@@ -1,0 +1,38 @@
+# Virtual environments
+.venv/
+venv/
+
+# Python caches and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Python packaging metadata and build outputs
+*.egg-info/
+build/
+dist/
+*.spec.bak
+
+# Generated analysis and sample outputs
+oil_level_analysis_*/
+**/oil_level_analysis_*/
+sample/*.avi
+sample/*.mp4
+sample/*.mkv
+sample/*.mov
+sample/*.oilrecipe
+sample/output/
+
+# Runtime/debug artifacts
+*.log
+debug/
+captures/
+graphs/
+
+# IDE and OS metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,5 @@
+QMainWindow { background: #eef1f5; }
+QToolBar { spacing: 6px; padding: 5px; }
+QGroupBox { font-weight: 600; margin-top: 8px; }
+QGroupBox::title { subcontrol-origin: margin; left: 8px; padding: 0 4px; }
+QPushButton { min-height: 26px; }

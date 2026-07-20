@@ -1,0 +1,37 @@
+from __future__ import annotations
+
+from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
+from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
+from oil_tracker.adapters.system.logging_config import configure_logging
+from oil_tracker.adapters.vision.debug_renderer import DebugRenderer
+from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
+from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
+from oil_tracker.application.use_cases.analyze_video import AnalyzeVideoUseCase
+from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
+from oil_tracker.application.use_cases.preview_detection import PreviewDetectionUseCase
+from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
+from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
+from oil_tracker.ui.controllers.analysis_controller import AnalysisController
+from oil_tracker.ui.controllers.preview_controller import PreviewController
+from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
+from oil_tracker.ui.main_window import MainWindow
+
+
+def build_main_window() -> MainWindow:
+    configure_logging()
+    repository = JsonRecipeRepository()
+    validator = RecipeValidationService()
+    workbench = WorkbenchController(
+        SaveRecipeUseCase(repository, validator),
+        LoadRecipeUseCase(repository),
+        ValidateWorkbenchUseCase(validator),
+    )
+    preview_detector = OpenCvPhaseDetector()
+    preview_controller = PreviewController(PreviewDetectionUseCase(preview_detector))
+    analysis_detector = OpenCvPhaseDetector()
+    pipeline = AnalysisPipeline(lambda path: OpenCvVideoReader(path), analysis_detector, validator)
+    result_store = OutputBundleStore()
+    analysis_controller = AnalysisController(AnalyzeVideoUseCase(pipeline), result_store)
+    return MainWindow(workbench, preview_controller, analysis_controller, DebugRenderer())

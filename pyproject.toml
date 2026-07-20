@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rotary-oil-level-tracker"
+version = "0.1.0"
+description = "Windows desktop workbench for rotary compressor sight-glass oil-level analysis"
+readme = "README.md"
+requires-python = ">=3.11,<3.15"
+license = {text = "Proprietary - internal evaluation"}
+authors = [{name = "Rotary Oil Level Tracker Team"}]
+dependencies = [
+  "PySide6>=6.11,<7",
+  "numpy>=2.5,<3",
+  "opencv-python-headless>=4.13,<5",
+  "Jinja2>=3.1,<4",
+  "matplotlib>=3.11,<4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-qt>=4.4,<5", "coverage>=7,<8"]
+packaging = ["PyInstaller>=6.21,<7"]
+
+[project.scripts]
+oil-tracker = "oil_tracker.__main__:main"
+oil-tracker-cli = "oil_tracker.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+oil_tracker = ["adapters/reporting/templates/*.j2", "resources/styles/*.qss", "resources/icons/*"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+qt_api = "pyside6"
+
+[tool.coverage.run]
+source = ["oil_tracker"]
+branch = true
