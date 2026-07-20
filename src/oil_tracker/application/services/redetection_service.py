@@ -127,6 +127,7 @@ class PartialRedetectionService:
         detector.reset()
         workspace = None
         reader = None
+        decoded_frame_cache: dict[float, tuple[Any, int, float]] = {}
         try:
             workspace = self.workspace_factory(recipe, policy=self.policy)
             reader = self.video_reader_factory(str(source))
@@ -158,6 +159,7 @@ class PartialRedetectionService:
                 detector,
                 [glass],
                 full_static_artifact_schedule(request),
+                decoded_frame_cache=decoded_frame_cache,
             )
 
             display_samples: list[RedetectionSample] = []
@@ -171,9 +173,10 @@ class PartialRedetectionService:
                 actual_timestamp = None
                 detection_error: Exception | None = None
                 try:
-                    frame, frame_index, actual_timestamp = reader.read_at(
-                        nominal_timestamp
-                    )
+                    decoded = decoded_frame_cache.pop(nominal_timestamp, None)
+                    if decoded is None:
+                        decoded = reader.read_at(nominal_timestamp)
+                    frame, frame_index, actual_timestamp = decoded
                     detection, artifacts = detector.detect(
                         frame,
                         glass,
@@ -230,9 +233,6 @@ class PartialRedetectionService:
                         glass,
                         detection,
                     )
-                    # Workspace writes are intentionally outside the recoverable
-                    # frame/detector exception block. A missing index or artifact
-                    # makes the temporary run unusable and therefore fails it.
                     record_id = workspace.write_detection(
                         glass,
                         detection,
@@ -440,6 +440,7 @@ class PartialRedetectionService:
                 workspace.cleanup()
             raise
         finally:
+            decoded_frame_cache.clear()
             if reader is not None:
                 try:
                     reader.close()
