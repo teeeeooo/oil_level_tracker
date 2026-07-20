@@ -27,7 +27,7 @@ def test_dialog_displays_result_path_per_glass_counts_and_analyzed_state(qtbot, 
     output = tmp_path / "bundle"
     dialog = AnalysisCompleteDialog(_result(), output)
     qtbot.addWidget(dialog)
-    assert "검토 필요" in dialog.title_label.text()
+    assert "사용자 확인 필요" in dialog.title_label.text()
     assert dialog.path_label.text() == str(output)
     assert "Glass 1" in dialog.summary_label.text()
     assert "Glass 2" in dialog.summary_label.text()
