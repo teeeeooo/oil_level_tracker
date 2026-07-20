@@ -74,8 +74,12 @@ jobs:
         run: python -m pytest -q tests/gui/test_result_review_enhancements.py::test_review_filter_updates_count_highlights_and_preserves_events_and_glass_change
       - name: Focused result asset actions GUI
         run: python -m pytest -q tests/gui/test_result_review_enhancements.py::test_report_folder_and_selected_capture_actions_do_not_pause_playback
-      - name: Focused completion and same-profile workflows
-        run: python -m pytest -q tests/gui/test_analysis_complete_dialog.py tests/gui/test_analysis_completion_coordinator.py tests/gui/test_same_profile_analysis_coordinator.py
+      - name: Focused analysis completion dialog
+        run: python -m pytest -q tests/gui/test_analysis_complete_dialog.py
+      - name: Focused analysis completion coordinator
+        run: python -m pytest -q tests/gui/test_analysis_completion_coordinator.py
+      - name: Focused same-profile coordinator
+        run: python -m pytest -q tests/gui/test_same_profile_analysis_coordinator.py
       - name: Focused Viewer regression
         run: python -m pytest -q tests/unit/test_result_review_playback.py tests/gui/test_result_review_window.py tests/gui/test_result_review_workbench_entry.py
       - name: Run canonical suite
