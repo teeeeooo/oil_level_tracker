@@ -32,6 +32,8 @@ class WorkbenchProgressWidget(QWidget):
         self.setObjectName("workbenchProgress")
         title = QLabel("작업 진행")
         title.setObjectName("progressTitle")
+        self.preflight_status = QLabel("여러 시점 점검: 점검하지 않음")
+        self.preflight_status.setObjectName("preflightProgressStatus")
         self._buttons: dict[str, QPushButton] = {}
         steps_layout = QHBoxLayout()
         steps_layout.setContentsMargins(0, 0, 0, 0)
@@ -64,6 +66,7 @@ class WorkbenchProgressWidget(QWidget):
 
         top = QHBoxLayout()
         top.addWidget(title)
+        top.addWidget(self.preflight_status)
         top.addStretch(1)
         top.addWidget(self.next_issue)
 
@@ -82,3 +85,10 @@ class WorkbenchProgressWidget(QWidget):
             button.style().unpolish(button)
             button.style().polish(button)
         self.next_issue.setVisible(has_glass_issue)
+
+    def set_preflight_status(self, status: str, detail: str) -> None:
+        self.preflight_status.setText(f"여러 시점 점검: {status}")
+        self.preflight_status.setToolTip(detail)
+        self.preflight_status.setProperty("preflightState", status)
+        self.preflight_status.style().unpolish(self.preflight_status)
+        self.preflight_status.style().polish(self.preflight_status)
