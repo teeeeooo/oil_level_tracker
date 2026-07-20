@@ -7,10 +7,10 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QSizePolicy,
     QSlider,
     QStyle,
     QStyleOptionSlider,
-    QVBoxLayout,
     QWidget,
 )
 
@@ -20,10 +20,17 @@ class MarkerSlider(QSlider):
         super().__init__(Qt.Orientation.Horizontal, parent)
         self._duration = 0.0
         self._markers = []
-        self.setMinimumWidth(240)
+        self.setMinimumWidth(180)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.setToolTip("파랑: 분석 시작·종료 / 주황: 압축기 기동")
 
-    def set_markers(self, duration: float, analysis_start: float | None, analysis_end: float | None, compressor_start: float | None) -> None:
+    def set_markers(
+        self,
+        duration: float,
+        analysis_start: float | None,
+        analysis_end: float | None,
+        compressor_start: float | None,
+    ) -> None:
         self._duration = max(0.0, duration)
         self._markers = [
             (analysis_start, QColor(40, 170, 255)),
@@ -57,14 +64,16 @@ class MarkerSlider(QSlider):
                 QPolygonF(
                     [
                         QPointF(x, groove.top() - 1),
-                        QPointF(x - 5, groove.top() - 8),
-                        QPointF(x + 5, groove.top() - 8),
+                        QPointF(x - 4, groove.top() - 7),
+                        QPointF(x + 4, groove.top() - 7),
                     ]
                 )
             )
 
 
 class TransportBar(QWidget):
+    """Compact single-row video transport shared by the workbench and wizard."""
+
     playToggled = Signal(bool)
     stepRequested = Signal(int)
     seekRequested = Signal(float)
@@ -74,33 +83,35 @@ class TransportBar(QWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setObjectName("transportBar")
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+
         self.play = QPushButton("재생")
         self.play.setObjectName("transportPrimaryButton")
         self.play.setCheckable(True)
-        self.prev = QPushButton("이전 장면")
-        self.next = QPushButton("다음 장면")
+        self.prev = QPushButton("이전")
+        self.next = QPushButton("다음")
         self.slider = MarkerSlider()
         self.slider.setRange(0, 10000)
         self.time = QLabel("00:00.000 / 00:00.000 · 장면 0")
         self.time.setObjectName("timecodeLabel")
-        self.speed_label = QLabel("재생 속도")
+        self.speed_label = QLabel("배속")
         self.speed = QComboBox()
+        self.speed.setMinimumContentsLength(4)
         for value in (0.5, 1.0, 1.5, 2.0, 4.0):
             self.speed.addItem(f"{value:g}×", value)
         self.speed.setCurrentIndex(1)
-        controls = QHBoxLayout()
-        controls.setSpacing(8)
-        for widget in (self.play, self.prev, self.next):
-            controls.addWidget(widget)
-        controls.addStretch(1)
-        controls.addWidget(self.speed_label)
-        controls.addWidget(self.speed)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(10, 8, 10, 8)
+
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(6, 4, 6, 4)
         layout.setSpacing(5)
-        layout.addLayout(controls)
+        layout.addWidget(self.play)
+        layout.addWidget(self.prev)
+        layout.addWidget(self.next)
         layout.addWidget(self.time)
-        layout.addWidget(self.slider)
+        layout.addWidget(self.slider, 1)
+        layout.addWidget(self.speed_label)
+        layout.addWidget(self.speed)
+
         self.play.toggled.connect(self._play)
         self.prev.clicked.connect(lambda: self.stepRequested.emit(-1))
         self.next.clicked.connect(lambda: self.stepRequested.emit(1))
@@ -111,7 +122,7 @@ class TransportBar(QWidget):
         )
 
     def _play(self, checked: bool) -> None:
-        self.play.setText("일시정지" if checked else "재생")
+        self.play.setText("정지" if checked else "재생")
         self.playToggled.emit(checked)
 
     def set_position(self, time_sec: float, duration_sec: float, frame_index: int) -> None:

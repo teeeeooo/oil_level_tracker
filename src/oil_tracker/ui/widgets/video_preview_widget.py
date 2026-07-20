@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from PySide6.QtCore import QTimer, Signal
-from PySide6.QtWidgets import QLabel, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QLabel, QSizePolicy, QVBoxLayout, QWidget
 
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
 from oil_tracker.ui.widgets.transport_bar import TransportBar
@@ -20,17 +20,24 @@ class VideoPreviewWidget(QWidget):
         self.current_time = 0.0
         self.current_frame_index = 0
         self.playback_speed = 1.0
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
         self.canvas = VideoOverlayCanvas()
-        self.canvas.setMinimumSize(640, 340)
+        self.canvas.setMinimumSize(520, 280)
+        self.canvas.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.canvas.set_glasses([], None)
         self.transport = TransportBar()
-        self.placeholder = QLabel("영상을 선택하면 위 화면에서 미리 볼 수 있습니다.")
+        self.placeholder = QLabel("영상을 선택하면 이 영역에서 미리 볼 수 있습니다.")
         self.placeholder.setObjectName("previewHint")
+        self.placeholder.setFixedHeight(22)
+
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(4)
         layout.addWidget(self.placeholder)
         layout.addWidget(self.canvas, 1)
         layout.addWidget(self.transport)
+
         self.play_timer = QTimer(self)
         self.play_timer.timeout.connect(self._play_tick)
         self.transport.playToggled.connect(self.toggle_play)
@@ -51,6 +58,7 @@ class VideoPreviewWidget(QWidget):
         self.close_video()
         self.reader = OpenCvVideoReader(path)
         self.placeholder.setText(Path(path).name)
+        self.placeholder.setToolTip(path)
         self.transport.setEnabled(True)
         self.load_frame(0.0)
 

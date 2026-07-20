@@ -215,12 +215,14 @@ class DraggableZeroLine(QGraphicsLineItem):
         self.ellipse = ellipse
         self.callback = callback
         self._dragging = False
+        self.setData(0, glass_id)
         self.setPen(QPen(QColor(255, 220, 0), 3, Qt.PenStyle.DashLine))
         self.setZValue(50)
         self.setCursor(Qt.CursorShape.SizeVerCursor)
         self.label = QGraphicsSimpleTextItem("기준점", self)
         self.label.setBrush(QBrush(QColor(255, 240, 80)))
         self.label.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations, True)
+        self.label.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
         self._position_label()
 
     def shape(self) -> QPainterPath:
@@ -237,7 +239,6 @@ class DraggableZeroLine(QGraphicsLineItem):
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
             self._dragging = True
-            self._set_y(event.scenePos().y())
             event.accept()
             return
         super().mousePressEvent(event)
@@ -372,6 +373,8 @@ class VideoOverlayCanvas(QGraphicsView):
         self._glasses = []
         self._selected_id: str | None = None
         self._detection = None
+        self._detection_badge = None
+        self._editable_ellipse_item = None
         self.setMinimumSize(640, 420)
 
     def set_frame(self, frame: np.ndarray) -> None:
@@ -408,13 +411,15 @@ class VideoOverlayCanvas(QGraphicsView):
 
     def set_detection(self, detection) -> None:
         self._detection = detection
-        self.rebuild_overlays()
+        self._refresh_detection_status()
 
     def rebuild_overlays(self) -> None:
         for item in list(self._scene.items()):
             if item is not self._pixmap_item:
                 self._scene.removeItem(item)
         frame_rect = QRectF(0, 0, self._frame_size[0], self._frame_size[1])
+        self._detection_badge = None
+        self._editable_ellipse_item = None
         selected = None
         for glass in self._glasses:
             e = glass.geometry.ellipse
@@ -429,6 +434,7 @@ class VideoOverlayCanvas(QGraphicsView):
                 item = EditableEllipseItem(glass.id, rect, frame_rect, self._ellipse_changed)
                 item.setSelected(True)
                 item.setData(0, glass.id)
+                self._editable_ellipse_item = item
                 self._scene.addItem(item)
             else:
                 item = QGraphicsEllipseItem(rect)
@@ -488,7 +494,19 @@ class VideoOverlayCanvas(QGraphicsView):
         badge.setBrush(QBrush(QColor(255, 255, 255)))
         badge.setPos(e.bounds.x, e.bounds.bottom + 4)
         badge.setZValue(90)
+        badge.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+        self._detection_badge = badge
         self._scene.addItem(badge)
+
+    def _refresh_detection_status(self) -> None:
+        if self._detection_badge is not None and self._detection_badge.scene() is self._scene:
+            self._scene.removeItem(self._detection_badge)
+        self._detection_badge = None
+        if self._detection is None or self._detection.glass_id != self._selected_id:
+            return
+        selected = next((glass for glass in self._glasses if glass.id == self._selected_id), None)
+        if selected is not None:
+            self._add_detection_status(selected, self._detection)
 
     def _ellipse_changed(self, glass_id: str, rect: QRectF) -> None:
         ellipse = EllipseGeometry(
@@ -508,14 +526,18 @@ class VideoOverlayCanvas(QGraphicsView):
 
     def mousePressEvent(self, event) -> None:
         item = self.itemAt(event.position().toPoint())
+        clicked_auxiliary = isinstance(item, (ResizeHandleItem, DraggableZeroLine))
         current = item
         while current is not None:
             glass_id = current.data(0)
             if glass_id:
-                self.glassSelected.emit(str(glass_id))
+                if str(glass_id) != self._selected_id:
+                    self.glassSelected.emit(str(glass_id))
                 break
             current = current.parentItem()
         super().mousePressEvent(event)
+        if clicked_auxiliary and self._editable_ellipse_item is not None:
+            self._editable_ellipse_item.setSelected(True)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

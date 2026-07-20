@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
     QComboBox,
     QDoubleSpinBox,
     QFormLayout,
+    QLayout,
     QGroupBox,
     QHBoxLayout,
     QLabel,
@@ -13,6 +14,7 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QPushButton,
+    QSizePolicy,
     QScrollArea,
     QSpinBox,
     QVBoxLayout,
@@ -37,7 +39,10 @@ class GlassSettingsPanel(QWidget):
         super().__init__(parent)
         self._updating = False
         container = QWidget()
+        container.setMinimumWidth(420)
+        container.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Maximum)
         self.form = QFormLayout(container)
+        self.form.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
         self.form.setLabelAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.name = QLineEdit()
@@ -57,9 +62,12 @@ class GlassSettingsPanel(QWidget):
             self.judgment.addItem(JUDGMENT_MODE_LABELS[value], value.value)
         self.margin = _double(0, 0.79, decimals=3)
         self.margin.setSingleStep(0.01)
-        self.margin.setToolTip("관찰창 테두리부터 검출에서 제외하는 비율입니다.")
+        self.margin.setToolTip("관찰창 테두리를 검출에서 제외하는 비율입니다.")
         self.crop = QLabel("-")
+        self.crop.setObjectName("roiSummaryCard")
         self.crop.setWordWrap(True)
+        self.crop.setMinimumHeight(68)
+        self.crop.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
         self.form.addRow("관찰창 이름", self.name)
         self.form.addRow(self.enabled)
         self.form.addRow("중심 X", self.cx)
@@ -74,7 +82,7 @@ class GlassSettingsPanel(QWidget):
         scale_row.addWidget(self.scale, 1)
         self.form.addRow("길이 환산", scale_row)
         self.form.addRow("판정 방식", self.judgment)
-        self.form.addRow("테두리 제외 비율", self.margin)
+        self.form.addRow("테두리 제외 범위", self.margin)
 
         ex_group = QGroupBox("검출 제외 영역")
         ex_layout = QVBoxLayout(ex_group)
@@ -109,18 +117,21 @@ class GlassSettingsPanel(QWidget):
         adv.addRow("장면 간 최대 이동량(px)", self.max_jump)
         adv.addRow("거품 질감 기준", self.foam_variance)
         adv.addRow("최소 거품 면적 비율", self.foam_area)
-        self.restore = QPushButton("검출 설정 기본값으로 복원")
+        self.restore = QPushButton("검출 설정 기본값 복원")
         adv.addRow(self.restore)
         self.form.addRow(advanced)
 
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setWidget(container)
-        scroll.setFrameShape(QScrollArea.Shape.NoFrame)
+        self.scroll = QScrollArea()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scroll.setWidget(container)
+        self.scroll.setFrameShape(QScrollArea.Shape.NoFrame)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(4, 4, 4, 4)
-        layout.addWidget(scroll)
-        self.setMinimumWidth(330)
+        layout.addWidget(self.scroll)
+        self.setMinimumWidth(440)
+        self.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         self.setObjectName("settingsPanel")
         self._connect()
 
@@ -173,10 +184,12 @@ class GlassSettingsPanel(QWidget):
         self.width.setValue(e.radius_x * 2)
         self.height.setValue(e.radius_y * 2)
         self.crop.setText(
-            f"X {e.bounds.x:.1f} / Y {e.bounds.y:.1f} / "
-            f"너비 {e.bounds.width:.1f} / 높이 {e.bounds.height:.1f}"
+            f"시작점  X {e.bounds.x:.1f}   ·   Y {e.bounds.y:.1f}\n"
+            f"크기      너비 {e.bounds.width:.1f}   ·   높이 {e.bounds.height:.1f}"
         )
-        self.zero.setValue(glass.geometry.zero_line_y if glass.geometry.zero_line_y is not None else e.center_y)
+        self.zero.setValue(
+            glass.geometry.zero_line_y if glass.geometry.zero_line_y is not None else e.center_y
+        )
         initial = initial_state_for_ui(glass.initial_state)
         index = self.initial.findData(initial.value)
         self.initial.setCurrentIndex(max(0, index))

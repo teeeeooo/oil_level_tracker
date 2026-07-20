@@ -1,0 +1,40 @@
+/* Compact workbench refinement */
+QToolButton#toolbarButton,
+QToolButton#primaryToolButton {
+    min-height: 26px;
+    padding: 2px 7px;
+    border-radius: 5px;
+}
+
+QPushButton {
+    min-height: 24px;
+    padding: 2px 8px;
+}
+
+QGroupBox {
+    margin-top: 9px;
+    padding: 7px 6px 6px 6px;
+}
+
+QWidget#transportBar QPushButton {
+    min-height: 22px;
+    padding: 1px 7px;
+}
+
+QLabel#timecodeLabel {
+    min-width: 170px;
+}
+
+QLabel#roiSummaryCard {
+    padding: 8px 10px;
+    background: #eef5fb;
+    border: 1px solid #b9d0e4;
+    border-radius: 5px;
+    color: #263f55;
+    font-family: "Consolas", "Malgun Gothic";
+}
+
+QLabel#debugImageTitle {
+    font-weight: 700;
+    padding: 4px 2px;
+}

@@ -89,7 +89,7 @@ class MainWindow(QMainWindow):
             ("validate", "설정 점검", QStyle.StandardPixmap.SP_DialogApplyButton),
             ("analyze", "분석 실행", QStyle.StandardPixmap.SP_MediaPlay),
             ("result", "결과 보고서", QStyle.StandardPixmap.SP_FileDialogDetailedView),
-            ("debug", "상세 검출 정보", QStyle.StandardPixmap.SP_ComputerIcon),
+            ("debug", "ROI 상세보기", QStyle.StandardPixmap.SP_ComputerIcon),
         )
         for key, text, icon in definitions:
             action = QAction(self.style().standardIcon(icon), text, self)
@@ -128,9 +128,9 @@ class MainWindow(QMainWindow):
         self.splitter.setStretchFactor(1, 1)
         self.splitter.setStretchFactor(2, 0)
         width = max(1280, self.width())
-        left = max(190, int(width * 0.14))
-        right = max(350, int(width * 0.23))
-        self.splitter.setSizes([left, max(700, width - left - right), right])
+        left = max(180, int(width * 0.12))
+        right = max(460, int(width * 0.28))
+        self.splitter.setSizes([left, max(660, width - left - right), right])
         self.setCentralWidget(self.splitter)
 
         self.validation_panel = ValidationPanel()
@@ -139,9 +139,12 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.validation_dock)
         self.validation_dock.hide()
         self.debug_panel = DebugPanel()
-        self.debug_dock = QDockWidget("상세 검출 정보", self)
+        self.debug_dock = QDockWidget("ROI 및 상세 검출 정보", self)
         self.debug_dock.setWidget(self.debug_panel)
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.debug_dock)
+        self.debug_dock.setMinimumSize(760, 560)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.debug_dock)
+        self.debug_dock.setFloating(True)
+        self.debug_dock.resize(980, 720)
         self.debug_dock.hide()
         self.statusBar().showMessage("분석 프로필을 새로 만들거나 열어 주세요.")
 
@@ -149,6 +152,22 @@ class MainWindow(QMainWindow):
         self.preview_timer = QTimer(self)
         self.preview_timer.setSingleShot(True)
         self.preview_timer.setInterval(PREVIEW_DEBOUNCE_MS)
+
+    def _toggle_debug_view(self, visible: bool) -> None:
+        if visible:
+            if not self.debug_dock.isFloating():
+                self.debug_dock.setFloating(True)
+            self.debug_dock.resize(980, 720)
+            self.debug_dock.show()
+            self.debug_dock.raise_()
+            self.debug_dock.activateWindow()
+        else:
+            self.debug_dock.hide()
+
+    def _sync_debug_action(self, visible: bool) -> None:
+        self.actions["debug"].blockSignals(True)
+        self.actions["debug"].setChecked(visible)
+        self.actions["debug"].blockSignals(False)
 
     def _build_session_bar(self) -> QWidget:
         group = QGroupBox("분석 영상 설정")
@@ -174,12 +193,12 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.end_spin, 1, 3)
         layout.addWidget(QLabel("압축기 기동"), 1, 4)
         layout.addWidget(self.compressor_spin, 1, 5)
-        layout.addWidget(QLabel("분석 빈도"), 2, 0)
-        layout.addWidget(self.sampling_spin, 2, 1)
-        layout.addWidget(QLabel("영상 1초당 분석할 장면 수"), 2, 2, 1, 4)
+        layout.addWidget(QLabel("분석 빈도"), 1, 6)
+        layout.addWidget(self.sampling_spin, 1, 7)
         layout.setColumnStretch(1, 1)
         layout.setColumnStretch(3, 1)
         layout.setColumnStretch(5, 1)
+        layout.setColumnStretch(7, 1)
         return group
 
     def _connect(self) -> None:
@@ -189,7 +208,8 @@ class MainWindow(QMainWindow):
         self.actions["validate"].triggered.connect(self.validate_workbench)
         self.actions["analyze"].triggered.connect(self.run_analysis)
         self.actions["result"].triggered.connect(self.open_result)
-        self.actions["debug"].toggled.connect(self.debug_dock.setVisible)
+        self.actions["debug"].toggled.connect(self._toggle_debug_view)
+        self.debug_dock.visibilityChanged.connect(self._sync_debug_action)
         self.open_video_button.clicked.connect(self.open_video)
         self.glass_list.addRequested.connect(self.add_glass)
         self.glass_list.deleteRequested.connect(self.delete_glass)

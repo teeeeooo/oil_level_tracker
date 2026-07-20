@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QFormLayout,
     QGridLayout,
+    QGroupBox,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -30,8 +31,8 @@ class NewRecipeWizard(QWizard):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setWindowTitle("새 분석 프로필 만들기")
-        self.setMinimumSize(1020, 760)
-        self.resize(1120, 820)
+        self.setMinimumSize(960, 700)
+        self.resize(1120, 800)
         self.setButtonText(QWizard.WizardButton.BackButton, "이전")
         self.setButtonText(QWizard.WizardButton.NextButton, "다음")
         self.setButtonText(QWizard.WizardButton.FinishButton, "완료")
@@ -66,10 +67,19 @@ class NewRecipeWizard(QWizard):
         page2.setTitle("2. 분석 시간 설정")
         page2.setSubTitle("영상을 재생하거나 이동한 뒤 현재 위치를 각 시간으로 지정합니다.")
         page2_layout = QVBoxLayout(page2)
+        page2_layout.setContentsMargins(4, 4, 4, 4)
+        page2_layout.setSpacing(6)
         self.preview = VideoPreviewWidget()
-        self.preview.videoError.connect(lambda message: QMessageBox.warning(self, "영상 미리보기 오류", message))
+        self.preview.videoError.connect(
+            lambda message: QMessageBox.warning(self, "영상 미리보기 오류", message)
+        )
         page2_layout.addWidget(self.preview, 1)
-        time_grid = QGridLayout()
+
+        time_group = QGroupBox("현재 위치 기준 시간 지정")
+        time_grid = QGridLayout(time_group)
+        time_grid.setContentsMargins(8, 8, 8, 8)
+        time_grid.setHorizontalSpacing(8)
+        time_grid.setVerticalSpacing(4)
         self.start = _time_spin()
         self.end = _time_spin()
         self.compressor = _time_spin()
@@ -78,23 +88,23 @@ class NewRecipeWizard(QWizard):
         self.sampling.setRange(0.1, 240.0)
         self.sampling.setSuffix(" 회/초")
         self.sampling.setValue(2.0)
-        self.set_start = QPushButton("현재 위치로 지정")
-        self.set_end = QPushButton("현재 위치로 지정")
-        self.set_compressor = QPushButton("현재 위치로 지정")
-        rows = (
+        self.set_start = QPushButton("현재 위치")
+        self.set_end = QPushButton("현재 위치")
+        self.set_compressor = QPushButton("현재 위치")
+        fields = (
             (0, "분석 시작", self.start, self.set_start),
-            (1, "분석 종료", self.end, self.set_end),
-            (2, "압축기 기동", self.compressor, self.set_compressor),
+            (2, "분석 종료", self.end, self.set_end),
+            (4, "압축기 기동", self.compressor, self.set_compressor),
         )
-        for row, label, spin, button in rows:
-            time_grid.addWidget(QLabel(label), row, 0)
-            time_grid.addWidget(spin, row, 1)
-            time_grid.addWidget(button, row, 2)
-        time_grid.addWidget(QLabel("분석 빈도"), 3, 0)
-        time_grid.addWidget(self.sampling, 3, 1)
-        time_grid.addWidget(QLabel("영상 1초당 분석할 장면 수"), 3, 2)
-        time_grid.setColumnStretch(1, 1)
-        page2_layout.addLayout(time_grid)
+        for column, label, spin, button in fields:
+            time_grid.addWidget(QLabel(label), 0, column, 1, 2)
+            time_grid.addWidget(spin, 1, column)
+            time_grid.addWidget(button, 1, column + 1)
+            time_grid.setColumnStretch(column, 1)
+        time_grid.addWidget(QLabel("분석 빈도"), 0, 6)
+        time_grid.addWidget(self.sampling, 1, 6)
+        time_grid.setColumnStretch(6, 1)
+        page2_layout.addWidget(time_group)
         self.addPage(page2)
 
         self.set_start.clicked.connect(lambda: self._set_current_time(self.start))
@@ -167,11 +177,19 @@ class NewRecipeWizard(QWizard):
     def validateCurrentPage(self) -> bool:
         if self.currentId() == 1:
             if self.end.value() <= self.start.value():
-                QMessageBox.warning(self, "시간 범위 확인", "분석 종료 시각은 분석 시작 시각보다 뒤여야 합니다.")
+                QMessageBox.warning(
+                    self,
+                    "시간 범위 확인",
+                    "분석 종료 시각은 분석 시작 시각보다 뒤여야 합니다.",
+                )
                 return False
             duration = self._video_metadata.duration_sec if self._video_metadata else 0.0
             if self.compressor.value() > duration:
-                QMessageBox.warning(self, "기동 시각 확인", "압축기 기동 시각이 영상 길이를 벗어났습니다.")
+                QMessageBox.warning(
+                    self,
+                    "기동 시각 확인",
+                    "압축기 기동 시각이 영상 길이를 벗어났습니다.",
+                )
                 return False
         return super().validateCurrentPage()
 

@@ -13,7 +13,10 @@ from oil_tracker.domain.session import AnalysisSession
 class HtmlReporter:
     def __init__(self) -> None:
         template_dir = Path(__file__).resolve().parent / "templates"
-        self.environment = Environment(loader=FileSystemLoader(str(template_dir)), autoescape=select_autoescape(["html", "xml"]))
+        self.environment = Environment(
+            loader=FileSystemLoader(str(template_dir)),
+            autoescape=select_autoescape(["html", "xml"]),
+        )
 
     def render(
         self,
@@ -32,4 +35,5 @@ class HtmlReporter:
             app_version=__version__,
             detector_version=DETECTOR_VERSION,
         )
-        output_path.write_text(html, encoding="utf-8")
+        # UTF-8 BOM helps Windows browsers and text viewers consistently detect Korean text.
+        output_path.write_bytes(html.encode("utf-8-sig"))
