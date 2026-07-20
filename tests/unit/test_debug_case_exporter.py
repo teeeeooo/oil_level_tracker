@@ -50,8 +50,8 @@ class _Repository:
         return None
 
 
-def _bundle(tmp_path: Path):
-    root = tmp_path / "bundle"
+def _bundle(tmp_path: Path, root_name: str = "bundle"):
+    root = tmp_path / root_name
     root.mkdir()
     recipe = root / "recipe_snapshot.oilrecipe"
     recipe.write_text('{"schema_version":1}', encoding="utf-8")
@@ -70,6 +70,26 @@ def _video(path: Path):
         frame = np.full((48, 64, 3), index * 8, dtype=np.uint8)
         writer.write(frame)
     writer.release()
+
+
+def _bundle_snapshot(root: Path):
+    snapshot = {}
+    for path in sorted(root.rglob("*"), key=lambda value: value.relative_to(root).as_posix()):
+        relative = path.relative_to(root).as_posix()
+        if path.is_dir():
+            snapshot[relative] = ("directory", b"")
+        elif path.is_file():
+            snapshot[relative] = ("file", path.read_bytes())
+        else:
+            snapshot[relative] = ("other", b"")
+    return snapshot
+
+
+def _symlink_or_skip(link: Path, target: Path):
+    try:
+        link.symlink_to(target, target_is_directory=True)
+    except (NotImplementedError, OSError) as exc:
+        pytest.skip(f"directory symlink is unavailable: {exc}")
 
 
 def test_package_without_source_keeps_required_trace_files_and_warning(tmp_path):
@@ -166,3 +186,125 @@ def test_failure_cleans_temporary_output_and_keeps_bundle_unchanged(tmp_path, mo
     assert not (destination / "debug_case_failure").exists()
     assert not list(destination.glob(".*.tmp-*"))
     assert (bundle.root / "recipe_snapshot.oilrecipe").read_bytes() == original_recipe
+
+
+def test_bundle_root_destination_is_rejected_without_mutation(tmp_path):
+    bundle = _bundle(tmp_path)
+    before = _bundle_snapshot(bundle.root)
+
+    with pytest.raises(DebugCaseExportError, match="공식 결과 bundle 내부"):
+        DebugCaseExporter().export(bundle, _Repository(), "record-1", bundle.root)
+
+    assert _bundle_snapshot(bundle.root) == before
+    assert not list(bundle.root.glob("debug_case_*"))
+    assert not list(bundle.root.glob(".*.tmp-*"))
+
+
+def test_missing_direct_bundle_child_is_rejected_before_directory_creation(tmp_path):
+    bundle = _bundle(tmp_path)
+    destination = bundle.root / "exports"
+    before = _bundle_snapshot(bundle.root)
+
+    with pytest.raises(DebugCaseExportError, match="공식 결과 bundle 내부"):
+        DebugCaseExporter().export(bundle, _Repository(), "record-1", destination)
+
+    assert not destination.exists()
+    assert _bundle_snapshot(bundle.root) == before
+
+
+def test_missing_deep_bundle_child_is_rejected_without_partial_output(tmp_path):
+    bundle = _bundle(tmp_path)
+    destination = bundle.root / "assets" / "debug_exports"
+    before = _bundle_snapshot(bundle.root)
+
+    with pytest.raises(DebugCaseExportError, match="공식 결과 bundle 내부"):
+        DebugCaseExporter().export(bundle, _Repository(), "record-1", destination)
+
+    assert not destination.exists()
+    assert not (bundle.root / "assets").exists()
+    assert _bundle_snapshot(bundle.root) == before
+
+
+def test_external_symlink_to_bundle_root_is_rejected(tmp_path):
+    bundle = _bundle(tmp_path)
+    external = tmp_path / "external"
+    external.mkdir()
+    link = external / "link"
+    _symlink_or_skip(link, bundle.root)
+    before = _bundle_snapshot(bundle.root)
+
+    with pytest.raises(DebugCaseExportError, match="공식 결과 bundle 내부"):
+        DebugCaseExporter().export(bundle, _Repository(), "record-1", link)
+
+    assert _bundle_snapshot(bundle.root) == before
+    assert not list(bundle.root.glob("debug_case_*"))
+
+
+def test_external_symlink_to_bundle_descendant_is_rejected(tmp_path):
+    bundle = _bundle(tmp_path)
+    assets = bundle.root / "assets"
+    assets.mkdir()
+    (assets / "keep.txt").write_text("keep", encoding="utf-8")
+    external = tmp_path / "external"
+    external.mkdir()
+    link = external / "link"
+    _symlink_or_skip(link, assets)
+    before = _bundle_snapshot(bundle.root)
+
+    with pytest.raises(DebugCaseExportError, match="공식 결과 bundle 내부"):
+        DebugCaseExporter().export(bundle, _Repository(), "record-1", link)
+
+    assert _bundle_snapshot(bundle.root) == before
+    assert not list(assets.glob("debug_case_*"))
+
+
+def test_bundle_parent_destination_creates_sibling_package_and_keeps_bundle_unchanged(tmp_path):
+    bundle = _bundle(tmp_path)
+    before = _bundle_snapshot(bundle.root)
+
+    output = DebugCaseExporter().export(bundle, _Repository(), "record-1", bundle.root.parent)
+
+    assert output.parent == bundle.root.parent.resolve()
+    assert output.parent != bundle.root.resolve()
+    assert output.is_dir()
+    assert _bundle_snapshot(bundle.root) == before
+
+
+def test_similar_prefix_external_destination_is_allowed(tmp_path):
+    bundle = _bundle(tmp_path, "oil_level_analysis_1")
+    destination = tmp_path / "oil_level_analysis_10"
+    before = _bundle_snapshot(bundle.root)
+
+    output = DebugCaseExporter().export(bundle, _Repository(), "record-1", destination)
+
+    assert output.parent == destination.resolve()
+    assert output.is_dir()
+    assert _bundle_snapshot(bundle.root) == before
+
+
+def test_relative_external_destination_is_resolved_and_allowed(tmp_path, monkeypatch):
+    bundle = _bundle(tmp_path)
+    working = tmp_path / "working"
+    working.mkdir()
+    monkeypatch.chdir(working)
+    before = _bundle_snapshot(bundle.root)
+
+    output = DebugCaseExporter().export(bundle, _Repository(), "record-1", Path("relative_exports"))
+
+    assert output.parent == (working / "relative_exports").resolve()
+    assert output.is_dir()
+    assert _bundle_snapshot(bundle.root) == before
+
+
+def test_rejected_bundle_destination_can_retry_to_external_directory(tmp_path):
+    bundle = _bundle(tmp_path)
+    before = _bundle_snapshot(bundle.root)
+    exporter = DebugCaseExporter()
+
+    with pytest.raises(DebugCaseExportError, match="공식 결과 bundle 내부"):
+        exporter.export(bundle, _Repository(), "record-1", bundle.root / "exports")
+
+    output = exporter.export(bundle, _Repository(), "record-1", tmp_path / "external-exports")
+    assert output.is_dir()
+    assert _bundle_snapshot(bundle.root) == before
+    assert not list((tmp_path / "external-exports").glob(".*.tmp-*"))
