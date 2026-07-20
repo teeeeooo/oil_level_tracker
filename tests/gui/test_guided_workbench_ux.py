@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import numpy as np
-from PySide6.QtCore import QPointF
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
@@ -9,6 +8,7 @@ from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
 from oil_tracker.domain.enums import ValidationSeverity
+from oil_tracker.domain.geometry import EllipseGeometry
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.validation import ValidationIssue, ValidationResult
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
@@ -68,15 +68,18 @@ def test_bottom_action_bar_enables_analysis_only_when_ready(qtbot):
 
 def test_roi_editor_uses_private_copy_until_applied(qtbot):
     glass = InspectionRecipe.default_glass(640, 480)
-    original_center = glass.geometry.ellipse.center_x
+    original = glass.geometry.ellipse
     dialog = RoiEditorDialog(np.zeros((480, 640, 3), dtype=np.uint8), glass, 640, 480)
     qtbot.addWidget(dialog)
-    edited = dialog.edited_glass()
-    ellipse = edited.geometry.ellipse
-    ellipse.center_x += 25
-    dialog._ellipse_changed(glass.id, ellipse)
-    assert glass.geometry.ellipse.center_x == original_center
-    assert dialog.edited_glass().geometry.ellipse.center_x == original_center + 25
+    edited = EllipseGeometry(
+        original.center_x + 25,
+        original.center_y,
+        original.radius_x,
+        original.radius_y,
+    )
+    dialog._ellipse_changed(glass.id, edited)
+    assert glass.geometry.ellipse.center_x == original.center_x
+    assert dialog.edited_glass().geometry.ellipse.center_x == original.center_x + 25
 
 
 def test_recipe_snapshot_command_restores_before_and_after(qtbot):
