@@ -7,11 +7,13 @@ import re
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
+    QComboBox,
     QFileDialog,
     QLabel,
     QMainWindow,
     QMessageBox,
     QSplitter,
+    QStackedWidget,
     QStyle,
     QToolBar,
     QVBoxLayout,
@@ -19,6 +21,8 @@ from PySide6.QtWidgets import (
 )
 
 from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetError
+from oil_tracker.adapters.storage.debug_case_exporter import DebugCaseExportError, DebugCaseExporter
+from oil_tracker.adapters.storage.debug_trace_repository import DebugTraceError, DebugTraceRepository
 from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleError, ResultBundleReader
 from oil_tracker.adapters.vision.source_video_resolver import (
     SourceVideoError,
@@ -30,6 +34,7 @@ from oil_tracker.application.services.review_query import ReviewQueryModel
 from oil_tracker.config.defaults import SUPPORTED_VIDEO_FILTER
 from oil_tracker.ui.controllers.result_review_controller import ResultReviewController
 from oil_tracker.ui.result_actions import ResultActionError, ResultActionService
+from oil_tracker.ui.widgets.result_debug_panel import ResultDebugPanel
 from oil_tracker.ui.widgets.result_review_canvas import ResultReviewCanvas
 from oil_tracker.ui.widgets.result_review_details import ResultReviewDetails
 from oil_tracker.ui.widgets.result_review_graph import ResultReviewGraph
@@ -49,6 +54,8 @@ class ResultReviewWindow(QMainWindow):
         source_resolver: SourceVideoResolver | None = None,
         playback_controller: ResultReviewController | None = None,
         action_service: ResultActionService | None = None,
+        debug_repository_factory=DebugTraceRepository,
+        debug_case_exporter: DebugCaseExporter | None = None,
         parent=None,
     ) -> None:
         super().__init__(parent)
@@ -56,14 +63,21 @@ class ResultReviewWindow(QMainWindow):
         self.source_resolver = source_resolver or SourceVideoResolver()
         self.playback = playback_controller or ResultReviewController(parent=self)
         self.action_service = action_service or ResultActionService()
+        self.debug_repository_factory = debug_repository_factory
+        self.debug_case_exporter = debug_case_exporter or DebugCaseExporter()
         self.bundle = None
         self.query: ReviewQueryModel | None = None
+        self.debug_repository: DebugTraceRepository | None = None
         self.selected_glass_id = ""
         self.selected_event = None
+        self.selected_debug_summary = None
+        self.selected_debug_record = None
         self.current_frame = None
         self.current_frame_index = 0
         self.current_time = 0.0
         self.video_override: Path | None = None
+        self.active_video_path: Path | None = None
+        self.mode = "general"
         self.state = "bundle 없음"
         self.setWindowTitle("Rotary Oil Level Tracker — 결과 검토")
         self.setMinimumSize(1280, 760)
@@ -93,6 +107,14 @@ class ResultReviewWindow(QMainWindow):
         toolbar.addSeparator()
         toolbar.addAction(self.save_png_action)
         toolbar.addSeparator()
+        toolbar.addWidget(QLabel("보기"))
+        self.mode_combo = QComboBox()
+        self.mode_combo.setObjectName("resultReviewModeCombo")
+        self.mode_combo.addItem("일반 검토", "general")
+        self.mode_combo.addItem("디버그", "debug")
+        self.mode_combo.setToolTip("일반 검토는 공식 tracking 결과를, 디버그는 분석 당시 저장된 detector trace를 표시합니다.")
+        toolbar.addWidget(self.mode_combo)
+        toolbar.addSeparator()
         self.state_label = QLabel()
         toolbar.addWidget(self.state_label)
 
@@ -100,6 +122,10 @@ class ResultReviewWindow(QMainWindow):
         self.canvas = ResultReviewCanvas()
         self.graph = ResultReviewGraph()
         self.details = ResultReviewDetails()
+        self.debug_details = ResultDebugPanel()
+        self.detail_stack = QStackedWidget()
+        self.detail_stack.addWidget(self.details)
+        self.detail_stack.addWidget(self.debug_details)
         self.transport = TransportBar()
         self.video_path_label = QLabel("원본 영상 정보 없음")
         self.video_path_label.setWordWrap(True)
@@ -121,13 +147,14 @@ class ResultReviewWindow(QMainWindow):
         splitter.setChildrenCollapsible(False)
         splitter.addWidget(self.navigation)
         splitter.addWidget(center)
-        splitter.addWidget(self.details)
+        splitter.addWidget(self.detail_stack)
         splitter.setStretchFactor(0, 0)
         splitter.setStretchFactor(1, 1)
         splitter.setStretchFactor(2, 0)
-        splitter.setSizes([310, 890, 340])
+        splitter.setSizes([310, 820, 410])
         self.setCentralWidget(splitter)
         self.statusBar().showMessage("결과 bundle을 열어 주세요.")
+        self._set_debug_mode_available(False, "이 결과에는 디버그 기록이 없습니다.")
 
     def _connect(self) -> None:
         self.open_action.triggered.connect(self.choose_bundle)
@@ -137,14 +164,20 @@ class ResultReviewWindow(QMainWindow):
         self.capture_action.triggered.connect(self.open_event_capture)
         self.same_profile_action.triggered.connect(self.prepare_same_profile_analysis)
         self.save_png_action.triggered.connect(self.save_current_png)
+        self.mode_combo.currentIndexChanged.connect(self._mode_changed)
         self.navigation.glassChanged.connect(self._glass_changed)
         self.navigation.filterChanged.connect(self._review_filter_changed)
+        self.navigation.debugFilterChanged.connect(self._debug_filter_changed)
         self.navigation.eventSelected.connect(self._event_selected)
         self.navigation.eventActivated.connect(self._jump_to)
         self.navigation.reviewActivated.connect(self._jump_to)
+        self.navigation.debugActivated.connect(self._debug_record_activated)
         self.navigation.previousRequested.connect(lambda: self._navigate_item(-1))
         self.navigation.nextRequested.connect(lambda: self._navigate_item(1))
         self.graph.timestampClicked.connect(self._graph_clicked)
+        self.debug_details.candidateSelected.connect(self.canvas.set_candidate_highlight)
+        self.debug_details.artifactRequested.connect(self._load_debug_artifact)
+        self.debug_details.exportRequested.connect(self.export_debug_case)
         self.transport.playToggled.connect(self._play_toggled)
         self.transport.stepRequested.connect(self.playback.step)
         self.transport.seekRequested.connect(self._seek_fraction)
@@ -165,9 +198,16 @@ class ResultReviewWindow(QMainWindow):
 
     def load_bundle(self, source: str | Path) -> bool:
         self.statusBar().showMessage("결과 bundle을 확인하고 있습니다...")
+        debug_repository = None
         try:
             bundle = self.bundle_reader.read(source)
             query = ReviewQueryModel(bundle)
+            if bundle.has_debug_trace:
+                try:
+                    debug_repository = self.debug_repository_factory(bundle)
+                except DebugTraceError as exc:
+                    bundle.debug_warning = str(exc)
+                    debug_repository = None
         except ResultBundleError as exc:
             LOGGER.exception("Result bundle load failed")
             QMessageBox.critical(self, "결과 bundle 열기 실패", str(exc))
@@ -187,40 +227,61 @@ class ResultReviewWindow(QMainWindow):
         if resolution.path is not None:
             try:
                 validation = self.source_resolver.validate_candidate(bundle, resolution.path)
-                prepared = self.playback.prepare_video(
-                    validation.path,
-                    bundle.analysis_start_sec,
-                    emit_failure=False,
-                )
+                prepared = self.playback.prepare_video(validation.path, bundle.analysis_start_sec, emit_failure=False)
             except (SourceVideoError, SourceVideoMismatchError, Exception) as exc:
                 LOGGER.exception("Resolved source video preparation failed")
                 source_problem = str(exc)
                 prepared = None
 
         self.playback.pause()
+        if self.debug_repository is not None:
+            self.debug_repository.close()
+        self.debug_repository = debug_repository
         self.bundle = bundle
         self.query = query
         self.selected_glass_id = selected_glass_id
         self.selected_event = None
+        self.selected_debug_summary = None
+        self.selected_debug_record = None
         self.current_frame = None
         self.current_frame_index = 0
         self.current_time = bundle.analysis_start_sec
         self.video_override = None
+        self.active_video_path = None
+        self.mode = "general"
+        self.mode_combo.blockSignals(True)
+        self.mode_combo.setCurrentIndex(0)
+        self.mode_combo.blockSignals(False)
+        self.detail_stack.setCurrentWidget(self.details)
         self.navigation.set_bundle(bundle, query, selected_glass_id)
         self.details.clear()
+        self.debug_details.clear()
+        if debug_repository is not None:
+            self._set_debug_mode_available(True, "")
+            self.navigation.set_debug_records(debug_repository.index.records, enabled=True)
+        else:
+            message = bundle.debug_warning or "이 결과에는 디버그 기록이 없습니다."
+            self._set_debug_mode_available(False, message)
+            self.navigation.set_debug_records((), enabled=False, message=message)
         self._rebuild_graph()
         self._refresh_markers()
         if prepared is None:
             self.playback.close_video()
             self._show_missing_video(source_problem)
+            if bundle.debug_warning:
+                self.statusBar().showMessage(f"일반 결과는 열었습니다. 디버그 기록 경고: {bundle.debug_warning}", 15000)
             return True
         try:
             self.video_path_label.setText(str(validation.path))
+            self.active_video_path = Path(validation.path)
             self.playback.activate_prepared(prepared)
         finally:
             prepared.close()
-        if validation.warnings:
-            self.statusBar().showMessage("원본 영상 확인 필요: " + " / ".join(validation.warnings), 12000)
+        messages = list(validation.warnings)
+        if bundle.debug_warning:
+            messages.append("디버그 기록: " + bundle.debug_warning)
+        if messages:
+            self.statusBar().showMessage("원본/디버그 확인 필요: " + " / ".join(messages), 15000)
         self._set_state("영상 로드됨 · 일시정지")
         return True
 
@@ -256,6 +317,7 @@ class ResultReviewWindow(QMainWindow):
         finally:
             prepared.close()
         self.video_override = None if auto else validation.path
+        self.active_video_path = Path(validation.path)
         self.video_path_label.setText(str(validation.path))
         if validation.warnings:
             self.statusBar().showMessage("원본 영상 확인 필요: " + " / ".join(validation.warnings), 12000)
@@ -267,9 +329,9 @@ class ResultReviewWindow(QMainWindow):
             return
         original = self.bundle.source_video_path or "기록된 경로 없음"
         self.video_path_label.setText(f"분석 당시 경로: {original}")
-        self.canvas.set_message("원본 영상을 찾을 수 없음\n분석 당시 경로를 확인한 뒤 '원본 영상 다시 지정'을 선택해 주세요.")
+        self.canvas.set_message("원본 영상을 찾을 수 없음\n저장된 debug artifact는 디버그 panel에서 확인할 수 있습니다.")
         self._set_state("bundle 준비됨 · 영상 없음")
-        message = "영상 없이도 관찰창, 이벤트와 검토 필요 목록을 확인할 수 있습니다."
+        message = "영상 없이도 관찰창, 이벤트, 검토 목록과 저장된 debug artifact를 확인할 수 있습니다."
         if problem:
             message += f" 원본 영상 준비 실패: {problem}"
         self.statusBar().showMessage(message, 12000)
@@ -288,9 +350,22 @@ class ResultReviewWindow(QMainWindow):
         if glass is None:
             return
         overlay = self.query.overlay_at(self.selected_glass_id, self.current_time)
-        self.canvas.set_review_frame(self.current_frame, glass, overlay)
         active = self.query.active_events(self.selected_glass_id, self.current_time)
-        self.details.update_details(self.bundle, self.selected_glass_id, overlay, self.current_frame_index, self.current_time, active)
+        if self.mode == "debug":
+            record = self.selected_debug_record
+            tolerance = self._debug_tolerance()
+            if record is not None and record.glass_id == self.selected_glass_id and abs(record.timestamp_sec - self.current_time) <= tolerance:
+                self.canvas.set_debug_frame(self.current_frame, glass, record, self.current_time)
+                self.debug_details.set_record(record, self.current_time)
+            else:
+                self.canvas.set_review_frame(self.current_frame, glass, overlay)
+                self.debug_details.summary.setText(
+                    "현재 decoded 시각에는 선택된 debug record가 없습니다.\n"
+                    "일반 tracking overlay만 임시 표시되며 candidate layer는 숨겨졌습니다."
+                )
+        else:
+            self.canvas.set_review_frame(self.current_frame, glass, overlay)
+            self.details.update_details(self.bundle, self.selected_glass_id, overlay, self.current_frame_index, self.current_time, active)
         metadata = self.playback.metadata
         duration = metadata.duration_sec if metadata is not None else 0.0
         self.transport.set_position(self.current_time, duration, self.current_frame_index)
@@ -302,6 +377,10 @@ class ResultReviewWindow(QMainWindow):
             return
         self.selected_glass_id = glass_id
         self.selected_event = None
+        if self.selected_debug_record is not None and self.selected_debug_record.glass_id != glass_id:
+            self.selected_debug_summary = None
+            self.selected_debug_record = None
+            self.debug_details.clear("선택한 관찰창의 디버그 장면을 선택해 주세요.")
         self.navigation.refresh_items(self.bundle, self.query, glass_id)
         self._refresh_markers()
         self._rebuild_graph()
@@ -309,15 +388,18 @@ class ResultReviewWindow(QMainWindow):
             glass = self.bundle.glass_config(glass_id)
             if glass is not None:
                 overlay = self.query.overlay_at(glass_id, self.current_time)
-                self.canvas.refresh_overlay(glass, overlay)
-                self.details.update_details(
-                    self.bundle,
-                    glass_id,
-                    overlay,
-                    self.current_frame_index,
-                    self.current_time,
-                    self.query.active_events(glass_id, self.current_time),
-                )
+                if self.mode == "general":
+                    self.canvas.refresh_overlay(glass, overlay)
+                    self.details.update_details(
+                        self.bundle,
+                        glass_id,
+                        overlay,
+                        self.current_frame_index,
+                        self.current_time,
+                        self.query.active_events(glass_id, self.current_time),
+                    )
+                else:
+                    self.canvas.set_review_frame(self.current_frame, glass, overlay)
 
     def _review_filter_changed(self, _value: str) -> None:
         if self.bundle is None or self.query is None:
@@ -326,9 +408,78 @@ class ResultReviewWindow(QMainWindow):
         self._refresh_markers()
         self._rebuild_graph()
 
+    def _debug_filter_changed(self, _value: str) -> None:
+        self._refresh_markers()
+        self._rebuild_graph()
+
     def _event_selected(self, event) -> None:
         self.selected_event = event
         self.capture_action.setEnabled(bool(self.bundle is not None and event is not None and event.capture_path))
+
+    def _mode_changed(self, _index: int) -> None:
+        requested = str(self.mode_combo.currentData() or "general")
+        if requested == "debug" and self.debug_repository is None:
+            message = self.bundle.debug_warning if self.bundle is not None and self.bundle.debug_warning else "이 결과에는 디버그 기록이 없습니다."
+            QMessageBox.information(self, "디버그 기록 없음", message)
+            self.mode_combo.blockSignals(True)
+            self.mode_combo.setCurrentIndex(0)
+            self.mode_combo.blockSignals(False)
+            requested = "general"
+        self.mode = requested
+        self.detail_stack.setCurrentWidget(self.debug_details if self.mode == "debug" else self.details)
+        if self.current_frame is not None and self.bundle is not None and self.query is not None:
+            glass = self.bundle.glass_config(self.selected_glass_id)
+            if glass is not None:
+                overlay = self.query.overlay_at(self.selected_glass_id, self.current_time)
+                if self.mode == "debug" and self.selected_debug_record is not None:
+                    self.canvas.set_debug_frame(self.current_frame, glass, self.selected_debug_record, self.current_time)
+                    self.debug_details.set_record(self.selected_debug_record, self.current_time)
+                else:
+                    self.canvas.set_review_frame(self.current_frame, glass, overlay)
+                    self.details.update_details(
+                        self.bundle,
+                        self.selected_glass_id,
+                        overlay,
+                        self.current_frame_index,
+                        self.current_time,
+                        self.query.active_events(self.selected_glass_id, self.current_time),
+                    )
+        self._rebuild_graph()
+        self._refresh_markers()
+
+    def _set_debug_mode_available(self, enabled: bool, message: str) -> None:
+        item = self.mode_combo.model().item(1)
+        if item is not None:
+            item.setEnabled(enabled)
+            item.setToolTip("분석 당시 저장된 trace를 표시합니다." if enabled else message)
+        self.mode_combo.setToolTip(message if not enabled else "일반 검토와 분석 당시 저장된 디버그 trace를 전환합니다.")
+
+    def _debug_record_activated(self, summary) -> None:
+        if self.debug_repository is None:
+            return
+        try:
+            record = self.debug_repository.load_record(summary.record_id)
+        except DebugTraceError as exc:
+            QMessageBox.warning(self, "디버그 장면 읽기 실패", str(exc))
+            return
+        self.playback.pause()
+        self.selected_debug_summary = summary
+        self.selected_debug_record = record
+        self.mode_combo.setCurrentIndex(1)
+        self.debug_details.set_record(record, None)
+        self._load_debug_artifact(self.debug_details.current_artifact_key())
+        self._rebuild_graph()
+        self._refresh_markers()
+        self._jump_to(record.timestamp_sec)
+
+    def _load_debug_artifact(self, key: str) -> None:
+        if self.debug_repository is None or self.selected_debug_record is None or not key:
+            return
+        try:
+            image = self.debug_repository.load_image(self.selected_debug_record, key)
+            self.debug_details.set_artifact(key, image)
+        except DebugTraceError as exc:
+            self.debug_details.set_artifact(key, None, str(exc))
 
     def _rebuild_graph(self) -> None:
         if self.bundle is None or self.query is None or not self.selected_glass_id:
@@ -340,10 +491,17 @@ class ResultReviewWindow(QMainWindow):
             self.navigation.current_filter(),
             self.current_time,
             self.query,
+            self._filtered_debug_summaries(),
+            self.selected_debug_summary.record_id if self.selected_debug_summary is not None else "",
         )
         self.graph.set_model(model)
 
     def _graph_clicked(self, timestamp: float) -> None:
+        if self.mode == "debug" and self.debug_repository is not None:
+            summary = self.debug_repository.nearest(self.selected_glass_id, timestamp, self._debug_tolerance())
+            if summary is not None and summary in self._filtered_debug_summaries():
+                self._debug_record_activated(summary)
+                return
         self._jump_to(timestamp)
 
     def _play_toggled(self, playing: bool) -> None:
@@ -382,12 +540,26 @@ class ResultReviewWindow(QMainWindow):
         else:
             self.current_time = timestamp
             self.graph.set_cursor(timestamp)
+            if self.mode == "debug" and self.selected_debug_record is not None:
+                self.debug_details.set_record(self.selected_debug_record, None)
             self.statusBar().showMessage(f"원본 영상 없음 · 선택 항목 시각 {timestamp:.3f}초")
 
     def _navigate_item(self, direction: int) -> None:
         if self.query is None or not self.selected_glass_id:
             return
-        if self.navigation.active_tab_is_events():
+        if self.navigation.active_tab_is_debug():
+            values = list(self._filtered_debug_summaries())
+            current = self.current_time
+            ordered = sorted(values, key=lambda item: (item.timestamp_sec, item.frame_index, item.record_id))
+            if direction < 0:
+                target = next((item for item in reversed(ordered) if item.timestamp_sec < current - 1e-9), None)
+            else:
+                target = next((item for item in ordered if item.timestamp_sec > current + 1e-9), None)
+            if target is not None:
+                self._debug_record_activated(target)
+                return
+            timestamp = None
+        elif self.navigation.active_tab_is_events():
             target = self.query.previous_event(self.selected_glass_id, self.current_time) if direction < 0 else self.query.next_event(self.selected_glass_id, self.current_time)
             timestamp = target.start_time_sec if target is not None else None
         else:
@@ -397,6 +569,18 @@ class ResultReviewWindow(QMainWindow):
             self.statusBar().showMessage("현재 필터에서 이동할 이전/다음 항목이 없습니다.")
         else:
             self._jump_to(timestamp)
+
+    def _filtered_debug_summaries(self):
+        if self.debug_repository is None:
+            return ()
+        _key, reasons = self.navigation.current_debug_filter()
+        return self.debug_repository.summaries(self.selected_glass_id, reasons or None)
+
+    def _debug_tolerance(self) -> float:
+        if self.bundle is None:
+            return 0.05
+        fps = max(0.1, float(self.bundle.session.sampling_fps or 1.0))
+        return max(0.05, 0.55 / fps)
 
     def _refresh_markers(self) -> None:
         if self.bundle is None or self.query is None:
@@ -410,6 +594,33 @@ class ResultReviewWindow(QMainWindow):
             for interval in self.query.filtered_intervals(self.selected_glass_id, self.navigation.current_filter())
         ]
         self.transport.slider.set_review_markers(duration, events, intervals)
+        summaries = self._filtered_debug_summaries()
+        self.transport.slider.set_debug_markers(
+            duration,
+            [summary.timestamp_sec for summary in summaries],
+            self.selected_debug_summary.timestamp_sec if self.selected_debug_summary is not None else None,
+        )
+
+    def export_debug_case(self) -> None:
+        if self.bundle is None or self.debug_repository is None or self.selected_debug_record is None:
+            QMessageBox.information(self, "디버그 재현 패키지", "내보낼 디버그 장면을 먼저 선택해 주세요.")
+            return
+        destination = QFileDialog.getExistingDirectory(self, "디버그 재현 패키지를 만들 상위 폴더 선택", str(self.bundle.root.parent))
+        if not destination:
+            return
+        try:
+            output = self.debug_case_exporter.export(
+                self.bundle,
+                self.debug_repository,
+                self.selected_debug_record.record_id,
+                destination,
+                source_video_path=self.active_video_path,
+            )
+        except (DebugCaseExportError, DebugTraceError, OSError, ValueError) as exc:
+            LOGGER.exception("Debug case export failed")
+            QMessageBox.critical(self, "디버그 재현 패키지 실패", str(exc))
+            return
+        QMessageBox.information(self, "디버그 재현 패키지 완료", f"독립 패키지를 생성했습니다.\n{output}")
 
     def open_report(self) -> None:
         self._run_result_action("결과 보고서 열기", lambda: self.action_service.open_report(self.bundle))
@@ -474,8 +685,14 @@ class ResultReviewWindow(QMainWindow):
     def closeEvent(self, event) -> None:
         self.playback.close()
         self.graph.close()
+        if self.debug_repository is not None:
+            self.debug_repository.close()
+            self.debug_repository = None
+        self.debug_details.clear()
         self.current_frame = None
         self.selected_event = None
+        self.selected_debug_summary = None
+        self.selected_debug_record = None
         super().closeEvent(event)
 
 
