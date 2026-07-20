@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, MutableMapping, Sequence
+from typing import Any
 
 from oil_tracker.domain.enums import FillState
 from oil_tracker.domain.recipe import GlassInspectionConfig
 from oil_tracker.domain.results import TrackingSample
+
+
+DecodedFrame = tuple[Any, int, float]
 
 
 def static_artifact_sample_timestamps(schedule: Sequence[float]) -> tuple[float, ...]:
@@ -20,12 +24,15 @@ def learn_static_artifacts(
     detector,
     glasses: Iterable[GlassInspectionConfig],
     schedule: Sequence[float],
+    *,
+    decoded_frame_cache: MutableMapping[float, DecodedFrame] | None = None,
 ) -> tuple[float, ...]:
-    """Prepare one isolated detector using the official representative-frame policy.
+    """Prepare a detector using the official representative-frame policy.
 
-    Decode failures are intentionally skipped. The returned timestamps identify the
-    representative frames that were decoded successfully, which is useful for audit
-    and deterministic tests.
+    Decode failures are intentionally skipped. Re-detection may provide a bounded
+    cache so representative timestamps that also belong to its processing schedule
+    are decoded only once. The official pipeline leaves the cache unset and retains
+    its established behavior.
     """
     learn = getattr(detector, "learn_static_artifact", None)
     targets = static_artifact_sample_timestamps(schedule)
@@ -35,11 +42,14 @@ def learn_static_artifacts(
     decoded_targets: list[float] = []
     for target in targets:
         try:
-            frame, _frame_index, _actual_timestamp = reader.read_at(target)
+            decoded = reader.read_at(target)
         except Exception:
             continue
+        frame, _frame_index, _actual_timestamp = decoded
         frames.append(frame)
         decoded_targets.append(target)
+        if decoded_frame_cache is not None:
+            decoded_frame_cache[target] = decoded
     if not frames:
         return ()
     for glass in tuple(glasses):
