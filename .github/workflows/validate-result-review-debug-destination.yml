@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
   test:
@@ -17,6 +19,7 @@ jobs:
     env:
       QT_QPA_PLATFORM: offscreen
       TARGET_SHA: 160f51b87e0ea4478a5a8c91b9723092e0502720
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout exact feature head
         uses: actions/checkout@v4
@@ -74,10 +77,35 @@ jobs:
           echo "Exact feature SHA=${TARGET_SHA}" | tee -a "validation-environment-${{ matrix.python-version }}.txt"
 
       - name: Run canonical suite
+        id: canonical
+        continue-on-error: true
         shell: bash
         run: |
+          set +e
           set -o pipefail
           QT_QPA_PLATFORM=offscreen python -m pytest -q 2>&1 | tee "pytest-${{ matrix.python-version }}.log"
+          status=${PIPESTATUS[0]}
+          echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
+          exit 0
+
+      - name: Publish validation result to PR
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "### Exact-head validation — Python ${{ matrix.python-version }}"
+            echo
+            echo "- workflow run: ${{ github.run_id }}"
+            echo "- exact feature SHA: \`${TARGET_SHA}\`"
+            echo "- canonical exit code: \`${{ steps.canonical.outputs.exit_code || 'not-run' }}\`"
+            echo
+            echo '```text'
+            cat "validation-environment-${{ matrix.python-version }}.txt" 2>/dev/null || true
+            echo
+            tail -n 160 "pytest-${{ matrix.python-version }}.log" 2>/dev/null || true
+            echo '```'
+          } > validation-comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file validation-comment.md
 
       - name: Upload validation summary
         if: always()
@@ -89,3 +117,8 @@ jobs:
             pytest-${{ matrix.python-version }}.log
           if-no-files-found: warn
           retention-days: 7
+
+      - name: Fail when canonical suite failed
+        if: ${{ steps.canonical.outputs.exit_code != '0' }}
+        shell: bash
+        run: exit 1
