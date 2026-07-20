@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QDialog,
     QDialogButtonBox,
@@ -29,20 +29,20 @@ class AnalysisCompleteDialog(QDialog):
         self.setModal(False)
         self.setMinimumWidth(620)
         layout = QVBoxLayout(self)
-        title = QLabel(f"분석 완료 · 전체 판정: {result_state_label(result.overall_state)}")
-        title.setObjectName("analysisCompleteTitle")
-        layout.addWidget(title)
-        path_label = QLabel(str(self.output_path))
-        path_label.setWordWrap(True)
-        path_label.setTextInteractionFlags(path_label.textInteractionFlags())
+        self.title_label = QLabel(f"분석 완료 · 전체 판정: {result_state_label(result.overall_state)}")
+        self.title_label.setObjectName("analysisCompleteTitle")
+        layout.addWidget(self.title_label)
+        self.path_label = QLabel(str(self.output_path))
+        self.path_label.setWordWrap(True)
+        self.path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         layout.addWidget(QLabel("결과 bundle 경로"))
-        layout.addWidget(path_label)
-        summary = QLabel(self._glass_summary())
-        summary.setWordWrap(True)
+        layout.addWidget(self.path_label)
+        self.summary_label = QLabel(self._glass_summary())
+        self.summary_label.setWordWrap(True)
         layout.addWidget(QLabel("관찰창별 판정"))
-        layout.addWidget(summary)
-        counts = QLabel(f"경고 {len(result.warnings)}개 · 오류 {len(result.errors)}개 · 상태: ANALYZED")
-        layout.addWidget(counts)
+        layout.addWidget(self.summary_label)
+        self.counts_label = QLabel(f"경고 {len(result.warnings)}개 · 오류 {len(result.errors)}개 · 상태: ANALYZED")
+        layout.addWidget(self.counts_label)
         actions = QGridLayout()
         self.review_button = QPushButton("결과 영상 검토")
         self.report_button = QPushButton("결과 보고서 열기")
@@ -53,9 +53,9 @@ class AnalysisCompleteDialog(QDialog):
         actions.addWidget(self.folder_button, 1, 0)
         actions.addWidget(self.same_profile_button, 1, 1)
         layout.addLayout(actions)
-        close_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
-        close_box.rejected.connect(self.reject)
-        layout.addWidget(close_box)
+        self.close_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        self.close_box.rejected.connect(self.reject)
+        layout.addWidget(self.close_box)
         self.review_button.clicked.connect(self.reviewRequested)
         self.report_button.clicked.connect(self.reportRequested)
         self.folder_button.clicked.connect(self.folderRequested)
