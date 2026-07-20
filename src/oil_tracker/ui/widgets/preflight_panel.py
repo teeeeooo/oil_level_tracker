@@ -183,10 +183,11 @@ class PreflightPanel(QWidget):
         try:
             self.result_table.setRowCount(len(result.samples))
             for row, sample in enumerate(result.samples):
+                actual_time = sample.sample_point.actual_timestamp
                 values = (
                     sample.glass_name,
                     sample.sample_point.label,
-                    f"{sample.sample_point.actual_timestamp:.3f} 초",
+                    "-" if actual_time is None else f"{actual_time:.3f} 초",
                     _STATUS_LABELS[sample.status],
                     "-" if sample.fill_state is None else fill_state_label(sample.fill_state),
                     "-" if sample.confidence is None else f"{sample.confidence * 100:.0f}%",
@@ -197,7 +198,11 @@ class PreflightPanel(QWidget):
                     if column == 0:
                         item.setData(
                             Qt.ItemDataRole.UserRole,
-                            (sample.glass_id, sample.sample_point.actual_timestamp, sample.reason),
+                            (
+                                sample.glass_id,
+                                sample.sample_point.navigation_timestamp,
+                                sample.reason,
+                            ),
                         )
                     self.result_table.setItem(row, column, item)
             self.result_table.resizeColumnsToContents()
