@@ -25,9 +25,9 @@ class RedetectionResultReviewWindow(ResultReviewWindow):
         self.redetection_action.triggered.connect(self.redetectionRequested)
 
     def load_bundle(self, source) -> bool:
-        self.bundleAboutToChange.emit()
         loaded = super().load_bundle(source)
         if loaded:
+            self.bundleAboutToChange.emit()
             self.redetection_action.setEnabled(self.bundle is not None)
             self.bundleChanged.emit(self.bundle)
             self.sourceVideoChanged.emit(self.active_video_path)
