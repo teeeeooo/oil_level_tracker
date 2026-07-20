@@ -88,17 +88,23 @@ class PartialRedetectionService:
         temporary_settings = detector_settings_from_json(request.detector_settings_json)
         validation_errors = validate_detector_settings(temporary_settings)
         if validation_errors:
-            messages = ", ".join(f"{key}: {value}" for key, value in validation_errors.items())
+            messages = ", ".join(
+                f"{field}: {message}" for field, message in validation_errors.items()
+            )
             raise RedetectionError(f"검출 설정이 올바르지 않습니다: {messages}")
-        glass = next((item for item in recipe.glasses if item.id == request.selected_glass_id), None)
+        glass = next(
+            (item for item in recipe.glasses if item.id == request.selected_glass_id),
+            None,
+        )
         if glass is None:
             raise RedetectionError("선택한 관찰창이 recipe snapshot에 없습니다.")
         baseline_settings = glass.detector_settings
         glass.detector_settings = temporary_settings
         source = Path(request.source_video_path).expanduser()
         if not source.is_file():
-            raise RedetectionError("원본 영상이 없습니다. 원본 영상을 다시 지정해 주세요.")
-
+            raise RedetectionError(
+                "원본 영상이 없습니다. 원본 영상을 다시 지정해 주세요."
+            )
         schedule = redetection_schedule(request)
         if not schedule:
             raise RedetectionError("재검출할 timestamp schedule이 비어 있습니다.")
@@ -106,7 +112,15 @@ class PartialRedetectionService:
         if display_total <= 0:
             raise RedetectionError("표시 구간에 재검출 sample이 없습니다.")
 
-        self._emit(progress, request, "source_prepare", 0, display_total, None, "원본 영상 준비")
+        self._emit(
+            progress,
+            request,
+            "source_prepare",
+            0,
+            display_total,
+            None,
+            "원본 영상 준비",
+        )
         detector = self.detector_factory()
         if detector is None:
             raise RedetectionError("재검출 detector를 만들 수 없습니다.")
@@ -151,8 +165,15 @@ class PartialRedetectionService:
             consecutive_failures = 0
             for nominal_timestamp, warmup in schedule:
                 self._check_cancelled(cancellation)
+                detection = None
+                artifacts = None
+                frame_index = None
+                actual_timestamp = None
+                detection_error: Exception | None = None
                 try:
-                    frame, frame_index, actual_timestamp = reader.read_at(nominal_timestamp)
+                    frame, frame_index, actual_timestamp = reader.read_at(
+                        nominal_timestamp
+                    )
                     detection, artifacts = detector.detect(
                         frame,
                         glass,
@@ -160,42 +181,29 @@ class PartialRedetectionService:
                         actual_timestamp,
                         debug=True,
                     )
-                    consecutive_failures = 0
-                    if warmup:
-                        continue
-                    tracking = tracking_sample_from_detection(
-                        workspace.run_id,
-                        glass,
-                        detection,
-                    )
-                    record_id = workspace.write_detection(glass, detection, artifacts)
-                    selected_candidate = _selected_candidate(detection)
-                    sample = RedetectionSample(
-                        nominal_timestamp_sec=nominal_timestamp,
-                        requested_timestamp_sec=nominal_timestamp,
-                        actual_timestamp_sec=actual_timestamp,
-                        frame_index=frame_index,
-                        tracking_sample=tracking,
-                        fill_state=tracking.fill_state,
-                        confidence=tracking.overall_confidence,
-                        is_valid=tracking.is_valid,
-                        flags=tuple(tracking.flags),
-                        selected_candidate=selected_candidate,
-                        debug_record_id=record_id,
-                    )
                 except Exception as exc:
-                    if request.mode is RedetectionMode.CURRENT:
-                        raise RedetectionError(
-                            f"현재 장면 재검출에 실패했습니다: {type(exc).__name__}: {exc}"
-                        ) from exc
+                    detection_error = exc
                     consecutive_failures += 1
                     LOGGER.exception(
                         "Redetection sample failed at %.9f", nominal_timestamp
                     )
-                    if consecutive_failures >= self.policy.max_consecutive_sample_failures:
+                else:
+                    consecutive_failures = 0
+
+                if detection_error is not None:
+                    if request.mode is RedetectionMode.CURRENT:
                         raise RedetectionError(
-                            "연속된 frame decode 또는 detector 실패로 재검출을 계속할 수 없습니다."
-                        ) from exc
+                            "현재 장면 재검출에 실패했습니다: "
+                            f"{type(detection_error).__name__}: {detection_error}"
+                        ) from detection_error
+                    if (
+                        consecutive_failures
+                        >= self.policy.max_consecutive_sample_failures
+                    ):
+                        raise RedetectionError(
+                            "연속된 frame decode 또는 detector 실패로 재검출을 "
+                            "계속할 수 없습니다."
+                        ) from detection_error
                     if warmup:
                         continue
                     sample = RedetectionSample(
@@ -210,7 +218,38 @@ class PartialRedetectionService:
                         flags=("REDETECTION_SAMPLE_FAILED",),
                         selected_candidate=None,
                         debug_record_id="",
-                        error_message=f"{type(exc).__name__}: {exc}",
+                        error_message=(
+                            f"{type(detection_error).__name__}: {detection_error}"
+                        ),
+                    )
+                else:
+                    if warmup:
+                        continue
+                    tracking = tracking_sample_from_detection(
+                        workspace.run_id,
+                        glass,
+                        detection,
+                    )
+                    # Workspace writes are intentionally outside the recoverable
+                    # frame/detector exception block. A missing index or artifact
+                    # makes the temporary run unusable and therefore fails it.
+                    record_id = workspace.write_detection(
+                        glass,
+                        detection,
+                        artifacts,
+                    )
+                    sample = RedetectionSample(
+                        nominal_timestamp_sec=nominal_timestamp,
+                        requested_timestamp_sec=nominal_timestamp,
+                        actual_timestamp_sec=actual_timestamp,
+                        frame_index=frame_index,
+                        tracking_sample=tracking,
+                        fill_state=tracking.fill_state,
+                        confidence=tracking.overall_confidence,
+                        is_valid=tracking.is_valid,
+                        flags=tuple(tracking.flags),
+                        selected_candidate=_selected_candidate(detection),
+                        debug_record_id=record_id,
                     )
                 workspace.append_sample(sample)
                 display_samples.append(sample)
@@ -227,7 +266,9 @@ class PartialRedetectionService:
 
             succeeded = [sample for sample in display_samples if sample.succeeded]
             if not succeeded:
-                raise RedetectionError("표시 구간에서 성공한 재검출 sample이 없습니다.")
+                raise RedetectionError(
+                    "표시 구간에서 성공한 재검출 sample이 없습니다."
+                )
 
             self._check_cancelled(cancellation)
             self._emit(
@@ -281,7 +322,7 @@ class PartialRedetectionService:
                     tracking_samples,
                 )
                 if request.mode is RedetectionMode.FULL:
-                    if session.compressor_start_sec is not None and tracking_samples:
+                    if session.compressor_start_sec is not None:
                         closest = min(
                             tracking_samples,
                             key=lambda item: abs(
@@ -324,15 +365,13 @@ class PartialRedetectionService:
                     official_summary = official_bundle.glass_summary(glass.id)
                     if official_summary is not None:
                         official_state = official_summary.result_state
-                    official_note = str(
-                        official_bundle.manifest.get("glass_judgment_notes", {}).get(
-                            glass.id,
-                            "",
-                        )
-                    ) if isinstance(official_bundle.manifest.get("glass_judgment_notes"), dict) else ""
+                    notes = official_bundle.manifest.get("glass_judgment_notes")
+                    if isinstance(notes, dict):
+                        official_note = str(notes.get(glass.id, ""))
                 else:
                     rerun_note = (
-                        "구간 참고 결과입니다. 짧은 구간만으로 전체 시험 PASS/FAIL을 확정하지 않습니다."
+                        "구간 참고 결과입니다. 짧은 구간만으로 전체 시험 "
+                        "PASS/FAIL을 확정하지 않습니다."
                     )
                 official_events = _official_events_for_request(
                     official_bundle.events,
@@ -365,7 +404,6 @@ class PartialRedetectionService:
                 "workspace 완료",
             )
             workspace.finalize()
-            limitation = _limitation_message(request.mode)
             result = RedetectionResult(
                 request=request,
                 workspace_root=str(workspace.root),
@@ -386,8 +424,10 @@ class PartialRedetectionService:
                 official_judgment_note=official_note,
                 rerun_judgment_note=rerun_note,
                 rerun_valid_coverage_ratio=rerun_coverage,
-                candidate_baseline_available=bool(official_candidate_timestamps),
-                limitation_message=limitation,
+                candidate_baseline_available=bool(
+                    official_candidate_timestamps
+                ),
+                limitation_message=_limitation_message(request.mode),
                 warnings=tuple(
                     sample.error_message
                     for sample in display_samples
@@ -413,7 +453,15 @@ class PartialRedetectionService:
             raise RedetectionCancelled("재검출이 취소되었습니다.")
 
     @staticmethod
-    def _emit(progress, request, stage, processed, total, timestamp, message) -> None:
+    def _emit(
+        progress,
+        request,
+        stage,
+        processed,
+        total,
+        timestamp,
+        message,
+    ) -> None:
         if progress is not None:
             progress(
                 RedetectionProgress(
@@ -430,7 +478,11 @@ class PartialRedetectionService:
 def _selected_candidate(detection) -> RedetectionCandidate | None:
     ordered = sorted(
         detection.candidates,
-        key=lambda candidate: (-candidate.final_score, candidate.y, candidate.source),
+        key=lambda candidate: (
+            -candidate.final_score,
+            candidate.y,
+            candidate.source,
+        ),
     )
     for rank, candidate in enumerate(ordered, 1):
         if candidate.selected:
@@ -465,19 +517,28 @@ def _official_events_for_request(events, request):
         event
         for event in selected
         if event.start_time_sec <= end
-        and (event.end_time_sec if event.end_time_sec is not None else event.start_time_sec) >= start
+        and (
+            event.end_time_sec
+            if event.end_time_sec is not None
+            else event.start_time_sec
+        )
+        >= start
     )
 
 
 def _limitation_message(mode: RedetectionMode) -> str:
     if mode is RedetectionMode.CURRENT:
         return (
-            "현재 장면만 독립적으로 검출한 결과입니다. 공식 분석의 temporal smoothing과 "
-            "상태 이력은 완전히 재현되지 않을 수 있습니다."
+            "현재 장면만 독립적으로 검출한 결과입니다. 공식 분석의 temporal "
+            "smoothing과 상태 이력은 완전히 재현되지 않을 수 있습니다."
         )
     if mode is RedetectionMode.SHORT:
         return (
-            "짧은 구간 이전의 전체 분석 이력은 포함되지 않습니다. 가까운 temporal context를 "
-            "사용한 비교 결과입니다. 전체 시험 판정이 아닌 구간 참고 결과입니다."
+            "짧은 구간 이전의 전체 분석 이력은 포함되지 않습니다. 가까운 "
+            "temporal context를 사용한 비교 결과입니다. 전체 시험 판정이 아닌 "
+            "구간 참고 결과입니다."
         )
-    return "분석 snapshot의 전체 timestamp schedule과 판정 규칙을 사용한 선택 관찰창 재검출 결과입니다."
+    return (
+        "분석 snapshot의 전체 timestamp schedule과 판정 규칙을 사용한 선택 "
+        "관찰창 재검출 결과입니다."
+    )
