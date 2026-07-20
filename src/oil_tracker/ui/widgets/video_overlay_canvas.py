@@ -4,11 +4,12 @@ from typing import Callable
 
 import numpy as np
 from PySide6.QtCore import QPointF, QRectF, Qt, Signal
-from PySide6.QtGui import QBrush, QColor, QImage, QPainter, QPen, QPixmap
+from PySide6.QtGui import QBrush, QColor, QImage, QPainter, QPainterPath, QPen, QPixmap
 from PySide6.QtWidgets import (
     QGraphicsEllipseItem,
     QGraphicsItem,
     QGraphicsLineItem,
+    QGraphicsPathItem,
     QGraphicsPixmapItem,
     QGraphicsRectItem,
     QGraphicsScene,
@@ -16,126 +17,264 @@ from PySide6.QtWidgets import (
     QGraphicsView,
 )
 
-from oil_tracker.domain.enums import BoundaryKind
 from oil_tracker.domain.geometry import EllipseGeometry, Rect
+from oil_tracker.ui.presentation_labels import fill_state_label
+
+
+MIN_ELLIPSE_SIZE = 20.0
+
+
+def scene_rect_in_frame(item: QGraphicsItem, rect: QRectF, frame_rect: QRectF) -> QRectF:
+    """Return one item's rectangle in canonical scene coordinates, clipped to the frame."""
+    return item.mapRectToScene(rect).normalized().intersected(frame_rect)
+
+
+def resized_rect(
+    start_rect: QRectF,
+    handle: str,
+    point: QPointF,
+    frame_rect: QRectF,
+    minimum_size: float = MIN_ELLIPSE_SIZE,
+) -> QRectF:
+    left, top, right, bottom = (
+        start_rect.left(),
+        start_rect.top(),
+        start_rect.right(),
+        start_rect.bottom(),
+    )
+    if "l" in handle:
+        left = min(point.x(), right - minimum_size)
+    if "r" in handle:
+        right = max(point.x(), left + minimum_size)
+    if "t" in handle:
+        top = min(point.y(), bottom - minimum_size)
+    if "b" in handle:
+        bottom = max(point.y(), top + minimum_size)
+    left = max(frame_rect.left(), left)
+    right = min(frame_rect.right(), right)
+    top = max(frame_rect.top(), top)
+    bottom = min(frame_rect.bottom(), bottom)
+    if right - left < minimum_size:
+        if "l" in handle:
+            left = max(frame_rect.left(), right - minimum_size)
+        else:
+            right = min(frame_rect.right(), left + minimum_size)
+    if bottom - top < minimum_size:
+        if "t" in handle:
+            top = max(frame_rect.top(), bottom - minimum_size)
+        else:
+            bottom = min(frame_rect.bottom(), top + minimum_size)
+    return QRectF(QPointF(left, top), QPointF(right, bottom)).normalized()
+
+
+class ResizeHandleItem(QGraphicsRectItem):
+    SIZE = 10.0
+    HIT_SIZE = 18.0
+
+    def __init__(self, role: str, owner: "EditableEllipseItem") -> None:
+        super().__init__(owner)
+        self.role = role
+        self.owner = owner
+        self.setRect(-self.SIZE / 2, -self.SIZE / 2, self.SIZE, self.SIZE)
+        self.setBrush(QBrush(QColor(22, 105, 170)))
+        self.setPen(QPen(QColor(255, 255, 255), 1))
+        self.setZValue(4)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations, True)
+        self.setAcceptHoverEvents(True)
+        self.setCursor(_handle_cursor(role))
+
+    def shape(self) -> QPainterPath:
+        path = QPainterPath()
+        path.addRect(-self.HIT_SIZE / 2, -self.HIT_SIZE / 2, self.HIT_SIZE, self.HIT_SIZE)
+        return path
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.owner.begin_resize(self.role, event.scenePos())
+            event.accept()
+            return
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event) -> None:
+        self.owner.continue_resize(event.scenePos())
+        event.accept()
+
+    def mouseReleaseEvent(self, event) -> None:
+        self.owner.end_resize(event.scenePos())
+        event.accept()
 
 
 class EditableEllipseItem(QGraphicsEllipseItem):
-    HANDLE = 10.0
+    HANDLE_ROLES = ("tl", "t", "tr", "r", "br", "b", "bl", "l")
 
     def __init__(self, glass_id: str, rect: QRectF, frame_rect: QRectF, callback: Callable[[str, QRectF], None]) -> None:
         super().__init__(rect)
         self.glass_id = glass_id
         self.frame_rect = frame_rect
         self.callback = callback
-        self._handle: str | None = None
-        self._start_rect = QRectF(rect)
-        self.setFlags(QGraphicsItem.GraphicsItemFlag.ItemIsMovable | QGraphicsItem.GraphicsItemFlag.ItemIsSelectable | QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges)
+        self._resizing = False
+        self._active_handle: str | None = None
+        self._start_scene_rect = QRectF(rect)
+        self._handles = {role: ResizeHandleItem(role, self) for role in self.HANDLE_ROLES}
+        self.setFlags(
+            QGraphicsItem.GraphicsItemFlag.ItemIsMovable
+            | QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+            | QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges
+        )
         self.setAcceptHoverEvents(True)
+        self.setCursor(Qt.CursorShape.SizeAllCursor)
         self.setZValue(30)
         self.setPen(QPen(QColor(0, 220, 255), 2))
         self.setBrush(QBrush(Qt.BrushStyle.NoBrush))
+        self._sync_handles()
 
-    def _handles(self) -> dict[str, QRectF]:
-        r = self.rect()
-        h = self.HANDLE
-        points = {
-            "tl": r.topLeft(), "t": QPointF(r.center().x(), r.top()), "tr": r.topRight(),
-            "r": QPointF(r.right(), r.center().y()), "br": r.bottomRight(), "b": QPointF(r.center().x(), r.bottom()),
-            "bl": r.bottomLeft(), "l": QPointF(r.left(), r.center().y()),
-        }
-        return {name: QRectF(point.x() - h / 2, point.y() - h / 2, h, h) for name, point in points.items()}
+    def begin_resize(self, role: str, _scene_pos: QPointF) -> None:
+        self._resizing = True
+        self._active_handle = role
+        self._start_scene_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
 
-    def paint(self, painter: QPainter, option, widget=None) -> None:
-        super().paint(painter, option, widget)
-        if self.isSelected():
-            painter.setPen(QPen(QColor(255, 255, 255), 1))
-            painter.setBrush(QBrush(QColor(0, 160, 220)))
-            for handle in self._handles().values():
-                painter.drawRect(handle)
-
-    def mousePressEvent(self, event) -> None:
-        self._handle = None
-        for name, rect in self._handles().items():
-            if rect.contains(event.pos()):
-                self._handle = name
-                self._start_rect = QRectF(self.rect())
-                event.accept()
-                return
-        super().mousePressEvent(event)
-
-    def mouseMoveEvent(self, event) -> None:
-        if self._handle is None:
-            super().mouseMoveEvent(event)
+    def continue_resize(self, scene_pos: QPointF) -> None:
+        if not self._resizing or self._active_handle is None:
             return
-        r = QRectF(self._start_rect)
-        p = event.pos()
-        if "l" in self._handle:
-            r.setLeft(p.x())
-        if "r" in self._handle:
-            r.setRight(p.x())
-        if "t" in self._handle:
-            r.setTop(p.y())
-        if "b" in self._handle:
-            r.setBottom(p.y())
-        r = r.normalized()
-        if r.width() < 20:
-            r.setWidth(20)
-        if r.height() < 20:
-            r.setHeight(20)
-        r = r.intersected(self.frame_rect)
-        self.setRect(r)
-        event.accept()
-
-    def mouseReleaseEvent(self, event) -> None:
-        if self._handle is None:
-            super().mouseReleaseEvent(event)
-        else:
-            self._handle = None
-            event.accept()
-        scene_rect = self.mapRectToScene(self.rect()).boundingRect()
+        new_scene_rect = resized_rect(
+            self._start_scene_rect,
+            self._active_handle,
+            scene_pos,
+            self.frame_rect,
+        )
         self.setPos(0, 0)
-        self.setRect(scene_rect.intersected(self.frame_rect))
-        self.callback(self.glass_id, self.rect())
+        self.setRect(new_scene_rect)
+        self._sync_handles()
+
+    def end_resize(self, scene_pos: QPointF) -> None:
+        if not self._resizing:
+            return
+        self.continue_resize(scene_pos)
+        self._resizing = False
+        self._active_handle = None
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+        self.callback(self.glass_id, QRectF(self.rect()))
 
     def itemChange(self, change, value):
         if change == QGraphicsItem.GraphicsItemChange.ItemPositionChange and self.scene() is not None:
             proposed = value
             moved = self.rect().translated(proposed)
-            dx = proposed.x()
-            dy = proposed.y()
-            if moved.left() < self.frame_rect.left(): dx += self.frame_rect.left() - moved.left()
-            if moved.right() > self.frame_rect.right(): dx -= moved.right() - self.frame_rect.right()
-            if moved.top() < self.frame_rect.top(): dy += self.frame_rect.top() - moved.top()
-            if moved.bottom() > self.frame_rect.bottom(): dy -= moved.bottom() - self.frame_rect.bottom()
+            dx, dy = proposed.x(), proposed.y()
+            if moved.left() < self.frame_rect.left():
+                dx += self.frame_rect.left() - moved.left()
+            if moved.right() > self.frame_rect.right():
+                dx -= moved.right() - self.frame_rect.right()
+            if moved.top() < self.frame_rect.top():
+                dy += self.frame_rect.top() - moved.top()
+            if moved.bottom() > self.frame_rect.bottom():
+                dy -= moved.bottom() - self.frame_rect.bottom()
             return QPointF(dx, dy)
+        if change == QGraphicsItem.GraphicsItemChange.ItemSelectedHasChanged:
+            self._sync_handles()
         return super().itemChange(change, value)
+
+    def mouseReleaseEvent(self, event) -> None:
+        if self._resizing:
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
+        final_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
+        self.setPos(0, 0)
+        self.setRect(final_rect)
+        self._sync_handles()
+        self.callback(self.glass_id, QRectF(self.rect()))
+
+    def _sync_handles(self) -> None:
+        r = self.rect()
+        positions = {
+            "tl": r.topLeft(),
+            "t": QPointF(r.center().x(), r.top()),
+            "tr": r.topRight(),
+            "r": QPointF(r.right(), r.center().y()),
+            "br": r.bottomRight(),
+            "b": QPointF(r.center().x(), r.bottom()),
+            "bl": r.bottomLeft(),
+            "l": QPointF(r.left(), r.center().y()),
+        }
+        for role, handle in self._handles.items():
+            handle.setPos(positions[role])
+            handle.setVisible(self.isSelected())
 
 
 class DraggableZeroLine(QGraphicsLineItem):
-    def __init__(self, glass_id: str, y: float, x1: float, x2: float, min_y: float, max_y: float, callback) -> None:
-        super().__init__(x1, y, x2, y)
+    HIT_HEIGHT = 14.0
+
+    def __init__(self, glass_id: str, y: float, ellipse: EllipseGeometry, callback) -> None:
+        extent = ellipse.horizontal_extent_at(y) or (
+            ellipse.center_x - ellipse.radius_x,
+            ellipse.center_x + ellipse.radius_x,
+        )
+        super().__init__(extent[0], y, extent[1], y)
         self.glass_id = glass_id
-        self.min_y = min_y
-        self.max_y = max_y
+        self.ellipse = ellipse
         self.callback = callback
-        self.setPen(QPen(QColor(255, 255, 0), 2, Qt.PenStyle.DashLine))
+        self._dragging = False
+        self.setPen(QPen(QColor(255, 220, 0), 3, Qt.PenStyle.DashLine))
         self.setZValue(50)
         self.setCursor(Qt.CursorShape.SizeVerCursor)
+        self.label = QGraphicsSimpleTextItem("기준점", self)
+        self.label.setBrush(QBrush(QColor(255, 240, 80)))
+        self.label.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations, True)
+        self._position_label()
+
+    def shape(self) -> QPainterPath:
+        line = self.line()
+        path = QPainterPath()
+        path.addRect(
+            min(line.x1(), line.x2()),
+            line.y1() - self.HIT_HEIGHT / 2,
+            abs(line.x2() - line.x1()),
+            self.HIT_HEIGHT,
+        )
+        return path
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._dragging = True
+            self._set_y(event.scenePos().y())
+            event.accept()
+            return
+        super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event) -> None:
-        y = min(self.max_y, max(self.min_y, event.scenePos().y()))
-        line = self.line()
-        self.setLine(line.x1(), y, line.x2(), y)
-        event.accept()
+        if self._dragging:
+            self._set_y(event.scenePos().y())
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event) -> None:
-        self.callback(self.glass_id, self.line().y1())
-        event.accept()
+        if self._dragging:
+            self._set_y(event.scenePos().y())
+            self._dragging = False
+            self.callback(self.glass_id, self.line().y1())
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
+
+    def _set_y(self, requested_y: float) -> None:
+        minimum = self.ellipse.center_y - self.ellipse.radius_y
+        maximum = self.ellipse.center_y + self.ellipse.radius_y
+        y = min(maximum, max(minimum, requested_y))
+        extent = self.ellipse.horizontal_extent_at(y)
+        if extent is None:
+            return
+        self.setLine(extent[0], y, extent[1], y)
+        self._position_label()
+
+    def _position_label(self) -> None:
+        line = self.line()
+        self.label.setPos(line.x1() + 6, line.y1() - 22)
 
 
 class EditableRectItem(QGraphicsRectItem):
-    HANDLE = 9.0
+    HANDLE = 10.0
 
     def __init__(self, glass_id: str, zone_id: str, rect: QRectF, frame_rect: QRectF, callback) -> None:
         super().__init__(rect)
@@ -145,7 +284,11 @@ class EditableRectItem(QGraphicsRectItem):
         self.callback = callback
         self._resize = False
         self._start = QRectF(rect)
-        self.setFlags(QGraphicsItem.GraphicsItemFlag.ItemIsMovable | QGraphicsItem.GraphicsItemFlag.ItemIsSelectable | QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges)
+        self.setFlags(
+            QGraphicsItem.GraphicsItemFlag.ItemIsMovable
+            | QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+            | QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges
+        )
         self.setPen(QPen(QColor(255, 140, 0), 2, Qt.PenStyle.DashLine))
         self.setBrush(QBrush(QColor(255, 100, 0, 40)))
         self.setZValue(40)
@@ -163,6 +306,7 @@ class EditableRectItem(QGraphicsRectItem):
         if self._handle().contains(event.pos()):
             self._resize = True
             self._start = QRectF(self.rect())
+            self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
             event.accept()
         else:
             self._resize = False
@@ -182,11 +326,12 @@ class EditableRectItem(QGraphicsRectItem):
     def mouseReleaseEvent(self, event) -> None:
         if not self._resize:
             super().mouseReleaseEvent(event)
-        scene_rect = self.mapRectToScene(self.rect()).boundingRect().intersected(self.frame_rect)
+        scene_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
         self.setPos(0, 0)
         self.setRect(scene_rect)
-        self.callback(self.glass_id, self.zone_id, self.rect())
+        self.callback(self.glass_id, self.zone_id, QRectF(self.rect()))
         self._resize = False
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         event.accept()
 
     def itemChange(self, change, value):
@@ -194,10 +339,14 @@ class EditableRectItem(QGraphicsRectItem):
             proposed = value
             moved = self.rect().translated(proposed)
             dx, dy = proposed.x(), proposed.y()
-            if moved.left() < 0: dx -= moved.left()
-            if moved.top() < 0: dy -= moved.top()
-            if moved.right() > self.frame_rect.right(): dx -= moved.right() - self.frame_rect.right()
-            if moved.bottom() > self.frame_rect.bottom(): dy -= moved.bottom() - self.frame_rect.bottom()
+            if moved.left() < self.frame_rect.left():
+                dx += self.frame_rect.left() - moved.left()
+            if moved.right() > self.frame_rect.right():
+                dx -= moved.right() - self.frame_rect.right()
+            if moved.top() < self.frame_rect.top():
+                dy += self.frame_rect.top() - moved.top()
+            if moved.bottom() > self.frame_rect.bottom():
+                dy -= moved.bottom() - self.frame_rect.bottom()
             return QPointF(dx, dy)
         return super().itemChange(change, value)
 
@@ -210,6 +359,7 @@ class VideoOverlayCanvas(QGraphicsView):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
+        self.setObjectName("videoCanvas")
         self._scene = QGraphicsScene(self)
         self.setScene(self._scene)
         self.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.SmoothPixmapTransform)
@@ -229,10 +379,22 @@ class VideoOverlayCanvas(QGraphicsView):
             return
         if frame.ndim == 2:
             contiguous = np.ascontiguousarray(frame)
-            image = QImage(contiguous.data, contiguous.shape[1], contiguous.shape[0], contiguous.strides[0], QImage.Format.Format_Grayscale8).copy()
+            image = QImage(
+                contiguous.data,
+                contiguous.shape[1],
+                contiguous.shape[0],
+                contiguous.strides[0],
+                QImage.Format.Format_Grayscale8,
+            ).copy()
         else:
             rgb = np.ascontiguousarray(frame[:, :, ::-1])
-            image = QImage(rgb.data, rgb.shape[1], rgb.shape[0], rgb.strides[0], QImage.Format.Format_RGB888).copy()
+            image = QImage(
+                rgb.data,
+                rgb.shape[1],
+                rgb.shape[0],
+                rgb.strides[0],
+                QImage.Format.Format_RGB888,
+            ).copy()
         self._frame_size = (image.width(), image.height())
         self._pixmap_item.setPixmap(QPixmap.fromImage(image))
         self._scene.setSceneRect(0, 0, image.width(), image.height())
@@ -256,12 +418,17 @@ class VideoOverlayCanvas(QGraphicsView):
         selected = None
         for glass in self._glasses:
             e = glass.geometry.ellipse
-            rect = QRectF(e.center_x - e.radius_x, e.center_y - e.radius_y, e.radius_x * 2, e.radius_y * 2)
+            rect = QRectF(
+                e.center_x - e.radius_x,
+                e.center_y - e.radius_y,
+                e.radius_x * 2,
+                e.radius_y * 2,
+            )
             if glass.id == self._selected_id:
                 selected = glass
                 item = EditableEllipseItem(glass.id, rect, frame_rect, self._ellipse_changed)
                 item.setSelected(True)
-                item.mousePressEvent
+                item.setData(0, glass.id)
                 self._scene.addItem(item)
             else:
                 item = QGraphicsEllipseItem(rect)
@@ -272,61 +439,95 @@ class VideoOverlayCanvas(QGraphicsView):
         if selected:
             self._add_selected_overlays(selected, frame_rect)
         if self._detection and self._detection.glass_id == self._selected_id and selected:
-            self._add_detection_overlays(selected, self._detection)
+            self._add_detection_status(selected, self._detection)
 
     def _add_selected_overlays(self, glass, frame_rect: QRectF) -> None:
         e = glass.geometry.ellipse
         ratio = glass.geometry.margin_ratio
-        inner = QRectF(e.center_x - e.radius_x * (1-ratio), e.center_y - e.radius_y * (1-ratio), 2*e.radius_x*(1-ratio), 2*e.radius_y*(1-ratio))
+        inner = QRectF(
+            e.center_x - e.radius_x * (1 - ratio),
+            e.center_y - e.radius_y * (1 - ratio),
+            2 * e.radius_x * (1 - ratio),
+            2 * e.radius_y * (1 - ratio),
+        )
         margin = QGraphicsEllipseItem(inner)
         margin.setPen(QPen(QColor(80, 220, 120), 1, Qt.PenStyle.DotLine))
         margin.setZValue(35)
         self._scene.addItem(margin)
         if glass.geometry.zero_line_y is not None:
-            extent = e.horizontal_extent_at(glass.geometry.zero_line_y)
-            if extent:
-                self._scene.addItem(DraggableZeroLine(glass.id, glass.geometry.zero_line_y, extent[0], extent[1], e.center_y-e.radius_y, e.center_y+e.radius_y, self.zeroLineChanged.emit))
+            self._scene.addItem(
+                DraggableZeroLine(
+                    glass.id,
+                    glass.geometry.zero_line_y,
+                    e,
+                    self.zeroLineChanged.emit,
+                )
+            )
         for zone in glass.geometry.exclusions:
             r = zone.rect
-            self._scene.addItem(EditableRectItem(glass.id, zone.id, QRectF(r.x, r.y, r.width, r.height), frame_rect, self._exclusion_changed))
+            self._scene.addItem(
+                EditableRectItem(
+                    glass.id,
+                    zone.id,
+                    QRectF(r.x, r.y, r.width, r.height),
+                    frame_rect,
+                    self._exclusion_changed,
+                )
+            )
         label = QGraphicsSimpleTextItem(glass.name)
         label.setBrush(QBrush(QColor(255, 255, 255)))
         label.setPos(e.bounds.x, max(0, e.bounds.y - 22))
         label.setZValue(90)
         self._scene.addItem(label)
 
-    def _add_detection_overlays(self, glass, detection) -> None:
+    def _add_detection_status(self, glass, detection) -> None:
         e = glass.geometry.ellipse
-        for candidate in detection.candidates:
-            if candidate.kind == BoundaryKind.FOAM_FRONT:
-                color = QColor(255, 0, 255)
-            else:
-                color = QColor(0, 255, 80) if candidate.selected else QColor(255, 70, 70, 150)
-            item = QGraphicsLineItem(e.bounds.x, candidate.y, e.bounds.right, candidate.y)
-            item.setPen(QPen(color, 3 if candidate.selected else 1))
-            item.setZValue(70 if candidate.selected else 60)
-            self._scene.addItem(item)
-        badge = QGraphicsSimpleTextItem(f"{detection.fill_state.value} | conf {detection.overall_confidence:.2f}")
+        badge = QGraphicsSimpleTextItem(
+            f"{fill_state_label(detection.fill_state)} · 신뢰도 {detection.overall_confidence:.2f}"
+        )
         badge.setBrush(QBrush(QColor(255, 255, 255)))
         badge.setPos(e.bounds.x, e.bounds.bottom + 4)
         badge.setZValue(90)
         self._scene.addItem(badge)
 
     def _ellipse_changed(self, glass_id: str, rect: QRectF) -> None:
-        ellipse = EllipseGeometry(rect.center().x(), rect.center().y(), rect.width()/2, rect.height()/2)
+        ellipse = EllipseGeometry(
+            rect.center().x(),
+            rect.center().y(),
+            rect.width() / 2,
+            rect.height() / 2,
+        )
         self.geometryChanged.emit(glass_id, ellipse)
 
     def _exclusion_changed(self, glass_id: str, zone_id: str, rect: QRectF) -> None:
-        self.exclusionChanged.emit(glass_id, zone_id, Rect(rect.x(), rect.y(), rect.width(), rect.height()))
+        self.exclusionChanged.emit(
+            glass_id,
+            zone_id,
+            Rect(rect.x(), rect.y(), rect.width(), rect.height()),
+        )
 
     def mousePressEvent(self, event) -> None:
         item = self.itemAt(event.position().toPoint())
-        glass_id = item.data(0) if item is not None else None
-        if glass_id:
-            self.glassSelected.emit(str(glass_id))
+        current = item
+        while current is not None:
+            glass_id = current.data(0)
+            if glass_id:
+                self.glassSelected.emit(str(glass_id))
+                break
+            current = current.parentItem()
         super().mousePressEvent(event)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         if not self._pixmap_item.pixmap().isNull():
             self.fitInView(self._scene.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+
+
+def _handle_cursor(role: str) -> Qt.CursorShape:
+    if role in {"l", "r"}:
+        return Qt.CursorShape.SizeHorCursor
+    if role in {"t", "b"}:
+        return Qt.CursorShape.SizeVerCursor
+    if role in {"tl", "br"}:
+        return Qt.CursorShape.SizeFDiagCursor
+    return Qt.CursorShape.SizeBDiagCursor

@@ -87,7 +87,7 @@ class InspectionRecipe:
     updated_at: str = field(default_factory=utc_now_iso)
 
     @classmethod
-    def empty(cls, width: int = 1280, height: int = 720, name: str = "Untitled Recipe") -> "InspectionRecipe":
+    def empty(cls, width: int = 1280, height: int = 720, name: str = "새 유면 분석 프로필") -> "InspectionRecipe":
         return cls(name=name, reference_frame_width=width, reference_frame_height=height)
 
     @staticmethod
@@ -95,7 +95,7 @@ class InspectionRecipe:
         rx, ry = width * 0.12, height * 0.27
         ellipse = EllipseGeometry(width * 0.5, height * 0.5, rx, ry)
         geometry = GlassGeometry(ellipse=ellipse, zero_line_y=height * 0.55, margin_ratio=0.08)
-        return GlassInspectionConfig(id=str(uuid4()), name=f"Glass {index}", geometry=geometry)
+        return GlassInspectionConfig(id=str(uuid4()), name=f"유면 관찰창 {index}", geometry=geometry)
 
     def touch(self) -> None:
         self.updated_at = utc_now_iso()

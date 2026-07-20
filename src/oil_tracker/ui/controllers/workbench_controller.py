@@ -25,7 +25,7 @@ class WorkbenchController:
         self.recipe_path: Path | None = None
         self.video_reader: OpenCvVideoReader | None = None
 
-    def new_document(self, width: int = 1280, height: int = 720, name: str = "Untitled Recipe") -> None:
+    def new_document(self, width: int = 1280, height: int = 720, name: str = "새 유면 분석 프로필") -> None:
         self.close_video()
         self.recipe = InspectionRecipe.empty(width, height, name)
         self.session = AnalysisSession()
@@ -57,7 +57,7 @@ class WorkbenchController:
 
     def read_at(self, timestamp_sec: float):
         if self.video_reader is None:
-            raise ValueError("No video is open.")
+            raise ValueError("열려 있는 시험 영상이 없습니다.")
         return self.video_reader.read_at(timestamp_sec)
 
     def add_glass(self):
@@ -98,7 +98,7 @@ class WorkbenchController:
         glass = self._glass(glass_id)
         e = glass.geometry.ellipse
         rect = Rect(e.center_x - e.radius_x * 0.3, e.center_y - e.radius_y * 0.1, e.radius_x * 0.6, e.radius_y * 0.2)
-        zone = ExclusionZone(str(uuid4()), rect, f"Exclusion {len(glass.geometry.exclusions) + 1}")
+        zone = ExclusionZone(str(uuid4()), rect, f"검출 제외 영역 {len(glass.geometry.exclusions) + 1}")
         glass.geometry.exclusions.append(zone)
         self.mark_dirty()
         return zone
