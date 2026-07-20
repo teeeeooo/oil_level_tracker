@@ -15,19 +15,30 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from oil_tracker.ui.controllers.redetection_controller import RedetectionController
+from oil_tracker.ui.redetection_comparison_coordinator import RedetectionComparisonCoordinator
+from oil_tracker.ui.redetection_result_review_window import RedetectionResultReviewWindow
 from oil_tracker.ui.result_actions import ResultActionService
-from oil_tracker.ui.result_review_window import ResultReviewWindow
 
 
 class ResultReviewCoordinator(QObject):
     """Own the single review window without coupling its playback to Workbench state."""
 
-    def __init__(self, window, action_service: ResultActionService | None = None, same_profile_coordinator=None) -> None:
+    def __init__(
+        self,
+        window,
+        action_service: ResultActionService | None = None,
+        same_profile_coordinator=None,
+        redetection_service=None,
+    ) -> None:
         super().__init__(window)
         self.window = window
         self.action_service = action_service or ResultActionService()
         self.same_profile_coordinator = same_profile_coordinator
-        self.viewer: ResultReviewWindow | None = None
+        self.redetection_service = redetection_service
+        self.viewer: RedetectionResultReviewWindow | None = None
+        self.redetection_controller: RedetectionController | None = None
+        self.redetection_coordinator: RedetectionComparisonCoordinator | None = None
         self.action = QAction(
             window.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay),
             "결과 검토",
@@ -82,9 +93,25 @@ class ResultReviewCoordinator(QObject):
 
     def open_bundle(self, path: str | Path) -> bool:
         if self.viewer is None:
-            self.viewer = ResultReviewWindow(action_service=self.action_service, parent=self.window)
+            self.viewer = RedetectionResultReviewWindow(
+                action_service=self.action_service,
+                parent=self.window,
+            )
             if self.same_profile_coordinator is not None:
-                self.viewer.sameProfileRequested.connect(self.same_profile_coordinator.start)
+                self.viewer.sameProfileRequested.connect(
+                    self.same_profile_coordinator.start
+                )
+            if self.redetection_service is not None:
+                self.redetection_controller = RedetectionController(
+                    self.redetection_service,
+                    self.viewer,
+                )
+                self.redetection_coordinator = RedetectionComparisonCoordinator(
+                    self.window,
+                    self.viewer,
+                    self.redetection_controller,
+                    self.viewer,
+                )
         loaded = self.viewer.load_bundle(path)
         if loaded:
             self.viewer.show()
@@ -93,6 +120,10 @@ class ResultReviewCoordinator(QObject):
         return loaded
 
     def close(self) -> None:
+        if self.redetection_coordinator is not None:
+            self.redetection_coordinator.close()
+            self.redetection_coordinator = None
+        self.redetection_controller = None
         if self.viewer is not None:
             self.viewer.close()
             self.viewer = None
