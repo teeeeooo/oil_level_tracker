@@ -7,7 +7,7 @@ import pytest
 
 from oil_tracker.application.preflight import preflight_context_key
 from oil_tracker.domain.enums import InitialObservationState
-from oil_tracker.domain.geometry import ExclusionZone, Rect
+from oil_tracker.domain.geometry import EllipseGeometry, ExclusionZone, Rect
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.session import AnalysisSession, VideoMetadata
 
@@ -25,6 +25,16 @@ def _context():
         sampling_fps=2.0,
     )
     return recipe, session
+
+
+def _move_ellipse(recipe, _session) -> None:
+    ellipse = recipe.glasses[0].geometry.ellipse
+    recipe.glasses[0].geometry.ellipse = EllipseGeometry(
+        321.0,
+        ellipse.center_y,
+        ellipse.radius_x,
+        ellipse.radius_y,
+    )
 
 
 def test_non_detection_metadata_and_sampling_rate_do_not_make_result_stale():
@@ -48,7 +58,7 @@ def test_non_detection_metadata_and_sampling_rate_do_not_make_result_stale():
         lambda recipe, session: setattr(session, "compressor_start_sec", 1.5),
         lambda recipe, session: setattr(recipe.glasses[0], "enabled", False),
         lambda recipe, session: setattr(recipe.glasses[0], "name", "관찰창 변경"),
-        lambda recipe, session: setattr(recipe.glasses[0].geometry.ellipse, "center_x", 321.0),
+        _move_ellipse,
         lambda recipe, session: setattr(recipe.glasses[0].geometry, "zero_line_y", 250.0),
         lambda recipe, session: recipe.glasses[0].geometry.exclusions.append(
             ExclusionZone(str(uuid4()), Rect(1.0, 2.0, 3.0, 4.0), "제외")
