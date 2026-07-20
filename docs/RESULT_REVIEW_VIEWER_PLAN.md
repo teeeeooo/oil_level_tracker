@@ -39,18 +39,23 @@ Phase 2B의 실제 Windows DPI, 장시간 실영상 성능, keyframe-dependent s
 
 ### Phase 2C-1 — Debug Viewer
 
-**다음 작업**
+**완료**
 
-- 일반/디버그 모드 전환
-- detector 후보와 score breakdown
-- penalty와 smoothing 전후 정보
-- edge map, mask, gradient와 ROI crop
-- 문제 frame 중심 debug trace
-- 디버그 재현 패키지
+PR #13 `feat: add result review debug viewer`로 `main`에 반영했다.
+
+- PR head: `160f51b87e0ea4478a5a8c91b9723092e0502720`
+- main merge SHA: `ed596f3781dc30c27c7e47b0d13b8edf16e17c59`
+- 검증: Python 3.13 및 3.14에서 각각 `301 passed`
+- `none`, `basic`, `full` debug trace level과 `basic` 신규 session 기본값
+- bounded-memory streaming JSONL/PNG writer와 atomic bundle 포함
+- backward-compatible optional debug pointer와 lazy index/record/image reader
+- 일반/디버그 mode, candidate overlay, score breakdown, state/smoothing와 artifact panel
+- debug scene filter, graph/timeline marker와 독립 재현 패키지
+- 공식 result bundle 내부와 symlink alias destination으로의 export 차단
 
 ### Phase 2C-2 이후
 
-**예정**
+**다음 작업 — Phase 2C-2**
 
 - 부분 재검출과 설정 비교
 - 사용자 수동 정답과 regression fixture
@@ -498,9 +503,11 @@ Bundle asset resolver는 다음을 거부한다.
 
 ### 상태
 
-**다음 작업 — Phase 2C-1**
+**진행 중 — Phase 2C-1 완료 / 다음 작업 Phase 2C-2**
 
 ### 9.1 Debug Viewer
+
+**완료**
 
 일반 Viewer와 timeline, graph 기반은 공유하되 mode와 데이터 책임을 분리한다.
 
@@ -525,7 +532,7 @@ Bundle asset resolver는 다음을 거부한다.
 - 최종 tracking sample과 event만 저장
 - Phase 2B 구현의 기본 상태
 
-#### `basic` — Phase 2C 목표 기본값
+#### `basic` — 신규 session 기본값
 
 - event, 낮은 신뢰도, 위치 급변과 검토 필요 frame만 trace 저장
 - 일반 배포 환경의 기본값
@@ -664,5 +671,6 @@ Phase 2B에서는 다음을 구현하지 않았다.
 - Viewer는 결과 bundle snapshot을 사용하고 Workbench 현재 편집 상태에 의존하지 않는다.
 - 신규 `review_index.json`은 기존 bundle과 backward-compatible하게 추가한다.
 - event와 low-confidence index는 CSV에서 계산하며 중복 저장하지 않는다.
-- debug trace가 구현되기 전 신규 bundle의 `debug_trace_level`은 `none`이다.
-- Phase 2C에서 debug trace를 구현할 때 실제 배포 기본 수준은 `basic`으로 전환하는 것을 목표로 한다.
+- 과거 session에 `debug_trace_level`이 없으면 `none`으로 읽어 기존 bundle 호환성을 유지한다.
+- 신규 Workbench session의 기본 debug trace 수준은 문제 장면 중심의 `basic`이다.
+- 디버그 재현 패키지는 공식 result bundle 내부 또는 symlink alias 하위에 저장할 수 없다.
