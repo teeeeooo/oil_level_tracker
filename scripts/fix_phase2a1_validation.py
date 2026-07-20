@@ -33,20 +33,20 @@ replace(
 
 replace(
     "tests/gui/test_workbench_readiness_feedback.py",
-    """        assert window.settings.edit_roi.hasFocus()\n        assert validation_issue_text(window) == \"관찰 영역 수정 필요\"\n""",
-    """        assert window.settings._last_focused_field == \"geometry\"\n        assert \"관찰창 타원\" in validation_issue_text(window)\n""",
+    """    assert window.settings.edit_roi.hasFocus()\n    assert validation_issue_text(window) == \"관찰 영역 수정 필요\"\n""",
+    """    assert window.settings._last_focused_field == \"geometry\"\n    assert \"관찰창 타원\" in validation_issue_text(window)\n""",
 )
 
 replace(
     "tests/gui/test_workbench_readiness_feedback.py",
-    """        assert window.settings.zero.hasFocus()\n""",
-    """        assert window.settings._last_focused_field == \"zero_line_y\"\n""",
+    """    assert window.settings.zero.hasFocus()\n""",
+    """    assert window.settings._last_focused_field == \"zero_line_y\"\n""",
 )
 
 replace(
     "tests/gui/test_workbench_readiness_feedback.py",
-    """        window._preview_ready(current, object())\n""",
-    """        window._preview_ready(current, None)\n""",
+    """    window._preview_ready(current, object())\n""",
+    """    window._preview_ready(current, None)\n""",
 )
 
 print("Phase 2A-1 validation compatibility fixes applied.")
