@@ -60,8 +60,21 @@ jobs:
         run: python -m pytest -q tests/unit/test_bundle_asset_resolver.py tests/unit/test_result_actions.py
       - name: Focused transactional replacements
         run: python -m pytest -q tests/unit/test_result_review_replacement.py tests/unit/test_same_profile_workbench.py
-      - name: Focused interactive Viewer enhancements
-        run: python -m pytest -q tests/gui/test_result_review_graph.py tests/gui/test_result_review_enhancements.py
+      - name: Focused graph widget
+        run: python -m pytest -q tests/gui/test_result_review_graph.py
+      - name: Focused replacement rollback GUI
+        run: >-
+          python -m pytest -q
+          tests/gui/test_result_review_enhancements.py::test_resolution_mismatch_replacement_preserves_complete_viewer_state
+          tests/gui/test_result_review_enhancements.py::test_candidate_decode_failure_preserves_complete_viewer_state
+          tests/gui/test_result_review_enhancements.py::test_failed_candidate_from_missing_video_state_keeps_missing_state
+      - name: Focused video graph and filter GUI
+        run: >-
+          python -m pytest -q
+          tests/gui/test_result_review_enhancements.py::test_graph_click_pauses_seeks_and_uses_actual_decoded_timestamp
+          tests/gui/test_result_review_enhancements.py::test_review_filter_updates_count_highlights_and_preserves_events_and_glass_change
+      - name: Focused result asset actions GUI
+        run: python -m pytest -q tests/gui/test_result_review_enhancements.py::test_report_folder_and_selected_capture_actions_do_not_pause_playback
       - name: Focused completion and same-profile workflows
         run: python -m pytest -q tests/gui/test_analysis_complete_dialog.py tests/gui/test_analysis_completion_coordinator.py tests/gui/test_same_profile_analysis_coordinator.py
       - name: Focused Viewer regression
