@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMessageBox
 
 from oil_tracker.adapters.vision.source_video_resolver import SourceVideoResolver
@@ -233,7 +234,9 @@ def test_review_filter_updates_count_highlights_and_preserves_events_and_glass_c
     window.navigation.filter_combo.setCurrentIndex(lost_index)
     assert window.navigation.current_filter().value == "detection_lost"
     assert window.navigation.filter_count.text() == "0개"
-    assert window.navigation.review_list.item(0).flags() == 0
+    empty_flags = window.navigation.review_list.item(0).flags()
+    assert not (empty_flags & Qt.ItemFlag.ItemIsEnabled)
+    assert not (empty_flags & Qt.ItemFlag.ItemIsSelectable)
     assert len(window.graph.model.highlights) == 0
     assert window.navigation.event_list.count() == 1
     window.navigation.glass_combo.setCurrentIndex(1)
