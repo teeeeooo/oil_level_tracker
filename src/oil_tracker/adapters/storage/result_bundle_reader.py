@@ -9,7 +9,7 @@ from oil_tracker.adapters.reporting.csv_exporter import EVENT_COLUMNS, TRACKING_
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.domain.enums import EventType, FillState, ResultState
 from oil_tracker.domain.review import ReviewBundle, ReviewEvent, ReviewGlass, ReviewTrackingSample
-from oil_tracker.domain.session import AnalysisSession, VideoMetadata
+from oil_tracker.domain.session import AnalysisSession, DebugTraceLevel, VideoMetadata
 
 
 SUPPORTED_REVIEW_INDEX_VERSION = 1
@@ -32,7 +32,6 @@ class ResultBundleReader:
         default_manifest = root / "analysis_manifest.json"
         manifest_path = selected if selected.is_file() and selected.name == "analysis_manifest.json" else default_manifest
         manifest = self._read_json(manifest_path, required=True)
-
         index_path: Path | None = None
         if selected.is_file() and selected.name == "review_index.json":
             index_path = selected
@@ -54,15 +53,12 @@ class ResultBundleReader:
         if review_index is not None and files["manifest"] != manifest_path.resolve():
             manifest_path = files["manifest"]
             manifest = self._read_json(manifest_path, required=True)
-
         try:
             recipe = self.recipe_repository.load(files["recipe_snapshot"])
         except FileNotFoundError as exc:
             raise ResultBundleError(f"필수 파일이 없습니다: {files['recipe_snapshot'].name}") from exc
         except json.JSONDecodeError as exc:
-            raise ResultBundleError(
-                f"{files['recipe_snapshot'].name} JSON 형식이 올바르지 않습니다: {exc.msg}"
-            ) from exc
+            raise ResultBundleError(f"{files['recipe_snapshot'].name} JSON 형식이 올바르지 않습니다: {exc.msg}") from exc
         except (KeyError, TypeError, ValueError) as exc:
             raise ResultBundleError(f"{files['recipe_snapshot'].name} 내용을 읽을 수 없습니다: {exc}") from exc
 
@@ -71,7 +67,6 @@ class ResultBundleReader:
             session = AnalysisSession.from_dict(session_payload)
         except (KeyError, TypeError, ValueError) as exc:
             raise ResultBundleError(f"session.json 내용을 읽을 수 없습니다: {exc}") from exc
-
         known_glass_ids = {glass.id for glass in recipe.glasses}
         samples = self._read_tracking(files["tracking_data"], known_glass_ids)
         if not samples:
@@ -88,6 +83,7 @@ class ResultBundleReader:
             compressor_start = session.compressor_start_sec
         run_id = str(index.get("run_id") or manifest.get("run_id") or samples[0].run_id)
         glasses = self._review_glasses(index, recipe, events)
+        debug_level, debug_index_path, debug_trace_path, debug_count, debug_warning = self._debug_contract(root, index)
 
         return ReviewBundle(
             root=root.resolve(),
@@ -105,9 +101,37 @@ class ResultBundleReader:
             samples=tuple(sorted(samples, key=lambda item: (item.glass_id, item.timestamp_sec, item.frame_index, item.input_order))),
             events=tuple(sorted(events, key=lambda item: (item.glass_id, item.start_time_sec, item.event_type.value, item.input_order))),
             files=files,
-            debug_trace_level=str(index.get("debug_trace_level", "none")),
+            debug_trace_level=debug_level.value,
+            debug_index_path=debug_index_path,
+            debug_trace_path=debug_trace_path,
+            debug_record_count=debug_count,
+            debug_warning=debug_warning,
             review_index=review_index,
         )
+
+    def _debug_contract(self, root: Path, index: dict[str, Any]) -> tuple[DebugTraceLevel, str, str, int, str]:
+        raw_level = index.get("debug_trace_level", "none")
+        try:
+            level = DebugTraceLevel(str(raw_level))
+        except ValueError as exc:
+            raise ResultBundleError(f"review_index.json debug_trace_level 값이 올바르지 않습니다: {raw_level}") from exc
+        count = self._required_int(index.get("debug_record_count", 0), "review_index.json", "debug_record_count")
+        if count < 0:
+            raise ResultBundleError("review_index.json debug_record_count는 음수일 수 없습니다.")
+        if level is DebugTraceLevel.NONE:
+            return level, "", "", 0, ""
+        index_pointer = str(index.get("debug_index") or "")
+        trace_pointer = str(index.get("debug_trace") or "")
+        if not index_pointer or not trace_pointer:
+            return level, index_pointer, trace_pointer, count, "디버그 기록 경로가 불완전하여 디버그 모드를 사용할 수 없습니다."
+        try:
+            index_path = self._safe_internal_path(root, index_pointer, "review_index.json debug_index")
+            trace_path = self._safe_internal_path(root, trace_pointer, "review_index.json debug_trace")
+        except ResultBundleError as exc:
+            return level, index_pointer, trace_pointer, count, str(exc)
+        if not index_path.is_file() or not trace_path.is_file():
+            return level, index_pointer, trace_pointer, count, "디버그 index 또는 trace 파일이 없어 디버그 모드를 사용할 수 없습니다."
+        return level, index_pointer, trace_pointer, count, ""
 
     def _bundle_root(self, source: Path) -> Path:
         if source.is_dir():
