@@ -1,11 +1,25 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
 from PySide6.QtCore import QObject, QTimer, Signal
 
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+
+
+@dataclass
+class PreparedReviewVideo:
+    reader: object
+    frame: object
+    frame_index: int
+    timestamp_sec: float
+
+    def close(self) -> None:
+        reader, self.reader = self.reader, None
+        if reader is not None:
+            reader.close()
 
 
 class ResultReviewController(QObject):
@@ -37,21 +51,47 @@ class ResultReviewController(QObject):
     def is_playing(self) -> bool:
         return self.timer.isActive()
 
-    def open_video(self, path: str | Path, initial_timestamp: float = 0.0) -> None:
-        self.close_video()
-        generation = self._generation
+    def prepare_video(
+        self,
+        path: str | Path,
+        initial_timestamp: float = 0.0,
+        *,
+        emit_failure: bool = True,
+    ) -> PreparedReviewVideo:
+        reader = None
         try:
             reader = self.reader_factory(path)
+            frame, frame_index, actual_timestamp = reader.read_at(max(0.0, float(initial_timestamp)))
+            return PreparedReviewVideo(reader, frame, int(frame_index), float(actual_timestamp))
         except Exception as exc:
-            self.failed.emit(f"원본 영상을 열 수 없습니다: {exc}")
+            if reader is not None:
+                reader.close()
+            if emit_failure:
+                self.failed.emit(f"원본 영상을 열 수 없습니다: {exc}")
             raise
-        if generation != self._generation:
-            reader.close()
-            return
-        self.reader = reader
-        self.metadataChanged.emit(reader.metadata)
+
+    def activate_prepared(self, prepared: PreparedReviewVideo) -> None:
+        if prepared.reader is None:
+            raise ValueError("준비된 video reader가 없습니다.")
+        self.timer.stop()
+        self._generation += 1
+        previous = self.reader
+        self.reader = prepared.reader
+        prepared.reader = None
+        self.current_time = float(prepared.timestamp_sec)
+        self.current_frame_index = int(prepared.frame_index)
+        self.metadataChanged.emit(self.reader.metadata)
         self.playbackStateChanged.emit("일시정지")
-        self.seek(initial_timestamp)
+        self.frameReady.emit(prepared.frame, self.current_frame_index, self.current_time)
+        if previous is not None:
+            previous.close()
+
+    def open_video(self, path: str | Path, initial_timestamp: float = 0.0) -> None:
+        prepared = self.prepare_video(path, initial_timestamp)
+        try:
+            self.activate_prepared(prepared)
+        finally:
+            prepared.close()
 
     def close_video(self) -> None:
         self._generation += 1

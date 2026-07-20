@@ -14,6 +14,7 @@ from oil_tracker.application.use_cases.preflight_check import PreflightCheckUseC
 from oil_tracker.application.use_cases.preview_detection import PreviewDetectionUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
+from oil_tracker.ui.analysis_completion_coordinator import AnalysisCompletionCoordinator
 from oil_tracker.ui.controllers.analysis_controller import AnalysisController
 from oil_tracker.ui.controllers.preflight_controller import PreflightController
 from oil_tracker.ui.controllers.preview_controller import PreviewController
@@ -21,7 +22,9 @@ from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
 from oil_tracker.ui.main_window import MainWindow
 from oil_tracker.ui.observation_settings_copy_coordinator import ObservationSettingsCopyCoordinator
 from oil_tracker.ui.preflight_coordinator import PreflightCoordinator
+from oil_tracker.ui.result_actions import ResultActionService
 from oil_tracker.ui.result_review_coordinator import ResultReviewCoordinator
+from oil_tracker.ui.same_profile_analysis_coordinator import SameProfileAnalysisCoordinator
 
 
 def build_main_window() -> MainWindow:
@@ -48,5 +51,27 @@ def build_main_window() -> MainWindow:
     )
     preflight_controller = PreflightController(preflight_use_case, window)
     window.preflight_coordinator = PreflightCoordinator(window, preflight_controller)
-    window.result_review_coordinator = ResultReviewCoordinator(window)
+    window.same_profile_coordinator = SameProfileAnalysisCoordinator(window)
+    window.result_action_service = ResultActionService()
+    window.result_review_coordinator = ResultReviewCoordinator(
+        window,
+        window.result_action_service,
+        window.same_profile_coordinator,
+    )
+    window.analysis_completion_coordinator = AnalysisCompletionCoordinator(
+        window,
+        window.result_review_coordinator,
+        window.same_profile_coordinator,
+        window.result_action_service,
+    )
+    try:
+        analysis_controller.completed.disconnect(window._analysis_completed)
+    except (RuntimeError, TypeError):
+        pass
+    analysis_controller.completed.connect(window.analysis_completion_coordinator.analysis_completed)
+    try:
+        window.actions["result"].triggered.disconnect(window.open_result)
+    except (RuntimeError, TypeError):
+        pass
+    window.actions["result"].triggered.connect(lambda _checked=False: window.analysis_completion_coordinator.open_last_report())
     return window

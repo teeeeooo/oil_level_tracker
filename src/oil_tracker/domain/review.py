@@ -1,12 +1,36 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
 from typing import Any
 
 from .enums import EventType, FillState, ResultState
 from .recipe import InspectionRecipe
 from .session import AnalysisSession, VideoMetadata
+
+
+class ReviewCategory(str, Enum):
+    INVALID = "invalid"
+    LOW_CONFIDENCE = "low_confidence"
+    REVIEW_REQUIRED = "review_required"
+    FOAM = "foam"
+    GLARE_OR_FOG = "glare_or_fog"
+    DETECTION_LOST = "detection_lost"
+
+
+class ReviewFilter(str, Enum):
+    ALL = "all"
+    INVALID = ReviewCategory.INVALID.value
+    LOW_CONFIDENCE = ReviewCategory.LOW_CONFIDENCE.value
+    REVIEW_REQUIRED = ReviewCategory.REVIEW_REQUIRED.value
+    FOAM = ReviewCategory.FOAM.value
+    GLARE_OR_FOG = ReviewCategory.GLARE_OR_FOG.value
+    DETECTION_LOST = ReviewCategory.DETECTION_LOST.value
+
+    @property
+    def category(self) -> ReviewCategory | None:
+        return None if self is ReviewFilter.ALL else ReviewCategory(self.value)
 
 
 @dataclass(frozen=True)
@@ -79,6 +103,11 @@ class LowConfidenceInterval:
     minimum_confidence: float
     reasons: tuple[str, ...]
     sample_count: int
+    categories: tuple[ReviewCategory, ...] = ()
+
+    def matches(self, review_filter: ReviewFilter) -> bool:
+        category = review_filter.category
+        return category is None or category in self.categories
 
 
 @dataclass(frozen=True)
@@ -91,6 +120,55 @@ class ReviewOverlayData:
     within_analysis_range: bool
     review_reasons: tuple[str, ...] = ()
     boundary_status: str = ""
+
+
+@dataclass(frozen=True)
+class ReviewGraphPoint:
+    timestamp_sec: float
+    value: float | None
+    is_valid: bool
+    confidence: float
+
+
+@dataclass(frozen=True)
+class ReviewGraphSeries:
+    name: str
+    points: tuple[ReviewGraphPoint, ...]
+
+    @property
+    def has_values(self) -> bool:
+        return any(point.value is not None for point in self.points)
+
+
+@dataclass(frozen=True)
+class ReviewGraphEventMarker:
+    timestamp_sec: float
+    label: str
+    end_time_sec: float | None = None
+
+
+@dataclass(frozen=True)
+class ReviewGraphHighlight:
+    start_time_sec: float
+    end_time_sec: float
+    categories: tuple[ReviewCategory, ...]
+    reasons: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ReviewGraphModel:
+    glass_id: str
+    glass_name: str
+    unit: str
+    y_axis_label: str
+    oil_air: ReviewGraphSeries
+    foam_front: ReviewGraphSeries
+    event_markers: tuple[ReviewGraphEventMarker, ...]
+    highlights: tuple[ReviewGraphHighlight, ...]
+    analysis_start_sec: float
+    analysis_end_sec: float
+    compressor_start_sec: float | None
+    cursor_timestamp_sec: float
 
 
 @dataclass
