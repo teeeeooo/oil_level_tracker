@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QCheckBox,
     QDialog,
@@ -96,16 +95,21 @@ class GlassSettingsCopyDialog(QDialog):
         option_layout = QVBoxLayout(option_group)
         source_mm = source.mm_per_pixel if source is not None else None
         mm_text = (
-            "길이 환산값 (원본: 미설정 — 선택 시 None 복사)"
+            "길이 환산값 (원본: 미설정 — 선택 시 미설정 값 복사)"
             if source_mm is None
             else f"길이 환산값 (원본: {source_mm:g} mm/pixel)"
         )
         option_specs = (
-            ("judgment_rule", "판정 설정", "판정 mode와 recovery, hold, coverage, violation 관련 값을 모두 복사합니다.", True),
+            (
+                "judgment_rule",
+                "판정 설정",
+                "판정 모드와 회복 시간, 유지 시간, 유효 구간 비율, 허용 이탈·위반 값을 모두 복사합니다.",
+                True,
+            ),
             ("detector_settings", "검출기 설정", "현재 검출기 설정 전체를 독립된 값으로 복사합니다.", True),
             ("margin_ratio", "테두리 제외 범위", "타원 내부의 테두리 제외 비율을 복사합니다.", True),
             ("initial_state", "분석 시작 시 상태", "분석 시작 시 유면 상태 가정을 복사합니다.", True),
-            ("mm_per_pixel", mm_text, "미설정 값(None)도 선택한 경우 정확히 복사합니다.", False),
+            ("mm_per_pixel", mm_text, "미설정 값도 선택한 경우 정확히 복사합니다.", False),
             ("ellipse_size", "타원 크기", "가로·세로 반지름만 복사합니다. 중심 위치와 기준점은 복사되지 않습니다.", False),
         )
         for key, text, tooltip, checked in option_specs:
@@ -135,7 +139,7 @@ class GlassSettingsCopyDialog(QDialog):
         self.apply_button.setObjectName("primaryActionButton")
         self.apply_button.setDefault(True)
         self.cancel_button.setText("취소")
-        self.button_box.accepted.connect(self.accept)
+        self.apply_button.clicked.connect(self.accept)
         self.button_box.rejected.connect(self.reject)
         root.addWidget(self.button_box)
 
