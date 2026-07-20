@@ -175,7 +175,7 @@ def test_dialog_shows_source_excludes_it_from_targets_and_uses_safe_defaults(qtb
     )] == [True, True, True, True]
     assert not dialog.option_checks["mm_per_pixel"].isChecked()
     assert not dialog.option_checks["ellipse_size"].isChecked()
-    assert "None 복사" in dialog.option_checks["mm_per_pixel"].text()
+    assert "미설정 값 복사" in dialog.option_checks["mm_per_pixel"].text()
     assert "중심 위치와 기준점" in dialog.option_checks["ellipse_size"].toolTip()
 
     dialog.select_all_button.click()
@@ -202,6 +202,11 @@ def test_dialog_apply_requires_at_least_one_option(qtbot):
         check.setChecked(False)
     assert not dialog.apply_button.isEnabled()
     assert "설정 항목" in dialog.summary_label.text()
+
+    dialog.option_checks["judgment_rule"].setChecked(True)
+    assert dialog.apply_button.isEnabled()
+    dialog.apply_button.click()
+    assert dialog.result() == QDialog.DialogCode.Accepted
 
 
 def test_cancel_leaves_recipe_undo_preview_and_state_unchanged(qtbot):
