@@ -323,3 +323,58 @@ def test_artifact_is_requested_lazily_and_missing_state_is_explicit(qtbot, tmp_p
     assert "lazy decode 완료" in panel.artifact_status.text()
     panel.set_artifact("foam_mask", None)
     assert "저장되지 않았습니다" in panel.image_label.text()
+
+
+def test_bundle_internal_export_error_preserves_debug_viewer_state(qtbot, tmp_path, monkeypatch):
+    import oil_tracker.ui.result_review_window as review_window_module
+
+    holder = []
+    bundle = _bundle(tmp_path, trace=True)
+    window = _window(bundle, holder)
+    qtbot.addWidget(window)
+    assert window.load_bundle(bundle.root)
+    repository = holder[0]
+    window._debug_record_activated(repository.summary)
+
+    before_bundle = {
+        path.relative_to(bundle.root).as_posix(): ("directory", b"") if path.is_dir() else ("file", path.read_bytes())
+        for path in sorted(bundle.root.rglob("*"), key=lambda value: value.relative_to(bundle.root).as_posix())
+    }
+    selected_summary = window.selected_debug_summary
+    selected_record = window.selected_debug_record
+    timestamp = window.current_time
+    reader = window.playback.reader
+    record_load_count = repository.record_load_count
+    messages = []
+
+    monkeypatch.setattr(
+        review_window_module,
+        "QFileDialog",
+        SimpleNamespace(getExistingDirectory=lambda *_args, **_kwargs: str(bundle.root)),
+    )
+    monkeypatch.setattr(
+        review_window_module,
+        "QMessageBox",
+        SimpleNamespace(critical=lambda _parent, title, message: messages.append((title, message))),
+    )
+
+    window.export_debug_case()
+
+    after_bundle = {
+        path.relative_to(bundle.root).as_posix(): ("directory", b"") if path.is_dir() else ("file", path.read_bytes())
+        for path in sorted(bundle.root.rglob("*"), key=lambda value: value.relative_to(bundle.root).as_posix())
+    }
+    assert messages
+    assert messages[-1][0] == "디버그 재현 패키지 실패"
+    assert "공식 결과 bundle 내부" in messages[-1][1]
+    assert before_bundle == after_bundle
+    assert not list(bundle.root.glob("debug_case_*"))
+    assert not list(bundle.root.glob(".*.tmp-*"))
+    assert window.selected_debug_summary is selected_summary
+    assert window.selected_debug_record is selected_record
+    assert window.current_time == timestamp
+    assert window.mode == "debug"
+    assert window.playback.reader is reader
+    assert window.debug_repository is repository
+    assert repository.record_load_count == record_load_count
+    window.close()
