@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
 )
 
 from oil_tracker.domain.enums import EventType
+from oil_tracker.domain.review import ReviewFilter
 from oil_tracker.ui.presentation_labels import result_state_label
 
 
@@ -44,17 +45,31 @@ _EVENT_LABELS = {
     EventType.JUDGMENT_FAIL: "판정 불합격",
 }
 
+_FILTER_LABELS = (
+    (ReviewFilter.ALL, "전체"),
+    (ReviewFilter.INVALID, "유효하지 않은 검출"),
+    (ReviewFilter.LOW_CONFIDENCE, "신뢰도 기준 미달"),
+    (ReviewFilter.REVIEW_REQUIRED, "사용자 확인 필요"),
+    (ReviewFilter.FOAM, "거품 영향"),
+    (ReviewFilter.GLARE_OR_FOG, "흐림·반사광"),
+    (ReviewFilter.DETECTION_LOST, "검출 유실"),
+)
+
+_EVENT_ROLE = int(Qt.ItemDataRole.UserRole) + 1
+
 
 class ResultReviewNavigation(QWidget):
     glassChanged = Signal(str)
     eventActivated = Signal(float)
     reviewActivated = Signal(float)
+    eventSelected = Signal(object)
+    filterChanged = Signal(str)
     previousRequested = Signal()
     nextRequested = Signal()
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setMinimumWidth(290)
+        self.setMinimumWidth(300)
         self.glass_combo = QComboBox()
         self.result_label = QLabel("결과 bundle 없음")
         self.result_label.setWordWrap(True)
@@ -62,7 +77,21 @@ class ResultReviewNavigation(QWidget):
         self.event_list = QListWidget()
         self.review_list = QListWidget()
         self.tabs.addTab(self.event_list, "이벤트")
-        self.tabs.addTab(self.review_list, "검토 필요")
+        review_page = QWidget()
+        review_layout = QVBoxLayout(review_page)
+        review_layout.setContentsMargins(0, 0, 0, 0)
+        self.filter_combo = QComboBox()
+        for review_filter, label in _FILTER_LABELS:
+            self.filter_combo.addItem(label, review_filter.value)
+        self.filter_combo.setToolTip("검토 필요 항목을 기록된 사유 category로 필터링합니다.")
+        self.filter_count = QLabel("0개")
+        filter_row = QHBoxLayout()
+        filter_row.addWidget(QLabel("사유"))
+        filter_row.addWidget(self.filter_combo, 1)
+        filter_row.addWidget(self.filter_count)
+        review_layout.addLayout(filter_row)
+        review_layout.addWidget(self.review_list, 1)
+        self.tabs.addTab(review_page, "검토 필요")
         self.previous_button = QPushButton("이전 항목")
         self.next_button = QPushButton("다음 항목")
         buttons = QHBoxLayout()
@@ -75,10 +104,10 @@ class ResultReviewNavigation(QWidget):
         layout.addWidget(self.tabs, 1)
         layout.addLayout(buttons)
         self.glass_combo.currentIndexChanged.connect(self._glass_changed)
+        self.filter_combo.currentIndexChanged.connect(self._filter_changed)
+        self.event_list.currentItemChanged.connect(self._event_selected)
         self.event_list.itemActivated.connect(self._event_activated)
-        self.event_list.itemDoubleClicked.connect(self._event_activated)
         self.review_list.itemActivated.connect(self._review_activated)
-        self.review_list.itemDoubleClicked.connect(self._review_activated)
         self.previous_button.clicked.connect(self.previousRequested)
         self.next_button.clicked.connect(self.nextRequested)
 
@@ -94,8 +123,23 @@ class ResultReviewNavigation(QWidget):
         self.glass_combo.blockSignals(False)
         self.refresh_items(bundle, query, self.current_glass_id())
 
+    def clear(self) -> None:
+        self.glass_combo.clear()
+        self.event_list.clear()
+        self.review_list.clear()
+        self.result_label.setText("결과 bundle 없음")
+        self.filter_count.setText("0개")
+        self.eventSelected.emit(None)
+
     def current_glass_id(self) -> str:
         return str(self.glass_combo.currentData() or "")
+
+    def current_filter(self) -> ReviewFilter:
+        return ReviewFilter(str(self.filter_combo.currentData() or ReviewFilter.ALL.value))
+
+    def selected_event(self):
+        item = self.event_list.currentItem()
+        return item.data(_EVENT_ROLE) if item is not None else None
 
     def refresh_items(self, bundle, query, glass_id: str) -> None:
         summary = bundle.glass_summary(glass_id)
@@ -105,29 +149,36 @@ class ResultReviewNavigation(QWidget):
         self.event_list.clear()
         for event in query.events_for_glass(glass_id):
             duration = f"–{event.end_time_sec:.3f}s" if event.end_time_sec is not None else ""
-            capture = ""
-            if event.capture_path:
-                capture_path = bundle.root / event.capture_path
-                capture = " · 캡처 있음" if capture_path.is_file() else " · 캡처 파일 없음"
+            capture = " · 캡처 기록됨" if event.capture_path else ""
             item = QListWidgetItem(
                 f"{event.start_time_sec:.3f}s{duration} · {_EVENT_LABELS.get(event.event_type, event.event_type.value)}{capture}"
             )
             item.setData(Qt.ItemDataRole.UserRole, event.start_time_sec)
+            item.setData(_EVENT_ROLE, event)
             tooltip = [f"confidence {event.confidence:.3f}"]
             if event.note:
                 tooltip.append(event.note)
             if event.capture_path:
-                tooltip.append(str(bundle.root / event.capture_path))
+                tooltip.append(f"캡처: {event.capture_path}")
             item.setToolTip("\n".join(tooltip))
             self.event_list.addItem(item)
         self.review_list.clear()
-        for interval in query.low_confidence_intervals(glass_id):
-            reasons = ", ".join(interval.reasons)
-            item = QListWidgetItem(
-                f"{interval.start_time_sec:.3f}–{interval.end_time_sec:.3f}s · 최저 {interval.minimum_confidence:.3f}\n{reasons}"
-            )
-            item.setData(Qt.ItemDataRole.UserRole, interval.representative_time_sec)
-            self.review_list.addItem(item)
+        intervals = query.filtered_intervals(glass_id, self.current_filter())
+        self.filter_count.setText(f"{len(intervals)}개")
+        if not intervals:
+            empty = QListWidgetItem("현재 필터에 해당하는 검토 항목이 없습니다.")
+            empty.setFlags(Qt.ItemFlag.NoItemFlags)
+            self.review_list.addItem(empty)
+        else:
+            for interval in intervals:
+                reasons = ", ".join(interval.reasons)
+                item = QListWidgetItem(
+                    f"{interval.start_time_sec:.3f}–{interval.end_time_sec:.3f}s · 최저 {interval.minimum_confidence:.3f}\n{reasons}"
+                )
+                item.setData(Qt.ItemDataRole.UserRole, interval.representative_time_sec)
+                item.setToolTip("category: " + ", ".join(category.value for category in interval.categories))
+                self.review_list.addItem(item)
+        self.eventSelected.emit(None)
 
     def active_tab_is_events(self) -> bool:
         return self.tabs.currentWidget() is self.event_list
@@ -137,8 +188,16 @@ class ResultReviewNavigation(QWidget):
         if glass_id:
             self.glassChanged.emit(glass_id)
 
+    def _filter_changed(self, _index: int) -> None:
+        self.filterChanged.emit(self.current_filter().value)
+
+    def _event_selected(self, current, _previous) -> None:
+        self.eventSelected.emit(current.data(_EVENT_ROLE) if current is not None else None)
+
     def _event_activated(self, item: QListWidgetItem) -> None:
         self.eventActivated.emit(float(item.data(Qt.ItemDataRole.UserRole)))
 
     def _review_activated(self, item: QListWidgetItem) -> None:
-        self.reviewActivated.emit(float(item.data(Qt.ItemDataRole.UserRole)))
+        value = item.data(Qt.ItemDataRole.UserRole)
+        if value is not None:
+            self.reviewActivated.emit(float(value))
