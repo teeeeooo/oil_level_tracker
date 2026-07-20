@@ -33,6 +33,24 @@ _BASIC_IMAGE_KEYS = (
     "foam_mask",
 )
 
+_FULL_IMAGE_KEYS = (
+    "overlay",
+    "original_roi",
+    "ellipse_mask",
+    "effective_mask",
+    "exclusion_mask",
+    "grayscale",
+    "normalized",
+    "blurred",
+    "sobel",
+    "canny",
+    "horizontal_mask",
+    "glare_mask",
+    "foam_mask",
+    "foam_variance",
+    "static_artifact_map",
+)
+
 
 class JsonlDebugTraceWriterFactory:
     def __init__(self, staging_parent: str | Path | None = None) -> None:
@@ -95,7 +113,7 @@ class JsonlDebugTraceWriter:
         warnings: list[str] = []
         images: dict[str, str] = {}
         availability: list[str] = []
-        requested_keys = tuple(artifacts.images) if self.trace_level is DebugTraceLevel.FULL else _BASIC_IMAGE_KEYS
+        requested_keys = _FULL_IMAGE_KEYS if self.trace_level is DebugTraceLevel.FULL else _BASIC_IMAGE_KEYS
         for image_key in requested_keys:
             image = artifacts.images.get(image_key)
             if image is None:
@@ -106,6 +124,7 @@ class JsonlDebugTraceWriter:
             try:
                 _write_png(destination, image)
             except Exception as exc:
+                destination.unlink(missing_ok=True)
                 warnings.append(f"image_encode_failed:{image_key}:{type(exc).__name__}")
                 continue
             images[image_key] = relative.as_posix()
@@ -132,6 +151,7 @@ class JsonlDebugTraceWriter:
             )
         state = dict(getattr(artifacts, "state", {}) or {})
         state.update(dict(detection.debug_metrics or {}))
+        reasons = tuple(dict.fromkeys(reason.value for reason in decision.reasons))
         record = _json_safe(
             {
                 "schema_version": DEBUG_TRACE_SCHEMA_VERSION,
@@ -141,7 +161,7 @@ class JsonlDebugTraceWriter:
                 "glass_name": str(glass.name),
                 "frame_index": int(detection.frame_index),
                 "timestamp_sec": float(detection.time_sec),
-                "capture_reasons": [reason.value for reason in decision.reasons],
+                "capture_reasons": list(reasons),
                 "fill_state": detection.fill_state.value,
                 "confidence": {
                     "oil": detection.oil_air_confidence,
@@ -175,7 +195,7 @@ class JsonlDebugTraceWriter:
                 "glass_name": str(glass.name),
                 "frame_index": int(detection.frame_index),
                 "timestamp_sec": float(detection.time_sec),
-                "capture_reasons": [reason.value for reason in decision.reasons],
+                "capture_reasons": list(reasons),
                 "confidence": _finite_or_none(detection.overall_confidence),
                 "fill_state": detection.fill_state.value,
                 "artifact_availability": sorted(availability),
