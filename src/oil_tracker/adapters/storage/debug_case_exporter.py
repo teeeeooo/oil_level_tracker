@@ -31,11 +31,15 @@ class DebugCaseExporter:
         *,
         source_video_path: str | Path | None = None,
     ) -> Path:
-        parent = Path(destination_parent).expanduser()
+        bundle_root = _resolve_bundle_root(bundle.root)
+        requested_parent = Path(destination_parent).expanduser()
+        parent = _ensure_export_outside_bundle(bundle_root, requested_parent, strict=False)
         parent.mkdir(parents=True, exist_ok=True)
+        parent = _ensure_export_outside_bundle(bundle_root, parent, strict=True)
+
         name = datetime.now().strftime("debug_case_%Y%m%d_%H%M%S")
         final = parent / name
-        if final.exists():
+        if final.exists() or final.is_symlink():
             raise DebugCaseExportError(f"기존 debug package를 덮어쓸 수 없습니다: {final}")
         temporary = parent / f".{name}.tmp-{uuid4().hex[:8]}"
         warnings: list[str] = []
@@ -44,7 +48,13 @@ class DebugCaseExporter:
         if source is not None and not source.is_file():
             source = None
         try:
+            parent = _ensure_export_outside_bundle(bundle_root, parent, strict=True)
+            temporary = parent / temporary.name
             temporary.mkdir(parents=False, exist_ok=False)
+            if temporary.is_symlink():
+                raise DebugCaseExportError("디버그 재현 패키지 임시 폴더가 안전하지 않습니다.")
+            _ensure_export_outside_bundle(bundle_root, temporary, strict=True)
+
             detection_payload = asdict(record)
             (temporary / "detection_debug.json").write_text(
                 json.dumps(detection_payload, ensure_ascii=False, indent=2, allow_nan=False),
@@ -101,6 +111,15 @@ class DebugCaseExporter:
                 json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False),
                 encoding="utf-8",
             )
+
+            parent = _ensure_export_outside_bundle(bundle_root, parent, strict=True)
+            temporary = parent / temporary.name
+            if temporary.is_symlink():
+                raise DebugCaseExportError("디버그 재현 패키지 임시 폴더가 안전하지 않습니다.")
+            _ensure_export_outside_bundle(bundle_root, temporary, strict=True)
+            final = parent / final.name
+            if final.exists() or final.is_symlink():
+                raise DebugCaseExportError(f"기존 debug package를 덮어쓸 수 없습니다: {final}")
             os.replace(temporary, final)
             return final
         except Exception:
@@ -177,6 +196,31 @@ class DebugCaseExporter:
             if writer is not None:
                 writer.release()
             capture.release()
+
+
+def _resolve_bundle_root(root: str | Path) -> Path:
+    candidate = Path(root).expanduser()
+    try:
+        resolved = candidate.resolve(strict=True)
+    except OSError as exc:
+        raise DebugCaseExportError("공식 결과 bundle 경로를 확인할 수 없습니다.") from exc
+    if not resolved.is_dir():
+        raise DebugCaseExportError("공식 결과 bundle 경로가 폴더가 아닙니다.")
+    return resolved
+
+
+def _ensure_export_outside_bundle(bundle_root: Path, destination_parent: Path, *, strict: bool) -> Path:
+    try:
+        resolved_destination = destination_parent.resolve(strict=strict)
+    except OSError as exc:
+        raise DebugCaseExportError(f"내보내기 폴더 경로를 확인할 수 없습니다: {destination_parent}") from exc
+    if resolved_destination == bundle_root or bundle_root in resolved_destination.parents:
+        raise DebugCaseExportError(
+            "디버그 재현 패키지는 공식 결과 bundle 내부에 저장할 수 없습니다.\n"
+            "결과 bundle 밖의 폴더를 선택해 주세요.\n"
+            f"거부된 폴더: {resolved_destination}"
+        )
+    return resolved_destination
 
 
 def _write_png(path: Path, image) -> None:
