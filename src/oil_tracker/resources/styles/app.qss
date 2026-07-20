@@ -255,3 +255,97 @@ QStatusBar {
     border-top: 1px solid #d5dde5;
     color: #40566c;
 }
+
+
+/* Guided workbench phase 1 */
+QWidget#guidedActionBar {
+    background: #ffffff;
+    border-top: 1px solid #c7d1dc;
+}
+
+QLabel#guidedStatusLabel {
+    padding: 5px 9px;
+    border-radius: 5px;
+    background: #eef3f7;
+    color: #33485d;
+    font-weight: 700;
+}
+
+QLabel#guidedStatusLabel[validationState="error"] {
+    background: #fde7e7;
+    color: #9d2424;
+}
+
+QLabel#guidedStatusLabel[validationState="warning"] {
+    background: #fff2d5;
+    color: #855a08;
+}
+
+QLabel#guidedStatusLabel[validationState="ready"] {
+    background: #dff3e7;
+    color: #1f6b3c;
+}
+
+QPushButton#primaryActionButton {
+    min-width: 110px;
+    background: #1769aa;
+    color: white;
+    border-color: #125b94;
+    font-weight: 800;
+}
+
+QPushButton#primaryActionButton:hover {
+    background: #1d78bd;
+}
+
+QToolButton#advancedToggle {
+    min-height: 28px;
+    padding: 3px 8px;
+    border: 1px solid #c6d1dc;
+    border-radius: 5px;
+    background: #f6f9fc;
+    color: #2a3b4d;
+    font-weight: 700;
+}
+
+QLabel#inlineValidationMessage {
+    padding: 3px 5px;
+    border-radius: 4px;
+    font-size: 9pt;
+}
+
+QLabel#inlineValidationMessage[validationState="error"] {
+    background: #fdeaea;
+    color: #9e2424;
+}
+
+QLabel#inlineValidationMessage[validationState="warning"] {
+    background: #fff4d8;
+    color: #7c570b;
+}
+
+QLineEdit[validationState="error"],
+QDoubleSpinBox[validationState="error"],
+QSpinBox[validationState="error"],
+QComboBox[validationState="error"],
+QListWidget[validationState="error"],
+QLabel#roiSummaryCard[validationState="error"] {
+    border: 2px solid #c43c3c;
+}
+
+QLineEdit[validationState="warning"],
+QDoubleSpinBox[validationState="warning"],
+QSpinBox[validationState="warning"],
+QComboBox[validationState="warning"],
+QListWidget[validationState="warning"],
+QLabel#roiSummaryCard[validationState="warning"] {
+    border: 2px solid #d99a24;
+}
+
+QLabel#roiEditorHint {
+    padding: 7px 9px;
+    border: 1px solid #cbd7e2;
+    border-radius: 5px;
+    background: #f5f8fb;
+    color: #33485d;
+}

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import numpy as np
 from PySide6.QtCore import QTimer, QUrl, Qt
-from PySide6.QtGui import QAction, QDesktopServices
+from PySide6.QtGui import QAction, QDesktopServices, QKeySequence, QUndoStack
 from PySide6.QtWidgets import (
     QApplication,
     QDockWidget,
@@ -29,16 +29,20 @@ from PySide6.QtWidgets import (
 from oil_tracker.config.defaults import DEFAULT_WINDOW_SIZE, PREVIEW_DEBOUNCE_MS, SUPPORTED_VIDEO_FILTER
 from oil_tracker.domain.enums import InitialObservationState, JudgmentMode, WorkbenchState
 from oil_tracker.domain.geometry import EllipseGeometry
-from oil_tracker.domain.recipe import DetectorSettings
+from oil_tracker.domain.recipe import DetectorSettings, InspectionRecipe
 from oil_tracker.ui.presentation_labels import (
     fill_state_label,
     result_state_label,
+    validation_issue_message,
     workbench_state_label,
 )
+from oil_tracker.ui.undo import RecipeSnapshotCommand
 from oil_tracker.ui.widgets.analysis_progress_dialog import AnalysisProgressDialog
+from oil_tracker.ui.widgets.bottom_action_bar import BottomActionBar
 from oil_tracker.ui.widgets.debug_panel import DebugPanel
 from oil_tracker.ui.widgets.glass_list_panel import GlassListPanel
 from oil_tracker.ui.widgets.glass_settings_panel import GlassSettingsPanel
+from oil_tracker.ui.widgets.roi_editor_dialog import RoiEditorDialog
 from oil_tracker.ui.widgets.transport_bar import TransportBar
 from oil_tracker.ui.widgets.validation_panel import ValidationPanel
 from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
@@ -58,12 +62,15 @@ class MainWindow(QMainWindow):
         self.playback_speed = 1.0
         self.last_result_path = ""
         self.last_debug_artifacts = None
+        self.undo_stack = QUndoStack(self)
+        self._last_validation = None
         self.setWindowTitle("Rotary Oil Level Tracker — 분석 프로필 설정")
         self.setMinimumSize(1280, 760)
         self._resize_to_available_screen()
         self._build_ui()
         self._connect()
         self._refresh_all()
+        self._refresh_inline_validation()
 
     def _resize_to_available_screen(self) -> None:
         screen = QApplication.primaryScreen()
@@ -91,17 +98,35 @@ class MainWindow(QMainWindow):
             ("result", "결과 보고서", QStyle.StandardPixmap.SP_FileDialogDetailedView),
             ("debug", "ROI 상세보기", QStyle.StandardPixmap.SP_ComputerIcon),
         )
-        for key, text, icon in definitions:
-            action = QAction(self.style().standardIcon(icon), text, self)
+        toolbar_keys = {"new", "load", "result", "debug"}
+        for key, label, icon in definitions:
+            action = QAction(self.style().standardIcon(icon), label, self)
+            self.actions[key] = action
+            if key not in toolbar_keys:
+                continue
             toolbar.addAction(action)
             button = toolbar.widgetForAction(action)
             if isinstance(button, QToolButton):
-                button.setObjectName("primaryToolButton" if key == "analyze" else "toolbarButton")
+                button.setObjectName("toolbarButton")
                 button.setCursor(Qt.CursorShape.PointingHandCursor)
-            self.actions[key] = action
-            if key in {"save", "validate", "result"}:
+            if key in {"load", "result"}:
                 toolbar.addSeparator()
         self.actions["debug"].setCheckable(True)
+        self.actions["save"].setShortcut(QKeySequence.StandardKey.Save)
+
+        self.actions["undo"] = self.undo_stack.createUndoAction(self, "실행 취소")
+        self.actions["redo"] = self.undo_stack.createRedoAction(self, "다시 실행")
+        self.actions["undo"].setShortcut(QKeySequence.StandardKey.Undo)
+        self.actions["redo"].setShortcut(QKeySequence.StandardKey.Redo)
+        self.actions["undo"].setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowBack))
+        self.actions["redo"].setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowForward))
+        toolbar.addAction(self.actions["undo"])
+        toolbar.addAction(self.actions["redo"])
+        for key in ("undo", "redo"):
+            button = toolbar.widgetForAction(self.actions[key])
+            if isinstance(button, QToolButton):
+                button.setObjectName("toolbarButton")
+                button.setCursor(Qt.CursorShape.PointingHandCursor)
         toolbar.addSeparator()
         self.state_label = QLabel()
         self.state_label.setObjectName("stateBadge")
@@ -131,7 +156,15 @@ class MainWindow(QMainWindow):
         left = max(180, int(width * 0.12))
         right = max(460, int(width * 0.28))
         self.splitter.setSizes([left, max(660, width - left - right), right])
-        self.setCentralWidget(self.splitter)
+
+        self.action_bar = BottomActionBar()
+        shell = QWidget()
+        shell_layout = QVBoxLayout(shell)
+        shell_layout.setContentsMargins(0, 0, 0, 0)
+        shell_layout.setSpacing(0)
+        shell_layout.addWidget(self.splitter, 1)
+        shell_layout.addWidget(self.action_bar)
+        self.setCentralWidget(shell)
 
         self.validation_panel = ValidationPanel()
         self.validation_dock = QDockWidget("설정 점검 결과", self)
@@ -210,6 +243,9 @@ class MainWindow(QMainWindow):
         self.actions["result"].triggered.connect(self.open_result)
         self.actions["debug"].toggled.connect(self._toggle_debug_view)
         self.debug_dock.visibilityChanged.connect(self._sync_debug_action)
+        self.action_bar.validateRequested.connect(self.actions["validate"].trigger)
+        self.action_bar.saveRequested.connect(self.actions["save"].trigger)
+        self.action_bar.analyzeRequested.connect(self.actions["analyze"].trigger)
         self.open_video_button.clicked.connect(self.open_video)
         self.glass_list.addRequested.connect(self.add_glass)
         self.glass_list.deleteRequested.connect(self.delete_glass)
@@ -223,6 +259,8 @@ class MainWindow(QMainWindow):
         self.settings.addExclusionRequested.connect(self.add_exclusion)
         self.settings.deleteExclusionRequested.connect(self.delete_exclusion)
         self.settings.restoreDefaultsRequested.connect(self.restore_defaults)
+        self.settings.editRoiRequested.connect(self.open_roi_editor)
+        self.settings.resetGlassRequested.connect(self.reset_selected_glass)
         self.transport.playToggled.connect(self.toggle_play)
         self.transport.stepRequested.connect(self.step_frame)
         self.transport.seekRequested.connect(self.seek_fraction)
@@ -241,17 +279,113 @@ class MainWindow(QMainWindow):
         for spin in (self.start_spin, self.end_spin, self.compressor_spin, self.sampling_spin):
             spin.editingFinished.connect(self._session_changed)
 
+    def _record_recipe_change(self, text: str, change) -> None:
+        before = self.workbench.recipe.to_dict()
+        selected_before = self.workbench.selected_glass_id
+        change()
+        after = self.workbench.recipe.to_dict()
+        selected_after = self.workbench.selected_glass_id
+        if before == after and selected_before == selected_after:
+            return
+        self.undo_stack.push(
+            RecipeSnapshotCommand(
+                self.workbench,
+                before,
+                after,
+                selected_before,
+                selected_after,
+                text,
+                self._after_snapshot_restored,
+                already_applied=True,
+            )
+        )
+        self._after_user_change()
+
+    def _after_snapshot_restored(self) -> None:
+        self._refresh_all()
+        self.schedule_preview()
+        self._refresh_inline_validation()
+
+    def _after_user_change(self) -> None:
+        self._refresh_all()
+        self.schedule_preview()
+        self._refresh_inline_validation()
+
+    def _refresh_inline_validation(self):
+        if self.workbench.state == WorkbenchState.ANALYZING and self._last_validation is not None:
+            return self._last_validation
+        result = self.workbench.validate()
+        self._last_validation = result
+        selected_id = self.workbench.selected_glass_id
+        self.settings.set_validation_issues(result.issues, selected_id)
+        self.validation_panel.set_result(result)
+        self.action_bar.set_validation_result(result)
+        self._update_state()
+        return result
+
+    def open_roi_editor(self) -> None:
+        glass = self.workbench.selected_glass()
+        if glass is None:
+            return
+        dialog = RoiEditorDialog(
+            self.current_frame,
+            glass,
+            self.workbench.recipe.reference_frame_width,
+            self.workbench.recipe.reference_frame_height,
+            self,
+        )
+        if dialog.exec() != RoiEditorDialog.DialogCode.Accepted:
+            return
+        edited = dialog.edited_glass()
+
+        def apply_edit() -> None:
+            for index, candidate in enumerate(self.workbench.recipe.glasses):
+                if candidate.id == edited.id:
+                    self.workbench.recipe.glasses[index] = edited
+                    self.workbench.selected_glass_id = edited.id
+                    self.workbench.mark_dirty()
+                    return
+
+        self._record_recipe_change("ROI 집중 편집", apply_edit)
+
+    def reset_selected_glass(self) -> None:
+        glass = self.workbench.selected_glass()
+        if glass is None:
+            return
+
+        def reset() -> None:
+            current = self.workbench.selected_glass()
+            if current is None:
+                return
+            default = InspectionRecipe.default_glass(
+                self.workbench.recipe.reference_frame_width,
+                self.workbench.recipe.reference_frame_height,
+            )
+            default.id = current.id
+            default.name = current.name
+            default.enabled = current.enabled
+            default.description = current.description
+            for index, candidate in enumerate(self.workbench.recipe.glasses):
+                if candidate.id == current.id:
+                    self.workbench.recipe.glasses[index] = default
+                    self.workbench.mark_dirty()
+                    return
+
+        self._record_recipe_change("관찰창 초기화", reset)
+
     def new_recipe(self) -> None:
         wizard = NewRecipeWizard(self)
         if wizard.exec() == NewRecipeWizard.DialogCode.Accepted:
             if wizard.skipped:
                 self.workbench.new_document()
+                self.undo_stack.clear()
                 self._set_placeholder()
                 self._refresh_all()
                 return
             metadata = wizard.video_metadata
             width, height = (metadata.width, metadata.height) if metadata else (1280, 720)
             self.workbench.new_document(width, height, wizard.recipe_name.text().strip() or "새 유면 분석 프로필")
+            self.undo_stack.clear()
             self.workbench.recipe.description = wizard.description.toPlainText()
             if wizard.video_path.text():
                 self.workbench.open_video(wizard.video_path.text())
@@ -264,6 +398,7 @@ class MainWindow(QMainWindow):
                 self.workbench.add_glass()
             self._refresh_all()
             self.schedule_preview()
+            self._refresh_inline_validation()
 
     def open_video(self) -> None:
         path, _ = QFileDialog.getOpenFileName(self, "시험 영상 열기", "", SUPPORTED_VIDEO_FILTER)
@@ -275,104 +410,111 @@ class MainWindow(QMainWindow):
             self._load_frame(0.0)
             self._refresh_all()
             self.schedule_preview()
+            self._refresh_inline_validation()
         except Exception as exc:
             self._error("영상 열기 실패", str(exc))
 
     def add_glass(self) -> None:
-        self.workbench.add_glass()
-        self._refresh_all()
-        self.schedule_preview()
+        self._record_recipe_change("관찰창 추가", self.workbench.add_glass)
 
     def delete_glass(self) -> None:
-        self.workbench.delete_selected_glass()
-        self._refresh_all()
-        self.schedule_preview()
+        self._record_recipe_change("관찰창 삭제", self.workbench.delete_selected_glass)
 
     def select_glass(self, glass_id: str) -> None:
         self.workbench.set_selected(glass_id)
         self._refresh_panels()
         self.schedule_preview()
+        self._refresh_inline_validation()
 
     def set_enabled(self, glass_id: str, enabled: bool) -> None:
-        glass = next((g for g in self.workbench.recipe.glasses if g.id == glass_id), None)
-        if glass:
-            glass.enabled = enabled
-            self.workbench.mark_dirty()
-            self._refresh_all()
+        def change() -> None:
+            glass = next((g for g in self.workbench.recipe.glasses if g.id == glass_id), None)
+            if glass is not None:
+                glass.enabled = enabled
+                self.workbench.mark_dirty()
+
+        self._record_recipe_change("분석 포함 변경", change)
 
     def _geometry_changed(self, glass_id: str, ellipse) -> None:
-        self.workbench.update_ellipse(glass_id, ellipse)
-        self._refresh_panels()
-        self.schedule_preview()
+        self._record_recipe_change(
+            "관찰창 위치 또는 크기 변경",
+            lambda: self.workbench.update_ellipse(glass_id, ellipse),
+        )
 
     def _zero_changed(self, glass_id: str, y: float) -> None:
-        self.workbench.update_zero_line(glass_id, y)
-        self._refresh_panels()
-        self.schedule_preview()
+        self._record_recipe_change(
+            "기준점 이동",
+            lambda: self.workbench.update_zero_line(glass_id, y),
+        )
 
     def _exclusion_changed(self, glass_id: str, zone_id: str, rect) -> None:
-        self.workbench.update_exclusion(glass_id, zone_id, rect)
-        self._refresh_panels()
-        self.schedule_preview()
+        self._record_recipe_change(
+            "검출 제외 영역 변경",
+            lambda: self.workbench.update_exclusion(glass_id, zone_id, rect),
+        )
 
     def add_exclusion(self) -> None:
         glass = self.workbench.selected_glass()
-        if glass:
-            self.workbench.add_exclusion(glass.id)
-            self._refresh_panels()
-            self.schedule_preview()
+        if glass is not None:
+            self._record_recipe_change(
+                "검출 제외 영역 추가",
+                lambda: self.workbench.add_exclusion(glass.id),
+            )
 
     def delete_exclusion(self, zone_id: str) -> None:
         glass = self.workbench.selected_glass()
-        if glass:
-            self.workbench.delete_exclusion(glass.id, zone_id)
-            self._refresh_panels()
-            self.schedule_preview()
+        if glass is not None:
+            self._record_recipe_change(
+                "검출 제외 영역 삭제",
+                lambda: self.workbench.delete_exclusion(glass.id, zone_id),
+            )
 
     def restore_defaults(self) -> None:
-        glass = self.workbench.selected_glass()
-        if glass:
-            glass.detector_settings = DetectorSettings()
-            self.workbench.mark_dirty()
-            self._refresh_panels()
-            self.schedule_preview()
+        def change() -> None:
+            glass = self.workbench.selected_glass()
+            if glass is not None:
+                glass.detector_settings = DetectorSettings()
+                self.workbench.mark_dirty()
+
+        self._record_recipe_change("검출 설정 기본값 복원", change)
 
     def _field_changed(self, key: str, value) -> None:
-        glass = self.workbench.selected_glass()
-        if glass is None:
-            return
-        e = glass.geometry.ellipse
-        if key in {"center_x", "center_y", "width", "height"}:
-            cx = value if key == "center_x" else e.center_x
-            cy = value if key == "center_y" else e.center_y
-            rx = value / 2 if key == "width" else e.radius_x
-            ry = value / 2 if key == "height" else e.radius_y
-            self.workbench.update_ellipse(glass.id, EllipseGeometry(cx, cy, rx, ry))
-        elif key == "zero_line_y":
-            self.workbench.update_zero_line(glass.id, float(value))
-        elif key == "name":
-            glass.name = str(value)
-            self.workbench.mark_dirty()
-        elif key == "enabled":
-            glass.enabled = bool(value)
-            self.workbench.mark_dirty()
-        elif key == "initial_state":
-            glass.initial_state = InitialObservationState(value)
-            self.workbench.mark_dirty()
-        elif key == "mm_per_pixel":
-            glass.mm_per_pixel = value
-            self.workbench.mark_dirty()
-        elif key == "judgment_mode":
-            glass.judgment_rule.mode = JudgmentMode(value)
-            self.workbench.mark_dirty()
-        elif key == "margin_ratio":
-            glass.geometry.margin_ratio = float(value)
-            self.workbench.mark_dirty()
-        elif hasattr(glass.detector_settings, key):
-            setattr(glass.detector_settings, key, value)
-            self.workbench.mark_dirty()
-        self._refresh_all()
-        self.schedule_preview()
+        def change() -> None:
+            glass = self.workbench.selected_glass()
+            if glass is None:
+                return
+            e = glass.geometry.ellipse
+            if key in {"center_x", "center_y", "width", "height"}:
+                cx = value if key == "center_x" else e.center_x
+                cy = value if key == "center_y" else e.center_y
+                rx = value / 2 if key == "width" else e.radius_x
+                ry = value / 2 if key == "height" else e.radius_y
+                self.workbench.update_ellipse(glass.id, EllipseGeometry(cx, cy, rx, ry))
+            elif key == "zero_line_y":
+                self.workbench.update_zero_line(glass.id, float(value))
+            elif key == "name":
+                glass.name = str(value)
+                self.workbench.mark_dirty()
+            elif key == "enabled":
+                glass.enabled = bool(value)
+                self.workbench.mark_dirty()
+            elif key == "initial_state":
+                glass.initial_state = InitialObservationState(value)
+                self.workbench.mark_dirty()
+            elif key == "mm_per_pixel":
+                glass.mm_per_pixel = value
+                self.workbench.mark_dirty()
+            elif key == "judgment_mode":
+                glass.judgment_rule.mode = JudgmentMode(value)
+                self.workbench.mark_dirty()
+            elif key == "margin_ratio":
+                glass.geometry.margin_ratio = float(value)
+                self.workbench.mark_dirty()
+            elif hasattr(glass.detector_settings, key):
+                setattr(glass.detector_settings, key, value)
+                self.workbench.mark_dirty()
+
+        self._record_recipe_change("관찰창 설정 변경", change)
 
     def _session_changed(self) -> None:
         self.workbench.session.analysis_start_sec = self.start_spin.value()
@@ -382,6 +524,7 @@ class MainWindow(QMainWindow):
         self.workbench.mark_dirty()
         self._update_transport_markers()
         self._update_state()
+        self._refresh_inline_validation()
 
     def toggle_play(self, playing: bool) -> None:
         if playing and self.workbench.video_reader:
@@ -485,16 +628,17 @@ class MainWindow(QMainWindow):
             return
         try:
             self.workbench.load(Path(selected))
+            self.undo_stack.clear()
             self._set_placeholder()
             self._refresh_all()
+            self._refresh_inline_validation()
         except Exception as exc:
             self._error("프로필 열기 실패", str(exc))
 
     def validate_workbench(self):
-        result = self.workbench.validate()
+        result = self._refresh_inline_validation()
         self.validation_panel.set_result(result)
         self.validation_dock.show()
-        self._update_state()
         self.statusBar().showMessage(
             "설정 점검을 통과했습니다."
             if result.is_ready
@@ -505,12 +649,8 @@ class MainWindow(QMainWindow):
     def _route_validation_issue(self, issue) -> None:
         if issue.glass_id:
             self.select_glass(issue.glass_id)
+        self.settings.focus_field(issue.field)
         field_map = {
-            "zero_line_y": self.settings.zero,
-            "margin": self.settings.margin,
-            "mm_per_pixel": self.settings.scale,
-            "geometry": self.settings.cx,
-            "exclusions": self.settings.exclusions,
             "sampling_fps": self.sampling_spin,
             "input_video_path": self.open_video_button,
             "analysis_range": self.start_spin,
@@ -519,7 +659,7 @@ class MainWindow(QMainWindow):
         widget = field_map.get(issue.field)
         if widget is not None:
             widget.setFocus()
-        self.statusBar().showMessage(issue.message)
+        self.statusBar().showMessage(validation_issue_message(issue))
 
     def run_analysis(self) -> None:
         result = self.validate_workbench()
@@ -595,6 +735,10 @@ class MainWindow(QMainWindow):
         self.glass_list.set_glasses(self.workbench.recipe.glasses, self.workbench.selected_glass_id)
         self.settings.set_glass(self.workbench.selected_glass())
         self.canvas.set_glasses(self.workbench.recipe.glasses, self.workbench.selected_glass_id)
+        if self._last_validation is not None:
+            self.settings.set_validation_issues(
+                self._last_validation.issues, self.workbench.selected_glass_id
+            )
 
     def _sync_session_fields(self) -> None:
         session = self.workbench.session
@@ -631,6 +775,10 @@ class MainWindow(QMainWindow):
         self.state_label.style().polish(self.state_label)
         self.actions["analyze"].setEnabled(self.workbench.state == WorkbenchState.VALIDATED)
         self.actions["result"].setEnabled(bool(self.last_result_path))
+        if self.workbench.state == WorkbenchState.ANALYZING:
+            self.action_bar.analyze_button.setEnabled(False)
+        elif self._last_validation is not None:
+            self.action_bar.set_validation_result(self._last_validation)
 
     def _set_placeholder(self) -> None:
         self.current_frame = np.zeros(
