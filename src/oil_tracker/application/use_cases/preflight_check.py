@@ -111,9 +111,9 @@ class PreflightCheckUseCase:
                         sample_point = PreflightSamplePoint(
                             labels=request.labels,
                             requested_timestamps=request.requested_timestamps,
-                            requested_timestamp=request.requested_timestamp,
-                            actual_timestamp=request.normalized_timestamp,
-                            frame_index=request.frame_key,
+                            requested_timestamp=request.normalized_timestamp,
+                            actual_timestamp=None,
+                            frame_index=None,
                         )
                         results.append(
                             PreflightDetectionResult(
@@ -136,7 +136,7 @@ class PreflightCheckUseCase:
                         sample_point = PreflightSamplePoint(
                             labels=request.labels,
                             requested_timestamps=request.requested_timestamps,
-                            requested_timestamp=request.requested_timestamp,
+                            requested_timestamp=request.normalized_timestamp,
                             actual_timestamp=float(actual_timestamp),
                             frame_index=int(frame_index),
                         )
@@ -157,6 +157,11 @@ class PreflightCheckUseCase:
                 analysis_start_sec=session.analysis_start_sec,
                 analysis_end_sec=end_sec,
                 compressor_start_sec=session.compressor_start_sec,
+                recipe_id=recipe.recipe_id,
+                recipe_name=recipe.name,
+                enabled_glass_ids=tuple(glass.id for glass in enabled),
+                video_fps=float(reader.metadata.fps),
+                video_duration_sec=float(reader.metadata.duration_sec),
             )
         finally:
             reader.close()
