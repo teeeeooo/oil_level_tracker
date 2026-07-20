@@ -24,7 +24,7 @@ from oil_tracker.application.services.redetection_request import (
     full_static_artifact_schedule,
     redetection_schedule,
 )
-from oil_tracker.domain.enums import EventType, ResultState
+from oil_tracker.domain.enums import EventType, FillState, ResultState
 from oil_tracker.domain.events import detect_events_for_glass
 from oil_tracker.domain.judgment import judge_samples
 from oil_tracker.domain.recipe import InspectionRecipe
@@ -36,7 +36,7 @@ from oil_tracker.domain.redetection import (
     RedetectionResult,
     RedetectionSample,
 )
-from oil_tracker.domain.results import EventMarker
+from oil_tracker.domain.results import EventMarker, TrackingSample
 from oil_tracker.domain.session import AnalysisSession
 
 
@@ -312,9 +312,8 @@ class PartialRedetectionService:
                     "이벤트와 판정 계산",
                 )
                 tracking_samples = [
-                    sample.tracking_sample
+                    _tracking_for_event_and_judgment(workspace.run_id, glass.id, sample)
                     for sample in display_samples
-                    if sample.tracking_sample is not None
                 ]
                 rerun_events = detect_events_for_glass(
                     workspace.run_id,
@@ -335,7 +334,9 @@ class PartialRedetectionService:
                                 glass.id,
                                 EventType.COMPRESSOR_START,
                                 session.compressor_start_sec,
-                                representative_frame_index=closest.frame_index,
+                                representative_frame_index=(
+                                    closest.frame_index if closest.frame_index >= 0 else None
+                                ),
                                 confidence=1.0,
                             )
                         )
@@ -357,7 +358,11 @@ class PartialRedetectionService:
                             if outcome.state is ResultState.FAIL
                             else EventType.REVIEW_REQUIRED,
                             tracking_samples[-1].timestamp_sec,
-                            representative_frame_index=tracking_samples[-1].frame_index,
+                            representative_frame_index=(
+                                tracking_samples[-1].frame_index
+                                if tracking_samples[-1].frame_index >= 0
+                                else None
+                            ),
                             confidence=outcome.valid_coverage_ratio,
                             note=outcome.note,
                         )
@@ -365,9 +370,14 @@ class PartialRedetectionService:
                     official_summary = official_bundle.glass_summary(glass.id)
                     if official_summary is not None:
                         official_state = official_summary.result_state
-                    notes = official_bundle.manifest.get("glass_judgment_notes")
-                    if isinstance(notes, dict):
-                        official_note = str(notes.get(glass.id, ""))
+                    official_note = _official_judgment_note(
+                        official_bundle.events,
+                        glass.id,
+                    )
+                    if not official_note:
+                        notes = official_bundle.manifest.get("glass_judgment_notes")
+                        if isinstance(notes, dict):
+                            official_note = str(notes.get(glass.id, ""))
                 else:
                     rerun_note = (
                         "구간 참고 결과입니다. 짧은 구간만으로 전체 시험 "
@@ -474,6 +484,50 @@ class PartialRedetectionService:
                     message=message,
                 )
             )
+
+
+def _tracking_for_event_and_judgment(
+    run_id: str,
+    glass_id: str,
+    sample: RedetectionSample,
+) -> TrackingSample:
+    if sample.tracking_sample is not None:
+        return sample.tracking_sample
+    return TrackingSample(
+        run_id=run_id,
+        glass_id=glass_id,
+        frame_index=-1,
+        timestamp_sec=sample.nominal_timestamp_sec,
+        fill_state=FillState.UNKNOWN_REVIEW,
+        overall_confidence=0.0,
+        is_valid=False,
+        flags=["DETECTION_LOST", "REDETECTION_SAMPLE_FAILED"],
+    )
+
+
+def _official_judgment_note(events, glass_id: str) -> str:
+    judgment_types = {
+        EventType.JUDGMENT_PASS,
+        EventType.JUDGMENT_FAIL,
+        EventType.REVIEW_REQUIRED,
+    }
+    candidates = [
+        event
+        for event in events
+        if event.glass_id == glass_id
+        and event.event_type in judgment_types
+        and str(getattr(event, "note", "") or "")
+    ]
+    if not candidates:
+        return ""
+    selected = max(
+        candidates,
+        key=lambda event: (
+            event.start_time_sec,
+            getattr(event, "input_order", 0),
+        ),
+    )
+    return str(selected.note)
 
 
 def _selected_candidate(detection) -> RedetectionCandidate | None:
