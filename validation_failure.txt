@@ -1,25 +1,68 @@
-INTERNALERROR> Traceback (most recent call last):
-INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/_pytest/main.py", line 326, in wrap_session
-INTERNALERROR>     config._do_configure()
-INTERNALERROR>     ~~~~~~~~~~~~~~~~~~~~^^
-INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/_pytest/config/__init__.py", line 1205, in _do_configure
-INTERNALERROR>     self.hook.pytest_configure.call_historic(kwargs=dict(config=self))
-INTERNALERROR>     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
-INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pluggy/_hooks.py", line 534, in call_historic
-INTERNALERROR>     res = self._hookexec(self.name, self._hookimpls.copy(), kwargs, False)
-INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pluggy/_manager.py", line 120, in _hookexec
-INTERNALERROR>     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
-INTERNALERROR>            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pluggy/_callers.py", line 167, in _multicall
-INTERNALERROR>     raise exception
-INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pluggy/_callers.py", line 121, in _multicall
-INTERNALERROR>     res = hook_impl.function(*args)
-INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py", line 241, in pytest_configure
-INTERNALERROR>     qt_api.set_qt_api(config.getini("qt_api"))
-INTERNALERROR>     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
-INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/qt_compat.py", line 108, in set_qt_api
-INTERNALERROR>     self.QtGui = _import_module("QtGui")
-INTERNALERROR>                  ~~~~~~~~~~~~~~^^^^^^^^^
-INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/qt_compat.py", line 104, in _import_module
-INTERNALERROR>     m = __import__(_root_module, globals(), locals(), [module_name], 0)
-INTERNALERROR> ImportError: libEGL.so.1: cannot open shared object file: No such file or directory
+FF.........F...............................                              [100%]
+=================================== FAILURES ===================================
+__________________________ test_main_window_creation ___________________________
+
+qtbot = <pytestqt.qtbot.QtBot object at 0x7fc3a160cad0>
+
+    def test_main_window_creation(qtbot):
+        window = MainWindow(controller(), FakePreview(), FakeAnalysis(), DebugRenderer())
+        qtbot.addWidget(window)
+>       assert "Recipe Workbench" in window.windowTitle()
+E       AssertionError: assert 'Recipe Workbench' in 'Rotary Oil Level Tracker — 분석 프로필 설정'
+E        +  where 'Rotary Oil Level Tracker — 분석 프로필 설정' = <built-in method windowTitle of MainWindow object at 0x7fc3a1bdf5c0>()
+E        +    where <built-in method windowTitle of MainWindow object at 0x7fc3a1bdf5c0> = <oil_tracker.ui.main_window.MainWindow(0x555bf1458b10) at 0x7fc3a1bdf5c0>.windowTitle
+
+tests/gui/test_gui_smoke.py:39: AssertionError
+----------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+QtWarningMsg: This plugin does not support raise()
+________________________ test_add_delete_glass_binding _________________________
+
+qtbot = <pytestqt.qtbot.QtBot object at 0x7fc3a1590690>
+
+    def test_add_delete_glass_binding(qtbot):
+        c = controller(); window = MainWindow(c, FakePreview(), FakeAnalysis(), DebugRenderer()); qtbot.addWidget(window)
+        qtbot.mouseClick(window.glass_list.add_button, __import__('PySide6').QtCore.Qt.MouseButton.LeftButton)
+        assert len(c.recipe.glasses) == 1
+>       assert window.settings.name.text() == "Glass 1"
+E       AssertionError: assert '유면 관찰창 1' == 'Glass 1'
+E         
+E         - Glass 1
+E         + 유면 관찰창 1
+
+tests/gui/test_gui_smoke.py:47: AssertionError
+----------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+QtWarningMsg: This plugin does not support raise()
+___________________ test_recipe_video_to_analysis_and_bundle ___________________
+
+tmp_path = PosixPath('/tmp/pytest-of-runner/pytest-0/test_recipe_video_to_analysis_0')
+
+    def test_recipe_video_to_analysis_and_bundle(tmp_path):
+        video = tmp_path / "sample.avi"; make_video(video)
+        reader = OpenCvVideoReader(video); metadata = reader.metadata; reader.close()
+        recipe = InspectionRecipe.empty(320, 240, "Integration")
+        glass = glass_config(); glass.judgment_rule.stable_hold_sec = .2; glass.judgment_rule.recovery_limit_sec = 3
+        recipe.glasses.append(glass)
+        session = AnalysisSession(str(video), metadata, 0, metadata.duration_sec, 0, 5, str(tmp_path), resolution_confirmed=True)
+        pipeline = AnalysisPipeline(lambda p: OpenCvVideoReader(p), OpenCvPhaseDetector(), RecipeValidationService())
+        result = pipeline.run(recipe, session)
+        assert result.glass_results[0].samples
+        bundle = OutputBundleStore().write_bundle(result, recipe, session, tmp_path)
+        for expected in ("report.html", "tracking_data.csv", "events.csv", "recipe_snapshot.oilrecipe", "session.json", "analysis_manifest.json"):
+            assert (bundle / expected).is_file()
+        html = (bundle / "report.html").read_text(encoding="utf-8")
+>       assert "Rotary Oil Level Analysis" in html
+E       assert 'Rotary Oil Level Analysis' in '\ufeff<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n<meta http-equiv="Content-Type" content="tex...ass="card"><h2>경고</h2><ul><li>mm/pixel is not set; results will use pixels.</li></ul></section>\n</main></body></html>'
+
+tests/integration/test_analysis_and_reporting.py:40: AssertionError
+=========================== short test summary info ============================
+FAILED tests/gui/test_gui_smoke.py::test_main_window_creation - AssertionError: assert 'Recipe Workbench' in 'Rotary Oil Level Tracker — 분석 프로필 설정'
+ +  where 'Rotary Oil Level Tracker — 분석 프로필 설정' = <built-in method windowTitle of MainWindow object at 0x7fc3a1bdf5c0>()
+ +    where <built-in method windowTitle of MainWindow object at 0x7fc3a1bdf5c0> = <oil_tracker.ui.main_window.MainWindow(0x555bf1458b10) at 0x7fc3a1bdf5c0>.windowTitle
+FAILED tests/gui/test_gui_smoke.py::test_add_delete_glass_binding - AssertionError: assert '유면 관찰창 1' == 'Glass 1'
+  
+  - Glass 1
+  + 유면 관찰창 1
+FAILED tests/integration/test_analysis_and_reporting.py::test_recipe_video_to_analysis_and_bundle - assert 'Rotary Oil Level Analysis' in '\ufeff<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n<meta http-equiv="Content-Type" content="tex...ass="card"><h2>경고</h2><ul><li>mm/pixel is not set; results will use pixels.</li></ul></section>\n</main></body></html>'
+3 failed, 40 passed in 2.07s
