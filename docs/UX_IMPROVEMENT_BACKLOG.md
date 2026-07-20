@@ -31,7 +31,7 @@ UX 개선은 다음 세 가지 사용자 확신을 단계적으로 높이는 방
 |---|---|---|
 | Phase 1 | Workbench 복잡도 축소와 복구 가능한 편집 | 완료 |
 | Phase 2A | 설정 완성도와 분석 전 사전 검증 | 완료 |
-| Phase 2B | 분석 결과 영상 검토 Viewer | 다음 작업 — 2B-1 |
+| Phase 2B | 분석 결과 영상 검토 Viewer | 진행 중 — 2B-1 완료 |
 | Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 예정 |
 | Phase 2D | 반복 시험 운영과 복구 자동화 | 후보 |
 
@@ -234,6 +234,20 @@ Global session issue는 모든 관찰창의 오류로 전파하지 않고, 해�
 
 ## 6. Phase 2B — 분석 결과 영상 검토 Viewer
 
+### 상태
+
+**진행 중**
+
+- Phase 2B-1 `Result Review Viewer MVP`: 완료
+- Phase 2B-2 `일반 검토 강화`: 다음 작업
+
+Phase 2B-1은 PR #9 `feat: add result review viewer MVP`로 `main`에 반영했다.
+
+- PR head: `2f948a57171586665b20c5f814f1d7d2c2863142`
+- main merge SHA: `faeb31a54d1e7d88ebee79a8ee33769fb24dd8c0`
+- 검증: Python 3.13 및 3.14에서 각각 `175 passed`
+- 실제 Windows DPI, 실영상 seek와 overlay 좌표 검증은 수동 확인 항목으로 유지
+
 ### 목적
 
 분석 완료 후 사용자가 원본 영상을 재생하면서 검출된 유면 위치와 판정 근거를 overlay로 확인할 수 있게 한다.
@@ -242,18 +256,22 @@ Global session issue는 모든 관찰창의 오류로 전파하지 않고, 해�
 
 ### Phase 2B-1 — Viewer MVP
 
-**다음 작업**
+**완료**
 
-- 결과 bundle 열기
-- 원본 영상 자동 탐색과 재지정
+- 기존 및 신규 결과 bundle 열기
+- `review_index.json` 생성과 index 없는 기존 bundle 복원
+- 원본 영상 자동 탐색과 session 한정 재지정
 - 관찰창 선택
 - ROI, 기준점, 최종 유면 위치와 foam front overlay
 - 영상과 tracking timestamp 동기화
 - 이벤트와 낮은 신뢰도 구간 탐색
 - 현재 시점 상세 정보
-- overlay 포함 장면 이미지 저장
+- overlay 포함 원본 해상도 PNG 저장
+- Workbench와 분리된 read-only Viewer 및 독립 video reader
 
 ### Phase 2B-2 — 일반 검토 강화
+
+**다음 작업**
 
 - tracking graph와 영상 동기화
 - 그래프 클릭 시 해당 시점 이동
@@ -360,11 +378,10 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 
 ## 11. 현재 다음 작업
 
-현재 `main`에는 Phase 1과 Phase 2A 전체가 완료되어 있다.
+현재 `main`에는 Phase 1, Phase 2A 전체와 Phase 2B-1이 완료되어 있다.
 
 다음 구현 순서는 다음과 같다.
 
-1. **Phase 2B-1:** Result Review Viewer MVP
-2. **Phase 2B-2:** 일반 검토 강화
-3. **Phase 2C:** Debug Viewer와 재검출 확장
-4. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
+1. **Phase 2B-2:** 일반 검토 강화
+2. **Phase 2C:** Debug Viewer와 재검출 확장
+3. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
