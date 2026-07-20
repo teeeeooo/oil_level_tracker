@@ -87,17 +87,14 @@ class RedetectionWorkspace:
     def write_detection(self, glass, detection, artifacts) -> str:
         if self._finalized or self._closed:
             raise RedetectionWorkspaceError("종료된 workspace에는 기록할 수 없습니다.")
-        before = self.writer.record_count
         decision = DebugCaptureDecision(True, (DebugCaptureReason.FULL_TRACE,))
         try:
-            self.writer.write(glass, detection, artifacts, decision)
+            record_id = self.writer.write(glass, detection, artifacts, decision)
         except Exception as exc:
             raise RedetectionWorkspaceError(
                 f"재검출 artifact를 저장할 수 없습니다: {exc}"
             ) from exc
-        if self.writer.record_count <= before:
-            return ""
-        return str(self.writer._summaries[-1]["record_id"])
+        return str(record_id or "")
 
     def append_sample(self, sample: RedetectionSample) -> None:
         if self._finalized or self._closed:
@@ -226,7 +223,9 @@ def _sample_payload(sample: RedetectionSample) -> dict:
         "debug_record_id": sample.debug_record_id,
         "error_message": sample.error_message,
         "warmup": sample.warmup,
-        "tracking": None if tracking is None else {
+        "tracking": None
+        if tracking is None
+        else {
             "run_id": tracking.run_id,
             "glass_id": tracking.glass_id,
             "frame_index": tracking.frame_index,
