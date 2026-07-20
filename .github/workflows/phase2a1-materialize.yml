@@ -46,11 +46,14 @@ jobs:
           python -m pip install -e ".[dev]"
 
       - name: Materialize implementation
-        run: python scripts/apply_phase2a1_readiness.py
+        run: |
+          python scripts/apply_phase2a1_readiness.py
+          python scripts/fix_phase2a1_validation.py
 
       - name: Remove temporary materialization files
         run: |
           rm scripts/apply_phase2a1_readiness.py
+          rm scripts/fix_phase2a1_validation.py
           rm .github/workflows/phase2a1-materialize.yml
 
       - name: Pre-commit validation on Python 3.13
@@ -112,4 +115,4 @@ jobs:
         run: |
           echo "Exact feature head: ${{ steps.commit.outputs.sha }}"
           echo "Command: QT_QPA_PLATFORM=offscreen python -m pytest -q"
-          echo "Temporary workflow and materialization script removed before final commit."
+          echo "Temporary workflow and materialization scripts removed before final commit."
