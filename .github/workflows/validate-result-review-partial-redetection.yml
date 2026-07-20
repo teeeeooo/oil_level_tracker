@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
   test:
@@ -55,10 +57,42 @@ jobs:
           print("matplotlib=" + matplotlib.__version__)
           PY
       - name: Canonical test suite
+        id: tests
+        continue-on-error: true
         shell: bash
         run: |
           set +e
           QT_QPA_PLATFORM=offscreen python -m pytest -q > /tmp/pytest.log 2>&1
           status=$?
+          echo "status=${status}" >> "${GITHUB_OUTPUT}"
           tail -n 180 /tmp/pytest.log
           exit $status
+      - name: Publish failure tail to validation PR
+        if: steps.tests.outputs.status != '0'
+        uses: actions/github-script@v7
+        env:
+          PYTHON_VERSION: ${{ matrix.python-version }}
+        with:
+          script: |
+            const fs = require('fs');
+            const text = fs.readFileSync('/tmp/pytest.log', 'utf8');
+            const lines = text.split(/\r?\n/).slice(-180).join('\n');
+            const body = [
+              `### Exact-head validation failure · Python ${process.env.PYTHON_VERSION}`,
+              '',
+              `Feature SHA: \`${process.env.EXPECTED_SHA}\``,
+              '',
+              '```text',
+              lines,
+              '```'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });
+      - name: Fail job when tests failed
+        if: steps.tests.outputs.status != '0'
+        shell: bash
+        run: exit 1
