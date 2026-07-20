@@ -1,33 +1,34 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rotary Oil Level Analysis {{ result.run_id }}</title>
+<title>유면 분석 결과 {{ result.run_id }}</title>
 <style>
-:root{font-family:Segoe UI,Arial,sans-serif;color:#1f2937;background:#f3f4f6}body{margin:0;padding:24px}.page{max-width:1260px;margin:auto}.card{background:white;border:1px solid #d1d5db;border-radius:10px;padding:18px;margin:0 0 18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}h1,h2,h3{margin-top:0}.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.metric{padding:12px;background:#f8fafc;border-radius:8px}.state{font-weight:700}.PASS{color:#047857}.FAIL{color:#b91c1c}.REVIEW_REQUIRED{color:#b45309}.NOT_APPLICABLE{color:#4b5563}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #e5e7eb;padding:7px;text-align:left;vertical-align:top}th{background:#f8fafc}img.graph{display:block;max-width:100%;height:auto;margin:auto}.capture{max-width:360px;border:1px solid #d1d5db}.muted{color:#6b7280}.mono{font-family:Consolas,monospace;word-break:break-all}
+:root{font-family:"Malgun Gothic","Segoe UI",Arial,sans-serif;color:#1f2937;background:#f3f4f6}body{margin:0;padding:24px}.page{max-width:1260px;margin:auto}.card{background:white;border:1px solid #d1d5db;border-radius:10px;padding:18px;margin:0 0 18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}h1,h2,h3{margin-top:0}.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.metric{padding:12px;background:#f8fafc;border-radius:8px}.state{font-weight:700}.PASS{color:#047857}.FAIL{color:#b91c1c}.REVIEW_REQUIRED{color:#b45309}.NOT_APPLICABLE{color:#4b5563}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #e5e7eb;padding:7px;text-align:left;vertical-align:top}th{background:#f8fafc}img.graph{display:block;max-width:100%;height:auto;margin:auto}.capture{max-width:360px;border:1px solid #d1d5db}.muted{color:#6b7280}.mono{font-family:Consolas,"Malgun Gothic",monospace;word-break:break-all}
 </style>
 </head>
 <body><main class="page">
-<section class="card"><h1>Rotary Oil Level Analysis</h1><div class="summary">
-<div class="metric"><div class="muted">Overall judgment</div><div class="state {{ result.overall_state.value }}">{{ result.overall_state.value }}</div></div>
-<div class="metric"><div class="muted">Run ID</div><div class="mono">{{ result.run_id }}</div></div>
-<div class="metric"><div class="muted">Recipe</div><div>{{ recipe.name }}</div></div>
-<div class="metric"><div class="muted">Source video</div><div class="mono">{{ session.input_video_path }}</div></div>
+<section class="card"><h1>Rotary Oil Level Tracker 분석 결과</h1><div class="summary">
+<div class="metric"><div class="muted">전체 판정</div><div class="state {{ result.overall_state.value }}">{{ result.overall_state.value }}</div></div>
+<div class="metric"><div class="muted">분석 ID</div><div class="mono">{{ result.run_id }}</div></div>
+<div class="metric"><div class="muted">분석 프로필</div><div>{{ recipe.name }}</div></div>
+<div class="metric"><div class="muted">시험 영상</div><div class="mono">{{ session.input_video_path }}</div></div>
 </div></section>
-<section class="card"><h2>Combined graph</h2><img class="graph" src="{{ graph_paths['combined'] }}" alt="Combined tracking graph"></section>
-<section class="card"><h2>Recipe and analysis settings</h2>
-<table><tr><th>Reference resolution</th><td>{{ recipe.reference_frame_width }} × {{ recipe.reference_frame_height }}</td><th>Sampling FPS</th><td>{{ session.sampling_fps }}</td></tr>
-<tr><th>Analysis range</th><td>{{ '%.3f'|format(session.analysis_start_sec) }}–{{ '%.3f'|format(session.effective_end_sec() or 0) }} s</td><th>Compressor start</th><td>{{ session.compressor_start_sec }}</td></tr>
-<tr><th>App version</th><td>{{ app_version }}</td><th>Detector version</th><td>{{ detector_version }}</td></tr></table></section>
+<section class="card"><h2>통합 그래프</h2><img class="graph" src="{{ graph_paths['combined'] }}" alt="통합 유면 추적 그래프"></section>
+<section class="card"><h2>프로필 및 분석 설정</h2>
+<table><tr><th>기준 해상도</th><td>{{ recipe.reference_frame_width }} × {{ recipe.reference_frame_height }}</td><th>분석 빈도</th><td>{{ session.sampling_fps }} 회/초</td></tr>
+<tr><th>분석 범위</th><td>{{ '%.3f'|format(session.analysis_start_sec) }}–{{ '%.3f'|format(session.effective_end_sec() or 0) }}초</td><th>압축기 기동</th><td>{{ session.compressor_start_sec }}</td></tr>
+<tr><th>앱 버전</th><td>{{ app_version }}</td><th>검출기 버전</th><td>{{ detector_version }}</td></tr></table></section>
 {% for glass in result.glass_results %}
-<section class="card"><h2>{{ glass.glass_name }}</h2><p><span class="state {{ glass.result_state.value }}">{{ glass.result_state.value }}</span> — valid coverage {{ '%.1f%%'|format(glass.valid_coverage_ratio*100) }}</p><p>{{ glass.judgment_note }}</p>
-<img class="graph" src="{{ graph_paths[glass.glass_id] }}" alt="{{ glass.glass_name }} graph">
-<h3>Events</h3><table><thead><tr><th>Time</th><th>Event</th><th>Confidence</th><th>Oil px</th><th>Foam px</th><th>Capture</th><th>Note</th></tr></thead><tbody>
-{% for event in glass.events %}<tr><td>{{ '%.3f'|format(event.start_time_sec) }}</td><td>{{ event.event_type.value }}</td><td>{{ '%.3f'|format(event.confidence) }}</td><td>{{ event.oil_level_px }}</td><td>{{ event.foam_front_px }}</td><td>{% if event.capture_path %}<a href="{{ event.capture_path }}">open</a>{% endif %}</td><td>{{ event.note }}</td></tr>{% endfor %}
+<section class="card"><h2>{{ glass.glass_name }}</h2><p><span class="state {{ glass.result_state.value }}">{{ glass.result_state.value }}</span> — 유효 데이터 비율 {{ '%.1f%%'|format(glass.valid_coverage_ratio*100) }}</p><p>{{ glass.judgment_note }}</p>
+<img class="graph" src="{{ graph_paths[glass.glass_id] }}" alt="{{ glass.glass_name }} 그래프">
+<h3>주요 이벤트</h3><table><thead><tr><th>시간</th><th>이벤트</th><th>신뢰도</th><th>유면 px</th><th>거품 px</th><th>캡처</th><th>메모</th></tr></thead><tbody>
+{% for event in glass.events %}<tr><td>{{ '%.3f'|format(event.start_time_sec) }}</td><td>{{ event.event_type.value }}</td><td>{{ '%.3f'|format(event.confidence) }}</td><td>{{ event.oil_level_px }}</td><td>{{ event.foam_front_px }}</td><td>{% if event.capture_path %}<a href="{{ event.capture_path }}">열기</a>{% endif %}</td><td>{{ event.note }}</td></tr>{% endfor %}
 </tbody></table>
-<h3>Review sections</h3><p>Unknown/review samples: {{ glass.samples|selectattr('fill_state.value','equalto','UNKNOWN_REVIEW')|list|length }}. Low-confidence intervals are marked in the graph and events table.</p>
+<h3>검토 정보</h3><p>확인이 필요한 장면: {{ glass.samples|selectattr('fill_state.value','equalto','UNKNOWN_REVIEW')|list|length }}개. 신뢰도가 낮은 구간은 그래프와 이벤트 표에 표시됩니다.</p>
 </section>{% endfor %}
-<section class="card"><h2>Source metadata</h2><pre>{{ session.video_metadata.to_dict() if session.video_metadata else {} }}</pre></section>
-<section class="card"><h2>Warnings</h2>{% if result.warnings %}<ul>{% for warning in result.warnings %}<li>{{ warning }}</li>{% endfor %}</ul>{% else %}<p>None</p>{% endif %}</section>
+<section class="card"><h2>영상 메타데이터</h2><pre>{{ session.video_metadata.to_dict() if session.video_metadata else {} }}</pre></section>
+<section class="card"><h2>경고</h2>{% if result.warnings %}<ul>{% for warning in result.warnings %}<li>{{ warning }}</li>{% endfor %}</ul>{% else %}<p>없음</p>{% endif %}</section>
 </main></body></html>
