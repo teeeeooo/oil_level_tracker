@@ -85,10 +85,9 @@ class PreflightController(QObject):
         worker.completed.connect(self._completed)
         worker.failed.connect(self._failed)
         worker.cancelled.connect(self._cancelled)
-        worker.completed.connect(thread.quit)
-        worker.failed.connect(thread.quit)
-        worker.cancelled.connect(thread.quit)
-        thread.finished.connect(worker.deleteLater)
+        for terminal_signal in (worker.completed, worker.failed, worker.cancelled):
+            terminal_signal.connect(worker.deleteLater)
+            terminal_signal.connect(thread.quit)
         thread.finished.connect(lambda gen=generation: self._cleanup(gen))
         self._runs[generation] = _ActiveRun(thread, worker, cancellation)
         self.started.emit()
