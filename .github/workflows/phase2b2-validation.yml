@@ -1,6 +1,8 @@
 name: Phase 2B-2 temporary validation
 
 on:
+  push:
+    branches: [feature/result-review-general-enhancements]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -15,7 +17,7 @@ jobs:
     env:
       QT_QPA_PLATFORM: offscreen
     steps:
-      - name: Checkout exact PR head
+      - name: Checkout exact feature head
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -45,7 +47,7 @@ jobs:
           import matplotlib
           from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
           from PySide6 import __version__ as pyside_version
-          print(f"Python validation runtime")
+          print("Python validation runtime")
           print(f"PySide6={pyside_version}")
           print(f"matplotlib={matplotlib.__version__}")
           print(f"matplotlib default backend={matplotlib.get_backend()}")
