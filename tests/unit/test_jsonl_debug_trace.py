@@ -80,6 +80,7 @@ def _decision():
 
 
 def _write(tmp_path: Path, level=DebugTraceLevel.BASIC, *, missing=False):
+    tmp_path.mkdir(parents=True, exist_ok=True)
     glass = _glass()
     writer = JsonlDebugTraceWriter("run-한글", level, staging_parent=tmp_path)
     writer.write(glass, _detection(glass.id), _artifacts(missing), _decision())
