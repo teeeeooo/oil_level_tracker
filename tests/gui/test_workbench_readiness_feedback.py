@@ -160,6 +160,13 @@ def test_preview_rejects_stale_glass_and_frame_results(qtbot):
     current = PhaseDetection(glass.id, 10, 1.0, FillState.PARTIAL_VISIBLE, oil_air_level_y=200, overall_confidence=0.9)
     window._preview_ready(current, None)
     assert window.canvas._detection is current
+
+    other = workbench.add_glass()
+    window._preview_context = (other.id, 10, 1.0)
+    window.canvas.set_detection(None)
+    window._preview_ready(current, None)
+    assert window.canvas._detection is None
+
     window.schedule_preview()
     assert window.canvas._detection is None
     assert preview.invalidations > 0

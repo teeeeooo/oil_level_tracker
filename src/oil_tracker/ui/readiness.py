@@ -159,7 +159,7 @@ def first_validation_error(validation_result):
 def build_workbench_progress(recipe, session, state: WorkbenchState, validation_result) -> list[ProgressStep]:
     errors = validation_result.errors
     warnings = validation_result.warnings
-    video_fields = {"input_video_path", "video_metadata", "reference_frame"}
+    video_fields = {"input_video_path", "video_metadata"}
     time_fields = {"analysis_range", "sampling_fps", "compressor_start"}
 
     video_errors = [issue for issue in errors if issue.field in video_fields]

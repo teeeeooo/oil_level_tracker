@@ -123,3 +123,46 @@ def test_progress_states_cover_unselected_invalid_validated_and_dirty():
     dirty = build_workbench_progress(recipe, session, WorkbenchState.DRAFT_DIRTY, ValidationResult([]))
     assert dirty[3].state == ProgressStepState.CURRENT
     assert "재점검" in dirty[3].detail
+
+
+
+def test_progress_assigns_time_and_reference_errors_to_their_own_steps():
+    recipe = InspectionRecipe.empty(640, 480)
+    glass = InspectionRecipe.default_glass(640, 480)
+    recipe.glasses = [glass]
+    session = AnalysisSession(
+        input_video_path="video.mp4",
+        video_metadata=VideoMetadata("video.mp4", 640, 480, 30.0, 10.0, 300),
+        analysis_end_sec=10.0,
+        compressor_start_sec=1.0,
+    )
+    reference_issue = ValidationIssue(
+        ValidationSeverity.ERROR,
+        "READY_REFERENCE",
+        "reference",
+        glass.id,
+        "reference_frame",
+    )
+    reference_steps = build_workbench_progress(
+        recipe,
+        session,
+        WorkbenchState.DRAFT,
+        ValidationResult([reference_issue]),
+    )
+    assert reference_steps[0].state == ProgressStepState.COMPLETE
+    assert reference_steps[2].state == ProgressStepState.ERROR
+
+    time_issue = ValidationIssue(
+        ValidationSeverity.ERROR,
+        "READY_RANGE",
+        "range",
+        field="analysis_range",
+    )
+    time_steps = build_workbench_progress(
+        recipe,
+        session,
+        WorkbenchState.DRAFT,
+        ValidationResult([time_issue]),
+    )
+    assert time_steps[0].state == ProgressStepState.COMPLETE
+    assert time_steps[1].state == ProgressStepState.ERROR
