@@ -1,0 +1,53 @@
+name: Temporary Final Result Review Viewer Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.13", "3.14"]
+    env:
+      QT_QPA_PLATFORM: offscreen
+      TARGET_SHA: 2f948a57171586665b20c5f814f1d7d2c2863142
+    steps:
+      - name: Checkout exact feature head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_SHA }}
+      - name: Assert exact checkout
+        run: test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Qt runtime libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 \
+            libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-shape0 libxcb-xinerama0
+      - name: Install project
+        run: python -m pip install -U pip && python -m pip install -e ".[dev]"
+      - name: Run canonical suite
+        shell: bash
+        run: |
+          set -o pipefail
+          QT_QPA_PLATFORM=offscreen python -m pytest -q | tee pytest.log
+          summary="$(tail -n 1 pytest.log | sed -E 's/[[:space:]]+/-/g; s/,//g; s/[^A-Za-z0-9._-]/-/g')"
+          echo "PYTEST_SUMMARY=$summary" >> "$GITHUB_ENV"
+      - name: Upload validation summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-${{ matrix.python-version }}-${{ env.PYTEST_SUMMARY }}
+          path: pytest.log
+          retention-days: 1
