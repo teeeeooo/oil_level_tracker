@@ -30,7 +30,7 @@ UX 개선은 다음 세 가지 사용자 확신을 단계적으로 높이는 방
 | Phase | 주제 | 상태 |
 |---|---|---|
 | Phase 1 | Workbench 복잡도 축소와 복구 가능한 편집 | 완료 |
-| Phase 2A | 설정 완성도와 분석 전 사전 검증 | 예정 |
+| Phase 2A | 설정 완성도와 분석 전 사전 검증 | 진행 중 — 2A-1 완료 |
 | Phase 2B | 분석 결과 영상 검토 Viewer | 예정 |
 | Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 예정 |
 | Phase 2D | 반복 시험 운영과 복구 자동화 | 후보 |
@@ -108,53 +108,71 @@ PR #4 `feat: add guided workbench UX phase 1`로 `main`에 반영했다.
 
 ## 5. Phase 2A — 설정 완성도와 분석 전 사전 검증
 
+### 상태
+
+**진행 중**
+
+- Phase 2A-1 `Workbench Readiness Feedback`: 완료
+- Phase 2A-2 `Multi-frame Preflight Check`: 다음 작업
+- Phase 2A-3 `Observation-window Settings Copy`: 예정
+
+Phase 2A-1은 PR #5 `feat: add workbench readiness feedback`로 `main`에 반영했다.
+
+- PR head: `d915e1fe6aff81057a519436fc34e61406885b8f`
+- main merge SHA: `25f3257e3b29682e8fa15cad5a5359373ee0d5a3`
+- 검증: Python 3.13 및 3.14에서 각각 `63 passed`
+
 ### 목적
 
 사용자가 분석을 실행하기 전에 모든 관찰창이 제대로 설정되었고, 영상의 여러 시점에서 안정적인 검출이 가능한지 확인할 수 있게 한다.
 
-### 우선 구현 항목
+### Phase 2A-1 — Workbench Readiness Feedback
+
+**완료**
 
 #### 5.1 관찰창별 설정 완료 상태
 
-왼쪽 관찰창 목록에 다음 상태를 표시한다.
+왼쪽 관찰창 목록에 다음 상태와 가장 중요한 사유를 표시한다.
 
 - 완료
 - 확인 필요
 - 수정 필요
 - 분석 제외
 
-각 항목에는 가장 중요한 미완료 사유를 함께 표시한다.
+Global session issue는 모든 관찰창의 오류로 전파하지 않고, 해당 관찰창과 연결된 validation issue만 사용한다.
 
-예:
+#### 5.2 문제 관찰창 이동과 작업 진행 단계
 
-```text
-✓ 유면 관찰창 1
-⚠ 유면 관찰창 2 · 기준점 확인 필요
-● 유면 관찰창 3 · 영상 검출 실패
-```
+- 첫 번째 error 관찰창으로 이동
+- error가 없으면 첫 번째 warning 관찰창으로 이동
+- 관련 입력 필드 focus 및 scroll
+- 관찰창 목록, 설정 패널과 canvas 선택 동기화
+- 상단 작업 단계 표시
+- 영상 선택, 시간 설정, 관찰창 설정, 설정 점검과 분석 실행 단계 클릭 이동
 
-#### 5.2 작업 진행 단계 표시
-
-Workbench 상단에 현재 진행 상태를 표시한다.
-
-```text
-영상 선택 ✓ → 시간 설정 ✓ → 관찰창 설정 2/3 → 사전 점검 → 분석 실행
-```
-
-단계 선택 시 관련 영역 또는 첫 번째 미완료 항목으로 이동한다.
-
-#### 5.3 일반 사용자용 검출 미리보기 카드
+#### 5.3 일반 사용자용 현재 장면 검출 카드
 
 현재 장면의 최종 검출 결과만 간단히 표시한다.
 
 - fill state
 - confidence
 - 기준점 대비 유면 위치
+- mm/pixel 설정 시 mm 환산값
 - 검출 상태: 정상 / 확인 필요 / 실패
 
 후보선과 내부 score는 일반 화면에서 숨기고 `ROI 상세보기` 또는 후속 Debug Viewer에서 제공한다.
 
-#### 5.4 여러 시점 자동 사전 점검
+#### 5.4 Preview 안정성과 분석 실행 조건
+
+- 관찰창, frame과 timestamp 전환 시 stale preview 차단
+- 새 preview 요청 중 이전 확정 결과 제거
+- 명시적 설정 점검 후에만 `VALIDATED` 상태 진입
+- 설정 변경 후 `DRAFT_DIRTY`로 전환하고 재점검 요구
+- `.oilrecipe` schema와 detector algorithm 유지
+
+### Phase 2A-2 — Multi-frame Preflight Check
+
+**다음 작업**
 
 분석 구간의 대표 시점을 자동 검사한다.
 
@@ -167,12 +185,19 @@ Workbench 상단에 현재 진행 상태를 표시한다.
 
 결과:
 
-- 시점별 성공·경고·실패
+- 관찰창·시점별 성공, 경고와 실패
 - 관찰창별 최저 confidence
-- 후보 없음, 위치 급변과 거품 영향 가능성
+- 후보 없음
+- 비정상적인 위치 급변
+- 거품 영향 또는 사용자 확인 가능성
 - 문제 시점으로 즉시 이동
+- 재점검 시 이전 결과와 진행 상태 교체
 
-#### 5.5 관찰창 설정 복사
+이번 단계는 전체 분석 결과를 생성하지 않으며, 분석 전 설정 품질 확인을 위한 제한된 sample 검사로 구현한다.
+
+### Phase 2A-3 — Observation-window Settings Copy
+
+**예정**
 
 복사 가능한 항목을 선택한다.
 
@@ -185,7 +210,7 @@ Workbench 상단에 현재 진행 상태를 표시한다.
 
 ROI 위치와 기준점은 기본적으로 복사 대상에서 제외한다.
 
-### 완료 조건
+### Phase 2A 전체 완료 조건
 
 - 모든 관찰창의 준비 상태가 왼쪽 목록에 표시된다.
 - 미완료 관찰창과 첫 번째 오류로 바로 이동할 수 있다.
@@ -317,14 +342,16 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 5. 자동화가 불확실한 경우 사용자가 검토하고 수정할 수 있는 경로를 제공한다.
 6. 전체 pytest, integration과 offscreen GUI regression test를 완료 조건에 포함한다.
 7. 실제 Windows DPI와 실영상 검토는 merge 전 수동 확인 항목으로 유지한다.
+8. Phase 완료 마킹은 해당 구현 PR이 `main`에 병합된 뒤에만 기록한다.
 
 ## 11. 현재 다음 작업
 
-현재 `main`에는 Phase 1이 완료되어 있다.
+현재 `main`에는 Phase 1과 Phase 2A-1이 완료되어 있다.
 
 다음 구현 순서는 다음과 같다.
 
-1. **Phase 2A:** 관찰창별 완료 상태와 여러 시점 사전 점검
-2. **Phase 2B:** Result Review Viewer MVP
-3. **Phase 2C:** Debug Viewer와 재검출 확장
-4. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
+1. **Phase 2A-2:** 여러 시점 자동 사전 점검
+2. **Phase 2A-3:** 관찰창 설정 복사
+3. **Phase 2B:** Result Review Viewer MVP
+4. **Phase 2C:** Debug Viewer와 재검출 확장
+5. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
