@@ -1,0 +1,24 @@
+name: Export docs snapshot
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/export-docs-snapshot.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Upload docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-2c1-docs-snapshot
+          path: |
+            docs/UX_IMPROVEMENT_BACKLOG.md
+            docs/RESULT_REVIEW_VIEWER_PLAN.md
+          retention-days: 1
