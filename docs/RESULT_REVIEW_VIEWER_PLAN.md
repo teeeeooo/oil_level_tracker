@@ -18,25 +18,40 @@ PR #9 `feat: add result review viewer MVP`로 `main`에 반영했다.
 - main merge SHA: `faeb31a54d1e7d88ebee79a8ee33769fb24dd8c0`
 - 검증: Python 3.13 및 3.14에서 각각 `175 passed`
 - 기존 bundle과 신규 `review_index.json` bundle 모두 지원
-- 실제 Windows DPI, 장시간 실영상 seek와 overlay 좌표 검증은 수동 확인 항목으로 유지
 
 ### Phase 2B-2 — 일반 검토 강화
 
+**완료**
+
+PR #11 `feat: enhance result review workflow`로 `main`에 반영했다.
+
+- PR head: `326d36f5694005ffe4794d8238fbbfb30e8f5c41`
+- main merge SHA: `a063520d18cbb5669a068414a9dacfe5b50e867d`
+- 검증: Python 3.13 및 3.14에서 각각 `230 passed`
+- interactive tracking graph와 graph/video 양방향 동기화
+- 검토 사유별 filter
+- report, 결과 폴더와 event capture action
+- 분석 완료 dialog와 같은 profile 새 영상 workflow
+- transactional video/Workbench 교체와 lifecycle 보강
+- `.oilrecipe`, CSV와 `review_index.json` schema 유지
+
+Phase 2B의 실제 Windows DPI, 장시간 실영상 성능, keyframe-dependent seek, graph cursor 성능과 file lock 해제는 수동 확인 항목으로 유지한다.
+
+### Phase 2C-1 — Debug Viewer
+
 **다음 작업**
 
-- tracking graph와 영상 timeline 동기화
-- 그래프 클릭 seek
-- 검토 필요 항목 필터
-- 결과 보고서와 결과 폴더 연결
-- 분석 완료 화면에서 Viewer 바로 열기
-- 같은 profile로 새 영상 분석
+- 일반/디버그 모드 전환
+- detector 후보와 score breakdown
+- penalty와 smoothing 전후 정보
+- edge map, mask, gradient와 ROI crop
+- 문제 frame 중심 debug trace
+- 디버그 재현 패키지
 
-### Phase 2C 이후
+### Phase 2C-2 이후
 
 **예정**
 
-- Debug Viewer
-- detector 내부 후보와 score 표시
 - 부분 재검출과 설정 비교
 - 사용자 수동 정답과 regression fixture
 - annotated MP4 export
@@ -48,7 +63,7 @@ Result Review Viewer는 하나의 기반 위에서 두 목적을 지원한다.
 1. **일반 사용자 결과 검토**
    - 분석 결과가 실제 영상과 일치하는지 직관적으로 확인
    - 이벤트와 낮은 신뢰도 구간을 빠르게 탐색
-   - HTML 보고서만으로 이해하기 어려운 판정 근거를 영상으로 확인
+   - HTML 보고서만으로 이해하기 어려운 판정 근거를 영상과 graph로 확인
 
 2. **개발자 디버그 및 detector 개선**
    - 후보선, 점수, penalty와 상태 전이 근거 확인
@@ -60,7 +75,7 @@ Phase 2B는 일반 사용자 결과 검토에 집중하고, detector 내부 정�
 ## 4. 핵심 원칙
 
 - 원본 영상을 다시 인코딩하지 않고 원본 frame 위에 저장된 결과를 실시간 overlay한다.
-- Viewer는 detector를 다시 실행하지 않는다.
+- 일반 Viewer는 저장된 tracking data만 사용하고 detector를 다시 실행하지 않는다.
 - Viewer는 Workbench의 현재 recipe와 session이 아니라 결과 bundle의 snapshot을 사용한다.
 - 일반 모드에서는 최종 결과만 표시하고 detector 내부 후보와 점수는 숨긴다.
 - 원본 영상이 이동되었을 때 사용자가 세션 한정 대체 경로를 지정할 수 있다.
@@ -68,6 +83,8 @@ Phase 2B는 일반 사용자 결과 검토에 집중하고, detector 내부 정�
 - 기존 `report.html`, CSV와 `.oilrecipe` 형식을 유지한다.
 - 신규 index가 없는 기존 결과 bundle도 계속 열 수 있어야 한다.
 - Viewer의 video reader, playback state와 lifecycle은 Workbench와 분리한다.
+- 결과 bundle 내부 asset은 root 밖으로 탈출하지 않도록 검증한다.
+- 새 reader와 Workbench 후보는 준비가 완료된 뒤에만 active state로 교체한다.
 
 ## 5. 사용자 흐름
 
@@ -87,9 +104,9 @@ Viewer 자체에서도 다른 bundle을 열 수 있다.
 - `analysis_manifest.json`
 - `review_index.json`
 
-### 5.2 분석 완료 직후 — Phase 2B-2
+### 5.2 분석 완료 직후
 
-분석 완료 화면에서 다음 행동을 제공한다.
+분석 완료 dialog에서 다음 행동을 제공한다.
 
 - 결과 영상 검토
 - 결과 보고서 열기
@@ -97,16 +114,24 @@ Viewer 자체에서도 다른 bundle을 열 수 있다.
 - 같은 profile로 새 영상 분석
 - 닫기
 
-이 흐름은 Phase 2B-2에서 구현한다.
+Workbench는 먼저 `ANALYZED` 상태와 결과 bundle 경로를 확정한다. 후속 action 실패는 분석 성공 상태를 변경하지 않는다.
+
+### 5.3 같은 profile로 새 영상 분석
+
+- 결과 bundle의 recipe snapshot을 deep copy한다.
+- 새 영상과 첫 frame을 임시 reader에서 준비한다.
+- snapshot과 동일한 해상도만 shortcut으로 적용한다.
+- 사용자가 현재 Workbench 교체를 확인한 뒤 한 번에 commit한다.
+- 실패 또는 취소 시 기존 Workbench 전체 상태를 보존한다.
+- 결과 snapshot과 기존 Viewer는 변경하지 않는다.
 
 ## 6. 화면 구조
 
 ```text
-┌ 좌측: 관찰창·이벤트 목록 ┬ 중앙: 원본 영상 + overlay ┬ 우측: 현재 시점 정보 ┐
-└ 하단: 재생 제어 · timeline · 이벤트/신뢰도 marker · 그래프                ┘
+┌ 좌측: 관찰창·이벤트·검토 필터 ┬ 중앙: 원본 영상 + overlay ┬ 우측: 현재 시점 정보 ┐
+│                               ├ interactive tracking graph ┤                      │
+└ 하단: 재생 제어 · timeline · 이벤트/신뢰도 marker                               ┘
 ```
-
-Phase 2B-1에서는 그래프를 제외한 Viewer 기반을 구현했다.
 
 ### 6.1 좌측 패널
 
@@ -114,11 +139,13 @@ Phase 2B-1에서는 그래프를 제외한 Viewer 기반을 구현했다.
 - 관찰창별 판정 상태
 - 이벤트 목록
 - 낮은 신뢰도·검토 필요 구간 목록
+- 검토 사유 category filter
+- 현재 filter 결과 개수
 - 이전/다음 항목 이동
 - event confidence와 note
-- event capture 존재 여부
+- event capture 존재 여부와 열기
 
-MVP는 한 번에 하나의 관찰창 overlay를 표시한다.
+한 번에 하나의 관찰창 overlay와 graph를 표시한다.
 
 ### 6.2 중앙 영상 영역
 
@@ -145,7 +172,29 @@ Viewer canvas는 read-only다.
 - recipe mutation
 - Undo command 생성
 
-### 6.3 우측 정보 패널
+### 6.3 Interactive tracking graph
+
+- 선택 관찰창의 oil-air 추세
+- 값이 있을 때 foam-front 추세
+- 기준점 Y=0
+- 분석 시작·종료와 압축기 기동 marker
+- event marker
+- 현재 filter를 통과한 검토 interval
+- 현재 actual decoded timestamp cursor
+- graph 클릭 seek
+
+단위 정책:
+
+- `mm_per_pixel`과 usable mm 값이 있으면 mm
+- 그 외에는 px
+- smoothed 값 우선
+- 같은 단위의 raw 값 fallback
+- 값이 없으면 gap
+- 누락값을 임의의 0으로 표시하지 않음
+
+Playback 중에는 전체 series를 재생성하지 않고 cursor만 갱신한다.
+
+### 6.4 우측 정보 패널
 
 현재 video timestamp와 선택된 tracking sample 기준:
 
@@ -163,7 +212,7 @@ Viewer canvas는 read-only다.
 - 검토 필요 사유
 - boundary가 ROI 밖이어서 표시되지 않은 경우의 상태
 
-### 6.4 하단 timeline
+### 6.5 하단 timeline
 
 - 재생과 일시정지
 - 이전/다음 frame
@@ -175,7 +224,7 @@ Viewer canvas는 read-only다.
 - low-confidence interval
 - 현재 timestamp cursor
 
-## 7. Phase 2B-1 구현 계약
+## 7. Phase 2B 구현 계약
 
 ### 7.1 Result bundle reader
 
@@ -236,7 +285,7 @@ Reader 규칙:
 - `analysis_manifest.json`은 `review_index` pointer를 가진다.
 - 기존 CSV column과 report 파일은 변경하지 않는다.
 - index가 없는 기존 bundle은 manifest, session, recipe와 CSV에서 동일한 `ReviewBundle` model로 복원한다.
-- MVP의 event timestamp index와 low-confidence interval은 index에 중복 저장하지 않고 CSV에서 load 시 계산한다.
+- Phase 2B의 event timestamp index와 low-confidence interval은 index에 중복 저장하지 않고 CSV에서 load 시 계산한다.
 - 향후 대형 결과의 성능상 필요성이 확인되면 backward-compatible index 확장을 별도 schema version으로 검토한다.
 
 ### 7.3 `tracking_data.csv`
@@ -283,8 +332,18 @@ Foam front:
 - 분석 시작 전과 종료 후에는 tracking overlay를 표시하지 않음
 - seek 후 요청 timestamp가 아니라 actual decoded timestamp를 사용
 - video timestamp와 tracking sample timestamp를 별도로 표시
+- graph cursor, timeline, overlay와 detail을 actual decoded timestamp로 재동기화
 
-### 7.5 검토 필요 interval
+### 7.5 검토 필요 interval과 filter
+
+검토 category:
+
+- `invalid`
+- `low_confidence`
+- `review_required`
+- `foam`
+- `glare_or_fog`
+- `detection_lost`
 
 다음 조건을 만족하는 sample은 검토 필요 대상으로 분류한다.
 
@@ -295,7 +354,7 @@ Foam front:
 - `FOGGED_OR_GLARE`
 - `REVIEW_REQUIRED`
 - `UNKNOWN_REVIEW`
-- foam, review, glare 또는 lost 관련 명시적 flag
+- foam, review, glare, fog 또는 lost 관련 명시적 flag
 
 연속 sample은 session sampling FPS 또는 timestamp 간격을 기준으로 interval로 묶는다.
 
@@ -304,6 +363,8 @@ Foam front:
 - 최저 confidence sample 우선
 - 동률이면 가장 이른 timestamp
 - 이후 frame index와 입력 순서로 deterministic 결정
+
+Filter는 Viewer session 상태이며 공식 결과와 bundle을 변경하지 않는다.
 
 ### 7.6 원본 영상 탐색과 재지정
 
@@ -326,14 +387,28 @@ Foam front:
 
 영상이 없어도 bundle metadata, 관찰창, event와 검토 필요 목록을 볼 수 있다.
 
-### 7.7 Event navigation
+새 대체 영상은 reader 생성, metadata 검증과 첫 frame decode가 성공한 뒤에만 active reader로 교체한다. 실패하면 기존 reader, frame, timestamp, overlay, details, path와 PNG 상태를 유지한다.
+
+### 7.7 Event navigation과 asset action
 
 - 관찰창별 timestamp 정렬
 - point event와 duration event 지원
 - event type 한글 label
 - confidence와 note 표시
 - capture path 존재 여부 표시
-- 선택 시 재생을 멈추고 event 시작 시각으로 seek
+- activation 시 재생을 멈추고 event 시작 시각으로 seek
+- 선택 event capture 열기
+- `report.html` 열기
+- 결과 bundle 폴더 열기
+
+Bundle asset resolver는 다음을 거부한다.
+
+- 절대경로
+- `..`
+- root 밖 resolve
+- symlink root escape
+- 존재하지 않는 파일
+- 잘못된 file/directory type
 
 ### 7.8 Overlay PNG 저장
 
@@ -345,75 +420,89 @@ Foam front:
 - 파일명에 사용할 수 없는 문자를 안전하게 치환한다.
 - 공식 분석 결과 파일을 자동으로 덮어쓰지 않는다.
 
-### 7.9 Lifecycle
+### 7.9 분석 완료와 같은 profile workflow
 
-- Viewer별 독립 `OpenCvVideoReader`
-- 다른 bundle을 열 때 기존 reader close
-- 원본 영상 교체 시 기존 reader 정리
-- Viewer close 시 playback timer 정지와 reader close
-- generation 값으로 이전 frame update 무효화
-- Workbench close 시 Viewer 정리
-- Viewer 조작이 Workbench current frame, selection, recipe, preview와 preflight 상태를 변경하지 않음
+분석 완료 dialog:
 
-## 8. Phase 2B-2 — 일반 검토 강화
-
-### 8.1 Tracking graph
-
-- 선택 관찰창의 oil level과 foam front 추세
-- confidence 또는 valid 상태 표시
-- 현재 재생 시각 cursor
-- 그래프 클릭 시 영상 seek
-- 영상 seek 시 그래프 cursor 동기화
-- 분석 구간과 event marker 표시
-
-Graph는 저장된 tracking data만 사용하며 detector를 실행하지 않는다.
-
-### 8.2 검토 필터
-
-- 전체 결과
-- event만
-- 낮은 신뢰도만
-- invalid sample만
-- foam·glare·lost 사유별 필터
-
-필터는 공식 결과를 변경하지 않는다.
-
-### 8.3 결과 action 연결
-
-Viewer에서 다음 action을 제공한다.
-
-- `report.html` 열기
-- 결과 bundle 폴더 열기
-- event capture 열기
-- 같은 profile로 새 영상 분석
-
-상대경로는 bundle root 밖으로 탈출하지 않도록 검증한다.
-
-### 8.4 분석 완료 화면
-
-분석 완료 후 단순 information box 대신 다음 행동을 제공한다.
-
+- 전체 판정과 관찰창별 판정
+- 결과 bundle 경로
+- warning/error 개수
 - 결과 영상 검토
 - 결과 보고서 열기
 - 결과 폴더 열기
 - 같은 profile로 새 영상 분석
-- 닫기
 
-Viewer 진입 실패가 분석 결과 자체를 실패 상태로 바꾸면 안 된다.
+같은 profile workflow:
 
-### 8.5 같은 profile로 새 영상 분석
+- recipe snapshot serialization round-trip deep copy
+- 동일 해상도 영상만 shortcut 적용
+- 새 reader, metadata와 첫 frame을 먼저 준비
+- 사용자 교체 확인
+- 성공 시 `recipe_path=None`, 새 session과 `DRAFT` state 적용
+- session 시간, compressor start, output directory와 run note reset
+- sampling FPS를 새 영상 FPS 이하로 clamp
+- Undo, preview, preflight와 validation 상태 reset
+- 실패·취소 시 기존 Workbench 전체 상태 보존
 
-- 분석 당시 `recipe_snapshot.oilrecipe`을 기반으로 새 Workbench 문서 구성
-- 기존 결과 bundle과 공식 결과는 변경하지 않음
-- 새 영상 선택 후 해상도와 geometry 확인
-- session 시간과 output 경로는 새 시험 값으로 설정
-- 사용자 확인 없이 현재 Workbench의 수정 중 recipe를 덮어쓰지 않음
+### 7.10 Lifecycle
+
+- Viewer별 독립 `OpenCvVideoReader`
+- bundle load 실패 시 기존 정상 bundle과 reader 유지
+- 다른 정상 bundle을 적용할 때 기존 reader close
+- Viewer close 시 playback timer와 reader close
+- graph Matplotlib callback disconnect와 figure 정리
+- generation 값으로 이전 frame update 무효화
+- Workbench close 시 Viewer, completion dialog와 pending candidate 정리
+- Viewer 조작이 Workbench current frame, selection, recipe, preview와 preflight 상태를 변경하지 않음
+
+## 8. Phase 2B 완료 조건
+
+다음 자동화 조건은 PR #9와 PR #11에서 충족했다.
+
+- 기존 분석 bundle을 열 수 있다.
+- 신규 bundle에 `review_index.json`을 생성한다.
+- 원본 영상을 찾지 못하면 사용자가 대체 파일을 지정할 수 있다.
+- 영상 재생 위치와 tracking overlay가 시간 기준으로 동기화된다.
+- 선택 관찰창의 ROI, 기준점, 유면 위치와 confidence가 표시된다.
+- event와 낮은 신뢰도 항목을 클릭하면 해당 시점으로 이동한다.
+- interactive graph와 영상이 양방향 동기화된다.
+- 검토 필요 항목을 machine category로 필터할 수 있다.
+- report, 결과 폴더와 event capture를 안전하게 열 수 있다.
+- 분석 완료 dialog에서 Viewer와 후속 작업으로 이동할 수 있다.
+- 같은 profile로 새 영상을 준비하되 기존 상태를 원자적으로 보호한다.
+- 일반 모드에는 최종 결과만 표시된다.
+- overlay 포함 현재 장면을 원본 해상도 PNG로 저장할 수 있다.
+- 잘못되거나 불완전한 bundle은 원인을 포함한 오류 메시지를 제공한다.
+- 기존 결과 파일과 `report.html` 생성을 유지한다.
+- unit, integration과 offscreen GUI regression test가 통과한다.
+
+남은 수동 확인:
+
+- Windows DPI scaling과 graph 문구·legend 잘림
+- 실제 분석 결과 bundle
+- 많은 sample의 장시간 영상 성능
+- variable/keyframe-dependent 영상 seek
+- playback 중 graph cursor 성능
+- px/mm와 foam graph 실제 표시
+- Windows에서 report, folder와 capture 열기
+- 분석 완료 dialog action
+- 같은 profile 새 영상 workflow
+- 원본 영상 이동 후 재지정
+- 잘못된 대체 영상 선택 후 기존 Viewer 상태 유지
+- 관찰창 1~3개 전환
+- 실제 oil/foam overlay 좌표
+- Unicode 경로 PNG 저장
+- Viewer와 Workbench 종료 후 file lock 해제
 
 ## 9. Phase 2C — Debug Viewer와 재검출
 
+### 상태
+
+**다음 작업 — Phase 2C-1**
+
 ### 9.1 Debug Viewer
 
-일반 Viewer와 timeline 기반은 공유하되 mode를 분리한다.
+일반 Viewer와 timeline, graph 기반은 공유하되 mode와 데이터 책임을 분리한다.
 
 표시 항목:
 
@@ -429,16 +518,17 @@ Viewer 진입 실패가 분석 결과 자체를 실패 상태로 바꾸면 안 �
 
 ### 9.2 Debug trace 수준
 
-향후 분석 session에 다음 수준을 제공한다.
+분석 session에 다음 수준을 제공한다.
 
 #### `none`
 
 - 최종 tracking sample과 event만 저장
-- 현재 Phase 2B 구현의 상태
+- Phase 2B 구현의 기본 상태
 
-#### `basic` — 향후 기본값
+#### `basic` — Phase 2C 목표 기본값
 
 - event, 낮은 신뢰도, 위치 급변과 검토 필요 frame만 trace 저장
+- 일반 배포 환경의 기본값
 
 #### `full`
 
@@ -512,66 +602,48 @@ debug_case_YYYYMMDD_HHMMSS/
 
 - `ReviewBundle`, tracking sample, event와 interval model
 - 시간 query service
+- graph presentation model
 - overlay presentation data
-- 향후 debug trace model
+- debug trace model
 
 ### Infrastructure
 
 - 결과 bundle reader
 - CSV와 JSON index reader
 - 원본 영상 path resolver
+- bundle asset resolver
 - read-only frame reader
 - overlay renderer
-- 향후 debug JSONL reader와 short-clip exporter
+- debug JSONL reader와 short-clip exporter
 
 ### Presentation
 
 - Result Review window
 - playback controller
 - read-only canvas
+- interactive tracking graph
 - timeline과 event navigator
 - current-frame detail panel
-- Phase 2B-2 tracking graph
-- Phase 2C debug overlay renderer
+- debug overlay renderer와 artifact panel
 
 분석 pipeline이 Qt widget, 색상 또는 화면 배치 정보를 직접 생성하지 않도록 한다.
 
-## 11. Phase 2B-1 완료 조건
+## 11. Phase 2C-1 설계 원칙
 
-다음 자동화 조건은 PR #9에서 충족했다.
+- 일반 mode는 기존 Phase 2B 동작과 결과만 유지한다.
+- debug mode는 trace가 있는 bundle에서만 활성화한다.
+- trace가 없는 기존 bundle은 정상적으로 일반 mode로 열린다.
+- debug trace는 bundle 내부 상대경로와 schema version을 가진다.
+- debug artifact 경로는 bundle root 밖으로 탈출할 수 없다.
+- 기본 분석 성능과 결과 용량을 보호하기 위해 저장 수준을 명시한다.
+- 후보와 score 표현은 저장 당시 detector 결과를 재현하며 Viewer에서 detector를 다시 실행하지 않는다.
+- detector 재실행과 설정 비교는 Phase 2C-2로 분리한다.
+- 공식 tracking result와 debug trace가 불일치하면 공식 결과를 수정하지 않고 사용자에게 상태를 표시한다.
 
-- 기존 분석 bundle을 열 수 있다.
-- 신규 bundle에 `review_index.json`을 생성한다.
-- 원본 영상을 찾지 못하면 사용자가 대체 파일을 지정할 수 있다.
-- 영상 재생 위치와 tracking overlay가 시간 기준으로 동기화된다.
-- 선택 관찰창의 ROI, 기준점, 유면 위치와 confidence가 표시된다.
-- event와 낮은 신뢰도 항목을 클릭하면 해당 시점으로 이동한다.
-- 일반 모드에는 최종 결과만 표시된다.
-- overlay 포함 현재 장면을 원본 해상도 PNG로 저장할 수 있다.
-- 잘못되거나 불완전한 bundle은 원인을 포함한 오류 메시지를 제공한다.
-- 기존 결과 파일과 `report.html` 생성을 유지한다.
-- unit, integration과 offscreen GUI regression test가 통과한다.
+## 12. Phase 2B 비범위
 
-남은 수동 확인:
+Phase 2B에서는 다음을 구현하지 않았다.
 
-- Windows DPI scaling과 문구 잘림
-- 실제 분석 결과 bundle
-- 장시간 또는 variable/keyframe-dependent 영상 seek
-- 원본 영상 이동 후 재지정
-- 잘못된 대체 영상 선택 후 기존 Viewer 상태 유지
-- 관찰창 1~3개 전환
-- 실제 oil/foam overlay 좌표
-- Unicode 경로 PNG 저장
-- Viewer 종료와 영상 교체 후 file lock 해제
-
-## 12. 비범위
-
-Phase 2B-1에서는 다음을 구현하지 않는다.
-
-- tracking graph
-- 그래프 클릭 seek
-- 분석 완료 화면과 Viewer 연결
-- 같은 profile로 새 영상 분석
 - 여러 관찰창 동시 overlay
 - detector 후보와 score
 - debug trace 생성·읽기
@@ -588,9 +660,9 @@ Phase 2B-1에서는 다음을 구현하지 않는다.
 
 - 결과 검토와 detector 디버그를 별도 앱으로 나누지 않고 하나의 Viewer에서 mode로 분리한다.
 - 일반 Viewer 기반은 Phase 2B, detector 내부 정보는 Phase 2C에서 구현한다.
-- MVP는 원본 영상 위 실시간 overlay를 우선하며 annotated MP4는 후속으로 둔다.
+- Phase 2B는 원본 영상 위 실시간 overlay와 interactive graph를 우선하며 annotated MP4는 후속으로 둔다.
 - Viewer는 결과 bundle snapshot을 사용하고 Workbench 현재 편집 상태에 의존하지 않는다.
 - 신규 `review_index.json`은 기존 bundle과 backward-compatible하게 추가한다.
-- MVP에서 event와 low-confidence index는 CSV에서 계산하며 중복 저장하지 않는다.
+- event와 low-confidence index는 CSV에서 계산하며 중복 저장하지 않는다.
 - debug trace가 구현되기 전 신규 bundle의 `debug_trace_level`은 `none`이다.
 - Phase 2C에서 debug trace를 구현할 때 실제 배포 기본 수준은 `basic`으로 전환하는 것을 목표로 한다.
