@@ -1,0 +1,58 @@
+name: Validate partial re-detection exact head
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.13", "3.14"]
+    env:
+      QT_QPA_PLATFORM: offscreen
+      EXPECTED_SHA: 6b754d66bf0461dcd98f2d1d9f4a91e878a9ae64
+    steps:
+      - name: Checkout exact feature head
+        uses: actions/checkout@v4
+        with:
+          ref: 6b754d66bf0461dcd98f2d1d9f4a91e878a9ae64
+          fetch-depth: 1
+      - name: Assert checkout SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          echo "expected=${EXPECTED_SHA}"
+          echo "actual=${actual}"
+          test "${actual}" = "${EXPECTED_SHA}"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Report runtime versions
+        shell: bash
+        run: |
+          python - <<'PY'
+          import matplotlib
+          import PySide6
+          import sys
+          print("python=" + sys.version.replace("\n", " "))
+          print("pyside6=" + PySide6.__version__)
+          print("matplotlib=" + matplotlib.__version__)
+          PY
+      - name: Canonical test suite
+        shell: bash
+        run: QT_QPA_PLATFORM=offscreen python -m pytest -q
