@@ -51,7 +51,13 @@ class ResultReviewController(QObject):
     def is_playing(self) -> bool:
         return self.timer.isActive()
 
-    def prepare_video(self, path: str | Path, initial_timestamp: float = 0.0) -> PreparedReviewVideo:
+    def prepare_video(
+        self,
+        path: str | Path,
+        initial_timestamp: float = 0.0,
+        *,
+        emit_failure: bool = True,
+    ) -> PreparedReviewVideo:
         reader = None
         try:
             reader = self.reader_factory(path)
@@ -60,7 +66,8 @@ class ResultReviewController(QObject):
         except Exception as exc:
             if reader is not None:
                 reader.close()
-            self.failed.emit(f"원본 영상을 열 수 없습니다: {exc}")
+            if emit_failure:
+                self.failed.emit(f"원본 영상을 열 수 없습니다: {exc}")
             raise
 
     def activate_prepared(self, prepared: PreparedReviewVideo) -> None:
