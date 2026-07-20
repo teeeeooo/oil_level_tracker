@@ -55,8 +55,10 @@ jobs:
           PY
       - name: Focused graph model and filters
         run: python -m pytest -q tests/unit/test_review_graph.py tests/unit/test_review_filters.py
-      - name: Focused bundle assets and actions
-        run: python -m pytest -q tests/unit/test_bundle_asset_resolver.py tests/unit/test_result_actions.py
+      - name: Focused bundle asset resolver
+        run: python -m pytest -q tests/unit/test_bundle_asset_resolver.py
+      - name: Focused result action service
+        run: python -m pytest -q tests/unit/test_result_actions.py
       - name: Focused transactional replacements
         run: python -m pytest -q tests/unit/test_result_review_replacement.py tests/unit/test_same_profile_workbench.py
       - name: Focused interactive graph
