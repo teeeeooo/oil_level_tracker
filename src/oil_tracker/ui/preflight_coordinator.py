@@ -23,17 +23,11 @@ class PreflightCoordinator(QObject):
         self.dock.setMinimumHeight(300)
         window.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dock)
         self.dock.hide()
-
-        self.action = QAction(
-            window.style().standardIcon(QStyle.StandardPixmap.SP_DialogApplyButton),
-            "여러 시점 점검",
-            window,
-        )
+        self.action = QAction(window.style().standardIcon(QStyle.StandardPixmap.SP_DialogApplyButton), "여러 시점 점검", window)
         toolbar = window.findChild(QToolBar, "mainToolBar")
         if toolbar is not None:
             toolbar.addSeparator()
             toolbar.addAction(self.action)
-
         self.last_result = None
         self._request_context_key: str | None = None
         self._context_check_pending = False
@@ -52,7 +46,6 @@ class PreflightCoordinator(QObject):
         self.controller.completed.connect(self._completed)
         self.controller.failed.connect(self._failed)
         self.controller.cancelled.connect(self._cancelled)
-
         window = self.window
         change_signals = (
             window.actions["new"].triggered,
@@ -92,6 +85,15 @@ class PreflightCoordinator(QObject):
         self.window._load_frame(timestamp)
         self.window.schedule_preview()
         self.window.statusBar().showMessage(f"여러 시점 점검: {reason}")
+
+    def reset(self) -> None:
+        self.controller.invalidate()
+        self.last_result = None
+        self._request_context_key = None
+        self._context_check_pending = False
+        self._running = False
+        self.panel.set_stale()
+        self._set_progress_status("점검하지 않음", "새 영상에서 대표 장면 점검을 다시 실행해 주세요.")
 
     def schedule_context_check(self, *_args) -> None:
         if self._context_check_pending:
