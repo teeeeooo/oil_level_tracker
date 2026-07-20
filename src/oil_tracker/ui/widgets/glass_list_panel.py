@@ -7,6 +7,7 @@ from PySide6.QtWidgets import QHBoxLayout, QListWidget, QListWidgetItem, QPushBu
 class GlassListPanel(QWidget):
     addRequested = Signal()
     deleteRequested = Signal()
+    copyRequested = Signal()
     selectionChanged = Signal(str)
     enabledChanged = Signal(str, bool)
     issueActivated = Signal(object)
@@ -21,14 +22,19 @@ class GlassListPanel(QWidget):
         self.list.itemDoubleClicked.connect(self._activated)
         self.add_button = QPushButton("관찰창 추가")
         self.delete_button = QPushButton("삭제")
+        self.copy_button = QPushButton("설정 복사")
+        self.copy_button.setToolTip("현재 선택한 관찰창의 공통 설정을 다른 관찰창에 복사합니다.")
+        self.copy_button.setEnabled(False)
         self.add_button.clicked.connect(self.addRequested)
         self.delete_button.clicked.connect(self.deleteRequested)
-        buttons = QHBoxLayout()
-        buttons.addWidget(self.add_button)
-        buttons.addWidget(self.delete_button)
+        self.copy_button.clicked.connect(self.copyRequested)
+        primary_buttons = QHBoxLayout()
+        primary_buttons.addWidget(self.add_button)
+        primary_buttons.addWidget(self.delete_button)
         layout = QVBoxLayout(self)
         layout.addWidget(self.list)
-        layout.addLayout(buttons)
+        layout.addLayout(primary_buttons)
+        layout.addWidget(self.copy_button)
         self.setMinimumWidth(230)
 
     def set_glasses(self, glasses, selected_id: str | None, readiness_by_id=None) -> None:
@@ -60,8 +66,10 @@ class GlassListPanel(QWidget):
         if selected_row >= 0:
             self.list.setCurrentRow(selected_row)
         self.list.blockSignals(False)
+        self.copy_button.setEnabled(selected_row >= 0 and len(glasses) > 1)
 
     def _selected(self, current, _previous) -> None:
+        self.copy_button.setEnabled(current is not None and self.list.count() > 1)
         if current:
             self.selectionChanged.emit(current.data(Qt.ItemDataRole.UserRole))
 
