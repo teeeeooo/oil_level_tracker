@@ -102,6 +102,7 @@ class RedetectionController(QObject):
         )
         self.worker.moveToThread(self.thread)
         self.thread.started.connect(self.worker.run)
+        self.thread.finished.connect(self.worker.deleteLater)
         self.worker.progress.connect(self._progress)
         self.worker.completed.connect(self._complete)
         self.worker.failed.connect(self._fail)
@@ -151,7 +152,7 @@ class RedetectionController(QObject):
         self._finish_thread()
 
     def _finish_thread(self) -> None:
-        thread, worker = self.thread, self.worker
+        thread = self.thread
         self.thread = None
         self.worker = None
         self.cancellation = None
@@ -159,8 +160,6 @@ class RedetectionController(QObject):
             thread.quit()
             thread.wait(5000)
             thread.deleteLater()
-        if worker is not None:
-            worker.deleteLater()
         self.runningChanged.emit(False)
         pending, self._pending = self._pending, None
         if pending is not None and not self._closing:
@@ -176,10 +175,19 @@ class RedetectionController(QObject):
         self._closing = True
         self._pending = None
         self.cancel()
-        if self.thread is not None:
-            self.thread.quit()
-            self.thread.wait(5000)
+        thread = self.thread
+        if thread is not None:
+            thread.quit()
+            if not thread.wait(5000):
+                LOGGER.warning(
+                    "Redetection worker did not stop within the bounded close wait; "
+                    "references are retained until its terminal signal is delivered."
+                )
+                self._cleanup_completed_workspace()
+                return
+            thread.deleteLater()
         self.thread = None
         self.worker = None
         self.cancellation = None
+        self.runningChanged.emit(False)
         self._cleanup_completed_workspace()
