@@ -30,8 +30,8 @@ UX 개선은 다음 세 가지 사용자 확신을 단계적으로 높이는 방
 | Phase | 주제 | 상태 |
 |---|---|---|
 | Phase 1 | Workbench 복잡도 축소와 복구 가능한 편집 | 완료 |
-| Phase 2A | 설정 완성도와 분석 전 사전 검증 | 진행 중 — 2A-1, 2A-2 완료 |
-| Phase 2B | 분석 결과 영상 검토 Viewer | 예정 |
+| Phase 2A | 설정 완성도와 분석 전 사전 검증 | 완료 |
+| Phase 2B | 분석 결과 영상 검토 Viewer | 다음 작업 — 2B-1 |
 | Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 예정 |
 | Phase 2D | 반복 시험 운영과 복구 자동화 | 후보 |
 
@@ -110,11 +110,11 @@ PR #4 `feat: add guided workbench UX phase 1`로 `main`에 반영했다.
 
 ### 상태
 
-**진행 중**
+**완료**
 
 - Phase 2A-1 `Workbench Readiness Feedback`: 완료
 - Phase 2A-2 `Multi-frame Preflight Check`: 완료
-- Phase 2A-3 `Observation-window Settings Copy`: 다음 작업
+- Phase 2A-3 `Observation-window Settings Copy`: 완료
 
 Phase 2A-1은 PR #5 `feat: add workbench readiness feedback`로 `main`에 반영했다.
 
@@ -127,6 +127,12 @@ Phase 2A-2는 PR #6 `feat: add multi-frame preflight checks`로 `main`에 반영
 - PR head: `bf2bb571adbc8abb7a2e9203fa8332fa2936e404`
 - main merge SHA: `44780b9f520b73d87e8701ac6216df04be5ef669`
 - 검증: Python 3.13 및 3.14에서 각각 `102 passed`
+
+Phase 2A-3은 PR #7 `feat: add observation-window settings copy`로 `main`에 반영했다.
+
+- PR head: `d501525db0514c2ec78deef12a1d698ef9bc8ae7`
+- main merge SHA: `742db20be1a797443410d5b07f563e0dcceb3420`
+- 검증: Python 3.13 및 3.14에서 각각 `128 passed`
 
 ### 목적
 
@@ -203,18 +209,18 @@ Global session issue는 모든 관찰창의 오류로 전파하지 않고, 해�
 
 ### Phase 2A-3 — Observation-window Settings Copy
 
-**다음 작업**
+**완료**
 
-복사 가능한 항목을 선택한다.
-
-- 판정 방식
-- detector 설정
-- 테두리 제외 범위
-- 초기 상태
-- mm/pixel
-- 선택적으로 타원 크기
-
-ROI 위치와 기준점은 기본적으로 복사 대상에서 제외한다.
+- 선택한 관찰창을 source로 사용
+- 복수 target과 분석 제외 target 지원
+- 판정 설정, detector 설정, 테두리 제외 범위와 초기 상태를 기본 복사
+- mm/pixel과 타원 크기는 선택적으로 복사
+- target의 ID, 이름, 분석 포함 여부, 타원 중심, 기준점과 제외 영역 유지
+- mutable 설정은 deep copy하여 source와 target 간 alias 방지
+- 타원 크기는 모든 target에 적용 가능한지 먼저 검증하고 원자적으로 적용
+- 복수 target 변경 전체를 한 번의 Undo/Redo로 처리
+- no-op이면 recipe, Undo stack과 preflight 상태를 변경하지 않음
+- 적용 후 readiness, validation, preview와 preflight context 갱신
 
 ### Phase 2A 전체 완료 조건
 
@@ -235,6 +241,8 @@ ROI 위치와 기준점은 기본적으로 복사 대상에서 제외한다.
 상세 설계와 데이터 계약은 [`RESULT_REVIEW_VIEWER_PLAN.md`](./RESULT_REVIEW_VIEWER_PLAN.md)를 따른다.
 
 ### Phase 2B-1 — Viewer MVP
+
+**다음 작업**
 
 - 결과 bundle 열기
 - 원본 영상 자동 탐색과 재지정
@@ -352,11 +360,11 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 
 ## 11. 현재 다음 작업
 
-현재 `main`에는 Phase 1과 Phase 2A-1, Phase 2A-2가 완료되어 있다.
+현재 `main`에는 Phase 1과 Phase 2A 전체가 완료되어 있다.
 
 다음 구현 순서는 다음과 같다.
 
-1. **Phase 2A-3:** 관찰창 설정 복사
-2. **Phase 2B:** Result Review Viewer MVP
+1. **Phase 2B-1:** Result Review Viewer MVP
+2. **Phase 2B-2:** 일반 검토 강화
 3. **Phase 2C:** Debug Viewer와 재검출 확장
 4. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
