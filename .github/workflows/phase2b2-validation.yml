@@ -43,11 +43,12 @@ jobs:
         run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
       - name: Report runtime backends
         run: |
-          python - <<'PY'
+          python - <<'PY' | tee runtime-${{ matrix.python-version }}.txt
           import matplotlib
+          import platform
           from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
           from PySide6 import __version__ as pyside_version
-          print("Python validation runtime")
+          print(f"Python={platform.python_version()}")
           print(f"PySide6={pyside_version}")
           print(f"matplotlib={matplotlib.__version__}")
           print(f"matplotlib default backend={matplotlib.get_backend()}")
@@ -55,15 +56,30 @@ jobs:
           PY
       - name: Focused graph model and filters
         run: python -m pytest -q tests/unit/test_review_graph.py tests/unit/test_review_filters.py
-      - name: Focused bundle asset resolver
-        run: python -m pytest -q tests/unit/test_bundle_asset_resolver.py
-      - name: Focused result action service
-        run: python -m pytest -q tests/unit/test_result_actions.py
+      - name: Focused bundle assets and actions
+        run: python -m pytest -q tests/unit/test_bundle_asset_resolver.py tests/unit/test_result_actions.py
       - name: Focused transactional replacements
         run: python -m pytest -q tests/unit/test_result_review_replacement.py tests/unit/test_same_profile_workbench.py
-      - name: Focused interactive graph
-        run: python -m pytest -q tests/gui/test_result_review_graph.py
+      - name: Focused interactive Viewer enhancements
+        run: python -m pytest -q tests/gui/test_result_review_graph.py tests/gui/test_result_review_enhancements.py
+      - name: Focused completion and same-profile workflows
+        run: python -m pytest -q tests/gui/test_analysis_complete_dialog.py tests/gui/test_analysis_completion_coordinator.py tests/gui/test_same_profile_analysis_coordinator.py
       - name: Focused Viewer regression
         run: python -m pytest -q tests/unit/test_result_review_playback.py tests/gui/test_result_review_window.py tests/gui/test_result_review_workbench_entry.py
       - name: Run canonical suite
-        run: QT_QPA_PLATFORM=offscreen python -m pytest -q
+        shell: bash
+        run: |
+          set +e
+          QT_QPA_PLATFORM=offscreen python -m pytest -q | tee pytest-${{ matrix.python-version }}.log
+          STATUS=${PIPESTATUS[0]}
+          tail -n 1 pytest-${{ matrix.python-version }}.log > summary-${{ matrix.python-version }}.txt
+          exit $STATUS
+      - name: Upload temporary validation summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2b2-validation-${{ matrix.python-version }}
+          path: |
+            runtime-${{ matrix.python-version }}.txt
+            summary-${{ matrix.python-version }}.txt
+          retention-days: 1
