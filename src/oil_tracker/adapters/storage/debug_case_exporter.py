@@ -48,8 +48,7 @@ class DebugCaseExporter:
         if source is not None and not source.is_file():
             source = None
         try:
-            parent = _ensure_export_outside_bundle(bundle_root, parent, strict=True)
-            temporary = parent / temporary.name
+            _ensure_export_outside_bundle(bundle_root, parent, strict=True)
             temporary.mkdir(parents=False, exist_ok=False)
             if temporary.is_symlink():
                 raise DebugCaseExportError("디버그 재현 패키지 임시 폴더가 안전하지 않습니다.")
@@ -112,12 +111,10 @@ class DebugCaseExporter:
                 encoding="utf-8",
             )
 
-            parent = _ensure_export_outside_bundle(bundle_root, parent, strict=True)
-            temporary = parent / temporary.name
+            _ensure_export_outside_bundle(bundle_root, parent, strict=True)
             if temporary.is_symlink():
                 raise DebugCaseExportError("디버그 재현 패키지 임시 폴더가 안전하지 않습니다.")
             _ensure_export_outside_bundle(bundle_root, temporary, strict=True)
-            final = parent / final.name
             if final.exists() or final.is_symlink():
                 raise DebugCaseExportError(f"기존 debug package를 덮어쓸 수 없습니다: {final}")
             os.replace(temporary, final)
