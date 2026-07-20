@@ -21,6 +21,7 @@ from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
 from oil_tracker.ui.main_window import MainWindow
 from oil_tracker.ui.observation_settings_copy_coordinator import ObservationSettingsCopyCoordinator
 from oil_tracker.ui.preflight_coordinator import PreflightCoordinator
+from oil_tracker.ui.result_review_coordinator import ResultReviewCoordinator
 
 
 def build_main_window() -> MainWindow:
@@ -47,4 +48,5 @@ def build_main_window() -> MainWindow:
     )
     preflight_controller = PreflightController(preflight_use_case, window)
     window.preflight_coordinator = PreflightCoordinator(window, preflight_controller)
+    window.result_review_coordinator = ResultReviewCoordinator(window)
     return window

@@ -48,8 +48,14 @@ class OutputBundleStore:
             graph_paths = self.graphs.render(result, temporary / "graphs")
             self.recipes.save(temporary / "recipe_snapshot.oilrecipe", recipe)
             atomic_write_text(temporary / "session.json", json.dumps(session.to_dict(), ensure_ascii=False, indent=2))
+            review_index = _review_index(result, recipe, session)
+            atomic_write_text(
+                temporary / "review_index.json",
+                json.dumps(review_index, ensure_ascii=False, indent=2),
+            )
             result.manifest["output_bundle"] = final.name
             result.manifest["result_status"] = result.overall_state.value
+            result.manifest["review_index"] = "review_index.json"
             atomic_write_text(temporary / "analysis_manifest.json", json.dumps(result.manifest, ensure_ascii=False, indent=2))
             self.html.render(result, recipe, session, graph_paths, temporary / "report.html")
             atomic_write_text(temporary / "logs" / "analysis.log", f"run_id={result.run_id}\nstatus={result.overall_state.value}\n")
@@ -65,6 +71,31 @@ class OutputBundleStore:
             if temporary.exists():
                 shutil.rmtree(temporary, ignore_errors=True)
             raise
+
+
+def _review_index(result: AnalysisResult, recipe: InspectionRecipe, session: AnalysisSession) -> dict:
+    return {
+        "schema_version": 1,
+        "run_id": result.run_id,
+        "source_video_path": session.input_video_path,
+        "source_metadata": session.video_metadata.to_dict() if session.video_metadata else {},
+        "analysis_range": [session.analysis_start_sec, session.effective_end_sec()],
+        "compressor_start_sec": session.compressor_start_sec,
+        "recipe_snapshot": "recipe_snapshot.oilrecipe",
+        "session": "session.json",
+        "tracking_data": "tracking_data.csv",
+        "events": "events.csv",
+        "manifest": "analysis_manifest.json",
+        "glasses": [
+            {
+                "id": glass_result.glass_id,
+                "name": glass_result.glass_name,
+                "result_status": glass_result.result_state.value,
+            }
+            for glass_result in result.glass_results
+        ],
+        "debug_trace_level": "none",
+    }
 
 
 def _unique_path(path: Path) -> Path:
