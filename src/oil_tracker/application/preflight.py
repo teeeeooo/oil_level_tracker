@@ -48,12 +48,16 @@ class PreflightSamplePoint:
     labels: tuple[str, ...]
     requested_timestamps: tuple[float, ...]
     requested_timestamp: float
-    actual_timestamp: float
-    frame_index: int
+    actual_timestamp: float | None
+    frame_index: int | None
 
     @property
     def label(self) -> str:
         return " · ".join(self.labels)
+
+    @property
+    def navigation_timestamp(self) -> float:
+        return self.requested_timestamp if self.actual_timestamp is None else self.actual_timestamp
 
 
 @dataclass(frozen=True)
@@ -95,6 +99,11 @@ class PreflightResult:
     analysis_start_sec: float
     analysis_end_sec: float
     compressor_start_sec: float | None
+    recipe_id: str
+    recipe_name: str
+    enabled_glass_ids: tuple[str, ...]
+    video_fps: float
+    video_duration_sec: float
 
 
 @dataclass(frozen=True)
@@ -248,7 +257,10 @@ def summarize_preflight(
     for glass in enabled_glasses:
         items = sorted(
             (result for result in results if result.glass_id == glass.id),
-            key=lambda result: (result.sample_point.actual_timestamp, result.sample_point.frame_index),
+            key=lambda result: (
+                result.sample_point.navigation_timestamp,
+                -1 if result.sample_point.frame_index is None else result.sample_point.frame_index,
+            ),
         )
         confidences = [float(item.confidence) for item in items if item.confidence is not None]
         representative = next(
@@ -263,7 +275,7 @@ def summarize_preflight(
                 normal_count=sum(item.status == PreflightStatus.NORMAL for item in items),
                 review_count=sum(item.status == PreflightStatus.REVIEW for item in items),
                 failure_count=sum(item.status == PreflightStatus.FAILURE for item in items),
-                representative_issue_timestamp=None if representative is None else representative.sample_point.actual_timestamp,
+                representative_issue_timestamp=None if representative is None else representative.sample_point.navigation_timestamp,
                 representative_issue_reason="" if representative is None else representative.reason,
                 position_jump_detected=any("PREFLIGHT_POSITION_JUMP" in item.flags for item in items),
             )
