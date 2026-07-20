@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
+from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
 from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
 from oil_tracker.adapters.system.logging_config import configure_logging
 from oil_tracker.adapters.vision.debug_renderer import DebugRenderer
@@ -39,7 +40,12 @@ def build_main_window() -> MainWindow:
     preview_detector = OpenCvPhaseDetector()
     preview_controller = PreviewController(PreviewDetectionUseCase(preview_detector))
     analysis_detector = OpenCvPhaseDetector()
-    pipeline = AnalysisPipeline(lambda path: OpenCvVideoReader(path), analysis_detector, validator)
+    pipeline = AnalysisPipeline(
+        lambda path: OpenCvVideoReader(path),
+        analysis_detector,
+        validator,
+        JsonlDebugTraceWriterFactory(),
+    )
     result_store = OutputBundleStore()
     analysis_controller = AnalysisController(AnalyzeVideoUseCase(pipeline), result_store)
     window = MainWindow(workbench, preview_controller, analysis_controller, DebugRenderer())
