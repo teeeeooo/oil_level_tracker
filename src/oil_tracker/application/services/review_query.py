@@ -4,6 +4,7 @@ from bisect import bisect_right
 from collections import defaultdict
 from statistics import median
 
+from oil_tracker.domain.enums import FillState
 from oil_tracker.domain.review import (
     LowConfidenceInterval,
     ReviewBundle,
@@ -248,11 +249,13 @@ def review_categories(sample: ReviewTrackingSample, minimum_confidence: float) -
         categories.add(ReviewCategory.INVALID)
     if sample.overall_confidence < minimum_confidence:
         categories.add(ReviewCategory.LOW_CONFIDENCE)
+    if sample.fill_state == FillState.UNKNOWN_REVIEW:
+        categories.add(ReviewCategory.REVIEW_REQUIRED)
     flags = {flag.strip().upper() for flag in sample.flags if flag.strip()}
     for flag in flags:
         if "LOW_CONFIDENCE" in flag:
             categories.add(ReviewCategory.LOW_CONFIDENCE)
-        if "REVIEW" in flag or "UNKNOWN_REVIEW" in flag:
+        if "REVIEW" in flag:
             categories.add(ReviewCategory.REVIEW_REQUIRED)
         if "FOAM" in flag:
             categories.add(ReviewCategory.FOAM)
@@ -269,6 +272,8 @@ def review_reasons(sample: ReviewTrackingSample, minimum_confidence: float) -> t
         reasons.append("유효하지 않은 검출")
     if sample.overall_confidence < minimum_confidence:
         reasons.append("신뢰도 기준 미달")
+    if sample.fill_state == FillState.UNKNOWN_REVIEW:
+        reasons.append("사용자 확인 필요")
     normalized_flags = {flag.strip().upper() for flag in sample.flags if flag.strip()}
     for flag in sorted(normalized_flags):
         if flag in _EXPLICIT_REVIEW_FLAGS or "REVIEW" in flag or "FOAM" in flag or "GLARE" in flag or "FOG" in flag or "LOST" in flag:
