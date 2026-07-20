@@ -104,14 +104,21 @@ class ResultReviewNavigation(QWidget):
         )
         self.event_list.clear()
         for event in query.events_for_glass(glass_id):
-            duration = ""
-            if event.end_time_sec is not None:
-                duration = f"–{event.end_time_sec:.3f}s"
+            duration = f"–{event.end_time_sec:.3f}s" if event.end_time_sec is not None else ""
+            capture = ""
+            if event.capture_path:
+                capture_path = bundle.root / event.capture_path
+                capture = " · 캡처 있음" if capture_path.is_file() else " · 캡처 파일 없음"
             item = QListWidgetItem(
-                f"{event.start_time_sec:.3f}s{duration} · {_EVENT_LABELS.get(event.event_type, event.event_type.value)}"
+                f"{event.start_time_sec:.3f}s{duration} · {_EVENT_LABELS.get(event.event_type, event.event_type.value)}{capture}"
             )
             item.setData(Qt.ItemDataRole.UserRole, event.start_time_sec)
-            item.setToolTip(event.note or f"confidence {event.confidence:.3f}")
+            tooltip = [f"confidence {event.confidence:.3f}"]
+            if event.note:
+                tooltip.append(event.note)
+            if event.capture_path:
+                tooltip.append(str(bundle.root / event.capture_path))
+            item.setToolTip("\n".join(tooltip))
             self.event_list.addItem(item)
         self.review_list.clear()
         for interval in query.low_confidence_intervals(glass_id):
