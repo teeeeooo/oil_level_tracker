@@ -47,7 +47,10 @@ class ResultActionService:
 
 
 def _root(bundle_or_root) -> Path:
-    root = getattr(bundle_or_root, "root", bundle_or_root)
+    if isinstance(bundle_or_root, (str, Path)):
+        root = bundle_or_root
+    else:
+        root = getattr(bundle_or_root, "root", None)
     if root in (None, ""):
         raise ResultActionError("결과 bundle 경로가 없습니다.")
     return Path(root)
