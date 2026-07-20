@@ -4,6 +4,7 @@ from oil_tracker.application.services.review_query import ReviewQueryModel
 from oil_tracker.domain.review import (
     ReviewBundle,
     ReviewFilter,
+    ReviewGraphDebugMarker,
     ReviewGraphEventMarker,
     ReviewGraphHighlight,
     ReviewGraphModel,
@@ -19,6 +20,8 @@ def build_review_graph_model(
     review_filter: ReviewFilter = ReviewFilter.ALL,
     cursor_timestamp_sec: float = 0.0,
     query: ReviewQueryModel | None = None,
+    debug_summaries=(),
+    selected_debug_record_id: str = "",
 ) -> ReviewGraphModel:
     query = query or ReviewQueryModel(bundle)
     glass = bundle.glass_config(glass_id)
@@ -70,6 +73,15 @@ def build_review_graph_model(
         )
         for interval in query.filtered_intervals(glass_id, review_filter)
     )
+    debug_markers = tuple(
+        ReviewGraphDebugMarker(
+            timestamp_sec=summary.timestamp_sec,
+            reasons=tuple(summary.capture_reasons),
+            selected=summary.record_id == selected_debug_record_id,
+        )
+        for summary in debug_summaries
+        if summary.glass_id == glass_id and bundle.analysis_start_sec <= summary.timestamp_sec <= bundle.analysis_end_sec
+    )
     return ReviewGraphModel(
         glass_id=glass_id,
         glass_name=glass.name,
@@ -83,6 +95,7 @@ def build_review_graph_model(
         analysis_end_sec=bundle.analysis_end_sec,
         compressor_start_sec=bundle.compressor_start_sec,
         cursor_timestamp_sec=_clamp(cursor_timestamp_sec, bundle.analysis_start_sec, bundle.analysis_end_sec),
+        debug_markers=debug_markers,
     )
 
 
