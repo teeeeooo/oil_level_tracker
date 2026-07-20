@@ -53,5 +53,15 @@ jobs:
           print(f"matplotlib default backend={matplotlib.get_backend()}")
           print(f"Qt canvas={FigureCanvasQTAgg.__name__}")
           PY
+      - name: Focused graph model and filters
+        run: python -m pytest -q tests/unit/test_review_graph.py tests/unit/test_review_filters.py
+      - name: Focused bundle assets and actions
+        run: python -m pytest -q tests/unit/test_bundle_asset_resolver.py tests/unit/test_result_actions.py
+      - name: Focused transactional replacements
+        run: python -m pytest -q tests/unit/test_result_review_replacement.py tests/unit/test_same_profile_workbench.py
+      - name: Focused interactive graph
+        run: python -m pytest -q tests/gui/test_result_review_graph.py
+      - name: Focused Viewer regression
+        run: python -m pytest -q tests/unit/test_result_review_playback.py tests/gui/test_result_review_window.py tests/gui/test_result_review_workbench_entry.py
       - name: Run canonical suite
         run: QT_QPA_PLATFORM=offscreen python -m pytest -q
