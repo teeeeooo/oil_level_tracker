@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from oil_tracker.application.services.review_query import ReviewQueryModel, review_categories
+from oil_tracker.application.services.review_query import ReviewQueryModel, review_categories, review_reasons
 from oil_tracker.domain.enums import FillState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.review import (
@@ -17,13 +17,13 @@ from oil_tracker.domain.review import (
 from oil_tracker.domain.session import AnalysisSession
 
 
-def _sample(glass_id, timestamp, *, confidence=0.9, valid=True, flags=()):
+def _sample(glass_id, timestamp, *, confidence=0.9, valid=True, flags=(), fill_state=FillState.PARTIAL_VISIBLE):
     return ReviewTrackingSample(
         run_id="run",
         glass_id=glass_id,
         frame_index=int(timestamp * 10),
         timestamp_sec=timestamp,
-        fill_state=FillState.PARTIAL_VISIBLE,
+        fill_state=fill_state,
         overall_confidence=confidence,
         is_valid=valid,
         flags=tuple(flags),
@@ -64,6 +64,7 @@ def _query(samples):
         (_sample("x", 1.0, valid=False), ReviewCategory.INVALID),
         (_sample("x", 1.0, confidence=0.2), ReviewCategory.LOW_CONFIDENCE),
         (_sample("x", 1.0, flags=("REVIEW_REQUIRED",)), ReviewCategory.REVIEW_REQUIRED),
+        (_sample("x", 1.0, fill_state=FillState.UNKNOWN_REVIEW), ReviewCategory.REVIEW_REQUIRED),
         (_sample("x", 1.0, flags=("FOAM_REVIEW",)), ReviewCategory.FOAM),
         (_sample("x", 1.0, flags=("FOGGED_OR_GLARE",)), ReviewCategory.GLARE_OR_FOG),
         (_sample("x", 1.0, flags=("DETECTION_LOST",)), ReviewCategory.DETECTION_LOST),
@@ -71,6 +72,11 @@ def _query(samples):
 )
 def test_review_category_classification(sample, category):
     assert category in review_categories(sample, 0.5)
+
+
+def test_unknown_review_fill_state_has_user_reason_without_flag():
+    sample = _sample("x", 1.0, fill_state=FillState.UNKNOWN_REVIEW)
+    assert "사용자 확인 필요" in review_reasons(sample, 0.5)
 
 
 def test_interval_can_have_multiple_categories_and_match_each_filter():
