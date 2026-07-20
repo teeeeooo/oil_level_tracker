@@ -94,17 +94,23 @@ class JsonlDebugTraceWriter:
     def record_count(self) -> int:
         return len(self._summaries)
 
-    def write(self, glass, detection, artifacts, decision: DebugCaptureDecision) -> None:
+    def write(
+        self,
+        glass,
+        detection,
+        artifacts,
+        decision: DebugCaptureDecision,
+    ) -> str | None:
         if self._closed:
             raise RuntimeError("Debug trace writer is closed.")
         if not decision.capture:
-            return
+            return None
         if artifacts is None:
             raise OSError("Selected debug trace record has no detector artifacts.")
         timestamp_key = int(round(float(detection.time_sec) * 1_000_000))
         key = (str(glass.id), int(detection.frame_index), timestamp_key)
         if key in self._keys:
-            return
+            return None
         self._keys.add(key)
 
         record_id = _record_id(glass.id, detection.frame_index, detection.time_sec)
@@ -131,7 +137,10 @@ class JsonlDebugTraceWriter:
             availability.append(image_key)
 
         candidates = []
-        for rank, candidate in enumerate(sorted(detection.candidates, key=lambda item: item.final_score, reverse=True), 1):
+        for rank, candidate in enumerate(
+            sorted(detection.candidates, key=lambda item: item.final_score, reverse=True),
+            1,
+        ):
             candidates.append(
                 {
                     "rank": rank,
@@ -182,7 +191,12 @@ class JsonlDebugTraceWriter:
                 "warnings": warnings,
             }
         )
-        encoded = json.dumps(record, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode("utf-8")
+        encoded = json.dumps(
+            record,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            allow_nan=False,
+        ).encode("utf-8")
         offset = self._handle.tell()
         self._handle.write(encoded)
         self._handle.write(b"\n")
@@ -203,10 +217,15 @@ class JsonlDebugTraceWriter:
                 "byte_length": len(encoded),
             }
         )
+        return record_id
 
     def finalize(self) -> DebugTraceCompletion:
         if self._finalized:
-            return DebugTraceCompletion(str(self.staging_directory), self.trace_level.value, self.record_count)
+            return DebugTraceCompletion(
+                str(self.staging_directory),
+                self.trace_level.value,
+                self.record_count,
+            )
         if self._closed:
             raise RuntimeError("Debug trace writer was aborted.")
         self._handle.flush()
@@ -231,12 +250,21 @@ class JsonlDebugTraceWriter:
         }
         temporary = self.index_path.with_suffix(".json.tmp")
         temporary.write_text(
-            json.dumps(_json_safe(index), ensure_ascii=False, indent=2, allow_nan=False),
+            json.dumps(
+                _json_safe(index),
+                ensure_ascii=False,
+                indent=2,
+                allow_nan=False,
+            ),
             encoding="utf-8",
         )
         os.replace(temporary, self.index_path)
         self._finalized = True
-        return DebugTraceCompletion(str(self.staging_directory), self.trace_level.value, self.record_count)
+        return DebugTraceCompletion(
+            str(self.staging_directory),
+            self.trace_level.value,
+            self.record_count,
+        )
 
     def abort(self) -> None:
         if not self._closed:
@@ -268,7 +296,9 @@ def _write_png(path: Path, image: np.ndarray) -> None:
 
 
 def _record_id(glass_id: str, frame_index: int, timestamp_sec: float) -> str:
-    digest = hashlib.sha256(f"{glass_id}\0{frame_index}\0{timestamp_sec:.9f}".encode("utf-8")).hexdigest()[:12]
+    digest = hashlib.sha256(
+        f"{glass_id}\0{frame_index}\0{timestamp_sec:.9f}".encode("utf-8")
+    ).hexdigest()[:12]
     return f"f{int(frame_index):09d}_{digest}"
 
 
