@@ -55,15 +55,31 @@ _FILTER_LABELS = (
     (ReviewFilter.DETECTION_LOST, "검출 유실"),
 )
 
+_DEBUG_FILTERS = (
+    ("all", "전체", set()),
+    ("low_confidence", "low confidence", {"low_confidence"}),
+    ("invalid_review", "invalid / review", {"invalid", "unknown_review"}),
+    ("detection_lost", "detection lost", {"detection_lost", "no_selected_candidate", "rejected_only"}),
+    ("glare_fog", "glare / fog", {"glare_or_fog"}),
+    ("foam", "foam", {"foam"}),
+    ("position_jump", "position jump", {"oil_position_jump", "foam_position_jump"}),
+    ("candidate_ambiguity", "candidate ambiguity", {"candidate_ambiguity"}),
+    ("state_transition", "state transition", {"state_transition"}),
+    ("markers", "start / end / compressor", {"first_sample", "last_sample", "compressor_nearest"}),
+)
+
 _EVENT_ROLE = int(Qt.ItemDataRole.UserRole) + 1
+_DEBUG_ROLE = int(Qt.ItemDataRole.UserRole) + 2
 
 
 class ResultReviewNavigation(QWidget):
     glassChanged = Signal(str)
     eventActivated = Signal(float)
     reviewActivated = Signal(float)
+    debugActivated = Signal(object)
     eventSelected = Signal(object)
     filterChanged = Signal(str)
+    debugFilterChanged = Signal(str)
     previousRequested = Signal()
     nextRequested = Signal()
 
@@ -76,7 +92,9 @@ class ResultReviewNavigation(QWidget):
         self.tabs = QTabWidget()
         self.event_list = QListWidget()
         self.review_list = QListWidget()
+        self.debug_list = QListWidget()
         self.tabs.addTab(self.event_list, "이벤트")
+
         review_page = QWidget()
         review_layout = QVBoxLayout(review_page)
         review_layout.setContentsMargins(0, 0, 0, 0)
@@ -92,6 +110,24 @@ class ResultReviewNavigation(QWidget):
         review_layout.addLayout(filter_row)
         review_layout.addWidget(self.review_list, 1)
         self.tabs.addTab(review_page, "검토 필요")
+
+        debug_page = QWidget()
+        debug_layout = QVBoxLayout(debug_page)
+        debug_layout.setContentsMargins(0, 0, 0, 0)
+        self.debug_filter_combo = QComboBox()
+        for key, label, reasons in _DEBUG_FILTERS:
+            self.debug_filter_combo.addItem(label, (key, tuple(sorted(reasons))))
+        self.debug_count = QLabel("0개")
+        debug_filter_row = QHBoxLayout()
+        debug_filter_row.addWidget(QLabel("사유"))
+        debug_filter_row.addWidget(self.debug_filter_combo, 1)
+        debug_filter_row.addWidget(self.debug_count)
+        debug_layout.addLayout(debug_filter_row)
+        debug_layout.addWidget(self.debug_list, 1)
+        self.debug_tab_index = self.tabs.addTab(debug_page, "디버그 장면")
+        self._debug_summaries = ()
+        self._debug_message = "이 결과에는 디버그 기록이 없습니다."
+
         self.previous_button = QPushButton("이전 항목")
         self.next_button = QPushButton("다음 항목")
         buttons = QHBoxLayout()
@@ -105,11 +141,14 @@ class ResultReviewNavigation(QWidget):
         layout.addLayout(buttons)
         self.glass_combo.currentIndexChanged.connect(self._glass_changed)
         self.filter_combo.currentIndexChanged.connect(self._filter_changed)
+        self.debug_filter_combo.currentIndexChanged.connect(self._debug_filter_changed)
         self.event_list.currentItemChanged.connect(self._event_selected)
         self.event_list.itemActivated.connect(self._event_activated)
         self.review_list.itemActivated.connect(self._review_activated)
+        self.debug_list.itemActivated.connect(self._debug_activated)
         self.previous_button.clicked.connect(self.previousRequested)
         self.next_button.clicked.connect(self.nextRequested)
+        self.set_debug_records((), enabled=False)
 
     def set_bundle(self, bundle, query, selected_glass_id: str | None = None) -> None:
         self.glass_combo.blockSignals(True)
@@ -129,6 +168,7 @@ class ResultReviewNavigation(QWidget):
         self.review_list.clear()
         self.result_label.setText("결과 bundle 없음")
         self.filter_count.setText("0개")
+        self.set_debug_records((), enabled=False)
         self.eventSelected.emit(None)
 
     def current_glass_id(self) -> str:
@@ -137,9 +177,23 @@ class ResultReviewNavigation(QWidget):
     def current_filter(self) -> ReviewFilter:
         return ReviewFilter(str(self.filter_combo.currentData() or ReviewFilter.ALL.value))
 
+    def current_debug_filter(self) -> tuple[str, set[str]]:
+        value = self.debug_filter_combo.currentData() or ("all", ())
+        return str(value[0]), set(value[1])
+
     def selected_event(self):
         item = self.event_list.currentItem()
         return item.data(_EVENT_ROLE) if item is not None else None
+
+    def selected_debug(self):
+        item = self.debug_list.currentItem()
+        return item.data(_DEBUG_ROLE) if item is not None else None
+
+    def set_debug_records(self, summaries, *, enabled: bool = True, message: str = "") -> None:
+        self._debug_summaries = tuple(summaries)
+        self._debug_message = message or "이 결과에는 디버그 기록이 없습니다."
+        self.tabs.setTabEnabled(self.debug_tab_index, bool(enabled))
+        self._refresh_debug_list()
 
     def refresh_items(self, bundle, query, glass_id: str) -> None:
         summary = bundle.glass_summary(glass_id)
@@ -178,10 +232,42 @@ class ResultReviewNavigation(QWidget):
                 item.setData(Qt.ItemDataRole.UserRole, interval.representative_time_sec)
                 item.setToolTip("category: " + ", ".join(category.value for category in interval.categories))
                 self.review_list.addItem(item)
+        self._refresh_debug_list()
         self.eventSelected.emit(None)
 
     def active_tab_is_events(self) -> bool:
         return self.tabs.currentWidget() is self.event_list
+
+    def active_tab_is_debug(self) -> bool:
+        return self.tabs.currentWidget() is self.tabs.widget(self.debug_tab_index)
+
+    def _refresh_debug_list(self) -> None:
+        self.debug_list.clear()
+        glass_id = self.current_glass_id()
+        _key, reasons = self.current_debug_filter()
+        values = [summary for summary in self._debug_summaries if not glass_id or summary.glass_id == glass_id]
+        if reasons:
+            values = [summary for summary in values if reasons.intersection(summary.capture_reasons)]
+        self.debug_count.setText(f"{len(values)}개")
+        if not values:
+            empty = QListWidgetItem(self._debug_message if not self._debug_summaries else "현재 필터에 해당하는 디버그 장면이 없습니다.")
+            empty.setFlags(Qt.ItemFlag.NoItemFlags)
+            self.debug_list.addItem(empty)
+            return
+        for summary in values:
+            reasons_text = ", ".join(summary.capture_reasons)
+            artifact = "artifact 있음" if summary.artifact_availability else "artifact 없음"
+            item = QListWidgetItem(
+                f"{summary.timestamp_sec:.3f}s · 장면 {summary.frame_index}\n"
+                f"{summary.fill_state} · confidence {summary.confidence:.3f}\n{reasons_text} · {artifact}"
+            )
+            item.setData(Qt.ItemDataRole.UserRole, summary.timestamp_sec)
+            item.setData(_DEBUG_ROLE, summary)
+            item.setToolTip(
+                f"glass: {summary.glass_id}\nrecord: {summary.record_id}\n"
+                f"reasons: {reasons_text}\nartifacts: {', '.join(summary.artifact_availability) or '-'}"
+            )
+            self.debug_list.addItem(item)
 
     def _glass_changed(self, _index: int) -> None:
         glass_id = self.current_glass_id()
@@ -190,6 +276,10 @@ class ResultReviewNavigation(QWidget):
 
     def _filter_changed(self, _index: int) -> None:
         self.filterChanged.emit(self.current_filter().value)
+
+    def _debug_filter_changed(self, _index: int) -> None:
+        self._refresh_debug_list()
+        self.debugFilterChanged.emit(self.current_debug_filter()[0])
 
     def _event_selected(self, current, _previous) -> None:
         self.eventSelected.emit(current.data(_EVENT_ROLE) if current is not None else None)
@@ -201,3 +291,8 @@ class ResultReviewNavigation(QWidget):
         value = item.data(Qt.ItemDataRole.UserRole)
         if value is not None:
             self.reviewActivated.emit(float(value))
+
+    def _debug_activated(self, item: QListWidgetItem) -> None:
+        summary = item.data(_DEBUG_ROLE)
+        if summary is not None:
+            self.debugActivated.emit(summary)
