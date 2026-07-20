@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import asdict, dataclass, replace
 from enum import Enum
 import hashlib
 import json
@@ -186,8 +186,44 @@ def build_preflight_schedule(
 
 def preflight_context_key(recipe: InspectionRecipe, session: AnalysisSession) -> str:
     metadata = session.video_metadata
+    glasses = []
+    for glass in recipe.glasses:
+        ellipse = glass.geometry.ellipse
+        glasses.append(
+            {
+                "id": glass.id,
+                "name": glass.name,
+                "enabled": glass.enabled,
+                "ellipse": {
+                    "center_x": ellipse.center_x,
+                    "center_y": ellipse.center_y,
+                    "radius_x": ellipse.radius_x,
+                    "radius_y": ellipse.radius_y,
+                },
+                "zero_line_y": glass.geometry.zero_line_y,
+                "margin_ratio": glass.geometry.margin_ratio,
+                "exclusions": [
+                    {
+                        "id": zone.id,
+                        "x": zone.rect.x,
+                        "y": zone.rect.y,
+                        "width": zone.rect.width,
+                        "height": zone.rect.height,
+                    }
+                    for zone in glass.geometry.exclusions
+                ],
+                "initial_state": glass.initial_state.value,
+                "mm_per_pixel": glass.mm_per_pixel,
+                "detector_settings": asdict(glass.detector_settings),
+            }
+        )
     payload = {
-        "recipe": recipe.to_dict(),
+        "recipe": {
+            "recipe_id": recipe.recipe_id,
+            "reference_frame_width": recipe.reference_frame_width,
+            "reference_frame_height": recipe.reference_frame_height,
+            "glasses": glasses,
+        },
         "session": {
             "input_video_path": session.input_video_path,
             "video": None
@@ -203,7 +239,6 @@ def preflight_context_key(recipe: InspectionRecipe, session: AnalysisSession) ->
             "analysis_start_sec": session.analysis_start_sec,
             "analysis_end_sec": session.effective_end_sec(),
             "compressor_start_sec": session.compressor_start_sec,
-            "sampling_fps": session.sampling_fps,
             "resolution_confirmed": session.resolution_confirmed,
         },
     }
