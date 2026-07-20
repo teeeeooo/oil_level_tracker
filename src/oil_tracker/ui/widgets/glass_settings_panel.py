@@ -43,6 +43,7 @@ class GlassSettingsPanel(QWidget):
         super().__init__(parent)
         self._updating = False
         self._validation_messages: dict[str, QLabel] = {}
+        self._last_focused_field: str | None = None
 
         container = QWidget()
         container.setMinimumWidth(420)
@@ -183,7 +184,7 @@ class GlassSettingsPanel(QWidget):
         self.setObjectName("settingsPanel")
 
         self._field_widgets = {
-            "geometry": [self.crop, self.edit_roi, self.cx, self.cy, self.width, self.height],
+            "geometry": [self.edit_roi, self.crop, self.cx, self.cy, self.width, self.height],
             "zero_line_y": [self.zero, self.edit_roi],
             "exclusions": [self.exclusions, self.add_ex, self.del_ex],
             "mm_per_pixel": [self.has_scale, self.scale],
@@ -339,6 +340,7 @@ class GlassSettingsPanel(QWidget):
                 label.show()
 
     def focus_field(self, field: str | None) -> None:
+        self._last_focused_field = field
         if field in {"geometry", "mm_per_pixel", "margin"}:
             self.set_advanced_visible(True)
         widgets = self._field_widgets.get(field or "", [])

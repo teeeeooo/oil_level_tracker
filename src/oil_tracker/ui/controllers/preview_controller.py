@@ -38,6 +38,9 @@ class PreviewController(QObject):
         self.pool = QThreadPool.globalInstance()
         self.generation = 0
 
+    def invalidate(self) -> None:
+        self.generation += 1
+
     def request(self, frame, glass, frame_index: int, time_sec: float) -> None:
         self.generation += 1
         generation = self.generation

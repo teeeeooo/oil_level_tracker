@@ -349,3 +349,81 @@ QLabel#roiEditorHint {
     background: #f5f8fb;
     color: #33485d;
 }
+
+/* Workbench readiness feedback */
+QWidget#workbenchProgress {
+    background: #f8fafc;
+    border-bottom: 1px solid #c7d1dc;
+}
+
+QLabel#progressTitle {
+    color: #26394d;
+    font-weight: 800;
+}
+
+QLabel#progressArrow {
+    color: #7b8c9c;
+    font-weight: 700;
+}
+
+QPushButton#progressStepButton {
+    min-width: 105px;
+    padding: 4px 7px;
+    border: 1px solid #c5d0db;
+    border-radius: 5px;
+    background: #eef2f6;
+    color: #506174;
+    font-weight: 700;
+}
+
+QPushButton#progressStepButton[stepState="complete"] {
+    background: #dff3e7;
+    border-color: #98c8aa;
+    color: #1f6b3c;
+}
+
+QPushButton#progressStepButton[stepState="current"] {
+    background: #e1effb;
+    border-color: #7daed4;
+    color: #155c91;
+}
+
+QPushButton#progressStepButton[stepState="error"] {
+    background: #fde7e7;
+    border-color: #d79999;
+    color: #9d2424;
+}
+
+QPushButton#progressStepButton[stepState="warning"] {
+    background: #fff2d5;
+    border-color: #d8b76b;
+    color: #855a08;
+}
+
+QPushButton#nextIssueButton {
+    padding: 4px 10px;
+    font-weight: 700;
+}
+
+QGroupBox#detectionSummaryCard {
+    background: #ffffff;
+    border: 1px solid #cbd6e1;
+    border-radius: 5px;
+}
+
+QGroupBox#detectionSummaryCard[quality="normal"] {
+    border: 2px solid #78b58d;
+}
+
+QGroupBox#detectionSummaryCard[quality="review"] {
+    border: 2px solid #d4a340;
+}
+
+QGroupBox#detectionSummaryCard[quality="failure"] {
+    border: 2px solid #cc6a6a;
+}
+
+QLabel#detectionSummaryHeading {
+    color: #617286;
+    font-weight: 700;
+}
