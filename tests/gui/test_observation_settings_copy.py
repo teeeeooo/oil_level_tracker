@@ -277,6 +277,9 @@ def test_detection_related_copy_marks_existing_preflight_result_stale(qtbot):
 
     qtbot.waitUntil(lambda: preflight.panel.status_label.text() == "재점검 필요")
     assert workbench.selected_glass_id == source_id
+    preflight.last_result = None
+    preflight.deleteLater()
+    qtbot.wait(20)
 
 
 def test_no_op_shows_message_without_undo_dirty_preview_or_preflight_change(qtbot, monkeypatch):
