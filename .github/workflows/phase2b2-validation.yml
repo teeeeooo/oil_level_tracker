@@ -74,8 +74,12 @@ jobs:
         run: python -m pytest -q tests/gui/test_result_review_enhancements.py::test_review_filter_updates_count_highlights_and_preserves_events_and_glass_change
       - name: Focused result asset actions GUI
         run: python -m pytest -q tests/gui/test_result_review_enhancements.py::test_report_folder_and_selected_capture_actions_do_not_pause_playback
-      - name: Focused analysis completion dialog
-        run: python -m pytest -q tests/gui/test_analysis_complete_dialog.py
+      - name: Focused completion dialog content
+        run: python -m pytest -q tests/gui/test_analysis_complete_dialog.py::test_dialog_displays_result_path_per_glass_counts_and_analyzed_state
+      - name: Focused completion dialog actions
+        run: python -m pytest -q tests/gui/test_analysis_complete_dialog.py::test_dialog_emits_each_action_once_per_click
+      - name: Focused completion dialog close
+        run: python -m pytest -q tests/gui/test_analysis_complete_dialog.py::test_dialog_close_does_not_mutate_result
       - name: Focused analysis completion coordinator
         run: python -m pytest -q tests/gui/test_analysis_completion_coordinator.py
       - name: Focused same-profile coordinator
