@@ -1,7 +1,17 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from enum import Enum
 from typing import Any
+
+
+class DebugTraceLevel(str, Enum):
+    NONE = "none"
+    BASIC = "basic"
+    FULL = "full"
+
+    def __str__(self) -> str:
+        return self.value
 
 
 @dataclass
@@ -43,6 +53,7 @@ class AnalysisSession:
     output_directory: str = ""
     run_note: str = ""
     resolution_confirmed: bool = True
+    debug_trace_level: DebugTraceLevel = DebugTraceLevel.BASIC
 
     def effective_end_sec(self) -> float | None:
         if self.analysis_end_sec is not None:
@@ -60,11 +71,17 @@ class AnalysisSession:
             "output_directory": self.output_directory,
             "run_note": self.run_note,
             "resolution_confirmed": self.resolution_confirmed,
+            "debug_trace_level": self.debug_trace_level.value,
         }
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "AnalysisSession":
         metadata = data.get("video_metadata")
+        raw_level = data.get("debug_trace_level")
+        try:
+            level = DebugTraceLevel.NONE if raw_level is None else DebugTraceLevel(str(raw_level))
+        except ValueError as exc:
+            raise ValueError(f"Invalid debug_trace_level: {raw_level!r}") from exc
         return cls(
             input_video_path=str(data.get("input_video_path", "")),
             video_metadata=VideoMetadata.from_dict(metadata) if isinstance(metadata, dict) else None,
@@ -75,6 +92,7 @@ class AnalysisSession:
             output_directory=str(data.get("output_directory", "")),
             run_note=str(data.get("run_note", "")),
             resolution_confirmed=_parse_bool(data.get("resolution_confirmed", True)),
+            debug_trace_level=level,
         )
 
 
