@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass
 import logging
 from typing import Callable
 
-from oil_tracker.application.detection_quality import DetectionQuality, assess_detection_quality
+from oil_tracker.application.detection_quality import assess_detection_quality
 from oil_tracker.application.preflight import (
     DEFAULT_PREFLIGHT_POLICY,
     PreflightCancelled,
@@ -20,7 +21,7 @@ from oil_tracker.application.preflight import (
     summarize_preflight,
 )
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
-from oil_tracker.domain.enums import FillState
+from oil_tracker.domain.enums import FillState, InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.session import AnalysisSession
 
@@ -101,7 +102,6 @@ class PreflightCheckUseCase:
             total = len(schedule) * len(enabled)
             completed = 0
             decoded_by_request = {request: (frame, frame_index, actual) for request, frame, frame_index, actual in decoded}
-            static_frames = [frame for _, frame, _, _ in decoded]
 
             for request in schedule:
                 for glass in enabled:
@@ -140,7 +140,7 @@ class PreflightCheckUseCase:
                             actual_timestamp=float(actual_timestamp),
                             frame_index=int(frame_index),
                         )
-                        results.append(self._detect_sample(static_frames, frame, frame_index, actual_timestamp, glass, sample_point))
+                        results.append(self._detect_sample(frame, frame_index, actual_timestamp, glass, sample_point))
 
                     completed += 1
                     if progress is not None:
@@ -161,16 +161,19 @@ class PreflightCheckUseCase:
         finally:
             reader.close()
 
-    def _detect_sample(self, static_frames, frame, frame_index, actual_timestamp, glass, sample_point):
+    def _detect_sample(self, frame, frame_index, actual_timestamp, glass, sample_point):
         detector = self.detector_factory()
-        learn = getattr(detector, "learn_static_artifact", None)
-        if callable(learn) and static_frames:
-            try:
-                learn(static_frames, glass)
-            except Exception:
-                logger.exception("Optional preflight static-artifact learning failed for glass %s", glass.id)
+        glass_for_detection = deepcopy(glass)
+        if "분석 시작" not in sample_point.labels:
+            glass_for_detection.initial_state = InitialObservationState.AUTO
         try:
-            detection, _ = detector.detect(frame, glass, frame_index, actual_timestamp, debug=False)
+            detection, _ = detector.detect(
+                frame,
+                glass_for_detection,
+                frame_index,
+                actual_timestamp,
+                debug=False,
+            )
         except Exception as exc:
             logger.exception(
                 "Preflight detector failed for glass %s at %.6fs",
