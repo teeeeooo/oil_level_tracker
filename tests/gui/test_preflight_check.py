@@ -135,7 +135,8 @@ def _window(qtbot):
 def _result(workbench, *, status=PreflightStatus.NORMAL, reason="정상적으로 검출되었습니다"):
     samples = []
     summaries = []
-    for index, glass in enumerate(glass for glass in workbench.recipe.glasses if glass.enabled):
+    enabled = [glass for glass in workbench.recipe.glasses if glass.enabled]
+    for index, glass in enumerate(enabled):
         sample = PreflightDetectionResult(
             glass_id=glass.id,
             glass_name=glass.name,
@@ -171,6 +172,7 @@ def _result(workbench, *, status=PreflightStatus.NORMAL, reason="정상적으로
             )
         )
     session = workbench.session
+    metadata = session.video_metadata
     return PreflightResult(
         overall_status=status,
         samples=tuple(samples),
@@ -180,12 +182,18 @@ def _result(workbench, *, status=PreflightStatus.NORMAL, reason="정상적으로
         analysis_start_sec=session.analysis_start_sec,
         analysis_end_sec=session.effective_end_sec(),
         compressor_start_sec=session.compressor_start_sec,
+        recipe_id=workbench.recipe.recipe_id,
+        recipe_name=workbench.recipe.name,
+        enabled_glass_ids=tuple(glass.id for glass in enabled),
+        video_fps=metadata.fps,
+        video_duration_sec=metadata.duration_sec,
     )
 
 
 def test_panel_states_summary_and_result_row_activation(qtbot):
     panel = PreflightPanel()
     qtbot.addWidget(panel)
+    panel.show()
     workbench = _workbench()
     workbench.new_document(640, 480)
     workbench.add_glass()
@@ -243,27 +251,26 @@ def test_coordinator_marks_result_stale_on_relevant_change_but_not_selection(qtb
 
 
 def test_result_row_navigation_selects_glass_seeks_video_and_requests_live_preview(qtbot):
-    window, workbench, preview, reader, first, second = _window(qtbot)
+    window, workbench, preview, reader, first, _second = _window(qtbot)
     controller = DummyPreflightController()
     coordinator = PreflightCoordinator(window, controller)
     result = _result(workbench, status=PreflightStatus.REVIEW, reason="신뢰도 확인 필요")
-    controller.completed.emit(result)
     coordinator.last_result = result
     coordinator.panel.set_result(result)
 
     target_sample = result.samples[0]
     coordinator.navigate_to_result(
         target_sample.glass_id,
-        target_sample.sample_point.actual_timestamp,
+        target_sample.sample_point.navigation_timestamp,
         target_sample.reason,
     )
 
     assert workbench.selected_glass_id == first.id
     assert window.canvas._selected_id == first.id
-    assert reader.targets[-1] == target_sample.sample_point.actual_timestamp
+    assert reader.targets[-1] == target_sample.sample_point.navigation_timestamp
     qtbot.waitUntil(lambda: bool(preview.requests), timeout=2000)
     assert preview.requests[-1][0] == first.id
-    assert preview.requests[-1][2] == target_sample.sample_point.actual_timestamp
+    assert preview.requests[-1][2] == target_sample.sample_point.navigation_timestamp
 
 
 def test_cancel_rerun_and_analysis_invalidation_states(qtbot):
