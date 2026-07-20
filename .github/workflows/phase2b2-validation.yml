@@ -1,0 +1,55 @@
+name: Phase 2B-2 temporary validation
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.13", "3.14"]
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Assert exact checkout
+        shell: bash
+        run: |
+          EXPECTED="${{ github.event.pull_request.head.sha || github.sha }}"
+          ACTUAL="$(git rev-parse HEAD)"
+          echo "expected=$EXPECTED"
+          echo "actual=$ACTUAL"
+          test "$ACTUAL" = "$EXPECTED"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install Qt runtime libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0
+      - name: Install project
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
+      - name: Report runtime backends
+        run: |
+          python - <<'PY'
+          import matplotlib
+          from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
+          from PySide6 import __version__ as pyside_version
+          print(f"Python validation runtime")
+          print(f"PySide6={pyside_version}")
+          print(f"matplotlib={matplotlib.__version__}")
+          print(f"matplotlib default backend={matplotlib.get_backend()}")
+          print(f"Qt canvas={FigureCanvasQTAgg.__name__}")
+          PY
+      - name: Run canonical suite
+        run: QT_QPA_PLATFORM=offscreen python -m pytest -q
