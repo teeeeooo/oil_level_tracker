@@ -22,6 +22,7 @@ class MarkerSlider(QSlider):
         self._markers = []
         self._review_points: list[tuple[float, QColor]] = []
         self._review_intervals: list[tuple[float, float, QColor]] = []
+        self._debug_points: list[tuple[float, bool]] = []
         self.setMinimumWidth(180)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.setToolTip("파랑: 분석 시작·종료 / 주황: 압축기 기동")
@@ -58,12 +59,23 @@ class MarkerSlider(QSlider):
             for start, end in review_intervals
             if start is not None and end is not None
         ]
-        self.setToolTip("파랑: 분석 범위 / 주황: 압축기 기동 / 보라: 이벤트 / 빨강: 검토 필요")
+        self._update_tooltip()
+        self.update()
+
+    def set_debug_markers(self, duration: float, timestamps=(), selected_timestamp: float | None = None) -> None:
+        self._duration = max(0.0, duration)
+        self._debug_points = [
+            (float(timestamp), selected_timestamp is not None and abs(float(timestamp) - float(selected_timestamp)) <= 1e-9)
+            for timestamp in timestamps
+            if timestamp is not None
+        ]
+        self._update_tooltip()
         self.update()
 
     def clear_review_markers(self) -> None:
         self._review_points.clear()
         self._review_intervals.clear()
+        self._debug_points.clear()
         self.setToolTip("파랑: 분석 시작·종료 / 주황: 압축기 기동")
         self.update()
 
@@ -92,6 +104,8 @@ class MarkerSlider(QSlider):
             self._draw_triangle(painter, groove, timestamp, color, upward=True)
         for timestamp, color in self._review_points:
             self._draw_triangle(painter, groove, timestamp, color, upward=False)
+        for timestamp, selected in self._debug_points:
+            self._draw_debug_square(painter, groove, timestamp, selected)
 
     def _draw_triangle(self, painter, groove, timestamp, color, *, upward: bool) -> None:
         if timestamp is None:
@@ -113,6 +127,20 @@ class MarkerSlider(QSlider):
             ]
         painter.drawPolygon(QPolygonF(points))
 
+    def _draw_debug_square(self, painter, groove, timestamp: float, selected: bool) -> None:
+        x = groove.left() + self._ratio(timestamp) * groove.width()
+        size = 8 if selected else 5
+        color = QColor(20, 210, 210)
+        painter.setPen(color)
+        painter.setBrush(color if selected else Qt.BrushStyle.NoBrush)
+        painter.drawRect(QRectF(x - size / 2, groove.center().y() - size / 2, size, size))
+
+    def _update_tooltip(self) -> None:
+        parts = ["파랑: 분석 범위", "주황: 압축기 기동", "보라 삼각형: 이벤트", "빨강 영역: 검토 필요"]
+        if self._debug_points:
+            parts.append("청록 사각형: 디버그 기록(채움: 선택 기록)")
+        self.setToolTip(" / ".join(parts))
+
     def _ratio(self, timestamp: float) -> float:
         return min(1.0, max(0.0, timestamp / self._duration))
 
@@ -130,7 +158,6 @@ class TransportBar(QWidget):
         super().__init__(parent)
         self.setObjectName("transportBar")
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-
         self.play = QPushButton("재생")
         self.play.setObjectName("transportPrimaryButton")
         self.play.setCheckable(True)
@@ -146,7 +173,6 @@ class TransportBar(QWidget):
         for value in (0.5, 1.0, 1.5, 2.0, 4.0):
             self.speed.addItem(f"{value:g}×", value)
         self.speed.setCurrentIndex(1)
-
         layout = QHBoxLayout(self)
         layout.setContentsMargins(6, 4, 6, 4)
         layout.setSpacing(5)
@@ -157,15 +183,12 @@ class TransportBar(QWidget):
         layout.addWidget(self.slider, 1)
         layout.addWidget(self.speed_label)
         layout.addWidget(self.speed)
-
         self.play.toggled.connect(self._play)
         self.prev.clicked.connect(lambda: self.stepRequested.emit(-1))
         self.next.clicked.connect(lambda: self.stepRequested.emit(1))
         self.slider.sliderMoved.connect(lambda value: self.seekRequested.emit(value / 10000.0))
         self.slider.sliderReleased.connect(self.seekReleased)
-        self.speed.currentIndexChanged.connect(
-            lambda _i: self.speedChanged.emit(float(self.speed.currentData()))
-        )
+        self.speed.currentIndexChanged.connect(lambda _i: self.speedChanged.emit(float(self.speed.currentData())))
 
     def _play(self, checked: bool) -> None:
         self.play.setText("정지" if checked else "재생")
