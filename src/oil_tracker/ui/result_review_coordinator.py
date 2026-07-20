@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from PySide6.QtCore import QEvent, QObject
+from PySide6.QtCore import QEvent, QObject, Qt
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QDialog,
@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QStyle,
     QToolBar,
+    QToolButton,
     QVBoxLayout,
 )
 
@@ -32,7 +33,11 @@ class ResultReviewCoordinator(QObject):
         window.actions["review"] = self.action
         toolbar = window.findChild(QToolBar, "mainToolBar")
         if toolbar is not None:
-            toolbar.addAction(self.action)
+            toolbar.insertAction(window.actions.get("debug"), self.action)
+            button = toolbar.widgetForAction(self.action)
+            if isinstance(button, QToolButton):
+                button.setObjectName("toolbarButton")
+                button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.action.triggered.connect(self.open_dialog)
         window.installEventFilter(self)
 
