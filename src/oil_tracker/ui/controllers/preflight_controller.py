@@ -32,7 +32,10 @@ class PreflightWorker(QObject):
                 progress=lambda update: self.progress.emit(self.generation, update),
                 cancellation=self.cancellation,
             )
-            self.completed.emit(self.generation, result)
+            if self.cancellation.cancelled:
+                self.cancelled.emit(self.generation)
+            else:
+                self.completed.emit(self.generation, result)
         except PreflightCancelled:
             self.cancelled.emit(self.generation)
         except Exception as exc:
