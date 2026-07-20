@@ -71,3 +71,21 @@ def test_normal_canvas_does_not_draw_detector_candidate_lines(qtbot):
     line_items = [item for item in canvas.scene().items() if isinstance(item, QGraphicsLineItem)]
     assert len(line_items) == 1
     assert isinstance(line_items[0], DraggableZeroLine)
+
+
+def test_detection_status_update_does_not_rebuild_editable_geometry(qtbot):
+    canvas = VideoOverlayCanvas()
+    qtbot.addWidget(canvas)
+    glass = InspectionRecipe.default_glass(640, 480)
+    canvas.set_frame(np.zeros((480, 640, 3), dtype=np.uint8))
+    canvas.set_glasses([glass], glass.id)
+    editable = canvas._editable_ellipse_item
+    detection = SimpleNamespace(
+        glass_id=glass.id,
+        fill_state=FillState.PARTIAL_VISIBLE,
+        overall_confidence=0.8,
+        candidates=[],
+    )
+    canvas.set_detection(detection)
+    assert canvas._editable_ellipse_item is editable
+    assert editable.scene() is canvas.scene()
