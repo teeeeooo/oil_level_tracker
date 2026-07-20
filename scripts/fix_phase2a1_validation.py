@@ -49,4 +49,10 @@ replace(
     """    window._preview_ready(current, None)\n""",
 )
 
+replace(
+    "tests/gui/test_gui_smoke.py",
+    """    preview = FakePreview()\n    window = MainWindow(c, preview, FakeAnalysis(), DebugRenderer())\n    qtbot.addWidget(window)\n    window.request_preview()\n""",
+    """    preview = FakePreview()\n    from oil_tracker.domain.session import VideoMetadata\n\n    c.session.input_video_path = \"video.mp4\"\n    c.session.video_metadata = VideoMetadata(\"video.mp4\", 1280, 720, 30.0, 10.0, 300)\n    window = MainWindow(c, preview, FakeAnalysis(), DebugRenderer())\n    qtbot.addWidget(window)\n    window.request_preview()\n""",
+)
+
 print("Phase 2A-1 validation compatibility fixes applied.")
