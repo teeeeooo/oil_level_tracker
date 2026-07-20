@@ -134,37 +134,39 @@ def _apply_selected_settings(target, source, options: GlassSettingsCopyOptions) 
 
 def _validate_copied_ellipse(recipe: InspectionRecipe, target) -> None:
     ellipse = target.geometry.ellipse
-    values = (
-        ellipse.center_x,
-        ellipse.center_y,
-        ellipse.radius_x,
-        ellipse.radius_y,
-        target.geometry.zero_line_y,
-        target.geometry.margin_ratio,
-    )
-    invalid_number = any(value is None or not isfinite(float(value)) for value in values)
+    try:
+        center_x = float(ellipse.center_x)
+        center_y = float(ellipse.center_y)
+        radius_x = float(ellipse.radius_x)
+        radius_y = float(ellipse.radius_y)
+        zero_line_y = float(target.geometry.zero_line_y)
+        margin = float(target.geometry.margin_ratio)
+    except (TypeError, ValueError):
+        _raise_geometry_copy_error(target)
+
+    values = (center_x, center_y, radius_x, radius_y, zero_line_y, margin)
+    invalid_number = not all(isfinite(value) for value in values)
     outside_frame = (
-        ellipse.radius_x <= 0
-        or ellipse.radius_y <= 0
-        or ellipse.center_x - ellipse.radius_x < 0
-        or ellipse.center_y - ellipse.radius_y < 0
-        or ellipse.center_x + ellipse.radius_x > recipe.reference_frame_width
-        or ellipse.center_y + ellipse.radius_y > recipe.reference_frame_height
+        radius_x <= 0
+        or radius_y <= 0
+        or center_x - radius_x < 0
+        or center_y - radius_y < 0
+        or center_x + radius_x > recipe.reference_frame_width
+        or center_y + radius_y > recipe.reference_frame_height
     )
-    zero_line_outside = (
-        target.geometry.zero_line_y is None
-        or target.geometry.zero_line_y < ellipse.center_y - ellipse.radius_y
-        or target.geometry.zero_line_y > ellipse.center_y + ellipse.radius_y
-    )
-    margin = target.geometry.margin_ratio
+    zero_line_outside = zero_line_y < center_y - radius_y or zero_line_y > center_y + radius_y
     invalid_margin = margin < 0 or margin >= 0.8
     effective_area_too_small = (
-        2.0 * ellipse.radius_x * (1.0 - margin) < 4.0
-        or 2.0 * ellipse.radius_y * (1.0 - margin) < 4.0
+        2.0 * radius_x * (1.0 - margin) < 4.0
+        or 2.0 * radius_y * (1.0 - margin) < 4.0
     )
     if invalid_number or outside_frame or zero_line_outside or invalid_margin or effective_area_too_small:
-        raise GlassSettingsCopyError(
-            f"{target.name}에는 선택한 타원 크기를 적용할 수 없습니다.\n"
-            "현재 중심 위치 또는 기준점과 맞지 않습니다.",
-            target_glass_id=target.id,
-        )
+        _raise_geometry_copy_error(target)
+
+
+def _raise_geometry_copy_error(target) -> None:
+    raise GlassSettingsCopyError(
+        f"{target.name}에는 선택한 타원 크기를 적용할 수 없습니다.\n"
+        "현재 중심 위치 또는 기준점과 맞지 않습니다.",
+        target_glass_id=target.id,
+    )
