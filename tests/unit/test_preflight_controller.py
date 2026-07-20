@@ -32,6 +32,12 @@ class CancellableUseCase:
         raise PreflightCancelled("cancelled")
 
 
+class LateCancellationUseCase:
+    def execute(self, _recipe, _session, progress=None, cancellation=None):
+        cancellation.cancel()
+        return SimpleNamespace(marker="must-not-complete")
+
+
 class GenerationUseCase:
     def __init__(self) -> None:
         self.first_started = threading.Event()
@@ -87,6 +93,18 @@ def test_controller_cancel_is_distinct_from_failure(qtbot):
         controller.cancel()
 
     assert failures == []
+    _wait_for_cleanup(qtbot, controller)
+
+
+def test_late_cancellation_wins_over_completed_signal(qtbot):
+    controller = PreflightController(LateCancellationUseCase())
+    completed = []
+    controller.completed.connect(completed.append)
+
+    with qtbot.waitSignal(controller.cancelled, timeout=2000):
+        controller.start({"marker": "late-cancel"}, {})
+
+    assert completed == []
     _wait_for_cleanup(qtbot, controller)
 
 
