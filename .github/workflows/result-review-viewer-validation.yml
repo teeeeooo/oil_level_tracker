@@ -1,0 +1,41 @@
+name: Temporary Result Review Viewer Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.13", "3.14"]
+    env:
+      QT_QPA_PLATFORM: offscreen
+      TARGET_SHA: 44be8cb14c029b82560dd74e256932a4865942df
+    steps:
+      - name: Checkout exact feature head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_SHA }}
+      - name: Assert exact checkout
+        run: test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Qt runtime libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 \
+            libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-shape0 libxcb-xinerama0
+      - name: Install project
+        run: python -m pip install -U pip && python -m pip install -e ".[dev]"
+      - name: Run canonical suite
+        run: QT_QPA_PLATFORM=offscreen python -m pytest -q
