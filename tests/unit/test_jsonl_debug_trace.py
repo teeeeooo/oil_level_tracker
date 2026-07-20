@@ -1,0 +1,232 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+import shutil
+from types import SimpleNamespace
+
+import numpy as np
+import pytest
+
+from oil_tracker.adapters.storage.debug_trace_repository import DebugTraceError, DebugTraceRepository
+from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriter
+from oil_tracker.domain.debug_trace import DebugCaptureDecision, DebugCaptureReason
+from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
+from oil_tracker.domain.enums import BoundaryKind, FillState
+from oil_tracker.domain.recipe import InspectionRecipe
+from oil_tracker.domain.session import DebugTraceLevel
+
+
+def _glass(glass_id="유리/../A"):
+    glass = InspectionRecipe.default_glass(320, 240, 1)
+    glass.id = glass_id
+    glass.name = "관찰창 한글"
+    return glass
+
+
+def _detection(glass_id, frame=10, time=1.25):
+    candidate = BoundaryCandidate(
+        source="sobel",
+        kind=BoundaryKind.OIL_AIR,
+        y=120.0,
+        features={"local_y": np.float32(10.0), "bad": np.float64(float("nan"))},
+        penalties={"jump": np.float32(0.1), "infinite": float("inf")},
+        feature_score=np.float32(0.8),
+        penalty=np.float32(0.1),
+        final_score=np.float32(0.7),
+        selected=True,
+    )
+    return PhaseDetection(
+        glass_id=glass_id,
+        frame_index=frame,
+        time_sec=time,
+        fill_state=FillState.PARTIAL_VISIBLE,
+        oil_air_level_y=121.0,
+        oil_air_level_px_from_zero=4.0,
+        oil_air_level_mm_from_zero=None,
+        foam_front_y=None,
+        foam_front_px_from_zero=None,
+        foam_front_mm_from_zero=None,
+        oil_air_confidence=0.7,
+        foam_confidence=0.0,
+        visibility_confidence=0.8,
+        overall_confidence=0.7,
+        raw_oil_air_level_y=120.0,
+        smoothed_oil_air_level_y=121.0,
+        candidates=[candidate],
+        flags=["LOW_CONFIDENCE"],
+        debug_metrics={"glare_ratio": np.float32(0.2), "nonfinite": float("-inf")},
+    )
+
+
+def _artifacts(missing=False):
+    image = np.full((12, 16), 127, dtype=np.uint8)
+    images = {
+        "overlay": np.dstack([image, image, image]),
+        "original_roi": np.dstack([image, image, image]),
+        "normalized": image,
+        "sobel": image,
+        "canny": image,
+        "effective_mask": image,
+        "glare_mask": image,
+        "foam_mask": None if missing else image,
+        "ellipse_mask": image,
+    }
+    return SimpleNamespace(images=images, state={"previous_state": "EMPTY_NO_INTERFACE", "proposed_state": "PARTIAL_VISIBLE"})
+
+
+def _decision():
+    return DebugCaptureDecision(True, (DebugCaptureReason.FIRST_SAMPLE, DebugCaptureReason.LOW_CONFIDENCE))
+
+
+def _write(tmp_path: Path, level=DebugTraceLevel.BASIC, *, missing=False):
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    glass = _glass()
+    writer = JsonlDebugTraceWriter("run-한글", level, staging_parent=tmp_path)
+    writer.write(glass, _detection(glass.id), _artifacts(missing), _decision())
+    completion = writer.finalize()
+    return glass, Path(completion.staging_directory)
+
+
+def test_writer_emits_valid_independent_jsonl_and_utf8_byte_offsets(tmp_path):
+    _glass_value, staging = _write(tmp_path)
+    index = json.loads((staging / "debug_index.json").read_text(encoding="utf-8"))
+    summary = index["records"][0]
+    with (staging / "debug_trace.jsonl").open("rb") as handle:
+        handle.seek(summary["byte_offset"])
+        raw = handle.read(summary["byte_length"])
+    record = json.loads(raw.decode("utf-8"))
+    assert record["run_id"] == "run-한글"
+    assert record["glass_name"] == "관찰창 한글"
+    assert record["record_id"] == summary["record_id"]
+    assert b"\n" not in raw
+
+
+def test_writer_converts_numpy_and_nonfinite_values_to_json_safe_null(tmp_path):
+    _glass_value, staging = _write(tmp_path)
+    record = json.loads((staging / "debug_trace.jsonl").read_text(encoding="utf-8").splitlines()[0])
+    assert record["candidates"][0]["features"]["local_y"] == 10.0
+    assert record["candidates"][0]["features"]["bad"] is None
+    assert record["candidates"][0]["penalties"]["infinite"] is None
+    assert record["state"]["nonfinite"] is None
+
+
+def test_basic_writes_only_required_subset_and_safe_paths(tmp_path):
+    glass, staging = _write(tmp_path)
+    record = json.loads((staging / "debug_trace.jsonl").read_text().splitlines()[0])
+    assert "ellipse_mask" not in record["images"]
+    assert "overlay" in record["images"]
+    for relative in record["images"].values():
+        assert ".." not in Path(relative).parts
+        assert glass.id not in relative
+        assert (staging / relative).is_file()
+
+
+def test_full_writes_all_available_artifacts(tmp_path):
+    _glass_value, staging = _write(tmp_path, DebugTraceLevel.FULL)
+    record = json.loads((staging / "debug_trace.jsonl").read_text().splitlines()[0])
+    assert "ellipse_mask" in record["images"]
+    assert len(record["images"]) >= 8
+
+
+def test_missing_optional_image_is_record_warning_not_writer_failure(tmp_path):
+    _glass_value, staging = _write(tmp_path, missing=True)
+    record = json.loads((staging / "debug_trace.jsonl").read_text().splitlines()[0])
+    assert "foam_mask" not in record["images"]
+    assert "missing_optional_image:foam_mask" in record["warnings"]
+
+
+def test_duplicate_glass_frame_timestamp_is_not_written_twice(tmp_path):
+    glass = _glass("g1")
+    writer = JsonlDebugTraceWriter("run-1", DebugTraceLevel.BASIC, staging_parent=tmp_path)
+    detection = _detection(glass.id)
+    writer.write(glass, detection, _artifacts(), _decision())
+    writer.write(glass, detection, _artifacts(), _decision())
+    completion = writer.finalize()
+    index = json.loads((Path(completion.staging_directory) / "debug_index.json").read_text())
+    assert index["record_count"] == 1
+    assert len((Path(completion.staging_directory) / "debug_trace.jsonl").read_text().splitlines()) == 1
+
+
+def test_abort_removes_staging_directory(tmp_path):
+    writer = JsonlDebugTraceWriter("run-1", DebugTraceLevel.BASIC, staging_parent=tmp_path)
+    staging = writer.staging_directory
+    writer.abort()
+    assert not staging.exists()
+
+
+def _repository_bundle(tmp_path: Path):
+    glass, staging = _write(tmp_path)
+    root = tmp_path / "bundle"
+    (root / "debug").mkdir(parents=True)
+    for source in staging.rglob("*"):
+        target = root / "debug" / source.relative_to(staging)
+        if source.is_dir():
+            target.mkdir(parents=True, exist_ok=True)
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+    recipe = InspectionRecipe.empty(320, 240, "review")
+    recipe.glasses.append(glass)
+    review_index = {
+        "debug_trace_level": "basic",
+        "debug_index": "debug/debug_index.json",
+        "debug_trace": "debug/debug_trace.jsonl",
+        "debug_record_count": 1,
+    }
+    return SimpleNamespace(
+        root=root,
+        run_id="run-한글",
+        recipe=recipe,
+        review_index=review_index,
+        debug_trace_level="basic",
+    )
+
+
+def test_repository_loads_index_only_then_lazy_record_and_image(tmp_path):
+    bundle = _repository_bundle(tmp_path)
+    repository = DebugTraceRepository(bundle, record_cache_size=1, image_cache_size=1)
+    assert repository.record_load_count == 0
+    assert repository.image_load_count == 0
+    summary = repository.index.records[0]
+    record = repository.load_record(summary.record_id)
+    assert repository.record_load_count == 1
+    repository.load_record(summary.record_id)
+    assert repository.record_load_count == 1
+    image = repository.load_image(record, "overlay")
+    assert image.shape[:2] == (12, 16)
+    repository.load_image(record, "overlay")
+    assert repository.image_load_count == 1
+
+
+def test_repository_rejects_invalid_offset_and_unknown_glass(tmp_path):
+    bundle = _repository_bundle(tmp_path)
+    index_path = bundle.root / "debug" / "debug_index.json"
+    index = json.loads(index_path.read_text())
+    index["records"][0]["byte_offset"] = 10**9
+    index_path.write_text(json.dumps(index))
+    with pytest.raises(DebugTraceError, match="offset"):
+        DebugTraceRepository(bundle)
+
+    bundle = _repository_bundle(tmp_path / "other")
+    index_path = bundle.root / "debug" / "debug_index.json"
+    index = json.loads(index_path.read_text())
+    index["records"][0]["glass_id"] = "unknown"
+    index_path.write_text(json.dumps(index))
+    with pytest.raises(DebugTraceError, match="없는 glass_id"):
+        DebugTraceRepository(bundle)
+
+
+def test_repository_rejects_unsupported_schema_and_path_traversal(tmp_path):
+    bundle = _repository_bundle(tmp_path)
+    index_path = bundle.root / "debug" / "debug_index.json"
+    index = json.loads(index_path.read_text())
+    index["schema_version"] = 99
+    index_path.write_text(json.dumps(index))
+    with pytest.raises(DebugTraceError, match="지원하지 않는"):
+        DebugTraceRepository(bundle)
+
+    bundle = _repository_bundle(tmp_path / "other")
+    bundle.review_index["debug_index"] = "../outside.json"
+    with pytest.raises(DebugTraceError, match="상대경로|밖"):
+        DebugTraceRepository(bundle)

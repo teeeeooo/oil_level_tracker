@@ -156,6 +156,13 @@ class ReviewGraphHighlight:
 
 
 @dataclass(frozen=True)
+class ReviewGraphDebugMarker:
+    timestamp_sec: float
+    reasons: tuple[str, ...]
+    selected: bool = False
+
+
+@dataclass(frozen=True)
 class ReviewGraphModel:
     glass_id: str
     glass_name: str
@@ -169,6 +176,7 @@ class ReviewGraphModel:
     analysis_end_sec: float
     compressor_start_sec: float | None
     cursor_timestamp_sec: float
+    debug_markers: tuple[ReviewGraphDebugMarker, ...] = ()
 
 
 @dataclass
@@ -189,7 +197,15 @@ class ReviewBundle:
     events: tuple[ReviewEvent, ...]
     files: dict[str, Path] = field(default_factory=dict)
     debug_trace_level: str = "none"
+    debug_index_path: str = ""
+    debug_trace_path: str = ""
+    debug_record_count: int = 0
+    debug_warning: str = ""
     review_index: dict[str, Any] | None = None
+
+    @property
+    def has_debug_trace(self) -> bool:
+        return self.debug_trace_level != "none" and self.debug_record_count > 0 and not self.debug_warning
 
     def glass_config(self, glass_id: str):
         return next((glass for glass in self.recipe.glasses if glass.id == glass_id), None)

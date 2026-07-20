@@ -52,6 +52,15 @@ class ResultReviewGraph(QWidget):
             self.axes.axvspan(highlight.start_time_sec, end, alpha=0.12, hatch="//")
         for marker in model.event_markers:
             self.axes.axvline(marker.timestamp_sec, linewidth=0.6, alpha=0.18)
+        for index, marker in enumerate(model.debug_markers):
+            artist = self.axes.axvline(
+                marker.timestamp_sec,
+                linestyle="-.",
+                linewidth=2.2 if marker.selected else 0.9,
+                alpha=0.95 if marker.selected else 0.35,
+                label="선택 디버그 장면" if marker.selected else "디버그 기록" if index == 0 else None,
+            )
+            artist.set_gid("debug:" + "|".join(marker.reasons))
         self._plot_series(model.oil_air.points, model.oil_air.name, "-")
         if model.foam_front.has_values:
             self._plot_series(model.foam_front.points, model.foam_front.name, "--")

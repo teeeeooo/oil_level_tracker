@@ -71,6 +71,7 @@ class OpenCvPhaseDetector:
         pre = preprocess(bundle.crop, bundle.effective_mask, settings)
         candidates = generate_oil_air_candidates(pre, bundle.effective_mask, settings)
         previous_local = tracker.previous_y - bundle.crop_origin[1] if tracker.previous_y is not None else None
+        previous_state = tracker.current_state
         static_map = self._static_maps.get(glass.id)
         scored = score_candidates(
             candidates,
@@ -81,7 +82,7 @@ class OpenCvPhaseDetector:
                 exclusion_mask=bundle.exclusion_mask,
                 settings=settings,
                 previous_y=previous_local,
-                previous_state=tracker.current_state,
+                previous_state=previous_state,
                 static_artifact_map=static_map,
             ),
         )
@@ -94,7 +95,7 @@ class OpenCvPhaseDetector:
             pre.glare_mask,
             selected,
             foam_candidate,
-            tracker.current_state,
+            previous_state,
             settings,
         )
         valid_rows = np.where(bundle.effective_mask.any(axis=1))[0]
@@ -157,8 +158,9 @@ class OpenCvPhaseDetector:
                 "glare_ratio": float(np.count_nonzero(pre.glare_mask)) / max(1, np.count_nonzero(bundle.effective_mask)),
                 "foam_bottom_connected_area_ratio": foam.bottom_connected_area_ratio,
                 "effective_area": int(np.count_nonzero(bundle.effective_mask)),
-                "previous_state": tracker.current_state.value if tracker.current_state else None,
+                "previous_state": previous_state.value if previous_state else None,
                 "proposed_state": proposed_state.value,
+                "stabilized_state": stabilized_state.value,
             },
         )
         artifacts = self._debug_artifacts(frame, glass, bundle, pre, foam, detection, static_map) if debug else None
@@ -182,11 +184,21 @@ class OpenCvPhaseDetector:
             if extent:
                 cv2.line(overlay, (int(extent[0]), int(glass.geometry.zero_line_y)), (int(extent[1]), int(glass.geometry.zero_line_y)), (255, 255, 0), 1)
         for candidate in detection.candidates:
+            extent = e.horizontal_extent_at(float(candidate.y))
+            if extent is None:
+                continue
             if candidate.kind.value == "foam_front":
                 color = (255, 0, 255)
             else:
                 color = (0, 255, 0) if candidate.selected else (0, 0, 255)
-            cv2.line(overlay, (int(e.bounds.x), int(candidate.y)), (int(e.bounds.right), int(candidate.y)), color, 2 if candidate.selected else 1)
+            cv2.line(
+                overlay,
+                (int(extent[0]), int(candidate.y)),
+                (int(extent[1]), int(candidate.y)),
+                color,
+                2 if candidate.selected else 1,
+                cv2.LINE_AA,
+            )
         images = {
             "overlay": overlay,
             "original_roi": bundle.crop,

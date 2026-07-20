@@ -70,3 +70,4 @@ class AnalysisResult:
     errors: list[str] = field(default_factory=list)
     manifest: dict[str, Any] = field(default_factory=dict)
     output_directory: str = ""
+    debug_trace_completion: Any | None = None

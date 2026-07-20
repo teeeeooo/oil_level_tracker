@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox
 from oil_tracker.config.defaults import SUPPORTED_VIDEO_FILTER
 from oil_tracker.domain.enums import WorkbenchState
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchReplacementError
+from oil_tracker.ui.debug_trace_settings import sync_debug_trace_selector
 
 
 LOGGER = logging.getLogger(__name__)
@@ -96,6 +97,7 @@ class SameProfileAnalysisCoordinator(QObject):
         window.play_timer.stop()
         window.preview_timer.stop()
         window.workbench.commit_same_profile_video(prepared)
+        sync_debug_trace_selector(window)
         window.undo_stack.clear()
         window.current_frame = prepared.frame
         window.current_frame_index = prepared.frame_index
