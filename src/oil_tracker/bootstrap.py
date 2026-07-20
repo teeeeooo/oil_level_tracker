@@ -10,13 +10,16 @@ from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
 from oil_tracker.application.use_cases.analyze_video import AnalyzeVideoUseCase
 from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
+from oil_tracker.application.use_cases.preflight_check import PreflightCheckUseCase
 from oil_tracker.application.use_cases.preview_detection import PreviewDetectionUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
 from oil_tracker.ui.controllers.analysis_controller import AnalysisController
+from oil_tracker.ui.controllers.preflight_controller import PreflightController
 from oil_tracker.ui.controllers.preview_controller import PreviewController
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
 from oil_tracker.ui.main_window import MainWindow
+from oil_tracker.ui.preflight_coordinator import PreflightCoordinator
 
 
 def build_main_window() -> MainWindow:
@@ -34,4 +37,12 @@ def build_main_window() -> MainWindow:
     pipeline = AnalysisPipeline(lambda path: OpenCvVideoReader(path), analysis_detector, validator)
     result_store = OutputBundleStore()
     analysis_controller = AnalysisController(AnalyzeVideoUseCase(pipeline), result_store)
-    return MainWindow(workbench, preview_controller, analysis_controller, DebugRenderer())
+    window = MainWindow(workbench, preview_controller, analysis_controller, DebugRenderer())
+    preflight_use_case = PreflightCheckUseCase(
+        lambda path: OpenCvVideoReader(path),
+        OpenCvPhaseDetector,
+        validator,
+    )
+    preflight_controller = PreflightController(preflight_use_case, window)
+    window.preflight_coordinator = PreflightCoordinator(window, preflight_controller)
+    return window
