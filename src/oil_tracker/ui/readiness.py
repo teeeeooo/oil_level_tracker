@@ -3,7 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 
-from oil_tracker.domain.enums import FillState, ValidationSeverity, WorkbenchState
+from oil_tracker.application.detection_quality import (
+    DetectionQuality as PreviewQuality,
+    assess_detection_quality,
+)
+from oil_tracker.domain.enums import ValidationSeverity, WorkbenchState
 from oil_tracker.ui.presentation_labels import fill_state_label, validation_issue_short_message
 
 
@@ -20,12 +24,6 @@ class ProgressStepState(str, Enum):
     ERROR = "error"
     WARNING = "warning"
     WAITING = "waiting"
-
-
-class PreviewQuality(str, Enum):
-    NORMAL = "normal"
-    REVIEW = "review"
-    FAILURE = "failure"
 
 
 @dataclass(frozen=True)
@@ -246,28 +244,14 @@ def build_detection_summary(detection, glass) -> PreviewSummary:
 
     confidence = max(0.0, min(1.0, float(detection.overall_confidence)))
     threshold = float(glass.detector_settings.minimum_final_confidence)
-    upper_flags = {str(flag).upper() for flag in detection.flags}
-    visible_boundary_states = {
-        FillState.FILLING_VISIBLE,
-        FillState.PARTIAL_VISIBLE,
-        FillState.DRAINING_VISIBLE,
-    }
-    unusable = (
-        "DETECTION_LOST" in upper_flags
-        or (detection.fill_state in visible_boundary_states and detection.oil_air_level_y is None)
-    )
-    if unusable:
-        quality = PreviewQuality.FAILURE
+    assessment = assess_detection_quality(detection, threshold)
+    quality = assessment.quality
+    if quality == PreviewQuality.FAILURE:
         detection_status = "검출 실패"
-        judgment = "검출 결과를 사용할 수 없음"
-    elif detection.fill_state == FillState.UNKNOWN_REVIEW or confidence < threshold:
-        quality = PreviewQuality.REVIEW
+    elif quality == PreviewQuality.REVIEW:
         detection_status = "확인 필요"
-        judgment = "사용자 확인 필요"
     else:
-        quality = PreviewQuality.NORMAL
         detection_status = "유면 확인됨" if detection.oil_air_level_y is not None else "유면 경계 미표시"
-        judgment = "정상적으로 검출됨"
 
     reference_position = _reference_position(detection, glass)
     return PreviewSummary(
@@ -276,7 +260,7 @@ def build_detection_summary(detection, glass) -> PreviewSummary:
         fill_state=fill_state_label(detection.fill_state),
         confidence=f"{confidence * 100:.0f}%",
         reference_position=reference_position,
-        judgment=judgment,
+        judgment=assessment.reason,
     )
 
 
