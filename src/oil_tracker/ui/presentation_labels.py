@@ -92,6 +92,21 @@ VALIDATION_MESSAGE_BY_CODE = {
     "WARN_DURATION": "분석 구간이 1초보다 짧습니다.",
 }
 
+VALIDATION_SHORT_MESSAGE_BY_CODE = {
+    "STRUCT_ELLIPSE": "관찰 영역 수정 필요",
+    "STRUCT_MARGIN": "테두리 제외 범위 수정 필요",
+    "STRUCT_MARGIN_AREA": "유효 관찰 영역 수정 필요",
+    "READY_ZERO": "기준점 설정 필요",
+    "READY_ZERO_BOUNDS": "기준점 위치 수정 필요",
+    "WARN_ZERO_EDGE": "기준점 확인 필요",
+    "STRUCT_EXCLUSION": "제외 영역 수정 필요",
+    "STRUCT_EXCLUSION_BOUNDS": "제외 영역 위치 수정 필요",
+    "READY_COMPRESSOR": "압축기 기동 시각 필요",
+    "STRUCT_SCALE": "길이 환산값 수정 필요",
+    "WARN_SCALE": "길이 환산값 확인 필요",
+    "WARN_MARGIN": "테두리 제외 범위 확인 필요",
+}
+
 
 def enum_label(value: Enum | str | None, labels: dict[Enum, str]) -> str:
     if value is None:
@@ -126,3 +141,9 @@ def initial_state_for_ui(value: InitialObservationState) -> InitialObservationSt
 
 def validation_issue_message(issue) -> str:
     return VALIDATION_MESSAGE_BY_CODE.get(issue.code, issue.message)
+
+
+def validation_issue_short_message(issue) -> str:
+    if issue is None:
+        return ""
+    return VALIDATION_SHORT_MESSAGE_BY_CODE.get(issue.code, validation_issue_message(issue))

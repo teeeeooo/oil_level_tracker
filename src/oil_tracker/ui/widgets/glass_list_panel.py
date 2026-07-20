@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import QSize, Qt, Signal
 from PySide6.QtWidgets import QHBoxLayout, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
 
 
@@ -9,29 +9,51 @@ class GlassListPanel(QWidget):
     deleteRequested = Signal()
     selectionChanged = Signal(str)
     enabledChanged = Signal(str, bool)
+    issueActivated = Signal(object)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.list = QListWidget()
+        self.list.setWordWrap(True)
+        self.list.setSpacing(2)
         self.list.currentItemChanged.connect(self._selected)
         self.list.itemChanged.connect(self._checked)
-        self.add_button = QPushButton("Glass 추가")
+        self.list.itemDoubleClicked.connect(self._activated)
+        self.add_button = QPushButton("관찰창 추가")
         self.delete_button = QPushButton("삭제")
         self.add_button.clicked.connect(self.addRequested)
         self.delete_button.clicked.connect(self.deleteRequested)
-        buttons = QHBoxLayout(); buttons.addWidget(self.add_button); buttons.addWidget(self.delete_button)
-        layout = QVBoxLayout(self); layout.addWidget(self.list); layout.addLayout(buttons)
-        self.setMinimumWidth(180)
+        buttons = QHBoxLayout()
+        buttons.addWidget(self.add_button)
+        buttons.addWidget(self.delete_button)
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.list)
+        layout.addLayout(buttons)
+        self.setMinimumWidth(230)
 
-    def set_glasses(self, glasses, selected_id: str | None) -> None:
+    def set_glasses(self, glasses, selected_id: str | None, readiness_by_id=None) -> None:
+        readiness_by_id = readiness_by_id or {}
         self.list.blockSignals(True)
         self.list.clear()
         selected_row = -1
         for row, glass in enumerate(glasses):
-            item = QListWidgetItem(glass.name)
+            readiness = readiness_by_id.get(glass.id)
+            if readiness is None:
+                text = glass.name
+                tooltip = glass.name
+                issue = None
+            else:
+                suffix = f" · {readiness.reason}" if readiness.reason else ""
+                text = f"{readiness.symbol} {glass.name}\n{readiness.label}{suffix}"
+                tooltip = f"{glass.name}: {readiness.label}{suffix}"
+                issue = readiness.issue
+            item = QListWidgetItem(text)
+            item.setToolTip(tooltip)
             item.setData(Qt.ItemDataRole.UserRole, glass.id)
+            item.setData(Qt.ItemDataRole.UserRole + 1, issue)
             item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
             item.setCheckState(Qt.CheckState.Checked if glass.enabled else Qt.CheckState.Unchecked)
+            item.setSizeHint(QSize(0, 52 if readiness is not None else 32))
             self.list.addItem(item)
             if glass.id == selected_id:
                 selected_row = row
@@ -44,4 +66,12 @@ class GlassListPanel(QWidget):
             self.selectionChanged.emit(current.data(Qt.ItemDataRole.UserRole))
 
     def _checked(self, item) -> None:
-        self.enabledChanged.emit(item.data(Qt.ItemDataRole.UserRole), item.checkState() == Qt.CheckState.Checked)
+        self.enabledChanged.emit(
+            item.data(Qt.ItemDataRole.UserRole),
+            item.checkState() == Qt.CheckState.Checked,
+        )
+
+    def _activated(self, item) -> None:
+        issue = item.data(Qt.ItemDataRole.UserRole + 1)
+        if issue is not None:
+            self.issueActivated.emit(issue)

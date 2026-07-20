@@ -119,8 +119,11 @@ class WorkbenchController:
     def mark_dirty(self) -> None:
         self.state = WorkbenchState.DRAFT_DIRTY if self.state in {WorkbenchState.VALIDATED, WorkbenchState.ANALYZED} else WorkbenchState.DRAFT
 
+    def validation_result(self):
+        return self.validate_use_case.execute(self.recipe, self.session)
+
     def validate(self):
-        result = self.validate_use_case.execute(self.recipe, self.session)
+        result = self.validation_result()
         self.state = WorkbenchState.VALIDATED if result.is_ready else WorkbenchState.DRAFT
         return result
 

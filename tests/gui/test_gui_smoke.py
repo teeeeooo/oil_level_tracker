@@ -100,6 +100,10 @@ def test_preview_request_routing(qtbot):
     c = controller()
     c.add_glass()
     preview = FakePreview()
+    from oil_tracker.domain.session import VideoMetadata
+
+    c.session.input_video_path = "video.mp4"
+    c.session.video_metadata = VideoMetadata("video.mp4", 1280, 720, 30.0, 10.0, 300)
     window = MainWindow(c, preview, FakeAnalysis(), DebugRenderer())
     qtbot.addWidget(window)
     window.request_preview()

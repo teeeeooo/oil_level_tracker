@@ -36,16 +36,25 @@ from oil_tracker.ui.presentation_labels import (
     validation_issue_message,
     workbench_state_label,
 )
+from oil_tracker.ui.readiness import (
+    build_workbench_progress,
+    first_actionable_issue,
+    first_issue_for_fields,
+    first_validation_error,
+    glass_readiness_by_id,
+)
 from oil_tracker.ui.undo import RecipeSnapshotCommand
 from oil_tracker.ui.widgets.analysis_progress_dialog import AnalysisProgressDialog
 from oil_tracker.ui.widgets.bottom_action_bar import BottomActionBar
 from oil_tracker.ui.widgets.debug_panel import DebugPanel
+from oil_tracker.ui.widgets.detection_summary_card import DetectionSummaryCard
 from oil_tracker.ui.widgets.glass_list_panel import GlassListPanel
 from oil_tracker.ui.widgets.glass_settings_panel import GlassSettingsPanel
 from oil_tracker.ui.widgets.roi_editor_dialog import RoiEditorDialog
 from oil_tracker.ui.widgets.transport_bar import TransportBar
 from oil_tracker.ui.widgets.validation_panel import ValidationPanel
 from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
+from oil_tracker.ui.widgets.workbench_progress import WorkbenchProgressWidget
 from oil_tracker.ui.wizard.new_recipe_wizard import NewRecipeWizard
 
 
@@ -64,6 +73,7 @@ class MainWindow(QMainWindow):
         self.last_debug_artifacts = None
         self.undo_stack = QUndoStack(self)
         self._last_validation = None
+        self._preview_context: tuple[str, int, float] | None = None
         self.setWindowTitle("Rotary Oil Level Tracker — 분석 프로필 설정")
         self.setMinimumSize(1280, 760)
         self._resize_to_available_screen()
@@ -137,11 +147,14 @@ class MainWindow(QMainWindow):
         self.settings = GlassSettingsPanel()
         self.transport = TransportBar()
         self.session_bar = self._build_session_bar()
+        self.progress = WorkbenchProgressWidget()
+        self.detection_summary = DetectionSummaryCard()
         center = QWidget()
         center_layout = QVBoxLayout(center)
         center_layout.setContentsMargins(6, 6, 6, 6)
         center_layout.setSpacing(6)
         center_layout.addWidget(self.session_bar)
+        center_layout.addWidget(self.detection_summary)
         center_layout.addWidget(self.canvas, 1)
         center_layout.addWidget(self.transport)
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
@@ -162,6 +175,7 @@ class MainWindow(QMainWindow):
         shell_layout = QVBoxLayout(shell)
         shell_layout.setContentsMargins(0, 0, 0, 0)
         shell_layout.setSpacing(0)
+        shell_layout.addWidget(self.progress)
         shell_layout.addWidget(self.splitter, 1)
         shell_layout.addWidget(self.action_bar)
         self.setCentralWidget(shell)
@@ -251,6 +265,9 @@ class MainWindow(QMainWindow):
         self.glass_list.deleteRequested.connect(self.delete_glass)
         self.glass_list.selectionChanged.connect(self.select_glass)
         self.glass_list.enabledChanged.connect(self.set_enabled)
+        self.glass_list.issueActivated.connect(self._route_validation_issue)
+        self.progress.stepActivated.connect(self._progress_step_activated)
+        self.progress.nextIssueRequested.connect(self._navigate_next_issue)
         self.canvas.geometryChanged.connect(self._geometry_changed)
         self.canvas.zeroLineChanged.connect(self._zero_changed)
         self.canvas.exclusionChanged.connect(self._exclusion_changed)
@@ -314,14 +331,18 @@ class MainWindow(QMainWindow):
     def _refresh_inline_validation(self):
         if self.workbench.state == WorkbenchState.ANALYZING and self._last_validation is not None:
             return self._last_validation
-        result = self.workbench.validate()
+        result = self.workbench.validation_result()
+        self._apply_validation_result(result)
+        return result
+
+    def _apply_validation_result(self, result) -> None:
         self._last_validation = result
         selected_id = self.workbench.selected_glass_id
         self.settings.set_validation_issues(result.issues, selected_id)
         self.validation_panel.set_result(result)
         self.action_bar.set_validation_result(result)
+        self._refresh_panels()
         self._update_state()
-        return result
 
     def open_roi_editor(self) -> None:
         glass = self.workbench.selected_glass()
@@ -381,6 +402,7 @@ class MainWindow(QMainWindow):
                 self.undo_stack.clear()
                 self._set_placeholder()
                 self._refresh_all()
+                self._refresh_inline_validation()
                 return
             metadata = wizard.video_metadata
             width, height = (metadata.width, metadata.height) if metadata else (1280, 720)
@@ -570,25 +592,51 @@ class MainWindow(QMainWindow):
                 self.workbench.session.video_metadata.duration_sec if self.workbench.session.video_metadata else 0.0,
                 frame_index,
             )
+            self._invalidate_preview("현재 장면 분석 대기")
         except Exception as exc:
             self.statusBar().showMessage(f"영상 장면을 읽지 못했습니다: {exc}")
 
     def schedule_preview(self) -> None:
-        self.preview_timer.start()
+        self._invalidate_preview("현재 장면 분석 대기")
+        if self.workbench.selected_glass() is not None and self.workbench.session.video_metadata is not None:
+            self.preview_timer.start()
+        else:
+            self.preview_timer.stop()
 
     def request_preview(self) -> None:
         glass = self.workbench.selected_glass()
-        if glass is not None and self.current_frame is not None:
-            self.statusBar().showMessage("현재 장면을 분석하고 있습니다...")
-            self.preview_controller.request(
-                self.current_frame,
-                glass,
-                self.current_frame_index,
-                self.current_time,
-            )
+        if glass is None or self.current_frame is None or self.workbench.session.video_metadata is None:
+            self._invalidate_preview("시험 영상과 관찰창을 선택해 주세요")
+            return
+        self._preview_context = (glass.id, self.current_frame_index, self.current_time)
+        self.detection_summary.set_loading()
+        self.statusBar().showMessage("현재 장면을 분석하고 있습니다...")
+        self.preview_controller.request(
+            self.current_frame,
+            glass,
+            self.current_frame_index,
+            self.current_time,
+        )
 
     def _preview_ready(self, detection, artifacts) -> None:
+        context = self._preview_context
+        if context is None:
+            return
+        selected_id = self.workbench.selected_glass_id
+        if (
+            detection.glass_id != selected_id
+            or detection.glass_id != context[0]
+            or detection.frame_index != self.current_frame_index
+            or detection.frame_index != context[1]
+            or abs(float(detection.time_sec) - self.current_time) > 1e-6
+            or abs(float(detection.time_sec) - context[2]) > 1e-6
+        ):
+            return
+        glass = self.workbench.selected_glass()
+        if glass is None:
+            return
         self.canvas.set_detection(detection)
+        self.detection_summary.set_detection(detection, glass)
         self.debug_panel.set_artifacts(artifacts)
         self.last_debug_artifacts = artifacts
         self.statusBar().showMessage(
@@ -596,7 +644,24 @@ class MainWindow(QMainWindow):
         )
 
     def _preview_failed(self, message: str) -> None:
+        self.canvas.set_detection(None)
+        self.detection_summary.set_failure(message)
+        self.last_debug_artifacts = None
         self.statusBar().showMessage(f"현재 장면 분석 실패: {message}")
+
+    def _invalidate_preview(self, message: str) -> None:
+        invalidate = getattr(self.preview_controller, "invalidate", None)
+        if callable(invalidate):
+            invalidate()
+        self._preview_context = None
+        self.canvas.set_detection(None)
+        self.last_debug_artifacts = None
+        if self.workbench.session.video_metadata is None:
+            self.detection_summary.set_empty("시험 영상을 선택해 주세요")
+        elif self.workbench.selected_glass() is None:
+            self.detection_summary.set_empty("관찰창을 선택해 주세요")
+        else:
+            self.detection_summary.set_empty(message)
 
     def save_recipe(self) -> None:
         path = self.workbench.recipe_path
@@ -636,7 +701,8 @@ class MainWindow(QMainWindow):
             self._error("프로필 열기 실패", str(exc))
 
     def validate_workbench(self):
-        result = self._refresh_inline_validation()
+        result = self.workbench.validate()
+        self._apply_validation_result(result)
         self.validation_panel.set_result(result)
         self.validation_dock.show()
         self.statusBar().showMessage(
@@ -660,6 +726,54 @@ class MainWindow(QMainWindow):
         if widget is not None:
             widget.setFocus()
         self.statusBar().showMessage(validation_issue_message(issue))
+
+    def _navigate_next_issue(self) -> None:
+        if self._last_validation is None:
+            return
+        issue = first_actionable_issue(self.workbench.recipe.glasses, self._last_validation)
+        if issue is None:
+            self.statusBar().showMessage("수정하거나 확인할 관찰창 항목이 없습니다.")
+            return
+        self._route_validation_issue(issue)
+
+    def _progress_step_activated(self, step_key: str) -> None:
+        if step_key == "video":
+            self.open_video_button.setFocus()
+            self.statusBar().showMessage("시험 영상 열기에서 분석 영상을 선택해 주세요.")
+            return
+        if step_key == "time":
+            issue = (
+                first_issue_for_fields(
+                    self._last_validation,
+                    {"analysis_range", "sampling_fps", "compressor_start"},
+                )
+                if self._last_validation is not None
+                else None
+            )
+            if issue is not None:
+                self._route_validation_issue(issue)
+            else:
+                self.start_spin.setFocus()
+                self.statusBar().showMessage("분석 시간과 압축기 기동 시각을 확인해 주세요.")
+            return
+        if step_key == "glasses":
+            self._navigate_next_issue()
+            if self.workbench.selected_glass_id is None:
+                self.glass_list.list.setFocus()
+            return
+        if step_key == "validation":
+            self.validation_dock.show()
+            issue = first_validation_error(self._last_validation) if self._last_validation is not None else None
+            if issue is not None:
+                self._route_validation_issue(issue)
+            else:
+                self.action_bar.validate_button.setFocus()
+                self.statusBar().showMessage("설정 점검을 실행해 분석 가능 상태를 확정해 주세요.")
+            return
+        if step_key == "analysis":
+            self.action_bar.analyze_button.setFocus()
+            message = "분석 실행을 선택해 주세요." if self.workbench.state == WorkbenchState.VALIDATED else "설정 점검 완료 후 분석할 수 있습니다."
+            self.statusBar().showMessage(message)
 
     def run_analysis(self) -> None:
         result = self.validate_workbench()
@@ -732,7 +846,16 @@ class MainWindow(QMainWindow):
         self._update_state()
 
     def _refresh_panels(self) -> None:
-        self.glass_list.set_glasses(self.workbench.recipe.glasses, self.workbench.selected_glass_id)
+        readiness = (
+            glass_readiness_by_id(self.workbench.recipe.glasses, self._last_validation)
+            if self._last_validation is not None
+            else None
+        )
+        self.glass_list.set_glasses(
+            self.workbench.recipe.glasses,
+            self.workbench.selected_glass_id,
+            readiness,
+        )
         self.settings.set_glass(self.workbench.selected_glass())
         self.canvas.set_glasses(self.workbench.recipe.glasses, self.workbench.selected_glass_id)
         if self._last_validation is not None:
@@ -773,12 +896,22 @@ class MainWindow(QMainWindow):
         self.state_label.setProperty("workbenchState", self.workbench.state.value)
         self.state_label.style().unpolish(self.state_label)
         self.state_label.style().polish(self.state_label)
-        self.actions["analyze"].setEnabled(self.workbench.state == WorkbenchState.VALIDATED)
+        can_analyze = self.workbench.state == WorkbenchState.VALIDATED
+        self.actions["analyze"].setEnabled(can_analyze)
         self.actions["result"].setEnabled(bool(self.last_result_path))
-        if self.workbench.state == WorkbenchState.ANALYZING:
-            self.action_bar.analyze_button.setEnabled(False)
-        elif self._last_validation is not None:
+        if self._last_validation is not None:
             self.action_bar.set_validation_result(self._last_validation)
+            issue = first_actionable_issue(self.workbench.recipe.glasses, self._last_validation)
+            self.progress.set_steps(
+                build_workbench_progress(
+                    self.workbench.recipe,
+                    self.workbench.session,
+                    self.workbench.state,
+                    self._last_validation,
+                ),
+                issue is not None,
+            )
+        self.action_bar.analyze_button.setEnabled(can_analyze)
 
     def _set_placeholder(self) -> None:
         self.current_frame = np.zeros(
@@ -786,6 +919,7 @@ class MainWindow(QMainWindow):
             dtype=np.uint8,
         )
         self.canvas.set_frame(self.current_frame)
+        self._invalidate_preview("시험 영상을 선택해 주세요")
 
     def _error(self, title: str, message: str) -> None:
         QMessageBox.critical(self, title, message)
