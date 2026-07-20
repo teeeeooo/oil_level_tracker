@@ -31,8 +31,8 @@ UX 개선은 다음 세 가지 사용자 확신을 단계적으로 높이는 방
 |---|---|---|
 | Phase 1 | Workbench 복잡도 축소와 복구 가능한 편집 | 완료 |
 | Phase 2A | 설정 완성도와 분석 전 사전 검증 | 완료 |
-| Phase 2B | 분석 결과 영상 검토 Viewer | 진행 중 — 2B-1 완료 |
-| Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 예정 |
+| Phase 2B | 분석 결과 영상 검토 Viewer | 완료 |
+| Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 다음 작업 — 2C-1 |
 | Phase 2D | 반복 시험 운영과 복구 자동화 | 후보 |
 
 ## 4. Phase 1 — Workbench 복잡도 축소와 편집 안정성
@@ -236,21 +236,27 @@ Global session issue는 모든 관찰창의 오류로 전파하지 않고, 해�
 
 ### 상태
 
-**진행 중**
+**완료**
 
 - Phase 2B-1 `Result Review Viewer MVP`: 완료
-- Phase 2B-2 `일반 검토 강화`: 다음 작업
+- Phase 2B-2 `일반 검토 강화`: 완료
 
 Phase 2B-1은 PR #9 `feat: add result review viewer MVP`로 `main`에 반영했다.
 
 - PR head: `2f948a57171586665b20c5f814f1d7d2c2863142`
 - main merge SHA: `faeb31a54d1e7d88ebee79a8ee33769fb24dd8c0`
 - 검증: Python 3.13 및 3.14에서 각각 `175 passed`
-- 실제 Windows DPI, 실영상 seek와 overlay 좌표 검증은 수동 확인 항목으로 유지
+
+Phase 2B-2는 PR #11 `feat: enhance result review workflow`로 `main`에 반영했다.
+
+- PR head: `326d36f5694005ffe4794d8238fbbfb30e8f5c41`
+- main merge SHA: `a063520d18cbb5669a068414a9dacfe5b50e867d`
+- 검증: Python 3.13 및 3.14에서 각각 `230 passed`
+- 실제 Windows DPI, 장시간 실영상 성능, graph seek와 file lock 해제는 수동 확인 항목으로 유지
 
 ### 목적
 
-분석 완료 후 사용자가 원본 영상을 재생하면서 검출된 유면 위치와 판정 근거를 overlay로 확인할 수 있게 한다.
+분석 완료 후 사용자가 원본 영상을 재생하면서 검출된 유면 위치와 판정 근거를 overlay와 tracking graph로 확인할 수 있게 한다.
 
 상세 설계와 데이터 계약은 [`RESULT_REVIEW_VIEWER_PLAN.md`](./RESULT_REVIEW_VIEWER_PLAN.md)를 따른다.
 
@@ -271,25 +277,39 @@ Phase 2B-1은 PR #9 `feat: add result review viewer MVP`로 `main`에 반영했�
 
 ### Phase 2B-2 — 일반 검토 강화
 
-**다음 작업**
+**완료**
 
-- tracking graph와 영상 동기화
-- 그래프 클릭 시 해당 시점 이동
-- 검토 필요 항목만 필터
-- 결과 보고서와 결과 폴더 연결
-- 같은 프로필로 새 영상 분석
-- 분석 완료 대화상자에서 Viewer 바로 열기
+- interactive tracking graph와 영상의 양방향 timestamp 동기화
+- graph 클릭 seek와 actual decoded timestamp 재동기화
+- px/mm 단위 선택, smoothed→raw→gap graph 정책
+- invalid, low-confidence, review, foam, glare/fog와 lost 사유별 검토 필터
+- 안전한 결과 보고서, 결과 폴더와 event capture 열기
+- 전용 분석 완료 dialog와 Viewer/report/folder action
+- 결과 snapshot을 사용하는 같은 profile 새 영상 분석 준비
+- 새 영상 준비 실패 시 기존 Workbench를 보존하는 원자적 교체
+- 잘못된 원본 영상 재지정 시 기존 Viewer reader, frame, overlay와 상태 보존
+- Viewer, graph와 Workbench lifecycle 및 file handle 정리
+- `.oilrecipe`, tracking/event CSV와 `review_index.json` schema 유지
 
 ### 완료 조건
 
 - 분석 결과와 원본 영상을 함께 열 수 있다.
 - 최종 검출 위치가 원본 영상 위에 정확한 시점으로 표시된다.
 - 이벤트 또는 낮은 신뢰도 항목으로 즉시 이동할 수 있다.
+- tracking graph와 video cursor가 actual decoded timestamp로 동기화된다.
+- 검토 필요 항목을 사유별로 필터할 수 있다.
 - 원본 영상이 이동된 경우 사용자가 새 경로를 지정할 수 있다.
+- 결과 보고서, 결과 폴더와 event capture를 안전하게 열 수 있다.
+- 분석 완료 화면에서 Viewer와 후속 작업으로 이동할 수 있다.
+- 같은 profile로 새 영상을 준비하되 기존 Workbench와 결과 bundle을 보호한다.
 - 일반 검토 모드에서는 detector 내부 후보와 점수를 노출하지 않는다.
 - Viewer가 현재 Workbench 편집 상태가 아니라 결과 bundle snapshot을 사용한다.
 
 ## 7. Phase 2C — 개발용 디버그와 결과 확장
+
+### 상태
+
+**다음 작업 — Phase 2C-1**
 
 ### 목적
 
@@ -378,10 +398,12 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 
 ## 11. 현재 다음 작업
 
-현재 `main`에는 Phase 1, Phase 2A 전체와 Phase 2B-1이 완료되어 있다.
+현재 `main`에는 Phase 1, Phase 2A 전체와 Phase 2B 전체가 완료되어 있다.
 
 다음 구현 순서는 다음과 같다.
 
-1. **Phase 2B-2:** 일반 검토 강화
-2. **Phase 2C:** Debug Viewer와 재검출 확장
-3. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
+1. **Phase 2C-1:** Debug Viewer
+2. **Phase 2C-2:** 부분 재검출과 비교
+3. **Phase 2C-3:** 사용자 정답과 회귀 자료
+4. **Phase 2C-4:** 공유용 결과 영상
+5. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
