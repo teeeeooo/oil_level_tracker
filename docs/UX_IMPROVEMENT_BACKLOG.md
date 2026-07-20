@@ -30,7 +30,7 @@ UX 개선은 다음 세 가지 사용자 확신을 단계적으로 높이는 방
 | Phase | 주제 | 상태 |
 |---|---|---|
 | Phase 1 | Workbench 복잡도 축소와 복구 가능한 편집 | 완료 |
-| Phase 2A | 설정 완성도와 분석 전 사전 검증 | 진행 중 — 2A-1 완료 |
+| Phase 2A | 설정 완성도와 분석 전 사전 검증 | 진행 중 — 2A-1, 2A-2 완료 |
 | Phase 2B | 분석 결과 영상 검토 Viewer | 예정 |
 | Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 예정 |
 | Phase 2D | 반복 시험 운영과 복구 자동화 | 후보 |
@@ -113,14 +113,20 @@ PR #4 `feat: add guided workbench UX phase 1`로 `main`에 반영했다.
 **진행 중**
 
 - Phase 2A-1 `Workbench Readiness Feedback`: 완료
-- Phase 2A-2 `Multi-frame Preflight Check`: 다음 작업
-- Phase 2A-3 `Observation-window Settings Copy`: 예정
+- Phase 2A-2 `Multi-frame Preflight Check`: 완료
+- Phase 2A-3 `Observation-window Settings Copy`: 다음 작업
 
 Phase 2A-1은 PR #5 `feat: add workbench readiness feedback`로 `main`에 반영했다.
 
 - PR head: `d915e1fe6aff81057a519436fc34e61406885b8f`
 - main merge SHA: `25f3257e3b29682e8fa15cad5a5359373ee0d5a3`
 - 검증: Python 3.13 및 3.14에서 각각 `63 passed`
+
+Phase 2A-2는 PR #6 `feat: add multi-frame preflight checks`로 `main`에 반영했다.
+
+- PR head: `bf2bb571adbc8abb7a2e9203fa8332fa2936e404`
+- main merge SHA: `44780b9f520b73d87e8701ac6216df04be5ef669`
+- 검증: Python 3.13 및 3.14에서 각각 `102 passed`
 
 ### 목적
 
@@ -172,7 +178,7 @@ Global session issue는 모든 관찰창의 오류로 전파하지 않고, 해�
 
 ### Phase 2A-2 — Multi-frame Preflight Check
 
-**다음 작업**
+**완료**
 
 분석 구간의 대표 시점을 자동 검사한다.
 
@@ -197,7 +203,7 @@ Global session issue는 모든 관찰창의 오류로 전파하지 않고, 해�
 
 ### Phase 2A-3 — Observation-window Settings Copy
 
-**예정**
+**다음 작업**
 
 복사 가능한 항목을 선택한다.
 
@@ -346,12 +352,11 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 
 ## 11. 현재 다음 작업
 
-현재 `main`에는 Phase 1과 Phase 2A-1이 완료되어 있다.
+현재 `main`에는 Phase 1과 Phase 2A-1, Phase 2A-2가 완료되어 있다.
 
 다음 구현 순서는 다음과 같다.
 
-1. **Phase 2A-2:** 여러 시점 자동 사전 점검
-2. **Phase 2A-3:** 관찰창 설정 복사
-3. **Phase 2B:** Result Review Viewer MVP
-4. **Phase 2C:** Debug Viewer와 재검출 확장
-5. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
+1. **Phase 2A-3:** 관찰창 설정 복사
+2. **Phase 2B:** Result Review Viewer MVP
+3. **Phase 2C:** Debug Viewer와 재검출 확장
+4. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
