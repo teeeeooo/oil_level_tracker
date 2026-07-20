@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from pathlib import Path
 from typing import Any
 
 
@@ -18,6 +17,19 @@ class VideoMetadata:
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "VideoMetadata":
+        return cls(
+            path=str(data.get("path", "")),
+            width=int(data.get("width", 0)),
+            height=int(data.get("height", 0)),
+            fps=float(data.get("fps", 0.0)),
+            duration_sec=float(data.get("duration_sec", 0.0)),
+            frame_count=int(data.get("frame_count", 0)),
+            codec=str(data.get("codec", "")),
+            timestamp_reliability_warning=str(data.get("timestamp_reliability_warning", "")),
+        )
 
 
 @dataclass
@@ -49,3 +61,37 @@ class AnalysisSession:
             "run_note": self.run_note,
             "resolution_confirmed": self.resolution_confirmed,
         }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "AnalysisSession":
+        metadata = data.get("video_metadata")
+        return cls(
+            input_video_path=str(data.get("input_video_path", "")),
+            video_metadata=VideoMetadata.from_dict(metadata) if isinstance(metadata, dict) else None,
+            analysis_start_sec=float(data.get("analysis_start_sec", 0.0)),
+            analysis_end_sec=_optional_float(data.get("analysis_end_sec")),
+            compressor_start_sec=_optional_float(data.get("compressor_start_sec")),
+            sampling_fps=float(data.get("sampling_fps", 2.0)),
+            output_directory=str(data.get("output_directory", "")),
+            run_note=str(data.get("run_note", "")),
+            resolution_confirmed=_parse_bool(data.get("resolution_confirmed", True)),
+        )
+
+
+def _optional_float(value: Any) -> float | None:
+    if value is None or value == "":
+        return None
+    return float(value)
+
+
+def _parse_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)) and value in (0, 1):
+        return bool(value)
+    text = str(value).strip().lower()
+    if text in {"true", "1", "yes", "y"}:
+        return True
+    if text in {"false", "0", "no", "n"}:
+        return False
+    raise ValueError(f"Invalid boolean value: {value!r}")
