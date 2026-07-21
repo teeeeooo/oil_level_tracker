@@ -1,4 +1,4 @@
-name: S5-B final metric extraction
+name: S5-B paired-boundary midpoint patch
 
 on:
   pull_request:
@@ -9,53 +9,57 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  actions: read
-  pull-requests: write
-  contents: read
+  contents: write
 
 jobs:
-  extract:
+  patch-feature:
     runs-on: ubuntu-24.04
     env:
-      GH_TOKEN: ${{ github.token }}
-      FAILED_RUN_ID: '29852941657'
-      FAILED_JOB_ID: '88710364196'
+      FEATURE_BRANCH: feature/oil-boundary-temporal-tracking
+      EXPECTED_SHA: 79f934cc41a462cf2eb54e088e8e5fac418df425
     steps:
-      - name: Extract prefixed JSON metrics from stored log
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.FEATURE_BRANCH }}
+          fetch-depth: 0
+      - name: Assert exact feature head
         run: |
-          gh run view "${FAILED_RUN_ID}" --repo "${GITHUB_REPOSITORY}" --job "${FAILED_JOB_ID}" --log > /tmp/job.log
+          actual="$(git rev-parse HEAD)"
+          echo "expected_feature_sha=${EXPECTED_SHA}"
+          echo "actual_feature_sha=${actual}"
+          test "${actual}" = "${EXPECTED_SHA}"
+      - name: Apply deterministic paired-boundary midpoint
+        run: |
           python - <<'PY'
-          import re
           from pathlib import Path
-          lines = Path('/tmp/job.log').read_text(encoding='utf-8', errors='replace').splitlines()
-          keys = (
-              '"base_sha"', '"feature_sha"', '"dataset_fingerprint"', '"case_count"',
-              '"sequence_count"', '"category_count"', '"base_detector"', '"feature_detector"',
-              '"base_errors"', '"feature_errors"', '"raw_oil_', '"smoothed_oil_',
-              '"base_coverage"', '"feature_coverage"', '"base_no_interface_fpr"',
-              '"feature_no_interface_fpr"', '"base_temporal_recovery"',
-              '"feature_temporal_recovery"', '"base_foam_precision"', '"feature_foam_precision"',
-              '"base_foam_recall"', '"feature_foam_recall"', '"base_shimmer_fpr"',
-              '"feature_shimmer_fpr"', '"base_cpu_ms"', '"feature_cpu_ms"', '"cpu_ratio"',
-              '"dependency_diff"',
-          )
-          extracted = []
-          for line in lines:
-              if any(key in line for key in keys) and '^[[36;1m' not in line:
-                  content = re.sub(r'^.*?Z\s+', '', line)
-                  extracted.append(content)
-          traceback = []
-          for index, line in enumerate(lines):
-              if 'Traceback (most recent call last):' in line:
-                  traceback = [re.sub(r'^.*?Z\s+', '', value) for value in lines[index:index+5]]
-                  break
-          body = [
-              '## S5-B final controlled metric extraction', '',
-              'Stored log only; detector and benchmark were not rerun.', '',
-              '```text', *extracted[-80:], '```', '',
-              '```text', *traceback, '```',
-          ]
-          Path('/tmp/body.md').write_text('\n'.join(body), encoding='utf-8')
+          path = Path('src/oil_tracker/adapters/vision/candidate_scorer.py')
+          text = path.read_text(encoding='utf-8')
+          old = '''                left_weight = max(0.05, left_score)
+                right_weight = max(0.05, right_score)
+                merged_y = (
+                    left_weight * float(left.y) + right_weight * float(right.y)
+                ) / (left_weight + right_weight)
+                keeper.features["paired_boundary_original_y"] = float(keeper.y)
+                keeper.features["paired_boundary_merged_y"] = float(merged_y)
+'''
+          new = '''                unrounded_midpoint = (float(left.y) + float(right.y)) / 2.0
+                merged_y = float(round(unrounded_midpoint))
+                keeper.features["paired_boundary_original_y"] = float(keeper.y)
+                keeper.features["paired_boundary_unrounded_midpoint"] = float(
+                    unrounded_midpoint
+                )
+                keeper.features["paired_boundary_merged_y"] = float(merged_y)
+'''
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one replacement target, found {text.count(old)}')
+          path.write_text(text.replace(old, new), encoding='utf-8')
           PY
-          cat /tmp/body.md
-          gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
+          git diff --check
+      - name: Commit feature fix
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/oil_tracker/adapters/vision/candidate_scorer.py
+          git commit -m "fix: align paired oil boundary to deterministic midpoint"
+          git push origin HEAD:"${FEATURE_BRANCH}"
+          echo "new_feature_sha=$(git rev-parse HEAD)"
