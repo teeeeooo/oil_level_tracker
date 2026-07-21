@@ -91,9 +91,13 @@ class TruthCoordinate:
             return None
         if not isinstance(payload, dict):
             raise TruthValidationError("truth coordinate는 JSON object여야 합니다.")
+        source_y = _finite(payload.get("source_frame_y"), "source_frame_y")
+        local_y = _finite(payload.get("roi_local_y"), "roi_local_y")
+        if source_y is None or local_y is None:
+            raise TruthValidationError("truth coordinate에는 source_frame_y와 roi_local_y가 필요합니다.")
         return cls(
-            source_frame_y=_finite(payload.get("source_frame_y"), "source_frame_y"),
-            roi_local_y=_finite(payload.get("roi_local_y"), "roi_local_y"),
+            source_frame_y=source_y,
+            roi_local_y=local_y,
             px_from_zero=_finite(payload.get("px_from_zero"), "px_from_zero"),
             mm_from_zero=_finite(payload.get("mm_from_zero"), "mm_from_zero"),
         )
@@ -486,7 +490,8 @@ def coordinate_from_source_y(source_y: float | None, glass) -> TruthCoordinate |
     ellipse = glass.geometry.ellipse
     if ellipse.horizontal_extent_at(value) is None:
         raise TruthValidationError("경계 Y가 선택 관찰창 ROI 타원 밖에 있습니다.")
-    local = value - ellipse.bounds.y
+    crop_origin_y = max(0, int(math.floor(ellipse.bounds.y)))
+    local = value - crop_origin_y
     px = glass.geometry.level_px_from_zero(value)
     mm = glass.geometry.level_mm_from_zero(value, glass.mm_per_pixel)
     return TruthCoordinate(value, local, px, mm)
