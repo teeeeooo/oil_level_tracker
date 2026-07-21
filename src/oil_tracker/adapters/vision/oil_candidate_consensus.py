@@ -20,6 +20,7 @@ class OilCandidateCluster:
     strongest_generator_score: float
     consensus_score: float
     members: tuple[tuple[str, float, float], ...]
+    unrounded_representative_y: float = 0.0
 
     def to_candidate(self, cluster_index: int) -> BoundaryCandidate:
         supports = {source for source, _y, _score in self.members}
@@ -34,6 +35,9 @@ class OilCandidateCluster:
             "region_support": float("region_boundary" in supports),
             "cluster_spread": float(self.spread),
             "representative_local_y": float(self.representative_y),
+            "unrounded_representative_local_y": float(
+                self.unrounded_representative_y
+            ),
             "strongest_generator_score": float(self.strongest_generator_score),
             "consensus_score": float(self.consensus_score),
             "consensus_cluster_index": float(cluster_index),
@@ -69,7 +73,7 @@ def build_oil_candidate_consensus(
         for index, cluster in enumerate(working):
             if candidate.source in cluster:
                 continue
-            representative = _representative(tuple(cluster.values()))
+            representative = _weighted_representative(tuple(cluster.values()))
             distance = abs(float(candidate.y) - representative)
             if distance <= tolerance + 1e-12:
                 eligible.append((distance, representative, index))
@@ -90,7 +94,9 @@ def build_oil_candidate_consensus(
             ),
         )
     )
-    consensus = tuple(cluster.to_candidate(index) for index, cluster in enumerate(clusters))
+    consensus = tuple(
+        cluster.to_candidate(index) for index, cluster in enumerate(clusters)
+    )
 
     membership: dict[tuple[str, float, float], tuple[int, float]] = {}
     for index, cluster in enumerate(clusters):
@@ -103,7 +109,10 @@ def build_oil_candidate_consensus(
             source_matches = [
                 (abs(float(candidate.y) - cluster.representative_y), index, cluster)
                 for index, cluster in enumerate(clusters)
-                if any(source == candidate.source for source, _y, _score in cluster.members)
+                if any(
+                    source == candidate.source
+                    for source, _y, _score in cluster.members
+                )
             ]
             if source_matches:
                 distance, index, cluster = min(source_matches)
@@ -111,7 +120,9 @@ def build_oil_candidate_consensus(
                     match = (index, cluster.representative_y)
         if match is not None:
             candidate.features["consensus_cluster_index"] = float(match[0])
-            candidate.features["consensus_representative_local_y"] = float(match[1])
+            candidate.features["consensus_representative_local_y"] = float(
+                match[1]
+            )
             candidate.features["consensus_member"] = 1.0
         else:
             candidate.features["consensus_cluster_index"] = -1.0
@@ -138,15 +149,21 @@ def _deduplicate_same_source(
         )
         source_kept: list[BoundaryCandidate] = []
         for candidate in ordered:
-            if all(abs(float(candidate.y) - float(prior.y)) > tolerance + 1e-12 for prior in source_kept):
+            if all(
+                abs(float(candidate.y) - float(prior.y)) > tolerance + 1e-12
+                for prior in source_kept
+            ):
                 source_kept.append(candidate)
         kept.extend(source_kept)
     return tuple(sorted(kept, key=_candidate_sort_key))
 
 
-def _make_cluster(candidates: tuple[BoundaryCandidate, ...]) -> OilCandidateCluster:
+def _make_cluster(
+    candidates: tuple[BoundaryCandidate, ...],
+) -> OilCandidateCluster:
     ordered = tuple(sorted(candidates, key=_candidate_sort_key))
-    representative = _representative(ordered)
+    unrounded = _weighted_representative(ordered)
+    representative = float(round(unrounded))
     ys = [float(candidate.y) for candidate in ordered]
     strengths = [_strength(candidate) for candidate in ordered]
     support = len({candidate.source for candidate in ordered})
@@ -162,10 +179,13 @@ def _make_cluster(candidates: tuple[BoundaryCandidate, ...]) -> OilCandidateClus
         strongest_generator_score=strongest,
         consensus_score=consensus,
         members=members,
+        unrounded_representative_y=unrounded,
     )
 
 
-def _representative(candidates: tuple[BoundaryCandidate, ...]) -> float:
+def _weighted_representative(
+    candidates: tuple[BoundaryCandidate, ...],
+) -> float:
     weighted = [(_strength(candidate), float(candidate.y)) for candidate in candidates]
     total = sum(max(0.05, strength) for strength, _y in weighted)
     if total <= 0.0:
@@ -173,7 +193,9 @@ def _representative(candidates: tuple[BoundaryCandidate, ...]) -> float:
     return sum(max(0.05, strength) * y for strength, y in weighted) / total
 
 
-def _candidate_sort_key(candidate: BoundaryCandidate) -> tuple[float, str, float, str]:
+def _candidate_sort_key(
+    candidate: BoundaryCandidate,
+) -> tuple[float, str, float, str]:
     return (
         float(candidate.y),
         str(candidate.source),
