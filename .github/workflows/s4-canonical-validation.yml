@@ -8,9 +8,14 @@ permissions:
   contents: read
   pull-requests: write
 
+concurrency:
+  group: s4-canonical-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   canonical:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -32,8 +37,8 @@ jobs:
           test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
       - name: Install runner dependencies
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq fonts-noto-cjk libegl1 libgl1 libxkbcommon-x11-0
+          timeout 180s sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update -qq
+          timeout 180s sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq fonts-noto-cjk libegl1 libgl1 libxkbcommon-x11-0
           fc-cache -f
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
