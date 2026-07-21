@@ -28,9 +28,17 @@ jobs:
               tests/test_oil_settings.py
           - group: controlled-oil
             files: tests/test_oil_controlled_benchmark.py
+          - group: foam-regression
+            files: >-
+              tests/test_foam_evidence.py
+              tests/test_foam_fill_state_policy.py
+              tests/test_foam_phase_detector_integration.py
+              tests/test_foam_settings.py
+              tests/test_foam_temporal_gate.py
+              tests/test_foam_controlled_benchmark.py
     env:
       QT_QPA_PLATFORM: offscreen
-      EXPECTED_SHA: fff9144b588e682090eb5b76719c5fd2261a30bf
+      EXPECTED_SHA: afd0397d9cd32c1146760bc7fd2a85639ac9ad52
       TEST_FILES: ${{ matrix.files }}
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -65,7 +73,7 @@ jobs:
               echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
               echo
               echo '```text'
-              tail -n 300 /tmp/pytest.log
+              tail -n 320 /tmp/pytest.log
               echo '```'
             } > /tmp/body.md
             gh pr edit 55 --body-file /tmp/body.md || true
