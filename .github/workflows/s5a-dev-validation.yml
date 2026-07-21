@@ -1,0 +1,51 @@
+name: S5-A development validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-24.04
+    env:
+      QT_QPA_PLATFORM: offscreen
+      EXPECTED_SHA: 09840dcf02c5390574c60b63dfb4f0360eef6925
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_SHA }}
+      - name: Assert exact feature checkout
+        run: |
+          actual=$(git rev-parse HEAD)
+          echo "expected exact SHA=$EXPECTED_SHA"
+          echo "actual checkout SHA=$actual"
+          test "$actual" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Versions
+        run: |
+          python - <<'PY'
+          import cv2, numpy, PySide6
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          print('Python detector version:', OpenCvPhaseDetector.version)
+          print('PySide6:', PySide6.__version__)
+          print('NumPy:', numpy.__version__)
+          print('OpenCV:', cv2.__version__)
+          PY
+      - name: Focused tests
+        run: |
+          python -m pytest -q \
+            tests/test_foam_evidence.py \
+            tests/test_foam_temporal_gate.py \
+            tests/test_foam_fill_state_policy.py \
+            tests/test_detector_benchmark_metrics.py \
+            tests/test_detector_benchmark_runner.py \
+            tests/test_detector_benchmark_integration.py \
+            tests/test_benchmark_cli.py
