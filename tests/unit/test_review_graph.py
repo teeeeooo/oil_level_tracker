@@ -64,8 +64,12 @@ def test_px_graph_prefers_smoothed_then_raw_and_keeps_gap():
     )
     model = build_review_graph_model(bundle, glass.id)
     assert model.unit == "px"
-    assert model.y_axis_label == "기준점 대비 높이 (px)"
+    assert model.y_axis_label == "기준선 대비 높이 (px)"
     assert [point.value for point in model.oil_air.points] == [3.0, 5.0, None]
+    assert model.axis_lower is not None and model.axis_upper is not None
+    assert model.axis_lower < 0 < model.axis_upper
+    assert model.analysis_top_boundary_value is not None
+    assert model.analysis_bottom_boundary_value is not None
 
 
 def test_mm_graph_is_used_only_when_usable_mm_value_exists():

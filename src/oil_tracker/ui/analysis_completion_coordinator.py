@@ -36,8 +36,12 @@ class AnalysisCompletionCoordinator(QObject):
         window.installEventFilter(self)
 
     def analysis_completed(self, result, output_path: str) -> None:
-        if hasattr(self.window, "progress_dialog"):
-            self.window.progress_dialog.accept()
+        progress_dialog = getattr(self.window, "progress_dialog", None)
+        if progress_dialog is not None:
+            mark_completed = getattr(progress_dialog, "mark_completed", None)
+            if callable(mark_completed):
+                mark_completed()
+            progress_dialog.accept()
         self.window.workbench.state = WorkbenchState.ANALYZED
         self.window.last_result_path = output_path
         self.window._update_state()

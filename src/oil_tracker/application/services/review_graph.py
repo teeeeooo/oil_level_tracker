@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from oil_tracker.application.services.graph_axis import graph_axis_range_for_glass
 from oil_tracker.application.services.review_query import ReviewQueryModel
 from oil_tracker.domain.review import (
     ReviewBundle,
@@ -55,6 +56,14 @@ def build_review_graph_model(
         )
         for sample in samples
     )
+    axis_range = graph_axis_range_for_glass(
+        glass,
+        unit=unit,
+        observed_values=(
+            *(point.value for point in oil_points),
+            *(point.value for point in foam_points),
+        ),
+    )
     events = tuple(
         ReviewGraphEventMarker(
             timestamp_sec=event.start_time_sec,
@@ -86,7 +95,7 @@ def build_review_graph_model(
         glass_id=glass_id,
         glass_name=glass.name,
         unit=unit,
-        y_axis_label=f"기준점 대비 높이 ({unit})",
+        y_axis_label=f"기준선 대비 높이 ({unit})",
         oil_air=ReviewGraphSeries("유면", oil_points),
         foam_front=ReviewGraphSeries("거품 경계", foam_points),
         event_markers=events,
@@ -96,6 +105,12 @@ def build_review_graph_model(
         compressor_start_sec=bundle.compressor_start_sec,
         cursor_timestamp_sec=_clamp(cursor_timestamp_sec, bundle.analysis_start_sec, bundle.analysis_end_sec),
         debug_markers=debug_markers,
+        axis_lower=axis_range.lower,
+        axis_upper=axis_range.upper,
+        analysis_top_boundary_value=axis_range.analysis_top_boundary,
+        analysis_bottom_boundary_value=axis_range.analysis_bottom_boundary,
+        range_source=axis_range.source,
+        range_reason=axis_range.reason,
     )
 
 

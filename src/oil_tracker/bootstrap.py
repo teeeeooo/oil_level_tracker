@@ -64,6 +64,8 @@ def build_main_window() -> MainWindow:
     result_store = OutputBundleStore()
     analysis_controller = AnalysisController(AnalyzeVideoUseCase(pipeline), result_store)
     window = MainWindow(workbench, preview_controller, analysis_controller, DebugRenderer())
+    analysis_controller.setParent(window)
+    window.destroyed.connect(lambda: analysis_controller.shutdown())
     install_debug_trace_selector(window)
     window.settings_copy_coordinator = ObservationSettingsCopyCoordinator(window)
     preflight_use_case = PreflightCheckUseCase(

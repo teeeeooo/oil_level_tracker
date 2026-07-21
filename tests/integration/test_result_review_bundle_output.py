@@ -13,12 +13,12 @@ from oil_tracker.domain.session import AnalysisSession, VideoMetadata
 
 
 class _NoCaptures:
-    def create_event_captures(self, *_args):
+    def create_event_captures(self, *_args, **_kwargs):
         return None
 
 
 class _Graphs:
-    def render(self, _result, directory):
+    def render(self, _result, directory, _recipe=None, **_kwargs):
         directory.mkdir(parents=True, exist_ok=True)
         path = directory / "combined_levels.png"
         path.write_bytes(b"graph")

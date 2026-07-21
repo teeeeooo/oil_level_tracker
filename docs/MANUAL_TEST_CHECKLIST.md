@@ -40,21 +40,42 @@
 - Inspect all six debug tabs and candidate reject reasons.
 - Export selected-frame debug artifacts and open every PNG/CSV/JSON.
 
-## Analysis/export
-- Run 1-, 2- and 3-Glass analyses.
-- Cancel in the middle and verify no completed bundle is exposed.
-- Open Result Review from a Foam/review case and use **사용자 정답으로 확인**; confirm Glass, frame and timestamp context are retained and the official result bundle is unchanged.
+## Analysis lifecycle and cancellation
+- Run 1-, 2- and 3-Glass analyses with a long real compressor video.
+- Confirm the dialog displays all six stages in order: 영상 분석, 이벤트와 판정 계산, 결과 이미지 생성, CSV와 snapshot 저장, graph와 보고서 생성, bundle 마무리.
+- Confirm frame analysis completion remains below overall 100% and stages 2–6 stay visible.
+- On a slow disk, confirm graph/report and bundle-finalization progress remains visible rather than appearing frozen.
+- Cancel separately during each of the six stages and confirm no completed bundle is exposed before atomic finalization.
+- Confirm cancellation or failure removes the temporary result directory and debug staging directory.
+- Confirm the completion dialog appears only after the final result directory and manifest are visible.
+- Cancel immediately before finalization, then test a late cancel after finalization; confirm only the pre-finalization case is discarded.
+- Close the Workbench while analysis is running and confirm the worker thread exits without an orphan thread, process, video lock or output lock.
+- Exercise a long Unicode output path and a deeply nested Windows path.
 - Open report offline with network disconnected.
 - Confirm full/empty rows have blank numeric levels in CSV.
-- Confirm graph distinguishes oil-air, foam, zero, unknown and low-confidence intervals.
-- Exercise a long video and long output path on Windows.
+- Open Result Review from a Foam/review case and use **사용자 정답으로 확인**; confirm Glass, frame and timestamp context are retained and the official result bundle is unchanged.
+
+## Result visualization
+- Open Result Review on Windows with Malgun Gothic available and verify Korean title, axes, legend, annotations and empty-state text.
+- Open the partial re-detection comparison and verify Korean graph labels and table headers: 공식/재검출 유면 and 공식/재검출 거품 경계.
+- Open the offline HTML report and verify every combined/detail graph renders Korean text without repeated missing-glyph warnings.
+- Verify negative y-axis tick labels and minus signs remain readable.
+- Test Glass 1–3 with different ellipse positions, vertical radii, margin ratios and zero-line positions.
+- Confirm each Glass detail graph includes the full inner-ellipse analysis area, 기준선 0 and both analysis boundaries even when observed values occupy a narrow band.
+- Confirm exclusion rectangles do not reduce the graph's full vertical analysis range.
+- Verify a Glass with valid `mm_per_pixel` uses mm on its detail graph and a px-only Glass stays in source pixels.
+- Verify a mixed-scale combined graph remains in px and covers the union of all included Glass analysis ranges.
+- Verify full/empty no-interface data, all-missing series and intermittent missing values remain gaps rather than zero-valued lines.
+- Repeatedly open and close Result Review and re-detection windows; confirm Matplotlib callbacks, fonts and file handles do not accumulate.
 
 ## Packaging
 - Run the full test suite on Windows with Python 3.14.3.
 - Build one-folder distributions on Windows with both the release baseline interpreter and Python 3.14.3 when possible.
-- Copy `dist/RotaryOilLevelTracker` to a clean machine without Python.
+- Copy `dist/RotaryOilLevelTracker` to a clean machine without Python or separately bundled font files.
 - Run the complete Workbench, preflight, analysis and Result Review workflow from the one-folder package.
+- Confirm Windows Malgun Gothic is selected on a clean PC and the application does not require a repository font binary.
 - Generate HTML/CSV in a user-writable output folder.
 - Confirm Jinja template, Qt plugins and matplotlib resources resolve after relocation.
+- Repeat output generation with file-locking software active and confirm resources are released after close.
 
 > These are manual follow-up items. A GitHub-only validation run does not claim that they were performed.

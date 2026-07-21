@@ -26,7 +26,7 @@ def _model(cursor=1.0, *, glass_name="Glass A", foam=True):
         glass_id="glass-a",
         glass_name=glass_name,
         unit="px",
-        y_axis_label="기준점 대비 높이 (px)",
+        y_axis_label="기준선 대비 높이 (px)",
         oil_air=oil,
         foam_front=ReviewGraphSeries("거품 경계", foam_points),
         event_markers=(ReviewGraphEventMarker(1.5, "FOAM_START"),),
@@ -35,18 +35,27 @@ def _model(cursor=1.0, *, glass_name="Glass A", foam=True):
         analysis_end_sec=2.0,
         compressor_start_sec=0.5,
         cursor_timestamp_sec=cursor,
+        axis_lower=-10.0,
+        axis_upper=12.0,
+        analysis_top_boundary_value=10.0,
+        analysis_bottom_boundary_value=-8.0,
+        range_source="analysis_geometry",
     )
 
 
-def test_graph_renders_selected_glass_unit_and_optional_foam(qtbot):
+def test_graph_renders_selected_glass_unit_boundaries_and_optional_foam(qtbot):
     graph = ResultReviewGraph()
     qtbot.addWidget(graph)
     graph.set_model(_model())
-    assert "Glass A" in graph.axes.get_title()
-    assert graph.axes.get_ylabel() == "기준점 대비 높이 (px)"
+    assert graph.axes.get_title() == "Glass A 유면 추적"
+    assert graph.axes.get_ylabel() == "기준선 대비 높이 (px)"
+    assert tuple(round(value, 6) for value in graph.axes.get_ylim()) == (-10.0, 12.0)
     labels = graph.axes.get_legend_handles_labels()[1]
     assert "유면" in labels
     assert "거품 경계" in labels
+    assert "기준선" in labels
+    assert "분석 영역 위쪽 경계" in labels
+    assert "분석 영역 아래쪽 경계" in labels
     graph.set_model(_model(glass_name="Glass B", foam=False))
     assert "Glass B" in graph.axes.get_title()
     assert "거품 경계" not in graph.axes.get_legend_handles_labels()[1]
