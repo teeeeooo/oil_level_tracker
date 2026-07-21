@@ -32,7 +32,7 @@ UX 개선은 다음 세 가지 사용자 확신을 단계적으로 높이는 방
 | Phase 1 | Workbench 복잡도 축소와 복구 가능한 편집 | 완료 |
 | Phase 2A | 설정 완성도와 분석 전 사전 검증 | 완료 |
 | Phase 2B | 분석 결과 영상 검토 Viewer | 완료 |
-| Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 진행 중 — 2C-1 완료 |
+| Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 진행 중 — 2C-1, 2C-2 완료 |
 | Phase 2D | 반복 시험 운영과 복구 자동화 | 후보 |
 
 ## 4. Phase 1 — Workbench 복잡도 축소와 편집 안정성
@@ -309,10 +309,11 @@ Phase 2B-2는 PR #11 `feat: enhance result review workflow`로 `main`에 반영�
 
 ### 상태
 
-**진행 중 — Phase 2C-1 완료**
+**진행 중 — Phase 2C-1, Phase 2C-2 완료**
 
 - Phase 2C-1 `Debug Viewer`: 완료
-- 다음 작업: Phase 2C-2 `부분 재검출과 비교`
+- Phase 2C-2 `부분 재검출과 비교`: 완료
+- 다음 작업: Phase 2C-3 `사용자 정답과 회귀 자료`
 
 Phase 2C-1은 PR #13 `feat: add result review debug viewer`로 `main`에 반영했다.
 
@@ -322,6 +323,17 @@ Phase 2C-1은 PR #13 `feat: add result review debug viewer`로 `main`에 반영�
 - `none`, `basic`, `full` debug trace, streaming JSONL/PNG 저장과 lazy Debug Viewer 구현
 - 공식 result bundle 내부와 symlink alias로의 재현 패키지 export 차단
 - 실제 Windows DPI, 장시간 영상 성능, production codec과 file lock 해제는 수동 확인 항목으로 유지
+
+Phase 2C-2는 PR #20 `feat: add partial re-detection comparison`으로 `main`에 반영했다.
+
+- PR head: `261a8b32f64817adeafaaec5ea31e644922c833c`
+- main merge SHA: `06d6937b55c70b4726340ee698dfd9ed7d089f23`
+- 검증: Python 3.13 및 3.14에서 각각 `370 passed`
+- 현재 장면, 앞뒤 짧은 구간과 선택 관찰창 전체 구간 재검출 구현
+- 임시 detector 설정, 공식/재검출 tracking·candidate·artifact·event·판정 비교 구현
+- 선택 관찰창 및 모든 관찰창 Workbench 적용을 독립적으로 검증하고 한 단계 Undo/Redo 지원
+- 공식 result bundle 불변, 임시 streaming workspace와 안전한 새 profile 저장 유지
+- 실제 Windows DPI, 실영상 temporal 결과, full-range 성능과 file lock 해제는 수동 확인 항목으로 유지
 
 ### 목적
 
@@ -340,6 +352,8 @@ Result Review Viewer를 detector 문제 재현, 튜닝과 회귀 검증에 활�
 - 디버그 재현 패키지 내보내기
 
 ### Phase 2C-2 — 부분 재검출과 비교
+
+**완료**
 
 - 현재 frame 다시 검출
 - 앞뒤 짧은 구간 다시 검출
@@ -412,11 +426,10 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 
 ## 11. 현재 다음 작업
 
-현재 `main`에는 Phase 1, Phase 2A 전체, Phase 2B 전체와 Phase 2C-1 Debug Viewer가 완료되어 있다.
+현재 `main`에는 Phase 1, Phase 2A 전체, Phase 2B 전체와 Phase 2C-1 Debug Viewer, Phase 2C-2 부분 재검출과 비교가 완료되어 있다.
 
 다음 구현 순서는 다음과 같다.
 
-1. **Phase 2C-2:** 부분 재검출과 비교
-2. **Phase 2C-3:** 사용자 정답과 회귀 자료
-3. **Phase 2C-4:** 공유용 결과 영상
-4. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
+1. **Phase 2C-3:** 사용자 정답과 회귀 자료
+2. **Phase 2C-4:** 공유용 결과 영상
+3. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가

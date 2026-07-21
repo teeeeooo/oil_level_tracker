@@ -53,11 +53,24 @@ PR #13 `feat: add result review debug viewer`로 `main`에 반영했다.
 - debug scene filter, graph/timeline marker와 독립 재현 패키지
 - 공식 result bundle 내부와 symlink alias destination으로의 export 차단
 
-### Phase 2C-2 이후
+### Phase 2C-2 — 부분 재검출과 설정 비교
 
-**다음 작업 — Phase 2C-2**
+**완료**
 
-- 부분 재검출과 설정 비교
+PR #20 `feat: add partial re-detection comparison`으로 `main`에 반영했다.
+
+- PR head: `261a8b32f64817adeafaaec5ea31e644922c833c`
+- main merge SHA: `06d6937b55c70b4726340ee698dfd9ed7d089f23`
+- 검증: Python 3.13 및 3.14에서 각각 `370 passed`
+- 현재 장면 독립 검출, bounded short-range와 선택 관찰창 full-range 재검출
+- 임시 detector 설정과 공식/재검출 tracking, candidate, artifact, event와 판정 비교
+- current/all Workbench 적용의 범위별 compatibility와 한 단계 Undo/Redo
+- result bundle 불변, streaming temporary workspace와 bundle 외부 새 profile 저장
+
+### Phase 2C-3 이후
+
+**다음 작업 — Phase 2C-3**
+
 - 사용자 수동 정답과 regression fixture
 - annotated MP4 export
 
@@ -503,7 +516,7 @@ Bundle asset resolver는 다음을 거부한다.
 
 ### 상태
 
-**진행 중 — Phase 2C-1 완료 / 다음 작업 Phase 2C-2**
+**진행 중 — Phase 2C-1, Phase 2C-2 완료 / 다음 작업 Phase 2C-3**
 
 ### 9.1 Debug Viewer
 
@@ -544,6 +557,8 @@ Bundle asset resolver는 다음을 거부한다.
 - 결과 용량 증가 경고
 
 ### 9.3 부분 재검출과 설정 비교
+
+**완료**
 
 문제 frame에서 detector 설정을 임시 조정하고 다음 범위를 다시 검출한다.
 
@@ -644,7 +659,7 @@ debug_case_YYYYMMDD_HHMMSS/
 - debug artifact 경로는 bundle root 밖으로 탈출할 수 없다.
 - 기본 분석 성능과 결과 용량을 보호하기 위해 저장 수준을 명시한다.
 - 후보와 score 표현은 저장 당시 detector 결과를 재현하며 Viewer에서 detector를 다시 실행하지 않는다.
-- detector 재실행과 설정 비교는 Phase 2C-2로 분리한다.
+- detector 재실행과 설정 비교는 Phase 2C-2에서 별도 임시 workspace와 비교 workflow로 구현했다.
 - 공식 tracking result와 debug trace가 불일치하면 공식 결과를 수정하지 않고 사용자에게 상태를 표시한다.
 
 ## 12. Phase 2B 비범위
