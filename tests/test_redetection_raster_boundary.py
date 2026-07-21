@@ -60,11 +60,12 @@ class _Panel:
         self.rerun = []
 
     def set_official_artifact(self, key, image, error):
-        self.official.append((key, image, error))
+        snapshot = None if image is None else QImage(image).copy()
+        self.official.append((key, snapshot, error))
 
     def set_rerun_artifact(self, key, image, error):
-        self.rerun.append((key, image, error))
-
+        snapshot = None if image is None else QImage(image).copy()
+        self.rerun.append((key, snapshot, error))
 
 
 def test_redetection_official_and_rerun_artifacts_cross_ui_as_detached_qimages():
