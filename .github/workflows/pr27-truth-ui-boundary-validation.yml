@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   canonical:
@@ -56,6 +57,24 @@ jobs:
           print("PySide6", PySide6.__version__)
           print("Matplotlib", matplotlib.__version__)
           PY
-      - name: Run canonical suite
+      - name: Run canonical suite and publish bounded diagnostics
         shell: bash
-        run: python -m pytest -q
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          python -m pytest -q 2>&1 | tee pytest.log
+          status=${PIPESTATUS[0]}
+          set -e
+          {
+            echo "## Python ${{ matrix.python-version }} canonical result"
+            echo
+            echo "Exact feature SHA: \`$EXPECTED_FEATURE_SHA\`"
+            echo "Exit status: \`$status\`"
+            echo
+            echo '```text'
+            tail -n 220 pytest.log
+            echo '```'
+          } > validation-comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file validation-comment.md
+          exit "$status"
