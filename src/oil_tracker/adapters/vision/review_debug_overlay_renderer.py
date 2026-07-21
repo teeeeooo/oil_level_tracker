@@ -5,6 +5,8 @@ import math
 import cv2
 import numpy as np
 
+from oil_tracker.adapters.vision.review_overlay_renderer import _copy_bgr_frame
+
 
 class ReviewDebugOverlayRenderer:
     """Render saved detector candidates without mixing official tracking overlays."""
@@ -17,9 +19,7 @@ class ReviewDebugOverlayRenderer:
         actual_timestamp: float,
         highlighted_candidate: int | None = None,
     ) -> np.ndarray:
-        image = np.ascontiguousarray(frame.copy())
-        if image.ndim == 2:
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+        image = _copy_bgr_frame(frame)
 
         ellipse = glass.geometry.ellipse
         cv2.ellipse(
