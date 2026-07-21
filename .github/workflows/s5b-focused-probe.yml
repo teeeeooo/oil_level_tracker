@@ -1,4 +1,4 @@
-name: S5-B final exact-head validation
+name: S5-B final comparison diagnosis
 
 on:
   pull_request:
@@ -9,427 +9,49 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
-  pull-requests: write
   actions: read
+  pull-requests: write
+  contents: read
 
 jobs:
-  focused:
-    name: focused-python313
+  extract:
     runs-on: ubuntu-24.04
     env:
-      QT_QPA_PLATFORM: offscreen
-      FEATURE_SHA: 15249bfc46668cae0560b5459f6f0de2d56041ea
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ env.FEATURE_SHA }}
-      - name: Assert exact feature checkout
-        run: |
-          actual="$(git rev-parse HEAD)"
-          echo "expected_feature_sha=${FEATURE_SHA}"
-          echo "actual_checkout_sha=${actual}"
-          test "${actual}" = "${FEATURE_SHA}"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: pip
-          cache-dependency-path: pyproject.toml
-      - name: Install package
-        run: |
-          sudo apt-get update -qq >/dev/null
-          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
-          python -m pip install -q -e '.[dev]'
-      - name: Runtime identity
-        run: |
-          python - <<'PY'
-          import cv2, matplotlib, numpy, PySide6, sys
-          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
-          print("python=" + sys.version)
-          print("PySide6=" + PySide6.__version__)
-          print("numpy=" + numpy.__version__)
-          print("opencv=" + cv2.__version__)
-          print("matplotlib=" + matplotlib.__version__)
-          print("detector_version=" + OpenCvPhaseDetector.version)
-          PY
-      - name: Run focused detector and architecture tests
-        shell: bash
-        run: |
-          set -o pipefail
-          python -m pytest -q \
-            tests/test_detector_benchmark_integration.py::test_current_detector_runs_headlessly_on_phase2c3_fixture_dataset \
-            tests/unit/test_fill_state.py::test_partial_boundary_is_selected \
-            tests/unit/test_fill_state.py::test_full_prior_rejects_mid_glass_static_reflection \
-            tests/unit/test_fill_state.py::test_boundary_appearing_from_top_is_draining_visible \
-            tests/unit/test_fill_state.py::test_boundary_appearing_from_bottom_is_filling_visible_not_foam \
-            tests/test_oil_candidate_consensus.py \
-            tests/test_oil_signed_scoring.py \
-            tests/test_oil_no_interface.py \
-            tests/test_oil_temporal_path.py \
-            tests/test_oil_temporal_tracker.py \
-            tests/test_oil_detector_integration.py \
-            tests/test_oil_fill_state_classifier.py \
-            tests/test_oil_controlled_benchmark.py \
-            tests/test_foam_controlled_benchmark.py \
-            tests/test_foam_phase_detector_integration.py \
-            tests/test_detector_benchmark_metrics.py \
-            tests/test_detector_benchmark_runner.py \
-            tests/test_detector_benchmark_integration.py \
-            tests/test_benchmark_cli.py \
-            tests/test_ui_import_boundaries.py \
-            | tee /tmp/focused.log
-          python -m pytest -q tests \
-            -k 'raster or qimage or image_boundary or workbench or wheel or lifecycle or progress or graph or finalization' \
-            | tee /tmp/architecture.log
-
-  controlled:
-    name: controlled-base-versus-feature
-    needs: focused
-    runs-on: ubuntu-24.04
-    env:
-      QT_QPA_PLATFORM: offscreen
-      BASE_SHA: 5f180d02a7aff36591e6f35adf44fca6347bdf9c
-      FEATURE_SHA: 15249bfc46668cae0560b5459f6f0de2d56041ea
       GH_TOKEN: ${{ github.token }}
+      FAILED_RUN_ID: '29852941657'
+      FAILED_JOB_ID: '88710364196'
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ env.FEATURE_SHA }}
-          fetch-depth: 0
-      - name: Assert feature source and dependency contract
+      - name: Extract stored controlled summary and traceback
         run: |
-          actual="$(git rev-parse HEAD)"
-          echo "expected_feature_sha=${FEATURE_SHA}"
-          echo "actual_checkout_sha=${actual}"
-          test "${actual}" = "${FEATURE_SHA}"
-          dependency_files="$(git diff --name-only "${BASE_SHA}" "${FEATURE_SHA}" -- pyproject.toml requirements.txt requirements '*.lock' 2>/dev/null || true)"
-          echo "dependency_diff=${dependency_files:-none}"
-          test -z "${dependency_files}"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: pip
-          cache-dependency-path: pyproject.toml
-      - name: Install feature and generate identical datasets
-        run: |
-          sudo apt-get update -qq >/dev/null
-          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
-          python -m pip install -q -e '.[dev]'
-          mkdir -p "${RUNNER_TEMP}/s5b"
-          PYTHONPATH=tests python - <<'PY'
-          import json, os
-          from pathlib import Path
-          from foam_benchmark_fixtures import generate_controlled_foam_dataset
-          from oil_benchmark_fixtures import generate_controlled_oil_dataset
-          from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
-          root = Path(os.environ["RUNNER_TEMP"]) / "s5b"
-          oil_path, _ = generate_controlled_oil_dataset(root / "oil")
-          foam_path, _ = generate_controlled_foam_dataset(root / "foam")
-          reader = FilesystemRegressionDatasetReader()
-          oil = reader.load(oil_path)
-          foam = reader.load(foam_path)
-          info = {
-              "oil_path": str(oil_path),
-              "foam_path": str(foam_path),
-              "oil_fingerprint": oil.fingerprint,
-              "foam_fingerprint": foam.fingerprint,
-              "oil_case_count": len(oil.cases),
-              "oil_sequence_count": len({case.sequence_id for case in oil.cases if case.sequence_id}),
-              "oil_category_count": len({case.category.value for case in oil.cases}),
-          }
-          (root / "datasets.json").write_text(json.dumps(info, sort_keys=True), encoding="utf-8")
-          print(json.dumps(info, sort_keys=True))
-          PY
-      - name: Create bounded benchmark runner
-        run: |
-          cat > "${RUNNER_TEMP}/run_benchmark.py" <<'PY'
-          from datetime import datetime, timezone
-          import json, sys
-          from pathlib import Path
-          from statistics import median
-          from time import perf_counter
-          from oil_tracker.adapters.storage.benchmark_result_writer import AtomicBenchmarkResultWriter
-          from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
-          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
-          from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
-
-          dataset_path, destination, label = Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3]
-          reader = FilesystemRegressionDatasetReader()
-          service = DetectorBenchmarkService(
-              reader,
-              AtomicBenchmarkResultWriter(),
-              OpenCvPhaseDetector,
-              clock=lambda: datetime(2026, 7, 22, tzinfo=timezone.utc),
-              runtime_metadata_factory=lambda: {"python": label, "packages": {"numpy": "pinned", "opencv-python-headless": "pinned"}},
-          )
-          run = service.run(dataset_path, destination.parent / (label + "-results"))
-          dataset = reader.load(dataset_path)
-          sequences, independent = {}, []
-          for case in dataset.cases:
-              if case.sequence_id is None:
-                  independent.append((case,))
-              else:
-                  sequences.setdefault(case.sequence_id, []).append(case)
-          groups = [tuple(sorted(values, key=lambda item: (item.sequence_order, item.timestamp_sec, item.case_id))) for _, values in sorted(sequences.items())]
-          groups.extend(independent)
-          samples = []
-          for iteration in range(7):
-              started, count = perf_counter(), 0
-              for group in groups:
-                  detector = OpenCvPhaseDetector()
-                  detector.reset()
-                  for case in group:
-                      detector.detect(case.frame, case.glass, case.frame_index, case.timestamp_sec, debug=False)
-                      count += 1
-              if iteration > 1:
-                  samples.append((perf_counter() - started) / max(1, count))
-          output = {
-              "dataset_fingerprint": dataset.fingerprint,
-              "detector_version": OpenCvPhaseDetector.version,
-              "cpu_median_seconds": median(samples),
-              "cpu_samples_seconds": samples,
-              "payload": run.payload,
-          }
-          destination.write_text(json.dumps(output, sort_keys=True, allow_nan=False), encoding="utf-8")
-          print(json.dumps({key: output[key] for key in ("dataset_fingerprint", "detector_version", "cpu_median_seconds")}, sort_keys=True))
-          PY
-      - name: Run base exact SHA
-        run: |
-          info="${RUNNER_TEMP}/s5b/datasets.json"
-          oil_path="$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["oil_path"])' "${info}")"
-          foam_path="$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["foam_path"])' "${info}")"
-          git checkout --detach "${BASE_SHA}"
-          actual="$(git rev-parse HEAD)"
-          echo "expected_base_sha=${BASE_SHA}"
-          echo "actual_base_checkout_sha=${actual}"
-          test "${actual}" = "${BASE_SHA}"
-          python -m pip install -q -e .
-          OIL_TRACKER_SOURCE_REVISION="${BASE_SHA}" python "${RUNNER_TEMP}/run_benchmark.py" "${oil_path}" "${RUNNER_TEMP}/s5b/base-oil.json" base
-          OIL_TRACKER_SOURCE_REVISION="${BASE_SHA}" python "${RUNNER_TEMP}/run_benchmark.py" "${foam_path}" "${RUNNER_TEMP}/s5b/base-foam.json" base-foam
-      - name: Run feature exact SHA
-        run: |
-          info="${RUNNER_TEMP}/s5b/datasets.json"
-          oil_path="$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["oil_path"])' "${info}")"
-          foam_path="$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["foam_path"])' "${info}")"
-          git checkout --detach "${FEATURE_SHA}"
-          actual="$(git rev-parse HEAD)"
-          echo "expected_feature_sha=${FEATURE_SHA}"
-          echo "actual_feature_checkout_sha=${actual}"
-          test "${actual}" = "${FEATURE_SHA}"
-          python -m pip install -q -e .
-          OIL_TRACKER_SOURCE_REVISION="${FEATURE_SHA}" python "${RUNNER_TEMP}/run_benchmark.py" "${oil_path}" "${RUNNER_TEMP}/s5b/feature-oil.json" feature
-          OIL_TRACKER_SOURCE_REVISION="${FEATURE_SHA}" python "${RUNNER_TEMP}/run_benchmark.py" "${foam_path}" "${RUNNER_TEMP}/s5b/feature-foam.json" feature-foam
-      - name: Compare acceptance metrics
-        run: |
+          gh run view "${FAILED_RUN_ID}" --repo "${GITHUB_REPOSITORY}" --job "${FAILED_JOB_ID}" --log > /tmp/job.log
           python - <<'PY'
-          import json, math, os
           from pathlib import Path
-          root = Path(os.environ["RUNNER_TEMP"]) / "s5b"
-          info = json.loads((root / "datasets.json").read_text())
-          bo = json.loads((root / "base-oil.json").read_text())
-          fo = json.loads((root / "feature-oil.json").read_text())
-          bf = json.loads((root / "base-foam.json").read_text())
-          ff = json.loads((root / "feature-foam.json").read_text())
-          assert bo["dataset_fingerprint"] == fo["dataset_fingerprint"] == info["oil_fingerprint"]
-          assert bf["dataset_fingerprint"] == ff["dataset_fingerprint"] == info["foam_fingerprint"]
-
-          def metric(result, scope, name):
-              payload = result["payload"]
-              summary = payload["micro_aggregate"] if scope == "micro" else payload["category_summaries"][scope]
-              return summary["metrics"][name]["value"]
-
-          error_names = (
-              "raw_oil_mae",
-              "raw_oil_median_absolute_error",
-              "raw_oil_p90_absolute_error",
-              "raw_oil_p95_absolute_error",
-              "smoothed_oil_mae",
-              "smoothed_oil_median_absolute_error",
-              "smoothed_oil_p90_absolute_error",
-              "smoothed_oil_p95_absolute_error",
-          )
-          coverage_names = ("raw_oil_detection_coverage", "smoothed_oil_detection_coverage")
-          be = {name: metric(bo, "micro", name) for name in error_names}
-          fe = {name: metric(fo, "micro", name) for name in error_names}
-          bc = {name: metric(bo, "micro", name) for name in coverage_names}
-          fc = {name: metric(fo, "micro", name) for name in coverage_names}
-          bn = {
-              "raw": metric(bo, "no_interface", "raw_no_interface_false_boundary_rate"),
-              "smoothed": metric(bo, "no_interface", "smoothed_no_interface_false_boundary_rate"),
-          }
-          fn = {
-              "raw": metric(fo, "no_interface", "raw_no_interface_false_boundary_rate"),
-              "smoothed": metric(fo, "no_interface", "smoothed_no_interface_false_boundary_rate"),
-          }
-
-          def temporal(result):
-              cases = {(case["sequence_id"], case["sequence_order"]): case for case in result["payload"]["cases"] if case["sequence_id"] is not None}
-              checks = (
-                  not cases[("transient-false-line", 1)]["raw_oil_boundary_present"],
-                  not cases[("one-frame-dropout", 1)]["raw_oil_boundary_present"],
-                  not cases[("one-frame-dropout", 1)]["smoothed_oil_boundary_present"],
-                  not cases[("multi-frame-dropout", 1)]["raw_oil_boundary_present"],
-                  not cases[("multi-frame-dropout", 2)]["raw_oil_boundary_present"],
-                  not cases[("visible-to-no-interface", 3)]["smoothed_oil_boundary_present"],
-                  cases[("no-interface-to-visible", 3)]["raw_oil_boundary_present"],
-                  cases[("large-jump-new-path", 4)]["raw_oil_boundary_present"],
-                  not cases[("glare-recovery", 1)]["raw_oil_boundary_present"],
-                  not cases[("glare-recovery", 2)]["raw_oil_boundary_present"],
-                  cases[("glare-recovery", 3)]["raw_oil_boundary_present"],
-              )
-              return sum(map(bool, checks)), len(checks)
-
-          bt, ft = temporal(bo), temporal(fo)
-          bp, fp = metric(bf, "micro", "foam_precision"), metric(ff, "micro", "foam_precision")
-          br, fr = metric(bf, "micro", "foam_recall"), metric(ff, "micro", "foam_recall")
-          bs = metric(bf, "transparent_oil_shimmer", "shimmer_foam_false_positive_rate")
-          fs = metric(ff, "transparent_oil_shimmer", "shimmer_foam_false_positive_rate")
-          base_cpu = bo["cpu_median_seconds"] * 1000.0
-          feature_cpu = fo["cpu_median_seconds"] * 1000.0
-          ratio = feature_cpu / max(base_cpu, 1e-12)
-          summary = {
-              "base_sha": os.environ["BASE_SHA"],
-              "feature_sha": os.environ["FEATURE_SHA"],
-              "dataset_fingerprint": info["oil_fingerprint"],
-              "case_count": info["oil_case_count"],
-              "sequence_count": info["oil_sequence_count"],
-              "category_count": info["oil_category_count"],
-              "base_detector": bo["detector_version"],
-              "feature_detector": fo["detector_version"],
-              "base_errors": be,
-              "feature_errors": fe,
-              "base_coverage": bc,
-              "feature_coverage": fc,
-              "base_no_interface_fpr": bn,
-              "feature_no_interface_fpr": fn,
-              "base_temporal_recovery": f"{bt[0]}/{bt[1]}",
-              "feature_temporal_recovery": f"{ft[0]}/{ft[1]}",
-              "base_foam_precision": bp,
-              "feature_foam_precision": fp,
-              "base_foam_recall": br,
-              "feature_foam_recall": fr,
-              "base_shimmer_fpr": bs,
-              "feature_shimmer_fpr": fs,
-              "base_cpu_ms": base_cpu,
-              "feature_cpu_ms": feature_cpu,
-              "cpu_ratio": ratio,
-              "dependency_diff": "none",
-          }
-          print(json.dumps(summary, sort_keys=True, indent=2))
-          Path("/tmp/controlled-summary.json").write_text(json.dumps(summary, sort_keys=True, indent=2), encoding="utf-8")
-
-          assert all(fe[name] is not None and (be[name] is None or fe[name] <= be[name] + 1e-12) for name in error_names)
-          assert all(fc[name] is not None and (bc[name] is None or fc[name] + 1e-12 >= bc[name]) for name in coverage_names)
-          assert all(fn[key] is not None and (bn[key] is None or fn[key] <= bn[key] + 1e-12) for key in ("raw", "smoothed"))
-          strict = any(be[name] is None or fe[name] < be[name] - 1e-12 for name in error_names)
-          strict = strict or any(bc[name] is None or fc[name] > bc[name] + 1e-12 for name in coverage_names)
-          strict = strict or any(bn[key] is None or fn[key] < bn[key] - 1e-12 for key in ("raw", "smoothed"))
-          assert strict
-          assert fn == {"raw": 0.0, "smoothed": 0.0}
-          assert ft[0] == ft[1] and ft[0] >= bt[0]
-          assert fp >= bp and fr >= br and fs <= bs
-          assert fp == 1.0 and fr == 1.0 and fs == 0.0
-          assert math.isfinite(ratio) and ratio <= 1.5
+          text = Path('/tmp/job.log').read_text(encoding='utf-8', errors='replace')
+          start = text.find('{\n')
+          candidates = []
+          while start >= 0:
+              end = text.find('\n}', start)
+              if end < 0:
+                  break
+              block = text[start:end + 2]
+              if '"base_errors"' in block and '"cpu_ratio"' in block:
+                  candidates.append(block)
+              start = text.find('{\n', start + 2)
+          traceback = text[text.rfind('Traceback (most recent call last):'):]
+          body = [
+              '## S5-B final controlled comparison diagnosis',
+              '',
+              'This run only reads the stored final validation log; it does not execute detector tests.',
+              '',
+              '```json',
+              candidates[-1] if candidates else 'controlled summary not found',
+              '```',
+              '',
+              '```text',
+              '\n'.join(traceback.splitlines()[:12]),
+              '```',
+          ]
+          Path('/tmp/body.md').write_text('\n'.join(body), encoding='utf-8')
           PY
-      - name: Publish controlled summary
-        if: success()
-        run: |
-          {
-            echo '## S5-B final controlled comparison'
-            echo
-            echo 'Validation run: `29852761988` focused precursor; this PR run is the final exact-head validation.'
-            echo
-            echo '```json'
-            cat /tmp/controlled-summary.json
-            echo '```'
-          } > /tmp/body.md
+          cat /tmp/body.md
           gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
-
-  canonical:
-    name: canonical-python${{ matrix.python }}
-    needs: controlled
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        python: ['3.13', '3.14']
-    env:
-      QT_QPA_PLATFORM: offscreen
-      FEATURE_SHA: 15249bfc46668cae0560b5459f6f0de2d56041ea
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ env.FEATURE_SHA }}
-      - name: Assert exact feature checkout
-        run: |
-          actual="$(git rev-parse HEAD)"
-          echo "expected_feature_sha=${FEATURE_SHA}"
-          echo "actual_checkout_sha=${actual}"
-          test "${actual}" = "${FEATURE_SHA}"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python }}
-          cache: pip
-          cache-dependency-path: pyproject.toml
-      - name: Install package
-        run: |
-          sudo apt-get update -qq >/dev/null
-          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
-          python -m pip install -q -e '.[dev]'
-      - name: Runtime identity
-        run: |
-          python - <<'PY'
-          import cv2, matplotlib, numpy, PySide6, sys
-          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
-          print("python=" + sys.version)
-          print("PySide6=" + PySide6.__version__)
-          print("numpy=" + numpy.__version__)
-          print("opencv=" + cv2.__version__)
-          print("matplotlib=" + matplotlib.__version__)
-          print("detector_version=" + OpenCvPhaseDetector.version)
-          PY
-      - name: Run canonical full suite
-        shell: bash
-        run: |
-          set -o pipefail
-          QT_QPA_PLATFORM=offscreen python -m pytest -q | tee /tmp/canonical.log
-
-  cleanup:
-    name: cleanup-validation-resources
-    needs: [focused, controlled, canonical]
-    runs-on: ubuntu-24.04
-    env:
-      GH_TOKEN: ${{ github.token }}
-      BASE_SHA: 5f180d02a7aff36591e6f35adf44fca6347bdf9c
-      FEATURE_SHA: 15249bfc46668cae0560b5459f6f0de2d56041ea
-      VALIDATION_BRANCH: validation/s5b-focused-probe
-      FEATURE_BRANCH: feature/oil-boundary-temporal-tracking
-    steps:
-      - name: Verify feature cleanliness and zero artifacts
-        run: |
-          feature_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${FEATURE_BRANCH}" --jq '.object.sha')"
-          echo "expected_feature_sha=${FEATURE_SHA}"
-          echo "actual_feature_branch_sha=${feature_head}"
-          test "${feature_head}" = "${FEATURE_SHA}"
-          workflow_diff="$(gh api "repos/${GITHUB_REPOSITORY}/compare/${BASE_SHA}...${FEATURE_SHA}" --jq '[.files[] | select(.filename | startswith(".github/workflows/"))] | length')"
-          echo "feature_workflow_diff_count=${workflow_diff}"
-          test "${workflow_diff}" = "0"
-          artifact_count="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" --jq '.total_count')"
-          echo "actions_artifact_count=${artifact_count}"
-          test "${artifact_count}" = "0"
-      - name: Close validation PR and delete validation branch
-        run: |
-          gh pr close 55 --repo "${GITHUB_REPOSITORY}"
-          gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${VALIDATION_BRANCH}"
-      - name: Verify validation cleanup
-        run: |
-          state="$(gh pr view 55 --repo "${GITHUB_REPOSITORY}" --json state,mergedAt --jq '.state + ":" + (.mergedAt // "null")')"
-          echo "validation_pr_state=${state}"
-          test "${state}" = "CLOSED:null"
-          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${VALIDATION_BRANCH}" >/tmp/ref.out 2>/tmp/ref.err; then exit 1; fi
-          grep -q '404' /tmp/ref.err
-          if gh api "repos/${GITHUB_REPOSITORY}/contents/.github/workflows/s5b-focused-probe.yml?ref=${VALIDATION_BRANCH}" >/tmp/workflow.out 2>/tmp/workflow.err; then exit 1; fi
-          grep -q '404' /tmp/workflow.err
-          feature_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${FEATURE_BRANCH}" --jq '.object.sha')"
-          echo "post_cleanup_feature_sha=${feature_head}"
-          test "${feature_head}" = "${FEATURE_SHA}"
