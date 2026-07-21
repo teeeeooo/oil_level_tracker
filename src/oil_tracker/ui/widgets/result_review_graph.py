@@ -12,6 +12,7 @@ from oil_tracker.domain.review import ReviewGraphModel
 
 class ResultReviewGraph(QWidget):
     timestampClicked = Signal(float)
+    truthMarkerClicked = Signal(str, float)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -61,6 +62,28 @@ class ResultReviewGraph(QWidget):
                 label="선택 디버그 장면" if marker.selected else "디버그 기록" if index == 0 else None,
             )
             artist.set_gid("debug:" + "|".join(marker.reasons))
+        for index, marker in enumerate(model.truth_markers):
+            artist = self.axes.axvline(
+                marker.timestamp_sec,
+                linestyle=(0, (1.0, 1.4)),
+                linewidth=2.8 if marker.selected else 1.1,
+                alpha=1.0 if marker.selected else 0.55,
+                label=(
+                    "선택 사용자 정답"
+                    if marker.selected
+                    else "사용자 정답"
+                    if index == 0
+                    else None
+                ),
+            )
+            artist.set_gid(
+                "truth:"
+                + marker.annotation_id
+                + ":"
+                + marker.disposition
+                + ":"
+                + "|".join(marker.error_types)
+            )
         self._plot_series(model.oil_air.points, model.oil_air.name, "-")
         if model.foam_front.has_values:
             self._plot_series(model.foam_front.points, model.foam_front.name, "--")
@@ -123,9 +146,23 @@ class ResultReviewGraph(QWidget):
             return
         if math.hypot(float(event.x) - press[0], float(event.y) - press[1]) > 4.0:
             return
+        marker = self._truth_marker_at_pixel(float(event.x))
+        if marker is not None:
+            self.truthMarkerClicked.emit(marker.annotation_id, marker.timestamp_sec)
+            return
         self.timestampClicked.emit(
             min(self.model.analysis_end_sec, max(self.model.analysis_start_sec, value))
         )
+
+    def _truth_marker_at_pixel(self, x_pixel: float):
+        if self.model is None or not self.model.truth_markers:
+            return None
+        candidates = []
+        for marker in self.model.truth_markers:
+            marker_x = float(self.axes.transData.transform((marker.timestamp_sec, 0.0))[0])
+            candidates.append((abs(marker_x - x_pixel), marker.timestamp_sec, marker.annotation_id, marker))
+        distance, _timestamp, _annotation_id, marker = min(candidates)
+        return marker if distance <= 7.0 else None
 
     def closeEvent(self, event) -> None:
         for callback_id in self._callback_ids:

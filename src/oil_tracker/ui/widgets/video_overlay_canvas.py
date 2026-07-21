@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from typing import Callable
 
-import numpy as np
 from PySide6.QtCore import QPointF, QRectF, Qt, Signal
-from PySide6.QtGui import QBrush, QColor, QImage, QPainter, QPainterPath, QPen, QPixmap
+from PySide6.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen, QPixmap
 from PySide6.QtWidgets import (
     QGraphicsEllipseItem,
     QGraphicsItem,
@@ -17,11 +16,13 @@ from PySide6.QtWidgets import (
     QGraphicsView,
 )
 
+from oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter
 from oil_tracker.domain.geometry import EllipseGeometry, Rect
 from oil_tracker.ui.presentation_labels import fill_state_label
 
 
 MIN_ELLIPSE_SIZE = 20.0
+_FRAME_IMAGE_CONVERTER = QtFrameImageConverter()
 
 
 def scene_rect_in_frame(item: QGraphicsItem, rect: QRectF, frame_rect: QRectF) -> QRectF:
@@ -377,27 +378,10 @@ class VideoOverlayCanvas(QGraphicsView):
         self._editable_ellipse_item = None
         self.setMinimumSize(640, 420)
 
-    def set_frame(self, frame: np.ndarray) -> None:
+    def set_frame(self, frame) -> None:
         if frame is None:
             return
-        if frame.ndim == 2:
-            contiguous = np.ascontiguousarray(frame)
-            image = QImage(
-                contiguous.data,
-                contiguous.shape[1],
-                contiguous.shape[0],
-                contiguous.strides[0],
-                QImage.Format.Format_Grayscale8,
-            ).copy()
-        else:
-            rgb = np.ascontiguousarray(frame[:, :, ::-1])
-            image = QImage(
-                rgb.data,
-                rgb.shape[1],
-                rgb.shape[0],
-                rgb.strides[0],
-                QImage.Format.Format_RGB888,
-            ).copy()
+        image = _FRAME_IMAGE_CONVERTER.to_qimage(frame)
         self._frame_size = (image.width(), image.height())
         self._pixmap_item.setPixmap(QPixmap.fromImage(image))
         self._scene.setSceneRect(0, 0, image.width(), image.height())

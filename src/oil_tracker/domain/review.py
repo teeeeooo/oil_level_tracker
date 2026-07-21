@@ -163,6 +163,15 @@ class ReviewGraphDebugMarker:
 
 
 @dataclass(frozen=True)
+class ReviewGraphTruthMarker:
+    timestamp_sec: float
+    annotation_id: str
+    disposition: str
+    error_types: tuple[str, ...] = ()
+    selected: bool = False
+
+
+@dataclass(frozen=True)
 class ReviewGraphModel:
     glass_id: str
     glass_name: str
@@ -177,6 +186,7 @@ class ReviewGraphModel:
     compressor_start_sec: float | None
     cursor_timestamp_sec: float
     debug_markers: tuple[ReviewGraphDebugMarker, ...] = ()
+    truth_markers: tuple[ReviewGraphTruthMarker, ...] = ()
 
 
 @dataclass
