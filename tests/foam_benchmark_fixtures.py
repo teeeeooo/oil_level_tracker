@@ -143,8 +143,8 @@ def controlled_scenes():
             sequence_id="transient-shimmer",
             sequence_order=order,
         )
-    add("clipped-glare", BenchmarkCategory.REFLECTION_OR_BLUR, _glare(*size), FillState.UNKNOWN_REVIEW)
-    add("thin-line", BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE, _line(*size), FillState.UNKNOWN_REVIEW)
+    add("clipped-glare", BenchmarkCategory.REFLECTION_OR_BLUR, _glare(*size), FillState.FULL_NO_INTERFACE)
+    add("thin-line", BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE, _line(*size), FillState.FULL_NO_INTERFACE)
     add("clear-boundary", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(*size, 130), FillState.PARTIAL_VISIBLE, oil_y=130.0)
     add("full-no-interface", BenchmarkCategory.NO_INTERFACE, _uniform(*size, 80), FillState.FULL_NO_INTERFACE)
     add("empty-no-interface", BenchmarkCategory.NO_INTERFACE, _uniform(*size, 190), FillState.EMPTY_NO_INTERFACE)
