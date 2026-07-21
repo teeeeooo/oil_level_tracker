@@ -85,7 +85,7 @@ jobs:
           echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
           exit 0
 
-      - name: Publish matrix result to validation PR
+      - name: Publish compact matrix result
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
@@ -93,8 +93,13 @@ jobs:
           EXACT_SHA: 261a8b32f64817adeafaaec5ea31e644922c833c
         shell: bash
         run: |
+          if [[ "${PYTHON_VERSION}" == "3.13" ]]; then
+            comment_id="5029011517"
+          else
+            comment_id="5029012424"
+          fi
           {
-            echo "### Temporary exact-head validation — Python ${PYTHON_VERSION}"
+            echo "### Final exact-head validation — Python ${PYTHON_VERSION}"
             echo
             echo "- Exact feature SHA: \`${EXACT_SHA}\`"
             echo "- Runner: Ubuntu 24.04"
@@ -102,11 +107,13 @@ jobs:
             echo
             echo '```text'
             cat runtime-versions.txt
-            echo
-            tail -n 180 pytest-output.txt
+            tail -n 1 pytest-output.txt
             echo '```'
           } > validation-comment.md
-          gh pr comment "${{ github.event.pull_request.number }}" --body-file validation-comment.md
+          gh api \
+            --method PATCH \
+            "repos/${GITHUB_REPOSITORY}/issues/comments/${comment_id}" \
+            -f "body=$(cat validation-comment.md)"
 
       - name: Preserve pytest failure conclusion
         if: steps.pytest.outputs.exit_code != '0'
