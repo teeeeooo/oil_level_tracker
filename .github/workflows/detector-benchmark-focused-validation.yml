@@ -1,4 +1,4 @@
-name: Apply focused detector benchmark fixes
+name: Cleanup focused detector benchmark validation
 
 on:
   pull_request:
@@ -6,67 +6,15 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
-  apply-fixes:
+  cleanup:
     runs-on: ubuntu-24.04
     env:
-      EXPECTED_FEATURE_SHA: e4e58b628965d4ea9e40dbfac3657958f0afd5b2
+      GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Checkout feature branch
-        uses: actions/checkout@v4
-        with:
-          repository: teeeeooo/oil_level_tracker
-          ref: feature/detector-benchmark-foundation
-          fetch-depth: 2
-      - name: Assert and apply exact fixes
-        shell: python
-        run: |
-          from pathlib import Path
-          import subprocess
-
-          actual = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-          expected = "e4e58b628965d4ea9e40dbfac3657958f0afd5b2"
-          if actual != expected:
-              raise SystemExit(f"feature head moved: expected={expected}, actual={actual}")
-
-          replacements = {
-              Path("src/oil_tracker/domain/detector_benchmark.py"): [
-                  (
-                      '            "error",\n            "false_positive_rate",',
-                      '            "error",\n            "mae",\n            "median_absolute",\n            "p90_absolute",\n            "p95_absolute",\n            "false_positive_rate",',
-                  ),
-              ],
-              Path("tests/test_regression_dataset_reader.py"): [
-                  (
-                      '    assert [case.timestamp_sec for case in loaded.cases] == [1.0, 2.0, 3.0]\n',
-                      '    assert [case.case_id for case in loaded.cases] == sorted(\n        case.case_id for case in loaded.cases\n    )\n    assert sorted(case.timestamp_sec for case in loaded.cases) == [1.0, 2.0, 3.0]\n',
-                  ),
-                  (
-                      'match="recipe ID|session source-frame|frame index"',
-                      'match="recipe snapshot hash|recipe ID|session source-frame|frame index"',
-                  ),
-              ],
-              Path("tests/test_benchmark_result_writer.py"): [
-                  (
-                      '    previous = _payload(error=10.0, boundary=False)\n    current = _payload(error=5.0, boundary=True)\n    comparison = compare_benchmark_payloads(previous, current)\n',
-                      '    previous = _payload(error=10.0, boundary=True)\n    current = _payload(error=5.0, boundary=True)\n    previous_coverage = previous["micro_aggregate"]["metrics"][\n        "raw_oil_detection_coverage"\n    ]\n    previous_coverage["value"] = 0.0\n    previous_coverage["numerator"] = 0\n    comparison = compare_benchmark_payloads(previous, current)\n',
-                  ),
-              ],
-          }
-          for path, items in replacements.items():
-              text = path.read_text(encoding="utf-8")
-              for old, new in items:
-                  count = text.count(old)
-                  if count != 1:
-                      raise SystemExit(f"replacement expected once, found {count}: {path} / {old[:80]!r}")
-                  text = text.replace(old, new)
-              path.write_text(text, encoding="utf-8")
-      - name: Commit focused fixes
-        run: |
-          git diff --check
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/oil_tracker/domain/detector_benchmark.py tests/test_regression_dataset_reader.py tests/test_benchmark_result_writer.py
-          git commit -m "fix: correct benchmark comparison and test expectations"
-          git push origin HEAD:feature/detector-benchmark-foundation
+      - name: Close temporary validation PR
+        run: gh pr close 30 --repo teeeeooo/oil_level_tracker --comment "Focused diagnostics applied to feature head; cleaning temporary validation resources."
+      - name: Delete temporary validation branch
+        run: gh api --method DELETE repos/teeeeooo/oil_level_tracker/git/refs/heads/validation/detector-benchmark-focused-e4e58b6
