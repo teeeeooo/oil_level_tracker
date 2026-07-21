@@ -52,11 +52,10 @@ class TemporalTracker:
         if foam_update_accepted is None:
             foam_update_accepted = raw_foam_y is not None
 
-        oil = self._smooth(
-            self._oil_values,
+        oil = self._smooth_oil(
             raw_y if oil_update_accepted else None,
         )
-        foam = self._smooth(
+        foam = self._smooth_median(
             self._foam_values,
             raw_foam_y if foam_update_accepted else None,
         )
@@ -64,7 +63,11 @@ class TemporalTracker:
             self.previous_y = oil
         if foam is not None:
             self.previous_foam_y = foam
-        state = proposed_state if review_override else self._stabilize_state(proposed_state)
+        state = (
+            proposed_state
+            if review_override
+            else self._stabilize_state(proposed_state)
+        )
         return oil, foam, state
 
     def clear_oil(self) -> None:
@@ -80,12 +83,52 @@ class TemporalTracker:
         self._pending_state = None
         self._pending_count = 0
 
-    def _smooth(self, values: deque[float], value: float | None) -> float | None:
+    def _smooth_oil(self, value: float | None) -> float | None:
+        """Track causal motion while retaining median suppression for reversals.
+
+        The bounded path has already confidence-gated every value reaching this
+        method. A monotonic accepted path therefore follows the latest measurement
+        instead of accumulating median lag during rapid filling or draining. When
+        accepted samples reverse direction, the bounded median still suppresses an
+        isolated oscillation. No absolute pixel threshold is required.
+        """
+
+        if value is None:
+            return None
+        current = float(value)
+        prior = tuple(self._oil_values)
+        self._oil_values.append(current)
+        self._trim(self._oil_values)
+        if not prior:
+            return current
+        previous = prior[-1]
+        delta = current - previous
+        if delta == 0.0:
+            return self._median(self._oil_values)
+        if len(prior) == 1:
+            return current
+        prior_delta = previous - prior[-2]
+        if prior_delta == 0.0 or delta * prior_delta > 0.0:
+            return current
+        return self._median(self._oil_values)
+
+    def _smooth_median(
+        self,
+        values: deque[float],
+        value: float | None,
+    ) -> float | None:
         if value is None:
             return None
         values.append(float(value))
+        self._trim(values)
+        return self._median(values)
+
+    def _trim(self, values: deque[float]) -> None:
         while len(values) > max(1, self.smoothing_window):
             values.popleft()
+
+    @staticmethod
+    def _median(values: deque[float]) -> float:
         ordered = sorted(values)
         return ordered[len(ordered) // 2]
 
