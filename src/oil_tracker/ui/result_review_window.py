@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QImage
 from PySide6.QtWidgets import (
     QComboBox,
     QFileDialog,
@@ -56,6 +56,8 @@ class ResultReviewWindow(QMainWindow):
         action_service: ResultActionService | None = None,
         debug_repository_factory=DebugTraceRepository,
         debug_case_exporter: DebugCaseExporter | None = None,
+        png_exporter=None,
+        debug_artifact_presenter=None,
         parent=None,
     ) -> None:
         super().__init__(parent)
@@ -65,6 +67,8 @@ class ResultReviewWindow(QMainWindow):
         self.action_service = action_service or ResultActionService()
         self.debug_repository_factory = debug_repository_factory
         self.debug_case_exporter = debug_case_exporter or DebugCaseExporter()
+        self.png_exporter = png_exporter
+        self.debug_artifact_presenter = debug_artifact_presenter
         self.bundle = None
         self.query: ReviewQueryModel | None = None
         self.debug_repository: DebugTraceRepository | None = None
@@ -72,9 +76,11 @@ class ResultReviewWindow(QMainWindow):
         self.selected_event = None
         self.selected_debug_summary = None
         self.selected_debug_record = None
-        self.current_frame = None
+        self.current_source_image = QImage()
+        self.current_render_image = QImage()
         self.current_frame_index = 0
         self.current_time = 0.0
+        self.highlighted_candidate: int | None = None
         self.video_override: Path | None = None
         self.active_video_path: Path | None = None
         self.mode = "general"
@@ -175,7 +181,7 @@ class ResultReviewWindow(QMainWindow):
         self.navigation.previousRequested.connect(lambda: self._navigate_item(-1))
         self.navigation.nextRequested.connect(lambda: self._navigate_item(1))
         self.graph.timestampClicked.connect(self._graph_clicked)
-        self.debug_details.candidateSelected.connect(self.canvas.set_candidate_highlight)
+        self.debug_details.candidateSelected.connect(self._candidate_highlight_changed)
         self.debug_details.artifactRequested.connect(self._load_debug_artifact)
         self.debug_details.exportRequested.connect(self.export_debug_case)
         self.transport.playToggled.connect(self._play_toggled)
@@ -243,9 +249,11 @@ class ResultReviewWindow(QMainWindow):
         self.selected_event = None
         self.selected_debug_summary = None
         self.selected_debug_record = None
-        self.current_frame = None
+        self.current_source_image = QImage()
+        self.current_render_image = QImage()
         self.current_frame_index = 0
         self.current_time = bundle.analysis_start_sec
+        self.highlighted_candidate = None
         self.video_override = None
         self.active_video_path = None
         self.mode = "general"
@@ -329,6 +337,8 @@ class ResultReviewWindow(QMainWindow):
             return
         original = self.bundle.source_video_path or "기록된 경로 없음"
         self.video_path_label.setText(f"분석 당시 경로: {original}")
+        self.current_source_image = QImage()
+        self.current_render_image = QImage()
         self.canvas.set_message("원본 영상을 찾을 수 없음\n저장된 debug artifact는 디버그 panel에서 확인할 수 있습니다.")
         self._set_state("bundle 준비됨 · 영상 없음")
         message = "영상 없이도 관찰창, 이벤트, 검토 목록과 저장된 debug artifact를 확인할 수 있습니다."
@@ -340,43 +350,95 @@ class ResultReviewWindow(QMainWindow):
         self.transport.set_position(self.current_time, metadata.duration_sec, self.current_frame_index)
         self._refresh_markers()
 
-    def _frame_ready(self, frame, frame_index: int, timestamp: float) -> None:
+    def _frame_ready(self, image, frame_index: int, timestamp: float) -> None:
         if self.bundle is None or self.query is None or not self.selected_glass_id:
             return
-        self.current_frame = frame.copy()
+        if not isinstance(image, QImage) or image.isNull():
+            self._playback_failed("Result Review presentation boundary가 빈 Qt image를 반환했습니다.")
+            return
+        self.current_source_image = QImage(image).copy()
         self.current_frame_index = int(frame_index)
         self.current_time = float(timestamp)
-        glass = self.bundle.glass_config(self.selected_glass_id)
-        if glass is None:
-            return
-        overlay = self.query.overlay_at(self.selected_glass_id, self.current_time)
-        active = self.query.active_events(self.selected_glass_id, self.current_time)
-        if self.mode == "debug":
-            record = self.selected_debug_record
-            tolerance = self._debug_tolerance()
-            if record is not None and record.glass_id == self.selected_glass_id and abs(record.timestamp_sec - self.current_time) <= tolerance:
-                self.canvas.set_debug_frame(self.current_frame, glass, record, self.current_time)
-                self.debug_details.set_record(record, self.current_time)
-            else:
-                self.canvas.set_review_frame(self.current_frame, glass, overlay)
-                self.debug_details.summary.setText(
-                    "현재 decoded 시각에는 선택된 debug record가 없습니다.\n"
-                    "일반 tracking overlay만 임시 표시되며 candidate layer는 숨겨졌습니다."
-                )
-        else:
-            self.canvas.set_review_frame(self.current_frame, glass, overlay)
-            self.details.update_details(self.bundle, self.selected_glass_id, overlay, self.current_frame_index, self.current_time, active)
+        self._render_current_scene()
         metadata = self.playback.metadata
         duration = metadata.duration_sec if metadata is not None else 0.0
         self.transport.set_position(self.current_time, duration, self.current_frame_index)
         self.graph.set_cursor(self.current_time)
         self._set_state("재생 중" if self.playback.is_playing else "영상 로드됨 · 일시정지")
 
+    def _render_current_scene(self) -> bool:
+        if (
+            self.bundle is None
+            or self.query is None
+            or not self.selected_glass_id
+            or self.current_source_image.isNull()
+            or self.playback.reader is None
+        ):
+            return False
+        glass = self.bundle.glass_config(self.selected_glass_id)
+        if glass is None:
+            return False
+        overlay = self.query.overlay_at(self.selected_glass_id, self.current_time)
+        active = self.query.active_events(self.selected_glass_id, self.current_time)
+        debug_matches = False
+        try:
+            if self.mode == "debug":
+                record = self.selected_debug_record
+                tolerance = self._debug_tolerance()
+                debug_matches = (
+                    record is not None
+                    and record.glass_id == self.selected_glass_id
+                    and abs(record.timestamp_sec - self.current_time) <= tolerance
+                )
+                if debug_matches:
+                    rendered = self.playback.render_debug(
+                        glass,
+                        record,
+                        self.current_time,
+                        self.highlighted_candidate,
+                    )
+                else:
+                    rendered = self.playback.render_general(glass, overlay)
+            else:
+                rendered = self.playback.render_general(glass, overlay)
+        except Exception as exc:
+            LOGGER.exception("Result Review raster presentation failed")
+            self.statusBar().showMessage(f"현재 장면 overlay를 표시할 수 없습니다: {exc}", 12000)
+            return False
+        if not isinstance(rendered, QImage) or rendered.isNull():
+            self.statusBar().showMessage("현재 장면 overlay adapter가 빈 Qt image를 반환했습니다.", 12000)
+            return False
+        self.current_render_image = QImage(rendered).copy()
+        self.canvas.set_image(self.current_render_image)
+        if self.mode == "debug" and debug_matches:
+            self.debug_details.set_record(self.selected_debug_record, self.current_time)
+        elif self.mode == "debug":
+            self.debug_details.summary.setText(
+                "현재 decoded 시각에는 선택된 debug record가 없습니다.\n"
+                "일반 tracking overlay만 임시 표시되며 candidate layer는 숨겨졌습니다."
+            )
+        else:
+            self.details.update_details(
+                self.bundle,
+                self.selected_glass_id,
+                overlay,
+                self.current_frame_index,
+                self.current_time,
+                active,
+            )
+        return True
+
+    def _candidate_highlight_changed(self, candidate_index: int) -> None:
+        self.highlighted_candidate = int(candidate_index)
+        if self.mode == "debug":
+            self._render_current_scene()
+
     def _glass_changed(self, glass_id: str) -> None:
         if self.bundle is None or self.query is None:
             return
         self.selected_glass_id = glass_id
         self.selected_event = None
+        self.highlighted_candidate = None
         if self.selected_debug_record is not None and self.selected_debug_record.glass_id != glass_id:
             self.selected_debug_summary = None
             self.selected_debug_record = None
@@ -384,22 +446,7 @@ class ResultReviewWindow(QMainWindow):
         self.navigation.refresh_items(self.bundle, self.query, glass_id)
         self._refresh_markers()
         self._rebuild_graph()
-        if self.current_frame is not None:
-            glass = self.bundle.glass_config(glass_id)
-            if glass is not None:
-                overlay = self.query.overlay_at(glass_id, self.current_time)
-                if self.mode == "general":
-                    self.canvas.refresh_overlay(glass, overlay)
-                    self.details.update_details(
-                        self.bundle,
-                        glass_id,
-                        overlay,
-                        self.current_frame_index,
-                        self.current_time,
-                        self.query.active_events(glass_id, self.current_time),
-                    )
-                else:
-                    self.canvas.set_review_frame(self.current_frame, glass, overlay)
+        self._render_current_scene()
 
     def _review_filter_changed(self, _value: str) -> None:
         if self.bundle is None or self.query is None:
@@ -426,24 +473,9 @@ class ResultReviewWindow(QMainWindow):
             self.mode_combo.blockSignals(False)
             requested = "general"
         self.mode = requested
+        self.highlighted_candidate = None
         self.detail_stack.setCurrentWidget(self.debug_details if self.mode == "debug" else self.details)
-        if self.current_frame is not None and self.bundle is not None and self.query is not None:
-            glass = self.bundle.glass_config(self.selected_glass_id)
-            if glass is not None:
-                overlay = self.query.overlay_at(self.selected_glass_id, self.current_time)
-                if self.mode == "debug" and self.selected_debug_record is not None:
-                    self.canvas.set_debug_frame(self.current_frame, glass, self.selected_debug_record, self.current_time)
-                    self.debug_details.set_record(self.selected_debug_record, self.current_time)
-                else:
-                    self.canvas.set_review_frame(self.current_frame, glass, overlay)
-                    self.details.update_details(
-                        self.bundle,
-                        self.selected_glass_id,
-                        overlay,
-                        self.current_frame_index,
-                        self.current_time,
-                        self.query.active_events(self.selected_glass_id, self.current_time),
-                    )
+        self._render_current_scene()
         self._rebuild_graph()
         self._refresh_markers()
 
@@ -465,6 +497,7 @@ class ResultReviewWindow(QMainWindow):
         self.playback.pause()
         self.selected_debug_summary = summary
         self.selected_debug_record = record
+        self.highlighted_candidate = None
         self.mode_combo.setCurrentIndex(1)
         self.debug_details.set_record(record, None)
         self._load_debug_artifact(self.debug_details.current_artifact_key())
@@ -475,10 +508,17 @@ class ResultReviewWindow(QMainWindow):
     def _load_debug_artifact(self, key: str) -> None:
         if self.debug_repository is None or self.selected_debug_record is None or not key:
             return
+        if self.debug_artifact_presenter is None:
+            self.debug_details.set_artifact(key, None, "debug artifact presentation adapter가 구성되지 않았습니다.")
+            return
         try:
-            image = self.debug_repository.load_image(self.selected_debug_record, key)
+            image = self.debug_artifact_presenter.present(
+                self.debug_repository,
+                self.selected_debug_record,
+                key,
+            )
             self.debug_details.set_artifact(key, image)
-        except DebugTraceError as exc:
+        except (DebugTraceError, TypeError, ValueError) as exc:
             self.debug_details.set_artifact(key, None, str(exc))
 
     def _rebuild_graph(self) -> None:
@@ -654,8 +694,11 @@ class ResultReviewWindow(QMainWindow):
             self.sameProfileRequested.emit(self.bundle)
 
     def save_current_png(self) -> None:
-        if self.bundle is None or self.current_frame is None:
+        if self.bundle is None or self.current_render_image.isNull():
             QMessageBox.information(self, "PNG 저장", "저장할 원본 영상 장면이 없습니다.")
+            return
+        if self.png_exporter is None:
+            QMessageBox.critical(self, "PNG 저장 실패", "PNG storage adapter가 구성되지 않았습니다.")
             return
         glass = self.bundle.glass_config(self.selected_glass_id)
         name = _safe_filename(glass.name if glass is not None else self.selected_glass_id)
@@ -664,7 +707,12 @@ class ResultReviewWindow(QMainWindow):
         if not selected:
             return
         try:
-            destination = self.canvas.save_png(selected)
+            destination = self.png_exporter.export(
+                QImage(self.current_render_image).copy(),
+                selected,
+                protected_roots=(self.bundle.root,),
+                overwrite=True,
+            )
         except Exception as exc:
             LOGGER.exception("Review PNG save failed")
             QMessageBox.critical(self, "PNG 저장 실패", f"PNG 이미지를 저장할 수 없습니다: {exc}")
@@ -680,7 +728,7 @@ class ResultReviewWindow(QMainWindow):
         self.folder_action.setEnabled(has_bundle)
         self.same_profile_action.setEnabled(has_bundle)
         self.capture_action.setEnabled(has_bundle and self.selected_event is not None and bool(self.selected_event.capture_path))
-        self.save_png_action.setEnabled(has_bundle and self.current_frame is not None)
+        self.save_png_action.setEnabled(has_bundle and not self.current_render_image.isNull())
 
     def closeEvent(self, event) -> None:
         self.playback.close()
@@ -689,7 +737,9 @@ class ResultReviewWindow(QMainWindow):
             self.debug_repository.close()
             self.debug_repository = None
         self.debug_details.clear()
-        self.current_frame = None
+        self.current_source_image = QImage()
+        self.current_render_image = QImage()
+        self.highlighted_candidate = None
         self.selected_event = None
         self.selected_debug_summary = None
         self.selected_debug_record = None
