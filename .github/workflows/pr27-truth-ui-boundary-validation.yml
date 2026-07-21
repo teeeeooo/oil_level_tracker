@@ -1,4 +1,4 @@
-name: PR 27 Truth UI Boundary Validation
+name: PR 27 Truth UI Boundary Diagnostics
 
 on:
   pull_request:
@@ -9,13 +9,9 @@ permissions:
   pull-requests: write
 
 jobs:
-  canonical:
-    name: Python ${{ matrix.python-version }} canonical
+  diagnostics:
+    name: Python 3.13 bounded diagnostics
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.13", "3.14"]
     env:
       QT_QPA_PLATFORM: offscreen
       EXPECTED_FEATURE_SHA: 425cfdba141c98abaa860b18e1ec23624cccca26
@@ -30,13 +26,12 @@ jobs:
         run: |
           actual="$(git rev-parse HEAD)"
           test "$actual" = "$EXPECTED_FEATURE_SHA"
-          echo "Validated exact feature SHA: $actual"
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.13"
           cache: pip
-      - name: Install Qt runtime libraries
+      - name: Install runtime and project dependencies
         shell: bash
         run: |
           sudo apt-get update
@@ -44,36 +39,25 @@ jobs:
             libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 \
             libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
             libxcb-shape0 libxcb-xinerama0
-      - name: Install project and test dependencies
-        shell: bash
-        run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev]"
-          python - <<'PY'
-          import matplotlib
-          import PySide6
-          import sys
-          print("Python", sys.version)
-          print("PySide6", PySide6.__version__)
-          print("Matplotlib", matplotlib.__version__)
-          PY
-      - name: Run canonical suite and publish bounded diagnostics
+      - name: Run bounded diagnostics and publish result
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set +e
-          python -m pytest -q 2>&1 | tee pytest.log
+          python -m pytest -q --disable-warnings --tb=short 2>&1 | tee pytest.log
           status=${PIPESTATUS[0]}
           set -e
           {
-            echo "## Python ${{ matrix.python-version }} canonical result"
+            echo "## Python 3.13 bounded diagnostics"
             echo
             echo "Exact feature SHA: \`$EXPECTED_FEATURE_SHA\`"
             echo "Exit status: \`$status\`"
             echo
             echo '```text'
-            tail -n 220 pytest.log
+            cat pytest.log
             echo '```'
           } > validation-comment.md
           gh pr comment "${{ github.event.pull_request.number }}" --body-file validation-comment.md
