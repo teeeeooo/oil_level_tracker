@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       QT_QPA_PLATFORM: offscreen
-      EXPECTED_SHA: b0bc31ed79154e3df7f6e5caf20c6b0721d21572
+      EXPECTED_SHA: a6c684214e8452fa6b1ad47e00dfda87fa1fbbf7
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -120,11 +120,18 @@ jobs:
               "signed_above_minus_below",
               "polarity_score",
               "polarity_sign",
+              "persistent_region_contrast",
+              "persistent_signed_above_minus_below",
+              "persistent_polarity_sign",
               "consensus_score",
               "unique_generator_support_count",
+              "state_transition_prior_conflict",
+              "strong_state_transition_override",
               "paired_structure_distance_px",
               "paired_structure_partner_y",
               "paired_structure_opposite_polarity",
+              "paired_boundary_step_preserved",
+              "paired_boundary_merged_y",
               "best_second_path_margin",
           )
           for name, frame, glass in scenes:
