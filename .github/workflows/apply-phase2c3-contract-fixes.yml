@@ -1,0 +1,179 @@
+name: Apply Phase 2C-3 contract fixes
+
+on:
+  push:
+    branches: [feature/result-review-user-truth-regression]
+    paths:
+      - .github/workflows/apply-phase2c3-contract-fixes.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+      - name: Assert exact source lineage
+        run: |
+          test "$(git rev-parse HEAD^)" = "3f63a1aadc622fcea808fd309600e613c79b35bf"
+      - name: Apply exact contract patches
+        shell: python
+        run: |
+          from pathlib import Path
+
+          def replace_once(path, old, new, label):
+              text = path.read_text(encoding="utf-8")
+              if text.count(old) != 1:
+                  raise SystemExit(f"{label}: expected one target, found {text.count(old)}")
+              path.write_text(text.replace(old, new), encoding="utf-8")
+
+          domain = Path("src/oil_tracker/domain/user_truth.py")
+          replace_once(
+              domain,
+              '''        return cls(
+              source_frame_y=_finite(payload.get("source_frame_y"), "source_frame_y"),
+              roi_local_y=_finite(payload.get("roi_local_y"), "roi_local_y"),
+              px_from_zero=_finite(payload.get("px_from_zero"), "px_from_zero"),
+              mm_from_zero=_finite(payload.get("mm_from_zero"), "mm_from_zero"),
+          )''',
+              '''        source_y = _finite(payload.get("source_frame_y"), "source_frame_y")
+          local_y = _finite(payload.get("roi_local_y"), "roi_local_y")
+          if source_y is None or local_y is None:
+              raise TruthValidationError("truth coordinate에는 source_frame_y와 roi_local_y가 필요합니다.")
+          return cls(
+              source_frame_y=source_y,
+              roi_local_y=local_y,
+              px_from_zero=_finite(payload.get("px_from_zero"), "px_from_zero"),
+              mm_from_zero=_finite(payload.get("mm_from_zero"), "mm_from_zero"),
+          )''',
+              "required coordinate fields",
+          )
+          replace_once(
+              domain,
+              '''    local = value - ellipse.bounds.y
+    px = glass.geometry.level_px_from_zero(value)''',
+              '''    crop_origin_y = max(0, int(math.floor(ellipse.bounds.y)))
+    local = value - crop_origin_y
+    px = glass.geometry.level_px_from_zero(value)''',
+              "integer crop origin",
+          )
+
+          window = Path("src/oil_tracker/ui/truth_annotation_window.py")
+          replace_once(
+              window,
+              '''        self.disposition_buttons[TruthDisposition.CORRECTED].setChecked(True)
+        self.confirm_official_button = QPushButton("공식 결과를 정답으로 확인")''',
+              '''        self.disposition_buttons[TruthDisposition.CORRECTED].setChecked(True)
+        self.disposition_buttons[TruthDisposition.CONFIRMED_CORRECT].setEnabled(False)
+        self.confirm_official_button = QPushButton("공식 결과를 정답으로 확인")''',
+              "confirmed action-only entry",
+          )
+          replace_once(
+              window,
+              '''        self.annotation_list.itemActivated.connect(self._annotation_activated)
+        self.disposition_filter.currentIndexChanged.connect(self.draftChanged)
+        self.error_filter.currentIndexChanged.connect(self.draftChanged)
+        self.edit_target.currentIndexChanged.connect(''',
+              '''        self.annotation_list.itemActivated.connect(self._annotation_activated)
+        self.edit_target.currentIndexChanged.connect(''',
+              "filter signal isolation",
+          )
+          replace_once(
+              window,
+              '''            oil_source_y=self.oil_y.value() if self.oil_present.isChecked() else None,
+            foam_present=self.foam_present.isChecked(),
+            foam_source_y=self.foam_y.value() if self.foam_present.isChecked() else None,''',
+              '''            oil_source_y=self.canvas.oil_y if self.oil_present.isChecked() else None,
+            foam_present=self.foam_present.isChecked(),
+            foam_source_y=self.canvas.foam_y if self.foam_present.isChecked() else None,''',
+              "canonical canvas draft coordinates",
+          )
+          replace_once(
+              window,
+              '''    def _refresh_enabled(self) -> None:
+        disposition = next(
+            value for value, button in self.disposition_buttons.items() if button.isChecked()
+        )
+        corrected = disposition is TruthDisposition.CORRECTED
+        confirmed = disposition is TruthDisposition.CONFIRMED_CORRECT
+        self.fill_state.setEnabled(corrected)
+        self.oil_present.setEnabled(corrected)
+        self.foam_present.setEnabled(corrected)
+        self.oil_y.setEnabled(corrected and self.oil_present.isChecked())
+        self.foam_y.setEnabled(corrected and self.foam_present.isChecked())
+        self.remove_oil.setEnabled(corrected and self.oil_present.isChecked())
+        self.remove_foam.setEnabled(corrected and self.foam_present.isChecked())
+        for check in self.error_checks.values():
+            check.setEnabled(not confirmed)
+        self.confirm_official_button.setEnabled(self._official is not None and self._context is not None)
+        self.save_annotation_button.setEnabled(self._context is not None)
+
+
+''',
+              '''    def _refresh_enabled(self) -> None:
+        disposition = next(
+            value for value, button in self.disposition_buttons.items() if button.isChecked()
+        )
+        corrected = disposition is TruthDisposition.CORRECTED
+        confirmed = disposition is TruthDisposition.CONFIRMED_CORRECT
+        self.fill_state.setEnabled(corrected)
+        self.oil_present.setEnabled(corrected)
+        self.foam_present.setEnabled(corrected)
+        self.oil_y.setEnabled(corrected and self.oil_present.isChecked())
+        self.foam_y.setEnabled(corrected and self.foam_present.isChecked())
+        self.remove_oil.setEnabled(corrected and self.oil_present.isChecked())
+        self.remove_foam.setEnabled(corrected and self.foam_present.isChecked())
+        for check in self.error_checks.values():
+            check.setEnabled(not confirmed)
+        self.confirm_official_button.setEnabled(self._official is not None and self._context is not None)
+        error = self._basic_validation_error()
+        self.save_annotation_button.setEnabled(self._context is not None and not error)
+        self.validation_label.setText(error)
+
+    def _basic_validation_error(self) -> str:
+        if self._context is None:
+            return ""
+        disposition = next(
+            value for value, button in self.disposition_buttons.items() if button.isChecked()
+        )
+        if disposition is TruthDisposition.CONFIRMED_CORRECT:
+            return "" if self._official is not None else "현재 장면에 확인할 공식 tracking sample이 없습니다."
+        errors = tuple(value for value, check in self.error_checks.items() if check.isChecked())
+        if not errors:
+            return "detector 오류 유형을 하나 이상 선택해 주세요."
+        if TruthErrorType.OTHER in errors and not self.note.toPlainText().strip():
+            return "기타 오류 유형을 선택한 경우 메모를 입력해 주세요."
+        if disposition is TruthDisposition.UNUSABLE:
+            return ""
+        state = self.fill_state.currentData()
+        visible_states = {
+            FillState.FILLING_VISIBLE,
+            FillState.PARTIAL_VISIBLE,
+            FillState.DRAINING_VISIBLE,
+            FillState.FOAMING_VISIBLE,
+        }
+        if state in visible_states and (not self.oil_present.isChecked() or self.canvas.oil_y is None):
+            return "선택한 fill state에는 실제 유면 경계 Y가 필요합니다."
+        if self.oil_present.isChecked() and self.canvas.oil_y is None:
+            return "유면 경계 Y가 ROI 타원 안에 있어야 합니다."
+        if self.foam_present.isChecked() and self.canvas.foam_y is None:
+            return "거품 경계가 보이는 경우 foam front Y가 필요합니다."
+        return ""
+
+
+''',
+              "save eligibility validation",
+          )
+      - name: Commit fixes and remove temporary workflow
+        run: |
+          rm .github/workflows/apply-phase2c3-contract-fixes.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/oil_tracker/domain/user_truth.py src/oil_tracker/ui/truth_annotation_window.py .github/workflows/apply-phase2c3-contract-fixes.yml
+          test "$(git diff --cached --name-only | sort)" = $'.github/workflows/apply-phase2c3-contract-fixes.yml\nsrc/oil_tracker/domain/user_truth.py\nsrc/oil_tracker/ui/truth_annotation_window.py'
+          git commit -m "fix: enforce truth coordinate and input contracts"
+          git push origin HEAD:feature/result-review-user-truth-regression
