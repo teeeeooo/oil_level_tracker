@@ -73,6 +73,15 @@ class FoamDetectionResult:
     bounding_box_fill_ratio: float
     front_y: float | None
 
+    def __post_init__(self) -> None:
+        if self.decision_status in {
+            FoamDecisionStatus.WEAK_REJECTED,
+            FoamDecisionStatus.AMBIGUOUS,
+            FoamDecisionStatus.GLARE_REJECTED,
+        }:
+            object.__setattr__(self, "candidate", None)
+            object.__setattr__(self, "mask", np.zeros_like(self.mask, dtype=np.uint8))
+
 
 def detect_bottom_connected_foam(
     crop: np.ndarray,
