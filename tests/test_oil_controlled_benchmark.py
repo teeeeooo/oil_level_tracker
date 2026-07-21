@@ -82,14 +82,18 @@ def test_feature_detector_meets_controlled_oil_absolute_gates(tmp_path):
 def test_temporal_side_contracts_are_visible_in_case_results(tmp_path):
     dataset_path, _scenes = generate_controlled_oil_dataset(tmp_path)
     payload = _service().run(dataset_path, tmp_path / "results").payload
-    cases = {case["case_id"]: case for case in payload["cases"]}
+    cases = {
+        (case.get("sequence_id"), case.get("sequence_order")): case
+        for case in payload["cases"]
+        if case.get("sequence_id") is not None
+    }
 
-    assert not cases["one-dropout-1"]["raw_oil_boundary_present"]
-    assert not cases["one-dropout-1"]["smoothed_oil_boundary_present"]
-    assert not cases["multi-dropout-1"]["raw_oil_boundary_present"]
-    assert not cases["multi-dropout-2"]["raw_oil_boundary_present"]
-    assert not cases["visible-to-no-2"]["raw_oil_boundary_present"]
-    assert not cases["visible-to-no-3"]["smoothed_oil_boundary_present"]
-    assert cases["no-to-visible-3"]["raw_oil_boundary_present"]
-    assert cases["large-jump-4"]["raw_oil_boundary_present"]
-    assert not cases["transient-false-1"]["raw_oil_boundary_present"]
+    assert not cases[("one-frame-dropout", 1)]["raw_oil_boundary_present"]
+    assert not cases[("one-frame-dropout", 1)]["smoothed_oil_boundary_present"]
+    assert not cases[("multi-frame-dropout", 1)]["raw_oil_boundary_present"]
+    assert not cases[("multi-frame-dropout", 2)]["raw_oil_boundary_present"]
+    assert not cases[("visible-to-no-interface", 2)]["raw_oil_boundary_present"]
+    assert not cases[("visible-to-no-interface", 3)]["smoothed_oil_boundary_present"]
+    assert cases[("no-interface-to-visible", 3)]["raw_oil_boundary_present"]
+    assert cases[("large-jump-new-path", 4)]["raw_oil_boundary_present"]
+    assert not cases[("transient-false-line", 1)]["raw_oil_boundary_present"]
