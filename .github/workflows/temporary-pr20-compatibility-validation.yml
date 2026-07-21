@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   full-suite:
@@ -43,9 +44,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev]"
 
-      - name: Report runtime versions
+      - name: Record runtime versions
         run: |
-          python - <<'PY'
+          python - <<'PY' > runtime-versions.txt
           import sys
           import PySide6
           import matplotlib
@@ -54,8 +55,45 @@ jobs:
           print(f"PySide6: {PySide6.__version__}")
           print(f"Matplotlib: {matplotlib.__version__}")
           PY
+          cat runtime-versions.txt
 
       - name: Run canonical offscreen suite
+        id: pytest
+        continue-on-error: true
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m pytest -q
+        shell: bash
+        run: |
+          set +e
+          python -m pytest -q > pytest-output.txt 2>&1
+          status=$?
+          cat pytest-output.txt
+          echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
+          exit 0
+
+      - name: Publish matrix result to validation PR
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHON_VERSION: ${{ matrix.python-version }}
+          EXACT_SHA: 261a8b32f64817adeafaaec5ea31e644922c833c
+        shell: bash
+        run: |
+          {
+            echo "### Temporary exact-head validation — Python ${PYTHON_VERSION}"
+            echo
+            echo "- Exact feature SHA: \`${EXACT_SHA}\`"
+            echo "- Runner: Ubuntu 24.04"
+            echo "- Command: \`QT_QPA_PLATFORM=offscreen python -m pytest -q\`"
+            echo
+            echo '```text'
+            cat runtime-versions.txt
+            echo
+            tail -n 180 pytest-output.txt
+            echo '```'
+          } > validation-comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file validation-comment.md
+
+      - name: Preserve pytest failure conclusion
+        if: steps.pytest.outputs.exit_code != '0'
+        run: exit 1
