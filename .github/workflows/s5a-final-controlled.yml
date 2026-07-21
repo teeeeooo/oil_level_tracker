@@ -1,0 +1,231 @@
+name: S5-A final controlled comparison
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  QT_QPA_PLATFORM: offscreen
+  BASE_SHA: 4c7fde39a730755945b657fbcdb2f803a8275faf
+  FEATURE_SHA: 0db9ef11fecc5c41249e26b1644a05e6e88e8410
+
+jobs:
+  controlled-base-versus-feature:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout feature exact SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.FEATURE_SHA }}
+          path: feature
+      - name: Checkout base exact SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BASE_SHA }}
+          path: base
+      - name: Assert exact checkouts and dependency equality
+        run: |
+          feature_actual=$(git -C feature rev-parse HEAD)
+          base_actual=$(git -C base rev-parse HEAD)
+          echo "feature expected=$FEATURE_SHA actual=$feature_actual"
+          echo "base expected=$BASE_SHA actual=$base_actual"
+          test "$feature_actual" = "$FEATURE_SHA"
+          test "$base_actual" = "$BASE_SHA"
+          cmp base/pyproject.toml feature/pyproject.toml
+          echo "dependency diff=none"
+      - name: Install Qt runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Create deterministic CPU measurement script
+        run: |
+          cat > /tmp/measure_detector.py <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import statistics
+          import sys
+          import time
+
+          from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          from oil_tracker.application.services.detector_benchmark_service import _case_groups
+
+          dataset = FilesystemRegressionDatasetReader().load(Path(sys.argv[1]))
+          output = Path(sys.argv[2])
+
+          def run_once() -> float:
+              count = 0
+              started = time.perf_counter()
+              for group in _case_groups(dataset):
+                  detector = OpenCvPhaseDetector()
+                  detector.reset()
+                  for case in group:
+                      detector.detect(
+                          case.frame,
+                          case.glass,
+                          case.frame_index,
+                          case.timestamp_sec,
+                          debug=False,
+                      )
+                      count += 1
+              return (time.perf_counter() - started) / max(1, count)
+
+          for _ in range(3):
+              run_once()
+          samples = [run_once() for _ in range(15)]
+          payload = {
+              "case_count": len(dataset.cases),
+              "warmup_runs": 3,
+              "measured_runs": 15,
+              "median_sec_per_detection": statistics.median(samples),
+          }
+          output.write_text(json.dumps(payload, sort_keys=True), encoding="utf-8")
+          PY
+      - name: Install feature generator
+        run: python -m pip install -e './feature[dev]'
+      - name: Generate controlled external-style dataset once
+        run: |
+          PYTHONPATH="$PWD/feature/tests:$PWD/feature/src" python - <<'PY' | tee /tmp/dataset.log
+          from pathlib import Path
+          from foam_benchmark_fixtures import generate_controlled_foam_dataset
+          from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
+
+          dataset_path, scenes = generate_controlled_foam_dataset(Path('/tmp/s5a-final-controlled'))
+          dataset = FilesystemRegressionDatasetReader().load(dataset_path)
+          Path('/tmp/dataset_path.txt').write_text(str(dataset_path), encoding='utf-8')
+          print('dataset fingerprint:', dataset.fingerprint)
+          print('case count:', len(dataset.cases))
+          print('dataset category count:', len({case.category.value for case in dataset.cases}))
+          print('scene contract count:', len(scenes))
+          PY
+      - name: Run base benchmark and CPU measurement
+        run: |
+          python -m pip install -e ./base
+          python - <<'PY'
+          from pathlib import Path
+          import oil_tracker
+          actual = Path(oil_tracker.__file__).resolve()
+          print('base import path:', actual)
+          assert '/base/' in actual.as_posix()
+          PY
+          DATASET=$(cat /tmp/dataset_path.txt)
+          OIL_TRACKER_SOURCE_REVISION="$BASE_SHA" python -m oil_tracker.cli benchmark --dataset "$DATASET" --output /tmp/base-output > /tmp/base-cli.log
+          BASE_RESULT=$(find /tmp/base-output -name benchmark_result.json -print -quit)
+          test -n "$BASE_RESULT"
+          cp "$BASE_RESULT" /tmp/base_result.json
+          python /tmp/measure_detector.py "$DATASET" /tmp/base_perf.json
+      - name: Run feature benchmark and CPU measurement on same dataset
+        run: |
+          python -m pip install -e ./feature
+          python - <<'PY'
+          from pathlib import Path
+          import oil_tracker
+          actual = Path(oil_tracker.__file__).resolve()
+          print('feature import path:', actual)
+          assert '/feature/' in actual.as_posix()
+          PY
+          DATASET=$(cat /tmp/dataset_path.txt)
+          OIL_TRACKER_SOURCE_REVISION="$FEATURE_SHA" python -m oil_tracker.cli benchmark --dataset "$DATASET" --output /tmp/feature-output --baseline /tmp/base_result.json > /tmp/feature-cli.log
+          FEATURE_RESULT=$(find /tmp/feature-output -name benchmark_result.json -print -quit)
+          test -n "$FEATURE_RESULT"
+          cp "$FEATURE_RESULT" /tmp/feature_result.json
+          python /tmp/measure_detector.py "$DATASET" /tmp/feature_perf.json
+      - name: Assert controlled acceptance and write compact summary
+        run: |
+          python - <<'PY' | tee /tmp/controlled-summary.log
+          import json
+          from pathlib import Path
+
+          base = json.loads(Path('/tmp/base_result.json').read_text(encoding='utf-8'))
+          feature = json.loads(Path('/tmp/feature_result.json').read_text(encoding='utf-8'))
+          base_perf = json.loads(Path('/tmp/base_perf.json').read_text(encoding='utf-8'))
+          feature_perf = json.loads(Path('/tmp/feature_perf.json').read_text(encoding='utf-8'))
+
+          def metric(payload, name, category=None):
+              summary = payload['micro_aggregate'] if category is None else payload['category_summaries'][category]
+              return summary['metrics'][name]['value']
+
+          def oil_signature(payload):
+              return [
+                  (case['case_id'], case['raw_oil_boundary_y'], case['smoothed_oil_boundary_y'])
+                  for case in payload['cases']
+                  if case['category'] == 'clear_oil_boundary'
+              ]
+
+          cpu_ratio = feature_perf['median_sec_per_detection'] / base_perf['median_sec_per_detection']
+          summary = {
+              'base_exact_sha': base['source_revision'],
+              'feature_exact_sha': feature['source_revision'],
+              'dataset_fingerprint': feature['dataset']['fingerprint'],
+              'case_count': feature['case_count'],
+              'dataset_category_count': 6,
+              'benchmark_contract_category_count': len(feature['category_summaries']),
+              'base_detector_version': base['detector']['version'],
+              'feature_detector_version': feature['detector']['version'],
+              'base_settings_fingerprint': base['detector']['settings_fingerprint'],
+              'feature_settings_fingerprint': feature['detector']['settings_fingerprint'],
+              'base_foam_precision': metric(base, 'foam_precision'),
+              'feature_foam_precision': metric(feature, 'foam_precision'),
+              'base_foam_recall': metric(base, 'foam_recall'),
+              'feature_foam_recall': metric(feature, 'foam_recall'),
+              'base_white_foam_recall': metric(base, 'foam_recall', 'white_foam'),
+              'feature_white_foam_recall': metric(feature, 'foam_recall', 'white_foam'),
+              'base_shimmer_false_positive_rate': metric(base, 'shimmer_foam_false_positive_rate', 'transparent_oil_shimmer'),
+              'feature_shimmer_false_positive_rate': metric(feature, 'shimmer_foam_false_positive_rate', 'transparent_oil_shimmer'),
+              'base_white_fill_state_accuracy': metric(base, 'fill_state_accuracy', 'white_foam'),
+              'feature_white_fill_state_accuracy': metric(feature, 'fill_state_accuracy', 'white_foam'),
+              'base_clear_fill_state_accuracy': metric(base, 'fill_state_accuracy', 'clear_oil_boundary'),
+              'feature_clear_fill_state_accuracy': metric(feature, 'fill_state_accuracy', 'clear_oil_boundary'),
+              'base_raw_no_interface_false_boundary_rate': metric(base, 'raw_no_interface_false_boundary_rate', 'no_interface'),
+              'feature_raw_no_interface_false_boundary_rate': metric(feature, 'raw_no_interface_false_boundary_rate', 'no_interface'),
+              'base_smoothed_no_interface_false_boundary_rate': metric(base, 'smoothed_no_interface_false_boundary_rate', 'no_interface'),
+              'feature_smoothed_no_interface_false_boundary_rate': metric(feature, 'smoothed_no_interface_false_boundary_rate', 'no_interface'),
+              'base_oil_signature': oil_signature(base),
+              'feature_oil_signature': oil_signature(feature),
+              'base_cpu_median_sec_per_detection': base_perf['median_sec_per_detection'],
+              'feature_cpu_median_sec_per_detection': feature_perf['median_sec_per_detection'],
+              'cpu_ratio': cpu_ratio,
+              'warmup_runs': feature_perf['warmup_runs'],
+              'measured_runs': feature_perf['measured_runs'],
+              'dependency_diff': 'none',
+          }
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          assert base['dataset']['fingerprint'] == feature['dataset']['fingerprint']
+          assert summary['feature_shimmer_false_positive_rate'] == 0.0
+          assert summary['feature_shimmer_false_positive_rate'] < summary['base_shimmer_false_positive_rate']
+          assert summary['feature_foam_precision'] >= summary['base_foam_precision']
+          assert summary['feature_foam_recall'] >= summary['base_foam_recall']
+          assert summary['feature_white_foam_recall'] >= 0.80
+          assert summary['feature_white_fill_state_accuracy'] >= summary['base_white_fill_state_accuracy']
+          assert summary['feature_clear_fill_state_accuracy'] >= summary['base_clear_fill_state_accuracy']
+          assert summary['feature_oil_signature'] == summary['base_oil_signature']
+          assert summary['feature_raw_no_interface_false_boundary_rate'] <= summary['base_raw_no_interface_false_boundary_rate']
+          assert summary['feature_smoothed_no_interface_false_boundary_rate'] <= summary['base_smoothed_no_interface_false_boundary_rate']
+          assert cpu_ratio <= 1.5
+          assert base['benchmark_schema_version'] == feature['benchmark_schema_version'] == 1
+          assert base['category_contract'] == feature['category_contract']
+          assert feature['previous_baseline_comparison']['status'] == 'complete'
+          print('final controlled acceptance: PASS')
+          PY
+      - name: Publish final controlled result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          {
+            echo '### Final controlled base-versus-feature validation'
+            echo
+            echo '```text'
+            test -f /tmp/dataset.log && cat /tmp/dataset.log
+            test -f /tmp/controlled-summary.log && cat /tmp/controlled-summary.log
+            echo '```'
+          } > /tmp/comment.md
+          gh pr comment "$PR_NUMBER" --repo teeeeooo/oil_level_tracker --body-file /tmp/comment.md
