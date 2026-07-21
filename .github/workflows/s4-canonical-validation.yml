@@ -1,0 +1,64 @@
+name: S4 canonical validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  canonical:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.13', '3.14']
+    env:
+      EXPECTED_SHA: 757ceb7f8768107809a7106d43311cfb094713b2
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - name: Checkout exact feature SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_SHA }}
+          fetch-depth: 1
+      - name: Assert exact checkout
+        run: |
+          echo "expected exact SHA=$EXPECTED_SHA"
+          echo "actual checkout SHA=$(git rev-parse HEAD)"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - name: Install runner display and Korean font dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-noto-cjk libegl1 libgl1 libxkbcommon-x11-0
+          fc-cache -f
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip -q
+          python -m pip install -e '.[dev]' -q
+      - name: Print environment and selected font
+        run: |
+          python - <<'PY'
+          import matplotlib, numpy, cv2, PySide6, sys
+          from oil_tracker.visualization.matplotlib_font import resolve_matplotlib_font
+          selected = resolve_matplotlib_font()
+          print('Python=', sys.version)
+          print('PySide6=', PySide6.__version__)
+          print('NumPy=', numpy.__version__)
+          print('OpenCV=', cv2.__version__)
+          print('Matplotlib=', matplotlib.__version__)
+          print('selected Korean font=', selected.family)
+          print('font resolver source=', selected.source)
+          print('font supports Hangul=', selected.supports_hangul)
+          PY
+      - name: Run canonical suite
+        run: |
+          python -m pytest -q 2>&1 | tee /tmp/canonical-pytest.txt
+          printf 'missing Hangul glyph warning count='
+          grep -Ec 'Glyph .* missing from font' /tmp/canonical-pytest.txt || true
