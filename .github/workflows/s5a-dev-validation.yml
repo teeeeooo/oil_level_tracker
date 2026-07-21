@@ -10,7 +10,7 @@ permissions:
 
 env:
   QT_QPA_PLATFORM: offscreen
-  EXPECTED_SHA: 8248f3eff5bc8304acd2dcb8bbbd1c0f98b667b7
+  EXPECTED_SHA: 2eecc6f3292d1ccf8085b288529034066a8fed46
 
 jobs:
   diagnostics:
@@ -50,10 +50,10 @@ jobs:
             tests/test_benchmark_cli.py > /tmp/pytest.log 2>&1
           code=$?
           {
-            echo '### S5-A bounded pytest diagnostic after Qt runtime install'
+            echo '### S5-A bounded pytest diagnostic after controlled truth correction'
             echo
             echo '```text'
-            tail -n 220 /tmp/pytest.log
+            tail -n 260 /tmp/pytest.log
             echo '```'
             echo
             echo "exit_code=$code"
