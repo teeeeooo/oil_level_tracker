@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   canonical:
@@ -17,6 +18,7 @@ jobs:
     env:
       EXPECTED_SHA: 757ceb7f8768107809a7106d43311cfb094713b2
       QT_QPA_PLATFORM: offscreen
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout exact feature SHA
         uses: actions/checkout@v4
@@ -42,23 +44,38 @@ jobs:
         run: |
           python -m pip install --upgrade pip -q
           python -m pip install -e '.[dev]' -q
-      - name: Print environment and selected font
+      - name: Record environment and selected font
         run: |
-          python - <<'PY'
+          python - <<'PY' | tee /tmp/canonical-env.txt
           import matplotlib, numpy, cv2, PySide6, sys
           from oil_tracker.visualization.matplotlib_font import resolve_matplotlib_font
           selected = resolve_matplotlib_font()
-          print('Python=', sys.version)
-          print('PySide6=', PySide6.__version__)
-          print('NumPy=', numpy.__version__)
-          print('OpenCV=', cv2.__version__)
-          print('Matplotlib=', matplotlib.__version__)
-          print('selected Korean font=', selected.family)
-          print('font resolver source=', selected.source)
-          print('font supports Hangul=', selected.supports_hangul)
+          print('Python=' + sys.version.split()[0])
+          print('PySide6=' + PySide6.__version__)
+          print('NumPy=' + numpy.__version__)
+          print('OpenCV=' + cv2.__version__)
+          print('Matplotlib=' + matplotlib.__version__)
+          print('selected_font=' + selected.family)
+          print('font_source=' + selected.source)
+          print('font_supports_Hangul=' + str(selected.supports_hangul))
           PY
       - name: Run canonical suite
         run: |
           python -m pytest -q 2>&1 | tee /tmp/canonical-pytest.txt
-          printf 'missing Hangul glyph warning count='
-          grep -Ec 'Glyph .* missing from font' /tmp/canonical-pytest.txt || true
+      - name: Publish compact canonical evidence
+        run: |
+          glyph_count=$(grep -Ec 'Glyph .* missing from font' /tmp/canonical-pytest.txt || true)
+          {
+            echo "### S4 canonical Python ${{ matrix.python-version }} exact-head evidence"
+            echo
+            echo "- run_id: $GITHUB_RUN_ID"
+            echo "- expected_sha: $EXPECTED_SHA"
+            echo "- actual_sha: $(git rev-parse HEAD)"
+            echo "- missing_hangul_glyph_warnings: $glyph_count"
+            echo
+            echo '```text'
+            cat /tmp/canonical-env.txt
+            tail -n 8 /tmp/canonical-pytest.txt
+            echo '```'
+          } > /tmp/canonical-comment.md
+          gh pr comment 44 --body-file /tmp/canonical-comment.md
