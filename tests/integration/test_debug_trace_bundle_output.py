@@ -14,12 +14,12 @@ from oil_tracker.domain.session import AnalysisSession, DebugTraceLevel, VideoMe
 
 
 class _NoCaptures:
-    def create_event_captures(self, *_args):
+    def create_event_captures(self, *_args, **_kwargs):
         return None
 
 
 class _Graphs:
-    def render(self, _result, directory):
+    def render(self, _result, directory, _recipe=None, **_kwargs):
         directory.mkdir(parents=True, exist_ok=True)
         (directory / "combined_levels.png").write_bytes(b"graph")
         return {"combined": "graphs/combined_levels.png"}
