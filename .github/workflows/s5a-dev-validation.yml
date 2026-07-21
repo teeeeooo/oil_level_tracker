@@ -1,0 +1,62 @@
+name: S5-A development validation 2
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-24.04
+    env:
+      QT_QPA_PLATFORM: offscreen
+      EXPECTED_SHA: 0d6250d0e3c07d51626dff3d818234f0cef8d27b
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_SHA }}
+      - name: Assert exact feature checkout
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Foam evidence
+        continue-on-error: true
+        run: python -m pytest -q tests/test_foam_evidence.py
+      - name: Foam temporal gate
+        continue-on-error: true
+        run: python -m pytest -q tests/test_foam_temporal_gate.py
+      - name: Foam fill-state policy
+        continue-on-error: true
+        run: python -m pytest -q tests/test_foam_fill_state_policy.py
+      - name: Foam settings
+        continue-on-error: true
+        run: python -m pytest -q tests/test_foam_settings.py
+      - name: Benchmark metrics
+        continue-on-error: true
+        run: python -m pytest -q tests/test_detector_benchmark_metrics.py
+      - name: Benchmark runner
+        continue-on-error: true
+        run: python -m pytest -q tests/test_detector_benchmark_runner.py
+      - name: Benchmark integration
+        continue-on-error: true
+        run: python -m pytest -q tests/test_detector_benchmark_integration.py
+      - name: Benchmark CLI
+        continue-on-error: true
+        run: python -m pytest -q tests/test_benchmark_cli.py
+      - name: Final focused assertion
+        run: |
+          python -m pytest -q \
+            tests/test_foam_evidence.py \
+            tests/test_foam_temporal_gate.py \
+            tests/test_foam_fill_state_policy.py \
+            tests/test_foam_settings.py \
+            tests/test_detector_benchmark_metrics.py \
+            tests/test_detector_benchmark_runner.py \
+            tests/test_detector_benchmark_integration.py \
+            tests/test_benchmark_cli.py
