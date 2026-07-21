@@ -95,7 +95,7 @@ class InspectionRecipe:
         rx, ry = width * 0.12, height * 0.27
         ellipse = EllipseGeometry(width * 0.5, height * 0.5, rx, ry)
         geometry = GlassGeometry(ellipse=ellipse, zero_line_y=height * 0.55, margin_ratio=0.08)
-        return GlassInspectionConfig(id=str(uuid4()), name=f"유면 관찰창 {index}", geometry=geometry)
+        return GlassInspectionConfig(id=str(uuid4()), name=f"Glass {index}", geometry=geometry)
 
     def touch(self) -> None:
         self.updated_at = utc_now_iso()
