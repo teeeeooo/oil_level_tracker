@@ -8,9 +8,6 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 UI_ROOT = ROOT / "src" / "oil_tracker" / "ui"
-ALLOWED_EXISTING_UI_IMAGE_IMPORTS = {
-    "src/oil_tracker/ui/widgets/result_review_canvas.py",
-}
 _FORBIDDEN_IMPORT_ROOTS = {"cv2", "numpy"}
 
 
@@ -35,7 +32,7 @@ def _ui_import_violations() -> dict[str, set[str]]:
     for path in sorted(UI_ROOT.rglob("*.py")):
         relative = path.relative_to(ROOT).as_posix()
         forbidden = _forbidden_imports(path.read_text(encoding="utf-8"))
-        if forbidden and relative not in ALLOWED_EXISTING_UI_IMAGE_IMPORTS:
+        if forbidden:
             violations[relative] = forbidden
     return violations
 
@@ -54,39 +51,73 @@ def test_ast_import_guard_detects_forbidden_ui_dependencies(source, expected):
     assert _forbidden_imports(source) == expected
 
 
-def test_ui_does_not_add_new_cv2_or_numpy_imports_beyond_temporary_debt():
+def test_entire_ui_tree_has_no_cv2_or_numpy_imports():
     assert _ui_import_violations() == {}
 
 
-def test_legacy_result_review_canvas_is_the_only_temporary_allowlisted_violation():
-    assert ALLOWED_EXISTING_UI_IMAGE_IMPORTS == {
-        "src/oil_tracker/ui/widgets/result_review_canvas.py",
-    }
-    legacy = ROOT / next(iter(ALLOWED_EXISTING_UI_IMAGE_IMPORTS))
-    assert _forbidden_imports(legacy.read_text(encoding="utf-8")) == {"cv2", "numpy"}
+def test_temporary_ui_raster_allowlist_is_removed():
+    source = Path(__file__).read_text(encoding="utf-8")
+    assert "ALLOWED_EXISTING_UI_IMAGE_IMPORTS" not in source
+    assert "temporary allowlist" not in source.lower()
 
 
-def test_truth_annotation_ui_files_have_no_numpy_or_cv2_imports():
+def test_result_review_canvas_has_only_qt_display_responsibility():
+    path = UI_ROOT / "widgets" / "result_review_canvas.py"
+    source = path.read_text(encoding="utf-8")
+    forbidden_fragments = (
+        "ReviewOverlayRenderer",
+        "ReviewDebugOverlayRenderer",
+        "QtFrameImageConverter",
+        "imencode",
+        "tofile",
+        "write_bytes",
+        "mkdir",
+        "os.replace",
+        "set_review_frame",
+        "set_debug_frame",
+        "save_png",
+        "rendered_image",
+        "[:, :, ::-1]",
+        "cv2.",
+        "np.",
+    )
+    assert {value for value in forbidden_fragments if value in source} == set()
+    assert "def set_image(" in source
+    assert "QImage(image).copy()" in source
+
+
+def test_result_review_ui_does_not_construct_raster_adapters():
     paths = (
-        UI_ROOT / "widgets" / "truth_annotation_canvas.py",
-        UI_ROOT / "truth_annotation_window.py",
+        UI_ROOT / "result_review_window.py",
         UI_ROOT / "truth_annotation_coordinator.py",
+        UI_ROOT / "widgets" / "result_debug_panel.py",
+        UI_ROOT / "widgets" / "result_review_canvas.py",
     )
-    assert {path.name: _forbidden_imports(path.read_text(encoding="utf-8")) for path in paths} == {
-        "truth_annotation_canvas.py": set(),
-        "truth_annotation_window.py": set(),
-        "truth_annotation_coordinator.py": set(),
+    forbidden = (
+        "ReviewOverlayRenderer(",
+        "ReviewDebugOverlayRenderer(",
+        "QtFrameImageConverter(",
+        "ReviewPngExporter(",
+    )
+    violations = {
+        path.relative_to(ROOT).as_posix(): [value for value in forbidden if value in path.read_text(encoding="utf-8")]
+        for path in paths
     }
+    assert violations == {path.relative_to(ROOT).as_posix(): [] for path in paths}
 
 
-def test_presentation_adapter_numpy_import_is_outside_ui_boundary():
-    adapter = (
-        ROOT
-        / "src"
-        / "oil_tracker"
-        / "adapters"
-        / "presentation"
-        / "qt_frame_image_converter.py"
+def test_raster_adapters_are_outside_ui_and_domain_application_boundaries():
+    adapter_paths = (
+        ROOT / "src" / "oil_tracker" / "adapters" / "vision" / "review_overlay_renderer.py",
+        ROOT / "src" / "oil_tracker" / "adapters" / "vision" / "review_debug_overlay_renderer.py",
+        ROOT / "src" / "oil_tracker" / "adapters" / "presentation" / "review_frame_presenter.py",
+        ROOT / "src" / "oil_tracker" / "adapters" / "storage" / "review_png_exporter.py",
     )
-    assert _forbidden_imports(adapter.read_text(encoding="utf-8")) == {"numpy"}
-    assert UI_ROOT not in adapter.parents
+    assert all(path.is_file() and UI_ROOT not in path.parents for path in adapter_paths)
+    for path in (
+        ROOT / "src" / "oil_tracker" / "domain" / "review.py",
+        ROOT / "src" / "oil_tracker" / "application" / "services" / "review_query.py",
+    ):
+        source = path.read_text(encoding="utf-8")
+        assert _forbidden_imports(source) == set()
+        assert "PySide6" not in source
