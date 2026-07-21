@@ -247,7 +247,7 @@ def test_decode_and_detector_failures_are_recorded_and_later_samples_continue():
 
     reasons = [sample.reason for sample in result.samples]
     assert any("영상 장면을 읽지 못했습니다" in reason for reason in reasons)
-    assert any("관찰창 검출 중 오류" in reason for reason in reasons)
+    assert any("Glass 검출 중 오류" in reason for reason in reasons)
     assert len(result.samples) > 2
     assert result.samples[-1].sample_point.actual_timestamp > result.samples[0].sample_point.actual_timestamp
     assert reader.closed
