@@ -1,52 +1,45 @@
-name: S5-A full-suite diagnostic
+name: S5-A bounded connectivity patch
 
 on:
   pull_request:
     branches: [main]
 
 permissions:
-  contents: read
-  pull-requests: write
+  contents: write
 
 env:
-  QT_QPA_PLATFORM: offscreen
-  EXPECTED_SHA: 8ddb94931b1f7e5a73aecf0b13a076401a0217f9
+  EXPECTED_FEATURE_SHA: 8ddb94931b1f7e5a73aecf0b13a076401a0217f9
 
 jobs:
-  canonical-313:
+  patch-feature:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ env.EXPECTED_SHA }}
-      - name: Assert exact feature checkout
+          ref: feature/foam-shimmer-discrimination
+          fetch-depth: 0
+      - name: Assert and apply exact relative-kernel replacement
         run: |
           actual=$(git rev-parse HEAD)
-          echo "expected=$EXPECTED_SHA actual=$actual"
-          test "$actual" = "$EXPECTED_SHA"
-      - name: Install Qt runtime libraries
-        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: pip
-      - run: python -m pip install -e '.[dev]'
-      - name: Run suite and publish bounded tail
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          echo "expected feature SHA=$EXPECTED_FEATURE_SHA"
+          echo "actual feature SHA=$actual"
+          test "$actual" = "$EXPECTED_FEATURE_SHA"
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/oil_tracker/adapters/vision/foam_front_detector.py')
+          text = path.read_text(encoding='utf-8')
+          old = 'close_size = _odd_kernel(max(3, int(round(base * 0.025))), upper=9)'
+          new = 'close_size = _odd_kernel(max(3, int(round(base * 0.040))), upper=9)'
+          if text.count(old) != 1:
+              raise SystemExit('expected relative close-kernel expression was not unique')
+          path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+      - name: Commit and push feature patch
         run: |
-          set +e
-          python -m pytest -q > /tmp/pytest.log 2>&1
-          code=$?
-          {
-            echo '### Full suite diagnostic after rejected-candidate fix'
-            echo
-            echo '```text'
-            tail -n 420 /tmp/pytest.log
-            echo '```'
-            echo
-            echo "exit_code=$code"
-          } > /tmp/comment.md
-          gh pr comment "$PR_NUMBER" --body-file /tmp/comment.md
-          exit "$code"
+          git diff --check
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/oil_tracker/adapters/vision/foam_front_detector.py
+          git commit -m "fix: connect relative Foam texture support"
+          git push origin HEAD:feature/foam-shimmer-discrimination
