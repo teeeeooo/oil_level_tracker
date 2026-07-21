@@ -234,14 +234,12 @@ def test_wheel_safe_controls_do_not_change_values_and_keep_keyboard_editing(qtbo
         after = control.currentIndex() if hasattr(control, "currentIndex") else control.value()
         assert after == before
 
-    ignored = _wheel_event()
-    panel.zero.wheelEvent(ignored)
-    assert not ignored.isAccepted()
-
     scrollbar = panel.scroll.verticalScrollBar()
     assert scrollbar.maximum() > 0
     scrollbar.setValue(0)
-    QApplication.sendEvent(panel.zero, _wheel_event())
+    event = _wheel_event()
+    QApplication.sendEvent(panel.zero, event)
+    assert event.isAccepted()
     assert scrollbar.value() > 0
 
     panel.canny_low.setValue(10)
