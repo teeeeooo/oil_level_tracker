@@ -153,21 +153,32 @@ class ResultDebugPanel(QWidget):
             f"{record.glass_name or record.glass_id} · trace {record.timestamp_sec:.3f}초 · 장면 {record.frame_index}{delta_text}\n"
             f"저장 사유: {', '.join(record.capture_reasons) or '-'}"
         )
-        self.candidates.setRowCount(len(record.candidates))
-        for row, candidate in enumerate(record.candidates):
-            for column, (key, _title) in enumerate(_COLUMNS):
-                value = candidate.get(key)
-                if isinstance(value, float):
-                    text = f"{value:.4f}"
-                elif key in {"selected", "rejected"}:
-                    text = "예" if value else "아니오"
-                else:
-                    text = "-" if value in (None, "") else str(value)
-                item = QTableWidgetItem(text)
-                if key == "rank":
-                    item.setData(Qt.ItemDataRole.UserRole, row)
-                self.candidates.setItem(row, column, item)
-        self.candidates.resizeColumnsToContents()
+        previous_blocked = self.candidates.blockSignals(True)
+        try:
+            self.candidates.setRowCount(len(record.candidates))
+            for row, candidate in enumerate(record.candidates):
+                for column, (key, _title) in enumerate(_COLUMNS):
+                    value = candidate.get(key)
+                    if isinstance(value, float):
+                        text = f"{value:.4f}"
+                    elif key in {"selected", "rejected"}:
+                        text = "예" if value else "아니오"
+                    else:
+                        text = "-" if value in (None, "") else str(value)
+                    item = QTableWidgetItem(text)
+                    if key == "rank":
+                        item.setData(Qt.ItemDataRole.UserRole, row)
+                    self.candidates.setItem(row, column, item)
+            self.candidates.resizeColumnsToContents()
+            if record.candidates:
+                self.candidates.selectRow(0)
+        finally:
+            self.candidates.blockSignals(previous_blocked)
+        if record.candidates:
+            self._show_candidate(0, emit_selection=False)
+        else:
+            self.candidate_detail.clear()
+
         state_lines = [
             f"previous state: {_display(record.state.get('previous_state'))}",
             f"proposed state: {_display(record.state.get('proposed_state'))}",
@@ -200,8 +211,6 @@ class ResultDebugPanel(QWidget):
             state_lines.append("\ntrace warnings:\n" + "\n".join(record.warnings))
         self.state_detail.setPlainText("\n".join(state_lines))
         self.export_button.setEnabled(True)
-        if record.candidates:
-            self.candidates.selectRow(0)
         self._refresh_artifact_availability()
         self._artifact_changed(self.artifact_combo.currentIndex())
 
@@ -247,6 +256,9 @@ class ResultDebugPanel(QWidget):
         )
 
     def _candidate_changed(self, row: int, _column: int, _previous_row: int, _previous_column: int) -> None:
+        self._show_candidate(row, emit_selection=True)
+
+    def _show_candidate(self, row: int, *, emit_selection: bool) -> None:
         if self._record is None or row < 0 or row >= len(self._record.candidates):
             self.candidate_detail.clear()
             return
@@ -266,7 +278,8 @@ class ResultDebugPanel(QWidget):
         lines.append("\npenalties:")
         lines.extend(f"  {key}: {_display(value)}" for key, value in sorted((candidate.get("penalties") or {}).items()))
         self.candidate_detail.setPlainText("\n".join(lines))
-        self.candidateSelected.emit(row)
+        if emit_selection:
+            self.candidateSelected.emit(row)
 
     def _artifact_changed(self, _index: int) -> None:
         if self._record is not None:
