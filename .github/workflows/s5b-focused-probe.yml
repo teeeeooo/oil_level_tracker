@@ -29,6 +29,7 @@ jobs:
           - group: integration
             files: >-
               tests/test_oil_detector_integration.py
+              tests/test_oil_fill_state_classifier.py
               tests/test_oil_settings.py
               tests/test_ui_import_boundaries.py
           - group: controlled-oil
@@ -43,7 +44,7 @@ jobs:
               tests/test_foam_controlled_benchmark.py
     env:
       QT_QPA_PLATFORM: offscreen
-      EXPECTED_SHA: 2be95e29964bacb272e3030d9bbdc1c8f29d164f
+      EXPECTED_SHA: 3bdf7f5f8f8925eef372aa0f2bf3c797735d7139
       TEST_FILES: ${{ matrix.files }}
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -81,6 +82,6 @@ jobs:
               tail -n 120 /tmp/pytest.log
               echo '```'
             } > /tmp/comment.md
-            gh pr comment 55 --body-file /tmp/comment.md
+            gh pr comment 55 --body-file /tmp/comment.md || true
           fi
           exit ${status}
