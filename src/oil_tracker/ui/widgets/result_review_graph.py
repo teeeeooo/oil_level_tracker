@@ -8,6 +8,10 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 
 from oil_tracker.domain.review import ReviewGraphModel
+from oil_tracker.visualization.matplotlib_font import (
+    apply_font_to_axes,
+    configure_matplotlib_korean_font,
+)
 
 
 class ResultReviewGraph(QWidget):
@@ -19,6 +23,7 @@ class ResultReviewGraph(QWidget):
         self.setObjectName("resultReviewGraph")
         self.setMinimumHeight(190)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self._font_selection = configure_matplotlib_korean_font()
         self.figure = Figure(figsize=(8.0, 2.8), tight_layout=True)
         self.canvas = FigureCanvasQTAgg(self.figure)
         self.axes = self.figure.add_subplot(111)
@@ -39,11 +44,29 @@ class ResultReviewGraph(QWidget):
         self.model = model
         self.series_rebuild_count += 1
         self.axes.clear()
-        self.axes.set_title(f"{model.glass_name} tracking")
+        self.axes.set_title(f"{model.glass_name} 유면 추적")
         self.axes.set_xlabel("시간 (초)")
         self.axes.set_ylabel(model.y_axis_label)
         self.axes.set_xlim(model.analysis_start_sec, model.analysis_end_sec)
-        self.axes.axhline(0.0, linestyle=":", linewidth=1.2, label="기준점")
+        if model.axis_lower is not None and model.axis_upper is not None:
+            self.axes.set_ylim(model.axis_lower, model.axis_upper)
+        self.axes.axhline(0.0, linestyle=":", linewidth=1.2, label="기준선")
+        if model.analysis_top_boundary_value is not None:
+            self.axes.axhline(
+                model.analysis_top_boundary_value,
+                linestyle="--",
+                linewidth=0.9,
+                alpha=0.65,
+                label="분석 영역 위쪽 경계",
+            )
+        if model.analysis_bottom_boundary_value is not None:
+            self.axes.axhline(
+                model.analysis_bottom_boundary_value,
+                linestyle="--",
+                linewidth=0.9,
+                alpha=0.65,
+                label="분석 영역 아래쪽 경계",
+            )
         self.axes.axvline(model.analysis_start_sec, linewidth=0.8, alpha=0.45, label="분석 범위")
         self.axes.axvline(model.analysis_end_sec, linewidth=0.8, alpha=0.45)
         if model.compressor_start_sec is not None:
@@ -96,7 +119,14 @@ class ResultReviewGraph(QWidget):
         handles, labels = self.axes.get_legend_handles_labels()
         if handles:
             unique = dict(zip(labels, handles))
-            self.axes.legend(unique.values(), unique.keys(), loc="best", fontsize="small")
+            self.axes.legend(
+                unique.values(),
+                unique.keys(),
+                loc="best",
+                fontsize="small",
+                prop=self._font_selection.properties,
+            )
+        apply_font_to_axes(self.axes, self._font_selection)
         self.canvas.draw_idle()
 
     def _plot_series(self, points, label: str, linestyle: str) -> None:
@@ -116,10 +146,11 @@ class ResultReviewGraph(QWidget):
         self.model = None
         self.cursor_artist = None
         self.axes.clear()
-        self.axes.set_title("tracking graph")
+        self.axes.set_title("유면 추적 graph")
         self.axes.text(0.5, 0.5, "결과 bundle을 열어 주세요.", ha="center", va="center", transform=self.axes.transAxes)
         self.axes.set_xticks([])
         self.axes.set_yticks([])
+        apply_font_to_axes(self.axes, self._font_selection)
         self.canvas.draw_idle()
 
     def _on_press(self, event) -> None:
