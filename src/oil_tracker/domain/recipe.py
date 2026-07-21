@@ -43,6 +43,15 @@ class DetectorSettings:
     foam_max_front_jump_px: float = 24.0
     state_hold_frames: int = 2
     candidate_top_k: int = 8
+    oil_consensus_tolerance_px: float = 4.0
+    oil_min_consensus_sources: int = 2
+    oil_min_polarity_score: float = 0.10
+    oil_no_interface_min_score: float = 0.58
+    oil_path_window: int = 5
+    oil_path_beam_width: int = 4
+    oil_path_min_margin: float = 0.08
+    oil_tracker_update_confidence: float = 0.55
+    oil_reacquire_frames: int = 2
     weight_edge: float = 0.22
     weight_coverage: float = 0.20
     weight_region: float = 0.22
