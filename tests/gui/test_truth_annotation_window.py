@@ -51,7 +51,7 @@ def test_confirm_official_is_explicit_and_copies_fill_and_lines(qtbot, tmp_path)
     window.apply_official_reference()
     values = window.draft_values()
     assert values.disposition is TruthDisposition.CONFIRMED_CORRECT
-    assert window.fill_state.currentData() is official.fill_state
+    assert FillState(str(window.fill_state.currentData())) is official.fill_state
     assert values.oil_source_y == official.oil_boundary.source_frame_y
     assert values.foam_source_y == official.foam_front.source_frame_y
     assert values.error_types == ()
