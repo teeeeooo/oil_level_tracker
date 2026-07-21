@@ -16,7 +16,7 @@ _SYMBOLS = {
 
 _LABELS = {
     ProgressStepState.COMPLETE: "완료",
-    ProgressStepState.CURRENT: "현재 단계",
+    ProgressStepState.CURRENT: "현재",
     ProgressStepState.ERROR: "수정 필요",
     ProgressStepState.WARNING: "확인 필요",
     ProgressStepState.WAITING: "대기",
@@ -37,19 +37,20 @@ class WorkbenchProgressWidget(QWidget):
         self._buttons: dict[str, QPushButton] = {}
         steps_layout = QHBoxLayout()
         steps_layout.setContentsMargins(0, 0, 0, 0)
-        steps_layout.setSpacing(5)
+        steps_layout.setSpacing(4)
         for index, (key, label) in enumerate(
             (
                 ("video", "영상 선택"),
                 ("time", "시간 설정"),
-                ("glasses", "관찰창 설정"),
+                ("glasses", "Glass 설정"),
                 ("validation", "설정 점검"),
                 ("analysis", "분석 실행"),
             )
         ):
             button = QPushButton(label)
             button.setObjectName("progressStepButton")
-            button.setMinimumHeight(48)
+            button.setMinimumHeight(36)
+            button.setMinimumWidth(0)
             button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
             button.clicked.connect(lambda _checked=False, step_key=key: self.stepActivated.emit(step_key))
             self._buttons[key] = button
@@ -71,15 +72,15 @@ class WorkbenchProgressWidget(QWidget):
         top.addWidget(self.next_issue)
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(8, 6, 8, 6)
-        layout.setSpacing(5)
+        layout.setContentsMargins(8, 5, 8, 5)
+        layout.setSpacing(4)
         layout.addLayout(top)
         layout.addLayout(steps_layout)
 
     def set_steps(self, steps, has_glass_issue: bool) -> None:
         for step in steps:
             button = self._buttons[step.key]
-            button.setText(f"{_SYMBOLS[step.state]} {step.label}\n{_LABELS[step.state]}")
+            button.setText(f"{_SYMBOLS[step.state]} {step.label} · {_LABELS[step.state]}")
             button.setToolTip(step.detail)
             button.setProperty("stepState", step.state.value)
             button.style().unpolish(button)
