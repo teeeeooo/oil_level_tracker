@@ -1,4 +1,4 @@
-name: S5-A split controlled comparison diagnostic
+name: S5-A controlled metrics and CPU diagnostic
 
 on:
   pull_request:
@@ -41,6 +41,52 @@ jobs:
         with:
           python-version: '3.13'
           cache: pip
+      - name: Create public CPU measurement script
+        run: |
+          cat > /tmp/measure_detector.py <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import statistics
+          import sys
+          import time
+
+          from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          from oil_tracker.application.services.detector_benchmark_service import _case_groups
+
+          dataset = FilesystemRegressionDatasetReader().load(Path(sys.argv[1]))
+          output = Path(sys.argv[2])
+
+          def run_once() -> float:
+              count = 0
+              start = time.perf_counter()
+              for group in _case_groups(dataset):
+                  detector = OpenCvPhaseDetector()
+                  detector.reset()
+                  for case in group:
+                      detector.detect(
+                          case.frame,
+                          case.glass,
+                          case.frame_index,
+                          case.timestamp_sec,
+                          debug=False,
+                      )
+                      count += 1
+              return (time.perf_counter() - start) / max(1, count)
+
+          for _ in range(3):
+              run_once()
+          samples = [run_once() for _ in range(15)]
+          payload = {
+              "case_count": len(dataset.cases),
+              "warmup_runs": 3,
+              "measured_runs": 15,
+              "median_sec_per_detection": statistics.median(samples),
+          }
+          output.write_text(json.dumps(payload, sort_keys=True), encoding="utf-8")
+          print(json.dumps(payload, indent=2, sort_keys=True))
+          PY
       - name: Install feature generator
         run: python -m pip install -e './feature[dev]'
       - name: Generate one controlled dataset
@@ -59,7 +105,7 @@ jobs:
           print('category count:', len({case.category.value for case in dataset.cases}))
           print('scene contract count:', len(scenes))
           PY
-      - name: Install and run base detector
+      - name: Install, benchmark and measure base detector
         run: |
           python -m pip install -e ./base
           python - <<'PY'
@@ -70,11 +116,12 @@ jobs:
           assert '/base/' in actual.as_posix()
           PY
           DATASET=$(cat /tmp/dataset_path.txt)
-          OIL_TRACKER_SOURCE_REVISION="$BASE_SHA" python -m oil_tracker.cli benchmark --dataset "$DATASET" --output /tmp/base-output 2>&1 | tee /tmp/base.log
+          OIL_TRACKER_SOURCE_REVISION="$BASE_SHA" python -m oil_tracker.cli benchmark --dataset "$DATASET" --output /tmp/base-output > /tmp/base.log
           BASE_RESULT=$(find /tmp/base-output -name benchmark_result.json -print -quit)
           test -n "$BASE_RESULT"
           cp "$BASE_RESULT" /tmp/base_benchmark_result.json
-      - name: Install and run feature detector on same dataset
+          python /tmp/measure_detector.py "$DATASET" /tmp/base_perf.json > /tmp/base_perf.log
+      - name: Install, benchmark and measure feature detector on same dataset
         run: |
           python -m pip install -e ./feature
           python - <<'PY'
@@ -85,11 +132,12 @@ jobs:
           assert '/feature/' in actual.as_posix()
           PY
           DATASET=$(cat /tmp/dataset_path.txt)
-          OIL_TRACKER_SOURCE_REVISION="$FEATURE_SHA" python -m oil_tracker.cli benchmark --dataset "$DATASET" --output /tmp/feature-output --baseline /tmp/base_benchmark_result.json 2>&1 | tee /tmp/feature.log
+          OIL_TRACKER_SOURCE_REVISION="$FEATURE_SHA" python -m oil_tracker.cli benchmark --dataset "$DATASET" --output /tmp/feature-output --baseline /tmp/base_benchmark_result.json > /tmp/feature.log
           FEATURE_RESULT=$(find /tmp/feature-output -name benchmark_result.json -print -quit)
           test -n "$FEATURE_RESULT"
           cp "$FEATURE_RESULT" /tmp/feature_benchmark_result.json
-      - name: Compare controlled metrics
+          python /tmp/measure_detector.py "$DATASET" /tmp/feature_perf.json > /tmp/feature_perf.log
+      - name: Compare controlled metrics and CPU
         run: |
           python - <<'PY' | tee /tmp/compare.log
           import json
@@ -97,6 +145,8 @@ jobs:
 
           base = json.loads(Path('/tmp/base_benchmark_result.json').read_text(encoding='utf-8'))
           feature = json.loads(Path('/tmp/feature_benchmark_result.json').read_text(encoding='utf-8'))
+          base_perf = json.loads(Path('/tmp/base_perf.json').read_text(encoding='utf-8'))
+          feature_perf = json.loads(Path('/tmp/feature_perf.json').read_text(encoding='utf-8'))
 
           def metric(payload, name, category=None):
               summary = payload['micro_aggregate'] if category is None else payload['category_summaries'][category]
@@ -109,8 +159,13 @@ jobs:
                   if case['category'] == 'clear_oil_boundary'
               ]
 
+          ratio = feature_perf['median_sec_per_detection'] / base_perf['median_sec_per_detection']
           values = {
+              'base_exact_sha': base['source_revision'],
+              'feature_exact_sha': feature['source_revision'],
               'dataset_fingerprint': feature['dataset']['fingerprint'],
+              'case_count': feature['case_count'],
+              'category_count': len(feature['category_summaries']),
               'base_detector_version': base['detector']['version'],
               'feature_detector_version': feature['detector']['version'],
               'base_settings_fingerprint': base['detector']['settings_fingerprint'],
@@ -133,6 +188,12 @@ jobs:
               'feature_smoothed_no_interface_false_boundary_rate': metric(feature, 'smoothed_no_interface_false_boundary_rate', 'no_interface'),
               'base_oil_signature': oil_signature(base),
               'feature_oil_signature': oil_signature(feature),
+              'base_cpu_median_sec_per_detection': base_perf['median_sec_per_detection'],
+              'feature_cpu_median_sec_per_detection': feature_perf['median_sec_per_detection'],
+              'cpu_ratio': ratio,
+              'warmup_runs': feature_perf['warmup_runs'],
+              'measured_runs': feature_perf['measured_runs'],
+              'dependency_diff': 'none',
           }
           print(json.dumps(values, indent=2, sort_keys=True))
           assert base['dataset']['fingerprint'] == feature['dataset']['fingerprint']
@@ -146,27 +207,24 @@ jobs:
           assert values['feature_oil_signature'] == values['base_oil_signature']
           assert values['feature_raw_no_interface_false_boundary_rate'] <= values['base_raw_no_interface_false_boundary_rate']
           assert values['feature_smoothed_no_interface_false_boundary_rate'] <= values['base_smoothed_no_interface_false_boundary_rate']
+          assert ratio <= 1.5
           assert base['benchmark_schema_version'] == feature['benchmark_schema_version'] == 1
           assert base['category_contract'] == feature['category_contract']
           assert feature['previous_baseline_comparison']['status'] == 'complete'
-          print('controlled acceptance: PASS')
+          print('controlled metrics and CPU acceptance: PASS')
           PY
-      - name: Publish bounded diagnostics
+      - name: Publish compact diagnostics
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           {
-            echo '### S5-A split controlled comparison diagnostic'
+            echo '### S5-A controlled metrics and CPU diagnostic'
             echo
             echo '```text'
-            for file in /tmp/dataset.log /tmp/base.log /tmp/feature.log /tmp/compare.log; do
-              if test -f "$file"; then
-                echo "--- $file ---"
-                tail -n 140 "$file"
-              fi
-            done
+            test -f /tmp/dataset.log && cat /tmp/dataset.log
+            test -f /tmp/compare.log && cat /tmp/compare.log
             echo '```'
           } > /tmp/comment.md
           gh pr comment "$PR_NUMBER" --body-file /tmp/comment.md
