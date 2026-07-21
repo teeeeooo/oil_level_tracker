@@ -1,77 +1,172 @@
-name: S5-B focused probe
+name: S5-B focused validation
 
 on:
   pull_request:
     branches: [main]
+
+concurrency:
+  group: s5b-validation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
   pull-requests: write
 
 jobs:
-  oil-core:
-    name: oil-core-${{ matrix.name }}
+  focused-regression:
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: consensus
-            file: tests/test_oil_candidate_consensus.py
-          - name: scoring
-            file: tests/test_oil_signed_scoring.py
-          - name: no-interface
-            file: tests/test_oil_no_interface.py
-          - name: path
-            file: tests/test_oil_temporal_path.py
-          - name: smoothing
-            file: tests/test_oil_temporal_tracker.py
-          - name: detector
-            file: tests/test_oil_detector_integration.py
-          - name: fill-state
-            file: tests/test_oil_fill_state_classifier.py
-          - name: settings
-            file: tests/test_oil_settings.py
     env:
       QT_QPA_PLATFORM: offscreen
-      EXPECTED_SHA: 2a58795a470f8d9284648d60c3a5d49e9fd31cb2
-      TEST_FILE: ${{ matrix.file }}
+      EXPECTED_SHA: b0bc31ed79154e3df7f6e5caf20c6b0721d21572
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ env.EXPECTED_SHA }}
+
       - name: Assert exact feature head
         run: |
           actual="$(git rev-parse HEAD)"
           echo "expected_exact_sha=${EXPECTED_SHA}"
           echo "actual_checkout_sha=${actual}"
           test "${actual}" = "${EXPECTED_SHA}"
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Install runtime and package
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install package
         run: |
           sudo apt-get update -qq >/dev/null
-          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-xinerama0 libxcb-keysyms1 libxcb-render-util0 >/dev/null
+          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
           python -m pip install -q -e '.[dev]'
-      - name: Run isolated oil core file
+
+      - name: Run focused regression set
         shell: bash
         run: |
           set +e
-          python -m pytest -q --tb=short ${TEST_FILE} > /tmp/pytest.log 2>&1
+          python -m pytest -q --tb=short \
+            tests/test_detector_benchmark_integration.py::test_current_detector_runs_headlessly_on_phase2c3_fixture_dataset \
+            tests/unit/test_fill_state.py::test_partial_boundary_is_selected \
+            tests/unit/test_fill_state.py::test_full_prior_rejects_mid_glass_static_reflection \
+            tests/unit/test_fill_state.py::test_boundary_appearing_from_top_is_draining_visible \
+            tests/unit/test_fill_state.py::test_boundary_appearing_from_bottom_is_filling_visible_not_foam \
+            tests/test_oil_candidate_consensus.py \
+            tests/test_oil_signed_scoring.py \
+            tests/test_oil_no_interface.py \
+            tests/test_oil_temporal_path.py \
+            tests/test_oil_temporal_tracker.py \
+            tests/test_oil_detector_integration.py \
+            tests/test_oil_fill_state_classifier.py \
+            tests/test_oil_controlled_benchmark.py \
+            tests/test_foam_controlled_benchmark.py \
+            tests/test_foam_phase_detector_integration.py \
+            > /tmp/pytest.log 2>&1
           status=$?
-          cat /tmp/pytest.log
+
           if [ "${status}" -ne 0 ]; then
-            {
-              echo "## Temporary S5-B oil-core diagnostic: ${{ matrix.name }}"
-              echo
-              echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
-              echo
-              echo '```text'
-              cat /tmp/pytest.log
-              echo '```'
-            } > /tmp/body.md
-            gh pr edit 55 --body-file /tmp/body.md || true
+            python - <<'PY' >> /tmp/pytest.log 2>&1
+          import json
+          import cv2
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          from oil_tracker.domain.enums import InitialObservationState
+          from tests.fixtures.synthetic import full_frame, glass_config, partial_frame
+
+          scenes = []
+          scenes.append(("partial-center", partial_frame(130), glass_config()))
+
+          reflection = full_frame()
+          cv2.line(reflection, (100, 120), (220, 120), (150, 150, 150), 2)
+          reflection_glass = glass_config()
+          reflection_glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+          scenes.append(("full-static-reflection", reflection, reflection_glass))
+
+          top_glass = glass_config()
+          top_glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+          scenes.append(("full-to-top-boundary", partial_frame(45), top_glass))
+
+          bottom_glass = glass_config()
+          bottom_glass.initial_state = InitialObservationState.EMPTY_NO_INTERFACE
+          scenes.append(("empty-to-bottom-boundary", partial_frame(200), bottom_glass))
+
+          print("\n--- bounded S5-B fill-state diagnostics ---")
+          keys = (
+              "oil_decision_status",
+              "oil_decision_reason",
+              "oil_boundary_score",
+              "oil_no_interface_score",
+              "oil_decision_margin",
+              "oil_path_cumulative_score",
+              "oil_path_second_score",
+              "oil_transition_cost",
+              "oil_tracker_update_accepted",
+              "oil_no_interface_uniformity",
+              "oil_no_interface_weak_boundary",
+              "oil_no_interface_visibility",
+              "oil_no_interface_reason",
+              "previous_state",
+              "proposed_state",
+              "stabilized_state",
+          )
+          feature_keys = (
+              "local_y",
+              "source_y",
+              "observation_score",
+              "edge_strength",
+              "horizontal_coverage",
+              "absolute_region_contrast",
+              "signed_above_minus_below",
+              "polarity_score",
+              "polarity_sign",
+              "consensus_score",
+              "unique_generator_support_count",
+              "paired_structure_distance_px",
+              "paired_structure_partner_y",
+              "paired_structure_opposite_polarity",
+              "best_second_path_margin",
+          )
+          for name, frame, glass in scenes:
+              detection, _ = OpenCvPhaseDetector().detect(frame, glass, 0, 0.0, debug=True)
+              metrics = {key: detection.debug_metrics.get(key) for key in keys}
+              candidates = []
+              oil_candidates = [candidate for candidate in detection.candidates if candidate.source == "oil_consensus"]
+              oil_candidates.sort(
+                  key=lambda candidate: (
+                      -float(candidate.features.get("observation_score", candidate.final_score)),
+                      float(candidate.y),
+                  )
+              )
+              for candidate in oil_candidates[:8]:
+                  candidates.append({
+                      "y": candidate.y,
+                      "selected": candidate.selected,
+                      "rejected": candidate.rejected,
+                      "reason": candidate.reject_reason,
+                      "features": {key: candidate.features.get(key) for key in feature_keys},
+                  })
+              print(json.dumps({
+                  "scene": name,
+                  "fill_state": detection.fill_state.value,
+                  "raw_y": detection.raw_oil_air_level_y,
+                  "smoothed_y": detection.smoothed_oil_air_level_y,
+                  "flags": detection.flags,
+                  "metrics": metrics,
+                  "candidates": candidates,
+              }, sort_keys=True))
+          PY
           fi
+
+          cat /tmp/pytest.log
+          {
+            echo "## S5-B focused regression result"
+            echo
+            echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
+            echo
+            echo '```text'
+            tail -n 520 /tmp/pytest.log
+            echo '```'
+          } > /tmp/body.md
+          gh pr edit 55 --body-file /tmp/body.md
           exit ${status}
