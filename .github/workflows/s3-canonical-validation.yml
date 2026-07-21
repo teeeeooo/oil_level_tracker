@@ -65,6 +65,28 @@ jobs:
           status=${PIPESTATUS[0]}
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit 0
+      - name: Extract canonical evidence
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('/tmp/s3-canonical.log').read_text(encoding='utf-8', errors='replace')
+          if '=================================== FAILURES ===================================' in text:
+              start = text.index('=================================== FAILURES ===================================')
+              end_marker = '=========================== short test summary info ============================'
+              end = text.find(end_marker, start)
+              if end < 0:
+                  end = min(len(text), start + 40000)
+              else:
+                  summary_end = text.find('\n', text.find('=', end + len(end_marker)))
+                  end = min(len(text), max(end + len(end_marker), summary_end) + 12000)
+              evidence = text[start:end]
+          else:
+              lines = text.splitlines()
+              evidence = '\n'.join(lines[-40:])
+          Path('/tmp/s3-canonical-evidence.txt').write_text(evidence[:50000], encoding='utf-8')
+          PY
       - name: Publish canonical evidence
         if: always()
         env:
@@ -82,7 +104,7 @@ jobs:
             echo "expected exact SHA=$EXPECTED_SHA"
             echo "actual checkout SHA=$(git rev-parse HEAD)"
             cat /tmp/s3-canonical-versions.txt
-            tail -n 160 /tmp/s3-canonical.log
+            cat /tmp/s3-canonical-evidence.txt
             echo '```'
           } > /tmp/s3-canonical-comment.md
           gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/s3-canonical-comment.md
