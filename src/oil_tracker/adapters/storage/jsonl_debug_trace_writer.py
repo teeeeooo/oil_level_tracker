@@ -31,6 +31,8 @@ _BASIC_IMAGE_KEYS = (
     "effective_mask",
     "glare_mask",
     "foam_mask",
+    "foam_combined_evidence",
+    "foam_accepted_component",
 )
 
 _FULL_IMAGE_KEYS = (
@@ -48,6 +50,12 @@ _FULL_IMAGE_KEYS = (
     "glare_mask",
     "foam_mask",
     "foam_variance",
+    "foam_edge_density",
+    "foam_whiteness",
+    "foam_texture_evidence",
+    "foam_glare_excluded_mask",
+    "foam_combined_evidence",
+    "foam_accepted_component",
     "static_artifact_map",
 )
 
