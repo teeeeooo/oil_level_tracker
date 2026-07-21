@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import math
 
-import numpy as np
 from PySide6.QtCore import QPointF, QRectF, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QImage, QKeyEvent, QMouseEvent, QPainter, QPen, QPixmap
 from PySide6.QtWidgets import QWidget
@@ -19,7 +18,7 @@ class TruthAnnotationCanvas(QWidget):
         super().__init__(parent)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setMouseTracking(True)
-        self._frame: np.ndarray | None = None
+        self._image = QImage()
         self._pixmap = QPixmap()
         self._glass = None
         self._official = None
@@ -37,6 +36,10 @@ class TruthAnnotationCanvas(QWidget):
         return self._scale
 
     @property
+    def source_image_size(self) -> QSize:
+        return self._image.size()
+
+    @property
     def oil_y(self) -> float | None:
         return self._oil_y
 
@@ -48,9 +51,9 @@ class TruthAnnotationCanvas(QWidget):
     def edit_target(self) -> str:
         return self._edit_target
 
-    def set_frame(self, frame: np.ndarray | None) -> None:
-        self._frame = None if frame is None else np.ascontiguousarray(frame.copy())
-        self._pixmap = QPixmap() if frame is None else _pixmap(self._frame)
+    def set_frame_image(self, image: QImage | None) -> None:
+        self._image = QImage() if image is None else QImage(image).copy()
+        self._pixmap = QPixmap() if self._image.isNull() else QPixmap.fromImage(self._image)
         self._resize_for_scale()
         self.update()
 
@@ -71,7 +74,7 @@ class TruthAnnotationCanvas(QWidget):
         self.update()
 
     def clear(self, message: str = "현재 Viewer 장면을 불러와 주세요.") -> None:
-        self._frame = None
+        self._image = QImage()
         self._pixmap = QPixmap()
         self._glass = None
         self._official = None
@@ -215,7 +218,7 @@ class TruthAnnotationCanvas(QWidget):
         painter.drawText(QPointF(extent[0] * self._scale + 4, max(14.0, y - 5)), label)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
-        if event.button() != Qt.MouseButton.LeftButton or self._frame is None or self._glass is None:
+        if event.button() != Qt.MouseButton.LeftButton or self._image.isNull() or self._glass is None:
             super().mousePressEvent(event)
             return
         self.setFocus(Qt.FocusReason.MouseFocusReason)
@@ -262,16 +265,3 @@ class TruthAnnotationCanvas(QWidget):
     def _resize_for_scale(self) -> None:
         self.resize(self.sizeHint())
         self.updateGeometry()
-
-
-def _pixmap(frame: np.ndarray) -> QPixmap:
-    if frame.ndim == 2:
-        array = np.ascontiguousarray(frame)
-        image = QImage(array.data, array.shape[1], array.shape[0], array.strides[0], QImage.Format.Format_Grayscale8).copy()
-    elif frame.shape[2] == 4:
-        array = np.ascontiguousarray(frame[:, :, [2, 1, 0, 3]])
-        image = QImage(array.data, array.shape[1], array.shape[0], array.strides[0], QImage.Format.Format_RGBA8888).copy()
-    else:
-        array = np.ascontiguousarray(frame[:, :, ::-1])
-        image = QImage(array.data, array.shape[1], array.shape[0], array.strides[0], QImage.Format.Format_RGB888).copy()
-    return QPixmap.fromImage(image)
