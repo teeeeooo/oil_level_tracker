@@ -24,6 +24,8 @@ jobs:
           actual=$(git rev-parse HEAD)
           echo "expected=$EXPECTED_SHA actual=$actual"
           test "$actual" = "$EXPECTED_SHA"
+      - name: Install Qt runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
@@ -48,10 +50,10 @@ jobs:
             tests/test_benchmark_cli.py > /tmp/pytest.log 2>&1
           code=$?
           {
-            echo '### S5-A bounded pytest diagnostic'
+            echo '### S5-A bounded pytest diagnostic after Qt runtime install'
             echo
             echo '```text'
-            tail -n 180 /tmp/pytest.log
+            tail -n 220 /tmp/pytest.log
             echo '```'
             echo
             echo "exit_code=$code"
