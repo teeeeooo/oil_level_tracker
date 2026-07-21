@@ -47,7 +47,11 @@ class AnalysisWorker(QObject):
         except AnalysisCancelled:
             self._emit_cancelled()
         except Exception as exc:
-            self._emit_failed(str(exc))
+            stage = reporter.last_update
+            message = str(exc)
+            if stage is not None:
+                message = f"{stage.stage_label} 단계에서 실패했습니다.\n{message}"
+            self._emit_failed(message)
 
     def _emit_completed(self, result, output: str) -> None:
         if not self._terminal_emitted:
