@@ -6,6 +6,8 @@
 
 전체 UX 우선순위와 Phase 순서는 [`UX_IMPROVEMENT_BACKLOG.md`](./UX_IMPROVEMENT_BACKLOG.md)를 따른다. 이 문서는 그중 **Phase 2B 이후 Result Review Viewer 관련 기능의 상세 설계 문서**다.
 
+실사용 graph, detector benchmark와 Phase 2C-4 선행 gate는 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)를 따른다.
+
 ## 2. 구현 현황
 
 ### Phase 2B-1 — Result Review Viewer MVP
@@ -67,12 +69,29 @@ PR #20 `feat: add partial re-detection comparison`으로 `main`에 반영했다.
 - current/all Workbench 적용의 범위별 compatibility와 한 단계 Undo/Redo
 - result bundle 불변, streaming temporary workspace와 bundle 외부 새 profile 저장
 
-### Phase 2C-3 이후
+### Phase 2C-3 — 사용자 정답과 regression fixture
 
-**다음 작업 — Phase 2C-3**
+**완료**
 
-- 사용자 수동 정답과 regression fixture
-- annotated MP4 export
+PR #27 `feat: add user truth annotations and regression fixtures`로 `main`에 반영했다.
+
+- PR head: `7cf152083b72394a90ae1118a94084c32b0c9033`
+- main merge SHA: `c9f130f58d51c79b29cf3594a0cbd44b3a570d78`
+- 검증: Python 3.13 및 3.14에서 각각 `485 passed`
+- 외부 `.oiltruth`, bundle identity validation과 atomic 저장
+- 사용자 유면·거품 위치, fill state, 오류 유형과 공식/truth 비교
+- annotation 탐색, graph/timeline marker와 dirty lifecycle
+- deterministic regression fixture dataset과 비동기 export
+- official result bundle 불변과 path safety
+
+### 실사용 안정화 이후
+
+**다음 작업 — S1 Detector benchmark foundation**
+
+- Phase 2C-3 fixture를 읽는 benchmark runner와 current detector baseline
+- UI raster boundary, Workbench UX와 graph 안정화
+- Foam/아지랑이 및 유면 tracking 개선
+- 실제 영상 validation gate 후 annotated MP4 export
 
 ## 3. 목표
 
@@ -516,7 +535,7 @@ Bundle asset resolver는 다음을 거부한다.
 
 ### 상태
 
-**진행 중 — Phase 2C-1, Phase 2C-2 완료 / 다음 작업 Phase 2C-3**
+**진행 중 — Phase 2C-1, Phase 2C-2, Phase 2C-3 완료 / 다음 작업 S1 Detector benchmark foundation**
 
 ### 9.1 Debug Viewer
 
@@ -583,6 +602,8 @@ Bundle asset resolver는 다음을 거부한다.
 
 ### 9.4 사용자 정답과 regression 자료
 
+**완료**
+
 사용자가 잘못 검출된 frame에서 실제 유면 위치와 오류 유형을 지정한다.
 
 오류 유형 예시:
@@ -596,6 +617,16 @@ Bundle asset resolver는 다음을 거부한다.
 - 상태 분류 오류
 
 공식 분석 결과와 사용자 수정값은 명확히 분리한다.
+
+구현 결과:
+
+- 외부 `.oiltruth` annotation set
+- confirmed/corrected/unusable disposition
+- canonical source-frame 유면·거품 좌표
+- annotation 수정·삭제·filter와 graph/timeline marker
+- 공식/truth pure comparison
+- current/selected/all regression fixture export
+- official result bundle 불변
 
 ### 9.5 디버그 재현 패키지
 
@@ -614,9 +645,23 @@ debug_case_YYYYMMDD_HHMMSS/
 
 ### 9.6 공유용 결과 영상
 
+**실사용 안정화 gate 이후 진행**
+
 - overlay annotated MP4 export
 - 일반 사용자 공유용 preset
 - 디버그 정보 포함 여부 선택
+
+상세 선행 조건은 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)의 S1~S6을 따른다.
+
+### 9.7 실사용 결과 시각화 안정화
+
+Phase 2C-4 전에 다음을 완료한다.
+
+- Matplotlib 한글 font resolver
+- 사용자-facing `oil-air`를 `유면` 또는 `유면 경계`로 변경
+- graph y축을 검출값 autoscale이 아니라 Glass 전체 분석 영역으로 고정
+- 기준선 0과 분석 영역 위·아래 경계 표시
+- Result Review와 HTML report의 동일 graph 범위 정책
 
 ## 10. 아키텍처 방향
 
@@ -649,6 +694,8 @@ debug_case_YYYYMMDD_HHMMSS/
 - debug overlay renderer와 artifact panel
 
 분석 pipeline이 Qt widget, 색상 또는 화면 배치 정보를 직접 생성하지 않도록 한다.
+
+Decoded frame과 debug artifact는 presentation adapter에서 detached `QImage`로 변환한 뒤 UI에 전달한다. `result_review_canvas.py`의 temporary NumPy/OpenCV allowlist는 별도 S2 architecture refactor에서 제거한다.
 
 ## 11. Phase 2C-1 설계 원칙
 

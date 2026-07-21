@@ -6,6 +6,8 @@
 
 Result Review Viewer의 화면, 데이터 계약, 일반 검토 모드와 디버그 모드에 대한 상세 설계는 [`RESULT_REVIEW_VIEWER_PLAN.md`](./RESULT_REVIEW_VIEWER_PLAN.md)를 따른다.
 
+실제 사용에서 확인된 Workbench, graph, 분석 lifecycle과 detector 정확도 문제의 실행 계획은 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)를 따른다.
+
 ## 2. 최종 목표
 
 영상 편집 경험이 없는 일반 사용자가 다음 흐름을 별도 설명 없이 완료할 수 있도록 한다.
@@ -32,7 +34,7 @@ UX 개선은 다음 세 가지 사용자 확신을 단계적으로 높이는 방
 | Phase 1 | Workbench 복잡도 축소와 복구 가능한 편집 | 완료 |
 | Phase 2A | 설정 완성도와 분석 전 사전 검증 | 완료 |
 | Phase 2B | 분석 결과 영상 검토 Viewer | 완료 |
-| Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 진행 중 — 2C-1, 2C-2 완료 |
+| Phase 2C | 개발용 디버그, 재검출과 공유 확장 | 진행 중 — 2C-1, 2C-2, 2C-3 완료 |
 | Phase 2D | 반복 시험 운영과 복구 자동화 | 후보 |
 
 ## 4. Phase 1 — Workbench 복잡도 축소와 편집 안정성
@@ -309,11 +311,12 @@ Phase 2B-2는 PR #11 `feat: enhance result review workflow`로 `main`에 반영�
 
 ### 상태
 
-**진행 중 — Phase 2C-1, Phase 2C-2 완료**
+**진행 중 — Phase 2C-1, Phase 2C-2, Phase 2C-3 완료**
 
 - Phase 2C-1 `Debug Viewer`: 완료
 - Phase 2C-2 `부분 재검출과 비교`: 완료
-- 다음 작업: Phase 2C-3 `사용자 정답과 회귀 자료`
+- Phase 2C-3 `사용자 정답과 회귀 자료`: 완료
+- 다음 작업: 실사용 안정화 S1 `Detector benchmark foundation`
 
 Phase 2C-1은 PR #13 `feat: add result review debug viewer`로 `main`에 반영했다.
 
@@ -334,6 +337,20 @@ Phase 2C-2는 PR #20 `feat: add partial re-detection comparison`으로 `main`에
 - 선택 관찰창 및 모든 관찰창 Workbench 적용을 독립적으로 검증하고 한 단계 Undo/Redo 지원
 - 공식 result bundle 불변, 임시 streaming workspace와 안전한 새 profile 저장 유지
 - 실제 Windows DPI, 실영상 temporal 결과, full-range 성능과 file lock 해제는 수동 확인 항목으로 유지
+
+Phase 2C-3은 PR #27 `feat: add user truth annotations and regression fixtures`로 `main`에 반영했다.
+
+- PR head: `7cf152083b72394a90ae1118a94084c32b0c9033`
+- main merge SHA: `c9f130f58d51c79b29cf3594a0cbd44b3a570d78`
+- 검증: Python 3.13 및 3.14에서 각각 `485 passed`
+- 외부 `.oiltruth` 사용자 정답 세트와 confirmed/corrected/unusable workflow 구현
+- 유면·거품 위치, fill state, 오류 유형과 메모를 공식 결과와 분리 저장
+- deterministic regression fixture dataset, manifest, hash, frame identity와 atomic export 구현
+- Truth Annotation UI의 NumPy/OpenCV 직접 의존을 presentation adapter 경계로 이동
+- UI import architecture guard를 추가하고 `result_review_canvas.py`만 temporary allowlist로 유지
+- 실제 compressor 영상, Windows DPI와 exported fixture 호환성은 수동 확인 항목으로 유지
+
+Phase 2C-4 전에 수행할 실사용 안정화 순서와 acceptance criteria는 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)에 기록한다.
 
 ### 목적
 
@@ -363,6 +380,8 @@ Result Review Viewer를 detector 문제 재현, 튜닝과 회귀 검증에 활�
 
 ### Phase 2C-3 — 사용자 정답과 회귀 자료
 
+**완료**
+
 - 실제 유면 위치 수동 표시
 - 오류 유형 분류
 - 공식 분석 결과와 사용자 수정값 분리
@@ -370,6 +389,8 @@ Result Review Viewer를 detector 문제 재현, 튜닝과 회귀 검증에 활�
 - detector benchmark 자료로 활용
 
 ### Phase 2C-4 — 공유용 결과 영상
+
+**실사용 안정화 gate 이후 진행**
 
 - overlay annotated MP4 export
 - 일반 검토용 preset
@@ -382,6 +403,7 @@ Result Review Viewer를 detector 문제 재현, 튜닝과 회귀 검증에 활�
 - 기본 배포 설정은 문제 frame 중심의 `basic`이다.
 - 문제 장면을 독립적인 재현 패키지로 저장할 수 있다.
 - 임시 detector 설정으로 부분 재검출하고 원본과 비교할 수 있다.
+- 사용자 정답을 공식 결과와 분리해 저장하고 regression fixture로 내보낼 수 있다.
 
 ## 8. Phase 2D — 반복 시험 운영과 복구 자동화 후보
 
@@ -426,10 +448,18 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 
 ## 11. 현재 다음 작업
 
-현재 `main`에는 Phase 1, Phase 2A 전체, Phase 2B 전체와 Phase 2C-1 Debug Viewer, Phase 2C-2 부분 재검출과 비교가 완료되어 있다.
+현재 `main`에는 Phase 1, Phase 2A 전체, Phase 2B 전체와 Phase 2C-1 Debug Viewer, Phase 2C-2 부분 재검출과 비교, Phase 2C-3 사용자 정답과 회귀 자료가 완료되어 있다.
+
+실제 사용에서 확인된 문제와 상세 acceptance criteria는 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)를 따른다.
 
 다음 구현 순서는 다음과 같다.
 
-1. **Phase 2C-3:** 사용자 정답과 회귀 자료
-2. **Phase 2C-4:** 공유용 결과 영상
-3. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
+1. **S1:** Detector benchmark foundation
+2. **S2:** UI raster boundary architecture refactor
+3. **S3:** Workbench usability stabilization
+4. **S4:** Analysis lifecycle 및 결과 시각화 안정화
+5. **S5-A:** Foam과 투명 오일 아지랑이 구분 개선
+6. **S5-B:** 유면 경계 검출과 temporal tracking 개선
+7. **S6:** 실제 영상 validation gate
+8. **S7 / Phase 2C-4:** 공유용 annotated MP4
+9. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
