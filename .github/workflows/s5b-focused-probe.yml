@@ -1,4 +1,4 @@
-name: S5-B focused validation
+name: S5-B focused failure extraction
 
 on:
   pull_request:
@@ -9,49 +9,30 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  actions: read
+  pull-requests: write
   contents: read
 
 jobs:
-  focused:
+  extract:
     runs-on: ubuntu-24.04
     env:
-      QT_QPA_PLATFORM: offscreen
-      FEATURE_SHA: 915247a61f568129032906258451c485684c2a04
+      GH_TOKEN: ${{ github.token }}
+      FAILED_RUN_ID: '29855794866'
+      FAILED_JOB_ID: '88719653310'
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ env.FEATURE_SHA }}
-      - name: Assert exact feature checkout
+      - name: Extract focused failure tail
         run: |
-          actual="$(git rev-parse HEAD)"
-          echo "expected_feature_sha=${FEATURE_SHA}"
-          echo "actual_checkout_sha=${actual}"
-          test "${actual}" = "${FEATURE_SHA}"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: pip
-          cache-dependency-path: pyproject.toml
-      - name: Install package
-        run: |
-          sudo apt-get update -qq >/dev/null
-          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
-          python -m pip install -q -e '.[dev]'
-      - name: Run focused regression set
-        run: |
-          python -m pytest -q \
-            tests/test_detector_benchmark_integration.py::test_current_detector_runs_headlessly_on_phase2c3_fixture_dataset \
-            tests/unit/test_fill_state.py::test_partial_boundary_is_selected \
-            tests/unit/test_fill_state.py::test_full_prior_rejects_mid_glass_static_reflection \
-            tests/unit/test_fill_state.py::test_boundary_appearing_from_top_is_draining_visible \
-            tests/unit/test_fill_state.py::test_boundary_appearing_from_bottom_is_filling_visible_not_foam \
-            tests/test_oil_candidate_consensus.py \
-            tests/test_oil_signed_scoring.py \
-            tests/test_oil_no_interface.py \
-            tests/test_oil_temporal_path.py \
-            tests/test_oil_temporal_tracker.py \
-            tests/test_oil_detector_integration.py \
-            tests/test_oil_fill_state_classifier.py \
-            tests/test_oil_controlled_benchmark.py \
-            tests/test_foam_controlled_benchmark.py \
-            tests/test_foam_phase_detector_integration.py
+          gh run view "${FAILED_RUN_ID}" --repo "${GITHUB_REPOSITORY}" --job "${FAILED_JOB_ID}" --log > /tmp/job.log
+          {
+            echo '## S5-B polarity-consensus focused failure'
+            echo
+            echo 'Stored log only; tests were not rerun.'
+            echo
+            echo '```text'
+            grep -n -E 'FAILED|FAILURES|AssertionError|assert |ERROR|Traceback|short test summary|passed|failed' /tmp/job.log | tail -n 140
+            echo
+            tail -n 100 /tmp/job.log
+            echo '```'
+          } > /tmp/body.md
+          gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
