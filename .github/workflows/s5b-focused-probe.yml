@@ -1,4 +1,4 @@
-name: S5-B focused failure extraction
+name: S5-B clear coverage diagnosis
 
 on:
   pull_request:
@@ -9,30 +9,84 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  actions: read
-  pull-requests: write
   contents: read
+  pull-requests: write
 
 jobs:
-  extract:
+  diagnose:
     runs-on: ubuntu-24.04
     env:
+      QT_QPA_PLATFORM: offscreen
+      FEATURE_SHA: 915247a61f568129032906258451c485684c2a04
       GH_TOKEN: ${{ github.token }}
-      FAILED_RUN_ID: '29855794866'
-      FAILED_JOB_ID: '88719653310'
     steps:
-      - name: Extract focused failure tail
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.FEATURE_SHA }}
+      - name: Assert exact feature checkout
+        run: test "$(git rev-parse HEAD)" = "${FEATURE_SHA}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install package
         run: |
-          gh run view "${FAILED_RUN_ID}" --repo "${GITHUB_REPOSITORY}" --job "${FAILED_JOB_ID}" --log > /tmp/job.log
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
+          python -m pip install -q -e '.[dev]'
+      - name: Print clear-boundary scene decisions
+        run: |
+          PYTHONPATH=tests python - <<'PY' > /tmp/clear.txt
+          import json
+          from oil_benchmark_fixtures import controlled_oil_scenes
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          from oil_tracker.domain.detector_benchmark import BenchmarkCategory
+          from oil_tracker.domain.enums import BoundaryKind
+          from oil_tracker.domain.recipe import InspectionRecipe
+
+          rows = []
+          for scene in controlled_oil_scenes():
+              if scene.category is not BenchmarkCategory.CLEAR_OIL_BOUNDARY:
+                  continue
+              glass = InspectionRecipe.default_glass(320, 240)
+              glass.id = 'clear-' + scene.case_id
+              detection, _ = OpenCvPhaseDetector().detect(
+                  scene.frame, glass, 0, scene.timestamp, debug=True
+              )
+              selected = next(
+                  (
+                      candidate
+                      for candidate in detection.candidates
+                      if candidate.kind is BoundaryKind.OIL_AIR and candidate.selected
+                  ),
+                  None,
+              )
+              rows.append({
+                  'scene': scene.case_id,
+                  'truth_y': scene.oil_y,
+                  'raw_y': detection.raw_oil_air_level_y,
+                  'fill_state': detection.fill_state.value,
+                  'decision': detection.debug_metrics.get('oil_decision_status'),
+                  'reason': detection.debug_metrics.get('oil_decision_reason'),
+                  'flags': detection.flags,
+                  'selected_y': None if selected is None else selected.y,
+                  'signed_region': None if selected is None else selected.features.get('generator_signed_region_evidence'),
+                  'correction': None if selected is None else selected.features.get('polarity_edge_center_correction_px'),
+                  'support': None if selected is None else selected.features.get('unique_generator_support_count'),
+                  'polarity_sign': None if selected is None else selected.features.get('polarity_sign'),
+                  'observation_score': None if selected is None else selected.features.get('observation_score'),
+              })
+          print(json.dumps(rows, sort_keys=True, indent=2))
+          PY
+          cat /tmp/clear.txt
           {
-            echo '## S5-B polarity-consensus focused failure'
+            echo '## S5-B clear-boundary coverage diagnosis'
             echo
-            echo 'Stored log only; tests were not rerun.'
+            echo 'Feature-only clear scenes; no base, Foam, CPU, or canonical rerun.'
             echo
-            echo '```text'
-            grep -n -E 'FAILED|FAILURES|AssertionError|assert |ERROR|Traceback|short test summary|passed|failed' /tmp/job.log | tail -n 140
-            echo
-            tail -n 100 /tmp/job.log
+            echo '```json'
+            cat /tmp/clear.txt
             echo '```'
           } > /tmp/body.md
           gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
