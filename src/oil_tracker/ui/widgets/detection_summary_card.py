@@ -3,7 +3,7 @@ from __future__ import annotations
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, QSizePolicy
 
-from oil_tracker.ui.readiness import PreviewQuality, build_detection_summary
+from oil_tracker.ui.readiness import build_detection_summary
 
 
 class DetectionSummaryCard(QGroupBox):
@@ -36,6 +36,8 @@ class DetectionSummaryCard(QGroupBox):
             self.values[key] = value
             layout.addWidget(heading, row, 0)
             layout.addWidget(value, row, 1)
+        # Keep the pre-S3 field lookup available for callers while presenting the new wording.
+        self.values["judgment"] = self.values["interpretation"]
         self.action_button = QPushButton("초기 상태 설정으로 이동")
         self.action_button.setObjectName("secondaryActionButton")
         self.action_button.clicked.connect(self.initialStateRequested)
