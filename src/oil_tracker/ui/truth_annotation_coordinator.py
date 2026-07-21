@@ -4,8 +4,13 @@ import logging
 from pathlib import Path
 
 from PySide6.QtCore import QObject
+from PySide6.QtGui import QImage
 from PySide6.QtWidgets import QFileDialog, QMessageBox
 
+from oil_tracker.adapters.presentation.qt_frame_image_converter import (
+    FrameImageConversionError,
+    QtFrameImageConverter,
+)
 from oil_tracker.adapters.storage.json_truth_repository import (
     JsonTruthRepository,
     TruthIdentityMismatchError,
@@ -28,6 +33,10 @@ from oil_tracker.ui.truth_annotation_window import TruthAnnotationWindow
 
 
 LOGGER = logging.getLogger(__name__)
+_IMAGE_CONVERSION_MESSAGE = (
+    "현재 Viewer 장면을 이미지로 변환할 수 없습니다. "
+    "uint8 grayscale, BGR 또는 BGRA frame인지 확인해 주세요."
+)
 
 
 class TruthAnnotationCoordinator(QObject):
@@ -40,17 +49,20 @@ class TruthAnnotationCoordinator(QObject):
         repository: JsonTruthRepository | None = None,
         service: UserTruthService | None = None,
         exporter: RegressionFixtureExporter | None = None,
+        frame_image_converter: QtFrameImageConverter | None = None,
         parent=None,
     ) -> None:
         super().__init__(parent or viewer)
         self.viewer = viewer
         self.repository = repository or JsonTruthRepository()
         self.service = service or UserTruthService()
+        self.frame_image_converter = frame_image_converter or QtFrameImageConverter()
         self.export_controller = TruthExportController(exporter or RegressionFixtureExporter(), self)
         self.window: TruthAnnotationWindow | None = None
         self.session = TruthSession()
         self.identity = None
         self.draft_dirty = False
+        self._draft_image = QImage()
         self._closing = False
 
         viewer.truthRequested.connect(self.open)
@@ -115,6 +127,7 @@ class TruthAnnotationCoordinator(QObject):
         if self.window is None or self.viewer.bundle is None:
             return
         if self.viewer.current_frame is None or self.viewer.active_video_path is None:
+            self._release_draft_image()
             self.window.clear_context("원본 영상이 없습니다. Viewer에서 원본 영상 다시 지정을 사용해 주세요.")
             self.window.set_source_available(False, "원본 영상 다시 지정 후 새 annotation을 작성할 수 있습니다.")
             return
@@ -123,6 +136,11 @@ class TruthAnnotationCoordinator(QObject):
         glass = self.viewer.bundle.glass_config(self.viewer.selected_glass_id)
         if glass is None:
             QMessageBox.warning(self.window, "사용자 정답", "선택 관찰창이 result snapshot에 없습니다.")
+            return
+        image_error = self._set_draft_image_from_frame(self.viewer.current_frame)
+        if image_error:
+            self.window.clear_context("현재 Viewer 장면을 표시할 수 없습니다.")
+            self.window.set_validation_error(image_error)
             return
         self._ensure_set()
         existing = self.session.truth_set.find(
@@ -144,7 +162,7 @@ class TruthAnnotationCoordinator(QObject):
             debug_repository=self.viewer.debug_repository,
         )
         self.window.set_context(
-            self.viewer.current_frame.copy(),
+            self._draft_image,
             glass,
             context,
             official,
@@ -187,7 +205,7 @@ class TruthAnnotationCoordinator(QObject):
                 foam_source_y=values.foam_source_y,
                 error_types=values.error_types,
                 note=values.note,
-                official_reference=self.window._official,
+                official_reference=self.window.official_reference(),
                 existing_annotation=self.window.existing_annotation(),
             )
             saved = self.session.truth_set.upsert(annotation)
@@ -199,7 +217,7 @@ class TruthAnnotationCoordinator(QObject):
         self.session.mark_dirty()
         self.draft_dirty = False
         self.window.set_context(
-            self.window.canvas._frame.copy() if self.window.canvas._frame is not None else None,
+            None if self._draft_image.isNull() else self._draft_image,
             glass,
             context,
             saved.official_tracking_reference,
@@ -235,6 +253,7 @@ class TruthAnnotationCoordinator(QObject):
         if changed:
             self.session.mark_dirty()
             self.draft_dirty = False
+            self._release_draft_image()
             self.window.clear_context("annotation을 삭제했습니다. 현재 Viewer 장면을 다시 불러와 주세요.")
             self._refresh_annotations()
             self._refresh_markers()
@@ -246,6 +265,7 @@ class TruthAnnotationCoordinator(QObject):
         self.identity = build_truth_bundle_identity(self.viewer.bundle)
         self.session.attach_new(self.service.create_set(self.identity))
         self.draft_dirty = False
+        self._release_draft_image()
         if self.window is not None:
             self.window.clear_context()
         self._refresh_annotations()
@@ -284,6 +304,7 @@ class TruthAnnotationCoordinator(QObject):
         self.identity = expected
         self.session.attach_loaded(result.truth_set, result.path)
         self.draft_dirty = False
+        self._release_draft_image()
         self.window.clear_context("사용자 정답 파일을 열었습니다. 목록을 선택하거나 현재 장면을 불러와 주세요.")
         self._refresh_annotations()
         self._refresh_markers()
@@ -348,10 +369,24 @@ class TruthAnnotationCoordinator(QObject):
             annotation.actual_decoded_timestamp_sec,
             annotation.frame_index,
         )
-        frame = self.viewer.current_frame.copy() if self.viewer.current_frame is not None else None
-        self.window.set_context(frame, glass, context, annotation.official_tracking_reference, annotation)
+        image_error = ""
+        if self.viewer.current_frame is None:
+            self._release_draft_image()
+        else:
+            image_error = self._set_draft_image_from_frame(self.viewer.current_frame)
+        self.window.set_context(
+            None if self._draft_image.isNull() else self._draft_image,
+            glass,
+            context,
+            annotation.official_tracking_reference,
+            annotation,
+        )
         self.window.set_decode_delta(annotation.actual_decoded_timestamp_sec, self.viewer.current_time)
-        if self.viewer.current_frame_index != annotation.frame_index:
+        if image_error:
+            self.window.set_validation_error(image_error)
+        elif self.viewer.current_frame is None:
+            self.window.set_validation_error("annotation 장면을 원본 영상에서 불러오지 못했습니다.")
+        elif self.viewer.current_frame_index != annotation.frame_index:
             self.window.set_validation_error(
                 f"현재 decode frame {self.viewer.current_frame_index}가 annotation frame {annotation.frame_index}와 다릅니다. "
                 "원본 영상 identity를 확인해 주세요."
@@ -408,6 +443,7 @@ class TruthAnnotationCoordinator(QObject):
         self.identity = build_truth_bundle_identity(bundle) if bundle is not None else None
         self.session.clear()
         self.draft_dirty = False
+        self._release_draft_image()
         if self.window is not None:
             self.window.clear_context("새 result bundle을 열었습니다. 새 정답 세트를 만들거나 .oiltruth를 열어 주세요.")
             self._refresh_source_state()
@@ -422,6 +458,7 @@ class TruthAnnotationCoordinator(QObject):
 
     def _glass_changed(self, _glass_id: str) -> None:
         if self.window is not None:
+            self._release_draft_image()
             self.window.clear_context("관찰창이 변경되었습니다. 현재 Viewer 장면을 명시적으로 불러와 주세요.")
             self.draft_dirty = False
             self._refresh_annotations()
@@ -481,6 +518,21 @@ class TruthAnnotationCoordinator(QObject):
             self.session.dirty = False
             return True
         return False
+
+    def _set_draft_image_from_frame(self, frame) -> str:
+        try:
+            image = self.frame_image_converter.to_qimage(frame)
+            if image is None or image.isNull():
+                raise FrameImageConversionError("converter가 빈 QImage를 반환했습니다.")
+        except (FrameImageConversionError, TypeError, ValueError) as exc:
+            LOGGER.warning("Truth frame conversion failed: %s", exc)
+            self._release_draft_image()
+            return _IMAGE_CONVERSION_MESSAGE
+        self._draft_image = QImage(image).copy()
+        return ""
+
+    def _release_draft_image(self) -> None:
+        self._draft_image = QImage()
 
     def _refresh_annotations(self, *_args, select_id: str = "") -> None:
         if self.window is None:
@@ -583,6 +635,7 @@ class TruthAnnotationCoordinator(QObject):
             return
         self._closing = True
         self.export_controller.close()
+        self._release_draft_image()
         if self.window is not None:
             self.window.close()
             self.window = None
