@@ -57,6 +57,24 @@
 - Build and run the one-folder package on a general office Windows PC without CUDA or any GPU-compute runtime dependency.
 - Repeat with Unicode and long paths, active file locking, cancellation and application close; confirm video/output/debug resources are released.
 
+## S5-B oil boundary and temporal tracking
+- Validate a real, visually clear oil boundary and a weak transparent-oil boundary against user-recorded truth.
+- Validate transparent-oil agitation, shimmer and heat-haze-like motion without forcing a numeric boundary.
+- Validate structural horizontal lines, Glass rim, glare and reflection separately and together with a real oil boundary.
+- Include low lighting, blur and fogging; verify conflicting evidence produces review rather than a forced position.
+- Validate full no-interface and empty no-interface scenes; raw and smoothed numeric positions must remain blank.
+- Validate rapid filling, rapid draining and the immediate compressor-startup transient without permanent jump rejection.
+- Validate one-sample and multi-sample oil-boundary dropout; a missing current sample must not display a stale smoothed number.
+- Insert a deliberately misleading strong line, then verify bounded recovery to the true oil path.
+- Validate visible-to-no-interface and no-interface-to-visible transitions, including stale smoothing removal and bounded reacquisition.
+- Run Glass 1, 2 and 3 independently and together; verify oil path, smoothing, polarity and reacquisition state remain isolated.
+- Exercise Workbench preview, modeless preflight, full analysis and partial re-detection with the same representative scenes.
+- In Result Review debug, inspect consensus source support, signed contrast/polarity, static overlap, no-interface decision, path margin, tracker update and reacquisition metrics.
+- Record user truth and run an external S1 regression dataset containing real oil boundary, reflection, structure, no-interface, dropout and rapid-flow categories.
+- Measure Windows CPU median and long-duration memory with debug disabled; compare against the accepted exact-head baseline and verify bounded path state.
+- Build and run the Windows one-folder package on a general office PC with an integrated/basic GPU and with no CUDA or dedicated GPU compute runtime.
+- Repeat with Unicode and long paths, active file locking, cancellation and application close; confirm video, output and debug resources are released.
+
 ## Analysis lifecycle and cancellation
 - Run 1-, 2- and 3-Glass analyses with a long real compressor video.
 - Confirm the dialog displays all six stages in order: 영상 분석, 이벤트와 판정 계산, 결과 이미지 생성, CSV와 snapshot 저장, graph와 보고서 생성, bundle 마무리.
