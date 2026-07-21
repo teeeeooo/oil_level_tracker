@@ -381,7 +381,7 @@ def _odd_kernel(value: int, *, upper: int) -> int:
 
 
 def _clean_support_mask(mask: np.ndarray, base: int) -> np.ndarray:
-    close_size = _odd_kernel(max(3, int(round(base * 0.025))), upper=9)
+    close_size = _odd_kernel(max(3, int(round(base * 0.040))), upper=9)
     open_size = _odd_kernel(max(3, int(round(base * 0.012))), upper=5)
     closed = cv2.morphologyEx(
         mask, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (close_size, close_size))
