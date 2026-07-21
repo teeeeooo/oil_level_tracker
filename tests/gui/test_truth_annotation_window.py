@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import numpy as np
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QColor, QImage
 
 from oil_tracker.adapters.storage.json_truth_repository import build_truth_bundle_identity
 from oil_tracker.application.services.user_truth import TruthFrameContext, UserTruthService
@@ -9,6 +9,12 @@ from oil_tracker.domain.enums import FillState
 from oil_tracker.domain.user_truth import TruthDisposition, TruthErrorType
 from oil_tracker.ui.truth_annotation_window import TruthAnnotationWindow
 from user_truth_fixtures import make_truth_bundle, make_truth_set_and_annotation
+
+
+def _frame_image(width: int = 320, height: int = 240) -> QImage:
+    image = QImage(width, height, QImage.Format.Format_RGB32)
+    image.fill(QColor(12, 34, 56))
+    return image
 
 
 def _window(qtbot, tmp_path):
@@ -20,8 +26,8 @@ def _window(qtbot, tmp_path):
     qtbot.addWidget(window)
     window.show()
     context = TruthFrameContext("glass-1", "관찰창 1", 2.0, 2.0, 60)
-    frame = np.zeros((240, 320, 3), dtype=np.uint8)
-    window.set_context(frame, glass, context, official)
+    frame_image = _frame_image()
+    window.set_context(frame_image, glass, context, official)
     return window, bundle, glass, official, context
 
 
@@ -33,6 +39,11 @@ def test_window_without_context_disables_annotation_actions(qtbot):
     assert not window.export_current_button.isEnabled()
 
 
+def test_window_accepts_qimage_context_and_preserves_source_size(qtbot, tmp_path):
+    window, _bundle, _glass, _official, _context = _window(qtbot, tmp_path)
+    assert window.canvas.source_image_size == QSize(320, 240)
+
+
 def test_current_frame_context_is_snapshot_and_not_silently_rebound(qtbot, tmp_path):
     window, _bundle, _glass, _official, context = _window(qtbot, tmp_path)
     assert window.context() is context
@@ -42,6 +53,14 @@ def test_current_frame_context_is_snapshot_and_not_silently_rebound(qtbot, tmp_p
     unrelated = TruthFrameContext("glass-1", "관찰창 1", 3.0, 3.0, 90)
     assert unrelated != original
     assert window.context() is original
+
+
+def test_clear_context_releases_canvas_image(qtbot, tmp_path):
+    window, _bundle, _glass, _official, _context = _window(qtbot, tmp_path)
+    window.clear_context("비움")
+    assert window.context() is None
+    assert window.official_reference() is None
+    assert window.canvas.source_image_size.isEmpty()
 
 
 def test_confirm_official_is_explicit_and_copies_fill_and_lines(qtbot, tmp_path):
