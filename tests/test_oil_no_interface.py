@@ -61,11 +61,11 @@ def test_weak_structural_candidate_can_lose_to_no_interface():
     image = np.full((48, 64, 3), 90, dtype=np.uint8)
     image[23:25] = 120
     evidence = _evidence(image, [_candidate(0.30)])
+    assert evidence.available
     assert evidence.score > evidence.boundary_score
-    assert evidence.reason in {
-        "uniform_region_with_weak_boundary",
-        "weak_boundary_evidence",
-    }
+    assert evidence.score >= DetectorSettings().oil_no_interface_min_score
+    assert evidence.uniformity_score > 0.8
+    assert evidence.reason != "strong_boundary_evidence"
 
 
 def test_glare_visibility_conflict_is_explicit_and_finite():
