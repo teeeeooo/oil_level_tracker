@@ -9,44 +9,33 @@ permissions:
   pull-requests: write
 
 jobs:
-  focused:
-    name: focused-${{ matrix.group }}
+  oil-core:
+    name: oil-core-${{ matrix.name }}
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
         include:
-          - group: oil-core
-            files: >-
-              tests/test_oil_candidate_consensus.py
-              tests/test_oil_signed_scoring.py
-              tests/test_oil_no_interface.py
-              tests/test_oil_temporal_path.py
-              tests/test_oil_temporal_tracker.py
-              tests/test_oil_detector_integration.py
-              tests/test_oil_fill_state_classifier.py
-              tests/test_oil_settings.py
-          - group: oil-controlled
-            files: tests/test_oil_controlled_benchmark.py
-          - group: foam-regression
-            files: >-
-              tests/test_foam_evidence.py
-              tests/test_foam_fill_state_policy.py
-              tests/test_foam_phase_detector_integration.py
-              tests/test_foam_settings.py
-              tests/test_foam_temporal_gate.py
-              tests/test_foam_controlled_benchmark.py
-          - group: benchmark-boundary
-            files: >-
-              tests/test_detector_benchmark_metrics.py
-              tests/test_detector_benchmark_runner.py
-              tests/test_detector_benchmark_integration.py
-              tests/test_benchmark_cli.py
-              tests/test_ui_import_boundaries.py
+          - name: consensus
+            file: tests/test_oil_candidate_consensus.py
+          - name: scoring
+            file: tests/test_oil_signed_scoring.py
+          - name: no-interface
+            file: tests/test_oil_no_interface.py
+          - name: path
+            file: tests/test_oil_temporal_path.py
+          - name: smoothing
+            file: tests/test_oil_temporal_tracker.py
+          - name: detector
+            file: tests/test_oil_detector_integration.py
+          - name: fill-state
+            file: tests/test_oil_fill_state_classifier.py
+          - name: settings
+            file: tests/test_oil_settings.py
     env:
       QT_QPA_PLATFORM: offscreen
       EXPECTED_SHA: 2a58795a470f8d9284648d60c3a5d49e9fd31cb2
-      TEST_FILES: ${{ matrix.files }}
+      TEST_FILE: ${{ matrix.file }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -66,78 +55,21 @@ jobs:
           sudo apt-get update -qq >/dev/null
           sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-xinerama0 libxcb-keysyms1 libxcb-render-util0 >/dev/null
           python -m pip install -q -e '.[dev]'
-      - name: Runtime identity
-        run: |
-          python - <<'PY'
-          import cv2, matplotlib, numpy, PySide6, sys
-          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
-          print('python=' + sys.version)
-          print('PySide6=' + PySide6.__version__)
-          print('numpy=' + numpy.__version__)
-          print('opencv=' + cv2.__version__)
-          print('matplotlib=' + matplotlib.__version__)
-          print('detector_version=' + OpenCvPhaseDetector.version)
-          PY
-      - name: Run focused group
+      - name: Run isolated oil core file
         shell: bash
         run: |
           set +e
-          python -m pytest -q --tb=short ${TEST_FILES} > /tmp/pytest.log 2>&1
+          python -m pytest -q --tb=short ${TEST_FILE} > /tmp/pytest.log 2>&1
           status=$?
           cat /tmp/pytest.log
           if [ "${status}" -ne 0 ]; then
             {
-              echo "## Temporary S5-B focused diagnostic: ${{ matrix.group }}"
+              echo "## Temporary S5-B oil-core diagnostic: ${{ matrix.name }}"
               echo
               echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
               echo
               echo '```text'
-              tail -n 360 /tmp/pytest.log
-              echo '```'
-            } > /tmp/body.md
-            gh pr edit 55 --body-file /tmp/body.md || true
-          fi
-          exit ${status}
-
-  full-python313:
-    runs-on: ubuntu-24.04
-    env:
-      QT_QPA_PLATFORM: offscreen
-      EXPECTED_SHA: 2a58795a470f8d9284648d60c3a5d49e9fd31cb2
-      GH_TOKEN: ${{ github.token }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ env.EXPECTED_SHA }}
-      - name: Assert exact feature head
-        run: |
-          actual="$(git rev-parse HEAD)"
-          echo "expected_exact_sha=${EXPECTED_SHA}"
-          echo "actual_checkout_sha=${actual}"
-          test "${actual}" = "${EXPECTED_SHA}"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: Install runtime and package
-        run: |
-          sudo apt-get update -qq >/dev/null
-          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-xinerama0 libxcb-keysyms1 libxcb-render-util0 >/dev/null
-          python -m pip install -q -e '.[dev]'
-      - name: Run full suite diagnostic
-        shell: bash
-        run: |
-          set +e
-          python -m pytest -q --tb=short > /tmp/pytest.log 2>&1
-          status=$?
-          cat /tmp/pytest.log
-          if [ "${status}" -ne 0 ]; then
-            {
-              echo "## Temporary S5-B full-suite diagnostic"
-              echo
-              echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
-              echo
-              echo '```text'
-              tail -n 500 /tmp/pytest.log
+              cat /tmp/pytest.log
               echo '```'
             } > /tmp/body.md
             gh pr edit 55 --body-file /tmp/body.md || true
