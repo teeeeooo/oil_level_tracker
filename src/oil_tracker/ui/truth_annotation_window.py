@@ -325,8 +325,18 @@ class TruthAnnotationWindow(QMainWindow):
     def set_annotations(self, annotations) -> None:
         current_id = self.current_annotation_id()
         self.annotation_list.clear()
-        disposition_filter = self.disposition_filter.currentData()
-        error_filter = self.error_filter.currentData()
+        raw_disposition_filter = self.disposition_filter.currentData()
+        raw_error_filter = self.error_filter.currentData()
+        disposition_filter = (
+            None
+            if raw_disposition_filter is None
+            else TruthDisposition(str(raw_disposition_filter))
+        )
+        error_filter = (
+            None
+            if raw_error_filter is None
+            else TruthErrorType(str(raw_error_filter))
+        )
         visible = []
         for annotation in annotations:
             if disposition_filter is not None and annotation.disposition is not disposition_filter:
@@ -436,7 +446,11 @@ class TruthAnnotationWindow(QMainWindow):
         disposition = next(
             value for value, button in self.disposition_buttons.items() if button.isChecked()
         )
-        fill_state = self.fill_state.currentData() if disposition is TruthDisposition.CORRECTED else None
+        fill_state = (
+            FillState(str(self.fill_state.currentData()))
+            if disposition is TruthDisposition.CORRECTED
+            else None
+        )
         return TruthDraftValues(
             disposition=disposition,
             fill_state=fill_state,
@@ -542,7 +556,7 @@ class TruthAnnotationWindow(QMainWindow):
                 self._draft_changed()
 
     def _state_changed(self, _index: int) -> None:
-        state = self.fill_state.currentData()
+        state = FillState(str(self.fill_state.currentData()))
         if state in {FillState.EMPTY_NO_INTERFACE, FillState.FULL_NO_INTERFACE}:
             self.oil_present.setChecked(False)
             self.canvas.remove_line("oil")
@@ -589,7 +603,7 @@ class TruthAnnotationWindow(QMainWindow):
             return "기타 오류 유형을 선택한 경우 메모를 입력해 주세요."
         if disposition is TruthDisposition.UNUSABLE:
             return ""
-        state = self.fill_state.currentData()
+        state = FillState(str(self.fill_state.currentData()))
         visible_states = {
             FillState.FILLING_VISIBLE,
             FillState.PARTIAL_VISIBLE,
