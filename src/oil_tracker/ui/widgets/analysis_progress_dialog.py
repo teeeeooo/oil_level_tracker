@@ -109,7 +109,11 @@ class AnalysisProgressDialog(QDialog):
         self.cancelRequested.emit()
 
     def reject(self) -> None:
-        if self._terminal:
-            super().reject()
-        else:
+        super().reject()
+
+    def closeEvent(self, event) -> None:
+        if not self._terminal:
             self._request_cancel()
+            event.ignore()
+            return
+        super().closeEvent(event)
