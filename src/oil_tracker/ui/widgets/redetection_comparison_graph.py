@@ -33,6 +33,7 @@ class RedetectionComparisonGraph(QWidget):
         self.clear("재검출 결과가 없습니다.")
 
     def set_result(self, result, glass) -> None:
+        self._update_adjacent_table_headers()
         self._points = tuple(result.comparisons)
         self._target_timestamp = result.request.target_timestamp_sec
         use_mm = bool(glass.mm_per_pixel and glass.mm_per_pixel > 0) and any(
@@ -149,6 +150,28 @@ class RedetectionComparisonGraph(QWidget):
             label=label,
         )
 
+    def _update_adjacent_table_headers(self) -> None:
+        table = getattr(self.window(), "tracking_table", None)
+        if table is None:
+            return
+        table.setHorizontalHeaderLabels(
+            (
+                "기준 시각",
+                "공식 시각",
+                "재검출 시각",
+                "공식 유면",
+                "재검출 유면",
+                "유면 Δ",
+                "공식 거품 경계",
+                "재검출 거품 경계",
+                "거품 경계 Δ",
+                "신뢰도 Δ",
+                "상태",
+                "유효성",
+                "일치 상태",
+            )
+        )
+
     def _clicked(self, event) -> None:
         if event.inaxes is not self.axes or event.xdata is None or not self._points:
             return
@@ -171,7 +194,8 @@ class RedetectionComparisonGraph(QWidget):
         self.comparisonSelected.emit(index, float(timestamp))
 
     def closeEvent(self, event) -> None:
-        self.canvas.mpl_disconnect(self._callback)
+        if self._callback is not None:
+            self.canvas.mpl_disconnect(self._callback)
         self._callback = None
         self.figure.clear()
         super().closeEvent(event)
