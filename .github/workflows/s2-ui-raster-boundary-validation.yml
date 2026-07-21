@@ -1,0 +1,13 @@
+name: S2 UI raster boundary validation placeholder
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "Validation is activated after PR evidence comments are reserved."
