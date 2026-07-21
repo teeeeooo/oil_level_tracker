@@ -12,11 +12,16 @@
 
 - 작성일: 2026-07-21
 - Phase 2C-3 PR: #27 `feat: add user truth annotations and regression fixtures`
-- PR exact head: `7cf152083b72394a90ae1118a94084c32b0c9033`
-- main merge SHA: `c9f130f58d51c79b29cf3594a0cbd44b3a570d78`
-- canonical validation: Python 3.13 및 3.14에서 각각 `485 passed`
+- Phase 2C-3 PR exact head: `7cf152083b72394a90ae1118a94084c32b0c9033`
+- Phase 2C-3 main merge SHA: `c9f130f58d51c79b29cf3594a0cbd44b3a570d78`
+- Phase 2C-3 canonical validation: Python 3.13 및 3.14에서 각각 `485 passed`
+- S1 PR: #29 `feat: add detector benchmark foundation`
+- S1 PR exact head: `73edfedb61948e2ff0431ed31075db1ac5d682ef`
+- S1 main merge SHA: `ced132f5927554c658a9993155a8d4afa121b011`
+- S1 focused validation: Python 3.13에서 `66 passed`, failure/skip 없음
+- S1 canonical validation: Python 3.13 및 3.14에서 각각 `542 passed`, failure/skip 없음
 
-Phase 2C-3으로 외부 `.oiltruth` 사용자 정답 세트와 regression fixture export가 확보됐다. 이후 detector 변경은 이 자료를 benchmark 근거로 사용한다.
+Phase 2C-3으로 외부 `.oiltruth` 사용자 정답 세트와 regression fixture export가 확보됐고, S1으로 같은 자료를 읽고 현재 detector를 정량 평가하는 benchmark foundation이 확보됐다. 이후 detector 변경은 S1 결과를 baseline 근거로 사용한다.
 
 ## 3. 최상위 원칙
 
@@ -35,7 +40,22 @@ Phase 2C-3으로 외부 `.oiltruth` 사용자 정답 세트와 regression fixtur
 5. 같은 fixture dataset 재검증
 6. 실제 compressor 영상 수동 검증
 
-### 3.2 UI architecture 규칙을 유지한다
+### 3.2 Detector 구현 선택 기준
+
+S1 benchmark와 S5 detector 개선에는 다음 기준을 적용한다. 이 기준은 기존 작업 순서를 변경하지 않고 구현 선택과 acceptance를 구체화한다.
+
+- 대규모 학습 모델은 기본 범위에서 제외한다.
+- 추가 model checkpoint와 GPU runtime dependency를 도입하지 않는다.
+- OpenCV·NumPy 기반의 경량 알고리즘을 우선한다.
+- threshold와 scoring weight는 단일 영상이 아니라 여러 fixture category의 benchmark 결과로 보정한다.
+- 설정값은 가능한 한 기존 `DetectorSettings`에서 관리하고 serialization, fingerprint와 backward compatibility 대상에 포함한다.
+- 한 영상의 성능만 높이기 위한 hard-coded 예외, fixture ID 분기와 파일명 기반 분기를 금지한다.
+- 낮은 confidence나 상충 evidence는 강제 유면·Foam 상태로 확정하지 않고 `UNKNOWN_REVIEW`와 review-required 경로로 처리한다.
+- 정확도 외에 배포 용량, CPU 처리 속도, 메모리와 Windows one-folder 호환성을 acceptance criterion에 포함한다.
+- GPU가 없는 일반 업무용 Windows PC에서 동작해야 한다.
+- 학습 모델이 필요하다는 근거가 생기더라도 기존 S5 범위를 자동 확장하지 않고 별도 설계·승인 작업으로 분리한다.
+
+### 3.3 UI architecture 규칙을 유지한다
 
 `src/oil_tracker/ui`는 `cv2`와 `numpy`를 직접 import하지 않는다.
 
@@ -43,7 +63,7 @@ Phase 2C-3에서 presentation adapter를 추가하고 기존 직접 import를 �
 
 이 예외는 신규 구현의 선례가 아니며, Phase 2C-4 전에 제거한다.
 
-### 3.3 사용자 화면 용어를 일관되게 한다
+### 3.4 사용자 화면 용어를 일관되게 한다
 
 | 기존 사용자 용어 | 변경 사용자 용어 |
 |---|---|
@@ -276,9 +296,9 @@ Workbench당 하나의 modeless window로 전환한다.
 - temporal persistence와 front 이동 연속성
 - 아지랑이 transient/refractive motion 특징
 - Foam state 전환 전 minimum evidence gate
-- 불확실한 경우 Foam 확정 대신 review 상태
+- 불확실한 경우 Foam 확정 대신 `UNKNOWN_REVIEW`
 
-Algorithm 선택은 benchmark 결과를 기준으로 한다.
+Algorithm 선택은 benchmark 결과와 3.2 구현 선택 기준을 따른다.
 
 ### RW-13. 유면 검출과 tracking 정확도가 낮음
 
@@ -303,6 +323,9 @@ Algorithm 선택은 benchmark 결과를 기준으로 한다.
 - confidence-gated tracker update
 - tracker prior와 rejected candidate 분리
 - no-interface hypothesis를 candidate와 함께 비교
+- 낮은 confidence나 상충 evidence에서 `UNKNOWN_REVIEW`
+
+Algorithm 선택은 benchmark 결과와 3.2 구현 선택 기준을 따른다.
 
 ### RW-14. Result Review graph 한글이 깨짐
 
@@ -368,6 +391,8 @@ Phase 2C-3 fixture를 다음 category로 수집한다.
 
 Dataset에는 category, 예상 fill state, 유면·거품 truth와 unusable 사유를 포함한다.
 
+Threshold와 scoring 보정은 단일 영상이 아니라 위 category를 균형 있게 포함한 dataset 결과를 기준으로 한다.
+
 ## 6. Benchmark 지표
 
 - oil boundary MAE px
@@ -380,6 +405,8 @@ Dataset에는 category, 예상 fill state, 유면·거품 truth와 unusable 사�
 - no-interface false-boundary rate
 - event timestamp difference
 - detector version과 settings snapshot
+- dataset, settings와 run fingerprint
+- 이전 baseline 대비 category별 delta
 
 Raw와 smoothed 위치는 별도로 측정한다.
 
@@ -399,27 +426,46 @@ Raw와 smoothed 위치는 별도로 측정한다.
 
 ### S1 — Detector benchmark foundation
 
-**다음 작업**
+**완료**
 
-Algorithm은 변경하지 않는다.
+PR #29 `feat: add detector benchmark foundation`로 `main`에 반영했다.
 
-범위:
+- PR exact head: `73edfedb61948e2ff0431ed31075db1ac5d682ef`
+- main merge SHA: `ced132f5927554c658a9993155a8d4afa121b011`
+- focused validation: Python 3.13에서 `66 passed`, failure/skip 없음
+- canonical validation: Python 3.13 및 3.14에서 각각 `542 passed`, failure/skip 없음
+- Actions artifact 없음
+- 임시 validation PR, branch와 workflow cleanup 완료
 
-- regression dataset reader
-- benchmark runner
-- category별 metric
-- current detector baseline
-- machine-readable JSON/CSV 결과
-- 이전 baseline과 비교 report
-- fixture 수집 절차
+Algorithm과 threshold는 변경하지 않았다.
+
+구현 범위:
+
+- Phase 2C-3 regression dataset reader
+- schema, identity, path, manifest와 SHA-256 검증
+- current `OpenCvPhaseDetector` benchmark runner
+- 독립 case와 sequence 간 temporal state 격리
+- 8개 category별 metric
+- raw/smoothed 유면과 Foam 위치 분리
+- coverage, fill state, Foam precision/recall, shimmer와 no-interface metric
+- JSON/CSV/Markdown atomic 결과
+- dataset/run/settings fingerprint
+- previous baseline comparison
+- headless CLI
+- fixture 수집, 실행과 해석 절차
+
+S1은 대규모 학습 모델, model checkpoint, GPU dependency와 algorithm tuning을 도입하지 않았다. 기존 `DetectorSettings` snapshot을 그대로 사용했고 단일 영상용 hard-coded 예외를 추가하지 않았다.
 
 ### S2 — UI raster boundary architecture refactor
+
+**다음 작업**
 
 범위:
 
 - `result_review_canvas.py`의 `cv2`와 `numpy` import 제거
 - overlay rendering을 vision/presentation adapter로 이동
 - PNG encoding과 filesystem write를 storage adapter로 이동
+- concrete renderer와 filesystem wiring을 UI 밖 bootstrap/composition root로 이동
 - architecture allowlist 제거
 
 ### S3 — Workbench usability stabilization
@@ -447,9 +493,29 @@ Algorithm은 변경하지 않는다.
 
 S1 benchmark를 기준으로 Foam false-positive를 줄인다.
 
+구현·acceptance 기준:
+
+- OpenCV·NumPy 기반 경량 algorithm을 우선한다.
+- 대규모 학습 모델, model checkpoint와 GPU dependency를 기본 범위에 포함하지 않는다.
+- threshold와 scoring weight는 여러 fixture category의 precision, recall과 shimmer false-positive 결과로 보정한다.
+- 설정값은 가능한 한 `DetectorSettings`에서 관리하고 serialization과 fingerprint 대상에 포함한다.
+- 단일 영상, fixture ID나 파일명에 대한 hard-coded 예외를 금지한다.
+- evidence가 낮거나 상충하면 Foam 상태를 강제하지 않고 `UNKNOWN_REVIEW`로 처리한다.
+- 배포 용량 증가, CPU frame 처리 시간, memory와 Windows one-folder packaging을 측정한다.
+
 ### S5-B — 유면 경계와 temporal tracking 개선
 
 S1 benchmark를 기준으로 위치 오차, false boundary와 tracker contamination을 줄인다.
+
+구현·acceptance 기준:
+
+- OpenCV·NumPy 기반 경량 candidate, scoring과 temporal algorithm을 우선한다.
+- 대규모 학습 모델, model checkpoint와 GPU dependency를 기본 범위에 포함하지 않는다.
+- threshold와 scoring weight는 여러 fixture category의 MAE, P90/P95, coverage와 no-interface false-boundary 결과로 보정한다.
+- 설정값은 가능한 한 `DetectorSettings`에서 관리하고 serialization과 fingerprint 대상에 포함한다.
+- 단일 영상, fixture ID나 파일명에 대한 hard-coded 예외를 금지한다.
+- confidence가 낮거나 candidate evidence가 상충하면 위치나 fill state를 강제하지 않고 `UNKNOWN_REVIEW`로 처리한다.
+- 배포 용량 증가, CPU frame 처리 시간, memory와 Windows one-folder packaging을 측정한다.
 
 S5-A와 S5-B를 하나의 대형 PR로 합치지 않는다.
 
@@ -457,12 +523,16 @@ S5-A와 S5-B를 하나의 대형 PR로 합치지 않는다.
 
 - 동일 fixture dataset 재실행
 - baseline과 새 detector 비교
+- 여러 category에서 threshold와 setting의 일반화 확인
 - 실제 compressor 영상 수동 확인
 - Windows 장시간 실행
 - event와 judgment 회귀
-- memory, 속도와 file lock
+- memory와 CPU 처리 속도
+- 배포 용량 변화
+- Windows one-folder packaging과 GPU 없는 PC 실행
+- file lock과 resource cleanup
 
-Detector 개선이 수치로 확인되지 않으면 다음 단계로 진행하지 않는다.
+Detector 개선이 수치로 확인되지 않거나 Windows CPU/배포 acceptance를 충족하지 않으면 다음 단계로 진행하지 않는다.
 
 ### S7 — Phase 2C-4 공유용 결과 영상
 
@@ -477,8 +547,8 @@ Annotated MP4 rendering과 encoding은 UI 밖의 adapter/application 계층에�
 
 ## 8. 구현 순서 요약
 
-1. **S1 Detector benchmark foundation**
-2. **S2 UI raster boundary architecture refactor**
+1. **S1 Detector benchmark foundation — 완료**
+2. **S2 UI raster boundary architecture refactor — 다음 작업**
 3. **S3 Workbench usability stabilization**
 4. **S4 Analysis lifecycle·결과 시각화 안정화**
 5. **S5-A Foam/아지랑이 구분**
@@ -490,6 +560,6 @@ Annotated MP4 rendering과 encoding은 UI 밖의 adapter/application 계층에�
 
 - 각 단계는 구현 PR이 `main`에 병합된 뒤에만 완료로 표시한다.
 - 자동 test를 실행하지 않은 플랫폼에 대해 PASS를 주장하지 않는다.
-- Windows DPI와 실제 compressor 영상 검증은 별도로 기록한다.
-- Detector 변경은 benchmark 전후 수치를 함께 기록한다.
+- Windows DPI, Windows one-folder와 실제 compressor 영상 검증은 별도로 기록한다.
+- Detector 변경은 benchmark 전후 수치, runtime, memory와 배포 영향 evidence를 함께 기록한다.
 - Phase 2C-4는 S6 gate 통과 전 시작하지 않는다.
