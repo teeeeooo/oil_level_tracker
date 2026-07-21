@@ -33,6 +33,14 @@ class DetectorSettings:
     foam_variance_threshold: float = 120.0
     foam_edge_density_threshold: float = 0.08
     foam_min_area_ratio: float = 0.025
+    foam_lightness_threshold: float = 125.0
+    foam_max_chroma: float = 42.0
+    foam_min_whiteness_ratio: float = 0.25
+    foam_max_glare_overlap_ratio: float = 0.25
+    foam_min_evidence_score: float = 0.48
+    foam_strong_evidence_score: float = 0.68
+    foam_persistence_frames: int = 3
+    foam_max_front_jump_px: float = 24.0
     state_hold_frames: int = 2
     candidate_top_k: int = 8
     weight_edge: float = 0.22
