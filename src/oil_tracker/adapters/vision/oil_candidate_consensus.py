@@ -23,6 +23,7 @@ class OilCandidateCluster:
     unrounded_representative_y: float = 0.0
     signed_region_evidence: float = 0.0
     edge_center_correction_px: float = 0.0
+    edge_center_correction_deferred: float = 0.0
 
     def to_candidate(self, cluster_index: int) -> BoundaryCandidate:
         supports = {source for source, _y, _score in self.members}
@@ -45,6 +46,9 @@ class OilCandidateCluster:
             ),
             "polarity_edge_center_correction_px": float(
                 self.edge_center_correction_px
+            ),
+            "polarity_edge_center_correction_deferred": float(
+                self.edge_center_correction_deferred
             ),
             "strongest_generator_score": float(self.strongest_generator_score),
             "consensus_score": float(self.consensus_score),
@@ -173,11 +177,25 @@ def _make_cluster(
     unrounded = _weighted_representative(ordered)
     support = len({candidate.source for candidate in ordered})
     signed_region = _signed_region_evidence(ordered)
-    correction = 0.0
-    if support >= 2 and abs(signed_region) >= 0.05:
-        correction = -1.0 if signed_region > 0.0 else 1.0
-    representative = float(round(unrounded) + correction)
     ys = [float(candidate.y) for candidate in ordered]
+    base_representative = float(round(unrounded))
+    desired_correction = 0.0
+    if support >= 2 and abs(signed_region) >= 0.05:
+        desired_correction = -1.0 if signed_region > 0.0 else 1.0
+    proposed_representative = base_representative + desired_correction
+    correction_within_member_envelope = (
+        not ys
+        or min(ys) - 1e-12
+        <= proposed_representative
+        <= max(ys) + 1e-12
+    )
+    correction = (
+        desired_correction if correction_within_member_envelope else 0.0
+    )
+    correction_deferred = float(
+        desired_correction != 0.0 and correction == 0.0
+    )
+    representative = base_representative + correction
     strengths = [_strength(candidate) for candidate in ordered]
     strongest = max(strengths, default=0.0)
     average = sum(strengths) / max(1, len(strengths))
@@ -194,6 +212,7 @@ def _make_cluster(
         unrounded_representative_y=unrounded,
         signed_region_evidence=signed_region,
         edge_center_correction_px=correction,
+        edge_center_correction_deferred=correction_deferred,
     )
 
 
