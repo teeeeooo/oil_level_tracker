@@ -3,6 +3,7 @@ from __future__ import annotations
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QAbstractItemView,
+    QHeaderView,
     QHBoxLayout,
     QLabel,
     QProgressBar,
@@ -65,17 +66,17 @@ class PreflightPanel(QWidget):
         header.addWidget(self.rerun_button)
 
         self.summary_table = self._table(
-            ("관찰창", "최저 신뢰도", "정상", "확인 필요", "실패", "위치 급변", "대표 문제")
+            ("Glass", "최저 신뢰도", "정상", "확인 필요", "실패", "위치 급변", "대표 문제")
         )
         self.result_table = self._table(
-            ("관찰창", "대표 시점", "실제 시각", "상태", "관측 상태", "신뢰도", "문제 사유")
+            ("Glass", "대표 시점", "실제 시각", "상태", "관측 상태", "신뢰도", "문제 사유")
         )
         self.result_table.itemSelectionChanged.connect(self._selected_result)
         self.result_table.cellDoubleClicked.connect(lambda row, _column: self._activate_row(row))
 
-        tabs = QTabWidget()
-        tabs.addTab(self.result_table, "시점별 결과")
-        tabs.addTab(self.summary_table, "관찰창별 요약")
+        self.tabs = QTabWidget()
+        self.tabs.addTab(self.result_table, "시점별 결과")
+        self.tabs.addTab(self.summary_table, "Glass별 요약")
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(8, 8, 8, 8)
@@ -84,7 +85,7 @@ class PreflightPanel(QWidget):
         layout.addWidget(self.detail_label)
         layout.addWidget(self.progress_label)
         layout.addWidget(self.progress_bar)
-        layout.addWidget(tabs, 1)
+        layout.addWidget(self.tabs, 1)
         self.set_unchecked()
 
     @staticmethod
@@ -96,7 +97,9 @@ class PreflightPanel(QWidget):
         table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         table.setAlternatingRowColors(True)
         table.verticalHeader().setVisible(False)
-        table.horizontalHeader().setStretchLastSection(True)
+        header = table.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
+        header.setStretchLastSection(True)
         return table
 
     def set_unchecked(self) -> None:
@@ -108,7 +111,7 @@ class PreflightPanel(QWidget):
     def set_running(self) -> None:
         self._result = None
         self._clear_tables()
-        self._set_status("진행 중", "대표 장면을 준비하고 관찰창별 검출을 실행하고 있습니다.", "running")
+        self._set_status("진행 중", "대표 장면을 준비하고 Glass별 검출을 실행하고 있습니다.", "running")
         self.progress_bar.setRange(0, 1)
         self.progress_bar.setValue(0)
         self.progress_bar.show()
@@ -131,7 +134,7 @@ class PreflightPanel(QWidget):
         elif result.overall_status == PreflightStatus.REVIEW:
             detail = "사용자가 확인해야 할 대표 장면이 있습니다. 결과 행을 선택하면 해당 시점으로 이동합니다."
         else:
-            detail = "일부 대표 장면 또는 관찰창에서 검출에 실패했습니다. 결과 행에서 원인을 확인해 주세요."
+            detail = "일부 대표 장면 또는 Glass에서 검출에 실패했습니다. 결과 행에서 원인을 확인해 주세요."
         self._set_status(label, detail, result.overall_status.value)
         self.progress_bar.hide()
         self.progress_label.hide()
@@ -141,7 +144,7 @@ class PreflightPanel(QWidget):
     def set_stale(self) -> None:
         self._set_status(
             "재점검 필요",
-            "영상, 시간 또는 관찰창 설정이 변경되었습니다. 표시된 결과는 이전 설정 기준입니다.",
+            "영상, 시간 또는 Glass 설정이 변경되었습니다. 표시된 결과는 이전 설정 기준입니다.",
             "stale",
         )
         self.progress_bar.hide()
