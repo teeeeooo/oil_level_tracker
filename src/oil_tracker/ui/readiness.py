@@ -7,7 +7,7 @@ from oil_tracker.application.detection_quality import (
     DetectionQuality as PreviewQuality,
     assess_detection_quality,
 )
-from oil_tracker.domain.enums import ValidationSeverity, WorkbenchState
+from oil_tracker.domain.enums import FillState, ValidationSeverity, WorkbenchState
 from oil_tracker.ui.presentation_labels import fill_state_label, validation_issue_short_message
 
 
@@ -51,7 +51,9 @@ class PreviewSummary:
     fill_state: str
     confidence: str
     reference_position: str
-    judgment: str
+    interpretation: str
+    recommendation: str
+    action_key: str | None = None
 
 
 _SEVERITY_ORDER = {
@@ -198,14 +200,14 @@ def build_workbench_progress(recipe, session, state: WorkbenchState, validation_
     enabled_count = sum(1 for glass in recipe.glasses if glass.enabled)
     if enabled_count == 0:
         glass_state = ProgressStepState.CURRENT if video_complete else ProgressStepState.WAITING
-        glass_step = ProgressStep("glasses", "관찰창 설정", glass_state, "분석할 관찰창이 필요함")
+        glass_step = ProgressStep("glasses", "Glass 설정", glass_state, "분석할 Glass가 필요함")
     elif glass_errors:
-        glass_step = ProgressStep("glasses", "관찰창 설정", ProgressStepState.ERROR, "관찰창 수정 필요")
+        glass_step = ProgressStep("glasses", "Glass 설정", ProgressStepState.ERROR, "Glass 수정 필요")
     elif glass_warnings:
-        glass_step = ProgressStep("glasses", "관찰창 설정", ProgressStepState.WARNING, "관찰창 확인 필요")
+        glass_step = ProgressStep("glasses", "Glass 설정", ProgressStepState.WARNING, "Glass 확인 필요")
     else:
         glass_step = ProgressStep(
-            "glasses", "관찰창 설정", ProgressStepState.COMPLETE, f"{enabled_count}개 설정 완료"
+            "glasses", "Glass 설정", ProgressStepState.COMPLETE, f"{enabled_count}개 설정 완료"
         )
 
     prerequisites_ready = not errors and enabled_count > 0 and video_complete
@@ -240,6 +242,7 @@ def build_detection_summary(detection, glass) -> PreviewSummary:
             "-",
             "-",
             "검출 결과가 없습니다",
+            "분석 영역과 영상 장면을 확인하세요.",
         )
 
     confidence = max(0.0, min(1.0, float(detection.overall_confidence)))
@@ -253,14 +256,37 @@ def build_detection_summary(detection, glass) -> PreviewSummary:
     else:
         detection_status = "유면 확인됨" if detection.oil_air_level_y is not None else "유면 경계 미표시"
 
-    reference_position = _reference_position(detection, glass)
+    flags = {str(flag).upper() for flag in detection.flags}
+    foam_possible = detection.fill_state in {
+        FillState.FULL_WITH_FOAM,
+        FillState.FOAMING_VISIBLE,
+    } or any("FOAM" in flag for flag in flags)
+    if foam_possible:
+        interpretation = "거품 가능성이 감지됨"
+        recommendation = "영상에서 실제 거품인지 확인하세요."
+        action_key = "initial_state"
+    elif quality == PreviewQuality.FAILURE:
+        interpretation = assessment.reason
+        recommendation = "분석 영역, 기준선과 현재 영상 장면을 확인하세요."
+        action_key = None
+    elif quality == PreviewQuality.REVIEW:
+        interpretation = assessment.reason
+        recommendation = "현재 영상 장면을 직접 확인하세요."
+        action_key = None
+    else:
+        interpretation = assessment.reason
+        recommendation = "추가 조치가 필요하지 않습니다."
+        action_key = None
+
     return PreviewSummary(
         quality=quality,
         detection_status=detection_status,
         fill_state=fill_state_label(detection.fill_state),
         confidence=f"{confidence * 100:.0f}%",
-        reference_position=reference_position,
-        judgment=assessment.reason,
+        reference_position=_reference_position(detection, glass),
+        interpretation=interpretation,
+        recommendation=recommendation,
+        action_key=action_key,
     )
 
 
