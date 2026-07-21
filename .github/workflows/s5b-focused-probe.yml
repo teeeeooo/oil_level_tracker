@@ -1,4 +1,4 @@
-name: S5-B final comparison diagnosis
+name: S5-B final metric extraction
 
 on:
   pull_request:
@@ -21,35 +21,39 @@ jobs:
       FAILED_RUN_ID: '29852941657'
       FAILED_JOB_ID: '88710364196'
     steps:
-      - name: Extract stored controlled summary and traceback
+      - name: Extract prefixed JSON metrics from stored log
         run: |
           gh run view "${FAILED_RUN_ID}" --repo "${GITHUB_REPOSITORY}" --job "${FAILED_JOB_ID}" --log > /tmp/job.log
           python - <<'PY'
+          import re
           from pathlib import Path
-          text = Path('/tmp/job.log').read_text(encoding='utf-8', errors='replace')
-          start = text.find('{\n')
-          candidates = []
-          while start >= 0:
-              end = text.find('\n}', start)
-              if end < 0:
+          lines = Path('/tmp/job.log').read_text(encoding='utf-8', errors='replace').splitlines()
+          keys = (
+              '"base_sha"', '"feature_sha"', '"dataset_fingerprint"', '"case_count"',
+              '"sequence_count"', '"category_count"', '"base_detector"', '"feature_detector"',
+              '"base_errors"', '"feature_errors"', '"raw_oil_', '"smoothed_oil_',
+              '"base_coverage"', '"feature_coverage"', '"base_no_interface_fpr"',
+              '"feature_no_interface_fpr"', '"base_temporal_recovery"',
+              '"feature_temporal_recovery"', '"base_foam_precision"', '"feature_foam_precision"',
+              '"base_foam_recall"', '"feature_foam_recall"', '"base_shimmer_fpr"',
+              '"feature_shimmer_fpr"', '"base_cpu_ms"', '"feature_cpu_ms"', '"cpu_ratio"',
+              '"dependency_diff"',
+          )
+          extracted = []
+          for line in lines:
+              if any(key in line for key in keys) and '^[[36;1m' not in line:
+                  content = re.sub(r'^.*?Z\s+', '', line)
+                  extracted.append(content)
+          traceback = []
+          for index, line in enumerate(lines):
+              if 'Traceback (most recent call last):' in line:
+                  traceback = [re.sub(r'^.*?Z\s+', '', value) for value in lines[index:index+5]]
                   break
-              block = text[start:end + 2]
-              if '"base_errors"' in block and '"cpu_ratio"' in block:
-                  candidates.append(block)
-              start = text.find('{\n', start + 2)
-          traceback = text[text.rfind('Traceback (most recent call last):'):]
           body = [
-              '## S5-B final controlled comparison diagnosis',
-              '',
-              'This run only reads the stored final validation log; it does not execute detector tests.',
-              '',
-              '```json',
-              candidates[-1] if candidates else 'controlled summary not found',
-              '```',
-              '',
-              '```text',
-              '\n'.join(traceback.splitlines()[:12]),
-              '```',
+              '## S5-B final controlled metric extraction', '',
+              'Stored log only; detector and benchmark were not rerun.', '',
+              '```text', *extracted[-80:], '```', '',
+              '```text', *traceback, '```',
           ]
           Path('/tmp/body.md').write_text('\n'.join(body), encoding='utf-8')
           PY
