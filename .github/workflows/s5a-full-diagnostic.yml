@@ -227,4 +227,4 @@ jobs:
             test -f /tmp/compare.log && cat /tmp/compare.log
             echo '```'
           } > /tmp/comment.md
-          gh pr comment "$PR_NUMBER" --body-file /tmp/comment.md
+          gh pr comment "$PR_NUMBER" --repo teeeeooo/oil_level_tracker --body-file /tmp/comment.md
