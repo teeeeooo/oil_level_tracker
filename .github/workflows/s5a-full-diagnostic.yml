@@ -1,0 +1,52 @@
+name: S5-A full-suite diagnostic
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  QT_QPA_PLATFORM: offscreen
+  EXPECTED_SHA: 180c08d1b4f6f73b9522185e5e9c657e4e08b4e5
+
+jobs:
+  canonical-313:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_SHA }}
+      - name: Assert exact feature checkout
+        run: |
+          actual=$(git rev-parse HEAD)
+          echo "expected=$EXPECTED_SHA actual=$actual"
+          test "$actual" = "$EXPECTED_SHA"
+      - name: Install Qt runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - name: Run suite and publish bounded tail
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set +e
+          python -m pytest -q > /tmp/pytest.log 2>&1
+          code=$?
+          {
+            echo '### Full suite diagnostic'
+            echo
+            echo '```text'
+            tail -n 420 /tmp/pytest.log
+            echo '```'
+            echo
+            echo "exit_code=$code"
+          } > /tmp/comment.md
+          gh pr comment "$PR_NUMBER" --body-file /tmp/comment.md
+          exit "$code"
