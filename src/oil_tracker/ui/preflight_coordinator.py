@@ -1,29 +1,29 @@
 from __future__ import annotations
 
-from PySide6.QtCore import QEvent, QObject, QTimer, Qt
+from PySide6.QtCore import QEvent, QObject, QTimer
 from PySide6.QtGui import QAction
-from PySide6.QtWidgets import QDockWidget, QStyle, QToolBar
+from PySide6.QtWidgets import QStyle, QToolBar
 
 from oil_tracker.application.preflight import preflight_context_key
 from oil_tracker.domain.enums import WorkbenchState
 from oil_tracker.ui.widgets.preflight_panel import PreflightPanel
+from oil_tracker.ui.widgets.preflight_window import PreflightWindow
 
 
 class PreflightCoordinator(QObject):
-    """Connect preflight application work to the existing Workbench without owning domain state."""
+    """Connect preflight work to one reusable modeless Workbench window."""
 
     def __init__(self, window, controller, parent=None) -> None:
         super().__init__(parent or window)
         self.window = window
         self.controller = controller
         self.panel = PreflightPanel()
-        self.dock = QDockWidget("여러 시점 점검", window)
-        self.dock.setObjectName("preflightDock")
-        self.dock.setWidget(self.panel)
-        self.dock.setMinimumHeight(300)
-        window.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dock)
-        self.dock.hide()
-        self.action = QAction(window.style().standardIcon(QStyle.StandardPixmap.SP_DialogApplyButton), "여러 시점 점검", window)
+        self.preflight_window = PreflightWindow(self.panel, window)
+        self.action = QAction(
+            window.style().standardIcon(QStyle.StandardPixmap.SP_DialogApplyButton),
+            "여러 시점 점검",
+            window,
+        )
         toolbar = window.findChild(QToolBar, "mainToolBar")
         if toolbar is not None:
             toolbar.addSeparator()
@@ -34,10 +34,10 @@ class PreflightCoordinator(QObject):
         self._running = False
         self._connect()
         window.installEventFilter(self)
-        self._set_progress_status("점검하지 않음", "대표 장면 점검을 실행할 수 있습니다.")
+        self._set_progress_status("점검하지 않음", "대표 장면 점검 창을 열 수 있습니다.")
 
     def _connect(self) -> None:
-        self.action.triggered.connect(self.start)
+        self.action.triggered.connect(self.show_window)
         self.panel.runRequested.connect(self.start)
         self.panel.cancelRequested.connect(self.controller.cancel)
         self.panel.resultActivated.connect(self.navigate_to_result)
@@ -71,15 +71,21 @@ class PreflightCoordinator(QObject):
             spin.editingFinished.connect(self.schedule_context_check)
         window.actions["analyze"].triggered.connect(self._analysis_action_finished)
 
+    def show_window(self, *_args) -> None:
+        self.preflight_window.show()
+        self.preflight_window.raise_()
+        self.preflight_window.activateWindow()
+
     def start(self) -> None:
-        self.dock.show()
-        self.dock.raise_()
+        self.show_window()
+        if self._running:
+            return
         self._request_context_key = self._current_context_key()
         self.controller.start(self.window.workbench.recipe, self.window.workbench.session)
 
     def navigate_to_result(self, glass_id: str, timestamp: float, reason: str) -> None:
         if not any(glass.id == glass_id for glass in self.window.workbench.recipe.glasses):
-            self.window.statusBar().showMessage("해당 관찰창이 현재 설정에 없어 이동할 수 없습니다.")
+            self.window.statusBar().showMessage("해당 Glass가 현재 설정에 없어 이동할 수 없습니다.")
             return
         self.window.select_glass(glass_id)
         self.window._load_frame(timestamp)
@@ -92,7 +98,7 @@ class PreflightCoordinator(QObject):
         self._request_context_key = None
         self._context_check_pending = False
         self._running = False
-        self.panel.set_stale()
+        self.panel.set_unchecked()
         self._set_progress_status("점검하지 않음", "새 영상에서 대표 장면 점검을 다시 실행해 주세요.")
 
     def schedule_context_check(self, *_args) -> None:
@@ -117,7 +123,7 @@ class PreflightCoordinator(QObject):
                     self._set_progress_status(self.panel.status_label.text(), self.panel.detail_label.text())
             else:
                 self.panel.set_stale()
-                self._set_progress_status("재점검 필요", "영상 또는 관찰창 설정이 변경되었습니다.")
+                self._set_progress_status("재점검 필요", "영상 또는 Glass 설정이 변경되었습니다.")
 
     def _analysis_action_finished(self) -> None:
         if self.window.workbench.state != WorkbenchState.ANALYZING:
@@ -170,4 +176,6 @@ class PreflightCoordinator(QObject):
     def eventFilter(self, watched, event) -> bool:
         if watched is self.window and event.type() == QEvent.Type.Close:
             self.controller.invalidate()
+            self._running = False
+            self.preflight_window.close()
         return super().eventFilter(watched, event)
