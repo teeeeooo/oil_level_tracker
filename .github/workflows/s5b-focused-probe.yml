@@ -1,4 +1,4 @@
-name: S5-B candidate coordinate diagnosis
+name: S5-B polarity edge-center patch
 
 on:
   pull_request:
@@ -9,101 +9,103 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
-  pull-requests: write
+  contents: write
 
 jobs:
-  diagnose:
+  patch-feature:
     runs-on: ubuntu-24.04
     env:
-      QT_QPA_PLATFORM: offscreen
-      FEATURE_SHA: 387fdd9d9849853186b6b1f3df709127630a3046
-      GH_TOKEN: ${{ github.token }}
+      FEATURE_BRANCH: feature/oil-boundary-temporal-tracking
+      EXPECTED_SHA: 387fdd9d9849853186b6b1f3df709127630a3046
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ env.FEATURE_SHA }}
-      - name: Assert exact feature checkout
-        run: test "$(git rev-parse HEAD)" = "${FEATURE_SHA}"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: pip
-          cache-dependency-path: pyproject.toml
-      - name: Install package
+          ref: ${{ env.FEATURE_BRANCH }}
+          fetch-depth: 0
+      - name: Assert exact feature head
         run: |
-          sudo apt-get update -qq >/dev/null
-          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
-          python -m pip install -q -e '.[dev]'
-      - name: Print corrected oil candidate coordinates
+          actual="$(git rev-parse HEAD)"
+          echo "expected_feature_sha=${EXPECTED_SHA}"
+          echo "actual_feature_sha=${actual}"
+          test "${actual}" = "${EXPECTED_SHA}"
+      - name: Apply bounded polarity edge-center refinement
         run: |
-          PYTHONPATH=tests python - <<'PY' > /tmp/candidates.txt
-          import json
-          from oil_benchmark_fixtures import controlled_oil_scenes
-          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
-          from oil_tracker.domain.enums import BoundaryKind
-          from oil_tracker.domain.recipe import InspectionRecipe
+          python - <<'PY'
+          from pathlib import Path
 
-          selected_ids = {
-              'opposite-polarity',
-              'weak-valid',
-              'glare-plus-real',
-              'polarity-change-2',
-              'polarity-change-3',
-          }
-          rows = []
-          for scene in controlled_oil_scenes():
-              if scene.case_id not in selected_ids:
-                  continue
-              detector = OpenCvPhaseDetector()
-              glass = InspectionRecipe.default_glass(320, 240)
-              glass.id = 'diagnostic-' + scene.case_id
-              detection, _ = detector.detect(scene.frame, glass, 0, scene.timestamp, debug=True)
-              candidates = []
-              for candidate in detection.candidates:
-                  if candidate.kind is not BoundaryKind.OIL_AIR:
-                      continue
-                  candidates.append({
-                      'source': candidate.source,
-                      'y': candidate.y,
-                      'local_y': candidate.features.get('local_y'),
-                      'source_y': candidate.features.get('source_y'),
-                      'representative_local_y': candidate.features.get('representative_local_y'),
-                      'unrounded_representative_local_y': candidate.features.get('unrounded_representative_local_y'),
-                      'consensus_representative_local_y': candidate.features.get('consensus_representative_local_y'),
-                      'paired_boundary_original_y': candidate.features.get('paired_boundary_original_y'),
-                      'paired_boundary_unrounded_midpoint': candidate.features.get('paired_boundary_unrounded_midpoint'),
-                      'paired_boundary_merged_y': candidate.features.get('paired_boundary_merged_y'),
-                      'paired_structure_partner_y': candidate.features.get('paired_structure_partner_y'),
-                      'polarity_sign': candidate.features.get('polarity_sign'),
-                      'persistent_polarity_sign': candidate.features.get('persistent_polarity_sign'),
-                      'signed_above_minus_below': candidate.features.get('signed_above_minus_below'),
-                      'persistent_signed_above_minus_below': candidate.features.get('persistent_signed_above_minus_below'),
-                      'observation_score': candidate.features.get('observation_score'),
-                      'support': candidate.features.get('unique_generator_support_count'),
-                      'selected': candidate.selected,
-                      'rejected': candidate.rejected,
-                      'reject_reason': candidate.reject_reason,
-                  })
-              candidates.sort(key=lambda item: (not item['selected'], item['rejected'], -float(item['observation_score'] or 0.0), float(item['y'])))
-              rows.append({
-                  'scene': scene.case_id,
-                  'truth_y': scene.oil_y,
-                  'raw_y': detection.raw_oil_air_level_y,
-                  'smoothed_y': detection.smoothed_oil_air_level_y,
-                  'decision': detection.debug_metrics.get('oil_decision_status'),
-                  'candidates': candidates[:16],
-              })
-          print(json.dumps(rows, sort_keys=True, indent=2))
+          scorer = Path('src/oil_tracker/adapters/vision/candidate_scorer.py')
+          text = scorer.read_text(encoding='utf-8')
+          old = '''    for candidate in candidates:
+        if id(candidate) not in resolved:
+            candidate.features.setdefault("paired_structure_distance_px", 0.0)
+            candidate.features.setdefault("paired_structure_partner_y", 0.0)
+            candidate.features.setdefault("paired_structure_opposite_polarity", 0.0)
+            candidate.features.setdefault("paired_boundary_step_preserved", 0.0)
+'''
+          new = '''    for candidate in candidates:
+        if id(candidate) not in resolved:
+            candidate.features.setdefault("paired_structure_distance_px", 0.0)
+            candidate.features.setdefault("paired_structure_partner_y", 0.0)
+            candidate.features.setdefault("paired_structure_opposite_polarity", 0.0)
+            candidate.features.setdefault("paired_boundary_step_preserved", 0.0)
+        support = int(
+            round(candidate.features.get("unique_generator_support_count", 0.0))
+        )
+        polarity_sign = float(candidate.features.get("polarity_sign", 0.0))
+        polarity_score = float(candidate.features.get("polarity_score", 0.0))
+        persistent_region = float(
+            candidate.features.get("persistent_region_contrast", 0.0)
+        )
+        if (
+            not candidate.rejected
+            and candidate.source == "oil_consensus"
+            and support >= int(settings.oil_min_consensus_sources)
+            and float(candidate.features.get("paired_boundary_step_preserved", 0.0)) < 0.5
+            and float(candidate.features.get("polarity_available", 0.0)) >= 0.5
+            and abs(polarity_sign) > 0.5
+            and polarity_score >= max(0.15, float(settings.oil_min_polarity_score))
+            and persistent_region >= max(
+                0.20,
+                float(settings.minimum_region_contrast),
+            )
+        ):
+            correction = -1.0 if polarity_sign > 0.0 else 1.0
+            original_y = float(candidate.y)
+            candidate.features["pre_polarity_edge_center_y"] = original_y
+            candidate.features["polarity_edge_center_correction_px"] = correction
+            candidate.y = original_y + correction
+            candidate.features["representative_local_y"] = float(candidate.y)
+        else:
+            candidate.features.setdefault("polarity_edge_center_correction_px", 0.0)
+'''
+          if text.count(old) != 1:
+              raise SystemExit(f'candidate scorer replacement target count={text.count(old)}')
+          scorer.write_text(text.replace(old, new), encoding='utf-8')
+
+          tests = Path('tests/test_oil_signed_scoring.py')
+          test_text = tests.read_text(encoding='utf-8')
+          marker = '''def test_single_signed_boundary_is_not_rejected_as_structure():
+'''
+          addition = '''def test_strong_consensus_polarity_refines_to_edge_center():
+    _image, _mask, positive = _score(190, 70)
+    _image, _mask, negative = _score(70, 190)
+    assert positive.y == 23.0
+    assert positive.features["polarity_edge_center_correction_px"] == -1.0
+    assert negative.y == 25.0
+    assert negative.features["polarity_edge_center_correction_px"] == 1.0
+
+
+'''
+          if test_text.count(marker) != 1:
+              raise SystemExit(f'test insertion marker count={test_text.count(marker)}')
+          tests.write_text(test_text.replace(marker, addition + marker), encoding='utf-8')
           PY
-          cat /tmp/candidates.txt
-          {
-            echo '## S5-B corrected candidate-coordinate diagnosis'
-            echo
-            echo 'Feature-only representative scenes; no base, Foam, CPU, or canonical rerun.'
-            echo
-            echo '```json'
-            cat /tmp/candidates.txt
-            echo '```'
-          } > /tmp/body.md
-          gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
+          git diff --check
+      - name: Commit feature fix
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/oil_tracker/adapters/vision/candidate_scorer.py tests/test_oil_signed_scoring.py
+          git commit -m "fix: refine strong oil edges to interface center"
+          git push origin HEAD:"${FEATURE_BRANCH}"
+          echo "new_feature_sha=$(git rev-parse HEAD)"
