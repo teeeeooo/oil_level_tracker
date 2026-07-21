@@ -52,6 +52,7 @@ jobs:
             tail -n 220 canonical.log
             echo '```'
           } > canonical-comment.md
-          gh pr comment 33 --repo teeeeooo/oil_level_tracker --body-file canonical-comment.md
+          gh api --method PATCH repos/teeeeooo/oil_level_tracker/issues/comments/5032094605 \
+            -f body="$(cat canonical-comment.md)"
           cat canonical-comment.md
           exit "$status"
