@@ -183,6 +183,7 @@ class TruthAnnotationWindow(QMainWindow):
             self.disposition_buttons[value] = button
             disposition_layout.addWidget(button)
         self.disposition_buttons[TruthDisposition.CORRECTED].setChecked(True)
+        self.disposition_buttons[TruthDisposition.CONFIRMED_CORRECT].setEnabled(False)
         self.confirm_official_button = QPushButton("공식 결과를 정답으로 확인")
         disposition_layout.addWidget(self.confirm_official_button)
 
@@ -282,8 +283,6 @@ class TruthAnnotationWindow(QMainWindow):
         self.export_all_button.clicked.connect(self.exportAllRequested)
         self.cancel_export_button.clicked.connect(self.cancelExportRequested)
         self.annotation_list.itemActivated.connect(self._annotation_activated)
-        self.disposition_filter.currentIndexChanged.connect(self.draftChanged)
-        self.error_filter.currentIndexChanged.connect(self.draftChanged)
         self.edit_target.currentIndexChanged.connect(
             lambda _index: self.canvas.set_edit_target(str(self.edit_target.currentData()))
         )
@@ -441,9 +440,9 @@ class TruthAnnotationWindow(QMainWindow):
         return TruthDraftValues(
             disposition=disposition,
             fill_state=fill_state,
-            oil_source_y=self.oil_y.value() if self.oil_present.isChecked() else None,
+            oil_source_y=self.canvas.oil_y if self.oil_present.isChecked() else None,
             foam_present=self.foam_present.isChecked(),
-            foam_source_y=self.foam_y.value() if self.foam_present.isChecked() else None,
+            foam_source_y=self.canvas.foam_y if self.foam_present.isChecked() else None,
             error_types=tuple(
                 value for value, check in self.error_checks.items() if check.isChecked()
             ),
@@ -571,7 +570,41 @@ class TruthAnnotationWindow(QMainWindow):
         for check in self.error_checks.values():
             check.setEnabled(not confirmed)
         self.confirm_official_button.setEnabled(self._official is not None and self._context is not None)
-        self.save_annotation_button.setEnabled(self._context is not None)
+        error = self._basic_validation_error()
+        self.save_annotation_button.setEnabled(self._context is not None and not error)
+        self.validation_label.setText(error)
+
+    def _basic_validation_error(self) -> str:
+        if self._context is None:
+            return ""
+        disposition = next(
+            value for value, button in self.disposition_buttons.items() if button.isChecked()
+        )
+        if disposition is TruthDisposition.CONFIRMED_CORRECT:
+            return "" if self._official is not None else "현재 장면에 확인할 공식 tracking sample이 없습니다."
+        errors = tuple(value for value, check in self.error_checks.items() if check.isChecked())
+        if not errors:
+            return "detector 오류 유형을 하나 이상 선택해 주세요."
+        if TruthErrorType.OTHER in errors and not self.note.toPlainText().strip():
+            return "기타 오류 유형을 선택한 경우 메모를 입력해 주세요."
+        if disposition is TruthDisposition.UNUSABLE:
+            return ""
+        state = self.fill_state.currentData()
+        visible_states = {
+            FillState.FILLING_VISIBLE,
+            FillState.PARTIAL_VISIBLE,
+            FillState.DRAINING_VISIBLE,
+            FillState.FOAMING_VISIBLE,
+        }
+        if state in visible_states and (
+            not self.oil_present.isChecked() or self.canvas.oil_y is None
+        ):
+            return "선택한 fill state에는 실제 유면 경계 Y가 필요합니다."
+        if self.oil_present.isChecked() and self.canvas.oil_y is None:
+            return "유면 경계 Y가 ROI 타원 안에 있어야 합니다."
+        if self.foam_present.isChecked() and self.canvas.foam_y is None:
+            return "거품 경계가 보이는 경우 foam front Y가 필요합니다."
+        return ""
 
 
 def _y_spin() -> QDoubleSpinBox:
