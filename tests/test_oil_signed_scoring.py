@@ -2,7 +2,11 @@ from __future__ import annotations
 
 import numpy as np
 
-from oil_tracker.adapters.vision.candidate_scorer import CandidateScoreContext, score_candidates
+from oil_tracker.adapters.vision.candidate_scorer import (
+    CandidateScoreContext,
+    score_candidates,
+    suppress_paired_horizontal_structures,
+)
 from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import BoundaryKind
@@ -104,7 +108,11 @@ def test_recent_opposite_polarity_is_penalized_not_hard_coded():
         "oil_consensus",
         BoundaryKind.OIL_AIR,
         24.0,
-        {"generator_strength": 0.9, "consensus_score": 0.8, "unique_generator_support_count": 3.0},
+        {
+            "generator_strength": 0.9,
+            "consensus_score": 0.8,
+            "unique_generator_support_count": 3.0,
+        },
     )
     result = score_candidates(
         [candidate],
@@ -120,3 +128,39 @@ def test_recent_opposite_polarity_is_penalized_not_hard_coded():
     assert result.features["polarity_sign"] == -1.0
     assert result.features["polarity_consistency"] < 0.5
     assert result.penalties["polarity_conflict_penalty"] > 0.0
+
+
+def test_close_strong_opposite_polarity_pair_is_rejected_as_structure():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+    upper = _scored_scalar_candidate(40.0, 1.0)
+    lower = _scored_scalar_candidate(47.0, -1.0)
+    suppress_paired_horizontal_structures([upper, lower], settings)
+    assert upper.rejected and lower.rejected
+    assert upper.reject_reason == "paired_opposite_polarity_structure"
+    assert lower.reject_reason == "paired_opposite_polarity_structure"
+    assert upper.features["paired_structure_distance_px"] == 7.0
+    assert upper.penalties["paired_structure_penalty"] == 1.0
+
+
+def test_single_signed_boundary_is_not_rejected_as_structure():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+    candidate = _scored_scalar_candidate(40.0, 1.0)
+    suppress_paired_horizontal_structures([candidate], settings)
+    assert not candidate.rejected
+    assert candidate.features["paired_structure_opposite_polarity"] == 0.0
+
+
+def _scored_scalar_candidate(y: float, polarity: float) -> BoundaryCandidate:
+    candidate = BoundaryCandidate(
+        "oil_consensus",
+        BoundaryKind.OIL_AIR,
+        y,
+        {
+            "observation_score": 0.90,
+            "polarity_sign": polarity,
+            "unique_generator_support_count": 3.0,
+        },
+    )
+    candidate.final_score = 0.90
+    candidate.penalties["paired_structure_penalty"] = 0.0
+    return candidate
