@@ -4,7 +4,10 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from oil_tracker.adapters.vision.review_debug_overlay_renderer import ReviewDebugOverlayRenderer
+from oil_tracker.adapters.vision.review_debug_overlay_renderer import (
+    ReviewDebugOverlayRenderer,
+    _dashed_line,
+)
 from oil_tracker.domain.recipe import InspectionRecipe
 
 
@@ -51,20 +54,29 @@ def test_debug_renderer_distinguishes_selected_rejected_eligible_and_foam_candid
 
 def test_selected_line_is_solid_and_rejected_and_eligible_lines_are_dashed():
     frame = np.zeros((240, 320, 3), dtype=np.uint8)
-    record = _record(
-        (
-            _candidate(100.0, rank=1, selected=True),
-            _candidate(110.0, rank=2, rejected=True),
-            _candidate(120.0, rank=3),
-        )
+    renderer = ReviewDebugOverlayRenderer()
+    baseline = renderer.render(frame, _glass(), _record(), 2.0)
+    selected_render = renderer.render(
+        frame,
+        _glass(),
+        _record((_candidate(100.0, rank=1, selected=True),)),
+        2.0,
     )
-    rendered = ReviewDebugOverlayRenderer().render(frame, _glass(), record, 2.0)
-    selected = np.any(rendered[100, 125:210] != 0, axis=1)
-    rejected = np.any(rendered[110, 125:210] != 0, axis=1)
-    eligible = np.any(rendered[120, 125:210] != 0, axis=1)
-    assert selected.all()
+    selected_delta = np.any(
+        selected_render[100, 125:210] != baseline[100, 125:210],
+        axis=1,
+    )
+    assert selected_delta.all()
+
+    rejected_image = np.zeros((5, 120, 3), dtype=np.uint8)
+    eligible_image = np.zeros((5, 120, 3), dtype=np.uint8)
+    _dashed_line(rejected_image, (0, 2), (119, 2), (1, 2, 3), 1, dash=9, gap=6)
+    _dashed_line(eligible_image, (0, 2), (119, 2), (1, 2, 3), 1, dash=3, gap=5)
+    rejected = np.any(rejected_image[2] != 0, axis=1)
+    eligible = np.any(eligible_image[2] != 0, axis=1)
     assert rejected.any() and not rejected.all()
     assert eligible.any() and not eligible.all()
+    assert rejected.sum() > eligible.sum()
 
 
 def test_highlight_changes_only_presentation_and_keeps_source_unchanged():
