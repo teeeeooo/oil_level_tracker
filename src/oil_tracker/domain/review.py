@@ -187,6 +187,12 @@ class ReviewGraphModel:
     cursor_timestamp_sec: float
     debug_markers: tuple[ReviewGraphDebugMarker, ...] = ()
     truth_markers: tuple[ReviewGraphTruthMarker, ...] = ()
+    axis_lower: float | None = None
+    axis_upper: float | None = None
+    analysis_top_boundary_value: float | None = None
+    analysis_bottom_boundary_value: float | None = None
+    range_source: str = "unavailable"
+    range_reason: str = ""
 
 
 @dataclass
