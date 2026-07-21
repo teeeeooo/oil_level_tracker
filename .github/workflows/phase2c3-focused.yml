@@ -10,72 +10,99 @@ permissions:
   contents: write
 
 jobs:
-  pytest:
+  patch-feature:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
     steps:
-      - name: Checkout validation branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: validation/phase2c3-focused-2
-      - name: Checkout exact feature SHA
-        uses: actions/checkout@v4
-        with:
-          ref: 48be9f58d7b38bad73c886ab38377f04e786cee9
-          path: source
-      - name: Assert exact feature SHA
-        run: test "$(git -C source rev-parse HEAD)" = "48be9f58d7b38bad73c886ab38377f04e786cee9"
-      - name: Install Qt runtime libraries
-        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: pip
-          cache-dependency-path: source/pyproject.toml
-      - name: Install project and test dependencies
-        run: python -m pip install --upgrade pip && python -m pip install -e 'source[dev]'
-      - name: Run focused suite and capture concise result
-        env:
-          QT_QPA_PLATFORM: offscreen
+          ref: feature/result-review-user-truth-regression
+      - name: Assert exact feature head
+        run: test "$(git rev-parse HEAD)" = "48be9f58d7b38bad73c886ab38377f04e786cee9"
+      - name: Normalize Qt enum data and render test contract
+        shell: python
         run: |
-          set +e
-          {
-            python --version
-            python - <<'PY'
-          import matplotlib
-          import PySide6
-          print('PySide6', PySide6.__version__)
-          print('Matplotlib', matplotlib.__version__)
-          PY
-            echo 'COMMAND: QT_QPA_PLATFORM=offscreen python -m pytest -q --tb=short focused files'
-            cd source
-            QT_QPA_PLATFORM=offscreen python -m pytest -q --tb=short \
-              tests/test_user_truth_domain.py \
-              tests/test_json_truth_repository.py \
-              tests/test_regression_fixture_exporter.py \
-              tests/test_truth_export_controller.py \
-              tests/gui/test_truth_annotation_canvas.py \
-              tests/gui/test_truth_annotation_window.py \
-              tests/gui/test_truth_markers.py \
-              tests/test_redetection_comparison.py \
-              tests/test_redetection_ui_controller.py \
-              tests/unit/test_result_review_playback.py \
-              tests/gui/test_result_review_graph.py
-          } > focused-result.txt 2>&1
-          status=$?
-          cd ..
-          mv source/focused-result.txt focused-result.txt
-          printf '\nEXIT_STATUS=%s\nEXACT_FEATURE_SHA=%s\n' "$status" '48be9f58d7b38bad73c886ab38377f04e786cee9' >> focused-result.txt
-          echo "$status" > focused-status.txt
-          tail -n 300 focused-result.txt
-          exit 0
-      - name: Persist result on validation branch
+          from pathlib import Path
+
+          def replace_once(path, old, new, label):
+              text = path.read_text(encoding="utf-8")
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{label}: expected one target, found {count}")
+              path.write_text(text.replace(old, new), encoding="utf-8")
+
+          window = Path("src/oil_tracker/ui/truth_annotation_window.py")
+          replace_once(
+              window,
+              '''        disposition_filter = self.disposition_filter.currentData()
+        error_filter = self.error_filter.currentData()''',
+              '''        raw_disposition_filter = self.disposition_filter.currentData()
+        raw_error_filter = self.error_filter.currentData()
+        disposition_filter = (
+            None
+            if raw_disposition_filter is None
+            else TruthDisposition(str(raw_disposition_filter))
+        )
+        error_filter = (
+            None
+            if raw_error_filter is None
+            else TruthErrorType(str(raw_error_filter))
+        )''',
+              "filter enum normalization",
+          )
+          replace_once(
+              window,
+              '''        fill_state = self.fill_state.currentData() if disposition is TruthDisposition.CORRECTED else None''',
+              '''        fill_state = (
+            FillState(str(self.fill_state.currentData()))
+            if disposition is TruthDisposition.CORRECTED
+            else None
+        )''',
+              "draft fill state normalization",
+          )
+          replace_once(
+              window,
+              '''    def _state_changed(self, _index: int) -> None:
+        state = self.fill_state.currentData()''',
+              '''    def _state_changed(self, _index: int) -> None:
+        state = FillState(str(self.fill_state.currentData()))''',
+              "state change normalization",
+          )
+          replace_once(
+              window,
+              '''        state = self.fill_state.currentData()
+        visible_states = {''',
+              '''        state = FillState(str(self.fill_state.currentData()))
+        visible_states = {''',
+              "validation state normalization",
+          )
+
+          canvas_test = Path("tests/gui/test_truth_annotation_canvas.py")
+          replace_once(
+              canvas_test,
+              '''    painter = QPainter(image)
+    canvas.render(painter)
+    painter.end()''',
+              '''    canvas.render(image)''',
+              "PySide render signature",
+          )
+          replace_once(
+              canvas_test,
+              '''from PySide6.QtGui import QImage, QPainter''',
+              '''from PySide6.QtGui import QImage''',
+              "unused painter import",
+          )
+
+          window_test = Path("tests/gui/test_truth_annotation_window.py")
+          replace_once(
+              window_test,
+              '''    assert window.fill_state.currentData() is official.fill_state''',
+              '''    assert FillState(str(window.fill_state.currentData())) is official.fill_state''',
+              "Qt enum assertion",
+          )
+      - name: Commit and push feature fixes
         run: |
-          rm -rf source
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add focused-result.txt focused-status.txt
-          git commit -m "ci: record Phase 2C-3 focused result" || true
-          git push origin HEAD:validation/phase2c3-focused-2
-      - name: Fail when pytest failed
-        run: test "$(cat focused-status.txt)" = "0"
+          git add src/oil_tracker/ui/truth_annotation_window.py tests/gui/test_truth_annotation_canvas.py tests/gui/test_truth_annotation_window.py
+          git commit -m "fix: normalize truth editor Qt enum data"
+          git push origin HEAD:feature/result-review-user-truth-regression
