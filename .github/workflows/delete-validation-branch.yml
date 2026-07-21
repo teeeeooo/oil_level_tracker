@@ -4,16 +4,25 @@ on:
   push:
     branches:
       - validation/s4-final-315aa3c
+  pull_request:
+    branches: [main]
+    types: [closed]
 
 permissions:
   contents: write
 
 jobs:
   cleanup:
+    if: github.event_name == 'push' || github.event.pull_request.head.ref == 'validation/s4-final-315aa3c'
     runs-on: ubuntu-24.04
     steps:
-      - name: Delete this temporary branch
+      - name: Delete temporary branch
         env:
           GH_TOKEN: ${{ github.token }}
+          PR_HEAD: ${{ github.event.pull_request.head.ref }}
         run: |
-          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --delete "${GITHUB_REF_NAME}"
+          branch="${GITHUB_REF_NAME}"
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            branch="${PR_HEAD}"
+          fi
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --delete "${branch}"
