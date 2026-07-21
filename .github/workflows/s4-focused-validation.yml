@@ -3,9 +3,11 @@ name: S4 focused validation
 on:
   pull_request:
     branches: [main]
+    paths-ignore:
+      - validation-result.txt
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   focused:
@@ -13,11 +15,13 @@ jobs:
     env:
       EXPECTED_SHA: 155e1ea35e482c4545b835533c5d1ff90090752f
       QT_QPA_PLATFORM: offscreen
+      VALIDATION_BRANCH: validation/s4-focused-155e1ea
     steps:
       - name: Checkout exact feature SHA
         uses: actions/checkout@v4
         with:
           ref: ${{ env.EXPECTED_SHA }}
+          fetch-depth: 1
       - name: Assert exact checkout
         run: |
           echo "expected exact SHA=$EXPECTED_SHA"
@@ -25,8 +29,8 @@ jobs:
           test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
       - name: Install Korean runner font
         run: |
-          sudo apt-get update
-          sudo apt-get install -y fonts-noto-cjk
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-noto-cjk
           fc-cache -f
       - name: Set up Python 3.13
         uses: actions/setup-python@v5
@@ -35,16 +39,15 @@ jobs:
           cache: pip
       - name: Install package
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e '.[dev]'
+          python -m pip install --upgrade pip -q
+          python -m pip install -e '.[dev]' -q
       - name: Print environment and selected font
         run: |
           python - <<'PY'
-          import matplotlib, numpy, cv2, PySide6
+          import matplotlib, numpy, cv2, PySide6, sys
           from oil_tracker.visualization.matplotlib_font import resolve_matplotlib_font
           selected = resolve_matplotlib_font()
-          print('Python version:')
-          import sys; print(sys.version)
+          print('Python=', sys.version)
           print('PySide6=', PySide6.__version__)
           print('NumPy=', numpy.__version__)
           print('OpenCV=', cv2.__version__)
@@ -54,8 +57,10 @@ jobs:
           print('font supports Hangul=', selected.supports_hangul)
           PY
       - name: Run focused S4 and regression tests
+        id: pytest
+        continue-on-error: true
         run: |
-          python -m pytest -q \
+          python -m pytest -q --tb=short \
             tests/test_s4_progress_contract.py \
             tests/test_s4_graph_axis.py \
             tests/test_s4_matplotlib_font.py \
@@ -69,4 +74,27 @@ jobs:
             tests/gui/test_result_review_canvas.py \
             tests/test_redetection_raster_boundary.py \
             tests/gui/test_workbench_usability_stabilization.py \
-            tests/unit/test_preflight_use_case.py
+            tests/unit/test_preflight_use_case.py > /tmp/pytest-output.txt 2>&1
+      - name: Persist bounded diagnostic on failure
+        if: steps.pytest.outcome == 'failure'
+        run: |
+          {
+            echo "expected_sha=$EXPECTED_SHA"
+            echo "actual_sha=$(git rev-parse HEAD)"
+            echo "--- pytest tail ---"
+            tail -n 180 /tmp/pytest-output.txt
+          } > /tmp/validation-result.txt
+          git fetch origin "$VALIDATION_BRANCH"
+          git checkout -B "$VALIDATION_BRANCH" "origin/$VALIDATION_BRANCH"
+          cp /tmp/validation-result.txt validation-result.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add validation-result.txt
+          git commit -m "ci: record focused validation diagnostic"
+          git push origin "$VALIDATION_BRANCH"
+      - name: Fail when focused tests fail
+        if: steps.pytest.outcome == 'failure'
+        run: exit 1
+      - name: Print focused result
+        if: steps.pytest.outcome == 'success'
+        run: cat /tmp/pytest-output.txt
