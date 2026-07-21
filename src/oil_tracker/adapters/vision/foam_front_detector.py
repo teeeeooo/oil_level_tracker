@@ -77,17 +77,34 @@ class FoamDetectionResult:
 def detect_bottom_connected_foam(
     crop: np.ndarray,
     gray: np.ndarray,
-    canny: np.ndarray,
-    glare_mask: np.ndarray,
-    effective_mask: np.ndarray,
-    settings: DetectorSettings,
+    canny: np.ndarray | None = None,
+    glare_mask: np.ndarray | DetectorSettings | None = None,
+    effective_mask: np.ndarray | None = None,
+    settings: DetectorSettings | None = None,
 ) -> FoamDetectionResult:
     """Evaluate generalized Foam evidence without mutating any input array.
 
-    Spatial evidence is deliberately separate from temporal acceptance. Strong
-    components may be accepted immediately by ``FoamTemporalGate``; moderate
-    components require persistence and front continuity.
+    The preferred S5-A call supplies BGR/grayscale crop, gray, Canny, glare mask,
+    effective mask and settings. The legacy four-argument adapter helper call
+    ``(gray, canny, effective_mask, settings)`` remains supported for existing
+    callers and uses the documented grayscale/no-glare fallback.
     """
+
+    if settings is None and isinstance(glare_mask, DetectorSettings):
+        legacy_gray = crop
+        legacy_canny = gray
+        legacy_effective_mask = canny
+        settings = glare_mask
+        crop = legacy_gray
+        gray = legacy_gray
+        canny = legacy_canny
+        effective_mask = legacy_effective_mask
+        glare_mask = np.zeros_like(legacy_gray, dtype=np.uint8)
+    if settings is None or canny is None or glare_mask is None or effective_mask is None:
+        raise TypeError(
+            "detect_bottom_connected_foam requires either the six-argument S5-A "
+            "contract or the legacy four-argument grayscale contract."
+        )
 
     _validate_shapes(crop, gray, canny, glare_mask, effective_mask)
     valid = effective_mask > 0
@@ -108,9 +125,6 @@ def detect_bottom_connected_foam(
         1.0,
     ).astype(np.float32)
 
-    # Preserve glare overlap as negative evidence by forming components before
-    # clipped pixels are removed. A bright clipped reflection can therefore be
-    # explicitly classified as glare-rejected rather than silently disappearing.
     raw_support = (
         valid
         & (raw_whiteness >= 0.12)
@@ -333,9 +347,6 @@ def _texture_evidence(
         np.clip(var_small / max(1e-6, float(settings.foam_variance_threshold)), 0.0, 1.0),
         np.clip(var_large / max(1e-6, float(settings.foam_variance_threshold)), 0.0, 1.0),
     )
-    # A single high variance or edge-density response cannot create strong Foam
-    # evidence. The product/minimum terms require two-dimensional, multi-scale
-    # support and suppress isolated refractive or structural lines.
     texture = np.clip(
         0.40 * np.sqrt(variance_score * edge_score)
         + 0.35 * np.minimum(variance_score, edge_score)
