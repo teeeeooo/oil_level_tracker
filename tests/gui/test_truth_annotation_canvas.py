@@ -1,22 +1,26 @@
 from __future__ import annotations
 
-import numpy as np
-from PySide6.QtCore import QPoint, Qt
-from PySide6.QtGui import QImage
+from PySide6.QtCore import QPoint, QSize, Qt
+from PySide6.QtGui import QColor, QImage
 
 from oil_tracker.application.services.user_truth import UserTruthService
 from oil_tracker.ui.widgets.truth_annotation_canvas import TruthAnnotationCanvas
 from user_truth_fixtures import make_truth_bundle
 
 
+def _frame_image(width: int = 320, height: int = 240, color=Qt.GlobalColor.black) -> QImage:
+    image = QImage(width, height, QImage.Format.Format_RGB32)
+    image.fill(color)
+    return image
+
+
 def _canvas(qtbot, tmp_path):
     bundle = make_truth_bundle(tmp_path)
     glass = bundle.recipe.glasses[0]
     official = UserTruthService().official_reference(bundle, glass, 2.0)
-    frame = np.zeros((240, 320, 3), dtype=np.uint8)
     canvas = TruthAnnotationCanvas()
     qtbot.addWidget(canvas)
-    canvas.set_frame(frame)
+    canvas.set_frame_image(_frame_image())
     canvas.set_context(
         glass,
         official_reference=official,
@@ -42,6 +46,38 @@ def test_canvas_keeps_separate_official_and_truth_layers_with_labels(qtbot, tmp_
     assert canvas._show_official
 
 
+def test_canvas_uses_qimage_snapshot_and_preserves_source_size(qtbot):
+    canvas = TruthAnnotationCanvas()
+    qtbot.addWidget(canvas)
+    source = _frame_image(123, 77, QColor(10, 20, 30))
+    canvas.set_frame_image(source)
+    assert canvas.source_image_size == QSize(123, 77)
+    assert canvas.sizeHint() == QSize(123, 77)
+
+
+def test_canvas_image_is_independent_from_source_mutation(qtbot):
+    canvas = TruthAnnotationCanvas()
+    qtbot.addWidget(canvas)
+    source = _frame_image(40, 30, QColor(10, 20, 30))
+    canvas.set_frame_image(source)
+    canvas.actual_size()
+    canvas.show()
+    source.fill(QColor(200, 100, 50))
+    rendered = QImage(canvas.size(), QImage.Format.Format_ARGB32)
+    rendered.fill(Qt.GlobalColor.transparent)
+    canvas.render(rendered)
+    assert rendered.pixelColor(1, 1) == QColor(10, 20, 30)
+
+
+def test_canvas_clear_releases_image_and_context(qtbot, tmp_path):
+    canvas, _glass, _official = _canvas(qtbot, tmp_path)
+    canvas.clear("비움")
+    assert canvas.source_image_size.isEmpty()
+    assert canvas.oil_y is None
+    assert canvas.foam_y is None
+    assert canvas._official is None
+
+
 def test_oil_click_and_drag_emit_source_frame_canonical_y(qtbot, tmp_path):
     canvas, glass, _official = _canvas(qtbot, tmp_path)
     received = []
@@ -56,6 +92,19 @@ def test_oil_click_and_drag_emit_source_frame_canonical_y(qtbot, tmp_path):
     qtbot.mouseMove(canvas, QPoint(center_x, drag_y))
     qtbot.mouseRelease(canvas, Qt.MouseButton.LeftButton, pos=QPoint(center_x, drag_y))
     assert canvas.oil_y == drag_y
+
+
+def test_mouse_y_conversion_is_canonical_while_zoomed(qtbot, tmp_path):
+    canvas, glass, _official = _canvas(qtbot, tmp_path)
+    canvas.set_scale(2.0)
+    target_y = int(round(glass.geometry.ellipse.center_y + 7))
+    center_x = int(round(glass.geometry.ellipse.center_x))
+    qtbot.mouseClick(
+        canvas,
+        Qt.MouseButton.LeftButton,
+        pos=QPoint(center_x * 2, target_y * 2),
+    )
+    assert canvas.oil_y == target_y
 
 
 def test_foam_edit_target_is_independent_from_oil(qtbot, tmp_path):
