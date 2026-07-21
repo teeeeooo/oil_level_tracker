@@ -1,4 +1,4 @@
-name: S5-B raw error case diagnosis
+name: S5-B candidate coordinate diagnosis
 
 on:
   pull_request:
@@ -35,63 +35,71 @@ jobs:
           sudo apt-get update -qq >/dev/null
           sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
           python -m pip install -q -e '.[dev]'
-      - name: Generate feature oil payload and print high-error cases
+      - name: Print candidate coordinates for representative high-error scenes
         run: |
-          PYTHONPATH=tests python - <<'PY' > /tmp/cases.txt
-          from datetime import datetime, timezone
+          PYTHONPATH=tests python - <<'PY' > /tmp/candidates.txt
           import json
-          import os
-          from pathlib import Path
-          from oil_benchmark_fixtures import generate_controlled_oil_dataset
-          from oil_tracker.adapters.storage.benchmark_result_writer import AtomicBenchmarkResultWriter
-          from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
+          from oil_benchmark_fixtures import controlled_oil_scenes
           from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
-          from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
+          from oil_tracker.domain.recipe import InspectionRecipe
 
-          root = Path(os.environ['RUNNER_TEMP']) / 'raw-case-diagnosis'
-          dataset, _ = generate_controlled_oil_dataset(root)
-          service = DetectorBenchmarkService(
-              FilesystemRegressionDatasetReader(),
-              AtomicBenchmarkResultWriter(),
-              OpenCvPhaseDetector,
-              clock=lambda: datetime(2026, 7, 22, tzinfo=timezone.utc),
-              runtime_metadata_factory=lambda: {'python':'diagnostic','packages':{}},
-          )
-          payload = service.run(dataset, root / 'results').payload
-          selected = []
-          for case in payload['cases']:
-              error = case.get('raw_oil_absolute_error_px')
-              if error is not None and error >= 1.0:
-                  selected.append({
-                      'category': case['category'],
-                      'sequence_id': case['sequence_id'],
-                      'sequence_order': case['sequence_order'],
-                      'truth_y': case['truth_oil_boundary_y'],
-                      'raw_y': case['raw_oil_boundary_y'],
-                      'error': error,
-                      'smoothed_y': case['smoothed_oil_boundary_y'],
-                      'smoothed_error': case['smoothed_oil_absolute_error_px'],
-                      'fill_state': case['predicted_fill_state'],
-                      'flags': case['flags'],
+          selected_ids = {
+              'opposite-polarity',
+              'weak-valid',
+              'glare-plus-real',
+              'polarity-change-2',
+              'polarity-change-3',
+          }
+          scenes = [scene for scene in controlled_oil_scenes() if scene.case_id in selected_ids]
+          rows = []
+          for scene in scenes:
+              detector = OpenCvPhaseDetector()
+              glass = InspectionRecipe.default_glass(320, 240)
+              glass.id = 'diagnostic-' + scene.case_id
+              detection, _ = detector.detect(scene.frame, glass, 0, scene.timestamp, debug=True)
+              candidates = []
+              for candidate in detection.candidates:
+                  if candidate.kind.value != 'OIL_AIR':
+                      continue
+                  candidates.append({
+                      'source': candidate.source,
+                      'y': candidate.y,
+                      'local_y': candidate.features.get('local_y'),
+                      'source_y': candidate.features.get('source_y'),
+                      'raw_generator_y': candidate.features.get('raw_generator_y'),
+                      'representative_local_y': candidate.features.get('representative_local_y'),
+                      'unrounded_representative_local_y': candidate.features.get('unrounded_representative_local_y'),
+                      'consensus_representative_local_y': candidate.features.get('consensus_representative_local_y'),
+                      'paired_boundary_original_y': candidate.features.get('paired_boundary_original_y'),
+                      'paired_boundary_unrounded_midpoint': candidate.features.get('paired_boundary_unrounded_midpoint'),
+                      'paired_boundary_merged_y': candidate.features.get('paired_boundary_merged_y'),
+                      'polarity_sign': candidate.features.get('polarity_sign'),
+                      'persistent_polarity_sign': candidate.features.get('persistent_polarity_sign'),
+                      'observation_score': candidate.features.get('observation_score'),
+                      'support': candidate.features.get('unique_generator_support_count'),
+                      'selected': candidate.selected,
+                      'rejected': candidate.rejected,
+                      'reject_reason': candidate.reject_reason,
                   })
-          selected.sort(key=lambda item: (-item['error'], str(item['sequence_id']), item['sequence_order'] if item['sequence_order'] is not None else -1, item['truth_y']))
-          print(json.dumps({
-              'dataset_fingerprint': payload['dataset']['fingerprint'],
-              'detector_version': payload['detector']['version'],
-              'raw_median': payload['micro_aggregate']['metrics']['raw_oil_median_absolute_error']['value'],
-              'raw_p90': payload['micro_aggregate']['metrics']['raw_oil_p90_absolute_error']['value'],
-              'raw_p95': payload['micro_aggregate']['metrics']['raw_oil_p95_absolute_error']['value'],
-              'cases': selected,
-          }, sort_keys=True, indent=2))
+              candidates.sort(key=lambda item: (not item['selected'], item['rejected'], -float(item['observation_score'] or 0.0), float(item['y'])))
+              rows.append({
+                  'scene': scene.case_id,
+                  'truth_y': scene.oil_y,
+                  'raw_y': detection.raw_oil_air_level_y,
+                  'smoothed_y': detection.smoothed_oil_air_level_y,
+                  'decision': detection.debug_metrics.get('oil_decision_status'),
+                  'candidates': candidates[:12],
+              })
+          print(json.dumps(rows, sort_keys=True, indent=2))
           PY
-          cat /tmp/cases.txt
+          cat /tmp/candidates.txt
           {
-            echo '## S5-B raw-error case diagnosis'
+            echo '## S5-B candidate-coordinate diagnosis'
             echo
-            echo 'Feature-only controlled oil payload; no base, Foam, CPU, or canonical rerun.'
+            echo 'Feature-only representative scenes; no base, Foam, CPU, or canonical rerun.'
             echo
             echo '```json'
-            cat /tmp/cases.txt
+            cat /tmp/candidates.txt
             echo '```'
           } > /tmp/body.md
           gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
