@@ -7,6 +7,7 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  issues: write
 
 jobs:
   focused:
@@ -38,23 +39,28 @@ jobs:
         shell: bash
         run: |
           set +e
-          python -m pytest -q --tb=short \
-            tests/test_oil_candidate_consensus.py \
-            tests/test_oil_signed_scoring.py \
-            tests/test_oil_no_interface.py \
-            tests/test_candidate_scoring.py > /tmp/pytest.log 2>&1
+          {
+            echo 'candidate-related test files:'
+            find tests -maxdepth 1 -type f -name '*candidate*' -printf '%f\n' | sort
+            echo
+            python -m pytest -q --tb=short \
+              tests/test_oil_candidate_consensus.py \
+              tests/test_oil_signed_scoring.py \
+              tests/test_oil_no_interface.py
+          } > /tmp/pytest.log 2>&1
           status=$?
           cat /tmp/pytest.log
-          if [ "${status}" -ne 0 ]; then
-            {
-              echo "### S5-B isolated diagnostic: consensus-scoring"
-              echo
-              echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
-              echo
-              echo '```text'
-              tail -n 160 /tmp/pytest.log
-              echo '```'
-            } > /tmp/comment.md
-            gh pr comment 55 --body-file /tmp/comment.md
-          fi
+          {
+            echo "### S5-B isolated diagnostic: consensus-scoring"
+            echo
+            echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
+            echo
+            echo '```text'
+            tail -n 180 /tmp/pytest.log
+            echo '```'
+          } > /tmp/comment.md
+          gh api repos/teeeeooo/oil_level_tracker/issues/comments/5035885005 \
+            --method PATCH --input /tmp/comment.md \
+            -H 'Content-Type: text/plain' || \
+          gh pr comment 55 --body-file /tmp/comment.md
           exit ${status}
