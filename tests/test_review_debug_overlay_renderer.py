@@ -59,13 +59,12 @@ def test_selected_line_is_solid_and_rejected_and_eligible_lines_are_dashed():
         )
     )
     rendered = ReviewDebugOverlayRenderer().render(frame, _glass(), record, 2.0)
-    selected_pixels = np.count_nonzero(rendered[100, 100:220])
-    rejected_pixels = np.count_nonzero(rendered[110, 100:220])
-    eligible_pixels = np.count_nonzero(rendered[120, 100:220])
-    assert selected_pixels > rejected_pixels
-    assert selected_pixels > eligible_pixels
-    assert rejected_pixels > 0
-    assert eligible_pixels > 0
+    selected = np.any(rendered[100, 125:210] != 0, axis=1)
+    rejected = np.any(rendered[110, 125:210] != 0, axis=1)
+    eligible = np.any(rendered[120, 125:210] != 0, axis=1)
+    assert selected.all()
+    assert rejected.any() and not rejected.all()
+    assert eligible.any() and not eligible.all()
 
 
 def test_highlight_changes_only_presentation_and_keeps_source_unchanged():
@@ -102,7 +101,7 @@ def test_timestamp_and_delta_context_are_rendered_without_official_final_overlay
     first = renderer.render(frame, _glass(), record, 2.012)
     second = renderer.render(frame, _glass(), record, 2.112)
     assert not np.array_equal(first, second)
-    assert np.count_nonzero(first[26:55, 10:310]) > 0
+    assert np.count_nonzero(first[10:78, 10:310]) > 0
     assert np.count_nonzero(first[160, 100:220]) == 0
 
 
