@@ -6,40 +6,15 @@ on:
 
 permissions:
   contents: read
-  issues: write
+  pull-requests: write
 
 jobs:
-  focused:
-    name: focused-${{ matrix.group }}
+  controlled-oil:
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - group: core
-            files: >-
-              tests/test_oil_candidate_consensus.py
-              tests/test_oil_signed_scoring.py
-              tests/test_oil_no_interface.py
-              tests/test_oil_temporal_path.py
-              tests/test_oil_temporal_tracker.py
-              tests/test_oil_detector_integration.py
-              tests/test_oil_fill_state_classifier.py
-              tests/test_oil_settings.py
-          - group: controlled-oil
-            files: tests/test_oil_controlled_benchmark.py
-          - group: foam-regression
-            files: >-
-              tests/test_foam_evidence.py
-              tests/test_foam_fill_state_policy.py
-              tests/test_foam_phase_detector_integration.py
-              tests/test_foam_settings.py
-              tests/test_foam_temporal_gate.py
-              tests/test_foam_controlled_benchmark.py
     env:
       QT_QPA_PLATFORM: offscreen
       EXPECTED_SHA: cda5a1bfcfeaae0dcb86675b07021d03a4020273
-      TEST_FILES: ${{ matrix.files }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -58,28 +33,21 @@ jobs:
           sudo apt-get update -qq >/dev/null
           sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-xinerama0 libxcb-keysyms1 libxcb-render-util0 >/dev/null
           python -m pip install -q -e '.[dev]'
-      - name: Run focused group
+      - name: Run controlled oil diagnostic
         shell: bash
         run: |
           set +e
-          python -m pytest -q --tb=short ${TEST_FILES} > /tmp/pytest.log 2>&1
+          python -m pytest -q --tb=short tests/test_oil_controlled_benchmark.py > /tmp/pytest.log 2>&1
           status=$?
           cat /tmp/pytest.log
-          if [ "${status}" -ne 0 ]; then
-            comment_id=5035885005
-            if [ "${{ matrix.group }}" = "foam-regression" ]; then comment_id=5035885331; fi
-            {
-              echo "### S5-B focused diagnostic: ${{ matrix.group }}"
-              echo
-              echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
-              echo
-              echo '```text'
-              tail -n 240 /tmp/pytest.log
-              echo '```'
-            } > /tmp/comment.md
-            gh api repos/teeeeooo/oil_level_tracker/issues/comments/${comment_id} \
-              --method PATCH -F body=@/tmp/comment.md || true
-          fi
+          {
+            echo "### S5-B controlled oil diagnostic"
+            echo
+            echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
+            echo
+            echo '```text'
+            tail -n 260 /tmp/pytest.log
+            echo '```'
+          } > /tmp/comment.md
+          gh pr comment 55 --body-file /tmp/comment.md || true
           exit ${status}
-        env:
-          GH_TOKEN: ${{ github.token }}
