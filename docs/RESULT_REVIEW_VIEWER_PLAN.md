@@ -84,14 +84,17 @@ PR #27 `feat: add user truth annotations and regression fixtures`로 `main`에 �
 - deterministic regression fixture dataset과 비동기 export
 - official result bundle 불변과 path safety
 
-### 실사용 안정화 이후
+### 실사용 안정화
 
-**다음 작업 — S1 Detector benchmark foundation**
+**S1 Detector benchmark foundation 완료 / 다음 작업 S2 UI raster boundary architecture refactor**
 
-- Phase 2C-3 fixture를 읽는 benchmark runner와 current detector baseline
-- UI raster boundary, Workbench UX와 graph 안정화
-- Foam/아지랑이 및 유면 tracking 개선
-- 실제 영상 validation gate 후 annotated MP4 export
+- S1은 PR #29 `feat: add detector benchmark foundation`으로 `main`에 반영했다.
+- S1 PR head: `73edfedb61948e2ff0431ed31075db1ac5d682ef`
+- S1 main merge SHA: `ced132f5927554c658a9993155a8d4afa121b011`
+- canonical validation: Python 3.13 및 3.14에서 각각 `542 passed`, failure/skip 없음
+- S2에서 Result Review canvas의 temporary NumPy/OpenCV allowlist를 제거한다.
+- 이후 Workbench UX와 graph 안정화, Foam/아지랑이 및 유면 tracking 개선을 진행한다.
+- 실제 영상 validation gate 후 annotated MP4 export를 진행한다.
 
 ## 3. 목표
 
@@ -535,7 +538,7 @@ Bundle asset resolver는 다음을 거부한다.
 
 ### 상태
 
-**진행 중 — Phase 2C-1, Phase 2C-2, Phase 2C-3 완료 / 다음 작업 S1 Detector benchmark foundation**
+**진행 중 — Phase 2C-1, Phase 2C-2, Phase 2C-3와 실사용 안정화 S1 완료 / 다음 작업 S2 UI raster boundary architecture refactor**
 
 ### 9.1 Debug Viewer
 
