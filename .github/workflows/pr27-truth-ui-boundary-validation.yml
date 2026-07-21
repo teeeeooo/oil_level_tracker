@@ -93,21 +93,22 @@ jobs:
           text = replace_once(text, "        self._image = None\n", "", "result_debug_panel clear image")
           start = text.index("    def set_artifact(")
           end = text.index("\n    def selected_candidate_index", start)
-          replacement = '''    def set_artifact(self, key: str, image, error: str = "") -> None:
-              self._pixmap = QPixmap()
-              if image is None:
-                  self.image_label.setPixmap(QPixmap())
-                  self.image_label.setText(error or "이 장면에는 선택한 artifact가 저장되지 않았습니다.")
-                  self.artifact_status.setText(error or "artifact 없음")
-                  return
-              frame_image = _FRAME_IMAGE_CONVERTER.to_qimage(image)
-              self._pixmap = QPixmap.fromImage(frame_image)
-              self.image_label.setText("")
-              self.artifact_status.setText(
-                  f"{_ARTIFACT_LABELS.get(key, key)} · {frame_image.width()}×{frame_image.height()} · lazy decode 완료"
-              )
-              self.fit_image()
-          '''
+          replacement = (
+              '    def set_artifact(self, key: str, image, error: str = "") -> None:\n'
+              '        self._pixmap = QPixmap()\n'
+              '        if image is None:\n'
+              '            self.image_label.setPixmap(QPixmap())\n'
+              '            self.image_label.setText(error or "이 장면에는 선택한 artifact가 저장되지 않았습니다.")\n'
+              '            self.artifact_status.setText(error or "artifact 없음")\n'
+              '            return\n'
+              '        frame_image = _FRAME_IMAGE_CONVERTER.to_qimage(image)\n'
+              '        self._pixmap = QPixmap.fromImage(frame_image)\n'
+              '        self.image_label.setText("")\n'
+              '        self.artifact_status.setText(\n'
+              '            f"{_ARTIFACT_LABELS.get(key, key)} · {frame_image.width()}×{frame_image.height()} · lazy decode 완료"\n'
+              '        )\n'
+              '        self.fit_image()\n'
+          )
           text = text[:start] + replacement + text[end:]
           head, marker, _tail = text.partition("\ndef _pixmap")
           if not marker:
@@ -149,16 +150,17 @@ jobs:
           )
           start = text.index("    def set_frame(")
           end = text.index("\n    def set_glasses", start)
-          replacement = '''    def set_frame(self, frame) -> None:
-              if frame is None:
-                  return
-              image = _FRAME_IMAGE_CONVERTER.to_qimage(frame)
-              self._frame_size = (image.width(), image.height())
-              self._pixmap_item.setPixmap(QPixmap.fromImage(image))
-              self._scene.setSceneRect(0, 0, image.width(), image.height())
-              self.rebuild_overlays()
-              self.fitInView(self._scene.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
-          '''
+          replacement = (
+              '    def set_frame(self, frame) -> None:\n'
+              '        if frame is None:\n'
+              '            return\n'
+              '        image = _FRAME_IMAGE_CONVERTER.to_qimage(frame)\n'
+              '        self._frame_size = (image.width(), image.height())\n'
+              '        self._pixmap_item.setPixmap(QPixmap.fromImage(image))\n'
+              '        self._scene.setSceneRect(0, 0, image.width(), image.height())\n'
+              '        self.rebuild_overlays()\n'
+              '        self.fitInView(self._scene.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)\n'
+          )
           text = text[:start] + replacement + text[end:]
           write(path, text)
 
