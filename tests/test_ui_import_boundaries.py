@@ -55,10 +55,16 @@ def test_entire_ui_tree_has_no_cv2_or_numpy_imports():
     assert _ui_import_violations() == {}
 
 
-def test_temporary_ui_raster_allowlist_is_removed():
-    source = Path(__file__).read_text(encoding="utf-8")
-    assert "ALLOWED_EXISTING_UI_IMAGE_IMPORTS" not in source
-    assert "temporary allowlist" not in source.lower()
+def test_ui_raster_import_guard_has_no_exception_collection():
+    module = ast.parse(Path(__file__).read_text(encoding="utf-8"))
+    assigned_names = {
+        target.id
+        for node in module.body
+        if isinstance(node, ast.Assign)
+        for target in node.targets
+        if isinstance(target, ast.Name)
+    }
+    assert not {name for name in assigned_names if "ALLOW" in name.upper()}
 
 
 def test_result_review_canvas_has_only_qt_display_responsibility():
