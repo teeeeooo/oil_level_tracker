@@ -20,17 +20,16 @@ def glass(initial=InitialObservationState.AUTO):
 
 
 def oil_frame(y: int = 130, *, above=175, below=70):
-    frame = np.full((240, 320, 3), 55, dtype=np.uint8)
-    frame[78:186, 122:198] = above
-    frame[y:186, 122:198] = below
-    frame[y - 1 : y + 2, 122:198] = 225
+    # Keep the entire effective ellipse uniform above the contract boundary. A
+    # rectangular patch would add an unintended four-source structural line.
+    frame = np.full((240, 320, 3), above, dtype=np.uint8)
+    frame[y:] = below
+    frame[y - 1 : y + 2] = 225
     return frame
 
 
 def uniform_frame(value: int):
-    frame = np.full((240, 320, 3), 55, dtype=np.uint8)
-    frame[78:186, 122:198] = value
-    return frame
+    return np.full((240, 320, 3), value, dtype=np.uint8)
 
 
 def test_detector_version_and_canonical_coordinates_and_debug_evidence():
@@ -107,7 +106,7 @@ def test_static_map_input_frames_are_not_mutated_and_dynamic_boundary_can_reappe
     detector = OpenCvPhaseDetector()
     config = glass()
     static = uniform_frame(80)
-    static[150:154, 122:198] = 205
+    static[150:154] = 205
     before = static.copy()
     detector.learn_static_artifact([static], config)
     assert np.array_equal(static, before)
