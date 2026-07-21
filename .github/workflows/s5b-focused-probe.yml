@@ -9,37 +9,11 @@ permissions:
   pull-requests: write
 
 jobs:
-  focused:
-    name: focused-${{ matrix.group }}
+  foam-regression:
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - group: core
-            files: >-
-              tests/test_oil_candidate_consensus.py
-              tests/test_oil_signed_scoring.py
-              tests/test_oil_no_interface.py
-              tests/test_oil_temporal_path.py
-              tests/test_oil_temporal_tracker.py
-              tests/test_oil_detector_integration.py
-              tests/test_oil_fill_state_classifier.py
-              tests/test_oil_settings.py
-          - group: controlled-oil
-            files: tests/test_oil_controlled_benchmark.py
-          - group: foam-regression
-            files: >-
-              tests/test_foam_evidence.py
-              tests/test_foam_fill_state_policy.py
-              tests/test_foam_phase_detector_integration.py
-              tests/test_foam_settings.py
-              tests/test_foam_temporal_gate.py
-              tests/test_foam_controlled_benchmark.py
     env:
       QT_QPA_PLATFORM: offscreen
       EXPECTED_SHA: afd0397d9cd32c1146760bc7fd2a85639ac9ad52
-      TEST_FILES: ${{ matrix.files }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -59,23 +33,27 @@ jobs:
           sudo apt-get update -qq >/dev/null
           sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-xinerama0 libxcb-keysyms1 libxcb-render-util0 >/dev/null
           python -m pip install -q -e '.[dev]'
-      - name: Run focused group
+      - name: Run S5-A compatibility diagnostic
         shell: bash
         run: |
           set +e
-          python -m pytest -q --tb=short ${TEST_FILES} > /tmp/pytest.log 2>&1
+          python -m pytest -vv --tb=long \
+            tests/test_foam_evidence.py \
+            tests/test_foam_fill_state_policy.py \
+            tests/test_foam_phase_detector_integration.py \
+            tests/test_foam_settings.py \
+            tests/test_foam_temporal_gate.py \
+            tests/test_foam_controlled_benchmark.py > /tmp/pytest.log 2>&1
           status=$?
           cat /tmp/pytest.log
-          if [ "${status}" -ne 0 ]; then
-            {
-              echo "## Temporary S5-B diagnostic: ${{ matrix.group }}"
-              echo
-              echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
-              echo
-              echo '```text'
-              tail -n 320 /tmp/pytest.log
-              echo '```'
-            } > /tmp/body.md
-            gh pr edit 55 --body-file /tmp/body.md || true
-          fi
+          {
+            echo "## Temporary S5-A compatibility diagnostic"
+            echo
+            echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
+            echo
+            echo '```text'
+            tail -n 720 /tmp/pytest.log
+            echo '```'
+          } > /tmp/body.md
+          gh pr edit 55 --body-file /tmp/body.md || true
           exit ${status}
