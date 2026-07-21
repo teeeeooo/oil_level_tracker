@@ -55,7 +55,9 @@ class ReviewFramePresenter:
         try:
             rendered = self.general_renderer.render(frame, glass, overlay)
             return self.converter.to_qimage(rendered)
-        except (FrameImageConversionError, TypeError, ValueError) as exc:
+        except Exception as exc:
+            if isinstance(exc, ReviewRasterPresentationError):
+                raise
             raise ReviewRasterPresentationError(f"일반 overlay 장면을 만들 수 없습니다: {exc}") from exc
 
     def render_debug(
@@ -75,7 +77,9 @@ class ReviewFramePresenter:
                 highlighted_candidate,
             )
             return self.converter.to_qimage(rendered)
-        except (FrameImageConversionError, TypeError, ValueError) as exc:
+        except Exception as exc:
+            if isinstance(exc, ReviewRasterPresentationError):
+                raise
             raise ReviewRasterPresentationError(f"디버그 overlay 장면을 만들 수 없습니다: {exc}") from exc
 
     def clear(self) -> None:
@@ -105,6 +109,10 @@ class ReviewPresentedVideoReader:
     @property
     def metadata(self):
         return self._reader.metadata
+
+    @property
+    def closed(self) -> bool:
+        return self._closed
 
     @property
     def source_image(self) -> QImage:
