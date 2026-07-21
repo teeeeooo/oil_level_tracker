@@ -144,6 +144,7 @@ class ResultDebugPanel(QWidget):
         self.export_button.setEnabled(False)
 
     def set_record(self, record, actual_timestamp: float | None = None) -> None:
+        previous_row = self.candidates.currentRow() if self._record is record else -1
         self._record = record
         delta_text = ""
         if actual_timestamp is not None:
@@ -153,6 +154,7 @@ class ResultDebugPanel(QWidget):
             f"{record.glass_name or record.glass_id} · trace {record.timestamp_sec:.3f}초 · 장면 {record.frame_index}{delta_text}\n"
             f"저장 사유: {', '.join(record.capture_reasons) or '-'}"
         )
+        target_row = -1
         previous_blocked = self.candidates.blockSignals(True)
         try:
             self.candidates.setRowCount(len(record.candidates))
@@ -171,11 +173,12 @@ class ResultDebugPanel(QWidget):
                     self.candidates.setItem(row, column, item)
             self.candidates.resizeColumnsToContents()
             if record.candidates:
-                self.candidates.selectRow(0)
+                target_row = previous_row if 0 <= previous_row < len(record.candidates) else 0
+                self.candidates.selectRow(target_row)
         finally:
             self.candidates.blockSignals(previous_blocked)
-        if record.candidates:
-            self._show_candidate(0, emit_selection=False)
+        if target_row >= 0:
+            self._show_candidate(target_row, emit_selection=False)
         else:
             self.candidate_detail.clear()
 
