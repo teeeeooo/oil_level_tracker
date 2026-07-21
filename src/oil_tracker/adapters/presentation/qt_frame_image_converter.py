@@ -30,7 +30,7 @@ class QtFrameImageConverter:
                 array = np.ascontiguousarray(frame[:, :, ::-1])
                 image_format = QImage.Format.Format_RGB888
             elif channels == 4:
-                array = np.ascontiguousarray(frame[:, :, [2, 1, 0, 3]])
+                array = frame[:, :, [2, 1, 0, 3]].copy(order="C")
                 image_format = QImage.Format.Format_RGBA8888
             else:
                 raise FrameImageConversionError(
@@ -52,3 +52,13 @@ class QtFrameImageConverter:
         if image.isNull():
             raise FrameImageConversionError("Qt image snapshot 생성에 실패했습니다.")
         return image.copy()
+
+
+def blank_bgr_frame(width: int, height: int):
+    """Create the uint8 BGR placeholder used before a video frame is decoded."""
+
+    width = int(width)
+    height = int(height)
+    if width <= 0 or height <= 0:
+        raise ValueError("placeholder frame 크기는 양수여야 합니다.")
+    return np.zeros((height, width, 3), dtype=np.uint8)
