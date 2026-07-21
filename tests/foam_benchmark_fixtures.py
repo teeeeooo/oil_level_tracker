@@ -28,6 +28,17 @@ S5A_SETTING_FIELDS = (
     "foam_persistence_frames",
     "foam_max_front_jump_px",
 )
+S5B_SETTING_FIELDS = (
+    "oil_consensus_tolerance_px",
+    "oil_min_consensus_sources",
+    "oil_min_polarity_score",
+    "oil_no_interface_min_score",
+    "oil_path_window",
+    "oil_path_beam_width",
+    "oil_path_min_margin",
+    "oil_tracker_update_confidence",
+    "oil_reacquire_frames",
+)
 
 
 @dataclass(frozen=True)
@@ -123,13 +134,21 @@ def generate_controlled_foam_dataset(tmp_path: Path):
 
 
 def _make_recipe_snapshot_base_compatible(bundle) -> None:
+    """Remove additive detector keys before fixture hashes are generated.
+
+    The S5-B controlled comparison intentionally feeds identical fixture bytes to
+    the S5-A base detector and the S5-B feature detector. Removing additive S5-A
+    and S5-B keys here lets each checkout restore its own dataclass defaults while
+    preserving the version-1 recipe and regression fixture schemas.
+    """
+
     recipe_path = Path(
         bundle.files.get("recipe_snapshot", bundle.root / "recipe_snapshot.oilrecipe")
     )
     payload = json.loads(recipe_path.read_text(encoding="utf-8"))
     for glass in payload.get("glasses", []):
         settings = glass.get("detector_settings", {})
-        for field_name in S5A_SETTING_FIELDS:
+        for field_name in S5A_SETTING_FIELDS + S5B_SETTING_FIELDS:
             settings.pop(field_name, None)
     recipe_path.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False),
