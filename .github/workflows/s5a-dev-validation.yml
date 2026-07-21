@@ -1,0 +1,68 @@
+name: S5-A development validation 3
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  QT_QPA_PLATFORM: offscreen
+  EXPECTED_SHA: 236f9e53ad450be4a0527f3b41bc3dfbf1378edc
+
+jobs:
+  controlled-dataset:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ env.EXPECTED_SHA }}'}
+      - run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13', cache: pip}
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q tests/test_foam_controlled_benchmark.py::test_controlled_dataset_is_external_style_valid_and_fingerprint_is_stable
+
+  controlled-metrics:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ env.EXPECTED_SHA }}'}
+      - run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13', cache: pip}
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q tests/test_foam_controlled_benchmark.py::test_feature_detector_meets_controlled_foam_and_shimmer_acceptance
+
+  controlled-nonregression:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ env.EXPECTED_SHA }}'}
+      - run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13', cache: pip}
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q tests/test_foam_controlled_benchmark.py::test_controlled_oil_and_no_interface_cases_are_evaluable
+
+  foam-combined:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ env.EXPECTED_SHA }}'}
+      - run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13', cache: pip}
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q tests/test_foam_evidence.py tests/test_foam_temporal_gate.py tests/test_foam_fill_state_policy.py tests/test_foam_settings.py
+
+  benchmark-combined:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ env.EXPECTED_SHA }}'}
+      - run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13', cache: pip}
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q tests/test_detector_benchmark_metrics.py tests/test_detector_benchmark_runner.py tests/test_detector_benchmark_integration.py tests/test_benchmark_cli.py
