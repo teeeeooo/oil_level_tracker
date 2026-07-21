@@ -1,0 +1,55 @@
+name: S2 Python 3.14 diagnostic
+
+on:
+  pull_request:
+    branches:
+      - feature/ui-raster-boundary-refactor
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  diagnostic:
+    name: Python 3.14 diagnostic
+    runs-on: ubuntu-24.04
+    env:
+      EXPECTED_SHA: d022403bc95cbcd28fad390e8a9bacfe95297e02
+      QT_QPA_PLATFORM: offscreen
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_SHA }}
+      - name: Assert exact feature head
+        run: test "$(git rev-parse HEAD)" = "${EXPECTED_SHA}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Install runtime and project
+        run: |
+          sudo apt-get update >/dev/null
+          sudo apt-get install -y libegl1 >/dev/null
+          python -m pip install --upgrade pip >/dev/null
+          python -m pip install -e '.[dev]' >/dev/null
+      - name: Publish bounded Python 3.14 diagnostic
+        shell: bash
+        run: |
+          set +e
+          python -m pytest -q --tb=short > pytest.log 2>&1
+          status=$?
+          {
+            echo "## S2 Python 3.14 bounded diagnostic"
+            echo
+            echo "- workflow run ID: ${GITHUB_RUN_ID}"
+            echo "- expected/actual SHA: ${EXPECTED_SHA} / $(git rev-parse HEAD)"
+            echo "- exit code: ${status}"
+            echo
+            echo '```text'
+            grep '^FAILED ' pytest.log || true
+            awk '/=+ FAILURES =+/{capture=1} /=+ warnings summary =+/{capture=0} capture{print}' pytest.log | tail -n 160
+            echo '```'
+          } > diagnostic.md
+          gh pr comment 32 --repo teeeeooo/oil_level_tracker --body-file diagnostic.md
+          cat diagnostic.md
+          exit "$status"
