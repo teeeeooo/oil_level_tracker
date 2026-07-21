@@ -1,0 +1,24 @@
+expected_sha=c00b7ad7c2fbe31eb99b14782025c5f91a016c5c
+actual_sha=c00b7ad7c2fbe31eb99b14782025c5f91a016c5c
+--- pytest tail ---
+.................................FF..................................... [ 84%]
+.............                                                            [100%]
+=================================== FAILURES ===================================
+__ test_analysis_is_committed_before_dialog_and_close_does_not_change_result ___
+tests/gui/test_analysis_completion_coordinator.py:102: in test_analysis_is_committed_before_dialog_and_close_does_not_change_result
+    coordinator.analysis_completed(_result(), output)
+src/oil_tracker/ui/analysis_completion_coordinator.py:40: in analysis_completed
+    self.window.progress_dialog.mark_completed()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: '_Progress' object has no attribute 'mark_completed'
+___________ test_viewer_and_report_failures_preserve_analyzed_state ____________
+tests/gui/test_analysis_completion_coordinator.py:128: in test_viewer_and_report_failures_preserve_analyzed_state
+    coordinator.analysis_completed(_result(), output)
+src/oil_tracker/ui/analysis_completion_coordinator.py:40: in analysis_completed
+    self.window.progress_dialog.mark_completed()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: '_Progress' object has no attribute 'mark_completed'
+=========================== short test summary info ============================
+FAILED tests/gui/test_analysis_completion_coordinator.py::test_analysis_is_committed_before_dialog_and_close_does_not_change_result - AttributeError: '_Progress' object has no attribute 'mark_completed'
+FAILED tests/gui/test_analysis_completion_coordinator.py::test_viewer_and_report_failures_preserve_analyzed_state - AttributeError: '_Progress' object has no attribute 'mark_completed'
+2 failed, 83 passed in 3.70s
