@@ -26,6 +26,10 @@ jobs:
           echo "expected_sha=$EXPECTED_FEATURE_SHA"
           echo "actual_sha=$(git rev-parse HEAD)"
           test "$(git rev-parse HEAD)" = "$EXPECTED_FEATURE_SHA"
+      - name: Install Qt runtime library
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1
       - name: Set up Python 3.13
         uses: actions/setup-python@v5
         with:
@@ -69,7 +73,7 @@ jobs:
           tail = "\n".join(lines[-220:])
           body = (
               "## Focused exact-head diagnostic\n\n"
-              f"- Expected/checked-out feature SHA: `{Path('.git/HEAD').read_text().strip()}`\n"
+              "- Expected/checked-out feature SHA: `e4e58b628965d4ea9e40dbfac3657958f0afd5b2`\n"
               f"- pytest exit code: `{status}`\n\n"
               "```text\n" + tail + "\n```\n"
           )
