@@ -31,7 +31,10 @@ class RedetectionResultReviewWindow(ResultReviewWindow):
     def _build_ui(self) -> None:
         super()._build_ui()
         self.redetection_action = QAction("부분 재검출과 비교", self)
-        self.truth_action = QAction("사용자 정답", self)
+        self.truth_action = QAction("사용자 정답으로 확인", self)
+        self.truth_action.setToolTip(
+            "현재 Glass, 장면과 시각을 유지해 사용자 정답 workflow를 엽니다. 공식 결과는 변경하지 않습니다."
+        )
         toolbar = self.findChild(QToolBar)
         if toolbar is not None:
             toolbar.insertAction(self.save_png_action, self.redetection_action)

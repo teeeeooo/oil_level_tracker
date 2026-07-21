@@ -20,11 +20,11 @@ from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
 
 
 class RoiEditorDialog(QDialog):
-    """Edit one observation ROI on a private copy until the user applies it."""
+    """Edit one analysis region on a private copy until the user applies it."""
 
     def __init__(self, frame, glass, frame_width: int, frame_height: int, parent=None) -> None:
         super().__init__(parent)
-        self.setWindowTitle("ROI 집중 편집")
+        self.setWindowTitle("분석 영역 편집")
         self.setMinimumSize(980, 700)
         self.resize(1200, 840)
         self._frame_width = frame_width
@@ -32,7 +32,7 @@ class RoiEditorDialog(QDialog):
         self._working = deepcopy(glass)
 
         instruction = QLabel(
-            "타원의 파란 조절점을 드래그해 크기를 바꾸고, 노란 기준선을 위아래로 움직이세요. "
+            "분석 영역 타원의 파란 조절점을 드래그해 크기를 바꾸고, 노란 기준선을 위아래로 움직이세요. "
             "적용하기 전까지 원래 프로필은 변경되지 않습니다."
         )
         instruction.setWordWrap(True)
@@ -48,7 +48,7 @@ class RoiEditorDialog(QDialog):
         self.exclusion_combo = QComboBox()
         self.add_exclusion_button = QPushButton("제외 영역 추가")
         self.delete_exclusion_button = QPushButton("선택 제외 영역 삭제")
-        self.reset_geometry_button = QPushButton("관찰창 위치 초기화")
+        self.reset_geometry_button = QPushButton("분석 영역 위치 초기화")
 
         controls = QHBoxLayout()
         controls.setSpacing(7)

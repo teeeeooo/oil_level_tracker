@@ -197,7 +197,7 @@ class PreflightCheckUseCase:
                 foam_detected=False,
                 flags=("DETECTOR_EXCEPTION",),
                 status=PreflightStatus.FAILURE,
-                reason=f"관찰창 검출 중 오류가 발생했습니다: {exc}",
+                reason=f"Glass 검출 중 오류가 발생했습니다: {exc}",
             )
 
         assessment = assess_detection_quality(detection, glass.detector_settings.minimum_final_confidence)

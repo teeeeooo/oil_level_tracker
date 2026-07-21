@@ -44,7 +44,7 @@ def test_glass_reason_priority_prefers_geometry_then_zero_then_scale():
     ]
     summary = glass_readiness(glass, ValidationResult(issues))
     assert summary.issue.code == "STRUCT_ELLIPSE"
-    assert summary.reason == "관찰 영역 수정 필요"
+    assert summary.reason == "분석 영역 수정 필요"
 
 
 def test_first_actionable_issue_prefers_error_glass_before_warning_glass():
@@ -74,6 +74,8 @@ def test_detection_summary_normal_review_failure_and_position_units():
     assert summary.confidence == "87%"
     assert "12.4 px 아래" in summary.reference_position
     assert "2.48 mm" in summary.reference_position
+    assert summary.recommendation == "추가 조치가 필요하지 않습니다."
+    assert summary.action_key is None
 
     review = PhaseDetection(glass.id, 5, 1.5, FillState.UNKNOWN_REVIEW, overall_confidence=0.8)
     assert build_detection_summary(review, glass).quality == PreviewQuality.REVIEW
@@ -81,6 +83,23 @@ def test_detection_summary_normal_review_failure_and_position_units():
     assert build_detection_summary(low, glass).quality == PreviewQuality.REVIEW
     failed = PhaseDetection(glass.id, 5, 1.5, FillState.PARTIAL_VISIBLE, overall_confidence=0.9)
     assert build_detection_summary(failed, glass).quality == PreviewQuality.FAILURE
+
+
+def test_foam_detection_summary_separates_interpretation_recommendation_and_action():
+    glass = _glass()
+    foam = PhaseDetection(
+        glass.id,
+        1,
+        0.0,
+        FillState.FOAMING_VISIBLE,
+        oil_air_level_y=200.0,
+        overall_confidence=0.8,
+    )
+    summary = build_detection_summary(foam, glass)
+    assert summary.quality == PreviewQuality.REVIEW
+    assert summary.interpretation == "거품 가능성이 감지됨"
+    assert summary.recommendation == "영상에서 실제 거품인지 확인하세요."
+    assert summary.action_key == "initial_state"
 
 
 def test_detection_summary_reports_above_and_missing_reference():
@@ -120,10 +139,10 @@ def test_progress_states_cover_unselected_invalid_validated_and_dirty():
     ready = build_workbench_progress(recipe, session, WorkbenchState.VALIDATED, ValidationResult([]))
     assert all(step.state == ProgressStepState.COMPLETE for step in ready[:4])
     assert ready[4].state == ProgressStepState.CURRENT
+    assert ready[2].label == "Glass 설정"
     dirty = build_workbench_progress(recipe, session, WorkbenchState.DRAFT_DIRTY, ValidationResult([]))
     assert dirty[3].state == ProgressStepState.CURRENT
     assert "재점검" in dirty[3].detail
-
 
 
 def test_progress_assigns_time_and_reference_errors_to_their_own_steps():

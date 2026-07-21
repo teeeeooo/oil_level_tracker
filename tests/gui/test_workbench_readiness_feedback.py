@@ -132,7 +132,7 @@ def test_navigation_selects_first_error_glass_focuses_field_and_canvas(qtbot):
     assert workbench.selected_glass_id == second.id
     assert window.canvas._selected_id == second.id
     assert window.settings._last_focused_field == "geometry"
-    assert "관찰창 타원" in validation_issue_text(window)
+    assert "분석 영역 타원" in validation_issue_text(window)
 
 
 def test_navigation_falls_back_to_warning_when_no_error(qtbot):

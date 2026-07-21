@@ -8,11 +8,9 @@ from PySide6.QtGui import QAction, QDesktopServices, QKeySequence, QUndoStack
 from PySide6.QtWidgets import (
     QApplication,
     QDockWidget,
-    QDoubleSpinBox,
     QFileDialog,
     QGridLayout,
     QGroupBox,
-    QHBoxLayout,
     QLabel,
     QMainWindow,
     QMessageBox,
@@ -54,6 +52,8 @@ from oil_tracker.ui.widgets.roi_editor_dialog import RoiEditorDialog
 from oil_tracker.ui.widgets.transport_bar import TransportBar
 from oil_tracker.ui.widgets.validation_panel import ValidationPanel
 from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
+from oil_tracker.ui.widgets.video_playback_panel import VideoPlaybackPanel
+from oil_tracker.ui.widgets.wheel_safe_controls import WheelSafeDoubleSpinBox
 from oil_tracker.ui.widgets.workbench_progress import WorkbenchProgressWidget
 from oil_tracker.ui.wizard.new_recipe_wizard import NewRecipeWizard
 
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
             ("validate", "설정 점검", QStyle.StandardPixmap.SP_DialogApplyButton),
             ("analyze", "분석 실행", QStyle.StandardPixmap.SP_MediaPlay),
             ("result", "결과 보고서", QStyle.StandardPixmap.SP_FileDialogDetailedView),
-            ("debug", "ROI 상세보기", QStyle.StandardPixmap.SP_ComputerIcon),
+            ("debug", "분석 영역 상세보기", QStyle.StandardPixmap.SP_ComputerIcon),
         )
         toolbar_keys = {"new", "load", "result", "debug"}
         for key, label, icon in definitions:
@@ -144,31 +144,43 @@ class MainWindow(QMainWindow):
 
         self.glass_list = GlassListPanel()
         self.canvas = VideoOverlayCanvas()
+        self.canvas.setMinimumSize(560, 340)
         self.settings = GlassSettingsPanel()
         self.transport = TransportBar()
         self.session_bar = self._build_session_bar()
         self.progress = WorkbenchProgressWidget()
         self.detection_summary = DetectionSummaryCard()
-        center = QWidget()
-        center_layout = QVBoxLayout(center)
+        self.playback_panel = VideoPlaybackPanel(self.canvas, self.transport)
+
+        self.left_panel = QWidget()
+        self.left_panel.setObjectName("workbenchLeftPanel")
+        left_layout = QVBoxLayout(self.left_panel)
+        left_layout.setContentsMargins(4, 4, 4, 4)
+        left_layout.setSpacing(6)
+        left_layout.addWidget(self.detection_summary, 0)
+        left_layout.addWidget(self.glass_list, 1)
+        self.left_panel.setMinimumWidth(250)
+
+        self.center_panel = QWidget()
+        self.center_panel.setObjectName("workbenchCenterPanel")
+        center_layout = QVBoxLayout(self.center_panel)
         center_layout.setContentsMargins(6, 6, 6, 6)
         center_layout.setSpacing(6)
-        center_layout.addWidget(self.session_bar)
-        center_layout.addWidget(self.detection_summary)
-        center_layout.addWidget(self.canvas, 1)
-        center_layout.addWidget(self.transport)
+        center_layout.addWidget(self.session_bar, 0)
+        center_layout.addWidget(self.playback_panel, 1)
+
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
         self.splitter.setChildrenCollapsible(False)
-        self.splitter.addWidget(self.glass_list)
-        self.splitter.addWidget(center)
+        self.splitter.addWidget(self.left_panel)
+        self.splitter.addWidget(self.center_panel)
         self.splitter.addWidget(self.settings)
         self.splitter.setStretchFactor(0, 0)
         self.splitter.setStretchFactor(1, 1)
         self.splitter.setStretchFactor(2, 0)
         width = max(1280, self.width())
-        left = max(180, int(width * 0.12))
-        right = max(460, int(width * 0.28))
-        self.splitter.setSizes([left, max(660, width - left - right), right])
+        left = max(250, int(width * 0.20))
+        right = max(370, int(width * 0.27))
+        self.splitter.setSizes([left, max(580, width - left - right), right])
 
         self.action_bar = BottomActionBar()
         shell = QWidget()
@@ -186,7 +198,7 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.validation_dock)
         self.validation_dock.hide()
         self.debug_panel = DebugPanel()
-        self.debug_dock = QDockWidget("ROI 및 상세 검출 정보", self)
+        self.debug_dock = QDockWidget("분석 영역 및 상세 검출 정보", self)
         self.debug_dock.setWidget(self.debug_panel)
         self.debug_dock.setMinimumSize(760, 560)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.debug_dock)
@@ -233,7 +245,7 @@ class MainWindow(QMainWindow):
         self.sampling_spin.setSuffix(" 회/초")
         self.sampling_spin.setValue(2.0)
         layout.addWidget(self.open_video_button, 0, 0)
-        layout.addWidget(self.video_path_label, 0, 1, 1, 5)
+        layout.addWidget(self.video_path_label, 0, 1, 1, 7)
         layout.addWidget(QLabel("분석 시작"), 1, 0)
         layout.addWidget(self.start_spin, 1, 1)
         layout.addWidget(QLabel("분석 종료"), 1, 2)
@@ -242,10 +254,8 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.compressor_spin, 1, 5)
         layout.addWidget(QLabel("분석 빈도"), 1, 6)
         layout.addWidget(self.sampling_spin, 1, 7)
-        layout.setColumnStretch(1, 1)
-        layout.setColumnStretch(3, 1)
-        layout.setColumnStretch(5, 1)
-        layout.setColumnStretch(7, 1)
+        for column in (1, 3, 5, 7):
+            layout.setColumnStretch(column, 1)
         return group
 
     def _connect(self) -> None:
@@ -278,6 +288,7 @@ class MainWindow(QMainWindow):
         self.settings.restoreDefaultsRequested.connect(self.restore_defaults)
         self.settings.editRoiRequested.connect(self.open_roi_editor)
         self.settings.resetGlassRequested.connect(self.reset_selected_glass)
+        self.detection_summary.initialStateRequested.connect(self._focus_initial_state)
         self.transport.playToggled.connect(self.toggle_play)
         self.transport.stepRequested.connect(self.step_frame)
         self.transport.seekRequested.connect(self.seek_fraction)
@@ -367,7 +378,7 @@ class MainWindow(QMainWindow):
                     self.workbench.mark_dirty()
                     return
 
-        self._record_recipe_change("ROI 집중 편집", apply_edit)
+        self._record_recipe_change("분석 영역 편집", apply_edit)
 
     def reset_selected_glass(self) -> None:
         glass = self.workbench.selected_glass()
@@ -392,35 +403,36 @@ class MainWindow(QMainWindow):
                     self.workbench.mark_dirty()
                     return
 
-        self._record_recipe_change("관찰창 초기화", reset)
+        self._record_recipe_change("Glass 초기화", reset)
 
     def new_recipe(self) -> None:
         wizard = NewRecipeWizard(self)
-        if wizard.exec() == NewRecipeWizard.DialogCode.Accepted:
-            if wizard.skipped:
-                self.workbench.new_document()
-                self.undo_stack.clear()
-                self._set_placeholder()
-                self._refresh_all()
-                self._refresh_inline_validation()
-                return
-            metadata = wizard.video_metadata
-            width, height = (metadata.width, metadata.height) if metadata else (1280, 720)
-            self.workbench.new_document(width, height, wizard.recipe_name.text().strip() or "새 유면 분석 프로필")
+        if wizard.exec() != NewRecipeWizard.DialogCode.Accepted:
+            return
+        if wizard.skipped:
+            self.workbench.new_document()
             self.undo_stack.clear()
-            self.workbench.recipe.description = wizard.description.toPlainText()
-            if wizard.video_path.text():
-                self.workbench.open_video(wizard.video_path.text())
-                self.workbench.session.analysis_start_sec = wizard.start.value()
-                self.workbench.session.analysis_end_sec = wizard.end.value()
-                self.workbench.session.compressor_start_sec = wizard.compressor.value()
-                self.workbench.session.sampling_fps = wizard.sampling.value()
-                self._load_frame(self.workbench.session.analysis_start_sec)
-            if wizard.create_glass.isChecked():
-                self.workbench.add_glass()
+            self._set_placeholder()
             self._refresh_all()
-            self.schedule_preview()
             self._refresh_inline_validation()
+            return
+        metadata = wizard.video_metadata
+        width, height = (metadata.width, metadata.height) if metadata else (1280, 720)
+        self.workbench.new_document(width, height, wizard.recipe_name.text().strip() or "새 유면 분석 프로필")
+        self.undo_stack.clear()
+        self.workbench.recipe.description = wizard.description.toPlainText()
+        if wizard.video_path.text():
+            self.workbench.open_video(wizard.video_path.text())
+            self.workbench.session.analysis_start_sec = wizard.start.value()
+            self.workbench.session.analysis_end_sec = wizard.end.value()
+            self.workbench.session.compressor_start_sec = wizard.compressor.value()
+            self.workbench.session.sampling_fps = wizard.sampling.value()
+            self._load_frame(self.workbench.session.analysis_start_sec)
+        if wizard.create_glass.isChecked():
+            self.workbench.add_glass()
+        self._refresh_all()
+        self.schedule_preview()
+        self._refresh_inline_validation()
 
     def open_video(self) -> None:
         path, _ = QFileDialog.getOpenFileName(self, "시험 영상 열기", "", SUPPORTED_VIDEO_FILTER)
@@ -437,10 +449,10 @@ class MainWindow(QMainWindow):
             self._error("영상 열기 실패", str(exc))
 
     def add_glass(self) -> None:
-        self._record_recipe_change("관찰창 추가", self.workbench.add_glass)
+        self._record_recipe_change("Glass 추가", self.workbench.add_glass)
 
     def delete_glass(self) -> None:
-        self._record_recipe_change("관찰창 삭제", self.workbench.delete_selected_glass)
+        self._record_recipe_change("Glass 삭제", self.workbench.delete_selected_glass)
 
     def select_glass(self, glass_id: str) -> None:
         self.workbench.set_selected(glass_id)
@@ -459,15 +471,12 @@ class MainWindow(QMainWindow):
 
     def _geometry_changed(self, glass_id: str, ellipse) -> None:
         self._record_recipe_change(
-            "관찰창 위치 또는 크기 변경",
+            "분석 영역 위치 또는 크기 변경",
             lambda: self.workbench.update_ellipse(glass_id, ellipse),
         )
 
     def _zero_changed(self, glass_id: str, y: float) -> None:
-        self._record_recipe_change(
-            "기준점 이동",
-            lambda: self.workbench.update_zero_line(glass_id, y),
-        )
+        self._record_recipe_change("기준점 이동", lambda: self.workbench.update_zero_line(glass_id, y))
 
     def _exclusion_changed(self, glass_id: str, zone_id: str, rect) -> None:
         self._record_recipe_change(
@@ -479,16 +488,14 @@ class MainWindow(QMainWindow):
         glass = self.workbench.selected_glass()
         if glass is not None:
             self._record_recipe_change(
-                "검출 제외 영역 추가",
-                lambda: self.workbench.add_exclusion(glass.id),
+                "검출 제외 영역 추가", lambda: self.workbench.add_exclusion(glass.id)
             )
 
     def delete_exclusion(self, zone_id: str) -> None:
         glass = self.workbench.selected_glass()
         if glass is not None:
             self._record_recipe_change(
-                "검출 제외 영역 삭제",
-                lambda: self.workbench.delete_exclusion(glass.id, zone_id),
+                "검출 제외 영역 삭제", lambda: self.workbench.delete_exclusion(glass.id, zone_id)
             )
 
     def restore_defaults(self) -> None:
@@ -524,7 +531,7 @@ class MainWindow(QMainWindow):
                 glass.initial_state = InitialObservationState(value)
                 self.workbench.mark_dirty()
             elif key == "mm_per_pixel":
-                glass.mm_per_pixel = value
+                glass.mm_per_pixel = None if value is None else float(value)
                 self.workbench.mark_dirty()
             elif key == "judgment_mode":
                 glass.judgment_rule.mode = JudgmentMode(value)
@@ -536,7 +543,7 @@ class MainWindow(QMainWindow):
                 setattr(glass.detector_settings, key, value)
                 self.workbench.mark_dirty()
 
-        self._record_recipe_change("관찰창 설정 변경", change)
+        self._record_recipe_change("Glass 설정 변경", change)
 
     def _session_changed(self) -> None:
         self.workbench.session.analysis_start_sec = self.start_spin.value()
@@ -571,7 +578,15 @@ class MainWindow(QMainWindow):
     def step_frame(self, direction: int) -> None:
         metadata = self.workbench.session.video_metadata
         if metadata:
-            self._load_frame(max(0.0, min(metadata.duration_sec, self.current_time + direction / max(1.0, metadata.fps))))
+            self._load_frame(
+                max(
+                    0.0,
+                    min(
+                        metadata.duration_sec,
+                        self.current_time + direction / max(1.0, metadata.fps),
+                    ),
+                )
+            )
             self.schedule_preview()
 
     def seek_fraction(self, fraction: float) -> None:
@@ -589,7 +604,9 @@ class MainWindow(QMainWindow):
             self.canvas.set_frame(frame)
             self.transport.set_position(
                 actual,
-                self.workbench.session.video_metadata.duration_sec if self.workbench.session.video_metadata else 0.0,
+                self.workbench.session.video_metadata.duration_sec
+                if self.workbench.session.video_metadata
+                else 0.0,
                 frame_index,
             )
             self._invalidate_preview("현재 장면 분석 대기")
@@ -606,7 +623,7 @@ class MainWindow(QMainWindow):
     def request_preview(self) -> None:
         glass = self.workbench.selected_glass()
         if glass is None or self.current_frame is None or self.workbench.session.video_metadata is None:
-            self._invalidate_preview("시험 영상과 관찰창을 선택해 주세요")
+            self._invalidate_preview("시험 영상과 Glass를 선택해 주세요")
             return
         self._preview_context = (glass.id, self.current_frame_index, self.current_time)
         self.detection_summary.set_loading()
@@ -635,8 +652,19 @@ class MainWindow(QMainWindow):
         glass = self.workbench.selected_glass()
         if glass is None:
             return
+        metadata = self.workbench.session.video_metadata
+        tolerance = max(1.0, 2.0 / max(1.0, metadata.fps if metadata else 1.0))
+        near_analysis_start = abs(self.current_time - self.workbench.session.analysis_start_sec) <= tolerance
+        initial_state_needs_review = glass.initial_state in {
+            InitialObservationState.AUTO,
+            InitialObservationState.UNKNOWN_REVIEW,
+        }
         self.canvas.set_detection(detection)
-        self.detection_summary.set_detection(detection, glass)
+        self.detection_summary.set_detection(
+            detection,
+            glass,
+            allow_initial_state_action=near_analysis_start or initial_state_needs_review,
+        )
         self.debug_panel.set_artifacts(artifacts)
         self.last_debug_artifacts = artifacts
         self.statusBar().showMessage(
@@ -659,9 +687,18 @@ class MainWindow(QMainWindow):
         if self.workbench.session.video_metadata is None:
             self.detection_summary.set_empty("시험 영상을 선택해 주세요")
         elif self.workbench.selected_glass() is None:
-            self.detection_summary.set_empty("관찰창을 선택해 주세요")
+            self.detection_summary.set_empty("Glass를 선택해 주세요")
         else:
             self.detection_summary.set_empty(message)
+
+    def _focus_initial_state(self) -> None:
+        glass = self.workbench.selected_glass()
+        if glass is None:
+            return
+        self.settings.focus_field("initial_state")
+        self.statusBar().showMessage(
+            f"{glass.name}의 분석 시작 상태를 영상과 비교해 확인하세요. 현재 설정은 자동으로 변경되지 않습니다."
+        )
 
     def save_recipe(self) -> None:
         path = self.workbench.recipe_path
@@ -732,7 +769,7 @@ class MainWindow(QMainWindow):
             return
         issue = first_actionable_issue(self.workbench.recipe.glasses, self._last_validation)
         if issue is None:
-            self.statusBar().showMessage("수정하거나 확인할 관찰창 항목이 없습니다.")
+            self.statusBar().showMessage("수정하거나 확인할 Glass 항목이 없습니다.")
             return
         self._route_validation_issue(issue)
 
@@ -772,7 +809,11 @@ class MainWindow(QMainWindow):
             return
         if step_key == "analysis":
             self.action_bar.analyze_button.setFocus()
-            message = "분석 실행을 선택해 주세요." if self.workbench.state == WorkbenchState.VALIDATED else "설정 점검 완료 후 분석할 수 있습니다."
+            message = (
+                "분석 실행을 선택해 주세요."
+                if self.workbench.state == WorkbenchState.VALIDATED
+                else "설정 점검 완료 후 분석할 수 있습니다."
+            )
             self.statusBar().showMessage(message)
 
     def run_analysis(self) -> None:
@@ -914,9 +955,9 @@ class MainWindow(QMainWindow):
         self.action_bar.analyze_button.setEnabled(can_analyze)
 
     def _set_placeholder(self) -> None:
-        self.current_frame = np.zeros(
-            (self.workbench.recipe.reference_frame_height, self.workbench.recipe.reference_frame_width, 3),
-            dtype=np.uint8,
+        self.current_frame = blank_bgr_frame(
+            self.workbench.recipe.reference_frame_width,
+            self.workbench.recipe.reference_frame_height,
         )
         self.canvas.set_frame(self.current_frame)
         self._invalidate_preview("시험 영상을 선택해 주세요")
@@ -929,8 +970,8 @@ class MainWindow(QMainWindow):
         super().closeEvent(event)
 
 
-def _time_spin() -> QDoubleSpinBox:
-    box = QDoubleSpinBox()
+def _time_spin() -> WheelSafeDoubleSpinBox:
+    box = WheelSafeDoubleSpinBox()
     box.setRange(0, 1_000_000)
     box.setDecimals(3)
     box.setKeyboardTracking(False)

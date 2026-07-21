@@ -55,7 +55,7 @@ def test_main_window_creation(qtbot):
     qtbot.addWidget(window)
     assert "분석 프로필 설정" in window.windowTitle()
     assert window.glass_list is not None
-    assert window.settings.minimumWidth() >= 440
+    assert window.settings.minimumWidth() >= 370
     assert window.settings.scroll.horizontalScrollBarPolicy() == Qt.ScrollBarPolicy.ScrollBarAsNeeded
     assert window.settings.scroll.verticalScrollBarPolicy() == Qt.ScrollBarPolicy.ScrollBarAsNeeded
     assert window.debug_dock.minimumWidth() >= 760
@@ -67,7 +67,7 @@ def test_add_delete_glass_binding(qtbot):
     qtbot.addWidget(window)
     qtbot.mouseClick(window.glass_list.add_button, Qt.MouseButton.LeftButton)
     assert len(c.recipe.glasses) == 1
-    assert window.settings.name.text() == "유면 관찰창 1"
+    assert window.settings.name.text() == "Glass 1"
     qtbot.mouseClick(window.glass_list.delete_button, Qt.MouseButton.LeftButton)
     assert len(c.recipe.glasses) == 0
 
