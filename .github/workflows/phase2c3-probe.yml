@@ -1,0 +1,38 @@
+name: Phase 2C-3 probe validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 9163bca964f24234f95dc72b2cd43bd4e8051ad0
+      - name: Assert exact feature SHA
+        run: test "$(git rev-parse HEAD)" = "9163bca964f24234f95dc72b2cd43bd4e8051ad0"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install project and test dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -e '.[dev]'
+      - name: Report runtime versions
+        run: |
+          python --version
+          python - <<'PY'
+          import matplotlib
+          import PySide6
+          print('PySide6', PySide6.__version__)
+          print('Matplotlib', matplotlib.__version__)
+          PY
+      - name: Run canonical suite
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: QT_QPA_PLATFORM=offscreen python -m pytest -q
