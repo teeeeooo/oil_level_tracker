@@ -230,16 +230,25 @@ class RedetectionComparisonCoordinator(QObject):
     def _refresh_compatibility(self) -> None:
         if self.window is None or self.viewer.bundle is None:
             return
-        compatibility = check_workbench_compatibility(
+        selected_compatibility = check_workbench_compatibility(
             self.main_window.workbench.recipe,
             self.main_window.workbench.state,
             self.viewer.bundle.recipe,
             self.viewer.selected_glass_id,
             DetectorSettingsApplyScope.SELECTED,
         )
+        all_compatibility = check_workbench_compatibility(
+            self.main_window.workbench.recipe,
+            self.main_window.workbench.state,
+            self.viewer.bundle.recipe,
+            self.viewer.selected_glass_id,
+            DetectorSettingsApplyScope.ALL,
+        )
         self.window.set_apply_compatibility(
-            compatibility.compatible,
-            compatibility.reasons,
+            selected_compatibility.compatible,
+            selected_compatibility.reasons,
+            all_compatibility.compatible,
+            all_compatibility.reasons,
         )
 
     def _started(self, generation: int, mode: str) -> None:
@@ -387,7 +396,7 @@ class RedetectionComparisonCoordinator(QObject):
                 "Workbench 적용 불가",
                 "\n".join(compatibility.reasons),
             )
-            self.window.set_apply_compatibility(False, compatibility.reasons)
+            self._refresh_compatibility()
             return
         settings = self.window.temporary_settings()
         planned_recipe = deepcopy(self.main_window.workbench.recipe)
