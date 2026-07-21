@@ -37,6 +37,7 @@ class AnalysisCompletionCoordinator(QObject):
 
     def analysis_completed(self, result, output_path: str) -> None:
         if hasattr(self.window, "progress_dialog"):
+            self.window.progress_dialog.mark_completed()
             self.window.progress_dialog.accept()
         self.window.workbench.state = WorkbenchState.ANALYZED
         self.window.last_result_path = output_path
