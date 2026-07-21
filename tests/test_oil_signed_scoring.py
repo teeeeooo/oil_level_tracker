@@ -170,7 +170,8 @@ def test_opposite_local_edges_with_persistent_region_step_are_merged():
     rejected = [candidate for candidate in (upper, lower) if candidate.rejected]
     assert len(kept) == 1
     assert len(rejected) == 1
-    assert 40.0 < kept[0].y < 46.0
+    assert kept[0].y == 43.0
+    assert kept[0].features["paired_boundary_unrounded_midpoint"] == 43.0
     assert kept[0].features["paired_boundary_step_preserved"] == 1.0
     assert rejected[0].reject_reason == "paired_boundary_edge_duplicate"
 
