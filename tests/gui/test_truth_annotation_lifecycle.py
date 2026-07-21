@@ -6,7 +6,6 @@ from PySide6.QtCore import Signal
 from PySide6.QtGui import QColor, QImage
 from PySide6.QtWidgets import QMessageBox, QWidget
 
-from oil_tracker.adapters.presentation.qt_frame_image_converter import FrameImageConversionError
 from oil_tracker.adapters.storage.json_truth_repository import build_truth_bundle_identity
 from oil_tracker.application.services.user_truth import TruthSession, TruthSessionStatus, UserTruthService
 from oil_tracker.ui.truth_annotation_coordinator import TruthAnnotationCoordinator
@@ -24,7 +23,7 @@ class _Viewer(QWidget):
         super().__init__()
         self.bundle = None
         self.active_video_path = None
-        self.current_frame = None
+        self.current_source_image = QImage()
         self.current_frame_index = 60
         self.current_time = 2.0
         self.selected_glass_id = "glass-1"
@@ -49,24 +48,16 @@ class _Viewer(QWidget):
         self.selected_truth_id = selected_id
 
 
-class _RecordingConverter:
-    def __init__(self, *, error: Exception | None = None) -> None:
-        self.calls = []
-        self.error = error
-
-    def to_qimage(self, frame) -> QImage:
-        self.calls.append(frame)
-        if self.error is not None:
-            raise self.error
-        image = QImage(320, 240, QImage.Format.Format_RGB32)
-        image.fill(QColor(12, 34, 56))
-        return image
+def _source_image(rgb=(12, 34, 56)) -> QImage:
+    image = QImage(320, 240, QImage.Format.Format_RGB32)
+    image.fill(QColor(*rgb))
+    return image
 
 
-def _coordinator(qtbot, *, converter=None):
+def _coordinator(qtbot):
     viewer = _Viewer()
     qtbot.addWidget(viewer)
-    coordinator = TruthAnnotationCoordinator(viewer, frame_image_converter=converter)
+    coordinator = TruthAnnotationCoordinator(viewer)
     coordinator._ensure_window()
     qtbot.addWidget(coordinator.window)
     return coordinator, viewer
@@ -101,60 +92,58 @@ def test_truth_session_state_machine_is_external_viewer_state(tmp_path):
     assert session.path is None
 
 
-def test_capture_converts_viewer_frame_once_and_canvas_receives_qimage(qtbot, tmp_path):
-    converter = _RecordingConverter()
-    coordinator, viewer = _coordinator(qtbot, converter=converter)
+def test_capture_reuses_detached_viewer_qimage_and_canvas_receives_snapshot(qtbot, tmp_path):
+    coordinator, viewer = _coordinator(qtbot)
     viewer.bundle = make_truth_bundle(tmp_path)
     viewer.active_video_path = tmp_path / "source.mp4"
-    viewer.current_frame = object()
+    source = _source_image()
+    viewer.current_source_image = source
     viewer.selected_glass_id = viewer.bundle.recipe.glasses[0].id
 
     coordinator.capture_current_frame()
+    source.fill(QColor(90, 100, 110))
 
-    assert converter.calls == [viewer.current_frame]
     assert coordinator.window.context() is not None
     assert coordinator.window.canvas.source_image_size.width() == 320
     assert coordinator.window.canvas.source_image_size.height() == 240
     assert not coordinator._draft_image.isNull()
+    color = coordinator._draft_image.pixelColor(0, 0)
+    assert (color.red(), color.green(), color.blue()) == (12, 34, 56)
     assert not hasattr(coordinator.window.canvas, "_frame")
     coordinator.close()
 
 
 def test_annotation_save_reuses_coordinator_draft_image_without_canvas_private_state(qtbot, tmp_path):
-    converter = _RecordingConverter()
-    coordinator, viewer = _coordinator(qtbot, converter=converter)
+    coordinator, viewer = _coordinator(qtbot)
     viewer.bundle = make_truth_bundle(tmp_path)
     viewer.active_video_path = tmp_path / "source.mp4"
-    original_frame = object()
-    viewer.current_frame = original_frame
+    viewer.current_source_image = _source_image()
     viewer.selected_glass_id = viewer.bundle.recipe.glasses[0].id
 
     coordinator.capture_current_frame()
     original_color = coordinator._draft_image.pixelColor(0, 0)
     coordinator.confirm_official()
-    viewer.current_frame = object()
+    viewer.current_source_image = _source_image((99, 88, 77))
 
     assert coordinator.save_annotation()
-    assert converter.calls == [original_frame]
     assert coordinator._draft_image.pixelColor(0, 0) == original_color
     assert coordinator.window.canvas.source_image_size == coordinator._draft_image.size()
     assert not hasattr(coordinator.window.canvas, "_frame")
     coordinator.close()
 
 
-def test_converter_failure_is_presented_as_bounded_korean_error(qtbot, tmp_path):
-    converter = _RecordingConverter(error=FrameImageConversionError("raw numpy failure"))
-    coordinator, viewer = _coordinator(qtbot, converter=converter)
+def test_invalid_viewer_image_is_presented_as_bounded_korean_error(qtbot, tmp_path, monkeypatch):
+    coordinator, viewer = _coordinator(qtbot)
     viewer.bundle = make_truth_bundle(tmp_path)
     viewer.active_video_path = tmp_path / "source.mp4"
-    viewer.current_frame = object()
+    viewer.current_source_image = object()
     viewer.selected_glass_id = viewer.bundle.recipe.glasses[0].id
+    monkeypatch.setattr(coordinator, "_viewer_source_available", lambda: True)
 
     coordinator.capture_current_frame()
 
     message = coordinator.window.validation_label.text()
-    assert "이미지로 변환할 수 없습니다" in message
-    assert "raw numpy failure" not in message
+    assert "이미지로 불러올 수 없습니다" in message
     assert coordinator.window.context() is None
     assert coordinator._draft_image.isNull()
     coordinator.close()
@@ -262,8 +251,7 @@ def test_bundle_change_clears_active_truth_context_markers_and_draft_image(qtbot
     truth_set, annotation, _service = make_truth_set_and_annotation(old_bundle)
     coordinator.session.attach_new(truth_set)
     viewer.set_truth_annotations((annotation,), selected_id=annotation.annotation_id)
-    image = QImage(10, 10, QImage.Format.Format_RGB32)
-    coordinator._draft_image = image
+    coordinator._draft_image = QImage(10, 10, QImage.Format.Format_RGB32)
 
     new_bundle = make_truth_bundle(tmp_path / "new")
     coordinator._bundle_changed(new_bundle)
@@ -281,7 +269,7 @@ def test_source_loss_preserves_saved_annotation_metadata_but_disables_creation(q
     truth_set, annotation, _service = make_truth_set_and_annotation(bundle)
     viewer.bundle = bundle
     viewer.active_video_path = None
-    viewer.current_frame = None
+    viewer.current_source_image = QImage()
     coordinator.session.attach_new(truth_set)
     coordinator._refresh_annotations()
     coordinator._source_changed(None)
