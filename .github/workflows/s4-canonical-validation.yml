@@ -60,23 +60,30 @@ jobs:
           print('font_supports_Hangul=' + str(selected.supports_hangul))
           PY
       - name: Run canonical suite
+        id: pytest
+        continue-on-error: true
         run: |
           set -o pipefail
           python -m pytest -q 2>&1 | tee /tmp/pytest.txt
-      - name: Publish compact evidence
+      - name: Publish bounded canonical evidence
+        if: always() && steps.pytest.outcome != 'skipped'
         run: |
           glyph_count=$(grep -Ec 'Glyph .* missing from font' /tmp/pytest.txt || true)
           {
-            echo "### S4 canonical Python ${{ matrix.python-version }} final exact-head evidence"
+            echo "### S4 canonical Python ${{ matrix.python-version }} exact-head evidence"
             echo
             echo "- run_id: $GITHUB_RUN_ID"
             echo "- expected_sha: $EXPECTED_SHA"
             echo "- actual_sha: $(git rev-parse HEAD)"
+            echo "- pytest_outcome: ${{ steps.pytest.outcome }}"
             echo "- missing_hangul_glyph_warnings: $glyph_count"
             echo
             echo '```text'
             cat /tmp/env.txt
-            tail -n 8 /tmp/pytest.txt
+            tail -n 80 /tmp/pytest.txt
             echo '```'
           } > /tmp/comment.md
           gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/comment.md
+      - name: Fail when canonical tests fail
+        if: steps.pytest.outcome == 'failure'
+        run: exit 1
