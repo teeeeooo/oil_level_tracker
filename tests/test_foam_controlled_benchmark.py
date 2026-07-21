@@ -1,0 +1,80 @@
+from __future__ import annotations
+
+from datetime import datetime, timezone
+
+from foam_benchmark_fixtures import generate_controlled_foam_dataset
+from oil_tracker.adapters.storage.benchmark_result_writer import AtomicBenchmarkResultWriter
+from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
+from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
+from oil_tracker.domain.detector_benchmark import CATEGORY_CONTRACT
+
+
+FIXED_TIME = datetime(2026, 7, 21, 16, 0, 0, tzinfo=timezone.utc)
+
+
+def _service():
+    return DetectorBenchmarkService(
+        FilesystemRegressionDatasetReader(),
+        AtomicBenchmarkResultWriter(),
+        OpenCvPhaseDetector,
+        clock=lambda: FIXED_TIME,
+        runtime_metadata_factory=lambda: {
+            "python": "controlled",
+            "packages": {
+                "numpy": "controlled",
+                "opencv-python-headless": "controlled",
+            },
+        },
+    )
+
+
+def _metric(summary, name):
+    return summary["metrics"][name]["value"]
+
+
+def test_controlled_dataset_is_external_style_valid_and_fingerprint_is_stable(tmp_path):
+    dataset_path, scenes = generate_controlled_foam_dataset(tmp_path)
+    reader = FilesystemRegressionDatasetReader()
+    first = reader.load(dataset_path)
+    second = reader.load(dataset_path)
+    assert first.fingerprint == second.fingerprint
+    assert len(first.fingerprint) == 64
+    assert len(first.cases) == len(scenes)
+    categories = {case.category.value for case in first.cases}
+    assert {
+        "white_foam",
+        "transparent_oil_shimmer",
+        "reflection_or_blur",
+        "structural_horizontal_edge",
+        "clear_oil_boundary",
+        "no_interface",
+    } <= categories
+    assert set(categories) <= set(CATEGORY_CONTRACT)
+    assert any(case.sequence_id == "transient-shimmer" for case in first.cases)
+    assert any(case.sequence_id == "persistent-foam" for case in first.cases)
+
+
+def test_feature_detector_meets_controlled_foam_and_shimmer_acceptance(tmp_path):
+    dataset_path, _scenes = generate_controlled_foam_dataset(tmp_path)
+    payload = _service().run(dataset_path, tmp_path / "results").payload
+    micro = payload["micro_aggregate"]
+    shimmer = payload["category_summaries"]["transparent_oil_shimmer"]
+    white = payload["category_summaries"]["white_foam"]
+    assert payload["benchmark_schema_version"] == 1
+    assert payload["detector"]["version"] == "opencv-phase-detector-s5a-foam-v2"
+    assert _metric(shimmer, "shimmer_foam_false_positive_rate") == 0.0
+    assert _metric(micro, "foam_precision") == 1.0
+    assert _metric(micro, "foam_recall") >= 0.80
+    assert _metric(white, "fill_state_accuracy") is not None
+
+
+def test_controlled_oil_and_no_interface_cases_are_evaluable(tmp_path):
+    dataset_path, _scenes = generate_controlled_foam_dataset(tmp_path)
+    payload = _service().run(dataset_path, tmp_path / "results").payload
+    clear = payload["category_summaries"]["clear_oil_boundary"]
+    no_interface = payload["category_summaries"]["no_interface"]
+    assert clear["oil_boundary_coverage"]["raw"]["truth_present_detector_present"] == 1
+    assert clear["oil_boundary_coverage"]["smoothed"]["truth_present_detector_present"] == 1
+    assert _metric(no_interface, "raw_no_interface_false_boundary_rate") is not None
+    assert _metric(no_interface, "smoothed_no_interface_false_boundary_rate") is not None

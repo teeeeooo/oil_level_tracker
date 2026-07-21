@@ -35,9 +35,17 @@ _FIELD_SPECS = (
     DetectorSettingField("smoothing_window", "temporal", int, 1, 1001, 0, 1, "유면 위치 smoothing에 사용하는 sample 수입니다."),
     DetectorSettingField("glare_threshold", "artifact", int, 0, 255, 0, 1, "과노출 반사광으로 분류하는 밝기 임계값입니다."),
     DetectorSettingField("glare_ratio_unknown", "artifact", float, 0.0, 1.0, 6, 0.01, "관찰 불가 상태로 전환할 반사광 면적 비율입니다."),
-    DetectorSettingField("foam_variance_threshold", "foam", float, 0.0, 1000000.0, 6, 1.0, "거품 질감의 국부 분산 임계값입니다."),
-    DetectorSettingField("foam_edge_density_threshold", "foam", float, 0.0, 1.0, 6, 0.01, "거품 영역의 최소 edge density입니다."),
-    DetectorSettingField("foam_min_area_ratio", "foam", float, 0.0, 1.0, 6, 0.01, "하단 연결 거품의 최소 면적 비율입니다."),
+    DetectorSettingField("foam_variance_threshold", "foam", float, 0.0, 1000000.0, 6, 1.0, "거품 질감의 국부 분산 정규화 기준입니다."),
+    DetectorSettingField("foam_edge_density_threshold", "foam", float, 0.000001, 1.0, 6, 0.01, "거품 질감의 edge-density 정규화 기준입니다."),
+    DetectorSettingField("foam_min_area_ratio", "foam", float, 0.0, 1.0, 6, 0.01, "하단 연결 거품 component의 최소 면적 비율입니다."),
+    DetectorSettingField("foam_lightness_threshold", "foam", float, 0.0, 255.0, 3, 1.0, "Lab lightness 기반 Foam 백색도 하한입니다."),
+    DetectorSettingField("foam_max_chroma", "foam", float, 0.000001, 181.0, 3, 1.0, "Foam 백색도로 인정할 최대 Lab chroma입니다."),
+    DetectorSettingField("foam_min_whiteness_ratio", "foam", float, 0.0, 1.0, 6, 0.01, "Foam component가 확보해야 하는 최소 백색도 support 비율입니다."),
+    DetectorSettingField("foam_max_glare_overlap_ratio", "foam", float, 0.0, 1.0, 6, 0.01, "Foam component에 허용할 최대 clipped glare 중첩 비율입니다."),
+    DetectorSettingField("foam_min_evidence_score", "foam", float, 0.0, 1.0, 6, 0.01, "Temporal 검토 대상으로 유지할 최소 Foam evidence score입니다."),
+    DetectorSettingField("foam_strong_evidence_score", "foam", float, 0.0, 1.0, 6, 0.01, "단일 frame에서 즉시 승인할 strong Foam evidence score입니다."),
+    DetectorSettingField("foam_persistence_frames", "foam", int, 1, 10000, 0, 1, "Moderate Foam evidence 승인에 필요한 연속 sample 수입니다."),
+    DetectorSettingField("foam_max_front_jump_px", "foam", float, 0.0, 100000.0, 6, 1.0, "Moderate Foam persistence chain에서 허용할 최대 front 이동량입니다."),
     DetectorSettingField("state_hold_frames", "temporal", int, 1, 10000, 0, 1, "상태 전이를 확정하기 전에 유지할 sample 수입니다."),
     DetectorSettingField("candidate_top_k", "candidate", int, 1, 1000, 0, 1, "debug 결과에 유지할 후보의 최대 개수입니다."),
     DetectorSettingField("weight_edge", "score_weight", float, 0.0, 100.0, 8, 0.01, "edge strength score 가중치입니다."),
@@ -120,6 +128,12 @@ def validate_detector_settings(settings: DetectorSettings) -> dict[str, str]:
             errors[spec.name] = f"{spec.maximum:g} 이하여야 합니다."
     if "canny_low" not in errors and "canny_high" not in errors and settings.canny_low >= settings.canny_high:
         errors["canny_high"] = "Canny 상한은 하한보다 커야 합니다."
+    if (
+        "foam_min_evidence_score" not in errors
+        and "foam_strong_evidence_score" not in errors
+        and settings.foam_min_evidence_score > settings.foam_strong_evidence_score
+    ):
+        errors["foam_strong_evidence_score"] = "Strong Foam score는 최소 evidence score 이상이어야 합니다."
     weight_names = [spec.name for spec in _FIELD_SPECS if spec.category == "score_weight"]
     if not any(float(getattr(settings, name)) > 0.0 for name in weight_names if name not in errors):
         errors.setdefault("weight_edge", "score 가중치 중 하나 이상은 0보다 커야 합니다.")

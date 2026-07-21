@@ -74,7 +74,7 @@ def _request(generation, mode=RedetectionMode.CURRENT):
 def test_editor_displays_every_detector_setting_and_noop_state(qtbot):
     editor = DetectorSettingsEditor(DetectorSettings())
     qtbot.addWidget(editor)
-    assert editor.table.rowCount() == len(detector_setting_fields()) == 29
+    assert editor.table.rowCount() == len(detector_setting_fields())
     assert editor.changed_field_names() == ()
     assert editor.validation_errors() == {}
     assert editor.changed_count.text() == "변경 0개"
@@ -182,7 +182,7 @@ def test_controller_rapid_rerun_cancels_first_and_only_completes_latest(qtbot):
     assert service.calls == [1, 2]
     assert completed[-1].request.generation == 2
     assert all(result.request.generation == 2 for result in completed)
-    assert 1 not in cancelled  # stale cancellation signal is intentionally suppressed
+    assert 1 not in cancelled
     controller.close()
 
 

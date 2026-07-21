@@ -40,6 +40,23 @@
 - Inspect all six debug tabs and candidate reject reasons.
 - Export selected-frame debug artifacts and open every PNG/CSV/JSON.
 
+## S5-A Foam and transparent-oil discrimination
+- Validate real diffuse white Foam, low-light Foam and partial Foam fronts against user-recorded truth.
+- Validate transparent-oil agitation, refractive shimmer and heat-haze-like motion without Foam.
+- Include compressor startup immediately after energizing, when fluid motion is fastest.
+- Include clipped glare, moving Glass reflection, blur and fogging.
+- Run Glass 1, 2 and 3 independently and together; verify Foam temporal state never crosses Glass boundaries.
+- Verify a one-sample transient shimmer is rejected and sustained Foam remains accepted.
+- Verify a moving Foam front remains continuous within the configured jump limit and a discontinuous jump restarts persistence.
+- In Workbench preview and modeless preflight, inspect Foam decision flags without changing the official Recipe unintentionally.
+- Run full analysis, then inspect Foam whiteness, texture, glare-excluded, combined-evidence and accepted-component images in Result Review debug.
+- Run partial re-detection with changed Foam settings and confirm every additive setting appears in the comparison.
+- Record user truth for representative Foam and shimmer scenes and run the external S1 benchmark dataset.
+- Measure median Windows CPU frame time with debug disabled and compare against the accepted exact-head baseline.
+- Run a long-duration 1–3 Glass analysis and confirm memory remains bounded and no frame history accumulates in the Foam gate.
+- Build and run the one-folder package on a general office Windows PC without CUDA or any GPU-compute runtime dependency.
+- Repeat with Unicode and long paths, active file locking, cancellation and application close; confirm video/output/debug resources are released.
+
 ## Analysis lifecycle and cancellation
 - Run 1-, 2- and 3-Glass analyses with a long real compressor video.
 - Confirm the dialog displays all six stages in order: 영상 분석, 이벤트와 판정 계산, 결과 이미지 생성, CSV와 snapshot 저장, graph와 보고서 생성, bundle 마무리.
