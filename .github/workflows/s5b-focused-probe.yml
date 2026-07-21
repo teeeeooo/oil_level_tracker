@@ -1,4 +1,4 @@
-name: S5-B focused validation
+name: S5-B final exact-head validation
 
 on:
   pull_request:
@@ -9,10 +9,13 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
+  actions: read
 
 jobs:
   focused:
+    name: focused-python313
     runs-on: ubuntu-24.04
     env:
       QT_QPA_PLATFORM: offscreen
@@ -37,7 +40,19 @@ jobs:
           sudo apt-get update -qq >/dev/null
           sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
           python -m pip install -q -e '.[dev]'
-      - name: Run focused regression set
+      - name: Runtime identity
+        run: |
+          python - <<'PY'
+          import cv2, matplotlib, numpy, PySide6, sys
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          print("python=" + sys.version)
+          print("PySide6=" + PySide6.__version__)
+          print("numpy=" + numpy.__version__)
+          print("opencv=" + cv2.__version__)
+          print("matplotlib=" + matplotlib.__version__)
+          print("detector_version=" + OpenCvPhaseDetector.version)
+          PY
+      - name: Run focused detector tests
         run: |
           python -m pytest -q \
             tests/test_detector_benchmark_integration.py::test_current_detector_runs_headlessly_on_phase2c3_fixture_dataset \
@@ -54,4 +69,170 @@ jobs:
             tests/test_oil_fill_state_classifier.py \
             tests/test_oil_controlled_benchmark.py \
             tests/test_foam_controlled_benchmark.py \
-            tests/test_foam_phase_detector_integration.py
+            tests/test_foam_phase_detector_integration.py \
+            tests/test_detector_benchmark_metrics.py \
+            tests/test_detector_benchmark_runner.py \
+            tests/test_detector_benchmark_integration.py \
+            tests/test_benchmark_cli.py \
+            tests/test_ui_import_boundaries.py
+      - name: Run S2-S4 architecture regressions
+        run: |
+          python -m pytest -q tests \
+            -k 'raster or qimage or image_boundary or workbench or wheel or lifecycle or progress or graph or finalization'
+
+  controlled:
+    name: controlled-base-versus-feature
+    needs: focused
+    runs-on: ubuntu-24.04
+    env:
+      QT_QPA_PLATFORM: offscreen
+      BASE_SHA: 5f180d02a7aff36591e6f35adf44fca6347bdf9c
+      FEATURE_SHA: 387fdd9d9849853186b6b1f3df709127630a3046
+      VALIDATION_BRANCH: validation/s5b-focused-probe
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.VALIDATION_BRANCH }}
+          fetch-depth: 0
+      - name: Preserve temporary comparison helper
+        run: cp .github/scripts/s5b_controlled_compare.py "${RUNNER_TEMP}/s5b_compare.py"
+      - name: Checkout exact feature source
+        run: |
+          git checkout --detach "${FEATURE_SHA}"
+          actual="$(git rev-parse HEAD)"
+          echo "expected_feature_sha=${FEATURE_SHA}"
+          echo "actual_feature_checkout_sha=${actual}"
+          test "${actual}" = "${FEATURE_SHA}"
+          dependency_files="$(git diff --name-only "${BASE_SHA}" "${FEATURE_SHA}" -- pyproject.toml requirements.txt requirements '*.lock' 2>/dev/null || true)"
+          echo "dependency_diff=${dependency_files:-none}"
+          test -z "${dependency_files}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install feature and generate identical datasets
+        run: |
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
+          python -m pip install -q -e '.[dev]'
+          PYTHONPATH=tests python "${RUNNER_TEMP}/s5b_compare.py" generate "${RUNNER_TEMP}/s5b"
+      - name: Run base exact SHA
+        run: |
+          git checkout --detach "${BASE_SHA}"
+          actual="$(git rev-parse HEAD)"
+          echo "expected_base_sha=${BASE_SHA}"
+          echo "actual_base_checkout_sha=${actual}"
+          test "${actual}" = "${BASE_SHA}"
+          python -m pip install -q -e .
+          oil_path="$(python -c 'import json,os; print(json.load(open(os.environ["RUNNER_TEMP"]+"/s5b/datasets.json"))["oil_path"])')"
+          foam_path="$(python -c 'import json,os; print(json.load(open(os.environ["RUNNER_TEMP"]+"/s5b/datasets.json"))["foam_path"])')"
+          OIL_TRACKER_SOURCE_REVISION="${BASE_SHA}" python "${RUNNER_TEMP}/s5b_compare.py" run "${oil_path}" "${RUNNER_TEMP}/s5b/base-oil.json" base
+          OIL_TRACKER_SOURCE_REVISION="${BASE_SHA}" python "${RUNNER_TEMP}/s5b_compare.py" run "${foam_path}" "${RUNNER_TEMP}/s5b/base-foam.json" base-foam
+      - name: Run feature exact SHA
+        run: |
+          git checkout --detach "${FEATURE_SHA}"
+          actual="$(git rev-parse HEAD)"
+          echo "expected_feature_sha=${FEATURE_SHA}"
+          echo "actual_feature_checkout_sha=${actual}"
+          test "${actual}" = "${FEATURE_SHA}"
+          python -m pip install -q -e .
+          oil_path="$(python -c 'import json,os; print(json.load(open(os.environ["RUNNER_TEMP"]+"/s5b/datasets.json"))["oil_path"])')"
+          foam_path="$(python -c 'import json,os; print(json.load(open(os.environ["RUNNER_TEMP"]+"/s5b/datasets.json"))["foam_path"])')"
+          OIL_TRACKER_SOURCE_REVISION="${FEATURE_SHA}" python "${RUNNER_TEMP}/s5b_compare.py" run "${oil_path}" "${RUNNER_TEMP}/s5b/feature-oil.json" feature
+          OIL_TRACKER_SOURCE_REVISION="${FEATURE_SHA}" python "${RUNNER_TEMP}/s5b_compare.py" run "${foam_path}" "${RUNNER_TEMP}/s5b/feature-foam.json" feature-foam
+      - name: Compare controlled acceptance
+        run: |
+          python "${RUNNER_TEMP}/s5b_compare.py" compare "${RUNNER_TEMP}/s5b" "${BASE_SHA}" "${FEATURE_SHA}"
+      - name: Record controlled summary on validation PR
+        run: |
+          {
+            echo '## S5-B final controlled comparison'
+            echo
+            echo "Validation run: \`${GITHUB_RUN_ID}\`"
+            echo
+            echo '```json'
+            cat "${RUNNER_TEMP}/s5b/controlled-summary.json"
+            echo '```'
+          } > "${RUNNER_TEMP}/validation-body.md"
+          gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file "${RUNNER_TEMP}/validation-body.md"
+
+  canonical:
+    name: canonical-python${{ matrix.python }}
+    needs: controlled
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.13', '3.14']
+    env:
+      QT_QPA_PLATFORM: offscreen
+      FEATURE_SHA: 387fdd9d9849853186b6b1f3df709127630a3046
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.FEATURE_SHA }}
+      - name: Assert exact feature checkout
+        run: |
+          actual="$(git rev-parse HEAD)"
+          echo "expected_feature_sha=${FEATURE_SHA}"
+          echo "actual_checkout_sha=${actual}"
+          test "${actual}" = "${FEATURE_SHA}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install package
+        run: |
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
+          python -m pip install -q -e '.[dev]'
+      - name: Runtime identity
+        run: |
+          python - <<'PY'
+          import cv2, matplotlib, numpy, PySide6, sys
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          print("python=" + sys.version)
+          print("PySide6=" + PySide6.__version__)
+          print("numpy=" + numpy.__version__)
+          print("opencv=" + cv2.__version__)
+          print("matplotlib=" + matplotlib.__version__)
+          print("detector_version=" + OpenCvPhaseDetector.version)
+          PY
+      - name: Run canonical full suite
+        run: QT_QPA_PLATFORM=offscreen python -m pytest -q
+
+  cleanup:
+    name: cleanup-validation-resources
+    needs: [focused, controlled, canonical]
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BASE_SHA: 5f180d02a7aff36591e6f35adf44fca6347bdf9c
+      FEATURE_SHA: 387fdd9d9849853186b6b1f3df709127630a3046
+      FEATURE_BRANCH: feature/oil-boundary-temporal-tracking
+      VALIDATION_BRANCH: validation/s5b-focused-probe
+    steps:
+      - name: Verify clean feature and zero artifacts
+        run: |
+          feature_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${FEATURE_BRANCH}" --jq '.object.sha')"
+          echo "expected_feature_sha=${FEATURE_SHA}"
+          echo "actual_feature_branch_sha=${feature_head}"
+          test "${feature_head}" = "${FEATURE_SHA}"
+          workflow_diff="$(gh api "repos/${GITHUB_REPOSITORY}/compare/${BASE_SHA}...${FEATURE_SHA}" --jq '[.files[] | select(.filename | startswith(".github/workflows/"))] | length')"
+          echo "feature_workflow_diff_count=${workflow_diff}"
+          test "${workflow_diff}" = "0"
+          artifact_count="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" --jq '.total_count')"
+          echo "actions_artifact_count=${artifact_count}"
+          test "${artifact_count}" = "0"
+      - name: Close validation PR and delete validation branch
+        run: |
+          gh pr close 55 --repo "${GITHUB_REPOSITORY}"
+          gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${VALIDATION_BRANCH}"
+      - name: Verify feature head remains unchanged
+        run: |
+          feature_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${FEATURE_BRANCH}" --jq '.object.sha')"
+          echo "post_cleanup_feature_sha=${feature_head}"
+          test "${feature_head}" = "${FEATURE_SHA}"
