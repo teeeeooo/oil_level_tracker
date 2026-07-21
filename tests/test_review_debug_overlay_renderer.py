@@ -100,9 +100,10 @@ def test_timestamp_and_delta_context_are_rendered_without_official_final_overlay
     renderer = ReviewDebugOverlayRenderer()
     first = renderer.render(frame, _glass(), record, 2.012)
     second = renderer.render(frame, _glass(), record, 2.112)
+    baseline = renderer.render(frame, _glass(), _record(timestamp=2.0), 2.012)
     assert not np.array_equal(first, second)
     assert np.count_nonzero(first[10:78, 10:310]) > 0
-    assert np.count_nonzero(first[160, 100:220]) == 0
+    assert np.array_equal(first[160, 100:220], baseline[160, 100:220])
 
 
 def test_debug_render_is_deterministic_and_preserves_source_resolution():
