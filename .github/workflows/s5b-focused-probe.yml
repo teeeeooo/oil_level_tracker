@@ -1,4 +1,4 @@
-name: S5-B comparison log diagnosis
+name: S5-B comparison traceback diagnosis
 
 on:
   pull_request:
@@ -14,25 +14,21 @@ permissions:
   contents: read
 
 jobs:
-  extract-comparison-failure:
+  extract-traceback:
     runs-on: ubuntu-24.04
     env:
       GH_TOKEN: ${{ github.token }}
       FAILED_RUN_ID: '29851502005'
       FAILED_JOB_ID: '88705466607'
     steps:
-      - name: Extract bounded comparison log
+      - name: Extract final traceback only
         run: |
           gh run view "${FAILED_RUN_ID}" --repo "${GITHUB_REPOSITORY}" --job "${FAILED_JOB_ID}" --log > /tmp/job.log
           {
-            echo '## S5-B controlled comparison failure diagnosis'
-            echo
-            echo 'This job only reads the stored prior job log; no detector tests or benchmarks are executed.'
+            echo '## S5-B controlled comparison final traceback'
             echo
             echo '```text'
-            grep -n -E 'expected_base_sha|actual_base_checkout_sha|expected_feature_sha|actual_feature_checkout_sha|dataset_fingerprint|detector_version|cpu_median|Traceback|AssertionError|assert |base_|feature_|acceptance|Process completed|Error|ERROR' /tmp/job.log | tail -n 260
-            echo
-            tail -n 160 /tmp/job.log
+            tail -n 65 /tmp/job.log
             echo '```'
           } > /tmp/body.md
           gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
