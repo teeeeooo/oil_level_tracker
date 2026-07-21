@@ -6,6 +6,8 @@ from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import FillState
 from oil_tracker.domain.recipe import DetectorSettings
 
+from .foam_front_detector import FoamDecisionStatus
+
 
 def classify_fill_state(
     gray: np.ndarray,
@@ -15,6 +17,7 @@ def classify_fill_state(
     foam_candidate: BoundaryCandidate | None,
     previous_state: FillState | None,
     settings: DetectorSettings,
+    foam_status: FoamDecisionStatus = FoamDecisionStatus.NO_EVIDENCE,
 ) -> tuple[FillState, float, list[str]]:
     flags: list[str] = []
     valid = effective_mask > 0
@@ -25,6 +28,11 @@ def classify_fill_state(
     if glare_ratio >= settings.glare_ratio_unknown:
         return FillState.UNKNOWN_REVIEW, visibility, ["FOGGED_OR_GLARE"]
 
+    pending_or_ambiguous = foam_status in {
+        FoamDecisionStatus.PERSISTENCE_PENDING,
+        FoamDecisionStatus.AMBIGUOUS,
+        FoamDecisionStatus.MODERATE_EVIDENCE,
+    }
     if oil_candidate is not None:
         y = oil_candidate.y
         valid_rows = np.where(valid.any(axis=1))[0]
@@ -38,12 +46,27 @@ def classify_fill_state(
             state = FillState.PARTIAL_VISIBLE
         if foam_candidate is not None:
             state = FillState.FOAMING_VISIBLE
+        elif pending_or_ambiguous:
+            flags.append(
+                "FOAM_PERSISTENCE_PENDING"
+                if foam_status is FoamDecisionStatus.PERSISTENCE_PENDING
+                else "FOAM_EVIDENCE_AMBIGUOUS"
+            )
         return state, visibility, flags
+
+    if foam_candidate is not None:
+        return FillState.FULL_WITH_FOAM, visibility, flags
+    if pending_or_ambiguous:
+        flags.append(
+            "FOAM_PERSISTENCE_PENDING"
+            if foam_status is FoamDecisionStatus.PERSISTENCE_PENDING
+            else "FOAM_EVIDENCE_AMBIGUOUS"
+        )
+        flags.append("REVIEW_REQUIRED")
+        return FillState.UNKNOWN_REVIEW, min(visibility, 0.45), flags
 
     mean_intensity = float(gray[valid].mean())
     texture = float(gray[valid].std())
-    if foam_candidate is not None:
-        return FillState.FULL_WITH_FOAM, visibility, flags
     if previous_state in {FillState.FULL_NO_INTERFACE, FillState.FULL_WITH_FOAM} and mean_intensity < 170:
         return FillState.FULL_NO_INTERFACE, visibility, flags
     if previous_state == FillState.EMPTY_NO_INTERFACE and mean_intensity > 85:
