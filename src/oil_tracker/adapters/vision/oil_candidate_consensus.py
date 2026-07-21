@@ -21,6 +21,8 @@ class OilCandidateCluster:
     consensus_score: float
     members: tuple[tuple[str, float, float], ...]
     unrounded_representative_y: float = 0.0
+    signed_region_evidence: float = 0.0
+    edge_center_correction_px: float = 0.0
 
     def to_candidate(self, cluster_index: int) -> BoundaryCandidate:
         supports = {source for source, _y, _score in self.members}
@@ -37,6 +39,12 @@ class OilCandidateCluster:
             "representative_local_y": float(self.representative_y),
             "unrounded_representative_local_y": float(
                 self.unrounded_representative_y
+            ),
+            "generator_signed_region_evidence": float(
+                self.signed_region_evidence
+            ),
+            "polarity_edge_center_correction_px": float(
+                self.edge_center_correction_px
             ),
             "strongest_generator_score": float(self.strongest_generator_score),
             "consensus_score": float(self.consensus_score),
@@ -163,10 +171,14 @@ def _make_cluster(
 ) -> OilCandidateCluster:
     ordered = tuple(sorted(candidates, key=_candidate_sort_key))
     unrounded = _weighted_representative(ordered)
-    representative = float(round(unrounded))
+    support = len({candidate.source for candidate in ordered})
+    signed_region = _signed_region_evidence(ordered)
+    correction = 0.0
+    if support >= 2 and abs(signed_region) >= 0.05:
+        correction = -1.0 if signed_region > 0.0 else 1.0
+    representative = float(round(unrounded) + correction)
     ys = [float(candidate.y) for candidate in ordered]
     strengths = [_strength(candidate) for candidate in ordered]
-    support = len({candidate.source for candidate in ordered})
     strongest = max(strengths, default=0.0)
     average = sum(strengths) / max(1, len(strengths))
     diversity = min(1.0, support / max(1, len(_SOURCE_NAMES)))
@@ -180,6 +192,48 @@ def _make_cluster(
         consensus_score=consensus,
         members=members,
         unrounded_representative_y=unrounded,
+        signed_region_evidence=signed_region,
+        edge_center_correction_px=correction,
+    )
+
+
+def _signed_region_evidence(
+    candidates: tuple[BoundaryCandidate, ...],
+) -> float:
+    region = [
+        candidate
+        for candidate in candidates
+        if candidate.source == "region_boundary"
+        and float(candidate.features.get("generator_region_available", 0.0)) >= 0.5
+    ]
+    if not region:
+        return 0.0
+    selected = min(
+        region,
+        key=lambda candidate: (
+            -abs(
+                _finite(
+                    candidate.features.get(
+                        "generator_signed_region_contrast",
+                        0.0,
+                    )
+                )
+            ),
+            -_strength(candidate),
+            float(candidate.y),
+        ),
+    )
+    return max(
+        -1.0,
+        min(
+            1.0,
+            _finite(
+                selected.features.get(
+                    "generator_signed_region_contrast",
+                    0.0,
+                )
+            ),
+        ),
     )
 
 
@@ -214,5 +268,8 @@ def _strength(candidate: BoundaryCandidate) -> float:
 
 
 def _finite(value: float) -> float:
-    number = float(value)
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return 0.0
     return number if math.isfinite(number) else 0.0
