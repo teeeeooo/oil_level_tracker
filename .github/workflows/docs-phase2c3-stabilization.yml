@@ -16,11 +16,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-          fetch-depth: 2
+          fetch-depth: 4
       - name: Assert documentation base
         run: |
-          test "$(git rev-parse HEAD^)" = "5529596b43c8fbdbad9de5607f8753b1a75977b0"
-          test "$(git rev-parse HEAD^^)" = "c9f130f58d51c79b29cf3594a0cbd44b3a570d78"
+          test "$(git rev-parse HEAD^)" = "cc558296b7c76fa80bf3ecec327bde3fc4c9f1ef"
+          test "$(git rev-parse HEAD^^)" = "5529596b43c8fbdbad9de5607f8753b1a75977b0"
+          test "$(git rev-parse HEAD^^^)" = "c9f130f58d51c79b29cf3594a0cbd44b3a570d78"
       - name: Update linked planning documents
         shell: python
         run: |
