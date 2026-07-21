@@ -9,6 +9,7 @@ from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import FillState
 from oil_tracker.domain.recipe import DetectorSettings
 
+from .candidate_generators import signed_region_contrast_profiles
 from .preprocessing import PreprocessResult
 from .row_features import masked_row_mean, row_coverage
 
@@ -22,6 +23,7 @@ class CandidateScoreContext:
     settings: DetectorSettings
     previous_y: float | None = None
     previous_state: FillState | None = None
+    previous_polarity: float | None = None
     static_artifact_map: np.ndarray | None = None
 
 
@@ -45,32 +47,80 @@ def score_candidates(candidates: list[BoundaryCandidate], context: CandidateScor
             candidate.reject_reason = "outside_effective_mask"
             candidate.final_score = 0.0
             continue
-        region = _region_contrast(pre.blurred, mask, y)
-        edge = float(energy[y])
-        horizontal = float(max(coverage[y], candidate.features.get("generator_strength", 0.0) if candidate.source in {"hough", "canny"} else 0.0))
-        gradient_direction = min(1.0, abs(float(signed[y])) / 80.0)
+
+        intensity = _signed_intensity_evidence(pre.blurred, mask, pre.glare_mask, y)
+        edge = _unit(energy[y])
+        horizontal = _unit(coverage[y])
+        signed_sobel_raw = _finite(signed[y])
+        # Positive polarity consistently means the band above is brighter than below.
+        signed_sobel_normalized = _signed_unit(-signed_sobel_raw / 80.0)
+        signed_contrast_normalized = _signed_unit(intensity.signed_difference / 80.0) if intensity.available else 0.0
+        polarity_combined = (
+            0.45 * signed_sobel_normalized + 0.55 * signed_contrast_normalized
+            if intensity.available
+            else signed_sobel_normalized
+        )
+        polarity_score = _unit(abs(polarity_combined))
+        polarity_sign = 0.0 if polarity_score < 1e-9 else (1.0 if polarity_combined > 0.0 else -1.0)
+        polarity_confidence = _unit(
+            0.50 * polarity_score
+            + 0.50 * (abs(intensity.signed_difference) / 42.0 if intensity.available else 0.0)
+        )
+        polarity_consistency = _polarity_consistency(
+            polarity_sign,
+            polarity_score,
+            context.previous_polarity,
+        )
+        region = _unit(abs(intensity.signed_difference) / 80.0) if intensity.available else 0.0
         temporal = 0.5 if context.previous_y is None else math.exp(-abs(candidate.y - context.previous_y) / max(1.0, settings.temporal_max_jump_px))
         state_score = _state_plausibility(candidate.y, top, bottom, context.previous_state)
+        consensus = _unit(candidate.features.get("consensus_score", 0.0))
+        support = int(round(candidate.features.get("unique_generator_support_count", 1.0)))
         glare = _row_overlap(pre.glare_mask, mask, y)
         exclusion = _row_overlap(context.exclusion_mask, context.ellipse_mask, y)
         edge_distance = min(abs(candidate.y - top), abs(bottom - candidate.y)) / max(1.0, bottom - top)
         border = max(0.0, 1.0 - edge_distance / 0.10) if edge_distance < 0.10 else 0.0
         static = 0.0
         if context.static_artifact_map is not None:
-            static = _row_overlap(context.static_artifact_map, context.ellipse_mask, y)
+            static = _row_overlap(context.static_artifact_map, context.ellipse_mask, y, band=3)
         jump = 0.0
         if context.previous_y is not None:
             jump = max(0.0, abs(candidate.y - context.previous_y) - settings.temporal_max_jump_px) / max(1.0, settings.temporal_max_jump_px)
             jump = min(1.0, jump)
+
+        single_source = 1.0 if support < int(settings.oil_min_consensus_sources) else 0.0
+        polarity_conflict = (
+            1.0 - polarity_consistency
+            if context.previous_polarity not in (None, 0.0) and polarity_score >= settings.oil_min_polarity_score
+            else 0.0
+        )
+        dynamic_evidence = _unit(max(region, polarity_score, 0.72 * edge + 0.28 * horizontal))
+        static_dynamic_relief = _unit(dynamic_evidence * consensus)
+        effective_static = _unit(static * (1.0 - 0.72 * static_dynamic_relief))
 
         candidate.features.update(
             {
                 "edge_strength": edge,
                 "horizontal_coverage": horizontal,
                 "region_contrast": region,
-                "gradient_direction": gradient_direction,
+                "absolute_region_contrast": region,
+                "signed_sobel_y": signed_sobel_raw,
+                "signed_sobel_normalized": signed_sobel_normalized,
+                "above_intensity": intensity.above,
+                "below_intensity": intensity.below,
+                "signed_above_minus_below": intensity.signed_difference,
+                "polarity_score": polarity_score,
+                "polarity_confidence": polarity_confidence,
+                "polarity_sign": polarity_sign,
+                "polarity_available": float(intensity.available),
+                "polarity_consistency": polarity_consistency,
+                "gradient_direction": polarity_score,
                 "temporal_score": temporal,
                 "state_transition_score": state_score,
+                "consensus_score": consensus,
+                "unique_generator_support_count": float(support),
+                "dynamic_boundary_evidence": dynamic_evidence,
+                "static_dynamic_relief": static_dynamic_relief,
             }
         )
         candidate.penalties.update(
@@ -78,51 +128,77 @@ def score_candidates(candidates: list[BoundaryCandidate], context: CandidateScor
                 "glare_penalty": glare,
                 "border_penalty": border,
                 "exclusion_penalty": exclusion,
-                "static_artifact_penalty": static,
+                "static_artifact_penalty": effective_static,
                 "jump_penalty": jump,
+                "single_source_penalty": single_source,
+                "polarity_conflict_penalty": polarity_conflict,
             }
         )
-        feature_score = (
+
+        legacy_feature_score = (
             edge * settings.weight_edge
             + horizontal * settings.weight_coverage
             + region * settings.weight_region
-            + gradient_direction * settings.weight_gradient_direction
+            + polarity_score * settings.weight_gradient_direction
             + temporal * settings.weight_temporal
             + state_score * settings.weight_state
         )
-        penalty = (
+        observation_feature_score = (
+            edge * settings.weight_edge
+            + horizontal * settings.weight_coverage
+            + region * settings.weight_region
+            + polarity_score * settings.weight_gradient_direction
+            + consensus * settings.weight_temporal
+            + state_score * settings.weight_state
+        )
+        common_penalty = (
             glare * settings.penalty_glare
             + border * settings.penalty_border
             + exclusion * settings.penalty_exclusion
-            + static * settings.penalty_static
-            + jump * settings.penalty_jump
+            + effective_static * settings.penalty_static
+            + single_source * 0.08
+            + polarity_conflict * 0.16
         )
-        candidate.feature_score = float(feature_score)
-        candidate.penalty = float(penalty)
-        candidate.final_score = float(max(0.0, min(1.0, feature_score - penalty)))
-        relative_position = (candidate.y - top) / max(1.0, bottom - top)
-        if context.previous_state in {FillState.FULL_NO_INTERFACE, FillState.FULL_WITH_FOAM} and relative_position > 0.32:
+        legacy_penalty = common_penalty + jump * settings.penalty_jump
+        candidate.feature_score = float(legacy_feature_score)
+        candidate.penalty = float(legacy_penalty)
+        candidate.final_score = _unit(legacy_feature_score - legacy_penalty + 0.10 * consensus)
+        candidate.features["observation_feature_score"] = _unit(observation_feature_score)
+        candidate.features["observation_score"] = _unit(
+            observation_feature_score - common_penalty + 0.12 * consensus
+        )
+        candidate.features["static_overlap"] = static
+
+        if horizontal < settings.minimum_horizontal_coverage * 0.35 and region < settings.minimum_region_contrast * 0.55 and support < 2:
             candidate.rejected = True
-            candidate.reject_reason = "implausible_full_to_visible_transition"
-        elif context.previous_state == FillState.EMPTY_NO_INTERFACE and relative_position < 0.68:
-            candidate.rejected = True
-            candidate.reject_reason = "implausible_empty_to_visible_transition"
-        elif horizontal < settings.minimum_horizontal_coverage * 0.35 and region < settings.minimum_region_contrast * 0.55:
-            candidate.rejected = True
-            candidate.reject_reason = "insufficient_horizontal_or_region_evidence"
+            candidate.reject_reason = "insufficient_horizontal_region_or_consensus"
         elif glare > 0.65:
             candidate.rejected = True
             candidate.reject_reason = "glare_overlap"
         elif border > 0.85:
             candidate.rejected = True
             candidate.reject_reason = "rim_or_border"
-        elif candidate.final_score < settings.minimum_final_confidence:
+        elif static >= 0.62 and dynamic_evidence < 0.42 and consensus < 0.72:
             candidate.rejected = True
-            candidate.reject_reason = "below_confidence_threshold"
-    return sorted(candidates, key=lambda c: c.final_score, reverse=True)
+            candidate.reject_reason = "static_horizontal_structure"
+        elif candidate.features["observation_score"] < settings.minimum_final_confidence * 0.62:
+            candidate.rejected = True
+            candidate.reject_reason = "insufficient_boundary_observation"
+
+    return sorted(
+        candidates,
+        key=lambda c: (
+            -float(c.features.get("observation_score", c.final_score)),
+            -float(c.features.get("unique_generator_support_count", 0.0)),
+            float(c.y),
+            str(c.source),
+        ),
+    )
 
 
 def select_best_candidate(candidates: list[BoundaryCandidate], minimum_confidence: float) -> BoundaryCandidate | None:
+    """Backward-compatible greedy helper; S5-B production uses OilTemporalPath."""
+
     for candidate in candidates:
         if not candidate.rejected and candidate.final_score >= minimum_confidence:
             candidate.selected = True
@@ -130,15 +206,70 @@ def select_best_candidate(candidates: list[BoundaryCandidate], minimum_confidenc
     return None
 
 
-def _region_contrast(gray: np.ndarray, mask: np.ndarray, y: int, band: int = 5) -> float:
+def build_oil_debug_profiles(
+    context: CandidateScoreContext,
+    candidates: list[BoundaryCandidate] | tuple[BoundaryCandidate, ...],
+) -> dict[str, list[float]]:
+    """Build finite row profiles only for debug-enabled calls."""
+
+    mask = context.effective_mask
+    signed_sobel = masked_row_mean(context.pre.sobel_y_signed, mask)
+    signed_sobel = np.clip(-signed_sobel / 80.0, -1.0, 1.0)
+    coverage = row_coverage(context.pre.horizontal_mask, mask)
+    glare_excluded = np.where(context.pre.glare_mask > 0, 0, mask).astype(np.uint8)
+    signed_contrast, _absolute, _available = signed_region_contrast_profiles(
+        context.pre.blurred,
+        glare_excluded,
+        band=5,
+    )
+    consensus = np.zeros(mask.shape[0], dtype=np.float32)
+    for candidate in candidates:
+        y = int(round(candidate.y))
+        if 0 <= y < consensus.size:
+            consensus[y] = max(consensus[y], _unit(candidate.features.get("consensus_score", 0.0)))
+    static = np.zeros(mask.shape[0], dtype=np.float32)
+    if context.static_artifact_map is not None:
+        static = row_coverage(context.static_artifact_map, context.ellipse_mask)
+    return {
+        "oil_signed_sobel_profile": _finite_profile(signed_sobel),
+        "oil_signed_contrast_profile": _finite_profile(signed_contrast),
+        "oil_horizontal_coverage_profile": _finite_profile(coverage),
+        "oil_consensus_support_profile": _finite_profile(consensus),
+        "oil_static_overlap_profile": _finite_profile(static),
+    }
+
+
+@dataclass(frozen=True)
+class _IntensityEvidence:
+    above: float
+    below: float
+    signed_difference: float
+    available: bool
+
+
+def _signed_intensity_evidence(
+    gray: np.ndarray,
+    mask: np.ndarray,
+    glare_mask: np.ndarray,
+    y: int,
+    band: int = 5,
+) -> _IntensityEvidence:
     y0, y1 = max(0, y - band), min(gray.shape[0], y + band + 1)
-    above_mask = mask[y0:y] > 0
-    below_mask = mask[y:y1] > 0
-    if above_mask.sum() < 5 or below_mask.sum() < 5:
-        return 0.0
-    above = float(gray[y0:y][above_mask].mean())
-    below = float(gray[y:y1][below_mask].mean())
-    return min(1.0, abs(above - below) / 80.0)
+    valid = (mask > 0) & ~(glare_mask > 0)
+    above_mask = valid[y0:y]
+    below_mask = valid[y:y1]
+    if int(above_mask.sum()) < 5 or int(below_mask.sum()) < 5:
+        return _IntensityEvidence(0.0, 0.0, 0.0, False)
+    above = float(np.median(gray[y0:y][above_mask]))
+    below = float(np.median(gray[y:y1][below_mask]))
+    return _IntensityEvidence(above, below, above - below, True)
+
+
+def _region_contrast(gray: np.ndarray, mask: np.ndarray, y: int, band: int = 5) -> float:
+    """Backward-compatible absolute contrast helper."""
+
+    evidence = _signed_intensity_evidence(gray, mask, np.zeros_like(mask), y, band)
+    return _unit(abs(evidence.signed_difference) / 80.0) if evidence.available else 0.0
 
 
 def _row_overlap(binary: np.ndarray, denominator_mask: np.ndarray, y: int, band: int = 2) -> float:
@@ -151,9 +282,35 @@ def _row_overlap(binary: np.ndarray, denominator_mask: np.ndarray, y: int, band:
 def _state_plausibility(y: float, top: int, bottom: int, previous_state: FillState | None) -> float:
     relative = (y - top) / max(1.0, bottom - top)
     if previous_state in {FillState.FULL_NO_INTERFACE, FillState.FULL_WITH_FOAM}:
-        return max(0.0, 1.0 - relative)
+        return max(0.25, 1.0 - relative)
     if previous_state == FillState.EMPTY_NO_INTERFACE:
-        return max(0.0, relative)
+        return max(0.25, relative)
     if previous_state in {FillState.DRAINING_VISIBLE, FillState.FILLING_VISIBLE, FillState.PARTIAL_VISIBLE, FillState.FOAMING_VISIBLE}:
         return 0.75
     return 0.60
+
+
+def _polarity_consistency(sign: float, score: float, previous: float | None) -> float:
+    if previous in (None, 0.0) or sign == 0.0:
+        return 0.5
+    if sign * float(previous) > 0.0:
+        return 1.0
+    return _unit(0.35 - 0.25 * score)
+
+
+def _finite_profile(values: np.ndarray) -> list[float]:
+    finite = np.nan_to_num(values.astype(np.float64), nan=0.0, posinf=0.0, neginf=0.0)
+    return [float(value) for value in finite]
+
+
+def _finite(value: float) -> float:
+    number = float(value)
+    return number if math.isfinite(number) else 0.0
+
+
+def _unit(value: float) -> float:
+    return min(1.0, max(0.0, _finite(value)))
+
+
+def _signed_unit(value: float) -> float:
+    return min(1.0, max(-1.0, _finite(value)))
