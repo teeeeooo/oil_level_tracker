@@ -83,7 +83,18 @@ def test_oil_setting_range_integer_and_cross_field_validation():
         oil_reacquire_frames=3,
     )
     errors = validate_detector_settings(settings)
-    assert NEW_FIELDS <= set(errors)
+    assert {
+        "oil_consensus_tolerance_px",
+        "oil_min_consensus_sources",
+        "oil_min_polarity_score",
+        "oil_no_interface_min_score",
+        "oil_path_beam_width",
+        "oil_path_min_margin",
+        "oil_tracker_update_confidence",
+        "oil_reacquire_frames",
+    } <= set(errors)
+    assert "oil_path_window" not in errors
+    assert "Oil reacquire" in errors["oil_reacquire_frames"]
 
 
 def test_editor_lists_searches_changes_and_resets_oil_fields(qtbot):
