@@ -13,7 +13,12 @@ from oil_tracker.domain.recipe import GlassInspectionConfig
 from .candidate_generators import generate_oil_air_candidates
 from .candidate_scorer import CandidateScoreContext, score_candidates, select_best_candidate
 from .fill_state_classifier import classify_fill_state
-from .foam_front_detector import FoamDetectionResult, detect_bottom_connected_foam
+from .foam_front_detector import (
+    FoamDecisionStatus,
+    FoamDetectionResult,
+    detect_bottom_connected_foam,
+)
+from .foam_temporal_gate import FoamTemporalDecision, FoamTemporalGate
 from .geometry_masks import MaskBundle, build_mask_bundle
 from .preprocessing import PreprocessResult, preprocess
 from .temporal_tracker import TemporalTracker
@@ -28,17 +33,26 @@ class PhaseDetectionDebugArtifacts:
 
 
 class OpenCvPhaseDetector:
+    version = "opencv-phase-detector-s5a-foam-v2"
+
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
+        self._foam_gate = FoamTemporalGate()
+
+    @property
+    def foam_temporal_state_count(self) -> int:
+        return self._foam_gate.state_count
 
     def reset(self, glass_id: str | None = None) -> None:
         if glass_id is None:
             self._trackers.clear()
             self._static_maps.clear()
+            self._foam_gate.reset()
         else:
             self._trackers.pop(glass_id, None)
             self._static_maps.pop(glass_id, None)
+            self._foam_gate.reset(glass_id)
 
     def learn_static_artifact(self, frames: list[np.ndarray], glass: GlassInspectionConfig) -> None:
         if not frames:
@@ -87,8 +101,16 @@ class OpenCvPhaseDetector:
             ),
         )
         selected = select_best_candidate(scored, settings.minimum_final_confidence)
-        foam = detect_bottom_connected_foam(pre.gray, pre.canny, bundle.effective_mask, settings)
-        foam_candidate = foam.candidate
+        foam = detect_bottom_connected_foam(
+            bundle.crop,
+            pre.gray,
+            pre.canny,
+            pre.glare_mask,
+            bundle.effective_mask,
+            settings,
+        )
+        foam_temporal = self._foam_gate.evaluate(glass.id, foam, settings)
+        foam_candidate = foam_temporal.candidate
         proposed_state, visibility, flags = classify_fill_state(
             pre.gray,
             bundle.effective_mask,
@@ -97,7 +119,9 @@ class OpenCvPhaseDetector:
             foam_candidate,
             previous_state,
             settings,
+            foam_temporal.decision_status,
         )
+        flags.extend(_foam_flags(foam, foam_temporal))
         valid_rows = np.where(bundle.effective_mask.any(axis=1))[0]
         if selected is None and proposed_state == FillState.UNKNOWN_REVIEW and "FOGGED_OR_GLARE" not in flags:
             flags.append("DETECTION_LOST")
@@ -124,14 +148,18 @@ class OpenCvPhaseDetector:
         oil_mm = None if oil_px is None or mm is None else oil_px * mm
         foam_mm = None if foam_px is None or mm is None else foam_px * mm
 
-        # Store candidate y in canonical source-frame coordinates.
+        # Store all candidate y values in canonical source-frame coordinates.
         for candidate in scored:
             candidate.features.setdefault("local_y", candidate.y)
             candidate.y += origin_y
-        if foam_candidate is not None:
-            foam_candidate.features.setdefault("local_y", foam_candidate.y)
-            foam_candidate.y += origin_y
-            scored.append(foam_candidate)
+        foam_trace_candidate = foam.candidate
+        if foam_trace_candidate is not None:
+            foam_trace_candidate.features.setdefault("local_y", foam_trace_candidate.y)
+            foam_trace_candidate.features["temporal_pending_count"] = float(foam_temporal.pending_count)
+            foam_trace_candidate.features["temporal_required_count"] = float(foam_temporal.required_count)
+            foam_trace_candidate.features["temporal_front_delta"] = float(foam_temporal.front_delta or 0.0)
+            foam_trace_candidate.y += origin_y
+            scored.append(foam_trace_candidate)
 
         detection = PhaseDetection(
             glass_id=glass.id,
@@ -156,14 +184,41 @@ class OpenCvPhaseDetector:
             flags=sorted(set(flags)),
             debug_metrics={
                 "glare_ratio": float(np.count_nonzero(pre.glare_mask)) / max(1, np.count_nonzero(bundle.effective_mask)),
-                "foam_bottom_connected_area_ratio": foam.bottom_connected_area_ratio,
+                "foam_bottom_connected_area_ratio": float(foam.bottom_connected_area_ratio),
+                "foam_evidence_score": float(foam.final_evidence_score),
+                "foam_evidence_strength": foam_temporal.evidence_strength.value,
+                "foam_decision_status": foam_temporal.decision_status.value,
+                "foam_whiteness_ratio": float(foam.whiteness_ratio),
+                "foam_texture_support_ratio": float(foam.texture_support_ratio),
+                "foam_glare_overlap_ratio": float(foam.glare_overlap_ratio),
+                "foam_component_height_ratio": float(foam.component_height_ratio),
+                "foam_component_width_ratio": float(foam.component_width_ratio),
+                "foam_bounding_box_fill_ratio": float(foam.bounding_box_fill_ratio),
+                "foam_temporal_pending_count": int(foam_temporal.pending_count),
+                "foam_temporal_required_count": int(foam_temporal.required_count),
+                "foam_front_delta": None if foam_temporal.front_delta is None else float(foam_temporal.front_delta),
+                "foam_min_evidence_score": float(settings.foam_min_evidence_score),
+                "foam_strong_evidence_score": float(settings.foam_strong_evidence_score),
                 "effective_area": int(np.count_nonzero(bundle.effective_mask)),
                 "previous_state": previous_state.value if previous_state else None,
                 "proposed_state": proposed_state.value,
                 "stabilized_state": stabilized_state.value,
             },
         )
-        artifacts = self._debug_artifacts(frame, glass, bundle, pre, foam, detection, static_map) if debug else None
+        artifacts = (
+            self._debug_artifacts(
+                frame,
+                glass,
+                bundle,
+                pre,
+                foam,
+                foam_temporal,
+                detection,
+                static_map,
+            )
+            if debug
+            else None
+        )
         return detection, artifacts
 
     def _debug_artifacts(
@@ -173,6 +228,7 @@ class OpenCvPhaseDetector:
         bundle: MaskBundle,
         pre: PreprocessResult,
         foam: FoamDetectionResult,
+        foam_temporal: FoamTemporalDecision,
         detection: PhaseDetection,
         static_map: np.ndarray | None,
     ) -> PhaseDetectionDebugArtifacts:
@@ -199,6 +255,7 @@ class OpenCvPhaseDetector:
                 2 if candidate.selected else 1,
                 cv2.LINE_AA,
             )
+        accepted_mask = foam.mask if foam_temporal.accepted else np.zeros_like(foam.mask)
         images = {
             "overlay": overlay,
             "original_roi": bundle.crop,
@@ -214,6 +271,12 @@ class OpenCvPhaseDetector:
             "glare_mask": pre.glare_mask,
             "foam_mask": foam.mask,
             "foam_variance": cv2.normalize(foam.variance_map, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8),
+            "foam_edge_density": _unit_image(foam.edge_density_map),
+            "foam_whiteness": _unit_image(foam.whiteness_map),
+            "foam_texture_evidence": _unit_image(foam.texture_evidence_map),
+            "foam_glare_excluded_mask": foam.glare_excluded_mask,
+            "foam_combined_evidence": _unit_image(foam.combined_evidence_map),
+            "foam_accepted_component": accepted_mask,
             "static_artifact_map": static_map if static_map is not None else np.zeros_like(bundle.effective_mask),
         }
         rows = []
@@ -247,6 +310,32 @@ class OpenCvPhaseDetector:
                 **detection.debug_metrics,
             },
         )
+
+
+def _foam_flags(
+    foam: FoamDetectionResult,
+    temporal: FoamTemporalDecision,
+) -> list[str]:
+    if temporal.decision_status is FoamDecisionStatus.ACCEPTED_STRONG:
+        return ["FOAM_STRONG_EVIDENCE"]
+    if temporal.decision_status is FoamDecisionStatus.ACCEPTED_MODERATE:
+        return ["FOAM_MODERATE_EVIDENCE"]
+    if temporal.decision_status is FoamDecisionStatus.PERSISTENCE_PENDING:
+        return ["FOAM_PERSISTENCE_PENDING"]
+    if temporal.decision_status is FoamDecisionStatus.AMBIGUOUS:
+        return ["FOAM_EVIDENCE_AMBIGUOUS"]
+    if temporal.decision_status is FoamDecisionStatus.GLARE_REJECTED:
+        return ["FOAM_GLARE_REJECTED"]
+    if temporal.decision_status is FoamDecisionStatus.WEAK_REJECTED or (
+        foam.candidate is not None and foam.candidate.rejected
+    ):
+        return ["FOAM_COMPONENT_REJECTED"]
+    return []
+
+
+def _unit_image(values: np.ndarray) -> np.ndarray:
+    finite = np.nan_to_num(values, nan=0.0, posinf=1.0, neginf=0.0)
+    return np.clip(finite * 255.0, 0.0, 255.0).astype(np.uint8)
 
 
 def _initial_prior(initial: InitialObservationState) -> FillState | None:
