@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
+import json
 from pathlib import Path
 
 import cv2
@@ -17,6 +18,16 @@ from oil_tracker.domain.user_truth import TruthDisposition, TruthErrorType
 from user_truth_fixtures import make_truth_bundle
 
 FIXED_TIME = datetime(2026, 7, 21, 15, 0, 0, tzinfo=timezone.utc)
+S5A_SETTING_FIELDS = (
+    "foam_lightness_threshold",
+    "foam_max_chroma",
+    "foam_min_whiteness_ratio",
+    "foam_max_glare_overlap_ratio",
+    "foam_min_evidence_score",
+    "foam_strong_evidence_score",
+    "foam_persistence_frames",
+    "foam_max_front_jump_px",
+)
 
 
 @dataclass(frozen=True)
@@ -50,6 +61,7 @@ class ControlledVideoReader:
 
 def generate_controlled_foam_dataset(tmp_path: Path):
     bundle = make_truth_bundle(tmp_path / "controlled")
+    _make_recipe_snapshot_base_compatible(bundle)
     scenes = controlled_scenes()
     service = UserTruthService()
     identity = build_truth_bundle_identity(bundle)
@@ -108,6 +120,21 @@ def generate_controlled_foam_dataset(tmp_path: Path):
         ],
     )
     return result.dataset_path, scenes
+
+
+def _make_recipe_snapshot_base_compatible(bundle) -> None:
+    recipe_path = Path(
+        bundle.files.get("recipe_snapshot", bundle.root / "recipe_snapshot.oilrecipe")
+    )
+    payload = json.loads(recipe_path.read_text(encoding="utf-8"))
+    for glass in payload.get("glasses", []):
+        settings = glass.get("detector_settings", {})
+        for field_name in S5A_SETTING_FIELDS:
+            settings.pop(field_name, None)
+    recipe_path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False),
+        encoding="utf-8",
+    )
 
 
 def controlled_scenes():
