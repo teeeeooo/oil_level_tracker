@@ -1,0 +1,65 @@
+name: S5-B focused probe
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-24.04
+    env:
+      QT_QPA_PLATFORM: offscreen
+      EXPECTED_SHA: e9f46e995c38e3c287e38d844fd4663045df9ab2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_SHA }}
+      - name: Assert exact feature head
+        run: |
+          actual="$(git rev-parse HEAD)"
+          echo "expected_exact_sha=${EXPECTED_SHA}"
+          echo "actual_checkout_sha=${actual}"
+          test "${actual}" = "${EXPECTED_SHA}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install Qt runtime libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-xinerama0 libxcb-keysyms1 libxcb-render-util0
+      - name: Install package
+        run: python -m pip install -e '.[dev]'
+      - name: Runtime versions
+        run: |
+          python - <<'PY'
+          import cv2, matplotlib, numpy, PySide6, sys
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          print('python=' + sys.version)
+          print('PySide6=' + PySide6.__version__)
+          print('numpy=' + numpy.__version__)
+          print('opencv=' + cv2.__version__)
+          print('matplotlib=' + matplotlib.__version__)
+          print('detector_version=' + OpenCvPhaseDetector.version)
+          PY
+      - name: Focused S5-B tests
+        run: >-
+          python -m pytest -q
+          tests/test_oil_candidate_consensus.py
+          tests/test_oil_signed_scoring.py
+          tests/test_oil_no_interface.py
+          tests/test_oil_temporal_path.py
+          tests/test_oil_temporal_tracker.py
+          tests/test_oil_settings.py
+          tests/test_oil_detector_integration.py
+          tests/test_oil_controlled_benchmark.py
+          tests/test_candidate_scoring.py
+          tests/test_foam_front_detector.py
+          tests/test_foam_temporal_gate.py
+          tests/test_foam_detector_integration.py
+          tests/test_foam_settings.py
+          tests/test_foam_benchmark_fixtures.py
+          tests/test_foam_controlled_benchmark.py
+          tests/test_ui_import_boundaries.py
