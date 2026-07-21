@@ -311,12 +311,13 @@ Phase 2B-2는 PR #11 `feat: enhance result review workflow`로 `main`에 반영�
 
 ### 상태
 
-**진행 중 — Phase 2C-1, Phase 2C-2, Phase 2C-3 완료**
+**진행 중 — Phase 2C-1, Phase 2C-2, Phase 2C-3와 실사용 안정화 S1 완료**
 
 - Phase 2C-1 `Debug Viewer`: 완료
 - Phase 2C-2 `부분 재검출과 비교`: 완료
 - Phase 2C-3 `사용자 정답과 회귀 자료`: 완료
-- 다음 작업: 실사용 안정화 S1 `Detector benchmark foundation`
+- 실사용 안정화 S1 `Detector benchmark foundation`: 완료
+- 다음 작업: 실사용 안정화 S2 `UI raster boundary architecture refactor`
 
 Phase 2C-1은 PR #13 `feat: add result review debug viewer`로 `main`에 반영했다.
 
@@ -349,6 +350,19 @@ Phase 2C-3은 PR #27 `feat: add user truth annotations and regression fixtures`�
 - Truth Annotation UI의 NumPy/OpenCV 직접 의존을 presentation adapter 경계로 이동
 - UI import architecture guard를 추가하고 `result_review_canvas.py`만 temporary allowlist로 유지
 - 실제 compressor 영상, Windows DPI와 exported fixture 호환성은 수동 확인 항목으로 유지
+
+실사용 안정화 S1은 PR #29 `feat: add detector benchmark foundation`으로 `main`에 반영했다.
+
+- PR head: `73edfedb61948e2ff0431ed31075db1ac5d682ef`
+- main merge SHA: `ced132f5927554c658a9993155a8d4afa121b011`
+- focused 검증: Python 3.13에서 `66 passed`, failure/skip 없음
+- canonical 검증: Python 3.13 및 3.14에서 각각 `542 passed`, failure/skip 없음
+- safe regression dataset reader, current detector benchmark runner와 temporal state isolation 구현
+- category별 raw/smoothed metric, JSON/CSV/Markdown 결과와 previous baseline comparison 구현
+- dataset/run/settings fingerprint와 headless CLI 구현
+- detector algorithm, threshold, scoring weight, fixture export schema와 공식 result bundle은 변경하지 않음
+- Actions artifact 없음, 임시 validation PR/branch/workflow cleanup 완료
+- 실제 compressor dataset, Windows packaged CLI와 장시간 성능은 수동 확인 항목으로 유지
 
 Phase 2C-4 전에 수행할 실사용 안정화 순서와 acceptance criteria는 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)에 기록한다.
 
@@ -448,18 +462,17 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 
 ## 11. 현재 다음 작업
 
-현재 `main`에는 Phase 1, Phase 2A 전체, Phase 2B 전체와 Phase 2C-1 Debug Viewer, Phase 2C-2 부분 재검출과 비교, Phase 2C-3 사용자 정답과 회귀 자료가 완료되어 있다.
+현재 `main`에는 Phase 1, Phase 2A 전체, Phase 2B 전체, Phase 2C-1 Debug Viewer, Phase 2C-2 부분 재검출과 비교, Phase 2C-3 사용자 정답과 회귀 자료와 실사용 안정화 S1 Detector benchmark foundation이 완료되어 있다.
 
-실제 사용에서 확인된 문제와 상세 acceptance criteria는 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)를 따른다.
+실제 사용에서 확인된 문제, detector 구현 선택 기준과 상세 acceptance criteria는 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)를 따른다.
 
 다음 구현 순서는 다음과 같다.
 
-1. **S1:** Detector benchmark foundation
-2. **S2:** UI raster boundary architecture refactor
-3. **S3:** Workbench usability stabilization
-4. **S4:** Analysis lifecycle 및 결과 시각화 안정화
-5. **S5-A:** Foam과 투명 오일 아지랑이 구분 개선
-6. **S5-B:** 유면 경계 검출과 temporal tracking 개선
-7. **S6:** 실제 영상 validation gate
-8. **S7 / Phase 2C-4:** 공유용 annotated MP4
-9. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
+1. **S2:** UI raster boundary architecture refactor
+2. **S3:** Workbench usability stabilization
+3. **S4:** Analysis lifecycle 및 결과 시각화 안정화
+4. **S5-A:** Foam과 투명 오일 아지랑이 구분 개선
+5. **S5-B:** 유면 경계 검출과 temporal tracking 개선
+6. **S6:** 실제 영상 validation gate
+7. **S7 / Phase 2C-4:** 공유용 annotated MP4
+8. **Phase 2D:** 반복 시험 운영과 자동 복구 기능 재평가
