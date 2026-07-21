@@ -1,4 +1,4 @@
-name: S5-B controlled log extraction
+name: S5-B raw error case diagnosis
 
 on:
   pull_request:
@@ -9,52 +9,89 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  actions: read
-  pull-requests: write
   contents: read
+  pull-requests: write
 
 jobs:
-  extract:
+  diagnose:
     runs-on: ubuntu-24.04
     env:
+      QT_QPA_PLATFORM: offscreen
+      FEATURE_SHA: 387fdd9d9849853186b6b1f3df709127630a3046
       GH_TOKEN: ${{ github.token }}
-      FAILED_RUN_ID: '29854649152'
-      FAILED_JOB_ID: '88716059931'
     steps:
-      - name: Extract stored summary and traceback
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.FEATURE_SHA }}
+      - name: Assert exact feature checkout
+        run: test "$(git rev-parse HEAD)" = "${FEATURE_SHA}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install package
         run: |
-          gh run view "${FAILED_RUN_ID}" --repo "${GITHUB_REPOSITORY}" --job "${FAILED_JOB_ID}" --log > /tmp/job.log
-          python - <<'PY'
-          import re
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
+          python -m pip install -q -e '.[dev]'
+      - name: Generate feature oil payload and print high-error cases
+        run: |
+          PYTHONPATH=tests python - <<'PY' > /tmp/cases.txt
+          from datetime import datetime, timezone
+          import json
+          import os
           from pathlib import Path
-          lines = Path('/tmp/job.log').read_text(encoding='utf-8', errors='replace').splitlines()
-          keys = (
-              '"base_sha"', '"feature_sha"', '"dataset_fingerprint"', '"case_count"',
-              '"sequence_count"', '"category_count"', '"base_detector"', '"feature_detector"',
-              '"base_errors"', '"feature_errors"', '"raw_oil_', '"smoothed_oil_',
-              '"base_coverage"', '"feature_coverage"', '"base_no_interface_fpr"',
-              '"feature_no_interface_fpr"', '"base_temporal_recovery"',
-              '"feature_temporal_recovery"', '"base_foam_precision"', '"feature_foam_precision"',
-              '"base_foam_recall"', '"feature_foam_recall"', '"base_shimmer_fpr"',
-              '"feature_shimmer_fpr"', '"base_cpu_ms"', '"feature_cpu_ms"', '"cpu_ratio"',
-              '"dependency_diff"',
+          from oil_benchmark_fixtures import generate_controlled_oil_dataset
+          from oil_tracker.adapters.storage.benchmark_result_writer import AtomicBenchmarkResultWriter
+          from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
+
+          root = Path(os.environ['RUNNER_TEMP']) / 'raw-case-diagnosis'
+          dataset, _ = generate_controlled_oil_dataset(root)
+          service = DetectorBenchmarkService(
+              FilesystemRegressionDatasetReader(),
+              AtomicBenchmarkResultWriter(),
+              OpenCvPhaseDetector,
+              clock=lambda: datetime(2026, 7, 22, tzinfo=timezone.utc),
+              runtime_metadata_factory=lambda: {'python':'diagnostic','packages':{}},
           )
-          extracted = []
-          for line in lines:
-              if any(key in line for key in keys) and '^[[36;1m' not in line:
-                  extracted.append(re.sub(r'^.*?Z\s+', '', line))
-          traceback = []
-          for index, line in enumerate(lines):
-              if 'Traceback (most recent call last):' in line:
-                  traceback = [re.sub(r'^.*?Z\s+', '', value) for value in lines[index:index+7]]
-                  break
-          body = [
-              '## S5-B controlled comparison diagnosis', '',
-              'Stored log only; detector and benchmark were not rerun.', '',
-              '```text', *extracted[-100:], '```', '',
-              '```text', *traceback, '```',
-          ]
-          Path('/tmp/body.md').write_text('\n'.join(body), encoding='utf-8')
+          payload = service.run(dataset, root / 'results').payload
+          selected = []
+          for case in payload['cases']:
+              error = case.get('raw_oil_absolute_error_px')
+              if error is not None and error >= 1.0:
+                  selected.append({
+                      'category': case['category'],
+                      'sequence_id': case['sequence_id'],
+                      'sequence_order': case['sequence_order'],
+                      'truth_y': case['truth_oil_boundary_y'],
+                      'raw_y': case['raw_oil_boundary_y'],
+                      'error': error,
+                      'smoothed_y': case['smoothed_oil_boundary_y'],
+                      'smoothed_error': case['smoothed_oil_absolute_error_px'],
+                      'fill_state': case['predicted_fill_state'],
+                      'flags': case['flags'],
+                  })
+          selected.sort(key=lambda item: (-item['error'], str(item['sequence_id']), item['sequence_order'] if item['sequence_order'] is not None else -1, item['truth_y']))
+          print(json.dumps({
+              'dataset_fingerprint': payload['dataset']['fingerprint'],
+              'detector_version': payload['detector']['version'],
+              'raw_median': payload['micro_aggregate']['metrics']['raw_oil_median_absolute_error']['value'],
+              'raw_p90': payload['micro_aggregate']['metrics']['raw_oil_p90_absolute_error']['value'],
+              'raw_p95': payload['micro_aggregate']['metrics']['raw_oil_p95_absolute_error']['value'],
+              'cases': selected,
+          }, sort_keys=True, indent=2))
           PY
-          cat /tmp/body.md
+          cat /tmp/cases.txt
+          {
+            echo '## S5-B raw-error case diagnosis'
+            echo
+            echo 'Feature-only controlled oil payload; no base, Foam, CPU, or canonical rerun.'
+            echo
+            echo '```json'
+            cat /tmp/cases.txt
+            echo '```'
+          } > /tmp/body.md
           gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
