@@ -185,8 +185,11 @@ def test_workbench_layout_places_summary_left_and_separates_canvas_transport(qtb
 def test_settings_basic_area_has_no_coordinate_summary_and_scale_is_optional(qtbot):
     panel = GlassSettingsPanel()
     qtbot.addWidget(panel)
+    panel.resize(420, 620)
+    panel.show()
     glass = InspectionRecipe.default_glass(640, 480)
     panel.set_glass(glass)
+    QApplication.processEvents()
 
     assert panel.findChild(QLabel, "roiSummaryCard") is None
     assert panel.edit_roi.text() == "분석 영역 편집"
@@ -211,6 +214,7 @@ def test_settings_basic_area_has_no_coordinate_summary_and_scale_is_optional(qtb
     assert panel.scale.value() == 0.25
 
     panel.focus_field("initial_state")
+    QApplication.processEvents()
     assert panel._last_focused_field == "initial_state"
     assert panel.initial.hasFocus()
 
@@ -218,17 +222,27 @@ def test_settings_basic_area_has_no_coordinate_summary_and_scale_is_optional(qtb
 def test_wheel_safe_controls_do_not_change_values_and_keep_keyboard_editing(qtbot):
     panel = GlassSettingsPanel()
     qtbot.addWidget(panel)
+    panel.resize(420, 260)
     panel.set_glass(InspectionRecipe.default_glass(640, 480))
     panel.set_advanced_visible(True)
     panel.show()
+    QApplication.processEvents()
 
     for control in (panel.zero, panel.scale, panel.canny_low, panel.initial, panel.judgment):
         before = control.currentIndex() if hasattr(control, "currentIndex") else control.value()
-        event = _wheel_event()
-        QApplication.sendEvent(control, event)
+        QApplication.sendEvent(control, _wheel_event())
         after = control.currentIndex() if hasattr(control, "currentIndex") else control.value()
         assert after == before
-        assert not event.isAccepted()
+
+    ignored = _wheel_event()
+    panel.zero.wheelEvent(ignored)
+    assert not ignored.isAccepted()
+
+    scrollbar = panel.scroll.verticalScrollBar()
+    assert scrollbar.maximum() > 0
+    scrollbar.setValue(0)
+    QApplication.sendEvent(panel.zero, _wheel_event())
+    assert scrollbar.value() > 0
 
     panel.canny_low.setValue(10)
     panel.canny_low.setFocus()
