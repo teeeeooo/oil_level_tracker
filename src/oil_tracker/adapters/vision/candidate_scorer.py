@@ -11,7 +11,13 @@ from oil_tracker.domain.recipe import DetectorSettings
 
 from .candidate_generators import signed_region_contrast_profiles
 from .preprocessing import PreprocessResult
-from .row_features import masked_row_mean, row_coverage
+from .row_features import (
+    MaskedBandIntensityProfiles,
+    binary_band_overlap_profile,
+    masked_band_intensity_profiles,
+    masked_row_mean,
+    row_coverage,
+)
 
 
 @dataclass
@@ -27,6 +33,14 @@ class CandidateScoreContext:
     static_artifact_map: np.ndarray | None = None
 
 
+@dataclass(frozen=True)
+class _IntensityEvidence:
+    above: float
+    below: float
+    signed_difference: float
+    available: bool
+
+
 def score_candidates(
     candidates: list[BoundaryCandidate],
     context: CandidateScoreContext,
@@ -34,40 +48,64 @@ def score_candidates(
     if not candidates:
         return []
     pre, mask, settings = context.pre, context.effective_mask, context.settings
-    energy = masked_row_mean(pre.sobel_y_abs, mask)
+    effective = mask > 0
+    visible = effective & ~(pre.glare_mask > 0)
+    energy = masked_row_mean(pre.sobel_y_abs, effective)
     energy /= max(1.0, float(energy.max()))
-    coverage = row_coverage(pre.horizontal_mask, mask)
-    signed = masked_row_mean(pre.sobel_y_signed, mask)
+    coverage = row_coverage(pre.horizontal_mask, effective)
+    signed = masked_row_mean(pre.sobel_y_signed, effective)
     h = mask.shape[0]
-    valid_ys = np.where(mask.any(axis=1))[0]
+    valid_ys = np.flatnonzero(effective.any(axis=1))
     top = int(valid_ys.min()) if valid_ys.size else 0
     bottom = int(valid_ys.max()) if valid_ys.size else h - 1
     persistent_band = max(
         8,
         int(math.ceil(float(settings.oil_consensus_tolerance_px) * 2.5)),
     )
+    local_intensity = masked_band_intensity_profiles(
+        pre.blurred,
+        visible,
+        5,
+        reference_mask=effective,
+        minimum_fraction=0.45,
+        minimum_pixels=5,
+        include_center_extra=True,
+    )
+    persistent_intensity = masked_band_intensity_profiles(
+        pre.blurred,
+        visible,
+        persistent_band,
+        reference_mask=effective,
+        minimum_fraction=0.45,
+        minimum_pixels=5,
+        include_center_extra=True,
+    )
+    glare_profile = binary_band_overlap_profile(pre.glare_mask, effective, 2)
+    exclusion_profile = binary_band_overlap_profile(
+        context.exclusion_mask,
+        context.ellipse_mask,
+        2,
+    )
+    static_profile = (
+        binary_band_overlap_profile(
+            context.static_artifact_map,
+            context.ellipse_mask,
+            3,
+        )
+        if context.static_artifact_map is not None
+        else None
+    )
 
     for candidate in candidates:
         y = int(round(candidate.y))
-        if y < 1 or y >= h - 1 or not mask[y].any():
+        if y < 1 or y >= h - 1 or not effective[y].any():
             candidate.rejected = True
             candidate.reject_reason = "outside_effective_mask"
             candidate.final_score = 0.0
             continue
 
-        intensity = _signed_intensity_evidence(
-            pre.blurred,
-            mask,
-            pre.glare_mask,
-            y,
-        )
-        persistent_intensity = _signed_intensity_evidence(
-            pre.blurred,
-            mask,
-            pre.glare_mask,
-            y,
-            band=persistent_band,
-        )
+        intensity = _profile_evidence(local_intensity, y)
+        persistent = _profile_evidence(persistent_intensity, y)
         edge = _unit(energy[y])
         horizontal = _unit(coverage[y])
         signed_sobel_raw = _finite(signed[y])
@@ -108,19 +146,15 @@ def score_candidates(
             else 0.0
         )
         persistent_region = (
-            _unit(abs(persistent_intensity.signed_difference) / 80.0)
-            if persistent_intensity.available
+            _unit(abs(persistent.signed_difference) / 80.0)
+            if persistent.available
             else 0.0
         )
         persistent_polarity_sign = (
             0.0
-            if not persistent_intensity.available
-            or abs(persistent_intensity.signed_difference) < 1e-9
-            else (
-                1.0
-                if persistent_intensity.signed_difference > 0.0
-                else -1.0
-            )
+            if not persistent.available
+            or abs(persistent.signed_difference) < 1e-9
+            else (1.0 if persistent.signed_difference > 0.0 else -1.0)
         )
         temporal = (
             0.5
@@ -140,8 +174,8 @@ def score_candidates(
         support = int(
             round(candidate.features.get("unique_generator_support_count", 1.0))
         )
-        glare = _row_overlap(pre.glare_mask, mask, y)
-        exclusion = _row_overlap(context.exclusion_mask, context.ellipse_mask, y)
+        glare = _unit(glare_profile[y])
+        exclusion = _unit(exclusion_profile[y])
         edge_distance = min(
             abs(candidate.y - top),
             abs(bottom - candidate.y),
@@ -151,14 +185,7 @@ def score_candidates(
             if edge_distance < 0.10
             else 0.0
         )
-        static = 0.0
-        if context.static_artifact_map is not None:
-            static = _row_overlap(
-                context.static_artifact_map,
-                context.ellipse_mask,
-                y,
-                band=3,
-            )
+        static = 0.0 if static_profile is None else _unit(static_profile[y])
         jump = 0.0
         if context.previous_y is not None:
             jump = max(
@@ -209,16 +236,12 @@ def score_candidates(
                 "polarity_sign": polarity_sign,
                 "polarity_available": float(intensity.available),
                 "polarity_consistency": polarity_consistency,
-                "persistent_above_intensity": persistent_intensity.above,
-                "persistent_below_intensity": persistent_intensity.below,
-                "persistent_signed_above_minus_below": (
-                    persistent_intensity.signed_difference
-                ),
+                "persistent_above_intensity": persistent.above,
+                "persistent_below_intensity": persistent.below,
+                "persistent_signed_above_minus_below": persistent.signed_difference,
                 "persistent_region_contrast": persistent_region,
                 "persistent_polarity_sign": persistent_polarity_sign,
-                "persistent_polarity_available": float(
-                    persistent_intensity.available
-                ),
+                "persistent_polarity_available": float(persistent.available),
                 "persistent_intensity_band_px": float(persistent_band),
                 "gradient_direction": polarity_score,
                 "temporal_score": temporal,
@@ -311,9 +334,7 @@ def score_candidates(
             and support < 2
         ):
             candidate.rejected = True
-            candidate.reject_reason = (
-                "insufficient_horizontal_region_or_consensus"
-            )
+            candidate.reject_reason = "insufficient_horizontal_region_or_consensus"
         elif glare > 0.65:
             candidate.rejected = True
             candidate.reject_reason = "glare_overlap"
@@ -323,11 +344,7 @@ def score_candidates(
         elif border > 0.85:
             candidate.rejected = True
             candidate.reject_reason = "rim_or_border"
-        elif (
-            static >= 0.62
-            and dynamic_evidence < 0.42
-            and consensus < 0.72
-        ):
+        elif static >= 0.62 and dynamic_evidence < 0.42 and consensus < 0.72:
             candidate.rejected = True
             candidate.reject_reason = "static_horizontal_structure"
         elif (
@@ -337,18 +354,14 @@ def score_candidates(
             and not strong_state_transition
         ):
             candidate.rejected = True
-            candidate.reject_reason = (
-                "implausible_full_to_visible_transition"
-            )
+            candidate.reject_reason = "implausible_full_to_visible_transition"
         elif (
             context.previous_state == FillState.EMPTY_NO_INTERFACE
             and relative_position < 0.68
             and not strong_state_transition
         ):
             candidate.rejected = True
-            candidate.reject_reason = (
-                "implausible_empty_to_visible_transition"
-            )
+            candidate.reject_reason = "implausible_empty_to_visible_transition"
         elif (
             candidate.features["observation_score"]
             < settings.minimum_final_confidence * 0.62
@@ -364,14 +377,7 @@ def suppress_paired_horizontal_structures(
     candidates: list[BoundaryCandidate],
     settings: DetectorSettings,
 ) -> None:
-    """Resolve close opposite-polarity edges as a region step or a structure.
-
-    A dark/bright meniscus line on a genuine oil transition produces two close,
-    opposite local gradients but retains a strong same-direction intensity step
-    over a wider band. Uniform structural or reflection lines do not. Genuine
-    paired boundary edges are collapsed to one deterministic representative;
-    structural pairs are rejected.
-    """
+    """Resolve close opposite-polarity edges as a region step or a structure."""
 
     usable = sorted(
         (candidate for candidate in candidates if not candidate.rejected),
@@ -463,8 +469,7 @@ def suppress_paired_horizontal_structures(
                 float(settings.minimum_region_contrast) * 3.0,
             )
             persistent_step = (
-                max(left_persistent, right_persistent)
-                >= persistent_threshold
+                max(left_persistent, right_persistent) >= persistent_threshold
                 and left_persistent_sign != 0.0
                 and right_persistent_sign != 0.0
                 and left_persistent_sign * right_persistent_sign > 0.0
@@ -472,12 +477,8 @@ def suppress_paired_horizontal_structures(
 
             for candidate, partner in ((left, right), (right, left)):
                 candidate.features["paired_structure_distance_px"] = distance
-                candidate.features["paired_structure_partner_y"] = float(
-                    partner.y
-                )
-                candidate.features[
-                    "paired_structure_opposite_polarity"
-                ] = 1.0
+                candidate.features["paired_structure_partner_y"] = float(partner.y)
+                candidate.features["paired_structure_opposite_polarity"] = 1.0
                 candidate.features["paired_boundary_step_preserved"] = float(
                     persistent_step
                 )
@@ -491,21 +492,15 @@ def suppress_paired_horizontal_structures(
                 left_weight = max(0.05, left_score)
                 right_weight = max(0.05, right_score)
                 merged_y = (
-                    left_weight * float(left.y)
-                    + right_weight * float(right.y)
+                    left_weight * float(left.y) + right_weight * float(right.y)
                 ) / (left_weight + right_weight)
-                keeper.features["paired_boundary_original_y"] = float(
-                    keeper.y
-                )
-                keeper.features["paired_boundary_merged_y"] = float(
-                    merged_y
-                )
+                keeper.features["paired_boundary_original_y"] = float(keeper.y)
+                keeper.features["paired_boundary_merged_y"] = float(merged_y)
                 keeper.features["representative_local_y"] = float(merged_y)
                 keeper.y = float(merged_y)
                 keeper.rejected = False
                 keeper.reject_reason = ""
                 keeper.penalties["paired_structure_penalty"] = 0.0
-
                 duplicate.penalties["paired_structure_penalty"] = 1.0
                 duplicate.rejected = True
                 duplicate.reject_reason = "paired_boundary_edge_duplicate"
@@ -513,30 +508,16 @@ def suppress_paired_horizontal_structures(
                 for candidate in (left, right):
                     candidate.penalties["paired_structure_penalty"] = 1.0
                     candidate.rejected = True
-                    candidate.reject_reason = (
-                        "paired_opposite_polarity_structure"
-                    )
+                    candidate.reject_reason = "paired_opposite_polarity_structure"
             resolved.update((id(left), id(right)))
             break
 
     for candidate in candidates:
         if id(candidate) not in resolved:
-            candidate.features.setdefault(
-                "paired_structure_distance_px",
-                0.0,
-            )
-            candidate.features.setdefault(
-                "paired_structure_partner_y",
-                0.0,
-            )
-            candidate.features.setdefault(
-                "paired_structure_opposite_polarity",
-                0.0,
-            )
-            candidate.features.setdefault(
-                "paired_boundary_step_preserved",
-                0.0,
-            )
+            candidate.features.setdefault("paired_structure_distance_px", 0.0)
+            candidate.features.setdefault("paired_structure_partner_y", 0.0)
+            candidate.features.setdefault("paired_structure_opposite_polarity", 0.0)
+            candidate.features.setdefault("paired_boundary_step_preserved", 0.0)
 
 
 def select_best_candidate(
@@ -560,11 +541,7 @@ def build_oil_debug_profiles(
     signed_sobel = masked_row_mean(context.pre.sobel_y_signed, mask)
     signed_sobel = np.clip(-signed_sobel / 80.0, -1.0, 1.0)
     coverage = row_coverage(context.pre.horizontal_mask, mask)
-    glare_excluded = np.where(
-        context.pre.glare_mask > 0,
-        0,
-        mask,
-    ).astype(np.uint8)
+    glare_excluded = (mask > 0) & ~(context.pre.glare_mask > 0)
     signed_contrast, _absolute, _available = signed_region_contrast_profiles(
         context.pre.blurred,
         glare_excluded,
@@ -593,12 +570,16 @@ def build_oil_debug_profiles(
     }
 
 
-@dataclass(frozen=True)
-class _IntensityEvidence:
-    above: float
-    below: float
-    signed_difference: float
-    available: bool
+def _profile_evidence(
+    profiles: MaskedBandIntensityProfiles,
+    y: int,
+) -> _IntensityEvidence:
+    return _IntensityEvidence(
+        above=float(profiles.above[y]),
+        below=float(profiles.below[y]),
+        signed_difference=float(profiles.signed_difference[y]),
+        available=bool(profiles.available[y]),
+    )
 
 
 def _signed_intensity_evidence(
@@ -608,29 +589,17 @@ def _signed_intensity_evidence(
     y: int,
     band: int = 5,
 ) -> _IntensityEvidence:
-    y0, y1 = max(0, y - band), min(gray.shape[0], y + band + 1)
     effective = mask > 0
-    valid = effective & ~(glare_mask > 0)
-    above_effective = effective[y0:y]
-    below_effective = effective[y:y1]
-    above_mask = valid[y0:y]
-    below_mask = valid[y:y1]
-    above_required = max(
-        5,
-        int(np.count_nonzero(above_effective) * 0.45),
+    profiles = masked_band_intensity_profiles(
+        gray,
+        effective & ~(glare_mask > 0),
+        band,
+        reference_mask=effective,
+        minimum_fraction=0.45,
+        minimum_pixels=5,
+        include_center_extra=True,
     )
-    below_required = max(
-        5,
-        int(np.count_nonzero(below_effective) * 0.45),
-    )
-    if (
-        int(above_mask.sum()) < above_required
-        or int(below_mask.sum()) < below_required
-    ):
-        return _IntensityEvidence(0.0, 0.0, 0.0, False)
-    above = float(np.median(gray[y0:y][above_mask]))
-    below = float(np.median(gray[y:y1][below_mask]))
-    return _IntensityEvidence(above, below, above - below, True)
+    return _profile_evidence(profiles, y)
 
 
 def _region_contrast(
@@ -659,14 +628,8 @@ def _row_overlap(
     y: int,
     band: int = 2,
 ) -> float:
-    y0, y1 = max(0, y - band), min(binary.shape[0], y + band + 1)
-    denominator = denominator_mask[y0:y1] > 0
-    count = int(denominator.sum())
-    return (
-        0.0
-        if count == 0
-        else float(((binary[y0:y1] > 0) & denominator).sum()) / count
-    )
+    profile = binary_band_overlap_profile(binary, denominator_mask, band)
+    return float(profile[y]) if 0 <= y < profile.size else 0.0
 
 
 def _state_plausibility(
