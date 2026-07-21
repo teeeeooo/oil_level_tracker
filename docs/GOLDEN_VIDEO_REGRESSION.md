@@ -1,10 +1,185 @@
-# Golden Video Regression Structure
+# Golden Video and Detector Benchmark Regression
 
-Real golden fixtures are intentionally not fabricated. Add short, redistributable clips under `tests/golden/<case>/` with:
+## Authority and scope
 
-- `video.*`
-- `recipe.oilrecipe`
-- `annotations.json`
-- `README.md` containing source/license/test conditions
+This document is the execution guide for the detector benchmark work described by
+[`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md). Product,
+truth and architecture decisions remain subordinate to
+[`rotary_oil_level_tracker_ssot_spec.md`](./rotary_oil_level_tracker_ssot_spec.md).
 
-`annotations.json` should contain timestamp, expected FillState, acceptable oil-air/foam y range, expected event and whether low confidence is acceptable. Integration tests should compare ranges rather than exact pixels and should preserve the original clip hash in the annotation file.
+S1 builds a repeatable baseline around the existing Phase 2C-3 regression fixture
+export. It does **not** change detector algorithms, thresholds, `.oiltruth`, the
+regression fixture export schema or the official result bundle.
+
+## Dataset source
+
+Create annotations in Result Review and export them with the Phase 2C-3 regression
+fixture action. Keep real compressor videos, exported datasets and benchmark outputs
+outside the repository.
+
+An exporter schema-version 1 dataset contains:
+
+```text
+oil_regression_dataset_YYYYMMDD_HHMMSS/
+├─ dataset_manifest.json
+└─ fixtures/
+   └─ <fixture-id>/
+      ├─ fixture_manifest.json
+      ├─ frame.png
+      ├─ roi_crop.png
+      ├─ truth.json
+      ├─ official_reference.json
+      ├─ recipe_snapshot.oilrecipe
+      └─ session_snapshot.json
+```
+
+The benchmark reader verifies the dataset, fixture and truth schema versions; all
+manifest SHA-256 values; source-frame, recipe, session and annotation identity; and
+safe relative paths. Absolute paths, `..` traversal, root escape, symlink escape,
+duplicate IDs/manifest entries and unsupported future schemas are rejected.
+
+## Benchmark categories
+
+Machine-readable keys are stable and the Korean meanings are:
+
+| Key | 의미 |
+|---|---|
+| `clear_oil_boundary` | 뚜렷한 유면 |
+| `transparent_oil_full` | 투명 오일 가득 참 |
+| `transparent_oil_shimmer` | 투명 오일 교반·아지랑이 |
+| `white_foam` | 실제 흰색 Foam |
+| `reflection_or_blur` | 반사광·흐림 |
+| `structural_horizontal_edge` | 구조물 수평 경계 |
+| `rapid_oil_flow` | 빠른 오일 유입·배출 |
+| `no_interface` | full/empty no-interface |
+
+Exporter schema version 1 does not contain a category or sequence field. The reader
+therefore uses only conservative mappings that are authoritative from existing truth
+fields: Foam presence, Foam misclassification, glare/reflection, structural edge,
+visible interface and full/empty no-interface. It does not silently map an unknown
+case to `other`.
+
+Use an optional dataset-root `benchmark_catalog.json` for ambiguous categories,
+`transparent_oil_full`, `rapid_oil_flow`, or temporal sequences:
+
+```json
+{
+  "schema_version": 1,
+  "dataset_id": "the-id-from-dataset_manifest.json",
+  "fixtures": [
+    {
+      "fixture_id": "glass-1-0123456789abcdefabcd",
+      "category": "rapid_oil_flow",
+      "sequence_id": "fill-sequence-01",
+      "sequence_order": 0
+    }
+  ]
+}
+```
+
+`benchmark_catalog.json` is benchmark metadata. It does not extend or replace the
+Phase 2C-3 fixture or `.oiltruth` schemas. Every listed fixture ID and category is
+validated. A sequence is executed in canonical timestamp/frame order with one fresh
+detector instance; independent cases and different sequences never share tracker
+state.
+
+## Collection procedure
+
+1. Keep category balance visible while selecting annotations. Include both successful
+   and failed detector cases.
+2. Record `confirmed_correct`, `corrected` or `unusable` using the existing truth
+   workflow. Do not use the official detector result as implicit truth.
+3. For `unusable`, record a specific error type and useful note. These fixtures are
+   excluded from accuracy denominators but retained in total and reason counts.
+4. For Foam precision/recall, explicitly confirm whether Foam is present. Add a Foam
+   front only when an authoritative position is visible.
+5. For no-interface cases, use `FULL_NO_INTERFACE` or `EMPTY_NO_INTERFACE` and do not
+   fabricate a numeric oil boundary.
+6. Add catalog entries when category meaning or sequence membership cannot be derived
+   from existing truth fields.
+7. Export to an external, user-writable directory. Preserve the dataset bytes used for
+   a baseline so future detector runs use the same dataset fingerprint.
+
+## Run the current detector baseline
+
+```text
+python -m oil_tracker.cli benchmark \
+  --dataset <regression-dataset-directory> \
+  --output <output-root>
+```
+
+Compare with a previous result from the same dataset fingerprint:
+
+```text
+python -m oil_tracker.cli benchmark \
+  --dataset <regression-dataset-directory> \
+  --output <output-root> \
+  --baseline <previous-benchmark-result.json>
+```
+
+A malformed dataset, hash mismatch, unsupported schema or non-comparable baseline
+returns a non-zero exit code. The command is headless and does not initialize Qt.
+
+## Output
+
+A successful run is atomically finalized only after every file is written:
+
+```text
+detector_benchmark_<dataset-id>_<timestamp>/
+├─ benchmark_result.json
+├─ benchmark_cases.csv
+├─ benchmark_categories.csv
+├─ benchmark_summary.csv
+└─ benchmark_comparison.md
+```
+
+The JSON records dataset/run fingerprints, app and detector identity, Python and major
+package versions, source revision when available, complete detector settings snapshots,
+case results, category summaries, micro aggregate, macro category aggregate, warnings
+and comparison deltas. Absolute machine paths and runtime timestamps are excluded from
+the fingerprints.
+
+## Metric semantics
+
+- Oil and Foam position errors are reported separately for raw and smoothed outputs.
+- Normalized error divides by the effective canonical Glass analysis-region height,
+  not the source-frame height.
+- A missing detector boundary is a missed detection, never an arbitrary large error.
+- Coverage distinguishes truth-present/detected, truth-present/missing,
+  truth-absent/absent and truth-absent/false-boundary.
+- Fill-state accuracy reports evaluated/correct counts and a confusion matrix.
+- Foam precision/recall use only fixtures with authoritative Foam presence.
+- Shimmer Foam false-positive rate uses shimmer cases with authoritative Foam absence.
+- No-interface false-boundary rates are reported for raw/smoothed values and separately
+  for `FULL_NO_INTERFACE` and `EMPTY_NO_INTERFACE` when data exists.
+- Every metric records numerator, denominator, evaluated, excluded and unavailable
+  counts. Empty denominators are `not_evaluated`, not zero scores.
+- Micro aggregate pools usable cases. Macro category aggregate gives equal weight only
+  to categories where the metric is evaluated.
+- Exporter schema version 1 has no authoritative event truth. Event timestamp metrics
+  are explicitly `not_evaluated`; official-versus-rerun event differences are not
+  presented as truth accuracy.
+
+Percentiles use deterministic linear interpolation at rank `(n - 1) × q` for median,
+P90 and P95.
+
+## Baseline comparison
+
+Comparison requires the same benchmark schema, dataset fingerprint and category
+contract. Dataset or schema mismatch is rejected rather than silently compared.
+Settings or detector identity may differ and are recorded. Error and false-positive
+metrics are lower-is-better; coverage, accuracy, precision and recall are
+higher-is-better. S1 introduces no acceptance threshold or automatic tuning.
+
+## Manual follow-up
+
+- Collect and review a balanced real compressor dataset.
+- Review annotation quality with a second engineer where practical.
+- Exercise Unicode and long Windows paths from the packaged CLI.
+- Measure large/long dataset runtime and memory.
+- Archive the first accepted current-detector baseline before algorithm changes.
+
+Legacy short redistributable golden clips may still be stored under
+`tests/golden/<case>/` with `video.*`, `recipe.oilrecipe`, `annotations.json` and a
+source/license README. Real production video or generated benchmark outputs must not
+be committed.
