@@ -1,0 +1,104 @@
+name: S4 focused validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - validation-result.txt
+
+permissions:
+  contents: write
+
+jobs:
+  focused:
+    runs-on: ubuntu-24.04
+    env:
+      EXPECTED_SHA: c00b7ad7c2fbe31eb99b14782025c5f91a016c5c
+      QT_QPA_PLATFORM: offscreen
+      VALIDATION_BRANCH: validation/s4-focused-c00b7ad
+    steps:
+      - name: Checkout exact feature SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_SHA }}
+          fetch-depth: 1
+      - name: Assert exact checkout
+        run: |
+          echo "expected exact SHA=$EXPECTED_SHA"
+          echo "actual SHA=$(git rev-parse HEAD)"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - name: Install runner display and Korean font dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-noto-cjk libegl1 libgl1 libxkbcommon-x11-0
+          fc-cache -f
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip -q
+          python -m pip install -e '.[dev]' -q
+      - name: Print environment and selected font
+        run: |
+          python - <<'PY'
+          import matplotlib, numpy, cv2, PySide6, sys
+          from oil_tracker.visualization.matplotlib_font import resolve_matplotlib_font
+          selected = resolve_matplotlib_font()
+          print('Python=', sys.version)
+          print('PySide6=', PySide6.__version__)
+          print('NumPy=', numpy.__version__)
+          print('OpenCV=', cv2.__version__)
+          print('Matplotlib=', matplotlib.__version__)
+          print('selected Matplotlib font=', selected.family)
+          print('font resolver source=', selected.source)
+          print('font supports Hangul=', selected.supports_hangul)
+          PY
+      - name: Run focused S4 and regression tests
+        id: pytest
+        continue-on-error: true
+        run: |
+          python -m pytest -q --tb=short \
+            tests/test_s4_progress_contract.py \
+            tests/test_s4_graph_axis.py \
+            tests/test_s4_matplotlib_font.py \
+            tests/test_s4_analysis_progress_dialog.py \
+            tests/integration/test_result_review_bundle_output.py \
+            tests/unit/test_review_graph.py \
+            tests/gui/test_result_review_graph.py \
+            tests/gui/test_analysis_completion_coordinator.py \
+            tests/test_redetection_comparison.py \
+            tests/test_redetection_ui_controller.py \
+            tests/test_ui_import_boundaries.py \
+            tests/gui/test_result_review_canvas.py \
+            tests/test_redetection_raster_boundary.py \
+            tests/gui/test_workbench_usability_stabilization.py \
+            tests/unit/test_preflight_use_case.py > /tmp/pytest-output.txt 2>&1
+      - name: Persist bounded diagnostic on failure
+        if: steps.pytest.outcome == 'failure'
+        run: |
+          {
+            echo "expected_sha=$EXPECTED_SHA"
+            echo "actual_sha=$(git rev-parse HEAD)"
+            echo "--- pytest tail ---"
+            tail -n 220 /tmp/pytest-output.txt
+          } > /tmp/validation-result.txt
+          git fetch origin "$VALIDATION_BRANCH"
+          git checkout -B "$VALIDATION_BRANCH" "origin/$VALIDATION_BRANCH"
+          cp /tmp/validation-result.txt validation-result.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add validation-result.txt
+          git commit -m "ci: record focused validation diagnostic"
+          git push origin "$VALIDATION_BRANCH"
+      - name: Fail when focused tests fail
+        if: steps.pytest.outcome == 'failure'
+        run: exit 1
+      - name: Print focused result and glyph warning count
+        if: steps.pytest.outcome == 'success'
+        run: |
+          cat /tmp/pytest-output.txt
+          printf 'missing Hangul glyph warning count='
+          grep -Ec 'Glyph .* missing from font' /tmp/pytest-output.txt || true
