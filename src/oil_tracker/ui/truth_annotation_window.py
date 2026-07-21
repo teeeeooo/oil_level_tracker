@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QImage
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QButtonGroup,
@@ -376,7 +377,14 @@ class TruthAnnotationWindow(QMainWindow):
         item = self.annotation_list.currentItem()
         return item.data(_ANNOTATION_ROLE) if item is not None else None
 
-    def set_context(self, frame, glass, context, official_reference, annotation=None) -> None:
+    def set_context(
+        self,
+        frame_image: QImage | None,
+        glass,
+        context,
+        official_reference,
+        annotation=None,
+    ) -> None:
         self._building = True
         try:
             self._context = context
@@ -411,7 +419,7 @@ class TruthAnnotationWindow(QMainWindow):
                 for value, check in self.error_checks.items():
                     check.setChecked(value in annotation.error_types)
                 self.note.setPlainText(annotation.note)
-            self.canvas.set_frame(frame)
+            self.canvas.set_frame_image(frame_image)
             self.canvas.set_context(
                 glass,
                 official_reference=official_reference,
@@ -438,6 +446,9 @@ class TruthAnnotationWindow(QMainWindow):
 
     def context(self):
         return self._context
+
+    def official_reference(self):
+        return self._official
 
     def existing_annotation(self):
         return self._current_annotation
