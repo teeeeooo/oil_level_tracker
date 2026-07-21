@@ -33,8 +33,14 @@ _ARTIFACT_LABELS = {
     "canny": "Canny",
     "horizontal_mask": "horizontal mask",
     "glare_mask": "glare mask",
-    "foam_mask": "foam mask",
-    "foam_variance": "foam variance",
+    "foam_mask": "Foam spatial component mask",
+    "foam_variance": "Foam variance map",
+    "foam_edge_density": "Foam edge-density map",
+    "foam_whiteness": "Foam whiteness map",
+    "foam_texture_evidence": "Foam texture evidence",
+    "foam_glare_excluded_mask": "Foam glare-excluded mask",
+    "foam_combined_evidence": "Foam combined evidence",
+    "foam_accepted_component": "Accepted Foam component",
     "static_artifact_map": "static artifact map",
 }
 
@@ -196,6 +202,12 @@ class ResultDebugPanel(QWidget):
             f"overall confidence: {_display(record.confidence.get('overall'))}",
             f"glare ratio: {_display(record.state.get('glare_ratio'))}",
             f"foam bottom-connected ratio: {_display(record.state.get('foam_bottom_connected_area_ratio'))}",
+            f"Foam evidence score: {_display(record.state.get('foam_evidence_score'))}",
+            f"Foam decision: {_display(record.state.get('foam_decision_status'))}",
+            f"Foam whiteness ratio: {_display(record.state.get('foam_whiteness_ratio'))}",
+            f"Foam texture support: {_display(record.state.get('foam_texture_support_ratio'))}",
+            f"Foam glare overlap: {_display(record.state.get('foam_glare_overlap_ratio'))}",
+            f"Foam persistence: {_display(record.state.get('foam_temporal_pending_count'))}/{_display(record.state.get('foam_temporal_required_count'))}",
             f"effective area: {_display(record.state.get('effective_area'))}",
             f"flags: {', '.join(record.flags) or '-'}",
             f"capture reasons: {', '.join(record.capture_reasons) or '-'}",
@@ -205,7 +217,11 @@ class ResultDebugPanel(QWidget):
             for key, value in record.state.items()
             if key not in {
                 "previous_state", "proposed_state", "fill_state", "glare_ratio",
-                "foam_bottom_connected_area_ratio", "effective_area",
+                "foam_bottom_connected_area_ratio", "foam_evidence_score",
+                "foam_decision_status", "foam_whiteness_ratio",
+                "foam_texture_support_ratio", "foam_glare_overlap_ratio",
+                "foam_temporal_pending_count", "foam_temporal_required_count",
+                "effective_area",
             }
         }
         if extra:
