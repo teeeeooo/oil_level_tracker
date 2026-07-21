@@ -37,7 +37,13 @@ def test_shared_quality_helper_matches_current_frame_preview_card_semantics():
         preview = build_detection_summary(detection, glass)
         assert assessment.quality == expected
         assert preview.quality == PreviewQuality(expected.value)
-        assert preview.judgment == assessment.reason
+        if detection.fill_state == FillState.FOAMING_VISIBLE:
+            assert preview.interpretation == "거품 가능성이 감지됨"
+            assert preview.recommendation == "영상에서 실제 거품인지 확인하세요."
+            assert preview.action_key == "initial_state"
+        else:
+            assert preview.interpretation == assessment.reason
+            assert preview.recommendation
 
 
 def test_explicit_full_or_empty_state_without_visible_boundary_remains_usable():
