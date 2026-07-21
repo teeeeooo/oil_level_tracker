@@ -9,11 +9,29 @@ permissions:
   pull-requests: write
 
 jobs:
-  controlled-oil:
+  focused:
+    name: focused-${{ matrix.group }}
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: core
+            files: >-
+              tests/test_oil_candidate_consensus.py
+              tests/test_oil_signed_scoring.py
+              tests/test_oil_no_interface.py
+              tests/test_oil_temporal_path.py
+              tests/test_oil_temporal_tracker.py
+              tests/test_oil_detector_integration.py
+              tests/test_oil_fill_state_classifier.py
+              tests/test_oil_settings.py
+          - group: controlled-oil
+            files: tests/test_oil_controlled_benchmark.py
     env:
       QT_QPA_PLATFORM: offscreen
-      EXPECTED_SHA: cda5a1bfcfeaae0dcb86675b07021d03a4020273
+      EXPECTED_SHA: fff9144b588e682090eb5b76719c5fd2261a30bf
+      TEST_FILES: ${{ matrix.files }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -33,81 +51,23 @@ jobs:
           sudo apt-get update -qq >/dev/null
           sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-xinerama0 libxcb-keysyms1 libxcb-render-util0 >/dev/null
           python -m pip install -q -e '.[dev]'
-      - name: Run controlled oil diagnostic
+      - name: Run focused group
         shell: bash
         run: |
           set +e
-          python -m pytest -q --tb=short tests/test_oil_controlled_benchmark.py > /tmp/pytest.log 2>&1
+          python -m pytest -q --tb=short ${TEST_FILES} > /tmp/pytest.log 2>&1
           status=$?
-          if [ "${status}" -ne 0 ]; then
-            python - <<'PY' >> /tmp/pytest.log 2>&1
-          import json
-          import sys
-          import tempfile
-          from pathlib import Path
-          sys.path.insert(0, 'tests')
-          from oil_benchmark_fixtures import controlled_oil_scenes, generate_controlled_oil_dataset
-          from test_oil_controlled_benchmark import _run_sequence, _service
-          print('\n--- controlled oil bounded metrics ---')
-          with tempfile.TemporaryDirectory() as root:
-              root = Path(root)
-              dataset, scenes = generate_controlled_oil_dataset(root)
-              payload = _service().run(dataset, root / 'results').payload
-              print('dataset_fingerprint=' + payload['dataset']['fingerprint'])
-              print(f"cases={payload['case_count']} usable={payload['usable_count']} categories={payload['category_count']}")
-              for category in ('clear_oil_boundary', 'rapid_oil_flow', 'no_interface', 'structural_horizontal_edge', 'reflection_or_blur', 'transparent_oil_shimmer'):
-                  summary = payload['category_summaries'].get(category)
-                  if not summary:
-                      continue
-                  metrics = summary['metrics']
-                  selected = {}
-                  for name in (
-                      'raw_oil_detection_coverage',
-                      'smoothed_oil_detection_coverage',
-                      'raw_oil_mean_absolute_error',
-                      'raw_oil_median_absolute_error',
-                      'raw_oil_p90_absolute_error',
-                      'raw_oil_p95_absolute_error',
-                      'smoothed_oil_mean_absolute_error',
-                      'smoothed_oil_median_absolute_error',
-                      'smoothed_oil_p90_absolute_error',
-                      'smoothed_oil_p95_absolute_error',
-                      'raw_no_interface_false_boundary_rate',
-                      'smoothed_no_interface_false_boundary_rate',
-                      'fill_state_accuracy',
-                  ):
-                      if name in metrics:
-                          selected[name] = metrics[name]['value']
-                  print(category + '=' + json.dumps(selected, sort_keys=True))
-              for sequence_id, group in sorted({
-                  sequence_id: [scene for scene in controlled_oil_scenes() if scene.sequence_id == sequence_id]
-                  for sequence_id in {scene.sequence_id for scene in controlled_oil_scenes() if scene.sequence_id}
-              }.items()):
-                  outputs = _run_sequence(sorted(group, key=lambda scene: scene.sequence_order))
-                  print(sequence_id + '=' + json.dumps([
-                      {
-                          'order': scene.sequence_order,
-                          'truth_y': scene.oil_y,
-                          'raw_y': output.raw_oil_air_level_y,
-                          'smoothed_y': output.smoothed_oil_air_level_y,
-                          'state': output.fill_state.value,
-                          'decision': output.debug_metrics.get('oil_decision_status'),
-                          'reason': output.debug_metrics.get('oil_decision_reason'),
-                          'margin': output.debug_metrics.get('oil_decision_margin'),
-                      }
-                      for scene, output in zip(sorted(group, key=lambda scene: scene.sequence_order), outputs, strict=True)
-                  ], sort_keys=True))
-          PY
-          fi
           cat /tmp/pytest.log
-          {
-            echo "## Temporary S5-B controlled oil diagnostic"
-            echo
-            echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
-            echo
-            echo '```text'
-            tail -n 360 /tmp/pytest.log
-            echo '```'
-          } > /tmp/body.md
-          gh pr edit 55 --body-file /tmp/body.md || true
+          if [ "${status}" -ne 0 ]; then
+            {
+              echo "## Temporary S5-B diagnostic: ${{ matrix.group }}"
+              echo
+              echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
+              echo
+              echo '```text'
+              tail -n 300 /tmp/pytest.log
+              echo '```'
+            } > /tmp/body.md
+            gh pr edit 55 --body-file /tmp/body.md || true
+          fi
           exit ${status}
