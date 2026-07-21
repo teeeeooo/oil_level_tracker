@@ -1,0 +1,39 @@
+name: S5-A final path inventory
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  EXPECTED_FEATURE_SHA: 0db9ef11fecc5c41249e26b1644a05e6e88e8410
+
+jobs:
+  inventory:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_FEATURE_SHA }}
+      - name: Assert exact feature checkout
+        run: |
+          actual=$(git rev-parse HEAD)
+          echo "expected=$EXPECTED_FEATURE_SHA actual=$actual"
+          test "$actual" = "$EXPECTED_FEATURE_SHA"
+      - name: Publish relevant actual test paths
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          find tests -type f -name 'test_*.py' | sort | grep -E 'foam|benchmark|preview|preflight|redetection|debug|import_bound|raster|workbench|analysis|lifecycle|graph|result|phase_detector|settings' > /tmp/paths.txt
+          {
+            echo '### Relevant test path inventory'
+            echo
+            echo '```text'
+            cat /tmp/paths.txt
+            echo '```'
+          } > /tmp/comment.md
+          gh pr comment "$PR_NUMBER" --repo teeeeooo/oil_level_tracker --body-file /tmp/comment.md
