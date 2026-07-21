@@ -23,6 +23,7 @@ class MarkerSlider(QSlider):
         self._review_points: list[tuple[float, QColor]] = []
         self._review_intervals: list[tuple[float, float, QColor]] = []
         self._debug_points: list[tuple[float, bool]] = []
+        self._truth_points: list[tuple[float, str, bool]] = []
         self.setMinimumWidth(180)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.setToolTip("파랑: 분석 시작·종료 / 주황: 압축기 기동")
@@ -72,10 +73,25 @@ class MarkerSlider(QSlider):
         self._update_tooltip()
         self.update()
 
+    def set_truth_markers(self, duration: float, markers=()) -> None:
+        self._duration = max(0.0, duration)
+        self._truth_points = [
+            (
+                float(marker.timestamp_sec),
+                str(marker.disposition),
+                bool(marker.selected),
+            )
+            for marker in markers
+            if marker.timestamp_sec is not None
+        ]
+        self._update_tooltip()
+        self.update()
+
     def clear_review_markers(self) -> None:
         self._review_points.clear()
         self._review_intervals.clear()
         self._debug_points.clear()
+        self._truth_points.clear()
         self.setToolTip("파랑: 분석 시작·종료 / 주황: 압축기 기동")
         self.update()
 
@@ -106,6 +122,8 @@ class MarkerSlider(QSlider):
             self._draw_triangle(painter, groove, timestamp, color, upward=False)
         for timestamp, selected in self._debug_points:
             self._draw_debug_square(painter, groove, timestamp, selected)
+        for timestamp, disposition, selected in self._truth_points:
+            self._draw_truth_diamond(painter, groove, timestamp, disposition, selected)
 
     def _draw_triangle(self, painter, groove, timestamp, color, *, upward: bool) -> None:
         if timestamp is None:
@@ -135,10 +153,34 @@ class MarkerSlider(QSlider):
         painter.setBrush(color if selected else Qt.BrushStyle.NoBrush)
         painter.drawRect(QRectF(x - size / 2, groove.center().y() - size / 2, size, size))
 
+    def _draw_truth_diamond(self, painter, groove, timestamp: float, disposition: str, selected: bool) -> None:
+        x = groove.left() + self._ratio(timestamp) * groove.width()
+        y = groove.center().y()
+        size = 9 if selected else 6
+        color = {
+            "confirmed_correct": QColor(80, 210, 120),
+            "corrected": QColor(255, 210, 50),
+            "unusable": QColor(230, 100, 100),
+        }.get(disposition, QColor(230, 230, 230))
+        painter.setPen(color)
+        painter.setBrush(color if selected else Qt.BrushStyle.NoBrush)
+        painter.drawPolygon(
+            QPolygonF(
+                [
+                    QPointF(x, y - size / 2),
+                    QPointF(x + size / 2, y),
+                    QPointF(x, y + size / 2),
+                    QPointF(x - size / 2, y),
+                ]
+            )
+        )
+
     def _update_tooltip(self) -> None:
         parts = ["파랑: 분석 범위", "주황: 압축기 기동", "보라 삼각형: 이벤트", "빨강 영역: 검토 필요"]
         if self._debug_points:
             parts.append("청록 사각형: 디버그 기록(채움: 선택 기록)")
+        if self._truth_points:
+            parts.append("마름모: 사용자 정답(채움: 선택 정답)")
         self.setToolTip(" / ".join(parts))
 
     def _ratio(self, timestamp: float) -> float:
