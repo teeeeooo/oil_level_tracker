@@ -6,34 +6,34 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
+  issues: write
 
 jobs:
-  focused:
-    name: focused-${{ matrix.group }}
+  controlled:
+    name: controlled-${{ matrix.group }}
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
         include:
-          - group: consensus-scoring
+          - group: oil
+            files: tests/test_oil_controlled_benchmark.py
+            comment_id: '5035885005'
+          - group: foam
             files: >-
-              tests/test_oil_candidate_consensus.py
-              tests/test_oil_signed_scoring.py
-              tests/test_oil_no_interface.py
-          - group: temporal
-            files: >-
-              tests/test_oil_temporal_path.py
-              tests/test_oil_temporal_tracker.py
-          - group: integration
-            files: >-
-              tests/test_oil_detector_integration.py
-              tests/test_oil_fill_state_classifier.py
-              tests/test_oil_settings.py
-              tests/test_ui_import_boundaries.py
+              tests/test_foam_front_detector.py
+              tests/test_foam_temporal_gate.py
+              tests/test_foam_detector_integration.py
+              tests/test_foam_settings.py
+              tests/test_foam_benchmark_fixtures.py
+              tests/test_foam_controlled_benchmark.py
+            comment_id: '5035885331'
     env:
       QT_QPA_PLATFORM: offscreen
-      EXPECTED_SHA: fc59d2503e66d305d2f938c9a85f9d824f874d0f
+      EXPECTED_SHA: 2add649e95691aced37aeff4fa0d1b114f7769a8
       TEST_FILES: ${{ matrix.files }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -52,5 +52,22 @@ jobs:
           sudo apt-get update -qq >/dev/null
           sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-xinerama0 libxcb-keysyms1 libxcb-render-util0 >/dev/null
           python -m pip install -q -e '.[dev]'
-      - name: Run focused group
-        run: python -m pytest -q --tb=short ${TEST_FILES}
+      - name: Run controlled group
+        shell: bash
+        run: |
+          set +e
+          python -m pytest -q --tb=short ${TEST_FILES} > /tmp/pytest.log 2>&1
+          status=$?
+          cat /tmp/pytest.log
+          {
+            echo "### S5-B controlled diagnostic: ${{ matrix.group }}"
+            echo
+            echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
+            echo
+            echo '```text'
+            tail -n 240 /tmp/pytest.log
+            echo '```'
+          } > /tmp/comment.md
+          gh api repos/teeeeooo/oil_level_tracker/issues/comments/${{ matrix.comment_id }} \
+            --method PATCH -F body=@/tmp/comment.md
+          exit ${status}
