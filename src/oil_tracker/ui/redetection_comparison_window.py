@@ -49,7 +49,8 @@ class RedetectionComparisonWindow(QMainWindow):
         self._running = False
         self._settings_valid = True
         self._source_available = False
-        self._apply_compatible = False
+        self._apply_selected_compatible = False
+        self._apply_all_compatible = False
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -209,6 +210,7 @@ class RedetectionComparisonWindow(QMainWindow):
         self.save_all.clicked.connect(self.saveAllRequested)
         self.set_status(RedetectionStatus.IDLE, "실행 전")
         self._mode_changed()
+        self._refresh_apply_enabled()
 
     def current_mode(self) -> RedetectionMode:
         return RedetectionMode(str(self.mode.currentData()))
@@ -288,12 +290,27 @@ class RedetectionComparisonWindow(QMainWindow):
             official_message=official_message,
         )
 
-    def set_apply_compatibility(self, compatible: bool, reasons=()) -> None:
-        self._apply_compatible = bool(compatible)
+    def set_apply_compatibility(
+        self,
+        selected_compatible: bool,
+        selected_reasons,
+        all_compatible: bool,
+        all_reasons,
+    ) -> None:
+        self._apply_selected_compatible = bool(selected_compatible)
+        self._apply_all_compatible = bool(all_compatible)
         self.compatibility_label.setText(
-            "현재 Workbench에 적용할 수 있습니다."
-            if compatible
-            else "현재 Workbench에 적용할 수 없습니다.\n" + "\n".join(f"• {reason}" for reason in reasons)
+            _apply_compatibility_text(
+                "현재 관찰창 적용",
+                selected_compatible,
+                selected_reasons,
+            )
+            + "\n\n"
+            + _apply_compatibility_text(
+                "모든 관찰창 적용",
+                all_compatible,
+                all_reasons,
+            )
         )
         self._refresh_apply_enabled()
 
@@ -316,9 +333,12 @@ class RedetectionComparisonWindow(QMainWindow):
         self.rerun_button.setEnabled(allowed and self._result is not None)
 
     def _refresh_apply_enabled(self) -> None:
-        enabled = self._settings_valid and self._apply_compatible
-        self.apply_current.setEnabled(enabled)
-        self.apply_all.setEnabled(enabled)
+        self.apply_current.setEnabled(
+            self._settings_valid and self._apply_selected_compatible
+        )
+        self.apply_all.setEnabled(
+            self._settings_valid and self._apply_all_compatible
+        )
         self.save_selected.setEnabled(self._settings_valid)
         self.save_all.setEnabled(self._settings_valid)
 
@@ -428,6 +448,16 @@ class RedetectionComparisonWindow(QMainWindow):
                 f"재검출 note: {result.rerun_judgment_note or '-'}"
             )
         self.judgment_label.setText(text)
+
+
+def _apply_compatibility_text(title: str, compatible: bool, reasons) -> str:
+    if compatible:
+        details = "• 적용 가능"
+    else:
+        details = "\n".join(f"• {reason}" for reason in reasons)
+        if not details:
+            details = "• 적용할 수 없습니다."
+    return f"{title}:\n{details}"
 
 
 def _seconds_spin(value: float) -> QDoubleSpinBox:
