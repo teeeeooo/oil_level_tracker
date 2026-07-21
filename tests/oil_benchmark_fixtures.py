@@ -45,6 +45,10 @@ class OilControlledScene:
     sequence_id: str | None = None
     sequence_order: int | None = None
 
+    @property
+    def usable_truth(self) -> bool:
+        return self.fill_state is not FillState.UNKNOWN_REVIEW
+
 
 class OilControlledVideoReader:
     def __init__(self, source, metadata, scenes):
@@ -82,17 +86,27 @@ def generate_controlled_oil_dataset(tmp_path: Path):
             scene.timestamp,
             int(round(scene.timestamp * bundle.source_metadata.fps)),
         )
+        disposition = (
+            TruthDisposition.CORRECTED
+            if scene.usable_truth
+            else TruthDisposition.UNUSABLE
+        )
+        errors = (
+            (TruthErrorType.OTHER,)
+            if scene.usable_truth
+            else (TruthErrorType.VIDEO_UNUSABLE,)
+        )
         annotation = service.make_annotation(
             truth_set,
             identity,
             glass,
             context,
-            TruthDisposition.CORRECTED,
-            truth_fill_state=scene.fill_state,
-            oil_source_y=scene.oil_y,
-            foam_present=scene.foam_present,
-            foam_source_y=scene.foam_y,
-            error_types=(TruthErrorType.OTHER,),
+            disposition,
+            truth_fill_state=scene.fill_state if scene.usable_truth else None,
+            oil_source_y=scene.oil_y if scene.usable_truth else None,
+            foam_present=scene.foam_present if scene.usable_truth else False,
+            foam_source_y=scene.foam_y if scene.usable_truth else None,
+            error_types=errors,
             note=f"controlled oil scene contract: {scene.case_id}",
             official_reference=service.official_reference(
                 bundle,
@@ -107,6 +121,7 @@ def generate_controlled_oil_dataset(tmp_path: Path):
         )
         truth_set.upsert(annotation)
         annotations.append(annotation)
+
     reader = OilControlledVideoReader(
         bundle.source_video_path,
         bundle.source_metadata,
@@ -187,16 +202,43 @@ def controlled_oil_scenes() -> tuple[OilControlledScene, ...]:
     for case_id, category, frame, state, oil_y in static:
         add(case_id, category, frame, state, oil_y=oil_y)
 
-    _add_motion_sequence(add, width, height, "slow-motion", BenchmarkCategory.CLEAR_OIL_BOUNDARY, (120, 123, 126, 129, 132), FillState.PARTIAL_VISIBLE)
-    _add_motion_sequence(add, width, height, "rapid-filling", BenchmarkCategory.RAPID_OIL_FLOW, (165, 151, 137, 123, 109), FillState.FILLING_VISIBLE)
-    _add_motion_sequence(add, width, height, "rapid-draining", BenchmarkCategory.RAPID_OIL_FLOW, (108, 122, 136, 150, 164), FillState.DRAINING_VISIBLE)
-
-    transient = (
-        (_oil(width, height, 132), FillState.PARTIAL_VISIBLE, 132.0),
-        (_false_line(width, height, 92), FillState.UNKNOWN_REVIEW, None),
-        (_oil(width, height, 134), FillState.PARTIAL_VISIBLE, 134.0),
+    _add_motion_sequence(
+        add,
+        width,
+        height,
+        "slow-motion",
+        BenchmarkCategory.CLEAR_OIL_BOUNDARY,
+        (120, 123, 126, 129, 132),
+        FillState.PARTIAL_VISIBLE,
     )
-    _add_frames(add, "transient-false-line", BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE, transient)
+    _add_motion_sequence(
+        add,
+        width,
+        height,
+        "rapid-filling",
+        BenchmarkCategory.RAPID_OIL_FLOW,
+        (165, 151, 137, 123, 109),
+        FillState.FILLING_VISIBLE,
+    )
+    _add_motion_sequence(
+        add,
+        width,
+        height,
+        "rapid-draining",
+        BenchmarkCategory.RAPID_OIL_FLOW,
+        (108, 122, 136, 150, 164),
+        FillState.DRAINING_VISIBLE,
+    )
+    _add_frames(
+        add,
+        "transient-false-line",
+        BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE,
+        (
+            (_oil(width, height, 132), FillState.PARTIAL_VISIBLE, 132.0),
+            (_false_line(width, height, 92), FillState.UNKNOWN_REVIEW, None),
+            (_oil(width, height, 134), FillState.PARTIAL_VISIBLE, 134.0),
+        ),
+    )
     _add_frames(
         add,
         "one-frame-dropout",
@@ -319,14 +361,9 @@ def _add_frames(add, sequence_id, category, frames):
         )
 
 
-def _base(width: int, height: int, value: int = 55) -> np.ndarray:
-    return np.full((height, width, 3), value, dtype=np.uint8)
-
-
 def _uniform(width: int, height: int, value: int) -> np.ndarray:
-    image = _base(width, height)
-    image[78:186, 122:198] = value
-    return image
+    # Avoid an artificial rectangular patch perimeter inside the effective ellipse.
+    return np.full((height, width, 3), value, dtype=np.uint8)
 
 
 def _oil(
@@ -339,8 +376,8 @@ def _oil(
     line: int = 225,
 ) -> np.ndarray:
     image = _uniform(width, height, above)
-    image[y:186, 122:198] = below
-    cv2.line(image, (122, y), (197, y), (line, line, line), 2)
+    image[y:] = below
+    cv2.line(image, (0, y), (width - 1, y), (line, line, line), 2)
     return image
 
 
@@ -348,8 +385,8 @@ def _structural_plus_oil(width: int, height: int, structure_y: int, oil_y: int) 
     image = _oil(width, height, oil_y, above=170, below=78, line=185)
     cv2.rectangle(
         image,
-        (122, structure_y - 3),
-        (197, structure_y + 3),
+        (0, structure_y - 3),
+        (width - 1, structure_y + 3),
         (245, 245, 245),
         -1,
     )
@@ -380,13 +417,13 @@ def _shimmer(width: int, height: int) -> np.ndarray:
 
 def _rim_line(width: int, height: int) -> np.ndarray:
     image = _uniform(width, height, 88)
-    cv2.rectangle(image, (122, 79), (197, 84), (230, 230, 230), -1)
+    cv2.rectangle(image, (0, 79), (width - 1, 84), (230, 230, 230), -1)
     return image
 
 
 def _false_line(width: int, height: int, y: int) -> np.ndarray:
     image = _uniform(width, height, 105)
-    cv2.rectangle(image, (122, y - 3), (197, y + 3), (245, 245, 245), -1)
+    cv2.rectangle(image, (0, y - 3), (width - 1, y + 3), (245, 245, 245), -1)
     return image
 
 
