@@ -60,8 +60,8 @@ class _Hypothesis:
 class OilTemporalPath:
     """Bounded causal beam over scalar boundary/no-interface hypotheses.
 
-    No frame, crop, mask, preprocessing map, or candidate object is retained between
-    calls. Each beam entry contains at most ``oil_path_window`` scalar observations.
+    A beam item retains only scalar decision history. Frames, masks, candidates and
+    preprocessing maps are never retained between calls.
     """
 
     def __init__(self) -> None:
@@ -105,9 +105,10 @@ class OilTemporalPath:
         no_interface: NoInterfaceEvidence,
         settings: DetectorSettings,
     ) -> OilPathDecision:
-        usable = [candidate for candidate in candidates if not candidate.rejected]
-        usable.sort(key=_candidate_order)
-        usable = usable[: max(1, int(settings.candidate_top_k))]
+        usable = sorted(
+            (candidate for candidate in candidates if not candidate.rejected),
+            key=_candidate_order,
+        )[: max(1, int(settings.candidate_top_k))]
         hypotheses = self._advance_beam(usable, no_interface, settings)
         self._beam = hypotheses
         best = hypotheses[0] if hypotheses else None
@@ -124,7 +125,6 @@ class OilTemporalPath:
             return self._missing_decision(no_interface, settings, best, second_score, margin)
         if best.kind == "no_interface":
             return self._no_interface_decision(no_interface, settings, best, second_score, margin)
-
         candidate = usable[best.candidate_index or 0]
         return self._boundary_decision(
             candidate,
@@ -141,30 +141,36 @@ class OilTemporalPath:
         no_interface: NoInterfaceEvidence,
         settings: DetectorSettings,
     ) -> tuple[_Hypothesis, ...]:
-        observations: list[tuple[str, int | None, float | None, float | None, float]] = []
-        for index, candidate in enumerate(candidates):
-            observations.append(
-                (
-                    "boundary",
-                    index,
-                    float(candidate.y),
-                    _candidate_polarity(candidate),
-                    _candidate_observation(candidate),
-                )
+        observations: list[tuple[str, int | None, float | None, float | None, float]] = [
+            (
+                "boundary",
+                index,
+                float(candidate.y),
+                _candidate_polarity(candidate),
+                _candidate_observation(candidate),
             )
+            for index, candidate in enumerate(candidates)
+        ]
         if no_interface.available:
             observations.append(("no_interface", None, None, None, _unit(no_interface.score)))
         else:
-            observations.append(("missing", None, None, None, 0.20 * _unit(no_interface.visibility_score)))
+            observations.append(
+                ("missing", None, None, None, 0.20 * _unit(no_interface.visibility_score))
+            )
 
-        previous = self._beam or (None,)
+        previous: tuple[_Hypothesis | None, ...] = self._beam or (None,)
         expanded: list[_Hypothesis] = []
         window = max(1, int(settings.oil_path_window))
         for prior in previous:
             for kind, candidate_index, y, polarity, observation in observations:
-                transition, velocity = self._transition(prior, kind, y, polarity, settings)
+                transition, velocity = self._transition(
+                    prior,
+                    kind,
+                    y,
+                    polarity,
+                    settings,
+                )
                 prior_score = 0.0 if prior is None else prior.cumulative_score * 0.72
-                cumulative = prior_score + observation - transition
                 history = () if prior is None else prior.history
                 history = (history + ((kind, y, observation),))[-window:]
                 expanded.append(
@@ -174,18 +180,28 @@ class OilTemporalPath:
                         y=y,
                         polarity=polarity,
                         observation_score=observation,
-                        cumulative_score=float(cumulative),
+                        cumulative_score=float(prior_score + observation - transition),
                         transition_cost=float(transition),
                         velocity=velocity,
                         history=history,
                     )
                 )
+
+        # Best/second margin must compare distinct current decisions. Without this
+        # collapse, two prior paths ending at the same current candidate can occupy
+        # ranks one and two and create a false low-margin ambiguity.
+        collapsed: dict[tuple[str, int | None], _Hypothesis] = {}
+        for item in expanded:
+            key = (item.kind, item.candidate_index)
+            prior = collapsed.get(key)
+            if prior is None or _hypothesis_order(item) < _hypothesis_order(prior):
+                collapsed[key] = item
+        ordered = sorted(collapsed.values(), key=_hypothesis_order)
         width = min(
             max(1, int(settings.oil_path_beam_width)),
             max(1, int(settings.candidate_top_k)),
         )
-        expanded.sort(key=_hypothesis_order)
-        return tuple(expanded[:width])
+        return tuple(ordered[:width])
 
     def _transition(
         self,
@@ -210,7 +226,10 @@ class OilTemporalPath:
         velocity = y - prior.y
         acceleration_cost = 0.0
         if prior.velocity is not None:
-            acceleration_cost = min(0.24, 0.08 * abs(velocity - prior.velocity) / scale)
+            acceleration_cost = min(
+                0.24,
+                0.08 * abs(velocity - prior.velocity) / scale,
+            )
         polarity_cost = 0.0
         if prior.polarity not in (None, 0.0) and polarity not in (None, 0.0):
             if prior.polarity * polarity < 0.0:
@@ -227,7 +246,9 @@ class OilTemporalPath:
         margin: float,
     ) -> OilPathDecision:
         observation = _candidate_observation(candidate)
-        support = int(round(candidate.features.get("unique_generator_support_count", 1.0)))
+        support = int(
+            round(candidate.features.get("unique_generator_support_count", 1.0))
+        )
         polarity_score = _unit(candidate.features.get("polarity_score", 0.0))
         update_threshold = max(
             float(settings.minimum_final_confidence),
@@ -238,7 +259,6 @@ class OilTemporalPath:
 
         if margin + 1e-12 < minimum_margin:
             self._on_unaccepted()
-            flags.extend(("OIL_PATH_LOW_MARGIN", "OIL_EVIDENCE_AMBIGUOUS"))
             return self._decision(
                 OilDecisionStatus.LOW_MARGIN,
                 None,
@@ -250,11 +270,10 @@ class OilTemporalPath:
                 True,
                 False,
                 False,
-                tuple(flags),
+                ("OIL_PATH_LOW_MARGIN", "OIL_EVIDENCE_AMBIGUOUS"),
             )
         if observation + 1e-12 < float(settings.minimum_final_confidence):
             self._on_unaccepted()
-            flags.append("OIL_EVIDENCE_AMBIGUOUS")
             return self._decision(
                 OilDecisionStatus.REJECTED_BOUNDARY,
                 None,
@@ -266,7 +285,7 @@ class OilTemporalPath:
                 False,
                 False,
                 False,
-                tuple(flags),
+                ("OIL_EVIDENCE_AMBIGUOUS",),
             )
         if support < int(settings.oil_min_consensus_sources):
             flags.append("OIL_SINGLE_SOURCE_WEAK")
@@ -301,7 +320,6 @@ class OilTemporalPath:
                     False,
                     tuple(flags + ["OIL_EVIDENCE_AMBIGUOUS"]),
                 )
-
         if observation + 1e-12 < update_threshold:
             self._on_unaccepted()
             return self._decision(
@@ -321,7 +339,10 @@ class OilTemporalPath:
         y = float(candidate.y)
         polarity = _candidate_polarity(candidate)
         if self.accepted_y is None:
-            strong_initial = support >= int(settings.oil_min_consensus_sources) or observation >= min(0.94, update_threshold + 0.18)
+            strong_initial = (
+                support >= int(settings.oil_min_consensus_sources)
+                or observation >= min(0.94, update_threshold + 0.18)
+            )
             if not strong_initial:
                 self._on_unaccepted()
                 return self._decision(
@@ -337,7 +358,17 @@ class OilTemporalPath:
                     False,
                     tuple(flags + ["OIL_PATH_PENDING"]),
                 )
-            return self._accept(candidate, no_interface, best, second_score, margin, polarity, flags, clear=False, reacquired=False)
+            return self._accept(
+                candidate,
+                no_interface,
+                best,
+                second_score,
+                margin,
+                polarity,
+                flags,
+                clear=False,
+                reacquired=False,
+            )
 
         jump = abs(y - self.accepted_y)
         max_jump = max(1.0, float(settings.temporal_max_jump_px))
@@ -345,7 +376,17 @@ class OilTemporalPath:
         velocity_residual = abs(y - predicted)
         continuous = jump <= max_jump * 1.25 or velocity_residual <= max_jump
         if continuous:
-            return self._accept(candidate, no_interface, best, second_score, margin, polarity, flags, clear=False, reacquired=False)
+            return self._accept(
+                candidate,
+                no_interface,
+                best,
+                second_score,
+                margin,
+                polarity,
+                flags,
+                clear=False,
+                reacquired=False,
+            )
 
         strong_single = (
             observation >= 0.88
@@ -353,15 +394,31 @@ class OilTemporalPath:
             and margin >= max(minimum_margin * 2.0, 0.12)
         )
         if strong_single:
-            return self._accept(candidate, no_interface, best, second_score, margin, polarity, flags, clear=True, reacquired=True)
+            return self._accept(
+                candidate,
+                no_interface,
+                best,
+                second_score,
+                margin,
+                polarity,
+                flags,
+                clear=True,
+                reacquired=True,
+            )
 
-        tolerance = max(float(settings.oil_consensus_tolerance_px), max_jump * 0.45)
+        tolerance = max(
+            float(settings.oil_consensus_tolerance_px),
+            max_jump * 0.45,
+        )
         if self._pending_y is None:
             pending_count = 1
             pending_velocity = None
         else:
             predicted_pending = self._pending_y + (self._pending_velocity or 0.0)
-            pending_continuous = abs(y - predicted_pending) <= tolerance or abs(y - self._pending_y) <= tolerance
+            pending_continuous = (
+                abs(y - predicted_pending) <= tolerance
+                or abs(y - self._pending_y) <= tolerance
+            )
             pending_count = self._pending_count + 1 if pending_continuous else 1
             pending_velocity = y - self._pending_y if pending_continuous else None
         self._pending_y = y
@@ -371,7 +428,17 @@ class OilTemporalPath:
         self._missing_count = 0
         self._no_interface_count = 0
         if pending_count >= max(1, int(settings.oil_reacquire_frames)):
-            return self._accept(candidate, no_interface, best, second_score, margin, polarity, flags, clear=True, reacquired=True)
+            return self._accept(
+                candidate,
+                no_interface,
+                best,
+                second_score,
+                margin,
+                polarity,
+                flags,
+                clear=True,
+                reacquired=True,
+            )
         return self._decision(
             OilDecisionStatus.REACQUISITION_PENDING,
             None,
@@ -400,7 +467,9 @@ class OilTemporalPath:
         reacquired: bool,
     ) -> OilPathDecision:
         previous = self.accepted_y
-        self.accepted_velocity = None if previous is None or clear else float(candidate.y) - previous
+        self.accepted_velocity = (
+            None if previous is None or clear else float(candidate.y) - previous
+        )
         self.accepted_y = float(candidate.y)
         if polarity not in (None, 0.0):
             self.accepted_polarity = polarity
@@ -437,7 +506,6 @@ class OilTemporalPath:
         second_score: float | None,
         margin: float,
     ) -> OilPathDecision:
-        minimum_margin = float(settings.oil_path_min_margin)
         if evidence.score + 1e-12 < float(settings.oil_no_interface_min_score):
             self._on_unaccepted()
             return self._decision(
@@ -453,7 +521,7 @@ class OilTemporalPath:
                 False,
                 ("OIL_EVIDENCE_AMBIGUOUS",),
             )
-        if margin + 1e-12 < minimum_margin:
+        if margin + 1e-12 < float(settings.oil_path_min_margin):
             self._on_unaccepted()
             return self._decision(
                 OilDecisionStatus.LOW_MARGIN,
@@ -472,7 +540,9 @@ class OilTemporalPath:
         self._missing_count = 0
         self._clear_pending()
         stable = self._no_interface_count >= max(1, int(settings.oil_reacquire_frames))
-        clear = stable and (self.accepted_y is not None or not self._smoothing_invalidated)
+        clear = stable and (
+            self.accepted_y is not None or not self._smoothing_invalidated
+        )
         if stable:
             self.accepted_y = None
             self.accepted_polarity = None
@@ -512,7 +582,9 @@ class OilTemporalPath:
             self.accepted_velocity = None
             self._smoothing_invalidated = True
             self._beam = ()
-        fallback = best or _Hypothesis("missing", None, None, None, 0.0, 0.0, 0.0, None, ())
+        fallback = best or _Hypothesis(
+            "missing", None, None, None, 0.0, 0.0, 0.0, None, ()
+        )
         return self._decision(
             OilDecisionStatus.UNAVAILABLE,
             None,
@@ -566,10 +638,17 @@ class OilTemporalPath:
             path_cumulative_score=float(best.cumulative_score),
             path_second_score=None if second_score is None else float(second_score),
             path_beam_count=len(self._beam),
-            path_history_length=max((len(item.history) for item in self._beam), default=0),
+            path_history_length=max(
+                (len(item.history) for item in self._beam),
+                default=0,
+            ),
             reacquisition_count=int(self._pending_count),
-            accepted_prior_y=None if self.accepted_y is None else float(self.accepted_y),
-            accepted_polarity=None if self.accepted_polarity is None else float(self.accepted_polarity),
+            accepted_prior_y=(
+                None if self.accepted_y is None else float(self.accepted_y)
+            ),
+            accepted_polarity=(
+                None if self.accepted_polarity is None else float(self.accepted_polarity)
+            ),
             flags=tuple(dict.fromkeys(flags)),
         )
 
@@ -593,9 +672,15 @@ class OilTemporalPath:
             else:
                 rank, hypothesis = rank_and_path
                 candidate.features["path_rank"] = float(rank)
-                candidate.features["path_cumulative_score"] = float(hypothesis.cumulative_score)
-                candidate.features["transition_cost"] = float(hypothesis.transition_cost)
-            candidate.features["best_second_path_margin"] = float(max(0.0, margin))
+                candidate.features["path_cumulative_score"] = float(
+                    hypothesis.cumulative_score
+                )
+                candidate.features["transition_cost"] = float(
+                    hypothesis.transition_cost
+                )
+            candidate.features["best_second_path_margin"] = float(
+                max(0.0, margin)
+            )
             candidate.features.setdefault("tracker_update_accepted", 0.0)
 
 
@@ -604,8 +689,7 @@ def _candidate_observation(candidate: BoundaryCandidate) -> float:
 
 
 def _candidate_polarity(candidate: BoundaryCandidate) -> float | None:
-    available = candidate.features.get("polarity_available", 0.0) >= 0.5
-    if not available:
+    if candidate.features.get("polarity_available", 0.0) < 0.5:
         return None
     value = float(candidate.features.get("polarity_sign", 0.0))
     if not math.isfinite(value) or value == 0.0:
