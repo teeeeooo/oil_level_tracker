@@ -1,0 +1,61 @@
+name: PR 27 Truth UI Boundary Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  canonical:
+    name: Python ${{ matrix.python-version }} canonical
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.13", "3.14"]
+    env:
+      QT_QPA_PLATFORM: offscreen
+      EXPECTED_FEATURE_SHA: 425cfdba141c98abaa860b18e1ec23624cccca26
+    steps:
+      - name: Checkout exact feature head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_FEATURE_SHA }}
+          fetch-depth: 1
+      - name: Assert exact checkout
+        shell: bash
+        run: |
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$EXPECTED_FEATURE_SHA"
+          echo "Validated exact feature SHA: $actual"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install Qt runtime libraries
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 \
+            libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
+            libxcb-shape0 libxcb-xinerama0
+      - name: Install project and test dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+          python - <<'PY'
+          import matplotlib
+          import PySide6
+          import sys
+          print("Python", sys.version)
+          print("PySide6", PySide6.__version__)
+          print("Matplotlib", matplotlib.__version__)
+          PY
+      - name: Run canonical suite
+        shell: bash
+        run: python -m pytest -q
