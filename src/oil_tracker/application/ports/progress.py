@@ -153,10 +153,15 @@ class MonotonicProgressSink:
         self._last_stage_index = 0
         self._last_stage_fraction = 0.0
         self._last_overall_fraction = 0.0
+        self._last_update: ProgressUpdate | None = None
         self._finalized = False
 
+    @property
+    def last_update(self) -> ProgressUpdate | None:
+        return self._last_update
+
     def __call__(self, update: ProgressUpdate) -> None:
-        if self._sink is None or self._finalized:
+        if self._finalized:
             return
         if update.stage_index < self._last_stage_index:
             return
@@ -174,4 +179,6 @@ class MonotonicProgressSink:
         self._last_stage_index = update.stage_index
         self._last_stage_fraction = update.stage_fraction
         self._last_overall_fraction = update.overall_fraction
-        self._sink(update)
+        self._last_update = update
+        if self._sink is not None:
+            self._sink(update)
