@@ -69,7 +69,6 @@ class AnalysisPipeline:
             messages = "; ".join(i.message for i in validation.errors)
             raise ValueError(f"Workbench is not ready: {messages}")
 
-        _check_cancelled(cancellation)
         run_id = str(uuid4())
         started = datetime.now(timezone.utc)
         enabled = [g for g in recipe.glasses if g.enabled]
@@ -154,10 +153,11 @@ class AnalysisPipeline:
                         artifacts = None
                         completed_detections = index * len(enabled) + glass_index + 1
                         elapsed = max(1e-6, time.perf_counter() - began)
+                        frame_fraction = completed_detections / max(1, total_detections)
                         _emit(
                             progress,
                             AnalysisStage.VIDEO_ANALYSIS,
-                            completed_detections / max(1, total_detections),
+                            0.02 + 0.98 * frame_fraction,
                             message=f"{glass.name} 검출 중",
                             completed=completed_detections,
                             total=total_detections,
