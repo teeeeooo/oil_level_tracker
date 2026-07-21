@@ -28,11 +28,23 @@ LOGGER = logging.getLogger(__name__)
 class RedetectionComparisonCoordinator(QObject):
     """Keep one modeless comparison window per Result Review Viewer."""
 
-    def __init__(self, main_window, viewer, controller, parent=None) -> None:
+    def __init__(
+        self,
+        main_window,
+        viewer,
+        controller,
+        parent=None,
+        debug_artifact_presenter=None,
+    ) -> None:
         super().__init__(parent or viewer)
         self.main_window = main_window
         self.viewer = viewer
         self.controller = controller
+        self.debug_artifact_presenter = (
+            debug_artifact_presenter
+            if debug_artifact_presenter is not None
+            else getattr(viewer, "debug_artifact_presenter", None)
+        )
         self.window: RedetectionComparisonWindow | None = None
         self.generation = 0
         self.target_timestamp = 0.0
@@ -351,14 +363,19 @@ class RedetectionComparisonCoordinator(QObject):
             return
         image = None
         error = ""
-        if self.viewer.debug_repository is not None and self.current_official_record is not None:
-            try:
-                image = self.viewer.debug_repository.load_image(
-                    self.current_official_record,
-                    key,
-                )
-            except Exception as exc:
-                error = str(exc)
+        repository = self.viewer.debug_repository
+        if repository is not None and self.current_official_record is not None:
+            if self.debug_artifact_presenter is None:
+                error = "debug artifact presentation adapter가 구성되지 않았습니다."
+            else:
+                try:
+                    image = self.debug_artifact_presenter.present(
+                        repository,
+                        self.current_official_record,
+                        key,
+                    )
+                except Exception as exc:
+                    error = str(exc)
         for panel in (self.window.candidate_compare, self.window.artifact_compare):
             panel.set_official_artifact(key, image, error)
 
@@ -373,10 +390,17 @@ class RedetectionComparisonCoordinator(QObject):
             else None
         )
         if repository is not None and self.current_rerun_record is not None:
-            try:
-                image = repository.load_image(self.current_rerun_record, key)
-            except Exception as exc:
-                error = str(exc)
+            if self.debug_artifact_presenter is None:
+                error = "debug artifact presentation adapter가 구성되지 않았습니다."
+            else:
+                try:
+                    image = self.debug_artifact_presenter.present(
+                        repository,
+                        self.current_rerun_record,
+                        key,
+                    )
+                except Exception as exc:
+                    error = str(exc)
         for panel in (self.window.candidate_compare, self.window.artifact_compare):
             panel.set_rerun_artifact(key, image, error)
 
