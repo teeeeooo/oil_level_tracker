@@ -23,10 +23,10 @@ def _score(above: int, below: int, *, glare: bool = False, excluded: bool = Fals
     if glare:
         image[19:29, 10:54] = 255
     if excluded:
-        # Remove every effective pixel in both intensity bands. A partial-width
-        # exclusion still leaves valid pixels and therefore remains available.
-        mask[19:29, :] = 0
-        exclusion[19:29, :] = 255
+        # Remove every pixel from the upper statistics band while retaining the
+        # candidate row itself inside the effective mask.
+        mask[19:24, :] = 0
+        exclusion[19:24, :] = 255
     pre = preprocess(image, mask, settings)
     candidate = BoundaryCandidate(
         "oil_consensus",
