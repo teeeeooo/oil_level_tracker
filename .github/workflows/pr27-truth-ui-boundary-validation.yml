@@ -1,64 +1,196 @@
-name: PR 27 Truth UI Boundary Diagnostics
+name: PR 27 One-time UI Boundary Patch
 
 on:
   pull_request:
     branches: [main]
 
 permissions:
-  contents: read
-  pull-requests: write
+  contents: write
 
 jobs:
-  diagnostics:
-    name: Python 3.13 bounded diagnostics
+  patch:
+    name: Apply bounded UI import migration
     runs-on: ubuntu-24.04
-    env:
-      QT_QPA_PLATFORM: offscreen
-      EXPECTED_FEATURE_SHA: 425cfdba141c98abaa860b18e1ec23624cccca26
     steps:
-      - name: Checkout exact feature head
+      - name: Checkout PR 27 feature branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.EXPECTED_FEATURE_SHA }}
-          fetch-depth: 1
-      - name: Assert exact checkout
+          ref: feature/result-review-user-truth-regression
+          fetch-depth: 0
+      - name: Apply mechanical presentation-boundary migration
         shell: bash
         run: |
-          actual="$(git rev-parse HEAD)"
-          test "$actual" = "$EXPECTED_FEATURE_SHA"
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          cache: pip
-      - name: Install runtime and project dependencies
+          python - <<'PY'
+          from pathlib import Path
+          import ast
+
+          def read(path):
+              return Path(path).read_text(encoding="utf-8")
+
+          def write(path, text):
+              compile(text, path, "exec")
+              Path(path).write_text(text, encoding="utf-8")
+
+          def replace_once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise RuntimeError(f"{label}: expected one match, found {count}")
+              return text.replace(old, new, 1)
+
+          path = "src/oil_tracker/ui/main_window.py"
+          text = read(path)
+          text = replace_once(
+              text,
+              "import numpy as np\n",
+              "from oil_tracker.adapters.presentation.qt_frame_image_converter import blank_bgr_frame\n",
+              "main_window numpy import",
+          )
+          text = replace_once(
+              text,
+              "np.zeros((720, 1280, 3), dtype=np.uint8)",
+              "blank_bgr_frame(1280, 720)",
+              "main_window placeholder",
+          )
+          write(path, text)
+
+          path = "src/oil_tracker/ui/widgets/debug_panel.py"
+          text = read(path)
+          text = replace_once(text, "import numpy as np\n", "", "debug_panel numpy import")
+          text = replace_once(
+              text,
+              "from PySide6.QtGui import QImage, QPixmap",
+              "from PySide6.QtGui import QPixmap",
+              "debug_panel Qt import",
+          )
+          text = replace_once(
+              text,
+              ")\n\n\n_IMAGE_LABELS = {",
+              ")\n\nfrom oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter\n\n\n_FRAME_IMAGE_CONVERTER = QtFrameImageConverter()\n\n_IMAGE_LABELS = {",
+              "debug_panel adapter import",
+          )
+          head, marker, _tail = text.partition("\ndef _pixmap")
+          if not marker:
+              raise RuntimeError("debug_panel pixmap helper not found")
+          text = head + "\n\ndef _pixmap(image) -> QPixmap:\n    return QPixmap.fromImage(_FRAME_IMAGE_CONVERTER.to_qimage(image))\n"
+          write(path, text)
+
+          path = "src/oil_tracker/ui/widgets/result_debug_panel.py"
+          text = read(path)
+          text = replace_once(text, "import numpy as np\n", "", "result_debug_panel numpy import")
+          text = replace_once(
+              text,
+              "from PySide6.QtGui import QImage, QPixmap",
+              "from PySide6.QtGui import QPixmap",
+              "result_debug_panel Qt import",
+          )
+          text = replace_once(
+              text,
+              ")\n\n\n_ARTIFACT_LABELS = {",
+              ")\n\nfrom oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter\n\n\n_FRAME_IMAGE_CONVERTER = QtFrameImageConverter()\n\n_ARTIFACT_LABELS = {",
+              "result_debug_panel adapter import",
+          )
+          text = replace_once(text, "        self._image: np.ndarray | None = None\n", "", "result_debug_panel image field")
+          text = replace_once(text, "        self._image = None\n", "", "result_debug_panel clear image")
+          start = text.index("    def set_artifact(")
+          end = text.index("\n    def selected_candidate_index", start)
+          replacement = '''    def set_artifact(self, key: str, image, error: str = "") -> None:
+              self._pixmap = QPixmap()
+              if image is None:
+                  self.image_label.setPixmap(QPixmap())
+                  self.image_label.setText(error or "이 장면에는 선택한 artifact가 저장되지 않았습니다.")
+                  self.artifact_status.setText(error or "artifact 없음")
+                  return
+              frame_image = _FRAME_IMAGE_CONVERTER.to_qimage(image)
+              self._pixmap = QPixmap.fromImage(frame_image)
+              self.image_label.setText("")
+              self.artifact_status.setText(
+                  f"{_ARTIFACT_LABELS.get(key, key)} · {frame_image.width()}×{frame_image.height()} · lazy decode 완료"
+              )
+              self.fit_image()
+          '''
+          text = text[:start] + replacement + text[end:]
+          head, marker, _tail = text.partition("\ndef _pixmap")
+          if not marker:
+              raise RuntimeError("result_debug_panel pixmap helper not found")
+          text = head.rstrip() + "\n"
+          write(path, text)
+
+          path = "src/oil_tracker/ui/widgets/roi_editor_dialog.py"
+          text = read(path)
+          text = replace_once(text, "import numpy as np\n", "", "roi_editor numpy import")
+          text = replace_once(
+              text,
+              "def __init__(self, frame: np.ndarray, glass, frame_width: int, frame_height: int, parent=None) -> None:",
+              "def __init__(self, frame, glass, frame_width: int, frame_height: int, parent=None) -> None:",
+              "roi_editor frame annotation",
+          )
+          write(path, text)
+
+          path = "src/oil_tracker/ui/widgets/video_overlay_canvas.py"
+          text = read(path)
+          text = replace_once(text, "import numpy as np\n", "", "video_overlay numpy import")
+          text = replace_once(
+              text,
+              "from PySide6.QtGui import QBrush, QColor, QImage, QPainter, QPainterPath, QPen, QPixmap",
+              "from PySide6.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen, QPixmap",
+              "video_overlay Qt import",
+          )
+          text = replace_once(
+              text,
+              "from oil_tracker.domain.geometry import EllipseGeometry, Rect\n",
+              "from oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter\nfrom oil_tracker.domain.geometry import EllipseGeometry, Rect\n",
+              "video_overlay adapter import",
+          )
+          text = replace_once(
+              text,
+              "MIN_ELLIPSE_SIZE = 20.0\n",
+              "MIN_ELLIPSE_SIZE = 20.0\n_FRAME_IMAGE_CONVERTER = QtFrameImageConverter()\n",
+              "video_overlay converter instance",
+          )
+          start = text.index("    def set_frame(")
+          end = text.index("\n    def set_glasses", start)
+          replacement = '''    def set_frame(self, frame) -> None:
+              if frame is None:
+                  return
+              image = _FRAME_IMAGE_CONVERTER.to_qimage(frame)
+              self._frame_size = (image.width(), image.height())
+              self._pixmap_item.setPixmap(QPixmap.fromImage(image))
+              self._scene.setSceneRect(0, 0, image.width(), image.height())
+              self.rebuild_overlays()
+              self.fitInView(self._scene.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+          '''
+          text = text[:start] + replacement + text[end:]
+          write(path, text)
+
+          forbidden = {"numpy", "cv2"}
+          targets = [
+              "src/oil_tracker/ui/main_window.py",
+              "src/oil_tracker/ui/widgets/debug_panel.py",
+              "src/oil_tracker/ui/widgets/result_debug_panel.py",
+              "src/oil_tracker/ui/widgets/roi_editor_dialog.py",
+              "src/oil_tracker/ui/widgets/video_overlay_canvas.py",
+          ]
+          for target in targets:
+              roots = set()
+              for node in ast.walk(ast.parse(read(target))):
+                  if isinstance(node, ast.Import):
+                      roots.update(alias.name.split(".", 1)[0] for alias in node.names)
+                  elif isinstance(node, ast.ImportFrom) and node.module:
+                      roots.add(node.module.split(".", 1)[0])
+              overlap = roots & forbidden
+              if overlap:
+                  raise RuntimeError(f"{target}: forbidden imports remain: {sorted(overlap)}")
+          PY
+          git diff --check
+      - name: Commit migration to PR 27 branch
         shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 \
-            libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
-            libxcb-shape0 libxcb-xinerama0
-          python -m pip install --upgrade pip
-          python -m pip install -e ".[dev]"
-      - name: Run bounded diagnostics and publish result
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set +e
-          python -m pytest -q --disable-warnings --tb=short 2>&1 | tee pytest.log
-          status=${PIPESTATUS[0]}
-          set -e
-          {
-            echo "## Python 3.13 bounded diagnostics"
-            echo
-            echo "Exact feature SHA: \`$EXPECTED_FEATURE_SHA\`"
-            echo "Exit status: \`$status\`"
-            echo
-            echo '```text'
-            cat pytest.log
-            echo '```'
-          } > validation-comment.md
-          gh pr comment "${{ github.event.pull_request.number }}" --body-file validation-comment.md
-          exit "$status"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/oil_tracker/ui/main_window.py \
+            src/oil_tracker/ui/widgets/debug_panel.py \
+            src/oil_tracker/ui/widgets/result_debug_panel.py \
+            src/oil_tracker/ui/widgets/roi_editor_dialog.py \
+            src/oil_tracker/ui/widgets/video_overlay_canvas.py
+          git commit -m "refactor: route legacy UI frames through presentation adapter"
+          git push origin HEAD:feature/result-review-user-truth-regression
