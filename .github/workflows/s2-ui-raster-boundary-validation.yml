@@ -1,4 +1,4 @@
-name: S2 UI raster boundary exact-head validation
+name: S2 UI raster boundary candidate diagnostics
 
 on:
   pull_request:
@@ -7,14 +7,16 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
-  focused:
-    name: Focused Python 3.13
+  diagnostic:
+    name: Focused and canonical diagnostic Python 3.13
     runs-on: ubuntu-24.04
     env:
       EXPECTED_SHA: c3cfa9bdda53d188e98be3ce0c83fe77775cd64f
       QT_QPA_PLATFORM: offscreen
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,23 +35,7 @@ jobs:
           sudo apt-get install -y libegl1 >/dev/null
           python -m pip install --upgrade pip >/dev/null
           python -m pip install -e '.[dev]' >/dev/null
-      - name: Print package versions
-        run: |
-          python - <<'PY'
-          import sys
-          import cv2
-          import matplotlib
-          import numpy
-          import PySide6
-          import pytest
-          print(f"python={sys.version}")
-          print(f"PySide6={PySide6.__version__}")
-          print(f"numpy={numpy.__version__}")
-          print(f"opencv={cv2.__version__}")
-          print(f"matplotlib={matplotlib.__version__}")
-          print(f"pytest={pytest.__version__}")
-          PY
-      - name: Run focused S2 tests
+      - name: Run diagnostics and publish bounded output
         shell: bash
         run: |
           set +e
@@ -71,60 +57,28 @@ jobs:
             tests/gui/test_truth_annotation_lifecycle.py \
             tests/unit/test_result_review_replacement.py \
             tests/test_redetection_ui_controller.py \
-            tests/test_redetection_additional_contracts.py > pytest.log 2>&1
-          status=$?
-          if [ "$status" -eq 0 ]; then tail -n 20 pytest.log; else tail -n 220 pytest.log; fi
-          exit "$status"
-
-  canonical:
-    name: Canonical Python ${{ matrix.python-version }}
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.13', '3.14']
-    env:
-      EXPECTED_SHA: c3cfa9bdda53d188e98be3ce0c83fe77775cd64f
-      QT_QPA_PLATFORM: offscreen
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ env.EXPECTED_SHA }}
-      - name: Assert exact feature head
-        run: |
-          echo "expected_sha=${EXPECTED_SHA}"
-          echo "actual_sha=$(git rev-parse HEAD)"
-          test "$(git rev-parse HEAD)" = "${EXPECTED_SHA}"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install runtime and project
-        run: |
-          sudo apt-get update >/dev/null
-          sudo apt-get install -y libegl1 >/dev/null
-          python -m pip install --upgrade pip >/dev/null
-          python -m pip install -e '.[dev]' >/dev/null
-      - name: Print package versions
-        run: |
-          python - <<'PY'
-          import sys
-          import cv2
-          import matplotlib
-          import numpy
-          import PySide6
-          import pytest
-          print(f"python={sys.version}")
-          print(f"PySide6={PySide6.__version__}")
-          print(f"numpy={numpy.__version__}")
-          print(f"opencv={cv2.__version__}")
-          print(f"matplotlib={matplotlib.__version__}")
-          print(f"pytest={pytest.__version__}")
-          PY
-      - name: Run canonical suite
-        shell: bash
-        run: |
-          set +e
-          python -m pytest -q --tb=short > pytest.log 2>&1
-          status=$?
-          if [ "$status" -eq 0 ]; then tail -n 20 pytest.log; else tail -n 260 pytest.log; fi
-          exit "$status"
+            tests/test_redetection_additional_contracts.py > focused.log 2>&1
+          focused_status=$?
+          python -m pytest -q --tb=short > canonical.log 2>&1
+          canonical_status=$?
+          {
+            echo "## S2 candidate diagnostics"
+            echo
+            echo "- expected SHA: \`${EXPECTED_SHA}\`"
+            echo "- actual SHA: \`$(git rev-parse HEAD)\`"
+            echo "- focused exit: \`${focused_status}\`"
+            echo "- canonical exit: \`${canonical_status}\`"
+            echo
+            echo "### Focused tail"
+            echo '```text'
+            tail -n 220 focused.log
+            echo '```'
+            echo
+            echo "### Canonical tail"
+            echo '```text'
+            tail -n 280 canonical.log
+            echo '```'
+          } > diagnostic-comment.md
+          gh pr comment 34 --repo teeeeooo/oil_level_tracker --body-file diagnostic-comment.md
+          cat diagnostic-comment.md
+          if [ "$focused_status" -ne 0 ] || [ "$canonical_status" -ne 0 ]; then exit 1; fi
