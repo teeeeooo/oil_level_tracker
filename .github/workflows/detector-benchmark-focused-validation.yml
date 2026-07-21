@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   focused:
@@ -43,10 +44,13 @@ jobs:
           print(f"Matplotlib={matplotlib.__version__}")
           print(f"pytest={pytest.__version__}")
           PY
-      - name: Run focused benchmark tests
+      - name: Run focused tests and publish bounded diagnostic
         env:
           QT_QPA_PLATFORM: offscreen
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
+          set +e
           python -m pytest -q \
             tests/test_regression_dataset_reader.py \
             tests/test_detector_benchmark_metrics.py \
@@ -55,4 +59,22 @@ jobs:
             tests/test_benchmark_cli.py \
             tests/test_detector_benchmark_architecture.py \
             tests/test_detector_benchmark_integration.py \
-            tests/test_ui_import_boundaries.py
+            tests/test_ui_import_boundaries.py > focused.log 2>&1
+          status=$?
+          python - "$status" <<'PY'
+          from pathlib import Path
+          import sys
+          status = int(sys.argv[1])
+          lines = Path("focused.log").read_text(encoding="utf-8", errors="replace").splitlines()
+          tail = "\n".join(lines[-220:])
+          body = (
+              "## Focused exact-head diagnostic\n\n"
+              f"- Expected/checked-out feature SHA: `{Path('.git/HEAD').read_text().strip()}`\n"
+              f"- pytest exit code: `{status}`\n\n"
+              "```text\n" + tail + "\n```\n"
+          )
+          Path("focused-comment.md").write_text(body, encoding="utf-8")
+          PY
+          gh pr comment 30 --repo teeeeooo/oil_level_tracker --body-file focused-comment.md
+          cat focused.log
+          exit "$status"
