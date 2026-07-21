@@ -1,0 +1,61 @@
+name: Temporary PR20 Compatibility Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  full-suite:
+    name: Python ${{ matrix.python-version }} full suite
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.13", "3.14"]
+
+    steps:
+      - name: Check out exact feature head
+        uses: actions/checkout@v4
+        with:
+          ref: 261a8b32f64817adeafaaec5ea31e644922c833c
+          fetch-depth: 0
+
+      - name: Assert exact checkout SHA
+        shell: bash
+        run: |
+          expected="261a8b32f64817adeafaaec5ea31e644922c833c"
+          actual="$(git rev-parse HEAD)"
+          echo "Expected SHA: ${expected}"
+          echo "Actual SHA:   ${actual}"
+          test "${actual}" = "${expected}"
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install project and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Report runtime versions
+        run: |
+          python - <<'PY'
+          import sys
+          import PySide6
+          import matplotlib
+
+          print(f"Python: {sys.version}")
+          print(f"PySide6: {PySide6.__version__}")
+          print(f"Matplotlib: {matplotlib.__version__}")
+          PY
+
+      - name: Run canonical offscreen suite
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m pytest -q
