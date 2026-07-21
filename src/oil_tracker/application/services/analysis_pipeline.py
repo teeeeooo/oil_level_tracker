@@ -8,7 +8,13 @@ from typing import Callable
 from uuid import uuid4
 
 from oil_tracker.application.ports.phase_detector import PhaseDetector
-from oil_tracker.application.ports.progress import CancellationToken, ProgressSink, ProgressUpdate
+from oil_tracker.application.ports.progress import (
+    AnalysisCancelled,
+    AnalysisStage,
+    CancellationToken,
+    ProgressSink,
+    build_progress_update,
+)
 from oil_tracker.application.services.debug_capture_policy import DebugCapturePolicy
 from oil_tracker.application.services.detection_processing import (
     effective_observation_height,
@@ -22,10 +28,6 @@ from oil_tracker.domain.judgment import judge_samples
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.results import AnalysisResult, EventMarker, GlassAnalysisResult, TrackingSample
 from oil_tracker.domain.session import AnalysisSession, DebugTraceLevel
-
-
-class AnalysisCancelled(RuntimeError):
-    pass
 
 
 @dataclass
@@ -67,6 +69,7 @@ class AnalysisPipeline:
             messages = "; ".join(i.message for i in validation.errors)
             raise ValueError(f"Workbench is not ready: {messages}")
 
+        _check_cancelled(cancellation)
         run_id = str(uuid4())
         started = datetime.now(timezone.utc)
         enabled = [g for g in recipe.glasses if g.enabled]
@@ -96,17 +99,34 @@ class AnalysisPipeline:
         )
         completion = None
         self.detector.reset()
+        _emit(
+            progress,
+            AnalysisStage.VIDEO_ANALYSIS,
+            0.0,
+            message="영상과 분석 영역을 준비하고 있습니다.",
+            total=len(schedules) * len(enabled),
+        )
 
         try:
             reader = self.video_reader_factory(session.input_video_path)
             try:
+                _check_cancelled(cancellation)
                 learn_static_artifacts(reader, self.detector, enabled, schedules)
+                _check_cancelled(cancellation)
+                _emit(
+                    progress,
+                    AnalysisStage.VIDEO_ANALYSIS,
+                    0.02,
+                    message="고정 artifact 준비를 마쳤습니다.",
+                    total=len(schedules) * len(enabled),
+                )
                 began = time.perf_counter()
+                total_detections = len(schedules) * len(enabled)
                 for index, target_time in enumerate(schedules):
-                    if cancellation and cancellation.cancelled:
-                        raise AnalysisCancelled("Analysis was cancelled.")
+                    _check_cancelled(cancellation)
                     frame, frame_index, actual_time = reader.read_at(target_time)
-                    for glass in enabled:
+                    for glass_index, glass in enumerate(enabled):
+                        _check_cancelled(cancellation)
                         detection, artifacts = self.detector.detect(
                             frame,
                             glass,
@@ -132,22 +152,42 @@ class AnalysisPipeline:
                                 sink.write(glass, detection, artifacts, decision)
                         previous_detections[glass.id] = detection
                         artifacts = None
-                        if progress:
-                            elapsed = max(1e-6, time.perf_counter() - began)
-                            progress(
-                                ProgressUpdate(
-                                    index + 1,
-                                    len(schedules),
-                                    actual_time,
-                                    glass.name,
-                                    (index + 1) / elapsed,
-                                )
-                            )
+                        completed_detections = index * len(enabled) + glass_index + 1
+                        elapsed = max(1e-6, time.perf_counter() - began)
+                        _emit(
+                            progress,
+                            AnalysisStage.VIDEO_ANALYSIS,
+                            completed_detections / max(1, total_detections),
+                            message=f"{glass.name} 검출 중",
+                            completed=completed_detections,
+                            total=total_detections,
+                            timestamp_sec=actual_time,
+                            glass_name=glass.name,
+                            rate_fps=(index + 1) / elapsed,
+                        )
             finally:
                 reader.close()
 
+            _check_cancelled(cancellation)
+            _emit(
+                progress,
+                AnalysisStage.VIDEO_ANALYSIS,
+                1.0,
+                message="영상 분석을 마쳤습니다.",
+                completed=len(schedules) * len(enabled),
+                total=len(schedules) * len(enabled),
+            )
+            _emit(
+                progress,
+                AnalysisStage.EVENTS_AND_JUDGMENT,
+                0.0,
+                message="Glass별 이벤트와 판정을 계산하고 있습니다.",
+                total=len(enabled),
+            )
+
             glass_results: list[GlassAnalysisResult] = []
-            for glass in enabled:
+            for glass_index, glass in enumerate(enabled):
+                _check_cancelled(cancellation)
                 samples = by_glass[glass.id]
                 events = detect_events_for_glass(run_id, glass.id, samples)
                 if session.compressor_start_sec is not None:
@@ -204,11 +244,29 @@ class AnalysisPipeline:
                         judgment_note=outcome.note,
                     )
                 )
+                _emit(
+                    progress,
+                    AnalysisStage.EVENTS_AND_JUDGMENT,
+                    (glass_index + 1) / max(1, len(enabled)),
+                    message=f"{glass.name} 이벤트와 판정 계산 완료",
+                    completed=glass_index + 1,
+                    total=len(enabled),
+                    glass_name=glass.name,
+                )
 
+            _check_cancelled(cancellation)
             overall = _overall_result([result.result_state for result in glass_results])
             completed = datetime.now(timezone.utc)
             if sink is not None:
                 completion = sink.finalize()
+            _emit(
+                progress,
+                AnalysisStage.EVENTS_AND_JUDGMENT,
+                1.0,
+                message="이벤트와 판정 계산을 마쳤습니다.",
+                completed=len(enabled),
+                total=len(enabled),
+            )
             return AnalysisResult(
                 run_id=run_id,
                 overall_state=overall,
@@ -246,6 +304,16 @@ class AnalysisPipeline:
             if sink is not None and completion is None:
                 sink.abort()
             raise
+
+
+def _emit(progress: ProgressSink | None, stage: AnalysisStage, fraction: float, **kwargs) -> None:
+    if progress is not None:
+        progress(build_progress_update(stage, fraction, **kwargs))
+
+
+def _check_cancelled(cancellation: CancellationToken | None) -> None:
+    if cancellation is not None and cancellation.cancelled:
+        raise AnalysisCancelled("Analysis was cancelled.")
 
 
 def timestamp_schedule(start_sec: float, end_sec: float, sampling_fps: float) -> list[float]:
