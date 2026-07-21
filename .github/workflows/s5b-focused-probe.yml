@@ -35,12 +35,13 @@ jobs:
           sudo apt-get update -qq >/dev/null
           sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
           python -m pip install -q -e '.[dev]'
-      - name: Print candidate coordinates for representative high-error scenes
+      - name: Print corrected oil candidate coordinates
         run: |
           PYTHONPATH=tests python - <<'PY' > /tmp/candidates.txt
           import json
           from oil_benchmark_fixtures import controlled_oil_scenes
           from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          from oil_tracker.domain.enums import BoundaryKind
           from oil_tracker.domain.recipe import InspectionRecipe
 
           selected_ids = {
@@ -50,31 +51,34 @@ jobs:
               'polarity-change-2',
               'polarity-change-3',
           }
-          scenes = [scene for scene in controlled_oil_scenes() if scene.case_id in selected_ids]
           rows = []
-          for scene in scenes:
+          for scene in controlled_oil_scenes():
+              if scene.case_id not in selected_ids:
+                  continue
               detector = OpenCvPhaseDetector()
               glass = InspectionRecipe.default_glass(320, 240)
               glass.id = 'diagnostic-' + scene.case_id
               detection, _ = detector.detect(scene.frame, glass, 0, scene.timestamp, debug=True)
               candidates = []
               for candidate in detection.candidates:
-                  if candidate.kind.value != 'OIL_AIR':
+                  if candidate.kind is not BoundaryKind.OIL_AIR:
                       continue
                   candidates.append({
                       'source': candidate.source,
                       'y': candidate.y,
                       'local_y': candidate.features.get('local_y'),
                       'source_y': candidate.features.get('source_y'),
-                      'raw_generator_y': candidate.features.get('raw_generator_y'),
                       'representative_local_y': candidate.features.get('representative_local_y'),
                       'unrounded_representative_local_y': candidate.features.get('unrounded_representative_local_y'),
                       'consensus_representative_local_y': candidate.features.get('consensus_representative_local_y'),
                       'paired_boundary_original_y': candidate.features.get('paired_boundary_original_y'),
                       'paired_boundary_unrounded_midpoint': candidate.features.get('paired_boundary_unrounded_midpoint'),
                       'paired_boundary_merged_y': candidate.features.get('paired_boundary_merged_y'),
+                      'paired_structure_partner_y': candidate.features.get('paired_structure_partner_y'),
                       'polarity_sign': candidate.features.get('polarity_sign'),
                       'persistent_polarity_sign': candidate.features.get('persistent_polarity_sign'),
+                      'signed_above_minus_below': candidate.features.get('signed_above_minus_below'),
+                      'persistent_signed_above_minus_below': candidate.features.get('persistent_signed_above_minus_below'),
                       'observation_score': candidate.features.get('observation_score'),
                       'support': candidate.features.get('unique_generator_support_count'),
                       'selected': candidate.selected,
@@ -88,13 +92,13 @@ jobs:
                   'raw_y': detection.raw_oil_air_level_y,
                   'smoothed_y': detection.smoothed_oil_air_level_y,
                   'decision': detection.debug_metrics.get('oil_decision_status'),
-                  'candidates': candidates[:12],
+                  'candidates': candidates[:16],
               })
           print(json.dumps(rows, sort_keys=True, indent=2))
           PY
           cat /tmp/candidates.txt
           {
-            echo '## S5-B candidate-coordinate diagnosis'
+            echo '## S5-B corrected candidate-coordinate diagnosis'
             echo
             echo 'Feature-only representative scenes; no base, Foam, CPU, or canonical rerun.'
             echo
