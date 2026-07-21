@@ -14,6 +14,11 @@ from oil_tracker.domain.session import AnalysisSession, VideoMetadata
 from oil_tracker.ui.controllers.result_review_controller import ResultReviewController
 from oil_tracker.ui.result_actions import ResultActionService
 from oil_tracker.ui.result_review_window import ResultReviewWindow
+from review_raster_fixtures import (
+    debug_artifact_presenter,
+    png_exporter,
+    presented_reader_factory,
+)
 
 
 class _Reader:
@@ -128,12 +133,14 @@ def _bundle(tmp_path: Path, *, source_exists=True, capture=False):
 
 
 def _window(bundle, *, opener=None):
-    factory = lambda path: _Reader(path)
+    raw_factory = lambda path: _Reader(path)
     return ResultReviewWindow(
         bundle_reader=_BundleReader(bundle),
-        source_resolver=SourceVideoResolver(factory),
-        playback_controller=ResultReviewController(factory),
+        source_resolver=SourceVideoResolver(raw_factory),
+        playback_controller=ResultReviewController(presented_reader_factory(raw_factory)),
         action_service=ResultActionService(opener=opener) if opener is not None else None,
+        png_exporter=png_exporter(),
+        debug_artifact_presenter=debug_artifact_presenter(),
     )
 
 
@@ -141,7 +148,8 @@ def _state_snapshot(window):
     return {
         "reader": window.playback.reader,
         "path": window.video_path_label.text(),
-        "frame": window.current_frame.copy(),
+        "source_image": window.current_source_image.copy(),
+        "render_image": window.current_render_image.copy(),
         "frame_index": window.current_frame_index,
         "timestamp": window.current_time,
         "glass": window.selected_glass_id,
@@ -156,7 +164,8 @@ def _assert_state_preserved(window, before):
     assert window.playback.reader is before["reader"]
     assert window.playback.reader.closed is False
     assert window.video_path_label.text() == before["path"]
-    assert np.array_equal(window.current_frame, before["frame"])
+    assert window.current_source_image == before["source_image"]
+    assert window.current_render_image == before["render_image"]
     assert window.current_frame_index == before["frame_index"]
     assert window.current_time == before["timestamp"]
     assert window.selected_glass_id == before["glass"]
@@ -205,7 +214,8 @@ def test_failed_candidate_from_missing_video_state_keeps_missing_state(qtbot, tm
     assert window._open_resolved_video(tmp_path / "missing.mp4", 1.0, auto=False) is False
     assert window.state == "bundle 준비됨 · 영상 없음"
     assert window.playback.reader is None
-    assert window.current_frame is None
+    assert window.current_source_image.isNull()
+    assert window.current_render_image.isNull()
     window.close()
 
 

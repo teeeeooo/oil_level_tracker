@@ -11,6 +11,11 @@ from oil_tracker.domain.review import ReviewBundle, ReviewEvent, ReviewGlass, Re
 from oil_tracker.domain.session import AnalysisSession, VideoMetadata
 from oil_tracker.ui.controllers.result_review_controller import ResultReviewController
 from oil_tracker.ui.result_review_window import ResultReviewWindow
+from review_raster_fixtures import (
+    debug_artifact_presenter,
+    png_exporter,
+    presented_reader_factory,
+)
 
 
 class _BundleReader:
@@ -87,11 +92,13 @@ def _bundle(tmp_path: Path, *, video_exists=True):
 
 
 def _window(bundle):
-    factory = lambda path: _VideoReader(path)
+    raw_factory = lambda path: _VideoReader(path)
     return ResultReviewWindow(
         bundle_reader=_BundleReader(bundle),
-        source_resolver=SourceVideoResolver(factory),
-        playback_controller=ResultReviewController(factory),
+        source_resolver=SourceVideoResolver(raw_factory),
+        playback_controller=ResultReviewController(presented_reader_factory(raw_factory)),
+        png_exporter=png_exporter(),
+        debug_artifact_presenter=debug_artifact_presenter(),
     )
 
 
@@ -101,11 +108,12 @@ def test_viewer_loads_bundle_video_navigation_and_details(qtbot, tmp_path):
     qtbot.addWidget(window)
     assert window.load_bundle(bundle.root) is True
     assert window.state == "영상 로드됨 · 일시정지"
-    assert window.current_frame is not None
+    assert not window.current_source_image.isNull()
+    assert not window.current_render_image.isNull()
     assert window.navigation.event_list.count() == 1
     assert window.navigation.review_list.count() == 1
     assert window.details.values["sample_time"].text() != "-"
-    assert window.canvas.rendered_image().shape[:2] == (240, 320)
+    assert (window.canvas.source_image_size.width(), window.canvas.source_image_size.height()) == (320, 240)
     window.close()
 
 
@@ -121,16 +129,19 @@ def test_event_jump_pauses_and_uses_actual_decoded_timestamp(qtbot, tmp_path):
     window.close()
 
 
-def test_glass_change_preserves_video_timestamp_and_refreshes_lists(qtbot, tmp_path):
+def test_glass_change_preserves_video_timestamp_and_rerenders(qtbot, tmp_path):
     bundle = _bundle(tmp_path)
     window = _window(bundle)
     qtbot.addWidget(window)
     window.load_bundle(bundle.root)
-    before = window.current_time
+    before_time = window.current_time
+    before_image = window.current_render_image.copy()
     window.navigation.glass_combo.setCurrentIndex(1)
-    assert window.current_time == before
+    assert window.current_time == before_time
     assert window.selected_glass_id == bundle.glasses[1].id
     assert window.navigation.event_list.count() == 0
+    assert not window.current_render_image.isNull()
+    assert window.current_render_image != before_image
     window.close()
 
 
@@ -143,10 +154,12 @@ def test_missing_video_keeps_bundle_and_event_information_available(qtbot, tmp_p
     assert "분석 당시 경로" in window.video_path_label.text()
     assert window.navigation.event_list.count() == 1
     assert window.playback.reader is None
+    assert window.current_source_image.isNull()
+    assert window.current_render_image.isNull()
     window.close()
 
 
-def test_close_releases_viewer_reader(qtbot, tmp_path):
+def test_close_releases_viewer_reader_and_qimage_state(qtbot, tmp_path):
     bundle = _bundle(tmp_path)
     window = _window(bundle)
     qtbot.addWidget(window)
@@ -155,3 +168,5 @@ def test_close_releases_viewer_reader(qtbot, tmp_path):
     window.close()
     assert active_reader.closed is True
     assert window.playback.reader is None
+    assert window.current_source_image.isNull()
+    assert window.current_render_image.isNull()

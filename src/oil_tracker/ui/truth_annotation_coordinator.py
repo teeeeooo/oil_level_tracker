@@ -7,10 +7,6 @@ from PySide6.QtCore import QObject
 from PySide6.QtGui import QImage
 from PySide6.QtWidgets import QFileDialog, QMessageBox
 
-from oil_tracker.adapters.presentation.qt_frame_image_converter import (
-    FrameImageConversionError,
-    QtFrameImageConverter,
-)
 from oil_tracker.adapters.storage.json_truth_repository import (
     JsonTruthRepository,
     TruthIdentityMismatchError,
@@ -33,10 +29,7 @@ from oil_tracker.ui.truth_annotation_window import TruthAnnotationWindow
 
 
 LOGGER = logging.getLogger(__name__)
-_IMAGE_CONVERSION_MESSAGE = (
-    "현재 Viewer 장면을 이미지로 변환할 수 없습니다. "
-    "uint8 grayscale, BGR 또는 BGRA frame인지 확인해 주세요."
-)
+_IMAGE_BOUNDARY_MESSAGE = "현재 Viewer 장면을 이미지로 불러올 수 없습니다. 원본 영상 장면을 다시 선택해 주세요."
 
 
 class TruthAnnotationCoordinator(QObject):
@@ -49,14 +42,12 @@ class TruthAnnotationCoordinator(QObject):
         repository: JsonTruthRepository | None = None,
         service: UserTruthService | None = None,
         exporter: RegressionFixtureExporter | None = None,
-        frame_image_converter: QtFrameImageConverter | None = None,
         parent=None,
     ) -> None:
         super().__init__(parent or viewer)
         self.viewer = viewer
         self.repository = repository or JsonTruthRepository()
         self.service = service or UserTruthService()
-        self.frame_image_converter = frame_image_converter or QtFrameImageConverter()
         self.export_controller = TruthExportController(exporter or RegressionFixtureExporter(), self)
         self.window: TruthAnnotationWindow | None = None
         self.session = TruthSession()
@@ -88,7 +79,7 @@ class TruthAnnotationCoordinator(QObject):
         self._ensure_set()
         self._refresh_source_state()
         self._refresh_annotations()
-        if self.window.context() is None and self.viewer.current_frame is not None:
+        if self.window.context() is None and self._viewer_source_available():
             self.capture_current_frame()
         self.window.show()
         self.window.raise_()
@@ -126,7 +117,7 @@ class TruthAnnotationCoordinator(QObject):
     def capture_current_frame(self) -> None:
         if self.window is None or self.viewer.bundle is None:
             return
-        if self.viewer.current_frame is None or self.viewer.active_video_path is None:
+        if not self._viewer_source_available() or self.viewer.active_video_path is None:
             self._release_draft_image()
             self.window.clear_context("원본 영상이 없습니다. Viewer에서 원본 영상 다시 지정을 사용해 주세요.")
             self.window.set_source_available(False, "원본 영상 다시 지정 후 새 annotation을 작성할 수 있습니다.")
@@ -137,7 +128,7 @@ class TruthAnnotationCoordinator(QObject):
         if glass is None:
             QMessageBox.warning(self.window, "사용자 정답", "선택 관찰창이 result snapshot에 없습니다.")
             return
-        image_error = self._set_draft_image_from_frame(self.viewer.current_frame)
+        image_error = self._set_draft_image(self.viewer.current_source_image)
         if image_error:
             self.window.clear_context("현재 Viewer 장면을 표시할 수 없습니다.")
             self.window.set_validation_error(image_error)
@@ -341,7 +332,6 @@ class TruthAnnotationCoordinator(QObject):
         except TruthRepositoryError as exc:
             self.session.mark_failed()
             self._refresh_session_state()
-            LOGGER.exception("Truth file save failed")
             QMessageBox.critical(self.window, "사용자 정답 저장 실패", str(exc))
             return False
         self.session.mark_saved(path)
@@ -370,10 +360,10 @@ class TruthAnnotationCoordinator(QObject):
             annotation.frame_index,
         )
         image_error = ""
-        if self.viewer.current_frame is None:
+        if not self._viewer_source_available():
             self._release_draft_image()
         else:
-            image_error = self._set_draft_image_from_frame(self.viewer.current_frame)
+            image_error = self._set_draft_image(self.viewer.current_source_image)
         self.window.set_context(
             None if self._draft_image.isNull() else self._draft_image,
             glass,
@@ -384,7 +374,7 @@ class TruthAnnotationCoordinator(QObject):
         self.window.set_decode_delta(annotation.actual_decoded_timestamp_sec, self.viewer.current_time)
         if image_error:
             self.window.set_validation_error(image_error)
-        elif self.viewer.current_frame is None:
+        elif not self._viewer_source_available():
             self.window.set_validation_error("annotation 장면을 원본 영상에서 불러오지 못했습니다.")
         elif self.viewer.current_frame_index != annotation.frame_index:
             self.window.set_validation_error(
@@ -519,17 +509,16 @@ class TruthAnnotationCoordinator(QObject):
             return True
         return False
 
-    def _set_draft_image_from_frame(self, frame) -> str:
-        try:
-            image = self.frame_image_converter.to_qimage(frame)
-            if image is None or image.isNull():
-                raise FrameImageConversionError("converter가 빈 QImage를 반환했습니다.")
-        except (FrameImageConversionError, TypeError, ValueError) as exc:
-            LOGGER.warning("Truth frame conversion failed: %s", exc)
+    def _set_draft_image(self, image) -> str:
+        if not isinstance(image, QImage) or image.isNull():
             self._release_draft_image()
-            return _IMAGE_CONVERSION_MESSAGE
+            return _IMAGE_BOUNDARY_MESSAGE
         self._draft_image = QImage(image).copy()
         return ""
+
+    def _viewer_source_available(self) -> bool:
+        image = getattr(self.viewer, "current_source_image", None)
+        return isinstance(image, QImage) and not image.isNull()
 
     def _release_draft_image(self) -> None:
         self._draft_image = QImage()
@@ -560,7 +549,7 @@ class TruthAnnotationCoordinator(QObject):
     def _refresh_source_state(self) -> None:
         if self.window is None:
             return
-        available = self.viewer.active_video_path is not None and self.viewer.current_frame is not None
+        available = self.viewer.active_video_path is not None and self._viewer_source_available()
         message = "" if available else "원본 영상 다시 지정 후 새 annotation과 fixture export를 사용할 수 있습니다."
         self.window.set_source_available(available, message)
 

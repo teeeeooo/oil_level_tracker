@@ -1,76 +1,88 @@
 from __future__ import annotations
 
-import cv2
-import numpy as np
+import gc
 
-from oil_tracker.adapters.vision.review_overlay_renderer import ReviewOverlayRenderer
-from oil_tracker.domain.enums import FillState
-from oil_tracker.domain.recipe import InspectionRecipe
-from oil_tracker.domain.review import ReviewOverlayData, ReviewTrackingSample
+from PySide6.QtGui import QColor, QImage
+
 from oil_tracker.ui.widgets.result_review_canvas import ResultReviewCanvas
+from review_raster_fixtures import solid_image
 
 
-def _glass():
-    glass = InspectionRecipe.default_glass(320, 240, 1)
-    glass.geometry.zero_line_y = 140.0
-    return glass
-
-
-def _overlay(glass, *, valid=True, within=True, oil_y=130.0, foam_y=120.0):
-    sample = ReviewTrackingSample(
-        "run", glass.id, 10, 1.0, FillState.PARTIAL_VISIBLE,
-        smoothed_oil_air_level_px_from_zero=10.0,
-        smoothed_foam_front_px_from_zero=20.0,
-        overall_confidence=0.8 if valid else 0.2,
-        is_valid=valid,
-        flags=() if valid else ("LOW_CONFIDENCE",),
-    )
-    return ReviewOverlayData(
-        glass.id,
-        1.0,
-        sample if within else None,
-        oil_y if within else None,
-        foam_y if within else None,
-        within,
-        () if valid else ("LOW_CONFIDENCE",),
-    )
-
-
-def test_renderer_draws_roi_zero_oil_and_foam_with_ellipse_extent():
-    frame = np.zeros((240, 320, 3), dtype=np.uint8)
-    glass = _glass()
-    rendered = ReviewOverlayRenderer().render(frame, glass, _overlay(glass))
-    assert rendered.shape == frame.shape
-    assert np.count_nonzero(rendered) > 0
-    assert np.count_nonzero(rendered[130, 0:50]) == 0
-    assert np.count_nonzero(rendered[130, 120:200]) > 0
-    assert np.count_nonzero(rendered[120, 120:200]) > 0
-
-
-def test_renderer_suppresses_geometry_outside_analysis_range():
-    frame = np.zeros((240, 320, 3), dtype=np.uint8)
-    glass = _glass()
-    rendered = ReviewOverlayRenderer().render(frame, glass, _overlay(glass, within=False))
-    ellipse_top = int(glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y)
-    assert np.count_nonzero(rendered[ellipse_top, 150:170]) == 0
-
-
-def test_invalid_sample_changes_roi_highlight():
-    frame = np.zeros((240, 320, 3), dtype=np.uint8)
-    glass = _glass()
-    normal = ReviewOverlayRenderer().render(frame, glass, _overlay(glass, valid=True))
-    invalid = ReviewOverlayRenderer().render(frame, glass, _overlay(glass, valid=False))
-    assert not np.array_equal(normal, invalid)
-
-
-def test_canvas_is_read_only_and_saves_original_resolution_unicode_png(qtbot, tmp_path):
+def test_canvas_displays_detached_qimage_and_preserves_source_dimensions(qtbot):
     canvas = ResultReviewCanvas()
     qtbot.addWidget(canvas)
-    frame = np.zeros((240, 320, 3), dtype=np.uint8)
-    glass = _glass()
-    canvas.set_review_frame(frame, glass, _overlay(glass))
+    image = solid_image(320, 240, (10, 20, 30))
+    canvas.set_image(image)
+    image.fill(QColor(90, 100, 110))
+    del image
+    gc.collect()
+    retained = canvas.image()
+    assert canvas.source_image_size.width() == 320
+    assert canvas.source_image_size.height() == 240
+    color = retained.pixelColor(0, 0)
+    assert (color.red(), color.green(), color.blue()) == (10, 20, 30)
+    assert not canvas.label.pixmap().isNull()
+
+
+def test_canvas_message_and_empty_state_remove_stale_pixmap(qtbot):
+    canvas = ResultReviewCanvas()
+    qtbot.addWidget(canvas)
+    canvas.set_image(solid_image(80, 60))
+    assert not canvas.label.pixmap().isNull()
+    canvas.set_message("새 장면 없음")
+    assert canvas.source_image_size.isEmpty()
+    assert canvas.image().isNull()
+    assert canvas.label.pixmap().isNull()
+    assert canvas.label.text() == "새 장면 없음"
+    canvas.set_image(None)
+    assert "표시할" in canvas.label.text()
+
+
+def test_canvas_replaces_general_and_debug_images_without_retaining_stale_snapshot(qtbot):
+    canvas = ResultReviewCanvas()
+    qtbot.addWidget(canvas)
+    canvas.set_image(solid_image(320, 240, (1, 2, 3)))
+    first = canvas.image()
+    canvas.set_image(solid_image(640, 360, (4, 5, 6)))
+    second = canvas.image()
+    assert first.size() != second.size()
+    assert canvas.source_image_size == second.size()
+    color = second.pixelColor(0, 0)
+    assert (color.red(), color.green(), color.blue()) == (4, 5, 6)
+
+
+def test_resize_keeps_pixmap_aspect_ratio(qtbot):
+    canvas = ResultReviewCanvas()
+    qtbot.addWidget(canvas)
+    canvas.resize(500, 500)
+    canvas.show()
+    canvas.set_image(solid_image(400, 200))
+    qtbot.wait(10)
+    pixmap = canvas.label.pixmap()
+    assert not pixmap.isNull()
+    assert abs((pixmap.width() / pixmap.height()) - 2.0) < 0.02
+    assert pixmap.width() <= canvas.label.width()
+    assert pixmap.height() <= canvas.label.height()
+
+
+def test_canvas_is_read_only_and_has_no_raster_or_filesystem_api(qtbot):
+    canvas = ResultReviewCanvas()
+    qtbot.addWidget(canvas)
     assert not hasattr(canvas, "geometryChanged")
     assert not hasattr(canvas, "zeroLineChanged")
-    destination = canvas.save_png(tmp_path / "검토 장면.png")
-    decoded = cv2.imdecode(np.fromfile(str(destination), dtype=np.uint8), cv2.IMREAD_COLOR)
-    assert decoded.shape[:2] == (240, 320)
+    assert not hasattr(canvas, "set_review_frame")
+    assert not hasattr(canvas, "set_debug_frame")
+    assert not hasattr(canvas, "refresh_overlay")
+    assert not hasattr(canvas, "save_png")
+    assert not hasattr(canvas, "rendered_image")
+
+
+def test_close_releases_image_and_pixmap_references(qtbot):
+    canvas = ResultReviewCanvas()
+    qtbot.addWidget(canvas)
+    canvas.set_image(solid_image(320, 240))
+    canvas.close()
+    qtbot.wait(1)
+    assert canvas.image().isNull()
+    assert canvas.source_image_size.isEmpty()
+    assert canvas.label.pixmap().isNull()

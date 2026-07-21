@@ -5,14 +5,13 @@ from pathlib import Path
 from typing import Callable
 
 from PySide6.QtCore import QObject, QTimer, Signal
-
-from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+from PySide6.QtGui import QImage
 
 
 @dataclass
 class PreparedReviewVideo:
     reader: object
-    frame: object
+    frame: QImage
     frame_index: int
     timestamp_sec: float
 
@@ -20,6 +19,7 @@ class PreparedReviewVideo:
         reader, self.reader = self.reader, None
         if reader is not None:
             reader.close()
+        self.frame = QImage()
 
 
 class ResultReviewController(QObject):
@@ -30,7 +30,7 @@ class ResultReviewController(QObject):
 
     def __init__(
         self,
-        reader_factory: Callable[[str | Path], object] = OpenCvVideoReader,
+        reader_factory: Callable[[str | Path], object] | None = None,
         parent=None,
     ) -> None:
         super().__init__(parent)
@@ -51,6 +51,36 @@ class ResultReviewController(QObject):
     def is_playing(self) -> bool:
         return self.timer.isActive()
 
+    @property
+    def source_image(self) -> QImage:
+        if self.reader is None:
+            return QImage()
+        image = self.reader.source_image
+        return QImage(image).copy()
+
+    def render_general(self, glass, overlay) -> QImage:
+        if self.reader is None:
+            raise ValueError("표시할 원본 영상 장면이 없습니다.")
+        return QImage(self.reader.render_general(glass, overlay)).copy()
+
+    def render_debug(
+        self,
+        glass,
+        record,
+        actual_timestamp: float,
+        highlighted_candidate: int | None = None,
+    ) -> QImage:
+        if self.reader is None:
+            raise ValueError("표시할 원본 영상 장면이 없습니다.")
+        return QImage(
+            self.reader.render_debug(
+                glass,
+                record,
+                actual_timestamp,
+                highlighted_candidate,
+            )
+        ).copy()
+
     def prepare_video(
         self,
         path: str | Path,
@@ -58,11 +88,23 @@ class ResultReviewController(QObject):
         *,
         emit_failure: bool = True,
     ) -> PreparedReviewVideo:
+        if self.reader_factory is None:
+            error = RuntimeError("Result Review presented reader factory가 구성되지 않았습니다.")
+            if emit_failure:
+                self.failed.emit(str(error))
+            raise error
         reader = None
         try:
             reader = self.reader_factory(path)
             frame, frame_index, actual_timestamp = reader.read_at(max(0.0, float(initial_timestamp)))
-            return PreparedReviewVideo(reader, frame, int(frame_index), float(actual_timestamp))
+            if not isinstance(frame, QImage) or frame.isNull():
+                raise TypeError("Result Review reader는 detached QImage를 반환해야 합니다.")
+            return PreparedReviewVideo(
+                reader,
+                QImage(frame).copy(),
+                int(frame_index),
+                float(actual_timestamp),
+            )
         except Exception as exc:
             if reader is not None:
                 reader.close()
@@ -82,7 +124,11 @@ class ResultReviewController(QObject):
         self.current_frame_index = int(prepared.frame_index)
         self.metadataChanged.emit(self.reader.metadata)
         self.playbackStateChanged.emit("일시정지")
-        self.frameReady.emit(prepared.frame, self.current_frame_index, self.current_time)
+        self.frameReady.emit(
+            QImage(prepared.frame).copy(),
+            self.current_frame_index,
+            self.current_time,
+        )
         if previous is not None:
             previous.close()
 
@@ -153,6 +199,8 @@ class ResultReviewController(QObject):
         generation = self._generation
         try:
             frame, frame_index, actual_timestamp = self.reader.read_at(max(0.0, float(timestamp_sec)))
+            if not isinstance(frame, QImage) or frame.isNull():
+                raise TypeError("Result Review reader는 detached QImage를 반환해야 합니다.")
         except EOFError:
             self.pause()
             return
@@ -164,7 +212,7 @@ class ResultReviewController(QObject):
             return
         self.current_time = float(actual_timestamp)
         self.current_frame_index = int(frame_index)
-        self.frameReady.emit(frame, self.current_frame_index, self.current_time)
+        self.frameReady.emit(QImage(frame).copy(), self.current_frame_index, self.current_time)
         if not keep_playing:
             self.playbackStateChanged.emit("일시정지")
 

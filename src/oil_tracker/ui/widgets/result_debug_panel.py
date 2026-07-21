@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -19,10 +19,6 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter
-
-
-_FRAME_IMAGE_CONVERTER = QtFrameImageConverter()
 
 _ARTIFACT_LABELS = {
     "overlay": "검출 overlay",
@@ -148,6 +144,7 @@ class ResultDebugPanel(QWidget):
         self.export_button.setEnabled(False)
 
     def set_record(self, record, actual_timestamp: float | None = None) -> None:
+        previous_row = self.candidates.currentRow() if self._record is record else -1
         self._record = record
         delta_text = ""
         if actual_timestamp is not None:
@@ -157,21 +154,34 @@ class ResultDebugPanel(QWidget):
             f"{record.glass_name or record.glass_id} · trace {record.timestamp_sec:.3f}초 · 장면 {record.frame_index}{delta_text}\n"
             f"저장 사유: {', '.join(record.capture_reasons) or '-'}"
         )
-        self.candidates.setRowCount(len(record.candidates))
-        for row, candidate in enumerate(record.candidates):
-            for column, (key, _title) in enumerate(_COLUMNS):
-                value = candidate.get(key)
-                if isinstance(value, float):
-                    text = f"{value:.4f}"
-                elif key in {"selected", "rejected"}:
-                    text = "예" if value else "아니오"
-                else:
-                    text = "-" if value in (None, "") else str(value)
-                item = QTableWidgetItem(text)
-                if key == "rank":
-                    item.setData(Qt.ItemDataRole.UserRole, row)
-                self.candidates.setItem(row, column, item)
-        self.candidates.resizeColumnsToContents()
+        target_row = -1
+        previous_blocked = self.candidates.blockSignals(True)
+        try:
+            self.candidates.setRowCount(len(record.candidates))
+            for row, candidate in enumerate(record.candidates):
+                for column, (key, _title) in enumerate(_COLUMNS):
+                    value = candidate.get(key)
+                    if isinstance(value, float):
+                        text = f"{value:.4f}"
+                    elif key in {"selected", "rejected"}:
+                        text = "예" if value else "아니오"
+                    else:
+                        text = "-" if value in (None, "") else str(value)
+                    item = QTableWidgetItem(text)
+                    if key == "rank":
+                        item.setData(Qt.ItemDataRole.UserRole, row)
+                    self.candidates.setItem(row, column, item)
+            self.candidates.resizeColumnsToContents()
+            if record.candidates:
+                target_row = previous_row if 0 <= previous_row < len(record.candidates) else 0
+                self.candidates.selectRow(target_row)
+        finally:
+            self.candidates.blockSignals(previous_blocked)
+        if target_row >= 0:
+            self._show_candidate(target_row, emit_selection=False)
+        else:
+            self.candidate_detail.clear()
+
         state_lines = [
             f"previous state: {_display(record.state.get('previous_state'))}",
             f"proposed state: {_display(record.state.get('proposed_state'))}",
@@ -204,23 +214,21 @@ class ResultDebugPanel(QWidget):
             state_lines.append("\ntrace warnings:\n" + "\n".join(record.warnings))
         self.state_detail.setPlainText("\n".join(state_lines))
         self.export_button.setEnabled(True)
-        if record.candidates:
-            self.candidates.selectRow(0)
         self._refresh_artifact_availability()
         self._artifact_changed(self.artifact_combo.currentIndex())
 
-    def set_artifact(self, key: str, image, error: str = "") -> None:
+    def set_artifact(self, key: str, image: QImage | None, error: str = "") -> None:
         self._pixmap = QPixmap()
-        if image is None:
+        if image is None or image.isNull():
             self.image_label.setPixmap(QPixmap())
             self.image_label.setText(error or "이 장면에는 선택한 artifact가 저장되지 않았습니다.")
             self.artifact_status.setText(error or "artifact 없음")
             return
-        frame_image = _FRAME_IMAGE_CONVERTER.to_qimage(image)
-        self._pixmap = QPixmap.fromImage(frame_image)
+        detached = QImage(image).copy()
+        self._pixmap = QPixmap.fromImage(detached)
         self.image_label.setText("")
         self.artifact_status.setText(
-            f"{_ARTIFACT_LABELS.get(key, key)} · {frame_image.width()}×{frame_image.height()} · lazy decode 완료"
+            f"{_ARTIFACT_LABELS.get(key, key)} · {detached.width()}×{detached.height()} · lazy decode 완료"
         )
         self.fit_image()
 
@@ -251,6 +259,9 @@ class ResultDebugPanel(QWidget):
         )
 
     def _candidate_changed(self, row: int, _column: int, _previous_row: int, _previous_column: int) -> None:
+        self._show_candidate(row, emit_selection=True)
+
+    def _show_candidate(self, row: int, *, emit_selection: bool) -> None:
         if self._record is None or row < 0 or row >= len(self._record.candidates):
             self.candidate_detail.clear()
             return
@@ -270,7 +281,8 @@ class ResultDebugPanel(QWidget):
         lines.append("\npenalties:")
         lines.extend(f"  {key}: {_display(value)}" for key, value in sorted((candidate.get("penalties") or {}).items()))
         self.candidate_detail.setPlainText("\n".join(lines))
-        self.candidateSelected.emit(row)
+        if emit_selection:
+            self.candidateSelected.emit(row)
 
     def _artifact_changed(self, _index: int) -> None:
         if self._record is not None:

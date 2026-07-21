@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import numpy as np
+from PySide6.QtGui import QImage
 
 from oil_tracker.domain.session import VideoMetadata
 from oil_tracker.ui.controllers.result_review_controller import ResultReviewController
+from review_raster_fixtures import solid_image
 
 
 class _Reader:
@@ -14,14 +15,27 @@ class _Reader:
         self.metadata = VideoMetadata(self.path, 32, 24, fps, duration, int(duration * fps), "fake")
         self.closed = False
         self.requests = []
+        self._source_image = QImage()
+
+    @property
+    def source_image(self):
+        return QImage(self._source_image).copy()
 
     def read_at(self, timestamp):
         self.requests.append(timestamp)
         actual = min(max(0.0, float(timestamp)) + 0.01, max(0.0, self.metadata.duration_sec - 0.01))
-        return np.zeros((24, 32, 3), dtype=np.uint8), int(actual * self.metadata.fps), actual
+        self._source_image = solid_image(32, 24, (10, 20, 30))
+        return QImage(self._source_image).copy(), int(actual * self.metadata.fps), actual
+
+    def render_general(self, _glass, _overlay):
+        return QImage(self._source_image).copy()
+
+    def render_debug(self, _glass, _record, _timestamp, _highlight=None):
+        return QImage(self._source_image).copy()
 
     def close(self):
         self.closed = True
+        self._source_image = QImage()
 
 
 def test_open_seek_step_speed_and_actual_timestamp(qtbot):
@@ -34,11 +48,14 @@ def test_open_seek_step_speed_and_actual_timestamp(qtbot):
 
     controller = ResultReviewController(factory)
     received = []
-    controller.frameReady.connect(lambda _frame, index, timestamp: received.append((index, timestamp)))
+    controller.frameReady.connect(
+        lambda frame, index, timestamp: received.append((QImage(frame).copy(), index, timestamp))
+    )
     controller.open_video("source.mp4", 0.5)
-    assert received[-1][1] == 0.51
+    assert isinstance(received[-1][0], QImage) and not received[-1][0].isNull()
+    assert received[-1][2] == 0.51
     controller.seek(1.0)
-    assert received[-1][1] == 1.01
+    assert received[-1][2] == 1.01
     before = controller.current_time
     controller.step(1)
     assert controller.current_time > before

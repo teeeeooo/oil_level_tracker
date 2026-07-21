@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import gc
+
 import numpy as np
 import pytest
 
@@ -48,12 +50,32 @@ def test_non_contiguous_source_is_supported(converter):
     assert (color.red(), color.green(), color.blue()) == (33, 22, 11)
 
 
-def test_returned_qimage_is_detached_from_source_mutation(converter):
+def test_returned_qimage_is_detached_from_source_mutation_and_lifetime(converter):
     frame = np.array([[[10, 20, 30]]], dtype=np.uint8)
     image = converter.to_qimage(frame)
     frame[0, 0] = (90, 100, 110)
+    del frame
+    gc.collect()
     color = image.pixelColor(0, 0)
     assert (color.red(), color.green(), color.blue()) == (30, 20, 10)
+
+
+def test_repeated_conversion_is_deterministic(converter):
+    frame = np.arange(4 * 5 * 3, dtype=np.uint8).reshape((4, 5, 3))
+    first = converter.to_qimage(frame)
+    second = converter.to_qimage(frame)
+    assert first.size() == second.size()
+    first_pixels = [
+        first.pixelColor(x, y).rgba()
+        for y in range(first.height())
+        for x in range(first.width())
+    ]
+    second_pixels = [
+        second.pixelColor(x, y).rgba()
+        for y in range(second.height())
+        for x in range(second.width())
+    ]
+    assert first_pixels == second_pixels
 
 
 @pytest.mark.parametrize(

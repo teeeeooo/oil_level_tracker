@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-import numpy as np
 import pytest
+from PySide6.QtGui import QImage
 
 from oil_tracker.domain.session import VideoMetadata
 from oil_tracker.ui.controllers.result_review_controller import ResultReviewController
+from review_raster_fixtures import solid_image
 
 
 class _Reader:
@@ -14,17 +15,30 @@ class _Reader:
         self.fail_read = fail_read
         self.closed = False
         self.metadata = VideoMetadata(self.path, 320, 240, 10.0, 5.0, 50, "fake")
+        self._source_image = QImage()
         events.append(("open", self.path))
+
+    @property
+    def source_image(self):
+        return QImage(self._source_image).copy()
 
     def read_at(self, timestamp):
         self.events.append(("read", self.path, float(timestamp)))
         if self.fail_read:
             raise OSError("decode failed")
         actual = float(timestamp) + 0.01
-        return np.zeros((240, 320, 3), dtype=np.uint8), int(actual * 10), actual
+        self._source_image = solid_image(320, 240, (10, 20, 30))
+        return QImage(self._source_image).copy(), int(actual * 10), actual
+
+    def render_general(self, _glass, _overlay):
+        return QImage(self._source_image).copy()
+
+    def render_debug(self, _glass, _record, _timestamp, _highlight=None):
+        return QImage(self._source_image).copy()
 
     def close(self):
         self.closed = True
+        self._source_image = QImage()
         self.events.append(("close", self.path))
 
 
@@ -42,12 +56,14 @@ def test_candidate_factory_failure_preserves_active_reader_frame_and_timestamp()
     active = controller.reader
     before_time = controller.current_time
     before_frame = controller.current_frame_index
+    before_image = controller.source_image
     with pytest.raises(OSError):
         controller.open_video("bad.mp4", 2.0)
     assert controller.reader is active
     assert active.closed is False
     assert controller.current_time == before_time
     assert controller.current_frame_index == before_frame
+    assert controller.source_image == before_image
 
 
 def test_candidate_decode_failure_closes_candidate_only_and_preserves_active_reader():

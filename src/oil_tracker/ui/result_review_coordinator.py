@@ -17,7 +17,6 @@ from PySide6.QtWidgets import (
 
 from oil_tracker.ui.controllers.redetection_controller import RedetectionController
 from oil_tracker.ui.redetection_comparison_coordinator import RedetectionComparisonCoordinator
-from oil_tracker.ui.redetection_result_review_window import RedetectionResultReviewWindow
 from oil_tracker.ui.result_actions import ResultActionService
 from oil_tracker.ui.truth_annotation_coordinator import TruthAnnotationCoordinator
 
@@ -31,13 +30,15 @@ class ResultReviewCoordinator(QObject):
         action_service: ResultActionService | None = None,
         same_profile_coordinator=None,
         redetection_service=None,
+        viewer_factory=None,
     ) -> None:
         super().__init__(window)
         self.window = window
         self.action_service = action_service or ResultActionService()
         self.same_profile_coordinator = same_profile_coordinator
         self.redetection_service = redetection_service
-        self.viewer: RedetectionResultReviewWindow | None = None
+        self.viewer_factory = viewer_factory
+        self.viewer = None
         self.redetection_controller: RedetectionController | None = None
         self.redetection_coordinator: RedetectionComparisonCoordinator | None = None
         self.truth_coordinator: TruthAnnotationCoordinator | None = None
@@ -95,10 +96,9 @@ class ResultReviewCoordinator(QObject):
 
     def open_bundle(self, path: str | Path) -> bool:
         if self.viewer is None:
-            self.viewer = RedetectionResultReviewWindow(
-                action_service=self.action_service,
-                parent=self.window,
-            )
+            if self.viewer_factory is None:
+                raise RuntimeError("Result Review viewer factory가 구성되지 않았습니다.")
+            self.viewer = self.viewer_factory(self.window)
             self.truth_coordinator = TruthAnnotationCoordinator(
                 self.viewer,
                 parent=self.viewer,

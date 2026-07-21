@@ -15,6 +15,11 @@ from oil_tracker.domain.session import AnalysisSession, DebugTraceLevel, VideoMe
 from oil_tracker.ui.controllers.result_review_controller import ResultReviewController
 from oil_tracker.ui.result_review_window import ResultReviewWindow
 from oil_tracker.ui.widgets.result_debug_panel import ResultDebugPanel
+from review_raster_fixtures import (
+    debug_artifact_presenter,
+    png_exporter,
+    presented_reader_factory,
+)
 
 
 class _Reader:
@@ -169,21 +174,13 @@ def _bundle(tmp_path: Path, *, trace: bool):
     )
     samples = (
         ReviewTrackingSample(
-            "run",
-            glass.id,
-            10,
-            1.0,
-            FillState.PARTIAL_VISIBLE,
+            "run", glass.id, 10, 1.0, FillState.PARTIAL_VISIBLE,
             smoothed_oil_air_level_px_from_zero=10.0,
             overall_confidence=0.9,
             is_valid=True,
         ),
         ReviewTrackingSample(
-            "run",
-            glass.id,
-            20,
-            2.0,
-            FillState.UNKNOWN_REVIEW,
+            "run", glass.id, 20, 2.0, FillState.UNKNOWN_REVIEW,
             overall_confidence=0.42,
             is_valid=False,
             flags=("LOW_CONFIDENCE",),
@@ -225,12 +222,14 @@ def _window(bundle, repository_holder=None):
         holder.append(repository)
         return repository
 
-    reader_factory = lambda path: _Reader(path)
+    raw_factory = lambda path: _Reader(path)
     return ResultReviewWindow(
         bundle_reader=_BundleReader(bundle),
-        source_resolver=SourceVideoResolver(reader_factory),
-        playback_controller=ResultReviewController(reader_factory),
+        source_resolver=SourceVideoResolver(raw_factory),
+        playback_controller=ResultReviewController(presented_reader_factory(raw_factory)),
         debug_repository_factory=factory,
+        png_exporter=png_exporter(),
+        debug_artifact_presenter=debug_artifact_presenter(),
     )
 
 
@@ -243,8 +242,9 @@ def test_trace_less_bundle_disables_debug_mode_and_keeps_general_viewer(qtbot, t
     assert window.mode_combo.model().item(1).isEnabled() is False
     assert window.navigation.tabs.isTabEnabled(window.navigation.debug_tab_index) is False
     assert "디버그 기록이 없습니다" in window.mode_combo.toolTip()
-    assert window.current_frame is not None
-    assert window.canvas._debug_record is None
+    assert not window.current_source_image.isNull()
+    assert not window.current_render_image.isNull()
+    assert not hasattr(window.canvas, "_debug_record")
     window.close()
 
 
@@ -266,12 +266,13 @@ def test_debug_record_activation_pauses_seeks_and_lazy_loads_once(qtbot, tmp_pat
     assert window.current_time == 2.012
     assert window.selected_debug_record.record_id == "record-1"
     assert "decoded 차이 +0.012초" in window.debug_details.summary.text()
-    assert window.canvas._debug_record.record_id == "record-1"
+    assert not window.current_render_image.isNull()
     assert len(window.graph.model.debug_markers) == 1
     assert window.graph.model.debug_markers[0].selected
     assert window.transport.slider._debug_points == [(2.0, True)]
     load_count = repository.record_load_count
-    window._frame_ready(np.zeros((240, 320, 3), dtype=np.uint8), 21, 2.02)
+    image, index, actual = window.playback.reader.read_at(2.02)
+    window._frame_ready(image, index, actual)
     assert repository.record_load_count == load_count
     window.close()
     assert repository.closed
@@ -286,32 +287,40 @@ def test_switching_back_to_general_hides_candidate_layer_and_preserves_time(qtbo
     window._debug_record_activated(holder[0].summary)
     timestamp = window.current_time
     glass_id = window.selected_glass_id
+    debug_image = window.current_render_image.copy()
     window.mode_combo.setCurrentIndex(0)
     assert window.mode == "general"
     assert window.current_time == timestamp
     assert window.selected_glass_id == glass_id
-    assert window.canvas._debug_record is None
     assert window.detail_stack.currentWidget() is window.details
+    assert window.current_render_image != debug_image
     window.close()
 
 
-def test_candidate_table_dynamic_details_and_highlight(qtbot, tmp_path):
-    panel = ResultDebugPanel()
-    qtbot.addWidget(panel)
-    repository = _DebugRepository(_bundle(tmp_path, trace=True))
-    selected = []
-    panel.candidateSelected.connect(selected.append)
-    panel.set_record(repository.record, 2.01)
+def test_candidate_table_dynamic_details_and_highlight_rerenders_without_mutating_record(qtbot, tmp_path):
+    holder = []
+    bundle = _bundle(tmp_path, trace=True)
+    window = _window(bundle, holder)
+    qtbot.addWidget(window)
+    window.load_bundle(bundle.root)
+    repository = holder[0]
+    window._debug_record_activated(repository.summary)
+    panel = window.debug_details
     assert panel.candidates.rowCount() == 2
     assert "new_dynamic_feature" in panel.candidate_detail.toPlainText()
-    assert "new_dynamic_penalty" in panel.candidate_detail.toPlainText()
+    record_before = repository.record
+    normal = window.current_render_image.copy()
     panel.candidates.selectRow(1)
-    assert selected[-1] == 1
+    assert window.highlighted_candidate == 1
+    assert panel.candidates.currentRow() == 1
     assert "geometry" in panel.candidate_detail.toPlainText()
     assert "raw oil Y" in panel.state_detail.toPlainText()
+    assert window.current_render_image != normal
+    assert repository.record is record_before
+    window.close()
 
 
-def test_artifact_is_requested_lazily_and_missing_state_is_explicit(qtbot, tmp_path):
+def test_artifact_is_requested_lazily_and_presented_as_detached_qimage(qtbot, tmp_path):
     panel = ResultDebugPanel()
     qtbot.addWidget(panel)
     repository = _DebugRepository(_bundle(tmp_path, trace=True))
@@ -319,7 +328,8 @@ def test_artifact_is_requested_lazily_and_missing_state_is_explicit(qtbot, tmp_p
     panel.artifactRequested.connect(requests.append)
     panel.set_record(repository.record)
     assert requests
-    panel.set_artifact("normalized", repository.load_image(repository.record, "normalized"))
+    image = debug_artifact_presenter().present(repository, repository.record, "normalized")
+    panel.set_artifact("normalized", image)
     assert "lazy decode 완료" in panel.artifact_status.text()
     panel.set_artifact("foam_mask", None)
     assert "저장되지 않았습니다" in panel.image_label.text()
@@ -344,6 +354,7 @@ def test_bundle_internal_export_error_preserves_debug_viewer_state(qtbot, tmp_pa
     selected_record = window.selected_debug_record
     timestamp = window.current_time
     reader = window.playback.reader
+    render_image = window.current_render_image.copy()
     record_load_count = repository.record_load_count
     messages = []
 
@@ -375,6 +386,7 @@ def test_bundle_internal_export_error_preserves_debug_viewer_state(qtbot, tmp_pa
     assert window.current_time == timestamp
     assert window.mode == "debug"
     assert window.playback.reader is reader
+    assert window.current_render_image == render_image
     assert window.debug_repository is repository
     assert repository.record_load_count == record_load_count
     window.close()
