@@ -60,7 +60,5 @@ jobs:
             echo '```'
           } > /tmp/comment.md
           gh api repos/teeeeooo/oil_level_tracker/issues/comments/5035885005 \
-            --method PATCH --input /tmp/comment.md \
-            -H 'Content-Type: text/plain' || \
-          gh pr comment 55 --body-file /tmp/comment.md
+            --method PATCH -F body=@/tmp/comment.md
           exit ${status}
