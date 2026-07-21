@@ -5,34 +5,63 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   pytest:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout validation branch
+        uses: actions/checkout@v4
+        with:
+          ref: validation/phase2c3-probe-1
+          fetch-depth: 2
+      - name: Checkout exact feature SHA
+        uses: actions/checkout@v4
         with:
           ref: 9163bca964f24234f95dc72b2cd43bd4e8051ad0
+          path: source
       - name: Assert exact feature SHA
-        run: test "$(git rev-parse HEAD)" = "9163bca964f24234f95dc72b2cd43bd4e8051ad0"
+        run: test "$(git -C source rev-parse HEAD)" = "9163bca964f24234f95dc72b2cd43bd4e8051ad0"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
           cache: pip
+          cache-dependency-path: source/pyproject.toml
       - name: Install project and test dependencies
-        run: python -m pip install --upgrade pip && python -m pip install -e '.[dev]'
-      - name: Report runtime versions
+        run: python -m pip install --upgrade pip && python -m pip install -e 'source[dev]'
+      - name: Run canonical suite and capture concise result
+        env:
+          QT_QPA_PLATFORM: offscreen
         run: |
-          python --version
-          python - <<'PY'
+          set +e
+          {
+            python --version
+            python - <<'PY'
           import matplotlib
           import PySide6
           print('PySide6', PySide6.__version__)
           print('Matplotlib', matplotlib.__version__)
           PY
-      - name: Run canonical suite
-        env:
-          QT_QPA_PLATFORM: offscreen
-        run: QT_QPA_PLATFORM=offscreen python -m pytest -q
+            echo 'COMMAND: QT_QPA_PLATFORM=offscreen python -m pytest -q --tb=short'
+            cd source
+            QT_QPA_PLATFORM=offscreen python -m pytest -q --tb=short
+          } > validation-result.txt 2>&1
+          status=$?
+          cd ..
+          mv source/validation-result.txt validation-result.txt
+          printf '\nEXIT_STATUS=%s\nEXACT_FEATURE_SHA=%s\n' "$status" '9163bca964f24234f95dc72b2cd43bd4e8051ad0' >> validation-result.txt
+          echo "$status" > validation-status.txt
+          tail -n 240 validation-result.txt
+          exit 0
+      - name: Persist validation result on validation branch
+        run: |
+          rm -rf source
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add validation-result.txt validation-status.txt
+          git commit -m "ci: record Phase 2C-3 probe result" || true
+          git push origin HEAD:validation/phase2c3-probe-1
+      - name: Fail when pytest failed
+        run: test "$(cat validation-status.txt)" = "0"
