@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -19,10 +19,6 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter
-
-
-_FRAME_IMAGE_CONVERTER = QtFrameImageConverter()
 
 _ARTIFACT_LABELS = {
     "overlay": "검출 overlay",
@@ -209,18 +205,18 @@ class ResultDebugPanel(QWidget):
         self._refresh_artifact_availability()
         self._artifact_changed(self.artifact_combo.currentIndex())
 
-    def set_artifact(self, key: str, image, error: str = "") -> None:
+    def set_artifact(self, key: str, image: QImage | None, error: str = "") -> None:
         self._pixmap = QPixmap()
-        if image is None:
+        if image is None or image.isNull():
             self.image_label.setPixmap(QPixmap())
             self.image_label.setText(error or "이 장면에는 선택한 artifact가 저장되지 않았습니다.")
             self.artifact_status.setText(error or "artifact 없음")
             return
-        frame_image = _FRAME_IMAGE_CONVERTER.to_qimage(image)
-        self._pixmap = QPixmap.fromImage(frame_image)
+        detached = QImage(image).copy()
+        self._pixmap = QPixmap.fromImage(detached)
         self.image_label.setText("")
         self.artifact_status.setText(
-            f"{_ARTIFACT_LABELS.get(key, key)} · {frame_image.width()}×{frame_image.height()} · lazy decode 완료"
+            f"{_ARTIFACT_LABELS.get(key, key)} · {detached.width()}×{detached.height()} · lazy decode 완료"
         )
         self.fit_image()
 
