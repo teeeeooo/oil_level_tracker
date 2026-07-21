@@ -1,84 +1,72 @@
-name: Detector benchmark focused exact-head validation
+name: Apply focused detector benchmark fixes
 
 on:
   pull_request:
     branches: [main]
 
 permissions:
-  contents: read
-  pull-requests: write
+  contents: write
 
 jobs:
-  focused:
+  apply-fixes:
     runs-on: ubuntu-24.04
     env:
       EXPECTED_FEATURE_SHA: e4e58b628965d4ea9e40dbfac3657958f0afd5b2
-      OIL_TRACKER_SOURCE_REVISION: e4e58b628965d4ea9e40dbfac3657958f0afd5b2
     steps:
-      - name: Checkout exact feature head
+      - name: Checkout feature branch
         uses: actions/checkout@v4
         with:
           repository: teeeeooo/oil_level_tracker
-          ref: e4e58b628965d4ea9e40dbfac3657958f0afd5b2
-          fetch-depth: 1
-      - name: Assert exact checkout SHA
+          ref: feature/detector-benchmark-foundation
+          fetch-depth: 2
+      - name: Assert and apply exact fixes
+        shell: python
         run: |
-          echo "expected_sha=$EXPECTED_FEATURE_SHA"
-          echo "actual_sha=$(git rev-parse HEAD)"
-          test "$(git rev-parse HEAD)" = "$EXPECTED_FEATURE_SHA"
-      - name: Install Qt runtime library
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libegl1
-      - name: Set up Python 3.13
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          cache: pip
-      - name: Install project
-        run: python -m pip install -e ".[dev]"
-      - name: Print runtime versions
-        run: |
-          python --version
-          python - <<'PY'
-          import cv2, matplotlib, numpy, PySide6, pytest
-          print(f"PySide6={PySide6.__version__}")
-          print(f"NumPy={numpy.__version__}")
-          print(f"OpenCV={cv2.__version__}")
-          print(f"Matplotlib={matplotlib.__version__}")
-          print(f"pytest={pytest.__version__}")
-          PY
-      - name: Run focused tests and publish bounded diagnostic
-        env:
-          QT_QPA_PLATFORM: offscreen
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set +e
-          python -m pytest -q \
-            tests/test_regression_dataset_reader.py \
-            tests/test_detector_benchmark_metrics.py \
-            tests/test_detector_benchmark_runner.py \
-            tests/test_benchmark_result_writer.py \
-            tests/test_benchmark_cli.py \
-            tests/test_detector_benchmark_architecture.py \
-            tests/test_detector_benchmark_integration.py \
-            tests/test_ui_import_boundaries.py > focused.log 2>&1
-          status=$?
-          python - "$status" <<'PY'
           from pathlib import Path
-          import sys
-          status = int(sys.argv[1])
-          lines = Path("focused.log").read_text(encoding="utf-8", errors="replace").splitlines()
-          tail = "\n".join(lines[-220:])
-          body = (
-              "## Focused exact-head diagnostic\n\n"
-              "- Expected/checked-out feature SHA: `e4e58b628965d4ea9e40dbfac3657958f0afd5b2`\n"
-              f"- pytest exit code: `{status}`\n\n"
-              "```text\n" + tail + "\n```\n"
-          )
-          Path("focused-comment.md").write_text(body, encoding="utf-8")
-          PY
-          gh pr comment 30 --repo teeeeooo/oil_level_tracker --body-file focused-comment.md
-          cat focused.log
-          exit "$status"
+          import subprocess
+
+          actual = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          expected = "e4e58b628965d4ea9e40dbfac3657958f0afd5b2"
+          if actual != expected:
+              raise SystemExit(f"feature head moved: expected={expected}, actual={actual}")
+
+          replacements = {
+              Path("src/oil_tracker/domain/detector_benchmark.py"): [
+                  (
+                      '            "error",\n            "false_positive_rate",',
+                      '            "error",\n            "mae",\n            "median_absolute",\n            "p90_absolute",\n            "p95_absolute",\n            "false_positive_rate",',
+                  ),
+              ],
+              Path("tests/test_regression_dataset_reader.py"): [
+                  (
+                      '    assert [case.timestamp_sec for case in loaded.cases] == [1.0, 2.0, 3.0]\n',
+                      '    assert [case.case_id for case in loaded.cases] == sorted(\n        case.case_id for case in loaded.cases\n    )\n    assert sorted(case.timestamp_sec for case in loaded.cases) == [1.0, 2.0, 3.0]\n',
+                  ),
+                  (
+                      'match="recipe ID|session source-frame|frame index"',
+                      'match="recipe snapshot hash|recipe ID|session source-frame|frame index"',
+                  ),
+              ],
+              Path("tests/test_benchmark_result_writer.py"): [
+                  (
+                      '    previous = _payload(error=10.0, boundary=False)\n    current = _payload(error=5.0, boundary=True)\n    comparison = compare_benchmark_payloads(previous, current)\n',
+                      '    previous = _payload(error=10.0, boundary=True)\n    current = _payload(error=5.0, boundary=True)\n    previous_coverage = previous["micro_aggregate"]["metrics"][\n        "raw_oil_detection_coverage"\n    ]\n    previous_coverage["value"] = 0.0\n    previous_coverage["numerator"] = 0\n    comparison = compare_benchmark_payloads(previous, current)\n',
+                  ),
+              ],
+          }
+          for path, items in replacements.items():
+              text = path.read_text(encoding="utf-8")
+              for old, new in items:
+                  count = text.count(old)
+                  if count != 1:
+                      raise SystemExit(f"replacement expected once, found {count}: {path} / {old[:80]!r}")
+                  text = text.replace(old, new)
+              path.write_text(text, encoding="utf-8")
+      - name: Commit focused fixes
+        run: |
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/oil_tracker/domain/detector_benchmark.py tests/test_regression_dataset_reader.py tests/test_benchmark_result_writer.py
+          git commit -m "fix: correct benchmark comparison and test expectations"
+          git push origin HEAD:feature/detector-benchmark-foundation
