@@ -1,0 +1,89 @@
+name: S3 Canonical Validation
+
+on:
+  pull_request:
+    branches:
+      - feature/workbench-usability-stabilization
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  canonical:
+    name: canonical-python-${{ matrix.python-version }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.13', '3.14']
+    env:
+      EXPECTED_SHA: 884f6f46a68ae20b495bb4d48e88c8c91e5d01a6
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - name: Checkout exact feature head
+        uses: actions/checkout@v4
+        with:
+          ref: 884f6f46a68ae20b495bb4d48e88c8c91e5d01a6
+          fetch-depth: 1
+      - name: Assert exact checkout
+        shell: bash
+        run: |
+          actual="$(git rev-parse HEAD)"
+          echo "expected exact SHA=$EXPECTED_SHA"
+          echo "actual checkout SHA=$actual"
+          test "$actual" = "$EXPECTED_SHA"
+      - name: Install Qt offscreen runtime libraries
+        run: sudo apt-get update -q && sudo apt-get install -y -q libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install package and test dependencies
+        run: python -m pip install -q --upgrade pip && python -m pip install -q -e '.[dev]'
+      - name: Capture runtime versions
+        run: |
+          python - <<'PY' | tee /tmp/s3-canonical-versions.txt
+          import sys
+          import PySide6
+          import numpy
+          import cv2
+          import matplotlib
+          print(f"Python version={sys.version}")
+          print(f"PySide6 version={PySide6.__version__}")
+          print(f"NumPy version={numpy.__version__}")
+          print(f"OpenCV version={cv2.__version__}")
+          print(f"Matplotlib version={matplotlib.__version__}")
+          PY
+      - name: Run canonical full suite
+        id: tests
+        shell: bash
+        run: |
+          set +e
+          python -m pytest -q 2>&1 | tee /tmp/s3-canonical.log
+          status=${PIPESTATUS[0]}
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Publish canonical evidence
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEST_STATUS: ${{ steps.tests.outputs.status }}
+          MATRIX_PYTHON: ${{ matrix.python-version }}
+        shell: bash
+        run: |
+          result=PASS
+          if [ "${TEST_STATUS:-1}" != "0" ]; then result=FAIL; fi
+          {
+            echo "Canonical Python ${MATRIX_PYTHON} validation **${result}** for exact feature SHA \`$EXPECTED_SHA\`."
+            echo
+            echo '```text'
+            echo "expected exact SHA=$EXPECTED_SHA"
+            echo "actual checkout SHA=$(git rev-parse HEAD)"
+            cat /tmp/s3-canonical-versions.txt
+            tail -n 160 /tmp/s3-canonical.log
+            echo '```'
+          } > /tmp/s3-canonical-comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/s3-canonical-comment.md
+          test "${TEST_STATUS:-1}" = "0"
