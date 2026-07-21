@@ -3,50 +3,79 @@ name: Phase 2C-3 focused validation
 on:
   pull_request:
     branches: [main]
+    paths:
+      - .github/workflows/phase2c3-focused.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   pytest:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout validation branch
+        uses: actions/checkout@v4
+        with:
+          ref: validation/phase2c3-focused-2
+      - name: Checkout exact feature SHA
+        uses: actions/checkout@v4
         with:
           ref: 48be9f58d7b38bad73c886ab38377f04e786cee9
+          path: source
       - name: Assert exact feature SHA
-        run: test "$(git rev-parse HEAD)" = "48be9f58d7b38bad73c886ab38377f04e786cee9"
+        run: test "$(git -C source rev-parse HEAD)" = "48be9f58d7b38bad73c886ab38377f04e786cee9"
       - name: Install Qt runtime libraries
         run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
           cache: pip
+          cache-dependency-path: source/pyproject.toml
       - name: Install project and test dependencies
-        run: python -m pip install --upgrade pip && python -m pip install -e '.[dev]'
-      - name: Report runtime versions
+        run: python -m pip install --upgrade pip && python -m pip install -e 'source[dev]'
+      - name: Run focused suite and capture concise result
+        env:
+          QT_QPA_PLATFORM: offscreen
         run: |
-          python --version
-          python - <<'PY'
+          set +e
+          {
+            python --version
+            python - <<'PY'
           import matplotlib
           import PySide6
           print('PySide6', PySide6.__version__)
           print('Matplotlib', matplotlib.__version__)
           PY
-      - name: Run Phase 2C-3 focused suite
-        env:
-          QT_QPA_PLATFORM: offscreen
+            echo 'COMMAND: QT_QPA_PLATFORM=offscreen python -m pytest -q --tb=short focused files'
+            cd source
+            QT_QPA_PLATFORM=offscreen python -m pytest -q --tb=short \
+              tests/test_user_truth_domain.py \
+              tests/test_json_truth_repository.py \
+              tests/test_regression_fixture_exporter.py \
+              tests/test_truth_export_controller.py \
+              tests/gui/test_truth_annotation_canvas.py \
+              tests/gui/test_truth_annotation_window.py \
+              tests/gui/test_truth_markers.py \
+              tests/test_redetection_comparison.py \
+              tests/test_redetection_ui_controller.py \
+              tests/unit/test_result_review_playback.py \
+              tests/gui/test_result_review_graph.py
+          } > focused-result.txt 2>&1
+          status=$?
+          cd ..
+          mv source/focused-result.txt focused-result.txt
+          printf '\nEXIT_STATUS=%s\nEXACT_FEATURE_SHA=%s\n' "$status" '48be9f58d7b38bad73c886ab38377f04e786cee9' >> focused-result.txt
+          echo "$status" > focused-status.txt
+          tail -n 300 focused-result.txt
+          exit 0
+      - name: Persist result on validation branch
         run: |
-          QT_QPA_PLATFORM=offscreen python -m pytest -q --tb=short \
-            tests/test_user_truth_domain.py \
-            tests/test_json_truth_repository.py \
-            tests/test_regression_fixture_exporter.py \
-            tests/test_truth_export_controller.py \
-            tests/gui/test_truth_annotation_canvas.py \
-            tests/gui/test_truth_annotation_window.py \
-            tests/gui/test_truth_markers.py \
-            tests/test_redetection_comparison.py \
-            tests/test_redetection_ui_controller.py \
-            tests/unit/test_result_review_playback.py \
-            tests/gui/test_result_review_graph.py
+          rm -rf source
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add focused-result.txt focused-status.txt
+          git commit -m "ci: record Phase 2C-3 focused result" || true
+          git push origin HEAD:validation/phase2c3-focused-2
+      - name: Fail when pytest failed
+        run: test "$(cat focused-status.txt)" = "0"
