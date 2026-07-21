@@ -1,0 +1,68 @@
+name: S2 canonical exact-head validation
+
+on:
+  pull_request:
+    branches:
+      - feature/ui-raster-boundary-refactor
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  canonical:
+    name: Canonical Python ${{ matrix.python-version }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.13', '3.14']
+    env:
+      EXPECTED_SHA: 1097207c07101b0cdcea48bd74d4713b41ea910b
+      QT_QPA_PLATFORM: offscreen
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_SHA }}
+      - name: Assert exact feature head
+        run: |
+          echo "expected_sha=${EXPECTED_SHA}"
+          echo "actual_sha=$(git rev-parse HEAD)"
+          test "$(git rev-parse HEAD)" = "${EXPECTED_SHA}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install runtime and project
+        run: |
+          sudo apt-get update >/dev/null
+          sudo apt-get install -y libegl1 >/dev/null
+          python -m pip install --upgrade pip >/dev/null
+          python -m pip install -e '.[dev]' >/dev/null
+      - name: Run canonical suite
+        shell: bash
+        run: |
+          set +e
+          python -m pytest -q --tb=short > pytest.log 2>&1
+          status=$?
+          actual_sha=$(git rev-parse HEAD)
+          summary=$(tail -n 1 pytest.log)
+          {
+            echo "## Final canonical Python ${{ matrix.python-version }}"
+            echo
+            echo "- workflow run ID: ${GITHUB_RUN_ID}"
+            echo "- expected SHA: ${EXPECTED_SHA}"
+            echo "- actual SHA: ${actual_sha}"
+            echo "- Python: $(python --version 2>&1)"
+            echo "- PySide6: $(python -c 'import PySide6; print(PySide6.__version__)')"
+            echo "- NumPy: $(python -c 'import numpy; print(numpy.__version__)')"
+            echo "- OpenCV: $(python -c 'import cv2; print(cv2.__version__)')"
+            echo "- Matplotlib: $(python -c 'import matplotlib; print(matplotlib.__version__)')"
+            echo "- pytest: $(python -c 'import pytest; print(pytest.__version__)')"
+            echo "- exit code: ${status}"
+            echo "- summary: ${summary}"
+            if [ "$status" -ne 0 ]; then grep '^FAILED ' pytest.log || true; fi
+          } > evidence.md
+          gh pr comment 35 --repo teeeeooo/oil_level_tracker --body-file evidence.md
+          cat evidence.md
+          exit "$status"
