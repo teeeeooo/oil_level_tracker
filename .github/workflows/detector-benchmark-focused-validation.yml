@@ -1,96 +1,20 @@
-name: Detector benchmark canonical exact-head validation
+name: Cleanup detector benchmark validation
 
 on:
   pull_request:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
-  canonical:
-    name: canonical-python-${{ matrix.python-version }}
+  cleanup:
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.13", "3.14"]
     env:
-      EXPECTED_FEATURE_SHA: 73edfedb61948e2ff0431ed31075db1ac5d682ef
-      OIL_TRACKER_SOURCE_REVISION: 73edfedb61948e2ff0431ed31075db1ac5d682ef
-      PR_NUMBER: ${{ github.event.pull_request.number }}
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Checkout exact feature head
-        uses: actions/checkout@v4
-        with:
-          repository: teeeeooo/oil_level_tracker
-          ref: 73edfedb61948e2ff0431ed31075db1ac5d682ef
-          fetch-depth: 1
-      - name: Assert exact checkout SHA
-        run: |
-          echo "expected_sha=$EXPECTED_FEATURE_SHA"
-          echo "actual_sha=$(git rev-parse HEAD)"
-          test "$(git rev-parse HEAD)" = "$EXPECTED_FEATURE_SHA"
-      - name: Install Qt runtime library
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libegl1
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-      - name: Install project
-        run: python -m pip install -e ".[dev]"
-      - name: Record runtime versions
-        run: |
-          python - <<'PY' > runtime-versions.txt
-          import platform
-          import cv2, matplotlib, numpy, PySide6, pytest
-          print(f"Python={platform.python_version()}")
-          print(f"PySide6={PySide6.__version__}")
-          print(f"NumPy={numpy.__version__}")
-          print(f"OpenCV={cv2.__version__}")
-          print(f"Matplotlib={matplotlib.__version__}")
-          print(f"pytest={pytest.__version__}")
-          PY
-          cat runtime-versions.txt
-      - name: Run canonical full suite and publish concise result
-        env:
-          QT_QPA_PLATFORM: offscreen
-          MATRIX_PYTHON: ${{ matrix.python-version }}
-        shell: bash
-        run: |
-          set +e
-          python -m pytest -q > canonical.log 2>&1
-          status=$?
-          python - "$status" <<'PY'
-          from pathlib import Path
-          import os
-          import sys
-          status = int(sys.argv[1])
-          versions = Path("runtime-versions.txt").read_text(encoding="utf-8", errors="replace").strip()
-          lines = Path("canonical.log").read_text(encoding="utf-8", errors="replace").splitlines()
-          summary = next(
-              (
-                  line.strip()
-                  for line in reversed(lines)
-                  if " passed" in line or " failed" in line or " error" in line
-              ),
-              "pytest summary unavailable",
-          )
-          py = os.environ["MATRIX_PYTHON"]
-          body = (
-              f"## Final canonical evidence — Python {py}\n\n"
-              "- Expected/checked-out feature SHA: `73edfedb61948e2ff0431ed31075db1ac5d682ef`\n"
-              f"- pytest exit code: `{status}`\n"
-              f"- pytest summary: `{summary}`\n\n"
-              "```text\n" + versions + "\n```\n"
-          )
-          Path("canonical-comment.md").write_text(body, encoding="utf-8")
-          PY
-          gh pr comment "$PR_NUMBER" --repo teeeeooo/oil_level_tracker --body-file canonical-comment.md
-          tail -n 20 canonical.log
-          exit "$status"
+      - name: Close temporary validation PR
+        run: gh pr close 31 --repo teeeeooo/oil_level_tracker --comment "Focused and canonical exact-head validation succeeded; cleaning temporary validation resources."
+      - name: Delete temporary validation branch
+        run: gh api --method DELETE repos/teeeeooo/oil_level_tracker/git/refs/heads/validation/detector-benchmark-focused-73edfed
