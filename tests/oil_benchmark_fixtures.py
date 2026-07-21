@@ -55,7 +55,11 @@ class OilControlledVideoReader:
 
     def read_at(self, timestamp):
         scene = self.scenes[round(float(timestamp), 6)]
-        return scene.frame.copy(), int(round(scene.timestamp * self.metadata.fps)), scene.timestamp
+        return (
+            scene.frame.copy(),
+            int(round(scene.timestamp * self.metadata.fps)),
+            scene.timestamp,
+        )
 
     def close(self):
         self.closed = True
@@ -90,7 +94,11 @@ def generate_controlled_oil_dataset(tmp_path: Path):
             foam_source_y=scene.foam_y,
             error_types=(TruthErrorType.OTHER,),
             note=f"controlled oil scene contract: {scene.case_id}",
-            official_reference=service.official_reference(bundle, glass, scene.timestamp),
+            official_reference=service.official_reference(
+                bundle,
+                glass,
+                scene.timestamp,
+            ),
         )
         annotation = replace(
             annotation,
@@ -99,7 +107,11 @@ def generate_controlled_oil_dataset(tmp_path: Path):
         )
         truth_set.upsert(annotation)
         annotations.append(annotation)
-    reader = OilControlledVideoReader(bundle.source_video_path, bundle.source_metadata, scenes)
+    reader = OilControlledVideoReader(
+        bundle.source_video_path,
+        bundle.source_metadata,
+        scenes,
+    )
     exporter = RegressionFixtureExporter(lambda _path: reader, clock=lambda: FIXED_TIME)
     result = exporter.export(
         bundle,
@@ -158,92 +170,76 @@ def controlled_oil_scenes() -> tuple[OilControlledScene, ...]:
         )
         timestamp += 0.1
 
-    add("clear-upper", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 105), FillState.PARTIAL_VISIBLE, oil_y=105.0)
-    add("clear-center", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 132), FillState.PARTIAL_VISIBLE, oil_y=132.0)
-    add("clear-lower", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 160), FillState.PARTIAL_VISIBLE, oil_y=160.0)
-    add("opposite-polarity", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 128, above=65, below=180), FillState.PARTIAL_VISIBLE, oil_y=128.0)
-    add("weak-valid", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 138, above=145, below=95, line=175), FillState.PARTIAL_VISIBLE, oil_y=138.0)
-    add("structural-plus-real", BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE, _structural_plus_oil(width, height, 108, 145), FillState.PARTIAL_VISIBLE, oil_y=145.0)
-    add("glare-plus-real", BenchmarkCategory.REFLECTION_OR_BLUR, _glare_plus_oil(width, height, 142), FillState.PARTIAL_VISIBLE, oil_y=142.0)
-    add("reflection-only", BenchmarkCategory.REFLECTION_OR_BLUR, _reflection(width, height), FillState.FULL_NO_INTERFACE)
-    add("shimmer-only", BenchmarkCategory.TRANSPARENT_OIL_SHIMMER, _shimmer(width, height), FillState.FULL_NO_INTERFACE)
-    add("full-no-interface", BenchmarkCategory.NO_INTERFACE, _uniform(width, height, 78), FillState.FULL_NO_INTERFACE)
-    add("empty-no-interface", BenchmarkCategory.NO_INTERFACE, _uniform(width, height, 188), FillState.EMPTY_NO_INTERFACE)
-    add("rim-line", BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE, _rim_line(width, height), FillState.FULL_NO_INTERFACE)
+    static = (
+        ("clear-upper", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 105), FillState.PARTIAL_VISIBLE, 105.0),
+        ("clear-center", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 132), FillState.PARTIAL_VISIBLE, 132.0),
+        ("clear-lower", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 160), FillState.PARTIAL_VISIBLE, 160.0),
+        ("opposite-polarity", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 128, above=65, below=180), FillState.PARTIAL_VISIBLE, 128.0),
+        ("weak-valid", BenchmarkCategory.CLEAR_OIL_BOUNDARY, _oil(width, height, 138, above=145, below=95, line=175), FillState.PARTIAL_VISIBLE, 138.0),
+        ("structural-plus-real", BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE, _structural_plus_oil(width, height, 108, 145), FillState.PARTIAL_VISIBLE, 145.0),
+        ("glare-plus-real", BenchmarkCategory.REFLECTION_OR_BLUR, _glare_plus_oil(width, height, 142), FillState.PARTIAL_VISIBLE, 142.0),
+        ("reflection-only", BenchmarkCategory.REFLECTION_OR_BLUR, _reflection(width, height), FillState.FULL_NO_INTERFACE, None),
+        ("shimmer-only", BenchmarkCategory.TRANSPARENT_OIL_SHIMMER, _shimmer(width, height), FillState.FULL_NO_INTERFACE, None),
+        ("full-no-interface", BenchmarkCategory.NO_INTERFACE, _uniform(width, height, 78), FillState.FULL_NO_INTERFACE, None),
+        ("empty-no-interface", BenchmarkCategory.NO_INTERFACE, _uniform(width, height, 188), FillState.EMPTY_NO_INTERFACE, None),
+        ("rim-line", BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE, _rim_line(width, height), FillState.FULL_NO_INTERFACE, None),
+    )
+    for case_id, category, frame, state, oil_y in static:
+        add(case_id, category, frame, state, oil_y=oil_y)
 
-    for order, y in enumerate((120, 123, 126, 129, 132)):
-        add(
-            f"slow-motion-{order}",
-            BenchmarkCategory.CLEAR_OIL_BOUNDARY,
-            _oil(width, height, y),
-            FillState.PARTIAL_VISIBLE,
-            oil_y=float(y),
-            sequence_id="slow-motion",
-            sequence_order=order,
+    _add_motion_sequence(add, width, height, "slow-motion", BenchmarkCategory.CLEAR_OIL_BOUNDARY, (120, 123, 126, 129, 132), FillState.PARTIAL_VISIBLE)
+    _add_motion_sequence(add, width, height, "rapid-filling", BenchmarkCategory.RAPID_OIL_FLOW, (165, 151, 137, 123, 109), FillState.FILLING_VISIBLE)
+    _add_motion_sequence(add, width, height, "rapid-draining", BenchmarkCategory.RAPID_OIL_FLOW, (108, 122, 136, 150, 164), FillState.DRAINING_VISIBLE)
+
+    transient = (
+        (_oil(width, height, 132), FillState.PARTIAL_VISIBLE, 132.0),
+        (_false_line(width, height, 92), FillState.UNKNOWN_REVIEW, None),
+        (_oil(width, height, 134), FillState.PARTIAL_VISIBLE, 134.0),
+    )
+    _add_frames(add, "transient-false-line", BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE, transient)
+    _add_frames(
+        add,
+        "one-frame-dropout",
+        BenchmarkCategory.RAPID_OIL_FLOW,
+        (
+            (_oil(width, height, 128), FillState.PARTIAL_VISIBLE, 128.0),
+            (_uniform(width, height, 112), FillState.UNKNOWN_REVIEW, None),
+            (_oil(width, height, 130), FillState.PARTIAL_VISIBLE, 130.0),
+        ),
+    )
+    _add_frames(
+        add,
+        "multi-frame-dropout",
+        BenchmarkCategory.RAPID_OIL_FLOW,
+        (
+            (_oil(width, height, 128), FillState.PARTIAL_VISIBLE, 128.0),
+            (_uniform(width, height, 112), FillState.UNKNOWN_REVIEW, None),
+            (_uniform(width, height, 114), FillState.UNKNOWN_REVIEW, None),
+            (_oil(width, height, 132), FillState.PARTIAL_VISIBLE, 132.0),
+        ),
+    )
+    _add_frames(
+        add,
+        "glare-recovery",
+        BenchmarkCategory.REFLECTION_OR_BLUR,
+        (
+            (_oil(width, height, 130), FillState.PARTIAL_VISIBLE, 130.0),
+            (_glare(width, height), FillState.UNKNOWN_REVIEW, None),
+            (_glare(width, height), FillState.UNKNOWN_REVIEW, None),
+            (_oil(width, height, 133), FillState.PARTIAL_VISIBLE, 133.0),
+        ),
+    )
+
+    for order, frame in enumerate(
+        (
+            _uniform(width, height, 78),
+            _uniform(width, height, 78),
+            _oil(width, height, 145),
+            _oil(width, height, 143),
         )
-    for order, y in enumerate((165, 151, 137, 123, 109)):
+    ):
         add(
-            f"rapid-filling-{order}",
-            BenchmarkCategory.RAPID_OIL_FLOW,
-            _oil(width, height, y),
-            FillState.FILLING_VISIBLE,
-            oil_y=float(y),
-            sequence_id="rapid-filling",
-            sequence_order=order,
-        )
-    for order, y in enumerate((108, 122, 136, 150, 164)):
-        add(
-            f"rapid-draining-{order}",
-            BenchmarkCategory.RAPID_OIL_FLOW,
-            _oil(width, height, y),
-            FillState.DRAINING_VISIBLE,
-            oil_y=float(y),
-            sequence_id="rapid-draining",
-            sequence_order=order,
-        )
-    for order, frame in enumerate((_oil(width, height, 132), _false_line(width, height, 92), _oil(width, height, 134))):
-        add(
-            f"transient-false-{order}",
-            BenchmarkCategory.STRUCTURAL_HORIZONTAL_EDGE,
-            frame,
-            FillState.PARTIAL_VISIBLE,
-            oil_y=132.0 if order == 0 else (None if order == 1 else 134.0),
-            sequence_id="transient-false-line",
-            sequence_order=order,
-        )
-    for order, frame in enumerate((_oil(width, height, 128), _uniform(width, height, 112), _oil(width, height, 130))):
-        add(
-            f"one-dropout-{order}",
-            BenchmarkCategory.RAPID_OIL_FLOW,
-            frame,
-            FillState.PARTIAL_VISIBLE if order != 1 else FillState.UNKNOWN_REVIEW,
-            oil_y=None if order == 1 else float(128 + order),
-            sequence_id="one-frame-dropout",
-            sequence_order=order,
-        )
-    for order, frame in enumerate((_oil(width, height, 128), _uniform(width, height, 112), _uniform(width, height, 114), _oil(width, height, 132))):
-        add(
-            f"multi-dropout-{order}",
-            BenchmarkCategory.RAPID_OIL_FLOW,
-            frame,
-            FillState.PARTIAL_VISIBLE if order in {0, 3} else FillState.UNKNOWN_REVIEW,
-            oil_y=128.0 if order == 0 else (132.0 if order == 3 else None),
-            sequence_id="multi-frame-dropout",
-            sequence_order=order,
-        )
-    for order, frame in enumerate((_oil(width, height, 130), _glare(width, height), _glare(width, height), _oil(width, height, 133))):
-        add(
-            f"glare-recovery-{order}",
-            BenchmarkCategory.REFLECTION_OR_BLUR,
-            frame,
-            FillState.PARTIAL_VISIBLE if order in {0, 3} else FillState.UNKNOWN_REVIEW,
-            oil_y=130.0 if order == 0 else (133.0 if order == 3 else None),
-            sequence_id="glare-recovery",
-            sequence_order=order,
-        )
-    for order, frame in enumerate((_uniform(width, height, 78), _uniform(width, height, 78), _oil(width, height, 145), _oil(width, height, 143))):
-        add(
-            f"no-to-visible-{order}",
+            f"no-interface-to-visible-{order}",
             BenchmarkCategory.NO_INTERFACE if order < 2 else BenchmarkCategory.RAPID_OIL_FLOW,
             frame,
             FillState.FULL_NO_INTERFACE if order < 2 else FillState.DRAINING_VISIBLE,
@@ -251,9 +247,16 @@ def controlled_oil_scenes() -> tuple[OilControlledScene, ...]:
             sequence_id="no-interface-to-visible",
             sequence_order=order,
         )
-    for order, frame in enumerate((_oil(width, height, 145), _oil(width, height, 143), _uniform(width, height, 78), _uniform(width, height, 78))):
+    for order, frame in enumerate(
+        (
+            _oil(width, height, 145),
+            _oil(width, height, 143),
+            _uniform(width, height, 78),
+            _uniform(width, height, 78),
+        )
+    ):
         add(
-            f"visible-to-no-{order}",
+            f"visible-to-no-interface-{order}",
             BenchmarkCategory.RAPID_OIL_FLOW if order < 2 else BenchmarkCategory.NO_INTERFACE,
             frame,
             FillState.DRAINING_VISIBLE if order < 2 else FillState.FULL_NO_INTERFACE,
@@ -261,28 +264,59 @@ def controlled_oil_scenes() -> tuple[OilControlledScene, ...]:
             sequence_id="visible-to-no-interface",
             sequence_order=order,
         )
-    for order, y in enumerate((125, 126, 168, 170, 172)):
-        add(
-            f"large-jump-{order}",
-            BenchmarkCategory.RAPID_OIL_FLOW,
-            _oil(width, height, y),
-            FillState.PARTIAL_VISIBLE,
-            oil_y=float(y),
-            sequence_id="large-jump-new-path",
-            sequence_order=order,
-        )
+    _add_motion_sequence(
+        add,
+        width,
+        height,
+        "large-jump-new-path",
+        BenchmarkCategory.RAPID_OIL_FLOW,
+        (125, 126, 168, 170, 172),
+        FillState.PARTIAL_VISIBLE,
+    )
     for order, polarity in enumerate((1, 1, -1, -1)):
         y = 132 + order
         add(
             f"polarity-change-{order}",
             BenchmarkCategory.CLEAR_OIL_BOUNDARY,
-            _oil(width, height, y, above=175 if polarity > 0 else 65, below=70 if polarity > 0 else 180),
+            _oil(
+                width,
+                height,
+                y,
+                above=175 if polarity > 0 else 65,
+                below=70 if polarity > 0 else 180,
+            ),
             FillState.PARTIAL_VISIBLE,
             oil_y=float(y),
             sequence_id="polarity-change",
             sequence_order=order,
         )
     return tuple(rows)
+
+
+def _add_motion_sequence(add, width, height, sequence_id, category, ys, state):
+    for order, y in enumerate(ys):
+        add(
+            f"{sequence_id}-{order}",
+            category,
+            _oil(width, height, y),
+            state,
+            oil_y=float(y),
+            sequence_id=sequence_id,
+            sequence_order=order,
+        )
+
+
+def _add_frames(add, sequence_id, category, frames):
+    for order, (frame, state, oil_y) in enumerate(frames):
+        add(
+            f"{sequence_id}-{order}",
+            category,
+            frame,
+            state,
+            oil_y=oil_y,
+            sequence_id=sequence_id,
+            sequence_order=order,
+        )
 
 
 def _base(width: int, height: int, value: int = 55) -> np.ndarray:
@@ -295,7 +329,15 @@ def _uniform(width: int, height: int, value: int) -> np.ndarray:
     return image
 
 
-def _oil(width: int, height: int, y: int, *, above: int = 175, below: int = 70, line: int = 225) -> np.ndarray:
+def _oil(
+    width: int,
+    height: int,
+    y: int,
+    *,
+    above: int = 175,
+    below: int = 70,
+    line: int = 225,
+) -> np.ndarray:
     image = _uniform(width, height, above)
     image[y:186, 122:198] = below
     cv2.line(image, (122, y), (197, y), (line, line, line), 2)
@@ -304,7 +346,13 @@ def _oil(width: int, height: int, y: int, *, above: int = 175, below: int = 70, 
 
 def _structural_plus_oil(width: int, height: int, structure_y: int, oil_y: int) -> np.ndarray:
     image = _oil(width, height, oil_y, above=170, below=78, line=185)
-    cv2.rectangle(image, (122, structure_y - 3), (197, structure_y + 3), (245, 245, 245), -1)
+    cv2.rectangle(
+        image,
+        (122, structure_y - 3),
+        (197, structure_y + 3),
+        (245, 245, 245),
+        -1,
+    )
     return image
 
 
