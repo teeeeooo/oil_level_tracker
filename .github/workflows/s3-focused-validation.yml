@@ -28,6 +28,8 @@ jobs:
           echo "expected exact SHA=$EXPECTED_SHA"
           echo "actual checkout SHA=$actual"
           test "$actual" = "$EXPECTED_SHA"
+      - name: Install Qt offscreen runtime libraries
+        run: sudo apt-get update -q && sudo apt-get install -y -q libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0
       - name: Set up Python 3.13
         uses: actions/setup-python@v5
         with:
@@ -86,7 +88,7 @@ jobs:
             echo 'Focused validation failed for exact feature SHA `ff55345f0a0e230327fc96027a493bb0916d5b35`.'
             echo
             echo '```text'
-            tail -n 160 /tmp/s3-focused.log
+            tail -n 180 /tmp/s3-focused.log
             echo '```'
           } > /tmp/s3-focused-comment.md
           gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/s3-focused-comment.md
