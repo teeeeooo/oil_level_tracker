@@ -85,17 +85,24 @@ class ReviewDebugOverlayRenderer:
         delta = decoded - float(record.timestamp_sec)
         _outlined_text(
             image,
-            f"DEBUG TRACE {record.timestamp_sec:.3f}s / DECODED {decoded:.3f}s / DELTA {delta:+.3f}s",
-            (14, 26),
+            f"DEBUG TRACE {record.timestamp_sec:.3f}s",
+            (14, 24),
             (255, 255, 255),
-            0.56,
+            0.54,
+        )
+        _outlined_text(
+            image,
+            f"DECODED {decoded:.3f}s  DELTA {delta:+.3f}s",
+            (14, 47),
+            (255, 255, 255),
+            0.50,
         )
         _outlined_text(
             image,
             "Official final tracking overlay is hidden in debug mode",
-            (14, 49),
+            (14, 70),
             (0, 220, 255),
-            0.48,
+            0.45,
         )
         return image
 
