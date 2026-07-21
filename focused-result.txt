@@ -1,0 +1,345 @@
+Python 3.13.14
+PySide6 6.11.1
+Matplotlib 3.11.1
+COMMAND: QT_QPA_PLATFORM=offscreen python -m pytest -q --tb=short focused files
+........................................................F........F...... [ 68%]
+F................................                                        [100%]
+=================================== FAILURES ===================================
+_______ test_canvas_keeps_separate_official_and_truth_layers_with_labels _______
+tests/gui/test_truth_annotation_canvas.py:41: in test_canvas_keeps_separate_official_and_truth_layers_with_labels
+    canvas.render(painter)
+E   TypeError: 'PySide6.QtWidgets.QWidget.render' called with wrong argument types:
+E     PySide6.QtWidgets.QWidget.render(QPainter)
+E   Supported signatures:
+E     PySide6.QtWidgets.QWidget.render(target: PySide6.QtGui.QPaintDevice, /, targetOffset: PySide6.QtCore.QPoint = Default(QPoint), sourceRegion: PySide6.QtGui.QRegion | PySide6.QtGui.QBitmap | PySide6.QtGui.QPolygon | PySide6.QtCore.QRect = Default(QRegion), renderFlags: PySide6.QtWidgets.QWidget.RenderFlag = Instance(QWidget.RenderFlags(QWidget.RenderFlag.DrawWindowBackground | QWidget.RenderFlag.DrawChildren)))
+E     PySide6.QtWidgets.QWidget.render(painter: PySide6.QtGui.QPainter, targetOffset: PySide6.QtCore.QPoint, /, sourceRegion: PySide6.QtGui.QRegion | PySide6.QtGui.QBitmap | PySide6.QtGui.QPolygon | PySide6.QtCore.QRect = Default(QRegion), renderFlags: PySide6.QtWidgets.QWidget.RenderFlag = Instance(QWidget.RenderFlags(QWidget.RenderFlag.DrawWindowBackground | QWidget.RenderFlag.DrawChildren)))
+_________ test_confirm_official_is_explicit_and_copies_fill_and_lines __________
+tests/gui/test_truth_annotation_window.py:54: in test_confirm_official_is_explicit_and_copies_fill_and_lines
+    assert window.fill_state.currentData() is official.fill_state
+E   AssertionError: assert 'PARTIAL_VISIBLE' is <FillState.PARTIAL_VISIBLE: 'PARTIAL_VISIBLE'>
+E    +  where 'PARTIAL_VISIBLE' = <built-in method currentData of PySide6.QtWidgets.QComboBox object at 0x7fc733b28300>()
+E    +    where <built-in method currentData of PySide6.QtWidgets.QComboBox object at 0x7fc733b28300> = <PySide6.QtWidgets.QComboBox(0x564f38684e50) at 0x7fc733b28300>.currentData
+E    +      where <PySide6.QtWidgets.QComboBox(0x564f38684e50) at 0x7fc733b28300> = <oil_tracker.ui.truth_annotation_window.TruthAnnotationWindow(0x564f3820f580) at 0x7fc733b1e700>.fill_state
+E    +  and   <FillState.PARTIAL_VISIBLE: 'PARTIAL_VISIBLE'> = OfficialTrackingReference(sample_timestamp_sec=2.0, frame_index=60, fill_state=<FillState.PARTIAL_VISIBLE: 'PARTIAL_VI...=7.5), confidence=0.8, valid=True, flags=('LOW_CONFIDENCE',), debug_record_id=None, candidate_baseline_available=False).fill_state
+----------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+________________ test_annotation_list_sort_filter_and_selection ________________
+tests/gui/test_truth_annotation_window.py:172: in test_annotation_list_sort_filter_and_selection
+    assert window.annotation_list.count() == 1
+E   assert 0 == 1
+E    +  where 0 = <built-in method count of PySide6.QtWidgets.QListWidget object at 0x7fc733b8f080>()
+E    +    where <built-in method count of PySide6.QtWidgets.QListWidget object at 0x7fc733b8f080> = <PySide6.QtWidgets.QListWidget(0x564f38d49e90) at 0x7fc733b8f080>.count
+E    +      where <PySide6.QtWidgets.QListWidget(0x564f38d49e90) at 0x7fc733b8f080> = <oil_tracker.ui.truth_annotation_window.TruthAnnotationWindow(0x564f38d1a420) at 0x7fc733b1e980>.annotation_list
+----------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+=============================== warnings summary ===============================
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 49884 (\N{HANGUL SYLLABLE SI}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 44036 (\N{HANGUL SYLLABLE GAN}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 52488 (\N{HANGUL SYLLABLE CO}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 50976 (\N{HANGUL SYLLABLE YU}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 47732 (\N{HANGUL SYLLABLE MYEON}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 44288 (\N{HANGUL SYLLABLE GWAN}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 52272 (\N{HANGUL SYLLABLE CAL}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 52285 (\N{HANGUL SYLLABLE CANG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 44592 (\N{HANGUL SYLLABLE GI}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 51456 (\N{HANGUL SYLLABLE JUN}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 51216 (\N{HANGUL SYLLABLE JEOM}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 48516 (\N{HANGUL SYLLABLE BUN}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 49437 (\N{HANGUL SYLLABLE SEOG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 48276 (\N{HANGUL SYLLABLE BEOM}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 50948 (\N{HANGUL SYLLABLE WI}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 50517 (\N{HANGUL SYLLABLE AB}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 52629 (\N{HANGUL SYLLABLE CUG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 46041 (\N{HANGUL SYLLABLE DONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 49324 (\N{HANGUL SYLLABLE SA}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 50857 (\N{HANGUL SYLLABLE YONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 51088 (\N{HANGUL SYLLABLE JA}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 51221 (\N{HANGUL SYLLABLE JEONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 45813 (\N{HANGUL SYLLABLE DAB}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 44277 (\N{HANGUL SYLLABLE GONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 49885 (\N{HANGUL SYLLABLE SIG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 54788 (\N{HANGUL SYLLABLE HYEON}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 51116 (\N{HANGUL SYLLABLE JAE}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 50689 (\N{HANGUL SYLLABLE YEONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 49345 (\N{HANGUL SYLLABLE SANG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_clicking_truth_marker_emits_annotation_identity_instead_of_generic_seek
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:64: UserWarning: Glyph 44033 (\N{HANGUL SYLLABLE GAG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 49884 (\N{HANGUL SYLLABLE SI}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 44036 (\N{HANGUL SYLLABLE GAN}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 52488 (\N{HANGUL SYLLABLE CO}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 50976 (\N{HANGUL SYLLABLE YU}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 47732 (\N{HANGUL SYLLABLE MYEON}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 44288 (\N{HANGUL SYLLABLE GWAN}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 52272 (\N{HANGUL SYLLABLE CAL}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 52285 (\N{HANGUL SYLLABLE CANG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 44592 (\N{HANGUL SYLLABLE GI}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 51456 (\N{HANGUL SYLLABLE JUN}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 51216 (\N{HANGUL SYLLABLE JEOM}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 48516 (\N{HANGUL SYLLABLE BUN}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 49437 (\N{HANGUL SYLLABLE SEOG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 48276 (\N{HANGUL SYLLABLE BEOM}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 50948 (\N{HANGUL SYLLABLE WI}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 50517 (\N{HANGUL SYLLABLE AB}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 52629 (\N{HANGUL SYLLABLE CUG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 46041 (\N{HANGUL SYLLABLE DONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 49324 (\N{HANGUL SYLLABLE SA}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 50857 (\N{HANGUL SYLLABLE YONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 51088 (\N{HANGUL SYLLABLE JA}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 51221 (\N{HANGUL SYLLABLE JEONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 45813 (\N{HANGUL SYLLABLE DAB}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 44277 (\N{HANGUL SYLLABLE GONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 49885 (\N{HANGUL SYLLABLE SIG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 54788 (\N{HANGUL SYLLABLE HYEON}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 51116 (\N{HANGUL SYLLABLE JAE}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 50689 (\N{HANGUL SYLLABLE YEONG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 49345 (\N{HANGUL SYLLABLE SANG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/gui/test_truth_markers.py::test_click_away_from_truth_marker_keeps_existing_timestamp_navigation
+  /home/runner/work/oil_level_tracker/oil_level_tracker/source/tests/gui/test_truth_markers.py:88: UserWarning: Glyph 44033 (\N{HANGUL SYLLABLE GAG}) missing from font(s) DejaVu Sans.
+    graph.canvas.draw()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 51116 (\N{HANGUL SYLLABLE JAE}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 44160 (\N{HANGUL SYLLABLE GEOM}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 52636 (\N{HANGUL SYLLABLE CUL}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 44208 (\N{HANGUL SYLLABLE GYEOL}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 44284 (\N{HANGUL SYLLABLE GWA}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 44032 (\N{HANGUL SYLLABLE GA}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 50630 (\N{HANGUL SYLLABLE EOBS}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 49845 (\N{HANGUL SYLLABLE SEUB}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 45768 (\N{HANGUL SYLLABLE NI}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+tests/test_redetection_ui_controller.py::test_comparison_window_has_required_tabs_and_mode_limitations
+tests/test_redetection_ui_controller.py::test_window_disables_run_without_source_or_with_invalid_settings
+  /opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/pytestqt/plugin.py:220: UserWarning: Glyph 45796 (\N{HANGUL SYLLABLE DA}) missing from font(s) DejaVu Sans.
+    app.processEvents()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/gui/test_truth_annotation_canvas.py::test_canvas_keeps_separate_official_and_truth_layers_with_labels - TypeError: 'PySide6.QtWidgets.QWidget.render' called with wrong argument types:
+  PySide6.QtWidgets.QWidget.render(QPainter)
+Supported signatures:
+  PySide6.QtWidgets.QWidget.render(target: PySide6.QtGui.QPaintDevice, /, targetOffset: PySide6.QtCore.QPoint = Default(QPoint), sourceRegion: PySide6.QtGui.QRegion | PySide6.QtGui.QBitmap | PySide6.QtGui.QPolygon | PySide6.QtCore.QRect = Default(QRegion), renderFlags: PySide6.QtWidgets.QWidget.RenderFlag = Instance(QWidget.RenderFlags(QWidget.RenderFlag.DrawWindowBackground | QWidget.RenderFlag.DrawChildren)))
+  PySide6.QtWidgets.QWidget.render(painter: PySide6.QtGui.QPainter, targetOffset: PySide6.QtCore.QPoint, /, sourceRegion: PySide6.QtGui.QRegion | PySide6.QtGui.QBitmap | PySide6.QtGui.QPolygon | PySide6.QtCore.QRect = Default(QRegion), renderFlags: PySide6.QtWidgets.QWidget.RenderFlag = Instance(QWidget.RenderFlags(QWidget.RenderFlag.DrawWindowBackground | QWidget.RenderFlag.DrawChildren)))
+FAILED tests/gui/test_truth_annotation_window.py::test_confirm_official_is_explicit_and_copies_fill_and_lines - AssertionError: assert 'PARTIAL_VISIBLE' is <FillState.PARTIAL_VISIBLE: 'PARTIAL_VISIBLE'>
+ +  where 'PARTIAL_VISIBLE' = <built-in method currentData of PySide6.QtWidgets.QComboBox object at 0x7fc733b28300>()
+ +    where <built-in method currentData of PySide6.QtWidgets.QComboBox object at 0x7fc733b28300> = <PySide6.QtWidgets.QComboBox(0x564f38684e50) at 0x7fc733b28300>.currentData
+ +      where <PySide6.QtWidgets.QComboBox(0x564f38684e50) at 0x7fc733b28300> = <oil_tracker.ui.truth_annotation_window.TruthAnnotationWindow(0x564f3820f580) at 0x7fc733b1e700>.fill_state
+ +  and   <FillState.PARTIAL_VISIBLE: 'PARTIAL_VISIBLE'> = OfficialTrackingReference(sample_timestamp_sec=2.0, frame_index=60, fill_state=<FillState.PARTIAL_VISIBLE: 'PARTIAL_VI...=7.5), confidence=0.8, valid=True, flags=('LOW_CONFIDENCE',), debug_record_id=None, candidate_baseline_available=False).fill_state
+FAILED tests/gui/test_truth_annotation_window.py::test_annotation_list_sort_filter_and_selection - assert 0 == 1
+ +  where 0 = <built-in method count of PySide6.QtWidgets.QListWidget object at 0x7fc733b8f080>()
+ +    where <built-in method count of PySide6.QtWidgets.QListWidget object at 0x7fc733b8f080> = <PySide6.QtWidgets.QListWidget(0x564f38d49e90) at 0x7fc733b8f080>.count
+ +      where <PySide6.QtWidgets.QListWidget(0x564f38d49e90) at 0x7fc733b8f080> = <oil_tracker.ui.truth_annotation_window.TruthAnnotationWindow(0x564f38d1a420) at 0x7fc733b1e980>.annotation_list
+3 failed, 102 passed, 80 warnings in 4.85s
+
+EXIT_STATUS=1
+EXACT_FEATURE_SHA=48be9f58d7b38bad73c886ab38377f04e786cee9
