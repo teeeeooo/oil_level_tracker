@@ -13,7 +13,13 @@ from oil_tracker.domain.enums import BoundaryKind
 from oil_tracker.domain.recipe import DetectorSettings
 
 
-def _score(above: int, below: int, *, glare: bool = False, excluded: bool = False):
+def _score(
+    above: int,
+    below: int,
+    *,
+    glare: bool = False,
+    excluded: bool = False,
+):
     settings = DetectorSettings(
         minimum_final_confidence=0.05,
         minimum_horizontal_coverage=0.0,
@@ -27,8 +33,6 @@ def _score(above: int, below: int, *, glare: bool = False, excluded: bool = Fals
     if glare:
         image[19:29, 10:54] = 255
     if excluded:
-        # Remove every pixel from the upper statistics band while retaining the
-        # candidate row itself inside the effective mask.
         mask[19:24, :] = 0
         exclusion[19:24, :] = 255
     pre = preprocess(image, mask, settings)
@@ -61,6 +65,8 @@ def test_bright_above_dark_below_has_positive_signed_evidence():
     assert candidate.features["polarity_sign"] == 1.0
     assert candidate.features["polarity_score"] > 0.5
     assert candidate.features["polarity_available"] == 1.0
+    assert candidate.features["persistent_signed_above_minus_below"] > 0.0
+    assert candidate.features["persistent_region_contrast"] > 0.5
 
 
 def test_dark_above_bright_below_has_opposite_polarity():
@@ -68,6 +74,7 @@ def test_dark_above_bright_below_has_opposite_polarity():
     assert candidate.features["signed_above_minus_below"] < 0.0
     assert candidate.features["polarity_sign"] == -1.0
     assert candidate.features["polarity_score"] > 0.5
+    assert candidate.features["persistent_polarity_sign"] == -1.0
 
 
 def test_weak_contrast_is_finite_and_low_polarity():
@@ -142,6 +149,32 @@ def test_close_strong_opposite_polarity_pair_is_rejected_as_structure():
     assert upper.penalties["paired_structure_penalty"] == 1.0
 
 
+def test_opposite_local_edges_with_persistent_region_step_are_merged():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+    upper = _scored_scalar_candidate(
+        40.0,
+        1.0,
+        observation=0.92,
+        persistent_contrast=0.90,
+        persistent_polarity=1.0,
+    )
+    lower = _scored_scalar_candidate(
+        46.0,
+        -1.0,
+        observation=0.82,
+        persistent_contrast=0.84,
+        persistent_polarity=1.0,
+    )
+    suppress_paired_horizontal_structures([upper, lower], settings)
+    kept = [candidate for candidate in (upper, lower) if not candidate.rejected]
+    rejected = [candidate for candidate in (upper, lower) if candidate.rejected]
+    assert len(kept) == 1
+    assert len(rejected) == 1
+    assert 40.0 < kept[0].y < 46.0
+    assert kept[0].features["paired_boundary_step_preserved"] == 1.0
+    assert rejected[0].reject_reason == "paired_boundary_edge_duplicate"
+
+
 def test_single_signed_boundary_is_not_rejected_as_structure():
     settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
     candidate = _scored_scalar_candidate(40.0, 1.0)
@@ -150,17 +183,27 @@ def test_single_signed_boundary_is_not_rejected_as_structure():
     assert candidate.features["paired_structure_opposite_polarity"] == 0.0
 
 
-def _scored_scalar_candidate(y: float, polarity: float) -> BoundaryCandidate:
+def _scored_scalar_candidate(
+    y: float,
+    polarity: float,
+    *,
+    observation: float = 0.90,
+    persistent_contrast: float = 0.0,
+    persistent_polarity: float = 0.0,
+) -> BoundaryCandidate:
     candidate = BoundaryCandidate(
         "oil_consensus",
         BoundaryKind.OIL_AIR,
         y,
         {
-            "observation_score": 0.90,
+            "observation_score": observation,
+            "polarity_score": abs(polarity),
             "polarity_sign": polarity,
+            "persistent_region_contrast": persistent_contrast,
+            "persistent_polarity_sign": persistent_polarity,
             "unique_generator_support_count": 3.0,
         },
     )
-    candidate.final_score = 0.90
+    candidate.final_score = observation
     candidate.penalties["paired_structure_penalty"] = 0.0
     return candidate
