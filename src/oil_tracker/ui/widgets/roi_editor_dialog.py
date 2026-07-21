@@ -3,7 +3,6 @@ from __future__ import annotations
 from copy import deepcopy
 from uuid import uuid4
 
-import numpy as np
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QComboBox,
@@ -23,7 +22,7 @@ from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
 class RoiEditorDialog(QDialog):
     """Edit one observation ROI on a private copy until the user applies it."""
 
-    def __init__(self, frame: np.ndarray, glass, frame_width: int, frame_height: int, parent=None) -> None:
+    def __init__(self, frame, glass, frame_width: int, frame_height: int, parent=None) -> None:
         super().__init__(parent)
         self.setWindowTitle("ROI 집중 편집")
         self.setMinimumSize(980, 700)

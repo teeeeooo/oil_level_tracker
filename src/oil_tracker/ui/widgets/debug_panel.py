@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import numpy as np
 from PySide6.QtCore import Signal, Qt
-from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
@@ -15,6 +14,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter
+
+
+_FRAME_IMAGE_CONVERTER = QtFrameImageConverter()
 
 _IMAGE_LABELS = {
     "overlay": "검출 결과 화면",
@@ -135,23 +138,6 @@ class DebugPanel(QWidget):
         self.state.setPlainText("\n".join(f"{key}: {value}" for key, value in artifacts.state.items()))
 
 
-def _pixmap(image: np.ndarray) -> QPixmap:
-    if image.ndim == 2:
-        arr = np.ascontiguousarray(image)
-        qimage = QImage(
-            arr.data,
-            arr.shape[1],
-            arr.shape[0],
-            arr.strides[0],
-            QImage.Format.Format_Grayscale8,
-        ).copy()
-    else:
-        arr = np.ascontiguousarray(image[:, :, ::-1])
-        qimage = QImage(
-            arr.data,
-            arr.shape[1],
-            arr.shape[0],
-            arr.strides[0],
-            QImage.Format.Format_RGB888,
-        ).copy()
-    return QPixmap.fromImage(qimage)
+
+def _pixmap(image) -> QPixmap:
+    return QPixmap.fromImage(_FRAME_IMAGE_CONVERTER.to_qimage(image))

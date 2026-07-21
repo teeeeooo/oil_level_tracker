@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import numpy as np
+from oil_tracker.adapters.presentation.qt_frame_image_converter import blank_bgr_frame
 from PySide6.QtCore import QTimer, QUrl, Qt
 from PySide6.QtGui import QAction, QDesktopServices, QKeySequence, QUndoStack
 from PySide6.QtWidgets import (
@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
         self.preview_controller = preview_controller
         self.analysis_controller = analysis_controller
         self.debug_renderer = debug_renderer
-        self.current_frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+        self.current_frame = blank_bgr_frame(1280, 720)
         self.current_time = 0.0
         self.current_frame_index = 0
         self.playback_speed = 1.0
