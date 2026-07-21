@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import json
 
-from foam_benchmark_fixtures import generate_controlled_foam_dataset
+from foam_benchmark_fixtures import S5B_SETTING_FIELDS, generate_controlled_foam_dataset
 from oil_tracker.adapters.storage.benchmark_result_writer import AtomicBenchmarkResultWriter
 from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
@@ -53,6 +54,14 @@ def test_controlled_dataset_is_external_style_valid_and_fingerprint_is_stable(tm
     assert set(categories) <= set(CATEGORY_CONTRACT)
     assert any(case.sequence_id == "transient-shimmer" for case in first.cases)
     assert any(case.sequence_id == "persistent-foam" for case in first.cases)
+
+    recipe_paths = tuple(dataset_path.rglob("recipe_snapshot.oilrecipe"))
+    assert recipe_paths
+    for recipe_path in recipe_paths:
+        payload = json.loads(recipe_path.read_text(encoding="utf-8"))
+        for glass in payload.get("glasses", []):
+            settings = glass.get("detector_settings", {})
+            assert not set(S5B_SETTING_FIELDS).intersection(settings)
 
 
 def test_feature_detector_meets_controlled_foam_and_shimmer_acceptance(tmp_path):
