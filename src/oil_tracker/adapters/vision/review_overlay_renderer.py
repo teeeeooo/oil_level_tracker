@@ -10,9 +10,7 @@ class ReviewOverlayRenderer:
     """Render final saved analysis values onto a full-resolution source frame."""
 
     def render(self, frame: np.ndarray, glass, overlay: ReviewOverlayData) -> np.ndarray:
-        image = np.ascontiguousarray(frame.copy())
-        if image.ndim == 2:
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+        image = _copy_bgr_frame(frame)
         if not overlay.within_analysis_range:
             self._text(image, "OUTSIDE ANALYSIS RANGE", (16, 30), (0, 190, 255), 0.75)
             return image
@@ -85,3 +83,23 @@ class ReviewOverlayRenderer:
         safe = str(text).encode("ascii", "replace").decode("ascii")
         cv2.putText(image, safe, origin, cv2.FONT_HERSHEY_SIMPLEX, scale, (0, 0, 0), 4, cv2.LINE_AA)
         cv2.putText(image, safe, origin, cv2.FONT_HERSHEY_SIMPLEX, scale, color, 1, cv2.LINE_AA)
+
+
+def _copy_bgr_frame(frame: np.ndarray) -> np.ndarray:
+    if not isinstance(frame, np.ndarray):
+        raise TypeError("review frame은 numpy.ndarray여야 합니다.")
+    if frame.dtype != np.uint8:
+        raise ValueError(f"review frame dtype은 uint8이어야 합니다: {frame.dtype}")
+    if frame.size == 0:
+        raise ValueError("review frame이 비어 있습니다.")
+    image = np.ascontiguousarray(frame.copy())
+    if image.ndim == 2:
+        return cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+    if image.ndim != 3:
+        raise ValueError(f"review frame 차원은 2 또는 3이어야 합니다: {image.ndim}")
+    channels = image.shape[2]
+    if channels == 3:
+        return image
+    if channels == 4:
+        return cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
+    raise ValueError(f"지원하지 않는 review frame channel 수입니다: {channels}")
