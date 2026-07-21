@@ -1,0 +1,19 @@
+name: Delete temporary validation branch
+
+on:
+  push:
+    branches:
+      - validation/s4-final-315aa3c
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Delete this temporary branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --delete "${GITHUB_REF_NAME}"
