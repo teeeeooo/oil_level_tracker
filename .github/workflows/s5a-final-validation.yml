@@ -1,4 +1,4 @@
-name: S5-A final path inventory
+name: S5-A final focused and canonical validation
 
 on:
   pull_request:
@@ -9,10 +9,11 @@ permissions:
   pull-requests: write
 
 env:
+  QT_QPA_PLATFORM: offscreen
   EXPECTED_FEATURE_SHA: 0db9ef11fecc5c41249e26b1644a05e6e88e8410
 
 jobs:
-  inventory:
+  focused:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -21,19 +22,179 @@ jobs:
       - name: Assert exact feature checkout
         run: |
           actual=$(git rev-parse HEAD)
-          echo "expected=$EXPECTED_FEATURE_SHA actual=$actual"
+          echo "expected exact SHA=$EXPECTED_FEATURE_SHA"
+          echo "actual checkout SHA=$actual"
           test "$actual" = "$EXPECTED_FEATURE_SHA"
-      - name: Publish relevant actual test paths
+      - name: Install Qt runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install package
+        run: python -m pip install -e '.[dev]'
+      - name: Print runtime identity
+        run: |
+          python - <<'PY' | tee /tmp/versions.log
+          import sys
+          import cv2
+          import matplotlib
+          import numpy
+          import PySide6
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          print('Python:', sys.version)
+          print('PySide6:', PySide6.__version__)
+          print('NumPy:', numpy.__version__)
+          print('OpenCV:', cv2.__version__)
+          print('Matplotlib:', matplotlib.__version__)
+          print('detector version:', OpenCvPhaseDetector.version)
+          PY
+      - name: Run explicit focused test paths
+        id: focused_run
+        run: |
+          set +e
+          python -m pytest -q \
+            tests/test_foam_evidence.py \
+            tests/test_foam_temporal_gate.py \
+            tests/test_foam_fill_state_policy.py \
+            tests/test_foam_phase_detector_integration.py \
+            tests/test_foam_settings.py \
+            tests/unit/test_foam.py \
+            tests/test_foam_controlled_benchmark.py \
+            tests/test_detector_benchmark_architecture.py \
+            tests/test_detector_benchmark_integration.py \
+            tests/test_detector_benchmark_metrics.py \
+            tests/test_detector_benchmark_runner.py \
+            tests/test_benchmark_cli.py \
+            tests/test_benchmark_result_writer.py \
+            tests/test_redetection_additional_contracts.py \
+            tests/test_redetection_apply_compatibility_ui.py \
+            tests/test_redetection_comparison.py \
+            tests/test_redetection_raster_boundary.py \
+            tests/test_redetection_service.py \
+            tests/test_redetection_settings_request.py \
+            tests/test_redetection_ui_controller.py \
+            tests/test_redetection_workspace.py \
+            tests/test_review_debug_overlay_renderer.py \
+            tests/unit/test_analysis_debug_trace_pipeline.py \
+            tests/unit/test_debug_bundle_contract.py \
+            tests/unit/test_debug_capture_policy.py \
+            tests/unit/test_debug_case_exporter.py \
+            tests/unit/test_debug_trace_session.py \
+            tests/unit/test_jsonl_debug_trace.py \
+            tests/integration/test_debug_trace_bundle_output.py \
+            tests/gui/test_preflight_check.py \
+            tests/unit/test_preflight_context.py \
+            tests/unit/test_preflight_controller.py \
+            tests/unit/test_preflight_schedule.py \
+            tests/unit/test_preflight_use_case.py \
+            tests/gui/test_guided_workbench_ux.py \
+            tests/gui/test_workbench_readiness_feedback.py \
+            tests/gui/test_workbench_usability_stabilization.py \
+            tests/gui/test_same_profile_analysis_coordinator.py \
+            tests/unit/test_same_profile_workbench.py \
+            tests/integration/test_analysis_and_reporting.py \
+            tests/gui/test_analysis_complete_dialog.py \
+            tests/gui/test_analysis_completion_coordinator.py \
+            tests/test_s4_analysis_progress_dialog.py \
+            tests/test_s4_analysis_worker.py \
+            tests/test_s4_graph_axis.py \
+            tests/gui/test_result_review_canvas.py \
+            tests/gui/test_result_review_debug_viewer.py \
+            tests/gui/test_result_review_graph.py \
+            tests/gui/test_result_review_png_export.py \
+            tests/unit/test_review_graph.py \
+            tests/test_ui_import_boundaries.py > /tmp/focused.log 2>&1
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit "$code"
+      - name: Publish focused result
+        if: always()
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          EXIT_CODE: ${{ steps.focused_run.outputs.exit_code }}
         run: |
-          find tests -type f -name 'test_*.py' | sort | grep -E 'foam|benchmark|preview|preflight|redetection|debug|import_bound|raster|workbench|analysis|lifecycle|graph|result|phase_detector|settings' > /tmp/paths.txt
           {
-            echo '### Relevant test path inventory'
+            echo '### Final focused validation · Python 3.13'
+            echo
+            echo "expected feature SHA: \`$EXPECTED_FEATURE_SHA\`"
             echo
             echo '```text'
-            cat /tmp/paths.txt
+            cat /tmp/versions.log
+            tail -n 35 /tmp/focused.log
             echo '```'
+            echo
+            echo "exit_code=$EXIT_CODE"
+          } > /tmp/comment.md
+          gh pr comment "$PR_NUMBER" --repo teeeeooo/oil_level_tracker --body-file /tmp/comment.md
+
+  canonical:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.13', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_FEATURE_SHA }}
+      - name: Assert exact feature checkout
+        run: |
+          actual=$(git rev-parse HEAD)
+          echo "expected exact SHA=$EXPECTED_FEATURE_SHA"
+          echo "actual checkout SHA=$actual"
+          test "$actual" = "$EXPECTED_FEATURE_SHA"
+      - name: Install Qt runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - name: Install package
+        run: python -m pip install -e '.[dev]'
+      - name: Print runtime identity
+        run: |
+          python - <<'PY' | tee /tmp/versions.log
+          import sys
+          import cv2
+          import matplotlib
+          import numpy
+          import PySide6
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          print('Python:', sys.version)
+          print('PySide6:', PySide6.__version__)
+          print('NumPy:', numpy.__version__)
+          print('OpenCV:', cv2.__version__)
+          print('Matplotlib:', matplotlib.__version__)
+          print('detector version:', OpenCvPhaseDetector.version)
+          PY
+      - name: Run canonical suite
+        id: canonical_run
+        run: |
+          set +e
+          python -m pytest -q > /tmp/canonical.log 2>&1
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit "$code"
+      - name: Publish canonical result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PYTHON_VERSION: ${{ matrix.python }}
+          EXIT_CODE: ${{ steps.canonical_run.outputs.exit_code }}
+        run: |
+          {
+            echo "### Final canonical validation · Python $PYTHON_VERSION"
+            echo
+            echo "expected feature SHA: \`$EXPECTED_FEATURE_SHA\`"
+            echo
+            echo '```text'
+            cat /tmp/versions.log
+            tail -n 35 /tmp/canonical.log
+            echo '```'
+            echo
+            echo "exit_code=$EXIT_CODE"
           } > /tmp/comment.md
           gh pr comment "$PR_NUMBER" --repo teeeeooo/oil_level_tracker --body-file /tmp/comment.md
