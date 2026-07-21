@@ -1,4 +1,4 @@
-name: S5-B clear diagnosis extraction
+name: S5-B weak boundary diagnosis
 
 on:
   pull_request:
@@ -9,35 +9,90 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  actions: read
-  pull-requests: write
   contents: read
+  pull-requests: write
 
 jobs:
-  extract:
+  diagnose:
     runs-on: ubuntu-24.04
     env:
+      QT_QPA_PLATFORM: offscreen
+      FEATURE_SHA: 915247a61f568129032906258451c485684c2a04
       GH_TOKEN: ${{ github.token }}
-      SOURCE_RUN_ID: '29855992543'
-      SOURCE_JOB_ID: '88720322806'
     steps:
-      - name: Extract clear scene JSON from stored log
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.FEATURE_SHA }}
+      - name: Assert exact feature checkout
+        run: test "$(git rev-parse HEAD)" = "${FEATURE_SHA}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install package
         run: |
-          gh run view "${SOURCE_RUN_ID}" --repo "${GITHUB_REPOSITORY}" --job "${SOURCE_JOB_ID}" --log > /tmp/job.log
-          python - <<'PY'
-          import re
-          from pathlib import Path
-          lines = Path('/tmp/job.log').read_text(encoding='utf-8', errors='replace').splitlines()
-          extracted = []
-          for line in lines:
-              if any(key in line for key in ("'scene':", '"scene"', "'truth_y':", '"truth_y"', "'raw_y':", '"raw_y"', "'decision':", '"decision"', "'correction':", '"correction"', "'signed_region':", '"signed_region"', "'support':", '"support"')) and '^[[36;1m' not in line:
-                  extracted.append(re.sub(r'^.*?Z\s+', '', line))
-          body = [
-              '## S5-B clear-boundary stored diagnosis', '',
-              'Stored log only; detector tests were not rerun.', '',
-              '```text', *extracted[-260:], '```',
-          ]
-          Path('/tmp/body.md').write_text('\n'.join(body), encoding='utf-8')
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
+          python -m pip install -q -e '.[dev]'
+      - name: Print weak-valid candidate and path evidence
+        run: |
+          PYTHONPATH=tests python - <<'PY' > /tmp/weak.txt
+          import json
+          from oil_benchmark_fixtures import controlled_oil_scenes
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          from oil_tracker.domain.enums import BoundaryKind
+          from oil_tracker.domain.recipe import InspectionRecipe
+
+          scene = next(item for item in controlled_oil_scenes() if item.case_id == 'weak-valid')
+          glass = InspectionRecipe.default_glass(320, 240)
+          glass.id = 'weak-valid-diagnostic'
+          detection, _ = OpenCvPhaseDetector().detect(
+              scene.frame, glass, 0, scene.timestamp, debug=True
+          )
+          candidates = []
+          for candidate in detection.candidates:
+              if candidate.kind is not BoundaryKind.OIL_AIR:
+                  continue
+              candidates.append({
+                  'source': candidate.source,
+                  'y': candidate.y,
+                  'local_y': candidate.features.get('local_y'),
+                  'source_y': candidate.features.get('source_y'),
+                  'unrounded_y': candidate.features.get('unrounded_representative_local_y'),
+                  'signed_region_evidence': candidate.features.get('generator_signed_region_evidence'),
+                  'edge_center_correction': candidate.features.get('polarity_edge_center_correction_px'),
+                  'support': candidate.features.get('unique_generator_support_count'),
+                  'consensus_score': candidate.features.get('consensus_score'),
+                  'observation_score': candidate.features.get('observation_score'),
+                  'polarity_sign': candidate.features.get('polarity_sign'),
+                  'polarity_score': candidate.features.get('polarity_score'),
+                  'persistent_region': candidate.features.get('persistent_region_contrast'),
+                  'path_score': candidate.features.get('path_cumulative_score'),
+                  'path_rank': candidate.features.get('path_rank'),
+                  'path_margin': candidate.features.get('best_second_path_margin'),
+                  'selected': candidate.selected,
+                  'rejected': candidate.rejected,
+                  'reject_reason': candidate.reject_reason,
+              })
+          candidates.sort(key=lambda item: (item['rejected'], -float(item['observation_score'] or 0.0), float(item['y'])))
+          print(json.dumps({
+              'truth_y': scene.oil_y,
+              'raw_y': detection.raw_oil_air_level_y,
+              'smoothed_y': detection.smoothed_oil_air_level_y,
+              'fill_state': detection.fill_state.value,
+              'flags': detection.flags,
+              'metrics': detection.debug_metrics,
+              'candidates': candidates,
+          }, sort_keys=True, indent=2))
           PY
-          cat /tmp/body.md
+          {
+            echo '## S5-B weak-valid candidate diagnosis'
+            echo
+            echo 'Feature-only single scene; no base, Foam, CPU, or canonical run.'
+            echo
+            echo '```json'
+            cat /tmp/weak.txt
+            echo '```'
+          } > /tmp/body.md
           gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
