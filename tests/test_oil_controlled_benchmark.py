@@ -43,7 +43,7 @@ def test_controlled_oil_dataset_is_stable_external_style_and_multi_category(tmp_
     assert len(first.fingerprint) == 64
     assert len(first.cases) == len(scenes)
     assert len({case.sequence_id for case in first.cases if case.sequence_id}) >= 8
-    assert sum(case.usable for case in first.cases) < len(first.cases)
+    assert any(not scene.usable_truth for scene in scenes)
     categories = {case.category.value for case in first.cases}
     assert {
         "clear_oil_boundary",
@@ -75,6 +75,8 @@ def test_feature_detector_meets_controlled_oil_absolute_gates(tmp_path):
     assert _metric(clear, "smoothed_oil_p95_absolute_error") <= 6.0
     assert _metric(rapid, "raw_oil_median_absolute_error") <= 3.0
     assert _metric(rapid, "raw_oil_p95_absolute_error") <= 6.0
+    assert _metric(rapid, "smoothed_oil_median_absolute_error") <= 3.0
+    assert _metric(rapid, "smoothed_oil_p95_absolute_error") <= 6.0
     assert _metric(no_interface, "raw_no_interface_false_boundary_rate") == 0.0
     assert _metric(no_interface, "smoothed_no_interface_false_boundary_rate") == 0.0
     assert _metric(micro, "raw_oil_detection_coverage") is not None
@@ -101,6 +103,9 @@ def test_temporal_side_contracts_use_same_controlled_scene_generator():
     assert outputs["no-interface-to-visible"][3].raw_oil_air_level_y is not None
     assert outputs["large-jump-new-path"][4].raw_oil_air_level_y is not None
     assert outputs["transient-false-line"][1].raw_oil_air_level_y is None
+    assert outputs["glare-recovery"][1].raw_oil_air_level_y is None
+    assert outputs["glare-recovery"][2].raw_oil_air_level_y is None
+    assert outputs["glare-recovery"][3].raw_oil_air_level_y is not None
 
 
 def _run_sequence(scenes):
