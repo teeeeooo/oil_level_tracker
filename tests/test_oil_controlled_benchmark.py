@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from oil_benchmark_fixtures import generate_controlled_oil_dataset
+from oil_benchmark_fixtures import controlled_oil_scenes, generate_controlled_oil_dataset
 from oil_tracker.adapters.storage.benchmark_result_writer import AtomicBenchmarkResultWriter
 from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
 from oil_tracker.domain.detector_benchmark import CATEGORY_CONTRACT
+from oil_tracker.domain.recipe import InspectionRecipe
 
 
 FIXED_TIME = datetime(2026, 7, 21, 19, 0, 0, tzinfo=timezone.utc)
@@ -42,6 +43,7 @@ def test_controlled_oil_dataset_is_stable_external_style_and_multi_category(tmp_
     assert len(first.fingerprint) == 64
     assert len(first.cases) == len(scenes)
     assert len({case.sequence_id for case in first.cases if case.sequence_id}) >= 8
+    assert sum(case.usable for case in first.cases) < len(first.cases)
     categories = {case.category.value for case in first.cases}
     assert {
         "clear_oil_boundary",
@@ -79,21 +81,40 @@ def test_feature_detector_meets_controlled_oil_absolute_gates(tmp_path):
     assert _metric(micro, "smoothed_oil_detection_coverage") is not None
 
 
-def test_temporal_side_contracts_are_visible_in_case_results(tmp_path):
-    dataset_path, _scenes = generate_controlled_oil_dataset(tmp_path)
-    payload = _service().run(dataset_path, tmp_path / "results").payload
-    cases = {
-        (case.get("sequence_id"), case.get("sequence_order")): case
-        for case in payload["cases"]
-        if case.get("sequence_id") is not None
-    }
+def test_temporal_side_contracts_use_same_controlled_scene_generator():
+    scenes = controlled_oil_scenes()
+    grouped = {}
+    for scene in scenes:
+        if scene.sequence_id is not None:
+            grouped.setdefault(scene.sequence_id, []).append(scene)
 
-    assert not cases[("one-frame-dropout", 1)]["raw_oil_boundary_present"]
-    assert not cases[("one-frame-dropout", 1)]["smoothed_oil_boundary_present"]
-    assert not cases[("multi-frame-dropout", 1)]["raw_oil_boundary_present"]
-    assert not cases[("multi-frame-dropout", 2)]["raw_oil_boundary_present"]
-    assert not cases[("visible-to-no-interface", 2)]["raw_oil_boundary_present"]
-    assert not cases[("visible-to-no-interface", 3)]["smoothed_oil_boundary_present"]
-    assert cases[("no-interface-to-visible", 3)]["raw_oil_boundary_present"]
-    assert cases[("large-jump-new-path", 4)]["raw_oil_boundary_present"]
-    assert not cases[("transient-false-line", 1)]["raw_oil_boundary_present"]
+    outputs = {
+        sequence_id: _run_sequence(sorted(values, key=lambda item: item.sequence_order))
+        for sequence_id, values in grouped.items()
+    }
+    assert outputs["one-frame-dropout"][1].raw_oil_air_level_y is None
+    assert outputs["one-frame-dropout"][1].smoothed_oil_air_level_y is None
+    assert outputs["multi-frame-dropout"][1].raw_oil_air_level_y is None
+    assert outputs["multi-frame-dropout"][2].raw_oil_air_level_y is None
+    assert outputs["visible-to-no-interface"][2].raw_oil_air_level_y is None
+    assert outputs["visible-to-no-interface"][3].smoothed_oil_air_level_y is None
+    assert outputs["no-interface-to-visible"][3].raw_oil_air_level_y is not None
+    assert outputs["large-jump-new-path"][4].raw_oil_air_level_y is not None
+    assert outputs["transient-false-line"][1].raw_oil_air_level_y is None
+
+
+def _run_sequence(scenes):
+    detector = OpenCvPhaseDetector()
+    glass = InspectionRecipe.default_glass(320, 240)
+    glass.id = f"controlled-{scenes[0].sequence_id}"
+    outputs = []
+    for index, scene in enumerate(scenes):
+        detection, _artifacts = detector.detect(
+            scene.frame,
+            glass,
+            index,
+            scene.timestamp,
+            debug=False,
+        )
+        outputs.append(detection)
+    return outputs
