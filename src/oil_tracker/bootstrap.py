@@ -3,12 +3,14 @@ from __future__ import annotations
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
 from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
+from oil_tracker.adapters.storage.redetection_workspace import RedetectionWorkspace
 from oil_tracker.adapters.system.logging_config import configure_logging
 from oil_tracker.adapters.vision.debug_renderer import DebugRenderer
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
 from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
+from oil_tracker.application.services.redetection_service import PartialRedetectionService
 from oil_tracker.application.use_cases.analyze_video import AnalyzeVideoUseCase
 from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.preflight_check import PreflightCheckUseCase
@@ -61,10 +63,16 @@ def build_main_window() -> MainWindow:
     window.preflight_coordinator = PreflightCoordinator(window, preflight_controller)
     window.same_profile_coordinator = SameProfileAnalysisCoordinator(window)
     window.result_action_service = ResultActionService()
+    window.redetection_service = PartialRedetectionService(
+        lambda path: OpenCvVideoReader(path),
+        OpenCvPhaseDetector,
+        RedetectionWorkspace.create,
+    )
     window.result_review_coordinator = ResultReviewCoordinator(
         window,
         window.result_action_service,
         window.same_profile_coordinator,
+        window.redetection_service,
     )
     window.analysis_completion_coordinator = AnalysisCompletionCoordinator(
         window,
@@ -76,10 +84,14 @@ def build_main_window() -> MainWindow:
         analysis_controller.completed.disconnect(window._analysis_completed)
     except (RuntimeError, TypeError):
         pass
-    analysis_controller.completed.connect(window.analysis_completion_coordinator.analysis_completed)
+    analysis_controller.completed.connect(
+        window.analysis_completion_coordinator.analysis_completed
+    )
     try:
         window.actions["result"].triggered.disconnect(window.open_result)
     except (RuntimeError, TypeError):
         pass
-    window.actions["result"].triggered.connect(lambda _checked=False: window.analysis_completion_coordinator.open_last_report())
+    window.actions["result"].triggered.connect(
+        lambda _checked=False: window.analysis_completion_coordinator.open_last_report()
+    )
     return window
