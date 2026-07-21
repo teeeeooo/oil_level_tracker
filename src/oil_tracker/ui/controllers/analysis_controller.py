@@ -122,7 +122,8 @@ class AnalysisController(QObject):
 
     @Slot(object)
     def _forward_progress(self, update) -> None:
-        if self.sender() is self.worker and not self._terminal_received:
+        sender = self.sender()
+        if (sender is None or sender is self.worker) and not self._terminal_received:
             self.progress.emit(update)
 
     @Slot(object, str)
@@ -147,7 +148,8 @@ class AnalysisController(QObject):
         self._cleanup()
 
     def _accept_terminal(self) -> bool:
-        if self.sender() is not self.worker or self._terminal_received:
+        sender = self.sender()
+        if (sender is not None and sender is not self.worker) or self._terminal_received:
             return False
         self._terminal_received = True
         return True
