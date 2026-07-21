@@ -19,6 +19,7 @@ from oil_tracker.ui.controllers.redetection_controller import RedetectionControl
 from oil_tracker.ui.redetection_comparison_coordinator import RedetectionComparisonCoordinator
 from oil_tracker.ui.redetection_result_review_window import RedetectionResultReviewWindow
 from oil_tracker.ui.result_actions import ResultActionService
+from oil_tracker.ui.truth_annotation_coordinator import TruthAnnotationCoordinator
 
 
 class ResultReviewCoordinator(QObject):
@@ -39,6 +40,7 @@ class ResultReviewCoordinator(QObject):
         self.viewer: RedetectionResultReviewWindow | None = None
         self.redetection_controller: RedetectionController | None = None
         self.redetection_coordinator: RedetectionComparisonCoordinator | None = None
+        self.truth_coordinator: TruthAnnotationCoordinator | None = None
         self.action = QAction(
             window.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay),
             "결과 검토",
@@ -97,6 +99,11 @@ class ResultReviewCoordinator(QObject):
                 action_service=self.action_service,
                 parent=self.window,
             )
+            self.truth_coordinator = TruthAnnotationCoordinator(
+                self.viewer,
+                parent=self.viewer,
+            )
+            self.viewer.truthMarkerRequested.connect(self._truth_marker_requested)
             if self.same_profile_coordinator is not None:
                 self.viewer.sameProfileRequested.connect(
                     self.same_profile_coordinator.start
@@ -119,7 +126,26 @@ class ResultReviewCoordinator(QObject):
             self.viewer.activateWindow()
         return loaded
 
+    def _truth_marker_requested(self, annotation_id: str) -> None:
+        coordinator = self.truth_coordinator
+        if coordinator is None or coordinator.session.truth_set is None:
+            return
+        annotation = next(
+            (
+                value
+                for value in coordinator.session.truth_set.annotations
+                if value.annotation_id == annotation_id
+            ),
+            None,
+        )
+        if annotation is not None:
+            coordinator.open()
+            coordinator.activate_annotation(annotation)
+
     def close(self) -> None:
+        if self.truth_coordinator is not None:
+            self.truth_coordinator.close()
+            self.truth_coordinator = None
         if self.redetection_coordinator is not None:
             self.redetection_coordinator.close()
             self.redetection_coordinator = None
