@@ -77,6 +77,7 @@ class DebugTraceRecord:
     state: dict[str, Any]
     candidates: tuple[dict[str, Any], ...]
     images: dict[str, str]
+    profiles: dict[str, Any] = field(default_factory=dict)
     warnings: tuple[str, ...] = ()
 
 
