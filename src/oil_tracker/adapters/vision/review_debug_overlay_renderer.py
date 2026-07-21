@@ -79,7 +79,7 @@ class ReviewDebugOverlayRenderer:
             score = _finite_number(candidate.get("final_score"))
             score_text = "-" if score is None else f"{score:.3f}"
             label = f"#{rank} {candidate.get('kind', '')} {status} score={score_text}"
-            _outlined_text(image, label, (start[0] + 4, max(16, start[1] - 5)), color, 0.42)
+            _outlined_text(image, label, (start[0] + 4, max(16, start[1] - 10)), color, 0.42)
 
         decoded = float(actual_timestamp)
         delta = decoded - float(record.timestamp_sec)
