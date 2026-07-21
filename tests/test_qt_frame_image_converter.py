@@ -65,7 +65,17 @@ def test_repeated_conversion_is_deterministic(converter):
     first = converter.to_qimage(frame)
     second = converter.to_qimage(frame)
     assert first.size() == second.size()
-    assert bytes(first.bits()) == bytes(second.bits())
+    first_pixels = [
+        first.pixelColor(x, y).rgba()
+        for y in range(first.height())
+        for x in range(first.width())
+    ]
+    second_pixels = [
+        second.pixelColor(x, y).rgba()
+        for y in range(second.height())
+        for x in range(second.width())
+    ]
+    assert first_pixels == second_pixels
 
 
 @pytest.mark.parametrize(
