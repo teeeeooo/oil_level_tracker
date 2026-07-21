@@ -110,34 +110,108 @@ def test_editor_invalid_snapshot_emits_korean_validation(qtbot):
     assert "재검출을 실행할 수 없습니다" in editor.validation_label.text()
 
 
-def test_controller_latest_generation_wins_and_stale_result_is_discarded(qtbot):
+def test_comparison_window_has_required_tabs_and_mode_limitations(qtbot, tmp_path):
+    bundle = make_bundle(tmp_path)
+    glass = bundle.recipe.glasses[0]
+    window = RedetectionComparisonWindow(glass.detector_settings)
+    qtbot.addWidget(window)
+    window.set_context(bundle, glass, bundle.source_video_path, 3.0)
+    assert [window.tabs.tabText(index) for index in range(window.tabs.count())] == [
+        "요약",
+        "Tracking 비교",
+        "후보와 점수",
+        "Artifact 비교",
+        "Event·판정 비교",
+        "설정 적용",
+    ]
+    assert window.current_mode() is RedetectionMode.CURRENT
+    assert not window.before.isEnabled()
+    window.mode.setCurrentIndex(1)
+    assert window.current_mode() is RedetectionMode.SHORT
+    assert window.before.isEnabled() and window.after.isEnabled()
+    window.set_status(RedetectionStatus.SETTINGS_STALE, "설정 변경됨 — 다시 실행 필요")
+    assert "다시 실행 필요" in window.state_label.text()
+    assert window.run_button.isEnabled()
+
+
+def test_window_disables_run_without_source_or_with_invalid_settings(qtbot, tmp_path):
+    bundle = make_bundle(tmp_path)
+    glass = bundle.recipe.glasses[0]
+    window = RedetectionComparisonWindow(glass.detector_settings)
+    qtbot.addWidget(window)
+    window.set_context(bundle, glass, "", 3.0)
+    assert not window.run_button.isEnabled()
+    window.set_context(bundle, glass, bundle.source_video_path, 3.0)
+    assert window.run_button.isEnabled()
+    window.settings_editor._temporary = DetectorSettings(canny_low=200, canny_high=100)
+    window.settings_editor._sync_editors()
+    window.settings_editor._refresh_state()
+    assert not window.run_button.isEnabled()
+
+
+def test_async_controller_emits_started_progress_completed_without_blocking(qtbot):
     service = FakeService(delay=0.03)
     controller = RedetectionController(service)
-    first = _request(1)
-    second = _request(2)
-    controller.start(first, SimpleNamespace(), ())
-    controller.start(second, SimpleNamespace(), ())
-    qtbot.waitUntil(lambda: len(service.workspaces) >= 2, timeout=3000)
-    qtbot.waitUntil(lambda: controller.state.status != RedetectionStatus.RUNNING, timeout=3000)
-    assert controller.state.generation == 2
-    assert controller.state.status == RedetectionStatus.COMPLETE
-    assert service.workspaces[0].cleaned
-    assert not service.workspaces[-1].cleaned
-    controller.dispose()
-    assert service.workspaces[-1].cleaned
+    completed = []
+    progress = []
+    controller.completed.connect(completed.append)
+    controller.progress.connect(progress.append)
+    controller.generation = 1
+    controller.start(_request(1), object())
+    assert controller.running
+    qtbot.waitUntil(lambda: bool(completed), timeout=3000)
+    assert service.calls == [1]
+    assert progress and progress[0].generation == 1
+    assert completed[0].request.generation == 1
+    controller.close()
 
 
-def test_window_reopen_close_and_mode_labels(qtbot, tmp_path):
-    bundle = make_bundle(tmp_path)
-    window = RedetectionComparisonWindow()
-    qtbot.addWidget(window)
-    window.set_official_bundle(bundle)
-    window.show()
-    QCoreApplication.processEvents()
-    assert window.mode_combo.count() == 3
-    assert window.run_button.text() == "재검출 실행"
-    window.close()
-    window.show()
-    QCoreApplication.processEvents()
-    assert window.mode_combo.count() == 3
-    assert window.settings_editor.changed_field_names() == ()
+def test_controller_rapid_rerun_cancels_first_and_only_completes_latest(qtbot):
+    service = FakeService(delay=0.08)
+    controller = RedetectionController(service)
+    completed = []
+    cancelled = []
+    controller.completed.connect(completed.append)
+    controller.cancelled.connect(cancelled.append)
+    controller.generation = 1
+    controller.start(_request(1), object())
+    qtbot.waitUntil(lambda: controller.running, timeout=1000)
+    controller.generation = 2
+    controller.start(_request(2), object())
+    qtbot.waitUntil(lambda: bool(completed), timeout=5000)
+    assert service.calls == [1, 2]
+    assert completed[-1].request.generation == 2
+    assert all(result.request.generation == 2 for result in completed)
+    assert 1 not in cancelled
+    controller.close()
+
+
+def test_controller_new_run_cleans_previous_workspace(qtbot):
+    service = FakeService()
+    controller = RedetectionController(service)
+    completed = []
+    controller.completed.connect(completed.append)
+    controller.generation = 1
+    controller.start(_request(1), object())
+    qtbot.waitUntil(lambda: len(completed) == 1, timeout=3000)
+    first_workspace = service.workspaces[0]
+    controller.generation = 2
+    controller.start(_request(2), object())
+    qtbot.waitUntil(lambda: len(completed) == 2, timeout=3000)
+    assert first_workspace.cleaned
+    second_workspace = service.workspaces[1]
+    controller.close()
+    assert second_workspace.cleaned
+
+
+def test_controller_cancel_reports_current_generation(qtbot):
+    service = FakeService(delay=0.2)
+    controller = RedetectionController(service)
+    cancelled = []
+    controller.cancelled.connect(cancelled.append)
+    controller.generation = 3
+    controller.start(_request(3), object())
+    controller.cancel()
+    qtbot.waitUntil(lambda: cancelled == [3], timeout=3000)
+    assert not controller.running
+    controller.close()
