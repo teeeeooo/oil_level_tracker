@@ -11,11 +11,11 @@ permissions:
 
 jobs:
   focused:
-    name: focused-consensus-scoring
+    name: focused-integration
     runs-on: ubuntu-24.04
     env:
       QT_QPA_PLATFORM: offscreen
-      EXPECTED_SHA: 3bdf7f5f8f8925eef372aa0f2bf3c797735d7139
+      EXPECTED_SHA: 6577f7cebd83021cfe4971f68cfbf9204f093c50
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -39,26 +39,50 @@ jobs:
         shell: bash
         run: |
           set +e
-          {
-            echo 'candidate-related test files:'
-            find tests -maxdepth 1 -type f -name '*candidate*' -printf '%f\n' | sort
-            echo
-            python -m pytest -q --tb=short \
-              tests/test_oil_candidate_consensus.py \
-              tests/test_oil_signed_scoring.py \
-              tests/test_oil_no_interface.py
-          } > /tmp/pytest.log 2>&1
+          python -m pytest -q --tb=short \
+            tests/test_oil_detector_integration.py \
+            tests/test_oil_fill_state_classifier.py \
+            tests/test_oil_settings.py \
+            tests/test_ui_import_boundaries.py > /tmp/pytest.log 2>&1
           status=$?
+          if [ "${status}" -ne 0 ]; then
+            python - <<'PY' >> /tmp/pytest.log 2>&1
+          import sys
+          sys.path.insert(0, 'tests')
+          from test_oil_detector_integration import glass, oil_frame
+          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+          detector = OpenCvPhaseDetector()
+          detection, artifacts = detector.detect(oil_frame(130), glass(), 1, 0.0, debug=True)
+          print('\n--- bounded detector diagnostic ---')
+          for key in sorted(detection.debug_metrics):
+              if key.startswith('oil_') or key in {'glare_ratio', 'previous_state', 'proposed_state', 'stabilized_state'}:
+                  print(f'{key}={detection.debug_metrics[key]}')
+          for row in (artifacts.candidate_rows if artifacts else [])[:12]:
+              print({
+                  'source': row.get('source'),
+                  'y': row.get('y'),
+                  'support': row.get('unique_generator_support_count'),
+                  'consensus': row.get('consensus_score'),
+                  'observation': row.get('observation_score'),
+                  'polarity': row.get('polarity_score'),
+                  'static': row.get('static_overlap'),
+                  'path_rank': row.get('path_rank'),
+                  'margin': row.get('best_second_path_margin'),
+                  'rejected': row.get('rejected'),
+                  'reason': row.get('reject_reason'),
+              })
+          PY
+          fi
           cat /tmp/pytest.log
           {
-            echo "### S5-B isolated diagnostic: consensus-scoring"
+            echo "### S5-B isolated diagnostic: integration"
             echo
             echo "Exact feature SHA: \`${EXPECTED_SHA}\`"
             echo
             echo '```text'
-            tail -n 180 /tmp/pytest.log
+            tail -n 240 /tmp/pytest.log
             echo '```'
           } > /tmp/comment.md
-          gh api repos/teeeeooo/oil_level_tracker/issues/comments/5035885005 \
+          gh api repos/teeeeooo/oil_level_tracker/issues/comments/5035885331 \
             --method PATCH -F body=@/tmp/comment.md
           exit ${status}
