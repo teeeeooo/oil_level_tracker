@@ -18,7 +18,7 @@ jobs:
       matrix:
         python-version: ['3.13', '3.14']
     env:
-      EXPECTED_SHA: e230dcc6ab0b2536de0c56ff82d68e64e8149e4a
+      EXPECTED_SHA: d022403bc95cbcd28fad390e8a9bacfe95297e02
       QT_QPA_PLATFORM: offscreen
       GH_TOKEN: ${{ github.token }}
     steps:
