@@ -10,7 +10,7 @@ permissions:
 
 env:
   QT_QPA_PLATFORM: offscreen
-  EXPECTED_SHA: 180c08d1b4f6f73b9522185e5e9c657e4e08b4e5
+  EXPECTED_SHA: 51cf667a12e15753a80519ba31ec4226e7630e26
 
 jobs:
   canonical-313:
@@ -40,7 +40,7 @@ jobs:
           python -m pytest -q > /tmp/pytest.log 2>&1
           code=$?
           {
-            echo '### Full suite diagnostic'
+            echo '### Full suite diagnostic after compatibility fixes'
             echo
             echo '```text'
             tail -n 420 /tmp/pytest.log
