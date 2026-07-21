@@ -612,6 +612,10 @@ def metric_direction(metric_name: str) -> str | None:
         token in lowered
         for token in (
             "error",
+            "mae",
+            "median_absolute",
+            "p90_absolute",
+            "p95_absolute",
             "false_positive_rate",
             "false_boundary_rate",
             "timestamp_difference",

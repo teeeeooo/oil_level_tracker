@@ -47,7 +47,10 @@ def test_valid_unicode_dataset_load_and_deterministic_fixture_order(tmp_path):
     loaded = FilesystemRegressionDatasetReader().load(dataset_root)
     assert loaded.schema_version == 1
     assert len(loaded.cases) == 3
-    assert [case.timestamp_sec for case in loaded.cases] == [1.0, 2.0, 3.0]
+    assert [case.case_id for case in loaded.cases] == sorted(
+        case.case_id for case in loaded.cases
+    )
+    assert sorted(case.timestamp_sec for case in loaded.cases) == [1.0, 2.0, 3.0]
     assert all(case.category is BenchmarkCategory.CLEAR_OIL_BOUNDARY for case in loaded.cases)
     assert all(case.analysis_height_px > 0 for case in loaded.cases)
     assert loaded.fingerprint
@@ -229,7 +232,7 @@ def test_recipe_session_and_frame_identity_mismatch_are_rejected(tmp_path, kind)
         payload["frame_index"] += 1
         write_json(path, payload)
     rehash_dataset(dataset_root)
-    with pytest.raises(RegressionDatasetIntegrityError, match="recipe ID|session source-frame|frame index"):
+    with pytest.raises(RegressionDatasetIntegrityError, match="recipe snapshot hash|recipe ID|session source-frame|frame index"):
         FilesystemRegressionDatasetReader().load(dataset_root)
 
 

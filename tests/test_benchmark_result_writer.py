@@ -164,8 +164,13 @@ def test_failure_removes_staging_and_exposes_no_completed_output(tmp_path):
 
 
 def test_matching_baseline_reports_lower_and_higher_is_better_deltas(tmp_path):
-    previous = _payload(error=10.0, boundary=False)
+    previous = _payload(error=10.0, boundary=True)
     current = _payload(error=5.0, boundary=True)
+    previous_coverage = previous["micro_aggregate"]["metrics"][
+        "raw_oil_detection_coverage"
+    ]
+    previous_coverage["value"] = 0.0
+    previous_coverage["numerator"] = 0
     comparison = compare_benchmark_payloads(previous, current)
     assert comparison["status"] == "comparable"
     error_change = comparison["micro_metric_changes"]["raw_oil_mae"]
