@@ -18,15 +18,67 @@ class TemporalTracker:
     _pending_state: FillState | None = None
     _pending_count: int = 0
 
-    def update(self, raw_y: float | None, raw_foam_y: float | None, proposed_state: FillState) -> tuple[float | None, float | None, FillState]:
-        oil = self._smooth(self._oil_values, raw_y)
-        foam = self._smooth(self._foam_values, raw_foam_y)
+    @property
+    def oil_sample_count(self) -> int:
+        return len(self._oil_values)
+
+    @property
+    def foam_sample_count(self) -> int:
+        return len(self._foam_values)
+
+    def update(
+        self,
+        raw_y: float | None,
+        raw_foam_y: float | None,
+        proposed_state: FillState,
+        *,
+        oil_update_accepted: bool | None = None,
+        oil_clear: bool = False,
+        foam_update_accepted: bool | None = None,
+        review_override: bool = False,
+    ) -> tuple[float | None, float | None, FillState]:
+        """Update only accepted scalar samples while preserving legacy call behavior.
+
+        A missing or rejected current-frame measurement always returns ``None`` even
+        when prior smoothing samples exist. ``oil_clear`` invalidates stale smoothing
+        before an accepted reacquisition or stable no-interface transition.
+        """
+
+        if oil_clear:
+            self._oil_values.clear()
+            self.previous_y = None
+        if oil_update_accepted is None:
+            oil_update_accepted = raw_y is not None
+        if foam_update_accepted is None:
+            foam_update_accepted = raw_foam_y is not None
+
+        oil = self._smooth(
+            self._oil_values,
+            raw_y if oil_update_accepted else None,
+        )
+        foam = self._smooth(
+            self._foam_values,
+            raw_foam_y if foam_update_accepted else None,
+        )
         if oil is not None:
             self.previous_y = oil
         if foam is not None:
             self.previous_foam_y = foam
-        state = self._stabilize_state(proposed_state)
+        state = proposed_state if review_override else self._stabilize_state(proposed_state)
         return oil, foam, state
+
+    def clear_oil(self) -> None:
+        self._oil_values.clear()
+        self.previous_y = None
+
+    def reset(self) -> None:
+        self.previous_y = None
+        self.previous_foam_y = None
+        self.current_state = None
+        self._oil_values.clear()
+        self._foam_values.clear()
+        self._pending_state = None
+        self._pending_count = 0
 
     def _smooth(self, values: deque[float], value: float | None) -> float | None:
         if value is None:
