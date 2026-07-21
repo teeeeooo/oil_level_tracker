@@ -112,16 +112,22 @@ class RecipeValidationService:
                             "exclusions",
                         )
                     )
-            if glass.mm_per_pixel is not None and glass.mm_per_pixel <= 0:
-                issues.append(
-                    ValidationIssue(
-                        ValidationSeverity.ERROR,
-                        "STRUCT_SCALE",
-                        "mm/pixel must be positive.",
-                        glass.id,
-                        "mm_per_pixel",
+            if glass.mm_per_pixel is not None:
+                try:
+                    scale = float(glass.mm_per_pixel)
+                    scale_valid = math.isfinite(scale) and scale > 0
+                except (TypeError, ValueError):
+                    scale_valid = False
+                if not scale_valid:
+                    issues.append(
+                        ValidationIssue(
+                            ValidationSeverity.ERROR,
+                            "STRUCT_SCALE",
+                            "mm/pixel must be finite and positive when enabled.",
+                            glass.id,
+                            "mm_per_pixel",
+                        )
                     )
-                )
             for field_name, message in validate_detector_settings(
                 glass.detector_settings
             ).items():
@@ -189,16 +195,6 @@ class RecipeValidationService:
                             "zero_line_y",
                         )
                     )
-            if glass.mm_per_pixel is None:
-                issues.append(
-                    ValidationIssue(
-                        ValidationSeverity.WARNING,
-                        "WARN_SCALE",
-                        "mm/pixel is not set; results will use pixels.",
-                        glass.id,
-                        "mm_per_pixel",
-                    )
-                )
             if glass.geometry.margin_ratio > 0.30:
                 issues.append(
                     ValidationIssue(
