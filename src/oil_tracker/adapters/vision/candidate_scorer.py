@@ -489,12 +489,12 @@ def suppress_paired_horizontal_structures(
                     if _pair_candidate_order(left) <= _pair_candidate_order(right)
                     else (right, left)
                 )
-                left_weight = max(0.05, left_score)
-                right_weight = max(0.05, right_score)
-                merged_y = (
-                    left_weight * float(left.y) + right_weight * float(right.y)
-                ) / (left_weight + right_weight)
+                unrounded_midpoint = (float(left.y) + float(right.y)) / 2.0
+                merged_y = float(round(unrounded_midpoint))
                 keeper.features["paired_boundary_original_y"] = float(keeper.y)
+                keeper.features["paired_boundary_unrounded_midpoint"] = float(
+                    unrounded_midpoint
+                )
                 keeper.features["paired_boundary_merged_y"] = float(merged_y)
                 keeper.features["representative_local_y"] = float(merged_y)
                 keeper.y = float(merged_y)
