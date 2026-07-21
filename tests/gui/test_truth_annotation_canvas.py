@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 from PySide6.QtCore import QPoint, Qt
-from PySide6.QtGui import QImage, QPainter
+from PySide6.QtGui import QImage
 
 from oil_tracker.application.services.user_truth import UserTruthService
 from oil_tracker.ui.widgets.truth_annotation_canvas import TruthAnnotationCanvas
@@ -37,9 +37,7 @@ def test_canvas_keeps_separate_official_and_truth_layers_with_labels(qtbot, tmp_
     assert canvas.edit_target == "oil"
     image = QImage(canvas.size(), QImage.Format.Format_ARGB32)
     image.fill(Qt.GlobalColor.transparent)
-    painter = QPainter(image)
-    canvas.render(painter)
-    painter.end()
+    canvas.render(image)
     assert not image.isNull()
     assert canvas._show_official
 
