@@ -1,0 +1,105 @@
+name: S3 Focused Validation
+
+on:
+  pull_request:
+    branches:
+      - feature/workbench-usability-stabilization
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  focused:
+    runs-on: ubuntu-24.04
+    env:
+      EXPECTED_SHA: 5778bb2f05175879b7aa1b5065af754f50d87768
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - name: Checkout exact feature head
+        uses: actions/checkout@v4
+        with:
+          ref: 5778bb2f05175879b7aa1b5065af754f50d87768
+          fetch-depth: 1
+      - name: Assert exact checkout
+        shell: bash
+        run: |
+          actual="$(git rev-parse HEAD)"
+          echo "expected exact SHA=$EXPECTED_SHA"
+          echo "actual checkout SHA=$actual"
+          test "$actual" = "$EXPECTED_SHA"
+      - name: Install Qt offscreen runtime libraries
+        run: sudo apt-get update -q && sudo apt-get install -y -q libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install package and test dependencies
+        run: python -m pip install -q --upgrade pip && python -m pip install -q -e '.[dev]'
+      - name: Capture runtime versions
+        run: |
+          python - <<'PY' | tee /tmp/s3-focused-versions.txt
+          import sys
+          import PySide6
+          import numpy
+          import cv2
+          import matplotlib
+          print(f"Python version={sys.version}")
+          print(f"PySide6 version={PySide6.__version__}")
+          print(f"NumPy version={numpy.__version__}")
+          print(f"OpenCV version={cv2.__version__}")
+          print(f"Matplotlib version={matplotlib.__version__}")
+          PY
+      - name: Run focused S3 and S2 regression tests
+        id: tests
+        shell: bash
+        run: |
+          set +e
+          python -m pytest -q \
+            tests/gui/test_workbench_usability_stabilization.py \
+            tests/gui/test_workbench_readiness_feedback.py \
+            tests/gui/test_guided_workbench_ux.py \
+            tests/gui/test_preflight_check.py \
+            tests/gui/test_gui_smoke.py \
+            tests/unit/test_validation.py \
+            tests/unit/test_readiness_feedback.py \
+            tests/unit/test_detection_quality.py \
+            tests/unit/test_preflight_use_case.py \
+            tests/unit/test_recipe_optional_scale_roundtrip.py \
+            tests/test_ui_import_boundaries.py \
+            tests/gui/test_result_review_canvas.py \
+            tests/gui/test_result_review_coordinator_factory.py \
+            tests/gui/test_result_review_debug_viewer.py \
+            tests/gui/test_result_review_enhancements.py \
+            tests/gui/test_result_review_png_export.py \
+            tests/gui/test_result_review_window.py \
+            tests/gui/test_result_review_workbench_entry.py \
+            tests/gui/test_truth_annotation_lifecycle.py \
+            tests/test_redetection_raster_boundary.py \
+            tests/test_review_frame_presenter.py \
+            tests/test_review_png_exporter.py 2>&1 | tee /tmp/s3-focused.log
+          status=${PIPESTATUS[0]}
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Publish focused evidence
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEST_STATUS: ${{ steps.tests.outputs.status }}
+        shell: bash
+        run: |
+          result=PASS
+          if [ "${TEST_STATUS:-1}" != "0" ]; then result=FAIL; fi
+          {
+            echo "Focused validation **${result}** for exact feature SHA \`$EXPECTED_SHA\`."
+            echo
+            echo '```text'
+            echo "expected exact SHA=$EXPECTED_SHA"
+            echo "actual checkout SHA=$(git rev-parse HEAD)"
+            cat /tmp/s3-focused-versions.txt
+            if [ "$result" = PASS ]; then tail -n 20 /tmp/s3-focused.log; else grep -E '^_{3,} .* _{3,}$|^E +|^FAILED |^[0-9]+ failed' /tmp/s3-focused.log | head -n 200; fi
+            echo '```'
+          } > /tmp/s3-focused-comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/s3-focused-comment.md
+          test "${TEST_STATUS:-1}" = "0"
