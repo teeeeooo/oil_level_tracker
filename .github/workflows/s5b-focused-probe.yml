@@ -1,4 +1,4 @@
-name: S5-B oil metric diagnosis
+name: S5-B oil metric traceback
 
 on:
   pull_request:
@@ -9,104 +9,26 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  actions: read
   pull-requests: write
+  contents: read
 
 jobs:
-  oil-metrics:
+  extract:
     runs-on: ubuntu-24.04
     env:
-      QT_QPA_PLATFORM: offscreen
       GH_TOKEN: ${{ github.token }}
-      BASE_SHA: 5f180d02a7aff36591e6f35adf44fca6347bdf9c
-      FEATURE_SHA: c5b3df7141daee9cdfd2cb82be0e8b771670d1cd
+      FAILED_RUN_ID: '29852027251'
+      FAILED_JOB_ID: '88707021465'
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ env.FEATURE_SHA }}
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: pip
-          cache-dependency-path: pyproject.toml
-      - name: Install and generate oil dataset
+      - name: Extract stored traceback
         run: |
-          sudo apt-get update -qq >/dev/null
-          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 >/dev/null
-          python -m pip install -q -e '.[dev]'
-          PYTHONPATH=tests python - <<'PY'
-          import json, os
-          from pathlib import Path
-          from oil_benchmark_fixtures import generate_controlled_oil_dataset
-          from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
-          root = Path(os.environ['RUNNER_TEMP']) / 'oil-metric-diagnosis'
-          dataset, _ = generate_controlled_oil_dataset(root)
-          loaded = FilesystemRegressionDatasetReader().load(dataset)
-          (Path(os.environ['RUNNER_TEMP']) / 'oil-dataset.json').write_text(json.dumps({'path': str(dataset), 'fingerprint': loaded.fingerprint}), encoding='utf-8')
-          print('dataset_fingerprint=' + loaded.fingerprint)
-          PY
-          cat > "${RUNNER_TEMP}/metric_run.py" <<'PY'
-          import json, sys
-          from datetime import datetime, timezone
-          from pathlib import Path
-          from oil_tracker.adapters.storage.benchmark_result_writer import AtomicBenchmarkResultWriter
-          from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
-          from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
-          from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
-          dataset, output = Path(sys.argv[1]), Path(sys.argv[2])
-          service = DetectorBenchmarkService(FilesystemRegressionDatasetReader(), AtomicBenchmarkResultWriter(), OpenCvPhaseDetector, clock=lambda: datetime(2026, 7, 22, tzinfo=timezone.utc), runtime_metadata_factory=lambda: {'python':'diagnostic','packages':{}})
-          payload = service.run(dataset, output.parent / (output.stem + '-service')).payload
-          output.write_text(json.dumps(payload, sort_keys=True), encoding='utf-8')
-          print('detector_version=' + OpenCvPhaseDetector.version)
-          PY
-      - name: Base exact metrics
-        run: |
-          dataset="$(python -c 'import json,os; print(json.load(open(os.environ["RUNNER_TEMP"]+"/oil-dataset.json"))["path"])')"
-          git checkout --detach "${BASE_SHA}"
-          test "$(git rev-parse HEAD)" = "${BASE_SHA}"
-          python -m pip install -q -e .
-          python "${RUNNER_TEMP}/metric_run.py" "${dataset}" "${RUNNER_TEMP}/base.json"
-      - name: Feature exact metrics
-        run: |
-          dataset="$(python -c 'import json,os; print(json.load(open(os.environ["RUNNER_TEMP"]+"/oil-dataset.json"))["path"])')"
-          git checkout --detach "${FEATURE_SHA}"
-          test "$(git rev-parse HEAD)" = "${FEATURE_SHA}"
-          python -m pip install -q -e .
-          python "${RUNNER_TEMP}/metric_run.py" "${dataset}" "${RUNNER_TEMP}/feature.json"
-      - name: Publish bounded metric diagnosis
-        run: |
-          python - <<'PY' > /tmp/metrics.txt
-          import json, os
-          from pathlib import Path
-          root = Path(os.environ['RUNNER_TEMP'])
-          base = json.loads((root/'base.json').read_text())
-          feature = json.loads((root/'feature.json').read_text())
-          names = (
-              'raw_oil_mean_absolute_error','raw_oil_median_absolute_error','raw_oil_p90_absolute_error','raw_oil_p95_absolute_error',
-              'smoothed_oil_mean_absolute_error','smoothed_oil_median_absolute_error','smoothed_oil_p90_absolute_error','smoothed_oil_p95_absolute_error',
-              'raw_oil_detection_coverage','smoothed_oil_detection_coverage',
-          )
-          def metric(payload, name): return payload['micro_aggregate']['metrics'][name]['value']
-          summary = {
-              'dataset_fingerprint': base['dataset']['fingerprint'],
-              'base_detector': base['detector']['version'],
-              'feature_detector': feature['detector']['version'],
-              'base': {name: metric(base, name) for name in names},
-              'feature': {name: metric(feature, name) for name in names},
-              'base_no_interface': {key: base['category_summaries']['no_interface']['metrics'][key]['value'] for key in ('raw_no_interface_false_boundary_rate','smoothed_no_interface_false_boundary_rate')},
-              'feature_no_interface': {key: feature['category_summaries']['no_interface']['metrics'][key]['value'] for key in ('raw_no_interface_false_boundary_rate','smoothed_no_interface_false_boundary_rate')},
-          }
-          print(json.dumps(summary, sort_keys=True, indent=2))
-          PY
-          cat /tmp/metrics.txt
+          gh run view "${FAILED_RUN_ID}" --repo "${GITHUB_REPOSITORY}" --job "${FAILED_JOB_ID}" --log > /tmp/job.log
           {
-            echo '## S5-B oil metric diagnosis'
+            echo '## S5-B oil metric diagnostic traceback'
             echo
-            echo 'This diagnostic ran only the oil benchmark payload; no Foam, CPU, or canonical jobs were repeated.'
-            echo
-            echo '```json'
-            cat /tmp/metrics.txt
+            echo '```text'
+            tail -n 70 /tmp/job.log
             echo '```'
           } > /tmp/body.md
           gh pr edit 55 --repo "${GITHUB_REPOSITORY}" --body-file /tmp/body.md
