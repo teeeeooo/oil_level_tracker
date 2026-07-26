@@ -219,6 +219,13 @@ def score_candidates(
             static * (1.0 - 0.72 * static_dynamic_relief)
         )
         glare_conflict = glare >= float(settings.glare_ratio_unknown)
+        structural_band_evidence = (
+            persistent.available
+            and support >= int(settings.oil_min_consensus_sources)
+            and region >= max(0.24, float(settings.minimum_region_contrast) * 2.0)
+            and persistent_region <= min(0.18, region * 0.45)
+        )
+        static_structure_conflict = static >= 0.62 and structural_band_evidence
 
         candidate.features.update(
             {
@@ -250,6 +257,8 @@ def score_candidates(
                 "unique_generator_support_count": float(support),
                 "dynamic_boundary_evidence": dynamic_evidence,
                 "static_dynamic_relief": static_dynamic_relief,
+                "static_structural_band_evidence": float(structural_band_evidence),
+                "static_structure_conflict": float(static_structure_conflict),
                 "glare_band_visibility_conflict": float(glare_conflict),
             }
         )
@@ -344,9 +353,9 @@ def score_candidates(
         elif border > 0.85:
             candidate.rejected = True
             candidate.reject_reason = "rim_or_border"
-        elif static >= 0.62 and dynamic_evidence < 0.42 and consensus < 0.72:
+        elif static_structure_conflict:
             candidate.rejected = True
-            candidate.reject_reason = "static_horizontal_structure"
+            candidate.reject_reason = "static_structure_without_persistent_region_step"
         elif (
             context.previous_state
             in {FillState.FULL_NO_INTERFACE, FillState.FULL_WITH_FOAM}
@@ -379,8 +388,17 @@ def suppress_paired_horizontal_structures(
 ) -> None:
     """Resolve close opposite-polarity edges as a region step or a structure."""
 
+    pairable_reject_reasons = {
+        "insufficient_horizontal_region_or_consensus",
+        "insufficient_boundary_observation",
+    }
     usable = sorted(
-        (candidate for candidate in candidates if not candidate.rejected),
+        (
+            candidate
+            for candidate in candidates
+            if not candidate.rejected
+            or candidate.reject_reason in pairable_reject_reasons
+        ),
         key=lambda candidate: (float(candidate.y), str(candidate.source)),
     )
     minimum_distance = max(
@@ -441,17 +459,6 @@ def suppress_paired_horizontal_structures(
                     )
                 )
             )
-            if (
-                primary_score
-                < max(0.68, float(settings.minimum_final_confidence) + 0.12)
-                or primary_support < int(settings.oil_min_consensus_sources)
-                or secondary_score
-                < max(0.24, float(settings.minimum_final_confidence) * 0.55)
-                or secondary_polarity
-                < max(0.10, float(settings.oil_min_polarity_score))
-            ):
-                continue
-
             left_persistent = _unit(
                 left.features.get("persistent_region_contrast", 0.0)
             )
@@ -474,11 +481,35 @@ def suppress_paired_horizontal_structures(
                 and right_persistent_sign != 0.0
                 and left_persistent_sign * right_persistent_sign > 0.0
             )
+            static_paired_structure = (
+                max(
+                    _unit(left.features.get("static_overlap", 0.0)),
+                    _unit(right.features.get("static_overlap", 0.0)),
+                )
+                > 0.0
+                and not persistent_step
+            )
+            strong_pair_evidence = not (
+                primary_score
+                < max(0.68, float(settings.minimum_final_confidence) + 0.12)
+                or primary_support < int(settings.oil_min_consensus_sources)
+                or secondary_score
+                < max(0.24, float(settings.minimum_final_confidence) * 0.55)
+                or secondary_polarity
+                < max(0.10, float(settings.oil_min_polarity_score))
+            )
+            if (left.rejected or right.rejected) and not static_paired_structure:
+                continue
+            if not static_paired_structure and not strong_pair_evidence:
+                continue
 
             for candidate, partner in ((left, right), (right, left)):
                 candidate.features["paired_structure_distance_px"] = distance
                 candidate.features["paired_structure_partner_y"] = float(partner.y)
                 candidate.features["paired_structure_opposite_polarity"] = 1.0
+                candidate.features["static_paired_structure"] = float(
+                    static_paired_structure
+                )
                 candidate.features["paired_boundary_step_preserved"] = float(
                     persistent_step
                 )
@@ -517,6 +548,7 @@ def suppress_paired_horizontal_structures(
             candidate.features.setdefault("paired_structure_distance_px", 0.0)
             candidate.features.setdefault("paired_structure_partner_y", 0.0)
             candidate.features.setdefault("paired_structure_opposite_polarity", 0.0)
+            candidate.features.setdefault("static_paired_structure", 0.0)
             candidate.features.setdefault("paired_boundary_step_preserved", 0.0)
 
 

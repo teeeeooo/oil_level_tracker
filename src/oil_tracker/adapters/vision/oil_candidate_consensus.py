@@ -146,6 +146,7 @@ def build_oil_candidate_consensus(
 def _deduplicate_same_source(
     candidates: tuple[BoundaryCandidate, ...], tolerance: float
 ) -> tuple[BoundaryCandidate, ...]:
+    opposite_edge_anchors = _opposite_region_edge_anchors(candidates, tolerance)
     by_source: dict[str, list[BoundaryCandidate]] = {}
     for candidate in candidates:
         by_source.setdefault(candidate.source, []).append(candidate)
@@ -161,13 +162,80 @@ def _deduplicate_same_source(
         )
         source_kept: list[BoundaryCandidate] = []
         for candidate in ordered:
+            candidate_anchor = _nearest_anchor_index(
+                float(candidate.y),
+                opposite_edge_anchors,
+                tolerance,
+            )
             if all(
                 abs(float(candidate.y) - float(prior.y)) > tolerance + 1e-12
+                or (
+                    candidate_anchor is not None
+                    and _nearest_anchor_index(
+                        float(prior.y),
+                        opposite_edge_anchors,
+                        tolerance,
+                    )
+                    not in {None, candidate_anchor}
+                )
                 for prior in source_kept
             ):
                 source_kept.append(candidate)
         kept.extend(source_kept)
     return tuple(sorted(kept, key=_candidate_sort_key))
+
+
+def _opposite_region_edge_anchors(
+    candidates: tuple[BoundaryCandidate, ...],
+    tolerance: float,
+) -> tuple[float, ...]:
+    region_edges = [
+        (
+            float(candidate.y),
+            _finite(
+                candidate.features.get(
+                    "generator_signed_region_contrast",
+                    0.0,
+                )
+            ),
+        )
+        for candidate in candidates
+        if candidate.source == "region_boundary"
+        and float(candidate.features.get("generator_region_available", 0.0)) >= 0.5
+        and abs(
+            _finite(
+                candidate.features.get(
+                    "generator_signed_region_contrast",
+                    0.0,
+                )
+            )
+        )
+        >= 0.05
+    ]
+    protected: set[float] = set()
+    for index, (left_y, left_signed) in enumerate(region_edges):
+        for right_y, right_signed in region_edges[index + 1 :]:
+            distance = abs(right_y - left_y)
+            if (
+                distance > 1e-12
+                and distance <= tolerance + 1e-12
+                and left_signed * right_signed < 0.0
+            ):
+                protected.update((left_y, right_y))
+    return tuple(sorted(protected))
+
+
+def _nearest_anchor_index(
+    y: float,
+    anchors: tuple[float, ...],
+    tolerance: float,
+) -> int | None:
+    eligible = [
+        (abs(y - anchor), anchor, index)
+        for index, anchor in enumerate(anchors)
+        if abs(y - anchor) <= tolerance + 1e-12
+    ]
+    return None if not eligible else min(eligible)[2]
 
 
 def _make_cluster(

@@ -32,6 +32,47 @@ def test_only_accepted_oil_values_enter_smoothing():
     assert tracker.oil_sample_count == 2
 
 
+def test_review_required_state_bypasses_visible_state_hold():
+    tracker = TemporalTracker(smoothing_window=3, state_hold_frames=3)
+    _oil, _foam, visible = tracker.update(
+        40.0,
+        None,
+        FillState.PARTIAL_VISIBLE,
+        oil_update_accepted=True,
+    )
+    raw_missing = None
+    smoothed, _foam, review = tracker.update(
+        raw_missing,
+        None,
+        FillState.UNKNOWN_REVIEW,
+        oil_update_accepted=False,
+    )
+    assert visible is FillState.PARTIAL_VISIBLE
+    assert raw_missing is None
+    assert smoothed is None
+    assert review is FillState.UNKNOWN_REVIEW
+    assert tracker.current_state is FillState.UNKNOWN_REVIEW
+
+
+def test_normal_visible_state_transition_still_uses_hold_policy():
+    tracker = TemporalTracker(smoothing_window=3, state_hold_frames=2)
+    tracker.update(40.0, None, FillState.PARTIAL_VISIBLE, oil_update_accepted=True)
+    _oil, _foam, first = tracker.update(
+        50.0,
+        None,
+        FillState.FILLING_VISIBLE,
+        oil_update_accepted=True,
+    )
+    _oil, _foam, second = tracker.update(
+        52.0,
+        None,
+        FillState.FILLING_VISIBLE,
+        oil_update_accepted=True,
+    )
+    assert first is FillState.PARTIAL_VISIBLE
+    assert second is FillState.FILLING_VISIBLE
+
+
 def test_no_interface_clear_removes_stale_median():
     tracker = TemporalTracker(smoothing_window=5, state_hold_frames=1)
     for value in (10.0, 11.0, 12.0):

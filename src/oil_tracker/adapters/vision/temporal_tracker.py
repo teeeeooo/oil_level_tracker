@@ -63,11 +63,14 @@ class TemporalTracker:
             self.previous_y = oil
         if foam is not None:
             self.previous_foam_y = foam
-        state = (
-            proposed_state
-            if review_override
-            else self._stabilize_state(proposed_state)
-        )
+        review_required = review_override or proposed_state is FillState.UNKNOWN_REVIEW
+        if review_required:
+            self.current_state = FillState.UNKNOWN_REVIEW
+            self._pending_state = None
+            self._pending_count = 0
+            state = FillState.UNKNOWN_REVIEW
+        else:
+            state = self._stabilize_state(proposed_state)
         return oil, foam, state
 
     def clear_oil(self) -> None:

@@ -602,6 +602,7 @@ class OilTemporalPath:
     def _on_unaccepted(self) -> None:
         self._missing_count += 1
         self._no_interface_count = 0
+        self._clear_pending()
 
     def _clear_pending(self) -> None:
         self._pending_y = None

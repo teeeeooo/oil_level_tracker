@@ -178,14 +178,10 @@ class OpenCvPhaseDetector:
         origin_y = bundle.crop_origin[1]
         raw_oil_source = selected.y + origin_y if selected else None
         raw_foam_source = foam_candidate.y + origin_y if foam_candidate else None
-        review_override = proposed_state is FillState.UNKNOWN_REVIEW and oil_decision.status in {
-            OilDecisionStatus.AMBIGUOUS,
-            OilDecisionStatus.PATH_PENDING,
-            OilDecisionStatus.REACQUISITION_PENDING,
-            OilDecisionStatus.REJECTED_BOUNDARY,
-            OilDecisionStatus.LOW_MARGIN,
-            OilDecisionStatus.UNAVAILABLE,
-        }
+        review_override = (
+            proposed_state is FillState.UNKNOWN_REVIEW
+            or "REVIEW_REQUIRED" in flags
+        )
         smoothed_oil, smoothed_foam, stabilized_state = tracker.update(
             raw_oil_source,
             raw_foam_source,

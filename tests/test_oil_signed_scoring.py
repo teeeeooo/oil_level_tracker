@@ -59,6 +59,61 @@ def _score(
     return image, mask, scored
 
 
+def _score_stationary_weak_boundary(*, static_overlap: bool) -> BoundaryCandidate:
+    settings = DetectorSettings(
+        minimum_final_confidence=0.05,
+        minimum_horizontal_coverage=0.0,
+        minimum_region_contrast=0.0,
+        oil_min_polarity_score=0.0,
+    )
+    image = np.full((48, 64), 115, dtype=np.uint8)
+    image[24:] = 95
+    mask = np.full_like(image, 255)
+    static_map = np.zeros_like(image)
+    if static_overlap:
+        static_map[21:28] = 255
+    pre = preprocess(image, mask, settings)
+    candidate = BoundaryCandidate(
+        "oil_consensus",
+        BoundaryKind.OIL_AIR,
+        24.0,
+        {
+            "generator_strength": 0.75,
+            "consensus_score": 0.65,
+            "unique_generator_support_count": 3.0,
+        },
+    )
+    return score_candidates(
+        [candidate],
+        CandidateScoreContext(
+            pre=pre,
+            effective_mask=mask,
+            ellipse_mask=mask,
+            exclusion_mask=np.zeros_like(mask),
+            settings=settings,
+            static_artifact_map=static_map,
+        ),
+    )[0]
+
+
+def test_static_overlap_is_bounded_penalty_not_hard_reject():
+    baseline = _score_stationary_weak_boundary(static_overlap=False)
+    penalized = _score_stationary_weak_boundary(static_overlap=True)
+    assert not penalized.rejected
+    assert penalized.reject_reason != "static_horizontal_structure"
+    assert penalized.features["static_overlap"] > 0.0
+    assert penalized.penalties["static_artifact_penalty"] > 0.0
+    assert 0.0 <= penalized.final_score <= baseline.final_score <= 1.0
+    assert (
+        0.0
+        <= penalized.features["observation_score"]
+        <= baseline.features["observation_score"]
+        <= 1.0
+    )
+    assert np.isfinite(penalized.final_score)
+    assert np.isfinite(penalized.features["observation_score"])
+
+
 def test_bright_above_dark_below_has_positive_signed_evidence():
     _image, _mask, candidate = _score(190, 70)
     assert candidate.features["signed_above_minus_below"] > 0.0

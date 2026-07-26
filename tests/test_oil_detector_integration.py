@@ -76,9 +76,11 @@ def test_one_frame_dropout_has_no_stale_numeric_output_and_recovers():
     config = glass()
     accepted, _ = detector.detect(oil_frame(130), config, 1, 0.0)
     assert accepted.raw_oil_air_level_y is not None
-    missing, _ = detector.detect(uniform_frame(115), config, 2, 0.5)
+    missing, _ = detector.detect(uniform_frame(135), config, 2, 0.5)
     assert missing.raw_oil_air_level_y is None
     assert missing.smoothed_oil_air_level_y is None
+    assert missing.fill_state is FillState.UNKNOWN_REVIEW
+    assert "REVIEW_REQUIRED" in missing.flags
     recovered, _ = detector.detect(oil_frame(132), config, 3, 1.0)
     assert recovered.raw_oil_air_level_y is not None
     assert abs(recovered.raw_oil_air_level_y - 132.0) <= 4.0
@@ -102,7 +104,7 @@ def test_per_glass_and_full_reset_clear_path_and_smoothing_state():
     assert detector.foam_temporal_state_count == 0
 
 
-def test_static_map_input_frames_are_not_mutated_and_dynamic_boundary_can_reappear():
+def test_static_map_structure_is_not_false_boundary_and_real_boundary_can_reappear():
     detector = OpenCvPhaseDetector()
     config = glass()
     static = uniform_frame(80)
@@ -110,7 +112,10 @@ def test_static_map_input_frames_are_not_mutated_and_dynamic_boundary_can_reappe
     before = static.copy()
     detector.learn_static_artifact([static], config)
     assert np.array_equal(static, before)
-    detection, _ = detector.detect(oil_frame(130), config, 1, 0.0, debug=True)
+    structure_only, _ = detector.detect(static, config, 1, 0.0, debug=True)
+    assert structure_only.raw_oil_air_level_y is None
+    assert structure_only.smoothed_oil_air_level_y is None
+    detection, _ = detector.detect(oil_frame(130), config, 2, 0.5, debug=True)
     assert detection.raw_oil_air_level_y is not None
     assert abs(detection.raw_oil_air_level_y - 130.0) <= 4.0
     consensus = [item for item in detection.candidates if item.source == "oil_consensus"]

@@ -117,11 +117,64 @@ def test_large_consistent_new_path_reacquires_and_requests_smoothing_clear():
     path.evaluate([candidate(20.0)], no_interface(), settings())
     pending = path.evaluate([candidate(70.0)], no_interface(0.10), settings())
     assert pending.status is OilDecisionStatus.REACQUISITION_PENDING
+    assert pending.reacquisition_count == 1
     accepted = path.evaluate([candidate(72.0)], no_interface(0.10), settings())
     assert accepted.status is OilDecisionStatus.ACCEPTED_BOUNDARY
     assert accepted.clear_smoothing
     assert "OIL_REACQUIRED" in accepted.flags
     assert path.accepted_y == 72.0
+
+
+def test_ambiguous_gap_breaks_reacquisition_chain():
+    path = OilTemporalPath()
+    config = settings(oil_no_interface_min_score=0.60)
+    path.evaluate([candidate(20.0)], no_interface(), config)
+    assert path.evaluate([candidate(70.0)], no_interface(0.10), config).reacquisition_count == 1
+    gap = path.evaluate([], no_interface(0.30), config)
+    assert gap.status is OilDecisionStatus.AMBIGUOUS
+    resumed = path.evaluate([candidate(72.0)], no_interface(0.10), config)
+    assert resumed.status is OilDecisionStatus.REACQUISITION_PENDING
+    assert resumed.reacquisition_count == 1
+    assert path.accepted_y == 20.0
+
+
+def test_rejected_gap_breaks_reacquisition_chain():
+    path = OilTemporalPath()
+    config = settings()
+    path.evaluate([candidate(20.0)], no_interface(), config)
+    assert path.evaluate([candidate(70.0)], no_interface(0.10), config).reacquisition_count == 1
+    gap = path.evaluate([candidate(71.0, score=0.30)], no_interface(0.05), config)
+    assert gap.status is OilDecisionStatus.REJECTED_BOUNDARY
+    resumed = path.evaluate([candidate(72.0)], no_interface(0.10), config)
+    assert resumed.status is OilDecisionStatus.REACQUISITION_PENDING
+    assert resumed.reacquisition_count == 1
+    assert path.accepted_y == 20.0
+
+
+def test_no_interface_gap_breaks_reacquisition_chain():
+    path = OilTemporalPath()
+    config = settings()
+    path.evaluate([candidate(20.0)], no_interface(), config)
+    assert path.evaluate([candidate(70.0)], no_interface(0.10), config).reacquisition_count == 1
+    gap = path.evaluate([], no_interface(0.90), config)
+    assert gap.status is OilDecisionStatus.NO_INTERFACE_SELECTED
+    resumed = path.evaluate([candidate(72.0)], no_interface(0.10), config)
+    assert resumed.status is OilDecisionStatus.REACQUISITION_PENDING
+    assert resumed.reacquisition_count == 1
+    assert path.accepted_y == 20.0
+
+
+def test_different_large_jump_restarts_reacquisition_at_count_one():
+    path = OilTemporalPath()
+    config = settings()
+    path.evaluate([candidate(20.0)], no_interface(), config)
+    first = path.evaluate([candidate(70.0)], no_interface(0.10), config)
+    second = path.evaluate([candidate(100.0)], no_interface(0.10), config)
+    assert first.status is OilDecisionStatus.REACQUISITION_PENDING
+    assert second.status is OilDecisionStatus.REACQUISITION_PENDING
+    assert first.reacquisition_count == 1
+    assert second.reacquisition_count == 1
+    assert path.accepted_y == 20.0
 
 
 def test_rapid_continuous_motion_is_not_hard_rejected():
