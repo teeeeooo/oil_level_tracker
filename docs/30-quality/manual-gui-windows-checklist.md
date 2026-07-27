@@ -71,7 +71,28 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Validate visible-to-no-interface and no-interface-to-visible transitions, including stale smoothing removal and bounded reacquisition.
 - Run Glass 1, 2 and 3 independently and together; verify oil path, smoothing, polarity and reacquisition state remain isolated.
 - Exercise Workbench preview, modeless preflight, full analysis and partial re-detection with the same representative scenes.
-- In Result Review debug, inspect consensus source support, signed contrast/polarity, static overlap, no-interface decision, path margin, tracker update and reacquisition metrics.
+
+### Legacy pre-cutover inspection
+- Before S5-B2 cutover, inspect the current production path's consensus source support, signed contrast/polarity, static overlap, no-interface decision, path margin, tracker update and reacquisition metrics to understand legacy behavior.
+- Treat these legacy metrics as cutover-context and compatibility/debug evidence only; they are not the acceptance owner for the new typed hypothesis pipeline.
+
+### S5-B1 shadow typed evidence
+- Inspect immutable raw-observation identity and provenance from source evidence through every derived view.
+- Inspect proposal Y span/diameter, members per proposal and total proposal count.
+- Confirm proposal construction does not create a transitive-chaining bridge between otherwise separate evidence groups.
+- Inspect broad region-step evidence separately from narrow line/pulse evidence.
+- Inspect continuous boundary likelihood, continuous artifact likelihood and ambiguity likelihood with its reason.
+- Inspect the soft static-prior contribution and confirm it does not erase contradictory current evidence.
+- Inspect typed boundary, no-interface, ambiguous and unavailable projection outcomes.
+- Compare the shadow projected decision with the legacy production decision for the same frame and settings.
+- Inspect raw-observation, proposal, hypothesis and temporal-state resource counts and confirm each remains bounded.
+- Confirm official `PhaseDetection` and the result bundle preserve the legacy production output while S5-B1 remains shadow-only.
+
+### S5-B2 cutover
+- After cutover, confirm the typed hypothesis pipeline owns production selection and temporal decisions.
+- Confirm legacy metrics remain compatibility/debug projections only and no longer exercise production selection authority.
+
+### Cross-stage validation
 - Record user truth and run an external S1 regression dataset containing real oil boundary, reflection, structure, no-interface, dropout and rapid-flow categories.
 - Measure Windows CPU median and long-duration memory with debug disabled; compare against the accepted exact-head baseline and verify bounded path state.
 - Build and run the Windows one-folder package on a general office PC with an integrated/basic GPU and with no CUDA or dedicated GPU compute runtime.
@@ -106,8 +127,9 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Repeatedly open and close Result Review and re-detection windows; confirm Matplotlib callbacks, fonts and file handles do not accumulate.
 
 ## Packaging
-- Run the full test suite on Windows with Python 3.14.3.
-- Build one-folder distributions on Windows with both the release baseline interpreter and Python 3.14.3 when possible.
+- Run the Windows canonical suite with Python 3.14.
+- Build and verify the one-folder distribution on Windows in the supported Python 3.14 environment used as the project release baseline.
+- Record the interpreter actually used; do not claim an unexecuted patch version or Windows result.
 - Copy `dist/RotaryOilLevelTracker` to a clean machine without Python or separately bundled font files.
 - Run the complete Workbench, preflight, analysis and Result Review workflow from the one-folder package.
 - Confirm Windows Malgun Gothic is selected on a clean PC and the application does not require a repository font binary.

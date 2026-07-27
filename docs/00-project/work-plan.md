@@ -3,17 +3,17 @@
 - **Document status:** `VALIDATING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Current exact head:** `7ac6c5da7289ad53662caf43447b5cf3a8c10476`
-- **Current exact parent:** `73e9cd3d6562ba65126f4cd74574f3289f1dd9ad`
-- **Current gate:** Independent documentation and planning audit
-- **Last closeout result:** `SUCCESS`
-- **Current state:** Documentation and planning audit
+- **Task-start exact head:** `1256408be65223840ffee113a051ed35bf552257`
+- **Task-start exact parent:** `7ac6c5da7289ad53662caf43447b5cf3a8c10476`
+- **Current gate:** Independent documentation and planning re-audit
+- **Last independent gate result:** `AUDIT: FAIL`
+- **Current state:** Documentation audit repair
 
 This is the operational SSOT for the active milestone. Closeout results must be reflected according to the [closeout policy](./closeout-policy.md), without requiring a read-only actor to mutate a frozen exact head.
 
 ## Exact-head bookkeeping
 
-The header records the authoritative branch head at the start of the current mutation-capable task. After that task creates a commit, the Worker final report records the resulting exact head and parent. The next authorized mutation-capable closeout owner updates this header before making another material change. During an exact-head freeze, documentation is not changed merely to copy audit or validation results into the branch.
+The header records the task-start identity for the current mutation-capable task. It does not and cannot record the resulting commit SHA inside that same commit. The Worker final report records the resulting exact head and parent, and the next authorized mutation-capable owner updates the task-start identity before making another material change. During an exact-head freeze, do not add a documentation commit merely to copy audit or validation results into the branch.
 
 ## Bounded maintenance rules
 
@@ -40,10 +40,10 @@ Stop narrow candidate/static suppression repair. Replace it with the architectur
 
 ## Execution stages
 
-1. **Documentation normalization — completed on feature head**
-   The document hierarchy, roadmap, work plan, closeout policy and S5-B architecture contract are present on the feature branch and await independent audit.
-2. **S5-B1 shadow hypothesis pipeline — awaiting documentation audit**
-   Implement the new typed pipeline beside production behavior only after the current gate passes. Record comparable evidence without changing external `PhaseDetection` results.
+1. **Documentation normalization — branch-local completion under re-audit**
+   The normalized hierarchy and S5-B architecture contract remain branch-local. The independent audit findings are repaired in this task, but formal acceptance still requires a fresh independent re-audit.
+2. **S5-B1 shadow hypothesis pipeline — not started**
+   Do not begin source implementation until the fresh documentation and planning re-audit passes. The future shadow pipeline must record comparable typed evidence without changing external `PhaseDetection` results.
 3. **Architecture/evidence audit — pending shadow implementation**
    Independently verify type boundaries, deterministic proposals/deduplication, evidence preservation and resource bounds.
 4. **S5-B2 production cutover — pending architecture audit**
@@ -61,16 +61,17 @@ Stop narrow candidate/static suppression repair. Replace it with the architectur
 
 ## Current gate
 
-An independent documentation and planning audit must pass before S5-B1 implementation begins.
+This repair task must produce a new documentation-only exact head, then a fresh independent documentation and planning re-audit must pass before S5-B1 source implementation begins. S5-B1 has not started, and the architecture remains `VALIDATING`.
 
 Gate requirements:
 
-- review the normalized hierarchy and authoritative ownership independently;
-- verify roadmap status against merged project history;
+- verify the repaired task-start terminology and exact-head bookkeeping ownership;
+- verify the single replacement closeout records the prior `AUDIT: FAIL`, its findings and the bounded repair evidence;
+- review the normalized hierarchy, authoritative ownership and roadmap consistency independently;
 - verify the work-plan gate, findings, risks and next action;
 - verify the S5-B architecture contract against the read-only investigation evidence;
-- confirm links, archive replacements and Markdown-only scope at the exact remote head;
-- return `PASS` before S5-B1 begins; on failure, report the blocking findings without mutating the audited head, and require the next authorized Worker to reflect them before repair.
+- confirm links, path case, replacement/compaction rules, Markdown-only scope and trailing newlines at the new exact remote head;
+- return `PASS` before S5-B1 begins; on failure, report blocking findings without mutating the audited head.
 
 ## Acceptance criteria
 
@@ -103,10 +104,9 @@ Gate requirements:
 
 ## Blocking findings
 
-- The production path still assigns semantic meaning after raw generator clustering and hard suppression decisions.
-- Repeated repairs have not separated broad region transitions from narrow structural pulses.
-- Current static suppression can still become an early information-destroying gate.
-- A shadow pipeline and independent evidence audit do not yet exist.
+- The repaired documentation exact head has not yet passed a fresh independent documentation and planning re-audit.
+- S5-B1 source implementation has not started, so the typed shadow pipeline and its independent evidence audit do not yet exist.
+- Until cutover, the production path still assigns semantic meaning after legacy generator clustering and suppression decisions.
 
 ## Open risks
 
@@ -128,15 +128,16 @@ Gate requirements:
 
 ## Next action
 
-Obtain an independent documentation and planning audit at the immutable exact head reported by this repair Worker. After an audit `PASS`, the next authorized mutation-capable Worker updates the Work Plan header and begins S5-B1 as a bounded shadow implementation that leaves production `PhaseDetection` behavior unchanged.
+Obtain a fresh independent documentation and planning re-audit at the immutable exact head reported by this repair Worker. Only after re-audit `PASS` may the next authorized mutation-capable Worker update the task-start identity and begin S5-B1 as a bounded shadow implementation that leaves production `PhaseDetection` behavior unchanged.
 
 ## Latest recorded closeout
 
-- **Result:** `SUCCESS`
-- **Task-start exact head:** `7ac6c5da7289ad53662caf43447b5cf3a8c10476`
-- **Task-start exact parent:** `73e9cd3d6562ba65126f4cd74574f3289f1dd9ad`
-- **Completed scope:** Added bounded replacement and compaction rules for the Roadmap, Work Plan, closeout policy and documentation guide.
-- **Validation evidence:** Relative links, single latest-closeout ownership, current gate/next-action consistency, Markdown-only scope, trailing newlines and `git diff --check` verified before commit.
-- **Findings:** Planning documents must replace obsolete current-state content rather than accumulate closeout, audit, validation or commit journals.
-- **Current gate and next action:** Unchanged; obtain independent documentation and planning audit `PASS` before S5-B1 begins.
-- **Unresolved risks:** Existing S5-B architecture and evidence risks remain current; no detector implementation or runtime validation is claimed.
+- **Repair result:** `SUCCESS`
+- **Task-start exact head:** `1256408be65223840ffee113a051ed35bf552257`
+- **Task-start exact parent:** `7ac6c5da7289ad53662caf43447b5cf3a8c10476`
+- **Trigger:** Independent documentation and planning audit returned `AUDIT: FAIL` at the task-start exact head.
+- **Blocking findings:** The Work Plan mislabeled task-start identity as current resulting identity, and two maintained Markdown files lacked trailing newlines despite recorded PASS evidence.
+- **Completed repair scope:** Corrected Work Plan terminology and repair/re-audit state, added the closeout-policy terminology safeguard, restored the two missing trailing newlines, aligned maintained S5-B manual evidence with the typed shadow/cutover architecture and normalized maintained Windows wording to Python 3.14.
+- **Validation evidence:** Starting local/remote identity and parent matched; only the five expected documentation files changed; all tracked Markdown files have trailing newlines; relative Markdown links, old flat active references, case-sensitive paths, single project-status/current-gate/next-action ownership and the single latest-closeout block were checked; `git diff --check` passed. Runtime detector, pytest, canonical, benchmark, GUI, application and packaging validation were not run.
+- **Current gate and next action:** Architecture status remains `VALIDATING`; S5-B1 is not started. Obtain a fresh independent documentation and planning re-audit `PASS` at the resulting exact head before any source implementation.
+- **Unresolved S5-B architecture risks:** Broad/narrow evidence correlation, shadow instrumentation drift, sticky temporal state, short-sample static-prior bias, bounded resource cost and limited real-video truth coverage remain unresolved.

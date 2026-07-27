@@ -46,7 +46,7 @@ A mutation-capable Worker:
 - reports the resulting exact head and parent after commit creation;
 - does not use branch-local completion as formal `DONE`.
 
-Because a commit cannot contain its own resulting SHA, the Work Plan header records the authoritative head at task start. The Worker final report supplies the resulting head, and the next authorized mutation-capable owner updates the header before another material mutation.
+Because a commit cannot contain its own resulting SHA, the Work Plan header records the authoritative head at task start. When it does so, the labels must be `Task-start exact head` and `Task-start exact parent`, or unambiguously equivalent wording; a task-start SHA must not be labeled `Current exact head`. The Worker final report owns the resulting exact head and parent, and the next authorized mutation-capable owner updates the header before another material mutation.
 
 ## Read-only Auditor or Validator closeout
 
