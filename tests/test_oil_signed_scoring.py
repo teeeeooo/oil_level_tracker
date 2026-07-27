@@ -276,6 +276,71 @@ def test_multi_edge_static_group_rejects_every_candidate_deterministically():
         } == {"multi_edge_static_structure"}
 
 
+def test_undercovered_static_core_rejects_strong_survivor_deterministically():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+
+    def make_candidates():
+        return [
+            _scored_scalar_candidate(
+                40.0,
+                -1.0,
+                observation=0.96,
+                persistent_contrast=0.44,
+                persistent_polarity=-1.0,
+                static_overlap=0.053,
+                consensus=0.92,
+                support=4,
+            ),
+            _scored_scalar_candidate(44.0, 1.0, static_overlap=0.064),
+            _scored_scalar_candidate(48.0, -1.0, static_overlap=0.091),
+            _scored_scalar_candidate(
+                52.0,
+                1.0,
+                observation=0.98,
+                persistent_contrast=0.52,
+                persistent_polarity=1.0,
+                static_overlap=0.052,
+                consensus=0.93,
+                support=4,
+            ),
+            _scored_scalar_candidate(
+                58.0,
+                -1.0,
+                observation=0.30,
+                persistent_contrast=0.21,
+                persistent_polarity=1.0,
+                static_overlap=0.0,
+                consensus=0.40,
+                support=2,
+            ),
+        ]
+
+    expected = None
+    for order in permutations(range(5)):
+        values = make_candidates()
+        arranged = [values[index] for index in order]
+        suppress_paired_horizontal_structures(arranged, settings)
+        signature = tuple(
+            sorted(
+                (
+                    candidate.y,
+                    candidate.rejected,
+                    candidate.reject_reason,
+                    candidate.features[
+                        "multi_edge_static_protected_real_boundary"
+                    ],
+                )
+                for candidate in arranged
+            )
+        )
+        expected = signature if expected is None else expected
+        assert signature == expected
+        assert all(candidate.rejected for candidate in arranged)
+        assert {
+            candidate.reject_reason for candidate in arranged
+        } == {"multi_edge_static_structure"}
+
+
 def test_nearby_persistent_real_boundary_is_only_survivor_of_static_group():
     settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
     static_group = [
@@ -425,6 +490,7 @@ def _scored_scalar_candidate(
     persistent_polarity: float = 0.0,
     static_overlap: float = 0.0,
     consensus: float = 0.80,
+    support: int = 3,
     rejected: bool = False,
     reject_reason: str = "",
 ) -> BoundaryCandidate:
@@ -440,7 +506,7 @@ def _scored_scalar_candidate(
             "persistent_polarity_sign": persistent_polarity,
             "static_overlap": static_overlap,
             "consensus_score": consensus,
-            "unique_generator_support_count": 3.0,
+            "unique_generator_support_count": float(support),
         },
     )
     candidate.final_score = observation

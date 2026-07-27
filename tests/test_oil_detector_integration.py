@@ -32,7 +32,13 @@ def uniform_frame(value: int):
     return np.full((240, 320, 3), value, dtype=np.uint8)
 
 
-def multi_edge_static_band(*, offset: int = 0, background: int = 95):
+def multi_edge_static_band(
+    *,
+    offset: int = 0,
+    background: int = 95,
+    x_start: int = 0,
+    x_stop: int = 320,
+):
     frame = uniform_frame(background)
     for y, value in (
         (108 + offset, 180),
@@ -40,7 +46,7 @@ def multi_edge_static_band(*, offset: int = 0, background: int = 95):
         (116 + offset, 190),
         (120 + offset, 75),
     ):
-        frame[y - 1 : y + 2] = value
+        frame[y - 1 : y + 2, x_start:x_stop] = value
     return frame
 
 
@@ -160,6 +166,44 @@ def test_multi_edge_static_band_never_produces_numeric_oil_output():
                 item.reject_reason == "multi_edge_static_structure"
                 for item in consensus
             )
+
+
+def test_partial_static_learning_never_protects_multi_edge_false_survivor():
+    detector = OpenCvPhaseDetector()
+    config = glass()
+    observed = multi_edge_static_band()
+    partial_static = multi_edge_static_band(x_start=150, x_stop=170)
+    detector.learn_static_artifact(
+        [partial_static, partial_static.copy(), partial_static.copy()],
+        config,
+    )
+
+    for index in range(3):
+        detection, _ = detector.detect(
+            observed,
+            config,
+            index + 1,
+            index * 0.5,
+            debug=True,
+        )
+        assert detection.raw_oil_air_level_y is None
+        assert detection.smoothed_oil_air_level_y is None
+        consensus = [
+            item for item in detection.candidates if item.source == "oil_consensus"
+        ]
+        assert consensus
+        assert not [item for item in consensus if not item.rejected]
+        assert all(
+            item.reject_reason == "multi_edge_static_structure"
+            for item in consensus
+        )
+        assert any(
+            0.0 < item.features["static_overlap"] < 0.06
+            and item.features["observation_score"] > 0.90
+            and item.features["unique_generator_support_count"] >= 4.0
+            and item.features["consensus_score"] > 0.90
+            for item in consensus
+        )
 
 
 def test_real_boundary_is_only_survivor_beside_multi_edge_static_band():

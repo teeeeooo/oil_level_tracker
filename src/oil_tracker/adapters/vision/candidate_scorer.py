@@ -410,7 +410,7 @@ def suppress_paired_horizontal_structures(
         float(settings.oil_consensus_tolerance_px) * 3.0,
     )
     resolved = _suppress_multi_edge_static_groups(
-        usable,
+        candidates,
         settings=settings,
         minimum_distance=minimum_distance,
         maximum_distance=maximum_distance,
@@ -578,24 +578,13 @@ def _suppress_multi_edge_static_groups(
         candidates,
         key=lambda candidate: (float(candidate.y), str(candidate.source)),
     )
-    protected = _protected_real_boundary_ids(
-        ordered,
-        settings=settings,
-        minimum_distance=minimum_distance,
-        maximum_distance=maximum_distance,
-    )
-    for candidate in ordered:
-        if id(candidate) in protected:
-            candidate.features["multi_edge_static_protected_real_boundary"] = 1.0
-
-    structural = [candidate for candidate in ordered if id(candidate) not in protected]
-    by_id = {id(candidate): candidate for candidate in structural}
+    by_id = {id(candidate): candidate for candidate in ordered}
     adjacency = {candidate_id: set() for candidate_id in by_id}
     opposite_pairs: set[frozenset[int]] = set()
-    for index, left in enumerate(structural):
+    for index, left in enumerate(ordered):
         left_static = _unit(left.features.get("static_overlap", 0.0)) > 0.0
         left_sign = float(left.features.get("polarity_sign", 0.0))
-        for right in structural[index + 1 :]:
+        for right in ordered[index + 1 :]:
             distance = float(right.y) - float(left.y)
             if distance > maximum_distance:
                 break
@@ -616,7 +605,7 @@ def _suppress_multi_edge_static_groups(
 
     suppressed: set[int] = set()
     visited: set[int] = set()
-    for root in structural:
+    for root in ordered:
         root_id = id(root)
         if root_id in visited:
             continue
@@ -637,29 +626,52 @@ def _suppress_multi_edge_static_groups(
             )
             pending.extend(neighbors)
         visited.update(component_ids)
-        component = [by_id[candidate_id] for candidate_id in component_ids]
-        if len(component) < 3:
+        component = sorted(
+            (by_id[candidate_id] for candidate_id in component_ids),
+            key=lambda candidate: (float(candidate.y), str(candidate.source)),
+        )
+        static_members = [
+            candidate
+            for candidate in component
+            if _unit(candidate.features.get("static_overlap", 0.0)) > 0.0
+        ]
+        if len(static_members) < 2:
             continue
-        ys = [float(candidate.y) for candidate in component]
-        span = max(ys) - min(ys)
+        static_min_y = min(float(candidate.y) for candidate in static_members)
+        static_max_y = max(float(candidate.y) for candidate in static_members)
+        core = [
+            candidate
+            for candidate in component
+            if static_min_y - 1e-12
+            <= float(candidate.y)
+            <= static_max_y + 1e-12
+        ]
+        core_ids = {id(candidate) for candidate in core}
+        core_ys = [float(candidate.y) for candidate in core]
+        span = static_max_y - static_min_y
+        if len(core) < 3:
+            continue
         if span < minimum_distance * 2.0 - 1e-12:
             continue
         if span > maximum_distance * 2.0 + 1e-12:
             continue
-        if len({round(value, 9) for value in ys}) < 3:
+        if len({round(value, 9) for value in core_ys}) < 3:
             continue
-        pair_count = sum(pair <= component_ids for pair in opposite_pairs)
-        static_count = sum(
-            _unit(candidate.features.get("static_overlap", 0.0)) > 0.0
-            for candidate in component
-        )
-        if pair_count < 2 or static_count < 2:
+        pair_count = sum(pair <= core_ids for pair in opposite_pairs)
+        if pair_count < 2:
             continue
         for candidate in component:
+            inside_static_span = id(candidate) in core_ids
+            if (
+                not inside_static_span
+                and _is_protected_real_boundary_candidate(candidate, settings)
+            ):
+                candidate.features[
+                    "multi_edge_static_protected_real_boundary"
+                ] = 1.0
+                continue
             candidate.features["multi_edge_static_structure"] = 1.0
-            candidate.features["multi_edge_static_group_size"] = float(
-                len(component)
-            )
+            candidate.features["multi_edge_static_group_size"] = float(len(core))
             candidate.features["multi_edge_static_opposite_pair_count"] = float(
                 pair_count
             )
@@ -672,88 +684,49 @@ def _suppress_multi_edge_static_groups(
     return suppressed
 
 
-def _protected_real_boundary_ids(
-    candidates: list[BoundaryCandidate],
-    *,
+def _is_protected_real_boundary_candidate(
+    candidate: BoundaryCandidate,
     settings: DetectorSettings,
-    minimum_distance: float,
-    maximum_distance: float,
-) -> set[int]:
+) -> bool:
+    """Return whether a candidate outside a static core has real-boundary evidence."""
+
+    if candidate.rejected:
+        return False
     static_limit = max(
         0.05,
         float(settings.minimum_horizontal_coverage) * 0.25,
     )
+    if _unit(candidate.features.get("static_overlap", 0.0)) > static_limit:
+        return False
     persistent_threshold = max(
         0.35,
         float(settings.minimum_region_contrast) * 3.0,
+    )
+    persistent = (
+        _unit(candidate.features.get("persistent_region_contrast", 0.0))
+        >= persistent_threshold
+        and float(candidate.features.get("persistent_polarity_sign", 0.0))
+        != 0.0
     )
     observation_threshold = max(
         0.68,
         float(settings.minimum_final_confidence) + 0.12,
     )
-    protected = {
-        id(candidate)
-        for candidate in candidates
-        if not candidate.rejected
-        and _unit(candidate.features.get("static_overlap", 0.0)) <= static_limit
-        and (
-            (
-                _unit(candidate.features.get("persistent_region_contrast", 0.0))
-                >= persistent_threshold
-                and float(candidate.features.get("persistent_polarity_sign", 0.0))
-                != 0.0
-            )
-            or (
-                float(candidate.features.get("observation_score", candidate.final_score))
-                >= observation_threshold
-                and int(
-                    round(
-                        candidate.features.get(
-                            "unique_generator_support_count",
-                            0.0,
-                        )
-                    )
+    strong_consensus = (
+        float(candidate.features.get("observation_score", candidate.final_score))
+        >= observation_threshold
+        and int(
+            round(
+                candidate.features.get(
+                    "unique_generator_support_count",
+                    0.0,
                 )
-                >= int(settings.oil_min_consensus_sources)
-                and _unit(candidate.features.get("consensus_score", 0.0)) >= 0.65
             )
         )
-    }
-    for index, left in enumerate(candidates):
-        for right in candidates[index + 1 :]:
-            distance = float(right.y) - float(left.y)
-            if distance > maximum_distance:
-                break
-            if distance < minimum_distance:
-                continue
-            if (
-                _unit(left.features.get("static_overlap", 0.0)) > static_limit
-                or _unit(right.features.get("static_overlap", 0.0)) > static_limit
-            ):
-                continue
-            left_sign = float(left.features.get("polarity_sign", 0.0))
-            right_sign = float(right.features.get("polarity_sign", 0.0))
-            if left_sign == 0.0 or right_sign == 0.0 or left_sign * right_sign >= 0.0:
-                continue
-            left_persistent_sign = float(
-                left.features.get("persistent_polarity_sign", 0.0)
-            )
-            right_persistent_sign = float(
-                right.features.get("persistent_polarity_sign", 0.0)
-            )
-            if (
-                max(
-                    _unit(left.features.get("persistent_region_contrast", 0.0)),
-                    _unit(right.features.get("persistent_region_contrast", 0.0)),
-                )
-                >= persistent_threshold
-                and left_persistent_sign != 0.0
-                and right_persistent_sign != 0.0
-                and left_persistent_sign * right_persistent_sign > 0.0
-                and (not left.rejected or not right.rejected)
-            ):
-                protected.update((id(left), id(right)))
-    return protected
+        >= int(settings.oil_min_consensus_sources)
+        and _unit(candidate.features.get("consensus_score", 0.0)) >= 0.65
+    )
+    return persistent or strong_consensus
 
 
 def select_best_candidate(
