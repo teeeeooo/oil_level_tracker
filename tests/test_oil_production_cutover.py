@@ -193,8 +193,14 @@ def _coherent_typed_results() -> tuple[OilShadowFrameResult, ...]:
     return boundary, reacquisition, no_interface, ambiguous, unavailable
 
 
+def _forged_observation_kind(observation, kind: ShadowObservationKind):
+    forged = replace(observation)
+    object.__setattr__(forged, "kind", kind)
+    return forged
+
+
 def _malformed_typed_results() -> tuple[tuple[str, OilShadowFrameResult], ...]:
-    boundary, _reacquisition, no_interface, _ambiguous, _unavailable = (
+    boundary, reacquisition, no_interface, ambiguous, unavailable = (
         _coherent_typed_results()
     )
     current_boundary = boundary.current_observation
@@ -207,6 +213,31 @@ def _malformed_typed_results() -> tuple[tuple[str, OilShadowFrameResult], ...]:
         ShadowObservationKind.UNAVAILABLE,
         0.0,
         "adversarial_unavailable",
+    )
+    coherent_ambiguous_current = ambiguous.current_observation
+    coherent_unavailable_current = unavailable.current_observation
+    assert isinstance(coherent_ambiguous_current, ShadowAmbiguousObservation)
+    assert isinstance(coherent_unavailable_current, ShadowUnavailableObservation)
+
+    forged_boundary_for_accepted = _forged_observation_kind(
+        current_boundary,
+        ShadowObservationKind.NO_INTERFACE,
+    )
+    forged_boundary_for_reacquisition = _forged_observation_kind(
+        current_boundary,
+        ShadowObservationKind.AMBIGUOUS,
+    )
+    forged_no_interface = _forged_observation_kind(
+        current_no_interface,
+        ShadowObservationKind.BOUNDARY,
+    )
+    forged_ambiguous = _forged_observation_kind(
+        coherent_ambiguous_current,
+        ShadowObservationKind.UNAVAILABLE,
+    )
+    forged_unavailable = _forged_observation_kind(
+        coherent_unavailable_current,
+        ShadowObservationKind.NO_INTERFACE,
     )
 
     reacquisition_decision = replace(
@@ -262,6 +293,29 @@ def _malformed_typed_results() -> tuple[tuple[str, OilShadowFrameResult], ...]:
     object.__setattr__(unsupported_decision, "status", "unsupported_status")
 
     return (
+        (
+            "boundary accepted with forged boundary kind",
+            replace(boundary, current_observation=forged_boundary_for_accepted),
+        ),
+        (
+            "reacquisition pending with forged boundary kind",
+            replace(
+                reacquisition,
+                current_observation=forged_boundary_for_reacquisition,
+            ),
+        ),
+        (
+            "no-interface accepted with forged no-interface kind",
+            replace(no_interface, current_observation=forged_no_interface),
+        ),
+        (
+            "ambiguous with forged ambiguous kind",
+            replace(ambiguous, current_observation=forged_ambiguous),
+        ),
+        (
+            "unavailable with forged unavailable kind",
+            replace(unavailable, current_observation=forged_unavailable),
+        ),
         (
             "boundary accepted with no-interface current",
             replace(boundary, current_observation=current_no_interface),

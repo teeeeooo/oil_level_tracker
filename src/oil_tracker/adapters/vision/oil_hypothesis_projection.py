@@ -71,6 +71,8 @@ def validate_production_result(result: OilShadowFrameResult) -> None:
     if decision.status is ShadowTemporalStatus.NO_INTERFACE_ACCEPTED:
         if not isinstance(current, ShadowNoInterfaceObservation):
             raise ValueError("typed no-interface decision has the wrong current observation")
+        if current.kind is not ShadowObservationKind.NO_INTERFACE:
+            raise ValueError("typed no-interface current has the wrong internal kind")
         if decision.observation_kind is not ShadowObservationKind.NO_INTERFACE:
             raise ValueError("typed no-interface decision has the wrong observation kind")
         if decision.selected_hypothesis_id is not None or decision.projected_source_y is not None:
@@ -80,6 +82,8 @@ def validate_production_result(result: OilShadowFrameResult) -> None:
     if decision.status is ShadowTemporalStatus.AMBIGUOUS:
         if not isinstance(current, ShadowAmbiguousObservation):
             raise ValueError("typed ambiguous decision has the wrong current observation")
+        if current.kind is not ShadowObservationKind.AMBIGUOUS:
+            raise ValueError("typed ambiguous current has the wrong internal kind")
         if decision.observation_kind is not ShadowObservationKind.AMBIGUOUS:
             raise ValueError("typed ambiguous decision has the wrong observation kind")
         if decision.selected_hypothesis_id is not None:
@@ -91,6 +95,8 @@ def validate_production_result(result: OilShadowFrameResult) -> None:
     if decision.status is ShadowTemporalStatus.UNAVAILABLE:
         if not isinstance(current, ShadowUnavailableObservation):
             raise ValueError("typed unavailable decision has the wrong current observation")
+        if current.kind is not ShadowObservationKind.UNAVAILABLE:
+            raise ValueError("typed unavailable current has the wrong internal kind")
         if decision.observation_kind is not ShadowObservationKind.UNAVAILABLE:
             raise ValueError("typed unavailable decision has the wrong observation kind")
         if decision.selected_hypothesis_id is not None or decision.projected_source_y is not None:
@@ -325,6 +331,8 @@ def _validated_boundary_current(
     current = result.current_observation
     if not isinstance(current, ShadowBoundaryObservation):
         raise ValueError(f"{context} has the wrong current observation")
+    if current.kind is not ShadowObservationKind.BOUNDARY:
+        raise ValueError(f"{context} current has the wrong internal kind")
     canonical = _hypothesis_by_id(result, current.hypothesis.identity)
     if canonical is None:
         raise ValueError(f"{context} current hypothesis is not canonical")
