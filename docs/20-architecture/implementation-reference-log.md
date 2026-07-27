@@ -1,6 +1,6 @@
 # Implementation Reference Log
 
-SSOT가 모든 외부 자료보다 우선합니다. 아래 자료는 구현 원리 확인과 API 교차 검증에만 사용했으며, 외부 코드 전체를 복사하지 않았습니다.
+[제품 SSOT](../rotary_oil_level_tracker_ssot_spec.md)가 모든 외부 자료보다 우선합니다. 아래 자료는 구현 원리 확인과 API 교차 검증에만 사용했으며, 외부 코드 전체를 복사하지 않았습니다. 현재 milestone 상태와 next action은 [roadmap](../00-project/roadmap.md)과 [work plan](../00-project/work-plan.md)을 따릅니다.
 
 | Area | Problem | Source URL | Source date/version | Key takeaway | Applied decision | License/reuse note |
 |---|---|---|---|---|---|---|

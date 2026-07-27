@@ -1,5 +1,7 @@
 # Implementation Decisions
 
+This is a historical baseline decision log, not a project-status document. The [product SSOT](../rotary_oil_level_tracker_ssot_spec.md) remains authoritative, and an active feature architecture overrides an older detector implementation note where they differ. In particular, detector items 8, 11 and 12 describe the pre-cutover baseline; current S5-B authority is the [oil-boundary hypothesis architecture](./s5b-oil-boundary-hypothesis-architecture.md).
+
 1. **Source coordinates are scene coordinates.** `QGraphicsScene` uses original frame pixel coordinates. `QGraphicsView` performs display scaling only, eliminating persistent display/source conversion drift.
 2. **Ellipse remains axis-aligned.** Eight resize handles are implemented; rotation is intentionally unsupported per SSOT.
 3. **Crop ROI is always derived.** No independent crop rectangle exists in the domain or UI.

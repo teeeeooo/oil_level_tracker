@@ -2,10 +2,7 @@
 
 ## Authority and scope
 
-This document is the execution guide for the detector benchmark work described by
-[`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md). Product,
-truth and architecture decisions remain subordinate to
-[`rotary_oil_level_tracker_ssot_spec.md`](./rotary_oil_level_tracker_ssot_spec.md).
+This document is the execution guide for the detector benchmark and regression obligations referenced by the [real-world validation plan](./real-world-validation-plan.md). Product, truth and architecture decisions remain subordinate to the [product SSOT](../rotary_oil_level_tracker_ssot_spec.md), while current milestone state and gate belong to the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md).
 
 S1 builds a repeatable baseline around the existing Phase 2C-3 regression fixture
 export. It does **not** change detector algorithms, thresholds, `.oiltruth`, the

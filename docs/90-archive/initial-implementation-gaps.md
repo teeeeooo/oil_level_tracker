@@ -1,6 +1,10 @@
-# Implementation Gaps and Constraints
+# Initial Implementation Gaps and Constraints
 
-The delivered project is a coherent executable MVP vertical slice. The following items require follow-up rather than being represented as complete:
+**Status:** `SUPERSEDED`
+
+This document is the historical gap snapshot from the initial MVP delivery. It is superseded because later milestones implemented several listed items and current status now belongs to the [project roadmap](../00-project/roadmap.md), [current work plan](../00-project/work-plan.md) and [real-world validation plan](../30-quality/real-world-validation-plan.md). Preserve the list below as historical context only.
+
+The delivered project was a coherent executable MVP vertical slice. The following items require follow-up rather than being represented as complete:
 
 1. **Real test-video calibration is not complete.** Candidate weights, intensity heuristics, foam thresholds and state-transition priors were verified with synthetic fixtures only. Real compressor sight-glass videos and manual annotations are required before production judgment use.
 2. **Golden video regression contains structure/documentation but no proprietary real footage.** No actual test video was supplied. Synthetic video regression is included.

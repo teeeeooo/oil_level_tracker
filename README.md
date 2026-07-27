@@ -2,7 +2,7 @@
 
 Windows desktop workbench for tracking oil-air boundaries and bottom-connected foam fronts in rotary-compressor sight-glass test videos. The application turns a reusable Glass geometry/detector **Recipe** and a video-specific **Analysis Session** into reviewable tracking data, events, judgments, captures, graphs, an offline HTML report and CSV files.
 
-The authoritative product/architecture specification is included at `docs/rotary_oil_level_tracker_ssot_spec.md`.
+The authoritative product specification is [docs/rotary_oil_level_tracker_ssot_spec.md](docs/rotary_oil_level_tracker_ssot_spec.md). Use the [documentation guide](docs/README.md) for the roadmap, active work plan, architecture and validation documents.
 
 ## Requirements
 
@@ -115,7 +115,7 @@ python -m pytest
 
 The test suite covers coordinate conversion, mask/margin/exclusion behavior, Recipe round-trip/versioning, validation, judgment, event debounce, candidate penalties, FillState behavior, foam connectivity, timestamp scheduling, synthetic detector fixtures, full analysis/reporting, multi-Glass decode behavior, cancellation and GUI smoke/routing.
 
-Geometry drag/resize and Windows DPI behavior also require `docs/MANUAL_TEST_CHECKLIST.md`.
+Geometry drag/resize and Windows DPI behavior also require the [manual GUI and Windows checklist](docs/30-quality/manual-gui-windows-checklist.md).
 
 ## PyInstaller one-folder build
 
@@ -191,14 +191,14 @@ src/oil_tracker/
 └─ __main__.py
 ```
 
-Additional files:
+Documentation entry points:
 
-- `docs/IMPLEMENTATION_REFERENCE_LOG.md`
-- `docs/IMPLEMENTATION_DECISIONS.md`
-- `docs/IMPLEMENTATION_GAPS.md`
-- `docs/MANUAL_TEST_CHECKLIST.md`
-- `docs/GOLDEN_VIDEO_REGRESSION.md`
+- [Documentation guide](docs/README.md)
+- [Project roadmap](docs/00-project/roadmap.md)
+- [Current work plan](docs/00-project/work-plan.md)
+- [Architecture documents](docs/20-architecture/)
+- [Quality and validation documents](docs/30-quality/)
 
 ## Current implementation scope and limitations
 
-This delivery is an executable MVP vertical slice rather than a production-qualified vision system. Synthetic video tests and output generation are implemented and exercised. Real sight-glass videos, manual annotations, Windows clean-PC packaging and detector threshold calibration remain required before operational PASS/FAIL use. See `docs/IMPLEMENTATION_GAPS.md` for the precise list.
+The application is not yet production-qualified for operational PASS/FAIL use. Real-video detector qualification, Windows clean-PC packaging and long-duration platform evidence remain governed by the [roadmap](docs/00-project/roadmap.md), [current work plan](docs/00-project/work-plan.md) and [real-world validation plan](docs/30-quality/real-world-validation-plan.md).

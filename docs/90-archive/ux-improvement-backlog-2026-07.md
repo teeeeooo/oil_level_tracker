@@ -1,12 +1,17 @@
-# Rotary Oil Level Tracker UX Improvement Backlog
+# UX Improvement Backlog — 2026-07 Historical Snapshot
+
+**Status:** `SUPERSEDED`
+
+This snapshot is superseded because current milestone state moved to the [roadmap](../00-project/roadmap.md), active execution moved to the [work plan](../00-project/work-plan.md), and the maintained UX contract is [ux-improvement-plan.md](../10-product/ux-improvement-plan.md). Preserve the content below only for historical implementation evidence.
+
 
 ## 1. 문서 목적
 
 이 문서는 Rotary Oil Level Tracker의 전체 UX 개선 방향, 구현 순서, Phase별 범위와 완료 상태를 관리하는 계획 문서다.
 
-Result Review Viewer의 화면, 데이터 계약, 일반 검토 모드와 디버그 모드에 대한 상세 설계는 [`RESULT_REVIEW_VIEWER_PLAN.md`](./RESULT_REVIEW_VIEWER_PLAN.md)를 따른다.
+Result Review Viewer의 화면, 데이터 계약, 일반 검토 모드와 디버그 모드에 대한 상세 설계는 [current Result Review Viewer plan](../10-product/result-review-viewer-plan.md)를 따른다.
 
-실제 사용에서 확인된 Workbench, graph, 분석 lifecycle과 detector 정확도 문제의 실행 계획은 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)를 따른다.
+실제 사용에서 확인된 Workbench, graph, 분석 lifecycle과 detector 정확도 문제의 실행 계획은 [current real-world validation plan](../30-quality/real-world-validation-plan.md)를 따른다.
 
 ## 2. 최종 목표
 
@@ -260,7 +265,7 @@ Phase 2B-2는 PR #11 `feat: enhance result review workflow`로 `main`에 반영�
 
 분석 완료 후 사용자가 원본 영상을 재생하면서 검출된 유면 위치와 판정 근거를 overlay와 tracking graph로 확인할 수 있게 한다.
 
-상세 설계와 데이터 계약은 [`RESULT_REVIEW_VIEWER_PLAN.md`](./RESULT_REVIEW_VIEWER_PLAN.md)를 따른다.
+상세 설계와 데이터 계약은 [current Result Review Viewer plan](../10-product/result-review-viewer-plan.md)를 따른다.
 
 ### Phase 2B-1 — Viewer MVP
 
@@ -364,7 +369,7 @@ Phase 2C-3은 PR #27 `feat: add user truth annotations and regression fixtures`�
 - Actions artifact 없음, 임시 validation PR/branch/workflow cleanup 완료
 - 실제 compressor dataset, Windows packaged CLI와 장시간 성능은 수동 확인 항목으로 유지
 
-Phase 2C-4 전에 수행할 실사용 안정화 순서와 acceptance criteria는 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)에 기록한다.
+Phase 2C-4 전에 수행할 실사용 안정화 순서와 acceptance criteria는 [current real-world validation plan](../30-quality/real-world-validation-plan.md)에 기록한다.
 
 ### 목적
 
@@ -464,7 +469,7 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 
 현재 `main`에는 Phase 1, Phase 2A 전체, Phase 2B 전체, Phase 2C-1 Debug Viewer, Phase 2C-2 부분 재검출과 비교, Phase 2C-3 사용자 정답과 회귀 자료와 실사용 안정화 S1 Detector benchmark foundation이 완료되어 있다.
 
-실제 사용에서 확인된 문제, detector 구현 선택 기준과 상세 acceptance criteria는 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)를 따른다.
+실제 사용에서 확인된 문제, detector 구현 선택 기준과 상세 acceptance criteria는 [current real-world validation plan](../30-quality/real-world-validation-plan.md)를 따른다.
 
 다음 구현 순서는 다음과 같다.
 

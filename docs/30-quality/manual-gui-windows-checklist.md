@@ -1,5 +1,7 @@
 # Manual GUI and Windows Acceptance Checklist
 
+This document owns manual GUI, real-video, Windows and packaging obligations. It does not own milestone status; use the [roadmap](../00-project/roadmap.md) and [current work plan](../00-project/work-plan.md).
+
 ## Workbench and video
 - Launch the packaged app on a 100%, 125%, and 150% Windows display scale.
 - At 1280 px window width, verify all five Workbench progress steps remain identifiable on one line without overlap or clipping.
