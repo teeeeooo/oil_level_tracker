@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from itertools import permutations
+
 import numpy as np
 
 from oil_tracker.adapters.vision.candidate_scorer import (
@@ -239,6 +241,105 @@ def test_single_signed_boundary_is_not_rejected_as_structure():
     assert candidate.features["paired_structure_opposite_polarity"] == 0.0
 
 
+def test_multi_edge_static_group_rejects_every_candidate_deterministically():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+
+    def make_candidates():
+        return [
+            _scored_scalar_candidate(40.0, -1.0, static_overlap=0.20),
+            _scored_scalar_candidate(44.0, 1.0, static_overlap=0.25),
+            _scored_scalar_candidate(48.0, -1.0, static_overlap=0.30),
+            _scored_scalar_candidate(52.0, 1.0, static_overlap=0.20),
+        ]
+
+    expected = None
+    for order in permutations(range(4)):
+        values = make_candidates()
+        arranged = [values[index] for index in order]
+        suppress_paired_horizontal_structures(arranged, settings)
+        signature = tuple(
+            sorted(
+                (
+                    candidate.y,
+                    candidate.rejected,
+                    candidate.reject_reason,
+                    candidate.features["multi_edge_static_structure"],
+                )
+                for candidate in arranged
+            )
+        )
+        expected = signature if expected is None else expected
+        assert signature == expected
+        assert all(candidate.rejected for candidate in arranged)
+        assert {
+            candidate.reject_reason for candidate in arranged
+        } == {"multi_edge_static_structure"}
+
+
+def test_real_boundary_outside_multi_edge_static_group_remains_only_candidate():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+    static_group = [
+        _scored_scalar_candidate(40.0, -1.0, static_overlap=0.20),
+        _scored_scalar_candidate(44.0, 1.0, static_overlap=0.25),
+        _scored_scalar_candidate(48.0, -1.0, static_overlap=0.30),
+        _scored_scalar_candidate(52.0, 1.0, static_overlap=0.20),
+    ]
+    real = _scored_scalar_candidate(
+        82.0,
+        1.0,
+        persistent_contrast=0.85,
+        persistent_polarity=1.0,
+    )
+    values = static_group + [real]
+    suppress_paired_horizontal_structures(values, settings)
+    assert [candidate for candidate in values if not candidate.rejected] == [real]
+    assert all(
+        candidate.reject_reason == "multi_edge_static_structure"
+        for candidate in static_group
+    )
+
+
+def test_low_observation_static_partner_still_suppresses_pair():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+    primary = _scored_scalar_candidate(40.0, 1.0, static_overlap=0.20)
+    partner = _scored_scalar_candidate(
+        47.0,
+        -1.0,
+        observation=0.20,
+        static_overlap=0.15,
+        rejected=True,
+        reject_reason="insufficient_boundary_observation",
+    )
+    suppress_paired_horizontal_structures([primary, partner], settings)
+    assert primary.rejected and partner.rejected
+    assert primary.reject_reason == "paired_opposite_polarity_structure"
+    assert partner.reject_reason == "paired_opposite_polarity_structure"
+
+
+def test_persistent_step_does_not_resurrect_pre_rejected_candidate():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+    accepted = _scored_scalar_candidate(
+        40.0,
+        1.0,
+        persistent_contrast=0.90,
+        persistent_polarity=1.0,
+    )
+    rejected = _scored_scalar_candidate(
+        46.0,
+        -1.0,
+        observation=0.30,
+        persistent_contrast=0.85,
+        persistent_polarity=1.0,
+        rejected=True,
+        reject_reason="insufficient_boundary_observation",
+    )
+    suppress_paired_horizontal_structures([rejected, accepted], settings)
+    assert not accepted.rejected
+    assert accepted.y == 40.0
+    assert rejected.rejected
+    assert rejected.reject_reason == "insufficient_boundary_observation"
+
+
 def _scored_scalar_candidate(
     y: float,
     polarity: float,
@@ -246,6 +347,9 @@ def _scored_scalar_candidate(
     observation: float = 0.90,
     persistent_contrast: float = 0.0,
     persistent_polarity: float = 0.0,
+    static_overlap: float = 0.0,
+    rejected: bool = False,
+    reject_reason: str = "",
 ) -> BoundaryCandidate:
     candidate = BoundaryCandidate(
         "oil_consensus",
@@ -257,9 +361,12 @@ def _scored_scalar_candidate(
             "polarity_sign": polarity,
             "persistent_region_contrast": persistent_contrast,
             "persistent_polarity_sign": persistent_polarity,
+            "static_overlap": static_overlap,
             "unique_generator_support_count": 3.0,
         },
     )
     candidate.final_score = observation
+    candidate.rejected = rejected
+    candidate.reject_reason = reject_reason
     candidate.penalties["paired_structure_penalty"] = 0.0
     return candidate

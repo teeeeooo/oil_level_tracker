@@ -32,6 +32,18 @@ def uniform_frame(value: int):
     return np.full((240, 320, 3), value, dtype=np.uint8)
 
 
+def multi_edge_static_band(*, offset: int = 0, background: int = 95):
+    frame = uniform_frame(background)
+    for y, value in (
+        (108 + offset, 180),
+        (112 + offset, 70),
+        (116 + offset, 190),
+        (120 + offset, 75),
+    ):
+        frame[y - 1 : y + 2] = value
+    return frame
+
+
 def test_detector_version_and_canonical_coordinates_and_debug_evidence():
     detector = OpenCvPhaseDetector()
     frame = oil_frame(130)
@@ -120,3 +132,77 @@ def test_static_map_structure_is_not_false_boundary_and_real_boundary_can_reappe
     assert abs(detection.raw_oil_air_level_y - 130.0) <= 4.0
     consensus = [item for item in detection.candidates if item.source == "oil_consensus"]
     assert any("static_overlap" in item.features for item in consensus)
+
+
+def test_multi_edge_static_band_never_produces_numeric_oil_output():
+    detector = OpenCvPhaseDetector()
+    config = glass()
+    static = multi_edge_static_band()
+    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
+
+    for index in range(3):
+        detection, _ = detector.detect(
+            static,
+            config,
+            index + 1,
+            index * 0.5,
+            debug=True,
+        )
+        assert detection.raw_oil_air_level_y is None
+        assert detection.smoothed_oil_air_level_y is None
+        consensus = [
+            item for item in detection.candidates if item.source == "oil_consensus"
+        ]
+        assert consensus
+        assert not [item for item in consensus if not item.rejected]
+        if index == 0:
+            assert any(
+                item.reject_reason == "multi_edge_static_structure"
+                for item in consensus
+            )
+
+
+def test_real_boundary_is_only_survivor_beside_multi_edge_static_band():
+    detector = OpenCvPhaseDetector()
+    config = glass()
+    static = multi_edge_static_band(offset=-2, background=115)
+    combo = oil_frame(154, above=165, below=72)
+    static_pixels = np.any(static != 115, axis=2)
+    combo[static_pixels] = static[static_pixels]
+    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
+
+    detection, _ = detector.detect(combo, config, 1, 0.0, debug=True)
+    assert detection.raw_oil_air_level_y is not None
+    assert abs(detection.raw_oil_air_level_y - 154.0) <= 4.0
+    accepted = [
+        item
+        for item in detection.candidates
+        if item.source == "oil_consensus" and not item.rejected
+    ]
+    assert accepted
+    assert all(abs(item.y - 154.0) <= 4.0 for item in accepted)
+    assert any(
+        item.reject_reason == "multi_edge_static_structure"
+        for item in detection.candidates
+        if item.source == "oil_consensus"
+    )
+
+
+def test_stationary_weak_boundary_survives_nonuniform_static_overlap():
+    detector = OpenCvPhaseDetector()
+    config = glass()
+    static = uniform_frame(112)
+    static[138:142, 40:130] = 150
+    static[138:142, 190:280] = 150
+    weak = uniform_frame(125)
+    weak[140:] = 103
+    weak[139:142] = 145
+    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
+
+    detection, _ = detector.detect(weak, config, 1, 0.0, debug=True)
+    assert detection.raw_oil_air_level_y is not None
+    assert abs(detection.raw_oil_air_level_y - 140.0) <= 4.0
+    assert any(
+        item.source == "oil_consensus" and not item.rejected
+        for item in detection.candidates
+    )

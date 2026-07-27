@@ -409,7 +409,11 @@ def suppress_paired_horizontal_structures(
         8.0,
         float(settings.oil_consensus_tolerance_px) * 3.0,
     )
-    resolved: set[int] = set()
+    resolved = _suppress_multi_edge_static_groups(
+        usable,
+        minimum_distance=minimum_distance,
+        maximum_distance=maximum_distance,
+    )
     for left_index, left in enumerate(usable):
         if id(left) in resolved:
             continue
@@ -515,11 +519,14 @@ def suppress_paired_horizontal_structures(
                 )
 
             if persistent_step:
-                keeper, duplicate = (
-                    (left, right)
-                    if _pair_candidate_order(left) <= _pair_candidate_order(right)
-                    else (right, left)
+                accepted = tuple(
+                    candidate for candidate in (left, right) if not candidate.rejected
                 )
+                if not accepted:
+                    resolved.update((id(left), id(right)))
+                    break
+                keeper = min(accepted, key=_pair_candidate_order)
+                duplicate = right if keeper is left else left
                 unrounded_midpoint = (float(left.y) + float(right.y)) / 2.0
                 merged_y = float(round(unrounded_midpoint))
                 keeper.features["paired_boundary_original_y"] = float(keeper.y)
@@ -529,8 +536,6 @@ def suppress_paired_horizontal_structures(
                 keeper.features["paired_boundary_merged_y"] = float(merged_y)
                 keeper.features["representative_local_y"] = float(merged_y)
                 keeper.y = float(merged_y)
-                keeper.rejected = False
-                keeper.reject_reason = ""
                 keeper.penalties["paired_structure_penalty"] = 0.0
                 duplicate.penalties["paired_structure_penalty"] = 1.0
                 duplicate.rejected = True
@@ -544,12 +549,93 @@ def suppress_paired_horizontal_structures(
             break
 
     for candidate in candidates:
-        if id(candidate) not in resolved:
-            candidate.features.setdefault("paired_structure_distance_px", 0.0)
-            candidate.features.setdefault("paired_structure_partner_y", 0.0)
-            candidate.features.setdefault("paired_structure_opposite_polarity", 0.0)
-            candidate.features.setdefault("static_paired_structure", 0.0)
-            candidate.features.setdefault("paired_boundary_step_preserved", 0.0)
+        candidate.features.setdefault("paired_structure_distance_px", 0.0)
+        candidate.features.setdefault("paired_structure_partner_y", 0.0)
+        candidate.features.setdefault("paired_structure_opposite_polarity", 0.0)
+        candidate.features.setdefault("static_paired_structure", 0.0)
+        candidate.features.setdefault("paired_boundary_step_preserved", 0.0)
+        candidate.features.setdefault("multi_edge_static_structure", 0.0)
+        candidate.features.setdefault("multi_edge_static_group_size", 0.0)
+        candidate.features.setdefault("multi_edge_static_opposite_pair_count", 0.0)
+        candidate.features.setdefault("multi_edge_static_span_px", 0.0)
+
+
+def _suppress_multi_edge_static_groups(
+    candidates: list[BoundaryCandidate],
+    *,
+    minimum_distance: float,
+    maximum_distance: float,
+) -> set[int]:
+    """Reject connected static bands with multiple opposite-polarity edge pairs."""
+
+    ordered = sorted(
+        candidates,
+        key=lambda candidate: (float(candidate.y), str(candidate.source)),
+    )
+    by_id = {id(candidate): candidate for candidate in ordered}
+    adjacency = {candidate_id: set() for candidate_id in by_id}
+    opposite_pairs: set[frozenset[int]] = set()
+    for index, left in enumerate(ordered):
+        left_sign = float(left.features.get("polarity_sign", 0.0))
+        for right in ordered[index + 1 :]:
+            distance = float(right.y) - float(left.y)
+            if distance > maximum_distance:
+                break
+            left_id, right_id = id(left), id(right)
+            adjacency[left_id].add(right_id)
+            adjacency[right_id].add(left_id)
+            right_sign = float(right.features.get("polarity_sign", 0.0))
+            if left_sign != 0.0 and right_sign != 0.0 and left_sign * right_sign < 0.0:
+                opposite_pairs.add(frozenset((left_id, right_id)))
+
+    suppressed: set[int] = set()
+    visited: set[int] = set()
+    for root in ordered:
+        root_id = id(root)
+        if root_id in visited:
+            continue
+        pending = [root_id]
+        component_ids: set[int] = set()
+        while pending:
+            current = pending.pop()
+            if current in component_ids:
+                continue
+            component_ids.add(current)
+            pending.extend(sorted(adjacency[current] - component_ids))
+        visited.update(component_ids)
+        component = [by_id[candidate_id] for candidate_id in component_ids]
+        if len(component) < 3:
+            continue
+        ys = [float(candidate.y) for candidate in component]
+        span = max(ys) - min(ys)
+        if span < minimum_distance * 2.0 - 1e-12:
+            continue
+        if span > maximum_distance * 2.0 + 1e-12:
+            continue
+        if len({round(value, 9) for value in ys}) < 3:
+            continue
+        pair_count = sum(pair <= component_ids for pair in opposite_pairs)
+        static_count = sum(
+            _unit(candidate.features.get("static_overlap", 0.0)) > 0.0
+            for candidate in component
+        )
+        if pair_count < 2 or static_count < 2:
+            continue
+        for candidate in component:
+            candidate.features["multi_edge_static_structure"] = 1.0
+            candidate.features["multi_edge_static_group_size"] = float(
+                len(component)
+            )
+            candidate.features["multi_edge_static_opposite_pair_count"] = float(
+                pair_count
+            )
+            candidate.features["multi_edge_static_span_px"] = float(span)
+            candidate.features["static_paired_structure"] = 1.0
+            candidate.penalties["paired_structure_penalty"] = 1.0
+            candidate.rejected = True
+            candidate.reject_reason = "multi_edge_static_structure"
+            suppressed.add(id(candidate))
+    return suppressed
 
 
 def select_best_candidate(
