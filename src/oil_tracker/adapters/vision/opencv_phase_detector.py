@@ -409,7 +409,7 @@ class OpenCvPhaseDetector:
                 reason="shadow_disabled",
             )
         readonly_pre = PreprocessResult(
-            *(_readonly_view(value) for value in (
+            *(_isolated_readonly_copy(value) for value in (
                 pre.gray,
                 pre.normalized,
                 pre.blurred,
@@ -423,11 +423,11 @@ class OpenCvPhaseDetector:
         kwargs = {
             "glass_id": glass_id,
             "pre": readonly_pre,
-            "effective_mask": _readonly_view(bundle.effective_mask),
-            "ellipse_mask": _readonly_view(bundle.ellipse_mask),
-            "exclusion_mask": _readonly_view(bundle.exclusion_mask),
+            "effective_mask": _isolated_readonly_copy(bundle.effective_mask),
+            "ellipse_mask": _isolated_readonly_copy(bundle.ellipse_mask),
+            "exclusion_mask": _isolated_readonly_copy(bundle.exclusion_mask),
             "static_artifact_map": (
-                None if static_map is None else _readonly_view(static_map)
+                None if static_map is None else _isolated_readonly_copy(static_map)
             ),
             "crop_origin_y": float(bundle.crop_origin[1]),
         }
@@ -559,10 +559,10 @@ class OpenCvPhaseDetector:
         )
 
 
-def _readonly_view(value: np.ndarray) -> np.ndarray:
-    view = value.view()
-    view.flags.writeable = False
-    return view
+def _isolated_readonly_copy(value: np.ndarray) -> np.ndarray:
+    isolated = np.array(value, copy=True, order="K", subok=False)
+    isolated.flags.writeable = False
+    return isolated
 
 
 def _foam_flags(

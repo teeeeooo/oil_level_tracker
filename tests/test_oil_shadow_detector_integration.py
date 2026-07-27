@@ -145,6 +145,88 @@ def test_shadow_failure_and_attempted_input_mutation_are_isolated():
     assert "ValueError" in failed[0].debug_metrics["shadow_oil_failure_reason"]
 
 
+class _AdversarialRasterOwnershipRunner:
+    def __init__(self):
+        self.mutated_names = set()
+        self.base_depths = {}
+
+    def run(self, **kwargs):
+        arrays = {
+            "pre.gray": kwargs["pre"].gray,
+            "pre.normalized": kwargs["pre"].normalized,
+            "pre.blurred": kwargs["pre"].blurred,
+            "pre.sobel_y_signed": kwargs["pre"].sobel_y_signed,
+            "pre.sobel_y_abs": kwargs["pre"].sobel_y_abs,
+            "pre.canny": kwargs["pre"].canny,
+            "pre.horizontal_mask": kwargs["pre"].horizontal_mask,
+            "pre.glare_mask": kwargs["pre"].glare_mask,
+            "effective_mask": kwargs["effective_mask"],
+            "ellipse_mask": kwargs["ellipse_mask"],
+            "exclusion_mask": kwargs["exclusion_mask"],
+            "static_artifact_map": kwargs["static_artifact_map"],
+        }
+        assert arrays["static_artifact_map"] is not None
+        for name, array in arrays.items():
+            assert array is not None
+            assert not array.flags.writeable
+            chain = [array]
+            while isinstance(chain[-1].base, np.ndarray):
+                chain.append(chain[-1].base)
+            owner = chain[-1]
+            self.base_depths[name] = len(chain) - 1
+            assert owner.flags.owndata
+            assert owner.base is None
+            before = array.copy()
+            owner.setflags(write=True)
+            writable = np.asarray(owner)
+            replacement = 0 if np.any(writable != 0) else 1
+            writable[...] = replacement
+            assert not np.array_equal(array, before)
+            self.mutated_names.add(name)
+        raise RuntimeError("adversarial shadow raster mutation")
+
+    def reset(self, _glass_id=None):
+        return None
+
+
+def test_shadow_owned_rasters_survive_base_chain_mutation_and_failure():
+    runner = _AdversarialRasterOwnershipRunner()
+    failing = OpenCvPhaseDetector(shadow_runner=runner)
+    baseline = OpenCvPhaseDetector(shadow_enabled=False)
+    glass_a = _glass("ownership-a")
+    glass_b = _glass("ownership-b")
+    static = _oil_frame(115)
+    failing.learn_static_artifact([static.copy()] * 3, glass_a)
+    baseline.learn_static_artifact([static.copy()] * 3, glass_b)
+    frame = _oil_frame(130)
+    before = frame.copy()
+
+    failed = failing.detect(frame, glass_a, 1, 0.0, debug=True)
+    control = baseline.detect(before.copy(), glass_b, 1, 0.0, debug=True)
+
+    expected_names = {
+        "pre.gray",
+        "pre.normalized",
+        "pre.blurred",
+        "pre.sobel_y_signed",
+        "pre.sobel_y_abs",
+        "pre.canny",
+        "pre.horizontal_mask",
+        "pre.glare_mask",
+        "effective_mask",
+        "ellipse_mask",
+        "exclusion_mask",
+        "static_artifact_map",
+    }
+    assert runner.mutated_names == expected_names
+    assert runner.base_depths == {name: 0 for name in expected_names}
+    assert np.array_equal(frame, before)
+    assert _official_snapshot(*failed) == _official_snapshot(*control)
+    assert failing.version == baseline.version == "opencv-phase-detector-s5b-oil-v3"
+    assert failed[0].debug_metrics["shadow_oil_available"] is False
+    assert "RuntimeError" in failed[0].debug_metrics["shadow_oil_failure_reason"]
+
+
 def test_debug_false_runs_shadow_but_keeps_artifact_contract_none():
     detector = OpenCvPhaseDetector()
     detection, artifacts = detector.detect(_oil_frame(), _glass(), 1, 0.0, debug=False)
