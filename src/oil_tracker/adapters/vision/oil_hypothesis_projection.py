@@ -12,11 +12,13 @@ from oil_tracker.domain.enums import BoundaryKind
 from .oil_shadow_types import (
     OilShadowFrameResult,
     SemanticHypothesis,
+    ShadowAmbiguousObservation,
     ShadowBoundaryObservation,
     ShadowNoInterfaceEvidence,
     ShadowNoInterfaceObservation,
     ShadowObservationKind,
     ShadowTemporalStatus,
+    ShadowUnavailableObservation,
 )
 from .preprocessing import PreprocessResult
 from .row_features import masked_band_intensity_profiles, masked_row_mean, row_coverage
@@ -36,49 +38,66 @@ class OilProductionProjection:
 
 def validate_production_result(result: OilShadowFrameResult) -> None:
     decision = result.temporal_decision
+    current = result.current_observation
     hypothesis_ids = [item.identity for item in result.hypotheses]
     if len(hypothesis_ids) != len(set(hypothesis_ids)):
         raise ValueError("typed oil result contains duplicate hypothesis identities")
 
     if decision.status is ShadowTemporalStatus.BOUNDARY_ACCEPTED:
+        boundary = _validated_boundary_current(result, "accepted typed boundary")
         if decision.observation_kind is not ShadowObservationKind.BOUNDARY:
             raise ValueError("accepted typed boundary has the wrong observation kind")
         if decision.selected_hypothesis_id is None or decision.projected_source_y is None:
             raise ValueError("accepted typed boundary is missing identity or source Y")
-        selected = _hypothesis_by_id(result, decision.selected_hypothesis_id)
-        if selected is None:
-            raise ValueError("accepted typed boundary identity is not present")
-        if not math.isclose(
-            float(decision.projected_source_y),
-            float(selected.representative_source_y),
-            rel_tol=0.0,
-            abs_tol=1e-9,
-        ):
-            raise ValueError("accepted typed boundary Y disagrees with its hypothesis")
-        return
-
-    if decision.status is ShadowTemporalStatus.NO_INTERFACE_ACCEPTED:
-        if decision.observation_kind is not ShadowObservationKind.NO_INTERFACE:
-            raise ValueError("typed no-interface decision has the wrong observation kind")
-        if decision.selected_hypothesis_id is not None or decision.projected_source_y is not None:
-            raise ValueError("typed no-interface decision cannot expose a boundary")
-        if not isinstance(result.current_observation, ShadowNoInterfaceObservation):
-            raise ValueError("typed no-interface decision is missing no-interface evidence")
+        if decision.selected_hypothesis_id != boundary.identity:
+            raise ValueError("accepted typed boundary identity disagrees with current evidence")
+        _require_same_y(
+            decision.projected_source_y,
+            boundary.representative_source_y,
+            "accepted typed boundary Y disagrees with current evidence",
+        )
         return
 
     if decision.status is ShadowTemporalStatus.REACQUISITION_PENDING:
+        boundary = _validated_boundary_current(result, "typed reacquisition")
         if decision.observation_kind is not ShadowObservationKind.BOUNDARY:
             raise ValueError("typed reacquisition decision has the wrong observation kind")
         if decision.selected_hypothesis_id is None or decision.projected_source_y is not None:
             raise ValueError("typed reacquisition must retain identity without numeric output")
-        if _hypothesis_by_id(result, decision.selected_hypothesis_id) is None:
-            raise ValueError("typed reacquisition identity is not present")
+        if decision.selected_hypothesis_id != boundary.identity:
+            raise ValueError("typed reacquisition identity disagrees with current evidence")
         return
 
-    if decision.selected_hypothesis_id is not None:
-        raise ValueError("non-boundary typed decision cannot select a hypothesis")
-    if decision.status is ShadowTemporalStatus.UNAVAILABLE and decision.projected_source_y is not None:
-        raise ValueError("typed unavailable decision cannot expose a boundary")
+    if decision.status is ShadowTemporalStatus.NO_INTERFACE_ACCEPTED:
+        if not isinstance(current, ShadowNoInterfaceObservation):
+            raise ValueError("typed no-interface decision has the wrong current observation")
+        if decision.observation_kind is not ShadowObservationKind.NO_INTERFACE:
+            raise ValueError("typed no-interface decision has the wrong observation kind")
+        if decision.selected_hypothesis_id is not None or decision.projected_source_y is not None:
+            raise ValueError("typed no-interface decision cannot expose a boundary")
+        return
+
+    if decision.status is ShadowTemporalStatus.AMBIGUOUS:
+        if not isinstance(current, ShadowAmbiguousObservation):
+            raise ValueError("typed ambiguous decision has the wrong current observation")
+        if decision.observation_kind is not ShadowObservationKind.AMBIGUOUS:
+            raise ValueError("typed ambiguous decision has the wrong observation kind")
+        if decision.selected_hypothesis_id is not None:
+            raise ValueError("typed ambiguous decision cannot select a hypothesis")
+        if not _same_optional_y(decision.projected_source_y, current.projected_source_y):
+            raise ValueError("typed ambiguous projected Y disagrees with current evidence")
+        return
+
+    if decision.status is ShadowTemporalStatus.UNAVAILABLE:
+        if not isinstance(current, ShadowUnavailableObservation):
+            raise ValueError("typed unavailable decision has the wrong current observation")
+        if decision.observation_kind is not ShadowObservationKind.UNAVAILABLE:
+            raise ValueError("typed unavailable decision has the wrong observation kind")
+        if decision.selected_hypothesis_id is not None or decision.projected_source_y is not None:
+            raise ValueError("typed unavailable decision cannot expose a boundary")
+        return
+
+    raise ValueError(f"unsupported typed oil temporal status: {decision.status!r}")
 
 
 def project_production_result(result: OilShadowFrameResult) -> OilProductionProjection:
@@ -297,6 +316,37 @@ def _reject_reason(
     if item.label.value == "ambiguous":
         return "typed_ambiguous_hypothesis"
     return "typed_not_temporally_selected"
+
+
+def _validated_boundary_current(
+    result: OilShadowFrameResult,
+    context: str,
+) -> SemanticHypothesis:
+    current = result.current_observation
+    if not isinstance(current, ShadowBoundaryObservation):
+        raise ValueError(f"{context} has the wrong current observation")
+    canonical = _hypothesis_by_id(result, current.hypothesis.identity)
+    if canonical is None:
+        raise ValueError(f"{context} current hypothesis is not canonical")
+    if current.hypothesis != canonical:
+        raise ValueError(f"{context} current hypothesis disagrees with canonical content")
+    _require_same_y(
+        current.hypothesis.representative_source_y,
+        canonical.representative_source_y,
+        f"{context} current hypothesis Y disagrees with canonical content",
+    )
+    return canonical
+
+
+def _same_optional_y(left: float | None, right: float | None) -> bool:
+    if left is None or right is None:
+        return left is right
+    return math.isclose(float(left), float(right), rel_tol=0.0, abs_tol=1e-9)
+
+
+def _require_same_y(left: float, right: float, message: str) -> None:
+    if not _same_optional_y(left, right):
+        raise ValueError(message)
 
 
 def _hypothesis_by_id(

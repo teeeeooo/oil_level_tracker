@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from datetime import datetime, timezone
 import hashlib
 import inspect
@@ -7,8 +8,10 @@ import json
 import math
 
 import numpy as np
+import pytest
 
 from benchmark_fixtures import export_benchmark_dataset
+from foam_benchmark_fixtures import controlled_scenes
 from oil_tracker.adapters.storage.benchmark_result_writer import AtomicBenchmarkResultWriter
 from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
 from oil_tracker.adapters.vision import (
@@ -18,8 +21,22 @@ from oil_tracker.adapters.vision import (
     oil_no_interface,
     oil_temporal_path,
 )
+from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
+from oil_tracker.adapters.vision.oil_hypothesis_projection import (
+    validate_production_result,
+)
 from oil_tracker.adapters.vision.oil_shadow_pipeline import OilHypothesisPipeline
+from oil_tracker.adapters.vision.oil_shadow_types import (
+    OilShadowFrameResult,
+    ShadowAmbiguousObservation,
+    ShadowBoundaryObservation,
+    ShadowNoInterfaceObservation,
+    ShadowObservationKind,
+    ShadowTemporalStatus,
+    ShadowUnavailableObservation,
+)
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
 from oil_tracker.application.services.detector_settings import detector_settings_to_json
 from oil_tracker.domain.enums import FillState, InitialObservationState
@@ -47,6 +64,51 @@ def _oil_frame(y: int = 130):
 
 def _uniform_frame(value: int):
     return np.full((240, 320, 3), value, dtype=np.uint8)
+
+
+def _pipeline_result(
+    frame: np.ndarray,
+    glass_id: str,
+    pipeline: OilHypothesisPipeline | None = None,
+) -> OilShadowFrameResult:
+    owner = pipeline or OilHypothesisPipeline()
+    glass = _glass(glass_id)
+    bundle = build_mask_bundle(frame, glass)
+    pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
+    return owner.run(
+        glass_id=glass.id,
+        pre=pre,
+        effective_mask=bundle.effective_mask,
+        ellipse_mask=bundle.ellipse_mask,
+        exclusion_mask=bundle.exclusion_mask,
+        static_artifact_map=None,
+        crop_origin_y=float(bundle.crop_origin[1]),
+    )
+
+
+def _ambiguous_observation(result: OilShadowFrameResult):
+    current = result.current_observation
+    assert isinstance(current, ShadowBoundaryObservation)
+    hypothesis = current.hypothesis
+    return ShadowAmbiguousObservation(
+        kind=ShadowObservationKind.AMBIGUOUS,
+        hypothesis_ids=(hypothesis.identity,),
+        boundary_likelihood=hypothesis.boundary_likelihood,
+        artifact_likelihood=hypothesis.artifact_likelihood,
+        ambiguity_likelihood=max(0.35, hypothesis.ambiguity_likelihood),
+        no_interface_likelihood=current.no_interface.likelihood,
+        visibility=hypothesis.visibility,
+        projected_source_y=hypothesis.representative_source_y,
+        reason="adversarial_typed_result",
+    )
+
+
+def _white_foam_frame() -> np.ndarray:
+    return next(
+        item.frame.copy()
+        for item in controlled_scenes()
+        if item.case_id == "white-foam"
+    )
 
 
 def _candidate_signature(detection):
@@ -80,6 +142,200 @@ def _image_signature(images):
             for key, value in images.items()
         )
     )
+
+
+class _ExactTypedResultRunner:
+    def __init__(self, result: OilShadowFrameResult):
+        self.result = result
+
+    def run(self, **_kwargs):
+        return self.result
+
+    def reset(self, _glass_id=None):
+        return None
+
+
+def _coherent_typed_results() -> tuple[OilShadowFrameResult, ...]:
+    boundary = _pipeline_result(_oil_frame(), "coherent-boundary")
+    no_interface = _pipeline_result(_uniform_frame(75), "coherent-no-interface")
+    assert isinstance(boundary.current_observation, ShadowBoundaryObservation)
+    assert isinstance(no_interface.current_observation, ShadowNoInterfaceObservation)
+
+    hypothesis = boundary.current_observation.hypothesis
+    reacquisition = replace(
+        boundary,
+        temporal_decision=replace(
+            boundary.temporal_decision,
+            status=ShadowTemporalStatus.REACQUISITION_PENDING,
+            observation_kind=ShadowObservationKind.BOUNDARY,
+            selected_hypothesis_id=hypothesis.identity,
+            projected_source_y=None,
+            reason="coherent_reacquisition",
+        ),
+    )
+    ambiguous_observation = _ambiguous_observation(boundary)
+    ambiguous = replace(
+        boundary,
+        current_observation=ambiguous_observation,
+        temporal_decision=replace(
+            boundary.temporal_decision,
+            status=ShadowTemporalStatus.AMBIGUOUS,
+            observation_kind=ShadowObservationKind.AMBIGUOUS,
+            selected_hypothesis_id=None,
+            projected_source_y=ambiguous_observation.projected_source_y,
+            reason="coherent_ambiguous",
+        ),
+    )
+    unavailable = OilHypothesisPipeline().failure_result(
+        glass_id="coherent-unavailable",
+        reason="coherent_unavailable",
+    )
+    return boundary, reacquisition, no_interface, ambiguous, unavailable
+
+
+def _malformed_typed_results() -> tuple[tuple[str, OilShadowFrameResult], ...]:
+    boundary, _reacquisition, no_interface, _ambiguous, _unavailable = (
+        _coherent_typed_results()
+    )
+    current_boundary = boundary.current_observation
+    current_no_interface = no_interface.current_observation
+    assert isinstance(current_boundary, ShadowBoundaryObservation)
+    assert isinstance(current_no_interface, ShadowNoInterfaceObservation)
+    hypothesis = current_boundary.hypothesis
+    ambiguous_current = _ambiguous_observation(boundary)
+    unavailable_current = ShadowUnavailableObservation(
+        ShadowObservationKind.UNAVAILABLE,
+        0.0,
+        "adversarial_unavailable",
+    )
+
+    reacquisition_decision = replace(
+        boundary.temporal_decision,
+        status=ShadowTemporalStatus.REACQUISITION_PENDING,
+        observation_kind=ShadowObservationKind.BOUNDARY,
+        projected_source_y=None,
+        reason="malformed_reacquisition",
+    )
+    no_interface_decision = replace(
+        no_interface.temporal_decision,
+        status=ShadowTemporalStatus.NO_INTERFACE_ACCEPTED,
+        observation_kind=ShadowObservationKind.NO_INTERFACE,
+        selected_hypothesis_id=None,
+        projected_source_y=None,
+        reason="malformed_no_interface",
+    )
+    ambiguous_decision = replace(
+        boundary.temporal_decision,
+        status=ShadowTemporalStatus.AMBIGUOUS,
+        observation_kind=ShadowObservationKind.AMBIGUOUS,
+        selected_hypothesis_id=None,
+        projected_source_y=ambiguous_current.projected_source_y,
+        reason="malformed_ambiguous",
+    )
+    unavailable_decision = replace(
+        boundary.temporal_decision,
+        status=ShadowTemporalStatus.UNAVAILABLE,
+        observation_kind=ShadowObservationKind.UNAVAILABLE,
+        selected_hypothesis_id=None,
+        projected_source_y=None,
+        reason="malformed_unavailable",
+    )
+
+    alternate = replace(hypothesis, identity="alternate-hypothesis-id")
+    altered_current_hypothesis = replace(
+        hypothesis,
+        representative_source_y=hypothesis.representative_source_y + 1.0,
+    )
+    altered_current = replace(
+        current_boundary,
+        hypothesis=altered_current_hypothesis,
+    )
+    wrong_identity = replace(
+        boundary,
+        hypotheses=(hypothesis, alternate),
+        temporal_decision=replace(
+            boundary.temporal_decision,
+            selected_hypothesis_id=alternate.identity,
+        ),
+    )
+    unsupported_decision = replace(boundary.temporal_decision)
+    object.__setattr__(unsupported_decision, "status", "unsupported_status")
+
+    return (
+        (
+            "boundary accepted with no-interface current",
+            replace(boundary, current_observation=current_no_interface),
+        ),
+        (
+            "boundary accepted with ambiguous current",
+            replace(boundary, current_observation=ambiguous_current),
+        ),
+        (
+            "boundary accepted with unavailable current",
+            replace(boundary, current_observation=unavailable_current),
+        ),
+        (
+            "reacquisition pending with non-boundary current",
+            replace(
+                boundary,
+                current_observation=current_no_interface,
+                temporal_decision=reacquisition_decision,
+            ),
+        ),
+        (
+            "no-interface accepted with boundary current",
+            replace(
+                no_interface,
+                current_observation=current_boundary,
+                temporal_decision=no_interface_decision,
+            ),
+        ),
+        (
+            "ambiguous with wrong current type",
+            replace(boundary, temporal_decision=ambiguous_decision),
+        ),
+        (
+            "unavailable with wrong current type",
+            replace(boundary, temporal_decision=unavailable_decision),
+        ),
+        ("boundary selected identity disagrees with current", wrong_identity),
+        (
+            "current boundary content disagrees with canonical tuple",
+            replace(boundary, current_observation=altered_current),
+        ),
+        (
+            "accepted projected Y disagrees with current and canonical",
+            replace(
+                boundary,
+                temporal_decision=replace(
+                    boundary.temporal_decision,
+                    projected_source_y=hypothesis.representative_source_y + 1.0,
+                ),
+            ),
+        ),
+        (
+            "ambiguous projected Y disagrees with current",
+            replace(
+                boundary,
+                current_observation=ambiguous_current,
+                temporal_decision=replace(
+                    ambiguous_decision,
+                    projected_source_y=(
+                        float(ambiguous_current.projected_source_y) + 1.0
+                    ),
+                ),
+            ),
+        ),
+        (
+            "unsupported temporal status",
+            replace(boundary, temporal_decision=unsupported_decision),
+        ),
+    )
+
+
+def test_coherent_typed_result_combinations_validate():
+    for result in _coherent_typed_results():
+        validate_production_result(result)
 
 
 def test_production_detector_does_not_call_legacy_oil_owners(monkeypatch):
@@ -276,6 +532,80 @@ def test_invalid_typed_return_projects_unavailable_without_numeric_output():
     assert detection.debug_metrics["oil_pipeline_available"] is False
     assert "TypeError" in detection.debug_metrics["oil_pipeline_failure_reason"]
     assert "OIL_PIPELINE_FAILURE" in detection.flags
+
+
+def _foam_projection_snapshot(detection, artifacts):
+    foam_candidates = tuple(
+        item
+        for item in _candidate_signature(detection)
+        if item[1] == "foam_front"
+    )
+    foam_metrics = tuple(
+        sorted(
+            (key, value)
+            for key, value in detection.debug_metrics.items()
+            if key.startswith("foam_")
+        )
+    )
+    foam_images = {
+        key: value
+        for key, value in artifacts.images.items()
+        if key.startswith("foam_")
+    }
+    return (
+        detection.fill_state,
+        detection.raw_foam_front_y,
+        detection.smoothed_foam_front_y,
+        detection.foam_front_y,
+        detection.foam_confidence,
+        foam_candidates,
+        foam_metrics,
+        _image_signature(foam_images),
+    )
+
+
+@pytest.mark.parametrize(
+    ("case_name", "malformed_result"),
+    _malformed_typed_results(),
+    ids=lambda value: value if isinstance(value, str) else None,
+)
+def test_malformed_exact_typed_results_fail_closed_without_harming_foam(
+    case_name,
+    malformed_result,
+):
+    frame = _white_foam_frame()
+    before = frame.copy()
+    glass = _glass(f"malformed-{case_name}")
+    baseline, baseline_artifacts = OpenCvPhaseDetector(
+        oil_runner=_InvalidRunner()
+    ).detect(frame.copy(), glass, 1, 0.0, debug=True)
+    detection, artifacts = OpenCvPhaseDetector(
+        oil_runner=_ExactTypedResultRunner(malformed_result)
+    ).detect(frame, glass, 1, 0.0, debug=True)
+
+    assert np.array_equal(frame, before), case_name
+    assert detection.raw_oil_air_level_y is None, case_name
+    assert detection.smoothed_oil_air_level_y is None, case_name
+    assert detection.debug_metrics["oil_pipeline_available"] is False, case_name
+    assert "ValueError" in detection.debug_metrics["oil_pipeline_failure_reason"], case_name
+    assert "OIL_PIPELINE_FAILURE" in detection.flags, case_name
+    assert not any(
+        item.selected
+        for item in detection.candidates
+        if item.kind.value == "oil_air"
+    ), case_name
+    assert not any(
+        item.source
+        in {"oil_consensus", "sobel", "canny", "hough", "region_boundary"}
+        for item in detection.candidates
+        if item.kind.value == "oil_air"
+    ), case_name
+    assert artifacts is not None and baseline_artifacts is not None
+    assert "foam_decision_status" in detection.debug_metrics
+    assert _foam_projection_snapshot(detection, artifacts) == _foam_projection_snapshot(
+        baseline,
+        baseline_artifacts,
+    ), case_name
 
 
 class _AdversarialRasterRunner:

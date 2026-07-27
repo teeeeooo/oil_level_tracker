@@ -3,88 +3,66 @@
 - **Document status:** `VALIDATING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Task-start exact head:** `f8ad80f69ecbab4033725f61ab6a8afbed7f15e5`
-- **Task-start exact parent:** `7d07844d0d376d755ee6ef4d0d9d8d31a2d0d7f4`
-- **Last S5-B1 re-audit result:** `AUDIT: PASS`
-- **Current gate:** Independent S5-B2 exact-head production-cutover audit
-- **Current state:** S5-B2 typed oil-hypothesis production cutover completed on feature head
+- **Task-start exact head:** `64093e359cee24831f6c88184791fc05ef166331`
+- **Task-start exact parent:** `f8ad80f69ecbab4033725f61ab6a8afbed7f15e5`
+- **Last S5-B2 cutover audit:** `AUDIT: FAIL`
+- **Blocking finding:** Malformed typed-result coherence validation gap
+- **Current gate:** Fresh independent S5-B2 exact-head re-audit
+- **Current state:** Typed result coherence validation repair completed on the feature worktree
 
-This is the operational SSOT for the active milestone. Closeout results follow the [closeout policy](./closeout-policy.md); branch-local completion is not formal `DONE`.
+This is the operational SSOT for the active milestone. Closeout results follow the [closeout policy](./closeout-policy.md); branch-local completion is not formal completion.
 
-## Problem statement
+## Blocker and repair
 
-S5-B replaces the legacy scalar candidate/consensus/scorer/no-interface/path chain with immutable edge observations, bounded semantic hypotheses, typed current observations and bounded temporal decisions while preserving the external detector contract and the independently owned S5-A Foam path.
+The production cutover validator previously accepted some exact `OilShadowFrameResult` values whose current observation, temporal status, selected hypothesis identity or projected Y contradicted one another. Such a result could reach the compatibility projection and create official numeric oil output despite being internally malformed.
 
-S5-B1 established and independently accepted the typed pipeline. S5-B2 must make that pipeline the single production authority without retaining a legacy fallback or allowing compatibility projections to become selection inputs.
+`validate_production_result()` now validates each supported temporal status against its required current-observation type and observation kind. Boundary and reacquisition decisions must reference the same canonical hypothesis content and identity, accepted boundary Y must agree across decision/current/canonical evidence, ambiguous projected Y must agree with the current ambiguous observation, and unsupported statuses fail closed.
 
-## Current decision
+## Failure projection
 
-`OpenCvPhaseDetector.detect()` now obtains every official oil boundary, no-interface decision, confidence, temporal acceptance and smoothing-clear instruction from the typed hypothesis pipeline. The legacy oil generator, consensus, scorer, no-interface evaluator and `OilTemporalPath` remain historical standalone code only and are not imported, constructed or called by production detection.
+A coherence-validation failure is handled by the existing detector exception boundary and becomes a typed unavailable result:
 
-The existing `PhaseDetection`, Recipe/settings persistence, user-truth, regression fixture, result bundle, tracking/events CSV and debug trace schemas remain unchanged. Official oil candidate rows are deterministic compatibility projections from immutable semantic hypotheses and provenance. S5-A Foam detection and Foam temporal gating remain separate production owners.
-
-## Current gate
-
-A fresh independent S5-B2 exact-head cutover audit must verify:
-
-- typed observation → proposal → semantic evidence → typed current observation → typed temporal decision is the sole official oil flow;
-- no prohibited legacy oil owner, legacy state or fallback influences production selection;
-- accepted boundary, no-interface, ambiguity, unavailable and reacquisition-pending decisions project correctly to `PhaseDetection` and `TemporalTracker`;
-- official candidate/debug rows are deterministic, finite, JSON-safe and provenance-based, with no `oil_consensus`, raw-generator or legacy-comparison truth;
-- S5-A Foam behavior, external/persisted schemas, detector identity and bounded resource contracts remain compatible;
-- the complete cutover delta and focused evidence are sufficient before controlled comparison begins.
-
-Controlled base/feature comparison remains blocked until this independent audit returns `PASS` on the immutable resulting head.
-
-## Completed scope on feature head
-
-- Replaced the legacy production oil decision chain with the typed S5-B pipeline.
-- Added a one-way typed-to-`PhaseDetection` candidate/debug/result projection.
-- Mapped typed no-interface evidence and compatible prior state to full, empty or review output without a numeric boundary.
-- Preserved accepted Foam authority when the oil path is absent, ambiguous, unavailable or pending.
-- Removed shadow-versus-legacy comparison metrics from production truth and changed runtime metrics to production hypothesis evidence.
-- Updated detector/reporting identity to distinguish the typed production algorithm.
-- Replaced legacy implementation-detail integration expectations with equivalent typed-production behavior tests while retaining standalone legacy module tests.
+- no raw or smoothed numeric oil Y;
+- no selected oil candidate;
+- `OIL_PIPELINE_FAILURE` is present;
+- no legacy fallback or candidate source is used;
+- Foam detection, Foam temporal processing and Foam debug evidence continue from the original frame;
+- the input frame remains unchanged.
 
 ## Validation evidence
 
-Project `.venv` uses Python 3.14.4 with pytest 9.1.1. Focused typed production tests cover single authority, boundary projection, no-interface mapping, smoothing clear, ambiguity, failure, invalid return, reacquisition pending, raster isolation, deterministic provenance, Glass-local reset and benchmark identity. The final required oil, Foam, benchmark, settings, result-bundle, regression-fixture, debug trace/CSV and automated debug-viewer compatibility scope passed `226` tests on the feature worktree.
+Project `.venv` uses Python 3.14.4 with pytest 9.1.1.
 
-This evidence is implementation validation only. It is not controlled comparison, canonical validation, real-video accuracy acceptance, Windows/manual GUI validation or packaging validation.
+- Focused production-cutover and fill-state scope: `42 passed`.
+- Non-controlled oil/Foam/benchmark/result/fixture/debug compatibility scope: `245 passed`.
+- Controlled oil benchmark, executed separately: `1 passed, 2 failed`.
 
-## Blocking findings
+The controlled failures are unchanged deferred findings:
 
-- No implementation blocker is currently recorded on the Worker head.
-- The cutover is not independently accepted until the exact-head audit returns `PASS`.
-- Controlled comparison remains blocked until that audit passes.
+- clear-oil raw detection coverage is `0.5714285714285714`, below the expected `1.0`;
+- `no-interface-to-visible` frame 3 still has no numeric raw oil recovery.
 
-## Open risks
+No controlled expectation was removed, relaxed or hidden. Controlled comparison remains blocked until the fresh independent exact-head re-audit returns `PASS`.
 
-- Broad transition and narrow artifact likelihood calibration still requires controlled dataset evidence.
-- Full/empty projection remains sensitive to camera exposure and compatible prior state.
-- Rapid movement, dropout and reacquisition behavior requires sequence-level controlled comparison.
-- CPU and long-duration memory acceptance, real-video truth, Windows/manual workflow and packaging remain later gates.
+## Compatibility and non-goals
 
-## Explicit non-goals
-
-- No persisted schema, domain port, `PhaseDetection`, result bundle, CSV, truth, fixture or debug trace schema change.
-- No dependency or environment mutation.
-- No S5-A Foam algorithm or Foam temporal ownership change.
-- No broad historical legacy-code cleanup.
-- No controlled comparison, canonical validation, sample/real-video accuracy acceptance, Windows/manual GUI validation, packaging validation, merge or branch cleanup.
-- No formal `DONE` claim.
+- Observation, proposal, evidence, likelihood and temporal-transition algorithms are unchanged.
+- Detector version, candidate projection semantics and external/persisted/debug schemas are unchanged.
+- S5-A Foam algorithm and temporal ownership are unchanged.
+- No dependency or environment mutation was performed.
+- No controlled comparison, canonical validation, Windows/manual GUI validation, packaging validation, merge or cleanup is part of this repair.
 
 ## Next action
 
-Perform an independent S5-B2 exact-head production-cutover audit. If and only if that audit returns `PASS`, proceed to controlled base/feature comparison on the same immutable head.
+Perform a fresh independent S5-B2 exact-head re-audit of the immutable repair head. Controlled comparison remains prohibited until that audit returns `PASS`.
 
 ## Latest recorded closeout
 
-- **Worker result:** S5-B2 typed oil-hypothesis production cutover completed on feature head.
-- **Task-start exact head:** `f8ad80f69ecbab4033725f61ab6a8afbed7f15e5`
-- **Task-start exact parent:** `7d07844d0d376d755ee6ef4d0d9d8d31a2d0d7f4`
-- **Prior gate:** Independent S5-B1 exact-head re-audit returned `AUDIT: PASS`.
-- **Completed source scope:** Single typed oil production authority, compatibility projection, fill-state/status mapping, detector/debug integration and detector identity update.
-- **Compatibility:** External detector and persisted/result/fixture/debug schemas remain unchanged; S5-A Foam owners remain unchanged.
-- **Current gate:** Independent S5-B2 exact-head production-cutover audit.
-- **Deferred gates:** Controlled comparison, canonical validation, sample/real-video accuracy acceptance, Windows/manual GUI validation, packaging validation, merge and cleanup were not performed.
+- **Repair result:** Typed result coherence validator and adversarial evidence completed on the feature worktree.
+- **Task-start exact head:** `64093e359cee24831f6c88184791fc05ef166331`
+- **Task-start exact parent:** `f8ad80f69ecbab4033725f61ab6a8afbed7f15e5`
+- **Prior audit:** Independent S5-B2 production-cutover audit returned `AUDIT: FAIL` for malformed typed-result coherence validation.
+- **Completed source scope:** Status/current-observation, canonical hypothesis identity/content and projected-Y coherence validation only.
+- **Completed test scope:** Exact-type adversarial combinations fail closed while normal boundary, no-interface, ambiguous, unavailable and reacquisition combinations remain valid.
+- **Current gate:** Fresh independent S5-B2 exact-head re-audit.
+- **Deferred findings:** The two controlled oil accuracy failures remain unchanged and are not repaired by this task.
