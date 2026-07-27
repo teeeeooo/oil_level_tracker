@@ -3,62 +3,60 @@
 - **Document status:** `VALIDATING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Task-start exact head:** `faab56316acf61dd3e4838074335d77d20ae6377`
-- **Task-start exact parent:** `b12cd4d51d9b6ffef7abea390ac669560f89b116`
+- **Task-start exact head:** `5f8749e8c1a508646d04026b2f1135db1b5be369`
+- **Task-start exact parent:** `faab56316acf61dd3e4838074335d77d20ae6377`
 - **Orchestrator decision:** `NEEDS_DOCUMENT_REPAIR`
-- **Current gate:** Bounded trust-boundary documentation repair
-- **Next gate:** Independent trust-boundary redesign architecture re-audit
+- **Current gate:** Independent trust-boundary redesign architecture re-audit
 - **Source implementation:** Blocked until architecture re-audit `PASS`
-- **Controlled comparison:** Blocked until the implementation exact head passes independent source audit
+- **Controlled comparison:** Blocked until implementation exact-head source audit `PASS`
 
-This is the operational SSOT for the active milestone. Closeout follows the [documentation closeout policy](./closeout-policy.md). Branch-local work is not formal completion, and this plan makes no `DONE` or S5-B completion claim.
+This is the operational SSOT for the active milestone. Closeout follows the [documentation closeout policy](./closeout-policy.md). Branch-local documentation repair is not formal completion, and this plan makes no `DONE` or S5-B completion claim.
 
-## Material findings
+## Current state
 
-The Orchestrator review identified three current blockers:
+The bounded documentation repair is complete on the feature head:
 
-1. successful evidence-unavailable and pipeline execution failure collapse into one canonical unavailable outcome;
-2. the failed-frame model can inherit successful unavailable stable-clear authority, leaving tracker and smoothing behavior ambiguous;
-3. the [Roadmap](./roadmap.md) still names the obsolete production-cutover audit as the next gate.
+- distinct successful evidence-unavailable and pipeline-failure outcomes are defined;
+- pipeline failure is fixed to hypothesis-state no-commit, compatibility tracker `NO_UPDATE` and smoothing `PRESERVE`;
+- Glass-local hypothesis temporal evaluation is provisional and cannot mutate live state before trust-boundary validation;
+- one transactional trust-boundary owner validates canonical evidence, provisional decision, proposed next state, resources, actions and the prepared publishable outcome;
+- only that owner may commit the proposed next Glass-local temporal state, exactly once and only after all validation succeeds;
+- hypothesis temporal state and the downstream compatibility smoothing/fill-state tracker are explicitly separate owners;
+- successful evidence-unavailable may progress its stability counter only through a valid transactional commit;
+- every execution, validation, normalization, outcome-construction or commit failure preserves both state owners;
+- the [Roadmap](./roadmap.md) is already aligned and remains unchanged by this repair.
 
-These findings require documentation repair before source implementation resumes.
+The architecture contract is recorded in the [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md). Exact Python class, module and helper names remain available to the later implementation Worker, but provisional evaluation, validation and atomic commit ordering are mandatory.
 
-## Architecture resolution
+## Compatibility and bounded scope
 
-The governing [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md) now requires:
+This documentation repair changes mutation timing and authority only. It does not change:
 
-- distinct concrete `EvidenceUnavailableOutcome` and `PipelineFailureOutcome` variants;
-- successful current observations and normal temporal decisions only on `SuccessfulPipelineFrame`;
-- a `FailedPipelineFrame` with required failure reason and bounded diagnostics, but no evidence tuples, current observation or normal temporal decision;
-- a closed tracker/smoothing action set derived from concrete variant and semantic mode;
-- successful unavailable pending/stable transitions separated from execution failure;
-- pipeline failure fixed to no tracker update and smoothing preserve, with no temporal-counter progression;
-- one canonical normalizer as the sole production authority for selection, numeric oil, confidence, actions, fill-state input, flags and debug projection.
+- observation extraction, proposal or hypothesis algorithms;
+- likelihood formulas, thresholds or accepted successful temporal transition behavior;
+- bounded Glass-local state limits;
+- external `PhaseDetection`;
+- Recipe/settings persistence;
+- benchmark, truth, fixture, result, CSV or debug schema versions;
+- detector version or dependencies;
+- S5-A Foam ownership or behavior;
+- controlled accuracy expectations.
 
-The selected compatibility policy supersedes the current repeated-failure stable-clear behavior. Only successful evidence-unavailable may reach its bounded stable-clear transition. The existing failure-clear source test is a later bounded implementation replacement target; no source or test is changed in this task.
-
-## Current bounded scope
-
-Authorized changes are limited to:
+The completed change is limited to:
 
 - `docs/20-architecture/s5b-oil-boundary-hypothesis-architecture.md`;
-- `docs/00-project/work-plan.md`;
-- `docs/00-project/roadmap.md`.
+- `docs/00-project/work-plan.md`.
 
-Observation extraction, proposal/hypothesis algorithms, likelihood formulas, thresholds, successful-frame temporal transitions, external `PhaseDetection`, Recipe/settings persistence, benchmark/truth/fixture/result/CSV/debug schemas, detector version, dependencies and S5-A Foam ownership remain unchanged.
-
-Source implementation, tests, controlled comparison, canonical validation, Windows/manual validation, packaging, merge and cleanup remain blocked or outside this gate.
+Source, tests, dependencies, workflows, the Roadmap, controlled comparison, canonical validation, Windows/manual validation, packaging, merge and cleanup remain unchanged or outside this gate.
 
 ## Required downstream sequence
 
-After this documentation repair:
+1. Independent trust-boundary redesign architecture re-audit of the immutable documentation head.
+2. Bounded source implementation only after architecture re-audit `PASS`.
+3. Independent exact-head source audit of the transactional implementation.
+4. Controlled base/feature comparison only after source audit `PASS`.
 
-1. independent trust-boundary redesign architecture re-audit;
-2. bounded source implementation only after architecture `PASS`;
-3. independent exact-head source audit;
-4. controlled base/feature comparison only after source audit `PASS`.
-
-S6 cannot start before formal S5-B completion.
+Old direct-mutation and new transactional temporal paths must not simultaneously own production state. S6 cannot start before formal S5-B completion.
 
 ## Deferred controlled accuracy findings
 
@@ -71,17 +69,18 @@ They remain detector-accuracy findings. This documentation repair neither relaxe
 
 ## Documentation verification contract
 
-This GitHub-only Worker must verify before closeout:
+This GitHub-only Worker verifies before closeout that:
 
-- the resulting commit changes exactly the three authorized Markdown files;
-- the complete commit diff contains no source, test, dependency or workflow delta;
+- the resulting commit changes exactly the two authorized Markdown files;
+- the complete diff contains no source, test, dependency, workflow or Roadmap delta;
 - relative links and case-sensitive paths resolve to existing repository paths;
-- Markdown replacements are complete and retain a final newline;
-- the obsolete production-cutover-audit next gate is removed;
-- no generic unavailable outcome owns both successful unavailability and execution failure;
-- failed-frame tracker and smoothing semantics are consistent throughout the architecture.
+- Markdown replacements retain final newlines;
+- no wording permits live hypothesis temporal mutation before canonical evidence and final proposal validation;
+- malformed successful results cannot change state before conversion to `PipelineFailureOutcome`;
+- one transactional owner and exactly-once commit semantics are consistent;
+- the Current gate is independent architecture re-audit.
 
-No local test, Markdown checker, `git diff --check`, canonical suite, Windows check or packaging run is claimed by this GitHub-only task.
+No local `git diff --check`, Markdown checker, test, benchmark, application, canonical suite, Windows check or packaging run is claimed by this GitHub-only task.
 
 ## Next action
 
@@ -89,11 +88,13 @@ Perform an independent trust-boundary redesign architecture re-audit against the
 
 ## Latest recorded closeout
 
-- **Result:** Production-result trust-boundary clarification prepared as a bounded documentation-only repair.
-- **Task-start exact head:** `faab56316acf61dd3e4838074335d77d20ae6377`.
-- **Task-start exact parent:** `b12cd4d51d9b6ffef7abea390ac669560f89b116`.
+- **Result:** Bounded temporal commit-boundary documentation repair completed on the feature head.
+- **Task-start exact head:** `5f8749e8c1a508646d04026b2f1135db1b5be369`.
+- **Task-start exact parent:** `faab56316acf61dd3e4838074335d77d20ae6377`.
 - **Decision recorded:** `NEEDS_DOCUMENT_REPAIR`.
-- **Architecture policy:** Distinct evidence-unavailable/failure variants; execution failure is no-update/preserve and cannot obtain successful unavailable stable-clear authority.
-- **Current gate:** Bounded trust-boundary documentation repair.
-- **Next gate:** Independent trust-boundary redesign architecture re-audit.
+- **Completed architecture:** Distinct evidence-unavailable/failure outcomes, failure `NO_UPDATE`/`PRESERVE`, provisional temporal evaluation and one exactly-once atomic Glass-local state commit boundary.
+- **Bookkeeping:** Roadmap alignment remains current; the Work Plan gate is no longer the repair stage.
+- **Current gate:** Independent trust-boundary redesign architecture re-audit.
+- **Source implementation:** Blocked pending architecture re-audit `PASS`.
 - **Deferred findings:** The two controlled oil accuracy findings remain unchanged.
+- **Resulting exact SHA:** Reported by the Worker final report, not self-recorded in this commit.
