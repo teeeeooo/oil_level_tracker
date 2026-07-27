@@ -83,6 +83,32 @@ Update [roadmap.md](./roadmap.md) only when one of these occurs:
 
 Do not add Worker commits, temporary audit findings, exact validation counts or detailed thresholds to the roadmap.
 
+## Roadmap replacement and compaction
+
+The Roadmap is not a closeout journal.
+
+- Keep exactly one current entry per milestone.
+- Update status, major result and next gate in place rather than appending a new milestone record.
+- Compress completed milestones to purpose, formal status, major result, maintenance gate and detail links.
+- Remove obsolete prior-state wording; rely on Git history for detailed status transitions.
+- Never add a closeout-history, audit-history or validation-history section.
+
+## Work Plan replacement and compaction
+
+The Work Plan manages exactly one active milestone.
+
+- Replace Current gate, Next action, Blocking findings and Open risks with the latest current-state content.
+- Remove resolved findings and risks that no longer affect the current decision.
+- Keep execution-stage entries short and current; do not preserve earlier stage descriptions as a journal.
+- Maintain exactly one `Latest recorded closeout` block and replace the complete block at the next mutation-capable closeout.
+- Do not append audit logs, validation logs, commit history or previous closeout blocks.
+- Replace the document with the next active milestone when the current milestone closes.
+- Create an archive snapshot only with explicit approval for exceptional historical value; do not create one automatically for every milestone.
+
+## Size discipline
+
+Roadmap and Work Plan closeouts must compact obsolete content as part of the same change. Avoid repeating the same fact across sections. Link detailed evidence to architecture or quality documents, external artifacts or Git history. Document growth is not evidence of progress.
+
 ## Architecture document update conditions
 
 Update the relevant architecture document when:

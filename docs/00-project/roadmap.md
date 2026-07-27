@@ -4,9 +4,20 @@
 
 This document is the long-term milestone SSOT. It owns milestone order, scope and state. Exact branch progress, findings and immediate next action belong only in the [current work plan](./work-plan.md).
 
+The roadmap is a bounded current-state document, not a cumulative journal. Keep exactly one current entry per milestone and update that entry in place. Historical status transitions and detailed change history belong to Git history.
+
 ## Status rules
 
 Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERRED` and `SUPERSEDED`. `DONE` means implementation, required validation and merge are complete.
+
+## Replacement and compaction rules
+
+- Maintain one current item per milestone; replace its status, major result and next gate in place.
+- Do not add Worker or Auditor commits, individual closeouts, test counts, temporary findings or validation logs.
+- Compress completed milestones to purpose, formal status, major result, maintenance gate and detail links.
+- Remove obsolete wording when a milestone changes instead of preserving prior states below the current item.
+- Use architecture, quality or product documents for detailed contracts and evidence; use Git history for past roadmap text.
+- Do not create a roadmap history section.
 
 ## Milestones
 

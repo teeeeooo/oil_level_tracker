@@ -3,8 +3,8 @@
 - **Document status:** `VALIDATING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Current exact head:** `73e9cd3d6562ba65126f4cd74574f3289f1dd9ad`
-- **Current exact parent:** `dcb53782b3db33841cf15c8115b643a1fb89ecad`
+- **Current exact head:** `7ac6c5da7289ad53662caf43447b5cf3a8c10476`
+- **Current exact parent:** `73e9cd3d6562ba65126f4cd74574f3289f1dd9ad`
 - **Current gate:** Independent documentation and planning audit
 - **Last closeout result:** `SUCCESS`
 - **Current state:** Documentation and planning audit
@@ -14,6 +14,17 @@ This is the operational SSOT for the active milestone. Closeout results must be 
 ## Exact-head bookkeeping
 
 The header records the authoritative branch head at the start of the current mutation-capable task. After that task creates a commit, the Worker final report records the resulting exact head and parent. The next authorized mutation-capable closeout owner updates this header before making another material change. During an exact-head freeze, documentation is not changed merely to copy audit or validation results into the branch.
+
+## Bounded maintenance rules
+
+- This document manages exactly one active milestone and is replaced when the next milestone becomes active.
+- Replace Current gate, Next action, Blocking findings and Open risks with the current decision state; do not retain resolved or obsolete entries.
+- Keep each execution stage to a short current result and at most one or two explanatory lines.
+- Maintain exactly one `Latest recorded closeout` block and replace the whole block at the next mutation-capable closeout.
+- Do not append audit logs, validation logs, commit histories or prior closeout blocks.
+- Link detailed evidence to architecture, quality, external artifacts or Git history instead of copying it here.
+- Create an archive snapshot only by explicit approval when exceptional historical preservation is necessary; do not archive every milestone by default.
+- Compact obsolete content during each closeout so document growth is not itself an objective.
 
 ## Problem statement
 
@@ -122,11 +133,10 @@ Obtain an independent documentation and planning audit at the immutable exact he
 ## Latest recorded closeout
 
 - **Result:** `SUCCESS`
-- **Exact head:** `73e9cd3d6562ba65126f4cd74574f3289f1dd9ad`
-- **Exact parent:** `dcb53782b3db33841cf15c8115b643a1fb89ecad`
-- **Completed scope:** Normalized documentation hierarchy, roadmap/work-plan separation, closeout policy, S5-B architecture contract and preserved historical snapshots.
-- **Validation evidence:** Missing relative Markdown links `0`; old filename references `0`; duplicate authoritative ownership not found; Markdown-only scope confirmed; `git diff --check` passed.
-- **Findings:** Previous feature documents duplicated project status and next-action ownership. Failed candidate/static repair heads remain historical findings, not S5-B completion evidence.
-- **Current gate:** Independent documentation and planning audit.
-- **Next action:** Obtain independent audit `PASS` before S5-B1 shadow implementation begins.
-- **Unresolved risks:** S5-B architecture, calibration and real-video risks remain open; no implementation or detector validation is claimed by this documentation-only closeout.
+- **Task-start exact head:** `7ac6c5da7289ad53662caf43447b5cf3a8c10476`
+- **Task-start exact parent:** `73e9cd3d6562ba65126f4cd74574f3289f1dd9ad`
+- **Completed scope:** Added bounded replacement and compaction rules for the Roadmap, Work Plan, closeout policy and documentation guide.
+- **Validation evidence:** Relative links, single latest-closeout ownership, current gate/next-action consistency, Markdown-only scope, trailing newlines and `git diff --check` verified before commit.
+- **Findings:** Planning documents must replace obsolete current-state content rather than accumulate closeout, audit, validation or commit journals.
+- **Current gate and next action:** Unchanged; obtain independent documentation and planning audit `PASS` before S5-B1 begins.
+- **Unresolved risks:** Existing S5-B architecture and evidence risks remain current; no detector implementation or runtime validation is claimed.

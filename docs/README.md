@@ -57,7 +57,13 @@ The only project status values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`,
 - Quality documents change when metrics, fixture categories, manual obligations or runtime/packaging gates change.
 - This index changes whenever a document is added, moved, renamed or archived, or the authority hierarchy changes.
 
-See the [closeout policy](./00-project/closeout-policy.md) for the required closeout fields and transition rules.
+## Bounded planning documents
+
+The Roadmap and Work Plan are bounded current-state documents, not cumulative journals. Roadmap milestones are updated in place, while the Work Plan replaces obsolete gates, findings, risks, stage summaries and its single latest-closeout block. Detailed evidence belongs in linked architecture or quality documents, external artifacts or Git history.
+
+Archive snapshots require explicit approval for exceptional historical value. They are not created automatically at every milestone or closeout. Each mutation-capable closeout must remove obsolete planning content as well as add the new current state.
+
+See the [closeout policy](./00-project/closeout-policy.md) for replacement, compaction, exact-head and actor-specific closeout rules.
 
 ## Archive policy
 
