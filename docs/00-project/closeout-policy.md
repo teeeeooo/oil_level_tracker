@@ -18,12 +18,16 @@ Use only:
 
 `DONE` is allowed only after implementation, all required validation and merge are complete. A local, feature or failed audit head is never sufficient.
 
-## Every closeout
+## Formal status and branch-local result
 
-Update [work-plan.md](./work-plan.md) with:
+Formal project and document status uses only the allowed values above. Execution stages on an unmerged branch use descriptive results such as `completed on feature head`, `awaiting audit` or `pending cutover`; they do not use `DONE` to describe branch-local completion.
+
+## Closeout record contract
+
+Every closeout result must eventually be reflected in [work-plan.md](./work-plan.md) with:
 
 - result;
-- exact head;
+- exact head and parent when applicable;
 - completed scope;
 - validation evidence;
 - findings;
@@ -31,7 +35,41 @@ Update [work-plan.md](./work-plan.md) with:
 - next action;
 - unresolved risks.
 
-The work plan must reflect the authoritative final state of the closeout, including a failed or blocked result. Do not preserve an obsolete next action after a gate changes.
+The actor and exact-head state determine when that update occurs. A read-only actor does not mutate a frozen audited or validated head merely to record its result. The next authorized mutation-capable owner must incorporate any deferred closeout result before resuming material changes. Do not preserve an obsolete next action after a gate changes.
+
+## Mutation-capable Worker closeout
+
+A mutation-capable Worker:
+
+- includes its material change and Work Plan update in the same resulting head;
+- records the branch state, completed scope, evidence, risks and next gate before audit begins;
+- reports the resulting exact head and parent after commit creation;
+- does not use branch-local completion as formal `DONE`.
+
+Because a commit cannot contain its own resulting SHA, the Work Plan header records the authoritative head at task start. The Worker final report supplies the resulting head, and the next authorized mutation-capable owner updates the header before another material mutation.
+
+## Read-only Auditor or Validator closeout
+
+A read-only Auditor or Validator:
+
+- does not modify the branch under audit or validation;
+- records exact head, result, findings and next gate in its final report;
+- leaves a successful immutable validation chain on the same exact head;
+- on failure, requires the next authorized Worker to reflect the result in the Work Plan before repair begins;
+- leaves successful results for the final merge closeout or an explicit post-merge documentation closeout to incorporate.
+
+A read-only actor is never the mutation owner for the Work Plan on the head it is auditing or validating.
+
+## Exact-head freeze
+
+An exact-head freeze begins when an independent exact-head audit, controlled comparison, canonical validation or final audit starts. During the freeze, do not add or change:
+
+- source;
+- tests;
+- documentation;
+- metadata commits.
+
+If a frozen check fails, end the freeze. The next authorized repair Worker records the failure in the Work Plan, applies the repair and creates a new exact head. If the frozen checks succeed, keep the same exact head as the merge target. Record formal completion only after merge through an explicit post-merge documentation closeout.
 
 ## Roadmap update conditions
 

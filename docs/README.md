@@ -51,7 +51,7 @@ The only project status values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`,
 
 ## Update rules
 
-- Every implementation, audit and validation closeout updates the work plan.
+- Every implementation, audit and validation closeout result must be reflected in the work plan. A mutation-capable Worker includes the update in its resulting head; a read-only Auditor or Validator reports against the immutable head and does not mutate it during an exact-head freeze. Deferred results are incorporated by the next authorized mutation-capable owner or an explicit post-merge documentation closeout.
 - The roadmap changes only for milestone start/completion, order or scope change, or defer/supersede decisions.
 - Architecture documents change when responsibility boundaries, domain types, interfaces or confirmed design decisions change.
 - Quality documents change when metrics, fixture categories, manual obligations or runtime/packaging gates change.

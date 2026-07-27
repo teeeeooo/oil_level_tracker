@@ -1,7 +1,9 @@
 # S5-B Oil-Boundary Hypothesis Architecture
 
-**Status:** `ACTIVE` design contract
+**Status:** `VALIDATING` design contract
 **Milestone:** [S5-B](../00-project/work-plan.md)
+
+The contract is awaiting independent documentation and planning audit. After audit `PASS`, the next authorized mutation-capable owner changes the document status to `ACTIVE`; the read-only Auditor does not mutate the audited head.
 
 ## Purpose
 

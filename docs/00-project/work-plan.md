@@ -1,12 +1,19 @@
 # Current Work Plan
 
-- **Document status:** `ACTIVE`
+- **Document status:** `VALIDATING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Documentation starting exact head:** `dcb53782b3db33841cf15c8115b643a1fb89ecad`
-- **Current state:** Architecture redesign preparation
+- **Current exact head:** `73e9cd3d6562ba65126f4cd74574f3289f1dd9ad`
+- **Current exact parent:** `dcb53782b3db33841cf15c8115b643a1fb89ecad`
+- **Current gate:** Independent documentation and planning audit
+- **Last closeout result:** `SUCCESS`
+- **Current state:** Documentation and planning audit
 
-This is the operational SSOT for the active milestone. Every implementation, audit and validation closeout must update this document according to the [closeout policy](./closeout-policy.md).
+This is the operational SSOT for the active milestone. Closeout results must be reflected according to the [closeout policy](./closeout-policy.md), without requiring a read-only actor to mutate a frozen exact head.
+
+## Exact-head bookkeeping
+
+The header records the authoritative branch head at the start of the current mutation-capable task. After that task creates a commit, the Worker final report records the resulting exact head and parent. The next authorized mutation-capable closeout owner updates this header before making another material change. During an exact-head freeze, documentation is not changed merely to copy audit or validation results into the branch.
 
 ## Problem statement
 
@@ -22,23 +29,23 @@ Stop narrow candidate/static suppression repair. Replace it with the architectur
 
 ## Execution stages
 
-1. **Documentation normalization — DONE**
-   Established the document hierarchy, roadmap, work plan, closeout policy and S5-B architecture contract.
-2. **S5-B1 shadow hypothesis pipeline — PLANNED**
-   Implement the new typed pipeline beside production behavior. Record comparable evidence without changing external `PhaseDetection` results.
-3. **Architecture/evidence audit — PLANNED**
+1. **Documentation normalization — completed on feature head**
+   The document hierarchy, roadmap, work plan, closeout policy and S5-B architecture contract are present on the feature branch and await independent audit.
+2. **S5-B1 shadow hypothesis pipeline — awaiting documentation audit**
+   Implement the new typed pipeline beside production behavior only after the current gate passes. Record comparable evidence without changing external `PhaseDetection` results.
+3. **Architecture/evidence audit — pending shadow implementation**
    Independently verify type boundaries, deterministic proposals/deduplication, evidence preservation and resource bounds.
-4. **S5-B2 production cutover — PLANNED**
+4. **S5-B2 production cutover — pending architecture audit**
    Switch production selection/temporal flow to the audited hypothesis pipeline and remove replaced legacy ownership.
-5. **Exact-head audit — PLANNED**
+5. **Exact-head audit — pending cutover**
    Audit the production cutover at an immutable remote head.
-6. **Controlled comparison — PLANNED**
+6. **Controlled comparison — pending exact-head audit**
    Compare feature and base under the same environment, dataset and settings; include Foam non-regression and CPU evidence.
-7. **Sample-video reference probe — PLANNED**
+7. **Sample-video reference probe — pending controlled evidence**
    Use the repository sample only as supporting architecture evidence, never canonical truth.
-8. **Python 3.14 canonical validation — PLANNED**
+8. **Python 3.14 canonical validation — pending prior gates**
    Run the complete required suite on the configured Python 3.14 environment.
-9. **Final PR audit and merge — PLANNED**
+9. **Final PR audit and merge — pending canonical validation**
    Perform independent final review and guarded merge only after all earlier gates pass.
 
 ## Current gate
@@ -52,7 +59,7 @@ Gate requirements:
 - verify the work-plan gate, findings, risks and next action;
 - verify the S5-B architecture contract against the read-only investigation evidence;
 - confirm links, archive replacements and Markdown-only scope at the exact remote head;
-- return `PASS` before S5-B1 begins; otherwise update this work plan with the blocking findings.
+- return `PASS` before S5-B1 begins; on failure, report the blocking findings without mutating the audited head, and require the next authorized Worker to reflect them before repair.
 
 ## Acceptance criteria
 
@@ -110,13 +117,14 @@ Gate requirements:
 
 ## Next action
 
-Complete and independently audit the normalized documentation. After an audit `PASS`, begin S5-B1 as a bounded shadow implementation that leaves production `PhaseDetection` behavior unchanged.
+Obtain an independent documentation and planning audit at the immutable exact head reported by this repair Worker. After an audit `PASS`, the next authorized mutation-capable Worker updates the Work Plan header and begins S5-B1 as a bounded shadow implementation that leaves production `PhaseDetection` behavior unchanged.
 
-## Latest closeout
+## Latest recorded closeout
 
 - **Result:** `SUCCESS`
-- **Exact head:** Input and parent exact head `dcb53782b3db33841cf15c8115b643a1fb89ecad`; the resulting exact head is this documentation commit.
-- **Completed scope:** Normalized documentation hierarchy, roadmap/work-plan separation, closeout policy, active S5-B architecture contract and preserved historical snapshots.
+- **Exact head:** `73e9cd3d6562ba65126f4cd74574f3289f1dd9ad`
+- **Exact parent:** `dcb53782b3db33841cf15c8115b643a1fb89ecad`
+- **Completed scope:** Normalized documentation hierarchy, roadmap/work-plan separation, closeout policy, S5-B architecture contract and preserved historical snapshots.
 - **Validation evidence:** Missing relative Markdown links `0`; old filename references `0`; duplicate authoritative ownership not found; Markdown-only scope confirmed; `git diff --check` passed.
 - **Findings:** Previous feature documents duplicated project status and next-action ownership. Failed candidate/static repair heads remain historical findings, not S5-B completion evidence.
 - **Current gate:** Independent documentation and planning audit.
