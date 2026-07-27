@@ -241,7 +241,7 @@ def test_single_signed_boundary_is_not_rejected_as_structure():
     assert candidate.features["paired_structure_opposite_polarity"] == 0.0
 
 
-def test_multi_edge_static_group_rejects_every_candidate_deterministically():
+def test_static_candidates_use_candidate_local_witnesses_deterministically():
     settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
 
     def make_candidates():
@@ -263,7 +263,8 @@ def test_multi_edge_static_group_rejects_every_candidate_deterministically():
                     candidate.y,
                     candidate.rejected,
                     candidate.reject_reason,
-                    candidate.features["multi_edge_static_structure"],
+                    candidate.features["candidate_local_static_structure"],
+                    candidate.features["candidate_local_static_partner_y"],
                 )
                 for candidate in arranged
             )
@@ -273,10 +274,14 @@ def test_multi_edge_static_group_rejects_every_candidate_deterministically():
         assert all(candidate.rejected for candidate in arranged)
         assert {
             candidate.reject_reason for candidate in arranged
-        } == {"multi_edge_static_structure"}
+        } == {"candidate_local_static_structure"}
+        assert all(
+            candidate.features["multi_edge_static_structure"] == 0.0
+            for candidate in arranged
+        )
 
 
-def test_undercovered_static_core_rejects_strong_survivor_deterministically():
+def test_undercovered_static_false_candidates_do_not_consume_weak_fringe():
     settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
 
     def make_candidates():
@@ -326,67 +331,120 @@ def test_undercovered_static_core_rejects_strong_survivor_deterministically():
                     candidate.y,
                     candidate.rejected,
                     candidate.reject_reason,
-                    candidate.features[
-                        "multi_edge_static_protected_real_boundary"
-                    ],
+                    candidate.features["candidate_local_static_structure"],
                 )
                 for candidate in arranged
             )
         )
         expected = signature if expected is None else expected
         assert signature == expected
-        assert all(candidate.rejected for candidate in arranged)
         assert {
-            candidate.reject_reason for candidate in arranged
-        } == {"multi_edge_static_structure"}
+            candidate.y for candidate in arranged if candidate.rejected
+        } == {40.0, 44.0, 48.0, 52.0}
+        survivor = next(candidate for candidate in arranged if not candidate.rejected)
+        assert survivor.y == 58.0
+        assert survivor.features["candidate_local_static_structure"] == 0.0
 
 
-def test_nearby_persistent_real_boundary_is_only_survivor_of_static_group():
+def test_real_boundary_between_static_anchors_is_not_suppressed():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+    upper_anchor = _scored_scalar_candidate(
+        40.0,
+        -1.0,
+        static_overlap=0.20,
+    )
+    real = _scored_scalar_candidate(
+        44.0,
+        1.0,
+        observation=0.62,
+        persistent_contrast=0.28,
+        persistent_polarity=1.0,
+    )
+    lower_anchor = _scored_scalar_candidate(
+        48.0,
+        -1.0,
+        static_overlap=0.25,
+    )
+    suppress_paired_horizontal_structures(
+        [lower_anchor, real, upper_anchor],
+        settings,
+    )
+    assert not real.rejected
+    assert real.reject_reason == ""
+    assert real.features["candidate_local_static_structure"] == 0.0
+
+
+def test_weak_real_boundary_immediately_outside_static_pair_is_preserved():
     settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
     static_group = [
-        _scored_scalar_candidate(40.0, -1.0, static_overlap=0.20),
-        _scored_scalar_candidate(44.0, 1.0, static_overlap=0.25),
-        _scored_scalar_candidate(48.0, -1.0, static_overlap=0.30),
-        _scored_scalar_candidate(52.0, 1.0, static_overlap=0.20),
+        _scored_scalar_candidate(40.0, -1.0, static_overlap=0.04),
+        _scored_scalar_candidate(44.0, 1.0, static_overlap=0.05),
     ]
     real = _scored_scalar_candidate(
-        58.0,
+        48.0,
         -1.0,
-        observation=0.95,
-        persistent_contrast=0.85,
+        observation=0.30,
+        persistent_contrast=0.20,
         persistent_polarity=-1.0,
+        consensus=0.40,
+        support=2,
     )
     values = static_group + [real]
     suppress_paired_horizontal_structures(values, settings)
-    assert [candidate for candidate in values if not candidate.rejected] == [real]
-    assert real.features["multi_edge_static_protected_real_boundary"] == 1.0
-    assert all(
-        candidate.reject_reason == "multi_edge_static_structure"
-        for candidate in static_group
+    assert all(candidate.rejected for candidate in static_group)
+    assert not real.rejected
+    assert real.features["candidate_local_static_structure"] == 0.0
+
+
+def test_persistent_real_step_crossing_static_candidates_is_preserved():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+    static_false = [
+        _scored_scalar_candidate(32.0, -1.0, static_overlap=0.20),
+        _scored_scalar_candidate(36.0, 1.0, static_overlap=0.22),
+        _scored_scalar_candidate(52.0, -1.0, static_overlap=0.24),
+        _scored_scalar_candidate(56.0, 1.0, static_overlap=0.21),
+    ]
+    real_upper = _scored_scalar_candidate(
+        41.0,
+        1.0,
+        region_contrast=0.68,
+        persistent_contrast=0.88,
+        persistent_polarity=1.0,
+        static_overlap=0.18,
     )
+    real_lower = _scored_scalar_candidate(
+        47.0,
+        -1.0,
+        region_contrast=0.62,
+        persistent_contrast=0.84,
+        persistent_polarity=1.0,
+        static_overlap=0.16,
+    )
+    values = static_false + [real_upper, real_lower]
+    suppress_paired_horizontal_structures(values, settings)
+    kept = [candidate for candidate in values if not candidate.rejected]
+    assert len(kept) == 1
+    assert kept[0].y == 44.0
+    assert kept[0].features["paired_boundary_step_preserved"] == 1.0
+    assert kept[0].features[
+        "candidate_local_static_protected_persistent_step"
+    ] == 1.0
+    assert all(candidate.rejected for candidate in static_false)
 
 
-def test_nearby_strong_non_static_candidate_is_preserved_deterministically():
+def test_close_static_structures_keep_local_partner_identity():
     settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
 
     def make_candidates():
         return [
             _scored_scalar_candidate(40.0, -1.0, static_overlap=0.20),
-            _scored_scalar_candidate(44.0, 1.0, static_overlap=0.25),
-            _scored_scalar_candidate(48.0, -1.0, static_overlap=0.30),
-            _scored_scalar_candidate(52.0, 1.0, static_overlap=0.20),
-            _scored_scalar_candidate(
-                58.0,
-                -1.0,
-                observation=0.95,
-                persistent_contrast=0.20,
-                persistent_polarity=-1.0,
-                consensus=0.90,
-            ),
+            _scored_scalar_candidate(44.0, 1.0, static_overlap=0.20),
+            _scored_scalar_candidate(55.0, -1.0, static_overlap=0.20),
+            _scored_scalar_candidate(59.0, 1.0, static_overlap=0.20),
         ]
 
     expected = None
-    for order in permutations(range(5)):
+    for order in permutations(range(4)):
         values = make_candidates()
         arranged = [values[index] for index in order]
         suppress_paired_horizontal_structures(arranged, settings)
@@ -394,20 +452,47 @@ def test_nearby_strong_non_static_candidate_is_preserved_deterministically():
             sorted(
                 (
                     candidate.y,
-                    candidate.rejected,
-                    candidate.reject_reason,
-                    candidate.features[
-                        "multi_edge_static_protected_real_boundary"
-                    ],
+                    candidate.features["candidate_local_static_partner_y"],
+                    candidate.features["multi_edge_static_span_px"],
                 )
                 for candidate in arranged
             )
         )
         expected = signature if expected is None else expected
         assert signature == expected
-        assert [
-            candidate.y for candidate in arranged if not candidate.rejected
-        ] == [58.0]
+    assert expected == (
+        (40.0, 44.0, 0.0),
+        (44.0, 40.0, 0.0),
+        (55.0, 59.0, 0.0),
+        (59.0, 55.0, 0.0),
+    )
+
+
+def test_pre_rejected_candidates_never_anchor_static_rejection():
+    settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
+    for reason in (
+        "glare_overlap",
+        "rim_or_border",
+        "implausible_full_to_visible_transition",
+    ):
+        anchor = _scored_scalar_candidate(
+            40.0,
+            -1.0,
+            static_overlap=0.20,
+            rejected=True,
+            reject_reason=reason,
+        )
+        real = _scored_scalar_candidate(
+            44.0,
+            1.0,
+            observation=0.55,
+            static_overlap=0.18,
+        )
+        suppress_paired_horizontal_structures([anchor, real], settings)
+        assert anchor.rejected
+        assert anchor.reject_reason == reason
+        assert not real.rejected
+        assert real.features["candidate_local_static_structure"] == 0.0
 
 
 def test_pre_rejected_static_member_does_not_remove_nearby_real_boundary():
@@ -436,11 +521,11 @@ def test_pre_rejected_static_member_does_not_remove_nearby_real_boundary():
     suppress_paired_horizontal_structures(values, settings)
     assert not real.rejected
     assert real.reject_reason == ""
-    assert real.features["multi_edge_static_protected_real_boundary"] == 1.0
+    assert static_group[-1].reject_reason == "insufficient_boundary_observation"
     assert all(candidate.rejected for candidate in static_group)
 
 
-def test_low_observation_static_partner_still_suppresses_pair():
+def test_low_observation_pre_rejected_partner_does_not_suppress_accepted():
     settings = DetectorSettings(oil_consensus_tolerance_px=4.0)
     primary = _scored_scalar_candidate(40.0, 1.0, static_overlap=0.20)
     partner = _scored_scalar_candidate(
@@ -452,9 +537,10 @@ def test_low_observation_static_partner_still_suppresses_pair():
         reject_reason="insufficient_boundary_observation",
     )
     suppress_paired_horizontal_structures([primary, partner], settings)
-    assert primary.rejected and partner.rejected
-    assert primary.reject_reason == "paired_opposite_polarity_structure"
-    assert partner.reject_reason == "paired_opposite_polarity_structure"
+    assert not primary.rejected
+    assert primary.features["candidate_local_static_structure"] == 0.0
+    assert partner.rejected
+    assert partner.reject_reason == "insufficient_boundary_observation"
 
 
 def test_persistent_step_does_not_resurrect_pre_rejected_candidate():
@@ -462,6 +548,7 @@ def test_persistent_step_does_not_resurrect_pre_rejected_candidate():
     accepted = _scored_scalar_candidate(
         40.0,
         1.0,
+        region_contrast=0.70,
         persistent_contrast=0.90,
         persistent_polarity=1.0,
     )
@@ -469,6 +556,7 @@ def test_persistent_step_does_not_resurrect_pre_rejected_candidate():
         46.0,
         -1.0,
         observation=0.30,
+        region_contrast=0.65,
         persistent_contrast=0.85,
         persistent_polarity=1.0,
         rejected=True,
@@ -486,6 +574,7 @@ def _scored_scalar_candidate(
     polarity: float,
     *,
     observation: float = 0.90,
+    region_contrast: float = 0.0,
     persistent_contrast: float = 0.0,
     persistent_polarity: float = 0.0,
     static_overlap: float = 0.0,
@@ -502,6 +591,7 @@ def _scored_scalar_candidate(
             "observation_score": observation,
             "polarity_score": abs(polarity),
             "polarity_sign": polarity,
+            "region_contrast": region_contrast,
             "persistent_region_contrast": persistent_contrast,
             "persistent_polarity_sign": persistent_polarity,
             "static_overlap": static_overlap,

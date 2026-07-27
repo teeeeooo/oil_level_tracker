@@ -160,15 +160,23 @@ def test_multi_edge_static_band_never_produces_numeric_oil_output():
             item for item in detection.candidates if item.source == "oil_consensus"
         ]
         assert consensus
-        assert not [item for item in consensus if not item.rejected]
-        if index == 0:
-            assert any(
-                item.reject_reason == "multi_edge_static_structure"
-                for item in consensus
-            )
+        assert all(
+            item.rejected
+            or item.features["observation_score"]
+            < config.detector_settings.minimum_final_confidence
+            for item in consensus
+        )
+        assert any(
+            item.reject_reason == "candidate_local_static_structure"
+            for item in consensus
+        )
+        assert all(
+            item.features["multi_edge_static_structure"] == 0.0
+            for item in consensus
+        )
 
 
-def test_partial_static_learning_never_protects_multi_edge_false_survivor():
+def test_partial_static_learning_rejects_low_overlap_false_candidates():
     detector = OpenCvPhaseDetector()
     config = glass()
     observed = multi_edge_static_band()
@@ -192,9 +200,10 @@ def test_partial_static_learning_never_protects_multi_edge_false_survivor():
             item for item in detection.candidates if item.source == "oil_consensus"
         ]
         assert consensus
-        assert not [item for item in consensus if not item.rejected]
         assert all(
-            item.reject_reason == "multi_edge_static_structure"
+            item.rejected
+            or item.features["observation_score"]
+            < config.detector_settings.minimum_final_confidence
             for item in consensus
         )
         assert any(
@@ -202,11 +211,38 @@ def test_partial_static_learning_never_protects_multi_edge_false_survivor():
             and item.features["observation_score"] > 0.90
             and item.features["unique_generator_support_count"] >= 4.0
             and item.features["consensus_score"] > 0.90
+            and item.reject_reason == "candidate_local_static_structure"
             for item in consensus
         )
 
 
-def test_real_boundary_is_only_survivor_beside_multi_edge_static_band():
+def test_real_boundary_inside_static_anchor_range_is_preserved():
+    detector = OpenCvPhaseDetector()
+    config = glass()
+    static = multi_edge_static_band(offset=-2, background=115)
+    combo = oil_frame(114, above=165, below=72)
+    static_pixels = np.any(static != 115, axis=2)
+    combo[static_pixels] = static[static_pixels]
+    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
+
+    detection, _ = detector.detect(combo, config, 1, 0.0, debug=True)
+    assert detection.raw_oil_air_level_y is not None
+    assert abs(detection.raw_oil_air_level_y - 114.0) <= 4.0
+    accepted = [
+        item
+        for item in detection.candidates
+        if item.source == "oil_consensus" and not item.rejected
+    ]
+    assert accepted
+    assert all(abs(item.y - 114.0) <= 4.0 for item in accepted)
+    assert any(
+        item.features["candidate_local_static_protected_persistent_step"]
+        == 1.0
+        for item in accepted
+    )
+
+
+def test_real_boundary_is_only_survivor_beside_static_band():
     detector = OpenCvPhaseDetector()
     config = glass()
     static = multi_edge_static_band(offset=-2, background=115)
@@ -226,17 +262,19 @@ def test_real_boundary_is_only_survivor_beside_multi_edge_static_band():
     assert accepted
     assert all(abs(item.y - 154.0) <= 4.0 for item in accepted)
     assert any(
-        item.reject_reason == "multi_edge_static_structure"
+        item.reject_reason == "candidate_local_static_structure"
         for item in detection.candidates
         if item.source == "oil_consensus"
     )
 
 
-def test_nearby_real_boundary_survives_within_static_group_distance():
+def test_weak_stationary_boundary_just_outside_static_group_is_preserved():
     detector = OpenCvPhaseDetector()
     config = glass()
     static = multi_edge_static_band(offset=-2, background=115)
-    combo = oil_frame(126, above=165, below=72)
+    combo = uniform_frame(125)
+    combo[126:] = 103
+    combo[125:128] = 145
     static_pixels = np.any(static != 115, axis=2)
     combo[static_pixels] = static[static_pixels]
     detector.learn_static_artifact([static, static.copy(), static.copy()], config)
@@ -250,19 +288,59 @@ def test_nearby_real_boundary_survives_within_static_group_distance():
         for item in detection.candidates
         if item.source == "oil_consensus" and not item.rejected
     ]
-    assert len(accepted) == 1
-    assert abs(accepted[0].y - 126.0) <= 4.0
-    assert (
-        accepted[0].features[
-            "multi_edge_static_protected_real_boundary"
-        ]
-        == 1.0
+    assert accepted
+    assert all(abs(item.y - 126.0) <= 4.0 for item in accepted)
+    assert all(
+        item.features["candidate_local_static_structure"] == 0.0
+        for item in accepted
     )
     assert all(
-        item.reject_reason == "multi_edge_static_structure"
+        item.reject_reason == "candidate_local_static_structure"
         for item in detection.candidates
         if item.source == "oil_consensus"
-        and abs(item.y - accepted[0].y) > 4.0
+        and abs(item.y - detection.raw_oil_air_level_y) > 4.0
+    )
+
+
+def test_low_static_overlap_false_candidates_and_weak_real_boundary_are_separated():
+    detector = OpenCvPhaseDetector()
+    config = glass()
+    observed_static = multi_edge_static_band(offset=-2, background=115)
+    partial_static = multi_edge_static_band(
+        offset=-2,
+        background=115,
+        x_start=150,
+        x_stop=170,
+    )
+    combo = uniform_frame(125)
+    combo[140:] = 103
+    combo[139:142] = 145
+    static_pixels = np.any(observed_static != 115, axis=2)
+    combo[static_pixels] = observed_static[static_pixels]
+    detector.learn_static_artifact(
+        [partial_static, partial_static.copy(), partial_static.copy()],
+        config,
+    )
+
+    detection, _ = detector.detect(combo, config, 1, 0.0, debug=True)
+    assert detection.raw_oil_air_level_y is not None
+    assert abs(detection.raw_oil_air_level_y - 140.0) <= 4.0
+    consensus = [
+        item for item in detection.candidates if item.source == "oil_consensus"
+    ]
+    accepted = [item for item in consensus if not item.rejected]
+    assert accepted
+    assert all(abs(item.y - 140.0) <= 4.0 for item in accepted)
+    low_overlap_false = [
+        item
+        for item in consensus
+        if 0.0 < item.features["static_overlap"] < 0.11
+        and abs(item.y - 140.0) > 4.0
+    ]
+    assert low_overlap_false
+    assert all(
+        item.reject_reason == "candidate_local_static_structure"
+        for item in low_overlap_false
     )
 
 

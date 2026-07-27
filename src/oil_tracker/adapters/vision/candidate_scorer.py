@@ -388,17 +388,8 @@ def suppress_paired_horizontal_structures(
 ) -> None:
     """Resolve close opposite-polarity edges as a region step or a structure."""
 
-    pairable_reject_reasons = {
-        "insufficient_horizontal_region_or_consensus",
-        "insufficient_boundary_observation",
-    }
     usable = sorted(
-        (
-            candidate
-            for candidate in candidates
-            if not candidate.rejected
-            or candidate.reject_reason in pairable_reject_reasons
-        ),
+        (candidate for candidate in candidates if not candidate.rejected),
         key=lambda candidate: (float(candidate.y), str(candidate.source)),
     )
     minimum_distance = max(
@@ -409,8 +400,8 @@ def suppress_paired_horizontal_structures(
         8.0,
         float(settings.oil_consensus_tolerance_px) * 3.0,
     )
-    resolved = _suppress_multi_edge_static_groups(
-        candidates,
+    resolved = _suppress_candidate_local_static_structures(
+        usable,
         settings=settings,
         minimum_distance=minimum_distance,
         maximum_distance=maximum_distance,
@@ -464,34 +455,17 @@ def suppress_paired_horizontal_structures(
                     )
                 )
             )
-            left_persistent = _unit(
-                left.features.get("persistent_region_contrast", 0.0)
+            persistent_step = _is_persistent_region_step_pair(
+                left,
+                right,
+                settings,
             )
-            right_persistent = _unit(
-                right.features.get("persistent_region_contrast", 0.0)
-            )
-            left_persistent_sign = float(
-                left.features.get("persistent_polarity_sign", 0.0)
-            )
-            right_persistent_sign = float(
-                right.features.get("persistent_polarity_sign", 0.0)
-            )
-            persistent_threshold = max(
-                0.35,
-                float(settings.minimum_region_contrast) * 3.0,
-            )
-            persistent_step = (
-                max(left_persistent, right_persistent) >= persistent_threshold
-                and left_persistent_sign != 0.0
-                and right_persistent_sign != 0.0
-                and left_persistent_sign * right_persistent_sign > 0.0
-            )
+            left_static = _unit(left.features.get("static_overlap", 0.0))
+            right_static = _unit(right.features.get("static_overlap", 0.0))
+            mixed_static_pair = (left_static > 0.0) != (right_static > 0.0)
             static_paired_structure = (
-                max(
-                    _unit(left.features.get("static_overlap", 0.0)),
-                    _unit(right.features.get("static_overlap", 0.0)),
-                )
-                > 0.0
+                left_static > 0.0
+                and right_static > 0.0
                 and not persistent_step
             )
             strong_pair_evidence = not (
@@ -503,9 +477,13 @@ def suppress_paired_horizontal_structures(
                 or secondary_polarity
                 < max(0.10, float(settings.oil_min_polarity_score))
             )
-            if (left.rejected or right.rejected) and not static_paired_structure:
+            if mixed_static_pair and not persistent_step:
                 continue
-            if not static_paired_structure and not strong_pair_evidence:
+            if (
+                not persistent_step
+                and not static_paired_structure
+                and not strong_pair_evidence
+            ):
                 continue
 
             for candidate, partner in ((left, right), (right, left)):
@@ -514,6 +492,12 @@ def suppress_paired_horizontal_structures(
                 candidate.features["paired_structure_opposite_polarity"] = 1.0
                 candidate.features["static_paired_structure"] = float(
                     static_paired_structure
+                )
+                candidate.features["candidate_local_static_structure"] = float(
+                    static_paired_structure
+                )
+                candidate.features["candidate_local_static_witness_count"] = (
+                    2.0 if static_paired_structure else 0.0
                 )
                 candidate.features["paired_boundary_step_preserved"] = float(
                     persistent_step
@@ -554,6 +538,17 @@ def suppress_paired_horizontal_structures(
         candidate.features.setdefault("paired_structure_partner_y", 0.0)
         candidate.features.setdefault("paired_structure_opposite_polarity", 0.0)
         candidate.features.setdefault("static_paired_structure", 0.0)
+        candidate.features.setdefault("candidate_local_static_structure", 0.0)
+        candidate.features.setdefault("candidate_local_static_witness_count", 0.0)
+        candidate.features.setdefault("candidate_local_static_partner_y", 0.0)
+        candidate.features.setdefault(
+            "candidate_local_static_same_polarity_witness",
+            0.0,
+        )
+        candidate.features.setdefault(
+            "candidate_local_static_protected_persistent_step",
+            0.0,
+        )
         candidate.features.setdefault("paired_boundary_step_preserved", 0.0)
         candidate.features.setdefault("multi_edge_static_structure", 0.0)
         candidate.features.setdefault("multi_edge_static_group_size", 0.0)
@@ -565,168 +560,155 @@ def suppress_paired_horizontal_structures(
         )
 
 
-def _suppress_multi_edge_static_groups(
+def _suppress_candidate_local_static_structures(
     candidates: list[BoundaryCandidate],
     *,
     settings: DetectorSettings,
     minimum_distance: float,
     maximum_distance: float,
 ) -> set[int]:
-    """Reject only the static edge subgraph, preserving nearby real boundaries."""
+    """Reject candidates with their own local static structural witnesses."""
 
     ordered = sorted(
         candidates,
         key=lambda candidate: (float(candidate.y), str(candidate.source)),
     )
-    by_id = {id(candidate): candidate for candidate in ordered}
-    adjacency = {candidate_id: set() for candidate_id in by_id}
-    opposite_pairs: set[frozenset[int]] = set()
+    persistent_ids: set[int] = set()
     for index, left in enumerate(ordered):
-        left_static = _unit(left.features.get("static_overlap", 0.0)) > 0.0
         left_sign = float(left.features.get("polarity_sign", 0.0))
         for right in ordered[index + 1 :]:
             distance = float(right.y) - float(left.y)
             if distance > maximum_distance:
                 break
-            right_static = _unit(right.features.get("static_overlap", 0.0)) > 0.0
+            if distance < minimum_distance:
+                continue
+            right_sign = float(right.features.get("polarity_sign", 0.0))
+            if (
+                left_sign == 0.0
+                or right_sign == 0.0
+                or left_sign * right_sign >= 0.0
+            ):
+                continue
+            if _is_persistent_region_step_pair(left, right, settings):
+                persistent_ids.update((id(left), id(right)))
+
+    for candidate in ordered:
+        if id(candidate) in persistent_ids:
+            candidate.features[
+                "candidate_local_static_protected_persistent_step"
+            ] = 1.0
+
+    structural = [
+        candidate
+        for candidate in ordered
+        if id(candidate) not in persistent_ids
+        and _unit(candidate.features.get("static_overlap", 0.0)) > 0.0
+    ]
+    witnesses: dict[int, list[tuple[int, float, BoundaryCandidate]]] = {
+        id(candidate): [] for candidate in structural
+    }
+    duplicate_distance = max(
+        minimum_distance,
+        float(settings.oil_consensus_tolerance_px),
+    )
+    for index, left in enumerate(structural):
+        left_sign = float(left.features.get("polarity_sign", 0.0))
+        for right in structural[index + 1 :]:
+            distance = float(right.y) - float(left.y)
+            if distance > maximum_distance:
+                break
             right_sign = float(right.features.get("polarity_sign", 0.0))
             opposite = (
-                left_sign != 0.0
+                distance >= minimum_distance
+                and left_sign != 0.0
                 and right_sign != 0.0
                 and left_sign * right_sign < 0.0
             )
-            if not ((left_static and right_static) or (opposite and (left_static or right_static))):
+            same_polarity_duplicate = (
+                distance > 1e-12
+                and distance <= duplicate_distance + 1e-12
+                and left_sign != 0.0
+                and left_sign == right_sign
+            )
+            if not opposite and not same_polarity_duplicate:
                 continue
-            left_id, right_id = id(left), id(right)
-            adjacency[left_id].add(right_id)
-            adjacency[right_id].add(left_id)
-            if opposite:
-                opposite_pairs.add(frozenset((left_id, right_id)))
+            relation = 0 if opposite else 1
+            witnesses[id(left)].append((relation, distance, right))
+            witnesses[id(right)].append((relation, distance, left))
 
     suppressed: set[int] = set()
-    visited: set[int] = set()
-    for root in ordered:
-        root_id = id(root)
-        if root_id in visited:
+    for candidate in structural:
+        local_witnesses = witnesses[id(candidate)]
+        if not local_witnesses:
             continue
-        pending = [root_id]
-        component_ids: set[int] = set()
-        while pending:
-            current = pending.pop()
-            if current in component_ids:
-                continue
-            component_ids.add(current)
-            neighbors = sorted(
-                adjacency[current] - component_ids,
-                key=lambda candidate_id: (
-                    float(by_id[candidate_id].y),
-                    str(by_id[candidate_id].source),
-                ),
-                reverse=True,
-            )
-            pending.extend(neighbors)
-        visited.update(component_ids)
-        component = sorted(
-            (by_id[candidate_id] for candidate_id in component_ids),
-            key=lambda candidate: (float(candidate.y), str(candidate.source)),
+        relation, distance, partner = min(
+            local_witnesses,
+            key=lambda item: (
+                item[0],
+                item[1],
+                float(item[2].y),
+                str(item[2].source),
+            ),
         )
-        static_members = [
-            candidate
-            for candidate in component
-            if _unit(candidate.features.get("static_overlap", 0.0)) > 0.0
-        ]
-        if len(static_members) < 2:
-            continue
-        static_min_y = min(float(candidate.y) for candidate in static_members)
-        static_max_y = max(float(candidate.y) for candidate in static_members)
-        core = [
-            candidate
-            for candidate in component
-            if static_min_y - 1e-12
-            <= float(candidate.y)
-            <= static_max_y + 1e-12
-        ]
-        core_ids = {id(candidate) for candidate in core}
-        core_ys = [float(candidate.y) for candidate in core]
-        span = static_max_y - static_min_y
-        if len(core) < 3:
-            continue
-        if span < minimum_distance * 2.0 - 1e-12:
-            continue
-        if span > maximum_distance * 2.0 + 1e-12:
-            continue
-        if len({round(value, 9) for value in core_ys}) < 3:
-            continue
-        pair_count = sum(pair <= core_ids for pair in opposite_pairs)
-        if pair_count < 2:
-            continue
-        for candidate in component:
-            inside_static_span = id(candidate) in core_ids
-            if (
-                not inside_static_span
-                and _is_protected_real_boundary_candidate(candidate, settings)
-            ):
-                candidate.features[
-                    "multi_edge_static_protected_real_boundary"
-                ] = 1.0
-                continue
-            candidate.features["multi_edge_static_structure"] = 1.0
-            candidate.features["multi_edge_static_group_size"] = float(len(core))
-            candidate.features["multi_edge_static_opposite_pair_count"] = float(
-                pair_count
-            )
-            candidate.features["multi_edge_static_span_px"] = float(span)
-            candidate.features["static_paired_structure"] = 1.0
-            candidate.penalties["paired_structure_penalty"] = 1.0
-            candidate.rejected = True
-            candidate.reject_reason = "multi_edge_static_structure"
-            suppressed.add(id(candidate))
+        candidate.features["candidate_local_static_structure"] = 1.0
+        candidate.features["candidate_local_static_witness_count"] = 2.0
+        candidate.features["candidate_local_static_partner_y"] = float(
+            partner.y
+        )
+        candidate.features["candidate_local_static_same_polarity_witness"] = (
+            1.0 if relation == 1 else 0.0
+        )
+        candidate.features["paired_structure_distance_px"] = float(distance)
+        candidate.features["paired_structure_partner_y"] = float(partner.y)
+        candidate.features["paired_structure_opposite_polarity"] = (
+            1.0 if relation == 0 else 0.0
+        )
+        candidate.features["static_paired_structure"] = 1.0
+        candidate.penalties["paired_structure_penalty"] = 1.0
+        candidate.rejected = True
+        candidate.reject_reason = "candidate_local_static_structure"
+        suppressed.add(id(candidate))
     return suppressed
 
 
-def _is_protected_real_boundary_candidate(
+def _is_persistent_region_step_pair(
+    left: BoundaryCandidate,
+    right: BoundaryCandidate,
+    settings: DetectorSettings,
+) -> bool:
+    """Return whether both local edges independently support one region step."""
+
+    left_sign = float(
+        left.features.get("persistent_polarity_sign", 0.0)
+    )
+    right_sign = float(
+        right.features.get("persistent_polarity_sign", 0.0)
+    )
+    return (
+        _has_persistent_region_step_evidence(left, settings)
+        and _has_persistent_region_step_evidence(right, settings)
+        and left_sign != 0.0
+        and right_sign != 0.0
+        and left_sign * right_sign > 0.0
+    )
+
+
+def _has_persistent_region_step_evidence(
     candidate: BoundaryCandidate,
     settings: DetectorSettings,
 ) -> bool:
-    """Return whether a candidate outside a static core has real-boundary evidence."""
-
-    if candidate.rejected:
-        return False
-    static_limit = max(
-        0.05,
-        float(settings.minimum_horizontal_coverage) * 0.25,
-    )
-    if _unit(candidate.features.get("static_overlap", 0.0)) > static_limit:
-        return False
-    persistent_threshold = max(
+    threshold = max(
         0.35,
         float(settings.minimum_region_contrast) * 3.0,
     )
-    persistent = (
-        _unit(candidate.features.get("persistent_region_contrast", 0.0))
-        >= persistent_threshold
-        and float(candidate.features.get("persistent_polarity_sign", 0.0))
-        != 0.0
+    persistent = _unit(
+        candidate.features.get("persistent_region_contrast", 0.0)
     )
-    observation_threshold = max(
-        0.68,
-        float(settings.minimum_final_confidence) + 0.12,
+    local = _unit(candidate.features.get("region_contrast", 0.0))
+    return (
+        persistent >= threshold
+        and (local <= 1e-12 or persistent + 1e-12 >= local)
     )
-    strong_consensus = (
-        float(candidate.features.get("observation_score", candidate.final_score))
-        >= observation_threshold
-        and int(
-            round(
-                candidate.features.get(
-                    "unique_generator_support_count",
-                    0.0,
-                )
-            )
-        )
-        >= int(settings.oil_min_consensus_sources)
-        and _unit(candidate.features.get("consensus_score", 0.0)) >= 0.65
-    )
-    return persistent or strong_consensus
 
 
 def select_best_candidate(
