@@ -1,13 +1,13 @@
 # S5-B Oil-Boundary Hypothesis Architecture
 
-**Status:** `VALIDATING` design contract
+**Status:** `ACTIVE` design contract
 **Milestone:** [S5-B](../00-project/work-plan.md)
 
-The contract is awaiting independent documentation and planning audit. After audit `PASS`, the next authorized mutation-capable owner changes the document status to `ACTIVE`; the read-only Auditor does not mutate the audited head.
+The independent documentation and planning re-audit accepted this contract. S5-B1 is implemented beside the production detector and now awaits an independent architecture/evidence audit. `ACTIVE` identifies the governing architecture; it does not authorize S5-B2 cutover or imply accuracy acceptance.
 
 ## Purpose
 
-Define the replacement architecture for oil-boundary and no-interface reasoning before S5-B1 implementation. This document owns the internal evidence, proposal, likelihood and temporal boundaries. The external `PhaseDetection` contract, persisted recipe/truth/result schemas and S5-A Foam behavior remain compatible.
+Define and govern the replacement architecture for oil-boundary and no-interface reasoning through the S5-B shadow and cutover stages. This document owns the internal evidence, proposal, likelihood and temporal boundaries. The external `PhaseDetection` contract, persisted recipe/truth/result schemas and S5-A Foam behavior remain compatible.
 
 ## Root cause of repeated failure
 
@@ -64,7 +64,7 @@ Determinism requirements:
 5. retain the member observations and proposal span;
 6. emit separate proposals when two edge groups cannot fit within one bounded diameter.
 
-Representative Y uses broad region-transition evidence when that evidence is available and internally consistent. Otherwise it uses the deterministic center/median projection of the bounded narrow evidence. Integer/source-coordinate projection occurs only at the compatibility boundary; internal likelihood calculations may retain finite sub-pixel scalars.
+The pre-evidence proposal seed uses the deterministic center/median of its bounded members only to locate broad and narrow measurements. After evidence evaluation, the semantic hypothesis representative Y uses broad region-transition evidence when that evidence is available and internally consistent; otherwise it retains the bounded center/median projection. Integer/source-coordinate projection occurs only at the compatibility boundary, and internal likelihood calculations may retain finite sub-pixel scalars.
 
 ## Broad multi-scale region-step evidence
 

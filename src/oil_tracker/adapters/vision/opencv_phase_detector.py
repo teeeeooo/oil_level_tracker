@@ -22,6 +22,12 @@ from .foam_temporal_gate import FoamTemporalDecision, FoamTemporalGate
 from .geometry_masks import MaskBundle, build_mask_bundle
 from .oil_candidate_consensus import build_oil_candidate_consensus
 from .oil_no_interface import NoInterfaceEvidence, evaluate_no_interface
+from .oil_shadow_pipeline import (
+    OilShadowPipeline,
+    shadow_debug_detail,
+    shadow_runtime_metrics,
+)
+from .oil_shadow_types import OilShadowFrameResult
 from .oil_temporal_path import OilDecisionStatus, OilPathDecision, OilTemporalPath
 from .preprocessing import PreprocessResult, preprocess
 from .temporal_tracker import TemporalTracker
@@ -38,11 +44,19 @@ class PhaseDetectionDebugArtifacts:
 class OpenCvPhaseDetector:
     version = "opencv-phase-detector-s5b-oil-v3"
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        shadow_enabled: bool = True,
+        shadow_runner: Any | None = None,
+    ) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
         self._oil_paths: dict[str, OilTemporalPath] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._foam_gate = FoamTemporalGate()
+        self._shadow_enabled = bool(shadow_enabled)
+        self._shadow_pipeline = OilShadowPipeline()
+        self._shadow_runner = shadow_runner or self._shadow_pipeline
 
     @property
     def foam_temporal_state_count(self) -> int:
@@ -51,6 +65,14 @@ class OpenCvPhaseDetector:
     @property
     def oil_temporal_state_count(self) -> int:
         return len(self._oil_paths)
+
+    @property
+    def shadow_temporal_state_count(self) -> int:
+        return int(getattr(self._shadow_runner, "temporal_state_count", 0))
+
+    @property
+    def shadow_bounds(self):
+        return self._shadow_pipeline.bounds
 
     def oil_path_for(self, glass_id: str) -> OilTemporalPath | None:
         return self._oil_paths.get(str(glass_id))
@@ -61,12 +83,14 @@ class OpenCvPhaseDetector:
             self._oil_paths.clear()
             self._static_maps.clear()
             self._foam_gate.reset()
+            self._reset_shadow(None)
         else:
             key = str(glass_id)
             self._trackers.pop(key, None)
             self._oil_paths.pop(key, None)
             self._static_maps.pop(key, None)
             self._foam_gate.reset(key)
+            self._reset_shadow(key)
 
     def learn_static_artifact(self, frames: list[np.ndarray], glass: GlassInspectionConfig) -> None:
         if not frames:
@@ -100,13 +124,19 @@ class OpenCvPhaseDetector:
 
         bundle = build_mask_bundle(frame, glass)
         pre = preprocess(bundle.crop, bundle.effective_mask, settings)
+        static_map = self._static_maps.get(glass.id)
+        shadow_result = self._evaluate_shadow(
+            glass.id,
+            pre,
+            bundle,
+            static_map,
+        )
         raw_generated = generate_oil_air_candidates(pre, bundle.effective_mask, settings)
         consensus = build_oil_candidate_consensus(
             raw_generated,
             settings.oil_consensus_tolerance_px,
         )
         previous_state = tracker.current_state
-        static_map = self._static_maps.get(glass.id)
         score_context = CandidateScoreContext(
             pre=pre,
             effective_mask=bundle.effective_mask,
@@ -229,8 +259,91 @@ class OpenCvPhaseDetector:
             oil_candidates.append(foam_trace_candidate)
 
         accepted_prior_source = (
-            None if oil_decision.accepted_prior_y is None else oil_decision.accepted_prior_y + origin_y
+            None
+            if oil_decision.accepted_prior_y is None
+            else oil_decision.accepted_prior_y + origin_y
         )
+        debug_metrics = {
+            "glare_ratio": float(np.count_nonzero(pre.glare_mask))
+            / max(1, np.count_nonzero(bundle.effective_mask)),
+            "oil_decision_status": oil_decision.status.value,
+            "oil_decision_reason": oil_decision.reason,
+            "oil_boundary_score": float(oil_decision.boundary_score),
+            "oil_no_interface_score": float(oil_decision.no_interface_score),
+            "oil_decision_margin": float(oil_decision.decision_margin),
+            "oil_path_cumulative_score": float(
+                oil_decision.path_cumulative_score
+            ),
+            "oil_path_second_score": oil_decision.path_second_score,
+            "oil_transition_cost": float(oil_decision.transition_cost),
+            "oil_path_beam_count": int(oil_decision.path_beam_count),
+            "oil_path_history_length": int(oil_decision.path_history_length),
+            "oil_path_retained_scalar_count": int(
+                oil_path.retained_scalar_observation_count
+            ),
+            "oil_tracker_update_accepted": bool(
+                oil_decision.tracker_update_accepted
+            ),
+            "oil_reacquisition_count": int(oil_decision.reacquisition_count),
+            "oil_accepted_prior_local_y": oil_decision.accepted_prior_y,
+            "oil_accepted_prior_source_y": accepted_prior_source,
+            "oil_accepted_polarity": oil_decision.accepted_polarity,
+            "oil_smoothing_sample_count": int(tracker.oil_sample_count),
+            "oil_no_interface_uniformity": float(
+                no_interface.uniformity_score
+            ),
+            "oil_no_interface_weak_boundary": float(
+                no_interface.weak_boundary_score
+            ),
+            "oil_no_interface_visibility": float(
+                no_interface.visibility_score
+            ),
+            "oil_no_interface_glare_conflict": float(
+                no_interface.glare_conflict
+            ),
+            "oil_no_interface_reason": no_interface.reason,
+            "oil_raw_generator_count": len(raw_trace),
+            "oil_consensus_candidate_count": len(scored),
+            "foam_bottom_connected_area_ratio": float(
+                foam.bottom_connected_area_ratio
+            ),
+            "foam_evidence_score": float(foam.final_evidence_score),
+            "foam_evidence_strength": foam_temporal.evidence_strength.value,
+            "foam_decision_status": foam_temporal.decision_status.value,
+            "foam_whiteness_ratio": float(foam.whiteness_ratio),
+            "foam_texture_support_ratio": float(foam.texture_support_ratio),
+            "foam_glare_overlap_ratio": float(foam.glare_overlap_ratio),
+            "foam_component_height_ratio": float(foam.component_height_ratio),
+            "foam_component_width_ratio": float(foam.component_width_ratio),
+            "foam_bounding_box_fill_ratio": float(
+                foam.bounding_box_fill_ratio
+            ),
+            "foam_temporal_pending_count": int(foam_temporal.pending_count),
+            "foam_temporal_required_count": int(
+                foam_temporal.required_count
+            ),
+            "foam_front_delta": (
+                None
+                if foam_temporal.front_delta is None
+                else float(foam_temporal.front_delta)
+            ),
+            "foam_min_evidence_score": float(settings.foam_min_evidence_score),
+            "foam_strong_evidence_score": float(
+                settings.foam_strong_evidence_score
+            ),
+            "effective_area": int(np.count_nonzero(bundle.effective_mask)),
+            "previous_state": previous_state.value if previous_state else None,
+            "proposed_state": proposed_state.value,
+            "stabilized_state": stabilized_state.value,
+        }
+        debug_metrics.update(
+            shadow_runtime_metrics(
+                shadow_result,
+                legacy_status=oil_decision.status.value,
+                legacy_source_y=raw_oil_source,
+            )
+        )
+        shadow_detail = shadow_debug_detail(shadow_result) if debug else None
         detection = PhaseDetection(
             glass_id=glass.id,
             frame_index=frame_index,
@@ -252,52 +365,7 @@ class OpenCvPhaseDetector:
             smoothed_foam_front_y=smoothed_foam,
             candidates=oil_candidates,
             flags=sorted(set(flags)),
-            debug_metrics={
-                "glare_ratio": float(np.count_nonzero(pre.glare_mask)) / max(1, np.count_nonzero(bundle.effective_mask)),
-                "oil_decision_status": oil_decision.status.value,
-                "oil_decision_reason": oil_decision.reason,
-                "oil_boundary_score": float(oil_decision.boundary_score),
-                "oil_no_interface_score": float(oil_decision.no_interface_score),
-                "oil_decision_margin": float(oil_decision.decision_margin),
-                "oil_path_cumulative_score": float(oil_decision.path_cumulative_score),
-                "oil_path_second_score": oil_decision.path_second_score,
-                "oil_transition_cost": float(oil_decision.transition_cost),
-                "oil_path_beam_count": int(oil_decision.path_beam_count),
-                "oil_path_history_length": int(oil_decision.path_history_length),
-                "oil_path_retained_scalar_count": int(oil_path.retained_scalar_observation_count),
-                "oil_tracker_update_accepted": bool(oil_decision.tracker_update_accepted),
-                "oil_reacquisition_count": int(oil_decision.reacquisition_count),
-                "oil_accepted_prior_local_y": oil_decision.accepted_prior_y,
-                "oil_accepted_prior_source_y": accepted_prior_source,
-                "oil_accepted_polarity": oil_decision.accepted_polarity,
-                "oil_smoothing_sample_count": int(tracker.oil_sample_count),
-                "oil_no_interface_uniformity": float(no_interface.uniformity_score),
-                "oil_no_interface_weak_boundary": float(no_interface.weak_boundary_score),
-                "oil_no_interface_visibility": float(no_interface.visibility_score),
-                "oil_no_interface_glare_conflict": float(no_interface.glare_conflict),
-                "oil_no_interface_reason": no_interface.reason,
-                "oil_raw_generator_count": len(raw_trace),
-                "oil_consensus_candidate_count": len(scored),
-                "foam_bottom_connected_area_ratio": float(foam.bottom_connected_area_ratio),
-                "foam_evidence_score": float(foam.final_evidence_score),
-                "foam_evidence_strength": foam_temporal.evidence_strength.value,
-                "foam_decision_status": foam_temporal.decision_status.value,
-                "foam_whiteness_ratio": float(foam.whiteness_ratio),
-                "foam_texture_support_ratio": float(foam.texture_support_ratio),
-                "foam_glare_overlap_ratio": float(foam.glare_overlap_ratio),
-                "foam_component_height_ratio": float(foam.component_height_ratio),
-                "foam_component_width_ratio": float(foam.component_width_ratio),
-                "foam_bounding_box_fill_ratio": float(foam.bounding_box_fill_ratio),
-                "foam_temporal_pending_count": int(foam_temporal.pending_count),
-                "foam_temporal_required_count": int(foam_temporal.required_count),
-                "foam_front_delta": None if foam_temporal.front_delta is None else float(foam_temporal.front_delta),
-                "foam_min_evidence_score": float(settings.foam_min_evidence_score),
-                "foam_strong_evidence_score": float(settings.foam_strong_evidence_score),
-                "effective_area": int(np.count_nonzero(bundle.effective_mask)),
-                "previous_state": previous_state.value if previous_state else None,
-                "proposed_state": proposed_state.value,
-                "stabilized_state": stabilized_state.value,
-            },
+            debug_metrics=debug_metrics,
         )
         artifacts = (
             self._debug_artifacts(
@@ -310,11 +378,79 @@ class OpenCvPhaseDetector:
                 detection,
                 static_map,
                 debug_profiles,
+                shadow_detail,
             )
             if debug
             else None
         )
         return detection, artifacts
+
+    def _reset_shadow(self, glass_id: str | None) -> None:
+        owners = (self._shadow_runner, self._shadow_pipeline)
+        seen: set[int] = set()
+        for owner in owners:
+            if id(owner) in seen:
+                continue
+            seen.add(id(owner))
+            reset = getattr(owner, "reset", None)
+            if callable(reset):
+                reset(glass_id)
+
+    def _evaluate_shadow(
+        self,
+        glass_id: str,
+        pre: PreprocessResult,
+        bundle: MaskBundle,
+        static_map: np.ndarray | None,
+    ) -> OilShadowFrameResult:
+        if not self._shadow_enabled:
+            return self._shadow_pipeline.failure_result(
+                glass_id=glass_id,
+                reason="shadow_disabled",
+            )
+        readonly_pre = PreprocessResult(
+            *(_readonly_view(value) for value in (
+                pre.gray,
+                pre.normalized,
+                pre.blurred,
+                pre.sobel_y_signed,
+                pre.sobel_y_abs,
+                pre.canny,
+                pre.horizontal_mask,
+                pre.glare_mask,
+            ))
+        )
+        kwargs = {
+            "glass_id": glass_id,
+            "pre": readonly_pre,
+            "effective_mask": _readonly_view(bundle.effective_mask),
+            "ellipse_mask": _readonly_view(bundle.ellipse_mask),
+            "exclusion_mask": _readonly_view(bundle.exclusion_mask),
+            "static_artifact_map": (
+                None if static_map is None else _readonly_view(static_map)
+            ),
+            "crop_origin_y": float(bundle.crop_origin[1]),
+        }
+        try:
+            run = getattr(self._shadow_runner, "run", None)
+            result = run(**kwargs) if callable(run) else self._shadow_runner(**kwargs)
+            if not isinstance(result, OilShadowFrameResult):
+                raise TypeError("shadow runner returned an invalid result type")
+            return result
+        except Exception as exc:
+            reason = f"{type(exc).__name__}:{str(exc)[:120]}"
+            failure = getattr(self._shadow_runner, "failure_result", None)
+            if callable(failure):
+                try:
+                    result = failure(glass_id=glass_id, reason=reason)
+                    if isinstance(result, OilShadowFrameResult):
+                        return result
+                except Exception:
+                    pass
+            return self._shadow_pipeline.failure_result(
+                glass_id=glass_id,
+                reason=reason,
+            )
 
     def _debug_artifacts(
         self,
@@ -327,6 +463,7 @@ class OpenCvPhaseDetector:
         detection: PhaseDetection,
         static_map: np.ndarray | None,
         profiles: dict[str, list[float]],
+        shadow_detail: dict[str, Any] | None,
     ) -> PhaseDetectionDebugArtifacts:
         overlay = frame.copy()
         e = glass.geometry.ellipse
@@ -416,9 +553,16 @@ class OpenCvPhaseDetector:
                 "visibility_confidence": detection.visibility_confidence,
                 "overall_confidence": detection.overall_confidence,
                 "flags": detection.flags,
+                "shadow_oil": shadow_detail or {},
                 **detection.debug_metrics,
             },
         )
+
+
+def _readonly_view(value: np.ndarray) -> np.ndarray:
+    view = value.view()
+    view.flags.writeable = False
+    return view
 
 
 def _foam_flags(
