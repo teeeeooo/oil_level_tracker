@@ -97,15 +97,15 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Replace brittle candidate/static suppression with typed, evidence-preserving boundary and no-interface hypotheses plus bounded temporal reasoning.
 - **Status:** `ACTIVE`
-- **Major result:** The independently accepted S5-B1 typed hypothesis architecture is now cut over as the single production oil-boundary/no-interface/temporal authority on the feature head; external schemas and S5-A Foam ownership remain unchanged.
-- **Next gate:** Pass an independent S5-B2 exact-head production-cutover audit before controlled base/feature comparison begins.
+- **Major result:** The typed production oil-boundary/no-interface/temporal cutover exists on the feature head. Its production-result trust boundary is undergoing architecture clarification and independent re-audit; external schemas and S5-A Foam ownership remain unchanged.
+- **Next gate:** Architecture audit `PASS` → bounded source implementation → independent source exact-head audit `PASS` → controlled base/feature comparison.
 - **Detail:** [Current work plan](./work-plan.md), [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 
 ### S6 — Real-video and Windows validation gate
 
 - **Purpose:** Qualify the stabilized detector and application on representative real video and the target Windows environment.
 - **Status:** `PLANNED`
-- **Major result:** None yet; this gate begins only after S5-B is complete.
+- **Major result:** None yet; this gate does not begin before formal S5-B completion.
 - **Next gate:** Controlled benchmark comparison, real-video review, long-duration CPU/memory checks and one-folder validation must all pass.
 - **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md), [manual checklist](../30-quality/manual-gui-windows-checklist.md)
 
