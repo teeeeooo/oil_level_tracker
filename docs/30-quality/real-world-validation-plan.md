@@ -137,7 +137,7 @@ Acceptance requires:
 
 - no unbounded frame/candidate history;
 - bounded per-Glass temporal/static state consistent with architecture limits;
-- no material unexplained CPU regression after separating shadow-only instrumentation cost;
+- no material unexplained CPU regression from the production typed-hypothesis pipeline and its bounded instrumentation;
 - stable long-duration process memory after warm-up;
 - no dedicated-GPU or CUDA dependency.
 

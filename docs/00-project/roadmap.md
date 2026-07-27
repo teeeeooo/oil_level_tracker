@@ -97,8 +97,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Replace brittle candidate/static suppression with typed, evidence-preserving boundary and no-interface hypotheses plus bounded temporal reasoning.
 - **Status:** `ACTIVE`
-- **Major result:** Not yet complete. Prior narrow candidate/static suppression repairs exposed an architectural mismatch and are not completion evidence.
-- **Next gate:** Pass a fresh independent exact-head re-audit of the existing S5-B1 shadow implementation and its raster ownership-isolation repair before S5-B2 begins.
+- **Major result:** The independently accepted S5-B1 typed hypothesis architecture is now cut over as the single production oil-boundary/no-interface/temporal authority on the feature head; external schemas and S5-A Foam ownership remain unchanged.
+- **Next gate:** Pass an independent S5-B2 exact-head production-cutover audit before controlled base/feature comparison begins.
 - **Detail:** [Current work plan](./work-plan.md), [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 
 ### S6 — Real-video and Windows validation gate

@@ -76,7 +76,7 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Before S5-B2 cutover, inspect the current production path's consensus source support, signed contrast/polarity, static overlap, no-interface decision, path margin, tracker update and reacquisition metrics to understand legacy behavior.
 - Treat these legacy metrics as cutover-context and compatibility/debug evidence only; they are not the acceptance owner for the new typed hypothesis pipeline.
 
-### S5-B1 shadow typed evidence
+### S5-B1 typed foundation evidence
 - Inspect immutable raw-observation identity and provenance from source evidence through every derived view.
 - Inspect proposal Y span/diameter, members per proposal and total proposal count.
 - Confirm proposal construction does not create a transitive-chaining bridge between otherwise separate evidence groups.
@@ -84,13 +84,12 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Inspect continuous boundary likelihood, continuous artifact likelihood and ambiguity likelihood with its reason.
 - Inspect the soft static-prior contribution and confirm it does not erase contradictory current evidence.
 - Inspect typed boundary, no-interface, ambiguous and unavailable projection outcomes.
-- Compare the shadow projected decision with the legacy production decision for the same frame and settings.
 - Inspect raw-observation, proposal, hypothesis and temporal-state resource counts and confirm each remains bounded.
-- Confirm official `PhaseDetection` and the result bundle preserve the legacy production output while S5-B1 remains shadow-only.
 
-### S5-B2 cutover
-- After cutover, confirm the typed hypothesis pipeline owns production selection and temporal decisions.
-- Confirm legacy metrics remain compatibility/debug projections only and no longer exercise production selection authority.
+### S5-B2 cutover audit
+- Confirm the typed hypothesis pipeline exclusively owns production oil selection, no-interface and temporal decisions.
+- Confirm official `PhaseDetection`, candidate rows and debug metrics are one-way projections from the accepted typed temporal decision.
+- Confirm legacy generator, consensus, scorer, no-interface and `OilTemporalPath` metrics or state do not exercise production selection authority or provide fallback.
 
 ### Cross-stage validation
 - Record user truth and run an external S1 regression dataset containing real oil boundary, reflection, structure, no-interface, dropout and rapid-flow categories.

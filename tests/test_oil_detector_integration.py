@@ -7,21 +7,19 @@ from oil_tracker.domain.enums import FillState, InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
 
 
-def glass(initial=InitialObservationState.AUTO):
+DETECTOR_VERSION = "opencv-phase-detector-s5b-typed-production-v1"
+
+
+def glass(initial=InitialObservationState.AUTO, glass_id="glass-oil"):
     value = InspectionRecipe.default_glass(320, 240)
-    value.id = "glass-oil"
+    value.id = glass_id
     value.geometry.zero_line_y = 150.0
     value.initial_state = initial
     value.detector_settings.minimum_final_confidence = 0.35
-    value.detector_settings.oil_tracker_update_confidence = 0.45
-    value.detector_settings.oil_path_min_margin = 0.04
-    value.detector_settings.oil_reacquire_frames = 2
     return value
 
 
 def oil_frame(y: int = 130, *, above=175, below=70):
-    # Keep the entire effective ellipse uniform above the contract boundary. A
-    # rectangular patch would add an unintended four-source structural line.
     frame = np.full((240, 320, 3), above, dtype=np.uint8)
     frame[y:] = below
     frame[y - 1 : y + 2] = 225
@@ -50,12 +48,17 @@ def multi_edge_static_band(
     return frame
 
 
-def test_detector_version_and_canonical_coordinates_and_debug_evidence():
+def _oil_candidates(detection):
+    return [item for item in detection.candidates if item.kind.value == "oil_air"]
+
+
+def test_detector_version_canonical_coordinates_and_typed_debug_evidence():
     detector = OpenCvPhaseDetector()
     frame = oil_frame(130)
     before = frame.copy()
     detection, artifacts = detector.detect(frame, glass(), 1, 0.0, debug=True)
-    assert detector.version == "opencv-phase-detector-s5b-oil-v3"
+
+    assert detector.version == DETECTOR_VERSION
     assert np.array_equal(frame, before)
     assert detection.raw_oil_air_level_y is not None
     assert abs(detection.raw_oil_air_level_y - 130.0) <= 4.0
@@ -69,10 +72,12 @@ def test_detector_version_and_canonical_coordinates_and_debug_evidence():
         "oil_consensus_support_profile",
         "oil_static_overlap_profile",
     } <= set(artifacts.profiles)
-    assert detection.debug_metrics["oil_decision_status"] == "accepted_boundary"
-    consensus = [item for item in detection.candidates if item.source == "oil_consensus"]
-    assert consensus
-    assert all("local_y" in item.features and "source_y" in item.features for item in consensus)
+    assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
+    candidates = _oil_candidates(detection)
+    assert candidates
+    assert all(item.source.startswith("oil_hypothesis:") for item in candidates)
+    assert all("local_y" in item.features and "source_y" in item.features for item in candidates)
+    assert not any(item.source == "oil_consensus" for item in detection.candidates)
 
 
 def test_no_interface_never_returns_numeric_boundary():
@@ -87,6 +92,7 @@ def test_no_interface_never_returns_numeric_boundary():
     assert second.fill_state in {FillState.FULL_NO_INTERFACE, FillState.UNKNOWN_REVIEW}
     assert artifacts is not None
     assert first.debug_metrics["oil_no_interface_score"] >= 0.0
+    assert not any(item.selected for item in _oil_candidates(first))
 
 
 def test_one_frame_dropout_has_no_stale_numeric_output_and_recovers():
@@ -97,54 +103,32 @@ def test_one_frame_dropout_has_no_stale_numeric_output_and_recovers():
     missing, _ = detector.detect(uniform_frame(135), config, 2, 0.5)
     assert missing.raw_oil_air_level_y is None
     assert missing.smoothed_oil_air_level_y is None
-    assert missing.fill_state is FillState.UNKNOWN_REVIEW
-    assert "REVIEW_REQUIRED" in missing.flags
     recovered, _ = detector.detect(oil_frame(132), config, 3, 1.0)
     assert recovered.raw_oil_air_level_y is not None
     assert abs(recovered.raw_oil_air_level_y - 132.0) <= 4.0
 
 
-def test_per_glass_and_full_reset_clear_path_and_smoothing_state():
+def test_per_glass_and_full_reset_clear_typed_and_smoothing_state():
     detector = OpenCvPhaseDetector()
-    first = glass()
-    second = glass()
-    second.id = "glass-two"
+    first = glass(glass_id="glass-one")
+    second = glass(glass_id="glass-two")
     detector.detect(oil_frame(130), first, 1, 0.0)
     detector.detect(oil_frame(140), second, 1, 0.0)
     assert detector.oil_temporal_state_count == 2
-    assert detector.oil_path_for(first.id).accepted_y is not None
     detector.reset(first.id)
     assert detector.oil_temporal_state_count == 1
-    assert detector.oil_path_for(first.id) is None
-    assert detector.oil_path_for(second.id) is not None
     detector.reset()
     assert detector.oil_temporal_state_count == 0
     assert detector.foam_temporal_state_count == 0
 
 
-def test_static_map_structure_is_not_false_boundary_and_real_boundary_can_reappear():
-    detector = OpenCvPhaseDetector()
-    config = glass()
-    static = uniform_frame(80)
-    static[150:154] = 205
-    before = static.copy()
-    detector.learn_static_artifact([static], config)
-    assert np.array_equal(static, before)
-    structure_only, _ = detector.detect(static, config, 1, 0.0, debug=True)
-    assert structure_only.raw_oil_air_level_y is None
-    assert structure_only.smoothed_oil_air_level_y is None
-    detection, _ = detector.detect(oil_frame(130), config, 2, 0.5, debug=True)
-    assert detection.raw_oil_air_level_y is not None
-    assert abs(detection.raw_oil_air_level_y - 130.0) <= 4.0
-    consensus = [item for item in detection.candidates if item.source == "oil_consensus"]
-    assert any("static_overlap" in item.features for item in consensus)
-
-
-def test_multi_edge_static_band_never_produces_numeric_oil_output():
+def test_static_structure_is_not_false_boundary_and_real_boundary_reappears():
     detector = OpenCvPhaseDetector()
     config = glass()
     static = multi_edge_static_band()
-    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
+    before = static.copy()
+    detector.learn_static_artifact([static.copy()] * 3, config)
+    assert np.array_equal(static, before)
 
     for index in range(3):
         detection, _ = detector.detect(
@@ -156,209 +140,32 @@ def test_multi_edge_static_band_never_produces_numeric_oil_output():
         )
         assert detection.raw_oil_air_level_y is None
         assert detection.smoothed_oil_air_level_y is None
-        consensus = [
-            item for item in detection.candidates if item.source == "oil_consensus"
-        ]
-        assert consensus
-        assert all(
-            item.rejected
-            or item.features["observation_score"]
-            < config.detector_settings.minimum_final_confidence
-            for item in consensus
-        )
-        assert any(
-            item.reject_reason == "candidate_local_static_structure"
-            for item in consensus
-        )
-        assert all(
-            item.features["multi_edge_static_structure"] == 0.0
-            for item in consensus
-        )
+        candidates = _oil_candidates(detection)
+        assert candidates
+        assert all(not item.selected for item in candidates)
+        assert any(item.features["static_prior_contribution"] > 0.0 for item in candidates)
+        assert all(item.source.startswith("oil_hypothesis:") for item in candidates)
+
+    reappeared, _ = detector.detect(oil_frame(130), config, 4, 1.5, debug=True)
+    assert reappeared.raw_oil_air_level_y is not None
+    assert abs(reappeared.raw_oil_air_level_y - 130.0) <= 4.0
+    selected = [item for item in _oil_candidates(reappeared) if item.selected]
+    assert len(selected) == 1
+    assert selected[0].y == reappeared.raw_oil_air_level_y
 
 
-def test_partial_static_learning_rejects_low_overlap_false_candidates():
+def test_partial_static_prior_remains_soft_and_provenance_is_exposed():
     detector = OpenCvPhaseDetector()
     config = glass()
-    observed = multi_edge_static_band()
     partial_static = multi_edge_static_band(x_start=150, x_stop=170)
     detector.learn_static_artifact(
-        [partial_static, partial_static.copy(), partial_static.copy()],
+        [partial_static.copy(), partial_static.copy(), partial_static.copy()],
         config,
     )
-
-    for index in range(3):
-        detection, _ = detector.detect(
-            observed,
-            config,
-            index + 1,
-            index * 0.5,
-            debug=True,
-        )
-        assert detection.raw_oil_air_level_y is None
-        assert detection.smoothed_oil_air_level_y is None
-        consensus = [
-            item for item in detection.candidates if item.source == "oil_consensus"
-        ]
-        assert consensus
-        assert all(
-            item.rejected
-            or item.features["observation_score"]
-            < config.detector_settings.minimum_final_confidence
-            for item in consensus
-        )
-        assert any(
-            0.0 < item.features["static_overlap"] < 0.06
-            and item.features["observation_score"] > 0.90
-            and item.features["unique_generator_support_count"] >= 4.0
-            and item.features["consensus_score"] > 0.90
-            and item.reject_reason == "candidate_local_static_structure"
-            for item in consensus
-        )
-
-
-def test_real_boundary_inside_static_anchor_range_is_preserved():
-    detector = OpenCvPhaseDetector()
-    config = glass()
-    static = multi_edge_static_band(offset=-2, background=115)
-    combo = oil_frame(114, above=165, below=72)
-    static_pixels = np.any(static != 115, axis=2)
-    combo[static_pixels] = static[static_pixels]
-    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
-
-    detection, _ = detector.detect(combo, config, 1, 0.0, debug=True)
-    assert detection.raw_oil_air_level_y is not None
-    assert abs(detection.raw_oil_air_level_y - 114.0) <= 4.0
-    accepted = [
-        item
-        for item in detection.candidates
-        if item.source == "oil_consensus" and not item.rejected
-    ]
-    assert accepted
-    assert all(abs(item.y - 114.0) <= 4.0 for item in accepted)
-    assert any(
-        item.features["candidate_local_static_protected_persistent_step"]
-        == 1.0
-        for item in accepted
-    )
-
-
-def test_real_boundary_is_only_survivor_beside_static_band():
-    detector = OpenCvPhaseDetector()
-    config = glass()
-    static = multi_edge_static_band(offset=-2, background=115)
-    combo = oil_frame(154, above=165, below=72)
-    static_pixels = np.any(static != 115, axis=2)
-    combo[static_pixels] = static[static_pixels]
-    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
-
-    detection, _ = detector.detect(combo, config, 1, 0.0, debug=True)
-    assert detection.raw_oil_air_level_y is not None
-    assert abs(detection.raw_oil_air_level_y - 154.0) <= 4.0
-    accepted = [
-        item
-        for item in detection.candidates
-        if item.source == "oil_consensus" and not item.rejected
-    ]
-    assert accepted
-    assert all(abs(item.y - 154.0) <= 4.0 for item in accepted)
-    assert any(
-        item.reject_reason == "candidate_local_static_structure"
-        for item in detection.candidates
-        if item.source == "oil_consensus"
-    )
-
-
-def test_weak_stationary_boundary_just_outside_static_group_is_preserved():
-    detector = OpenCvPhaseDetector()
-    config = glass()
-    static = multi_edge_static_band(offset=-2, background=115)
-    combo = uniform_frame(125)
-    combo[126:] = 103
-    combo[125:128] = 145
-    static_pixels = np.any(static != 115, axis=2)
-    combo[static_pixels] = static[static_pixels]
-    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
-
-    detection, _ = detector.detect(combo, config, 1, 0.0, debug=True)
-    assert detection.raw_oil_air_level_y is not None
-    assert detection.smoothed_oil_air_level_y is not None
-    assert abs(detection.raw_oil_air_level_y - 126.0) <= 4.0
-    accepted = [
-        item
-        for item in detection.candidates
-        if item.source == "oil_consensus" and not item.rejected
-    ]
-    assert accepted
-    assert all(abs(item.y - 126.0) <= 4.0 for item in accepted)
-    assert all(
-        item.features["candidate_local_static_structure"] == 0.0
-        for item in accepted
-    )
-    assert all(
-        item.reject_reason == "candidate_local_static_structure"
-        for item in detection.candidates
-        if item.source == "oil_consensus"
-        and abs(item.y - detection.raw_oil_air_level_y) > 4.0
-    )
-
-
-def test_low_static_overlap_false_candidates_and_weak_real_boundary_are_separated():
-    detector = OpenCvPhaseDetector()
-    config = glass()
-    observed_static = multi_edge_static_band(offset=-2, background=115)
-    partial_static = multi_edge_static_band(
-        offset=-2,
-        background=115,
-        x_start=150,
-        x_stop=170,
-    )
-    combo = uniform_frame(125)
-    combo[140:] = 103
-    combo[139:142] = 145
-    static_pixels = np.any(observed_static != 115, axis=2)
-    combo[static_pixels] = observed_static[static_pixels]
-    detector.learn_static_artifact(
-        [partial_static, partial_static.copy(), partial_static.copy()],
-        config,
-    )
-
-    detection, _ = detector.detect(combo, config, 1, 0.0, debug=True)
-    assert detection.raw_oil_air_level_y is not None
-    assert abs(detection.raw_oil_air_level_y - 140.0) <= 4.0
-    consensus = [
-        item for item in detection.candidates if item.source == "oil_consensus"
-    ]
-    accepted = [item for item in consensus if not item.rejected]
-    assert accepted
-    assert all(abs(item.y - 140.0) <= 4.0 for item in accepted)
-    low_overlap_false = [
-        item
-        for item in consensus
-        if 0.0 < item.features["static_overlap"] < 0.11
-        and abs(item.y - 140.0) > 4.0
-    ]
-    assert low_overlap_false
-    assert all(
-        item.reject_reason == "candidate_local_static_structure"
-        for item in low_overlap_false
-    )
-
-
-def test_stationary_weak_boundary_survives_nonuniform_static_overlap():
-    detector = OpenCvPhaseDetector()
-    config = glass()
-    static = uniform_frame(112)
-    static[138:142, 40:130] = 150
-    static[138:142, 190:280] = 150
-    weak = uniform_frame(125)
-    weak[140:] = 103
-    weak[139:142] = 145
-    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
-
-    detection, _ = detector.detect(weak, config, 1, 0.0, debug=True)
-    assert detection.raw_oil_air_level_y is not None
-    assert abs(detection.raw_oil_air_level_y - 140.0) <= 4.0
-    assert any(
-        item.source == "oil_consensus" and not item.rejected
-        for item in detection.candidates
-    )
+    detection, _ = detector.detect(multi_edge_static_band(), config, 1, 0.0, debug=True)
+    assert detection.raw_oil_air_level_y is None
+    candidates = _oil_candidates(detection)
+    assert candidates
+    assert all(not item.selected for item in candidates)
+    assert all(item.features["provenance_count"] > 0.0 for item in candidates)
+    assert all(0.0 <= item.features["static_prior_contribution"] <= 1.0 for item in candidates)

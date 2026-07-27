@@ -27,8 +27,8 @@ from .oil_shadow_types import (
 from .preprocessing import PreprocessResult
 
 
-class OilShadowPipeline:
-    """Shadow-only S5-B hypothesis pipeline with bounded scalar retained state."""
+class OilHypothesisPipeline:
+    """Official S5-B typed hypothesis pipeline with bounded scalar retained state."""
 
     def __init__(self, bounds: OilShadowBounds | None = None) -> None:
         self.bounds = bounds or OilShadowBounds()
@@ -95,15 +95,11 @@ class OilShadowPipeline:
             resources=resources,
         )
         debug_count = _scalar_leaf_count(
-            shadow_runtime_metrics(
-                preliminary,
-                legacy_status="unavailable",
-                legacy_source_y=None,
-            )
-        ) + _scalar_leaf_count(shadow_debug_detail(preliminary))
+            oil_runtime_metrics(preliminary)
+        ) + _scalar_leaf_count(oil_debug_detail(preliminary))
         if debug_count > self.bounds.maximum_debug_scalar_count:
             raise RuntimeError(
-                "Oil shadow debug scalar contract exceeded its configured bound."
+                "Oil hypothesis debug scalar contract exceeded its configured bound."
             )
         return replace(
             preliminary,
@@ -116,7 +112,7 @@ class OilShadowPipeline:
         glass_id: str,
         reason: str,
     ) -> OilShadowFrameResult:
-        normalized_reason = str(reason)[:160] or "shadow_execution_failed"
+        normalized_reason = str(reason)[:160] or "oil_hypothesis_execution_failed"
         current = ShadowUnavailableObservation(
             ShadowObservationKind.UNAVAILABLE,
             0.0,
@@ -144,12 +140,8 @@ class OilShadowPipeline:
             resources=resources,
         )
         debug_count = _scalar_leaf_count(
-            shadow_runtime_metrics(
-                preliminary,
-                legacy_status="unavailable",
-                legacy_source_y=None,
-            )
-        ) + _scalar_leaf_count(shadow_debug_detail(preliminary))
+            oil_runtime_metrics(preliminary)
+        ) + _scalar_leaf_count(oil_debug_detail(preliminary))
         return replace(
             preliminary,
             resources=replace(
@@ -230,74 +222,103 @@ class OilShadowPipeline:
         )
 
 
-def shadow_runtime_metrics(
-    result: OilShadowFrameResult,
-    *,
-    legacy_status: str,
-    legacy_source_y: float | None,
-) -> dict[str, Any]:
+# Historical import compatibility; production code uses OilHypothesisPipeline.
+OilShadowPipeline = OilHypothesisPipeline
+
+
+def oil_runtime_metrics(result: OilShadowFrameResult) -> dict[str, Any]:
     likelihoods = _current_likelihoods(result)
     temporal = result.temporal_decision
     resources = result.resources
-    delta = (
-        None
-        if legacy_source_y is None or temporal.projected_source_y is None
-        else temporal.projected_source_y - float(legacy_source_y)
-    )
+    no_interface = _current_no_interface(result)
     return {
-        "shadow_oil_available": bool(result.available),
-        "shadow_oil_failure_reason": result.failure_reason,
-        "shadow_oil_raw_observation_count": resources.raw_observation_count,
-        "shadow_oil_raw_observation_limit": resources.raw_observation_limit,
-        "shadow_oil_broad_scale_count": resources.broad_scale_count,
-        "shadow_oil_broad_scale_limit": resources.broad_scale_limit,
-        "shadow_oil_narrow_scale_count": resources.narrow_scale_count,
-        "shadow_oil_narrow_scale_limit": resources.narrow_scale_limit,
-        "shadow_oil_narrow_examined_rows_per_hypothesis": (
+        "oil_pipeline_available": bool(result.available),
+        "oil_pipeline_failure_reason": result.failure_reason,
+        "oil_decision_status": temporal.status.value,
+        "oil_decision_reason": temporal.reason,
+        "oil_selected_hypothesis_id": temporal.selected_hypothesis_id,
+        "oil_temporal_projected_source_y": temporal.projected_source_y,
+        "oil_boundary_score": likelihoods["boundary"],
+        "oil_artifact_score": likelihoods["artifact"],
+        "oil_ambiguity_score": likelihoods["ambiguity"],
+        "oil_no_interface_score": likelihoods["no_interface"],
+        "oil_decision_confidence": temporal.confidence,
+        "oil_decision_margin": temporal.decision_margin,
+        "oil_tracker_update_accepted": (
+            temporal.status.value == "boundary_accepted"
+        ),
+        "oil_clear_smoothing": temporal.clear_smoothing,
+        "oil_reacquisition_count": temporal.reacquisition_count,
+        "oil_hypothesis_raw_observation_count": resources.raw_observation_count,
+        "oil_hypothesis_raw_observation_limit": resources.raw_observation_limit,
+        "oil_hypothesis_broad_scale_count": resources.broad_scale_count,
+        "oil_hypothesis_broad_scale_limit": resources.broad_scale_limit,
+        "oil_hypothesis_narrow_scale_count": resources.narrow_scale_count,
+        "oil_hypothesis_narrow_scale_limit": resources.narrow_scale_limit,
+        "oil_hypothesis_narrow_examined_rows_per_hypothesis": (
             resources.narrow_examined_rows_per_hypothesis
         ),
-        "shadow_oil_narrow_examined_rows_per_hypothesis_limit": (
+        "oil_hypothesis_narrow_examined_rows_per_hypothesis_limit": (
             resources.narrow_examined_rows_per_hypothesis_limit
         ),
-        "shadow_oil_proposal_count": resources.proposal_count,
-        "shadow_oil_proposal_limit": resources.proposal_limit,
-        "shadow_oil_maximum_proposal_diameter_px": resources.maximum_proposal_diameter_px,
-        "shadow_oil_proposal_diameter_limit_px": resources.proposal_diameter_limit_px,
-        "shadow_oil_maximum_members_per_proposal": resources.maximum_members_per_proposal,
-        "shadow_oil_members_per_proposal_limit": resources.members_per_proposal_limit,
-        "shadow_oil_retained_member_count": resources.retained_member_count,
-        "shadow_oil_retained_member_limit": resources.retained_member_limit,
-        "shadow_oil_hypothesis_count": resources.semantic_hypothesis_count,
-        "shadow_oil_hypothesis_limit": resources.semantic_hypothesis_limit,
-        "shadow_oil_temporal_beam_count": resources.temporal_beam_count,
-        "shadow_oil_temporal_beam_limit": resources.temporal_beam_limit,
-        "shadow_oil_temporal_history_length": resources.temporal_history_length,
-        "shadow_oil_temporal_history_limit": resources.temporal_history_limit,
-        "shadow_oil_retained_temporal_scalar_count": resources.retained_temporal_scalar_count,
-        "shadow_oil_retained_temporal_scalar_limit": resources.retained_temporal_scalar_limit,
-        "shadow_oil_static_prior_scalar_count": resources.static_prior_scalar_count,
-        "shadow_oil_static_prior_scalar_limit": resources.static_prior_scalar_limit,
-        "shadow_oil_debug_scalar_count": resources.debug_scalar_count,
-        "shadow_oil_debug_scalar_limit": resources.debug_scalar_limit,
-        "shadow_oil_current_observation": result.current_observation.kind.value,
-        "shadow_oil_temporal_decision": temporal.status.value,
-        "shadow_oil_selected_hypothesis_id": temporal.selected_hypothesis_id,
-        "shadow_oil_projected_source_y": temporal.projected_source_y,
-        "shadow_oil_boundary_likelihood": likelihoods["boundary"],
-        "shadow_oil_artifact_likelihood": likelihoods["artifact"],
-        "shadow_oil_ambiguity_likelihood": likelihoods["ambiguity"],
-        "shadow_oil_no_interface_likelihood": likelihoods["no_interface"],
-        "shadow_oil_decision_confidence": temporal.confidence,
-        "shadow_oil_decision_margin": temporal.decision_margin,
-        "shadow_oil_clear_smoothing_projection": temporal.clear_smoothing,
-        "shadow_oil_reacquisition_count": temporal.reacquisition_count,
-        "shadow_oil_legacy_status": str(legacy_status),
-        "shadow_oil_legacy_source_y": legacy_source_y,
-        "shadow_oil_legacy_y_delta": delta,
+        "oil_hypothesis_proposal_count": resources.proposal_count,
+        "oil_hypothesis_proposal_limit": resources.proposal_limit,
+        "oil_hypothesis_maximum_proposal_diameter_px": (
+            resources.maximum_proposal_diameter_px
+        ),
+        "oil_hypothesis_proposal_diameter_limit_px": (
+            resources.proposal_diameter_limit_px
+        ),
+        "oil_hypothesis_maximum_members_per_proposal": (
+            resources.maximum_members_per_proposal
+        ),
+        "oil_hypothesis_members_per_proposal_limit": (
+            resources.members_per_proposal_limit
+        ),
+        "oil_hypothesis_retained_member_count": resources.retained_member_count,
+        "oil_hypothesis_retained_member_limit": resources.retained_member_limit,
+        "oil_hypothesis_count": resources.semantic_hypothesis_count,
+        "oil_hypothesis_limit": resources.semantic_hypothesis_limit,
+        "oil_hypothesis_temporal_beam_count": resources.temporal_beam_count,
+        "oil_hypothesis_temporal_beam_limit": resources.temporal_beam_limit,
+        "oil_hypothesis_temporal_history_length": resources.temporal_history_length,
+        "oil_hypothesis_temporal_history_limit": resources.temporal_history_limit,
+        "oil_hypothesis_retained_temporal_scalar_count": (
+            resources.retained_temporal_scalar_count
+        ),
+        "oil_hypothesis_retained_temporal_scalar_limit": (
+            resources.retained_temporal_scalar_limit
+        ),
+        "oil_hypothesis_static_prior_scalar_count": resources.static_prior_scalar_count,
+        "oil_hypothesis_static_prior_scalar_limit": resources.static_prior_scalar_limit,
+        "oil_hypothesis_debug_scalar_count": resources.debug_scalar_count,
+        "oil_hypothesis_debug_scalar_limit": resources.debug_scalar_limit,
+        "oil_hypothesis_current_observation": result.current_observation.kind.value,
+        "oil_no_interface_uniformity": (
+            0.0 if no_interface is None else no_interface.region_uniformity
+        ),
+        "oil_no_interface_weak_boundary": (
+            0.0 if no_interface is None else no_interface.weak_boundary_evidence
+        ),
+        "oil_no_interface_visibility": (
+            0.0 if no_interface is None else no_interface.visibility
+        ),
+        "oil_no_interface_glare_conflict": (
+            0.0 if no_interface is None else no_interface.glare_conflict
+        ),
+        "oil_no_interface_full_likelihood": (
+            0.0 if no_interface is None else no_interface.full_likelihood
+        ),
+        "oil_no_interface_empty_likelihood": (
+            0.0 if no_interface is None else no_interface.empty_likelihood
+        ),
+        "oil_no_interface_reason": (
+            "not_available" if no_interface is None else no_interface.reason
+        ),
     }
 
 
-def shadow_debug_detail(result: OilShadowFrameResult) -> dict[str, Any]:
+def oil_debug_detail(result: OilShadowFrameResult) -> dict[str, Any]:
     selected = _selected_hypothesis(result)
     return {
         "available": result.available,
@@ -347,6 +368,15 @@ def _hypothesis_detail(item: SemanticHypothesis) -> dict[str, Any]:
         "static_prior_available": item.static_prior.available,
         "static_prior_contribution": item.static_prior.contribution,
     }
+
+
+def _current_no_interface(result: OilShadowFrameResult):
+    current = result.current_observation
+    if isinstance(current, ShadowBoundaryObservation):
+        return current.no_interface
+    if isinstance(current, ShadowNoInterfaceObservation):
+        return current.evidence
+    return None
 
 
 def _current_likelihoods(result: OilShadowFrameResult) -> dict[str, float]:

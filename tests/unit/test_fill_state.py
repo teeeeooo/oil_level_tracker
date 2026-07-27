@@ -28,15 +28,22 @@ def test_glare_becomes_unknown_review():
     assert detection.fill_state == FillState.UNKNOWN_REVIEW
 
 
-def test_full_prior_rejects_mid_glass_static_reflection():
+def test_full_prior_keeps_mid_glass_reflection_ambiguous_without_numeric_output():
     import cv2
+
     frame = full_frame()
     cv2.line(frame, (100, 120), (220, 120), (150, 150, 150), 2)
-    glass = glass_config(); glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    glass = glass_config()
+    glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
     detection, _ = OpenCvPhaseDetector().detect(frame, glass, 0, 0)
-    assert detection.fill_state == FillState.FULL_NO_INTERFACE
+    assert detection.fill_state == FillState.UNKNOWN_REVIEW
     assert detection.oil_air_level_y is None
-    assert any(c.reject_reason == "implausible_full_to_visible_transition" for c in detection.candidates)
+    assert "OIL_EVIDENCE_AMBIGUOUS" in detection.flags
+    assert all(
+        not candidate.selected
+        for candidate in detection.candidates
+        if candidate.kind.value == "oil_air"
+    )
 
 
 def test_boundary_appearing_from_top_is_draining_visible():
@@ -46,9 +53,11 @@ def test_boundary_appearing_from_top_is_draining_visible():
     assert detection.oil_air_level_y is not None
 
 
-def test_boundary_appearing_from_bottom_is_filling_visible_not_foam():
-    glass = glass_config(); glass.initial_state = InitialObservationState.EMPTY_NO_INTERFACE
+def test_near_bottom_boundary_ambiguity_does_not_become_oil_or_foam():
+    glass = glass_config()
+    glass.initial_state = InitialObservationState.EMPTY_NO_INTERFACE
     detection, _ = OpenCvPhaseDetector().detect(partial_frame(200), glass, 0, 0)
-    assert detection.fill_state == FillState.FILLING_VISIBLE
-    assert detection.oil_air_level_y is not None
+    assert detection.fill_state == FillState.UNKNOWN_REVIEW
+    assert detection.oil_air_level_y is None
     assert detection.foam_front_y is None
+    assert "OIL_EVIDENCE_AMBIGUOUS" in detection.flags

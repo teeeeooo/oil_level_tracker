@@ -3,11 +3,11 @@
 **Status:** `ACTIVE` design contract
 **Milestone:** [S5-B](../00-project/work-plan.md)
 
-The independent documentation and planning re-audit accepted this contract. S5-B1 is implemented beside the production detector and now awaits an independent architecture/evidence audit. `ACTIVE` identifies the governing architecture; it does not authorize S5-B2 cutover or imply accuracy acceptance.
+The independent S5-B1 exact-head re-audit accepted the typed hypothesis contract. S5-B2 now uses that pipeline as the single production oil-boundary/no-interface/temporal authority on the feature head and awaits an independent production-cutover audit. `ACTIVE` identifies the governing architecture; it does not imply accuracy acceptance or authorize controlled comparison before that audit passes.
 
 ## Purpose
 
-Define and govern the replacement architecture for oil-boundary and no-interface reasoning through the S5-B shadow and cutover stages. This document owns the internal evidence, proposal, likelihood and temporal boundaries. The external `PhaseDetection` contract, persisted recipe/truth/result schemas and S5-A Foam behavior remain compatible.
+Define and govern the replacement architecture for oil-boundary and no-interface reasoning through the S5-B typed-pipeline and production-cutover stages. This document owns the internal evidence, proposal, likelihood and temporal boundaries. The external `PhaseDetection` contract, persisted recipe/truth/result schemas and S5-A Foam behavior remain compatible.
 
 ## Root cause of repeated failure
 
@@ -171,44 +171,41 @@ Temporal reasoning must preserve:
 
 `OpenCvPhaseDetector.detect` continues to return the existing `PhaseDetection` shape through the application port. S5-B maps the typed decision to the existing oil-level, confidence, fill-state, flags, candidate trace and debug-metric fields.
 
-The cutover must not require a persisted recipe, user-truth, regression fixture, result bundle or CSV schema change. Internal raw observations and hypotheses may be projected into existing debug structures or runtime-only shadow evidence, but they do not redefine the external product contract.
+The cutover must not require a persisted recipe, user-truth, regression fixture, result bundle or CSV schema change. Internal raw observations and hypotheses are projected through a one-way compatibility adapter into existing candidate/debug structures, but they do not redefine the external product contract or feed selection back into the typed pipeline.
 
-## S5-B1 shadow implementation
+## S5-B1 typed pipeline foundation
 
-S5-B1 adds the new observation/proposal/likelihood pipeline beside production behavior.
+S5-B1 established immutable observations, bounded proposals, continuous semantic evidence, typed current observations and bounded Glass-local temporal decisions beside the then-current production path. The independent exact-head re-audit returned `AUDIT: PASS`, authorizing production cutover but not accuracy acceptance or merge readiness.
 
-Requirements:
-
-- production `PhaseDetection` values remain controlled by the legacy path;
-- shadow results are runtime/test evidence and do not mutate official result bundles;
-- the same preprocess/mask inputs may be shared, but shadow types cannot mutate legacy candidates;
-- comparison records deterministic proposal identities, likelihood components, no-interface evidence, resource counts and projected decision;
-- focused tests prove input-order determinism, bounded diameter/counts and ambiguity preservation;
-- an independent architecture/evidence audit is required before cutover.
+Accepted evidence includes deterministic identities, bounded diameter/counts, ambiguity preservation, raster ownership isolation, finite scalar debug output and typed failure projection.
 
 ## S5-B2 production cutover
 
 S5-B2 switches oil-boundary/no-interface/temporal ownership to the audited typed pipeline.
 
-Requirements:
+Implemented requirements:
 
 - external detector and persisted contracts remain compatible;
 - S5-A Foam pipeline remains independently owned and non-regressing;
-- official candidate/debug projection is generated from immutable hypothesis provenance;
-- old and new paths are not both allowed to influence production selection;
-- controlled base/feature comparison, exact-head audit and canonical validation follow the cutover.
+- official candidate/debug projection is generated deterministically from immutable hypothesis provenance;
+- accepted boundary, no-interface, ambiguous, unavailable and reacquisition-pending decisions have explicit external projections;
+- stable typed no-interface/unavailable decisions clear stale smoothing through the existing compatibility tracker;
+- the legacy generator, consensus, scorer, no-interface evaluator and `OilTemporalPath` are not imported, constructed, called or used as fallback by production detection;
+- shadow-versus-legacy comparison metrics are removed from production truth and replaced with production hypothesis evidence.
 
-## Legacy removal plan
+The current gate is an independent S5-B2 exact-head production-cutover audit. Controlled base/feature comparison and later canonical validation remain blocked until that audit passes.
 
-After production cutover and focused compatibility tests, remove or reduce the replaced ownership in:
+## Legacy ownership status
 
-- source-count `oil_candidate_consensus` as semantic selection authority;
-- monolithic `candidate_scorer` boundary/static pair suppression logic;
-- candidate pair/group exceptions that infer semantics from local layout;
-- duplicate no-interface comparisons based on surviving scored candidates;
-- legacy oil-path inputs that depend on mutable `BoundaryCandidate` selection state.
+The following owners remain historical standalone modules only and have no production authority:
 
-Compatibility adapters may remain only where required to project new hypotheses into existing debug or `PhaseDetection` fields. Dead parallel decision paths are not retained as fallback.
+- source-count `oil_candidate_consensus`;
+- monolithic `candidate_scorer` boundary/static pair suppression;
+- raw oil candidate generators;
+- scored-candidate no-interface evaluation;
+- mutable-candidate `OilTemporalPath` state.
+
+Compatibility code is one-way: immutable typed hypotheses are projected into existing debug and `PhaseDetection` fields after temporal selection. It is not a second decision engine and cannot feed candidate selection back into the typed pipeline. Broad historical-code deletion is outside S5-B2 scope.
 
 ## CPU and memory bounds
 
@@ -258,7 +255,7 @@ The repository sample video is an architecture evidence probe only. It can demon
 - Static evidence learned from limited timestamps may conflict with moving reflections or a stationary true boundary.
 - Full versus empty classification remains difficult when visible intensity is camera/lighting dependent.
 - Likelihood calibration may vary across Glass geometry and camera exposure while settings remain shared.
-- Shadow instrumentation can bias CPU measurements unless production-equivalent and shadow-only costs are reported separately.
-- Existing debug consumers may assume mutable `BoundaryCandidate` semantics and require a compatibility projection audit.
+- Production hypothesis instrumentation may affect CPU measurements and requires controlled feature/base comparison.
+- Existing debug consumers may assume mutable legacy-candidate semantics and require exact-head compatibility audit evidence.
 
 These risks remain in the [work plan](../00-project/work-plan.md) until evidence closes them.
