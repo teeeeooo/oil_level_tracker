@@ -188,6 +188,40 @@ def test_real_boundary_is_only_survivor_beside_multi_edge_static_band():
     )
 
 
+def test_nearby_real_boundary_survives_within_static_group_distance():
+    detector = OpenCvPhaseDetector()
+    config = glass()
+    static = multi_edge_static_band(offset=-2, background=115)
+    combo = oil_frame(126, above=165, below=72)
+    static_pixels = np.any(static != 115, axis=2)
+    combo[static_pixels] = static[static_pixels]
+    detector.learn_static_artifact([static, static.copy(), static.copy()], config)
+
+    detection, _ = detector.detect(combo, config, 1, 0.0, debug=True)
+    assert detection.raw_oil_air_level_y is not None
+    assert detection.smoothed_oil_air_level_y is not None
+    assert abs(detection.raw_oil_air_level_y - 126.0) <= 4.0
+    accepted = [
+        item
+        for item in detection.candidates
+        if item.source == "oil_consensus" and not item.rejected
+    ]
+    assert len(accepted) == 1
+    assert abs(accepted[0].y - 126.0) <= 4.0
+    assert (
+        accepted[0].features[
+            "multi_edge_static_protected_real_boundary"
+        ]
+        == 1.0
+    )
+    assert all(
+        item.reject_reason == "multi_edge_static_structure"
+        for item in detection.candidates
+        if item.source == "oil_consensus"
+        and abs(item.y - accepted[0].y) > 4.0
+    )
+
+
 def test_stationary_weak_boundary_survives_nonuniform_static_overlap():
     detector = OpenCvPhaseDetector()
     config = glass()

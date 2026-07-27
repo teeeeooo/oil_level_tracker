@@ -411,6 +411,7 @@ def suppress_paired_horizontal_structures(
     )
     resolved = _suppress_multi_edge_static_groups(
         usable,
+        settings=settings,
         minimum_distance=minimum_distance,
         maximum_distance=maximum_distance,
     )
@@ -558,39 +559,64 @@ def suppress_paired_horizontal_structures(
         candidate.features.setdefault("multi_edge_static_group_size", 0.0)
         candidate.features.setdefault("multi_edge_static_opposite_pair_count", 0.0)
         candidate.features.setdefault("multi_edge_static_span_px", 0.0)
+        candidate.features.setdefault(
+            "multi_edge_static_protected_real_boundary",
+            0.0,
+        )
 
 
 def _suppress_multi_edge_static_groups(
     candidates: list[BoundaryCandidate],
     *,
+    settings: DetectorSettings,
     minimum_distance: float,
     maximum_distance: float,
 ) -> set[int]:
-    """Reject connected static bands with multiple opposite-polarity edge pairs."""
+    """Reject only the static edge subgraph, preserving nearby real boundaries."""
 
     ordered = sorted(
         candidates,
         key=lambda candidate: (float(candidate.y), str(candidate.source)),
     )
-    by_id = {id(candidate): candidate for candidate in ordered}
+    protected = _protected_real_boundary_ids(
+        ordered,
+        settings=settings,
+        minimum_distance=minimum_distance,
+        maximum_distance=maximum_distance,
+    )
+    for candidate in ordered:
+        if id(candidate) in protected:
+            candidate.features["multi_edge_static_protected_real_boundary"] = 1.0
+
+    structural = [candidate for candidate in ordered if id(candidate) not in protected]
+    by_id = {id(candidate): candidate for candidate in structural}
     adjacency = {candidate_id: set() for candidate_id in by_id}
     opposite_pairs: set[frozenset[int]] = set()
-    for index, left in enumerate(ordered):
+    for index, left in enumerate(structural):
+        left_static = _unit(left.features.get("static_overlap", 0.0)) > 0.0
         left_sign = float(left.features.get("polarity_sign", 0.0))
-        for right in ordered[index + 1 :]:
+        for right in structural[index + 1 :]:
             distance = float(right.y) - float(left.y)
             if distance > maximum_distance:
                 break
+            right_static = _unit(right.features.get("static_overlap", 0.0)) > 0.0
+            right_sign = float(right.features.get("polarity_sign", 0.0))
+            opposite = (
+                left_sign != 0.0
+                and right_sign != 0.0
+                and left_sign * right_sign < 0.0
+            )
+            if not ((left_static and right_static) or (opposite and (left_static or right_static))):
+                continue
             left_id, right_id = id(left), id(right)
             adjacency[left_id].add(right_id)
             adjacency[right_id].add(left_id)
-            right_sign = float(right.features.get("polarity_sign", 0.0))
-            if left_sign != 0.0 and right_sign != 0.0 and left_sign * right_sign < 0.0:
+            if opposite:
                 opposite_pairs.add(frozenset((left_id, right_id)))
 
     suppressed: set[int] = set()
     visited: set[int] = set()
-    for root in ordered:
+    for root in structural:
         root_id = id(root)
         if root_id in visited:
             continue
@@ -601,7 +627,15 @@ def _suppress_multi_edge_static_groups(
             if current in component_ids:
                 continue
             component_ids.add(current)
-            pending.extend(sorted(adjacency[current] - component_ids))
+            neighbors = sorted(
+                adjacency[current] - component_ids,
+                key=lambda candidate_id: (
+                    float(by_id[candidate_id].y),
+                    str(by_id[candidate_id].source),
+                ),
+                reverse=True,
+            )
+            pending.extend(neighbors)
         visited.update(component_ids)
         component = [by_id[candidate_id] for candidate_id in component_ids]
         if len(component) < 3:
@@ -636,6 +670,90 @@ def _suppress_multi_edge_static_groups(
             candidate.reject_reason = "multi_edge_static_structure"
             suppressed.add(id(candidate))
     return suppressed
+
+
+def _protected_real_boundary_ids(
+    candidates: list[BoundaryCandidate],
+    *,
+    settings: DetectorSettings,
+    minimum_distance: float,
+    maximum_distance: float,
+) -> set[int]:
+    static_limit = max(
+        0.05,
+        float(settings.minimum_horizontal_coverage) * 0.25,
+    )
+    persistent_threshold = max(
+        0.35,
+        float(settings.minimum_region_contrast) * 3.0,
+    )
+    observation_threshold = max(
+        0.68,
+        float(settings.minimum_final_confidence) + 0.12,
+    )
+    protected = {
+        id(candidate)
+        for candidate in candidates
+        if not candidate.rejected
+        and _unit(candidate.features.get("static_overlap", 0.0)) <= static_limit
+        and (
+            (
+                _unit(candidate.features.get("persistent_region_contrast", 0.0))
+                >= persistent_threshold
+                and float(candidate.features.get("persistent_polarity_sign", 0.0))
+                != 0.0
+            )
+            or (
+                float(candidate.features.get("observation_score", candidate.final_score))
+                >= observation_threshold
+                and int(
+                    round(
+                        candidate.features.get(
+                            "unique_generator_support_count",
+                            0.0,
+                        )
+                    )
+                )
+                >= int(settings.oil_min_consensus_sources)
+                and _unit(candidate.features.get("consensus_score", 0.0)) >= 0.65
+            )
+        )
+    }
+    for index, left in enumerate(candidates):
+        for right in candidates[index + 1 :]:
+            distance = float(right.y) - float(left.y)
+            if distance > maximum_distance:
+                break
+            if distance < minimum_distance:
+                continue
+            if (
+                _unit(left.features.get("static_overlap", 0.0)) > static_limit
+                or _unit(right.features.get("static_overlap", 0.0)) > static_limit
+            ):
+                continue
+            left_sign = float(left.features.get("polarity_sign", 0.0))
+            right_sign = float(right.features.get("polarity_sign", 0.0))
+            if left_sign == 0.0 or right_sign == 0.0 or left_sign * right_sign >= 0.0:
+                continue
+            left_persistent_sign = float(
+                left.features.get("persistent_polarity_sign", 0.0)
+            )
+            right_persistent_sign = float(
+                right.features.get("persistent_polarity_sign", 0.0)
+            )
+            if (
+                max(
+                    _unit(left.features.get("persistent_region_contrast", 0.0)),
+                    _unit(right.features.get("persistent_region_contrast", 0.0)),
+                )
+                >= persistent_threshold
+                and left_persistent_sign != 0.0
+                and right_persistent_sign != 0.0
+                and left_persistent_sign * right_persistent_sign > 0.0
+                and (not left.rejected or not right.rejected)
+            ):
+                protected.update((id(left), id(right)))
+    return protected
 
 
 def select_best_candidate(
