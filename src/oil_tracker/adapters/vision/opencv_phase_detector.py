@@ -27,8 +27,14 @@ from .oil_shadow_pipeline import (
     OilHypothesisPipeline,
     oil_debug_detail,
     oil_runtime_metrics,
+    outcome_hypotheses,
 )
-from .oil_shadow_types import OilShadowFrameResult, ShadowTemporalStatus
+from .oil_shadow_types import (
+    EvidenceUnavailableOutcome,
+    OilCanonicalOutcome,
+    OilCanonicalOutcomeBase,
+    PipelineFailureStage,
+)
 from .preprocessing import PreprocessResult, preprocess
 from .temporal_tracker import TemporalTracker
 
@@ -137,8 +143,7 @@ class OpenCvPhaseDetector:
             previous_state,
             settings,
             foam_temporal.decision_status,
-            oil_result.temporal_decision.status,
-            oil_projection.no_interface_evidence,
+            oil_result,
         )
         flags.extend(_foam_flags(foam, foam_temporal))
         flags.extend(oil_projection.flags)
@@ -147,7 +152,7 @@ class OpenCvPhaseDetector:
             selected is None
             and proposed_state is FillState.UNKNOWN_REVIEW
             and "FOGGED_OR_GLARE" not in flags
-            and oil_result.temporal_decision.status is ShadowTemporalStatus.UNAVAILABLE
+            and isinstance(oil_result, EvidenceUnavailableOutcome)
         ):
             flags.append("DETECTION_LOST")
         if foam_candidate is not None and valid_rows.size:
@@ -166,8 +171,8 @@ class OpenCvPhaseDetector:
             raw_oil_source,
             raw_foam_source,
             proposed_state,
-            oil_update_accepted=oil_projection.tracker_update_accepted,
-            oil_clear=oil_projection.clear_smoothing,
+            oil_tracker_action=oil_projection.tracker_action,
+            oil_smoothing_action=oil_projection.smoothing_action,
             foam_update_accepted=foam_candidate is not None,
             review_override=review_override,
         )
@@ -191,7 +196,7 @@ class OpenCvPhaseDetector:
                 bundle.effective_mask,
                 bundle.ellipse_mask,
                 static_map,
-                oil_result.hypotheses,
+                outcome_hypotheses(oil_result),
             )
             if debug
             else {}
@@ -294,7 +299,7 @@ class OpenCvPhaseDetector:
         pre: PreprocessResult,
         bundle: MaskBundle,
         static_map: np.ndarray | None,
-    ) -> OilShadowFrameResult:
+    ) -> OilCanonicalOutcome:
         readonly_pre = PreprocessResult(
             *(
                 _isolated_readonly_copy(value)
@@ -324,15 +329,15 @@ class OpenCvPhaseDetector:
         try:
             run = getattr(self._oil_runner, "run", None)
             result = run(**kwargs) if callable(run) else self._oil_runner(**kwargs)
-            if not isinstance(result, OilShadowFrameResult):
+            if not isinstance(result, OilCanonicalOutcomeBase):
                 raise TypeError("typed oil runner returned an invalid result type")
             validate_production_result(result)
             return result
         except Exception as exc:
             reason = f"{type(exc).__name__}:{str(exc)[:120]}"
-            return self._oil_pipeline.failure_result(
-                glass_id=glass_id,
+            return self._oil_pipeline.failure_outcome(
                 reason=reason,
+                stage=PipelineFailureStage.EXTERNAL_RUNNER,
             )
 
     def _debug_artifacts(

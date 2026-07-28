@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 
 from oil_tracker.domain.enums import FillState
 
+from .oil_shadow_types import CompatibilityTrackerAction, SmoothingAction
+
 
 @dataclass
 class TemporalTracker:
@@ -32,28 +34,45 @@ class TemporalTracker:
         raw_foam_y: float | None,
         proposed_state: FillState,
         *,
-        oil_update_accepted: bool | None = None,
-        oil_clear: bool = False,
+        oil_tracker_action: CompatibilityTrackerAction,
+        oil_smoothing_action: SmoothingAction,
         foam_update_accepted: bool | None = None,
         review_override: bool = False,
     ) -> tuple[float | None, float | None, FillState]:
-        """Update only accepted scalar samples while preserving legacy call behavior.
+        """Consume canonical oil actions and bounded Foam acceptance only."""
 
-        A missing or rejected current-frame measurement always returns ``None`` even
-        when prior smoothing samples exist. ``oil_clear`` invalidates stale smoothing
-        before an accepted reacquisition or stable no-interface transition.
-        """
+        if oil_tracker_action is CompatibilityTrackerAction.ACCEPT_BOUNDARY:
+            if raw_y is None:
+                raise ValueError("Accepted boundary action requires a numeric oil Y.")
+            if oil_smoothing_action not in {
+                SmoothingAction.PRESERVE,
+                SmoothingAction.CLEAR_BEFORE_ACCEPT,
+            }:
+                raise ValueError("Accepted boundary has an incompatible smoothing action.")
+        elif oil_tracker_action is CompatibilityTrackerAction.NO_UPDATE:
+            if raw_y is not None:
+                raise ValueError("No-update action cannot carry a numeric oil Y.")
+            if oil_smoothing_action not in {
+                SmoothingAction.PRESERVE,
+                SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE,
+            }:
+                raise ValueError("No-update has an incompatible smoothing action.")
+        else:
+            raise TypeError("Unsupported compatibility tracker action.")
 
-        if oil_clear:
+        if oil_smoothing_action in {
+            SmoothingAction.CLEAR_BEFORE_ACCEPT,
+            SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE,
+        }:
             self._oil_values.clear()
             self.previous_y = None
-        if oil_update_accepted is None:
-            oil_update_accepted = raw_y is not None
         if foam_update_accepted is None:
             foam_update_accepted = raw_foam_y is not None
 
         oil = self._smooth_oil(
-            raw_y if oil_update_accepted else None,
+            raw_y
+            if oil_tracker_action is CompatibilityTrackerAction.ACCEPT_BOUNDARY
+            else None,
         )
         foam = self._smooth_median(
             self._foam_values,

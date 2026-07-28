@@ -102,6 +102,7 @@ class RawEdgeObservation:
     measurement_width_px: float
     band_height_px: float
     source_local_index: int
+    source_angle_deg: float | None = None
 
     def __post_init__(self) -> None:
         _identity(self.identity)
@@ -119,6 +120,10 @@ class RawEdgeObservation:
             _unit(value, name)
         _positive_finite(self.measurement_width_px, "measurement width")
         _positive_finite(self.band_height_px, "band height")
+        if self.source_angle_deg is not None:
+            _nonnegative_finite(self.source_angle_deg, "observation source angle")
+            if self.source_angle_deg > 90.0:
+                raise ValueError("Observation source angle exceeds its physical range.")
         if not self.polarity_available and abs(self.polarity) > 1e-12:
             raise ValueError("Unavailable polarity must use the neutral scalar value 0.0.")
 
@@ -390,30 +395,85 @@ class ShadowNoInterfaceEvidence:
             raise ValueError("No-interface evidence requires a reason.")
 
 
+class CompatibilityTrackerAction(str, Enum):
+    ACCEPT_BOUNDARY = "ACCEPT_BOUNDARY"
+    NO_UPDATE = "NO_UPDATE"
+
+
+class SmoothingAction(str, Enum):
+    PRESERVE = "PRESERVE"
+    CLEAR_BEFORE_ACCEPT = "CLEAR_BEFORE_ACCEPT"
+    CLEAR_STALE_AFTER_STABLE_ABSENCE = "CLEAR_STALE_AFTER_STABLE_ABSENCE"
+
+
+class BoundaryAcceptanceMode(str, Enum):
+    INITIAL = "initial"
+    CONTINUOUS = "continuous"
+    REACQUIRED = "reacquired"
+
+
+class AbsenceStabilityMode(str, Enum):
+    PENDING = "pending"
+    STABLE = "stable"
+
+
+class PipelineFailureStage(str, Enum):
+    EVIDENCE_CONSTRUCTION = "evidence_construction"
+    PHASE_A = "phase_a"
+    TEMPORAL_EVALUATION = "temporal_evaluation"
+    PHASE_B = "phase_b"
+    OUTCOME_PREPARATION = "outcome_preparation"
+    COMMIT = "commit"
+    EXTERNAL_RUNNER = "external_runner"
+
+
+JsonScalar: TypeAlias = str | int | float | bool | None
+DiagnosticItems: TypeAlias = tuple[tuple[str, JsonScalar], ...]
+
+
 @dataclass(frozen=True)
 class ShadowBoundaryObservation:
-    kind: ShadowObservationKind
     hypothesis: SemanticHypothesis
-    no_interface: ShadowNoInterfaceEvidence
+    alternatives: tuple[str, ...] = ()
+    diagnostics: DiagnosticItems = ()
 
     def __post_init__(self) -> None:
-        if self.kind is not ShadowObservationKind.BOUNDARY:
-            raise ValueError("Boundary observation kind is invalid.")
+        if not isinstance(self.alternatives, tuple):
+            raise TypeError("Boundary alternatives must be an immutable tuple.")
+        if self.alternatives and tuple(sorted(set(self.alternatives))) != self.alternatives:
+            raise ValueError("Boundary alternatives must be unique and canonically sorted.")
+        _diagnostics(self.diagnostics)
+
+    @property
+    def kind(self) -> ShadowObservationKind:
+        return ShadowObservationKind.BOUNDARY
+
+    @property
+    def visibility(self) -> float:
+        return self.hypothesis.visibility
 
 
 @dataclass(frozen=True)
 class ShadowNoInterfaceObservation:
-    kind: ShadowObservationKind
     evidence: ShadowNoInterfaceEvidence
+    diagnostics: DiagnosticItems = ()
 
     def __post_init__(self) -> None:
-        if self.kind is not ShadowObservationKind.NO_INTERFACE:
-            raise ValueError("No-interface observation kind is invalid.")
+        if not self.evidence.available:
+            raise ValueError("Positive no-interface observation requires available evidence.")
+        _diagnostics(self.diagnostics)
+
+    @property
+    def kind(self) -> ShadowObservationKind:
+        return ShadowObservationKind.NO_INTERFACE
+
+    @property
+    def visibility(self) -> float:
+        return self.evidence.visibility
 
 
 @dataclass(frozen=True)
 class ShadowAmbiguousObservation:
-    kind: ShadowObservationKind
     hypothesis_ids: tuple[str, ...]
     boundary_likelihood: float
     artifact_likelihood: float
@@ -422,12 +482,13 @@ class ShadowAmbiguousObservation:
     visibility: float
     projected_source_y: float | None
     reason: str
+    diagnostics: DiagnosticItems = ()
 
     def __post_init__(self) -> None:
-        if self.kind is not ShadowObservationKind.AMBIGUOUS:
-            raise ValueError("Ambiguous observation kind is invalid.")
         if not isinstance(self.hypothesis_ids, tuple):
             raise TypeError("Ambiguous hypothesis identities must be an immutable tuple.")
+        if self.hypothesis_ids and tuple(sorted(set(self.hypothesis_ids))) != self.hypothesis_ids:
+            raise ValueError("Ambiguous hypothesis identities must be unique and canonical.")
         for value, name in (
             (self.boundary_likelihood, "ambiguous boundary likelihood"),
             (self.artifact_likelihood, "ambiguous artifact likelihood"),
@@ -437,23 +498,31 @@ class ShadowAmbiguousObservation:
         ):
             _unit(value, name)
         if self.projected_source_y is not None:
-            _finite(self.projected_source_y, "ambiguous projected source Y")
+            _finite(self.projected_source_y, "ambiguous diagnostic source Y")
         if not self.reason:
             raise ValueError("Ambiguous observation requires a reason.")
+        _diagnostics(self.diagnostics)
+
+    @property
+    def kind(self) -> ShadowObservationKind:
+        return ShadowObservationKind.AMBIGUOUS
 
 
 @dataclass(frozen=True)
 class ShadowUnavailableObservation:
-    kind: ShadowObservationKind
     visibility: float
     reason: str
+    diagnostics: DiagnosticItems = ()
 
     def __post_init__(self) -> None:
-        if self.kind is not ShadowObservationKind.UNAVAILABLE:
-            raise ValueError("Unavailable observation kind is invalid.")
         _unit(self.visibility, "unavailable visibility")
         if not self.reason:
-            raise ValueError("Unavailable observation requires a reason.")
+            raise ValueError("Successful evidence-unavailable observation requires a reason.")
+        _diagnostics(self.diagnostics)
+
+    @property
+    def kind(self) -> ShadowObservationKind:
+        return ShadowObservationKind.UNAVAILABLE
 
 
 ShadowCurrentObservation: TypeAlias = (
@@ -465,39 +534,213 @@ ShadowCurrentObservation: TypeAlias = (
 
 
 @dataclass(frozen=True)
-class ShadowTemporalDecision:
-    status: ShadowTemporalStatus
-    observation_kind: ShadowObservationKind
-    selected_hypothesis_id: str | None
-    projected_source_y: float | None
-    confidence: float
-    decision_margin: float
-    clear_smoothing: bool
-    reason: str
+class TemporalResourceMetrics:
     beam_count: int
     history_length: int
     retained_scalar_count: int
     reacquisition_count: int
 
     def __post_init__(self) -> None:
-        if self.selected_hypothesis_id is not None:
-            _identity(self.selected_hypothesis_id)
-        if self.projected_source_y is not None:
-            _finite(self.projected_source_y, "temporal projected source Y")
+        if any(value < 0 for value in (
+            self.beam_count,
+            self.history_length,
+            self.retained_scalar_count,
+            self.reacquisition_count,
+        )):
+            raise ValueError("Temporal resource counters cannot be negative.")
+
+
+@dataclass(frozen=True)
+class BoundaryAcceptedDecision:
+    selected_hypothesis: SemanticHypothesis
+    accepted_source_y: float
+    confidence: float
+    decision_margin: float
+    acceptance_mode: BoundaryAcceptanceMode
+    reason: str
+    resources: TemporalResourceMetrics
+
+    def __post_init__(self) -> None:
+        _finite(self.accepted_source_y, "accepted boundary source Y")
         _unit(self.confidence, "temporal confidence")
         _unit(self.decision_margin, "temporal decision margin")
-        if any(
-            value < 0
-            for value in (
-                self.beam_count,
-                self.history_length,
-                self.retained_scalar_count,
-                self.reacquisition_count,
-            )
-        ):
-            raise ValueError("Temporal resource counters cannot be negative.")
+        if not isinstance(self.acceptance_mode, BoundaryAcceptanceMode):
+            raise TypeError("Boundary decision requires a closed acceptance mode.")
         if not self.reason:
-            raise ValueError("Temporal decision requires a reason.")
+            raise ValueError("Boundary decision requires a reason.")
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.BOUNDARY_ACCEPTED
+
+    @property
+    def observation_kind(self) -> ShadowObservationKind:
+        return ShadowObservationKind.BOUNDARY
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.ACCEPT_BOUNDARY
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return (
+            SmoothingAction.CLEAR_BEFORE_ACCEPT
+            if self.acceptance_mode is BoundaryAcceptanceMode.REACQUIRED
+            else SmoothingAction.PRESERVE
+        )
+
+
+@dataclass(frozen=True)
+class NoInterfaceAcceptedDecision:
+    evidence: ShadowNoInterfaceEvidence
+    confidence: float
+    decision_margin: float
+    stability_mode: AbsenceStabilityMode
+    reason: str
+    resources: TemporalResourceMetrics
+
+    def __post_init__(self) -> None:
+        if not self.evidence.available:
+            raise ValueError("No-interface decision requires positive available evidence.")
+        _unit(self.confidence, "temporal confidence")
+        _unit(self.decision_margin, "temporal decision margin")
+        if not isinstance(self.stability_mode, AbsenceStabilityMode):
+            raise TypeError("No-interface decision requires a closed stability mode.")
+        if not self.reason:
+            raise ValueError("No-interface decision requires a reason.")
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.NO_INTERFACE_ACCEPTED
+
+    @property
+    def observation_kind(self) -> ShadowObservationKind:
+        return ShadowObservationKind.NO_INTERFACE
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.NO_UPDATE
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return (
+            SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE
+            if self.stability_mode is AbsenceStabilityMode.STABLE
+            else SmoothingAction.PRESERVE
+        )
+
+
+@dataclass(frozen=True)
+class AmbiguousDecision:
+    hypothesis_ids: tuple[str, ...]
+    projected_source_y: float | None
+    confidence: float
+    decision_margin: float
+    reason: str
+    resources: TemporalResourceMetrics
+
+    def __post_init__(self) -> None:
+        if self.projected_source_y is not None:
+            _finite(self.projected_source_y, "ambiguous diagnostic source Y")
+        _unit(self.confidence, "temporal confidence")
+        _unit(self.decision_margin, "temporal decision margin")
+        if not self.reason:
+            raise ValueError("Ambiguous decision requires a reason.")
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.AMBIGUOUS
+
+    @property
+    def observation_kind(self) -> ShadowObservationKind:
+        return ShadowObservationKind.AMBIGUOUS
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.NO_UPDATE
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return SmoothingAction.PRESERVE
+
+
+@dataclass(frozen=True)
+class EvidenceUnavailableDecision:
+    visibility: float
+    confidence: float
+    decision_margin: float
+    stability_mode: AbsenceStabilityMode
+    reason: str
+    resources: TemporalResourceMetrics
+
+    def __post_init__(self) -> None:
+        _unit(self.visibility, "unavailable visibility")
+        _unit(self.confidence, "temporal confidence")
+        _unit(self.decision_margin, "temporal decision margin")
+        if not isinstance(self.stability_mode, AbsenceStabilityMode):
+            raise TypeError("Unavailable decision requires a closed stability mode.")
+        if not self.reason:
+            raise ValueError("Evidence-unavailable decision requires a reason.")
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.UNAVAILABLE
+
+    @property
+    def observation_kind(self) -> ShadowObservationKind:
+        return ShadowObservationKind.UNAVAILABLE
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.NO_UPDATE
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return (
+            SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE
+            if self.stability_mode is AbsenceStabilityMode.STABLE
+            else SmoothingAction.PRESERVE
+        )
+
+
+@dataclass(frozen=True)
+class ReacquisitionPendingDecision:
+    pending_hypothesis: SemanticHypothesis
+    confidence: float
+    decision_margin: float
+    reason: str
+    resources: TemporalResourceMetrics
+
+    def __post_init__(self) -> None:
+        _unit(self.confidence, "temporal confidence")
+        _unit(self.decision_margin, "temporal decision margin")
+        if not self.reason:
+            raise ValueError("Reacquisition decision requires a reason.")
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.REACQUISITION_PENDING
+
+    @property
+    def observation_kind(self) -> ShadowObservationKind:
+        return ShadowObservationKind.BOUNDARY
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.NO_UPDATE
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return SmoothingAction.PRESERVE
+
+
+ShadowTemporalDecision: TypeAlias = (
+    BoundaryAcceptedDecision
+    | NoInterfaceAcceptedDecision
+    | AmbiguousDecision
+    | EvidenceUnavailableDecision
+    | ReacquisitionPendingDecision
+)
 
 
 @dataclass(frozen=True)
@@ -532,46 +775,19 @@ class ShadowResourceSummary:
     debug_scalar_limit: int
 
     def __post_init__(self) -> None:
-        values = (
-            self.raw_observation_count,
-            self.raw_observation_limit,
-            self.broad_scale_count,
-            self.broad_scale_limit,
-            self.narrow_scale_count,
-            self.narrow_scale_limit,
-            self.narrow_examined_rows_per_hypothesis,
-            self.narrow_examined_rows_per_hypothesis_limit,
-            self.proposal_count,
-            self.proposal_limit,
-            self.maximum_members_per_proposal,
-            self.members_per_proposal_limit,
-            self.retained_member_count,
-            self.retained_member_limit,
-            self.semantic_hypothesis_count,
-            self.semantic_hypothesis_limit,
-            self.temporal_beam_count,
-            self.temporal_beam_limit,
-            self.temporal_history_length,
-            self.temporal_history_limit,
-            self.retained_temporal_scalar_count,
-            self.retained_temporal_scalar_limit,
-            self.static_prior_scalar_count,
-            self.static_prior_scalar_limit,
-            self.debug_scalar_count,
-            self.debug_scalar_limit,
+        values = tuple(
+            value for name, value in self.__dict__.items()
+            if name not in {"maximum_proposal_diameter_px", "proposal_diameter_limit_px"}
         )
         if any(value < 0 for value in values):
             raise ValueError("Shadow resource counts and limits cannot be negative.")
         _nonnegative_finite(self.maximum_proposal_diameter_px, "maximum proposal diameter")
         _positive_finite(self.proposal_diameter_limit_px, "proposal diameter limit")
-        count_limit_pairs = (
+        pairs = (
             (self.raw_observation_count, self.raw_observation_limit),
             (self.broad_scale_count, self.broad_scale_limit),
             (self.narrow_scale_count, self.narrow_scale_limit),
-            (
-                self.narrow_examined_rows_per_hypothesis,
-                self.narrow_examined_rows_per_hypothesis_limit,
-            ),
+            (self.narrow_examined_rows_per_hypothesis, self.narrow_examined_rows_per_hypothesis_limit),
             (self.proposal_count, self.proposal_limit),
             (self.maximum_members_per_proposal, self.members_per_proposal_limit),
             (self.retained_member_count, self.retained_member_limit),
@@ -582,36 +798,295 @@ class ShadowResourceSummary:
             (self.static_prior_scalar_count, self.static_prior_scalar_limit),
             (self.debug_scalar_count, self.debug_scalar_limit),
         )
-        if any(count > limit for count, limit in count_limit_pairs):
+        if any(count > limit for count, limit in pairs):
             raise ValueError("Shadow resource count exceeds its configured limit.")
         if self.maximum_proposal_diameter_px > self.proposal_diameter_limit_px + 1e-12:
             raise ValueError("Observed proposal diameter exceeds its configured limit.")
 
 
 @dataclass(frozen=True)
-class OilShadowFrameResult:
-    available: bool
-    failure_reason: str | None
+class SuccessfulPipelineFrame:
     raw_observations: tuple[RawEdgeObservation, ...]
     proposals: tuple[BoundedYProposal, ...]
     hypotheses: tuple[SemanticHypothesis, ...]
     current_observation: ShadowCurrentObservation
-    temporal_decision: ShadowTemporalDecision
-    resources: ShadowResourceSummary
+    frame_height: int
+    frame_width: int
+    diagnostics: DiagnosticItems = ()
 
     def __post_init__(self) -> None:
-        for name, value in (
-            ("raw observations", self.raw_observations),
-            ("proposals", self.proposals),
-            ("hypotheses", self.hypotheses),
-        ):
-            if not isinstance(value, tuple):
-                raise TypeError(f"Oil shadow {name} must be stored as an immutable tuple.")
-        if self.available and self.failure_reason is not None:
-            raise ValueError("Available shadow result cannot carry a failure reason.")
-        if not self.available and not self.failure_reason:
-            raise ValueError("Unavailable shadow result requires a failure reason.")
+        if any(not isinstance(value, tuple) for value in (
+            self.raw_observations, self.proposals, self.hypotheses
+        )):
+            raise TypeError("Successful pipeline evidence must use immutable tuples.")
+        if self.frame_height < 1 or self.frame_width < 1:
+            raise ValueError("Successful pipeline frame dimensions must be positive.")
+        _diagnostics(self.diagnostics)
 
+
+@dataclass(frozen=True)
+class FailedPipelineFrame:
+    reason: str
+    stage: PipelineFailureStage
+    visibility: float = 0.0
+    diagnostics: DiagnosticItems = ()
+
+    def __post_init__(self) -> None:
+        if not self.reason:
+            raise ValueError("Failed pipeline frame requires a reason.")
+        if not isinstance(self.stage, PipelineFailureStage):
+            raise TypeError("Failed pipeline frame requires a closed failure stage.")
+        _unit(self.visibility, "failure visibility")
+        _diagnostics(self.diagnostics)
+
+
+class OilCanonicalOutcomeBase:
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        raise NotImplementedError
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        raise NotImplementedError
+
+
+@dataclass(frozen=True)
+class AcceptedBoundaryOutcome(OilCanonicalOutcomeBase):
+    selected_hypothesis: SemanticHypothesis
+    hypotheses: tuple[SemanticHypothesis, ...]
+    resources: ShadowResourceSummary
+    confidence: float
+    decision_margin: float
+    acceptance_mode: BoundaryAcceptanceMode
+    reason: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.hypotheses, tuple):
+            raise TypeError("Accepted-boundary hypotheses must be immutable.")
+        if self.selected_hypothesis not in self.hypotheses:
+            raise ValueError("Accepted boundary must select canonical evidence.")
+        _unit(self.confidence, "accepted-boundary confidence")
+        _unit(self.decision_margin, "accepted-boundary margin")
+        if not isinstance(self.acceptance_mode, BoundaryAcceptanceMode):
+            raise TypeError("Accepted boundary requires a closed acceptance mode.")
+        if not self.reason:
+            raise ValueError("Accepted-boundary outcome requires a reason.")
+
+    @property
+    def raw_source_y(self) -> float:
+        return self.selected_hypothesis.representative_source_y
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.BOUNDARY_ACCEPTED
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.ACCEPT_BOUNDARY
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return SmoothingAction.CLEAR_BEFORE_ACCEPT if self.acceptance_mode is BoundaryAcceptanceMode.REACQUIRED else SmoothingAction.PRESERVE
+
+
+@dataclass(frozen=True)
+class NoInterfaceOutcome(OilCanonicalOutcomeBase):
+    evidence: ShadowNoInterfaceEvidence
+    hypotheses: tuple[SemanticHypothesis, ...]
+    resources: ShadowResourceSummary
+    confidence: float
+    decision_margin: float
+    stability_mode: AbsenceStabilityMode
+    reason: str
+
+    def __post_init__(self) -> None:
+        if not self.evidence.available:
+            raise ValueError("No-interface outcome requires positive available evidence.")
+        if not isinstance(self.hypotheses, tuple):
+            raise TypeError("No-interface hypotheses must be immutable.")
+        _unit(self.confidence, "no-interface confidence")
+        _unit(self.decision_margin, "no-interface margin")
+        if not isinstance(self.stability_mode, AbsenceStabilityMode):
+            raise TypeError("No-interface outcome requires a closed stability mode.")
+        if not self.reason:
+            raise ValueError("No-interface outcome requires a reason.")
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.NO_INTERFACE_ACCEPTED
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.NO_UPDATE
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE if self.stability_mode is AbsenceStabilityMode.STABLE else SmoothingAction.PRESERVE
+
+
+@dataclass(frozen=True)
+class AmbiguousOutcome(OilCanonicalOutcomeBase):
+    hypotheses: tuple[SemanticHypothesis, ...]
+    hypothesis_ids: tuple[str, ...]
+    projected_source_y: float | None
+    boundary_likelihood: float
+    artifact_likelihood: float
+    ambiguity_likelihood: float
+    no_interface_likelihood: float
+    visibility: float
+    resources: ShadowResourceSummary
+    confidence: float
+    decision_margin: float
+    reason: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.hypotheses, tuple) or not isinstance(self.hypothesis_ids, tuple):
+            raise TypeError("Ambiguous outcome evidence must be immutable.")
+        canonical_ids = {item.identity for item in self.hypotheses}
+        if not set(self.hypothesis_ids) <= canonical_ids:
+            raise ValueError("Ambiguous outcome references non-canonical evidence.")
+        if self.projected_source_y is not None:
+            _finite(self.projected_source_y, "ambiguous outcome diagnostic Y")
+        for value, name in (
+            (self.boundary_likelihood, "ambiguous boundary likelihood"),
+            (self.artifact_likelihood, "ambiguous artifact likelihood"),
+            (self.ambiguity_likelihood, "ambiguous likelihood"),
+            (self.no_interface_likelihood, "ambiguous no-interface likelihood"),
+            (self.visibility, "ambiguous visibility"),
+            (self.confidence, "ambiguous confidence"),
+            (self.decision_margin, "ambiguous margin"),
+        ):
+            _unit(value, name)
+        if not self.reason:
+            raise ValueError("Ambiguous outcome requires a reason.")
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.AMBIGUOUS
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.NO_UPDATE
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return SmoothingAction.PRESERVE
+
+
+@dataclass(frozen=True)
+class EvidenceUnavailableOutcome(OilCanonicalOutcomeBase):
+    hypotheses: tuple[SemanticHypothesis, ...]
+    resources: ShadowResourceSummary
+    visibility: float
+    confidence: float
+    decision_margin: float
+    stability_mode: AbsenceStabilityMode
+    reason: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.hypotheses, tuple):
+            raise TypeError("Evidence-unavailable hypotheses must be immutable.")
+        _unit(self.visibility, "evidence-unavailable visibility")
+        _unit(self.confidence, "evidence-unavailable confidence")
+        _unit(self.decision_margin, "evidence-unavailable margin")
+        if not isinstance(self.stability_mode, AbsenceStabilityMode):
+            raise TypeError("Evidence-unavailable outcome requires a closed stability mode.")
+        if not self.reason:
+            raise ValueError("Evidence-unavailable outcome requires a reason.")
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.UNAVAILABLE
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.NO_UPDATE
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE if self.stability_mode is AbsenceStabilityMode.STABLE else SmoothingAction.PRESERVE
+
+
+@dataclass(frozen=True)
+class ReacquisitionPendingOutcome(OilCanonicalOutcomeBase):
+    pending_hypothesis: SemanticHypothesis
+    hypotheses: tuple[SemanticHypothesis, ...]
+    resources: ShadowResourceSummary
+    confidence: float
+    decision_margin: float
+    reason: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.hypotheses, tuple):
+            raise TypeError("Reacquisition hypotheses must be immutable.")
+        if self.pending_hypothesis not in self.hypotheses:
+            raise ValueError("Reacquisition must reference canonical evidence.")
+        _unit(self.confidence, "reacquisition confidence")
+        _unit(self.decision_margin, "reacquisition margin")
+        if not self.reason:
+            raise ValueError("Reacquisition outcome requires a reason.")
+
+    @property
+    def status(self) -> ShadowTemporalStatus:
+        return ShadowTemporalStatus.REACQUISITION_PENDING
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.NO_UPDATE
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return SmoothingAction.PRESERVE
+
+
+@dataclass(frozen=True)
+class PipelineFailureOutcome(OilCanonicalOutcomeBase):
+    reason: str
+    stage: PipelineFailureStage
+    visibility: float = 0.0
+    diagnostics: DiagnosticItems = ()
+
+    def __post_init__(self) -> None:
+        if not self.reason:
+            raise ValueError("Pipeline failure outcome requires a reason.")
+        if not isinstance(self.stage, PipelineFailureStage):
+            raise TypeError("Pipeline failure requires a closed failure stage.")
+        _unit(self.visibility, "pipeline failure visibility")
+        _diagnostics(self.diagnostics)
+
+    @property
+    def tracker_action(self) -> CompatibilityTrackerAction:
+        return CompatibilityTrackerAction.NO_UPDATE
+
+    @property
+    def smoothing_action(self) -> SmoothingAction:
+        return SmoothingAction.PRESERVE
+
+
+OilCanonicalOutcome: TypeAlias = (
+    AcceptedBoundaryOutcome
+    | NoInterfaceOutcome
+    | AmbiguousOutcome
+    | EvidenceUnavailableOutcome
+    | ReacquisitionPendingOutcome
+    | PipelineFailureOutcome
+)
+OilShadowFrameResult: TypeAlias = OilCanonicalOutcome
+
+
+def _diagnostics(items: DiagnosticItems) -> None:
+    if not isinstance(items, tuple):
+        raise TypeError("Diagnostics must be an immutable tuple.")
+    keys = [key for key, _value in items]
+    if len(keys) != len(set(keys)) or tuple(sorted(keys)) != tuple(keys):
+        raise ValueError("Diagnostics must have unique canonical keys.")
+    for key, value in items:
+        if not isinstance(key, str) or not key:
+            raise ValueError("Diagnostic keys must be non-empty strings.")
+        if isinstance(value, float):
+            _finite(value, f"diagnostic {key}")
+        elif value is not None and not isinstance(value, (str, int, bool)):
+            raise TypeError("Diagnostics must contain JSON-safe scalar values.")
 
 def stable_digest(kind: str, scalar_items: tuple[tuple[str, str | int | float | bool | None], ...]) -> str:
     payload = {

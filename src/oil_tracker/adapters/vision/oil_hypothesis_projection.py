@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 import hashlib
+import json
 import math
 
 import numpy as np
@@ -9,16 +10,20 @@ import numpy as np
 from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import BoundaryKind
 
+from .oil_shadow_pipeline import outcome_hypotheses
 from .oil_shadow_types import (
-    OilShadowFrameResult,
+    AcceptedBoundaryOutcome,
+    AmbiguousOutcome,
+    CompatibilityTrackerAction,
+    EvidenceUnavailableOutcome,
+    NoInterfaceOutcome,
+    OilCanonicalOutcome,
+    OilCanonicalOutcomeBase,
+    PipelineFailureOutcome,
+    ReacquisitionPendingOutcome,
     SemanticHypothesis,
-    ShadowAmbiguousObservation,
-    ShadowBoundaryObservation,
     ShadowNoInterfaceEvidence,
-    ShadowNoInterfaceObservation,
-    ShadowObservationKind,
-    ShadowTemporalStatus,
-    ShadowUnavailableObservation,
+    SmoothingAction,
 )
 from .preprocessing import PreprocessResult
 from .row_features import masked_band_intensity_profiles, masked_row_mean, row_coverage
@@ -30,110 +35,109 @@ class OilProductionProjection:
     candidates: tuple[BoundaryCandidate, ...]
     raw_source_y: float | None
     confidence: float
-    tracker_update_accepted: bool
-    clear_smoothing: bool
+    tracker_action: CompatibilityTrackerAction
+    smoothing_action: SmoothingAction
     no_interface_evidence: ShadowNoInterfaceEvidence | None
     flags: tuple[str, ...]
 
 
-def validate_production_result(result: OilShadowFrameResult) -> None:
-    decision = result.temporal_decision
-    current = result.current_observation
-    hypothesis_ids = [item.identity for item in result.hypotheses]
-    if len(hypothesis_ids) != len(set(hypothesis_ids)):
-        raise ValueError("typed oil result contains duplicate hypothesis identities")
-
-    if decision.status is ShadowTemporalStatus.BOUNDARY_ACCEPTED:
-        boundary = _validated_boundary_current(result, "accepted typed boundary")
-        if decision.observation_kind is not ShadowObservationKind.BOUNDARY:
-            raise ValueError("accepted typed boundary has the wrong observation kind")
-        if decision.selected_hypothesis_id is None or decision.projected_source_y is None:
-            raise ValueError("accepted typed boundary is missing identity or source Y")
-        if decision.selected_hypothesis_id != boundary.identity:
-            raise ValueError("accepted typed boundary identity disagrees with current evidence")
-        _require_same_y(
-            decision.projected_source_y,
-            boundary.representative_source_y,
-            "accepted typed boundary Y disagrees with current evidence",
-        )
+def validate_production_result(outcome: OilCanonicalOutcome) -> None:
+    if not isinstance(outcome, OilCanonicalOutcomeBase):
+        raise TypeError("Oil runner returned a non-canonical result.")
+    supported = {
+        AcceptedBoundaryOutcome,
+        NoInterfaceOutcome,
+        AmbiguousOutcome,
+        EvidenceUnavailableOutcome,
+        ReacquisitionPendingOutcome,
+        PipelineFailureOutcome,
+    }
+    if type(outcome) not in supported:
+        raise TypeError("Unsupported canonical oil outcome subclass.")
+    expected = {field.name for field in fields(outcome)}
+    if set(vars(outcome)) != expected:
+        raise ValueError("Canonical outcome carries an extra/missing discriminator.")
+    if isinstance(outcome, PipelineFailureOutcome):
+        if outcome.tracker_action is not CompatibilityTrackerAction.NO_UPDATE:
+            raise ValueError("Pipeline failure cannot update the compatibility tracker.")
+        if outcome.smoothing_action is not SmoothingAction.PRESERVE:
+            raise ValueError("Pipeline failure cannot clear smoothing.")
+        _json_safe({"reason": outcome.reason, "stage": outcome.stage.value})
         return
 
-    if decision.status is ShadowTemporalStatus.REACQUISITION_PENDING:
-        boundary = _validated_boundary_current(result, "typed reacquisition")
-        if decision.observation_kind is not ShadowObservationKind.BOUNDARY:
-            raise ValueError("typed reacquisition decision has the wrong observation kind")
-        if decision.selected_hypothesis_id is None or decision.projected_source_y is not None:
-            raise ValueError("typed reacquisition must retain identity without numeric output")
-        if decision.selected_hypothesis_id != boundary.identity:
-            raise ValueError("typed reacquisition identity disagrees with current evidence")
-        return
-
-    if decision.status is ShadowTemporalStatus.NO_INTERFACE_ACCEPTED:
-        if not isinstance(current, ShadowNoInterfaceObservation):
-            raise ValueError("typed no-interface decision has the wrong current observation")
-        if current.kind is not ShadowObservationKind.NO_INTERFACE:
-            raise ValueError("typed no-interface current has the wrong internal kind")
-        if decision.observation_kind is not ShadowObservationKind.NO_INTERFACE:
-            raise ValueError("typed no-interface decision has the wrong observation kind")
-        if decision.selected_hypothesis_id is not None or decision.projected_source_y is not None:
-            raise ValueError("typed no-interface decision cannot expose a boundary")
-        return
-
-    if decision.status is ShadowTemporalStatus.AMBIGUOUS:
-        if not isinstance(current, ShadowAmbiguousObservation):
-            raise ValueError("typed ambiguous decision has the wrong current observation")
-        if current.kind is not ShadowObservationKind.AMBIGUOUS:
-            raise ValueError("typed ambiguous current has the wrong internal kind")
-        if decision.observation_kind is not ShadowObservationKind.AMBIGUOUS:
-            raise ValueError("typed ambiguous decision has the wrong observation kind")
-        if decision.selected_hypothesis_id is not None:
-            raise ValueError("typed ambiguous decision cannot select a hypothesis")
-        if not _same_optional_y(decision.projected_source_y, current.projected_source_y):
-            raise ValueError("typed ambiguous projected Y disagrees with current evidence")
-        return
-
-    if decision.status is ShadowTemporalStatus.UNAVAILABLE:
-        if not isinstance(current, ShadowUnavailableObservation):
-            raise ValueError("typed unavailable decision has the wrong current observation")
-        if current.kind is not ShadowObservationKind.UNAVAILABLE:
-            raise ValueError("typed unavailable current has the wrong internal kind")
-        if decision.observation_kind is not ShadowObservationKind.UNAVAILABLE:
-            raise ValueError("typed unavailable decision has the wrong observation kind")
-        if decision.selected_hypothesis_id is not None or decision.projected_source_y is not None:
-            raise ValueError("typed unavailable decision cannot expose a boundary")
-        return
-
-    raise ValueError(f"unsupported typed oil temporal status: {decision.status!r}")
+    hypotheses = outcome.hypotheses
+    if not isinstance(hypotheses, tuple):
+        raise TypeError("Canonical hypotheses must be immutable.")
+    identities = [item.identity for item in hypotheses]
+    if len(identities) != len(set(identities)):
+        raise ValueError("Canonical outcome contains duplicate hypothesis identities.")
+    if isinstance(outcome, AcceptedBoundaryOutcome):
+        if outcome.selected_hypothesis not in hypotheses:
+            raise ValueError("Accepted boundary does not select canonical evidence.")
+        if outcome.tracker_action is not CompatibilityTrackerAction.ACCEPT_BOUNDARY:
+            raise ValueError("Accepted boundary has the wrong tracker action.")
+        if not math.isfinite(outcome.raw_source_y):
+            raise ValueError("Accepted boundary source Y must be finite.")
+    elif isinstance(outcome, NoInterfaceOutcome):
+        if not outcome.evidence.available:
+            raise ValueError("No-interface outcome lacks positive evidence.")
+    elif isinstance(outcome, AmbiguousOutcome):
+        if not set(outcome.hypothesis_ids) <= set(identities):
+            raise ValueError("Ambiguous outcome references non-canonical evidence.")
+    elif isinstance(outcome, ReacquisitionPendingOutcome):
+        if outcome.pending_hypothesis not in hypotheses:
+            raise ValueError("Reacquisition outcome references non-canonical evidence.")
+    if outcome.tracker_action is CompatibilityTrackerAction.ACCEPT_BOUNDARY and not isinstance(
+        outcome, AcceptedBoundaryOutcome
+    ):
+        raise ValueError("Only accepted boundary may update the compatibility tracker.")
+    if outcome.smoothing_action is SmoothingAction.CLEAR_BEFORE_ACCEPT and not isinstance(
+        outcome, AcceptedBoundaryOutcome
+    ):
+        raise ValueError("Only reacquired boundary may clear before acceptance.")
+    if outcome.smoothing_action is SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE and not isinstance(
+        outcome, (NoInterfaceOutcome, EvidenceUnavailableOutcome)
+    ):
+        raise ValueError("Only successful stable absence may clear stale smoothing.")
+    _json_safe(
+        {
+            "variant": type(outcome).__name__,
+            "confidence": outcome.confidence,
+            "margin": outcome.decision_margin,
+            "reason": outcome.reason,
+            "tracker_action": outcome.tracker_action.value,
+            "smoothing_action": outcome.smoothing_action.value,
+        }
+    )
 
 
-def project_production_result(result: OilShadowFrameResult) -> OilProductionProjection:
-    validate_production_result(result)
-    decision = result.temporal_decision
-    accepted = decision.status is ShadowTemporalStatus.BOUNDARY_ACCEPTED
-    selected_id = decision.selected_hypothesis_id if accepted else None
+def project_production_result(outcome: OilCanonicalOutcome) -> OilProductionProjection:
+    validate_production_result(outcome)
+    hypotheses = outcome_hypotheses(outcome)
+    selected_id = (
+        outcome.selected_hypothesis.identity
+        if isinstance(outcome, AcceptedBoundaryOutcome)
+        else None
+    )
     candidates = tuple(
-        _candidate_from_hypothesis(item, result, selected_id)
+        _candidate_from_hypothesis(item, outcome, selected_id)
         for item in sorted(
-            result.hypotheses,
+            hypotheses,
             key=lambda value: (value.representative_source_y, value.identity),
         )
     )
     selected = next((item for item in candidates if item.selected), None)
-    raw_source_y = None if selected is None else float(selected.y)
-    no_interface = (
-        result.current_observation.evidence
-        if isinstance(result.current_observation, ShadowNoInterfaceObservation)
-        else None
-    )
     return OilProductionProjection(
         selected_candidate=selected,
         candidates=candidates,
-        raw_source_y=raw_source_y,
-        confidence=float(decision.confidence),
-        tracker_update_accepted=accepted,
-        clear_smoothing=bool(decision.clear_smoothing),
-        no_interface_evidence=no_interface,
-        flags=_decision_flags(result),
+        raw_source_y=None if selected is None else float(selected.y),
+        confidence=0.0 if isinstance(outcome, PipelineFailureOutcome) else float(outcome.confidence),
+        tracker_action=outcome.tracker_action,
+        smoothing_action=outcome.smoothing_action,
+        no_interface_evidence=(
+            outcome.evidence if isinstance(outcome, NoInterfaceOutcome) else None
+        ),
+        flags=_outcome_flags(outcome),
     )
 
 
@@ -179,29 +183,28 @@ def build_hypothesis_debug_profiles(
     }
 
 
-def selected_hypothesis(result: OilShadowFrameResult) -> SemanticHypothesis | None:
-    identity = result.temporal_decision.selected_hypothesis_id
-    return None if identity is None else _hypothesis_by_id(result, identity)
+def selected_hypothesis(outcome: OilCanonicalOutcome) -> SemanticHypothesis | None:
+    if isinstance(outcome, AcceptedBoundaryOutcome):
+        return outcome.selected_hypothesis
+    if isinstance(outcome, ReacquisitionPendingOutcome):
+        return outcome.pending_hypothesis
+    return None
 
 
 def current_no_interface_evidence(
-    result: OilShadowFrameResult,
+    outcome: OilCanonicalOutcome,
 ) -> ShadowNoInterfaceEvidence | None:
-    current = result.current_observation
-    if isinstance(current, ShadowNoInterfaceObservation):
-        return current.evidence
-    if isinstance(current, ShadowBoundaryObservation):
-        return current.no_interface
-    return None
+    return outcome.evidence if isinstance(outcome, NoInterfaceOutcome) else None
 
 
 def _candidate_from_hypothesis(
     item: SemanticHypothesis,
-    result: OilShadowFrameResult,
+    outcome: OilCanonicalOutcome,
     selected_id: str | None,
 ) -> BoundaryCandidate:
     selected = selected_id == item.identity
-    decision = result.temporal_decision
+    confidence = 0.0 if isinstance(outcome, PipelineFailureOutcome) else float(outcome.confidence)
+    margin = 0.0 if isinstance(outcome, PipelineFailureOutcome) else float(outcome.decision_margin)
     features = {
         "hypothesis_identity_token": _identity_token(item.identity),
         "provenance_token": _identity_token("|".join(item.provenance)),
@@ -220,8 +223,8 @@ def _candidate_from_hypothesis(
         "edge_strength": float(item.narrow.peak_strength),
         "horizontal_coverage": float(item.narrow.horizontal_coverage),
         "region_contrast": float(item.broad.strength),
-        "temporal_score": float(decision.confidence),
-        "state_transition_score": float(decision.decision_margin),
+        "temporal_score": confidence,
+        "state_transition_score": margin,
         "evidence_availability": float(item.evidence_availability),
         "visibility": float(item.visibility),
         "polarity_available": float(item.polarity_available),
@@ -246,12 +249,10 @@ def _candidate_from_hypothesis(
         "static_prior_overlap": float(item.static_prior.overlap),
         "static_prior_contribution": float(item.static_prior.contribution),
         "temporal_selected": float(selected),
-        "temporal_confidence": float(decision.confidence),
-        "temporal_decision_margin": float(decision.decision_margin),
+        "temporal_confidence": confidence,
+        "temporal_decision_margin": margin,
     }
-    glare_conflict = float(
-        max(item.broad.glare_conflict, item.narrow.glare_overlap)
-    )
+    glare_conflict = float(max(item.broad.glare_conflict, item.narrow.glare_overlap))
     exclusion_conflict = float(
         max(item.broad.exclusion_conflict, item.narrow.exclusion_overlap)
     )
@@ -275,46 +276,36 @@ def _candidate_from_hypothesis(
         penalties=penalties,
         feature_score=float(item.boundary_likelihood),
         penalty=float(min(1.0, item.artifact_likelihood + item.ambiguity_likelihood)),
-        final_score=(
-            float(decision.confidence)
-            if selected
-            else float(item.boundary_likelihood)
-        ),
+        final_score=confidence if selected else float(item.boundary_likelihood),
         selected=selected,
         rejected=not selected,
-        reject_reason="" if selected else _reject_reason(item, result),
+        reject_reason="" if selected else _reject_reason(item, outcome),
     )
     _assert_finite_candidate(candidate)
     return candidate
 
 
-def _decision_flags(result: OilShadowFrameResult) -> tuple[str, ...]:
-    status = result.temporal_decision.status
-    flags: list[str] = []
-    if status is ShadowTemporalStatus.AMBIGUOUS:
-        flags.append("OIL_EVIDENCE_AMBIGUOUS")
-    elif status is ShadowTemporalStatus.UNAVAILABLE:
-        flags.append("OIL_PIPELINE_UNAVAILABLE")
-    elif status is ShadowTemporalStatus.REACQUISITION_PENDING:
-        flags.append("OIL_REACQUISITION_PENDING")
-    if not result.available:
-        flags.append("OIL_PIPELINE_FAILURE")
-    return tuple(flags)
+def _outcome_flags(outcome: OilCanonicalOutcome) -> tuple[str, ...]:
+    if isinstance(outcome, AmbiguousOutcome):
+        return ("OIL_EVIDENCE_AMBIGUOUS",)
+    if isinstance(outcome, EvidenceUnavailableOutcome):
+        return ("OIL_PIPELINE_UNAVAILABLE",)
+    if isinstance(outcome, ReacquisitionPendingOutcome):
+        return ("OIL_REACQUISITION_PENDING",)
+    if isinstance(outcome, PipelineFailureOutcome):
+        return ("OIL_PIPELINE_FAILURE",)
+    return ()
 
 
-def _reject_reason(
-    item: SemanticHypothesis,
-    result: OilShadowFrameResult,
-) -> str:
-    status = result.temporal_decision.status
-    if status is ShadowTemporalStatus.NO_INTERFACE_ACCEPTED:
+def _reject_reason(item: SemanticHypothesis, outcome: OilCanonicalOutcome) -> str:
+    if isinstance(outcome, NoInterfaceOutcome):
         return "typed_no_interface_selected"
-    if status is ShadowTemporalStatus.AMBIGUOUS:
+    if isinstance(outcome, AmbiguousOutcome):
         return "typed_ambiguous_observation"
-    if status is ShadowTemporalStatus.UNAVAILABLE:
+    if isinstance(outcome, EvidenceUnavailableOutcome):
         return "typed_unavailable_observation"
-    if status is ShadowTemporalStatus.REACQUISITION_PENDING:
-        if item.identity == result.temporal_decision.selected_hypothesis_id:
+    if isinstance(outcome, ReacquisitionPendingOutcome):
+        if item.identity == outcome.pending_hypothesis.identity:
             return "typed_reacquisition_pending"
         return "typed_not_temporally_selected"
     if item.label.value == "artifact_like":
@@ -322,46 +313,6 @@ def _reject_reason(
     if item.label.value == "ambiguous":
         return "typed_ambiguous_hypothesis"
     return "typed_not_temporally_selected"
-
-
-def _validated_boundary_current(
-    result: OilShadowFrameResult,
-    context: str,
-) -> SemanticHypothesis:
-    current = result.current_observation
-    if not isinstance(current, ShadowBoundaryObservation):
-        raise ValueError(f"{context} has the wrong current observation")
-    if current.kind is not ShadowObservationKind.BOUNDARY:
-        raise ValueError(f"{context} current has the wrong internal kind")
-    canonical = _hypothesis_by_id(result, current.hypothesis.identity)
-    if canonical is None:
-        raise ValueError(f"{context} current hypothesis is not canonical")
-    if current.hypothesis != canonical:
-        raise ValueError(f"{context} current hypothesis disagrees with canonical content")
-    _require_same_y(
-        current.hypothesis.representative_source_y,
-        canonical.representative_source_y,
-        f"{context} current hypothesis Y disagrees with canonical content",
-    )
-    return canonical
-
-
-def _same_optional_y(left: float | None, right: float | None) -> bool:
-    if left is None or right is None:
-        return left is right
-    return math.isclose(float(left), float(right), rel_tol=0.0, abs_tol=1e-9)
-
-
-def _require_same_y(left: float, right: float, message: str) -> None:
-    if not _same_optional_y(left, right):
-        raise ValueError(message)
-
-
-def _hypothesis_by_id(
-    result: OilShadowFrameResult,
-    identity: str,
-) -> SemanticHypothesis | None:
-    return next((item for item in result.hypotheses if item.identity == identity), None)
 
 
 def _identity_token(value: str) -> float:
@@ -384,4 +335,8 @@ def _assert_finite_candidate(candidate: BoundaryCandidate) -> None:
         *candidate.penalties.values(),
     ]
     if not all(math.isfinite(float(value)) for value in scalars):
-        raise ValueError("typed oil candidate projection must be finite")
+        raise ValueError("Typed oil candidate projection must be finite.")
+
+
+def _json_safe(value) -> None:
+    json.dumps(value, ensure_ascii=False, sort_keys=True, allow_nan=False)

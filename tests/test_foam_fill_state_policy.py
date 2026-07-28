@@ -1,160 +1,143 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import numpy as np
 
 from oil_tracker.adapters.vision.fill_state_classifier import classify_fill_state
 from oil_tracker.adapters.vision.foam_front_detector import FoamDecisionStatus
+from oil_tracker.adapters.vision.oil_hypothesis_projection import project_production_result
+from oil_tracker.adapters.vision.oil_shadow_pipeline import OilHypothesisPipeline
 from oil_tracker.adapters.vision.oil_shadow_types import (
-    ShadowNoInterfaceEvidence,
-    ShadowTemporalStatus,
+    AcceptedBoundaryOutcome,
+    AmbiguousOutcome,
+    NoInterfaceOutcome,
 )
+from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import BoundaryKind, FillState
 from oil_tracker.domain.recipe import DetectorSettings
 
 
-def _candidate(kind: BoundaryKind, y: float = 50.0) -> BoundaryCandidate:
-    candidate = BoundaryCandidate("test", kind, y, final_score=0.8)
-    if kind is BoundaryKind.OIL_AIR:
-        candidate.features["local_y"] = y
-    return candidate
-
-
-def _no_interface(full: float, empty: float):
-    return ShadowNoInterfaceEvidence(
-        available=True,
-        likelihood=0.9,
-        full_likelihood=full,
-        empty_likelihood=empty,
-        region_uniformity=0.9,
-        weak_boundary_evidence=0.9,
-        competing_boundary_likelihood=0.0,
-        visibility=0.95,
-        glare_conflict=0.0,
-        mean_intensity=90.0,
-        texture=5.0,
-        reason="foam_policy_no_interface",
+def _run(frame, glass_id):
+    mask = np.full(frame.shape[:2], 255, dtype=np.uint8)
+    return OilHypothesisPipeline().run(
+        glass_id=glass_id,
+        pre=preprocess(frame, mask, DetectorSettings()),
+        effective_mask=mask,
+        ellipse_mask=mask,
+        exclusion_mask=np.zeros_like(mask),
+        static_artifact_map=None,
+        crop_origin_y=0.0,
     )
 
 
-def _classify(
-    oil,
-    foam,
-    status,
-    *,
-    previous=None,
-    oil_status=ShadowTemporalStatus.NO_INTERFACE_ACCEPTED,
-    no_interface=None,
-):
+def _outcomes():
+    frame = np.full((240, 320), 175, dtype=np.uint8)
+    frame[130:] = 70
+    frame[129:132] = 225
+    accepted = _run(frame, "foam-accepted")
+    none = _run(np.full((240, 320), 75, dtype=np.uint8), "foam-none")
+    assert isinstance(accepted, AcceptedBoundaryOutcome)
+    assert isinstance(none, NoInterfaceOutcome)
+    return accepted, none
+
+
+def _foam(y=50.0):
+    value = BoundaryCandidate("foam", BoundaryKind.FOAM_FRONT, y, final_score=0.8)
+    value.selected = True
+    return value
+
+
+def _classify(oil, foam, foam_status, outcome, previous=None):
     gray = np.full((100, 80), 100, dtype=np.uint8)
     effective = np.full_like(gray, 255)
-    glare = np.zeros_like(gray)
     return classify_fill_state(
         gray,
         effective,
-        glare,
+        np.zeros_like(gray),
         oil,
         foam,
         previous,
         DetectorSettings(),
-        status,
-        oil_status,
-        no_interface,
+        foam_status,
+        outcome,
     )
 
 
 def test_accepted_foam_with_oil_forces_foaming_visible():
+    accepted, _none = _outcomes()
+    oil = project_production_result(accepted).selected_candidate
+    assert oil is not None
+    oil.features["local_y"] = 50.0
     state, _visibility, flags = _classify(
-        _candidate(BoundaryKind.OIL_AIR),
-        _candidate(BoundaryKind.FOAM_FRONT),
+        oil,
+        _foam(),
         FoamDecisionStatus.ACCEPTED_STRONG,
-        oil_status=ShadowTemporalStatus.BOUNDARY_ACCEPTED,
+        accepted,
     )
     assert state is FillState.FOAMING_VISIBLE
     assert flags == []
 
 
-def test_accepted_foam_without_oil_forces_full_with_foam():
+def test_accepted_foam_without_oil_remains_authoritative():
+    accepted, _none = _outcomes()
+    ambiguous = AmbiguousOutcome(
+        hypotheses=accepted.hypotheses,
+        hypothesis_ids=(accepted.selected_hypothesis.identity,),
+        projected_source_y=accepted.raw_source_y,
+        boundary_likelihood=0.45,
+        artifact_likelihood=0.4,
+        ambiguity_likelihood=0.8,
+        no_interface_likelihood=0.2,
+        visibility=0.9,
+        resources=accepted.resources,
+        confidence=0.3,
+        decision_margin=0.1,
+        reason="ambiguous",
+    )
     state, _visibility, flags = _classify(
         None,
-        _candidate(BoundaryKind.FOAM_FRONT),
+        _foam(),
         FoamDecisionStatus.ACCEPTED_MODERATE,
-        oil_status=ShadowTemporalStatus.AMBIGUOUS,
+        ambiguous,
     )
     assert state is FillState.FULL_WITH_FOAM
     assert flags == []
 
 
 def test_pending_or_ambiguous_with_clear_oil_preserves_visible_nonfoam_state():
-    for status in (
-        FoamDecisionStatus.PERSISTENCE_PENDING,
-        FoamDecisionStatus.AMBIGUOUS,
-    ):
-        state, _visibility, flags = _classify(
-            _candidate(BoundaryKind.OIL_AIR, 50),
-            None,
-            status,
-            oil_status=ShadowTemporalStatus.BOUNDARY_ACCEPTED,
-        )
+    accepted, _none = _outcomes()
+    oil = project_production_result(accepted).selected_candidate
+    assert oil is not None
+    oil.features["local_y"] = 50.0
+    for status in (FoamDecisionStatus.PERSISTENCE_PENDING, FoamDecisionStatus.AMBIGUOUS):
+        state, _visibility, flags = _classify(oil, None, status, accepted)
         assert state is FillState.PARTIAL_VISIBLE
         assert "FOAM" in flags[0]
 
 
-def test_pending_or_ambiguous_without_oil_requires_unknown_review():
-    for status in (
-        FoamDecisionStatus.PERSISTENCE_PENDING,
-        FoamDecisionStatus.AMBIGUOUS,
-    ):
-        state, visibility, flags = _classify(
-            None,
-            None,
-            status,
-            no_interface=_no_interface(0.8, 0.1),
-        )
+def test_pending_or_ambiguous_without_oil_requires_review():
+    _accepted, none = _outcomes()
+    for status in (FoamDecisionStatus.PERSISTENCE_PENDING, FoamDecisionStatus.AMBIGUOUS):
+        state, visibility, flags = _classify(None, None, status, none)
         assert state is FillState.UNKNOWN_REVIEW
         assert visibility <= 0.45
         assert "REVIEW_REQUIRED" in flags
 
 
-def test_weak_and_glare_rejected_follow_typed_no_interface_classifier():
-    for status in (
+def test_weak_rejected_uses_positive_canonical_no_interface_only():
+    _accepted, none = _outcomes()
+    full = replace(
+        none,
+        evidence=replace(none.evidence, full_likelihood=0.8, empty_likelihood=0.1),
+    )
+    state, _visibility, flags = _classify(
+        None,
+        None,
         FoamDecisionStatus.WEAK_REJECTED,
-        FoamDecisionStatus.GLARE_REJECTED,
-    ):
-        state, _visibility, flags = _classify(
-            None,
-            None,
-            status,
-            previous=FillState.FULL_NO_INTERFACE,
-            no_interface=_no_interface(0.8, 0.1),
-        )
-        assert state is FillState.FULL_NO_INTERFACE
-        assert flags == []
-
-
-def test_existing_visible_full_and_empty_paths_remain_available():
-    oil = _candidate(BoundaryKind.OIL_AIR, 5)
-    state, _visibility, _flags = _classify(
-        oil,
-        None,
-        FoamDecisionStatus.NO_EVIDENCE,
+        full,
         previous=FillState.FULL_NO_INTERFACE,
-        oil_status=ShadowTemporalStatus.BOUNDARY_ACCEPTED,
     )
-    assert state is FillState.DRAINING_VISIBLE
-    full, _visibility, _flags = _classify(
-        None,
-        None,
-        FoamDecisionStatus.NO_EVIDENCE,
-        previous=FillState.FULL_NO_INTERFACE,
-        no_interface=_no_interface(0.8, 0.1),
-    )
-    empty, _visibility, _flags = _classify(
-        None,
-        None,
-        FoamDecisionStatus.NO_EVIDENCE,
-        previous=FillState.EMPTY_NO_INTERFACE,
-        no_interface=_no_interface(0.1, 0.8),
-    )
-    assert full is FillState.FULL_NO_INTERFACE
-    assert empty is FillState.EMPTY_NO_INTERFACE
+    assert state is FillState.FULL_NO_INTERFACE
+    assert flags == []

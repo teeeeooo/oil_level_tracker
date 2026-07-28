@@ -29,7 +29,6 @@ from .oil_shadow_types import (
     ShadowHypothesisLabel,
     ShadowNoInterfaceEvidence,
     ShadowNoInterfaceObservation,
-    ShadowObservationKind,
     ShadowSourceFamily,
     ShadowUnavailableObservation,
     StaticPriorEvidence,
@@ -285,9 +284,8 @@ def evaluate_typed_current_observation(
     no_interface = _no_interface_evidence(pre, effective_mask, hypotheses)
     if not no_interface.available and no_interface.visibility < 0.20:
         return ShadowUnavailableObservation(
-            ShadowObservationKind.UNAVAILABLE,
-            no_interface.visibility,
-            no_interface.reason,
+            visibility=no_interface.visibility,
+            reason=no_interface.reason,
         )
 
     ordered = sorted(hypotheses, key=_hypothesis_order)
@@ -306,9 +304,10 @@ def evaluate_typed_current_observation(
             and best.visibility >= 0.30
         ):
             return ShadowBoundaryObservation(
-                ShadowObservationKind.BOUNDARY,
-                best,
-                no_interface,
+                hypothesis=best,
+                alternatives=tuple(
+                    sorted(item.identity for item in ordered[1:3])
+                ),
             )
 
     competing_boundary = 0.0 if best is None else best.boundary_likelihood
@@ -317,10 +316,7 @@ def evaluate_typed_current_observation(
         and no_interface.likelihood >= 0.58
         and no_interface.likelihood - competing_boundary >= 0.10
     ):
-        return ShadowNoInterfaceObservation(
-            ShadowObservationKind.NO_INTERFACE,
-            no_interface,
-        )
+        return ShadowNoInterfaceObservation(evidence=no_interface)
 
     reason = "competing_boundary_artifact_or_no_interface_evidence"
     if best is not None and best.polarity_available is False:
@@ -328,7 +324,6 @@ def evaluate_typed_current_observation(
     elif no_interface.glare_conflict >= 0.55:
         reason = "glare_visibility_conflict"
     return ShadowAmbiguousObservation(
-        kind=ShadowObservationKind.AMBIGUOUS,
         hypothesis_ids=tuple(sorted(item.identity for item in ordered[:3])),
         boundary_likelihood=competing_boundary,
         artifact_likelihood=0.0 if best is None else best.artifact_likelihood,
@@ -477,6 +472,7 @@ def _hough_observations(
                 measurement_width_px=float(width),
                 band_height_px=1.0,
                 source_local_index=source_index,
+                source_angle_deg=angle,
             )
         )
     return output

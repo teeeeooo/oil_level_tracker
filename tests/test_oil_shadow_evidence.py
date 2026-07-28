@@ -9,10 +9,13 @@ import numpy as np
 from oil_tracker.adapters.vision.oil_shadow_observations import semantic_deduplicate
 from oil_tracker.adapters.vision.oil_shadow_pipeline import OilShadowPipeline
 from oil_tracker.adapters.vision.oil_shadow_types import (
+    AcceptedBoundaryOutcome,
+    AmbiguousOutcome,
     BroadScaleEvidence,
+    EvidenceUnavailableOutcome,
+    NoInterfaceOutcome,
     OilShadowBounds,
     ShadowHypothesisLabel,
-    ShadowObservationKind,
     stable_digest,
 )
 from oil_tracker.adapters.vision.preprocessing import preprocess
@@ -130,7 +133,7 @@ def test_likelihoods_are_finite_normalized_and_ambiguity_is_first_class():
     line = np.full((80, 100), 100, dtype=np.uint8)
     line[39:42] = 200
     result = _run(line)
-    assert result.current_observation.kind is ShadowObservationKind.AMBIGUOUS
+    assert isinstance(result, AmbiguousOutcome)
     for item in result.hypotheses:
         values = (
             item.boundary_likelihood,
@@ -205,20 +208,17 @@ def test_semantic_dedup_is_deterministic_preserves_provenance_and_keeps_opposite
     assert len(separated) == 2
 
 
-def test_typed_no_interface_boundary_ambiguity_and_unavailable_outputs():
+def test_closed_no_interface_boundary_ambiguity_and_unavailable_outcomes():
     dark = _run(np.full((80, 100), 75, dtype=np.uint8))
     bright = _run(np.full((80, 100), 190, dtype=np.uint8))
-    assert dark.current_observation.kind is ShadowObservationKind.NO_INTERFACE
-    assert bright.current_observation.kind is ShadowObservationKind.NO_INTERFACE
-    assert dark.current_observation.evidence.full_likelihood > dark.current_observation.evidence.empty_likelihood
-    assert bright.current_observation.evidence.empty_likelihood > bright.current_observation.evidence.full_likelihood
+    assert isinstance(dark, NoInterfaceOutcome)
+    assert isinstance(bright, NoInterfaceOutcome)
+    assert dark.evidence.full_likelihood > dark.evidence.empty_likelihood
+    assert bright.evidence.empty_likelihood > bright.evidence.full_likelihood
 
     strong = _run(_step())
-    assert strong.current_observation.kind in {
-        ShadowObservationKind.BOUNDARY,
-        ShadowObservationKind.AMBIGUOUS,
-    }
-    assert strong.current_observation.kind is not ShadowObservationKind.NO_INTERFACE
+    assert isinstance(strong, (AcceptedBoundaryOutcome, AmbiguousOutcome))
+    assert not isinstance(strong, NoInterfaceOutcome)
 
     glare = _run(np.full((80, 100), 255, dtype=np.uint8))
-    assert glare.current_observation.kind is ShadowObservationKind.UNAVAILABLE
+    assert isinstance(glare, EvidenceUnavailableOutcome)
