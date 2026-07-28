@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, fields
+from dataclasses import dataclass
 import hashlib
-import json
-import math
 
 import numpy as np
 
@@ -18,7 +16,6 @@ from .oil_shadow_types import (
     EvidenceUnavailableOutcome,
     NoInterfaceOutcome,
     OilCanonicalOutcome,
-    OilCanonicalOutcomeBase,
     PipelineFailureOutcome,
     ReacquisitionPendingOutcome,
     SemanticHypothesis,
@@ -41,78 +38,9 @@ class OilProductionProjection:
     flags: tuple[str, ...]
 
 
-def validate_production_result(outcome: OilCanonicalOutcome) -> None:
-    if not isinstance(outcome, OilCanonicalOutcomeBase):
-        raise TypeError("Oil runner returned a non-canonical result.")
-    supported = {
-        AcceptedBoundaryOutcome,
-        NoInterfaceOutcome,
-        AmbiguousOutcome,
-        EvidenceUnavailableOutcome,
-        ReacquisitionPendingOutcome,
-        PipelineFailureOutcome,
-    }
-    if type(outcome) not in supported:
-        raise TypeError("Unsupported canonical oil outcome subclass.")
-    expected = {field.name for field in fields(outcome)}
-    if set(vars(outcome)) != expected:
-        raise ValueError("Canonical outcome carries an extra/missing discriminator.")
-    if isinstance(outcome, PipelineFailureOutcome):
-        if outcome.tracker_action is not CompatibilityTrackerAction.NO_UPDATE:
-            raise ValueError("Pipeline failure cannot update the compatibility tracker.")
-        if outcome.smoothing_action is not SmoothingAction.PRESERVE:
-            raise ValueError("Pipeline failure cannot clear smoothing.")
-        _json_safe({"reason": outcome.reason, "stage": outcome.stage.value})
-        return
-
-    hypotheses = outcome.hypotheses
-    if not isinstance(hypotheses, tuple):
-        raise TypeError("Canonical hypotheses must be immutable.")
-    identities = [item.identity for item in hypotheses]
-    if len(identities) != len(set(identities)):
-        raise ValueError("Canonical outcome contains duplicate hypothesis identities.")
-    if isinstance(outcome, AcceptedBoundaryOutcome):
-        if outcome.selected_hypothesis not in hypotheses:
-            raise ValueError("Accepted boundary does not select canonical evidence.")
-        if outcome.tracker_action is not CompatibilityTrackerAction.ACCEPT_BOUNDARY:
-            raise ValueError("Accepted boundary has the wrong tracker action.")
-        if not math.isfinite(outcome.raw_source_y):
-            raise ValueError("Accepted boundary source Y must be finite.")
-    elif isinstance(outcome, NoInterfaceOutcome):
-        if not outcome.evidence.available:
-            raise ValueError("No-interface outcome lacks positive evidence.")
-    elif isinstance(outcome, AmbiguousOutcome):
-        if not set(outcome.hypothesis_ids) <= set(identities):
-            raise ValueError("Ambiguous outcome references non-canonical evidence.")
-    elif isinstance(outcome, ReacquisitionPendingOutcome):
-        if outcome.pending_hypothesis not in hypotheses:
-            raise ValueError("Reacquisition outcome references non-canonical evidence.")
-    if outcome.tracker_action is CompatibilityTrackerAction.ACCEPT_BOUNDARY and not isinstance(
-        outcome, AcceptedBoundaryOutcome
-    ):
-        raise ValueError("Only accepted boundary may update the compatibility tracker.")
-    if outcome.smoothing_action is SmoothingAction.CLEAR_BEFORE_ACCEPT and not isinstance(
-        outcome, AcceptedBoundaryOutcome
-    ):
-        raise ValueError("Only reacquired boundary may clear before acceptance.")
-    if outcome.smoothing_action is SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE and not isinstance(
-        outcome, (NoInterfaceOutcome, EvidenceUnavailableOutcome)
-    ):
-        raise ValueError("Only successful stable absence may clear stale smoothing.")
-    _json_safe(
-        {
-            "variant": type(outcome).__name__,
-            "confidence": outcome.confidence,
-            "margin": outcome.decision_margin,
-            "reason": outcome.reason,
-            "tracker_action": outcome.tracker_action.value,
-            "smoothing_action": outcome.smoothing_action.value,
-        }
-    )
 
 
 def project_production_result(outcome: OilCanonicalOutcome) -> OilProductionProjection:
-    validate_production_result(outcome)
     hypotheses = outcome_hypotheses(outcome)
     selected_id = (
         outcome.selected_hypothesis.identity
@@ -281,7 +209,6 @@ def _candidate_from_hypothesis(
         rejected=not selected,
         reject_reason="" if selected else _reject_reason(item, outcome),
     )
-    _assert_finite_candidate(candidate)
     return candidate
 
 
@@ -323,20 +250,3 @@ def _identity_token(value: str) -> float:
 def _finite_profile(values: np.ndarray) -> list[float]:
     finite = np.nan_to_num(values, nan=0.0, posinf=1.0, neginf=-1.0)
     return [float(value) for value in finite]
-
-
-def _assert_finite_candidate(candidate: BoundaryCandidate) -> None:
-    scalars = [
-        candidate.y,
-        candidate.feature_score,
-        candidate.penalty,
-        candidate.final_score,
-        *candidate.features.values(),
-        *candidate.penalties.values(),
-    ]
-    if not all(math.isfinite(float(value)) for value in scalars):
-        raise ValueError("Typed oil candidate projection must be finite.")
-
-
-def _json_safe(value) -> None:
-    json.dumps(value, ensure_ascii=False, sort_keys=True, allow_nan=False)

@@ -1,40 +1,46 @@
 from __future__ import annotations
 
-from dataclasses import fields, is_dataclass, replace
+from dataclasses import fields, is_dataclass
 from enum import Enum
 
 import numpy as np
 
 from oil_tracker.adapters.vision.oil_shadow_pipeline import OilHypothesisPipeline
 from oil_tracker.adapters.vision.oil_shadow_temporal import (
-    GlassTemporalSnapshot,
+    GlassTemporalRecord,
     GlassTemporalState,
-    OilShadowTemporalModel,
+    TemporalStoreState,
 )
 from oil_tracker.adapters.vision.oil_shadow_types import (
     AbsenceStabilityMode,
+    AcceptedBoundaryOutcome,
     BoundaryAcceptanceMode,
-    BoundaryAcceptedDecision,
-    EvidenceUnavailableDecision,
+    EvidenceUnavailableOutcome,
     NoInterfaceOutcome,
     OilShadowBounds,
     PipelineFailureOutcome,
-    ReacquisitionPendingDecision,
-    ShadowAmbiguousObservation,
-    ShadowBoundaryObservation,
-    ShadowNoInterfaceObservation,
-    ShadowUnavailableObservation,
+    ReacquisitionPendingOutcome,
     SmoothingAction,
-    stable_digest,
 )
 from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.domain.recipe import DetectorSettings
 
 
-def _pipeline_result(image):
-    mask = np.full(image.shape[:2], 255, dtype=np.uint8)
-    return OilHypothesisPipeline().run(
-        glass_id="seed",
+def _boundary(y: int) -> np.ndarray:
+    image = np.full((240, 320), 175, dtype=np.uint8)
+    image[y:] = 70
+    image[y - 1 : y + 2] = 225
+    return image
+
+
+def _uniform(value: int) -> np.ndarray:
+    return np.full((240, 320), value, dtype=np.uint8)
+
+
+def _run(pipeline: OilHypothesisPipeline, image: np.ndarray, glass_id: str = "g"):
+    mask = np.full(image.shape, 255, dtype=np.uint8)
+    return pipeline.run(
+        glass_id=glass_id,
         pre=preprocess(image, mask, DetectorSettings()),
         effective_mask=mask,
         ellipse_mask=mask,
@@ -44,77 +50,16 @@ def _pipeline_result(image):
     )
 
 
-def _seeds():
-    step = np.full((80, 100), 180, dtype=np.uint8)
-    step[40:] = 60
-    step[39:42] = 230
-    boundary = _pipeline_result(step)
-    dark = _pipeline_result(np.full((80, 100), 75, dtype=np.uint8))
-    assert not isinstance(boundary, PipelineFailureOutcome)
-    assert boundary.hypotheses
-    assert isinstance(dark, NoInterfaceOutcome)
-    return boundary.hypotheses[0], dark.evidence
-
-
-def _boundary(y: float):
-    hypothesis, _evidence = _seeds()
-    identity = stable_digest("temporal-boundary", (("y", y),))
-    hypothesis = replace(
-        hypothesis,
-        identity=identity,
-        representative_local_y=y,
-        representative_source_y=y,
-        minimum_local_y=y - 1.0,
-        maximum_local_y=y + 1.0,
-        boundary_likelihood=0.90,
-        artifact_likelihood=0.08,
-        ambiguity_likelihood=0.12,
-    )
-    return ShadowBoundaryObservation(hypothesis=hypothesis)
-
-
-def _no_interface():
-    _hypothesis, evidence = _seeds()
-    return ShadowNoInterfaceObservation(evidence=evidence)
-
-
-def _ambiguous(y=40.0):
-    return ShadowAmbiguousObservation(
-        hypothesis_ids=(stable_digest("ambiguous", (("y", y),)),),
-        boundary_likelihood=0.45,
-        artifact_likelihood=0.42,
-        ambiguity_likelihood=0.80,
-        no_interface_likelihood=0.25,
-        visibility=0.90,
-        projected_source_y=y,
-        reason="competing evidence",
-    )
-
-
-def _unavailable():
-    return ShadowUnavailableObservation(visibility=0.10, reason="insufficient support")
-
-
-def _snapshot(state: GlassTemporalState | None = None, generation: int = 0):
-    state = state or GlassTemporalState("g")
-    return GlassTemporalSnapshot("g", generation, state.version, state)
-
-
-def _advance(model, snapshot, observation):
-    provisional = model.evaluate(snapshot, observation)
-    return provisional, _snapshot(provisional.next_state, snapshot.reset_generation)
-
-
-def _assert_no_raster(value):
+def _assert_no_raster(value: object) -> None:
     if isinstance(value, np.ndarray):
-        raise AssertionError("temporal state retained a raster")
+        raise AssertionError("temporal truth retained a raster")
     if isinstance(value, (str, int, float, bool, type(None), Enum)):
         return
     if isinstance(value, tuple):
         for item in value:
             _assert_no_raster(item)
         return
-    if isinstance(value, dict):
+    if isinstance(value, dict) or type(value).__name__ == "mappingproxy":
         for item in value.values():
             _assert_no_raster(item)
         return
@@ -125,63 +70,76 @@ def _assert_no_raster(value):
     raise AssertionError(type(value))
 
 
-def test_pure_evaluation_is_deterministic_and_has_no_live_state_authority():
-    model = OilShadowTemporalModel()
-    snapshot = _snapshot()
-    first = model.evaluate(snapshot, _boundary(20.0))
-    second = model.evaluate(snapshot, _boundary(20.0))
-    assert first == second
-    assert first.next_state is not snapshot.state
-    assert isinstance(first.decision, BoundaryAcceptedDecision)
-    assert first.decision.acceptance_mode is BoundaryAcceptanceMode.INITIAL
-    assert not hasattr(model, "commit")
-    assert not hasattr(model, "reset")
-    assert not hasattr(model, "snapshot")
+def test_missing_record_is_canonical_initial_and_read_does_not_insert():
+    pipeline = OilHypothesisPipeline()
+    before = pipeline._debug_store_reference
+    snapshot = pipeline.temporal_snapshot("g")
+    assert snapshot.version == 0
+    assert snapshot.state == GlassTemporalState("g")
+    assert pipeline.temporal_state_count == 0
+    assert pipeline._debug_store_reference is before
+    assert before == TemporalStoreState({})
+    assert GlassTemporalRecord.initial("g").version == 0
 
 
-def test_successful_transition_policy_is_preserved_by_pure_model():
-    model = OilShadowTemporalModel()
-    snapshot = _snapshot()
-    initial, snapshot = _advance(model, snapshot, _boundary(20.0))
-    continuous, snapshot = _advance(model, snapshot, _boundary(40.0))
-    pending, snapshot = _advance(model, snapshot, _boundary(100.0))
-    reacquired, snapshot = _advance(model, snapshot, _boundary(102.0))
-    assert isinstance(initial.decision, BoundaryAcceptedDecision)
-    assert isinstance(continuous.decision, BoundaryAcceptedDecision)
-    assert isinstance(pending.decision, ReacquisitionPendingDecision)
-    assert isinstance(reacquired.decision, BoundaryAcceptedDecision)
-    assert reacquired.decision.acceptance_mode is BoundaryAcceptanceMode.REACQUIRED
-    assert reacquired.decision.smoothing_action is SmoothingAction.CLEAR_BEFORE_ACCEPT
-    assert reacquired.decision.accepted_source_y == 102.0
+def test_successful_temporal_mathematics_are_preserved_by_fixed_reducer():
+    pipeline = OilHypothesisPipeline()
+    initial = _run(pipeline, _boundary(130))
+    continuous = _run(pipeline, _boundary(132))
+    pending = _run(pipeline, _boundary(200))
+    reacquired = _run(pipeline, _boundary(198))
+
+    assert isinstance(initial, AcceptedBoundaryOutcome)
+    assert initial.acceptance_mode is BoundaryAcceptanceMode.INITIAL
+    assert isinstance(continuous, AcceptedBoundaryOutcome)
+    assert continuous.acceptance_mode is BoundaryAcceptanceMode.CONTINUOUS
+    assert pipeline.temporal_snapshot("g").version == 4
+    assert isinstance(pending, ReacquisitionPendingOutcome)
+    assert isinstance(reacquired, AcceptedBoundaryOutcome)
+    assert reacquired.acceptance_mode is BoundaryAcceptanceMode.REACQUIRED
+    assert reacquired.smoothing_action is SmoothingAction.CLEAR_BEFORE_ACCEPT
+    snapshot = pipeline.temporal_snapshot("g")
+    assert snapshot.state.accepted_y == reacquired.raw_source_y
+    assert snapshot.state.accepted_velocity is None
+    assert snapshot.state.pending_y is None
+    assert snapshot.state.pending_count == 0
 
 
 def test_unavailable_and_no_interface_counters_remain_bounded():
     bounds = OilShadowBounds(unavailable_clear_frames=3, no_interface_clear_frames=2)
-    model = OilShadowTemporalModel(bounds)
-    snapshot = _snapshot()
-    _accepted, snapshot = _advance(model, snapshot, _boundary(20.0))
-    first, snapshot = _advance(model, snapshot, _unavailable())
-    second, snapshot = _advance(model, snapshot, _unavailable())
-    third, snapshot = _advance(model, snapshot, _unavailable())
-    assert isinstance(first.decision, EvidenceUnavailableDecision)
-    assert first.decision.stability_mode is AbsenceStabilityMode.PENDING
-    assert second.decision.stability_mode is AbsenceStabilityMode.PENDING
-    assert third.decision.stability_mode is AbsenceStabilityMode.STABLE
-    assert third.decision.smoothing_action is SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE
-    for _ in range(10):
-        stable, snapshot = _advance(model, snapshot, _no_interface())
-    assert stable.decision.stability_mode is AbsenceStabilityMode.STABLE
-    assert snapshot.state.no_interface_count == bounds.no_interface_clear_frames
+    pipeline = OilHypothesisPipeline(bounds)
+    assert isinstance(_run(pipeline, _boundary(130)), AcceptedBoundaryOutcome)
+
+    unavailable = [_run(pipeline, _uniform(255)) for _ in range(8)]
+    assert all(isinstance(item, EvidenceUnavailableOutcome) for item in unavailable)
+    assert unavailable[0].stability_mode is AbsenceStabilityMode.PENDING
+    assert unavailable[2].stability_mode is AbsenceStabilityMode.STABLE
+    assert unavailable[-1].smoothing_action is SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE
+    assert pipeline.temporal_snapshot("g").state.unavailable_count == 3
+
+    pipeline.reset("g")
+    no_interface = [_run(pipeline, _uniform(75)) for _ in range(8)]
+    assert all(isinstance(item, NoInterfaceOutcome) for item in no_interface)
+    assert no_interface[0].stability_mode is AbsenceStabilityMode.PENDING
+    assert no_interface[1].stability_mode is AbsenceStabilityMode.STABLE
+    assert pipeline.temporal_snapshot("g").state.no_interface_count == 2
 
 
-def test_temporal_resources_and_state_retain_no_raster():
+def test_temporal_resources_are_bounded_and_store_retains_no_raster():
     bounds = OilShadowBounds(temporal_beam_width=3, temporal_history_window=4)
-    model = OilShadowTemporalModel(bounds)
-    snapshot = _snapshot()
-    sequence = (_boundary(20.0), _ambiguous(22.0), _boundary(24.0), _unavailable(), _no_interface())
+    pipeline = OilHypothesisPipeline(bounds)
+    sequence = (
+        _boundary(130),
+        _boundary(132),
+        _boundary(200),
+        _uniform(255),
+        _uniform(75),
+    )
     for index in range(30):
-        provisional, snapshot = _advance(model, snapshot, sequence[index % len(sequence)])
-        assert provisional.resources.beam_count <= bounds.temporal_beam_width
-        assert provisional.resources.history_length <= bounds.temporal_history_window
-        assert provisional.resources.retained_scalar_count <= model.retained_scalar_limit
-    _assert_no_raster(snapshot.state)
+        outcome = _run(pipeline, sequence[index % len(sequence)])
+        assert not isinstance(outcome, PipelineFailureOutcome)
+        resources = outcome.resources
+        assert resources.temporal_beam_count <= bounds.temporal_beam_width
+        assert resources.temporal_history_length <= bounds.temporal_history_window
+        assert resources.retained_temporal_scalar_count <= resources.retained_temporal_scalar_limit
+    _assert_no_raster(pipeline._debug_store_reference)

@@ -1,17 +1,18 @@
 # Current Work Plan
 
-- **Document status:** `DESIGNING`
+- **Document status:** `SOURCE_AUDIT_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Redesign-start exact head:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`
-- **Redesign-start exact parent:** `a8e308c514762e0bca0af0273b2bfcb01ab4bc29`
+- **Implementation-start exact head:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`
+- **Implementation-start exact parent:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`
 - **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
-- **Independent source-audit history:** Three successive failures of the multi-lock transactional temporal architecture
-- **Current gate:** Independent serialized temporal-state architecture exact-head re-audit
-- **Implementation status:** Blocked pending architecture re-audit `PASS`
-- **Controlled comparison:** Blocked pending later independent source exact-head audit `PASS`
+- **Architecture audit:** `AUDIT: PASS`
+- **Independent source-audit history:** Three successive failures of the retired multi-lock transactional temporal architecture
+- **Current gate:** Independent serialized temporal-state source exact-head audit
+- **Implementation status:** Source and deterministic tests implemented; independent exact-head source audit required
+- **Controlled comparison:** Blocked pending independent source exact-head audit `PASS`
 
-This plan records a documentation-only S5-B architecture redesign. It makes no source repair, test, controlled-comparison, canonical-validation, Windows, packaging, merge or S5-B completion claim.
+This plan records the bounded S5-B serialized temporal-state source/test implementation. It makes no controlled-comparison, canonical-validation, Windows/manual-validation, packaging, merge or S5-B completion claim.
 
 ## Why the previous source direction is retired
 
@@ -98,25 +99,26 @@ Every oil pipeline failure must produce:
 
 There is no post-replacement failure projection.
 
-## Future source migration scope
+## Implemented source migration scope
 
-After architecture re-audit `PASS`, a bounded implementation Worker must:
+The audited architecture has been implemented as a bounded owner-aligned source change:
 
-- replace the current barrier/guard/per-Glass-lock architecture with a single serialized owner;
-- introduce the immutable store and Glass-record model;
-- fold evaluator, next-state, outcome and action construction into one fixed reducer;
-- validate all canonical invariants before one store-reference replacement;
-- remove reset generation, commit token, stale/replay/session semantics and related tests;
-- remove detector-side post-run result rejection;
-- keep projection exhaustive and non-rejecting;
-- replace different-Glass parallelism tests with total-order, re-entry and failure-invariance tests;
-- preserve successful temporal mathematics, S5-A Foam, external schemas and detector behavior.
+- one ticket-based ingress serializes oil-frame run, Glass reset, global reset, snapshot and count;
+- immutable preparation owns independent read-only raster copies before sequencing;
+- one immutable `TemporalStoreState` reference owns all versioned `GlassTemporalRecord` values;
+- one fixed private reducer creates decision, next record, outcome, tracker/smoothing actions and resources;
+- owner validation completes before exactly one successful store-reference replacement;
+- reset generation, commit token, stale/replay/session semantics, lifecycle barriers and per-Glass locks are removed;
+- detector-side post-owner rejection and projection-side load-bearing validation are removed;
+- projection is exhaustive and non-rejecting for the closed outcome family;
+- deterministic tests enforce total order, re-entry rejection, failure invariance and single replacement;
+- successful temporal mathematics, S5-A Foam, external schemas and detector behavior remain protected.
 
-No source or test implementation is authorized by this documentation commit.
+This implementation remains unapproved until an independent exact-head source Auditor returns `AUDIT: PASS`.
 
-## Architecture acceptance matrix
+## Source implementation acceptance matrix
 
-Independent architecture re-audit must verify:
+Independent exact-head source audit must verify:
 
 - one owner defines a total order for run, reset, snapshot and count;
 - one immutable store value owns all Glass records;
@@ -138,22 +140,23 @@ Unchanged and not relaxed:
 - clear-oil raw detection coverage remains `0.5714285714285714`, below expected `1.0`;
 - `no-interface-to-visible` frame 3 still has no numeric raw oil recovery.
 
-These remain future controlled-comparison findings and are not part of this documentation redesign.
+These remain future controlled-comparison findings and are not part of this bounded serialized-owner correctness change.
 
 ## Downstream sequence
 
-1. Independent serialized temporal-state architecture exact-head re-audit.
-2. Bounded source/test implementation only after architecture `AUDIT: PASS`.
-3. Independent implementation exact-head source audit.
-4. Controlled base/feature comparison only after source audit `PASS`.
-5. Later canonical, Windows/manual, packaging and merge gates under separate authority.
+1. Independent serialized temporal-state implementation exact-head source audit.
+2. Controlled base/feature comparison only after source audit `PASS`.
+3. Later canonical, Windows/manual, packaging and merge gates under separate authority.
 
 ## Latest recorded closeout
 
-- **Result:** Multi-lock transactional temporal architecture retired in favor of one serialized owner.
-- **Starting exact head:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`.
-- **Starting parent:** `a8e308c514762e0bca0af0273b2bfcb01ab4bc29`.
-- **Changed scope:** Architecture and current work-plan documentation only.
-- **Validation:** Documentation inspection and repository diff checks only; no source tests or controlled validation authorized.
-- **Current gate:** Independent serialized temporal-state architecture exact-head re-audit.
+- **Result:** Single-owner serialized temporal-state source/test implementation complete; independent exact-head source audit required.
+- **Starting exact head:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`.
+- **Starting parent:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`.
+- **Changed scope:** Serialized oil owner/store/reducer, detector/projection cutover, owner-aligned tests and this current work plan.
+- **Focused validation:** `36 passed` for serialized ordering, reducer coherence, failure invariance, reset and re-entry.
+- **Production validation:** `42 passed` for detector/consumer, S5-A Foam and raster-isolation coverage.
+- **Full repository validation:** `767 passed`, with only the two unchanged controlled-accuracy failures recorded above.
+- **Compile validation:** `PYTHONPATH=src .venv/bin/python -m compileall -q src tests` passed.
+- **Current gate:** Independent serialized temporal-state implementation exact-head source audit.
 - **Resulting exact SHA:** Reported by the Worker final report, not self-recorded in this commit.

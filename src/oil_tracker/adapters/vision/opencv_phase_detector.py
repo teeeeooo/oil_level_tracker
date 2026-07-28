@@ -21,7 +21,6 @@ from .geometry_masks import MaskBundle, build_mask_bundle
 from .oil_hypothesis_projection import (
     build_hypothesis_debug_profiles,
     project_production_result,
-    validate_production_result,
 )
 from .oil_shadow_pipeline import (
     OilHypothesisPipeline,
@@ -298,9 +297,7 @@ class OpenCvPhaseDetector:
             static_map=static_map,
         )
         try:
-            result = self._oil_pipeline.run(**kwargs)
-            validate_production_result(result)
-            return result
+            return self._oil_pipeline.run(**kwargs)
         except Exception as exc:
             reason = f"{type(exc).__name__}:{str(exc)[:120]}"
             return PipelineFailureOutcome(

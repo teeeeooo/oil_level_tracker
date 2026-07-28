@@ -15,7 +15,7 @@ from oil_tracker.adapters.vision import (
     oil_temporal_path,
 )
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
-from oil_tracker.adapters.vision.oil_hypothesis_projection import validate_production_result
+from oil_tracker.adapters.vision.oil_hypothesis_projection import project_production_result
 from oil_tracker.adapters.vision.oil_shadow_pipeline import OilHypothesisPipeline
 from oil_tracker.adapters.vision.oil_shadow_types import (
     AcceptedBoundaryOutcome,
@@ -259,20 +259,16 @@ def test_successful_stable_absence_clear_is_not_shared_with_pipeline_failure(mon
     assert failed_detector.oil_temporal_state_count == before_count == 1
 
 
-def test_invalid_internal_pipeline_result_cannot_change_temporal_state(monkeypatch):
-    detector = OpenCvPhaseDetector()
-    glass = _glass("invalid")
-    accepted, _ = detector.detect(_oil_frame(), glass, 1, 0.0)
-    assert accepted.raw_oil_air_level_y is not None
-    before_count = detector.oil_temporal_state_count
-    monkeypatch.setattr(detector._oil_pipeline, "run", lambda **_kwargs: {"invalid": True})
-    detection, _ = detector.detect(_oil_frame(), glass, 2, 0.5)
-    assert detector.oil_temporal_state_count == before_count == 1
-    assert detection.raw_oil_air_level_y is None
-    assert detection.debug_metrics["oil_pipeline_available"] is False
-    assert detection.debug_metrics["oil_tracker_action"] == "NO_UPDATE"
-    assert detection.debug_metrics["oil_smoothing_action"] == "PRESERVE"
-    assert "TypeError" in detection.debug_metrics["oil_pipeline_failure_reason"]
+def test_detector_has_no_post_owner_result_rejection_or_failure_conversion():
+    source = inspect.getsource(OpenCvPhaseDetector._evaluate_oil_pipeline)
+    assert "validate_production_result" not in source
+    assert "return self._oil_pipeline.run(**kwargs)" in source
+    failure = PipelineFailureOutcome("injected", PipelineFailureStage.PHASE_A)
+    projection = project_production_result(failure)
+    assert projection.raw_source_y is None
+    assert projection.selected_candidate is None
+    assert projection.tracker_action.value == "NO_UPDATE"
+    assert projection.smoothing_action.value == "PRESERVE"
 
 
 def test_production_constructor_surfaces_have_no_oil_injection_callbacks():
@@ -396,7 +392,9 @@ def test_canonical_outcomes_validate_and_typed_state_is_glass_local_resettable()
         _pipeline_result(_uniform_frame(255), "unavailable"),
         PipelineFailureOutcome("failed", PipelineFailureStage.PHASE_A),
     ):
-        validate_production_result(outcome)
+        projection = project_production_result(outcome)
+        assert projection.tracker_action is outcome.tracker_action
+        assert projection.smoothing_action is outcome.smoothing_action
 
     detector = OpenCvPhaseDetector()
     detector.detect(_oil_frame(125), _glass("a"), 1, 0.0)
@@ -407,3 +405,47 @@ def test_canonical_outcomes_validate_and_typed_state_is_glass_local_resettable()
     detector.reset()
     assert detector.oil_temporal_state_count == 0
     assert detector.foam_temporal_state_count == 0
+
+
+def test_projection_is_exhaustive_and_non_rejecting_for_closed_outcome_family():
+    accepted = _pipeline_result(_oil_frame(), "projection-boundary")
+    no_interface = _pipeline_result(_uniform_frame(75), "projection-none")
+    unavailable = _pipeline_result(_uniform_frame(255), "projection-unavailable")
+    assert isinstance(accepted, AcceptedBoundaryOutcome)
+    assert isinstance(no_interface, NoInterfaceOutcome)
+    assert isinstance(unavailable, EvidenceUnavailableOutcome)
+    hypothesis = accepted.selected_hypothesis
+    ambiguous = AmbiguousOutcome(
+        hypotheses=accepted.hypotheses,
+        hypothesis_ids=(hypothesis.identity,),
+        projected_source_y=hypothesis.representative_source_y,
+        boundary_likelihood=hypothesis.boundary_likelihood,
+        artifact_likelihood=hypothesis.artifact_likelihood,
+        ambiguity_likelihood=hypothesis.ambiguity_likelihood,
+        no_interface_likelihood=0.0,
+        visibility=hypothesis.visibility,
+        resources=accepted.resources,
+        confidence=0.5,
+        decision_margin=0.1,
+        reason="projection ambiguity",
+    )
+    pending = ReacquisitionPendingOutcome(
+        pending_hypothesis=hypothesis,
+        hypotheses=accepted.hypotheses,
+        resources=accepted.resources,
+        confidence=0.5,
+        decision_margin=0.1,
+        reason="projection pending",
+    )
+    failure = PipelineFailureOutcome("projection failure", PipelineFailureStage.PHASE_A)
+
+    family = (accepted, no_interface, ambiguous, unavailable, pending, failure)
+    projections = tuple(project_production_result(outcome) for outcome in family)
+    assert projections[0].raw_source_y == accepted.raw_source_y
+    assert projections[0].selected_candidate is not None
+    for projection in projections[1:]:
+        assert projection.raw_source_y is None
+        assert projection.selected_candidate is None
+    for outcome, projection in zip(family, projections):
+        assert projection.tracker_action is outcome.tracker_action
+        assert projection.smoothing_action is outcome.smoothing_action
