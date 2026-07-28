@@ -1,6 +1,6 @@
 # Current Work Plan
 
-- **Document status:** `TEST_CONTRACT_AUDIT_PENDING`
+- **Document status:** `TYPED_COHERENCE_GATE_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
 - **Implementation-start exact head:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`
@@ -11,6 +11,8 @@
 - **Calibration-start exact parent:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`
 - **Dominance-robustness start exact head:** `912a94b1cd62b0164e896a7e02dbb1df1c0c85dc`
 - **Dominance-robustness start exact parent:** `e0d5c9fddb53c549bac0e56a4b7b6084862e5ca7`
+- **Typed-coherence start exact head:** `328a63a5472367aa3c5f2f3266a624f03e64c16d`
+- **Typed-coherence start exact parent:** `15230707d45c4b719719feff09d40a516934093c`
 - **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
 - **Architecture audit:** `AUDIT: PASS`
 - **Serialized source re-audit:** `AUDIT: PASS`
@@ -18,13 +20,13 @@
 - **Controlled comparison:** `COMPARISON: FAIL`
 - **Failure attribution:** `DIAGNOSIS: COMPLETE`
 - **Glare helper disposition:** `INVALID_AND_REPLACE`
-- **Primary repair owner:** controlled perturbation test infrastructure only
-- **Current gate:** Independent Honest Perturbation Test-Contract Exact-Head Audit
-- **Implementation status:** Honest non-wrapping/full-frame perturbations expose current glare blockers; production source is unchanged
-- **Glare coherence:** Typed-construction and semantic-discrimination production repairs remain separate and blocked
+- **Primary repair owner:** `src/oil_tracker/adapters/vision/oil_shadow_observations.py`
+- **Current gate:** Orchestrator Lane B lightweight exact-head gate
+- **Implementation status:** Contextual ambiguity no longer claims one hypothesis Y when its likelihoods are aggregate; original saturated glare is coherent ambiguous evidence with no numeric oil
+- **Glare coherence:** Typed construction repaired; semantic glare discrimination remains a separate blocker
 - **Controlled comparison and canonical validation:** Blocked
 
-This plan records a test-infrastructure-only S5-B glare perturbation contract repair. It does not modify production detection behavior or approve typed construction, semantic glare discrimination, a new controlled comparison, canonical validation, Windows/manual validation, packaging, merge or S5-B completion.
+This plan records the bounded S5-B typed ambiguous-observation coherence repair. It does not relax Phase-A validation, modify semantic glare scoring or approve the separate semantic discrimination repair, controlled comparison, canonical validation, Windows/manual validation, packaging, merge or S5-B completion.
 
 ## Why the previous source direction is retired
 
@@ -165,55 +167,56 @@ The general boundary floor `0.48`, general boundary margin `0.08`, ambiguity cei
 
 Feature-only persisted-dataset validation restored clear raw/smoothed coverage to `1.0`, rapid raw/smoothed coverage to `0.9565217391`, and kept no-interface raw/smoothed false-boundary rates at `0.0`. Reflection-only, structural rim-line, shimmer-only and transient false-line controls produced no raw oil. Foam precision and recall remained `1.0`.
 
-`glare-recovery` frames 1–2 still report the known Phase-A `Ambiguous likelihoods disagree with canonical evidence` pipeline failure. The final visible frame now has numeric raw oil, so the intermediate cross-field coherence defect remains a separate bounded owner rather than expanding this calibration repair.
+The subsequent typed-coherence repair now prevents contextual glare ambiguity from retaining a hypothesis-specific projected Y unless the complete likelihood tuple remains canonical to that hypothesis. Original saturated `glare-recovery` evidence is therefore reviewable ambiguous evidence with no numeric oil instead of a Phase-A pipeline failure. The final visible frame remains numeric, while semantic glare false-positive discrimination stays a separate bounded owner.
 
 The strict-dominance robustness matrix covers clear and rapid representatives across boundary-position `-2` through `+2 px`, brightness `-8` through `+8`, contrast `0.90×` through `1.10×` and three fixed weak-noise seeds. All positive probes retain deterministic public numeric oil within the truth-near geometry tolerance. The same perturbations over thin line, paired pulse, rim line, reflection, glare, shimmer, learned static overlap, uniform full/empty and transient false-line controls produce no raw oil; uniform states remain no-interface and structural-plus-real remains distinguishable from structural-only evidence.
 
 ## Honest glare perturbation test contract
 
-The independently completed glare attribution returned `DIAGNOSIS: COMPLETE` and classified the shared saturated-pixel preservation helper as `INVALID_AND_REPLACE`. This exact head changes test infrastructure only; `src/oil_tracker/**`, detector settings, controlled scene semantics, detector version and external schemas are unchanged.
+The independently completed glare attribution returned `DIAGNOSIS: COMPLETE` and classified the shared saturated-pixel preservation helper as `INVALID_AND_REPLACE`. That test-contract repair changed test infrastructure only; detector settings, controlled scene semantics, detector version and external schemas remain unchanged by the current typed-coherence repair.
 
 The general neighborhood helper now uses non-wrapping `cv2.warpAffine` vertical translation with `BORDER_REPLICATE`, signed-integer full-frame brightness with clipping, fixed-center (`127.5`) full-frame contrast with clipping, and `np.random.default_rng(seed)` full-frame Gaussian noise with positive sigma and clipping. No source pixel is exempted because it was originally saturated. Deterministic diagnostics record shape, dtype, extrema, mean, standard deviation, changed-pixel count, absolute/difference statistics, populations at `>=230`, `>=235`, `>=240`, `>=245`, and frame SHA-256 without entering the detector input contract.
 
-The mandatory `glare-recovery-1` `0.92×` contrast probe moves from source maximum `255` with a populated `>=245` mask to transformed maximum `244` with zero `>=245` pixels while retaining positive `>=240` population. Helper-contract tests, fresh-detector repeats, debug on/off public-result equality and input-raster hash invariance pass. The clear/rapid positive neighborhood passes all `40` probes. The negative neighborhood passes `199/220` probes and intentionally leaves `21` correct-contract assertions red: two near-threshold glare-only contrast false-oil cases and nineteen foam clipped-glare false-oil cases. The original saturated glare case remains a normalized `OIL_PIPELINE_FAILURE` at `phase_a` with tracker `NO_UPDATE` and smoothing `PRESERVE`.
+The mandatory `glare-recovery-1` `0.92×` contrast probe moves from source maximum `255` with a populated `>=245` mask to transformed maximum `244` with zero `>=245` pixels while retaining positive `>=240` population. The honest helper contract, deterministic diagnostics and red product assertions remain unchanged. The typed-coherence repair changes only the original saturated-frame outcome from normalized Phase-A failure to coherent ambiguity; it does not change the two near-threshold glare-only or nineteen foam clipped-glare false-oil findings.
 
-These red tests are executable evidence for the separate typed-coherence and semantic glare owners. They are not skipped, xfailed, conditionally weakened or rewritten to accept false oil. The next gate is an independent Honest Perturbation Test-Contract Exact-Head Audit. Typed construction, semantic discrimination and controlled comparison remain blocked.
+The `21` red tests remain executable evidence for the separate semantic glare-discrimination owner. They are not skipped, xfailed, conditionally weakened or rewritten to accept false oil.
+
+## Typed ambiguous-observation coherence repair
+
+A contextual ambiguity value may summarize frame-level glare or the minimum ambiguity floor rather than one semantic hypothesis. The construction now retains `projected_source_y` only when that aggregate ambiguity remains equal to the selected hypothesis's canonical ambiguity within the existing Phase-A numeric tolerance. Otherwise it preserves the aggregate likelihoods and referenced hypothesis identities but emits no specific projected Y.
+
+This keeps Phase-A unchanged and fail-closed: a malformed observation that claims a canonical hypothesis Y while supplying mismatched likelihoods is still rejected. Original saturated glare now produces coherent `AmbiguousOutcome`, no raw or smoothed numeric oil, `NO_UPDATE`, `PRESERVE`, glare/review flags and identical fresh-repeat/debug results. General thresholds, semantic scores, artifact penalties, preprocessing glare threshold, temporal reduction, fill-state, Foam, external schemas and detector version are unchanged.
 
 ## Controlled evidence status
 
-- Controlled comparison: `COMPARISON: FAIL`.
+- Controlled comparison: `COMPARISON: FAIL`; no new comparison is authorized yet.
 - Glare failure attribution: `DIAGNOSIS: COMPLETE`.
-- Invalid helper disposition: `INVALID_AND_REPLACE`; replaced in the general test neighborhood only.
-- Production source and detector settings: unchanged.
-- Known typed-coherence blocker: saturated glare remains normalized at `phase_a`.
-- Known semantic blockers: honest near-threshold glare-only and foam clipped-glare probes produce false numeric oil.
-- Next gate: independent Honest Perturbation Test-Contract Exact-Head Audit.
-- Typed construction, semantic discrimination, new controlled comparison and canonical validation remain blocked.
+- Invalid helper disposition: `INVALID_AND_REPLACE`; the honest perturbation contract remains active.
+- Typed construction: repaired in the observation owner without changing Phase-A validation.
+- Known semantic blockers: exactly two near-threshold glare-only and nineteen foam clipped-glare probes still produce false numeric oil.
+- Next gate: Orchestrator Lane B lightweight exact-head gate.
+- Semantic discrimination, new controlled comparison and canonical validation remain blocked.
 
 ## Downstream sequence
 
-1. Independent exact-head audit of this honest perturbation test contract.
-2. Separate bounded typed ambiguous-construction repair and independent source audit.
-3. Separate bounded semantic glare-discrimination repair and independent source audit.
-4. New controlled base/feature comparison only after both production owner gates pass.
-5. Later canonical, Windows/manual, packaging and merge gates under separate authority.
+1. Orchestrator Lane B lightweight exact-head gate for this typed-coherence repair.
+2. Separate bounded Semantic Glare-Discrimination Repair and its source gate.
+3. New controlled base/feature comparison after the semantic owner passes.
+4. Formal S5-B completion under separate merge authority.
+5. `S5-C — Canonical/Qt validation stabilization` as a distinct post-S5-B gate.
+6. S6 real-video, Windows/manual and packaging validation.
 
 ## Latest recorded closeout
 
-- **Result:** Honest glare perturbation semantics are executable in test infrastructure without changing production behavior.
-- **Starting exact head:** `15230707d45c4b719719feff09d40a516934093c`.
-- **Starting parent:** `912a94b1cd62b0164e896a7e02dbb1df1c0c85dc`.
-- **Changed scope:** `tests/test_oil_controlled_benchmark.py` and this current work plan only.
-- **Production source:** `src/oil_tracker/**`, detector settings, controlled fixture semantics, detector version and external schemas are unchanged.
-- **Invalid helper removal:** saturated-pixel preservation and `np.roll` are absent from the general perturbation path.
-- **Helper-contract and threshold validation:** `7 passed`; `glare-recovery-1` at `0.92×` reaches maximum `244`, zero `>=245` pixels and positive `>=240` population.
-- **Positive neighborhood validation:** `40 passed`; clear and rapid representatives remain deterministic, numeric and within `4 px`.
-- **Negative neighborhood validation:** `199 passed`, `21 failed`; every failure is a known glare semantic false-oil assertion.
-- **Typed-coherence characterization:** saturated glare remains a normalized `OIL_PIPELINE_FAILURE` at `phase_a` with tracker `NO_UPDATE` and smoothing `PRESERVE`.
-- **Dominance and guard validation:** `21 passed`.
-- **Controlled benchmark file:** `251 passed`, `21 failed`; failure set matches the focused negative matrix exactly.
-- **Collection:** `1064 tests collected`.
-- **Full repository validation:** `1043 passed`, `21 failed`; `UNEXPECTED_FAILURE` count is zero.
-- **Compile validation:** `PYTHONPATH=src .venv/bin/python -m compileall -q tests` passed.
-- **Current gate:** Independent Honest Perturbation Test-Contract Exact-Head Audit after ordinary commit/push.
+- **Result:** Typed ambiguous observation construction is cross-field coherent without relaxing the canonical trust boundary.
+- **Starting exact head:** `328a63a5472367aa3c5f2f3266a624f03e64c16d`.
+- **Starting parent:** `15230707d45c4b719719feff09d40a516934093c`.
+- **Changed source owner:** `src/oil_tracker/adapters/vision/oil_shadow_observations.py` only.
+- **Construction:** Hypothesis-specific projected Y is omitted when contextual ambiguity differs from the hypothesis's canonical ambiguity.
+- **Phase-A:** Validator source is unchanged; malformed projected-Y/likelihood mismatch remains rejected.
+- **Original saturated glare:** Coherent ambiguous/review outcome, no pipeline failure and no numeric oil.
+- **Known semantic failures:** The exact two glare-only plus nineteen foam clipped-glare false-oil assertions remain intentional blockers.
+- **Validation scope:** Focused typed construction, saturated glare, malformed mismatch, positive neighborhoods, related controlled benchmark suite and `git diff --check` only.
+- **S5-C:** Planned as a separate post-S5-B gate; not implemented here.
+- **Current gate:** Orchestrator Lane B lightweight exact-head gate after ordinary commit/push.
 - **Resulting exact SHA:** Reported by the Worker final report, not self-recorded in this commit.

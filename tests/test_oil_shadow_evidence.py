@@ -337,7 +337,12 @@ def _typed_hypothesis(
     )
 
 
-def _no_interface(likelihood: float) -> ShadowNoInterfaceEvidence:
+def _no_interface(
+    likelihood: float,
+    *,
+    visibility: float = 1.0,
+    glare_conflict: float = 0.0,
+) -> ShadowNoInterfaceEvidence:
     return ShadowNoInterfaceEvidence(
         available=True,
         likelihood=likelihood,
@@ -346,25 +351,70 @@ def _no_interface(likelihood: float) -> ShadowNoInterfaceEvidence:
         region_uniformity=0.5,
         weak_boundary_evidence=0.2,
         competing_boundary_likelihood=0.0,
-        visibility=1.0,
-        glare_conflict=0.0,
+        visibility=visibility,
+        glare_conflict=glare_conflict,
         mean_intensity=100.0,
         texture=1.0,
         reason="test_no_interface_evidence",
     )
 
 
-def _typed_observation(monkeypatch, hypotheses, *, no_interface=0.15):
+def _typed_observation(
+    monkeypatch,
+    hypotheses,
+    *,
+    no_interface=0.15,
+    visibility=1.0,
+    glare_conflict=0.0,
+):
     image = np.full((20, 20), 100, dtype=np.uint8)
     mask = np.full_like(image, 255)
     pre = preprocess(image, mask, DetectorSettings())
-    evidence = _no_interface(no_interface)
+    evidence = _no_interface(
+        no_interface,
+        visibility=visibility,
+        glare_conflict=glare_conflict,
+    )
     monkeypatch.setattr(
         oil_shadow_observations,
         "_no_interface_evidence",
         lambda *_args: evidence,
     )
     return evaluate_typed_current_observation(pre, mask, tuple(hypotheses))
+
+
+def test_contextual_ambiguity_does_not_claim_one_hypothesis_projection(monkeypatch):
+    target = _typed_hypothesis(
+        "contextual-glare",
+        boundary=0.31,
+        artifact=0.22,
+        ambiguity=0.66,
+    )
+    contextual = _typed_observation(
+        monkeypatch,
+        (target,),
+        no_interface=0.22,
+        visibility=0.11,
+        glare_conflict=0.89,
+    )
+    assert isinstance(contextual, ShadowAmbiguousObservation)
+    assert contextual.hypothesis_ids == (target.identity,)
+    assert contextual.boundary_likelihood == target.boundary_likelihood
+    assert contextual.artifact_likelihood == target.artifact_likelihood
+    assert contextual.ambiguity_likelihood == 0.89
+    assert contextual.projected_source_y is None
+    assert contextual.reason == "glare_visibility_conflict"
+
+    canonical = _typed_observation(
+        monkeypatch,
+        (target,),
+        no_interface=0.22,
+        visibility=0.40,
+        glare_conflict=0.55,
+    )
+    assert isinstance(canonical, ShadowAmbiguousObservation)
+    assert canonical.ambiguity_likelihood == target.ambiguity_likelihood
+    assert canonical.projected_source_y == target.representative_source_y
 
 
 def test_corroborated_single_boundary_requires_strict_no_interface_dominance(monkeypatch):

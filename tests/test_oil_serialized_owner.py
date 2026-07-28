@@ -165,6 +165,24 @@ def test_phase_a_canonicalizes_fresh_evidence_and_rejects_forgery():
     with pytest.raises(ValueError):
         pipeline._phase_a(replace(raw, hypotheses=(forged_hypothesis,) + raw.hypotheses[1:]))
 
+    hypothesis = raw.hypotheses[0]
+    mismatched_ambiguity = 0.0 if hypothesis.ambiguity_likelihood > 0.1 else 1.0
+    forged_ambiguous = ShadowAmbiguousObservation(
+        hypothesis_ids=(hypothesis.identity,),
+        boundary_likelihood=hypothesis.boundary_likelihood,
+        artifact_likelihood=hypothesis.artifact_likelihood,
+        ambiguity_likelihood=mismatched_ambiguity,
+        no_interface_likelihood=0.2,
+        visibility=hypothesis.visibility,
+        projected_source_y=hypothesis.representative_source_y,
+        reason="forged cross-field mismatch",
+    )
+    with pytest.raises(
+        ValueError,
+        match="Ambiguous likelihoods disagree with canonical evidence",
+    ):
+        pipeline._phase_a(replace(raw, current_observation=forged_ambiguous))
+
 
 def test_immutable_input_preparation_owns_independent_readonly_arrays():
     pipeline = OilHypothesisPipeline()

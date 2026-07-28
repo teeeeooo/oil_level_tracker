@@ -297,15 +297,23 @@ def test_honest_glare_contrast_crosses_the_244_245_preprocessing_boundary():
     assert transformed_detection.debug_metrics["glare_ratio"] == 0.0
 
 
-def test_original_saturated_glare_exposes_closed_phase_a_coherence_failure():
+def test_original_saturated_glare_is_coherent_ambiguous_without_numeric_oil():
     scenes = {scene.case_id: scene for scene in controlled_oil_scenes()}
     detection = _assert_fresh_detector_determinism(
         scenes["glare-recovery-1"].frame,
-        "saturated-glare-phase-a-characterization",
+        "saturated-glare-coherent-ambiguity",
     )
     assert detection.raw_oil_air_level_y is None
-    assert "OIL_PIPELINE_FAILURE" in detection.flags
-    assert detection.debug_metrics["oil_pipeline_failure_stage"] == "phase_a"
+    assert detection.smoothed_oil_air_level_y is None
+    assert "OIL_PIPELINE_FAILURE" not in detection.flags
+    assert "OIL_EVIDENCE_AMBIGUOUS" in detection.flags
+    assert "FOGGED_OR_GLARE" in detection.flags
+    assert "REVIEW_REQUIRED" in detection.flags
+    assert detection.debug_metrics["oil_pipeline_available"] is True
+    assert detection.debug_metrics["oil_pipeline_failure_stage"] is None
+    assert detection.debug_metrics["oil_hypothesis_current_observation"] == "ambiguous"
+    assert detection.debug_metrics["oil_decision_reason"] == "glare_visibility_conflict"
+    assert detection.debug_metrics["oil_temporal_projected_source_y"] is None
     assert detection.debug_metrics["oil_tracker_action"] == "NO_UPDATE"
     assert detection.debug_metrics["oil_smoothing_action"] == "PRESERVE"
 

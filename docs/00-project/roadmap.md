@@ -101,11 +101,19 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Next gate:** Architecture audit `PASS` → bounded source implementation → independent source exact-head audit `PASS` → controlled base/feature comparison.
 - **Detail:** [Current work plan](./work-plan.md), [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 
+### S5-C — Canonical/Qt validation stabilization
+
+- **Purpose:** Stabilize `QApplication` / `QCoreApplication` ownership, isolate GUI fixtures, slim duplicate GUI/canonical coverage and preserve the non-GUI/headless validation contract.
+- **Status:** `PLANNED`
+- **Major result:** None yet; this milestone is a separate validation-stability gate after formal S5-B completion.
+- **Next gate:** Remove recurring canonical Qt instability without weakening headless coverage before S6 begins.
+- **Detail:** [Current work plan](./work-plan.md), [Real-world validation plan](../30-quality/real-world-validation-plan.md)
+
 ### S6 — Real-video and Windows validation gate
 
 - **Purpose:** Qualify the stabilized detector and application on representative real video and the target Windows environment.
 - **Status:** `PLANNED`
-- **Major result:** None yet; this gate does not begin before formal S5-B completion.
+- **Major result:** None yet; this gate does not begin before formal S5-C completion.
 - **Next gate:** Controlled benchmark comparison, real-video review, long-duration CPU/memory checks and one-folder validation must all pass.
 - **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md), [manual checklist](../30-quality/manual-gui-windows-checklist.md)
 
@@ -127,4 +135,4 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S5-B` → `S6` → `S7 / Phase 2C-4` → Phase 2D reassessment.
+`S5-B` → `S5-C` → `S6` → `S7 / Phase 2C-4` → Phase 2D reassessment.

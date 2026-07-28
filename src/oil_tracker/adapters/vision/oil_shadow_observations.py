@@ -331,18 +331,30 @@ def evaluate_typed_current_observation(
         reason = "polarity_unavailable_or_conflicting"
     elif no_interface.glare_conflict >= 0.55:
         reason = "glare_visibility_conflict"
+    ambiguity_likelihood = max(
+        0.35,
+        no_interface.glare_conflict,
+        0.0 if best is None else best.ambiguity_likelihood,
+    )
+    projected_source_y = (
+        best.representative_source_y
+        if best is not None
+        and math.isclose(
+            ambiguity_likelihood,
+            best.ambiguity_likelihood,
+            rel_tol=0.0,
+            abs_tol=1e-9,
+        )
+        else None
+    )
     return ShadowAmbiguousObservation(
         hypothesis_ids=tuple(sorted(item.identity for item in ordered[:3])),
         boundary_likelihood=competing_boundary,
         artifact_likelihood=0.0 if best is None else best.artifact_likelihood,
-        ambiguity_likelihood=max(
-            0.35,
-            no_interface.glare_conflict,
-            0.0 if best is None else best.ambiguity_likelihood,
-        ),
+        ambiguity_likelihood=ambiguity_likelihood,
         no_interface_likelihood=no_interface.likelihood,
         visibility=no_interface.visibility,
-        projected_source_y=None if best is None else best.representative_source_y,
+        projected_source_y=projected_source_y,
         reason=reason,
     )
 
