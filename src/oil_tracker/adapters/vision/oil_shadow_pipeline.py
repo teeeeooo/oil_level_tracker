@@ -5,7 +5,8 @@ from enum import Enum
 import json
 import math
 from statistics import median
-from typing import Any, Callable
+from threading import RLock
+from typing import Any
 
 import numpy as np
 
@@ -21,13 +22,15 @@ from .oil_shadow_temporal import (
     OilShadowTemporalModel,
     ProvisionalTemporalResult,
     TemporalAuditSnapshot,
-    _OilTemporalAuthority,
-    _TemporalTransactionSession,
+    TemporalCommitError,
+    _LifecycleBarrier,
 )
 from .oil_shadow_types import (
+    AbsenceStabilityMode,
     AcceptedBoundaryOutcome,
     AmbiguousDecision,
     AmbiguousOutcome,
+    BoundaryAcceptanceMode,
     BoundaryAcceptedDecision,
     BoundedYProposal,
     EvidenceUnavailableDecision,
@@ -57,48 +60,82 @@ from .oil_shadow_types import (
 from .preprocessing import PreprocessResult
 
 
-OutcomePreparer = Callable[
-    [SuccessfulPipelineFrame, ProvisionalTemporalResult, ShadowResourceSummary],
-    OilCanonicalOutcome,
-]
-
-
 class OilHypothesisPipeline:
-    """Sole S5-B production evidence, validation, prepare and commit owner."""
+    """Sole S5-B evidence, validation, state and commit owner."""
 
-    def __init__(
-        self,
-        bounds: OilShadowBounds | None = None,
-        *,
-        temporal_evaluator: Callable[[GlassTemporalSnapshot, ShadowCurrentObservation], ProvisionalTemporalResult] | None = None,
-        outcome_preparer: OutcomePreparer | None = None,
-        commit_hook: Callable[[GlassTemporalSnapshot, GlassTemporalState], None] | None = None,
-        handoff_hook: Callable[[str], None] | None = None,
-        transaction_admitted_hook: Callable[[str], None] | None = None,
-        global_reset_waiting_hook: Callable[[], None] | None = None,
-    ) -> None:
+    def __init__(self, bounds: OilShadowBounds | None = None) -> None:
         self.bounds = bounds or OilShadowBounds()
-        self._temporal_model = OilShadowTemporalModel(self.bounds)
-        self.__temporal_authority = _OilTemporalAuthority(
-            self._temporal_model,
-            evaluator=temporal_evaluator,
-            commit_hook=commit_hook,
-            handoff_hook=handoff_hook,
-            transaction_admitted_hook=transaction_admitted_hook,
-            global_reset_waiting_hook=global_reset_waiting_hook,
-        )
-        self._outcome_preparer = outcome_preparer or self._prepare_outcome
+        self.__temporal_model = OilShadowTemporalModel(self.bounds)
+        self.__states: dict[str, GlassTemporalState] = {}
+        self.__versions: dict[str, int] = {}
+        self.__locks: dict[str, RLock] = {}
+        self.__guard = RLock()
+        self.__barrier = _LifecycleBarrier()
+        self.__reset_generation = 0
 
     @property
     def temporal_state_count(self) -> int:
-        return self.__temporal_authority.state_count
+        with self.__barrier.transaction():
+            with self.__guard:
+                return len(self.__states)
 
     def temporal_snapshot(self, glass_id: str) -> TemporalAuditSnapshot:
         """Return an immutable read-only audit projection, never commit authority."""
-        return self.__temporal_authority.audit_snapshot(glass_id)
+        key = str(glass_id)
+        if not key:
+            raise ValueError("Temporal audit snapshot requires a Glass identity.")
+        with self.__barrier.transaction():
+            with self.__guard:
+                lock = self.__locks.setdefault(key, RLock())
+            with lock:
+                snapshot = self.__snapshot_locked(key)
+                return TemporalAuditSnapshot(
+                    glass_id=snapshot.glass_id,
+                    reset_generation=snapshot.reset_generation,
+                    version=snapshot.version,
+                    state=snapshot.state,
+                )
 
     def reset(self, glass_id: str | None = None) -> None:
-        self.__temporal_authority.reset(glass_id)
+        if glass_id is None:
+            with self.__barrier.global_reset():
+                with self.__guard:
+                    keys = set(self.__versions) | set(self.__states) | set(self.__locks)
+                    self.__reset_generation += 1
+                    for key in keys:
+                        current = self.__versions.get(
+                            key,
+                            self.__states.get(key, GlassTemporalState(key)).version,
+                        )
+                        self.__versions[key] = current + 1
+                    self.__states.clear()
+            return
+        key = str(glass_id)
+        if not key:
+            raise ValueError("Temporal reset requires a Glass identity.")
+        with self.__barrier.transaction():
+            with self.__guard:
+                lock = self.__locks.setdefault(key, RLock())
+            with lock:
+                with self.__guard:
+                    current = self.__versions.get(
+                        key,
+                        self.__states.get(key, GlassTemporalState(key)).version,
+                    )
+                    self.__versions[key] = current + 1
+                    self.__states.pop(key, None)
+
+    def __snapshot_locked(self, key: str) -> GlassTemporalSnapshot:
+        with self.__guard:
+            state = self.__states.get(key)
+            version = self.__versions.setdefault(
+                key,
+                0 if state is None else state.version,
+            )
+            generation = self.__reset_generation
+        if state is None:
+            state = GlassTemporalState(glass_id=key, version=version)
+        return GlassTemporalSnapshot(key, generation, version, state)
 
     def run(
         self,
@@ -112,105 +149,150 @@ class OilHypothesisPipeline:
         crop_origin_y: float,
     ) -> OilCanonicalOutcome:
         key = str(glass_id)
-        return self.__temporal_authority.execute(
-            key,
-            lambda session: self._run_transaction(
-                session=session,
-                glass_id=key,
-                pre=pre,
-                effective_mask=effective_mask,
-                ellipse_mask=ellipse_mask,
-                exclusion_mask=exclusion_mask,
-                static_artifact_map=static_artifact_map,
-                crop_origin_y=crop_origin_y,
-            ),
-        )
+        if not key:
+            raise ValueError("Oil pipeline requires a Glass identity.")
+        with self.__barrier.transaction():
+            with self.__guard:
+                lock = self.__locks.setdefault(key, RLock())
+            with lock:
+                snapshot = self.__snapshot_locked(key)
+                try:
+                    raw = extract_raw_observations(
+                        pre,
+                        effective_mask,
+                        crop_origin_y=crop_origin_y,
+                        bounds=self.bounds,
+                    )
+                    proposals = build_bounded_proposals(raw, self.bounds)
+                    hypotheses = evaluate_semantic_hypotheses(
+                        proposals,
+                        raw,
+                        pre,
+                        effective_mask,
+                        ellipse_mask,
+                        exclusion_mask,
+                        static_artifact_map,
+                        crop_origin_y=crop_origin_y,
+                        bounds=self.bounds,
+                    )
+                    current = evaluate_typed_current_observation(
+                        pre, effective_mask, hypotheses
+                    )
+                    raw_frame = SuccessfulPipelineFrame(
+                        raw_observations=raw,
+                        proposals=proposals,
+                        hypotheses=hypotheses,
+                        current_observation=current,
+                        frame_height=int(pre.gray.shape[0]),
+                        frame_width=int(pre.gray.shape[1]),
+                    )
+                except Exception as exc:
+                    return self._failure_outcome(
+                        _failure_reason(exc),
+                        PipelineFailureStage.EVIDENCE_CONSTRUCTION,
+                    )
 
-    def _run_transaction(
-        self,
-        *,
-        session: _TemporalTransactionSession,
-        glass_id: str,
-        pre: PreprocessResult,
-        effective_mask: np.ndarray,
-        ellipse_mask: np.ndarray,
-        exclusion_mask: np.ndarray,
-        static_artifact_map: np.ndarray | None,
-        crop_origin_y: float,
-    ) -> OilCanonicalOutcome:
-        try:
-            raw = extract_raw_observations(
-                pre,
-                effective_mask,
-                crop_origin_y=crop_origin_y,
-                bounds=self.bounds,
-            )
-            proposals = build_bounded_proposals(raw, self.bounds)
-            hypotheses = evaluate_semantic_hypotheses(
-                proposals,
-                raw,
-                pre,
-                effective_mask,
-                ellipse_mask,
-                exclusion_mask,
-                static_artifact_map,
-                crop_origin_y=crop_origin_y,
-                bounds=self.bounds,
-            )
-            current = evaluate_typed_current_observation(pre, effective_mask, hypotheses)
-            raw_frame = SuccessfulPipelineFrame(
-                raw_observations=raw,
-                proposals=proposals,
-                hypotheses=hypotheses,
-                current_observation=current,
-                frame_height=int(pre.gray.shape[0]),
-                frame_width=int(pre.gray.shape[1]),
-            )
-        except Exception as exc:
-            return self.failure_outcome(
-                _failure_reason(exc),
-                PipelineFailureStage.EVIDENCE_CONSTRUCTION,
-            )
+                try:
+                    canonical = self._phase_a(raw_frame)
+                except Exception as exc:
+                    return self._failure_outcome(
+                        _failure_reason(exc), PipelineFailureStage.PHASE_A
+                    )
 
-        try:
-            canonical = self._phase_a(raw_frame)
-        except Exception as exc:
-            return self.failure_outcome(_failure_reason(exc), PipelineFailureStage.PHASE_A)
+                try:
+                    provisional = self.__temporal_model.evaluate(
+                        snapshot, canonical.current_observation
+                    )
+                except Exception as exc:
+                    return self._failure_outcome(
+                        _failure_reason(exc),
+                        PipelineFailureStage.TEMPORAL_EVALUATION,
+                    )
 
-        snapshot = session.snapshot
-        try:
-            provisional = session.evaluate(canonical.current_observation)
-        except Exception as exc:
-            return self.failure_outcome(
-                _failure_reason(exc),
-                PipelineFailureStage.TEMPORAL_EVALUATION,
-            )
+                try:
+                    resource_summary = self._phase_b(
+                        key, canonical, snapshot, provisional
+                    )
+                except Exception as exc:
+                    return self._failure_outcome(
+                        _failure_reason(exc), PipelineFailureStage.PHASE_B
+                    )
 
-        try:
-            resource_summary = self._phase_b(
-                glass_id, canonical, snapshot, provisional
-            )
-        except Exception as exc:
-            return self.failure_outcome(_failure_reason(exc), PipelineFailureStage.PHASE_B)
+                try:
+                    prepared = self._prepare_outcome(
+                        canonical, provisional, resource_summary
+                    )
+                    prepared = self._finalize_debug_resources(prepared)
+                    self._validate_prepared_outcome(
+                        prepared, canonical, provisional
+                    )
+                    commit_token = self._commit_token(key, snapshot, prepared)
+                except Exception as exc:
+                    return self._failure_outcome(
+                        _failure_reason(exc),
+                        PipelineFailureStage.OUTCOME_PREPARATION,
+                    )
 
-        try:
-            prepared = self._outcome_preparer(canonical, provisional, resource_summary)
-            prepared = self._finalize_debug_resources(prepared)
-            self._validate_prepared_outcome(prepared, canonical, provisional)
-            commit_token = self._commit_token(glass_id, snapshot, prepared)
-        except Exception as exc:
-            return self.failure_outcome(
-                _failure_reason(exc),
-                PipelineFailureStage.OUTCOME_PREPARATION,
-            )
+                try:
+                    proposed = provisional.next_state
+                    if not commit_token:
+                        raise ValueError("Temporal commit requires a token.")
+                    with self.__guard:
+                        current_state = self.__states.get(key)
+                        current_version = self.__versions.get(
+                            key, 0 if current_state is None else current_state.version
+                        )
+                        live_state = (
+                            GlassTemporalState(key, version=current_version)
+                            if current_state is None
+                            else current_state
+                        )
+                    if self.__reset_generation != snapshot.reset_generation:
+                        raise TemporalCommitError(
+                            "Pre-reset temporal proposal cannot be committed."
+                        )
+                    if current_version != snapshot.version or live_state != snapshot.state:
+                        raise TemporalCommitError(
+                            "Stale temporal snapshot cannot be committed."
+                        )
+                    if (
+                        current_state is not None
+                        and current_state.last_commit_token == commit_token
+                    ):
+                        raise TemporalCommitError(
+                            "Temporal proposal replay is prohibited."
+                        )
+                    committed = replace(proposed, last_commit_token=commit_token)
+                    with self.__guard:
+                        latest = self.__states.get(key)
+                        latest_version = self.__versions.get(
+                            key, 0 if latest is None else latest.version
+                        )
+                        latest_state = (
+                            GlassTemporalState(key, version=latest_version)
+                            if latest is None
+                            else latest
+                        )
+                        if self.__reset_generation != snapshot.reset_generation:
+                            raise TemporalCommitError(
+                                "Reset invalidated temporal proposal."
+                            )
+                        if (
+                            latest_version != snapshot.version
+                            or latest_state != snapshot.state
+                        ):
+                            raise TemporalCommitError(
+                                "Concurrent temporal state replaced the snapshot."
+                            )
+                        self.__states[key] = committed
+                        self.__versions[key] = committed.version
+                except Exception as exc:
+                    return self._failure_outcome(
+                        _failure_reason(exc), PipelineFailureStage.COMMIT
+                    )
+                return prepared
 
-        try:
-            session.commit(provisional.next_state, commit_token)
-        except Exception as exc:
-            return self.failure_outcome(_failure_reason(exc), PipelineFailureStage.COMMIT)
-        return prepared
-
-    def failure_outcome(
+    def _failure_outcome(
         self,
         reason: str,
         stage: PipelineFailureStage = PipelineFailureStage.EXTERNAL_RUNNER,
@@ -257,6 +339,7 @@ class OilHypothesisPipeline:
         state = provisional.next_state
         self._validate_next_state(snapshot, state, provisional.resources)
         self._validate_decision(frame.current_observation, frame.hypotheses, decision)
+        self._validate_transition_coherence(snapshot, decision, state)
         if decision.resources != provisional.resources:
             raise ValueError("Decision and provisional resources disagree.")
         return self._resource_summary(frame, provisional.resources)
@@ -680,7 +763,7 @@ class OilHypothesisPipeline:
         )
         if resources != expected:
             raise ValueError("Proposed resource summary disagrees with state.")
-        if resources.retained_scalar_count > self._temporal_model.retained_scalar_limit:
+        if resources.retained_scalar_count > self.__temporal_model.retained_scalar_limit:
             raise ValueError("Proposed retained temporal scalar bound exceeded.")
 
     def _validate_decision(
@@ -749,6 +832,121 @@ class OilHypothesisPipeline:
         }:
             raise ValueError("Temporal decision forged a smoothing action.")
 
+    def _validate_transition_coherence(
+        self,
+        snapshot: GlassTemporalSnapshot,
+        decision,
+        state: GlassTemporalState,
+    ) -> None:
+        prior = snapshot.state
+        pending_cleared = (
+            state.pending_y is None
+            and state.pending_velocity is None
+            and state.pending_count == 0
+        )
+        if isinstance(decision, BoundaryAcceptedDecision):
+            if not _same_optional(state.accepted_y, decision.accepted_source_y):
+                raise ValueError("Accepted outcome Y disagrees with proposed state.")
+            if not pending_cleared or state.no_interface_count or state.unavailable_count:
+                raise ValueError("Accepted transition retained incompatible temporal state.")
+            if state.smoothing_invalidated:
+                raise ValueError("Accepted transition cannot retain invalidated smoothing.")
+            if decision.acceptance_mode is BoundaryAcceptanceMode.INITIAL:
+                if prior.accepted_y is not None:
+                    raise ValueError("Initial acceptance requires no prior accepted boundary.")
+            elif decision.acceptance_mode is BoundaryAcceptanceMode.CONTINUOUS:
+                if prior.accepted_y is None or not _same_optional(
+                    state.accepted_velocity,
+                    decision.accepted_source_y - prior.accepted_y,
+                ):
+                    raise ValueError("Continuous acceptance velocity is incoherent.")
+            elif decision.acceptance_mode is BoundaryAcceptanceMode.REACQUIRED:
+                if state.accepted_velocity is not None:
+                    raise ValueError("Reacquired acceptance must reset velocity.")
+            return
+
+        if isinstance(decision, ReacquisitionPendingDecision):
+            expected_y = decision.pending_hypothesis.representative_source_y
+            if not _same_optional(state.pending_y, expected_y):
+                raise ValueError("Pending reacquisition Y disagrees with decision.")
+            if not 1 <= state.pending_count < self.bounds.reacquisition_frames:
+                raise ValueError("Pending reacquisition count is incoherent.")
+            if not _same_optional(state.accepted_y, prior.accepted_y) or not _same_optional(
+                state.accepted_velocity, prior.accepted_velocity
+            ):
+                raise ValueError("Pending reacquisition changed accepted state.")
+            if state.no_interface_count or state.unavailable_count:
+                raise ValueError("Pending reacquisition retained absence counters.")
+            if state.smoothing_invalidated != prior.smoothing_invalidated:
+                raise ValueError("Pending reacquisition changed smoothing authority.")
+            return
+
+        if isinstance(decision, NoInterfaceAcceptedDecision):
+            expected_count = min(
+                self.bounds.no_interface_clear_frames, prior.no_interface_count + 1
+            )
+            stable = expected_count >= self.bounds.no_interface_clear_frames
+            if state.no_interface_count != expected_count or state.unavailable_count:
+                raise ValueError("No-interface counters are incoherent.")
+            if not pending_cleared:
+                raise ValueError("No-interface transition retained pending boundary state.")
+            expected_mode = (
+                AbsenceStabilityMode.STABLE if stable else AbsenceStabilityMode.PENDING
+            )
+            if decision.stability_mode is not expected_mode:
+                raise ValueError("No-interface stability mode disagrees with state.")
+            if stable:
+                if state.accepted_y is not None or state.accepted_velocity is not None:
+                    raise ValueError("Stable no-interface transition retained accepted Y.")
+                if not state.smoothing_invalidated:
+                    raise ValueError("Stable no-interface transition must invalidate smoothing.")
+            elif (
+                not _same_optional(state.accepted_y, prior.accepted_y)
+                or not _same_optional(state.accepted_velocity, prior.accepted_velocity)
+                or state.smoothing_invalidated != prior.smoothing_invalidated
+            ):
+                raise ValueError("Pending no-interface transition changed accepted state.")
+            return
+
+        if isinstance(decision, EvidenceUnavailableDecision):
+            expected_count = min(
+                self.bounds.unavailable_clear_frames, prior.unavailable_count + 1
+            )
+            stable = expected_count >= self.bounds.unavailable_clear_frames
+            if state.unavailable_count != expected_count or state.no_interface_count:
+                raise ValueError("Unavailable counters are incoherent.")
+            if not pending_cleared:
+                raise ValueError("Unavailable transition retained pending boundary state.")
+            expected_mode = (
+                AbsenceStabilityMode.STABLE if stable else AbsenceStabilityMode.PENDING
+            )
+            if decision.stability_mode is not expected_mode:
+                raise ValueError("Unavailable stability mode disagrees with state.")
+            if stable:
+                if state.accepted_y is not None or state.accepted_velocity is not None:
+                    raise ValueError("Stable unavailable transition retained accepted Y.")
+                if not state.smoothing_invalidated or state.beam:
+                    raise ValueError("Stable unavailable transition did not clear stale state.")
+            elif (
+                not _same_optional(state.accepted_y, prior.accepted_y)
+                or not _same_optional(state.accepted_velocity, prior.accepted_velocity)
+                or state.smoothing_invalidated != prior.smoothing_invalidated
+            ):
+                raise ValueError("Pending unavailable transition changed accepted state.")
+            return
+
+        if isinstance(decision, AmbiguousDecision):
+            if not pending_cleared or state.no_interface_count or state.unavailable_count:
+                raise ValueError("Ambiguous transition retained incompatible counters.")
+            if (
+                not _same_optional(state.accepted_y, prior.accepted_y)
+                or not _same_optional(state.accepted_velocity, prior.accepted_velocity)
+                or state.smoothing_invalidated != prior.smoothing_invalidated
+            ):
+                raise ValueError("Ambiguous transition changed accepted state.")
+            return
+        raise TypeError("Unsupported temporal transition coherence variant.")
+
     def _resource_summary(
         self,
         frame: SuccessfulPipelineFrame,
@@ -790,7 +988,7 @@ class OilHypothesisPipeline:
             temporal_history_length=temporal.history_length,
             temporal_history_limit=self.bounds.temporal_history_window,
             retained_temporal_scalar_count=temporal.retained_scalar_count,
-            retained_temporal_scalar_limit=self._temporal_model.retained_scalar_limit,
+            retained_temporal_scalar_limit=self.__temporal_model.retained_scalar_limit,
             static_prior_scalar_count=2,
             static_prior_scalar_limit=self.bounds.static_prior_scalars_per_glass,
             debug_scalar_count=0,
@@ -904,6 +1102,49 @@ class OilHypothesisPipeline:
             raise ValueError("Prepared outcome tracker action disagrees with decision.")
         if outcome.smoothing_action != provisional.decision.smoothing_action:
             raise ValueError("Prepared outcome smoothing action disagrees with decision.")
+        decision = provisional.decision
+        state = provisional.next_state
+        if not _same(outcome.confidence, decision.confidence) or not _same(
+            outcome.decision_margin, decision.decision_margin
+        ):
+            raise ValueError("Prepared outcome confidence disagrees with transition.")
+        if outcome.reason != decision.reason:
+            raise ValueError("Prepared outcome reason disagrees with transition.")
+        if isinstance(decision, BoundaryAcceptedDecision):
+            if not isinstance(outcome, AcceptedBoundaryOutcome):
+                raise ValueError("Accepted decision prepared the wrong outcome variant.")
+            if outcome.acceptance_mode is not decision.acceptance_mode:
+                raise ValueError("Accepted outcome mode disagrees with transition.")
+            if outcome.selected_hypothesis != decision.selected_hypothesis or not _same_optional(
+                state.accepted_y, outcome.raw_source_y
+            ):
+                raise ValueError("Accepted outcome and committed Y are incoherent.")
+        elif isinstance(decision, ReacquisitionPendingDecision):
+            if not isinstance(outcome, ReacquisitionPendingOutcome):
+                raise ValueError("Pending decision prepared the wrong outcome variant.")
+            if outcome.pending_hypothesis != decision.pending_hypothesis or not _same_optional(
+                state.pending_y, outcome.pending_hypothesis.representative_source_y
+            ):
+                raise ValueError("Pending outcome and proposed state are incoherent.")
+        elif isinstance(decision, NoInterfaceAcceptedDecision):
+            if not isinstance(outcome, NoInterfaceOutcome):
+                raise ValueError("No-interface decision prepared the wrong outcome variant.")
+            if outcome.evidence != decision.evidence or outcome.stability_mode is not decision.stability_mode:
+                raise ValueError("No-interface outcome disagrees with transition.")
+        elif isinstance(decision, EvidenceUnavailableDecision):
+            if not isinstance(outcome, EvidenceUnavailableOutcome):
+                raise ValueError("Unavailable decision prepared the wrong outcome variant.")
+            if outcome.stability_mode is not decision.stability_mode or not _same(
+                outcome.visibility, decision.visibility
+            ):
+                raise ValueError("Unavailable outcome disagrees with transition.")
+        elif isinstance(decision, AmbiguousDecision):
+            if not isinstance(outcome, AmbiguousOutcome):
+                raise ValueError("Ambiguous decision prepared the wrong outcome variant.")
+            if outcome.hypothesis_ids != decision.hypothesis_ids or not _same_optional(
+                outcome.projected_source_y, decision.projected_source_y
+            ):
+                raise ValueError("Ambiguous outcome disagrees with transition.")
         _json_safe(oil_runtime_metrics(outcome))
         _json_safe(oil_debug_detail(outcome))
 

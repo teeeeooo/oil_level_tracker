@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Callable
+from typing import Any
 
 import cv2
 import numpy as np
@@ -32,7 +32,7 @@ from .oil_shadow_pipeline import (
 from .oil_shadow_types import (
     EvidenceUnavailableOutcome,
     OilCanonicalOutcome,
-    OilCanonicalOutcomeBase,
+    PipelineFailureOutcome,
     PipelineFailureStage,
 )
 from .preprocessing import PreprocessResult, preprocess
@@ -50,16 +50,11 @@ class PhaseDetectionDebugArtifacts:
 class OpenCvPhaseDetector:
     version = "opencv-phase-detector-s5b-typed-production-v1"
 
-    def __init__(
-        self,
-        *,
-        oil_precommit_probe: Callable[[dict[str, Any]], None] | None = None,
-    ) -> None:
+    def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._foam_gate = FoamTemporalGate()
         self._oil_pipeline = OilHypothesisPipeline()
-        self._oil_precommit_probe = oil_precommit_probe
 
     @property
     def foam_temporal_state_count(self) -> int:
@@ -303,22 +298,13 @@ class OpenCvPhaseDetector:
             static_map=static_map,
         )
         try:
-            if self._oil_precommit_probe is not None:
-                self._oil_precommit_probe(
-                    _isolated_pipeline_inputs(
-                        glass_id=glass_id,
-                        pre=pre,
-                        bundle=bundle,
-                        static_map=static_map,
-                    )
-                )
             result = self._oil_pipeline.run(**kwargs)
             validate_production_result(result)
             return result
         except Exception as exc:
             reason = f"{type(exc).__name__}:{str(exc)[:120]}"
-            return self._oil_pipeline.failure_outcome(
-                reason=reason,
+            return PipelineFailureOutcome(
+                reason=reason or "oil_hypothesis_execution_failed",
                 stage=PipelineFailureStage.EXTERNAL_RUNNER,
             )
 

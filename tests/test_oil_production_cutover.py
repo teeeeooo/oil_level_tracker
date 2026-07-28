@@ -136,7 +136,7 @@ def test_closed_models_have_no_stored_duplicate_discriminators_or_clear_boolean(
 def test_failure_unavailable_and_numeric_ownership_are_structurally_distinct():
     accepted = _pipeline_result(_oil_frame(), "accepted")
     unavailable = _pipeline_result(_uniform_frame(255), "unavailable")
-    failure = OilHypothesisPipeline().failure_outcome(
+    failure = PipelineFailureOutcome(
         "injected",
         PipelineFailureStage.PHASE_A,
     )
@@ -224,7 +224,7 @@ def test_positive_no_interface_projection_requires_canonical_evidence():
         assert detection.fill_state is expected
 
 
-def test_successful_stable_absence_clear_is_not_shared_with_pipeline_failure():
+def test_successful_stable_absence_clear_is_not_shared_with_pipeline_failure(monkeypatch):
     detector = OpenCvPhaseDetector()
     glass = _glass("successful-unavailable")
     accepted, _ = detector.detect(_oil_frame(), glass, 1, 0.0)
@@ -238,18 +238,16 @@ def test_successful_stable_absence_clear_is_not_shared_with_pipeline_failure():
     assert outputs[-1].debug_metrics["oil_smoothing_action"] == "CLEAR_STALE_AFTER_STABLE_ABSENCE"
     assert outputs[-1].debug_metrics["oil_smoothing_sample_count"] == 0
 
-    calls = 0
-
-    def fail_after_accepted(_kwargs):
-        nonlocal calls
-        calls += 1
-        if calls > 1:
-            raise RuntimeError("injected pre-commit failure")
-
-    failed_detector = OpenCvPhaseDetector(oil_precommit_probe=fail_after_accepted)
+    failed_detector = OpenCvPhaseDetector()
     failed_glass = _glass("pipeline-failure")
     first, _ = failed_detector.detect(_oil_frame(), failed_glass, 1, 0.0)
     sample_count = first.debug_metrics["oil_smoothing_sample_count"]
+    before_count = failed_detector.oil_temporal_state_count
+    monkeypatch.setattr(
+        failed_detector._oil_pipeline,
+        "run",
+        lambda **_kwargs: (_ for _ in ()).throw(RuntimeError("injected pipeline failure")),
+    )
     failures = [
         failed_detector.detect(_oil_frame(), failed_glass, index, index * 0.5)[0]
         for index in range(2, 10)
@@ -258,46 +256,49 @@ def test_successful_stable_absence_clear_is_not_shared_with_pipeline_failure():
     assert all(item.debug_metrics["oil_tracker_action"] == "NO_UPDATE" for item in failures)
     assert all(item.debug_metrics["oil_smoothing_action"] == "PRESERVE" for item in failures)
     assert all(item.debug_metrics["oil_smoothing_sample_count"] == sample_count for item in failures)
-    assert failed_detector.oil_temporal_state_count == 1
+    assert failed_detector.oil_temporal_state_count == before_count == 1
 
-def test_stateful_external_mutation_cannot_change_detector_temporal_state():
-    external = OilHypothesisPipeline()
 
-    def mutate_then_fail(kwargs):
-        outcome = external.run(**kwargs)
-        assert isinstance(outcome, AcceptedBoundaryOutcome)
-        raise TypeError("invalid injected result")
-
-    detector = OpenCvPhaseDetector(oil_precommit_probe=mutate_then_fail)
-    detection, _ = detector.detect(_oil_frame(), _glass("invalid"), 1, 0.0)
-    assert external.temporal_state_count == 1
-    assert detector.oil_temporal_state_count == 0
+def test_invalid_internal_pipeline_result_cannot_change_temporal_state(monkeypatch):
+    detector = OpenCvPhaseDetector()
+    glass = _glass("invalid")
+    accepted, _ = detector.detect(_oil_frame(), glass, 1, 0.0)
+    assert accepted.raw_oil_air_level_y is not None
+    before_count = detector.oil_temporal_state_count
+    monkeypatch.setattr(detector._oil_pipeline, "run", lambda **_kwargs: {"invalid": True})
+    detection, _ = detector.detect(_oil_frame(), glass, 2, 0.5)
+    assert detector.oil_temporal_state_count == before_count == 1
     assert detection.raw_oil_air_level_y is None
-    assert detection.smoothed_oil_air_level_y is None
     assert detection.debug_metrics["oil_pipeline_available"] is False
     assert detection.debug_metrics["oil_tracker_action"] == "NO_UPDATE"
     assert detection.debug_metrics["oil_smoothing_action"] == "PRESERVE"
     assert "TypeError" in detection.debug_metrics["oil_pipeline_failure_reason"]
-    assert "OIL_PIPELINE_FAILURE" in detection.flags
 
 
-def test_stateful_runner_surface_is_removed_from_detector():
-    parameters = inspect.signature(OpenCvPhaseDetector).parameters
-    assert "oil_runner" not in parameters
-    assert "oil_precommit_probe" in parameters
-    try:
-        OpenCvPhaseDetector(oil_runner=object())  # type: ignore[call-arg]
-    except TypeError:
-        pass
-    else:
-        raise AssertionError("stateful oil runner injection remained available")
+def test_production_constructor_surfaces_have_no_oil_injection_callbacks():
+    detector_parameters = inspect.signature(OpenCvPhaseDetector).parameters
+    pipeline_parameters = inspect.signature(OilHypothesisPipeline).parameters
+    assert not detector_parameters
+    assert set(pipeline_parameters) == {"bounds"}
+    for forbidden in (
+        "oil_runner",
+        "oil_precommit_probe",
+        "temporal_evaluator",
+        "outcome_preparer",
+        "commit_hook",
+        "handoff_hook",
+        "transaction_admitted_hook",
+        "global_reset_waiting_hook",
+    ):
+        assert forbidden not in detector_parameters
+        assert forbidden not in pipeline_parameters
 
 
 class _AdversarialRasterRunner:
     def __init__(self):
         self.mutated = 0
 
-    def run(self, kwargs):
+    def run(self, **kwargs):
         arrays = (
             kwargs["pre"].gray,
             kwargs["pre"].normalized,
@@ -323,10 +324,10 @@ class _AdversarialRasterRunner:
         raise RuntimeError("adversarial raster mutation")
 
 
-
-def test_raster_isolation_and_foam_processing_survive_oil_failure():
+def test_raster_isolation_and_foam_processing_survive_oil_failure(monkeypatch):
     runner = _AdversarialRasterRunner()
-    detector = OpenCvPhaseDetector(oil_precommit_probe=runner.run)
+    detector = OpenCvPhaseDetector()
+    monkeypatch.setattr(detector._oil_pipeline, "run", runner.run)
     glass = _glass("raster")
     static = _oil_frame(115)
     detector.learn_static_artifact([static.copy()] * 3, glass)
