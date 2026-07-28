@@ -5,6 +5,7 @@ from enum import Enum
 import math
 
 import numpy as np
+import pytest
 
 from oil_tracker.adapters.vision import oil_shadow_observations
 from oil_tracker.adapters.vision.oil_shadow_observations import (
@@ -239,31 +240,49 @@ def _typed_hypothesis(
     boundary: float = 0.445,
     artifact: float = 0.16,
     ambiguity: float = 0.52,
+    broad_available_scale_count: int = 2,
     broad_strength: float = 0.47,
     broad_scale_consistency: float = 0.90,
     broad_polarity_consistency: float = 1.0,
     broad_glare: float = 0.0,
     broad_exclusion: float = 0.0,
+    narrow_available: bool = True,
+    narrow_peak_strength: float = 1.0,
+    narrow_scale_persistence: float = 1.0,
     paired_edge_strength: float = 0.72,
     pulse_symmetry: float = 0.50,
     narrow_glare: float = 0.0,
+    narrow_exclusion: float = 0.0,
+    narrow_border: float = 0.0,
     narrow_static: float = 0.0,
     static_contribution: float = 0.0,
+    visibility: float = 1.0,
+    evidence_availability: float = 1.0,
+    proposal_count: int = 1,
+    observation_count: int = 6,
 ):
     template = _run(_step(line=False)).hypotheses[0]
-    proposal_id = stable_digest("typed-proposal", (("seed", seed),))
+    proposal_ids = tuple(
+        sorted(
+            stable_digest(
+                "typed-proposal",
+                (("seed", seed), ("index", index)),
+            )
+            for index in range(proposal_count)
+        )
+    )
     observation_ids = tuple(
         sorted(
             stable_digest(
                 "typed-observation",
                 (("seed", seed), ("index", index)),
             )
-            for index in range(6)
+            for index in range(observation_count)
         )
     )
     broad = replace(
         template.broad,
-        available_scale_count=max(2, template.broad.available_scale_count),
+        available_scale_count=broad_available_scale_count,
         strength=broad_strength,
         scale_consistency=broad_scale_consistency,
         polarity_consistency=broad_polarity_consistency,
@@ -274,14 +293,14 @@ def _typed_hypothesis(
     )
     narrow = replace(
         template.narrow,
-        available=True,
-        peak_strength=1.0,
+        available=narrow_available,
+        peak_strength=narrow_peak_strength,
         horizontal_coverage=0.0,
         paired_edge_strength=paired_edge_strength,
         pulse_symmetry=pulse_symmetry,
-        scale_persistence=1.0,
-        border_overlap=0.0,
-        exclusion_overlap=0.0,
+        scale_persistence=narrow_scale_persistence,
+        border_overlap=narrow_border,
+        exclusion_overlap=narrow_exclusion,
         glare_overlap=narrow_glare,
         static_overlap=narrow_static,
     )
@@ -296,7 +315,7 @@ def _typed_hypothesis(
     return replace(
         template,
         identity=identity,
-        proposal_ids=(proposal_id,),
+        proposal_ids=proposal_ids,
         observation_ids=observation_ids,
         representative_local_y=y,
         representative_source_y=y + 10.0,
@@ -308,13 +327,13 @@ def _typed_hypothesis(
         boundary_likelihood=boundary,
         artifact_likelihood=artifact,
         ambiguity_likelihood=ambiguity,
-        evidence_availability=1.0,
-        visibility=1.0,
+        evidence_availability=evidence_availability,
+        visibility=visibility,
         polarity_available=True,
         polarity=0.01,
         polarity_confidence=0.01,
         label=ShadowHypothesisLabel.BOUNDARY_LIKE,
-        provenance=tuple(sorted((proposal_id,) + observation_ids)),
+        provenance=tuple(sorted(proposal_ids + observation_ids)),
     )
 
 
@@ -346,6 +365,103 @@ def _typed_observation(monkeypatch, hypotheses, *, no_interface=0.15):
         lambda *_args: evidence,
     )
     return evaluate_typed_current_observation(pre, mask, tuple(hypotheses))
+
+
+def test_corroborated_single_boundary_requires_strict_no_interface_dominance(monkeypatch):
+    boundary = 0.445
+    target = _typed_hypothesis("dominance", boundary=boundary)
+
+    assert isinstance(
+        _typed_observation(monkeypatch, (target,), no_interface=boundary - 1e-6),
+        ShadowBoundaryObservation,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (target,), no_interface=boundary),
+        ShadowAmbiguousObservation,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (target,), no_interface=boundary + 1e-6),
+        ShadowAmbiguousObservation,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (target,), no_interface=boundary - 1e-9),
+        ShadowBoundaryObservation,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (target,), no_interface=boundary - 1e-12),
+        ShadowAmbiguousObservation,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (target,), no_interface=boundary - 5e-13),
+        ShadowAmbiguousObservation,
+    )
+
+    alternative = _typed_hypothesis("dominance-alternative", y=55.0)
+    assert isinstance(
+        _typed_observation(
+            monkeypatch,
+            (target, alternative),
+            no_interface=boundary - 1e-6,
+        ),
+        ShadowAmbiguousObservation,
+    )
+    assert isinstance(
+        _typed_observation(
+            monkeypatch,
+            (_typed_hypothesis("below-narrow-floor", boundary=0.429999),),
+            no_interface=0.20,
+        ),
+        ShadowAmbiguousObservation,
+    )
+    assert isinstance(
+        _typed_observation(
+            monkeypatch,
+            (_typed_hypothesis("at-narrow-floor", boundary=0.43, artifact=0.16),),
+            no_interface=0.20,
+        ),
+        ShadowBoundaryObservation,
+    )
+
+
+@pytest.mark.parametrize(
+    ("guard", "changes"),
+    (
+        ("artifact-margin", {"artifact": 0.185001}),
+        ("broad-scale-count", {"broad_available_scale_count": 1}),
+        ("broad-strength", {"broad_strength": 0.399999}),
+        ("broad-consistency", {"broad_scale_consistency": 0.849999}),
+        ("ambiguity", {"ambiguity": 0.60}),
+        ("narrow-availability", {"narrow_available": False}),
+        ("narrow-peak", {"narrow_peak_strength": 0.899999}),
+        ("narrow-persistence", {"narrow_scale_persistence": 0.899999}),
+        (
+            "pulse-artifact",
+            {"paired_edge_strength": 0.96, "pulse_symmetry": 0.96},
+        ),
+        ("paired-edge", {"paired_edge_strength": 0.800001}),
+        ("visibility", {"visibility": 0.849999}),
+        ("evidence-availability", {"evidence_availability": 0.899999}),
+        ("polarity-coherence", {"broad_polarity_consistency": 0.849999}),
+        ("spatial-conflict", {"narrow_exclusion": 0.150001}),
+        (
+            "static-contribution",
+            {"narrow_static": 0.10, "static_contribution": 0.080001},
+        ),
+        ("static-overlap", {"narrow_static": 0.200001}),
+        ("observation-count", {"observation_count": 5}),
+        ("proposal-count", {"proposal_count": 2}),
+    ),
+)
+def test_single_dominant_boundary_closes_when_any_guard_fails(
+    monkeypatch,
+    guard,
+    changes,
+):
+    target = _typed_hypothesis(f"guard-{guard}", **changes)
+    assert isinstance(
+        _typed_observation(monkeypatch, (target,), no_interface=0.15),
+        ShadowAmbiguousObservation,
+    )
 
 
 def test_single_dominant_boundary_requires_independent_corroboration(monkeypatch):

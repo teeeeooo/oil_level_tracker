@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
+import cv2
+import numpy as np
+
 from oil_benchmark_fixtures import controlled_oil_scenes, generate_controlled_oil_dataset
 from oil_tracker.adapters.storage.benchmark_result_writer import AtomicBenchmarkResultWriter
 from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
@@ -32,6 +35,100 @@ def _service():
 
 def _metric(summary, name):
     return summary["metrics"][name]["value"]
+
+
+def _shift_vertical(frame: np.ndarray, delta: int) -> np.ndarray:
+    shifted = np.roll(frame, delta, axis=0)
+    if delta > 0:
+        shifted[:delta] = frame[0]
+    elif delta < 0:
+        shifted[delta:] = frame[-1]
+    return shifted
+
+
+def _preserve_saturated_pixels(
+    source: np.ndarray,
+    adjusted: np.ndarray,
+) -> np.ndarray:
+    return np.where(source >= 245, source, adjusted).astype(np.uint8)
+
+
+def _adjust_brightness(frame: np.ndarray, delta: int) -> np.ndarray:
+    adjusted = np.clip(frame.astype(np.int16) + delta, 0, 255).astype(np.uint8)
+    return _preserve_saturated_pixels(frame, adjusted)
+
+
+def _adjust_contrast(frame: np.ndarray, factor: float) -> np.ndarray:
+    adjusted = (frame.astype(np.float32) - 127.5) * factor + 127.5
+    clipped = np.clip(adjusted, 0, 255).astype(np.uint8)
+    return _preserve_saturated_pixels(frame, clipped)
+
+
+def _add_deterministic_noise(
+    frame: np.ndarray,
+    seed: int,
+    sigma: float = 1.5,
+) -> np.ndarray:
+    rng = np.random.default_rng(seed)
+    noisy = frame.astype(np.float32) + rng.normal(0.0, sigma, frame.shape)
+    clipped = np.clip(noisy, 0, 255).astype(np.uint8)
+    return _preserve_saturated_pixels(frame, clipped)
+
+
+def _local_neighborhood(frame: np.ndarray):
+    for delta in (-2, -1, 0, 1, 2):
+        yield f"geometry-{delta:+d}", _shift_vertical(frame, delta), float(delta)
+    for delta in (-8, -4, 0, 4, 8):
+        yield f"brightness-{delta:+d}", _adjust_brightness(frame, delta), 0.0
+    for factor in (0.90, 0.92, 1.0, 1.08, 1.10):
+        yield f"contrast-{factor:.2f}", _adjust_contrast(frame, factor), 0.0
+    for seed in (7, 19, 43):
+        yield f"noise-{seed}", _add_deterministic_noise(frame, seed), 0.0
+
+
+def _fresh_detection(
+    frame: np.ndarray,
+    case_id: str,
+    *,
+    debug: bool,
+    static_frames: tuple[np.ndarray, ...] = (),
+):
+    detector = OpenCvPhaseDetector()
+    glass = InspectionRecipe.default_glass(320, 240)
+    glass.id = f"dominance-robustness-{case_id}"
+    if static_frames:
+        detector.learn_static_artifact([item.copy() for item in static_frames], glass)
+    detection, _artifacts = detector.detect(frame, glass, 0, 1.0, debug=debug)
+    return detection
+
+
+def _assert_fresh_detector_determinism(
+    frame: np.ndarray,
+    case_id: str,
+    *,
+    static_frames: tuple[np.ndarray, ...] = (),
+):
+    first = _fresh_detection(
+        frame,
+        case_id,
+        debug=False,
+        static_frames=static_frames,
+    )
+    repeat = _fresh_detection(
+        frame,
+        case_id,
+        debug=False,
+        static_frames=static_frames,
+    )
+    debug = _fresh_detection(
+        frame,
+        case_id,
+        debug=True,
+        static_frames=static_frames,
+    )
+    assert first == repeat
+    assert first == debug
+    return first
 
 
 def test_controlled_oil_dataset_is_stable_external_style_and_multi_category(tmp_path):
@@ -112,6 +209,71 @@ def test_direct_single_candidate_semantic_recall_targets_are_numeric():
             debug=False,
         )
         assert detection.raw_oil_air_level_y is not None, case_id
+
+
+def test_clear_and_rapid_local_neighborhoods_are_numeric_and_deterministic():
+    scenes = {scene.case_id: scene for scene in controlled_oil_scenes()}
+    for case_id in ("clear-upper", "rapid-filling-0"):
+        scene = scenes[case_id]
+        assert scene.oil_y is not None
+        for probe_name, frame, truth_offset in _local_neighborhood(scene.frame):
+            detection = _assert_fresh_detector_determinism(
+                frame,
+                f"positive-{case_id}-{probe_name}",
+            )
+            assert "OIL_PIPELINE_FAILURE" not in detection.flags
+            assert detection.raw_oil_air_level_y is not None
+            assert detection.fill_state.value != "UNKNOWN_REVIEW"
+            expected_y = scene.oil_y + truth_offset
+            assert abs(detection.raw_oil_air_level_y - expected_y) <= 4.0
+
+
+def test_negative_local_neighborhoods_do_not_create_head_only_oil():
+    scenes = {scene.case_id: scene for scene in controlled_oil_scenes()}
+    thin_line = np.full((240, 320, 3), 105, dtype=np.uint8)
+    cv2.line(thin_line, (0, 120), (319, 120), (235, 235, 235), 1)
+    paired_pulse = np.full((240, 320, 3), 105, dtype=np.uint8)
+    cv2.rectangle(paired_pulse, (0, 113), (319, 116), (235, 235, 235), -1)
+    cv2.rectangle(paired_pulse, (0, 123), (319, 126), (45, 45, 45), -1)
+    static_frames = tuple(thin_line.copy() for _ in range(4))
+    controls = (
+        ("thin-structural-line", thin_line, ()),
+        ("paired-pulse", paired_pulse, ()),
+        ("rim-adjacent-line", scenes["rim-line"].frame, ()),
+        ("reflection-only", scenes["reflection-only"].frame, ()),
+        ("glare-overlap", scenes["glare-recovery-1"].frame, ()),
+        ("shimmer-only", scenes["shimmer-only"].frame, ()),
+        ("static-overlap", thin_line, static_frames),
+        ("uniform-full", scenes["full-no-interface"].frame, ()),
+        ("uniform-empty", scenes["empty-no-interface"].frame, ()),
+        ("transient-false-line", scenes["transient-false-line-1"].frame, ()),
+    )
+
+    for control_name, base_frame, learned_static in controls:
+        for probe_name, frame, _truth_offset in _local_neighborhood(base_frame):
+            detection = _assert_fresh_detector_determinism(
+                frame,
+                f"negative-{control_name}-{probe_name}",
+                static_frames=learned_static,
+            )
+            assert detection.raw_oil_air_level_y is None
+            if control_name != "glare-overlap":
+                assert "OIL_PIPELINE_FAILURE" not in detection.flags
+            if control_name == "uniform-full":
+                assert detection.fill_state.value == "FULL_NO_INTERFACE"
+            elif control_name == "uniform-empty":
+                assert detection.fill_state.value == "EMPTY_NO_INTERFACE"
+
+    structural_real = _assert_fresh_detector_determinism(
+        scenes["structural-plus-real"].frame,
+        "structural-plus-real-positive-control",
+    )
+    structural_only = _assert_fresh_detector_determinism(
+        thin_line,
+        "structural-only-negative-control",
+    )
+    assert structural_real.raw_oil_air_level_y is not None
+    assert structural_only.raw_oil_air_level_y is None
 
 
 def test_temporal_side_contracts_use_same_controlled_scene_generator():

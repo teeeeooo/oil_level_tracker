@@ -373,7 +373,7 @@ def _accepts_corroborated_single_dominant_boundary(
         and len(best.observation_ids) >= 6
         and best.boundary_likelihood >= 0.43
         and best.boundary_likelihood - best.artifact_likelihood >= 0.26
-        and best.boundary_likelihood - no_interface.likelihood >= 0.06
+        and best.boundary_likelihood - no_interface.likelihood > 1e-12
         and best.ambiguity_likelihood < 0.60
         and best.broad.available_scale_count >= 2
         and best.broad.strength >= 0.40
