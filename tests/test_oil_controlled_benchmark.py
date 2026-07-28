@@ -398,6 +398,61 @@ def test_direct_single_candidate_semantic_recall_targets_are_numeric():
         assert detection.raw_oil_air_level_y is not None, case_id
 
 
+def _bright_boundary_frame(
+    above: int,
+    below: int,
+    *,
+    y: int = 120,
+    line: int | None = None,
+) -> np.ndarray:
+    frame = np.full((240, 320, 3), above, dtype=np.uint8)
+    frame[y:] = below
+    if line is not None:
+        cv2.line(frame, (0, y), (319, y), (line, line, line), 2)
+    return frame
+
+
+@pytest.mark.parametrize(
+    "case_id,frame,expected_y",
+    (
+        ("upper-230-line-244", _bright_boundary_frame(230, 70, line=244), 120.0),
+        ("upper-244-no-line", _bright_boundary_frame(244, 70), 120.0),
+        ("lower-bright-reversed", _bright_boundary_frame(70, 230), 120.0),
+        ("threshold-minus-one-line", _bright_boundary_frame(244, 70, line=244), 120.0),
+        ("local-bright-interface-line", _bright_boundary_frame(175, 70, line=244), 120.0),
+        ("near-roi-top", _bright_boundary_frame(230, 70, y=75, line=244), 75.0),
+        ("near-roi-bottom", _bright_boundary_frame(230, 70, y=165, line=244), 165.0),
+    ),
+)
+def test_bright_real_boundary_matrix_remains_numeric(case_id, frame, expected_y):
+    detection = _assert_fresh_detector_determinism(frame, f"bright-boundary-{case_id}")
+    context = {
+        "case_id": case_id,
+        "raw_oil_y": detection.raw_oil_air_level_y,
+        "fill_state": detection.fill_state.value,
+        "flags": detection.flags,
+        "boundary_score": detection.debug_metrics["oil_boundary_score"],
+        "artifact_score": detection.debug_metrics["oil_artifact_score"],
+    }
+    assert detection.raw_oil_air_level_y is not None, context
+    assert abs(detection.raw_oil_air_level_y - expected_y) <= 4.0, context
+    assert "OIL_PIPELINE_FAILURE" not in detection.flags, context
+
+
+def test_near_threshold_partial_glare_plateau_has_no_numeric_oil():
+    frame = np.full((240, 320, 3), 90, dtype=np.uint8)
+    frame[80:185, 132:188] = 244
+    detection = _assert_fresh_detector_determinism(
+        frame,
+        "near-threshold-partial-glare-plateau",
+    )
+    assert detection.raw_oil_air_level_y is None
+    assert "OIL_PIPELINE_FAILURE" not in detection.flags
+    boundary_score = detection.debug_metrics["oil_boundary_score"]
+    artifact_score = detection.debug_metrics["oil_artifact_score"]
+    assert boundary_score - artifact_score < 0.08
+
+
 def _positive_neighborhood_cases():
     scenes = {scene.case_id: scene for scene in controlled_oil_scenes()}
     cases = []

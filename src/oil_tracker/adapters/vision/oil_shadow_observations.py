@@ -227,11 +227,10 @@ def evaluate_semantic_hypotheses(
         broad = _broad_summary(proposal, broad_profiles, bounds)
         narrow = _narrow_summary(proposal, narrow_context, bounds)
         static_prior = _static_prior(narrow, broad, static_artifact_map, bounds)
-        bright_plateau_artifact = _bright_plateau_artifact(
+        bright_plateau_artifact = _persistent_plateau_artifact(
             pre.gray,
             effective_mask,
             broad.transition_local_y,
-            broad.strength,
         )
         hypothesis = _semantic_hypothesis(
             proposal,
@@ -770,39 +769,72 @@ def _narrow_summary(
     )
 
 
-def _bright_plateau_artifact(
+def _persistent_plateau_artifact(
     gray: np.ndarray,
     effective_mask: np.ndarray,
     center_y: float,
-    broad_strength: float,
 ) -> float:
-    """Measure persistent brightness not explained by the broad region step."""
+    """Measure broad, vertically persistent horizontal structure beside a boundary."""
 
+    _validate_same_shape(gray, effective_mask)
     effective = effective_mask > 0
-    brightness = np.clip(
-        (gray.astype(np.float64) - 200.0) / 55.0,
-        0.0,
-        1.0,
-    )
-    center = min(gray.shape[0] - 1, max(0, int(round(center_y))))
-    band_height = 16
-    center_gap = 2
-    supports: list[float] = []
+    valid_rows = np.flatnonzero(np.any(effective, axis=1))
+    if valid_rows.size == 0:
+        return 0.0
+
+    first_row = int(valid_rows[0])
+    last_row = int(valid_rows[-1])
+    roi_height = last_row - first_row + 1
+    band_height = max(2, int(round(0.10 * roi_height)))
+    center_gap = max(1, int(round(0.015 * roi_height)))
+    center = min(last_row, max(first_row, int(round(center_y))))
+    reference_width = max(int(np.count_nonzero(effective[row])) for row in valid_rows)
+    if reference_width < 2:
+        return 0.0
+
+    minimum_run = max(2, int(math.ceil(0.25 * reference_width)))
+    side_scores: list[float] = []
     for start, stop in (
-        (max(0, center - center_gap - band_height), max(0, center - center_gap)),
-        (
-            min(gray.shape[0], center + center_gap),
-            min(gray.shape[0], center + center_gap + band_height),
-        ),
+        (max(first_row, center - center_gap - band_height), max(first_row, center - center_gap)),
+        (min(last_row + 1, center + center_gap), min(last_row + 1, center + center_gap + band_height)),
     ):
-        valid = effective[start:stop]
-        if stop <= start or np.count_nonzero(valid) < 5:
-            supports.append(0.0)
-            continue
-        supports.append(float(np.mean(brightness[start:stop][valid])))
-    persistent_support = max(supports, default=0.0)
-    unexplained_support = max(0.0, persistent_support - broad_strength)
-    return _unit(3.0 * unexplained_support)
+        row_scores: list[float] = []
+        for row in range(start, stop):
+            columns = np.flatnonzero(effective[row])
+            if columns.size < minimum_run:
+                continue
+            runs = np.split(columns, np.flatnonzero(np.diff(columns) > 1) + 1)
+            run = max(runs, key=len)
+            if run.size < minimum_run:
+                continue
+            row_scores.append(
+                _structured_row_support(gray[row, run])
+                * (run.size / reference_width)
+            )
+        completeness = min(1.0, len(row_scores) / max(1, band_height))
+        persistence = (
+            0.0
+            if not row_scores
+            else float(np.quantile(row_scores, 0.25)) * completeness
+        )
+        side_scores.append(persistence)
+
+    horizontal_geometry = reference_width / max(1, gray.shape[1])
+    return _unit(max(side_scores, default=0.0) * horizontal_geometry)
+
+
+def _structured_row_support(values: np.ndarray) -> float:
+    centered = values.astype(np.float64) - float(np.mean(values))
+    if float(np.dot(centered, centered)) <= 1e-12:
+        return 0.0
+    strongest = 0.0
+    for lag in range(1, min(4, values.size - 2) + 1):
+        left = centered[:-lag]
+        right = centered[lag:]
+        denominator = float(np.linalg.norm(left) * np.linalg.norm(right))
+        if denominator > 1e-12:
+            strongest = max(strongest, abs(float(np.dot(left, right)) / denominator))
+    return _unit(strongest)
 
 
 def _static_prior(

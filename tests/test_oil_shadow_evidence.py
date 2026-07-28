@@ -107,59 +107,52 @@ def test_narrow_line_and_paired_pulse_raise_continuous_artifact_evidence():
     assert all(0.0 <= item.artifact_likelihood <= 1.0 for item in pair_result.hypotheses)
 
 
-def test_bright_plateau_artifact_is_continuous_below_the_binary_glare_threshold():
+def test_plateau_artifact_uses_persistent_structure_not_absolute_brightness():
     mask = np.full((80, 100), 255, dtype=np.uint8)
-    moderate = np.full((80, 100), 90, dtype=np.uint8)
-    moderate[42:] = 230
-    near_glare = np.full((80, 100), 90, dtype=np.uint8)
-    near_glare[42:] = 244
-
-    moderate_score = oil_shadow_observations._bright_plateau_artifact(
-        moderate,
-        mask,
-        40.0,
-        0.50,
-    )
-    near_glare_score = oil_shadow_observations._bright_plateau_artifact(
-        near_glare,
-        mask,
-        40.0,
-        0.50,
-    )
-
-    assert 0.0 < moderate_score < near_glare_score < 1.0
-
-
-def test_bright_plateau_artifact_ignores_local_lines_and_real_boundary_levels():
-    mask = np.full((80, 100), 255, dtype=np.uint8)
-    plateau = np.full((80, 100), 90, dtype=np.uint8)
-    plateau[42:] = 244
+    uniform_230 = np.full((80, 100), 70, dtype=np.uint8)
+    uniform_230[:40] = 230
+    uniform_244 = np.full((80, 100), 70, dtype=np.uint8)
+    uniform_244[:40] = 244
     local_line = np.full((80, 100), 90, dtype=np.uint8)
     local_line[39:42] = 244
-    real_boundary = _step(175, 70, line=True)
+    striped = np.full((80, 100), 90, dtype=np.uint8)
+    striped[42:] = 244
+    striped[42:, ::2] = 240
+    partial = np.full((80, 100), 90, dtype=np.uint8)
+    partial[42:, 25:75] = 244
 
-    plateau_score = oil_shadow_observations._bright_plateau_artifact(
+    score = oil_shadow_observations._persistent_plateau_artifact
+    assert score(uniform_230, mask, 40.0) == 0.0
+    assert score(uniform_244, mask, 40.0) == 0.0
+    assert score(local_line, mask, 40.0) == 0.0
+    assert score(striped, mask, 40.0) > 0.70
+    assert score(partial, mask, 40.0) > 0.50
+
+
+@pytest.mark.parametrize("shape", ((40, 50), (80, 100), (160, 200)))
+def test_plateau_artifact_scales_with_roi_and_requires_broad_support(shape):
+    height, width = shape
+    center = height // 2
+    plateau = np.full(shape, 90, dtype=np.uint8)
+    plateau[center:] = 244
+    plateau[center:, ::2] = 240
+    broad = np.full(shape, 255, dtype=np.uint8)
+    sparse = np.zeros(shape, dtype=np.uint8)
+    sparse[:, width // 2] = 255
+
+    broad_score = oil_shadow_observations._persistent_plateau_artifact(
         plateau,
-        mask,
-        40.0,
-        0.45,
+        broad,
+        float(center),
     )
-    local_line_score = oil_shadow_observations._bright_plateau_artifact(
-        local_line,
-        mask,
-        40.0,
-        0.45,
-    )
-    real_boundary_score = oil_shadow_observations._bright_plateau_artifact(
-        real_boundary,
-        mask,
-        40.0,
-        0.45,
+    sparse_score = oil_shadow_observations._persistent_plateau_artifact(
+        plateau,
+        sparse,
+        float(center),
     )
 
-    assert plateau_score > 0.50
-    assert local_line_score == 0.0
-    assert real_boundary_score == 0.0
+    assert broad_score > 0.70
+    assert sparse_score == 0.0
 
 
 def test_real_boundary_adjacent_to_structure_keeps_multiple_explanations():
