@@ -107,6 +107,61 @@ def test_narrow_line_and_paired_pulse_raise_continuous_artifact_evidence():
     assert all(0.0 <= item.artifact_likelihood <= 1.0 for item in pair_result.hypotheses)
 
 
+def test_bright_plateau_artifact_is_continuous_below_the_binary_glare_threshold():
+    mask = np.full((80, 100), 255, dtype=np.uint8)
+    moderate = np.full((80, 100), 90, dtype=np.uint8)
+    moderate[42:] = 230
+    near_glare = np.full((80, 100), 90, dtype=np.uint8)
+    near_glare[42:] = 244
+
+    moderate_score = oil_shadow_observations._bright_plateau_artifact(
+        moderate,
+        mask,
+        40.0,
+        0.50,
+    )
+    near_glare_score = oil_shadow_observations._bright_plateau_artifact(
+        near_glare,
+        mask,
+        40.0,
+        0.50,
+    )
+
+    assert 0.0 < moderate_score < near_glare_score < 1.0
+
+
+def test_bright_plateau_artifact_ignores_local_lines_and_real_boundary_levels():
+    mask = np.full((80, 100), 255, dtype=np.uint8)
+    plateau = np.full((80, 100), 90, dtype=np.uint8)
+    plateau[42:] = 244
+    local_line = np.full((80, 100), 90, dtype=np.uint8)
+    local_line[39:42] = 244
+    real_boundary = _step(175, 70, line=True)
+
+    plateau_score = oil_shadow_observations._bright_plateau_artifact(
+        plateau,
+        mask,
+        40.0,
+        0.45,
+    )
+    local_line_score = oil_shadow_observations._bright_plateau_artifact(
+        local_line,
+        mask,
+        40.0,
+        0.45,
+    )
+    real_boundary_score = oil_shadow_observations._bright_plateau_artifact(
+        real_boundary,
+        mask,
+        40.0,
+        0.45,
+    )
+
+    assert plateau_score > 0.50
+    assert local_line_score == 0.0
+    assert real_boundary_score == 0.0
+
+
 def test_real_boundary_adjacent_to_structure_keeps_multiple_explanations():
     image = _step(line=False)
     image[46:49] = 220

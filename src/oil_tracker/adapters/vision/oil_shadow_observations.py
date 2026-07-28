@@ -227,12 +227,19 @@ def evaluate_semantic_hypotheses(
         broad = _broad_summary(proposal, broad_profiles, bounds)
         narrow = _narrow_summary(proposal, narrow_context, bounds)
         static_prior = _static_prior(narrow, broad, static_artifact_map, bounds)
+        bright_plateau_artifact = _bright_plateau_artifact(
+            pre.gray,
+            effective_mask,
+            broad.transition_local_y,
+            broad.strength,
+        )
         hypothesis = _semantic_hypothesis(
             proposal,
             members,
             broad,
             narrow,
             static_prior,
+            bright_plateau_artifact,
             crop_origin_y,
         )
         hypotheses.append(hypothesis)
@@ -763,6 +770,41 @@ def _narrow_summary(
     )
 
 
+def _bright_plateau_artifact(
+    gray: np.ndarray,
+    effective_mask: np.ndarray,
+    center_y: float,
+    broad_strength: float,
+) -> float:
+    """Measure persistent brightness not explained by the broad region step."""
+
+    effective = effective_mask > 0
+    brightness = np.clip(
+        (gray.astype(np.float64) - 200.0) / 55.0,
+        0.0,
+        1.0,
+    )
+    center = min(gray.shape[0] - 1, max(0, int(round(center_y))))
+    band_height = 16
+    center_gap = 2
+    supports: list[float] = []
+    for start, stop in (
+        (max(0, center - center_gap - band_height), max(0, center - center_gap)),
+        (
+            min(gray.shape[0], center + center_gap),
+            min(gray.shape[0], center + center_gap + band_height),
+        ),
+    ):
+        valid = effective[start:stop]
+        if stop <= start or np.count_nonzero(valid) < 5:
+            supports.append(0.0)
+            continue
+        supports.append(float(np.mean(brightness[start:stop][valid])))
+    persistent_support = max(supports, default=0.0)
+    unexplained_support = max(0.0, persistent_support - broad_strength)
+    return _unit(3.0 * unexplained_support)
+
+
 def _static_prior(
     narrow: NarrowEvidenceSummary,
     broad: BroadEvidenceSummary,
@@ -813,6 +855,7 @@ def _semantic_hypothesis(
     broad: BroadEvidenceSummary,
     narrow: NarrowEvidenceSummary,
     static_prior: StaticPriorEvidence,
+    bright_plateau_artifact: float,
     crop_origin_y: float,
 ) -> SemanticHypothesis:
     polarity_values = [item.polarity for item in members if item.polarity_available]
@@ -850,6 +893,7 @@ def _semantic_hypothesis(
     artifact = _unit(
         structural_artifact * (1.0 - 0.82 * broad.strength)
         + static_prior.contribution
+        + bright_plateau_artifact
     )
     ambiguity = _unit(
         0.48 * (1.0 - abs(boundary - artifact))
