@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Callable
 
 import cv2
 import numpy as np
@@ -50,12 +50,16 @@ class PhaseDetectionDebugArtifacts:
 class OpenCvPhaseDetector:
     version = "opencv-phase-detector-s5b-typed-production-v1"
 
-    def __init__(self, *, oil_runner: Any | None = None) -> None:
+    def __init__(
+        self,
+        *,
+        oil_precommit_probe: Callable[[dict[str, Any]], None] | None = None,
+    ) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._foam_gate = FoamTemporalGate()
         self._oil_pipeline = OilHypothesisPipeline()
-        self._oil_runner = oil_runner or self._oil_pipeline
+        self._oil_precommit_probe = oil_precommit_probe
 
     @property
     def foam_temporal_state_count(self) -> int:
@@ -63,7 +67,7 @@ class OpenCvPhaseDetector:
 
     @property
     def oil_temporal_state_count(self) -> int:
-        return int(getattr(self._oil_runner, "temporal_state_count", self._oil_pipeline.temporal_state_count))
+        return self._oil_pipeline.temporal_state_count
 
     @property
     def oil_bounds(self):
@@ -283,15 +287,7 @@ class OpenCvPhaseDetector:
         return detection, artifacts
 
     def _reset_oil_pipeline(self, glass_id: str | None) -> None:
-        owners = (self._oil_runner, self._oil_pipeline)
-        seen: set[int] = set()
-        for owner in owners:
-            if id(owner) in seen:
-                continue
-            seen.add(id(owner))
-            reset = getattr(owner, "reset", None)
-            if callable(reset):
-                reset(glass_id)
+        self._oil_pipeline.reset(glass_id)
 
     def _evaluate_oil_pipeline(
         self,
@@ -300,37 +296,23 @@ class OpenCvPhaseDetector:
         bundle: MaskBundle,
         static_map: np.ndarray | None,
     ) -> OilCanonicalOutcome:
-        readonly_pre = PreprocessResult(
-            *(
-                _isolated_readonly_copy(value)
-                for value in (
-                    pre.gray,
-                    pre.normalized,
-                    pre.blurred,
-                    pre.sobel_y_signed,
-                    pre.sobel_y_abs,
-                    pre.canny,
-                    pre.horizontal_mask,
-                    pre.glare_mask,
-                )
-            )
+        kwargs = _isolated_pipeline_inputs(
+            glass_id=glass_id,
+            pre=pre,
+            bundle=bundle,
+            static_map=static_map,
         )
-        kwargs = {
-            "glass_id": glass_id,
-            "pre": readonly_pre,
-            "effective_mask": _isolated_readonly_copy(bundle.effective_mask),
-            "ellipse_mask": _isolated_readonly_copy(bundle.ellipse_mask),
-            "exclusion_mask": _isolated_readonly_copy(bundle.exclusion_mask),
-            "static_artifact_map": (
-                None if static_map is None else _isolated_readonly_copy(static_map)
-            ),
-            "crop_origin_y": float(bundle.crop_origin[1]),
-        }
         try:
-            run = getattr(self._oil_runner, "run", None)
-            result = run(**kwargs) if callable(run) else self._oil_runner(**kwargs)
-            if not isinstance(result, OilCanonicalOutcomeBase):
-                raise TypeError("typed oil runner returned an invalid result type")
+            if self._oil_precommit_probe is not None:
+                self._oil_precommit_probe(
+                    _isolated_pipeline_inputs(
+                        glass_id=glass_id,
+                        pre=pre,
+                        bundle=bundle,
+                        static_map=static_map,
+                    )
+                )
+            result = self._oil_pipeline.run(**kwargs)
             validate_production_result(result)
             return result
         except Exception as exc:
@@ -461,6 +443,41 @@ class OpenCvPhaseDetector:
             },
         )
 
+
+
+def _isolated_pipeline_inputs(
+    *,
+    glass_id: str,
+    pre: PreprocessResult,
+    bundle: MaskBundle,
+    static_map: np.ndarray | None,
+) -> dict[str, Any]:
+    readonly_pre = PreprocessResult(
+        *(
+            _isolated_readonly_copy(value)
+            for value in (
+                pre.gray,
+                pre.normalized,
+                pre.blurred,
+                pre.sobel_y_signed,
+                pre.sobel_y_abs,
+                pre.canny,
+                pre.horizontal_mask,
+                pre.glare_mask,
+            )
+        )
+    )
+    return {
+        "glass_id": glass_id,
+        "pre": readonly_pre,
+        "effective_mask": _isolated_readonly_copy(bundle.effective_mask),
+        "ellipse_mask": _isolated_readonly_copy(bundle.ellipse_mask),
+        "exclusion_mask": _isolated_readonly_copy(bundle.exclusion_mask),
+        "static_artifact_map": (
+            None if static_map is None else _isolated_readonly_copy(static_map)
+        ),
+        "crop_origin_y": float(bundle.crop_origin[1]),
+    }
 
 def _isolated_readonly_copy(value: np.ndarray) -> np.ndarray:
     isolated = np.array(value, copy=True, order="K", subok=False)

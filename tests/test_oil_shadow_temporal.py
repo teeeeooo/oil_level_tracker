@@ -4,17 +4,15 @@ from dataclasses import fields, is_dataclass, replace
 from enum import Enum
 
 import numpy as np
-import pytest
 
 from oil_tracker.adapters.vision.oil_shadow_pipeline import OilHypothesisPipeline
 from oil_tracker.adapters.vision.oil_shadow_temporal import (
-    OilShadowTemporalTracker,
-    TemporalCommitError,
-    TemporalCommitPayload,
+    GlassTemporalSnapshot,
+    GlassTemporalState,
+    OilShadowTemporalModel,
 )
 from oil_tracker.adapters.vision.oil_shadow_types import (
     AbsenceStabilityMode,
-    AcceptedBoundaryOutcome,
     BoundaryAcceptanceMode,
     BoundaryAcceptedDecision,
     EvidenceUnavailableDecision,
@@ -94,17 +92,17 @@ def _ambiguous(y=40.0):
 
 
 def _unavailable():
-    return ShadowUnavailableObservation(
-        visibility=0.10,
-        reason="insufficient support",
-    )
+    return ShadowUnavailableObservation(visibility=0.10, reason="insufficient support")
 
 
-def _commit(tracker, glass_id, observation, token):
-    snapshot = tracker.snapshot(glass_id)
-    provisional = tracker.evaluate(snapshot, observation)
-    tracker.commit(TemporalCommitPayload(snapshot, provisional.next_state, token))
-    return provisional
+def _snapshot(state: GlassTemporalState | None = None, generation: int = 0):
+    state = state or GlassTemporalState("g")
+    return GlassTemporalSnapshot("g", generation, state.version, state)
+
+
+def _advance(model, snapshot, observation):
+    provisional = model.evaluate(snapshot, observation)
+    return provisional, _snapshot(provisional.next_state, snapshot.reset_generation)
 
 
 def _assert_no_raster(value):
@@ -127,26 +125,27 @@ def _assert_no_raster(value):
     raise AssertionError(type(value))
 
 
-def test_snapshot_and_evaluation_do_not_create_or_mutate_live_state():
-    tracker = OilShadowTemporalTracker()
-    snapshot = tracker.snapshot("g")
-    before = snapshot.state
-    first = tracker.evaluate(snapshot, _boundary(20.0))
-    second = tracker.evaluate(snapshot, _boundary(20.0))
-    assert tracker.state_count == 0
-    assert tracker.snapshot("g").state == before
+def test_pure_evaluation_is_deterministic_and_has_no_live_state_authority():
+    model = OilShadowTemporalModel()
+    snapshot = _snapshot()
+    first = model.evaluate(snapshot, _boundary(20.0))
+    second = model.evaluate(snapshot, _boundary(20.0))
     assert first == second
-    assert first.next_state is not before
+    assert first.next_state is not snapshot.state
     assert isinstance(first.decision, BoundaryAcceptedDecision)
     assert first.decision.acceptance_mode is BoundaryAcceptanceMode.INITIAL
+    assert not hasattr(model, "commit")
+    assert not hasattr(model, "reset")
+    assert not hasattr(model, "snapshot")
 
 
-def test_committed_transitions_preserve_successful_semantics_and_actions():
-    tracker = OilShadowTemporalTracker()
-    initial = _commit(tracker, "g", _boundary(20.0), "initial-token")
-    continuous = _commit(tracker, "g", _boundary(40.0), "continuous-token")
-    pending = _commit(tracker, "g", _boundary(100.0), "pending-token")
-    reacquired = _commit(tracker, "g", _boundary(102.0), "reacquired-token")
+def test_successful_transition_policy_is_preserved_by_pure_model():
+    model = OilShadowTemporalModel()
+    snapshot = _snapshot()
+    initial, snapshot = _advance(model, snapshot, _boundary(20.0))
+    continuous, snapshot = _advance(model, snapshot, _boundary(40.0))
+    pending, snapshot = _advance(model, snapshot, _boundary(100.0))
+    reacquired, snapshot = _advance(model, snapshot, _boundary(102.0))
     assert isinstance(initial.decision, BoundaryAcceptedDecision)
     assert isinstance(continuous.decision, BoundaryAcceptedDecision)
     assert isinstance(pending.decision, ReacquisitionPendingDecision)
@@ -156,95 +155,33 @@ def test_committed_transitions_preserve_successful_semantics_and_actions():
     assert reacquired.decision.accepted_source_y == 102.0
 
 
-def test_successful_unavailable_advances_only_proposed_or_committed_state():
-    bounds = OilShadowBounds(unavailable_clear_frames=3)
-    tracker = OilShadowTemporalTracker(bounds)
-    _commit(tracker, "g", _boundary(20.0), "accepted")
-    snapshot = tracker.snapshot("g")
-    proposed = tracker.evaluate(snapshot, _unavailable())
-    assert isinstance(proposed.decision, EvidenceUnavailableDecision)
-    assert proposed.decision.stability_mode is AbsenceStabilityMode.PENDING
-    assert tracker.snapshot("g") == snapshot
-    first = _commit(tracker, "g", _unavailable(), "unavailable-1")
-    second = _commit(tracker, "g", _unavailable(), "unavailable-2")
-    third = _commit(tracker, "g", _unavailable(), "unavailable-3")
+def test_unavailable_and_no_interface_counters_remain_bounded():
+    bounds = OilShadowBounds(unavailable_clear_frames=3, no_interface_clear_frames=2)
+    model = OilShadowTemporalModel(bounds)
+    snapshot = _snapshot()
+    _accepted, snapshot = _advance(model, snapshot, _boundary(20.0))
+    first, snapshot = _advance(model, snapshot, _unavailable())
+    second, snapshot = _advance(model, snapshot, _unavailable())
+    third, snapshot = _advance(model, snapshot, _unavailable())
+    assert isinstance(first.decision, EvidenceUnavailableDecision)
     assert first.decision.stability_mode is AbsenceStabilityMode.PENDING
     assert second.decision.stability_mode is AbsenceStabilityMode.PENDING
     assert third.decision.stability_mode is AbsenceStabilityMode.STABLE
     assert third.decision.smoothing_action is SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE
-    assert tracker.snapshot("g").state.unavailable_count == 3
-
-
-def test_no_interface_counter_is_bounded_and_stable_clear_is_derived():
-    bounds = OilShadowBounds(no_interface_clear_frames=2)
-    tracker = OilShadowTemporalTracker(bounds)
-    _commit(tracker, "g", _boundary(20.0), "accepted")
-    first = _commit(tracker, "g", _no_interface(), "absence-1")
-    stable = _commit(tracker, "g", _no_interface(), "absence-2")
-    for index in range(10):
-        stable = _commit(tracker, "g", _no_interface(), f"absence-extra-{index}")
-    assert first.decision.stability_mode is AbsenceStabilityMode.PENDING
+    for _ in range(10):
+        stable, snapshot = _advance(model, snapshot, _no_interface())
     assert stable.decision.stability_mode is AbsenceStabilityMode.STABLE
-    assert tracker.snapshot("g").state.no_interface_count == 2
+    assert snapshot.state.no_interface_count == bounds.no_interface_clear_frames
 
 
-def test_stale_and_replay_commit_cannot_overwrite_newer_state():
-    tracker = OilShadowTemporalTracker()
-    snapshot = tracker.snapshot("g")
-    provisional = tracker.evaluate(snapshot, _boundary(20.0))
-    payload = TemporalCommitPayload(snapshot, provisional.next_state, "one")
-    committed = tracker.commit(payload)
-    with pytest.raises(TemporalCommitError, match="Stale|replay"):
-        tracker.commit(payload)
-    stale = tracker.evaluate(snapshot, _boundary(80.0))
-    with pytest.raises(TemporalCommitError, match="Stale"):
-        tracker.commit(TemporalCommitPayload(snapshot, stale.next_state, "stale"))
-    assert tracker.snapshot("g").state == committed
-
-
-@pytest.mark.parametrize("global_reset", (False, True))
-def test_reset_invalidates_every_pre_reset_snapshot(global_reset):
-    tracker = OilShadowTemporalTracker()
-    snapshot = tracker.snapshot("g")
-    proposal = tracker.evaluate(snapshot, _boundary(20.0))
-    if global_reset:
-        tracker.reset()
-    else:
-        tracker.reset("g")
-    reset_snapshot = tracker.snapshot("g")
-    assert reset_snapshot.version == snapshot.version + 1
-    assert tracker.state_count == 0
-    with pytest.raises(TemporalCommitError, match="Stale"):
-        tracker.commit(TemporalCommitPayload(snapshot, proposal.next_state, "pre-reset"))
-    fresh = tracker.evaluate(reset_snapshot, _boundary(22.0))
-    tracker.commit(TemporalCommitPayload(reset_snapshot, fresh.next_state, "post-reset"))
-    assert tracker.snapshot("g").version == reset_snapshot.version + 1
-
-
-def test_commit_hook_failure_leaves_complete_prior_state_unchanged():
-    def fail(_snapshot, _state):
-        raise RuntimeError("injected commit failure")
-
-    tracker = OilShadowTemporalTracker(commit_hook=fail)
-    snapshot = tracker.snapshot("g")
-    proposal = tracker.evaluate(snapshot, _boundary(20.0))
-    with pytest.raises(RuntimeError, match="injected"):
-        tracker.commit(TemporalCommitPayload(snapshot, proposal.next_state, "fail"))
-    assert tracker.state_count == 0
-    assert tracker.snapshot("g") == snapshot
-
-
-def test_beam_history_scalar_counts_no_raster_and_reset_are_bounded():
+def test_temporal_resources_and_state_retain_no_raster():
     bounds = OilShadowBounds(temporal_beam_width=3, temporal_history_window=4)
-    tracker = OilShadowTemporalTracker(bounds)
+    model = OilShadowTemporalModel(bounds)
+    snapshot = _snapshot()
     sequence = (_boundary(20.0), _ambiguous(22.0), _boundary(24.0), _unavailable(), _no_interface())
     for index in range(30):
-        provisional = _commit(tracker, "g", sequence[index % len(sequence)], f"token-{index}")
+        provisional, snapshot = _advance(model, snapshot, sequence[index % len(sequence)])
         assert provisional.resources.beam_count <= bounds.temporal_beam_width
         assert provisional.resources.history_length <= bounds.temporal_history_window
-        assert provisional.resources.retained_scalar_count <= tracker.retained_scalar_limit
-    _assert_no_raster(tracker._states)
-    tracker.reset("g")
-    assert tracker.state_count == 0
-    tracker.reset()
-    assert tracker.state_count == 0
+        assert provisional.resources.retained_scalar_count <= model.retained_scalar_limit
+    _assert_no_raster(snapshot.state)

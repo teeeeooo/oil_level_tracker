@@ -3,7 +3,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 from dataclasses import dataclass, replace
 import math
-from threading import RLock
+from threading import Condition, RLock, get_ident, local
 from typing import Callable, Iterator
 
 from .oil_shadow_types import (
@@ -87,12 +87,23 @@ class GlassTemporalState:
 @dataclass(frozen=True)
 class GlassTemporalSnapshot:
     glass_id: str
+    reset_generation: int
     version: int
     state: GlassTemporalState
 
     def __post_init__(self) -> None:
+        if self.reset_generation < 0:
+            raise ValueError("Temporal reset generation cannot be negative.")
         if self.glass_id != self.state.glass_id or self.version != self.state.version:
             raise ValueError("Temporal snapshot identity/version disagrees with state.")
+
+
+@dataclass(frozen=True)
+class TemporalAuditSnapshot:
+    glass_id: str
+    reset_generation: int
+    version: int
+    state: GlassTemporalState
 
 
 @dataclass(frozen=True)
@@ -106,141 +117,21 @@ class ProvisionalTemporalResult:
             raise ValueError("Provisional decision resources disagree with next state.")
 
 
-@dataclass(frozen=True)
-class TemporalCommitPayload:
-    snapshot: GlassTemporalSnapshot
-    next_state: GlassTemporalState
-    commit_token: str
-
-    def __post_init__(self) -> None:
-        if not self.commit_token:
-            raise ValueError("Temporal commit payload requires a token.")
-        if self.next_state.glass_id != self.snapshot.glass_id:
-            raise ValueError("Temporal commit payload targets the wrong Glass.")
-        if self.next_state.version != self.snapshot.version + 1:
-            raise ValueError("Temporal commit payload version is invalid.")
-
-
 class TemporalCommitError(RuntimeError):
-    """Raised when an immutable Glass-local proposal cannot be committed."""
+    """Raised when a transaction-local immutable proposal cannot be committed."""
 
 
-class OilShadowTemporalTracker:
-    """Immutable Glass-local hypothesis-state owner with provisional evaluation."""
+class OilShadowTemporalModel:
+    """Pure deterministic temporal evaluator with no live-state authority."""
 
-    def __init__(
-        self,
-        bounds: OilShadowBounds | None = None,
-        *,
-        commit_hook: Callable[[GlassTemporalSnapshot, GlassTemporalState], None] | None = None,
-    ) -> None:
+    def __init__(self, bounds: OilShadowBounds | None = None) -> None:
         self.bounds = bounds or OilShadowBounds()
-        self._states: dict[str, GlassTemporalState] = {}
-        self._versions: dict[str, int] = {}
-        self._locks: dict[str, RLock] = {}
-        self._lock_guard = RLock()
-        self._commit_hook = commit_hook
-
-    @property
-    def state_count(self) -> int:
-        with self._lock_guard:
-            return len(self._states)
 
     @property
     def retained_scalar_limit(self) -> int:
         return self.bounds.temporal_beam_width * (
             self.bounds.temporal_history_window * 4 + 7
         ) + 12
-
-    @contextmanager
-    def transaction(self, glass_id: str) -> Iterator[None]:
-        key = str(glass_id)
-        if not key:
-            raise ValueError("Temporal transaction requires a Glass identity.")
-        with self._lock_guard:
-            lock = self._locks.setdefault(key, RLock())
-        with lock:
-            yield
-
-    def reset(self, glass_id: str | None = None) -> None:
-        if glass_id is None:
-            with self._lock_guard:
-                locks = tuple(self._locks.values())
-            for lock in locks:
-                lock.acquire()
-            try:
-                with self._lock_guard:
-                    keys = set(self._versions) | set(self._states) | set(self._locks)
-                    for key in keys:
-                        current = self._versions.get(
-                            key,
-                            self._states.get(key, GlassTemporalState(key)).version,
-                        )
-                        self._versions[key] = current + 1
-                    self._states.clear()
-            finally:
-                for lock in reversed(locks):
-                    lock.release()
-            return
-        key = str(glass_id)
-        with self.transaction(key):
-            with self._lock_guard:
-                current = self._versions.get(
-                    key,
-                    self._states.get(key, GlassTemporalState(key)).version,
-                )
-                self._versions[key] = current + 1
-                self._states.pop(key, None)
-
-    def snapshot(self, glass_id: str) -> GlassTemporalSnapshot:
-        key = str(glass_id)
-        if not key:
-            raise ValueError("Temporal snapshot requires a Glass identity.")
-        with self._lock_guard:
-            lock = self._locks.get(key)
-            if lock is None:
-                state = self._states.get(key)
-                version = self._versions.setdefault(
-                    key,
-                    0 if state is None else state.version,
-                )
-                if state is None:
-                    state = GlassTemporalState(glass_id=key, version=version)
-                return GlassTemporalSnapshot(key, version, state)
-        with lock:
-            with self._lock_guard:
-                state = self._states.get(key)
-                version = self._versions.setdefault(
-                    key,
-                    0 if state is None else state.version,
-                )
-            if state is None:
-                state = GlassTemporalState(glass_id=key, version=version)
-            return GlassTemporalSnapshot(key, version, state)
-
-    def state_resource_counts(self, glass_id: str) -> tuple[int, int, int, int]:
-        key = str(glass_id)
-        with self._lock_guard:
-            lock = self._locks.get(key)
-            if lock is None:
-                state = self._states.get(key)
-                if state is None:
-                    return 0, 0, 0, 0
-            else:
-                state = None
-        if lock is not None:
-            with lock:
-                with self._lock_guard:
-                    state = self._states.get(key)
-                if state is None:
-                    return 0, 0, 0, 0
-        assert state is not None
-        return (
-            len(state.beam),
-            max((len(item.history) for item in state.beam), default=0),
-            self._retained_scalar_count(state),
-            2,
-        )
 
     def evaluate(
         self,
@@ -263,21 +154,13 @@ class OilShadowTemporalTracker:
         provisional = self._record_static_state(provisional, observation)
 
         if isinstance(observation, ShadowBoundaryObservation):
-            decision, next_state = self._boundary_decision(
-                provisional, observation, margin
-            )
+            decision, next_state = self._boundary_decision(provisional, observation, margin)
         elif isinstance(observation, ShadowNoInterfaceObservation):
-            decision, next_state = self._no_interface_decision(
-                provisional, observation, margin
-            )
+            decision, next_state = self._no_interface_decision(provisional, observation, margin)
         elif isinstance(observation, ShadowUnavailableObservation):
-            decision, next_state = self._unavailable_decision(
-                provisional, observation, margin
-            )
+            decision, next_state = self._unavailable_decision(provisional, observation, margin)
         elif isinstance(observation, ShadowAmbiguousObservation):
-            decision, next_state = self._ambiguous_decision(
-                provisional, observation, margin
-            )
+            decision, next_state = self._ambiguous_decision(provisional, observation, margin)
         else:
             raise TypeError("Unsupported successful current-observation variant.")
 
@@ -289,48 +172,6 @@ class OilShadowTemporalTracker:
         resources = self._resources(next_state)
         decision = replace(decision, resources=resources)
         return ProvisionalTemporalResult(decision, next_state, resources)
-
-    def commit(self, payload: TemporalCommitPayload) -> GlassTemporalState:
-        """Compare-and-swap one complete immutable state replacement exactly once."""
-
-        snapshot = payload.snapshot
-        proposed = payload.next_state
-        commit_token = payload.commit_token
-        key = snapshot.glass_id
-        with self._lock_guard:
-            current = self._states.get(key)
-            current_version = self._versions.get(
-                key,
-                0 if current is None else current.version,
-            )
-        current_state = (
-            GlassTemporalState(glass_id=key, version=current_version)
-            if current is None
-            else current
-        )
-        if current_version != snapshot.version or current_state != snapshot.state:
-            raise TemporalCommitError("Stale temporal snapshot cannot be committed.")
-        if current is not None and current.last_commit_token == commit_token:
-            raise TemporalCommitError("Temporal proposal replay is prohibited.")
-        if self._commit_hook is not None:
-            self._commit_hook(snapshot, proposed)
-        committed = replace(proposed, last_commit_token=commit_token)
-        with self._lock_guard:
-            latest = self._states.get(key)
-            latest_version = self._versions.get(
-                key,
-                0 if latest is None else latest.version,
-            )
-            latest_state = (
-                GlassTemporalState(glass_id=key, version=latest_version)
-                if latest is None
-                else latest
-            )
-            if latest_version != snapshot.version or latest_state != snapshot.state:
-                raise TemporalCommitError("Concurrent temporal state replaced the snapshot.")
-            self._states[key] = committed
-            self._versions[key] = committed.version
-        return committed
 
     def _advance_beam(
         self,
@@ -708,6 +549,284 @@ class OilShadowTemporalTracker:
     def _retained_scalar_count(state: GlassTemporalState) -> int:
         beam_scalars = sum(len(item.history) * 4 + 7 for item in state.beam)
         return beam_scalars + 12
+
+
+
+class _LifecycleBarrier:
+    """Writer-priority shared/exclusive lifecycle barrier."""
+
+    def __init__(
+        self,
+        reset_waiting_hook: Callable[[], None] | None = None,
+    ) -> None:
+        self._condition = Condition(RLock())
+        self._reset_waiting_hook = reset_waiting_hook
+        self._local = local()
+        self._active_transactions = 0
+        self._reset_active = False
+        self._reset_waiters = 0
+
+    @contextmanager
+    def transaction(self) -> Iterator[None]:
+        depth = int(getattr(self._local, "transaction_depth", 0))
+        if depth:
+            self._local.transaction_depth = depth + 1
+            try:
+                yield
+            finally:
+                self._local.transaction_depth = depth
+            return
+        with self._condition:
+            while self._reset_active or self._reset_waiters:
+                self._condition.wait()
+            self._active_transactions += 1
+            self._local.transaction_depth = 1
+        try:
+            yield
+        finally:
+            with self._condition:
+                self._local.transaction_depth = 0
+                self._active_transactions -= 1
+                if self._active_transactions == 0:
+                    self._condition.notify_all()
+
+    @contextmanager
+    def global_reset(self) -> Iterator[None]:
+        if int(getattr(self._local, "transaction_depth", 0)):
+            raise RuntimeError("Global reset cannot start inside a temporal transaction.")
+        with self._condition:
+            self._reset_waiters += 1
+            try:
+                if self._reset_waiting_hook is not None:
+                    self._reset_waiting_hook()
+                while self._reset_active or self._active_transactions:
+                    self._condition.wait()
+                self._reset_active = True
+            finally:
+                self._reset_waiters -= 1
+        try:
+            yield
+        finally:
+            with self._condition:
+                self._reset_active = False
+                self._condition.notify_all()
+
+
+class _TemporalTransactionSession:
+    """Opaque transaction-local authority; invalid after owner callback returns."""
+
+    def __init__(
+        self,
+        owner: _OilTemporalAuthority,
+        lease: object,
+        snapshot: GlassTemporalSnapshot,
+    ) -> None:
+        self.__owner = owner
+        self.__lease = lease
+        self.__snapshot = snapshot
+        self.__thread_id = get_ident()
+        self.__active = True
+        self.__committed = False
+
+    @property
+    def snapshot(self) -> GlassTemporalSnapshot:
+        self.__ensure_active()
+        return self.__snapshot
+
+    def evaluate(self, observation: ShadowCurrentObservation) -> ProvisionalTemporalResult:
+        self.__ensure_active()
+        return self.__owner._evaluate(self.__lease, self.__snapshot, observation)
+
+    def commit(self, next_state: GlassTemporalState, commit_token: str) -> GlassTemporalState:
+        self.__ensure_active()
+        if self.__committed:
+            raise TemporalCommitError("Temporal transaction already committed.")
+        committed = self.__owner._commit(
+            self.__lease,
+            self.__snapshot,
+            next_state,
+            commit_token,
+        )
+        self.__committed = True
+        return committed
+
+    def _close(self) -> None:
+        self.__active = False
+        self.__owner._close_lease(self.__lease)
+
+    def __ensure_active(self) -> None:
+        if not self.__active or get_ident() != self.__thread_id:
+            raise TemporalCommitError("Temporal authority is not active in this transaction.")
+
+
+class _OilTemporalAuthority:
+    """Pipeline-owned live state; commit exists only through an active session."""
+
+    def __init__(
+        self,
+        model: OilShadowTemporalModel,
+        *,
+        evaluator: Callable[[GlassTemporalSnapshot, ShadowCurrentObservation], ProvisionalTemporalResult] | None = None,
+        commit_hook: Callable[[GlassTemporalSnapshot, GlassTemporalState], None] | None = None,
+        handoff_hook: Callable[[str], None] | None = None,
+        transaction_admitted_hook: Callable[[str], None] | None = None,
+        global_reset_waiting_hook: Callable[[], None] | None = None,
+    ) -> None:
+        self._model = model
+        self._evaluator = evaluator or model.evaluate
+        self._commit_hook = commit_hook
+        self._handoff_hook = handoff_hook
+        self._transaction_admitted_hook = transaction_admitted_hook
+        self._states: dict[str, GlassTemporalState] = {}
+        self._versions: dict[str, int] = {}
+        self._locks: dict[str, RLock] = {}
+        self._guard = RLock()
+        self._barrier = _LifecycleBarrier(global_reset_waiting_hook)
+        self._reset_generation = 0
+        self._active_leases: set[int] = set()
+
+    @property
+    def state_count(self) -> int:
+        with self._barrier.transaction():
+            with self._guard:
+                return len(self._states)
+
+    def execute(self, glass_id: str, body: Callable[[_TemporalTransactionSession], object]):
+        key = str(glass_id)
+        if not key:
+            raise ValueError("Temporal transaction requires a Glass identity.")
+        with self._barrier.transaction():
+            with self._guard:
+                lock = self._locks.setdefault(key, RLock())
+            with lock:
+                if self._transaction_admitted_hook is not None:
+                    self._transaction_admitted_hook(key)
+                snapshot = self._snapshot_locked(key)
+                lease = object()
+                with self._guard:
+                    self._active_leases.add(id(lease))
+                session = _TemporalTransactionSession(self, lease, snapshot)
+                try:
+                    return body(session)
+                finally:
+                    session._close()
+
+    def reset(self, glass_id: str | None = None) -> None:
+        if glass_id is None:
+            with self._barrier.global_reset():
+                with self._guard:
+                    keys = set(self._versions) | set(self._states) | set(self._locks)
+                    self._reset_generation += 1
+                    for key in keys:
+                        current = self._versions.get(
+                            key,
+                            self._states.get(key, GlassTemporalState(key)).version,
+                        )
+                        self._versions[key] = current + 1
+                    self._states.clear()
+            return
+        key = str(glass_id)
+        if not key:
+            raise ValueError("Temporal reset requires a Glass identity.")
+        with self._barrier.transaction():
+            with self._guard:
+                lock = self._locks.setdefault(key, RLock())
+            with lock:
+                with self._guard:
+                    current = self._versions.get(
+                        key,
+                        self._states.get(key, GlassTemporalState(key)).version,
+                    )
+                    self._versions[key] = current + 1
+                    self._states.pop(key, None)
+
+    def audit_snapshot(self, glass_id: str) -> TemporalAuditSnapshot:
+        key = str(glass_id)
+        if not key:
+            raise ValueError("Temporal audit snapshot requires a Glass identity.")
+        with self._barrier.transaction():
+            with self._guard:
+                lock = self._locks.setdefault(key, RLock())
+            with lock:
+                snapshot = self._snapshot_locked(key)
+                return TemporalAuditSnapshot(
+                    glass_id=snapshot.glass_id,
+                    reset_generation=snapshot.reset_generation,
+                    version=snapshot.version,
+                    state=snapshot.state,
+                )
+
+    def _snapshot_locked(self, key: str) -> GlassTemporalSnapshot:
+        with self._guard:
+            state = self._states.get(key)
+            version = self._versions.setdefault(
+                key,
+                0 if state is None else state.version,
+            )
+            generation = self._reset_generation
+        if state is None:
+            state = GlassTemporalState(glass_id=key, version=version)
+        return GlassTemporalSnapshot(key, generation, version, state)
+
+    def _evaluate(self, lease: object, snapshot: GlassTemporalSnapshot, observation):
+        self._require_lease(lease)
+        return self._evaluator(snapshot, observation)
+
+    def _commit(
+        self,
+        lease: object,
+        snapshot: GlassTemporalSnapshot,
+        proposed: GlassTemporalState,
+        commit_token: str,
+    ) -> GlassTemporalState:
+        self._require_lease(lease)
+        if not commit_token:
+            raise ValueError("Temporal commit requires a token.")
+        if proposed.glass_id != snapshot.glass_id:
+            raise ValueError("Temporal commit targets the wrong Glass.")
+        if proposed.version != snapshot.version + 1:
+            raise ValueError("Temporal commit version is invalid.")
+        key = snapshot.glass_id
+        with self._guard:
+            current = self._states.get(key)
+            current_version = self._versions.get(key, 0 if current is None else current.version)
+            current_generation = self._reset_generation
+        current_state = GlassTemporalState(key, version=current_version) if current is None else current
+        if current_generation != snapshot.reset_generation:
+            raise TemporalCommitError("Pre-reset temporal proposal cannot be committed.")
+        if current_version != snapshot.version or current_state != snapshot.state:
+            raise TemporalCommitError("Stale temporal snapshot cannot be committed.")
+        if current is not None and current.last_commit_token == commit_token:
+            raise TemporalCommitError("Temporal proposal replay is prohibited.")
+        if self._commit_hook is not None:
+            self._commit_hook(snapshot, proposed)
+        committed = replace(proposed, last_commit_token=commit_token)
+        with self._guard:
+            latest = self._states.get(key)
+            latest_version = self._versions.get(key, 0 if latest is None else latest.version)
+            latest_state = GlassTemporalState(key, version=latest_version) if latest is None else latest
+            if self._reset_generation != snapshot.reset_generation:
+                raise TemporalCommitError("Reset invalidated temporal proposal.")
+            if latest_version != snapshot.version or latest_state != snapshot.state:
+                raise TemporalCommitError("Concurrent temporal state replaced the snapshot.")
+            self._states[key] = committed
+            self._versions[key] = committed.version
+        if self._handoff_hook is not None:
+            try:
+                self._handoff_hook(key)
+            except Exception:
+                # Synchronization-only observation hooks cannot invalidate a commit.
+                pass
+        return committed
+
+    def _require_lease(self, lease: object) -> None:
+        with self._guard:
+            if id(lease) not in self._active_leases:
+                raise TemporalCommitError("Temporal commit authority is not active.")
+
+    def _close_lease(self, lease: object) -> None:
+        with self._guard:
+            self._active_leases.discard(id(lease))
 
 
 def _beam_order(item: _BeamItem) -> tuple[float, int, float, str]:

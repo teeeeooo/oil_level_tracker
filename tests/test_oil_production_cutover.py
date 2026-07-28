@@ -238,25 +238,15 @@ def test_successful_stable_absence_clear_is_not_shared_with_pipeline_failure():
     assert outputs[-1].debug_metrics["oil_smoothing_action"] == "CLEAR_STALE_AFTER_STABLE_ABSENCE"
     assert outputs[-1].debug_metrics["oil_smoothing_sample_count"] == 0
 
-    class FailAfterAccepted:
-        def __init__(self):
-            self.pipeline = OilHypothesisPipeline()
-            self.calls = 0
+    calls = 0
 
-        @property
-        def temporal_state_count(self):
-            return self.pipeline.temporal_state_count
+    def fail_after_accepted(_kwargs):
+        nonlocal calls
+        calls += 1
+        if calls > 1:
+            raise RuntimeError("injected pre-commit failure")
 
-        def run(self, **kwargs):
-            self.calls += 1
-            if self.calls > 1:
-                raise RuntimeError("injected pipeline failure")
-            return self.pipeline.run(**kwargs)
-
-        def reset(self, glass_id=None):
-            self.pipeline.reset(glass_id)
-
-    failed_detector = OpenCvPhaseDetector(oil_runner=FailAfterAccepted())
+    failed_detector = OpenCvPhaseDetector(oil_precommit_probe=fail_after_accepted)
     failed_glass = _glass("pipeline-failure")
     first, _ = failed_detector.detect(_oil_frame(), failed_glass, 1, 0.0)
     sample_count = first.debug_metrics["oil_smoothing_sample_count"]
@@ -268,59 +258,46 @@ def test_successful_stable_absence_clear_is_not_shared_with_pipeline_failure():
     assert all(item.debug_metrics["oil_tracker_action"] == "NO_UPDATE" for item in failures)
     assert all(item.debug_metrics["oil_smoothing_action"] == "PRESERVE" for item in failures)
     assert all(item.debug_metrics["oil_smoothing_sample_count"] == sample_count for item in failures)
+    assert failed_detector.oil_temporal_state_count == 1
 
+def test_stateful_external_mutation_cannot_change_detector_temporal_state():
+    external = OilHypothesisPipeline()
 
-class _InvalidRunner:
-    def run(self, **_kwargs):
-        return {"not": "canonical"}
+    def mutate_then_fail(kwargs):
+        outcome = external.run(**kwargs)
+        assert isinstance(outcome, AcceptedBoundaryOutcome)
+        raise TypeError("invalid injected result")
 
-    def reset(self, _glass_id=None):
-        return None
-
-
-def test_invalid_external_result_fails_closed_without_numeric_output():
-    detection, _ = OpenCvPhaseDetector(oil_runner=_InvalidRunner()).detect(
-        _oil_frame(),
-        _glass("invalid"),
-        1,
-        0.0,
-    )
+    detector = OpenCvPhaseDetector(oil_precommit_probe=mutate_then_fail)
+    detection, _ = detector.detect(_oil_frame(), _glass("invalid"), 1, 0.0)
+    assert external.temporal_state_count == 1
+    assert detector.oil_temporal_state_count == 0
     assert detection.raw_oil_air_level_y is None
     assert detection.smoothed_oil_air_level_y is None
     assert detection.debug_metrics["oil_pipeline_available"] is False
+    assert detection.debug_metrics["oil_tracker_action"] == "NO_UPDATE"
     assert detection.debug_metrics["oil_smoothing_action"] == "PRESERVE"
     assert "TypeError" in detection.debug_metrics["oil_pipeline_failure_reason"]
     assert "OIL_PIPELINE_FAILURE" in detection.flags
 
 
-def test_forged_canonical_outcome_extra_discriminator_fails_closed():
-    outcome = _pipeline_result(_oil_frame(), "forged")
-    assert isinstance(outcome, AcceptedBoundaryOutcome)
-    object.__setattr__(outcome, "stored_status", "boundary_accepted")
-
-    class ExactRunner:
-        def run(self, **_kwargs):
-            return outcome
-
-        def reset(self, _glass_id=None):
-            return None
-
-    detection, _ = OpenCvPhaseDetector(oil_runner=ExactRunner()).detect(
-        _oil_frame(),
-        _glass("forged"),
-        1,
-        0.0,
-    )
-    assert detection.raw_oil_air_level_y is None
-    assert detection.debug_metrics["oil_pipeline_available"] is False
-    assert "extra/missing discriminator" in detection.debug_metrics["oil_pipeline_failure_reason"]
+def test_stateful_runner_surface_is_removed_from_detector():
+    parameters = inspect.signature(OpenCvPhaseDetector).parameters
+    assert "oil_runner" not in parameters
+    assert "oil_precommit_probe" in parameters
+    try:
+        OpenCvPhaseDetector(oil_runner=object())  # type: ignore[call-arg]
+    except TypeError:
+        pass
+    else:
+        raise AssertionError("stateful oil runner injection remained available")
 
 
 class _AdversarialRasterRunner:
     def __init__(self):
         self.mutated = 0
 
-    def run(self, **kwargs):
+    def run(self, kwargs):
         arrays = (
             kwargs["pre"].gray,
             kwargs["pre"].normalized,
@@ -345,13 +322,11 @@ class _AdversarialRasterRunner:
             self.mutated += 1
         raise RuntimeError("adversarial raster mutation")
 
-    def reset(self, _glass_id=None):
-        return None
 
 
 def test_raster_isolation_and_foam_processing_survive_oil_failure():
     runner = _AdversarialRasterRunner()
-    detector = OpenCvPhaseDetector(oil_runner=runner)
+    detector = OpenCvPhaseDetector(oil_precommit_probe=runner.run)
     glass = _glass("raster")
     static = _oil_frame(115)
     detector.learn_static_artifact([static.copy()] * 3, glass)

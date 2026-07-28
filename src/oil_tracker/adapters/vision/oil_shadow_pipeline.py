@@ -18,9 +18,11 @@ from .oil_shadow_observations import (
 from .oil_shadow_temporal import (
     GlassTemporalSnapshot,
     GlassTemporalState,
-    OilShadowTemporalTracker,
+    OilShadowTemporalModel,
     ProvisionalTemporalResult,
-    TemporalCommitPayload,
+    TemporalAuditSnapshot,
+    _OilTemporalAuthority,
+    _TemporalTransactionSession,
 )
 from .oil_shadow_types import (
     AcceptedBoundaryOutcome,
@@ -68,22 +70,35 @@ class OilHypothesisPipeline:
         self,
         bounds: OilShadowBounds | None = None,
         *,
-        temporal: OilShadowTemporalTracker | None = None,
+        temporal_evaluator: Callable[[GlassTemporalSnapshot, ShadowCurrentObservation], ProvisionalTemporalResult] | None = None,
         outcome_preparer: OutcomePreparer | None = None,
+        commit_hook: Callable[[GlassTemporalSnapshot, GlassTemporalState], None] | None = None,
+        handoff_hook: Callable[[str], None] | None = None,
+        transaction_admitted_hook: Callable[[str], None] | None = None,
+        global_reset_waiting_hook: Callable[[], None] | None = None,
     ) -> None:
         self.bounds = bounds or OilShadowBounds()
-        self.temporal = temporal or OilShadowTemporalTracker(self.bounds)
+        self._temporal_model = OilShadowTemporalModel(self.bounds)
+        self.__temporal_authority = _OilTemporalAuthority(
+            self._temporal_model,
+            evaluator=temporal_evaluator,
+            commit_hook=commit_hook,
+            handoff_hook=handoff_hook,
+            transaction_admitted_hook=transaction_admitted_hook,
+            global_reset_waiting_hook=global_reset_waiting_hook,
+        )
         self._outcome_preparer = outcome_preparer or self._prepare_outcome
 
     @property
     def temporal_state_count(self) -> int:
-        return self.temporal.state_count
+        return self.__temporal_authority.state_count
 
-    def temporal_snapshot(self, glass_id: str) -> GlassTemporalSnapshot:
-        return self.temporal.snapshot(glass_id)
+    def temporal_snapshot(self, glass_id: str) -> TemporalAuditSnapshot:
+        """Return an immutable read-only audit projection, never commit authority."""
+        return self.__temporal_authority.audit_snapshot(glass_id)
 
     def reset(self, glass_id: str | None = None) -> None:
-        self.temporal.reset(glass_id)
+        self.__temporal_authority.reset(glass_id)
 
     def run(
         self,
@@ -97,105 +112,103 @@ class OilHypothesisPipeline:
         crop_origin_y: float,
     ) -> OilCanonicalOutcome:
         key = str(glass_id)
-        with self.temporal.transaction(key):
-            try:
-                raw = extract_raw_observations(
-                    pre,
-                    effective_mask,
-                    crop_origin_y=crop_origin_y,
-                    bounds=self.bounds,
-                )
-                proposals = build_bounded_proposals(raw, self.bounds)
-                hypotheses = evaluate_semantic_hypotheses(
-                    proposals,
-                    raw,
-                    pre,
-                    effective_mask,
-                    ellipse_mask,
-                    exclusion_mask,
-                    static_artifact_map,
-                    crop_origin_y=crop_origin_y,
-                    bounds=self.bounds,
-                )
-                current = evaluate_typed_current_observation(
-                    pre,
-                    effective_mask,
-                    hypotheses,
-                )
-                raw_frame = SuccessfulPipelineFrame(
-                    raw_observations=raw,
-                    proposals=proposals,
-                    hypotheses=hypotheses,
-                    current_observation=current,
-                    frame_height=int(pre.gray.shape[0]),
-                    frame_width=int(pre.gray.shape[1]),
-                )
-            except Exception as exc:
-                return self.failure_outcome(
-                    _failure_reason(exc),
-                    PipelineFailureStage.EVIDENCE_CONSTRUCTION,
-                )
+        return self.__temporal_authority.execute(
+            key,
+            lambda session: self._run_transaction(
+                session=session,
+                glass_id=key,
+                pre=pre,
+                effective_mask=effective_mask,
+                ellipse_mask=ellipse_mask,
+                exclusion_mask=exclusion_mask,
+                static_artifact_map=static_artifact_map,
+                crop_origin_y=crop_origin_y,
+            ),
+        )
 
-            try:
-                canonical = self._phase_a(raw_frame)
-            except Exception as exc:
-                return self.failure_outcome(
-                    _failure_reason(exc),
-                    PipelineFailureStage.PHASE_A,
-                )
+    def _run_transaction(
+        self,
+        *,
+        session: _TemporalTransactionSession,
+        glass_id: str,
+        pre: PreprocessResult,
+        effective_mask: np.ndarray,
+        ellipse_mask: np.ndarray,
+        exclusion_mask: np.ndarray,
+        static_artifact_map: np.ndarray | None,
+        crop_origin_y: float,
+    ) -> OilCanonicalOutcome:
+        try:
+            raw = extract_raw_observations(
+                pre,
+                effective_mask,
+                crop_origin_y=crop_origin_y,
+                bounds=self.bounds,
+            )
+            proposals = build_bounded_proposals(raw, self.bounds)
+            hypotheses = evaluate_semantic_hypotheses(
+                proposals,
+                raw,
+                pre,
+                effective_mask,
+                ellipse_mask,
+                exclusion_mask,
+                static_artifact_map,
+                crop_origin_y=crop_origin_y,
+                bounds=self.bounds,
+            )
+            current = evaluate_typed_current_observation(pre, effective_mask, hypotheses)
+            raw_frame = SuccessfulPipelineFrame(
+                raw_observations=raw,
+                proposals=proposals,
+                hypotheses=hypotheses,
+                current_observation=current,
+                frame_height=int(pre.gray.shape[0]),
+                frame_width=int(pre.gray.shape[1]),
+            )
+        except Exception as exc:
+            return self.failure_outcome(
+                _failure_reason(exc),
+                PipelineFailureStage.EVIDENCE_CONSTRUCTION,
+            )
 
-            snapshot = self.temporal.snapshot(key)
-            try:
-                provisional = self.temporal.evaluate(
-                    snapshot,
-                    canonical.current_observation,
-                )
-            except Exception as exc:
-                return self.failure_outcome(
-                    _failure_reason(exc),
-                    PipelineFailureStage.TEMPORAL_EVALUATION,
-                )
+        try:
+            canonical = self._phase_a(raw_frame)
+        except Exception as exc:
+            return self.failure_outcome(_failure_reason(exc), PipelineFailureStage.PHASE_A)
 
-            try:
-                resource_summary = self._phase_b(
-                    key,
-                    canonical,
-                    snapshot,
-                    provisional,
-                )
-            except Exception as exc:
-                return self.failure_outcome(
-                    _failure_reason(exc),
-                    PipelineFailureStage.PHASE_B,
-                )
+        snapshot = session.snapshot
+        try:
+            provisional = session.evaluate(canonical.current_observation)
+        except Exception as exc:
+            return self.failure_outcome(
+                _failure_reason(exc),
+                PipelineFailureStage.TEMPORAL_EVALUATION,
+            )
 
-            try:
-                prepared = self._outcome_preparer(
-                    canonical,
-                    provisional,
-                    resource_summary,
-                )
-                prepared = self._finalize_debug_resources(prepared)
-                self._validate_prepared_outcome(prepared, canonical, provisional)
-                payload = TemporalCommitPayload(
-                    snapshot=snapshot,
-                    next_state=provisional.next_state,
-                    commit_token=self._commit_token(key, snapshot, prepared),
-                )
-            except Exception as exc:
-                return self.failure_outcome(
-                    _failure_reason(exc),
-                    PipelineFailureStage.OUTCOME_PREPARATION,
-                )
+        try:
+            resource_summary = self._phase_b(
+                glass_id, canonical, snapshot, provisional
+            )
+        except Exception as exc:
+            return self.failure_outcome(_failure_reason(exc), PipelineFailureStage.PHASE_B)
 
-            try:
-                self.temporal.commit(payload)
-            except Exception as exc:
-                return self.failure_outcome(
-                    _failure_reason(exc),
-                    PipelineFailureStage.COMMIT,
-                )
-            return prepared
+        try:
+            prepared = self._outcome_preparer(canonical, provisional, resource_summary)
+            prepared = self._finalize_debug_resources(prepared)
+            self._validate_prepared_outcome(prepared, canonical, provisional)
+            commit_token = self._commit_token(glass_id, snapshot, prepared)
+        except Exception as exc:
+            return self.failure_outcome(
+                _failure_reason(exc),
+                PipelineFailureStage.OUTCOME_PREPARATION,
+            )
+
+        try:
+            session.commit(provisional.next_state, commit_token)
+        except Exception as exc:
+            return self.failure_outcome(_failure_reason(exc), PipelineFailureStage.COMMIT)
+        return prepared
 
     def failure_outcome(
         self,
@@ -667,7 +680,7 @@ class OilHypothesisPipeline:
         )
         if resources != expected:
             raise ValueError("Proposed resource summary disagrees with state.")
-        if resources.retained_scalar_count > self.temporal.retained_scalar_limit:
+        if resources.retained_scalar_count > self._temporal_model.retained_scalar_limit:
             raise ValueError("Proposed retained temporal scalar bound exceeded.")
 
     def _validate_decision(
@@ -777,7 +790,7 @@ class OilHypothesisPipeline:
             temporal_history_length=temporal.history_length,
             temporal_history_limit=self.bounds.temporal_history_window,
             retained_temporal_scalar_count=temporal.retained_scalar_count,
-            retained_temporal_scalar_limit=self.temporal.retained_scalar_limit,
+            retained_temporal_scalar_limit=self._temporal_model.retained_scalar_limit,
             static_prior_scalar_count=2,
             static_prior_scalar_limit=self.bounds.static_prior_scalars_per_glass,
             debug_scalar_count=0,

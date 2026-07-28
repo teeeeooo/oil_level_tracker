@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, fields, replace
-from threading import Event
+from threading import Barrier, Event
 
 import numpy as np
 import pytest
@@ -15,7 +15,13 @@ from oil_tracker.adapters.vision.oil_shadow_observations import (
     extract_raw_observations,
 )
 from oil_tracker.adapters.vision.oil_shadow_pipeline import OilHypothesisPipeline
-from oil_tracker.adapters.vision.oil_shadow_temporal import OilShadowTemporalTracker
+from oil_tracker.adapters.vision.oil_shadow_temporal import (
+    GlassTemporalSnapshot,
+    GlassTemporalState,
+    OilShadowTemporalModel,
+    TemporalCommitError,
+    _OilTemporalAuthority,
+)
 from oil_tracker.adapters.vision.oil_shadow_types import (
     AcceptedBoundaryOutcome,
     AmbiguousDecision,
@@ -97,8 +103,8 @@ def _phase_b_setup():
     pipeline = OilHypothesisPipeline()
     canonical = pipeline._phase_a(_raw_frame(_boundary_image()))
     assert isinstance(canonical.current_observation, ShadowBoundaryObservation)
-    snapshot = pipeline.temporal.snapshot("g")
-    provisional = pipeline.temporal.evaluate(snapshot, canonical.current_observation)
+    snapshot = GlassTemporalSnapshot("g", 0, 0, GlassTemporalState("g"))
+    provisional = pipeline._temporal_model.evaluate(snapshot, canonical.current_observation)
     assert isinstance(provisional.decision, BoundaryAcceptedDecision)
     return pipeline, canonical, snapshot, provisional
 
@@ -277,15 +283,15 @@ def test_phase_a_rejects_malformed_evidence_graph(case):
 
 
 def test_phase_a_failure_prevents_temporal_evaluation_and_state_creation(monkeypatch):
-    class SpyTemporal(OilShadowTemporalTracker):
-        calls = 0
+    calls = 0
+    model = OilShadowTemporalModel()
 
-        def evaluate(self, snapshot, observation):
-            self.calls += 1
-            return super().evaluate(snapshot, observation)
+    def spy(snapshot, observation):
+        nonlocal calls
+        calls += 1
+        return model.evaluate(snapshot, observation)
 
-    temporal = SpyTemporal()
-    pipeline = OilHypothesisPipeline(temporal=temporal)
+    pipeline = OilHypothesisPipeline(temporal_evaluator=spy)
 
     def fail(_frame):
         raise ValueError("injected phase A failure")
@@ -294,8 +300,8 @@ def test_phase_a_failure_prevents_temporal_evaluation_and_state_creation(monkeyp
     outcome = _run(pipeline, _boundary_image(), "new")
     assert isinstance(outcome, PipelineFailureOutcome)
     assert outcome.stage is PipelineFailureStage.PHASE_A
-    assert temporal.calls == 0
-    assert temporal.state_count == 0
+    assert calls == 0
+    assert pipeline.temporal_state_count == 0
 
 
 def test_evidence_construction_failure_returns_fresh_failure_without_state(monkeypatch):
@@ -316,16 +322,14 @@ def test_evidence_construction_failure_returns_fresh_failure_without_state(monke
 
 
 def test_temporal_evaluation_exception_returns_failure_without_state():
-    class FailingTemporal(OilShadowTemporalTracker):
-        def evaluate(self, snapshot, observation):
-            raise RuntimeError("injected temporal evaluation failure")
+    def fail(_snapshot, _observation):
+        raise RuntimeError("injected temporal evaluation failure")
 
-    temporal = FailingTemporal()
-    pipeline = OilHypothesisPipeline(temporal=temporal)
+    pipeline = OilHypothesisPipeline(temporal_evaluator=fail)
     outcome = _run(pipeline, _boundary_image(), "g")
     assert isinstance(outcome, PipelineFailureOutcome)
     assert outcome.stage is PipelineFailureStage.TEMPORAL_EVALUATION
-    assert temporal.state_count == 0
+    assert pipeline.temporal_state_count == 0
 
 
 def test_phase_b_owner_exception_returns_failure_without_commit(monkeypatch):
@@ -342,28 +346,28 @@ def test_phase_b_owner_exception_returns_failure_without_commit(monkeypatch):
 
 
 def test_forged_provisional_resource_is_rejected_before_commit():
-    class ForgingTemporal(OilShadowTemporalTracker):
-        def evaluate(self, snapshot, observation):
-            result = super().evaluate(snapshot, observation)
-            forged = replace(result)
-            object.__setattr__(
-                forged,
-                "resources",
-                TemporalResourceMetrics(
-                    result.resources.beam_count,
-                    result.resources.history_length,
-                    result.resources.retained_scalar_count + 1,
-                    result.resources.reacquisition_count,
-                ),
-            )
-            return forged
+    model = OilShadowTemporalModel()
 
-    temporal = ForgingTemporal()
-    pipeline = OilHypothesisPipeline(temporal=temporal)
+    def forge(snapshot, observation):
+        result = model.evaluate(snapshot, observation)
+        forged = replace(result)
+        object.__setattr__(
+            forged,
+            "resources",
+            TemporalResourceMetrics(
+                result.resources.beam_count,
+                result.resources.history_length,
+                result.resources.retained_scalar_count + 1,
+                result.resources.reacquisition_count,
+            ),
+        )
+        return forged
+
+    pipeline = OilHypothesisPipeline(temporal_evaluator=forge)
     outcome = _run(pipeline, _boundary_image(), "g")
     assert isinstance(outcome, PipelineFailureOutcome)
     assert outcome.stage is PipelineFailureStage.PHASE_B
-    assert temporal.state_count == 0
+    assert pipeline.temporal_state_count == 0
 
 
 def test_phase_b_rejects_decision_current_mismatch_without_commit():
@@ -381,7 +385,7 @@ def test_phase_b_rejects_decision_current_mismatch_without_commit():
     bad = replace(provisional, decision=forged)
     with pytest.raises(ValueError, match="mismatch"):
         pipeline._phase_b("g", canonical, snapshot, bad)
-    assert pipeline.temporal.state_count == 0
+    assert pipeline.temporal_state_count == 0
 
 
 def test_phase_b_rejects_selection_content_y_mode_state_and_resources():
@@ -419,7 +423,7 @@ def test_phase_b_rejects_selection_content_y_mode_state_and_resources():
     for bad in cases:
         with pytest.raises((TypeError, ValueError)):
             pipeline._phase_b("g", canonical, snapshot, bad)
-        assert pipeline.temporal.state_count == 0
+        assert pipeline.temporal_state_count == 0
 
 
 def test_legal_success_commits_exactly_once_and_reset_is_bounded():
@@ -439,14 +443,13 @@ def test_commit_failure_returns_pipeline_failure_and_preserves_prior_state():
     def fail(_snapshot, _state):
         raise RuntimeError("injected commit failure")
 
-    temporal = OilShadowTemporalTracker(commit_hook=fail)
-    pipeline = OilHypothesisPipeline(temporal=temporal)
-    before = temporal.snapshot("g")
+    pipeline = OilHypothesisPipeline(commit_hook=fail)
+    before = pipeline.temporal_snapshot("g")
     outcome = _run(pipeline, _boundary_image(), "g")
     assert isinstance(outcome, PipelineFailureOutcome)
     assert outcome.stage is PipelineFailureStage.COMMIT
-    assert temporal.snapshot("g") == before
-    assert temporal.state_count == 0
+    assert pipeline.temporal_snapshot("g") == before
+    assert pipeline.temporal_state_count == 0
 
 
 def test_outcome_construction_and_prepared_validation_fail_before_commit():
@@ -510,15 +513,14 @@ def test_one_glass_commit_failure_does_not_affect_another_glass():
         if snapshot.glass_id == "a":
             raise RuntimeError("glass a failure")
 
-    temporal = OilShadowTemporalTracker(commit_hook=fail_a)
-    pipeline = OilHypothesisPipeline(temporal=temporal)
+    pipeline = OilHypothesisPipeline(commit_hook=fail_a)
     failed = _run(pipeline, _boundary_image(), "a")
     succeeded = _run(pipeline, _boundary_image(), "b")
     assert isinstance(failed, PipelineFailureOutcome)
     assert isinstance(succeeded, AcceptedBoundaryOutcome)
-    assert temporal.snapshot("a").version == 0
-    assert temporal.snapshot("b").version == 1
-    assert temporal.state_count == 1
+    assert pipeline.temporal_snapshot("a").version == 0
+    assert pipeline.temporal_snapshot("b").version == 1
+    assert pipeline.temporal_state_count == 1
 
 
 def test_same_glass_transaction_serializes_prepare_commit_publish_order():
@@ -557,15 +559,11 @@ def test_committed_state_is_not_observable_before_outcome_handoff():
     committed = Event()
     release = Event()
 
-    class BlockingCommitTracker(OilShadowTemporalTracker):
-        def commit(self, payload):
-            result = super().commit(payload)
-            committed.set()
-            assert release.wait(timeout=5)
-            return result
+    def block_handoff(_glass_id):
+        committed.set()
+        assert release.wait(timeout=5)
 
-    temporal = BlockingCommitTracker()
-    pipeline = OilHypothesisPipeline(temporal=temporal)
+    pipeline = OilHypothesisPipeline(handoff_hook=block_handoff)
     with ThreadPoolExecutor(max_workers=2) as executor:
         operation = executor.submit(_run, pipeline, _boundary_image(), "g")
         assert committed.wait(timeout=5)
@@ -576,3 +574,153 @@ def test_committed_state_is_not_observable_before_outcome_handoff():
         snapshot = observer.result(timeout=5)
     assert isinstance(outcome, AcceptedBoundaryOutcome)
     assert snapshot.version == 1
+
+
+def test_global_reset_blocks_new_glass_after_writer_is_waiting():
+    a_entered = Event()
+    release_a = Event()
+    reset_waiting = Event()
+    b_entered = Event()
+
+    def admitted(glass_id: str):
+        if glass_id == "a":
+            a_entered.set()
+            assert release_a.wait(timeout=5)
+        elif glass_id == "b":
+            b_entered.set()
+
+    pipeline = OilHypothesisPipeline(
+        transaction_admitted_hook=admitted,
+        global_reset_waiting_hook=reset_waiting.set,
+    )
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        first = executor.submit(_run, pipeline, _boundary_image(), "a")
+        assert a_entered.wait(timeout=5)
+        reset = executor.submit(pipeline.reset)
+        assert reset_waiting.wait(timeout=5)
+        second = executor.submit(_run, pipeline, _boundary_image(132), "b")
+        assert not b_entered.wait(timeout=0.2)
+        release_a.set()
+        assert isinstance(first.result(timeout=5), AcceptedBoundaryOutcome)
+        reset.result(timeout=5)
+        assert isinstance(second.result(timeout=5), AcceptedBoundaryOutcome)
+    assert b_entered.is_set()
+    assert pipeline.temporal_state_count == 1
+    assert pipeline.temporal_snapshot("a").state.accepted_y is None
+    assert pipeline.temporal_snapshot("b").version == 1
+
+
+def test_global_reset_waits_for_post_commit_handoff_window():
+    committed = Event()
+    release_handoff = Event()
+    reset_waiting = Event()
+
+    def handoff(_glass_id: str):
+        committed.set()
+        assert release_handoff.wait(timeout=5)
+
+    pipeline = OilHypothesisPipeline(
+        handoff_hook=handoff,
+        global_reset_waiting_hook=reset_waiting.set,
+    )
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        operation = executor.submit(_run, pipeline, _boundary_image(), "g")
+        assert committed.wait(timeout=5)
+        reset = executor.submit(pipeline.reset)
+        assert reset_waiting.wait(timeout=5)
+        assert not reset.done()
+        release_handoff.set()
+        assert isinstance(operation.result(timeout=5), AcceptedBoundaryOutcome)
+        reset.result(timeout=5)
+    assert pipeline.temporal_state_count == 0
+    assert pipeline.temporal_snapshot("g").version == 2
+
+
+def test_reset_crosses_active_multi_glass_transactions_without_deadlock():
+    both_active = Barrier(2)
+    a_entered = Event()
+    b_entered = Event()
+    release = Event()
+    reset_waiting = Event()
+    c_entered = Event()
+
+    def admitted(glass_id: str):
+        if glass_id in {"a", "b"}:
+            (a_entered if glass_id == "a" else b_entered).set()
+            both_active.wait(timeout=5)
+            assert release.wait(timeout=5)
+        elif glass_id == "c":
+            c_entered.set()
+
+    pipeline = OilHypothesisPipeline(
+        transaction_admitted_hook=admitted,
+        global_reset_waiting_hook=reset_waiting.set,
+    )
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        a = executor.submit(_run, pipeline, _boundary_image(125), "a")
+        b = executor.submit(_run, pipeline, _boundary_image(145), "b")
+        assert a_entered.wait(timeout=5)
+        assert b_entered.wait(timeout=5)
+        reset = executor.submit(pipeline.reset)
+        assert reset_waiting.wait(timeout=5)
+        c = executor.submit(_run, pipeline, _boundary_image(135), "c")
+        assert not c_entered.wait(timeout=0.2)
+        release.set()
+        assert isinstance(a.result(timeout=5), AcceptedBoundaryOutcome)
+        assert isinstance(b.result(timeout=5), AcceptedBoundaryOutcome)
+        reset.result(timeout=5)
+        assert isinstance(c.result(timeout=5), AcceptedBoundaryOutcome)
+    assert pipeline.temporal_state_count == 1
+    assert pipeline.temporal_snapshot("c").version == 1
+
+
+def test_different_glass_transactions_enter_independently_without_global_reset():
+    both_entered = Barrier(2)
+
+    def admitted(glass_id: str):
+        if glass_id in {"a", "b"}:
+            both_entered.wait(timeout=5)
+
+    pipeline = OilHypothesisPipeline(transaction_admitted_hook=admitted)
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        a = executor.submit(_run, pipeline, _boundary_image(125), "a")
+        b = executor.submit(_run, pipeline, _boundary_image(145), "b")
+        assert isinstance(a.result(timeout=5), AcceptedBoundaryOutcome)
+        assert isinstance(b.result(timeout=5), AcceptedBoundaryOutcome)
+    assert pipeline.temporal_state_count == 2
+
+
+def test_transaction_session_rejects_replay_stale_and_post_reset_use():
+    model = OilShadowTemporalModel()
+    authority = _OilTemporalAuthority(model)
+    observation = _raw_frame(_boundary_image()).current_observation
+    captured = {}
+
+    def first_body(session):
+        proposal = session.evaluate(observation)
+        captured["session"] = session
+        captured["proposal"] = proposal
+        session.commit(proposal.next_state, "first")
+        with pytest.raises(TemporalCommitError, match="already committed"):
+            session.commit(proposal.next_state, "first")
+
+    authority.execute("g", first_body)
+    stale_session = captured["session"]
+    with pytest.raises(TemporalCommitError, match="not active"):
+        stale_session.commit(captured["proposal"].next_state, "stale")
+    authority.reset()
+    with pytest.raises(TemporalCommitError, match="not active"):
+        stale_session.commit(captured["proposal"].next_state, "pre-reset")
+    assert authority.audit_snapshot("g").reset_generation == 1
+    assert authority.audit_snapshot("g").version == 2
+
+
+def test_pipeline_exposes_read_only_projection_and_no_direct_commit_capability():
+    pipeline = OilHypothesisPipeline()
+    assert not hasattr(pipeline, "temporal")
+    snapshot = pipeline.temporal_snapshot("g")
+    assert not hasattr(snapshot, "commit")
+    assert not hasattr(snapshot, "evaluate")
+    assert not hasattr(_OilTemporalAuthority(OilShadowTemporalModel()), "commit")
+    with pytest.raises(TypeError):
+        OilHypothesisPipeline(temporal=object())  # type: ignore[call-arg]
