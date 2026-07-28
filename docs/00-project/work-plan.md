@@ -1,95 +1,135 @@
 # Current Work Plan
 
-- **Document status:** `VALIDATING`
+- **Document status:** `DESIGNING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Repair-start exact head:** `a8e308c514762e0bca0af0273b2bfcb01ab4bc29`
-- **Repair-start exact parent:** `7a05d1f40e175dfd2c0d7e86274559ab1899037b`
-- **Second source re-audit:** `AUDIT: FAIL` — production transaction seams required elimination
-- **Current gate:** Independent production transaction seam-elimination exact-head source re-audit
-- **Repair status:** Source/test repair complete; pending independent re-audit
-- **Controlled comparison:** Blocked until source exact-head re-audit `PASS`
+- **Redesign-start exact head:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`
+- **Redesign-start exact parent:** `a8e308c514762e0bca0af0273b2bfcb01ab4bc29`
+- **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
+- **Independent source-audit history:** Three successive failures of the multi-lock transactional temporal architecture
+- **Current gate:** Independent serialized temporal-state architecture exact-head re-audit
+- **Implementation status:** Blocked pending architecture re-audit `PASS`
+- **Controlled comparison:** Blocked pending later independent source exact-head audit `PASS`
 
-This operational plan records the bounded S5-B2 repair. It makes no S5-B completion, controlled-comparison, canonical-validation, Windows, packaging or merge claim.
+This plan records a documentation-only S5-B architecture redesign. It makes no source repair, test, controlled-comparison, canonical-validation, Windows, packaging, merge or S5-B completion claim.
 
-## Repair result
+## Why the previous source direction is retired
 
-The repair removes replaceable production transaction authority:
+The current source attempted to preserve different-Glass temporal mutation parallelism through:
 
-1. **Production hooks eliminated**
-   - `OilHypothesisPipeline` no longer accepts `temporal_evaluator`, `outcome_preparer`, `commit_hook`, `handoff_hook`, `transaction_admitted_hook` or `global_reset_waiting_hook`;
-   - `OpenCvPhaseDetector` no longer accepts `oil_runner` or `oil_precommit_probe`;
-   - lifecycle condition locks, Glass locks and commit-to-return flow invoke no user-supplied callback;
-   - test synchronization and failure injection now use monkeypatching, private owner instrumentation and deterministic event/barrier wrappers only.
+- a writer-priority lifecycle barrier;
+- per-Glass locks plus shared guards;
+- state and version side mappings;
+- reset generation;
+- immutable snapshots with stale/replay validation;
+- commit tokens;
+- commit-to-return exclusion;
+- post-hoc decision/state/outcome coherence checks.
 
-2. **Fixed transaction ownership**
-   - the former generic `_OilTemporalAuthority.execute(glass_id, callback)` and `_TemporalTransactionSession` object graph were removed;
-   - live Glass state, versions, locks, reset generation and writer-priority lifecycle barrier are owned directly by `OilHypothesisPipeline`;
-   - evidence construction, Phase A, fixed internal temporal evaluation, Phase B, outcome preparation/validation, commit and return execute in one lexical `run()` transaction;
-   - no public or production-object callback/session/commit operation can receive an arbitrary `next_state`;
-   - the public operation surface is `run`, `reset`, `temporal_state_count` and immutable `temporal_snapshot` only.
+Three independent source audits found recurring partial-commit, reset re-entry, post-commit rejection and semantic-coherence problems despite two bounded repairs. The failures indicate architectural over-complexity rather than another local validation gap.
 
-3. **Fixed temporal evaluator and transition coherence**
-   - production always constructs and uses its own private `OilShadowTemporalModel`;
-   - Phase B validates decision/current identity, state/resource bounds and load-bearing decision-to-next-state coherence without re-evaluating the transition;
-   - accepted outcome Y must equal committed `accepted_y`;
-   - reacquisition pending Y/count, accepted/reacquired velocity, no-interface and unavailable counters/stability/clearing, and ambiguous-state preservation are validated;
-   - prepared outcome variant, confidence, margin, reason, mode, selected/pending hypothesis and state Y must agree with the same validated transition.
+Different-Glass temporal mutation parallelism is therefore abandoned. The product has one to three Glasses and prioritizes temporal correctness and auditability over unmeasured mutation throughput.
 
-4. **Lifecycle safety retained**
-   - writer-priority global reset blocks new transactions after a reset waiter appears;
-   - admitted transactions retain lifecycle and Glass ownership through state replacement and outcome return preparation;
-   - global reset never gathers Glass locks and runs only after admitted transactions leave;
-   - global reset re-entry from an active transaction fails closed rather than self-deadlocking;
-   - same-Glass ordering and different-Glass parallelism remain intact;
-   - all condition counters and locks release through context-manager `finally` paths.
+## Governing redesign
 
-## Preserved scope
+The authoritative contract is [S5-B Oil-Boundary Hypothesis Architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md).
 
-Unchanged:
+The redesign requires:
 
-- observation/proposal/hypothesis algorithms, likelihoods, thresholds and accepted temporal mathematics;
-- closed canonical outcomes and external `PhaseDetection` shape;
-- detector version `opencv-phase-detector-s5b-typed-production-v1`;
-- Recipe/settings, persistence, benchmark, truth, result, CSV and debug schemas;
-- S5-A Foam ownership and behavior;
-- raster isolation, dependencies, lock files and workflows;
-- the two deferred controlled-accuracy expectations.
+1. **One serialized owner**
+   - oil-frame temporal processing, Glass reset, global reset, snapshot and count use one owner command order;
+   - concurrent callers are sequenced at one ingress and execute in assigned order;
+   - stateless image preprocessing may remain outside the owner command loop;
+   - the public owner facade performs immutable input isolation before sequencing;
+   - temporal evidence application, reduction, outcome creation and state mutation are serialized.
 
-No legacy oil fallback was introduced.
+2. **One immutable store reference**
+   - `TemporalStoreState` owns all Glass records;
+   - each `GlassTemporalRecord` owns version and temporal state together;
+   - missing records denote initial state without insertion;
+   - successful mutation prepares a complete new store and replaces the owner reference once;
+   - any run failure leaves the exact prior store unchanged.
 
-## Final validation evidence
+3. **One fixed canonical reducer**
+   - the same reducer branch creates canonical decision, next record, canonical outcome, tracker action and smoothing action;
+   - the reducer is a private fixed source component, not a constructor/public seam;
+   - production callback, evaluator, runner and external commit injection remain prohibited.
 
-Executed with project `.venv` Python `3.14.4` after the final source changes:
+4. **One load-bearing validation owner**
+   - canonical evidence, reducer result and prepared replacement store are validated inside the owner before replacement;
+   - detector projection does not revalidate or reject a returned successful outcome;
+   - there is no commit-after-handoff or failure conversion after state assignment.
 
-- transactional/concurrency/failure focused suite:
-  - command: `PYTHONPATH=src .venv/bin/python -m pytest -q tests/test_oil_shadow_temporal.py tests/test_oil_transactional_boundary.py tests/test_oil_shadow_evidence.py tests/test_oil_shadow_observations.py`;
-  - result: `58 passed in 4.52s`;
-- production consumer suite:
-  - command: `PYTHONPATH=src .venv/bin/python -m pytest -q tests/test_oil_production_cutover.py tests/test_oil_detector_integration.py tests/test_oil_fill_state_classifier.py tests/test_oil_temporal_tracker.py tests/test_foam_fill_state_policy.py`;
-  - result: `35 passed in 2.53s`;
-- full repository suite, executed once:
-  - command: `PYTHONPATH=src .venv/bin/python -m pytest -q`;
-  - result: `775 passed, 2 failed in 56.39s`;
-  - no native Qt crash occurred;
-  - both failures are the unchanged controlled-accuracy findings below and no new failure occurred;
-- syntax/import compilation: `PYTHONPATH=src .venv/bin/python -m compileall -q src tests` — passed;
-- whitespace/error check: `git diff --check` — passed with no output.
+5. **Ordered reset and explicit re-entry rejection**
+   - reset commands share the same owner order as run and read commands;
+   - run-before-reset and reset-before-run semantics follow assigned sequence exactly;
+   - active-owner public re-entry is rejected before enqueue and mutation;
+   - owner commands execute no user callback or hook.
 
-## Deterministic coverage
+## Retired concurrency requirements
 
-Tests cover:
+The following are no longer acceptance requirements and must be removed rather than retained dormant:
 
-- reset waiter re-entry rejection without deadlock;
-- global reset versus newly arriving transactions;
-- commit-to-outcome reset exclusion;
-- reset crossing multiple active Glass transactions;
-- same-Glass ordering and different-Glass parallelism;
-- stale, replay, cross-thread, cross-Glass and pre-reset rejection;
-- evidence, Phase A, temporal evaluation, Phase B, outcome preparation/validation and commit failure prior-state invariance;
-- all temporal decision variants and outcome-to-state semantic coherence;
-- absence of constructor evaluator/outcome/commit/handoff/session seams;
-- consumer failure projection, S5-A Foam and raster isolation non-regression.
+- different-Glass temporal mutation parallelism;
+- lifecycle barrier and reset waiters;
+- per-Glass lock ordering;
+- separate state/version stores;
+- reset generation;
+- commit token and stale/replay handling;
+- public proposal/commit composition;
+- callback-based transaction instrumentation;
+- post-commit detector rejection.
+
+Future performance work requires measurement and a separately audited architecture decision. It may not restore parallel temporal mutation by default.
+
+## Failure contract
+
+Every oil pipeline failure must produce:
+
+- unchanged complete prior owner state;
+- `PipelineFailureOutcome`;
+- no numeric oil and no selected candidate;
+- tracker `NO_UPDATE`;
+- smoothing `PRESERVE`;
+- no positive no-interface projection;
+- no legacy oil fallback;
+- independent S5-A Foam processing;
+- unchanged input raster ownership.
+
+There is no post-replacement failure projection.
+
+## Future source migration scope
+
+After architecture re-audit `PASS`, a bounded implementation Worker must:
+
+- replace the current barrier/guard/per-Glass-lock architecture with a single serialized owner;
+- introduce the immutable store and Glass-record model;
+- fold evaluator, next-state, outcome and action construction into one fixed reducer;
+- validate all canonical invariants before one store-reference replacement;
+- remove reset generation, commit token, stale/replay/session semantics and related tests;
+- remove detector-side post-run result rejection;
+- keep projection exhaustive and non-rejecting;
+- replace different-Glass parallelism tests with total-order, re-entry and failure-invariance tests;
+- preserve successful temporal mathematics, S5-A Foam, external schemas and detector behavior.
+
+No source or test implementation is authorized by this documentation commit.
+
+## Architecture acceptance matrix
+
+Independent architecture re-audit must verify:
+
+- one owner defines a total order for run, reset, snapshot and count;
+- one immutable store value owns all Glass records;
+- record version and temporal state are co-owned;
+- successful mutation has exactly one state-reference replacement;
+- every pre-replacement failure preserves the complete prior store;
+- one fixed reducer creates decision, record, outcome and actions together;
+- exactly one load-bearing production validation owner exists;
+- detector cannot reject or convert an outcome after commit;
+- reset ordering and re-entry semantics are explicit and deadlock-free;
+- lock/barrier/generation/token/session complexity is an explicit removal target;
+- source acceptance and deterministic test matrices cover all temporal variants and failure points;
+- S5-A Foam, raster isolation and external contracts remain protected.
 
 ## Deferred controlled accuracy findings
 
@@ -98,22 +138,22 @@ Unchanged and not relaxed:
 - clear-oil raw detection coverage remains `0.5714285714285714`, below expected `1.0`;
 - `no-interface-to-visible` frame 3 still has no numeric raw oil recovery.
 
-These remain later controlled-comparison findings, not repair regressions.
+These remain future controlled-comparison findings and are not part of this documentation redesign.
 
-## Remaining risks and downstream sequence
+## Downstream sequence
 
-Independent re-audit must verify the complete diff, lexical transaction ownership, absence of callback/session/commit seams, transition coherence and lifecycle lock ordering. Validation redesign and suite slimming remain later S5-C planning input.
-
-1. Independent production transaction seam-elimination exact-head source re-audit.
-2. Controlled base/feature comparison only after re-audit `PASS`.
-3. Later canonical, Windows/manual, packaging and merge gates under separate authority.
+1. Independent serialized temporal-state architecture exact-head re-audit.
+2. Bounded source/test implementation only after architecture `AUDIT: PASS`.
+3. Independent implementation exact-head source audit.
+4. Controlled base/feature comparison only after source audit `PASS`.
+5. Later canonical, Windows/manual, packaging and merge gates under separate authority.
 
 ## Latest recorded closeout
 
-- **Result:** Production transaction seams eliminated; pending independent exact-head source re-audit.
-- **Starting exact head:** `a8e308c514762e0bca0af0273b2bfcb01ab4bc29`.
-- **Starting parent:** `7a05d1f40e175dfd2c0d7e86274559ab1899037b`.
-- **Implemented boundary:** Fixed lexical pipeline transaction, private fixed evaluator, inline validated commit and callback-free lifecycle barrier.
-- **Validation:** Focused suites `58 passed` and `35 passed`; full suite `775 passed, 2 unchanged deferred controlled-accuracy failures`.
-- **Current gate:** Independent production transaction seam-elimination exact-head source re-audit.
+- **Result:** Multi-lock transactional temporal architecture retired in favor of one serialized owner.
+- **Starting exact head:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`.
+- **Starting parent:** `a8e308c514762e0bca0af0273b2bfcb01ab4bc29`.
+- **Changed scope:** Architecture and current work-plan documentation only.
+- **Validation:** Documentation inspection and repository diff checks only; no source tests or controlled validation authorized.
+- **Current gate:** Independent serialized temporal-state architecture exact-head re-audit.
 - **Resulting exact SHA:** Reported by the Worker final report, not self-recorded in this commit.

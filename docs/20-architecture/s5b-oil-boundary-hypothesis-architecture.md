@@ -1,295 +1,301 @@
 # S5-B Oil-Boundary Hypothesis Architecture
 
-**Status:** `ACTIVE` transactional trust-boundary contract; source implementation is blocked pending independent architecture re-audit  
+**Status:** `ACTIVE` serialized temporal-state contract; source implementation is blocked pending independent architecture re-audit
 **Milestone:** [S5-B](../00-project/work-plan.md)
 
-This document governs the S5-B internal observation, proposal, semantic-hypothesis, temporal-state, temporal-decision, pipeline-frame and canonical production-result boundaries. The independently accepted S5-B1 typed hypothesis architecture and the S5-B2 typed production cutover remain the foundation. This repair closes the remaining temporal mutation-before-normalization ambiguity without changing detector algorithms, accepted successful temporal transition mathematics or external contracts.
+This document governs the S5-B internal evidence, temporal-state, canonical-decision, canonical-outcome and detector-projection boundaries. It supersedes the multi-lock transactional temporal architecture at exact head `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`.
 
-`ACTIVE` identifies the governing architecture. It does not authorize source implementation, controlled comparison, canonical validation, Windows/manual validation, packaging, merge, cleanup or accuracy acceptance. The current gate is an independent architecture re-audit of this exact documentation head.
+`ACTIVE` identifies the governing architecture only. It does not authorize source implementation, controlled comparison, canonical validation, Windows/manual validation, packaging, merge, cleanup or S5-B completion. The next gate is an independent architecture re-audit of the documentation exact head produced by this redesign.
 
-## Purpose
+## Decision summary
 
-Preserve the accepted extraction and reasoning pipeline while making contradictory production states structurally unrepresentable and preventing rejected provisional work from changing live Glass-local temporal state. One transactional trust-boundary owner must validate canonical evidence, evaluate temporal behavior provisionally, validate the proposed transition and publishable outcome, then commit the proposed next state exactly once.
+S5-B adopts one serialized temporal-state owner for all Glasses. Every oil-frame temporal command, Glass-local reset, global reset, temporal snapshot and state-count query executes in one owner-defined total order. Different-Glass temporal mutation parallelism is no longer a product requirement.
 
-The repair is structural rather than another field-validator patch. Concrete variants determine meaning; independent optional fields or booleans must not recreate a second discriminator. Frozen dataclasses and constructor checks remain useful local guards, but they are not a substitute for canonical trust-boundary validation or transactional state ownership.
+The owner holds one immutable `TemporalStoreState` value. Each `GlassTemporalRecord` contains its own version and temporal state. A fixed internal reducer creates the canonical decision, next record, canonical outcome, compatibility tracker action and smoothing action as one coherent reduction. The owner validates the complete reduction and prepared replacement store before replacing the owner-state reference once.
 
-## Retained algorithmic flow
+There is no temporal commit after that replacement and no production rejection of the returned outcome. Any run failure leaves the complete prior owner state unchanged and returns `PipelineFailureOutcome` with no numeric oil or selection, tracker `NO_UPDATE` and smoothing `PRESERVE`.
+
+## Why the prior transactional concurrency direction is retired
+
+Three independent source audits rejected successive versions of the multi-lock transaction design. The repeated defects were not isolated missing checks. They arose from the architecture's need to coordinate independently created decisions, states, outcomes and lifecycle metadata across multiple synchronization mechanisms.
+
+The retired design accumulated:
+
+- a lifecycle barrier and reset waiters;
+- per-Glass locks plus a shared guard;
+- state and version in separate mappings;
+- global reset generation;
+- snapshot admission and stale-proposal checks;
+- commit tokens and replay checks;
+- commit-to-handoff atomicity requirements;
+- decision/state/outcome post-hoc coherence validation;
+- reset re-entry and lock-ordering rules;
+- post-commit rejection paths in downstream detector code.
+
+After redesign and two bounded repairs, audits still found partial-commit risk, reset re-entry ambiguity, possible post-commit rejection and semantic mismatch between independently prepared artifacts. Preserving different-Glass mutation parallelism would continue to require CAS-like validation, lifecycle coordination and rollback-sensitive reasoning that is disproportionate for a Windows desktop product processing one to three Glasses.
+
+The product therefore chooses temporal correctness and auditability over parallel temporal mutation. An unmeasured throughput concern is not authority to restore the retired transaction graph.
+
+## Retained detection and external contracts
+
+The following remain unchanged unless a later separately authorized task changes them:
+
+- masked-raster preprocessing and isolation;
+- raw observation extraction;
+- bounded deterministic Y proposal construction;
+- broad region-step and narrow line/pulse evidence;
+- boundary, artifact and ambiguity likelihood formulas;
+- soft static prior behavior;
+- semantic hypothesis deduplication;
+- successful temporal transition mathematics and configured bounds;
+- closed current-observation, decision and canonical-outcome variants;
+- external `PhaseDetection` and application-port schemas;
+- Recipe/settings persistence;
+- benchmark, truth, fixture, result, CSV and debug schema versions;
+- detector version and dependencies;
+- independently governed S5-A Foam behavior.
+
+Legacy oil fallback remains prohibited.
+
+## Explicitly abandoned requirements
+
+The source implementation must not preserve or recreate these requirements:
+
+- simultaneous temporal mutation for different Glasses;
+- external temporal proposal creation or commit;
+- public snapshot/evaluate/commit composition;
+- arbitrary custom temporal runner or evaluator injection;
+- callback-based transaction instrumentation;
+- per-Glass lock ownership;
+- lifecycle read/write barriers or reset waiters;
+- generation-based stale proposal rejection;
+- commit token, replay or session ownership protocols;
+- post-commit handoff validation.
+
+Stateless preprocessing may be parallelized independently. S5-B evidence application, temporal reduction, outcome creation and owner-state mutation remain serialized. Future performance work must begin with measurement and cannot reintroduce parallel state mutation without a new audited architecture decision.
+
+## Single temporal-state owner
+
+### Owner responsibility
+
+One production owner has exclusive authority over:
+
+- S5-B oil-frame evidence construction and temporal application;
+- all Glass-local temporal records;
+- Glass-local reset;
+- global reset;
+- immutable temporal snapshot projection;
+- temporal state count;
+- canonical run failure conversion;
+- canonical outcome publication.
+
+The implementation may use a dedicated executor/queue or an equivalent single-owner command loop. The implementation detail is flexible only if it proves that no two temporal commands can read or modify owner state concurrently.
+
+The owner is not a general task executor. It accepts only the closed S5-B command family defined below and invokes no user callback, public hook or replaceable production component while a command is active.
+
+### Closed command family
+
+Conceptually, the owner accepts:
 
 ```text
-masked frame evidence
-→ immutable raw edge observations
-→ bounded-diameter deterministic Y proposals
-→ broad region-step + narrow line/pulse evidence
-→ continuous boundary/artifact/ambiguity likelihoods
-→ soft static prior
-→ deterministic semantic deduplication
-→ discriminated current observation
-→ Phase A canonical evidence validation
-→ immutable prior Glass-local temporal-state snapshot
-→ provisional temporal decision + proposed next state + proposed resources
-→ Phase B temporal proposal/final outcome validation
-→ prepared publishable canonical outcome + validated commit payload
-→ exactly-once atomic Glass-local temporal-state commit
-→ canonical outcome publication
-→ existing PhaseDetection compatibility projection
+RunOilFrame(glass_id, immutable isolated frame inputs)
+ResetGlass(glass_id)
+ResetAll()
+ReadSnapshot(glass_id)
+ReadStateCount()
 ```
 
-Observation extraction, proposal formation, hypothesis scoring, likelihood formulas and thresholds, accepted successful-frame temporal transition policy and Glass-local bounds remain unchanged. The mandatory change is mutation timing and authority: temporal evaluation is provisional until the single trust-boundary owner validates and commits it.
+Public `run`, `reset`, `temporal_snapshot` and `temporal_state_count` operations are synchronous facades over these commands. A caller receives a result only after its command has completed in owner order.
 
-## Retained evidence contracts
+No public command exposes a prior-state object, reducer, next record, commit operation or mutable owner reference.
 
-Raw observations remain immutable bounded scalar records with deterministic identities and provenance. Proposal construction remains input-order independent, bounded by maximum Y diameter, member count and proposal count, and cannot form a single-link chaining bridge.
+### Deterministic ordering rule
 
-Broad evidence continues to measure signed region transitions, visible support, scale/polarity consistency and glare/exclusion conflicts. Narrow evidence continues to measure peak support, paired-edge structure, pulse symmetry, center offset, scale persistence and structural/static overlap. Missing support is unavailable evidence, not scored negative evidence.
+A single ingress assigns each accepted command a strictly increasing command sequence number. Commands execute in ascending sequence order. This assigned sequence, rather than thread scheduling time or Glass identity, defines the authoritative order for concurrent callers.
 
-Semantic hypotheses continue to expose finite normalized boundary, artifact and ambiguity likelihoods, evidence availability, visibility, polarity, bounded representative Y and deterministic identity/content/provenance. Ambiguity remains first-class. No-interface remains positive typed evidence rather than candidate absence. Static evidence remains a bounded soft prior and never deletes current observations.
+Tests may capture assigned command sequence numbers through private, non-production instrumentation. The sequence is diagnostic ordering evidence and not a commit token or authorization capability.
 
-## Why the generic result and direct-mutation model are rejected
+Input validation that does not inspect temporal state may occur before sequence assignment. Once accepted and sequenced, a command cannot be overtaken by another temporal command. Cancellation after sequencing is not a production operation.
 
-The current generic records duplicate meaning across independent fields:
+### Stateless work outside the owner
 
-- frame availability and optional failure reason;
-- temporal status and observation kind;
-- current-observation class and stored kind;
-- selected identity and projected Y;
-- generic smoothing-clear boolean and transition meaning;
-- no-interface availability and positive acceptance;
-- declared resource counts and retained tuples.
+Image preprocessing that does not read or change S5-B temporal state may execute before the owner facade is called. The public owner facade performs read-only copying and input isolation before command sequencing; that preparation remains part of the sole owner boundary and converts its own failure to `PipelineFailureOutcome`. An accepted command payload is immutable and exposes no mutable arrays or callbacks to the command loop.
 
-That shape permits class/status/identity/Y disagreement, failure frames with successful temporal authority, forged smoothing clear, positive no-interface acceptance without evidence and other cross-field contradictions. Adding another conditional validator does not close the state space.
+The authoritative S5-B sequence inside the owner is:
 
-A second defect exists when temporal evaluation changes live state before the trust boundary has validated the complete result. A malformed successful frame, mutated provisional decision, resource mismatch or normalization exception can then become `PipelineFailureOutcome` while beam/history/counters or accepted/pending state have already changed.
+```text
+Evidence construction
+→ canonical evidence validation
+→ fixed canonical reducer
+→ outcome/record invariant validation
+→ new immutable owner-state preparation
+→ single owner-state reference replacement
+→ return the same canonical outcome
+```
 
-The accepted target architecture therefore rejects both defects:
+Moving evidence construction outside the owner is not part of this redesign. A later optimization requires measurement plus proof that the resulting immutable evidence payload cannot create a second validation or temporal authority.
 
-- a generic unavailable result with optional `failure_reason`, an `is_failure` boolean or an equivalent independent discriminator is prohibited;
-- a temporal `evaluate()` operation that changes live `_GlassState` while constructing a decision is not an accepted production architecture;
-- a raw or provisional object that the trust-boundary owner may reject cannot authorize earlier live-state mutation;
-- constructor validation or frozen dataclasses alone cannot establish temporal transaction integrity;
-- snapshot rollback, rollback-only handling or best-effort restore is not the default architecture and cannot be selected independently by an implementation Worker;
-- pure/provisional evaluation followed by explicit validated commit is mandatory.
+## Immutable owner state
 
-Exact Python class, module and helper names remain an implementation choice. The ordering and ownership contract does not.
+### Store model
 
-## Closed current-observation model
+The owner holds exactly one live immutable store value:
 
-Concrete current-observation class derives `kind`; `kind` is not a constructor argument or independently stored field.
+```text
+TemporalStoreState
+  records: Glass ID → GlassTemporalRecord
+  epoch: non-negative successful-mutation ordering metadata
+```
 
-| Variant | Legal owned fields | Structurally absent fields |
-|---|---|---|
-| `BoundaryObservation` | canonical hypothesis, bounded alternatives, visibility and diagnostics | failure reason, no-interface acceptance, temporal action |
-| `NoInterfaceObservation` | available positive no-interface evidence, full/empty evidence inputs, visibility and diagnostics | selected boundary identity/Y, failure reason, temporal action |
-| `AmbiguousObservation` | bounded competing options, optional available diagnostic no-interface evidence, reason and diagnostics | accepted boundary Y, positive no-interface acceptance, clear authority |
-| `UnavailableObservation` | successful-execution evidence-unavailability reason, visibility and bounded diagnostics | boundary selection/Y, positive no-interface acceptance, failure reason, clear authority |
+Each record owns related data together:
 
-`UnavailableObservation` means the evidence pipeline executed successfully but current evidence is insufficient or unavailable. It never represents execution or normalization failure.
+```text
+GlassTemporalRecord
+  glass_id: Glass ID
+  version: non-negative per-Glass successful-transition version
+  temporal_state:
+    bounded beam and history
+    accepted Y and accepted velocity
+    pending reacquisition Y, velocity and count
+    no-interface stability count
+    successful-unavailable stability count
+    smoothing invalidation state
+    bounded static temporal diagnostics
+```
 
-## Transactional temporal-state ownership
+`records` is an immutable mapping value. A record, its version and its temporal state cannot be mutated in place. Version is not stored in a second mapping. There is no reset generation, commit token, transaction session or stale snapshot authority.
 
-### Hypothesis temporal state
+The owner may keep queue sequence bookkeeping outside `TemporalStoreState`; it must not use that bookkeeping as a second state store. `epoch` changes only through a successful mutating command and is diagnostic ordering metadata, not a CAS guard.
 
-The Glass-local hypothesis temporal state includes, at minimum:
+### Missing records
 
-- bounded beam and beam history;
-- accepted Y and accepted velocity;
-- pending reacquisition Y, velocity and count;
-- no-interface and successful-unavailable stability counters;
-- static temporal diagnostics retained across frames;
-- any other bounded scalar needed by the accepted successful temporal transition policy.
+A missing Glass record denotes the canonical initial temporal state for that Glass with record version `0`. Reading an initial state must not insert a live record. A successful frame transition creates the first record at version `1` only through the single prepared store replacement. After either Glass-local or global reset, the next successful transition for the affected Glass again starts at version `1`; store `epoch` provides only cross-reset diagnostic ordering.
 
-This state is owned transactionally by the trust-boundary owner. The stateful temporal component may calculate with an immutable snapshot, but it cannot commit or expose live mutation authority.
+A Glass-local reset removes that Glass record and advances store `epoch`, even when the record was already absent. A global reset replaces the store with an empty record mapping and advances `epoch`. Reset does not preserve tombstones, per-Glass locks, version side tables or reset generations.
 
-### Compatibility smoothing and fill-state tracker
+### One replacement rule
 
-The downstream compatibility tracker is a separate state owner. It may contain:
+For a successful mutating command, the owner performs exactly:
 
-- the smoothed oil sample deque;
-- the last smoothed accepted oil value;
-- external fill-state stabilization and pending state;
-- existing Foam-owned compatibility state, which remains independently governed by S5-A.
+1. read the prior `TemporalStoreState` reference;
+2. derive the prior Glass record or canonical initial record;
+3. complete the canonical reduction;
+4. validate the complete decision, next record, outcome and actions;
+5. build and validate the complete new `TemporalStoreState` value;
+6. replace the live owner-state reference once;
+7. return the already completed canonical outcome or reset acknowledgment.
 
-This tracker consumes only canonical outcome actions after successful canonical publication. It never consumes raw observations, raw temporal status, a provisional decision or a proposed next hypothesis state.
+No field-by-field live mutation is permitted. No second assignment may complete the same command. No validation, normalization, projection or failure conversion is permitted after assignment.
 
-`NO_UPDATE` and `PRESERVE` have explicit two-owner meaning on failure:
+If construction or validation fails, the owner does not assign a new store reference. The exact prior store object and all contained records remain unchanged.
 
-- the hypothesis temporal-state owner commits no proposed state and leaves beam/history/counters/accepted/pending/static state unchanged;
-- the compatibility tracker receives no oil update, performs no oil clear and preserves smoothing/fill-state oil history.
+## Exact linearization points
 
-The term “tracker” must not be used ambiguously to merge these owners. Documentation, source and tests must identify whether they refer to hypothesis temporal state or the compatibility smoothing/fill-state tracker.
+The architecture has explicit linearization points:
 
-## Provisional temporal evaluation contract
+| Command | Linearization point |
+|---|---|
+| `RunOilFrame` rejected before sequencing | owner-facade failure finalization, with no temporal-state read or replacement |
+| successful sequenced `RunOilFrame` | the single owner-state reference replacement |
+| failed sequenced `RunOilFrame` | failure outcome finalization in its owner sequence slot, with no state replacement |
+| `ResetGlass` | the single replacement with the target record removed and epoch advanced |
+| `ResetAll` | the single replacement with an empty record mapping and epoch advanced |
+| `ReadSnapshot` | the owner-state reference read used to construct the immutable snapshot |
+| `ReadStateCount` | the owner-state reference read used to compute the count |
 
-Temporal evaluation receives:
+The command queue order defines relative ordering. The state replacement is the only mutating linearization point. Returning to the caller is not an additional commit or handoff phase.
 
-- one fresh canonical evidence view produced by Phase A;
-- one immutable Glass-local prior-state snapshot;
-- the unchanged accepted bounds and successful transition policy.
+## Fixed canonical reducer ownership
 
-It returns provisional immutable values only:
+### Reduction result
 
-- a proposed temporal decision;
-- a proposed next Glass-local hypothesis temporal state;
-- proposed resource metrics derived from that proposed state;
-- bounded diagnostics required for final validation.
+One fixed internal reducer consumes canonical evidence plus one prior `GlassTemporalRecord` and produces one immutable coherent reduction:
 
-Provisional evaluation must not:
+```text
+CanonicalTemporalReduction
+  decision
+  next_record
+  outcome
+  tracker_action
+  smoothing_action
+  resource_metrics
+```
 
-- create or mutate the live state entry for a new Glass;
-- replace or mutate the existing live state entry;
-- increment counters in live state;
-- append to live beam/history;
-- alter accepted or pending values;
-- clear live state;
-- update the compatibility smoothing/fill-state tracker;
-- publish a production outcome.
+The reducer creates these values together from the same branch of the successful temporal policy. It does not independently create an outcome and next record and then reconcile them later.
 
-An exception during provisional evaluation discards all provisional values and leaves both state owners unchanged.
+Concrete decision and outcome variants derive status, observation kind and legal actions. Generic booleans or optional fields cannot recreate a second discriminator.
 
-## Closed successful-frame temporal decisions
+### Reducer trust boundary
 
-Normal temporal decisions exist only inside a successful provisional frame. Concrete decision class derives status, observation kind, tracker action and smoothing action.
+The reducer is a trusted source component:
 
-| Variant | Legal owned fields | Derived authority |
-|---|---|---|
-| `BoundaryAcceptedDecision` | selected canonical hypothesis, accepted source Y, finite confidence/margin, diagnostics and `acceptance_mode` | boundary acceptance action from `initial`, `continuous` or `reacquired` |
-| `NoInterfaceAcceptedDecision` | available positive no-interface evidence, finite confidence/margin, fill-state evidence and bounded stability mode | no compatibility tracker update; smoothing action from pending/stable mode |
-| `AmbiguousDecision` | bounded diagnostic options, optional diagnostic projected Y, finite confidence/margin and reason | preserve/no update only |
-| `EvidenceUnavailableDecision` | successful-execution unavailability reason, visibility, finite confidence/diagnostics and bounded stability mode | no compatibility tracker update; smoothing action from pending/stable mode |
-| `ReacquisitionPendingDecision` | pending canonical identity/content, finite diagnostics and reason | preserve/no update only; no accepted numeric Y |
+- production constructs and calls the fixed reducer directly;
+- it is not accepted through a constructor argument;
+- it is not replaceable through a public protocol, runner, evaluator or callback;
+- it exposes no public commit capability;
+- it cannot retain or mutate the owner-state reference;
+- it returns immutable values only.
 
-Status and observation kind are never independent constructor inputs. Diagnostic projected Y is not accepted oil Y and cannot become raw oil output or candidate selection.
+Private reflection or test monkeypatching is not a production trust boundary. Tests may use private patching for deterministic failure injection, and an Auditor may inspect the reducer source and variant coverage. Such test mechanisms do not justify production injection seams.
 
-A successful `EvidenceUnavailableDecision` may advance the successful-unavailable stability counter only through a validated proposed next state and the single commit boundary. A pipeline failure cannot enter this decision family or advance that counter.
+### Reducer variant requirements
 
-## Closed tracker and smoothing actions
+The fixed reducer must cover the complete successful temporal family:
 
-The implementation may choose exact enum names, but the legal action set and mapping are mandatory.
+- initial boundary acceptance;
+- continuous boundary acceptance;
+- bounded boundary reacquisition acceptance;
+- reacquisition pending;
+- no-interface pending and stable absence;
+- successful evidence-unavailable pending and stable absence;
+- ambiguous evidence.
 
-### Compatibility tracker action set
+Pipeline execution or validation failure never enters the successful reducer and never advances successful-unavailable or no-interface counters.
 
-- `ACCEPT_BOUNDARY`: append/accept the canonical boundary value in the compatibility smoothing tracker.
-- `NO_UPDATE`: do not mutate compatibility oil tracker state.
+## Sole validation ownership
 
-### Compatibility smoothing action set
+The temporal owner is the only load-bearing production validation owner. Constructor checks may reject impossible local values during construction, but no downstream component may independently reclassify or reject a committed successful outcome.
 
-- `PRESERVE`: retain applicable oil smoothing history.
-- `CLEAR_BEFORE_ACCEPT`: clear stale history before accepting a reacquired boundary.
-- `CLEAR_STALE_AFTER_STABLE_ABSENCE`: clear stale oil history after a bounded successful absence transition.
+The owner validates:
 
-No generic `clear_smoothing: bool` is accepted at the production boundary.
+### Canonical evidence
 
-| Canonical situation | Compatibility tracker action | Smoothing action |
-|---|---|---|
-| accepted boundary, `initial` | `ACCEPT_BOUNDARY` | `PRESERVE` |
-| accepted boundary, `continuous` | `ACCEPT_BOUNDARY` | `PRESERVE` |
-| accepted boundary, `reacquired` | `ACCEPT_BOUNDARY` | `CLEAR_BEFORE_ACCEPT` |
-| accepted no-interface, unstable/pending | `NO_UPDATE` | `PRESERVE` |
-| accepted no-interface, bounded stable transition | `NO_UPDATE` | `CLEAR_STALE_AFTER_STABLE_ABSENCE` |
-| successful evidence unavailable, unstable/pending | `NO_UPDATE` | `PRESERVE` |
-| successful evidence unavailable, bounded stable transition | `NO_UPDATE` | `CLEAR_STALE_AFTER_STABLE_ABSENCE` |
-| ambiguous | `NO_UPDATE` | `PRESERVE` |
-| reacquisition pending | `NO_UPDATE` | `PRESERVE` |
-| pipeline execution, validation, normalization, outcome-construction or commit failure | `NO_UPDATE` | `PRESERVE` |
-
-The successful evidence-unavailable stable clear is explicitly retained as accepted temporal behavior. Pipeline failure is not an evidence-unavailable sample and cannot advance that transition.
-
-## Closed pipeline-frame model
-
-The outer frame removes the generic `available`/optional-failure pair.
-
-### `SuccessfulPipelineFrame`
-
-Before Phase A canonicalization, a successful raw frame may carry only the raw inputs needed to reconstruct:
-
-- immutable observations, proposals and hypotheses;
-- recomputable resource inputs;
-- one legal current observation;
-- bounded JSON-safe diagnostics.
-
-A raw successful frame does not own committed temporal state. Its provisional decision, proposed next state and proposed resources are produced only after Phase A creates a fresh canonical evidence view.
-
-### `FailedPipelineFrame`
-
-Owns only:
-
-- required canonical failure reason;
-- bounded failure stage/category;
-- bounded visibility and debug-safe diagnostics needed for compatibility projection.
-
-It structurally has:
-
-- no current observation;
-- no normal temporal decision;
-- no proposed next hypothesis state;
-- no observation, proposal or hypothesis tuples;
-- no selected identity or numeric oil Y;
-- no positive no-interface evidence;
-- no compatibility tracker action other than `NO_UPDATE`;
-- no smoothing action other than `PRESERVE`.
-
-A failed frame cannot reuse `UnavailableObservation` or `EvidenceUnavailableDecision`. Execution failure never enters successful temporal evaluation and never increments no-interface, successful-unavailable, beam, history, reacquisition or stability counters.
-
-## One transactional trust-boundary owner
-
-The trust-boundary owner is the sole production truth and temporal commit authority. It performs two integrity phases inside one operation; the phases do not create separate production authorities.
-
-### Phase A — Canonical evidence validation
-
-Phase A occurs before temporal evaluation. It validates the raw successful evidence payload and reconstructs a fresh canonical evidence view.
-
-It must validate:
-
-- outer successful evidence payload shape and supported concrete variants;
-- observation, proposal and hypothesis immutable tuples;
+- supported concrete evidence variants;
 - deterministic identity, content, provenance and Y coherence;
-- finiteness, declared range and JSON safety of retained scalars and diagnostics;
-- positive no-interface evidence availability and legal meaning;
-- actual tuple/resource counts against configured limits;
-- legal current-observation concrete variant and canonical membership;
-- absence of duplicate discriminator attributes or unsupported subclasses.
+- canonical ordering and membership;
+- finiteness, ranges and JSON safety;
+- positive no-interface evidence availability and meaning;
+- tuple and resource limits;
+- immutable isolated raster/evidence ownership;
+- absence of unsupported subclasses or duplicate discriminator attributes.
 
-If Phase A fails, temporal evaluation is not called. The owner returns a fresh `PipelineFailureOutcome` and commits no hypothesis temporal state.
+### Canonical reduction
 
-### Phase B — Temporal proposal and final outcome validation
+- supported concrete decision and outcome variants;
+- decision/current-observation compatibility;
+- selected hypothesis identity, content, provenance and Y;
+- acceptance or stability mode;
+- exact decision-to-record temporal semantics;
+- version increment and Glass identity;
+- beam, history, counter and retained-resource bounds;
+- exact tracker and smoothing actions derived by the variant;
+- outcome/record/resource/action coherence;
+- bounded diagnostics and projection data.
 
-After Phase A, the owner obtains the immutable prior-state snapshot and requests provisional evaluation. Phase B then validates:
+### Prepared owner state
 
-- proposed temporal decision concrete variant;
-- selected canonical membership and complete canonical content;
-- selected/source Y agreement;
-- acceptance mode or successful-absence stability mode;
-- compatibility tracker and smoothing actions derived from the concrete decision/mode;
-- proposed beam/history/counter bounds and Glass-local identity;
-- proposed resource summary recomputed from the proposed next state;
-- action/outcome compatibility;
-- bounded JSON-safe diagnostics and projection inputs;
-- the complete prepared canonical outcome;
-- the complete immutable commit payload.
+- only the targeted Glass record changes for a successful run;
+- all untargeted records are value-identical to the prior store;
+- a reset changes only its defined scope;
+- records and mapping are immutable;
+- epoch and record version changes are canonical;
+- the complete replacement value is valid before assignment.
 
-The owner must reconstruct fresh canonical decision/outcome values rather than reusing mutable raw selections.
+Validation must finish before the owner-state reference replacement. There is no commit failure category after assignment: the replacement is a local reference assignment of an already completed immutable value, is treated as non-failing, and is immediately followed only by returning the already prepared outcome.
 
-### Prepare, commit and publish ordering
+## Canonical outcomes and action mapping
 
-The mandatory order is:
-
-1. produce raw observations, proposals, hypotheses and current observation;
-2. complete Phase A and create a fresh canonical evidence view;
-3. read the current immutable Glass-local temporal-state snapshot;
-4. calculate provisional decision, proposed next state and proposed resources without live mutation;
-5. complete Phase B validation;
-6. construct and validate the complete publishable canonical outcome and immutable commit payload;
-7. commit the proposed next state exactly once with an all-or-nothing replacement operation;
-8. publish/return the already prepared canonical outcome from the same boundary.
-
-No observable production state may exist between a successful commit and canonical outcome publication. Canonical outcome construction is not permitted after state commit. The commit implementation must be all-or-nothing; a partial field-by-field live-state mutation followed by rollback is prohibited.
-
-A commit failure retains the prior immutable state and returns `PipelineFailureOutcome`. The implementation must use a commit primitive whose failure cannot leave a partially applied state. Best-effort restoration is insufficient.
-
-Old direct-mutation temporal APIs and the new transactional path cannot both modify production state. During migration, only one path may have production commit authority at any exact head.
-
-## Closed canonical production outcomes
-
-The trust-boundary owner prepares exactly one fresh concrete outcome:
+The owner returns exactly one closed outcome variant:
 
 - `AcceptedBoundaryOutcome`;
 - `NoInterfaceOutcome`;
@@ -298,184 +304,220 @@ The trust-boundary owner prepares exactly one fresh concrete outcome:
 - `ReacquisitionPendingOutcome`;
 - `PipelineFailureOutcome`.
 
-Concrete outcome variant is the only classification discriminator.
+Only `AcceptedBoundaryOutcome` owns numeric oil and selected boundary identity. `EvidenceUnavailableOutcome` represents successful execution with insufficient evidence and may participate in its bounded successful-absence policy. `PipelineFailureOutcome` represents execution, evidence construction, reducer or validation failure and cannot participate in successful absence counters.
 
-### `EvidenceUnavailableOutcome`
+The legal compatibility actions remain:
 
-Represents successful pipeline execution with insufficient/unavailable current evidence. It owns successful unavailable temporal semantics, including pending versus bounded stable transition. It owns no numeric oil, selected candidate, positive no-interface acceptance or pipeline failure reason.
+| Canonical situation | Tracker action | Smoothing action |
+|---|---|---|
+| accepted boundary, initial or continuous | `ACCEPT_BOUNDARY` | `PRESERVE` |
+| accepted boundary, reacquired | `ACCEPT_BOUNDARY` | `CLEAR_BEFORE_ACCEPT` |
+| accepted no-interface, pending | `NO_UPDATE` | `PRESERVE` |
+| accepted no-interface, stable | `NO_UPDATE` | `CLEAR_STALE_AFTER_STABLE_ABSENCE` |
+| successful evidence unavailable, pending | `NO_UPDATE` | `PRESERVE` |
+| successful evidence unavailable, stable | `NO_UPDATE` | `CLEAR_STALE_AFTER_STABLE_ABSENCE` |
+| ambiguous or reacquisition pending | `NO_UPDATE` | `PRESERVE` |
+| any pipeline failure | `NO_UPDATE` | `PRESERVE` |
 
-### `PipelineFailureOutcome`
+A generic `clear_smoothing` boolean is not a production discriminator.
 
-Represents pipeline execution, canonical evidence validation, provisional temporal evaluation, temporal proposal validation, proposed state/resource validation, canonical outcome construction or temporal commit failure. It requires a canonical bounded failure reason and may own bounded debug-safe failure diagnostics. It owns no evidence tuples, current observation, normal temporal decision, proposed next state, numeric oil, selected candidate or positive no-interface evidence. Its actions are fixed to `NO_UPDATE` and `PRESERVE`.
+## Detector projection boundary
 
-A generic outcome with optional failure fields or an independent failure boolean is prohibited.
+`OpenCvPhaseDetector` supplies preprocessed raster inputs to the public temporal-owner facade. That facade performs immutable isolation, accepts the command and returns one canonical outcome. The detector then performs one-way projection to existing consumers.
 
-## Failure timing semantics
+The detector must not:
 
-Every failure point below has the same oil-state result.
+- call a second load-bearing `validate_production_result` after the owner returns;
+- convert a returned successful canonical outcome into `PipelineFailureOutcome`;
+- inspect a provisional decision or next record;
+- reread temporal state to verify the outcome;
+- select from raw evidence after canonical outcome publication;
+- use legacy oil fallback;
+- mutate S5-B temporal owner state through projection.
 
-| Failure point | Required handling before return |
-|---|---|
-| observation/proposal/hypothesis/current-evidence construction failure | discard partial evidence; do not call or commit temporal evaluation |
-| Phase A canonical evidence validation failure | discard raw frame; do not call temporal evaluation |
-| provisional temporal evaluation exception | discard provisional values; retain prior state |
-| provisional temporal decision validation failure | discard decision and proposed state; retain prior state |
-| proposed next-state or resource validation failure | discard decision and proposed state; retain prior state |
-| canonical outcome construction or prepared-outcome validation failure | discard prepared values before commit; retain prior state |
-| temporal state commit failure | all-or-nothing commit leaves prior state intact; discard prepared success outcome |
+All expected operational failures inside `RunOilFrame` are caught and normalized by the owner before any replacement. A failure before command acceptance cannot have changed temporal state. Once a canonical outcome is returned, projection is exhaustive and non-rejecting.
 
-The common result is:
+Compatibility smoothing and fill-state remain separate downstream state owners. They consume only the canonical outcome variant and its canonical tracker/smoothing actions. S5-A Foam processing remains independent and must continue even when oil returns `PipelineFailureOutcome`.
 
+## Reset ordering and re-entry
+
+### Queue ordering
+
+Reset commands use the same owner queue and ordering rule as run and read commands.
+
+- `run → reset`: the run completes, including its outcome and any single replacement, before reset linearizes;
+- `reset → run`: reset linearizes first and the run reduces from the reset initial record;
+- `run A → reset Glass A → run A`: the second run observes no record from the first run;
+- `run A → reset all → run B`: the final run observes an empty store;
+- snapshots and counts observe the store at their own sequence position.
+
+Global reset does not wait on per-Glass locks because none exist. It simply executes when its sequence position reaches the owner.
+
+### Re-entry rejection
+
+A public `run`, `reset`, `temporal_snapshot` or `temporal_state_count` call made from the active owner command context is rejected before enqueue and before any owner-state mutation. The implementation uses an explicit owner-context re-entry guard and a dedicated error category; it must not block waiting for its own queue.
+
+A re-entered `run` is rejected by the public owner facade before sequencing and returns `PipelineFailureOutcome` with a bounded `temporal_reentry_rejected` reason, `NO_UPDATE` and `PRESERVE`. Re-entered reset and read operations raise the dedicated `TemporalReentryError` before sequencing because their return contracts are not oil outcomes. In every case, prior owner state is unchanged and no new external schema discriminator is introduced.
+
+The owner invokes no user callback, hook or externally supplied callable during a command, so production re-entry has no supported use case.
+
+## Failure contract
+
+Every `RunOilFrame` failure point has the same result:
+
+- exact prior `TemporalStoreState` reference unchanged;
+- all Glass records unchanged;
 - fresh `PipelineFailureOutcome`;
 - no numeric oil;
 - no selected candidate;
 - no positive no-interface projection;
-- no hypothesis temporal-state change, including beam/history/counters/accepted/pending/static diagnostics;
-- compatibility tracker `NO_UPDATE`;
+- tracker `NO_UPDATE`;
 - smoothing `PRESERVE`;
-- no legacy fallback;
+- no legacy oil fallback;
 - independently valid S5-A Foam processing preserved;
-- input raster and retained frame-owned images unchanged.
+- input raster and frame-owned images unchanged.
 
-A malformed successful frame cannot change state and then be reclassified as failure. A failure cannot impersonate positive no-interface evidence or successful evidence-unavailable stability.
+Failure points include:
 
-## Sole downstream authority
+- S5-B evidence construction;
+- canonical evidence validation;
+- canonical reducer execution;
+- reducer-result construction;
+- decision/record/outcome/action/resource invariant validation;
+- new owner-state preparation or validation;
+- pre-enqueue immutable input preparation.
 
-After successful transactional normalization and commit, no production consumer may directly read a raw frame result, raw current observation, provisional temporal decision, proposed next state or raw resource summary.
+There is no post-replacement failure projection. The owner must prepare the successful outcome and replacement store completely before assignment. A Python-level local reference assignment is the final mutating action; code after it may only return the already prepared outcome without invoking fallible validation, hooks or callbacks.
 
-| Downstream concern | Sole authoritative input |
-|---|---|
-| numeric raw oil and selected candidate | `AcceptedBoundaryOutcome` |
-| confidence and decision margin | validated scalars owned by the canonical outcome |
-| compatibility tracker update | canonical tracker action |
-| smoothing mutation | canonical smoothing action |
-| fill-state oil input | canonical outcome variant and canonical no-interface evidence |
-| flags and failure projection | canonical outcome variant and required variant-owned reason |
-| candidate/debug projection | validated canonical provenance and bounded JSON-safe diagnostics |
+## Source migration scope
 
-Fill-state classification consumes the canonical outcome, not raw temporal status. Flags derive from the variant; no optional failure boolean participates. Candidate/debug projection cannot reread a generic raw result or feed projected values back into selection.
+A later bounded source implementation, after architecture re-audit `PASS`, must at minimum:
 
-External compatibility may continue to expose existing flags such as unavailable and pipeline-failure flags, but they are one-way projections from distinct internal variants.
+1. Replace the lifecycle barrier, shared guard, per-Glass locks, separate state/version mappings and reset generation in `oil_shadow_pipeline.py` with the single serialized owner and one immutable store reference.
+2. Replace `GlassTemporalSnapshot`, commit token, replay/stale checks and `TemporalCommitError` transaction semantics with `TemporalStoreState`, `GlassTemporalRecord`, closed commands and immutable reduction values.
+3. Refactor the current pure evaluator plus post-hoc coherence checks into one fixed reducer that creates decision, next record, outcome and actions together.
+4. Retain canonical evidence validation but consolidate all load-bearing outcome/record validation inside the owner before replacement.
+5. Remove detector-side post-run canonical result rejection from `opencv_phase_detector.py`; detector projection must be exhaustive and non-rejecting.
+6. Adjust `oil_hypothesis_projection.py` so projection consumes closed outcomes without acting as a second production trust boundary.
+7. Replace transaction/CAS/lifecycle tests with serialized owner, ordering, re-entry, single-replacement and prior-store invariance tests.
+8. Remove obsolete lock, barrier, session, generation, commit-token, stale/replay and different-Glass parallelism code and tests.
+9. Preserve external schemas, successful temporal mathematics, Foam behavior and detector compatibility.
 
-## Current-behavior compatibility decision
+Exact private class and module names remain implementation choices. The ownership, ordering, replacement and validation contracts do not.
 
-This architecture supersedes the current repeated-failure clear behavior.
+## Architecture acceptance matrix
 
-Repeated pipeline execution or normalization failure must not mutate accepted Y, accepted velocity, beam/history, pending reacquisition, unavailable counters, static diagnostics, compatibility tracker samples or smoothing history. It always projects `NO_UPDATE` plus `PRESERVE`, regardless of sequence length.
+### Owner and ordering
 
-The existing source test that expects repeated execution failure to reach stable unavailable clear is a replacement target during bounded source implementation. It must be replaced by separate sequence families:
+- concurrent callers are fully serialized by one owner;
+- accepted command sequence numbers form one total order;
+- execution order equals assigned sequence order;
+- no two commands read or mutate owner state concurrently;
+- same-Glass and different-Glass calls follow the same contract;
+- snapshots and counts are ordered commands, not unsynchronized reads;
+- no lifecycle barrier, reset waiter or per-Glass lock remains.
 
-1. successful `EvidenceUnavailableDecision` frames prove pending preservation and bounded stable clear through validated commits;
-2. repeated `FailedPipelineFrame`/`PipelineFailureOutcome` frames prove persistent no-update/preserve behavior and invariant hypothesis temporal state;
-3. successful unavailable stable clear followed or preceded by pipeline failure proves the two sequences do not share counters or authority.
+### Immutable state and replacement
 
-No implementation Worker decision remains open on this policy.
+- one live `TemporalStoreState` reference owns all Glass records;
+- each record owns version and temporal state together;
+- missing-record reads do not create state;
+- a successful run replaces the owner-state reference exactly once;
+- reset replaces the owner-state reference exactly once;
+- untargeted Glass records remain value-identical;
+- no failure point replaces the owner-state reference;
+- no field-by-field live mutation or rollback exists.
 
-## Required validation matrix
+### Reducer coherence
 
-### Construction and discrimination
+- every successful temporal variant yields decision, next record, outcome and actions from the same reducer branch;
+- accepted outcome Y equals the next record's accepted Y;
+- reacquisition pending identity/Y/count agree across reduction values;
+- no-interface and successful-unavailable stability mode, counters and clear action agree;
+- ambiguous reduction preserves accepted state according to the accepted policy;
+- pipeline failure never invokes successful absence transition logic;
+- reducer source is fixed and not production-replaceable.
 
-- every legal current observation, provisional temporal decision, pipeline frame and canonical outcome constructs;
-- concrete class derives every discriminator and legal action;
-- successful evidence unavailable and pipeline failure normalize to different concrete outcomes;
-- `PipelineFailureOutcome` cannot receive evidence, current observation, normal temporal decision or proposed next state;
-- failure cannot receive or forge stable-clear mode, tracker acceptance or any non-preserve smoothing action;
-- only `AcceptedBoundaryOutcome` owns numeric oil and selected candidate.
+### Validation and projection
 
-### Transaction and mutation timing
+- exactly one load-bearing production validation owner exists;
+- all canonical evidence and reduction invariants are validated before replacement;
+- detector performs no post-commit rejection or failure conversion;
+- downstream tracker, smoothing, fill-state, flags and debug consumers use only canonical outcomes/actions;
+- only accepted boundary owns numeric oil and selection;
+- pipeline failure owns no positive no-interface evidence;
+- S5-A Foam and raster isolation remain unaffected.
 
-Tests must prove:
+### Reset and re-entry
 
-- provisional temporal evaluation does not create or mutate live prior state;
-- a legal successful outcome commits the proposed next state exactly once;
-- Phase A evidence normalization failure prevents temporal evaluation from running;
-- a provisional decision mutation rejected by Phase B leaves live hypothesis temporal state unchanged;
-- post-construction non-finite decision or resource mutation leaves live state unchanged;
-- canonical identity/content/provenance/Y mismatch leaves live state unchanged;
-- proposed beam, history or counter limit excess leaves live state unchanged;
-- canonical outcome construction or prepared-outcome validation failure leaves live state unchanged;
-- commit is exactly once with no replay or duplicate commit after return/retry handling;
-- a failed commit leaves the complete prior state unchanged;
-- old direct-mutation and new transactional APIs cannot both own production commit authority;
-- a failure in one Glass cannot change another Glass's temporal state.
+- run-before-reset and reset-before-run produce state and outcome consistent with owner order;
+- Glass reset affects only the target record;
+- global reset yields an empty store;
+- snapshots/counts around reset observe their sequence position;
+- active-owner re-entry is rejected before enqueue and mutation;
+- re-entry never deadlocks;
+- owner commands invoke no user callback or hook.
 
-### Sequence behavior
+### Failure injection
 
-- accepted boundary initial/continuous preserves applicable history;
-- reacquired boundary clears before accepting;
-- no-interface pending preserves and bounded stable transition clears stale history;
-- successful evidence-unavailable pending preserves and bounded stable transition clears stale history only through valid commits;
-- ambiguous and reacquisition pending always preserve/no-update;
-- repeated `FailedPipelineFrame` sequences leave hypothesis temporal state and compatibility smoothing state unchanged regardless of length;
-- successful unavailable stable-clear and pipeline-failure preserve are verified as separate sequence tests;
-- interleaving failure with successful unavailable does not advance the successful-unavailable counter on failure frames.
+Deterministic tests inject failure at each pre-replacement stage:
 
-### Trust-boundary adversarial inputs
+- evidence construction;
+- evidence canonicalization/validation;
+- each reducer variant;
+- reduction value construction;
+- decision/record/outcome/resource validation;
+- new store creation and validation;
+- immutable input preparation.
 
-Table-driven or deterministic property-style tests must forge independently:
+Every row asserts exact prior-store identity or value equality, `PipelineFailureOutcome`, no numeric oil/selection, `NO_UPDATE`, `PRESERVE`, no legacy fallback and independent Foam behavior.
 
-- outer success/failure variant and legal fields;
-- current/provisional temporal concrete variant;
-- identity, content, provenance and Y;
-- confidence, margin, likelihood, visibility and support finiteness/range;
-- no-interface evidence availability and positive meaning;
-- actual tuple counts, proposed resource counts and configured limits;
-- acceptance/stability modes and derived actions;
-- candidate/debug JSON safety;
-- unsupported subclasses, extra discriminator attributes and post-construction mutation;
-- outcome-construction and commit failure injection.
+### Compatibility and regression
 
-Every malformed row asserts the full fail-closed projection and both state-owner invariants, not only validator rejection.
+- successful temporal sequence behavior remains unchanged;
+- external `PhaseDetection`, Recipe, persistence, benchmark, truth, result, CSV and debug schemas remain unchanged;
+- detector version and dependency set remain unchanged unless separately authorized;
+- controlled accuracy expectations are not relaxed;
+- obsolete concurrency code is absent rather than dormant.
 
-### Downstream ownership
+## Required implementation evidence
 
-Tests must prove:
+The future source Worker must report:
 
-- flags derive from canonical variant without optional failure boolean;
-- fill-state consumes only canonical outcome, never raw/provisional temporal status;
-- compatibility tracker and smoothing consume only canonical actions;
-- pipeline failure supplies no positive no-interface evidence;
-- candidate/debug projection uses only canonical identity/content/provenance/Y;
-- no raw/provisional result can regain production selection or state authority;
-- S5-A Foam candidates, confidence, metrics and debug images remain unchanged by oil failure;
-- input raster isolation is retained.
+- starting and resulting exact heads;
+- complete changed-file set;
+- owner command and queue implementation;
+- command ordering evidence under concurrent callers;
+- owner-state replacement instrumentation proving one assignment per successful mutation;
+- full prior-store invariance at every injected failure point;
+- reset/run/snapshot/count ordering evidence;
+- re-entry rejection evidence;
+- reducer variant coverage;
+- detector post-commit rejection removal;
+- removed lock/barrier/generation/token/session surface;
+- focused and full regression results;
+- unchanged controlled-accuracy findings, if still present.
 
-## Bounded migration sequence
+An independent exact-head source audit is required before controlled comparison.
 
-After independent architecture `PASS`:
+## Non-goals
 
-1. introduce/complete closed observations and Phase A canonical evidence validation;
-2. introduce immutable temporal-state snapshot and provisional next-state types;
-3. replace live direct mutation with pure/provisional temporal evaluation;
-4. introduce final trust-boundary validation and the atomic temporal commit owner;
-5. introduce closed pipeline frames and canonical outcomes;
-6. cut detector, fill-state, compatibility smoothing, flags and debug consumers atomically to canonical outcomes;
-7. remove generic result fields and the direct-mutation temporal API;
-8. replace the failure-clear test and add the complete mutation/transaction validation matrix;
-9. run compatibility regression;
-10. obtain an independent exact-head source audit;
-11. perform controlled base/feature comparison only after that audit passes.
+This documentation redesign does not:
 
-Old direct-mutation and new transactional temporal paths must never simultaneously change production state. Legacy candidate generation, consensus, scoring, no-interface evaluation and `OilTemporalPath` remain prohibited as production fallback.
-
-## External compatibility and non-goals
-
-This repair does not change:
-
-- observation extraction, proposal or semantic-hypothesis algorithms;
-- likelihood formulas, thresholds or accepted successful temporal transitions;
-- bounded Glass-local state limits;
-- external `PhaseDetection` and application-port shape;
-- Recipe/settings persistence;
-- benchmark, truth, fixture, result, CSV or debug schema versions;
-- detector version or dependency set;
-- S5-A Foam algorithm, temporal ownership or output semantics;
-- controlled accuracy expectations.
-
-Source implementation, tests, controlled comparison, canonical validation, Windows/manual validation, packaging, merge and cleanup are outside this documentation task.
+- modify source, tests, dependencies or commit history;
+- change detector algorithms, likelihoods, thresholds or successful temporal mathematics;
+- redesign Foam temporal ownership;
+- authorize controlled comparison or validation;
+- claim performance improvement;
+- define a generic concurrency framework;
+- approve packaging, merge or S5-B completion.
 
 ## Remaining risks
 
-Broad and narrow likelihoods may remain correlated under blur, fog and refractive motion; full/empty classification remains exposure-dependent; calibration may vary by Glass geometry; production instrumentation may affect CPU; and debug consumers may contain assumptions about old mutable results. The source migration must also prove that its all-or-nothing commit primitive cannot partially mutate a Glass state under injected failure. Those implementation and detector-evidence risks must be exposed by later source audit and controlled comparison, not solved by weakening this boundary.
+Serialization may increase per-frame latency if evidence construction is expensive. The product has only one to three Glasses, so this is an accepted architectural trade until measured. Later profiling may identify safe stateless preprocessing work outside the owner, but must not split temporal authority or create a second validation boundary.
 
-The two deferred controlled accuracy findings remain tracked in the [current work plan](../00-project/work-plan.md). The current gate is the independent trust-boundary redesign architecture re-audit.
+The source migration remains substantial: existing transaction tests and private structures strongly encode lifecycle barriers, per-Glass parallelism, reset generations and commit tokens. Removing them cleanly is safer than adapting them into dormant compatibility layers. Audit must also verify that detector projection contains no hidden post-owner rejection and that all reducer branches preserve the accepted temporal mathematics.
+
+Broad/narrow evidence correlation under blur, fog and refractive motion, exposure-dependent full/empty classification, Glass calibration variance and debug CPU cost remain detector-evidence risks for later controlled comparison. They are not reasons to weaken serialized ownership.
+
+The two deferred controlled-accuracy findings remain tracked in the [current work plan](../00-project/work-plan.md). The current gate is independent serialized temporal-state architecture re-audit.
