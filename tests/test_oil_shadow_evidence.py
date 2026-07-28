@@ -6,7 +6,11 @@ import math
 
 import numpy as np
 
-from oil_tracker.adapters.vision.oil_shadow_observations import semantic_deduplicate
+from oil_tracker.adapters.vision import oil_shadow_observations
+from oil_tracker.adapters.vision.oil_shadow_observations import (
+    evaluate_typed_current_observation,
+    semantic_deduplicate,
+)
 from oil_tracker.adapters.vision.oil_shadow_pipeline import OilShadowPipeline
 from oil_tracker.adapters.vision.oil_shadow_types import (
     AcceptedBoundaryOutcome,
@@ -15,7 +19,11 @@ from oil_tracker.adapters.vision.oil_shadow_types import (
     EvidenceUnavailableOutcome,
     NoInterfaceOutcome,
     OilShadowBounds,
+    ShadowAmbiguousObservation,
+    ShadowBoundaryObservation,
     ShadowHypothesisLabel,
+    ShadowNoInterfaceEvidence,
+    ShadowNoInterfaceObservation,
     stable_digest,
 )
 from oil_tracker.adapters.vision.preprocessing import preprocess
@@ -222,3 +230,198 @@ def test_closed_no_interface_boundary_ambiguity_and_unavailable_outcomes():
 
     glare = _run(np.full((80, 100), 255, dtype=np.uint8))
     assert isinstance(glare, EvidenceUnavailableOutcome)
+
+
+def _typed_hypothesis(
+    seed: str,
+    *,
+    y: float = 40.0,
+    boundary: float = 0.445,
+    artifact: float = 0.16,
+    ambiguity: float = 0.52,
+    broad_strength: float = 0.47,
+    broad_scale_consistency: float = 0.90,
+    broad_polarity_consistency: float = 1.0,
+    broad_glare: float = 0.0,
+    broad_exclusion: float = 0.0,
+    paired_edge_strength: float = 0.72,
+    pulse_symmetry: float = 0.50,
+    narrow_glare: float = 0.0,
+    narrow_static: float = 0.0,
+    static_contribution: float = 0.0,
+):
+    template = _run(_step(line=False)).hypotheses[0]
+    proposal_id = stable_digest("typed-proposal", (("seed", seed),))
+    observation_ids = tuple(
+        sorted(
+            stable_digest(
+                "typed-observation",
+                (("seed", seed), ("index", index)),
+            )
+            for index in range(6)
+        )
+    )
+    broad = replace(
+        template.broad,
+        available_scale_count=max(2, template.broad.available_scale_count),
+        strength=broad_strength,
+        scale_consistency=broad_scale_consistency,
+        polarity_consistency=broad_polarity_consistency,
+        transition_local_y=y,
+        visibility=1.0,
+        glare_conflict=broad_glare,
+        exclusion_conflict=broad_exclusion,
+    )
+    narrow = replace(
+        template.narrow,
+        available=True,
+        peak_strength=1.0,
+        horizontal_coverage=0.0,
+        paired_edge_strength=paired_edge_strength,
+        pulse_symmetry=pulse_symmetry,
+        scale_persistence=1.0,
+        border_overlap=0.0,
+        exclusion_overlap=0.0,
+        glare_overlap=narrow_glare,
+        static_overlap=narrow_static,
+    )
+    static_prior = replace(
+        template.static_prior,
+        available=static_contribution > 0.0,
+        coverage=narrow_static if static_contribution > 0.0 else 0.0,
+        overlap=narrow_static if static_contribution > 0.0 else 0.0,
+        contribution=static_contribution,
+    )
+    identity = stable_digest("typed-hypothesis", (("seed", seed),))
+    return replace(
+        template,
+        identity=identity,
+        proposal_ids=(proposal_id,),
+        observation_ids=observation_ids,
+        representative_local_y=y,
+        representative_source_y=y + 10.0,
+        minimum_local_y=y - 1.0,
+        maximum_local_y=y + 1.0,
+        broad=broad,
+        narrow=narrow,
+        static_prior=static_prior,
+        boundary_likelihood=boundary,
+        artifact_likelihood=artifact,
+        ambiguity_likelihood=ambiguity,
+        evidence_availability=1.0,
+        visibility=1.0,
+        polarity_available=True,
+        polarity=0.01,
+        polarity_confidence=0.01,
+        label=ShadowHypothesisLabel.BOUNDARY_LIKE,
+        provenance=tuple(sorted((proposal_id,) + observation_ids)),
+    )
+
+
+def _no_interface(likelihood: float) -> ShadowNoInterfaceEvidence:
+    return ShadowNoInterfaceEvidence(
+        available=True,
+        likelihood=likelihood,
+        full_likelihood=likelihood,
+        empty_likelihood=0.0,
+        region_uniformity=0.5,
+        weak_boundary_evidence=0.2,
+        competing_boundary_likelihood=0.0,
+        visibility=1.0,
+        glare_conflict=0.0,
+        mean_intensity=100.0,
+        texture=1.0,
+        reason="test_no_interface_evidence",
+    )
+
+
+def _typed_observation(monkeypatch, hypotheses, *, no_interface=0.15):
+    image = np.full((20, 20), 100, dtype=np.uint8)
+    mask = np.full_like(image, 255)
+    pre = preprocess(image, mask, DetectorSettings())
+    evidence = _no_interface(no_interface)
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_no_interface_evidence",
+        lambda *_args: evidence,
+    )
+    return evaluate_typed_current_observation(pre, mask, tuple(hypotheses))
+
+
+def test_single_dominant_boundary_requires_independent_corroboration(monkeypatch):
+    target = _typed_hypothesis("target")
+    accepted = _typed_observation(monkeypatch, (target,))
+    assert isinstance(accepted, ShadowBoundaryObservation)
+
+    structural_pulse = _typed_hypothesis(
+        "structural-pulse",
+        paired_edge_strength=0.96,
+        pulse_symmetry=0.96,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (structural_pulse,)),
+        ShadowAmbiguousObservation,
+    )
+
+    glare_conflict = _typed_hypothesis(
+        "glare-conflict",
+        broad_glare=0.40,
+        narrow_glare=0.40,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (glare_conflict,)),
+        ShadowAmbiguousObservation,
+    )
+
+    polarity_conflict = _typed_hypothesis(
+        "polarity-conflict",
+        broad_polarity_consistency=0.40,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (polarity_conflict,)),
+        ShadowAmbiguousObservation,
+    )
+
+    static_conflict = _typed_hypothesis(
+        "static-conflict",
+        narrow_static=0.60,
+        static_contribution=0.12,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (static_conflict,)),
+        ShadowAmbiguousObservation,
+    )
+
+
+def test_single_dominant_path_preserves_no_interface_and_real_alternatives(monkeypatch):
+    first = _typed_hypothesis("alternative-a", y=35.0)
+    second = _typed_hypothesis("alternative-b", y=55.0)
+    no_interface = _typed_observation(monkeypatch, (), no_interface=0.80)
+    assert isinstance(no_interface, ShadowNoInterfaceObservation)
+
+    forward = _typed_observation(monkeypatch, (first, second))
+    reverse = _typed_observation(monkeypatch, (second, first))
+    assert isinstance(forward, ShadowAmbiguousObservation)
+    assert forward == reverse
+
+
+def test_general_boundary_floor_remains_unchanged(monkeypatch):
+    uncorroborated = _typed_hypothesis(
+        "below-floor",
+        boundary=0.479,
+        broad_strength=0.35,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (uncorroborated,)),
+        ShadowAmbiguousObservation,
+    )
+
+    at_general_floor = _typed_hypothesis(
+        "at-floor",
+        boundary=0.48,
+        broad_strength=0.35,
+    )
+    assert isinstance(
+        _typed_observation(monkeypatch, (at_general_floor,)),
+        ShadowBoundaryObservation,
+    )

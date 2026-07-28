@@ -1,21 +1,26 @@
 # Current Work Plan
 
-- **Document status:** `SOURCE_REAUDIT_PENDING`
+- **Document status:** `SOURCE_AUDIT_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
 - **Implementation-start exact head:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`
 - **Implementation-start exact parent:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`
-- **Repair-start exact head:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`
-- **Repair-start exact parent:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`
+- **Serialized repair exact head:** `e0d5c9fddb53c549bac0e56a4b7b6084862e5ca7`
+- **Serialized repair exact parent:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`
+- **Calibration-start exact head:** `e0d5c9fddb53c549bac0e56a4b7b6084862e5ca7`
+- **Calibration-start exact parent:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`
 - **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
 - **Architecture audit:** `AUDIT: PASS`
-- **Source audit:** `AUDIT: FAIL` — core serialized architecture passed; detector pre-owner immutable-input preparation failure escaped `detect()`
-- **Independent source-audit history:** Three failures of the retired transactional design plus one bounded detector-normalization defect on the serialized implementation
-- **Current gate:** Independent detector pre-owner failure-normalization repair exact-head source re-audit
-- **Implementation status:** Blocking detector normalization defect repaired; independent exact-head source re-audit required
-- **Controlled comparison:** Blocked pending independent source re-audit `PASS`
+- **Serialized source re-audit:** `AUDIT: PASS`
+- **Controlled comparison:** `COMPARISON: FAIL`
+- **Failure attribution:** `DIAGNOSIS: COMPLETE`
+- **Primary repair owner:** typed semantic current-observation boundary calibration
+- **Current gate:** Independent exact-head source audit of the single-candidate calibration repair
+- **Implementation status:** Narrow corroborated single-dominant-boundary repair implemented; audit required
+- **Glare coherence:** Separate bounded follow-up owner; not repaired here
+- **Controlled comparison and canonical validation:** Blocked
 
-This plan records the bounded S5-B serialized temporal-state source/test implementation. It makes no controlled-comparison, canonical-validation, Windows/manual-validation, packaging, merge or S5-B completion claim.
+This plan records the bounded S5-B single-candidate semantic boundary calibration repair. It does not approve the separate glare-coherence repair, a new controlled comparison, canonical validation, Windows/manual validation, packaging, merge or S5-B completion.
 
 ## Why the previous source direction is retired
 
@@ -144,31 +149,49 @@ Independent exact-head source audit must verify:
 - source acceptance and deterministic test matrices cover all temporal variants and failure points;
 - S5-A Foam, raster isolation and external contracts remain protected.
 
-## Deferred controlled accuracy findings
+## Single-candidate semantic boundary calibration repair
 
-Unchanged and not relaxed:
+The independently completed controlled comparison returned `COMPARISON: FAIL`, and the bounded failure attribution returned `DIAGNOSIS: COMPLETE`. Persisted truth-visible failures retained truth-near raw observations, bounded proposals and semantic hypotheses, but one dominant hypothesis with no material alternative was withheld before the temporal reducer because its boundary likelihood was approximately `0.4329–0.4541`, below the unchanged general `0.48` floor.
 
-- clear-oil raw detection coverage remains `0.5714285714285714`, below expected `1.0`;
-- `no-interface-to-visible` frame 3 still has no numeric raw oil recovery.
+The repair uses a separate narrow current-observation acceptance path. It requires exactly one semantic hypothesis and one proposal, at least six observation provenance members, boundary likelihood `>= 0.43`, boundary-to-artifact margin `>= 0.26`, boundary-to-no-interface margin `>= 0.06`, ambiguity `< 0.60`, broad strength `>= 0.40`, at least two broad scales, broad scale consistency `>= 0.85`, available narrow evidence with peak and scale persistence `>= 0.90`, pulse-artifact support `<= 0.50`, paired-edge strength `<= 0.80`, visibility `>= 0.85`, evidence availability `>= 0.90`, coherent available polarity, bounded glare/exclusion/border conflict `<= 0.15`, static-prior contribution `<= 0.08` and static overlap `<= 0.20`.
 
-These remain future controlled-comparison findings and are not part of this bounded serialized-owner correctness change.
+The general boundary floor `0.48`, general boundary margin `0.08`, ambiguity ceiling `0.72`, visibility floor `0.30`, no-interface likelihood `0.58` and no-interface margin `0.10` remain unchanged. Semantic scoring weights, artifact penalties, static-prior meaning, proposal clustering, semantic deduplication, temporal reduction, reacquisition, fill-state hold, external schemas and detector version are unchanged.
+
+Feature-only persisted-dataset validation restored clear raw/smoothed coverage to `1.0`, rapid raw/smoothed coverage to `0.9565217391`, and kept no-interface raw/smoothed false-boundary rates at `0.0`. Reflection-only, structural rim-line, shimmer-only and transient false-line controls produced no raw oil. Foam precision and recall remained `1.0`.
+
+`glare-recovery` frames 1–2 still report the known Phase-A `Ambiguous likelihoods disagree with canonical evidence` pipeline failure. The final visible frame now has numeric raw oil, so the intermediate cross-field coherence defect remains a separate bounded owner rather than expanding this calibration repair.
+
+## Controlled evidence status
+
+- Controlled comparison: `COMPARISON: FAIL`.
+- Failure attribution: `DIAGNOSIS: COMPLETE`.
+- Primary owner repaired here: typed semantic current-observation calibration for corroborated single candidates.
+- Separate follow-up owner: glare ambiguous-observation cross-field coherence.
+- Next gate: independent exact-head source audit.
+- New controlled comparison and canonical validation remain blocked.
 
 ## Downstream sequence
 
-1. Independent detector pre-owner failure-normalization repair exact-head source re-audit.
-2. Controlled base/feature comparison only after source re-audit `PASS`.
-3. Later canonical, Windows/manual, packaging and merge gates under separate authority.
+1. Independent exact-head source audit of this calibration-only repair.
+2. Separate bounded glare cross-field coherence repair and independent audit.
+3. New controlled base/feature comparison only after the owner-aligned source gates pass.
+4. Later canonical, Windows/manual, packaging and merge gates under separate authority.
 
 ## Latest recorded closeout
 
-- **Result:** Detector pre-owner immutable-input preparation failures are normalized without changing the serialized core; independent exact-head source re-audit required.
-- **Starting exact head:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`.
-- **Starting parent:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`.
-- **Changed scope:** Detector oil evaluation boundary, production-path normalization tests and this current work plan only.
-- **Repair-focused validation:** `5 passed` for helper/copy failures across debug-off and debug-on production paths.
-- **Serialized validation:** `36 passed` for owner ordering, reducer coherence, failure invariance, reset and re-entry.
-- **Production validation:** `44 passed` for detector/consumer, S5-A Foam, raster isolation and closed projection coverage.
-- **Full repository validation:** `771 passed`, with only the two unchanged controlled-accuracy failures recorded above.
+- **Result:** Corroborated single-dominant semantic boundaries recover without lowering global gates or changing temporal/fill-state behavior; independent exact-head source audit required.
+- **Starting exact head:** `e0d5c9fddb53c549bac0e56a4b7b6084862e5ca7`.
+- **Starting parent:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`.
+- **Changed scope:** `oil_shadow_observations.py`, directly related observation/controlled tests and this current work plan only.
+- **Observation/evidence validation:** `49 passed`.
+- **Required controlled targets/sequences:** `2 passed`.
+- **Controlled benchmark validation:** `4 passed`.
+- **Production detector/consumer/Foam validation:** `73 passed`.
+- **Serialized owner/reducer validation:** `72 passed`.
+- **Persisted feature-only validation:** `74` cases, zero detector exceptions, clear coverage `1.0`, rapid coverage `0.9565217391`, no-interface false-boundary `0.0`.
+- **Determinism validation:** `74` cases with zero repeat, debug/instrumentation or hypothesis-order mismatches.
+- **Known residual:** glare-recovery frames 1–2 retain the separate Phase-A coherence failure; final visible frame recovers numeric oil.
+- **Full repository validation:** `777 passed`.
 - **Compile validation:** `PYTHONPATH=src .venv/bin/python -m compileall -q src tests` passed.
-- **Current gate:** Independent detector pre-owner failure-normalization repair exact-head source re-audit.
+- **Current gate:** Independent exact-head source audit after final validation and commit/push.
 - **Resulting exact SHA:** Reported by the Worker final report, not self-recorded in this commit.

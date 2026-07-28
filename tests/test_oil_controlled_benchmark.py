@@ -73,6 +73,8 @@ def test_feature_detector_meets_controlled_oil_absolute_gates(tmp_path):
     assert _metric(clear, "raw_oil_p95_absolute_error") <= 4.0
     assert _metric(clear, "smoothed_oil_median_absolute_error") <= 3.0
     assert _metric(clear, "smoothed_oil_p95_absolute_error") <= 6.0
+    assert _metric(rapid, "raw_oil_detection_coverage") >= 0.8695652174
+    assert _metric(rapid, "smoothed_oil_detection_coverage") >= 0.8695652174
     assert _metric(rapid, "raw_oil_median_absolute_error") <= 3.0
     assert _metric(rapid, "raw_oil_p95_absolute_error") <= 6.0
     assert _metric(rapid, "smoothed_oil_median_absolute_error") <= 3.0
@@ -81,6 +83,35 @@ def test_feature_detector_meets_controlled_oil_absolute_gates(tmp_path):
     assert _metric(no_interface, "smoothed_no_interface_false_boundary_rate") == 0.0
     assert _metric(micro, "raw_oil_detection_coverage") is not None
     assert _metric(micro, "smoothed_oil_detection_coverage") is not None
+
+
+def test_direct_single_candidate_semantic_recall_targets_are_numeric():
+    target_ids = {
+        "clear-upper",
+        "opposite-polarity",
+        "structural-plus-real",
+        "rapid-filling-0",
+        "large-jump-new-path-0",
+        "slow-motion-1",
+        "slow-motion-3",
+        "polarity-change-1",
+        "polarity-change-2",
+    }
+    scenes = {scene.case_id: scene for scene in controlled_oil_scenes()}
+    assert target_ids <= scenes.keys()
+    for case_id in sorted(target_ids):
+        scene = scenes[case_id]
+        detector = OpenCvPhaseDetector()
+        glass = InspectionRecipe.default_glass(320, 240)
+        glass.id = f"semantic-recall-{case_id}"
+        detection, _artifacts = detector.detect(
+            scene.frame,
+            glass,
+            0,
+            scene.timestamp,
+            debug=False,
+        )
+        assert detection.raw_oil_air_level_y is not None, case_id
 
 
 def test_temporal_side_contracts_use_same_controlled_scene_generator():

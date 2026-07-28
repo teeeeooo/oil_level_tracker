@@ -297,12 +297,20 @@ def evaluate_typed_current_observation(
             best.boundary_likelihood
             - max(best.artifact_likelihood, no_interface.likelihood, second_boundary),
         )
-        if (
+        standard_boundary = (
             best.boundary_likelihood >= 0.48
             and boundary_margin >= 0.08
             and best.ambiguity_likelihood < 0.72
             and best.visibility >= 0.30
-        ):
+        )
+        corroborated_single_boundary = (
+            _accepts_corroborated_single_dominant_boundary(
+                best,
+                ordered,
+                no_interface,
+            )
+        )
+        if standard_boundary or corroborated_single_boundary:
             return ShadowBoundaryObservation(
                 hypothesis=best,
                 alternatives=tuple(
@@ -336,6 +344,51 @@ def evaluate_typed_current_observation(
         visibility=no_interface.visibility,
         projected_source_y=None if best is None else best.representative_source_y,
         reason=reason,
+    )
+
+
+def _accepts_corroborated_single_dominant_boundary(
+    best: SemanticHypothesis,
+    ordered: list[SemanticHypothesis],
+    no_interface: ShadowNoInterfaceEvidence,
+) -> bool:
+    """Accept only a fully corroborated single hypothesis below the general floor."""
+
+    if len(ordered) != 1:
+        return False
+    pulse_artifact = _narrow_pulse_artifact(best.narrow)
+    spatial_conflict = max(
+        best.broad.glare_conflict,
+        best.broad.exclusion_conflict,
+        best.narrow.glare_overlap,
+        best.narrow.exclusion_overlap,
+        best.narrow.border_overlap,
+    )
+    polarity_coherent = (
+        not best.polarity_available
+        or best.broad.polarity_consistency >= 0.85
+    )
+    return (
+        len(best.proposal_ids) == 1
+        and len(best.observation_ids) >= 6
+        and best.boundary_likelihood >= 0.43
+        and best.boundary_likelihood - best.artifact_likelihood >= 0.26
+        and best.boundary_likelihood - no_interface.likelihood >= 0.06
+        and best.ambiguity_likelihood < 0.60
+        and best.broad.available_scale_count >= 2
+        and best.broad.strength >= 0.40
+        and best.broad.scale_consistency >= 0.85
+        and best.narrow.available
+        and best.narrow.peak_strength >= 0.90
+        and best.narrow.scale_persistence >= 0.90
+        and pulse_artifact <= 0.50
+        and best.narrow.paired_edge_strength <= 0.80
+        and best.visibility >= 0.85
+        and best.evidence_availability >= 0.90
+        and polarity_coherent
+        and spatial_conflict <= 0.15
+        and best.static_prior.contribution <= 0.08
+        and best.narrow.static_overlap <= 0.20
     )
 
 
@@ -724,6 +777,24 @@ def _static_prior(
     )
 
 
+def _narrow_boundary_support(narrow: NarrowEvidenceSummary) -> float:
+    return _unit(
+        0.45 * narrow.peak_strength
+        + 0.30 * narrow.horizontal_coverage
+        + 0.25 * narrow.scale_persistence
+    )
+
+
+def _narrow_pulse_artifact(narrow: NarrowEvidenceSummary) -> float:
+    return _unit(
+        0.36 * narrow.paired_edge_strength
+        + 0.24 * narrow.pulse_symmetry
+        + 0.14 * narrow.border_overlap
+        + 0.12 * narrow.exclusion_overlap
+        + 0.14 * narrow.glare_overlap
+    )
+
+
 def _semantic_hypothesis(
     proposal: BoundedYProposal,
     members: tuple[RawEdgeObservation, ...],
@@ -748,18 +819,8 @@ def _semantic_hypothesis(
         + 0.45 * float(narrow.available)
     )
     visibility = _unit(0.65 * broad.visibility + 0.35 * (1.0 - narrow.glare_overlap))
-    narrow_boundary = _unit(
-        0.45 * narrow.peak_strength
-        + 0.30 * narrow.horizontal_coverage
-        + 0.25 * narrow.scale_persistence
-    )
-    pulse_artifact = _unit(
-        0.36 * narrow.paired_edge_strength
-        + 0.24 * narrow.pulse_symmetry
-        + 0.14 * narrow.border_overlap
-        + 0.12 * narrow.exclusion_overlap
-        + 0.14 * narrow.glare_overlap
-    )
+    narrow_boundary = _narrow_boundary_support(narrow)
+    pulse_artifact = _narrow_pulse_artifact(narrow)
     boundary = _unit(
         0.55 * broad.strength
         + 0.25 * narrow_boundary
