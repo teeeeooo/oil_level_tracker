@@ -107,52 +107,55 @@ def test_narrow_line_and_paired_pulse_raise_continuous_artifact_evidence():
     assert all(0.0 <= item.artifact_likelihood <= 1.0 for item in pair_result.hypotheses)
 
 
-def test_plateau_artifact_uses_persistent_structure_not_absolute_brightness():
+def test_plateau_artifact_separates_glare_from_legitimate_phase_texture():
     mask = np.full((80, 100), 255, dtype=np.uint8)
-    uniform_230 = np.full((80, 100), 70, dtype=np.uint8)
-    uniform_230[:40] = 230
-    uniform_244 = np.full((80, 100), 70, dtype=np.uint8)
-    uniform_244[:40] = 244
+    x = np.arange(100)
+    uniform_bright_phase = np.full((80, 100), 70, dtype=np.uint8)
+    uniform_bright_phase[:40] = 244
     local_line = np.full((80, 100), 90, dtype=np.uint8)
     local_line[39:42] = 244
-    striped = np.full((80, 100), 90, dtype=np.uint8)
-    striped[42:] = 244
-    striped[42:, ::2] = 240
-    partial = np.full((80, 100), 90, dtype=np.uint8)
-    partial[42:, 25:75] = 244
+    weak_stripes = np.full((80, 100), 70, dtype=np.uint8)
+    weak_stripes[:40] = 180 + 12 * ((x // 12) % 2 * 2 - 1)
+    smooth_gradient = np.full((80, 100), 70, dtype=np.uint8)
+    smooth_gradient[:40] = np.clip(180 + 12 * (2 * x / 99 - 1), 0, 255)
+    smooth_sinusoid = np.full((80, 100), 70, dtype=np.uint8)
+    smooth_sinusoid[:40] = np.clip(
+        180 + 12 * np.sin(2 * np.pi * x / 48),
+        0,
+        255,
+    )
+    localized_plateau = np.full((80, 100), 90, dtype=np.uint8)
+    localized_plateau[42:, 25:75] = 244
+    distributed_fine_glare = np.full((80, 100), 90, dtype=np.uint8)
+    distributed_fine_glare[42:] = 244
+    distributed_fine_glare[42:, ::2] = 240
 
     score = oil_shadow_observations._persistent_plateau_artifact
-    assert score(uniform_230, mask, 40.0) == 0.0
-    assert score(uniform_244, mask, 40.0) == 0.0
+    assert score(uniform_bright_phase, mask, 40.0) == 0.0
     assert score(local_line, mask, 40.0) == 0.0
-    assert score(striped, mask, 40.0) > 0.70
-    assert score(partial, mask, 40.0) > 0.50
+    assert score(weak_stripes, mask, 40.0) < 0.01
+    assert score(smooth_gradient, mask, 40.0) < 0.01
+    assert score(smooth_sinusoid, mask, 40.0) < 0.01
+    assert score(localized_plateau, mask, 40.0) > 0.80
+    assert score(distributed_fine_glare, mask, 40.0) > 0.40
 
 
 @pytest.mark.parametrize("shape", ((40, 50), (80, 100), (160, 200)))
-def test_plateau_artifact_scales_with_roi_and_requires_broad_support(shape):
+def test_plateau_artifact_scales_with_roi_and_rejects_fragmented_support(shape):
     height, width = shape
     center = height // 2
     plateau = np.full(shape, 90, dtype=np.uint8)
-    plateau[center:] = 244
-    plateau[center:, ::2] = 240
+    plateau[center:, width // 4 : 3 * width // 4] = 244
     broad = np.full(shape, 255, dtype=np.uint8)
     sparse = np.zeros(shape, dtype=np.uint8)
     sparse[:, width // 2] = 255
+    fragmented = np.zeros(shape, dtype=np.uint8)
+    fragmented[:, ::8] = 255
 
-    broad_score = oil_shadow_observations._persistent_plateau_artifact(
-        plateau,
-        broad,
-        float(center),
-    )
-    sparse_score = oil_shadow_observations._persistent_plateau_artifact(
-        plateau,
-        sparse,
-        float(center),
-    )
-
-    assert broad_score > 0.70
-    assert sparse_score == 0.0
+    score = oil_shadow_observations._persistent_plateau_artifact
+    assert score(plateau, broad, float(center)) > 0.80
+    assert score(plateau, sparse, float(center)) == 0.0
+    assert score(plateau, fragmented, float(center)) == 0.0
 
 
 def test_real_boundary_adjacent_to_structure_keeps_multiple_explanations():

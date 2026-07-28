@@ -774,7 +774,7 @@ def _persistent_plateau_artifact(
     effective_mask: np.ndarray,
     center_y: float,
 ) -> float:
-    """Measure broad, vertically persistent horizontal structure beside a boundary."""
+    """Measure localized glare components and strong distributed fine texture."""
 
     _validate_same_shape(gray, effective_mask)
     effective = effective_mask > 0
@@ -785,56 +785,114 @@ def _persistent_plateau_artifact(
     first_row = int(valid_rows[0])
     last_row = int(valid_rows[-1])
     roi_height = last_row - first_row + 1
-    band_height = max(2, int(round(0.10 * roi_height)))
+    window_height = max(3, int(round(0.45 * roi_height)))
     center_gap = max(1, int(round(0.015 * roi_height)))
     center = min(last_row, max(first_row, int(round(center_y))))
     reference_width = max(int(np.count_nonzero(effective[row])) for row in valid_rows)
-    if reference_width < 2:
+    if reference_width < 4:
         return 0.0
 
-    minimum_run = max(2, int(math.ceil(0.25 * reference_width)))
+    minimum_run = max(3, int(math.ceil(0.25 * reference_width)))
     side_scores: list[float] = []
     for start, stop in (
-        (max(first_row, center - center_gap - band_height), max(first_row, center - center_gap)),
-        (min(last_row + 1, center + center_gap), min(last_row + 1, center + center_gap + band_height)),
+        (
+            max(first_row, center - center_gap - window_height),
+            max(first_row, center - center_gap),
+        ),
+        (
+            min(last_row + 1, center + center_gap),
+            min(last_row + 1, center + center_gap + window_height),
+        ),
     ):
         row_scores: list[float] = []
         for row in range(start, stop):
             columns = np.flatnonzero(effective[row])
-            if columns.size < minimum_run:
-                continue
-            runs = np.split(columns, np.flatnonzero(np.diff(columns) > 1) + 1)
-            run = max(runs, key=len)
+            runs = (
+                np.split(columns, np.flatnonzero(np.diff(columns) > 1) + 1)
+                if columns.size
+                else ()
+            )
+            run = max(runs, key=len) if runs else np.empty(0, dtype=np.int64)
             if run.size < minimum_run:
+                row_scores.append(0.0)
                 continue
             row_scores.append(
-                _structured_row_support(gray[row, run])
+                _row_plateau_support(gray[row, run])
                 * (run.size / reference_width)
             )
-        completeness = min(1.0, len(row_scores) / max(1, band_height))
-        persistence = (
-            0.0
-            if not row_scores
-            else float(np.quantile(row_scores, 0.25)) * completeness
-        )
-        side_scores.append(persistence)
+        side_scores.append(0.0 if not row_scores else float(np.mean(row_scores)))
 
-    horizontal_geometry = reference_width / max(1, gray.shape[1])
-    return _unit(max(side_scores, default=0.0) * horizontal_geometry)
+    return _unit(max(side_scores, default=0.0))
 
 
-def _structured_row_support(values: np.ndarray) -> float:
-    centered = values.astype(np.float64) - float(np.mean(values))
-    if float(np.dot(centered, centered)) <= 1e-12:
+def _row_plateau_support(values: np.ndarray) -> float:
+    row = values.astype(np.float64)
+    if row.size < 5:
         return 0.0
-    strongest = 0.0
-    for lag in range(1, min(4, values.size - 2) + 1):
-        left = centered[:-lag]
-        right = centered[lag:]
-        denominator = float(np.linalg.norm(left) * np.linalg.norm(right))
-        if denominator > 1e-12:
-            strongest = max(strongest, abs(float(np.dot(left, right)) / denominator))
-    return _unit(strongest)
+    differences = np.diff(row)
+    magnitudes = np.abs(differences)
+    total_variation = float(np.sum(magnitudes))
+    if total_variation <= 1e-12:
+        return 0.0
+
+    edge_indices = np.argsort(magnitudes)[-min(6, magnitudes.size) :]
+    localized = 0.0
+    for edge_index in edge_indices:
+        split = int(edge_index) + 1
+        localized = max(
+            localized,
+            _localized_component_support(
+                abs(float(np.mean(row[:split]) - np.mean(row[split:]))),
+                float(magnitudes[edge_index]),
+                float(magnitudes[edge_index]) / total_variation,
+            ),
+        )
+
+    for left_index, first_edge in enumerate(edge_indices):
+        for second_edge in edge_indices[left_index + 1 :]:
+            left, right = sorted((int(first_edge), int(second_edge)))
+            if differences[left] * differences[right] >= 0.0:
+                continue
+            center_mean = float(np.mean(row[left + 1 : right + 1]))
+            left_delta = center_mean - float(np.mean(row[: left + 1]))
+            right_delta = center_mean - float(np.mean(row[right + 1 :]))
+            if left_delta * right_delta <= 0.0:
+                continue
+            localized = max(
+                localized,
+                _localized_component_support(
+                    min(abs(left_delta), abs(right_delta)),
+                    min(float(magnitudes[left]), float(magnitudes[right])),
+                    (float(magnitudes[left]) + float(magnitudes[right]))
+                    / total_variation,
+                ),
+            )
+
+    strongest_two = float(
+        np.sum(np.sort(magnitudes)[-min(2, magnitudes.size) :])
+    )
+    distributed_fraction = max(0.0, 1.0 - strongest_two / total_variation)
+    mean_variation = total_variation / max(1, row.size - 1)
+    fine_texture = (
+        min(1.0, (mean_variation / 4.5) ** 6)
+        * distributed_fraction
+    )
+    return _unit(max(localized, fine_texture))
+
+
+def _localized_component_support(
+    contrast: float,
+    edge_strength: float,
+    edge_dominance: float,
+) -> float:
+    contrast_support = _unit(contrast / 64.0)
+    edge_support = _unit(edge_strength / 64.0)
+    return _unit(
+        1.6
+        * contrast_support**2
+        * edge_support**2
+        * _unit(edge_dominance)
+    )
 
 
 def _static_prior(

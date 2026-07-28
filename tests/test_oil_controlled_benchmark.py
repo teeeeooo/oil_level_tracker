@@ -14,6 +14,7 @@ from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemReg
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
 from oil_tracker.domain.detector_benchmark import CATEGORY_CONTRACT
+from oil_tracker.domain.geometry import EllipseGeometry
 from oil_tracker.domain.recipe import InspectionRecipe
 
 
@@ -412,6 +413,49 @@ def _bright_boundary_frame(
     return frame
 
 
+def _textured_boundary_frame(
+    texture: str,
+    *,
+    brightness: int,
+    amplitude: int,
+    period: int,
+    y: int,
+    bright_side: str,
+    phase_offset: int = 0,
+) -> np.ndarray:
+    frame = np.full((240, 320, 3), 70, dtype=np.uint8)
+    x = np.arange(320, dtype=np.float64) + phase_offset
+    if texture == "stripes":
+        values = brightness + amplitude * ((x // period) % 2 * 2 - 1)
+    elif texture == "gradient":
+        values = brightness + amplitude * (2 * x / 319 - 1)
+    elif texture == "sinusoid":
+        values = brightness + amplitude * np.sin(2 * np.pi * x / period)
+    else:
+        raise AssertionError(f"unsupported texture: {texture}")
+    phase = np.clip(values, 0, 244).astype(np.uint8)
+    if bright_side == "above":
+        frame[:y] = phase[None, :, None]
+    elif bright_side == "below":
+        frame[y:] = phase[None, :, None]
+    else:
+        raise AssertionError(f"unsupported bright side: {bright_side}")
+    return frame
+
+
+def _partial_glare_frame(
+    width: int,
+    *,
+    center_x: int = 160,
+    top: int = 80,
+    bottom: int = 185,
+) -> np.ndarray:
+    frame = np.full((240, 320, 3), 90, dtype=np.uint8)
+    left = center_x - width // 2
+    frame[top:bottom, left : left + width] = 244
+    return frame
+
+
 @pytest.mark.parametrize(
     "case_id,frame,expected_y",
     (
@@ -439,18 +483,195 @@ def test_bright_real_boundary_matrix_remains_numeric(case_id, frame, expected_y)
     assert "OIL_PIPELINE_FAILURE" not in detection.flags, context
 
 
-def test_near_threshold_partial_glare_plateau_has_no_numeric_oil():
-    frame = np.full((240, 320, 3), 90, dtype=np.uint8)
-    frame[80:185, 132:188] = 244
-    detection = _assert_fresh_detector_determinism(
-        frame,
-        "near-threshold-partial-glare-plateau",
-    )
-    assert detection.raw_oil_air_level_y is None
-    assert "OIL_PIPELINE_FAILURE" not in detection.flags
-    boundary_score = detection.debug_metrics["oil_boundary_score"]
-    artifact_score = detection.debug_metrics["oil_artifact_score"]
-    assert boundary_score - artifact_score < 0.08
+@pytest.mark.parametrize(
+    "case_id,frame,expected_y",
+    (
+        (
+            "stripes-normal-above",
+            _textured_boundary_frame(
+                "stripes",
+                brightness=180,
+                amplitude=4,
+                period=12,
+                y=120,
+                bright_side="above",
+            ),
+            120.0,
+        ),
+        (
+            "stripes-bright-below-offset",
+            _textured_boundary_frame(
+                "stripes",
+                brightness=220,
+                amplitude=8,
+                period=24,
+                y=120,
+                bright_side="below",
+                phase_offset=5,
+            ),
+            120.0,
+        ),
+        (
+            "stripes-near-threshold-high-boundary",
+            _textured_boundary_frame(
+                "stripes",
+                brightness=236,
+                amplitude=12,
+                period=48,
+                y=100,
+                bright_side="above",
+                phase_offset=11,
+            ),
+            100.0,
+        ),
+        (
+            "gradient-normal-above",
+            _textured_boundary_frame(
+                "gradient",
+                brightness=150,
+                amplitude=8,
+                period=1,
+                y=120,
+                bright_side="above",
+            ),
+            120.0,
+        ),
+        (
+            "gradient-middle-below",
+            _textured_boundary_frame(
+                "gradient",
+                brightness=180,
+                amplitude=12,
+                period=1,
+                y=140,
+                bright_side="below",
+            ),
+            140.0,
+        ),
+        (
+            "gradient-bright-high-boundary",
+            _textured_boundary_frame(
+                "gradient",
+                brightness=220,
+                amplitude=16,
+                period=1,
+                y=100,
+                bright_side="above",
+            ),
+            100.0,
+        ),
+        (
+            "sinusoid-normal-above",
+            _textured_boundary_frame(
+                "sinusoid",
+                brightness=180,
+                amplitude=6,
+                period=48,
+                y=120,
+                bright_side="above",
+            ),
+            120.0,
+        ),
+        (
+            "sinusoid-bright-below-offset",
+            _textured_boundary_frame(
+                "sinusoid",
+                brightness=220,
+                amplitude=10,
+                period=64,
+                y=140,
+                bright_side="below",
+                phase_offset=7,
+            ),
+            140.0,
+        ),
+        (
+            "sinusoid-near-threshold-high-boundary",
+            _textured_boundary_frame(
+                "sinusoid",
+                brightness=236,
+                amplitude=8,
+                period=48,
+                y=100,
+                bright_side="above",
+                phase_offset=13,
+            ),
+            100.0,
+        ),
+    ),
+)
+def test_legitimate_textured_oil_phase_remains_numeric(case_id, frame, expected_y):
+    detection = _assert_fresh_detector_determinism(frame, f"textured-{case_id}")
+    context = {
+        "case_id": case_id,
+        "raw_oil_y": detection.raw_oil_air_level_y,
+        "boundary_score": detection.debug_metrics["oil_boundary_score"],
+        "artifact_score": detection.debug_metrics["oil_artifact_score"],
+        "flags": detection.flags,
+    }
+    assert detection.raw_oil_air_level_y is not None, context
+    assert abs(detection.raw_oil_air_level_y - expected_y) <= 4.0, context
+    assert "OIL_PIPELINE_FAILURE" not in detection.flags, context
+
+
+def test_uniform_partial_glare_width_sweep_has_no_acceptance_cliff():
+    scores = []
+    for width in (48, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70):
+        detection, _input_hash = _fresh_detection(
+            _partial_glare_frame(width),
+            f"partial-glare-width-{width}",
+            debug=False,
+        )
+        context = {
+            "width": width,
+            "raw_oil_y": detection.raw_oil_air_level_y,
+            "boundary_score": detection.debug_metrics["oil_boundary_score"],
+            "artifact_score": detection.debug_metrics["oil_artifact_score"],
+            "flags": detection.flags,
+        }
+        assert detection.raw_oil_air_level_y is None, context
+        assert "OIL_PIPELINE_FAILURE" not in detection.flags, context
+        scores.append(detection.debug_metrics["oil_artifact_score"])
+
+    assert all(left + 1e-12 >= right for left, right in zip(scores, scores[1:]))
+    assert max(abs(left - right) for left, right in zip(scores, scores[1:])) < 0.30
+
+
+def test_partial_glare_location_and_roi_scale_variants_remain_suppressed():
+    for center_x in (145, 152, 160, 168, 175):
+        detection, _input_hash = _fresh_detection(
+            _partial_glare_frame(60, center_x=center_x),
+            f"partial-glare-location-{center_x}",
+            debug=False,
+        )
+        assert detection.raw_oil_air_level_y is None, center_x
+
+    for radius_x, radius_y, width in (
+        (30.0, 52.0, 44),
+        (38.4, 64.8, 60),
+        (50.0, 78.0, 78),
+        (62.0, 92.0, 96),
+    ):
+        frame = _partial_glare_frame(width, top=72, bottom=190)
+        input_hash = hashlib.sha256(frame.tobytes()).hexdigest()
+        glass = InspectionRecipe.default_glass(320, 240)
+        glass.id = f"partial-glare-roi-{radius_x}"
+        glass.geometry.ellipse = EllipseGeometry(
+            160.0,
+            120.0,
+            radius_x,
+            radius_y,
+        )
+        detection, _artifacts = OpenCvPhaseDetector().detect(
+            frame,
+            glass,
+            0,
+            1.0,
+            debug=False,
+        )
+        assert hashlib.sha256(frame.tobytes()).hexdigest() == input_hash
+        assert detection.raw_oil_air_level_y is None, radius_x
+        assert "OIL_PIPELINE_FAILURE" not in detection.flags, radius_x
 
 
 def _positive_neighborhood_cases():
