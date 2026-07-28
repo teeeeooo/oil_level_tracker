@@ -6,13 +6,16 @@ import inspect
 import json
 
 import numpy as np
+import pytest
 
+from foam_benchmark_fixtures import controlled_scenes
 from oil_tracker.adapters.vision import (
     candidate_generators,
     candidate_scorer,
     oil_candidate_consensus,
     oil_no_interface,
     oil_temporal_path,
+    opencv_phase_detector as detector_module,
 )
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
 from oil_tracker.adapters.vision.oil_hypothesis_projection import project_production_result
@@ -262,13 +265,97 @@ def test_successful_stable_absence_clear_is_not_shared_with_pipeline_failure(mon
 def test_detector_has_no_post_owner_result_rejection_or_failure_conversion():
     source = inspect.getsource(OpenCvPhaseDetector._evaluate_oil_pipeline)
     assert "validate_production_result" not in source
-    assert "return self._oil_pipeline.run(**kwargs)" in source
+    assert source.index("try:") < source.index("kwargs = _isolated_pipeline_inputs")
+    assert source.index("kwargs = _isolated_pipeline_inputs") < source.index(
+        "return self._oil_pipeline.run(**kwargs)"
+    )
     failure = PipelineFailureOutcome("injected", PipelineFailureStage.PHASE_A)
     projection = project_production_result(failure)
     assert projection.raw_source_y is None
     assert projection.selected_candidate is None
     assert projection.tracker_action.value == "NO_UPDATE"
     assert projection.smoothing_action.value == "PRESERVE"
+
+
+@pytest.mark.parametrize("debug", (False, True))
+@pytest.mark.parametrize("failure_site", ("input_helper", "array_copy"))
+def test_detector_normalizes_pre_owner_preparation_failure_and_preserves_foam(
+    monkeypatch,
+    debug,
+    failure_site,
+):
+    detector = OpenCvPhaseDetector()
+    glass = _glass(f"pre-owner-{failure_site}-{debug}")
+    glass.detector_settings.foam_strong_evidence_score = 1.0
+    glass.detector_settings.foam_min_evidence_score = 0.20
+
+    accepted, _ = detector.detect(_oil_frame(130), glass, 1, 0.0, debug=False)
+    assert accepted.raw_oil_air_level_y is not None
+    before_store = detector._oil_pipeline._debug_store_reference
+    before_replacements = detector._oil_pipeline._debug_store_replacement_count
+    before_record = before_store.records[glass.id]
+    before_snapshot = detector._oil_pipeline.temporal_snapshot(glass.id)
+
+    def fail(*_args, **_kwargs):
+        raise RuntimeError(f"injected detector {failure_site} failure")
+
+    scene = next(
+        item for item in controlled_scenes() if item.case_id == "partial-foam"
+    )
+    with monkeypatch.context() as patch:
+        patch.setattr(
+            detector_module,
+            (
+                "_isolated_pipeline_inputs"
+                if failure_site == "input_helper"
+                else "_isolated_readonly_copy"
+            ),
+            fail,
+        )
+        detection, artifacts = detector.detect(
+            scene.frame,
+            glass,
+            2,
+            scene.timestamp,
+            debug=debug,
+        )
+
+    assert isinstance(detection, PhaseDetection)
+    assert detection.raw_oil_air_level_y is None
+    assert detection.smoothed_oil_air_level_y is None
+    assert detection.oil_air_level_y is None
+    assert detection.oil_air_level_px_from_zero is None
+    assert detection.oil_air_level_mm_from_zero is None
+    assert not any(
+        item.selected for item in detection.candidates if item.kind.value == "oil_air"
+    )
+    assert detection.debug_metrics["oil_pipeline_available"] is False
+    assert detection.debug_metrics["oil_tracker_action"] == "NO_UPDATE"
+    assert detection.debug_metrics["oil_smoothing_action"] == "PRESERVE"
+    assert detection.debug_metrics["oil_no_interface_score"] == 0.0
+    assert detection.debug_metrics["oil_no_interface_reason"] == "not_available"
+    assert "OIL_PIPELINE_FAILURE" in detection.flags
+
+    assert detector._oil_pipeline._debug_store_reference is before_store
+    assert detector._oil_pipeline._debug_store_replacement_count == before_replacements
+    assert detector._oil_pipeline._debug_store_reference.records[glass.id] is before_record
+    assert detector._oil_pipeline.temporal_snapshot(glass.id) == before_snapshot
+
+    foam_state = detector._foam_gate.state_for(glass.id)
+    assert foam_state is not None
+    assert foam_state.pending_count == 1
+    assert detection.debug_metrics["foam_decision_status"] == "persistence_pending"
+    assert detection.debug_metrics["foam_temporal_pending_count"] == 1
+    assert detector.foam_temporal_state_count == 1
+    assert (artifacts is not None) is debug
+    if artifacts is not None:
+        assert "foam_combined_evidence" in artifacts.images
+        assert artifacts.state["foam_decision_status"] == "persistence_pending"
+
+    recovered, _ = detector.detect(_oil_frame(132), glass, 3, 1.0, debug=False)
+    assert recovered.debug_metrics["oil_pipeline_available"] is True
+    assert recovered.raw_oil_air_level_y is not None
+    assert detector._oil_pipeline._debug_store_replacement_count == before_replacements + 1
 
 
 def test_production_constructor_surfaces_have_no_oil_injection_callbacks():

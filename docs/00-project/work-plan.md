@@ -1,16 +1,19 @@
 # Current Work Plan
 
-- **Document status:** `SOURCE_AUDIT_PENDING`
+- **Document status:** `SOURCE_REAUDIT_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
 - **Implementation-start exact head:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`
 - **Implementation-start exact parent:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`
+- **Repair-start exact head:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`
+- **Repair-start exact parent:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`
 - **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
 - **Architecture audit:** `AUDIT: PASS`
-- **Independent source-audit history:** Three successive failures of the retired multi-lock transactional temporal architecture
-- **Current gate:** Independent serialized temporal-state source exact-head audit
-- **Implementation status:** Source and deterministic tests implemented; independent exact-head source audit required
-- **Controlled comparison:** Blocked pending independent source exact-head audit `PASS`
+- **Source audit:** `AUDIT: FAIL` — core serialized architecture passed; detector pre-owner immutable-input preparation failure escaped `detect()`
+- **Independent source-audit history:** Three failures of the retired transactional design plus one bounded detector-normalization defect on the serialized implementation
+- **Current gate:** Independent detector pre-owner failure-normalization repair exact-head source re-audit
+- **Implementation status:** Blocking detector normalization defect repaired; independent exact-head source re-audit required
+- **Controlled comparison:** Blocked pending independent source re-audit `PASS`
 
 This plan records the bounded S5-B serialized temporal-state source/test implementation. It makes no controlled-comparison, canonical-validation, Windows/manual-validation, packaging, merge or S5-B completion claim.
 
@@ -99,6 +102,14 @@ Every oil pipeline failure must produce:
 
 There is no post-replacement failure projection.
 
+## Detector pre-owner failure-normalization repair
+
+The serialized core passed independent source audit. The blocking defect was limited to the detector facade: `_isolated_pipeline_inputs(...)` executed before the detector's exception-normalization boundary, so an immutable-copy failure could escape `detect()` before the owner was invoked.
+
+The bounded repair places detector-side immutable oil-input preparation and serialized-owner invocation inside the same normalization boundary. Any preparation or invocation exception now returns `PipelineFailureOutcome` with tracker `NO_UPDATE`, smoothing `PRESERVE`, no numeric oil, no selected candidate and no positive no-interface evidence.
+
+The repair does not change owner sequencing, immutable store/record models, reducer logic, temporal mathematics, replacement behavior, reset/re-entry semantics, projection mapping, detector version or external schemas. Production-path tests inject failures into both `_isolated_pipeline_inputs` and the internal readonly-copy operation through `OpenCvPhaseDetector.detect()`. They verify exact oil-store identity/replacement invariance, retained existing Glass record, continued S5-A Foam processing and a successful following oil command for debug-off and debug-on paths.
+
 ## Implemented source migration scope
 
 The audited architecture has been implemented as a bounded owner-aligned source change:
@@ -144,19 +155,20 @@ These remain future controlled-comparison findings and are not part of this boun
 
 ## Downstream sequence
 
-1. Independent serialized temporal-state implementation exact-head source audit.
-2. Controlled base/feature comparison only after source audit `PASS`.
+1. Independent detector pre-owner failure-normalization repair exact-head source re-audit.
+2. Controlled base/feature comparison only after source re-audit `PASS`.
 3. Later canonical, Windows/manual, packaging and merge gates under separate authority.
 
 ## Latest recorded closeout
 
-- **Result:** Single-owner serialized temporal-state source/test implementation complete; independent exact-head source audit required.
-- **Starting exact head:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`.
-- **Starting parent:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`.
-- **Changed scope:** Serialized oil owner/store/reducer, detector/projection cutover, owner-aligned tests and this current work plan.
-- **Focused validation:** `36 passed` for serialized ordering, reducer coherence, failure invariance, reset and re-entry.
-- **Production validation:** `42 passed` for detector/consumer, S5-A Foam and raster-isolation coverage.
-- **Full repository validation:** `767 passed`, with only the two unchanged controlled-accuracy failures recorded above.
+- **Result:** Detector pre-owner immutable-input preparation failures are normalized without changing the serialized core; independent exact-head source re-audit required.
+- **Starting exact head:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`.
+- **Starting parent:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`.
+- **Changed scope:** Detector oil evaluation boundary, production-path normalization tests and this current work plan only.
+- **Repair-focused validation:** `5 passed` for helper/copy failures across debug-off and debug-on production paths.
+- **Serialized validation:** `36 passed` for owner ordering, reducer coherence, failure invariance, reset and re-entry.
+- **Production validation:** `44 passed` for detector/consumer, S5-A Foam, raster isolation and closed projection coverage.
+- **Full repository validation:** `771 passed`, with only the two unchanged controlled-accuracy failures recorded above.
 - **Compile validation:** `PYTHONPATH=src .venv/bin/python -m compileall -q src tests` passed.
-- **Current gate:** Independent serialized temporal-state implementation exact-head source audit.
+- **Current gate:** Independent detector pre-owner failure-normalization repair exact-head source re-audit.
 - **Resulting exact SHA:** Reported by the Worker final report, not self-recorded in this commit.

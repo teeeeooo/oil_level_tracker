@@ -290,13 +290,13 @@ class OpenCvPhaseDetector:
         bundle: MaskBundle,
         static_map: np.ndarray | None,
     ) -> OilCanonicalOutcome:
-        kwargs = _isolated_pipeline_inputs(
-            glass_id=glass_id,
-            pre=pre,
-            bundle=bundle,
-            static_map=static_map,
-        )
         try:
+            kwargs = _isolated_pipeline_inputs(
+                glass_id=glass_id,
+                pre=pre,
+                bundle=bundle,
+                static_map=static_map,
+            )
             return self._oil_pipeline.run(**kwargs)
         except Exception as exc:
             reason = f"{type(exc).__name__}:{str(exc)[:120]}"
