@@ -1,6 +1,6 @@
 # Current Work Plan
 
-- **Document status:** `SOURCE_AUDIT_PENDING`
+- **Document status:** `TEST_CONTRACT_AUDIT_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
 - **Implementation-start exact head:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`
@@ -17,13 +17,14 @@
 - **Calibration source audit:** `AUDIT: FAIL`
 - **Controlled comparison:** `COMPARISON: FAIL`
 - **Failure attribution:** `DIAGNOSIS: COMPLETE`
-- **Primary repair owner:** narrow-path boundary-to-no-interface semantic dominance
-- **Current gate:** Independent exact-head source re-audit of the dominance-robustness repair
-- **Implementation status:** Fixed positive-margin cliff replaced by strict semantic dominance; audit required
-- **Glare coherence:** Separate bounded follow-up owner; not repaired here
+- **Glare helper disposition:** `INVALID_AND_REPLACE`
+- **Primary repair owner:** controlled perturbation test infrastructure only
+- **Current gate:** Independent Honest Perturbation Test-Contract Exact-Head Audit
+- **Implementation status:** Honest non-wrapping/full-frame perturbations expose current glare blockers; production source is unchanged
+- **Glare coherence:** Typed-construction and semantic-discrimination production repairs remain separate and blocked
 - **Controlled comparison and canonical validation:** Blocked
 
-This plan records the bounded S5-B corroborated-boundary no-interface-dominance robustness repair. It does not approve the separate glare-coherence repair, a new controlled comparison, canonical validation, Windows/manual validation, packaging, merge or S5-B completion.
+This plan records a test-infrastructure-only S5-B glare perturbation contract repair. It does not modify production detection behavior or approve typed construction, semantic glare discrimination, a new controlled comparison, canonical validation, Windows/manual validation, packaging, merge or S5-B completion.
 
 ## Why the previous source direction is retired
 
@@ -168,43 +169,51 @@ Feature-only persisted-dataset validation restored clear raw/smoothed coverage t
 
 The strict-dominance robustness matrix covers clear and rapid representatives across boundary-position `-2` through `+2 px`, brightness `-8` through `+8`, contrast `0.90×` through `1.10×` and three fixed weak-noise seeds. All positive probes retain deterministic public numeric oil within the truth-near geometry tolerance. The same perturbations over thin line, paired pulse, rim line, reflection, glare, shimmer, learned static overlap, uniform full/empty and transient false-line controls produce no raw oil; uniform states remain no-interface and structural-plus-real remains distinguishable from structural-only evidence.
 
+## Honest glare perturbation test contract
+
+The independently completed glare attribution returned `DIAGNOSIS: COMPLETE` and classified the shared saturated-pixel preservation helper as `INVALID_AND_REPLACE`. This exact head changes test infrastructure only; `src/oil_tracker/**`, detector settings, controlled scene semantics, detector version and external schemas are unchanged.
+
+The general neighborhood helper now uses non-wrapping `cv2.warpAffine` vertical translation with `BORDER_REPLICATE`, signed-integer full-frame brightness with clipping, fixed-center (`127.5`) full-frame contrast with clipping, and `np.random.default_rng(seed)` full-frame Gaussian noise with positive sigma and clipping. No source pixel is exempted because it was originally saturated. Deterministic diagnostics record shape, dtype, extrema, mean, standard deviation, changed-pixel count, absolute/difference statistics, populations at `>=230`, `>=235`, `>=240`, `>=245`, and frame SHA-256 without entering the detector input contract.
+
+The mandatory `glare-recovery-1` `0.92×` contrast probe moves from source maximum `255` with a populated `>=245` mask to transformed maximum `244` with zero `>=245` pixels while retaining positive `>=240` population. Helper-contract tests, fresh-detector repeats, debug on/off public-result equality and input-raster hash invariance pass. The clear/rapid positive neighborhood passes all `40` probes. The negative neighborhood passes `199/220` probes and intentionally leaves `21` correct-contract assertions red: two near-threshold glare-only contrast false-oil cases and nineteen foam clipped-glare false-oil cases. The original saturated glare case remains a normalized `OIL_PIPELINE_FAILURE` at `phase_a` with tracker `NO_UPDATE` and smoothing `PRESERVE`.
+
+These red tests are executable evidence for the separate typed-coherence and semantic glare owners. They are not skipped, xfailed, conditionally weakened or rewritten to accept false oil. The next gate is an independent Honest Perturbation Test-Contract Exact-Head Audit. Typed construction, semantic discrimination and controlled comparison remain blocked.
+
 ## Controlled evidence status
 
 - Controlled comparison: `COMPARISON: FAIL`.
-- Failure attribution: `DIAGNOSIS: COMPLETE`.
-- Calibration source audit: `AUDIT: FAIL`; persisted and negative-control behavior passed, with one fixed-margin neighborhood blocker.
-- Primary owner repaired here: strict boundary-over-no-interface semantic dominance in the narrow corroborated path.
-- General boundary and no-interface acceptance gates remain unchanged.
-- Separate follow-up owner: glare ambiguous-observation cross-field coherence.
-- Next gate: independent exact-head source re-audit.
-- New controlled comparison and canonical validation remain blocked.
+- Glare failure attribution: `DIAGNOSIS: COMPLETE`.
+- Invalid helper disposition: `INVALID_AND_REPLACE`; replaced in the general test neighborhood only.
+- Production source and detector settings: unchanged.
+- Known typed-coherence blocker: saturated glare remains normalized at `phase_a`.
+- Known semantic blockers: honest near-threshold glare-only and foam clipped-glare probes produce false numeric oil.
+- Next gate: independent Honest Perturbation Test-Contract Exact-Head Audit.
+- Typed construction, semantic discrimination, new controlled comparison and canonical validation remain blocked.
 
 ## Downstream sequence
 
-1. Independent exact-head source re-audit of this strict-dominance robustness repair.
-2. Separate bounded glare cross-field coherence repair and independent audit.
-3. New controlled base/feature comparison only after the owner-aligned source gates pass.
-4. Later canonical, Windows/manual, packaging and merge gates under separate authority.
+1. Independent exact-head audit of this honest perturbation test contract.
+2. Separate bounded typed ambiguous-construction repair and independent source audit.
+3. Separate bounded semantic glare-discrimination repair and independent source audit.
+4. New controlled base/feature comparison only after both production owner gates pass.
+5. Later canonical, Windows/manual, packaging and merge gates under separate authority.
 
 ## Latest recorded closeout
 
-- **Result:** The narrow corroborated path now requires strict semantic dominance over no-interface evidence instead of a calibrated positive distance; all other guards and global gates remain unchanged.
-- **Starting exact head:** `912a94b1cd62b0164e896a7e02dbb1df1c0c85dc`.
-- **Starting parent:** `e0d5c9fddb53c549bac0e56a4b7b6084862e5ca7`.
-- **Changed scope:** `oil_shadow_observations.py`, directly related observation/controlled tests and this current work plan only.
-- **Dominance and guard validation:** `22 passed`.
-- **Positive neighborhood validation:** clear and rapid representatives, `36` probes, deterministic numeric oil and truth-near geometry.
-- **Negative neighborhood validation:** ten control families, `180` probes, zero raw-oil false positives and deterministic debug on/off behavior.
-- **Observation/evidence validation:** `40 passed`.
-- **Required controlled targets/sequences:** `2 passed`.
-- **Controlled benchmark validation:** `6 passed`.
-- **Production detector/consumer/Foam validation:** `69 passed`.
-- **Serialized owner/reducer validation:** `55 passed`.
-- **Persisted parent-to-candidate diagnostic:** `74` cases; oil and Foam semantic payloads and public records exactly unchanged, zero head-only numeric oil and zero unhandled detector exceptions.
-- **Persisted metrics:** clear raw/smoothed coverage `1.0`; rapid raw/smoothed coverage `0.9565217391`; no-interface raw/smoothed false-boundary `0.0`; Foam precision/recall `1.0`.
-- **Known residual:** glare-recovery frames 1–2 retain `ValueError:Ambiguous likelihoods disagree with canonical evidence` at `phase_a`; final visible frame retains numeric raw oil.
-- **Full repository validation:** `798 passed`.
-- **Compile validation:** `PYTHONPATH=src .venv/bin/python -m compileall -q src tests` passed.
-- **Diff validation:** `git diff --check` passed.
-- **Current gate:** Independent exact-head source re-audit after ordinary commit/push.
+- **Result:** Honest glare perturbation semantics are executable in test infrastructure without changing production behavior.
+- **Starting exact head:** `15230707d45c4b719719feff09d40a516934093c`.
+- **Starting parent:** `912a94b1cd62b0164e896a7e02dbb1df1c0c85dc`.
+- **Changed scope:** `tests/test_oil_controlled_benchmark.py` and this current work plan only.
+- **Production source:** `src/oil_tracker/**`, detector settings, controlled fixture semantics, detector version and external schemas are unchanged.
+- **Invalid helper removal:** saturated-pixel preservation and `np.roll` are absent from the general perturbation path.
+- **Helper-contract and threshold validation:** `7 passed`; `glare-recovery-1` at `0.92×` reaches maximum `244`, zero `>=245` pixels and positive `>=240` population.
+- **Positive neighborhood validation:** `40 passed`; clear and rapid representatives remain deterministic, numeric and within `4 px`.
+- **Negative neighborhood validation:** `199 passed`, `21 failed`; every failure is a known glare semantic false-oil assertion.
+- **Typed-coherence characterization:** saturated glare remains a normalized `OIL_PIPELINE_FAILURE` at `phase_a` with tracker `NO_UPDATE` and smoothing `PRESERVE`.
+- **Dominance and guard validation:** `21 passed`.
+- **Controlled benchmark file:** `251 passed`, `21 failed`; failure set matches the focused negative matrix exactly.
+- **Collection:** `1064 tests collected`.
+- **Full repository validation:** `1043 passed`, `21 failed`; `UNEXPECTED_FAILURE` count is zero.
+- **Compile validation:** `PYTHONPATH=src .venv/bin/python -m compileall -q tests` passed.
+- **Current gate:** Independent Honest Perturbation Test-Contract Exact-Head Audit after ordinary commit/push.
 - **Resulting exact SHA:** Reported by the Worker final report, not self-recorded in this commit.
