@@ -5,7 +5,7 @@
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: FAIL`
 **Authoritative qualification base:** `main @ 2d085423d63c4ecd716ed47deef41293a9e69e5c`
 **Worker branch:** `feature/s6-base-sample-qualification`
-**Qualification evidence head:** `PENDING_FIRST_EVIDENCE_COMMIT`
+**Qualification evidence commit:** `6b78b398de0cc87e3384ab6f1fe854c698468648`
 **Durable evidence:** [`../30-quality/s6-base-sample-1-evidence.md`](../30-quality/s6-base-sample-1-evidence.md)
 
 This document owns the active execution state. Milestone order and completion state remain governed by [`roadmap.md`](./roadmap.md). S6 remains active; this finding does not close S6 or authorize S7.

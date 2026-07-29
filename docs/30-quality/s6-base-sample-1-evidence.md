@@ -4,7 +4,7 @@
 **Milestone:** `S6 — Real-video and Windows validation gate` remains `ACTIVE`
 **Worker branch:** `feature/s6-base-sample-qualification`
 **Starting main:** `2d085423d63c4ecd716ed47deef41293a9e69e5c` (`docs: close S5-C and activate S6`)
-**Qualification evidence head:** `PENDING_FIRST_EVIDENCE_COMMIT`
+**Qualification evidence commit:** `6b78b398de0cc87e3384ab6f1fe854c698468648`
 **Scope:** macOS source-tree, short repository supporting sample only
 
 This document records engineering behavior, not detector truth accuracy. The sample has no user-confirmed `.oiltruth`; therefore MAE, precision, recall, false-positive/false-negative truth and physical correctness are not evaluated.
