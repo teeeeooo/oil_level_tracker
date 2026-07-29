@@ -104,17 +104,17 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S5-C — Canonical/Qt validation stabilization
 
 - **Purpose:** Stabilize `QApplication` / `QCoreApplication` ownership, isolate GUI fixtures, slim duplicate GUI/canonical coverage and preserve the non-GUI/headless validation contract.
-- **Status:** `ACTIVE`
-- **Major result:** S5-B is formally closed and the separate canonical/Qt stabilization gate is now active; no S5-C source change has begun.
-- **Next gate:** Confirm lifecycle ownership and fixture boundaries, then remove recurring canonical Qt instability without weakening headless coverage before S6 begins.
+- **Status:** `DONE`
+- **Major result:** One session-owned pytest-qt `QApplication`, temporary offscreen platform injection, bounded Qt-state verification and explicit source-tree headless subprocess isolation now keep canonical and focused validation deterministic without changing production or detector behavior.
+- **Next gate:** Preserve the accepted lifecycle and headless boundaries during S6 real-video, Windows/manual and packaging qualification.
 - **Detail:** [Current work plan](./work-plan.md), [Real-world validation plan](../30-quality/real-world-validation-plan.md)
 
 ### S6 — Real-video and Windows validation gate
 
 - **Purpose:** Qualify the stabilized detector and application on representative real video and the target Windows environment.
-- **Status:** `PLANNED`
-- **Major result:** None yet; this gate does not begin before formal S5-C completion.
-- **Next gate:** Controlled benchmark comparison, real-video review, long-duration CPU/memory checks and one-folder validation must all pass.
+- **Status:** `ACTIVE`
+- **Major result:** S5-C is formally closed; representative real-video, long-duration, Windows/manual and one-folder packaging evidence has not yet been produced.
+- **Next gate:** Define the controlled S6 evidence set, then complete benchmark comparison, real-video review, CPU/memory checks and clean-PC one-folder validation.
 - **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md), [manual checklist](../30-quality/manual-gui-windows-checklist.md)
 
 ### S7 / Phase 2C-4 — Annotated MP4 export
@@ -135,4 +135,4 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S5-B` → `S5-C` → `S6` → `S7 / Phase 2C-4` → Phase 2D reassessment.
+`S6` → `S7 / Phase 2C-4` → Phase 2D reassessment.
