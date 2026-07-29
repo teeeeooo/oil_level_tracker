@@ -47,6 +47,20 @@ class _SingleFrameIdentifiabilityEvidence:
     acceptance_margin: float
 
 
+@dataclass(frozen=True)
+class _PlateauEvidenceContext:
+    first_row: int
+    last_row: int
+    window_height: int
+    center_gap: int
+    reference_width: int
+    row_scores: np.ndarray
+
+    def __post_init__(self) -> None:
+        if self.row_scores.ndim != 1 or self.row_scores.flags.writeable:
+            raise TypeError("Plateau row scores must be one-dimensional and read-only.")
+
+
 def extract_raw_observations(
     pre: PreprocessResult,
     effective_mask: np.ndarray,
@@ -232,15 +246,19 @@ def evaluate_semantic_hypotheses(
         static_artifact_map,
         bounds,
     )
+    plateau_context = (
+        _build_plateau_evidence_context(pre.gray, effective_mask)
+        if proposals
+        else None
+    )
     hypotheses: list[SemanticHypothesis] = []
     for proposal in proposals:
         members = tuple(observation_by_id[item] for item in proposal.member_ids)
         broad = _broad_summary(proposal, broad_profiles, bounds)
         narrow = _narrow_summary(proposal, narrow_context, bounds)
         static_prior = _static_prior(narrow, broad, static_artifact_map, bounds)
-        bright_plateau_artifact = _persistent_plateau_artifact(
-            pre.gray,
-            effective_mask,
+        bright_plateau_artifact = _plateau_artifact_from_context(
+            plateau_context,
             broad.transition_local_y,
         )
         hypothesis = _semantic_hypothesis(
@@ -966,55 +984,106 @@ def _persistent_plateau_artifact(
     effective_mask: np.ndarray,
     center_y: float,
 ) -> float:
-    """Measure localized glare components and strong distributed fine texture."""
+    """Measure plateau evidence through one immutable per-frame context."""
 
+    return _plateau_artifact_from_context(
+        _build_plateau_evidence_context(gray, effective_mask),
+        center_y,
+    )
+
+
+def _build_plateau_evidence_context(
+    gray: np.ndarray,
+    effective_mask: np.ndarray,
+) -> _PlateauEvidenceContext | None:
     _validate_same_shape(gray, effective_mask)
     effective = effective_mask > 0
-    valid_rows = np.flatnonzero(np.any(effective, axis=1))
+    row_widths = np.count_nonzero(effective, axis=1)
+    valid_rows = np.flatnonzero(row_widths > 0)
     if valid_rows.size == 0:
-        return 0.0
+        return None
 
     first_row = int(valid_rows[0])
     last_row = int(valid_rows[-1])
     roi_height = last_row - first_row + 1
-    window_height = max(3, int(round(0.45 * roi_height)))
-    center_gap = max(1, int(round(0.015 * roi_height)))
-    center = min(last_row, max(first_row, int(round(center_y))))
-    reference_width = max(int(np.count_nonzero(effective[row])) for row in valid_rows)
-    if reference_width < 4:
-        return 0.0
+    reference_width = int(np.max(row_widths[valid_rows]))
+    row_scores = np.zeros(effective.shape[0], dtype=np.float64)
+    if reference_width >= 4:
+        minimum_run = max(3, int(math.ceil(0.25 * reference_width)))
+        run_cache: dict[bytes, tuple[int, int]] = {}
+        support_cache: dict[tuple[str, int, bytes], float] = {}
+        for row in range(first_row, last_row + 1):
+            mask_key = effective[row].tobytes()
+            if mask_key not in run_cache:
+                run_cache[mask_key] = _longest_contiguous_run(effective[row])
+            start, stop = run_cache[mask_key]
+            run_size = stop - start
+            if run_size < minimum_run:
+                continue
+            values = gray[row, start:stop]
+            cache_key = (values.dtype.str, run_size, values.tobytes())
+            if cache_key not in support_cache:
+                support_cache[cache_key] = _row_plateau_support(values)
+            row_scores[row] = support_cache[cache_key] * (
+                run_size / reference_width
+            )
+    row_scores.setflags(write=False)
+    return _PlateauEvidenceContext(
+        first_row=first_row,
+        last_row=last_row,
+        window_height=max(3, int(round(0.45 * roi_height))),
+        center_gap=max(1, int(round(0.015 * roi_height))),
+        reference_width=reference_width,
+        row_scores=row_scores,
+    )
 
-    minimum_run = max(3, int(math.ceil(0.25 * reference_width)))
-    side_scores: list[float] = []
+
+def _plateau_artifact_from_context(
+    context: _PlateauEvidenceContext | None,
+    center_y: float,
+) -> float:
+    if context is None or context.reference_width < 4:
+        return 0.0
+    center = min(
+        context.last_row,
+        max(context.first_row, int(round(center_y))),
+    )
+    side_scores = []
     for start, stop in (
         (
-            max(first_row, center - center_gap - window_height),
-            max(first_row, center - center_gap),
+            max(
+                context.first_row,
+                center - context.center_gap - context.window_height,
+            ),
+            max(context.first_row, center - context.center_gap),
         ),
         (
-            min(last_row + 1, center + center_gap),
-            min(last_row + 1, center + center_gap + window_height),
+            min(context.last_row + 1, center + context.center_gap),
+            min(
+                context.last_row + 1,
+                center + context.center_gap + context.window_height,
+            ),
         ),
     ):
-        row_scores: list[float] = []
-        for row in range(start, stop):
-            columns = np.flatnonzero(effective[row])
-            runs = (
-                np.split(columns, np.flatnonzero(np.diff(columns) > 1) + 1)
-                if columns.size
-                else ()
-            )
-            run = max(runs, key=len) if runs else np.empty(0, dtype=np.int64)
-            if run.size < minimum_run:
-                row_scores.append(0.0)
-                continue
-            row_scores.append(
-                _row_plateau_support(gray[row, run])
-                * (run.size / reference_width)
-            )
-        side_scores.append(0.0 if not row_scores else float(np.mean(row_scores)))
-
+        side_scores.append(
+            0.0
+            if stop <= start
+            else float(np.mean(context.row_scores[start:stop]))
+        )
     return _unit(max(side_scores, default=0.0))
+
+
+def _longest_contiguous_run(row_mask: np.ndarray) -> tuple[int, int]:
+    columns = np.flatnonzero(row_mask)
+    if columns.size == 0:
+        return 0, 0
+    gaps = np.flatnonzero(np.diff(columns) > 1)
+    if gaps.size == 0:
+        return int(columns[0]), int(columns[-1]) + 1
+    starts = np.concatenate((columns[:1], columns[gaps + 1]))
+    stops = np.concatenate((columns[gaps] + 1, columns[-1:] + 1))
+    index = int(np.argmax(stops - starts))
+    return int(starts[index]), int(stops[index])
 
 
 def _row_plateau_support(values: np.ndarray) -> float:
@@ -1028,13 +1097,29 @@ def _row_plateau_support(values: np.ndarray) -> float:
         return 0.0
 
     edge_indices = np.argsort(magnitudes)[-min(6, magnitudes.size) :]
+    prefix = np.concatenate(
+        (np.zeros(1, dtype=np.float64), np.cumsum(row, dtype=np.float64))
+    )
+    row_size = int(row.size)
+    prefix_means = {
+        int(edge) + 1: float(prefix[int(edge) + 1] / (int(edge) + 1))
+        for edge in edge_indices
+    }
+    suffix_means = {
+        int(edge) + 1: float(
+            (prefix[row_size] - prefix[int(edge) + 1])
+            / (row_size - int(edge) - 1)
+        )
+        for edge in edge_indices
+    }
+
     localized = 0.0
     for edge_index in edge_indices:
         split = int(edge_index) + 1
         localized = max(
             localized,
             _localized_component_support(
-                abs(float(np.mean(row[:split]) - np.mean(row[split:]))),
+                abs(prefix_means[split] - suffix_means[split]),
                 float(magnitudes[edge_index]),
                 float(magnitudes[edge_index]) / total_variation,
             ),
@@ -1045,9 +1130,11 @@ def _row_plateau_support(values: np.ndarray) -> float:
             left, right = sorted((int(first_edge), int(second_edge)))
             if differences[left] * differences[right] >= 0.0:
                 continue
-            center_mean = float(np.mean(row[left + 1 : right + 1]))
-            left_delta = center_mean - float(np.mean(row[: left + 1]))
-            right_delta = center_mean - float(np.mean(row[right + 1 :]))
+            center_mean = float(
+                (prefix[right + 1] - prefix[left + 1]) / (right - left)
+            )
+            left_delta = center_mean - prefix_means[left + 1]
+            right_delta = center_mean - suffix_means[right + 1]
             if left_delta * right_delta <= 0.0:
                 continue
             localized = max(

@@ -553,6 +553,21 @@ Every row asserts exact prior-store identity or value equality, `PipelineFailure
 - controlled accuracy expectations are not relaxed;
 - obsolete concurrency code is absent rather than dormant.
 
+## Per-frame plateau evidence performance ownership
+
+The accepted deterministic dataset infrastructure returned `AUDIT: PASS`. The ensuing complete controlled comparison preserved functional behavior but failed the `1.5×` performance limit at process `1.9645×` and wall `2.0256×`. Independent attribution returned `ATTRIBUTION: COMPLETE`: repeated `_persistent_plateau_artifact()` and `_row_plateau_support()` work consumed `0.893101 s` per 58-frame run, approximately `70.3%` of the measured feature-base CPU delta. Candidate-rich Foam, glare and shimmer frames multiplied the same row scan by semantic-hypothesis count.
+
+The bounded repair changes computation ownership, not evidence meaning:
+
+- `evaluate_semantic_hypotheses()` constructs at most one immutable plateau context per frame and skips it when there are no proposals;
+- valid-row bounds, effective-mask longest runs and grayscale-run support are frame-local values;
+- identical mask rows and identical grayscale runs reuse exact results only inside that context;
+- each semantic hypothesis performs only an above/below window lookup against read-only row scores;
+- Float64 prefix sums replace repeated prefix, suffix and center slice means while preserving the same top-six edge set, pair enumeration, formulas, coefficients, minimum run and window geometry;
+- the context retains no input alias, mutable global state or cross-frame raster/profile cache.
+
+Exact parent/candidate normalized JSON is identical for deterministic Oil `58`, Foam `16`, direct `50` and repeated ambiguity `6`. This includes complete detections, canonical outcomes, tracker/smoothing actions, candidates, flags, Foam values and pipeline-failure state. Worker-owned 3-warm-up/15-measured interleaved validation against exact base provisionally measures process `1.4146×` and wall `1.4458×`. The result is not audit approval and does not authorize merge or S5-B completion.
+
 ## Required source-audit evidence
 
 The fresh independent source Auditor must verify:
@@ -568,14 +583,17 @@ The fresh independent source Auditor must verify:
 - the implemented boundary uses only current observable evidence and contains no latent label, fixture ID or case-specific branch;
 - intensity `235–245`, broad `82–89`, sparse texture `228–234` in both polarities, and near-ceiling support `4–14` show no isolated acceptance island and expose a continuous identifiability margin;
 - the audited `239/240`, `85/86`, texture-statistics and `8/9` neighbor pairs no longer reverse independently;
-- the general boundary floor, semantic likelihood formulas, preprocessing and plateau score are unchanged;
+- the general boundary floor, semantic likelihood formulas, preprocessing and plateau evidence semantics are unchanged;
+- plateau context construction occurs at most once per frame, expensive support is not repeated for an identical frame-local row, and hypothesis queries perform no row scan;
 - retained clear/rapid, bright-boundary, structural, historical glare, saturated-glare, malformed Phase-A and S5-A Foam contracts remain satisfied;
 - immutable contract hashes remain `818802756ebc206250f89540f06616988816b93c5e9b55b17bb42511decc8579` and `727455c5f6263a84e740fd307c9f28846af15e743c729945a4ac841a80ca3b18`;
-- the Worker-owned targeted validation reports `521 passed` with no expected failure, unexpected failure, skip, xfail or conditional acceptance;
+- the Worker-owned targeted validation reports `524 passed` with no expected failure, unexpected failure, skip, xfail or conditional acceptance;
+- deterministic Oil/Foam/direct identities remain exact and parent/candidate complete normalized output hashes are equal;
+- the Worker-owned provisional process and wall ratios are both at or below `1.5×`;
 - temporal source is unchanged because existing ambiguity reduction already owns the repeated-sequence behavior;
 - detector version, dependencies and external schemas remain unchanged.
 
-Controlled comparison remains blocked until this fresh source re-audit returns `PASS`.
+The repair remains unapproved until a fresh independent performance-source exact-head audit returns `PASS`.
 
 ## Non-goals
 
@@ -585,7 +603,7 @@ This bounded source implementation does not:
 - infer a physical glare cause or relabel latent oil truth;
 - redesign temporal or Foam ownership;
 - implement temporal raster history, optical flow or capture metadata;
-- authorize controlled comparison or broader validation before the source audit;
+- treat Worker-owned comparison evidence as independent audit approval;
 - make the retained plateau-discriminability cue the acceptance owner;
 - approve packaging, merge, synchronization, cleanup or S5-B completion.
 
@@ -593,8 +611,8 @@ This bounded source implementation does not:
 
 The executable contract remains the immutable acceptance target for the bounded source. Any future contract-red result is not permission to weaken latent truth, relabel oil-bearing scenes as no oil, add case-ID behavior or move another local threshold cliff.
 
-Serialization may increase per-frame latency if evidence construction is expensive. The product has only one to three Glasses, so this remains an accepted architectural trade until measured. Later profiling may identify safe stateless preprocessing work outside the owner, but must not split temporal authority or create a second validation boundary.
+Serialization and canonical validation remain measurable feature-only costs, but they were outside this bounded primary-owner repair. They must not be changed unless a later independently authorized task demonstrates that the plateau-only repair is insufficient on an accepted exact head.
 
 Broad/narrow evidence correlation under blur, fog and refractive motion, exposure-dependent full/empty classification, Glass calibration variance and debug CPU cost remain detector-evidence risks for later controlled comparison. They are not reasons to weaken serialized ownership or the observability contract.
 
-The current gate is the fresh independent source exact-head re-audit. Controlled comparison remains blocked until that re-audit returns `PASS`.
+The current gate is a fresh independent performance-source exact-head audit. Worker-owned ratios and parity evidence are provisional; merge and S5-B completion remain blocked pending that audit.

@@ -1,21 +1,21 @@
 # Current Work Plan
 
-- **Document status:** `DETERMINISTIC_CONTROLLED_DATASET_INFRA_AUDIT_PENDING`
+- **Document status:** `S5B_PLATEAU_PERFORMANCE_REPAIR_AUDIT_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Deterministic infrastructure start exact head:** `0e2f0459c075c729d0702a6edb293e90a114057e`
+- **Performance-repair start exact head:** `ce1656df2e5528d47579b62681a10b5ca7c3e38c`
 - **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
 - **Authoritative observability diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
-- **Route-invariant source audit:** `AUDIT: PASS`
-- **Controlled comparison:** functional metrics passed; CPU ratio `4.2818×`; overall `COMPARISON: FAIL`
-- **Performance attribution:** `DIAGNOSIS: BLOCKED`
-- **Attribution blocker:** prior exported oil/Foam dataset bytes were not preserved and fresh export identities were nondeterministic
-- **Current mutation owner:** test infrastructure, one default-preserving exporter identity seam, quality documentation and PR metadata
-- **Detector/threshold/temporal/observability mutation:** prohibited and unchanged
-- **Deterministic controlled infrastructure:** implemented and unapproved
-- **Current gate:** fresh independent test-infrastructure exact-head audit; Auditor does not merge
-- **Controlled comparison and CPU attribution:** blocked until the infrastructure audit returns `PASS`
-- **Canonical/Qt, Windows/manual and packaging:** not authorized by this infrastructure task
+- **Deterministic dataset infrastructure audit:** `AUDIT: PASS`
+- **Deterministic controlled comparison:** functional contracts passed; process ratio `1.9645×`, wall ratio `2.0256×`; `COMPARISON: FAIL`
+- **Performance attribution:** `ATTRIBUTION: COMPLETE`
+- **Primary owner:** per-hypothesis plateau-discriminability row recomputation, about `70.3%` of the measured feature-base CPU delta
+- **Current mutation owner:** per-frame plateau evidence reuse in `oil_shadow_observations.py`, focused tests, source-completing documentation and PR metadata
+- **Detector thresholds, observability semantics, temporal/Foam owners and external schemas:** unchanged
+- **Worker-owned provisional performance:** process ratio `1.4146×`, wall ratio `1.4458×`; exact parent/candidate detector-output parity
+- **Repair status:** implemented but unapproved; merge and S5-B completion are not authorized
+- **Current gate:** fresh independent performance-source exact-head audit; Auditor does not merge
+- **Canonical/Qt, E2E, Windows/manual and packaging:** intentionally not run by this bounded repair
 
 This plan records the bounded production implementation of the audited S5-B single-frame observability contract. The existing detector input and typed evidence cannot always distinguish partial glare from a legitimate oil phase; therefore latent physical truth and detector-observable outcome remain separate contract dimensions. The implementation changes only typed current-observation acceptance in `oil_shadow_observations.py`; proposal construction, semantic scoring, Phase-A validation, temporal reducer/store, fill-state, smoothing, Foam ownership, detector version, dependencies and external schemas remain unchanged.
 
@@ -35,7 +35,15 @@ The new unapproved deterministic `v1` identities are:
 - oil dataset ID `e176b4d4-925b-5496-b3c9-735328c4fe19`, annotation-set ID `14b48b9f-418d-5192-90d0-b18d5bbf54ea`, reader fingerprint `f0c122bd6cab823934004d7bcb163c2d7c112f8b8e42594a7dc99440c022265d`;
 - Foam dataset ID `911c2572-de66-53b1-8c97-9c25e32aefe0`, annotation-set ID `a5ed8021-9594-5297-9f47-dbb978077ed2`, reader fingerprint `ddd3c195998ee11daa7e6819e94af1a9ed817867b25817b49b176e12f31af83b`.
 
-These identities are test infrastructure evidence only. They do not approve source behavior or the performance result. After independent infrastructure audit `PASS`, CPU attribution and the complete controlled comparison must be rerun fresh on the accepted deterministic bytes.
+These identities are test infrastructure evidence only. The infrastructure audit returned `AUDIT: PASS`, after which the fresh deterministic comparison preserved the functional contracts but measured process `1.9645×` and wall `2.0256×` against the `1.5×` limit. Stage attribution returned `ATTRIBUTION: COMPLETE`: `_persistent_plateau_artifact()` and `_row_plateau_support()` consumed `0.893101 s` per 58-frame run, about `70.3%` of the feature-base CPU delta, because each semantic hypothesis repeated the same frame-row work.
+
+## Per-frame plateau evidence performance repair
+
+The bounded repair keeps the plateau semantic formula, top-six edge set, edge-pair enumeration, minimum-run and side-window geometry exact. `evaluate_semantic_hypotheses()` now prepares one immutable frame-local plateau context only when proposals exist. That context computes each distinct effective-mask row span and each distinct grayscale run once per frame, stores independent read-only row scores, and lets every hypothesis query the same precomputed above/below window evidence. Float64 prefix sums replace repeated slice means without approximation. There is no module-global or cross-frame cache and no raster alias.
+
+The exact parent head and repair candidate produced byte-identical normalized outputs for deterministic Oil `58`, Foam `16`, direct `50` and repeated ambiguity `6`, including full detections, canonical outcomes, flags, candidates, tracker/smoothing actions and Foam behavior. Worker-owned 3-warm-up/15-measured interleaved validation against exact base measured process `1.4146×` and wall `1.4458×`. Candidate-rich median CPU/detection changed from parent to repair as follows: Foam-positive `311.539 → 50.324 ms`, glare/reflection `63.957 → 28.120 ms`, shimmer `68.237 → 39.280 ms`; no-interface remained effectively unchanged at `14.412 → 14.229 ms`.
+
+Focused validation reports `524 passed` with no failures, skips or xfails; Python compile and `git diff --check` pass. The result is source-complete but unapproved. The next gate is a fresh independent performance-source exact-head audit; merge, synchronization and S5-B completion remain unauthorized.
 
 ## Current observability decision
 
