@@ -111,7 +111,13 @@ oil_level_analysis_YYYYMMDD_HHMMSS/
 
 ```bat
 python -m pytest
+python -m pytest -m qt_app
 ```
+
+The first command is the canonical suite. The `qt_app` command is a focused selection
+for tests that share the single pytest-qt `QApplication`; it is not additional
+canonical coverage. Headless subprocess checks use the source tree directly and do
+not inherit the GUI platform environment.
 
 The test suite covers coordinate conversion, mask/margin/exclusion behavior, Recipe round-trip/versioning, validation, judgment, event debounce, candidate penalties, FillState behavior, foam connectivity, timestamp scheduling, synthetic detector fixtures, full analysis/reporting, multi-Glass decode behavior, cancellation and GUI smoke/routing.
 

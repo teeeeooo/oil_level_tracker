@@ -133,15 +133,18 @@ def test_real_hash_mismatch_is_rejected_before_detector_or_output(tmp_path, caps
     assert not list(output.glob("detector_benchmark_*")) if output.exists() else True
 
 
-def test_cli_import_is_headless_and_does_not_initialize_qt(tmp_path):
+def test_cli_import_is_headless_and_does_not_initialize_qt(headless_subprocess_env):
     code = (
-        "import sys; import oil_tracker.cli; "
+        "import os, sys; "
+        "assert 'QT_QPA_PLATFORM' not in os.environ; "
+        "import oil_tracker.cli; "
         "assert 'PySide6' not in sys.modules; "
         "assert 'oil_tracker.bootstrap' not in sys.modules"
     )
     completed = subprocess.run(
         [sys.executable, "-c", code],
         cwd=Path(__file__).resolve().parents[1],
+        env=headless_subprocess_env,
         text=True,
         capture_output=True,
         check=False,
