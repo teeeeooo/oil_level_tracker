@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import replace
+from dataclasses import dataclass, replace
 import math
 from statistics import median
 
@@ -34,6 +34,17 @@ from .oil_shadow_types import (
     StaticPriorEvidence,
     stable_digest,
 )
+
+
+@dataclass(frozen=True)
+class _SingleFrameIdentifiabilityEvidence:
+    phase_ceiling_pressure: float
+    texture_relief: float
+    broad_corroboration_deficit: float
+    evidence_reliability: float
+    collision_pressure: float
+    semantic_support: float
+    acceptance_margin: float
 
 
 def extract_raw_observations(
@@ -297,13 +308,9 @@ def evaluate_typed_current_observation(
     ordered = sorted(hypotheses, key=_hypothesis_order)
     best = ordered[0] if ordered else None
     second_boundary = ordered[1].boundary_likelihood if len(ordered) > 1 else 0.0
-    observability_conflict = False
+    identifiability = None
+    canonical_boundary_candidate = False
     if best is not None:
-        observability_conflict = _has_single_frame_observability_conflict(
-            pre,
-            effective_mask,
-            best,
-        )
         boundary_margin = max(
             0.0,
             best.boundary_likelihood
@@ -322,9 +329,19 @@ def evaluate_typed_current_observation(
                 no_interface,
             )
         )
-        if not observability_conflict and (
+        canonical_boundary_candidate = (
             standard_boundary or corroborated_single_boundary
-        ):
+        )
+        identifiability = _single_frame_identifiability_evidence(
+            pre,
+            effective_mask,
+            best,
+            no_interface,
+            second_boundary,
+            standard_boundary=standard_boundary,
+            corroborated_single_boundary=corroborated_single_boundary,
+        )
+        if canonical_boundary_candidate and identifiability.acceptance_margin >= 0.0:
             return ShadowBoundaryObservation(
                 hypothesis=best,
                 alternatives=tuple(
@@ -341,8 +358,12 @@ def evaluate_typed_current_observation(
         return ShadowNoInterfaceObservation(evidence=no_interface)
 
     reason = "competing_boundary_artifact_or_no_interface_evidence"
-    if observability_conflict:
-        reason = "single_frame_boundary_observability_conflict"
+    if (
+        canonical_boundary_candidate
+        and identifiability is not None
+        and identifiability.acceptance_margin < 0.0
+    ):
+        reason = "single_frame_boundary_identifiability_margin"
     elif best is not None and best.polarity_available is False:
         reason = "polarity_unavailable_or_conflicting"
     elif no_interface.glare_conflict >= 0.55:
@@ -375,23 +396,17 @@ def evaluate_typed_current_observation(
     )
 
 
-def _has_single_frame_observability_conflict(
+def _single_frame_identifiability_evidence(
     pre: PreprocessResult,
     effective_mask: np.ndarray,
     best: SemanticHypothesis,
-) -> bool:
-    """Fail closed when a near-ceiling phase lacks independent broad support."""
-
-    if (
-        best.broad.available_scale_count < 2
-        or best.broad.strength >= 0.40
-        or best.narrow.horizontal_coverage < 0.95
-        or best.evidence_availability < 0.90
-        or best.visibility < 0.85
-    ):
-        return False
-    if not np.issubdtype(pre.gray.dtype, np.integer):
-        return False
+    no_interface: ShadowNoInterfaceEvidence,
+    second_boundary: float,
+    *,
+    standard_boundary: bool,
+    corroborated_single_boundary: bool,
+) -> _SingleFrameIdentifiabilityEvidence:
+    """Combine current-frame semantic and photometric evidence into one margin."""
 
     effective = effective_mask > 0
     center = min(
@@ -407,8 +422,8 @@ def _has_single_frame_observability_conflict(
             min(effective.shape[0], center + gap + depth),
         ),
     )
-    ceiling = float(np.iinfo(pre.gray.dtype).max)
-    near_ceiling = ceiling - 15.0
+    gray_scale = _gray_scale(pre.gray)
+    side_evidence: list[tuple[float, float, float, float]] = []
     for rows in side_ranges:
         values = [
             pre.gray[row][effective[row]]
@@ -418,12 +433,137 @@ def _has_single_frame_observability_conflict(
         if not values:
             continue
         samples = np.concatenate(values).astype(np.float64)
-        if samples.size < 20:
-            continue
-        near_ceiling_fraction = float(np.mean(samples >= near_ceiling))
-        if near_ceiling_fraction >= 0.90 and float(np.std(samples)) <= 4.0:
-            return True
-    return False
+        normalized = np.clip(samples / gray_scale, 0.0, 1.0)
+        phase_ceiling_pressure = _smoothstep_mean(
+            (normalized - 0.88) / 0.10
+        )
+        spread = float(np.std(samples)) / gray_scale
+        lower_tail_asymmetry = _unit(
+            (float(np.median(samples)) - float(np.mean(samples)))
+            / max(float(np.std(samples)), 1e-12)
+        )
+        texture_relief = (
+            _smoothstep(spread / 0.018)
+            * _smoothstep(lower_tail_asymmetry / 0.25)
+        )
+        sample_confidence = samples.size / (samples.size + 20.0)
+        photometric_collision = phase_ceiling_pressure * (
+            1.0 - 0.90 * texture_relief
+        )
+        side_evidence.append(
+            (
+                photometric_collision,
+                phase_ceiling_pressure,
+                texture_relief,
+                sample_confidence,
+            )
+        )
+
+    if side_evidence:
+        (
+            photometric_collision,
+            phase_ceiling_pressure,
+            texture_relief,
+            sample_confidence,
+        ) = max(side_evidence, key=lambda item: item[0])
+    else:
+        photometric_collision = 0.0
+        phase_ceiling_pressure = 0.0
+        texture_relief = 0.0
+        sample_confidence = 0.0
+
+    broad_corroboration_deficit = _smoothstep(
+        (0.46 - best.broad.strength) / 0.18
+    )
+    scale_fraction = best.broad.available_scale_count / max(
+        1,
+        len(best.broad.scales),
+    )
+    side_availability = len(side_evidence) / 2.0
+    observable_reliability = (
+        best.narrow.horizontal_coverage
+        + best.evidence_availability
+        + best.visibility
+        + scale_fraction
+    ) / 4.0
+    sampling_reliability = math.sqrt(
+        max(0.0, side_availability * sample_confidence)
+    )
+    evidence_reliability = _unit(
+        observable_reliability * sampling_reliability
+    )
+    collision_pressure = _unit(
+        photometric_collision
+        * (0.40 + 0.60 * broad_corroboration_deficit)
+        * (1.15 - 0.15 * evidence_reliability)
+    )
+
+    boundary_support = _smoothstep(
+        (best.boundary_likelihood - 0.40) / 0.14
+    )
+    artifact_dominance = _smoothstep(
+        max(0.0, best.boundary_likelihood - best.artifact_likelihood) / 0.35
+    )
+    canonical_dominance = _smoothstep(
+        max(
+            0.0,
+            best.boundary_likelihood
+            - max(
+                best.artifact_likelihood,
+                no_interface.likelihood,
+                second_boundary,
+            ),
+        )
+        / 0.20
+    )
+    dominance_support = max(artifact_dominance, canonical_dominance)
+    ambiguity_clearance = _smoothstep(
+        (0.72 - best.ambiguity_likelihood) / 0.30
+    )
+    semantic_support = _unit(
+        (
+            0.50 * boundary_support
+            + 0.30 * dominance_support
+            + 0.20 * ambiguity_clearance
+        )
+        * (0.70 + 0.30 * evidence_reliability)
+    )
+    route_baseline = (
+        0.40
+        if standard_boundary
+        else 0.35 if corroborated_single_boundary else 1.0
+    )
+    acceptance_margin = (
+        semantic_support - route_baseline - 1.10 * collision_pressure
+    )
+    return _SingleFrameIdentifiabilityEvidence(
+        phase_ceiling_pressure=_unit(phase_ceiling_pressure),
+        texture_relief=_unit(texture_relief),
+        broad_corroboration_deficit=_unit(broad_corroboration_deficit),
+        evidence_reliability=_unit(evidence_reliability),
+        collision_pressure=_unit(collision_pressure),
+        semantic_support=_unit(semantic_support),
+        acceptance_margin=float(acceptance_margin),
+    )
+
+
+def _gray_scale(gray: np.ndarray) -> float:
+    if np.issubdtype(gray.dtype, np.integer):
+        return float(np.iinfo(gray.dtype).max)
+    finite = np.asarray(gray, dtype=np.float64)
+    finite = finite[np.isfinite(finite)]
+    return max(1.0, float(np.max(np.abs(finite))) if finite.size else 1.0)
+
+
+def _smoothstep(value: float) -> float:
+    bounded = _unit(value)
+    return bounded * bounded * (3.0 - 2.0 * bounded)
+
+
+def _smoothstep_mean(values: np.ndarray) -> float:
+    bounded = np.clip(np.asarray(values, dtype=np.float64), 0.0, 1.0)
+    smooth = bounded * bounded * (3.0 - 2.0 * bounded)
+    return 0.0 if smooth.size == 0 else float(np.mean(smooth))
 
 
 def _accepts_corroborated_single_dominant_boundary(

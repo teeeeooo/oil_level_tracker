@@ -1,12 +1,12 @@
 # S5-B Oil-Boundary Hypothesis Architecture
 
-**Status:** `ACTIVE` single-frame observability source implemented; fresh independent source exact-head audit pending
+**Status:** `ACTIVE` continuous observability-margin repair implemented; fresh independent source exact-head re-audit pending
 **Milestone:** [S5-B](../00-project/work-plan.md)
 **Authoritative diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
 
 This document governs the S5-B internal evidence, temporal-state, canonical-decision, canonical-outcome and detector-projection boundaries. It retains the audited serialized temporal owner while superseding the assumption that every robust oil/glare distinction can be recovered from one current frame and its existing typed evidence.
 
-`ACTIVE` identifies the governing architecture only. The audited observability contract and bounded source implementation are complete but unapproved. It does not authorize controlled comparison, canonical validation, Windows/manual validation, packaging, merge, synchronization, cleanup or S5-B completion. The next gate is a fresh independent **source exact-head audit** of the immutable contract, production owner and retained behavior.
+`ACTIVE` identifies the governing architecture only. The audited observability contract remains immutable. The latest independent source audit returned `AUDIT: FAIL`, and the bounded continuous-margin repair is complete but unapproved. It does not authorize controlled comparison, canonical validation, Windows/manual validation, packaging, merge, synchronization, cleanup or S5-B completion. The next gate is a fresh independent **source exact-head re-audit** of the immutable contract, production owner, focused cliff regressions and retained behavior.
 
 ## Single-frame observability contract
 
@@ -62,11 +62,15 @@ Retained distinguishable clear/rapid, bright real-boundary and structural-plus-r
 
 ### Implemented observability boundary and next gate
 
-The independent Observability Contract Exact-Head Audit returned `PASS`. The bounded source implementation keeps the plateau-discriminability heuristic unchanged as a visible-artifact cue and adds no physical glare classification. Typed current-observation acceptance instead fails closed when a near-ceiling phase produces strong full-width narrow evidence but lacks the existing independent broad-phase corroboration needed to identify the boundary from the current frame. The rule is applied equally to observationally equivalent latent glare and latent oil inputs.
+The independent Observability Contract Exact-Head Audit returned `PASS`. The later source audit returned `AUDIT: FAIL` because the first implementation placed canonical acceptance behind four direct boolean conditions: dtype ceiling minus `15`, broad strength `<0.40`, near-ceiling fraction `>=0.90`, and standard deviation `<=4.0`. Adjacent observable inputs therefore produced isolated numeric/ambiguity reversals. Those conditions are retired rather than moved to new threshold values.
+
+The bounded repair keeps the plateau-discriminability heuristic unchanged as a visible-artifact cue and adds no physical glare classification. It builds continuous photometric ceiling pressure and lower-tail texture relief from current side-band samples, combines them with continuous broad-corroboration deficit and coverage/availability/visibility/sample reliability, and subtracts the resulting collision pressure from semantic boundary, artifact/no-interface/alternative dominance and ambiguity-clearance support. The final typed family is selected by one canonical identifiability margin; no raw photometric or sample statistic crossing directly switches the outcome. Observationally equivalent latent glare and latent oil inputs produce identical evidence and outcome.
+
+The focused regressions cover intensity `235–245`, broad `82–89` including the audited `85/86` pair, sparse 10% alternating/block/sinusoidal texture at low values `228–234` with both polarities, and near-ceiling support counts `4–14` across multiple ROI locations and sizes. The audited `239/240` and `8/9` pairs no longer reverse, required evidence progresses continuously, legitimate sparse texture remains numeric, and unresolved collisions remain ambiguity.
 
 The implementation does not change preprocessing, proposal construction, semantic likelihood formulas, the general boundary floor, Phase-A, temporal mathematics, fill-state, Foam, external schemas, detector version or dependencies. Existing ambiguity reduction already preserves accepted temporal state and cannot promote repeated identical unresolved frames, so no temporal owner change is required.
 
-The bounded source remains unapproved until a fresh independent source exact-head audit returns `PASS`. Controlled base/feature comparison is blocked until that audit authorizes it.
+The bounded source remains unapproved until a fresh independent source exact-head re-audit returns `PASS`. Controlled base/feature comparison is blocked until that audit authorizes it.
 
 Future architecture options are limited to separately designed and audited positive evidence such as temporal photometric/component history or capture metadata. Optical flow, retained raster history and capture-metadata schemas are not implemented by this source change.
 
@@ -553,13 +557,18 @@ The fresh independent source Auditor must verify:
 - all eight observationally equivalent collision pairs produce the same typed and canonical ambiguity family;
 - no collision publishes raw or smoothed numeric oil or selects an oil candidate;
 - repeated identical unresolved frames remain `NO_UPDATE` plus `PRESERVE` without numeric promotion;
+- the prior dtype-ceiling, `0.40` broad-strength, `0.90` near-ceiling-fraction and `4.0` standard-deviation boolean observability switches are absent;
 - the implemented boundary uses only current observable evidence and contains no latent label, fixture ID or case-specific branch;
+- intensity `235–245`, broad `82–89`, sparse texture `228–234` in both polarities, and near-ceiling support `4–14` show no isolated acceptance island and expose a continuous identifiability margin;
+- the audited `239/240`, `85/86`, texture-statistics and `8/9` neighbor pairs no longer reverse independently;
 - the general boundary floor, semantic likelihood formulas, preprocessing and plateau score are unchanged;
 - retained clear/rapid, bright-boundary, structural, historical glare, saturated-glare, malformed Phase-A and S5-A Foam contracts remain satisfied;
+- immutable contract hashes remain `818802756ebc206250f89540f06616988816b93c5e9b55b17bb42511decc8579` and `727455c5f6263a84e740fd307c9f28846af15e743c729945a4ac841a80ca3b18`;
+- the Worker-owned targeted validation reports `420 passed` with no expected failure, unexpected failure, skip, xfail or conditional acceptance;
 - temporal source is unchanged because existing ambiguity reduction already owns the repeated-sequence behavior;
 - detector version, dependencies and external schemas remain unchanged.
 
-Controlled comparison remains blocked until this fresh source audit returns `PASS`.
+Controlled comparison remains blocked until this fresh source re-audit returns `PASS`.
 
 ## Non-goals
 
@@ -581,4 +590,4 @@ Serialization may increase per-frame latency if evidence construction is expensi
 
 Broad/narrow evidence correlation under blur, fog and refractive motion, exposure-dependent full/empty classification, Glass calibration variance and debug CPU cost remain detector-evidence risks for later controlled comparison. They are not reasons to weaken serialized ownership or the observability contract.
 
-The current gate is the fresh independent source exact-head audit. Controlled comparison remains blocked until that audit returns `PASS`.
+The current gate is the fresh independent source exact-head re-audit. Controlled comparison remains blocked until that re-audit returns `PASS`.
