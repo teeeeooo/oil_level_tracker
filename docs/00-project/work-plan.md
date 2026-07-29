@@ -1,20 +1,21 @@
 # Current Work Plan
 
-- **Document status:** `CONTINUOUS_OBSERVABILITY_MARGIN_REPAIR_AUDIT_PENDING`
+- **Document status:** `ROUTE_INVARIANT_IDENTIFIABILITY_MARGIN_REPAIR_AUDIT_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Continuous-margin repair start exact head:** `1bada077b863a55cf9bf1ef6e31a0dd07365aeb4`
+- **Route-invariant margin repair start exact head:** `38080906ed7380b27628251ae37f6c79726cf788`
 - **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
 - **Authoritative diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
 - **Architecture audit:** `AUDIT: PASS`
 - **Serialized source re-audit:** `AUDIT: PASS`
 - **Observability Contract Exact-Head Audit:** `AUDIT: PASS`
-- **Latest source audit:** `AUDIT: FAIL`
+- **Continuous-margin source re-audit:** `AUDIT: FAIL`
 - **Discrete observability gate:** retired
+- **Route-dependent normalization:** retired
 - **Plateau-discriminability heuristic:** retained unchanged as a non-authoritative visible-artifact cue
 - **Controlled comparison:** rerun blocked pending fresh independent source re-audit `PASS`
 - **Current mutation owner:** bounded production source, focused regression, source-completing documentation and PR metadata
-- **Production source mutation:** continuous current-frame identifiability margin complete
+- **Production source mutation:** route-invariant current-frame identifiability margin complete
 - **Current gate:** Fresh independent source exact-head re-audit; Auditor does not merge
 - **Source repair:** complete and unapproved pending source re-audit
 - **Canonical/Qt and controlled comparison:** blocked pending source re-audit `PASS`
@@ -29,9 +30,11 @@ The controlled fixture owner records latent scene cause, physical numeric geomet
 
 The executable collision matrix covers centered partial glare at `72/74 px`, legitimate `90 → 244` phase, alternating/block/sinusoidal stripe patterns, bright-side reversal, and ROI width/location variants where the component edge disappears. Repeated identical unresolved frames are not positive temporal evidence and cannot become numeric acceptance by repetition alone.
 
-The latest independent source audit returned `AUDIT: FAIL` because the prior current-frame observability override used four independent boolean cliffs: dtype ceiling minus `15`, broad strength `<0.40`, near-ceiling fraction `>=0.90`, and standard deviation `<=4.0`. That discrete gate is retired. The plateau-discriminability heuristic remains unchanged and is not the acceptance owner.
+The prior source audit returned `AUDIT: FAIL` because the first current-frame observability override used four independent boolean cliffs: dtype ceiling minus `15`, broad strength `<0.40`, near-ceiling fraction `>=0.90`, and standard deviation `<=4.0`. The continuous-margin repair retired those switches and kept all four raw-metric cliff families closed. The plateau-discriminability heuristic remains unchanged and is not the acceptance owner.
 
-Typed observation acceptance now combines photometric ceiling pressure, lower-tail texture relief, broad-corroboration deficit, continuous coverage/availability/visibility/sample reliability, semantic boundary support, artifact/no-interface/competing-hypothesis dominance and ambiguity clearance into one bounded identifiability margin. Raw metric crossings do not directly switch the canonical family. Observationally equivalent latent glare and latent oil inputs produce identical evidence and outcome. Future temporal photometric evidence or capture metadata require a separate architecture decision; neither is implemented here. Controlled comparison remains blocked until the fresh independent source re-audit returns `PASS`, and the sequence `S5-B → S5-C → S6` is unchanged.
+The continuous-margin source re-audit then returned `AUDIT: FAIL` because otherwise identical observable evidence received a `0.40` normalization on the standard route and `0.35` on the corroborated-only route. Exact default-geometry `83 → 243` evidence therefore jumped by `+0.05` when only route ownership changed, allowing a route downgrade to increase acceptance margin.
+
+Canonical route eligibility now remains exclusively in the caller. The identifiability helper receives no standard/corroborated route flags and combines only photometric ceiling pressure, lower-tail texture relief, broad-corroboration deficit, continuous coverage/availability/visibility/sample reliability, semantic boundary support, artifact/no-interface/competing-hypothesis dominance and ambiguity clearance. One route-invariant normalization varies continuously from `0.390` to `0.400` with existing evidence reliability. The exact route-limit states now produce the same margin `-0.0137589324`; no-route evidence cannot publish a boundary because canonical candidacy is checked separately. Observationally equivalent latent glare and latent oil inputs produce identical evidence and outcome. Controlled comparison remains blocked until the fresh independent source re-audit returns `PASS`, and the sequence `S5-B → S5-C → S6` is unchanged.
 
 ## Why the previous source direction is retired
 
@@ -197,6 +200,8 @@ The later plateau-discriminability source changes remain historical implementati
 - Paired latent glare/oil interpretations retain different physical truth while sharing one ambiguous detector expectation and byte-identical effective current evidence.
 - All eight collision pairs now produce `ShadowAmbiguousObservation` and `AmbiguousOutcome` with no raw/smoothed numeric oil, no selected oil candidate, `NO_UPDATE`, `PRESERVE` and review-required projection.
 - The exact six prior red nodes are green: short-period block stripe, centered partial glare `72 px`, centered partial glare `74 px`, sinusoid with bright side above, sinusoid with bright side below and repeated identical ambiguity.
+- Exact default-geometry `83 → 243` evidence produces margin `-0.0137589324` for standard plus corroborated, standard-only and corroborated-only route labels; route ownership discontinuity is exactly `0`.
+- The structural-plus-real brightness `-12…+4` frame sweep crosses standard plus corroborated to corroborated-only without an upward margin jump, has no acceptance island, and proves positive no-route margin cannot bypass canonical candidacy.
 - Intensity `235–245` has one explainable continuous margin progression; `239/240` are both ambiguity, and the `245` outcome remains ambiguity with materially changed semantic evidence after glare masking.
 - Broad `82–89` including `85 → 244` and `86 → 244` has continuous corroboration deficit and margin progression; both audited neighbors remain ambiguity with no `0.40` switch or acceptance island.
 - Sparse 10% alternating, block and sinusoidal lower-tail textures at low values `228–234`, with both bright-side polarities, remain numeric while the audited symmetric collision textures remain ambiguity.
@@ -207,7 +212,7 @@ The later plateau-discriminability source changes remain historical implementati
 - Saturated glare remains coherent ambiguity; malformed Phase-A likelihood/projection mismatch remains fail-closed; S5-A Foam/shimmer remains independently green.
 - The immutable observability fixture and contract test SHA-256 values remain `818802756ebc206250f89540f06616988816b93c5e9b55b17bb42511decc8579` and `727455c5f6263a84e740fd307c9f28846af15e743c729945a4ac841a80ca3b18`.
 - Full observability contract file: `40 passed`.
-- Stabilized Worker-owned targeted set: `420 passed`, expected failures `0`, unexpected failures `0`, skip/xfail/conditional acceptance `0`.
+- Stabilized Worker-owned targeted set: `521 passed`, expected failures `0`, unexpected failures `0`, skip/xfail/conditional acceptance `0`.
 - Python compile and `git diff --check`: `PASS`.
 - Temporal owner, dependencies, detector version and external schemas are unchanged.
 
@@ -222,10 +227,10 @@ The later plateau-discriminability source changes remain historical implementati
 ## Latest recorded source state
 
 - **Diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`.
-- **Starting exact head:** `1bada077b863a55cf9bf1ef6e31a0dd07365aeb4`.
-- **Changed owners:** typed current-observation source, focused margin regression, source-completing architecture/work-plan documentation and PR metadata.
+- **Starting exact head:** `38080906ed7380b27628251ae37f6c79726cf788`.
+- **Changed owners:** typed current-observation source, focused route-invariance regression, source-completing architecture/work-plan documentation and PR metadata.
 - **Production owner:** `src/oil_tracker/adapters/vision/oil_shadow_observations.py`.
-- **Retired conditions:** dtype ceiling minus `15`, broad strength `<0.40`, near-ceiling fraction `>=0.90`, and standard deviation `<=4.0` as direct boolean observability switches.
+- **Retired conditions:** dtype ceiling minus `15`, broad strength `<0.40`, near-ceiling fraction `>=0.90`, and standard deviation `<=4.0` as direct boolean observability switches; route-dependent `0.40/0.35/1.00` normalization.
 - **Plateau-discriminability heuristic:** retained unchanged as a non-authoritative visible-artifact cue.
 - **Temporal owner:** unchanged; existing ambiguity reduction already prevents repeated-frame numeric promotion.
 - **Controlled comparison:** blocked pending independent source re-audit `PASS`.

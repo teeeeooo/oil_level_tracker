@@ -1,12 +1,12 @@
 # S5-B Oil-Boundary Hypothesis Architecture
 
-**Status:** `ACTIVE` continuous observability-margin repair implemented; fresh independent source exact-head re-audit pending
+**Status:** `ACTIVE` route-invariant identifiability-margin repair implemented; fresh independent source exact-head re-audit pending
 **Milestone:** [S5-B](../00-project/work-plan.md)
 **Authoritative diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
 
 This document governs the S5-B internal evidence, temporal-state, canonical-decision, canonical-outcome and detector-projection boundaries. It retains the audited serialized temporal owner while superseding the assumption that every robust oil/glare distinction can be recovered from one current frame and its existing typed evidence.
 
-`ACTIVE` identifies the governing architecture only. The audited observability contract remains immutable. The latest independent source audit returned `AUDIT: FAIL`, and the bounded continuous-margin repair is complete but unapproved. It does not authorize controlled comparison, canonical validation, Windows/manual validation, packaging, merge, synchronization, cleanup or S5-B completion. The next gate is a fresh independent **source exact-head re-audit** of the immutable contract, production owner, focused cliff regressions and retained behavior.
+`ACTIVE` identifies the governing architecture only. The audited observability contract remains immutable. The continuous-margin source re-audit returned `AUDIT: FAIL`, and the bounded route-invariant repair is complete but unapproved. It does not authorize controlled comparison, canonical validation, Windows/manual validation, packaging, merge, synchronization, cleanup or S5-B completion. The next gate is a fresh independent **source exact-head re-audit** of the immutable contract, production owner, route-limit regression, retained cliff regressions and behavior.
 
 ## Single-frame observability contract
 
@@ -64,9 +64,13 @@ Retained distinguishable clear/rapid, bright real-boundary and structural-plus-r
 
 The independent Observability Contract Exact-Head Audit returned `PASS`. The later source audit returned `AUDIT: FAIL` because the first implementation placed canonical acceptance behind four direct boolean conditions: dtype ceiling minus `15`, broad strength `<0.40`, near-ceiling fraction `>=0.90`, and standard deviation `<=4.0`. Adjacent observable inputs therefore produced isolated numeric/ambiguity reversals. Those conditions are retired rather than moved to new threshold values.
 
-The bounded repair keeps the plateau-discriminability heuristic unchanged as a visible-artifact cue and adds no physical glare classification. It builds continuous photometric ceiling pressure and lower-tail texture relief from current side-band samples, combines them with continuous broad-corroboration deficit and coverage/availability/visibility/sample reliability, and subtracts the resulting collision pressure from semantic boundary, artifact/no-interface/alternative dominance and ambiguity-clearance support. The final typed family is selected by one canonical identifiability margin; no raw photometric or sample statistic crossing directly switches the outcome. Observationally equivalent latent glare and latent oil inputs produce identical evidence and outcome.
+The continuous-margin repair keeps the plateau-discriminability heuristic unchanged as a visible-artifact cue and adds no physical glare classification. It builds continuous photometric ceiling pressure and lower-tail texture relief from current side-band samples, combines them with continuous broad-corroboration deficit and coverage/availability/visibility/sample reliability, and subtracts the resulting collision pressure from semantic boundary, artifact/no-interface/alternative dominance and ambiguity-clearance support. The retained focused regressions cover intensity `235–245`, broad `82–89`, sparse texture `228–234`, and near-ceiling support `4–14`; all four prior raw-metric cliff families remain closed.
 
-The focused regressions cover intensity `235–245`, broad `82–89` including the audited `85/86` pair, sparse 10% alternating/block/sinusoidal texture at low values `228–234` with both polarities, and near-ceiling support counts `4–14` across multiple ROI locations and sizes. The audited `239/240` and `8/9` pairs no longer reverse, required evidence progresses continuously, legitimate sparse texture remains numeric, and unresolved collisions remain ambiguity.
+The continuous-margin source re-audit returned `AUDIT: FAIL` because the helper added route-dependent normalizations: `0.40` for standard candidates, `0.35` for corroborated-only candidates and `1.00` otherwise. Identical default-geometry `83 → 243` evidence therefore changed from `-0.0139242330` to `+0.0360757670` when only route ownership changed.
+
+Canonical candidacy and identifiability are now separate owners. The caller retains the unchanged standard and corroborated eligibility rules and decides whether a boundary may be published. The private identifiability helper accepts no route flags and uses only observable continuous evidence. Its shared normalization is `0.39 + 0.01 × evidence_reliability`, so it varies continuously from `0.390` to `0.400` without route labels. Standard plus corroborated, standard-only and corroborated-only labels over fixed `83 → 243` evidence all produce margin `-0.0137589324`. A no-route candidate may have a positive diagnostic margin but remains ambiguity because the caller's canonical-candidate guard is false.
+
+The route-transition regression uses structural-plus-real brightness `-12…+4`. The standard-to-corroborated-only transition has a decreasing margin, no ambiguity-to-numeric improvement and no acceptance island. Existing intensity, broad, texture and support neighborhoods remain continuous; audited `239/240`, `85/86` and `8/9` neighbors do not reverse, legitimate texture remains numeric, and unresolved collisions remain ambiguity.
 
 The implementation does not change preprocessing, proposal construction, semantic likelihood formulas, the general boundary floor, Phase-A, temporal mathematics, fill-state, Foam, external schemas, detector version or dependencies. Existing ambiguity reduction already preserves accepted temporal state and cannot promote repeated identical unresolved frames, so no temporal owner change is required.
 
@@ -558,13 +562,16 @@ The fresh independent source Auditor must verify:
 - no collision publishes raw or smoothed numeric oil or selects an oil candidate;
 - repeated identical unresolved frames remain `NO_UPDATE` plus `PRESERVE` without numeric promotion;
 - the prior dtype-ceiling, `0.40` broad-strength, `0.90` near-ceiling-fraction and `4.0` standard-deviation boolean observability switches are absent;
+- the route-dependent `0.40/0.35/1.00` normalization and both route parameters are absent from the identifiability helper;
+- exact `83 → 243` fixed evidence produces equal component fields and margin `-0.0137589324` for standard plus corroborated, standard-only and corroborated-only labels, with discontinuity `0`;
+- the structural-plus-real brightness `-12…+4` route transition has no upward margin jump, ambiguity-to-numeric route improvement or acceptance island, while no-route positive diagnostic margin cannot publish a boundary;
 - the implemented boundary uses only current observable evidence and contains no latent label, fixture ID or case-specific branch;
 - intensity `235–245`, broad `82–89`, sparse texture `228–234` in both polarities, and near-ceiling support `4–14` show no isolated acceptance island and expose a continuous identifiability margin;
 - the audited `239/240`, `85/86`, texture-statistics and `8/9` neighbor pairs no longer reverse independently;
 - the general boundary floor, semantic likelihood formulas, preprocessing and plateau score are unchanged;
 - retained clear/rapid, bright-boundary, structural, historical glare, saturated-glare, malformed Phase-A and S5-A Foam contracts remain satisfied;
 - immutable contract hashes remain `818802756ebc206250f89540f06616988816b93c5e9b55b17bb42511decc8579` and `727455c5f6263a84e740fd307c9f28846af15e743c729945a4ac841a80ca3b18`;
-- the Worker-owned targeted validation reports `420 passed` with no expected failure, unexpected failure, skip, xfail or conditional acceptance;
+- the Worker-owned targeted validation reports `521 passed` with no expected failure, unexpected failure, skip, xfail or conditional acceptance;
 - temporal source is unchanged because existing ambiguity reduction already owns the repeated-sequence behavior;
 - detector version, dependencies and external schemas remain unchanged.
 

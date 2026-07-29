@@ -2,9 +2,12 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass
+import inspect
 
 import numpy as np
+import pytest
 
+from oil_benchmark_fixtures import controlled_oil_scenes
 from oil_observability_fixtures import single_frame_observability_collisions
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
 import oil_tracker.adapters.vision.oil_shadow_observations as observations
@@ -26,15 +29,22 @@ class _Analysis:
     observation: object
     evidence: object
     hypothesis: object
+    prepared: object
+    effective_mask: np.ndarray
+    no_interface: object
+    second_boundary: float
+    standard_boundary: bool
+    corroborated_boundary: bool
 
 
 def _analyze(
     frame: np.ndarray,
-    ellipse: EllipseGeometry = _CANONICAL_ELLIPSE,
+    ellipse: EllipseGeometry | None = _CANONICAL_ELLIPSE,
 ) -> _Analysis:
     glass = InspectionRecipe.default_glass(320, 240)
     glass.id = "observability-margin-regression"
-    glass.geometry.ellipse = ellipse
+    if ellipse is not None:
+        glass.geometry.ellipse = ellipse
     bundle = build_mask_bundle(frame, glass)
     prepared = preprocess(
         bundle.crop,
@@ -99,15 +109,23 @@ def _analyze(
         best,
         no_interface,
         second_boundary,
-        standard_boundary=standard_boundary,
-        corroborated_single_boundary=corroborated_boundary,
     )
     current = observations.evaluate_typed_current_observation(
         prepared,
         bundle.effective_mask,
         hypotheses,
     )
-    return _Analysis(current, evidence, best)
+    return _Analysis(
+        current,
+        evidence,
+        best,
+        prepared,
+        bundle.effective_mask,
+        no_interface,
+        second_boundary,
+        standard_boundary,
+        corroborated_boundary,
+    )
 
 
 def _uniform_phase(high: int, *, low: int = 90) -> np.ndarray:
@@ -156,6 +174,27 @@ def _near_ceiling_support_frame(center_x: int, count: int) -> np.ndarray:
     return frame
 
 
+def _adjust_brightness(frame: np.ndarray, delta: int) -> np.ndarray:
+    adjusted = frame.astype(np.int16) + int(delta)
+    return np.clip(adjusted, 0, 255).astype(frame.dtype)
+
+
+def _route_owned_evidence(
+    row: _Analysis,
+    *,
+    standard_boundary: bool,
+    corroborated_boundary: bool,
+):
+    assert standard_boundary or corroborated_boundary
+    return observations._single_frame_identifiability_evidence(
+        row.prepared,
+        row.effective_mask,
+        row.hypothesis,
+        row.no_interface,
+        row.second_boundary,
+    )
+
+
 def _accepted(row: _Analysis) -> bool:
     return isinstance(row.observation, ShadowBoundaryObservation)
 
@@ -180,6 +219,82 @@ def _assert_adjacent_margin_change(
         abs(right - left) <= maximum
         for left, right in zip(margins, margins[1:])
     ), margins
+
+
+def test_exact_83_243_one_sided_route_limit_is_invariant() -> None:
+    row = _analyze(_uniform_phase(243, low=83), ellipse=None)
+    assert row.standard_boundary
+    assert row.corroborated_boundary
+
+    overlap = _route_owned_evidence(
+        row,
+        standard_boundary=True,
+        corroborated_boundary=True,
+    )
+    corroborated_only = _route_owned_evidence(
+        row,
+        standard_boundary=False,
+        corroborated_boundary=True,
+    )
+
+    assert overlap == corroborated_only
+    assert overlap.acceptance_margin == pytest.approx(-0.0137589324, abs=1e-9)
+    assert corroborated_only.acceptance_margin <= overlap.acceptance_margin
+    assert corroborated_only.acceptance_margin - overlap.acceptance_margin == 0.0
+
+
+def test_canonical_route_state_matrix_does_not_enter_identifiability() -> None:
+    row = _analyze(_uniform_phase(243, low=83), ellipse=None)
+    route_states = ((True, True), (True, False), (False, True))
+    evidence = [
+        _route_owned_evidence(
+            row,
+            standard_boundary=standard,
+            corroborated_boundary=corroborated,
+        )
+        for standard, corroborated in route_states
+    ]
+
+    assert all(item == evidence[0] for item in evidence[1:])
+    parameters = inspect.signature(
+        observations._single_frame_identifiability_evidence
+    ).parameters
+    assert "standard_boundary" not in parameters
+    assert "corroborated_single_boundary" not in parameters
+
+
+def test_real_frame_route_transition_has_no_upward_margin_jump() -> None:
+    scene = next(
+        item
+        for item in controlled_oil_scenes()
+        if item.case_id == "structural-plus-real"
+    )
+    deltas = list(range(-12, 5))
+    rows = {
+        delta: _analyze(_adjust_brightness(scene.frame, delta), ellipse=None)
+        for delta in deltas
+    }
+
+    assert rows[-8].standard_boundary and rows[-8].corroborated_boundary
+    assert not rows[-7].standard_boundary and rows[-7].corroborated_boundary
+    assert rows[-7].evidence.acceptance_margin <= rows[-8].evidence.acceptance_margin
+    assert all(_accepted(rows[delta]) for delta in range(-8, 1))
+
+    corroborated_margins = [
+        rows[delta].evidence.acceptance_margin for delta in range(-7, 1)
+    ]
+    assert all(
+        left >= right
+        for left, right in zip(corroborated_margins, corroborated_margins[1:])
+    ), corroborated_margins
+
+    assert not rows[1].standard_boundary
+    assert not rows[1].corroborated_boundary
+    assert rows[1].evidence.acceptance_margin > 0.0
+    assert isinstance(rows[1].observation, ShadowAmbiguousObservation)
+    assert rows[1].hypothesis.boundary_likelihood < rows[0].hypothesis.boundary_likelihood
+    assert rows[1].evidence.acceptance_margin < rows[0].evidence.acceptance_margin
+    _assert_no_isolated_outcome([rows[delta] for delta in deltas])
 
 
 def test_discrete_observability_conflict_gate_is_retired() -> None:

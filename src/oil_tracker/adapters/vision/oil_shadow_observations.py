@@ -338,8 +338,6 @@ def evaluate_typed_current_observation(
             best,
             no_interface,
             second_boundary,
-            standard_boundary=standard_boundary,
-            corroborated_single_boundary=corroborated_single_boundary,
         )
         if canonical_boundary_candidate and identifiability.acceptance_margin >= 0.0:
             return ShadowBoundaryObservation(
@@ -402,9 +400,6 @@ def _single_frame_identifiability_evidence(
     best: SemanticHypothesis,
     no_interface: ShadowNoInterfaceEvidence,
     second_boundary: float,
-    *,
-    standard_boundary: bool,
-    corroborated_single_boundary: bool,
 ) -> _SingleFrameIdentifiabilityEvidence:
     """Combine current-frame semantic and photometric evidence into one margin."""
 
@@ -528,13 +523,9 @@ def _single_frame_identifiability_evidence(
         )
         * (0.70 + 0.30 * evidence_reliability)
     )
-    route_baseline = (
-        0.40
-        if standard_boundary
-        else 0.35 if corroborated_single_boundary else 1.0
-    )
+    canonical_normalization = 0.39 + 0.01 * evidence_reliability
     acceptance_margin = (
-        semantic_support - route_baseline - 1.10 * collision_pressure
+        semantic_support - canonical_normalization - 1.10 * collision_pressure
     )
     return _SingleFrameIdentifiabilityEvidence(
         phase_ceiling_pressure=_unit(phase_ceiling_pressure),
