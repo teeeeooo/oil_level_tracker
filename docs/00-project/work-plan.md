@@ -1,26 +1,41 @@
 # Current Work Plan
 
-- **Document status:** `ROUTE_INVARIANT_IDENTIFIABILITY_MARGIN_REPAIR_AUDIT_PENDING`
+- **Document status:** `DETERMINISTIC_CONTROLLED_DATASET_INFRA_AUDIT_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Route-invariant margin repair start exact head:** `38080906ed7380b27628251ae37f6c79726cf788`
+- **Deterministic infrastructure start exact head:** `0e2f0459c075c729d0702a6edb293e90a114057e`
 - **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
-- **Authoritative diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
-- **Architecture audit:** `AUDIT: PASS`
-- **Serialized source re-audit:** `AUDIT: PASS`
-- **Observability Contract Exact-Head Audit:** `AUDIT: PASS`
-- **Continuous-margin source re-audit:** `AUDIT: FAIL`
-- **Discrete observability gate:** retired
-- **Route-dependent normalization:** retired
-- **Plateau-discriminability heuristic:** retained unchanged as a non-authoritative visible-artifact cue
-- **Controlled comparison:** rerun blocked pending fresh independent source re-audit `PASS`
-- **Current mutation owner:** bounded production source, focused regression, source-completing documentation and PR metadata
-- **Production source mutation:** route-invariant current-frame identifiability margin complete
-- **Current gate:** Fresh independent source exact-head re-audit; Auditor does not merge
-- **Source repair:** complete and unapproved pending source re-audit
-- **Canonical/Qt and controlled comparison:** blocked pending source re-audit `PASS`
+- **Authoritative observability diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
+- **Route-invariant source audit:** `AUDIT: PASS`
+- **Controlled comparison:** functional metrics passed; CPU ratio `4.2818×`; overall `COMPARISON: FAIL`
+- **Performance attribution:** `DIAGNOSIS: BLOCKED`
+- **Attribution blocker:** prior exported oil/Foam dataset bytes were not preserved and fresh export identities were nondeterministic
+- **Current mutation owner:** test infrastructure, one default-preserving exporter identity seam, quality documentation and PR metadata
+- **Detector/threshold/temporal/observability mutation:** prohibited and unchanged
+- **Deterministic controlled infrastructure:** implemented and unapproved
+- **Current gate:** fresh independent test-infrastructure exact-head audit; Auditor does not merge
+- **Controlled comparison and CPU attribution:** blocked until the infrastructure audit returns `PASS`
+- **Canonical/Qt, Windows/manual and packaging:** not authorized by this infrastructure task
 
 This plan records the bounded production implementation of the audited S5-B single-frame observability contract. The existing detector input and typed evidence cannot always distinguish partial glare from a legitimate oil phase; therefore latent physical truth and detector-observable outcome remain separate contract dimensions. The implementation changes only typed current-observation acceptance in `oil_shadow_observations.py`; proposal construction, semantic scoring, Phase-A validation, temporal reducer/store, fill-state, smoothing, Foam ownership, detector version, dependencies and external schemas remain unchanged.
+
+## Deterministic controlled dataset identity repair
+
+The accepted route-invariant source head passed independent audit, and the subsequent controlled base/feature comparison preserved the functional contracts but failed the existing CPU limit: base median `0.0083682 s/detection`, feature median `0.0358307 s/detection`, ratio `4.2818×` against limit `1.5×`. CPU attribution then returned `DIAGNOSIS: BLOCKED` because the exact exported dataset directories had been deleted and the controlled generators still inherited runtime UUID and timestamp identity from the production truth/export workflow.
+
+The test-infrastructure repair keeps the production workflow unchanged. `RegressionFixtureExporter` accepts one optional `dataset_id_factory`; when omitted it still calls a fresh UUID4 for each export, and production callers omit it. Controlled oil and Foam fixture owners instead provide explicit UUID5 identities and fixed timestamps derived from dataset kind, controlled contract version `v1`, canonical bundle/recipe/session identity, category and sequence metadata, truth values and every scene raster SHA-256. Recipe creation/update timestamps and controlled session source paths are normalized only in the test-owned snapshots before hashing. The reader fingerprint payload, manifest schemas, integrity hashes, safe-path checks and atomic finalization remain unchanged.
+
+The retired one-off comparison identities are no longer authoritative inputs:
+
+- oil: `0528deb1b0d71b8569561f78d6433975ffb7c6154326de9a568d4ec185114155`;
+- Foam: `a091165d0177817a18a94061ffce8fd524ee268444c41e247a97aaa44cc95ee8`.
+
+The new unapproved deterministic `v1` identities are:
+
+- oil dataset ID `e176b4d4-925b-5496-b3c9-735328c4fe19`, annotation-set ID `14b48b9f-418d-5192-90d0-b18d5bbf54ea`, reader fingerprint `f0c122bd6cab823934004d7bcb163c2d7c112f8b8e42594a7dc99440c022265d`;
+- Foam dataset ID `911c2572-de66-53b1-8c97-9c25e32aefe0`, annotation-set ID `a5ed8021-9594-5297-9f47-dbb978077ed2`, reader fingerprint `ddd3c195998ee11daa7e6819e94af1a9ed817867b25817b49b176e12f31af83b`.
+
+These identities are test infrastructure evidence only. They do not approve source behavior or the performance result. After independent infrastructure audit `PASS`, CPU attribution and the complete controlled comparison must be rerun fresh on the accepted deterministic bytes.
 
 ## Current observability decision
 

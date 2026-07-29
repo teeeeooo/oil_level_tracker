@@ -25,6 +25,16 @@ Observationally equivalent latent glare/oil pairs must have the same canonical
 review-required projection. Repeated identical unresolved observations do not become
 positive temporal evidence. See the [S5-B architecture contract](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md).
 
+## Deterministic controlled comparison datasets
+
+Repository-owned synthetic oil and Foam comparison generators use the same exporter, reader, truth and catalog schemas as ordinary datasets, but their test owner must make every exported byte reproducible across temporary roots and Python processes. `tests/controlled_dataset_identity.py` owns controlled contract version `v1`, fixed timestamps and namespace-based UUID5 derivation for the dataset, annotation set and per-case annotations. The derivation includes dataset kind, recipe and session snapshots, bundle identity, category and sequence metadata, truth fields and each raster SHA-256. Oil and Foam therefore have distinct stable identities, and a contract-version or raster change produces a different identity rather than silently reusing an old one.
+
+The only production seam is the optional exporter `dataset_id_factory`. Its default remains a new UUID4 on every export. The UI and user truth/export workflow do not pass the seam and retain runtime UUID uniqueness and wall-clock timestamps. Controlled fixture code supplies the deterministic factory and constructs an explicit fixed-time `UserTruthSet`; it does not modify `UserTruthSet.create()` or annotation defaults.
+
+Controlled recipe creation/update timestamps and session source paths are normalized only inside generated test snapshots. Geometry, detector settings, truth, rasters, categories, sequence membership/order and schema versions are not normalized or inferred. Reader fingerprint composition, SHA-256 verification, traversal/symlink protection and atomic export finalization remain load-bearing and unchanged. Generated datasets remain outside the repository.
+
+The former oil and Foam fingerprints `0528deb1…` and `a091165d…` were one-off runtime identities whose bytes were not preserved and are retired. The deterministic `v1` fingerprints `f0c122bd…` and `ddd3c195…` remain unapproved until a fresh independent test-infrastructure audit passes.
+
 ## Dataset source
 
 Create annotations in Result Review and export them with the Phase 2C-3 regression

@@ -9,7 +9,10 @@ import cv2
 import numpy as np
 
 from benchmark_fixtures import write_catalog
-from oil_tracker.adapters.storage.json_truth_repository import build_truth_bundle_identity
+from controlled_dataset_identity import (
+    CONTROLLED_CONTRACT_VERSION,
+    prepare_controlled_dataset_identity,
+)
 from oil_tracker.adapters.storage.regression_fixture_exporter import RegressionFixtureExporter
 from oil_tracker.application.services.user_truth import TruthFrameContext, UserTruthService
 from oil_tracker.domain.detector_benchmark import BenchmarkCategory
@@ -70,13 +73,24 @@ class ControlledVideoReader:
         self.closed = True
 
 
-def generate_controlled_foam_dataset(tmp_path: Path):
+def generate_controlled_foam_dataset(
+    tmp_path: Path,
+    *,
+    contract_version: str = CONTROLLED_CONTRACT_VERSION,
+):
     bundle = make_truth_bundle(tmp_path / "controlled")
     _make_recipe_snapshot_base_compatible(bundle)
     scenes = controlled_scenes()
     service = UserTruthService()
-    identity = build_truth_bundle_identity(bundle)
-    truth_set = service.create_set(identity)
+    controlled_identity = prepare_controlled_dataset_identity(
+        bundle,
+        scenes,
+        dataset_kind="foam",
+        contract_version=contract_version,
+        fixed_time=FIXED_TIME,
+    )
+    identity = controlled_identity.truth_set.bundle_identity
+    truth_set = controlled_identity.truth_set
     annotations = []
     glass = bundle.recipe.glasses[0]
     for index, scene in enumerate(scenes, 1):
@@ -100,16 +114,24 @@ def generate_controlled_foam_dataset(tmp_path: Path):
             error_types=(TruthErrorType.OTHER,),
             note=f"controlled scene contract: {scene.case_id}",
             official_reference=service.official_reference(bundle, glass, scene.timestamp),
+            now=controlled_identity.timestamp_iso,
         )
         annotation = replace(
             annotation,
-            annotation_id=f"controlled-{index:03d}-{scene.case_id}",
+            annotation_id=controlled_identity.annotation_id(index, scene.case_id),
             revision=index,
         )
-        truth_set.upsert(annotation)
+        annotation = truth_set.upsert(
+            annotation,
+            now=controlled_identity.timestamp_iso,
+        )
         annotations.append(annotation)
     reader = ControlledVideoReader(bundle.source_video_path, bundle.source_metadata, scenes)
-    exporter = RegressionFixtureExporter(lambda _path: reader, clock=lambda: FIXED_TIME)
+    exporter = RegressionFixtureExporter(
+        lambda _path: reader,
+        clock=lambda: FIXED_TIME,
+        dataset_id_factory=lambda: controlled_identity.dataset_id,
+    )
     result = exporter.export(
         bundle,
         truth_set,

@@ -90,10 +90,12 @@ class RegressionFixtureExporter:
         *,
         frame_policy: FrameIdentityPolicy | None = None,
         clock: Callable[[], datetime] | None = None,
+        dataset_id_factory: Callable[[], str] | None = None,
     ) -> None:
         self.reader_factory = reader_factory
         self.frame_policy = frame_policy or FrameIdentityPolicy()
         self.clock = clock or (lambda: datetime.now(timezone.utc))
+        self.dataset_id_factory = dataset_id_factory or (lambda: str(uuid4()))
 
     def deterministic_fixture_id(self, bundle, annotation: UserTruthAnnotation) -> str:
         prefix = _safe_component(annotation.glass_id)[:24] or "glass"
@@ -169,7 +171,7 @@ class RegressionFixtureExporter:
         reader = None
         warnings: list[str] = []
         decoded_count = 0
-        dataset_id = str(uuid4())
+        dataset_id = str(self.dataset_id_factory())
         fixture_entries: list[dict] = []
         try:
             self._check_cancel(cancellation)
