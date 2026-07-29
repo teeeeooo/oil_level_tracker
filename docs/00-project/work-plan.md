@@ -5,9 +5,9 @@
 - **Authoritative branch:** `main`
 - **Close task-start main:** `df2c49c7fc0db5a44fca26a8da49f581288bff4e`
 - **Previous milestone:** `S5-B — Oil-boundary hypothesis architecture` — `DONE`
-- **Current gate:** define and execute the bounded S5-C canonical/Qt stabilization task without reopening S5-B source behavior
+- **Current gate:** Worker implementation complete on the bounded S5-C feature branch; fresh independent Lane C audit pending
 - **Current blocker:** none
-- **Next action:** confirm QApplication/QCoreApplication ownership, GUI-fixture isolation and duplicate canonical coverage boundaries before implementation
+- **Next action:** independently audit the exact feature head, canonical/Qt focused validation, headless non-regression and mergeability
 - **S6 Windows/manual, real-video and packaging validation:** not started
 
 S5-C is a separate validation-stability milestone. It must preserve the merged S5-B typed oil-boundary architecture, observability contract, serialized temporal owner, S5-A Foam independence, detector schemas and headless validation behavior.
@@ -23,6 +23,22 @@ The bounded S5-C task owns only:
 - explicit evidence for any intentionally retained canonical/Qt exclusions.
 
 S5-C does not own detector threshold changes, oil/Foam semantic changes, S5-B architecture redesign, real-video qualification, Windows/manual acceptance or packaging.
+
+## S5-C Worker evidence
+
+- **Exact base:** `a6f0a95c862ebeaeabc25ad140172dfc7b37d3e1`
+- **Feature branch:** `feature/s5c-canonical-qt-validation-stabilization`
+- **Unmodified canonical baseline:** `1160 passed, 1 failed` on Python `3.14.4`, PySide6 `6.11.1` and pytest-qt `4.5.0`; no Qt crash or teardown failure occurred.
+- **Baseline failure class:** the headless CLI child process could not import the source tree because it implicitly relied on editable installation; root `conftest.py` also leaked `QT_QPA_PLATFORM=offscreen` to all tests and child processes.
+- **Application evidence:** the first `qtbot` group created one `QApplication`; `QCoreApplication.instance()` resolves to the same object. A QObject-only focused test created no application.
+- **Lifecycle choice:** one session `qapp`, temporary offscreen platform injection, automatic `qt_app` ownership and non-mutating post-test state verification. No `QCoreApplication` subprocess owner, suite serialization or per-test GUI subprocess is used.
+- **Coverage ownership:** no acceptance test was removed or moved. `python -m pytest -m qt_app` is a focused selection of canonical tests, not duplicate mandatory coverage.
+- **Focused Qt result:** `161 passed, 1005 deselected`.
+- **Canonical result:** `1166 passed in 131.68s`; no failure, crash, skip, xfail or conditional acceptance.
+- **Order evidence:** GUI-before-headless and headless-before-GUI each reported `2 passed`.
+- **Headless result:** `12 passed in 6.30s`; CLI import uses an explicit source-tree environment, excludes Qt platform state and imports neither PySide6 nor application bootstrap.
+- **Intentional non-runs:** S6 real-video, Windows/manual, packaging and clean-PC acceptance remain not started.
+- **Next gate:** fresh independent Lane C Auditor on the exact PR head.
 
 ## Latest recorded closeout
 

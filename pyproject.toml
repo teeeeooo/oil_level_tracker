@@ -40,6 +40,9 @@ oil_tracker = ["adapters/reporting/templates/*.j2", "resources/styles/*.qss", "r
 addopts = "-ra"
 testpaths = ["tests"]
 qt_api = "pyside6"
+markers = [
+  "qt_app: requires the process-owned QApplication and Qt teardown verification",
+]
 
 [tool.coverage.run]
 source = ["oil_tracker"]

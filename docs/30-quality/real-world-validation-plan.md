@@ -143,6 +143,32 @@ Acceptance requires:
 
 Numerical thresholds are set by the controlled-comparison owner using the accepted baseline and must be recorded in the work-plan closeout, not duplicated in the roadmap.
 
+## S5-C canonical and Qt lifecycle gate
+
+The canonical test process has one application owner: the session-scoped `qapp`
+fixture in `tests/conftest.py`. Its default `qapp_cls` is pytest-qt's
+`QApplication`; `QCoreApplication.instance()` therefore resolves to that same object
+once GUI tests begin. A separate `QCoreApplication` process is not used because the
+Qt Core/value and QObject-only tests do not require an application instance.
+
+`QT_QPA_PLATFORM=offscreen` is injected only while the test `QApplication` is first
+constructed and is then restored. Tests requesting `qapp` or `qtbot` are marked
+`qt_app` during collection. pytest-qt owns registered-widget teardown, and each
+controller test owns its worker-thread shutdown. The repository fixture only verifies
+that no visible top-level widget or global `QThreadPool` task remains; it does not
+force-delete QObjects, quit threads or drain deferred deletes globally.
+
+The canonical command remains `python -m pytest`. The focused diagnostic command is
+`python -m pytest -m qt_app`; it selects the same acceptance tests and is not an
+additional duplicate pipeline obligation. Headless subprocess tests receive an
+explicit source-tree `PYTHONPATH` and no Qt platform variable, so their import contract
+does not depend on editable installation or prior GUI test order.
+
+S5-C acceptance requires both GUI-before-headless and headless-before-GUI focused
+orders to pass. Process isolation is introduced only if direct evidence later proves
+that incompatible application classes are required; broad suite serialization and
+per-test GUI subprocesses remain prohibited.
+
 ## Windows and packaging gate
 
 - Run the canonical suite on Python 3.14.
