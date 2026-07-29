@@ -1,37 +1,32 @@
 # Current Work Plan
 
-- **Document status:** `PLATEAU_DISCRIMINABILITY_REAUDIT_PENDING`
+- **Document status:** `OBSERVABILITY_CONTRACT_AUDIT_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Implementation-start exact head:** `79428752f5b026e92dcd36f7ddc595da3bea8fd6`
-- **Implementation-start exact parent:** `fc923dbdfbf827da7ba1f8193a2ba5314ed9b606`
-- **Serialized repair exact head:** `e0d5c9fddb53c549bac0e56a4b7b6084862e5ca7`
-- **Serialized repair exact parent:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`
-- **Calibration-start exact head:** `e0d5c9fddb53c549bac0e56a4b7b6084862e5ca7`
-- **Calibration-start exact parent:** `687105264d6b4982216bdd06d076b2bd48f6cc3b`
-- **Dominance-robustness start exact head:** `912a94b1cd62b0164e896a7e02dbb1df1c0c85dc`
-- **Dominance-robustness start exact parent:** `e0d5c9fddb53c549bac0e56a4b7b6084862e5ca7`
-- **Typed-coherence start exact head:** `328a63a5472367aa3c5f2f3266a624f03e64c16d`
-- **Typed-coherence start exact parent:** `15230707d45c4b719719feff09d40a516934093c`
-- **Semantic-glare repair start exact head:** `1386331e628cdab6b6fce40ece3100141dd58982`
-- **Support-generalization repair start exact head:** `eba6a7cf4fa75cb77fada712d919057dbe6de80a`
-- **Plateau-discriminability repair start exact head:** `584030d402d6c802f9fc6887ff632ef28f9ff449`
+- **Observability-contract start exact head:** `d558fecc0c043037043af3967aec7fd197afcf5e`
 - **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
+- **Authoritative diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
 - **Architecture audit:** `AUDIT: PASS`
 - **Serialized source re-audit:** `AUDIT: PASS`
-- **Calibration source audit:** `AUDIT: FAIL`
-- **Semantic glare source audit:** `AUDIT: FAIL`
-- **Semantic glare source re-audit:** `AUDIT: FAIL`
-- **Controlled comparison:** `COMPARISON: FAIL`
-- **Failure attribution:** `DIAGNOSIS: COMPLETE`
-- **Glare helper disposition:** `INVALID_AND_REPLACE`, repaired by the honest perturbation contract
-- **Primary repair owner:** `src/oil_tracker/adapters/vision/oil_shadow_observations.py`
-- **Current gate:** Fresh independent exact-head source re-audit
-- **Implementation status:** Localized high-contrast glare components and strong distributed fine variation are separated from weak full-phase texture without a width acceptance cliff
-- **Glare coherence:** Typed construction remains coherent; the width-cliff and legitimate-texture recall findings are repaired on the Worker head
-- **Controlled comparison and canonical validation:** Blocked pending source re-audit `PASS`
+- **Latest plateau-discriminability source state:** `NOT APPROVED`
+- **Controlled comparison:** `COMPARISON: FAIL`, rerun blocked
+- **Current mutation owner:** documentation, controlled observability fixtures, tests and PR metadata only
+- **Production source mutation:** `NOT RUN`
+- **Current gate:** Fresh independent Observability Contract Exact-Head Audit
+- **Source repair:** Blocked pending contract audit `PASS`
+- **Canonical/Qt and controlled comparison:** Blocked pending contract audit and later source audit
 
-This plan records the bounded S5-B semantic glare plateau-discriminability repair after the latest independent source re-audit returned `AUDIT: FAIL`. It does not change preprocessing glare threshold, raw observation/proposal construction, boundary acceptance, Phase-A validation, temporal/fill-state ownership, fixtures, external schemas or detector version, and it does not approve controlled comparison, canonical validation, Windows/manual validation, packaging, merge or S5-B completion.
+This plan records the S5-B single-frame observability contract after the authoritative diagnosis `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`. The existing detector input and typed evidence cannot always distinguish partial glare from a legitimate oil phase; therefore latent physical truth and detector-observable outcome are separate contract dimensions. This Worker changes no production source, threshold, proposal construction, Phase-A validator, temporal reducer/store, fill-state, smoothing, Foam owner, detector version, dependency or external schema.
+
+## Current observability decision
+
+When oil boundary versus glare artifact is unidentifiable from the current frame and typed evidence, the only legal canonical family is `AmbiguousOutcome`. No raw or smoothed numeric oil is published, no oil candidate is selected, compatibility remains `NO_UPDATE` plus `PRESERVE`, and review-required projection is retained.
+
+The controlled fixture owner records latent scene cause, physical numeric geometry presence, latent oil Y, detector identifiability and expected canonical family separately. Paired latent interpretations can therefore share an identical effective observation without deleting or weakening physical truth.
+
+The executable collision matrix covers centered partial glare at `72/74 px`, legitimate `90 → 244` phase, alternating/block/sinusoidal stripe patterns, bright-side reversal, and ROI width/location variants where the component edge disappears. Repeated identical unresolved frames are not positive temporal evidence and cannot become numeric acceptance by repetition alone.
+
+The current plateau-discriminability repair is not approved. Production source repair and controlled comparison remain blocked until the fresh independent contract audit returns `PASS`. Future temporal photometric evidence or capture metadata require a separate architecture decision; neither is implemented here. The sequence `S5-B → S5-C → S6` is unchanged.
 
 ## Why the previous source direction is retired
 
@@ -184,56 +179,47 @@ The general neighborhood helper now uses non-wrapping `cv2.warpAffine` vertical 
 
 The mandatory `glare-recovery-1` `0.92×` contrast probe moves from source maximum `255` with a populated `>=245` mask to transformed maximum `244` with zero `>=245` pixels while retaining positive `>=240` population. The honest helper contract and deterministic diagnostics remain unchanged. At the typed-coherence gate, the two near-threshold glare-only and nineteen Foam clipped-glare findings remained red and were retained as the acceptance contract for the semantic repair below.
 
-The current semantic repair makes all `21` assertions green without skipping, xfail, conditional weakening, false-oil acceptance, fixture changes or truth changes.
+The exact historical set of two near-threshold glare-only probes and nineteen Foam clipped-glare probes remains an executable `21`-case no-numeric contract without skip, xfail, conditional weakening, false-oil acceptance or truth deletion.
 
-## Typed ambiguous-observation coherence repair
+## Retained typed and source history
 
-A contextual ambiguity value may summarize frame-level glare or the minimum ambiguity floor rather than one semantic hypothesis. The construction now retains `projected_source_y` only when that aggregate ambiguity remains equal to the selected hypothesis's canonical ambiguity within the existing Phase-A numeric tolerance. Otherwise it preserves the aggregate likelihoods and referenced hypothesis identities but emits no specific projected Y.
+The earlier typed-coherence repair remains retained: malformed Phase-A likelihood/projection mismatch is rejected, while original saturated glare produces coherent `AmbiguousOutcome`, no raw or smoothed numeric oil, `NO_UPDATE`, `PRESERVE` and review-required projection. S5-A Foam remains independently governed.
 
-This keeps Phase-A unchanged and fail-closed: a malformed observation that claims a canonical hypothesis Y while supplying mismatched likelihoods is still rejected. Original saturated glare now produces coherent `AmbiguousOutcome`, no raw or smoothed numeric oil, `NO_UPDATE`, `PRESERVE`, glare/review flags and identical fresh-repeat/debug results. General thresholds, semantic scores, artifact penalties, preprocessing glare threshold, temporal reduction, fill-state, Foam, external schemas and detector version are unchanged.
+The later plateau-discriminability source changes remain historical implementation evidence only. The new diagnosis shows that local component and texture evidence cannot resolve every single-frame collision, so those changes are not approved as the final contract or as authority for controlled comparison.
 
-## Semantic glare plateau-discriminability repair
+## Contract evidence status
 
-The latest independent semantic source re-audit returned `AUDIT: FAIL` with two blockers. A centered uniform partial glare changed from no numeric oil at width `56 px` to accepted numeric oil at `58–60 px`, because the short side band became horizontally uniform once the glare component filled the local mask run. At the same time, normalized horizontal autocorrelation discarded texture amplitude and therefore classified weak stripes, smooth gradients and sinusoidal banding inside a legitimate oil phase as strong plateau artifacts.
-
-The repair uses two continuous and complementary row evidences inside the same observation owner. Localized-component evidence evaluates only the strongest bounded set of lateral edges and raises support when one strong split or one opposite-edge pair explains a high-contrast component. Contrast and edge strength are squared before bounded weighting, so weak oil texture decays rapidly instead of crossing a hard threshold. Distributed-fine-texture evidence uses mean adjacent total variation with a steep continuous response and discounts the two strongest edges; it therefore retains the dense `240–244` glare pattern and clipped-glare Foam evidence without treating smooth or low-amplitude full-phase texture as glare.
-
-Each hypothesis side now uses a window proportional to `45%` of valid ROI height and a proportional center gap. Only the longest contiguous mask run is evaluated when it covers at least `25%` of the ROI reference width. Row evidence is averaged across the complete side window and weighted by actual run width. A partial glare that fills the mask at the candidate row therefore remains visible in farther rows as the ellipse widens, and the score decreases continuously as width increases rather than collapsing at one mask-width boundary. Sparse, fragmented and single-column support remain fail-closed.
-
-The evidence remains a private semantic term in `oil_shadow_observations.py`. Preprocessing, raw observations, proposals, acceptance thresholds, Phase-A, typed coherence, no-interface meaning, temporal/fill-state ownership, Foam, fixtures, schemas and detector version remain unchanged.
-
-## Controlled evidence status
-
-- Controlled comparison remains `COMPARISON: FAIL`; a new comparison is unauthorized until source re-audit `PASS`.
-- Latest semantic glare source re-audit: `AUDIT: FAIL`; the width-cliff and legitimate-texture blockers are repaired on the Worker head and require fresh re-audit.
-- Exact prior negatives: all two glare-only contrast and nineteen Foam clipped-glare probes produce no raw numeric oil.
-- Uniform partial-glare width sweep `48–70 px`, including required `52`, `56`, `60` and `64 px`, produces no numeric oil. Artifact scores are non-increasing and every adjacent width delta is below `0.30`, so the prior `56 → 58 px` decision cliff is absent.
-- Five horizontal locations and four scaled ellipse ROIs retain partial-glare suppression.
-- Bright real-boundary matrix: all seven cases remain truth-near numeric oil, including both bright-side directions, threshold-minus-one, local bright line and both ROI limits.
-- Legitimate phase-texture matrix: all nine weak stripe, smooth-gradient and sinusoidal cases remain truth-near numeric oil across brightness, amplitude, position and phase-side variation.
-- ROI support matrix at `40×50`, `80×100` and `160×200`: broad localized glare scores above `0.80`; sparse, fragmented and single-column support score `0.0`.
-- Final targeted set: `326 passed` across focused semantic evidence, the controlled oil benchmark file and focused S5-A Foam/shimmer acceptance.
-- Clear/rapid neighborhoods, direct semantic recall, structural-only/structural-plus-real separation, saturated glare typed ambiguity, malformed Phase-A mismatch rejection, raster immutability and debug equality remain green.
-- S5-A gate remains green with Foam precision `1.0`, Foam recall `>=0.80` and shimmer Foam false-positive rate `0.0`.
-- Next gate: fresh independent exact-head source re-audit; that Auditor does not merge.
+- Paired latent glare/oil interpretations carry different physical truth while sharing one ambiguous detector expectation.
+- Centered `72/74 px` partial glare and legitimate `90 → 244` oil phase are effective-observation equivalent under the controlled ellipse.
+- Alternating, short-block and sinusoidal texture plus bright-side reversal are included as unresolved single-frame collisions.
+- Shifted/narrow ROI cases prove equivalence when the component edge disappears; these already fail closed under the current source and remain retained contract coverage.
+- Repeated identical unresolved frames must remain ambiguity with no numeric promotion.
+- Exact historical glare negatives: `21` no-numeric cases retained.
+- Distinguishable clear/rapid, bright reversed and structural-plus-real cases remain truth-near numeric; structural-only remains no numeric.
+- Saturated glare, malformed Phase-A mismatch and S5-A Foam contracts remain retained.
+- No production source, dependency, detector version or external schema is changed by this Worker.
+- Final targeted contract set: `45 passed, 6 failed`; all six failures are expected current-source contract gaps and unexpected failures are `0`.
+- Red collision nodes: short-period block stripe, centered partial glare `72 px`, centered partial glare `74 px`, sinusoid with bright side above, sinusoid with bright side below, and repeated identical ambiguity.
+- Each single-frame red collision currently produces `ShadowBoundaryObservation` → `AcceptedBoundaryOutcome`, raw/smoothed `80.0`, `ACCEPT_BOUNDARY`/`PRESERVE`, and no review flag instead of the required ambiguity/no-numeric result.
+- The repeated sequence currently publishes raw/smoothed `80.0` on all six frames and treats every frame as accepted boundary evidence.
 
 ## Downstream sequence
 
-1. Fresh independent exact-head source re-audit of the plateau-discriminability repair.
-2. Controlled base/feature comparison only after source re-audit `PASS`.
-3. Formal S5-B completion under separate merge authority.
-4. `S5-C — Canonical/Qt validation stabilization` as a distinct post-S5-B gate.
-5. S6 real-video, Windows/manual and packaging validation.
+1. Fresh independent Observability Contract Exact-Head Audit; the Auditor does not merge.
+2. Only after contract `PASS`, a separate bounded production source implementation and fresh exact-head source audit.
+3. Controlled base/feature comparison only after the source audit authorizes it.
+4. Formal S5-B completion under separate merge authority.
+5. `S5-C — Canonical/Qt validation stabilization` as a distinct post-S5-B gate.
+6. S6 real-video, Windows/manual and packaging validation.
 
-## Latest recorded closeout
+## Latest recorded contract state
 
-- **Result:** Partial-glare evidence remains suppressive across the mask-width transition while weak legitimate phase texture retains numeric boundary recall.
-- **Starting exact head:** `584030d402d6c802f9fc6887ff632ef28f9ff449`.
-- **Changed owners:** semantic observation source, focused evidence tests, controlled public regressions and this work plan.
-- **B1:** a longer ROI-scaled side window and row averaging retain localized-component evidence after glare fills the candidate-row mask; width changes no longer create an acceptance cliff.
-- **B2:** normalized autocorrelation is replaced by strong localized-component and distributed-fine-variation evidence, both amplitude-sensitive; weak stripes, gradients and sinusoids remain recall-neutral.
-- **Phase-A and typed coherence:** unchanged and fail-closed; saturated glare remains coherent ambiguity with no projected Y or numeric oil.
-- **Temporal and Foam ownership:** unchanged; Foam detection remains independent from oil outcome selection.
-- **Validation scope:** one final targeted set plus `git diff --check`; controlled comparison and broader gates are intentionally excluded.
-- **Current gate:** fresh independent exact-head source re-audit after ordinary commit/push.
+- **Diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`.
+- **Starting exact head:** `d558fecc0c043037043af3967aec7fd197afcf5e`.
+- **Changed owners:** authoritative documentation, dedicated controlled observability fixture/truth metadata, executable contract tests and PR metadata.
+- **Production source:** unchanged.
+- **Plateau-discriminability repair:** not approved.
+- **Controlled comparison and source repair:** blocked pending independent contract `PASS`.
+- **Intentional non-runs:** full repository, canonical/Qt, E2E, controlled comparison, Windows/manual, packaging, merge, synchronization, Close and cleanup.
+- **Current gate:** fresh independent Observability Contract Exact-Head Audit after ordinary commit/push.
 - **Resulting exact SHA:** reported by the Worker final report, not self-recorded in this commit.

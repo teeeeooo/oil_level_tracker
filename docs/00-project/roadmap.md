@@ -97,8 +97,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Replace brittle candidate/static suppression with typed, evidence-preserving boundary and no-interface hypotheses plus bounded temporal reasoning.
 - **Status:** `ACTIVE`
-- **Major result:** The typed production oil-boundary/no-interface/temporal cutover exists on the feature head. Its production-result trust boundary is undergoing architecture clarification and independent re-audit; external schemas and S5-A Foam ownership remain unchanged.
-- **Next gate:** Architecture audit `PASS` → bounded source implementation → independent source exact-head audit `PASS` → controlled base/feature comparison.
+- **Major result:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE` separates latent physical oil truth from single-frame detector observability. Unresolved oil/glare collisions require canonical ambiguity, no numeric publication, `NO_UPDATE` and `PRESERVE`; external schemas and S5-A Foam ownership remain unchanged.
+- **Next gate:** Observability Contract Exact-Head Audit `PASS` → separate bounded source implementation → independent source exact-head audit `PASS` → controlled base/feature comparison.
 - **Detail:** [Current work plan](./work-plan.md), [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 
 ### S5-C — Canonical/Qt validation stabilization

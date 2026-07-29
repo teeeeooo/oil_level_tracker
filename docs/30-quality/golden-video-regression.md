@@ -8,6 +8,23 @@ S1 builds a repeatable baseline around the existing Phase 2C-3 regression fixtur
 export. It does **not** change detector algorithms, thresholds, `.oiltruth`, the
 regression fixture export schema or the official result bundle.
 
+## S5-B controlled observability truth
+
+The S5-B single-frame observability contract uses a dedicated test-only owner,
+`tests/oil_observability_fixtures.py`. It does not extend exporter schema version 1,
+`.oiltruth`, the benchmark catalog or any external result schema.
+
+Each controlled collision records latent scene cause, whether numeric physical oil
+geometry exists, latent oil Y when present, current detector identifiability and the
+expected canonical outcome family as separate fields. An oil-bearing scene may be
+unidentifiable from the effective current raster; its expected detector outcome is
+then ambiguity rather than a fabricated no-oil truth.
+
+Observationally equivalent latent glare/oil pairs must have the same canonical
+`AmbiguousOutcome`, no raw or smoothed numeric oil, `NO_UPDATE`, `PRESERVE` and
+review-required projection. Repeated identical unresolved observations do not become
+positive temporal evidence. See the [S5-B architecture contract](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md).
+
 ## Dataset source
 
 Create annotations in Result Review and export them with the Phase 2C-3 regression
