@@ -1,12 +1,12 @@
 # S5-B Oil-Boundary Hypothesis Architecture
 
-**Status:** `ACTIVE` route-invariant identifiability-margin repair implemented; fresh independent source exact-head re-audit pending
-**Milestone:** [S5-B](../00-project/work-plan.md)
+**Status:** `DONE` — accepted exact head merged and S5-B closed
+**Milestone:** [S5-B](../00-project/roadmap.md)
 **Authoritative diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
 
-This document governs the S5-B internal evidence, temporal-state, canonical-decision, canonical-outcome and detector-projection boundaries. It retains the audited serialized temporal owner while superseding the assumption that every robust oil/glare distinction can be recovered from one current frame and its existing typed evidence.
+This document governs the merged S5-B internal evidence, temporal-state, canonical-decision, canonical-outcome and detector-projection boundaries. It retains the audited serialized temporal owner while superseding the assumption that every robust oil/glare distinction can be recovered from one current frame and its existing typed evidence.
 
-`ACTIVE` identifies the governing architecture only. The audited observability contract remains immutable. The continuous-margin source re-audit returned `AUDIT: FAIL`, and the bounded route-invariant repair is complete but unapproved. It does not authorize controlled comparison, canonical validation, Windows/manual validation, packaging, merge, synchronization, cleanup or S5-B completion. The next gate is a fresh independent **source exact-head re-audit** of the immutable contract, production owner, route-limit regression, retained cliff regressions and behavior.
+The deterministic dataset infrastructure and final performance-source exact head each returned `AUDIT: PASS`. The final controlled comparison returned `COMPARISON: PASS` with process ratio `1.4809208190318381×` and wall ratio `1.4835741070817687×` against the `1.5×` limit; focused validation reported `427 passed` and pipeline failures `0`. Accepted PR head `df5b4604b0eeb2b67eb7608beceb90298f0fb5f0` was squash-merged as `df2c49c7fc0db5a44fca26a8da49f581288bff4e`. The observability contract is complete, S5-A Foam independence is preserved and the next milestone is the separate S5-C canonical/Qt stabilization gate.
 
 ## Single-frame observability contract
 
@@ -74,7 +74,7 @@ The route-transition regression uses structural-plus-real brightness `-12…+4`.
 
 The implementation does not change preprocessing, proposal construction, semantic likelihood formulas, the general boundary floor, Phase-A, temporal mathematics, fill-state, Foam, external schemas, detector version or dependencies. Existing ambiguity reduction already preserves accepted temporal state and cannot promote repeated identical unresolved frames, so no temporal owner change is required.
 
-The bounded source remains unapproved until a fresh independent source exact-head re-audit returns `PASS`. Controlled base/feature comparison is blocked until that audit authorizes it.
+The accepted source exact head passed independent audit and the final deterministic base/feature comparison passed. This observability boundary is therefore the merged S5-B contract; later milestones must preserve it unless a separately authorized architecture change replaces it.
 
 Future architecture options are limited to separately designed and audited positive evidence such as temporal photometric/component history or capture metadata. Optical flow, retained raster history and capture-metadata schemas are not implemented by this source change.
 
@@ -566,11 +566,11 @@ The bounded repair changes computation ownership, not evidence meaning:
 - Float64 prefix sums replace repeated prefix, suffix and center slice means while preserving the same top-six edge set, pair enumeration, formulas, coefficients, minimum run and window geometry;
 - the context retains no input alias, mutable global state or cross-frame raster/profile cache.
 
-Exact parent/candidate normalized JSON is identical for deterministic Oil `58`, Foam `16`, direct `50` and repeated ambiguity `6`. This includes complete detections, canonical outcomes, tracker/smoothing actions, candidates, flags, Foam values and pipeline-failure state. Worker-owned 3-warm-up/15-measured interleaved validation against exact base provisionally measures process `1.4146×` and wall `1.4458×`. The result is not audit approval and does not authorize merge or S5-B completion.
+Exact parent/candidate normalized JSON is identical for deterministic Oil `58`, Foam `16`, direct `50` and repeated ambiguity `6`. This includes complete detections, canonical outcomes, tracker/smoothing actions, candidates, flags, Foam values and pipeline-failure state. The final independently accepted controlled comparison measured process `1.4809208190318381×` and wall `1.4835741070817687×`, both within the `1.5×` limit.
 
-## Required source-audit evidence
+## Accepted source-audit evidence
 
-The fresh independent source Auditor must verify:
+The fresh independent source Auditor verified the following accepted exact-head contract:
 
 - immutable observability fixtures and contract tests are byte-for-byte unchanged;
 - all eight observationally equivalent collision pairs produce the same typed and canonical ambiguity family;
@@ -589,11 +589,11 @@ The fresh independent source Auditor must verify:
 - immutable contract hashes remain `818802756ebc206250f89540f06616988816b93c5e9b55b17bb42511decc8579` and `727455c5f6263a84e740fd307c9f28846af15e743c729945a4ac841a80ca3b18`;
 - the Worker-owned targeted validation reports `524 passed` with no expected failure, unexpected failure, skip, xfail or conditional acceptance;
 - deterministic Oil/Foam/direct identities remain exact and parent/candidate complete normalized output hashes are equal;
-- the Worker-owned provisional process and wall ratios are both at or below `1.5×`;
+- the Worker-owned provisional process and wall ratios are both at or below `1.5×`, and the final accepted comparison remains below that limit;
 - temporal source is unchanged because existing ambiguity reduction already owns the repeated-sequence behavior;
 - detector version, dependencies and external schemas remain unchanged.
 
-The repair remains unapproved until a fresh independent performance-source exact-head audit returns `PASS`.
+The performance-source exact head returned `AUDIT: PASS`; the final comparison returned `COMPARISON: PASS`, and the accepted head is merged.
 
 ## Non-goals
 
@@ -605,7 +605,7 @@ This bounded source implementation does not:
 - implement temporal raster history, optical flow or capture metadata;
 - treat Worker-owned comparison evidence as independent audit approval;
 - make the retained plateau-discriminability cue the acceptance owner;
-- approve packaging, merge, synchronization, cleanup or S5-B completion.
+- perform S5-C canonical/Qt stabilization, S6 real-video/Windows qualification or packaging validation.
 
 ## Remaining risks
 
@@ -613,6 +613,6 @@ The executable contract remains the immutable acceptance target for the bounded 
 
 Serialization and canonical validation remain measurable feature-only costs, but they were outside this bounded primary-owner repair. They must not be changed unless a later independently authorized task demonstrates that the plateau-only repair is insufficient on an accepted exact head.
 
-Broad/narrow evidence correlation under blur, fog and refractive motion, exposure-dependent full/empty classification, Glass calibration variance and debug CPU cost remain detector-evidence risks for later controlled comparison. They are not reasons to weaken serialized ownership or the observability contract.
+Broad/narrow evidence correlation under blur, fog and refractive motion, exposure-dependent full/empty classification, Glass calibration variance and debug CPU cost remain detector-evidence risks for later S6 qualification. They are not reasons to weaken serialized ownership or the observability contract.
 
-The current gate is a fresh independent performance-source exact-head audit. Worker-owned ratios and parity evidence are provisional; merge and S5-B completion remain blocked pending that audit.
+S5-B is merged and closed. The active successor is S5-C canonical/Qt validation stabilization; S6 real-video, Windows/manual and packaging work remains intentionally deferred to its own gate.

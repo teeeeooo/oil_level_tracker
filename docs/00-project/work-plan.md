@@ -1,262 +1,62 @@
 # Current Work Plan
 
-- **Document status:** `S5B_PLATEAU_PERFORMANCE_REPAIR_AUDIT_PENDING`
-- **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
-- **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Performance-repair start exact head:** `ce1656df2e5528d47579b62681a10b5ca7c3e38c`
-- **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
-- **Authoritative observability diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
-- **Deterministic dataset infrastructure audit:** `AUDIT: PASS`
-- **Deterministic controlled comparison:** functional contracts passed; process ratio `1.9645×`, wall ratio `2.0256×`; `COMPARISON: FAIL`
-- **Performance attribution:** `ATTRIBUTION: COMPLETE`
-- **Primary owner:** per-hypothesis plateau-discriminability row recomputation, about `70.3%` of the measured feature-base CPU delta
-- **Current mutation owner:** per-frame plateau evidence reuse in `oil_shadow_observations.py`, focused tests, source-completing documentation and PR metadata
-- **Detector thresholds, observability semantics, temporal/Foam owners and external schemas:** unchanged
-- **Worker-owned provisional performance:** process ratio `1.4146×`, wall ratio `1.4458×`; exact parent/candidate detector-output parity
-- **Repair status:** implemented but unapproved; merge and S5-B completion are not authorized
-- **Current gate:** fresh independent performance-source exact-head audit; Auditor does not merge
-- **Canonical/Qt, E2E, Windows/manual and packaging:** intentionally not run by this bounded repair
+- **Document status:** `ACTIVE`
+- **Active milestone:** `S5-C — Canonical/Qt validation stabilization`
+- **Authoritative branch:** `main`
+- **Close task-start main:** `df2c49c7fc0db5a44fca26a8da49f581288bff4e`
+- **Previous milestone:** `S5-B — Oil-boundary hypothesis architecture` — `DONE`
+- **Current gate:** define and execute the bounded S5-C canonical/Qt stabilization task without reopening S5-B source behavior
+- **Current blocker:** none
+- **Next action:** confirm QApplication/QCoreApplication ownership, GUI-fixture isolation and duplicate canonical coverage boundaries before implementation
+- **S6 Windows/manual, real-video and packaging validation:** not started
 
-This plan records the bounded production implementation of the audited S5-B single-frame observability contract. The existing detector input and typed evidence cannot always distinguish partial glare from a legitimate oil phase; therefore latent physical truth and detector-observable outcome remain separate contract dimensions. The implementation changes only typed current-observation acceptance in `oil_shadow_observations.py`; proposal construction, semantic scoring, Phase-A validation, temporal reducer/store, fill-state, smoothing, Foam ownership, detector version, dependencies and external schemas remain unchanged.
+S5-C is a separate validation-stability milestone. It must preserve the merged S5-B typed oil-boundary architecture, observability contract, serialized temporal owner, S5-A Foam independence, detector schemas and headless validation behavior.
 
-## Deterministic controlled dataset identity repair
+## S5-C scope
 
-The accepted route-invariant source head passed independent audit, and the subsequent controlled base/feature comparison preserved the functional contracts but failed the existing CPU limit: base median `0.0083682 s/detection`, feature median `0.0358307 s/detection`, ratio `4.2818×` against limit `1.5×`. CPU attribution then returned `DIAGNOSIS: BLOCKED` because the exact exported dataset directories had been deleted and the controlled generators still inherited runtime UUID and timestamp identity from the production truth/export workflow.
+The bounded S5-C task owns only:
 
-The test-infrastructure repair keeps the production workflow unchanged. `RegressionFixtureExporter` accepts one optional `dataset_id_factory`; when omitted it still calls a fresh UUID4 for each export, and production callers omit it. Controlled oil and Foam fixture owners instead provide explicit UUID5 identities and fixed timestamps derived from dataset kind, controlled contract version `v1`, canonical bundle/recipe/session identity, category and sequence metadata, truth values and every scene raster SHA-256. Recipe creation/update timestamps and controlled session source paths are normalized only in the test-owned snapshots before hashing. The reader fingerprint payload, manifest schemas, integrity hashes, safe-path checks and atomic finalization remain unchanged.
+- stable `QApplication` / `QCoreApplication` lifecycle ownership;
+- isolation of GUI-dependent fixtures and tests;
+- removal of unnecessary duplicate GUI/canonical coverage;
+- preservation of deterministic non-GUI and headless validation;
+- explicit evidence for any intentionally retained canonical/Qt exclusions.
 
-The retired one-off comparison identities are no longer authoritative inputs:
+S5-C does not own detector threshold changes, oil/Foam semantic changes, S5-B architecture redesign, real-video qualification, Windows/manual acceptance or packaging.
 
-- oil: `0528deb1b0d71b8569561f78d6433975ffb7c6154326de9a568d4ec185114155`;
-- Foam: `a091165d0177817a18a94061ffce8fd524ee268444c41e247a97aaa44cc95ee8`.
+## Latest recorded closeout
 
-The new unapproved deterministic `v1` identities are:
+### S5-B — merged and closed
 
-- oil dataset ID `e176b4d4-925b-5496-b3c9-735328c4fe19`, annotation-set ID `14b48b9f-418d-5192-90d0-b18d5bbf54ea`, reader fingerprint `f0c122bd6cab823934004d7bcb163c2d7c112f8b8e42594a7dc99440c022265d`;
-- Foam dataset ID `911c2572-de66-53b1-8c97-9c25e32aefe0`, annotation-set ID `a5ed8021-9594-5297-9f47-dbb978077ed2`, reader fingerprint `ddd3c195998ee11daa7e6819e94af1a9ed817867b25817b49b176e12f31af83b`.
+- **Result:** `DONE`
+- **Accepted PR head:** `df5b4604b0eeb2b67eb7608beceb90298f0fb5f0`
+- **Squash merge / authoritative main:** `df2c49c7fc0db5a44fca26a8da49f581288bff4e`
+- **Pull request:** `#56 — feat: implement S5-B typed oil-boundary architecture`
+- **Deterministic dataset infrastructure:** `AUDIT: PASS`
+- **Performance-source exact-head audit:** `AUDIT: PASS`
+- **Final deterministic comparison:** `COMPARISON: PASS`
+- **Process ratio:** `1.4809208190318381×`
+- **Wall ratio:** `1.4835741070817687×`
+- **Performance limit:** `1.5×`
+- **Final focused validation:** `427 passed`
+- **Pipeline failures:** `0`
 
-These identities are test infrastructure evidence only. The infrastructure audit returned `AUDIT: PASS`, after which the fresh deterministic comparison preserved the functional contracts but measured process `1.9645×` and wall `2.0256×` against the `1.5×` limit. Stage attribution returned `ATTRIBUTION: COMPLETE`: `_persistent_plateau_artifact()` and `_row_plateau_support()` consumed `0.893101 s` per 58-frame run, about `70.3%` of the feature-base CPU delta, because each semantic hypothesis repeated the same frame-row work.
+The completed S5-B scope establishes typed, evidence-preserving oil-boundary and no-interface hypotheses, canonical ambiguity for observationally unresolved oil/glare collisions, one serialized temporal-state owner, one immutable store replacement boundary and non-rejecting detector projection. The observability contract is complete, S5-A Foam independence is preserved, external schemas remain compatible and the accepted CPU limit is satisfied.
 
-## Per-frame plateau evidence performance repair
+### Intentional non-runs at S5-B Close
 
-The bounded repair keeps the plateau semantic formula, top-six edge set, edge-pair enumeration, minimum-run and side-window geometry exact. `evaluate_semantic_hypotheses()` now prepares one immutable frame-local plateau context only when proposals exist. That context computes each distinct effective-mask row span and each distinct grayscale run once per frame, stores independent read-only row scores, and lets every hypothesis query the same precomputed above/below window evidence. Float64 prefix sums replace repeated slice means without approximation. There is no module-global or cross-frame cache and no raster alias.
+- full repository suite;
+- canonical/Qt validation;
+- E2E validation;
+- Windows/manual and real-video validation;
+- packaging validation.
 
-The exact parent head and repair candidate produced byte-identical normalized outputs for deterministic Oil `58`, Foam `16`, direct `50` and repeated ambiguity `6`, including full detections, canonical outcomes, flags, candidates, tracker/smoothing actions and Foam behavior. Worker-owned 3-warm-up/15-measured interleaved validation against exact base measured process `1.4146×` and wall `1.4458×`. Candidate-rich median CPU/detection changed from parent to repair as follows: Foam-positive `311.539 → 50.324 ms`, glare/reflection `63.957 → 28.120 ms`, shimmer `68.237 → 39.280 ms`; no-interface remained effectively unchanged at `14.412 → 14.229 ms`.
+These remain successor-gate obligations and were not required to repeat the accepted exact-head source audit or deterministic comparison.
 
-Focused validation reports `524 passed` with no failures, skips or xfails; Python compile and `git diff --check` pass. The result is source-complete but unapproved. The next gate is a fresh independent performance-source exact-head audit; merge, synchronization and S5-B completion remain unauthorized.
+## Open risks and successor boundary
 
-## Current observability decision
+S5-B has no unresolved merge or Close blocker. Later evidence may still expose blur, fog, refractive-motion, exposure, Glass-calibration or long-duration runtime limitations; those findings must be handled by their owning successor milestone without weakening the merged observability or Foam contracts.
 
-When oil boundary versus glare artifact is unidentifiable from the current frame and typed evidence, the only legal canonical family is `AmbiguousOutcome`. No raw or smoothed numeric oil is published, no oil candidate is selected, compatibility remains `NO_UPDATE` plus `PRESERVE`, and review-required projection is retained.
+The active sequence remains:
 
-The controlled fixture owner records latent scene cause, physical numeric geometry presence, latent oil Y, detector identifiability and expected canonical family separately. Paired latent interpretations can therefore share an identical effective observation without deleting or weakening physical truth.
-
-The executable collision matrix covers centered partial glare at `72/74 px`, legitimate `90 → 244` phase, alternating/block/sinusoidal stripe patterns, bright-side reversal, and ROI width/location variants where the component edge disappears. Repeated identical unresolved frames are not positive temporal evidence and cannot become numeric acceptance by repetition alone.
-
-The prior source audit returned `AUDIT: FAIL` because the first current-frame observability override used four independent boolean cliffs: dtype ceiling minus `15`, broad strength `<0.40`, near-ceiling fraction `>=0.90`, and standard deviation `<=4.0`. The continuous-margin repair retired those switches and kept all four raw-metric cliff families closed. The plateau-discriminability heuristic remains unchanged and is not the acceptance owner.
-
-The continuous-margin source re-audit then returned `AUDIT: FAIL` because otherwise identical observable evidence received a `0.40` normalization on the standard route and `0.35` on the corroborated-only route. Exact default-geometry `83 → 243` evidence therefore jumped by `+0.05` when only route ownership changed, allowing a route downgrade to increase acceptance margin.
-
-Canonical route eligibility now remains exclusively in the caller. The identifiability helper receives no standard/corroborated route flags and combines only photometric ceiling pressure, lower-tail texture relief, broad-corroboration deficit, continuous coverage/availability/visibility/sample reliability, semantic boundary support, artifact/no-interface/competing-hypothesis dominance and ambiguity clearance. One route-invariant normalization varies continuously from `0.390` to `0.400` with existing evidence reliability. The exact route-limit states now produce the same margin `-0.0137589324`; no-route evidence cannot publish a boundary because canonical candidacy is checked separately. Observationally equivalent latent glare and latent oil inputs produce identical evidence and outcome. Controlled comparison remains blocked until the fresh independent source re-audit returns `PASS`, and the sequence `S5-B → S5-C → S6` is unchanged.
-
-## Why the previous source direction is retired
-
-The current source attempted to preserve different-Glass temporal mutation parallelism through:
-
-- a writer-priority lifecycle barrier;
-- per-Glass locks plus shared guards;
-- state and version side mappings;
-- reset generation;
-- immutable snapshots with stale/replay validation;
-- commit tokens;
-- commit-to-return exclusion;
-- post-hoc decision/state/outcome coherence checks.
-
-Three independent source audits found recurring partial-commit, reset re-entry, post-commit rejection and semantic-coherence problems despite two bounded repairs. The failures indicate architectural over-complexity rather than another local validation gap.
-
-Different-Glass temporal mutation parallelism is therefore abandoned. The product has one to three Glasses and prioritizes temporal correctness and auditability over unmeasured mutation throughput.
-
-## Governing redesign
-
-The authoritative contract is [S5-B Oil-Boundary Hypothesis Architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md).
-
-The redesign requires:
-
-1. **One serialized owner**
-   - oil-frame temporal processing, Glass reset, global reset, snapshot and count use one owner command order;
-   - concurrent callers are sequenced at one ingress and execute in assigned order;
-   - stateless image preprocessing may remain outside the owner command loop;
-   - the public owner facade performs immutable input isolation before sequencing;
-   - temporal evidence application, reduction, outcome creation and state mutation are serialized.
-
-2. **One immutable store reference**
-   - `TemporalStoreState` owns all Glass records;
-   - each `GlassTemporalRecord` owns version and temporal state together;
-   - missing records denote initial state without insertion;
-   - successful mutation prepares a complete new store and replaces the owner reference once;
-   - any run failure leaves the exact prior store unchanged.
-
-3. **One fixed canonical reducer**
-   - the same reducer branch creates canonical decision, next record, canonical outcome, tracker action and smoothing action;
-   - the reducer is a private fixed source component, not a constructor/public seam;
-   - production callback, evaluator, runner and external commit injection remain prohibited.
-
-4. **One load-bearing validation owner**
-   - canonical evidence, reducer result and prepared replacement store are validated inside the owner before replacement;
-   - detector projection does not revalidate or reject a returned successful outcome;
-   - there is no commit-after-handoff or failure conversion after state assignment.
-
-5. **Ordered reset and explicit re-entry rejection**
-   - reset commands share the same owner order as run and read commands;
-   - run-before-reset and reset-before-run semantics follow assigned sequence exactly;
-   - active-owner public re-entry is rejected before enqueue and mutation;
-   - owner commands execute no user callback or hook.
-
-## Retired concurrency requirements
-
-The following are no longer acceptance requirements and must be removed rather than retained dormant:
-
-- different-Glass temporal mutation parallelism;
-- lifecycle barrier and reset waiters;
-- per-Glass lock ordering;
-- separate state/version stores;
-- reset generation;
-- commit token and stale/replay handling;
-- public proposal/commit composition;
-- callback-based transaction instrumentation;
-- post-commit detector rejection.
-
-Future performance work requires measurement and a separately audited architecture decision. It may not restore parallel temporal mutation by default.
-
-## Failure contract
-
-Every oil pipeline failure must produce:
-
-- unchanged complete prior owner state;
-- `PipelineFailureOutcome`;
-- no numeric oil and no selected candidate;
-- tracker `NO_UPDATE`;
-- smoothing `PRESERVE`;
-- no positive no-interface projection;
-- no legacy oil fallback;
-- independent S5-A Foam processing;
-- unchanged input raster ownership.
-
-There is no post-replacement failure projection.
-
-## Detector pre-owner failure-normalization repair
-
-The serialized core passed independent source audit. The blocking defect was limited to the detector facade: `_isolated_pipeline_inputs(...)` executed before the detector's exception-normalization boundary, so an immutable-copy failure could escape `detect()` before the owner was invoked.
-
-The bounded repair places detector-side immutable oil-input preparation and serialized-owner invocation inside the same normalization boundary. Any preparation or invocation exception now returns `PipelineFailureOutcome` with tracker `NO_UPDATE`, smoothing `PRESERVE`, no numeric oil, no selected candidate and no positive no-interface evidence.
-
-The repair does not change owner sequencing, immutable store/record models, reducer logic, temporal mathematics, replacement behavior, reset/re-entry semantics, projection mapping, detector version or external schemas. Production-path tests inject failures into both `_isolated_pipeline_inputs` and the internal readonly-copy operation through `OpenCvPhaseDetector.detect()`. They verify exact oil-store identity/replacement invariance, retained existing Glass record, continued S5-A Foam processing and a successful following oil command for debug-off and debug-on paths.
-
-## Implemented source migration scope
-
-The audited architecture has been implemented as a bounded owner-aligned source change:
-
-- one ticket-based ingress serializes oil-frame run, Glass reset, global reset, snapshot and count;
-- immutable preparation owns independent read-only raster copies before sequencing;
-- one immutable `TemporalStoreState` reference owns all versioned `GlassTemporalRecord` values;
-- one fixed private reducer creates decision, next record, outcome, tracker/smoothing actions and resources;
-- owner validation completes before exactly one successful store-reference replacement;
-- reset generation, commit token, stale/replay/session semantics, lifecycle barriers and per-Glass locks are removed;
-- detector-side post-owner rejection and projection-side load-bearing validation are removed;
-- projection is exhaustive and non-rejecting for the closed outcome family;
-- deterministic tests enforce total order, re-entry rejection, failure invariance and single replacement;
-- successful temporal mathematics, S5-A Foam, external schemas and detector behavior remain protected.
-
-This implementation remains unapproved until an independent exact-head source Auditor returns `AUDIT: PASS`.
-
-## Source implementation acceptance matrix
-
-Independent exact-head source audit must verify:
-
-- one owner defines a total order for run, reset, snapshot and count;
-- one immutable store value owns all Glass records;
-- record version and temporal state are co-owned;
-- successful mutation has exactly one state-reference replacement;
-- every pre-replacement failure preserves the complete prior store;
-- one fixed reducer creates decision, record, outcome and actions together;
-- exactly one load-bearing production validation owner exists;
-- detector cannot reject or convert an outcome after commit;
-- reset ordering and re-entry semantics are explicit and deadlock-free;
-- lock/barrier/generation/token/session complexity is an explicit removal target;
-- source acceptance and deterministic test matrices cover all temporal variants and failure points;
-- S5-A Foam, raster isolation and external contracts remain protected.
-
-## Single-candidate semantic boundary calibration repair
-
-The independently completed controlled comparison returned `COMPARISON: FAIL`, and the bounded failure attribution returned `DIAGNOSIS: COMPLETE`. Persisted truth-visible failures retained truth-near raw observations, bounded proposals and semantic hypotheses, but one dominant hypothesis with no material alternative was withheld before the temporal reducer because its boundary likelihood was approximately `0.4329–0.4541`, below the unchanged general `0.48` floor.
-
-The repair uses a separate narrow current-observation acceptance path. It requires exactly one semantic hypothesis and one proposal, at least six observation provenance members, boundary likelihood `>= 0.43`, boundary-to-artifact margin `>= 0.26`, strict boundary dominance over no-interface evidence by more than the numerical equality epsilon `1e-12`, ambiguity `< 0.60`, broad strength `>= 0.40`, at least two broad scales, broad scale consistency `>= 0.85`, available narrow evidence with peak and scale persistence `>= 0.90`, pulse-artifact support `<= 0.50`, paired-edge strength `<= 0.80`, visibility `>= 0.85`, evidence availability `>= 0.90`, coherent available polarity, bounded glare/exclusion/border conflict `<= 0.15`, static-prior contribution `<= 0.08` and static overlap `<= 0.20`.
-
-The independent calibration source audit returned `AUDIT: FAIL` after persisted targets and negative controls passed. Its single blocker was the fixed `0.06` boundary-to-no-interface difference: small truth-preserving position, brightness and contrast perturbations kept boundary evidence semantically dominant and passed every other narrow guard, but crossed that arbitrary positive-margin cliff and lost numeric oil. This repair removes only that calibrated distance and replaces it with strict semantic winner identity. Exact equality and differences at or below `1e-12` remain fail-closed, and no replacement margin such as `0.04`, `0.05` or `0.055` is introduced.
-
-The general boundary floor `0.48`, general boundary margin `0.08`, ambiguity ceiling `0.72`, visibility floor `0.30`, no-interface likelihood `0.58` and no-interface margin `0.10` remain unchanged. All other corroboration guards remain unchanged. Semantic scoring weights, artifact penalties, no-interface evidence calculation, static-prior meaning, proposal clustering, semantic deduplication, temporal reduction, reacquisition, fill-state hold, external schemas and detector version are unchanged.
-
-Feature-only persisted-dataset validation restored clear raw/smoothed coverage to `1.0`, rapid raw/smoothed coverage to `0.9565217391`, and kept no-interface raw/smoothed false-boundary rates at `0.0`. Reflection-only, structural rim-line, shimmer-only and transient false-line controls produced no raw oil. Foam precision and recall remained `1.0`.
-
-The subsequent typed-coherence repair now prevents contextual glare ambiguity from retaining a hypothesis-specific projected Y unless the complete likelihood tuple remains canonical to that hypothesis. Original saturated `glare-recovery` evidence is therefore reviewable ambiguous evidence with no numeric oil instead of a Phase-A pipeline failure. The final visible frame remains numeric, while semantic glare false-positive discrimination stays a separate bounded owner.
-
-The strict-dominance robustness matrix covers clear and rapid representatives across boundary-position `-2` through `+2 px`, brightness `-8` through `+8`, contrast `0.90×` through `1.10×` and three fixed weak-noise seeds. All positive probes retain deterministic public numeric oil within the truth-near geometry tolerance. The same perturbations over thin line, paired pulse, rim line, reflection, glare, shimmer, learned static overlap, uniform full/empty and transient false-line controls produce no raw oil; uniform states remain no-interface and structural-plus-real remains distinguishable from structural-only evidence.
-
-## Honest glare perturbation test contract
-
-The independently completed glare attribution returned `DIAGNOSIS: COMPLETE` and classified the shared saturated-pixel preservation helper as `INVALID_AND_REPLACE`. That test-contract repair changed test infrastructure only; detector settings, controlled scene semantics, detector version and external schemas remain unchanged by the current typed-coherence repair.
-
-The general neighborhood helper now uses non-wrapping `cv2.warpAffine` vertical translation with `BORDER_REPLICATE`, signed-integer full-frame brightness with clipping, fixed-center (`127.5`) full-frame contrast with clipping, and `np.random.default_rng(seed)` full-frame Gaussian noise with positive sigma and clipping. No source pixel is exempted because it was originally saturated. Deterministic diagnostics record shape, dtype, extrema, mean, standard deviation, changed-pixel count, absolute/difference statistics, populations at `>=230`, `>=235`, `>=240`, `>=245`, and frame SHA-256 without entering the detector input contract.
-
-The mandatory `glare-recovery-1` `0.92×` contrast probe moves from source maximum `255` with a populated `>=245` mask to transformed maximum `244` with zero `>=245` pixels while retaining positive `>=240` population. The honest helper contract and deterministic diagnostics remain unchanged. At the typed-coherence gate, the two near-threshold glare-only and nineteen Foam clipped-glare findings remained red and were retained as the acceptance contract for the semantic repair below.
-
-The exact historical set of two near-threshold glare-only probes and nineteen Foam clipped-glare probes remains an executable `21`-case no-numeric contract without skip, xfail, conditional weakening, false-oil acceptance or truth deletion.
-
-## Retained typed and source history
-
-The earlier typed-coherence repair remains retained: malformed Phase-A likelihood/projection mismatch is rejected, while original saturated glare produces coherent `AmbiguousOutcome`, no raw or smoothed numeric oil, `NO_UPDATE`, `PRESERVE` and review-required projection. S5-A Foam remains independently governed.
-
-The later plateau-discriminability source changes remain historical implementation evidence only. The new diagnosis shows that local component and texture evidence cannot resolve every single-frame collision, so those changes are not approved as the final contract or as authority for controlled comparison.
-
-## Contract evidence status
-
-- Paired latent glare/oil interpretations retain different physical truth while sharing one ambiguous detector expectation and byte-identical effective current evidence.
-- All eight collision pairs now produce `ShadowAmbiguousObservation` and `AmbiguousOutcome` with no raw/smoothed numeric oil, no selected oil candidate, `NO_UPDATE`, `PRESERVE` and review-required projection.
-- The exact six prior red nodes are green: short-period block stripe, centered partial glare `72 px`, centered partial glare `74 px`, sinusoid with bright side above, sinusoid with bright side below and repeated identical ambiguity.
-- Exact default-geometry `83 → 243` evidence produces margin `-0.0137589324` for standard plus corroborated, standard-only and corroborated-only route labels; route ownership discontinuity is exactly `0`.
-- The structural-plus-real brightness `-12…+4` frame sweep crosses standard plus corroborated to corroborated-only without an upward margin jump, has no acceptance island, and proves positive no-route margin cannot bypass canonical candidacy.
-- Intensity `235–245` has one explainable continuous margin progression; `239/240` are both ambiguity, and the `245` outcome remains ambiguity with materially changed semantic evidence after glare masking.
-- Broad `82–89` including `85 → 244` and `86 → 244` has continuous corroboration deficit and margin progression; both audited neighbors remain ambiguity with no `0.40` switch or acceptance island.
-- Sparse 10% alternating, block and sinusoidal lower-tail textures at low values `228–234`, with both bright-side polarities, remain numeric while the audited symmetric collision textures remain ambiguity.
-- Near-ceiling support counts `4–14` are monotonic across centered, shifted and resized ROI geometries; audited counts `8/9` produce the same outcome and any later transition is a single continuous zero-margin crossing.
-- The six-frame repeated unresolved sequence remains ambiguous on every frame and never promotes itself to numeric oil.
-- Exact historical glare negatives remain `21/21` without numeric oil.
-- Distinguishable clear/rapid, bright real-boundary and structural-plus-real cases remain truth-near numeric; structural-only remains without numeric oil.
-- Saturated glare remains coherent ambiguity; malformed Phase-A likelihood/projection mismatch remains fail-closed; S5-A Foam/shimmer remains independently green.
-- The immutable observability fixture and contract test SHA-256 values remain `818802756ebc206250f89540f06616988816b93c5e9b55b17bb42511decc8579` and `727455c5f6263a84e740fd307c9f28846af15e743c729945a4ac841a80ca3b18`.
-- Full observability contract file: `40 passed`.
-- Stabilized Worker-owned targeted set: `521 passed`, expected failures `0`, unexpected failures `0`, skip/xfail/conditional acceptance `0`.
-- Python compile and `git diff --check`: `PASS`.
-- Temporal owner, dependencies, detector version and external schemas are unchanged.
-
-## Downstream sequence
-
-1. Fresh independent source exact-head audit; the Auditor does not merge.
-2. Controlled base/feature comparison only after the source audit returns `PASS` and authorizes it.
-3. Formal S5-B completion under separate merge authority.
-4. `S5-C — Canonical/Qt validation stabilization` as a distinct post-S5-B gate.
-5. S6 real-video, Windows/manual and packaging validation.
-
-## Latest recorded source state
-
-- **Diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`.
-- **Starting exact head:** `38080906ed7380b27628251ae37f6c79726cf788`.
-- **Changed owners:** typed current-observation source, focused route-invariance regression, source-completing architecture/work-plan documentation and PR metadata.
-- **Production owner:** `src/oil_tracker/adapters/vision/oil_shadow_observations.py`.
-- **Retired conditions:** dtype ceiling minus `15`, broad strength `<0.40`, near-ceiling fraction `>=0.90`, and standard deviation `<=4.0` as direct boolean observability switches; route-dependent `0.40/0.35/1.00` normalization.
-- **Plateau-discriminability heuristic:** retained unchanged as a non-authoritative visible-artifact cue.
-- **Temporal owner:** unchanged; existing ambiguity reduction already prevents repeated-frame numeric promotion.
-- **Controlled comparison:** blocked pending independent source re-audit `PASS`.
-- **Intentional non-runs:** full repository, canonical/Qt, E2E, controlled comparison, Windows/manual, packaging, merge, synchronization, Close and cleanup.
-- **Current gate:** fresh independent source exact-head audit after ordinary commit/push.
-- **Resulting exact SHA:** reported by the Worker final report, not self-recorded in this commit.
+`S5-C` → `S6` → `S7 / Phase 2C-4` → Phase 2D reassessment.

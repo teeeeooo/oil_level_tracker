@@ -96,17 +96,17 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S5-B — Oil-boundary hypothesis architecture
 
 - **Purpose:** Replace brittle candidate/static suppression with typed, evidence-preserving boundary and no-interface hypotheses plus bounded temporal reasoning.
-- **Status:** `ACTIVE`
-- **Major result:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE` separates latent physical oil truth from single-frame detector observability. Unresolved oil/glare collisions require canonical ambiguity, no numeric publication, `NO_UPDATE` and `PRESERVE`; external schemas and S5-A Foam ownership remain unchanged.
-- **Next gate:** Observability Contract Exact-Head Audit `PASS` → separate bounded source implementation → independent source exact-head audit `PASS` → controlled base/feature comparison.
+- **Status:** `DONE`
+- **Major result:** Typed observability and canonical ambiguity now separate latent physical oil truth from detector-identifiable evidence. One serialized temporal owner preserves atomic state, S5-A Foam independence and external compatibility; final deterministic comparison passed the `1.5×` CPU limit.
+- **Next gate:** Preserve the merged observability, temporal and Foam contracts through S5-C canonical/Qt stabilization and S6 real-video/Windows validation.
 - **Detail:** [Current work plan](./work-plan.md), [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 
 ### S5-C — Canonical/Qt validation stabilization
 
 - **Purpose:** Stabilize `QApplication` / `QCoreApplication` ownership, isolate GUI fixtures, slim duplicate GUI/canonical coverage and preserve the non-GUI/headless validation contract.
-- **Status:** `PLANNED`
-- **Major result:** None yet; this milestone is a separate validation-stability gate after formal S5-B completion.
-- **Next gate:** Remove recurring canonical Qt instability without weakening headless coverage before S6 begins.
+- **Status:** `ACTIVE`
+- **Major result:** S5-B is formally closed and the separate canonical/Qt stabilization gate is now active; no S5-C source change has begun.
+- **Next gate:** Confirm lifecycle ownership and fixture boundaries, then remove recurring canonical Qt instability without weakening headless coverage before S6 begins.
 - **Detail:** [Current work plan](./work-plan.md), [Real-world validation plan](../30-quality/real-world-validation-plan.md)
 
 ### S6 — Real-video and Windows validation gate
