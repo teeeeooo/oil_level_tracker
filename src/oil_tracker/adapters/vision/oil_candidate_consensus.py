@@ -1,0 +1,362 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+import math
+
+from oil_tracker.domain.detection import BoundaryCandidate
+from oil_tracker.domain.enums import BoundaryKind
+
+
+_SOURCE_NAMES = ("sobel", "canny", "hough", "region_boundary")
+
+
+@dataclass(frozen=True)
+class OilCandidateCluster:
+    """Immutable scalar evidence for one source-independent Y cluster."""
+
+    representative_y: float
+    spread: float
+    support_count: int
+    strongest_generator_score: float
+    consensus_score: float
+    members: tuple[tuple[str, float, float], ...]
+    unrounded_representative_y: float = 0.0
+    signed_region_evidence: float = 0.0
+    edge_center_correction_px: float = 0.0
+    edge_center_correction_deferred: float = 0.0
+
+    def to_candidate(self, cluster_index: int) -> BoundaryCandidate:
+        supports = {source for source, _y, _score in self.members}
+        features = {
+            "generator_strength": float(self.strongest_generator_score),
+            "raw_generator_count": float(len(self.members)),
+            "unique_generator_support_count": float(self.support_count),
+            "generator_support_count": float(self.support_count),
+            "sobel_support": float("sobel" in supports),
+            "canny_support": float("canny" in supports),
+            "hough_support": float("hough" in supports),
+            "region_support": float("region_boundary" in supports),
+            "cluster_spread": float(self.spread),
+            "representative_local_y": float(self.representative_y),
+            "unrounded_representative_local_y": float(
+                self.unrounded_representative_y
+            ),
+            "generator_signed_region_evidence": float(
+                self.signed_region_evidence
+            ),
+            "polarity_edge_center_correction_px": float(
+                self.edge_center_correction_px
+            ),
+            "polarity_edge_center_correction_deferred": float(
+                self.edge_center_correction_deferred
+            ),
+            "strongest_generator_score": float(self.strongest_generator_score),
+            "consensus_score": float(self.consensus_score),
+            "consensus_cluster_index": float(cluster_index),
+        }
+        return BoundaryCandidate(
+            source="oil_consensus",
+            kind=BoundaryKind.OIL_AIR,
+            y=float(self.representative_y),
+            features=features,
+        )
+
+
+@dataclass(frozen=True)
+class OilConsensusResult:
+    raw_candidates: tuple[BoundaryCandidate, ...]
+    clusters: tuple[OilCandidateCluster, ...]
+    consensus_candidates: tuple[BoundaryCandidate, ...]
+
+
+def build_oil_candidate_consensus(
+    candidates: list[BoundaryCandidate] | tuple[BoundaryCandidate, ...],
+    tolerance_px: float,
+) -> OilConsensusResult:
+    """Cluster generator candidates deterministically and independently of input order."""
+
+    tolerance = max(0.0, _finite(tolerance_px))
+    raw = tuple(sorted(candidates, key=_candidate_sort_key))
+    unique = _deduplicate_same_source(raw, tolerance)
+    working: list[dict[str, BoundaryCandidate]] = []
+
+    for candidate in unique:
+        eligible: list[tuple[float, float, int]] = []
+        for index, cluster in enumerate(working):
+            if candidate.source in cluster:
+                continue
+            representative = _weighted_representative(tuple(cluster.values()))
+            distance = abs(float(candidate.y) - representative)
+            if distance <= tolerance + 1e-12:
+                eligible.append((distance, representative, index))
+        if eligible:
+            _distance, _representative_y, target = min(eligible)
+            working[target][candidate.source] = candidate
+        else:
+            working.append({candidate.source: candidate})
+
+    clusters = tuple(
+        sorted(
+            (_make_cluster(tuple(cluster.values())) for cluster in working),
+            key=lambda item: (
+                item.representative_y,
+                -item.support_count,
+                -item.consensus_score,
+                item.members,
+            ),
+        )
+    )
+    consensus = tuple(
+        cluster.to_candidate(index) for index, cluster in enumerate(clusters)
+    )
+
+    membership: dict[tuple[str, float, float], tuple[int, float]] = {}
+    for index, cluster in enumerate(clusters):
+        for member in cluster.members:
+            membership[member] = (index, cluster.representative_y)
+    for candidate in raw:
+        key = _member_key(candidate)
+        match = membership.get(key)
+        if match is None:
+            source_matches = [
+                (abs(float(candidate.y) - cluster.representative_y), index, cluster)
+                for index, cluster in enumerate(clusters)
+                if any(
+                    source == candidate.source
+                    for source, _y, _score in cluster.members
+                )
+            ]
+            if source_matches:
+                distance, index, cluster = min(source_matches)
+                if distance <= tolerance + 1e-12:
+                    match = (index, cluster.representative_y)
+        if match is not None:
+            candidate.features["consensus_cluster_index"] = float(match[0])
+            candidate.features["consensus_representative_local_y"] = float(
+                match[1]
+            )
+            candidate.features["consensus_member"] = 1.0
+        else:
+            candidate.features["consensus_cluster_index"] = -1.0
+            candidate.features["consensus_member"] = 0.0
+
+    return OilConsensusResult(raw, clusters, consensus)
+
+
+def _deduplicate_same_source(
+    candidates: tuple[BoundaryCandidate, ...], tolerance: float
+) -> tuple[BoundaryCandidate, ...]:
+    opposite_edge_anchors = _opposite_region_edge_anchors(candidates, tolerance)
+    by_source: dict[str, list[BoundaryCandidate]] = {}
+    for candidate in candidates:
+        by_source.setdefault(candidate.source, []).append(candidate)
+    kept: list[BoundaryCandidate] = []
+    for source in sorted(by_source):
+        ordered = sorted(
+            by_source[source],
+            key=lambda candidate: (
+                -_strength(candidate),
+                float(candidate.y),
+                candidate.kind.value,
+            ),
+        )
+        source_kept: list[BoundaryCandidate] = []
+        for candidate in ordered:
+            candidate_anchor = _nearest_anchor_index(
+                float(candidate.y),
+                opposite_edge_anchors,
+                tolerance,
+            )
+            if all(
+                abs(float(candidate.y) - float(prior.y)) > tolerance + 1e-12
+                or (
+                    candidate_anchor is not None
+                    and _nearest_anchor_index(
+                        float(prior.y),
+                        opposite_edge_anchors,
+                        tolerance,
+                    )
+                    not in {None, candidate_anchor}
+                )
+                for prior in source_kept
+            ):
+                source_kept.append(candidate)
+        kept.extend(source_kept)
+    return tuple(sorted(kept, key=_candidate_sort_key))
+
+
+def _opposite_region_edge_anchors(
+    candidates: tuple[BoundaryCandidate, ...],
+    tolerance: float,
+) -> tuple[float, ...]:
+    region_edges = [
+        (
+            float(candidate.y),
+            _finite(
+                candidate.features.get(
+                    "generator_signed_region_contrast",
+                    0.0,
+                )
+            ),
+        )
+        for candidate in candidates
+        if candidate.source == "region_boundary"
+        and float(candidate.features.get("generator_region_available", 0.0)) >= 0.5
+        and abs(
+            _finite(
+                candidate.features.get(
+                    "generator_signed_region_contrast",
+                    0.0,
+                )
+            )
+        )
+        >= 0.05
+    ]
+    protected: set[float] = set()
+    for index, (left_y, left_signed) in enumerate(region_edges):
+        for right_y, right_signed in region_edges[index + 1 :]:
+            distance = abs(right_y - left_y)
+            if (
+                distance > 1e-12
+                and distance <= tolerance + 1e-12
+                and left_signed * right_signed < 0.0
+            ):
+                protected.update((left_y, right_y))
+    return tuple(sorted(protected))
+
+
+def _nearest_anchor_index(
+    y: float,
+    anchors: tuple[float, ...],
+    tolerance: float,
+) -> int | None:
+    eligible = [
+        (abs(y - anchor), anchor, index)
+        for index, anchor in enumerate(anchors)
+        if abs(y - anchor) <= tolerance + 1e-12
+    ]
+    return None if not eligible else min(eligible)[2]
+
+
+def _make_cluster(
+    candidates: tuple[BoundaryCandidate, ...],
+) -> OilCandidateCluster:
+    ordered = tuple(sorted(candidates, key=_candidate_sort_key))
+    unrounded = _weighted_representative(ordered)
+    support = len({candidate.source for candidate in ordered})
+    signed_region = _signed_region_evidence(ordered)
+    ys = [float(candidate.y) for candidate in ordered]
+    base_representative = float(round(unrounded))
+    desired_correction = 0.0
+    if support >= 2 and abs(signed_region) >= 0.05:
+        desired_correction = -1.0 if signed_region > 0.0 else 1.0
+    proposed_representative = base_representative + desired_correction
+    correction_within_member_envelope = (
+        not ys
+        or min(ys) - 1e-12
+        <= proposed_representative
+        <= max(ys) + 1e-12
+    )
+    correction = (
+        desired_correction if correction_within_member_envelope else 0.0
+    )
+    correction_deferred = float(
+        desired_correction != 0.0 and correction == 0.0
+    )
+    representative = base_representative + correction
+    strengths = [_strength(candidate) for candidate in ordered]
+    strongest = max(strengths, default=0.0)
+    average = sum(strengths) / max(1, len(strengths))
+    diversity = min(1.0, support / max(1, len(_SOURCE_NAMES)))
+    consensus = min(1.0, 0.62 * diversity + 0.38 * average)
+    members = tuple(_member_key(candidate) for candidate in ordered)
+    return OilCandidateCluster(
+        representative_y=representative,
+        spread=max(ys) - min(ys) if ys else 0.0,
+        support_count=support,
+        strongest_generator_score=strongest,
+        consensus_score=consensus,
+        members=members,
+        unrounded_representative_y=unrounded,
+        signed_region_evidence=signed_region,
+        edge_center_correction_px=correction,
+        edge_center_correction_deferred=correction_deferred,
+    )
+
+
+def _signed_region_evidence(
+    candidates: tuple[BoundaryCandidate, ...],
+) -> float:
+    region = [
+        candidate
+        for candidate in candidates
+        if candidate.source == "region_boundary"
+        and float(candidate.features.get("generator_region_available", 0.0)) >= 0.5
+    ]
+    if not region:
+        return 0.0
+    selected = min(
+        region,
+        key=lambda candidate: (
+            -abs(
+                _finite(
+                    candidate.features.get(
+                        "generator_signed_region_contrast",
+                        0.0,
+                    )
+                )
+            ),
+            -_strength(candidate),
+            float(candidate.y),
+        ),
+    )
+    return max(
+        -1.0,
+        min(
+            1.0,
+            _finite(
+                selected.features.get(
+                    "generator_signed_region_contrast",
+                    0.0,
+                )
+            ),
+        ),
+    )
+
+
+def _weighted_representative(
+    candidates: tuple[BoundaryCandidate, ...],
+) -> float:
+    weighted = [(_strength(candidate), float(candidate.y)) for candidate in candidates]
+    total = sum(max(0.05, strength) for strength, _y in weighted)
+    if total <= 0.0:
+        return 0.0
+    return sum(max(0.05, strength) * y for strength, y in weighted) / total
+
+
+def _candidate_sort_key(
+    candidate: BoundaryCandidate,
+) -> tuple[float, str, float, str]:
+    return (
+        float(candidate.y),
+        str(candidate.source),
+        -_strength(candidate),
+        candidate.kind.value,
+    )
+
+
+def _member_key(candidate: BoundaryCandidate) -> tuple[str, float, float]:
+    return (str(candidate.source), float(candidate.y), _strength(candidate))
+
+
+def _strength(candidate: BoundaryCandidate) -> float:
+    value = candidate.features.get("generator_strength", 0.0)
+    return min(1.0, max(0.0, _finite(value)))
+
+
+def _finite(value: float) -> float:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return 0.0
+    return number if math.isfinite(number) else 0.0

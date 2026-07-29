@@ -1,10 +1,15 @@
-# Rotary Oil Level Tracker Real-World Stabilization Plan
+# Real-World Stabilization Plan — 2026-07 Historical Snapshot
+
+**Status:** `SUPERSEDED`
+
+This snapshot is superseded because milestone state moved to the [roadmap](../00-project/roadmap.md), active execution moved to the [work plan](../00-project/work-plan.md), and maintained acceptance obligations moved to the [real-world validation plan](../30-quality/real-world-validation-plan.md). Preserve the content below only for historical planning and implementation evidence.
+
 
 ## 1. 문서 목적
 
 이 문서는 실제 compressor 영상과 Windows Workbench를 사용하면서 확인된 UI, 분석 lifecycle, 결과 graph와 detector 정확도 문제를 관리한다.
 
-전체 Phase 상태와 우선순위는 [`UX_IMPROVEMENT_BACKLOG.md`](./UX_IMPROVEMENT_BACKLOG.md)를 따르고, Result Review Viewer의 상세 데이터·화면 계약은 [`RESULT_REVIEW_VIEWER_PLAN.md`](./RESULT_REVIEW_VIEWER_PLAN.md)를 따른다.
+전체 Phase 상태와 우선순위는 [current UX improvement plan](../10-product/ux-improvement-plan.md)를 따르고, Result Review Viewer의 상세 데이터·화면 계약은 [current Result Review Viewer plan](../10-product/result-review-viewer-plan.md)를 따른다.
 
 이 문서는 Phase 2C-3 완료 후 Phase 2C-4 공유용 결과 영상으로 바로 진행하지 않고, 실사용 안정화와 detector 정확도 검증을 먼저 수행하기 위한 실행 계획이다.
 

@@ -31,8 +31,8 @@ _FIELD_SPECS = (
     DetectorSettingField("minimum_horizontal_coverage", "candidate", float, 0.0, 1.0, 6, 0.01, "후보가 확보해야 하는 최소 수평 연속 비율입니다."),
     DetectorSettingField("minimum_region_contrast", "candidate", float, 0.0, 1.0, 6, 0.01, "후보 위아래 영역의 최소 대비입니다."),
     DetectorSettingField("minimum_final_confidence", "confidence", float, 0.0, 1.0, 6, 0.01, "최종 검출을 유효하게 인정할 최소 신뢰도입니다."),
-    DetectorSettingField("temporal_max_jump_px", "temporal", float, 0.0, 100000.0, 6, 1.0, "연속 sample 사이의 최대 유면 이동량입니다."),
-    DetectorSettingField("smoothing_window", "temporal", int, 1, 1001, 0, 1, "유면 위치 smoothing에 사용하는 sample 수입니다."),
+    DetectorSettingField("temporal_max_jump_px", "temporal", float, 0.0, 100000.0, 6, 1.0, "연속 sample 사이의 기준 이동량입니다. S5-B path는 hard reject 대신 transition cost에 사용합니다."),
+    DetectorSettingField("smoothing_window", "temporal", int, 1, 1001, 0, 1, "승인된 유면 위치 smoothing에 사용하는 sample 수입니다."),
     DetectorSettingField("glare_threshold", "artifact", int, 0, 255, 0, 1, "과노출 반사광으로 분류하는 밝기 임계값입니다."),
     DetectorSettingField("glare_ratio_unknown", "artifact", float, 0.0, 1.0, 6, 0.01, "관찰 불가 상태로 전환할 반사광 면적 비율입니다."),
     DetectorSettingField("foam_variance_threshold", "foam", float, 0.0, 1000000.0, 6, 1.0, "거품 질감의 국부 분산 정규화 기준입니다."),
@@ -47,18 +47,27 @@ _FIELD_SPECS = (
     DetectorSettingField("foam_persistence_frames", "foam", int, 1, 10000, 0, 1, "Moderate Foam evidence 승인에 필요한 연속 sample 수입니다."),
     DetectorSettingField("foam_max_front_jump_px", "foam", float, 0.0, 100000.0, 6, 1.0, "Moderate Foam persistence chain에서 허용할 최대 front 이동량입니다."),
     DetectorSettingField("state_hold_frames", "temporal", int, 1, 10000, 0, 1, "상태 전이를 확정하기 전에 유지할 sample 수입니다."),
-    DetectorSettingField("candidate_top_k", "candidate", int, 1, 1000, 0, 1, "debug 결과에 유지할 후보의 최대 개수입니다."),
+    DetectorSettingField("candidate_top_k", "candidate", int, 1, 1000, 0, 1, "frame마다 path에 전달하고 debug에 유지할 후보의 최대 개수입니다."),
+    DetectorSettingField("oil_consensus_tolerance_px", "oil_path", float, 0.0, 100000.0, 6, 0.5, "서로 다른 generator 후보를 같은 유면 cluster로 묶는 Y 허용 거리입니다."),
+    DetectorSettingField("oil_min_consensus_sources", "oil_path", int, 1, 4, 0, 1, "일반적인 strong 유면 승인에 필요한 서로 다른 generator 수입니다."),
+    DetectorSettingField("oil_min_polarity_score", "oil_path", float, 0.0, 1.0, 6, 0.01, "signed gradient와 위·아래 intensity가 확보해야 하는 최소 polarity evidence입니다."),
+    DetectorSettingField("oil_no_interface_min_score", "oil_path", float, 0.0, 1.0, 6, 0.01, "명시적 no-interface hypothesis 선택에 필요한 최소 score입니다."),
+    DetectorSettingField("oil_path_window", "oil_path", int, 1, 1000, 0, 1, "causal oil path hypothesis가 보존하는 최대 scalar sample 수입니다."),
+    DetectorSettingField("oil_path_beam_width", "oil_path", int, 1, 1000, 0, 1, "frame마다 보존하는 oil path hypothesis 최대 개수입니다."),
+    DetectorSettingField("oil_path_min_margin", "oil_path", float, 0.0, 10.0, 6, 0.01, "best와 second-best path 사이에 필요한 최소 decision margin입니다."),
+    DetectorSettingField("oil_tracker_update_confidence", "oil_path", float, 0.0, 1.0, 6, 0.01, "accepted Y와 polarity prior를 갱신할 최소 observation confidence입니다."),
+    DetectorSettingField("oil_reacquire_frames", "oil_path", int, 1, 1000, 0, 1, "큰 이동 또는 stale prior 이후 새 path 승인에 필요한 연속 evidence 수입니다."),
     DetectorSettingField("weight_edge", "score_weight", float, 0.0, 100.0, 8, 0.01, "edge strength score 가중치입니다."),
     DetectorSettingField("weight_coverage", "score_weight", float, 0.0, 100.0, 8, 0.01, "horizontal coverage score 가중치입니다."),
     DetectorSettingField("weight_region", "score_weight", float, 0.0, 100.0, 8, 0.01, "region contrast score 가중치입니다."),
-    DetectorSettingField("weight_gradient_direction", "score_weight", float, 0.0, 100.0, 8, 0.01, "gradient 방향 score 가중치입니다."),
-    DetectorSettingField("weight_temporal", "score_weight", float, 0.0, 100.0, 8, 0.01, "temporal continuity score 가중치입니다."),
+    DetectorSettingField("weight_gradient_direction", "score_weight", float, 0.0, 100.0, 8, 0.01, "signed polarity evidence score 가중치입니다."),
+    DetectorSettingField("weight_temporal", "score_weight", float, 0.0, 100.0, 8, 0.01, "legacy candidate continuity score 가중치입니다. 최종 path transition은 별도로 계산합니다."),
     DetectorSettingField("weight_state", "score_weight", float, 0.0, 100.0, 8, 0.01, "state transition score 가중치입니다."),
     DetectorSettingField("penalty_glare", "penalty", float, 0.0, 100.0, 8, 0.01, "반사광 중첩 penalty입니다."),
     DetectorSettingField("penalty_border", "penalty", float, 0.0, 100.0, 8, 0.01, "glass rim 인접 penalty입니다."),
     DetectorSettingField("penalty_exclusion", "penalty", float, 0.0, 100.0, 8, 0.01, "제외 영역 중첩 penalty입니다."),
     DetectorSettingField("penalty_static", "penalty", float, 0.0, 100.0, 8, 0.01, "고정 artifact penalty입니다."),
-    DetectorSettingField("penalty_jump", "penalty", float, 0.0, 100.0, 8, 0.01, "비정상 위치 급변 penalty입니다."),
+    DetectorSettingField("penalty_jump", "penalty", float, 0.0, 100.0, 8, 0.01, "candidate 단계의 비정상 위치 급변 penalty입니다."),
 )
 
 DETECTOR_SETTING_FIELDS = {spec.name: spec for spec in _FIELD_SPECS}
@@ -134,6 +143,18 @@ def validate_detector_settings(settings: DetectorSettings) -> dict[str, str]:
         and settings.foam_min_evidence_score > settings.foam_strong_evidence_score
     ):
         errors["foam_strong_evidence_score"] = "Strong Foam score는 최소 evidence score 이상이어야 합니다."
+    if (
+        "oil_path_beam_width" not in errors
+        and "candidate_top_k" not in errors
+        and settings.oil_path_beam_width > settings.candidate_top_k
+    ):
+        errors["oil_path_beam_width"] = "Oil path beam width는 candidate top K 이하여야 합니다."
+    if (
+        "oil_reacquire_frames" not in errors
+        and "oil_path_window" not in errors
+        and settings.oil_reacquire_frames > settings.oil_path_window
+    ):
+        errors["oil_reacquire_frames"] = "Oil reacquire sample 수는 path window 이하여야 합니다."
     weight_names = [spec.name for spec in _FIELD_SPECS if spec.category == "score_weight"]
     if not any(float(getattr(settings, name)) > 0.0 for name in weight_names if name not in errors):
         errors.setdefault("weight_edge", "score 가중치 중 하나 이상은 0보다 커야 합니다.")

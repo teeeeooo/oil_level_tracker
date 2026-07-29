@@ -1,5 +1,7 @@
 # Manual GUI and Windows Acceptance Checklist
 
+This document owns manual GUI, real-video, Windows and packaging obligations. It does not own milestone status; use the [roadmap](../00-project/roadmap.md) and [current work plan](../00-project/work-plan.md).
+
 ## Workbench and video
 - Launch the packaged app on a 100%, 125%, and 150% Windows display scale.
 - At 1280 px window width, verify all five Workbench progress steps remain identifiable on one line without overlap or clipping.
@@ -57,6 +59,44 @@
 - Build and run the one-folder package on a general office Windows PC without CUDA or any GPU-compute runtime dependency.
 - Repeat with Unicode and long paths, active file locking, cancellation and application close; confirm video/output/debug resources are released.
 
+## S5-B oil boundary and temporal tracking
+- Validate a real, visually clear oil boundary and a weak transparent-oil boundary against user-recorded truth.
+- Validate transparent-oil agitation, shimmer and heat-haze-like motion without forcing a numeric boundary.
+- Validate structural horizontal lines, Glass rim, glare and reflection separately and together with a real oil boundary.
+- Include low lighting, blur and fogging; verify conflicting evidence produces review rather than a forced position.
+- Validate full no-interface and empty no-interface scenes; raw and smoothed numeric positions must remain blank.
+- Validate rapid filling, rapid draining and the immediate compressor-startup transient without permanent jump rejection.
+- Validate one-sample and multi-sample oil-boundary dropout; a missing current sample must not display a stale smoothed number.
+- Insert a deliberately misleading strong line, then verify bounded recovery to the true oil path.
+- Validate visible-to-no-interface and no-interface-to-visible transitions, including stale smoothing removal and bounded reacquisition.
+- Run Glass 1, 2 and 3 independently and together; verify oil path, smoothing, polarity and reacquisition state remain isolated.
+- Exercise Workbench preview, modeless preflight, full analysis and partial re-detection with the same representative scenes.
+
+### Legacy pre-cutover inspection
+- Before S5-B2 cutover, inspect the current production path's consensus source support, signed contrast/polarity, static overlap, no-interface decision, path margin, tracker update and reacquisition metrics to understand legacy behavior.
+- Treat these legacy metrics as cutover-context and compatibility/debug evidence only; they are not the acceptance owner for the new typed hypothesis pipeline.
+
+### S5-B1 typed foundation evidence
+- Inspect immutable raw-observation identity and provenance from source evidence through every derived view.
+- Inspect proposal Y span/diameter, members per proposal and total proposal count.
+- Confirm proposal construction does not create a transitive-chaining bridge between otherwise separate evidence groups.
+- Inspect broad region-step evidence separately from narrow line/pulse evidence.
+- Inspect continuous boundary likelihood, continuous artifact likelihood and ambiguity likelihood with its reason.
+- Inspect the soft static-prior contribution and confirm it does not erase contradictory current evidence.
+- Inspect typed boundary, no-interface, ambiguous and unavailable projection outcomes.
+- Inspect raw-observation, proposal, hypothesis and temporal-state resource counts and confirm each remains bounded.
+
+### S5-B2 cutover audit
+- Confirm the typed hypothesis pipeline exclusively owns production oil selection, no-interface and temporal decisions.
+- Confirm official `PhaseDetection`, candidate rows and debug metrics are one-way projections from the accepted typed temporal decision.
+- Confirm legacy generator, consensus, scorer, no-interface and `OilTemporalPath` metrics or state do not exercise production selection authority or provide fallback.
+
+### Cross-stage validation
+- Record user truth and run an external S1 regression dataset containing real oil boundary, reflection, structure, no-interface, dropout and rapid-flow categories.
+- Measure Windows CPU median and long-duration memory with debug disabled; compare against the accepted exact-head baseline and verify bounded path state.
+- Build and run the Windows one-folder package on a general office PC with an integrated/basic GPU and with no CUDA or dedicated GPU compute runtime.
+- Repeat with Unicode and long paths, active file locking, cancellation and application close; confirm video, output and debug resources are released.
+
 ## Analysis lifecycle and cancellation
 - Run 1-, 2- and 3-Glass analyses with a long real compressor video.
 - Confirm the dialog displays all six stages in order: 영상 분석, 이벤트와 판정 계산, 결과 이미지 생성, CSV와 snapshot 저장, graph와 보고서 생성, bundle 마무리.
@@ -86,8 +126,9 @@
 - Repeatedly open and close Result Review and re-detection windows; confirm Matplotlib callbacks, fonts and file handles do not accumulate.
 
 ## Packaging
-- Run the full test suite on Windows with Python 3.14.3.
-- Build one-folder distributions on Windows with both the release baseline interpreter and Python 3.14.3 when possible.
+- Run the Windows canonical suite with Python 3.14.
+- Build and verify the one-folder distribution on Windows in the supported Python 3.14 environment used as the project release baseline.
+- Record the interpreter actually used; do not claim an unexecuted patch version or Windows result.
 - Copy `dist/RotaryOilLevelTracker` to a clean machine without Python or separately bundled font files.
 - Run the complete Workbench, preflight, analysis and Result Review workflow from the one-folder package.
 - Confirm Windows Malgun Gothic is selected on a clean PC and the application does not require a repository font binary.

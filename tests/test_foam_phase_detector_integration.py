@@ -27,7 +27,7 @@ def test_detector_identity_input_immutability_and_debug_false_fast_path():
     frame = _scene("white-foam").frame
     before = frame.copy()
     detection, artifacts = detector.detect(frame, glass, 1, 1.0, debug=False)
-    assert OpenCvPhaseDetector.version == "opencv-phase-detector-s5a-foam-v2"
+    assert OpenCvPhaseDetector.version == "opencv-phase-detector-s5b-typed-production-v1"
     assert artifacts is None
     assert np.array_equal(frame, before)
     assert detection.raw_foam_front_y is not None

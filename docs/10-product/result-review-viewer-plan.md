@@ -4,97 +4,11 @@
 
 이 문서는 Rotary Oil Level Tracker의 분석 결과를 원본 영상과 함께 재생하고, 검출 결과를 overlay로 확인하는 `Result Review Viewer`의 사용자 경험, 데이터 계약, 구현 범위와 단계별 확장 계획을 정의한다.
 
-전체 UX 우선순위와 Phase 순서는 [`UX_IMPROVEMENT_BACKLOG.md`](./UX_IMPROVEMENT_BACKLOG.md)를 따른다. 이 문서는 그중 **Phase 2B 이후 Result Review Viewer 관련 기능의 상세 설계 문서**다.
+전체 UX 계약은 [UX improvement plan](./ux-improvement-plan.md), 품질 및 실영상 gate는 [real-world validation plan](../30-quality/real-world-validation-plan.md)을 따른다. 이 문서는 Phase 2B 이후 Result Review Viewer 관련 상세 설계 문서다.
 
-실사용 graph, detector benchmark와 Phase 2C-4 선행 gate는 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)를 따른다.
+## 2. 문서 소유권
 
-## 2. 구현 현황
-
-### Phase 2B-1 — Result Review Viewer MVP
-
-**완료**
-
-PR #9 `feat: add result review viewer MVP`로 `main`에 반영했다.
-
-- PR head: `2f948a57171586665b20c5f814f1d7d2c2863142`
-- main merge SHA: `faeb31a54d1e7d88ebee79a8ee33769fb24dd8c0`
-- 검증: Python 3.13 및 3.14에서 각각 `175 passed`
-- 기존 bundle과 신규 `review_index.json` bundle 모두 지원
-
-### Phase 2B-2 — 일반 검토 강화
-
-**완료**
-
-PR #11 `feat: enhance result review workflow`로 `main`에 반영했다.
-
-- PR head: `326d36f5694005ffe4794d8238fbbfb30e8f5c41`
-- main merge SHA: `a063520d18cbb5669a068414a9dacfe5b50e867d`
-- 검증: Python 3.13 및 3.14에서 각각 `230 passed`
-- interactive tracking graph와 graph/video 양방향 동기화
-- 검토 사유별 filter
-- report, 결과 폴더와 event capture action
-- 분석 완료 dialog와 같은 profile 새 영상 workflow
-- transactional video/Workbench 교체와 lifecycle 보강
-- `.oilrecipe`, CSV와 `review_index.json` schema 유지
-
-Phase 2B의 실제 Windows DPI, 장시간 실영상 성능, keyframe-dependent seek, graph cursor 성능과 file lock 해제는 수동 확인 항목으로 유지한다.
-
-### Phase 2C-1 — Debug Viewer
-
-**완료**
-
-PR #13 `feat: add result review debug viewer`로 `main`에 반영했다.
-
-- PR head: `160f51b87e0ea4478a5a8c91b9723092e0502720`
-- main merge SHA: `ed596f3781dc30c27c7e47b0d13b8edf16e17c59`
-- 검증: Python 3.13 및 3.14에서 각각 `301 passed`
-- `none`, `basic`, `full` debug trace level과 `basic` 신규 session 기본값
-- bounded-memory streaming JSONL/PNG writer와 atomic bundle 포함
-- backward-compatible optional debug pointer와 lazy index/record/image reader
-- 일반/디버그 mode, candidate overlay, score breakdown, state/smoothing와 artifact panel
-- debug scene filter, graph/timeline marker와 독립 재현 패키지
-- 공식 result bundle 내부와 symlink alias destination으로의 export 차단
-
-### Phase 2C-2 — 부분 재검출과 설정 비교
-
-**완료**
-
-PR #20 `feat: add partial re-detection comparison`으로 `main`에 반영했다.
-
-- PR head: `261a8b32f64817adeafaaec5ea31e644922c833c`
-- main merge SHA: `06d6937b55c70b4726340ee698dfd9ed7d089f23`
-- 검증: Python 3.13 및 3.14에서 각각 `370 passed`
-- 현재 장면 독립 검출, bounded short-range와 선택 관찰창 full-range 재검출
-- 임시 detector 설정과 공식/재검출 tracking, candidate, artifact, event와 판정 비교
-- current/all Workbench 적용의 범위별 compatibility와 한 단계 Undo/Redo
-- result bundle 불변, streaming temporary workspace와 bundle 외부 새 profile 저장
-
-### Phase 2C-3 — 사용자 정답과 regression fixture
-
-**완료**
-
-PR #27 `feat: add user truth annotations and regression fixtures`로 `main`에 반영했다.
-
-- PR head: `7cf152083b72394a90ae1118a94084c32b0c9033`
-- main merge SHA: `c9f130f58d51c79b29cf3594a0cbd44b3a570d78`
-- 검증: Python 3.13 및 3.14에서 각각 `485 passed`
-- 외부 `.oiltruth`, bundle identity validation과 atomic 저장
-- 사용자 유면·거품 위치, fill state, 오류 유형과 공식/truth 비교
-- annotation 탐색, graph/timeline marker와 dirty lifecycle
-- deterministic regression fixture dataset과 비동기 export
-- official result bundle 불변과 path safety
-
-### 실사용 안정화
-
-**S1 Detector benchmark foundation 완료 / 다음 작업 S2 UI raster boundary architecture refactor**
-
-- S1은 PR #29 `feat: add detector benchmark foundation`으로 `main`에 반영했다.
-- S1 PR head: `73edfedb61948e2ff0431ed31075db1ac5d682ef`
-- S1 main merge SHA: `ced132f5927554c658a9993155a8d4afa121b011`
-- canonical validation: Python 3.13 및 3.14에서 각각 `542 passed`, failure/skip 없음
-- S2에서 Result Review canvas의 temporary NumPy/OpenCV allowlist를 제거한다.
-- 이후 Workbench UX와 graph 안정화, Foam/아지랑이 및 유면 tracking 개선을 진행한다.
-- 실제 영상 validation gate 후 annotated MP4 export를 진행한다.
+이 문서는 Result Review의 사용자 흐름, 화면, bundle reader, 시간 동기화, debug/re-detection/truth 계약을 소유한다. 프로젝트 장기 상태는 [roadmap](../00-project/roadmap.md), active gate와 next action은 [work plan](../00-project/work-plan.md)이 소유한다. 과거 PR head와 validation count는 Git history에 보존하며 이 기능 문서에서는 중복 관리하지 않는다.
 
 ## 3. 목표
 
@@ -495,9 +409,7 @@ Bundle asset resolver는 다음을 거부한다.
 - Workbench close 시 Viewer, completion dialog와 pending candidate 정리
 - Viewer 조작이 Workbench current frame, selection, recipe, preview와 preflight 상태를 변경하지 않음
 
-## 8. Phase 2B 완료 조건
-
-다음 자동화 조건은 PR #9와 PR #11에서 충족했다.
+## 8. Phase 2B acceptance contract
 
 - 기존 분석 bundle을 열 수 있다.
 - 신규 bundle에 `review_index.json`을 생성한다.
@@ -536,13 +448,7 @@ Bundle asset resolver는 다음을 거부한다.
 
 ## 9. Phase 2C — Debug Viewer와 재검출
 
-### 상태
-
-**진행 중 — Phase 2C-1, Phase 2C-2, Phase 2C-3와 실사용 안정화 S1 완료 / 다음 작업 S2 UI raster boundary architecture refactor**
-
 ### 9.1 Debug Viewer
-
-**완료**
 
 일반 Viewer와 timeline, graph 기반은 공유하되 mode와 데이터 책임을 분리한다.
 
@@ -580,8 +486,6 @@ Bundle asset resolver는 다음을 거부한다.
 
 ### 9.3 부분 재검출과 설정 비교
 
-**완료**
-
 문제 frame에서 detector 설정을 임시 조정하고 다음 범위를 다시 검출한다.
 
 - 현재 frame
@@ -604,8 +508,6 @@ Bundle asset resolver는 다음을 거부한다.
 - 새 profile로 저장
 
 ### 9.4 사용자 정답과 regression 자료
-
-**완료**
 
 사용자가 잘못 검출된 frame에서 실제 유면 위치와 오류 유형을 지정한다.
 
@@ -648,13 +550,13 @@ debug_case_YYYYMMDD_HHMMSS/
 
 ### 9.6 공유용 결과 영상
 
-**실사용 안정화 gate 이후 진행**
+Prerequisite: the roadmap's S6 real-video/Windows validation gate must pass before implementation begins.
 
 - overlay annotated MP4 export
 - 일반 사용자 공유용 preset
 - 디버그 정보 포함 여부 선택
 
-상세 선행 조건은 [`REAL_WORLD_STABILIZATION_PLAN.md`](./REAL_WORLD_STABILIZATION_PLAN.md)의 S1~S6을 따른다.
+상세 선행 조건은 [real-world validation plan](../30-quality/real-world-validation-plan.md)을 따른다.
 
 ### 9.7 실사용 결과 시각화 안정화
 
@@ -698,7 +600,7 @@ Phase 2C-4 전에 다음을 완료한다.
 
 분석 pipeline이 Qt widget, 색상 또는 화면 배치 정보를 직접 생성하지 않도록 한다.
 
-Decoded frame과 debug artifact는 presentation adapter에서 detached `QImage`로 변환한 뒤 UI에 전달한다. `result_review_canvas.py`의 temporary NumPy/OpenCV allowlist는 별도 S2 architecture refactor에서 제거한다.
+Decoded frame과 debug artifact는 presentation adapter에서 detached `QImage`로 변환한 뒤 UI에 전달한다. Qt presentation은 NumPy/OpenCV를 직접 소유하지 않으며 architecture import guard에 temporary allowlist가 없어야 한다.
 
 ## 11. Phase 2C-1 설계 원칙
 

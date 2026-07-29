@@ -9,7 +9,10 @@ import cv2
 import numpy as np
 
 from benchmark_fixtures import write_catalog
-from oil_tracker.adapters.storage.json_truth_repository import build_truth_bundle_identity
+from controlled_dataset_identity import (
+    CONTROLLED_CONTRACT_VERSION,
+    prepare_controlled_dataset_identity,
+)
 from oil_tracker.adapters.storage.regression_fixture_exporter import RegressionFixtureExporter
 from oil_tracker.application.services.user_truth import TruthFrameContext, UserTruthService
 from oil_tracker.domain.detector_benchmark import BenchmarkCategory
@@ -27,6 +30,17 @@ S5A_SETTING_FIELDS = (
     "foam_strong_evidence_score",
     "foam_persistence_frames",
     "foam_max_front_jump_px",
+)
+S5B_SETTING_FIELDS = (
+    "oil_consensus_tolerance_px",
+    "oil_min_consensus_sources",
+    "oil_min_polarity_score",
+    "oil_no_interface_min_score",
+    "oil_path_window",
+    "oil_path_beam_width",
+    "oil_path_min_margin",
+    "oil_tracker_update_confidence",
+    "oil_reacquire_frames",
 )
 
 
@@ -59,13 +73,24 @@ class ControlledVideoReader:
         self.closed = True
 
 
-def generate_controlled_foam_dataset(tmp_path: Path):
+def generate_controlled_foam_dataset(
+    tmp_path: Path,
+    *,
+    contract_version: str = CONTROLLED_CONTRACT_VERSION,
+):
     bundle = make_truth_bundle(tmp_path / "controlled")
     _make_recipe_snapshot_base_compatible(bundle)
     scenes = controlled_scenes()
     service = UserTruthService()
-    identity = build_truth_bundle_identity(bundle)
-    truth_set = service.create_set(identity)
+    controlled_identity = prepare_controlled_dataset_identity(
+        bundle,
+        scenes,
+        dataset_kind="foam",
+        contract_version=contract_version,
+        fixed_time=FIXED_TIME,
+    )
+    identity = controlled_identity.truth_set.bundle_identity
+    truth_set = controlled_identity.truth_set
     annotations = []
     glass = bundle.recipe.glasses[0]
     for index, scene in enumerate(scenes, 1):
@@ -89,16 +114,24 @@ def generate_controlled_foam_dataset(tmp_path: Path):
             error_types=(TruthErrorType.OTHER,),
             note=f"controlled scene contract: {scene.case_id}",
             official_reference=service.official_reference(bundle, glass, scene.timestamp),
+            now=controlled_identity.timestamp_iso,
         )
         annotation = replace(
             annotation,
-            annotation_id=f"controlled-{index:03d}-{scene.case_id}",
+            annotation_id=controlled_identity.annotation_id(index, scene.case_id),
             revision=index,
         )
-        truth_set.upsert(annotation)
+        annotation = truth_set.upsert(
+            annotation,
+            now=controlled_identity.timestamp_iso,
+        )
         annotations.append(annotation)
     reader = ControlledVideoReader(bundle.source_video_path, bundle.source_metadata, scenes)
-    exporter = RegressionFixtureExporter(lambda _path: reader, clock=lambda: FIXED_TIME)
+    exporter = RegressionFixtureExporter(
+        lambda _path: reader,
+        clock=lambda: FIXED_TIME,
+        dataset_id_factory=lambda: controlled_identity.dataset_id,
+    )
     result = exporter.export(
         bundle,
         truth_set,
@@ -123,13 +156,21 @@ def generate_controlled_foam_dataset(tmp_path: Path):
 
 
 def _make_recipe_snapshot_base_compatible(bundle) -> None:
+    """Remove additive detector keys before fixture hashes are generated.
+
+    The S5-B controlled comparison intentionally feeds identical fixture bytes to
+    the S5-A base detector and the S5-B feature detector. Removing additive S5-A
+    and S5-B keys here lets each checkout restore its own dataclass defaults while
+    preserving the version-1 recipe and regression fixture schemas.
+    """
+
     recipe_path = Path(
         bundle.files.get("recipe_snapshot", bundle.root / "recipe_snapshot.oilrecipe")
     )
     payload = json.loads(recipe_path.read_text(encoding="utf-8"))
     for glass in payload.get("glasses", []):
         settings = glass.get("detector_settings", {})
-        for field_name in S5A_SETTING_FIELDS:
+        for field_name in S5A_SETTING_FIELDS + S5B_SETTING_FIELDS:
             settings.pop(field_name, None)
     recipe_path.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False),

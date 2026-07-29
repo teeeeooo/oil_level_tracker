@@ -12,7 +12,9 @@
 
 ## 0. 문서 권한과 적용 규칙
 
-이 문서는 `Rotary Oil Level Tracker` 프로젝트의 제품 목적, 사용자 workflow, domain model, GUI, 영상 검출기, 결과물, 아키텍처, 테스트 및 구현 순서를 정의하는 **유일한 구현 기준 문서(SSOT)** 이다.
+이 문서는 `Rotary Oil Level Tracker` 프로젝트의 제품 목적, 사용자 workflow, domain model, GUI, 영상 검출기, 결과물, 아키텍처, 테스트 및 구현 순서를 정의하는 **유일한 제품 구현 기준 문서(SSOT)** 이다.
+
+현재 milestone 상태와 장기 순서는 [`00-project/roadmap.md`](./00-project/roadmap.md), active branch의 exact gate·evidence·next action은 [`00-project/work-plan.md`](./00-project/work-plan.md)가 소유한다. 승인된 feature architecture는 이 문서의 제품/호환성 요구를 유지하면서 내부 구현 계약을 구체화할 수 있다. 문서 탐색과 전체 권한 순서는 [`README.md`](./README.md)를 따른다.
 
 이 문서는 다음 기존 문서의 내용을 통합하고 대체한다.
 
