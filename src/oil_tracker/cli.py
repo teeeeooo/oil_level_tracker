@@ -10,6 +10,7 @@ from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
 from oil_tracker.adapters.storage.regression_dataset_reader import FilesystemRegressionDatasetReader
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+from oil_tracker.application.ports.progress import ProgressUpdate
 from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
 from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
@@ -50,6 +51,25 @@ def main(argv: list[str] | None = None) -> int:
     return 2
 
 
+def _format_analysis_progress(progress: ProgressUpdate) -> str:
+    parts = [f"[{progress.stage_index}/{progress.stage_count}] {progress.stage_label}"]
+    if progress.message:
+        parts.append(progress.message)
+    if progress.total > 0:
+        parts.append(f"{progress.completed}/{progress.total}")
+    if progress.timestamp_sec is not None:
+        parts.append(f"{progress.timestamp_sec:.3f}s")
+    if progress.glass_name:
+        parts.append(progress.glass_name)
+    if progress.rate_fps is not None:
+        parts.append(f"{progress.rate_fps:.2f} fps")
+    return " | ".join(parts)
+
+
+def _print_analysis_progress(progress: ProgressUpdate) -> None:
+    print(_format_analysis_progress(progress), end="\r", flush=True)
+
+
 def _run_analyze(args) -> int:
     repository = JsonRecipeRepository()
     recipe = repository.load(Path(args.recipe))
@@ -77,12 +97,15 @@ def _run_analyze(args) -> int:
     result = pipeline.run(
         recipe,
         session,
-        progress=lambda progress: print(
-            f"{progress.completed}/{progress.total} {progress.timestamp_sec:.3f}s {progress.glass_name}",
-            end="\r",
-        ),
+        progress=_print_analysis_progress,
     )
-    output = OutputBundleStore().write_bundle(result, recipe, session, Path(args.output))
+    output = OutputBundleStore().write_bundle(
+        result,
+        recipe,
+        session,
+        Path(args.output),
+        progress=_print_analysis_progress,
+    )
     print(f"\n{result.overall_state.value}: {output}")
     return 0
 
