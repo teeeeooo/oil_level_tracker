@@ -1,12 +1,12 @@
 # S5-B Oil-Boundary Hypothesis Architecture
 
-**Status:** `ACTIVE` single-frame observability contract; production repair is blocked pending independent contract audit
+**Status:** `ACTIVE` single-frame observability source implemented; fresh independent source exact-head audit pending
 **Milestone:** [S5-B](../00-project/work-plan.md)
 **Authoritative diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
 
 This document governs the S5-B internal evidence, temporal-state, canonical-decision, canonical-outcome and detector-projection boundaries. It retains the audited serialized temporal owner while superseding the assumption that every robust oil/glare distinction can be recovered from one current frame and its existing typed evidence.
 
-`ACTIVE` identifies the governing architecture only. It does not authorize production source repair, controlled comparison, canonical validation, Windows/manual validation, packaging, merge, synchronization, cleanup or S5-B completion. The next gate is a fresh independent **Observability Contract Exact-Head Audit** of the documentation, controlled truth and executable test contract.
+`ACTIVE` identifies the governing architecture only. The audited observability contract and bounded source implementation are complete but unapproved. It does not authorize controlled comparison, canonical validation, Windows/manual validation, packaging, merge, synchronization, cleanup or S5-B completion. The next gate is a fresh independent **source exact-head audit** of the immutable contract, production owner and retained behavior.
 
 ## Single-frame observability contract
 
@@ -60,13 +60,15 @@ The contract covers:
 
 Retained distinguishable clear/rapid, bright real-boundary and structural-plus-real cases remain numeric and truth-near. Structural-only, the exact historical glare-negative set of `21`, saturated glare, malformed Phase-A mismatch and independently governed S5-A Foam remain fail-closed or otherwise unchanged according to their existing contracts.
 
-### Gate and future options
+### Implemented observability boundary and next gate
 
-The current plateau-discriminability repair is **not approved**. Controlled base/feature comparison and production source repair are blocked until the new exact-head observability contract receives independent `PASS`.
+The independent Observability Contract Exact-Head Audit returned `PASS`. The bounded source implementation keeps the plateau-discriminability heuristic unchanged as a visible-artifact cue and adds no physical glare classification. Typed current-observation acceptance instead fails closed when a near-ceiling phase produces strong full-width narrow evidence but lacks the existing independent broad-phase corroboration needed to identify the boundary from the current frame. The rule is applied equally to observationally equivalent latent glare and latent oil inputs.
 
-After contract audit, a separate bounded source task may implement this canonical ambiguity rule without changing preprocessing, proposal construction, Phase-A, temporal mathematics, fill-state, Foam, external schemas, detector version or dependencies unless separately authorized.
+The implementation does not change preprocessing, proposal construction, semantic likelihood formulas, the general boundary floor, Phase-A, temporal mathematics, fill-state, Foam, external schemas, detector version or dependencies. Existing ambiguity reduction already preserves accepted temporal state and cannot promote repeated identical unresolved frames, so no temporal owner change is required.
 
-Future architecture options are limited to separately designed and audited positive evidence such as temporal photometric/component history or capture metadata. Optical flow, retained raster history and capture-metadata schemas are not implemented by this contract change.
+The bounded source remains unapproved until a fresh independent source exact-head audit returns `PASS`. Controlled base/feature comparison is blocked until that audit authorizes it.
+
+Future architecture options are limited to separately designed and audited positive evidence such as temporal photometric/component history or capture metadata. Optical flow, retained raster history and capture-metadata schemas are not implemented by this source change.
 
 The milestone order remains `S5-B → S5-C → S6`; this diagnosis does not reorder or combine S5-C or S6.
 
@@ -543,44 +545,40 @@ Every row asserts exact prior-store identity or value equality, `PipelineFailure
 - controlled accuracy expectations are not relaxed;
 - obsolete concurrency code is absent rather than dormant.
 
-## Required implementation evidence
+## Required source-audit evidence
 
-The future source Worker must report:
+The fresh independent source Auditor must verify:
 
-- starting and resulting exact heads;
-- complete changed-file set;
-- owner command and queue implementation;
-- command ordering evidence under concurrent callers;
-- owner-state replacement instrumentation proving one assignment per successful mutation;
-- full prior-store invariance at every injected failure point;
-- reset/run/snapshot/count ordering evidence;
-- re-entry rejection evidence;
-- reducer variant coverage;
-- detector post-commit rejection removal;
-- removed lock/barrier/generation/token/session surface;
-- focused and full regression results;
-- unchanged controlled-accuracy findings, if still present.
+- immutable observability fixtures and contract tests are byte-for-byte unchanged;
+- all eight observationally equivalent collision pairs produce the same typed and canonical ambiguity family;
+- no collision publishes raw or smoothed numeric oil or selects an oil candidate;
+- repeated identical unresolved frames remain `NO_UPDATE` plus `PRESERVE` without numeric promotion;
+- the implemented boundary uses only current observable evidence and contains no latent label, fixture ID or case-specific branch;
+- the general boundary floor, semantic likelihood formulas, preprocessing and plateau score are unchanged;
+- retained clear/rapid, bright-boundary, structural, historical glare, saturated-glare, malformed Phase-A and S5-A Foam contracts remain satisfied;
+- temporal source is unchanged because existing ambiguity reduction already owns the repeated-sequence behavior;
+- detector version, dependencies and external schemas remain unchanged.
 
-A fresh independent Observability Contract Exact-Head Audit is required before any production source implementation or controlled comparison.
+Controlled comparison remains blocked until this fresh source audit returns `PASS`.
 
 ## Non-goals
 
-This contract change does not:
+This bounded source implementation does not:
 
-- modify production source, dependencies, detector version or external schemas;
-- change detector algorithms, likelihoods, thresholds or successful temporal mathematics;
-- redesign Foam temporal ownership;
+- change preprocessing, proposal construction, semantic likelihood formulas, the general boundary floor, dependencies, detector version or external schemas;
+- infer a physical glare cause or relabel latent oil truth;
+- redesign temporal or Foam ownership;
 - implement temporal raster history, optical flow or capture metadata;
-- authorize source repair, controlled comparison or broader validation;
-- claim the current plateau-discriminability source is approved;
+- authorize controlled comparison or broader validation before the source audit;
+- make the retained plateau-discriminability cue the acceptance owner;
 - approve packaging, merge, synchronization, cleanup or S5-B completion.
 
 ## Remaining risks
 
-The executable contract intentionally exposes current source defects. A contract-red result is not permission to weaken latent truth, relabel oil-bearing scenes as no oil, add case-ID behavior or move another local threshold cliff.
+The executable contract remains the immutable acceptance target for the bounded source. Any future contract-red result is not permission to weaken latent truth, relabel oil-bearing scenes as no oil, add case-ID behavior or move another local threshold cliff.
 
 Serialization may increase per-frame latency if evidence construction is expensive. The product has only one to three Glasses, so this remains an accepted architectural trade until measured. Later profiling may identify safe stateless preprocessing work outside the owner, but must not split temporal authority or create a second validation boundary.
 
 Broad/narrow evidence correlation under blur, fog and refractive motion, exposure-dependent full/empty classification, Glass calibration variance and debug CPU cost remain detector-evidence risks for later controlled comparison. They are not reasons to weaken serialized ownership or the observability contract.
 
-The current gate is the fresh independent Observability Contract Exact-Head Audit. Production repair and controlled comparison remain blocked until that audit returns `PASS`.
+The current gate is the fresh independent source exact-head audit. Controlled comparison remains blocked until that audit returns `PASS`.

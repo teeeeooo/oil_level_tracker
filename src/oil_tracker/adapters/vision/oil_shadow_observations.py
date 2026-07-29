@@ -297,7 +297,13 @@ def evaluate_typed_current_observation(
     ordered = sorted(hypotheses, key=_hypothesis_order)
     best = ordered[0] if ordered else None
     second_boundary = ordered[1].boundary_likelihood if len(ordered) > 1 else 0.0
+    observability_conflict = False
     if best is not None:
+        observability_conflict = _has_single_frame_observability_conflict(
+            pre,
+            effective_mask,
+            best,
+        )
         boundary_margin = max(
             0.0,
             best.boundary_likelihood
@@ -316,7 +322,9 @@ def evaluate_typed_current_observation(
                 no_interface,
             )
         )
-        if standard_boundary or corroborated_single_boundary:
+        if not observability_conflict and (
+            standard_boundary or corroborated_single_boundary
+        ):
             return ShadowBoundaryObservation(
                 hypothesis=best,
                 alternatives=tuple(
@@ -333,7 +341,9 @@ def evaluate_typed_current_observation(
         return ShadowNoInterfaceObservation(evidence=no_interface)
 
     reason = "competing_boundary_artifact_or_no_interface_evidence"
-    if best is not None and best.polarity_available is False:
+    if observability_conflict:
+        reason = "single_frame_boundary_observability_conflict"
+    elif best is not None and best.polarity_available is False:
         reason = "polarity_unavailable_or_conflicting"
     elif no_interface.glare_conflict >= 0.55:
         reason = "glare_visibility_conflict"
@@ -363,6 +373,57 @@ def evaluate_typed_current_observation(
         projected_source_y=projected_source_y,
         reason=reason,
     )
+
+
+def _has_single_frame_observability_conflict(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    best: SemanticHypothesis,
+) -> bool:
+    """Fail closed when a near-ceiling phase lacks independent broad support."""
+
+    if (
+        best.broad.available_scale_count < 2
+        or best.broad.strength >= 0.40
+        or best.narrow.horizontal_coverage < 0.95
+        or best.evidence_availability < 0.90
+        or best.visibility < 0.85
+    ):
+        return False
+    if not np.issubdtype(pre.gray.dtype, np.integer):
+        return False
+
+    effective = effective_mask > 0
+    center = min(
+        effective.shape[0] - 1,
+        max(0, int(round(best.broad.transition_local_y))),
+    )
+    depth = max((item.band_scale for item in best.broad.scales), default=3)
+    gap = 2
+    side_ranges = (
+        range(max(0, center - gap - depth), max(0, center - gap)),
+        range(
+            min(effective.shape[0], center + gap),
+            min(effective.shape[0], center + gap + depth),
+        ),
+    )
+    ceiling = float(np.iinfo(pre.gray.dtype).max)
+    near_ceiling = ceiling - 15.0
+    for rows in side_ranges:
+        values = [
+            pre.gray[row][effective[row]]
+            for row in rows
+            if np.any(effective[row])
+        ]
+        if not values:
+            continue
+        samples = np.concatenate(values).astype(np.float64)
+        if samples.size < 20:
+            continue
+        near_ceiling_fraction = float(np.mean(samples >= near_ceiling))
+        if near_ceiling_fraction >= 0.90 and float(np.std(samples)) <= 4.0:
+            return True
+    return False
 
 
 def _accepts_corroborated_single_dominant_boundary(

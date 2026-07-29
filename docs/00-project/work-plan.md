@@ -1,22 +1,23 @@
 # Current Work Plan
 
-- **Document status:** `OBSERVABILITY_CONTRACT_AUDIT_PENDING`
+- **Document status:** `SOURCE_IMPLEMENTATION_COMPLETE_AUDIT_PENDING`
 - **Active milestone:** `S5-B — Oil-boundary hypothesis architecture`
 - **Branch:** `feature/oil-boundary-temporal-tracking`
-- **Observability-contract start exact head:** `d558fecc0c043037043af3967aec7fd197afcf5e`
+- **Source-implementation start exact head:** `4a9129a46da0e3db8dc775d20ea6c79ffb0d4c30`
 - **Base:** `main @ 5f180d02a7aff36591e6f35adf44fca6347bdf9c`
 - **Authoritative diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`
 - **Architecture audit:** `AUDIT: PASS`
 - **Serialized source re-audit:** `AUDIT: PASS`
-- **Latest plateau-discriminability source state:** `NOT APPROVED`
-- **Controlled comparison:** `COMPARISON: FAIL`, rerun blocked
-- **Current mutation owner:** documentation, controlled observability fixtures, tests and PR metadata only
-- **Production source mutation:** `NOT RUN`
-- **Current gate:** Fresh independent Observability Contract Exact-Head Audit
-- **Source repair:** Blocked pending contract audit `PASS`
-- **Canonical/Qt and controlled comparison:** Blocked pending contract audit and later source audit
+- **Observability Contract Exact-Head Audit:** `AUDIT: PASS`
+- **Plateau-discriminability heuristic:** retained unchanged as a non-authoritative visible-artifact cue
+- **Controlled comparison:** rerun blocked pending fresh independent source exact-head audit `PASS`
+- **Current mutation owner:** bounded production source, source-completing documentation and PR metadata
+- **Production source mutation:** bounded typed-observation implementation complete
+- **Current gate:** Fresh independent source exact-head audit; Auditor does not merge
+- **Source repair:** complete and unapproved pending source audit
+- **Canonical/Qt and controlled comparison:** blocked pending source audit `PASS`
 
-This plan records the S5-B single-frame observability contract after the authoritative diagnosis `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`. The existing detector input and typed evidence cannot always distinguish partial glare from a legitimate oil phase; therefore latent physical truth and detector-observable outcome are separate contract dimensions. This Worker changes no production source, threshold, proposal construction, Phase-A validator, temporal reducer/store, fill-state, smoothing, Foam owner, detector version, dependency or external schema.
+This plan records the bounded production implementation of the audited S5-B single-frame observability contract. The existing detector input and typed evidence cannot always distinguish partial glare from a legitimate oil phase; therefore latent physical truth and detector-observable outcome remain separate contract dimensions. The implementation changes only typed current-observation acceptance in `oil_shadow_observations.py`; proposal construction, semantic scoring, Phase-A validation, temporal reducer/store, fill-state, smoothing, Foam ownership, detector version, dependencies and external schemas remain unchanged.
 
 ## Current observability decision
 
@@ -26,7 +27,7 @@ The controlled fixture owner records latent scene cause, physical numeric geomet
 
 The executable collision matrix covers centered partial glare at `72/74 px`, legitimate `90 → 244` phase, alternating/block/sinusoidal stripe patterns, bright-side reversal, and ROI width/location variants where the component edge disappears. Repeated identical unresolved frames are not positive temporal evidence and cannot become numeric acceptance by repetition alone.
 
-The current plateau-discriminability repair is not approved. Production source repair and controlled comparison remain blocked until the fresh independent contract audit returns `PASS`. Future temporal photometric evidence or capture metadata require a separate architecture decision; neither is implemented here. The sequence `S5-B → S5-C → S6` is unchanged.
+The plateau-discriminability heuristic remains unchanged and is not the acceptance owner for unresolved collisions. Typed observation acceptance now fails closed when a near-ceiling phase is supported by a strong full-width narrow edge but does not reach the existing independent broad-evidence corroboration level. This is a conservative current-frame identifiability boundary, not a physical glare classifier: observationally equivalent latent glare and latent oil inputs receive the same ambiguity outcome. Future temporal photometric evidence or capture metadata require a separate architecture decision; neither is implemented here. Controlled comparison remains blocked until the fresh independent source audit returns `PASS`, and the sequence `S5-B → S5-C → S6` is unchanged.
 
 ## Why the previous source direction is retired
 
@@ -189,37 +190,36 @@ The later plateau-discriminability source changes remain historical implementati
 
 ## Contract evidence status
 
-- Paired latent glare/oil interpretations carry different physical truth while sharing one ambiguous detector expectation.
-- Centered `72/74 px` partial glare and legitimate `90 → 244` oil phase are effective-observation equivalent under the controlled ellipse.
-- Alternating, short-block and sinusoidal texture plus bright-side reversal are included as unresolved single-frame collisions.
-- Shifted/narrow ROI cases prove equivalence when the component edge disappears; these already fail closed under the current source and remain retained contract coverage.
-- Repeated identical unresolved frames must remain ambiguity with no numeric promotion.
-- Exact historical glare negatives: `21` no-numeric cases retained.
-- Distinguishable clear/rapid, bright reversed and structural-plus-real cases remain truth-near numeric; structural-only remains no numeric.
-- Saturated glare, malformed Phase-A mismatch and S5-A Foam contracts remain retained.
-- No production source, dependency, detector version or external schema is changed by this Worker.
-- Final targeted contract set: `45 passed, 6 failed`; all six failures are expected current-source contract gaps and unexpected failures are `0`.
-- Red collision nodes: short-period block stripe, centered partial glare `72 px`, centered partial glare `74 px`, sinusoid with bright side above, sinusoid with bright side below, and repeated identical ambiguity.
-- Each single-frame red collision currently produces `ShadowBoundaryObservation` → `AcceptedBoundaryOutcome`, raw/smoothed `80.0`, `ACCEPT_BOUNDARY`/`PRESERVE`, and no review flag instead of the required ambiguity/no-numeric result.
-- The repeated sequence currently publishes raw/smoothed `80.0` on all six frames and treats every frame as accepted boundary evidence.
+- Paired latent glare/oil interpretations retain different physical truth while sharing one ambiguous detector expectation and byte-identical effective current evidence.
+- All eight collision pairs now produce `ShadowAmbiguousObservation` and `AmbiguousOutcome` with no raw/smoothed numeric oil, no selected oil candidate, `NO_UPDATE`, `PRESERVE` and review-required projection.
+- The exact six prior red nodes are green: short-period block stripe, centered partial glare `72 px`, centered partial glare `74 px`, sinusoid with bright side above, sinusoid with bright side below and repeated identical ambiguity.
+- The six-frame repeated unresolved sequence remains ambiguous on every frame and never promotes itself to numeric oil.
+- Exact historical glare negatives remain `21/21` without numeric oil.
+- Distinguishable clear/rapid, bright real-boundary and structural-plus-real cases remain truth-near numeric; structural-only remains without numeric oil.
+- Saturated glare remains coherent ambiguity; malformed Phase-A likelihood/projection mismatch remains fail-closed; S5-A Foam/shimmer remains independently green.
+- The immutable observability fixture and contract test SHA-256 values remain `818802756ebc206250f89540f06616988816b93c5e9b55b17bb42511decc8579` and `727455c5f6263a84e740fd307c9f28846af15e743c729945a4ac841a80ca3b18`.
+- Full observability contract file: `40 passed`.
+- Stabilized Worker-owned targeted set: `144 passed`, expected failures `0`, unexpected failures `0`, skip/xfail/conditional acceptance `0`.
+- Python compile and `git diff --check`: `PASS`.
+- Temporal owner, dependencies, detector version and external schemas are unchanged.
 
 ## Downstream sequence
 
-1. Fresh independent Observability Contract Exact-Head Audit; the Auditor does not merge.
-2. Only after contract `PASS`, a separate bounded production source implementation and fresh exact-head source audit.
-3. Controlled base/feature comparison only after the source audit authorizes it.
-4. Formal S5-B completion under separate merge authority.
-5. `S5-C — Canonical/Qt validation stabilization` as a distinct post-S5-B gate.
-6. S6 real-video, Windows/manual and packaging validation.
+1. Fresh independent source exact-head audit; the Auditor does not merge.
+2. Controlled base/feature comparison only after the source audit returns `PASS` and authorizes it.
+3. Formal S5-B completion under separate merge authority.
+4. `S5-C — Canonical/Qt validation stabilization` as a distinct post-S5-B gate.
+5. S6 real-video, Windows/manual and packaging validation.
 
-## Latest recorded contract state
+## Latest recorded source state
 
 - **Diagnosis:** `DIAGNOSIS: CONTRACT_UNIDENTIFIABLE`.
-- **Starting exact head:** `d558fecc0c043037043af3967aec7fd197afcf5e`.
-- **Changed owners:** authoritative documentation, dedicated controlled observability fixture/truth metadata, executable contract tests and PR metadata.
-- **Production source:** unchanged.
-- **Plateau-discriminability repair:** not approved.
-- **Controlled comparison and source repair:** blocked pending independent contract `PASS`.
+- **Starting exact head:** `4a9129a46da0e3db8dc775d20ea6c79ffb0d4c30`.
+- **Changed owners:** typed current-observation source, source-completing architecture/work-plan documentation and PR metadata.
+- **Production owner:** `src/oil_tracker/adapters/vision/oil_shadow_observations.py`.
+- **Plateau-discriminability heuristic:** retained unchanged as a non-authoritative visible-artifact cue.
+- **Temporal owner:** unchanged; existing ambiguity reduction already prevents repeated-frame numeric promotion.
+- **Controlled comparison:** blocked pending independent source audit `PASS`.
 - **Intentional non-runs:** full repository, canonical/Qt, E2E, controlled comparison, Windows/manual, packaging, merge, synchronization, Close and cleanup.
-- **Current gate:** fresh independent Observability Contract Exact-Head Audit after ordinary commit/push.
+- **Current gate:** fresh independent source exact-head audit after ordinary commit/push.
 - **Resulting exact SHA:** reported by the Worker final report, not self-recorded in this commit.
