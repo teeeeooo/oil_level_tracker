@@ -7,7 +7,7 @@
 **Worker branch:** `feature/s6-base-sample-qualification`
 **Initial qualification evidence commit:** `6b78b398de0cc87e3384ab6f1fe854c698468648`
 **Resume branch-update merge:** `c3b3598`
-**Resume qualification evidence commit:** `PENDING_RESUME_EVIDENCE_COMMIT`
+**Resume qualification evidence commit:** `098ee55ea6e0d54cd621d511ce6bb0a1500b51ce`
 **Durable evidence:** [`../30-quality/s6-base-sample-1-evidence.md`](../30-quality/s6-base-sample-1-evidence.md)
 **Current gate:** `PR #58 S6-A Qualification Fresh Exact-Head Auditor`
 

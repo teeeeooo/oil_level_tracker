@@ -7,7 +7,7 @@
 **Initial qualification evidence commit:** `6b78b398de0cc87e3384ab6f1fe854c698468648`
 **Resume repaired main:** `8b37ff81c5d0aa55bf0449f1dbf07d9377b61cd4` (`fix: handle optional CLI lifecycle progress fields`)
 **Resume branch-update merge:** `c3b3598` (`Merge branch 'main' into feature/s6-base-sample-qualification`)
-**Resume qualification evidence commit:** `PENDING_RESUME_EVIDENCE_COMMIT`
+**Resume qualification evidence commit:** `098ee55ea6e0d54cd621d511ce6bb0a1500b51ce`
 **Scope:** macOS source-tree, short repository supporting sample only
 
 This document preserves the pre-repair CLI failure, the pre-repair diagnostic execution and the repaired-main official CLI rerun as separate evidence. It records engineering behavior, not detector truth accuracy. The sample has no user-confirmed `.oiltruth`; therefore MAE, precision, recall, false-positive/false-negative truth and physical correctness are not evaluated.
