@@ -1,13 +1,16 @@
 # S6-A Repository Supporting Sample Qualification Evidence
 
-**Verdict:** `S6-A SAMPLE QUALIFICATION: FAIL`
+**Verdict:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Milestone:** `S6 — Real-video and Windows validation gate` remains `ACTIVE`
 **Worker branch:** `feature/s6-base-sample-qualification`
-**Starting main:** `2d085423d63c4ecd716ed47deef41293a9e69e5c` (`docs: close S5-C and activate S6`)
-**Qualification evidence commit:** `6b78b398de0cc87e3384ab6f1fe854c698468648`
+**Initial starting main:** `2d085423d63c4ecd716ed47deef41293a9e69e5c` (`docs: close S5-C and activate S6`)
+**Initial qualification evidence commit:** `6b78b398de0cc87e3384ab6f1fe854c698468648`
+**Resume repaired main:** `8b37ff81c5d0aa55bf0449f1dbf07d9377b61cd4` (`fix: handle optional CLI lifecycle progress fields`)
+**Resume branch-update merge:** `c3b3598` (`Merge branch 'main' into feature/s6-base-sample-qualification`)
+**Resume qualification evidence commit:** `PENDING_RESUME_EVIDENCE_COMMIT`
 **Scope:** macOS source-tree, short repository supporting sample only
 
-This document records engineering behavior, not detector truth accuracy. The sample has no user-confirmed `.oiltruth`; therefore MAE, precision, recall, false-positive/false-negative truth and physical correctness are not evaluated.
+This document preserves the pre-repair CLI failure, the pre-repair diagnostic execution and the repaired-main official CLI rerun as separate evidence. It records engineering behavior, not detector truth accuracy. The sample has no user-confirmed `.oiltruth`; therefore MAE, precision, recall, false-positive/false-negative truth and physical correctness are not evaluated.
 
 ## Exact sample and Recipe identity
 
@@ -37,7 +40,9 @@ The on-screen context identifies the clip as “TechTip: Checking Oil Level - Bi
 - Execution path: `PYTHONPATH=src .venv/bin/python`
 - OpenCV source reader: repository `OpenCvVideoReader`
 - Detector: `opencv-phase-detector-s5b-typed-production-v1`
-- Repository state at start: local `main == origin/main == 2d085423…`, upstream `origin/main`, clean worktree
+- Initial repository state: local `main == origin/main == 2d085423…`, upstream `origin/main`, clean worktree
+- Resume repository state: local `main == origin/main == 8b37ff81…`, primary checkout on `main`, clean worktree
+- Branch update: non-rewriting merge of repaired `main` into the existing feature branch; original qualification commits remain ancestors
 - Environment mutation: none; no install, editable-install, dependency or packaging change
 
 ## Representative visual inspection and geometry
@@ -81,9 +86,9 @@ Repository `JsonRecipeRepository` load and save paths were used.
 - `mm_per_pixel is None`: `True`;
 - Git allowlist resolves specifically to `sample/base_sample_1.oilrecipe`.
 
-## Controlled CLI execution matrix
+## Pre-repair controlled CLI failure evidence
 
-All three requested runs used the same Recipe and `5.0 FPS`. Each command was started in a fresh process.
+All three requested runs used the same Recipe and `5.0 FPS`. Each command was started in a fresh process before the CLI formatting repair reached `main`.
 
 | Run | Range | Intended purpose | Actual CLI result |
 |---|---|---|---|
@@ -133,6 +138,35 @@ To determine whether the failure extended into detector or bundle ownership, the
 | C | `REVIEW_REQUIRED` | 48 | 7 | `27.40 s` | `34.25 s` | `200,294,400 B` | `run-c-post-overlay-fresh/.../oil_level_analysis_20260730_074506` |
 
 The timing is a short-run diagnostic only. It is not a long-duration memory result, accepted CPU baseline or Windows performance result.
+
+## Post-repair official CLI resume execution
+
+The repaired authoritative base is `main @ 8b37ff81c5d0aa55bf0449f1dbf07d9377b61cd4`. The existing feature branch was updated by merge commit `c3b3598`; no qualification history was rewritten. Each official run used the real CLI entrypoint in a fresh process and a fresh output root:
+
+```bash
+PYTHONPATH=src .venv/bin/python -m oil_tracker.cli analyze \
+  --recipe sample/base_sample_1.oilrecipe \
+  --video sample/base_sample_1.mp4 \
+  --output <run-output-root> \
+  --start <run-start> --end <run-end> \
+  --compressor-start 0 --sampling-fps 5.0
+```
+
+| Run | Exact range | Exit | Progress | Status | Samples | Events | Review events / flagged rows | Wall | Peak RSS |
+|---|---|---:|---|---|---:|---:|---:|---:|---:|
+| A — pre-overlay | `0–4.990138249 s` | `0` | `[1/6]` through `[6/6]`; no `None` | `REVIEW_REQUIRED` | 26 | 10 | `3 / 8` | `16.37 s` | `201,031,680 B` |
+| B — full | `0–14.438133333 s` | `0` | `[1/6]` through `[6/6]`; no `None` | `REVIEW_REQUIRED` | 73 | 10 | `3 / 55` | `35.16 s` | `202,309,632 B` |
+| C — post-overlay fresh | `5.023405837–14.438133333 s` | `0` | `[1/6]` through `[6/6]`; no `None` | `REVIEW_REQUIRED` | 48 | 7 | `2 / 48` | `37.73 s` | `201,506,816 B` |
+
+Each `review_index.json` contains one Glass with `result_status=REVIEW_REQUIRED`. No run printed `None`, traceback or CLI error. Exact bundles:
+
+- A: `sample/output/s6-base-sample-1/resume-official-8b37ff81-20260730T1016/run-a-pre-overlay/oil_level_analysis_20260730_102008`
+- B: `sample/output/s6-base-sample-1/resume-official-8b37ff81-20260730T1016/run-b-full/oil_level_analysis_20260730_102101`
+- C: `sample/output/s6-base-sample-1/resume-official-8b37ff81-20260730T1016/run-c-post-overlay-fresh/oil_level_analysis_20260730_102206`
+
+Repository `ResultBundleReader` reopened all three bundles. Required manifests, CSV files, Recipe/session snapshots, review indexes, reports, graphs, captures and analysis logs exist and parse. All local report references resolve; PNGs decode; no hidden temporary/staging artifact remains; the Recipe snapshot SHA-256 equals the tracked Recipe hash; full/empty numeric oil CSV fields remain blank; no video or output handle remained after process exit.
+
+The official CLI status, sample count and event count exactly match the corresponding pre-repair diagnostic execution. The repaired progress presentation changes lifecycle completion only; this evidence shows no detector-result or bundle-content divergence attributable to the repair. These short-run timings remain diagnostics, not accepted long-duration or Windows performance evidence.
 
 ## Detector engineering findings
 
@@ -229,17 +263,13 @@ Not executed and not accepted by this qualification:
 
 ## Final classification and next gate
 
-`S6-A SAMPLE QUALIFICATION: FAIL`
+`S6-A SAMPLE QUALIFICATION: PASS`
 
-The sample bytes and Recipe are reproducible, detector behavior remains reviewable around the explanatory overlay, and diagnostic bundles are structurally sound. However, all three required real CLI executions fail before bundle finalization because the CLI formats lifecycle progress with a missing timestamp. That material pipeline failure prevents `PASS`.
+The exact sample and Recipe identities match, the existing qualification history is preserved on repaired `main`, and all three required official CLI executions now exit `0`, emit lifecycle stages `[1/6]` through `[6/6]` without `None` or traceback, atomically finalize complete bundles and retain the reviewable detector behavior recorded before repair. No material qualification blocker remains for this repository supporting sample.
 
-Required next sequence:
+`PASS` means the short supporting-sample CLI and bundle qualification completed. It is not detector accuracy PASS, physical oil truth, Windows acceptance, long-duration acceptance, packaging acceptance, S6 Close or authorization to start S7.
 
-1. create a separate bounded source-repair task for the CLI progress callback;
-2. add focused regression coverage without changing detector behavior, thresholds, schemas or dependencies;
-3. obtain the required independent review/merge for that repair;
-4. rerun S6-A from the repaired exact main with the same video and Recipe bytes;
-5. keep S6 `ACTIVE`; Windows, long-duration and packaging remain pending.
+The next gate is `PR #58 S6-A Qualification Fresh Exact-Head Auditor`. A fresh Worker-independent Auditor must verify the updated exact base/head, preserved pre-repair evidence, repaired-main official A/B/C reproduction, bundle integrity, truth limitations, bounded PR diff and continued S6 `ACTIVE` status. Only after `AUDIT: PASS` may that Auditor perform the authorized guarded merge and registered-checkout synchronization.
 
 ## Evidence locations
 
@@ -249,9 +279,14 @@ Generated evidence is intentionally ignored by Git under:
 sample/output/s6-base-sample-1/
 ├─ frames/
 ├─ representative_frame_evidence.json
-├─ run-a-pre-overlay/
+├─ run-a-pre-overlay/                  # pre-repair diagnostic/failure evidence
 ├─ run-b-full/
-└─ run-c-post-overlay-fresh/
+├─ run-c-post-overlay-fresh/
+└─ resume-official-8b37ff81-20260730T1016/
+   ├─ official-cli-validation-summary.json
+   ├─ run-a-pre-overlay/
+   ├─ run-b-full/
+   └─ run-c-post-overlay-fresh/
 ```
 
 Tracked reproduction inputs and durable evidence are:
@@ -261,4 +296,4 @@ Tracked reproduction inputs and durable evidence are:
 - this document;
 - `docs/00-project/work-plan.md`.
 
-No production source, test, detector threshold, schema, dependency or packaging file was changed by this Worker.
+The repaired source and focused test arrive only through merged `main @ 8b37ff81…`. This resume Worker changed qualification documentation only; the PR diff against current `main` contains no source, test, detector threshold, schema, dependency or packaging change.

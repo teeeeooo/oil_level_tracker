@@ -2,27 +2,16 @@
 
 **Current milestone:** `S6 — Real-video and Windows validation gate`
 **Milestone status:** `ACTIVE`
-**Current S6-A result:** `S6-A SAMPLE QUALIFICATION: FAIL`
-**Authoritative qualification base:** `main @ 2d085423d63c4ecd716ed47deef41293a9e69e5c`
+**Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
+**Authoritative qualification base:** `main @ 8b37ff81c5d0aa55bf0449f1dbf07d9377b61cd4`
 **Worker branch:** `feature/s6-base-sample-qualification`
-**Qualification evidence commit:** `6b78b398de0cc87e3384ab6f1fe854c698468648`
+**Initial qualification evidence commit:** `6b78b398de0cc87e3384ab6f1fe854c698468648`
+**Resume branch-update merge:** `c3b3598`
+**Resume qualification evidence commit:** `PENDING_RESUME_EVIDENCE_COMMIT`
 **Durable evidence:** [`../30-quality/s6-base-sample-1-evidence.md`](../30-quality/s6-base-sample-1-evidence.md)
+**Current gate:** `PR #58 S6-A Qualification Fresh Exact-Head Auditor`
 
-This document owns the active execution state. Milestone order and completion state remain governed by [`roadmap.md`](./roadmap.md). S6 remains active; this finding does not close S6 or authorize S7.
-
-## Current gate
-
-The repository supporting sample and deterministic Recipe are qualified as reproducible inputs, but the required source-tree CLI workflow is blocked by a material lifecycle-progress defect.
-
-All three controlled CLI attempts fail with exit code `2` before bundle finalization:
-
-```text
-TypeError: unsupported format string passed to NoneType.__format__
-```
-
-The fault is in `src/oil_tracker/cli.py`: lifecycle progress may have `timestamp_sec=None`, while the CLI progress callback unconditionally applies `:.3f` formatting.
-
-This S6-A Worker did not modify production source or tests. The next source mutation must be a separately classified bounded repair with focused regression coverage.
+This document owns the active execution state. Milestone order and completion state remain governed by [`roadmap.md`](./roadmap.md). S6 remains active; this supporting-sample result does not close S6 or authorize S7.
 
 ## S6-A repository sample identity
 
@@ -38,59 +27,74 @@ This S6-A Worker did not modify production source or tests. The next source muta
 | Detector settings | production defaults |
 | Calibration | `mm_per_pixel=null` |
 
-The video remains Git-ignored. Only the exact Recipe is allowlisted from `sample/*.oilrecipe`.
+The video and generated output remain Git-ignored. Only the deterministic Recipe is allowlisted from `sample/*.oilrecipe`.
 
-## Controlled execution status
+## Repaired-main official CLI result
 
-| Run | Range | CLI acceptance | Diagnostic core/bundle evidence |
-|---|---|---|---|
-| A — pre-overlay | `0–4.990138249 s`, `5.0 FPS` | `FAIL`, exit `2`, no CLI bundle | `REVIEW_REQUIRED`, 26 samples, bundle complete |
-| B — full | `0–14.438133333 s`, `5.0 FPS` | `FAIL`, exit `2`, no CLI bundle | `REVIEW_REQUIRED`, 73 samples, bundle complete |
-| C — post-overlay fresh | `5.023405837–14.438133333 s`, `5.0 FPS` | `FAIL`, exit `2`, no CLI bundle | `REVIEW_REQUIRED`, 48 samples, bundle complete |
+The existing feature branch was updated without history rewrite by merging repaired `main @ 8b37ff81…`. All three official runs used the real CLI entrypoint, the same Recipe and `5.0 FPS`, with fresh output roots.
 
-The diagnostic runs used the same current-source pipeline and bundle store with `progress=None` to isolate the CLI presentation defect. They are supporting evidence only and do not substitute for successful CLI completion.
+| Run | Range | Exit / progress | Status | Samples | Events | Review events / flagged rows |
+|---|---|---|---|---:|---:|---:|
+| A — pre-overlay | `0–4.990138249 s` | `0`; `[1/6]` through `[6/6]`; no `None` | `REVIEW_REQUIRED` | 26 | 10 | `3 / 8` |
+| B — full | `0–14.438133333 s` | `0`; `[1/6]` through `[6/6]`; no `None` | `REVIEW_REQUIRED` | 73 | 10 | `3 / 55` |
+| C — post-overlay fresh | `5.023405837–14.438133333 s` | `0`; `[1/6]` through `[6/6]`; no `None` | `REVIEW_REQUIRED` | 48 | 7 | `2 / 48` |
 
-## Engineering behavior recorded
+Each bundle contains one review-index Glass with `result_status=REVIEW_REQUIRED`. Repository `ResultBundleReader` reopened all outputs. Required manifest, report, CSV, Recipe/session snapshot, review index, graphs, captures and analysis log exist and parse; report references and PNGs are valid; no staging artifact or process handle remains.
 
-- No controlled or representative diagnostic frame publishes raw or smoothed numeric oil.
-- Frame `0` returns typed no-interface with numeric oil `null`.
-- Frame `120` retains oil ambiguity while independently publishing a Foam result; Foam truth is not evaluated.
-- The frame `151` explanatory `High / 1/3 / Low` overlay creates strong horizontal oil candidates near `y≈319`, `397–411` and `475`.
-- Full-history and fresh post-overlay sequences both retain `ambiguous`, `NO_UPDATE`, `PRESERVE`, no selected oil hypothesis and numeric oil `null` at frames `151`, `152`, `240` and `433`.
-- No overlay-induced numeric lock or stale smoothing was observed.
-- Diagnostic bundles finalize atomically, have no broken local references, preserve blank full/no-interface numeric CSV fields and leave no video/output handle after process exit.
-- Representative temporal/resource counts stay within the accepted S5-B bounds.
+Official bundle roots are recorded in the durable evidence document under:
 
-These are engineering outputs without `.oiltruth`; detector accuracy is not evaluated.
+```text
+sample/output/s6-base-sample-1/
+└─ resume-official-8b37ff81-20260730T1016/
+```
 
-## Required repair handoff
+## Preserved failure and diagnostic evidence
 
-Create a separate bounded source-repair task that:
+The initial qualification on `main @ 2d085423…` remains preserved:
 
-1. preserves lifecycle progress where `timestamp_sec` and `glass_name` may be absent;
-2. makes CLI progress formatting safe for both lifecycle-only and frame-bearing updates;
-3. adds focused tests that execute `_run_analyze` or equivalent real CLI progress wiring;
-4. changes no detector threshold, Recipe schema, output schema, dependency or Oil/Foam meaning;
-5. obtains the required independent review before merge.
+- real CLI A/B/C each exited `2` before bundle finalization because a lifecycle-only progress update had `timestamp_sec=None`;
+- source-identical diagnostic runs with `progress=None` completed as `REVIEW_REQUIRED` with 26/73/48 samples and 10/10/7 events;
+- repaired-main official runs now complete with the same status, sample count and event count.
 
-After that repair reaches authoritative `main`, rerun this exact S6-A sample qualification from a fresh branch using the same video and Recipe hashes.
+The repair is owned by authoritative `main`, not by this qualification PR. Against current `main`, PR #58 contains no production source, test, detector, threshold, schema, dependency or packaging diff.
+
+## Engineering interpretation
+
+- `REVIEW_REQUIRED` is a valid reviewable engineering outcome, not an execution failure.
+- Raw and smoothed numeric oil remain `null` in the reviewed sample behavior.
+- The known `High / 1/3 / Low` overlay produces strong horizontal candidates, but the recorded outcome remains ambiguous with no selected numeric oil boundary.
+- Pre-overlay Foam output remains independently observable from oil ambiguity; Foam physical truth is not evaluated.
+- The repository sample is supporting smoke evidence only and has no user-confirmed `.oiltruth`.
+- No MAE, precision, recall, false-positive/false-negative truth, physical calibration or detector accuracy PASS is claimed.
+- Short-run wall time and peak memory are diagnostics, not accepted CPU or long-duration baselines.
+
+## PR scope and next gate
+
+PR #58 remains Draft. Its diff against current `main` is limited to:
+
+- `.gitignore`;
+- `docs/00-project/work-plan.md`;
+- `docs/30-quality/s6-base-sample-1-evidence.md`;
+- `sample/README.md`;
+- `sample/base_sample_1.oilrecipe`.
+
+The next owner is a fresh Worker-independent exact-head Auditor. The Auditor must verify base/head identity, sample and Recipe hashes, preserved pre-repair evidence, official A/B/C reproduction, bundle integrity, truth limitations, ignored sample2/3/4 preservation and bounded PR scope.
+
+Only after `AUDIT: PASS` may that Auditor perform the authorized guarded merge and registered-checkout synchronization. PR Ready transition, merge and S6 Close are not Worker-owned actions.
 
 ## Retained contracts
 
-- Repository samples are supporting evidence, not canonical truth.
-- No MAE, precision, recall or truth-accuracy claim without user-confirmed `.oiltruth`.
-- No video filename, hash, Recipe ID, frame number or fixture identity may become detector logic.
+- Repository samples are supporting evidence, never canonical truth.
+- No filename, hash, Recipe ID, frame number or fixture identity may become detector logic.
 - Ambiguous/conflicting evidence remains reviewable rather than forced numeric output.
 - S5-A Foam independence remains intact.
 - S5-B typed observability, canonical ambiguity and serialized temporal ownership remain intact.
 - S5-C canonical/Qt lifecycle and headless import boundaries remain intact.
-- Production source, tests, thresholds, schemas and dependencies are unchanged by the S6-A qualification Worker.
 
 ## Pending S6 scope
 
 Still pending and not accepted:
 
-- repaired three-run CLI reproduction;
 - representative user-confirmed real compressor videos and `.oiltruth`;
 - Windows GUI/manual/DPI/canonical-suite validation;
 - stable long-duration CPU and memory behavior;
@@ -99,28 +103,8 @@ Still pending and not accepted:
 - Unicode/long Windows path and file-lock behavior;
 - final S6 independent acceptance and Close.
 
-## Next authorized sequence
-
-```text
-S6-A evidence PR and fresh independent audit
-→ bounded CLI progress repair task
-→ repair audit/merge/synchronization
-→ fresh S6-A rerun on repaired exact main
-→ remaining Windows / long-duration / packaging gates
-→ S6 Close only after all acceptance evidence
-```
-
 `S7` must not start while S6 remains active.
 
 ## Intentional non-runs
 
-This qualification did not run or claim:
-
-- complete canonical suite repetition;
-- detector source repair or threshold tuning;
-- Windows execution;
-- long-duration qualification;
-- PyInstaller or one-folder packaging;
-- relocated/clean-PC execution;
-- user-truth accuracy metrics;
-- merge, audit approval or S6 Close.
+This resume qualification did not run or claim detector tuning, new sample2/3/4 qualification, Windows execution, long-duration qualification, packaging, relocated/clean-PC execution, user-truth accuracy metrics, PR Ready transition, merge, audit approval, S6 Close or S7 start.

@@ -82,7 +82,7 @@ PYTHONPATH=src .venv/bin/python -m oil_tracker.cli analyze \
   --sampling-fps 5.0
 ```
 
-The S6-A Worker found a reproducible CLI lifecycle-progress formatting defect before bundle finalization. See [`docs/30-quality/s6-base-sample-1-evidence.md`](../docs/30-quality/s6-base-sample-1-evidence.md) for the exact failing command, diagnostic core-pipeline evidence and repair handoff.
+The initial S6-A run found a reproducible CLI lifecycle-progress formatting defect before bundle finalization. After repaired `main @ 8b37ff81…`, the resumed official A/B/C CLI runs completed through lifecycle stages `1/6–6/6` and produced reviewable bundles. See [`docs/30-quality/s6-base-sample-1-evidence.md`](../docs/30-quality/s6-base-sample-1-evidence.md) for the preserved failure, diagnostic evidence and repaired-main official qualification.
 
 ## Git policy
 
