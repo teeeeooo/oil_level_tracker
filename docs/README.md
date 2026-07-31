@@ -45,6 +45,7 @@ A feature document must not maintain a competing project-wide “current next wo
 - S6-B additional real-video evidence: [additional sample qualification](./30-quality/s6-additional-real-samples-evidence.md)
 - S6-C provisional truth diagnosis: [agent-assisted provisional comparison](./30-quality/s6-provisional-truth-comparison.md)
 - Post-freeze domain-owner interpretation and field priorities: [S6 domain-owner review addendum](./30-quality/s6-domain-owner-review-addendum.md)
+- S6-E bounded runtime and resource-leak screening: [bounded runtime soak evidence](./30-quality/s6-bounded-runtime-soak-evidence.md)
 - Manual platform gate: [manual GUI and Windows checklist](./30-quality/manual-gui-windows-checklist.md)
 - Detector benchmark guide: [golden video regression](./30-quality/golden-video-regression.md)
 
