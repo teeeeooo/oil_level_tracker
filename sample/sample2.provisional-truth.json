@@ -1,0 +1,41 @@
+{
+  "schema_version": "agent-assisted-provisional-truth-v1",
+  "truth_kind": "agent_assisted_provisional",
+  "user_confirmed": false,
+  "annotation_basis": "blind_video_and_roi_frame_inspection_before_detector_output",
+  "source_video": {
+    "path": "sample/sample2.mp4",
+    "size_bytes": 1970224,
+    "sha256": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+    "width": 720,
+    "height": 1280,
+    "fps": 30.0,
+    "declared_frame_count": 288,
+    "declared_duration_sec": 9.6,
+    "sequential_decoded_frame_count": 286,
+    "last_usable_frame_index": 285,
+    "last_usable_timestamp_sec": 9.5
+  },
+  "recipe_reference": {
+    "path": "sample/sample2.oilrecipe",
+    "sha256": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+    "glass_id": "0aff9b80-002e-54e1-b1a3-fff1ec97a183",
+    "ellipse": {"center_x": 355.0, "center_y": 490.0, "radius_x": 170.0, "radius_y": 170.0}
+  },
+  "selection": {
+    "frame_count": 9,
+    "rationale": "Even coverage of the accepted fixed-geometry 0.0-2.0 second window, including subtle handheld reframing and the persistent fluorescent reflection.",
+    "windows": [{"name": "accepted_fixed_geometry", "frame_index_range": [0, 60]}]
+  },
+  "annotations": [
+    {"frame_index": 0, "timestamp_sec": 0.0, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "Bubbly/full-like glass; bright horizontal fluorescent reflection is not an oil boundary."},
+    {"frame_index": 8, "timestamp_sec": 0.266667, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "Persistent bubbly texture and fluorescent glare; no distinct oil-air interface."},
+    {"frame_index": 15, "timestamp_sec": 0.5, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "Strong reflection crosses lower half; texture may be bubbles or condensation."},
+    {"frame_index": 23, "timestamp_sec": 0.766667, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "No stable phase interface separate from the fluorescent reflection."},
+    {"frame_index": 30, "timestamp_sec": 1.0, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "Bubbly/full-like state; reflection excluded."},
+    {"frame_index": 38, "timestamp_sec": 1.266667, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "Slight reframing; no reliable oil-air boundary."},
+    {"frame_index": 45, "timestamp_sec": 1.5, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "Slight reframing and glare; full-like state remains more defensible than a numeric y."},
+    {"frame_index": 53, "timestamp_sec": 1.766667, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "No distinct interface; reflection is non-physical evidence."},
+    {"frame_index": 60, "timestamp_sec": 2.0, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "End of fixed-geometry window; no distinct interface."}
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "agent-assisted-provisional-truth-v1",
+  "truth_kind": "agent_assisted_provisional",
+  "user_confirmed": false,
+  "annotation_basis": "blind_video_and_roi_frame_inspection_before_detector_output",
+  "source_video": {
+    "path": "sample/sample4.mp4",
+    "size_bytes": 16224936,
+    "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+    "width": 1080,
+    "height": 1234,
+    "fps": 30.0,
+    "declared_frame_count": 1684,
+    "declared_duration_sec": 56.13333333333333,
+    "sequential_decoded_frame_count": 1682,
+    "last_usable_frame_index": 1681,
+    "last_usable_timestamp_sec": 56.033333333
+  },
+  "recipe_reference": {
+    "path": "sample/sample4.oilrecipe",
+    "sha256": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+    "glass_id": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2",
+    "ellipse": {"center_x": 595.0, "center_y": 850.0, "radius_x": 52.0, "radius_y": 52.0}
+  },
+  "selection": {
+    "frame_count": 16,
+    "rationale": "Uniform coverage from 0 through 56 seconds across the static small sight glass, including the late yellow/glare-dominant appearance.",
+    "windows": [{"name": "full_comparison", "frame_index_range": [0, 1680]}]
+  },
+  "annotations": [
+    {"frame_index": 0, "timestamp_sec": 0.0, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [856, 865], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Small glass; range spans the soft horizontal transition."},
+    {"frame_index": 112, "timestamp_sec": 3.733333, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [854, 863], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Soft but persistent transition; limited spatial resolution."},
+    {"frame_index": 224, "timestamp_sec": 7.466667, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [852, 861], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Small ROI and rim proximity widen the range."},
+    {"frame_index": 336, "timestamp_sec": 11.2, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [849, 858], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Visible transition with slight glare."},
+    {"frame_index": 448, "timestamp_sec": 14.933333, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [848, 857], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Visible transition; no numeric single-pixel claim."},
+    {"frame_index": 560, "timestamp_sec": 18.666667, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [847, 856], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Persistent boundary-like transition in small glass."},
+    {"frame_index": 672, "timestamp_sec": 22.4, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [846, 855], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Persistent transition with mild upper glare."},
+    {"frame_index": 784, "timestamp_sec": 26.133333, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [845, 854], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Small-glass boundary remains visible."},
+    {"frame_index": 896, "timestamp_sec": 29.866667, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [844, 853], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Transition remains distinct from the rim."},
+    {"frame_index": 1008, "timestamp_sec": 33.6, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [842, 851], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Upper region brightens; boundary range remains visible."},
+    {"frame_index": 1120, "timestamp_sec": 37.333333, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [840, 850], "fill_state_hint": "partial", "foam_hint": "unclear", "confidence": "medium", "notes": "Upper texture becomes brighter/foam-like; foam status is not resolved at this scale."},
+    {"frame_index": 1232, "timestamp_sec": 41.066667, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [838, 850], "fill_state_hint": "partial", "foam_hint": "unclear", "confidence": "low", "notes": "Bright upper phase and glare broaden the transition."},
+    {"frame_index": 1344, "timestamp_sec": 44.8, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [838, 851], "fill_state_hint": "partial", "foam_hint": "unclear", "confidence": "low", "notes": "Small glass with increasing yellow glare/foam-like appearance."},
+    {"frame_index": 1456, "timestamp_sec": 48.533333, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [849, 861], "fill_state_hint": "partial", "foam_hint": "unclear", "confidence": "low", "notes": "Strong yellow illumination; broad lower transition retained with low confidence."},
+    {"frame_index": 1568, "timestamp_sec": 52.266667, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [851, 864], "fill_state_hint": "partial", "foam_hint": "unclear", "confidence": "low", "notes": "Glare-dominant late state; range avoids a single-pixel claim."},
+    {"frame_index": 1680, "timestamp_sec": 56.0, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [852, 865], "fill_state_hint": "partial", "foam_hint": "unclear", "confidence": "low", "notes": "End of comparison window; yellow glare and tiny ROI limit certainty."}
+  ]
+}

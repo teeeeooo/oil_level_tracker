@@ -1,0 +1,61 @@
+{
+  "schema_version": "agent-assisted-provisional-truth-v1",
+  "truth_kind": "agent_assisted_provisional",
+  "user_confirmed": false,
+  "annotation_basis": "blind_video_and_roi_frame_inspection_before_detector_output",
+  "source_video": {
+    "path": "sample/sample3.mp4",
+    "size_bytes": 10001682,
+    "sha256": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+    "width": 1280,
+    "height": 720,
+    "fps": 29.97002997002997,
+    "declared_frame_count": 4202,
+    "declared_duration_sec": 140.20673333333333,
+    "sequential_decoded_frame_count": 4199,
+    "last_usable_frame_index": 4198,
+    "last_usable_timestamp_sec": 140.073266667,
+    "random_seek_observation": {"4198": "success", "4199": "fail", "4200": "fail", "4201": "fail"}
+  },
+  "recipe_reference": {
+    "path": "sample/sample3.oilrecipe",
+    "sha256": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+    "glass_id": "c21a62cd-e0e0-545c-8f7f-ee2384f036a9",
+    "ellipse": {"center_x": 835.0, "center_y": 315.0, "radius_x": 120.0, "radius_y": 120.0}
+  },
+  "selection": {
+    "frame_count": 24,
+    "rationale": "Coverage of title/approach, fixed-geometry entry, visible fill, agitation/full-like phase, drain transition, visible late drain boundary, and near-end reframing/decode boundary.",
+    "windows": [
+      {"name": "full_comparison", "frame_index_range": [900, 3147]},
+      {"name": "fresh_drain_comparison", "frame_index_range": [2250, 3147]},
+      {"name": "context_only", "frame_index_range": [0, 4198]}
+    ]
+  },
+  "annotations": [
+    {"frame_index": 0, "timestamp_sec": 0.0, "usability": "unusable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "high", "notes": "Title frame; sight glass is not visible."},
+    {"frame_index": 300, "timestamp_sec": 10.01, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "absent", "confidence": "low", "notes": "Handheld approach with glare and reframing."},
+    {"frame_index": 600, "timestamp_sec": 20.02, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "absent", "confidence": "low", "notes": "Small glass with glare; pre-window context."},
+    {"frame_index": 900, "timestamp_sec": 30.03, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [310, 322], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Broad horizontal phase transition; range widened for blur and glare."},
+    {"frame_index": 1000, "timestamp_sec": 33.366667, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [248, 274], "fill_state_hint": "partial", "foam_hint": "present", "confidence": "low", "notes": "Rising/agitated front is broad and foam-like; range is intentionally wide."},
+    {"frame_index": 1100, "timestamp_sec": 36.703333, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "present", "confidence": "medium", "notes": "Agitated yellow phase fills the glass; no distinct oil-air interface."},
+    {"frame_index": 1200, "timestamp_sec": 40.04, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "present", "confidence": "medium", "notes": "Full-like, uniformly agitated/foam-like appearance."},
+    {"frame_index": 1350, "timestamp_sec": 45.045, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "present", "confidence": "medium", "notes": "Full-like agitation; highlights are not a phase boundary."},
+    {"frame_index": 1500, "timestamp_sec": 50.05, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "present", "confidence": "medium", "notes": "Full-like agitation; no stable interface."},
+    {"frame_index": 1650, "timestamp_sec": 55.055, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "Full-like yellow phase with softened texture."},
+    {"frame_index": 1800, "timestamp_sec": 60.06, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "Bright curved region and lower reflection do not define a reliable oil-air interface."},
+    {"frame_index": 1950, "timestamp_sec": 65.065, "usability": "usable", "boundary_state": "no_interface", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "full_like", "foam_hint": "unclear", "confidence": "medium", "notes": "Full-like appearance with reflection and slight blur."},
+    {"frame_index": 2100, "timestamp_sec": 70.07, "usability": "unusable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "high", "notes": "Strong motion/reframing blur obscures the glass."},
+    {"frame_index": 2250, "timestamp_sec": 75.075, "usability": "unusable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "high", "notes": "Fresh drain start lands in severe blur/dark reframing."},
+    {"frame_index": 2400, "timestamp_sec": 80.08, "usability": "unusable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "high", "notes": "Blur and off-center illumination prevent a reliable annotation."},
+    {"frame_index": 2550, "timestamp_sec": 85.085, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Potential transition remains too blurred to distinguish from illumination."},
+    {"frame_index": 2700, "timestamp_sec": 90.09, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [326, 344], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "low", "notes": "Broad drain-phase transition; glare and curvature require a wide range."},
+    {"frame_index": 2850, "timestamp_sec": 95.095, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [334, 352], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Visible but non-flat drain boundary with localized glare."},
+    {"frame_index": 3000, "timestamp_sec": 100.1, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [346, 366], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "medium", "notes": "Visible broad drain boundary; illumination varies across the row."},
+    {"frame_index": 3147, "timestamp_sec": 105.005, "usability": "usable", "boundary_state": "visible", "oil_level_y_px": null, "oil_level_y_range_px": [348, 374], "fill_state_hint": "partial", "foam_hint": "absent", "confidence": "low", "notes": "Wavy/glared late-drain boundary; deliberately wide range."},
+    {"frame_index": 3300, "timestamp_sec": 110.11, "usability": "unusable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "high", "notes": "Camera reframed away from the Recipe glass."},
+    {"frame_index": 3600, "timestamp_sec": 120.12, "usability": "unusable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "high", "notes": "Heavy blur and reframing; fixed ROI is invalid."},
+    {"frame_index": 3900, "timestamp_sec": 130.13, "usability": "unusable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "high", "notes": "Reframed/defocused glass; no reliable fixed-ROI truth."},
+    {"frame_index": 4198, "timestamp_sec": 140.073267, "usability": "unusable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "high", "notes": "Last sequentially usable frame is effectively black."}
+  ]
+}

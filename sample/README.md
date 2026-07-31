@@ -102,6 +102,17 @@ The Recipes use deterministic IDs/timestamps, `AUTO`, `mm_per_pixel=null`, margi
 
 Production CLI runs completed with exit `0` and lifecycle stages `1/6–6/6`. sample2 and both sample3 windows returned `REVIEW_REQUIRED`; sample4 returned `FAIL`. These are preserved engineering results, not verified physical truth. See [S6-B evidence](../docs/30-quality/s6-additional-real-samples-evidence.md) for commands, bundle inspection and limitations.
 
+## S6-C agent-assisted provisional truth
+
+The four `*.provisional-truth.json` files contain 68 sparse, blind, machine-readable annotations made from video/ROI frames before detector output was inspected:
+
+- `base_sample_1.provisional-truth.json`: 19 annotations;
+- `sample2.provisional-truth.json`: 9 annotations;
+- `sample3.provisional-truth.json`: 24 annotations;
+- `sample4.provisional-truth.json`: 16 annotations.
+
+They use the explicit `agent-assisted-provisional-truth-v1` JSON schema and a separate `.provisional-truth.json` artifact suffix because the product-owned `.oiltruth` schema represents bundle-bound user confirmation/correction. They are silver truth, not user-confirmed ground truth, do not match the product `*.oiltruth` loader/file dialog, and cannot establish official detector accuracy. See [S6-C provisional comparison evidence](../docs/30-quality/s6-provisional-truth-comparison.md) for frozen hashes, selection rationale, uncertainties and fresh detector comparison.
+
 ## Git policy
 
-All MP4 files remain ignored by `sample/*.mp4` and are never added by qualification work. Generated evidence under `sample/output/` also remains ignored. Only the four exact deterministic Recipes are allowlisted from `sample/*.oilrecipe`; no MP4 or output allowlist exists.
+All MP4 files remain ignored by `sample/*.mp4` and are never added by qualification work. Generated evidence under `sample/output/` also remains ignored. Only the four exact deterministic Recipes are allowlisted from the Recipe ignore rule; the provisional JSON artifacts are tracked normally and remain separate from product `.oiltruth`. No MP4 or output allowlist exists.
