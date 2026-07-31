@@ -6,13 +6,14 @@
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
 **Current S6-C result:** `S6-C PROVISIONAL DIAGNOSTIC EVIDENCE: ACCEPTED`
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
-**Current S6-D1 feature-head result:** `S6-D1 REVIEW PACK: PREPARED — USER CONFIRMATION PENDING`
-**Current gate:** `S6-D1 Mobile-Assisted User-Truth Review Pack Fresh Exact-Head Auditor`
-**Product truth state:** no product `.oiltruth` exists or was created
+**Current S6-D1 result:** `S6-D1 REVIEW PACK: AUDITED AND PREPARED — USER CONFIRMATION PENDING`
+**Current gate:** `S6-D1 Domain-Owner Mobile Review`
+**Product truth state:** no product `.oiltruth` exists or was created; user dispositions remain pending
 **Pending accuracy gate:** user review, later S6-D2 product truth creation and category-balanced official detector-accuracy evidence
 **Pending runtime gates:** controlled-idle representative-duration performance and official long-duration CPU/memory stability
 **Successor milestone:** `S7 / Phase 2C-4 — Annotated MP4 export` remains `PLANNED` and has not started
-**Task-start exact head:** `0f0bf705795ebedc9210c9731e486b194ecded09`
+**Audited feature head:** `e8a4fe8ed4bac01b8700289a15f6ae6b5a70ced4` over parent `0f0bf705795ebedc9210c9731e486b194ecded09`
+**Merged PR/main:** `#63` / `170d71798526aa7592c2db9cb9c37e4559f5ed9a`
 **S6-A evidence:** [`../30-quality/s6-base-sample-1-evidence.md`](../30-quality/s6-base-sample-1-evidence.md)
 **S6-B evidence:** [`../30-quality/s6-additional-real-samples-evidence.md`](../30-quality/s6-additional-real-samples-evidence.md)
 **S6-C evidence:** [`../30-quality/s6-provisional-truth-comparison.md`](../30-quality/s6-provisional-truth-comparison.md)
@@ -20,9 +21,9 @@
 **S6-E evidence:** [`../30-quality/s6-bounded-runtime-soak-evidence.md`](../30-quality/s6-bounded-runtime-soak-evidence.md)
 **S6-D1 evidence:** [`../30-quality/s6-d1-mobile-truth-review-pack.md`](../30-quality/s6-d1-mobile-truth-review-pack.md)
 
-This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6-D1 has prepared a candidate review pack on an unmerged feature head. Fresh independent audit is required before the pack can be handed to the user. Candidate coordinates are not user-confirmed truth and do not satisfy S6-D accuracy acceptance.
+This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). PR #63 passed fresh exact-head audit and was guarded-squash-merged. The bundle-bound candidate pack is ready for explicit user review, but candidate coordinates remain unconfirmed and do not satisfy S6-D accuracy acceptance.
 
-## Latest feature-head state
+## Latest recorded closeout
 
 | Item | Current state |
 |---|---|
@@ -31,11 +32,11 @@ This document owns the current active execution state. Milestone order and forma
 | Mobile assets | 30 individual clean/comparison PNGs, four contact sheets, questionnaire, response template, candidate manifest and optional ZIP |
 | Candidate authority | Official detector context, new agent visual candidate, frozen provisional evidence, existing domain-owner statement and future user confirmation remain separate |
 | Product truth | `.oiltruth` absent; no `confirmed_correct`, `corrected` or `unusable` disposition was assigned |
-| Validation | 15 unique IDs, exact frame binding, valid ROI coordinates, complete image decode, complete 150-file SHA manifest and frozen input hashes passed |
-| Targeted tests | `64 passed in 6.69s`; exit code `0` |
-| Local evidence | Ignored root `sample/output/s6-d1-mobile-truth-review-pack/worker-0f0bf70-20260731T151330Z/` |
-| Current action | Fresh independent exact-head audit of the complete local review-pack provenance and tracked documentation |
-| Post-merge owner | User, at `S6-D1 Domain-Owner Mobile Review`; coding ownership resumes only for a later approved-frame S6-D2 Worker |
+| Fresh audit | Complete manifest rehash, four bundle reopens, 15 fresh source decodes, coordinate/range checks, 30 individual-image and four contact-sheet pixel reproductions, ZIP inspection and product-truth boundary passed |
+| Targeted tests | `64 passed in 6.99s`; Markdown links, `git diff --check`, ignored-evidence and clean-worktree checks exited `0` |
+| Merge | PR #63 guarded-squash-merged as `170d71798526aa7592c2db9cb9c37e4559f5ed9a` |
+| Local evidence | Ignored root `sample/output/s6-d1-mobile-truth-review-pack/worker-0f0bf70-20260731T151330Z/` and mobile ZIP preserved |
+| Current action / owner | User performs `S6-D1 Domain-Owner Mobile Review`; coding ownership resumes only after explicit responses for a separate S6-D2 Worker |
 
 ## Domain-owner priorities retained
 
@@ -62,8 +63,7 @@ sample4 remains the primary Oil-under-Foam separation diagnostic. sample3 remain
 
 Still pending and not accepted:
 
-- fresh independent audit and merge of the S6-D1 feature-head evidence;
-- external S6-D1 domain-owner mobile review;
+- external S6-D1 domain-owner mobile review and explicit per-ID responses;
 - S6-D2 bundle-bound product `.oiltruth` creation from only explicitly approved/corrected frames;
 - representative scratch, fogging/stain, clean rim-adjacent boundary, high-quality field fill/drain and clean full/empty no-interface videos;
 - category-balanced official detector-accuracy evidence;
@@ -84,4 +84,4 @@ Still pending and not accepted:
 
 ## Intentional non-runs
 
-This feature-head work did not create or edit product `.oiltruth`, provisional truth, Recipes, original MP4s, source, tests, dependencies, settings or thresholds. It did not calculate accuracy metrics, act for the user, run Windows, packaging, performance, long-duration or GUI acceptance, merge, synchronize the registered checkout, close S6, start S7, or perform branch/worktree/evidence hygiene.
+The audit and closeout did not create or edit product `.oiltruth`, provisional truth, Recipes, original MP4s, source, tests, dependencies, settings, thresholds or local review-pack artifacts. It did not assign a user disposition, calculate detector-accuracy metrics, run Windows, packaging, performance, long-duration or GUI acceptance, close S6, or start S7. Hygiene is limited to the Auditor-owned validation worktree; the source branch, unrelated worktrees and ignored review evidence remain subject to eligibility and preservation rules.

@@ -2,13 +2,12 @@
 
 ## Status
 
-- **Feature branch:** `feature/s6-d1-mobile-truth-review-pack`
-- **Starting production main:** `0f0bf705795ebedc9210c9731e486b194ecded09`
-- **Starting commit:** `docs: close S6-E bounded runtime soak screening`
-- **Feature-head result:** `S6-D1 REVIEW PACK: PREPARED — USER CONFIRMATION PENDING`
-- **Current gate:** `S6-D1 Mobile-Assisted User-Truth Review Pack Fresh Exact-Head Auditor`
-- **Next external checkpoint after audit and merge:** `S6-D1 Domain-Owner Mobile Review`
-- **Product truth state:** no `.oiltruth` exists or was created
+- **Audited feature branch/head:** `feature/s6-d1-mobile-truth-review-pack @ e8a4fe8ed4bac01b8700289a15f6ae6b5a70ced4`
+- **Audited parent:** `0f0bf705795ebedc9210c9731e486b194ecded09`
+- **Merged PR/main:** `#63 @ 170d71798526aa7592c2db9cb9c37e4559f5ed9a`
+- **Accepted result:** `S6-D1 REVIEW PACK: AUDITED AND PREPARED — USER CONFIRMATION PENDING`
+- **Current gate / external owner:** `S6-D1 Domain-Owner Mobile Review` / user
+- **Product truth state:** no `.oiltruth` exists or was created; no user disposition is assigned
 - **Milestone state:** S6 remains `ACTIVE`; S6-D official accuracy remains pending; S7 remains `PLANNED`
 
 This evidence preserves a bounded mobile review pack for 15 decisive frames from four repository samples. It binds every item to a fresh production bundle, exact run ID, exact decoded frame, Glass ID, Recipe identity and source identity. The pack contains agent candidates only. It does not contain user-confirmed truth, product `.oiltruth`, official detector-accuracy metrics or an accuracy PASS.
@@ -28,6 +27,23 @@ This Worker therefore produced only:
 - an optional mobile ZIP.
 
 No output uses `.oiltruth`, `.provisional-truth.json` or another product-loader suffix. Candidate coordinates are not accepted dispositions. Existing sample3/sample4 domain-owner statements guide physical interpretation but do not establish exact pixel coordinates or bundle-bound product truth.
+
+## Fresh exact-head audit and acceptance
+
+The independent Auditor verified the complete three-document PR diff at exact head `e8a4fe8ed4bac01b8700289a15f6ae6b5a70ced4` over parent `0f0bf705795ebedc9210c9731e486b194ecded09`. Source, tests, dependencies, settings, thresholds, Recipes, original MP4s, provisional truth and product `.oiltruth` were unchanged.
+
+The Auditor independently:
+
+- recomputed all 150 complete-manifest entries and every principal SHA-256;
+- reopened all four fresh bundles with production `ResultBundleReader` and reproduced exact run, Recipe, source, row, lifecycle and bundle-tree identities;
+- freshly decoded all 15 source frames and verified requested, official-sample and actual-decoded timestamps remain distinct where required;
+- verified every candidate coordinate, uncertainty-range endpoint and artifact band lies inside the corresponding Glass ROI;
+- reproduced all 30 clean/comparison images and all four contact sheets in memory from the bound decoded frames with pixel-exact equality;
+- inspected all images, questionnaire and response template for mobile usability and authority separation;
+- verified the 39-member ZIP byte-for-byte against its principal contents and found no forbidden truth suffix;
+- passed the targeted truth/bundle/source suite with `64 passed in 6.99s`, Markdown links, `git diff --check`, ignored-evidence and clean-worktree checks with exit `0`.
+
+PR #63 was marked Ready and guarded-squash-merged as `main @ 170d71798526aa7592c2db9cb9c37e4559f5ed9a`. Acceptance is limited to exact provenance, candidate-authority separation and suitability for explicit domain-owner mobile review. It does not establish user-confirmed truth, product `.oiltruth`, category-balanced accuracy, detector PASS, Windows, packaging or runtime acceptance.
 
 ## Local-only evidence identity
 
@@ -244,14 +260,14 @@ The same block is repeated for `S1-01–S1-03`, `S2-01–S2-03`, `S3-01–S3-04`
 
 ## Intentional non-runs and next owner
 
-This Worker did not:
+The Worker and Auditor did not:
 
 - create, load as product truth, or modify `.oiltruth`;
-- modify the four provisional truth files;
+- modify the four provisional truth files, fresh bundles or review-pack bytes;
 - modify source, tests, dependencies, settings, thresholds, Recipes or original MP4s;
 - compute detector accuracy metrics or claim accuracy PASS;
 - assign `confirmed_correct`, `corrected` or `unusable` on behalf of the user;
 - run Windows, packaging, performance, long-duration or GUI acceptance;
-- merge, synchronize the registered checkout, close S6, start S7, or clean existing branches/worktrees/evidence.
+- close S6, start S7, or remove the ignored review evidence.
 
-The next owner is the **S6-D1 Mobile-Assisted User-Truth Review Pack Fresh Exact-Head Auditor**. Only after Auditor PASS and merge does ownership move outside the coding workflow to the user for **S6-D1 Domain-Owner Mobile Review**. After explicit user responses, a separate S6-D2 Worker may create product `.oiltruth` for approved frames.
+The current owner is the **user** at **S6-D1 Domain-Owner Mobile Review**. The mobile ZIP and response template must be used for explicit per-ID review. Coding ownership resumes only after those responses, when a separately authorized S6-D2 Worker may create bundle-bound product `.oiltruth` from approved or corrected frames.
