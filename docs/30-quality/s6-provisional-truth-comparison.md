@@ -1,11 +1,12 @@
 # S6-C Agent-Assisted Provisional Truth and Diagnostic Comparison
 
-**Workstream result:** extension repair completed on feature head; awaiting fresh exact-head audit
+**Workstream result:** `S6-C PROVISIONAL DIAGNOSTIC EVIDENCE: ACCEPTED`
 **Milestone:** `S6 — Real-video and Windows validation gate` remains `ACTIVE`
 **Scope:** macOS source-tree, four short supporting videos, blind agent-assisted provisional truth only
 **Task-start main:** `774cdda7f35a46f925d2eb1db9d9142de2aece7b` (`docs: close S6-B sample qualification`)
-**Worker branch:** `feature/s6-provisional-truth-comparison`
-**Next gate:** `S6-C Provisional Truth Extension Repair Fresh Exact-Head Auditor`
+**Audited feature head:** `ebfbe7f37eccd74ef4fafcf600f798a61d58500e`
+**Merged PR / main:** `#61` / `1debde314a84e14f4d4cb67389878046977296a7`
+**Next gate:** `S6-D User-Confirmed Truth and Category-Balanced Detector-Accuracy Evidence`
 
 This evidence is a bounded diagnostic comparison. The annotations are not user-confirmed ground truth, do not replace the product `.oiltruth` workflow, and do not establish official detector accuracy.
 
@@ -53,6 +54,16 @@ The repository product `.oiltruth` schema is bundle-bound and represents user co
 The first fresh exact-head audit evaluated `b4c3e693add103334aecb3f55fb023f9555fa70f` and returned `FAIL` for one persisted-contract defect: the provisional artifacts used the product-owned `.oiltruth` suffix despite carrying a separate string schema that `JsonTruthRepository` cannot load as a schema-version-1 `UserTruthSet`.
 
 The bounded repair removes the product-owned suffix from all four provisional artifacts and names them `*.provisional-truth.json`, restoring a clear separation from product user truth. Annotation bytes, counts and frozen SHA-256 values are unchanged. The existing visual review, six detector runs and comparison evidence were not regenerated.
+
+## Fresh repair audit and acceptance
+
+The repair Auditor independently inspected PR #61 at base `774cdda7f35a46f925d2eb1db9d9142de2aece7b` and exact head `ebfbe7f37eccd74ef4fafcf600f798a61d58500e`. The complete diff contained only four documentation files and four provisional JSON artifacts. Product `.oiltruth` domain, repository and UI owners, detector source/settings, tests, dependencies, Recipes, MP4s and generated outputs were unchanged.
+
+Old and new artifact paths resolved to identical Git blobs and byte streams. All four frozen SHA-256 values, annotation counts, `agent-assisted-provisional-truth-v1`, `agent_assisted_provisional` and `user_confirmed=false` were preserved. `.gitignore` matched base exactly, no broad JSON rule existed, and no tracked or working-tree `*.provisional.oiltruth` artifact or obsolete reference remained.
+
+The Auditor reused the prior visual review and six detector comparisons because the repair did not invalidate video, Recipe, annotation, detector or bundle owners. Fresh focused validation reopened all six bundles through `ResultBundleReader`, reproduced their documented row/publication/result summaries, passed `tests/test_json_truth_repository.py` (`13 passed`), Markdown links, `git diff --check` and clean-worktree checks with exit `0`.
+
+PR #61 passed the fresh exact-head audit and was guarded-squash-merged as `main @ 1debde314a84e14f4d4cb67389878046977296a7`. Acceptance is limited to the diagnostic value and persisted-contract separation of this silver-truth evidence. It is not user-confirmed truth, official accuracy acceptance, detector PASS, Windows acceptance, long-duration acceptance, packaging acceptance or S6 Close.
 
 ## Fresh detector comparison
 
@@ -139,4 +150,4 @@ These machine-readable files are agent-assisted silver truth only. They were not
 
 No detector source, threshold, dependency, test, Recipe, MP4 byte or generated output was changed or force-added. Any repair suggested by these findings requires a separately authorized Lane C owner.
 
-S6 remains `ACTIVE`; S7 remains `PLANNED`. Windows GUI/DPI, packaging, relocation/clean-PC, Unicode/long-path, Windows file-lock/cancellation, official long-duration stability, user-confirmed truth, merge, synchronization and S6 Close remain outside this Worker.
+S6 remains `ACTIVE`; S7 remains `PLANNED`. The next gate is user-confirmed `.oiltruth` and category-balanced detector-accuracy evidence. Windows GUI/DPI, packaging, relocation/clean-PC, Unicode/long-path, Windows file-lock/cancellation, official long-duration stability and final S6 Close remain pending.
