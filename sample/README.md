@@ -1,6 +1,6 @@
-# Repository Supporting Sample
+# Repository Supporting Samples
 
-`base_sample_1.mp4` is a short repository-local supporting sample for S6 engineering qualification. It is not canonical detector truth and is not a substitute for user-confirmed `.oiltruth`.
+These local videos support S6 engineering qualification. They are not canonical detector truth and do not substitute for user-confirmed `.oiltruth`. `base_sample_1.mp4` owns the completed S6-A qualification; sample2/3/4 are the bounded S6-B intake set.
 
 ## Exact identity
 
@@ -84,6 +84,24 @@ PYTHONPATH=src .venv/bin/python -m oil_tracker.cli analyze \
 
 The initial S6-A run found a reproducible CLI lifecycle-progress formatting defect before bundle finalization. After repaired `main @ 8b37ff81…`, the resumed official A/B/C CLI runs completed through lifecycle stages `1/6–6/6` and produced reviewable bundles. See [`docs/30-quality/s6-base-sample-1-evidence.md`](../docs/30-quality/s6-base-sample-1-evidence.md) for the preserved failure, diagnostic evidence and repaired-main official qualification.
 
+## S6-B additional local samples
+
+| Video | Exact identity | Sequential usable boundary | Accepted fixed-geometry window | Recipe |
+|---|---|---|---|---|
+| `sample2.mp4` | `1,970,224 B`; `73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f` | frames `0–285`; last `9.500000 s` | `0.0–2.0 s` | `sample2.oilrecipe` |
+| `sample3.mp4` | `10,001,682 B`; `c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04` | frames `0–4198`; last `140.073267 s` | `30.03–105.0 s`; fresh drain `75.08–105.0 s` | `sample3.oilrecipe` |
+| `sample4.mp4` | `16,224,936 B`; `ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892` | frames `0–1681`; last `56.033333 s` | `0.0–56.0 s` | `sample4.oilrecipe` |
+
+All three show compressor sight glasses with reviewable phase evidence. sample2 has handheld reframing and a strong fluorescent reflection; sample3 includes fill, agitation, drain, blur and late reframing; sample4 keeps static framing around a small sight glass. The Recipe ellipses use only the stated stable windows. No exclusion hides an in-glass reflection, line, Foam-like region or difficult detector evidence.
+
+The Recipes use deterministic IDs/timestamps, `AUTO`, `mm_per_pixel=null`, margin `0.08`, no exclusions and production-default detector settings. Their SHA-256 values are:
+
+- `sample2.oilrecipe`: `061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458`
+- `sample3.oilrecipe`: `66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43`
+- `sample4.oilrecipe`: `53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849`
+
+Production CLI runs completed with exit `0` and lifecycle stages `1/6–6/6`. sample2 and both sample3 windows returned `REVIEW_REQUIRED`; sample4 returned `FAIL`. These are preserved engineering results, not verified physical truth. See [S6-B evidence](../docs/30-quality/s6-additional-real-samples-evidence.md) for commands, bundle inspection and limitations.
+
 ## Git policy
 
-The MP4 remains ignored by `sample/*.mp4` and is not added to Git by this qualification. Generated evidence under `sample/output/` also remains ignored. Only the exact deterministic Recipe is allowlisted from the existing `sample/*.oilrecipe` ignore rule.
+All MP4 files remain ignored by `sample/*.mp4` and are never added by qualification work. Generated evidence under `sample/output/` also remains ignored. Only the four exact deterministic Recipes are allowlisted from `sample/*.oilrecipe`; no MP4 or output allowlist exists.
