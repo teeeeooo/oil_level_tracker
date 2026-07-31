@@ -24,6 +24,9 @@ sample/*.mkv
 sample/*.mov
 sample/*.oilrecipe
 !sample/base_sample_1.oilrecipe
+!sample/sample2.oilrecipe
+!sample/sample3.oilrecipe
+!sample/sample4.oilrecipe
 sample/output/
 
 # Runtime/debug artifacts

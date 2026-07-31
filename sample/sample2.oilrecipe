@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "recipe_id": "da570374-9f2a-5b7d-8388-ce11a21a6af3",
+  "name": "S6 Additional Real Sample 2 Qualification",
+  "description": "Deterministic supporting-evidence Recipe for sample/sample2.mp4; not canonical detector truth. Steady initial close-up of a compressor sight glass; strong horizontal fluorescent reflection intentionally remains visible. Recommended qualification window 0.0-2.0 s; later handheld reframing is outside the fixed-geometry window.",
+  "reference_frame": {
+    "width": 720,
+    "height": 1280
+  },
+  "glasses": [
+    {
+      "id": "0aff9b80-002e-54e1-b1a3-fff1ec97a183",
+      "name": "sample2 sight glass",
+      "enabled": true,
+      "description": "Steady initial close-up of a compressor sight glass; strong horizontal fluorescent reflection intentionally remains visible. Recommended qualification window 0.0-2.0 s; later handheld reframing is outside the fixed-geometry window.",
+      "geometry": {
+        "ellipse": {
+          "center_x": 355.0,
+          "center_y": 490.0,
+          "radius_x": 170.0,
+          "radius_y": 170.0
+        },
+        "zero_line_y": 490.0,
+        "margin_ratio": 0.08,
+        "exclusions": []
+      },
+      "initial_state": "AUTO",
+      "mm_per_pixel": null,
+      "judgment_rule": {
+        "mode": "RECOVERY",
+        "recovery_limit_sec": 120.0,
+        "stable_hold_sec": 5.0,
+        "minimum_valid_coverage_ratio": 0.7,
+        "allowed_excursion_sec": 1.0,
+        "allowed_excursion_height": 0.0,
+        "allowed_violation_sec": 1.0,
+        "allowed_violation_depth": 0.0,
+        "unknown_policy": "review"
+      },
+      "detector_settings": {
+        "canny_low": 45,
+        "canny_high": 130,
+        "hough_threshold": 18,
+        "hough_min_line_length_ratio": 0.3,
+        "hough_max_line_gap": 8,
+        "hough_max_angle_deg": 8.0,
+        "minimum_horizontal_coverage": 0.22,
+        "minimum_region_contrast": 0.08,
+        "minimum_final_confidence": 0.42,
+        "temporal_max_jump_px": 32.0,
+        "smoothing_window": 5,
+        "glare_threshold": 245,
+        "glare_ratio_unknown": 0.4,
+        "foam_variance_threshold": 120.0,
+        "foam_edge_density_threshold": 0.08,
+        "foam_min_area_ratio": 0.025,
+        "foam_lightness_threshold": 125.0,
+        "foam_max_chroma": 42.0,
+        "foam_min_whiteness_ratio": 0.25,
+        "foam_max_glare_overlap_ratio": 0.25,
+        "foam_min_evidence_score": 0.48,
+        "foam_strong_evidence_score": 0.68,
+        "foam_persistence_frames": 3,
+        "foam_max_front_jump_px": 24.0,
+        "state_hold_frames": 2,
+        "candidate_top_k": 8,
+        "oil_consensus_tolerance_px": 4.0,
+        "oil_min_consensus_sources": 2,
+        "oil_min_polarity_score": 0.1,
+        "oil_no_interface_min_score": 0.58,
+        "oil_path_window": 5,
+        "oil_path_beam_width": 4,
+        "oil_path_min_margin": 0.08,
+        "oil_tracker_update_confidence": 0.55,
+        "oil_reacquire_frames": 2,
+        "weight_edge": 0.22,
+        "weight_coverage": 0.2,
+        "weight_region": 0.22,
+        "weight_gradient_direction": 0.05,
+        "weight_temporal": 0.18,
+        "weight_state": 0.13,
+        "penalty_glare": 0.26,
+        "penalty_border": 0.24,
+        "penalty_exclusion": 0.3,
+        "penalty_static": 0.12,
+        "penalty_jump": 0.25
+      }
+    }
+  ],
+  "defaults": {},
+  "created_at": "2026-07-31T00:00:00+00:00",
+  "updated_at": "2026-07-31T00:00:00+00:00"
+}
