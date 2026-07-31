@@ -4,34 +4,34 @@
 **Milestone status:** `ACTIVE`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
-**Current gate:** `S6 truth-data planning — user-confirmed .oiltruth and category-balanced detector-accuracy evidence`
+**Current S6-C result:** agent-assisted provisional truth comparison completed on feature head; awaiting fresh audit
+**Current gate:** `S6-C Provisional Truth Annotation and Diagnostic Comparison Fresh Exact-Head Auditor`
 **Successor milestone:** `S7 / Phase 2C-4 — Annotated MP4 export` remains `PLANNED` and has not started
-**Task-start exact head:** `2e4c55d138154cf45ce1c46b57b2d422e309d0c7`
-**Task-start exact parent:** `ab61b68d5f9b0df5d40148cc661a370cd2be5214`
-**Merged PR:** `#60 — docs: qualify S6 additional real-video samples`
+**Task-start exact head:** `774cdda7f35a46f925d2eb1db9d9142de2aece7b`
+**Task-start exact parent:** `2e4c55d138154cf45ce1c46b57b2d422e309d0c7`
 **S6-A evidence:** [`../30-quality/s6-base-sample-1-evidence.md`](../30-quality/s6-base-sample-1-evidence.md)
 **S6-B evidence:** [`../30-quality/s6-additional-real-samples-evidence.md`](../30-quality/s6-additional-real-samples-evidence.md)
+**S6-C evidence:** [`../30-quality/s6-provisional-truth-comparison.md`](../30-quality/s6-provisional-truth-comparison.md)
 
-This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6-B is merged and operationally qualified; S6 remains active because detector truth, Windows, long-duration and packaging acceptance are still pending.
+This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6-C adds blind silver-truth diagnostics without replacing user-confirmed truth; S6 remains active because official detector accuracy, Windows, long-duration and packaging acceptance are still pending.
 
 ## Latest recorded closeout
 
 | Item | Current state |
 |---|---|
-| Result | `S6-B INTAKE AND QUALIFICATION: PASS`; PR #60 passed fresh exact-head audit and guarded squash merge |
-| Audited identity | base `ab61b68d5f9b0df5d40148cc661a370cd2be5214`; head `b68a590a304c41408c5cb236c3274b35c40a1335` |
-| Merge identity | `main @ 2e4c55d138154cf45ce1c46b57b2d422e309d0c7` (`docs: qualify S6 additional real-video samples`) |
-| Inputs | Local-only ignored `sample2.mp4`, `sample3.mp4` and `sample4.mp4`; exact size/hash, sequential boundaries and fixed-window geometry independently verified |
-| Qualification | Four fresh production CLI runs exited `0`, emitted lifecycle stages `1/6–6/6`, reopened through `ResultBundleReader` and matched the preserved Worker outcomes |
-| Focused validation | Recipe storage/round-trip, CLI lifecycle progress, result-bundle reader and analysis/reporting tests: `24 passed` |
-| Engineering outcomes | sample2 and both sample3 windows: `REVIEW_REQUIRED`; sample4: `FAIL`; numeric oil remained `null` and no result was tuned or normalized away |
-| Accuracy limitation | No user-confirmed `.oiltruth`; S6-B is execution, reviewability and bundle qualification, not detector physical-accuracy acceptance |
-| Next action | Plan user-confirmed `.oiltruth` and category-balanced detector-accuracy evidence while retaining the remaining Windows, long-duration and packaging gates |
+| Result | S6-C blind agent-assisted provisional truth and diagnostic comparison completed on feature head; awaiting fresh exact-head audit |
+| Task identity | starting main `774cdda7f35a46f925d2eb1db9d9142de2aece7b`; parent `2e4c55d138154cf45ce1c46b57b2d422e309d0c7` |
+| Inputs | Four exact supporting-video identities and decode boundaries; 68 representative frames; frozen machine-readable provisional truth with recorded SHA-256 |
+| Fresh execution | Six production CLI runs exited `0` and reopened through `ResultBundleReader`: sample1 pre/post, sample2, sample3 full/drain and sample4 |
+| Diagnostic outcomes | No run published numeric oil. sample1 overlay and sample2 reflection remained conservative; sample3 missed selected visible boundaries under review; sample4 published Foam near frozen oil ranges and returned `FAIL` with oil null |
+| Focused validation | JSON structure/count/enumeration checks, frozen-hash verification, bundle-reader comparison, documentation links and diff hygiene |
+| Accuracy limitation | Silver truth is not user-confirmed `.oiltruth`; metrics are provisional diagnostics, not official detector physical-accuracy acceptance |
+| Next action | Fresh independent S6-C exact-head Auditor; after PASS, merge/sync/closeout ownership remains with that audit chain |
 
 ## Accepted meaning and limitations
 
-- S6-A and S6-B qualify execution, reviewability and bundle integrity for repository/local supporting samples.
-- No sample has user-confirmed `.oiltruth`; no MAE, precision, recall, false-positive/negative truth, calibrated level or detector physical-accuracy PASS is claimed.
+- S6-A and S6-B qualify execution, reviewability and bundle integrity for repository/local supporting samples; S6-C adds bounded provisional diagnosis.
+- No sample has user-confirmed `.oiltruth`; no official MAE, precision, recall, false-positive/negative truth, calibrated level or detector physical-accuracy PASS is claimed.
 - `REVIEW_REQUIRED` is valid engineering behavior. sample4's `FAIL` is preserved as the current recovery judgment, not promoted to physical truth.
 - Numeric `null` remains `null`. Production-default detector settings and evidence-visible artifacts remain unchanged.
 - macOS source-tree evidence does not substitute for Windows, packaging, relocation or clean-PC acceptance.
@@ -60,4 +60,4 @@ Still pending and not accepted:
 
 ## Intentional non-runs
 
-This post-merge documentation Close did not rerun detector qualification or focused tests and did not perform detector tuning, user-truth metrics, Windows GUI/DPI or canonical validation, official long-duration stability, packaging, relocated/clean-PC execution, Unicode/long-path or Windows file-lock/cancellation acceptance. It changed only this current-state Work Plan, did not modify production source, tests, dependencies, Recipes, detector settings, MP4 bytes or generated evidence, and did not close S6 or start S7.
+This Worker did not perform detector repair/tuning, user-confirmed truth or official accuracy acceptance, Windows GUI/DPI or canonical validation, official long-duration stability, packaging, relocated/clean-PC execution, Unicode/long-path or Windows file-lock/cancellation acceptance. It did not modify production source, tests, dependencies, Recipes, detector settings, MP4 bytes or generated output and did not close S6 or start S7.

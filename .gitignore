@@ -27,6 +27,11 @@ sample/*.oilrecipe
 !sample/sample2.oilrecipe
 !sample/sample3.oilrecipe
 !sample/sample4.oilrecipe
+sample/*.oiltruth
+!sample/base_sample_1.provisional.oiltruth
+!sample/sample2.provisional.oiltruth
+!sample/sample3.provisional.oiltruth
+!sample/sample4.provisional.oiltruth
 sample/output/
 
 # Runtime/debug artifacts

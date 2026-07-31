@@ -43,6 +43,7 @@ A feature document must not maintain a competing project-wide “current next wo
 - Current validation contract: [real-world validation plan](./30-quality/real-world-validation-plan.md)
 - S6-A repository sample evidence: [base sample qualification](./30-quality/s6-base-sample-1-evidence.md)
 - S6-B additional real-video evidence: [additional sample qualification](./30-quality/s6-additional-real-samples-evidence.md)
+- S6-C provisional truth diagnosis: [agent-assisted provisional comparison](./30-quality/s6-provisional-truth-comparison.md)
 - Manual platform gate: [manual GUI and Windows checklist](./30-quality/manual-gui-windows-checklist.md)
 - Detector benchmark guide: [golden video regression](./30-quality/golden-video-regression.md)
 

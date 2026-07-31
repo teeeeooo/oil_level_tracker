@@ -1,0 +1,54 @@
+{
+  "schema_version": "agent-assisted-provisional-truth-v1",
+  "truth_kind": "agent_assisted_provisional",
+  "user_confirmed": false,
+  "annotation_basis": "blind_video_and_roi_frame_inspection_before_detector_output",
+  "source_video": {
+    "path": "sample/base_sample_1.mp4",
+    "size_bytes": 12408143,
+    "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+    "width": 1280,
+    "height": 720,
+    "fps": 30.059287442513345,
+    "declared_frame_count": 434,
+    "declared_duration_sec": 14.438133333333333,
+    "sequential_decoded_frame_count": 434,
+    "last_usable_frame_index": 433,
+    "last_usable_timestamp_sec": 14.404865745
+  },
+  "recipe_reference": {
+    "path": "sample/base_sample_1.oilrecipe",
+    "sha256": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+    "glass_id": "1a188c16-6295-56a7-bd61-61a78b7ef058",
+    "ellipse": {"center_x": 696.0, "center_y": 366.0, "radius_x": 145.0, "radius_y": 148.0}
+  },
+  "selection": {
+    "frame_count": 19,
+    "rationale": "Eleven evenly spaced pre-overlay frames through frame 150, the first overlay frame 151, and seven later frames spanning the static explanatory overlay.",
+    "windows": [
+      {"name": "pre_overlay", "frame_index_range": [0, 150]},
+      {"name": "post_overlay_artifact", "frame_index_range": [151, 433]}
+    ]
+  },
+  "annotations": [
+    {"frame_index": 0, "timestamp_sec": 0.0, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "absent", "confidence": "low", "notes": "Weak central horizontal structure/reflection; not accepted as oil boundary."},
+    {"frame_index": 15, "timestamp_sec": 0.499014, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "absent", "confidence": "low", "notes": "Weak central horizontal structure/reflection."},
+    {"frame_index": 30, "timestamp_sec": 0.998028, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "absent", "confidence": "low", "notes": "Dark glass with fixed-looking horizontal structure."},
+    {"frame_index": 45, "timestamp_sec": 1.497042, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "absent", "confidence": "low", "notes": "Weak structure and compression blur."},
+    {"frame_index": 60, "timestamp_sec": 1.996055, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "absent", "confidence": "low", "notes": "Weak structure; no reliable phase interface."},
+    {"frame_index": 75, "timestamp_sec": 2.495069, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "absent", "confidence": "low", "notes": "Bright slanted reflection crosses the glass."},
+    {"frame_index": 90, "timestamp_sec": 2.994083, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "absent", "confidence": "low", "notes": "Central reflection/structure remains non-diagnostic."},
+    {"frame_index": 105, "timestamp_sec": 3.493097, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Weak bright horizontal region with shimmer; not forced to a boundary."},
+    {"frame_index": 120, "timestamp_sec": 3.992111, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Shimmer/texture above a fixed-looking structure; foam not confirmed."},
+    {"frame_index": 135, "timestamp_sec": 4.491125, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Agitated-looking texture and reflection; no reliable interface."},
+    {"frame_index": 150, "timestamp_sec": 4.990138, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Last pre-overlay frame; weak structure is not accepted as oil boundary."},
+    {"frame_index": 151, "timestamp_sec": 5.023406, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "First High / 1/3 / Low explanatory overlay; overlay lines are artifacts, not truth."},
+    {"frame_index": 170, "timestamp_sec": 5.655491, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Static explanatory overlay dominates horizontal evidence."},
+    {"frame_index": 200, "timestamp_sec": 6.653703, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Overlay and reflections prevent reliable physical interface annotation."},
+    {"frame_index": 240, "timestamp_sec": 7.984221, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Static overlay lines explicitly excluded as oil truth."},
+    {"frame_index": 300, "timestamp_sec": 9.980277, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Static overlay lines explicitly excluded as oil truth."},
+    {"frame_index": 360, "timestamp_sec": 11.976332, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Static overlay lines explicitly excluded as oil truth."},
+    {"frame_index": 420, "timestamp_sec": 13.972388, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Static overlay lines explicitly excluded as oil truth."},
+    {"frame_index": 433, "timestamp_sec": 14.404866, "usability": "usable", "boundary_state": "unclear", "oil_level_y_px": null, "oil_level_y_range_px": null, "fill_state_hint": "unclear", "foam_hint": "unclear", "confidence": "low", "notes": "Last usable frame; overlay remains dominant and non-physical."}
+  ]
+}
