@@ -2,12 +2,13 @@
 
 ## Status
 
-- **Feature branch:** `feature/s6-bounded-runtime-soak`
 - **Starting production main:** `a13b73b7b48aa6fecc0e7afb71d8dd1080ae5622`
-- **Starting commit:** `docs: preserve S6 domain-owner review priorities`
-- **Screening result:** `SOAK SCREENING: NO OBVIOUS RESOURCE LEAK`
-- **Evidence state:** completed on the feature head and awaiting fresh independent exact-head audit
-- **Milestone state:** S6 remains `ACTIVE`; S6-D remains pending; S7 remains `PLANNED`
+- **Audited feature head:** `b36851a651eb53ffca39dbd55cc97c9e885522a3`
+- **Merged PR / main:** `#62` / `8020be74039e061570cdbe8f6c82b91771b44ed0`
+- **Screening result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
+- **Evidence state:** passed fresh independent exact-head audit and guarded squash merge
+- **Next gate:** `S6-D User-Confirmed Truth and Category-Balanced Detector-Accuracy Evidence`
+- **Milestone state:** S6 remains `ACTIVE`; S7 remains `PLANNED`
 
 This result means only that two short source-tree diagnostic runs showed no obvious crash, state accumulation, owned-process leak, open-file accumulation, or post-finalization growth. It is not official long-duration memory acceptance, controlled-idle CPU or throughput acceptance, representative field-duration acceptance, detector accuracy acceptance, Windows acceptance, or packaged-runtime acceptance.
 
@@ -226,13 +227,25 @@ Both bundles passed all of the following checks:
 
 macOS cleanup and reopen behavior does not substitute for Windows file-lock acceptance.
 
+## Fresh exact-head audit and acceptance
+
+The Auditor independently verified PR #62 at base `a13b73b7b48aa6fecc0e7afb71d8dd1080ae5622` and exact head `b36851a651eb53ffca39dbd55cc97c9e885522a3`. The complete PR diff contained only this evidence, the Work Plan and the documentation index; no source, tests, dependencies, settings, Recipes, original MP4s, provisional truth or product `.oiltruth` changed.
+
+All `1,282` source-repeat seek positions were freshly reread without rewriting the generated inputs. Frame index, decoded timestamp and BGR SHA-256 matched at every repeat. Both derived videos then passed complete sequential decode at `604/604` and `678/678` frames. Principal and complete artifact hashes remained unchanged.
+
+Raw telemetry JSONL was parsed independently rather than accepting the generated inspection summary. The recomputed quarter-median RSS deltas were `+0.5625 MiB / +0.3455%` and `+0.4609 MiB / +0.2745%`; first/last-quarter open-file medians were `148 / 148` for both runs. The `64 MiB` and `25%` combined review threshold was not met. Recorded analyzer and recorder PIDs were absent, exact input handles were closed, post-exit output was stable and no staging residue remained.
+
+Production `ResultBundleReader` freshly reopened both bundles. All required JSON, CSV, snapshots, reports and assets passed parsing, link resolution, image decoding, Recipe/hash consistency and complete artifact-hash checks. Targeted lifecycle, result-bundle reader and source-video resolver tests passed `24` tests; documentation links, exact diff and clean-worktree checks exited `0`.
+
+PR #62 passed fresh exact-head audit and was guarded-squash-merged as `main @ 8020be74039e061570cdbe8f6c82b91771b44ed0`. Acceptance remains limited to bounded source-tree screening and preserves the ignored local evidence root unchanged.
+
 ## Screening decision
 
 `SOAK SCREENING: NO OBVIOUS RESOURCE LEAK`
 
 No crash, hang, non-zero exit, incomplete lifecycle, unreadable bundle, threshold-level post-warm-up RSS increase, clearly unbounded late RSS sequence, open-file accumulation, owned-process residue, post-exit output growth, incomplete staging, temporary artifact, or insufficient telemetry was found.
 
-This bounded result does not close S6-E until fresh independent exact-head audit and merge. It does not satisfy official long-duration stability, controlled-idle performance, CPU throughput, Windows, packaging, GUI, detector accuracy, or S6 final acceptance.
+S6-E is accepted only as bounded source-tree leak screening. It does not satisfy official long-duration stability, controlled-idle performance, CPU throughput, Windows, packaging, GUI, detector accuracy, or S6 final acceptance.
 
 ## Targeted validation
 
@@ -243,19 +256,20 @@ PYTHONPATH=src .venv/bin/python -m pytest -q \
   tests/unit/test_source_video_resolver.py
 ```
 
-Result: `24 passed in 2.94s`; exit code `0`.
+Worker result: `24 passed in 2.94s`; exit code `0`. Fresh Auditor result: `24 passed in 1.98s`; exit code `0`.
 
-Input/output hashes, complete sequential decode counts, telemetry structure/sample counts, bundle reopening, report assets, image decoding, Recipe snapshot/hash consistency, lifecycle logs, owned-process cleanup, and post-exit output stability were additionally checked by the ignored local scripts identified above.
+Input/output hashes, complete sequential decode counts, telemetry structure/sample counts, bundle reopening, report assets, image decoding, Recipe snapshot/hash consistency, lifecycle logs, owned-process cleanup, and post-exit output stability were independently rechecked from the preserved ignored evidence.
 
-## Intentional non-runs and next owner
+## Intentional non-runs and next gate
 
 Not run or claimed:
 
+- duplicate execution of the two completed bounded soak analyses;
 - official long-duration or representative field-duration soak;
 - controlled-idle CPU, throughput, or performance acceptance;
 - detector accuracy metrics or truth comparison;
 - source, test, dependency, Recipe, threshold, MP4, provisional truth, or product `.oiltruth` repair;
 - Windows, packaged one-folder, clean-PC, GUI, DPI, cancellation, or file-lock acceptance;
-- merge, registered-checkout synchronization, S6 Close, S7 start, branch cleanup, or worktree hygiene.
+- S6 Close or S7 start.
 
-The next owner is the **S6-E Bounded Runtime Soak and Resource-Leak Screening Fresh Exact-Head Auditor**.
+The next executable gate is **S6-D User-Confirmed Truth and Category-Balanced Detector-Accuracy Evidence**. Controlled-idle representative-duration performance and official long-duration CPU/memory stability remain separate pending runtime gates.
