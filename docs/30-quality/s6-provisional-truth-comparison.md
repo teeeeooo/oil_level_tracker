@@ -7,6 +7,7 @@
 **Audited feature head:** `ebfbe7f37eccd74ef4fafcf600f798a61d58500e`
 **Merged PR / main:** `#61` / `1debde314a84e14f4d4cb67389878046977296a7`
 **Next gate:** `S6-D User-Confirmed Truth and Category-Balanced Detector-Accuracy Evidence`
+**Post-freeze domain-owner review:** [S6 domain-owner review addendum](./s6-domain-owner-review-addendum.md)
 
 This evidence is a bounded diagnostic comparison. The annotations are not user-confirmed ground truth, do not replace the product `.oiltruth` workflow, and do not establish official detector accuracy.
 
