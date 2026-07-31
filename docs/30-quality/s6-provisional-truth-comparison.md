@@ -1,11 +1,11 @@
 # S6-C Agent-Assisted Provisional Truth and Diagnostic Comparison
 
-**Workstream result:** completed on feature head; awaiting fresh exact-head audit
+**Workstream result:** extension repair completed on feature head; awaiting fresh exact-head audit
 **Milestone:** `S6 — Real-video and Windows validation gate` remains `ACTIVE`
 **Scope:** macOS source-tree, four short supporting videos, blind agent-assisted provisional truth only
 **Task-start main:** `774cdda7f35a46f925d2eb1db9d9142de2aece7b` (`docs: close S6-B sample qualification`)
 **Worker branch:** `feature/s6-provisional-truth-comparison`
-**Next gate:** `S6-C Provisional Truth Annotation and Diagnostic Comparison Fresh Exact-Head Auditor`
+**Next gate:** `S6-C Provisional Truth Extension Repair Fresh Exact-Head Auditor`
 
 This evidence is a bounded diagnostic comparison. The annotations are not user-confirmed ground truth, do not replace the product `.oiltruth` workflow, and do not establish official detector accuracy.
 
@@ -41,12 +41,18 @@ Blind annotation completed and the four truth files passed deterministic JSON st
 
 | Provisional truth file | Annotations | Frozen SHA-256 |
 |---|---:|---|
-| `sample/base_sample_1.provisional.oiltruth` | 19 | `1bade0423365be7dcda710364607433c36a8fb809c925784c52e9ddf6a940dce` |
-| `sample/sample2.provisional.oiltruth` | 9 | `193a6c97b318b7d2f24ba8558be2429193a30b8dcab3be533e919eea87961a61` |
-| `sample/sample3.provisional.oiltruth` | 24 | `adb2f0cff086ec521ca11df9a1a0c4b68373436f974a1c631b01fccc6781e781` |
-| `sample/sample4.provisional.oiltruth` | 16 | `4d64c35b6b80b63fd928a8d9ada9a06dd5cb4dcc8e371f63e510596517213c26` |
+| `sample/base_sample_1.provisional-truth.json` | 19 | `1bade0423365be7dcda710364607433c36a8fb809c925784c52e9ddf6a940dce` |
+| `sample/sample2.provisional-truth.json` | 9 | `193a6c97b318b7d2f24ba8558be2429193a30b8dcab3be533e919eea87961a61` |
+| `sample/sample3.provisional-truth.json` | 24 | `adb2f0cff086ec521ca11df9a1a0c4b68373436f974a1c631b01fccc6781e781` |
+| `sample/sample4.provisional-truth.json` | 16 | `4d64c35b6b80b63fd928a8d9ada9a06dd5cb4dcc8e371f63e510596517213c26` |
 
-The repository product `.oiltruth` schema is bundle-bound and represents user confirmation/correction dispositions. This work therefore uses an explicit `agent-assisted-provisional-truth-v1` JSON schema under the required provisional filenames instead of misrepresenting these labels as user truth. No post-freeze correction has been made.
+The repository product `.oiltruth` schema is bundle-bound and represents user confirmation/correction dispositions. These artifacts therefore use a separate `.provisional-truth.json` filename contract with the explicit `agent-assisted-provisional-truth-v1` JSON schema. They do not match the product-owned `*.oiltruth` file dialog or loader. No post-freeze correction has been made.
+
+## First audit failure and bounded repair
+
+The first fresh exact-head audit evaluated `b4c3e693add103334aecb3f55fb023f9555fa70f` and returned `FAIL` for one persisted-contract defect: the provisional artifacts used the product-owned `.oiltruth` suffix despite carrying a separate string schema that `JsonTruthRepository` cannot load as a schema-version-1 `UserTruthSet`.
+
+The bounded repair removes the product-owned suffix from all four provisional artifacts and names them `*.provisional-truth.json`, restoring a clear separation from product user truth. Annotation bytes, counts and frozen SHA-256 values are unchanged. The existing visual review, six detector runs and comparison evidence were not regenerated.
 
 ## Fresh detector comparison
 
