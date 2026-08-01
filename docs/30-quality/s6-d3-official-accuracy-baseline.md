@@ -7,10 +7,12 @@
 - **Result:** `CURRENT-SAMPLE OFFICIAL BASELINE PRODUCED — CATEGORY-BALANCED GATE UNSATISFIED`
 - **Truth authority:** audited S6-D2 product `.oiltruth` only
 - **Truth count:** `15 total / 13 usable / 2 unusable`
+- **Available-corpus constraint:** the current four real videos are the representative real-video corpus available at this stage; further representative acquisition is externally infeasible
 - **Milestone:** S6 remains `ACTIVE`; S7 remains `PLANNED`
-- **Next gate:** `S6 Missing-Category Real-Video Acquisition and User-Truth Extension`
+- **Next audit gate:** `S6-D3 Fresh Independent Exact-Head Baseline and Available-Corpus Policy Audit`
+- **Post-audit substantive gate:** `S6-D4 Available-Corpus Detector Accuracy Repair`
 
-This evidence measures the current production detector against the exact audited S6-D2 user truth. It is an official baseline for the existing four-video sample set, not a category-balanced S6 accuracy PASS. No detector source, threshold, settings, Recipe, MP4, `.oiltruth` or provisional truth is changed to improve the result.
+This evidence measures the current production detector against the exact audited S6-D2 user truth. It is an official baseline for the existing four-video sample set, not a category-balanced S6 accuracy PASS. The baseline numbers and category gaps remain unchanged by the later available-corpus policy alignment. Missing categories remain explicit unavailable/`not_evaluated` residual validation risk; they are not reclassified as covered. No detector source, threshold, settings, Recipe, MP4, `.oiltruth` or provisional truth is changed to improve the result.
 
 ## Production benchmark construction
 
@@ -154,9 +156,17 @@ The validation-plan category matrix is stricter than the eight-key benchmark cat
 
 The existing four-video set therefore does not satisfy category-balanced official detector-accuracy eligibility. sample3 focus-loss remains lower-priority robustness evidence only. sample4 remains the primary current Oil-under-Foam dual-boundary evidence and is not used to claim missing temporal/no-interface categories.
 
-## Bounded missing-category acquisition
+## Available-corpus repair policy alignment
 
-Before a category-balanced S6 accuracy gate can be evaluated, acquire and user-confirm at least the missing field evidence below without weakening or retuning the detector during collection:
+The domain owner has recorded the current four real videos as the representative corpus available at this stage and further representative acquisition as externally infeasible. This constraint changes the executable sequence, not the D3 baseline or coverage ledger. Bounded detector repair may proceed only after this baseline/policy head passes fresh independent audit, using the exact frozen D3 dataset bytes, benchmark catalog, detector settings and runtime environment for base/feature comparison.
+
+User-confirmed/corrected truth remains mandatory authority for tuning. Missing categories remain residual risk and unavailable/`not_evaluated`; synthetic or current-frame substitutes cannot satisfy them. The resulting repair may establish improvement on the available corpus only and cannot establish category-balanced or general-field detector-accuracy PASS.
+
+## Residual unavailable categories and historical acquisition ledger
+
+The following acquisition list records the exact missing evidence identified by the D3 baseline. It is retained as historical coverage evidence and is **not** the current executable gate because the domain owner has recorded further representative real-video acquisition as externally infeasible at this stage. None of these categories is reclassified as covered; absent-category metrics remain unavailable/`not_evaluated`, and category-balanced/general-field accuracy PASS remains unavailable.
+
+If future external evidence becomes feasible, the original identified acquisition needs remain:
 
 1. real scratch/surface-defect video with usable truth;
 2. fogging/stain video with usable truth;
@@ -167,6 +177,7 @@ Before a category-balanced S6 accuracy gate can be evaluated, acquire and user-c
 7. structural rim/paired-line cases distinct from explanatory overlays;
 8. dropout/reacquisition and visible↔no-interface transition sequences;
 9. broader independent field-video coverage beyond the current four videos.
+
 ## Reproducibility and validation
 
 Each component dataset was benchmarked a second time using the first `benchmark_result.json` as `--baseline`. All four reruns exited `0`, were reported `comparable`, reproduced the exact dataset, settings and run fingerprints, and reproduced the complete case payload, category summaries, micro aggregate and macro aggregate. Every comparable evaluated metric delta was unchanged; unavailable metrics remained `not_evaluated`.
@@ -190,8 +201,8 @@ The four audited `.oiltruth` files loaded against their exact preserved D1 bundl
 
 ## Acceptance boundary and next gate
 
-**Current-sample official baseline produced; category-balanced gate remains unsatisfied because required field categories and broader independent video coverage are missing.** The low Oil coverage and zero fill-state accuracy are preserved as baseline findings, not repaired in this Worker.
+**Current-sample official baseline produced; category-balanced gate remains unsatisfied because required field categories and broader independent video coverage are unavailable.** The low Oil coverage `0/13`, fill-state accuracy `0/13`, Foam recall `0.700` and every other D3 metric remain unchanged. Additional representative acquisition is externally infeasible at this stage; this does not convert any missing category into covered evidence.
 
-No detector source/settings/threshold, Recipe, MP4, `.oiltruth` or provisional-truth bytes are modified. No Windows, packaging, GUI, canonical suite, long-duration run or detector tuning is performed. This evidence does not declare `Category-Balanced Official Detector-Accuracy Evidence: PASS`, does not close S6 and does not start S7.
+No detector source/settings/threshold, Recipe, MP4, `.oiltruth`, provisional-truth or local D3 evidence bytes are modified by the policy repair. No benchmark/analyzer/test rerun, Windows, packaging, GUI, canonical suite, long-duration run or detector tuning is performed. This evidence does not declare `Category-Balanced Official Detector-Accuracy Evidence: PASS` or general-field accuracy PASS, does not close S6 and does not start S7.
 
-The exact next gate is **`S6 Missing-Category Real-Video Acquisition and User-Truth Extension`**. The current-sample baseline remains preserved as the accepted-baseline candidate for comparison after that acquisition is independently reviewed.
+The exact next gate for PR #66 is **`S6-D3 Fresh Independent Exact-Head Baseline and Available-Corpus Policy Audit`**. After that Audit passes and the D3 PR is merged/closed, the next substantive gate is **`S6-D4 Available-Corpus Detector Accuracy Repair`**, using the same frozen D3 dataset/settings/environment. The current-sample baseline remains preserved as the comparison baseline; missing categories remain residual unavailable/`not_evaluated` risk.
