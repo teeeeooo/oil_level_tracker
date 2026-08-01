@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "annotation_set_id": "9b2e7d2b-fed2-42c3-b97a-243ec7c66138",
+  "created_at": "2026-08-01T13:33:32.027885+00:00",
+  "updated_at": "2026-08-01T13:33:32.030016+00:00",
+  "bundle_identity": {
+    "run_id": "bbf0f0d6-e8b6-4c52-b15b-ff48a402a75e",
+    "recipe_id": "71f5f146-cb3f-57a8-8075-31a2ba18165f",
+    "recipe_snapshot_hash": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+    "source_video_basename": "base_sample_1.mp4",
+    "source_width": 1280,
+    "source_height": 720,
+    "source_fps": 30.059287442513345,
+    "source_duration_sec": 14.438133333333333
+  },
+  "annotations": [
+    {
+      "schema_version": 1,
+      "annotation_id": "2876749e-7e85-4e26-bb82-f11ac860af1e",
+      "annotation_set_id": "9b2e7d2b-fed2-42c3-b97a-243ec7c66138",
+      "bundle_run_id": "bbf0f0d6-e8b6-4c52-b15b-ff48a402a75e",
+      "recipe_id": "71f5f146-cb3f-57a8-8075-31a2ba18165f",
+      "recipe_snapshot_hash": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+      "glass_id": "1a188c16-6295-56a7-bd61-61a78b7ef058",
+      "glass_name_snapshot": "Bitzer sight glass",
+      "requested_timestamp_sec": 4.8,
+      "actual_decoded_timestamp_sec": 4.8048,
+      "frame_index": 144,
+      "disposition": "corrected",
+      "truth_fill_state": "PARTIAL_VISIBLE",
+      "oil_boundary": {
+        "source_frame_y": 386.0,
+        "roi_local_y": 168.0,
+        "px_from_zero": -20.0,
+        "mm_from_zero": null
+      },
+      "foam_front": null,
+      "foam_present": false,
+      "error_types": [
+        "fill_state_misclassified",
+        "oil_boundary_missing"
+      ],
+      "note": "[S1-01] 사용자 승인: D1 agent Oil candidate 승인; Foam 없음; 강한 선 해당 없음.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 4.8048,
+        "frame_index": 144,
+        "fill_state": "UNKNOWN_REVIEW",
+        "oil_boundary": null,
+        "foam_front": null,
+        "confidence": 0.1575,
+        "valid": false,
+        "flags": [
+          "FOAM_COMPONENT_REJECTED",
+          "LOW_CONFIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS",
+          "REVIEW_REQUIRED"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.029117+00:00",
+      "updated_at": "2026-08-01T13:33:32.029117+00:00",
+      "revision": 1
+    },
+    {
+      "schema_version": 1,
+      "annotation_id": "304aa62f-0854-4343-b5c6-d14d2e46be72",
+      "annotation_set_id": "9b2e7d2b-fed2-42c3-b97a-243ec7c66138",
+      "bundle_run_id": "bbf0f0d6-e8b6-4c52-b15b-ff48a402a75e",
+      "recipe_id": "71f5f146-cb3f-57a8-8075-31a2ba18165f",
+      "recipe_snapshot_hash": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+      "glass_id": "1a188c16-6295-56a7-bd61-61a78b7ef058",
+      "glass_name_snapshot": "Bitzer sight glass",
+      "requested_timestamp_sec": 5.2,
+      "actual_decoded_timestamp_sec": 5.2052000000000005,
+      "frame_index": 156,
+      "disposition": "corrected",
+      "truth_fill_state": "PARTIAL_VISIBLE",
+      "oil_boundary": {
+        "source_frame_y": 386.0,
+        "roi_local_y": 168.0,
+        "px_from_zero": -20.0,
+        "mm_from_zero": null
+      },
+      "foam_front": null,
+      "foam_present": false,
+      "error_types": [
+        "fill_state_misclassified",
+        "oil_boundary_missing"
+      ],
+      "note": "[S1-02] 사용자 승인: D1 agent Oil candidate 승인; Foam 없음; 강한 선 overlay. overlay는 전용 TruthErrorType이 없어 note에 보존.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 5.2052000000000005,
+        "frame_index": 156,
+        "fill_state": "UNKNOWN_REVIEW",
+        "oil_boundary": null,
+        "foam_front": null,
+        "confidence": 0.1575,
+        "valid": false,
+        "flags": [
+          "FOAM_COMPONENT_REJECTED",
+          "LOW_CONFIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS",
+          "REVIEW_REQUIRED"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.029678+00:00",
+      "updated_at": "2026-08-01T13:33:32.029678+00:00",
+      "revision": 1
+    },
+    {
+      "schema_version": 1,
+      "annotation_id": "ae13a138-448d-442c-9dfe-c48c0d5f7076",
+      "annotation_set_id": "9b2e7d2b-fed2-42c3-b97a-243ec7c66138",
+      "bundle_run_id": "bbf0f0d6-e8b6-4c52-b15b-ff48a402a75e",
+      "recipe_id": "71f5f146-cb3f-57a8-8075-31a2ba18165f",
+      "recipe_snapshot_hash": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+      "glass_id": "1a188c16-6295-56a7-bd61-61a78b7ef058",
+      "glass_name_snapshot": "Bitzer sight glass",
+      "requested_timestamp_sec": 8.0,
+      "actual_decoded_timestamp_sec": 7.974633333333334,
+      "frame_index": 240,
+      "disposition": "corrected",
+      "truth_fill_state": "PARTIAL_VISIBLE",
+      "oil_boundary": {
+        "source_frame_y": 386.0,
+        "roi_local_y": 168.0,
+        "px_from_zero": -20.0,
+        "mm_from_zero": null
+      },
+      "foam_front": null,
+      "foam_present": false,
+      "error_types": [
+        "fill_state_misclassified",
+        "oil_boundary_missing"
+      ],
+      "note": "[S1-03] 사용자 승인: D1 agent Oil candidate 승인; Foam 없음; 강한 선 overlay. overlay는 전용 TruthErrorType이 없어 note에 보존.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 7.974633333333334,
+        "frame_index": 240,
+        "fill_state": "UNKNOWN_REVIEW",
+        "oil_boundary": null,
+        "foam_front": null,
+        "confidence": 0.1575,
+        "valid": false,
+        "flags": [
+          "FOAM_COMPONENT_REJECTED",
+          "LOW_CONFIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS",
+          "REVIEW_REQUIRED"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.030016+00:00",
+      "updated_at": "2026-08-01T13:33:32.030016+00:00",
+      "revision": 1
+    }
+  ]
+}

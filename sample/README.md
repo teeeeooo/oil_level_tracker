@@ -113,6 +113,19 @@ The four `*.provisional-truth.json` files contain 68 sparse, blind, machine-read
 
 They use the explicit `agent-assisted-provisional-truth-v1` JSON schema and a separate `.provisional-truth.json` artifact suffix because the product-owned `.oiltruth` schema represents bundle-bound user confirmation/correction. They are silver truth, not user-confirmed ground truth, do not match the product `*.oiltruth` loader/file dialog, and cannot establish official detector accuracy. See [S6-C provisional comparison evidence](../docs/30-quality/s6-provisional-truth-comparison.md) for frozen hashes, selection rationale, uncertainties and fresh detector comparison.
 
+## S6-D2 user-confirmed product truth
+
+The four product-owned `.oiltruth` files materialize the explicit S6-D1 user response against the exact preserved D1 production bundles:
+
+- `base_sample_1.oiltruth`: 3 annotations;
+- `sample2.oiltruth`: 3 annotations;
+- `sample3.oiltruth`: 4 annotations, including 2 `unusable` focus-loss frames;
+- `sample4.oiltruth`: 5 annotations.
+
+They contain 15 exact reviewed frames in total. The fresh product translation is `13 corrected + 2 unusable`; user approval of a D1 agent candidate is not interpreted as approval of detector output. See [S6-D2 user-confirmed product truth](../docs/30-quality/s6-d2-user-confirmed-product-truth.md) for exact bundle identities, coordinates, error semantics, derivative-ZIP provenance and validation.
+
+These truth files do not make the current sample set category-balanced official accuracy evidence and do not establish detector accuracy PASS. The four `*.provisional-truth.json` files remain separate immutable blind evidence.
+
 ## Git policy
 
-All MP4 files remain ignored by `sample/*.mp4` and are never added by qualification work. Generated evidence under `sample/output/` also remains ignored. Only the four exact deterministic Recipes are allowlisted from the Recipe ignore rule; the provisional JSON artifacts are tracked normally and remain separate from product `.oiltruth`. No MP4 or output allowlist exists.
+All MP4 files remain ignored by `sample/*.mp4` and are never added by qualification work. Generated evidence under `sample/output/` also remains ignored. Only the four exact deterministic Recipes are allowlisted from the Recipe ignore rule. The provisional JSON artifacts and four product `.oiltruth` files are tracked normally, remain semantically distinct, and no truth file is stored inside a result bundle. No MP4 or output allowlist exists.
