@@ -5,7 +5,7 @@
 This document owns real-video, detector, Workbench, lifecycle, graph, CPU, memory and packaging acceptance obligations discovered during real use. It does not own milestone status or the active next action.
 
 - Long-term milestone state: [project roadmap](../00-project/roadmap.md)
-- Active S5-B gate: [current work plan](../00-project/work-plan.md)
+- Active S6 gate: [current work plan](../00-project/work-plan.md)
 - S5-B design: [oil-boundary hypothesis architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 - Manual platform procedure: [manual GUI and Windows checklist](./manual-gui-windows-checklist.md)
 - Benchmark execution: [golden video regression](./golden-video-regression.md)
@@ -13,13 +13,15 @@ This document owns real-video, detector, Workbench, lifecycle, graph, CPU, memor
 ## Validation principles
 
 1. Detector accuracy is the primary product risk.
-2. Do not tune thresholds without user truth and category-balanced comparison.
-3. Prefer bounded OpenCV/NumPy algorithms; no checkpoint or GPU runtime is required.
-4. Low or conflicting evidence must remain reviewable rather than forcing a numeric boundary or Foam state.
-5. A single video, filename or fixture ID cannot define an exception.
-6. Accuracy evidence must be accompanied by CPU, memory, packaging and resource-cleanup evidence.
-7. Automatic tests and manual Windows/real-video checks are reported separately.
-8. The repository sample is supporting evidence only, never canonical truth.
+2. Do not tune detector thresholds without user-confirmed/corrected truth. Category-balanced real-video comparison remains the preferred acceptance evidence when representative acquisition is feasible.
+3. If the domain owner records further representative real-video acquisition as externally infeasible, bounded detector repair may proceed only against the audited available corpus and its frozen regression dataset; base/feature comparison must keep dataset bytes, catalog, settings and runtime environment identical.
+4. Categories absent from that available corpus remain explicit residual validation gaps and their metrics remain `not_evaluated`/unavailable; available-corpus repair cannot establish category-balanced or general-field detector-accuracy PASS.
+5. Prefer bounded OpenCV/NumPy algorithms; no checkpoint or GPU runtime is required.
+6. Low or conflicting evidence must remain reviewable rather than forcing a numeric boundary or Foam state.
+7. A single video, filename or fixture ID cannot define an exception.
+8. Accuracy evidence must be accompanied by CPU, memory, packaging and resource-cleanup evidence.
+9. Automatic tests and manual Windows/real-video checks are reported separately.
+10. The repository sample is supporting evidence only, never canonical truth.
 
 ## Evidence sources
 
