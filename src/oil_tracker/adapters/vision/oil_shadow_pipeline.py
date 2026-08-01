@@ -85,6 +85,7 @@ class _PreparedRunInputs:
     static_artifact_map: np.ndarray | None
     crop_origin_y: float
     accepted_foam_front_local_y: float | None
+    accepted_foam_row_support: tuple[float, ...] | None
 
     def __post_init__(self) -> None:
         arrays = (
@@ -111,6 +112,16 @@ class _PreparedRunInputs:
                 raise ValueError("Accepted Foam front must be finite.")
             if not 0.0 <= self.accepted_foam_front_local_y <= self.pre.gray.shape[0] - 1:
                 raise ValueError("Accepted Foam front must stay inside the Oil raster.")
+        if self.accepted_foam_row_support is not None:
+            if self.accepted_foam_front_local_y is None:
+                raise ValueError("Accepted Foam row support requires an accepted front.")
+            if len(self.accepted_foam_row_support) != self.pre.gray.shape[0]:
+                raise ValueError("Accepted Foam row support must match the Oil raster height.")
+            if any(
+                not math.isfinite(value) or not 0.0 <= value <= 1.0
+                for value in self.accepted_foam_row_support
+            ):
+                raise ValueError("Accepted Foam row support must contain finite unit values.")
         if any(
             type(value) is not np.ndarray
             or value.flags.writeable
@@ -789,6 +800,7 @@ class OilHypothesisPipeline:
         static_artifact_map: np.ndarray | None,
         crop_origin_y: float,
         accepted_foam_front_local_y: float | None = None,
+        accepted_foam_row_support: tuple[float, ...] | None = None,
     ) -> OilCanonicalOutcome:
         if self._is_owner_active():
             return self._failure_outcome(
@@ -805,6 +817,7 @@ class OilHypothesisPipeline:
                 static_artifact_map=static_artifact_map,
                 crop_origin_y=crop_origin_y,
                 accepted_foam_front_local_y=accepted_foam_front_local_y,
+                accepted_foam_row_support=accepted_foam_row_support,
             )
         except Exception as exc:
             return self._failure_outcome(
@@ -824,6 +837,7 @@ class OilHypothesisPipeline:
         static_artifact_map: np.ndarray | None,
         crop_origin_y: float,
         accepted_foam_front_local_y: float | None = None,
+        accepted_foam_row_support: tuple[float, ...] | None = None,
     ) -> _RunOilFrameCommand:
         key = str(glass_id)
         if not key:
@@ -853,6 +867,11 @@ class OilHypothesisPipeline:
                 None
                 if accepted_foam_front_local_y is None
                 else float(accepted_foam_front_local_y)
+            ),
+            accepted_foam_row_support=(
+                None
+                if accepted_foam_row_support is None
+                else tuple(float(value) for value in accepted_foam_row_support)
             ),
         )
         return _RunOilFrameCommand(payload)
@@ -918,12 +937,20 @@ class OilHypothesisPipeline:
                     payload.effective_mask,
                     hypotheses,
                 )
+            elif payload.accepted_foam_row_support is None:
+                current = evaluate_typed_current_observation(
+                    payload.pre,
+                    payload.effective_mask,
+                    hypotheses,
+                    accepted_foam_front_local_y=payload.accepted_foam_front_local_y,
+                )
             else:
                 current = evaluate_typed_current_observation(
                     payload.pre,
                     payload.effective_mask,
                     hypotheses,
                     accepted_foam_front_local_y=payload.accepted_foam_front_local_y,
+                    accepted_foam_row_support=payload.accepted_foam_row_support,
                 )
             raw_frame = SuccessfulPipelineFrame(
                 raw_observations=raw,

@@ -317,7 +317,13 @@ def evaluate_typed_current_observation(
     hypotheses: tuple[SemanticHypothesis, ...],
     *,
     accepted_foam_front_local_y: float | None = None,
+    accepted_foam_row_support: tuple[float, ...] | None = None,
 ) -> ShadowCurrentObservation:
+    _validate_accepted_foam_context(
+        pre.gray.shape[0],
+        accepted_foam_front_local_y,
+        accepted_foam_row_support,
+    )
     no_interface = _no_interface_evidence(pre, effective_mask, hypotheses)
     if not no_interface.available and no_interface.visibility < 0.20:
         return ShadowUnavailableObservation(
@@ -366,13 +372,19 @@ def evaluate_typed_current_observation(
         _select_foam_separated_boundary(
             ordered,
             accepted_foam_front_local_y,
+            accepted_foam_row_support,
         )
         if accepted_foam_front_local_y is not None
-        else _select_textured_low_contrast_boundary(
-            pre,
-            effective_mask,
-            ordered,
-            no_interface,
+        and accepted_foam_row_support is not None
+        else (
+            None
+            if accepted_foam_front_local_y is not None
+            else _select_textured_low_contrast_boundary(
+                pre,
+                effective_mask,
+                ordered,
+                no_interface,
+            )
         )
     )
     if recovered is not None:
@@ -423,6 +435,32 @@ def evaluate_typed_current_observation(
         projected_source_y=projected_source_y,
         reason=reason,
     )
+
+
+def _validate_accepted_foam_context(
+    frame_height: int,
+    accepted_foam_front_local_y: float | None,
+    accepted_foam_row_support: tuple[float, ...] | None,
+) -> None:
+    if accepted_foam_front_local_y is None:
+        if accepted_foam_row_support is not None:
+            raise ValueError("Foam row support requires an accepted Foam front.")
+        return
+    if not math.isfinite(float(accepted_foam_front_local_y)):
+        raise ValueError("Accepted Foam front must be finite.")
+    if not 0.0 <= float(accepted_foam_front_local_y) <= max(0, frame_height - 1):
+        raise ValueError("Accepted Foam front must stay inside the current raster.")
+    if accepted_foam_row_support is None:
+        return
+    if type(accepted_foam_row_support) is not tuple:
+        raise TypeError("Accepted Foam row support must be an immutable tuple.")
+    if len(accepted_foam_row_support) != frame_height:
+        raise ValueError("Accepted Foam row support must match the current raster height.")
+    if any(
+        not math.isfinite(float(value)) or not 0.0 <= float(value) <= 1.0
+        for value in accepted_foam_row_support
+    ):
+        raise ValueError("Accepted Foam row support must contain finite unit values.")
 
 
 def _boundary_observation(
@@ -501,16 +539,21 @@ def _select_textured_low_contrast_boundary(
 def _select_foam_separated_boundary(
     ordered: list[SemanticHypothesis],
     accepted_foam_front_local_y: float,
+    accepted_foam_row_support: tuple[float, ...],
 ) -> SemanticHypothesis | None:
     """Recover a distinct Oil phase below independently accepted Foam.
 
-    S5-A remains the sole Foam authority. This function only uses its accepted
-    front as current-frame context and still requires broad Oil phase evidence,
-    bounded spatial conflict, and horizontal support. No Foam context is
-    retained by the Oil temporal owner.
+    S5-A remains the sole Foam authority. The accepted front establishes the
+    vertical ordering, while its immutable current-frame row-support profile
+    prevents a structural band inside the accepted Foam component from being
+    reinterpreted as Oil. No Foam context is retained by the Oil temporal owner.
     """
 
     for candidate in ordered:
+        candidate_foam_support = _candidate_foam_support(
+            candidate,
+            accepted_foam_row_support,
+        )
         spatial_conflict = max(
             candidate.broad.glare_conflict,
             candidate.broad.exclusion_conflict,
@@ -520,6 +563,7 @@ def _select_foam_separated_boundary(
         )
         if (
             candidate.representative_local_y > accepted_foam_front_local_y
+            and candidate_foam_support < 0.50
             and candidate.boundary_likelihood >= 0.20
             and candidate.broad.available_scale_count >= 2
             and candidate.broad.strength >= 0.10
@@ -534,6 +578,23 @@ def _select_foam_separated_boundary(
         ):
             return candidate
     return None
+
+
+def _candidate_foam_support(
+    candidate: SemanticHypothesis,
+    accepted_foam_row_support: tuple[float, ...],
+) -> float:
+    first = max(0, int(math.floor(candidate.minimum_local_y)))
+    last = min(
+        len(accepted_foam_row_support) - 1,
+        int(math.ceil(candidate.maximum_local_y)),
+    )
+    if first > last:
+        return 1.0
+    values = accepted_foam_row_support[first : last + 1]
+    if not values:
+        return 1.0
+    return sum(float(value) for value in values) / len(values)
 
 
 def _single_frame_identifiability_evidence(

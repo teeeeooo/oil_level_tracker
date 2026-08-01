@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import math
 
+import cv2
 import numpy as np
 
 from foam_benchmark_fixtures import controlled_scenes
@@ -103,6 +104,24 @@ def test_accepted_low_light_foam_does_not_invent_an_oil_boundary_below_texture()
     assert detection.raw_foam_front_y is not None
     assert detection.raw_oil_air_level_y is None
     assert detection.smoothed_oil_air_level_y is None
+
+
+def test_accepted_white_foam_plus_structural_band_does_not_create_false_oil():
+    detector = OpenCvPhaseDetector()
+    glass = _glass()
+    frame = _scene("white-foam").frame.copy()
+    cv2.rectangle(frame, (122, 125), (197, 127), (120, 120, 120), -1)
+
+    detection, _artifacts = detector.detect(frame, glass, 1, 1.0, debug=False)
+
+    assert detection.raw_foam_front_y is not None
+    assert detection.debug_metrics["foam_decision_status"] in {
+        "accepted_strong",
+        "accepted_moderate",
+    }
+    assert detection.raw_oil_air_level_y is None
+    assert detection.smoothed_oil_air_level_y is None
+    assert detection.fill_state.value != "FOAMING_VISIBLE"
 
 
 def test_transient_shimmer_does_not_create_raw_or_smoothed_foam_front():
