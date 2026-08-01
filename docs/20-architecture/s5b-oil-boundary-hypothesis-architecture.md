@@ -76,7 +76,20 @@ The implementation does not change preprocessing, proposal construction, semanti
 
 The accepted source exact head passed independent audit and the final deterministic base/feature comparison passed. This observability boundary is therefore the merged S5-B contract; later milestones must preserve it unless a separately authorized architecture change replaces it.
 
-Future architecture options are limited to separately designed and audited positive evidence such as temporal photometric/component history or capture metadata. Optical flow, retained raster history and capture-metadata schemas are not implemented by this source change.
+### S6-D4 available-corpus positive-evidence addendum
+
+S6-D4 is a separately authorized positive-evidence extension; it does not revoke the latent glare/Oil collision diagnosis above. The normal S5-B canonical acceptance path remains first and unchanged. If that path fails, the production owner may recover a boundary only through one of two bounded current-frame routes:
+
+- without accepted Foam context, a weak boundary must still show a real broad phase transition, narrow/horizontal support, high visibility/availability and bounded spatial/static conflict, while the existing continuous identifiability evidence must show strong texture relief with low near-ceiling and collision pressure;
+- with Foam present, only the independently accepted S5-A current-frame Foam front may be used as context, and an Oil hypothesis must lie below that front while retaining broad phase support, narrow/horizontal evidence, visibility/availability and bounded spatial/static conflict.
+
+The second route exists because real white-Foam texture can saturate the grayscale plateau-artifact likelihood around a physically distinct Oil boundary. D4 does not globally lower that artifact likelihood or relax glare/structure protection. Foam presence alone cannot create an Oil boundary, and an ambiguous or rejected Foam candidate supplies no Oil context.
+
+S5-A is evaluated independently before the S5-B command only so its accepted local-Y scalar can be copied into the immutable current-frame Oil command. That optional finite scalar is not persisted in `GlassTemporalRecord` or `TemporalStoreState`; no Foam raster, component or history is retained by S5-B. Every recovered boundary is still a typed `ShadowBoundaryObservation`, passes through the one serialized S5-B reducer, and reaches numeric `PhaseDetection` fields only through the existing canonical outcome/projection path. Legacy Oil fallback, post-owner numeric injection and repetition-based ambiguity promotion remain prohibited.
+
+D4 adds no persisted detector setting, Recipe field, external `PhaseDetection` field, truth/fixture/benchmark/CSV/debug schema field, detector-version change or dependency. S5-A Foam publication thresholds and temporal behavior remain independently governed.
+
+Future architecture options remain limited to separately designed and audited positive evidence such as temporal photometric/component history or capture metadata. Optical flow, retained raster history and capture-metadata schemas are not implemented by this source change.
 
 The milestone order remains `S5-B → S5-C → S6`; this diagnosis does not reorder or combine S5-C or S6.
 

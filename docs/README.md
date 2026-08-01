@@ -49,6 +49,7 @@ A feature document must not maintain a competing project-wide “current next wo
 - S6-D1 mobile-assisted user-truth review pack: [mobile truth review pack](./30-quality/s6-d1-mobile-truth-review-pack.md)
 - S6-D2 bundle-bound user-confirmed product truth: [user-confirmed product truth](./30-quality/s6-d2-user-confirmed-product-truth.md)
 - S6-D3 current-sample detector baseline and category coverage: [official accuracy baseline](./30-quality/s6-d3-official-accuracy-baseline.md)
+- S6-D4 bounded available-corpus detector repair: [detector repair evidence](./30-quality/s6-d4-available-corpus-detector-repair.md)
 - S6-F one-hour long-duration resource stability: [one-hour stability evidence](./30-quality/s6-f-one-hour-long-duration-stability.md)
 - Manual platform gate: [manual GUI and Windows checklist](./30-quality/manual-gui-windows-checklist.md)
 - Detector benchmark guide: [golden video regression](./30-quality/golden-video-regression.md)
