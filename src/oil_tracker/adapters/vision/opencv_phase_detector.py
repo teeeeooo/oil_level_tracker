@@ -112,15 +112,6 @@ class OpenCvPhaseDetector:
         bundle = build_mask_bundle(frame, glass)
         pre = preprocess(bundle.crop, bundle.effective_mask, settings)
         static_map = self._static_maps.get(glass.id)
-        oil_result = self._evaluate_oil_pipeline(
-            glass.id,
-            pre,
-            bundle,
-            static_map,
-        )
-        oil_projection = project_production_result(oil_result)
-        selected = oil_projection.selected_candidate
-
         foam = detect_bottom_connected_foam(
             bundle.crop,
             pre.gray,
@@ -131,6 +122,17 @@ class OpenCvPhaseDetector:
         )
         foam_temporal = self._foam_gate.evaluate(glass.id, foam, settings)
         foam_candidate = foam_temporal.candidate
+        oil_result = self._evaluate_oil_pipeline(
+            glass.id,
+            pre,
+            bundle,
+            static_map,
+            accepted_foam_front_local_y=(
+                None if foam_candidate is None else float(foam_candidate.y)
+            ),
+        )
+        oil_projection = project_production_result(oil_result)
+        selected = oil_projection.selected_candidate
         previous_state = tracker.current_state
         proposed_state, visibility, flags = classify_fill_state(
             pre.gray,
@@ -289,6 +291,8 @@ class OpenCvPhaseDetector:
         pre: PreprocessResult,
         bundle: MaskBundle,
         static_map: np.ndarray | None,
+        *,
+        accepted_foam_front_local_y: float | None = None,
     ) -> OilCanonicalOutcome:
         try:
             kwargs = _isolated_pipeline_inputs(
@@ -296,6 +300,7 @@ class OpenCvPhaseDetector:
                 pre=pre,
                 bundle=bundle,
                 static_map=static_map,
+                accepted_foam_front_local_y=accepted_foam_front_local_y,
             )
             return self._oil_pipeline.run(**kwargs)
         except Exception as exc:
@@ -434,6 +439,7 @@ def _isolated_pipeline_inputs(
     pre: PreprocessResult,
     bundle: MaskBundle,
     static_map: np.ndarray | None,
+    accepted_foam_front_local_y: float | None = None,
 ) -> dict[str, Any]:
     readonly_pre = PreprocessResult(
         *(
@@ -460,6 +466,11 @@ def _isolated_pipeline_inputs(
             None if static_map is None else _isolated_readonly_copy(static_map)
         ),
         "crop_origin_y": float(bundle.crop_origin[1]),
+        "accepted_foam_front_local_y": (
+            None
+            if accepted_foam_front_local_y is None
+            else float(accepted_foam_front_local_y)
+        ),
     }
 
 def _isolated_readonly_copy(value: np.ndarray) -> np.ndarray:

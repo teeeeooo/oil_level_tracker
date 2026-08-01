@@ -89,6 +89,22 @@ def test_debug_images_are_additive_crop_sized_evidence_artifacts():
         assert artifacts.images[key].dtype == np.uint8
 
 
+def test_accepted_low_light_foam_does_not_invent_an_oil_boundary_below_texture():
+    detector = OpenCvPhaseDetector()
+    glass = _glass()
+    scene = _scene("low-light-foam")
+    detection, _artifacts = detector.detect(
+        scene.frame,
+        glass,
+        1,
+        scene.timestamp,
+        debug=False,
+    )
+    assert detection.raw_foam_front_y is not None
+    assert detection.raw_oil_air_level_y is None
+    assert detection.smoothed_oil_air_level_y is None
+
+
 def test_transient_shimmer_does_not_create_raw_or_smoothed_foam_front():
     detector = OpenCvPhaseDetector()
     glass = _glass()

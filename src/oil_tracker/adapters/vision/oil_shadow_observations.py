@@ -315,6 +315,8 @@ def evaluate_typed_current_observation(
     pre: PreprocessResult,
     effective_mask: np.ndarray,
     hypotheses: tuple[SemanticHypothesis, ...],
+    *,
+    accepted_foam_front_local_y: float | None = None,
 ) -> ShadowCurrentObservation:
     no_interface = _no_interface_evidence(pre, effective_mask, hypotheses)
     if not no_interface.available and no_interface.visibility < 0.20:
@@ -358,12 +360,23 @@ def evaluate_typed_current_observation(
             second_boundary,
         )
         if canonical_boundary_candidate and identifiability.acceptance_margin >= 0.0:
-            return ShadowBoundaryObservation(
-                hypothesis=best,
-                alternatives=tuple(
-                    sorted(item.identity for item in ordered[1:3])
-                ),
-            )
+            return _boundary_observation(best, ordered)
+
+    recovered = (
+        _select_foam_separated_boundary(
+            ordered,
+            accepted_foam_front_local_y,
+        )
+        if accepted_foam_front_local_y is not None
+        else _select_textured_low_contrast_boundary(
+            pre,
+            effective_mask,
+            ordered,
+            no_interface,
+        )
+    )
+    if recovered is not None:
+        return _boundary_observation(recovered, ordered)
 
     competing_boundary = 0.0 if best is None else best.boundary_likelihood
     if (
@@ -410,6 +423,117 @@ def evaluate_typed_current_observation(
         projected_source_y=projected_source_y,
         reason=reason,
     )
+
+
+def _boundary_observation(
+    selected: SemanticHypothesis,
+    ordered: list[SemanticHypothesis],
+) -> ShadowBoundaryObservation:
+    alternatives = [item for item in ordered if item.identity != selected.identity][:2]
+    return ShadowBoundaryObservation(
+        hypothesis=selected,
+        alternatives=tuple(sorted(item.identity for item in alternatives)),
+    )
+
+
+def _select_textured_low_contrast_boundary(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    ordered: list[SemanticHypothesis],
+    no_interface: ShadowNoInterfaceEvidence,
+) -> SemanticHypothesis | None:
+    """Recover a weak phase only when texture makes the raster identifiable.
+
+    This route deliberately stays closed for near-ceiling single-frame
+    glare/oil collisions and for pulse-like structural lines. It does not
+    replace the normal boundary acceptance path; it only admits a weak broad
+    phase transition when independently observable texture relief is present.
+    """
+
+    for candidate in ordered:
+        spatial_conflict = max(
+            candidate.broad.glare_conflict,
+            candidate.broad.exclusion_conflict,
+            candidate.narrow.glare_overlap,
+            candidate.narrow.exclusion_overlap,
+            candidate.narrow.border_overlap,
+        )
+        if not (
+            candidate.boundary_likelihood > candidate.artifact_likelihood
+            and candidate.broad.available_scale_count >= 2
+            and candidate.broad.strength >= 0.12
+            and candidate.broad.scale_consistency >= 0.80
+            and candidate.narrow.available
+            and candidate.narrow.peak_strength >= 0.25
+            and candidate.narrow.horizontal_coverage >= 0.40
+            and candidate.narrow.paired_edge_strength <= 0.80
+            and candidate.visibility >= 0.85
+            and candidate.evidence_availability >= 0.90
+            and spatial_conflict <= 0.15
+            and candidate.static_prior.contribution <= 0.08
+        ):
+            continue
+        second_boundary = max(
+            (
+                item.boundary_likelihood
+                for item in ordered
+                if item.identity != candidate.identity
+            ),
+            default=0.0,
+        )
+        evidence = _single_frame_identifiability_evidence(
+            pre,
+            effective_mask,
+            candidate,
+            no_interface,
+            second_boundary,
+        )
+        if (
+            evidence.texture_relief >= 0.55
+            and evidence.phase_ceiling_pressure <= 0.20
+            and evidence.collision_pressure <= 0.10
+            and evidence.evidence_reliability >= 0.75
+        ):
+            return candidate
+    return None
+
+
+def _select_foam_separated_boundary(
+    ordered: list[SemanticHypothesis],
+    accepted_foam_front_local_y: float,
+) -> SemanticHypothesis | None:
+    """Recover a distinct Oil phase below independently accepted Foam.
+
+    S5-A remains the sole Foam authority. This function only uses its accepted
+    front as current-frame context and still requires broad Oil phase evidence,
+    bounded spatial conflict, and horizontal support. No Foam context is
+    retained by the Oil temporal owner.
+    """
+
+    for candidate in ordered:
+        spatial_conflict = max(
+            candidate.broad.glare_conflict,
+            candidate.broad.exclusion_conflict,
+            candidate.narrow.glare_overlap,
+            candidate.narrow.exclusion_overlap,
+            candidate.narrow.border_overlap,
+        )
+        if (
+            candidate.representative_local_y > accepted_foam_front_local_y
+            and candidate.boundary_likelihood >= 0.20
+            and candidate.broad.available_scale_count >= 2
+            and candidate.broad.strength >= 0.10
+            and candidate.broad.scale_consistency >= 0.80
+            and candidate.narrow.available
+            and candidate.narrow.peak_strength >= 0.20
+            and candidate.narrow.horizontal_coverage >= 0.20
+            and candidate.visibility >= 0.85
+            and candidate.evidence_availability >= 0.90
+            and spatial_conflict <= 0.15
+            and candidate.static_prior.contribution <= 0.08
+        ):
+            return candidate
+    return None
 
 
 def _single_frame_identifiability_evidence(

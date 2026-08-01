@@ -299,6 +299,7 @@ def _typed_hypothesis(
     broad_exclusion: float = 0.0,
     narrow_available: bool = True,
     narrow_peak_strength: float = 1.0,
+    narrow_horizontal_coverage: float = 0.0,
     narrow_scale_persistence: float = 1.0,
     paired_edge_strength: float = 0.72,
     pulse_symmetry: float = 0.50,
@@ -346,7 +347,7 @@ def _typed_hypothesis(
         template.narrow,
         available=narrow_available,
         peak_strength=narrow_peak_strength,
-        horizontal_coverage=0.0,
+        horizontal_coverage=narrow_horizontal_coverage,
         paired_edge_strength=paired_edge_strength,
         pulse_symmetry=pulse_symmetry,
         scale_persistence=narrow_scale_persistence,
@@ -417,6 +418,7 @@ def _typed_observation(
     no_interface=0.15,
     visibility=1.0,
     glare_conflict=0.0,
+    accepted_foam_front_local_y=None,
 ):
     image = np.full((20, 20), 100, dtype=np.uint8)
     mask = np.full_like(image, 255)
@@ -431,7 +433,12 @@ def _typed_observation(
         "_no_interface_evidence",
         lambda *_args: evidence,
     )
-    return evaluate_typed_current_observation(pre, mask, tuple(hypotheses))
+    return evaluate_typed_current_observation(
+        pre,
+        mask,
+        tuple(hypotheses),
+        accepted_foam_front_local_y=accepted_foam_front_local_y,
+    )
 
 
 def test_contextual_ambiguity_does_not_claim_one_hypothesis_projection(monkeypatch):
@@ -642,3 +649,97 @@ def test_general_boundary_floor_remains_unchanged(monkeypatch):
         _typed_observation(monkeypatch, (at_general_floor,)),
         ShadowBoundaryObservation,
     )
+
+
+def test_textured_low_contrast_recovery_requires_identifiable_phase_evidence(monkeypatch):
+    target = _typed_hypothesis(
+        "textured-low-contrast",
+        y=12.0,
+        boundary=0.26,
+        artifact=0.20,
+        ambiguity=0.61,
+        broad_strength=0.17,
+        broad_scale_consistency=0.90,
+        narrow_peak_strength=0.40,
+        narrow_horizontal_coverage=0.60,
+        paired_edge_strength=0.30,
+    )
+
+    def evidence(texture_relief: float):
+        return oil_shadow_observations._SingleFrameIdentifiabilityEvidence(
+            phase_ceiling_pressure=0.0,
+            texture_relief=texture_relief,
+            broad_corroboration_deficit=1.0,
+            evidence_reliability=0.90,
+            collision_pressure=0.0,
+            semantic_support=0.10,
+            acceptance_margin=-0.30,
+        )
+
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_single_frame_identifiability_evidence",
+        lambda *_args: evidence(0.70),
+    )
+    recovered = _typed_observation(monkeypatch, (target,), no_interface=0.50)
+    assert isinstance(recovered, ShadowBoundaryObservation)
+    assert recovered.hypothesis.identity == target.identity
+
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_single_frame_identifiability_evidence",
+        lambda *_args: evidence(0.20),
+    )
+    unresolved = _typed_observation(monkeypatch, (target,), no_interface=0.50)
+    assert isinstance(unresolved, ShadowAmbiguousObservation)
+
+
+def test_accepted_foam_context_recovers_only_a_distinct_broad_phase_below_front(monkeypatch):
+    target = _typed_hypothesis(
+        "foam-separated-oil",
+        y=12.0,
+        boundary=0.30,
+        artifact=0.95,
+        ambiguity=0.35,
+        broad_strength=0.18,
+        broad_scale_consistency=0.90,
+        narrow_peak_strength=0.50,
+        narrow_horizontal_coverage=0.60,
+        paired_edge_strength=0.60,
+    )
+    below_foam = _typed_observation(
+        monkeypatch,
+        (target,),
+        no_interface=0.35,
+        accepted_foam_front_local_y=6.0,
+    )
+    assert isinstance(below_foam, ShadowBoundaryObservation)
+    assert below_foam.hypothesis.identity == target.identity
+
+    above_foam = _typed_observation(
+        monkeypatch,
+        (target,),
+        no_interface=0.35,
+        accepted_foam_front_local_y=14.0,
+    )
+    assert isinstance(above_foam, ShadowAmbiguousObservation)
+
+    weak_broad = _typed_hypothesis(
+        "foam-texture-without-phase",
+        y=12.0,
+        boundary=0.30,
+        artifact=0.95,
+        ambiguity=0.35,
+        broad_strength=0.05,
+        broad_scale_consistency=0.90,
+        narrow_peak_strength=0.50,
+        narrow_horizontal_coverage=0.80,
+        paired_edge_strength=0.40,
+    )
+    no_phase = _typed_observation(
+        monkeypatch,
+        (weak_broad,),
+        no_interface=0.35,
+        accepted_foam_front_local_y=6.0,
+    )
+    assert isinstance(no_phase, ShadowAmbiguousObservation)
