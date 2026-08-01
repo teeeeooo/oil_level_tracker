@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "annotation_set_id": "27059ae5-3095-4436-a4a6-a3a3abaa9b7a",
+  "created_at": "2026-08-01T13:33:32.028553+00:00",
+  "updated_at": "2026-08-01T13:33:32.032130+00:00",
+  "bundle_identity": {
+    "run_id": "84119a59-0c4c-445e-8653-913bfcabf579",
+    "recipe_id": "090a3115-56a1-59a2-a043-7ecab8db0b7d",
+    "recipe_snapshot_hash": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+    "source_video_basename": "sample3.mp4",
+    "source_width": 1280,
+    "source_height": 720,
+    "source_fps": 29.97002997002997,
+    "source_duration_sec": 140.20673333333335
+  },
+  "annotations": [
+    {
+      "schema_version": 1,
+      "annotation_id": "3d4a5a0f-1eb7-4e99-b628-07eb5f053799",
+      "annotation_set_id": "27059ae5-3095-4436-a4a6-a3a3abaa9b7a",
+      "bundle_run_id": "84119a59-0c4c-445e-8653-913bfcabf579",
+      "recipe_id": "090a3115-56a1-59a2-a043-7ecab8db0b7d",
+      "recipe_snapshot_hash": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+      "glass_id": "c21a62cd-e0e0-545c-8f7f-ee2384f036a9",
+      "glass_name_snapshot": "sample3 sight glass",
+      "requested_timestamp_sec": 30.03,
+      "actual_decoded_timestamp_sec": 30.03,
+      "frame_index": 900,
+      "disposition": "corrected",
+      "truth_fill_state": "FOAMING_VISIBLE",
+      "oil_boundary": {
+        "source_frame_y": 316.0,
+        "roi_local_y": 121.0,
+        "px_from_zero": -1.0,
+        "mm_from_zero": null
+      },
+      "foam_front": {
+        "source_frame_y": 286.0,
+        "roi_local_y": 91.0,
+        "px_from_zero": 29.0,
+        "mm_from_zero": null
+      },
+      "foam_present": true,
+      "error_types": [
+        "fill_state_misclassified",
+        "foam_misclassified",
+        "oil_boundary_missing"
+      ],
+      "note": "[S3-01] 사용자 승인: D1 agent Oil/Foam candidates 승인.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 30.03,
+        "frame_index": 900,
+        "fill_state": "UNKNOWN_REVIEW",
+        "oil_boundary": null,
+        "foam_front": null,
+        "confidence": 0.1575,
+        "valid": false,
+        "flags": [
+          "LOW_CONFIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS",
+          "REVIEW_REQUIRED"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.031187+00:00",
+      "updated_at": "2026-08-01T13:33:32.031187+00:00",
+      "revision": 1
+    },
+    {
+      "schema_version": 1,
+      "annotation_id": "31b9dfb9-a7d5-42fb-95ed-e37c6a794945",
+      "annotation_set_id": "27059ae5-3095-4436-a4a6-a3a3abaa9b7a",
+      "bundle_run_id": "84119a59-0c4c-445e-8653-913bfcabf579",
+      "recipe_id": "090a3115-56a1-59a2-a043-7ecab8db0b7d",
+      "recipe_snapshot_hash": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+      "glass_id": "c21a62cd-e0e0-545c-8f7f-ee2384f036a9",
+      "glass_name_snapshot": "sample3 sight glass",
+      "requested_timestamp_sec": 34.53,
+      "actual_decoded_timestamp_sec": 34.5345,
+      "frame_index": 1035,
+      "disposition": "corrected",
+      "truth_fill_state": "FOAMING_VISIBLE",
+      "oil_boundary": {
+        "source_frame_y": 243.0,
+        "roi_local_y": 48.0,
+        "px_from_zero": 72.0,
+        "mm_from_zero": null
+      },
+      "foam_front": {
+        "source_frame_y": 195.0,
+        "roi_local_y": 0.0,
+        "px_from_zero": 120.0,
+        "mm_from_zero": null
+      },
+      "foam_present": true,
+      "error_types": [
+        "fill_state_misclassified",
+        "foam_misclassified",
+        "oil_boundary_missing"
+      ],
+      "note": "[S3-02] 사용자 수정: Glass ruler Oil 20%, Foam 0%. 원문 note: 실제 glass의 위치는 표시 선상 -10%~60% 지점까지가 glass임. Recipe ROI/geometry는 변경하지 않음.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 34.5345,
+        "frame_index": 1035,
+        "fill_state": "UNKNOWN_REVIEW",
+        "oil_boundary": null,
+        "foam_front": null,
+        "confidence": 0.1575,
+        "valid": false,
+        "flags": [
+          "LOW_CONFIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS",
+          "REVIEW_REQUIRED"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.031524+00:00",
+      "updated_at": "2026-08-01T13:33:32.031524+00:00",
+      "revision": 1
+    },
+    {
+      "schema_version": 1,
+      "annotation_id": "ebb08d8d-3451-4d8e-9c59-db40a2df9aa9",
+      "annotation_set_id": "27059ae5-3095-4436-a4a6-a3a3abaa9b7a",
+      "bundle_run_id": "84119a59-0c4c-445e-8653-913bfcabf579",
+      "recipe_id": "090a3115-56a1-59a2-a043-7ecab8db0b7d",
+      "recipe_snapshot_hash": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+      "glass_id": "c21a62cd-e0e0-545c-8f7f-ee2384f036a9",
+      "glass_name_snapshot": "sample3 sight glass",
+      "requested_timestamp_sec": 95.03,
+      "actual_decoded_timestamp_sec": 95.02826666666667,
+      "frame_index": 2848,
+      "disposition": "unusable",
+      "truth_fill_state": null,
+      "oil_boundary": null,
+      "foam_front": null,
+      "foam_present": false,
+      "error_types": [
+        "video_unusable"
+      ],
+      "note": "[S3-03] 사용자 unusable: 초점 불량으로 사용 불가. candidate Oil은 맞아 보인다는 user comment를 보존하며 numeric truth는 product normalization으로 제거.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 95.02826666666667,
+        "frame_index": 2848,
+        "fill_state": "UNKNOWN_REVIEW",
+        "oil_boundary": null,
+        "foam_front": null,
+        "confidence": 0.1575,
+        "valid": false,
+        "flags": [
+          "LOW_CONFIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS",
+          "REVIEW_REQUIRED"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.031846+00:00",
+      "updated_at": "2026-08-01T13:33:32.031846+00:00",
+      "revision": 1
+    },
+    {
+      "schema_version": 1,
+      "annotation_id": "985a890f-d63a-4a9e-8248-65abfc4e17b1",
+      "annotation_set_id": "27059ae5-3095-4436-a4a6-a3a3abaa9b7a",
+      "bundle_run_id": "84119a59-0c4c-445e-8653-913bfcabf579",
+      "recipe_id": "090a3115-56a1-59a2-a043-7ecab8db0b7d",
+      "recipe_snapshot_hash": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+      "glass_id": "c21a62cd-e0e0-545c-8f7f-ee2384f036a9",
+      "glass_name_snapshot": "sample3 sight glass",
+      "requested_timestamp_sec": 105.0,
+      "actual_decoded_timestamp_sec": 105.0049,
+      "frame_index": 3147,
+      "disposition": "unusable",
+      "truth_fill_state": null,
+      "oil_boundary": null,
+      "foam_front": null,
+      "foam_present": false,
+      "error_types": [
+        "video_unusable"
+      ],
+      "note": "[S3-04] 사용자 unusable: 초점 불량으로 사용 불가. candidate Oil은 맞아 보인다는 user comment를 보존하며 numeric truth는 product normalization으로 제거.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 105.0049,
+        "frame_index": 3147,
+        "fill_state": "UNKNOWN_REVIEW",
+        "oil_boundary": null,
+        "foam_front": null,
+        "confidence": 0.1575,
+        "valid": false,
+        "flags": [
+          "LOW_CONFIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS",
+          "REVIEW_REQUIRED"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.032130+00:00",
+      "updated_at": "2026-08-01T13:33:32.032130+00:00",
+      "revision": 1
+    }
+  ]
+}

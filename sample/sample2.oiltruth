@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "annotation_set_id": "f6a36068-ec38-483d-939c-f1d2b4f48554",
+  "created_at": "2026-08-01T13:33:32.028252+00:00",
+  "updated_at": "2026-08-01T13:33:32.030806+00:00",
+  "bundle_identity": {
+    "run_id": "1369af1a-9e41-4f85-bfc7-a43d344436c0",
+    "recipe_id": "da570374-9f2a-5b7d-8388-ce11a21a6af3",
+    "recipe_snapshot_hash": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+    "source_video_basename": "sample2.mp4",
+    "source_width": 720,
+    "source_height": 1280,
+    "source_fps": 30.0,
+    "source_duration_sec": 9.6
+  },
+  "annotations": [
+    {
+      "schema_version": 1,
+      "annotation_id": "c9b0504f-f792-4e07-8359-9bb1754ad10f",
+      "annotation_set_id": "f6a36068-ec38-483d-939c-f1d2b4f48554",
+      "bundle_run_id": "1369af1a-9e41-4f85-bfc7-a43d344436c0",
+      "recipe_id": "da570374-9f2a-5b7d-8388-ce11a21a6af3",
+      "recipe_snapshot_hash": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+      "glass_id": "0aff9b80-002e-54e1-b1a3-fff1ec97a183",
+      "glass_name_snapshot": "sample2 sight glass",
+      "requested_timestamp_sec": 0.0,
+      "actual_decoded_timestamp_sec": 0.0,
+      "frame_index": 0,
+      "disposition": "corrected",
+      "truth_fill_state": "FOAMING_VISIBLE",
+      "oil_boundary": {
+        "source_frame_y": 592.0,
+        "roi_local_y": 272.0,
+        "px_from_zero": -102.0,
+        "mm_from_zero": null
+      },
+      "foam_front": {
+        "source_frame_y": 320.0,
+        "roi_local_y": 0.0,
+        "px_from_zero": 170.0,
+        "mm_from_zero": null
+      },
+      "foam_present": true,
+      "error_types": [
+        "fill_state_misclassified",
+        "foam_misclassified",
+        "glare_or_reflection",
+        "oil_boundary_missing"
+      ],
+      "note": "[S2-01] 사용자 수정: Glass ruler Oil 80%, Foam 0%; reflection; 약 50–60% 부근 빛반사.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 0.0,
+        "frame_index": 0,
+        "fill_state": "UNKNOWN_REVIEW",
+        "oil_boundary": null,
+        "foam_front": null,
+        "confidence": 0.1575,
+        "valid": false,
+        "flags": [
+          "FOAM_EVIDENCE_AMBIGUOUS",
+          "LOW_CONFIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS",
+          "REVIEW_REQUIRED"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.030264+00:00",
+      "updated_at": "2026-08-01T13:33:32.030264+00:00",
+      "revision": 1
+    },
+    {
+      "schema_version": 1,
+      "annotation_id": "e2070104-a258-46b4-ac9b-b9a3771224c0",
+      "annotation_set_id": "f6a36068-ec38-483d-939c-f1d2b4f48554",
+      "bundle_run_id": "1369af1a-9e41-4f85-bfc7-a43d344436c0",
+      "recipe_id": "da570374-9f2a-5b7d-8388-ce11a21a6af3",
+      "recipe_snapshot_hash": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+      "glass_id": "0aff9b80-002e-54e1-b1a3-fff1ec97a183",
+      "glass_name_snapshot": "sample2 sight glass",
+      "requested_timestamp_sec": 1.0,
+      "actual_decoded_timestamp_sec": 1.0,
+      "frame_index": 30,
+      "disposition": "corrected",
+      "truth_fill_state": "FOAMING_VISIBLE",
+      "oil_boundary": {
+        "source_frame_y": 592.0,
+        "roi_local_y": 272.0,
+        "px_from_zero": -102.0,
+        "mm_from_zero": null
+      },
+      "foam_front": {
+        "source_frame_y": 320.0,
+        "roi_local_y": 0.0,
+        "px_from_zero": 170.0,
+        "mm_from_zero": null
+      },
+      "foam_present": true,
+      "error_types": [
+        "fill_state_misclassified",
+        "glare_or_reflection",
+        "oil_boundary_missing",
+        "wrong_candidate"
+      ],
+      "note": "[S2-02] 사용자 수정: Glass ruler Oil 80%, Foam 0%; reflection; 약 50–60% 부근 빛반사.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 1.0,
+        "frame_index": 30,
+        "fill_state": "UNKNOWN_REVIEW",
+        "oil_boundary": null,
+        "foam_front": {
+          "source_frame_y": 452.0,
+          "roi_local_y": 132.0,
+          "px_from_zero": 38.0,
+          "mm_from_zero": null
+        },
+        "confidence": 0.34978575428817027,
+        "valid": false,
+        "flags": [
+          "FOAM_STRONG_EVIDENCE",
+          "LOW_CONFIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.030505+00:00",
+      "updated_at": "2026-08-01T13:33:32.030505+00:00",
+      "revision": 1
+    },
+    {
+      "schema_version": 1,
+      "annotation_id": "5327ef00-1627-4a4b-b89a-9a0735e37441",
+      "annotation_set_id": "f6a36068-ec38-483d-939c-f1d2b4f48554",
+      "bundle_run_id": "1369af1a-9e41-4f85-bfc7-a43d344436c0",
+      "recipe_id": "da570374-9f2a-5b7d-8388-ce11a21a6af3",
+      "recipe_snapshot_hash": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+      "glass_id": "0aff9b80-002e-54e1-b1a3-fff1ec97a183",
+      "glass_name_snapshot": "sample2 sight glass",
+      "requested_timestamp_sec": 2.0,
+      "actual_decoded_timestamp_sec": 2.0,
+      "frame_index": 60,
+      "disposition": "corrected",
+      "truth_fill_state": "FOAMING_VISIBLE",
+      "oil_boundary": {
+        "source_frame_y": 592.0,
+        "roi_local_y": 272.0,
+        "px_from_zero": -102.0,
+        "mm_from_zero": null
+      },
+      "foam_front": {
+        "source_frame_y": 320.0,
+        "roi_local_y": 0.0,
+        "px_from_zero": 170.0,
+        "mm_from_zero": null
+      },
+      "foam_present": true,
+      "error_types": [
+        "fill_state_misclassified",
+        "glare_or_reflection",
+        "oil_boundary_missing",
+        "wrong_candidate"
+      ],
+      "note": "[S2-03] 사용자 수정: Glass ruler Oil 80%, Foam 0%; reflection; 약 50–60% 부근 빛반사.",
+      "official_tracking_reference": {
+        "sample_timestamp_sec": 2.0,
+        "frame_index": 60,
+        "fill_state": "FULL_WITH_FOAM",
+        "oil_boundary": null,
+        "foam_front": {
+          "source_frame_y": 452.0,
+          "roi_local_y": 132.0,
+          "px_from_zero": 38.0,
+          "mm_from_zero": null
+        },
+        "confidence": 0.8409050530907785,
+        "valid": true,
+        "flags": [
+          "FOAM_STRONG_EVIDENCE",
+          "OIL_EVIDENCE_AMBIGUOUS"
+        ],
+        "debug_record_id": null,
+        "candidate_baseline_available": false
+      },
+      "official_debug_record_id": null,
+      "created_at": "2026-08-01T13:33:32.030806+00:00",
+      "updated_at": "2026-08-01T13:33:32.030806+00:00",
+      "revision": 1
+    }
+  ]
+}
