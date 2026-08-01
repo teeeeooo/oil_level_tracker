@@ -47,6 +47,7 @@ A feature document must not maintain a competing project-wide “current next wo
 - Post-freeze domain-owner interpretation and field priorities: [S6 domain-owner review addendum](./30-quality/s6-domain-owner-review-addendum.md)
 - S6-E bounded runtime and resource-leak screening: [bounded runtime soak evidence](./30-quality/s6-bounded-runtime-soak-evidence.md)
 - S6-D1 mobile-assisted user-truth review pack: [mobile truth review pack](./30-quality/s6-d1-mobile-truth-review-pack.md)
+- S6-F one-hour long-duration resource stability: [one-hour stability evidence](./30-quality/s6-f-one-hour-long-duration-stability.md)
 - Manual platform gate: [manual GUI and Windows checklist](./30-quality/manual-gui-windows-checklist.md)
 - Detector benchmark guide: [golden video regression](./30-quality/golden-video-regression.md)
 
