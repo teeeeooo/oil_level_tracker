@@ -2,18 +2,29 @@
 
 ## Status
 
-- **Task-start production main:** `bcac3d66e383dc6e60457bc173d90502fd45878d`
-- **Task-start parent:** `170d71798526aa7592c2db9cb9c37e4559f5ed9a`
-- **Feature branch:** `feature/s6-f-one-hour-long-duration-stability`
-- **Worker classification:** `ONE-HOUR LONG-DURATION STABILITY: PASS-CANDIDATE`
-- **Evidence state:** completed exact local run recovered; source-completing documentation awaiting fresh independent exact-head audit
+- **Audited feature head:** `457e946398885a5d8918d279b2b6975b0f381981` over parent `bcac3d66e383dc6e60457bc173d90502fd45878d`
+- **Merged PR/main:** `#64 @ abe1cae14cb488fd61a4da94f1f11aeddc6a5c38`
+- **Accepted classification:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — EXACT macOS SOURCE-TREE WORKLOAD`
+- **Evidence state:** raw local evidence preserved; fresh independent exact-head audit and guarded squash merge complete
 - **External pending checkpoint:** `S6-D1 Domain-Owner Mobile Review`
-- **Next technical gate:** `S6-F One-Hour Long-Duration Resource-Stability Fresh Exact-Head Auditor`
+- **Next technical gate:** `Controlled-Idle Representative-Duration CPU Throughput Evidence`
 - **Milestone state:** S6 remains `ACTIVE`; S7 remains `PLANNED`
 
-This evidence evaluates one already-completed, detached production CLI analyzer process. No new soak was started during result collection. The classification is a feature-head candidate for independent audit, not merged acceptance and not a universal memory specification.
+This evidence evaluates one already-completed, detached production CLI analyzer process. No new soak was started during Worker result collection or fresh audit. The accepted result is not a universal memory specification.
 
 The result is limited to macOS source-tree resource stability for this exact derived sample3 workload. It does not establish detector accuracy, controlled-idle CPU throughput, Windows or packaged-runtime stability, representative field-duration accuracy, or S6 final acceptance.
+
+## Fresh exact-head audit and acceptance
+
+The independent Auditor verified the complete three-document PR at exact head `457e946398885a5d8918d279b2b6975b0f381981`, recomputed all principal raw-evidence hashes, reparsed all `374` telemetry rows, reopened the completed production bundle, reran source/Recipe identity checks, and confirmed post-exit process/output cleanup without starting another soak.
+
+Fresh telemetry reproduced `315` live post-warm-up rows, RSS `163.625 / 169.625 / 466.734 MiB` min/median/max, `164.836 MiB` at 10–20 minutes, `174.367 MiB` in the final ten minutes, and a `+9.531 MiB / +5.782%` window-median increase. The analysis-only pre-output slope was `+0.213 MiB/min`; that mild duration-scaled retention remains a limitation rather than being described as a flat infinite-duration plateau.
+
+The late `463–467 MiB` high-memory region was not treated as a single spike. It persisted during graph/report/final-bundle work after the `1,607` event captures had nearly completed, plateaued rather than repeatedly stepping upward, and was followed by analyzer exit with owned RSS/open files/children at zero. This supports a workload-bounded finalization interpretation for the exact event-heavy bundle, while larger event sets remain outside the evidence scope.
+
+Production `ResultBundleReader` reopened `24,160` tracking rows and `1,607` events; all `1,609` PNGs and report-local references passed, Recipe/source identities matched, no staging residue remained, and two fresh post-exit observations reproduced `1,617 files / 687,497,078 bytes`. The targeted lifecycle/bundle/source suite passed `24` tests in `3.51 s`; Markdown links, exact diff and clean-worktree checks exited `0`.
+
+PR #64 was marked Ready and guarded-squash-merged as `main @ abe1cae14cb488fd61a4da94f1f11aeddc6a5c38`. Acceptance means only that this exact one-hour source-tree workload showed no crash, incomplete finalization, convincing unbounded resource growth, owned-handle/process accumulation or post-exit leak signal.
 
 ## Exact recovered run identity
 
@@ -177,13 +188,13 @@ The S6-D1 mobile ZIP remained unchanged at SHA-256 `fd06ce5e464f6a9f0ec3a72d4c0c
 
 ## Classification
 
-`ONE-HOUR LONG-DURATION STABILITY: PASS-CANDIDATE`
+`ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — EXACT macOS SOURCE-TREE WORKLOAD`
 
 The exact analyzer process ran continuously for more than 60 minutes, exited `0`, completed lifecycle `1/6–6/6`, finalized a readable bundle, accumulated neither file handles nor analyzer children, left no owned process, and produced stable post-exit output.
 
-The stable-window to final-window RSS increase was far below the existing combined diagnostic signal. A slow analysis-period RSS rise and a large but bounded finalization peak are preserved explicitly rather than normalized away. The peak plateaued during report/finalization work and disappeared on process exit; it is not treated as a single-spike leak signal.
+The stable-window to final-window RSS increase was far below the existing combined diagnostic signal. A slow analysis-period RSS rise and a large but workload-bounded finalization plateau are preserved explicitly rather than normalized away. The plateau disappeared on process exit and is not evidence of a post-exit leak, but it limits extrapolation to longer runs or substantially larger event sets.
 
-This Worker therefore finds no convincing one-hour resource leak for the exact workload. Independent exact-head audit is still required before the result can become accepted project evidence.
+Fresh independent audit found no convincing unbounded resource growth or post-exit leak for this exact one-hour workload. This is not infinite-duration stability or acceptance of any separate performance, accuracy, Windows or packaging gate.
 
 ## Validation
 
@@ -196,9 +207,9 @@ PYTHONPATH=src .venv/bin/python -m pytest -q \
   tests/unit/test_source_video_resolver.py
 ```
 
-Worker result: `24 passed in 3.19s`; exit code `0`.
+Worker result: `24 passed in 3.19s`; exit code `0`. Fresh Auditor result: `24 passed in 3.51s`; exit code `0`.
 
-Result collection also passed exact launch/completion reconciliation, raw telemetry parsing, interval continuity, production bundle reopening, all bundle PNG decoding, report-local link resolution, Recipe/source consistency, owned-process cleanup, post-exit output stability and ignored-evidence preservation checks.
+Result collection and fresh audit also passed exact launch/completion reconciliation, raw telemetry parsing, interval continuity, production bundle reopening, all bundle PNG decoding, report-local link resolution, Recipe/source consistency, owned-process cleanup, post-exit output stability and ignored-evidence preservation checks.
 
 ## Residual limitations and next gate
 
@@ -207,13 +218,13 @@ This evidence does not establish controlled-idle CPU throughput. It does not tes
 The generated sample3 video is runtime-only repeated/re-encoded evidence. Its loop seams, blur and image quality are not detector-accuracy requirements. No MAE, precision, recall, false-positive/negative rate, calibrated level or physical detector PASS is claimed.
 The slow approximately `+0.21 MiB/min` pre-output retention remains a bounded one-hour observation, not proof of an infinite-duration plateau. Longer or substantially denser event workloads may require separate follow-up if future acceptance scope expands.
 
-S6-D1 remains independently blocked on explicit domain-owner mobile review. S6 remains `ACTIVE`, and S7 remains `PLANNED`.
+S6-D1 remains pending on explicit domain-owner mobile review. S6 remains `ACTIVE`, and S7 remains `PLANNED`.
 
-The next technical owner is the **S6-F One-Hour Long-Duration Resource-Stability Fresh Exact-Head Auditor**. That Auditor must independently recompute the raw telemetry and bundle/resource evidence from this exact feature head before any merge or formal acceptance.
+The next technical gate is **Controlled-Idle Representative-Duration CPU Throughput Evidence**. It is separate from this accepted one-hour resource-stability result and must not infer performance acceptance from the current non-idle run.
 
 ## Intentional non-runs
 
-This Worker did not:
+The Worker and Auditor did not:
 
 - start or repeat a soak;
 - modify detector source, tests, dependencies, settings or thresholds;
@@ -223,5 +234,5 @@ This Worker did not:
 - judge detector physical accuracy or tune against sample3;
 - claim controlled-idle CPU throughput acceptance;
 - run Windows, packaging, clean-PC or GUI acceptance;
-- merge, approve audit, close S6 or start S7;
+- close S6 or start S7;
 - remove existing local evidence.
