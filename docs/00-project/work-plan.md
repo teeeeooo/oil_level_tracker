@@ -8,17 +8,17 @@
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
 **Current S6-D1 result:** `S6-D1 DOMAIN-OWNER RESPONSE: RECEIVED FOR 15 EXACT REVIEW FRAMES`
 **Current S6-D2 result:** `S6-D2 USER-CONFIRMED PRODUCT TRUTH: AUDITED AND ACCEPTED`
-**Current S6-D3 result:** `CURRENT-SAMPLE OFFICIAL BASELINE PRODUCED — AVAILABLE-CORPUS POLICY AUDIT PENDING`
+**Current S6-D3 result:** `CURRENT-SAMPLE OFFICIAL BASELINE AND AVAILABLE-CORPUS POLICY: AUDITED AND ACCEPTED`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
-**Current gate:** `S6-D3 Fresh Independent Exact-Head Baseline and Available-Corpus Policy Audit`
+**Current gate:** `S6-D4 Available-Corpus Detector Accuracy Repair`
 **S6-F host-use context:** `user-confirmed idle representative run`; not a telemetry-proven controlled-idle benchmark
 **Product truth state:** four bundle-bound `.oiltruth` files with 15 reviewed frames are audited and merged on `main`; `13 corrected + 2 unusable`, `0 confirmed_correct`
 **Available-corpus constraint:** the current four real videos are the representative real-video corpus available at this stage; further representative acquisition is externally infeasible and is not an executable S6 gate
-**Pending accuracy gate:** after D3 audit/merge, run `S6-D4 Available-Corpus Detector Accuracy Repair` against the frozen audited dataset/settings/environment while retaining unavailable categories as residual risk
+**Pending accuracy gate:** `S6-D4 Available-Corpus Detector Accuracy Repair` against the frozen audited D3 dataset/catalog/settings/runtime environment; unavailable categories remain residual risk
 **Pending runtime scope:** Windows/package runtime gates remain pending; any stricter CPU-regression comparison is a separate bounded comparison, not a duplicate one-hour soak
 **Successor milestone:** `S7 / Phase 2C-4 — Annotated MP4 export` remains `PLANNED` and has not started
-**Audited S6-D2 feature head:** `f35f2abfc98511cdfaba85ce23374882819b8e30` over base `e261e7b4f4b31c5af89faaac3bfc9ccc35ae1bcc`
-**Merged S6-D2 PR/main:** `#65` / `1e593364c36a5a30117e86816b1b94cfd52531f5`
+**Audited S6-D3 feature head:** `049d0eb49222b904c688686267acb01bf95374a9` over base `47a5516e49872bcb6ffcd9c8147b2dcaa8640218`
+**Merged S6-D3 PR/main:** `#66` / `0a3cf34b8d4e0fbd9725a2de24612e62da910e50`
 **S6-A evidence:** [`../30-quality/s6-base-sample-1-evidence.md`](../30-quality/s6-base-sample-1-evidence.md)
 **S6-B evidence:** [`../30-quality/s6-additional-real-samples-evidence.md`](../30-quality/s6-additional-real-samples-evidence.md)
 **S6-C evidence:** [`../30-quality/s6-provisional-truth-comparison.md`](../30-quality/s6-provisional-truth-comparison.md)
@@ -29,22 +29,20 @@
 **S6-D3 evidence:** [`../30-quality/s6-d3-official-accuracy-baseline.md`](../30-quality/s6-d3-official-accuracy-baseline.md)
 **S6-F feature evidence:** [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
 
-This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6-D3 preserves an official current-sample production-detector baseline from all 15 audited S6-D2 truths while excluding the 2 unusable frames from accuracy denominators. The current four-video set is not category-balanced, and those gaps remain explicit `not_evaluated`/unavailable residual validation risk. The domain owner has now recorded that further representative real-video acquisition is externally infeasible at this stage, so acquisition is no longer an executable gate. This Draft PR must first pass the S6-D3 fresh exact-head baseline/policy audit; after merge, the next substantive gate is bounded available-corpus detector repair against the same frozen evidence.
+This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6-D3 preserves an official current-sample production-detector baseline from all 15 audited S6-D2 truths while excluding the 2 unusable frames from accuracy denominators. Fresh independent audit passed at exact feature head `049d0eb49222b904c688686267acb01bf95374a9`, and PR #66 was native guarded-squash-merged as `main @ 0a3cf34b8d4e0fbd9725a2de24612e62da910e50`. The current four-video set remains non-category-balanced, and missing categories remain explicit `not_evaluated`/unavailable residual validation risk. Further representative acquisition is externally infeasible at this stage, so the current executable gate is bounded available-corpus detector repair against the same frozen D3 evidence; this Close does not start that repair.
 
 ## Latest recorded closeout
 
 | Item | Current state |
 |---|---|
-| S6-D3 exact base | `main @ 47a5516e49872bcb6ffcd9c8147b2dcaa8640218`; production detector `opencv-phase-detector-s5b-typed-production-v1` |
-| Local evidence | `sample/output/s6-d3-official-accuracy-baseline/worker-47a5516-20260801T160903Z/`; composite dataset fingerprint `a6845fcf225c99bae8032ae55003aadbd37352b62153395bb9d406450909d92b` |
-| Denominator | `15 total / 13 usable / 2 unusable`; unusable S3 focus-loss frames retained only as provenance/reason evidence |
-| Oil baseline | raw/smoothed detection coverage `0/13`; all usable Oil truth positions are missed, so Oil position MAE/percentiles are `not_evaluated` rather than assigned a fabricated penalty |
-| Fill/Foam baseline | fill-state accuracy `0/13`; Foam precision `7/7 = 1.000`, recall `7/10 = 0.700`; matched Foam-front MAE `47.285714 px` |
-| Review ambiguity | `6/13 = 0.461538` usable cases are `UNKNOWN_REVIEW` and/or carry `REVIEW_REQUIRED` |
-| Missing denominators | no-interface false-boundary, shimmer Foam false-positive and event truth metrics remain `not_evaluated` |
-| Reproducibility | four production CLI runs and four same-dataset `--baseline` reruns exited `0`; dataset/settings/run fingerprints, cases and micro/macro summaries reproduced exactly |
-| Focused validation | benchmark/export/reader/metric/CLI suite `67 passed in 7.93s` |
-| Gate decision | current-sample official baseline is preserved; category-balanced/general-field accuracy eligibility remains false because clear, shimmer, structural/rim, rapid fill/drain, full/empty no-interface, transition and broader independent field-video evidence are unavailable. Further acquisition is externally infeasible, so these remain residual `not_evaluated` gaps while the frozen available corpus may proceed to bounded repair after D3 audit/merge |
+| Exact audit target | PR #66; base `47a5516e49872bcb6ffcd9c8147b2dcaa8640218`; feature head `049d0eb49222b904c688686267acb01bf95374a9`; exact four-document scope |
+| Preserved baseline | `current-sample-official-baseline.json` SHA-256 `fbfc7aa34e00eeb002098f5d79a0f83288bd06aec014ecae3ebd9f177e207692`; `15 total / 13 usable / 2 unusable` |
+| Truth and metric audit | All four exported datasets reproduce audited D2 `.oiltruth` annotations exactly; production summaries reproduce exactly. Oil raw/smoothed coverage `0/13`, fill-state accuracy `0/13`, Foam precision `7/7`, recall `7/10`; Oil position, no-interface, shimmer and event metrics remain `not_evaluated` where authoritative denominators are absent |
+| Available-corpus policy | Missing categories remain explicit residual risk; synthetic/current-frame substitutes cannot satisfy them. D4 may claim improvement only on the frozen available corpus using identical dataset bytes, catalog, settings and runtime environment, never category-balanced/general-field PASS |
+| Reproducibility | Four preserved baseline outputs and four same-dataset `--baseline` reruns are `comparable`; dataset/settings/run fingerprints, complete cases, category summaries and micro/macro aggregates reproduce exactly |
+| Fresh audit validation | benchmark/export/reader/metric/CLI suite `67 passed in 8.03s`; changed-document Markdown check `41` relative links with no missing target; audited-head `git diff --check` passed |
+| Merge | PR #66 marked Ready and native exact-base/head guarded-squash-merged as `0a3cf34b8d4e0fbd9725a2de24612e62da910e50` |
+| Current gate | `S6-D4 Available-Corpus Detector Accuracy Repair`; not started by this Close |
 
 ## Domain-owner priorities retained
 
@@ -73,8 +71,7 @@ sample4 remains the primary Oil-under-Foam separation diagnostic. sample3 remain
 
 Still pending and not accepted:
 
-- fresh independent exact-head audit and guarded merge of the S6-D3 baseline plus available-corpus policy alignment;
-- `S6-D4 Available-Corpus Detector Accuracy Repair` against the exact frozen D3 dataset/settings/environment after that audit/merge;
+- `S6-D4 Available-Corpus Detector Accuracy Repair` against the exact frozen D3 dataset/catalog/settings/runtime environment;
 - unavailable categories remain residual validation gaps: scratch/surface defects, fogging/stain, clean rim-adjacent Oil, high-quality compressor-start fill/drain, transparent shimmer/refractive motion, structural rim/paired lines, clean full/empty no-interface, dropout/reacquisition transitions and broader independent field-video coverage;
 - category-balanced/general-field official detector-accuracy evidence remains desirable but cannot be claimed from the available corpus; absent-category metrics remain `not_evaluated` unless future external evidence becomes feasible;
 - any stricter CPU regression or host-controlled comparison later required by the validation plan, as a separate bounded base/feature comparison rather than a repeated one-hour soak;
@@ -94,4 +91,4 @@ Still pending and not accepted:
 
 ## Intentional non-runs
 
-The S6-D3 baseline Worker produced the preserved benchmark evidence described above. This available-corpus policy-repair Worker does not rerun that benchmark or analyzer, does not tune or repair detector source/thresholds/settings, and does not modify Recipes, original MP4s, `.oiltruth`, provisional truth or local D3 evidence bytes. It does not synthesize missing categories, run tests beyond documentation validation, run Windows/packaging/GUI/long-duration acceptance, close S6 or start S7. The baseline findings remain unchanged and no category-balanced/general-field accuracy PASS is declared.
+The S6-D3 Worker produced the preserved benchmark evidence described above, and the fresh Auditor consumed that evidence read-only. The Auditor did not run a new full analyzer or detector benchmark, tune or repair detector source/thresholds/settings, modify Recipes, original MP4s, `.oiltruth`, provisional truth or local D3 evidence bytes, synthesize missing categories, or run Windows/packaging/GUI/long-duration acceptance. Fresh work was limited to benchmark-contract tests, direct evidence/metric recomputation, documentation validation and the authorized merge/Close. S6 remains open and D4 is not started by this Close.
