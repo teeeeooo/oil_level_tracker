@@ -5,14 +5,14 @@
 - **Audited feature head:** `457e946398885a5d8918d279b2b6975b0f381981` over parent `bcac3d66e383dc6e60457bc173d90502fd45878d`
 - **Merged PR/main:** `#64 @ abe1cae14cb488fd61a4da94f1f11aeddc6a5c38`
 - **Accepted classification:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — EXACT macOS SOURCE-TREE WORKLOAD`
+- **Representative throughput:** recorded from the same preserved run under `user-confirmed idle representative run` context
 - **Evidence state:** raw local evidence preserved; fresh independent exact-head audit and guarded squash merge complete
-- **External pending checkpoint:** `S6-D1 Domain-Owner Mobile Review`
-- **Next technical gate:** `Controlled-Idle Representative-Duration CPU Throughput Evidence`
+- **Current next gate:** `S6-D1 Domain-Owner Mobile Review`
 - **Milestone state:** S6 remains `ACTIVE`; S7 remains `PLANNED`
 
-This evidence evaluates one already-completed, detached production CLI analyzer process. No new soak was started during Worker result collection or fresh audit. The accepted result is not a universal memory specification.
+This evidence evaluates one already-completed, detached production CLI analyzer process. No new soak was started during Worker result collection, fresh audit or throughput reconciliation. The accepted stability result is not a universal memory specification.
 
-The result is limited to macOS source-tree resource stability for this exact derived sample3 workload. It does not establish detector accuracy, controlled-idle CPU throughput, Windows or packaged-runtime stability, representative field-duration accuracy, or S6 final acceptance.
+The same preserved run also supplies observed representative throughput for this exact Apple M1 / one-Glass / 2-FPS derived sample3 workload. The user confirms that no other Mac work was performed during the run and the analyzer was effectively the primary workload, so the context is recorded as a `user-confirmed idle representative run`. Host-wide load average or CPU-idle telemetry was not separately instrumented, so this is not a telemetry-proven controlled-idle benchmark. It does not establish detector accuracy, Windows or packaged-runtime throughput, multi-Glass scaling, representative field-duration accuracy, or S6 final acceptance.
 
 ## Fresh exact-head audit and acceptance
 
@@ -90,6 +90,33 @@ The analyzer log completed all six production lifecycle stages. Video analysis r
 CSV/snapshot persistence completed `5/5`, graph/report generation completed, and bundle finalization completed `4/4` through temporary-bundle validation and atomic commit. The CLI ended with bundle label `REVIEW_REQUIRED` and exit code `0`.
 
 `REVIEW_REQUIRED` is retained only as a detector/result-bundle fact. It is not a physical-truth judgment and does not constitute detector accuracy failure.
+
+## Representative throughput reconciliation
+
+The preserved run was reparsed without executing another analyzer. It processed `24,160` sampled frames at `2.0 FPS`, representing `12,080.0 s` of source time, in `3868.206149 s` end-to-end wall time.
+
+| Metric | Fresh recomputation |
+|---|---:|
+| End-to-end sampled throughput | `6.245789 frames/s` |
+| Source-time / wall-time ratio | `3.122895× realtime` |
+| One-hour source equivalent, end-to-end | `1152.777 s` (`19 min 12.8 s`) |
+| First telemetry-observed output growth | `3577.215547 s` |
+| Pre-output throughput proxy | `6.753856 frames/s` |
+| One-hour source equivalent, pre-output proxy | `1066.058 s` (`17 min 46.1 s`) |
+| Last live cumulative CPU / elapsed | `5862.58 CPU-s / 3858.318431 s = 1.519` CPU-core equivalents |
+| Pre-output cumulative CPU / elapsed | `5474.91 CPU-s / 3577.215547 s = 1.530` CPU-core equivalents |
+| Output-growth interval to final live sample | `281.103 s` |
+| Wall time from first observed growth to process completion | `290.991 s` |
+
+The final exit telemetry row no longer had a live analyzer CPU counter. Therefore `1.519` core equivalents is the same-sample last-live average; using the final wall runtime with the last observed CPU counter gives a conservative `1.516` core-equivalent lower-bound context. Neither value is a host-wide CPU-utilization measurement.
+
+Execution context for this already-completed run is Apple M1, `8` CPU cores (`4` Performance + `4` Efficiency), `16 GB` RAM, macOS `26.5.2`, Python `3.14.4`, one enabled Glass and `2.0 FPS` sampling. The user confirms that no other Mac work was performed while S6-F ran and the analyzer was effectively the primary workload.
+
+That confirmation supports the bounded label `user-confirmed idle representative run`. The launcher did not persist host-wide load-average, per-core idle percentage or equivalent controlled-idle telemetry, so the stronger label `telemetry-proven controlled-idle benchmark` is not supported.
+
+The same audited one-hour run already provides the representative-duration throughput observation needed for this exact workload. Repeating another one-hour soak solely to obtain the same representative throughput is unnecessary. If the authoritative validation plan later requires a stricter CPU-regression decision, that work should be a separate bounded base/feature comparison with controlled conditions rather than another S6-F one-hour rerun.
+
+These measurements do not extrapolate to multiple Glasses, Windows/package execution, different sampling rates, different event densities or detector accuracy.
 
 ## Raw telemetry analysis
 
@@ -194,7 +221,7 @@ The exact analyzer process ran continuously for more than 60 minutes, exited `0`
 
 The stable-window to final-window RSS increase was far below the existing combined diagnostic signal. A slow analysis-period RSS rise and a large but workload-bounded finalization plateau are preserved explicitly rather than normalized away. The plateau disappeared on process exit and is not evidence of a post-exit leak, but it limits extrapolation to longer runs or substantially larger event sets.
 
-Fresh independent audit found no convincing unbounded resource growth or post-exit leak for this exact one-hour workload. This is not infinite-duration stability or acceptance of any separate performance, accuracy, Windows or packaging gate.
+Fresh independent audit found no convincing unbounded resource growth or post-exit leak for this exact one-hour workload. The preserved run also supports the representative throughput observation recorded in this evidence, but this is not infinite-duration stability, a host-instrumented CPU-regression acceptance, detector accuracy, Windows or packaging acceptance.
 
 ## Validation
 
@@ -211,28 +238,32 @@ Worker result: `24 passed in 3.19s`; exit code `0`. Fresh Auditor result: `24 pa
 
 Result collection and fresh audit also passed exact launch/completion reconciliation, raw telemetry parsing, interval continuity, production bundle reopening, all bundle PNG decoding, report-local link resolution, Recipe/source consistency, owned-process cleanup, post-exit output stability and ignored-evidence preservation checks.
 
+The documentation-only throughput reconciliation freshly recomputed frame/media/wall/CPU values from preserved telemetry, rechecked principal evidence and S6-D1 ZIP hashes, and validated local Markdown links plus `git diff --check`. No pytest rerun was required because source and tests did not change.
+
 ## Residual limitations and next gate
 
-This evidence does not establish controlled-idle CPU throughput. It does not test Windows, packaged one-folder relocation, clean-PC execution, Windows file locking, GUI/DPI, cancellation or close behavior.
+The representative throughput result is bounded to the exact M1 / one-Glass / 2-FPS source-tree workload and the user's confirmation that the Mac was otherwise unused. Host-wide load-average, per-core idle percentage or equivalent idle telemetry was not recorded, so this evidence is not a telemetry-proven controlled-idle benchmark or a controlled base/feature CPU-regression result. It does not test Windows, packaged one-folder relocation, clean-PC execution, Windows file locking, GUI/DPI, cancellation or close behavior.
 
 The generated sample3 video is runtime-only repeated/re-encoded evidence. Its loop seams, blur and image quality are not detector-accuracy requirements. No MAE, precision, recall, false-positive/negative rate, calibrated level or physical detector PASS is claimed.
 The slow approximately `+0.21 MiB/min` pre-output retention remains a bounded one-hour observation, not proof of an infinite-duration plateau. Longer or substantially denser event workloads may require separate follow-up if future acceptance scope expands.
 
-S6-D1 remains pending on explicit domain-owner mobile review. S6 remains `ACTIVE`, and S7 remains `PLANNED`.
+The existing one-hour run does not need to be repeated solely to obtain representative-duration throughput. If a stricter CPU-regression decision is later required by the authoritative validation plan, it remains a separate bounded controlled comparison with explicit base/feature conditions.
 
-The next technical gate is **Controlled-Idle Representative-Duration CPU Throughput Evidence**. It is separate from this accepted one-hour resource-stability result and must not infer performance acceptance from the current non-idle run.
+The current next gate is **S6-D1 Domain-Owner Mobile Review**. S6 remains `ACTIVE`, and S7 remains `PLANNED`.
 
 ## Intentional non-runs
 
-The Worker and Auditor did not:
+The stability Worker/Auditor and this documentation reconciliation did not:
 
-- start or repeat a soak;
+- start or repeat a soak or launch another analyzer;
 - modify detector source, tests, dependencies, settings or thresholds;
 - modify Recipes, original MP4s, provisional truth or product `.oiltruth`;
 - modify or clean the preserved S6-F raw evidence;
 - complete or infer the S6-D1 user review;
 - judge detector physical accuracy or tune against sample3;
-- claim controlled-idle CPU throughput acceptance;
+- claim telemetry-proven controlled-idle conditions or extrapolate one-Glass throughput to multi-Glass behavior;
 - run Windows, packaging, clean-PC or GUI acceptance;
 - close S6 or start S7;
 - remove existing local evidence.
+
+No pytest rerun was required for this documentation-only reconciliation because production source and tests were unchanged.
