@@ -7,18 +7,16 @@
 **Current S6-C result:** `S6-C PROVISIONAL DIAGNOSTIC EVIDENCE: ACCEPTED`
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
 **Current S6-D1 result:** `S6-D1 DOMAIN-OWNER RESPONSE: RECEIVED FOR 15 EXACT REVIEW FRAMES`
-**Current S6-D2 result:** `S6-D2 PRODUCT TRUTH MATERIALIZED — FRESH INDEPENDENT AUDIT PENDING`
+**Current S6-D2 result:** `S6-D2 USER-CONFIRMED PRODUCT TRUTH: AUDITED AND ACCEPTED`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
-**Current gate:** `S6-D2 Fresh Independent Exact-Head Product Truth Audit`
+**Current gate:** `Category-Balanced Official Detector-Accuracy Evidence`
 **S6-F host-use context:** `user-confirmed idle representative run`; not a telemetry-proven controlled-idle benchmark
-**Product truth state:** four bundle-bound `.oiltruth` files with 15 reviewed frames exist on the S6-D2 feature branch; `13 corrected + 2 unusable`; not yet audited or merged
-**Pending accuracy gate:** S6-D2 exact-head audit/merge, then category-balanced official detector-accuracy evidence
+**Product truth state:** four bundle-bound `.oiltruth` files with 15 reviewed frames are audited and merged on `main`; `13 corrected + 2 unusable`, `0 confirmed_correct`
+**Pending accuracy gate:** category-balanced official detector-accuracy evidence
 **Pending runtime scope:** Windows/package runtime gates remain pending; any stricter CPU-regression comparison is a separate bounded comparison, not a duplicate one-hour soak
 **Successor milestone:** `S7 / Phase 2C-4 — Annotated MP4 export` remains `PLANNED` and has not started
-**S6-D2 Worker base/main:** `e261e7b4f4b31c5af89faaac3bfc9ccc35ae1bcc`
-**S6-D2 Worker branch:** `feature/s6-d2-user-confirmed-product-truth`
-**Previous audited S6-F feature head:** `457e946398885a5d8918d279b2b6975b0f381981` over parent `bcac3d66e383dc6e60457bc173d90502fd45878d`
-**Previous merged S6-F PR/main:** `#64` / `abe1cae14cb488fd61a4da94f1f11aeddc6a5c38`
+**Audited S6-D2 feature head:** `f35f2abfc98511cdfaba85ce23374882819b8e30` over base `e261e7b4f4b31c5af89faaac3bfc9ccc35ae1bcc`
+**Merged S6-D2 PR/main:** `#65` / `1e593364c36a5a30117e86816b1b94cfd52531f5`
 **S6-A evidence:** [`../30-quality/s6-base-sample-1-evidence.md`](../30-quality/s6-base-sample-1-evidence.md)
 **S6-B evidence:** [`../30-quality/s6-additional-real-samples-evidence.md`](../30-quality/s6-additional-real-samples-evidence.md)
 **S6-C evidence:** [`../30-quality/s6-provisional-truth-comparison.md`](../30-quality/s6-provisional-truth-comparison.md)
@@ -28,34 +26,20 @@
 **S6-D2 evidence:** [`../30-quality/s6-d2-user-confirmed-product-truth.md`](../30-quality/s6-d2-user-confirmed-product-truth.md)
 **S6-F feature evidence:** [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
 
-This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). The domain owner has now supplied explicit responses for all 15 S6-D1 review IDs, and the S6-D2 Worker has materialized those decisions into four product-owned, exact-bundle-bound `.oiltruth` files without changing detector source, Recipes, videos or provisional truth. The current executable gate is the fresh independent exact-head product-truth audit; detector accuracy comparison follows only after that artifact gate passes.
+This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). The domain owner's 15 exact S6-D1 frame decisions are now materialized as four product-owned, exact-bundle-bound `.oiltruth` files. Fresh independent audit passed at exact feature head `f35f2abfc98511cdfaba85ce23374882819b8e30`, and PR #65 was guarded-squash-merged as `main @ 1e593364c36a5a30117e86816b1b94cfd52531f5`. The current executable gate is category-balanced official detector-accuracy evidence; this Close does not start that comparison or detector tuning.
 
 ## Latest recorded closeout
 
 | Item | Current state |
 |---|---|
-| S6-D2 materialization | Four `.oiltruth` files; `3 / 3 / 4 / 5` annotations; `15` unique frames total |
-| Product translation | `13 corrected`, `2 unusable`, `0 confirmed_correct`; FillState `PARTIAL_VISIBLE=3`, `FOAMING_VISIBLE=10`, unusable/null `2` |
-| D1 derivative ZIP | Current user-reviewed ZIP `8aefcf78beac62be7166d9bfd3338a5e3f1c3054990c857159f2c3d6bb7d2c10`; non-response review payload unchanged against preserved root after macOS metadata exclusion |
-| Bundle validation | All four truth files load through `JsonTruthRepository` and validate against their exact preserved D1 production bundle |
-| Targeted suite | `64 passed in 6.97s` |
-| Accuracy boundary | Product truth artifact only; no category-balanced detector metric or accuracy PASS claimed |
-| Current owner / next gate | independent Auditor / `S6-D2 Fresh Independent Exact-Head Product Truth Audit` |
-
-## Prior S6-F closeout retained
-
-| Item | Current state |
-|---|---|
-| Accepted S6-F run | Existing audited one-hour run reused read-only from `sample/output/s6-f-one-hour-long-duration/launch-bcac3d6-20260801T053400Z/`; no analyzer or soak rerun |
-| Workload | `24,160` sampled frames at `2.0 FPS`, representing `12,080.0 s` of one-Glass source time on Apple M1 / 16 GB / macOS `26.5.2` / Python `3.14.4` |
-| End-to-end throughput | `3868.206149 s` wall time → `6.245789 frames/s`, `3.122895×` realtime; one hour of equivalent source time is about `1152.777 s` (`19 min 12.8 s`) |
-| Pre-output throughput proxy | First telemetry-observed output growth at `3577.215547 s` → `6.753856 frames/s`; one hour source equivalent about `1066.058 s` (`17 min 46.1 s`) |
-| CPU consumption | Last live telemetry recorded `5862.58 CPU-s / 3858.318431 wall-s = 1.519` CPU-core equivalents; pre-output proxy `5474.91 / 3577.215547 = 1.530` core equivalents |
-| Output phase | First observed output growth to final live output state covered about `281.103 s`; about `290.991 s` of wall time remained from first growth through process completion |
-| Host-use context | User confirms no other Mac work was performed during the run and analyzer was effectively the primary workload; host-wide idle/load telemetry was not separately instrumented |
-| Interpretation | This is a `user-confirmed idle representative run`, not a telemetry-proven controlled-idle benchmark; it supports this exact M1 / one-Glass / 2-FPS workload only |
-| Duplicate-run decision | The same accepted one-hour run already supplies representative throughput evidence, so another one-hour soak is not required for that purpose; any stricter CPU-regression need is a separate bounded controlled comparison |
-| Preservation / next gate | Raw S6-F evidence remains unchanged. The current S6-D1 ZIP is a user-reviewed derivative recorded separately from the preserved root; `S6-D2 Fresh Independent Exact-Head Product Truth Audit` is the current next gate |
+| Exact audit target | PR #65; base `e261e7b4f4b31c5af89faaac3bfc9ccc35ae1bcc`; feature head `f35f2abfc98511cdfaba85ce23374882819b8e30`; exact eight-file scope |
+| D1 provenance | User-reviewed derivative ZIP `8aefcf78beac62be7166d9bfd3338a5e3f1c3054990c857159f2c3d6bb7d2c10`; after macOS metadata exclusion only `review-response-template.md` differs from the preserved root; all other `38` review payload members and all `149` non-ZIP original manifest entries reproduce exactly |
+| Product truth | Four `.oiltruth` files; `3 / 3 / 4 / 5` annotations; `13 corrected + 2 unusable + 0 confirmed_correct`; ruler-derived sample2/S3-02 coordinates reproduce exactly and unusable frames retain no numeric truth |
+| Bundle validation | All four preserved D1 production bundles reopen through `ResultBundleReader`; all truth files load through `JsonTruthRepository` with exact run/Recipe/snapshot/Glass/frame/timestamp identity, coordinate round-trip and official snapshot reference equality |
+| Fresh validation | `64 passed in 6.22s`; changed-document Markdown check `37` relative links with no missing target; `git diff --check` passed; audited worktree remained clean |
+| Merge | PR #65 marked Ready and native exact-base/head guarded-squash-merged as `1e593364c36a5a30117e86816b1b94cfd52531f5` |
+| Acceptance boundary | Product-truth artifact accepted only; no category-balanced detector metric, accuracy PASS, Windows/package acceptance or new analyzer run claimed |
+| Current gate | `Category-Balanced Official Detector-Accuracy Evidence`; not started by this Close |
 
 ## Domain-owner priorities retained
 
@@ -83,7 +67,6 @@ sample4 remains the primary Oil-under-Foam separation diagnostic. sample3 remain
 
 Still pending and not accepted:
 
-- fresh independent exact-head audit and guarded merge of the S6-D2 product truth artifact;
 - representative scratch, fogging/stain, clean rim-adjacent boundary, high-quality field fill/drain and clean full/empty no-interface videos;
 - category-balanced official detector-accuracy evidence;
 - any stricter CPU regression or host-controlled comparison later required by the validation plan, as a separate bounded base/feature comparison rather than a repeated one-hour soak;
@@ -103,4 +86,4 @@ Still pending and not accepted:
 
 ## Intentional non-runs
 
-This S6-D2 Worker created only the four product `.oiltruth` artifacts and source-completing documentation from the explicit user response. It did not start an analyzer, repeat the one-hour soak, modify provisional truth, Recipes, original MP4s, detector source, tests, dependencies, settings, thresholds or preserved D1 bundle/asset/manifest bytes. It did not calculate detector-accuracy metrics, claim detector accuracy PASS, extrapolate one-Glass throughput to multi-Glass or Windows/package performance, run Windows/packaging/GUI acceptance, close S6 or start S7. The current user-reviewed derivative ZIP was consumed read-only and recorded by its exact SHA-256.
+The S6-D2 Worker and fresh Auditor did not start an analyzer, repeat the one-hour soak, tune detector thresholds, modify provisional truth, Recipes, original MP4s, detector source, tests, dependencies or settings, or generate a detector-accuracy benchmark. The Auditor consumed the preserved D1 bundles and user-reviewed derivative ZIP read-only, ran only focused truth/bundle/source validation, and did not run Windows, packaging, GUI or new long-duration acceptance. This Close records the accepted artifact and next gate only; it does not close S6 or start S7.

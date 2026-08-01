@@ -2,15 +2,29 @@
 
 ## Status
 
-- **Starting main:** `e261e7b4f4b31c5af89faaac3bfc9ccc35ae1bcc`
-- **Worker branch:** `feature/s6-d2-user-confirmed-product-truth`
-- **Result:** four bundle-bound product `.oiltruth` files materialized from the explicit S6-D1 user response
+- **Audited feature head:** `f35f2abfc98511cdfaba85ce23374882819b8e30` over base `e261e7b4f4b31c5af89faaac3bfc9ccc35ae1bcc`
+- **Merged PR/main:** `#65 @ 1e593364c36a5a30117e86816b1b94cfd52531f5`
+- **Accepted result:** `S6-D2 USER-CONFIRMED PRODUCT TRUTH: AUDITED AND ACCEPTED`
 - **Review count:** `15` exact D1 frames (`3 / 3 / 4 / 5` by sample)
-- **Disposition projection:** `13 corrected`, `2 unusable`, `0 confirmed_correct`
+- **Product truth:** `13 corrected`, `2 unusable`, `0 confirmed_correct`
 - **Milestone:** S6 remains `ACTIVE`; S7 remains `PLANNED`
-- **Acceptance boundary:** this Worker does not claim detector accuracy PASS; fresh independent exact-head audit is required before merge
+- **Next gate:** `Category-Balanced Official Detector-Accuracy Evidence`
 
-This evidence materializes the user's S6-D1 frame decisions through the existing product truth domain and repository contract. D1 agent candidates are used only where the user explicitly approved them. Official detector snapshots remain comparison provenance and are never promoted to truth authority.
+This evidence materializes the user's S6-D1 frame decisions through the existing product truth domain and repository contract. D1 agent candidates are used only where the user explicitly approved them. Official detector snapshots remain comparison provenance and are never promoted to truth authority. Fresh independent exact-head audit and native guarded squash merge are complete; acceptance remains limited to this product-truth artifact.
+
+## Fresh exact-head audit and acceptance
+
+The independent Auditor verified the complete eight-file PR at exact feature head `f35f2abfc98511cdfaba85ce23374882819b8e30` over base `e261e7b4f4b31c5af89faaac3bfc9ccc35ae1bcc`. The PR was same-repository, one-commit and cleanly mergeable, and `main` still matched the exact base before mutation.
+
+The preserved D1 provenance was recomputed independently. The current derivative ZIP is `8aefcf78beac62be7166d9bfd3338a5e3f1c3054990c857159f2c3d6bb7d2c10`; after excluding `.DS_Store`, `__MACOSX` and `._*`, only the user-edited `review-response-template.md` differs from the preserved root. The other `38` review payload members are byte-identical, and all `149` original non-ZIP SHA-manifest entries reproduce exactly. Source videos, Recipes and provisional-truth files retain their frozen S6 identities.
+
+All 15 explicit user decisions were re-derived against the D1 candidate manifest and current product contract. Candidate approvals map to candidate coordinates rather than detector output; sample2 `80% / 0%` reproduces `Oil 592.0 / Foam 320.0`, and S3-02 `20% / 0%` reproduces `Oil 243.0 / Foam 195.0`. The result is `13 corrected + 2 unusable + 0 confirmed_correct`. S3-03 and S3-04 retain no fill state, Oil coordinate, Foam coordinate or `foam_present` after unusable normalization.
+
+Each preserved production bundle reopened through `ResultBundleReader`, and every committed truth file loaded through `JsonTruthRepository` with exact run, Recipe, Recipe-snapshot, Glass, frame and timestamp identity. All stored coordinates reproduced through `coordinate_from_source_y`, and every stored official tracking reference core matched a fresh reference generated from its exact production tracking row.
+
+Fresh focused validation passed `64` tests in `6.22s`. Changed-document Markdown validation checked `37` relative links with no missing target, and `git diff --check` passed on the audited head. No analyzer, detector benchmark, Windows/package validation, long-duration rerun or threshold tuning was performed.
+
+PR #65 was marked Ready and native exact-base/head guarded-squash-merged as `main @ 1e593364c36a5a30117e86816b1b94cfd52531f5`. Acceptance establishes the product-owned, exact-bundle-bound user truth only; it does not establish category-balanced detector accuracy or an accuracy PASS.
 
 ## Adjusted D1 provenance contract
 
@@ -88,6 +102,6 @@ Changed-document Markdown validation passed with `37` relative links checked and
 
 This 15-frame truth set is intentionally not category-balanced official accuracy evidence. Remaining sample gaps include scratch, fogging/stain, clean rim-adjacent Oil boundary, high-quality field fill/drain, clean full/empty no-interface and broader independent field-video coverage.
 
-Detector source/settings, tests, dependencies, Recipes, original MP4s and provisional truth are outside this Worker scope and remain unchanged. No detector accuracy PASS is claimed. S6 remains `ACTIVE`; S7 remains `PLANNED`.
+Detector source/settings, tests, dependencies, Recipes, original MP4s and provisional truth remained unchanged by the S6-D2 artifact work and audit. No detector accuracy PASS is claimed. S6 remains `ACTIVE`; S7 remains `PLANNED`.
 
-Exact next gate after this Draft PR is **`S6-D2 Fresh Independent Exact-Head Product Truth Audit`**. Only an independent `AUDIT: PASS` may permit guarded merge and subsequent Close work.
+The exact next gate is **`Category-Balanced Official Detector-Accuracy Evidence`**. This Close records that gate without starting a benchmark, detector repair or threshold-tuning task.
