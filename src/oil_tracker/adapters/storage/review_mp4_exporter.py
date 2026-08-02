@@ -117,6 +117,8 @@ class ReviewMp4Exporter:
             estimated = max(1, int(round(max(0.0, end - start) * fps)) + 1)
             frame, frame_index, actual_timestamp = reader.read_at(start)
             previous_identity = None
+            last_in_range_timestamp: float | None = None
+            first_after_end_timestamp: float | None = None
             while True:
                 _check_cancelled(cancellation)
                 actual_timestamp = float(actual_timestamp)
@@ -126,8 +128,10 @@ class ReviewMp4Exporter:
                     raise ReviewMp4EncodingError("원본 영상 reader가 동일 frame에서 진행하지 못했습니다.")
                 previous_identity = identity
                 if actual_timestamp > end + 1e-9:
+                    first_after_end_timestamp = actual_timestamp
                     break
                 if actual_timestamp >= start - 1e-9:
+                    last_in_range_timestamp = actual_timestamp
                     overlay = query.overlay_at(glass_id, actual_timestamp)
                     rendered = self.general_renderer.render(frame, glass, overlay)
                     if include_debug:
@@ -165,6 +169,12 @@ class ReviewMp4Exporter:
             _check_cancelled(cancellation)
             if frame_count <= 0:
                 raise ReviewMp4EncodingError("분석 구간에서 내보낼 video frame을 찾지 못했습니다.")
+            _ensure_analysis_end_covered(
+                end_sec=end,
+                last_in_range_timestamp=last_in_range_timestamp,
+                first_after_end_timestamp=first_after_end_timestamp,
+                fps=fps,
+            )
             writer.close()
             writer = None
             self.encoded_validator(temporary, width, height)
@@ -268,6 +278,26 @@ def _debug_record_for_frame(
         ),
     )
     return repository.load_record(summary.record_id)
+
+
+def _ensure_analysis_end_covered(
+    *,
+    end_sec: float,
+    last_in_range_timestamp: float | None,
+    first_after_end_timestamp: float | None,
+    fps: float,
+) -> None:
+    if first_after_end_timestamp is not None:
+        return
+    if last_in_range_timestamp is None:
+        raise ReviewMp4EncodingError("원본 영상이 저장된 분석 종료 시각까지 이어지는지 확인할 수 없습니다.")
+    frame_period = 1.0 / max(float(fps), 1e-9)
+    tolerance = max(1e-6, frame_period * 0.1)
+    if last_in_range_timestamp + frame_period + tolerance < float(end_sec):
+        raise ReviewMp4EncodingError(
+            "원본 영상이 저장된 분석 종료 시각까지 충분히 이어지지 않습니다. "
+            f"마지막 decoded 시각 {last_in_range_timestamp:.3f}s, 분석 종료 {float(end_sec):.3f}s"
+        )
 
 
 def _check_cancelled(cancellation) -> None:

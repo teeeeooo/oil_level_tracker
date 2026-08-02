@@ -121,8 +121,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Render approved Result Review overlays onto the source video and export a shareable annotated MP4, with a general-user preset and an option to include debug information.
 - **Status:** `ACTIVE`
-- **Major result:** The bounded S7 implementation is complete on its feature branch and awaiting fresh exact-head audit: selected-Glass analysis-range MP4 export reuses saved Result Review query/overlay semantics, optional debug export uses only exact stored trace evidence, and encoding/finalization runs outside the Qt event loop with bounded cancellation and cleanup.
-- **Next gate:** `S7 / Phase 2C-4 Annotated MP4 Export Fresh Exact-Head Auditor`.
+- **Major result:** The bounded S7 implementation and incomplete-analysis-interval publication repair are complete on the feature branch and awaiting fresh exact-head re-audit: selected-Glass MP4 export reuses saved Result Review query/overlay semantics, refuses publication when decoded source coverage ends materially before the saved analysis end, optional debug export uses only exact stored trace evidence, and encoding/finalization remains outside the Qt event loop with bounded cancellation and cleanup.
+- **Next gate:** `S7 / Phase 2C-4 Annotated MP4 Export Fresh Exact-Head Re-Auditor`.
 - **Priority:** `P0 — current next work`
 - **Detail:** [Result Review Viewer plan](../10-product/result-review-viewer-plan.md)
 

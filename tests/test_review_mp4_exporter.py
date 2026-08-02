@@ -8,6 +8,7 @@ import pytest
 
 from oil_tracker.adapters.storage.review_mp4_exporter import (
     ReviewMp4DestinationError,
+    ReviewMp4EncodingError,
     ReviewMp4ExportCancelled,
     ReviewMp4Exporter,
 )
@@ -166,6 +167,12 @@ class _FakeReader:
         self.closed = True
 
 
+class _KnownLastFrameReader(_FakeReader):
+    def __init__(self, path):
+        super().__init__(path, sequence=[(2, 0.25), (3, 0.35), (4, 0.45)])
+        self.metadata = VideoMetadata(self.path, 160, 120, 10.0, 0.5, 5, "fake")
+
+
 class _FakeWriter:
     instances = []
 
@@ -213,6 +220,99 @@ def test_export_queries_official_tracking_with_actual_decoded_timestamps_and_pre
     assert query.overlays[-1].oil_boundary_y is None
     assert query.overlays[-1].foam_front_y is None
     assert result.frame_count == 3
+    assert _FakeReader.instances[-1].closed
+    assert _FakeWriter.instances[-1].closed
+
+
+def test_short_real_source_cannot_publish_incomplete_analysis_interval(tmp_path):
+    source = tmp_path / "short.mp4"
+    _write_source(source, fps=10.0, frames=6)
+    bundle, glass = _bundle(tmp_path, source, start=0.2, end=0.8)
+    destination = tmp_path / "incomplete.mp4"
+    with pytest.raises(ReviewMp4EncodingError, match="분석 종료"):
+        ReviewMp4Exporter().export(
+            bundle=bundle,
+            query=ReviewQueryModel(bundle),
+            source_video_path=source,
+            glass_id=glass.id,
+            destination=destination,
+        )
+    assert not destination.exists()
+    assert list(tmp_path.glob(".*.tmp-*.mp4")) == []
+
+
+def test_premature_eof_cannot_publish_and_releases_resources(tmp_path):
+    source = tmp_path / "source.mp4"
+    source.write_bytes(b"source")
+    bundle, glass = _bundle(tmp_path, source, start=0.2, end=0.8)
+    destination = tmp_path / "eof.mp4"
+    with pytest.raises(ReviewMp4EncodingError, match="분석 종료"):
+        _fake_exporter().export(
+            bundle=bundle,
+            query=ReviewQueryModel(bundle),
+            source_video_path=source,
+            glass_id=glass.id,
+            destination=destination,
+        )
+    assert not destination.exists()
+    assert list(tmp_path.glob(".*.tmp-*.mp4")) == []
+    assert _FakeReader.instances[-1].closed
+    assert _FakeWriter.instances[-1].closed
+
+
+def test_known_source_last_frame_before_required_coverage_cannot_publish(tmp_path):
+    source = tmp_path / "source.mp4"
+    source.write_bytes(b"source")
+    bundle, glass = _bundle(tmp_path, source, start=0.2, end=0.8)
+    destination = tmp_path / "last-frame.mp4"
+    with pytest.raises(ReviewMp4EncodingError, match="분석 종료"):
+        _fake_exporter(reader_factory=_KnownLastFrameReader).export(
+            bundle=bundle,
+            query=ReviewQueryModel(bundle),
+            source_video_path=source,
+            glass_id=glass.id,
+            destination=destination,
+        )
+    assert not destination.exists()
+    assert list(tmp_path.glob(".*.tmp-*.mp4")) == []
+    assert _KnownLastFrameReader.instances[-1].closed
+    assert _FakeWriter.instances[-1].closed
+
+
+def test_analysis_end_between_adjacent_source_frames_is_complete(tmp_path):
+    source = tmp_path / "source.mp4"
+    _write_source(source, fps=10.0, frames=20)
+    bundle, glass = _bundle(tmp_path, source, start=0.2, end=0.85)
+    result = ReviewMp4Exporter().export(
+        bundle=bundle,
+        query=ReviewQueryModel(bundle),
+        source_video_path=source,
+        glass_id=glass.id,
+        destination=tmp_path / "between-frames.mp4",
+    )
+    assert result.path.is_file()
+    assert result.frame_count == 7
+    assert result.analysis_end_sec == pytest.approx(0.85)
+    assert list(tmp_path.glob(".*.tmp-*.mp4")) == []
+
+
+def test_incomplete_overwrite_preserves_existing_final_file(tmp_path):
+    source = tmp_path / "source.mp4"
+    source.write_bytes(b"source")
+    bundle, glass = _bundle(tmp_path, source, start=0.2, end=0.8)
+    destination = tmp_path / "existing.mp4"
+    destination.write_bytes(b"old-final")
+    with pytest.raises(ReviewMp4EncodingError, match="분석 종료"):
+        _fake_exporter().export(
+            bundle=bundle,
+            query=ReviewQueryModel(bundle),
+            source_video_path=source,
+            glass_id=glass.id,
+            destination=destination,
+            overwrite=True,
+        )
+    assert destination.read_bytes() == b"old-final"
+    assert list(tmp_path.glob(".*.tmp-*.mp4")) == []
     assert _FakeReader.instances[-1].closed
     assert _FakeWriter.instances[-1].closed
 

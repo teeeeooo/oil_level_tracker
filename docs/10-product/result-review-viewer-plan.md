@@ -550,11 +550,12 @@ debug_case_YYYYMMDD_HHMMSS/
 
 ### 9.6 공유용 결과 영상 — S7 / Phase 2C-4
 
-The accepted S6 real-video/runtime scope remains preserved. The bounded S7 implementation is now complete on its feature branch and awaiting fresh exact-head audit; it reuses the existing Result Review query/rendering contract rather than introducing a second detector or result authority. Windows/manual GUI and PyInstaller one-folder validation remain pending for the final S10 release gate and are not inferred from this source-tree work.
+The accepted S6 real-video/runtime scope remains preserved. The bounded S7 implementation and incomplete-interval publication repair are complete on the feature branch and awaiting fresh exact-head re-audit; they reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. Windows/manual GUI and PyInstaller one-folder validation remain pending for the final S10 release gate and are not inferred from this source-tree work.
 
 Implemented S7 contract:
 
 - export is for the currently selected Glass and only the saved analysis interval;
+- successful publication requires decoded source coverage through the saved analysis end: seeing the next decoded frame beyond the end proves adjacency, while source EOF/last-frame termination is accepted only when the final in-range decoded timestamp reaches the end within one source frame cadence;
 - every exported frame queries official saved tracking state with the actual decoded video timestamp through `ReviewQueryModel`, preserving missing numeric values as gaps;
 - the general preset uses the same final-result ellipse, reference line, Oil boundary, Foam front, FillState, confidence, timing and review-state overlay semantics as Result Review;
 - the optional debug preset keeps the general final-result overlay visible and adds candidates only when the stored debug trace matches the exact decoded frame identity and timestamp; frames without stored trace receive an explicit no-trace debug notice and no fabricated candidates;
