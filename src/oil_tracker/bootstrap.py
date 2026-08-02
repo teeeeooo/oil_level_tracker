@@ -10,6 +10,7 @@ from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeReposi
 from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
 from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
 from oil_tracker.adapters.storage.redetection_workspace import RedetectionWorkspace
+from oil_tracker.adapters.storage.review_mp4_exporter import ReviewMp4Exporter
 from oil_tracker.adapters.storage.review_png_exporter import ReviewPngExporter
 from oil_tracker.adapters.system.logging_config import configure_logging
 from oil_tracker.adapters.vision.debug_renderer import DebugRenderer
@@ -32,6 +33,7 @@ from oil_tracker.ui.controllers.analysis_controller import AnalysisController
 from oil_tracker.ui.controllers.preflight_controller import PreflightController
 from oil_tracker.ui.controllers.preview_controller import PreviewController
 from oil_tracker.ui.controllers.result_review_controller import ResultReviewController
+from oil_tracker.ui.controllers.review_mp4_export_controller import ReviewMp4ExportController
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
 from oil_tracker.ui.debug_trace_settings import install_debug_trace_selector
 from oil_tracker.ui.main_window import MainWindow
@@ -103,6 +105,13 @@ def build_main_window() -> MainWindow:
             playback_controller=ResultReviewController(review_reader_factory),
             action_service=window.result_action_service,
             png_exporter=ReviewPngExporter(),
+            mp4_export_controller=ReviewMp4ExportController(
+                ReviewMp4Exporter(
+                    reader_factory=OpenCvVideoReader,
+                    general_renderer=ReviewOverlayRenderer(),
+                    debug_renderer=ReviewDebugOverlayRenderer(),
+                )
+            ),
             debug_artifact_presenter=QtDebugArtifactPresenter(QtFrameImageConverter()),
             parent=parent,
         )

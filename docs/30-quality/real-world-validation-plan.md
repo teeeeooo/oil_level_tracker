@@ -171,6 +171,12 @@ orders to pass. Process isolation is introduced only if direct evidence later pr
 that incompatible application classes are required; broad suite serialization and
 per-test GUI subprocesses remain prohibited.
 
+## S7 annotated-MP4 source-tree gate
+
+The S7 worker implementation is source-tree evidence only and remains subject to fresh exact-head audit. Acceptance evidence for this slice must prove that selected-Glass export covers only the saved analysis interval, queries final tracking state with actual decoded timestamps, preserves numeric gaps, and uses stored debug trace only on the exact matching decoded frame. The export must remain a derivative artifact outside the official bundle and original source video.
+
+Failure and cancellation evidence must show bounded temporary-file cleanup plus deterministic reader/writer/debug-resource release. Result Review integration must keep encoding off the GUI event loop, preserve playback/viewer state, and stop export-owned work safely on Viewer close. No S6 detector benchmark or runtime evidence is invalidated by this derivative export path, and no Windows/manual GUI/PyInstaller PASS is inferred from the macOS/source-tree S7 validation.
+
 ## Final Windows and packaging release gate
 
 This gate is intentionally sequenced after the required product feature work. It remains mandatory and pending; no macOS/source-tree result establishes Windows/manual GUI or packaging PASS.

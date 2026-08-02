@@ -18,6 +18,8 @@ class ReviewDebugOverlayRenderer:
         record,
         actual_timestamp: float,
         highlighted_candidate: int | None = None,
+        *,
+        official_overlay_visible: bool = False,
     ) -> np.ndarray:
         image = _copy_bgr_frame(frame)
 
@@ -99,12 +101,36 @@ class ReviewDebugOverlayRenderer:
         )
         _outlined_text(
             image,
-            "Official final tracking overlay is hidden in debug mode",
+            (
+                "DEBUG EXPORT - official final tracking overlay remains visible"
+                if official_overlay_visible
+                else "Official final tracking overlay is hidden in debug mode"
+            ),
             (14, 70),
             (0, 220, 255),
             0.45,
         )
         return image
+
+    def render_export(self, frame: np.ndarray, glass, record, actual_timestamp: float) -> np.ndarray:
+        """Overlay stored debug evidence on top of the already-rendered official result frame."""
+        if record is None:
+            image = _copy_bgr_frame(frame)
+            _outlined_text(
+                image,
+                "DEBUG EXPORT - NO STORED TRACE FOR THIS FRAME",
+                (14, 24),
+                (255, 0, 255),
+                0.52,
+            )
+            return image
+        return self.render(
+            frame,
+            glass,
+            record,
+            actual_timestamp,
+            official_overlay_visible=True,
+        )
 
 
 def _finite_number(value) -> float | None:

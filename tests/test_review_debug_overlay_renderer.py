@@ -126,3 +126,20 @@ def test_debug_render_is_deterministic_and_preserves_source_resolution():
     second = renderer.render(frame, _glass(), record, 2.01)
     assert first.shape == (240, 320, 3)
     assert np.array_equal(first, second)
+
+
+def test_debug_export_without_stored_trace_adds_notice_but_no_candidate_lines():
+    frame = np.zeros((240, 320, 3), dtype=np.uint8)
+    frame[160, 120:200] = (7, 8, 9)
+    rendered = ReviewDebugOverlayRenderer().render_export(frame, _glass(), None, 2.0)
+    assert np.array_equal(rendered[160, 120:200], frame[160, 120:200])
+    assert np.count_nonzero(rendered[8:36, 8:310]) > 0
+
+
+def test_debug_export_with_stored_trace_preserves_existing_official_overlay_pixels():
+    frame = np.zeros((240, 320, 3), dtype=np.uint8)
+    frame[210:220, 270:300] = (10, 220, 10)
+    record = _record((_candidate(115.0, rank=1, selected=True),), timestamp=2.0)
+    rendered = ReviewDebugOverlayRenderer().render_export(frame, _glass(), record, 2.0)
+    assert np.count_nonzero(rendered[115, 100:220]) > 0
+    assert np.array_equal(rendered[210:220, 270:300], frame[210:220, 270:300])

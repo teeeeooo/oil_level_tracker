@@ -104,6 +104,7 @@ def test_result_review_ui_does_not_construct_raster_adapters():
         "ReviewDebugOverlayRenderer(",
         "QtFrameImageConverter(",
         "ReviewPngExporter(",
+        "ReviewMp4Exporter(",
     )
     violations = {
         path.relative_to(ROOT).as_posix(): [value for value in forbidden if value in path.read_text(encoding="utf-8")]
@@ -118,6 +119,7 @@ def test_raster_adapters_are_outside_ui_and_domain_application_boundaries():
         ROOT / "src" / "oil_tracker" / "adapters" / "vision" / "review_debug_overlay_renderer.py",
         ROOT / "src" / "oil_tracker" / "adapters" / "presentation" / "review_frame_presenter.py",
         ROOT / "src" / "oil_tracker" / "adapters" / "storage" / "review_png_exporter.py",
+        ROOT / "src" / "oil_tracker" / "adapters" / "storage" / "review_mp4_exporter.py",
     )
     assert all(path.is_file() and UI_ROOT not in path.parents for path in adapter_paths)
     for path in (
