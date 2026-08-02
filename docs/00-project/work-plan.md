@@ -1,7 +1,7 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
-**Current milestone:** `S7 / Phase 2C-4 — Annotated MP4 Export`
-**Milestone status:** `ACTIVE`
+**Current milestone:** `S8 — Repeated-Test Workflow & Result Management`
+**Milestone status:** `PLANNED — not started`
 **S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
@@ -12,11 +12,11 @@
 **Current S6-D4 result:** `AVAILABLE-CORPUS DETECTOR ACCURACY REPAIR: AUDITED, ACCEPTED AND MERGED`
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
-**Current S7 result:** `IMPLEMENTATION + DECODED-TIMELINE COVERAGE REPAIR COMPLETE ON FEATURE BRANCH — AWAITING FRESH EXACT-HEAD RE-AUDIT`
-**Current gate:** `S7 / Phase 2C-4 Annotated MP4 Export Decoded-Timeline Repair Fresh Exact-Head Re-Auditor`
-**Successor milestone:** `S8 — Repeated-Test Workflow & Result Management`
+**Current S7 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #68 @ 8846c272842df099f5849ea71686c3370248fc03`
+**Current gate:** `S8 — Repeated-Test Workflow & Result Management: select and authorize one bounded implementation slice; implementation not started`
+**Successor milestone:** `S9 — Operational Recovery & UX Polish`
 
-This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 is closed against the real-video/runtime scope actually completed: the audited available-corpus detector repair materially improves the frozen four-video D3 corpus while preserving fail-closed structural behavior in the controlled full-/partial-Foam regressions, and the bounded soak plus one-hour macOS source-tree evidence remain accepted. Missing real-video categories remain residual `not_evaluated` risk and no category-balanced or general-field detector-accuracy PASS is claimed. Windows/manual GUI and PyInstaller one-folder validation were not run or inferred; those obligations remain pending as the final Windows and packaging release gate after the product feature sequence. The bounded S7 annotated-MP4 implementation and decoded-timeline coverage repairs are complete on the same feature branch, remain unmerged, and now require the fresh exact-head decoded-timeline repair Re-Auditor gate before roadmap Close or successor work.
+This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, including the bounded available-corpus accuracy claim and residual `not_evaluated` field categories. S7 is now independently audited, merged and closed: the accepted annotated-MP4 path preserves official stored-result authority, fail-closed decoded-timeline coverage, derivative publication safety, bounded lifecycle/resource ownership and the Qt raster boundary. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed. S8 is the exact successor gate but implementation has not started; the next action is to select and authorize one bounded repeated-test workflow/result-management slice.
 
 ## Evidence owners
 
@@ -32,24 +32,20 @@ This document owns the current active execution state. Milestone order and forma
 - S6-E: [`../30-quality/s6-bounded-runtime-soak-evidence.md`](../30-quality/s6-bounded-runtime-soak-evidence.md)
 - S6-F: [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
 
-## Latest recorded closeout — S6-D4
+## Latest recorded closeout — S7 / Phase 2C-4
 
 | Item | Current state |
 |---|---|
-| Audit target | PR #67; base `e04ce64384b31643795448fb6b16e47564a3b7c3`; audited head `f18f78c3cf0058b809965fcaac3d3b449c2678b7`; exactly 9 changed files |
-| Latest detector source/test commit | `6b2ea43e8ae62773d4ae6ce17754477d810c78c6`; audited-head tail to `f18f78c…` was documentation-only |
-| Preserved D3 baseline | `current-sample-official-baseline.json` SHA-256 `fbfc7aa34e00eeb002098f5d79a0f83288bd06aec014ecae3ebd9f177e207692`; `15 total / 13 usable / 2 unusable` |
-| Latest feature evidence | `current-sample-feature.json` SHA-256 `b098a070927ffcf9230a57cd94827a8fe8eedec9a08f591591404c29271cf70c`; all four component comparisons `comparable` |
-| Accuracy result | raw/smoothed Oil `0/13 → 7/13`; matched Oil MAE `4.428571 px`; FillState `0/13 → 6/13`; review/unknown `6/13 → 4/13` |
-| Foam result | precision `1.000`; recall `0.700`; matched-front MAE unchanged at `47.285714 px` |
-| Structural false-Oil disposition | prior full-Foam and partial-Foam defect families are fail-closed across broad independent band, paired-line, narrow-Foam and sector-local probes; accepted Foam alone did not publish numeric Oil |
-| Positive Oil preservation | Foam-absent sample1 recovery remains; all five frozen sample4 Oil+Foam frames remain numeric and truth-near; sample3 frame 1035 remains additional recovery |
-| Ownership/resource boundary | S5-A retains Foam authority; accepted Foam component mask is current-frame readonly command evidence only; no Foam raster/history is retained in S5-B temporal state; canonical serialized S5-B remains sole numeric Oil owner |
-| Fresh audit validation | detector-focused exact-head suite `559 passed, 2 deselected, 1 warning`; the two deselected UI-editor tests require unavailable local pytest-qt fixtures and are not detector failures; broad production-path safety probes and frozen sample4 replay also passed |
-| Merge | PR #67 Ready and native exact-base/head guarded-squash-merged as `a046519f28765d69a591dc204e407fbf4298d9be` |
-| Synchronization | registered primary checkout synchronized cleanly to `main @ a046519f28765d69a591dc204e407fbf4298d9be` before this documentation Close |
-| Claim boundary | bounded available-corpus improvement only; unavailable field categories remain `not_evaluated`; no category-balanced/general-field PASS |
-| Gate recorded at D4 close (historical) | `S6 Windows and Packaging Gate`; product sequencing was reconciled later without changing the D4 evidence |
+| Audit target | PR #68; exact base `3f8b8672509fb14eb047cc0360fcb05c50c9b1d8`; exact final audit head `00e7007ca3aafb2bf38f46bd740a3a12fc81637b`; 4 commits / exactly 15 complete-PR changed files |
+| Documentation-only tail | `b3e2ebd8af3506c66c517565bf164795561cb655 → 00e7007ca3aafb2bf38f46bd740a3a12fc81637b` changed exactly four documentation files and no `src/` or `tests/` files |
+| Product/source contract | Official stored Result Review state remains the only general-export truth; missing Oil/Foam is not fabricated; debug trace is subordinate; decoded start/internal/end coverage is fail-closed under the `1.5×` nominal-frame-period contract while adjacent valid boundaries and bounded jitter remain usable |
+| Publication/lifecycle boundary | Source MP4 and official bundle remain immutable; failed/cancelled export cannot publish a partial final or replace an approved destination; temporary output is atomically published only after verification; reader/writer/debug resources and Qt worker lifecycle remain bounded; UI retains no direct NumPy/OpenCV raster ownership |
+| Reused validation | Unchanged source/test tree preserved the authoritative S7/Result Review/export/lifecycle/raster focused `97 passed` and source-video resolver compatibility `7 passed`; rerun was intentionally unnecessary because the final tail was documentation-only and did not invalidate the validation contract |
+| Fresh audit checks | Authoritative S7 documentation semantics passed; 46 applicable relative links passed; complete-PR `git diff --check` passed |
+| Merge | PR #68 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `8846c272842df099f5849ea71686c3370248fc03` |
+| Synchronization | Registered primary checkout synchronized cleanly to `main @ 8846c272842df099f5849ea71686c3370248fc03` before this documentation Close |
+| Claim boundary | No Windows/manual GUI/PyInstaller/audio-preservation PASS is inferred; replacement-video duration mismatch remains a warning distinct from MP4 publication completeness |
+| Next gate | `S8 — Repeated-Test Workflow & Result Management`: select and authorize one bounded implementation slice; implementation has not started |
 
 ## Final Windows and packaging release obligation
 
@@ -65,8 +61,8 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 
 ## Product priority and sequence
 
-- `P0`: S7 annotated MP4 export is the current next implementation work.
-- `P1`: S8 repeated-test workflow and result management follows S7.
+- `P0 completed`: S7 annotated MP4 export is audited, merged and closed.
+- `P1 current next gate`: S8 repeated-test workflow and result management; select and authorize one bounded implementation slice before implementation starts.
 - `P2`: after S8, select operational recovery and UX improvements based on observed user effect.
 - `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
 - Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.
@@ -77,7 +73,7 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 - No filename, hash, Recipe ID, frame number or sample identity may become detector logic.
 - Missing scratch/surface-defect, fogging/stain, clean rim-adjacent Oil, high-quality compressor-start fill/drain, transparent shimmer/refractive-motion, structural rim/paired-line field scenes, clean full/empty no-interface, dropout/reacquisition and broader field-video categories remain `not_evaluated` where authoritative denominators are absent.
 - S6-F is accepted only for its exact one-hour macOS source-tree workload; it does not establish Windows, packaging, multi-Glass scaling or infinite-duration stability.
-- S7 remains `ACTIVE`: annotated-video encoding and both bounded decoded-timeline publication repairs are implemented on PR #68, but fresh exact-head repair re-audit and merge/Close are still pending.
+- S7 is `DONE`: annotated-video encoding and both bounded decoded-timeline publication repairs were fresh exact-head audited and merged through PR #68; preserve those accepted contracts through S8/S9 and the final S10 release gate.
 - S9 is a selection/UX milestone: its P2 candidates are not all precommitted, and P3 backlog items are not mandatory release prerequisites unless explicitly promoted.
 
 ## Intentional non-runs retained from the S6-D4 close

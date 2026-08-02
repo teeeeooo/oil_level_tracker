@@ -120,10 +120,10 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S7 / Phase 2C-4 — Annotated MP4 Export
 
 - **Purpose:** Render approved Result Review overlays onto the source video and export a shareable annotated MP4, with a general-user preset and an option to include debug information.
-- **Status:** `ACTIVE`
-- **Major result:** The bounded S7 implementation and decoded-timeline coverage repairs are complete on the feature branch and awaiting fresh exact-head repair re-audit: selected-Glass MP4 export reuses saved Result Review query/overlay semantics and now refuses publication when the saved interval lacks cadence-plausible sequential decoded coverage, including sparse internal gaps or an unsupported after-end bracket; optional debug export still uses only exact stored trace evidence, and encoding/finalization remains outside the Qt event loop with bounded cancellation and cleanup.
-- **Next gate:** `S7 / Phase 2C-4 Annotated MP4 Export Decoded-Timeline Repair Fresh Exact-Head Re-Auditor`.
-- **Priority:** `P0 — current next work`
+- **Status:** `DONE`
+- **Major result:** PR #68 was fresh exact-head audited and native guarded-squash-merged as `8846c272842df099f5849ea71686c3370248fc03`. Selected-Glass MP4 export reuses official saved Result Review query/overlay semantics, fails closed when the saved interval lacks cadence-plausible sequential decoded coverage, keeps optional debug trace subordinate to official truth, and publishes only finalized temporary output through atomic replacement with bounded cancellation/resource cleanup.
+- **Next gate:** Preserve the accepted S7 stored-result, decoded-timeline, derivative-publication, lifecycle and UI raster-boundary contracts through successor work and the final S10 Windows/packaging release gate.
+- **Priority:** `P0 — completed`
 - **Detail:** [Result Review Viewer plan](../10-product/result-review-viewer-plan.md)
 
 ### S8 — Repeated-Test Workflow & Result Management
@@ -131,8 +131,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Purpose:** Reduce repeated compressor-test effort and operational mistakes when one Profile is reused across multiple test videos.
 - **Status:** `PLANNED`
 - **Major result:** The P1 candidate scope is prioritized: repeated analysis with one Profile, improved output naming, recent profile/result management, final run summary and completion actions, and clearer visual separation of profile-owned versus current-test settings. Implementation has not started.
-- **Next gate:** Start after S7, selecting a bounded implementation slice from this P1 scope.
-- **Priority:** `P1 — repeated-test productivity`
+- **Next gate:** Select and authorize one bounded S8 implementation slice from this P1 scope; implementation remains not started until that handoff.
+- **Priority:** `P1 — repeated-test productivity / current next gate`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S9 — Operational Recovery & UX Polish
@@ -154,4 +154,4 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4` → `S8` → `S9 selection/UX work` → `S10 final Windows & Packaging release gate`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 repeated-test workflow/result management` → `S9 selection/UX work` → `S10 final Windows & Packaging release gate`.

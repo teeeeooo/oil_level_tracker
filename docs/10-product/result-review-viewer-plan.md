@@ -550,7 +550,7 @@ debug_case_YYYYMMDD_HHMMSS/
 
 ### 9.6 공유용 결과 영상 — S7 / Phase 2C-4
 
-The accepted S6 real-video/runtime scope remains preserved. The bounded S7 implementation and decoded-timeline coverage repairs are complete on the feature branch and awaiting fresh exact-head re-audit; they reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. Windows/manual GUI and PyInstaller one-folder validation remain pending for the final S10 release gate and are not inferred from this source-tree work.
+The accepted S6 real-video/runtime scope remains preserved. S7 is fresh exact-head audited, merged and closed; the accepted annotated-MP4 implementation and decoded-timeline coverage repairs reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. S8 repeated-test workflow/result management is the planned successor and has not started. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed for the final product/release sequence and are not inferred from this source-tree work.
 
 Implemented S7 contract:
 
