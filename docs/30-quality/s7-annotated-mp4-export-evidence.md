@@ -4,7 +4,7 @@
 
 `IMPLEMENTATION + DECODED-TIMELINE COVERAGE REPAIR COMPLETE ON FEATURE BRANCH — AWAITING FRESH EXACT-HEAD RE-AUDIT`
 
-This evidence is source-completing Worker evidence only. It does not mark S7 `DONE`, does not merge the feature branch, and does not replace the required fresh exact-head repair Re-Auditor gate.
+This evidence is source-completing Worker evidence only. It does not mark S7 `DONE`, does not merge the feature branch, and does not replace the required fresh exact-head decoded-timeline repair Re-Auditor gate.
 
 ## Identity and scope
 
@@ -26,9 +26,9 @@ Encoding uses the repository's existing OpenCV dependency and adds no FFmpeg or 
 
 The first fresh Auditor identified that both source-last-frame termination and premature sequential `EOFError` could break the decode loop and still validate/publish a partial MP4. The Worker independently reproduced the defect on starting head `90c061f2a03927102636ca2d6ab08792f1e0239f`: a same-resolution 10 fps, 6-frame source with saved interval `0.2–0.8 s` published a 4-frame / 0.4 s output, and the fake sequential EOF path published 3 frames through `0.55 s` for the same saved end.
 
-Publication now requires decoded coverage of the saved analysis end. If sequential decode observes a next source frame after `analysis_end_sec`, that proves the saved end lies between adjacent decoded timestamps. If the source terminates by known last frame or `EOFError` before such a frame appears, the last in-range decoded timestamp must reach the saved end within one nominal source-frame cadence plus bounded timestamp tolerance. Materially shorter source coverage fails before temporary-video validation or atomic replacement.
+That first repair established the fail-closed publication requirement for premature `EOFError` and known source-last-frame termination, but its initial end-coverage criterion was later superseded by the decoded-timeline coverage repair below. The current publication contract is the `1.5×` cadence-plausibility rule documented in the next section, including start coverage, internal sequential gaps and the final end bracket.
 
-This stricter rule belongs only to annotated MP4 publication. `SourceVideoResolver.validate_candidate()` still treats same-resolution duration differences as warnings, so shorter replacement videos remain reviewable and the general Result Review replacement-video contract is unchanged.
+The stricter completeness rule belongs only to annotated MP4 publication. `SourceVideoResolver.validate_candidate()` still treats same-resolution duration differences as warnings, so shorter replacement videos remain reviewable and the general Result Review replacement-video contract is unchanged.
 
 ## Decoded-timeline coverage repair
 
@@ -114,4 +114,4 @@ The S6 detector benchmark, one-hour soak, Windows/manual GUI validation, PyInsta
 
 ## Next gate
 
-`S7 / Phase 2C-4 Annotated MP4 Export Repair Fresh Exact-Head Re-Auditor`
+`S7 / Phase 2C-4 Annotated MP4 Export Decoded-Timeline Repair Fresh Exact-Head Re-Auditor`

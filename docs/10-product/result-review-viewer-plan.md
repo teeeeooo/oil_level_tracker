@@ -550,12 +550,15 @@ debug_case_YYYYMMDD_HHMMSS/
 
 ### 9.6 공유용 결과 영상 — S7 / Phase 2C-4
 
-The accepted S6 real-video/runtime scope remains preserved. The bounded S7 implementation and incomplete-interval publication repair are complete on the feature branch and awaiting fresh exact-head re-audit; they reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. Windows/manual GUI and PyInstaller one-folder validation remain pending for the final S10 release gate and are not inferred from this source-tree work.
+The accepted S6 real-video/runtime scope remains preserved. The bounded S7 implementation and decoded-timeline coverage repairs are complete on the feature branch and awaiting fresh exact-head re-audit; they reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. Windows/manual GUI and PyInstaller one-folder validation remain pending for the final S10 release gate and are not inferred from this source-tree work.
 
 Implemented S7 contract:
 
 - export is for the currently selected Glass and only the saved analysis interval;
-- successful publication requires decoded source coverage through the saved analysis end: seeing the next decoded frame beyond the end proves adjacency, while source EOF/last-frame termination is accepted only when the final in-range decoded timestamp reaches the end within one source frame cadence;
+- annotated MP4 publication validates actual sequential decoded timestamps against the source cadence: nominal period is `1 / source FPS`, and the maximum supported decoded gap is `1.5×` that nominal period;
+- the first decoded timestamp must provide bounded coverage of the saved analysis start, and sequential decoded timestamps overlapping the analysis interval must remain monotonic and cadence-plausible; materially sparse internal gaps fail publication;
+- an after-end frame establishes saved-end coverage only when the last in-range timestamp and first after-end timestamp form a cadence-plausible bracket under the same `1.5×` bound; if decode instead terminates by `EOFError` or a known source last frame, the final in-range timestamp must reach the saved end within that same bound;
+- normal adjacent-frame boundaries and bounded decoder timestamp jitter remain accepted; this stricter completeness rule belongs only to annotated MP4 publication, while same-resolution replacement-video duration mismatch remains a Result Review warning;
 - every exported frame queries official saved tracking state with the actual decoded video timestamp through `ReviewQueryModel`, preserving missing numeric values as gaps;
 - the general preset uses the same final-result ellipse, reference line, Oil boundary, Foam front, FillState, confidence, timing and review-state overlay semantics as Result Review;
 - the optional debug preset keeps the general final-result overlay visible and adds candidates only when the stored debug trace matches the exact decoded frame identity and timestamp; frames without stored trace receive an explicit no-trace debug notice and no fabricated candidates;
