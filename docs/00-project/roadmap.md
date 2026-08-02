@@ -74,7 +74,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Purpose:** Resolve real-use layout, terminology, wheel-input and preflight usability issues.
 - **Status:** `DONE`
 - **Major result:** Stable progress layout, larger video workspace, consistent Glass/analysis-area wording, wheel-safe controls and modeless preflight.
-- **Next gate:** Confirm the behavior in the later Windows/manual validation gate.
+- **Next gate:** Confirm the behavior in the final Windows/manual release gate after the product feature sequence is complete.
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S4 — Analysis lifecycle and result visualization
@@ -82,7 +82,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Purpose:** Make long analysis progress and result graphs accurate and understandable.
 - **Status:** `DONE`
 - **Major result:** Stage-based progress, Korean Matplotlib font handling, user-facing oil-level terminology and full-analysis-area graph bounds.
-- **Next gate:** Revalidate lifecycle, graph and resource cleanup with real video on Windows.
+- **Next gate:** Preserve the accepted real-video/runtime evidence and revalidate lifecycle, graph, DPI and resource cleanup in the final Windows/manual release gate.
 - **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md)
 
 ### S5-A — Foam and shimmer discrimination
@@ -98,7 +98,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Purpose:** Replace brittle candidate/static suppression with typed, evidence-preserving boundary and no-interface hypotheses plus bounded temporal reasoning.
 - **Status:** `DONE`
 - **Major result:** Typed observability and canonical ambiguity now separate latent physical oil truth from detector-identifiable evidence. One serialized temporal owner preserves atomic state, S5-A Foam independence and external compatibility; final deterministic comparison passed the `1.5×` CPU limit.
-- **Next gate:** Preserve the merged observability, temporal and Foam contracts through S5-C canonical/Qt stabilization and S6 real-video/Windows validation.
+- **Next gate:** Preserve the merged observability, temporal and Foam contracts through S5-C stabilization, accepted S6 real-video/runtime validation and the later final Windows release gate.
 - **Detail:** [Current work plan](./work-plan.md), [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 
 ### S5-C — Canonical/Qt validation stabilization
@@ -106,33 +106,52 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Purpose:** Stabilize `QApplication` / `QCoreApplication` ownership, isolate GUI fixtures, slim duplicate GUI/canonical coverage and preserve the non-GUI/headless validation contract.
 - **Status:** `DONE`
 - **Major result:** One session-owned pytest-qt `QApplication`, temporary offscreen platform injection, bounded Qt-state verification and explicit source-tree headless subprocess isolation now keep canonical and focused validation deterministic without changing production or detector behavior.
-- **Next gate:** Preserve the accepted lifecycle and headless boundaries during S6 real-video, Windows/manual and packaging qualification.
+- **Next gate:** Preserve the accepted lifecycle and headless boundaries through S6 real-video/runtime validation, subsequent product work and the final Windows/packaging release gate.
 - **Detail:** [Current work plan](./work-plan.md), [Real-world validation plan](../30-quality/real-world-validation-plan.md)
 
-### S6 — Real-video and Windows validation gate
+### S6 — Real-video and runtime validation
 
-- **Purpose:** Qualify the stabilized detector and application on representative real video and the target Windows environment.
+- **Purpose:** Qualify the stabilized detector and application against the available real-video corpus and bounded/long-duration source-tree runtime evidence.
+- **Status:** `DONE`
+- **Major result:** Real-video qualification, user-confirmed truth, the audited S6-D4 available-corpus accuracy repair, bounded soak screening and one-hour macOS runtime stability are accepted. Missing field categories remain residual `not_evaluated` risk; no category-balanced or general-field detector-accuracy PASS is claimed.
+- **Next gate:** `S7 / Phase 2C-4 — Annotated MP4 Export`. Windows/manual GUI and one-folder packaging validation remain mandatory but move to the final release gate after the product feature sequence.
+- **Detail:** [Current work plan](./work-plan.md), [Real-world validation plan](../30-quality/real-world-validation-plan.md)
+
+### S7 / Phase 2C-4 — Annotated MP4 Export
+
+- **Purpose:** Render approved Result Review overlays onto the source video and export a shareable annotated MP4, with a general-user preset and an option to include debug information.
 - **Status:** `ACTIVE`
-- **Major result:** S5-C is formally closed; representative real-video, long-duration, Windows/manual and one-folder packaging evidence has not yet been produced.
-- **Next gate:** Define the controlled S6 evidence set, then complete benchmark comparison, real-video review, CPU/memory checks and clean-PC one-folder validation.
-- **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md), [manual checklist](../30-quality/manual-gui-windows-checklist.md)
-
-### S7 / Phase 2C-4 — Annotated MP4 export
-
-- **Purpose:** Export a shareable result video with approved overlays and optional debug information.
-- **Status:** `PLANNED`
-- **Major result:** Product and Viewer prerequisites exist; encoding work has not started.
-- **Next gate:** Start only after the S6 validation gate passes.
+- **Major result:** Existing Result Review overlay, PNG export and product prerequisites are available; video encoding implementation has not started.
+- **Next gate:** Begin the bounded S7 implementation without inferring Windows/package acceptance from the accepted S6 macOS/runtime evidence.
+- **Priority:** `P0 — current next work`
 - **Detail:** [Result Review Viewer plan](../10-product/result-review-viewer-plan.md)
 
-### Phase 2D — Repeated-test operations and recovery
+### S8 — Repeated-Test Workflow & Result Management
 
-- **Purpose:** Reassess autosave, crash recovery, recent-work management and repeated-test workflow after real operational use.
-- **Status:** `DEFERRED`
-- **Major result:** Candidate scope is recorded but not committed to the active sequence.
-- **Next gate:** Re-evaluate after S7 and sufficient real-use feedback; promote to `PLANNED` only through an explicit roadmap decision.
+- **Purpose:** Reduce repeated compressor-test effort and operational mistakes when one Profile is reused across multiple test videos.
+- **Status:** `PLANNED`
+- **Major result:** The P1 candidate scope is prioritized: repeated analysis with one Profile, improved output naming, recent profile/result management, final run summary and completion actions, and clearer visual separation of profile-owned versus current-test settings. Implementation has not started.
+- **Next gate:** Start after S7, selecting a bounded implementation slice from this P1 scope.
+- **Priority:** `P1 — repeated-test productivity`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
+
+### S9 — Operational Recovery & UX Polish
+
+- **Purpose:** Select recovery and interaction improvements after S8 based on observed user impact rather than committing every candidate to release scope.
+- **Status:** `PLANNED`
+- **Major result:** P2 selection candidates are autosave/abnormal-exit recovery, unsaved-change confirmation on close, analysis-area zoom/pan/fit, and field↔overlay bidirectional highlight. P3 remains a lower-priority backlog for enlarged reference-line drag guidance, keyboard geometry nudging, resize/modifier guidance and further Wizard/Workbench simplification.
+- **Next gate:** After S8, select only the P2 work justified by real-use effect; P3 is not a mandatory release prerequisite unless explicitly promoted later.
+- **Priority:** `P2 selection gate / P3 backlog`
+- **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
+
+### S10 — Windows and Packaging Final Release Gate
+
+- **Purpose:** Validate the completed product feature set on the target Windows environment and prove the relocatable one-folder distribution before release.
+- **Status:** `PLANNED`
+- **Major result:** Obligation is preserved and pending; no Windows/manual GUI/PyInstaller one-folder PASS is currently claimed.
+- **Next gate:** After the required product feature work, run the Windows Python 3.14 canonical suite, supported-DPI manual Workbench/preflight/analysis/Result Review flow, Windows PyInstaller one-folder build, clean-PC execution without Python or separately bundled fonts, relocated Jinja/Qt/OpenCV/Matplotlib resource checks, Korean font behavior, Unicode/long paths, active file locking, cancellation/application close and video/output/debug handle-release checks.
+- **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md), [manual checklist](../30-quality/manual-gui-windows-checklist.md)
 
 ## Current sequence
 
-`S6` → `S7 / Phase 2C-4` → Phase 2D reassessment.
+`S6 DONE` → `S7 / Phase 2C-4` → `S8` → `S9 selection/UX work` → `S10 final Windows & Packaging release gate`.

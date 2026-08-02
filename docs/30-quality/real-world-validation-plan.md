@@ -5,7 +5,7 @@
 This document owns real-video, detector, Workbench, lifecycle, graph, CPU, memory and packaging acceptance obligations discovered during real use. It does not own milestone status or the active next action.
 
 - Long-term milestone state: [project roadmap](../00-project/roadmap.md)
-- Active S6 gate: [current work plan](../00-project/work-plan.md)
+- Active gate and next action: [current work plan](../00-project/work-plan.md)
 - S5-B design: [oil-boundary hypothesis architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 - Manual platform procedure: [manual GUI and Windows checklist](./manual-gui-windows-checklist.md)
 - Benchmark execution: [golden video regression](./golden-video-regression.md)
@@ -19,8 +19,8 @@ This document owns real-video, detector, Workbench, lifecycle, graph, CPU, memor
 5. Prefer bounded OpenCV/NumPy algorithms; no checkpoint or GPU runtime is required.
 6. Low or conflicting evidence must remain reviewable rather than forcing a numeric boundary or Foam state.
 7. A single video, filename or fixture ID cannot define an exception.
-8. Accuracy evidence must be accompanied by CPU, memory, packaging and resource-cleanup evidence.
-9. Automatic tests and manual Windows/real-video checks are reported separately.
+8. Detector/runtime acceptance evidence must include CPU, memory and resource-cleanup evidence; Windows packaging remains mandatory release evidence in the final platform gate.
+9. Automatic tests and manual Windows/real-video checks are reported separately, and Windows PASS is never inferred from another platform.
 10. The repository sample is supporting evidence only, never canonical truth.
 
 ## Evidence sources
@@ -171,15 +171,19 @@ orders to pass. Process isolation is introduced only if direct evidence later pr
 that incompatible application classes are required; broad suite serialization and
 per-test GUI subprocesses remain prohibited.
 
-## Windows and packaging gate
+## Final Windows and packaging release gate
 
-- Run the canonical suite on Python 3.14.
-- Build the one-folder distribution on Windows.
-- Run on a clean PC without Python or separately bundled font files.
-- Complete Workbench, preflight, analysis and Result Review flow.
-- Verify Jinja, Qt plugins, OpenCV and Matplotlib resources after relocation.
-- Exercise Unicode/long paths, active file locking, cancellation and application close.
-- Confirm no video/output/debug handle remains locked after close.
+This gate is intentionally sequenced after the required product feature work. It remains mandatory and pending; no macOS/source-tree result establishes Windows/manual GUI or packaging PASS.
+
+- Run the canonical suite on Windows Python 3.14.
+- Complete manual Workbench, preflight, analysis and Result Review flow at the supported Windows DPI settings.
+- Build the PyInstaller one-folder distribution on Windows.
+- Run the relocated package on a clean Windows PC without Python or separately bundled font files.
+- Verify relocated Jinja, Qt, OpenCV and Matplotlib resources and Korean font behavior.
+- Exercise Unicode and long paths.
+- Exercise active file locking, cancellation and application close.
+- Confirm no video/output/debug handle remains locked after cancellation or close.
+- Report every unexercised platform/package condition as pending rather than inferring it from another environment.
 
 ## Evidence reporting
 

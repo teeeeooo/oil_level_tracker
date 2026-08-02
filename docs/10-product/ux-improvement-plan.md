@@ -125,28 +125,35 @@ The post-analysis developer workflow supports:
 - deterministic regression fixture export;
 - safe reproduction-package export outside the official bundle.
 
-## Deferred repeated-test candidates
+## S8 repeated-test productivity scope
 
-The following remain candidate product ideas, not active work:
+The roadmap prioritizes the following as the P1 repeated-test workflow and result-management scope after S7:
+
+- repeated analysis of multiple test videos with one Profile;
+- improved output naming;
+- recent profile and recent result management;
+- final run summary with clear completion actions;
+- clearer visual separation between profile-owned settings and current-test settings.
+
+These items target recurring compressor-test workload and avoidable operating mistakes. Exact milestone status and implementation slicing belong only to the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md).
+
+## S9 operational recovery and UX selection
+
+After S8, select P2 work based on observed user effect rather than treating every candidate as mandatory:
 
 - autosave and abnormal-exit recovery;
-- save confirmation on close;
-- final run summary;
-- clearer progress and completion actions;
-- output naming and recent profile/result management;
-- repeated analysis with one profile;
-- further Wizard/Workbench simplification.
+- unsaved-change confirmation on close;
+- analysis-area zoom, pan and fit;
+- bidirectional highlight between fields and overlay items.
 
-Their status and promotion gate belong only to the [roadmap](../00-project/roadmap.md).
-
-## Additional UX candidates
+The following remain P3 lower-priority backlog unless explicitly promoted:
 
 - enlarged reference-line drag guide;
 - 1 px arrow and 5 px `Shift`+arrow movement;
-- resize tooltip and modifier-based aspect/center behavior;
-- analysis-area zoom, pan and fit;
-- bidirectional highlight between fields and overlay items;
-- clearer visual separation between profile and current-test settings.
+- resize tooltip and modifier-based geometry editing;
+- further Wizard/Workbench simplification.
+
+S9 is a selection boundary, not a promise that every P2 or P3 candidate ships before release. Windows/manual GUI and packaging validation remains a separate final release obligation governed by the [roadmap](../00-project/roadmap.md) and [real-world validation plan](../30-quality/real-world-validation-plan.md).
 
 ## Implementation principles
 

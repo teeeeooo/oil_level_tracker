@@ -548,19 +548,20 @@ debug_case_YYYYMMDD_HHMMSS/
 └─ short_clip.mp4
 ```
 
-### 9.6 공유용 결과 영상
+### 9.6 공유용 결과 영상 — S7 / Phase 2C-4
 
-Prerequisite: the roadmap's S6 real-video/Windows validation gate must pass before implementation begins.
+The accepted S6 real-video/runtime scope is complete, so the roadmap now selects S7 as the exact next implementation gate. Existing Result Review overlay and PNG rendering paths are prerequisites to reuse; annotated-video encoding itself has not started. Windows/manual GUI and PyInstaller one-folder validation is not a prerequisite for starting S7 and remains pending as the final release gate after the product feature sequence.
 
-- overlay annotated MP4 export
-- 일반 사용자 공유용 preset
-- 디버그 정보 포함 여부 선택
+- approved result overlays rendered onto the source video;
+- shareable annotated MP4 export;
+- 일반 사용자 공유용 preset;
+- 디버그 정보 포함 여부 선택.
 
-상세 선행 조건은 [real-world validation plan](../30-quality/real-world-validation-plan.md)을 따른다.
+Platform/release obligations remain governed by the [real-world validation plan](../30-quality/real-world-validation-plan.md) and milestone status by the [roadmap](../00-project/roadmap.md).
 
 ### 9.7 실사용 결과 시각화 안정화
 
-Phase 2C-4 전에 다음을 완료한다.
+These Phase 2C-4 prerequisites were completed by S4 and must remain preserved during S7:
 
 - Matplotlib 한글 font resolver
 - 사용자-facing `oil-air`를 `유면` 또는 `유면 경계`로 변경

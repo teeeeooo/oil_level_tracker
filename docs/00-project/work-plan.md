@@ -1,7 +1,8 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
-**Current milestone:** `S6 — Real-video and Windows validation gate`
+**Current milestone:** `S7 / Phase 2C-4 — Annotated MP4 Export`
 **Milestone status:** `ACTIVE`
+**S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
 **Current S6-C result:** `S6-C PROVISIONAL DIAGNOSTIC EVIDENCE: ACCEPTED`
@@ -11,10 +12,10 @@
 **Current S6-D4 result:** `AVAILABLE-CORPUS DETECTOR ACCURACY REPAIR: AUDITED, ACCEPTED AND MERGED`
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
-**Current gate:** `S6 Windows and Packaging Gate`
-**Successor milestone:** `S7 / Phase 2C-4 — Annotated MP4 export` remains `PLANNED` and has not started
+**Current gate:** `S7 / Phase 2C-4 — Annotated MP4 Export`
+**Successor milestone:** `S8 — Repeated-Test Workflow & Result Management`
 
-This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). The available-corpus detector repair is now closed: it materially improves the frozen four-video D3 corpus while preserving fail-closed structural behavior in the controlled full-/partial-Foam regressions. Missing real-video categories remain residual `not_evaluated` risk and no category-balanced or general-field detector-accuracy PASS is claimed. S6 remains active because the target Windows/manual and one-folder packaging obligations are still pending.
+This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 is closed against the real-video/runtime scope actually completed: the audited available-corpus detector repair materially improves the frozen four-video D3 corpus while preserving fail-closed structural behavior in the controlled full-/partial-Foam regressions, and the bounded soak plus one-hour macOS source-tree evidence remain accepted. Missing real-video categories remain residual `not_evaluated` risk and no category-balanced or general-field detector-accuracy PASS is claimed. Windows/manual GUI and PyInstaller one-folder validation were not run or inferred; those obligations remain pending as the final Windows and packaging release gate after the product feature sequence. S7 is now the exact next implementation gate, and encoding work has not started.
 
 ## Evidence owners
 
@@ -46,11 +47,11 @@ This document owns the current active execution state. Milestone order and forma
 | Merge | PR #67 Ready and native exact-base/head guarded-squash-merged as `a046519f28765d69a591dc204e407fbf4298d9be` |
 | Synchronization | registered primary checkout synchronized cleanly to `main @ a046519f28765d69a591dc204e407fbf4298d9be` before this documentation Close |
 | Claim boundary | bounded available-corpus improvement only; unavailable field categories remain `not_evaluated`; no category-balanced/general-field PASS |
-| Next gate | `S6 Windows and Packaging Gate` |
+| Gate recorded at D4 close (historical) | `S6 Windows and Packaging Gate`; product sequencing was reconciled later without changing the D4 evidence |
 
-## Pending S6 scope
+## Final Windows and packaging release obligation
 
-Still pending and not accepted:
+The following scope is still pending and not accepted. It is no longer an S6 blocker; it is the final release gate after the required product feature work:
 
 - run the Windows canonical suite on the supported Python 3.14 environment;
 - complete manual Workbench, preflight, analysis and Result Review acceptance at the required Windows DPI scales;
@@ -58,7 +59,15 @@ Still pending and not accepted:
 - verify relocated Jinja, Qt, OpenCV and Matplotlib resources plus Korean font behavior;
 - exercise Unicode/long paths, active file locking, cancellation and application close, proving video/output/debug handles are released;
 - preserve missing real-video categories as residual validation gaps unless new authoritative evidence becomes feasible;
-- perform final independent S6 acceptance and formal Close before S7 starts.
+- do not infer Windows/manual/package PASS from macOS, source-tree or other-platform evidence.
+
+## Product priority and sequence
+
+- `P0`: S7 annotated MP4 export is the current next implementation work.
+- `P1`: S8 repeated-test workflow and result management follows S7.
+- `P2`: after S8, select operational recovery and UX improvements based on observed user effect.
+- `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
+- Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.
 
 ## Retained contracts and risks
 
@@ -66,8 +75,9 @@ Still pending and not accepted:
 - No filename, hash, Recipe ID, frame number or sample identity may become detector logic.
 - Missing scratch/surface-defect, fogging/stain, clean rim-adjacent Oil, high-quality compressor-start fill/drain, transparent shimmer/refractive-motion, structural rim/paired-line field scenes, clean full/empty no-interface, dropout/reacquisition and broader field-video categories remain `not_evaluated` where authoritative denominators are absent.
 - S6-F is accepted only for its exact one-hour macOS source-tree workload; it does not establish Windows, packaging, multi-Glass scaling or infinite-duration stability.
-- S7 remains blocked until the complete S6 validation gate passes.
+- S7 is active as the next implementation milestone, but annotated-video encoding has not started.
+- S9 is a selection/UX milestone: its P2 candidates are not all precommitted, and P3 backlog items are not mandatory release prerequisites unless explicitly promoted.
 
-## Intentional non-runs in S6-D4 Close
+## Intentional non-runs retained from the S6-D4 close
 
-The D4 Auditor did not rerun the accepted one-hour soak, Windows/manual GUI acceptance, packaging/PyInstaller acceptance or an unrelated canonical suite. The frozen D3 baseline was not regenerated because its preserved SHA-256 and source ancestry remained valid. Windows/manual and packaging work is now the exact next gate rather than inferred from macOS evidence.
+The D4 Auditor did not rerun the accepted one-hour soak, Windows/manual GUI acceptance, packaging/PyInstaller acceptance or an unrelated canonical suite. The frozen D3 baseline was not regenerated because its preserved SHA-256 and source ancestry remained valid. This reconciliation changes only product sequencing: Windows/manual and packaging work remains pending as the final release gate and is not inferred from macOS evidence.
