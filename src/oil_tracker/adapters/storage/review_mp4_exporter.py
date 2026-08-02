@@ -14,6 +14,9 @@ from oil_tracker.adapters.vision.review_debug_overlay_renderer import ReviewDebu
 from oil_tracker.adapters.vision.review_overlay_renderer import ReviewOverlayRenderer
 
 
+_DECODED_TIMELINE_MAX_GAP_PERIODS = 1.5
+
+
 class ReviewMp4ExportError(ValueError):
     """Base failure for a Result Review annotated MP4 export."""
 
@@ -117,6 +120,7 @@ class ReviewMp4Exporter:
             estimated = max(1, int(round(max(0.0, end - start) * fps)) + 1)
             frame, frame_index, actual_timestamp = reader.read_at(start)
             previous_identity = None
+            decoded_timestamps: list[float] = []
             last_in_range_timestamp: float | None = None
             first_after_end_timestamp: float | None = None
             while True:
@@ -127,6 +131,7 @@ class ReviewMp4Exporter:
                 if previous_identity == identity:
                     raise ReviewMp4EncodingError("원본 영상 reader가 동일 frame에서 진행하지 못했습니다.")
                 previous_identity = identity
+                decoded_timestamps.append(actual_timestamp)
                 if actual_timestamp > end + 1e-9:
                     first_after_end_timestamp = actual_timestamp
                     break
@@ -169,8 +174,10 @@ class ReviewMp4Exporter:
             _check_cancelled(cancellation)
             if frame_count <= 0:
                 raise ReviewMp4EncodingError("분석 구간에서 내보낼 video frame을 찾지 못했습니다.")
-            _ensure_analysis_end_covered(
+            _ensure_analysis_timeline_covered(
+                start_sec=start,
                 end_sec=end,
+                decoded_timestamps=decoded_timestamps,
                 last_in_range_timestamp=last_in_range_timestamp,
                 first_after_end_timestamp=first_after_end_timestamp,
                 fps=fps,
@@ -280,23 +287,55 @@ def _debug_record_for_frame(
     return repository.load_record(summary.record_id)
 
 
-def _ensure_analysis_end_covered(
+def _ensure_analysis_timeline_covered(
     *,
+    start_sec: float,
     end_sec: float,
+    decoded_timestamps: list[float],
     last_in_range_timestamp: float | None,
     first_after_end_timestamp: float | None,
     fps: float,
 ) -> None:
-    if first_after_end_timestamp is not None:
-        return
-    if last_in_range_timestamp is None:
-        raise ReviewMp4EncodingError("원본 영상이 저장된 분석 종료 시각까지 이어지는지 확인할 수 없습니다.")
+    if not decoded_timestamps or last_in_range_timestamp is None:
+        raise ReviewMp4EncodingError("원본 영상의 저장된 분석 구간 decoded timeline을 확인할 수 없습니다.")
+
     frame_period = 1.0 / max(float(fps), 1e-9)
-    tolerance = max(1e-6, frame_period * 0.1)
-    if last_in_range_timestamp + frame_period + tolerance < float(end_sec):
+    max_gap = frame_period * _DECODED_TIMELINE_MAX_GAP_PERIODS
+    epsilon = max(1e-9, frame_period * 1e-6)
+
+    first_timestamp = float(decoded_timestamps[0])
+    if first_timestamp > float(start_sec) + max_gap + epsilon:
+        raise ReviewMp4EncodingError(
+            "원본 영상의 decoded timeline이 저장된 분석 시작 구간을 충분히 덮지 못합니다. "
+            f"첫 decoded 시각 {first_timestamp:.3f}s, 분석 시작 {float(start_sec):.3f}s"
+        )
+
+    for left, right in zip(decoded_timestamps, decoded_timestamps[1:]):
+        left = float(left)
+        right = float(right)
+        if right <= left + epsilon:
+            raise ReviewMp4EncodingError("원본 영상의 decoded timestamp가 순차적으로 증가하지 않습니다.")
+        if right < float(start_sec) - epsilon or left > float(end_sec) + epsilon:
+            continue
+        if right - left > max_gap + epsilon:
+            raise ReviewMp4EncodingError(
+                "원본 영상의 decoded timeline에 저장된 분석 구간을 지지하지 못하는 공백이 있습니다. "
+                f"decoded gap {left:.3f}s → {right:.3f}s, nominal FPS {float(fps):.3f}"
+            )
+
+    if first_after_end_timestamp is not None:
+        boundary_gap = float(first_after_end_timestamp) - float(last_in_range_timestamp)
+        if boundary_gap > max_gap + epsilon:
+            raise ReviewMp4EncodingError(
+                "원본 영상의 decoded timeline이 저장된 분석 종료 경계를 정상 frame cadence로 bracket하지 못합니다. "
+                f"경계 {float(last_in_range_timestamp):.3f}s → {float(first_after_end_timestamp):.3f}s"
+            )
+        return
+
+    if float(end_sec) - float(last_in_range_timestamp) > max_gap + epsilon:
         raise ReviewMp4EncodingError(
             "원본 영상이 저장된 분석 종료 시각까지 충분히 이어지지 않습니다. "
-            f"마지막 decoded 시각 {last_in_range_timestamp:.3f}s, 분석 종료 {float(end_sec):.3f}s"
+            f"마지막 decoded 시각 {float(last_in_range_timestamp):.3f}s, 분석 종료 {float(end_sec):.3f}s"
         )
 
 

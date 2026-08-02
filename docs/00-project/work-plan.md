@@ -12,11 +12,11 @@
 **Current S6-D4 result:** `AVAILABLE-CORPUS DETECTOR ACCURACY REPAIR: AUDITED, ACCEPTED AND MERGED`
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
-**Current S7 result:** `IMPLEMENTATION + INCOMPLETE-INTERVAL PUBLICATION REPAIR COMPLETE ON FEATURE BRANCH — AWAITING FRESH EXACT-HEAD RE-AUDIT`
-**Current gate:** `S7 / Phase 2C-4 Annotated MP4 Export Fresh Exact-Head Re-Auditor`
+**Current S7 result:** `IMPLEMENTATION + DECODED-TIMELINE COVERAGE REPAIR COMPLETE ON FEATURE BRANCH — AWAITING FRESH EXACT-HEAD RE-AUDIT`
+**Current gate:** `S7 / Phase 2C-4 Annotated MP4 Export Repair Fresh Exact-Head Re-Auditor`
 **Successor milestone:** `S8 — Repeated-Test Workflow & Result Management`
 
-This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 is closed against the real-video/runtime scope actually completed: the audited available-corpus detector repair materially improves the frozen four-video D3 corpus while preserving fail-closed structural behavior in the controlled full-/partial-Foam regressions, and the bounded soak plus one-hour macOS source-tree evidence remain accepted. Missing real-video categories remain residual `not_evaluated` risk and no category-balanced or general-field detector-accuracy PASS is claimed. Windows/manual GUI and PyInstaller one-folder validation were not run or inferred; those obligations remain pending as the final Windows and packaging release gate after the product feature sequence. The bounded S7 annotated-MP4 implementation and incomplete-analysis-interval publication repair are complete on the same feature branch, remain unmerged, and now require the fresh exact-head Re-Auditor gate before roadmap Close or successor work.
+This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 is closed against the real-video/runtime scope actually completed: the audited available-corpus detector repair materially improves the frozen four-video D3 corpus while preserving fail-closed structural behavior in the controlled full-/partial-Foam regressions, and the bounded soak plus one-hour macOS source-tree evidence remain accepted. Missing real-video categories remain residual `not_evaluated` risk and no category-balanced or general-field detector-accuracy PASS is claimed. Windows/manual GUI and PyInstaller one-folder validation were not run or inferred; those obligations remain pending as the final Windows and packaging release gate after the product feature sequence. The bounded S7 annotated-MP4 implementation and decoded-timeline coverage repairs are complete on the same feature branch, remain unmerged, and now require the fresh exact-head repair Re-Auditor gate before roadmap Close or successor work.
 
 ## Evidence owners
 
@@ -77,7 +77,7 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 - No filename, hash, Recipe ID, frame number or sample identity may become detector logic.
 - Missing scratch/surface-defect, fogging/stain, clean rim-adjacent Oil, high-quality compressor-start fill/drain, transparent shimmer/refractive-motion, structural rim/paired-line field scenes, clean full/empty no-interface, dropout/reacquisition and broader field-video categories remain `not_evaluated` where authoritative denominators are absent.
 - S6-F is accepted only for its exact one-hour macOS source-tree workload; it does not establish Windows, packaging, multi-Glass scaling or infinite-duration stability.
-- S7 remains `ACTIVE`: annotated-video encoding and the bounded incomplete-interval publication repair are implemented on PR #68, but fresh exact-head re-audit and merge/Close are still pending.
+- S7 remains `ACTIVE`: annotated-video encoding and both bounded decoded-timeline publication repairs are implemented on PR #68, but fresh exact-head repair re-audit and merge/Close are still pending.
 - S9 is a selection/UX milestone: its P2 candidates are not all precommitted, and P3 backlog items are not mandatory release prerequisites unless explicitly promoted.
 
 ## Intentional non-runs retained from the S6-D4 close

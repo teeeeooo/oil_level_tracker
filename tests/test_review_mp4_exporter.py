@@ -143,7 +143,7 @@ class _FakeReader:
 
     def __init__(self, path, sequence=None):
         self.path = str(path)
-        self.sequence = list(sequence or [(2, 0.25), (3, 0.35), (5, 0.55)])
+        self.sequence = list(sequence or [(2, 0.25), (3, 0.35), (4, 0.45), (5, 0.55)])
         self.position = 0
         self.closed = False
         self.metadata = VideoMetadata(self.path, 160, 120, 10.0, 1.0, 10, "fake")
@@ -214,12 +214,12 @@ def test_export_queries_official_tracking_with_actual_decoded_timestamps_and_pre
         glass_id=glass.id,
         destination=tmp_path / "sync.mp4",
     )
-    assert query.timestamps == [0.25, 0.35, 0.55]
+    assert query.timestamps == [0.25, 0.35, 0.45, 0.55]
     assert query.overlays[0].oil_boundary_y == pytest.approx(60.0)
     assert query.overlays[-1].sample.timestamp_sec == pytest.approx(0.5)
     assert query.overlays[-1].oil_boundary_y is None
     assert query.overlays[-1].foam_front_y is None
-    assert result.frame_count == 3
+    assert result.frame_count == 4
     assert _FakeReader.instances[-1].closed
     assert _FakeWriter.instances[-1].closed
 
@@ -276,6 +276,98 @@ def test_known_source_last_frame_before_required_coverage_cannot_publish(tmp_pat
     assert not destination.exists()
     assert list(tmp_path.glob(".*.tmp-*.mp4")) == []
     assert _KnownLastFrameReader.instances[-1].closed
+    assert _FakeWriter.instances[-1].closed
+
+
+def test_sparse_after_end_timestamp_cannot_claim_interval_coverage(tmp_path):
+    source = tmp_path / "source.mp4"
+    source.write_bytes(b"source")
+    bundle, glass = _bundle(tmp_path, source, start=0.2, end=0.8)
+    destination = tmp_path / "sparse-boundary.mp4"
+
+    def reader_factory(path):
+        return _FakeReader(path, sequence=[(2, 0.25), (20, 2.00)])
+
+    with pytest.raises(ReviewMp4EncodingError, match="decoded timeline"):
+        _fake_exporter(reader_factory=reader_factory).export(
+            bundle=bundle,
+            query=ReviewQueryModel(bundle),
+            source_video_path=source,
+            glass_id=glass.id,
+            destination=destination,
+        )
+    assert not destination.exists()
+    assert list(tmp_path.glob(".*.tmp-*.mp4")) == []
+    assert _FakeReader.instances[-1].closed
+    assert _FakeWriter.instances[-1].closed
+
+
+def test_normal_adjacent_after_end_bracket_is_complete(tmp_path):
+    source = tmp_path / "source.mp4"
+    source.write_bytes(b"source")
+    bundle, glass = _bundle(tmp_path, source, start=0.2, end=0.8)
+
+    def reader_factory(path):
+        return _FakeReader(
+            path,
+            sequence=[(2, 0.25), (3, 0.35), (4, 0.45), (5, 0.55), (6, 0.65), (7, 0.75), (8, 0.85)],
+        )
+
+    result = _fake_exporter(reader_factory=reader_factory).export(
+        bundle=bundle,
+        query=ReviewQueryModel(bundle),
+        source_video_path=source,
+        glass_id=glass.id,
+        destination=tmp_path / "adjacent-boundary.mp4",
+    )
+    assert result.frame_count == 6
+    assert result.path.is_file()
+    assert _FakeReader.instances[-1].closed
+    assert _FakeWriter.instances[-1].closed
+
+
+def test_bounded_realistic_decoded_timestamp_jitter_is_accepted(tmp_path):
+    source = tmp_path / "source.mp4"
+    source.write_bytes(b"source")
+    bundle, glass = _bundle(tmp_path, source, start=0.2, end=0.8)
+
+    def reader_factory(path):
+        return _FakeReader(
+            path,
+            sequence=[(2, 0.248), (3, 0.352), (4, 0.449), (5, 0.556), (6, 0.651), (7, 0.748), (8, 0.853)],
+        )
+
+    result = _fake_exporter(reader_factory=reader_factory).export(
+        bundle=bundle,
+        query=ReviewQueryModel(bundle),
+        source_video_path=source,
+        glass_id=glass.id,
+        destination=tmp_path / "jitter.mp4",
+    )
+    assert result.frame_count == 6
+    assert result.path.is_file()
+
+
+def test_materially_sparse_internal_decoded_gap_cannot_publish(tmp_path):
+    source = tmp_path / "source.mp4"
+    source.write_bytes(b"source")
+    bundle, glass = _bundle(tmp_path, source, start=0.2, end=0.8)
+    destination = tmp_path / "sparse-internal.mp4"
+
+    def reader_factory(path):
+        return _FakeReader(path, sequence=[(2, 0.25), (3, 0.35), (6, 0.65), (7, 0.75), (8, 0.85)])
+
+    with pytest.raises(ReviewMp4EncodingError, match="decoded timeline"):
+        _fake_exporter(reader_factory=reader_factory).export(
+            bundle=bundle,
+            query=ReviewQueryModel(bundle),
+            source_video_path=source,
+            glass_id=glass.id,
+            destination=destination,
+        )
+    assert not destination.exists()
+    assert list(tmp_path.glob(".*.tmp-*.mp4")) == []
+    assert _FakeReader.instances[-1].closed
     assert _FakeWriter.instances[-1].closed
 
 
@@ -362,7 +454,7 @@ def test_debug_export_uses_only_exact_stored_trace_frames(tmp_path):
         destination=tmp_path / "debug.mp4",
         include_debug=True,
     )
-    assert [record is not None for record in debug_renderer.records] == [False, True, False]
+    assert [record is not None for record in debug_renderer.records] == [False, True, False, False]
     assert result.debug_frames == 1
     assert _DebugRepository.instances[-1].closed
 
