@@ -9,7 +9,7 @@
 **Current S6-D1 result:** `S6-D1 DOMAIN-OWNER RESPONSE: RECEIVED FOR 15 EXACT REVIEW FRAMES`
 **Current S6-D2 result:** `S6-D2 USER-CONFIRMED PRODUCT TRUTH: AUDITED AND ACCEPTED`
 **Current S6-D3 result:** `CURRENT-SAMPLE OFFICIAL BASELINE AND AVAILABLE-CORPUS POLICY: AUDITED AND ACCEPTED`
-**Current S6-D4 result:** `FOAM-CONTEXT STRUCTURAL FALSE-OIL REPAIR: WORKER COMPLETE — FRESH INDEPENDENT EXACT-HEAD RE-AUDIT REQUIRED`
+**Current S6-D4 result:** `PARTIAL-FOAM STRUCTURAL FALSE-OIL REPAIR: WORKER COMPLETE — FRESH INDEPENDENT EXACT-HEAD RE-AUDIT REQUIRED`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
 **Current gate:** `S6-D4 Fresh Independent Exact-Head Detector Accuracy Repair Re-Audit`
 **S6-F host-use context:** `user-confirmed idle representative run`; not a telemetry-proven controlled-idle benchmark
@@ -20,9 +20,10 @@
 **Successor milestone:** `S7 / Phase 2C-4 — Annotated MP4 export` remains `PLANNED` and has not started
 **Audited S6-D3 feature head:** `049d0eb49222b904c688686267acb01bf95374a9` over base `47a5516e49872bcb6ffcd9c8147b2dcaa8640218`
 **Merged S6-D3 PR/main:** `#66` / `0a3cf34b8d4e0fbd9725a2de24612e62da910e50`
-**S6-D4 Auditor-failed PR head:** `71af3205e4e1242ccc1a323e3cac174296366210`
-**S6-D4 starting main / repaired detector commit:** `e04ce64384b31643795448fb6b16e47564a3b7c3` / `c2c58fc1b58bbade421bb032cc219a56092bd816`
-**S6-D4 repaired feature evidence:** `current-sample-feature.json` SHA-256 `b2995711093b8e0ecdbeca23eae7dbebb303c37aa52add9f3119d4a9732795c0`
+**S6-D4 first Auditor-failed PR head:** `71af3205e4e1242ccc1a323e3cac174296366210`
+**S6-D4 second-repair starting / Auditor-failed PR head:** `2dc14a13cf3ae1d25b9941c3b9026cc8a224525f`
+**S6-D4 starting main / latest repaired detector commit:** `e04ce64384b31643795448fb6b16e47564a3b7c3` / `6b2ea43e8ae62773d4ae6ce17754477d810c78c6`
+**S6-D4 latest feature evidence:** `current-sample-feature.json` SHA-256 `b098a070927ffcf9230a57cd94827a8fe8eedec9a08f591591404c29271cf70c`
 **S6-A evidence:** [`../30-quality/s6-base-sample-1-evidence.md`](../30-quality/s6-base-sample-1-evidence.md)
 **S6-B evidence:** [`../30-quality/s6-additional-real-samples-evidence.md`](../30-quality/s6-additional-real-samples-evidence.md)
 **S6-C evidence:** [`../30-quality/s6-provisional-truth-comparison.md`](../30-quality/s6-provisional-truth-comparison.md)
@@ -34,25 +35,26 @@
 **S6-D4 feature evidence:** [`../30-quality/s6-d4-available-corpus-detector-repair.md`](../30-quality/s6-d4-available-corpus-detector-repair.md)
 **S6-F feature evidence:** [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
 
-This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6-D3 preserves the audited frozen current-sample baseline from all 15 S6-D2 truths with 13 usable and 2 unusable cases. The first S6-D4 feature head improved the frozen corpus but failed fresh audit because an accepted Foam front could promote structural horizontal evidence from ambiguity to false numeric Oil. The repair at source commit `c2c58fc1b58bbade421bb032cc219a56092bd816` now requires candidate-level spatial separation from the accepted S5-A Foam component before the Foam-context recovery may publish Oil. The new production regression keeps accepted white Foam while returning Oil `None` and `FULL_WITH_FOAM` for the structural-only scene. Repaired feature benchmarking against the same frozen D3 datasets preserves raw/smoothed Oil `7/13`, FillState `6/13`, review/unknown `4/13`, Foam precision `1.000`, recall `0.700` and matched-front MAE `47.285714 px`. The result remains non-category-balanced; all missing categories remain explicit `not_evaluated`/residual risk. The exact current gate is fresh independent exact-head D4 **re-audit**; the Worker has no merge authority.
+This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6-D3 preserves the audited frozen current-sample baseline from all 15 S6-D2 truths with 13 usable and 2 unusable cases. S6-D4 has now received two independent structural false-Oil FAIL findings: the first showed that a Foam-front coordinate alone could promote structural evidence, and the second showed that the first repair's one-dimensional `< 0.50` per-row Foam occupancy guard still failed on accepted partial Foam. The latest source commit `6b2ea43e8ae62773d4ae6ce17754477d810c78c6` retires that scalar occupancy gate and requires repeated outer-phase evidence across independent horizontal sectors after accepted Foam/glare and the local S5-B pulse neighborhood are removed. Controlled partial-Foam neighborhoods, narrow-partial cases and the prior full-Foam structural negative now remain Oil-null/ambiguous, while the frozen D3 feature result preserves raw/smoothed Oil `7/13`, FillState `6/13`, review/unknown `4/13`, Foam precision `1.000`, recall `0.700` and matched-front MAE `47.285714 px`. The result remains non-category-balanced; all missing field categories remain explicit `not_evaluated`/residual risk. The exact current gate is fresh independent exact-head D4 **re-audit**; the Worker has no merge authority.
 
 ## Current S6-D4 Worker handoff
 
 | Item | Current state |
 |---|---|
 | Starting main | `e04ce64384b31643795448fb6b16e47564a3b7c3`; clean and equal to `origin/main` at Worker start |
-| Auditor FAIL / repair | failed head `71af3205e4e1242ccc1a323e3cac174296366210` allowed accepted Foam-front context to promote structural horizontal evidence into false numeric Oil; repair requires spatial separation from the accepted Foam component |
-| Repaired detector source/test commit | `c2c58fc1b58bbade421bb032cc219a56092bd816` |
+| Auditor FAIL chronology | first failed head `71af3205e4e1242ccc1a323e3cac174296366210` exposed Foam-front-only authorization; second-repair starting head `2dc14a13cf3ae1d25b9941c3b9026cc8a224525f` exposed partial-Foam structural false Oil through the `< 0.50` row-occupancy repair |
+| Latest repaired detector source/test commit | `6b2ea43e8ae62773d4ae6ce17754477d810c78c6` |
 | Frozen D3 baseline | composite SHA-256 `fbfc7aa34e00eeb002098f5d79a0f83288bd06aec014ecae3ebd9f177e207692`; dataset composite `a6845fcf225c99bae8032ae55003aadbd37352b62153395bb9d406450909d92b` |
-| Superseded failed-head feature | source `6f7e3744c89852a88dab22036ba408de32ec0f65`; composite SHA-256 `42e7a3a8dae581d44580b500dcf27480e5a719fd5749399253a675a69bce7b93` |
-| Repaired feature evidence | local ignored `current-sample-feature.json` SHA-256 `b2995711093b8e0ecdbeca23eae7dbebb303c37aa52add9f3119d4a9732795c0`; all four component comparisons `comparable` |
-| Structural+Foam regression | accepted Foam `120 px`; Oil `None`; state `FULL_WITH_FOAM`; Oil decision remains ambiguous |
+| Superseded feature evidence | first failed feature `6f7e374… / 42e7a3a8…`; first repair `c2c58fc… / b2995711…`; neither is the current acceptance target |
+| Latest feature evidence | local ignored `current-sample-feature.json` SHA-256 `b098a070927ffcf9230a57cd94827a8fe8eedec9a08f591591404c29271cf70c`; all four component comparisons `comparable` |
+| Partial-Foam structural regression | six position/height cases plus two narrow-partial cases preserve accepted Foam while Oil stays `None`/ambiguous and never becomes false `FOAMING_VISIBLE`; broader starting-head diagnostic had `60 + 8` false numeric cases and the new discriminator rejected all `68/68` |
+| Full-Foam structural regression | prior accepted white-Foam structural negative remains fail-closed with Oil `None` |
 | Oil | raw/smoothed `0/13 → 7/13`; 7 matched MAE `4.428571 px`, median `2.0 px`, P90 `9.8 px`, P95 `10.4 px` |
 | FillState | `0/13 → 6/13` correct |
 | Foam | precision `1.000 → 1.000`; recall `0.700 → 0.700`; matched-front MAE `47.285714 → 47.285714 px` on the same seven matches |
 | Review/unknown | `6/13 → 4/13` |
 | Cross-video scope | Foam-absent sample1 recovered; all five sample4 Oil+Foam frames recovered; sample3 frame 1035 is an additional non-primary Oil recovery |
-| Focused validation | D4 focused `45 passed`; affected S5-A/S5-B/serialized-owner/performance set `172 passed`; controlled Oil + benchmark infrastructure `357 passed` |
+| Focused validation | D4 focused `53 passed`; affected-owner S5-A/S5-B/serialized-owner/resource set `470 passed`; benchmark-contract set `67 passed` |
 | Claim boundary | available-corpus improvement only; missing categories remain `not_evaluated`; no category-balanced/general-field accuracy PASS |
 | Next gate | `S6-D4 Fresh Independent Exact-Head Detector Accuracy Repair Re-Audit` |
 
