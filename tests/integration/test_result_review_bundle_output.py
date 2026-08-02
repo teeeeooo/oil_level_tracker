@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+from datetime import datetime
 import json
 from pathlib import Path
 
 import pytest
 
+import oil_tracker.adapters.storage.output_bundle_store as output_bundle_module
 from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
+from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleReader
 from oil_tracker.domain.enums import FillState, ResultState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.results import AnalysisResult, GlassAnalysisResult, TrackingSample
@@ -114,3 +117,41 @@ def test_write_failure_cleans_temporary_directory(tmp_path):
         store.write_bundle(result, recipe, session, tmp_path)
     assert not list(tmp_path.glob(".*.tmp-*"))
     assert not list(tmp_path.glob("oil_level_analysis_*"))
+
+
+def test_run_name_drives_safe_folder_and_persisted_review_metadata(tmp_path):
+    result, recipe, session, _glass = _inputs(tmp_path)
+    session.run_name = "반복 시험 / 03"
+
+    output = _store().write_bundle(result, recipe, session, tmp_path)
+
+    assert output.parent == tmp_path
+    assert "반복_시험_03" in output.name
+    saved_session = json.loads((output / "session.json").read_text())
+    index = json.loads((output / "review_index.json").read_text())
+    manifest = json.loads((output / "analysis_manifest.json").read_text())
+    assert saved_session["run_name"] == "반복 시험 / 03"
+    assert index["run_name"] == "반복 시험 / 03"
+    assert manifest["run_name"] == "반복 시험 / 03"
+    assert ResultBundleReader().read(output).run_name == "반복 시험 / 03"
+
+
+class _FixedDatetime:
+    @classmethod
+    def now(cls):
+        return datetime(2026, 8, 3, 12, 34, 56)
+
+
+def test_same_name_same_second_uses_suffix_without_overwriting(tmp_path, monkeypatch):
+    monkeypatch.setattr(output_bundle_module, "datetime", _FixedDatetime)
+    result, recipe, session, _glass = _inputs(tmp_path)
+    session.run_name = "반복 시험"
+    first = _store().write_bundle(result, recipe, session, tmp_path)
+    sentinel = first / "sentinel.txt"
+    sentinel.write_text("keep", encoding="utf-8")
+
+    second = _store().write_bundle(result, recipe, session, tmp_path)
+
+    assert first.name == "oil_level_analysis_반복_시험_20260803_123456"
+    assert second.name == f"{first.name}_2"
+    assert sentinel.read_text(encoding="utf-8") == "keep"

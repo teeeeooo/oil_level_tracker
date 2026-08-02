@@ -39,3 +39,14 @@ def test_frame_progress_keeps_timestamp_glass_and_rate() -> None:
     assert "1.235s" in rendered
     assert "Glass A" in rendered
     assert "7.89 fps" in rendered
+
+
+def test_analyze_parser_accepts_optional_run_name_without_changing_default():
+    parser = cli.build_parser()
+    default_args = parser.parse_args(["analyze", "--recipe", "a.oilrecipe", "--video", "a.mp4"])
+    named_args = parser.parse_args(
+        ["analyze", "--recipe", "a.oilrecipe", "--video", "a.mp4", "--run-name", "시험 03"]
+    )
+
+    assert default_args.run_name == ""
+    assert named_args.run_name == "시험 03"

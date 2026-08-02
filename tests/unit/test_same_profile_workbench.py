@@ -44,6 +44,7 @@ def _snapshot():
 
 def test_prepare_deep_copies_snapshot_and_resets_session_fields():
     controller = _controller(lambda path: _Reader(path, fps=1.5))
+    controller.session.run_name = "이전 시험"
     snapshot = _snapshot()
     prepared = controller.prepare_same_profile_video(snapshot, 3.0, "new.mp4")
     assert prepared.recipe is not snapshot
@@ -54,6 +55,7 @@ def test_prepare_deep_copies_snapshot_and_resets_session_fields():
     assert prepared.session.compressor_start_sec is None
     assert prepared.session.sampling_fps == 1.5
     assert prepared.session.output_directory == ""
+    assert prepared.session.run_name == ""
     assert prepared.session.run_note == ""
     assert prepared.session.resolution_confirmed is True
     prepared.recipe.glasses[0].name = "changed"

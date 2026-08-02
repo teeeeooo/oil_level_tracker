@@ -114,6 +114,7 @@ class WorkbenchController:
                 compressor_start_sec=None,
                 sampling_fps=sampling_fps,
                 output_directory="",
+                run_name="",
                 run_note="",
                 resolution_confirmed=True,
             )

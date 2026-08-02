@@ -122,3 +122,18 @@ def test_validation_routing_selects_glass(qtbot):
     issue = ValidationIssue(ValidationSeverity.ERROR, "X", "problem", a.id, "zero_line_y")
     window._route_validation_issue(issue)
     assert c.selected_glass_id == a.id
+
+
+def test_current_test_name_is_session_owned_and_does_not_rename_profile(qtbot):
+    c = controller()
+    c.recipe.name = "재사용 프로필"
+    window = MainWindow(c, FakePreview(), FakeAnalysis(), DebugRenderer())
+    qtbot.addWidget(window)
+
+    window.run_name_edit.setText("  반복 시험 03  ")
+    window.run_name_edit.editingFinished.emit()
+
+    assert c.session.run_name == "반복 시험 03"
+    assert c.recipe.name == "재사용 프로필"
+    assert "run_name" not in c.recipe.to_dict()
+    assert "프로필에는 저장되지" in window.run_name_edit.toolTip()

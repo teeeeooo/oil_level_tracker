@@ -219,6 +219,7 @@ Reader 규칙:
 {
   "schema_version": 1,
   "run_id": "...",
+  "run_name": "반복 시험 03",
   "source_video_path": "...",
   "source_metadata": {},
   "analysis_range": [0.0, 120.0],
@@ -237,6 +238,7 @@ Reader 규칙:
 
 - bundle 구성 파일은 상대경로다.
 - `analysis_manifest.json`은 `review_index` pointer를 가진다.
+- S8-A의 optional `run_name`은 사람이 지정한 current-test 이름이며 Profile/Recipe identity 또는 UUID `run_id`를 대체하지 않는다. `run_name`이 없는 pre-S8 index/session/manifest도 그대로 읽는다.
 - 기존 CSV column과 report 파일은 변경하지 않는다.
 - index가 없는 기존 bundle은 manifest, session, recipe와 CSV에서 동일한 `ReviewBundle` model로 복원한다.
 - Phase 2B의 event timestamp index와 low-confidence interval은 index에 중복 저장하지 않고 CSV에서 load 시 계산한다.
@@ -393,7 +395,7 @@ Bundle asset resolver는 다음을 거부한다.
 - 새 reader, metadata와 첫 frame을 먼저 준비
 - 사용자 교체 확인
 - 성공 시 `recipe_path=None`, 새 session과 `DRAFT` state 적용
-- session 시간, compressor start, output directory와 run note reset
+- session 시간, compressor start, output directory, current-test `run_name`과 run note reset
 - sampling FPS를 새 영상 FPS 이하로 clamp
 - Undo, preview, preflight와 validation 상태 reset
 - 실패·취소 시 기존 Workbench 전체 상태 보존

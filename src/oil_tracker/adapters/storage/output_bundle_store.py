@@ -4,7 +4,9 @@ from datetime import datetime
 import json
 import os
 from pathlib import Path
+import re
 import shutil
+import unicodedata
 from uuid import uuid4
 
 from oil_tracker.adapters.reporting.csv_exporter import CsvExporter
@@ -21,6 +23,11 @@ from oil_tracker.application.ports.progress import (
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.results import AnalysisResult
 from oil_tracker.domain.session import AnalysisSession
+
+
+_UNSAFE_FILENAME_CHARS = re.compile(r'[<>:"/\\|?*\x00-\x1f\x7f]+')
+_WHITESPACE = re.compile(r"\s+")
+_MAX_RUN_COMPONENT_BYTES = 96
 
 
 class OutputBundleStore:
@@ -42,9 +49,9 @@ class OutputBundleStore:
         progress=None,
         cancellation=None,
     ) -> Path:
-        root = root or Path(session.output_directory or Path.cwd())
+        root = Path(root or session.output_directory or Path.cwd()).expanduser()
         root.mkdir(parents=True, exist_ok=True)
-        name = datetime.now().strftime("oil_level_analysis_%Y%m%d_%H%M%S")
+        name = _result_bundle_name(session, datetime.now())
         final = _unique_path(root / name)
         temporary = root / f".{final.name}.tmp-{uuid4().hex[:8]}"
         completion = result.debug_trace_completion
@@ -163,6 +170,7 @@ class OutputBundleStore:
             )
             result.manifest["output_bundle"] = final.name
             result.manifest["result_status"] = result.overall_state.value
+            result.manifest["run_name"] = session.run_name
             result.manifest["review_index"] = "review_index.json"
             result.manifest["debug_trace_level"] = session.debug_trace_level.value
             result.manifest["debug_record_count"] = completion.record_count if completion is not None else 0
@@ -276,6 +284,7 @@ def _review_index(result: AnalysisResult, recipe: InspectionRecipe, session: Ana
     payload = {
         "schema_version": 1,
         "run_id": result.run_id,
+        "run_name": session.run_name,
         "source_video_path": session.input_video_path,
         "source_metadata": session.video_metadata.to_dict() if session.video_metadata else {},
         "analysis_range": [session.analysis_start_sec, session.effective_end_sec()],
@@ -316,3 +325,38 @@ def _unique_path(path: Path) -> Path:
         if not candidate.exists():
             return candidate
         counter += 1
+
+
+def _result_bundle_name(session: AnalysisSession, now: datetime) -> str:
+    timestamp = now.strftime("%Y%m%d_%H%M%S")
+    run_component = _safe_run_name_component(session.run_name)
+    if run_component:
+        return f"oil_level_analysis_{run_component}_{timestamp}"
+    return f"oil_level_analysis_{timestamp}"
+
+
+def _safe_run_name_component(value: str) -> str:
+    text = unicodedata.normalize("NFC", str(value or "")).strip()
+    text = "".join(
+        "_" if unicodedata.category(character).startswith("C") else character
+        for character in text
+    )
+    text = _UNSAFE_FILENAME_CHARS.sub("_", text)
+    text = _WHITESPACE.sub("_", text)
+    text = re.sub(r"_+", "_", text).strip(" ._-")
+    if not text or not any(character.isalnum() for character in text):
+        return ""
+    text = _truncate_utf8(text, _MAX_RUN_COMPONENT_BYTES).rstrip(" ._-")
+    return text if any(character.isalnum() for character in text) else ""
+
+
+def _truncate_utf8(value: str, max_bytes: int) -> str:
+    parts: list[str] = []
+    used = 0
+    for character in value:
+        size = len(character.encode("utf-8"))
+        if used + size > max_bytes:
+            break
+        parts.append(character)
+        used += size
+    return "".join(parts)
