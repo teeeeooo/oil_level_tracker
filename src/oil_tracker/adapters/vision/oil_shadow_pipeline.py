@@ -84,6 +84,8 @@ class _PreparedRunInputs:
     exclusion_mask: np.ndarray
     static_artifact_map: np.ndarray | None
     crop_origin_y: float
+    accepted_foam_front_local_y: float | None
+    accepted_foam_component_mask: np.ndarray | None
 
     def __post_init__(self) -> None:
         arrays = (
@@ -101,10 +103,22 @@ class _PreparedRunInputs:
         )
         if self.static_artifact_map is not None:
             arrays += (self.static_artifact_map,)
+        if self.accepted_foam_component_mask is not None:
+            arrays += (self.accepted_foam_component_mask,)
         if type(self.glass_id) is not str or not self.glass_id:
             raise ValueError("Prepared oil command requires a Glass identity.")
         if not math.isfinite(self.crop_origin_y):
             raise ValueError("Prepared oil command crop origin must be finite.")
+        if self.accepted_foam_front_local_y is not None:
+            if not math.isfinite(self.accepted_foam_front_local_y):
+                raise ValueError("Accepted Foam front must be finite.")
+            if not 0.0 <= self.accepted_foam_front_local_y <= self.pre.gray.shape[0] - 1:
+                raise ValueError("Accepted Foam front must stay inside the Oil raster.")
+        if (
+            self.accepted_foam_component_mask is not None
+            and self.accepted_foam_front_local_y is None
+        ):
+            raise ValueError("Accepted Foam component context requires an accepted front.")
         if any(
             type(value) is not np.ndarray
             or value.flags.writeable
@@ -782,6 +796,8 @@ class OilHypothesisPipeline:
         exclusion_mask: np.ndarray,
         static_artifact_map: np.ndarray | None,
         crop_origin_y: float,
+        accepted_foam_front_local_y: float | None = None,
+        accepted_foam_component_mask: np.ndarray | None = None,
     ) -> OilCanonicalOutcome:
         if self._is_owner_active():
             return self._failure_outcome(
@@ -797,6 +813,8 @@ class OilHypothesisPipeline:
                 exclusion_mask=exclusion_mask,
                 static_artifact_map=static_artifact_map,
                 crop_origin_y=crop_origin_y,
+                accepted_foam_front_local_y=accepted_foam_front_local_y,
+                accepted_foam_component_mask=accepted_foam_component_mask,
             )
         except Exception as exc:
             return self._failure_outcome(
@@ -815,6 +833,8 @@ class OilHypothesisPipeline:
         exclusion_mask: np.ndarray,
         static_artifact_map: np.ndarray | None,
         crop_origin_y: float,
+        accepted_foam_front_local_y: float | None = None,
+        accepted_foam_component_mask: np.ndarray | None = None,
     ) -> _RunOilFrameCommand:
         key = str(glass_id)
         if not key:
@@ -840,6 +860,16 @@ class OilHypothesisPipeline:
                 else _owned_readonly_array(static_artifact_map)
             ),
             crop_origin_y=float(crop_origin_y),
+            accepted_foam_front_local_y=(
+                None
+                if accepted_foam_front_local_y is None
+                else float(accepted_foam_front_local_y)
+            ),
+            accepted_foam_component_mask=(
+                None
+                if accepted_foam_component_mask is None
+                else _owned_readonly_array(accepted_foam_component_mask)
+            ),
         )
         return _RunOilFrameCommand(payload)
 
@@ -898,9 +928,27 @@ class OilHypothesisPipeline:
                 crop_origin_y=payload.crop_origin_y,
                 bounds=self.bounds,
             )
-            current = evaluate_typed_current_observation(
-                payload.pre, payload.effective_mask, hypotheses
-            )
+            if payload.accepted_foam_front_local_y is None:
+                current = evaluate_typed_current_observation(
+                    payload.pre,
+                    payload.effective_mask,
+                    hypotheses,
+                )
+            elif payload.accepted_foam_component_mask is None:
+                current = evaluate_typed_current_observation(
+                    payload.pre,
+                    payload.effective_mask,
+                    hypotheses,
+                    accepted_foam_front_local_y=payload.accepted_foam_front_local_y,
+                )
+            else:
+                current = evaluate_typed_current_observation(
+                    payload.pre,
+                    payload.effective_mask,
+                    hypotheses,
+                    accepted_foam_front_local_y=payload.accepted_foam_front_local_y,
+                    accepted_foam_component_mask=payload.accepted_foam_component_mask,
+                )
             raw_frame = SuccessfulPipelineFrame(
                 raw_observations=raw,
                 proposals=proposals,

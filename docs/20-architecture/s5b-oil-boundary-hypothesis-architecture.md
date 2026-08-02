@@ -76,7 +76,22 @@ The implementation does not change preprocessing, proposal construction, semanti
 
 The accepted source exact head passed independent audit and the final deterministic base/feature comparison passed. This observability boundary is therefore the merged S5-B contract; later milestones must preserve it unless a separately authorized architecture change replaces it.
 
-Future architecture options are limited to separately designed and audited positive evidence such as temporal photometric/component history or capture metadata. Optical flow, retained raster history and capture-metadata schemas are not implemented by this source change.
+### S6-D4 available-corpus positive-evidence addendum
+
+S6-D4 is a separately authorized positive-evidence extension; it does not revoke the latent glare/Oil collision diagnosis above. The normal S5-B canonical acceptance path remains first and unchanged. If that path fails, the production owner may recover a boundary only through one of two bounded current-frame routes:
+
+- without accepted Foam context, a weak boundary must still show a real broad phase transition, narrow/horizontal support, high visibility/availability and bounded spatial/static conflict, while the existing continuous identifiability evidence must show strong texture relief with low near-ceiling and collision pressure;
+- with Foam present, only independently accepted S5-A current-frame evidence may be used as context. An Oil hypothesis must lie below the accepted Foam front, retain broad phase support, narrow/horizontal evidence, visibility/availability and bounded spatial/static conflict, and must additionally prove a persistent phase change outside the local structural/pulse neighborhood after accepted Foam pixels are removed.
+
+The second route exists because real white-Foam texture can saturate the grayscale plateau-artifact likelihood around a physically distinct Oil boundary. D4 does not globally lower that artifact likelihood or relax glare/structure protection. The first D4 audit showed that the Foam-front coordinate alone could promote a structural band; the first repair then reduced the accepted Foam mask to per-row occupancy and required candidate support `< 0.50`. A second audit demonstrated that partial Foam can leave structural candidates with low row occupancy overlapping genuine sample4 Oil, so the one-dimensional occupancy guard is retired rather than tuned.
+
+The repaired contract preserves the full accepted current-frame S5-A component geometry until S5-B evidence construction. The serialized S5-B command receives an isolated read-only copy of the accepted Foam component mask plus the accepted front. Inside the sole S5-B owner, Foam and glare pixels are removed, the local pulse neighborhood is excluded using already-owned broad-scale, paired-edge-separation and proposal-diameter geometry, and the remaining visible ROI is divided into deterministic left/center/right sectors. Recovery requires the same outer-plateau phase ordering in a majority of sectors and requires at least one matching sector's median phase shift to exceed its own median-absolute-deviation noise. A sector is unavailable if any otherwise-visible row loses all residual samples, and sub-quantization differences carry no direction. This is a repeated spatial phase-evidence contract rather than a fixed artifact-likelihood, Foam-occupancy or corpus-fit contrast cutoff.
+
+The accepted Foam mask is current-frame command evidence only. It is not stored in `GlassTemporalRecord` or `TemporalStoreState`, and no Foam history or component object survives the command. A front without its accepted component mask cannot authorize D4 Foam-separated recovery. Every recovered boundary is still a typed `ShadowBoundaryObservation`, passes through the one serialized S5-B reducer, and reaches numeric `PhaseDetection` fields only through the existing canonical outcome/projection path. Legacy Oil fallback, post-owner numeric injection and repetition-based ambiguity promotion remain prohibited. Foam presence alone cannot manufacture Oil, and ambiguous or rejected Foam supplies no Oil context.
+
+D4 adds no persisted detector setting, Recipe field, external `PhaseDetection` field, truth/fixture/benchmark/CSV/debug schema field, detector-version change or dependency. S5-A Foam publication thresholds and temporal behavior remain independently governed.
+
+Future architecture options remain limited to separately designed and audited positive evidence such as temporal photometric/component history or capture metadata. Optical flow, retained raster history and capture-metadata schemas are not implemented by this source change.
 
 The milestone order remains `S5-B → S5-C → S6`; this diagnosis does not reorder or combine S5-C or S6.
 

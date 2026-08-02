@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import math
 
+import cv2
 import numpy as np
+import pytest
 
 from foam_benchmark_fixtures import controlled_scenes
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
@@ -87,6 +89,80 @@ def test_debug_images_are_additive_crop_sized_evidence_artifacts():
         assert key in artifacts.images
         assert artifacts.images[key].shape[:2] == crop_shape
         assert artifacts.images[key].dtype == np.uint8
+
+
+def test_accepted_low_light_foam_does_not_invent_an_oil_boundary_below_texture():
+    detector = OpenCvPhaseDetector()
+    glass = _glass()
+    scene = _scene("low-light-foam")
+    detection, _artifacts = detector.detect(
+        scene.frame,
+        glass,
+        1,
+        scene.timestamp,
+        debug=False,
+    )
+    assert detection.raw_foam_front_y is not None
+    assert detection.raw_oil_air_level_y is None
+    assert detection.smoothed_oil_air_level_y is None
+
+
+def _assert_structural_foam_stays_fail_closed(frame: np.ndarray, timestamp: float) -> None:
+    detector = OpenCvPhaseDetector()
+    glass = _glass()
+    detection, _artifacts = detector.detect(frame, glass, 1, timestamp, debug=False)
+
+    assert detection.raw_foam_front_y is not None
+    assert detection.debug_metrics["foam_decision_status"] in {
+        "accepted_strong",
+        "accepted_moderate",
+    }
+    assert detection.raw_oil_air_level_y is None
+    assert detection.smoothed_oil_air_level_y is None
+    assert detection.fill_state.value != "FOAMING_VISIBLE"
+    assert "OIL_EVIDENCE_AMBIGUOUS" in detection.flags
+
+
+def test_accepted_white_foam_plus_structural_band_does_not_create_false_oil():
+    frame = _scene("white-foam").frame.copy()
+    cv2.rectangle(frame, (122, 125), (197, 127), (120, 120, 120), -1)
+    _assert_structural_foam_stays_fail_closed(frame, 1.0)
+
+
+@pytest.mark.parametrize(
+    ("band_y", "band_height", "band_value"),
+    (
+        (123, 2, 150),
+        (132, 4, 180),
+        (138, 5, 180),
+        (150, 6, 180),
+        (156, 4, 180),
+        (165, 5, 180),
+    ),
+)
+def test_accepted_partial_foam_structural_band_neighborhood_stays_fail_closed(
+    band_y: int,
+    band_height: int,
+    band_value: int,
+):
+    scene = _scene("partial-foam")
+    frame = scene.frame.copy()
+    cv2.rectangle(
+        frame,
+        (122, band_y),
+        (197, band_y + band_height - 1),
+        (band_value, band_value, band_value),
+        -1,
+    )
+    _assert_structural_foam_stays_fail_closed(frame, scene.timestamp)
+
+
+@pytest.mark.parametrize("foam_width", (16, 20))
+def test_narrow_partial_foam_structural_band_stays_fail_closed(foam_width: int):
+    frame = _scene("white-foam").frame.copy()
+    frame[120:185, 122 + foam_width : 198] = 45
+    cv2.rectangle(frame, (122, 132), (197, 135), (180, 180, 180), -1)
+    _assert_structural_foam_stays_fail_closed(frame, 1.0)
 
 
 def test_transient_shimmer_does_not_create_raw_or_smoothed_foam_front():
