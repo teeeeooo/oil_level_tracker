@@ -419,7 +419,7 @@ def _typed_observation(
     visibility=1.0,
     glare_conflict=0.0,
     accepted_foam_front_local_y=None,
-    accepted_foam_row_support=None,
+    accepted_foam_component_mask=None,
 ):
     image = np.full((20, 20), 100, dtype=np.uint8)
     mask = np.full_like(image, 255)
@@ -439,7 +439,7 @@ def _typed_observation(
         mask,
         tuple(hypotheses),
         accepted_foam_front_local_y=accepted_foam_front_local_y,
-        accepted_foam_row_support=accepted_foam_row_support,
+        accepted_foam_component_mask=accepted_foam_component_mask,
     )
 
 
@@ -709,13 +709,18 @@ def test_accepted_foam_context_recovers_only_a_distinct_broad_phase_below_front(
         narrow_horizontal_coverage=0.60,
         paired_edge_strength=0.60,
     )
-    separated_support = tuple(0.0 for _ in range(20))
+    foam_component = np.zeros((20, 20), dtype=np.uint8)
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_has_foam_separated_phase_support",
+        lambda *_args: True,
+    )
     below_foam = _typed_observation(
         monkeypatch,
         (target,),
         no_interface=0.35,
         accepted_foam_front_local_y=6.0,
-        accepted_foam_row_support=separated_support,
+        accepted_foam_component_mask=foam_component,
     )
     assert isinstance(below_foam, ShadowBoundaryObservation)
     assert below_foam.hypothesis.identity == target.identity
@@ -733,7 +738,7 @@ def test_accepted_foam_context_recovers_only_a_distinct_broad_phase_below_front(
         (target,),
         no_interface=0.35,
         accepted_foam_front_local_y=14.0,
-        accepted_foam_row_support=separated_support,
+        accepted_foam_component_mask=foam_component,
     )
     assert isinstance(above_foam, ShadowAmbiguousObservation)
 
@@ -754,12 +759,12 @@ def test_accepted_foam_context_recovers_only_a_distinct_broad_phase_below_front(
         (weak_broad,),
         no_interface=0.35,
         accepted_foam_front_local_y=6.0,
-        accepted_foam_row_support=separated_support,
+        accepted_foam_component_mask=foam_component,
     )
     assert isinstance(no_phase, ShadowAmbiguousObservation)
 
 
-def test_accepted_foam_context_cannot_promote_structural_artifact_evidence(monkeypatch):
+def test_accepted_foam_context_requires_persistent_phase_not_structural_context(monkeypatch):
     structural = _typed_hypothesis(
         "foam-context-structural-artifact",
         y=12.0,
@@ -780,12 +785,16 @@ def test_accepted_foam_context_cannot_promote_structural_artifact_evidence(monke
     )
     assert isinstance(without_foam, ShadowAmbiguousObservation)
 
-    bulk_foam_support = tuple(1.0 if row >= 6 else 0.0 for row in range(20))
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_has_foam_separated_phase_support",
+        lambda *_args: False,
+    )
     with_foam = _typed_observation(
         monkeypatch,
         (structural,),
         no_interface=0.35,
         accepted_foam_front_local_y=6.0,
-        accepted_foam_row_support=bulk_foam_support,
+        accepted_foam_component_mask=np.zeros((20, 20), dtype=np.uint8),
     )
     assert isinstance(with_foam, ShadowAmbiguousObservation)

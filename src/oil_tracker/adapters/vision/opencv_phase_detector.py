@@ -122,11 +122,7 @@ class OpenCvPhaseDetector:
         )
         foam_temporal = self._foam_gate.evaluate(glass.id, foam, settings)
         foam_candidate = foam_temporal.candidate
-        accepted_foam_row_support = (
-            None
-            if foam_candidate is None
-            else _accepted_foam_row_support(foam.mask, bundle.effective_mask)
-        )
+        accepted_foam_component_mask = None if foam_candidate is None else foam.mask
         oil_result = self._evaluate_oil_pipeline(
             glass.id,
             pre,
@@ -135,7 +131,7 @@ class OpenCvPhaseDetector:
             accepted_foam_front_local_y=(
                 None if foam_candidate is None else float(foam_candidate.y)
             ),
-            accepted_foam_row_support=accepted_foam_row_support,
+            accepted_foam_component_mask=accepted_foam_component_mask,
         )
         oil_projection = project_production_result(oil_result)
         selected = oil_projection.selected_candidate
@@ -299,7 +295,7 @@ class OpenCvPhaseDetector:
         static_map: np.ndarray | None,
         *,
         accepted_foam_front_local_y: float | None = None,
-        accepted_foam_row_support: tuple[float, ...] | None = None,
+        accepted_foam_component_mask: np.ndarray | None = None,
     ) -> OilCanonicalOutcome:
         try:
             kwargs = _isolated_pipeline_inputs(
@@ -308,7 +304,7 @@ class OpenCvPhaseDetector:
                 bundle=bundle,
                 static_map=static_map,
                 accepted_foam_front_local_y=accepted_foam_front_local_y,
-                accepted_foam_row_support=accepted_foam_row_support,
+                accepted_foam_component_mask=accepted_foam_component_mask,
             )
             return self._oil_pipeline.run(**kwargs)
         except Exception as exc:
@@ -448,7 +444,7 @@ def _isolated_pipeline_inputs(
     bundle: MaskBundle,
     static_map: np.ndarray | None,
     accepted_foam_front_local_y: float | None = None,
-    accepted_foam_row_support: tuple[float, ...] | None = None,
+    accepted_foam_component_mask: np.ndarray | None = None,
 ) -> dict[str, Any]:
     readonly_pre = PreprocessResult(
         *(
@@ -480,29 +476,12 @@ def _isolated_pipeline_inputs(
             if accepted_foam_front_local_y is None
             else float(accepted_foam_front_local_y)
         ),
-        "accepted_foam_row_support": (
+        "accepted_foam_component_mask": (
             None
-            if accepted_foam_row_support is None
-            else tuple(float(value) for value in accepted_foam_row_support)
+            if accepted_foam_component_mask is None
+            else _isolated_readonly_copy(accepted_foam_component_mask)
         ),
     }
-
-
-def _accepted_foam_row_support(
-    foam_mask: np.ndarray,
-    effective_mask: np.ndarray,
-) -> tuple[float, ...]:
-    foam = foam_mask > 0
-    effective = effective_mask > 0
-    if foam.shape != effective.shape:
-        raise ValueError("Accepted Foam mask and effective mask must share one shape.")
-    effective_counts = effective.sum(axis=1)
-    foam_counts = np.count_nonzero(foam & effective, axis=1)
-    support = np.divide(
-        foam_counts.astype(np.float64),
-        np.maximum(1, effective_counts).astype(np.float64),
-    )
-    return tuple(float(value) for value in support)
 
 
 def _isolated_readonly_copy(value: np.ndarray) -> np.ndarray:

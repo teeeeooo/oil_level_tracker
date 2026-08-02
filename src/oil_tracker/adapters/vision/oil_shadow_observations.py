@@ -317,12 +317,13 @@ def evaluate_typed_current_observation(
     hypotheses: tuple[SemanticHypothesis, ...],
     *,
     accepted_foam_front_local_y: float | None = None,
-    accepted_foam_row_support: tuple[float, ...] | None = None,
+    accepted_foam_component_mask: np.ndarray | None = None,
 ) -> ShadowCurrentObservation:
     _validate_accepted_foam_context(
-        pre.gray.shape[0],
+        pre.gray,
+        effective_mask,
         accepted_foam_front_local_y,
-        accepted_foam_row_support,
+        accepted_foam_component_mask,
     )
     no_interface = _no_interface_evidence(pre, effective_mask, hypotheses)
     if not no_interface.available and no_interface.visibility < 0.20:
@@ -370,12 +371,14 @@ def evaluate_typed_current_observation(
 
     recovered = (
         _select_foam_separated_boundary(
+            pre,
+            effective_mask,
             ordered,
             accepted_foam_front_local_y,
-            accepted_foam_row_support,
+            accepted_foam_component_mask,
         )
         if accepted_foam_front_local_y is not None
-        and accepted_foam_row_support is not None
+        and accepted_foam_component_mask is not None
         else (
             None
             if accepted_foam_front_local_y is not None
@@ -438,29 +441,26 @@ def evaluate_typed_current_observation(
 
 
 def _validate_accepted_foam_context(
-    frame_height: int,
+    gray: np.ndarray,
+    effective_mask: np.ndarray,
     accepted_foam_front_local_y: float | None,
-    accepted_foam_row_support: tuple[float, ...] | None,
+    accepted_foam_component_mask: np.ndarray | None,
 ) -> None:
+    _validate_same_shape(gray, effective_mask)
+    frame_height = gray.shape[0]
     if accepted_foam_front_local_y is None:
-        if accepted_foam_row_support is not None:
-            raise ValueError("Foam row support requires an accepted Foam front.")
+        if accepted_foam_component_mask is not None:
+            raise ValueError("Foam component context requires an accepted Foam front.")
         return
     if not math.isfinite(float(accepted_foam_front_local_y)):
         raise ValueError("Accepted Foam front must be finite.")
     if not 0.0 <= float(accepted_foam_front_local_y) <= max(0, frame_height - 1):
         raise ValueError("Accepted Foam front must stay inside the current raster.")
-    if accepted_foam_row_support is None:
+    if accepted_foam_component_mask is None:
         return
-    if type(accepted_foam_row_support) is not tuple:
-        raise TypeError("Accepted Foam row support must be an immutable tuple.")
-    if len(accepted_foam_row_support) != frame_height:
-        raise ValueError("Accepted Foam row support must match the current raster height.")
-    if any(
-        not math.isfinite(float(value)) or not 0.0 <= float(value) <= 1.0
-        for value in accepted_foam_row_support
-    ):
-        raise ValueError("Accepted Foam row support must contain finite unit values.")
+    if type(accepted_foam_component_mask) is not np.ndarray:
+        raise TypeError("Accepted Foam component context must be a raster array.")
+    _validate_same_shape(gray, accepted_foam_component_mask)
 
 
 def _boundary_observation(
@@ -537,23 +537,24 @@ def _select_textured_low_contrast_boundary(
 
 
 def _select_foam_separated_boundary(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
     ordered: list[SemanticHypothesis],
     accepted_foam_front_local_y: float,
-    accepted_foam_row_support: tuple[float, ...],
+    accepted_foam_component_mask: np.ndarray,
 ) -> SemanticHypothesis | None:
-    """Recover a distinct Oil phase below independently accepted Foam.
+    """Recover Oil only when a separate phase persists outside local structure.
 
-    S5-A remains the sole Foam authority. The accepted front establishes the
-    vertical ordering, while its immutable current-frame row-support profile
-    prevents a structural band inside the accepted Foam component from being
-    reinterpreted as Oil. No Foam context is retained by the Oil temporal owner.
+    Accepted S5-A Foam supplies only current-frame context.  The Foam component
+    and glare are removed before testing three independent horizontal sectors.
+    A recoverable Oil phase must repeat the same outer-plateau ordering in a
+    majority of those sectors, with at least one sector exceeding its own
+    robust within-plateau noise.  Local pulse geometry is excluded using the
+    already-owned S5-B broad/pair/proposal scales rather than a new intensity
+    threshold.
     """
 
     for candidate in ordered:
-        candidate_foam_support = _candidate_foam_support(
-            candidate,
-            accepted_foam_row_support,
-        )
         spatial_conflict = max(
             candidate.broad.glare_conflict,
             candidate.broad.exclusion_conflict,
@@ -561,9 +562,8 @@ def _select_foam_separated_boundary(
             candidate.narrow.exclusion_overlap,
             candidate.narrow.border_overlap,
         )
-        if (
+        if not (
             candidate.representative_local_y > accepted_foam_front_local_y
-            and candidate_foam_support < 0.50
             and candidate.boundary_likelihood >= 0.20
             and candidate.broad.available_scale_count >= 2
             and candidate.broad.strength >= 0.10
@@ -576,25 +576,127 @@ def _select_foam_separated_boundary(
             and spatial_conflict <= 0.15
             and candidate.static_prior.contribution <= 0.08
         ):
+            continue
+        if _has_foam_separated_phase_support(
+            pre,
+            effective_mask,
+            accepted_foam_component_mask,
+            candidate,
+        ):
             return candidate
     return None
 
 
-def _candidate_foam_support(
+def _has_foam_separated_phase_support(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    accepted_foam_component_mask: np.ndarray,
     candidate: SemanticHypothesis,
-    accepted_foam_row_support: tuple[float, ...],
-) -> float:
-    first = max(0, int(math.floor(candidate.minimum_local_y)))
-    last = min(
-        len(accepted_foam_row_support) - 1,
-        int(math.ceil(candidate.maximum_local_y)),
+) -> bool:
+    """Require repeatable outer phase evidence after Foam/local-pulse removal."""
+
+    _validate_same_shape(pre.blurred, effective_mask, accepted_foam_component_mask)
+    effective = effective_mask > 0
+    visible = effective & ~(pre.glare_mask > 0)
+    residual = visible & ~(accepted_foam_component_mask > 0)
+    columns = np.flatnonzero(np.any(effective, axis=0))
+    if columns.size < 3:
+        return False
+
+    broad_scale = max((item.band_scale for item in candidate.broad.scales), default=0)
+    if broad_scale <= 0:
+        return False
+    local_gap = max(
+        broad_scale,
+        int(math.ceil(candidate.narrow.paired_edge_separation_px)),
+        int(math.ceil(candidate.maximum_local_y - candidate.minimum_local_y)),
     )
-    if first > last:
+    depth = 2 * broad_scale
+    center = min(
+        effective.shape[0] - 1,
+        max(0, int(round(candidate.representative_local_y))),
+    )
+    top_rows = range(max(0, center - local_gap - depth), max(0, center - local_gap))
+    bottom_rows = range(
+        min(effective.shape[0], center + local_gap),
+        min(effective.shape[0], center + local_gap + depth),
+    )
+    if not top_rows or not bottom_rows:
+        return False
+
+    left = int(columns[0])
+    right = int(columns[-1]) + 1
+    edges = np.linspace(left, right, 4, dtype=int)
+    gray_scale = _gray_scale(pre.blurred)
+    quantization = _gray_quantization_step(pre.blurred) / gray_scale
+    directional: list[tuple[int, bool]] = []
+    for index in range(3):
+        top = _robust_sector_phase(
+            pre.blurred,
+            visible,
+            residual,
+            top_rows,
+            int(edges[index]),
+            int(edges[index + 1]),
+        )
+        bottom = _robust_sector_phase(
+            pre.blurred,
+            visible,
+            residual,
+            bottom_rows,
+            int(edges[index]),
+            int(edges[index + 1]),
+        )
+        if top is None or bottom is None:
+            continue
+        top_median, top_mad = top
+        bottom_median, bottom_mad = bottom
+        contrast = (top_median - bottom_median) / gray_scale
+        noise = max(top_mad, bottom_mad, _gray_quantization_step(pre.blurred)) / gray_scale
+        if abs(contrast) <= quantization:
+            continue
+        directional.append((1 if contrast > 0.0 else -1, abs(contrast) > noise))
+
+    for direction in (-1, 1):
+        matching = [strong for sign, strong in directional if sign == direction]
+        if len(matching) >= 2 and any(matching):
+            return True
+    return False
+
+
+def _robust_sector_phase(
+    image: np.ndarray,
+    reference_mask: np.ndarray,
+    residual_mask: np.ndarray,
+    rows: range,
+    first_column: int,
+    last_column: int,
+) -> tuple[float, float] | None:
+    """Return median/MAD only when every visible sector row retains samples."""
+
+    chunks: list[np.ndarray] = []
+    for row in rows:
+        reference = reference_mask[row, first_column:last_column]
+        if not np.any(reference):
+            continue
+        selected = residual_mask[row, first_column:last_column]
+        if not np.any(selected):
+            return None
+        chunks.append(image[row, first_column:last_column][selected].astype(np.float64))
+    if not chunks:
+        return None
+    values = np.concatenate(chunks)
+    center = float(np.median(values))
+    mad = float(np.median(np.abs(values - center)))
+    return center, mad
+
+
+def _gray_quantization_step(image: np.ndarray) -> float:
+    if np.issubdtype(image.dtype, np.integer):
         return 1.0
-    values = accepted_foam_row_support[first : last + 1]
-    if not values:
-        return 1.0
-    return sum(float(value) for value in values) / len(values)
+    if np.issubdtype(image.dtype, np.floating):
+        return max(1.0, _gray_scale(image)) * float(np.finfo(image.dtype).eps)
+    return 1.0
 
 
 def _single_frame_identifiability_evidence(
