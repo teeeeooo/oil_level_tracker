@@ -12,10 +12,11 @@
 **Current S6-D4 result:** `AVAILABLE-CORPUS DETECTOR ACCURACY REPAIR: AUDITED, ACCEPTED AND MERGED`
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
-**Current gate:** `S7 / Phase 2C-4 — Annotated MP4 Export`
+**Current S7 result:** `IMPLEMENTATION COMPLETE ON FEATURE BRANCH — AWAITING FRESH EXACT-HEAD AUDIT`
+**Current gate:** `S7 / Phase 2C-4 Annotated MP4 Export Fresh Exact-Head Auditor`
 **Successor milestone:** `S8 — Repeated-Test Workflow & Result Management`
 
-This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 is closed against the real-video/runtime scope actually completed: the audited available-corpus detector repair materially improves the frozen four-video D3 corpus while preserving fail-closed structural behavior in the controlled full-/partial-Foam regressions, and the bounded soak plus one-hour macOS source-tree evidence remain accepted. Missing real-video categories remain residual `not_evaluated` risk and no category-balanced or general-field detector-accuracy PASS is claimed. Windows/manual GUI and PyInstaller one-folder validation were not run or inferred; those obligations remain pending as the final Windows and packaging release gate after the product feature sequence. S7 is now the exact next implementation gate, and encoding work has not started.
+This document owns the current active execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 is closed against the real-video/runtime scope actually completed: the audited available-corpus detector repair materially improves the frozen four-video D3 corpus while preserving fail-closed structural behavior in the controlled full-/partial-Foam regressions, and the bounded soak plus one-hour macOS source-tree evidence remain accepted. Missing real-video categories remain residual `not_evaluated` risk and no category-balanced or general-field detector-accuracy PASS is claimed. Windows/manual GUI and PyInstaller one-folder validation were not run or inferred; those obligations remain pending as the final Windows and packaging release gate after the product feature sequence. The bounded S7 annotated-MP4 implementation is complete on its feature branch, remains unmerged, and now requires the fresh exact-head Auditor gate before roadmap Close or successor work.
 
 ## Evidence owners
 
@@ -26,6 +27,7 @@ This document owns the current active execution state. Milestone order and forma
 - S6-D1: [`../30-quality/s6-d1-mobile-truth-review-pack.md`](../30-quality/s6-d1-mobile-truth-review-pack.md)
 - S6-D2: [`../30-quality/s6-d2-user-confirmed-product-truth.md`](../30-quality/s6-d2-user-confirmed-product-truth.md)
 - S6-D3: [`../30-quality/s6-d3-official-accuracy-baseline.md`](../30-quality/s6-d3-official-accuracy-baseline.md)
+- S7 Worker evidence: [`../30-quality/s7-annotated-mp4-export-evidence.md`](../30-quality/s7-annotated-mp4-export-evidence.md)
 - S6-D4: [`../30-quality/s6-d4-available-corpus-detector-repair.md`](../30-quality/s6-d4-available-corpus-detector-repair.md)
 - S6-E: [`../30-quality/s6-bounded-runtime-soak-evidence.md`](../30-quality/s6-bounded-runtime-soak-evidence.md)
 - S6-F: [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)

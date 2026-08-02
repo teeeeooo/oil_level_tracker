@@ -550,12 +550,18 @@ debug_case_YYYYMMDD_HHMMSS/
 
 ### 9.6 공유용 결과 영상 — S7 / Phase 2C-4
 
-The accepted S6 real-video/runtime scope is complete, so the roadmap now selects S7 as the exact next implementation gate. Existing Result Review overlay and PNG rendering paths are prerequisites to reuse; annotated-video encoding itself has not started. Windows/manual GUI and PyInstaller one-folder validation is not a prerequisite for starting S7 and remains pending as the final release gate after the product feature sequence.
+The accepted S6 real-video/runtime scope remains preserved. The bounded S7 implementation is now complete on its feature branch and awaiting fresh exact-head audit; it reuses the existing Result Review query/rendering contract rather than introducing a second detector or result authority. Windows/manual GUI and PyInstaller one-folder validation remain pending for the final S10 release gate and are not inferred from this source-tree work.
 
-- approved result overlays rendered onto the source video;
-- shareable annotated MP4 export;
-- 일반 사용자 공유용 preset;
-- 디버그 정보 포함 여부 선택.
+Implemented S7 contract:
+
+- export is for the currently selected Glass and only the saved analysis interval;
+- every exported frame queries official saved tracking state with the actual decoded video timestamp through `ReviewQueryModel`, preserving missing numeric values as gaps;
+- the general preset uses the same final-result ellipse, reference line, Oil boundary, Foam front, FillState, confidence, timing and review-state overlay semantics as Result Review;
+- the optional debug preset keeps the general final-result overlay visible and adds candidates only when the stored debug trace matches the exact decoded frame identity and timestamp; frames without stored trace receive an explicit no-trace debug notice and no fabricated candidates;
+- encoding uses the existing OpenCV dependency and adds no FFmpeg/external executable dependency; audio preservation is not part of this S7 acceptance contract;
+- export runs on a dedicated Qt worker thread, supports cooperative cancellation, closes reader/writer/debug handles deterministically, validates the temporary MP4 before publication and atomically finalizes it;
+- existing destinations require explicit overwrite confirmation, while the source MP4 and official result-bundle tree are protected from export writes;
+- failed or cancelled work removes its bounded temporary MP4 and does not publish a completed-looking destination.
 
 Platform/release obligations remain governed by the [real-world validation plan](../30-quality/real-world-validation-plan.md) and milestone status by the [roadmap](../00-project/roadmap.md).
 

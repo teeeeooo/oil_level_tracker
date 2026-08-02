@@ -9,9 +9,11 @@ from PySide6.QtGui import QAction, QImage
 from PySide6.QtWidgets import (
     QComboBox,
     QFileDialog,
+    QInputDialog,
     QLabel,
     QMainWindow,
     QMessageBox,
+    QProgressDialog,
     QSplitter,
     QStackedWidget,
     QStyle,
@@ -57,6 +59,7 @@ class ResultReviewWindow(QMainWindow):
         debug_repository_factory=DebugTraceRepository,
         debug_case_exporter: DebugCaseExporter | None = None,
         png_exporter=None,
+        mp4_export_controller=None,
         debug_artifact_presenter=None,
         parent=None,
     ) -> None:
@@ -68,6 +71,10 @@ class ResultReviewWindow(QMainWindow):
         self.debug_repository_factory = debug_repository_factory
         self.debug_case_exporter = debug_case_exporter or DebugCaseExporter()
         self.png_exporter = png_exporter
+        self.mp4_export_controller = mp4_export_controller
+        if self.mp4_export_controller is not None and self.mp4_export_controller.parent() is None:
+            self.mp4_export_controller.setParent(self)
+        self.mp4_export_progress = None
         self.debug_artifact_presenter = debug_artifact_presenter
         self.bundle = None
         self.query: ReviewQueryModel | None = None
@@ -103,6 +110,8 @@ class ResultReviewWindow(QMainWindow):
         self.capture_action = QAction("선택 이벤트 캡처 열기", self)
         self.same_profile_action = QAction("같은 프로필로 새 영상 분석", self)
         self.save_png_action = QAction(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogSaveButton), "현재 장면 PNG 저장", self)
+        self.export_mp4_action = QAction("주석 MP4 내보내기", self)
+        self.export_mp4_action.setToolTip("선택한 Glass의 저장된 분석 결과를 분석 구간 전체 MP4에 렌더링합니다.")
         toolbar.addAction(self.open_action)
         toolbar.addAction(self.reassign_action)
         toolbar.addSeparator()
@@ -112,6 +121,7 @@ class ResultReviewWindow(QMainWindow):
         toolbar.addAction(self.same_profile_action)
         toolbar.addSeparator()
         toolbar.addAction(self.save_png_action)
+        toolbar.addAction(self.export_mp4_action)
         toolbar.addSeparator()
         toolbar.addWidget(QLabel("보기"))
         self.mode_combo = QComboBox()
@@ -170,6 +180,7 @@ class ResultReviewWindow(QMainWindow):
         self.capture_action.triggered.connect(self.open_event_capture)
         self.same_profile_action.triggered.connect(self.prepare_same_profile_analysis)
         self.save_png_action.triggered.connect(self.save_current_png)
+        self.export_mp4_action.triggered.connect(self.export_annotated_mp4)
         self.mode_combo.currentIndexChanged.connect(self._mode_changed)
         self.navigation.glassChanged.connect(self._glass_changed)
         self.navigation.filterChanged.connect(self._review_filter_changed)
@@ -192,6 +203,12 @@ class ResultReviewWindow(QMainWindow):
         self.playback.metadataChanged.connect(self._metadata_changed)
         self.playback.playbackStateChanged.connect(self._playback_state_changed)
         self.playback.failed.connect(self._playback_failed)
+        if self.mp4_export_controller is not None:
+            self.mp4_export_controller.progress.connect(self._mp4_export_progress)
+            self.mp4_export_controller.completed.connect(self._mp4_export_completed)
+            self.mp4_export_controller.failed.connect(self._mp4_export_failed)
+            self.mp4_export_controller.cancelled.connect(self._mp4_export_cancelled)
+            self.mp4_export_controller.runningChanged.connect(self._mp4_export_running_changed)
 
     def choose_bundle(self) -> None:
         directory = QFileDialog.getExistingDirectory(
@@ -719,6 +736,115 @@ class ResultReviewWindow(QMainWindow):
             return
         QMessageBox.information(self, "PNG 저장 완료", f"원본 해상도 overlay 이미지를 저장했습니다.\n{destination}")
 
+    def export_annotated_mp4(self) -> None:
+        if (
+            self.bundle is None
+            or self.query is None
+            or self.active_video_path is None
+            or not self.selected_glass_id
+        ):
+            QMessageBox.information(self, "주석 MP4 내보내기", "결과 bundle과 원본 영상을 먼저 준비해 주세요.")
+            return
+        if self.mp4_export_controller is None:
+            QMessageBox.critical(self, "주석 MP4 내보내기 실패", "MP4 export controller가 구성되지 않았습니다.")
+            return
+        presets = ["일반 공유용"]
+        if self.debug_repository is not None:
+            presets.append("디버그 정보 포함")
+        preset, accepted = QInputDialog.getItem(
+            self,
+            "주석 MP4 preset",
+            "내보낼 overlay preset을 선택해 주세요.",
+            presets,
+            0,
+            False,
+        )
+        if not accepted:
+            return
+        include_debug = preset == "디버그 정보 포함"
+        glass = self.bundle.glass_config(self.selected_glass_id)
+        name = _safe_filename(glass.name if glass is not None else self.selected_glass_id)
+        suffix = "_debug" if include_debug else ""
+        default = self.bundle.root.parent / f"review_{name}_annotated{suffix}.mp4"
+        selected, _ = QFileDialog.getSaveFileName(self, "주석 MP4 저장", str(default), "MP4 비디오 (*.mp4)")
+        if not selected:
+            return
+        destination = _normalized_mp4_path(selected)
+        overwrite = False
+        if destination.exists():
+            answer = QMessageBox.question(
+                self,
+                "기존 MP4 덮어쓰기",
+                f"이미 같은 파일이 있습니다. 명시적으로 덮어쓰시겠습니까?\n{destination}",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            if answer != QMessageBox.StandardButton.Yes:
+                return
+            overwrite = True
+        self._open_mp4_progress()
+        try:
+            self.mp4_export_controller.start(
+                bundle=self.bundle,
+                query=self.query,
+                source_video_path=Path(self.active_video_path),
+                glass_id=self.selected_glass_id,
+                destination=destination,
+                include_debug=include_debug,
+                overwrite=overwrite,
+            )
+        except Exception as exc:
+            self._finish_mp4_progress()
+            QMessageBox.critical(self, "주석 MP4 내보내기 실패", str(exc))
+
+    def _open_mp4_progress(self) -> None:
+        dialog = QProgressDialog("주석 MP4를 내보내고 있습니다...", "취소", 0, 100, self)
+        dialog.setWindowTitle("주석 MP4 내보내기")
+        dialog.setWindowModality(Qt.WindowModality.NonModal)
+        dialog.setMinimumDuration(0)
+        dialog.setAutoClose(False)
+        dialog.setAutoReset(False)
+        dialog.canceled.connect(self.mp4_export_controller.cancel)
+        self.mp4_export_progress = dialog
+        dialog.show()
+
+    def _mp4_export_progress(self, update) -> None:
+        dialog = self.mp4_export_progress
+        if dialog is None:
+            return
+        total = max(1, int(getattr(update, "estimated_total_frames", 1)))
+        processed = max(0, int(getattr(update, "processed_frames", 0)))
+        dialog.setValue(min(99, int(100 * processed / total)))
+        dialog.setLabelText(
+            f"주석 MP4 인코딩 중 · {processed}/{total} frame · "
+            f"{float(getattr(update, 'timestamp_sec', 0.0)):.3f}s"
+        )
+
+    def _mp4_export_completed(self, result) -> None:
+        if self.mp4_export_progress is not None:
+            self.mp4_export_progress.setValue(100)
+        self._finish_mp4_progress()
+        self.statusBar().showMessage(f"주석 MP4 저장 완료: {result.path}", 12000)
+        QMessageBox.information(self, "주석 MP4 저장 완료", f"분석 구간 annotated MP4를 저장했습니다.\n{result.path}")
+
+    def _mp4_export_failed(self, message: str) -> None:
+        self._finish_mp4_progress()
+        LOGGER.error("Annotated MP4 export failed: %s", message)
+        QMessageBox.critical(self, "주석 MP4 내보내기 실패", message)
+
+    def _mp4_export_cancelled(self) -> None:
+        self._finish_mp4_progress()
+        self.statusBar().showMessage("주석 MP4 내보내기를 취소했습니다.", 8000)
+
+    def _mp4_export_running_changed(self, _running: bool) -> None:
+        self._set_state(self.state)
+
+    def _finish_mp4_progress(self) -> None:
+        dialog, self.mp4_export_progress = self.mp4_export_progress, None
+        if dialog is not None:
+            dialog.close()
+            dialog.deleteLater()
+
     def _set_state(self, state: str) -> None:
         self.state = state
         self.state_label.setText(f"상태: {state}")
@@ -729,8 +855,28 @@ class ResultReviewWindow(QMainWindow):
         self.same_profile_action.setEnabled(has_bundle)
         self.capture_action.setEnabled(has_bundle and self.selected_event is not None and bool(self.selected_event.capture_path))
         self.save_png_action.setEnabled(has_bundle and not self.current_render_image.isNull())
+        export_running = bool(
+            self.mp4_export_controller is not None
+            and self.mp4_export_controller.running
+        )
+        self.export_mp4_action.setEnabled(
+            has_bundle
+            and self.query is not None
+            and self.active_video_path is not None
+            and bool(self.selected_glass_id)
+            and self.mp4_export_controller is not None
+            and not export_running
+        )
 
     def closeEvent(self, event) -> None:
+        if self.mp4_export_controller is not None and not self.mp4_export_controller.close():
+            event.ignore()
+            self.statusBar().showMessage(
+                "주석 MP4 작업이 아직 종료되지 않아 Viewer를 닫지 않았습니다.",
+                10000,
+            )
+            return
+        self._finish_mp4_progress()
         self.playback.close()
         self.graph.close()
         if self.debug_repository is not None:
@@ -750,3 +896,8 @@ def _safe_filename(value: str) -> str:
     normalized = re.sub(r"[\\/:*?\"<>|]+", "_", value.strip())
     normalized = re.sub(r"\s+", "_", normalized).strip("._")
     return normalized or "glass"
+
+
+def _normalized_mp4_path(value: str | Path) -> Path:
+    path = Path(value).expanduser()
+    return path if path.suffix.lower() == ".mp4" else path.with_suffix(".mp4")
