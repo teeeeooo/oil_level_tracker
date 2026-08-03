@@ -129,19 +129,19 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S8 — Repeated-Test Workflow & Result Management
 
 - **Purpose:** Reduce repeated compressor-test effort and operational mistakes when one Profile is reused across multiple test videos.
-- **Status:** `ACTIVE`
-- **Major result:** S8-A, S8-B1, S8-B2 and S8-C1 remain independently audited, accepted and merged through PR #69–#72. S8-C2 Profile/Current-Test Visual Separation is implementation-complete on its focused Lane B branch and awaiting the Orchestrator exact-head gate: the normal Workbench visually separates reusable Profile identity/Glass configuration from current-test video/run/session settings while continuing to render directly from existing `InspectionRecipe`/`recipe_path` and `AnalysisSession` owners. No persisted or workflow authority changed.
-- **Next gate:** `S8-C2 Profile/Current-Test Visual Separation Orchestrator Exact-Head Gate`.
-- **Priority:** `P1 — repeated-test productivity / S8-C2 orchestrator gate`
+- **Status:** `DONE`
+- **Major result:** S8-A/B1/B2/C1 are accepted and merged through PR #69–#72, and presentation-only S8-C2 passed its Lane B Orchestrator exact-head gate and native guarded-squash-merged through PR #73 as `e90310a63faad2a20561ba0d5221432cc1e1c4fb`. Repeated same-Profile use now has explicit run identity/output naming, persistent recent Result/Profile access, finalized-run completion summary/actions, and clear Workbench separation of reusable Profile settings from current-test session settings without changing their established authorities.
+- **Next gate:** Preserve S8 contracts through S9 recovery/UX work and the final S10 Windows/packaging release gate.
+- **Priority:** `P1 — completed`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S9 — Operational Recovery & UX Polish
 
 - **Purpose:** Select recovery and interaction improvements after S8 based on observed user impact rather than committing every candidate to release scope.
-- **Status:** `PLANNED`
-- **Major result:** P2 selection candidates are autosave/abnormal-exit recovery, unsaved-change confirmation on close, analysis-area zoom/pan/fit, and field↔overlay bidirectional highlight. P3 remains a lower-priority backlog for enlarged reference-line drag guidance, keyboard geometry nudging, resize/modifier guidance and further Wizard/Workbench simplification.
-- **Next gate:** After S8, select only the P2 work justified by real-use effect; P3 is not a mandatory release prerequisite unless explicitly promoted later.
-- **Priority:** `P2 selection gate / P3 backlog`
+- **Status:** `ACTIVE`
+- **Major result:** The first bounded P2 slice is `S9-A — Unsaved Profile Change Tracking & Close Confirmation`. Current inspection shows application close has no unsaved-Profile guard and existing `WorkbenchState` dirty semantics also react to current-test/session edits, so the slice must distinguish Profile persistence state from session state before prompting. Autosave/abnormal-exit recovery, analysis-area zoom/pan/fit and field↔overlay highlight remain unstarted selection candidates; P3 remains lower-priority backlog.
+- **Next gate:** `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`.
+- **Priority:** `P2 — operational data-loss prevention / current`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S10 — Windows and Packaging Final Release Gate
@@ -154,4 +154,4 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 repeated-test workflow/result management` → `S9 selection/UX work` → `S10 final Windows & Packaging release gate`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 operational recovery/UX ACTIVE` → `S10 final Windows & Packaging release gate`.

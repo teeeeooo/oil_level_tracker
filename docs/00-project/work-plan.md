@@ -1,7 +1,7 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
-**Current milestone:** `S8 — Repeated-Test Workflow & Result Management`
-**Milestone status:** `ACTIVE — S8-A/B1/B2/C1 audited, merged and closed; S8-C2 implementation complete, awaiting Orchestrator exact-head gate`
+**Current milestone:** `S9 — Operational Recovery & UX Polish`
+**Milestone status:** `ACTIVE — S8 complete; S9-A Unsaved Profile Change Tracking & Close Confirmation selected and authorized, implementation not started`
 **S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
@@ -17,11 +17,12 @@
 **Current S8-B1 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #70 @ 1704c71b72b8851c09a669badda60b14ddecd1ef`
 **Current S8-B2 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #71 @ 067e599bb8fa727e94df360be30560cf73d8a599`
 **Current S8-C1 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #72 @ b485bf85a4d28c604c4d8ac2579fbe2e2f186857`
-**Current S8-C2 result:** `IMPLEMENTATION COMPLETE — PRESENTATION-ONLY LANE B; AWAITING ORCHESTRATOR EXACT-HEAD GATE`
-**Current gate:** `S8-C2 Profile/Current-Test Visual Separation Orchestrator Exact-Head Gate`
-**Successor milestone:** `S9 — Operational Recovery & UX Polish`
+**Current S8-C2 result:** `ORCHESTRATOR EXACT-HEAD GATE PASS; NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #73 @ e90310a63faad2a20561ba0d5221432cc1e1c4fb`
+**Current S9-A result:** `SELECTED / AUTHORIZED — IMPLEMENTATION NOT STARTED`
+**Current gate:** `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`
+**Successor milestone:** `S10 — Windows and Packaging Final Release Gate`
 
-This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, and S7 remains independently audited, merged and closed with its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts unchanged. S8 remains active: S8-A, S8-B1, S8-B2 and S8-C1 are independently audited, accepted and merged through PR #69, PR #70, PR #71 and PR #72. S8-C2 is implementation-complete as a presentation-only Lane B change and awaits the Orchestrator exact-head gate. The Workbench now shows a compact Profile identity strip derived directly from `InspectionRecipe` and `recipe_path`, labels Glass list/settings as reusable Profile-owned configuration, and marks the existing video/run/time/sampling group as current-test `AnalysisSession` state that is not Profile content. Existing new/load/save/video replacement/same-Profile transitions refresh those views through established Workbench refresh paths; no `.oilrecipe`, session/result persistence, load/save, same-Profile, recent-access or completion authority changed. S8 remains `ACTIVE` until merge/Close. The exact next gate is `S8-C2 Profile/Current-Test Visual Separation Orchestrator Exact-Head Gate`. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
+This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 and S7 remain closed against their accepted validation/export contracts. S8 is now complete: S8-A/B1/B2/C1 were independently audited and merged through PR #69–#72, and presentation-only S8-C2 passed the Lane B Orchestrator exact-head gate and native guarded-squash-merged through PR #73 as `e90310a63faad2a20561ba0d5221432cc1e1c4fb`. The Workbench ownership presentation remains read-only over existing `InspectionRecipe`/`recipe_path` and `AnalysisSession` owners; no persistence or workflow authority changed. S9 is now active. Bounded inspection selected `S9-A — Unsaved Profile Change Tracking & Close Confirmation` first because application close currently exits without an unsaved-Profile guard while existing `WorkbenchState` dirty transitions also react to session/current-test edits and therefore cannot alone represent Profile persistence state. Autosave/abnormal-exit recovery, zoom/pan/fit and field↔overlay highlight remain unstarted candidates. The exact next gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed.
 
 ## Evidence owners
 
@@ -42,6 +43,19 @@ This document owns the current execution state. Milestone order and formal statu
 - S6-E: [`../30-quality/s6-bounded-runtime-soak-evidence.md`](../30-quality/s6-bounded-runtime-soak-evidence.md)
 - S6-F: [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
 
+## Latest merged closeout — S8-C2 Profile/Current-Test Visual Separation
+
+| Item | Current state |
+|---|---|
+| Gate target | PR #73; exact base `482158f9ca381271d2824759ceca8f1e253be50f`; exact gated head `844d3f600aec2c2f26f0ec04525504167a00db6e`; 1 commit / exactly 10 complete-PR changed files; presentation-only Lane B |
+| Ownership presentation | Workbench displays Profile identity from existing `InspectionRecipe`/`recipe_path`, labels Glass list/settings as Profile-owned, and labels video/`run_name`/range/compressor/sampling as current-test `AnalysisSession` state. No duplicate authority was introduced. |
+| Compatibility boundary | `.oilrecipe`, session/result persistence, load/save, same-Profile, recent-access, completion and Result Review owners were unchanged. Existing 1280×760 source-tree layout and UI import boundaries remained passing. |
+| Fresh Orchestrator gate | Exact-head S8-C2 + Workbench usability + UI import subset: `21 passed`; 54 applicable relative links passed; complete-PR `git diff --check` passed |
+| Merge | PR #73 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `e90310a63faad2a20561ba0d5221432cc1e1c4fb` |
+| Synchronization | Registered primary checkout synchronized cleanly to `main @ e90310a63faad2a20561ba0d5221432cc1e1c4fb` before this documentation Close |
+| Claim boundary | No persisted/workflow responsibility changed and no detector/soak, Windows/manual GUI, Windows DPI or PyInstaller PASS is inferred |
+| Next gate | S8 is complete; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`. |
+
 ## Latest merged closeout — S8-C1 Final Run Summary & Completion Actions
 
 | Item | Current state |
@@ -55,7 +69,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #72 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `b485bf85a4d28c604c4d8ac2579fbe2e2f186857` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ b485bf85a4d28c604c4d8ac2579fbe2e2f186857` before this documentation Close |
 | Claim boundary | Official bundles remain immutable; recent-result/Profile caches remain non-authoritative; S7/S8-A/S8-B1/S8-B2 contracts remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or S9 PASS is inferred |
-| Next gate | `S8-C2 Profile/Current-Test Visual Separation Orchestrator Exact-Head Gate` |
+| Next gate | S8-C1 remains closed; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`. |
 
 ## Latest merged closeout — S8-B2 Persistent Recent Profile Access
 
@@ -70,7 +84,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #71 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `067e599bb8fa727e94df360be30560cf73d8a599` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ 067e599bb8fa727e94df360be30560cf73d8a599` before this documentation Close |
 | Claim boundary | S8-B1 result history, S8-A current-test identity, same-profile and S7 stored-result/annotated-MP4 contracts remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or S9 PASS is inferred |
-| Next gate | S8-B2 remains closed; current project gate is `S8-C2 Profile/Current-Test Visual Separation Orchestrator Exact-Head Gate`. |
+| Next gate | S8-B2 remains closed; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`. |
 
 ## Latest merged closeout — S8-B1 Persistent Recent Result Access
 
@@ -84,7 +98,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #70 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `1704c71b72b8851c09a669badda60b14ddecd1ef` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ 1704c71b72b8851c09a669badda60b14ddecd1ef` before this documentation Close |
 | Claim boundary | S8-A run identity/output naming and S7 stored-result/annotated-MP4 authority remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or later-S8/S9 PASS is inferred |
-| Next gate | S8-B1 remains closed; current project gate is `S8-C2 Profile/Current-Test Visual Separation Orchestrator Exact-Head Gate`. |
+| Next gate | S8-B1 remains closed; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`. |
 
 ## Latest merged closeout — S8-A Repeated-Test Run Identity + Output Naming
 
@@ -100,7 +114,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #69 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` before this documentation Close |
 | Claim boundary | S7 stored-result/annotated-MP4 authority remains unchanged; no S6 benchmark/soak, Windows/manual GUI, PyInstaller or unrelated later-S8/S9 PASS is inferred |
-| Next gate | S8-A remains closed; current project gate is `S8-C2 Profile/Current-Test Visual Separation Orchestrator Exact-Head Gate`. |
+| Next gate | S8-A remains closed; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`. |
 
 ## Final Windows and packaging release obligation
 
@@ -117,8 +131,8 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 ## Product priority and sequence
 
 - `P0 completed`: S7 annotated MP4 export is audited, merged and closed.
-- `P1 current next gate`: `S8-C2 Profile/Current-Test Visual Separation Orchestrator Exact-Head Gate`; implementation is complete on the focused Lane B branch and awaits exact-head orchestration.
-- `P2`: after S8, select operational recovery and UX improvements based on observed user effect.
+- `P1 completed`: S8 repeated-test workflow/result management is merged and closed through S8-C2 / PR #73.
+- `P2 current next gate`: `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`; autosave/recovery, zoom/pan/fit and field↔overlay highlight remain unstarted candidates.
 - `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
 - Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.
 
