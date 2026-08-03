@@ -130,9 +130,9 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Reduce repeated compressor-test effort and operational mistakes when one Profile is reused across multiple test videos.
 - **Status:** `ACTIVE`
-- **Major result:** S8-A is independently audited, accepted and native guarded-squash-merged through PR #69 as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`. S8-B1 Persistent Recent Result Access is implementation-complete and awaiting independent audit: bounded newest-first recent-result metadata is persisted in application user data, completed/manual-opened bundles are revalidated through the authoritative Result Review path, stale/corrupt history fails safely, and official result bundles remain immutable. Recent Profile management and the remaining S8 scope are not started.
-- **Next gate:** `S8-B1 Persistent Recent Result Access Fresh Exact-Head Auditor`.
-- **Priority:** `P1 — repeated-test productivity / S8-B1 audit gate`
+- **Major result:** S8-A is independently audited, accepted and native guarded-squash-merged through PR #69 as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`. S8-B1 Persistent Recent Result Access is independently audited, accepted and native guarded-squash-merged through PR #70 as `1704c71b72b8851c09a669badda60b14ddecd1ef`: bounded newest-first recent-result metadata lives in application user data, authoritative Result Review loading remains the only result truth, stale/corrupt history fails safely, and official result bundles remain immutable. Recent Profile management and the remaining S8 scope are not started.
+- **Next gate:** `S8-B2 — Persistent Recent Profile Access`: select and authorize one bounded recent-Profile implementation slice; implementation remains not started until that handoff.
+- **Priority:** `P1 — repeated-test productivity / S8-B2 selection gate`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S9 — Operational Recovery & UX Polish
