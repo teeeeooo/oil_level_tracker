@@ -209,3 +209,63 @@ def test_recent_history_failure_does_not_regress_completed_analysis(qtbot, tmp_p
     assert window.last_result_path == output
     assert coordinator.dialog is not None
     coordinator.close()
+
+
+class _FailingBundleReader:
+    def __init__(self):
+        self.paths = []
+
+    def read(self, path):
+        self.paths.append(path)
+        raise OSError("bundle summary unavailable")
+
+
+def test_completed_summary_uses_finalized_bundle_not_mutable_workbench(qtbot, tmp_path):
+    window = _Window()
+    qtbot.addWidget(window)
+    window.workbench.recipe = SimpleNamespace(name="mutable profile")
+    window.workbench.session = SimpleNamespace(run_name="mutable run", input_video_path="mutable.mp4")
+    bundle = SimpleNamespace(
+        run_name="final run",
+        recipe=SimpleNamespace(name="final profile"),
+        source_video_path="final-source.mp4",
+    )
+    reader = _BundleReader(bundle)
+    coordinator = AnalysisCompletionCoordinator(
+        window, _ReviewCoordinator(True), _SameProfileCoordinator(), _Actions(), reader
+    )
+    output = str(tmp_path / "completed-bundle")
+    coordinator.analysis_completed(_result(), output)
+
+    window.workbench.recipe.name = "later profile"
+    window.workbench.session.run_name = "later run"
+    window.workbench.session.input_video_path = "later.mp4"
+    assert coordinator.dialog.run_name_label.text() == "final run"
+    assert coordinator.dialog.profile_name_label.text() == "final profile"
+    assert coordinator.dialog.source_video_label.text() == "final-source.mp4"
+    assert coordinator.dialog.path_label.text() == output
+    assert reader.paths == [output]
+    coordinator.close()
+
+
+def test_bundle_summary_read_failure_degrades_without_revoking_completion(qtbot, tmp_path):
+    window = _Window()
+    qtbot.addWidget(window)
+    reader = _FailingBundleReader()
+    coordinator = AnalysisCompletionCoordinator(
+        window, _ReviewCoordinator(True), _SameProfileCoordinator(), _Actions(), reader
+    )
+    output = str(tmp_path / "completed-bundle")
+
+    coordinator.analysis_completed(_result(), output)
+
+    assert window.workbench.state == WorkbenchState.ANALYZED
+    assert window.last_result_path == output
+    assert coordinator.dialog is not None
+    assert coordinator.dialog.run_name_label.text() == "이름 없음 (현재 시험 이름 미지정)"
+    assert coordinator.dialog.profile_name_label.text() == "확인할 수 없음"
+    assert coordinator.dialog.source_video_label.text() == "확인할 수 없음"
+    assert "식별 메타데이터를 읽지 못했습니다" in coordinator.dialog.metadata_status_label.text()
+    assert coordinator.dialog.path_label.text() == output
+    assert reader.paths == [output]
+    coordinator.close()

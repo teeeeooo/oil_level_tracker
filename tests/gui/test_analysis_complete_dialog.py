@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QDialogButtonBox
 
 from oil_tracker.domain.enums import ResultState
 from oil_tracker.domain.results import AnalysisResult, GlassAnalysisResult
+from oil_tracker.ui.analysis_completion_summary import build_final_run_summary
 from oil_tracker.ui.widgets.analysis_complete_dialog import AnalysisCompleteDialog
 
 
@@ -62,3 +65,37 @@ def test_dialog_close_does_not_mutate_result(qtbot, tmp_path):
     qtbot.mouseClick(close_button, Qt.MouseButton.LeftButton)
     assert result.overall_state == ResultState.REVIEW_REQUIRED
     assert len(result.errors) == 2
+
+
+def test_dialog_distinguishes_finalized_run_profile_and_source_video(qtbot, tmp_path):
+    output = tmp_path / "bundle"
+    bundle = SimpleNamespace(
+        run_name="반복 시험 03",
+        recipe=SimpleNamespace(name="회수 시험 Profile"),
+        source_video_path=r"C:\시험 영상\기동 03.mp4",
+    )
+    summary = build_final_run_summary(_result(), output, bundle)
+    dialog = AnalysisCompleteDialog(_result(), output, summary=summary)
+    qtbot.addWidget(dialog)
+
+    assert dialog.run_name_label.text() == "반복 시험 03"
+    assert dialog.profile_name_label.text() == "회수 시험 Profile"
+    assert dialog.source_video_label.text() == "기동 03.mp4"
+    assert dialog.source_video_label.toolTip() == r"C:\시험 영상\기동 03.mp4"
+    assert dialog.path_label.text() == str(output)
+    assert dialog.metadata_status_label.text() == ""
+
+
+def test_empty_run_name_is_explicit_and_does_not_borrow_other_identity(qtbot, tmp_path):
+    bundle = SimpleNamespace(
+        run_name="",
+        recipe=SimpleNamespace(name="Profile A"),
+        source_video_path="source-a.mp4",
+    )
+    summary = build_final_run_summary(_result(), tmp_path / "bundle", bundle)
+    dialog = AnalysisCompleteDialog(_result(), tmp_path / "bundle", summary=summary)
+    qtbot.addWidget(dialog)
+
+    assert dialog.run_name_label.text() == "이름 없음 (현재 시험 이름 미지정)"
+    assert "Profile A" not in dialog.run_name_label.text()
+    assert "source-a.mp4" not in dialog.run_name_label.text()

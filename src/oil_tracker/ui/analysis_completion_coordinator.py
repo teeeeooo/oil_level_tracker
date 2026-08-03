@@ -10,6 +10,7 @@ from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetError
 from oil_tracker.adapters.storage.recent_result_history import RecentResultHistory
 from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleError, ResultBundleReader
 from oil_tracker.domain.enums import WorkbenchState
+from oil_tracker.ui.analysis_completion_summary import build_final_run_summary
 from oil_tracker.ui.result_actions import ResultActionError, ResultActionService
 from oil_tracker.ui.widgets.analysis_complete_dialog import AnalysisCompleteDialog
 
@@ -54,7 +55,8 @@ class AnalysisCompletionCoordinator(QObject):
     def show(self, result, output_path: str | Path) -> None:
         if self.dialog is not None:
             self.dialog.close()
-        dialog = AnalysisCompleteDialog(result, output_path, self.window)
+        summary = self._build_final_run_summary(result, output_path)
+        dialog = AnalysisCompleteDialog(result, output_path, self.window, summary=summary)
         self.dialog = dialog
         dialog.reviewRequested.connect(lambda: self._run_once("review", lambda: self._open_viewer(output_path)))
         dialog.reportRequested.connect(lambda: self._run_once("report", lambda: self._open_report(output_path)))
@@ -64,6 +66,18 @@ class AnalysisCompletionCoordinator(QObject):
         dialog.show()
         dialog.raise_()
         dialog.activateWindow()
+
+    def _build_final_run_summary(self, result, output_path: str | Path):
+        try:
+            bundle = self.bundle_reader.read(output_path)
+            return build_final_run_summary(result, output_path, bundle)
+        except Exception:
+            LOGGER.warning(
+                "Finalized bundle metadata could not be loaded for completion summary: %s",
+                output_path,
+                exc_info=True,
+            )
+            return build_final_run_summary(result, output_path)
 
     def _register_recent_result(self, output_path: str | Path) -> None:
         if self.recent_result_history is None:
