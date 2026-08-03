@@ -7,10 +7,17 @@ from oil_tracker.ui.result_review_coordinator import ResultReviewCoordinator
 
 
 class _Workbench(QMainWindow):
+    applicationCloseAccepted = Signal()
+
     def __init__(self):
         super().__init__()
         self.actions = {}
         self.last_result_path = ""
+
+    def closeEvent(self, event):
+        super().closeEvent(event)
+        if event.isAccepted():
+            self.applicationCloseAccepted.emit()
 
 
 class _Viewer(QWidget):

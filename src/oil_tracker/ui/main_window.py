@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 
 from oil_tracker.adapters.presentation.qt_frame_image_converter import blank_bgr_frame
-from PySide6.QtCore import QTimer, QUrl, Qt
+from PySide6.QtCore import QTimer, QUrl, Qt, Signal
 from PySide6.QtGui import QAction, QDesktopServices, QKeySequence, QUndoStack
 from PySide6.QtWidgets import (
     QApplication,
@@ -65,6 +65,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 class MainWindow(QMainWindow):
+    applicationCloseAccepted = Signal()
+
     def __init__(self, workbench, preview_controller, analysis_controller, debug_renderer, parent=None) -> None:
         super().__init__(parent)
         self.workbench = workbench
@@ -793,7 +795,7 @@ class MainWindow(QMainWindow):
             LOGGER.warning("Recent profile history could not be updated: %s", exc)
         self._refresh_recent_profile_menu()
 
-    def save_recipe(self) -> None:
+    def save_recipe(self) -> bool:
         path = self.workbench.recipe_path
         if path is None:
             selected, _ = QFileDialog.getSaveFileName(
@@ -803,7 +805,7 @@ class MainWindow(QMainWindow):
                 "유면 분석 프로필 (*.oilrecipe)",
             )
             if not selected:
-                return
+                return False
             path = Path(selected)
         try:
             self.workbench.save(path)
@@ -811,8 +813,10 @@ class MainWindow(QMainWindow):
             self._update_state()
             actual_path = self.workbench.recipe_path or path
             self.statusBar().showMessage(f"프로필 저장 완료: {actual_path}")
+            return True
         except Exception as exc:
             self._error("프로필 저장 실패", str(exc))
+            return False
 
     def load_recipe(self) -> None:
         path = self._pending_profile_path
@@ -1076,9 +1080,35 @@ class MainWindow(QMainWindow):
     def _error(self, title: str, message: str) -> None:
         QMessageBox.critical(self, title, message)
 
+    def _confirm_unsaved_profile_close(self):
+        return QMessageBox.warning(
+            self,
+            "저장되지 않은 Profile 변경",
+            "현재 Profile에 아직 안전하게 저장되지 않은 변경이 있습니다.\n\n"
+            "저장 후 닫기: 기존 Profile 저장 절차로 저장한 뒤 닫습니다.\n"
+            "버리고 닫기: Profile 파일을 변경하지 않고 현재 변경을 버립니다.\n"
+            "취소: 닫기를 중단하고 Workbench로 돌아갑니다.",
+            QMessageBox.StandardButton.Save
+            | QMessageBox.StandardButton.Discard
+            | QMessageBox.StandardButton.Cancel,
+            QMessageBox.StandardButton.Cancel,
+        )
+
     def closeEvent(self, event) -> None:
-        self.workbench.close_video()
+        if self.workbench.profile_has_unsaved_changes:
+            answer = self._confirm_unsaved_profile_close()
+            if answer == QMessageBox.StandardButton.Save:
+                if not self.save_recipe():
+                    event.ignore()
+                    return
+            elif answer != QMessageBox.StandardButton.Discard:
+                event.ignore()
+                return
         super().closeEvent(event)
+        if not event.isAccepted():
+            return
+        self.applicationCloseAccepted.emit()
+        self.workbench.close_video()
 
 
 def _time_spin() -> WheelSafeDoubleSpinBox:

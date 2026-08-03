@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from PySide6.QtCore import QEvent, QObject, QTimer
+from PySide6.QtCore import QObject, QTimer
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QStyle, QToolBar
 
@@ -33,7 +33,7 @@ class PreflightCoordinator(QObject):
         self._context_check_pending = False
         self._running = False
         self._connect()
-        window.installEventFilter(self)
+        window.applicationCloseAccepted.connect(self.close)
         self._set_progress_status("점검하지 않음", "대표 장면 점검 창을 열 수 있습니다.")
 
     def _connect(self) -> None:
@@ -173,9 +173,7 @@ class PreflightCoordinator(QObject):
         if callable(setter):
             setter(status, detail)
 
-    def eventFilter(self, watched, event) -> bool:
-        if watched is self.window and event.type() == QEvent.Type.Close:
-            self.controller.invalidate()
-            self._running = False
-            self.preflight_window.close()
-        return super().eventFilter(watched, event)
+    def close(self) -> None:
+        self.controller.invalidate()
+        self._running = False
+        self.preflight_window.close()

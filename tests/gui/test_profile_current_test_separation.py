@@ -59,6 +59,7 @@ def _controller():
 def _window(qtbot):
     controller = _controller()
     window = MainWindow(controller, _Preview(), _Analysis(), DebugRenderer())
+    window._confirm_unsaved_profile_close = lambda: QMessageBox.StandardButton.Discard
     qtbot.addWidget(window)
     return window, controller
 
@@ -154,6 +155,7 @@ def test_same_profile_replacement_shows_snapshot_profile_and_fresh_current_test(
     assert window.profile_path_label.text() == "아직 저장되지 않음"
     assert window.video_path_label.text() == "next.mp4"
     assert window.run_name_edit.text() == ""
+    assert controller.profile_has_unsaved_changes is False
 
 
 def test_new_profile_refreshes_profile_identity_from_recipe_owner(qtbot):
@@ -165,3 +167,4 @@ def test_new_profile_refreshes_profile_identity_from_recipe_owner(qtbot):
     assert window.profile_name_label.text() == "New Reusable Profile"
     assert window.profile_path_label.text() == "아직 저장되지 않음"
     assert controller.recipe_path is None
+    assert controller.profile_has_unsaved_changes is True

@@ -3,6 +3,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 
 import numpy as np
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QFileDialog, QMainWindow, QMessageBox
 
 from oil_tracker.domain.enums import WorkbenchState
@@ -82,6 +83,8 @@ class _Workbench:
 
 
 class _Window(QMainWindow):
+    applicationCloseAccepted = Signal()
+
     def __init__(self, state=WorkbenchState.DRAFT):
         super().__init__()
         self.workbench = _Workbench(state)

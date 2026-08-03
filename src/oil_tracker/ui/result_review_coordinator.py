@@ -4,7 +4,7 @@ import logging
 import os
 from pathlib import Path
 
-from PySide6.QtCore import QEvent, QObject, Qt
+from PySide6.QtCore import QObject, Qt
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QDialog,
@@ -66,7 +66,7 @@ class ResultReviewCoordinator(QObject):
                 button.setObjectName("toolbarButton")
                 button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.action.triggered.connect(self.open_dialog)
-        window.installEventFilter(self)
+        window.applicationCloseAccepted.connect(self.close)
 
     def open_dialog(self) -> None:
         entries = self._recent_entries()
@@ -238,12 +238,6 @@ class ResultReviewCoordinator(QObject):
         if self.viewer is not None:
             self.viewer.close()
             self.viewer = None
-
-    def eventFilter(self, watched, event) -> bool:
-        if watched is self.window and event.type() == QEvent.Type.Close:
-            self.close()
-        return super().eventFilter(watched, event)
-
 
 
 def _path_key(value: str | Path) -> str:

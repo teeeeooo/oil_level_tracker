@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from PySide6.QtCore import QEvent, QObject
+from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QMessageBox
 
 from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetError
@@ -37,7 +37,7 @@ class AnalysisCompletionCoordinator(QObject):
         self.recent_result_history = recent_result_history
         self.dialog: AnalysisCompleteDialog | None = None
         self._active_actions: set[str] = set()
-        window.installEventFilter(self)
+        window.applicationCloseAccepted.connect(self.close)
 
     def analysis_completed(self, result, output_path: str) -> None:
         progress_dialog = getattr(self.window, "progress_dialog", None)
@@ -156,9 +156,3 @@ class AnalysisCompletionCoordinator(QObject):
             self.dialog.close()
             self.dialog = None
         self._active_actions.clear()
-
-    def eventFilter(self, watched, event) -> bool:
-        if watched is self.window and event.type() == QEvent.Type.Close:
-            self.close()
-            self.same_profile_coordinator.close()
-        return super().eventFilter(watched, event)

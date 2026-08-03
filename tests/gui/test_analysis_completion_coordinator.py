@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 
 from oil_tracker.domain.enums import ResultState, WorkbenchState
@@ -19,6 +20,8 @@ class _Progress:
 
 
 class _Window(QMainWindow):
+    applicationCloseAccepted = Signal()
+
     def __init__(self):
         super().__init__()
         self.workbench = SimpleNamespace(state=WorkbenchState.DRAFT)
