@@ -7,6 +7,7 @@ from PySide6.QtCore import QEvent, QObject
 from PySide6.QtWidgets import QMessageBox
 
 from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetError
+from oil_tracker.adapters.storage.recent_result_history import RecentResultHistory
 from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleError, ResultBundleReader
 from oil_tracker.domain.enums import WorkbenchState
 from oil_tracker.ui.result_actions import ResultActionError, ResultActionService
@@ -24,6 +25,7 @@ class AnalysisCompletionCoordinator(QObject):
         same_profile_coordinator,
         action_service: ResultActionService,
         bundle_reader: ResultBundleReader | None = None,
+        recent_result_history: RecentResultHistory | None = None,
     ) -> None:
         super().__init__(window)
         self.window = window
@@ -31,6 +33,7 @@ class AnalysisCompletionCoordinator(QObject):
         self.same_profile_coordinator = same_profile_coordinator
         self.action_service = action_service
         self.bundle_reader = bundle_reader or ResultBundleReader()
+        self.recent_result_history = recent_result_history
         self.dialog: AnalysisCompleteDialog | None = None
         self._active_actions: set[str] = set()
         window.installEventFilter(self)
@@ -44,6 +47,7 @@ class AnalysisCompletionCoordinator(QObject):
             progress_dialog.accept()
         self.window.workbench.state = WorkbenchState.ANALYZED
         self.window.last_result_path = output_path
+        self._register_recent_result(output_path)
         self.window._update_state()
         self.show(result, output_path)
 
@@ -60,6 +64,18 @@ class AnalysisCompletionCoordinator(QObject):
         dialog.show()
         dialog.raise_()
         dialog.activateWindow()
+
+    def _register_recent_result(self, output_path: str | Path) -> None:
+        if self.recent_result_history is None:
+            return
+        try:
+            self.recent_result_history.register_path(output_path)
+        except Exception:
+            LOGGER.warning(
+                "Completed result could not be registered in recent history: %s",
+                output_path,
+                exc_info=True,
+            )
 
     def open_last_report(self) -> None:
         if not self.window.last_result_path:

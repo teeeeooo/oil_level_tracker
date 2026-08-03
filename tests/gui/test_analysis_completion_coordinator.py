@@ -78,6 +78,17 @@ class _BundleReader:
         return self.bundle
 
 
+class _RecentHistory:
+    def __init__(self, fail=False):
+        self.fail = fail
+        self.paths = []
+
+    def register_path(self, path):
+        self.paths.append(path)
+        if self.fail:
+            raise OSError("history unavailable")
+
+
 def _result():
     return AnalysisResult(
         run_id="run",
@@ -91,18 +102,21 @@ def _result():
 def test_analysis_is_committed_before_dialog_and_close_does_not_change_result(qtbot, tmp_path):
     window = _Window()
     qtbot.addWidget(window)
+    history = _RecentHistory()
     coordinator = AnalysisCompletionCoordinator(
         window,
         _ReviewCoordinator(True),
         _SameProfileCoordinator(),
         _Actions(),
         _BundleReader(object()),
+        recent_result_history=history,
     )
     output = str(tmp_path / "bundle")
     coordinator.analysis_completed(_result(), output)
     assert window.progress_dialog.accepted is True
     assert window.workbench.state == WorkbenchState.ANALYZED
     assert window.last_result_path == output
+    assert history.paths == [output]
     assert window.update_count == 1
     assert coordinator.dialog is not None
     coordinator.close()
@@ -172,3 +186,26 @@ def test_duplicate_action_key_is_ignored_while_action_is_active(qtbot):
 
     coordinator._run_once("review", outer)
     assert calls == ["outer"]
+
+
+def test_recent_history_failure_does_not_regress_completed_analysis(qtbot, tmp_path):
+    window = _Window()
+    qtbot.addWidget(window)
+    history = _RecentHistory(fail=True)
+    coordinator = AnalysisCompletionCoordinator(
+        window,
+        _ReviewCoordinator(True),
+        _SameProfileCoordinator(),
+        _Actions(),
+        _BundleReader(object()),
+        recent_result_history=history,
+    )
+    output = str(tmp_path / "bundle")
+
+    coordinator.analysis_completed(_result(), output)
+
+    assert history.paths == [output]
+    assert window.workbench.state == WorkbenchState.ANALYZED
+    assert window.last_result_path == output
+    assert coordinator.dialog is not None
+    coordinator.close()
