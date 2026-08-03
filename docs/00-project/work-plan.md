@@ -1,7 +1,7 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S9 — Operational Recovery & UX Polish`
-**Milestone status:** `ACTIVE — S8 complete; S9-A audited, merged and closed; next S9 candidate selection pending`
+**Milestone status:** `ACTIVE — S8 complete; S9-A audited, merged and closed; S9-B selected next; S9-C follows`
 **S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
@@ -19,10 +19,11 @@
 **Current S8-C1 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #72 @ b485bf85a4d28c604c4d8ac2579fbe2e2f186857`
 **Current S8-C2 result:** `ORCHESTRATOR EXACT-HEAD GATE PASS; NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #73 @ e90310a63faad2a20561ba0d5221432cc1e1c4fb`
 **Current S9-A result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #74`
-**Current gate:** `Continuation Orchestrator fresh-read — select the next S9 candidate from authoritative post-S9-A state`
+**Current gate:** `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`
+**Successor S9 slice:** `S9-C — Field ↔ Overlay Interaction Polish`
 **Successor milestone:** `S10 — Windows and Packaging Final Release Gate`
 
-This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 and S7 remain closed against their accepted validation/export contracts, and S8 is complete through PR #73. S9 remains active. S9-A has passed fresh exact-head Lane C audit, merged through PR #74 and completed bounded Close. `WorkbenchController` owns Profile close dirtiness separately from `WorkbenchState` by comparing user Profile state with a safe baseline established after successful load/save or authoritative same-Profile result-snapshot replacement; save-generated `InspectionRecipe.updated_at` bookkeeping is intentionally excluded from dirty truth. Explicit new Profiles have no safe baseline until saved. Recipe edits become dirty, undo away from the persisted state remains dirty, redo back to already-persisted Profile content becomes clean, and current-test/session-only changes remain non-Profile-dirty even when existing readiness state transitions to `DRAFT_DIRTY`. `MainWindow.closeEvent()` checks this Profile-specific state before close-success-dependent teardown and offers Save/Discard/Cancel. Save reuses the established MainWindow → WorkbenchController → SaveRecipeUseCase → JsonRecipeRepository chain; cancellation or failure keeps the Workbench, reader, Result Review, completion UI, prepared same-Profile work and preflight lifecycle intact. Those secondary owners clean up only after close acceptance, and repository write failure restores the pre-save `updated_at` so the in-memory Recipe remains unchanged. Autosave/abnormal-exit recovery, zoom/pan/fit and field↔overlay highlight remain unstarted candidates and are not automatically selected by this close. The exact next gate is a fresh `Continuation Orchestrator` read to select the next S9 candidate from authoritative post-S9-A state. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed.
+This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 and S7 remain closed against their accepted validation/export contracts, S8 is complete through PR #73, and S9 remains active. S9-A passed fresh exact-head Lane C audit, merged through PR #74 and completed bounded Close; its accepted Profile dirty/save/close lifecycle contract remains unchanged. Based on post-S9-A user impact, `S9-B — Workbench Analysis-Area Zoom, Pan & Fit` is now the selected implementation handoff, followed by `S9-C — Field ↔ Overlay Interaction Polish`, which also owns ellipse resize-handle visual polish without changing the SSOT geometry contract. After S9-B and S9-C, the project proceeds to mandatory `S10 — Windows and Packaging Final Release Gate`. Autosave/abnormal-exit recovery is deferred to post-S10 reassessment and is not an S9 release prerequisite. Windows/manual GUI, Windows DPI and PyInstaller acceptance remain pending/unclaimed until S10; the manual checklist will receive source-completing S9-B/S9-C acceptance updates in their implementation PRs, not in this planning-only reconciliation.
 
 ## Evidence owners
 
@@ -54,8 +55,8 @@ This document owns the current execution state. Milestone order and formal statu
 | Close lifecycle | Dirty Save/Discard/Cancel, Save-As cancellation and save failure preserve rejected-close state; Result Review, completion UI, prepared same-Profile work and preflight clean up only after accepted application close. |
 | Fresh Auditor validation | Exact-head focused S9-A + adjacent S8/Qt boundary suite: `55 passed`; independent F1 probe passed; 49 applicable relative links and complete-PR `git diff --check` passed. |
 | Merge / synchronization | PR #74 passed fresh Lane C audit, was marked Ready, native exact-base/head guarded-squash-merged, and the registered primary checkout was synchronized cleanly to authoritative `main` before this documentation Close. |
-| Claim boundary | Autosave/recovery, zoom/pan/fit, field↔overlay highlight, detector/soak, Windows/manual GUI, Windows DPI and PyInstaller remain unclaimed and unselected. |
-| Next gate | Fresh `Continuation Orchestrator` read to select the next S9 candidate from authoritative post-S9-A state. |
+| Claim boundary | S9-A did not implement zoom/pan/fit, field↔overlay interaction, ellipse-handle polish, autosave/recovery, detector/soak, Windows/manual GUI, Windows DPI or PyInstaller. S9-B and S9-C are now selected successor slices but remain unimplemented; autosave/recovery is deferred to post-S10 reassessment. |
+| Next gate | `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`. |
 
 ## Latest merged closeout — S8-C2 Profile/Current-Test Visual Separation
 
@@ -68,7 +69,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #73 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `e90310a63faad2a20561ba0d5221432cc1e1c4fb` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ e90310a63faad2a20561ba0d5221432cc1e1c4fb` before this documentation Close |
 | Claim boundary | No persisted/workflow responsibility changed and no detector/soak, Windows/manual GUI, Windows DPI or PyInstaller PASS is inferred |
-| Next gate | S8 is complete; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
+| Next gate | S8 is complete; current project gate is `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`. |
 
 ## Latest merged closeout — S8-C1 Final Run Summary & Completion Actions
 
@@ -83,7 +84,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #72 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `b485bf85a4d28c604c4d8ac2579fbe2e2f186857` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ b485bf85a4d28c604c4d8ac2579fbe2e2f186857` before this documentation Close |
 | Claim boundary | Official bundles remain immutable; recent-result/Profile caches remain non-authoritative; S7/S8-A/S8-B1/S8-B2 contracts remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or S9 PASS is inferred |
-| Next gate | S8-C1 remains closed; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
+| Next gate | S8-C1 remains closed; current project gate is `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`. |
 
 ## Latest merged closeout — S8-B2 Persistent Recent Profile Access
 
@@ -98,7 +99,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #71 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `067e599bb8fa727e94df360be30560cf73d8a599` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ 067e599bb8fa727e94df360be30560cf73d8a599` before this documentation Close |
 | Claim boundary | S8-B1 result history, S8-A current-test identity, same-profile and S7 stored-result/annotated-MP4 contracts remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or S9 PASS is inferred |
-| Next gate | S8-B2 remains closed; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
+| Next gate | S8-B2 remains closed; current project gate is `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`. |
 
 ## Latest merged closeout — S8-B1 Persistent Recent Result Access
 
@@ -112,7 +113,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #70 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `1704c71b72b8851c09a669badda60b14ddecd1ef` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ 1704c71b72b8851c09a669badda60b14ddecd1ef` before this documentation Close |
 | Claim boundary | S8-A run identity/output naming and S7 stored-result/annotated-MP4 authority remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or later-S8/S9 PASS is inferred |
-| Next gate | S8-B1 remains closed; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
+| Next gate | S8-B1 remains closed; current project gate is `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`. |
 
 ## Latest merged closeout — S8-A Repeated-Test Run Identity + Output Naming
 
@@ -128,7 +129,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #69 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` before this documentation Close |
 | Claim boundary | S7 stored-result/annotated-MP4 authority remains unchanged; no S6 benchmark/soak, Windows/manual GUI, PyInstaller or unrelated later-S8/S9 PASS is inferred |
-| Next gate | S8-A remains closed; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
+| Next gate | S8-A remains closed; current project gate is `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`. |
 
 ## Final Windows and packaging release obligation
 
@@ -146,9 +147,9 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 
 - `P0 completed`: S7 annotated MP4 export is audited, merged and closed.
 - `P1 completed`: S8 repeated-test workflow/result management is merged and closed through S8-C2 / PR #73.
-- `P2 current next gate`: fresh `Continuation Orchestrator` read for next-S9 selection; S9-A is closed, while autosave/recovery, zoom/pan/fit and field↔overlay highlight remain unstarted candidates and are not automatically selected.
-- `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
-- Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.
+- `P2 current next gate`: `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`; S9-C Field ↔ Overlay Interaction Polish follows S9-B.
+- `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted; autosave/abnormal-exit recovery is separately deferred to post-S10 reassessment.
+- Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after S9-B and S9-C.
 
 ## Retained contracts and risks
 
@@ -157,7 +158,7 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 - Missing scratch/surface-defect, fogging/stain, clean rim-adjacent Oil, high-quality compressor-start fill/drain, transparent shimmer/refractive-motion, structural rim/paired-line field scenes, clean full/empty no-interface, dropout/reacquisition and broader field-video categories remain `not_evaluated` where authoritative denominators are absent.
 - S6-F is accepted only for its exact one-hour macOS source-tree workload; it does not establish Windows, packaging, multi-Glass scaling or infinite-duration stability.
 - S7 is `DONE`: annotated-video encoding and both bounded decoded-timeline publication repairs were fresh exact-head audited and merged through PR #68; preserve those accepted contracts through S8/S9 and the final S10 release gate.
-- S9 is a selection/UX milestone: its P2 candidates are not all precommitted, and P3 backlog items are not mandatory release prerequisites unless explicitly promoted.
+- S9's selected remaining release sequence is S9-B then S9-C; autosave/abnormal-exit recovery is deferred to post-S10 reassessment, and unrelated P3 backlog items remain non-prerequisites unless explicitly promoted.
 
 ## Intentional non-runs retained from the S6-D4 close
 

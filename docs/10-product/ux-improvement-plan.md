@@ -151,14 +151,9 @@ S8-C2 owns only normal-Workbench visual separation of existing ownership. A comp
 
 Profile favorites/pinning/tags/search, Profile duplication/templates, result moving/deletion/comparison, multi-run comparison, autosave/recovery, filesystem-wide Profile discovery and batch/queue execution remain outside S8-C2. Exact milestone status and the audit gate belong only to the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md).
 
-## S9 operational recovery and UX selection
+## S9 operational recovery and UX polish
 
-After S8, select P2 work based on observed user effect rather than treating every candidate as mandatory:
-
-- autosave and abnormal-exit recovery;
-- unsaved-change confirmation on close;
-- analysis-area zoom, pan and fit;
-- bidirectional highlight between fields and overlay items.
+S9 slice sequence and current gate are owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). This section defines the user-facing contracts for the selected S9 interaction slices while preserving S9-A behavior and existing SSOT geometry authority.
 
 S9-A owns only unsaved Profile change tracking and application-close confirmation. Profile persistence dirtiness is independent from `WorkbenchState`: `WorkbenchController` compares user Profile state with a safe close baseline and intentionally excludes save-generated `InspectionRecipe.updated_at` bookkeeping from that comparison. Successful Profile load and save establish the baseline, while an explicit new Profile has no safe baseline until it is saved. Recipe-owned edits make the Profile dirty; undo away from the persisted Profile remains dirty, while redo back to the same persisted Profile content becomes clean even if the restored undo snapshot carries an older `updated_at`. Test-video, `run_name`, analysis range, compressor start, sampling and other `AnalysisSession`-only changes do not make the Profile dirty even when existing readiness/analysis state transitions mark the Workbench `DRAFT` or `DRAFT_DIRTY`.
 
@@ -166,7 +161,44 @@ A same-Profile new-video replacement starts from the authoritative Recipe snapsh
 
 Application close checks Profile-specific dirtiness before video-reader teardown. A dirty Profile offers Save, Discard and Cancel. Save reuses the established Profile save workflow and normalized `.oilrecipe` path behavior; Save-As cancellation or save failure cancels close and preserves the current Workbench. Rejected close also preserves application-owned secondary lifecycle state such as Result Review, the completion dialog, prepared same-Profile work and preflight; those owners tear down only after `MainWindow` has accepted the application close. Discard closes without writing or overwriting the Profile file. Cancel leaves Recipe, session, reader and UI state intact. A failed repository write restores the pre-save Recipe `updated_at`, so an unsuccessful save attempt cannot mutate the in-memory Profile or establish a clean baseline.
 
-S9-A does not add autosave, crash/abnormal-exit recovery, recovery files, session recovery or prompts on every new/load transition. Autosave/recovery, analysis-area zoom/pan/fit and field↔overlay highlight remain unstarted unless separately authorized.
+S9-A does not add autosave, crash/abnormal-exit recovery, recovery files, session recovery or prompts on every new/load transition. Its accepted dirty/save/close lifecycle remains the compatibility boundary for later S9 interaction work.
+
+### S9-B — Workbench Analysis-Area Zoom, Pan & Fit
+
+S9-B improves precision editing for small sight-glass regions without changing Recipe geometry authority.
+
+- The analysis-area view has a clear default Fit behavior and an explicit fit-to-view action that presents the source frame within the available viewport while preserving aspect ratio.
+- Users can zoom in and out around the analysis area. An explicit actual-pixel/100% view may be provided when it fits the interaction model, but its presence does not replace Fit as the safe default/reset behavior.
+- When zoomed, users can pan to inspect and edit small ellipse, zero-line and exclusion details.
+- Ordinary frame/timestamp changes within the same video/Profile context do not unnecessarily reset the user's current view transform.
+- Replacing the video or Profile context establishes a reasonable Fit/reset so a transform from the previous context is not carried forward blindly.
+- Canonical geometry remains source-frame / `QGraphicsScene` coordinates. Zoom and pan are view state only and must not mutate Recipe geometry, source coordinates or persisted data.
+- Ellipse movement/resizing, zero-line placement and exclusion editing retain source-coordinate accuracy at every supported zoom level.
+- Zoom/pan interaction must coexist with the existing settings-panel wheel-safe behavior; pointer interaction over settings controls must not regress into accidental value changes.
+- Exact gestures, helper/class names, transform APIs and implementation structure are left to the implementation owner.
+
+### S9-C — Field ↔ Overlay Interaction Polish
+
+S9-C reduces ambiguity about what the user is currently editing by coupling settings-panel context and overlay affordances without conflating selection with the active edit target.
+
+Field → Overlay behavior:
+
+- geometry fields or geometry-group focus highlights the selected ellipse;
+- zero-line field focus highlights the zero line;
+- margin field focus highlights the inner detection margin;
+- an exclusion entry/field highlights the corresponding exclusion overlay.
+
+Overlay → Field behavior:
+
+- ellipse interaction highlights the corresponding geometry field/group;
+- zero-line interaction highlights the corresponding field;
+- exclusion interaction highlights the corresponding exclusion field/group and makes that editor visible when scrolling or expansion is required.
+
+Selection state and active editing-target highlight remain semantically distinct: the selected Glass stays identifiable while the currently edited ellipse, line, margin or exclusion receives a stronger temporary affordance.
+
+Ellipse visual polish is part of S9-C. The existing axis-aligned eight-direction resize capability remains required, but a normally selected ellipse should not be dominated by eight large square handles. Resize affordances may become smaller circles, ticks or similarly restrained markers and may appear more strongly on hover, geometry-edit or resize context. Reducing visual size must not reduce the practical hit target or resize usability; the active handle/edit target must remain obvious. Existing minimum size, frame bounds and eight-direction resize behavior remain unchanged.
+
+Autosave/abnormal-exit recovery is not cancelled or superseded, but it is deferred to post-S10 reassessment because its current user benefit does not justify making it an S9 release prerequisite.
 
 The following remain P3 lower-priority backlog unless explicitly promoted:
 
@@ -175,7 +207,7 @@ The following remain P3 lower-priority backlog unless explicitly promoted:
 - resize tooltip and modifier-based geometry editing;
 - further Wizard/Workbench simplification.
 
-S9 is a selection boundary, not a promise that every P2 or P3 candidate ships before release. Windows/manual GUI and packaging validation remains a separate final release obligation governed by the [roadmap](../00-project/roadmap.md) and [real-world validation plan](../30-quality/real-world-validation-plan.md).
+S9-B and S9-C are the selected remaining S9 product slices; unrelated P3 items remain optional unless promoted. Their implementation PRs own source-completing manual acceptance updates, while Windows/manual GUI and packaging validation remains the separate mandatory S10 release obligation governed by the [roadmap](../00-project/roadmap.md) and [real-world validation plan](../30-quality/real-world-validation-plan.md).
 
 ## Implementation principles
 

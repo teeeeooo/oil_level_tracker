@@ -38,7 +38,7 @@ A feature document must not maintain a competing project-wide “current next wo
 
 ## Active documents
 
-- Active S6 state and gate: [current work plan](./00-project/work-plan.md)
+- Current project state and gate: [current work plan](./00-project/work-plan.md)
 - Long-term status: [project roadmap](./00-project/roadmap.md)
 - Current validation contract: [real-world validation plan](./30-quality/real-world-validation-plan.md)
 - S6-A repository sample evidence: [base sample qualification](./30-quality/s6-base-sample-1-evidence.md)

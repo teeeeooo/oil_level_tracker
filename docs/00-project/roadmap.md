@@ -137,11 +137,11 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ### S9 — Operational Recovery & UX Polish
 
-- **Purpose:** Select recovery and interaction improvements after S8 based on observed user impact rather than committing every candidate to release scope.
+- **Purpose:** Complete the selected high-impact Workbench interaction improvements after the S9-A data-loss guard while deferring lower-value recovery work.
 - **Status:** `ACTIVE`
-- **Major result:** `S9-A — Unsaved Profile Change Tracking & Close Confirmation` is audited, accepted and merged. Profile persistence dirtiness is tracked independently from `WorkbenchState` by comparing user Profile state with a safe load/save/result-snapshot baseline while excluding save-generated `updated_at` bookkeeping; current-test/session-only edits therefore do not trigger Profile-loss warnings, and undo/redo correctly returns to clean when user Profile content matches the persisted state. Application close now guards unsaved Profile changes before close-success-dependent teardown with Save/Discard/Cancel while preserving secondary application lifecycles until close acceptance. Autosave/abnormal-exit recovery, analysis-area zoom/pan/fit and field↔overlay highlight remain unstarted selection candidates; none is automatically selected by the S9-A close.
-- **Next gate:** Fresh `Continuation Orchestrator` read to select the next S9 candidate from authoritative post-S9-A state.
-- **Priority:** `P2 — S9-A completed / next candidate selection`
+- **Major result:** `S9-A — Unsaved Profile Change Tracking & Close Confirmation` is completed after audit, merge and Close. The selected remaining S9 sequence is `S9-B — Workbench Analysis-Area Zoom, Pan & Fit` followed by `S9-C — Field ↔ Overlay Interaction Polish`, with S9-C also owning selected-ellipse resize-handle visual polish while preserving the existing axis-aligned eight-direction resize contract. Autosave/abnormal-exit recovery is deferred to post-S10 reassessment rather than treated as an S9 release prerequisite.
+- **Next gate:** `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`.
+- **Priority:** `P2 — S9-B selected next; S9-C follows`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S10 — Windows and Packaging Final Release Gate
@@ -154,4 +154,4 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 operational recovery/UX ACTIVE` → `S10 final Windows & Packaging release gate`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9-A DONE` → `S9-B Zoom/Pan/Fit` → `S9-C Field↔Overlay Interaction Polish` → `S10 final Windows & Packaging release gate`; autosave/abnormal-exit recovery is deferred to post-S10 reassessment.
