@@ -45,8 +45,9 @@ Phase 2B는 일반 사용자 결과 검토에 집중하고, detector 내부 정�
 ### 5.1 기존 결과 열기
 
 - Workbench의 `결과 검토` action 선택
-- 최근 결과 또는 다른 결과 bundle 폴더 선택
-- Viewer가 bundle 유효성 검사
+- application user data에 저장된 bounded 최근-result 목록에서 선택하거나 `다른 결과 폴더 선택`으로 직접 지정
+- stale/moved 최근 경로는 해당 항목만 사용할 수 없게 표시하고 다른 history/manual workflow는 유지
+- Viewer가 기존 authoritative `ResultBundleReader`로 bundle 유효성 검사; history의 cached label은 결과 truth로 신뢰하지 않음
 - 원본 영상이 있으면 분석 시작 시점으로 로드
 - 원본 영상이 없으면 분석 당시 경로를 표시하고 재지정 action 제공
 
@@ -552,7 +553,7 @@ debug_case_YYYYMMDD_HHMMSS/
 
 ### 9.6 공유용 결과 영상 — S7 / Phase 2C-4
 
-The accepted S6 real-video/runtime scope remains preserved. S7 is fresh exact-head audited, merged and closed; the accepted annotated-MP4 implementation and decoded-timeline coverage repairs reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. S8 repeated-test workflow/result management remains `ACTIVE`: S8-A run identity/output naming is independently audited, accepted and native guarded-squash-merged through PR #69 as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`; the next bounded gate is S8-B recent Profile/result management selection and its implementation has not started. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed for the final product/release sequence and are not inferred from this source-tree work.
+The accepted S6 real-video/runtime scope remains preserved. S7 is fresh exact-head audited, merged and closed; the accepted annotated-MP4 implementation and decoded-timeline coverage repairs reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. S8 repeated-test workflow/result management remains `ACTIVE`: S8-A run identity/output naming is independently audited, accepted and native guarded-squash-merged through PR #69 as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`; S8-B1 Persistent Recent Result Access is implementation-complete and awaiting independent audit. Its registry is bounded application/user state outside official bundles, and every selected result still enters the existing Result Review authoritative read/validation path. Recent Profile management and the remaining S8 work remain unstarted. The exact next gate is `S8-B1 Persistent Recent Result Access Fresh Exact-Head Auditor`. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed for the final product/release sequence and are not inferred from this source-tree work.
 
 Implemented S7 contract:
 
