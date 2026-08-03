@@ -1,7 +1,7 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S9 — Operational Recovery & UX Polish`
-**Milestone status:** `ACTIVE — S8 complete; S9-A implementation complete, awaiting independent audit`
+**Milestone status:** `ACTIVE — S8 complete; S9-A audited, merged and closed; next S9 candidate selection pending`
 **S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
@@ -18,11 +18,11 @@
 **Current S8-B2 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #71 @ 067e599bb8fa727e94df360be30560cf73d8a599`
 **Current S8-C1 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #72 @ b485bf85a4d28c604c4d8ac2579fbe2e2f186857`
 **Current S8-C2 result:** `ORCHESTRATOR EXACT-HEAD GATE PASS; NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #73 @ e90310a63faad2a20561ba0d5221432cc1e1c4fb`
-**Current S9-A result:** `IMPLEMENTATION COMPLETE — AWAITING INDEPENDENT AUDIT`
-**Current gate:** `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`
+**Current S9-A result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #74`
+**Current gate:** `Continuation Orchestrator fresh-read — select the next S9 candidate from authoritative post-S9-A state`
 **Successor milestone:** `S10 — Windows and Packaging Final Release Gate`
 
-This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 and S7 remain closed against their accepted validation/export contracts, and S8 is complete through PR #73. S9 remains active. S9-A is implementation-complete on its focused Lane C Worker branch and awaiting independent audit. `WorkbenchController` now owns Profile close dirtiness separately from `WorkbenchState` by comparing user Profile state with a safe baseline established after successful load/save or authoritative same-Profile result-snapshot replacement; save-generated `InspectionRecipe.updated_at` bookkeeping is intentionally excluded from dirty truth. Explicit new Profiles have no safe baseline until saved. Recipe edits become dirty, undo away from the persisted state remains dirty, redo back to already-persisted Profile content becomes clean, and current-test/session-only changes remain non-Profile-dirty even when existing readiness state transitions to `DRAFT_DIRTY`. `MainWindow.closeEvent()` checks this Profile-specific state before close-success-dependent teardown and offers Save/Discard/Cancel. Save reuses the established MainWindow → WorkbenchController → SaveRecipeUseCase → JsonRecipeRepository chain; cancellation or failure keeps the Workbench, reader, Result Review, completion UI, prepared same-Profile work and preflight lifecycle intact. Those secondary owners now clean up only from the accepted-close signal, and repository write failure restores the pre-save `updated_at` so the in-memory Recipe remains unchanged. Autosave/abnormal-exit recovery, zoom/pan/fit and field↔overlay highlight remain unstarted candidates. The exact next gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed.
+This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 and S7 remain closed against their accepted validation/export contracts, and S8 is complete through PR #73. S9 remains active. S9-A has passed fresh exact-head Lane C audit, merged through PR #74 and completed bounded Close. `WorkbenchController` owns Profile close dirtiness separately from `WorkbenchState` by comparing user Profile state with a safe baseline established after successful load/save or authoritative same-Profile result-snapshot replacement; save-generated `InspectionRecipe.updated_at` bookkeeping is intentionally excluded from dirty truth. Explicit new Profiles have no safe baseline until saved. Recipe edits become dirty, undo away from the persisted state remains dirty, redo back to already-persisted Profile content becomes clean, and current-test/session-only changes remain non-Profile-dirty even when existing readiness state transitions to `DRAFT_DIRTY`. `MainWindow.closeEvent()` checks this Profile-specific state before close-success-dependent teardown and offers Save/Discard/Cancel. Save reuses the established MainWindow → WorkbenchController → SaveRecipeUseCase → JsonRecipeRepository chain; cancellation or failure keeps the Workbench, reader, Result Review, completion UI, prepared same-Profile work and preflight lifecycle intact. Those secondary owners clean up only after close acceptance, and repository write failure restores the pre-save `updated_at` so the in-memory Recipe remains unchanged. Autosave/abnormal-exit recovery, zoom/pan/fit and field↔overlay highlight remain unstarted candidates and are not automatically selected by this close. The exact next gate is a fresh `Continuation Orchestrator` read to select the next S9 candidate from authoritative post-S9-A state. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed.
 
 ## Evidence owners
 
@@ -44,6 +44,19 @@ This document owns the current execution state. Milestone order and formal statu
 - S6-E: [`../30-quality/s6-bounded-runtime-soak-evidence.md`](../30-quality/s6-bounded-runtime-soak-evidence.md)
 - S6-F: [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
 
+## Latest merged closeout — S9-A Unsaved Profile Change Tracking & Close Confirmation
+
+| Item | Current state |
+|---|---|
+| Audit target | PR #74; exact base `d5fb35f072613b07949fd83ffb67c93783028be9`; exact audited head `205ad12453bb75d94710f7f29a48aa7bcf389953`; 3 commits / exactly 19 complete-PR changed files; Lane C |
+| Profile dirty authority | User Profile state is compared independently from `WorkbenchState` and `AnalysisSession`; save-generated `updated_at` is excluded, while other persisted Recipe identity/metadata/content remains part of dirty truth. `edit → save → undo → redo` returns clean only when user Profile content again matches the persisted state. |
+| Save / failure boundary | Existing MainWindow → WorkbenchController → SaveRecipeUseCase → repository authority remains intact; successful save persists a fresh `updated_at`, failed publication restores it and does not establish a clean baseline. |
+| Close lifecycle | Dirty Save/Discard/Cancel, Save-As cancellation and save failure preserve rejected-close state; Result Review, completion UI, prepared same-Profile work and preflight clean up only after accepted application close. |
+| Fresh Auditor validation | Exact-head focused S9-A + adjacent S8/Qt boundary suite: `55 passed`; independent F1 probe passed; 49 applicable relative links and complete-PR `git diff --check` passed. |
+| Merge / synchronization | PR #74 passed fresh Lane C audit, was marked Ready, native exact-base/head guarded-squash-merged, and the registered primary checkout was synchronized cleanly to authoritative `main` before this documentation Close. |
+| Claim boundary | Autosave/recovery, zoom/pan/fit, field↔overlay highlight, detector/soak, Windows/manual GUI, Windows DPI and PyInstaller remain unclaimed and unselected. |
+| Next gate | Fresh `Continuation Orchestrator` read to select the next S9 candidate from authoritative post-S9-A state. |
+
 ## Latest merged closeout — S8-C2 Profile/Current-Test Visual Separation
 
 | Item | Current state |
@@ -55,7 +68,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #73 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `e90310a63faad2a20561ba0d5221432cc1e1c4fb` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ e90310a63faad2a20561ba0d5221432cc1e1c4fb` before this documentation Close |
 | Claim boundary | No persisted/workflow responsibility changed and no detector/soak, Windows/manual GUI, Windows DPI or PyInstaller PASS is inferred |
-| Next gate | S8 is complete; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`. |
+| Next gate | S8 is complete; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
 
 ## Latest merged closeout — S8-C1 Final Run Summary & Completion Actions
 
@@ -70,7 +83,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #72 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `b485bf85a4d28c604c4d8ac2579fbe2e2f186857` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ b485bf85a4d28c604c4d8ac2579fbe2e2f186857` before this documentation Close |
 | Claim boundary | Official bundles remain immutable; recent-result/Profile caches remain non-authoritative; S7/S8-A/S8-B1/S8-B2 contracts remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or S9 PASS is inferred |
-| Next gate | S8-C1 remains closed; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`. |
+| Next gate | S8-C1 remains closed; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
 
 ## Latest merged closeout — S8-B2 Persistent Recent Profile Access
 
@@ -85,7 +98,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #71 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `067e599bb8fa727e94df360be30560cf73d8a599` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ 067e599bb8fa727e94df360be30560cf73d8a599` before this documentation Close |
 | Claim boundary | S8-B1 result history, S8-A current-test identity, same-profile and S7 stored-result/annotated-MP4 contracts remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or S9 PASS is inferred |
-| Next gate | S8-B2 remains closed; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`. |
+| Next gate | S8-B2 remains closed; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
 
 ## Latest merged closeout — S8-B1 Persistent Recent Result Access
 
@@ -99,7 +112,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #70 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `1704c71b72b8851c09a669badda60b14ddecd1ef` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ 1704c71b72b8851c09a669badda60b14ddecd1ef` before this documentation Close |
 | Claim boundary | S8-A run identity/output naming and S7 stored-result/annotated-MP4 authority remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or later-S8/S9 PASS is inferred |
-| Next gate | S8-B1 remains closed; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`. |
+| Next gate | S8-B1 remains closed; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
 
 ## Latest merged closeout — S8-A Repeated-Test Run Identity + Output Naming
 
@@ -115,7 +128,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #69 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` before this documentation Close |
 | Claim boundary | S7 stored-result/annotated-MP4 authority remains unchanged; no S6 benchmark/soak, Windows/manual GUI, PyInstaller or unrelated later-S8/S9 PASS is inferred |
-| Next gate | S8-A remains closed; current project gate is `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`. |
+| Next gate | S8-A remains closed; current project gate is a fresh `Continuation Orchestrator` read for next-S9 selection. |
 
 ## Final Windows and packaging release obligation
 
@@ -133,7 +146,7 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 
 - `P0 completed`: S7 annotated MP4 export is audited, merged and closed.
 - `P1 completed`: S8 repeated-test workflow/result management is merged and closed through S8-C2 / PR #73.
-- `P2 current next gate`: `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`; autosave/recovery, zoom/pan/fit and field↔overlay highlight remain unstarted candidates.
+- `P2 current next gate`: fresh `Continuation Orchestrator` read for next-S9 selection; S9-A is closed, while autosave/recovery, zoom/pan/fit and field↔overlay highlight remain unstarted candidates and are not automatically selected.
 - `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
 - Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.
 
