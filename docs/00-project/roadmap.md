@@ -130,9 +130,9 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Reduce repeated compressor-test effort and operational mistakes when one Profile is reused across multiple test videos.
 - **Status:** `ACTIVE`
-- **Major result:** S8-A implements a session-owned current-test name separate from Profile/Recipe state, human-readable collision-safe result naming and backward-compatible persisted result metadata. Same-profile replacement and successful normal Workbench video replacement both begin with a fresh human run identity. Normal reader-factory or metadata failure before commit preserves the existing reader, session, state, run identity and Recipe/Profile state while closing any failed candidate reader; only a fully prepared candidate is committed, after which the previous reader is closed. The bounded transaction repair is complete on PR #69 and awaits fresh exact-head audit; recent profile/result management, final run summary and broader visual separation remain later S8 work.
-- **Next gate:** `S8-A Repeated-Test Run Identity + Output Naming Fresh Exact-Head Auditor`.
-- **Priority:** `P1 — repeated-test productivity / S8-A transaction repair awaiting audit`
+- **Major result:** S8-A is independently audited, accepted and native guarded-squash-merged through PR #69 as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`. Current-test `run_name` remains session-owned and separate from Profile/Recipe state; human-readable result naming is collision-safe and backward-compatible; same-profile and normal video replacement start with a fresh human identity; normal reader-factory/metadata failure preserves the active Workbench and closes failed candidates before commit.
+- **Next gate:** `S8-B — Recent Profile/Result Management`: select and authorize one bounded recent-access implementation slice; implementation remains not started until that handoff.
+- **Priority:** `P1 — repeated-test productivity / S8-B selection gate`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S9 — Operational Recovery & UX Polish

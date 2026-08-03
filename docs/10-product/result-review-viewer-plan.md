@@ -552,7 +552,7 @@ debug_case_YYYYMMDD_HHMMSS/
 
 ### 9.6 공유용 결과 영상 — S7 / Phase 2C-4
 
-The accepted S6 real-video/runtime scope remains preserved. S7 is fresh exact-head audited, merged and closed; the accepted annotated-MP4 implementation and decoded-timeline coverage repairs reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. S8 repeated-test workflow/result management is now `ACTIVE`: S8-A run identity/output naming is implemented on PR #69 and awaits fresh exact-head audit, but is not yet accepted or merged; later S8 slices remain unstarted. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed for the final product/release sequence and are not inferred from this source-tree work.
+The accepted S6 real-video/runtime scope remains preserved. S7 is fresh exact-head audited, merged and closed; the accepted annotated-MP4 implementation and decoded-timeline coverage repairs reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. S8 repeated-test workflow/result management remains `ACTIVE`: S8-A run identity/output naming is independently audited, accepted and native guarded-squash-merged through PR #69 as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`; the next bounded gate is S8-B recent Profile/result management selection and its implementation has not started. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed for the final product/release sequence and are not inferred from this source-tree work.
 
 Implemented S7 contract:
 

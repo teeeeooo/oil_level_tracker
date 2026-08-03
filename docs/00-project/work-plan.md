@@ -1,7 +1,7 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S8 — Repeated-Test Workflow & Result Management`
-**Milestone status:** `ACTIVE — S8-A transaction repair complete on feature branch; awaiting independent fresh audit`
+**Milestone status:** `ACTIVE — S8-A audited, merged and closed; S8-B selection gate active`
 **S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
@@ -13,11 +13,11 @@
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
 **Current S7 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #68 @ 8846c272842df099f5849ea71686c3370248fc03`
-**Current S8-A result:** `REPEATED-TEST RUN IDENTITY + OUTPUT NAMING TRANSACTION REPAIR COMPLETE — AWAITING FRESH EXACT-HEAD AUDIT`
-**Current gate:** `S8-A Repeated-Test Run Identity + Output Naming Fresh Exact-Head Auditor`
+**Current S8-A result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #69 @ c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`
+**Current gate:** `S8-B — Recent Profile/Result Management: select and authorize one bounded recent-access implementation slice; implementation not started`
 **Successor milestone:** `S9 — Operational Recovery & UX Polish`
 
-This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, including the bounded available-corpus accuracy claim and residual `not_evaluated` field categories. S7 is independently audited, merged and closed; its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts remain unchanged. S8 is now active through bounded slice S8-A: the feature branch adds a session-owned current-test name, safe human-readable result bundle naming and backward-compatible metadata without changing Recipe/Profile persistence. Same-profile replacement retains its existing atomic prepare/commit behavior. Normal Workbench replacement now prepares the candidate reader and metadata before commit: reader-factory or metadata failure leaves the previous reader, session, state, run identity and Recipe/Profile state untouched and closes any acquired failed candidate; successful commit resets `run_name`, installs the new reader/session video state and only then closes the previous reader. S8-A is not accepted or merged until the fresh exact-head Auditor passes it. Recent profile/result history, final-run summary, broader Profile/current-test visual redesign, autosave/recovery and batch execution remain outside this slice. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
+This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, including the bounded available-corpus accuracy claim and residual `not_evaluated` field categories. S7 is independently audited, merged and closed; its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts remain unchanged. S8 remains active: S8-A is independently audited, accepted, native guarded-squash-merged and closed through PR #69. Its accepted contract keeps `run_name` session/current-test-owned, preserves Recipe/Profile serialization, uses safe collision-resistant human-readable result naming, keeps pre-S8 result data readable, and makes normal reader-factory/metadata failure transactional while successful replacement starts with a fresh human identity. The next bounded gate is S8-B recent Profile/result management selection; implementation has not started. Final-run summary, broader Profile/current-test visual redesign, autosave/recovery and batch execution remain outside S8-A and unstarted. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
 
 ## Evidence owners
 
@@ -34,20 +34,21 @@ This document owns the current execution state. Milestone order and formal statu
 - S6-E: [`../30-quality/s6-bounded-runtime-soak-evidence.md`](../30-quality/s6-bounded-runtime-soak-evidence.md)
 - S6-F: [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
 
-## Latest recorded closeout — S7 / Phase 2C-4
+## Latest recorded closeout — S8-A Repeated-Test Run Identity + Output Naming
 
 | Item | Current state |
 |---|---|
-| Audit target | PR #68; exact base `3f8b8672509fb14eb047cc0360fcb05c50c9b1d8`; exact final audit head `00e7007ca3aafb2bf38f46bd740a3a12fc81637b`; 4 commits / exactly 15 complete-PR changed files |
-| Documentation-only tail | `b3e2ebd8af3506c66c517565bf164795561cb655 → 00e7007ca3aafb2bf38f46bd740a3a12fc81637b` changed exactly four documentation files and no `src/` or `tests/` files |
-| Product/source contract | Official stored Result Review state remains the only general-export truth; missing Oil/Foam is not fabricated; debug trace is subordinate; decoded start/internal/end coverage is fail-closed under the `1.5×` nominal-frame-period contract while adjacent valid boundaries and bounded jitter remain usable |
-| Publication/lifecycle boundary | Source MP4 and official bundle remain immutable; failed/cancelled export cannot publish a partial final or replace an approved destination; temporary output is atomically published only after verification; reader/writer/debug resources and Qt worker lifecycle remain bounded; UI retains no direct NumPy/OpenCV raster ownership |
-| Reused validation | Unchanged source/test tree preserved the authoritative S7/Result Review/export/lifecycle/raster focused `97 passed` and source-video resolver compatibility `7 passed`; rerun was intentionally unnecessary because the final tail was documentation-only and did not invalidate the validation contract |
-| Fresh audit checks | Authoritative S7 documentation semantics passed; 46 applicable relative links passed; complete-PR `git diff --check` passed |
-| Merge | PR #68 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `8846c272842df099f5849ea71686c3370248fc03` |
-| Synchronization | Registered primary checkout synchronized cleanly to `main @ 8846c272842df099f5849ea71686c3370248fc03` before this documentation Close |
-| Claim boundary | No Windows/manual GUI/PyInstaller/audio-preservation PASS is inferred; replacement-video duration mismatch remains a warning distinct from MP4 publication completeness |
-| Next gate | `S8 — Repeated-Test Workflow & Result Management`: select and authorize one bounded implementation slice; implementation has not started |
+| Audit target | PR #69; exact base `5f03d2349d871c354b2670543cec96738cd8e729`; exact final audit head `197c86b9e94632c4a01ec3903c871df762b09f36`; 4 commits / exactly 18 complete-PR changed files |
+| Final repair scope | `96adc21f781f654c9104d52624143270b66cd5d3 → 197c86b9e94632c4a01ec3903c871df762b09f36` changed exactly seven files and made normal Workbench video-open reader/metadata preparation transactional |
+| Accepted identity contract | Human `run_name` is session/current-test state, never Recipe/Profile identity; successful normal or same-profile replacement starts fresh, while dialog cancel and reader-factory/metadata failure preserve the active test identity and Workbench state |
+| Reader/resource boundary | Failed acquired candidates are closed without replacing or closing the active reader; successful candidate preparation commits reader/session state before the previous reader is released |
+| Output/persistence boundary | Safe Unicode-aware naming, path-separator sanitization, deterministic collision suffixes and temporary→validated→atomic bundle publication remain intact; pre-S8 persisted data remains readable and UUID `run_id` stays the technical identity |
+| Fresh validation | Exact-head focused S8-A/Workbench/CLI/Result Review/S7 suite: `104 passed`; independent factory-failure, metadata-failure and successful-commit lifecycle probes passed |
+| Fresh documentation checks | Authoritative S8 semantics passed; 50 applicable relative links passed; complete-PR `git diff --check` passed |
+| Merge | PR #69 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` |
+| Synchronization | Registered primary checkout synchronized cleanly to `main @ c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` before this documentation Close |
+| Claim boundary | S7 stored-result/annotated-MP4 authority remains unchanged; no S6 benchmark/soak, Windows/manual GUI, PyInstaller or unrelated later-S8/S9 PASS is inferred |
+| Next gate | `S8-B — Recent Profile/Result Management`: select and authorize one bounded recent-access implementation slice; implementation not started |
 
 ## Final Windows and packaging release obligation
 
@@ -64,7 +65,7 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 ## Product priority and sequence
 
 - `P0 completed`: S7 annotated MP4 export is audited, merged and closed.
-- `P1 current next gate`: S8 repeated-test workflow and result management; the S8-A normal-open transaction repair is complete on its feature branch and awaits fresh exact-head audit before any later S8 slice proceeds.
+- `P1 current next gate`: `S8-B — Recent Profile/Result Management`; select and authorize one bounded recent-access implementation slice before implementation begins.
 - `P2`: after S8, select operational recovery and UX improvements based on observed user effect.
 - `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
 - Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.
