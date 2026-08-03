@@ -138,20 +138,20 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S9 — Operational Recovery & UX Polish
 
 - **Purpose:** Complete the selected high-impact Workbench interaction improvements after the S9-A data-loss guard while deferring lower-value recovery work.
-- **Status:** `ACTIVE`
-- **Major result:** `S9-A — Unsaved Profile Change Tracking & Close Confirmation` and `S9-B — Workbench Analysis-Area Zoom, Pan & Fit` are completed. S9-B adds presentation-only Fit/zoom/pan/100% view state while preserving canonical source-scene geometry, same-context transform continuity and shared-canvas compatibility. `S9-C — Field ↔ Overlay Interaction Polish` remains the selected final S9 slice and also owns selected-ellipse resize-handle visual polish while preserving the axis-aligned eight-direction resize contract. Autosave/abnormal-exit recovery remains deferred to post-S10 reassessment.
-- **Next gate:** `S9-C — Field ↔ Overlay Interaction Polish Worker`.
-- **Priority:** `P2 — S9-A/S9-B completed; S9-C selected next`
+- **Status:** `DONE`
+- **Major result:** S9-A protects unsaved Profile changes on application close; S9-B adds presentation-only Fit/zoom/pan/100% while preserving canonical scene geometry; S9-C adds bidirectional field↔overlay active-target feedback and restrained ellipse resize affordances without changing Profile/session persistence or the axis-aligned eight-direction resize contract. Autosave/abnormal-exit recovery remains deferred to post-S10 reassessment.
+- **Next gate:** Preserve the accepted S9 interaction and persistence boundaries through the S10 Windows/packaging release gate.
+- **Priority:** `P2 — completed`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S10 — Windows and Packaging Final Release Gate
 
 - **Purpose:** Validate the completed product feature set on the target Windows environment and prove the relocatable one-folder distribution before release.
-- **Status:** `PLANNED`
-- **Major result:** Obligation is preserved and pending; no Windows/manual GUI/PyInstaller one-folder PASS is currently claimed.
-- **Next gate:** After the required product feature work, run the Windows Python 3.14 canonical suite, supported-DPI manual Workbench/preflight/analysis/Result Review flow, Windows PyInstaller one-folder build, clean-PC execution without Python or separately bundled fonts, relocated Jinja/Qt/OpenCV/Matplotlib resource checks, Korean font behavior, Unicode/long paths, active file locking, cancellation/application close and video/output/debug handle-release checks.
+- **Status:** `ACTIVE`
+- **Major result:** Product feature work through S9 is complete. Windows canonical, supported-DPI manual GUI, PyInstaller one-folder build/relocation and clean-PC acceptance remain pending; no Windows/manual/package PASS is currently claimed.
+- **Next gate:** Execute the final Windows/platform validation contract against the synchronized release candidate, preserving exact evidence for canonical tests, manual Workbench/preflight/analysis/Result Review, packaging/relocation, resources/fonts, Unicode/long paths and cancellation/handle cleanup.
 - **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md), [manual checklist](../30-quality/manual-gui-windows-checklist.md)
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9-A DONE` → `S9-B DONE` → `S9-C Field↔Overlay Interaction Polish` → `S10 final Windows & Packaging release gate`; autosave/abnormal-exit recovery is deferred to post-S10 reassessment.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 ACTIVE — final Windows & Packaging release gate`; autosave/abnormal-exit recovery remains deferred to post-S10 reassessment.
