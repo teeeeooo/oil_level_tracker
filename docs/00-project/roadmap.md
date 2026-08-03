@@ -139,9 +139,9 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Complete the selected high-impact Workbench interaction improvements after the S9-A data-loss guard while deferring lower-value recovery work.
 - **Status:** `ACTIVE`
-- **Major result:** `S9-A — Unsaved Profile Change Tracking & Close Confirmation` is completed after audit, merge and Close. The selected remaining S9 sequence is `S9-B — Workbench Analysis-Area Zoom, Pan & Fit` followed by `S9-C — Field ↔ Overlay Interaction Polish`, with S9-C also owning selected-ellipse resize-handle visual polish while preserving the existing axis-aligned eight-direction resize contract. Autosave/abnormal-exit recovery is deferred to post-S10 reassessment rather than treated as an S9 release prerequisite.
-- **Next gate:** `S9-B — Workbench Analysis-Area Zoom, Pan & Fit Worker`.
-- **Priority:** `P2 — S9-B selected next; S9-C follows`
+- **Major result:** `S9-A — Unsaved Profile Change Tracking & Close Confirmation` and `S9-B — Workbench Analysis-Area Zoom, Pan & Fit` are completed. S9-B adds presentation-only Fit/zoom/pan/100% view state while preserving canonical source-scene geometry, same-context transform continuity and shared-canvas compatibility. `S9-C — Field ↔ Overlay Interaction Polish` remains the selected final S9 slice and also owns selected-ellipse resize-handle visual polish while preserving the axis-aligned eight-direction resize contract. Autosave/abnormal-exit recovery remains deferred to post-S10 reassessment.
+- **Next gate:** `S9-C — Field ↔ Overlay Interaction Polish Worker`.
+- **Priority:** `P2 — S9-A/S9-B completed; S9-C selected next`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S10 — Windows and Packaging Final Release Gate
@@ -154,4 +154,4 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9-A DONE` → `S9-B Zoom/Pan/Fit` → `S9-C Field↔Overlay Interaction Polish` → `S10 final Windows & Packaging release gate`; autosave/abnormal-exit recovery is deferred to post-S10 reassessment.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9-A DONE` → `S9-B DONE` → `S9-C Field↔Overlay Interaction Polish` → `S10 final Windows & Packaging release gate`; autosave/abnormal-exit recovery is deferred to post-S10 reassessment.
