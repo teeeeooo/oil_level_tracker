@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 from oil_tracker.adapters.presentation.qt_frame_image_converter import blank_bgr_frame
@@ -14,6 +15,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QMainWindow,
+    QMenu,
     QMessageBox,
     QPushButton,
     QSizePolicy,
@@ -59,6 +61,9 @@ from oil_tracker.ui.widgets.workbench_progress import WorkbenchProgressWidget
 from oil_tracker.ui.wizard.new_recipe_wizard import NewRecipeWizard
 
 
+LOGGER = logging.getLogger(__name__)
+
+
 class MainWindow(QMainWindow):
     def __init__(self, workbench, preview_controller, analysis_controller, debug_renderer, parent=None) -> None:
         super().__init__(parent)
@@ -72,6 +77,8 @@ class MainWindow(QMainWindow):
         self.playback_speed = 1.0
         self.last_result_path = ""
         self.last_debug_artifacts = None
+        self.recent_profile_history = None
+        self._pending_profile_path: Path | None = None
         self.undo_stack = QUndoStack(self)
         self._last_validation = None
         self._preview_context: tuple[str, int, float] | None = None
@@ -122,6 +129,10 @@ class MainWindow(QMainWindow):
                 button.setCursor(Qt.CursorShape.PointingHandCursor)
             if key in {"load", "result"}:
                 toolbar.addSeparator()
+        self.recent_profile_menu = QMenu("최근 프로필", self)
+        self.recent_profile_menu.setObjectName("recentProfileMenu")
+        self.actions["load"].setMenu(self.recent_profile_menu)
+        self._refresh_recent_profile_menu()
         self.actions["debug"].setCheckable(True)
         self.actions["save"].setShortcut(QKeySequence.StandardKey.Save)
 
@@ -711,6 +722,57 @@ class MainWindow(QMainWindow):
             f"{glass.name}의 분석 시작 상태를 영상과 비교해 확인하세요. 현재 설정은 자동으로 변경되지 않습니다."
         )
 
+    def set_recent_profile_history(self, history) -> None:
+        self.recent_profile_history = history
+        self._refresh_recent_profile_menu()
+
+    def _refresh_recent_profile_menu(self) -> None:
+        menu = getattr(self, "recent_profile_menu", None)
+        if menu is None:
+            return
+        menu.clear()
+        entries = (
+            self.recent_profile_history.entries()
+            if self.recent_profile_history is not None
+            else ()
+        )
+        if entries:
+            for index, entry in enumerate(entries):
+                name = entry.profile_name or Path(entry.path).stem
+                label = f"{name} — {entry.path}"
+                if not entry.is_available():
+                    label += " (경로를 찾을 수 없음)"
+                action = menu.addAction(label)
+                action.setObjectName(f"recentProfileAction{index}")
+                action.setData(entry.path)
+                action.setEnabled(entry.is_available())
+                action.triggered.connect(
+                    lambda _checked=False, path=entry.path: self.open_recent_profile(path)
+                )
+            menu.addSeparator()
+        else:
+            empty = menu.addAction("최근 프로필 없음")
+            empty.setEnabled(False)
+        manual = menu.addAction("다른 프로필 파일 선택…")
+        manual.setObjectName("otherProfileFileAction")
+        manual.triggered.connect(lambda _checked=False: self.actions["load"].trigger())
+
+    def open_recent_profile(self, path: str | Path) -> None:
+        self._pending_profile_path = Path(path)
+        self.actions["load"].trigger()
+
+    def _register_recent_profile(self) -> None:
+        if self.recent_profile_history is None or self.workbench.recipe_path is None:
+            return
+        try:
+            self.recent_profile_history.record_recipe(
+                self.workbench.recipe_path,
+                self.workbench.recipe,
+            )
+        except Exception as exc:
+            LOGGER.warning("Recent profile history could not be updated: %s", exc)
+        self._refresh_recent_profile_menu()
+
     def save_recipe(self) -> None:
         path = self.workbench.recipe_path
         if path is None:
@@ -725,26 +787,33 @@ class MainWindow(QMainWindow):
             path = Path(selected)
         try:
             self.workbench.save(path)
+            self._register_recent_profile()
             self._update_state()
-            self.statusBar().showMessage(f"프로필 저장 완료: {path}")
+            actual_path = self.workbench.recipe_path or path
+            self.statusBar().showMessage(f"프로필 저장 완료: {actual_path}")
         except Exception as exc:
             self._error("프로필 저장 실패", str(exc))
 
     def load_recipe(self) -> None:
-        selected, _ = QFileDialog.getOpenFileName(
-            self,
-            "분석 프로필 열기",
-            "",
-            "유면 분석 프로필 (*.oilrecipe)",
-        )
-        if not selected:
-            return
+        path = self._pending_profile_path
+        self._pending_profile_path = None
+        if path is None:
+            selected, _ = QFileDialog.getOpenFileName(
+                self,
+                "분석 프로필 열기",
+                "",
+                "유면 분석 프로필 (*.oilrecipe)",
+            )
+            if not selected:
+                return
+            path = Path(selected)
         try:
-            self.workbench.load(Path(selected))
+            self.workbench.load(path)
             self.undo_stack.clear()
             self._set_placeholder()
             self._refresh_all()
             self._refresh_inline_validation()
+            self._register_recent_profile()
         except Exception as exc:
             self._error("프로필 열기 실패", str(exc))
 
