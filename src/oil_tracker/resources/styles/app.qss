@@ -192,6 +192,32 @@ QLabel#metadataCard {
     color: #33485d;
 }
 
+QGroupBox#profileOwnershipGroup {
+    background: #f3f8fd;
+    border-color: #8fb5d8;
+}
+
+QGroupBox#currentTestOwnershipGroup {
+    background: #fff9ef;
+    border-color: #d9b56f;
+}
+
+QLabel#profileIdentityName,
+QLabel#profileIdentityPath {
+    font-weight: 700;
+    color: #24415c;
+}
+
+QLabel#profileAreaHeading {
+    font-weight: 800;
+    color: #24557d;
+}
+
+QLabel#ownershipHint {
+    color: #5e6f80;
+    font-size: 9pt;
+}
+
 QLabel#previewHint {
     color: #52687d;
     padding: 4px;

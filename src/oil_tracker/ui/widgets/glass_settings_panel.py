@@ -55,6 +55,14 @@ class GlassSettingsPanel(QWidget):
         container_layout.setContentsMargins(4, 4, 8, 8)
         container_layout.setSpacing(8)
 
+        self.ownership_label = QLabel("Profile 설정 · 선택한 Glass")
+        self.ownership_label.setObjectName("profileAreaHeading")
+        self.ownership_hint = QLabel("아래 Glass 설정은 .oilrecipe Profile에 저장되어 다음 시험에서도 재사용됩니다.")
+        self.ownership_hint.setObjectName("ownershipHint")
+        self.ownership_hint.setWordWrap(True)
+        container_layout.addWidget(self.ownership_label)
+        container_layout.addWidget(self.ownership_hint)
+
         self.name = QLineEdit()
         self.enabled = QCheckBox("이 Glass를 분석에 포함")
         self.zero = _double(0, 100000)

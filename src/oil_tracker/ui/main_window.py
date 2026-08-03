@@ -159,6 +159,7 @@ class MainWindow(QMainWindow):
         self.canvas.setMinimumSize(560, 340)
         self.settings = GlassSettingsPanel()
         self.transport = TransportBar()
+        self.profile_context = self._build_profile_context()
         self.session_bar = self._build_session_bar()
         self.progress = WorkbenchProgressWidget()
         self.detection_summary = DetectionSummaryCard()
@@ -200,6 +201,7 @@ class MainWindow(QMainWindow):
         shell_layout.setContentsMargins(0, 0, 0, 0)
         shell_layout.setSpacing(0)
         shell_layout.addWidget(self.progress)
+        shell_layout.addWidget(self.profile_context)
         shell_layout.addWidget(self.splitter, 1)
         shell_layout.addWidget(self.action_bar)
         self.setCentralWidget(shell)
@@ -240,8 +242,26 @@ class MainWindow(QMainWindow):
         self.actions["debug"].setChecked(visible)
         self.actions["debug"].blockSignals(False)
 
+    def _build_profile_context(self) -> QWidget:
+        group = QGroupBox("Profile — 재사용 설정 · 아래 Glass/검출/판정 설정이 저장됩니다")
+        group.setObjectName("profileOwnershipGroup")
+        layout = QGridLayout(group)
+        self.profile_name_label = QLabel()
+        self.profile_name_label.setObjectName("profileIdentityName")
+        self.profile_path_label = QLabel()
+        self.profile_path_label.setObjectName("profileIdentityPath")
+        self.profile_path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        layout.addWidget(QLabel("Profile 이름"), 0, 0)
+        layout.addWidget(self.profile_name_label, 0, 1)
+        layout.addWidget(QLabel("저장 위치"), 0, 2)
+        layout.addWidget(self.profile_path_label, 0, 3)
+        layout.setColumnStretch(1, 1)
+        layout.setColumnStretch(3, 2)
+        return group
+
     def _build_session_bar(self) -> QWidget:
-        group = QGroupBox("분석 영상 설정")
+        group = QGroupBox("현재 시험 — 이번 분석에만 적용 · Profile에는 저장되지 않음")
+        group.setObjectName("currentTestOwnershipGroup")
         layout = QGridLayout(group)
         self.open_video_button = QPushButton("시험 영상 열기")
         self.open_video_button.setObjectName("secondaryActionButton")
@@ -1015,7 +1035,15 @@ class MainWindow(QMainWindow):
             session.compressor_start_sec,
         )
 
+    def _sync_profile_context(self) -> None:
+        recipe = self.workbench.recipe
+        path = self.workbench.recipe_path
+        self.profile_name_label.setText(recipe.name or "이름 없는 Profile")
+        self.profile_path_label.setText(str(path) if path is not None else "아직 저장되지 않음")
+        self.profile_path_label.setToolTip(str(path) if path is not None else "이 Profile은 아직 .oilrecipe 파일로 저장되지 않았습니다.")
+
     def _update_state(self) -> None:
+        self._sync_profile_context()
         self.state_label.setText(f"상태: {workbench_state_label(self.workbench.state)}")
         self.state_label.setProperty("workbenchState", self.workbench.state.value)
         self.state_label.style().unpolish(self.state_label)
