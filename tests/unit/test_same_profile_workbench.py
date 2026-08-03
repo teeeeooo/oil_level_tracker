@@ -125,3 +125,76 @@ def test_candidate_open_or_decode_failure_preserves_entire_workbench():
         controller.prepare_same_profile_video(_snapshot(), 2.0, "decode-fail.mp4")
     assert (controller.recipe, controller.session, controller.video_reader, controller.state, controller.recipe_path) == before
     assert original_reader.closed is False
+
+
+def test_normal_open_video_replacement_resets_current_test_identity_without_mutating_recipe():
+    controller = _controller(lambda path: _Reader(path))
+    controller.recipe = _snapshot()
+    controller.recipe.name = "재사용 프로필"
+    recipe_before = controller.recipe.to_dict()
+    original_reader = _Reader("old.mp4")
+    controller.video_reader = original_reader
+    controller.session = AnalysisSession(
+        input_video_path="old.mp4",
+        analysis_start_sec=1.0,
+        analysis_end_sec=7.0,
+        compressor_start_sec=2.0,
+        output_directory="old-output",
+        run_name="이전 시험",
+        run_note="old note",
+    )
+    controller.state = WorkbenchState.ANALYZED
+
+    controller.open_video("new.mp4")
+
+    assert controller.session.input_video_path == "new.mp4"
+    assert controller.session.run_name == ""
+    assert controller.state == WorkbenchState.DRAFT_DIRTY
+    assert original_reader.closed is True
+    assert controller.recipe.to_dict() == recipe_before
+    assert "run_name" not in controller.recipe.to_dict()
+
+
+def test_normal_open_video_failure_preserves_existing_current_test_identity_and_workbench():
+    original_reader = _Reader("old.mp4")
+
+    def fail_open(_path):
+        raise OSError("open failed")
+
+    controller = _controller(fail_open)
+    controller.recipe = _snapshot()
+    recipe_before = controller.recipe.to_dict()
+    controller.video_reader = original_reader
+    controller.session = AnalysisSession(input_video_path="old.mp4", run_name="유지할 시험")
+    controller.state = WorkbenchState.ANALYZED
+
+    with pytest.raises(OSError, match="open failed"):
+        controller.open_video("bad.mp4")
+
+    assert controller.session.input_video_path == "old.mp4"
+    assert controller.session.run_name == "유지할 시험"
+    assert controller.video_reader is original_reader
+    assert original_reader.closed is False
+    assert controller.state == WorkbenchState.ANALYZED
+    assert controller.recipe.to_dict() == recipe_before
+
+
+def test_normal_open_video_metadata_failure_preserves_existing_current_test_identity():
+    class MetadataFailureReader:
+        closed = False
+
+        @property
+        def metadata(self):
+            raise OSError("metadata failed")
+
+        def close(self):
+            self.closed = True
+
+    controller = _controller(lambda _path: MetadataFailureReader())
+    controller.session = AnalysisSession(input_video_path="old.mp4", run_name="유지할 시험")
+    controller.state = WorkbenchState.ANALYZED
+
+    with pytest.raises(OSError, match="metadata failed"):
+        controller.open_video("bad-metadata.mp4")
+
+    assert controller.session.run_name == "유지할 시험"

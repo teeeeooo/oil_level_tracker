@@ -130,9 +130,9 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Reduce repeated compressor-test effort and operational mistakes when one Profile is reused across multiple test videos.
 - **Status:** `ACTIVE`
-- **Major result:** S8-A implements a session-owned current-test name separate from Profile/Recipe state, human-readable collision-safe result naming, backward-compatible persisted result metadata and same-profile identity reset. The bounded slice is complete on its feature branch and awaits independent audit; recent profile/result management, final run summary and broader visual separation remain later S8 work.
-- **Next gate:** `S8-A Repeated-Test Run Identity + Output Naming Fresh Exact-Head Auditor`.
-- **Priority:** `P1 — repeated-test productivity / S8-A awaiting audit`
+- **Major result:** S8-A implements a session-owned current-test name separate from Profile/Recipe state, human-readable collision-safe result naming and backward-compatible persisted result metadata. Same-profile replacement and successful normal Workbench video replacement both begin with a fresh human run identity, while cancel/open/metadata failure before successful normal replacement preserves the existing identity. The bounded repair is complete on PR #69 and awaits fresh exact-head re-audit; recent profile/result management, final run summary and broader visual separation remain later S8 work.
+- **Next gate:** `S8-A Repeated-Test Run Identity + Output Naming Repair Fresh Exact-Head Auditor`.
+- **Priority:** `P1 — repeated-test productivity / S8-A repair awaiting re-audit`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S9 — Operational Recovery & UX Polish

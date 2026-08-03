@@ -68,6 +68,7 @@ class WorkbenchController:
         if previous is not None:
             previous.close()
         metadata = reader.metadata
+        self.session.run_name = ""
         self.session.input_video_path = path
         self.session.video_metadata = metadata
         self.session.analysis_start_sec = 0.0
