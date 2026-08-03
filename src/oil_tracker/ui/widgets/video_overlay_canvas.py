@@ -72,25 +72,56 @@ def resized_rect(
 
 
 class ResizeHandleItem(QGraphicsRectItem):
-    SIZE = 10.0
+    VISUAL_SIZE = 6.0
+    ACTIVE_SIZE = 9.0
     HIT_SIZE = 18.0
 
     def __init__(self, role: str, owner: "EditableEllipseItem") -> None:
         super().__init__(owner)
         self.role = role
         self.owner = owner
-        self.setRect(-self.SIZE / 2, -self.SIZE / 2, self.SIZE, self.SIZE)
-        self.setBrush(QBrush(QColor(22, 105, 170)))
-        self.setPen(QPen(QColor(255, 255, 255), 1))
+        self._context_active = False
+        self._hovered = False
+        self._resize_active = False
+        self.setRect(-self.HIT_SIZE / 2, -self.HIT_SIZE / 2, self.HIT_SIZE, self.HIT_SIZE)
+        self.setPen(QPen(Qt.PenStyle.NoPen))
+        self.setBrush(QBrush(Qt.BrushStyle.NoBrush))
         self.setZValue(4)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations, True)
         self.setAcceptHoverEvents(True)
         self.setCursor(_handle_cursor(role))
 
-    def shape(self) -> QPainterPath:
-        path = QPainterPath()
-        path.addRect(-self.HIT_SIZE / 2, -self.HIT_SIZE / 2, self.HIT_SIZE, self.HIT_SIZE)
-        return path
+    def set_context_active(self, active: bool) -> None:
+        self._context_active = active
+        self.update()
+
+    def set_resize_active(self, active: bool) -> None:
+        self._resize_active = active
+        self.update()
+
+    def paint(self, painter, option, widget=None):
+        size = self.ACTIVE_SIZE if self._resize_active else self.VISUAL_SIZE
+        if self._context_active or self._hovered:
+            size += 1.0
+        marker = QRectF(-size / 2, -size / 2, size, size)
+        pen_width = 2 if self._resize_active else 1.4
+        painter.setPen(QPen(QColor(255, 255, 255), pen_width))
+        painter.setBrush(
+            QBrush(QColor(22, 105, 170, 235))
+            if self._resize_active
+            else QBrush(QColor(22, 105, 170, 105 if not self._context_active else 165))
+        )
+        painter.drawEllipse(marker)
+
+    def hoverEnterEvent(self, event) -> None:
+        self._hovered = True
+        self.update()
+        super().hoverEnterEvent(event)
+
+    def hoverLeaveEvent(self, event) -> None:
+        self._hovered = False
+        self.update()
+        super().hoverLeaveEvent(event)
 
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
@@ -117,8 +148,13 @@ class EditableEllipseItem(QGraphicsEllipseItem):
         self.frame_rect = frame_rect
         self.callback = callback
         self._resizing = False
+        self._resize_moved = False
+        self._move_moved = False
         self._active_handle: str | None = None
+        self._interaction_active = False
+        self._hovered = False
         self._start_scene_rect = QRectF(rect)
+        self._press_scene_rect = QRectF(rect)
         self._handles = {role: ResizeHandleItem(role, self) for role in self.HANDLE_ROLES}
         self.setFlags(
             QGraphicsItem.GraphicsItemFlag.ItemIsMovable
@@ -132,15 +168,44 @@ class EditableEllipseItem(QGraphicsEllipseItem):
         self.setBrush(QBrush(Qt.BrushStyle.NoBrush))
         self._sync_handles()
 
+    def set_interaction_active(self, active: bool) -> None:
+        self._interaction_active = active
+        self._update_visual_state()
+
+    def hoverEnterEvent(self, event) -> None:
+        self._hovered = True
+        self._update_visual_state()
+        super().hoverEnterEvent(event)
+
+    def hoverLeaveEvent(self, event) -> None:
+        self._hovered = False
+        self._update_visual_state()
+        super().hoverLeaveEvent(event)
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._press_scene_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
+            self._move_moved = False
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event) -> None:
+        if event.buttons() & Qt.MouseButton.LeftButton:
+            self._move_moved = True
+        super().mouseMoveEvent(event)
+
     def begin_resize(self, role: str, _scene_pos: QPointF) -> None:
         self._resizing = True
+        self._resize_moved = False
         self._active_handle = role
+        self._handles[role].set_resize_active(True)
         self._start_scene_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
+        self._update_visual_state()
 
     def continue_resize(self, scene_pos: QPointF) -> None:
         if not self._resizing or self._active_handle is None:
             return
+        self._resize_moved = True
         new_scene_rect = resized_rect(
             self._start_scene_rect,
             self._active_handle,
@@ -154,11 +219,18 @@ class EditableEllipseItem(QGraphicsEllipseItem):
     def end_resize(self, scene_pos: QPointF) -> None:
         if not self._resizing:
             return
-        self.continue_resize(scene_pos)
+        if self._resize_moved:
+            self.continue_resize(scene_pos)
+        active_handle = self._active_handle
         self._resizing = False
         self._active_handle = None
+        if active_handle is not None:
+            self._handles[active_handle].set_resize_active(False)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
-        self.callback(self.glass_id, QRectF(self.rect()))
+        self._update_visual_state()
+        final_rect = QRectF(self.rect())
+        if final_rect != self._start_scene_rect:
+            self.callback(self.glass_id, final_rect)
 
     def itemChange(self, change, value):
         if change == QGraphicsItem.GraphicsItemChange.ItemPositionChange and self.scene() is not None:
@@ -187,7 +259,9 @@ class EditableEllipseItem(QGraphicsEllipseItem):
         self.setPos(0, 0)
         self.setRect(final_rect)
         self._sync_handles()
-        self.callback(self.glass_id, QRectF(self.rect()))
+        if self._move_moved and final_rect != self._press_scene_rect:
+            self.callback(self.glass_id, QRectF(self.rect()))
+        self._move_moved = False
 
     def _sync_handles(self) -> None:
         r = self.rect()
@@ -204,6 +278,12 @@ class EditableEllipseItem(QGraphicsEllipseItem):
         for role, handle in self._handles.items():
             handle.setPos(positions[role])
             handle.setVisible(self.isSelected())
+            handle.set_context_active(self._interaction_active or self._hovered)
+
+    def _update_visual_state(self) -> None:
+        width = 4 if self._interaction_active or self._resizing else (3 if self._hovered else 2)
+        self.setPen(QPen(QColor(0, 220, 255), width))
+        self._sync_handles()
 
 
 class DraggableZeroLine(QGraphicsLineItem):
@@ -219,6 +299,9 @@ class DraggableZeroLine(QGraphicsLineItem):
         self.ellipse = ellipse
         self.callback = callback
         self._dragging = False
+        self._drag_moved = False
+        self._interaction_active = False
+        self._press_y = y
         self.setData(0, glass_id)
         self.setPen(QPen(QColor(255, 220, 0), 3, Qt.PenStyle.DashLine))
         self.setZValue(50)
@@ -228,6 +311,12 @@ class DraggableZeroLine(QGraphicsLineItem):
         self.label.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations, True)
         self.label.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
         self._position_label()
+
+    def set_interaction_active(self, active: bool) -> None:
+        self._interaction_active = active
+        width = 5 if active else 3
+        self.setPen(QPen(QColor(255, 220, 0), width, Qt.PenStyle.DashLine))
+        self.label.setBrush(QBrush(QColor(255, 255, 150) if active else QColor(255, 240, 80)))
 
     def shape(self) -> QPainterPath:
         line = self.line()
@@ -242,13 +331,16 @@ class DraggableZeroLine(QGraphicsLineItem):
 
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
+            self._press_y = self.line().y1()
             self._dragging = True
+            self._drag_moved = False
             event.accept()
             return
         super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event) -> None:
         if self._dragging:
+            self._drag_moved = True
             self._set_y(event.scenePos().y())
             event.accept()
             return
@@ -256,9 +348,13 @@ class DraggableZeroLine(QGraphicsLineItem):
 
     def mouseReleaseEvent(self, event) -> None:
         if self._dragging:
-            self._set_y(event.scenePos().y())
+            if self._drag_moved:
+                self._set_y(event.scenePos().y())
             self._dragging = False
-            self.callback(self.glass_id, self.line().y1())
+            final_y = self.line().y1()
+            if self._drag_moved and final_y != self._press_y:
+                self.callback(self.glass_id, final_y)
+            self._drag_moved = False
             event.accept()
             return
         super().mouseReleaseEvent(event)
@@ -288,7 +384,10 @@ class EditableRectItem(QGraphicsRectItem):
         self.frame_rect = frame_rect
         self.callback = callback
         self._resize = False
+        self._pointer_moved = False
+        self._interaction_active = False
         self._start = QRectF(rect)
+        self._press_scene_rect = QRectF(rect)
         self.setFlags(
             QGraphicsItem.GraphicsItemFlag.ItemIsMovable
             | QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
@@ -297,6 +396,12 @@ class EditableRectItem(QGraphicsRectItem):
         self.setPen(QPen(QColor(255, 140, 0), 2, Qt.PenStyle.DashLine))
         self.setBrush(QBrush(QColor(255, 100, 0, 40)))
         self.setZValue(40)
+
+    def set_interaction_active(self, active: bool) -> None:
+        self._interaction_active = active
+        self.setPen(QPen(QColor(255, 140, 0), 4 if active else 2, Qt.PenStyle.DashLine))
+        self.setBrush(QBrush(QColor(255, 100, 0, 75 if active else 40)))
+        self.update()
 
     def _handle(self) -> QRectF:
         r = self.rect()
@@ -308,6 +413,9 @@ class EditableRectItem(QGraphicsRectItem):
             painter.fillRect(self._handle(), QColor(255, 255, 255))
 
     def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._press_scene_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
+            self._pointer_moved = False
         if self._handle().contains(event.pos()):
             self._resize = True
             self._start = QRectF(self.rect())
@@ -318,6 +426,7 @@ class EditableRectItem(QGraphicsRectItem):
             super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event) -> None:
+        self._pointer_moved = True
         if not self._resize:
             super().mouseMoveEvent(event)
             return
@@ -334,7 +443,9 @@ class EditableRectItem(QGraphicsRectItem):
         scene_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
         self.setPos(0, 0)
         self.setRect(scene_rect)
-        self.callback(self.glass_id, self.zone_id, QRectF(self.rect()))
+        if self._pointer_moved and scene_rect != self._press_scene_rect:
+            self.callback(self.glass_id, self.zone_id, QRectF(self.rect()))
+        self._pointer_moved = False
         self._resize = False
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         event.accept()
@@ -361,6 +472,7 @@ class VideoOverlayCanvas(QGraphicsView):
     zeroLineChanged = Signal(str, float)
     exclusionChanged = Signal(str, str, object)
     glassSelected = Signal(str)
+    interactionTargetRequested = Signal(str, str, object)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -381,6 +493,11 @@ class VideoOverlayCanvas(QGraphicsView):
         self._detection = None
         self._detection_badge = None
         self._editable_ellipse_item = None
+        self._margin_item = None
+        self._zero_line_item = None
+        self._exclusion_items: dict[str, EditableRectItem] = {}
+        self._active_target: str | None = None
+        self._active_zone_id: str | None = None
         self._fit_mode = True
         self._panning = False
         self._pan_start = None
@@ -439,9 +556,28 @@ class VideoOverlayCanvas(QGraphicsView):
         self.fitInView(self._scene.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
     def set_glasses(self, glasses, selected_id: str | None) -> None:
+        previous_selected = self._selected_id
         self._glasses = list(glasses)
         self._selected_id = selected_id
+        if previous_selected is not None and previous_selected != selected_id:
+            self._active_target = None
+            self._active_zone_id = None
+        if self._active_target == "exclusion" and not self._active_exclusion_exists():
+            self._active_target = None
+            self._active_zone_id = None
         self.rebuild_overlays()
+
+    def set_active_target(self, target: str | None, zone_id: str | None = None) -> None:
+        if target == "exclusion" and zone_id is not None:
+            self._active_target = target if self._zone_exists(zone_id) else None
+            self._active_zone_id = zone_id if self._active_target else None
+        elif target in {"geometry", "zero_line", "margin"}:
+            self._active_target = target
+            self._active_zone_id = None
+        else:
+            self._active_target = None
+            self._active_zone_id = None
+        self._apply_active_target_visuals()
 
     def set_detection(self, detection) -> None:
         self._detection = detection
@@ -454,6 +590,9 @@ class VideoOverlayCanvas(QGraphicsView):
         frame_rect = QRectF(0, 0, self._frame_size[0], self._frame_size[1])
         self._detection_badge = None
         self._editable_ellipse_item = None
+        self._margin_item = None
+        self._zero_line_item = None
+        self._exclusion_items = {}
         selected = None
         for glass in self._glasses:
             e = glass.geometry.ellipse
@@ -480,6 +619,7 @@ class VideoOverlayCanvas(QGraphicsView):
             self._add_selected_overlays(selected, frame_rect)
         if self._detection and self._detection.glass_id == self._selected_id and selected:
             self._add_detection_status(selected, self._detection)
+        self._apply_active_target_visuals()
 
     def _add_selected_overlays(self, glass, frame_rect: QRectF) -> None:
         e = glass.geometry.ellipse
@@ -493,27 +633,29 @@ class VideoOverlayCanvas(QGraphicsView):
         margin = QGraphicsEllipseItem(inner)
         margin.setPen(QPen(QColor(80, 220, 120), 1, Qt.PenStyle.DotLine))
         margin.setZValue(35)
+        margin.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+        self._margin_item = margin
         self._scene.addItem(margin)
         if glass.geometry.zero_line_y is not None:
-            self._scene.addItem(
-                DraggableZeroLine(
-                    glass.id,
-                    glass.geometry.zero_line_y,
-                    e,
-                    self.zeroLineChanged.emit,
-                )
+            self._zero_line_item = DraggableZeroLine(
+                glass.id,
+                glass.geometry.zero_line_y,
+                e,
+                self.zeroLineChanged.emit,
             )
+            self._scene.addItem(self._zero_line_item)
         for zone in glass.geometry.exclusions:
             r = zone.rect
-            self._scene.addItem(
-                EditableRectItem(
-                    glass.id,
-                    zone.id,
-                    QRectF(r.x, r.y, r.width, r.height),
-                    frame_rect,
-                    self._exclusion_changed,
-                )
+            item = EditableRectItem(
+                glass.id,
+                zone.id,
+                QRectF(r.x, r.y, r.width, r.height),
+                frame_rect,
+                self._exclusion_changed,
             )
+            item.setData(0, glass.id)
+            self._exclusion_items[zone.id] = item
+            self._scene.addItem(item)
         label = QGraphicsSimpleTextItem(glass.name)
         label.setBrush(QBrush(QColor(255, 255, 255)))
         label.setPos(e.bounds.x, max(0, e.bounds.y - 22))
@@ -558,6 +700,26 @@ class VideoOverlayCanvas(QGraphicsView):
             Rect(rect.x(), rect.y(), rect.width(), rect.height()),
         )
 
+    def _zone_exists(self, zone_id: str) -> bool:
+        selected = next((glass for glass in self._glasses if glass.id == self._selected_id), None)
+        return selected is not None and any(zone.id == zone_id for zone in selected.geometry.exclusions)
+
+    def _active_exclusion_exists(self) -> bool:
+        return self._active_zone_id is not None and self._zone_exists(self._active_zone_id)
+
+    def _apply_active_target_visuals(self) -> None:
+        if self._editable_ellipse_item is not None:
+            self._editable_ellipse_item.set_interaction_active(self._active_target == "geometry")
+        if self._margin_item is not None:
+            width = 4 if self._active_target == "margin" else 1
+            self._margin_item.setPen(QPen(QColor(80, 220, 120), width, Qt.PenStyle.DotLine))
+        if self._zero_line_item is not None:
+            self._zero_line_item.set_interaction_active(self._active_target == "zero_line")
+        for zone_id, item in self._exclusion_items.items():
+            item.set_interaction_active(
+                self._active_target == "exclusion" and zone_id == self._active_zone_id
+            )
+
     def wheelEvent(self, event) -> None:
         if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
             if event.angleDelta().y() > 0:
@@ -580,17 +742,33 @@ class VideoOverlayCanvas(QGraphicsView):
             event.accept()
             return
         item = self.itemAt(event.position().toPoint())
-        clicked_auxiliary = isinstance(item, (ResizeHandleItem, DraggableZeroLine))
         current = item
+        glass_id = None
+        target = None
+        zone_id = None
         while current is not None:
-            glass_id = current.data(0)
-            if glass_id:
-                if str(glass_id) != self._selected_id:
-                    self.glassSelected.emit(str(glass_id))
-                break
+            if isinstance(current, ResizeHandleItem):
+                target = "geometry"
+            elif isinstance(current, EditableEllipseItem):
+                target = target or "geometry"
+            elif isinstance(current, DraggableZeroLine):
+                target = "zero_line"
+            elif isinstance(current, EditableRectItem):
+                target = "exclusion"
+                zone_id = current.zone_id
+            item_glass_id = current.data(0)
+            if item_glass_id:
+                glass_id = str(item_glass_id)
             current = current.parentItem()
+        if glass_id is not None:
+            if glass_id != self._selected_id:
+                self.glassSelected.emit(glass_id)
+            elif target is not None:
+                self.set_active_target(target, zone_id)
+            if target is not None:
+                self.interactionTargetRequested.emit(glass_id, target, zone_id)
         super().mousePressEvent(event)
-        if clicked_auxiliary and self._editable_ellipse_item is not None:
+        if target is not None and self._editable_ellipse_item is not None:
             self._editable_ellipse_item.setSelected(True)
 
     def mouseMoveEvent(self, event) -> None:
@@ -612,6 +790,8 @@ class VideoOverlayCanvas(QGraphicsView):
             event.accept()
             return
         super().mouseReleaseEvent(event)
+        if self._active_target is not None and self._editable_ellipse_item is not None:
+            self._editable_ellipse_item.setSelected(True)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
