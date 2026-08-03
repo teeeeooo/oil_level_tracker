@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from PySide6.QtCore import QSize, Qt, Signal
-from PySide6.QtWidgets import QHBoxLayout, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
 
 
 class GlassListPanel(QWidget):
@@ -34,6 +34,13 @@ class GlassListPanel(QWidget):
         primary_buttons.addWidget(self.delete_button)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(6, 6, 6, 6)
+        self.ownership_label = QLabel("Profile 설정 · Glass 목록")
+        self.ownership_label.setObjectName("profileAreaHeading")
+        self.ownership_hint = QLabel("이 목록과 Glass 구성은 .oilrecipe Profile에 저장되어 다시 사용됩니다.")
+        self.ownership_hint.setObjectName("ownershipHint")
+        self.ownership_hint.setWordWrap(True)
+        layout.addWidget(self.ownership_label)
+        layout.addWidget(self.ownership_hint)
         layout.addWidget(self.list, 1)
         layout.addLayout(primary_buttons)
         layout.addWidget(self.copy_button)
