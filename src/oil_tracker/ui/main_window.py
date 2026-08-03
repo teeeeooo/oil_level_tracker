@@ -158,7 +158,7 @@ class MainWindow(QMainWindow):
 
         self.glass_list = GlassListPanel()
         self.canvas = VideoOverlayCanvas()
-        self.canvas.setMinimumSize(560, 340)
+        self.canvas.setMinimumSize(560, 300)
         self.settings = GlassSettingsPanel()
         self.transport = TransportBar()
         self.profile_context = self._build_profile_context()
@@ -470,7 +470,7 @@ class MainWindow(QMainWindow):
             self.workbench.session.analysis_end_sec = wizard.end.value()
             self.workbench.session.compressor_start_sec = wizard.compressor.value()
             self.workbench.session.sampling_fps = wizard.sampling.value()
-            self._load_frame(self.workbench.session.analysis_start_sec)
+            self._load_frame(self.workbench.session.analysis_start_sec, reset_view=True)
         if wizard.create_glass.isChecked():
             self.workbench.add_glass()
         self._refresh_all()
@@ -484,7 +484,7 @@ class MainWindow(QMainWindow):
         try:
             self.workbench.open_video(path)
             self._sync_session_fields()
-            self._load_frame(0.0)
+            self._load_frame(0.0, reset_view=True)
             self._refresh_all()
             self.schedule_preview()
             self._refresh_inline_validation()
@@ -639,13 +639,13 @@ class MainWindow(QMainWindow):
             self._load_frame(metadata.duration_sec * fraction)
             self.preview_timer.start()
 
-    def _load_frame(self, timestamp: float) -> None:
+    def _load_frame(self, timestamp: float, *, reset_view: bool = False) -> None:
         try:
             frame, frame_index, actual = self.workbench.read_at(timestamp)
             self.current_frame = frame
             self.current_frame_index = frame_index
             self.current_time = actual
-            self.canvas.set_frame(frame)
+            self.canvas.set_frame(frame, reset_view=reset_view)
             self.transport.set_position(
                 actual,
                 self.workbench.session.video_metadata.duration_sec
@@ -1074,7 +1074,7 @@ class MainWindow(QMainWindow):
             self.workbench.recipe.reference_frame_width,
             self.workbench.recipe.reference_frame_height,
         )
-        self.canvas.set_frame(self.current_frame)
+        self.canvas.set_frame(self.current_frame, reset_view=True)
         self._invalidate_preview("시험 영상을 선택해 주세요")
 
     def _error(self, title: str, message: str) -> None:

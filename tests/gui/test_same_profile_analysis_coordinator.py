@@ -41,9 +41,11 @@ class _Undo:
 class _Canvas:
     def __init__(self):
         self.frame = None
+        self.reset_view = None
 
-    def set_frame(self, frame):
+    def set_frame(self, frame, *, reset_view=False):
         self.frame = frame
+        self.reset_view = reset_view
 
 
 class _Transport:
@@ -166,6 +168,7 @@ def test_success_applies_prepared_candidate_and_resets_session_ui_state(qtbot, t
     assert window.undo_stack.cleared == 1
     assert window.last_result_path == ""
     assert window.current_frame is prepared.frame
+    assert window.canvas.reset_view is True
     assert window.current_frame_index == 0
     assert window.current_time == 0.01
     assert window.transport.position == (0.01, 5.0, 0)
