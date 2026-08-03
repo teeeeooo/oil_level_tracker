@@ -130,9 +130,9 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Reduce repeated compressor-test effort and operational mistakes when one Profile is reused across multiple test videos.
 - **Status:** `ACTIVE`
-- **Major result:** S8-A is independently audited, accepted and native guarded-squash-merged through PR #69 as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`. S8-B1 Persistent Recent Result Access is independently audited, accepted and native guarded-squash-merged through PR #70 as `1704c71b72b8851c09a669badda60b14ddecd1ef`. S8-B2 Persistent Recent Profile Access is implementation-complete on its focused branch and awaiting independent audit: bounded newest-first recent-Profile navigation metadata lives separately in application user data, successful manual load/save promotes the authoritative `.oilrecipe` path, and recent selection reuses the existing Profile load action/use-case path. Remaining S8 work is unstarted.
-- **Next gate:** `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor`.
-- **Priority:** `P1 — repeated-test productivity / S8-B2 audit gate`
+- **Major result:** S8-A is independently audited, accepted and native guarded-squash-merged through PR #69 as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`. S8-B1 Persistent Recent Result Access is independently audited, accepted and native guarded-squash-merged through PR #70 as `1704c71b72b8851c09a669badda60b14ddecd1ef`. S8-B2 Persistent Recent Profile Access is independently audited, accepted and native guarded-squash-merged through PR #71 as `067e599bb8fa727e94df360be30560cf73d8a599`: bounded recent-Profile navigation state stays separate in application user data, `.oilrecipe` deserialization remains authoritative, load/save history failures are non-fatal, and recent/manual Profile access share the established Workbench load path. Final-run summary and clearer Profile/current-test separation remain unstarted S8 work.
+- **Next gate:** `S8-C — Final Run Summary & Profile/Current-Test Separation`: select and authorize one bounded remaining-S8 implementation slice; implementation remains not started until that handoff.
+- **Priority:** `P1 — repeated-test productivity / S8-C selection gate`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S9 — Operational Recovery & UX Polish

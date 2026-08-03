@@ -1,7 +1,7 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S8 — Repeated-Test Workflow & Result Management`
-**Milestone status:** `ACTIVE — S8-A and S8-B1 audited, merged and closed; S8-B2 implementation complete, awaiting audit`
+**Milestone status:** `ACTIVE — S8-A, S8-B1 and S8-B2 audited, merged and closed; S8-C selection gate active`
 **S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
@@ -15,11 +15,11 @@
 **Current S7 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #68 @ 8846c272842df099f5849ea71686c3370248fc03`
 **Current S8-A result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #69 @ c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`
 **Current S8-B1 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #70 @ 1704c71b72b8851c09a669badda60b14ddecd1ef`
-**Current S8-B2 result:** `IMPLEMENTATION COMPLETE — AWAITING INDEPENDENT AUDIT`
-**Current gate:** `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor`
+**Current S8-B2 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #71 @ 067e599bb8fa727e94df360be30560cf73d8a599`
+**Current gate:** `S8-C — Final Run Summary & Profile/Current-Test Separation: select and authorize one bounded remaining-S8 implementation slice; implementation not started`
 **Successor milestone:** `S9 — Operational Recovery & UX Polish`
 
-This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, and S7 remains independently audited, merged and closed with its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts unchanged. S8 remains active: S8-A and S8-B1 are independently audited, accepted, native guarded-squash-merged and closed through PR #69 and PR #70. S8-B1's accepted contract keeps its bounded newest-first result registry in application user data and preserves authoritative Result Review loading. S8-B2 is now implementation-complete on its focused Worker branch and awaiting independent audit: `RecentProfileHistory` keeps a separate bounded `recent_profiles.json` navigation registry in application user data; successful manual Profile load and successful Profile save promote the actual `.oilrecipe` path plus Profile name; recent selection re-enters the existing `프로필 열기` action and `WorkbenchController.load()` / `LoadRecipeUseCase` path; stale/corrupt history is isolated; and history failure cannot revoke an otherwise successful Profile load/save. Final-run summary redesign, broader Profile/current-test visual redesign, autosave/recovery, batch execution and the remaining S8 work remain unstarted. The exact next gate is `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor`. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
+This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, and S7 remains independently audited, merged and closed with its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts unchanged. S8 remains active: S8-A, S8-B1 and S8-B2 are independently audited, accepted, native guarded-squash-merged and closed through PR #69, PR #70 and PR #71. S8-B1 keeps its bounded recent-result registry in application user data and preserves authoritative Result Review loading. S8-B2 keeps a separate bounded `recent_profiles.json` navigation registry in application user data; `.oilrecipe` deserialization remains authoritative, recent/manual Profile access share the established Workbench load path, stale/corrupt history is isolated, and history failure cannot revoke successful Profile load/save. The remaining P1 S8 work is final-run summary and clearer Profile/current-test visual separation. Autosave/recovery remains S9 scope and batch execution is not introduced here. The exact next gate is `S8-C — Final Run Summary & Profile/Current-Test Separation`: select and authorize one bounded remaining-S8 implementation slice; implementation has not started. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
 
 ## Evidence owners
 
@@ -38,6 +38,21 @@ This document owns the current execution state. Milestone order and formal statu
 - S6-E: [`../30-quality/s6-bounded-runtime-soak-evidence.md`](../30-quality/s6-bounded-runtime-soak-evidence.md)
 - S6-F: [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
 
+## Latest merged closeout — S8-B2 Persistent Recent Profile Access
+
+| Item | Current state |
+|---|---|
+| Audit target | PR #71; exact base `789d2646e3355f4486ef902d93565205265ecd39`; exact audited head `c1ffd79bc66f56eb11493156bc86780c33d2876b`; 1 commit / exactly 10 complete-PR changed files |
+| Profile authority | `RecentProfileHistory` stores only navigation/display metadata in application user data. Recent and manual access both enter `WorkbenchController.load()` → `LoadRecipeUseCase` → `JsonRecipeRepository.load()`, so the loaded `.oilrecipe` remains authoritative and cached names cannot override Recipe truth. |
+| Persistence/failure boundary | History is bounded newest-first, deduplicated by normalized path, stale/corrupt/unsupported/unreadable state is isolated, and same-directory temporary + atomic replacement preserves prior valid user-state on write failure without mutating Profile files. |
+| Registration/menu lifecycle | Successful load/save registers only after the authoritative operation succeeds; failed load is not promoted; history failure is non-fatal; the pending recent path is consumed before loading so failure cannot carry into a later manual selection. |
+| Fresh validation | Exact-head focused Profile persistence/Workbench/same-profile/S8-A/S8-B1/S7 suite: `100 passed`; independent authoritative-name/pending-path and atomic/non-mutation probes passed |
+| Fresh documentation checks | Authoritative S8-B2 semantics passed; 56 applicable relative links passed; complete-PR `git diff --check` passed |
+| Merge | PR #71 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `067e599bb8fa727e94df360be30560cf73d8a599` |
+| Synchronization | Registered primary checkout synchronized cleanly to `main @ 067e599bb8fa727e94df360be30560cf73d8a599` before this documentation Close |
+| Claim boundary | S8-B1 result history, S8-A current-test identity, same-profile and S7 stored-result/annotated-MP4 contracts remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or S9 PASS is inferred |
+| Next gate | `S8-C — Final Run Summary & Profile/Current-Test Separation`: select and authorize one bounded remaining-S8 implementation slice; implementation not started |
+
 ## Latest merged closeout — S8-B1 Persistent Recent Result Access
 
 | Item | Current state |
@@ -50,7 +65,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #70 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `1704c71b72b8851c09a669badda60b14ddecd1ef` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ 1704c71b72b8851c09a669badda60b14ddecd1ef` before this documentation Close |
 | Claim boundary | S8-A run identity/output naming and S7 stored-result/annotated-MP4 authority remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or later-S8/S9 PASS is inferred |
-| Next gate | S8-B2 implementation is complete on its focused Worker branch; next gate is `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor` |
+| Next gate | S8-B1 remains closed; current project gate is `S8-C — Final Run Summary & Profile/Current-Test Separation` selection/authorization. |
 
 ## Latest merged closeout — S8-A Repeated-Test Run Identity + Output Naming
 
@@ -66,7 +81,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #69 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` before this documentation Close |
 | Claim boundary | S7 stored-result/annotated-MP4 authority remains unchanged; no S6 benchmark/soak, Windows/manual GUI, PyInstaller or unrelated later-S8/S9 PASS is inferred |
-| Next gate | S8-A remains closed; current project gate is `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor`. |
+| Next gate | S8-A remains closed; current project gate is `S8-C — Final Run Summary & Profile/Current-Test Separation` selection/authorization. |
 
 ## Final Windows and packaging release obligation
 
@@ -83,7 +98,7 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 ## Product priority and sequence
 
 - `P0 completed`: S7 annotated MP4 export is audited, merged and closed.
-- `P1 current next gate`: `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor`; implementation is complete on the focused Worker branch and awaits independent audit.
+- `P1 current next gate`: `S8-C — Final Run Summary & Profile/Current-Test Separation`; select and authorize one bounded remaining-S8 implementation slice before implementation begins.
 - `P2`: after S8, select operational recovery and UX improvements based on observed user effect.
 - `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
 - Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.
