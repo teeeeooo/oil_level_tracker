@@ -335,6 +335,37 @@ def test_recipe_edit_then_undo_to_saved_content_returns_clean(qtbot, tmp_path):
     assert controller.profile_has_unsaved_changes is False
 
 
+def test_edit_save_undo_redo_returns_clean_and_closes_without_prompt(qtbot, tmp_path, monkeypatch):
+    controller = _saved_controller(tmp_path)
+    window = _window(controller)
+    path = controller.recipe_path
+    original_name = controller.recipe.glasses[0].name
+
+    window._field_changed("name", "Persisted Glass")
+    pre_save_updated_at = controller.recipe.updated_at
+    assert controller.profile_has_unsaved_changes is True
+
+    controller.save(path)
+    saved_updated_at = controller.recipe.updated_at
+    assert saved_updated_at != pre_save_updated_at
+    assert JsonRecipeRepository().load(path).updated_at == saved_updated_at
+    assert controller.profile_has_unsaved_changes is False
+
+    window.undo_stack.undo()
+    assert controller.recipe.glasses[0].name == original_name
+    assert controller.profile_has_unsaved_changes is True
+
+    window.undo_stack.redo()
+    assert controller.recipe.glasses[0].name == "Persisted Glass"
+    assert controller.recipe.updated_at == pre_save_updated_at
+    assert controller.profile_has_unsaved_changes is False
+
+    prompts = []
+    monkeypatch.setattr(window, "_confirm_unsaved_profile_close", lambda: prompts.append(True))
+    assert window.close() is True
+    assert prompts == []
+
+
 def test_session_only_edit_keeps_profile_clean_and_s8_c2_separation(qtbot, tmp_path):
     controller = _saved_controller(tmp_path)
     window = _window(controller)

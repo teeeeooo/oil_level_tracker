@@ -48,7 +48,7 @@ class WorkbenchController:
         self.validate_use_case = validate_use_case
         self.reader_factory = reader_factory
         self.recipe = InspectionRecipe.empty()
-        self._profile_close_baseline: dict | None = deepcopy(self.recipe.to_dict())
+        self._profile_close_baseline: dict | None = self._profile_persistence_state()
         self.session = AnalysisSession()
         self.state = WorkbenchState.EMPTY
         self.selected_glass_id: str | None = None
@@ -64,13 +64,19 @@ class WorkbenchController:
         self.recipe_path = None
         self._profile_close_baseline = None
 
+    def _profile_persistence_state(self) -> dict:
+        """Return Profile state relevant to unsaved-change truth, excluding save bookkeeping."""
+        state = deepcopy(self.recipe.to_dict())
+        state.pop("updated_at", None)
+        return state
+
     @property
     def profile_has_unsaved_changes(self) -> bool:
         baseline = self._profile_close_baseline
-        return baseline is None or self.recipe.to_dict() != baseline
+        return baseline is None or self._profile_persistence_state() != baseline
 
     def _set_profile_close_baseline(self) -> None:
-        self._profile_close_baseline = deepcopy(self.recipe.to_dict())
+        self._profile_close_baseline = self._profile_persistence_state()
 
     def open_video(self, path: str) -> None:
         reader = None
