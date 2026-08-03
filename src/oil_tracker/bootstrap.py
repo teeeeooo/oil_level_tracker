@@ -10,6 +10,7 @@ from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeReposi
 from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
 from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
 from oil_tracker.adapters.storage.redetection_workspace import RedetectionWorkspace
+from oil_tracker.adapters.storage.recent_profile_history import RecentProfileHistory
 from oil_tracker.adapters.storage.recent_result_history import RecentResultHistory
 from oil_tracker.adapters.storage.review_mp4_exporter import ReviewMp4Exporter
 from oil_tracker.adapters.storage.review_png_exporter import ReviewPngExporter
@@ -80,6 +81,7 @@ def build_main_window() -> MainWindow:
     window.preflight_coordinator = PreflightCoordinator(window, preflight_controller)
     window.same_profile_coordinator = SameProfileAnalysisCoordinator(window)
     window.result_action_service = ResultActionService()
+    window.set_recent_profile_history(RecentProfileHistory())
     window.recent_result_history = RecentResultHistory()
     window.redetection_service = PartialRedetectionService(
         lambda path: OpenCvVideoReader(path),

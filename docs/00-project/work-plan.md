@@ -1,7 +1,7 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S8 — Repeated-Test Workflow & Result Management`
-**Milestone status:** `ACTIVE — S8-A and S8-B1 audited, merged and closed; S8-B2 selection gate active`
+**Milestone status:** `ACTIVE — S8-A and S8-B1 audited, merged and closed; S8-B2 implementation complete, awaiting audit`
 **S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
@@ -15,10 +15,11 @@
 **Current S7 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #68 @ 8846c272842df099f5849ea71686c3370248fc03`
 **Current S8-A result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #69 @ c8164f00c6f1080f9fc8a3829b3991acc9c7a90b`
 **Current S8-B1 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #70 @ 1704c71b72b8851c09a669badda60b14ddecd1ef`
-**Current gate:** `S8-B2 — Persistent Recent Profile Access: select and authorize one bounded recent-Profile implementation slice; implementation not started`
+**Current S8-B2 result:** `IMPLEMENTATION COMPLETE — AWAITING INDEPENDENT AUDIT`
+**Current gate:** `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor`
 **Successor milestone:** `S9 — Operational Recovery & UX Polish`
 
-This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, and S7 remains independently audited, merged and closed with its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts unchanged. S8 remains active: S8-A and S8-B1 are independently audited, accepted, native guarded-squash-merged and closed through PR #69 and PR #70. S8-B1's accepted contract keeps its bounded newest-first registry in application user data, never inside result bundles; completed and manually opened results still enter the authoritative Result Review read/validation path; stale/corrupt history fails safely; history write failure cannot revoke successful completion; and `last_result_path` remains the current-workbench completion/report pointer. Recent Profile management, final-run summary redesign, broader Profile/current-test visual redesign, autosave/recovery and batch execution remain unstarted. The next bounded gate is `S8-B2 — Persistent Recent Profile Access`: select and authorize one bounded recent-Profile implementation slice; implementation has not started. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
+This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, and S7 remains independently audited, merged and closed with its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts unchanged. S8 remains active: S8-A and S8-B1 are independently audited, accepted, native guarded-squash-merged and closed through PR #69 and PR #70. S8-B1's accepted contract keeps its bounded newest-first result registry in application user data and preserves authoritative Result Review loading. S8-B2 is now implementation-complete on its focused Worker branch and awaiting independent audit: `RecentProfileHistory` keeps a separate bounded `recent_profiles.json` navigation registry in application user data; successful manual Profile load and successful Profile save promote the actual `.oilrecipe` path plus Profile name; recent selection re-enters the existing `프로필 열기` action and `WorkbenchController.load()` / `LoadRecipeUseCase` path; stale/corrupt history is isolated; and history failure cannot revoke an otherwise successful Profile load/save. Final-run summary redesign, broader Profile/current-test visual redesign, autosave/recovery, batch execution and the remaining S8 work remain unstarted. The exact next gate is `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor`. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
 
 ## Evidence owners
 
@@ -32,6 +33,7 @@ This document owns the current execution state. Milestone order and formal statu
 - S7 Worker evidence: [`../30-quality/s7-annotated-mp4-export-evidence.md`](../30-quality/s7-annotated-mp4-export-evidence.md)
 - S8-A Worker evidence: [`../30-quality/s8-a-run-identity-output-naming-evidence.md`](../30-quality/s8-a-run-identity-output-naming-evidence.md)
 - S8-B1 Worker evidence: [`../30-quality/s8-b1-persistent-recent-result-access-evidence.md`](../30-quality/s8-b1-persistent-recent-result-access-evidence.md)
+- S8-B2 Worker evidence: [`../30-quality/s8-b2-persistent-recent-profile-access-evidence.md`](../30-quality/s8-b2-persistent-recent-profile-access-evidence.md)
 - S6-D4: [`../30-quality/s6-d4-available-corpus-detector-repair.md`](../30-quality/s6-d4-available-corpus-detector-repair.md)
 - S6-E: [`../30-quality/s6-bounded-runtime-soak-evidence.md`](../30-quality/s6-bounded-runtime-soak-evidence.md)
 - S6-F: [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
@@ -48,7 +50,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #70 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `1704c71b72b8851c09a669badda60b14ddecd1ef` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ 1704c71b72b8851c09a669badda60b14ddecd1ef` before this documentation Close |
 | Claim boundary | S8-A run identity/output naming and S7 stored-result/annotated-MP4 authority remain unchanged; no detector/soak, Windows/manual GUI, PyInstaller or later-S8/S9 PASS is inferred |
-| Next gate | `S8-B2 — Persistent Recent Profile Access`: select and authorize one bounded recent-Profile implementation slice; implementation not started |
+| Next gate | S8-B2 implementation is complete on its focused Worker branch; next gate is `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor` |
 
 ## Latest merged closeout — S8-A Repeated-Test Run Identity + Output Naming
 
@@ -64,7 +66,7 @@ This document owns the current execution state. Milestone order and formal statu
 | Merge | PR #69 was marked Ready and native exact-base/head `guarded_merge` squash-merged as `c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` |
 | Synchronization | Registered primary checkout synchronized cleanly to `main @ c8164f00c6f1080f9fc8a3829b3991acc9c7a90b` before this documentation Close |
 | Claim boundary | S7 stored-result/annotated-MP4 authority remains unchanged; no S6 benchmark/soak, Windows/manual GUI, PyInstaller or unrelated later-S8/S9 PASS is inferred |
-| Next gate | S8-A remains closed; current project gate is `S8-B2 — Persistent Recent Profile Access` selection/authorization. |
+| Next gate | S8-A remains closed; current project gate is `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor`. |
 
 ## Final Windows and packaging release obligation
 
@@ -81,7 +83,7 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 ## Product priority and sequence
 
 - `P0 completed`: S7 annotated MP4 export is audited, merged and closed.
-- `P1 current next gate`: `S8-B2 — Persistent Recent Profile Access`; select and authorize one bounded recent-Profile implementation slice before implementation begins.
+- `P1 current next gate`: `S8-B2 Persistent Recent Profile Access Fresh Exact-Head Auditor`; implementation is complete on the focused Worker branch and awaits independent audit.
 - `P2`: after S8, select operational recovery and UX improvements based on observed user effect.
 - `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
 - Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.
