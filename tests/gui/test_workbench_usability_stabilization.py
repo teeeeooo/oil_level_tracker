@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import numpy as np
 from PySide6.QtCore import QObject, QPoint, QPointF, QRect, Qt, Signal
 from PySide6.QtGui import QWheelEvent
 from PySide6.QtWidgets import QApplication, QDockWidget, QLabel
@@ -180,6 +181,72 @@ def test_workbench_layout_places_summary_left_and_separates_canvas_transport(qtb
     splitter_rects = [_rect_in(window.splitter.widget(index), window.splitter) for index in range(3)]
     assert not splitter_rects[0].intersects(splitter_rects[1])
     assert not splitter_rects[1].intersects(splitter_rects[2])
+
+
+def test_workbench_view_controls_are_ephemeral_and_explicit(qtbot):
+    window, workbench = _window(qtbot)
+    frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+    window.canvas.set_frame(frame, reset_view=True)
+    recipe_before = workbench.recipe.to_dict()
+    session_before = workbench.session.to_dict()
+    profile_dirty_before = workbench.profile_has_unsaved_changes
+    undo_index_before = window.undo_stack.index()
+
+    panel = window.playback_panel
+    assert panel.zoom_in_button.text() == "확대"
+    assert panel.zoom_out_button.text() == "축소"
+    assert panel.fit_button.text() == "맞춤"
+    assert panel.actual_size_button.text() == "100%"
+    hint = panel.findChild(QLabel, "canvasViewHint")
+    assert hint is not None
+    assert "Ctrl+휠" in hint.text()
+    assert "가운데 버튼" in hint.text()
+
+    panel.zoom_in_button.click()
+    assert window.canvas.fit_mode is False
+    panel.zoom_out_button.click()
+    panel.actual_size_button.click()
+    assert window.canvas.fit_mode is False
+    panel.fit_button.click()
+    assert window.canvas.fit_mode is True
+
+    assert workbench.recipe.to_dict() == recipe_before
+    assert workbench.session.to_dict() == session_before
+    assert workbench.profile_has_unsaved_changes is profile_dirty_before
+    assert window.undo_stack.index() == undo_index_before
+
+
+def test_video_context_reset_and_same_context_frame_preserve_view_semantics(qtbot, monkeypatch):
+    from PySide6.QtWidgets import QFileDialog
+
+    from oil_tracker.domain.session import VideoMetadata
+
+    class Reader:
+        def __init__(self, path):
+            self.metadata = VideoMetadata(str(path), 1280, 720, 30.0, 10.0, 300, "fake")
+
+        def read_at(self, timestamp):
+            return np.zeros((720, 1280, 3), dtype=np.uint8), int(timestamp * 30), float(timestamp)
+
+        def close(self):
+            pass
+
+    window, workbench = _window(qtbot)
+    workbench.reader_factory = Reader
+    window.canvas.set_frame(np.zeros((720, 1280, 3), dtype=np.uint8), reset_view=True)
+    window.canvas.zoom_in()
+    assert window.canvas.fit_mode is False
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *_args, **_kwargs: ("new.mp4", ""))
+
+    window.open_video()
+
+    assert window.canvas.fit_mode is True
+    window.canvas.zoom_in()
+    manual_scale = window.canvas.transform().m11()
+    window._load_frame(1.0)
+    assert window.canvas.fit_mode is False
+    assert abs(window.canvas.transform().m11() - manual_scale) < 1e-9
+    assert workbench.profile_has_unsaved_changes is False
 
 
 def test_settings_basic_area_has_no_coordinate_summary_and_scale_is_optional(qtbot):

@@ -175,7 +175,8 @@ S9-B improves precision editing for small sight-glass regions without changing R
 - Canonical geometry remains source-frame / `QGraphicsScene` coordinates. Zoom and pan are view state only and must not mutate Recipe geometry, source coordinates or persisted data.
 - Ellipse movement/resizing, zero-line placement and exclusion editing retain source-coordinate accuracy at every supported zoom level.
 - Zoom/pan interaction must coexist with the existing settings-panel wheel-safe behavior; pointer interaction over settings controls must not regress into accidental value changes.
-- Exact gestures, helper/class names, transform APIs and implementation structure are left to the implementation owner.
+- The Workbench exposes explicit `확대`, `축소`, `맞춤` and `100%` view controls. `Ctrl`+wheel is an equivalent zoom shortcut on the canvas, while middle-button drag pans without competing with the existing left-button ellipse/zero-line/exclusion editing gestures.
+- Fit mode follows viewport resizing; once the user enters manual zoom/pan or 100% mode, ordinary viewport resize and same-context frame refresh preserve that manual scale instead of silently returning to Fit.
 
 ### S9-C — Field ↔ Overlay Interaction Polish
 

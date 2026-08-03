@@ -26,6 +26,19 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Confirm Foam guidance separates detection interpretation and recommended action.
 - Use **초기 상태 설정으로 이동** and confirm the selected Glass remains selected, the initial-state field receives focus and the Recipe is not changed automatically.
 
+## S9-B Workbench zoom, pan and fit
+- At 100%, 125% and 150% Windows display scale, open a small sight-glass scene and confirm **확대**, **축소**, **맞춤** and **100%** remain visible without reducing the canvas below a usable editing area.
+- Confirm the initial Workbench frame and every actual video/Profile context replacement enter Fit mode with the complete source frame visible at the correct aspect ratio.
+- Use **확대**/**축소** and `Ctrl`+wheel on the canvas; confirm scale changes smoothly while ellipse, zero-line and exclusion overlays remain registered to the same source-frame coordinates.
+- In a zoomed view, drag with the middle mouse button to pan and confirm ordinary left-button ellipse move/resize, zero-line drag and exclusion move/resize remain unambiguous.
+- Seek, step and play through multiple frames while manually zoomed/panned; confirm the same-context view transform is retained rather than returning to Fit on every frame.
+- Resize the Workbench while Fit is active and confirm the frame refits to the viewport. Repeat while manually zoomed and confirm the manual scale is preserved instead of collapsing back to Fit.
+- Replace the current test video, load/new a Profile, and enter the same-Profile new-video workflow; confirm the old context transform is discarded and the replacement starts in Fit.
+- At high zoom, edit all eight ellipse resize directions plus ellipse position, zero line and exclusion geometry; save/reload and confirm persisted coordinates still match source pixels with existing minimum-size and frame-bound rules.
+- Exercise zoom/pan/fit without editing geometry and confirm Profile dirty state, undo/redo availability, Analysis Session values, readiness/preflight state and saved Result data do not change.
+- Scroll the settings panel over spin/combo controls after using canvas zoom shortcuts and confirm its wheel-safe behavior still prevents accidental value changes.
+- Open **분석 영역 편집** and the wizard/video preview consumers and confirm their frame display and existing private-copy/apply/cancel behavior remain intact.
+
 ## Multiple-point preflight
 - Open the modeless **여러 시점 점검** window and confirm the Workbench video geometry does not shrink.
 - Resize the preflight window and its result table columns.

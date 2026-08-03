@@ -22,6 +22,9 @@ from oil_tracker.ui.presentation_labels import fill_state_label
 
 
 MIN_ELLIPSE_SIZE = 20.0
+ZOOM_STEP = 1.25
+MIN_VIEW_SCALE = 0.05
+MAX_VIEW_SCALE = 16.0
 _FRAME_IMAGE_CONVERTER = QtFrameImageConverter()
 
 
@@ -367,6 +370,8 @@ class VideoOverlayCanvas(QGraphicsView):
         self.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.SmoothPixmapTransform)
         self.setBackgroundBrush(QColor(20, 22, 25))
         self.setDragMode(QGraphicsView.DragMode.NoDrag)
+        self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorViewCenter)
+        self.setResizeAnchor(QGraphicsView.ViewportAnchor.AnchorViewCenter)
         self._pixmap_item = QGraphicsPixmapItem()
         self._pixmap_item.setZValue(0)
         self._scene.addItem(self._pixmap_item)
@@ -376,16 +381,61 @@ class VideoOverlayCanvas(QGraphicsView):
         self._detection = None
         self._detection_badge = None
         self._editable_ellipse_item = None
+        self._fit_mode = True
+        self._panning = False
+        self._pan_start = None
         self.setMinimumSize(640, 420)
 
-    def set_frame(self, frame) -> None:
+    @property
+    def fit_mode(self) -> bool:
+        return self._fit_mode
+
+    def set_frame(self, frame, *, reset_view: bool = False) -> None:
         if frame is None:
             return
+        if reset_view:
+            self._fit_mode = True
         image = _FRAME_IMAGE_CONVERTER.to_qimage(frame)
         self._frame_size = (image.width(), image.height())
         self._pixmap_item.setPixmap(QPixmap.fromImage(image))
         self._scene.setSceneRect(0, 0, image.width(), image.height())
         self.rebuild_overlays()
+        if self._fit_mode:
+            self._apply_fit()
+
+    def fit_to_view(self) -> None:
+        self._fit_mode = True
+        self._apply_fit()
+
+    def zoom_in(self) -> None:
+        self._zoom_by(ZOOM_STEP)
+
+    def zoom_out(self) -> None:
+        self._zoom_by(1.0 / ZOOM_STEP)
+
+    def actual_size(self) -> None:
+        if self._pixmap_item.pixmap().isNull():
+            return
+        center = self.mapToScene(self.viewport().rect().center())
+        self._fit_mode = False
+        self.resetTransform()
+        self.centerOn(center)
+
+    def _zoom_by(self, factor: float) -> None:
+        if self._pixmap_item.pixmap().isNull():
+            return
+        current = abs(self.transform().m11()) or 1.0
+        target = min(MAX_VIEW_SCALE, max(MIN_VIEW_SCALE, current * factor))
+        applied = target / current
+        if abs(applied - 1.0) < 1e-9:
+            return
+        self._fit_mode = False
+        self.scale(applied, applied)
+
+    def _apply_fit(self) -> None:
+        if self._pixmap_item.pixmap().isNull():
+            return
+        self.resetTransform()
         self.fitInView(self._scene.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
     def set_glasses(self, glasses, selected_id: str | None) -> None:
@@ -508,7 +558,27 @@ class VideoOverlayCanvas(QGraphicsView):
             Rect(rect.x(), rect.y(), rect.width(), rect.height()),
         )
 
+    def wheelEvent(self, event) -> None:
+        if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+            if event.angleDelta().y() > 0:
+                self.zoom_in()
+            elif event.angleDelta().y() < 0:
+                self.zoom_out()
+            event.accept()
+            return
+        super().wheelEvent(event)
+
     def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.MiddleButton:
+            if self.horizontalScrollBar().maximum() <= 0 and self.verticalScrollBar().maximum() <= 0:
+                event.accept()
+                return
+            self._fit_mode = False
+            self._panning = True
+            self._pan_start = event.position().toPoint()
+            self.setCursor(Qt.CursorShape.ClosedHandCursor)
+            event.accept()
+            return
         item = self.itemAt(event.position().toPoint())
         clicked_auxiliary = isinstance(item, (ResizeHandleItem, DraggableZeroLine))
         current = item
@@ -523,10 +593,30 @@ class VideoOverlayCanvas(QGraphicsView):
         if clicked_auxiliary and self._editable_ellipse_item is not None:
             self._editable_ellipse_item.setSelected(True)
 
+    def mouseMoveEvent(self, event) -> None:
+        if self._panning and self._pan_start is not None:
+            current = event.position().toPoint()
+            delta = current - self._pan_start
+            self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - delta.x())
+            self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta.y())
+            self._pan_start = current
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event) -> None:
+        if self._panning and event.button() == Qt.MouseButton.MiddleButton:
+            self._panning = False
+            self._pan_start = None
+            self.unsetCursor()
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
+
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        if not self._pixmap_item.pixmap().isNull():
-            self.fitInView(self._scene.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+        if self._fit_mode:
+            self._apply_fit()
 
 
 def _handle_cursor(role: str) -> Qt.CursorShape:

@@ -104,7 +104,7 @@ class SameProfileAnalysisCoordinator(QObject):
         window.current_frame_index = prepared.frame_index
         window.current_time = prepared.timestamp_sec
         window.last_result_path = ""
-        window.canvas.set_frame(window.current_frame)
+        window.canvas.set_frame(window.current_frame, reset_view=True)
         window.transport.set_position(
             window.current_time,
             window.workbench.session.video_metadata.duration_sec,

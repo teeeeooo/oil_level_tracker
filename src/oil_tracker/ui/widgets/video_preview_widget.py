@@ -60,7 +60,7 @@ class VideoPreviewWidget(QWidget):
         self.placeholder.setText(Path(path).name)
         self.placeholder.setToolTip(path)
         self.transport.setEnabled(True)
-        self.load_frame(0.0)
+        self.load_frame(0.0, reset_view=True)
 
     def close_video(self) -> None:
         self.play_timer.stop()
@@ -82,7 +82,7 @@ class VideoPreviewWidget(QWidget):
         duration = self.reader.metadata.duration_sec if self.reader is not None else 0.0
         self.transport.slider.set_markers(duration, analysis_start, analysis_end, compressor_start)
 
-    def load_frame(self, timestamp: float) -> None:
+    def load_frame(self, timestamp: float, *, reset_view: bool = False) -> None:
         if self.reader is None:
             return
         try:
@@ -91,7 +91,7 @@ class VideoPreviewWidget(QWidget):
             frame, frame_index, actual = self.reader.read_at(target)
             self.current_time = actual
             self.current_frame_index = frame_index
-            self.canvas.set_frame(frame)
+            self.canvas.set_frame(frame, reset_view=reset_view)
             self.transport.set_position(actual, duration, frame_index)
             self.timestampChanged.emit(actual)
         except Exception as exc:
