@@ -24,6 +24,11 @@ def build_parser() -> argparse.ArgumentParser:
     analyze.add_argument("--recipe", required=True)
     analyze.add_argument("--video", required=True)
     analyze.add_argument("--output", default=".")
+    analyze.add_argument(
+        "--run-name",
+        default="",
+        help="Human-readable current-test name for result metadata and folder naming",
+    )
     analyze.add_argument("--start", type=float, default=0.0)
     analyze.add_argument("--end", type=float)
     analyze.add_argument("--compressor-start", type=float)
@@ -86,6 +91,7 @@ def _run_analyze(args) -> int:
         compressor_start_sec=args.compressor_start,
         sampling_fps=args.sampling_fps,
         output_directory=args.output,
+        run_name=str(args.run_name or "").strip(),
         resolution_confirmed=(metadata.width, metadata.height)
         == (recipe.reference_frame_width, recipe.reference_frame_height),
     )

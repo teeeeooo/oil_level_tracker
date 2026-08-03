@@ -126,8 +126,13 @@ def test_reader_accepts_supported_entry_points(tmp_path, entry):
 
 def test_reader_recovers_old_bundle_without_review_index(tmp_path):
     root, _glass = _bundle(tmp_path, with_index=False)
+    session_payload = json.loads((root / "session.json").read_text())
+    session_payload.pop("run_name")
+    (root / "session.json").write_text(json.dumps(session_payload), encoding="utf-8")
+
     bundle = ResultBundleReader().read(root)
     assert bundle.review_index is None
+    assert bundle.run_name == ""
     assert bundle.analysis_start_sec == 1.0
     assert bundle.source_video_candidates[-1].endswith("source.mp4")
 

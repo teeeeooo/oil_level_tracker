@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QGridLayout,
     QGroupBox,
     QLabel,
+    QLineEdit,
     QMainWindow,
     QMessageBox,
     QPushButton,
@@ -237,6 +238,12 @@ class MainWindow(QMainWindow):
         self.video_path_label.setObjectName("videoPathLabel")
         self.video_path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.video_path_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self.run_name_edit = QLineEdit()
+        self.run_name_edit.setMaxLength(160)
+        self.run_name_edit.setPlaceholderText("예: TC-03 냉방 기동 회수 시험")
+        self.run_name_edit.setToolTip(
+            "현재 시험에만 적용되는 이름입니다. 프로필에는 저장되지 않으며 결과 bundle 이름과 metadata에 사용됩니다."
+        )
         self.start_spin = _time_spin()
         self.end_spin = _time_spin()
         self.compressor_spin = _time_spin()
@@ -246,14 +253,16 @@ class MainWindow(QMainWindow):
         self.sampling_spin.setValue(2.0)
         layout.addWidget(self.open_video_button, 0, 0)
         layout.addWidget(self.video_path_label, 0, 1, 1, 7)
-        layout.addWidget(QLabel("분석 시작"), 1, 0)
-        layout.addWidget(self.start_spin, 1, 1)
-        layout.addWidget(QLabel("분석 종료"), 1, 2)
-        layout.addWidget(self.end_spin, 1, 3)
-        layout.addWidget(QLabel("압축기 기동"), 1, 4)
-        layout.addWidget(self.compressor_spin, 1, 5)
-        layout.addWidget(QLabel("분석 빈도"), 1, 6)
-        layout.addWidget(self.sampling_spin, 1, 7)
+        layout.addWidget(QLabel("현재 시험 이름"), 1, 0)
+        layout.addWidget(self.run_name_edit, 1, 1, 1, 7)
+        layout.addWidget(QLabel("분석 시작"), 2, 0)
+        layout.addWidget(self.start_spin, 2, 1)
+        layout.addWidget(QLabel("분석 종료"), 2, 2)
+        layout.addWidget(self.end_spin, 2, 3)
+        layout.addWidget(QLabel("압축기 기동"), 2, 4)
+        layout.addWidget(self.compressor_spin, 2, 5)
+        layout.addWidget(QLabel("분석 빈도"), 2, 6)
+        layout.addWidget(self.sampling_spin, 2, 7)
         for column in (1, 3, 5, 7):
             layout.setColumnStretch(column, 1)
         return group
@@ -304,6 +313,7 @@ class MainWindow(QMainWindow):
         self.analysis_controller.cancelled.connect(self._analysis_cancelled)
         self.validation_panel.issueActivated.connect(self._route_validation_issue)
         self.debug_panel.exportRequested.connect(self.export_debug)
+        self.run_name_edit.editingFinished.connect(self._session_changed)
         for spin in (self.start_spin, self.end_spin, self.compressor_spin, self.sampling_spin):
             spin.editingFinished.connect(self._session_changed)
 
@@ -546,6 +556,7 @@ class MainWindow(QMainWindow):
         self._record_recipe_change("Glass 설정 변경", change)
 
     def _session_changed(self) -> None:
+        self.workbench.session.run_name = self.run_name_edit.text().strip()
         self.workbench.session.analysis_start_sec = self.start_spin.value()
         self.workbench.session.analysis_end_sec = self.end_spin.value()
         self.workbench.session.compressor_start_sec = self.compressor_spin.value()
@@ -906,6 +917,9 @@ class MainWindow(QMainWindow):
 
     def _sync_session_fields(self) -> None:
         session = self.workbench.session
+        self.run_name_edit.blockSignals(True)
+        self.run_name_edit.setText(session.run_name)
+        self.run_name_edit.blockSignals(False)
         for widget, value in (
             (self.start_spin, session.analysis_start_sec),
             (self.end_spin, session.analysis_end_sec or 0.0),

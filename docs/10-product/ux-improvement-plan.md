@@ -135,7 +135,9 @@ The roadmap prioritizes the following as the P1 repeated-test workflow and resul
 - final run summary with clear completion actions;
 - clearer visual separation between profile-owned settings and current-test settings.
 
-These items target recurring compressor-test workload and avoidable operating mistakes. Exact milestone status and implementation slicing belong only to the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md).
+S8-A owns only the first run-identity/output-naming seam. One optional `run_name` is current-test/session state, not Recipe/Profile state. The Workbench exposes it as `현재 시험 이름`; changing it must not rename or dirty serialized Profile content. New bundles persist the original human-readable value in `session.json`, `review_index.json` and `analysis_manifest.json`, while the folder name uses a filesystem-safe form plus the existing timestamp and deterministic collision suffixes. Empty or filename-unusable values retain the timestamp-only fallback, and older sessions/bundles without `run_name` remain readable. Both the same-profile new-video path and a successful normal Workbench video replacement reset the previous test name. Normal replacement is transactional across reader acquisition and metadata preparation: reader-factory or metadata failure preserves the existing active reader, complete session/state including `run_name`, and Recipe/Profile state, and closes any acquired failed candidate reader; only after preparation succeeds is the candidate installed and the previous reader closed. File-dialog cancellation remains a no-op. The same-profile deep-copy and atomic prepare/confirm/commit contract remains unchanged.
+
+Recent-profile/history UI, recent-result history, final-run summary redesign, broad Profile/current-test visual redesign, autosave/recovery and batch/queue execution remain outside S8-A. Exact milestone status and implementation slicing belong only to the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md).
 
 ## S9 operational recovery and UX selection
 

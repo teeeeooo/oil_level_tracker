@@ -129,10 +129,10 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S8 — Repeated-Test Workflow & Result Management
 
 - **Purpose:** Reduce repeated compressor-test effort and operational mistakes when one Profile is reused across multiple test videos.
-- **Status:** `PLANNED`
-- **Major result:** The P1 candidate scope is prioritized: repeated analysis with one Profile, improved output naming, recent profile/result management, final run summary and completion actions, and clearer visual separation of profile-owned versus current-test settings. Implementation has not started.
-- **Next gate:** Select and authorize one bounded S8 implementation slice from this P1 scope; implementation remains not started until that handoff.
-- **Priority:** `P1 — repeated-test productivity / current next gate`
+- **Status:** `ACTIVE`
+- **Major result:** S8-A implements a session-owned current-test name separate from Profile/Recipe state, human-readable collision-safe result naming and backward-compatible persisted result metadata. Same-profile replacement and successful normal Workbench video replacement both begin with a fresh human run identity. Normal reader-factory or metadata failure before commit preserves the existing reader, session, state, run identity and Recipe/Profile state while closing any failed candidate reader; only a fully prepared candidate is committed, after which the previous reader is closed. The bounded transaction repair is complete on PR #69 and awaits fresh exact-head audit; recent profile/result management, final run summary and broader visual separation remain later S8 work.
+- **Next gate:** `S8-A Repeated-Test Run Identity + Output Naming Fresh Exact-Head Auditor`.
+- **Priority:** `P1 — repeated-test productivity / S8-A transaction repair awaiting audit`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S9 — Operational Recovery & UX Polish

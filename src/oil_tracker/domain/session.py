@@ -51,6 +51,7 @@ class AnalysisSession:
     compressor_start_sec: float | None = None
     sampling_fps: float = 2.0
     output_directory: str = ""
+    run_name: str = ""
     run_note: str = ""
     resolution_confirmed: bool = True
     debug_trace_level: DebugTraceLevel = DebugTraceLevel.BASIC
@@ -69,6 +70,7 @@ class AnalysisSession:
             "compressor_start_sec": self.compressor_start_sec,
             "sampling_fps": self.sampling_fps,
             "output_directory": self.output_directory,
+            "run_name": self.run_name,
             "run_note": self.run_note,
             "resolution_confirmed": self.resolution_confirmed,
             "debug_trace_level": self.debug_trace_level.value,
@@ -90,6 +92,7 @@ class AnalysisSession:
             compressor_start_sec=_optional_float(data.get("compressor_start_sec")),
             sampling_fps=float(data.get("sampling_fps", 2.0)),
             output_directory=str(data.get("output_directory", "")),
+            run_name=str(data.get("run_name", "")),
             run_note=str(data.get("run_note", "")),
             resolution_confirmed=_parse_bool(data.get("resolution_confirmed", True)),
             debug_trace_level=level,

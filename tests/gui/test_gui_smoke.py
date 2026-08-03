@@ -122,3 +122,131 @@ def test_validation_routing_selects_glass(qtbot):
     issue = ValidationIssue(ValidationSeverity.ERROR, "X", "problem", a.id, "zero_line_y")
     window._route_validation_issue(issue)
     assert c.selected_glass_id == a.id
+
+
+def test_current_test_name_is_session_owned_and_does_not_rename_profile(qtbot):
+    c = controller()
+    c.recipe.name = "재사용 프로필"
+    window = MainWindow(c, FakePreview(), FakeAnalysis(), DebugRenderer())
+    qtbot.addWidget(window)
+
+    window.run_name_edit.setText("  반복 시험 03  ")
+    window.run_name_edit.editingFinished.emit()
+
+    assert c.session.run_name == "반복 시험 03"
+    assert c.recipe.name == "재사용 프로필"
+    assert "run_name" not in c.recipe.to_dict()
+    assert "프로필에는 저장되지" in window.run_name_edit.toolTip()
+
+
+def test_normal_open_video_clears_current_test_name_in_ui_without_mutating_profile(qtbot, monkeypatch):
+    import numpy as np
+    from PySide6.QtWidgets import QFileDialog
+
+    from oil_tracker.domain.enums import WorkbenchState
+    from oil_tracker.domain.session import VideoMetadata
+
+    class Reader:
+        def __init__(self, path):
+            self.metadata = VideoMetadata(str(path), 1280, 720, 30.0, 10.0, 300, "fake")
+            self.closed = False
+
+        def read_at(self, _timestamp):
+            return np.zeros((720, 1280, 3), dtype=np.uint8), 0, 0.0
+
+        def close(self):
+            self.closed = True
+
+    c = controller()
+    c.reader_factory = Reader
+    c.recipe.name = "재사용 프로필"
+    recipe_before = c.recipe.to_dict()
+    c.session.run_name = "이전 시험"
+    c.state = WorkbenchState.ANALYZED
+    window = MainWindow(c, FakePreview(), FakeAnalysis(), DebugRenderer())
+    qtbot.addWidget(window)
+    assert window.run_name_edit.text() == "이전 시험"
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *_args, **_kwargs: ("new.mp4", ""))
+
+    window.open_video()
+
+    assert c.session.run_name == ""
+    assert window.run_name_edit.text() == ""
+    assert c.recipe.to_dict() == recipe_before
+    assert "run_name" not in c.recipe.to_dict()
+
+
+def test_open_video_dialog_cancel_preserves_current_test_name(qtbot, monkeypatch):
+    from PySide6.QtWidgets import QFileDialog
+
+    c = controller()
+    c.recipe.name = "재사용 프로필"
+    recipe_before = c.recipe.to_dict()
+    c.session.run_name = "유지할 시험"
+    window = MainWindow(c, FakePreview(), FakeAnalysis(), DebugRenderer())
+    qtbot.addWidget(window)
+    assert window.run_name_edit.text() == "유지할 시험"
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *_args, **_kwargs: ("", ""))
+
+    window.open_video()
+
+    assert c.session.run_name == "유지할 시험"
+    assert window.run_name_edit.text() == "유지할 시험"
+    assert c.recipe.to_dict() == recipe_before
+
+
+def test_normal_open_video_metadata_failure_preserves_ui_and_reader_ownership(qtbot, monkeypatch):
+    from PySide6.QtWidgets import QFileDialog
+
+    from oil_tracker.domain.enums import WorkbenchState
+    from oil_tracker.domain.session import VideoMetadata
+
+    class ActiveReader:
+        def __init__(self):
+            self.closed = False
+
+        def close(self):
+            self.closed = True
+
+    class MetadataFailureReader:
+        def __init__(self):
+            self.closed = False
+
+        @property
+        def metadata(self):
+            raise OSError("metadata failed")
+
+        def close(self):
+            self.closed = True
+
+    old = ActiveReader()
+    candidate = MetadataFailureReader()
+    c = controller()
+    c.reader_factory = lambda _path: candidate
+    c.video_reader = old
+    c.recipe.name = "재사용 프로필"
+    recipe_before = c.recipe.to_dict()
+    c.session.input_video_path = "old.mp4"
+    c.session.video_metadata = VideoMetadata("old.mp4", 1280, 720, 30.0, 10.0, 300, "fake")
+    c.session.run_name = "유지할 시험"
+    c.state = WorkbenchState.ANALYZED
+    session_before = c.session.to_dict()
+    window = MainWindow(c, FakePreview(), FakeAnalysis(), DebugRenderer())
+    qtbot.addWidget(window)
+    assert window.run_name_edit.text() == "유지할 시험"
+    assert window.video_path_label.text() == "old.mp4"
+    errors = []
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *_args, **_kwargs: ("bad.mp4", ""))
+    monkeypatch.setattr(window, "_error", lambda title, message: errors.append((title, message)))
+
+    window.open_video()
+
+    assert errors == [("영상 열기 실패", "metadata failed")]
+    assert c.video_reader is old
+    assert old.closed is False
+    assert candidate.closed is True
+    assert c.session.to_dict() == session_before
+    assert c.state == WorkbenchState.ANALYZED
+    assert window.run_name_edit.text() == "유지할 시험"
+    assert window.video_path_label.text() == "old.mp4"
+    assert c.recipe.to_dict() == recipe_before

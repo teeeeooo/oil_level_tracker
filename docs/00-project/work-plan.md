@@ -1,7 +1,7 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S8 — Repeated-Test Workflow & Result Management`
-**Milestone status:** `PLANNED — not started`
+**Milestone status:** `ACTIVE — S8-A transaction repair complete on feature branch; awaiting independent fresh audit`
 **S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
@@ -13,10 +13,11 @@
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
 **Current S7 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #68 @ 8846c272842df099f5849ea71686c3370248fc03`
-**Current gate:** `S8 — Repeated-Test Workflow & Result Management: select and authorize one bounded implementation slice; implementation not started`
+**Current S8-A result:** `REPEATED-TEST RUN IDENTITY + OUTPUT NAMING TRANSACTION REPAIR COMPLETE — AWAITING FRESH EXACT-HEAD AUDIT`
+**Current gate:** `S8-A Repeated-Test Run Identity + Output Naming Fresh Exact-Head Auditor`
 **Successor milestone:** `S9 — Operational Recovery & UX Polish`
 
-This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, including the bounded available-corpus accuracy claim and residual `not_evaluated` field categories. S7 is now independently audited, merged and closed: the accepted annotated-MP4 path preserves official stored-result authority, fail-closed decoded-timeline coverage, derivative publication safety, bounded lifecycle/resource ownership and the Qt raster boundary. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed. S8 is the exact successor gate but implementation has not started; the next action is to select and authorize one bounded repeated-test workflow/result-management slice.
+This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, including the bounded available-corpus accuracy claim and residual `not_evaluated` field categories. S7 is independently audited, merged and closed; its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts remain unchanged. S8 is now active through bounded slice S8-A: the feature branch adds a session-owned current-test name, safe human-readable result bundle naming and backward-compatible metadata without changing Recipe/Profile persistence. Same-profile replacement retains its existing atomic prepare/commit behavior. Normal Workbench replacement now prepares the candidate reader and metadata before commit: reader-factory or metadata failure leaves the previous reader, session, state, run identity and Recipe/Profile state untouched and closes any acquired failed candidate; successful commit resets `run_name`, installs the new reader/session video state and only then closes the previous reader. S8-A is not accepted or merged until the fresh exact-head Auditor passes it. Recent profile/result history, final-run summary, broader Profile/current-test visual redesign, autosave/recovery and batch execution remain outside this slice. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
 
 ## Evidence owners
 
@@ -28,6 +29,7 @@ This document owns the current execution state. Milestone order and formal statu
 - S6-D2: [`../30-quality/s6-d2-user-confirmed-product-truth.md`](../30-quality/s6-d2-user-confirmed-product-truth.md)
 - S6-D3: [`../30-quality/s6-d3-official-accuracy-baseline.md`](../30-quality/s6-d3-official-accuracy-baseline.md)
 - S7 Worker evidence: [`../30-quality/s7-annotated-mp4-export-evidence.md`](../30-quality/s7-annotated-mp4-export-evidence.md)
+- S8-A Worker evidence: [`../30-quality/s8-a-run-identity-output-naming-evidence.md`](../30-quality/s8-a-run-identity-output-naming-evidence.md)
 - S6-D4: [`../30-quality/s6-d4-available-corpus-detector-repair.md`](../30-quality/s6-d4-available-corpus-detector-repair.md)
 - S6-E: [`../30-quality/s6-bounded-runtime-soak-evidence.md`](../30-quality/s6-bounded-runtime-soak-evidence.md)
 - S6-F: [`../30-quality/s6-f-one-hour-long-duration-stability.md`](../30-quality/s6-f-one-hour-long-duration-stability.md)
@@ -62,7 +64,7 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 ## Product priority and sequence
 
 - `P0 completed`: S7 annotated MP4 export is audited, merged and closed.
-- `P1 current next gate`: S8 repeated-test workflow and result management; select and authorize one bounded implementation slice before implementation starts.
+- `P1 current next gate`: S8 repeated-test workflow and result management; the S8-A normal-open transaction repair is complete on its feature branch and awaits fresh exact-head audit before any later S8 slice proceeds.
 - `P2`: after S8, select operational recovery and UX improvements based on observed user effect.
 - `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
 - Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.

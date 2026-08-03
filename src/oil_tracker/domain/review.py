@@ -223,6 +223,19 @@ class ReviewBundle:
     def has_debug_trace(self) -> bool:
         return self.debug_trace_level != "none" and self.debug_record_count > 0 and not self.debug_warning
 
+    @property
+    def run_name(self) -> str:
+        index = self.review_index or {}
+        for value in (
+            index.get("run_name"),
+            self.manifest.get("run_name"),
+            getattr(self.session, "run_name", ""),
+        ):
+            text = str(value or "").strip()
+            if text:
+                return text
+        return ""
+
     def glass_config(self, glass_id: str):
         return next((glass for glass in self.recipe.glasses if glass.id == glass_id), None)
 
