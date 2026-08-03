@@ -4,7 +4,7 @@ from pathlib import Path
 
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import QFileDialog, QMessageBox
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QWidget
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.vision.debug_renderer import DebugRenderer
@@ -14,8 +14,13 @@ from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.session import AnalysisSession
+from oil_tracker.ui.analysis_completion_coordinator import AnalysisCompletionCoordinator
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
 from oil_tracker.ui.main_window import MainWindow
+from oil_tracker.ui.preflight_coordinator import PreflightCoordinator
+from oil_tracker.ui.result_actions import ResultActionService
+from oil_tracker.ui.result_review_coordinator import ResultReviewCoordinator
+from oil_tracker.ui.same_profile_analysis_coordinator import SameProfileAnalysisCoordinator
 
 
 class _Preview(QObject):
@@ -41,6 +46,41 @@ class _Reader:
         self.closed = True
 
 
+class _ClosableWidget(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.closed = False
+
+    def closeEvent(self, event):
+        self.closed = True
+        super().closeEvent(event)
+
+
+class _PreparedResource:
+    def __init__(self):
+        self.closed = False
+
+    def close(self):
+        self.closed = True
+
+
+class _PreflightController(QObject):
+    started = Signal()
+    progress = Signal(object)
+    completed = Signal(object)
+    failed = Signal(str)
+    cancelled = Signal()
+
+    def __init__(self):
+        super().__init__()
+        self.invalidations = 0
+
+    def start(self, *_args): pass
+    def cancel(self): pass
+    def invalidate(self):
+        self.invalidations += 1
+
+
 def _controller(save_repository=None, load_repository=None):
     save_repository = save_repository or JsonRecipeRepository()
     load_repository = load_repository or save_repository
@@ -56,6 +96,51 @@ def _window(controller):
     return MainWindow(controller, _Preview(), _Analysis(), DebugRenderer())
 
 
+def _attach_close_lifecycles(window):
+    preflight_controller = _PreflightController()
+    preflight = PreflightCoordinator(window, preflight_controller)
+    preflight._running = True
+    same_profile = SameProfileAnalysisCoordinator(window)
+    prepared = _PreparedResource()
+    same_profile._prepared = prepared
+    review = ResultReviewCoordinator(window)
+    review_widget = _ClosableWidget(window)
+    review.viewer = review_widget
+    completion = AnalysisCompletionCoordinator(
+        window, review, same_profile, ResultActionService()
+    )
+    completion_widget = _ClosableWidget(window)
+    completion.dialog = completion_widget
+    return (
+        preflight_controller, preflight, same_profile, prepared,
+        review, review_widget, completion, completion_widget,
+    )
+
+
+def _assert_lifecycles_preserved(lifecycle) -> None:
+    controller, preflight, same_profile, prepared, review, review_widget, completion, completion_widget = lifecycle
+    assert controller.invalidations == 0
+    assert preflight._running is True
+    assert same_profile._prepared is prepared
+    assert prepared.closed is False
+    assert review.viewer is review_widget
+    assert review_widget.closed is False
+    assert completion.dialog is completion_widget
+    assert completion_widget.closed is False
+
+
+def _assert_lifecycles_closed(lifecycle) -> None:
+    controller, preflight, same_profile, prepared, review, review_widget, completion, completion_widget = lifecycle
+    assert controller.invalidations == 1
+    assert preflight._running is False
+    assert same_profile._prepared is None
+    assert prepared.closed is True
+    assert review.viewer is None
+    assert review_widget.closed is True
+    assert completion.dialog is None
+    assert completion_widget.closed is True
+
+
 def _saved_controller(tmp_path: Path):
     controller = _controller()
     controller.new_document(640, 480, "Profile")
@@ -69,15 +154,15 @@ def test_clean_close_has_no_unsaved_profile_prompt(qtbot, tmp_path, monkeypatch)
     reader = _Reader()
     controller.video_reader = reader
     window = _window(controller)
+    lifecycle = _attach_close_lifecycles(window)
     prompts = []
     monkeypatch.setattr(window, "_confirm_unsaved_profile_close", lambda: prompts.append(True))
 
-    event = QCloseEvent()
-    window.closeEvent(event)
+    assert window.close() is True
 
     assert prompts == []
-    assert event.isAccepted()
     assert reader.closed is True
+    _assert_lifecycles_closed(lifecycle)
 
 
 def test_dirty_close_cancel_preserves_workbench_and_reader(qtbot, tmp_path, monkeypatch):
@@ -89,20 +174,28 @@ def test_dirty_close_cancel_preserves_workbench_and_reader(qtbot, tmp_path, monk
     before_recipe = controller.recipe.to_dict()
     before_session = controller.session.to_dict()
     window = _window(controller)
+    lifecycle = _attach_close_lifecycles(window)
     monkeypatch.setattr(
         window,
         "_confirm_unsaved_profile_close",
         lambda: QMessageBox.StandardButton.Cancel,
     )
 
-    event = QCloseEvent()
-    window.closeEvent(event)
+    assert window.close() is False
 
-    assert not event.isAccepted()
     assert reader.closed is False
     assert controller.recipe.to_dict() == before_recipe
     assert controller.session.to_dict() == before_session
     assert controller.profile_has_unsaved_changes is True
+    _assert_lifecycles_preserved(lifecycle)
+
+    monkeypatch.setattr(
+        window,
+        "_confirm_unsaved_profile_close",
+        lambda: QMessageBox.StandardButton.Discard,
+    )
+    assert window.close() is True
+    _assert_lifecycles_closed(lifecycle)
 
 
 def test_dirty_close_discard_does_not_write_profile(qtbot, tmp_path, monkeypatch):
@@ -113,19 +206,19 @@ def test_dirty_close_discard_does_not_write_profile(qtbot, tmp_path, monkeypatch
     reader = _Reader()
     controller.video_reader = reader
     window = _window(controller)
+    lifecycle = _attach_close_lifecycles(window)
     monkeypatch.setattr(
         window,
         "_confirm_unsaved_profile_close",
         lambda: QMessageBox.StandardButton.Discard,
     )
 
-    event = QCloseEvent()
-    window.closeEvent(event)
+    assert window.close() is True
 
-    assert event.isAccepted()
     assert reader.closed is True
     assert path.read_bytes() == before
     assert controller.profile_has_unsaved_changes is True
+    _assert_lifecycles_closed(lifecycle)
 
 
 def test_dirty_close_save_uses_existing_authoritative_profile_path(qtbot, tmp_path, monkeypatch):
@@ -135,20 +228,20 @@ def test_dirty_close_save_uses_existing_authoritative_profile_path(qtbot, tmp_pa
     reader = _Reader()
     controller.video_reader = reader
     window = _window(controller)
+    lifecycle = _attach_close_lifecycles(window)
     monkeypatch.setattr(
         window,
         "_confirm_unsaved_profile_close",
         lambda: QMessageBox.StandardButton.Save,
     )
 
-    event = QCloseEvent()
-    window.closeEvent(event)
+    assert window.close() is True
 
-    assert event.isAccepted()
     assert reader.closed is True
     assert controller.profile_has_unsaved_changes is False
     assert controller.recipe_path == path
     assert JsonRecipeRepository().load(path).name == "Saved On Close"
+    _assert_lifecycles_closed(lifecycle)
 
 
 def test_save_as_cancel_during_close_keeps_window_state(qtbot, tmp_path, monkeypatch):
@@ -158,6 +251,7 @@ def test_save_as_cancel_during_close_keeps_window_state(qtbot, tmp_path, monkeyp
     controller.video_reader = reader
     before = controller.recipe.to_dict()
     window = _window(controller)
+    lifecycle = _attach_close_lifecycles(window)
     monkeypatch.setattr(
         window,
         "_confirm_unsaved_profile_close",
@@ -165,14 +259,21 @@ def test_save_as_cancel_during_close_keeps_window_state(qtbot, tmp_path, monkeyp
     )
     monkeypatch.setattr(QFileDialog, "getSaveFileName", lambda *_a, **_k: ("", ""))
 
-    event = QCloseEvent()
-    window.closeEvent(event)
+    assert window.close() is False
 
-    assert not event.isAccepted()
     assert reader.closed is False
     assert controller.recipe_path is None
     assert controller.recipe.to_dict() == before
     assert controller.profile_has_unsaved_changes is True
+    _assert_lifecycles_preserved(lifecycle)
+
+    monkeypatch.setattr(
+        window,
+        "_confirm_unsaved_profile_close",
+        lambda: QMessageBox.StandardButton.Discard,
+    )
+    assert window.close() is True
+    _assert_lifecycles_closed(lifecycle)
 
 
 class _FailingRepository(JsonRecipeRepository):
@@ -191,6 +292,7 @@ def test_save_failure_during_close_keeps_workbench_open(qtbot, tmp_path, monkeyp
     reader = _Reader()
     controller.video_reader = reader
     window = _window(controller)
+    lifecycle = _attach_close_lifecycles(window)
     errors = []
     monkeypatch.setattr(window, "_error", lambda title, message: errors.append((title, message)))
     monkeypatch.setattr(
@@ -199,16 +301,23 @@ def test_save_failure_during_close_keeps_workbench_open(qtbot, tmp_path, monkeyp
         lambda: QMessageBox.StandardButton.Save,
     )
 
-    event = QCloseEvent()
-    window.closeEvent(event)
+    assert window.close() is False
 
-    assert not event.isAccepted()
     assert reader.closed is False
     assert errors == [("프로필 저장 실패", "save failed")]
     assert controller.recipe.to_dict() == before_recipe
     assert controller.session.to_dict() == before_session
     assert controller.profile_has_unsaved_changes is True
     assert JsonRecipeRepository().load(source).name == "Profile"
+    _assert_lifecycles_preserved(lifecycle)
+
+    monkeypatch.setattr(
+        window,
+        "_confirm_unsaved_profile_close",
+        lambda: QMessageBox.StandardButton.Discard,
+    )
+    assert window.close() is True
+    _assert_lifecycles_closed(lifecycle)
 
 
 def test_recipe_edit_then_undo_to_saved_content_returns_clean(qtbot, tmp_path):

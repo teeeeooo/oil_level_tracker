@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 
 from oil_tracker.adapters.presentation.qt_frame_image_converter import blank_bgr_frame
-from PySide6.QtCore import QTimer, QUrl, Qt
+from PySide6.QtCore import QTimer, QUrl, Qt, Signal
 from PySide6.QtGui import QAction, QDesktopServices, QKeySequence, QUndoStack
 from PySide6.QtWidgets import (
     QApplication,
@@ -65,6 +65,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 class MainWindow(QMainWindow):
+    applicationCloseAccepted = Signal()
+
     def __init__(self, workbench, preview_controller, analysis_controller, debug_renderer, parent=None) -> None:
         super().__init__(parent)
         self.workbench = workbench
@@ -1102,8 +1104,11 @@ class MainWindow(QMainWindow):
             elif answer != QMessageBox.StandardButton.Discard:
                 event.ignore()
                 return
-        self.workbench.close_video()
         super().closeEvent(event)
+        if not event.isAccepted():
+            return
+        self.applicationCloseAccepted.emit()
+        self.workbench.close_video()
 
 
 def _time_spin() -> WheelSafeDoubleSpinBox:

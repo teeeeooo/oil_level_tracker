@@ -3,6 +3,7 @@
 **Status:** `IMPLEMENTATION COMPLETE — AWAITING INDEPENDENT AUDIT`
 
 - Starting exact `main`: `d5fb35f072613b07949fd83ffb67c93783028be9`
+- Rejected-close repair starting head: `aa7f10ec33e67cf8ae6b44a32609ce191b8e5cc2`
 - Worker branch: `feature/s9-a-unsaved-profile-close-guard`
 - Lane: `C — Independent Review`
 - Next gate: `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`
@@ -17,9 +18,11 @@ Current-test-only `AnalysisSession` changes are outside this comparison. Video/s
 
 ## Save and close boundary
 
-`MainWindow.closeEvent()` evaluates Profile-specific dirtiness before `close_video()`. Clean Profile close performs the existing teardown without a prompt. Dirty close provides Save, Discard and Cancel choices.
+`MainWindow.closeEvent()` evaluates Profile-specific dirtiness before any close-success-dependent teardown. Clean Profile close performs the existing teardown without a prompt. Dirty close provides Save, Discard and Cancel choices.
 
 Save calls the existing `MainWindow.save_recipe()` path, which continues through `WorkbenchController.save()` → `SaveRecipeUseCase` → `JsonRecipeRepository`. Existing paths are reused; new paths still use the established file dialog and repository `.oilrecipe` suffix normalization. Save-As cancellation and save failure ignore the close event and leave the reader and Workbench active.
+
+The rejected-close repair removes lifecycle teardown from raw `QEvent.Close` event filters. `MainWindow` now emits `applicationCloseAccepted` only after its close guard and the base close event have accepted the request. Result Review, analysis completion, prepared same-Profile work and preflight subscribe to that accepted-close boundary and retain their existing cleanup ownership. A rejected close therefore cannot destroy those secondary lifecycles before the user returns to the Workbench; an accepted close cleans them before the Workbench video reader is closed.
 
 Discard does not serialize or overwrite the current Profile. Cancel does not mutate Recipe, session, reader or UI state. `SaveRecipeUseCase` restores the previous `updated_at` if repository publication fails, so a failed save cannot mutate the in-memory Recipe or establish a false clean baseline.
 
@@ -31,16 +34,18 @@ S8-C2 Profile/current-test presentation remains unchanged: Profile identity stil
 
 ## Worker validation
 
-Narrow dirty/save/close coverage after final save-failure repair:
+Narrow dirty/save/close coverage, including real `window.close()` regression assertions for rejected and accepted secondary lifecycle behavior:
 
 `QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q tests/unit/test_profile_dirty_tracking.py tests/gui/test_unsaved_profile_close_guard.py`
 
-Result: `15 passed in 3.67s`.
+Result: `15 passed in 5.28s`.
 
-Focused Workbench compatibility after stabilization covered S9-A dirty/close behavior, S8-C2 ownership presentation, recent Profile access, same-Profile GUI/unit contracts, Recipe storage, UI import boundaries and Qt lifecycle.
+Adjacent compatibility covered Result Review and recent-result access, analysis completion, same-Profile workflow, S8-C2 Profile/current-test presentation, preflight, Qt lifecycle and UI import boundaries:
 
-Result: `53 passed in 6.80s`.
+`QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q tests/gui/test_result_review_coordinator_factory.py tests/gui/test_analysis_completion_coordinator.py tests/gui/test_same_profile_analysis_coordinator.py tests/gui/test_profile_current_test_separation.py tests/gui/test_preflight_check.py tests/gui/test_recent_result_review_access.py tests/test_qt_lifecycle.py tests/test_ui_import_boundaries.py`
 
-A development run that combined new close behavior with an older dirty-window GUI fixture blocked during pytest-qt teardown because the real modal close guard correctly awaited user choice. The owned test process was terminated, and only that existing test helper was updated to choose Discard during teardown; no test-only production bypass was introduced.
+Result: `39 passed in 7.74s`.
 
-Detector benchmarks, soak/long-duration workloads, Windows/manual GUI acceptance, PyInstaller and unrelated canonical suites were intentionally not run. No autosave/recovery, Windows/DPI or packaging PASS is inferred.
+Two development runs blocked after already-passed GUI test bodies because pytest-qt teardown attempted to close an intentionally dirty test MainWindow and the real modal guard correctly awaited a user choice. The owned processes were terminated. The affected preflight fixture now chooses Discard only for its teardown close; lifecycle regression tests still exercise the production close sequencing directly and do not bypass or mock the event-filter defect.
+
+Detector benchmarks, soak/long-duration workloads, Windows/manual GUI acceptance, Windows DPI, PyInstaller and unrelated canonical suites were intentionally not run. No autosave/recovery or packaging PASS is inferred.

@@ -22,6 +22,7 @@ class SameProfileAnalysisCoordinator(QObject):
         super().__init__(parent or window)
         self.window = window
         self._prepared = None
+        window.applicationCloseAccepted.connect(self.close)
 
     def start(self, bundle) -> bool:
         if self.window.workbench.state == WorkbenchState.ANALYZING:
