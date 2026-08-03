@@ -130,9 +130,9 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Reduce repeated compressor-test effort and operational mistakes when one Profile is reused across multiple test videos.
 - **Status:** `ACTIVE`
-- **Major result:** S8-A, S8-B1 and S8-B2 remain independently audited, accepted and merged through PR #69, PR #70 and PR #71. S8-C1 Final Run Summary & Completion Actions is implementation-complete on its focused branch and awaiting independent audit: the completion UI identifies the finalized current-test name, Profile and source video from the authoritative saved bundle, preserves `AnalysisResult` judgment/status and completed output path, degrades safely when richer bundle metadata cannot be read, and keeps established Review/report/folder/same-Profile action ownership. Broader Profile/current-test Workbench visual separation remains unstarted S8-C2 work.
-- **Next gate:** `S8-C1 Final Run Summary & Completion Actions Fresh Exact-Head Auditor`.
-- **Priority:** `P1 — repeated-test productivity / S8-C1 audit gate`
+- **Major result:** S8-A, S8-B1 and S8-B2 remain independently audited, accepted and merged through PR #69, PR #70 and PR #71. S8-C1 Final Run Summary & Completion Actions is independently audited, accepted and native guarded-squash-merged through PR #72 as `b485bf85a4d28c604c4d8ac2579fbe2e2f186857`: completion identity comes from the finalized saved bundle, judgment/status remains the completed `AnalysisResult`, optional metadata enrichment failure is non-fatal, and Review/report/folder/same-Profile actions preserve their established completed-output authority. Broader Profile/current-test Workbench visual separation remains unstarted S8-C2 work.
+- **Next gate:** `S8-C2 — Profile/Current-Test Visual Separation`: select and authorize one bounded implementation slice; implementation remains not started until that handoff.
+- **Priority:** `P1 — repeated-test productivity / S8-C2 selection gate`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ### S9 — Operational Recovery & UX Polish
