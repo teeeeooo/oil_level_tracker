@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
@@ -47,6 +48,7 @@ class WorkbenchController:
         self.validate_use_case = validate_use_case
         self.reader_factory = reader_factory
         self.recipe = InspectionRecipe.empty()
+        self._profile_close_baseline: dict | None = deepcopy(self.recipe.to_dict())
         self.session = AnalysisSession()
         self.state = WorkbenchState.EMPTY
         self.selected_glass_id: str | None = None
@@ -60,6 +62,15 @@ class WorkbenchController:
         self.state = WorkbenchState.EMPTY
         self.selected_glass_id = None
         self.recipe_path = None
+        self._profile_close_baseline = None
+
+    @property
+    def profile_has_unsaved_changes(self) -> bool:
+        baseline = self._profile_close_baseline
+        return baseline is None or self.recipe.to_dict() != baseline
+
+    def _set_profile_close_baseline(self) -> None:
+        self._profile_close_baseline = deepcopy(self.recipe.to_dict())
 
     def open_video(self, path: str) -> None:
         reader = None
@@ -155,6 +166,7 @@ class WorkbenchController:
         prepared.reader = None
         self.selected_glass_id = self.recipe.glasses[0].id if self.recipe.glasses else None
         self.recipe_path = None
+        self._set_profile_close_baseline()
         self.state = WorkbenchState.DRAFT
         if previous is not None:
             previous.close()
@@ -239,12 +251,14 @@ class WorkbenchController:
     def save(self, path: Path) -> None:
         self.save_use_case.execute(path, self.recipe)
         self.recipe_path = path.with_suffix(".oilrecipe")
+        self._set_profile_close_baseline()
         if self.state == WorkbenchState.EMPTY:
             self.state = WorkbenchState.DRAFT
 
     def load(self, path: Path) -> None:
         self.recipe = self.load_use_case.execute(path)
         self.recipe_path = path
+        self._set_profile_close_baseline()
         self.selected_glass_id = self.recipe.glasses[0].id if self.recipe.glasses else None
         self.state = WorkbenchState.DRAFT
 

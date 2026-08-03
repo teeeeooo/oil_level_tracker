@@ -14,5 +14,10 @@ class SaveRecipeUseCase:
         result = self.validator.validate(recipe, structural_only=True)
         if not result.is_structurally_valid:
             raise ValueError("Recipe has structural errors and cannot be saved.")
+        previous_updated_at = recipe.updated_at
         recipe.touch()
-        self.repository.save(path, recipe)
+        try:
+            self.repository.save(path, recipe)
+        except Exception:
+            recipe.updated_at = previous_updated_at
+            raise

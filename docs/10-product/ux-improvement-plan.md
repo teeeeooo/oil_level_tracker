@@ -160,6 +160,14 @@ After S8, select P2 work based on observed user effect rather than treating ever
 - analysis-area zoom, pan and fit;
 - bidirectional highlight between fields and overlay items.
 
+S9-A owns only unsaved Profile change tracking and application-close confirmation. Profile persistence dirtiness is independent from `WorkbenchState`: `WorkbenchController` compares the current serialized `InspectionRecipe` with a safe close baseline. Successful Profile load and save establish that baseline, while an explicit new Profile has no safe baseline until it is saved. Recipe-owned edits make the Profile dirty, and undoing back to the exact baseline makes it clean. Test-video, `run_name`, analysis range, compressor start, sampling and other `AnalysisSession`-only changes do not make the Profile dirty even when existing readiness/analysis state transitions mark the Workbench `DRAFT` or `DRAFT_DIRTY`.
+
+A same-Profile new-video replacement starts from the authoritative Recipe snapshot already stored in the finalized result bundle, so that copied snapshot is a safe close baseline even though `recipe_path` is intentionally `None`; subsequent user Recipe edits are dirty. This avoids a save warning caused only by copying a safely persisted result snapshot. S8-C2 continues to display Profile and current-test ownership from the existing Recipe/`recipe_path` and session owners.
+
+Application close checks Profile-specific dirtiness before video-reader teardown. A dirty Profile offers Save, Discard and Cancel. Save reuses the established Profile save workflow and normalized `.oilrecipe` path behavior; Save-As cancellation or save failure cancels close and preserves the current Workbench. Discard closes without writing or overwriting the Profile file. Cancel leaves Recipe, session, reader and UI state intact. A failed repository write restores the pre-save Recipe `updated_at`, so an unsuccessful save attempt cannot mutate the in-memory Profile or establish a clean baseline.
+
+S9-A does not add autosave, crash/abnormal-exit recovery, recovery files, session recovery or prompts on every new/load transition. Autosave/recovery, analysis-area zoom/pan/fit and field↔overlay highlight remain unstarted unless separately authorized.
+
 The following remain P3 lower-priority backlog unless explicitly promoted:
 
 - enlarged reference-line drag guide;

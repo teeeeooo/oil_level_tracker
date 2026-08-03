@@ -139,8 +139,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Select recovery and interaction improvements after S8 based on observed user impact rather than committing every candidate to release scope.
 - **Status:** `ACTIVE`
-- **Major result:** The first bounded P2 slice is `S9-A — Unsaved Profile Change Tracking & Close Confirmation`. Current inspection shows application close has no unsaved-Profile guard and existing `WorkbenchState` dirty semantics also react to current-test/session edits, so the slice must distinguish Profile persistence state from session state before prompting. Autosave/abnormal-exit recovery, analysis-area zoom/pan/fit and field↔overlay highlight remain unstarted selection candidates; P3 remains lower-priority backlog.
-- **Next gate:** `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker`.
+- **Major result:** `S9-A — Unsaved Profile Change Tracking & Close Confirmation` is implementation-complete on its focused Worker branch and awaiting independent audit. Profile persistence dirtiness is tracked independently from `WorkbenchState` by comparing the current serialized Recipe with a safe load/save/result-snapshot baseline; current-test/session-only edits therefore do not trigger Profile-loss warnings. Application close now guards unsaved Profile changes before reader teardown with Save/Discard/Cancel while reusing the established Profile save authority. Autosave/abnormal-exit recovery, analysis-area zoom/pan/fit and field↔overlay highlight remain unstarted selection candidates; P3 remains lower-priority backlog.
+- **Next gate:** `S9-A Unsaved Profile Change Tracking & Close Confirmation Fresh Exact-Head Auditor`.
 - **Priority:** `P2 — operational data-loss prevention / current`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
