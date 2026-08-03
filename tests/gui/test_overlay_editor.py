@@ -4,13 +4,22 @@ from types import SimpleNamespace
 
 import numpy as np
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtWidgets import QApplication, QGraphicsLineItem, QGraphicsRectItem, QGraphicsScene
+from PySide6.QtTest import QSignalSpy
+from PySide6.QtWidgets import (
+    QApplication,
+    QGraphicsItem,
+    QGraphicsLineItem,
+    QGraphicsRectItem,
+    QGraphicsScene,
+)
 
 from oil_tracker.domain.enums import FillState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.session import VideoMetadata
 from oil_tracker.ui.widgets.video_overlay_canvas import (
     DraggableZeroLine,
+    EditableEllipseItem,
+    ResizeHandleItem,
     VideoOverlayCanvas,
     resized_rect,
     scene_rect_in_frame,
@@ -234,3 +243,77 @@ def test_video_preview_shared_canvas_resets_on_open_and_preserves_frame_zoom(qtb
 
     preview.open_video("second.mp4")
     assert preview.canvas.fit_mode is True
+
+
+def test_resize_handles_keep_eight_direction_hit_targets_with_restrained_markers(qtbot):
+    glass = InspectionRecipe.default_glass(640, 480)
+    e = glass.geometry.ellipse
+    item = EditableEllipseItem(
+        glass.id,
+        QRectF(e.bounds.x, e.bounds.y, e.bounds.width, e.bounds.height),
+        QRectF(0, 0, 640, 480),
+        lambda *_args: None,
+    )
+    scene = QGraphicsScene()
+    scene.addItem(item)
+    item.setSelected(True)
+
+    assert tuple(item._handles) == EditableEllipseItem.HANDLE_ROLES
+    assert len(item._handles) == 8
+    for handle in item._handles.values():
+        assert handle.rect().width() == ResizeHandleItem.HIT_SIZE == 18.0
+        assert handle.rect().height() == ResizeHandleItem.HIT_SIZE
+        assert ResizeHandleItem.VISUAL_SIZE == 6.0
+        assert handle.flags() & QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations
+
+    item.begin_resize("br", item.rect().bottomRight())
+    assert item._handles["br"]._resize_active is True
+    item.end_resize(item.rect().bottomRight())
+    assert item._handles["br"]._resize_active is False
+
+
+def test_overlay_mouse_press_requests_exact_targets(qtbot):
+    canvas = VideoOverlayCanvas()
+    qtbot.addWidget(canvas)
+    canvas.resize(720, 520)
+    canvas.show()
+    glass = InspectionRecipe.default_glass(640, 480)
+    zone = glass.geometry.exclusions
+    if not zone:
+        from oil_tracker.domain.geometry import ExclusionZone, Rect
+
+        glass.geometry.exclusions.append(ExclusionZone("zone-a", Rect(280, 210, 80, 60), "Zone A"))
+    canvas.set_frame(np.zeros((480, 640, 3), dtype=np.uint8), reset_view=True)
+    canvas.set_glasses([glass], glass.id)
+    QApplication.processEvents()
+    spy = QSignalSpy(canvas.interactionTargetRequested)
+    geometry_changes = QSignalSpy(canvas.geometryChanged)
+    zero_changes = QSignalSpy(canvas.zeroLineChanged)
+    exclusion_changes = QSignalSpy(canvas.exclusionChanged)
+
+    zero_pos = canvas.mapFromScene(QPointF(glass.geometry.ellipse.center_x, glass.geometry.zero_line_y))
+    qtbot.mousePress(canvas.viewport(), Qt.MouseButton.LeftButton, pos=zero_pos)
+    qtbot.mouseRelease(canvas.viewport(), Qt.MouseButton.LeftButton, pos=zero_pos)
+    assert spy.count() >= 1
+    zero_signal = spy.at(spy.count() - 1)
+    assert zero_signal[0] == glass.id
+    assert zero_signal[1] == "zero_line"
+    assert zero_changes.count() == 0
+
+    exact = glass.geometry.exclusions[0]
+    zone_pos = canvas.mapFromScene(QPointF(exact.rect.x + exact.rect.width / 2, exact.rect.y + exact.rect.height / 2))
+    qtbot.mousePress(canvas.viewport(), Qt.MouseButton.LeftButton, pos=zone_pos)
+    qtbot.mouseRelease(canvas.viewport(), Qt.MouseButton.LeftButton, pos=zone_pos)
+    exclusion_signal = spy.at(spy.count() - 1)
+    assert exclusion_signal[1] == "exclusion"
+    assert exclusion_signal[2] == exact.id
+    assert exclusion_changes.count() == 0
+    assert canvas._editable_ellipse_item.isSelected() is True
+
+    e = glass.geometry.ellipse
+    handle_pos = canvas.mapFromScene(QPointF(e.center_x, e.center_y - e.radius_y))
+    qtbot.mousePress(canvas.viewport(), Qt.MouseButton.LeftButton, pos=handle_pos)
+    qtbot.mouseRelease(canvas.viewport(), Qt.MouseButton.LeftButton, pos=handle_pos)
+    geometry_signal = spy.at(spy.count() - 1)
+    assert geometry_signal[1] == "geometry"
+    assert geometry_changes.count() == 0

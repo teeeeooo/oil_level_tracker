@@ -51,6 +51,7 @@ A feature document must not maintain a competing project-wide “current next wo
 - S6-D3 current-sample detector baseline and category coverage: [official accuracy baseline](./30-quality/s6-d3-official-accuracy-baseline.md)
 - S6-D4 bounded available-corpus detector repair: [detector repair evidence](./30-quality/s6-d4-available-corpus-detector-repair.md)
 - S6-F one-hour long-duration resource stability: [one-hour stability evidence](./30-quality/s6-f-one-hour-long-duration-stability.md)
+- S9-C bounded field/overlay interaction implementation evidence: [field-overlay interaction polish evidence](./30-quality/s9-c-field-overlay-interaction-polish-evidence.md)
 - Manual platform gate: [manual GUI and Windows checklist](./30-quality/manual-gui-windows-checklist.md)
 - Detector benchmark guide: [golden video regression](./30-quality/golden-video-regression.md)
 

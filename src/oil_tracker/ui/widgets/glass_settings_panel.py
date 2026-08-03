@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import QEvent, Qt, Signal
 from PySide6.QtWidgets import (
     QCheckBox,
     QFormLayout,
@@ -39,6 +39,7 @@ class GlassSettingsPanel(QWidget):
     restoreDefaultsRequested = Signal()
     editRoiRequested = Signal()
     resetGlassRequested = Signal()
+    interactionTargetChanged = Signal(str, object)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -47,6 +48,9 @@ class GlassSettingsPanel(QWidget):
         self._last_focused_field: str | None = None
         self._selected_glass_id: str | None = None
         self._scale_cache: dict[str, float] = {}
+        self._interaction_target: str | None = None
+        self._interaction_zone_id: str | None = None
+        self._interaction_update = False
 
         container = QWidget()
         container.setMinimumWidth(350)
@@ -111,8 +115,8 @@ class GlassSettingsPanel(QWidget):
         self.form.addRow(self._message_label("mm_per_pixel"))
         container_layout.addWidget(basic)
 
-        ex_group = QGroupBox("검출 제외 영역")
-        ex_layout = QVBoxLayout(ex_group)
+        self.exclusion_group = QGroupBox("검출 제외 영역")
+        ex_layout = QVBoxLayout(self.exclusion_group)
         self.exclusions = QListWidget()
         self.exclusions.setMinimumHeight(90)
         ex_layout.addWidget(self.exclusions)
@@ -123,7 +127,7 @@ class GlassSettingsPanel(QWidget):
         ex_buttons.addWidget(self.del_ex)
         ex_layout.addLayout(ex_buttons)
         ex_layout.addWidget(self._message_label("exclusions"))
-        container_layout.addWidget(ex_group)
+        container_layout.addWidget(self.exclusion_group)
 
         self.advanced_toggle = QToolButton()
         self.advanced_toggle.setObjectName("advancedToggle")
@@ -146,8 +150,8 @@ class GlassSettingsPanel(QWidget):
         self.margin.setSingleStep(0.01)
         self.margin.setToolTip("분석 영역 테두리를 검출에서 제외하는 비율입니다.")
 
-        geometry_group = QGroupBox("좌표와 분석 범위")
-        geometry_form = QFormLayout(geometry_group)
+        self.geometry_group = QGroupBox("좌표와 분석 범위")
+        geometry_form = QFormLayout(self.geometry_group)
         geometry_form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
         geometry_form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.DontWrapRows)
         geometry_form.addRow("중심 X", self.cx)
@@ -156,7 +160,7 @@ class GlassSettingsPanel(QWidget):
         geometry_form.addRow("높이", self.height)
         geometry_form.addRow("테두리 제외 범위", self.margin)
         geometry_form.addRow(self._message_label("margin"))
-        advanced_layout.addWidget(geometry_group)
+        advanced_layout.addWidget(self.geometry_group)
 
         detector_group = QGroupBox("고급 검출 설정")
         detector_form = QFormLayout(detector_group)
@@ -207,6 +211,23 @@ class GlassSettingsPanel(QWidget):
             "margin": [self.margin],
             "glasses": [self.enabled],
         }
+        self._interaction_widgets = {
+            "geometry": [self.edit_roi, self.cx, self.cy, self.width, self.height],
+            "zero_line": [self.zero],
+            "margin": [self.margin],
+            "exclusion": [self.exclusions],
+        }
+        self._focus_targets = {
+            self.edit_roi: "geometry",
+            self.cx: "geometry",
+            self.cy: "geometry",
+            self.width: "geometry",
+            self.height: "geometry",
+            self.zero: "zero_line",
+            self.margin: "margin",
+        }
+        for widget in self._focus_targets:
+            widget.installEventFilter(self)
         self._connect()
 
     def _message_label(self, field: str) -> QLabel:
@@ -249,6 +270,7 @@ class GlassSettingsPanel(QWidget):
             widget.editingFinished.connect(lambda k=key, w=widget: self._emit(k, w.value()))
         self.add_ex.clicked.connect(self.addExclusionRequested)
         self.del_ex.clicked.connect(self._delete_exclusion)
+        self.exclusions.currentItemChanged.connect(self._exclusion_selection_changed)
         self.restore.clicked.connect(self.restoreDefaultsRequested)
         self.edit_roi.clicked.connect(self.editRoiRequested)
         self.reset_glass.clicked.connect(self.resetGlassRequested)
@@ -267,12 +289,19 @@ class GlassSettingsPanel(QWidget):
 
     def set_glass(self, glass) -> None:
         self._updating = True
+        previous_glass_id = self._selected_glass_id
         self.setEnabled(glass is not None)
         if glass is None:
             self._selected_glass_id = None
+            self._interaction_target = None
+            self._interaction_zone_id = None
             self._updating = False
+            self._apply_interaction_style()
             return
         self._selected_glass_id = glass.id
+        if previous_glass_id is not None and previous_glass_id != glass.id:
+            self._interaction_target = None
+            self._interaction_zone_id = None
         e = glass.geometry.ellipse
         self.name.setText(glass.name)
         self.enabled.setChecked(glass.enabled)
@@ -303,15 +332,25 @@ class GlassSettingsPanel(QWidget):
         self.max_jump.setValue(ds.temporal_max_jump_px)
         self.foam_variance.setValue(ds.foam_variance_threshold)
         self.foam_area.setValue(ds.foam_min_area_ratio)
+        self.exclusions.blockSignals(True)
         self.exclusions.clear()
-        for zone in glass.geometry.exclusions:
+        active_row = -1
+        for row, zone in enumerate(glass.geometry.exclusions):
             item = QListWidgetItem(
                 f"{zone.name} · X {zone.rect.x:.0f}, Y {zone.rect.y:.0f}, "
                 f"너비 {zone.rect.width:.0f}, 높이 {zone.rect.height:.0f}"
             )
             item.setData(Qt.ItemDataRole.UserRole, zone.id)
             self.exclusions.addItem(item)
+            if self._interaction_target == "exclusion" and zone.id == self._interaction_zone_id:
+                active_row = row
+        if self._interaction_target == "exclusion" and active_row < 0:
+            self._interaction_target = None
+            self._interaction_zone_id = None
+        self.exclusions.setCurrentRow(active_row)
+        self.exclusions.blockSignals(False)
         self._updating = False
+        self._apply_interaction_style()
 
     def set_validation_issues(self, issues, glass_id: str | None) -> None:
         for widgets in self._field_widgets.values():
@@ -362,9 +401,94 @@ class GlassSettingsPanel(QWidget):
         widgets = self._field_widgets.get(field or "", [])
         if not widgets:
             return
+        target = {
+            "geometry": "geometry",
+            "zero_line_y": "zero_line",
+            "margin": "margin",
+            "exclusions": "exclusion",
+        }.get(field or "")
+        zone_id = self._current_exclusion_id() if target == "exclusion" else None
+        if target is not None and (target != "exclusion" or zone_id is not None):
+            self._request_interaction_target(target, zone_id)
         widget = widgets[0]
         widget.setFocus()
         self.scroll.ensureWidgetVisible(widget, 20, 20)
+
+    def set_interaction_target(
+        self,
+        target: str | None,
+        zone_id: str | None = None,
+        *,
+        reveal: bool = False,
+    ) -> None:
+        if target == "exclusion" and zone_id is not None:
+            row = self._exclusion_row(zone_id)
+            if row < 0:
+                target = None
+                zone_id = None
+            else:
+                self._interaction_update = True
+                self.exclusions.setCurrentRow(row)
+                self._interaction_update = False
+        else:
+            self._interaction_update = True
+            self.exclusions.setCurrentRow(-1)
+            self._interaction_update = False
+        self._interaction_target = target
+        self._interaction_zone_id = zone_id if target == "exclusion" else None
+        if reveal and target in {"geometry", "margin"}:
+            self.set_advanced_visible(True)
+        if reveal:
+            widget = self._interaction_widgets.get(target or "", [None])[0]
+            if widget is not None:
+                self.scroll.ensureWidgetVisible(widget, 20, 20)
+        self._apply_interaction_style()
+
+    def eventFilter(self, watched, event):
+        if (
+            not self._interaction_update
+            and event.type() == QEvent.Type.FocusIn
+            and watched in self._focus_targets
+        ):
+            self._request_interaction_target(self._focus_targets[watched], None)
+        return super().eventFilter(watched, event)
+
+    def _exclusion_selection_changed(self, current, _previous) -> None:
+        if self._updating or self._interaction_update or current is None:
+            return
+        self._request_interaction_target(
+            "exclusion", current.data(Qt.ItemDataRole.UserRole)
+        )
+
+    def _request_interaction_target(self, target: str, zone_id: str | None) -> None:
+        self.set_interaction_target(target, zone_id)
+        self.interactionTargetChanged.emit(target, zone_id)
+
+    def _current_exclusion_id(self) -> str | None:
+        item = self.exclusions.currentItem()
+        return None if item is None else item.data(Qt.ItemDataRole.UserRole)
+
+    def _exclusion_row(self, zone_id: str) -> int:
+        for row in range(self.exclusions.count()):
+            item = self.exclusions.item(row)
+            if item.data(Qt.ItemDataRole.UserRole) == zone_id:
+                return row
+        return -1
+
+    def _apply_interaction_style(self) -> None:
+        for widgets in self._interaction_widgets.values():
+            for widget in widgets:
+                active = widget in self._interaction_widgets.get(self._interaction_target or "", [])
+                widget.setProperty("interactionTarget", active)
+                widget.style().unpolish(widget)
+                widget.style().polish(widget)
+        for group, active in (
+            (self.geometry_group, self._interaction_target == "geometry"),
+            (self.exclusion_group, self._interaction_target == "exclusion"),
+        ):
+            group.setProperty("interactionTarget", active)
+            group.style().unpolish(group)
+            group.style().polish(group)
 
     def _set_validation_state(self, widget, state: str) -> None:
         widget.setProperty("validationState", state)

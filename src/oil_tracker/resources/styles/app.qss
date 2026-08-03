@@ -350,6 +350,18 @@ QLabel#inlineValidationMessage[validationState="warning"] {
     color: #7c570b;
 }
 
+QDoubleSpinBox[interactionTarget="true"],
+QSpinBox[interactionTarget="true"],
+QListWidget[interactionTarget="true"],
+QPushButton[interactionTarget="true"] {
+    background: #e8f3fc;
+}
+
+QGroupBox[interactionTarget="true"] {
+    border: 2px solid #4d92ca;
+    background: #f4f9fd;
+}
+
 QLineEdit[validationState="error"],
 QDoubleSpinBox[validationState="error"],
 QSpinBox[validationState="error"],

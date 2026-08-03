@@ -84,6 +84,9 @@ class MainWindow(QMainWindow):
         self.undo_stack = QUndoStack(self)
         self._last_validation = None
         self._preview_context: tuple[str, int, float] | None = None
+        self._interaction_glass_id: str | None = None
+        self._interaction_target: str | None = None
+        self._interaction_zone_id: str | None = None
         self.setWindowTitle("Rotary Oil Level Tracker — 분석 프로필 설정")
         self.setMinimumSize(1280, 760)
         self._resize_to_available_screen()
@@ -324,7 +327,9 @@ class MainWindow(QMainWindow):
         self.canvas.zeroLineChanged.connect(self._zero_changed)
         self.canvas.exclusionChanged.connect(self._exclusion_changed)
         self.canvas.glassSelected.connect(self.select_glass)
+        self.canvas.interactionTargetRequested.connect(self._overlay_interaction_target)
         self.settings.fieldChanged.connect(self._field_changed)
+        self.settings.interactionTargetChanged.connect(self._settings_interaction_target)
         self.settings.addExclusionRequested.connect(self.add_exclusion)
         self.settings.deleteExclusionRequested.connect(self.delete_exclusion)
         self.settings.restoreDefaultsRequested.connect(self.restore_defaults)
@@ -453,6 +458,7 @@ class MainWindow(QMainWindow):
         if wizard.exec() != NewRecipeWizard.DialogCode.Accepted:
             return
         if wizard.skipped:
+            self._clear_interaction_target()
             self.workbench.new_document()
             self.undo_stack.clear()
             self._set_placeholder()
@@ -461,6 +467,7 @@ class MainWindow(QMainWindow):
             return
         metadata = wizard.video_metadata
         width, height = (metadata.width, metadata.height) if metadata else (1280, 720)
+        self._clear_interaction_target()
         self.workbench.new_document(width, height, wizard.recipe_name.text().strip() or "새 유면 분석 프로필")
         self.undo_stack.clear()
         self.workbench.recipe.description = wizard.description.toPlainText()
@@ -498,6 +505,8 @@ class MainWindow(QMainWindow):
         self._record_recipe_change("Glass 삭제", self.workbench.delete_selected_glass)
 
     def select_glass(self, glass_id: str) -> None:
+        if glass_id != self.workbench.selected_glass_id:
+            self._clear_interaction_target()
         self.workbench.set_selected(glass_id)
         self._refresh_panels()
         self.schedule_preview()
@@ -530,9 +539,14 @@ class MainWindow(QMainWindow):
     def add_exclusion(self) -> None:
         glass = self.workbench.selected_glass()
         if glass is not None:
-            self._record_recipe_change(
-                "검출 제외 영역 추가", lambda: self.workbench.add_exclusion(glass.id)
-            )
+            added = []
+
+            def change() -> None:
+                added.append(self.workbench.add_exclusion(glass.id))
+
+            self._record_recipe_change("검출 제외 영역 추가", change)
+            if added:
+                self._set_interaction_target(glass.id, "exclusion", added[0].id, reveal=True)
 
     def delete_exclusion(self, zone_id: str) -> None:
         glass = self.workbench.selected_glass()
@@ -587,6 +601,72 @@ class MainWindow(QMainWindow):
                 self.workbench.mark_dirty()
 
         self._record_recipe_change("Glass 설정 변경", change)
+
+    def _settings_interaction_target(self, target: str, zone_id) -> None:
+        glass = self.workbench.selected_glass()
+        if glass is not None:
+            self._set_interaction_target(glass.id, target, zone_id)
+
+    def _overlay_interaction_target(self, glass_id: str, target: str, zone_id) -> None:
+        if glass_id != self.workbench.selected_glass_id:
+            self.select_glass(glass_id)
+        self._set_interaction_target(glass_id, target, zone_id, reveal=True)
+
+    def _set_interaction_target(
+        self,
+        glass_id: str,
+        target: str | None,
+        zone_id: str | None = None,
+        *,
+        reveal: bool = False,
+    ) -> None:
+        if glass_id != self.workbench.selected_glass_id:
+            self._clear_interaction_target()
+            return
+        glass = self.workbench.selected_glass()
+        if glass is None:
+            self._clear_interaction_target()
+            return
+        if target == "exclusion":
+            if zone_id is None or not any(zone.id == zone_id for zone in glass.geometry.exclusions):
+                self._clear_interaction_target()
+                return
+        elif target not in {"geometry", "zero_line", "margin"}:
+            self._clear_interaction_target()
+            return
+        self._interaction_glass_id = glass_id
+        self._interaction_target = target
+        self._interaction_zone_id = zone_id if target == "exclusion" else None
+        self.settings.set_interaction_target(target, self._interaction_zone_id, reveal=reveal)
+        self.canvas.set_active_target(target, self._interaction_zone_id)
+
+    def _clear_interaction_target(self) -> None:
+        self._interaction_glass_id = None
+        self._interaction_target = None
+        self._interaction_zone_id = None
+        if hasattr(self, "settings"):
+            self.settings.set_interaction_target(None)
+        if hasattr(self, "canvas"):
+            self.canvas.set_active_target(None)
+
+    def _reconcile_interaction_target(self) -> None:
+        if self._interaction_target is None:
+            self.settings.set_interaction_target(None)
+            self.canvas.set_active_target(None)
+            return
+        selected = self.workbench.selected_glass()
+        if selected is None or selected.id != self._interaction_glass_id:
+            self._clear_interaction_target()
+            return
+        if self._interaction_target == "exclusion" and not any(
+            zone.id == self._interaction_zone_id for zone in selected.geometry.exclusions
+        ):
+            self._clear_interaction_target()
+            return
+        self.settings.set_interaction_target(
+            self._interaction_target, self._interaction_zone_id
+        )
+        self.canvas.set_active_target(self._interaction_target, self._interaction_zone_id)
 
     def _session_changed(self) -> None:
         self.workbench.session.run_name = self.run_name_edit.text().strip()
@@ -832,6 +912,7 @@ class MainWindow(QMainWindow):
                 return
             path = Path(selected)
         try:
+            self._clear_interaction_target()
             self.workbench.load(path)
             self.undo_stack.clear()
             self._set_placeholder()
@@ -1003,6 +1084,7 @@ class MainWindow(QMainWindow):
         )
         self.settings.set_glass(self.workbench.selected_glass())
         self.canvas.set_glasses(self.workbench.recipe.glasses, self.workbench.selected_glass_id)
+        self._reconcile_interaction_target()
         if self._last_validation is not None:
             self.settings.set_validation_issues(
                 self._last_validation.issues, self.workbench.selected_glass_id

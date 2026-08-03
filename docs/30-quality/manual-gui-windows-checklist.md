@@ -39,6 +39,19 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Scroll the settings panel over spin/combo controls after using canvas zoom shortcuts and confirm its wheel-safe behavior still prevents accidental value changes.
 - Open **분석 영역 편집** and the wizard/video preview consumers and confirm their frame display and existing private-copy/apply/cancel behavior remain intact.
 
+## S9-C field ↔ overlay interaction polish
+- At 100%, 125% and 150% Windows display scale, focus center X/Y, width and height controls; confirm the selected ellipse is clearly the active geometry target while the selected Glass identity remains visible.
+- Focus the zero-line and margin controls; confirm only the corresponding zero line or inner detection margin receives the stronger active affordance and the ellipse remains the selected Glass geometry.
+- Add at least two exclusion zones, select each list entry in turn and confirm the exact matching rectangle is highlighted with no cross-zone ambiguity.
+- Click/drag/resize the ellipse, zero line and each exclusion overlay; confirm the settings panel reveals the matching geometry/zero-line/exact-exclusion context without repeatedly stealing keyboard focus during drag.
+- Trigger existing error and warning validation on a field that is also an active interaction target; confirm validation border/meaning remains visible and first-issue routing/focus still works.
+- Cause benign preview/validation/panel refreshes while geometry, margin, zero-line and an exclusion are active; confirm the same target is rebound after overlay rebuild without resetting the current manual zoom/pan transform.
+- Change the selected Glass, then add/delete exclusions; confirm old Glass targets and deleted exclusion ids are cleared rather than highlighting stale overlays or list entries.
+- Exercise highlight-only field/overlay interaction without changing values and confirm Profile dirty truth, undo/redo count, Analysis Session, readiness/preflight and detector state do not change.
+- Inspect the normally selected ellipse at Fit and high zoom: confirm all eight resize directions remain available but handle markers are restrained circular affordances rather than dominant squares.
+- At each Windows display scale, acquire all eight resize handles comfortably; confirm the small visual marker still has a practical hit target, active resize handle is obvious, minimum size/frame bounds hold and saved source-pixel coordinates remain accurate.
+- Repeat the shared-canvas check in **분석 영역 편집** and wizard/video preview consumers; confirm consumers that do not provide an active target retain their existing display and ROI private-copy/Apply/Cancel behavior.
+
 ## Multiple-point preflight
 - Open the modeless **여러 시점 점검** window and confirm the Workbench video geometry does not shrink.
 - Resize the preflight window and its result table columns.
