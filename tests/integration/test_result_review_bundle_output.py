@@ -13,6 +13,7 @@ from oil_tracker.domain.enums import FillState, ResultState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.results import AnalysisResult, GlassAnalysisResult, TrackingSample
 from oil_tracker.domain.session import AnalysisSession, VideoMetadata
+from oil_tracker.ui.analysis_completion_summary import build_final_run_summary
 
 
 class _NoCaptures:
@@ -155,3 +156,32 @@ def test_same_name_same_second_uses_suffix_without_overwriting(tmp_path, monkeyp
     assert first.name == "oil_level_analysis_반복_시험_20260803_123456"
     assert second.name == f"{first.name}_2"
     assert sentinel.read_text(encoding="utf-8") == "keep"
+
+
+def test_final_run_summary_uses_saved_bundle_identity_without_mutation(tmp_path):
+    result, recipe, session, _glass = _inputs(tmp_path)
+    recipe.name = "회수 시험 Profile"
+    session.run_name = "반복 시험 03"
+    output = _store().write_bundle(result, recipe, session, tmp_path)
+    before = {
+        path.relative_to(output): path.read_bytes()
+        for path in output.rglob("*")
+        if path.is_file()
+    }
+
+    bundle = ResultBundleReader().read(output)
+    summary = build_final_run_summary(result, output, bundle)
+
+    assert summary.run_name == "반복 시험 03"
+    assert summary.profile_name == "회수 시험 Profile"
+    assert summary.source_video_name == "source.mp4"
+    assert summary.overall_state == result.overall_state
+    assert [(item.name, item.result_state) for item in summary.glasses] == [
+        (result.glass_results[0].glass_name, result.glass_results[0].result_state)
+    ]
+    after = {
+        path.relative_to(output): path.read_bytes()
+        for path in output.rglob("*")
+        if path.is_file()
+    }
+    assert after == before
