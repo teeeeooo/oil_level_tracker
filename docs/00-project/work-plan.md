@@ -1,7 +1,7 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S8 — Repeated-Test Workflow & Result Management`
-**Milestone status:** `ACTIVE — S8-A repair complete on feature branch; awaiting independent re-audit`
+**Milestone status:** `ACTIVE — S8-A transaction repair complete on feature branch; awaiting independent fresh audit`
 **S6 status:** `DONE — accepted real-video/runtime scope`
 **Current S6-A result:** `S6-A SAMPLE QUALIFICATION: PASS`
 **Current S6-B result:** `S6-B INTAKE AND QUALIFICATION: PASS`
@@ -13,11 +13,11 @@
 **Current S6-E result:** `S6-E BOUNDED SOAK SCREENING: ACCEPTED — NO OBVIOUS RESOURCE LEAK`
 **Current S6-F result:** `ONE-HOUR LONG-DURATION STABILITY: AUDITED AND ACCEPTED — REPRESENTATIVE THROUGHPUT RECORDED`
 **Current S7 result:** `AUDITED, ACCEPTED, NATIVE GUARDED-SQUASH-MERGED AND CLOSED — PR #68 @ 8846c272842df099f5849ea71686c3370248fc03`
-**Current S8-A result:** `REPEATED-TEST RUN IDENTITY + OUTPUT NAMING REPAIR COMPLETE — AWAITING FRESH EXACT-HEAD RE-AUDIT`
-**Current gate:** `S8-A Repeated-Test Run Identity + Output Naming Repair Fresh Exact-Head Auditor`
+**Current S8-A result:** `REPEATED-TEST RUN IDENTITY + OUTPUT NAMING TRANSACTION REPAIR COMPLETE — AWAITING FRESH EXACT-HEAD AUDIT`
+**Current gate:** `S8-A Repeated-Test Run Identity + Output Naming Fresh Exact-Head Auditor`
 **Successor milestone:** `S9 — Operational Recovery & UX Polish`
 
-This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, including the bounded available-corpus accuracy claim and residual `not_evaluated` field categories. S7 is independently audited, merged and closed; its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts remain unchanged. S8 is now active through bounded slice S8-A: the feature branch adds a session-owned current-test name, safe human-readable result bundle naming and backward-compatible metadata without changing Recipe/Profile persistence. Same-profile replacement already creates a fresh identity, and the bounded repair now also clears `run_name` after successful normal Workbench video acquisition while preserving the existing identity on dialog cancel or reader/metadata failure before that success boundary. S8-A is not accepted or merged until the fresh exact-head Repair Auditor passes it. Recent profile/result history, final-run summary, broader Profile/current-test visual redesign, autosave/recovery and batch execution remain outside this slice. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
+This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). S6 remains closed against the accepted real-video/runtime scope, including the bounded available-corpus accuracy claim and residual `not_evaluated` field categories. S7 is independently audited, merged and closed; its stored-result, decoded-timeline, derivative-publication, lifecycle and Qt raster-boundary contracts remain unchanged. S8 is now active through bounded slice S8-A: the feature branch adds a session-owned current-test name, safe human-readable result bundle naming and backward-compatible metadata without changing Recipe/Profile persistence. Same-profile replacement retains its existing atomic prepare/commit behavior. Normal Workbench replacement now prepares the candidate reader and metadata before commit: reader-factory or metadata failure leaves the previous reader, session, state, run identity and Recipe/Profile state untouched and closes any acquired failed candidate; successful commit resets `run_name`, installs the new reader/session video state and only then closes the previous reader. S8-A is not accepted or merged until the fresh exact-head Auditor passes it. Recent profile/result history, final-run summary, broader Profile/current-test visual redesign, autosave/recovery and batch execution remain outside this slice. Windows/manual GUI, PyInstaller one-folder validation and audio preservation were not run or inferred and remain pending/unclaimed.
 
 ## Evidence owners
 
@@ -64,7 +64,7 @@ The following scope is still pending and not accepted. It is no longer an S6 blo
 ## Product priority and sequence
 
 - `P0 completed`: S7 annotated MP4 export is audited, merged and closed.
-- `P1 current next gate`: S8 repeated-test workflow and result management; the S8-A normal-open run-identity repair is complete on its feature branch and awaits fresh exact-head Repair audit before any later S8 slice proceeds.
+- `P1 current next gate`: S8 repeated-test workflow and result management; the S8-A normal-open transaction repair is complete on its feature branch and awaits fresh exact-head audit before any later S8 slice proceeds.
 - `P2`: after S8, select operational recovery and UX improvements based on observed user effect.
 - `P3`: lower-priority geometry/Wizard/Workbench polish remains backlog unless explicitly promoted.
 - Final release: S10 Windows/manual GUI and one-folder packaging validation remains mandatory after the required product feature set.

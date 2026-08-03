@@ -128,7 +128,8 @@ def test_candidate_open_or_decode_failure_preserves_entire_workbench():
 
 
 def test_normal_open_video_replacement_resets_current_test_identity_without_mutating_recipe():
-    controller = _controller(lambda path: _Reader(path))
+    candidate = _Reader("new.mp4")
+    controller = _controller(lambda _path: candidate)
     controller.recipe = _snapshot()
     controller.recipe.name = "재사용 프로필"
     recipe_before = controller.recipe.to_dict()
@@ -150,6 +151,8 @@ def test_normal_open_video_replacement_resets_current_test_identity_without_muta
     assert controller.session.input_video_path == "new.mp4"
     assert controller.session.run_name == ""
     assert controller.state == WorkbenchState.DRAFT_DIRTY
+    assert controller.video_reader is candidate
+    assert candidate.closed is False
     assert original_reader.closed is True
     assert controller.recipe.to_dict() == recipe_before
     assert "run_name" not in controller.recipe.to_dict()
@@ -179,9 +182,10 @@ def test_normal_open_video_failure_preserves_existing_current_test_identity_and_
     assert controller.recipe.to_dict() == recipe_before
 
 
-def test_normal_open_video_metadata_failure_preserves_existing_current_test_identity():
+def test_normal_open_video_metadata_failure_preserves_entire_workbench_and_closes_candidate():
     class MetadataFailureReader:
-        closed = False
+        def __init__(self):
+            self.closed = False
 
         @property
         def metadata(self):
@@ -190,11 +194,35 @@ def test_normal_open_video_metadata_failure_preserves_existing_current_test_iden
         def close(self):
             self.closed = True
 
-    controller = _controller(lambda _path: MetadataFailureReader())
-    controller.session = AnalysisSession(input_video_path="old.mp4", run_name="유지할 시험")
+    candidate = MetadataFailureReader()
+    original_reader = _Reader("old.mp4")
+    controller = _controller(lambda _path: candidate)
+    controller.video_reader = original_reader
+    controller.recipe = _snapshot()
+    controller.recipe.name = "재사용 프로필"
+    controller.session = AnalysisSession(
+        input_video_path="old.mp4",
+        analysis_start_sec=1.0,
+        analysis_end_sec=7.0,
+        compressor_start_sec=2.0,
+        output_directory="old-output",
+        run_name="유지할 시험",
+        run_note="keep",
+    )
     controller.state = WorkbenchState.ANALYZED
+    controller.recipe_path = Path("saved.oilrecipe")
+    recipe_before = controller.recipe.to_dict()
+    session_before = controller.session.to_dict()
 
     with pytest.raises(OSError, match="metadata failed"):
         controller.open_video("bad-metadata.mp4")
 
+    assert controller.video_reader is original_reader
+    assert original_reader.closed is False
+    assert candidate.closed is True
+    assert controller.session.to_dict() == session_before
+    assert controller.session.input_video_path == "old.mp4"
     assert controller.session.run_name == "유지할 시험"
+    assert controller.state == WorkbenchState.ANALYZED
+    assert controller.recipe_path == Path("saved.oilrecipe")
+    assert controller.recipe.to_dict() == recipe_before

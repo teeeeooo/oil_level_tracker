@@ -62,24 +62,37 @@ class WorkbenchController:
         self.recipe_path = None
 
     def open_video(self, path: str) -> None:
-        reader = self.reader_factory(path)
+        reader = None
+        try:
+            reader = self.reader_factory(path)
+            metadata = reader.metadata
+            sampling_fps = min(2.0, metadata.fps) if metadata.fps > 0 else 1.0
+            resolution_confirmed = (metadata.width, metadata.height) == (
+                self.recipe.reference_frame_width,
+                self.recipe.reference_frame_height,
+            )
+            update_reference_dimensions = not self.recipe.glasses and self.state == WorkbenchState.EMPTY
+        except Exception:
+            if reader is not None:
+                reader.close()
+            raise
+
         previous = self.video_reader
         self.video_reader = reader
-        if previous is not None:
-            previous.close()
-        metadata = reader.metadata
         self.session.run_name = ""
         self.session.input_video_path = path
         self.session.video_metadata = metadata
         self.session.analysis_start_sec = 0.0
         self.session.analysis_end_sec = metadata.duration_sec
-        self.session.sampling_fps = min(2.0, metadata.fps) if metadata.fps > 0 else 1.0
-        self.session.resolution_confirmed = (metadata.width, metadata.height) == (self.recipe.reference_frame_width, self.recipe.reference_frame_height)
-        if not self.recipe.glasses and self.state == WorkbenchState.EMPTY:
+        self.session.sampling_fps = sampling_fps
+        self.session.resolution_confirmed = resolution_confirmed
+        if update_reference_dimensions:
             self.recipe.reference_frame_width = metadata.width
             self.recipe.reference_frame_height = metadata.height
             self.session.resolution_confirmed = True
         self.mark_dirty()
+        if previous is not None:
+            previous.close()
 
     def prepare_same_profile_video(
         self,

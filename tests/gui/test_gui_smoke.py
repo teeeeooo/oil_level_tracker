@@ -193,3 +193,60 @@ def test_open_video_dialog_cancel_preserves_current_test_name(qtbot, monkeypatch
     assert c.session.run_name == "유지할 시험"
     assert window.run_name_edit.text() == "유지할 시험"
     assert c.recipe.to_dict() == recipe_before
+
+
+def test_normal_open_video_metadata_failure_preserves_ui_and_reader_ownership(qtbot, monkeypatch):
+    from PySide6.QtWidgets import QFileDialog
+
+    from oil_tracker.domain.enums import WorkbenchState
+    from oil_tracker.domain.session import VideoMetadata
+
+    class ActiveReader:
+        def __init__(self):
+            self.closed = False
+
+        def close(self):
+            self.closed = True
+
+    class MetadataFailureReader:
+        def __init__(self):
+            self.closed = False
+
+        @property
+        def metadata(self):
+            raise OSError("metadata failed")
+
+        def close(self):
+            self.closed = True
+
+    old = ActiveReader()
+    candidate = MetadataFailureReader()
+    c = controller()
+    c.reader_factory = lambda _path: candidate
+    c.video_reader = old
+    c.recipe.name = "재사용 프로필"
+    recipe_before = c.recipe.to_dict()
+    c.session.input_video_path = "old.mp4"
+    c.session.video_metadata = VideoMetadata("old.mp4", 1280, 720, 30.0, 10.0, 300, "fake")
+    c.session.run_name = "유지할 시험"
+    c.state = WorkbenchState.ANALYZED
+    session_before = c.session.to_dict()
+    window = MainWindow(c, FakePreview(), FakeAnalysis(), DebugRenderer())
+    qtbot.addWidget(window)
+    assert window.run_name_edit.text() == "유지할 시험"
+    assert window.video_path_label.text() == "old.mp4"
+    errors = []
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *_args, **_kwargs: ("bad.mp4", ""))
+    monkeypatch.setattr(window, "_error", lambda title, message: errors.append((title, message)))
+
+    window.open_video()
+
+    assert errors == [("영상 열기 실패", "metadata failed")]
+    assert c.video_reader is old
+    assert old.closed is False
+    assert candidate.closed is True
+    assert c.session.to_dict() == session_before
+    assert c.state == WorkbenchState.ANALYZED
+    assert window.run_name_edit.text() == "유지할 시험"
+    assert window.video_path_label.text() == "old.mp4"
+    assert c.recipe.to_dict() == recipe_before
