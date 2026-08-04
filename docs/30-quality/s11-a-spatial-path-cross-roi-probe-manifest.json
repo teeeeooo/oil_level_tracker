@@ -1,0 +1,215 @@
+{
+  "baseline_main_sha": "3305cb8268fd4e1612105cba6144c2083066ff8c",
+  "mechanism": "five-sector-nondegenerate-relative-phase-path-gate",
+  "native": {
+    "case_count": 13,
+    "maximum_path_sector_row_evaluations": 125,
+    "oil_coverage": 9,
+    "oil_mae_px": 4.888888888888889,
+    "recovered_case_ids": [
+      "sample2:30",
+      "sample2:60"
+    ],
+    "retained_temporal_state": 0
+  },
+  "result_fingerprint_sha256": "0ba7a8c8f1fd9352479cba86557416bab9055eebf9e7ce991ff4cfaa47ce8382",
+  "rows": [
+    {
+      "candidate_oil_y": null,
+      "case_id": "base_sample_1:144",
+      "foam_y": null,
+      "oil_error_px": 9.0,
+      "oil_y": 395.0,
+      "p0_current_kind": "boundary",
+      "p0_oil_y": 395.0,
+      "path": null,
+      "route": "P0",
+      "truth_oil_y": 386.0
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "base_sample_1:156",
+      "foam_y": null,
+      "oil_error_px": null,
+      "oil_y": null,
+      "p0_current_kind": "ambiguous",
+      "p0_oil_y": null,
+      "path": null,
+      "route": "P0_FAIL_CLOSED",
+      "truth_oil_y": 386.0
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "base_sample_1:240",
+      "foam_y": null,
+      "oil_error_px": null,
+      "oil_y": null,
+      "p0_current_kind": "ambiguous",
+      "p0_oil_y": null,
+      "path": null,
+      "route": "P0_FAIL_CLOSED",
+      "truth_oil_y": 386.0
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "sample2:0",
+      "foam_y": null,
+      "oil_error_px": null,
+      "oil_y": null,
+      "p0_current_kind": "ambiguous",
+      "p0_oil_y": null,
+      "path": null,
+      "route": "P0_FAIL_CLOSED",
+      "truth_oil_y": 592.0
+    },
+    {
+      "candidate_oil_y": 599.0,
+      "case_id": "sample2:30",
+      "foam_y": 452.0,
+      "oil_error_px": 7.0,
+      "oil_y": 599.0,
+      "p0_current_kind": "ambiguous",
+      "p0_oil_y": null,
+      "path": {
+        "accepted": true,
+        "candidate_alignment_px": 6.0,
+        "candidate_local_y": 279.0,
+        "maximum_adjacent_jump_px": 6,
+        "path_median_local_y": 273.0,
+        "path_rows": [
+          277,
+          273,
+          267
+        ],
+        "path_sector_count": 3,
+        "path_sector_indices": [
+          0,
+          1,
+          2
+        ],
+        "path_span_px": 10,
+        "phase_sign": 1,
+        "reason": "nondegenerate_cross_roi_phase_path"
+      },
+      "route": "SPATIAL_ACCEPTED",
+      "truth_oil_y": 592.0
+    },
+    {
+      "candidate_oil_y": 598.0,
+      "case_id": "sample2:60",
+      "foam_y": 457.0,
+      "oil_error_px": 6.0,
+      "oil_y": 598.0,
+      "p0_current_kind": "ambiguous",
+      "p0_oil_y": null,
+      "path": {
+        "accepted": true,
+        "candidate_alignment_px": 1.0,
+        "candidate_local_y": 278.0,
+        "maximum_adjacent_jump_px": 7,
+        "path_median_local_y": 279.0,
+        "path_rows": [
+          283,
+          279,
+          272
+        ],
+        "path_sector_count": 3,
+        "path_sector_indices": [
+          0,
+          1,
+          2
+        ],
+        "path_span_px": 11,
+        "phase_sign": 1,
+        "reason": "nondegenerate_cross_roi_phase_path"
+      },
+      "route": "SPATIAL_ACCEPTED",
+      "truth_oil_y": 592.0
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "sample3:1035",
+      "foam_y": null,
+      "oil_error_px": 2.0,
+      "oil_y": 245.0,
+      "p0_current_kind": "boundary",
+      "p0_oil_y": 245.0,
+      "path": null,
+      "route": "P0",
+      "truth_oil_y": 243.0
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "sample3:900",
+      "foam_y": null,
+      "oil_error_px": null,
+      "oil_y": null,
+      "p0_current_kind": "ambiguous",
+      "p0_oil_y": null,
+      "path": null,
+      "route": "P0_FAIL_CLOSED",
+      "truth_oil_y": 316.0
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "sample4:0",
+      "foam_y": 849.0,
+      "oil_error_px": 0.5,
+      "oil_y": 861.0,
+      "p0_current_kind": "boundary",
+      "p0_oil_y": 861.0,
+      "path": null,
+      "route": "P0",
+      "truth_oil_y": 860.5
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "sample4:1470",
+      "foam_y": 844.0,
+      "oil_error_px": 11.0,
+      "oil_y": 866.0,
+      "p0_current_kind": "boundary",
+      "p0_oil_y": 866.0,
+      "path": null,
+      "route": "P0",
+      "truth_oil_y": 855.0
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "sample4:1680",
+      "foam_y": 843.0,
+      "oil_error_px": 7.5,
+      "oil_y": 866.0,
+      "p0_current_kind": "boundary",
+      "p0_oil_y": 866.0,
+      "path": null,
+      "route": "P0",
+      "truth_oil_y": 858.5
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "sample4:450",
+      "foam_y": 848.0,
+      "oil_error_px": 0.5,
+      "oil_y": 853.0,
+      "p0_current_kind": "boundary",
+      "p0_oil_y": 853.0,
+      "path": null,
+      "route": "P0",
+      "truth_oil_y": 852.5
+    },
+    {
+      "candidate_oil_y": null,
+      "case_id": "sample4:900",
+      "foam_y": 845.0,
+      "oil_error_px": 0.5,
+      "oil_y": 848.0,
+      "p0_current_kind": "boundary",
+      "p0_oil_y": 848.0,
+      "path": null,
+      "route": "P0",
+      "truth_oil_y": 848.5
+    }
+  ],
+  "schema": "s11-a-spatial-path-probe-v1"
+}
