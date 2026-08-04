@@ -103,7 +103,19 @@ The same current-frame no-interface visibility is included in the existing singl
 
 This repair does not add a new observation or outcome variant. Insufficient evidence remains `ShadowAmbiguousObservation`, and only a genuinely accepted `ShadowNoInterfaceObservation` enters the unchanged serialized no-interface stabilization/clearing policy. Only `AcceptedBoundaryOutcome` can publish numeric Oil. The one temporal owner, canonical reducer/projection, D4 positive-evidence routes, S5-A Foam independence, collision fail-closed contract, schemas, settings, detector version and dependencies remain unchanged.
 
-The S11-B feature head remains subject to fresh Lane C exact-head audit. This addendum records the feature contract and does not itself declare the repair merged, S11 complete or detector/general-field accuracy PASS.
+The P2 repair is merged on the current S11-B baseline. It remains an independent no-interface semantics responsibility and does not itself authorize numeric Oil recovery.
+
+### S11-B Spatial positive-evidence fallback addendum
+
+Spatial is a separate secondary current-frame positive-evidence route inside the same serialized S5-B owner. The complete ordinary current-frame route, including canonical/P0 boundary acceptance, S6-D4 recovery and merged P2 no-interface semantics, always runs first. Spatial is considered only when that route returns `ShadowAmbiguousObservation`; accepted no-interface and unavailable observations are not overridden.
+
+The fallback may use exposure-relative broad phase to form a candidate, but scalar relative phase is never sufficient for production acceptance. The candidate must also prove additional x-resolved information across five deterministic ROI sectors after glare and any independently accepted current-frame Foam component are removed. At least three consecutive sectors must independently find the same strong phase direction within the existing narrow search radius, each against its own MAD/quantization noise. Path median alignment and adjacent jumps remain bounded by existing S5-B geometry.
+
+A path-row span greater than `1 px` is retained only as a conservative fallback non-degeneracy condition showing that the sectorized evidence adds information beyond the existing scalar/row representation. It is not a physical Oil-shape rule. A valid flat or near-horizontal Oil surface may therefore remain ambiguous and is not classified as physically invalid by this route.
+
+When the Spatial gate accepts, it produces the same typed `ShadowBoundaryObservation` and complete canonical evidence graph as any other current-frame boundary. Phase-A validation, the fixed serialized reducer, temporal state, `AcceptedBoundaryOutcome` and production projection remain sole authorities. Rejected Spatial evidence leaves the original ambiguity unchanged. There is no retained Spatial state, repetition-based promotion, post-owner numeric injection or P2-coupled combined recovery mechanism.
+
+The maximum local path search is statically bounded to five sectors times at most 25 rows, or 125 sector-row evaluations for one fallback candidate. Spatial adds no persisted setting, Recipe/result/truth/CSV/debug public schema field, detector-version change, dependency or raster history. The focused production feature remains subject to fresh Lane C exact-head audit and does not itself declare S11 complete or detector/general-field accuracy PASS.
 
 ## Decision summary
 

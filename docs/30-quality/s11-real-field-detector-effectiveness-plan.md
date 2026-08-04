@@ -97,7 +97,7 @@ The detailed experiment and design decision is owned by [S11-A Detector Directio
 
 ## S11-B P2 no-interface production contract
 
-The S11-B feature head applies the merged P2 diagnostic semantics inside the canonical S5-B current-frame no-interface owner. Absolute raw brightness may still describe whether an accepted no-interface scene looks more FULL-like or EMPTY-like, but that appearance no longer adds positive weight to interface absence. Positive no-interface likelihood remains a bounded fusion of weak-boundary evidence, normalized-frame spatial uniformity, current visibility, glare conflict and competing-boundary evidence.
+The merged S11-B P2 repair applies the selected P2 diagnostic semantics inside the canonical S5-B current-frame no-interface owner. Absolute raw brightness may still describe whether an accepted no-interface scene looks more FULL-like or EMPTY-like, but that appearance no longer adds positive weight to interface absence. Positive no-interface likelihood remains a bounded fusion of weak-boundary evidence, normalized-frame spatial uniformity, current visibility, glare conflict and competing-boundary evidence.
 
 Uniformity is evaluated from the existing CLAHE-normalized current frame, while `full_likelihood`, `empty_likelihood`, raw mean intensity and raw texture remain diagnostic/fill-state evidence. This preserves the existing FULL/EMPTY downstream distinction without using either appearance likelihood as a hidden absence-score channel. No new detector setting, schema, dependency, temporal history or numeric Oil recovery path is introduced.
 
@@ -105,7 +105,15 @@ Production integration also keeps global current-frame visibility in the adjacen
 
 When the exposure-decoupled evidence is insufficient, the current frame remains ambiguous and cannot publish raw or smoothed numeric Oil. Genuine canonical no-interface still enters the unchanged serialized S5-B absence-stability path, including bounded stale-Oil clearing after stable absence. S5-A Foam, D4 positive Oil recovery, observational-equivalence collision protection, canonical projection and legacy-fallback prohibition remain separate and unchanged.
 
-The four S11-A metamorphic rescue anchors remain direct production acceptance evidence: `brightness 0.60 × sample3:900`, plus `brightness 0.45 × base_sample_1:144`, `sample3:900` and `sample3:1035`. Their required transition is false no-interface to fail-closed ambiguity, not numeric Oil recovery. The feature remains subject to fresh Lane C exact-head audit and does not establish detector/general-field accuracy PASS.
+The four S11-A metamorphic rescue anchors remain direct production acceptance evidence: `brightness 0.60 × sample3:900`, plus `brightness 0.45 × base_sample_1:144`, `sample3:900` and `sample3:1035`. Their required transition is false no-interface to fail-closed ambiguity, not numeric Oil recovery. The P2 repair is merged on the current baseline and does not establish detector/general-field accuracy PASS.
+
+## S11-B Spatial positive-evidence production contract
+
+The focused Spatial feature is a separate P0/D4-first fallback inside the existing S5-B current-frame owner. It runs only after the complete ordinary route remains `ShadowAmbiguousObservation`; it does not override accepted no-interface/unavailable outcomes and does not couple recovery to P2. Exposure-relative broad phase can create a candidate, but scalar/row evidence cannot publish numeric Oil without a same-frame five-sector cross-ROI path proving additional x-resolved information against sector-local MAD and quantization noise.
+
+The production non-degeneracy requirement `path span > 1 px` is a conservative proof of added spatial information, not a physical rule for Oil shape. Flat or near-horizontal Oil may remain ambiguous. Accepted fallback evidence is rebuilt into the normal canonical raw/proposal/hypothesis graph and a typed `ShadowBoundaryObservation`, then passes through unchanged Phase-A validation, the one serialized reducer, `AcceptedBoundaryOutcome` and production projection. No fallback state survives the command.
+
+On exact main `1e83aac0643b0734fa1d67dfa30b88da6f3bd31e`, actual production native Oil was `7/13` at `4.428571 px` MAE. The focused feature reproduces the diagnostic Spatial recoveries `sample2:30=599` and `sample2:60=598`, producing `9/13` at `4.888889 px` MAE with zero changes to the prior seven numeric anchors. Focused production tests retain collision/glare/structure/Foam protection and the P2 low-exposure rescue/warning boundaries. Detailed feature evidence is recorded in [S11-B Spatial Positive-Evidence Production Fallback](s11-b-spatial-positive-evidence-production.md). The feature remains subject to fresh Lane C exact-head audit.
 
 ## Repair acceptance boundary
 
