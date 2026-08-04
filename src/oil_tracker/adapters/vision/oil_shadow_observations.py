@@ -785,7 +785,8 @@ def _single_frame_identifiability_evidence(
         + best.evidence_availability
         + best.visibility
         + scale_fraction
-    ) / 4.0
+        + no_interface.visibility
+    ) / 5.0
     sampling_reliability = math.sqrt(
         max(0.0, side_availability * sample_confidence)
     )
@@ -1727,22 +1728,21 @@ def _no_interface_evidence(
             None,
             "insufficient_visible_support",
         )
-    values = pre.gray[visible].astype(np.float32)
-    mean_intensity = float(np.median(values))
-    texture = float(np.std(values))
-    uniformity = _unit(1.0 - texture / 58.0)
+    raw_values = pre.gray[visible].astype(np.float32)
+    normalized_values = pre.normalized[visible].astype(np.float32)
+    mean_intensity = float(np.median(raw_values))
+    texture = float(np.std(raw_values))
+    uniformity = _unit(1.0 - float(np.std(normalized_values)) / 58.0)
     row_energy = _normalize_profile(masked_row_mean(pre.sobel_y_abs, visible))
     raster_weakness = _unit(1.0 - float(np.max(row_energy)))
     competing = max((item.boundary_likelihood for item in hypotheses), default=0.0)
     weak_boundary = _unit(0.58 * (1.0 - competing) + 0.42 * raster_weakness)
     full = _unit((145.0 - mean_intensity) / 55.0) * uniformity
     empty = _unit((mean_intensity - 115.0) / 70.0) * uniformity
-    state_evidence = max(full, empty)
     likelihood = _unit(
         0.36 * weak_boundary
         + 0.27 * uniformity
         + 0.20 * visibility
-        + 0.17 * state_evidence
         - 0.30 * glare_conflict
         - 0.38 * competing
     )
@@ -1750,10 +1750,10 @@ def _no_interface_evidence(
         reason = "strong_competing_boundary"
     elif glare_conflict >= 0.45:
         reason = "glare_visibility_conflict"
-    elif state_evidence >= 0.45 and uniformity >= 0.65:
-        reason = "positive_uniform_full_or_empty_evidence"
+    elif likelihood >= 0.58 and uniformity >= 0.65:
+        reason = "positive_exposure_decoupled_absence_evidence"
     else:
-        reason = "mixed_no_interface_evidence"
+        reason = "mixed_exposure_decoupled_absence_evidence"
     return ShadowNoInterfaceEvidence(
         True,
         likelihood,

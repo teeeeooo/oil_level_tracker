@@ -82,7 +82,7 @@ def test_relative_local_contrast_is_multiplicative_scale_invariant() -> None:
     assert abs(full.signed_difference[0] / 255.0) > abs(dim.signed_difference[0] / 255.0)
 
 
-def test_p2_removes_low_exposure_false_no_interface_without_numeric_injection() -> None:
+def test_production_p2_returns_known_low_exposure_false_no_interface_cases_to_ambiguity() -> None:
     root = repository_root()
     cases = {case.case_id: case for case in load_cases(root)}
     transforms = {item.name: item for item in TRANSFORMS}
@@ -95,33 +95,47 @@ def test_p2_removes_low_exposure_false_no_interface_without_numeric_injection() 
     for case_id, transform_id in expectations:
         case = cases[case_id]
         frame = transform_frame(decode_frame(case), transforms[transform_id])
-        p0 = run_variant(frame.copy(), case, "P0")
+        production, _ = OpenCvPhaseDetector().detect(
+            frame.copy(), case.glass, case.frame_index, case.time_sec, debug=False
+        )
         p2 = run_variant(frame.copy(), case, "P2")
-        assert p0.current_kind == "no_interface", (case_id, transform_id)
+        assert production.debug_metrics["oil_decision_status"] == "ambiguous", (
+            case_id,
+            transform_id,
+        )
+        assert production.raw_oil_air_level_y is None, (case_id, transform_id)
+        assert production.smoothed_oil_air_level_y is None, (case_id, transform_id)
+        assert production.fill_state.value == "UNKNOWN_REVIEW", (case_id, transform_id)
+        assert "OIL_EVIDENCE_AMBIGUOUS" in production.flags, (case_id, transform_id)
+        assert production.debug_metrics["oil_no_interface_score"] == p2.no_interface_likelihood
         assert p2.current_kind == "ambiguous", (case_id, transform_id)
         assert p2.oil_y is None, (case_id, transform_id)
-        assert p2.no_interface_likelihood < p0.no_interface_likelihood
 
 
-def test_p2_no_interface_likelihood_does_not_use_absolute_full_empty_state_as_positive_absence() -> None:
+def test_production_no_interface_matches_p2_and_keeps_full_empty_as_diagnostics_only() -> None:
     mask = np.full((20, 20), 255, dtype=np.uint8)
     glare = np.zeros((20, 20), dtype=np.uint8)
     sobel = np.zeros((20, 20), dtype=np.float32)
     scores = []
     diagnostics = []
     production_scores = []
+    production_diagnostics = []
     for level in (100, 180):
         gray = np.full((20, 20), level, dtype=np.uint8)
         normalized = np.full((20, 20), 128, dtype=np.uint8)
         pre = SimpleNamespace(gray=gray, normalized=normalized, sobel_y_abs=sobel, glare_mask=glare)
         p2 = _p2_no_interface(pre, mask, ())
-        p0 = observations._no_interface_evidence(pre, mask, ())
+        production = observations._no_interface_evidence(pre, mask, ())
         scores.append(p2.likelihood)
         diagnostics.append((p2.full_likelihood, p2.empty_likelihood))
-        production_scores.append(p0.likelihood)
+        production_scores.append(production.likelihood)
+        production_diagnostics.append(
+            (production.full_likelihood, production.empty_likelihood)
+        )
     assert scores[0] == scores[1]
+    assert production_scores == scores
     assert diagnostics[0] != diagnostics[1]
-    assert production_scores[0] != production_scores[1]
+    assert production_diagnostics == diagnostics
 
 
 def test_p1_and_p3_collision_failure_is_explicit_while_p0_and_p2_preserve_observability() -> None:
