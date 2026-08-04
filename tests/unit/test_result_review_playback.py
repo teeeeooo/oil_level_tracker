@@ -104,3 +104,17 @@ def test_close_stops_timer_and_releases_reader(qapp):
     assert not controller.timer.isActive()
     assert reader.closed is True
     assert controller.reader is None
+
+
+def test_qtimer_playback_advances_through_repository_event_loop(qtbot):
+    controller = ResultReviewController(
+        lambda path: _Reader(path, duration=1.0, fps=20.0)
+    )
+    controller.open_video("source.mp4", 0.0)
+    before = controller.current_time
+    try:
+        controller.play()
+        qtbot.waitUntil(lambda: controller.current_time > before, timeout=1000)
+        assert controller.is_playing is True
+    finally:
+        controller.close()

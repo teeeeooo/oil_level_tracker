@@ -82,3 +82,32 @@ Mac continuation evidence:
 - full Mac `python -m pytest -q -m qt_app --maxfail=1`: `223 passed, 1071 deselected`, exit `0`.
 
 Windows behavior is still unverified for the new feature head. The next gate must first rerun the two focused regressions on Windows, then `python -m pytest -m qt_app`, then canonical `python -m pytest`.
+
+## Windows exact-head validation of `9d5f2feb`
+
+Windows exact-head validation subsequently completed on PR #77 head `9d5f2feb17a008c5fab783d3c9d669269acc17c7` with:
+
+- `1287 passed`;
+- `7 skipped`;
+- `0 failed`;
+- `0 hang`;
+- approximately `88 s` canonical runtime.
+
+The seven skips were Windows symlink-creation cases where the validation account lacked symlink creation privilege. This is Windows-specific evidence for that exact head and is not reinterpreted as Mac evidence.
+
+The recurrence-prevention changes below create a newer feature head, so this successful run is preserved as prior-head Windows evidence only. It is not final exact-head acceptance for the newer commit.
+
+## Recurrence-prevention layer
+
+A repository test-authoring portability contract now documents native filesystem identity, UTF-8 artifact I/O, non-interactive subprocess ownership, logical versus container-byte identity, semantic error assertions, Qt event-loop ownership and the separation between ordinary dirty pytest teardown and explicit S9-A close-decision tests.
+
+A bounded static policy test enforces only low-false-positive patterns demonstrated by the Windows failures:
+
+- test `read_text()` / `write_text()` calls declare an encoding;
+- direct test `subprocess.run()` calls declare stdin, and text-mode runs declare encoding;
+- direct `QTimer` or `ResultReviewController` test owners request `qapp` or `qtbot`;
+- the explicit S9-A Cancel / Discard / Save / rejected-close sentinel tests remain present and directly own their close decision.
+
+Separator literals, arbitrary full error text and ZIP/NPZ raw hashes are intentionally not generalized into repository-wide static rules because serialized/exact-artifact contracts can legitimately own them.
+
+Result Review also has a dynamic sentinel proving that an actual `QTimer` playback tick advances through the repository pytest-qt event loop. Adjacent direct `ResultReviewController` replacement tests now participate in the same session-owned QApplication lifecycle. No production timer, close-event, persisted, public or result contract changed.

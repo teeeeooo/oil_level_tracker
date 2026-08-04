@@ -42,7 +42,7 @@ class _Reader:
         self.events.append(("close", self.path))
 
 
-def test_candidate_factory_failure_preserves_active_reader_frame_and_timestamp():
+def test_candidate_factory_failure_preserves_active_reader_frame_and_timestamp(qapp):
     events = []
     first = _Reader("first.mp4", events)
 
@@ -66,7 +66,7 @@ def test_candidate_factory_failure_preserves_active_reader_frame_and_timestamp()
     assert controller.source_image == before_image
 
 
-def test_candidate_decode_failure_closes_candidate_only_and_preserves_active_reader():
+def test_candidate_decode_failure_closes_candidate_only_and_preserves_active_reader(qapp):
     events = []
     readers = {}
 
@@ -85,7 +85,7 @@ def test_candidate_decode_failure_closes_candidate_only_and_preserves_active_rea
     assert readers["bad.mp4"].closed is True
 
 
-def test_successful_candidate_decodes_before_previous_reader_is_closed():
+def test_successful_candidate_decodes_before_previous_reader_is_closed(qapp):
     events = []
 
     def factory(path):
