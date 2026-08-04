@@ -113,7 +113,7 @@ def test_writer_converts_numpy_and_nonfinite_values_to_json_safe_null(tmp_path):
 
 def test_basic_writes_only_required_subset_and_safe_paths(tmp_path):
     glass, staging = _write(tmp_path)
-    record = json.loads((staging / "debug_trace.jsonl").read_text().splitlines()[0])
+    record = json.loads((staging / "debug_trace.jsonl").read_text(encoding="utf-8").splitlines()[0])
     assert "ellipse_mask" not in record["images"]
     assert "overlay" in record["images"]
     for relative in record["images"].values():
@@ -124,14 +124,14 @@ def test_basic_writes_only_required_subset_and_safe_paths(tmp_path):
 
 def test_full_writes_all_available_artifacts(tmp_path):
     _glass_value, staging = _write(tmp_path, DebugTraceLevel.FULL)
-    record = json.loads((staging / "debug_trace.jsonl").read_text().splitlines()[0])
+    record = json.loads((staging / "debug_trace.jsonl").read_text(encoding="utf-8").splitlines()[0])
     assert "ellipse_mask" in record["images"]
     assert len(record["images"]) >= 8
 
 
 def test_missing_optional_image_is_record_warning_not_writer_failure(tmp_path):
     _glass_value, staging = _write(tmp_path, missing=True)
-    record = json.loads((staging / "debug_trace.jsonl").read_text().splitlines()[0])
+    record = json.loads((staging / "debug_trace.jsonl").read_text(encoding="utf-8").splitlines()[0])
     assert "foam_mask" not in record["images"]
     assert "missing_optional_image:foam_mask" in record["warnings"]
 
@@ -143,9 +143,9 @@ def test_duplicate_glass_frame_timestamp_is_not_written_twice(tmp_path):
     writer.write(glass, detection, _artifacts(), _decision())
     writer.write(glass, detection, _artifacts(), _decision())
     completion = writer.finalize()
-    index = json.loads((Path(completion.staging_directory) / "debug_index.json").read_text())
+    index = json.loads((Path(completion.staging_directory) / "debug_index.json").read_text(encoding="utf-8"))
     assert index["record_count"] == 1
-    assert len((Path(completion.staging_directory) / "debug_trace.jsonl").read_text().splitlines()) == 1
+    assert len((Path(completion.staging_directory) / "debug_trace.jsonl").read_text(encoding="utf-8").splitlines()) == 1
 
 
 def test_abort_removes_staging_directory(tmp_path):
@@ -202,17 +202,17 @@ def test_repository_loads_index_only_then_lazy_record_and_image(tmp_path):
 def test_repository_rejects_invalid_offset_and_unknown_glass(tmp_path):
     bundle = _repository_bundle(tmp_path)
     index_path = bundle.root / "debug" / "debug_index.json"
-    index = json.loads(index_path.read_text())
+    index = json.loads(index_path.read_text(encoding="utf-8"))
     index["records"][0]["byte_offset"] = 10**9
-    index_path.write_text(json.dumps(index))
+    index_path.write_text(json.dumps(index), encoding="utf-8")
     with pytest.raises(DebugTraceError, match="offset"):
         DebugTraceRepository(bundle)
 
     bundle = _repository_bundle(tmp_path / "other")
     index_path = bundle.root / "debug" / "debug_index.json"
-    index = json.loads(index_path.read_text())
+    index = json.loads(index_path.read_text(encoding="utf-8"))
     index["records"][0]["glass_id"] = "unknown"
-    index_path.write_text(json.dumps(index))
+    index_path.write_text(json.dumps(index), encoding="utf-8")
     with pytest.raises(DebugTraceError, match="없는 glass_id"):
         DebugTraceRepository(bundle)
 
@@ -220,9 +220,9 @@ def test_repository_rejects_invalid_offset_and_unknown_glass(tmp_path):
 def test_repository_rejects_unsupported_schema_and_path_traversal(tmp_path):
     bundle = _repository_bundle(tmp_path)
     index_path = bundle.root / "debug" / "debug_index.json"
-    index = json.loads(index_path.read_text())
+    index = json.loads(index_path.read_text(encoding="utf-8"))
     index["schema_version"] = 99
-    index_path.write_text(json.dumps(index))
+    index_path.write_text(json.dumps(index), encoding="utf-8")
     with pytest.raises(DebugTraceError, match="지원하지 않는"):
         DebugTraceRepository(bundle)
 

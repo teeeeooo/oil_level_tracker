@@ -59,6 +59,33 @@ def pytest_collection_modifyitems(items):
             item.add_marker(_QT_APP_MARKER)
 
 
+def _prepare_registered_main_windows_for_teardown(item) -> None:
+    """Prevent ordinary dirty Workbench teardown from opening an interactive modal."""
+    widgets = getattr(item, "qt_widgets", ())
+    if not widgets:
+        return
+    from PySide6.QtWidgets import QMessageBox
+
+    from oil_tracker.ui.main_window import MainWindow
+
+    for weak_widget, _before_close in tuple(widgets):
+        widget = weak_widget()
+        if (
+            isinstance(widget, MainWindow)
+            and widget.workbench.profile_has_unsaved_changes
+        ):
+            widget._confirm_unsaved_profile_close = (
+                lambda: QMessageBox.StandardButton.Discard
+            )
+
+
+@pytest.hookimpl(wrapper=True, tryfirst=True)
+def pytest_runtest_teardown(item):
+    """Prepare ordinary Workbenches before pytest-qt closes registered widgets."""
+    _prepare_registered_main_windows_for_teardown(item)
+    return (yield)
+
+
 @pytest.fixture
 def headless_subprocess_env():
     """Return an importable source-tree environment with no GUI platform contract."""
@@ -69,6 +96,7 @@ def headless_subprocess_env():
     if existing:
         paths.append(existing)
     env["PYTHONPATH"] = os.pathsep.join(paths)
+    env["PYTHONIOENCODING"] = "utf-8"
     return env
 
 

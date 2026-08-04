@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 from PySide6.QtCore import QObject, Qt, Signal
-from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtWidgets import QApplication
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
@@ -61,13 +61,9 @@ def workbench_window(qtbot):
     window = MainWindow(workbench, DummyPreviewController(), DummyAnalysisController(), DummyRenderer())
     qtbot.addWidget(window)
     window.resize(1280, 760)
-    window._confirm_unsaved_profile_close = lambda: QMessageBox.StandardButton.Discard
     window.show()
     QApplication.processEvents()
     yield window, workbench
-    workbench._set_profile_close_baseline()
-    window.close()
-    QApplication.processEvents()
 
 
 def _add_glass(window, workbench):
