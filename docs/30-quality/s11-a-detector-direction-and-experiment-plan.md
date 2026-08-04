@@ -152,6 +152,13 @@ The current successor order is therefore:
 4. probe offline temporal trajectory estimation as a separate result layer;
 5. combine spatial, temporal and P2 evidence only after each responsibility is independently justified.
 
+The Lane-B spatial Worker branch records its bounded result in
+`docs/30-quality/s11-a-spatial-path-cross-roi-probe.md`. The diagnostic gate requires a
+non-degenerate cross-ROI local phase path and recovers two native residual rows while preserving
+the retained collision/glare/Foam protections in its targeted evidence. This is navigation to the
+Worker evidence only; production mutation, Lane selection for that mutation, and successor
+sequencing remain Orchestrator decisions after exact-head review.
+
 ## Lane and ownership implication
 
 Lane is now assessed per actual mutation rather than carried forward from the original provisional classification.
