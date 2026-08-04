@@ -6,8 +6,6 @@
 
 S10 is closed. S11 is now the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. No detector source change is authorized until the failure stage and truth/evidence contract are established.
 
-A bounded post-S10 packaging maintenance repair is temporarily ahead of S11 source work after a packaged Windows Qt-platform bootstrap defect was discovered. S11 remains `ACTIVE / P0`; its S11-A scope is unchanged. The maintenance repair must pass read-only Windows packaged exact-head validation and fresh Lane C audit before merge/close, after which this plan returns directly to the existing S11-A gate.
-
 ## Current evidence owners
 
 - Detector/field acceptance: [`../30-quality/real-world-validation-plan.md`](../30-quality/real-world-validation-plan.md)
@@ -15,11 +13,10 @@ A bounded post-S10 packaging maintenance repair is temporarily ahead of S11 sour
 - Benchmark/truth workflow: [`../30-quality/golden-video-regression.md`](../30-quality/golden-video-regression.md)
 - S5-B observability/temporal architecture: [`../20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 - Post-S10 UX authority: [`../10-product/ux-improvement-plan.md`](../10-product/ux-improvement-plan.md)
-- Post-S10 packaged Qt bootstrap maintenance: [`../30-quality/post-s10-windows-qt-platform-bootstrap-repair.md`](../30-quality/post-s10-windows-qt-platform-bootstrap-repair.md)
 
-## Latest recorded closeout — S10 Windows and Packaging Final Release Gate
+## Latest recorded closeout — Post-S10 Windows Qt Platform Bootstrap Maintenance
 
-S10 is `DONE`: Windows canonical, supported-DPI GUI, PyInstaller one-folder, relocation, clean-PC, resources/fonts, Unicode/long paths and lifecycle/file-lock obligations were accepted; PR #77 was independently audited and merged, and `main` closed cleanly at `49ac9980f213b4b31efb2a7ee607c38982765fec`.
+PR #78 exact base `f52e477e71f562744ccb27846c9248a8b46fb310` / exact head `0805ebf4620b43934198bc16dfb1e49407fe91b2` passed Lane C Fresh Exact-Head Audit and native guarded-squash-merged as `bd6f478699563874439a533a5442b8fb23fdf9f7`. The bounded 10-file packaging/tests/docs repair adds a Windows-only PyInstaller runtime hook that forces native `QT_QPA_PLATFORM=windows` before PySide6 runtime initialization; source-tree GUI, CLI/headless behavior and S11 detector source remain unchanged. Auditor Mac focused validation passed `34` tests; exact-head Windows focused tests passed `14`, the clean one-folder build passed, and both no-env and inherited-`offscreen` packaged launches produced a native visible GUI with normal close/process termination. No S10 milestone reopening or S11 scope change occurred; current gate remains `S11-A — Real-field failure attribution and truth/corpus planning`.
 
 ## S11 current diagnosis
 
