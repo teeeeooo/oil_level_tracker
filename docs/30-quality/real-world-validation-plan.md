@@ -188,6 +188,8 @@ Failure and cancellation evidence must show bounded temporary-file cleanup plus 
 
 S10 completed this gate on the accepted release baseline: Windows canonical, supported-DPI GUI, PyInstaller one-folder build/relocation, clean-PC execution, resources/fonts, Unicode/long paths and cancellation/file-lock/application-close obligations were directly exercised and accepted.
 
+A post-S10 packaging maintenance repair now owns deterministic Windows Qt platform bootstrap inside the PyInstaller GUI artifact. The custom runtime hook runs before PyInstaller package runtime hooks and the GUI entry script, forces `QT_QPA_PLATFORM=windows` only on Windows packaged startup, and does not become a source-tree or CLI/headless dependency. The packaged application must therefore start without a user/system QPA prerequisite and must override a conflicting inherited QPA value rather than accept it as authority.
+
 Future source work does not automatically rerun the entire S10 gate. Re-execute only platform/package evidence materially invalidated by the changed owner or release input, and never infer Windows behavior from another platform.
 
 ## Evidence reporting

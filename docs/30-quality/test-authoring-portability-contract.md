@@ -23,6 +23,7 @@ This is the repository quality contract for tests that must run on supported mac
 - Ordinary dirty registered `MainWindow` cleanup belongs to the shared pytest/pytest-qt teardown owner and must finish non-interactively.
 - Tests whose subject is S9-A unsaved-close semantics remain separate: they directly prove Save, Discard, Cancel and rejected-close lifecycle behavior.
 - The test process keeps one session-owned `QApplication`; headless subprocess tests must not inherit that GUI platform contract.
+- Pytest's temporary `QT_QPA_PLATFORM=offscreen` injection is a test-only lifecycle mechanism. It must not be reused as production packaging bootstrap; the Windows one-folder GUI owns its native QPA choice through the PyInstaller runtime hook.
 
 ## Automated guard boundary
 

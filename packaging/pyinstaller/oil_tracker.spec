@@ -4,6 +4,7 @@ from pathlib import Path
 project_root = Path(SPECPATH).parents[1]
 src_root = project_root / "src"
 package_root = src_root / "oil_tracker"
+runtime_hook = Path(SPECPATH) / "runtime_hooks" / "windows_qt_platform.py"
 
 datas = [
     (str(package_root / "adapters" / "reporting" / "templates"), "oil_tracker/adapters/reporting/templates"),
@@ -18,7 +19,7 @@ a = Analysis(
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
-    runtime_hooks=[],
+    runtime_hooks=[str(runtime_hook)],
     excludes=["tkinter", "PyQt5", "PyQt6"],
     noarchive=False,
 )

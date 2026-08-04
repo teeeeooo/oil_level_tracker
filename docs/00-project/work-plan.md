@@ -6,6 +6,8 @@
 
 S10 is closed. S11 is now the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. No detector source change is authorized until the failure stage and truth/evidence contract are established.
 
+A bounded post-S10 packaging maintenance repair is temporarily ahead of S11 source work after a packaged Windows Qt-platform bootstrap defect was discovered. S11 remains `ACTIVE / P0`; its S11-A scope is unchanged. The maintenance repair must pass read-only Windows packaged exact-head validation and fresh Lane C audit before merge/close, after which this plan returns directly to the existing S11-A gate.
+
 ## Current evidence owners
 
 - Detector/field acceptance: [`../30-quality/real-world-validation-plan.md`](../30-quality/real-world-validation-plan.md)
@@ -13,6 +15,7 @@ S10 is closed. S11 is now the P0 successor because a Windows field run on a visu
 - Benchmark/truth workflow: [`../30-quality/golden-video-regression.md`](../30-quality/golden-video-regression.md)
 - S5-B observability/temporal architecture: [`../20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 - Post-S10 UX authority: [`../10-product/ux-improvement-plan.md`](../10-product/ux-improvement-plan.md)
+- Post-S10 packaged Qt bootstrap maintenance: [`../30-quality/post-s10-windows-qt-platform-bootstrap-repair.md`](../30-quality/post-s10-windows-qt-platform-bootstrap-repair.md)
 
 ## Latest recorded closeout — S10 Windows and Packaging Final Release Gate
 

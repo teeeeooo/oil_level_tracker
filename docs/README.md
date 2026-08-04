@@ -54,6 +54,7 @@ A feature document must not maintain a competing project-wide “current next wo
 - S6-F one-hour long-duration resource stability: [one-hour stability evidence](./30-quality/s6-f-one-hour-long-duration-stability.md)
 - S9-C bounded field/overlay interaction implementation evidence: [field-overlay interaction polish evidence](./30-quality/s9-c-field-overlay-interaction-polish-evidence.md)
 - S10 Windows canonical portability and Qt teardown repair evidence: [S10 repair evidence](./30-quality/s10-windows-canonical-portability-qt-teardown-repair-evidence.md)
+- Post-S10 Windows Qt platform bootstrap maintenance: [packaged Qt bootstrap repair](./30-quality/post-s10-windows-qt-platform-bootstrap-repair.md)
 - S11 real-field detector diagnosis and acceptance plan: [S11 detector effectiveness plan](./30-quality/s11-real-field-detector-effectiveness-plan.md)
 - Manual platform gate: [manual GUI and Windows checklist](./30-quality/manual-gui-windows-checklist.md)
 - Detector benchmark guide: [golden video regression](./30-quality/golden-video-regression.md)
