@@ -149,9 +149,27 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Purpose:** Validate the completed product feature set on the target Windows environment and prove the relocatable one-folder distribution before release.
 - **Status:** `DONE`
 - **Major result:** Exact-head Windows canonical validation passed with only seven privilege-limited symlink cases unavailable, and the user directly confirmed the supported-DPI GUI, one-folder build/relocation, clean-PC, resources/fonts, Unicode/long-path and lifecycle/file-lock package obligations. PR #77 repaired shared pytest/Qt portability architecture without production or packaging behavior drift and was independently audited and merged.
-- **Next gate:** No successor implementation milestone is authorized yet. Orchestrator must classify and plan the user's intended UI/UX improvement work and video-analysis/detector-effectiveness improvement work before either begins.
+- **Next gate:** Preserve the accepted platform/package baseline while S11 addresses real-field detector effectiveness.
 - **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md), [manual checklist](../30-quality/manual-gui-windows-checklist.md), [S10 repair evidence](../30-quality/s10-windows-canonical-portability-qt-teardown-repair-evidence.md)
+
+### S11 — Real-Field Detector Effectiveness Recovery
+
+- **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
+- **Status:** `ACTIVE`
+- **Major result:** Initial post-S10 Windows field diagnosis demonstrates severe under-detection and false no-interface behavior under clear-to-dark lighting variation; source repair is not yet authorized until representative truth and failure-stage attribution are established.
+- **Next gate:** S11-A real-field failure attribution and truth/corpus planning using local/private field video plus the existing `.oiltruth` and regression workflow.
+- **Priority:** `P0`
+- **Detail:** [S11 real-field detector effectiveness plan](../30-quality/s11-real-field-detector-effectiveness-plan.md)
+
+### S12 — Post-S10 UI/UX Refinement
+
+- **Purpose:** Address remaining real-use Workbench/setup/review friction after detector effectiveness is restored, while preserving established Profile/session/result and S9 interaction authorities.
+- **Status:** `PLANNED`
+- **Major result:** Scope is intentionally not fixed yet; real-use friction and the existing P3 UX backlog remain candidate inputs rather than authorized implementation slices.
+- **Next gate:** Reclassify and slice UI/UX work after the S11 detector gate reaches a stable accepted baseline.
+- **Priority:** `P1`
+- **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE`; next is bounded Orchestrator classification/planning, with autosave/abnormal-exit recovery still deferred unless explicitly reclassified.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE` → `S12 PLANNED`; autosave/abnormal-exit recovery remains deferred unless explicitly reclassified.

@@ -1,28 +1,31 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
-**Current milestone:** `None — S10 closed; successor implementation milestone not yet classified`
-**Milestone status:** `DONE — S10 Windows and Packaging Final Release Gate accepted and merged`
-**Current gate:** `Post-S10 Orchestrator classification/planning`
+**Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
+**Milestone status:** `ACTIVE — post-S10 field diagnosis and acceptance planning`
+**Current gate:** `S11-A — Real-field failure attribution and truth/corpus planning`
 
-This document owns the current execution state. Milestone order and formal status remain governed by [`roadmap.md`](./roadmap.md). Product feature work through S9 and the final S10 Windows/platform/package release gate are complete. No successor implementation milestone is authorized by this closeout.
+S10 is closed. S11 is now the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. No detector source change is authorized until the failure stage and truth/evidence contract are established.
 
 ## Current evidence owners
 
-- Final platform contract: [`../30-quality/real-world-validation-plan.md`](../30-quality/real-world-validation-plan.md)
-- Manual Windows/DPI procedure: [`../30-quality/manual-gui-windows-checklist.md`](../30-quality/manual-gui-windows-checklist.md)
-- S10 repair/final validation evidence: [`../30-quality/s10-windows-canonical-portability-qt-teardown-repair-evidence.md`](../30-quality/s10-windows-canonical-portability-qt-teardown-repair-evidence.md)
-- Test portability contract: [`../30-quality/test-authoring-portability-contract.md`](../30-quality/test-authoring-portability-contract.md)
+- Detector/field acceptance: [`../30-quality/real-world-validation-plan.md`](../30-quality/real-world-validation-plan.md)
+- S11 diagnostic evidence and plan: [`../30-quality/s11-real-field-detector-effectiveness-plan.md`](../30-quality/s11-real-field-detector-effectiveness-plan.md)
+- Benchmark/truth workflow: [`../30-quality/golden-video-regression.md`](../30-quality/golden-video-regression.md)
+- S5-B observability/temporal architecture: [`../20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
+- Post-S10 UX authority: [`../10-product/ux-improvement-plan.md`](../10-product/ux-improvement-plan.md)
 
 ## Latest recorded closeout — S10 Windows and Packaging Final Release Gate
 
-| Item | Current state |
-|---|---|
-| Gate target | PR #77; exact audited base `cf7936fde8a24a3414d27fe3ade66bfa9af7842c`; exact audited feature head `11b81af59e5d870cd20f7610c7eb42470cbf19c1`; 3 commits / exactly 23 changed files; Lane C. |
-| Scope | Tests/docs-only portability and validation-architecture repair. No `src/` production change and no `packaging/` change. |
-| Windows canonical | Exact-head `python -m pytest`: `1292 passed`, `7 skipped`, `0 failed`, `0 hang`. All seven skips are symlink-creation cases unavailable to the Windows validation account because of privilege limitations; they are `NOT AVAILABLE` environment-specific coverage, not product/test-logic failures. |
-| Manual/package acceptance | User directly confirmed Windows 100/125/150% DPI GUI, PyInstaller one-folder build, relocation, clean-PC execution, resources/fonts, Unicode/long paths, cancellation, file-lock and application-close behavior. These were externally executed Windows checks, not inferred from macOS evidence. |
-| Auditor validation | Fresh exact-head Mac focused validation covering changed owners, S9-A close sentinels and symlink-security owners: `216 passed in 43.45s`, exit `0`; changed-document relative links `35/35` passed; complete-PR `git diff --check` passed. |
-| Architecture result | Shared pytest-qt teardown owns ordinary dirty `MainWindow` cleanup without changing production S9-A Save/Discard/Cancel behavior; Qt event-loop ownership, UTF-8/subprocess/path/NPZ portability and bounded test-authoring policy remain test/validation concerns only. |
-| Merge / synchronization | PR #77 passed Fresh Exact-Head Auditor review, was marked Ready, and native exact-base/head `guarded_merge` squash-merged as `216c74ba96e23372a55182339e872ad284fa6820`; registered primary checkout synchronized cleanly to `main` at that SHA before this Close. |
-| Residual risks | Existing real-video category gaps remain governed by the real-world validation plan. Autosave/abnormal-exit recovery remains deferred for post-S10 classification and was not a release prerequisite. |
-| Next gate | Orchestrator classification/planning for the user's intended UI/UX improvement work and video-analysis/detector-effectiveness improvement work. Do not absorb either concern into S10 or invent a successor milestone before classification. |
+S10 is `DONE`: Windows canonical, supported-DPI GUI, PyInstaller one-folder, relocation, clean-PC, resources/fonts, Unicode/long paths and lifecycle/file-lock obligations were accepted; PR #77 was independently audited and merged, and `main` closed cleanly at `49ac9980f213b4b31efb2a7ee607c38982765fec`.
+
+## S11 current diagnosis
+
+- A 1280×720 / 30 fps Windows field video was analyzed over 480–1200 s with two Glasses using identical detector settings.
+- Base produced no numeric Oil detections and remained mainly `UNKNOWN_REVIEW`; Accum produced only sparse numeric detections and was dominated by no-interface states.
+- At a visually clear Base frame, Canny/hypothesis geometry contained a plausible boundary near the reference line, but boundary evidence lost to ambiguity/no-interface competition and the tracker received `NO_UPDATE`.
+- At dark Accum frames, high uniformity/no-interface evidence dominated despite a visually reported Oil boundary; numeric detections appeared only when lighting changed and no-interface evidence collapsed.
+- These observations are diagnostic evidence, not authoritative detector-accuracy truth. Exact physical fill labels and coordinate conventions must be reconciled through the existing user-truth workflow before acceptance claims.
+
+## Next action
+
+Start S11-A with the same field video as local/private evidence: freeze representative clear, dark, occluded and successful-detection frames/sequences; establish user-confirmed truth where usable; trace candidate → hypothesis → canonical decision → temporal action; then classify the smallest justified detector repair. Preserve S5-A Foam and S5-B fail-closed contracts unless direct evidence proves a separately authorized architecture change is required. S12 UI/UX refinement remains a separate P1 successor and does not begin inside S11.

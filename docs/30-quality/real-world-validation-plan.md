@@ -7,6 +7,7 @@ This document owns real-video, detector, Workbench, lifecycle, graph, CPU, memor
 - Long-term milestone state: [project roadmap](../00-project/roadmap.md)
 - Active gate and next action: [current work plan](../00-project/work-plan.md)
 - S5-B design: [oil-boundary hypothesis architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
+- S11 post-S10 field detector gate: [real-field detector effectiveness plan](./s11-real-field-detector-effectiveness-plan.md)
 - Manual platform procedure: [manual GUI and Windows checklist](./manual-gui-windows-checklist.md)
 - Benchmark execution: [golden video regression](./golden-video-regression.md)
 
@@ -19,7 +20,7 @@ This document owns real-video, detector, Workbench, lifecycle, graph, CPU, memor
 5. Prefer bounded OpenCV/NumPy algorithms; no checkpoint or GPU runtime is required.
 6. Low or conflicting evidence must remain reviewable rather than forcing a numeric boundary or Foam state.
 7. A single video, filename or fixture ID cannot define an exception.
-8. Detector/runtime acceptance evidence must include CPU, memory and resource-cleanup evidence; Windows packaging remains mandatory release evidence in the final platform gate.
+8. Detector/runtime acceptance evidence must include CPU, memory and resource-cleanup evidence; the Windows packaging baseline was accepted in S10 and is revalidated proportionally only when later changes materially invalidate it.
 9. Automatic tests and manual Windows/real-video checks are reported separately, and Windows PASS is never inferred from another platform.
 10. The repository sample is supporting evidence only, never canonical truth.
 
@@ -185,17 +186,9 @@ Failure and cancellation evidence must show bounded temporary-file cleanup plus 
 
 ## Final Windows and packaging release gate
 
-This gate is intentionally sequenced after the required product feature work. It remains mandatory and pending; no macOS/source-tree result establishes Windows/manual GUI or packaging PASS.
+S10 completed this gate on the accepted release baseline: Windows canonical, supported-DPI GUI, PyInstaller one-folder build/relocation, clean-PC execution, resources/fonts, Unicode/long paths and cancellation/file-lock/application-close obligations were directly exercised and accepted.
 
-- Run the canonical suite on Windows Python 3.14.
-- Complete manual Workbench, preflight, analysis and Result Review flow at the supported Windows DPI settings.
-- Build the PyInstaller one-folder distribution on Windows.
-- Run the relocated package on a clean Windows PC without Python or separately bundled font files.
-- Verify relocated Jinja, Qt, OpenCV and Matplotlib resources and Korean font behavior.
-- Exercise Unicode and long paths.
-- Exercise active file locking, cancellation and application close.
-- Confirm no video/output/debug handle remains locked after cancellation or close.
-- Report every unexercised platform/package condition as pending rather than inferring it from another environment.
+Future source work does not automatically rerun the entire S10 gate. Re-execute only platform/package evidence materially invalidated by the changed owner or release input, and never infer Windows behavior from another platform.
 
 ## Evidence reporting
 
