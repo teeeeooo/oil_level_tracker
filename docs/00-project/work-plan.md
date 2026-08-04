@@ -1,8 +1,8 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `ACTIVE — reproducible-corpus detector architecture probing`
-**Current gate:** `S11-A — OpenCV evidence redesign and controlled experiment planning`
+**Milestone status:** `ACTIVE — spatial current-frame detector architecture probing`
+**Current gate:** `S11-A — Spatial Path / cross-ROI consistency probe`
 
 S10 is closed. S11 is now the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. No detector source change is authorized until the failure stage and truth/evidence contract are established.
 
@@ -17,7 +17,7 @@ S10 is closed. S11 is now the P0 successor because a Windows field run on a visu
 
 ## Latest recorded closeout — Post-S10 Windows Qt Platform Bootstrap Maintenance
 
-PR #78 exact base `f52e477e71f562744ccb27846c9248a8b46fb310` / exact head `0805ebf4620b43934198bc16dfb1e49407fe91b2` passed Lane C Fresh Exact-Head Audit and native guarded-squash-merged as `bd6f478699563874439a533a5442b8fb23fdf9f7`. The bounded 10-file packaging/tests/docs repair adds a Windows-only PyInstaller runtime hook that forces native `QT_QPA_PLATFORM=windows` before PySide6 runtime initialization; source-tree GUI, CLI/headless behavior and S11 detector source remain unchanged. Auditor Mac focused validation passed `34` tests; exact-head Windows focused tests passed `14`, the clean one-folder build passed, and both no-env and inherited-`offscreen` packaged launches produced a native visible GUI with normal close/process termination. No S10 milestone reopening or S11 scope change occurred. The current gate has since advanced to `S11-A — OpenCV evidence redesign and controlled experiment planning` after the post-S10 field diagnosis was reproduced as a general exposure-sensitivity failure class on the local S6 corpus.
+PR #78 exact base `f52e477e71f562744ccb27846c9248a8b46fb310` / exact head `0805ebf4620b43934198bc16dfb1e49407fe91b2` passed Lane C Fresh Exact-Head Audit and native guarded-squash-merged as `bd6f478699563874439a533a5442b8fb23fdf9f7`. The bounded 10-file packaging/tests/docs repair adds a Windows-only PyInstaller runtime hook that forces native `QT_QPA_PLATFORM=windows` before PySide6 runtime initialization; source-tree GUI, CLI/headless behavior and S11 detector source remain unchanged. Auditor Mac focused validation passed `34` tests; exact-head Windows focused tests passed `14`, the clean one-folder build passed, and both no-env and inherited-`offscreen` packaged launches produced a native visible GUI with normal close/process termination. No S10 milestone reopening or S11 scope change occurred. The S11-A P0/P1/P2/P3 evidence probe is now merged. It rejected P1/P3 because they violate the retained S5-B observational-equivalence collision contract, retained P2 as a separate no-interface production repair candidate, and advanced the current gate to a spatial current-frame consistency probe.
 
 ## S11 current diagnosis
 
@@ -27,8 +27,10 @@ PR #78 exact base `f52e477e71f562744ccb27846c9248a8b46fb310` / exact head `0805e
 - At dark Accum frames, high uniformity/no-interface evidence dominated despite a visually reported Oil boundary; numeric detections appeared only when lighting changed and no-interface evidence collapsed.
 - These observations are diagnostic evidence, not authoritative detector-accuracy truth. Source inspection resolved the detector/product source-frame Y convention, and the private field video is not a repeatable S11 development corpus.
 - Repository-local truth-positive frames reproduce the same exposure-sensitivity class under controlled brightness changes: valid Oil can become ambiguous or false no-interface as absolute photometric evidence weakens.
-- External transparent-vessel vision literature and local probes support relative/local photometric phase evidence as the first redesign target; OpenCV remains the selected production primitive stack.
+- The completed P0/P1/P2/P3 probe showed that stronger scalar relative phase can recover some Oil but creates unsafe collision false Oil; P2 safely reduces exposure-driven false no-interface without recovering numeric Oil.
+- The next selected detection question is whether cross-ROI spatial path/curve consistency supplies genuinely new positive current-frame evidence while preserving S5-B collision, glare, structure and Foam protections.
+- Offline temporal trajectory estimation remains a separate result-estimation successor after spatial observation recovery; S12 stays separate.
 
 ## Next action
 
-Run the S11-A architecture probe defined in [`../30-quality/s11-a-detector-direction-and-experiment-plan.md`](../30-quality/s11-a-detector-direction-and-experiment-plan.md): compare `P0` current behavior against `P1` relative/local phase evidence, `P2` exposure-decoupled no-interface evidence and `P3` combined behavior on the frozen S6 truth plus controlled brightness/gamma/contrast variants. Preserve S5-A Foam, S5-B fail-closed ambiguity, structural/rim/glare negatives and bounded resources. Select the smallest sufficient source repair only after that comparison; provisional source classification is Lane C. S12 UI/UX refinement remains a separate P1 successor.
+Run the bounded S11-A Spatial Path / cross-ROI consistency probe defined by [`../30-quality/s11-a-detector-direction-and-experiment-plan.md`](../30-quality/s11-a-detector-direction-and-experiment-plan.md). Test whether current-frame spatial coherence can recover residual Oil misses without weakening S5-B fail-closed collision semantics, glare/structure/Foam protection or bounded resources. Keep P2 as a separate Lane C production no-interface repair candidate and keep offline temporal trajectory estimation as a later result-estimation probe. S12 UI/UX refinement remains separate.
