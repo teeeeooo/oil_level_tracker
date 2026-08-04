@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-**Status:** `ACTIVE — design direction agreed; source repair not yet started`
+**Status:** `ACTIVE — P0/P1/P2/P3 probe completed; next architecture work selected`
 
 This document records the post-S10 S11-A investigation result and the agreed detector direction before any production detector mutation.
 It supplements [S11 Real-Field Detector Effectiveness Recovery](s11-real-field-detector-effectiveness-plan.md) and does not replace the S5-B observability contract.
@@ -122,14 +122,44 @@ Required comparison dimensions include:
 
 A higher `13/13` local coverage number is not sufficient by itself. Acceptance requires mechanism-level improvement without corpus-specific branching or negative-protection regression.
 
+## Post-probe architecture decision
+
+The completed P0/P1/P2/P3 probe changes the selected direction.
+
+- P1/P3 are rejected as production candidates in the probed form. They recover two native Oil cases but violate the retained S5-B observational-equivalence contract by producing numeric Oil on latent-glare/latent-Oil collision pairs.
+- P2 remains a bounded no-interface semantics repair candidate. It removes demonstrated low-exposure false no-interface decisions without adding numeric Oil, but it does not improve Oil coverage and is not sufficient for the overall S11 recovery.
+- No current probe variant safely raises Oil detection coverage enough to serve as the production S11 cutover.
+
+The remaining work is intentionally separated into three responsibilities:
+
+1. **Spatial current-frame detection** — next detection probe. Evaluate whether cross-ROI path/curve consistency and multi-cue spatial evidence can recover residual Oil misses without weakening S5-B collision, glare or Foam protection. A stronger scalar row score alone is not sufficient.
+2. **P2 no-interface repair** — separate production semantics repair candidate. It prevents exposure from becoming unjustified positive FULL/EMPTY no-interface evidence and may proceed independently of numeric Oil recovery.
+3. **Offline temporal trajectory estimation** — separate result-estimation responsibility. Preserve raw accepted/ambiguous/no-interface observations and derive an explicitly estimated trajectory from multiple frames only after evidence supports doing so.
+
+The current `TemporalTracker` is causal and only smooths accepted numeric Oil values; a missing current observation remains missing. Reporting likewise renders missing Oil as a graph gap. Therefore a continuous Oil-level trajectory is not a graph-style change: it requires a new estimation responsibility with explicit provenance.
+
+A future trajectory model should distinguish at least `observed`, `estimated`, and `unavailable` states. Because analysis is offline, a bounded estimator may use both earlier and later observations, but it must abstain across unsupported long gaps, occlusion, contradictory anchors or low-reliability intervals rather than manufacturing continuity.
+
+Trajectory validation should begin without creating dense new truth. At existing user-confirmed truth frames, hide the same-frame measurement from the estimator and test whether surrounding observations/evidence reconstruct the held-out truth within acceptable error. Coverage must be reported together with abstention and reconstruction error; a visually smooth line is not acceptance evidence.
+
+Read-only sequence inspection also shows why spatial detection precedes trajectory estimation: some residual anchors such as sample2 `0/30/60`, sample3 `900`, and base sample1 `240` have little or no nearby accepted Oil measurement to interpolate. Temporal estimation cannot recover information that the observation layer never supplies.
+
+The current successor order is therefore:
+
+1. close the existing P0/P1/P2/P3 probe evidence;
+2. run a bounded Spatial Path / cross-ROI consistency probe;
+3. retain P2 as an independent no-interface production repair candidate;
+4. probe offline temporal trajectory estimation as a separate result layer;
+5. combine spatial, temporal and P2 evidence only after each responsibility is independently justified.
+
 ## Lane and ownership implication
 
-The actual source lane remains evidence-dependent until the architecture probe shows the smallest sufficient change.
+Lane is now assessed per actual mutation rather than carried forward from the original provisional classification.
 
-- A bounded change inside existing preprocessing/evidence owners that preserves S5-B observability semantics, temporal ownership, public/persisted schemas and dependencies may be classified as Lane B with explicit evidence.
-- A change to no-interface observability meaning, canonical positive-evidence semantics, temporal photometric/component history, validation architecture or runtime dependencies is Lane C and requires fresh independent audit.
-
-Given the current leading direction touches no-interface and positive-evidence semantics, S11 source work should begin with a **provisional Lane C** assumption and may narrow only if the probe proves a materially smaller existing-owner defect.
+- The completed P0/P1/P2/P3 probe PR is diagnostic/tests/documentation-only and leaves production defaults, runtime owners and contracts unchanged; its actual blast radius is Lane B.
+- A bounded future spatial diagnostic probe can remain Lane B when it stays inside test/diagnostic evidence and does not change production semantics or persisted/public contracts.
+- A production P2 repair changes S5-B no-interface/observability meaning and therefore remains Lane C with fresh independent audit.
+- A future temporal trajectory experiment may begin as diagnostic-only evidence, but production introduction of estimated trajectory provenance, result fields, persisted/exported semantics or detector feedback requires fresh classification and is expected to reach Lane C if those shared contracts move.
 
 ## Claim boundary
 
