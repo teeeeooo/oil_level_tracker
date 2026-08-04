@@ -2,9 +2,9 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE — production detector recovery`
-**Current gate:** `S11-B — P2 no-interface production repair`
+**Current gate:** `S11-B — conservative Spatial positive-evidence production fallback`
 
-S10 is closed. S11 is now the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. No detector source change is authorized until the failure stage and truth/evidence contract are established.
+S10 is closed. S11 remains the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. The P2 no-interface semantics repair is now merged; any further detector mutation remains separately scoped and must preserve the accepted S5-A Foam and S5-B fail-closed observability contracts.
 
 ## Current evidence owners
 
@@ -15,9 +15,9 @@ S10 is closed. S11 is now the P0 successor because a Windows field run on a visu
 - S5-B observability/temporal architecture: [`../20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 - Post-S10 UX authority: [`../10-product/ux-improvement-plan.md`](../10-product/ux-improvement-plan.md)
 
-## Latest recorded closeout — Post-S10 Windows Qt Platform Bootstrap Maintenance
+## Latest recorded closeout — S11-B P2 No-Interface Production Repair
 
-PR #78 exact base `f52e477e71f562744ccb27846c9248a8b46fb310` / exact head `0805ebf4620b43934198bc16dfb1e49407fe91b2` passed Lane C Fresh Exact-Head Audit and native guarded-squash-merged as `bd6f478699563874439a533a5442b8fb23fdf9f7`. The bounded 10-file packaging/tests/docs repair adds a Windows-only PyInstaller runtime hook that forces native `QT_QPA_PLATFORM=windows` before PySide6 runtime initialization; source-tree GUI, CLI/headless behavior and S11 detector source remain unchanged. Auditor Mac focused validation passed `34` tests; exact-head Windows focused tests passed `14`, the clean one-folder build passed, and both no-env and inherited-`offscreen` packaged launches produced a native visible GUI with normal close/process termination. No S10 milestone reopening or S11 scope change occurred. The S11-A P0/P1/P2/P3 evidence probe is now merged. It rejected P1/P3 because they violate the retained S5-B observational-equivalence collision contract, retained P2 as a separate no-interface production repair candidate, and advanced the current gate to a spatial current-frame consistency probe.
+PR #82 exact base `a38ee44f68cac519c5e90cbf3150d963b7da13eb` / exact head `d3204d90a04fbe7496808e77034ac268e92f477c` passed fresh Lane C exact-head audit and native guarded-squash-merged as `ebabcf9dd35bf3ec88be37c29ebadbeaac46144a`. The bounded four-file repair removes absolute raw brightness from positive interface-absence evidence, measures no-interface uniformity on the normalized raster, and retains current-frame visibility in adjacent identifiability reliability while preserving raw FULL/EMPTY appearance only for typed fill-state distinction. Auditor exact-head focused validation passed `154` tests with `git diff --check` clean; an independent 1,323-case controlled/collision/texture/geometry counterfactual probe found zero acceptance sign flips from the visibility seam. This closes only the P2 semantics repair: no detector/general-field accuracy PASS or S11 completion is inferred, and the current gate advances to the separate conservative Spatial positive-evidence production fallback.
 
 ## S11 current diagnosis
 
@@ -27,13 +27,13 @@ PR #78 exact base `f52e477e71f562744ccb27846c9248a8b46fb310` / exact head `0805e
 - At dark Accum frames, high uniformity/no-interface evidence dominated despite a visually reported Oil boundary; numeric detections appeared only when lighting changed and no-interface evidence collapsed.
 - These observations are diagnostic evidence, not authoritative detector-accuracy truth. Source inspection resolved the detector/product source-frame Y convention, and the private field video is not a repeatable S11 development corpus.
 - Repository-local truth-positive frames reproduce the same exposure-sensitivity class under controlled brightness changes: valid Oil can become ambiguous or false no-interface as absolute photometric evidence weakens.
-- The completed P0/P1/P2/P3 probe showed that stronger scalar relative phase can recover some Oil but creates unsafe collision false Oil; P2 safely reduces exposure-driven false no-interface without recovering numeric Oil.
+- The completed P0/P1/P2/P3 probe showed that stronger scalar relative phase can recover some Oil but creates unsafe collision false Oil; the selected P2 semantics repair safely reduces exposure-driven false no-interface without recovering numeric Oil.
+- PR #82 has now merged that P2 repair into the canonical S5-B owner, retaining raw FULL/EMPTY appearance only for typed fill-state distinction and preserving fail-closed ambiguity, glare/structure protection, S5-A Foam independence and serialized temporal ownership.
 - The merged Spatial Path probe recovered two additional native Oil rows while preserving the retained collision/glare/structure/Foam protections in targeted evidence, establishing cross-ROI spatial information as a useful bounded positive-evidence direction.
 - The spatial probe remains conservative and is not itself a production cutover: its non-degenerate-path gate must not be treated as a universal physical Oil discriminator, especially for valid near-horizontal surfaces.
-- The merged P2 × Spatial interaction probe found no material numeric-recovery interaction: P2 converts known exposure-driven false no-interface to ambiguity, but those rescued frames expose no additional accepted Spatial candidate in the current reproducible evidence.
-- P2 and Spatial therefore remain independent production candidates rather than one coupled recovery mechanism. P2 has the strongest direct field-failure justification; Spatial remains a conservative secondary positive-evidence fallback with a known near-horizontal-path limitation.
+- The merged P2 × Spatial interaction probe found no material numeric-recovery interaction, so Spatial remains a separate secondary positive-evidence fallback rather than a P2-coupled recovery mechanism.
 - Offline temporal trajectory estimation remains a separate result-estimation successor after the single-frame production observation layer is stabilized; S12 stays separate.
 
 ## Next action
 
-Start S11 production recovery with the separate P2 no-interface repair under Lane C independent review. After P2 is accepted, design the conservative Spatial positive-evidence production fallback as a separate mutation, preserving P0-first acceptance and the fact that a flat/near-horizontal path is not physically invalid Oil. Once the single-frame production observation layer is stabilized, run the offline temporal trajectory probe for observed/estimated/unavailable result reconstruction. S12 UI/UX refinement remains separate.
+Design and classify the conservative Spatial positive-evidence production fallback as a separate mutation, preserving P0-first acceptance, retained collision/glare/structure/Foam protections and the fact that a flat/near-horizontal path is not physically invalid Oil. Do not couple Spatial to the merged P2 semantics unless new interaction evidence requires it. Once the single-frame production observation layer is stabilized, run the separately owned offline temporal trajectory probe for observed/estimated/unavailable result reconstruction. S12 UI/UX refinement remains separate.
