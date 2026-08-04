@@ -16,6 +16,7 @@ from .oil_shadow_observations import (
     evaluate_typed_current_observation,
     extract_raw_observations,
 )
+from .oil_spatial_fallback import build_spatial_positive_fallback_frame
 from .oil_shadow_temporal import (
     CanonicalTemporalReduction,
     GlassTemporalRecord,
@@ -957,6 +958,21 @@ class OilHypothesisPipeline:
                 frame_height=int(payload.pre.gray.shape[0]),
                 frame_width=int(payload.pre.gray.shape[1]),
             )
+            if isinstance(current, ShadowAmbiguousObservation):
+                spatial_fallback = build_spatial_positive_fallback_frame(
+                    pre=payload.pre,
+                    effective_mask=payload.effective_mask,
+                    ellipse_mask=payload.ellipse_mask,
+                    exclusion_mask=payload.exclusion_mask,
+                    static_artifact_map=payload.static_artifact_map,
+                    base_raw_observations=raw,
+                    crop_origin_y=payload.crop_origin_y,
+                    bounds=self.bounds,
+                    accepted_foam_front_local_y=payload.accepted_foam_front_local_y,
+                    accepted_foam_component_mask=payload.accepted_foam_component_mask,
+                )
+                if spatial_fallback is not None:
+                    raw_frame = spatial_fallback
         except Exception as exc:
             return self._failure_outcome(
                 _failure_reason(exc), PipelineFailureStage.EVIDENCE_CONSTRUCTION
