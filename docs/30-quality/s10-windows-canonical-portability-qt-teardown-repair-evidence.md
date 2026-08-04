@@ -64,3 +64,21 @@ Portability-focused Mac regression: `119 passed`. Windows behavior remains unver
 The next owner must validate the same feature HEAD on supported Windows 10/11 with Python 3.14. It must rerun the focused portability/Qt regressions and fresh canonical `python -m pytest`, record terminal exit code and warnings, and specifically check whether any dispatcher-destruction or invalid-handle failure remains.
 
 A Windows-only failure in the repaired owners returns to this repair lineage. A materially distinct runtime or packaging failure is classified separately rather than silently absorbed. Only after exact-head Windows validation should the Lane C Fresh Auditor proceed.
+
+## PR #77 exact-head continuation: final two Windows regressions
+
+Windows validation of PR #77 head `8cc6d0fe5640a65f5a9c91b42f62d831fd99832b` reported that the earlier portability and dirty-window teardown blockers were cleared, leaving two test-contract failures.
+
+Result Action production behavior remains unchanged. Its local-file URL regression now converts `QUrl.toLocalFile()` back to resolved `Path` values before comparison, so filesystem identity rather than `/` versus `\\` spelling is asserted.
+
+All four `tests/unit/test_result_review_playback.py` tests now request the repository-owned Qt lifecycle: the existing first case through `qtbot`, and the remaining timer/controller cases through `qapp`. No `ResultReviewController` timer, playback, or production event-loop behavior is changed.
+
+Mac continuation evidence:
+
+- both reported focused regressions: `2 passed`;
+- complete Result Actions + Result Review playback unit files: `7 passed`;
+- Result Review playback consumers plus shared Qt lifecycle: `30 passed`;
+- collection confirms all four Result Review playback tests are selected by `-m qt_app`;
+- full Mac `python -m pytest -q -m qt_app --maxfail=1`: `223 passed, 1071 deselected`, exit `0`.
+
+Windows behavior is still unverified for the new feature head. The next gate must first rerun the two focused regressions on Windows, then `python -m pytest -m qt_app`, then canonical `python -m pytest`.

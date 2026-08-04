@@ -65,7 +65,7 @@ def test_open_seek_step_speed_and_actual_timestamp(qtbot):
     assert readers[0].closed is True
 
 
-def test_opening_replacement_closes_previous_reader():
+def test_opening_replacement_closes_previous_reader(qapp):
     readers = []
 
     def factory(path):
@@ -82,7 +82,7 @@ def test_opening_replacement_closes_previous_reader():
     assert readers[1].closed is True
 
 
-def test_play_pause_tick_and_end_of_video_auto_stop():
+def test_play_pause_tick_and_end_of_video_auto_stop(qapp):
     controller = ResultReviewController(lambda path: _Reader(path, duration=1.0, fps=10.0))
     controller.open_video("source.mp4", 0.0)
     controller.play()
@@ -95,7 +95,7 @@ def test_play_pause_tick_and_end_of_video_auto_stop():
     controller.close()
 
 
-def test_close_stops_timer_and_releases_reader():
+def test_close_stops_timer_and_releases_reader(qapp):
     reader = _Reader("source.mp4")
     controller = ResultReviewController(lambda _path: reader)
     controller.open_video("source.mp4")
