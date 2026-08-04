@@ -156,10 +156,10 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
-- **Major result:** Initial post-S10 Windows field diagnosis demonstrates severe under-detection and false no-interface behavior under clear-to-dark lighting variation; source repair is not yet authorized until representative truth and failure-stage attribution are established.
-- **Next gate:** S11-A real-field failure attribution and truth/corpus planning using local/private field video plus the existing `.oiltruth` and regression workflow.
+- **Major result:** Initial post-S10 Windows field diagnosis exposed severe under-detection and false no-interface behavior under lighting variation. Repository-local truth-positive frames reproduce the same exposure-sensitivity failure class under controlled photometric transforms, and the agreed first direction is to retain OpenCV while testing relative/local phase evidence plus exposure-decoupled no-interface semantics.
+- **Next gate:** S11-A controlled architecture probe on the frozen S6 corpus: compare current behavior with relative photometric phase evidence, exposure-decoupled no-interface evidence and their combination before selecting the smallest sufficient source repair.
 - **Priority:** `P0`
-- **Detail:** [S11 real-field detector effectiveness plan](../30-quality/s11-real-field-detector-effectiveness-plan.md)
+- **Detail:** [S11 real-field detector effectiveness plan](../30-quality/s11-real-field-detector-effectiveness-plan.md), [S11-A detector direction and experiment plan](../30-quality/s11-a-detector-direction-and-experiment-plan.md)
 
 ### S12 — Post-S10 UI/UX Refinement
 

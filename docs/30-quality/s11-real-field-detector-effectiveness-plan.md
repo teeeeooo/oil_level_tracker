@@ -2,9 +2,9 @@
 
 ## Authority and status
 
-This document owns the S11 real-field detector diagnosis, evidence plan and acceptance boundaries. Milestone state and current next action remain owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md).
+This document owns the S11 real-field detector diagnosis, evidence plan and acceptance boundaries. Milestone state and current next action remain owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). The agreed S11-A reproducible-corpus and detector-direction decision is recorded in [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md).
 
-**Status:** `ACTIVE — S11-A diagnosis/truth planning`
+**Status:** `ACTIVE — S11-A reproducible-corpus architecture probe planning`
 
 S11 starts after the accepted S10 Windows/package gate. The immediate product risk is detector effectiveness on field-representative sight-glass video, not packaging or UI-platform viability.
 
@@ -23,15 +23,16 @@ Private/local video characteristics reported by the user:
 - Base and Accum Glasses use identical detector settings;
 - Base recipe: center `(265.7, 431.0)`, radius `(131.0, 129.8)`, zero-line Y `423.7`, initial state `PARTIAL_VISIBLE`;
 - Accum recipe: center `(996.7, 404.1)`, radius `(110.2, 110.2)`, zero-line Y `325.7`, initial state `EMPTY_NO_INTERFACE`.
+
 ### Aggregate behavior
 
 - Base: 0 Oil-Y detections across 1440 analyzed frames; dominant state `UNKNOWN_REVIEW`.
 - Accum: 41 Oil-Y detections across 1441 analyzed frames, about 2.8%; dominant states `FULL_NO_INTERFACE` / `EMPTY_NO_INTERFACE`.
 - Lighting changes materially during the interval. Base becomes very dark around 700 s; Accum is clearly visible in some segments and occluded by a hand around 913 s.
 
-User/LVLM visual review reported a clearly visible Base boundary around 480 s and 913 s. Accum also showed a visible boundary in at least the 480 s review, but the narrative used both `full` and `partially filled` wording. S11 must resolve that physical label through user-confirmed truth rather than treating the LVLM description as authoritative fill-state truth.
+User/LVLM visual review reported a clearly visible Base boundary around 480 s and 913 s. Accum also showed a visible boundary in at least the 480 s review, but the narrative used both `full` and `partially filled` wording. These field descriptions remain diagnostic observations only and are not an S11 user-truth or repeatable development corpus.
 
-Coordinate conventions also require reconciliation: the visual-review Y values were reported in a different apparent frame/crop convention than detector `projected_source_y`. This does not invalidate the diagnostic observation that the detector produced a plausible source-space boundary near the configured Base reference line.
+Source inspection resolved the coordinate convention. Detector `projected_source_y` is source-frame Y (`roi_local_y + crop_origin_y`), and product `.oiltruth` also owns `source_frame_y` as the authoritative coordinate with ROI-local and zero-line values derived from it. Any future copied field Y note must therefore be interpreted only after confirming the original source-frame convention.
 
 ## Load-bearing debug observations
 
@@ -79,19 +80,20 @@ These are investigation hypotheses, not accepted root-cause claims:
 3. Ambiguity and no-interface competitors may jointly suppress an otherwise usable Base candidate before temporal tracking can accumulate positive motion/history evidence.
 4. Current identical detector settings may not adequately model the markedly different photometric conditions of the two Glasses, but per-video/fixture tuning is not an acceptable repair by itself.
 5. Initial state may influence downstream behavior and must be measured, but it must not be blamed without controlled evidence.
+
 ## S11-A required evidence
 
-Before detector mutation:
+Before production detector mutation:
 
-- freeze representative clear-boundary, dark/low-contrast, occluded/unusable and successful-detection frames or short sequences from the same private video;
-- record user-confirmed/corrected `.oiltruth` for usable observations rather than promoting LVLM labels to product truth;
-- reconcile source-frame, ROI/crop and zero-line coordinate conventions;
-- capture the complete path from preprocessing/edge evidence through proposals, semantic hypotheses, canonical outcome and temporal action;
-- compare the failed Base candidate with nearby accepted/failed Accum frames under the same detector settings;
-- establish whether no-interface confidence is primarily brightness/dynamic-range driven or reflects a separate evidence owner;
-- preserve dataset/video bytes and settings identity for controlled base/feature comparison.
+- retain the private Windows observations as diagnostic failure-class evidence only; repeated private-video extraction is not an S11 development dependency;
+- use the repository-local four-video S6 corpus, frozen Recipes, `13` usable user-confirmed truth cases and existing structural/Foam/glare regressions as the reproducible authority;
+- preserve the resolved source-frame Y convention when interpreting any copied field coordinate;
+- use controlled brightness/gamma/contrast transformations of truth-positive local frames as metamorphic probes for exposure sensitivity without creating new truth labels;
+- compare `P0` current behavior with `P1` relative/local photometric phase evidence, `P2` exposure-decoupled no-interface evidence and `P3` combined behavior before selecting production source repair;
+- capture the path from preprocessing/edge evidence through proposals, semantic hypotheses, no-interface evidence, canonical outcome and temporal action for representative native and transformed cases;
+- preserve dataset/video/settings identity for controlled base/feature comparison and retain S5-A/S5-B negative protection.
 
-Only after this attribution should Orchestrator classify the smallest justified source lane. A bounded existing-owner defect may remain Lane B; any change to S5-B observability, temporal positive evidence, shared detector contract or validation architecture is Lane C.
+The detailed experiment and design decision is owned by [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md). The source task begins with a provisional Lane C assumption because the leading direction may change no-interface/positive-evidence semantics; it may narrow to Lane B only if the probe proves a materially smaller existing-owner defect with the S5-B contract unchanged.
 
 ## Repair acceptance boundary
 
