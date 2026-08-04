@@ -2,9 +2,9 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE — production detector recovery`
-**Current gate:** `S11-B — Spatial positive-evidence production fallback fresh exact-head audit`
+**Current gate:** `S11 — Offline Temporal Trajectory probe`
 
-S10 is closed. S11 remains the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. The P2 no-interface semantics repair is now merged; any further detector mutation remains separately scoped and must preserve the accepted S5-A Foam and S5-B fail-closed observability contracts.
+S10 is closed. S11 remains the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. The P2 no-interface semantics repair and conservative Spatial positive-evidence fallback are now merged. The single-frame production observation layer is stable enough for the separately owned Offline Temporal Trajectory diagnostic gate; any later production result/schema integration remains separately classified.
 
 ## Current evidence owners
 
@@ -16,13 +16,13 @@ S10 is closed. S11 remains the P0 successor because a Windows field run on a vis
 - S5-B observability/temporal architecture: [`../20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 - Post-S10 UX authority: [`../10-product/ux-improvement-plan.md`](../10-product/ux-improvement-plan.md)
 
-## Latest recorded closeout — S11-B P2 No-Interface Production Repair
+## Latest recorded closeout — S11-B Spatial Positive-Evidence Production Fallback
 
-PR #82 exact base `a38ee44f68cac519c5e90cbf3150d963b7da13eb` / exact head `d3204d90a04fbe7496808e77034ac268e92f477c` passed fresh Lane C exact-head audit and native guarded-squash-merged as `ebabcf9dd35bf3ec88be37c29ebadbeaac46144a`. The bounded four-file repair removes absolute raw brightness from positive interface-absence evidence, measures no-interface uniformity on the normalized raster, and retains current-frame visibility in adjacent identifiability reliability while preserving raw FULL/EMPTY appearance only for typed fill-state distinction. Auditor exact-head focused validation passed `154` tests with `git diff --check` clean; an independent 1,323-case controlled/collision/texture/geometry counterfactual probe found zero acceptance sign flips from the visibility seam. This closes only the P2 semantics repair: no detector/general-field accuracy PASS or S11 completion is inferred.
+PR #83 exact base `1e83aac0643b0734fa1d67dfa30b88da6f3bd31e` / exact head `7378207b31f1a83cc0472adafa376a5b09aa14f6` passed fresh Lane C exact-head audit and native guarded-squash-merged as `1a4381c6be87068a083b26b72ca332a9e8baf9b0`. The bounded eight-file feature keeps ordinary P0/S6-D4/P2 evaluation first, runs Spatial only after genuine `ShadowAmbiguousObservation`, requires a five-sector non-degenerate current-frame path before relative-phase recovery can publish, and still routes accepted evidence through Phase-A, the single serialized reducer, canonical outcome and production projection. Auditor focused validation passed `170` tests with `git diff --check` clean; independent same-source timing measured native-case median `126.35 → 150.94 ms` with recovered rows near `458–460 ms`, consistent with the static `5 × 25` path-search bound and the supported offline lifecycle. The historical P2×Spatial diagnostic assertion expecting pre-P2 `P0=no_interface` remains a pre-existing stale test contract and is not a PR #83 regression. S11 remains `ACTIVE`; no general detector-accuracy PASS is claimed.
 
-## Current focused feature — S11-B Spatial Positive-Evidence Production Fallback
+## Accepted single-frame production state
 
-The focused feature starts from exact main `1e83aac0643b0734fa1d67dfa30b88da6f3bd31e` and is pending fresh Lane C exact-head audit. The production route is P0/D4-first and runs only after the complete current-frame path remains ambiguous. Relative broad phase may form a candidate, but numeric Oil still requires a bounded five-sector cross-ROI path proving additional x-resolved information; scalar relative phase alone cannot publish. The path-span non-degeneracy condition is a conservative fallback abstention rule, not a claim that valid Oil must slope or curve. Actual production native evidence is `7/13 → 9/13` with recoveries at `sample2:30` and `sample2:60`, zero existing-anchor changes, collision/glare/structure/Foam protections retained in the focused suite, no new temporal owner/state and no settings/schema/dependency expansion. See [`../30-quality/s11-b-spatial-positive-evidence-production.md`](../30-quality/s11-b-spatial-positive-evidence-production.md).
+P2 and Spatial are now separate accepted S11-B production responsibilities. The ordinary P0/D4/P2 route remains authoritative; Spatial is a conservative ambiguity-only current-frame fallback and cannot override accepted no-interface or unavailable outcomes. Relative broad phase alone cannot publish numeric Oil: the five-sector path must add genuinely x-resolved information, while flat/near-horizontal Oil is allowed to remain ambiguous rather than being classified invalid. Spatial retains no history/state and introduces no setting, schema, dependency or post-owner numeric reconstruction. Detailed evidence remains in [`../30-quality/s11-b-spatial-positive-evidence-production.md`](../30-quality/s11-b-spatial-positive-evidence-production.md).
 
 ## S11 current diagnosis
 
@@ -35,11 +35,11 @@ The focused feature starts from exact main `1e83aac0643b0734fa1d67dfa30b88da6f3b
 - The completed P0/P1/P2/P3 probe showed that stronger scalar relative phase can recover some Oil but creates unsafe collision false Oil; the selected P2 semantics repair safely reduces exposure-driven false no-interface without recovering numeric Oil.
 - PR #82 has now merged that P2 repair into the canonical S5-B owner, retaining raw FULL/EMPTY appearance only for typed fill-state distinction and preserving fail-closed ambiguity, glare/structure protection, S5-A Foam independence and serialized temporal ownership.
 - The merged Spatial Path probe recovered two additional native Oil rows while preserving the retained collision/glare/structure/Foam protections in targeted evidence, establishing cross-ROI spatial information as a useful bounded positive-evidence direction.
-- The focused production feature now reproduces those two native recoveries through the canonical S5-B owner while retaining the original seven numeric anchors and the targeted collision/glare/structure/Foam protections; it remains unaccepted until fresh exact-head audit.
+- PR #83 now carries those two native Spatial recoveries through the canonical S5-B owner while retaining the original seven numeric anchors and the targeted collision/glare/structure/Foam/P2 protections.
 - Its non-degenerate path span is only a proof of additional x-resolved fallback information, not a universal physical Oil discriminator; valid flat/near-horizontal Oil can remain ambiguous without being classified invalid.
 - The merged P2 × Spatial interaction probe found no material numeric-recovery interaction, so Spatial remains a separate secondary positive-evidence fallback rather than a P2-coupled recovery mechanism.
 - Offline temporal trajectory estimation remains a separate result-estimation successor after the single-frame production observation layer is stabilized; S12 stays separate.
 
 ## Next action
 
-Run a fresh Lane C Independent Auditor exact-head review of the focused Spatial production feature. Only after `AUDIT: PASS` may the Auditor mark the Draft PR Ready, guarded-merge it, synchronize main and record bounded Close evidence. If accepted, the next separately owned detector gate is the offline temporal trajectory probe for observed/estimated/unavailable result reconstruction. S12 UI/UX refinement remains separate.
+Run the separately owned Offline Temporal Trajectory probe against the stabilized single-frame observation stream. Preserve raw accepted/ambiguous/no-interface observations and evaluate an explicit `observed` / `estimated` / `unavailable` trajectory with abstention across unsupported gaps. This next gate is diagnostic evidence work only until its owner independently classifies any production result fields, persisted/exported provenance, graph reconstruction or detector feedback. S12 UI/UX refinement remains separate.
