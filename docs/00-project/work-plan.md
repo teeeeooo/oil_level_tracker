@@ -1,8 +1,8 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `ACTIVE — spatial current-frame detector architecture probing`
-**Current gate:** `S11-A — Spatial Path / cross-ROI consistency probe`
+**Milestone status:** `ACTIVE — current-frame evidence interaction probing`
+**Current gate:** `S11-A — P2 × Spatial interaction probe`
 
 S10 is closed. S11 is now the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. No detector source change is authorized until the failure stage and truth/evidence contract are established.
 
@@ -28,9 +28,11 @@ PR #78 exact base `f52e477e71f562744ccb27846c9248a8b46fb310` / exact head `0805e
 - These observations are diagnostic evidence, not authoritative detector-accuracy truth. Source inspection resolved the detector/product source-frame Y convention, and the private field video is not a repeatable S11 development corpus.
 - Repository-local truth-positive frames reproduce the same exposure-sensitivity class under controlled brightness changes: valid Oil can become ambiguous or false no-interface as absolute photometric evidence weakens.
 - The completed P0/P1/P2/P3 probe showed that stronger scalar relative phase can recover some Oil but creates unsafe collision false Oil; P2 safely reduces exposure-driven false no-interface without recovering numeric Oil.
-- The next selected detection question is whether cross-ROI spatial path/curve consistency supplies genuinely new positive current-frame evidence while preserving S5-B collision, glare, structure and Foam protections.
-- Offline temporal trajectory estimation remains a separate result-estimation successor after spatial observation recovery; S12 stays separate.
+- The merged Spatial Path probe recovered two additional native Oil rows while preserving the retained collision/glare/structure/Foam protections in targeted evidence, establishing cross-ROI spatial information as a useful bounded positive-evidence direction.
+- The spatial probe remains conservative and is not itself a production cutover: its non-degenerate-path gate must not be treated as a universal physical Oil discriminator, especially for valid near-horizontal surfaces.
+- P2 and Spatial now have complementary roles: P2 can prevent exposure-driven false no-interface from prematurely closing a frame, while Spatial can test ambiguous current-frame candidates for additional cross-ROI support.
+- Offline temporal trajectory estimation remains a separate result-estimation successor after the single-frame interaction is understood; S12 stays separate.
 
 ## Next action
 
-Run the bounded S11-A Spatial Path / cross-ROI consistency probe defined by [`../30-quality/s11-a-detector-direction-and-experiment-plan.md`](../30-quality/s11-a-detector-direction-and-experiment-plan.md). Test whether current-frame spatial coherence can recover residual Oil misses without weakening S5-B fail-closed collision semantics, glare/structure/Foam protection or bounded resources. Keep P2 as a separate Lane C production no-interface repair candidate and keep offline temporal trajectory estimation as a later result-estimation probe. S12 UI/UX refinement remains separate.
+Run a bounded diagnostic P2 × Spatial interaction probe on the same frozen S6 evidence. Test whether exposure-decoupled no-interface semantics can convert false no-interface to ambiguity and thereby expose additional cases to the already-probed spatial gate without creating false numeric Oil or weakening S5-B collision/glare/structure/Foam protection. Do not perform production cutover in this probe. After the interaction result, classify the smallest production mutation and then proceed to the separately owned offline temporal trajectory probe. S12 UI/UX refinement remains separate.

@@ -156,8 +156,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
-- **Major result:** The merged S11-A P0/P1/P2/P3 evidence probe reproduced the field-derived exposure failure class on the local corpus, rejected scalar relative-phase P1/P3 because they create S5-B collision false Oil, and retained P2 only as a separate no-interface semantics repair candidate. No safe numeric-Oil production cutover is yet demonstrated.
-- **Next gate:** Probe cross-ROI Spatial Path / curve consistency as the next current-frame positive-evidence candidate. Keep P2 production repair and later offline temporal trajectory estimation as separate responsibilities until each is independently justified.
+- **Major result:** The merged S11-A evidence probes rejected unsafe scalar relative-phase recovery, retained P2 as an exposure-decoupled no-interface repair candidate, and showed that a conservative cross-ROI spatial gate can recover two additional native Oil rows while preserving retained collision/glare/structure/Foam protections. The spatial probe is evidence for a useful direction, not a universal flat-vs-nonflat Oil discriminator or production cutover.
+- **Next gate:** Run a bounded P2 × Spatial interaction probe before selecting a production repair. Then classify the smallest production mutation and keep offline temporal trajectory estimation as the separate successor for continuous result reconstruction.
 - **Priority:** `P0`
 - **Detail:** [S11 real-field detector effectiveness plan](../30-quality/s11-real-field-detector-effectiveness-plan.md), [S11-A detector direction and experiment plan](../30-quality/s11-a-detector-direction-and-experiment-plan.md)
 
