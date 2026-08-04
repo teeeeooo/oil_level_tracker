@@ -156,8 +156,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
-- **Major result:** The merged S11-A evidence probes rejected unsafe scalar relative-phase recovery, retained P2 as an exposure-decoupled no-interface repair candidate, and showed that a conservative cross-ROI spatial gate can recover two additional native Oil rows while preserving retained collision/glare/structure/Foam protections. The spatial probe is evidence for a useful direction, not a universal flat-vs-nonflat Oil discriminator or production cutover.
-- **Next gate:** Run a bounded P2 × Spatial interaction probe before selecting a production repair. Then classify the smallest production mutation and keep offline temporal trajectory estimation as the separate successor for continuous result reconstruction.
+- **Major result:** S11-A probing is complete enough to select production work: unsafe scalar relative-phase recovery is rejected; P2 safely removes demonstrated exposure-driven false no-interface evidence; Spatial recovers two additional native Oil rows while retaining bounded negative protections; and the merged interaction probe found no material combined-only recovery. P2 and Spatial therefore remain separate production candidates, while temporal trajectory estimation remains a separate result-layer responsibility.
+- **Next gate:** Implement the P2 no-interface semantics repair first under Lane C independent review, then evaluate a separate conservative Spatial production fallback, and finally probe offline temporal trajectory estimation on the stabilized single-frame observation stream.
 - **Priority:** `P0`
 - **Detail:** [S11 real-field detector effectiveness plan](../30-quality/s11-real-field-detector-effectiveness-plan.md), [S11-A detector direction and experiment plan](../30-quality/s11-a-detector-direction-and-experiment-plan.md)
 

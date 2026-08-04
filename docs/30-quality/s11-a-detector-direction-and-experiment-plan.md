@@ -144,20 +144,19 @@ Trajectory validation should begin without creating dense new truth. At existing
 
 Read-only sequence inspection also shows why spatial detection precedes trajectory estimation: some residual anchors such as sample2 `0/30/60`, sample3 `900`, and base sample1 `240` have little or no nearby accepted Oil measurement to interpolate. Temporal estimation cannot recover information that the observation layer never supplies.
 
-The current successor order is therefore:
+The completed Spatial and P2 × Spatial probes resolve the remaining S11-A sequencing question.
 
-1. close the existing P0/P1/P2/P3 probe evidence;
-2. run a bounded Spatial Path / cross-ROI consistency probe;
-3. retain P2 as an independent no-interface production repair candidate;
-4. probe offline temporal trajectory estimation as a separate result layer;
-5. combine spatial, temporal and P2 evidence only after each responsibility is independently justified.
+- Spatial current-frame evidence is useful: the conservative diagnostic gate raises native numeric Oil coverage from `7/13` to `9/13` while retaining the targeted S5-B collision, glare, structure and Foam protections. Its `path_span > 1 px` rule is diagnostic non-degeneracy, not a physical rule that real Oil must slope; valid near-horizontal Oil can still require a different future spatial representation.
+- P2 and Spatial have **no material numeric-recovery interaction** in the bounded reproducible evidence. P2 converts the known low-exposure false no-interface cases to ambiguity, but none then exposes an accepted Spatial candidate. Combined-only recovery is zero across native, `0.60×` and `0.45×` evidence.
+- The absence of interaction means the two mechanisms should not be bundled merely to improve numeric coverage. Each has a separate product responsibility and can be released or rolled back independently.
 
-The Lane-B spatial Worker branch records its bounded result in
-`docs/30-quality/s11-a-spatial-path-cross-roi-probe.md`. The diagnostic gate requires a
-non-degenerate cross-ROI local phase path and recovers two native residual rows while preserving
-the retained collision/glare/Foam protections in its targeted evidence. This is navigation to the
-Worker evidence only; production mutation, Lane selection for that mutation, and successor
-sequencing remain Orchestrator decisions after exact-head review.
+The selected S11 production sequence is therefore:
+
+1. **P2 no-interface production repair** — first, because it directly repairs the demonstrated field/exposure semantic defect without inventing numeric Oil. This changes S5-B no-interface/observability meaning and therefore requires Lane C Worker + fresh independent Auditor.
+2. **Spatial positive-evidence production fallback** — second, as a separate conservative P0-first recovery path. Production design must preserve canonical typed outcome/projection ownership, retained collision/glare/Foam protections, and the claim boundary that flat/near-horizontal Oil is not invalid. Its actual mutation remains subject to fresh lane classification, expected to reach Lane C if S5-B acceptance architecture changes.
+3. **Offline temporal trajectory probe** — third, after the single-frame production observation stream is stabilized. Preserve raw observations and evaluate a distinct `observed` / `estimated` / `unavailable` trajectory using earlier and later evidence with abstention across unsupported gaps. Start validation with held-out existing truth rather than accepting visual smoothness.
+
+P2, Spatial and Temporal are therefore complementary **responsibilities**, not one coupled detector algorithm. S11-A architecture probing is complete enough to begin production recovery work; additional general web research or mechanism brainstorming is not a prerequisite for the next mutation. New investigation should be triggered by production validation evidence, a remaining failure class, or materially new field data rather than by open-ended search.
 
 ## Lane and ownership implication
 

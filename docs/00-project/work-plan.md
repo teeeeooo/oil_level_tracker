@@ -1,8 +1,8 @@
 # Rotary Oil Level Tracker — Active Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `ACTIVE — current-frame evidence interaction probing`
-**Current gate:** `S11-A — P2 × Spatial interaction probe`
+**Milestone status:** `ACTIVE — production detector recovery`
+**Current gate:** `S11-B — P2 no-interface production repair`
 
 S10 is closed. S11 is now the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. No detector source change is authorized until the failure stage and truth/evidence contract are established.
 
@@ -30,9 +30,10 @@ PR #78 exact base `f52e477e71f562744ccb27846c9248a8b46fb310` / exact head `0805e
 - The completed P0/P1/P2/P3 probe showed that stronger scalar relative phase can recover some Oil but creates unsafe collision false Oil; P2 safely reduces exposure-driven false no-interface without recovering numeric Oil.
 - The merged Spatial Path probe recovered two additional native Oil rows while preserving the retained collision/glare/structure/Foam protections in targeted evidence, establishing cross-ROI spatial information as a useful bounded positive-evidence direction.
 - The spatial probe remains conservative and is not itself a production cutover: its non-degenerate-path gate must not be treated as a universal physical Oil discriminator, especially for valid near-horizontal surfaces.
-- P2 and Spatial now have complementary roles: P2 can prevent exposure-driven false no-interface from prematurely closing a frame, while Spatial can test ambiguous current-frame candidates for additional cross-ROI support.
-- Offline temporal trajectory estimation remains a separate result-estimation successor after the single-frame interaction is understood; S12 stays separate.
+- The merged P2 × Spatial interaction probe found no material numeric-recovery interaction: P2 converts known exposure-driven false no-interface to ambiguity, but those rescued frames expose no additional accepted Spatial candidate in the current reproducible evidence.
+- P2 and Spatial therefore remain independent production candidates rather than one coupled recovery mechanism. P2 has the strongest direct field-failure justification; Spatial remains a conservative secondary positive-evidence fallback with a known near-horizontal-path limitation.
+- Offline temporal trajectory estimation remains a separate result-estimation successor after the single-frame production observation layer is stabilized; S12 stays separate.
 
 ## Next action
 
-Run a bounded diagnostic P2 × Spatial interaction probe on the same frozen S6 evidence. Test whether exposure-decoupled no-interface semantics can convert false no-interface to ambiguity and thereby expose additional cases to the already-probed spatial gate without creating false numeric Oil or weakening S5-B collision/glare/structure/Foam protection. Do not perform production cutover in this probe. After the interaction result, classify the smallest production mutation and then proceed to the separately owned offline temporal trajectory probe. S12 UI/UX refinement remains separate.
+Start S11 production recovery with the separate P2 no-interface repair under Lane C independent review. After P2 is accepted, design the conservative Spatial positive-evidence production fallback as a separate mutation, preserving P0-first acceptance and the fact that a flat/near-horizontal path is not physically invalid Oil. Once the single-frame production observation layer is stabilized, run the offline temporal trajectory probe for observed/estimated/unavailable result reconstruction. S12 UI/UX refinement remains separate.
