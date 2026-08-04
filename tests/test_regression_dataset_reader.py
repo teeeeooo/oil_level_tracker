@@ -167,13 +167,26 @@ def test_unknown_or_unavailable_category_is_not_silently_other(tmp_path):
         FilesystemRegressionDatasetReader().load(ambiguous)
 
 
-@pytest.mark.parametrize("unsafe", ["/absolute/fixture", "../outside-fixture"])
-def test_absolute_and_parent_traversal_fixture_paths_are_rejected(tmp_path, unsafe):
-    dataset_root = export_benchmark_dataset(tmp_path, label=f"unsafe-{unsafe[-3:]}")
+@pytest.mark.parametrize(
+    ("kind", "expected_message"),
+    [
+        ("absolute", "absolute paths are not allowed"),
+        ("traversal", "path traversal"),
+    ],
+)
+def test_absolute_and_parent_traversal_fixture_paths_are_rejected(
+    tmp_path, kind, expected_message
+):
+    dataset_root = export_benchmark_dataset(tmp_path, label=f"unsafe-{kind}")
+    unsafe = (
+        str((tmp_path / "outside-fixture").resolve())
+        if kind == "absolute"
+        else "../outside-fixture"
+    )
     payload = read_json(dataset_root / "dataset_manifest.json")
     payload["fixtures"][0]["path"] = unsafe
     _refresh_dataset_manifest(dataset_root, payload)
-    with pytest.raises(RegressionDatasetError, match="absolute|traversal"):
+    with pytest.raises(RegressionDatasetError, match=expected_message):
         FilesystemRegressionDatasetReader().load(dataset_root)
 
 
@@ -212,8 +225,17 @@ def test_declared_hash_mismatch_is_rejected(tmp_path):
         FilesystemRegressionDatasetReader().load(dataset_root)
 
 
-@pytest.mark.parametrize("kind", ["recipe", "session", "frame"])
-def test_recipe_session_and_frame_identity_mismatch_are_rejected(tmp_path, kind):
+@pytest.mark.parametrize(
+    ("kind", "expected_message"),
+    [
+        ("recipe", "recipe snapshot hash mismatch"),
+        ("session", "session source-frame identity mismatch"),
+        ("frame", "truth and decoded frame index mismatch"),
+    ],
+)
+def test_recipe_session_and_frame_identity_mismatch_are_rejected(
+    tmp_path, kind, expected_message
+):
     dataset_root = export_benchmark_dataset(tmp_path, label=f"identity-{kind}")
     fixture = fixture_directory(dataset_root)
     if kind == "recipe":
@@ -232,7 +254,7 @@ def test_recipe_session_and_frame_identity_mismatch_are_rejected(tmp_path, kind)
         payload["frame_index"] += 1
         write_json(path, payload)
     rehash_dataset(dataset_root)
-    with pytest.raises(RegressionDatasetIntegrityError, match="recipe snapshot hash|recipe ID|session source-frame|frame index"):
+    with pytest.raises(RegressionDatasetIntegrityError, match=expected_message):
         FilesystemRegressionDatasetReader().load(dataset_root)
 
 

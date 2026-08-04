@@ -575,7 +575,7 @@ def test_store_is_immutable_complete_and_contains_no_raster():
 def test_obsolete_transaction_and_parallel_mutation_surface_is_absent():
     source_root = Path(pipeline_module.__file__).parent
     source = "\n".join(
-        path.read_text()
+        path.read_text(encoding="utf-8")
         for path in (
             source_root / "oil_shadow_pipeline.py",
             source_root / "oil_shadow_temporal.py",

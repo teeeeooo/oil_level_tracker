@@ -59,7 +59,6 @@ def _controller():
 def _window(qtbot):
     controller = _controller()
     window = MainWindow(controller, _Preview(), _Analysis(), DebugRenderer())
-    window._confirm_unsaved_profile_close = lambda: QMessageBox.StandardButton.Discard
     qtbot.addWidget(window)
     return window, controller
 

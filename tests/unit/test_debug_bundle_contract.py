@@ -120,18 +120,18 @@ def test_incomplete_debug_pointers_are_soft_warning(tmp_path):
 
 def test_invalid_debug_level_is_clear_bundle_error(tmp_path):
     root = _bundle(tmp_path)
-    index = json.loads((root / "review_index.json").read_text())
+    index = json.loads((root / "review_index.json").read_text(encoding="utf-8"))
     index["debug_trace_level"] = "verbose"
-    (root / "review_index.json").write_text(json.dumps(index))
+    (root / "review_index.json").write_text(json.dumps(index), encoding="utf-8")
     with pytest.raises(ResultBundleError, match="debug_trace_level"):
         ResultBundleReader().read(root)
 
 
 def test_debug_pointer_traversal_does_not_escape_and_disables_only_debug(tmp_path):
     root = _bundle(tmp_path, level="basic", pointers=True)
-    index = json.loads((root / "review_index.json").read_text())
+    index = json.loads((root / "review_index.json").read_text(encoding="utf-8"))
     index["debug_index"] = "../outside.json"
-    (root / "review_index.json").write_text(json.dumps(index))
+    (root / "review_index.json").write_text(json.dumps(index), encoding="utf-8")
     bundle = ResultBundleReader().read(root)
     assert bundle.samples
     assert "bundle 밖" in bundle.debug_warning

@@ -160,10 +160,10 @@ def test_existing_package_directory_is_not_overwritten(tmp_path, monkeypatch):
     existing = destination / "debug_case_fixed"
     existing.mkdir()
     marker = existing / "keep.txt"
-    marker.write_text("keep")
+    marker.write_text("keep", encoding="utf-8")
     with pytest.raises(DebugCaseExportError, match="덮어쓸 수 없습니다"):
         DebugCaseExporter().export(bundle, _Repository(), "record-1", destination)
-    assert marker.read_text() == "keep"
+    assert marker.read_text(encoding="utf-8") == "keep"
 
 
 def test_failure_cleans_temporary_output_and_keeps_bundle_unchanged(tmp_path, monkeypatch):

@@ -44,8 +44,8 @@ from user_truth_fixtures import (
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_DIRECT_NPZ_SHA256 = (
-    "8cb506aacafc697c5e2fec9a4f87ef7c3b371220d8b46454af6cc12f8d793feb"
+EXPECTED_DIRECT_LOGICAL_ARRAY_SHA256 = (
+    "0b434069a926093cdf2afd79f922f912ce8264b8fcbf3d85ed0569c35840e491"
 )
 EXPECTED_DIRECT_MANIFEST_SHA256 = (
     "9d49789d7b092dc5c0ef5c26e48b6d477dffcf02c0e0417970a0ea0fe1dcc7aa"
@@ -219,14 +219,35 @@ def test_direct_fifty_frame_bundle_identity_remains_exact(tmp_path):
     manifest_path.write_text(
         json.dumps(manifest, indent=2, sort_keys=True),
         encoding="utf-8",
+        newline="\n",
     )
 
     assert len(manifest) == 50
-    assert hashlib.sha256(npz_path.read_bytes()).hexdigest() == EXPECTED_DIRECT_NPZ_SHA256
+    assert _logical_array_fingerprint(frames) == EXPECTED_DIRECT_LOGICAL_ARRAY_SHA256
+    with np.load(npz_path, allow_pickle=False) as loaded:
+        round_trip = {key: loaded[key] for key in loaded.files}
+    assert _logical_array_fingerprint(round_trip) == EXPECTED_DIRECT_LOGICAL_ARRAY_SHA256
     assert (
         hashlib.sha256(manifest_path.read_bytes()).hexdigest()
         == EXPECTED_DIRECT_MANIFEST_SHA256
     )
+
+
+def _logical_array_fingerprint(arrays) -> str:
+    digest = hashlib.sha256()
+    for key in sorted(arrays):
+        array = np.ascontiguousarray(arrays[key])
+        metadata = json.dumps(
+            {"dtype": array.dtype.str, "key": key, "shape": list(array.shape)},
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        content = array.tobytes(order="C")
+        digest.update(len(metadata).to_bytes(8, "big"))
+        digest.update(metadata)
+        digest.update(len(content).to_bytes(8, "big"))
+        digest.update(content)
+    return digest.hexdigest()
 
 
 def _assert_complete_identity_equal(first: dict, second: dict) -> None:
@@ -266,13 +287,16 @@ print(json.dumps(dataset_identity_summary(dataset_path), sort_keys=True))
     env["PYTHONPATH"] = os.pathsep.join(
         (str(PROJECT_ROOT / "src"), str(PROJECT_ROOT / "tests"))
     )
+    env["PYTHONIOENCODING"] = "utf-8"
     completed = subprocess.run(
         (sys.executable, "-c", code, kind, str(root)),
         cwd=PROJECT_ROOT,
         env=env,
+        stdin=subprocess.DEVNULL,
         check=True,
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     return json.loads(completed.stdout)
 

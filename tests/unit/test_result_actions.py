@@ -20,14 +20,16 @@ def _bundle(tmp_path):
 def test_report_folder_and_capture_use_local_file_urls(tmp_path):
     root = _bundle(tmp_path)
     opened = []
-    service = ResultActionService(opener=lambda url: opened.append(url.toLocalFile()) or True)
+    service = ResultActionService(
+        opener=lambda url: opened.append(Path(url.toLocalFile()).resolve()) or True
+    )
     assert service.open_report(root).name == "report.html"
     assert service.open_folder(root) == root.resolve()
     assert service.open_capture(root, "captures/event.png").name == "event.png"
     assert opened == [
-        str((root / "report.html").resolve()),
-        str(root.resolve()),
-        str((root / "captures" / "event.png").resolve()),
+        (root / "report.html").resolve(),
+        root.resolve(),
+        (root / "captures" / "event.png").resolve(),
     ]
 
 

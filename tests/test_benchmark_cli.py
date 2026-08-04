@@ -74,7 +74,8 @@ def test_normal_benchmark_command_prints_output_path_and_counts(monkeypatch, cap
     assert code == 0
     assert _FakeService.calls == [("data", "results", None)]
     output = capsys.readouterr().out
-    assert "benchmark output: results/detector_benchmark_dataset_timestamp" in output
+    expected = Path("results") / "detector_benchmark_dataset_timestamp"
+    assert f"benchmark output: {expected}" in output
     assert "total=4 usable=3 unusable=1 categories=2" in output
 
 
@@ -145,7 +146,9 @@ def test_cli_import_is_headless_and_does_not_initialize_qt(headless_subprocess_e
         [sys.executable, "-c", code],
         cwd=Path(__file__).resolve().parents[1],
         env=headless_subprocess_env,
+        stdin=subprocess.DEVNULL,
         text=True,
+        encoding="utf-8",
         capture_output=True,
         check=False,
     )

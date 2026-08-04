@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import numpy as np
 from PySide6.QtCore import QObject, Signal
-from PySide6.QtWidgets import QMessageBox
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.application.preflight import (
@@ -113,7 +112,6 @@ def _window(qtbot):
     workbench = _workbench()
     preview = DummyPreviewController()
     window = MainWindow(workbench, preview, DummyAnalysisController(), DummyRenderer())
-    window._confirm_unsaved_profile_close = lambda: QMessageBox.StandardButton.Discard
     qtbot.addWidget(window)
     window.show()
     workbench.new_document(640, 480)

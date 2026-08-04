@@ -126,7 +126,7 @@ def test_reader_accepts_supported_entry_points(tmp_path, entry):
 
 def test_reader_recovers_old_bundle_without_review_index(tmp_path):
     root, _glass = _bundle(tmp_path, with_index=False)
-    session_payload = json.loads((root / "session.json").read_text())
+    session_payload = json.loads((root / "session.json").read_text(encoding="utf-8"))
     session_payload.pop("run_name")
     (root / "session.json").write_text(json.dumps(session_payload), encoding="utf-8")
 
@@ -189,9 +189,9 @@ def test_reader_rejects_unknown_glass_id(tmp_path):
 
 def test_reader_rejects_unsupported_review_index_version(tmp_path):
     root, _glass = _bundle(tmp_path)
-    index = json.loads((root / "review_index.json").read_text())
+    index = json.loads((root / "review_index.json").read_text(encoding="utf-8"))
     index["schema_version"] = 99
-    (root / "review_index.json").write_text(json.dumps(index))
+    (root / "review_index.json").write_text(json.dumps(index), encoding="utf-8")
     with pytest.raises(ResultBundleError, match="지원하지 않는"):
         ResultBundleReader().read(root)
 
@@ -199,9 +199,9 @@ def test_reader_rejects_unsupported_review_index_version(tmp_path):
 @pytest.mark.parametrize("malicious", ["../outside.csv", "/tmp/outside.csv"])
 def test_reader_rejects_bundle_path_traversal(tmp_path, malicious):
     root, _glass = _bundle(tmp_path)
-    index = json.loads((root / "review_index.json").read_text())
+    index = json.loads((root / "review_index.json").read_text(encoding="utf-8"))
     index["tracking_data"] = malicious
-    (root / "review_index.json").write_text(json.dumps(index))
+    (root / "review_index.json").write_text(json.dumps(index), encoding="utf-8")
     with pytest.raises(ResultBundleError, match="bundle 밖|벗어납니다"):
         ResultBundleReader().read(root)
 

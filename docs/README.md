@@ -41,6 +41,7 @@ A feature document must not maintain a competing project-wide “current next wo
 - Current project state and gate: [current work plan](./00-project/work-plan.md)
 - Long-term status: [project roadmap](./00-project/roadmap.md)
 - Current validation contract: [real-world validation plan](./30-quality/real-world-validation-plan.md)
+- Test portability and authoring contract: [test authoring portability contract](./30-quality/test-authoring-portability-contract.md)
 - S6-A repository sample evidence: [base sample qualification](./30-quality/s6-base-sample-1-evidence.md)
 - S6-B additional real-video evidence: [additional sample qualification](./30-quality/s6-additional-real-samples-evidence.md)
 - S6-C provisional truth diagnosis: [agent-assisted provisional comparison](./30-quality/s6-provisional-truth-comparison.md)
@@ -52,6 +53,7 @@ A feature document must not maintain a competing project-wide “current next wo
 - S6-D4 bounded available-corpus detector repair: [detector repair evidence](./30-quality/s6-d4-available-corpus-detector-repair.md)
 - S6-F one-hour long-duration resource stability: [one-hour stability evidence](./30-quality/s6-f-one-hour-long-duration-stability.md)
 - S9-C bounded field/overlay interaction implementation evidence: [field-overlay interaction polish evidence](./30-quality/s9-c-field-overlay-interaction-polish-evidence.md)
+- S10 Windows canonical portability and Qt teardown repair evidence: [S10 repair evidence](./30-quality/s10-windows-canonical-portability-qt-teardown-repair-evidence.md)
 - Manual platform gate: [manual GUI and Windows checklist](./30-quality/manual-gui-windows-checklist.md)
 - Detector benchmark guide: [golden video regression](./30-quality/golden-video-regression.md)
 

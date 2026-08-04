@@ -111,8 +111,8 @@ def _staging(tmp_path: Path) -> DebugTraceCompletion:
 def test_none_bundle_has_no_debug_directory_or_pointers(tmp_path):
     result, recipe, session = _inputs(tmp_path, DebugTraceLevel.NONE)
     output = _store().write_bundle(result, recipe, session, tmp_path)
-    index = json.loads((output / "review_index.json").read_text())
-    manifest = json.loads((output / "analysis_manifest.json").read_text())
+    index = json.loads((output / "review_index.json").read_text(encoding="utf-8"))
+    manifest = json.loads((output / "analysis_manifest.json").read_text(encoding="utf-8"))
     assert index["debug_trace_level"] == "none"
     assert index["debug_record_count"] == 0
     assert "debug_index" not in index and "debug_trace" not in index
@@ -127,8 +127,8 @@ def test_trace_bundle_copies_staging_and_adds_backward_compatible_optional_point
     result.debug_trace_completion = DebugTraceCompletion(completion.staging_directory, level.value, 1)
     staging = Path(completion.staging_directory)
     output = _store().write_bundle(result, recipe, session, tmp_path)
-    index = json.loads((output / "review_index.json").read_text())
-    manifest = json.loads((output / "analysis_manifest.json").read_text())
+    index = json.loads((output / "review_index.json").read_text(encoding="utf-8"))
+    manifest = json.loads((output / "analysis_manifest.json").read_text(encoding="utf-8"))
     assert index["schema_version"] == 1
     assert index["debug_trace_level"] == level.value
     assert index["debug_schema_version"] == 1

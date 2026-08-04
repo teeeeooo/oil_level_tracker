@@ -89,7 +89,7 @@ def test_new_bundle_writes_review_index_without_removing_existing_outputs(tmp_pa
     assert (output / "review_index.json").is_file()
     for filename in ("report.html", "tracking_data.csv", "events.csv", "recipe_snapshot.oilrecipe", "session.json", "analysis_manifest.json"):
         assert (output / filename).is_file()
-    index = json.loads((output / "review_index.json").read_text())
+    index = json.loads((output / "review_index.json").read_text(encoding="utf-8"))
     assert index["schema_version"] == 1
     assert index["source_metadata"]["width"] == 320
     assert index["glasses"] == [{"id": glass.id, "name": glass.name, "result_status": "PASS"}]
@@ -99,7 +99,7 @@ def test_new_bundle_writes_review_index_without_removing_existing_outputs(tmp_pa
 def test_manifest_points_to_relative_review_index(tmp_path):
     result, recipe, session, _glass = _inputs(tmp_path)
     output = _store().write_bundle(result, recipe, session, tmp_path)
-    manifest = json.loads((output / "analysis_manifest.json").read_text())
+    manifest = json.loads((output / "analysis_manifest.json").read_text(encoding="utf-8"))
     assert manifest["review_index"] == "review_index.json"
 
 
@@ -128,9 +128,9 @@ def test_run_name_drives_safe_folder_and_persisted_review_metadata(tmp_path):
 
     assert output.parent == tmp_path
     assert "반복_시험_03" in output.name
-    saved_session = json.loads((output / "session.json").read_text())
-    index = json.loads((output / "review_index.json").read_text())
-    manifest = json.loads((output / "analysis_manifest.json").read_text())
+    saved_session = json.loads((output / "session.json").read_text(encoding="utf-8"))
+    index = json.loads((output / "review_index.json").read_text(encoding="utf-8"))
+    manifest = json.loads((output / "analysis_manifest.json").read_text(encoding="utf-8"))
     assert saved_session["run_name"] == "반복 시험 / 03"
     assert index["run_name"] == "반복 시험 / 03"
     assert manifest["run_name"] == "반복 시험 / 03"
