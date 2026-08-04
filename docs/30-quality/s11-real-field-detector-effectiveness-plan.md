@@ -4,7 +4,7 @@
 
 This document owns the S11 real-field detector diagnosis, evidence plan and acceptance boundaries. Milestone state and current next action remain owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). The agreed S11-A reproducible-corpus and detector-direction decision is recorded in [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md).
 
-**Status:** `ACTIVE — S11-A reproducible-corpus architecture probe planning`
+**Status:** `ACTIVE — S11-B P2 no-interface production repair under independent review`
 
 S11 starts after the accepted S10 Windows/package gate. The immediate product risk is detector effectiveness on field-representative sight-glass video, not packaging or UI-platform viability.
 
@@ -94,6 +94,18 @@ Before production detector mutation:
 - preserve dataset/video/settings identity for controlled base/feature comparison and retain S5-A/S5-B negative protection.
 
 The detailed experiment and design decision is owned by [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md). The source task begins with a provisional Lane C assumption because the leading direction may change no-interface/positive-evidence semantics; it may narrow to Lane B only if the probe proves a materially smaller existing-owner defect with the S5-B contract unchanged.
+
+## S11-B P2 no-interface production contract
+
+The S11-B feature head applies the merged P2 diagnostic semantics inside the canonical S5-B current-frame no-interface owner. Absolute raw brightness may still describe whether an accepted no-interface scene looks more FULL-like or EMPTY-like, but that appearance no longer adds positive weight to interface absence. Positive no-interface likelihood remains a bounded fusion of weak-boundary evidence, normalized-frame spatial uniformity, current visibility, glare conflict and competing-boundary evidence.
+
+Uniformity is evaluated from the existing CLAHE-normalized current frame, while `full_likelihood`, `empty_likelihood`, raw mean intensity and raw texture remain diagnostic/fill-state evidence. This preserves the existing FULL/EMPTY downstream distinction without using either appearance likelihood as a hidden absence-score channel. No new detector setting, schema, dependency, temporal history or numeric Oil recovery path is introduced.
+
+Production integration also keeps global current-frame visibility in the adjacent single-frame identifiability reliability. The diagnostic P2 probe patched only no-interface evidence, so it did not expose this seam. Once the brightness-derived absence term was removed in production, a glare-threshold transition could otherwise reduce no-interface likelihood and accidentally create a small upward boundary-identifiability margin jump. Feeding the already-owned no-interface visibility into the existing reliability average preserves the prior glare/route-transition fail-closed contract without reintroducing absolute brightness as positive absence evidence.
+
+When the exposure-decoupled evidence is insufficient, the current frame remains ambiguous and cannot publish raw or smoothed numeric Oil. Genuine canonical no-interface still enters the unchanged serialized S5-B absence-stability path, including bounded stale-Oil clearing after stable absence. S5-A Foam, D4 positive Oil recovery, observational-equivalence collision protection, canonical projection and legacy-fallback prohibition remain separate and unchanged.
+
+The four S11-A metamorphic rescue anchors remain direct production acceptance evidence: `brightness 0.60 × sample3:900`, plus `brightness 0.45 × base_sample_1:144`, `sample3:900` and `sample3:1035`. Their required transition is false no-interface to fail-closed ambiguity, not numeric Oil recovery. The feature remains subject to fresh Lane C exact-head audit and does not establish detector/general-field accuracy PASS.
 
 ## Repair acceptance boundary
 

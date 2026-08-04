@@ -95,6 +95,16 @@ Future architecture options remain limited to separately designed and audited po
 
 The milestone order remains `S5-B → S5-C → S6`; this diagnosis does not reorder or combine S5-C or S6.
 
+### S11-B P2 exposure-decoupled no-interface addendum
+
+S11-B changes only the positive no-interface evidence meaning inside the existing current-frame owner. Raw FULL/EMPTY appearance remains available for diagnostics and downstream typed fill-state distinction, but absolute brightness no longer contributes positive weight to interface absence. Current-frame spatial uniformity is measured on the already-owned normalized raster; weak-boundary evidence, visibility, glare conflict and competing-boundary evidence retain their existing roles.
+
+The same current-frame no-interface visibility is included in the existing single-frame identifiability reliability average. This is an adjacent preservation correction, not a new positive-evidence route: after removing the former brightness-derived absence term, a glare-mask transition could otherwise lower no-interface likelihood and accidentally improve boundary-identifiability margin. The visibility input prevents that inversion while leaving absolute brightness outside positive absence evidence.
+
+This repair does not add a new observation or outcome variant. Insufficient evidence remains `ShadowAmbiguousObservation`, and only a genuinely accepted `ShadowNoInterfaceObservation` enters the unchanged serialized no-interface stabilization/clearing policy. Only `AcceptedBoundaryOutcome` can publish numeric Oil. The one temporal owner, canonical reducer/projection, D4 positive-evidence routes, S5-A Foam independence, collision fail-closed contract, schemas, settings, detector version and dependencies remain unchanged.
+
+The S11-B feature head remains subject to fresh Lane C exact-head audit. This addendum records the feature contract and does not itself declare the repair merged, S11 complete or detector/general-field accuracy PASS.
+
 ## Decision summary
 
 S5-B adopts one serialized temporal-state owner for all Glasses. Every oil-frame temporal command, Glass-local reset, global reset, temporal snapshot and state-count query executes in one owner-defined total order. Different-Glass temporal mutation parallelism is no longer a product requirement.
