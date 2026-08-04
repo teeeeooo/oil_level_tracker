@@ -111,3 +111,21 @@ A bounded static policy test enforces only low-false-positive patterns demonstra
 Separator literals, arbitrary full error text and ZIP/NPZ raw hashes are intentionally not generalized into repository-wide static rules because serialized/exact-artifact contracts can legitimately own them.
 
 Result Review also has a dynamic sentinel proving that an actual `QTimer` playback tick advances through the repository pytest-qt event loop. Adjacent direct `ResultReviewController` replacement tests now participate in the same session-owned QApplication lifecycle. No production timer, close-event, persisted, public or result contract changed.
+
+
+## Final exact-head Windows and S10 acceptance
+
+Final Windows canonical validation was reported for exact PR #77 head `11b81af59e5d870cd20f7610c7eb42470cbf19c1` with command `python -m pytest`:
+
+- `1292 passed`;
+- `7 skipped`;
+- `0 failed`;
+- `0 hang`.
+
+All seven skips are symlink-creation tests whose Windows validation account could not create the required link because of privilege limitations, including the directory-symlink `WinError 1314` cases. They are treated as `NOT AVAILABLE` environment-specific coverage, not product/test-logic failures; the same symlink owners passed in the Auditor's exact-head macOS focused validation.
+
+The user also directly confirmed completion of the S10 Windows manual/package obligations: 100/125/150% DPI GUI coverage, PyInstaller one-folder build, relocation, clean-PC execution, resources/fonts, Unicode/long paths, cancellation, file-lock handling and application-close cleanup. These are externally executed Windows results, not inferred from source-tree or macOS evidence.
+
+The Fresh Exact-Head Auditor independently reviewed the complete tests/docs-only PR diff, confirmed no `src/` or `packaging/` change, and executed an exact-head macOS focused suite covering changed owners, S9-A close sentinels and the Windows-skip symlink-security owners: `216 passed in 43.45s`, exit `0`. Changed-document relative links were `35/35`, and complete-PR `git diff --check` passed.
+
+PR #77 was then marked Ready and native exact-base/head guarded-squash-merged as `216c74ba96e23372a55182339e872ad284fa6820`. S10 acceptance therefore closes without weakening production close semantics, persisted/public contracts, package inputs or detector behavior.
