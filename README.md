@@ -137,7 +137,7 @@ Output:
 dist\RotaryOilLevelTracker\RotaryOilLevelTracker.exe
 ```
 
-The spec collects package data and Jinja/style resources. The delivery environment did not complete a distributable build; build on Windows and perform the clean-PC checklist before release.
+The spec collects package data and Jinja/style resources. Its Windows-only GUI runtime hook forces the native `windows` Qt platform before PySide6 runtime initialization and the GUI entry script, so users do not need to preconfigure `QT_QPA_PLATFORM`. Build on Windows and perform the clean-PC checklist before release.
 
 ## Architecture
 

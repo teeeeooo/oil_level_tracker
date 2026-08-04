@@ -153,7 +153,10 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 
 ## Packaging
 - Run the Windows canonical suite with Python 3.14.
+- Before packaged startup, confirm the user/system does not require a preconfigured `QT_QPA_PLATFORM`; clear any inherited value in the validation shell and do not persist a user/system environment change.
 - Build and verify the one-folder distribution on Windows in the supported Python 3.14 environment used as the project release baseline.
+- Confirm `RotaryOilLevelTracker.exe` opens the native Windows GUI without external QPA setup; the package runtime bootstrap must select the `windows` Qt platform before the GUI entry script.
+- For one bounded conflict probe, launch once with only the child-process environment set to `QT_QPA_PLATFORM=offscreen` and confirm the packaged GUI still opens normally, proving the package-owned Windows selection overrides a bad inherited value. Remove the probe value immediately afterward; it is not an installation prerequisite.
 - Record the interpreter actually used; do not claim an unexecuted patch version or Windows result.
 - Copy `dist/RotaryOilLevelTracker` to a clean machine without Python or separately bundled font files.
 - Run the complete Workbench, preflight, analysis and Result Review workflow from the one-folder package.
