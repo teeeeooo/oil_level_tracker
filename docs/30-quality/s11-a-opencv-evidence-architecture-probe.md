@@ -306,22 +306,24 @@ The residual cases divide into two classes:
 The sample1 overlay `156/240`, sample2 `0`, and sample3 `900` remain valid discrimination anchors
 for that next architecture probe.
 
-## Lane / next-gate assessment
+## Orchestrator architecture decision after the probe
 
-There is no direct basis for the Worker to downgrade the requested provisional Lane C.
-The probe diff itself is diagnostic/tests/documentation-only and leaves runtime defaults untouched,
-but the only positive repair direction (P2) changes S5-B production observability/no-interface
-semantics.  P1/P3 additionally demonstrate why accepting new positive boundary evidence touches
-the canonical observability contract.
+The Orchestrator reviewed the actual diff and separated the probe lane from future production repair authority.
 
-The exact next gate is therefore Orchestrator review of:
+- This PR is diagnostic/tests/documentation-only, changes no `src/` production owner and does not alter runtime defaults, persisted/public contracts or temporal ownership. Its actual blast radius is Lane B.
+- P2 remains a distinct production repair candidate. Applying it to production changes S5-B no-interface/observability meaning and therefore remains Lane C with fresh independent audit.
+- P1/P3 are rejected in the probed form; no stronger scalar relative-contrast variant is selected for production.
 
-1. this probe PR's actual lane and independent-audit requirement;
-2. whether to authorize a narrowly scoped P2 production semantics repair;
-3. whether the remaining numeric-recovery work should open a separate spatial-consistency or new
-   temporal-positive-evidence architecture probe rather than extend this branch.
+The residual recovery work is split rather than combined into this probe:
 
-Worker does not declare `AUDIT: PASS`, merge approval, or detector accuracy PASS.
+1. **Spatial current-frame detection** is the next detection architecture probe. It should test cross-ROI path/curve consistency and multi-cue spatial evidence against the retained collision/glare/Foam protections.
+2. **Offline temporal trajectory estimation** is a separate result-estimation concern. Current causal smoothing only returns values for accepted numeric Oil, and reporting intentionally converts missing values to graph gaps. A continuous trajectory therefore requires an explicit estimator, not a plotting shortcut.
+3. A future trajectory result must keep observed versus estimated provenance visible and retain an unavailable/abstain state for unsupported gaps, occlusion or contradictory evidence. Because analysis is offline, both earlier and later observations may be evaluated in a bounded diagnostic estimator.
+4. Initial trajectory validation should use held-out existing truth: hide the same-frame measurement at a truth frame and evaluate whether surrounding observations/evidence reconstruct it. Report reconstruction error, recoverable coverage and abstention together.
+
+Read-only sequence inspection supports this ordering. Several hard residual cases have little or no nearby accepted Oil anchor, so interpolation of accepted points alone cannot solve the detection problem. Spatial observation recovery therefore precedes trajectory reconstruction.
+
+The next gate for this PR is Lane B Orchestrator exact-head review. Worker does not declare merge approval, detector accuracy PASS or `AUDIT: PASS`.
 
 ## Validation evidence
 
