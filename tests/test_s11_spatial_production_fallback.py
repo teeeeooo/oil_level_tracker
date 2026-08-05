@@ -54,17 +54,20 @@ def _diagnostic_case(frame, glass, case_id: str, *, foam=False) -> ProbeCase:
     )
 
 
-def test_production_native_recovery_matches_spatial_probe_without_anchor_regression() -> None:
-    expected_anchors = {
+def test_production_native_recovery_preserves_non_d1_anchors_and_withholds_unsafe_sample4() -> None:
+    expected_preserved = {
         "base_sample_1:144": 395.0,
+        "sample2:30": 599.0,
+        "sample2:60": 598.0,
         "sample3:1035": 245.0,
-        "sample4:0": 861.0,
-        "sample4:450": 853.0,
-        "sample4:900": 848.0,
-        "sample4:1470": 866.0,
-        "sample4:1680": 866.0,
     }
-    expected_recoveries = {"sample2:30": 599.0, "sample2:60": 598.0}
+    unsafe_sample4 = {
+        "sample4:0",
+        "sample4:450",
+        "sample4:900",
+        "sample4:1470",
+        "sample4:1680",
+    }
     rows = []
     root = require_s11_local_corpus()
     for case in load_cases(root):
@@ -77,18 +80,13 @@ def test_production_native_recovery_matches_spatial_probe_without_anchor_regress
 
     numeric = [row for row in rows if row[2] is not None]
     assert len(rows) == 13
-    assert len(numeric) == 9
+    assert len(numeric) == 4
     assert {
         case_id: oil_y
         for case_id, _truth, oil_y in rows
-        if case_id in expected_anchors
-    } == expected_anchors
-    assert {
-        case_id: oil_y
-        for case_id, _truth, oil_y in rows
-        if case_id in expected_recoveries
-    } == expected_recoveries
-    assert np.mean([abs(oil_y - truth) for _case_id, truth, oil_y in numeric]) == 44.0 / 9.0
+        if case_id in expected_preserved
+    } == expected_preserved
+    assert np.mean([abs(oil_y - truth) for _case_id, truth, oil_y in numeric]) == 6.0
     assert {
         case_id
         for case_id, _truth, oil_y in rows
@@ -98,7 +96,37 @@ def test_production_native_recovery_matches_spatial_probe_without_anchor_regress
         "base_sample_1:240",
         "sample2:0",
         "sample3:900",
+        *unsafe_sample4,
     }
+
+
+def test_sample4_structural_foam_is_published_without_oil_routing_authority() -> None:
+    root = require_s11_local_corpus()
+    cases = {case.case_id: case for case in load_cases(root)}
+    for case_id in (
+        "sample4:0",
+        "sample4:450",
+        "sample4:900",
+        "sample4:1470",
+        "sample4:1680",
+    ):
+        case = cases[case_id]
+        detection, _artifacts = OpenCvPhaseDetector().detect(
+            decode_frame(case),
+            case.glass,
+            frame_index=case.frame_index,
+            time_sec=case.time_sec,
+            debug=False,
+        )
+        assert detection.raw_foam_front_y is not None, case_id
+        assert detection.raw_oil_air_level_y is None, case_id
+        assert detection.debug_metrics["foam_oil_context_authoritative"] is False
+        assert (
+            detection.debug_metrics["foam_oil_context_reason"]
+            == "wide_hollow_structural_or_refractive_component"
+        )
+        assert detection.debug_metrics["foam_oil_context_wide_row_fraction"] >= 0.25
+        assert detection.debug_metrics["foam_oil_context_wide_row_compactness_median"] < 0.65
 
 
 def test_recovered_native_rows_use_genuine_cross_roi_path_information() -> None:
@@ -111,6 +139,15 @@ def test_recovered_native_rows_use_genuine_cross_roi_path_information() -> None:
     for case_id, (source_y, path_rows) in expected.items():
         case = cases[case_id]
         frame = decode_frame(case)
+        production, _artifacts = OpenCvPhaseDetector().detect(
+            frame.copy(),
+            case.glass,
+            frame_index=case.frame_index,
+            time_sec=case.time_sec,
+            debug=False,
+        )
+        assert production.raw_oil_air_level_y == source_y
+        assert production.debug_metrics["foam_oil_context_authoritative"] is True
         bundle = build_mask_bundle(frame, case.glass)
         pre = preprocess(
             bundle.crop,
@@ -215,6 +252,7 @@ def test_structural_foam_protection_preserves_s5a_owner() -> None:
         )
         assert detection.raw_foam_front_y is not None, index
         assert detection.raw_oil_air_level_y is None, index
+        assert detection.debug_metrics["foam_oil_context_authoritative"] is True, index
 
 
 def test_p2_semantic_rescues_do_not_gain_spatial_numeric_oil() -> None:

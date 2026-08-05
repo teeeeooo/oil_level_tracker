@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import cv2
 import numpy as np
 
@@ -7,6 +9,7 @@ from oil_tracker.adapters.vision.foam_front_detector import (
     FoamDecisionStatus,
     FoamEvidenceStrength,
     detect_bottom_connected_foam,
+    evaluate_foam_oil_context_authority,
 )
 from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.domain.recipe import DetectorSettings
@@ -66,6 +69,44 @@ def test_low_light_white_foam_and_partial_front_remain_supported():
     assert low.decision_status is not FoamDecisionStatus.GLARE_REJECTED
     assert partial_result.candidate is not None
     assert partial_result.component_width_ratio > 0.25
+
+
+def test_genuine_foam_retains_oil_context_authority():
+    full = _detect(_white_foam())
+    low_light = _detect(_white_foam(level=165))
+    partial = _white_foam()
+    partial[80:, 60:] = 45
+    partial_result = _detect(partial)
+
+    for result in (full, low_light, partial_result):
+        assert result.candidate is not None
+        authority = evaluate_foam_oil_context_authority(result)
+        assert authority.authoritative
+        assert authority.reason == "foam_context_structurally_consistent"
+
+
+def test_wide_hollow_structural_component_cannot_gain_oil_context_authority():
+    accepted = _detect(_white_foam())
+    assert accepted.candidate is not None
+
+    mask = np.zeros_like(accepted.mask)
+    mask[60:150, 10:16] = 255
+    mask[60:150, 104:110] = 255
+    mask[144:150, 10:110] = 255
+    bbox_area = (150 - 60) * (110 - 10)
+    structural = replace(
+        accepted,
+        mask=mask,
+        component_width_ratio=(110 - 10) / mask.shape[1],
+        bounding_box_fill_ratio=float(np.count_nonzero(mask)) / bbox_area,
+    )
+
+    authority = evaluate_foam_oil_context_authority(structural)
+    assert structural.candidate is not None  # S5-A publication remains independent.
+    assert not authority.authoritative
+    assert authority.reason == "wide_hollow_structural_or_refractive_component"
+    assert authority.wide_row_fraction >= 0.25
+    assert authority.wide_row_compactness_median < 0.65
 
 
 def test_saturated_high_variance_shimmer_is_not_accepted_as_foam():
