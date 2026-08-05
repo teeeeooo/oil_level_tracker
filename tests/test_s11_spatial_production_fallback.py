@@ -11,10 +11,15 @@ from oil_observability_fixtures import (
     historical_glare_negatives,
     single_frame_observability_collisions,
 )
+from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.vision.foam_front_detector import detect_bottom_connected_foam
 from oil_tracker.adapters.vision.foam_temporal_gate import FoamTemporalGate
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
-from oil_tracker.adapters.vision.oil_shadow_types import OilShadowBounds
+from oil_tracker.adapters.vision.oil_shadow_types import (
+    AcceptedBoundaryOutcome,
+    AmbiguousOutcome,
+    OilShadowBounds,
+)
 from oil_tracker.adapters.vision.oil_spatial_fallback import _evaluate_spatial_path
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.adapters.vision.preprocessing import preprocess
@@ -54,11 +59,22 @@ def _diagnostic_case(frame, glass, case_id: str, *, foam=False) -> ProbeCase:
     )
 
 
-def test_production_native_recovery_preserves_non_d1_anchors_and_withholds_unsafe_sample4() -> None:
+def _decode_local_video_frame(root: Path, sample: str, frame_index: int) -> np.ndarray:
+    capture = cv2.VideoCapture(str(root / "sample" / f"{sample}.mp4"))
+    capture.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
+    ok, frame = capture.read()
+    capture.release()
+    if not ok or frame is None:
+        raise RuntimeError(f"Could not decode {sample}:{frame_index}")
+    return frame
+
+
+def test_production_native_recovery_adds_d2_class_a_and_preserves_safety_anchors() -> None:
     expected_preserved = {
         "base_sample_1:144": 395.0,
         "sample2:30": 599.0,
         "sample2:60": 598.0,
+        "sample3:900": 319.0,
         "sample3:1035": 245.0,
     }
     unsafe_sample4 = {
@@ -80,13 +96,13 @@ def test_production_native_recovery_preserves_non_d1_anchors_and_withholds_unsaf
 
     numeric = [row for row in rows if row[2] is not None]
     assert len(rows) == 13
-    assert len(numeric) == 4
+    assert len(numeric) == 5
     assert {
         case_id: oil_y
         for case_id, _truth, oil_y in rows
         if case_id in expected_preserved
     } == expected_preserved
-    assert np.mean([abs(oil_y - truth) for _case_id, truth, oil_y in numeric]) == 6.0
+    assert np.mean([abs(oil_y - truth) for _case_id, truth, oil_y in numeric]) == 5.4
     assert {
         case_id
         for case_id, _truth, oil_y in rows
@@ -95,9 +111,114 @@ def test_production_native_recovery_preserves_non_d1_anchors_and_withholds_unsaf
         "base_sample_1:156",
         "base_sample_1:240",
         "sample2:0",
-        "sample3:900",
         *unsafe_sample4,
     }
+
+
+def test_d2_class_a_uses_current_frame_four_sector_positive_evidence() -> None:
+    root = require_s11_local_corpus()
+    glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
+    frame = _decode_local_video_frame(root, "sample3", 899)
+
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        frame.copy(),
+        glass,
+        frame_index=899,
+        time_sec=29.996633333333335,
+        debug=False,
+    )
+    assert detection.raw_foam_front_y is None
+    assert detection.raw_oil_air_level_y == 320.0
+    assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
+
+    selected = [
+        candidate
+        for candidate in detection.candidates
+        if candidate.kind.value == "oil_air" and candidate.selected
+    ]
+    assert len(selected) == 1
+    candidate = selected[0]
+    assert candidate.y == 320.0
+    # The scalar candidate is still below the ordinary boundary and horizontal
+    # coverage floors; D2 recovery therefore cannot be a global threshold shift.
+    assert candidate.features["boundary_likelihood"] < 0.48
+    assert candidate.features["horizontal_coverage"] < 0.40
+    assert candidate.features["narrow_paired_edge_strength"] <= 0.80
+
+    bundle = build_mask_bundle(frame, glass)
+    pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
+    path = _evaluate_spatial_path(
+        pre,
+        bundle.effective_mask,
+        candidate_local_y=float(candidate.features["local_y"]),
+        accepted_foam_component_mask=None,
+        bounds=OilShadowBounds(),
+    )
+    assert path.accepted
+    assert path.sector_count == 4
+    assert path.rows == (119, 128, 124, 128)
+    assert path.span_px == 9
+    assert path.maximum_jump_px == 9
+
+
+def test_d2_spatial_recovery_respects_authoritative_foam_front() -> None:
+    root = require_s11_local_corpus()
+    glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
+    frame = _decode_local_video_frame(root, "sample3", 899)
+    bundle = build_mask_bundle(frame, glass)
+    pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
+    accepted_foam_mask = np.zeros_like(bundle.effective_mask)
+
+    path = _evaluate_spatial_path(
+        pre,
+        bundle.effective_mask,
+        candidate_local_y=125.0,
+        accepted_foam_component_mask=accepted_foam_mask,
+        bounds=OilShadowBounds(),
+    )
+    assert path.accepted
+    assert path.sector_count == 4
+
+    def evaluate(front_local_y: float):
+        return OpenCvPhaseDetector()._evaluate_oil_pipeline(
+            glass.id,
+            pre,
+            bundle,
+            None,
+            accepted_foam_front_local_y=front_local_y,
+            accepted_foam_component_mask=accepted_foam_mask,
+        )
+
+    below_front = evaluate(124.0)
+    assert isinstance(below_front, AcceptedBoundaryOutcome)
+    assert below_front.raw_source_y == 320.0
+
+    for front_local_y in (125.0, 145.0, 150.0, 155.0):
+        blocked = evaluate(front_local_y)
+        assert isinstance(blocked, AmbiguousOutcome)
+        assert blocked.tracker_action.value == "NO_UPDATE"
+        assert blocked.projected_source_y == 321.0
+
+
+def test_d2_class_b_remains_split_when_visual_range_has_no_material_candidate() -> None:
+    root = require_s11_local_corpus()
+    glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
+    frame = _decode_local_video_frame(root, "sample3", 2697)
+
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        frame,
+        glass,
+        frame_index=2697,
+        time_sec=89.9899,
+        debug=False,
+    )
+    assert detection.raw_oil_air_level_y is None
+    assert detection.debug_metrics["oil_decision_status"] == "ambiguous"
+    oil_candidate_y = sorted(
+        candidate.y for candidate in detection.candidates if candidate.kind.value == "oil_air"
+    )
+    assert oil_candidate_y == [206.0, 252.0, 287.0, 294.0, 302.0, 399.0]
+    assert not any(326.0 <= y <= 344.0 for y in oil_candidate_y)
 
 
 def test_sample4_structural_foam_is_published_without_oil_routing_authority() -> None:
