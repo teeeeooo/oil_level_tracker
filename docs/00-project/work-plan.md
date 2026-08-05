@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE — production detector recovery`
-**Current gate:** `S11-D2 Class-B — sample3 observation/proposal representation defect`
+**Current gate:** `S11-D2 Class-B — observation/proposal representation recovery`
 
 S10 is closed. S11 remains the P0 successor because field-representative video still shows severe detector effectiveness failure despite the accepted platform/package baseline. P2, its FULL/EMPTY preservation correction, Spatial and local-corpus portability are merged. Windows canonical re-validation is green, S11-C full-video replay/forensics is complete, and S11-D1 plus the bounded S11-D2 Class-A repair are independently audited and merged. D2 recovers the sample3 candidate-present/non-identifiable current-frame class through Spatial corroboration while retaining the D1 Foam-front authority rule, sample2 Spatial anchors, sample4 fail-closed safety and the one serialized temporal owner. The remaining current gate is the separate sample3 Class-B observation/proposal representation defect; temporal relaxation, sample4 recovery and initial-state reconstruction remain outside it.
 
@@ -13,6 +13,7 @@ S10 is closed. S11 remains the P0 successor because field-representative video s
 - S11-C full-video/forensic diagnostic contract: [`../30-quality/s11-c-full-video-production-replay-visual-forensic-diagnostic.md`](../30-quality/s11-c-full-video-production-replay-visual-forensic-diagnostic.md)
 - S11-D1 Foam/Oil context repair plan: [`../30-quality/s11-d1-foam-structural-refractive-discrimination-oil-context-safety.md`](../30-quality/s11-d1-foam-structural-refractive-discrimination-oil-context-safety.md)
 - S11-D2 sample3 positive-evidence recovery plan: [`../30-quality/s11-d2-sample3-positive-evidence-recovery.md`](../30-quality/s11-d2-sample3-positive-evidence-recovery.md)
+- S11-D2 Class-B observation/proposal recovery gate: [`../30-quality/s11-d2-class-b-observation-proposal-representation.md`](../30-quality/s11-d2-class-b-observation-proposal-representation.md)
 - S11-A detector direction/experiment decision: [`../30-quality/s11-a-detector-direction-and-experiment-plan.md`](../30-quality/s11-a-detector-direction-and-experiment-plan.md)
 - S11-B Spatial production fallback: [`../30-quality/s11-b-spatial-positive-evidence-production.md`](../30-quality/s11-b-spatial-positive-evidence-production.md)
 - S11 Offline Temporal Trajectory probe: [`../30-quality/s11-offline-temporal-trajectory-probe.md`](../30-quality/s11-offline-temporal-trajectory-probe.md)
