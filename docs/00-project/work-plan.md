@@ -2,9 +2,9 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE — production detector recovery`
-**Current gate:** `S11-D2 — sample3 positive-evidence recovery`
+**Current gate:** `S11-D2 Class-B — sample3 observation/proposal representation defect`
 
-S10 is closed. S11 remains the P0 successor because field-representative video still shows severe detector effectiveness failure despite the accepted platform/package baseline. P2, its FULL/EMPTY preservation correction, Spatial and local-corpus portability are merged. Windows canonical re-validation is green, S11-C full-video replay/forensics is complete, and S11-D1 is independently audited and merged. D1 now separates S5-A Foam publication from S5-B Oil-routing authority: exact-head replay preserved base/sample2/sample3 behavior and the user-confirmed sample2 Spatial recoveries while withholding the sample4 structural/refractive Foam context without promoting an alternate numeric Oil path. The current gate is S11-D2, limited to the separate sample3 positive-evidence defects.
+S10 is closed. S11 remains the P0 successor because field-representative video still shows severe detector effectiveness failure despite the accepted platform/package baseline. P2, its FULL/EMPTY preservation correction, Spatial and local-corpus portability are merged. Windows canonical re-validation is green, S11-C full-video replay/forensics is complete, and S11-D1 plus the bounded S11-D2 Class-A repair are independently audited and merged. D2 recovers the sample3 candidate-present/non-identifiable current-frame class through Spatial corroboration while retaining the D1 Foam-front authority rule, sample2 Spatial anchors, sample4 fail-closed safety and the one serialized temporal owner. The remaining current gate is the separate sample3 Class-B observation/proposal representation defect; temporal relaxation, sample4 recovery and initial-state reconstruction remain outside it.
 
 ## Current evidence owners
 
@@ -20,9 +20,9 @@ S10 is closed. S11 remains the P0 successor because field-representative video s
 - S5-B observability/temporal architecture: [`../20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 - Post-S10 UX authority: [`../10-product/ux-improvement-plan.md`](../10-product/ux-improvement-plan.md)
 
-## Latest recorded closeout — S11-D1 Foam/Oil Context Safety
+## Latest recorded closeout — S11-D2 Class-A Positive-Evidence Recovery
 
-PR #87 exact base `5feb973c41adeac176a96efc0efbc3b435c2bbb3` / exact head `ac468a73fa8e890b0855ed63afb2979ca4378c42` passed fresh Lane C exact-head audit and native guarded-squash-merged as `0f4558dd3723a1923854274039112714a97fca71`. Auditor-focused validation returned `109 passed`, and exact-head four-video production replay preserved every base/sample2/sample3 Oil/Foam/fill-state signature while retaining sample2 `30 → 599` and `60 → 598`. On sample4, Foam remained published on `113/113`, Oil publication changed from the preserved S11-C baseline `110/113` to `0/113`, Foam Oil-context authority was withheld on `113/113`, and no alternate numeric Oil path appeared. The ignored S11-C forensic bundle remains preserved as temporary non-Git evidence. No Windows field, detector/general-field accuracy or S11 completion PASS is inferred.
+PR #88 exact base `61de9ef9336bfe200c8a70a692b7ebd749b8565d` / repaired exact head `7ad90480e844d73011bdf5921196dbe2ee590dae` passed fresh Lane C re-audit and native guarded-squash-merged as `11feb3215e5d6934a9d60020fed8d08d2dddd390`. Auditor-focused validation returned `150 passed`. A non-empty bottom-connected accepted-Foam adversarial reproduction proved that the repaired D2 selector blocks a local-Y `125` Oil candidate at Foam fronts `125/145/150/155` even while the Spatial path itself accepts, while front `124` preserves the legitimate source-Y `320` boundary. Exact-head 2 fps replay retained base Oil `2/30`, sample2 Oil `4/20` with `30 → 599` and `60 → 598`, sample3 Oil `42/281` with only five D2 rows remaining `reacquisition_pending/NO_UPDATE`, and sample4 Oil `0/113` / Foam `113/113` with unsafe Foam routing withheld `113/113`. The ignored S11-C forensic bundle remains preserved as temporary non-Git evidence. No Windows field, detector/general-field accuracy or S11 completion PASS is inferred.
 
 ## Post-portability validation and field evidence
 
@@ -54,4 +54,4 @@ P2, its FULL/EMPTY preservation correction and Spatial are accepted S11 producti
 
 ## Next action
 
-Start S11-D2 as a bounded sample3 positive-evidence source slice. Address the separately proven candidate-present-but-non-identifiable and candidate-not-generated defects without reopening D1, globally weakening ambiguity/glare/structure/no-interface protection, or turning Spatial into a blanket threshold route. Preserve the accepted D1 Foam/Oil context boundary, user-confirmed sample2 Spatial recovery and the one serialized S5-B owner. Keep initial-state retrospective reconstruction, sample4 forced numeric recovery and S12 outside this detector slice.
+Reassess the remaining sample3 Class-B observation/proposal representation defect as its own source decision. The frozen `326–344 px` visual Oil range at frame `2697` is still absent from the material candidate set, so the next work must explain proposal/observation construction rather than weaken Class-A gates or temporal confirmation. Preserve D1 Foam/Oil context safety, accepted D2 Class-A semantics, sample2 Spatial recovery and the one serialized S5-B owner. Keep sample4 forced numeric recovery, initial-state retrospective reconstruction and S12 outside this gate.

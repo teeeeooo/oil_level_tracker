@@ -6,7 +6,7 @@ S11-D2 is the next S11 source slice after accepted S11-D1. It owns the two repro
 sample3 current-frame Oil failures separated by S11-C: a visually aligned candidate that
 remains non-identifiable, and a visually clear boundary that never becomes a material candidate.
 
-**Status:** `WORKER REPAIRED — Class A recovery plus Foam-front constraint; Class B owner split; fresh exact-head re-audit pending`
+**Status:** `ACCEPTED — repaired Class-A recovery passed fresh Lane C re-audit; PR #88 guarded-squash-merged`
 
 **Worker starting repository identity:** `main @ 61de9ef9336bfe200c8a70a692b7ebd749b8565d`
 
@@ -183,15 +183,23 @@ changed owner can alter stream-level candidate/publication behavior beyond isola
 Absence/wrong-identity/decode-failure behavior for local MP4s remains governed by the accepted portability
 contract. Windows canonical and private field validation are later gates, not automatic Worker acceptance.
 
-## Lane and next gate
+## Accepted audit, merge and next gate
 
-S11-D2 starts as a **provisional Lane C — Independent Review candidate** because current evidence may require
-changing S5-B proposal construction, candidacy/identifiability semantics or the accepted Spatial positive-evidence
-boundary. Bounded owner inspection may establish a narrower existing-owner defect, but the Worker must not
-self-downgrade audit authority after source mutation.
+PR #88 passed fresh **Lane C — Independent Review re-audit** at exact base
+`61de9ef9336bfe200c8a70a692b7ebd749b8565d` / repaired exact head
+`7ad90480e844d73011bdf5921196dbe2ee590dae` and was native guarded-squash-merged as
+`11feb3215e5d6934a9d60020fed8d08d2dddd390`.
 
-The current Worker next gate is a fresh independent **S11-D2 exact-head Auditor**. If that gate accepts
-this bounded Class-A repair, the remaining Class-B observation/proposal representation defect must be
-reassessed as its own source decision rather than being silently folded into this PR. Do not declare S11
-complete until the resulting detector baseline is revalidated on the controlled Windows field workflow.
-Initial-state retrospective reconstruction and S12 remain separate successor decisions.
+Auditor-focused validation returned `150 passed`. A direct non-empty bottom-connected accepted-Foam
+adversarial reproduction showed that a local-Y `125` D2 candidate remains ambiguous/`NO_UPDATE` for
+accepted Foam fronts `125`, `145`, `150` and `155` even though its four-sector Spatial path accepts,
+while front `124` preserves the legitimate source-Y `320` boundary. Exact-head `2 fps` replay retained
+base Oil `2/30`, sample2 Oil `4/20` with `30 → 599` and `60 → 598`, sample3 Oil `42/281` with the five
+D2 current-frame recoveries remaining `reacquisition_pending/NO_UPDATE`, and sample4 Oil `0/113` /
+Foam `113/113` with unsafe Foam routing withheld `113/113`.
+
+The next source decision is the remaining **sample3 Class-B observation/proposal representation defect**:
+at frame `2697`, the frozen `326–344 px` visual Oil range still has no material candidate. That gate must
+not weaken temporal confirmation or silently absorb sample4 numeric recovery, initial-state retrospective
+reconstruction or S12. S11 remains active until the resulting detector baseline is separately validated on
+the controlled Windows field workflow; detector/general-field accuracy PASS and S11 completion are not implied.
