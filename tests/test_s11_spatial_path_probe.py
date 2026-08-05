@@ -17,7 +17,6 @@ from tests.diagnostics.s11_evidence_probe import (
     TRANSFORMS,
     decode_frame,
     load_cases,
-    repository_root,
     run_variant,
     transform_frame,
 )
@@ -26,6 +25,7 @@ from tests.diagnostics.s11_spatial_path_probe import (
     run_native_experiment,
     run_spatial_variant,
 )
+from tests.s11_local_corpus import require_s11_local_corpus
 
 
 def _diagnostic_case(frame, glass, case_id: str, *, foam=False) -> ProbeCase:
@@ -42,7 +42,7 @@ def _diagnostic_case(frame, glass, case_id: str, *, foam=False) -> ProbeCase:
 
 
 def test_native_spatial_path_recovers_two_residuals_without_regressing_p0_anchors() -> None:
-    rows = run_native_experiment()
+    rows = run_native_experiment(require_s11_local_corpus())
     p0_numeric = [row for row in rows if row.p0_oil_y is not None]
     spatial_numeric = [row for row in rows if row.oil_y is not None]
     assert len(rows) == 13
@@ -62,7 +62,7 @@ def test_native_spatial_path_recovers_two_residuals_without_regressing_p0_anchor
 
 
 def test_native_spatial_recovery_uses_nondegenerate_cross_roi_paths() -> None:
-    rows = {row.case_id: row for row in run_native_experiment()}
+    rows = {row.case_id: row for row in run_native_experiment(require_s11_local_corpus())}
     expected = {
         "sample2:30": (277, 273, 267),
         "sample2:60": (283, 279, 272),
@@ -161,7 +161,8 @@ def test_structural_foam_protection_and_foam_owner_stay_independent() -> None:
 
 
 def test_low_light_p1_warning_is_rejected_for_missing_symmetric_path_window() -> None:
-    cases = {case.case_id: case for case in load_cases(repository_root())}
+    root = require_s11_local_corpus()
+    cases = {case.case_id: case for case in load_cases(root)}
     transforms = {item.name: item for item in TRANSFORMS}
     case = cases["sample4:450"]
     for transform_id in ("brightness_0.60", "brightness_0.45"):
@@ -175,7 +176,7 @@ def test_low_light_p1_warning_is_rejected_for_missing_symmetric_path_window() ->
 
 
 def test_spatial_manifest_declares_bounded_current_frame_resources() -> None:
-    manifest = build_manifest(run_native_experiment())
+    manifest = build_manifest(run_native_experiment(require_s11_local_corpus()))
     assert manifest["baseline_main_sha"] == "3305cb8268fd4e1612105cba6144c2083066ff8c"
     native = manifest["native"]
     assert native["oil_coverage"] == 9

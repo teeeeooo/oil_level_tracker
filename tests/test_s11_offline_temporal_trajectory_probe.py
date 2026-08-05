@@ -7,6 +7,7 @@ from tests.diagnostics.s11_offline_temporal_trajectory_probe import (
     estimate_held_out,
     run_probe,
 )
+from tests.s11_local_corpus import require_s11_local_corpus
 
 
 def _observation(
@@ -125,7 +126,8 @@ def test_no_interface_inside_support_is_censored_not_measurement() -> None:
 
 
 def test_four_video_held_out_reconstruction_is_insufficient_for_integration() -> None:
-    streams, baselines, estimates = run_probe()
+    root = require_s11_local_corpus()
+    streams, baselines, estimates = run_probe(root)
     manifest = build_manifest(streams, baselines, estimates)
     truth = manifest["production_truth_anchor_baseline"]
     held_out = manifest["held_out_reconstruction"]

@@ -115,6 +115,27 @@ The bounded correction transfers the removed `0.17` positive weight to the alrea
 
 The P2 FULL/EMPTY preservation correction passed fresh Lane C exact-head audit and is merged. S11 does not return directly to field re-validation: the separate local-corpus canonical portability blocker is repaired as Lane B first, Windows canonical is then rerun, and only after that gate is green does controlled Windows field re-validation resume. Milestone state and exact next action remain owned by the roadmap and work plan.
 
+## S11 local-corpus canonical portability contract
+
+S11's four MP4s remain ignored local supporting media; they are not packaging or repository-distributed
+inputs. The checked-in S11-A evidence manifest owns their authoritative SHA-256 identities, while the
+tracked Recipes and `.oiltruth` artifacts remain repository authority. Corpus-dependent diagnostic
+and production-regression tests must validate all present required MP4 identities before decoding or
+aggregating any rows. A wrong present identity is a hard corpus failure even if another required MP4
+is absent. If identities of all present files are correct but one or more required MP4s are absent,
+the corpus-dependent test reports `SKIPPED / NOT AVAILABLE`; corpus-independent S11 synthetic tests
+continue normally and no partial 13-row aggregate is produced. Correct identity followed by decode
+failure remains a test failure, not an availability skip.
+
+Historical S11-A P0/P1/P2/P3 outputs retain their original diagnostic responsibility and are not
+rewritten to match later production architecture. Since accepted Spatial fallback, current production
+adds the cross-ROI recoveries `sample2:30=599` and `sample2:60=598` after the ordinary route remains
+ambiguous. The historical probe therefore no longer asserts P0 equality with current production;
+its frozen diagnostic aggregates remain self-owned, while the existing Spatial production fallback
+tests remain authority for current `9/13` production coverage and those two recoveries. This bounded
+portability repair changes no detector source, P2/Spatial semantics, truth meaning, schema, setting,
+dependency, runtime behavior or MP4 redistribution policy.
+
 ## S11-B Spatial positive-evidence production contract
 
 The focused Spatial feature is a separate P0/D4-first fallback inside the existing S5-B current-frame owner. It runs only after the complete ordinary route remains `ShadowAmbiguousObservation`; it does not override accepted no-interface/unavailable outcomes and does not couple recovery to P2. Exposure-relative broad phase can create a candidate, but scalar/row evidence cannot publish numeric Oil without a same-frame five-sector cross-ROI path proving additional x-resolved information against sector-local MAD and quantization noise.

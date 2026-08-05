@@ -129,3 +129,5 @@ These truth files do not make the current sample set category-balanced official 
 ## Git policy
 
 All MP4 files remain ignored by `sample/*.mp4` and are never added by qualification work. Generated evidence under `sample/output/` also remains ignored. Only the four exact deterministic Recipes are allowlisted from the Recipe ignore rule. The provisional JSON artifacts and four product `.oiltruth` files are tracked normally, remain semantically distinct, and no truth file is stored inside a result bundle. No MP4 or output allowlist exists.
+
+S11 corpus-dependent canonical tests treat those ignored videos as optional local evidence with mandatory identity when present. The checked-in S11-A evidence manifest owns the four MP4 SHA-256 values: a complete matching local corpus runs normally; missing required MP4s make only corpus-dependent tests `SKIPPED / NOT AVAILABLE`; any present wrong-hash file is a hard identity failure even when another video is missing; and a hash-correct file that cannot be decoded is a hard decode failure. Tests never form a partial 13-row S11 aggregate, and this policy does not redistribute or track the MP4 bytes.

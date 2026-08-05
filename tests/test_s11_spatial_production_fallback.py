@@ -24,10 +24,10 @@ from tests.diagnostics.s11_evidence_probe import (
     TRANSFORMS,
     decode_frame,
     load_cases,
-    repository_root,
     run_variant,
     transform_frame,
 )
+from tests.s11_local_corpus import require_s11_local_corpus
 
 
 def _production_raw_oil(frame: np.ndarray, glass, *, frame_index: int = 0) -> float | None:
@@ -66,7 +66,8 @@ def test_production_native_recovery_matches_spatial_probe_without_anchor_regress
     }
     expected_recoveries = {"sample2:30": 599.0, "sample2:60": 598.0}
     rows = []
-    for case in load_cases(repository_root()):
+    root = require_s11_local_corpus()
+    for case in load_cases(root):
         oil_y = _production_raw_oil(
             decode_frame(case),
             case.glass,
@@ -101,7 +102,8 @@ def test_production_native_recovery_matches_spatial_probe_without_anchor_regress
 
 
 def test_recovered_native_rows_use_genuine_cross_roi_path_information() -> None:
-    cases = {case.case_id: case for case in load_cases(repository_root())}
+    root = require_s11_local_corpus()
+    cases = {case.case_id: case for case in load_cases(root)}
     expected = {
         "sample2:30": (599.0, (277, 273, 267)),
         "sample2:60": (598.0, (283, 279, 272)),
@@ -216,7 +218,8 @@ def test_structural_foam_protection_preserves_s5a_owner() -> None:
 
 
 def test_p2_semantic_rescues_do_not_gain_spatial_numeric_oil() -> None:
-    cases = {case.case_id: case for case in load_cases(repository_root())}
+    root = require_s11_local_corpus()
+    cases = {case.case_id: case for case in load_cases(root)}
     transforms = {item.name: item for item in TRANSFORMS}
     expected = (
         ("brightness_0.60", "sample3:900"),
@@ -239,7 +242,8 @@ def test_p2_semantic_rescues_do_not_gain_spatial_numeric_oil() -> None:
 
 
 def test_low_exposure_known_false_boundary_warning_stays_fail_closed() -> None:
-    cases = {case.case_id: case for case in load_cases(repository_root())}
+    root = require_s11_local_corpus()
+    cases = {case.case_id: case for case in load_cases(root)}
     transforms = {item.name: item for item in TRANSFORMS}
     case = cases["sample4:450"]
     for transform_id in ("brightness_0.60", "brightness_0.45"):
