@@ -2,11 +2,11 @@
 
 ## Authority and status
 
-This document owns the next S11 source gate after accepted PR #88 Class-A recovery.
-It addresses the remaining sample3 defect where a visually usable Oil boundary is not represented
+This document records the accepted S11-D2 Class-B source gate that followed PR #88 Class-A recovery.
+It closes the sample3 representation defect where a visually usable Oil boundary was not represented
 by any material current-frame S5-B candidate.
 
-**Status:** `IMPLEMENTED — Worker exact-head handoff pending fresh independent audit`
+**Status:** `ACCEPTED — repaired semantic ownership passed fresh Lane C re-audit; PR #89 guarded-squash-merged`
 
 **Worker base identity:** `main @ 97c13d676b27163836da985b4b2505bb0afa402a`
 
@@ -154,11 +154,22 @@ A deterministic saturated-cap regression fixes this ordinary-first contract, and
 proves that an intrusive supplemental hypothesis cannot reorder the ordinary decision-facing prefix while a
 trailing supplemental hypothesis may still consume genuinely unused semantic capacity.
 
-## Next gate
+## Accepted audit, merge and next gate
 
-Worker Build owns source, tests, source-completing documentation and one focused Draft PR.
-Fresh independent exact-head Auditor owns the final Lane C Gate and guarded merge/Close after PASS.
+PR #89 passed fresh **Lane C — Independent Review re-audit** at exact base
+`97c13d676b27163836da985b4b2505bb0afa402a` / repaired exact head
+`993d78bfcfde7c404a8f9d7cfabe734ac2b298f0` and was native guarded-squash-merged as
+`9ba7dba31e11e4039500e4b12d73ee6f85cfc43a`.
 
-If accepted, rerun/retain the four-video production baseline and then decide whether remaining S11 work is
-sample4 independent Oil representation, temporal continuity, or controlled Windows field revalidation.
-Do not preselect those successors before the Class-B exact-head evidence is known.
+Auditor-focused exact-head validation returned `63 passed` on the observation/evidence/temporal/D2 surface
+plus `64 passed` on retained no-interface/serialized-owner/cutover/fill safety. The six prior saturated
+replacement rows changed from ordinary removals on the failed head to `removed=[] / added=[]` on the repaired
+head. A complete 444-row four-video base comparison found zero drift in publication, fill state, decision
+status/reason, tracker/smoothing actions, projected Y or serialized temporal state/beam; all `144` semantic
+candidate-set changes were additive and ordinary removals were `0`. Frame `2697` retains the material `327 px`
+Class-B representation as the fourth ordered hypothesis while remaining ambiguous / `NO_UPDATE`.
+
+The next gate is a **read-only Orchestrator post-D2 successor decision** using this accepted evidence. It must
+choose among remaining S11 work without automatically starting temporal relaxation, sample4 independent Oil
+recovery, Windows/private-field validation or S12. S11 completion and detector/general-field accuracy PASS are
+not implied.

@@ -2,9 +2,9 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE — production detector recovery`
-**Current gate:** `S11-D2 Class-B — observation/proposal representation recovery`
+**Current gate:** `Post-D2 successor decision — read-only Orchestrator`
 
-S10 is closed. S11 remains the P0 successor because field-representative video still shows severe detector effectiveness failure despite the accepted platform/package baseline. P2, its FULL/EMPTY preservation correction, Spatial and local-corpus portability are merged. Windows canonical re-validation is green, S11-C full-video replay/forensics is complete, and S11-D1 plus the bounded S11-D2 Class-A repair are independently audited and merged. D2 recovers the sample3 candidate-present/non-identifiable current-frame class through Spatial corroboration while retaining the D1 Foam-front authority rule, sample2 Spatial anchors, sample4 fail-closed safety and the one serialized temporal owner. The remaining current gate is the separate sample3 Class-B observation/proposal representation defect; temporal relaxation, sample4 recovery and initial-state reconstruction remain outside it.
+S10 is closed and S11 remains active. P2, FULL/EMPTY preservation, Spatial, local-corpus portability, S11-D1 and both bounded S11-D2 recovery classes are now accepted and merged. Class-B adds a current-frame representation for the previously omitted sample3 broad Oil transition while preserving ordinary-first semantic capacity, the three-hypothesis ambiguous decision prefix, D1/D2 Class-A safety boundaries and the serialized temporal owner. The accepted proportional replay remains publication- and temporal-state-stable. The next gate is decision-only: a read-only Orchestrator must choose the next remaining S11 workstream from the accepted post-D2 evidence without preauthorizing implementation.
 
 ## Current evidence owners
 
@@ -21,9 +21,9 @@ S10 is closed. S11 remains the P0 successor because field-representative video s
 - S5-B observability/temporal architecture: [`../20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 - Post-S10 UX authority: [`../10-product/ux-improvement-plan.md`](../10-product/ux-improvement-plan.md)
 
-## Latest recorded closeout — S11-D2 Class-A Positive-Evidence Recovery
+## Latest recorded closeout — S11-D2 Class-B Representation Recovery
 
-PR #88 exact base `61de9ef9336bfe200c8a70a692b7ebd749b8565d` / repaired exact head `7ad90480e844d73011bdf5921196dbe2ee590dae` passed fresh Lane C re-audit and native guarded-squash-merged as `11feb3215e5d6934a9d60020fed8d08d2dddd390`. Auditor-focused validation returned `150 passed`. A non-empty bottom-connected accepted-Foam adversarial reproduction proved that the repaired D2 selector blocks a local-Y `125` Oil candidate at Foam fronts `125/145/150/155` even while the Spatial path itself accepts, while front `124` preserves the legitimate source-Y `320` boundary. Exact-head 2 fps replay retained base Oil `2/30`, sample2 Oil `4/20` with `30 → 599` and `60 → 598`, sample3 Oil `42/281` with only five D2 rows remaining `reacquisition_pending/NO_UPDATE`, and sample4 Oil `0/113` / Foam `113/113` with unsafe Foam routing withheld `113/113`. The ignored S11-C forensic bundle remains preserved as temporary non-Git evidence. No Windows field, detector/general-field accuracy or S11 completion PASS is inferred.
+PR #89 exact base `97c13d676b27163836da985b4b2505bb0afa402a` / repaired exact head `993d78bfcfde7c404a8f9d7cfabe734ac2b298f0` passed fresh Lane C re-audit after the prior semantic-capacity failure and was native guarded-squash-merged as `9ba7dba31e11e4039500e4b12d73ee6f85cfc43a`. Exact-head validation returned `63 passed` on the observation/evidence/temporal/D2 surface plus `64 passed` on retained no-interface/serialized-owner/cutover/fill safety. The six prior supplemental-for-ordinary replacement rows now retain every ordinary semantic hypothesis, while frame `2697` still adds the material `327 px` Class-B representation as the fourth ordered hypothesis and remains ambiguous/`NO_UPDATE`. Independent four-video comparison preserved all 444 publication, fill, decision status/reason, tracker/smoothing and serialized temporal-state/beam rows; all 144 candidate-set changes were additive with ordinary removals `0`. Sample2 `30 → 599` and `60 → 598`, D2 Class-A current-frame recovery, sample4 fail-closed Oil/Foam behavior and the ignored S11-C forensic fingerprint remain preserved. No Windows field, detector/general-field accuracy or S11 completion PASS is inferred.
 
 ## Post-portability validation and field evidence
 
@@ -55,4 +55,4 @@ P2, its FULL/EMPTY preservation correction and Spatial are accepted S11 producti
 
 ## Next action
 
-Reassess the remaining sample3 Class-B observation/proposal representation defect as its own source decision. The frozen `326–344 px` visual Oil range at frame `2697` is still absent from the material candidate set, so the next work must explain proposal/observation construction rather than weaken Class-A gates or temporal confirmation. Preserve D1 Foam/Oil context safety, accepted D2 Class-A semantics, sample2 Spatial recovery and the one serialized S5-B owner. Keep sample4 forced numeric recovery, initial-state retrospective reconstruction and S12 outside this gate.
+Run a read-only Orchestrator post-D2 successor decision using the accepted Class-B exact-head replay and the existing S11 evidence owners. Choose among the remaining S11 work only after comparing their prerequisites and product value; do not automatically start temporal relaxation, sample4 independent Oil recovery, Windows/private-field validation or S12. Preserve the accepted D1/D2, Spatial, no-interface and serialized-temporal contracts while that decision is made.
