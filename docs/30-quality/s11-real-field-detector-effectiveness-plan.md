@@ -4,7 +4,7 @@
 
 This document owns the S11 real-field detector diagnosis, evidence plan and acceptance boundaries. Milestone state and current next action remain owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). The agreed S11-A reproducible-corpus and detector-direction decision is recorded in [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md).
 
-**Status:** `ACTIVE — S11 P2 FULL/EMPTY no-interface preservation repair under independent review`
+**Status:** `ACTIVE — P2 FULL/EMPTY preservation accepted; local-corpus canonical portability repair next`
 
 S11 starts after the accepted S10 Windows/package gate. The immediate product risk is detector effectiveness on field-representative sight-glass video, not packaging or UI-platform viability.
 
@@ -113,7 +113,7 @@ Windows canonical validation exposed a preservation regression after the accepte
 
 The bounded correction transfers the removed `0.17` positive weight to the already accepted exposure-decoupled normalized-raster uniformity channel, changing uniformity from `0.27` to `0.44` while leaving weak-boundary `0.36`, visibility `0.20`, the canonical threshold, and glare/competing-boundary penalties unchanged. This targets genuinely uniform absence evidence instead of globally lifting weak or merely visible frames. Absolute raw brightness, `full_likelihood` and `empty_likelihood` do not contribute to no-interface acceptance and remain downstream appearance evidence only. The correction therefore restores genuine FULL/EMPTY typed no-interface without numeric Oil while the four low-exposure rescue anchors must remain ambiguous/non-numeric. Collision, glare/structure, Foam, Spatial, serialized absence clearing and canonical projection remain preservation obligations.
 
-This repair is a Lane C source task and stops at a focused Draft PR for fresh independent exact-head audit. After audit and merge/Close, S11 still does not return directly to field re-validation: the separate local-corpus canonical portability blocker is repaired as Lane B first, Windows canonical is then rerun, and only after those blockers are resolved does the controlled Windows field re-validation gate resume. The work-plan's merge-dependent current-status reconciliation remains owned by the merge/Close owner.
+The P2 FULL/EMPTY preservation correction passed fresh Lane C exact-head audit and is merged. S11 does not return directly to field re-validation: the separate local-corpus canonical portability blocker is repaired as Lane B first, Windows canonical is then rerun, and only after that gate is green does controlled Windows field re-validation resume. Milestone state and exact next action remain owned by the roadmap and work plan.
 
 ## S11-B Spatial positive-evidence production contract
 
