@@ -2,14 +2,15 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE — production detector recovery`
-**Current gate:** `S11 — Windows canonical rerun on portability-repaired baseline`
+**Current gate:** `S11-C — Mac full-video production replay and visual forensic attribution`
 
-S10 is closed. S11 remains the P0 successor because a Windows field run on a visually usable compressor video showed severe detector effectiveness failure despite the accepted platform/package baseline. The P2 no-interface semantics repair, its FULL/EMPTY preservation correction and the conservative Spatial positive-evidence fallback are merged. The Offline Temporal Trajectory probe remains closed without production interpolation. The local-corpus canonical portability repair is now merged; the next gate is a fresh Windows canonical rerun on that repaired baseline before any controlled field re-validation.
+S10 is closed. S11 remains the P0 successor because field-representative video still shows severe detector effectiveness failure despite the accepted platform/package baseline. P2, its FULL/EMPTY preservation correction, Spatial and local-corpus portability are merged. Windows canonical re-validation is now green (`1321 passed, 0 failed, 23 explicit skips`), and controlled field re-validation on BASE still produces almost complete ambiguity despite visually clear Oil. The current gate is S11-C: replay the four Mac local videos through the full production stream, then visually and feature-wise attribute representative success/failure frames before selecting any further detector repair.
 
 ## Current evidence owners
 
 - Detector/field acceptance: [`../30-quality/real-world-validation-plan.md`](../30-quality/real-world-validation-plan.md)
 - S11 diagnostic evidence and plan: [`../30-quality/s11-real-field-detector-effectiveness-plan.md`](../30-quality/s11-real-field-detector-effectiveness-plan.md)
+- S11-C full-video/forensic diagnostic contract: [`../30-quality/s11-c-full-video-production-replay-visual-forensic-diagnostic.md`](../30-quality/s11-c-full-video-production-replay-visual-forensic-diagnostic.md)
 - S11-A detector direction/experiment decision: [`../30-quality/s11-a-detector-direction-and-experiment-plan.md`](../30-quality/s11-a-detector-direction-and-experiment-plan.md)
 - S11-B Spatial production fallback: [`../30-quality/s11-b-spatial-positive-evidence-production.md`](../30-quality/s11-b-spatial-positive-evidence-production.md)
 - S11 Offline Temporal Trajectory probe: [`../30-quality/s11-offline-temporal-trajectory-probe.md`](../30-quality/s11-offline-temporal-trajectory-probe.md)
@@ -20,6 +21,14 @@ S10 is closed. S11 remains the P0 successor because a Windows field run on a vis
 ## Latest recorded closeout — S11 Local-Corpus Canonical Portability Repair
 
 PR #86 exact base `b0a5da3805d50faba524d874e97c616136e3c6c1` / exact head `1caa4f36fd1e35de70dbb469047356612f6ab549` passed the Lane B Orchestrator exact-head gate and native guarded-squash-merged as `7ec3cc8eaf46214c73d52dcfa908e1feb949e452`. The test/diagnostic-only repair changes no production source: missing ignored MP4 corpus is now explicit `SKIPPED / NOT AVAILABLE`, any present wrong-hash MP4 hard-fails before decode or aggregation using the checked-in S11-A manifest as identity authority, and hash-correct decode failure remains hard failure. Historical P0/P1/P2 diagnostic semantics are frozen independently from later Spatial production, removing the obsolete P0-production parity coupling while preserving current Spatial production ownership. Worker exact-head evidence recorded `37 passed` on the complete correct local corpus, an isolated no-corpus checkout at `21 passed / 16 skipped / exit 0`, and explicit wrong-identity hard failure. No Windows canonical or detector/general-field accuracy PASS is inferred.
+
+## Post-portability validation and field evidence
+
+Windows 11 canonical re-validation passed on the authoritative source tree with `1321 passed, 0 failed, 23 skipped`, where `16` skips were explicit absent-local-corpus cases and `7` were known symlink privilege limitations. The gate is therefore no longer portability/canonical.
+
+Controlled field re-validation remains diagnostic, but BASE already demonstrates the product problem persists after accepted S11 production changes: `1441/1441` rows are `UNKNOWN_REVIEW`, only `2` raw Oil boundaries are accepted, `1436/1441` decisions are ambiguous, and `10,730` proposals collapse to only `4` selected candidates. User/LVLM review reports visible Oil at multiple representative times. The current field score means are boundary `0.278`, artifact `0.341`, ambiguity `0.530` and no-interface `0.421`, so the dominant problem is positive-boundary identifiability/competition rather than proposal absence.
+
+A fresh current-S11 comparison against the frozen 68-frame blind silver set further shows sample-dependent and multi-owner residuals: sample3 visible Oil remains `0/6`, sample4 publishes Oil `15/16` but only `7/16` are inside frozen ranges, and Foam disagrees strongly with the frozen visual evidence. This is enough to reject a single global-threshold repair and opens S11-C forensic attribution.
 
 ## Accepted single-frame production state
 
@@ -43,4 +52,4 @@ P2, its FULL/EMPTY preservation correction and Spatial are accepted S11 producti
 
 ## Next action
 
-Rerun the full Windows canonical suite on the current synchronized main after the local-corpus portability repair. Record exact main identity, Python/platform context, terminal summary, all skips and any remaining failures. Missing ignored S11 MP4s should now appear only as explicit corpus-dependent skips; wrong local MP4 identity must remain a hard failure. Only after Windows canonical is green should the original 480–1200 s Windows field workload be revalidated against the recorded pre-S11 Base/Accum baseline. S12 UI/UX refinement remains separate.
+Run S11-C on the Mac local corpus using the current production stream, not isolated truth-frame execution alone. Replay all four videos with real temporal ownership, keep generated bundles/debug assets under the already ignored `sample/output/` hierarchy, summarize full-stream publication/decision/candidate behavior, then visually inspect a bounded set of representative success/failure frames and decompose the actual Oil/Foam candidate evidence. Generated bundles remain temporary and untracked; after attribution, any future repair should promote only minimal exact frames/windows and compact expectations into regression tests. Do not start S12 or a new detector threshold repair until S11-C identifies the responsible owner(s).

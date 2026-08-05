@@ -2,9 +2,9 @@
 
 ## Authority and status
 
-This document owns the S11 real-field detector diagnosis, evidence plan and acceptance boundaries. Milestone state and current next action remain owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). The agreed S11-A reproducible-corpus and detector-direction decision is recorded in [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md).
+This document owns the S11 real-field detector diagnosis, evidence plan and acceptance boundaries. Milestone state and current next action remain owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). The agreed S11-A reproducible-corpus and detector-direction decision is recorded in [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md). The current forensic diagnostic contract is [S11-C Full-Video Production Replay and Visual Forensic Attribution](s11-c-full-video-production-replay-visual-forensic-diagnostic.md).
 
-**Status:** `ACTIVE — P2 FULL/EMPTY preservation accepted; local-corpus canonical portability repair next`
+**Status:** `ACTIVE — Windows canonical green; field failure persists; S11-C forensic attribution next`
 
 S11 starts after the accepted S10 Windows/package gate. The immediate product risk is detector effectiveness on field-representative sight-glass video, not packaging or UI-platform viability.
 
@@ -142,7 +142,21 @@ The focused Spatial feature is a separate P0/D4-first fallback inside the existi
 
 The production non-degeneracy requirement `path span > 1 px` is a conservative proof of added spatial information, not a physical rule for Oil shape. Flat or near-horizontal Oil may remain ambiguous. Accepted fallback evidence is rebuilt into the normal canonical raw/proposal/hypothesis graph and a typed `ShadowBoundaryObservation`, then passes through unchanged Phase-A validation, the one serialized reducer, `AcceptedBoundaryOutcome` and production projection. No fallback state survives the command.
 
-On exact main `1e83aac0643b0734fa1d67dfa30b88da6f3bd31e`, actual production native Oil was `7/13` at `4.428571 px` MAE. The focused feature reproduces the diagnostic Spatial recoveries `sample2:30=599` and `sample2:60=598`, producing `9/13` at `4.888889 px` MAE with zero changes to the prior seven numeric anchors. Focused production tests retain collision/glare/structure/Foam protection and the P2 low-exposure rescue/warning boundaries. Detailed feature evidence is recorded in [S11-B Spatial Positive-Evidence Production Fallback](s11-b-spatial-positive-evidence-production.md). The feature remains subject to fresh Lane C exact-head audit.
+On exact main `1e83aac0643b0734fa1d67dfa30b88da6f3bd31e`, actual production native Oil was `7/13` at `4.428571 px` MAE. The focused feature reproduces the diagnostic Spatial recoveries `sample2:30=599` and `sample2:60=598`, producing `9/13` at `4.888889 px` MAE with zero changes to the prior seven numeric anchors. Focused production tests retain collision/glare/structure/Foam protection and the P2 low-exposure rescue/warning boundaries. Detailed feature evidence is recorded in [S11-B Spatial Positive-Evidence Production Fallback](s11-b-spatial-positive-evidence-production.md). The feature has passed its fresh Lane C exact-head audit and remains accepted production behavior.
+
+## Post-portability evidence and S11-C direction
+
+The portability gate is closed. Windows canonical re-validation on the current authoritative source tree completed with `1321 passed, 0 failed, 23 explicit skips`, no unexpected skip family, material warning, hang or crash. The `16` S11 corpus-dependent skips are the expected absent-local-MP4 behavior and the other `7` are Windows symlink privilege limitations.
+
+Controlled field re-validation still demonstrates severe BASE failure after accepted P2/FULL-EMPTY/Spatial production changes. Across `1441` rows, fill state is `UNKNOWN_REVIEW` on every row, only `2` raw Oil boundaries are accepted, `1436` decisions are ambiguous and `10,730` candidates produce only `4` selected candidates. User/LVLM visual review reports a clear Oil boundary at multiple times. Mean field scores are boundary `0.278`, artifact `0.341`, ambiguity `0.530` and no-interface `0.421`. This strengthens the earlier diagnosis that proposals can exist while canonical positive-boundary evidence remains too weak relative to competing evidence.
+
+The frozen 68-frame blind silver comparison provides a separate local visual reference. Current production publishes numeric Oil on `15/22` visible rows but only `7/22` are inside the frozen visual point/range; sample3 remains `0/6`, whereas sample4 is `15/16` numeric with eight out-of-range results. Foam also remains inconsistent with the frozen visual evidence, especially sample4. Silver/user-confirmed truth conflict on some sample2 rows means Spatial cannot be globally labeled false-positive from those rows. The combined evidence therefore supports multiple residual failure modes and does not justify a single global threshold repair.
+
+The user additionally reports that fitting the Recipe ellipse to the low-transparency/whitish field glass already produces about `16%` confidence, a review-needed observation, an "Oil boundary not in frame" interpretation despite a visually central boundary, and a "Foam possible" interpretation despite no visible Foam. S11-C treats this as a focused optical-domain hypothesis: the same glass appearance may create Foam-like support and Oil artifact/ambiguity pressure, but accepted Foam must be distinguished from merely rejected/ambiguous Foam-like evidence before assigning causality.
+
+S11-C now replays the four local videos through the full production stream, including temporal Foam gating and serialized Oil/tracker ownership, then performs bounded direct visual/candidate forensics on representative frames. Generated bundles/debug images remain under the existing ignored `sample/output/` hierarchy and are temporary evidence only. The diagnostic should determine whether the dominant local/field failure arises from proposal construction, true-candidate scoring/ranking, artifact/ambiguity competition, Foam/Oil separation, Spatial selection or canonical identifiability. Detailed scope and regression rules are owned by the S11-C document.
+
+A later repair should promote only the smallest reproducible frames/windows and compact expectations into regression tests; full generated bundles are not tracked as golden artifacts. S12 remains separate until S11 reaches a stable accepted detector baseline.
 
 ## Repair acceptance boundary
 
