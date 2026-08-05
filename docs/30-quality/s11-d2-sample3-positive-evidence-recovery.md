@@ -6,9 +6,9 @@ S11-D2 is the next S11 source slice after accepted S11-D1. It owns the two repro
 sample3 current-frame Oil failures separated by S11-C: a visually aligned candidate that
 remains non-identifiable, and a visually clear boundary that never becomes a material candidate.
 
-**Status:** `PLANNED — documentation gate complete; source-owner inspection and repair next`
+**Status:** `WORKER IMPLEMENTED — Class A current-frame recovery; Class B owner split; fresh exact-head audit pending`
 
-**Starting repository identity:** `main @ 7d1e7e4d7effec2b1bb58f8d458b459d72af7eab`
+**Worker starting repository identity:** `main @ 61de9ef9336bfe200c8a70a692b7ebd749b8565d`
 
 D1 Foam/Oil context safety, P2/FULL-EMPTY preservation, accepted Spatial behavior, the S5-B
 observability contract and local-corpus identity rules remain authoritative.
@@ -57,6 +57,75 @@ independently releasable semantics, preserve the same evidence and report the re
 
 The selected mechanism must explain why the recovered boundary is distinguishable from glare, rim,
 structural lines, reflection and full-like/no-interface scenes. Numeric recovery itself is not sufficient.
+
+## Worker implementation record — audit pending
+
+### Owner attribution and split decision
+
+The Worker inspected the active raw-observation, proposal, semantic-scoring, typed-current-observation,
+Spatial-fallback, Phase-A validation and canonical projection/reducer owners directly. Repository-native
+evidence was sufficient, so no external-reference review was needed and no new dependency was considered.
+
+The two D2 classes do **not** share one safe repair mechanism:
+
+- **Class A** already has a material relative-phase proposal and an independently coherent cross-ROI path.
+  At exact frame `899`, the relative candidate is source Y=`320` with boundary likelihood about `0.362`,
+  aggregate horizontal coverage about `0.014`, broad strength about `0.277`, texture relief about `0.966`
+  and an accepted four-sector path `(119, 128, 124, 128)`. The defect is sequencing: Spatial path evidence
+  was evaluated only after the scalar typed-current owner had already accepted a boundary, so Spatial could
+  validate an accepted candidate but could not supply missing positive identifiability evidence.
+- **Class B** has no corresponding safe candidate/path in the frozen `326–344 px` visual range. At exact
+  frame `2697`, both the ordinary and relative proposal families remain dominated by other rows, with
+  material source candidates `206, 252, 287, 294, 302, 399`. Direct target-range checks do not produce a
+  coherent three-sector grayscale phase path. This is an observation/proposal-representation defect, not
+  the Class-A sequencing defect, and is deliberately left outside this repair rather than recovered by a
+  lower threshold or truth-guided candidate injection.
+
+### Implemented Class-A mechanism
+
+`oil_spatial_fallback.py` now has a secondary current-frame route only when the ordinary relative-phase
+owner remains non-boundary. The route does not lower the ordinary boundary or ambiguity floors. It reuses
+existing S5-B positive/safety evidence and requires all of the following before one Spatial path is tried:
+
+- available no-interface evidence with likelihood at most `0.40`;
+- boundary evidence greater than artifact evidence;
+- all broad scales available, broad strength at least `0.12`, scale consistency at least `0.60`, broad
+  polarity consistency at least `0.85`, and candidate polarity confidence at least `0.20`;
+- narrow peak at least `0.25` with paired-edge strength at most `0.80`;
+- visibility/evidence availability, glare/exclusion/border and static-prior safeguards retained from the
+  existing low-contrast S5-B route;
+- existing single-frame texture relief, phase-ceiling, collision-pressure and reliability safeguards;
+- the existing five-sector phase path must accept, and D2 additionally requires at least four sectors,
+  bounded span and candidate/path alignment.
+
+The first semantic-order candidate that passes the non-Spatial safety gate owns the only path attempt. If
+that path fails, D2 fails closed instead of searching lower-ranked alternatives. Therefore the added work is
+bounded to one existing five-sector path evaluation in an already-ambiguous Spatial fallback frame; there
+is no new temporal state, result/Recipe/truth schema, dependency or post-owner numeric reconstruction.
+
+### Representative and replay evidence
+
+Fresh exact-frame evaluation changes sample3 `899` from ambiguity/no numeric Oil to a current-frame canonical
+boundary at source Y=`320`, inside the frozen `310–322 px` range. Frozen frame `900` similarly yields Y=`319`.
+The accepted candidate remains below the ordinary scalar boundary/coverage floors, so the recovery is caused
+by the additional four-sector current-frame phase evidence rather than a global threshold change.
+
+The serialized stream owner remains authoritative. In the proportional `2 fps` four-video comparison, the
+new current-frame evidence does **not** bypass reacquisition: sample3 raw Oil stays `42/281` before and after.
+Five sample3 rows change only from `ambiguous` to `reacquisition_pending` (`899`, `914`, `3012`, `3057`,
+`3132`), all with `NO_UPDATE`; no new stream-level numeric Oil publication is created. This is reported as
+current-frame evidence recovery, not temporal/result recovery. The subsequent `914` current-frame boundary
+is Y=`301`, too far from Y=`320` for the unchanged temporal owner to confirm the path safely.
+
+The other replay signatures are unchanged: base `0/30` changed rows, sample2 `0/20`, and sample4 `0/113`.
+Sample4 remains raw Oil `0/113`, raw Foam `113/113`, with Foam Oil-routing authority withheld `113/113`
+for `wide_hollow_structural_or_refractive_component`. Sample2 user-confirmed Spatial anchors remain
+`30 → 599` and `60 → 598`. The later sample3 changed rows do not publish numeric Oil; their
+`reacquisition_pending` status is retained as explicit evidence for the Auditor rather than being promoted
+through a temporal exception.
+
+The S11-C forensic bundle remains unchanged and its hash list still verifies against fingerprint
+`9dc96fc04f9dcb1e00f5c120650ce6953e26239a0ecb61278cd6287b40519370` (`207/207` files verified).
 
 ## Non-goals and prohibited shortcuts
 
@@ -107,6 +176,8 @@ changing S5-B proposal construction, candidacy/identifiability semantics or the 
 boundary. Bounded owner inspection may establish a narrower existing-owner defect, but the Worker must not
 self-downgrade audit authority after source mutation.
 
-After accepted D2 repair, rerun the local production replay and reassess residual sample3/sample4/field gaps.
-Do not declare S11 complete until the resulting detector baseline is revalidated on the controlled Windows field
-workflow. Initial-state retrospective reconstruction and S12 remain separate successor decisions.
+The current Worker next gate is a fresh independent **S11-D2 exact-head Auditor**. If that gate accepts
+this bounded Class-A repair, the remaining Class-B observation/proposal representation defect must be
+reassessed as its own source decision rather than being silently folded into this PR. Do not declare S11
+complete until the resulting detector baseline is revalidated on the controlled Windows field workflow.
+Initial-state retrospective reconstruction and S12 remain separate successor decisions.

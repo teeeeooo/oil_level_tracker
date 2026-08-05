@@ -81,18 +81,30 @@ def build_spatial_positive_fallback_frame(
         accepted_foam_front_local_y=accepted_foam_front_local_y,
         accepted_foam_component_mask=accepted_foam_component_mask,
     )
-    if not isinstance(current, ShadowBoundaryObservation):
-        return None
-
-    path = _evaluate_spatial_path(
-        pre,
-        effective_mask,
-        candidate_local_y=current.hypothesis.representative_local_y,
-        accepted_foam_component_mask=accepted_foam_component_mask,
-        bounds=bounds,
-    )
-    if not path.accepted:
-        return None
+    if isinstance(current, ShadowBoundaryObservation):
+        path = _evaluate_spatial_path(
+            pre,
+            effective_mask,
+            candidate_local_y=current.hypothesis.representative_local_y,
+            accepted_foam_component_mask=accepted_foam_component_mask,
+            bounds=bounds,
+        )
+        if not path.accepted:
+            return None
+    else:
+        recovered = _select_spatially_corroborated_textured_boundary(
+            pre,
+            effective_mask,
+            hypotheses,
+            accepted_foam_component_mask=accepted_foam_component_mask,
+            bounds=bounds,
+        )
+        if recovered is None:
+            return None
+        current = observations._boundary_observation(
+            recovered,
+            sorted(hypotheses, key=observations._hypothesis_order),
+        )
     return SuccessfulPipelineFrame(
         raw_observations=raw,
         proposals=proposals,
@@ -352,6 +364,105 @@ def _relative_broad_summary(
         glare_conflict=glare,
         exclusion_conflict=exclusion,
     )
+
+
+def _select_spatially_corroborated_textured_boundary(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    hypotheses: tuple[SemanticHypothesis, ...],
+    *,
+    accepted_foam_component_mask: np.ndarray | None,
+    bounds: OilShadowBounds,
+) -> SemanticHypothesis | None:
+    """Recover weak scalar evidence only when current-frame Spatial adds proof.
+
+    The ordinary relative-phase route remains authoritative when it can already
+    form a typed boundary. This secondary route is narrower: it reuses the
+    existing textured-boundary glare/collision safeguards, but replaces missing
+    aggregate horizontal coverage with a four-sector coherent phase path.
+    """
+
+    ordered = sorted(hypotheses, key=observations._hypothesis_order)
+    no_interface = observations._no_interface_evidence(
+        pre,
+        effective_mask,
+        hypotheses,
+    )
+    if not no_interface.available or no_interface.likelihood > 0.40:
+        return None
+
+    for candidate in ordered:
+        spatial_conflict = max(
+            candidate.broad.glare_conflict,
+            candidate.broad.exclusion_conflict,
+            candidate.narrow.glare_overlap,
+            candidate.narrow.exclusion_overlap,
+            candidate.narrow.border_overlap,
+        )
+        if not (
+            candidate.boundary_likelihood > candidate.artifact_likelihood
+            and candidate.broad.available_scale_count == len(candidate.broad.scales)
+            and candidate.broad.strength >= 0.12
+            and candidate.broad.scale_consistency >= 0.60
+            and candidate.broad.polarity_consistency >= 0.85
+            and candidate.polarity_confidence >= 0.20
+            and candidate.narrow.available
+            and candidate.narrow.peak_strength >= 0.25
+            and candidate.narrow.paired_edge_strength <= 0.80
+            and candidate.visibility >= 0.85
+            and candidate.evidence_availability >= 0.90
+            and spatial_conflict <= 0.15
+            and candidate.static_prior.contribution <= 0.08
+        ):
+            continue
+
+        second_boundary = max(
+            (
+                item.boundary_likelihood
+                for item in ordered
+                if item.identity != candidate.identity
+            ),
+            default=0.0,
+        )
+        identifiability = observations._single_frame_identifiability_evidence(
+            pre,
+            effective_mask,
+            candidate,
+            no_interface,
+            second_boundary,
+        )
+        if not (
+            identifiability.texture_relief >= 0.55
+            and identifiability.phase_ceiling_pressure <= 0.20
+            and identifiability.collision_pressure <= 0.10
+            and identifiability.evidence_reliability >= 0.75
+        ):
+            continue
+
+        path = _evaluate_spatial_path(
+            pre,
+            effective_mask,
+            candidate_local_y=candidate.representative_local_y,
+            accepted_foam_component_mask=accepted_foam_component_mask,
+            bounds=bounds,
+        )
+        path_alignment = (
+            float("inf")
+            if path.median_local_y is None
+            else abs(path.median_local_y - candidate.representative_local_y)
+        )
+        if (
+            path.accepted
+            and path.sector_count >= _SECTOR_COUNT - 1
+            and path.span_px <= 2.0 * bounds.maximum_proposal_diameter_px
+            and path_alignment <= bounds.maximum_proposal_diameter_px
+        ):
+            return candidate
+        # Do not search lower-ranked hypotheses after the first candidate that
+        # passes the non-spatial safety gate. This keeps the fallback fail-closed
+        # and bounds the added Spatial work to one five-sector path evaluation.
+        return None
+    return None
 
 
 def _evaluate_spatial_path(
