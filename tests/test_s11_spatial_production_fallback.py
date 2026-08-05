@@ -15,7 +15,11 @@ from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeReposi
 from oil_tracker.adapters.vision.foam_front_detector import detect_bottom_connected_foam
 from oil_tracker.adapters.vision.foam_temporal_gate import FoamTemporalGate
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
-from oil_tracker.adapters.vision.oil_shadow_types import OilShadowBounds
+from oil_tracker.adapters.vision.oil_shadow_types import (
+    AcceptedBoundaryOutcome,
+    AmbiguousOutcome,
+    OilShadowBounds,
+)
 from oil_tracker.adapters.vision.oil_spatial_fallback import _evaluate_spatial_path
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.adapters.vision.preprocessing import preprocess
@@ -155,6 +159,45 @@ def test_d2_class_a_uses_current_frame_four_sector_positive_evidence() -> None:
     assert path.rows == (119, 128, 124, 128)
     assert path.span_px == 9
     assert path.maximum_jump_px == 9
+
+
+def test_d2_spatial_recovery_respects_authoritative_foam_front() -> None:
+    root = require_s11_local_corpus()
+    glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
+    frame = _decode_local_video_frame(root, "sample3", 899)
+    bundle = build_mask_bundle(frame, glass)
+    pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
+    accepted_foam_mask = np.zeros_like(bundle.effective_mask)
+
+    path = _evaluate_spatial_path(
+        pre,
+        bundle.effective_mask,
+        candidate_local_y=125.0,
+        accepted_foam_component_mask=accepted_foam_mask,
+        bounds=OilShadowBounds(),
+    )
+    assert path.accepted
+    assert path.sector_count == 4
+
+    def evaluate(front_local_y: float):
+        return OpenCvPhaseDetector()._evaluate_oil_pipeline(
+            glass.id,
+            pre,
+            bundle,
+            None,
+            accepted_foam_front_local_y=front_local_y,
+            accepted_foam_component_mask=accepted_foam_mask,
+        )
+
+    below_front = evaluate(124.0)
+    assert isinstance(below_front, AcceptedBoundaryOutcome)
+    assert below_front.raw_source_y == 320.0
+
+    for front_local_y in (125.0, 145.0, 150.0, 155.0):
+        blocked = evaluate(front_local_y)
+        assert isinstance(blocked, AmbiguousOutcome)
+        assert blocked.tracker_action.value == "NO_UPDATE"
+        assert blocked.projected_source_y == 321.0
 
 
 def test_d2_class_b_remains_split_when_visual_range_has_no_material_candidate() -> None:

@@ -96,6 +96,7 @@ def build_spatial_positive_fallback_frame(
             pre,
             effective_mask,
             hypotheses,
+            accepted_foam_front_local_y=accepted_foam_front_local_y,
             accepted_foam_component_mask=accepted_foam_component_mask,
             bounds=bounds,
         )
@@ -371,6 +372,7 @@ def _select_spatially_corroborated_textured_boundary(
     effective_mask: np.ndarray,
     hypotheses: tuple[SemanticHypothesis, ...],
     *,
+    accepted_foam_front_local_y: float | None,
     accepted_foam_component_mask: np.ndarray | None,
     bounds: OilShadowBounds,
 ) -> SemanticHypothesis | None:
@@ -400,7 +402,11 @@ def _select_spatially_corroborated_textured_boundary(
             candidate.narrow.border_overlap,
         )
         if not (
-            candidate.boundary_likelihood > candidate.artifact_likelihood
+            (
+                accepted_foam_front_local_y is None
+                or candidate.representative_local_y > accepted_foam_front_local_y
+            )
+            and candidate.boundary_likelihood > candidate.artifact_likelihood
             and candidate.broad.available_scale_count == len(candidate.broad.scales)
             and candidate.broad.strength >= 0.12
             and candidate.broad.scale_consistency >= 0.60

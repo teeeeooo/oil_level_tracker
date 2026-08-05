@@ -6,7 +6,7 @@ S11-D2 is the next S11 source slice after accepted S11-D1. It owns the two repro
 sample3 current-frame Oil failures separated by S11-C: a visually aligned candidate that
 remains non-identifiable, and a visually clear boundary that never becomes a material candidate.
 
-**Status:** `WORKER IMPLEMENTED — Class A current-frame recovery; Class B owner split; fresh exact-head audit pending`
+**Status:** `WORKER REPAIRED — Class A recovery plus Foam-front constraint; Class B owner split; fresh exact-head re-audit pending`
 
 **Worker starting repository identity:** `main @ 61de9ef9336bfe200c8a70a692b7ebd749b8565d`
 
@@ -102,6 +102,20 @@ The first semantic-order candidate that passes the non-Spatial safety gate owns 
 that path fails, D2 fails closed instead of searching lower-ranked alternatives. Therefore the added work is
 bounded to one existing five-sector path evaluation in an already-ambiguous Spatial fallback frame; there
 is no new temporal state, result/Recipe/truth schema, dependency or post-owner numeric reconstruction.
+
+### PR #88 Foam-front audit repair
+
+The first exact-head audit found that this secondary selector received the accepted Foam component mask but
+not the accepted Foam-front coordinate. That allowed Spatial corroboration to promote an Oil hypothesis above
+an authoritative accepted Foam front even though the existing Foam-aware S5-B selector requires Oil to lie
+strictly below that front. The bounded repair now passes the same `accepted_foam_front_local_y` into the D2
+selector and requires `candidate.representative_local_y > accepted_foam_front_local_y` whenever a front is
+present. The D2 gate set, candidate ordering, Spatial path, Foam qualification and temporal owner are otherwise
+unchanged. sample3:899-derived adversarial fronts at local Y `125`, `145`, `150` and `155` now remain ambiguous/
+`NO_UPDATE`, while a front at `124` still permits the legitimate local-Y `125` D2 boundary at source Y `320`.
+Repair-head `2 fps` replay of base, sample2 and sample3 reproduced the prior PR signatures exactly; sample4 was
+not rerun because its prior `113/113` frames withheld Foam Oil-routing authority, so the new front-present guard
+is unreachable there and the existing `Oil 0/113`, `Foam 113/113` evidence remains valid.
 
 ### Representative and replay evidence
 
