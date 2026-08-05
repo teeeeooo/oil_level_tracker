@@ -1273,6 +1273,13 @@ class OilHypothesisPipeline:
             if item.measurement_scale != 1 or not _same(item.band_height_px, 1.0):
                 raise ValueError("Pixel-edge observation scale/band shape is invalid.")
             return
+        if item.source_family is ShadowSourceFamily.SOBEL_DISTRIBUTED:
+            scale = max(self.bounds.broad_band_scales)
+            if item.measurement_scale != scale:
+                raise ValueError("Distributed Sobel observation scale is invalid.")
+            if not 2.0 * scale <= item.band_height_px <= 3.0 * scale:
+                raise ValueError("Distributed Sobel observation span is invalid.")
+            return
         if item.source_family is ShadowSourceFamily.REGION_STEP:
             if item.measurement_scale not in self.bounds.broad_band_scales:
                 raise ValueError("Region-step observation uses an unsupported scale.")

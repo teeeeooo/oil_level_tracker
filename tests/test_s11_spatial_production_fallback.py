@@ -5,6 +5,7 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+import pytest
 
 from foam_benchmark_fixtures import controlled_scenes as controlled_foam_scenes
 from oil_observability_fixtures import (
@@ -15,10 +16,12 @@ from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeReposi
 from oil_tracker.adapters.vision.foam_front_detector import detect_bottom_connected_foam
 from oil_tracker.adapters.vision.foam_temporal_gate import FoamTemporalGate
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
+from oil_tracker.adapters.vision.oil_shadow_observations import extract_raw_observations
 from oil_tracker.adapters.vision.oil_shadow_types import (
     AcceptedBoundaryOutcome,
     AmbiguousOutcome,
     OilShadowBounds,
+    ShadowSourceFamily,
 )
 from oil_tracker.adapters.vision.oil_spatial_fallback import _evaluate_spatial_path
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
@@ -200,7 +203,7 @@ def test_d2_spatial_recovery_respects_authoritative_foam_front() -> None:
         assert blocked.projected_source_y == 321.0
 
 
-def test_d2_class_b_remains_split_when_visual_range_has_no_material_candidate() -> None:
+def test_d2_class_b_materially_represents_visual_range_without_forced_promotion() -> None:
     root = require_s11_local_corpus()
     glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
     frame = _decode_local_video_frame(root, "sample3", 2697)
@@ -217,8 +220,26 @@ def test_d2_class_b_remains_split_when_visual_range_has_no_material_candidate() 
     oil_candidate_y = sorted(
         candidate.y for candidate in detection.candidates if candidate.kind.value == "oil_air"
     )
-    assert oil_candidate_y == [206.0, 252.0, 287.0, 294.0, 302.0, 399.0]
-    assert not any(326.0 <= y <= 344.0 for y in oil_candidate_y)
+    assert oil_candidate_y == [206.0, 252.0, 287.0, 294.0, 302.0, 327.0, 399.0]
+    assert any(326.0 <= y <= 344.0 for y in oil_candidate_y)
+    assert 302.0 in oil_candidate_y
+
+    bundle = build_mask_bundle(frame, glass)
+    pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
+    raw = extract_raw_observations(
+        pre,
+        bundle.effective_mask,
+        crop_origin_y=float(bundle.crop_origin[1]),
+        bounds=OilShadowBounds(),
+    )
+    distributed = [
+        item for item in raw
+        if item.source_family is ShadowSourceFamily.SOBEL_DISTRIBUTED
+    ]
+    assert len(distributed) == 1
+    assert distributed[0].source_y == 327.0
+    assert distributed[0].band_height_px == 21.0
+    assert distributed[0].response_strength == pytest.approx(0.1878, abs=0.0001)
 
 
 def test_sample4_structural_foam_is_published_without_oil_routing_authority() -> None:

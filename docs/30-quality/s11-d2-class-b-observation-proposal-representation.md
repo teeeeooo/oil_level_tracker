@@ -6,9 +6,9 @@ This document owns the next S11 source gate after accepted PR #88 Class-A recove
 It addresses the remaining sample3 defect where a visually usable Oil boundary is not represented
 by any material current-frame S5-B candidate.
 
-**Status:** `PLANNED — documentation gate complete; bounded owner repair next`
+**Status:** `IMPLEMENTED — Worker exact-head handoff pending fresh independent audit`
 
-**Starting repository identity:** `main @ aaeb0119524faf6d10218af3442ab05d733af8de`
+**Worker base identity:** `main @ 97c13d676b27163836da985b4b2505bb0afa402a`
 
 Accepted S11-D1 Foam/Oil context safety and S11-D2 Class-A Spatial corroboration remain authoritative.
 The repair must preserve the canonical S5-B observability contract and one serialized temporal owner.
@@ -18,12 +18,12 @@ The repair must preserve the canonical S5-B observability contract and one seria
 Production sample3 frame `2697` (`89.9899 s`) corresponds to frozen usable visual frame `2700`
 (`90.09 s`), Oil range `326–344 px`, Foam absent, partial-state hint.
 
-Current material candidate Y values remain approximately:
+Pre-repair material candidate Y values were approximately:
 
 `206, 252, 287, 294, 302, 399`
 
-No material candidate represents the frozen Oil range. The current outcome is ambiguous / `NO_UPDATE`.
-This survived accepted D1 and D2 Class-A changes and therefore remains a distinct representation defect.
+No material candidate represented the frozen Oil range. The pre-repair outcome was ambiguous / `NO_UPDATE`.
+This survived accepted D1 and D2 Class-A changes and therefore opened a distinct representation defect.
 ## Current owner boundary
 
 Direct owner inspection places the defect in the shared current-frame representation path:
@@ -91,6 +91,68 @@ fingerprint:
 
 Local-corpus identity, missing/decode-failure and no-partial-aggregate rules remain authoritative.
 Full canonical and Windows/private-field validation are later gates, not automatic Worker acceptance.
+
+## Worker implementation evidence
+
+The exact loss point was raw Sobel observation emission, not preprocessing, total raw retention,
+or proposal capacity at sample3 frame `2697`. The `326–344 px` visual range contains valid Sobel
+local maxima at source `327`, `335` and `343 px`, but global top-strength Sobel retention omitted them.
+
+The repair adds at most one internal `sobel_distributed` observation from an observable current-frame
+ridge: at least three already-valid Sobel local maxima above the unchanged `0.08` floor, spread across
+`20–30 px`, outside the neighborhoods of the ordinary strongest Sobel rows. Ordinary raw observations
+and ordinary proposals retain first ownership of their existing resource budgets. The supplemental
+observation is added only when raw/proposal capacity remains and never enters D2 Spatial base evidence.
+
+At production frame `2697`, raw observations change `12 → 13` and proposals `6 → 7` with a new
+source-Y `327 px` observation (`21 px` span, response `0.187762`) and proposal/hypothesis. The existing
+`302 px` competing hypothesis remains material. The `327 px` hypothesis remains ambiguous
+(boundary `0.185473`, artifact `0.152396`, ambiguity `0.464123`), so current-frame publication stays
+ambiguous / `NO_UPDATE`; no later temporal or canonical owner is weakened.
+
+Literal frame `2700` remains a separate residual observation: it still has no `326–344 px` raw/proposal;
+the bounded supplemental representation appears at `386 px` and remains ambiguous. The accepted defect
+and regression authority for this gate remain production frame `2697`, which corresponds to the frozen
+usable visual reference at `90.09 s`.
+
+The repaired four-video 2 FPS production replay preserves publication signatures exactly: base `2/30`,
+sample2 `4/20`, sample3 `42/281`, and sample4 Oil `0/113` with Foam `113/113`. Proposal/candidate
+signatures change only as supplemental representation: base `22/22`, sample2 `2/0`, sample3 `170/119`,
+sample4 `3/3`. Ordinary-hypothesis removals, decision status/reason drift, tracker-action drift,
+smoothing-action drift, serialized temporal-state/beam drift and publication drift are all `0` for every
+video. Maximum raw observations rise by at most one per frame (`36→37`, `36→37`, `30→31`, `34→35`),
+while maximum proposals remain bounded at `10`, `12`, `12`, `10` respectively. The instrumented replay
+wall time changed by about `+1.0%` in aggregate; this is proportional diagnostic evidence, not a
+field-performance certification.
+
+## Audit repair — semantic capacity ownership
+
+Fresh exact-head review accepted the observable `SOBEL_DISTRIBUTED` mechanism but found that the first
+implementation combined ordinary and supplemental semantic hypotheses before the hard
+`semantic_hypotheses=10` truncation. A high-scoring supplemental hypothesis could therefore evict an
+ordinary hypothesis even though raw/proposal admission already gave ordinary evidence first ownership.
+
+The bounded repair preserves the existing ordinary grouping, compatibility, merge identity and
+`_hypothesis_order` behavior, applies the semantic cap to those ordinary hypotheses first, and admits
+supplemental hypotheses only from capacity that remains. Supplemental evidence that would merge with an
+ordinary semantic group is not allowed to rewrite that ordinary group. The ordinary current-observation
+three-hypothesis decision prefix is also retained before supplemental admission; supplemental evidence may
+enter the remaining semantic capacity only when it sorts after that prefix. This keeps the Class-B `327 px`
+hypothesis material at frame `2697` as the fourth ordered hypothesis while preventing additive representation
+from perturbing the serialized temporal beam.
+
+The Auditor's six saturated replacements reproduce on the failing head and are absent after repair:
+
+- sample2 `270`: ordinary `335` was replaced by distributed `476`; repaired full semantics retain `335`;
+- sample3 `270`: ordinary `257` was replaced by distributed `340`; repaired semantics retain `257`;
+- sample3 `345`: ordinary `260` was replaced by distributed `269`; repaired semantics retain `260`;
+- sample3 `360`: ordinary `235` was replaced by distributed `268`; repaired semantics retain `235`;
+- sample3 `974`: ordinary `232` was replaced by distributed `242`; repaired semantics retain `232`;
+- sample3 `1049`: ordinary `295` was replaced by distributed `306`; repaired semantics retain `295`.
+
+A deterministic saturated-cap regression fixes this ordinary-first contract, and a decision-prefix regression
+proves that an intrusive supplemental hypothesis cannot reorder the ordinary decision-facing prefix while a
+trailing supplemental hypothesis may still consume genuinely unused semantic capacity.
 
 ## Next gate
 

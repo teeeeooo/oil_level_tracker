@@ -268,6 +268,70 @@ def test_semantic_dedup_is_deterministic_preserves_provenance_and_keeps_opposite
     assert len(separated) == 2
 
 
+def test_semantic_capacity_preserves_saturated_ordinary_before_supplemental():
+    bounds = OilShadowBounds(semantic_hypotheses=10)
+    ordinary = tuple(
+        _typed_hypothesis(
+            f"semantic-cap-ordinary-{index}",
+            y=20.0 + 20.0 * index,
+            boundary=0.60 - 0.02 * index,
+        )
+        for index in range(bounds.semantic_hypotheses)
+    )
+    baseline = semantic_deduplicate(ordinary, bounds)
+    supplemental = _typed_hypothesis(
+        "semantic-cap-supplemental",
+        y=240.0,
+        boundary=0.99,
+        artifact=0.01,
+        ambiguity=0.10,
+    )
+    with_supplemental = semantic_deduplicate(
+        ordinary + (supplemental,),
+        bounds,
+        supplemental_hypothesis_ids=frozenset({supplemental.identity}),
+    )
+    assert len(baseline) == bounds.semantic_hypotheses
+    assert with_supplemental == baseline
+
+
+def test_semantic_supplemental_cannot_reorder_ordinary_decision_prefix():
+    bounds = OilShadowBounds(semantic_hypotheses=10)
+    ordinary = tuple(
+        _typed_hypothesis(
+            f"semantic-prefix-ordinary-{index}",
+            y=20.0 + 20.0 * index,
+            boundary=boundary,
+        )
+        for index, boundary in enumerate((0.70, 0.60, 0.50, 0.40))
+    )
+    baseline = semantic_deduplicate(ordinary, bounds)
+    intrusive = _typed_hypothesis(
+        "semantic-prefix-intrusive",
+        y=140.0,
+        boundary=0.65,
+    )
+    guarded = semantic_deduplicate(
+        ordinary + (intrusive,),
+        bounds,
+        supplemental_hypothesis_ids=frozenset({intrusive.identity}),
+    )
+    assert guarded == baseline
+
+    trailing = _typed_hypothesis(
+        "semantic-prefix-trailing",
+        y=160.0,
+        boundary=0.30,
+    )
+    additive = semantic_deduplicate(
+        ordinary + (trailing,),
+        bounds,
+        supplemental_hypothesis_ids=frozenset({trailing.identity}),
+    )
+    assert additive[:3] == baseline[:3]
+    assert trailing.identity in {item.identity for item in additive}
+
+
 def test_closed_no_interface_boundary_ambiguity_and_unavailable_outcomes():
     dark = _run(np.full((80, 100), 75, dtype=np.uint8))
     bright = _run(np.full((80, 100), 190, dtype=np.uint8))
