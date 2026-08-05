@@ -1741,7 +1741,7 @@ def _no_interface_evidence(
     empty = _unit((mean_intensity - 115.0) / 70.0) * uniformity
     likelihood = _unit(
         0.36 * weak_boundary
-        + 0.27 * uniformity
+        + 0.44 * uniformity
         + 0.20 * visibility
         - 0.30 * glare_conflict
         - 0.38 * competing
