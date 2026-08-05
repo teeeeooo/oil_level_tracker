@@ -99,6 +99,18 @@ def extract_raw_observations(
             horizontal_support=coverage,
         )
     )
+    distributed_sobel = _distributed_sobel_observation(
+        energy,
+        signed_sobel,
+        valid_support,
+        visible_support,
+        coverage,
+        crop_origin_y,
+        width,
+        bounds,
+    )
+    if distributed_sobel is not None:
+        observations.append(distributed_sobel)
 
     observations.extend(
         _profile_observations(
@@ -154,18 +166,56 @@ def extract_raw_observations(
             )
         )
 
-    ordered = sorted(observations, key=lambda item: item.canonical_key)
-    return tuple(ordered[: bounds.total_raw_observations])
+    ordinary = sorted(
+        (
+            item
+            for item in observations
+            if item.source_family is not ShadowSourceFamily.SOBEL_DISTRIBUTED
+        ),
+        key=lambda item: item.canonical_key,
+    )
+    retained = ordinary[: bounds.total_raw_observations]
+    remaining = bounds.total_raw_observations - len(retained)
+    if remaining > 0:
+        supplemental = sorted(
+            (
+                item
+                for item in observations
+                if item.source_family is ShadowSourceFamily.SOBEL_DISTRIBUTED
+            ),
+            key=lambda item: item.canonical_key,
+        )
+        retained.extend(supplemental[:remaining])
+    return tuple(sorted(retained, key=lambda item: item.canonical_key))
 
 
 def build_bounded_proposals(
     observations: tuple[RawEdgeObservation, ...] | list[RawEdgeObservation],
     bounds: OilShadowBounds,
 ) -> tuple[BoundedYProposal, ...]:
-    ordered = tuple(sorted(observations, key=lambda item: item.canonical_key))
+    ordinary = tuple(
+        sorted(
+            (
+                item
+                for item in observations
+                if item.source_family is not ShadowSourceFamily.SOBEL_DISTRIBUTED
+            ),
+            key=lambda item: item.canonical_key,
+        )
+    )
+    supplemental = tuple(
+        sorted(
+            (
+                item
+                for item in observations
+                if item.source_family is ShadowSourceFamily.SOBEL_DISTRIBUTED
+            ),
+            key=lambda item: item.canonical_key,
+        )
+    )
     groups: list[list[RawEdgeObservation]] = []
     retained = 0
-    for observation in ordered:
+    for observation in ordinary:
         if retained >= bounds.total_retained_members:
             break
         if not groups:
@@ -187,6 +237,22 @@ def build_bounded_proposals(
             retained += 1
         else:
             break
+
+    for observation in supplemental:
+        if retained >= bounds.total_retained_members:
+            break
+        if len(groups) >= bounds.total_proposals:
+            break
+        overlaps_existing = any(
+            min(abs(observation.local_y - item.local_y) for item in group)
+            <= bounds.maximum_proposal_diameter_px + 1e-12
+            for group in groups
+        )
+        if overlaps_existing:
+            continue
+        groups.append([observation])
+        retained += 1
+    groups.sort(key=lambda group: min(item.local_y for item in group))
 
     proposals: list[BoundedYProposal] = []
     for group in groups[: bounds.total_proposals]:
@@ -905,6 +971,117 @@ def _accepts_corroborated_single_dominant_boundary(
         and spatial_conflict <= 0.15
         and best.static_prior.contribution <= 0.08
         and best.narrow.static_overlap <= 0.20
+    )
+
+
+def _distributed_sobel_observation(
+    response: np.ndarray,
+    signed: np.ndarray,
+    valid_support: np.ndarray,
+    visible_support: np.ndarray,
+    horizontal_support: np.ndarray,
+    crop_origin_y: float,
+    measurement_width: int,
+    bounds: OilShadowBounds,
+) -> RawEdgeObservation | None:
+    """Retain one broad Sobel ridge that top-strength ranking would omit.
+
+    The ordinary strongest Sobel rows remain untouched. This bounded secondary
+    representation requires at least three already-valid local maxima spread
+    across two to three canonical broad scales, outside the neighborhoods of
+    those strongest rows. It therefore represents an observable distributed
+    transition rather than inventing a target Y or lowering the edge floor.
+    """
+
+    scale = max(bounds.broad_band_scales)
+    primary_rows = _bounded_peak_rows(
+        response,
+        bounds.observations_per_source_scale,
+        minimum=0.08,
+    )
+    all_rows = sorted(
+        _bounded_peak_rows(
+            response,
+            bounds.total_raw_observations,
+            minimum=0.08,
+        )
+    )
+    secondary_rows = [
+        row
+        for row in all_rows
+        if all(abs(row - primary) > scale for primary in primary_rows)
+    ]
+    minimum_span = 2 * scale
+    maximum_span = 3 * scale
+    best_group: tuple[int, ...] | None = None
+    best_key: tuple[float, int, int, tuple[int, ...]] | None = None
+    for start_index, first_row in enumerate(secondary_rows):
+        group: list[int] = []
+        for row in secondary_rows[start_index:]:
+            if group and row - group[-1] > scale:
+                break
+            span = row - first_row
+            if span > maximum_span:
+                break
+            group.append(row)
+            if len(group) < 3 or span < minimum_span:
+                continue
+            mean_strength = float(np.mean([response[item] for item in group]))
+            key = (-mean_strength, -len(group), span, tuple(group))
+            if best_key is None or key < best_key:
+                best_key = key
+                best_group = tuple(group)
+
+    if best_group is None:
+        return None
+    first_row, last_row = best_group[0], best_group[-1]
+    center = 0.5 * (first_row + last_row)
+    row = min(
+        best_group,
+        key=lambda item: (abs(item - center), -float(response[item]), item),
+    )
+    signed_value = float(np.mean([signed[item] for item in best_group]))
+    polarity_available = abs(signed_value) >= 0.015
+    polarity = _signed_unit(signed_value) if polarity_available else 0.0
+    response_strength = _unit(
+        float(np.mean([response[item] for item in best_group]))
+    )
+    horizontal = _unit(
+        float(np.mean([horizontal_support[item] for item in best_group]))
+    )
+    valid = _unit(float(np.mean([valid_support[item] for item in best_group])))
+    visible = _unit(float(np.mean([visible_support[item] for item in best_group])))
+    band_height = float(last_row - first_row)
+    scalar_items = (
+        ("source_family", ShadowSourceFamily.SOBEL_DISTRIBUTED.value),
+        ("measurement_scale", scale),
+        ("local_y", float(row)),
+        ("source_y", float(row) + float(crop_origin_y)),
+        ("polarity_available", polarity_available),
+        ("polarity", polarity),
+        ("response_strength", response_strength),
+        ("horizontal_support", horizontal),
+        ("valid_mask_support", valid),
+        ("glare_visible_support", visible),
+        ("measurement_width_px", float(measurement_width)),
+        ("band_height_px", band_height),
+        ("source_local_index", 0),
+    )
+    return RawEdgeObservation(
+        identity=stable_digest("oil-shadow-observation", scalar_items),
+        source_family=ShadowSourceFamily.SOBEL_DISTRIBUTED,
+        measurement_scale=scale,
+        local_y=float(row),
+        source_y=float(row) + float(crop_origin_y),
+        polarity_available=polarity_available,
+        polarity=polarity,
+        response_strength=response_strength,
+        horizontal_support=horizontal,
+        valid_mask_support=valid,
+        glare_visible_support=visible,
+        measurement_width_px=float(measurement_width),
+        band_height_px=band_height,
+        source_local_index=0,
     )
 
 

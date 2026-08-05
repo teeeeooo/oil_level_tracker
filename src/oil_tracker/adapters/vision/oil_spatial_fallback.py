@@ -127,7 +127,11 @@ def _relative_region_observations(
     retained = [
         item
         for item in base_raw_observations
-        if item.source_family is not ShadowSourceFamily.REGION_STEP
+        if item.source_family
+        not in {
+            ShadowSourceFamily.REGION_STEP,
+            ShadowSourceFamily.SOBEL_DISTRIBUTED,
+        }
     ]
     effective = effective_mask > 0
     visible = effective & ~(pre.glare_mask > 0)

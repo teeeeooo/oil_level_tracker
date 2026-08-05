@@ -10,6 +10,7 @@ from typing import TypeAlias
 
 class ShadowSourceFamily(str, Enum):
     SOBEL = "sobel"
+    SOBEL_DISTRIBUTED = "sobel_distributed"
     CANNY = "canny"
     HOUGH = "hough"
     REGION_STEP = "region_step"
