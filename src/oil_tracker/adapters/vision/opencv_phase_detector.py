@@ -15,6 +15,7 @@ from .foam_front_detector import (
     FoamDecisionStatus,
     FoamDetectionResult,
     detect_bottom_connected_foam,
+    evaluate_foam_oil_context_authority,
 )
 from .foam_temporal_gate import FoamTemporalDecision, FoamTemporalGate
 from .geometry_masks import MaskBundle, build_mask_bundle
@@ -122,14 +123,25 @@ class OpenCvPhaseDetector:
         )
         foam_temporal = self._foam_gate.evaluate(glass.id, foam, settings)
         foam_candidate = foam_temporal.candidate
-        accepted_foam_component_mask = None if foam_candidate is None else foam.mask
+        foam_context = evaluate_foam_oil_context_authority(foam)
+        foam_context_authoritative = bool(
+            foam_candidate is not None and foam_context.authoritative
+        )
+        foam_context_reason = (
+            foam_context.reason
+            if foam_candidate is not None
+            else "foam_context_not_temporally_accepted"
+        )
+        accepted_foam_component_mask = (
+            foam.mask if foam_context_authoritative else None
+        )
         oil_result = self._evaluate_oil_pipeline(
             glass.id,
             pre,
             bundle,
             static_map,
             accepted_foam_front_local_y=(
-                None if foam_candidate is None else float(foam_candidate.y)
+                float(foam_candidate.y) if foam_context_authoritative else None
             ),
             accepted_foam_component_mask=accepted_foam_component_mask,
         )
@@ -229,6 +241,12 @@ class OpenCvPhaseDetector:
             "foam_component_height_ratio": float(foam.component_height_ratio),
             "foam_component_width_ratio": float(foam.component_width_ratio),
             "foam_bounding_box_fill_ratio": float(foam.bounding_box_fill_ratio),
+            "foam_oil_context_authoritative": foam_context_authoritative,
+            "foam_oil_context_reason": foam_context_reason,
+            "foam_oil_context_wide_row_fraction": float(foam_context.wide_row_fraction),
+            "foam_oil_context_wide_row_compactness_median": float(
+                foam_context.wide_row_compactness_median
+            ),
             "foam_temporal_pending_count": int(foam_temporal.pending_count),
             "foam_temporal_required_count": int(foam_temporal.required_count),
             "foam_front_delta": (

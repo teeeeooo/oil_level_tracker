@@ -7,9 +7,9 @@ It addresses the proven shared boundary where accepted S5-A Foam evidence become
 inside S5-B Oil observation. It does not authorize a general detector retune or the separate sample3
 candidate-generation/identifiability repair.
 
-**Status:** `PLANNED — documentation gate complete; bounded reference review and Lane C source repair next`
+**Status:** `WORKER IMPLEMENTED — focused Lane C branch; fresh exact-head audit pending`
 
-**Starting repository identity:** `main @ 1e283a60c4a16c870ec7be8f6e0d4fea6e198203`
+**Worker starting repository identity:** `main @ 5feb973c41adeac176a96efc0efbc3b435c2bbb3`
 
 The S5-A Foam contract, S5-B observability architecture, accepted P2/FULL-EMPTY preservation,
 Spatial production behavior and local-corpus identity rules remain authoritative.
@@ -70,6 +70,59 @@ Useful questions are limited to:
 Do not preselect ML, graph-cut, Hough, circularity thresholds, component-count rules or a new dependency.
 External ideas must be adapted only if they fit the current S5-A/S5-B ownership, packaging and CPU
 contracts more safely than a repository-native solution.
+
+## Worker implementation record — audit pending
+
+### Bounded reference review
+
+The Worker stopped the reference review once the repository-native ownership choice was clear:
+
+- OpenCV 4.x `imgproc` shape/connected-components documentation confirms that component geometry and
+  occupancy statistics are maintained upstream primitives already available in the current dependency set.
+- Laupsien et al., *Physics of Fluids* (2019), DOI `10.1063/1.5088945`, uses bubble morphology including
+  eccentricity and solidity as verification evidence. D1 adopts only the general morphology principle;
+  it does not import paper-specific circularity/eccentricity thresholds.
+- Musić et al., *Sensors* (2023), DOI `10.3390/s23167126`, documents glass-container refraction/reflection
+  artifacts and uses morphology/blob selection for a low-cost image pipeline. Bobovnik et al., *Sensors*
+  (2021), DOI `10.3390/s21082676`, detects a transparent-vessel liquid level on multiple vertical lines
+  specifically to reject local bubble/droplet outliers. D1 adopts the spatial-consistency principle only.
+
+ML, graph-cut, Hough, new dependencies and paper-specific shape thresholds were rejected as unnecessary
+for the proven D1 boundary.
+
+### Responsibility boundary and mechanism
+
+Current production had one implicit authority: once `FoamTemporalGate` accepted an S5-A candidate,
+`OpenCvPhaseDetector` always passed that candidate front and mask into S5-B. That context both selected
+Foam-separated Oil recovery and removed the same mask from Spatial evidence. S5-A publication therefore
+silently granted S5-B masking/routing authority.
+
+D1 preserves S5-A classification, temporal acceptance, Foam publication, fill-state input and Foam tracker
+updates. It adds a stateless `evaluate_foam_oil_context_authority` check only at the S5-A → S5-B handoff.
+The observed unsafe class is a component that spans most of the ROI but is hollow across many individual
+rows, matching the bright U-shaped rim/refractive structure seen in S11-C. Routing authority is withheld
+only when all four conditions hold:
+
+- component width ratio is at least `0.70`;
+- component bounding-box fill ratio is below `0.30`;
+- at least `0.25` of component rows span at least `0.35` of the component width;
+- median occupied/span compactness on those wide rows is below `0.65`.
+
+An accepted Foam candidate that matches this structural pattern remains published as Foam but contributes
+neither front nor mask to S5-B. S5-B then evaluates its independent evidence and remains fail-closed when
+that evidence is non-identifiable. No detector setting, Recipe/public schema, temporal state, dependency,
+truth input or post-owner numeric reconstruction is added.
+
+### Development evidence
+
+On the preserved S11-C sampled rows, the final authority guard withholds `0/8` accepted base-sample
+contexts, `0/10` sample2 contexts and `0/20` sample3 contexts, while withholding `113/113` sample4
+contexts. Replaying the same 113 sample4 frame/time rows changes raw Oil publication from `110/113` to
+`0/113`; Foam remains `113/113`, all 113 Oil outcomes are `ambiguous`, and no alternate structural Oil
+candidate is promoted. The user-confirmed sample2 anchors remain `30 → 599` and `60 → 598`.
+
+The ignored S11-C bundle remains unchanged and retains fingerprint
+`9dc96fc04f9dcb1e00f5c120650ce6953e26239a0ecb61278cd6287b40519370`.
 
 ## Non-goals and prohibited shortcuts
 

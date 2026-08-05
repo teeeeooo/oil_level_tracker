@@ -117,6 +117,7 @@ def _assert_structural_foam_stays_fail_closed(frame: np.ndarray, timestamp: floa
         "accepted_strong",
         "accepted_moderate",
     }
+    assert detection.debug_metrics["foam_oil_context_authoritative"] is True
     assert detection.raw_oil_air_level_y is None
     assert detection.smoothed_oil_air_level_y is None
     assert detection.fill_state.value != "FOAMING_VISIBLE"
