@@ -318,6 +318,7 @@ def evaluate_semantic_hypotheses(
         else None
     )
     hypotheses: list[SemanticHypothesis] = []
+    supplemental_hypothesis_ids: set[str] = set()
     for proposal in proposals:
         members = tuple(observation_by_id[item] for item in proposal.member_ids)
         broad = _broad_summary(proposal, broad_profiles, bounds)
@@ -337,13 +338,70 @@ def evaluate_semantic_hypotheses(
             crop_origin_y,
         )
         hypotheses.append(hypothesis)
-    return semantic_deduplicate(tuple(hypotheses), bounds)
+        if any(
+            item.source_family is ShadowSourceFamily.SOBEL_DISTRIBUTED
+            for item in members
+        ):
+            supplemental_hypothesis_ids.add(hypothesis.identity)
+    return semantic_deduplicate(
+        tuple(hypotheses),
+        bounds,
+        supplemental_hypothesis_ids=frozenset(supplemental_hypothesis_ids),
+    )
 
 
 def semantic_deduplicate(
     hypotheses: tuple[SemanticHypothesis, ...] | list[SemanticHypothesis],
     bounds: OilShadowBounds,
+    *,
+    supplemental_hypothesis_ids: frozenset[str] = frozenset(),
 ) -> tuple[SemanticHypothesis, ...]:
+    ordinary = tuple(
+        item for item in hypotheses if item.identity not in supplemental_hypothesis_ids
+    )
+    supplemental = tuple(
+        item for item in hypotheses if item.identity in supplemental_hypothesis_ids
+    )
+    ordinary_groups = _semantic_groups(ordinary, bounds)
+    ordinary_merged = [_merge_hypothesis_group(group) for group in ordinary_groups]
+    ordinary_merged.sort(key=_hypothesis_order)
+    retained = ordinary_merged[: bounds.semantic_hypotheses]
+    remaining = bounds.semantic_hypotheses - len(retained)
+    if remaining <= 0 or not supplemental:
+        return tuple(retained)
+
+    supplemental_candidates = tuple(
+        item
+        for item in supplemental
+        if not any(
+            _can_join_semantic_group(item, group, bounds)
+            for group in ordinary_groups
+        )
+    )
+    supplemental_merged = [
+        _merge_hypothesis_group(group)
+        for group in _semantic_groups(supplemental_candidates, bounds)
+    ]
+    supplemental_merged.sort(key=_hypothesis_order)
+    decision_prefix = retained[:3]
+    if len(decision_prefix) < 3:
+        supplemental_merged = []
+    else:
+        prefix_tail_order = _hypothesis_order(decision_prefix[-1])
+        supplemental_merged = [
+            item
+            for item in supplemental_merged
+            if _hypothesis_order(item) > prefix_tail_order
+        ]
+    combined = retained + supplemental_merged[:remaining]
+    combined.sort(key=_hypothesis_order)
+    return tuple(combined)
+
+
+def _semantic_groups(
+    hypotheses: tuple[SemanticHypothesis, ...] | list[SemanticHypothesis],
+    bounds: OilShadowBounds,
+) -> list[list[SemanticHypothesis]]:
     ordered = sorted(
         hypotheses,
         key=lambda item: (
@@ -353,28 +411,32 @@ def semantic_deduplicate(
         ),
     )
     groups: list[list[SemanticHypothesis]] = []
-    tolerance = min(2.0, bounds.maximum_proposal_diameter_px / 3.0)
     for item in ordered:
-        compatible_group = None
-        for group in groups:
-            minimum = min(value.minimum_local_y for value in group + [item])
-            maximum = max(value.maximum_local_y for value in group + [item])
-            if maximum - minimum > bounds.maximum_proposal_diameter_px + 1e-12:
-                continue
-            representative = float(median([value.representative_local_y for value in group]))
-            if abs(item.representative_local_y - representative) > tolerance + 1e-12:
-                continue
-            if all(_semantically_compatible(item, prior) for prior in group):
-                compatible_group = group
-                break
+        compatible_group = next(
+            (group for group in groups if _can_join_semantic_group(item, group, bounds)),
+            None,
+        )
         if compatible_group is None:
             groups.append([item])
         else:
             compatible_group.append(item)
+    return groups
 
-    merged = [_merge_hypothesis_group(group) for group in groups]
-    merged.sort(key=_hypothesis_order)
-    return tuple(merged[: bounds.semantic_hypotheses])
+
+def _can_join_semantic_group(
+    item: SemanticHypothesis,
+    group: list[SemanticHypothesis],
+    bounds: OilShadowBounds,
+) -> bool:
+    minimum = min(value.minimum_local_y for value in group + [item])
+    maximum = max(value.maximum_local_y for value in group + [item])
+    if maximum - minimum > bounds.maximum_proposal_diameter_px + 1e-12:
+        return False
+    tolerance = min(2.0, bounds.maximum_proposal_diameter_px / 3.0)
+    representative = float(median([value.representative_local_y for value in group]))
+    if abs(item.representative_local_y - representative) > tolerance + 1e-12:
+        return False
+    return all(_semantically_compatible(item, prior) for prior in group)
 
 
 def evaluate_typed_current_observation(

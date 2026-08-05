@@ -115,13 +115,44 @@ the bounded supplemental representation appears at `386 px` and remains ambiguou
 and regression authority for this gate remain production frame `2697`, which corresponds to the frozen
 usable visual reference at `90.09 s`.
 
-The final four-video 2 FPS production replay preserves publication signatures exactly: base `2/30`,
+The repaired four-video 2 FPS production replay preserves publication signatures exactly: base `2/30`,
 sample2 `4/20`, sample3 `42/281`, and sample4 Oil `0/113` with Foam `113/113`. Proposal/candidate
-signatures change only as supplemental representation: base `22/22`, sample2 `2/1`, sample3 `170/149`,
-sample4 `3/3`; publication changes are `0` for every video. Maximum raw observations rise by at most
-one per frame (`36→37`, `36→37`, `30→31`, `34→35`), while maximum proposals remain bounded at
-`10`, `12`, `12`, `10` respectively. The instrumented replay wall time changed by about `+4.1%` in
-aggregate; this is proportional diagnostic evidence, not a field-performance certification.
+signatures change only as supplemental representation: base `22/22`, sample2 `2/0`, sample3 `170/119`,
+sample4 `3/3`. Ordinary-hypothesis removals, decision status/reason drift, tracker-action drift,
+smoothing-action drift, serialized temporal-state/beam drift and publication drift are all `0` for every
+video. Maximum raw observations rise by at most one per frame (`36→37`, `36→37`, `30→31`, `34→35`),
+while maximum proposals remain bounded at `10`, `12`, `12`, `10` respectively. The instrumented replay
+wall time changed by about `+1.0%` in aggregate; this is proportional diagnostic evidence, not a
+field-performance certification.
+
+## Audit repair — semantic capacity ownership
+
+Fresh exact-head review accepted the observable `SOBEL_DISTRIBUTED` mechanism but found that the first
+implementation combined ordinary and supplemental semantic hypotheses before the hard
+`semantic_hypotheses=10` truncation. A high-scoring supplemental hypothesis could therefore evict an
+ordinary hypothesis even though raw/proposal admission already gave ordinary evidence first ownership.
+
+The bounded repair preserves the existing ordinary grouping, compatibility, merge identity and
+`_hypothesis_order` behavior, applies the semantic cap to those ordinary hypotheses first, and admits
+supplemental hypotheses only from capacity that remains. Supplemental evidence that would merge with an
+ordinary semantic group is not allowed to rewrite that ordinary group. The ordinary current-observation
+three-hypothesis decision prefix is also retained before supplemental admission; supplemental evidence may
+enter the remaining semantic capacity only when it sorts after that prefix. This keeps the Class-B `327 px`
+hypothesis material at frame `2697` as the fourth ordered hypothesis while preventing additive representation
+from perturbing the serialized temporal beam.
+
+The Auditor's six saturated replacements reproduce on the failing head and are absent after repair:
+
+- sample2 `270`: ordinary `335` was replaced by distributed `476`; repaired full semantics retain `335`;
+- sample3 `270`: ordinary `257` was replaced by distributed `340`; repaired semantics retain `257`;
+- sample3 `345`: ordinary `260` was replaced by distributed `269`; repaired semantics retain `260`;
+- sample3 `360`: ordinary `235` was replaced by distributed `268`; repaired semantics retain `235`;
+- sample3 `974`: ordinary `232` was replaced by distributed `242`; repaired semantics retain `232`;
+- sample3 `1049`: ordinary `295` was replaced by distributed `306`; repaired semantics retain `295`.
+
+A deterministic saturated-cap regression fixes this ordinary-first contract, and a decision-prefix regression
+proves that an intrusive supplemental hypothesis cannot reorder the ordinary decision-facing prefix while a
+trailing supplemental hypothesis may still consume genuinely unused semantic capacity.
 
 ## Next gate
 
