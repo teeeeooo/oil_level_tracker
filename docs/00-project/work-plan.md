@@ -2,15 +2,16 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE — production detector recovery`
-**Current gate:** `S11-C — Mac full-video production replay and visual forensic attribution`
+**Current gate:** `S11-D1 — Foam structural/refractive discrimination and Oil context safety`
 
-S10 is closed. S11 remains the P0 successor because field-representative video still shows severe detector effectiveness failure despite the accepted platform/package baseline. P2, its FULL/EMPTY preservation correction, Spatial and local-corpus portability are merged. Windows canonical re-validation is now green (`1321 passed, 0 failed, 23 explicit skips`), and controlled field re-validation on BASE still produces almost complete ambiguity despite visually clear Oil. The current gate is S11-C: replay the four Mac local videos through the full production stream, then visually and feature-wise attribute representative success/failure frames before selecting any further detector repair.
+S10 is closed. S11 remains the P0 successor because field-representative video still shows severe detector effectiveness failure despite the accepted platform/package baseline. P2, its FULL/EMPTY preservation correction, Spatial and local-corpus portability are merged. Windows canonical re-validation is green, and S11-C full-video replay/forensics is complete. S11-C proves multiple residual failure modes and, most importantly, a causal S5-A Foam → S5-B Oil routing defect on structural/refractive sight-glass evidence. The current gate is S11-D1: repair that shared responsibility boundary first, then replay before opening the separate sample3 positive-evidence work.
 
 ## Current evidence owners
 
 - Detector/field acceptance: [`../30-quality/real-world-validation-plan.md`](../30-quality/real-world-validation-plan.md)
 - S11 diagnostic evidence and plan: [`../30-quality/s11-real-field-detector-effectiveness-plan.md`](../30-quality/s11-real-field-detector-effectiveness-plan.md)
 - S11-C full-video/forensic diagnostic contract: [`../30-quality/s11-c-full-video-production-replay-visual-forensic-diagnostic.md`](../30-quality/s11-c-full-video-production-replay-visual-forensic-diagnostic.md)
+- S11-D1 Foam/Oil context repair plan: [`../30-quality/s11-d1-foam-structural-refractive-discrimination-oil-context-safety.md`](../30-quality/s11-d1-foam-structural-refractive-discrimination-oil-context-safety.md)
 - S11-A detector direction/experiment decision: [`../30-quality/s11-a-detector-direction-and-experiment-plan.md`](../30-quality/s11-a-detector-direction-and-experiment-plan.md)
 - S11-B Spatial production fallback: [`../30-quality/s11-b-spatial-positive-evidence-production.md`](../30-quality/s11-b-spatial-positive-evidence-production.md)
 - S11 Offline Temporal Trajectory probe: [`../30-quality/s11-offline-temporal-trajectory-probe.md`](../30-quality/s11-offline-temporal-trajectory-probe.md)
@@ -28,7 +29,7 @@ Windows 11 canonical re-validation passed on the authoritative source tree with 
 
 Controlled field re-validation remains diagnostic, but BASE already demonstrates the product problem persists after accepted S11 production changes: `1441/1441` rows are `UNKNOWN_REVIEW`, only `2` raw Oil boundaries are accepted, `1436/1441` decisions are ambiguous, and `10,730` proposals collapse to only `4` selected candidates. User/LVLM review reports visible Oil at multiple representative times. The current field score means are boundary `0.278`, artifact `0.341`, ambiguity `0.530` and no-interface `0.421`, so the dominant problem is positive-boundary identifiability/competition rather than proposal absence.
 
-A fresh current-S11 comparison against the frozen 68-frame blind silver set further shows sample-dependent and multi-owner residuals: sample3 visible Oil remains `0/6`, sample4 publishes Oil `15/16` but only `7/16` are inside frozen ranges, and Foam disagrees strongly with the frozen visual evidence. This is enough to reject a single global-threshold repair and opens S11-C forensic attribution.
+S11-C has now completed the full production-stream replay and bounded visual/candidate attribution. Local replay reproduces the Windows chain `many candidates → weak/competing Oil authority → ambiguity → NO_UPDATE`, while also separating multiple local modes: sample3 contains both correct-Y candidates that remain non-identifiable and visually clear boundaries that never become candidates. The highest-priority causal finding is sample4: Foam is accepted on all `113/113` replay rows, structural/refractive U-shaped support can satisfy the Foam owner, and withholding only accepted Foam context from the Oil owner collapses Oil publication from `110/113` to `0/113`. Spatial remains required for valid sample2 recovery but also owns suspicious sample3 full-like acceptances. A single global threshold repair is therefore rejected.
 
 ## Accepted single-frame production state
 
@@ -52,4 +53,4 @@ P2, its FULL/EMPTY preservation correction and Spatial are accepted S11 producti
 
 ## Next action
 
-Run S11-C on the Mac local corpus using the current production stream, not isolated truth-frame execution alone. Replay all four videos with real temporal ownership, keep generated bundles/debug assets under the already ignored `sample/output/` hierarchy, summarize full-stream publication/decision/candidate behavior, then visually inspect a bounded set of representative success/failure frames and decompose the actual Oil/Foam candidate evidence. Generated bundles remain temporary and untracked; after attribution, any future repair should promote only minimal exact frames/windows and compact expectations into regression tests. Do not start S12 or a new detector threshold repair until S11-C identifies the responsible owner(s).
+Start S11-D1 as a provisional Lane C source slice. Perform only a bounded external-reference review that can inform the existing S5-A/S5-B owners, then repair the proven structural/refractive Foam → Oil routing authority defect without using a global Foam/Oil threshold shift or sample-specific exception. Preserve genuine Foam, user-confirmed sample2 Spatial recovery, glare/structure/collision and FULL/EMPTY protections. Reuse the ignored S11-C forensic bundle while it remains decision-bearing, then rerun the four-video production replay after D1. Keep the separate sample3 candidate-generation/identifiability repair for S11-D2 and keep initial-state retrospective reconstruction outside this detector slice.

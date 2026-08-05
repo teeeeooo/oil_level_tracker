@@ -1,0 +1,126 @@
+# S11-D1 Foam Structural/Refractive Discrimination and Oil Context Safety
+
+## Authority and status
+
+S11-D1 is the first source-repair slice after the completed S11-C full-video forensic diagnostic.
+It addresses the proven shared boundary where accepted S5-A Foam evidence becomes routing authority
+inside S5-B Oil observation. It does not authorize a general detector retune or the separate sample3
+candidate-generation/identifiability repair.
+
+**Status:** `PLANNED — documentation gate complete; bounded reference review and Lane C source repair next`
+
+**Starting repository identity:** `main @ 1e283a60c4a16c870ec7be8f6e0d4fea6e198203`
+
+The S5-A Foam contract, S5-B observability architecture, accepted P2/FULL-EMPTY preservation,
+Spatial production behavior and local-corpus identity rules remain authoritative.
+
+## Evidence that opens S11-D1
+
+S11-C replayed all four local videos through the real production stream and met its exit criterion.
+The strongest new causal evidence is sample4:
+
+- production Foam publication: `113/113`;
+- production Oil publication: `110/113`;
+- accepted Foam evidence is structurally associated with a bright U-shaped lower rim/refractive region;
+- when only accepted Foam context is withheld from the Oil owner, Oil publication falls from `110` to `0`;
+- at representative frames the accepted Foam front lies on or near the visual Oil transition and changes
+  which lower candidate can qualify for Foam-separated Oil recovery.
+The direct conclusion is narrower than "Foam is wrong everywhere": some sight-glass structural/refractive
+appearances satisfy the current S5-A whiteness/texture/component criteria strongly enough to become
+accepted Foam, and that accepted context can materially alter S5-B Oil admissibility and ranking.
+
+The same S11-C evidence also proves other residual Oil defects, but they are not D1 scope:
+
+- sample3:899 has a correct-Y candidate that remains non-identifiable because positive support is weak;
+- sample3:2697 has a visually clear boundary for which no material candidate is generated;
+- Spatial is required for valid sample2 recovery but also owns suspicious sample3 full-like acceptances.
+
+These observations justify later S11-D2/S11-D3 work; they do not justify broadening D1 before its own
+Foam/Oil responsibility boundary is repaired and replayed.
+
+## Objective
+
+Prevent non-Foam structural/rim/refractive sight-glass evidence from silently acquiring Foam routing
+authority over Oil while preserving genuine Foam detection and the existing S5-B fail-closed ambiguity
+contract.
+
+D1 SHOULD prefer genuinely discriminative evidence or safer context handoff semantics over a global
+score shift. The implementation is not preselected by this document.
+
+The repair must answer two separate questions:
+
+1. why the observed U-shaped structural/refractive component currently qualifies as accepted Foam;
+2. when Foam evidence is accepted, what proof is sufficient before that context may mask, constrain or
+   re-route an otherwise plausible Oil boundary.
+## Bounded external-reference gate
+
+Before choosing a production mechanism, the Worker SHOULD perform a short evidence-focused review of
+maintained/credible sources only where they can inform the existing owners. The review is advisory,
+not acceptance authority.
+
+Useful questions are limited to:
+
+- which bubble/foam morphology or spatial-consistency features distinguish dispersed Foam from vessel
+  rim/refraction/structural brightness;
+- which liquid-boundary evidence families remain robust under transparent or low-transparency vessel
+  optics without globally weakening ambiguity;
+- how multi-line/cross-ROI consistency can reject local structural outliers while preserving valid
+  flat or near-horizontal interfaces.
+
+Do not preselect ML, graph-cut, Hough, circularity thresholds, component-count rules or a new dependency.
+External ideas must be adapted only if they fit the current S5-A/S5-B ownership, packaging and CPU
+contracts more safely than a repository-native solution.
+
+## Non-goals and prohibited shortcuts
+
+S11-D1 does not include:
+
+- global Foam threshold increase/decrease as the sole repair;
+- global Oil boundary/ambiguity threshold retuning;
+- sample4/video-name/Recipe-specific branching;
+- sample3 candidate-generation or positive-evidence recovery;
+- trajectory interpolation or initial-state retrospective reconstruction;
+- persisted/public schema, Recipe or truth changes;
+- new dependency or ML model without separately proven necessity;
+- weakening genuine Foam, glare, structure, no-interface or observational-equivalence protections.
+## Acceptance boundary
+
+A production repair is acceptable only if exact-head evidence shows all of the following:
+
+- the sample4 structural/rim/refractive class no longer obtains unsafe Foam routing authority;
+- genuine Foam acceptance remains protected by the existing S5-A regression set;
+- sample4 Oil is not merely recovered by promoting another structural candidate or by globally weakening
+  ambiguity/identifiability;
+- user-confirmed sample2 Spatial Oil recoveries remain preserved;
+- retained glare, structure, collision and FULL/EMPTY no-interface protections remain fail-closed;
+- no new hidden temporal state, post-owner numeric reconstruction or truth-derived production input is added;
+- CPU/resource behavior remains bounded within the existing architecture.
+
+The repair SHOULD include minimal regression cases that prove both sides of the responsibility boundary:
+a structural/refractive non-Foam case that cannot control Oil routing, and genuine Foam cases that still can.
+Use the smallest exact local frames/windows and compact expectations needed to prevent recurrence.
+
+## S11-C artifact retention
+
+The ignored S11-C forensic bundle is intentionally preserved through D1 because it contains the exact
+representative images, masks and counterfactual evidence needed for source attribution:
+
+`sample/output/s11-c-full-video-forensics/s11c-20260805T161456/`
+
+Recorded bundle fingerprint:
+`9dc96fc04f9dcb1e00f5c120650ce6953e26239a0ecb61278cd6287b40519370`
+
+It remains temporary, Git-ignored evidence and must not become a golden artifact. Cleanup belongs to the
+S11 merge/close owner after D1/D2 no longer need it.
+
+## Next gate
+
+S11-D1 is provisionally a **Lane C — Independent Review** source slice because the proven defect crosses
+the accepted S5-A Foam classification/context → S5-B Oil observability responsibility boundary.
+
+After D1 repair and fresh exact-head audit, rerun the four-video production replay and the minimal retained
+regressions. Only then open S11-D2 for the separate sample3 positive-evidence defects: candidate-present
+but non-identifiable and candidate-not-generated. Spatial reconciliation remains an acceptance constraint
+across these slices rather than a blanket threshold task.
+
+S11 completion, Windows field PASS, initial-state retrospective reconstruction and S12 are not implied.

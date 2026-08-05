@@ -4,6 +4,8 @@
 
 S11-C is a read-only diagnostic stage inside `S11 — Real-Field Detector Effectiveness Recovery`. The `S11-C` label is a milestone slice, not an Engineering Workflow Lane C classification. It does not authorize detector source, threshold, Recipe, truth, schema, dependency or runtime-contract mutation. The purpose is to reproduce the field failure class on the Mac local corpus with the actual current production pipeline, then attribute the loss of usable Oil evidence to the responsible current-frame/temporal owners before selecting any S11-D repair.
 
+**Status:** `COMPLETE — exit criterion met; S11-D1 selected`
+
 **Starting production identity:** `main @ c1eb10cb948feccbce438e9e27008824f53baf33`
 
 Detailed S5-B observability and S5-A Foam contracts remain authoritative. S11-C must preserve the distinction between visual/physical truth, current observable evidence and accepted production outcome.
@@ -146,3 +148,16 @@ S11-C is complete when the full-video replay plus representative visual forensic
 No source repair is performed inside this diagnostic. A subsequent S11-D repair is separately classified from the proven blast radius; shared S5-A/S5-B observability, Foam/Oil responsibility or validation-architecture changes remain Lane C candidates, while a truly bounded existing-owner defect may qualify for Lane B.
 
 Detector/general-field accuracy PASS, S11 completion and S12 start are not implied. S12 remains a separate UI/UX successor after a stable S11 detector baseline.
+
+
+## Completed result and handoff
+
+The completed replay/forensic execution met this document's exit criterion without source, test, Recipe, truth or tracked-document mutation. The local stream reproduces the Windows ambiguity/NO_UPDATE class and separates multiple residual owners. The decision-bearing new evidence is the causal sample4 Foam-context interaction: structural/refractive support can become accepted Foam, and removing only that accepted context from S5-B removes all sample4 Oil publication in the counterfactual replay.
+
+The next source gate is [S11-D1 Foam Structural/Refractive Discrimination and Oil Context Safety](s11-d1-foam-structural-refractive-discrimination-oil-context-safety.md). sample3 candidate-generation/identifiability remains a later S11-D2 concern. No new blind annotation is required.
+
+The ignored forensic root is intentionally preserved through the next repair gate:
+
+`sample/output/s11-c-full-video-forensics/s11c-20260805T161456/`
+
+Its recorded hash-list fingerprint is `9dc96fc04f9dcb1e00f5c120650ce6953e26239a0ecb61278cd6287b40519370`. It remains temporary non-Git authority.
