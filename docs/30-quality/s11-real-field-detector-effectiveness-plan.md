@@ -2,9 +2,9 @@
 
 ## Authority and status
 
-This document owns the S11 real-field detector diagnosis, evidence plan and acceptance boundaries. Milestone state and current next action remain owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). The agreed S11-A reproducible-corpus and detector-direction decision is recorded in [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md). The completed forensic diagnostic contract is [S11-C Full-Video Production Replay and Visual Forensic Attribution](s11-c-full-video-production-replay-visual-forensic-diagnostic.md). The current repair plan is [S11-D1 Foam Structural/Refractive Discrimination and Oil Context Safety](s11-d1-foam-structural-refractive-discrimination-oil-context-safety.md).
+This document owns the S11 real-field detector diagnosis, evidence plan and acceptance boundaries. Milestone state and current next action remain owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). The agreed S11-A reproducible-corpus and detector-direction decision is recorded in [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md). The completed forensic diagnostic contract is [S11-C Full-Video Production Replay and Visual Forensic Attribution](s11-c-full-video-production-replay-visual-forensic-diagnostic.md). The accepted D1 repair record is [S11-D1 Foam Structural/Refractive Discrimination and Oil Context Safety](s11-d1-foam-structural-refractive-discrimination-oil-context-safety.md).
 
-**Status:** `ACTIVE — S11-C complete; S11-D1 Foam/Oil context repair next`
+**Status:** `ACTIVE — S11-D1 accepted; S11-D2 sample3 positive-evidence recovery next`
 
 S11 starts after the accepted S10 Windows/package gate. The immediate product risk is detector effectiveness on field-representative sight-glass video, not packaging or UI-platform viability.
 
@@ -158,13 +158,13 @@ S11-C now replays the four local videos through the full production stream, incl
 
 A later repair should promote only the smallest reproducible frames/windows and compact expectations into regression tests; full generated bundles are not tracked as golden artifacts. S12 remains separate until S11 reaches a stable accepted detector baseline.
 
-## S11-C completed attribution and S11-D1 gate
+## S11-C completed attribution and accepted S11-D1 repair
 
 S11-C full production-stream replay met its exit criterion. It reproduced the Windows ambiguity/NO_UPDATE class locally and proved that residual failure is multi-modal rather than a single score-threshold defect. sample3 includes both a correct-Y candidate that remains non-identifiable and a visually clear boundary for which no material candidate is generated. Spatial remains necessary for user-confirmed sample2 Oil recovery but also promotes suspicious full-like sample3 structures.
 
-The first source slice is therefore S11-D1, not a general Oil-threshold repair. On sample4, production publishes Foam on `113/113` rows and Oil on `110/113`; direct mask review associates accepted Foam with a bright U-shaped structural/refractive region, and withholding only accepted Foam context from the Oil owner collapses Oil publication to `0/113`. This proves accepted Foam context is materially causal to Oil routing on the local corpus.
+S11-D1 repaired the first shared-responsibility defect rather than globally retuning Oil/Foam thresholds. Accepted S5-A Foam remains published and continues through its existing temporal/fill-state path, while a stateless handoff policy withholds only the wide, hollow structural/refractive component class from S5-B Oil masking/routing authority.
 
-S11-D1 owns only the structural/refractive Foam discrimination and Foam→Oil context-safety boundary. It must preserve genuine Foam and valid sample2 Spatial recovery. The separate sample3 candidate-generation/identifiability repair is reserved for S11-D2 after D1 replay. A bounded external-reference review may inform D1, but repository contracts and exact-head evidence remain acceptance authority. The ignored S11-C forensic bundle remains temporary evidence through D1 and is not a golden fixture.
+Fresh exact-head Lane C audit accepted that boundary. Four-video production replay preserved every base/sample2/sample3 Oil/Foam/fill-state signature and retained sample2 `30 → 599` and `60 → 598`. On sample4, Foam remained `113/113`, Oil changed from the preserved S11-C baseline `110/113` to `0/113`, authority was withheld `113/113`, and no alternate numeric Oil route appeared. The next source gate is S11-D2 for the separately proven sample3 candidate-present/non-identifiable and candidate-not-generated defects. The ignored S11-C forensic bundle remains temporary non-Git evidence and is not a golden fixture.
 
 ## Repair acceptance boundary
 

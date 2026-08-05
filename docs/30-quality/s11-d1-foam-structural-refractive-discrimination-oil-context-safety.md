@@ -7,7 +7,7 @@ It addresses the proven shared boundary where accepted S5-A Foam evidence become
 inside S5-B Oil observation. It does not authorize a general detector retune or the separate sample3
 candidate-generation/identifiability repair.
 
-**Status:** `WORKER IMPLEMENTED — focused Lane C branch; fresh exact-head audit pending`
+**Status:** `ACCEPTED — fresh Lane C exact-head audit PASS; PR #87 guarded-squash-merged`
 
 **Worker starting repository identity:** `main @ 5feb973c41adeac176a96efc0efbc3b435c2bbb3`
 
@@ -71,7 +71,7 @@ Do not preselect ML, graph-cut, Hough, circularity thresholds, component-count r
 External ideas must be adapted only if they fit the current S5-A/S5-B ownership, packaging and CPU
 contracts more safely than a repository-native solution.
 
-## Worker implementation record — audit pending
+## Accepted implementation record
 
 ### Bounded reference review
 
@@ -168,12 +168,10 @@ S11 merge/close owner after D1/D2 no longer need it.
 
 ## Next gate
 
-S11-D1 is provisionally a **Lane C — Independent Review** source slice because the proven defect crosses
-the accepted S5-A Foam classification/context → S5-B Oil observability responsibility boundary.
+S11-D1 passed fresh **Lane C — Independent Review** at exact base `5feb973c41adeac176a96efc0efbc3b435c2bbb3` / exact head `ac468a73fa8e890b0855ed63afb2979ca4378c42` and was native guarded-squash-merged as `0f4558dd3723a1923854274039112714a97fca71`.
 
-After D1 repair and fresh exact-head audit, rerun the four-video production replay and the minimal retained
-regressions. Only then open S11-D2 for the separate sample3 positive-evidence defects: candidate-present
-but non-identifiable and candidate-not-generated. Spatial reconciliation remains an acceptance constraint
-across these slices rather than a blanket threshold task.
+Auditor-focused validation returned `109 passed`, and the exact-head four-video replay preserved every base/sample2/sample3 Oil/Foam/fill-state signature. sample2 `30 → 599` and `60 → 598` remained intact. sample4 retained Foam `113/113`, withheld Oil-context authority `113/113`, changed Oil from the preserved S11-C baseline `110/113` to `0/113`, and promoted no alternate numeric Oil path.
 
-S11 completion, Windows field PASS, initial-state retrospective reconstruction and S12 are not implied.
+The next source gate is **S11-D2 — sample3 positive-evidence recovery** for the separate candidate-present-but-non-identifiable and candidate-not-generated defects. Spatial reconciliation remains an acceptance constraint rather than a blanket threshold task. The S11-C forensic bundle remains preserved as temporary ignored evidence through the next decision-bearing work.
+
+S11 completion, Windows field PASS, detector/general-field accuracy PASS, sample4 independent Oil recovery, initial-state retrospective reconstruction and S12 are not implied.
