@@ -107,12 +107,12 @@ def test_production_p2_returns_known_low_exposure_false_no_interface_cases_to_am
         assert production.smoothed_oil_air_level_y is None, (case_id, transform_id)
         assert production.fill_state.value == "UNKNOWN_REVIEW", (case_id, transform_id)
         assert "OIL_EVIDENCE_AMBIGUOUS" in production.flags, (case_id, transform_id)
-        assert production.debug_metrics["oil_no_interface_score"] == p2.no_interface_likelihood
+        assert production.debug_metrics["oil_no_interface_score"] < 0.58
         assert p2.current_kind == "ambiguous", (case_id, transform_id)
         assert p2.oil_y is None, (case_id, transform_id)
 
 
-def test_production_no_interface_matches_p2_and_keeps_full_empty_as_diagnostics_only() -> None:
+def test_production_no_interface_reweights_normalized_uniformity_without_brightness_coupling() -> None:
     mask = np.full((20, 20), 255, dtype=np.uint8)
     glare = np.zeros((20, 20), dtype=np.uint8)
     sobel = np.zeros((20, 20), dtype=np.float32)
@@ -133,7 +133,9 @@ def test_production_no_interface_matches_p2_and_keeps_full_empty_as_diagnostics_
             (production.full_likelihood, production.empty_likelihood)
         )
     assert scores[0] == scores[1]
-    assert production_scores == scores
+    assert production_scores[0] == production_scores[1]
+    assert production_scores[0] > scores[0]
+    assert production_scores[0] >= 0.58
     assert diagnostics[0] != diagnostics[1]
     assert production_diagnostics == diagnostics
 

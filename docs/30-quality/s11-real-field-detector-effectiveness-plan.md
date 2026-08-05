@@ -4,7 +4,7 @@
 
 This document owns the S11 real-field detector diagnosis, evidence plan and acceptance boundaries. Milestone state and current next action remain owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). The agreed S11-A reproducible-corpus and detector-direction decision is recorded in [S11-A Detector Direction and Experiment Plan](s11-a-detector-direction-and-experiment-plan.md).
 
-**Status:** `ACTIVE — S11-B P2 no-interface production repair under independent review`
+**Status:** `ACTIVE — S11 P2 FULL/EMPTY no-interface preservation repair under independent review`
 
 S11 starts after the accepted S10 Windows/package gate. The immediate product risk is detector effectiveness on field-representative sight-glass video, not packaging or UI-platform viability.
 
@@ -106,6 +106,14 @@ Production integration also keeps global current-frame visibility in the adjacen
 When the exposure-decoupled evidence is insufficient, the current frame remains ambiguous and cannot publish raw or smoothed numeric Oil. Genuine canonical no-interface still enters the unchanged serialized S5-B absence-stability path, including bounded stale-Oil clearing after stable absence. S5-A Foam, D4 positive Oil recovery, observational-equivalence collision protection, canonical projection and legacy-fallback prohibition remain separate and unchanged.
 
 The four S11-A metamorphic rescue anchors remain direct production acceptance evidence: `brightness 0.60 × sample3:900`, plus `brightness 0.45 × base_sample_1:144`, `sample3:900` and `sample3:1035`. Their required transition is false no-interface to fail-closed ambiguity, not numeric Oil recovery. The P2 repair is merged on the current baseline and does not establish detector/general-field accuracy PASS.
+
+### P2 FULL/EMPTY preservation correction
+
+Windows canonical validation exposed a preservation regression after the accepted P2 cutover: the two basic synthetic FULL/EMPTY cases and ten controlled noisy-uniform FULL/EMPTY cases no longer reached typed no-interface and instead failed closed as `UNKNOWN_REVIEW`. Direct current-main reproduction showed the normalized-raster uniformity and visibility evidence remained strong; the regression came from score scale contraction. P2 correctly removed the former `0.17 × FULL/EMPTY appearance` positive term but left the remaining positive coefficients summing to `0.83` while preserving the canonical `0.58` acceptance threshold and negative conflict penalties.
+
+The bounded correction transfers the removed `0.17` positive weight to the already accepted exposure-decoupled normalized-raster uniformity channel, changing uniformity from `0.27` to `0.44` while leaving weak-boundary `0.36`, visibility `0.20`, the canonical threshold, and glare/competing-boundary penalties unchanged. This targets genuinely uniform absence evidence instead of globally lifting weak or merely visible frames. Absolute raw brightness, `full_likelihood` and `empty_likelihood` do not contribute to no-interface acceptance and remain downstream appearance evidence only. The correction therefore restores genuine FULL/EMPTY typed no-interface without numeric Oil while the four low-exposure rescue anchors must remain ambiguous/non-numeric. Collision, glare/structure, Foam, Spatial, serialized absence clearing and canonical projection remain preservation obligations.
+
+This repair is a Lane C source task and stops at a focused Draft PR for fresh independent exact-head audit. After audit and merge/Close, S11 still does not return directly to field re-validation: the separate local-corpus canonical portability blocker is repaired as Lane B first, Windows canonical is then rerun, and only after those blockers are resolved does the controlled Windows field re-validation gate resume. The work-plan's merge-dependent current-status reconciliation remains owned by the merge/Close owner.
 
 ## S11-B Spatial positive-evidence production contract
 
