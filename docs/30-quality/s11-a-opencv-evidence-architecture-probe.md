@@ -98,6 +98,30 @@ The manifest records SHA256 for every MP4, Recipe and `.oiltruth`.  The video SH
 No filename, hash, Recipe ID, or frame ID participates in detector scoring.  Those identities
 exist only in the diagnostic corpus loader and result manifest.
 
+### Local-corpus availability and identity preservation
+
+The four MP4 files are intentionally local/ignored supporting media rather than repository-distributed
+artifacts. The checked-in S11-A manifest above is the authoritative MP4 SHA-256 source for diagnostic
+execution. Before any corpus-dependent S11 test loads truth cases or decodes a frame, the shared
+diagnostic loader checks every present required MP4 against those frozen hashes. If any present file
+has the wrong identity, execution fails with an explicit corpus identity mismatch even when another
+required MP4 is absent. Only after all present files pass identity checks may missing required MP4s
+produce `NOT AVAILABLE`; pytest callers translate only that missing-corpus condition to `SKIPPED`.
+A complete matching corpus executes normally, while a matching-identity file that OpenCV cannot
+decode remains a hard decode failure. Partial corpus is therefore never aggregated as the historical
+13-row evidence set, and wrong local bytes are never hidden behind availability handling.
+
+The historical P0/P1/P2/P3 results in this document remain frozen diagnostic evidence for the
+pre-Spatial mechanism comparison. Their diagnostic current-observation construction now explicitly
+uses the historical pre-P2 no-interface function for P0/P1 and the original S11-A P2 function for
+P2/P3 instead of importing later production no-interface semantics through the shared helper name.
+After accepted Spatial production fallback and the later FULL/EMPTY preservation repair, current
+production has a distinct responsibility and is not required to equal historical P0: production
+additionally recovers `sample2:30` and `sample2:60` through cross-ROI evidence and owns its accepted
+P2 preservation semantics independently. Historical probe tests validate their own frozen P0/P1/P2
+relationships and aggregate numbers, while current production coverage and those two Spatial
+recoveries remain owned by the S11 Spatial production fallback tests.
+
 ## Photometric transformation identity
 
 Every transform is applied to the decoded BGR frame before normal mask/preprocessing work.

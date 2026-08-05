@@ -6,6 +6,7 @@ from hashlib import sha256
 import json
 from pathlib import Path
 from statistics import median
+import sys
 import time
 from unittest.mock import patch
 
@@ -39,7 +40,18 @@ from oil_tracker.domain.recipe import GlassInspectionConfig
 
 BASELINE_MAIN_SHA = "0fd8ca0d423a1f632ad9a026d8f396686870d633"
 CORPUS_STEMS = ("base_sample_1", "sample2", "sample3", "sample4")
+CORPUS_MANIFEST_RELATIVE_PATH = Path(
+    "docs/30-quality/s11-a-opencv-evidence-architecture-probe-manifest.json"
+)
 VARIANTS = ("P0", "P1", "P2", "P3")
+
+
+class LocalCorpusUnavailableError(RuntimeError):
+    """Required ignored S11 MP4 corpus is not present in this checkout."""
+
+
+class LocalCorpusIdentityError(RuntimeError):
+    """A present S11 MP4 does not match the frozen authoritative identity."""
 
 
 @dataclass(frozen=True)
@@ -109,7 +121,40 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def authoritative_mp4_hashes(root: Path) -> dict[str, str]:
+    manifest_path = Path(root) / CORPUS_MANIFEST_RELATIVE_PATH
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    inputs = manifest["inputs"]
+    return {sample: str(inputs[sample]["mp4"]) for sample in CORPUS_STEMS}
+
+
+def validate_local_corpus(root: Path) -> None:
+    root = Path(root)
+    expected_hashes = authoritative_mp4_hashes(root)
+    missing: list[str] = []
+    mismatches: list[str] = []
+    for sample in CORPUS_STEMS:
+        path = root / "sample" / f"{sample}.mp4"
+        if not path.is_file():
+            missing.append(path.as_posix())
+            continue
+        actual = file_sha256(path)
+        expected = expected_hashes[sample]
+        if actual != expected:
+            mismatches.append(f"{path.as_posix()} expected={expected} actual={actual}")
+    if mismatches:
+        raise LocalCorpusIdentityError(
+            "S11 local corpus identity mismatch: " + "; ".join(mismatches)
+        )
+    if missing:
+        raise LocalCorpusUnavailableError(
+            "S11 local corpus NOT AVAILABLE; missing required MP4: " + ", ".join(missing)
+        )
+
+
 def load_cases(root: Path) -> tuple[ProbeCase, ...]:
+    root = Path(root)
+    validate_local_corpus(root)
     recipe_repo = JsonRecipeRepository()
     truth_repo = JsonTruthRepository()
     cases: list[ProbeCase] = []
@@ -266,6 +311,54 @@ def _relative_hypotheses(proposals, raw, pre, bundle, bounds: OilShadowBounds):
     return observations.semantic_deduplicate(tuple(hypotheses), bounds)
 
 
+def _p0_no_interface(pre, effective_mask: np.ndarray, hypotheses) -> ShadowNoInterfaceEvidence:
+    valid = effective_mask > 0
+    count = int(np.count_nonzero(valid))
+    if count == 0:
+        return ShadowNoInterfaceEvidence(
+            False, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, None, None,
+            "empty_effective_mask",
+        )
+    glare = (pre.glare_mask > 0) & valid
+    visible = valid & ~glare
+    visible_count = int(np.count_nonzero(visible))
+    visibility = observations._unit(visible_count / max(1, count))
+    glare_conflict = observations._unit(np.count_nonzero(glare) / max(1, count))
+    competing = max((item.boundary_likelihood for item in hypotheses), default=0.0)
+    if visible_count < max(10, int(count * 0.08)):
+        return ShadowNoInterfaceEvidence(
+            False, 0.0, 0.0, 0.0, 0.0, 0.0, competing, visibility,
+            glare_conflict, None, None, "insufficient_visible_support",
+        )
+    values = pre.gray[visible].astype(np.float32)
+    mean_intensity = float(np.median(values))
+    texture = float(np.std(values))
+    uniformity = observations._unit(1.0 - texture / 58.0)
+    row_energy = observations._normalize_profile(masked_row_mean(pre.sobel_y_abs, visible))
+    raster_weakness = observations._unit(1.0 - float(np.max(row_energy)))
+    weak_boundary = observations._unit(0.58 * (1.0 - competing) + 0.42 * raster_weakness)
+    full = observations._unit((145.0 - mean_intensity) / 55.0) * uniformity
+    empty = observations._unit((mean_intensity - 115.0) / 70.0) * uniformity
+    state_evidence = max(full, empty)
+    likelihood = observations._unit(
+        0.36 * weak_boundary + 0.27 * uniformity + 0.20 * visibility
+        + 0.17 * state_evidence - 0.30 * glare_conflict - 0.38 * competing
+    )
+    if competing >= 0.72:
+        reason = "strong_competing_boundary"
+    elif glare_conflict >= 0.45:
+        reason = "glare_visibility_conflict"
+    elif state_evidence >= 0.45 and uniformity >= 0.65:
+        reason = "positive_uniform_full_or_empty_evidence"
+    else:
+        reason = "mixed_no_interface_evidence"
+    return ShadowNoInterfaceEvidence(
+        True, likelihood, observations._unit(full), observations._unit(empty),
+        uniformity, weak_boundary, observations._unit(competing), visibility,
+        glare_conflict, mean_intensity, texture, reason,
+    )
+
+
 def _p2_no_interface(pre, effective_mask: np.ndarray, hypotheses) -> ShadowNoInterfaceEvidence:
     valid = effective_mask > 0
     count = int(np.count_nonzero(valid))
@@ -324,19 +417,17 @@ def _current_no_interface_likelihood(current) -> float:
 
 
 def _evaluate_current(pre, bundle, hypotheses, *, decoupled_absence: bool, foam_front, foam_mask):
-    if decoupled_absence:
-        no_interface = _p2_no_interface(pre, bundle.effective_mask, hypotheses)
-        with patch.object(observations, "_no_interface_evidence", return_value=no_interface):
-            return observations.evaluate_typed_current_observation(
-                pre, bundle.effective_mask, hypotheses,
-                accepted_foam_front_local_y=foam_front,
-                accepted_foam_component_mask=foam_mask,
-            )
-    return observations.evaluate_typed_current_observation(
-        pre, bundle.effective_mask, hypotheses,
-        accepted_foam_front_local_y=foam_front,
-        accepted_foam_component_mask=foam_mask,
+    no_interface = (
+        _p2_no_interface(pre, bundle.effective_mask, hypotheses)
+        if decoupled_absence
+        else _p0_no_interface(pre, bundle.effective_mask, hypotheses)
     )
+    with patch.object(observations, "_no_interface_evidence", return_value=no_interface):
+        return observations.evaluate_typed_current_observation(
+            pre, bundle.effective_mask, hypotheses,
+            accepted_foam_front_local_y=foam_front,
+            accepted_foam_component_mask=foam_mask,
+        )
 
 
 def run_variant(frame: np.ndarray, case: ProbeCase, variant: str) -> ProbeResult:
@@ -464,6 +555,7 @@ def _canonical_result_payload(rows: tuple[ProbeResult, ...]) -> list[dict[str, o
 
 def build_manifest(results: tuple[ProbeResult, ...], root: Path | None = None) -> dict[str, object]:
     root = repository_root() if root is None else Path(root)
+    validate_local_corpus(root)
     canonical = _canonical_result_payload(results)
     fingerprint = sha256(
         json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -510,7 +602,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run the S11-A detector evidence architecture probe.")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    results = run_experiment()
+    try:
+        results = run_experiment()
+    except LocalCorpusUnavailableError as exc:
+        print(f"NOT AVAILABLE: {exc}", file=sys.stderr)
+        return 2
     manifest = build_manifest(results)
     encoded = json.dumps(manifest, indent=2, sort_keys=True) + "\n"
     if args.output is None:

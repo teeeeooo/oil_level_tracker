@@ -19,10 +19,10 @@ from tests.diagnostics.s11_evidence_probe import (
     _relative_signed_profile,
     decode_frame,
     load_cases,
-    repository_root,
     run_variant,
     transform_frame,
 )
+from tests.s11_local_corpus import require_s11_local_corpus
 
 
 def _diagnostic_case(frame: np.ndarray, glass, case_id: str, truth_oil_y: float = 0.0, *, foam=False):
@@ -38,19 +38,14 @@ def _diagnostic_case(frame: np.ndarray, glass, case_id: str, truth_oil_y: float 
     )
 
 
-def test_p0_probe_matches_production_and_p1_native_delta_is_bounded() -> None:
-    root = repository_root()
+def test_historical_p0_p1_p2_native_diagnostic_baseline_is_frozen() -> None:
+    root = require_s11_local_corpus()
     rows = []
     for case in load_cases(root):
         frame = decode_frame(case)
-        production, _ = OpenCvPhaseDetector().detect(
-            frame.copy(), case.glass, case.frame_index, case.time_sec, debug=False
-        )
         p0 = run_variant(frame.copy(), case, "P0")
         p1 = run_variant(frame.copy(), case, "P1")
         p2 = run_variant(frame.copy(), case, "P2")
-        assert p0.oil_y == production.raw_oil_air_level_y, case.case_id
-        assert p0.foam_y == production.raw_foam_front_y, case.case_id
         assert p2.oil_y == p0.oil_y, case.case_id
         if p0.oil_y is not None:
             assert p1.oil_y == p0.oil_y, case.case_id
@@ -58,9 +53,11 @@ def test_p0_probe_matches_production_and_p1_native_delta_is_bounded() -> None:
 
     p0_rows = [row[1] for row in rows]
     p1_rows = [row[2] for row in rows]
+    p2_rows = [row[3] for row in rows]
     assert sum(item.oil_y is not None for item in p0_rows) == 7
     assert np.mean([item.oil_error_px for item in p0_rows if item.oil_error_px is not None]) == 31.0 / 7.0
     assert sum(item.oil_y is not None for item in p1_rows) == 9
+    assert sum(item.oil_y is not None for item in p2_rows) == 7
     recovered = {
         case_id: p1.oil_y
         for case_id, p0, p1, _p2 in rows
@@ -83,7 +80,7 @@ def test_relative_local_contrast_is_multiplicative_scale_invariant() -> None:
 
 
 def test_production_p2_returns_known_low_exposure_false_no_interface_cases_to_ambiguity() -> None:
-    root = repository_root()
+    root = require_s11_local_corpus()
     cases = {case.case_id: case for case in load_cases(root)}
     transforms = {item.name: item for item in TRANSFORMS}
     expectations = (

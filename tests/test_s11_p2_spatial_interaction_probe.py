@@ -18,6 +18,11 @@ from tests.diagnostics.s11_p2_spatial_interaction_probe import (
     run_experiment,
     run_interaction_variant,
 )
+from tests.s11_local_corpus import require_s11_local_corpus
+
+
+def _run_corpus_experiment():
+    return run_experiment(require_s11_local_corpus())
 
 
 def _diagnostic_case(frame, glass, case_id: str, *, foam=False):
@@ -34,7 +39,7 @@ def _diagnostic_case(frame, glass, case_id: str, *, foam=False):
 
 
 def test_native_p0_p2_spatial_combined_matrix_is_consistent() -> None:
-    rows = [row for row in run_experiment() if row.transform == "brightness_1.00"]
+    rows = [row for row in _run_corpus_experiment() if row.transform == "brightness_1.00"]
     assert len(rows) == 13
     assert sum(row.p0_oil_y is not None for row in rows) == 7
     assert sum(row.p2_oil_y is not None for row in rows) == 7
@@ -48,7 +53,7 @@ def test_native_p0_p2_spatial_combined_matrix_is_consistent() -> None:
 
 
 def test_known_p2_false_no_interface_transitions_do_not_gain_combined_numeric_oil() -> None:
-    rows = {(row.transform, row.case_id): row for row in run_experiment()}
+    rows = {(row.transform, row.case_id): row for row in _run_corpus_experiment()}
     expected = (
         ("brightness_0.60", "sample3:900"),
         ("brightness_0.45", "base_sample_1:144"),
@@ -66,7 +71,7 @@ def test_known_p2_false_no_interface_transitions_do_not_gain_combined_numeric_oi
 
 
 def test_combined_keeps_existing_spatial_low_light_recovery_but_adds_no_interaction_recovery() -> None:
-    rows = {(row.transform, row.case_id): row for row in run_experiment()}
+    rows = {(row.transform, row.case_id): row for row in _run_corpus_experiment()}
     row = rows[("brightness_0.60", "sample3:1035")]
     assert row.p0_current_kind == "ambiguous"
     assert row.p2_current_kind == "ambiguous"
@@ -81,7 +86,7 @@ def test_combined_keeps_existing_spatial_low_light_recovery_but_adds_no_interact
 
 
 def test_low_light_false_boundary_candidate_stays_spatially_rejected() -> None:
-    rows = {(row.transform, row.case_id): row for row in run_experiment()}
+    rows = {(row.transform, row.case_id): row for row in _run_corpus_experiment()}
     for transform_id in ("brightness_0.60", "brightness_0.45"):
         row = rows[(transform_id, "sample4:450")]
         assert row.combined_candidate_oil_y == 804.0
@@ -156,7 +161,7 @@ def test_structural_foam_protection_and_foam_owner_stay_independent() -> None:
 
 
 def test_manifest_declares_no_material_interaction_and_bounded_resources() -> None:
-    manifest = build_manifest(run_experiment())
+    manifest = build_manifest(_run_corpus_experiment())
     assert manifest["baseline_main_sha"] == "fd3c7baa6cc6f6095343a1da2cdba4375914c799"
     native = manifest["aggregate"]["brightness_1.00"]
     assert native["p0"]["oil_coverage"] == 7
