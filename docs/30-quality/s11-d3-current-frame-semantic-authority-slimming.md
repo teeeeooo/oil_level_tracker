@@ -4,7 +4,7 @@
 
 S11-D3 is the bounded source repair selected after the sample3 `28–40 s` blind-refresh and current-frame semantic-slimming diagnostic. It addresses the proven case where material Oil hypotheses already exist but correlated semantic gates repeatedly suppress them or a near-tie gives one candidate excessive authority.
 
-**Status:** `IMPLEMENTED — Worker evidence complete; fresh Lane C exact-head audit pending`
+**Status:** `ACCEPTED — fresh Lane C exact-head audit PASS; PR #90 guarded-squash-merged`
 
 **Worker base identity:** `main @ 399ef716f76092fe497443be483bb025fa787d81`
 
@@ -52,7 +52,7 @@ The other two recovered rows are `1094 → 244` (`2 px` above the blind range) a
 
 ## Retained safety evidence
 
-The focused exact-source suite covers the S5-B semantic evidence owner, continuous observability/collision margin, indistinguishable Oil/glare collisions, D2 Spatial production behavior, serialized temporal owner and production cutover. Worker stabilization returned `152 passed`.
+The focused exact-source suite covers the S5-B semantic evidence owner, continuous observability/collision margin, indistinguishable Oil/glare collisions, D2 Spatial production behavior, serialized temporal owner and production cutover. Fresh Auditor exact-head execution returned `153 passed`; this resolves the pre-audit `152` vs `153` evidence-count discrepancy in favor of the directly executed exact-head result.
 
 The retained D2 suite specifically preserves sample3 Class-A `899/900`, sample2 Spatial anchors `30 → 599` and `60 → 598`, authoritative Foam-front blocking, Class-B frame `2697` representation without forced numeric promotion, P2 low-exposure fail-closed cases and sample4 low-exposure structural warnings. No serialized temporal policy, public result/schema, Recipe, truth input, raw observation family or proposal construction is changed.
 ## Claim boundary and next gate
@@ -61,4 +61,4 @@ D3 is intentionally conservative. It removes duplicated semantic veto authority 
 
 D3 does not repair the separate sample3 Foam blind-positive gap, redesign temporal trajectory/reacquisition, expand raw/proposal representation, change truth, or perform Windows/private-field validation. Full canonical/E2E validation is outside this Worker slice.
 
-The next gate is a fresh **Lane C — Independent Review** of the exact D3 PR head. The Auditor owns complete-diff review, exact-head evidence, retained negative-safety verification and the PASS/FAIL decision. Only after `AUDIT: PASS` may the merge/Close owner merge this slice and reconcile repository status. D3 does not declare S11 complete or detector/general-field accuracy PASS.
+PR #90 passed fresh **Lane C — Independent Review** at exact base `399ef716f76092fe497443be483bb025fa787d81` / exact head `f1b383d76b3613815ac7a87acbe05be783bf1337` and was native guarded-squash-merged as `e3de8477da7e7aae0291f0235557748d3d40c8a9`. Auditor evidence retained the negative-safety surface and independently reproduced the 17-row sample3 probe with five current-frame boundaries, three strictly inside the blind Oil ranges and all five within `6 px`; `914` and `1049` remained ambiguous. The next S11 gate is the dedicated **Foam detection/context diagnostic** spanning sample4 over-detection risk and sample3 blind-visible Foam misses, before temporal trajectory work. D3 does not declare S11 complete or detector/general-field accuracy PASS.
