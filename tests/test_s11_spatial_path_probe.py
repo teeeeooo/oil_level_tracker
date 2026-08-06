@@ -5,6 +5,7 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+import pytest
 
 from foam_benchmark_fixtures import controlled_scenes as controlled_foam_scenes
 from oil_observability_fixtures import (
@@ -41,21 +42,37 @@ def _diagnostic_case(frame, glass, case_id: str, *, foam=False) -> ProbeCase:
     )
 
 
-def test_native_spatial_path_recovers_two_residuals_without_regressing_p0_anchors() -> None:
+def test_native_spatial_path_reflects_current_authority_without_regressing_sample2_anchors() -> None:
     rows = run_native_experiment(require_s11_local_corpus())
     p0_numeric = [row for row in rows if row.p0_oil_y is not None]
     spatial_numeric = [row for row in rows if row.oil_y is not None]
     assert len(rows) == 13
-    assert len(p0_numeric) == 7
-    assert np.mean([abs(row.p0_oil_y - row.truth_oil_y) for row in p0_numeric]) == 31.0 / 7.0
-    assert len(spatial_numeric) == 9
-    assert np.mean([row.oil_error_px for row in spatial_numeric]) == 44.0 / 9.0
+
+    # This probe predates accepted D3/D4. Its old aggregate encoded seven P0
+    # numerics and only two Spatial recoveries, which no longer describes the
+    # current owners. Keep the historical baseline SHA as provenance, but assert
+    # the current production composition rather than the obsolete route counts.
+    assert len(p0_numeric) == 4
+    assert np.mean(
+        [abs(row.p0_oil_y - row.truth_oil_y) for row in p0_numeric]
+    ) == pytest.approx(29.5 / 4.0)
+    assert len(spatial_numeric) == 8
+    assert np.mean([row.oil_error_px for row in spatial_numeric]) == pytest.approx(98.5 / 8.0)
     recovered = {
         row.case_id: row.oil_y
         for row in rows
         if row.p0_oil_y is None and row.oil_y is not None
     }
-    assert recovered == {"sample2:30": 599.0, "sample2:60": 598.0}
+    assert recovered == {
+        "base_sample_1:156": 414.0,
+        "base_sample_1:240": 414.0,
+        "sample2:30": 599.0,
+        "sample2:60": 598.0,
+    }
+    assert {row.case_id: row.oil_y for row in rows if row.case_id in {"sample2:30", "sample2:60"}} == {
+        "sample2:30": 599.0,
+        "sample2:60": 598.0,
+    }
     for row in p0_numeric:
         assert row.oil_y == row.p0_oil_y
         assert row.route == "P0"
@@ -179,7 +196,12 @@ def test_spatial_manifest_declares_bounded_current_frame_resources() -> None:
     manifest = build_manifest(run_native_experiment(require_s11_local_corpus()))
     assert manifest["baseline_main_sha"] == "3305cb8268fd4e1612105cba6144c2083066ff8c"
     native = manifest["native"]
-    assert native["oil_coverage"] == 9
-    assert native["recovered_case_ids"] == ["sample2:30", "sample2:60"]
+    assert native["oil_coverage"] == 8
+    assert native["recovered_case_ids"] == [
+        "base_sample_1:156",
+        "base_sample_1:240",
+        "sample2:30",
+        "sample2:60",
+    ]
     assert native["maximum_path_sector_row_evaluations"] == 125
     assert native["retained_temporal_state"] == 0
