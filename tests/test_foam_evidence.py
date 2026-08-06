@@ -72,17 +72,16 @@ def test_low_light_white_foam_and_partial_front_remain_supported():
     assert partial_result.component_width_ratio > 0.25
 
 
-def test_dark_yellow_textured_foam_survives_without_whiteness_membership():
+def test_dark_yellow_tapered_foam_survives_without_whiteness_membership():
     height, width = 160, 120
     image = np.full((height, width, 3), 45, dtype=np.uint8)
-    yy, xx = np.indices((60, width))
-    pattern = ((xx // 3 + yy // 3) % 2) == 0
-    warm = np.where(
-        pattern[..., None],
-        np.array((60, 85, 105), dtype=np.uint8),
-        np.array((35, 55, 80), dtype=np.uint8),
-    )
-    image[60:120, :, :] = warm
+    warm_a = np.array((60, 85, 105), dtype=np.uint8)
+    warm_b = np.array((35, 55, 80), dtype=np.uint8)
+    for y in range(45, 115):
+        fraction = (y - 45) / 70.0
+        half_width = int(round(48 - 27 * fraction))
+        for x in range(60 - half_width, 60 + half_width):
+            image[y, x] = warm_a if ((x // 3 + y // 3) % 2 == 0) else warm_b
 
     result = _detect(image)
 
@@ -92,17 +91,64 @@ def test_dark_yellow_textured_foam_survives_without_whiteness_membership():
     assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
     assert result.whiteness_ratio == 0.0
     assert result.texture_support_ratio >= 0.28
-    assert result.front_y == 60.0
+    assert result.bounding_box_fill_ratio < 0.80
+    assert result.front_y == 45.0
 
 
-def test_substantial_detached_white_layer_uses_lower_edge_as_foam_front():
+@pytest.mark.parametrize("pattern", ("vertical", "horizontal", "grid", "random"))
+def test_detached_warm_structure_cannot_gain_foam_authority(pattern: str):
     height, width = 160, 120
     image = np.full((height, width, 3), 45, dtype=np.uint8)
-    yy, xx = np.indices((50, 76))
-    pattern = ((xx // 3 + yy // 3) % 2) == 0
-    layer = np.where(pattern[..., None], 220, 150).astype(np.uint8)
-    layer = np.repeat(layer, 3, axis=2)
-    image[50:100, 22:98] = layer
+    warm = np.array((60, 85, 105), dtype=np.uint8)
+    y0, y1, x0, x1 = 40, 120, 15, 105
+    mask = np.zeros((height, width), dtype=bool)
+    if pattern in {"vertical", "grid"}:
+        for x in range(x0, x1, 10):
+            mask[y0:y1, x : x + 3] = True
+    if pattern in {"horizontal", "grid"}:
+        for y in range(y0, y1, 10):
+            mask[y : y + 3, x0:x1] = True
+    if pattern == "random":
+        rng = np.random.default_rng(211)
+        mask[y0:y1, x0:x1] = rng.random((y1 - y0, x1 - x0)) > 0.55
+    image[mask] = warm
+
+    result = _detect(image)
+    authority = evaluate_foam_oil_context_authority(result)
+
+    assert result.candidate is None
+    assert result.decision_status not in {
+        FoamDecisionStatus.ACCEPTED_STRONG,
+        FoamDecisionStatus.MODERATE_EVIDENCE,
+    }
+    assert not authority.authoritative
+
+
+@pytest.mark.parametrize("appearance", ("white", "warm"))
+def test_detached_layer_front_uses_structural_substrate_context_not_color_path(
+    appearance: str,
+):
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    warm_a = np.array((60, 85, 105), dtype=np.uint8)
+    warm_b = np.array((35, 55, 80), dtype=np.uint8)
+    for y in range(45, 90):
+        fraction = (y - 45) / 45.0
+        half_width = int(round(22 + 23 * fraction))
+        for x in range(60 - half_width, 60 + half_width):
+            if appearance == "white":
+                image[y, x] = 220 if ((x // 3 + y // 3) % 2 == 0) else 150
+            else:
+                image[y, x] = warm_a if ((x // 3 + y // 3) % 2 == 0) else warm_b
+
+    yy, xx = np.indices((height, width))
+    bright = np.where((((xx // 3 + yy // 3) % 2) == 0)[..., None], 220, 150).astype(np.uint8)
+    bright = np.repeat(bright, 3, axis=2)
+    rim = np.zeros((height, width), dtype=bool)
+    rim[96:150, 8:16] = True
+    rim[96:150, 104:112] = True
+    rim[142:150, 8:112] = True
+    image[rim] = bright[rim]
 
     result = _detect(image)
 
@@ -110,14 +156,8 @@ def test_substantial_detached_white_layer_uses_lower_edge_as_foam_front():
     assert result.selected_component is not None
     assert not result.selected_component.bottom_connected
     assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
-    assert result.component_height_ratio == pytest.approx(50 / height)
-    assert result.component_width_ratio == pytest.approx(76 / width)
-    assert result.front_y == 99.0
-
-    too_thin = np.full((height, width, 3), 45, dtype=np.uint8)
-    too_thin[70:95, 22:98] = layer[:25]
-    thin_result = _detect(too_thin)
-    assert thin_result.candidate is None
+    assert result.bounding_box_fill_ratio < 0.80
+    assert result.front_y == 89.0
 
 
 def test_wide_hollow_rim_is_rejected_but_filled_foam_can_replace_its_authority():

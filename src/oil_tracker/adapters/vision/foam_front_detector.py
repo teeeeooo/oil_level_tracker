@@ -94,14 +94,14 @@ _CHROMATIC_SUPPORT_MIN_TEXTURE = 0.05
 _CHROMATIC_SEED_MIN_TEXTURE = 0.20
 _CHROMATIC_SEED_MIN_SCORE = 0.20
 _CHROMATIC_COMPONENT_MIN_RATIO = 0.35
-_CHROMATIC_COMPONENT_MIN_AREA_MULTIPLIER = 2.5
-_CHROMATIC_COMPONENT_MIN_HEIGHT_RATIO = 0.28
-_CHROMATIC_COMPONENT_MIN_WIDTH_RATIO = 0.35
-_UPPER_LAYER_MIN_AREA_MULTIPLIER = 3.0
-_UPPER_LAYER_MIN_HEIGHT_RATIO = 0.26
-_UPPER_LAYER_MAX_HEIGHT_RATIO = 0.45
-_UPPER_LAYER_MIN_WIDTH_RATIO = 0.55
-_UPPER_LAYER_MIN_FILL_RATIO = 0.35
+_DETACHED_LAYER_MIN_AREA_MULTIPLIER = 2.5
+_DETACHED_LAYER_MIN_HEIGHT_RATIO = 0.15
+_DETACHED_LAYER_MAX_HEIGHT_RATIO = 0.68
+_DETACHED_LAYER_MIN_WIDTH_RATIO = 0.55
+_DETACHED_LAYER_MIN_FILL_RATIO = 0.30
+_DETACHED_LAYER_MAX_FILL_RATIO = 0.80
+_DETACHED_LAYER_MIN_DOMINANT_THIRD_OCCUPANCY = 0.20
+_DETACHED_LAYER_MIN_EDGE_CONCENTRATION_RATIO = 1.30
 
 
 @dataclass(frozen=True)
@@ -304,10 +304,17 @@ def detect_bottom_connected_foam(
     bottom_start = max(0, int(math.floor(h * 0.78)))
     bottom_band[bottom_start:, :] = valid[bottom_start:, :]
 
+    structural_boxes = _structural_support_boxes(labels, stats, valid)
     component_rows: list[FoamComponentEvidence] = []
     component_masks: dict[int, np.ndarray] = {}
     for label in range(1, count):
         component = labels == label
+        structural_substrate_present, front_from_lower_edge = _structural_substrate_relation(
+            label,
+            stats,
+            structural_boxes,
+            h,
+        )
         evidence = _component_evidence(
             label,
             component,
@@ -320,6 +327,8 @@ def detect_bottom_connected_foam(
             glare,
             effective_area,
             settings,
+            structural_substrate_present=structural_substrate_present,
+            front_from_lower_edge=front_from_lower_edge,
         )
         component_rows.append(evidence)
         component_masks[label] = component
@@ -583,6 +592,103 @@ def _has_material_nonstructural_support_component(
     return False
 
 
+def _structural_support_boxes(
+    labels: np.ndarray,
+    stats: np.ndarray,
+    valid: np.ndarray,
+) -> tuple[tuple[int, int, int, int, int], ...]:
+    _, w = valid.shape
+    boxes: list[tuple[int, int, int, int, int]] = []
+    for label in range(1, int(stats.shape[0])):
+        x = int(stats[label, cv2.CC_STAT_LEFT])
+        y = int(stats[label, cv2.CC_STAT_TOP])
+        width = max(1, int(stats[label, cv2.CC_STAT_WIDTH]))
+        height = max(1, int(stats[label, cv2.CC_STAT_HEIGHT]))
+        area = int(stats[label, cv2.CC_STAT_AREA])
+        width_ratio = width / max(1, w)
+        fill_ratio = area / max(1, width * height)
+        structural, _wide_rows, _compactness = _wide_hollow_component_metrics(
+            labels == label,
+            width_ratio=width_ratio,
+            fill_ratio=fill_ratio,
+        )
+        if structural:
+            boxes.append((label, x, x + width - 1, y, y + height - 1))
+    return tuple(boxes)
+
+
+def _structural_substrate_relation(
+    label: int,
+    stats: np.ndarray,
+    structural_boxes: tuple[tuple[int, int, int, int, int], ...],
+    frame_height: int,
+) -> tuple[bool, bool]:
+    x0 = int(stats[label, cv2.CC_STAT_LEFT])
+    y0 = int(stats[label, cv2.CC_STAT_TOP])
+    width = max(1, int(stats[label, cv2.CC_STAT_WIDTH]))
+    height = max(1, int(stats[label, cv2.CC_STAT_HEIGHT]))
+    x1 = x0 + width - 1
+    y1 = y0 + height - 1
+    max_gap = max(3, int(round(frame_height * 0.12)))
+    substrate_present = False
+    for structural_label, sx0, sx1, sy0, sy1 in structural_boxes:
+        if structural_label == label or sy1 <= y1:
+            continue
+        overlap = max(0, min(x1, sx1) - max(x0, sx0) + 1)
+        if overlap / max(1, width) < 0.35:
+            continue
+        gap = sy0 - y1 - 1
+        if gap > max_gap:
+            continue
+        substrate_present = True
+        if 3 <= gap <= max_gap:
+            return True, True
+    return substrate_present, False
+
+
+def _detached_layer_topology(
+    component: np.ndarray,
+    *,
+    area_ratio: float,
+    height_ratio: float,
+    width_ratio: float,
+    fill_ratio: float,
+    bottom_connected: bool,
+    min_area: float,
+    front_from_lower_edge: bool,
+) -> tuple[bool, float]:
+    ys, xs = np.where(component)
+    default_front = float(ys.min()) if ys.size else float(component.shape[0] - 1)
+    if bottom_connected or ys.size == 0:
+        return False, default_front
+    if (
+        area_ratio < min_area * _DETACHED_LAYER_MIN_AREA_MULTIPLIER
+        or not (_DETACHED_LAYER_MIN_HEIGHT_RATIO <= height_ratio <= _DETACHED_LAYER_MAX_HEIGHT_RATIO)
+        or width_ratio < _DETACHED_LAYER_MIN_WIDTH_RATIO
+        or not (_DETACHED_LAYER_MIN_FILL_RATIO <= fill_ratio <= _DETACHED_LAYER_MAX_FILL_RATIO)
+    ):
+        return False, default_front
+
+    x0, x1 = int(xs.min()), int(xs.max())
+    y0, y1 = int(ys.min()), int(ys.max())
+    layer = component[y0 : y1 + 1, x0 : x1 + 1]
+    row_occupancy = np.count_nonzero(layer, axis=1).astype(np.float32) / max(1, layer.shape[1])
+    third = max(1, int(math.ceil(layer.shape[0] / 3.0)))
+    top_occupancy = float(np.mean(row_occupancy[:third]))
+    bottom_occupancy = float(np.mean(row_occupancy[-third:]))
+    dominant = max(top_occupancy, bottom_occupancy)
+    opposite = min(top_occupancy, bottom_occupancy)
+    concentration = dominant / max(1e-6, opposite)
+    if (
+        dominant < _DETACHED_LAYER_MIN_DOMINANT_THIRD_OCCUPANCY
+        or concentration < _DETACHED_LAYER_MIN_EDGE_CONCENTRATION_RATIO
+    ):
+        return False, default_front
+
+    front_y = float(y1 if front_from_lower_edge else y0)
+    return True, front_y
+
+
 def _component_evidence(
     label: int,
     component: np.ndarray,
@@ -595,6 +701,9 @@ def _component_evidence(
     glare: np.ndarray,
     effective_area: int,
     settings: DetectorSettings,
+    *,
+    structural_substrate_present: bool,
+    front_from_lower_edge: bool,
 ) -> FoamComponentEvidence:
     h, w = valid.shape
     area = int(stats[cv2.CC_STAT_AREA])
@@ -616,31 +725,34 @@ def _component_evidence(
     min_area = max(1e-6, float(settings.foam_min_area_ratio))
     min_whiteness = float(settings.foam_min_whiteness_ratio)
     white_ok = whiteness_ratio >= min_whiteness
+    chromatic_ok = chromatic_ratio >= _CHROMATIC_COMPONENT_MIN_RATIO
     structural, _wide_rows, _compactness = _wide_hollow_component_metrics(
         component,
         width_ratio=width_ratio,
         fill_ratio=fill_ratio,
     )
-    chromatic_extent = (
-        whiteness_ratio < min_whiteness * 0.75
-        and chromatic_ratio >= _CHROMATIC_COMPONENT_MIN_RATIO
-        and area_ratio >= min_area * _CHROMATIC_COMPONENT_MIN_AREA_MULTIPLIER
-        and height_ratio >= _CHROMATIC_COMPONENT_MIN_HEIGHT_RATIO
-        and width_ratio >= _CHROMATIC_COMPONENT_MIN_WIDTH_RATIO
+    detached_layer, detached_front_y = _detached_layer_topology(
+        component,
+        area_ratio=area_ratio,
+        height_ratio=height_ratio,
+        width_ratio=width_ratio,
+        fill_ratio=fill_ratio,
+        bottom_connected=bottom_connected,
+        min_area=min_area,
+        front_from_lower_edge=front_from_lower_edge,
     )
-    upper_layer_extent = (
-        not bottom_connected
-        and white_ok
-        and area_ratio >= min_area * _UPPER_LAYER_MIN_AREA_MULTIPLIER
-        and _UPPER_LAYER_MIN_HEIGHT_RATIO <= height_ratio <= _UPPER_LAYER_MAX_HEIGHT_RATIO
-        and width_ratio >= _UPPER_LAYER_MIN_WIDTH_RATIO
-        and fill_ratio >= _UPPER_LAYER_MIN_FILL_RATIO
+    detached_layer = (
+        detached_layer
         and texture_ratio >= 0.28
+        and (white_ok or chromatic_ok)
+        and (not structural_substrate_present or front_from_lower_edge)
     )
-    if ys.size:
-        front_y = float(ys.max() if upper_layer_extent else ys.min())
+    if bottom_connected and ys.size:
+        front_y = float(ys.min())
+    elif detached_layer:
+        front_y = float(detached_front_y)
     else:
-        front_y = float(h - 1)
+        front_y = float(ys.min()) if ys.size else float(h - 1)
     vertical_extent = (h - front_y) / max(1.0, float(h))
     appearance_ratio = max(whiteness_ratio, chromatic_ratio)
     area_score = _unit(area_ratio / max(min_area * 3.0, 1e-6))
@@ -665,13 +777,12 @@ def _component_evidence(
     minimum = float(settings.foam_min_evidence_score)
     strong = float(settings.foam_strong_evidence_score)
     shape_ok = (
-        (bottom_connected or chromatic_extent or upper_layer_extent)
+        (bottom_connected or detached_layer)
         and area_ratio >= min_area
         and height_ratio >= 0.075
         and not thin_horizontal
         and not structural
     )
-    chromatic_ok = chromatic_ratio >= _CHROMATIC_COMPONENT_MIN_RATIO
     strong_appearance_ok = white_ok or chromatic_ok
     moderate_appearance_ok = whiteness_ratio >= min_whiteness * 0.75 or chromatic_ok
     texture_ok = texture_ratio >= 0.28

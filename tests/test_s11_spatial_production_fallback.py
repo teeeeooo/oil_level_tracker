@@ -80,6 +80,7 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         "base_sample_1:144": 395.0,
         "sample2:30": 599.0,
         "sample2:60": 598.0,
+        "sample4:1470": 866.0,
         "sample4:1680": 866.0,
     }
     expected_non_numeric = {
@@ -91,7 +92,6 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         "sample4:0",
         "sample4:450",
         "sample4:900",
-        "sample4:1470",
     }
     rows = []
     root = require_s11_local_corpus()
@@ -116,7 +116,7 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
     numeric = [row for row in rows if row[2] is not None]
     assert len(rows) == 13
     assert {case_id: oil_y for case_id, _truth, oil_y, _foam, _auth in numeric} == expected_numeric
-    assert np.mean([abs(oil_y - truth) for _case_id, truth, oil_y, _foam, _auth in numeric]) == 7.375
+    assert np.mean([abs(oil_y - truth) for _case_id, truth, oil_y, _foam, _auth in numeric]) == 8.1
     assert {case_id for case_id, _truth, oil_y, _foam, _auth in rows if oil_y is None} == expected_non_numeric
 
     # D4 must not inflate already valid white-Foam support and erase the accepted
@@ -334,6 +334,54 @@ def test_sample4_structural_foam_is_rejected_in_s5a_and_oil_stays_non_numeric() 
         assert detection.debug_metrics["foam_oil_context_authoritative"] is False, case_id
         assert detection.raw_oil_air_level_y is None, case_id
         assert detection.debug_metrics["oil_decision_status"] == "ambiguous", case_id
+
+
+def test_sample4_later_foam_separates_from_structural_substrate() -> None:
+    root = require_s11_local_corpus()
+    glass = JsonRecipeRepository().load(root / "sample" / "sample4.oilrecipe").glasses[0]
+
+    structural = OpenCvPhaseDetector().detect(
+        _decode_local_video_frame(root, "sample4", 975),
+        glass,
+        frame_index=975,
+        time_sec=32.5,
+        debug=False,
+    )[0]
+    assert structural.raw_foam_front_y is None
+    assert structural.debug_metrics["foam_decision_status"] == "weak_rejected"
+    assert structural.debug_metrics["foam_oil_context_authoritative"] is False
+
+    early_positive = OpenCvPhaseDetector().detect(
+        _decode_local_video_frame(root, "sample4", 1050),
+        glass,
+        frame_index=1050,
+        time_sec=35.0,
+        debug=False,
+    )[0]
+    assert early_positive.raw_foam_front_y is None
+    assert early_positive.debug_metrics["foam_decision_status"] == "weak_rejected"
+
+    expected_fronts = {
+        1125: 837.0,
+        1200: 840.0,
+        1275: 837.0,
+        1350: 836.0,
+        1425: 836.0,
+    }
+    for frame_index, expected_front in expected_fronts.items():
+        time_sec = frame_index / 30.0
+        detection, _artifacts = OpenCvPhaseDetector().detect(
+            _decode_local_video_frame(root, "sample4", frame_index),
+            glass,
+            frame_index=frame_index,
+            time_sec=time_sec,
+            debug=False,
+        )
+        assert detection.raw_foam_front_y == expected_front, frame_index
+        assert detection.debug_metrics["foam_decision_status"] == "accepted_strong", frame_index
+        assert detection.debug_metrics["foam_oil_context_authoritative"] is True, frame_index
+        assert detection.debug_metrics["foam_component_width_ratio"] < 0.70, frame_index
+        assert detection.debug_metrics["foam_bounding_box_fill_ratio"] >= 0.30, frame_index
 
 
 def test_recovered_native_rows_use_genuine_cross_roi_path_information() -> None:
