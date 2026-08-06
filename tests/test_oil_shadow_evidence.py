@@ -717,6 +717,122 @@ def test_general_boundary_floor_remains_unchanged(monkeypatch):
     )
 
 
+def test_d3_comparative_recovery_softens_correlated_semantic_vetoes(monkeypatch):
+    target = _typed_hypothesis(
+        "d3-soft-evidence",
+        boundary=0.30,
+        artifact=0.10,
+        ambiguity=0.62,
+        broad_strength=0.08,
+        narrow_horizontal_coverage=0.01,
+        paired_edge_strength=0.96,
+    )
+    evidence = oil_shadow_observations._SingleFrameIdentifiabilityEvidence(
+        phase_ceiling_pressure=0.0,
+        texture_relief=0.90,
+        broad_corroboration_deficit=0.8,
+        evidence_reliability=0.90,
+        collision_pressure=0.0,
+        semantic_support=0.20,
+        acceptance_margin=-0.20,
+    )
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_single_frame_identifiability_evidence",
+        lambda *_args: evidence,
+    )
+
+    recovered = _typed_observation(monkeypatch, (target,), no_interface=0.50)
+    assert isinstance(recovered, ShadowBoundaryObservation)
+    assert recovered.hypothesis.identity == target.identity
+
+    strict_only = evaluate_typed_current_observation(
+        preprocess(
+            np.full((20, 20), 100, dtype=np.uint8),
+            np.full((20, 20), 255, dtype=np.uint8),
+            DetectorSettings(),
+        ),
+        np.full((20, 20), 255, dtype=np.uint8),
+        (target,),
+        allow_comparative_recovery=False,
+    )
+    assert isinstance(strict_only, ShadowAmbiguousObservation)
+
+
+def test_d3_subthreshold_no_interface_is_comparative_not_a_veto(monkeypatch):
+    target = _typed_hypothesis(
+        "d3-subthreshold-absence",
+        boundary=0.30,
+        artifact=0.10,
+        ambiguity=0.62,
+        broad_strength=0.08,
+        narrow_horizontal_coverage=0.01,
+        paired_edge_strength=0.96,
+    )
+    evidence = oil_shadow_observations._SingleFrameIdentifiabilityEvidence(
+        phase_ceiling_pressure=0.0,
+        texture_relief=0.90,
+        broad_corroboration_deficit=0.8,
+        evidence_reliability=0.90,
+        collision_pressure=0.0,
+        semantic_support=0.20,
+        acceptance_margin=-0.20,
+    )
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_single_frame_identifiability_evidence",
+        lambda *_args: evidence,
+    )
+
+    recovered = _typed_observation(monkeypatch, (target,), no_interface=0.50)
+    assert isinstance(recovered, ShadowBoundaryObservation)
+    assert recovered.hypothesis.identity == target.identity
+
+
+def test_d3_local_near_tie_fails_closed_after_comparative_recovery(monkeypatch):
+    first = _typed_hypothesis(
+        "d3-tie-a",
+        y=40.0,
+        boundary=0.31,
+        artifact=0.10,
+        ambiguity=0.62,
+        broad_strength=0.08,
+        narrow_horizontal_coverage=0.01,
+        paired_edge_strength=0.96,
+    )
+    second = _typed_hypothesis(
+        "d3-tie-b",
+        y=46.0,
+        boundary=0.30,
+        artifact=0.10,
+        ambiguity=0.62,
+        broad_strength=0.08,
+        narrow_horizontal_coverage=0.01,
+        paired_edge_strength=0.96,
+    )
+    evidence = oil_shadow_observations._SingleFrameIdentifiabilityEvidence(
+        phase_ceiling_pressure=0.0,
+        texture_relief=0.90,
+        broad_corroboration_deficit=0.8,
+        evidence_reliability=0.90,
+        collision_pressure=0.0,
+        semantic_support=0.20,
+        acceptance_margin=-0.20,
+    )
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_single_frame_identifiability_evidence",
+        lambda *_args: evidence,
+    )
+
+    unresolved = _typed_observation(
+        monkeypatch,
+        (first, second),
+        no_interface=0.50,
+    )
+    assert isinstance(unresolved, ShadowAmbiguousObservation)
+
+
 def test_textured_low_contrast_recovery_requires_identifiable_phase_evidence(monkeypatch):
     target = _typed_hypothesis(
         "textured-low-contrast",

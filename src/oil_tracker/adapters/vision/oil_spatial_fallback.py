@@ -80,6 +80,7 @@ def build_spatial_positive_fallback_frame(
         hypotheses,
         accepted_foam_front_local_y=accepted_foam_front_local_y,
         accepted_foam_component_mask=accepted_foam_component_mask,
+        allow_comparative_recovery=False,
     )
     if isinstance(current, ShadowBoundaryObservation):
         path = _evaluate_spatial_path(
@@ -397,6 +398,39 @@ def _select_spatially_corroborated_textured_boundary(
     if not no_interface.available or no_interface.likelihood > 0.40:
         return None
 
+    independently_identifiable: list[tuple[float, SemanticHypothesis]] = []
+    for candidate in ordered:
+        if not observations._has_hard_current_frame_support(
+            candidate,
+            accepted_foam_front_local_y,
+        ):
+            continue
+        second_boundary = max(
+            (
+                item.boundary_likelihood
+                for item in ordered
+                if item.identity != candidate.identity
+            ),
+            default=0.0,
+        )
+        evidence = observations._single_frame_identifiability_evidence(
+            pre,
+            effective_mask,
+            candidate,
+            no_interface,
+            second_boundary,
+        )
+        if (
+            evidence.texture_relief >= 0.55
+            and evidence.phase_ceiling_pressure <= 0.20
+            and evidence.collision_pressure <= 0.10
+            and evidence.evidence_reliability >= 0.75
+        ):
+            independently_identifiable.append(
+                (candidate.boundary_likelihood, candidate)
+            )
+
+    accepted: list[SemanticHypothesis] = []
     for candidate in ordered:
         spatial_conflict = max(
             candidate.broad.glare_conflict,
@@ -467,12 +501,18 @@ def _select_spatially_corroborated_textured_boundary(
             and path.span_px <= 2.0 * bounds.maximum_proposal_diameter_px
             and path_alignment <= bounds.maximum_proposal_diameter_px
         ):
-            return candidate
-        # Do not search lower-ranked hypotheses after the first candidate that
-        # passes the non-spatial safety gate. This keeps the fallback fail-closed
-        # and bounds the added Spatial work to one five-sector path evaluation.
+            accepted.append(candidate)
+
+    if not accepted:
         return None
-    return None
+    selected = accepted[0]
+    if observations._has_local_authority_tie(
+        selected,
+        independently_identifiable,
+        bounds,
+    ):
+        return None
+    return selected
 
 
 def _evaluate_spatial_path(
