@@ -789,6 +789,52 @@ def test_d3_subthreshold_no_interface_is_comparative_not_a_veto(monkeypatch):
     assert recovered.hypothesis.identity == target.identity
 
 
+def test_d3_hard_invalid_foam_hypothesis_cannot_own_comparative_anchor(monkeypatch):
+    invalid_anchor = _typed_hypothesis(
+        "d3-foam-invalid-anchor",
+        y=4.0,
+        boundary=0.34,
+        artifact=0.10,
+        ambiguity=0.62,
+        broad_strength=0.08,
+        narrow_horizontal_coverage=0.01,
+        paired_edge_strength=0.96,
+    )
+    safe_target = _typed_hypothesis(
+        "d3-foam-safe-target",
+        y=12.0,
+        boundary=0.30,
+        artifact=0.10,
+        ambiguity=0.62,
+        broad_strength=0.08,
+        narrow_horizontal_coverage=0.01,
+        paired_edge_strength=0.96,
+    )
+    evidence = oil_shadow_observations._SingleFrameIdentifiabilityEvidence(
+        phase_ceiling_pressure=0.0,
+        texture_relief=0.90,
+        broad_corroboration_deficit=0.8,
+        evidence_reliability=0.90,
+        collision_pressure=0.0,
+        semantic_support=0.20,
+        acceptance_margin=-0.20,
+    )
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_single_frame_identifiability_evidence",
+        lambda *_args: evidence,
+    )
+
+    recovered = _typed_observation(
+        monkeypatch,
+        (invalid_anchor, safe_target),
+        no_interface=0.50,
+        accepted_foam_front_local_y=6.0,
+    )
+    assert isinstance(recovered, ShadowBoundaryObservation)
+    assert recovered.hypothesis.identity == safe_target.identity
+
+
 def test_d3_local_near_tie_fails_closed_after_comparative_recovery(monkeypatch):
     first = _typed_hypothesis(
         "d3-tie-a",
