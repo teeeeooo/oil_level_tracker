@@ -182,7 +182,7 @@ def test_transient_shimmer_does_not_create_raw_or_smoothed_foam_front():
         assert detection.smoothed_foam_front_y is None
 
 
-def test_detached_warm_grid_cannot_gain_foam_or_fill_state_authority():
+def test_representative_detached_warm_grid_cannot_gain_foam_or_fill_state_authority():
     frame = np.full((240, 320, 3), 45, dtype=np.uint8)
     for x in range(110, 210, 10):
         frame[70:150, x : x + 3] = (60, 85, 105)
@@ -207,7 +207,7 @@ def test_detached_warm_grid_cannot_gain_foam_or_fill_state_authority():
     assert detection.fill_state.value != "FOAMING_VISIBLE"
 
 
-def test_bottom_connected_warm_grid_cannot_gain_foam_or_fill_state_authority():
+def test_representative_bottom_connected_warm_grid_cannot_gain_foam_or_fill_state_authority():
     frame = np.full((240, 320, 3), 45, dtype=np.uint8)
     for x in range(110, 210, 10):
         frame[120:240, x : x + 3] = (60, 85, 105)

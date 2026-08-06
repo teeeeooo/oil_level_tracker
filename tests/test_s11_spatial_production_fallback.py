@@ -381,7 +381,6 @@ def test_sample4_later_foam_separates_from_structural_substrate() -> None:
         assert detection.debug_metrics["foam_decision_status"] == "accepted_strong", frame_index
         assert detection.debug_metrics["foam_oil_context_authoritative"] is True, frame_index
         assert detection.debug_metrics["foam_component_width_ratio"] < 0.70, frame_index
-        assert detection.debug_metrics["foam_bounding_box_fill_ratio"] >= 0.30, frame_index
 
 
 def test_recovered_native_rows_use_genuine_cross_roi_path_information() -> None:

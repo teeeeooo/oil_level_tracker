@@ -93,7 +93,6 @@ def test_dark_yellow_tapered_foam_survives_without_whiteness_membership():
     assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
     assert result.whiteness_ratio == 0.0
     assert result.texture_support_ratio >= 0.28
-    assert result.bounding_box_fill_ratio < 0.80
     assert result.front_y == 45.0
 
 
@@ -117,13 +116,12 @@ def test_bottom_connected_dark_yellow_tapered_foam_requires_and_keeps_layer_topo
     assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
     assert result.whiteness_ratio == 0.0
     assert result.texture_support_ratio >= 0.28
-    assert result.bounding_box_fill_ratio < 0.80
     assert result.front_y == 55.0
     assert authority.authoritative
 
 
 @pytest.mark.parametrize("pattern", ("vertical", "horizontal", "grid", "random"))
-def test_detached_warm_structure_cannot_gain_foam_authority(pattern: str):
+def test_representative_detached_warm_structure_cannot_gain_foam_authority(pattern: str):
     height, width = 160, 120
     image = np.full((height, width, 3), 45, dtype=np.uint8)
     warm = np.array((60, 85, 105), dtype=np.uint8)
@@ -152,7 +150,7 @@ def test_detached_warm_structure_cannot_gain_foam_authority(pattern: str):
 
 
 @pytest.mark.parametrize("pattern", ("vertical", "horizontal", "grid", "random", "panel"))
-def test_bottom_connected_warm_structure_requires_physical_layer_topology(pattern: str):
+def test_representative_bottom_connected_warm_structure_remains_non_authoritative(pattern: str):
     height, width = 160, 120
     image = np.full((height, width, 3), 45, dtype=np.uint8)
     warm = np.array((60, 85, 105), dtype=np.uint8)
@@ -219,7 +217,6 @@ def test_detached_layer_front_uses_structural_substrate_context_not_color_path(
     assert result.selected_component is not None
     assert not result.selected_component.bottom_connected
     assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
-    assert result.bounding_box_fill_ratio < 0.80
     assert result.front_y == 89.0
 
 

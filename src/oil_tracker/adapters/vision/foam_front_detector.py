@@ -95,11 +95,8 @@ _CHROMATIC_SEED_MIN_TEXTURE = 0.20
 _CHROMATIC_SEED_MIN_SCORE = 0.20
 _CHROMATIC_COMPONENT_MIN_RATIO = 0.35
 _LAYER_MIN_AREA_MULTIPLIER = 2.5
-_LAYER_MIN_HEIGHT_RATIO = 0.15
 _LAYER_MAX_HEIGHT_RATIO = 0.68
 _LAYER_MIN_WIDTH_RATIO = 0.55
-_LAYER_MIN_FILL_RATIO = 0.30
-_LAYER_MAX_FILL_RATIO = 0.80
 _LAYER_MIN_DOMINANT_THIRD_OCCUPANCY = 0.20
 _LAYER_MIN_EDGE_CONCENTRATION_RATIO = 1.30
 
@@ -646,19 +643,17 @@ def _structural_substrate_relation(
     return substrate_present, False
 
 
-def _layer_geometry_ok(
+def _material_layer_ok(
     *,
     area_ratio: float,
     height_ratio: float,
     width_ratio: float,
-    fill_ratio: float,
     min_area: float,
 ) -> bool:
     return bool(
         area_ratio >= min_area * _LAYER_MIN_AREA_MULTIPLIER
-        and _LAYER_MIN_HEIGHT_RATIO <= height_ratio <= _LAYER_MAX_HEIGHT_RATIO
+        and height_ratio <= _LAYER_MAX_HEIGHT_RATIO
         and width_ratio >= _LAYER_MIN_WIDTH_RATIO
-        and _LAYER_MIN_FILL_RATIO <= fill_ratio <= _LAYER_MAX_FILL_RATIO
     )
 
 
@@ -697,7 +692,6 @@ def _detached_layer_topology(
     area_ratio: float,
     height_ratio: float,
     width_ratio: float,
-    fill_ratio: float,
     bottom_connected: bool,
     min_area: float,
     front_from_lower_edge: bool,
@@ -706,11 +700,10 @@ def _detached_layer_topology(
     default_front = float(ys.min()) if ys.size else float(component.shape[0] - 1)
     if (
         bottom_connected
-        or not _layer_geometry_ok(
+        or not _material_layer_ok(
             area_ratio=area_ratio,
             height_ratio=height_ratio,
             width_ratio=width_ratio,
-            fill_ratio=fill_ratio,
             min_area=min_area,
         )
         or not _has_one_sided_layer_occupancy(component)
@@ -769,7 +762,6 @@ def _component_evidence(
         area_ratio=area_ratio,
         height_ratio=height_ratio,
         width_ratio=width_ratio,
-        fill_ratio=fill_ratio,
         bottom_connected=bottom_connected,
         min_area=min_area,
         front_from_lower_edge=front_from_lower_edge,
@@ -785,11 +777,10 @@ def _component_evidence(
         and not white_ok
         and chromatic_ok
         and texture_ratio >= 0.28
-        and _layer_geometry_ok(
+        and _material_layer_ok(
             area_ratio=area_ratio,
             height_ratio=height_ratio,
             width_ratio=width_ratio,
-            fill_ratio=fill_ratio,
             min_area=min_area,
         )
         and _has_one_sided_layer_occupancy(component, valid)
