@@ -4,6 +4,7 @@ from dataclasses import replace
 
 import cv2
 import numpy as np
+import pytest
 
 from oil_tracker.adapters.vision.foam_front_detector import (
     FoamDecisionStatus,
@@ -57,6 +58,8 @@ def test_diffuse_white_bottom_connected_foam_has_strong_combined_evidence():
     assert result.whiteness_ratio >= 0.20
     assert result.texture_support_ratio >= 0.22
     assert result.bottom_connected_area_ratio > 0
+    assert result.selected_component is not None
+    assert result.selected_component.bottom_connected
     assert 0.0 <= result.final_evidence_score <= 1.0
 
 
@@ -69,6 +72,185 @@ def test_low_light_white_foam_and_partial_front_remain_supported():
     assert low.decision_status is not FoamDecisionStatus.GLARE_REJECTED
     assert partial_result.candidate is not None
     assert partial_result.component_width_ratio > 0.25
+
+
+def test_dark_yellow_tapered_foam_survives_without_whiteness_membership():
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    warm_a = np.array((60, 85, 105), dtype=np.uint8)
+    warm_b = np.array((35, 55, 80), dtype=np.uint8)
+    for y in range(45, 115):
+        fraction = (y - 45) / 70.0
+        half_width = int(round(48 - 27 * fraction))
+        for x in range(60 - half_width, 60 + half_width):
+            image[y, x] = warm_a if ((x // 3 + y // 3) % 2 == 0) else warm_b
+
+    result = _detect(image)
+
+    assert result.candidate is not None
+    assert result.selected_component is not None
+    assert not result.selected_component.bottom_connected
+    assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
+    assert result.whiteness_ratio == 0.0
+    assert result.texture_support_ratio >= 0.28
+    assert result.front_y == 45.0
+
+
+def test_bottom_connected_dark_yellow_tapered_foam_requires_and_keeps_layer_topology():
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    warm_a = np.array((60, 85, 105), dtype=np.uint8)
+    warm_b = np.array((35, 55, 80), dtype=np.uint8)
+    for y in range(55, height):
+        fraction = (y - 55) / (height - 55)
+        half_width = int(round(48 - 34 * fraction))
+        for x in range(60 - half_width, 60 + half_width):
+            image[y, x] = warm_a if ((x // 3 + y // 3) % 2 == 0) else warm_b
+
+    result = _detect(image)
+    authority = evaluate_foam_oil_context_authority(result)
+
+    assert result.candidate is not None
+    assert result.selected_component is not None
+    assert result.selected_component.bottom_connected
+    assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
+    assert result.whiteness_ratio == 0.0
+    assert result.texture_support_ratio >= 0.28
+    assert result.front_y == 55.0
+    assert authority.authoritative
+
+
+@pytest.mark.parametrize("pattern", ("vertical", "horizontal", "grid", "random"))
+def test_representative_detached_warm_structure_cannot_gain_foam_authority(pattern: str):
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    warm = np.array((60, 85, 105), dtype=np.uint8)
+    y0, y1, x0, x1 = 40, 120, 15, 105
+    mask = np.zeros((height, width), dtype=bool)
+    if pattern in {"vertical", "grid"}:
+        for x in range(x0, x1, 10):
+            mask[y0:y1, x : x + 3] = True
+    if pattern in {"horizontal", "grid"}:
+        for y in range(y0, y1, 10):
+            mask[y : y + 3, x0:x1] = True
+    if pattern == "random":
+        rng = np.random.default_rng(211)
+        mask[y0:y1, x0:x1] = rng.random((y1 - y0, x1 - x0)) > 0.55
+    image[mask] = warm
+
+    result = _detect(image)
+    authority = evaluate_foam_oil_context_authority(result)
+
+    assert result.candidate is None
+    assert result.decision_status not in {
+        FoamDecisionStatus.ACCEPTED_STRONG,
+        FoamDecisionStatus.MODERATE_EVIDENCE,
+    }
+    assert not authority.authoritative
+
+
+@pytest.mark.parametrize("pattern", ("vertical", "horizontal", "grid", "random", "panel"))
+def test_representative_bottom_connected_warm_structure_remains_non_authoritative(pattern: str):
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    warm = np.array((60, 85, 105), dtype=np.uint8)
+    y0, y1, x0, x1 = 70, height, 15, 105
+    if pattern in {"vertical", "grid"}:
+        for x in range(x0, x1, 10):
+            image[y0:y1, x : x + 3] = warm
+    if pattern in {"horizontal", "grid"}:
+        for y in range(y0, y1, 10):
+            image[y : y + 3, x0:x1] = warm
+    if pattern == "random":
+        rng = np.random.default_rng(211)
+        mask = rng.random((y1 - y0, x1 - x0)) > 0.55
+        image[y0:y1, x0:x1][mask] = warm
+    elif pattern == "panel":
+        yy, xx = np.indices((y1 - y0, x1 - x0))
+        checker = ((xx // 3 + yy // 3) % 2) == 0
+        image[y0:y1, x0:x1] = np.where(
+            checker[..., None],
+            np.array((60, 85, 105), dtype=np.uint8),
+            np.array((35, 55, 80), dtype=np.uint8),
+        )
+
+    result = _detect(image)
+    authority = evaluate_foam_oil_context_authority(result)
+
+    assert result.candidate is None
+    assert result.decision_status not in {
+        FoamDecisionStatus.ACCEPTED_STRONG,
+        FoamDecisionStatus.MODERATE_EVIDENCE,
+    }
+    assert not authority.authoritative
+
+
+@pytest.mark.parametrize("appearance", ("white", "warm"))
+def test_detached_layer_front_uses_structural_substrate_context_not_color_path(
+    appearance: str,
+):
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    warm_a = np.array((60, 85, 105), dtype=np.uint8)
+    warm_b = np.array((35, 55, 80), dtype=np.uint8)
+    for y in range(45, 90):
+        fraction = (y - 45) / 45.0
+        half_width = int(round(22 + 23 * fraction))
+        for x in range(60 - half_width, 60 + half_width):
+            if appearance == "white":
+                image[y, x] = 220 if ((x // 3 + y // 3) % 2 == 0) else 150
+            else:
+                image[y, x] = warm_a if ((x // 3 + y // 3) % 2 == 0) else warm_b
+
+    yy, xx = np.indices((height, width))
+    bright = np.where((((xx // 3 + yy // 3) % 2) == 0)[..., None], 220, 150).astype(np.uint8)
+    bright = np.repeat(bright, 3, axis=2)
+    rim = np.zeros((height, width), dtype=bool)
+    rim[96:150, 8:16] = True
+    rim[96:150, 104:112] = True
+    rim[142:150, 8:112] = True
+    image[rim] = bright[rim]
+
+    result = _detect(image)
+
+    assert result.candidate is not None
+    assert result.selected_component is not None
+    assert not result.selected_component.bottom_connected
+    assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
+    assert result.front_y == 89.0
+
+
+def test_wide_hollow_rim_is_rejected_but_filled_foam_can_replace_its_authority():
+    height, width = 160, 120
+    yy, xx = np.indices((height, width))
+    bright = np.where((((xx // 3 + yy // 3) % 2) == 0)[..., None], 220, 150).astype(np.uint8)
+    bright = np.repeat(bright, 3, axis=2)
+    structural = np.full((height, width, 3), 45, dtype=np.uint8)
+    rim = np.zeros((height, width), dtype=bool)
+    rim[55:150, 8:17] = True
+    rim[55:150, 103:112] = True
+    rim[141:150, 8:112] = True
+    structural[rim] = bright[rim]
+
+    rejected = _detect(structural)
+    assert rejected.candidate is None
+    assert rejected.decision_status is FoamDecisionStatus.WEAK_REJECTED
+    assert rejected.final_evidence_score >= 0.80
+    assert rejected.component_width_ratio >= 0.70
+    assert rejected.bounding_box_fill_ratio < 0.30
+
+    with_foam = structural.copy()
+    warm = np.where(
+        ((((xx // 3 + yy // 3) % 2) == 0)[..., None]),
+        np.array((60, 85, 105), dtype=np.uint8),
+        np.array((35, 55, 80), dtype=np.uint8),
+    )
+    foam_region = (yy >= 80) & (yy < 145) & (xx >= 20) & (xx < 100)
+    with_foam[foam_region] = warm[foam_region]
+    accepted = _detect(with_foam)
+    assert accepted.candidate is not None
+    assert accepted.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
+    assert accepted.bounding_box_fill_ratio > 0.30
 
 
 def test_genuine_foam_retains_oil_context_authority():
@@ -102,7 +284,7 @@ def test_wide_hollow_structural_component_cannot_gain_oil_context_authority():
     )
 
     authority = evaluate_foam_oil_context_authority(structural)
-    assert structural.candidate is not None  # S5-A publication remains independent.
+    assert structural.candidate is not None  # D1 remains defense in depth for handoff inputs.
     assert not authority.authoritative
     assert authority.reason == "wide_hollow_structural_or_refractive_component"
     assert authority.wide_row_fraction >= 0.25

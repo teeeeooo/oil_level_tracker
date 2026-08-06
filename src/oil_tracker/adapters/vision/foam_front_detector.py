@@ -89,6 +89,17 @@ _OIL_CONTEXT_WIDE_ROW_SPAN_RATIO = 0.35
 _OIL_CONTEXT_MIN_WIDE_ROW_FRACTION = 0.25
 _OIL_CONTEXT_MIN_ROW_COMPACTNESS = 0.65
 
+_CHROMATIC_SUPPORT_MIN_CHROMA_RATIO = 0.20
+_CHROMATIC_SUPPORT_MIN_TEXTURE = 0.05
+_CHROMATIC_SEED_MIN_TEXTURE = 0.20
+_CHROMATIC_SEED_MIN_SCORE = 0.20
+_CHROMATIC_COMPONENT_MIN_RATIO = 0.35
+_LAYER_MIN_AREA_MULTIPLIER = 2.5
+_LAYER_MAX_HEIGHT_RATIO = 0.68
+_LAYER_MIN_WIDTH_RATIO = 0.55
+_LAYER_MIN_DOMINANT_THIRD_OCCUPANCY = 0.20
+_LAYER_MIN_EDGE_CONCENTRATION_RATIO = 1.30
+
 
 @dataclass(frozen=True)
 class FoamOilContextAuthority:
@@ -103,40 +114,21 @@ def evaluate_foam_oil_context_authority(result: FoamDetectionResult) -> FoamOilC
 
     S5-A Foam publication and S5-B routing are separate responsibilities.  A
     bright sight-glass rim can form one wide connected U-shaped component while
-    remaining hollow across individual rows.  Such a component may still be
-    reported by S5-A, but it is not allowed to mask or re-route Oil evidence.
+    remaining hollow across individual rows. S5-A rejects that known structural
+    class, while this handoff check independently keeps the same class from
+    masking or re-routing Oil evidence if an accepted input still reaches D1.
     """
 
     if result.candidate is None or not np.any(result.mask):
         return FoamOilContextAuthority(False, "foam_context_not_currently_accepted", 0.0, 0.0)
 
     support = result.mask > 0
-    ys, xs = np.where(support)
-    x0, x1 = int(xs.min()), int(xs.max())
-    y0, y1 = int(ys.min()), int(ys.max())
-    component = support[y0 : y1 + 1, x0 : x1 + 1]
-    component_width = max(1, component.shape[1])
-    wide_row_compactness: list[float] = []
-    for row in component:
-        row_x = np.flatnonzero(row)
-        if row_x.size == 0:
-            continue
-        span = int(row_x[-1] - row_x[0] + 1)
-        if span / component_width < _OIL_CONTEXT_WIDE_ROW_SPAN_RATIO:
-            continue
-        wide_row_compactness.append(float(row_x.size) / max(1, span))
-
-    wide_row_fraction = len(wide_row_compactness) / max(1, component.shape[0])
-    compactness_median = (
-        float(np.median(np.asarray(wide_row_compactness, dtype=np.float32)))
-        if wide_row_compactness
-        else 1.0
-    )
-    wide_hollow_structure = (
-        result.component_width_ratio >= _OIL_CONTEXT_WIDE_COMPONENT_RATIO
-        and result.bounding_box_fill_ratio < _OIL_CONTEXT_MAX_HOLLOW_FILL_RATIO
-        and wide_row_fraction >= _OIL_CONTEXT_MIN_WIDE_ROW_FRACTION
-        and compactness_median < _OIL_CONTEXT_MIN_ROW_COMPACTNESS
+    wide_hollow_structure, wide_row_fraction, compactness_median = (
+        _wide_hollow_component_metrics(
+            support,
+            width_ratio=float(result.component_width_ratio),
+            fill_ratio=float(result.bounding_box_fill_ratio),
+        )
     )
     if wide_hollow_structure:
         return FoamOilContextAuthority(
@@ -151,6 +143,77 @@ def evaluate_foam_oil_context_authority(result: FoamDetectionResult) -> FoamOilC
         float(wide_row_fraction),
         float(compactness_median),
     )
+
+
+def _wide_hollow_component_metrics(
+    support: np.ndarray,
+    *,
+    width_ratio: float,
+    fill_ratio: float,
+) -> tuple[bool, float, float]:
+    ys, xs = np.where(support)
+    if ys.size == 0:
+        return False, 0.0, 1.0
+    x0, x1 = int(xs.min()), int(xs.max())
+    y0, y1 = int(ys.min()), int(ys.max())
+    component = support[y0 : y1 + 1, x0 : x1 + 1]
+    component_width = max(1, component.shape[1])
+    compactness: list[float] = []
+    for row in component:
+        row_x = np.flatnonzero(row)
+        if row_x.size == 0:
+            continue
+        span = int(row_x[-1] - row_x[0] + 1)
+        if span / component_width < _OIL_CONTEXT_WIDE_ROW_SPAN_RATIO:
+            continue
+        compactness.append(float(row_x.size) / max(1, span))
+    wide_row_fraction = len(compactness) / max(1, component.shape[0])
+    compactness_median = (
+        float(np.median(np.asarray(compactness, dtype=np.float32)))
+        if compactness
+        else 1.0
+    )
+    structural = (
+        float(width_ratio) >= _OIL_CONTEXT_WIDE_COMPONENT_RATIO
+        and float(fill_ratio) < _OIL_CONTEXT_MAX_HOLLOW_FILL_RATIO
+        and wide_row_fraction >= _OIL_CONTEXT_MIN_WIDE_ROW_FRACTION
+        and compactness_median < _OIL_CONTEXT_MIN_ROW_COMPACTNESS
+    )
+    return bool(structural), float(wide_row_fraction), float(compactness_median)
+
+
+def _chromatic_foam_support(
+    chroma: np.ndarray,
+    warm_chroma: np.ndarray,
+    texture: np.ndarray,
+    valid: np.ndarray,
+    settings: DetectorSettings,
+) -> tuple[np.ndarray, np.ndarray]:
+    chroma_ceiling = max(1e-6, float(settings.foam_max_chroma))
+    warm_ratio = np.clip(warm_chroma.astype(np.float32) / chroma_ceiling, 0.0, 1.0)
+    chromatic_band = (
+        valid
+        & (warm_chroma >= _CHROMATIC_SUPPORT_MIN_CHROMA_RATIO * chroma_ceiling)
+        & (chroma <= chroma_ceiling)
+    )
+    membership = chromatic_band & (texture >= _CHROMATIC_SUPPORT_MIN_TEXTURE)
+    evidence = np.where(
+        chromatic_band,
+        np.sqrt(warm_ratio * np.clip(texture, 0.0, 1.0)),
+        0.0,
+    ).astype(np.float32)
+    seed = (
+        membership
+        & (texture >= _CHROMATIC_SEED_MIN_TEXTURE)
+        & (evidence >= _CHROMATIC_SEED_MIN_SCORE)
+    )
+    if not np.any(seed):
+        return np.zeros_like(valid, dtype=bool), evidence
+    count, labels = cv2.connectedComponents(membership.astype(np.uint8), connectivity=8)
+    keep = np.zeros(max(1, count), dtype=bool)
+    keep[np.unique(labels[seed])] = True
+    keep[0] = False
+    return keep[labels], evidence
 
 
 def detect_bottom_connected_foam(
@@ -191,27 +254,44 @@ def detect_bottom_connected_foam(
     if not np.any(valid):
         return _empty_result(gray.shape)
 
-    lightness, chroma = _lightness_and_chroma(crop, gray)
+    lightness, chroma, warm_chroma = _lightness_and_chroma(crop, gray)
     raw_whiteness = _whiteness_score(lightness, chroma, settings)
     glare = (glare_mask > 0) & valid
     glare_excluded = valid & ~glare
     whiteness = np.where(glare_excluded, raw_whiteness, 0.0).astype(np.float32)
 
     variance, edge_density, texture = _texture_evidence(gray, canny, valid, settings)
-    combined = np.clip(
-        0.50 * whiteness + 0.35 * texture + 0.15 * np.minimum(whiteness, texture),
-        0.0,
-        1.0,
-    ).astype(np.float32)
-
-    raw_support = (
+    chromatic_support, chromatic_evidence = _chromatic_foam_support(
+        chroma, warm_chroma, texture, valid, settings
+    )
+    white_support = (
         valid
         & (raw_whiteness >= 0.12)
         & (texture >= 0.18)
         & ((0.50 * raw_whiteness + 0.35 * texture) >= 0.24)
     )
-    support = raw_support.astype(np.uint8) * 255
-    support = _clean_support_mask(support, min(gray.shape[:2]))
+    white_clean = _clean_support_mask(
+        white_support.astype(np.uint8) * 255,
+        min(gray.shape[:2]),
+    )
+    if _has_material_nonstructural_support_component(white_clean, valid, settings):
+        chromatic_support = np.zeros_like(valid, dtype=bool)
+        chromatic_evidence = np.zeros_like(texture, dtype=np.float32)
+        support = white_clean
+    else:
+        raw_support = white_support | chromatic_support
+        support = _clean_support_mask(
+            raw_support.astype(np.uint8) * 255,
+            min(gray.shape[:2]),
+        )
+    combined = np.maximum(
+        np.clip(
+            0.50 * whiteness + 0.35 * texture + 0.15 * np.minimum(whiteness, texture),
+            0.0,
+            1.0,
+        ),
+        chromatic_evidence,
+    ).astype(np.float32)
     count, labels, stats, _centroids = cv2.connectedComponentsWithStats(
         (support > 0).astype(np.uint8), connectivity=8
     )
@@ -221,10 +301,17 @@ def detect_bottom_connected_foam(
     bottom_start = max(0, int(math.floor(h * 0.78)))
     bottom_band[bottom_start:, :] = valid[bottom_start:, :]
 
+    structural_boxes = _structural_support_boxes(labels, stats, valid)
     component_rows: list[FoamComponentEvidence] = []
     component_masks: dict[int, np.ndarray] = {}
     for label in range(1, count):
         component = labels == label
+        structural_substrate_present, front_from_lower_edge = _structural_substrate_relation(
+            label,
+            stats,
+            structural_boxes,
+            h,
+        )
         evidence = _component_evidence(
             label,
             component,
@@ -233,9 +320,12 @@ def detect_bottom_connected_foam(
             bottom_band,
             whiteness,
             texture,
+            chromatic_support,
             glare,
             effective_area,
             settings,
+            structural_substrate_present=structural_substrate_present,
+            front_from_lower_edge=front_from_lower_edge,
         )
         component_rows.append(evidence)
         component_masks[label] = component
@@ -369,16 +459,22 @@ def _validate_shapes(crop, gray, canny, glare_mask, effective_mask) -> None:
             raise ValueError(f"Foam {name} shape must match the crop.")
 
 
-def _lightness_and_chroma(crop: np.ndarray, gray: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def _lightness_and_chroma(
+    crop: np.ndarray,
+    gray: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     if crop.ndim == 2:
-        return gray.astype(np.float32), np.zeros_like(gray, dtype=np.float32)
+        zeros = np.zeros_like(gray, dtype=np.float32)
+        return gray.astype(np.float32), zeros, zeros.copy()
     if crop.ndim != 3 or crop.shape[2] not in (3, 4):
         raise ValueError("Foam crop must be grayscale, BGR or BGRA.")
     bgr = crop[:, :, :3]
     lab = cv2.cvtColor(bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
     a = lab[:, :, 1] - 128.0
     b = lab[:, :, 2] - 128.0
-    return lab[:, :, 0], np.sqrt(a * a + b * b).astype(np.float32)
+    chroma = np.sqrt(a * a + b * b).astype(np.float32)
+    warm_chroma = np.clip(b - np.maximum(a, 0.0), 0.0, None).astype(np.float32)
+    return lab[:, :, 0], chroma, warm_chroma
 
 
 def _whiteness_score(
@@ -461,6 +557,164 @@ def _clean_support_mask(mask: np.ndarray, base: int) -> np.ndarray:
     )
 
 
+def _has_material_nonstructural_support_component(
+    support: np.ndarray,
+    valid: np.ndarray,
+    settings: DetectorSettings,
+) -> bool:
+    count, labels, stats, _centroids = cv2.connectedComponentsWithStats(
+        (support > 0).astype(np.uint8), connectivity=8
+    )
+    effective_area = max(1, int(np.count_nonzero(valid)))
+    height = max(1, int(valid.shape[0]))
+    width = max(1, int(valid.shape[1]))
+    min_area = max(1e-6, float(settings.foam_min_area_ratio))
+    for label in range(1, count):
+        area = int(stats[label, cv2.CC_STAT_AREA])
+        component_width = max(1, int(stats[label, cv2.CC_STAT_WIDTH]))
+        component_height = max(1, int(stats[label, cv2.CC_STAT_HEIGHT]))
+        area_ratio = float(area) / effective_area
+        height_ratio = float(component_height) / height
+        if area_ratio < min_area or height_ratio < 0.075:
+            continue
+        width_ratio = float(component_width) / width
+        fill_ratio = float(area) / max(1, component_width * component_height)
+        structural, _wide_rows, _compactness = _wide_hollow_component_metrics(
+            labels == label,
+            width_ratio=width_ratio,
+            fill_ratio=fill_ratio,
+        )
+        if not structural:
+            return True
+    return False
+
+
+def _structural_support_boxes(
+    labels: np.ndarray,
+    stats: np.ndarray,
+    valid: np.ndarray,
+) -> tuple[tuple[int, int, int, int, int], ...]:
+    _, w = valid.shape
+    boxes: list[tuple[int, int, int, int, int]] = []
+    for label in range(1, int(stats.shape[0])):
+        x = int(stats[label, cv2.CC_STAT_LEFT])
+        y = int(stats[label, cv2.CC_STAT_TOP])
+        width = max(1, int(stats[label, cv2.CC_STAT_WIDTH]))
+        height = max(1, int(stats[label, cv2.CC_STAT_HEIGHT]))
+        area = int(stats[label, cv2.CC_STAT_AREA])
+        width_ratio = width / max(1, w)
+        fill_ratio = area / max(1, width * height)
+        structural, _wide_rows, _compactness = _wide_hollow_component_metrics(
+            labels == label,
+            width_ratio=width_ratio,
+            fill_ratio=fill_ratio,
+        )
+        if structural:
+            boxes.append((label, x, x + width - 1, y, y + height - 1))
+    return tuple(boxes)
+
+
+def _structural_substrate_relation(
+    label: int,
+    stats: np.ndarray,
+    structural_boxes: tuple[tuple[int, int, int, int, int], ...],
+    frame_height: int,
+) -> tuple[bool, bool]:
+    x0 = int(stats[label, cv2.CC_STAT_LEFT])
+    y0 = int(stats[label, cv2.CC_STAT_TOP])
+    width = max(1, int(stats[label, cv2.CC_STAT_WIDTH]))
+    height = max(1, int(stats[label, cv2.CC_STAT_HEIGHT]))
+    x1 = x0 + width - 1
+    y1 = y0 + height - 1
+    max_gap = max(3, int(round(frame_height * 0.12)))
+    substrate_present = False
+    for structural_label, sx0, sx1, sy0, sy1 in structural_boxes:
+        if structural_label == label or sy1 <= y1:
+            continue
+        overlap = max(0, min(x1, sx1) - max(x0, sx0) + 1)
+        if overlap / max(1, width) < 0.35:
+            continue
+        gap = sy0 - y1 - 1
+        if gap > max_gap:
+            continue
+        substrate_present = True
+        if 3 <= gap <= max_gap:
+            return True, True
+    return substrate_present, False
+
+
+def _material_layer_ok(
+    *,
+    area_ratio: float,
+    height_ratio: float,
+    width_ratio: float,
+    min_area: float,
+) -> bool:
+    return bool(
+        area_ratio >= min_area * _LAYER_MIN_AREA_MULTIPLIER
+        and height_ratio <= _LAYER_MAX_HEIGHT_RATIO
+        and width_ratio >= _LAYER_MIN_WIDTH_RATIO
+    )
+
+
+def _has_one_sided_layer_occupancy(
+    component: np.ndarray,
+    valid: np.ndarray | None = None,
+) -> bool:
+    ys, xs = np.where(component)
+    if ys.size == 0:
+        return False
+    x0, x1 = int(xs.min()), int(xs.max())
+    y0, y1 = int(ys.min()), int(ys.max())
+    layer = component[y0 : y1 + 1, x0 : x1 + 1]
+    row_population = np.count_nonzero(layer, axis=1).astype(np.float32)
+    if valid is None:
+        row_capacity = np.full(layer.shape[0], max(1, layer.shape[1]), dtype=np.float32)
+    else:
+        valid_layer = valid[y0 : y1 + 1, x0 : x1 + 1]
+        row_capacity = np.maximum(np.count_nonzero(valid_layer, axis=1), 1).astype(np.float32)
+    row_occupancy = row_population / row_capacity
+    third = max(1, int(math.ceil(layer.shape[0] / 3.0)))
+    top_occupancy = float(np.mean(row_occupancy[:third]))
+    bottom_occupancy = float(np.mean(row_occupancy[-third:]))
+    dominant = max(top_occupancy, bottom_occupancy)
+    opposite = min(top_occupancy, bottom_occupancy)
+    concentration = dominant / max(1e-6, opposite)
+    return bool(
+        dominant >= _LAYER_MIN_DOMINANT_THIRD_OCCUPANCY
+        and concentration >= _LAYER_MIN_EDGE_CONCENTRATION_RATIO
+    )
+
+
+def _detached_layer_topology(
+    component: np.ndarray,
+    *,
+    area_ratio: float,
+    height_ratio: float,
+    width_ratio: float,
+    bottom_connected: bool,
+    min_area: float,
+    front_from_lower_edge: bool,
+) -> tuple[bool, float]:
+    ys = np.where(component)[0]
+    default_front = float(ys.min()) if ys.size else float(component.shape[0] - 1)
+    if (
+        bottom_connected
+        or not _material_layer_ok(
+            area_ratio=area_ratio,
+            height_ratio=height_ratio,
+            width_ratio=width_ratio,
+            min_area=min_area,
+        )
+        or not _has_one_sided_layer_occupancy(component)
+    ):
+        return False, default_front
+
+    y0, y1 = int(ys.min()), int(ys.max())
+    front_y = float(y1 if front_from_lower_edge else y0)
+    return True, front_y
+
+
 def _component_evidence(
     label: int,
     component: np.ndarray,
@@ -469,9 +723,13 @@ def _component_evidence(
     bottom_band: np.ndarray,
     whiteness: np.ndarray,
     texture: np.ndarray,
+    chromatic_support: np.ndarray,
     glare: np.ndarray,
     effective_area: int,
     settings: DetectorSettings,
+    *,
+    structural_substrate_present: bool,
+    front_from_lower_edge: bool,
 ) -> FoamComponentEvidence:
     h, w = valid.shape
     area = int(stats[cv2.CC_STAT_AREA])
@@ -485,20 +743,63 @@ def _component_evidence(
     pixel_count = max(1, int(np.count_nonzero(component)))
     whiteness_ratio = float(np.count_nonzero(component & (whiteness >= 0.18))) / pixel_count
     texture_ratio = float(np.count_nonzero(component & (texture >= 0.22))) / pixel_count
+    chromatic_ratio = float(np.count_nonzero(component & chromatic_support)) / pixel_count
     glare_ratio = float(np.count_nonzero(component & glare)) / pixel_count
     ys = np.where(component)[0]
-    front_y = float(ys.min()) if ys.size else float(h - 1)
-    vertical_extent = (h - front_y) / max(1.0, float(h))
     thin_horizontal = height_ratio < 0.075 and width_ratio >= 0.30
 
     min_area = max(1e-6, float(settings.foam_min_area_ratio))
+    min_whiteness = float(settings.foam_min_whiteness_ratio)
+    white_ok = whiteness_ratio >= min_whiteness
+    chromatic_ok = chromatic_ratio >= _CHROMATIC_COMPONENT_MIN_RATIO
+    structural, _wide_rows, _compactness = _wide_hollow_component_metrics(
+        component,
+        width_ratio=width_ratio,
+        fill_ratio=fill_ratio,
+    )
+    detached_layer, detached_front_y = _detached_layer_topology(
+        component,
+        area_ratio=area_ratio,
+        height_ratio=height_ratio,
+        width_ratio=width_ratio,
+        bottom_connected=bottom_connected,
+        min_area=min_area,
+        front_from_lower_edge=front_from_lower_edge,
+    )
+    detached_layer = (
+        detached_layer
+        and texture_ratio >= 0.28
+        and (white_ok or chromatic_ok)
+        and (not structural_substrate_present or front_from_lower_edge)
+    )
+    bottom_chromatic_layer = (
+        bottom_connected
+        and not white_ok
+        and chromatic_ok
+        and texture_ratio >= 0.28
+        and _material_layer_ok(
+            area_ratio=area_ratio,
+            height_ratio=height_ratio,
+            width_ratio=width_ratio,
+            min_area=min_area,
+        )
+        and _has_one_sided_layer_occupancy(component, valid)
+    )
+    if bottom_connected and ys.size:
+        front_y = float(ys.min())
+    elif detached_layer:
+        front_y = float(detached_front_y)
+    else:
+        front_y = float(ys.min()) if ys.size else float(h - 1)
+    vertical_extent = (h - front_y) / max(1.0, float(h))
+    appearance_ratio = max(whiteness_ratio, chromatic_ratio)
     area_score = _unit(area_ratio / max(min_area * 3.0, 1e-6))
     height_score = _unit(height_ratio / 0.28)
     width_score = _unit(width_ratio / 0.55)
     fill_score = _unit((fill_ratio - 0.12) / 0.58)
     bottom_score = 1.0 if bottom_connected else 0.0
     score = (
-        0.22 * whiteness_ratio
+        0.22 * appearance_ratio
         + 0.22 * texture_ratio
         + 0.14 * area_score
         + 0.11 * height_score
@@ -511,22 +812,30 @@ def _component_evidence(
     )
     score = _unit(score)
 
+    minimum = float(settings.foam_min_evidence_score)
+    strong = float(settings.foam_strong_evidence_score)
+    shape_ok = (
+        ((bottom_connected and white_ok) or bottom_chromatic_layer or detached_layer)
+        and area_ratio >= min_area
+        and height_ratio >= 0.075
+        and not thin_horizontal
+        and not structural
+    )
+    strong_appearance_ok = white_ok or chromatic_ok
+    moderate_appearance_ok = whiteness_ratio >= min_whiteness * 0.75 or chromatic_ok
+    texture_ok = texture_ratio >= 0.28
     if glare_ratio > float(settings.foam_max_glare_overlap_ratio):
         status = FoamDecisionStatus.GLARE_REJECTED
+    elif structural:
+        status = FoamDecisionStatus.WEAK_REJECTED
+    elif score >= strong and shape_ok and strong_appearance_ok and texture_ok:
+        status = FoamDecisionStatus.ACCEPTED_STRONG
+    elif score >= minimum and shape_ok and moderate_appearance_ok and texture_ratio >= 0.22:
+        status = FoamDecisionStatus.MODERATE_EVIDENCE
+    elif score >= minimum * 0.80 and (strong_appearance_ok != texture_ok or shape_ok):
+        status = FoamDecisionStatus.AMBIGUOUS
     else:
-        minimum = float(settings.foam_min_evidence_score)
-        strong = float(settings.foam_strong_evidence_score)
-        shape_ok = bottom_connected and area_ratio >= min_area and height_ratio >= 0.075 and not thin_horizontal
-        white_ok = whiteness_ratio >= float(settings.foam_min_whiteness_ratio)
-        texture_ok = texture_ratio >= 0.28
-        if score >= strong and shape_ok and white_ok and texture_ok:
-            status = FoamDecisionStatus.ACCEPTED_STRONG
-        elif score >= minimum and shape_ok and whiteness_ratio >= float(settings.foam_min_whiteness_ratio) * 0.75 and texture_ratio >= 0.22:
-            status = FoamDecisionStatus.MODERATE_EVIDENCE
-        elif score >= minimum * 0.80 and (white_ok != texture_ok or shape_ok):
-            status = FoamDecisionStatus.AMBIGUOUS
-        else:
-            status = FoamDecisionStatus.WEAK_REJECTED
+        status = FoamDecisionStatus.WEAK_REJECTED
 
     return FoamComponentEvidence(
         label=int(label),

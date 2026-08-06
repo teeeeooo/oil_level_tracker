@@ -182,6 +182,56 @@ def test_transient_shimmer_does_not_create_raw_or_smoothed_foam_front():
         assert detection.smoothed_foam_front_y is None
 
 
+def test_representative_detached_warm_grid_cannot_gain_foam_or_fill_state_authority():
+    frame = np.full((240, 320, 3), 45, dtype=np.uint8)
+    for x in range(110, 210, 10):
+        frame[70:150, x : x + 3] = (60, 85, 105)
+    for y in range(70, 150, 10):
+        frame[y : y + 3, 110:210] = (60, 85, 105)
+
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        frame,
+        _glass(),
+        frame_index=0,
+        time_sec=0.0,
+        debug=False,
+    )
+
+    assert detection.raw_foam_front_y is None
+    assert detection.smoothed_foam_front_y is None
+    assert detection.debug_metrics["foam_oil_context_authoritative"] is False
+    assert detection.debug_metrics["foam_decision_status"] not in {
+        "accepted_strong",
+        "accepted_moderate",
+    }
+    assert detection.fill_state.value != "FOAMING_VISIBLE"
+
+
+def test_representative_bottom_connected_warm_grid_cannot_gain_foam_or_fill_state_authority():
+    frame = np.full((240, 320, 3), 45, dtype=np.uint8)
+    for x in range(110, 210, 10):
+        frame[120:240, x : x + 3] = (60, 85, 105)
+    for y in range(120, 240, 10):
+        frame[y : y + 3, 110:210] = (60, 85, 105)
+
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        frame,
+        _glass(),
+        frame_index=0,
+        time_sec=0.0,
+        debug=False,
+    )
+
+    assert detection.raw_foam_front_y is None
+    assert detection.smoothed_foam_front_y is None
+    assert detection.debug_metrics["foam_oil_context_authoritative"] is False
+    assert detection.debug_metrics["foam_decision_status"] not in {
+        "accepted_strong",
+        "accepted_moderate",
+    }
+    assert detection.fill_state.value not in {"FULL_WITH_FOAM", "FOAMING_VISIBLE"}
+
+
 def test_detector_reset_clears_bounded_foam_state_per_glass_and_globally():
     detector = OpenCvPhaseDetector()
     first = _glass()
