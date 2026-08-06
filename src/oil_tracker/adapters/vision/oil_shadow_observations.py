@@ -446,7 +446,9 @@ def evaluate_typed_current_observation(
     *,
     accepted_foam_front_local_y: float | None = None,
     accepted_foam_component_mask: np.ndarray | None = None,
+    allow_comparative_recovery: bool = True,
 ) -> ShadowCurrentObservation:
+    bounds = OilShadowBounds()
     _validate_accepted_foam_context(
         pre.gray,
         effective_mask,
@@ -462,6 +464,10 @@ def evaluate_typed_current_observation(
 
     ordered = sorted(hypotheses, key=_hypothesis_order)
     best = ordered[0] if ordered else None
+    competing_boundary = 0.0 if best is None else best.boundary_likelihood
+    if _positive_no_interface_is_authoritative(no_interface, competing_boundary):
+        return ShadowNoInterfaceObservation(evidence=no_interface)
+
     second_boundary = ordered[1].boundary_likelihood if len(ordered) > 1 else 0.0
     identifiability = None
     canonical_boundary_candidate = False
@@ -469,7 +475,7 @@ def evaluate_typed_current_observation(
         boundary_margin = max(
             0.0,
             best.boundary_likelihood
-            - max(best.artifact_likelihood, no_interface.likelihood, second_boundary),
+            - max(best.artifact_likelihood, second_boundary),
         )
         standard_boundary = (
             best.boundary_likelihood >= 0.48
@@ -497,37 +503,35 @@ def evaluate_typed_current_observation(
         if canonical_boundary_candidate and identifiability.acceptance_margin >= 0.0:
             return _boundary_observation(best, ordered)
 
-    recovered = (
-        _select_foam_separated_boundary(
+    recovered = None
+    if (
+        accepted_foam_front_local_y is not None
+        and accepted_foam_component_mask is not None
+    ):
+        recovered = _select_foam_separated_boundary(
             pre,
             effective_mask,
             ordered,
             accepted_foam_front_local_y,
             accepted_foam_component_mask,
         )
-        if accepted_foam_front_local_y is not None
-        and accepted_foam_component_mask is not None
-        else (
-            None
-            if accepted_foam_front_local_y is not None
-            else _select_textured_low_contrast_boundary(
+    elif accepted_foam_front_local_y is None:
+        recovered = _select_textured_low_contrast_boundary(
+            pre,
+            effective_mask,
+            ordered,
+            no_interface,
+        )
+        if recovered is None and allow_comparative_recovery:
+            recovered = _select_comparative_textured_boundary(
                 pre,
                 effective_mask,
                 ordered,
                 no_interface,
+                bounds,
             )
-        )
-    )
     if recovered is not None:
         return _boundary_observation(recovered, ordered)
-
-    competing_boundary = 0.0 if best is None else best.boundary_likelihood
-    if (
-        no_interface.available
-        and no_interface.likelihood >= 0.58
-        and no_interface.likelihood - competing_boundary >= 0.10
-    ):
-        return ShadowNoInterfaceObservation(evidence=no_interface)
 
     reason = "competing_boundary_artifact_or_no_interface_evidence"
     if (
@@ -602,19 +606,161 @@ def _boundary_observation(
     )
 
 
+def _positive_no_interface_is_authoritative(
+    evidence: ShadowNoInterfaceEvidence,
+    competing_boundary: float,
+) -> bool:
+    """Return whether current-frame evidence affirmatively establishes absence."""
+
+    return bool(
+        evidence.available
+        and evidence.likelihood >= 0.58
+        and evidence.likelihood - competing_boundary >= 0.10
+    )
+
+
+def _has_hard_current_frame_support(
+    candidate: SemanticHypothesis,
+    accepted_foam_front_local_y: float | None = None,
+) -> bool:
+    """Retain only direct observability/topology invalidity as hard rejection."""
+
+    if (
+        accepted_foam_front_local_y is not None
+        and candidate.representative_local_y <= accepted_foam_front_local_y
+    ):
+        return False
+    spatial_conflict = max(
+        candidate.broad.glare_conflict,
+        candidate.broad.exclusion_conflict,
+        candidate.narrow.glare_overlap,
+        candidate.narrow.exclusion_overlap,
+        candidate.narrow.border_overlap,
+    )
+    return bool(
+        candidate.visibility >= 0.30
+        and candidate.evidence_availability >= 0.30
+        and spatial_conflict < 0.55
+    )
+
+
+def _comparative_authority_score(
+    candidate: SemanticHypothesis,
+    no_interface: ShadowNoInterfaceEvidence,
+    *,
+    corroboration: float,
+) -> float:
+    """Fuse soft semantic evidence once after independent corroboration."""
+
+    positive = math.sqrt(
+        max(0.0, candidate.boundary_likelihood * _unit(corroboration))
+    )
+    qualified_absence = _unit(
+        no_interface.likelihood * no_interface.region_uniformity
+        if no_interface.available
+        else 0.0
+    )
+    artifact = _unit(candidate.artifact_likelihood)
+    opposition = 1.0 - (1.0 - artifact) * (1.0 - qualified_absence)
+    return float(positive - opposition)
+
+
+def _has_local_authority_tie(
+    selected: SemanticHypothesis,
+    assessments: list[tuple[float, SemanticHypothesis]],
+    bounds: OilShadowBounds,
+) -> bool:
+    """Fail closed when locally equivalent hypotheses retain similar authority."""
+
+    selected_score = next(
+        score for score, candidate in assessments if candidate.identity == selected.identity
+    )
+    for score, candidate in assessments:
+        if candidate.identity == selected.identity:
+            continue
+        if (
+            abs(candidate.representative_local_y - selected.representative_local_y)
+            <= bounds.maximum_proposal_diameter_px + 1e-12
+            and selected_score - score < 0.08
+        ):
+            return True
+    return False
+
+
+def _select_comparative_textured_boundary(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    ordered: list[SemanticHypothesis],
+    no_interface: ShadowNoInterfaceEvidence,
+    bounds: OilShadowBounds,
+) -> SemanticHypothesis | None:
+    """Compare every hard-safe weak hypothesis using independent texture proof.
+
+    Boundary/artifact/absence terms decide comparative authority once. Broad,
+    coverage, polarity and pulse morphology remain inside those semantic
+    likelihoods instead of reappearing as independent vetoes. Texture and the
+    continuous collision evidence are independent current-frame corroboration.
+    """
+
+    if not ordered:
+        return None
+    semantic_anchor = ordered[0]
+    assessments: list[tuple[float, SemanticHypothesis]] = []
+    for candidate in ordered:
+        if (
+            abs(candidate.representative_local_y - semantic_anchor.representative_local_y)
+            > bounds.maximum_proposal_diameter_px + 1e-12
+        ):
+            continue
+        if not _has_hard_current_frame_support(candidate):
+            continue
+        second_boundary = max(
+            (
+                item.boundary_likelihood
+                for item in ordered
+                if item.identity != candidate.identity
+            ),
+            default=0.0,
+        )
+        evidence = _single_frame_identifiability_evidence(
+            pre,
+            effective_mask,
+            candidate,
+            no_interface,
+            second_boundary,
+        )
+        if not (
+            evidence.texture_relief >= 0.55
+            and evidence.phase_ceiling_pressure <= 0.20
+            and evidence.collision_pressure <= 0.10
+            and evidence.evidence_reliability >= 0.75
+        ):
+            continue
+        corroboration = evidence.texture_relief * evidence.evidence_reliability
+        score = _comparative_authority_score(
+            candidate,
+            no_interface,
+            corroboration=corroboration,
+        )
+        if score > 0.0:
+            assessments.append((score, candidate))
+
+    if not assessments:
+        return None
+    assessments.sort(key=lambda item: (-item[0], _hypothesis_order(item[1])))
+    selected = assessments[0][1]
+    if _has_local_authority_tie(selected, assessments, bounds):
+        return None
+    return selected
+
+
 def _select_textured_low_contrast_boundary(
     pre: PreprocessResult,
     effective_mask: np.ndarray,
     ordered: list[SemanticHypothesis],
     no_interface: ShadowNoInterfaceEvidence,
 ) -> SemanticHypothesis | None:
-    """Recover a weak phase only when texture makes the raster identifiable.
-
-    This route deliberately stays closed for near-ceiling single-frame
-    glare/oil collisions and for pulse-like structural lines. It does not
-    replace the normal boundary acceptance path; it only admits a weak broad
-    phase transition when independently observable texture relief is present.
-    """
+    """Retain the accepted D2 scalar safety envelope for Spatial internals."""
 
     for candidate in ordered:
         spatial_conflict = max(

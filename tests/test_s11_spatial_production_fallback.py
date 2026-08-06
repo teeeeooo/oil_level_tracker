@@ -23,7 +23,10 @@ from oil_tracker.adapters.vision.oil_shadow_types import (
     OilShadowBounds,
     ShadowSourceFamily,
 )
-from oil_tracker.adapters.vision.oil_spatial_fallback import _evaluate_spatial_path
+from oil_tracker.adapters.vision.oil_spatial_fallback import (
+    _evaluate_spatial_path,
+    build_spatial_positive_fallback_frame,
+)
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.domain.recipe import InspectionRecipe
@@ -162,6 +165,45 @@ def test_d2_class_a_uses_current_frame_four_sector_positive_evidence() -> None:
     assert path.rows == (119, 128, 124, 128)
     assert path.span_px == 9
     assert path.maximum_jump_px == 9
+
+
+def test_d3_near_tie_does_not_give_first_spatial_candidate_monopoly() -> None:
+    root = require_s11_local_corpus()
+    glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
+    frame = _decode_local_video_frame(root, "sample3", 914)
+    bundle = build_mask_bundle(frame, glass)
+    pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
+    bounds = OilShadowBounds()
+    raw = extract_raw_observations(
+        pre,
+        bundle.effective_mask,
+        crop_origin_y=float(bundle.crop_origin[1]),
+        bounds=bounds,
+    )
+
+    fallback = build_spatial_positive_fallback_frame(
+        pre=pre,
+        effective_mask=bundle.effective_mask,
+        ellipse_mask=bundle.ellipse_mask,
+        exclusion_mask=bundle.exclusion_mask,
+        static_artifact_map=None,
+        base_raw_observations=raw,
+        crop_origin_y=float(bundle.crop_origin[1]),
+        bounds=bounds,
+        accepted_foam_front_local_y=None,
+        accepted_foam_component_mask=None,
+    )
+    assert fallback is None
+
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        frame.copy(),
+        glass,
+        frame_index=914,
+        time_sec=30.497133,
+        debug=False,
+    )
+    assert detection.raw_oil_air_level_y is None
+    assert detection.debug_metrics["oil_hypothesis_current_observation"] == "ambiguous"
 
 
 def test_d2_spatial_recovery_respects_authoritative_foam_front() -> None:

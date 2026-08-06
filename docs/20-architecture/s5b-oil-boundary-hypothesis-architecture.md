@@ -117,7 +117,21 @@ A path-row span greater than `1 px` is retained only as a conservative fallback 
 
 When the Spatial gate accepts, it produces the same typed `ShadowBoundaryObservation` and complete canonical evidence graph as any other current-frame boundary. Phase-A validation, the fixed serialized reducer, temporal state, `AcceptedBoundaryOutcome` and production projection remain sole authorities. Rejected Spatial evidence leaves the original ambiguity unchanged. There is no retained Spatial state, repetition-based promotion, post-owner numeric injection or P2-coupled combined recovery mechanism.
 
-The maximum local path search is statically bounded to five sectors times at most 25 rows, or 125 sector-row evaluations for one fallback candidate. Spatial adds no persisted setting, Recipe/result/truth/CSV/debug public schema field, detector-version change, dependency or raster history. The focused production feature remains subject to fresh Lane C exact-head audit and does not itself declare S11 complete or detector/general-field accuracy PASS.
+Before D3, the maximum local path search was statically bounded to five sectors times at most 25 rows, or 125 sector-row evaluations for the single attempted fallback candidate. D3 removes that first-attempt monopoly for strict-eligible Spatial candidates. The semantic-hypothesis cap remains `10`, so the deterministic worst case becomes at most `10 × 125 = 1250` sector-row evaluations in an already-ambiguous Spatial fallback frame; ordinary frames perform no added Spatial work. Spatial adds no persisted setting, Recipe/result/truth/CSV/debug public schema field, detector-version change, dependency or raster history. The D3 resource-bound change remains subject to fresh Lane C exact-head audit and does not itself declare S11 complete or detector/general-field accuracy PASS.
+
+### S11-D3 current-frame semantic authority addendum
+
+D3 preserves the existing strong-boundary, low-contrast, Foam-separated and Spatial positive-evidence routes as sufficient accepted semantics. It adds a later current-frame comparative route only when the ordinary non-Foam boundary routes remain ambiguous. Raw observation extraction, bounded proposal construction and semantic-likelihood formulas are unchanged.
+
+Affirmative no-interface remains hard only when its existing acceptance and dominance contract is satisfied. A lower no-interface likelihood no longer participates in the standard boundary dominance margin as a veto. In the D3 route, absence contributes as soft opposition only after normalization by the already-owned current-frame uniformity evidence.
+
+D3 hard rejection is limited to direct observability and topology failure: unusable visibility/evidence availability, severe glare/exclusion/border conflict and accepted Foam-front ordering. Every other weak semantic family remains inside comparative likelihood rather than being repeated as independent boundary-strength, coverage, polarity or pulse conjunctions. Candidate authority combines boundary likelihood with independent texture/reliability corroboration once and combines artifact plus qualified absence once as opposition.
+
+Comparative authority cannot search the full ROI for a more convenient Y. It is bounded to the existing leading semantic neighborhood, no wider than one `maximum_proposal_diameter_px`. If two independently supportable local candidates remain within that neighborhood and the existing `0.08` authority band, current-frame output remains ambiguous.
+
+The relative-phase Spatial helper deliberately disables this D3 scalar route. Spatial retains the accepted D2 non-Spatial safety envelope and five-sector positive-evidence requirement, but path evaluation is no longer monopolized by the first strict-eligible candidate: all strict-eligible candidates may be checked, and a locally neighboring independently identifiable near-tie preserves ambiguity. This keeps Spatial as independent corroboration rather than a universal candidate rescoring mechanism.
+
+D3 changes no temporal state, reducer, projection, persisted/public schema, Recipe setting, truth meaning, detector dependency or post-owner numeric authority. Every accepted D3 boundary is still a typed `ShadowBoundaryObservation` consumed by the same Phase-A validation and one serialized reducer. The exact D3 source head remains subject to fresh Lane C audit before this addendum may be treated as accepted production status.
 
 ## Decision summary
 
