@@ -648,6 +648,22 @@ The fresh independent source Auditor verified the following accepted exact-head 
 
 The performance-source exact head returned `AUDIT: PASS`; the final comparison returned `COMPARISON: PASS`, and the accepted head is merged.
 
+## S11-D5 accepted-Foam / Oil authority continuity addendum
+
+S11-D5 keeps accepted S5-A/D1 Foam as current-frame physical context without making Foam select a second, stricter S5-B semantic authority stack. This addendum is Worker-owned source-completing documentation for the D5 Draft PR and remains pending fresh independent exact-head audit.
+
+The composition rule is:
+
+- the ordinary S5-B hypotheses and their accepted D2 scalar / D3 comparative authority remain the Oil semantic owners;
+- an authoritative Foam front is a hard topology constraint, so an Oil candidate at or above that front cannot publish;
+- an authoritative Foam component is removed from the raster used for independent Oil identifiability corroboration, so Foam pixels cannot manufacture texture/collision proof for an Oil boundary;
+- the existing no-interface authority, visibility, glare/exclusion/border hard safety, semantic likelihoods, D3 local-tie rule and Spatial path proof remain unchanged;
+- the existing Foam-separated phase-support route remains only a final auxiliary recovery after ordinary D2/D3 authority has been evaluated under Foam constraints; it no longer replaces those authorities merely because Foam context is present;
+- Spatial fallback continues to remove accepted Foam pixels from its x-resolved path proof, so a previously valid no-Foam Spatial candidate may still fail closed when the authoritative Foam component consumes the independent sectors required by D2;
+- S5-A publication semantics, D1 structural/refractive authority, `FoamTemporalGate`, S5-B temporal reduction and external schemas are unchanged.
+
+This composition deliberately distinguishes authority continuity from forced numeric recovery. A candidate can remain ambiguous after Foam becomes authoritative when the residual non-Foam evidence no longer satisfies its already-owned proof. Conversely, a D2/D3 candidate that remains hard-safe, below the Foam front and independently corroborated outside Foam is not rejected solely because the context handoff occurred.
+
 ## Non-goals
 
 This bounded source implementation does not:

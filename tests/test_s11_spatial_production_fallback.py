@@ -80,6 +80,7 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         "base_sample_1:144": 395.0,
         "sample2:30": 599.0,
         "sample2:60": 598.0,
+        "sample3:1035": 245.0,
         "sample4:1470": 866.0,
         "sample4:1680": 866.0,
     }
@@ -88,7 +89,6 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         "base_sample_1:240",
         "sample2:0",
         "sample3:900",
-        "sample3:1035",
         "sample4:0",
         "sample4:450",
         "sample4:900",
@@ -116,7 +116,9 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
     numeric = [row for row in rows if row[2] is not None]
     assert len(rows) == 13
     assert {case_id: oil_y for case_id, _truth, oil_y, _foam, _auth in numeric} == expected_numeric
-    assert np.mean([abs(oil_y - truth) for _case_id, truth, oil_y, _foam, _auth in numeric]) == 8.1
+    assert np.mean(
+        [abs(oil_y - truth) for _case_id, truth, oil_y, _foam, _auth in numeric]
+    ) == pytest.approx(7.083333333333333)
     assert {case_id for case_id, _truth, oil_y, _foam, _auth in rows if oil_y is None} == expected_non_numeric
 
     # D4 must not inflate already valid white-Foam support and erase the accepted
@@ -127,16 +129,22 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         if case_id in {"sample2:30", "sample2:60"}
     } == {"sample2:30": 599.0, "sample2:60": 598.0}
 
-    # Newly represented sample3 Foam is authoritative D1 context, so the old
-    # D2 numeric anchors are no longer valid production expectations there.
-    for case_id in ("sample3:900", "sample3:1035"):
-        row = next(item for item in rows if item[0] == case_id)
-        assert row[2] is None
-        assert row[3] is not None
-        assert row[4] is True
+    # Authoritative Foam now constrains the existing Oil authority instead of
+    # selecting a separate stricter semantic stack. The native sample3:1035
+    # boundary therefore remains available below Foam; sample3:900 still fails
+    # closed because its Foam-aware residual Spatial proof is insufficient.
+    sample3_900 = next(item for item in rows if item[0] == "sample3:900")
+    assert sample3_900[2] is None
+    assert sample3_900[3] is not None
+    assert sample3_900[4] is True
+    sample3_1035 = next(item for item in rows if item[0] == "sample3:1035")
+    assert sample3_1035[2] == 245.0
+    assert sample3_1035[3] == 226.0
+    assert sample3_1035[4] is True
+    assert sample3_1035[2] > sample3_1035[3]
 
 
-def test_d2_class_a_remains_available_but_d4_foam_context_routes_production() -> None:
+def test_d2_class_a_authority_continues_but_foam_component_exclusion_can_fail_closed() -> None:
     root = require_s11_local_corpus()
     glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
     frame = _decode_local_video_frame(root, "sample3", 899)
@@ -169,23 +177,122 @@ def test_d2_class_a_remains_available_but_d4_foam_context_routes_production() ->
     assert path.span_px == 9
     assert path.maximum_jump_px == 9
 
-    # D4 now supplies genuine S5-A Foam on this blind-positive frame. D1 owns
-    # the downstream context handoff, so production no longer publishes the
-    # old D2 Oil anchor through that newly authoritative Foam region.
-    detection, _artifacts = detector.detect(
+    # D4 supplies genuine S5-A Foam on this blind-positive frame. D5 keeps D2
+    # available, but accepted Foam pixels remain excluded from its x-resolved
+    # proof. Here that exclusion removes the four-sector evidence, so the frame
+    # legitimately remains fail-closed rather than recovering Oil by bypassing Foam.
+    foam = detect_bottom_connected_foam(
+        bundle.crop,
+        pre.gray,
+        pre.canny,
+        pre.glare_mask,
+        bundle.effective_mask,
+        glass.detector_settings,
+    )
+    assert foam.candidate is not None
+    assert 320.0 > foam.candidate.y + float(bundle.crop_origin[1])
+    foam_aware_path = _evaluate_spatial_path(
+        pre,
+        bundle.effective_mask,
+        candidate_local_y=320.0 - float(bundle.crop_origin[1]),
+        accepted_foam_component_mask=foam.mask,
+        bounds=OilShadowBounds(),
+    )
+    assert not foam_aware_path.accepted
+    assert foam_aware_path.sector_count == 1
+
+    detection, _artifacts = OpenCvPhaseDetector().detect(
         frame.copy(),
         glass,
         frame_index=899,
         time_sec=29.996633333333335,
         debug=False,
     )
-    assert detection.raw_foam_front_y is not None
+    assert detection.raw_foam_front_y == 272.0
     assert detection.debug_metrics["foam_oil_context_authoritative"] is True
     assert detection.raw_oil_air_level_y is None
     assert detection.debug_metrics["oil_decision_status"] == "ambiguous"
 
 
-def test_d3_near_tie_does_not_give_first_spatial_candidate_monopoly() -> None:
+@pytest.mark.parametrize(
+    ("frame_index", "expected_oil_y", "expected_foam_y"),
+    (
+        (929, 300.0, 260.0),
+        (1034, 245.0, 228.0),
+        (1094, 244.0, 233.0),
+        (1124, 250.0, 226.0),
+    ),
+)
+def test_d5_authoritative_foam_preserves_compatible_current_frame_oil_authority(
+    frame_index: int,
+    expected_oil_y: float,
+    expected_foam_y: float,
+) -> None:
+    root = require_s11_local_corpus()
+    glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
+    frame = _decode_local_video_frame(root, "sample3", frame_index)
+
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        frame,
+        glass,
+        frame_index=frame_index,
+        time_sec=frame_index / 29.97,
+        debug=False,
+    )
+
+    assert detection.raw_foam_front_y == expected_foam_y
+    assert detection.debug_metrics["foam_oil_context_authoritative"] is True
+    assert detection.raw_oil_air_level_y == expected_oil_y
+    assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
+    assert expected_oil_y > expected_foam_y
+
+
+def test_d5_foam_owned_current_frame_evidence_remains_fail_closed() -> None:
+    root = require_s11_local_corpus()
+    glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
+    frame = _decode_local_video_frame(root, "sample3", 1079)
+    bundle = build_mask_bundle(frame, glass)
+    pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
+
+    direct = OpenCvPhaseDetector()._evaluate_oil_pipeline(
+        glass.id,
+        pre,
+        bundle,
+        None,
+        accepted_foam_front_local_y=None,
+        accepted_foam_component_mask=None,
+    )
+    assert isinstance(direct, AcceptedBoundaryOutcome)
+    assert direct.raw_source_y == 231.0
+
+    foam = detect_bottom_connected_foam(
+        bundle.crop,
+        pre.gray,
+        pre.canny,
+        pre.glare_mask,
+        bundle.effective_mask,
+        glass.detector_settings,
+    )
+    assert foam.candidate is not None
+    candidate_row = int(round(231.0 - float(bundle.crop_origin[1])))
+    visible_row = bundle.effective_mask[candidate_row] > 0
+    assert np.any(visible_row)
+    assert np.all(foam.mask[candidate_row][visible_row] > 0)
+
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        frame,
+        glass,
+        frame_index=1079,
+        time_sec=1079 / 29.97,
+        debug=False,
+    )
+    assert detection.raw_foam_front_y == 219.0
+    assert detection.debug_metrics["foam_oil_context_authoritative"] is True
+    assert detection.raw_oil_air_level_y is None
+    assert detection.debug_metrics["oil_decision_status"] == "ambiguous"
+
+
+def test_d3_near_tie_remains_ambiguous_until_foam_residual_evidence_separates_it() -> None:
     root = require_s11_local_corpus()
     glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
     frame = _decode_local_video_frame(root, "sample3", 914)
@@ -233,8 +340,9 @@ def test_d3_near_tie_does_not_give_first_spatial_candidate_monopoly() -> None:
     )
     assert detection.raw_foam_front_y == 255.0
     assert detection.debug_metrics["foam_oil_context_authoritative"] is True
-    assert detection.raw_oil_air_level_y == 304.0
+    assert detection.raw_oil_air_level_y == 301.0
     assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
+    assert detection.raw_oil_air_level_y > detection.raw_foam_front_y
 
 
 def test_d2_spatial_recovery_respects_authoritative_foam_front() -> None:

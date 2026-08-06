@@ -462,6 +462,14 @@ def evaluate_typed_current_observation(
             reason=no_interface.reason,
         )
 
+    oil_evidence_mask = effective_mask
+    if accepted_foam_component_mask is not None:
+        oil_evidence_mask = np.where(
+            accepted_foam_component_mask > 0,
+            0,
+            effective_mask,
+        ).astype(effective_mask.dtype, copy=False)
+
     ordered = sorted(hypotheses, key=_hypothesis_order)
     best = ordered[0] if ordered else None
     competing_boundary = 0.0 if best is None else best.boundary_likelihood
@@ -495,17 +503,40 @@ def evaluate_typed_current_observation(
         )
         identifiability = _single_frame_identifiability_evidence(
             pre,
-            effective_mask,
+            oil_evidence_mask,
             best,
             no_interface,
             second_boundary,
         )
-        if canonical_boundary_candidate and identifiability.acceptance_margin >= 0.0:
+        if (
+            canonical_boundary_candidate
+            and identifiability.acceptance_margin >= 0.0
+            and (
+                accepted_foam_front_local_y is None
+                or best.representative_local_y > accepted_foam_front_local_y
+            )
+        ):
             return _boundary_observation(best, ordered)
 
-    recovered = None
+    recovered = _select_textured_low_contrast_boundary(
+        pre,
+        oil_evidence_mask,
+        ordered,
+        no_interface,
+        accepted_foam_front_local_y=accepted_foam_front_local_y,
+    )
+    if recovered is None and allow_comparative_recovery:
+        recovered = _select_comparative_textured_boundary(
+            pre,
+            oil_evidence_mask,
+            ordered,
+            no_interface,
+            bounds,
+            accepted_foam_front_local_y=accepted_foam_front_local_y,
+        )
     if (
-        accepted_foam_front_local_y is not None
+        recovered is None
+        and accepted_foam_front_local_y is not None
         and accepted_foam_component_mask is not None
     ):
         recovered = _select_foam_separated_boundary(
@@ -515,21 +546,6 @@ def evaluate_typed_current_observation(
             accepted_foam_front_local_y,
             accepted_foam_component_mask,
         )
-    elif accepted_foam_front_local_y is None:
-        recovered = _select_textured_low_contrast_boundary(
-            pre,
-            effective_mask,
-            ordered,
-            no_interface,
-        )
-        if recovered is None and allow_comparative_recovery:
-            recovered = _select_comparative_textured_boundary(
-                pre,
-                effective_mask,
-                ordered,
-                no_interface,
-                bounds,
-            )
     if recovered is not None:
         return _boundary_observation(recovered, ordered)
 
@@ -693,6 +709,8 @@ def _select_comparative_textured_boundary(
     ordered: list[SemanticHypothesis],
     no_interface: ShadowNoInterfaceEvidence,
     bounds: OilShadowBounds,
+    *,
+    accepted_foam_front_local_y: float | None = None,
 ) -> SemanticHypothesis | None:
     """Compare every hard-safe weak hypothesis using independent texture proof.
 
@@ -712,7 +730,10 @@ def _select_comparative_textured_boundary(
             > bounds.maximum_proposal_diameter_px + 1e-12
         ):
             continue
-        if not _has_hard_current_frame_support(candidate):
+        if not _has_hard_current_frame_support(
+            candidate,
+            accepted_foam_front_local_y,
+        ):
             continue
         second_boundary = max(
             (
@@ -759,6 +780,8 @@ def _select_textured_low_contrast_boundary(
     effective_mask: np.ndarray,
     ordered: list[SemanticHypothesis],
     no_interface: ShadowNoInterfaceEvidence,
+    *,
+    accepted_foam_front_local_y: float | None = None,
 ) -> SemanticHypothesis | None:
     """Retain the accepted D2 scalar safety envelope for Spatial internals."""
 
@@ -771,7 +794,11 @@ def _select_textured_low_contrast_boundary(
             candidate.narrow.border_overlap,
         )
         if not (
-            candidate.boundary_likelihood > candidate.artifact_likelihood
+            (
+                accepted_foam_front_local_y is None
+                or candidate.representative_local_y > accepted_foam_front_local_y
+            )
+            and candidate.boundary_likelihood > candidate.artifact_likelihood
             and candidate.broad.available_scale_count >= 2
             and candidate.broad.strength >= 0.12
             and candidate.broad.scale_consistency >= 0.80
