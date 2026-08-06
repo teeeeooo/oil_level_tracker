@@ -11,7 +11,7 @@ This snapshot is superseded because current milestone state moved to the [roadma
 
 Result Review Viewer의 화면, 데이터 계약, 일반 검토 모드와 디버그 모드에 대한 상세 설계는 [current Result Review Viewer plan](../10-product/result-review-viewer-plan.md)를 따른다.
 
-실제 사용에서 확인된 Workbench, graph, 분석 lifecycle과 detector 정확도 문제의 실행 계획은 [current real-world validation plan](../30-quality/real-world-validation-plan.md)를 따른다.
+실제 사용에서 확인된 Workbench, graph, 분석 lifecycle과 detector 정확도 문제의 실행 계획은 [current real-world validation plan](../30-validation/real-world-validation-plan.md)를 따른다.
 
 ## 2. 최종 목표
 
@@ -369,7 +369,7 @@ Phase 2C-3은 PR #27 `feat: add user truth annotations and regression fixtures`�
 - Actions artifact 없음, 임시 validation PR/branch/workflow cleanup 완료
 - 실제 compressor dataset, Windows packaged CLI와 장시간 성능은 수동 확인 항목으로 유지
 
-Phase 2C-4 전에 수행할 실사용 안정화 순서와 acceptance criteria는 [current real-world validation plan](../30-quality/real-world-validation-plan.md)에 기록한다.
+Phase 2C-4 전에 수행할 실사용 안정화 순서와 acceptance criteria는 [current real-world validation plan](../30-validation/real-world-validation-plan.md)에 기록한다.
 
 ### 목적
 
@@ -469,7 +469,7 @@ Phase와 별개로 필요성이 확인되면 포함한다.
 
 현재 `main`에는 Phase 1, Phase 2A 전체, Phase 2B 전체, Phase 2C-1 Debug Viewer, Phase 2C-2 부분 재검출과 비교, Phase 2C-3 사용자 정답과 회귀 자료와 실사용 안정화 S1 Detector benchmark foundation이 완료되어 있다.
 
-실제 사용에서 확인된 문제, detector 구현 선택 기준과 상세 acceptance criteria는 [current real-world validation plan](../30-quality/real-world-validation-plan.md)를 따른다.
+실제 사용에서 확인된 문제, detector 구현 선택 기준과 상세 acceptance criteria는 [current real-world validation plan](../30-validation/real-world-validation-plan.md)를 따른다.
 
 다음 구현 순서는 다음과 같다.
 

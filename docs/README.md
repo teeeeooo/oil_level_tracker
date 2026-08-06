@@ -1,90 +1,70 @@
-# Documentation Guide
+# Documentation Map and Authority
 
-`docs/` contains the product specification, project planning, feature contracts, quality gates and historical records for Rotary Oil Level Tracker. Start here before changing implementation or project status.
+This file is the **documentation-routing SSOT**. Before creating, moving, renaming or editing anything under `docs/`, classify the document by responsibility and follow the authority/update rules below.
 
-## Start here
+## Reading path for a fresh agent
 
-1. Read the [product SSOT](./rotary_oil_level_tracker_ssot_spec.md) for product scope, user workflow, domain and baseline architecture.
-2. Read the [roadmap](./00-project/roadmap.md) for long-term milestone order and state.
-3. Read the [current work plan](./00-project/work-plan.md) for the active milestone, current gate, evidence and next action.
-4. Read the active feature design and the quality documents linked from the work plan.
-5. Apply the [closeout policy](./00-project/closeout-policy.md) whenever implementation, audit or validation work closes.
+Follow this path unless a task names a more specific authoritative owner:
 
-## Document classification
+1. [`00-project/roadmap.md`](00-project/roadmap.md) — milestone status and durable project sequence.
+2. [`00-project/work-plan.md`](00-project/work-plan.md) — exact current gate, accepted baseline and next executable engineering action.
+3. the relevant product or architecture owner under [`10-product/`](10-product/) or [`20-architecture/`](20-architecture/).
+4. the applicable validation contract under [`30-validation/`](30-validation/).
+5. only then use [`50-diagnostics/`](50-diagnostics/) and [`60-evidence/`](60-evidence/) for causal detail and historical proof.
 
-| Directory | Ownership |
-|---|---|
-| `00-project/` | Long-term roadmap, current work, status transitions and closeout procedure |
-| `10-product/` | User flow, UX and feature requirements |
-| `20-architecture/` | System boundaries, feature architecture and design decisions |
-| `30-quality/` | Benchmark, validation, regression and manual acceptance obligations |
-| `40-operations/` | Packaging, deployment and release operation documents when present |
-| `90-archive/` | Superseded or historical planning records; never current authority |
+The stable product specification is [`rotary_oil_level_tracker_ssot_spec.md`](rotary_oil_level_tracker_ssot_spec.md). It owns durable product requirements, not current milestone sequencing.
 
-Directories are created only when they contain a meaningful document. File names use lower-kebab-case except this index and the unchanged top-level product SSOT.
+## Directory taxonomy
 
-## Authoritative hierarchy
+| Directory | Responsibility | Authority boundary |
+|---|---|---|
+| `00-project/` | roadmap, current work, lifecycle policy, retained/deferred routing | owns project sequencing; `retained-commitments.md` owns only non-current retained/deferred/evidence-gated work |
+| `10-product/` | user-facing/product contracts | durable behavior and UX intent, not milestone status |
+| `20-architecture/` | durable responsibility/design contracts | accepted ownership and invariants; no Worker/Auditor chronology |
+| `30-validation/` | validation, benchmark and test-acceptance contracts | what must be demonstrated for acceptance; not execution history |
+| `40-operations/` | executable Windows/package/manual procedures | how to perform operational checks; not proof that they passed |
+| `50-diagnostics/` | investigations, probes and machine manifests | causal/reproducibility support; never current gate or architecture authority |
+| `60-evidence/` | completed implementation/audit/validation records by milestone | historical proof; contemporaneous status prose is provenance, not current authority |
+| `70-reference/` | external/reference and implementation-reference provenance | supporting provenance only |
+| `90-archive/` | superseded historical context | not current authority; preserve for history/navigation |
 
-When documents disagree, use this order:
+## Authority hierarchy
 
-1. [Product SSOT](./rotary_oil_level_tracker_ssot_spec.md) for product and persisted-contract requirements.
-2. [Roadmap](./00-project/roadmap.md) for milestone scope, sequence and long-term status.
-3. [Work plan](./00-project/work-plan.md) for the active milestone, exact current gate and next action.
-4. Approved architecture or product detail documents for feature-specific contracts.
-5. Quality documents for acceptance evidence and validation obligations.
-6. Historical implementation records and archived documents for context only.
+When documents disagree, use this routing order for the responsibility in question:
 
-A feature document must not maintain a competing project-wide “current next work” list. It links to the roadmap or work plan instead.
+1. stable product requirements: [`rotary_oil_level_tracker_ssot_spec.md`](rotary_oil_level_tracker_ssot_spec.md);
+2. milestone status/sequence: [`00-project/roadmap.md`](00-project/roadmap.md);
+3. exact active gate: [`00-project/work-plan.md`](00-project/work-plan.md);
+4. retained but non-current commitments: [`00-project/retained-commitments.md`](00-project/retained-commitments.md);
+5. durable product/architecture owner under `10-product/` or `20-architecture/`;
+6. current acceptance contract under `30-validation/`;
+7. operational procedure under `40-operations/`;
+8. diagnostics/evidence/reference as supporting provenance;
+9. archive only for historical context.
 
-## Active documents
-
-- Current project state and gate: [current work plan](./00-project/work-plan.md)
-- Long-term status: [project roadmap](./00-project/roadmap.md)
-- Current validation contract: [real-world validation plan](./30-quality/real-world-validation-plan.md)
-- Test portability and authoring contract: [test authoring portability contract](./30-quality/test-authoring-portability-contract.md)
-- S6-A repository sample evidence: [base sample qualification](./30-quality/s6-base-sample-1-evidence.md)
-- S6-B additional real-video evidence: [additional sample qualification](./30-quality/s6-additional-real-samples-evidence.md)
-- S6-C provisional truth diagnosis: [agent-assisted provisional comparison](./30-quality/s6-provisional-truth-comparison.md)
-- Post-freeze domain-owner interpretation and field priorities: [S6 domain-owner review addendum](./30-quality/s6-domain-owner-review-addendum.md)
-- S6-E bounded runtime and resource-leak screening: [bounded runtime soak evidence](./30-quality/s6-bounded-runtime-soak-evidence.md)
-- S6-D1 mobile-assisted user-truth review pack: [mobile truth review pack](./30-quality/s6-d1-mobile-truth-review-pack.md)
-- S6-D2 bundle-bound user-confirmed product truth: [user-confirmed product truth](./30-quality/s6-d2-user-confirmed-product-truth.md)
-- S6-D3 current-sample detector baseline and category coverage: [official accuracy baseline](./30-quality/s6-d3-official-accuracy-baseline.md)
-- S6-D4 bounded available-corpus detector repair: [detector repair evidence](./30-quality/s6-d4-available-corpus-detector-repair.md)
-- S6-F one-hour long-duration resource stability: [one-hour stability evidence](./30-quality/s6-f-one-hour-long-duration-stability.md)
-- S9-C bounded field/overlay interaction implementation evidence: [field-overlay interaction polish evidence](./30-quality/s9-c-field-overlay-interaction-polish-evidence.md)
-- S10 Windows canonical portability and Qt teardown repair evidence: [S10 repair evidence](./30-quality/s10-windows-canonical-portability-qt-teardown-repair-evidence.md)
-- Post-S10 Windows Qt platform bootstrap maintenance: [packaged Qt bootstrap repair](./30-quality/post-s10-windows-qt-platform-bootstrap-repair.md)
-- S11 real-field detector diagnosis and acceptance plan: [S11 detector effectiveness plan](./30-quality/s11-real-field-detector-effectiveness-plan.md)
-- Manual platform gate: [manual GUI and Windows checklist](./30-quality/manual-gui-windows-checklist.md)
-- Detector benchmark guide: [golden video regression](./30-quality/golden-video-regression.md)
-
-## Document status
-
-The only project status values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERRED` and `SUPERSEDED`. `DONE` requires implementation, required validation and merge completion; an unmerged feature head is never `DONE`.
+A historical Worker/Auditor “next gate”, old frame count or old milestone label never overrides the current roadmap/work plan.
 
 ## Update rules
 
-- Every implementation, audit and validation closeout result must be reflected in the work plan. A mutation-capable Worker includes the update in its resulting head; a read-only Auditor or Validator reports against the immutable head and does not mutate it during an exact-head freeze. Deferred results are incorporated by the next authorized mutation-capable owner or an explicit post-merge documentation closeout.
-- The roadmap changes only for milestone start/completion, order or scope change, or defer/supersede decisions.
-- Architecture documents change when responsibility boundaries, domain types, interfaces or confirmed design decisions change.
-- Quality documents change when metrics, fixture categories, manual obligations or runtime/packaging gates change.
-- This index changes whenever a document is added, moved, renamed or archived, or the authority hierarchy changes.
+- **Current status or next engineering action:** update `roadmap.md` and/or `work-plan.md`; do not duplicate the status into product/architecture/evidence files.
+- **Retained, deferred or evidence-gated work that is not executable now:** route it to `retained-commitments.md`. Do not leave it as a pseudo-current backlog in architecture or product plans.
+- **Durable product/architecture change:** update the owning `10-product/` or `20-architecture/` contract and its relevant validation owner.
+- **Validation expectation:** update `30-validation/`; completed run/audit numbers belong in `60-evidence/`.
+- **Operational procedure:** update `40-operations/`; the evidence that it passed belongs in `60-evidence/`.
+- **Investigation/probe:** use `50-diagnostics/`; machine manifests are semantic evidence artifacts and must not be rewritten merely for taxonomy changes.
+- **Completed evidence:** preserve contemporaneous facts. Link/classification repairs are allowed; do not rewrite history to sound current.
+- **Superseded material:** move to `90-archive/` only after proving any still-current contract has another active owner.
 
-## Bounded planning documents
+## Current project routing
 
-The Roadmap and Work Plan are bounded current-state documents, not cumulative journals. Roadmap milestones are updated in place, while the Work Plan replaces obsolete gates, findings, risks, stage summaries and its single latest-closeout block. Detailed evidence belongs in linked architecture or quality documents, external artifacts or Git history.
-
-Archive snapshots require explicit approval for exceptional historical value. They are not created automatically at every milestone or closeout. Each mutation-capable closeout must remove obsolete planning content as well as add the new current state.
-
-See the [closeout policy](./00-project/closeout-policy.md) for replacement, compaction, exact-head and actor-specific closeout rules.
+- Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
+- S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
+- S5-B base observability architecture: [`20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
+- S11 validation contract: [`30-validation/s11-real-field-detector-effectiveness.md`](30-validation/s11-real-field-detector-effectiveness.md)
+- S11 diagnostics: [`50-diagnostics/s11/`](50-diagnostics/s11/)
+- S11 historical evidence: [`60-evidence/s11/`](60-evidence/s11/)
+- Retained/deferred commitments: [`00-project/retained-commitments.md`](00-project/retained-commitments.md)
 
 ## Archive policy
 
-Archive documents preserve meaningful history that no longer describes current operation. Each archived document must state why it is superseded and link to its replacement. Archived content is not used to determine current milestone status, gate or next action.
-
-Current historical records:
-
-- [Initial implementation gaps](./90-archive/initial-implementation-gaps.md)
-- [Real-world stabilization snapshot](./90-archive/real-world-stabilization-plan-2026-07.md)
-- [UX improvement backlog snapshot](./90-archive/ux-improvement-backlog-2026-07.md)
+`90-archive/` preserves superseded context and decision history. Archived documents may keep their original language. Repair inbound/outbound links when needed for navigation, but do not promote archived statements back into current authority without an explicit current owner update.

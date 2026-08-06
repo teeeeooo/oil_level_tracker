@@ -14,7 +14,7 @@
 
 이 문서는 `Rotary Oil Level Tracker` 프로젝트의 제품 목적, 사용자 workflow, domain model, GUI, 영상 검출기, 결과물, 아키텍처, 테스트 및 구현 순서를 정의하는 **유일한 제품 구현 기준 문서(SSOT)** 이다.
 
-현재 milestone 상태와 장기 순서는 [`00-project/roadmap.md`](./00-project/roadmap.md), active branch의 exact gate·evidence·next action은 [`00-project/work-plan.md`](./00-project/work-plan.md)가 소유한다. 승인된 feature architecture는 이 문서의 제품/호환성 요구를 유지하면서 내부 구현 계약을 구체화할 수 있다. 문서 탐색과 전체 권한 순서는 [`README.md`](./README.md)를 따른다.
+현재 milestone 상태와 장기 순서는 [`00-project/roadmap.md`](00-project/roadmap.md), active branch의 exact gate·evidence·next action은 [`00-project/work-plan.md`](00-project/work-plan.md)가 소유한다. 승인된 feature architecture는 이 문서의 제품/호환성 요구를 유지하면서 내부 구현 계약을 구체화할 수 있다. 문서 탐색과 전체 권한 순서는 [`README.md`](README.md)를 따른다.
 
 이 문서는 다음 기존 문서의 내용을 통합하고 대체한다.
 
@@ -1851,216 +1851,25 @@ CLI 구현은 MVP의 필수 UI 기능은 아니지만, application use case와 i
 
 ---
 
-# 23. 구현 Milestone
+# 23. 구현 순서 권한
 
-## Milestone 0 — Repository Foundation
+이 제품 SSOT는 current milestone sequencing, status 또는 exact next gate를 소유하지 않는다. 초기 구현 단계에서 사용한 Milestone 0–9 순서는 역사적 구현 scaffolding으로 완료되었으며, 현재 프로젝트 순서는 [`00-project/roadmap.md`](00-project/roadmap.md), exact active gate는 [`00-project/work-plan.md`](00-project/work-plan.md)가 소유한다.
 
-- pyproject
-- src layout
-- logging
-- domain skeleton
-- application ports
-- test setup
-- bootstrap
-
-완료 조건:
-
-- import 가능
-- 최소 unit test 통과
-- dependency direction 위반 없음
-
-## Milestone 1 — Recipe/Session Domain
-
-- Recipe
-- Glass geometry
-- zero line
-- margin
-- exclusion zones
-- session/time settings
-- JSON repository
-- validation
-- schema version
-
-완료 조건:
-
-- round-trip
-- draft/validated state
-- resolution mismatch validation
-
-## Milestone 2 — Video Workbench
-
-- main window 3-pane
-- wizard
-- video open/play/seek
-- speed control
-- transport markers
-- glass list
-
-완료 조건:
-
-- UI responsive
-- seek/time/frame 표시
-- wizard skip 가능
-
-## Milestone 3 — Overlay Editor
-
-- ellipse draw/edit
-- zero line
-- exclusion rectangles
-- panel binding
-- coordinate transform
-- dirty state
-
-완료 조건:
-
-- source pixel coordinate 저장
-- resize/move 안정성
-- invalid geometry 방지
-
-## Milestone 4 — Preview and Debug Foundation
-
-- PreviewDetectionUseCase
-- current frame decode
-- effective mask
-- debug DTO
-- overlay
-- candidate table shell
-- debug export
-
-완료 조건:
-
-- seek 후 preview
-- UI block 없음
-- debug artifact 생성
-
-## Milestone 5 — Phase Detector
-
-- Sobel candidates
-- Canny candidates
-- Hough candidates
-- region scoring
-- artifact masks
-- FillState
-- oil-air selection
-- confidence
-
-완료 조건:
-
-- full/empty에서 강제 boundary 선택 금지
-- candidate/reject reason 확인
-
-## Milestone 6 — Foam and Temporal Tracking
-
-- foam features
-- bottom-connected foam
-- foam front
-- temporal state tracker
-- raw/smoothed output
-
-완료 조건:
-
-- oil-air와 foam separate output
-- full-with-foam 처리
-
-## Milestone 7 — Full Analysis and Events
-
-- timestamp sampling
-- multi-glass
-- progress/cancel
-- event detector
-- judgment
-
-완료 조건:
-
-- 1~3 Glass 분석
-- 판정 모드 3종
-- event capture timestamps
-
-## Milestone 8 — Reporting
-
-- graphs
-- HTML
-- tracking CSV
-- events CSV
-- captures
-- manifest
-
-완료 조건:
-
-- portable output bundle
-- report offline open
-- recipe snapshot 포함
-
-## Milestone 9 — Windows Distribution
-
-- PyInstaller one-folder
-- resource path
-- smoke test on clean Windows PC
-- release documentation
-
-완료 조건:
-
-- Python 미설치 Windows PC에서 실행
-- sample workflow 완료
-- HTML/CSV 생성
+현재 실행 대상이 아니지만 명시적으로 유지해야 하는 `RETAINED` / `DEFERRED` / `EVIDENCE-GATED` 책임은 [`00-project/retained-commitments.md`](00-project/retained-commitments.md)에서만 라우팅한다. 이 SSOT의 제품 요구사항을 retained backlog나 milestone status로 재해석하지 않는다.
 
 ---
 
-# 24. 최종 Acceptance Criteria
+# 24. Acceptance 권한
 
-## 24.1 사용자 Workflow
+최종 acceptance는 lifecycle checklist 하나가 아니라 책임별 owner로 분리한다.
 
-- [ ] 앱 실행 시 Recipe Workbench가 열린다.
-- [ ] 새 Recipe wizard를 실행하거나 건너뛸 수 있다.
-- [ ] 영상 파일을 열고 재생/seek/속도 변경할 수 있다.
-- [ ] Glass를 1~3개 추가하고 선택할 수 있다.
-- [ ] ellipse를 이동/resize할 수 있다.
-- [ ] crop ROI가 ellipse에서 자동 파생된다.
-- [ ] zero line을 drag할 수 있다.
-- [ ] margin과 exclusion zone을 설정할 수 있다.
-- [ ] seek한 frame에서 preview 후보가 표시된다.
-- [ ] Recipe를 DRAFT로 저장하고 다시 불러올 수 있다.
-- [ ] 검증 통과 후 분석할 수 있다.
-- [ ] 분석 후 그래프/이벤트/캡쳐를 확인할 수 있다.
-- [ ] HTML 및 CSV output bundle을 생성한다.
+- stable product/compatibility 요구사항: 이 SSOT와 `10-product/`;
+- durable internal responsibility: `20-architecture/`;
+- current validation/benchmark/test acceptance contract: `30-validation/`;
+- Windows/package/manual 실행 절차: `40-operations/`;
+- completed execution/audit proof: `60-evidence/`.
 
-## 24.2 Detector
-
-- [ ] Sobel max row를 최종 결과로 직접 사용하지 않는다.
-- [ ] 후보 생성과 scoring이 분리된다.
-- [ ] glass border/reflection/residue에 대한 mask/penalty가 있다.
-- [ ] exclusion zone이 detector 계산에서 제외된다.
-- [ ] full oil 상태에서 가짜 oil-air boundary를 강제 선택하지 않는다.
-- [ ] empty 상태에서 가짜 boundary를 강제 선택하지 않는다.
-- [ ] top에서 나타나는 draining boundary를 처리한다.
-- [ ] bottom에서 나타나는 filling boundary를 처리한다.
-- [ ] oil-air boundary와 foam front를 분리한다.
-- [ ] foam front는 bottom-connected foam 영역의 상단으로 정의된다.
-- [ ] low-confidence/unknown을 허용한다.
-- [ ] raw와 smoothed 값을 모두 저장한다.
-
-## 24.3 Debug
-
-- [ ] overlay, preprocess, edge/mask, foam, candidates, state를 볼 수 있다.
-- [ ] candidate score와 reject reason을 볼 수 있다.
-- [ ] debug frame artifact를 export할 수 있다.
-- [ ] preview/debug 로직이 UI widget에 OpenCV 코드를 직접 넣지 않는다.
-
-## 24.4 Architecture
-
-- [ ] domain/application에 OpenCV/PySide6 import가 없다.
-- [ ] UI는 application use case만 호출한다.
-- [ ] adapter가 port를 구현한다.
-- [ ] Recipe와 Analysis Session이 분리된다.
-- [ ] `AnalysisResult`를 HTML/CSV exporter가 공통 사용한다.
-- [ ] analysis가 UI thread를 block하지 않는다.
-
-## 24.5 Packaging
-
-- [ ] one-folder 패키지가 생성된다.
-- [ ] clean Windows PC에서 실행된다.
-- [ ] resource/template 경로가 패키징 후 정상 동작한다.
-- [ ] 결과물을 설치 폴더가 아닌 사용자 지정/output 폴더에 저장한다.
+Milestone `DONE`, current gate 또는 다음 작업을 판단할 때 과거 체크박스나 evidence 파일의 당시 status를 사용하지 않는다. 그 판단은 roadmap/work-plan만 따른다.
 
 ---
 

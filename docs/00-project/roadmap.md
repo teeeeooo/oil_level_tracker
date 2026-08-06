@@ -2,7 +2,7 @@
 
 **Status:** `ACTIVE`
 
-This document is the long-term milestone SSOT. It owns milestone order, scope and state. Exact branch progress, findings and immediate next action belong only in the [current work plan](./work-plan.md).
+This document is the long-term milestone SSOT. It owns milestone order, scope and state. Exact branch progress, findings and immediate next action belong only in the [current work plan](work-plan.md).
 
 The roadmap is a bounded current-state document, not a cumulative journal. Keep exactly one current entry per milestone and update that entry in place. Historical status transitions and detailed change history belong to Git history.
 
@@ -59,7 +59,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Status:** `DONE`
 - **Major result:** Safe dataset reader, headless benchmark runner, category metrics, fingerprints and baseline comparison.
 - **Next gate:** Reuse the same dataset and metric semantics for detector deltas.
-- **Detail:** [Golden video regression](../30-quality/golden-video-regression.md)
+- **Detail:** [Golden video regression](../30-validation/golden-video-regression.md)
 
 ### S2 — UI raster boundary architecture
 
@@ -67,7 +67,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Status:** `DONE`
 - **Major result:** Raster conversion/rendering responsibilities moved behind presentation and adapter boundaries; temporary allowlist removed.
 - **Next gate:** Maintain the import boundary in all subsequent UI work.
-- **Detail:** [Implementation decisions](../20-architecture/implementation-decisions.md)
+- **Detail:** [Historical implementation decision record](../90-archive/implementation-decisions.md)
 
 ### S3 — Workbench usability stabilization
 
@@ -83,7 +83,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Status:** `DONE`
 - **Major result:** Stage-based progress, Korean Matplotlib font handling, user-facing oil-level terminology and full-analysis-area graph bounds.
 - **Next gate:** Preserve the accepted analysis lifecycle, graph and resource-cleanup behavior in any post-S10 successor work.
-- **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md)
+- **Detail:** [Real-world validation plan](../30-validation/real-world-validation-plan.md)
 
 ### S5-A — Foam and shimmer discrimination
 
@@ -91,7 +91,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Status:** `DONE`
 - **Major result:** Multi-evidence Foam classification, glare handling and bounded temporal persistence without a GPU/model dependency.
 - **Next gate:** Preserve Foam/shimmer discrimination as a non-regression contract in any post-S10 detector work.
-- **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md), [manual checklist](../30-quality/manual-gui-windows-checklist.md)
+- **Detail:** [Real-world validation plan](../30-validation/real-world-validation-plan.md), [manual checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S5-B — Oil-boundary hypothesis architecture
 
@@ -99,7 +99,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Status:** `DONE`
 - **Major result:** Typed observability and canonical ambiguity now separate latent physical oil truth from detector-identifiable evidence. One serialized temporal owner preserves atomic state, S5-A Foam independence and external compatibility; final deterministic comparison passed the `1.5×` CPU limit.
 - **Next gate:** Preserve the merged observability, temporal and Foam contracts in any post-S10 detector or validation work.
-- **Detail:** [Current work plan](./work-plan.md), [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
+- **Detail:** [Current work plan](work-plan.md), [S5-B architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 
 ### S5-C — Canonical/Qt validation stabilization
 
@@ -107,7 +107,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Status:** `DONE`
 - **Major result:** One session-owned pytest-qt `QApplication`, temporary offscreen platform injection, bounded Qt-state verification and explicit source-tree headless subprocess isolation now keep canonical and focused validation deterministic without changing production or detector behavior.
 - **Next gate:** Preserve the accepted lifecycle/headless boundaries and S10 portability refinements in any post-S10 validation work.
-- **Detail:** [Current work plan](./work-plan.md), [Real-world validation plan](../30-quality/real-world-validation-plan.md)
+- **Detail:** [Current work plan](work-plan.md), [Real-world validation plan](../30-validation/real-world-validation-plan.md)
 
 ### S6 — Real-video and runtime validation
 
@@ -115,7 +115,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Status:** `DONE`
 - **Major result:** Real-video qualification, user-confirmed truth, the audited S6-D4 available-corpus accuracy repair, bounded soak screening and one-hour macOS runtime stability are accepted. Missing field categories remain residual `not_evaluated` risk; no category-balanced or general-field detector-accuracy PASS is claimed.
 - **Next gate:** Preserve the accepted real-video/runtime evidence and residual `not_evaluated` category boundary in any post-S10 detector work.
-- **Detail:** [Current work plan](./work-plan.md), [Real-world validation plan](../30-quality/real-world-validation-plan.md)
+- **Detail:** [Current work plan](work-plan.md), [Real-world validation plan](../30-validation/real-world-validation-plan.md)
 
 ### S7 / Phase 2C-4 — Annotated MP4 Export
 
@@ -148,18 +148,18 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Validate the completed product feature set on the target Windows environment and prove the relocatable one-folder distribution before release.
 - **Status:** `DONE`
-- **Major result:** Exact-head Windows canonical validation passed with only seven privilege-limited symlink cases unavailable, and the user directly confirmed the supported-DPI GUI, one-folder build/relocation, clean-PC, resources/fonts, Unicode/long-path and lifecycle/file-lock package obligations. PR #77 repaired shared pytest/Qt portability architecture without production or packaging behavior drift and was independently audited and merged.
-- **Next gate:** Preserve the accepted platform/package baseline while S11 addresses real-field detector effectiveness.
-- **Detail:** [Real-world validation plan](../30-quality/real-world-validation-plan.md), [manual checklist](../30-quality/manual-gui-windows-checklist.md), [S10 repair evidence](../30-quality/s10-windows-canonical-portability-qt-teardown-repair-evidence.md)
+- **Major result:** Exact-head Windows canonical validation passed with only privilege-limited symlink cases unavailable, and the supported-DPI GUI, one-folder build/relocation, clean-PC, resources/fonts, Unicode/long-path and lifecycle/file-lock package obligations were completed. The post-S10 Qt platform bootstrap repair is also accepted maintenance evidence.
+- **Next gate:** Preserve the accepted platform/package baseline while S11 addresses detector effectiveness.
+- **Detail:** [Real-world validation plan](../30-validation/real-world-validation-plan.md), [manual Windows checklist](../40-operations/manual-gui-windows-checklist.md), [S10 evidence](../60-evidence/s10/)
 
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
-- **Major result:** S11-A/B repairs, S11-C forensics, S11-D1, both bounded S11-D2 recovery classes, S11-D3 current-frame semantic authority slimming, S11-D4 Foam support/classification and S11-D5 accepted-Foam/Oil authority continuity are independently accepted and merged. D5 preserves existing D2/D3 current-frame Oil authority under authoritative Foam topology/component constraints instead of replacing it with a stricter alternate semantic stack; representative sample3 rows `929/1034/1094/1124` recover `300/245/244/250 px`, while `899/1079` remain fail-closed because residual non-Foam proof is insufficient. D1/D4 Foam safety, sample2 Spatial anchors and `FoamTemporalGate` ownership remain unchanged.
-- **Next gate:** Run a read-only post-D5 S11 effectiveness reconciliation against the frozen blind/local evidence before authorizing another source slice. Re-measure the remaining real application misses after accepted D3/D4/D5 and do not preselect temporal redesign unless the residual failure is demonstrably temporal rather than observation or current-frame semantic authority.
+- **Major result:** S11-B and D1–D5 established the accepted current-frame representation, Spatial, Foam/Oil context and comparative-authority baseline. The completed post-D5 effectiveness reconciliation found that another broad or temporal redesign is not yet justified; one bounded S5-B current-frame authority seam remains the next source responsibility.
+- **Next gate:** **Bounded S5-B current-frame semantic repair:** an Oil hypothesis already made hard-invalid by authoritative accepted-Foam topology must not retain D3 comparative neighborhood/anchor authority over hard-safe alternatives. `Provisional Lane B`; production temporal work remains unapproved and S11 stable-baseline closure is not yet justified.
 - **Priority:** `P0`
-- **Detail:** [S11 real-field detector effectiveness plan](../30-quality/s11-real-field-detector-effectiveness-plan.md), [S11-D5 accepted-Foam/Oil authority continuity](../30-quality/s11-d5-accepted-foam-oil-current-frame-semantic-authority-continuity.md), [S11-D4 Foam support/classification](../30-quality/s11-d4-foam-support-structural-classification.md), [S11-D3 semantic authority slimming](../30-quality/s11-d3-current-frame-semantic-authority-slimming.md), [S11-C full-video forensic diagnostic](../30-quality/s11-c-full-video-production-replay-visual-forensic-diagnostic.md), [S11-D1 Foam/Oil context repair](../30-quality/s11-d1-foam-structural-refractive-discrimination-oil-context-safety.md), [S11-D2 sample3 positive-evidence recovery](../30-quality/s11-d2-sample3-positive-evidence-recovery.md), [S11-D2 Class-B representation recovery](../30-quality/s11-d2-class-b-observation-proposal-representation.md), [S11-A detector direction and experiment plan](../30-quality/s11-a-detector-direction-and-experiment-plan.md), [S11-B Spatial production fallback](../30-quality/s11-b-spatial-positive-evidence-production.md), [S11 Offline Temporal Trajectory probe](../30-quality/s11-offline-temporal-trajectory-probe.md)
+- **Detail:** [current work plan](work-plan.md), [durable S11 architecture](../20-architecture/s11-detector-responsibility-architecture.md), [S11 validation contract](../30-validation/s11-real-field-detector-effectiveness.md), [S11 diagnostics](../50-diagnostics/s11/), [S11 completed evidence](../60-evidence/s11/)
 
 ### S12 — Post-S10 UI/UX Refinement
 
@@ -172,4 +172,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE` → `S12 PLANNED`; autosave/abnormal-exit recovery remains deferred unless explicitly reclassified.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE` → `S12 PLANNED`.
+
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, trajectory provenance responsibility, retrospective initial-state reconstruction and the final post-S11 Windows field-workflow check, is routed only through [`retained-commitments.md`](retained-commitments.md).

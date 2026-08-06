@@ -41,7 +41,7 @@ from oil_tracker.domain.recipe import GlassInspectionConfig
 BASELINE_MAIN_SHA = "0fd8ca0d423a1f632ad9a026d8f396686870d633"
 CORPUS_STEMS = ("base_sample_1", "sample2", "sample3", "sample4")
 CORPUS_MANIFEST_RELATIVE_PATH = Path(
-    "docs/30-quality/s11-a-opencv-evidence-architecture-probe-manifest.json"
+    "docs/50-diagnostics/s11/s11-a-opencv-evidence-architecture-probe-manifest.json"
 )
 VARIANTS = ("P0", "P1", "P2", "P3")
 

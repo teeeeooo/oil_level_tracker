@@ -2,7 +2,7 @@
 
 **Status:** `SUPERSEDED`
 
-This snapshot is superseded because milestone state moved to the [roadmap](../00-project/roadmap.md), active execution moved to the [work plan](../00-project/work-plan.md), and maintained acceptance obligations moved to the [real-world validation plan](../30-quality/real-world-validation-plan.md). Preserve the content below only for historical planning and implementation evidence.
+This snapshot is superseded because milestone state moved to the [roadmap](../00-project/roadmap.md), active execution moved to the [work plan](../00-project/work-plan.md), and maintained acceptance obligations moved to the [real-world validation plan](../30-validation/real-world-validation-plan.md). Preserve the content below only for historical planning and implementation evidence.
 
 
 ## 1. 문서 목적

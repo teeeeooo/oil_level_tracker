@@ -121,7 +121,7 @@ not inherit the GUI platform environment.
 
 The test suite covers coordinate conversion, mask/margin/exclusion behavior, Recipe round-trip/versioning, validation, judgment, event debounce, candidate penalties, FillState behavior, foam connectivity, timestamp scheduling, synthetic detector fixtures, full analysis/reporting, multi-Glass decode behavior, cancellation and GUI smoke/routing.
 
-Geometry drag/resize and Windows DPI behavior also require the [manual GUI and Windows checklist](docs/30-quality/manual-gui-windows-checklist.md).
+Geometry drag/resize and Windows DPI behavior also require the [manual GUI and Windows checklist](docs/40-operations/manual-gui-windows-checklist.md).
 
 ## PyInstaller one-folder build
 
@@ -203,8 +203,11 @@ Documentation entry points:
 - [Project roadmap](docs/00-project/roadmap.md)
 - [Current work plan](docs/00-project/work-plan.md)
 - [Architecture documents](docs/20-architecture/)
-- [Quality and validation documents](docs/30-quality/)
+- [Validation contracts](docs/30-validation/)
+- [Windows/package/manual procedures](docs/40-operations/)
+- [Diagnostics](docs/50-diagnostics/)
+- [Completed evidence](docs/60-evidence/)
 
 ## Current implementation scope and limitations
 
-The application is not yet production-qualified for operational PASS/FAIL use. Real-video detector qualification, Windows clean-PC packaging and long-duration platform evidence remain governed by the [roadmap](docs/00-project/roadmap.md), [current work plan](docs/00-project/work-plan.md) and [real-world validation plan](docs/30-quality/real-world-validation-plan.md).
+The application is not yet generally qualified for operational detector PASS/FAIL use because S11 real-field detector effectiveness remains `ACTIVE`. Windows canonical/manual/one-folder packaging acceptance is already preserved in [S10 evidence](docs/60-evidence/s10/), and the accepted exact-workload one-hour source-tree stability result is preserved in [S6-F evidence](docs/60-evidence/s6/s6-f-one-hour-long-duration-stability.md). The current engineering gate is owned by the [roadmap](docs/00-project/roadmap.md), [current work plan](docs/00-project/work-plan.md) and [S11 validation contract](docs/30-validation/s11-real-field-detector-effectiveness.md).

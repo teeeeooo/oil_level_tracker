@@ -4,7 +4,7 @@
 
 이 문서는 Rotary Oil Level Tracker의 분석 결과를 원본 영상과 함께 재생하고, 검출 결과를 overlay로 확인하는 `Result Review Viewer`의 사용자 경험, 데이터 계약, 구현 범위와 단계별 확장 계획을 정의한다.
 
-전체 UX 계약은 [UX improvement plan](./ux-improvement-plan.md), 품질 및 실영상 gate는 [real-world validation plan](../30-quality/real-world-validation-plan.md)을 따른다. 이 문서는 Phase 2B 이후 Result Review Viewer 관련 상세 설계 문서다.
+전체 UX 계약은 [UX improvement plan](ux-improvement-plan.md), 품질 및 실영상 gate는 [real-world validation plan](../30-validation/real-world-validation-plan.md)을 따른다. 이 문서는 Phase 2B 이후 Result Review Viewer 관련 상세 설계 문서다.
 
 ## 2. 문서 소유권
 
@@ -431,7 +431,7 @@ Bundle asset resolver는 다음을 거부한다.
 - 기존 결과 파일과 `report.html` 생성을 유지한다.
 - unit, integration과 offscreen GUI regression test가 통과한다.
 
-남은 수동 확인:
+수동/플랫폼 확인 항목(관련 owner가 materially invalidated 되었을 때 비례 재검증):
 
 - Windows DPI scaling과 graph 문구·legend 잘림
 - 실제 분석 결과 bundle
@@ -553,7 +553,7 @@ debug_case_YYYYMMDD_HHMMSS/
 
 ### 9.6 공유용 결과 영상 — S7 / Phase 2C-4
 
-The accepted S6 real-video/runtime scope remains preserved. S7 is fresh exact-head audited, merged and closed; the accepted annotated-MP4 implementation and decoded-timeline coverage repairs reuse the existing Result Review query/rendering contract rather than introducing a second detector or result authority. S8 repeated-test workflow/result management is now `DONE`: S8-A/B1/B2/C1 remain accepted through PR #69–#72, and presentation-only S8-C2 passed its Lane B Orchestrator exact-head gate and native guarded-squash-merged through PR #73 as `e90310a63faad2a20561ba0d5221432cc1e1c4fb`. S8-C2 changed only normal Workbench ownership labels/read-only identity presentation sourced from existing Recipe/`recipe_path` and `AnalysisSession`; Result Review, finalized-bundle authority, completion actions, recent-result/Profile navigation state and same-Profile replacement semantics remain unchanged. S9 is now active with `S9-A Unsaved Profile Change Tracking & Close Confirmation Worker` as the next bounded gate. Windows/manual GUI, PyInstaller one-folder validation and audio preservation remain pending/unclaimed for the final product/release sequence and are not inferred from this source-tree work.
+The accepted S7 annotated-MP4 contract reuses the existing Result Review query/rendering authority rather than introducing a second detector or result authority. S8 and S9 follow-on workflow/presentation work is also accepted, and S10 Windows/manual/package acceptance is completed evidence. This product document does not own current milestone status or the next engineering gate; use the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md). Audio preservation remains outside the S7 annotated-MP4 acceptance contract.
 
 Implemented S7 contract:
 
@@ -570,7 +570,7 @@ Implemented S7 contract:
 - existing destinations require explicit overwrite confirmation, while the source MP4 and official result-bundle tree are protected from export writes;
 - failed or cancelled work removes its bounded temporary MP4 and does not publish a completed-looking destination.
 
-Platform/release obligations remain governed by the [real-world validation plan](../30-quality/real-world-validation-plan.md) and milestone status by the [roadmap](../00-project/roadmap.md).
+Platform/release obligations remain governed by the [real-world validation plan](../30-validation/real-world-validation-plan.md) and milestone status by the [roadmap](../00-project/roadmap.md).
 
 ### 9.7 실사용 결과 시각화 안정화
 

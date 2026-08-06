@@ -24,7 +24,7 @@ Formal project and document status uses only the allowed values above. Execution
 
 ## Closeout record contract
 
-Every closeout result must eventually be reflected in [work-plan.md](./work-plan.md) with:
+Every closeout result must eventually be reflected in [work-plan.md](work-plan.md) with:
 
 - result;
 - exact head and parent when applicable;
@@ -73,7 +73,7 @@ If a frozen check fails, end the freeze. The next authorized repair Worker recor
 
 ## Roadmap update conditions
 
-Update [roadmap.md](./roadmap.md) only when one of these occurs:
+Update [roadmap.md](roadmap.md) only when one of these occurs:
 
 - a milestone starts;
 - a milestone completes;

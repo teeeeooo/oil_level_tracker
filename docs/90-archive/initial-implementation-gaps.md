@@ -2,7 +2,7 @@
 
 **Status:** `SUPERSEDED`
 
-This document is the historical gap snapshot from the initial MVP delivery. It is superseded because later milestones implemented several listed items and current status now belongs to the [project roadmap](../00-project/roadmap.md), [current work plan](../00-project/work-plan.md) and [real-world validation plan](../30-quality/real-world-validation-plan.md). Preserve the list below as historical context only.
+This document is the historical gap snapshot from the initial MVP delivery. It is superseded because later milestones implemented several listed items and current status now belongs to the [project roadmap](../00-project/roadmap.md), [current work plan](../00-project/work-plan.md) and [real-world validation plan](../30-validation/real-world-validation-plan.md). Preserve the list below as historical context only.
 
 The delivered project was a coherent executable MVP vertical slice. The following items require follow-up rather than being represented as complete:
 

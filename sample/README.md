@@ -82,7 +82,7 @@ PYTHONPATH=src .venv/bin/python -m oil_tracker.cli analyze \
   --sampling-fps 5.0
 ```
 
-The initial S6-A run found a reproducible CLI lifecycle-progress formatting defect before bundle finalization. After repaired `main @ 8b37ff81…`, the resumed official A/B/C CLI runs completed through lifecycle stages `1/6–6/6` and produced reviewable bundles. See [`docs/30-quality/s6-base-sample-1-evidence.md`](../docs/30-quality/s6-base-sample-1-evidence.md) for the preserved failure, diagnostic evidence and repaired-main official qualification.
+The initial S6-A run found a reproducible CLI lifecycle-progress formatting defect before bundle finalization. After repaired `main @ 8b37ff81…`, the resumed official A/B/C CLI runs completed through lifecycle stages `1/6–6/6` and produced reviewable bundles. See [`docs/60-evidence/s6/s6-base-sample-1-evidence.md`](../docs/60-evidence/s6/s6-base-sample-1-evidence.md) for the preserved failure, diagnostic evidence and repaired-main official qualification.
 
 ## S6-B additional local samples
 
@@ -100,7 +100,7 @@ The Recipes use deterministic IDs/timestamps, `AUTO`, `mm_per_pixel=null`, margi
 - `sample3.oilrecipe`: `66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43`
 - `sample4.oilrecipe`: `53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849`
 
-Production CLI runs completed with exit `0` and lifecycle stages `1/6–6/6`. sample2 and both sample3 windows returned `REVIEW_REQUIRED`; sample4 returned `FAIL`. These are preserved engineering results, not verified physical truth. See [S6-B evidence](../docs/30-quality/s6-additional-real-samples-evidence.md) for commands, bundle inspection and limitations.
+Production CLI runs completed with exit `0` and lifecycle stages `1/6–6/6`. sample2 and both sample3 windows returned `REVIEW_REQUIRED`; sample4 returned `FAIL`. These are preserved engineering results, not verified physical truth. See [S6-B evidence](../docs/60-evidence/s6/s6-additional-real-samples-evidence.md) for commands, bundle inspection and limitations.
 
 ## S6-C agent-assisted provisional truth
 
@@ -111,7 +111,7 @@ The four `*.provisional-truth.json` files contain 68 sparse, blind, machine-read
 - `sample3.provisional-truth.json`: 24 annotations;
 - `sample4.provisional-truth.json`: 16 annotations.
 
-They use the explicit `agent-assisted-provisional-truth-v1` JSON schema and a separate `.provisional-truth.json` artifact suffix because the product-owned `.oiltruth` schema represents bundle-bound user confirmation/correction. They are silver truth, not user-confirmed ground truth, do not match the product `*.oiltruth` loader/file dialog, and cannot establish official detector accuracy. See [S6-C provisional comparison evidence](../docs/30-quality/s6-provisional-truth-comparison.md) for frozen hashes, selection rationale, uncertainties and fresh detector comparison.
+They use the explicit `agent-assisted-provisional-truth-v1` JSON schema and a separate `.provisional-truth.json` artifact suffix because the product-owned `.oiltruth` schema represents bundle-bound user confirmation/correction. They are silver truth, not user-confirmed ground truth, do not match the product `*.oiltruth` loader/file dialog, and cannot establish official detector accuracy. See [S6-C provisional comparison evidence](../docs/60-evidence/s6/s6-provisional-truth-comparison.md) for frozen hashes, selection rationale, uncertainties and fresh detector comparison.
 
 ## S6-D2 user-confirmed product truth
 
@@ -122,7 +122,7 @@ The four product-owned `.oiltruth` files materialize the explicit S6-D1 user res
 - `sample3.oiltruth`: 4 annotations, including 2 `unusable` focus-loss frames;
 - `sample4.oiltruth`: 5 annotations.
 
-They contain 15 exact reviewed frames in total. The fresh product translation is `13 corrected + 2 unusable`; user approval of a D1 agent candidate is not interpreted as approval of detector output. See [S6-D2 user-confirmed product truth](../docs/30-quality/s6-d2-user-confirmed-product-truth.md) for exact bundle identities, coordinates, error semantics, derivative-ZIP provenance and validation.
+They contain 15 exact reviewed frames in total. The fresh product translation is `13 corrected + 2 unusable`; user approval of a D1 agent candidate is not interpreted as approval of detector output. See [S6-D2 user-confirmed product truth](../docs/60-evidence/s6/s6-d2-user-confirmed-product-truth.md) for exact bundle identities, coordinates, error semantics, derivative-ZIP provenance and validation.
 
 These truth files do not make the current sample set category-balanced official accuracy evidence and do not establish detector accuracy PASS. The four `*.provisional-truth.json` files remain separate immutable blind evidence.
 

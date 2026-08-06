@@ -6,8 +6,8 @@ This document owns the user-facing workflow and acceptance contract for Workbenc
 
 - Long-term milestone status: [project roadmap](../00-project/roadmap.md)
 - Active gate and next action: [current work plan](../00-project/work-plan.md)
-- Result Review detail: [Result Review Viewer plan](./result-review-viewer-plan.md)
-- Manual Windows obligations: [manual GUI and Windows checklist](../30-quality/manual-gui-windows-checklist.md)
+- Result Review detail: [Result Review Viewer plan](result-review-viewer-plan.md)
+- Manual Windows obligations: [manual GUI and Windows checklist](../40-operations/manual-gui-windows-checklist.md)
 
 Historical PR heads and validation counts remain available in Git history rather than being repeated here.
 
@@ -96,7 +96,7 @@ Selecting a row seeks the Workbench to that Glass/timestamp. Recipe, video, anal
 
 After analysis, the user can open the source video and official bundle together, inspect the selected Glass overlay, navigate events/review intervals and synchronize video with the tracking graph. The Viewer remains read-only and uses result-bundle snapshots rather than current Workbench state.
 
-General review hides candidate and score internals. Debug mode, partial re-detection, user truth and regression export follow the detailed [Result Review Viewer plan](./result-review-viewer-plan.md).
+General review hides candidate and score internals. Debug mode, partial re-detection, user truth and regression export follow the detailed [Result Review Viewer plan](result-review-viewer-plan.md).
 
 ## Real-use Workbench stabilization contract
 
@@ -147,7 +147,7 @@ S8-C1 owns only the finalized-run completion summary and its established complet
 
 Completion Review/report/folder actions remain bound to the completed output path. Same-Profile continuation still reloads that finalized bundle and enters the existing transactional replacement workflow; the summary never supplies Recipe truth. Recent-result/Profile caches remain navigation state only, official bundles remain immutable, and duplicate-action/close protection remains owned by the existing completion coordinator.
 
-S8-C2 owns only normal-Workbench visual separation of existing ownership. A compact read-only Profile strip renders the active Recipe name and actual `recipe_path`, and the Glass list/settings panels are explicitly labeled as reusable `.oilrecipe` Profile content. The existing test-video, `run_name`, analysis range, compressor-start and sampling controls remain backed by `AnalysisSession` and are grouped as current-test-only state that is not Profile content. These labels refresh through existing Workbench new/load/save/video/same-Profile transitions and introduce no duplicate Profile/session model, persistence field, dirty-state rule or workflow owner. S8-C2 remains presentation-only Lane B pending its Orchestrator exact-head gate.
+S8-C2 owns only normal-Workbench visual separation of existing ownership. A compact read-only Profile strip renders the active Recipe name and actual `recipe_path`, and the Glass list/settings panels are explicitly labeled as reusable `.oilrecipe` Profile content. The existing test-video, `run_name`, analysis range, compressor-start and sampling controls remain backed by `AnalysisSession` and are grouped as current-test-only state that is not Profile content. These labels refresh through existing Workbench new/load/save/video/same-Profile transitions and introduce no duplicate Profile/session model, persistence field, dirty-state rule or workflow owner. This presentation contract is accepted; current milestone status is intentionally not repeated here.
 
 Profile favorites/pinning/tags/search, Profile duplication/templates, result moving/deletion/comparison, multi-run comparison, autosave/recovery, filesystem-wide Profile discovery and batch/queue execution remain outside S8-C2. Exact milestone status and the audit gate belong only to the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md).
 
@@ -201,7 +201,7 @@ Validation and edit-target presentation coexist rather than replace one another.
 
 Ellipse visual polish is part of S9-C. The existing axis-aligned eight-direction resize capability remains required, but a normally selected ellipse should not be dominated by eight large square handles. The Workbench renders restrained circular handle markers while preserving a larger transform-independent practical hit area; hover/geometry context strengthens the markers and the active resize handle is visually stronger. Existing minimum size, frame bounds, source-scene coordinates and eight-direction resize behavior remain unchanged. S9-C highlight refresh updates item styling in place and does not reset S9-B Fit/manual zoom or pan state.
 
-Autosave/abnormal-exit recovery is not cancelled or superseded, but it is deferred to post-S10 reassessment because its current user benefit does not justify making it an S9 release prerequisite.
+Autosave/abnormal-exit recovery remains explicitly `DEFERRED`. Its activation condition and non-current routing are owned only by the [retained commitments](../00-project/retained-commitments.md).
 
 The following remain P3 lower-priority backlog unless explicitly promoted:
 
@@ -210,7 +210,7 @@ The following remain P3 lower-priority backlog unless explicitly promoted:
 - resize tooltip and modifier-based geometry editing;
 - further Wizard/Workbench simplification.
 
-S9-B and S9-C are the selected remaining S9 product slices; unrelated P3 items remain optional unless promoted. Their implementation PRs own source-completing manual acceptance updates, while Windows/manual GUI and packaging validation remains the separate mandatory S10 release obligation governed by the [roadmap](../00-project/roadmap.md) and [real-world validation plan](../30-quality/real-world-validation-plan.md).
+S9-B and S9-C remain accepted product contracts; unrelated P3 items remain optional unless promoted. S10 Windows/manual GUI and packaging acceptance is completed historical evidence, while any future proportional revalidation is governed by the [roadmap](../00-project/roadmap.md), [real-world validation plan](../30-validation/real-world-validation-plan.md) and [manual Windows procedure](../40-operations/manual-gui-windows-checklist.md).
 
 ## Implementation principles
 
