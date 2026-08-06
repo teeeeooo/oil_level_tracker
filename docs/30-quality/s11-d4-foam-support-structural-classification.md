@@ -1,6 +1,6 @@
 # S11-D4 Foam Support Representation / Structural Component Classification
 
-Status: Lane C current-frame Foam authority simplified on `fix/s11-d4-foam-support-structural-classification`; fresh independent exact-head audit required.
+Status: `ACCEPTED` — PR #91 exact head `337d6ce2c24e841225c43ada4d3f2648a461b2fc` passed fresh Lane C audit and was guarded-squash-merged as `9a69306146b7f10c8ece99d3dd5a16101dee875d`.
 
 ## Responsibility
 
@@ -83,4 +83,4 @@ Existing glare, shimmer, variance-only, edge-only, white-Foam, low-light-Foam, p
 
 The chromatic path still adds bounded ROI-sized float/bool maps and a seeded connected-component pass when chromatic texture exists. White-support arbitration and classification retain bounded connected-component, row-occupancy and structural-substrate relation scans over the current ROI. This simplification adds no work and removes three layer-specific scalar comparisons plus their constants/argument plumbing. There is no unbounded state, frame history, lookahead, new dependency or ML path. Residual open-world ambiguity is deliberately not converted into more S5-A morphology work.
 
-Generated replay/debug material remains local diagnostic evidence and is not tracked as golden truth. Merge-dependent status changes are intentionally left to the independent exact-head gate.
+Generated replay/debug material remains local diagnostic evidence and is not tracked as golden truth. The independent exact-head gate reran the focused Foam/fill-state/temporal/S11 Spatial surface (`72 passed`), reproduced sample3 blind-positive `12/18`, sample4 frozen structural `0/14`, dense structural `0/66`, and later genuine-Foam `14/26`, and found no plausible application-domain analogue in the bounded adversarial lattice probe beyond the documented open-world single-frame imitation limit.
