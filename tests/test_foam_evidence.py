@@ -4,6 +4,7 @@ from dataclasses import replace
 
 import cv2
 import numpy as np
+import pytest
 
 from oil_tracker.adapters.vision.foam_front_detector import (
     FoamDecisionStatus,
@@ -71,6 +72,87 @@ def test_low_light_white_foam_and_partial_front_remain_supported():
     assert partial_result.component_width_ratio > 0.25
 
 
+def test_dark_yellow_textured_foam_survives_without_whiteness_membership():
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    yy, xx = np.indices((60, width))
+    pattern = ((xx // 3 + yy // 3) % 2) == 0
+    warm = np.where(
+        pattern[..., None],
+        np.array((60, 85, 105), dtype=np.uint8),
+        np.array((35, 55, 80), dtype=np.uint8),
+    )
+    image[60:120, :, :] = warm
+
+    result = _detect(image)
+
+    assert result.candidate is not None
+    assert result.selected_component is not None
+    assert not result.selected_component.bottom_connected
+    assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
+    assert result.whiteness_ratio == 0.0
+    assert result.texture_support_ratio >= 0.28
+    assert result.front_y == 60.0
+
+
+def test_substantial_detached_white_layer_uses_lower_edge_as_foam_front():
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    yy, xx = np.indices((50, 76))
+    pattern = ((xx // 3 + yy // 3) % 2) == 0
+    layer = np.where(pattern[..., None], 220, 150).astype(np.uint8)
+    layer = np.repeat(layer, 3, axis=2)
+    image[50:100, 22:98] = layer
+
+    result = _detect(image)
+
+    assert result.candidate is not None
+    assert result.selected_component is not None
+    assert not result.selected_component.bottom_connected
+    assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
+    assert result.component_height_ratio == pytest.approx(50 / height)
+    assert result.component_width_ratio == pytest.approx(76 / width)
+    assert result.front_y == 99.0
+
+    too_thin = np.full((height, width, 3), 45, dtype=np.uint8)
+    too_thin[70:95, 22:98] = layer[:25]
+    thin_result = _detect(too_thin)
+    assert thin_result.candidate is None
+
+
+def test_wide_hollow_rim_is_rejected_but_filled_foam_can_replace_its_authority():
+    height, width = 160, 120
+    yy, xx = np.indices((height, width))
+    bright = np.where((((xx // 3 + yy // 3) % 2) == 0)[..., None], 220, 150).astype(np.uint8)
+    bright = np.repeat(bright, 3, axis=2)
+    structural = np.full((height, width, 3), 45, dtype=np.uint8)
+    rim = np.zeros((height, width), dtype=bool)
+    rim[55:150, 8:17] = True
+    rim[55:150, 103:112] = True
+    rim[141:150, 8:112] = True
+    structural[rim] = bright[rim]
+
+    rejected = _detect(structural)
+    assert rejected.candidate is None
+    assert rejected.decision_status is FoamDecisionStatus.WEAK_REJECTED
+    assert rejected.final_evidence_score >= 0.80
+    assert rejected.component_width_ratio >= 0.70
+    assert rejected.bounding_box_fill_ratio < 0.30
+
+    with_foam = structural.copy()
+    warm = np.where(
+        ((((xx // 3 + yy // 3) % 2) == 0)[..., None]),
+        np.array((60, 85, 105), dtype=np.uint8),
+        np.array((35, 55, 80), dtype=np.uint8),
+    )
+    foam_region = (yy >= 80) & (yy < 145) & (xx >= 20) & (xx < 100)
+    with_foam[foam_region] = warm[foam_region]
+    accepted = _detect(with_foam)
+    assert accepted.candidate is not None
+    assert accepted.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
+    assert accepted.bounding_box_fill_ratio > 0.30
+
+
 def test_genuine_foam_retains_oil_context_authority():
     full = _detect(_white_foam())
     low_light = _detect(_white_foam(level=165))
@@ -102,7 +184,7 @@ def test_wide_hollow_structural_component_cannot_gain_oil_context_authority():
     )
 
     authority = evaluate_foam_oil_context_authority(structural)
-    assert structural.candidate is not None  # S5-A publication remains independent.
+    assert structural.candidate is not None  # D1 remains defense in depth for handoff inputs.
     assert not authority.authoritative
     assert authority.reason == "wide_hollow_structural_or_refractive_component"
     assert authority.wide_row_fraction >= 0.25
