@@ -94,14 +94,14 @@ _CHROMATIC_SUPPORT_MIN_TEXTURE = 0.05
 _CHROMATIC_SEED_MIN_TEXTURE = 0.20
 _CHROMATIC_SEED_MIN_SCORE = 0.20
 _CHROMATIC_COMPONENT_MIN_RATIO = 0.35
-_DETACHED_LAYER_MIN_AREA_MULTIPLIER = 2.5
-_DETACHED_LAYER_MIN_HEIGHT_RATIO = 0.15
-_DETACHED_LAYER_MAX_HEIGHT_RATIO = 0.68
-_DETACHED_LAYER_MIN_WIDTH_RATIO = 0.55
-_DETACHED_LAYER_MIN_FILL_RATIO = 0.30
-_DETACHED_LAYER_MAX_FILL_RATIO = 0.80
-_DETACHED_LAYER_MIN_DOMINANT_THIRD_OCCUPANCY = 0.20
-_DETACHED_LAYER_MIN_EDGE_CONCENTRATION_RATIO = 1.30
+_LAYER_MIN_AREA_MULTIPLIER = 2.5
+_LAYER_MIN_HEIGHT_RATIO = 0.15
+_LAYER_MAX_HEIGHT_RATIO = 0.68
+_LAYER_MIN_WIDTH_RATIO = 0.55
+_LAYER_MIN_FILL_RATIO = 0.30
+_LAYER_MAX_FILL_RATIO = 0.80
+_LAYER_MIN_DOMINANT_THIRD_OCCUPANCY = 0.20
+_LAYER_MIN_EDGE_CONCENTRATION_RATIO = 1.30
 
 
 @dataclass(frozen=True)
@@ -646,6 +646,51 @@ def _structural_substrate_relation(
     return substrate_present, False
 
 
+def _layer_geometry_ok(
+    *,
+    area_ratio: float,
+    height_ratio: float,
+    width_ratio: float,
+    fill_ratio: float,
+    min_area: float,
+) -> bool:
+    return bool(
+        area_ratio >= min_area * _LAYER_MIN_AREA_MULTIPLIER
+        and _LAYER_MIN_HEIGHT_RATIO <= height_ratio <= _LAYER_MAX_HEIGHT_RATIO
+        and width_ratio >= _LAYER_MIN_WIDTH_RATIO
+        and _LAYER_MIN_FILL_RATIO <= fill_ratio <= _LAYER_MAX_FILL_RATIO
+    )
+
+
+def _has_one_sided_layer_occupancy(
+    component: np.ndarray,
+    valid: np.ndarray | None = None,
+) -> bool:
+    ys, xs = np.where(component)
+    if ys.size == 0:
+        return False
+    x0, x1 = int(xs.min()), int(xs.max())
+    y0, y1 = int(ys.min()), int(ys.max())
+    layer = component[y0 : y1 + 1, x0 : x1 + 1]
+    row_population = np.count_nonzero(layer, axis=1).astype(np.float32)
+    if valid is None:
+        row_capacity = np.full(layer.shape[0], max(1, layer.shape[1]), dtype=np.float32)
+    else:
+        valid_layer = valid[y0 : y1 + 1, x0 : x1 + 1]
+        row_capacity = np.maximum(np.count_nonzero(valid_layer, axis=1), 1).astype(np.float32)
+    row_occupancy = row_population / row_capacity
+    third = max(1, int(math.ceil(layer.shape[0] / 3.0)))
+    top_occupancy = float(np.mean(row_occupancy[:third]))
+    bottom_occupancy = float(np.mean(row_occupancy[-third:]))
+    dominant = max(top_occupancy, bottom_occupancy)
+    opposite = min(top_occupancy, bottom_occupancy)
+    concentration = dominant / max(1e-6, opposite)
+    return bool(
+        dominant >= _LAYER_MIN_DOMINANT_THIRD_OCCUPANCY
+        and concentration >= _LAYER_MIN_EDGE_CONCENTRATION_RATIO
+    )
+
+
 def _detached_layer_topology(
     component: np.ndarray,
     *,
@@ -657,34 +702,22 @@ def _detached_layer_topology(
     min_area: float,
     front_from_lower_edge: bool,
 ) -> tuple[bool, float]:
-    ys, xs = np.where(component)
+    ys = np.where(component)[0]
     default_front = float(ys.min()) if ys.size else float(component.shape[0] - 1)
-    if bottom_connected or ys.size == 0:
-        return False, default_front
     if (
-        area_ratio < min_area * _DETACHED_LAYER_MIN_AREA_MULTIPLIER
-        or not (_DETACHED_LAYER_MIN_HEIGHT_RATIO <= height_ratio <= _DETACHED_LAYER_MAX_HEIGHT_RATIO)
-        or width_ratio < _DETACHED_LAYER_MIN_WIDTH_RATIO
-        or not (_DETACHED_LAYER_MIN_FILL_RATIO <= fill_ratio <= _DETACHED_LAYER_MAX_FILL_RATIO)
+        bottom_connected
+        or not _layer_geometry_ok(
+            area_ratio=area_ratio,
+            height_ratio=height_ratio,
+            width_ratio=width_ratio,
+            fill_ratio=fill_ratio,
+            min_area=min_area,
+        )
+        or not _has_one_sided_layer_occupancy(component)
     ):
         return False, default_front
 
-    x0, x1 = int(xs.min()), int(xs.max())
     y0, y1 = int(ys.min()), int(ys.max())
-    layer = component[y0 : y1 + 1, x0 : x1 + 1]
-    row_occupancy = np.count_nonzero(layer, axis=1).astype(np.float32) / max(1, layer.shape[1])
-    third = max(1, int(math.ceil(layer.shape[0] / 3.0)))
-    top_occupancy = float(np.mean(row_occupancy[:third]))
-    bottom_occupancy = float(np.mean(row_occupancy[-third:]))
-    dominant = max(top_occupancy, bottom_occupancy)
-    opposite = min(top_occupancy, bottom_occupancy)
-    concentration = dominant / max(1e-6, opposite)
-    if (
-        dominant < _DETACHED_LAYER_MIN_DOMINANT_THIRD_OCCUPANCY
-        or concentration < _DETACHED_LAYER_MIN_EDGE_CONCENTRATION_RATIO
-    ):
-        return False, default_front
-
     front_y = float(y1 if front_from_lower_edge else y0)
     return True, front_y
 
@@ -747,6 +780,20 @@ def _component_evidence(
         and (white_ok or chromatic_ok)
         and (not structural_substrate_present or front_from_lower_edge)
     )
+    bottom_chromatic_layer = (
+        bottom_connected
+        and not white_ok
+        and chromatic_ok
+        and texture_ratio >= 0.28
+        and _layer_geometry_ok(
+            area_ratio=area_ratio,
+            height_ratio=height_ratio,
+            width_ratio=width_ratio,
+            fill_ratio=fill_ratio,
+            min_area=min_area,
+        )
+        and _has_one_sided_layer_occupancy(component, valid)
+    )
     if bottom_connected and ys.size:
         front_y = float(ys.min())
     elif detached_layer:
@@ -777,7 +824,7 @@ def _component_evidence(
     minimum = float(settings.foam_min_evidence_score)
     strong = float(settings.foam_strong_evidence_score)
     shape_ok = (
-        (bottom_connected or detached_layer)
+        ((bottom_connected and white_ok) or bottom_chromatic_layer or detached_layer)
         and area_ratio >= min_area
         and height_ratio >= 0.075
         and not thin_horizontal

@@ -58,6 +58,8 @@ def test_diffuse_white_bottom_connected_foam_has_strong_combined_evidence():
     assert result.whiteness_ratio >= 0.20
     assert result.texture_support_ratio >= 0.22
     assert result.bottom_connected_area_ratio > 0
+    assert result.selected_component is not None
+    assert result.selected_component.bottom_connected
     assert 0.0 <= result.final_evidence_score <= 1.0
 
 
@@ -95,6 +97,31 @@ def test_dark_yellow_tapered_foam_survives_without_whiteness_membership():
     assert result.front_y == 45.0
 
 
+def test_bottom_connected_dark_yellow_tapered_foam_requires_and_keeps_layer_topology():
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    warm_a = np.array((60, 85, 105), dtype=np.uint8)
+    warm_b = np.array((35, 55, 80), dtype=np.uint8)
+    for y in range(55, height):
+        fraction = (y - 55) / (height - 55)
+        half_width = int(round(48 - 34 * fraction))
+        for x in range(60 - half_width, 60 + half_width):
+            image[y, x] = warm_a if ((x // 3 + y // 3) % 2 == 0) else warm_b
+
+    result = _detect(image)
+    authority = evaluate_foam_oil_context_authority(result)
+
+    assert result.candidate is not None
+    assert result.selected_component is not None
+    assert result.selected_component.bottom_connected
+    assert result.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
+    assert result.whiteness_ratio == 0.0
+    assert result.texture_support_ratio >= 0.28
+    assert result.bounding_box_fill_ratio < 0.80
+    assert result.front_y == 55.0
+    assert authority.authoritative
+
+
 @pytest.mark.parametrize("pattern", ("vertical", "horizontal", "grid", "random"))
 def test_detached_warm_structure_cannot_gain_foam_authority(pattern: str):
     height, width = 160, 120
@@ -112,6 +139,42 @@ def test_detached_warm_structure_cannot_gain_foam_authority(pattern: str):
         rng = np.random.default_rng(211)
         mask[y0:y1, x0:x1] = rng.random((y1 - y0, x1 - x0)) > 0.55
     image[mask] = warm
+
+    result = _detect(image)
+    authority = evaluate_foam_oil_context_authority(result)
+
+    assert result.candidate is None
+    assert result.decision_status not in {
+        FoamDecisionStatus.ACCEPTED_STRONG,
+        FoamDecisionStatus.MODERATE_EVIDENCE,
+    }
+    assert not authority.authoritative
+
+
+@pytest.mark.parametrize("pattern", ("vertical", "horizontal", "grid", "random", "panel"))
+def test_bottom_connected_warm_structure_requires_physical_layer_topology(pattern: str):
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    warm = np.array((60, 85, 105), dtype=np.uint8)
+    y0, y1, x0, x1 = 70, height, 15, 105
+    if pattern in {"vertical", "grid"}:
+        for x in range(x0, x1, 10):
+            image[y0:y1, x : x + 3] = warm
+    if pattern in {"horizontal", "grid"}:
+        for y in range(y0, y1, 10):
+            image[y : y + 3, x0:x1] = warm
+    if pattern == "random":
+        rng = np.random.default_rng(211)
+        mask = rng.random((y1 - y0, x1 - x0)) > 0.55
+        image[y0:y1, x0:x1][mask] = warm
+    elif pattern == "panel":
+        yy, xx = np.indices((y1 - y0, x1 - x0))
+        checker = ((xx // 3 + yy // 3) % 2) == 0
+        image[y0:y1, x0:x1] = np.where(
+            checker[..., None],
+            np.array((60, 85, 105), dtype=np.uint8),
+            np.array((35, 55, 80), dtype=np.uint8),
+        )
 
     result = _detect(image)
     authority = evaluate_foam_oil_context_authority(result)
