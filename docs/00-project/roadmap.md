@@ -139,7 +139,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Complete the selected high-impact Workbench interaction improvements after the S9-A data-loss guard while deferring lower-value recovery work.
 - **Status:** `DONE`
-- **Major result:** S9-A protects unsaved Profile changes on application close; S9-B adds presentation-only Fit/zoom/pan/100% while preserving canonical scene geometry; S9-C adds bidirectional field↔overlay active-target feedback and restrained ellipse resize affordances without changing Profile/session persistence or the axis-aligned eight-direction resize contract. Autosave/abnormal-exit recovery remains deferred pending post-S10 classification.
+- **Major result:** S9-A protects unsaved Profile changes on application close; S9-B adds presentation-only Fit/zoom/pan/100% while preserving canonical scene geometry; S9-C adds bidirectional field↔overlay active-target feedback and restrained ellipse resize affordances without changing Profile/session persistence or the axis-aligned eight-direction resize contract. Autosave/abnormal-exit recovery remains `DEFERRED`, is routed through [retained commitments](retained-commitments.md), and is not the current gate.
 - **Next gate:** Preserve the accepted S9 interaction and persistence boundaries in any post-S10 successor work.
 - **Priority:** `P2 — completed`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
