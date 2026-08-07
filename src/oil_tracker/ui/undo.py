@@ -42,6 +42,11 @@ class RecipeSnapshotCommand(QUndoCommand):
         self._restore(self.after, self.selected_after)
 
     def _restore(self, snapshot: dict, selected_id: str | None) -> None:
+        before = self.controller.recipe.to_dict()
+        self.controller.invalidate_initial_state_confirmations_for_recipe_transition(
+            before,
+            snapshot,
+        )
         self.controller.recipe = InspectionRecipe.from_dict(deepcopy(snapshot))
         existing_ids = {glass.id for glass in self.controller.recipe.glasses}
         self.controller.selected_glass_id = selected_id if selected_id in existing_ids else (

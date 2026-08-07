@@ -16,7 +16,7 @@ from oil_tracker.application.services.recipe_validation_service import RecipeVal
 from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
-from oil_tracker.domain.enums import JudgmentMode, WorkbenchState
+from oil_tracker.domain.enums import InitialObservationState, JudgmentMode, WorkbenchState
 from oil_tracker.domain.geometry import EllipseGeometry
 from oil_tracker.domain.session import VideoMetadata
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
@@ -121,6 +121,9 @@ def _window(qtbot):
     workbench.session.analysis_end_sec = 10.0
     workbench.session.compressor_start_sec = 2.0
     workbench.session.sampling_fps = 2.0
+    for glass in workbench.recipe.glasses:
+        glass.initial_state = InitialObservationState.UNKNOWN_REVIEW
+        workbench.confirm_initial_state(glass.id)
     workbench.set_selected(source.id)
     window._refresh_all()
     window._refresh_inline_validation()
@@ -330,3 +333,92 @@ def test_geometry_error_is_reported_and_multi_target_copy_is_atomic(qtbot, monke
     assert _glass(workbench, second_id).name in warnings[0]
     assert workbench.recipe.to_dict() == before
     assert window.undo_stack.count() == 0
+
+
+def test_initial_state_copy_undo_redo_never_resurrects_confirmation(qtbot):
+    window, workbench, _preview, source_id, first_id, second_id = _window(qtbot)
+    source = _glass(workbench, source_id)
+    first = _glass(workbench, first_id)
+    second = _glass(workbench, second_id)
+    source.initial_state = InitialObservationState.EMPTY_NO_INTERFACE
+    first.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    second.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    for glass_id in (source_id, first_id, second_id):
+        workbench.confirm_initial_state(glass_id)
+    source_confirmation = workbench.initial_state_confirmation(source_id)
+    second_confirmation = workbench.initial_state_confirmation(second_id)
+
+    options = GlassSettingsCopyOptions(
+        judgment_rule=False,
+        detector_settings=False,
+        margin_ratio=False,
+        initial_state=True,
+        mm_per_pixel=False,
+        ellipse_size=False,
+    )
+    request = _request(source_id, (first_id,), options)
+    coordinator = ObservationSettingsCopyCoordinator(window)
+    coordinator._create_dialog = lambda *_args: FakeDialog(request)
+    coordinator.open_dialog()
+
+    assert first.initial_state is InitialObservationState.FULL_NO_INTERFACE
+    assert _glass(workbench, first_id).initial_state is InitialObservationState.EMPTY_NO_INTERFACE
+    assert workbench.initial_state_confirmation(first_id) is None
+    assert workbench.initial_state_confirmation(source_id) == source_confirmation
+    assert workbench.initial_state_confirmation(second_id) == second_confirmation
+
+    window.undo_stack.undo()
+    assert _glass(workbench, first_id).initial_state is InitialObservationState.FULL_NO_INTERFACE
+    assert workbench.initial_state_confirmation(first_id) is None
+
+    window.undo_stack.redo()
+    assert _glass(workbench, first_id).initial_state is InitialObservationState.EMPTY_NO_INTERFACE
+    assert workbench.initial_state_confirmation(first_id) is None
+
+    window.undo_stack.undo()
+    workbench.confirm_initial_state(first_id)
+    validation = RecipeValidationService().validate(
+        workbench.recipe,
+        workbench.session,
+        require_run_confirmation=True,
+    )
+    assert not any(issue.code.startswith("READY_INITIAL_STATE") for issue in validation.errors)
+
+
+def test_reset_snapshot_undo_redo_does_not_resurrect_confirmation(qtbot):
+    window, workbench, _preview, source_id, _first_id, _second_id = _window(qtbot)
+    source = _glass(workbench, source_id)
+    source.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    workbench.confirm_initial_state(source_id)
+    assert workbench.initial_state_confirmation(source_id) is not None
+
+    window.reset_selected_glass()
+    assert _glass(workbench, source_id).initial_state is InitialObservationState.AUTO
+    assert workbench.initial_state_confirmation(source_id) is None
+
+    window.undo_stack.undo()
+    assert _glass(workbench, source_id).initial_state is InitialObservationState.FULL_NO_INTERFACE
+    assert workbench.initial_state_confirmation(source_id) is None
+
+    window.undo_stack.redo()
+    assert _glass(workbench, source_id).initial_state is InitialObservationState.AUTO
+    assert workbench.initial_state_confirmation(source_id) is None
+
+
+def test_snapshot_reenable_requires_fresh_confirmation(qtbot):
+    window, workbench, _preview, source_id, first_id, _second_id = _window(qtbot)
+    source_confirmation = workbench.initial_state_confirmation(source_id)
+    first_confirmation = workbench.initial_state_confirmation(first_id)
+
+    window.set_enabled(first_id, False)
+    assert _glass(workbench, first_id).enabled is False
+    assert workbench.initial_state_confirmation(first_id) == first_confirmation
+
+    window.undo_stack.undo()
+    assert _glass(workbench, first_id).enabled is True
+    assert workbench.initial_state_confirmation(first_id) is None
+    assert workbench.initial_state_confirmation(source_id) == source_confirmation
+
+    window.undo_stack.redo()
+    assert _glass(workbench, first_id).enabled is False
+    assert workbench.initial_state_confirmation(first_id) is None

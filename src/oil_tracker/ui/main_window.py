@@ -364,6 +364,10 @@ class MainWindow(QMainWindow):
         selected_after = self.workbench.selected_glass_id
         if before == after and selected_before == selected_after:
             return
+        self.workbench.invalidate_initial_state_confirmations_for_recipe_transition(
+            before,
+            after,
+        )
         self.undo_stack.push(
             RecipeSnapshotCommand(
                 self.workbench,

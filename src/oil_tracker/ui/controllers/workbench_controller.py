@@ -231,6 +231,34 @@ class WorkbenchController:
         else:
             self.session.initial_state_confirmations.pop(glass_id, None)
 
+    def invalidate_initial_state_confirmations_for_recipe_transition(
+        self,
+        before: dict,
+        after: dict,
+    ) -> None:
+        before_by_id = {
+            str(raw.get("id")): raw
+            for raw in before.get("glasses", [])
+            if isinstance(raw, dict) and raw.get("id") is not None
+        }
+        after_by_id = {
+            str(raw.get("id")): raw
+            for raw in after.get("glasses", [])
+            if isinstance(raw, dict) and raw.get("id") is not None
+        }
+        for glass_id in tuple(self.session.initial_state_confirmations):
+            previous = before_by_id.get(glass_id)
+            current = after_by_id.get(glass_id)
+            if previous is None or current is None:
+                self.invalidate_initial_state_confirmation(glass_id)
+                continue
+            initial_state_changed = previous.get("initial_state") != current.get("initial_state")
+            newly_enabled = not bool(previous.get("enabled", True)) and bool(
+                current.get("enabled", True)
+            )
+            if initial_state_changed or newly_enabled:
+                self.invalidate_initial_state_confirmation(glass_id)
+
     def update_initial_state(self, glass_id: str, state: InitialObservationState) -> None:
         glass = self._glass(glass_id)
         if glass.initial_state is state:
