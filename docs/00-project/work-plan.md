@@ -11,7 +11,7 @@ The ambiguity-gated temporal reacquisition repair is accepted and merged. Compat
 
 The accepted repair preserves current-frame D1–D5/D3 authority, the existing continuity/pending thresholds, the two-real-boundary confirmation requirement, and the separate wrong-current-frame selection behavior represented by sample3 frame `1004`.
 
-The next action is read-only: remeasure the post-repair detector baseline and determine whether any coherent, causally demonstrated source defect remains or whether S11 has reached a stable enough baseline to activate the retained final Windows field-workflow check.
+The next action is read-only: remeasure the post-repair detector baseline and determine whether any coherent, causally demonstrated detector source defect remains. If the detector baseline is stable, the next S11 gate is the retained **Initial-State Retrospective FULL/EMPTY Reconstruction** responsibility, not the final Windows field-workflow check.
 
 ## Accepted baseline to preserve
 
@@ -33,8 +33,8 @@ The reconciliation must distinguish demonstrated source defects from residual no
 
 ## Temporal and closure boundary
 
-S11 stable-baseline closure remains unapproved. Repeated private Windows field-video replay is not an iterative dependency. The retained final Windows field-workflow check becomes executable only if the read-only reconciliation concludes that the accepted S11 detector baseline is stable enough for closure validation.
+S11 stable-baseline closure remains unapproved. Repeated private Windows field-video replay is not an iterative dependency. If the read-only reconciliation confirms a stable detector baseline, activate the retained Initial-State Retrospective FULL/EMPTY Reconstruction gate first. The final Windows field-workflow check becomes executable only after that sequence-level responsibility completes its own accepted decision/validation and the resulting S11 output semantics are stable.
 
 ## Next handoff
 
-Run one **read-only post-temporal-repair S11 stable-baseline reconciliation Orchestrator**. It must remeasure the accepted post-repair detector, classify any material remaining losses by their earliest responsible owner, and return exactly one next decision: a newly demonstrated bounded source repair, stable-baseline progression to the retained final Windows field-workflow check, or no further source action.
+Run one **read-only post-temporal-repair S11 stable-baseline reconciliation Orchestrator**. It must remeasure the accepted post-repair detector, classify any material remaining losses by their earliest responsible owner, and return exactly one next decision: a newly demonstrated bounded detector source repair, stable detector baseline progression to the retained **Initial-State Retrospective FULL/EMPTY Reconstruction** gate, or no further detector source action with the exact remaining evidence gap. It must not advance directly to the final Windows field-workflow check.

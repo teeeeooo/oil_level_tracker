@@ -7,9 +7,9 @@ This file owns **affirmatively retained work that is not the current executable 
 - **Responsibility:** sequence-level backward inference may allow a later defensible trajectory to retrospectively support an earlier `FULL` or `EMPTY` interpretation.
 - **Classification:** `RETAINED`
 - **Authoritative source / rationale:** the product contract distinguishes Recipe initial state from detector evidence; Recipe initial state remains a prior and must never be promoted into retrospective truth. A later evidence-bearing trajectory may support retrospective interpretation only through a separately authorized sequence-level owner.
-- **Activation condition:** a future sequence-level design has sufficient evidence to define retrospective inference without weakening current-frame/no-interface safety or treating Recipe state as truth.
-- **Routing owner:** future architecture/validation slice selected by [`roadmap.md`](roadmap.md) and [`work-plan.md`](work-plan.md).
-- **Current-gate boundary:** no implementation algorithm or Lane is preselected, and this is **not the current S11 gate**.
+- **Activation condition:** the post-temporal-repair S11 stable-baseline reconciliation confirms that no further coherent detector source defect must be repaired first. At that point this responsibility becomes the next S11 gate, before the final Windows field-workflow check. Its own sequence-level design must still demonstrate retrospective inference without weakening current-frame/no-interface safety or treating Recipe state as truth.
+- **Routing owner:** the next architecture/validation slice selected by [`roadmap.md`](roadmap.md) and [`work-plan.md`](work-plan.md) after stable detector-baseline confirmation.
+- **Current-gate boundary:** no implementation algorithm or Lane is preselected. This is **not the current gate while stable-baseline reconciliation is pending**, but it is the explicitly ordered successor if that reconciliation confirms detector stability.
 
 ## Autosave / abnormal-exit recovery
 
@@ -34,9 +34,9 @@ This file owns **affirmatively retained work that is not the current executable 
 - **Responsibility:** perform one final target-Windows field workflow check after the S11 detector baseline is stable enough to make that replay decision-bearing.
 - **Classification:** `RETAINED`
 - **Authoritative source / rationale:** Windows canonical/manual/package acceptance is already complete for the accepted product baseline, while detector effectiveness is still changing under S11. A final field workflow check remains useful only after the detector baseline stabilizes.
-- **Activation condition:** S11 reaches a stable accepted detector baseline and closure is otherwise justified.
+- **Activation condition:** S11 first reaches a stable accepted detector baseline, then any activated Initial-State Retrospective FULL/EMPTY Reconstruction responsibility completes its own accepted decision/validation so the resulting S11 output semantics are stable for final field verification.
 - **Routing owner:** the S11 close/validation owner using the operational Windows procedure under [`../40-operations/`](../40-operations/).
-- **Current-gate boundary:** this is a later closure check, **not the current engineering gate**.
+- **Current-gate boundary:** this remains a later closure check after the retrospective reconstruction gate, **not the current engineering gate**.
 
 ## Explicitly superseded recurring dependency
 

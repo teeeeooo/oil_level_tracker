@@ -157,7 +157,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
 - **Major result:** S11-B and D1–D5 plus the comparative-anchor repair established the accepted current-frame baseline, and the bounded temporal repair now preserves a geometrically compatible reacquisition-pending path across canonical ambiguity without allowing ambiguity to publish or advance confirmation.
-- **Next gate:** **Read-only post-temporal-repair S11 stable-baseline reconciliation:** remeasure the accepted detector after the temporal repair and decide whether any further demonstrated source defect remains or the baseline is stable enough to activate the retained final Windows field-workflow check. S11 closure remains unapproved until that decision.
+- **Next gate:** **Read-only post-temporal-repair S11 stable-baseline reconciliation:** remeasure the accepted detector after the temporal repair and decide whether any further demonstrated detector source defect remains. If the detector baseline is stable, activate the retained **Initial-State Retrospective FULL/EMPTY Reconstruction** gate before the final Windows field-workflow check. S11 closure remains unapproved.
 - **Priority:** `P0`
 - **Detail:** [current work plan](work-plan.md), [durable S11 architecture](../20-architecture/s11-detector-responsibility-architecture.md), [S11 validation contract](../30-validation/s11-real-field-detector-effectiveness.md), [S11 diagnostics](../50-diagnostics/s11/), [S11 completed evidence](../60-evidence/s11/)
 
