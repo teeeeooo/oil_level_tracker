@@ -2,18 +2,16 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `VALIDATING`
-**Current engineering gate:** `Lane B — Result Review playback graph layout-stability repair`
-**Source lane:** `Lane B — bounded Result Review presentation/layout repair`
+**Current engineering gate:** `Final Windows field-workflow validation`
+**Source lane:** `None — target-Windows validation only`
 
 ## Current decision
 
 The S11 detector baseline and Initial-State Retrospective FULL/EMPTY Reconstruction are accepted for sequencing. Current-frame D1–D5/S5-B authority, the serialized ambiguity-gated reacquisition owner, immutable observed samples, explicit current-run confirmation authority and versioned retrospective result semantics are the baseline to preserve.
 
-The Workbench exclusion / ellipse interaction isolation repair is accepted. Exclusion drag/resize now remains isolated from selected-ellipse geometry while preserving the established Workbench interaction contract.
+Both bounded pre-Windows functional repairs are accepted. Exclusion drag/resize is isolated from selected-ellipse geometry, and sustained Result Review playback keeps its plotting area/layout stable without rebuilding graph series on cursor movement.
 
-Before spending the final Windows field-validation pass, the remaining bounded source gate is the existing Result Review presentation owner: repeated playback/cursor updates must remain graph-layout stable over sustained playback, and cursor movement must not require rebuilding graph series. The exact causal repair remains Worker-owned.
-
-After that repair is accepted, execute the **final Windows field-workflow check** using the [manual Windows checklist](../40-operations/manual-gui-windows-checklist.md), including its initial-state confirmation and retrospective reconstruction obligations. Detector tuning and retrospective architecture are not reopened by this sequence.
+The remaining S11 gate is the **final Windows field-workflow check** using the [manual Windows checklist](../40-operations/manual-gui-windows-checklist.md), including initial-state confirmation, retrospective reconstruction, exclusion/ellipse isolation and sustained Result Review graph stability obligations. Detector tuning and retrospective architecture are not reopened by this validation gate.
 
 ## Accepted detector baseline to preserve
 
@@ -31,8 +29,8 @@ Official retrospective semantics preserve legacy observed-only bundle readabilit
 
 ## Closure boundary
 
-S11 closure remains unapproved. The final Windows field-workflow check remains the last S11 acceptance gate, but it is executable only after the remaining Result Review graph layout-stability repair is accepted. Do not advance to S12 before the target-Windows field workflow is accepted.
+S11 closure remains unapproved. The final Windows field-workflow check is now the exact last S11 acceptance gate. Do not advance to S12 before the target-Windows field workflow is accepted.
 
 ## Next handoff
 
-Execute **Lane B — Result Review playback graph layout-stability repair** from synchronized `main` on one focused branch/PR. After that repair is accepted, proceed to the final Windows field-workflow validation.
+Execute the **final Windows field-workflow validation** from synchronized `main` using the operational Windows checklist. This gate is validation-only unless concrete field evidence demonstrates a new source defect.
