@@ -10,6 +10,7 @@ from oil_tracker.domain.redetection import (
     RedetectionEventComparison,
     RedetectionMode,
     RedetectionPolicy,
+    RedetectionRetrospectiveComparison,
 )
 
 
@@ -189,6 +190,49 @@ def compare_events(
                 item.status,
             ),
         )
+    )
+
+
+def compare_retrospective_interpretation(
+    official,
+    rerun,
+    *,
+    recomputed: bool,
+) -> RedetectionRetrospectiveComparison:
+    if not recomputed:
+        return RedetectionRetrospectiveComparison(
+            official=official,
+            rerun=None,
+            status="not_recomputed_without_full_sequence",
+            changed=False,
+        )
+    if official is None and rerun is None:
+        return RedetectionRetrospectiveComparison(
+            official=None,
+            rerun=None,
+            status="both_unavailable",
+            changed=False,
+        )
+    if official is None:
+        return RedetectionRetrospectiveComparison(
+            official=None,
+            rerun=rerun,
+            status="rerun_only",
+            changed=True,
+        )
+    if rerun is None:
+        return RedetectionRetrospectiveComparison(
+            official=official,
+            rerun=None,
+            status="official_only",
+            changed=True,
+        )
+    changed = official.to_dict() != rerun.to_dict()
+    return RedetectionRetrospectiveComparison(
+        official=official,
+        rerun=rerun,
+        status="changed" if changed else "matched",
+        changed=changed,
     )
 
 

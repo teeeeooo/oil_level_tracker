@@ -335,6 +335,7 @@ class MainWindow(QMainWindow):
         self.settings.restoreDefaultsRequested.connect(self.restore_defaults)
         self.settings.editRoiRequested.connect(self.open_roi_editor)
         self.settings.resetGlassRequested.connect(self.reset_selected_glass)
+        self.settings.initialStateConfirmRequested.connect(self._confirm_initial_state)
         self.detection_summary.initialStateRequested.connect(self._focus_initial_state)
         self.transport.playToggled.connect(self.toggle_play)
         self.transport.stepRequested.connect(self.step_frame)
@@ -516,8 +517,7 @@ class MainWindow(QMainWindow):
         def change() -> None:
             glass = next((g for g in self.workbench.recipe.glasses if g.id == glass_id), None)
             if glass is not None:
-                glass.enabled = enabled
-                self.workbench.mark_dirty()
+                self.workbench.set_glass_enabled(glass_id, enabled)
 
         self._record_recipe_change("분석 포함 변경", change)
 
@@ -582,11 +582,12 @@ class MainWindow(QMainWindow):
                 glass.name = str(value)
                 self.workbench.mark_dirty()
             elif key == "enabled":
-                glass.enabled = bool(value)
-                self.workbench.mark_dirty()
+                self.workbench.set_glass_enabled(glass.id, bool(value))
             elif key == "initial_state":
-                glass.initial_state = InitialObservationState(value)
-                self.workbench.mark_dirty()
+                self.workbench.update_initial_state(
+                    glass.id,
+                    InitialObservationState(value),
+                )
             elif key == "mm_per_pixel":
                 glass.mm_per_pixel = None if value is None else float(value)
                 self.workbench.mark_dirty()
@@ -670,7 +671,7 @@ class MainWindow(QMainWindow):
 
     def _session_changed(self) -> None:
         self.workbench.session.run_name = self.run_name_edit.text().strip()
-        self.workbench.session.analysis_start_sec = self.start_spin.value()
+        self.workbench.update_analysis_start(self.start_spin.value())
         self.workbench.session.analysis_end_sec = self.end_spin.value()
         self.workbench.session.compressor_start_sec = self.compressor_spin.value()
         self.workbench.session.sampling_fps = self.sampling_spin.value()
@@ -819,10 +820,43 @@ class MainWindow(QMainWindow):
         glass = self.workbench.selected_glass()
         if glass is None:
             return
+        if self.workbench.session.video_metadata is not None:
+            self._load_frame(self.workbench.session.analysis_start_sec)
+            self.schedule_preview()
         self.settings.focus_field("initial_state")
         self.statusBar().showMessage(
-            f"{glass.name}의 분석 시작 상태를 영상과 비교해 확인하세요. 현재 설정은 자동으로 변경되지 않습니다."
+            f"{glass.name}의 분석 시작 장면과 선택 상태를 비교한 뒤 '현재 Run 상태 확인'을 누르세요."
         )
+
+    def _confirm_initial_state(self) -> None:
+        glass = self.workbench.selected_glass()
+        if glass is None:
+            return
+        if glass.initial_state is InitialObservationState.AUTO:
+            QMessageBox.warning(
+                self,
+                "초기 상태 확인 불가",
+                "AUTO는 최종 분석의 현재 Run 확인 값이 될 수 없습니다. 먼저 상태를 명시적으로 선택해 주세요.",
+            )
+            return
+        if self.workbench.session.video_metadata is None:
+            QMessageBox.warning(self, "초기 상태 확인 불가", "먼저 현재 Run의 시험 영상을 선택해 주세요.")
+            return
+        self._load_frame(self.workbench.session.analysis_start_sec)
+        answer = QMessageBox.question(
+            self,
+            "현재 Run 초기 상태 확인",
+            f"분석 시작 장면({self.workbench.session.analysis_start_sec:.3f}초)을 직접 확인했고 "
+            f"{glass.name}의 시작 상태가 {glass.initial_state.value}임을 현재 Run에 대해 확인합니까?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if answer != QMessageBox.StandardButton.Yes:
+            return
+        self.workbench.confirm_initial_state(glass.id)
+        self._refresh_panels()
+        self._refresh_inline_validation()
+        self.statusBar().showMessage(f"{glass.name} 현재 Run 초기 상태 확인을 기록했습니다.")
 
     def set_recent_profile_history(self, history) -> None:
         self.recent_profile_history = history
@@ -1082,7 +1116,20 @@ class MainWindow(QMainWindow):
             self.workbench.selected_glass_id,
             readiness,
         )
-        self.settings.set_glass(self.workbench.selected_glass())
+        selected = self.workbench.selected_glass()
+        self.settings.set_glass(selected)
+        if selected is not None:
+            confirmation = self.workbench.initial_state_confirmation(selected.id)
+            confirmed = bool(
+                confirmation is not None
+                and confirmation.matches(selected.initial_state, self.workbench.session)
+            )
+            self.settings.set_initial_state_confirmation(
+                confirmed,
+                "현재 Run 확인됨" if confirmed else "현재 Run 확인 필요",
+            )
+        else:
+            self.settings.set_initial_state_confirmation(False, "선택한 Glass 없음")
         self.canvas.set_glasses(self.workbench.recipe.glasses, self.workbench.selected_glass_id)
         self._reconcile_interaction_target()
         if self._last_validation is not None:

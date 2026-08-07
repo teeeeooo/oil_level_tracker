@@ -90,7 +90,7 @@ class OutputBundleStore:
             )
 
             _check_cancelled(cancellation, AnalysisStage.CSV_AND_SNAPSHOTS)
-            snapshot_steps = 5
+            snapshot_steps = 6
             _emit(
                 progress,
                 AnalysisStage.CSV_AND_SNAPSHOTS,
@@ -110,6 +110,16 @@ class OutputBundleStore:
             )
             _emit_snapshot(progress, 3, snapshot_steps, "분석 session snapshot 저장 완료")
             _check_cancelled(cancellation, AnalysisStage.CSV_AND_SNAPSHOTS)
+            atomic_write_text(
+                temporary / "retrospective_interpretation.json",
+                json.dumps(
+                    _retrospective_payload(result, session),
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+            )
+            _emit_snapshot(progress, 4, snapshot_steps, "retrospective interpretation 저장 완료")
+            _check_cancelled(cancellation, AnalysisStage.CSV_AND_SNAPSHOTS)
             if completion is not None:
                 _copy_debug_staging(
                     Path(completion.staging_directory),
@@ -122,13 +132,13 @@ class OutputBundleStore:
                     destination = temporary / "debug" / relative
                     destination.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(source, destination)
-            _emit_snapshot(progress, 4, snapshot_steps, "debug snapshot 준비 완료")
+            _emit_snapshot(progress, 5, snapshot_steps, "debug snapshot 준비 완료")
             review_index = _review_index(result, recipe, session, completion)
             atomic_write_text(
                 temporary / "review_index.json",
                 json.dumps(review_index, ensure_ascii=False, indent=2),
             )
-            _emit_snapshot(progress, 5, snapshot_steps, "결과 검토 index 저장 완료")
+            _emit_snapshot(progress, 6, snapshot_steps, "결과 검토 index 저장 완료")
 
             _check_cancelled(cancellation, AnalysisStage.GRAPHS_AND_REPORT)
             _emit(
@@ -172,6 +182,8 @@ class OutputBundleStore:
             result.manifest["result_status"] = result.overall_state.value
             result.manifest["run_name"] = session.run_name
             result.manifest["review_index"] = "review_index.json"
+            result.manifest["result_semantics_version"] = 2
+            result.manifest["retrospective_interpretation"] = "retrospective_interpretation.json"
             result.manifest["debug_trace_level"] = session.debug_trace_level.value
             result.manifest["debug_record_count"] = completion.record_count if completion is not None else 0
             if completion is not None:
@@ -239,6 +251,7 @@ def _validate_temporary_bundle(temporary: Path) -> None:
         "session.json",
         "analysis_manifest.json",
         "review_index.json",
+        "retrospective_interpretation.json",
         "graphs/combined_levels.png",
         "logs/analysis.log",
     )
@@ -280,9 +293,34 @@ def _emit_finalization(progress, completed: int, total: int, message: str) -> No
     )
 
 
+def _retrospective_payload(result: AnalysisResult, session: AnalysisSession) -> dict:
+    return {
+        "schema_version": 1,
+        "result_semantics_version": 2,
+        "run_id": result.run_id,
+        "current_run_confirmations": {
+            glass_id: confirmation.to_dict()
+            for glass_id, confirmation in session.initial_state_confirmations.items()
+        },
+        "interpretations": [
+            glass_result.retrospective.to_dict()
+            for glass_result in result.glass_results
+            if glass_result.retrospective is not None
+        ],
+        "coverage": {
+            glass_result.glass_id: {
+                "observed": glass_result.valid_coverage_ratio,
+                "effective_state_aware": glass_result.effective_state_aware_coverage_ratio,
+            }
+            for glass_result in result.glass_results
+        },
+    }
+
+
 def _review_index(result: AnalysisResult, recipe: InspectionRecipe, session: AnalysisSession, completion=None) -> dict:
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
+        "result_semantics_version": 2,
         "run_id": result.run_id,
         "run_name": session.run_name,
         "source_video_path": session.input_video_path,
@@ -294,11 +332,19 @@ def _review_index(result: AnalysisResult, recipe: InspectionRecipe, session: Ana
         "tracking_data": "tracking_data.csv",
         "events": "events.csv",
         "manifest": "analysis_manifest.json",
+        "retrospective_interpretation": "retrospective_interpretation.json",
         "glasses": [
             {
                 "id": glass_result.glass_id,
                 "name": glass_result.glass_name,
                 "result_status": glass_result.result_state.value,
+                "observed_coverage_ratio": glass_result.valid_coverage_ratio,
+                "effective_state_aware_coverage_ratio": glass_result.effective_state_aware_coverage_ratio,
+                "retrospective_status": (
+                    glass_result.retrospective.status.value
+                    if glass_result.retrospective is not None
+                    else "NOT_APPLICABLE"
+                ),
             }
             for glass_result in result.glass_results
         ],

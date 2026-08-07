@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from .enums import EventType, FillState, ResultState
+from .retrospective import RetrospectiveInterpretation
 
 
 @dataclass
@@ -57,6 +58,8 @@ class GlassAnalysisResult:
     events: list[EventMarker] = field(default_factory=list)
     valid_coverage_ratio: float = 0.0
     judgment_note: str = ""
+    effective_state_aware_coverage_ratio: float = 0.0
+    retrospective: RetrospectiveInterpretation | None = None
 
 
 @dataclass

@@ -39,6 +39,7 @@ class GlassSettingsPanel(QWidget):
     restoreDefaultsRequested = Signal()
     editRoiRequested = Signal()
     resetGlassRequested = Signal()
+    initialStateConfirmRequested = Signal()
     interactionTargetChanged = Signal(str, object)
 
     def __init__(self, parent=None) -> None:
@@ -73,6 +74,17 @@ class GlassSettingsPanel(QWidget):
         self.initial = WheelSafeComboBox()
         for label, value in INITIAL_STATE_CHOICES:
             self.initial.addItem(label, value.value)
+        self.confirm_initial = QPushButton("현재 Run 상태 확인")
+        self.confirm_initial.setObjectName("secondaryActionButton")
+        self.initial_confirmation = QLabel("현재 Run 확인 필요")
+        self.initial_confirmation.setObjectName("ownershipHint")
+        initial_row = QVBoxLayout()
+        initial_controls = QHBoxLayout()
+        initial_controls.setSpacing(6)
+        initial_controls.addWidget(self.initial, 1)
+        initial_controls.addWidget(self.confirm_initial)
+        initial_row.addLayout(initial_controls)
+        initial_row.addWidget(self.initial_confirmation)
         self.judgment = WheelSafeComboBox()
         for value in JudgmentMode:
             self.judgment.addItem(JUDGMENT_MODE_LABELS[value], value.value)
@@ -109,7 +121,7 @@ class GlassSettingsPanel(QWidget):
         self.form.addRow(self._message_label("geometry"))
         self.form.addRow("기준선 Y", self.zero)
         self.form.addRow(self._message_label("zero_line_y"))
-        self.form.addRow("분석 시작 상태", self.initial)
+        self.form.addRow("분석 시작 상태", initial_row)
         self.form.addRow("판정 방식", self.judgment)
         self.form.addRow("실제 길이 환산 — 선택 사항", scale_row)
         self.form.addRow(self._message_label("mm_per_pixel"))
@@ -205,7 +217,8 @@ class GlassSettingsPanel(QWidget):
         self._field_widgets = {
             "geometry": [self.edit_roi, self.cx, self.cy, self.width, self.height],
             "zero_line_y": [self.zero, self.edit_roi],
-            "initial_state": [self.initial],
+            "initial_state": [self.initial, self.confirm_initial],
+            "initial_state_confirmation": [self.confirm_initial],
             "exclusions": [self.exclusions, self.add_ex, self.del_ex],
             "mm_per_pixel": [self.has_scale, self.scale],
             "margin": [self.margin],
@@ -253,6 +266,7 @@ class GlassSettingsPanel(QWidget):
         self.initial.currentIndexChanged.connect(
             lambda _index: self._emit("initial_state", self.initial.currentData())
         )
+        self.confirm_initial.clicked.connect(self.initialStateConfirmRequested)
         self.has_scale.toggled.connect(self._scale_changed)
         self.scale.editingFinished.connect(self._scale_changed)
         self.judgment.currentIndexChanged.connect(
@@ -351,6 +365,10 @@ class GlassSettingsPanel(QWidget):
         self.exclusions.blockSignals(False)
         self._updating = False
         self._apply_interaction_style()
+
+    def set_initial_state_confirmation(self, confirmed: bool, message: str) -> None:
+        self.initial_confirmation.setText(message)
+        self.confirm_initial.setText("현재 Run 확인됨" if confirmed else "현재 Run 상태 확인")
 
     def set_validation_issues(self, issues, glass_id: str | None) -> None:
         for widgets in self._field_widgets.values():

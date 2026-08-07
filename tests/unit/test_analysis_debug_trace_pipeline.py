@@ -10,9 +10,9 @@ from oil_tracker.application.services.analysis_pipeline import AnalysisCancelled
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
 from oil_tracker.domain.debug_trace import DebugTraceCompletion
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
-from oil_tracker.domain.enums import BoundaryKind, FillState
+from oil_tracker.domain.enums import BoundaryKind, FillState, InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
-from oil_tracker.domain.session import AnalysisSession, DebugTraceLevel, VideoMetadata
+from oil_tracker.domain.session import AnalysisSession, DebugTraceLevel, InitialStateConfirmation, VideoMetadata
 
 
 class FakeReader:
@@ -127,6 +127,12 @@ def _inputs(level):
         compressor_start_sec=1.0,
         sampling_fps=2.0,
         debug_trace_level=level,
+    )
+    glass.initial_state = InitialObservationState.UNKNOWN_REVIEW
+    session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
+        InitialObservationState.UNKNOWN_REVIEW,
+        session.input_video_path,
+        session.analysis_start_sec,
     )
     return recipe, session
 

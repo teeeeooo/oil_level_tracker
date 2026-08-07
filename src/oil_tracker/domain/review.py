@@ -7,6 +7,7 @@ from typing import Any
 
 from .enums import EventType, FillState, ResultState
 from .recipe import InspectionRecipe
+from .retrospective import RetrospectiveInterpretation
 from .session import AnalysisSession, VideoMetadata
 
 
@@ -120,6 +121,7 @@ class ReviewOverlayData:
     within_analysis_range: bool
     review_reasons: tuple[str, ...] = ()
     boundary_status: str = ""
+    retrospective: RetrospectiveInterpretation | None = None
 
 
 @dataclass(frozen=True)
@@ -218,6 +220,8 @@ class ReviewBundle:
     debug_record_count: int = 0
     debug_warning: str = ""
     review_index: dict[str, Any] | None = None
+    result_semantics_version: int = 1
+    retrospective_interpretations: tuple[RetrospectiveInterpretation, ...] = ()
 
     @property
     def has_debug_trace(self) -> bool:
@@ -241,3 +245,9 @@ class ReviewBundle:
 
     def glass_summary(self, glass_id: str) -> ReviewGlass | None:
         return next((glass for glass in self.glasses if glass.id == glass_id), None)
+
+    def retrospective_for_glass(self, glass_id: str) -> RetrospectiveInterpretation | None:
+        return next(
+            (item for item in self.retrospective_interpretations if item.glass_id == glass_id),
+            None,
+        )

@@ -9,8 +9,10 @@ import pytest
 from oil_tracker.adapters.reporting.csv_exporter import EVENT_COLUMNS, TRACKING_COLUMNS
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleError, ResultBundleReader
+from oil_tracker.domain.enums import InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
-from oil_tracker.domain.session import AnalysisSession, VideoMetadata
+from oil_tracker.domain.retrospective import RetrospectiveStatus
+from oil_tracker.domain.session import AnalysisSession, InitialStateConfirmation, VideoMetadata
 
 
 def _bundle(tmp_path: Path, *, with_index: bool = True, tracking_rows=None, event_rows=None):
@@ -215,4 +217,99 @@ def test_reader_allows_header_only_events(tmp_path):
 def test_reader_rejects_empty_tracking_data(tmp_path):
     root, _glass = _bundle(tmp_path, tracking_rows=[])
     with pytest.raises(ResultBundleError, match="tracking row"):
+        ResultBundleReader().read(root)
+
+
+def _upgrade_bundle_to_v2(root: Path, glass) -> None:
+    recipe = JsonRecipeRepository().load(root / "recipe_snapshot.oilrecipe")
+    recipe.glasses[0].initial_state = InitialObservationState.FULL_NO_INTERFACE
+    JsonRecipeRepository().save(root / "recipe_snapshot.oilrecipe", recipe)
+
+    session_payload = json.loads((root / "session.json").read_text(encoding="utf-8"))
+    session = AnalysisSession.from_dict(session_payload)
+    confirmation = InitialStateConfirmation(
+        InitialObservationState.FULL_NO_INTERFACE,
+        session.input_video_path,
+        session.analysis_start_sec,
+    )
+    session.initial_state_confirmations[glass.id] = confirmation
+    (root / "session.json").write_text(json.dumps(session.to_dict()), encoding="utf-8")
+
+    manifest = json.loads((root / "analysis_manifest.json").read_text(encoding="utf-8"))
+    manifest["result_semantics_version"] = 2
+    manifest["retrospective_interpretation"] = "retrospective_interpretation.json"
+    (root / "analysis_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+    index = json.loads((root / "review_index.json").read_text(encoding="utf-8"))
+    index["schema_version"] = 2
+    index["result_semantics_version"] = 2
+    index["retrospective_interpretation"] = "retrospective_interpretation.json"
+    (root / "review_index.json").write_text(json.dumps(index), encoding="utf-8")
+
+    retrospective = {
+        "schema_version": 1,
+        "result_semantics_version": 2,
+        "run_id": "run-1",
+        "current_run_confirmations": {glass.id: confirmation.to_dict()},
+        "interpretations": [
+            {
+                "glass_id": glass.id,
+                "status": "ACCEPTED",
+                "confirmed_prior": "FULL_NO_INTERFACE",
+                "interpreted_state": "FULL_NO_INTERFACE",
+                "interval": [1.0, 1.5],
+                "frame_interval": [10, 15],
+                "evidence_frame_indices": [20, 21],
+                "evidence_timestamps_sec": [2.0, 2.5],
+                "evidence_relative_positions": [0.1, 0.2],
+                "barriers": [],
+                "reason": "test",
+                "provenance": "initial_state_retrospective_v1",
+            }
+        ],
+        "coverage": {glass.id: {"observed": 0.5, "effective_state_aware": 0.75}},
+    }
+    (root / "retrospective_interpretation.json").write_text(
+        json.dumps(retrospective),
+        encoding="utf-8",
+    )
+
+
+def test_reader_keeps_v1_observed_only_compatibility(tmp_path):
+    root, _glass = _bundle(tmp_path)
+    bundle = ResultBundleReader().read(root)
+    assert bundle.result_semantics_version == 1
+    assert bundle.retrospective_interpretations == ()
+
+
+def test_reader_loads_v2_retrospective_semantics_with_provenance(tmp_path):
+    root, glass = _bundle(tmp_path)
+    _upgrade_bundle_to_v2(root, glass)
+
+    bundle = ResultBundleReader().read(root)
+    interpretation = bundle.retrospective_for_glass(glass.id)
+    assert bundle.result_semantics_version == 2
+    assert interpretation is not None
+    assert interpretation.status is RetrospectiveStatus.ACCEPTED
+    assert interpretation.provenance == "initial_state_retrospective_v1"
+    assert bundle.samples[0].fill_state.value == "PARTIAL_VISIBLE"
+
+
+def test_reader_rejects_unsupported_or_mismatched_new_semantics(tmp_path):
+    root, glass = _bundle(tmp_path)
+    _upgrade_bundle_to_v2(root, glass)
+    index = json.loads((root / "review_index.json").read_text(encoding="utf-8"))
+    index["result_semantics_version"] = 3
+    (root / "review_index.json").write_text(json.dumps(index), encoding="utf-8")
+    with pytest.raises(ResultBundleError, match="지원되지 않습니다"):
+        ResultBundleReader().read(root)
+
+
+def test_reader_rejects_v2_confirmation_provenance_mismatch(tmp_path):
+    root, glass = _bundle(tmp_path)
+    _upgrade_bundle_to_v2(root, glass)
+    payload = json.loads((root / "retrospective_interpretation.json").read_text(encoding="utf-8"))
+    payload["current_run_confirmations"][glass.id]["analysis_start_sec"] = 99.0
+    (root / "retrospective_interpretation.json").write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ResultBundleError, match="confirmation provenance"):
         ResultBundleReader().read(root)

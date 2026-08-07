@@ -12,6 +12,14 @@ from tests.s11_local_corpus import require_s11_local_corpus
 _TARGETS = {914, 929, 1004, 1034, 1049, 1064, 1079, 1094, 1109, 1124, 1139}
 
 
+class _DetectorRegressionValidator:
+    def __init__(self) -> None:
+        self.inner = RecipeValidationService()
+
+    def validate(self, recipe, session, **_kwargs):
+        return self.inner.validate(recipe, session, require_run_confirmation=False)
+
+
 class _CaptureDetector:
     def __init__(self) -> None:
         self.inner = OpenCvPhaseDetector()
@@ -67,7 +75,7 @@ def test_sample3_ambiguity_gated_reacquisition_preserves_recovery_and_safety(tmp
     pipeline = AnalysisPipeline(
         lambda path: OpenCvVideoReader(path),
         detector,
-        RecipeValidationService(),
+        _DetectorRegressionValidator(),
     )
     pipeline.run(recipe, session)
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -8,11 +9,13 @@ from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import QFileDialog, QInputDialog, QMessageBox
 
 from oil_tracker.adapters.vision.source_video_resolver import SourceVideoResolver
-from oil_tracker.domain.enums import EventType, FillState, ResultState
+from oil_tracker.domain.enums import EventType, FillState, InitialObservationState, ResultState
 from oil_tracker.domain.recipe import InspectionRecipe
+from oil_tracker.domain.retrospective import RetrospectiveInterpretation, RetrospectiveStatus
 from oil_tracker.domain.review import ReviewBundle, ReviewEvent, ReviewGlass, ReviewTrackingSample
 from oil_tracker.domain.session import AnalysisSession, VideoMetadata
 from oil_tracker.ui.controllers.result_review_controller import ResultReviewController
+from oil_tracker.ui.presentation_labels import fill_state_label
 from oil_tracker.ui.result_review_window import ResultReviewWindow
 from review_raster_fixtures import (
     debug_artifact_presenter,
@@ -285,4 +288,38 @@ def test_mp4_debug_preset_and_terminal_signals_preserve_viewer_state(qtbot, tmp_
     controller.cancelled.emit()
     assert (window.current_time, window.selected_glass_id, window.current_render_image) == before
     window.debug_repository = None
+    window.close()
+
+
+def test_result_review_keeps_observed_state_and_retrospective_interpretation_separate(qtbot, tmp_path):
+    bundle = _bundle(tmp_path)
+    glass = bundle.glasses[0]
+    retrospective = RetrospectiveInterpretation(
+        glass_id=glass.id,
+        status=RetrospectiveStatus.ACCEPTED,
+        confirmed_prior=InitialObservationState.FULL_NO_INTERFACE,
+        interpreted_state=FillState.FULL_NO_INTERFACE,
+        start_time_sec=1.0,
+        end_time_sec=1.5,
+        start_frame_index=10,
+        end_frame_index=15,
+        evidence_frame_indices=(20, 21),
+        evidence_timestamps_sec=(2.0, 2.5),
+        evidence_relative_positions=(0.1, 0.2),
+        reason="accepted fixture",
+    )
+    bundle = replace(
+        bundle,
+        result_semantics_version=2,
+        retrospective_interpretations=(retrospective,),
+    )
+    window = _window(bundle)
+    qtbot.addWidget(window)
+    assert window.load_bundle(bundle.root) is True
+
+    assert window.details.values["fill_state"].text() == fill_state_label(FillState.PARTIAL_VISIBLE)
+    assert fill_state_label(FillState.FULL_NO_INTERFACE) in window.details.values["retrospective_state"].text()
+    assert "현재 시각에 적용" in window.details.values["retrospective_state"].text()
+    assert "ACCEPTED" in window.details.values["retrospective_status"].text()
+    assert "initial_state_retrospective_v1" in window.details.values["retrospective_status"].text()
     window.close()

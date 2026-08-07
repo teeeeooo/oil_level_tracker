@@ -129,7 +129,8 @@ def test_trace_bundle_copies_staging_and_adds_backward_compatible_optional_point
     output = _store().write_bundle(result, recipe, session, tmp_path)
     index = json.loads((output / "review_index.json").read_text(encoding="utf-8"))
     manifest = json.loads((output / "analysis_manifest.json").read_text(encoding="utf-8"))
-    assert index["schema_version"] == 1
+    assert index["schema_version"] == 2
+    assert index["result_semantics_version"] == 2
     assert index["debug_trace_level"] == level.value
     assert index["debug_schema_version"] == 1
     assert index["debug_index"] == "debug/debug_index.json"

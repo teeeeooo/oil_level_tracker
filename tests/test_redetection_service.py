@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
 import pytest
 
+import oil_tracker.application.services.redetection_service as redetection_service_module
 from oil_tracker.adapters.storage.redetection_workspace import (
     RedetectionWorkspace,
     RedetectionWorkspaceError,
@@ -22,9 +24,12 @@ from oil_tracker.application.services.redetection_service import (
     RedetectionError,
 )
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
-from oil_tracker.domain.enums import BoundaryKind, FillState
+from oil_tracker.domain.enums import BoundaryKind, EventType, FillState, InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.redetection import RedetectionMode
+from oil_tracker.domain.retrospective import RetrospectiveInterpretation, RetrospectiveStatus
+from oil_tracker.domain.review import ReviewEvent
+from oil_tracker.domain.session import InitialStateConfirmation
 from redetection_fixtures import make_bundle
 
 
@@ -350,3 +355,138 @@ def test_resolution_mismatch_closes_reader_and_cleans_workspace(tmp_path):
         service.run(_request(bundle, RedetectionMode.CURRENT), bundle)
     assert WrongReader.instances[-1].closed
     assert not created[0].root.exists()
+
+
+def _retrospective_fixture() -> RetrospectiveInterpretation:
+    return RetrospectiveInterpretation(
+        glass_id="glass-1",
+        status=RetrospectiveStatus.ACCEPTED,
+        confirmed_prior=InitialObservationState.FULL_NO_INTERFACE,
+        interpreted_state=FillState.FULL_NO_INTERFACE,
+        start_time_sec=1.0,
+        end_time_sec=1.5,
+        start_frame_index=0,
+        end_frame_index=1,
+        evidence_frame_indices=(2, 3),
+        evidence_timestamps_sec=(2.0, 2.5),
+        evidence_relative_positions=(0.1, 0.2),
+        reason="fixture",
+    )
+
+
+def _bundle_with_retrospective(bundle):
+    glass = bundle.recipe.glasses[0]
+    glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    bundle.session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
+        InitialObservationState.FULL_NO_INTERFACE,
+        bundle.session.input_video_path,
+        bundle.session.analysis_start_sec,
+    )
+    return replace(
+        bundle,
+        result_semantics_version=2,
+        retrospective_interpretations=(_retrospective_fixture(),),
+    )
+
+
+def test_full_redetection_recomputes_retrospective_from_saved_confirmation_and_compares_separately(tmp_path, monkeypatch):
+    _reset_fakes()
+    bundle = _bundle_with_retrospective(make_bundle(tmp_path, fps=2.0))
+    rerun = _retrospective_fixture()
+    calls = []
+
+    def fake_reconstruct(glass, samples, confirmation):
+        calls.append((glass.id, len(samples), confirmation))
+        return rerun
+
+    monkeypatch.setattr(redetection_service_module, "reconstruct_initial_state", fake_reconstruct)
+    output = _service().run(_request(bundle, RedetectionMode.FULL), bundle)
+    try:
+        assert len(calls) == 1
+        assert calls[0][0] == "glass-1"
+        assert calls[0][1] == len(output.result.samples)
+        assert calls[0][2] == bundle.session.initial_state_confirmations["glass-1"]
+        assert output.result.official_retrospective == bundle.retrospective_for_glass("glass-1")
+        assert output.result.rerun_retrospective == rerun
+        assert output.result.retrospective_comparison is not None
+        assert output.result.retrospective_comparison.status == "matched"
+        assert output.result.retrospective_comparison.changed is False
+        assert output.result.rerun_effective_state_aware_coverage_ratio is not None
+    finally:
+        output.workspace.cleanup()
+
+
+@pytest.mark.parametrize("mode", [RedetectionMode.CURRENT, RedetectionMode.SHORT])
+def test_local_redetection_does_not_reconstruct_leading_sequence(tmp_path, monkeypatch, mode):
+    _reset_fakes()
+    bundle = _bundle_with_retrospective(make_bundle(tmp_path, fps=2.0))
+
+    def forbidden(*_args, **_kwargs):
+        raise AssertionError("local redetection must not reconstruct the leading sequence")
+
+    monkeypatch.setattr(redetection_service_module, "reconstruct_initial_state", forbidden)
+    kwargs = {"before_sec": 0.5, "after_sec": 0.5} if mode is RedetectionMode.SHORT else {}
+    output = _service().run(_request(bundle, mode, **kwargs), bundle)
+    try:
+        assert output.result.official_retrospective == bundle.retrospective_for_glass("glass-1")
+        assert output.result.rerun_retrospective is None
+        assert output.result.retrospective_comparison is not None
+        assert output.result.retrospective_comparison.status == "not_recomputed_without_full_sequence"
+        assert output.result.retrospective_comparison.changed is False
+    finally:
+        output.workspace.cleanup()
+
+
+def test_full_legacy_bundle_without_saved_confirmation_stays_observed_only(tmp_path, monkeypatch):
+    _reset_fakes()
+    bundle = make_bundle(tmp_path, fps=2.0)
+
+    def forbidden(*_args, **_kwargs):
+        raise AssertionError("legacy observed-only bundle must not synthesize retrospective interpretation")
+
+    monkeypatch.setattr(redetection_service_module, "reconstruct_initial_state", forbidden)
+    output = _service().run(_request(bundle, RedetectionMode.FULL), bundle)
+    try:
+        assert output.result.official_retrospective is None
+        assert output.result.rerun_retrospective is None
+        assert output.result.retrospective_comparison is not None
+        assert output.result.retrospective_comparison.status == "both_unavailable"
+        assert output.result.retrospective_comparison.changed is False
+    finally:
+        output.workspace.cleanup()
+
+
+def test_short_official_event_comparison_excludes_retrospective_provenance(tmp_path):
+    bundle = make_bundle(tmp_path, fps=2.0)
+    request = _request(
+        bundle,
+        RedetectionMode.SHORT,
+        before_sec=0.5,
+        after_sec=0.5,
+    )
+    observed = ReviewEvent(
+        run_id="run-1",
+        glass_id="glass-1",
+        event_type=EventType.REVIEW_REQUIRED,
+        start_time_sec=3.0,
+        note="observed",
+    )
+    retrospective = ReviewEvent(
+        run_id="run-1",
+        glass_id="glass-1",
+        event_type=EventType.FULL_NO_INTERFACE_START,
+        start_time_sec=3.0,
+        note="provenance=retrospective_initial_state",
+    )
+
+    selected = redetection_service_module._official_events_for_request(
+        (observed, retrospective),
+        request,
+    )
+    assert selected == (observed,)
+
+    full_selected = redetection_service_module._official_events_for_request(
+        (observed, retrospective),
+        _request(bundle, RedetectionMode.FULL),
+    )
+    assert full_selected == (observed, retrospective)

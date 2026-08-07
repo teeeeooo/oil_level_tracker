@@ -126,6 +126,7 @@ class ReviewQueryModel:
             within_analysis_range=within,
             review_reasons=reasons,
             boundary_status=boundary_status,
+            retrospective=self.bundle.retrospective_for_glass(glass_id),
         )
 
     def previous_event(self, glass_id: str, timestamp_sec: float) -> ReviewEvent | None:

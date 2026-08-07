@@ -5,6 +5,11 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from oil_tracker.domain.oil_boundary_topology import (
+    BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION,
+    TOP_ENTRANCE_MAX_RELATIVE_POSITION,
+    boundary_relative_position,
+)
 from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import FillState
 from oil_tracker.domain.recipe import DetectorSettings
@@ -313,7 +318,7 @@ def score_candidates(
         )
         candidate.features["static_overlap"] = static
 
-        relative_position = (candidate.y - top) / max(1.0, bottom - top)
+        relative_position = boundary_relative_position(candidate.y, top, bottom)
         strong_state_transition = (
             support >= int(settings.oil_min_consensus_sources)
             and consensus >= 0.65
@@ -326,11 +331,11 @@ def score_candidates(
             (
                 context.previous_state
                 in {FillState.FULL_NO_INTERFACE, FillState.FULL_WITH_FOAM}
-                and relative_position > 0.32
+                and relative_position > TOP_ENTRANCE_MAX_RELATIVE_POSITION
             )
             or (
                 context.previous_state == FillState.EMPTY_NO_INTERFACE
-                and relative_position < 0.68
+                and relative_position < BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION
             )
         )
         candidate.features["strong_state_transition_override"] = float(
@@ -359,14 +364,14 @@ def score_candidates(
         elif (
             context.previous_state
             in {FillState.FULL_NO_INTERFACE, FillState.FULL_WITH_FOAM}
-            and relative_position > 0.32
+            and relative_position > TOP_ENTRANCE_MAX_RELATIVE_POSITION
             and not strong_state_transition
         ):
             candidate.rejected = True
             candidate.reject_reason = "implausible_full_to_visible_transition"
         elif (
             context.previous_state == FillState.EMPTY_NO_INTERFACE
-            and relative_position < 0.68
+            and relative_position < BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION
             and not strong_state_transition
         ):
             candidate.rejected = True

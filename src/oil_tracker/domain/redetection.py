@@ -6,6 +6,7 @@ from typing import Any
 
 from .enums import EventType, FillState, ResultState
 from .results import EventMarker, TrackingSample
+from .retrospective import RetrospectiveInterpretation
 from .review import ReviewTrackingSample
 
 
@@ -176,6 +177,14 @@ class RedetectionComparisonSummary:
 
 
 @dataclass(frozen=True)
+class RedetectionRetrospectiveComparison:
+    official: RetrospectiveInterpretation | None
+    rerun: RetrospectiveInterpretation | None
+    status: str
+    changed: bool = False
+
+
+@dataclass(frozen=True)
 class RedetectionProgress:
     generation: int
     stage: str
@@ -205,3 +214,7 @@ class RedetectionResult:
     candidate_baseline_available: bool = False
     limitation_message: str = ""
     warnings: tuple[str, ...] = ()
+    official_retrospective: RetrospectiveInterpretation | None = None
+    rerun_retrospective: RetrospectiveInterpretation | None = None
+    retrospective_comparison: RedetectionRetrospectiveComparison | None = None
+    rerun_effective_state_aware_coverage_ratio: float | None = None

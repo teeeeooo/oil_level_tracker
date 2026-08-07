@@ -8,11 +8,13 @@ from typing import Any
 from oil_tracker.adapters.reporting.csv_exporter import EVENT_COLUMNS, TRACKING_COLUMNS
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.domain.enums import EventType, FillState, ResultState
+from oil_tracker.domain.retrospective import RetrospectiveInterpretation
 from oil_tracker.domain.review import ReviewBundle, ReviewEvent, ReviewGlass, ReviewTrackingSample
 from oil_tracker.domain.session import AnalysisSession, DebugTraceLevel, VideoMetadata
 
 
-SUPPORTED_REVIEW_INDEX_VERSION = 1
+SUPPORTED_REVIEW_INDEX_VERSIONS = {1, 2}
+SUPPORTED_RESULT_SEMANTICS_VERSIONS = {1, 2}
 
 
 class ResultBundleError(ValueError):
@@ -41,18 +43,46 @@ class ResultBundleReader:
             index_path = root / "review_index.json"
 
         review_index = self._read_json(index_path, required=True) if index_path is not None else None
+        result_semantics_version = 1
         if review_index is not None:
             version = self._required_int(review_index.get("schema_version"), index_path.name, "schema_version")
-            if version != SUPPORTED_REVIEW_INDEX_VERSION:
+            if version not in SUPPORTED_REVIEW_INDEX_VERSIONS:
                 raise ResultBundleError(
                     f"지원하지 않는 review_index.json 버전입니다: {version}. "
-                    f"지원 버전은 {SUPPORTED_REVIEW_INDEX_VERSION}입니다."
+                    f"지원 버전은 {sorted(SUPPORTED_REVIEW_INDEX_VERSIONS)}입니다."
                 )
+            raw_semantics = review_index.get("result_semantics_version", 1 if version == 1 else None)
+            result_semantics_version = self._required_int(
+                raw_semantics,
+                index_path.name,
+                "result_semantics_version",
+            )
+            expected_semantics = 1 if version == 1 else 2
+            if result_semantics_version != expected_semantics:
+                raise ResultBundleError(
+                    "review_index.json schema_version과 result_semantics_version 조합이 "
+                    f"지원되지 않습니다: schema={version}, semantics={result_semantics_version}."
+                )
+        elif manifest.get("result_semantics_version") not in (None, 1, "1"):
+            raise ResultBundleError(
+                "새 result semantics를 선언한 bundle에는 지원되는 review_index.json이 필요합니다."
+            )
 
-        files = self._resolve_bundle_files(root, review_index)
+        files = self._resolve_bundle_files(root, review_index, result_semantics_version)
         if review_index is not None and files["manifest"] != manifest_path.resolve():
             manifest_path = files["manifest"]
             manifest = self._read_json(manifest_path, required=True)
+        declared_manifest_semantics = manifest.get("result_semantics_version", result_semantics_version)
+        try:
+            manifest_semantics = int(declared_manifest_semantics)
+        except (TypeError, ValueError) as exc:
+            raise ResultBundleError(
+                f"analysis_manifest.json result_semantics_version 값이 올바르지 않습니다: {declared_manifest_semantics}"
+            ) from exc
+        if manifest_semantics != result_semantics_version:
+            raise ResultBundleError(
+                "analysis_manifest.json과 review_index.json의 result semantics 버전이 일치하지 않습니다."
+            )
         try:
             recipe = self.recipe_repository.load(files["recipe_snapshot"])
         except FileNotFoundError as exc:
@@ -82,6 +112,13 @@ class ResultBundleReader:
         if compressor_start is None:
             compressor_start = session.compressor_start_sec
         run_id = str(index.get("run_id") or manifest.get("run_id") or samples[0].run_id)
+        retrospective_interpretations = self._retrospective_contract(
+            files.get("retrospective_interpretation"),
+            result_semantics_version,
+            run_id,
+            known_glass_ids,
+            session,
+        )
         glasses = self._review_glasses(index, recipe, events)
         debug_level, debug_index_path, debug_trace_path, debug_count, debug_warning = self._debug_contract(root, index)
 
@@ -107,6 +144,8 @@ class ResultBundleReader:
             debug_record_count=debug_count,
             debug_warning=debug_warning,
             review_index=review_index,
+            result_semantics_version=result_semantics_version,
+            retrospective_interpretations=retrospective_interpretations,
         )
 
     def _debug_contract(self, root: Path, index: dict[str, Any]) -> tuple[DebugTraceLevel, str, str, int, str]:
@@ -142,7 +181,12 @@ class ResultBundleReader:
             raise ResultBundleError("analysis_manifest.json, review_index.json 또는 결과 폴더를 선택해 주세요.")
         raise ResultBundleError(f"선택한 결과 경로가 존재하지 않습니다: {source}")
 
-    def _resolve_bundle_files(self, root: Path, index: dict[str, Any] | None) -> dict[str, Path]:
+    def _resolve_bundle_files(
+        self,
+        root: Path,
+        index: dict[str, Any] | None,
+        result_semantics_version: int,
+    ) -> dict[str, Path]:
         mapping = {
             "manifest": "analysis_manifest.json",
             "session": "session.json",
@@ -150,6 +194,13 @@ class ResultBundleReader:
             "tracking_data": "tracking_data.csv",
             "events": "events.csv",
         }
+        if result_semantics_version == 2:
+            pointer = (index or {}).get("retrospective_interpretation")
+            if pointer in (None, ""):
+                raise ResultBundleError(
+                    "result semantics v2 bundle에 retrospective_interpretation 경로가 없습니다."
+                )
+            mapping["retrospective_interpretation"] = pointer
         if index:
             for key in tuple(mapping):
                 if key in index and index[key] not in (None, ""):
@@ -161,6 +212,73 @@ class ResultBundleReader:
                 raise ResultBundleError(f"필수 파일이 없습니다: {path.name}")
             resolved[key] = path
         return resolved
+
+    def _retrospective_contract(
+        self,
+        path: Path | None,
+        result_semantics_version: int,
+        run_id: str,
+        known_glass_ids: set[str],
+        session: AnalysisSession,
+    ) -> tuple[RetrospectiveInterpretation, ...]:
+        if result_semantics_version == 1:
+            return ()
+        if result_semantics_version not in SUPPORTED_RESULT_SEMANTICS_VERSIONS:
+            raise ResultBundleError(
+                f"지원하지 않는 result semantics 버전입니다: {result_semantics_version}."
+            )
+        payload = self._read_json(path, required=True)
+        schema = self._required_int(
+            payload.get("schema_version"),
+            path.name if path is not None else "retrospective_interpretation.json",
+            "schema_version",
+        )
+        semantics = self._required_int(
+            payload.get("result_semantics_version"),
+            path.name if path is not None else "retrospective_interpretation.json",
+            "result_semantics_version",
+        )
+        if schema != 1 or semantics != 2:
+            raise ResultBundleError(
+                "지원하지 않는 retrospective interpretation artifact입니다: "
+                f"schema={schema}, semantics={semantics}."
+            )
+        if str(payload.get("run_id") or "") != run_id:
+            raise ResultBundleError("retrospective interpretation run_id가 bundle run_id와 일치하지 않습니다.")
+        confirmations = payload.get("current_run_confirmations") or {}
+        if not isinstance(confirmations, dict):
+            raise ResultBundleError("retrospective interpretation confirmations는 JSON object여야 합니다.")
+        if confirmations != {
+            glass_id: confirmation.to_dict()
+            for glass_id, confirmation in session.initial_state_confirmations.items()
+        }:
+            raise ResultBundleError(
+                "retrospective interpretation confirmation provenance가 session.json과 일치하지 않습니다."
+            )
+        raw_items = payload.get("interpretations") or []
+        if not isinstance(raw_items, list):
+            raise ResultBundleError("retrospective interpretation 목록은 JSON array여야 합니다.")
+        parsed: list[RetrospectiveInterpretation] = []
+        seen: set[str] = set()
+        for item in raw_items:
+            if not isinstance(item, dict):
+                raise ResultBundleError("retrospective interpretation 항목은 JSON object여야 합니다.")
+            try:
+                interpretation = RetrospectiveInterpretation.from_dict(item)
+            except (TypeError, ValueError) as exc:
+                raise ResultBundleError(f"retrospective interpretation을 읽을 수 없습니다: {exc}") from exc
+            if interpretation.glass_id not in known_glass_ids:
+                raise ResultBundleError(
+                    "retrospective interpretation에 snapshot에 없는 glass_id가 있습니다: "
+                    f"{interpretation.glass_id}"
+                )
+            if interpretation.glass_id in seen:
+                raise ResultBundleError(
+                    f"retrospective interpretation glass_id가 중복됩니다: {interpretation.glass_id}"
+                )
+            seen.add(interpretation.glass_id)
+            parsed.append(interpretation)
+        return tuple(parsed)
 
     def _safe_internal_path(self, root: Path, value: Any, field: str) -> Path:
         if not isinstance(value, str) or not value.strip():

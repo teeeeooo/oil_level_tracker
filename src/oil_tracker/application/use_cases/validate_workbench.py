@@ -9,4 +9,4 @@ class ValidateWorkbenchUseCase:
         self.service = service
 
     def execute(self, recipe: InspectionRecipe, session: AnalysisSession) -> ValidationResult:
-        return self.service.validate(recipe, session)
+        return self.service.validate(recipe, session, require_run_confirmation=True)

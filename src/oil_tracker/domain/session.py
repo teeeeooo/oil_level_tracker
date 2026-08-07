@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from enum import Enum
 from typing import Any
+
+from .enums import InitialObservationState
 
 
 class DebugTraceLevel(str, Enum):
@@ -42,6 +44,35 @@ class VideoMetadata:
         )
 
 
+@dataclass(frozen=True)
+class InitialStateConfirmation:
+    state: InitialObservationState
+    input_video_path: str
+    analysis_start_sec: float
+
+    def matches(self, state: InitialObservationState, session: "AnalysisSession") -> bool:
+        return (
+            self.state is state
+            and self.input_video_path == session.input_video_path
+            and abs(self.analysis_start_sec - session.analysis_start_sec) <= 1e-9
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "state": self.state.value,
+            "input_video_path": self.input_video_path,
+            "analysis_start_sec": self.analysis_start_sec,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "InitialStateConfirmation":
+        return cls(
+            state=InitialObservationState(str(data.get("state"))),
+            input_video_path=str(data.get("input_video_path", "")),
+            analysis_start_sec=float(data.get("analysis_start_sec", 0.0)),
+        )
+
+
 @dataclass
 class AnalysisSession:
     input_video_path: str = ""
@@ -55,6 +86,7 @@ class AnalysisSession:
     run_note: str = ""
     resolution_confirmed: bool = True
     debug_trace_level: DebugTraceLevel = DebugTraceLevel.BASIC
+    initial_state_confirmations: dict[str, InitialStateConfirmation] = field(default_factory=dict)
 
     def effective_end_sec(self) -> float | None:
         if self.analysis_end_sec is not None:
@@ -74,6 +106,10 @@ class AnalysisSession:
             "run_note": self.run_note,
             "resolution_confirmed": self.resolution_confirmed,
             "debug_trace_level": self.debug_trace_level.value,
+            "initial_state_confirmations": {
+                glass_id: confirmation.to_dict()
+                for glass_id, confirmation in self.initial_state_confirmations.items()
+            },
         }
 
     @classmethod
@@ -96,6 +132,11 @@ class AnalysisSession:
             run_note=str(data.get("run_note", "")),
             resolution_confirmed=_parse_bool(data.get("resolution_confirmed", True)),
             debug_trace_level=level,
+            initial_state_confirmations={
+                str(glass_id): InitialStateConfirmation.from_dict(value)
+                for glass_id, value in (data.get("initial_state_confirmations") or {}).items()
+                if isinstance(value, dict)
+            },
         )
 
 

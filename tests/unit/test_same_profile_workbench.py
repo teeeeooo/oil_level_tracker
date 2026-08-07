@@ -5,9 +5,9 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from oil_tracker.domain.enums import WorkbenchState
+from oil_tracker.domain.enums import InitialObservationState, WorkbenchState
 from oil_tracker.domain.recipe import InspectionRecipe
-from oil_tracker.domain.session import AnalysisSession, VideoMetadata
+from oil_tracker.domain.session import AnalysisSession, InitialStateConfirmation, VideoMetadata
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchController, WorkbenchReplacementError
 
 
@@ -45,6 +45,11 @@ def _snapshot():
 def test_prepare_deep_copies_snapshot_and_resets_session_fields():
     controller = _controller(lambda path: _Reader(path, fps=1.5))
     controller.session.run_name = "이전 시험"
+    controller.session.initial_state_confirmations["copied"] = InitialStateConfirmation(
+        InitialObservationState.FULL_NO_INTERFACE,
+        "old.mp4",
+        1.0,
+    )
     snapshot = _snapshot()
     prepared = controller.prepare_same_profile_video(snapshot, 3.0, "new.mp4")
     assert prepared.recipe is not snapshot
@@ -58,6 +63,7 @@ def test_prepare_deep_copies_snapshot_and_resets_session_fields():
     assert prepared.session.run_name == ""
     assert prepared.session.run_note == ""
     assert prepared.session.resolution_confirmed is True
+    assert prepared.session.initial_state_confirmations == {}
     prepared.recipe.glasses[0].name = "changed"
     assert snapshot.glasses[0].name != "changed"
     prepared.close()
@@ -144,12 +150,21 @@ def test_normal_open_video_replacement_resets_current_test_identity_without_muta
         run_name="이전 시험",
         run_note="old note",
     )
+    glass = controller.recipe.glasses[0]
+    glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    controller.session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
+        glass.initial_state,
+        controller.session.input_video_path,
+        controller.session.analysis_start_sec,
+    )
+    recipe_before = controller.recipe.to_dict()
     controller.state = WorkbenchState.ANALYZED
 
     controller.open_video("new.mp4")
 
     assert controller.session.input_video_path == "new.mp4"
     assert controller.session.run_name == ""
+    assert controller.session.initial_state_confirmations == {}
     assert controller.state == WorkbenchState.DRAFT_DIRTY
     assert controller.video_reader is candidate
     assert candidate.closed is False
