@@ -113,6 +113,27 @@ def _reducer(pipeline: OilHypothesisPipeline):
     return getattr(pipeline, "_OilHypothesisPipeline__reducer")
 
 
+def _ambiguous_frame(
+    pipeline: OilHypothesisPipeline,
+    frame: SuccessfulPipelineFrame,
+    *,
+    projected: bool = True,
+) -> SuccessfulPipelineFrame:
+    assert isinstance(frame.current_observation, ShadowBoundaryObservation)
+    hypothesis = frame.current_observation.hypothesis
+    current = ShadowAmbiguousObservation(
+        hypothesis_ids=(hypothesis.identity,),
+        boundary_likelihood=hypothesis.boundary_likelihood,
+        artifact_likelihood=hypothesis.artifact_likelihood,
+        ambiguity_likelihood=hypothesis.ambiguity_likelihood,
+        no_interface_likelihood=0.2,
+        visibility=hypothesis.visibility,
+        projected_source_y=hypothesis.representative_source_y if projected else None,
+        reason="test ambiguity",
+    )
+    return pipeline._phase_a(replace(frame, current_observation=current))
+
+
 def _wait_for_assigned(pipeline: OilHypothesisPipeline, count: int) -> None:
     deadline = time.monotonic() + 5.0
     while time.monotonic() < deadline:
@@ -526,6 +547,97 @@ def test_fixed_reducer_complete_variant_coherence():
         assert reduction.decision.tracker_action is reduction.outcome.tracker_action
         assert reduction.decision.smoothing_action is reduction.outcome.smoothing_action
         assert reduction.resource_metrics == reduction.outcome.resources
+
+
+def test_compatible_ambiguity_preserves_pending_without_confirming_it():
+    pipeline = OilHypothesisPipeline()
+    reducer = _reducer(pipeline)
+    initial_frame = pipeline._phase_a(_raw_frame(_boundary_image(130)))
+    pending_frame = pipeline._phase_a(_raw_frame(_boundary_image(200)))
+    followup_frame = pipeline._phase_a(_raw_frame(_boundary_image(198)))
+
+    initial = reducer.reduce(GlassTemporalRecord.initial("g"), initial_frame)
+    pending = reducer.reduce(initial.next_record, pending_frame)
+    ambiguous_frame = _ambiguous_frame(pipeline, pending_frame)
+    ambiguous = reducer.reduce(pending.next_record, ambiguous_frame)
+
+    assert isinstance(pending.outcome, ReacquisitionPendingOutcome)
+    assert isinstance(ambiguous.outcome, AmbiguousOutcome)
+    assert ambiguous.outcome.tracker_action.value == "NO_UPDATE"
+    assert not hasattr(ambiguous.outcome, "raw_source_y")
+    assert ambiguous.next_record.temporal_state.pending_y == pending.next_record.temporal_state.pending_y
+    assert ambiguous.next_record.temporal_state.pending_velocity == pending.next_record.temporal_state.pending_velocity
+    assert ambiguous.next_record.temporal_state.pending_count == pending.next_record.temporal_state.pending_count == 1
+    pipeline._validate_reduction(ambiguous_frame, pending.next_record, ambiguous)
+
+    reacquired = reducer.reduce(ambiguous.next_record, followup_frame)
+    assert isinstance(reacquired.outcome, AcceptedBoundaryOutcome)
+    assert reacquired.outcome.acceptance_mode is BoundaryAcceptanceMode.REACQUIRED
+
+
+def test_incompatible_or_unprojected_ambiguity_clears_pending():
+    pipeline = OilHypothesisPipeline()
+    reducer = _reducer(pipeline)
+    initial_frame = pipeline._phase_a(_raw_frame(_boundary_image(130)))
+    pending_frame = pipeline._phase_a(_raw_frame(_boundary_image(200)))
+    incompatible_frame = _ambiguous_frame(pipeline, initial_frame)
+    unprojected_frame = _ambiguous_frame(pipeline, pending_frame, projected=False)
+
+    for ambiguous_frame in (incompatible_frame, unprojected_frame):
+        initial = reducer.reduce(GlassTemporalRecord.initial("g"), initial_frame)
+        pending = reducer.reduce(initial.next_record, pending_frame)
+        ambiguous = reducer.reduce(pending.next_record, ambiguous_frame)
+        state = ambiguous.next_record.temporal_state
+        assert isinstance(ambiguous.outcome, AmbiguousOutcome)
+        assert state.pending_y is None
+        assert state.pending_velocity is None
+        assert state.pending_count == 0
+        pipeline._validate_reduction(ambiguous_frame, pending.next_record, ambiguous)
+
+
+def test_no_interface_and_unavailable_still_clear_pending_reacquisition():
+    pipeline = OilHypothesisPipeline()
+    reducer = _reducer(pipeline)
+    initial_frame = pipeline._phase_a(_raw_frame(_boundary_image(130)))
+    pending_frame = pipeline._phase_a(_raw_frame(_boundary_image(200)))
+    no_interface = pipeline._phase_a(_raw_frame(_uniform(75)))
+    unavailable = pipeline._phase_a(_raw_frame(_uniform(255)))
+
+    for absence_frame in (no_interface, unavailable):
+        initial = reducer.reduce(GlassTemporalRecord.initial("g"), initial_frame)
+        pending = reducer.reduce(initial.next_record, pending_frame)
+        reduced = reducer.reduce(pending.next_record, absence_frame)
+        state = reduced.next_record.temporal_state
+        assert state.pending_y is None
+        assert state.pending_velocity is None
+        assert state.pending_count == 0
+        pipeline._validate_reduction(absence_frame, pending.next_record, reduced)
+
+
+def test_transition_coherence_rejects_illegal_ambiguous_pending_retention():
+    pipeline = OilHypothesisPipeline()
+    reducer = _reducer(pipeline)
+    initial_frame = pipeline._phase_a(_raw_frame(_boundary_image(130)))
+    pending_frame = pipeline._phase_a(_raw_frame(_boundary_image(200)))
+    incompatible_frame = _ambiguous_frame(pipeline, initial_frame)
+    initial = reducer.reduce(GlassTemporalRecord.initial("g"), initial_frame)
+    pending = reducer.reduce(initial.next_record, pending_frame)
+    ambiguous = reducer.reduce(pending.next_record, incompatible_frame)
+
+    forged = replace(
+        ambiguous.next_record.temporal_state,
+        pending_y=pending.next_record.temporal_state.pending_y,
+        pending_velocity=pending.next_record.temporal_state.pending_velocity,
+        pending_count=pending.next_record.temporal_state.pending_count,
+    )
+    with pytest.raises(ValueError, match="incompatible pending path"):
+        pipeline._validate_transition_coherence(pending.next_record, ambiguous.decision, forged)
+
+    compatible_frame = _ambiguous_frame(pipeline, pending_frame)
+    compatible = reducer.reduce(pending.next_record, compatible_frame)
+    advanced = replace(compatible.next_record.temporal_state, pending_count=2)
+    with pytest.raises(ValueError, match="advanced or changed pending state"):
+        pipeline._validate_transition_coherence(pending.next_record, compatible.decision, advanced)
 
 
 def test_active_owner_reentry_is_rejected_before_enqueue_and_owner_continues(monkeypatch):

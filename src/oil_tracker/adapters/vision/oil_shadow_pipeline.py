@@ -477,18 +477,13 @@ class _FixedCanonicalReducer:
                 "continuous_shadow_boundary",
             )
 
-        tolerance = self.bounds.maximum_proposal_diameter_px * 2.0
-        if state.pending_y is None:
+        pending_continuous = _pending_path_compatible(self.bounds, state, y)
+        if state.pending_y is None or not pending_continuous:
             pending_count = 1
             pending_velocity = None
         else:
-            pending_prediction = state.pending_y + (state.pending_velocity or 0.0)
-            pending_continuous = (
-                abs(y - state.pending_y) <= tolerance
-                or abs(y - pending_prediction) <= tolerance
-            )
-            pending_count = state.pending_count + 1 if pending_continuous else 1
-            pending_velocity = y - state.pending_y if pending_continuous else None
+            pending_count = state.pending_count + 1
+            pending_velocity = y - state.pending_y
         state = replace(
             state,
             pending_y=y,
@@ -632,13 +627,18 @@ class _FixedCanonicalReducer:
         observation: ShadowAmbiguousObservation,
         margin: float,
     ) -> tuple[ShadowTemporalDecision, GlassTemporalState]:
+        retain_pending = _pending_path_compatible(
+            self.bounds,
+            state,
+            observation.projected_source_y,
+        )
         next_state = replace(
             state,
             no_interface_count=0,
             unavailable_count=0,
-            pending_y=None,
-            pending_velocity=None,
-            pending_count=0,
+            pending_y=state.pending_y if retain_pending else None,
+            pending_velocity=state.pending_velocity if retain_pending else None,
+            pending_count=state.pending_count if retain_pending else 0,
         )
         confidence = _unit(
             max(
@@ -1888,8 +1888,21 @@ class OilHypothesisPipeline:
             return
 
         if isinstance(decision, AmbiguousDecision):
-            if not pending_cleared or state.no_interface_count or state.unavailable_count:
+            if state.no_interface_count or state.unavailable_count:
                 raise ValueError("Ambiguous transition retained incompatible counters.")
+            if not pending_cleared:
+                if not _pending_path_compatible(
+                    self.bounds,
+                    prior,
+                    decision.projected_source_y,
+                ):
+                    raise ValueError("Ambiguous transition retained an incompatible pending path.")
+                if (
+                    not _same_optional(state.pending_y, prior.pending_y)
+                    or not _same_optional(state.pending_velocity, prior.pending_velocity)
+                    or state.pending_count != prior.pending_count
+                ):
+                    raise ValueError("Ambiguous transition advanced or changed pending state.")
             if (
                 not _same_optional(state.accepted_y, prior.accepted_y)
                 or not _same_optional(state.accepted_velocity, prior.accepted_velocity)
@@ -1904,15 +1917,11 @@ class OilHypothesisPipeline:
         prior: GlassTemporalState,
         y: float,
     ) -> tuple[float | None, int]:
-        if prior.pending_y is None:
-            return None, 1
-        tolerance = self.bounds.maximum_proposal_diameter_px * 2.0
-        prediction = prior.pending_y + (prior.pending_velocity or 0.0)
-        continuous = (
-            abs(y - prior.pending_y) <= tolerance
-            or abs(y - prediction) <= tolerance
-        )
-        if not continuous:
+        if prior.pending_y is None or not _pending_path_compatible(
+            self.bounds,
+            prior,
+            y,
+        ):
             return None, 1
         return y - prior.pending_y, prior.pending_count + 1
 
@@ -2374,6 +2383,21 @@ def _diagnostic_payload(current: ShadowCurrentObservation):
 
 def _json_safe(value) -> None:
     json.dumps(value, ensure_ascii=False, sort_keys=True, allow_nan=False)
+
+
+def _pending_path_compatible(
+    bounds: OilShadowBounds,
+    state: GlassTemporalState,
+    source_y: float | None,
+) -> bool:
+    if state.pending_y is None or source_y is None:
+        return False
+    tolerance = bounds.maximum_proposal_diameter_px * 2.0
+    prediction = state.pending_y + (state.pending_velocity or 0.0)
+    return (
+        abs(source_y - state.pending_y) <= tolerance
+        or abs(source_y - prediction) <= tolerance
+    )
 
 
 def _same(left: float, right: float) -> bool:

@@ -2,57 +2,43 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current engineering gate:** `read-only intermittent current-frame boundary / temporal reacquisition diagnostic`
-**Source lane:** `not selected — production temporal mutation requires a separate evidence-based decision`
+**Current engineering gate:** `canonical ambiguity-gated temporal reacquisition continuity repair`
+**Source lane:** `Lane B — bounded existing-owner temporal repair`
 
 ## Current decision
 
-The post-repair S11 effectiveness reconciliation is complete. It found no coherent successor current-frame representation or semantic repair family after the accepted comparative-anchor fix. A distinct residual family remains where materially aligned current-frame Oil boundaries are first lost in the serialized temporal/reacquisition owner.
+The post-repair reconciliation and bounded temporal diagnostic are complete. The diagnostic demonstrated one coherent defect inside the existing serialized temporal/reacquisition owner: a canonical ambiguous observation unconditionally clears an existing pending reacquisition path even when its canonical projected Y remains compatible with that path.
 
-The next action is a bounded read-only temporal diagnostic, not production source work. It must explain why the existing reducer successfully reacquires some large-motion boundaries but loses later aligned boundaries across ambiguity or movement consistency, while also accounting for cases where current continuity accepts a materially wrong current-frame selection.
+The selected source slice is therefore narrow. Compatible ambiguity may preserve existing pending history under the already accepted pending-consistency rule, but ambiguity remains non-numeric and cannot increment reacquisition confirmation. Incompatible or unprojected ambiguity, no-interface and unavailable evidence continue to clear pending state.
 
-Production temporal mutation is therefore not yet approved. A source change may be selected only if the diagnostic demonstrates one bounded existing-owner defect and a safety-preserving mutation shape.
+The repair does not change current-frame D1–D5/D3 authority, the existing continuity/pending thresholds, the two-real-boundary confirmation requirement, or the separate wrong-current-frame selection seen at sample3 frame `1004`.
 
 ## Accepted baseline to preserve
 
-S11 remains active on an accepted baseline that already includes:
+S11 remains active on the accepted baseline of typed S5-B observability, current-frame Spatial/Foam/Oil authority composition, hard-invalid comparative-anchor exclusion, canonical fail-closed publication and one serialized production temporal owner.
 
-- typed S5-B observability and canonical fail-closed publication;
-- P2/FULL-EMPTY preservation and bounded Spatial current-frame corroboration;
-- D1 Foam/Oil context safety;
-- D2 Class-A positive Spatial recovery and Class-B additive observation/proposal representation;
-- D3 comparative current-frame semantic authority slimming;
-- D4 Foam support representation and structural-component classification;
-- D5 Foam-constrained D2/D3 authority continuity;
-- hard-invalid current-frame hypotheses removed from indirect D3 anchor/neighborhood/second-boundary authority;
-- one serialized production temporal owner.
+Hard no-interface, unavailable, glare/exclusion/border, structural and authoritative-Foam safety remain unchanged. Numeric Oil still originates only from an accepted canonical boundary outcome.
 
-Durable responsibility details live in [`../20-architecture/s11-detector-responsibility-architecture.md`](../20-architecture/s11-detector-responsibility-architecture.md). Historical implementation/audit records live in [`../60-evidence/s11/`](../60-evidence/s11/).
+## Active temporal repair boundary
 
-## Current temporal diagnostic boundary
+The existing fixed serialized reducer owns the change. It must preserve a pending reacquisition candidate across canonical ambiguity only when the ambiguous observation's existing `projected_source_y` is compatible with the pending path under the existing pending-consistency semantics.
 
-The diagnostic is read-only and stays inside the existing serialized temporal/reacquisition responsibility. It must compare successful bounded reacquisition against the aligned residual family and attribute failure to the earliest temporal mechanism, including ambiguity reset, pending-state consistency, continuity acceptance and reacquisition confirmation.
+Compatible ambiguity preserves `pending_y`, `pending_velocity` and `pending_count` unchanged. It cannot act as a confirmation frame. The same owner-level coherence validator must reject any retained pending state that is incompatible, altered or advanced.
 
-The diagnostic must treat materially wrong current-frame selections as safety controls rather than recovery targets. Any proposed temporal policy must show that it does not make wrong-boundary reinforcement easier, reinterpret ambiguous frames as numeric Oil, or bypass current-frame D1–D5 authority.
-
-Do not reopen the accepted comparative-anchor repair merely because another frame remains wrong or non-numeric. Global D3 expansion, threshold retuning, truth-guided selection, result-layer reconstruction, interpolation, lookahead or hidden second temporal state remain unauthorized.
-
-## Temporal and closure boundary
-
-Production temporal redesign remains **unapproved**. The offline temporal trajectory probe found insufficient evidence for interpolation/trajectory publication and remains diagnostic provenance under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Residual misses after the current-frame repair do not by themselves authorize temporal work.
-
-S11 stable-baseline closure is **not yet justified**. Repeated private Windows field-video replay is no longer a normal iterative dependency. One final Windows field-workflow check is retained only after a stable S11 baseline exists; see [`retained-commitments.md`](retained-commitments.md).
+Accepted continuity remains `maximum_proposal_diameter_px × 4`, pending consistency remains `maximum_proposal_diameter_px × 2`, and reacquisition still requires two real boundary observations. No new temporal fields, trajectory state, lookahead, interpolation or result-layer reconstruction are authorized.
 
 ## Validation route
 
-Use [`../30-validation/s11-real-field-detector-effectiveness.md`](../30-validation/s11-real-field-detector-effectiveness.md) for S11 safety/claim boundaries and the existing production reducer plus frozen sample3 sequence for the diagnostic. The successful reacquisition sequence, intermittent aligned boundaries, ambiguity-reset cases and materially wrong current-frame boundaries must all be represented. Historical diagnostics and aggregate counts remain provenance only.
+Use focused fixed-reducer/invariant regressions plus the frozen sample3 production sequence. Required controls include existing `914 → 929` reacquisition, compatible `1034 → 1049`, wrong/incompatible `1064 → 1079`, compatible `1094 → 1109 → 1124`, subsequent `1139` continuity and unchanged `1004` wrong-boundary acceptance behavior.
 
-Diagnostic and evidence routing:
+The safety claim is narrow: the repair may preserve pending history across compatible canonical ambiguity, but may not make ambiguous evidence numeric, make wrong pending paths easier to confirm, or weaken no-interface/unavailable/Foam/current-frame authority.
 
-- S11 diagnostics/manifests: [`../50-diagnostics/s11/`](../50-diagnostics/s11/)
-- completed S11 implementation/audit evidence: [`../60-evidence/s11/`](../60-evidence/s11/)
-- retained/deferred work: [`retained-commitments.md`](retained-commitments.md)
+Historical diagnostics and aggregate counts remain provenance only. Production trajectory estimation and retrospective reconstruction remain outside this source slice.
+
+## Temporal and closure boundary
+
+S11 stable-baseline closure remains unapproved. Repeated private Windows field-video replay is not an iterative dependency, and the retained final Windows field-workflow check does not become executable from this Worker result alone.
 
 ## Next handoff
 
-Run one **S11 intermittent current-frame boundary / temporal reacquisition read-only diagnostic Worker**. It must determine whether one safe, coherent defect exists inside the current serialized reducer and return either a bounded source direction with its actual provisional lane, continued no-mutation status, or stable-baseline progression. It must not implement production temporal behavior.
+After Worker completion, run one **Lane B Orchestrator bounded independent exact-head Gate** on the focused branch/PR. That gate must independently inspect the complete diff and exact-head evidence before any merge or stable-baseline progression decision.
