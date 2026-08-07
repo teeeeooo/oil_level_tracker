@@ -2,16 +2,16 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current engineering gate:** `canonical ambiguity-gated temporal reacquisition continuity repair`
-**Source lane:** `Lane B — bounded existing-owner temporal repair`
+**Current engineering gate:** `read-only post-temporal-repair S11 stable-baseline reconciliation`
+**Source lane:** `not selected — the reconciliation must determine whether any further source mutation is justified`
 
 ## Current decision
 
-The post-repair reconciliation and bounded temporal diagnostic are complete. The diagnostic demonstrated one coherent defect inside the existing serialized temporal/reacquisition owner: a canonical ambiguous observation unconditionally clears an existing pending reacquisition path even when its canonical projected Y remains compatible with that path.
+The ambiguity-gated temporal reacquisition repair is accepted and merged. Compatible canonical ambiguity may now preserve an already-pending reacquisition path without becoming numeric or advancing confirmation; incompatible or unprojected ambiguity, no-interface and unavailable evidence still clear pending state.
 
-The selected source slice is therefore narrow. Compatible ambiguity may preserve existing pending history under the already accepted pending-consistency rule, but ambiguity remains non-numeric and cannot increment reacquisition confirmation. Incompatible or unprojected ambiguity, no-interface and unavailable evidence continue to clear pending state.
+The accepted repair preserves current-frame D1–D5/D3 authority, the existing continuity/pending thresholds, the two-real-boundary confirmation requirement, and the separate wrong-current-frame selection behavior represented by sample3 frame `1004`.
 
-The repair does not change current-frame D1–D5/D3 authority, the existing continuity/pending thresholds, the two-real-boundary confirmation requirement, or the separate wrong-current-frame selection seen at sample3 frame `1004`.
+The next action is read-only: remeasure the post-repair detector baseline and determine whether any coherent, causally demonstrated source defect remains or whether S11 has reached a stable enough baseline to activate the retained final Windows field-workflow check.
 
 ## Accepted baseline to preserve
 
@@ -19,26 +19,22 @@ S11 remains active on the accepted baseline of typed S5-B observability, current
 
 Hard no-interface, unavailable, glare/exclusion/border, structural and authoritative-Foam safety remain unchanged. Numeric Oil still originates only from an accepted canonical boundary outcome.
 
-## Active temporal repair boundary
+## Accepted temporal boundary
 
-The existing fixed serialized reducer owns the change. It must preserve a pending reacquisition candidate across canonical ambiguity only when the ambiguous observation's existing `projected_source_y` is compatible with the pending path under the existing pending-consistency semantics.
+The fixed serialized reducer now preserves an already-pending reacquisition path across canonical ambiguity only when the ambiguous observation's existing `projected_source_y` remains compatible under the accepted pending-consistency semantics. The retained pending Y, velocity and confirmation count remain unchanged; ambiguity itself never confirms or publishes Oil.
 
-Compatible ambiguity preserves `pending_y`, `pending_velocity` and `pending_count` unchanged. It cannot act as a confirmation frame. The same owner-level coherence validator must reject any retained pending state that is incompatible, altered or advanced.
+Incompatible or unprojected ambiguity, no-interface and unavailable evidence still clear pending state. Accepted continuity remains `maximum_proposal_diameter_px × 4`, pending consistency remains `maximum_proposal_diameter_px × 2`, and reacquisition still requires two real boundary observations. No new temporal fields, trajectory state, lookahead, interpolation or result-layer reconstruction were introduced.
 
-Accepted continuity remains `maximum_proposal_diameter_px × 4`, pending consistency remains `maximum_proposal_diameter_px × 2`, and reacquisition still requires two real boundary observations. No new temporal fields, trajectory state, lookahead, interpolation or result-layer reconstruction are authorized.
+## Reconciliation route
 
-## Validation route
+Remeasure the accepted post-repair production path rather than inferring closure from the focused regression alone. Use the frozen S11 evidence needed to determine whether remaining losses still form any coherent repairable owner family, while preserving the known wrong-boundary safety controls and legitimate fail-closed cases.
 
-Use focused fixed-reducer/invariant regressions plus the frozen sample3 production sequence. Required controls include existing `914 → 929` reacquisition, compatible `1034 → 1049`, wrong/incompatible `1064 → 1079`, compatible `1094 → 1109 → 1124`, subsequent `1139` continuity and unchanged `1004` wrong-boundary acceptance behavior.
-
-The safety claim is narrow: the repair may preserve pending history across compatible canonical ambiguity, but may not make ambiguous evidence numeric, make wrong pending paths easier to confirm, or weaken no-interface/unavailable/Foam/current-frame authority.
-
-Historical diagnostics and aggregate counts remain provenance only. Production trajectory estimation and retrospective reconstruction remain outside this source slice.
+The reconciliation must distinguish demonstrated source defects from residual nonnumeric ambiguity and must not reopen accepted current-frame or temporal rules without fresh causal evidence. Historical diagnostics and aggregate counts remain provenance only.
 
 ## Temporal and closure boundary
 
-S11 stable-baseline closure remains unapproved. Repeated private Windows field-video replay is not an iterative dependency, and the retained final Windows field-workflow check does not become executable from this Worker result alone.
+S11 stable-baseline closure remains unapproved. Repeated private Windows field-video replay is not an iterative dependency. The retained final Windows field-workflow check becomes executable only if the read-only reconciliation concludes that the accepted S11 detector baseline is stable enough for closure validation.
 
 ## Next handoff
 
-After Worker completion, run one **Lane B Orchestrator bounded independent exact-head Gate** on the focused branch/PR. That gate must independently inspect the complete diff and exact-head evidence before any merge or stable-baseline progression decision.
+Run one **read-only post-temporal-repair S11 stable-baseline reconciliation Orchestrator**. It must remeasure the accepted post-repair detector, classify any material remaining losses by their earliest responsible owner, and return exactly one next decision: a newly demonstrated bounded source repair, stable-baseline progression to the retained final Windows field-workflow check, or no further source action.
