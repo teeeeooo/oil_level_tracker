@@ -58,6 +58,22 @@ Ellipse, reference line, exclusion region and supported settings changes partici
 
 ## Pre-analysis readiness contract
 
+### Run-scoped initial-state confirmation
+
+Final analysis requires an explicit current-run initial-state confirmation for every enabled Glass. The selected Recipe value and the current-run confirmation are separate concepts: a default, pre-populated, loaded or copied `initial_state` must never masquerade as fresh user confirmation.
+
+Current-run confirmation records the user's direct visual assessment for the current video and analysis-start context. `AUTO` cannot satisfy final-analysis readiness. An explicitly confirmed `UNKNOWN_REVIEW` may satisfy readiness when the user genuinely cannot determine the initial state, but it grants no retrospective FULL/EMPTY authority.
+
+Confirmation becomes stale when the material observation context changes, including:
+
+- video replacement, including same-Profile new-video preparation;
+- analysis-start change;
+- initial-state value change;
+- a new or newly enabled Glass that lacks confirmation;
+- establishment of a new analysis session.
+
+Freshly confirming an unchanged selected initial state does not by itself dirty the reusable Profile. Preflight may run while initial state remains unresolved, but it must not silently establish confirmation. GUI and programmatic/headless final-analysis entry paths must enforce the same confirmation authority.
+
 ### Glass readiness
 
 Each Glass displays one of: ready, review required, correction required or excluded, with the most important reason. Global session issues are not duplicated as every Glass's error.

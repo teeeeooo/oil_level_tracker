@@ -40,6 +40,18 @@ Phase 2B는 일반 사용자 결과 검토에 집중하고, detector 내부 정�
 - 결과 bundle 내부 asset은 root 밖으로 탈출하지 않도록 검증한다.
 - 새 reader와 Workbench 후보는 준비가 완료된 뒤에만 active state로 교체한다.
 
+### 4.1 Observed state와 retrospective interpretation
+
+Result Review는 detector observation과 Initial-State Retrospective FULL/EMPTY interpretation을 서로 다른 evidence layer로 취급한다.
+
+- observed detector `fill_state`, validity와 numeric Oil은 저장 당시 observation 그대로 표시한다;
+- observed `UNKNOWN_REVIEW`는 retrospective interpretation이 accepted되어도 숨기거나 FULL/EMPTY로 교체하지 않는다;
+- retrospective interpretation은 accepted/unresolved/conflict status와 provenance를 별도로 표시한다;
+- graph와 overlay는 retrospective FULL/EMPTY를 numeric Oil position으로 바꾸거나 line을 만들어내지 않는다;
+- observed detector comparison과 retrospective interpretation comparison은 서로 다른 비교 의미를 유지한다.
+
+Legacy v1 observed-only bundle은 기존 의미로 계속 지원한다. Retrospective interpretation이 official event/judgment/coverage semantics에 참여하는 신규 bundle은 explicit newer result/review semantics version을 가져야 하며, v1-only application은 이를 ordinary v1처럼 조용히 표시해서는 안 된다. Version의 physical field/artifact 위치는 별도 accepted implementation contract가 정하지 않는 한 이 product document가 고정하지 않는다.
+
 ## 5. 사용자 흐름
 
 ### 5.1 기존 결과 열기
@@ -495,13 +507,18 @@ Bundle asset resolver는 다음을 거부한다.
 - 앞뒤 짧은 구간
 - 전체 분석 구간
 
+CURRENT/local 또는 짧은 범위 재검출은 필요한 full leading context 없이 초기 sequence를 조용히 retrospective reconstruction해서는 안 된다. Full-sequence 재검출은 saved current-run initial-state confirmation과 rerun observations를 사용하여 retrospective interpretation을 독립적으로 다시 계산할 수 있지만, 공식 저장 interpretation과 rerun interpretation의 provenance를 분리한다.
+
 비교 항목:
 
 - 유면 위치
 - confidence
 - 선택 후보
-- fill state
+- observed fill state
+- retrospective interpretation/status when available
 - event 변화
+
+Observed detector comparison과 retrospective interpretation comparison은 separate evidence로 유지한다.
 
 시험 설정은 원본 recipe에 자동 저장하지 않는다.
 

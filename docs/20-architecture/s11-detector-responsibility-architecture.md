@@ -57,7 +57,9 @@ Production retains **one serialized temporal owner** after current-frame canonic
 
 The reducer and its same-owner transition-coherence validator jointly own this rule. Retained ambiguous pending state must be unchanged and geometrically compatible, otherwise the transition fails closed before atomic store replacement. Existing accepted-boundary continuity, pending-consistency and real-boundary confirmation semantics remain authoritative.
 
-S11 temporal work does not authorize hidden second temporal state, lookahead, result-layer interpolation, post-owner numeric reconstruction or truth-derived temporal promotion. The offline temporal trajectory diagnostic remains insufficient to authorize production trajectory estimation. Any future observed/estimated/unavailable responsibility is evidence-gated through [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
+S11 temporal work does not authorize hidden second temporal state, lookahead, result-layer interpolation, post-owner numeric reconstruction or truth-derived temporal promotion. The offline temporal trajectory diagnostic remains insufficient to authorize production trajectory estimation; any future observed/estimated/unavailable responsibility remains evidence-gated through [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
+
+Initial-State Retrospective FULL/EMPTY Reconstruction is a separate **downstream sequence interpretation** owned by [`initial-state-retrospective-reconstruction-architecture.md`](initial-state-retrospective-reconstruction-architecture.md). It begins only after immutable observed TrackingSamples have been collected and cannot transfer retrospective authority into S5-B, D1–D5 or this serialized online detector temporal owner.
 
 ## Non-authorities
 

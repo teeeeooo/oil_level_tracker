@@ -538,9 +538,19 @@ FOAMING_VISIBLE
 UNKNOWN_REVIEW
 ```
 
-`AUTO`는 detector가 초기 상태를 판단하도록 한다.
+`AUTO`는 detector가 초기 상태를 판단하도록 남겨 둔 compatibility/unresolved 값이다. Persisted Recipe의 `initial_state`는 **선택된 초기 prior**이며 detector의 hard truth가 아니다. 수동 상태도 영상 증거가 충분하면 다른 관측 상태로 전이할 수 있어야 한다.
 
-수동 상태는 detector의 hard truth가 아니라 temporal tracker의 prior로 사용한다. 영상 증거가 충분하면 다른 상태로 전이할 수 있어야 한다.
+### 7.3.1 Current-run confirmation과 retrospective interpretation
+
+최종 분석은 enabled Glass마다 **현재 run/session의 초기 상태 확인**이 명시적으로 완료되어야 한다. 이 확인은 현재 video와 analysis-start context를 사용자가 직접 시각 판독했다는 run/session provenance이며, Recipe 저장·불러오기·복사나 pre-populated 값만으로 성립하지 않는다.
+
+- `AUTO`는 최종 분석 readiness를 만족할 수 없다.
+- 사용자가 실제로 판단할 수 없는 경우 명시적으로 확인한 `UNKNOWN_REVIEW`는 최종 분석 readiness를 만족할 수 있지만 retrospective FULL/EMPTY authority는 제공하지 않는다.
+- 다른 명시적으로 확인된 non-`AUTO` 상태는 기존 initial-prior 의미를 유지한다.
+- Initial-State Retrospective FULL/EMPTY Reconstruction은 명시적으로 확인된 `FULL_NO_INTERFACE` 또는 `EMPTY_NO_INTERFACE` prior에서만 활성화될 수 있다.
+- persisted/copied initial-state 값은 current-run confirmation을 복사하거나 합성하지 않는다.
+
+Detector가 남긴 observed `fill_state`, observed validity와 numeric Oil evidence는 immutable historical observation이다. Retrospective FULL/EMPTY는 별도 official sequence interpretation이며 observation을 다시 쓰지 않는다. Later direct sequence evidence가 prior와 모순되면 그 direct evidence가 retrospective eligibility를 무효화한다. Retrospective interpretation은 numeric Oil boundary를 합성하지 않는다.
 
 ## 7.4 mm/pixel
 
@@ -729,6 +739,8 @@ Session은 별도 파일로 저장할 수 있으나 MVP에서는 Recipe 옆에 o
 - initial state/geometry 정합성 실패
 - effective mask 면적 부족
 - resolution mismatch 후 재검증 미완료
+
+Final-analysis readiness additionally requires explicit current-run initial-state confirmation for every enabled Glass. `AUTO` or missing current-run confirmation blocks final analysis even when a persisted Recipe value exists. This run/session confirmation is not Recipe persistence and must not be inferred from save/load/copy behavior.
 
 ### Warning
 
@@ -1212,19 +1224,20 @@ GUI event loop를 block하지 않는다.
 5. Frame decode
 6. Per-glass phase detection
 7. Temporal smoothing/state tracking
-8. Event detection
-9. Judgment
-10. Event frame capture
-11. Graph rendering
-12. HTML/CSV export
-13. Result summary
+8. Eligible leading-interval retrospective FULL/EMPTY interpretation
+9. Event detection
+10. Judgment
+11. Event frame capture
+12. Graph rendering
+13. HTML/CSV export
+14. Result summary
 ```
 
 ---
 
 # 13. Event Detection
 
-Event detector는 raw image를 직접 해석하지 않고 `TrackingSample`과 `FillState` 시간열을 사용한다.
+Event detector는 raw image를 직접 해석하지 않고 immutable observed `TrackingSample`과, 적용 가능한 경우 별도로 provenance가 유지되는 retrospective sequence interpretation을 사용한다. Retrospective state가 event semantics에 참여하면 inferred state 사용 사실이 first-class evidence로 남아야 하며 observed `fill_state` 자체는 변경하지 않는다.
 
 필수 이벤트:
 
@@ -1297,7 +1310,9 @@ valid samples / expected samples
 
 minimum valid coverage 미달이면 `REVIEW_REQUIRED`다.
 
-`FULL_NO_INTERFACE`와 `EMPTY_NO_INTERFACE`는 confidence가 충분하고 상태가 명확하면 valid 상태로 계산할 수 있다. `UNKNOWN_REVIEW`, `DETECTION_LOST`는 invalid다.
+`FULL_NO_INTERFACE`와 `EMPTY_NO_INTERFACE`는 observed confidence가 충분하고 상태가 명확하면 observed valid 상태로 계산할 수 있다. `UNKNOWN_REVIEW`, `DETECTION_LOST`는 observed invalid다. Retrospective interpretation은 observed sample validity를 바꾸지 않는다.
+
+Official result semantics는 **observed coverage**와, retrospective interpretation이 공식 상태 의미에 참여할 때의 **effective state-aware coverage**를 구분해야 한다. Judgment가 retrospective state를 사용하면 그 provenance가 결과에 남아야 한다. `RECOVERY`처럼 numeric Oil recovery를 요구하는 판정은 retrospective FULL/EMPTY가 아니라 observed numeric Oil에 계속 의존한다.
 
 ## 14.3 RECOVERY
 
@@ -1398,6 +1413,8 @@ flags
 
 mm/pixel이 없으면 mm column은 빈 값이다.
 
+`tracking_data.csv`의 `fill_state`, numeric fields와 `is_valid`는 원래 detector observation을 보존한다. Retrospective FULL/EMPTY를 accepted하더라도 observed `fill_state`를 교체하지 않는다. Retrospective interpretation은 accepted/unresolved/conflict status와 inference provenance를 가진 별도 persisted result responsibility다.
+
 ## 15.3 events.csv
 
 ```text
@@ -1447,6 +1464,17 @@ HTML은 외부 네트워크 없이 열려야 하며 output bundle 안에서 상�
 - zero line: 고정 기준선
 - event: marker
 - numeric 값이 없는 full/empty 상태에 임의의 가짜 높이를 CSV에 쓰지 않는다.
+- retrospective FULL/EMPTY가 accepted되어도 graph/overlay는 numeric Oil line을 합성하지 않는다.
+
+## 15.6 Result semantics compatibility
+
+Recipe schema는 기존 호환성을 유지하고 `AUTO`를 계속 보존한다. Current-run initial-state confirmation은 별도 session/run provenance이며 Recipe persistence가 아니다. 그 confirmation이 없는 기존 session/bundle은 기존 observed-only 의미를 유지한다.
+
+기존 v1 observed-only result bundle은 기존 의미로 계속 읽을 수 있어야 한다. Retrospective interpretation이 official event/judgment/coverage semantics에 참여하는 신규 bundle은 **명시적인 더 새로운 result/review semantics version**을 사용해야 한다.
+
+새 reader는 legacy v1 observed-only bundle과 새로운 retrospective semantics를 모두 지원한다. 반대로 v1-only application은 newer retrospective-semantics bundle을 ordinary v1처럼 조용히 표시해서는 안 되며 명시적으로 실패해야 한다.
+
+Versioned compatibility와 separate retrospective provenance가 요구사항이다. Version field나 retrospective artifact가 어느 physical file/field에 위치하는지는 별도 accepted implementation contract가 정하지 않는 한 구현 책임으로 남긴다.
 
 ---
 

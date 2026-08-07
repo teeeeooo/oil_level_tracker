@@ -58,7 +58,7 @@ Any failure before replacement leaves the exact prior store unchanged and return
 
 Detector projection is one-way. Downstream code may project the already accepted closed outcome, but it cannot reread temporal state, independently reject a committed outcome, select a raw candidate after canonical publication or inject a numeric Oil result.
 
-Result-layer interpolation, offline trajectory estimation and retrospective initial-state reconstruction are not part of the current production S5-B contract. Any future responsibility requires separate evidence and routing through [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
+Result-layer interpolation and offline trajectory estimation are not part of the current production S5-B contract. Initial-State Retrospective FULL/EMPTY Reconstruction is likewise not S5-B behavior: it is the separately owned downstream sequence interpretation in [`initial-state-retrospective-reconstruction-architecture.md`](initial-state-retrospective-reconstruction-architecture.md), operating only after immutable observed TrackingSamples are collected and without injecting current-frame or numeric Oil authority back into this pipeline. Any future broader observed/estimated/unavailable trajectory responsibility remains evidence-gated through [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
 
 ## Historical development evidence
 

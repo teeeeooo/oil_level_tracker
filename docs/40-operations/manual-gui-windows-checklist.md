@@ -62,6 +62,22 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Close and reopen the preflight window; confirm the last result/stale state is retained appropriately.
 - Close the Workbench while preflight is open or running; confirm the window closes and no video file lock or orphan process remains.
 
+## Initial-state confirmation and retrospective reconstruction — post-implementation obligations
+- With a populated saved Profile, start a new analysis session and confirm final analysis remains blocked until every enabled Glass has an explicit current-run initial-state confirmation; a loaded/copied/default value alone must not count.
+- Confirm `AUTO` cannot satisfy final-analysis readiness.
+- Explicitly confirm `UNKNOWN_REVIEW` for a genuinely indeterminate initial scene; confirm final-analysis readiness may proceed while no retrospective FULL/EMPTY interpretation is granted from that prior.
+- Confirming an unchanged selected initial state must not by itself dirty the reusable Profile.
+- Replace the video, prepare a same-Profile new video, change analysis start, change the selected initial-state value, enable an unconfirmed Glass, and establish a new analysis session; each material context change must invalidate only the affected current-run confirmation authority as specified by the product contract.
+- Run preflight with unresolved confirmation and verify it can inspect the setup without silently establishing user confirmation.
+- Exercise both GUI and available programmatic/headless final-analysis paths and confirm they enforce equivalent confirmation authority.
+- Review a result with accepted retrospective FULL/EMPTY and confirm the original observed state, including observed `UNKNOWN_REVIEW`, remains separately visible.
+- Confirm retrospective state exposes accepted/unresolved/conflict provenance and that conflict routes to review rather than rewriting observation.
+- Confirm graphs/overlays keep missing numeric Oil as a gap and never draw a fabricated Oil line for retrospective FULL/EMPTY.
+- Open a legacy v1 observed-only bundle in the new reader and confirm its original meaning remains readable; verify a v1-only consumer does not silently present a newer retrospective-semantics bundle as ordinary v1.
+- In re-detection, confirm CURRENT/local scope cannot silently rebuild the initial sequence without full leading context, while a full-sequence rerun keeps its retrospective provenance separate from the saved official result.
+
+> These obligations become executable only after the retrospective implementation exists. Recording them here does not execute or approve the final Windows field-workflow check.
+
 ## Preview/debug
 - Rapidly scrub seek bar and verify only latest preview appears.
 - Change margin, confidence, Canny and foam settings and verify preview refresh.
