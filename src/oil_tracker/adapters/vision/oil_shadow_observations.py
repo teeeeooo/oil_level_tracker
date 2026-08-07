@@ -720,25 +720,28 @@ def _select_comparative_textured_boundary(
     continuous collision evidence are independent current-frame corroboration.
     """
 
-    if not ordered:
+    hard_safe = [
+        candidate
+        for candidate in ordered
+        if _has_hard_current_frame_support(
+            candidate,
+            accepted_foam_front_local_y,
+        )
+    ]
+    if not hard_safe:
         return None
-    semantic_anchor = ordered[0]
+    semantic_anchor = hard_safe[0]
     assessments: list[tuple[float, SemanticHypothesis]] = []
-    for candidate in ordered:
+    for candidate in hard_safe:
         if (
             abs(candidate.representative_local_y - semantic_anchor.representative_local_y)
             > bounds.maximum_proposal_diameter_px + 1e-12
         ):
             continue
-        if not _has_hard_current_frame_support(
-            candidate,
-            accepted_foam_front_local_y,
-        ):
-            continue
         second_boundary = max(
             (
                 item.boundary_likelihood
-                for item in ordered
+                for item in hard_safe
                 if item.identity != candidate.identity
             ),
             default=0.0,
