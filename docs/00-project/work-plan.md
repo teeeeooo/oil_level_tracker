@@ -2,18 +2,16 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current engineering gate:** `read-only post-repair S11 effectiveness reconciliation`
-**Source lane:** `not selected — the reconciliation must classify any next mutation from fresh evidence`
+**Current engineering gate:** `read-only intermittent current-frame boundary / temporal reacquisition diagnostic`
+**Source lane:** `not selected — production temporal mutation requires a separate evidence-based decision`
 
 ## Current decision
 
-The bounded S5-B current-frame semantic repair is accepted and merged. D3 comparative authority now excludes hypotheses that have already lost hard current-frame authority, so an accepted-Foam-topology-invalid hypothesis can no longer retain anchor, neighborhood or second-boundary authority over candidates that remain hard-safe.
+The post-repair S11 effectiveness reconciliation is complete. It found no coherent successor current-frame representation or semantic repair family after the accepted comparative-anchor fix. A distinct residual family remains where materially aligned current-frame Oil boundaries are first lost in the serialized temporal/reacquisition owner.
 
-The next action is not another source repair by default. Re-measure the post-repair S11 baseline and determine whether remaining misses form:
+The next action is a bounded read-only temporal diagnostic, not production source work. It must explain why the existing reducer successfully reacquires some large-motion boundaries but loses later aligned boundaries across ambiguity or movement consistency, while also accounting for cases where current continuity accepts a materially wrong current-frame selection.
 
-- another demonstrated current-frame observation/representation/semantic defect;
-- a coherent temporal-first family with sufficient evidence to justify a bounded diagnostic or source direction;
-- or legitimately fail-closed residuals with a stable enough baseline to proceed toward the retained final Windows field-workflow check.
+Production temporal mutation is therefore not yet approved. A source change may be selected only if the diagnostic demonstrates one bounded existing-owner defect and a safety-preserving mutation shape.
 
 ## Accepted baseline to preserve
 
@@ -31,13 +29,13 @@ S11 remains active on an accepted baseline that already includes:
 
 Durable responsibility details live in [`../20-architecture/s11-detector-responsibility-architecture.md`](../20-architecture/s11-detector-responsibility-architecture.md). Historical implementation/audit records live in [`../60-evidence/s11/`](../60-evidence/s11/).
 
-## Current reconciliation boundary
+## Current temporal diagnostic boundary
 
-The reconciliation is read-only. It must measure the accepted post-repair detector rather than infer the next source owner from pre-repair misses. Classify each material remaining loss by the earliest responsible boundary: observation/representation, current-frame semantic authority, temporal/reacquisition ownership, or legitimate fail-closed/unavailable evidence.
+The diagnostic is read-only and stays inside the existing serialized temporal/reacquisition responsibility. It must compare successful bounded reacquisition against the aligned residual family and attribute failure to the earliest temporal mechanism, including ambiguity reset, pending-state consistency, continuity acceptance and reacquisition confirmation.
 
-Do not reopen the accepted comparative-anchor repair merely because another frame remains wrong or non-numeric. A next source slice requires direct causal evidence and the lowest actual lane for that owner. In particular, frame-specific truth proximity, global D3 expansion, threshold retuning, result-layer reconstruction and temporal interpolation remain unauthorized shortcuts.
+The diagnostic must treat materially wrong current-frame selections as safety controls rather than recovery targets. Any proposed temporal policy must show that it does not make wrong-boundary reinforcement easier, reinterpret ambiguous frames as numeric Oil, or bypass current-frame D1–D5 authority.
 
-If the refreshed residuals form a coherent temporal-first family, the reconciliation may recommend a bounded temporal diagnostic or source direction, but it must explicitly account for wrong-boundary reinforcement and existing successful reacquisition before authorizing production temporal mutation.
+Do not reopen the accepted comparative-anchor repair merely because another frame remains wrong or non-numeric. Global D3 expansion, threshold retuning, truth-guided selection, result-layer reconstruction, interpolation, lookahead or hidden second temporal state remain unauthorized.
 
 ## Temporal and closure boundary
 
@@ -47,7 +45,7 @@ S11 stable-baseline closure is **not yet justified**. Repeated private Windows f
 
 ## Validation route
 
-Use [`../30-validation/s11-real-field-detector-effectiveness.md`](../30-validation/s11-real-field-detector-effectiveness.md) for S11 safety/claim boundaries and the current production path for refreshed effectiveness measurement. Historical diagnostics and aggregate counts are provenance only; the reconciliation must derive its decision from the accepted post-repair source identity.
+Use [`../30-validation/s11-real-field-detector-effectiveness.md`](../30-validation/s11-real-field-detector-effectiveness.md) for S11 safety/claim boundaries and the existing production reducer plus frozen sample3 sequence for the diagnostic. The successful reacquisition sequence, intermittent aligned boundaries, ambiguity-reset cases and materially wrong current-frame boundaries must all be represented. Historical diagnostics and aggregate counts remain provenance only.
 
 Diagnostic and evidence routing:
 
@@ -57,4 +55,4 @@ Diagnostic and evidence routing:
 
 ## Next handoff
 
-Run one **read-only post-repair S11 effectiveness reconciliation Orchestrator**. It must refresh the accepted source identity, remeasure the real/frozen blind residuals, classify the earliest remaining owner, and return exactly one next decision: another bounded current-frame repair, an evidence-justified temporal diagnostic/source direction, stable-baseline progression to the retained final Windows field-workflow check, or no further source action.
+Run one **S11 intermittent current-frame boundary / temporal reacquisition read-only diagnostic Worker**. It must determine whether one safe, coherent defect exists inside the current serialized reducer and return either a bounded source direction with its actual provisional lane, continued no-mutation status, or stable-baseline progression. It must not implement production temporal behavior.
