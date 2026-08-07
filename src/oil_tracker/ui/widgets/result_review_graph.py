@@ -125,6 +125,10 @@ class ResultReviewGraph(QWidget):
                 loc="best",
                 fontsize="small",
                 prop=self._font_selection.properties,
+                # Keep the legend shorter than the minimum-height plotting area.
+                # A tall single-column legend makes tight_layout progressively
+                # squeeze the axes during cursor-only playback redraws.
+                ncols=3,
             )
         apply_font_to_axes(self.axes, self._font_selection)
         self.canvas.draw_idle()

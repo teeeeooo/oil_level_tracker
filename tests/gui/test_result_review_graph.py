@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+from PySide6.QtWidgets import QApplication
+
 from oil_tracker.domain.review import (
     ReviewGraphEventMarker,
     ReviewGraphHighlight,
@@ -69,6 +71,45 @@ def test_cursor_update_does_not_rebuild_series(qtbot):
     graph.set_cursor(1.75)
     assert graph.series_rebuild_count == count
     assert list(graph.cursor_artist.get_xdata()) == [1.75, 1.75]
+
+
+def test_sustained_cursor_updates_keep_minimum_height_layout_stable_and_allow_model_replace(qtbot):
+    graph = ResultReviewGraph()
+    qtbot.addWidget(graph)
+    graph.resize(790, graph.minimumHeight())
+    graph.show()
+    graph.set_model(_model())
+    graph.canvas.draw()
+    QApplication.processEvents()
+
+    initial_rebuild_count = graph.series_rebuild_count
+    initial_axes_count = len(graph.figure.axes)
+    initial_line_count = len(graph.axes.lines)
+    initial_callback_ids = graph._callback_ids
+    initial_bounds = tuple(float(value) for value in graph.axes.get_window_extent().bounds)
+    assert initial_bounds[3] >= 90.0
+
+    final_timestamp = 0.0
+    for index in range(80):
+        final_timestamp = 1.0 + (index % 4) * 0.25
+        graph.set_cursor(final_timestamp)
+        graph.canvas.draw()
+
+    final_bounds = tuple(float(value) for value in graph.axes.get_window_extent().bounds)
+    assert graph.series_rebuild_count == initial_rebuild_count
+    assert len(graph.figure.axes) == initial_axes_count
+    assert len(graph.axes.lines) == initial_line_count
+    assert graph._callback_ids == initial_callback_ids
+    assert max(abs(after - before) for before, after in zip(initial_bounds, final_bounds)) <= 0.5
+    assert list(graph.cursor_artist.get_xdata()) == [final_timestamp, final_timestamp]
+
+    graph.set_model(_model(cursor=0.5, glass_name="Glass B", foam=False))
+    graph.canvas.draw()
+    replacement_bounds = tuple(float(value) for value in graph.axes.get_window_extent().bounds)
+    assert graph.series_rebuild_count == initial_rebuild_count + 1
+    assert graph.axes.get_title() == "Glass B 유면 추적"
+    assert tuple(round(value, 6) for value in graph.axes.get_ylim()) == (-10.0, 12.0)
+    assert max(abs(after - before) for before, after in zip(initial_bounds, replacement_bounds)) <= 0.5
 
 
 def test_valid_axes_click_emits_timestamp_and_drag_is_ignored(qtbot):
