@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import numpy as np
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtTest import QSignalSpy
+from PySide6.QtTest import QSignalSpy, QTest
 from PySide6.QtWidgets import (
     QApplication,
     QGraphicsItem,
@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
 )
 
 from oil_tracker.domain.enums import FillState
+from oil_tracker.domain.geometry import ExclusionZone, Rect
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.session import VideoMetadata
 from oil_tracker.ui.widgets.video_overlay_canvas import (
@@ -272,6 +273,94 @@ def test_resize_handles_keep_eight_direction_hit_targets_with_restrained_markers
     assert item._handles["br"]._resize_active is False
 
 
+def _drag_view(canvas, start_scene: QPointF, end_scene: QPointF) -> None:
+    start = canvas.mapFromScene(start_scene)
+    end = canvas.mapFromScene(end_scene)
+    QTest.mousePress(canvas.viewport(), Qt.MouseButton.LeftButton, pos=start)
+    QApplication.processEvents()
+    QTest.mouseMove(canvas.viewport(), end, delay=10)
+    QApplication.processEvents()
+    QTest.mouseRelease(canvas.viewport(), Qt.MouseButton.LeftButton, pos=end)
+    QApplication.processEvents()
+
+
+def test_exclusion_drag_and_resize_do_not_move_selected_ellipse(qtbot):
+    canvas = VideoOverlayCanvas()
+    qtbot.addWidget(canvas)
+    canvas.resize(720, 520)
+    canvas.show()
+    glass = InspectionRecipe.default_glass(640, 480)
+    glass.geometry.exclusions = [
+        ExclusionZone("zone-a", Rect(280, 150, 80, 50), "Zone A"),
+        ExclusionZone("zone-b", Rect(180, 300, 70, 45), "Zone B"),
+    ]
+    canvas.set_frame(np.zeros((480, 640, 3), dtype=np.uint8), reset_view=True)
+    canvas.set_glasses([glass], glass.id)
+    QApplication.processEvents()
+
+    ellipse = canvas._editable_ellipse_item
+    first = canvas._exclusion_items["zone-a"]
+    second = canvas._exclusion_items["zone-b"]
+    ellipse_before = QRectF(ellipse.rect())
+    second_before = QRectF(second.rect())
+    geometry_changes = QSignalSpy(canvas.geometryChanged)
+    exclusion_changes = QSignalSpy(canvas.exclusionChanged)
+
+    _drag_view(canvas, QPointF(300, 170), QPointF(335, 190))
+
+    assert ellipse.rect() == ellipse_before
+    assert ellipse.pos() == QPointF(0, 0)
+    assert geometry_changes.count() == 0
+    assert first.rect() != QRectF(280, 150, 80, 50)
+    assert second.rect() == second_before
+    assert exclusion_changes.count() == 1
+    assert exclusion_changes.at(0)[1] == "zone-a"
+    assert canvas._active_target == "exclusion"
+    assert canvas._active_zone_id == "zone-a"
+    assert ellipse.isSelected() is True
+
+    first_before_resize = QRectF(first.rect())
+    resize_start = first_before_resize.bottomRight() - QPointF(2, 2)
+    _drag_view(canvas, resize_start, resize_start + QPointF(30, 25))
+
+    assert ellipse.rect() == ellipse_before
+    assert ellipse.pos() == QPointF(0, 0)
+    assert geometry_changes.count() == 0
+    assert first.rect().width() > first_before_resize.width()
+    assert first.rect().height() > first_before_resize.height()
+    assert second.rect() == second_before
+    assert exclusion_changes.count() == 2
+    assert exclusion_changes.at(1)[1] == "zone-a"
+    assert ellipse.isSelected() is True
+
+
+def test_ellipse_drag_and_resize_still_work_after_exclusion_interaction(qtbot):
+    canvas = VideoOverlayCanvas()
+    qtbot.addWidget(canvas)
+    canvas.resize(720, 520)
+    canvas.show()
+    glass = InspectionRecipe.default_glass(640, 480)
+    glass.geometry.exclusions = [ExclusionZone("zone-a", Rect(280, 150, 80, 50), "Zone A")]
+    canvas.set_frame(np.zeros((480, 640, 3), dtype=np.uint8), reset_view=True)
+    canvas.set_glasses([glass], glass.id)
+    QApplication.processEvents()
+    geometry_changes = QSignalSpy(canvas.geometryChanged)
+
+    _drag_view(canvas, QPointF(300, 170), QPointF(325, 185))
+    e = glass.geometry.ellipse
+    _drag_view(canvas, QPointF(e.center_x, e.center_y + 70), QPointF(e.center_x + 20, e.center_y + 80))
+    assert geometry_changes.count() == 1
+
+    ellipse = canvas._editable_ellipse_item
+    top_handle = canvas.mapFromScene(QPointF(ellipse.rect().center().x(), ellipse.rect().top()))
+    resize_end = canvas.mapFromScene(QPointF(ellipse.rect().center().x(), ellipse.rect().top() - 20))
+    QTest.mousePress(canvas.viewport(), Qt.MouseButton.LeftButton, pos=top_handle)
+    QTest.mouseMove(canvas.viewport(), resize_end, delay=10)
+    QTest.mouseRelease(canvas.viewport(), Qt.MouseButton.LeftButton, pos=resize_end)
+    QApplication.processEvents()
+    assert geometry_changes.count() == 2
+
+
 def test_overlay_mouse_press_requests_exact_targets(qtbot):
     canvas = VideoOverlayCanvas()
     qtbot.addWidget(canvas)
@@ -280,8 +369,6 @@ def test_overlay_mouse_press_requests_exact_targets(qtbot):
     glass = InspectionRecipe.default_glass(640, 480)
     zone = glass.geometry.exclusions
     if not zone:
-        from oil_tracker.domain.geometry import ExclusionZone, Rect
-
         glass.geometry.exclusions.append(ExclusionZone("zone-a", Rect(280, 210, 80, 60), "Zone A"))
     canvas.set_frame(np.zeros((480, 640, 3), dtype=np.uint8), reset_view=True)
     canvas.set_glasses([glass], glass.id)
