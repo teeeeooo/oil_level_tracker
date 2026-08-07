@@ -156,8 +156,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `VALIDATING`
-- **Major result:** The accepted S11 current-frame and serialized temporal detector baseline is stable, and Initial-State Retrospective FULL/EMPTY Reconstruction is now accepted downstream of immutable detector observation with explicit current-run confirmation authority, separate inferred-state provenance and versioned result compatibility. Further detector source tuning is not the current gate.
-- **Next gate:** Complete two bounded pre-Windows functional repairs in order: **Lane B — Workbench exclusion / ellipse interaction isolation repair**, then **Lane B — Result Review playback graph layout-stability repair**. After both are accepted, execute the **final Windows field-workflow check** against the accepted retrospective result semantics using the operational Windows checklist. S11 closes only if that final field workflow is accepted; the accepted detector and retrospective architecture remain unchanged.
+- **Major result:** The accepted S11 current-frame and serialized temporal detector baseline is stable, Initial-State Retrospective FULL/EMPTY Reconstruction is accepted downstream of immutable detector observation, and Workbench exclusion editing is now isolated from selected-ellipse geometry. Further detector source tuning is not the current gate.
+- **Next gate:** Complete **Lane B — Result Review playback graph layout-stability repair**. After that repair is accepted, execute the **final Windows field-workflow check** against the accepted retrospective result semantics using the operational Windows checklist. S11 closes only if that final field workflow is accepted; the accepted detector and retrospective architecture remain unchanged.
 - **Priority:** `P0`
 - **Detail:** [current work plan](work-plan.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [retrospective reconstruction architecture](../20-architecture/initial-state-retrospective-reconstruction-architecture.md), [retrospective validation contract](../30-validation/initial-state-retrospective-reconstruction-validation.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
@@ -166,7 +166,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Purpose:** Address remaining real-use Workbench/setup/review friction after detector effectiveness is restored, while preserving established Profile/session/result and S9 interaction authorities.
 - **Status:** `PLANNED`
 - **Major result:** Scope is intentionally not fixed yet; real-use friction, the existing P3 UX backlog, improved Foam guidance actionability after visual confirmation and clearer historical-result entry-point discoverability are candidate inputs rather than authorized implementation slices.
-- **Next gate:** Reclassify and slice UI/UX work only after S11 completes both bounded pre-Windows repairs and the final Windows field-workflow closure gate, so S11 official result semantics are field-validated and stable.
+- **Next gate:** Reclassify and slice UI/UX work only after S11 completes the remaining pre-Windows graph-layout repair and the final Windows field-workflow closure gate, so S11 official result semantics are field-validated and stable.
 - **Priority:** `P1`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
@@ -174,4 +174,4 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 `S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery and the evidence-gated trajectory provenance responsibility, is routed through [`retained-commitments.md`](retained-commitments.md). The current S11 sequence is Workbench exclusion/ellipse interaction isolation repair, Result Review playback graph layout-stability repair, then final Windows field-workflow validation; the first repair is the exact current engineering gate.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery and the evidence-gated trajectory provenance responsibility, is routed through [`retained-commitments.md`](retained-commitments.md). Workbench exclusion/ellipse interaction isolation is accepted; the exact current S11 gate is Result Review playback graph layout-stability repair, followed by final Windows field-workflow validation.
