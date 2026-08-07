@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 from datetime import datetime
 import json
 from pathlib import Path
@@ -9,10 +10,11 @@ import pytest
 import oil_tracker.adapters.storage.output_bundle_store as output_bundle_module
 from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
 from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleReader
-from oil_tracker.domain.enums import FillState, ResultState
+from oil_tracker.domain.enums import FillState, InitialObservationState, ResultState
 from oil_tracker.domain.recipe import InspectionRecipe
+from oil_tracker.domain.retrospective import RetrospectiveInterpretation, RetrospectiveStatus
 from oil_tracker.domain.results import AnalysisResult, GlassAnalysisResult, TrackingSample
-from oil_tracker.domain.session import AnalysisSession, VideoMetadata
+from oil_tracker.domain.session import AnalysisSession, InitialStateConfirmation, VideoMetadata
 from oil_tracker.ui.analysis_completion_summary import build_final_run_summary
 
 
@@ -87,12 +89,24 @@ def test_new_bundle_writes_review_index_without_removing_existing_outputs(tmp_pa
     result, recipe, session, glass = _inputs(tmp_path)
     output = _store().write_bundle(result, recipe, session, tmp_path)
     assert (output / "review_index.json").is_file()
-    for filename in ("report.html", "tracking_data.csv", "events.csv", "recipe_snapshot.oilrecipe", "session.json", "analysis_manifest.json"):
+    for filename in (
+        "report.html",
+        "tracking_data.csv",
+        "events.csv",
+        "recipe_snapshot.oilrecipe",
+        "session.json",
+        "analysis_manifest.json",
+        "retrospective_interpretation.json",
+    ):
         assert (output / filename).is_file()
     index = json.loads((output / "review_index.json").read_text(encoding="utf-8"))
-    assert index["schema_version"] == 1
+    assert index["schema_version"] == 2
+    assert index["result_semantics_version"] == 2
     assert index["source_metadata"]["width"] == 320
-    assert index["glasses"] == [{"id": glass.id, "name": glass.name, "result_status": "PASS"}]
+    assert index["glasses"][0]["id"] == glass.id
+    assert index["glasses"][0]["result_status"] == "PASS"
+    assert index["glasses"][0]["observed_coverage_ratio"] == 0.0
+    assert index["glasses"][0]["effective_state_aware_coverage_ratio"] == 0.0
     assert index["tracking_data"] == "tracking_data.csv"
 
 
@@ -101,6 +115,8 @@ def test_manifest_points_to_relative_review_index(tmp_path):
     output = _store().write_bundle(result, recipe, session, tmp_path)
     manifest = json.loads((output / "analysis_manifest.json").read_text(encoding="utf-8"))
     assert manifest["review_index"] == "review_index.json"
+    assert manifest["result_semantics_version"] == 2
+    assert manifest["retrospective_interpretation"] == "retrospective_interpretation.json"
 
 
 def test_bundle_keeps_atomic_replace_and_no_temporary_directory(tmp_path):
@@ -185,3 +201,42 @@ def test_final_run_summary_uses_saved_bundle_identity_without_mutation(tmp_path)
         if path.is_file()
     }
     assert after == before
+
+
+def test_retrospective_bundle_keeps_tracking_csv_observed_only_and_persists_separate_provenance(tmp_path):
+    result, recipe, session, glass = _inputs(tmp_path)
+    glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
+        InitialObservationState.FULL_NO_INTERFACE,
+        session.input_video_path,
+        session.analysis_start_sec,
+    )
+    result.glass_results[0].retrospective = RetrospectiveInterpretation(
+        glass_id=glass.id,
+        status=RetrospectiveStatus.ACCEPTED,
+        confirmed_prior=InitialObservationState.FULL_NO_INTERFACE,
+        interpreted_state=FillState.FULL_NO_INTERFACE,
+        start_time_sec=0.5,
+        end_time_sec=0.75,
+        start_frame_index=15,
+        end_frame_index=22,
+        evidence_frame_indices=(30, 31),
+        evidence_timestamps_sec=(1.0, 1.1),
+        evidence_relative_positions=(0.1, 0.2),
+        reason="fixture",
+    )
+    result.glass_results[0].valid_coverage_ratio = 1.0
+    result.glass_results[0].effective_state_aware_coverage_ratio = 1.0
+
+    output = _store().write_bundle(result, recipe, session, tmp_path)
+    with (output / "tracking_data.csv").open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert rows[0]["fill_state"] == FillState.PARTIAL_VISIBLE.value
+
+    retrospective = json.loads((output / "retrospective_interpretation.json").read_text(encoding="utf-8"))
+    assert retrospective["interpretations"][0]["interpreted_state"] == FillState.FULL_NO_INTERFACE.value
+    assert retrospective["current_run_confirmations"][glass.id]["state"] == InitialObservationState.FULL_NO_INTERFACE.value
+
+    bundle = ResultBundleReader().read(output)
+    assert bundle.samples[0].fill_state is FillState.PARTIAL_VISIBLE
+    assert bundle.retrospective_for_glass(glass.id).status is RetrospectiveStatus.ACCEPTED

@@ -21,6 +21,16 @@ from oil_tracker.application.services.detection_processing import (
     learn_static_artifacts,
     tracking_sample_from_detection,
 )
+from oil_tracker.application.services.initial_state_reconstruction import (
+    annotate_judgment_provenance,
+    effective_state_aware_coverage,
+    enforce_conflict_review,
+    merge_state_aware_events,
+    observed_coverage,
+    project_state_aware_samples,
+    reconstruct_initial_state,
+    samples_for_judgment,
+)
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
 from oil_tracker.domain.enums import EventType, ResultState
 from oil_tracker.domain.events import detect_events_for_glass
@@ -64,7 +74,11 @@ class AnalysisPipeline:
         progress: ProgressSink | None = None,
         cancellation: CancellationToken | None = None,
     ) -> AnalysisResult:
-        validation = self.validator.validate(recipe, session)
+        validation = self.validator.validate(
+            recipe,
+            session,
+            require_run_confirmation=True,
+        )
         if not validation.is_ready:
             messages = "; ".join(i.message for i in validation.errors)
             raise ValueError(f"Workbench is not ready: {messages}")
@@ -189,7 +203,16 @@ class AnalysisPipeline:
             for glass_index, glass in enumerate(enabled):
                 _check_cancelled(cancellation)
                 samples = by_glass[glass.id]
-                events = detect_events_for_glass(run_id, glass.id, samples)
+                confirmation = session.initial_state_confirmations.get(glass.id)
+                retrospective = reconstruct_initial_state(glass, samples, confirmation)
+                effective_samples = project_state_aware_samples(samples, retrospective)
+                observed_events = detect_events_for_glass(run_id, glass.id, samples)
+                projected_events = detect_events_for_glass(run_id, glass.id, effective_samples)
+                events = merge_state_aware_events(
+                    observed_events,
+                    projected_events,
+                    retrospective,
+                )
                 if session.compressor_start_sec is not None:
                     closest = min(
                         samples,
@@ -207,11 +230,22 @@ class AnalysisPipeline:
                             confidence=1.0,
                         )
                     )
-                outcome = judge_samples(
+                judgment_samples = samples_for_judgment(
                     samples,
+                    retrospective,
+                    glass.judgment_rule.mode,
+                )
+                outcome = judge_samples(
+                    judgment_samples,
                     glass.judgment_rule,
                     session.compressor_start_sec,
                 )
+                outcome = annotate_judgment_provenance(
+                    outcome,
+                    retrospective,
+                    glass.judgment_rule.mode,
+                )
+                outcome = enforce_conflict_review(outcome, retrospective)
                 events.append(
                     EventMarker(
                         run_id,
@@ -240,8 +274,13 @@ class AnalysisPipeline:
                                 event.event_type.value,
                             ),
                         ),
-                        valid_coverage_ratio=outcome.valid_coverage_ratio,
+                        valid_coverage_ratio=observed_coverage(samples),
+                        effective_state_aware_coverage_ratio=effective_state_aware_coverage(
+                            samples,
+                            retrospective,
+                        ),
                         judgment_note=outcome.note,
+                        retrospective=retrospective,
                     )
                 )
                 _emit(

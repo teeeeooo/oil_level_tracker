@@ -15,9 +15,20 @@ from oil_tracker.application.services.detector_settings import (
     detector_settings_from_json,
     validate_detector_settings,
 )
+from oil_tracker.application.services.initial_state_reconstruction import (
+    annotate_judgment_provenance,
+    effective_state_aware_coverage,
+    enforce_conflict_review,
+    merge_state_aware_events,
+    observed_coverage,
+    project_state_aware_samples,
+    reconstruct_initial_state,
+    samples_for_judgment,
+)
 from oil_tracker.application.services.redetection_comparison import (
     align_redetection_samples,
     compare_events,
+    compare_retrospective_interpretation,
     summarize_comparison,
 )
 from oil_tracker.application.services.redetection_request import (
@@ -301,6 +312,9 @@ class PartialRedetectionService:
             rerun_state = None
             rerun_note = ""
             rerun_coverage = None
+            rerun_effective_coverage = None
+            official_retrospective = official_bundle.retrospective_for_glass(glass.id)
+            rerun_retrospective = None
             if request.mode is not RedetectionMode.CURRENT:
                 self._emit(
                     progress,
@@ -315,10 +329,33 @@ class PartialRedetectionService:
                     _tracking_for_event_and_judgment(workspace.run_id, glass.id, sample)
                     for sample in display_samples
                 ]
-                rerun_events = detect_events_for_glass(
+                event_samples = tracking_samples
+                if request.mode is RedetectionMode.FULL:
+                    confirmation = session.initial_state_confirmations.get(glass.id)
+                    if confirmation is not None:
+                        rerun_retrospective = reconstruct_initial_state(
+                            glass,
+                            tracking_samples,
+                            confirmation,
+                        )
+                        event_samples = project_state_aware_samples(
+                            tracking_samples,
+                            rerun_retrospective,
+                        )
+                observed_rerun_events = detect_events_for_glass(
                     workspace.run_id,
                     glass.id,
                     tracking_samples,
+                )
+                projected_rerun_events = detect_events_for_glass(
+                    workspace.run_id,
+                    glass.id,
+                    event_samples,
+                )
+                rerun_events = merge_state_aware_events(
+                    observed_rerun_events,
+                    projected_rerun_events,
+                    rerun_retrospective,
                 )
                 if request.mode is RedetectionMode.FULL:
                     if session.compressor_start_sec is not None:
@@ -340,14 +377,29 @@ class PartialRedetectionService:
                                 confidence=1.0,
                             )
                         )
-                    outcome = judge_samples(
+                    judgment_samples = samples_for_judgment(
                         tracking_samples,
+                        rerun_retrospective,
+                        glass.judgment_rule.mode,
+                    )
+                    outcome = judge_samples(
+                        judgment_samples,
                         glass.judgment_rule,
                         session.compressor_start_sec,
                     )
+                    outcome = annotate_judgment_provenance(
+                        outcome,
+                        rerun_retrospective,
+                        glass.judgment_rule.mode,
+                    )
+                    outcome = enforce_conflict_review(outcome, rerun_retrospective)
                     rerun_state = outcome.state
                     rerun_note = outcome.note
-                    rerun_coverage = outcome.valid_coverage_ratio
+                    rerun_coverage = observed_coverage(tracking_samples)
+                    rerun_effective_coverage = effective_state_aware_coverage(
+                        tracking_samples,
+                        rerun_retrospective,
+                    )
                     rerun_events.append(
                         EventMarker(
                             workspace.run_id,
@@ -394,6 +446,11 @@ class PartialRedetectionService:
                     policy=self.policy,
                 )
 
+            retrospective_comparison = compare_retrospective_interpretation(
+                official_retrospective,
+                rerun_retrospective,
+                recomputed=request.mode is RedetectionMode.FULL,
+            )
             summary = summarize_comparison(
                 comparisons,
                 event_comparisons,
@@ -443,6 +500,10 @@ class PartialRedetectionService:
                     for sample in display_samples
                     if sample.error_message
                 ),
+                official_retrospective=official_retrospective,
+                rerun_retrospective=rerun_retrospective,
+                retrospective_comparison=retrospective_comparison,
+                rerun_effective_state_aware_coverage_ratio=rerun_effective_coverage,
             )
             return RedetectionRunOutput(result=result, workspace=workspace)
         except Exception:
@@ -566,6 +627,11 @@ def _official_events_for_request(events, request):
     ]
     if request.mode is RedetectionMode.FULL:
         return tuple(selected)
+    selected = [
+        event
+        for event in selected
+        if "provenance=retrospective_initial_state" not in event.note
+    ]
     start = request.requested_range.display_start_sec
     end = request.requested_range.display_end_sec
     return tuple(

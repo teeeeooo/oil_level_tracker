@@ -10,10 +10,10 @@ from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
 from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
-from oil_tracker.domain.enums import WorkbenchState
+from oil_tracker.domain.enums import InitialObservationState, WorkbenchState
 from oil_tracker.domain.geometry import EllipseGeometry, ExclusionZone, Rect
 from oil_tracker.domain.recipe import InspectionRecipe
-from oil_tracker.domain.session import AnalysisSession
+from oil_tracker.domain.session import AnalysisSession, InitialStateConfirmation
 
 
 class WorkbenchReplacementError(ValueError):
@@ -103,6 +103,7 @@ class WorkbenchController:
         self.session.analysis_end_sec = metadata.duration_sec
         self.session.sampling_fps = sampling_fps
         self.session.resolution_confirmed = resolution_confirmed
+        self.invalidate_initial_state_confirmation()
         if update_reference_dimensions:
             self.recipe.reference_frame_width = metadata.width
             self.recipe.reference_frame_height = metadata.height
@@ -197,7 +198,9 @@ class WorkbenchController:
     def delete_selected_glass(self) -> None:
         if self.selected_glass_id is None:
             return
-        self.recipe.glasses = [g for g in self.recipe.glasses if g.id != self.selected_glass_id]
+        removed_id = self.selected_glass_id
+        self.recipe.glasses = [g for g in self.recipe.glasses if g.id != removed_id]
+        self.invalidate_initial_state_confirmation(removed_id)
         self.selected_glass_id = self.recipe.glasses[0].id if self.recipe.glasses else None
         self.mark_dirty()
 
@@ -206,6 +209,81 @@ class WorkbenchController:
 
     def set_selected(self, glass_id: str | None) -> None:
         self.selected_glass_id = glass_id
+
+    def confirm_initial_state(self, glass_id: str) -> InitialStateConfirmation:
+        glass = self._glass(glass_id)
+        if glass.initial_state is InitialObservationState.AUTO:
+            raise ValueError("AUTO cannot be confirmed for final analysis.")
+        confirmation = InitialStateConfirmation(
+            state=glass.initial_state,
+            input_video_path=self.session.input_video_path,
+            analysis_start_sec=self.session.analysis_start_sec,
+        )
+        self.session.initial_state_confirmations[glass_id] = confirmation
+        return confirmation
+
+    def initial_state_confirmation(self, glass_id: str) -> InitialStateConfirmation | None:
+        return self.session.initial_state_confirmations.get(glass_id)
+
+    def invalidate_initial_state_confirmation(self, glass_id: str | None = None) -> None:
+        if glass_id is None:
+            self.session.initial_state_confirmations.clear()
+        else:
+            self.session.initial_state_confirmations.pop(glass_id, None)
+
+    def invalidate_initial_state_confirmations_for_recipe_transition(
+        self,
+        before: dict,
+        after: dict,
+    ) -> None:
+        before_by_id = {
+            str(raw.get("id")): raw
+            for raw in before.get("glasses", [])
+            if isinstance(raw, dict) and raw.get("id") is not None
+        }
+        after_by_id = {
+            str(raw.get("id")): raw
+            for raw in after.get("glasses", [])
+            if isinstance(raw, dict) and raw.get("id") is not None
+        }
+        for glass_id in tuple(self.session.initial_state_confirmations):
+            previous = before_by_id.get(glass_id)
+            current = after_by_id.get(glass_id)
+            if previous is None or current is None:
+                self.invalidate_initial_state_confirmation(glass_id)
+                continue
+            initial_state_changed = previous.get("initial_state") != current.get("initial_state")
+            newly_enabled = not bool(previous.get("enabled", True)) and bool(
+                current.get("enabled", True)
+            )
+            if initial_state_changed or newly_enabled:
+                self.invalidate_initial_state_confirmation(glass_id)
+
+    def update_initial_state(self, glass_id: str, state: InitialObservationState) -> None:
+        glass = self._glass(glass_id)
+        if glass.initial_state is state:
+            return
+        glass.initial_state = state
+        self.invalidate_initial_state_confirmation(glass_id)
+        self.mark_dirty()
+
+    def set_glass_enabled(self, glass_id: str, enabled: bool) -> None:
+        glass = self._glass(glass_id)
+        enabled = bool(enabled)
+        if glass.enabled == enabled:
+            return
+        glass.enabled = enabled
+        if enabled:
+            self.invalidate_initial_state_confirmation(glass_id)
+        self.mark_dirty()
+
+    def update_analysis_start(self, value: float) -> None:
+        value = float(value)
+        if abs(self.session.analysis_start_sec - value) <= 1e-9:
+            return
+        self.session.analysis_start_sec = value
+        self.invalidate_initial_state_confirmation()
+        self.mark_dirty()
 
     def update_ellipse(self, glass_id: str, ellipse: EllipseGeometry) -> None:
         glass = self._glass(glass_id)
@@ -263,6 +341,7 @@ class WorkbenchController:
 
     def load(self, path: Path) -> None:
         self.recipe = self.load_use_case.execute(path)
+        self.invalidate_initial_state_confirmation()
         self.recipe_path = path
         self._set_profile_close_baseline()
         self.selected_glass_id = self.recipe.glasses[0].id if self.recipe.glasses else None

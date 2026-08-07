@@ -259,6 +259,13 @@ class _Workbench:
             else WorkbenchState.DRAFT
         )
 
+    def invalidate_initial_state_confirmations_for_recipe_transition(
+        self,
+        _before: dict,
+        _after: dict,
+    ) -> None:
+        pass
+
 
 class _Preflight:
     def __init__(self) -> None:

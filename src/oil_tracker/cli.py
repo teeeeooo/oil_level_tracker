@@ -14,7 +14,8 @@ from oil_tracker.application.ports.progress import ProgressUpdate
 from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
 from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
-from oil_tracker.domain.session import AnalysisSession
+from oil_tracker.domain.enums import InitialObservationState
+from oil_tracker.domain.session import AnalysisSession, InitialStateConfirmation
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -33,6 +34,18 @@ def build_parser() -> argparse.ArgumentParser:
     analyze.add_argument("--end", type=float)
     analyze.add_argument("--compressor-start", type=float)
     analyze.add_argument("--sampling-fps", type=float, default=2.0)
+    analyze.add_argument(
+        "--initial-state-confirmation",
+        action="append",
+        default=[],
+        metavar="GLASS_ID=STATE",
+        help=(
+            "Repeat for every enabled Glass after directly confirming the current video's analysis-start "
+            "frame. STATE must exactly match the selected Recipe initial_state; every explicit "
+            "non-AUTO value is confirmable, while AUTO is not. Only confirmed FULL_NO_INTERFACE "
+            "or EMPTY_NO_INTERFACE can activate retrospective reconstruction."
+        ),
+    )
     benchmark = sub.add_parser(
         "benchmark",
         help="Run the current detector against a Phase 2C-3 regression dataset",
@@ -75,6 +88,46 @@ def _print_analysis_progress(progress: ProgressUpdate) -> None:
     print(_format_analysis_progress(progress), end="\r", flush=True)
 
 
+def _apply_initial_state_confirmations(recipe, session, entries) -> None:
+    enabled = {glass.id: glass for glass in recipe.glasses if glass.enabled}
+    seen: set[str] = set()
+    for raw_entry in entries:
+        glass_id, separator, raw_state = str(raw_entry).partition("=")
+        glass_id = glass_id.strip()
+        raw_state = raw_state.strip()
+        if not separator or not glass_id or not raw_state:
+            raise ValueError(
+                "--initial-state-confirmation must use GLASS_ID=STATE."
+            )
+        glass = enabled.get(glass_id)
+        if glass is None:
+            raise ValueError(
+                "Initial-state confirmation references an unknown or disabled Glass: "
+                f"{glass_id}"
+            )
+        if glass_id in seen:
+            raise ValueError(f"Duplicate initial-state confirmation for Glass: {glass_id}")
+        try:
+            state = InitialObservationState(raw_state)
+        except ValueError as exc:
+            raise ValueError(
+                f"Unsupported initial-state confirmation for {glass_id}: {raw_state}"
+            ) from exc
+        if state is InitialObservationState.AUTO:
+            raise ValueError("AUTO cannot be confirmed for final analysis.")
+        if state is not glass.initial_state:
+            raise ValueError(
+                f"Initial-state confirmation for {glass_id} ({state.value}) does not match "
+                f"the selected Recipe value ({glass.initial_state.value})."
+            )
+        session.initial_state_confirmations[glass_id] = InitialStateConfirmation(
+            state=state,
+            input_video_path=session.input_video_path,
+            analysis_start_sec=session.analysis_start_sec,
+        )
+        seen.add(glass_id)
+
+
 def _run_analyze(args) -> int:
     repository = JsonRecipeRepository()
     recipe = repository.load(Path(args.recipe))
@@ -94,6 +147,11 @@ def _run_analyze(args) -> int:
         run_name=str(args.run_name or "").strip(),
         resolution_confirmed=(metadata.width, metadata.height)
         == (recipe.reference_frame_width, recipe.reference_frame_height),
+    )
+    _apply_initial_state_confirmations(
+        recipe,
+        session,
+        args.initial_state_confirmation,
     )
     pipeline = AnalysisPipeline(
         lambda path: OpenCvVideoReader(path),

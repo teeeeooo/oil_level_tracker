@@ -16,7 +16,9 @@ class ResultReviewDetails(QWidget):
             ("frame_index", "decoded 장면"),
             ("sample_time", "tracking 시각"),
             ("glass", "선택 관찰창"),
-            ("fill_state", "상태"),
+            ("fill_state", "관측 상태"),
+            ("retrospective_state", "회고 해석"),
+            ("retrospective_status", "회고 근거 / 상태"),
             ("oil_y", "유면 Y"),
             ("oil_px", "기준점 대비 px"),
             ("oil_mm", "기준점 대비 mm"),
@@ -49,6 +51,23 @@ class ResultReviewDetails(QWidget):
         self.values["video_time"].setText(f"{video_timestamp:.3f} 초")
         self.values["frame_index"].setText(str(frame_index))
         self.values["glass"].setText(glass.name if glass is not None else glass_id)
+        retrospective = overlay.retrospective
+        if retrospective is None:
+            self.values["retrospective_state"].setText("없음 (observed-only)")
+            self.values["retrospective_status"].setText(
+                f"result semantics v{bundle.result_semantics_version} · 별도 회고 해석 없음"
+            )
+        else:
+            interpreted = (
+                fill_state_label(retrospective.interpreted_state)
+                if retrospective.interpreted_state is not None
+                else "없음"
+            )
+            active = "현재 시각에 적용" if retrospective.contains(video_timestamp) else "현재 시각에는 미적용"
+            self.values["retrospective_state"].setText(f"{interpreted} · {active}")
+            self.values["retrospective_status"].setText(
+                f"{retrospective.status.value} · {retrospective.provenance} · {retrospective.reason}"
+            )
         if sample is None:
             for key in (
                 "sample_time",

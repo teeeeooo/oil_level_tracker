@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 
 from oil_tracker.application.services.detector_settings import validate_detector_settings
-from oil_tracker.domain.enums import JudgmentMode, ValidationSeverity
+from oil_tracker.domain.enums import InitialObservationState, JudgmentMode, ValidationSeverity
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.session import AnalysisSession
 from oil_tracker.domain.validation import ValidationIssue, ValidationResult
@@ -15,6 +15,7 @@ class RecipeValidationService:
         recipe: InspectionRecipe,
         session: AnalysisSession | None = None,
         structural_only: bool = False,
+        require_run_confirmation: bool = False,
     ) -> ValidationResult:
         issues: list[ValidationIssue] = []
         if recipe.schema_version != 1:
@@ -155,6 +156,38 @@ class RecipeValidationService:
                 )
             )
         for glass in enabled:
+            if require_run_confirmation and glass.initial_state is InitialObservationState.AUTO:
+                issues.append(
+                    ValidationIssue(
+                        ValidationSeverity.ERROR,
+                        "READY_INITIAL_STATE_AUTO",
+                        "Analysis start state must be selected explicitly; AUTO cannot start final analysis.",
+                        glass.id,
+                        "initial_state",
+                    )
+                )
+            elif require_run_confirmation and session is not None:
+                confirmation = session.initial_state_confirmations.get(glass.id)
+                if confirmation is None:
+                    issues.append(
+                        ValidationIssue(
+                            ValidationSeverity.ERROR,
+                            "READY_INITIAL_STATE_CONFIRMATION",
+                            "Current-run analysis start state confirmation is required.",
+                            glass.id,
+                            "initial_state_confirmation",
+                        )
+                    )
+                elif not confirmation.matches(glass.initial_state, session):
+                    issues.append(
+                        ValidationIssue(
+                            ValidationSeverity.ERROR,
+                            "READY_INITIAL_STATE_CONFIRMATION_STALE",
+                            "Current-run analysis start state confirmation is stale for this video/start context or selected state.",
+                            glass.id,
+                            "initial_state_confirmation",
+                        )
+                    )
             if glass.geometry.zero_line_y is None:
                 issues.append(
                     ValidationIssue(
