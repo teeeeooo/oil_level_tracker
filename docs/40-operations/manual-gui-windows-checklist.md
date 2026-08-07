@@ -73,7 +73,7 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Exercise both GUI and available programmatic/headless final-analysis paths and confirm they enforce equivalent confirmation authority.
 - Review a result with accepted retrospective FULL/EMPTY and confirm the original observed state, including observed `UNKNOWN_REVIEW`, remains separately visible.
 - Confirm retrospective state exposes accepted/unresolved/conflict provenance and that conflict routes to review rather than rewriting observation.
-- Confirm graphs/overlays keep missing numeric Oil as a gap and never draw a fabricated Oil line for retrospective FULL/EMPTY.
+- Confirm missing numeric Oil remains absent from samples and overlays. In graphs, verify only pre-existing finite observed anchors are connected, no retrospective FULL/EMPTY anchor is fabricated, and observed `UNKNOWN_REVIEW`/no-interface bands remain visible between anchors.
 - Open a legacy v1 observed-only bundle in the new reader and confirm its original meaning remains readable; verify a v1-only consumer does not silently present a newer retrospective-semantics bundle as ordinary v1.
 - In re-detection, confirm CURRENT/local scope cannot silently rebuild the initial sequence without full leading context, while a full-sequence rerun keeps its retrospective provenance separate from the saved official result.
 
@@ -165,7 +165,9 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Confirm exclusion rectangles do not reduce the graph's full vertical analysis range.
 - Verify a Glass with valid `mm_per_pixel` uses mm on its detail graph and a px-only Glass stays in source pixels.
 - Verify a mixed-scale combined graph remains in px and covers the union of all included Glass analysis ranges.
-- Verify full/empty no-interface data, all-missing series and intermittent missing values remain gaps rather than zero-valued lines.
+- Verify full/empty no-interface data and all-missing Oil series never become zero-valued lines or synthetic points.
+- On an intermittent Oil series, verify Result Review and generated report connect the same stored finite anchors into one line while the intervening UNKNOWN/no-interface bands remain visible and cursor/overlay values stay absent at missing samples.
+- Verify intermittent Foam remains gap-preserving and is not connected across absent Foam observations.
 - Sustain Result Review playback and repeated cursor updates long enough to expose cumulative layout drift; confirm the graph plotting area and overall layout do not progressively shrink or collapse.
 - Repeatedly open and close Result Review and re-detection windows; confirm Matplotlib callbacks, fonts and file handles do not accumulate.
 

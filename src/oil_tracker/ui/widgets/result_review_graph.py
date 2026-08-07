@@ -7,6 +7,7 @@ from matplotlib.figure import Figure
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 
+from oil_tracker.application.services.graph_series import continuous_observed_polyline
 from oil_tracker.domain.review import ReviewGraphModel
 from oil_tracker.visualization.matplotlib_font import (
     apply_font_to_axes,
@@ -107,7 +108,12 @@ class ResultReviewGraph(QWidget):
                 + ":"
                 + "|".join(marker.error_types)
             )
-        self._plot_series(model.oil_air.points, model.oil_air.name, "-")
+        self._plot_series(
+            model.oil_air.points,
+            model.oil_air.name,
+            "-",
+            connect_observed_anchors=True,
+        )
         if model.foam_front.has_values:
             self._plot_series(model.foam_front.points, model.foam_front.name, "--")
         self.cursor_artist = self.axes.axvline(
@@ -133,9 +139,18 @@ class ResultReviewGraph(QWidget):
         apply_font_to_axes(self.axes, self._font_selection)
         self.canvas.draw_idle()
 
-    def _plot_series(self, points, label: str, linestyle: str) -> None:
+    def _plot_series(
+        self,
+        points,
+        label: str,
+        linestyle: str,
+        *,
+        connect_observed_anchors: bool = False,
+    ) -> None:
         times = [point.timestamp_sec for point in points]
         values = [float("nan") if point.value is None else point.value for point in points]
+        if connect_observed_anchors:
+            times, values = continuous_observed_polyline(times, values)
         if times:
             self.axes.plot(times, values, linestyle=linestyle, linewidth=1.6, label=label)
 

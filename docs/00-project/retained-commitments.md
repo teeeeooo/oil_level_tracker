@@ -18,7 +18,7 @@ This file owns **affirmatively retained work that is not the current executable 
 - **Authoritative source / rationale:** the completed offline temporal trajectory probe found insufficient evidence for production interpolation and showed that temporally consistent anchors can reinforce a persistent wrong boundary.
 - **Activation condition:** new evidence demonstrates a safe, useful temporal responsibility with explicit provenance and acceptance criteria that cannot be satisfied by the existing current-frame/serialized owner alone.
 - **Routing owner:** future architecture plus validation decision; diagnostic provenance lives under [`../50-diagnostics/s11/`](../50-diagnostics/s11/).
-- **Current-gate boundary:** no separate production trajectory-estimation responsibility is authorized; this remains evidence-gated and is not the current S11 gate.
+- **Current-gate boundary:** no separate production trajectory-estimation responsibility is authorized; this remains evidence-gated and is not the current S11 gate. Connecting already stored finite observed anchors as a graph-only presentation polyline does not activate this responsibility because it creates no intermediate numeric sample, overlay value, provenance claim or detector-history input.
 
 ## Explicitly superseded recurring dependency
 

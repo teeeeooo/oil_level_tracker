@@ -1464,7 +1464,10 @@ HTML은 외부 네트워크 없이 열려야 하며 output bundle 안에서 상�
 - zero line: 고정 기준선
 - event: marker
 - numeric 값이 없는 full/empty 상태에 임의의 가짜 높이를 CSV에 쓰지 않는다.
-- retrospective FULL/EMPTY가 accepted되어도 graph/overlay는 numeric Oil line을 합성하지 않는다.
+- Oil series의 저장값은 관측 결과 그대로 유지한다. `null`/non-finite sample은 graph vertex로 만들지 않고, 저장된 finite Oil anchor들만 시간순으로 하나의 presentation polyline으로 연결한다.
+- 위 연결은 누락 timestamp의 CSV/TrackingSample/overlay numeric 값을 만들거나 detector observation을 보간·수정하는 동작이 아니다. `UNKNOWN_REVIEW`와 no-interface 상태 band가 그 사이의 evidence 상태를 계속 표시한다.
+- finite Oil anchor가 하나도 없으면 Oil line을 표시하지 않는다. Foam front는 실제 부재 의미를 보존하기 위해 누락 구간을 연결하지 않는다.
+- retrospective FULL/EMPTY가 accepted되어도 graph/overlay에 새 numeric Oil anchor를 합성하지 않는다. Retrospective interpretation만으로 presentation polyline의 시작점·끝점 또는 중간 vertex를 추가할 수 없다.
 
 ## 15.6 Result semantics compatibility
 

@@ -2,7 +2,7 @@
 
 ## Scope
 
-This document owns the lean preservation contract for the accepted S11 **detector baseline**. Historical diagnosis, implementation and audit chronology lives under [`../60-evidence/s11/`](../60-evidence/s11/); investigations and machine manifests live under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Current sequencing remains owned by [`../00-project/work-plan.md`](../00-project/work-plan.md).
+This document owns the lean preservation contract for the accepted S11 **detector baseline**. Historical diagnosis, implementation and audit chronology lives under [`../60-evidence/s11/`](../60-evidence/s11/); the latest bounded detector/graph repair evidence is [`s11-detector-and-observed-graph-continuity.md`](../60-evidence/s11/s11-detector-and-observed-graph-continuity.md). Investigations and machine manifests live under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Current sequencing remains owned by [`../00-project/work-plan.md`](../00-project/work-plan.md).
 
 The current-frame D1–D5/S5-B and serialized temporal baseline is stable for sequencing purposes. Detector source tuning is no longer the current engineering gate. The active downstream responsibility is validated separately by [`initial-state-retrospective-reconstruction-validation.md`](initial-state-retrospective-reconstruction-validation.md).
 
@@ -12,10 +12,12 @@ The durable owners in [`../20-architecture/s11-detector-responsibility-architect
 
 - hard current-frame no-interface, unavailable, glare/exclusion/border, structural and authoritative-Foam safety;
 - accepted D2 Spatial, D3 comparative and D5 Foam/Oil authority;
+- D3 subcanonical structural-tail integrity outside authoritative-Foam context, rejecting texture borrowed from a directly dominant local structure without promoting that structure;
 - ambiguity as a valid non-numeric outcome;
 - only accepted canonical boundary outcomes publishing numeric Oil;
 - one serialized temporal owner with atomic replacement/invariant validation;
-- accepted-boundary continuity, pending-consistency and two-real-boundary reacquisition confirmation semantics;
+- one bounded per-observation motion envelope shared by accepted-boundary continuity, pending consistency and ambiguity compatibility;
+- two-real-boundary reacquisition confirmation semantics;
 - compatible canonical ambiguity preserving an already-pending reacquisition path without count advancement or numeric publication;
 - incompatible/unprojected ambiguity, no-interface and unavailable evidence clearing that pending path;
 - no truth-, Recipe-, frame-identity- or video-identity-based numeric promotion.
@@ -26,6 +28,8 @@ Initial-State Retrospective FULL/EMPTY Reconstruction is allowed only as the sep
 
 Any regression evidence needed because the Lane C implementation materially touches a detector-facing boundary is proportional preservation evidence, not authorization to redesign the detector.
 
+Downstream graph presentation may connect only the finite observed Oil anchors already stored by this detector contract. Validation must prove that no missing timestamp gains a numeric sample or overlay value, state/review bands remain visible, and Foam gaps remain gaps. That presentation behavior is not detector publication or trajectory estimation authority.
+
 ## Claim boundary
 
-This contract does not establish general-field detector accuracy, trajectory interpolation or arbitrary gap filling. S11 remains active because downstream official sequence semantics still require implementation and acceptance. Final Windows field-workflow validation remains later and is not authorized by this detector-baseline contract.
+This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. S11 remains `VALIDATING` until the final Windows field-workflow check accepts the complete current baseline; this detector-baseline contract alone does not authorize that Windows PASS.

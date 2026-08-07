@@ -38,6 +38,8 @@ D3 keeps direct observability/topology invalidity hard while treating correlated
 
 D3 comparative authority is deliberately local: a semantic anchor/neighborhood bounds which hard-safe alternatives may be compared. That comparative mechanism does not authorize a hard-invalid hypothesis to act as the anchor or neighborhood owner.
 
+Outside authoritative accepted-Foam context, the local comparison also preserves structural-neighborhood integrity. A comparative candidate below the existing ordinary `0.48` boundary floor may not borrow texture from a nearby hypothesis that retains at least twice its direct narrow response, at least as much boundary likelihood and greater artifact opposition. This is a post-ranking fail-closed check: it cannot promote the stronger neighbor, does not affect candidates already meeting the ordinary boundary floor, and does not replace glare/structure/no-interface safety. Authoritative-Foam scenes retain the accepted D5 residual-raster and topology owners below.
+
 ## D5 Foam-constrained D2/D3 composition
 
 D5 preserves the accepted D2/Spatial and D3 Oil authorities when genuine accepted Foam context is present instead of replacing them wholesale with a stricter Foam-only selector. The composition contract is:
@@ -53,13 +55,19 @@ The accepted comparative-anchor repair closes the D5/D3 seam where a hypothesis 
 
 ## Serialized temporal boundary
 
-Production retains **one serialized temporal owner** after current-frame canonical evidence. A canonical ambiguous observation remains non-numeric and cannot itself confirm reacquisition. When an existing pending reacquisition path is present, ambiguity may preserve that exact pending state only if its canonical projected Y is compatible under the same bounded pending-consistency rule used for real boundary observations; preservation does not increment the confirmation count or update pending motion. Incompatible or unprojected ambiguity, no-interface and unavailable evidence clear pending reacquisition state.
+Production retains **one serialized temporal owner** after current-frame canonical evidence. A canonical ambiguous observation remains non-numeric and cannot itself confirm reacquisition. Accepted-boundary continuity, real-boundary pending consistency and ambiguity compatibility share one bounded per-observation motion envelope. When an existing pending reacquisition path is present, ambiguity may preserve that exact pending state only if its canonical projected Y is compatible with the pending position or prediction inside that envelope; preservation does not increment the confirmation count or update pending motion. Only a second real compatible boundary confirms reacquisition. Incompatible or unprojected ambiguity, no-interface and unavailable evidence clear pending reacquisition state.
 
 The reducer and its same-owner transition-coherence validator jointly own this rule. Retained ambiguous pending state must be unchanged and geometrically compatible, otherwise the transition fails closed before atomic store replacement. Existing accepted-boundary continuity, pending-consistency and real-boundary confirmation semantics remain authoritative.
 
 S11 temporal work does not authorize hidden second temporal state, lookahead, result-layer interpolation, post-owner numeric reconstruction or truth-derived temporal promotion. The offline temporal trajectory diagnostic remains insufficient to authorize production trajectory estimation; any future observed/estimated/unavailable responsibility remains evidence-gated through [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
 
 Initial-State Retrospective FULL/EMPTY Reconstruction is a separate **downstream sequence interpretation** owned by [`initial-state-retrospective-reconstruction-architecture.md`](initial-state-retrospective-reconstruction-architecture.md). It begins only after immutable observed TrackingSamples have been collected and cannot transfer retrospective authority into S5-B, D1–D5 or this serialized online detector temporal owner.
+
+## Observed-graph presentation boundary
+
+Result presentation may omit missing/non-finite vertices and connect the remaining stored finite Oil anchors in timestamp order as one polyline. This improves human readability of the observed trend but does not create a value at an omitted timestamp, mutate an official TrackingSample/CSV, supply an overlay position, feed detector history or claim estimated trajectory provenance. `UNKNOWN_REVIEW` and no-interface state bands remain visible across the connected span. Foam keeps gap-preserving rendering because Foam absence is itself meaningful.
+
+This presentation rule therefore does not activate the separate observed/estimated/unavailable trajectory responsibility. Any future numeric estimation between anchors still requires the evidence and provenance gate in [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
 
 ## Non-authorities
 

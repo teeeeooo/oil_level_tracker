@@ -12,6 +12,7 @@ from oil_tracker.application.services.graph_axis import (
     combined_graph_axis_range,
     graph_axis_range_for_glass,
 )
+from oil_tracker.application.services.graph_series import continuous_observed_polyline
 from oil_tracker.domain.enums import FillState, ResultState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.results import AnalysisResult, GlassAnalysisResult
@@ -68,9 +69,16 @@ class GraphRenderer:
             foam = [_value(sample.smoothed_foam_front_px_from_zero, sample.raw_foam_front_px_from_zero) for sample in glass.samples]
             observed.extend(oil)
             observed.extend(foam)
-            ax.plot(times, _gaps(oil), label=f"{glass.glass_name} 유면")
+            oil_times, oil_values = continuous_observed_polyline(times, oil)
+            if oil_times:
+                ax.plot(oil_times, oil_values, label=f"{glass.glass_name} 유면")
             if any(value is not None for value in foam):
-                ax.plot(times, _gaps(foam), linestyle="--", label=f"{glass.glass_name} 거품 경계")
+                ax.plot(
+                    times,
+                    _gaps(foam),
+                    linestyle="--",
+                    label=f"{glass.glass_name} 거품 경계",
+                )
         ranges = []
         if recipe is not None:
             for glass_result in result.glass_results:
@@ -113,9 +121,17 @@ class GraphRenderer:
         else:
             oil = [_value(sample.smoothed_oil_air_level_px_from_zero, sample.raw_oil_air_level_px_from_zero) for sample in glass.samples]
             foam = [_value(sample.smoothed_foam_front_px_from_zero, sample.raw_foam_front_px_from_zero) for sample in glass.samples]
-        ax.plot(times, _gaps(oil), label="유면", linewidth=2)
+        oil_times, oil_values = continuous_observed_polyline(times, oil)
+        if oil_times:
+            ax.plot(oil_times, oil_values, label="유면", linewidth=2)
         if any(value is not None for value in foam):
-            ax.plot(times, _gaps(foam), linestyle="--", label="거품 경계", linewidth=2)
+            ax.plot(
+                times,
+                _gaps(foam),
+                linestyle="--",
+                label="거품 경계",
+                linewidth=2,
+            )
         ax.axhline(0.0, linestyle=":", linewidth=1.5, label="기준선")
         if config is not None:
             axis_range = graph_axis_range_for_glass(config, unit=unit, observed_values=(*oil, *foam))

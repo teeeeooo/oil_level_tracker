@@ -36,6 +36,9 @@ from .oil_shadow_types import (
 )
 
 
+_ORDINARY_BOUNDARY_LIKELIHOOD_FLOOR = 0.48
+
+
 @dataclass(frozen=True)
 class _SingleFrameIdentifiabilityEvidence:
     phase_ceiling_pressure: float
@@ -486,7 +489,7 @@ def evaluate_typed_current_observation(
             - max(best.artifact_likelihood, second_boundary),
         )
         standard_boundary = (
-            best.boundary_likelihood >= 0.48
+            best.boundary_likelihood >= _ORDINARY_BOUNDARY_LIKELIHOOD_FLOOR
             and boundary_margin >= 0.08
             and best.ambiguity_likelihood < 0.72
             and best.visibility >= 0.30
@@ -681,6 +684,40 @@ def _comparative_authority_score(
     return float(positive - opposition)
 
 
+def _borrows_structural_neighborhood(
+    candidate: SemanticHypothesis,
+    hard_safe: list[SemanticHypothesis],
+    bounds: OilShadowBounds,
+) -> bool:
+    """Detect a weak tail borrowing texture from a stronger local structure.
+
+    A subcanonical weak tail beside a stronger structural hypothesis must not
+    borrow that structure's texture while discarding its artifact opposition.
+    Candidates that already meet the ordinary ``0.48`` boundary floor retain
+    their existing authority.  Below that floor, require the neighbour to keep
+    at least twice the direct narrow response so ordinary sloped/curved material
+    boundaries with nearby support remain eligible.  This is a fail-closed
+    integrity check after comparative ranking; it never transfers authority to
+    a different candidate.
+    """
+
+    if candidate.boundary_likelihood >= _ORDINARY_BOUNDARY_LIKELIHOOD_FLOOR:
+        return False
+
+    for item in hard_safe:
+        if (
+            item.identity != candidate.identity
+            and abs(item.representative_local_y - candidate.representative_local_y)
+            <= bounds.maximum_proposal_diameter_px + 1e-12
+            and item.boundary_likelihood + 1e-12 >= candidate.boundary_likelihood
+            and item.artifact_likelihood > candidate.artifact_likelihood + 1e-12
+            and item.narrow.peak_strength + 1e-12
+            >= candidate.narrow.peak_strength * 2.0
+        ):
+            return True
+    return False
+
+
 def _has_local_authority_tie(
     selected: SemanticHypothesis,
     assessments: list[tuple[float, SemanticHypothesis]],
@@ -774,6 +811,11 @@ def _select_comparative_textured_boundary(
     assessments.sort(key=lambda item: (-item[0], _hypothesis_order(item[1])))
     selected = assessments[0][1]
     if _has_local_authority_tie(selected, assessments, bounds):
+        return None
+    if (
+        accepted_foam_front_local_y is None
+        and _borrows_structural_neighborhood(selected, hard_safe, bounds)
+    ):
         return None
     return selected
 

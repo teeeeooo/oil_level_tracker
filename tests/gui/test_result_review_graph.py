@@ -58,6 +58,9 @@ def test_graph_renders_selected_glass_unit_boundaries_and_optional_foam(qtbot):
     assert "기준선" in labels
     assert "분석 영역 위쪽 경계" in labels
     assert "분석 영역 아래쪽 경계" in labels
+    oil_artist = next(line for line in graph.axes.lines if line.get_label() == "유면")
+    assert tuple(oil_artist.get_xdata()) == (0.0, 2.0)
+    assert tuple(oil_artist.get_ydata()) == (1.0, 3.0)
     graph.set_model(_model(glass_name="Glass B", foam=False))
     assert "Glass B" in graph.axes.get_title()
     assert "거품 경계" not in graph.axes.get_legend_handles_labels()[1]

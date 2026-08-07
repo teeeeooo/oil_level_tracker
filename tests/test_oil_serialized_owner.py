@@ -549,12 +549,15 @@ def test_fixed_reducer_complete_variant_coherence():
         assert reduction.resource_metrics == reduction.outcome.resources
 
 
-def test_compatible_ambiguity_preserves_pending_without_confirming_it():
+def test_compatible_ambiguity_preserves_pending_and_shared_motion_envelope_reacquires():
     pipeline = OilHypothesisPipeline()
     reducer = _reducer(pipeline)
     initial_frame = pipeline._phase_a(_raw_frame(_boundary_image(130)))
     pending_frame = pipeline._phase_a(_raw_frame(_boundary_image(200)))
-    followup_frame = pipeline._phase_a(_raw_frame(_boundary_image(198)))
+    # The second real boundary moves 15 px from the pending observation.  This is
+    # inside the ordinary 24 px continuity envelope but outside the former 12 px
+    # pending-only envelope that unnecessarily restarted reacquisition.
+    followup_frame = pipeline._phase_a(_raw_frame(_boundary_image(215)))
 
     initial = reducer.reduce(GlassTemporalRecord.initial("g"), initial_frame)
     pending = reducer.reduce(initial.next_record, pending_frame)

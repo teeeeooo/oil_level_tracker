@@ -431,7 +431,7 @@ class _FixedCanonicalReducer:
         ):
             return 0.10, None
         velocity = source_y - prior.source_y
-        continuity = self.bounds.maximum_proposal_diameter_px * 4.0
+        continuity = _boundary_motion_envelope(self.bounds)
         jump_cost = min(0.62, 0.10 * (abs(velocity) / max(1.0, continuity)) ** 1.35)
         acceleration_cost = 0.0
         if prior.velocity is not None:
@@ -464,7 +464,7 @@ class _FixedCanonicalReducer:
                 "initial_shadow_boundary",
             )
 
-        continuity = self.bounds.maximum_proposal_diameter_px * 4.0
+        continuity = _boundary_motion_envelope(self.bounds)
         predicted = state.accepted_y + (state.accepted_velocity or 0.0)
         if abs(y - state.accepted_y) <= continuity or abs(y - predicted) <= continuity:
             return self._accept_boundary(
@@ -2392,12 +2392,18 @@ def _pending_path_compatible(
 ) -> bool:
     if state.pending_y is None or source_y is None:
         return False
-    tolerance = bounds.maximum_proposal_diameter_px * 2.0
+    tolerance = _boundary_motion_envelope(bounds)
     prediction = state.pending_y + (state.pending_velocity or 0.0)
     return (
         abs(source_y - state.pending_y) <= tolerance
         or abs(source_y - prediction) <= tolerance
     )
+
+
+def _boundary_motion_envelope(bounds: OilShadowBounds) -> float:
+    """Use one bounded per-observation motion envelope for Oil continuity."""
+
+    return bounds.maximum_proposal_diameter_px * 4.0
 
 
 def _same(left: float, right: float) -> bool:

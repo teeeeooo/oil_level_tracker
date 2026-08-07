@@ -97,25 +97,31 @@ def test_sample3_ambiguity_gated_reacquisition_preserves_recovery_and_safety(tmp
     assert rows[1049]["projected_y"] == 240.0
     assert rows[1049]["pending_y"] == 245.0 and rows[1049]["pending_count"] == 1
 
-    assert rows[1064]["status"] == "reacquisition_pending" and rows[1064]["raw_y"] is None
-    assert rows[1064]["pending_y"] == 258.0 and rows[1064]["pending_count"] == 1
+    assert rows[1064]["status"] == "boundary_accepted"
+    assert rows[1064]["reason"] == "bounded_shadow_reacquisition"
+    assert rows[1064]["raw_y"] == 258.0
+    assert rows[1064]["accepted_y"] == 258.0
+    assert rows[1064]["pending_y"] is None and rows[1064]["pending_count"] == 0
     assert rows[1079]["status"] == "ambiguous" and rows[1079]["raw_y"] is None
     assert rows[1079]["projected_y"] == 231.0
     assert rows[1079]["foam_authoritative"] is True
     assert rows[1079]["pending_y"] is None and rows[1079]["pending_count"] == 0
 
-    assert rows[1094]["status"] == "reacquisition_pending"
-    assert rows[1094]["pending_y"] == 244.0 and rows[1094]["pending_count"] == 1
+    assert rows[1094]["status"] == "boundary_accepted"
+    assert rows[1094]["reason"] == "continuous_shadow_boundary"
+    assert rows[1094]["raw_y"] == 244.0
+    assert rows[1094]["accepted_y"] == 244.0
+    assert rows[1094]["accepted_velocity"] == -14.0
     assert rows[1109]["status"] == "ambiguous" and rows[1109]["raw_y"] is None
     assert rows[1109]["projected_y"] == 248.0
     assert rows[1109]["foam_authoritative"] is True
-    assert rows[1109]["pending_y"] == 244.0 and rows[1109]["pending_count"] == 1
+    assert rows[1109]["pending_y"] is None and rows[1109]["pending_count"] == 0
 
     assert rows[1124]["status"] == "boundary_accepted"
-    assert rows[1124]["reason"] == "bounded_shadow_reacquisition"
+    assert rows[1124]["reason"] == "continuous_shadow_boundary"
     assert rows[1124]["raw_y"] == 250.0
     assert rows[1124]["accepted_y"] == 250.0
-    assert rows[1124]["accepted_velocity"] is None
+    assert rows[1124]["accepted_velocity"] == 6.0
     assert rows[1124]["pending_count"] == 0
 
     assert rows[1139]["status"] == "boundary_accepted"

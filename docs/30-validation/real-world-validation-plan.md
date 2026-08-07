@@ -128,7 +128,9 @@ Frame processing completion is not overall 100%. Completion is emitted only afte
 - User-facing series names use `유면` and `거품 경계`.
 - Each Glass detail graph covers the full inner-ellipse analysis range and shows reference zero plus upper/lower analysis boundaries.
 - Combined graphs cover the union of included Glass ranges.
-- Missing/no-interface values remain gaps, never zero.
+- Missing/no-interface values remain non-numeric and are never converted to zero, CSV samples or overlay positions.
+- Oil rendering connects only stored finite observed anchors as one presentation polyline while UNKNOWN/no-interface bands continue to expose the intervening evidence state; an all-missing Oil series stays empty.
+- Foam rendering preserves intermittent gaps and does not connect across absent Foam observations.
 - Result Review, re-detection comparison and HTML report use the same range and font policy.
 - Repeated open/close cycles release Matplotlib callbacks, figures and file handles.
 

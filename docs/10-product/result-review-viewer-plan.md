@@ -47,7 +47,7 @@ Result Review는 detector observation과 Initial-State Retrospective FULL/EMPTY 
 - observed detector `fill_state`, validity와 numeric Oil은 저장 당시 observation 그대로 표시한다;
 - observed `UNKNOWN_REVIEW`는 retrospective interpretation이 accepted되어도 숨기거나 FULL/EMPTY로 교체하지 않는다;
 - retrospective interpretation은 accepted/unresolved/conflict status와 provenance를 별도로 표시한다;
-- graph와 overlay는 retrospective FULL/EMPTY를 numeric Oil position으로 바꾸거나 line을 만들어내지 않는다;
+- graph와 overlay는 retrospective FULL/EMPTY를 numeric Oil position이나 새 Oil anchor로 바꾸지 않는다. Graph는 이미 저장된 finite observed Oil anchor만 presentation line으로 연결할 수 있다;
 - observed detector comparison과 retrospective interpretation comparison은 서로 다른 비교 의미를 유지한다.
 
 Legacy v1 observed-only bundle은 기존 의미로 계속 지원한다. Retrospective interpretation이 official event/judgment/coverage semantics에 참여하는 신규 bundle은 explicit newer result/review semantics version을 가져야 하며, v1-only application은 이를 ordinary v1처럼 조용히 표시해서는 안 된다. Version의 physical field/artifact 위치는 별도 accepted implementation contract가 정하지 않는 한 이 product document가 고정하지 않는다.
@@ -158,8 +158,13 @@ Viewer canvas는 read-only다.
 - 그 외에는 px
 - smoothed 값 우선
 - 같은 단위의 raw 값 fallback
-- 값이 없으면 gap
+- sample 값이 없으면 data model과 overlay에는 numeric position이 없는 상태를 그대로 유지
+- Oil은 저장된 finite observed anchor만 시간순으로 골라 하나의 presentation polyline으로 연결; 누락 timestamp에 point/sample을 생성하지 않음
+- `UNKNOWN_REVIEW`/no-interface와 review interval은 background/highlight로 계속 표시하여 anchor 사이의 evidence 공백을 숨기지 않음
+- Foam front는 실제 부재 의미를 보존하도록 누락 구간을 연결하지 않음
 - 누락값을 임의의 0으로 표시하지 않음
+
+Oil anchor 연결은 사용자가 관찰 흐름을 읽기 위한 downstream presentation 규칙이다. CSV, official TrackingSample, cursor overlay 또는 detector temporal history에 중간 numeric 값을 추가하지 않으며, retrospective FULL/EMPTY나 별도 trajectory estimation authority를 만들지 않는다.
 
 Playback 중에는 전체 series를 재생성하지 않고 cursor만 갱신한다. 반복 playback/cursor 갱신은 plotting area의 높이와 전체 graph layout을 점진적으로 축소하거나 collapse시키지 않아야 하며, sustained playback 동안 layout이 안정적으로 유지되어야 한다. 정확한 source-level 원인과 repair mechanism은 구현 Worker가 결정한다.
 
