@@ -4,39 +4,38 @@
 
 This is the lean **current validation contract** for S11. Historical diagnosis, implementation and audit chronology lives under [`../60-evidence/s11/`](../60-evidence/s11/); investigations and machine manifests live under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Current sequencing remains owned by [`../00-project/work-plan.md`](../00-project/work-plan.md).
 
-S11 remains `ACTIVE`. The accepted D1–D5 baseline materially improved current-frame Foam/Oil representation and authority composition, but a stable-baseline closure is not yet justified.
+S11 remains `ACTIVE`. The accepted current-frame baseline is preserved, and the current gate is the bounded existing-owner temporal repair selected by the completed intermittent-boundary diagnostic.
 
 ## Current decision-bearing gate
 
-The bounded S5-B repair must establish this invariant:
+The repair must establish this invariant:
 
-> An Oil hypothesis already made **hard-invalid by authoritative accepted-Foam topology** must not retain D3 comparative neighborhood/anchor authority over hard-safe alternatives.
+> Canonical ambiguity may preserve an already-pending reacquisition path only when its existing canonical projected Y is compatible with that path under the existing pending-consistency semantics; ambiguity remains non-numeric and does not advance confirmation.
 
-The gate is provisionally Lane B because it is intended as a bounded current-frame semantic-authority correction. The exact implementation remains subject to owner/diff inspection; this validation contract does not preselect code shape or thresholds.
+Incompatible or unprojected ambiguity, no-interface and unavailable evidence must continue to clear pending reacquisition state. The same serialized owner must reject forged or incoherent retained pending state before store replacement.
 
 ## Required preservation
 
-A successful repair must preserve the accepted durable owners in [`../20-architecture/s11-detector-responsibility-architecture.md`](../20-architecture/s11-detector-responsibility-architecture.md), materially including:
+A successful repair must preserve the durable owners in [`../20-architecture/s11-detector-responsibility-architecture.md`](../20-architecture/s11-detector-responsibility-architecture.md), materially including:
 
-- hard no-interface, unavailable, glare/exclusion/border and structural safety;
-- authoritative Foam-front/topology rejection of invalid Oil hypotheses;
-- accepted Foam pixels not supplying independent Oil proof;
-- D2 Spatial as bounded current-frame corroboration;
-- D3 near-tie fail-closed behavior among candidates that remain hard-safe;
-- D5 preservation of valid D2/D3 authority under genuine Foam context;
-- one canonical publication path and one serialized temporal owner;
-- no truth-, Recipe-, frame-identity- or video-identity-based numeric injection.
-
-The repair must demonstrate both sides of the authority boundary: a hard-invalid hypothesis cannot control D3 comparison, while genuinely hard-safe alternatives do not receive new authority unless their existing current-frame evidence earns it.
+- hard current-frame no-interface, unavailable, glare/exclusion/border, structural and authoritative-Foam safety;
+- accepted D2 Spatial, D3 comparative and D5 Foam/Oil authority unchanged;
+- ambiguity as a valid non-numeric outcome with tracker `NO_UPDATE` and smoothing `PRESERVE`;
+- only accepted canonical boundary outcomes publishing numeric Oil;
+- one serialized temporal owner and atomic replacement/invariant validation;
+- existing accepted-boundary continuity, pending-consistency and two-real-boundary reacquisition confirmation semantics;
+- no truth-, Recipe-, frame-identity- or video-identity-based numeric promotion.
 
 ## Evidence and claim boundary
 
-Use the smallest deterministic current-frame reproductions and materially adjacent accepted regressions necessary to prove the owner seam. Frozen local/blind evidence may support attribution; diagnostic manifests remain provenance, not current truth.
+Focused reducer/invariant regressions must prove compatible ambiguity retention without count advancement, later real-boundary reacquisition, incompatible/unprojected ambiguity clearing, no-interface/unavailable clearing and fail-closed rejection of illegal retained state.
 
-Production temporal redesign, trajectory interpolation and observed/estimated publication are **not approved** by S11. The existing offline temporal probe concluded that available trajectory evidence was insufficient, so temporal work cannot be selected merely because a current-frame repair leaves residual misses.
+Production-facing evidence must exercise the frozen sample3 sequence with the existing successful `914 → 929` reacquisition, compatible `1034 → 1049`, wrong/incompatible `1064 → 1079`, compatible `1094 → 1109 → 1124`, subsequent `1139` continuity and unchanged `1004` continuity behavior. Truth or blind Y may evaluate alignment externally but may not enter production selection.
 
-Repeated private Windows field-video replay is not a normal per-iteration dependency. One final Windows field-workflow check remains retained only after a stable S11 detector baseline exists; see [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
+The claim is limited to ambiguity-gated pending continuity. It does not repair wrong current-frame selection, relax current-frame thresholds, approve trajectory estimation/interpolation, or establish general-field detector accuracy.
+
+Repeated private Windows field-video replay is not a normal per-iteration dependency. One final Windows field-workflow check remains retained only after a separate stable-baseline decision; see [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
 
 ## Closure boundary
 
-S11 closure requires more than passing this source slice. The resulting detector baseline must first be reconciled as stable enough for the retained final Windows field-workflow check and a separate closure decision. This document does not declare general-field detector accuracy, S11 completion or temporal trajectory acceptance.
+Passing this source slice does not complete S11. The focused PR must first pass the Lane B Orchestrator bounded independent exact-head Gate, after which stable-baseline progression is a separate decision.

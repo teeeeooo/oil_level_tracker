@@ -49,13 +49,15 @@ D5 preserves the accepted D2/Spatial and D3 Oil authorities when genuine accepte
 5. Spatial proves its path on the Foam-excluded residual raster.
 6. any Foam-separated auxiliary selector remains subordinate to these owners and cannot bypass the same hard constraints.
 
-The current S11 gate refines this composition at one remaining seam: a hypothesis that is already hard-invalid under authoritative accepted-Foam topology must not retain D3 comparative anchor/neighborhood authority over hard-safe alternatives. The exact source slice and validation are owned by the current work plan, not by this architecture document.
+The accepted comparative-anchor repair closes the D5/D3 seam where a hypothesis already hard-invalid under authoritative accepted-Foam topology could retain comparative anchor/neighborhood authority over hard-safe alternatives. The current temporal source slice does not reopen that authority.
 
 ## Serialized temporal boundary
 
-Production retains **one serialized temporal owner** after current-frame canonical evidence. S11 current-frame repairs do not authorize hidden second temporal state, lookahead, result-layer interpolation, post-owner numeric reconstruction or truth-derived temporal promotion.
+Production retains **one serialized temporal owner** after current-frame canonical evidence. A canonical ambiguous observation remains non-numeric and cannot itself confirm reacquisition. When an existing pending reacquisition path is present, ambiguity may preserve that exact pending state only if its canonical projected Y is compatible under the same bounded pending-consistency rule used for real boundary observations; preservation does not increment the confirmation count or update pending motion. Incompatible or unprojected ambiguity, no-interface and unavailable evidence clear pending reacquisition state.
 
-The offline temporal trajectory diagnostic remains insufficient to authorize production trajectory estimation. Any future observed/estimated/unavailable responsibility is evidence-gated through [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
+The reducer and its same-owner transition-coherence validator jointly own this rule. Retained ambiguous pending state must be unchanged and geometrically compatible, otherwise the transition fails closed before atomic store replacement. Existing accepted-boundary continuity, pending-consistency and real-boundary confirmation semantics remain authoritative.
+
+S11 temporal work does not authorize hidden second temporal state, lookahead, result-layer interpolation, post-owner numeric reconstruction or truth-derived temporal promotion. The offline temporal trajectory diagnostic remains insufficient to authorize production trajectory estimation. Any future observed/estimated/unavailable responsibility is evidence-gated through [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
 
 ## Non-authorities
 
