@@ -384,15 +384,13 @@ class EditableRectItem(QGraphicsRectItem):
         self.frame_rect = frame_rect
         self.callback = callback
         self._resize = False
+        self._dragging = False
         self._pointer_moved = False
         self._interaction_active = False
         self._start = QRectF(rect)
         self._press_scene_rect = QRectF(rect)
-        self.setFlags(
-            QGraphicsItem.GraphicsItemFlag.ItemIsMovable
-            | QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
-            | QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges
-        )
+        self._press_scene_pos = QPointF()
+        self.setCursor(Qt.CursorShape.SizeAllCursor)
         self.setPen(QPen(QColor(255, 140, 0), 2, Qt.PenStyle.DashLine))
         self.setBrush(QBrush(QColor(255, 100, 0, 40)))
         self.setZValue(40)
@@ -409,62 +407,69 @@ class EditableRectItem(QGraphicsRectItem):
 
     def paint(self, painter, option, widget=None):
         super().paint(painter, option, widget)
-        if self.isSelected():
+        if self._interaction_active:
             painter.fillRect(self._handle(), QColor(255, 255, 255))
 
     def mousePressEvent(self, event) -> None:
-        if event.button() == Qt.MouseButton.LeftButton:
-            self._press_scene_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
-            self._pointer_moved = False
-        if self._handle().contains(event.pos()):
-            self._resize = True
-            self._start = QRectF(self.rect())
-            self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
-            event.accept()
-        else:
-            self._resize = False
+        if event.button() != Qt.MouseButton.LeftButton:
             super().mousePressEvent(event)
+            return
+        self._press_scene_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
+        self._press_scene_pos = event.scenePos()
+        self._pointer_moved = False
+        self._resize = self._handle().contains(event.pos())
+        self._dragging = not self._resize
+        self._start = QRectF(self._press_scene_rect)
+        event.accept()
 
     def mouseMoveEvent(self, event) -> None:
-        self._pointer_moved = True
-        if not self._resize:
+        if not self._resize and not self._dragging:
             super().mouseMoveEvent(event)
             return
-        r = QRectF(self._start)
-        r.setBottomRight(event.pos())
-        r = r.normalized().intersected(self.frame_rect)
-        if r.width() >= 8 and r.height() >= 8:
-            self.setRect(r)
+        self._pointer_moved = True
+        if self._resize:
+            self._resize_to(event.scenePos())
+        else:
+            self._drag_to(event.scenePos())
         event.accept()
 
     def mouseReleaseEvent(self, event) -> None:
-        if not self._resize:
+        if not self._resize and not self._dragging:
             super().mouseReleaseEvent(event)
+            return
+        if self._pointer_moved:
+            if self._resize:
+                self._resize_to(event.scenePos())
+            else:
+                self._drag_to(event.scenePos())
         scene_rect = scene_rect_in_frame(self, self.rect(), self.frame_rect)
-        self.setPos(0, 0)
         self.setRect(scene_rect)
         if self._pointer_moved and scene_rect != self._press_scene_rect:
             self.callback(self.glass_id, self.zone_id, QRectF(self.rect()))
         self._pointer_moved = False
         self._resize = False
-        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+        self._dragging = False
         event.accept()
 
-    def itemChange(self, change, value):
-        if change == QGraphicsItem.GraphicsItemChange.ItemPositionChange and self.scene() is not None:
-            proposed = value
-            moved = self.rect().translated(proposed)
-            dx, dy = proposed.x(), proposed.y()
-            if moved.left() < self.frame_rect.left():
-                dx += self.frame_rect.left() - moved.left()
-            if moved.right() > self.frame_rect.right():
-                dx -= moved.right() - self.frame_rect.right()
-            if moved.top() < self.frame_rect.top():
-                dy += self.frame_rect.top() - moved.top()
-            if moved.bottom() > self.frame_rect.bottom():
-                dy -= moved.bottom() - self.frame_rect.bottom()
-            return QPointF(dx, dy)
-        return super().itemChange(change, value)
+    def _resize_to(self, scene_pos: QPointF) -> None:
+        rect = QRectF(self._start)
+        rect.setBottomRight(scene_pos)
+        rect = rect.normalized().intersected(self.frame_rect)
+        if rect.width() >= 8 and rect.height() >= 8:
+            self.setRect(rect)
+
+    def _drag_to(self, scene_pos: QPointF) -> None:
+        delta = scene_pos - self._press_scene_pos
+        moved = self._press_scene_rect.translated(delta)
+        if moved.left() < self.frame_rect.left():
+            moved.moveLeft(self.frame_rect.left())
+        if moved.right() > self.frame_rect.right():
+            moved.moveRight(self.frame_rect.right())
+        if moved.top() < self.frame_rect.top():
+            moved.moveTop(self.frame_rect.top())
+        if moved.bottom() > self.frame_rect.bottom():
+            moved.moveBottom(self.frame_rect.bottom())
+        self.setRect(moved)
 
 
 class VideoOverlayCanvas(QGraphicsView):
