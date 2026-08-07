@@ -65,6 +65,8 @@ Legacy v1 observed-only bundle은 기존 의미로 계속 지원한다. Retrospe
 
 Viewer 자체에서도 다른 bundle을 열 수 있다.
 
+기존 결과 reopening 기능은 최근-result 목록과 manual bundle 선택 workflow로 이미 제공된다. 남은 friction은 기능 부재가 아니라 naming/entry-point discoverability이며, 향후 S12 reclassification의 candidate input으로만 유지한다. 최종 label이나 UI structure는 여기서 선결하지 않으며 승인된 implementation slice로 간주하지 않는다.
+
 지원 입력:
 
 - 결과 bundle directory
@@ -159,7 +161,7 @@ Viewer canvas는 read-only다.
 - 값이 없으면 gap
 - 누락값을 임의의 0으로 표시하지 않음
 
-Playback 중에는 전체 series를 재생성하지 않고 cursor만 갱신한다.
+Playback 중에는 전체 series를 재생성하지 않고 cursor만 갱신한다. 반복 playback/cursor 갱신은 plotting area의 높이와 전체 graph layout을 점진적으로 축소하거나 collapse시키지 않아야 하며, sustained playback 동안 layout이 안정적으로 유지되어야 한다. 정확한 source-level 원인과 repair mechanism은 구현 Worker가 결정한다.
 
 ### 6.4 우측 정보 패널
 

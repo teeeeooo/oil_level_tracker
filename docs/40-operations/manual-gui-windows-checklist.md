@@ -19,6 +19,7 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Resize with left/right/top/bottom/corner handles; confirm minimum size and no inverted geometry.
 - Drag the zero line to top/bottom and confirm it remains inside the ellipse.
 - Add, move, resize and delete multiple exclusion rectangles.
+- While dragging and resizing an exclusion, confirm the selected Glass ellipse geometry remains unchanged unless the ellipse itself is intentionally manipulated.
 - Verify stored `.oilrecipe` coordinates match source pixels after window resizing.
 - Scroll the settings panel while the pointer is over spin boxes and combo boxes; confirm values do not change and the panel continues scrolling.
 - Verify keyboard arrows, direct entry and arrow buttons still edit wheel-safe controls.
@@ -165,6 +166,7 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Verify a Glass with valid `mm_per_pixel` uses mm on its detail graph and a px-only Glass stays in source pixels.
 - Verify a mixed-scale combined graph remains in px and covers the union of all included Glass analysis ranges.
 - Verify full/empty no-interface data, all-missing series and intermittent missing values remain gaps rather than zero-valued lines.
+- Sustain Result Review playback and repeated cursor updates long enough to expose cumulative layout drift; confirm the graph plotting area and overall layout do not progressively shrink or collapse.
 - Repeatedly open and close Result Review and re-detection windows; confirm Matplotlib callbacks, fonts and file handles do not accumulate.
 
 ## Packaging

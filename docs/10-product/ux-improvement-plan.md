@@ -43,6 +43,7 @@ Advanced mode retains geometry coordinates, mm/pixel details, margin and detecto
 ### Focused analysis-area editing
 
 - Edit ellipse, reference line and exclusion regions in a large focused view.
+- Editing one geometry target mutates only that target: dragging or resizing an exclusion must not change the selected Glass ellipse geometry unless the ellipse itself is intentionally manipulated.
 - Keep the source profile unchanged until Apply.
 - Cancel restores the original state.
 - Apply creates one undo operation.
@@ -123,7 +124,7 @@ General review hides candidate and score internals. Debug mode, partial re-detec
 - Basic settings avoid awkward wrapped coordinate summaries.
 - Wheel events scroll the settings panel instead of changing spin/combo values; keyboard/direct controls still edit values.
 - Real-length conversion is visibly optional and does not warn when disabled.
-- Foam guidance separates detector interpretation from recommended user action and never mutates initial state automatically.
+- Foam guidance separates detector interpretation from recommended user action and never mutates initial state automatically. A future S12 candidate may make the post-confirmation action guidance more explicit when the current recommendation stops at confirming whether Foam is real; this remains a copy/actionability refinement candidate, not an authorized implementation slice.
 - Multi-frame preflight is a modeless resizable window rather than a central-area-shrinking dock.
 
 These requirements are verified through automated geometry/import tests where practical and the manual Windows checklist where platform interaction matters.
