@@ -20,15 +20,6 @@ This file owns **affirmatively retained work that is not the current executable 
 - **Routing owner:** future architecture plus validation decision; diagnostic provenance lives under [`../50-diagnostics/s11/`](../50-diagnostics/s11/).
 - **Current-gate boundary:** no separate production trajectory-estimation responsibility is authorized; this remains evidence-gated and is not the current S11 gate.
 
-## Final Windows field-workflow check after retrospective reconstruction
-
-- **Responsibility:** perform one final target-Windows field workflow check after the active Initial-State Retrospective FULL/EMPTY Reconstruction responsibility is implemented and accepted.
-- **Classification:** `RETAINED`
-- **Authoritative source / rationale:** Windows canonical/manual/package acceptance is already complete for the prior product baseline, and the S11 detector baseline is now stable for sequencing. Final field replay remains useful only after the new retrospective official semantics are stable.
-- **Activation condition:** the active retrospective reconstruction implementation completes its required acceptance so the resulting S11 output semantics are stable for final field verification.
-- **Routing owner:** the S11 close/validation owner using the operational Windows procedure under [`../40-operations/`](../40-operations/).
-- **Current-gate boundary:** this remains a later closure check after the retrospective reconstruction gate, **not the current engineering gate**.
-
 ## Explicitly superseded recurring dependency
 
 Repeated replay of the private Windows field video during every S11 source iteration is **SUPERSEDED as a normal development dependency**. The private video may remain diagnostic corroboration when deliberately available, but iterative S11 source work must not depend on repeated private-field replay. This superseded practice is not a retained commitment.
