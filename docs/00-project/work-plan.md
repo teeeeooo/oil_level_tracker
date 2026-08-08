@@ -1,49 +1,36 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `ACTIVE`
-**Current engineering gate:** `S11 Slice D — Effectiveness Reconciliation`
-**Current owner:** `Orchestrator — corpus-wide detector effectiveness reconciliation`
+**Milestone status:** `VALIDATING`
+**Current engineering gate:** `Final Windows field-workflow validation`
+**Source lane:** `None — target-Windows validation only`
 
 ## Current decision
 
-Final Windows field-workflow validation remains paused because fresh real-corpus use demonstrated that the accepted detector baseline is still materially below the required practical detection effectiveness.
+**Subtractive Detector Simplification Slices A–D are accepted.** The reconciled detector baseline removes redundant distributed-Sobel authority, scopes plateau opposition to proven collision evidence and uses bounded Spatial as independent corroboration for hard-safe weak Oil candidates while preserving canonical numeric publication, hard current-frame safety and the one serialized temporal owner.
 
-**Slices A–C are accepted and merged.** Slice A removed redundant distributed-Sobel supplemental proposal/semantic authority. Slice B scoped bright-plateau opposition to existing collision/glare evidence. Slice C unified bounded Spatial corroboration so a hard-safe weak current-frame candidate may recover only with stronger full-path cross-ROI proof while preserving the existing canonical publication and serialized temporal owners.
+Slice D reproduced `109/299` numeric Oil across the four established 2 FPS qualification windows. The retained user-confirmed truth surface is `8/13` numeric with `5.4375 px` MAE, and the retained collision/glare/structure/Foam/no-interface/Spatial preservation suite passed `356` tests. The remaining long local gaps are attributable to overlay-dominated or severe blur/reframing/no-interface/unclear evidence rather than one material general hard-safe failure class.
 
-The coverage-first product/architecture/validation reconciliation remains binding. The detector is optimized for useful observed trajectory rather than pixel-perfect per-frame localization: usable numeric coverage and graph gap/readability may take priority over modest pixel error, while persistent gross wrong-interface tracking remains unacceptable.
+No additional detector mechanism is authorized by the current evidence. The exact remaining S11 gate is the **final Windows field-workflow validation** using the [manual Windows checklist](../40-operations/manual-gui-windows-checklist.md).
 
-The current gate is **S11 Slice D — Effectiveness Reconciliation**. It is an evidence/reconciliation gate over the accepted simplified detector baseline, not pre-authorization for another detector mechanism.
+## Accepted baseline to preserve
 
-## Accepted baseline that remains binding
+Only an accepted canonical S5-B boundary may publish numeric Oil. Positive no-interface, unavailable evidence, severe glare/exclusion/border conflict, authoritative Foam topology, local unresolved authority ties and unsupported Spatial geometry remain fail-closed. Slice A distributed-Sobel removal, Slice B scoped plateau/collision semantics and Slice C full-path weak Spatial corroboration are accepted source authority.
 
-Only an accepted canonical S5-B boundary may publish numeric Oil. Positive no-interface, unavailable evidence, severe glare/exclusion/border conflict, authoritative Foam topology and the one serialized temporal owner remain fail-closed authority.
+The serialized temporal owner remains the only online detector temporal owner. Missing timestamps remain missing; no retrospective interpretation, graph presentation or field-validation step may synthesize numeric Oil or rewrite detector history. Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate downstream interpretation of immutable observed results.
 
-S5-A Foam publication and Foam temporal gating, P2 no-interface meaning, D1/D5 Foam/Oil topology, Initial-State Retrospective FULL/EMPTY Reconstruction and observed-anchor graph semantics remain binding and are not reopened by Slice D.
+The accepted pre-Windows functional repairs also remain binding: exclusion drag/resize is isolated from selected-ellipse geometry, and sustained Result Review playback preserves graph layout while connecting only stored observed Oil anchors.
 
-## Ordered S11 source sequence
+## Windows validation boundary
 
-1. **Slice A — Proposal Authority Consolidation — ACCEPTED / MERGED:** redundant distributed-Sobel supplemental proposal/semantic authority has been removed while required current behavior and canonical publication safety remain preserved.
-2. **Coverage-first detector acceptance reconciliation — COMPLETE:** product, architecture and validation authority now prioritize usable observed trajectory over pixel-perfect localization while retaining gross wrong-interface protection.
-3. **Slice B — Scoped Plateau / Collision Authority — ACCEPTED / MERGED:** bright-plateau opposition is scoped to existing current-frame collision/glare evidence, materially improving usable observed trajectory while preserving hard safety and canonical publication ownership.
-4. **Slice C — Unified Spatial Corroboration — ACCEPTED / MERGED:** bounded Spatial independently corroborates hard-safe weak current-frame Oil only with stronger full-path proof, while retaining scalar-supported Spatial, hard safety, local-tie rejection and canonical/temporal ownership.
-5. **Slice D — Effectiveness Reconciliation — CURRENT:** replay the complete local corpus and retained negative populations on the accepted simplified baseline; authorize another mechanism only for a demonstrated remaining general failure class.
-6. **Final Windows field-workflow validation:** resume only after Slice D accepts the simplified detector baseline.
+Run the target-Windows operational checklist against synchronized authoritative `main`. Confirm the complete real workflow, including current-run initial-state confirmation, observed-versus-retrospective result semantics, detector/graph behavior, exclusion/ellipse isolation and sustained Result Review graph stability.
 
-Slice D is a reconciliation gate, not implementation authority for an additional detector mechanism.
-
-## Current acceptance boundary
-
-Slice D must evaluate Slices A–C as one accepted detector baseline across the complete four-video corpus and retained collision/glare/structure/Foam/no-interface populations. Report per-sample numeric coverage, time-axis gap behavior, gross wrong-interface protection and secondary truth-anchor error under the existing coverage-first metric order.
-
-A remaining miss justifies another detector mechanism only when the reconciliation demonstrates a material **general failure class** that the accepted simplified responsibilities cannot cover safely. Do not reopen removed distributed-Sobel authority, broaden plateau appearance vetoes, weaken current hard safety, add sample identity, or introduce temporal/result interpolation merely to raise coverage.
-
-If no such general source defect remains, Slice D should accept the simplified detector baseline and hand off to the deferred final Windows field-workflow validation rather than invent another source slice.
+This gate is validation-only. Do not tune detector thresholds, reopen Slices A–D, modify retrospective architecture or start S12 during the validation. If concrete Windows field evidence demonstrates a new source defect, stop and classify that defect separately before repair.
 
 ## Closure boundary
 
-S11 closure remains unapproved. The previous Final Windows field-workflow gate is deferred, not discarded. S12 remains blocked until Slice D reconciles the detector baseline and the resumed target-Windows field workflow is accepted.
+S11 closure remains unapproved until the final Windows field-workflow check is accepted. S12 remains blocked until that target-Windows closure gate is complete.
 
 ## Next handoff
 
-Assign the **Orchestrator** for **S11 Slice D — Effectiveness Reconciliation** on synchronized `main`. The Orchestrator owns corpus-wide read-only replay and reconciliation of the accepted simplified baseline. Any newly demonstrated general failure class must be decomposed into a separate bounded source gate before implementation; otherwise proceed to the deferred final Windows field-workflow validation.
+Execute the **final Windows field-workflow validation** from synchronized `main` using the operational Windows checklist. Source mutation is `NOT AUTHORIZED` by this handoff; any newly demonstrated source defect requires a separately classified repair gate.

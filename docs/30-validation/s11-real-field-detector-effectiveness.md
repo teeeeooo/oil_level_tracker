@@ -41,6 +41,10 @@ Slice A must prove that consolidating Y-proposal authority does not reduce blind
 
 Slice B is accepted: scoped plateau/collision authority increased corpus coverage from 67/299 to 71/299 and reduced sample4 longest missing span from 35.5 s to 12.5 s while retained gross wrong-interface controls remained non-numeric. That accepted behavior is the exact coverage-first baseline for Slice C; later work must not treat the old generic plateau veto as preservation authority.
 
+Slice C is accepted: unified bounded Spatial corroboration increased corpus coverage from `71/299` to `109/299` with no removed production numerics, improved sample4 from `26/113` to `62/113`, and reduced its longest missing span from `12.5 s` to `3.5 s` while retaining hard safety and canonical/serialized ownership.
+
+Slice D is accepted: exact-current-main replay reproduced `109/299` across the four qualification windows; the retained user-confirmed truth surface is `8/13` numeric with `5.4375 px` MAE, and the retained collision/glare/structure/Foam/no-interface preservation suite passed `356` tests. Residual long gaps were attributable to overlay-dominated or severe blur/reframing/no-interface/unclear evidence rather than one material general hard-safe detector failure class. No additional detector mechanism is authorized by this reconciliation.
+
 Slice B/C work must preserve the accepted hard-safety boundary and independently prove the responsibility it removes or transfers. For Slice B and later coverage work, unchanged publication is not a success criterion: the change should materially improve usable observed coverage or graph-gap behavior while retaining gross wrong-interface protection. If a subtractive change exposes a retained negative family, repair only the smallest demonstrated safety responsibility rather than restoring an undifferentiated prior heuristic stack.
 
 No slice may claim acceptance from publication count alone, from one sample, or from temporal/result interpolation of missing current-frame Oil.
@@ -55,4 +59,4 @@ Downstream graph presentation may connect only the finite observed Oil anchors a
 
 ## Claim boundary
 
-This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. S11 remains `ACTIVE` while the subtractive detector source sequence is implemented and reconciled. Final Windows field-workflow validation remains a later closure gate; no source-tree result alone authorizes that Windows PASS.
+This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. The subtractive detector source sequence is reconciled and accepted on the available local corpus, but S11 remains open until the **final Windows field-workflow validation** is accepted. No source-tree or local-corpus result alone authorizes that Windows PASS.

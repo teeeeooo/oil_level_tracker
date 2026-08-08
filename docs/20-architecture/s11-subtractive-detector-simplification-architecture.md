@@ -1,6 +1,6 @@
 # S11 Subtractive Detector Simplification Architecture
 
-**Status:** `ACTIVE — Slices A/B accepted; Slice C current`
+**Status:** `ACTIVE — Slices A–D accepted; final Windows field-workflow validation next`
 
 ## Purpose
 
@@ -51,13 +51,15 @@ Slice B removed bright-plateau appearance as independent generic artifact opposi
 
 Retained glare/collision/structure/Foam/no-interface populations remained fail-closed. This accepted scoped plateau composition is the scalar baseline for Slice C and must not be broadened back into generic appearance authority merely to suppress new Spatial candidates.
 
-### Slice C — Unified Spatial Corroboration
+### Slice C — Unified Spatial Corroboration — ACCEPTED
 
-After the scalar current-frame owner is simplified, allow the existing bounded Spatial phase path to corroborate hard-safe weak candidates without requiring them to pass a second near-duplicate scalar eligibility stack. Spatial must still abstain on direct glare/exclusion/border/Foam-topology invalidity, insufficient residual sectors, local authority ties and unsupported geometry.
+Slice C preserved the existing scalar-supported Spatial route and added fallback-only full-path corroboration for hard-safe weak candidates. Weak recovery requires stronger 5/5 cross-ROI proof, retains local-authority-tie rejection and hard current-frame safety, and still resolves through the existing typed/canonical publication and serialized temporal owners. The accepted replay increased corpus numeric coverage from `71/299` to `109/299` with no removed production numerics; sample4 improved from `26/113` to `62/113` and its longest missing span fell from `12.5 s` to `3.5 s`.
 
-### Slice D — Effectiveness Reconciliation
+### Slice D — Effectiveness Reconciliation — ACCEPTED
 
-Replay the complete four-video corpus and retained negative populations on the accepted simplified baseline. Only if a material, general failure class remains should another detector mechanism be proposed. Final Windows field-workflow validation resumes after this reconciliation accepts the source baseline.
+The accepted A–C baseline was replayed across the complete four-video qualification windows and retained collision/glare/structure/Foam/no-interface populations. Current production coverage is `109/299`; user-confirmed truth coverage is `8/13` with `5.4375 px` MAE. The retained current-frame preservation suite passed `356` tests.
+
+Residual long gaps do not form one material hard-safe general detector failure class: the base-sample long gap is dominated by a static explanatory overlay in the frozen visual evidence, while sample3's longest gap coincides with no-interface/strong motion-reframing blur/unclear evidence. Remaining visually identifiable misses are shorter and bracketed by useful numeric anchors. Another detector mechanism is therefore not authorized by Slice D; the simplified detector source baseline is accepted for final target-Windows field-workflow validation.
 
 ## Validation authority
 
@@ -83,4 +85,4 @@ If subtractive simplification violates a retained negative family, the correct r
 
 ## Current executable gate
 
-The current executable source gate is **Slice C — Unified Spatial Corroboration**. Slices A and B are accepted and merged. Slice D remains a later effectiveness-reconciliation gate and is not pre-authorized implementation scope for the Slice C Worker.
+There is no remaining subtractive detector source gate. **Slices A–D are accepted**, and the exact next gate is the **final Windows field-workflow validation**. Another detector mechanism requires new evidence of a material general failure class and is not pre-authorized by this architecture.
