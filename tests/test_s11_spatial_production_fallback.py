@@ -384,7 +384,7 @@ def test_d2_spatial_recovery_respects_authoritative_foam_front() -> None:
         assert blocked.projected_source_y == 321.0
 
 
-def test_d2_class_b_materially_represents_visual_range_without_forced_promotion() -> None:
+def test_slice_a_removes_distributed_supplemental_authority_without_forced_promotion() -> None:
     root = require_s11_local_corpus()
     glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
     frame = _decode_local_video_frame(root, "sample3", 2697)
@@ -398,12 +398,6 @@ def test_d2_class_b_materially_represents_visual_range_without_forced_promotion(
     )
     assert detection.raw_oil_air_level_y is None
     assert detection.debug_metrics["oil_decision_status"] == "ambiguous"
-    oil_candidate_y = sorted(
-        candidate.y for candidate in detection.candidates if candidate.kind.value == "oil_air"
-    )
-    assert oil_candidate_y == [206.0, 252.0, 287.0, 294.0, 302.0, 327.0, 399.0]
-    assert any(326.0 <= y <= 344.0 for y in oil_candidate_y)
-    assert 302.0 in oil_candidate_y
 
     bundle = build_mask_bundle(frame, glass)
     pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
@@ -413,14 +407,12 @@ def test_d2_class_b_materially_represents_visual_range_without_forced_promotion(
         crop_origin_y=float(bundle.crop_origin[1]),
         bounds=OilShadowBounds(),
     )
-    distributed = [
-        item for item in raw
-        if item.source_family is ShadowSourceFamily.SOBEL_DISTRIBUTED
-    ]
-    assert len(distributed) == 1
-    assert distributed[0].source_y == 327.0
-    assert distributed[0].band_height_px == 21.0
-    assert distributed[0].response_strength == pytest.approx(0.1878, abs=0.0001)
+    assert raw
+    assert ShadowSourceFamily.REGION_STEP in {item.source_family for item in raw}
+    assert not any(
+        item.source_family is ShadowSourceFamily.SOBEL_DISTRIBUTED
+        for item in raw
+    )
 
 
 def test_sample4_structural_foam_is_rejected_in_s5a_and_oil_stays_non_numeric() -> None:

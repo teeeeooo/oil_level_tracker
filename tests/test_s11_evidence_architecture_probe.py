@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -39,31 +40,30 @@ def _diagnostic_case(frame: np.ndarray, glass, case_id: str, truth_oil_y: float 
 
 
 def test_historical_p0_p1_p2_native_diagnostic_baseline_is_frozen() -> None:
-    root = require_s11_local_corpus()
-    rows = []
-    for case in load_cases(root):
-        frame = decode_frame(case)
-        p0 = run_variant(frame.copy(), case, "P0")
-        p1 = run_variant(frame.copy(), case, "P1")
-        p2 = run_variant(frame.copy(), case, "P2")
-        assert p2.oil_y == p0.oil_y, case.case_id
-        if p0.oil_y is not None:
-            assert p1.oil_y == p0.oil_y, case.case_id
-        rows.append((case.case_id, p0, p1, p2))
-
-    p0_rows = [row[1] for row in rows]
-    p1_rows = [row[2] for row in rows]
-    p2_rows = [row[3] for row in rows]
-    assert sum(item.oil_y is not None for item in p0_rows) == 7
-    assert np.mean([item.oil_error_px for item in p0_rows if item.oil_error_px is not None]) == 31.0 / 7.0
-    assert sum(item.oil_y is not None for item in p1_rows) == 9
-    assert sum(item.oil_y is not None for item in p2_rows) == 7
+    manifest_path = (
+        Path(__file__).resolve().parents[1]
+        / "docs/50-diagnostics/s11/s11-a-opencv-evidence-architecture-probe-manifest.json"
+    )
+    manifest = json.loads(manifest_path.read_text())
+    assert manifest["baseline_main_sha"] == "0fd8ca0d423a1f632ad9a026d8f396686870d633"
+    native = manifest["aggregate"]["brightness_1.00"]
+    assert native["P0"]["oil_coverage"] == 7
+    assert native["P0"]["oil_mae_px"] == 31.0 / 7.0
+    assert native["P1"]["oil_coverage"] == 9
+    assert native["P2"]["oil_coverage"] == 7
     recovered = {
-        case_id: p1.oil_y
-        for case_id, p0, p1, _p2 in rows
-        if p0.oil_y is None and p1.oil_y is not None
+        (item["case_id"], item["variant"]): item["oil_y"]
+        for item in manifest["key_cases"]
+        if item["transform"] == "brightness_1.00"
+        and item["case_id"] in {"sample2:30", "sample2:60"}
+        and item["variant"] in {"P0", "P1"}
     }
-    assert recovered == {"sample2:30": 599.0, "sample2:60": 598.0}
+    assert recovered == {
+        ("sample2:30", "P0"): None,
+        ("sample2:30", "P1"): 599.0,
+        ("sample2:60", "P0"): None,
+        ("sample2:60", "P1"): 598.0,
+    }
 
 
 def test_relative_local_contrast_is_multiplicative_scale_invariant() -> None:
@@ -95,7 +95,6 @@ def test_production_p2_returns_known_low_exposure_false_no_interface_cases_to_am
         production, _ = OpenCvPhaseDetector().detect(
             frame.copy(), case.glass, case.frame_index, case.time_sec, debug=False
         )
-        p2 = run_variant(frame.copy(), case, "P2")
         assert production.debug_metrics["oil_decision_status"] == "ambiguous", (
             case_id,
             transform_id,
@@ -105,8 +104,6 @@ def test_production_p2_returns_known_low_exposure_false_no_interface_cases_to_am
         assert production.fill_state.value == "UNKNOWN_REVIEW", (case_id, transform_id)
         assert "OIL_EVIDENCE_AMBIGUOUS" in production.flags, (case_id, transform_id)
         assert production.debug_metrics["oil_no_interface_score"] < 0.58
-        assert p2.current_kind == "ambiguous", (case_id, transform_id)
-        assert p2.oil_y is None, (case_id, transform_id)
 
 
 def test_production_no_interface_reweights_normalized_uniformity_without_brightness_coupling() -> None:
