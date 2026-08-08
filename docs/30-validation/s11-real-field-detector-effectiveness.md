@@ -39,6 +39,8 @@ Each subtractive detector slice must use the same repository-local four-video ev
 
 Slice A must prove that consolidating Y-proposal authority does not reduce blind-visible representation or create new numeric Oil on retained glare, structural, Foam, no-interface or transient-false-line negatives. A lower raw-observation/proposal load is supporting evidence only; it does not substitute for correctness.
 
+Slice B is accepted: scoped plateau/collision authority increased corpus coverage from 67/299 to 71/299 and reduced sample4 longest missing span from 35.5 s to 12.5 s while retained gross wrong-interface controls remained non-numeric. That accepted behavior is the exact coverage-first baseline for Slice C; later work must not treat the old generic plateau veto as preservation authority.
+
 Slice B/C work must preserve the accepted hard-safety boundary and independently prove the responsibility it removes or transfers. For Slice B and later coverage work, unchanged publication is not a success criterion: the change should materially improve usable observed coverage or graph-gap behavior while retaining gross wrong-interface protection. If a subtractive change exposes a retained negative family, repair only the smallest demonstrated safety responsibility rather than restoring an undifferentiated prior heuristic stack.
 
 No slice may claim acceptance from publication count alone, from one sample, or from temporal/result interpolation of missing current-frame Oil.

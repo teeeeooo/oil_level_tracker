@@ -1,6 +1,6 @@
 # S11 Subtractive Detector Simplification Architecture
 
-**Status:** `ACTIVE — Slice A accepted; Slice B current`
+**Status:** `ACTIVE — Slices A/B accepted; Slice C current`
 
 ## Purpose
 
@@ -45,11 +45,11 @@ Slice A removed the distributed-Sobel supplemental producer and its separate raw
 
 This accepted slice is the simplified baseline for later coverage work; removed distributed-Sobel authority must not be restored merely to increase a benchmark count.
 
-### Slice B — Scoped Plateau / Collision Authority
+### Slice B — Scoped Plateau / Collision Authority — ACCEPTED
 
-Remove bright-plateau evidence from unconditional generic artifact opposition. Retain only the smallest directly evidenced collision responsibility needed to protect real glare/foam-glare failures. Do not replace the removed broad authority with new appearance carve-outs or sample-specific thresholds.
+Slice B removed bright-plateau appearance as independent generic artifact opposition and retained it only as a multiplier on existing current-frame collision evidence. The accepted exact-head replay increased corpus numeric coverage from 67/299 to 71/299 without reducing another sample, and reduced sample4 longest missing span from 35.5 s to 12.5 s while newly recovered observations remained on the same physical Oil interface.
 
-Slice B is the first coverage-improvement slice. It should materially increase usable numeric Oil observations and reduce long ambiguity gaps when the same physical Oil interface remains approximately represented. Pixel MAE is secondary; persistent gross wrong-interface tracking remains a blocking regression.
+Retained glare/collision/structure/Foam/no-interface populations remained fail-closed. This accepted scoped plateau composition is the scalar baseline for Slice C and must not be broadened back into generic appearance authority merely to suppress new Spatial candidates.
 
 ### Slice C — Unified Spatial Corroboration
 
@@ -83,4 +83,4 @@ If subtractive simplification violates a retained negative family, the correct r
 
 ## Current executable gate
 
-The first executable source gate is **Slice A — Proposal Authority Consolidation**. Slice B and Slice C remain ordered successors and are not pre-authorized implementation scope for the Slice A Worker.
+The current executable source gate is **Slice C — Unified Spatial Corroboration**. Slices A and B are accepted and merged. Slice D remains a later effectiveness-reconciliation gate and is not pre-authorized implementation scope for the Slice C Worker.
