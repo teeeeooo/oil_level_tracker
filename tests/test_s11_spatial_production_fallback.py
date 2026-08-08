@@ -81,6 +81,7 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         "sample2:30": 599.0,
         "sample2:60": 598.0,
         "sample3:1035": 245.0,
+        "sample4:450": 853.0,
         "sample4:900": 848.0,
         "sample4:1470": 866.0,
         "sample4:1680": 866.0,
@@ -91,7 +92,6 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         "sample2:0",
         "sample3:900",
         "sample4:0",
-        "sample4:450",
     }
     rows = []
     root = require_s11_local_corpus()
@@ -118,7 +118,7 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
     assert {case_id: oil_y for case_id, _truth, oil_y, _foam, _auth in numeric} == expected_numeric
     assert np.mean(
         [abs(oil_y - truth) for _case_id, truth, oil_y, _foam, _auth in numeric]
-    ) == pytest.approx(6.142857142857143)
+    ) == pytest.approx(5.4375)
     assert {case_id for case_id, _truth, oil_y, _foam, _auth in rows if oil_y is None} == expected_non_numeric
 
     # D4 must not inflate already valid white-Foam support and erase the accepted
@@ -142,6 +142,38 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
     assert sample3_1035[3] == 226.0
     assert sample3_1035[4] is True
     assert sample3_1035[2] > sample3_1035[3]
+
+
+def test_unified_spatial_corroboration_replaces_soft_scalar_veto_but_not_no_interface() -> None:
+    root = require_s11_local_corpus()
+    sample4_glass = JsonRecipeRepository().load(root / "sample" / "sample4.oilrecipe").glasses[0]
+    sample4_frame = _decode_local_video_frame(root, "sample4", 450)
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        sample4_frame, sample4_glass, frame_index=450, time_sec=15.0, debug=False
+    )
+    selected = next(candidate for candidate in detection.candidates if candidate.selected)
+    assert detection.raw_oil_air_level_y == 853.0
+    assert selected.features["polarity_confidence"] < 0.20
+    bundle = build_mask_bundle(sample4_frame, sample4_glass)
+    pre = preprocess(bundle.crop, bundle.effective_mask, sample4_glass.detector_settings)
+    path = _evaluate_spatial_path(
+        pre,
+        bundle.effective_mask,
+        candidate_local_y=float(selected.features["local_y"]),
+        accepted_foam_component_mask=None,
+        bounds=OilShadowBounds(),
+    )
+    assert path.accepted
+    assert path.sector_count == 5
+
+    sample3_glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]
+    sample3_frame = _decode_local_video_frame(root, "sample3", 2069)
+    blocked, _artifacts = OpenCvPhaseDetector().detect(
+        sample3_frame, sample3_glass, frame_index=2069, time_sec=69.0356, debug=False
+    )
+    assert blocked.debug_metrics["oil_no_interface_score"] > 0.40
+    assert blocked.raw_oil_air_level_y is None
+    assert blocked.debug_metrics["oil_decision_status"] == "ambiguous"
 
 
 def test_d2_class_a_authority_continues_but_foam_component_exclusion_can_fail_closed() -> None:
@@ -432,8 +464,12 @@ def test_sample4_structural_foam_rejection_remains_independent_from_oil_boundary
         assert detection.debug_metrics["foam_component_width_ratio"] >= 0.70, case_id
         assert detection.debug_metrics["foam_bounding_box_fill_ratio"] < 0.30, case_id
         assert detection.debug_metrics["foam_oil_context_authoritative"] is False, case_id
-        if case_id == "sample4:900":
-            assert detection.raw_oil_air_level_y == 848.0
+        expected_oil_y = {
+            "sample4:450": 853.0,
+            "sample4:900": 848.0,
+        }.get(case_id)
+        if expected_oil_y is not None:
+            assert detection.raw_oil_air_level_y == expected_oil_y
             assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
         else:
             assert detection.raw_oil_air_level_y is None, case_id

@@ -381,12 +381,13 @@ def _select_spatially_corroborated_textured_boundary(
     accepted_foam_component_mask: np.ndarray | None,
     bounds: OilShadowBounds,
 ) -> SemanticHypothesis | None:
-    """Recover weak scalar evidence only when current-frame Spatial adds proof.
+    """Recover a hard-safe weak candidate when Spatial independently corroborates it.
 
-    The ordinary relative-phase route remains authoritative when it can already
-    form a typed boundary. This secondary route is narrower: it reuses the
-    existing textured-boundary glare/collision safeguards, but replaces missing
-    aggregate horizontal coverage with a four-sector coherent phase path.
+    The existing scalar-supported four-sector proof stays authoritative. A
+    hard-safe candidate that misses that soft scalar stack may still use the same
+    bounded cross-ROI path, but only with five-sector proof and the broader
+    hard-safe authority census. Spatial still resolves through the ordinary typed
+    boundary instead of becoming a separate publication owner.
     """
 
     ordered = sorted(hypotheses, key=observations._hypothesis_order)
@@ -398,13 +399,17 @@ def _select_spatially_corroborated_textured_boundary(
     if not no_interface.available or no_interface.likelihood > 0.40:
         return None
 
-    independently_identifiable: list[tuple[float, SemanticHypothesis]] = []
+    legacy_assessments: list[SemanticHypothesis] = []
+    weak_assessments: list[SemanticHypothesis] = []
+    legacy_authority: list[tuple[float, SemanticHypothesis]] = []
+    weak_authority: list[tuple[float, SemanticHypothesis]] = []
     for candidate in ordered:
         if not observations._has_hard_current_frame_support(
             candidate,
             accepted_foam_front_local_y,
         ):
             continue
+
         second_boundary = max(
             (
                 item.boundary_likelihood
@@ -413,25 +418,29 @@ def _select_spatially_corroborated_textured_boundary(
             ),
             default=0.0,
         )
-        evidence = observations._single_frame_identifiability_evidence(
+        collision = observations._single_frame_identifiability_evidence(
             pre,
             effective_mask,
             candidate,
             no_interface,
             second_boundary,
         )
+        if collision.collision_pressure > 0.10:
+            continue
+        weak_authority.append((candidate.boundary_likelihood, candidate))
+        independently_identifiable = (
+            collision.texture_relief >= 0.55
+            and collision.phase_ceiling_pressure <= 0.20
+            and collision.evidence_reliability >= 0.75
+        )
+        if independently_identifiable:
+            legacy_authority.append((candidate.boundary_likelihood, candidate))
         if (
-            evidence.texture_relief >= 0.55
-            and evidence.phase_ceiling_pressure <= 0.20
-            and evidence.collision_pressure <= 0.10
-            and evidence.evidence_reliability >= 0.75
+            candidate.narrow.paired_edge_strength > 0.80
+            or candidate.static_prior.contribution > 0.08
         ):
-            independently_identifiable.append(
-                (candidate.boundary_likelihood, candidate)
-            )
+            continue
 
-    accepted: list[SemanticHypothesis] = []
-    for candidate in ordered:
         spatial_conflict = max(
             candidate.broad.glare_conflict,
             candidate.broad.exclusion_conflict,
@@ -439,12 +448,8 @@ def _select_spatially_corroborated_textured_boundary(
             candidate.narrow.exclusion_overlap,
             candidate.narrow.border_overlap,
         )
-        if not (
-            (
-                accepted_foam_front_local_y is None
-                or candidate.representative_local_y > accepted_foam_front_local_y
-            )
-            and candidate.boundary_likelihood > candidate.artifact_likelihood
+        legacy_scalar_support = (
+            candidate.boundary_likelihood > candidate.artifact_likelihood
             and candidate.broad.available_scale_count == len(candidate.broad.scales)
             and candidate.broad.strength >= 0.12
             and candidate.broad.scale_consistency >= 0.60
@@ -452,37 +457,11 @@ def _select_spatially_corroborated_textured_boundary(
             and candidate.polarity_confidence >= 0.20
             and candidate.narrow.available
             and candidate.narrow.peak_strength >= 0.25
-            and candidate.narrow.paired_edge_strength <= 0.80
             and candidate.visibility >= 0.85
             and candidate.evidence_availability >= 0.90
             and spatial_conflict <= 0.15
-            and candidate.static_prior.contribution <= 0.08
-        ):
-            continue
-
-        second_boundary = max(
-            (
-                item.boundary_likelihood
-                for item in ordered
-                if item.identity != candidate.identity
-            ),
-            default=0.0,
+            and independently_identifiable
         )
-        identifiability = observations._single_frame_identifiability_evidence(
-            pre,
-            effective_mask,
-            candidate,
-            no_interface,
-            second_boundary,
-        )
-        if not (
-            identifiability.texture_relief >= 0.55
-            and identifiability.phase_ceiling_pressure <= 0.20
-            and identifiability.collision_pressure <= 0.10
-            and identifiability.evidence_reliability >= 0.75
-        ):
-            continue
-
         path = _evaluate_spatial_path(
             pre,
             effective_mask,
@@ -495,22 +474,27 @@ def _select_spatially_corroborated_textured_boundary(
             if path.median_local_y is None
             else abs(path.median_local_y - candidate.representative_local_y)
         )
-        if (
+        path_is_bounded = (
             path.accepted
-            and path.sector_count >= _SECTOR_COUNT - 1
             and path.span_px <= 2.0 * bounds.maximum_proposal_diameter_px
             and path_alignment <= bounds.maximum_proposal_diameter_px
-        ):
-            accepted.append(candidate)
+        )
+        if not path_is_bounded:
+            continue
+        if legacy_scalar_support and path.sector_count >= _SECTOR_COUNT - 1:
+            legacy_assessments.append(candidate)
+        elif path.sector_count == _SECTOR_COUNT:
+            weak_assessments.append(candidate)
 
-    if not accepted:
+    if legacy_assessments:
+        selected = legacy_assessments[0]
+        authority = legacy_authority
+    elif weak_assessments:
+        selected = weak_assessments[0]
+        authority = weak_authority
+    else:
         return None
-    selected = accepted[0]
-    if observations._has_local_authority_tie(
-        selected,
-        independently_identifiable,
-        bounds,
-    ):
+    if observations._has_local_authority_tie(selected, authority, bounds):
         return None
     return selected
 
