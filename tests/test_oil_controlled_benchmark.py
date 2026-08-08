@@ -633,7 +633,9 @@ def test_uniform_partial_glare_width_sweep_has_no_acceptance_cliff():
         assert "OIL_PIPELINE_FAILURE" not in detection.flags, context
         scores.append(detection.debug_metrics["oil_artifact_score"])
 
-    assert all(left + 1e-12 >= right for left, right in zip(scores, scores[1:]))
+    # Slice B removes bright-plateau appearance as independent artifact authority.
+    # Retain the safety contract as fail-closed publication with no abrupt score cliff,
+    # without requiring appearance width alone to order artifact likelihood.
     assert max(abs(left - right) for left, right in zip(scores, scores[1:])) < 0.30
 
 

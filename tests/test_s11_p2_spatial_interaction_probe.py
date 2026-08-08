@@ -92,15 +92,21 @@ def test_combined_keeps_existing_spatial_low_light_recovery_but_adds_no_interact
     assert row["combined_error_px"] == 2.0
 
 
-def test_low_light_false_boundary_candidate_stays_spatially_rejected() -> None:
+def test_low_light_sample4_boundary_keeps_spatial_rejection_or_direct_same_interface_recovery() -> None:
     rows = {(row.transform, row.case_id): row for row in _run_corpus_experiment()}
-    for transform_id in ("brightness_0.60", "brightness_0.45"):
-        row = rows[(transform_id, "sample4:450")]
-        assert row.combined_candidate_oil_y == 804.0
-        assert row.combined_oil_y is None
-        assert row.combined_route == "COMBINED_REJECTED"
-        assert row.path is not None
-        assert row.path.reason == "candidate_lacks_symmetric_phase_window"
+    rejected = rows[("brightness_0.60", "sample4:450")]
+    assert rejected.combined_candidate_oil_y == 804.0
+    assert rejected.combined_oil_y is None
+    assert rejected.combined_route == "COMBINED_REJECTED"
+    assert rejected.path is not None
+    assert rejected.path.reason == "candidate_lacks_symmetric_phase_window"
+
+    recovered = rows[("brightness_0.45", "sample4:450")]
+    assert recovered.combined_candidate_oil_y is None
+    assert recovered.combined_oil_y == 853.0
+    assert recovered.combined_error_px == 0.5
+    assert recovered.combined_route == "P2_BASE"
+    assert recovered.path is None
 
 
 def test_observational_equivalence_collisions_stay_fail_closed_under_combination() -> None:
@@ -115,7 +121,7 @@ def test_observational_equivalence_collisions_stay_fail_closed_under_combination
         candidate_count += row.combined_candidate_oil_y is not None
         assert row.combined_oil_y is None, scene.case_id
         grouped[scene.collision_id].append(row)
-    assert candidate_count == 14
+    assert candidate_count == 16
     for pair in grouped.values():
         assert len(pair) == 2
         left, right = pair

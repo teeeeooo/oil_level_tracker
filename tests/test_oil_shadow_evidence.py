@@ -158,6 +158,44 @@ def test_plateau_artifact_scales_with_roi_and_rejects_fragmented_support(shape):
     assert score(plateau, fragmented, float(center)) == 0.0
 
 
+def test_bright_plateau_is_scoped_to_direct_collision_or_glare_evidence():
+    basis = _run(_step(line=False)).hypotheses[0]
+    broad = replace(basis.broad, glare_conflict=0.0)
+    narrow = replace(
+        basis.narrow,
+        paired_edge_strength=0.0,
+        pulse_symmetry=0.0,
+        border_overlap=0.0,
+        exclusion_overlap=0.0,
+        glare_overlap=0.0,
+        horizontal_coverage=1.0,
+        scale_persistence=1.0,
+    )
+    scoped = oil_shadow_observations._scoped_plateau_collision_artifact
+
+    assert scoped(0.90, broad, narrow) == 0.0
+
+    collision = replace(
+        narrow,
+        paired_edge_strength=1.0,
+        pulse_symmetry=1.0,
+    )
+    localized = replace(
+        narrow,
+        horizontal_coverage=0.10,
+        scale_persistence=0.80,
+    )
+    unavailable = replace(localized, available=False)
+    bordered = replace(narrow, border_overlap=0.10)
+    glare = replace(broad, glare_conflict=0.50)
+    assert scoped(0.90, broad, collision) == pytest.approx(0.54)
+    assert scoped(0.90, broad, localized) == pytest.approx(0.63)
+    assert scoped(0.90, broad, unavailable) == 0.0
+    assert scoped(0.90, broad, bordered) == pytest.approx(0.1026)
+    assert scoped(0.90, glare, narrow) == pytest.approx(0.45)
+    assert scoped(0.90, glare, collision) == pytest.approx(0.90)
+
+
 def test_real_boundary_adjacent_to_structure_keeps_multiple_explanations():
     image = _step(line=False)
     image[46:49] = 220

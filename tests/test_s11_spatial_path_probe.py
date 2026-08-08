@@ -56,8 +56,8 @@ def test_native_spatial_path_reflects_current_authority_without_regressing_sampl
     assert np.mean(
         [abs(row.p0_oil_y - row.truth_oil_y) for row in p0_numeric]
     ) == pytest.approx(29.5 / 4.0)
-    assert len(spatial_numeric) == 8
-    assert np.mean([row.oil_error_px for row in spatial_numeric]) == pytest.approx(98.5 / 8.0)
+    assert len(spatial_numeric) == 10
+    assert np.mean([row.oil_error_px for row in spatial_numeric]) == pytest.approx(99.5 / 10.0)
     recovered = {
         row.case_id: row.oil_y
         for row in rows
@@ -68,6 +68,8 @@ def test_native_spatial_path_reflects_current_authority_without_regressing_sampl
         "base_sample_1:240": 414.0,
         "sample2:30": 599.0,
         "sample2:60": 598.0,
+        "sample4:450": 853.0,
+        "sample4:900": 848.0,
     }
     assert {row.case_id: row.oil_y for row in rows if row.case_id in {"sample2:30", "sample2:60"}} == {
         "sample2:30": 599.0,
@@ -112,7 +114,7 @@ def test_observational_equivalence_collisions_stay_fail_closed() -> None:
             assert spatial.path is not None
             assert spatial.path.reason == "degenerate_scalar_row"
             assert spatial.path.path_span_px <= 1
-    assert relative_numeric == 14
+    assert relative_numeric == 16
     assert spatial_numeric == 0
     for pair in grouped.values():
         assert len(pair) == 2
@@ -196,12 +198,14 @@ def test_spatial_manifest_declares_bounded_current_frame_resources() -> None:
     manifest = build_manifest(run_native_experiment(require_s11_local_corpus()))
     assert manifest["baseline_main_sha"] == "3305cb8268fd4e1612105cba6144c2083066ff8c"
     native = manifest["native"]
-    assert native["oil_coverage"] == 8
+    assert native["oil_coverage"] == 10
     assert native["recovered_case_ids"] == [
         "base_sample_1:156",
         "base_sample_1:240",
         "sample2:30",
         "sample2:60",
+        "sample4:450",
+        "sample4:900",
     ]
     assert native["maximum_path_sector_row_evaluations"] == 125
     assert native["retained_temporal_state"] == 0
