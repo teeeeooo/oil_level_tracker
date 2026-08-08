@@ -155,11 +155,11 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
-- **Status:** `VALIDATING`
-- **Major result:** The accepted S11 current-frame baseline now includes bounded D3 structural-tail integrity, and the serialized temporal owner uses one motion envelope for ordinary continuity and pending-path compatibility while ambiguity remains non-confirming. Initial-State Retrospective FULL/EMPTY Reconstruction remains downstream of immutable detector observation. Workbench exclusion editing is isolated from selected-ellipse geometry, sustained Result Review playback keeps its layout stable, and Oil graphs connect only stored finite observed anchors as one presentation line without synthesizing samples. Further source repair is not the current gate.
-- **Next gate:** Execute the **final Windows field-workflow check** against the accepted retrospective semantics, detector continuity repair, observed-anchor graph presentation and the prior interaction/layout repairs using the operational Windows checklist. S11 closes only if that final field workflow is accepted; Windows PASS is not inferred from macOS/source validation.
+- **Status:** `ACTIVE`
+- **Major result:** The accepted D1–D5/current-frame, serialized temporal, retrospective, Workbench interaction and observed-anchor presentation repairs remain the baseline. Fresh four-video real-corpus use nevertheless shows detector effectiveness is still dominated by ambiguity. Read-only subtractive ablation indicates that redundant proposal-generation authority and overly broad artifact opposition can suppress already-observed Oil evidence, so S11 source work is reopened under a subtract-before-add architecture rather than adding another detector layer.
+- **Next gate:** Implement **Subtractive Detector Simplification Slice A — Proposal Authority Consolidation** inside the existing S5-B current-frame owner, then independently review its exact head. Scoped plateau/collision authority and unified Spatial corroboration remain ordered later slices. Final Windows field-workflow validation resumes only after the simplified source baseline is reconciled and accepted.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [detector/graph continuity evidence](../60-evidence/s11/s11-detector-and-observed-graph-continuity.md), [retrospective reconstruction architecture](../20-architecture/initial-state-retrospective-reconstruction-architecture.md), [retrospective validation contract](../30-validation/initial-state-retrospective-reconstruction-validation.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [subtractive detector simplification architecture](../20-architecture/s11-subtractive-detector-simplification-architecture.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [S11 effectiveness validation](../30-validation/s11-real-field-detector-effectiveness.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S12 — Post-S10 UI/UX Refinement
 
@@ -172,6 +172,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery and the evidence-gated trajectory provenance responsibility, is routed through [`retained-commitments.md`](retained-commitments.md). Both pre-Windows functional repairs are accepted; the exact current S11 gate is the final Windows field-workflow validation.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery and the evidence-gated trajectory provenance responsibility, is routed through [`retained-commitments.md`](retained-commitments.md). The exact current S11 gate is Subtractive Detector Simplification Slice A; final Windows field-workflow validation remains the later closure gate after detector-source reconciliation.

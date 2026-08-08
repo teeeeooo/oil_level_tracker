@@ -59,6 +59,7 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 
 - Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
+- Active S11 subtractive detector simplification design: [`20-architecture/s11-subtractive-detector-simplification-architecture.md`](20-architecture/s11-subtractive-detector-simplification-architecture.md)
 - Active S11 retrospective sequence responsibility: [`20-architecture/initial-state-retrospective-reconstruction-architecture.md`](20-architecture/initial-state-retrospective-reconstruction-architecture.md)
 - S5-B base observability architecture: [`20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 - S11 detector-baseline validation: [`30-validation/s11-real-field-detector-effectiveness.md`](30-validation/s11-real-field-detector-effectiveness.md)

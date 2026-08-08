@@ -4,7 +4,7 @@
 
 This document owns the lean preservation contract for the accepted S11 **detector baseline**. Historical diagnosis, implementation and audit chronology lives under [`../60-evidence/s11/`](../60-evidence/s11/); the latest bounded detector/graph repair evidence is [`s11-detector-and-observed-graph-continuity.md`](../60-evidence/s11/s11-detector-and-observed-graph-continuity.md). Investigations and machine manifests live under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Current sequencing remains owned by [`../00-project/work-plan.md`](../00-project/work-plan.md).
 
-The current-frame D1–D5/S5-B and serialized temporal baseline is stable for sequencing purposes. Detector source tuning is no longer the current engineering gate. The active downstream responsibility is validated separately by [`initial-state-retrospective-reconstruction-validation.md`](initial-state-retrospective-reconstruction-validation.md).
+The accepted D1–D5/S5-B and serialized temporal baseline remains the preservation floor, but fresh four-video use has reopened bounded detector source work. The active source design is [`../20-architecture/s11-subtractive-detector-simplification-architecture.md`](../20-architecture/s11-subtractive-detector-simplification-architecture.md): remove redundant proposal/semantic authority before adding any new detector mechanism. Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate downstream responsibility validated by [`initial-state-retrospective-reconstruction-validation.md`](initial-state-retrospective-reconstruction-validation.md).
 
 ## Accepted detector baseline
 
@@ -22,6 +22,16 @@ The durable owners in [`../20-architecture/s11-detector-responsibility-architect
 - incompatible/unprojected ambiguity, no-interface and unavailable evidence clearing that pending path;
 - no truth-, Recipe-, frame-identity- or video-identity-based numeric promotion.
 
+## Subtractive source-slice acceptance
+
+Each subtractive detector slice must use the same repository-local four-video evidence surface rather than a single-sample success criterion. Report at least truth-near representation/publication behavior, numeric error for published truth anchors, ambiguity/abstention behavior and retained false-positive protection.
+
+Slice A must prove that consolidating Y-proposal authority does not reduce blind-visible representation or create new numeric Oil on retained glare, structural, Foam, no-interface or transient-false-line negatives. A lower raw-observation/proposal load is supporting evidence only; it does not substitute for correctness.
+
+Later Slice B/C work must preserve the same hard-safety boundary and independently prove the responsibility it removes or transfers. If a subtractive change exposes a retained negative family, repair only the smallest demonstrated safety responsibility rather than restoring an undifferentiated prior heuristic stack.
+
+No slice may claim acceptance from publication count alone, from one sample, or from temporal/result interpolation of missing current-frame Oil.
+
 ## Downstream preservation requirement
 
 Initial-State Retrospective FULL/EMPTY Reconstruction is allowed only as the separate downstream responsibility defined by [`../20-architecture/initial-state-retrospective-reconstruction-architecture.md`](../20-architecture/initial-state-retrospective-reconstruction-architecture.md). Its implementation must consume immutable observed detector results and must not alter this detector validation contract, detector thresholds, D1–D5/S5-B authority or serialized temporal history.
@@ -32,4 +42,4 @@ Downstream graph presentation may connect only the finite observed Oil anchors a
 
 ## Claim boundary
 
-This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. S11 remains `VALIDATING` until the final Windows field-workflow check accepts the complete current baseline; this detector-baseline contract alone does not authorize that Windows PASS.
+This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. S11 remains `ACTIVE` while the subtractive detector source sequence is implemented and reconciled. Final Windows field-workflow validation remains a later closure gate; no source-tree result alone authorizes that Windows PASS.
