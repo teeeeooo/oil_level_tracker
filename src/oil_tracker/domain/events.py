@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 from typing import Callable, Iterable
 
 from .enums import EventType, FillState
@@ -66,9 +67,15 @@ def detect_events_for_glass(
     _appearance_events(run_id, glass_id, samples, events)
     _oil_drop_event(run_id, glass_id, samples, events, config)
 
-    numeric = [s for s in samples if s.smoothed_oil_air_level_px_from_zero is not None]
+    numeric = [
+        (sample, _oil_level(sample))
+        for sample in samples
+        if _oil_level(sample) is not None
+    ]
     if numeric:
-        minimum = min(numeric, key=lambda s: _numeric(s.smoothed_oil_air_level_px_from_zero))
+        maximum = max(numeric, key=lambda item: (float(item[1]), -item[0].timestamp_sec))[0]
+        minimum = min(numeric, key=lambda item: (float(item[1]), item[0].timestamp_sec))[0]
+        events.append(_event_from_sample(run_id, glass_id, EventType.MAXIMUM_OIL_LEVEL, maximum))
         events.append(_event_from_sample(run_id, glass_id, EventType.MINIMUM_OIL_LEVEL, minimum))
 
     events.append(
@@ -321,9 +328,35 @@ def _event_from_sample(
         start_time_sec=sample.timestamp_sec,
         end_time_sec=end_time,
         representative_frame_index=sample.frame_index,
-        oil_level_px=sample.smoothed_oil_air_level_px_from_zero,
-        oil_level_mm=sample.smoothed_oil_air_level_mm_from_zero,
-        foam_front_px=sample.smoothed_foam_front_px_from_zero,
-        foam_front_mm=sample.smoothed_foam_front_mm_from_zero,
+        oil_level_px=_oil_level(sample),
+        oil_level_mm=_finite_first(
+            sample.smoothed_oil_air_level_mm_from_zero,
+            sample.raw_oil_air_level_mm_from_zero,
+        ),
+        foam_front_px=_finite_first(
+            sample.smoothed_foam_front_px_from_zero,
+            sample.raw_foam_front_px_from_zero,
+        ),
+        foam_front_mm=_finite_first(
+            sample.smoothed_foam_front_mm_from_zero,
+            sample.raw_foam_front_mm_from_zero,
+        ),
         confidence=sample.overall_confidence,
     )
+
+
+def _oil_level(sample: TrackingSample) -> float | None:
+    return _finite_first(
+        sample.smoothed_oil_air_level_px_from_zero,
+        sample.raw_oil_air_level_px_from_zero,
+    )
+
+
+def _finite_first(*values: float | None) -> float | None:
+    for value in values:
+        if value is None:
+            continue
+        number = float(value)
+        if math.isfinite(number):
+            return number
+    return None

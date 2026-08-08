@@ -26,12 +26,12 @@ class _Graphs:
 
 
 class _Html:
-    def render(self, _result, _recipe, _session, _graphs, path):
+    def render(self, _result, _recipe, _session, _graphs, path, **_kwargs):
         path.write_text("<html>report</html>", encoding="utf-8")
 
 
 class _FailingHtml:
-    def render(self, *_args):
+    def render(self, *_args, **_kwargs):
         raise OSError("report failed")
 
 

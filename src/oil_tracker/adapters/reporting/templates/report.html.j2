@@ -4,31 +4,86 @@
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>유면 분석 결과 {{ result.run_id }}</title>
+<title>유면 관찰 보고서 {{ result.run_id }}</title>
 <style>
-:root{font-family:"Malgun Gothic","Segoe UI",Arial,sans-serif;color:#1f2937;background:#f3f4f6}body{margin:0;padding:24px}.page{max-width:1260px;margin:auto}.card{background:white;border:1px solid #d1d5db;border-radius:10px;padding:18px;margin:0 0 18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}h1,h2,h3{margin-top:0}.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.metric{padding:12px;background:#f8fafc;border-radius:8px}.state{font-weight:700}.PASS{color:#047857}.FAIL{color:#b91c1c}.REVIEW_REQUIRED{color:#b45309}.NOT_APPLICABLE{color:#4b5563}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #e5e7eb;padding:7px;text-align:left;vertical-align:top}th{background:#f8fafc}img.graph{display:block;max-width:100%;height:auto;margin:auto}.capture{max-width:360px;border:1px solid #d1d5db}.muted{color:#6b7280}.mono{font-family:Consolas,"Malgun Gothic",monospace;word-break:break-all}
+:root{font-family:"Malgun Gothic","Apple SD Gothic Neo","Segoe UI",Arial,sans-serif;color:#172033;background:#eef2f7;line-height:1.55;--blue:#2563eb;--orange:#ea580c;--purple:#7c3aed;--red:#dc2626;--slate:#475569}*{box-sizing:border-box}body{margin:0;padding:28px}.page{max-width:1240px;margin:auto}.card{background:#fff;border:1px solid #dbe2ea;border-radius:16px;padding:24px;margin:0 0 22px;box-shadow:0 8px 24px rgba(15,23,42,.055)}h1,h2,h3{margin:0;color:#111827}h1{font-size:28px}h2{font-size:22px;margin-bottom:14px}h3{font-size:17px}.eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;color:#2563eb;text-transform:uppercase;margin-bottom:7px}.muted{color:#64748b}.mono{font-family:Consolas,"Malgun Gothic",monospace;word-break:break-all}.hero{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(260px,.8fr);gap:24px;align-items:start}.hero-copy{font-size:15px;color:#475569;max-width:760px}.summary-grid{display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:10px}.metric{padding:13px 14px;background:#f8fafc;border:1px solid #e5eaf0;border-radius:11px}.metric-label{font-size:12px;color:#64748b;margin-bottom:3px}.metric-value{font-weight:700}.state{font-weight:800}.PASS{color:#047857}.FAIL{color:#b91c1c}.REVIEW_REQUIRED{color:#b45309}.NOT_APPLICABLE{color:#4b5563}.graph{display:block;width:100%;height:auto;margin:6px auto 0;border-radius:10px}.graph-note{display:flex;flex-wrap:wrap;gap:14px;margin:12px 0 0;font-size:12px;color:#64748b}.key{display:inline-flex;align-items:center;gap:6px}.key::before{content:"";display:inline-block;width:24px;border-top:3px solid var(--blue)}.key.bridge::before{border-top-style:dashed;opacity:.7}.key.foam::before{border-top:3px dashed var(--orange)}.glass-head{display:flex;justify-content:space-between;align-items:start;gap:18px;margin-bottom:14px}.glass-summary{background:linear-gradient(135deg,#eff6ff,#f8fafc);border-left:4px solid var(--blue);padding:15px 17px;border-radius:10px;margin:0 0 18px}.observation-note{background:#f8fafc;border:1px solid #e2e8f0;padding:13px 15px;border-radius:10px;color:#475569;margin:16px 0}.landmark-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:14px}.landmark{border:1px solid #dbe2ea;border-radius:13px;overflow:hidden;background:#fff}.landmark.maximum{border-top:4px solid var(--purple)}.landmark.minimum{border-top:4px solid var(--red)}.landmark.foam{border-top:4px solid var(--orange)}.landmark.timing{border-top:4px solid var(--slate)}.landmark.oil{border-top:4px solid #0f766e}.capture-wrap{background:#0f172a;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center}.capture{display:block;max-width:100%;max-height:100%;object-fit:contain}.capture-missing{color:#cbd5e1;font-size:13px;padding:20px;text-align:center}.landmark-body{padding:14px 15px 16px}.landmark-title{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.landmark-time{font-weight:800;color:#0f172a;white-space:nowrap}.landmark-desc{font-size:13px;color:#475569;margin:8px 0}.level{font-size:12px;font-weight:700;color:#334155}.judgment{border-top:1px solid #e5e7eb;margin-top:18px;padding-top:16px}.warning{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:10px;padding:12px 14px;margin:8px 0}details{border:1px solid #dbe2ea;border-radius:12px;background:#fff;margin:0 0 16px}summary{cursor:pointer;font-weight:700;padding:15px 17px}.details-body{padding:0 17px 17px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:top}th{background:#f8fafc;color:#475569;width:16%}.footer{text-align:center;color:#64748b;font-size:12px;padding:2px 0 18px}@media(max-width:760px){body{padding:12px}.card{padding:17px}.hero{grid-template-columns:1fr}.glass-head{display:block}.summary-grid{grid-template-columns:1fr 1fr}}@media print{body{padding:0;background:#fff}.card{box-shadow:none;break-inside:avoid}.landmark{break-inside:avoid}details{display:block}details>summary{list-style:none}.page{max-width:none}}
 </style>
 </head>
 <body><main class="page">
-<section class="card"><h1>Rotary Oil Level Tracker 분석 결과</h1><div class="summary">
-<div class="metric"><div class="muted">전체 판정</div><div class="state {{ result.overall_state.value }}">{{ result.overall_state.value }}</div></div>
-<div class="metric"><div class="muted">분석 ID</div><div class="mono">{{ result.run_id }}</div></div>
-<div class="metric"><div class="muted">분석 프로필</div><div>{{ recipe.name }}</div></div>
-<div class="metric"><div class="muted">시험 영상</div><div class="mono">{{ session.input_video_path }}</div></div>
-</div></section>
-<section class="card"><h2>통합 그래프</h2><img class="graph" src="{{ graph_paths['combined'] }}" alt="통합 유면 추적 그래프"></section>
-<section class="card"><h2>프로필 및 분석 설정</h2>
-<table><tr><th>기준 해상도</th><td>{{ recipe.reference_frame_width }} × {{ recipe.reference_frame_height }}</td><th>분석 빈도</th><td>{{ session.sampling_fps }} 회/초</td></tr>
-<tr><th>분석 범위</th><td>{{ '%.3f'|format(session.analysis_start_sec) }}–{{ '%.3f'|format(session.effective_end_sec() or 0) }}초</td><th>압축기 기동</th><td>{{ session.compressor_start_sec }}</td></tr>
-<tr><th>앱 버전</th><td>{{ app_version }}</td><th>검출기 버전</th><td>{{ detector_version }}</td></tr></table></section>
+<section class="card hero">
+  <div>
+    <div class="eyebrow">Sight-glass observation report</div>
+    <h1>유면 관찰 보고서</h1>
+    <p class="hero-copy">이 보고서는 영상에서 관측된 유면 위치를 시간순으로 보여주고, 최고·최저 유면과 거품 발생·소멸 등 주요 순간을 원본 장면과 함께 정리합니다. 점선은 직접 위치값이 없는 구간의 앞뒤 관측점을 연결한 것으로, 중간 측정값을 뜻하지 않습니다.</p>
+  </div>
+  <div class="summary-grid">
+    <div class="metric"><div class="metric-label">전체 판정</div><div class="metric-value state {{ result.overall_state.value }}">{{ presentation.overall_state_label }}</div></div>
+    <div class="metric"><div class="metric-label">시험 영상</div><div class="metric-value">{{ video_name }}</div></div>
+    <div class="metric"><div class="metric-label">분석 프로필</div><div class="metric-value">{{ recipe.name }}</div></div>
+    <div class="metric"><div class="metric-label">분석 구간</div><div class="metric-value">{{ '%.1f'|format(session.analysis_start_sec) }}–{{ '%.1f'|format(session.effective_end_sec() or 0) }}초</div></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>전체 유면 흐름</h2>
+  <img class="graph" src="{{ graph_paths['combined'] }}" alt="전체 Glass 유면 흐름 그래프">
+  <div class="graph-note"><span class="key">직접 관측 구간</span><span class="key bridge">관측 공백 연결</span><span class="key foam">거품 경계</span></div>
+</section>
+
 {% for glass in result.glass_results %}
-<section class="card"><h2>{{ glass.glass_name }}</h2><p><span class="state {{ glass.result_state.value }}">{{ glass.result_state.value }}</span> — 유효 데이터 비율 {{ '%.1f%%'|format(glass.valid_coverage_ratio*100) }}</p><p>{{ glass.judgment_note }}</p>
-<img class="graph" src="{{ graph_paths[glass.glass_id] }}" alt="{{ glass.glass_name }} 그래프">
-<h3>주요 이벤트</h3><table><thead><tr><th>시간</th><th>이벤트</th><th>신뢰도</th><th>유면 px</th><th>거품 px</th><th>캡처</th><th>메모</th></tr></thead><tbody>
-{% for event in glass.events %}<tr><td>{{ '%.3f'|format(event.start_time_sec) }}</td><td>{{ event.event_type.value }}</td><td>{{ '%.3f'|format(event.confidence) }}</td><td>{{ event.oil_level_px }}</td><td>{{ event.foam_front_px }}</td><td>{% if event.capture_path %}<a href="{{ event.capture_path }}">열기</a>{% endif %}</td><td>{{ event.note }}</td></tr>{% endfor %}
-</tbody></table>
-<h3>검토 정보</h3><p>확인이 필요한 장면: {{ glass.samples|selectattr('fill_state.value','equalto','UNKNOWN_REVIEW')|list|length }}개. 신뢰도가 낮은 구간은 그래프와 이벤트 표에 표시됩니다.</p>
-</section>{% endfor %}
-<section class="card"><h2>영상 메타데이터</h2><pre>{{ session.video_metadata.to_dict() if session.video_metadata else {} }}</pre></section>
-<section class="card"><h2>경고</h2>{% if result.warnings %}<ul>{% for warning in result.warnings %}<li>{{ warning }}</li>{% endfor %}</ul>{% else %}<p>없음</p>{% endif %}</section>
+{% set report_glass = presentation.for_glass(glass.glass_id) %}
+{% set glass_config = glass_configs.get(glass.glass_id) %}
+<section class="card">
+  <div class="glass-head">
+    <div><div class="eyebrow">Glass observation</div><h2>{{ glass.glass_name }}</h2></div>
+    <div class="state {{ glass.result_state.value }}">{{ report_glass.result_state_label }}</div>
+  </div>
+  <p class="glass-summary">{{ report_glass.movement_summary }}</p>
+  <img class="graph" src="{{ graph_paths[glass.glass_id] }}" alt="{{ glass.glass_name }} 유면 관찰 그래프">
+  <div class="graph-note"><span class="key">직접 관측 구간</span><span class="key bridge">관측 공백 연결</span><span class="key foam">거품 경계</span></div>
+  <p class="observation-note">{{ report_glass.observation_note }}</p>
+
+  <h3>영상에서 확인할 주요 순간</h3>
+  {% if report_glass.landmarks %}
+  <div class="landmark-grid">
+  {% for landmark in report_glass.landmarks %}
+    <article class="landmark {{ landmark.emphasis }}">
+      <div class="capture-wrap">
+      {% if landmark.capture_path %}<img class="capture" src="{{ landmark.capture_path }}" alt="{{ landmark.label }} 장면">
+      {% else %}<div class="capture-missing">원본 영상 장면을 불러오지 못했습니다.</div>{% endif %}
+      </div>
+      <div class="landmark-body">
+        <div class="landmark-title"><h3>{{ landmark.label }}</h3><span class="landmark-time">{{ '%.2f'|format(landmark.timestamp_sec) }}초</span></div>
+        <p class="landmark-desc">{{ landmark.description }}</p>
+        <div class="level">{{ format_landmark_level(landmark, glass_config) }}</div>
+      </div>
+    </article>
+  {% endfor %}
+  </div>
+  {% else %}<p class="muted">표시할 수 있는 물리적 landmark가 없습니다.</p>{% endif %}
+
+  <div class="judgment"><h3>판정 안내</h3><p>{{ report_glass.judgment_summary }}</p></div>
+</section>
+{% endfor %}
+
+{% if result.warnings %}
+<section class="card"><h2>확인 사항</h2>{% for warning in result.warnings %}<div class="warning">{{ warning }}</div>{% endfor %}</section>
+{% endif %}
+
+<section class="card">
+  <h2>분석 정보</h2>
+  <details><summary>시험 및 프로필 설정</summary><div class="details-body"><table>
+    <tr><th>분석 ID</th><td class="mono">{{ result.run_id }}</td><th>압축기 기동</th><td>{{ session.compressor_start_sec if session.compressor_start_sec is not none else '-' }}</td></tr>
+    <tr><th>기준 해상도</th><td>{{ recipe.reference_frame_width }} × {{ recipe.reference_frame_height }}</td><th>분석 빈도</th><td>{{ session.sampling_fps }} 회/초</td></tr>
+    <tr><th>원본 경로</th><td colspan="3" class="mono">{{ session.input_video_path }}</td></tr>
+  </table></div></details>
+  <details><summary>원본 영상 및 소프트웨어</summary><div class="details-body"><table>
+    {% if session.video_metadata %}<tr><th>영상 해상도</th><td>{{ session.video_metadata.width }} × {{ session.video_metadata.height }}</td><th>영상 FPS</th><td>{{ '%.3f'|format(session.video_metadata.fps) }}</td></tr>
+    <tr><th>영상 길이</th><td>{{ '%.3f'|format(session.video_metadata.duration_sec) }}초</td><th>Codec</th><td>{{ session.video_metadata.codec or '-' }}</td></tr>{% endif %}
+    <tr><th>앱 버전</th><td>{{ app_version }}</td><th>검출기 버전</th><td>{{ detector_version }}</td></tr>
+  </table></div></details>
+  <p class="muted">전체 관측값과 domain event는 같은 결과 폴더의 <span class="mono">tracking_data.csv</span>, <span class="mono">events.csv</span> 및 Result Review에서 확인할 수 있습니다. Detector debug 자료는 main report와 분리되어 있습니다.</p>
+</section>
+
+<div class="footer">Rotary Oil Level Tracker · 오프라인 결과 보고서</div>
 </main></body></html>

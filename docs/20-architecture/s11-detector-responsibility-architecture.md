@@ -65,9 +65,9 @@ Initial-State Retrospective FULL/EMPTY Reconstruction is a separate **downstream
 
 ## Observed-graph presentation boundary
 
-Result presentation may omit missing/non-finite vertices and connect the remaining stored finite Oil anchors in timestamp order as one polyline. This improves human readability of the observed trend but does not create a value at an omitted timestamp, mutate an official TrackingSample/CSV, supply an overlay position, feed detector history or claim estimated trajectory provenance. `UNKNOWN_REVIEW` and no-interface state bands remain visible across the connected span. Foam keeps gap-preserving rendering because Foam absence is itself meaningful.
+Result presentation may omit missing/non-finite vertices and visually connect the remaining stored finite Oil anchors in timestamp order. Consecutive finite observations form solid segments; an edge that crosses one or more missing samples is a lower-emphasis dashed bridge containing only the stored endpoint anchors. This makes the overall movement readable while distinguishing direct observation from a display-only connection. It does not create a value at an omitted timestamp, mutate an official TrackingSample/CSV, supply an overlay position, feed detector history or claim estimated trajectory provenance. `UNKNOWN_REVIEW` and no-interface state bands remain visible across the connected span. Foam keeps gap-preserving rendering because Foam absence is itself meaningful.
 
-This presentation rule therefore does not activate the separate observed/estimated/unavailable trajectory responsibility. Any future numeric estimation between anchors still requires the evidence and provenance gate in [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
+This presentation rule therefore does not activate the separate observed/estimated/unavailable trajectory responsibility. The user-facing summary, landmarks and source captures are owned by the separate [`Result Observation Report Architecture`](result-observation-report-architecture.md). Any future numeric estimation between anchors still requires the evidence and provenance gate in [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
 
 ## Non-authorities
 

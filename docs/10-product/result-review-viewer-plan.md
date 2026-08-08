@@ -18,6 +18,7 @@ Result Review Viewer는 하나의 기반 위에서 두 목적을 지원한다.
    - 분석 결과가 실제 영상과 일치하는지 직관적으로 확인
    - 이벤트와 낮은 신뢰도 구간을 빠르게 탐색
    - HTML 보고서만으로 이해하기 어려운 판정 근거를 영상과 graph로 확인
+   - HTML 보고서 자체에서도 관측 흐름, 최고·최저, bounded Foam episode와 해당 source 장면을 우선적으로 이해
 
 2. **개발자 디버그 및 detector 개선**
    - 후보선, 점수, penalty와 상태 전이 근거 확인
@@ -32,6 +33,7 @@ Phase 2B는 일반 사용자 결과 검토에 집중하고, detector 내부 정�
 - 일반 Viewer는 저장된 tracking data만 사용하고 detector를 다시 실행하지 않는다.
 - Viewer는 Workbench의 현재 recipe와 session이 아니라 결과 bundle의 snapshot을 사용한다.
 - 일반 모드에서는 최종 결과만 표시하고 detector 내부 후보와 점수는 숨긴다.
+- HTML main report는 raw event/confidence/debug 표 대신 관측 흐름 설명, annotated graph와 bounded key-moment capture를 표시한다. 전체 event/quality 정보는 CSV와 Result Review에서 유지한다.
 - 원본 영상이 이동되었을 때 사용자가 세션 한정 대체 경로를 지정할 수 있다.
 - 대체 영상의 geometry를 자동 scale하거나 이동하지 않는다.
 - 기존 `report.html`, CSV와 `.oilrecipe` 형식을 유지한다.
@@ -159,12 +161,12 @@ Viewer canvas는 read-only다.
 - smoothed 값 우선
 - 같은 단위의 raw 값 fallback
 - sample 값이 없으면 data model과 overlay에는 numeric position이 없는 상태를 그대로 유지
-- Oil은 저장된 finite observed anchor만 시간순으로 골라 하나의 presentation polyline으로 연결; 누락 timestamp에 point/sample을 생성하지 않음
+- Oil은 저장된 finite observed anchor만 시간순으로 사용. 직접 연속 observation은 실선, missing run 앞뒤 anchor의 graph-only bridge는 점선으로 연결하며 누락 timestamp에 point/sample을 생성하지 않음
 - `UNKNOWN_REVIEW`/no-interface와 review interval은 background/highlight로 계속 표시하여 anchor 사이의 evidence 공백을 숨기지 않음
 - Foam front는 실제 부재 의미를 보존하도록 누락 구간을 연결하지 않음
 - 누락값을 임의의 0으로 표시하지 않음
 
-Oil anchor 연결은 사용자가 관찰 흐름을 읽기 위한 downstream presentation 규칙이다. CSV, official TrackingSample, cursor overlay 또는 detector temporal history에 중간 numeric 값을 추가하지 않으며, retrospective FULL/EMPTY나 별도 trajectory estimation authority를 만들지 않는다.
+Oil anchor 연결은 사용자가 관찰 흐름을 읽기 위한 downstream presentation 규칙이다. 점선 bridge도 기존 양 끝 anchor만 사용한다. CSV, official TrackingSample, cursor overlay 또는 detector temporal history에 중간 numeric 값을 추가하지 않으며, retrospective FULL/EMPTY나 별도 trajectory estimation authority를 만들지 않는다.
 
 Playback 중에는 전체 series를 재생성하지 않고 cursor만 갱신한다. 반복 playback/cursor 갱신은 plotting area의 높이와 전체 graph layout을 점진적으로 축소하거나 collapse시키지 않아야 하며, sustained playback 동안 layout이 안정적으로 유지되어야 한다. 정확한 source-level 원인과 repair mechanism은 구현 Worker가 결정한다.
 

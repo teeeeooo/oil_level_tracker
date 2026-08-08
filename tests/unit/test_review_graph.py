@@ -117,7 +117,7 @@ def test_event_compressor_analysis_range_and_cursor_are_present():
     assert model.analysis_end_sec == 4.0
     assert model.compressor_start_sec == 1.5
     assert model.cursor_timestamp_sec == 4.0
-    assert model.event_markers[0].label == EventType.FOAM_START.value
+    assert model.event_markers[0].label == "거품 발생"
 
 
 def test_filter_controls_graph_highlights_without_hiding_events():

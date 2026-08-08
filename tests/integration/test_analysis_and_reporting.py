@@ -78,8 +78,16 @@ def test_recipe_video_to_analysis_and_bundle(tmp_path):
     report_bytes = (bundle / "report.html").read_bytes()
     assert report_bytes.startswith(b"\xef\xbb\xbf")
     html = report_bytes.decode("utf-8-sig")
-    assert "Rotary Oil Level Tracker 분석 결과" in html
+    assert "유면 관찰 보고서" in html
     assert "분석 프로필" in html
+    assert "영상에서 확인할 주요 순간" in html
+    assert "관측 최고 유면" in html
+    assert "관측 최저 유면" in html
+    assert "LOW_CONFIDENCE_START" not in html
+    assert "Valid sample coverage" not in html
+    assert "판정 안내" in html
+    assert '<img class="capture"' in html
+    assert list((bundle / "captures").glob("*.png"))
 
 
 def test_multi_glass_decodes_each_timestamp_once(tmp_path):

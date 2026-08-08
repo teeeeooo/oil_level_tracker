@@ -32,7 +32,7 @@ class _Graphs:
 
 
 class _Html:
-    def render(self, _result, _recipe, _session, _graphs, path):
+    def render(self, _result, _recipe, _session, _graphs, path, **_kwargs):
         path.write_text("<html>report</html>", encoding="utf-8")
 
 

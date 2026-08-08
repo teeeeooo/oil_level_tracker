@@ -7,7 +7,7 @@ from matplotlib.figure import Figure
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 
-from oil_tracker.application.services.graph_series import continuous_observed_polyline
+from oil_tracker.application.services.graph_series import observed_trajectory
 from oil_tracker.domain.review import ReviewGraphModel
 from oil_tracker.visualization.matplotlib_font import (
     apply_font_to_axes,
@@ -150,9 +150,52 @@ class ResultReviewGraph(QWidget):
         times = [point.timestamp_sec for point in points]
         values = [float("nan") if point.value is None else point.value for point in points]
         if connect_observed_anchors:
-            times, values = continuous_observed_polyline(times, values)
+            trajectory = observed_trajectory(times, values)
+            anchors = trajectory.anchors
+            if not anchors:
+                return
+            labelled = False
+            for run in trajectory.observed_runs:
+                if len(run.timestamps) < 2:
+                    continue
+                self.axes.plot(
+                    run.timestamps,
+                    run.values,
+                    linestyle="-",
+                    linewidth=1.7,
+                    color="#2563eb",
+                    label=label if not labelled else None,
+                )
+                labelled = True
+            for index, bridge in enumerate(trajectory.gap_bridges):
+                self.axes.plot(
+                    bridge.timestamps,
+                    bridge.values,
+                    linestyle=(0, (4, 3)),
+                    linewidth=1.45,
+                    color="#2563eb",
+                    alpha=0.7,
+                    label="관측 공백 연결" if index == 0 else None,
+                )
+            anchor_times, anchor_values = zip(*anchors)
+            self.axes.scatter(
+                anchor_times,
+                anchor_values,
+                s=10,
+                color="#2563eb",
+                alpha=0.7,
+                label=label if not labelled else None,
+            )
+            return
         if times:
-            self.axes.plot(times, values, linestyle=linestyle, linewidth=1.6, label=label)
+            self.axes.plot(
+                times,
+                values,
+                linestyle=linestyle,
+                linewidth=1.6,
+                color="#f97316" if label == "거품 경계" else None,
+                label=label,
+            )
 
     def set_cursor(self, timestamp_sec: float) -> None:
         if self.model is None or self.cursor_artist is None:

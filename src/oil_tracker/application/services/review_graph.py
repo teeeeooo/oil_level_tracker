@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from oil_tracker.application.services.event_presentation import event_type_label
 from oil_tracker.application.services.graph_axis import graph_axis_range_for_glass
 from oil_tracker.application.services.review_query import ReviewQueryModel
 from oil_tracker.domain.review import (
@@ -68,7 +69,7 @@ def build_review_graph_model(
         ReviewGraphEventMarker(
             timestamp_sec=event.start_time_sec,
             end_time_sec=event.end_time_sec,
-            label=event.event_type.value,
+            label=event_type_label(event.event_type),
         )
         for event in query.events_for_glass(glass_id)
         if bundle.analysis_start_sec <= event.start_time_sec <= bundle.analysis_end_sec

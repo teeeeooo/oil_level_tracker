@@ -46,3 +46,16 @@ def test_semantic_flag_events_are_emitted():
     assert EventType.DETECTION_LOST in types
     assert EventType.FOGGED_OR_GLARE in types
     assert EventType.FOAM_REACH_TOP in types
+
+
+def test_observed_extrema_include_maximum_and_minimum_with_raw_fallback():
+    samples = [s(0.0, level=2.0), s(1.0, level=-3.0), s(2.0, level=7.0)]
+    samples[0].smoothed_oil_air_level_px_from_zero = None
+    samples[0].raw_oil_air_level_px_from_zero = 2.0
+
+    events = detect_events_for_glass("r", "g", samples)
+    maximum = next(event for event in events if event.event_type is EventType.MAXIMUM_OIL_LEVEL)
+    minimum = next(event for event in events if event.event_type is EventType.MINIMUM_OIL_LEVEL)
+
+    assert (maximum.start_time_sec, maximum.oil_level_px) == (2.0, 7.0)
+    assert (minimum.start_time_sec, minimum.oil_level_px) == (1.0, -3.0)

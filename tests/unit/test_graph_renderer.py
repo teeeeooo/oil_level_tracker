@@ -15,15 +15,24 @@ def test_static_detail_connects_oil_anchors_but_preserves_foam_gaps(
     monkeypatch,
 ) -> None:
     calls: dict[str, tuple[tuple[float, ...], tuple[float, ...]]] = {}
+    scatter_calls: dict[str, tuple[tuple[float, ...], tuple[float, ...]]] = {}
     original_plot = Axes.plot
+    original_scatter = Axes.scatter
 
     def recording_plot(self, x_values, y_values, *args, **kwargs):
         label = kwargs.get("label")
-        if label in {"유면", "거품 경계"}:
+        if label in {"관측 공백 연결", "거품 경계"}:
             calls[label] = (tuple(x_values), tuple(y_values))
         return original_plot(self, x_values, y_values, *args, **kwargs)
 
+    def recording_scatter(self, x_values, y_values, *args, **kwargs):
+        label = kwargs.get("label")
+        if label == "관측 유면":
+            scatter_calls[label] = (tuple(x_values), tuple(y_values))
+        return original_scatter(self, x_values, y_values, *args, **kwargs)
+
     monkeypatch.setattr(Axes, "plot", recording_plot)
+    monkeypatch.setattr(Axes, "scatter", recording_scatter)
     glass = InspectionRecipe.default_glass(320, 240, 1)
     result = GlassAnalysisResult(
         glass_id=glass.id,
@@ -40,7 +49,8 @@ def test_static_detail_connects_oil_anchors_but_preserves_foam_gaps(
     GraphRenderer()._render_glass(result, glass, output)
 
     assert output.is_file()
-    assert calls["유면"] == ((0.0, 2.0), (1.0, 3.0))
+    assert scatter_calls["관측 유면"] == ((0.0, 2.0), (1.0, 3.0))
+    assert calls["관측 공백 연결"] == ((0.0, 2.0), (1.0, 3.0))
     foam_times, foam_values = calls["거품 경계"]
     assert foam_times == (0.0, 1.0, 2.0)
     assert math.isnan(foam_values[0])
@@ -48,12 +58,13 @@ def test_static_detail_connects_oil_anchors_but_preserves_foam_gaps(
     assert math.isnan(foam_values[2])
 
     calls.clear()
+    scatter_calls.clear()
     result.samples = [
         _sample(glass.id, 0.0, None, None),
         _sample(glass.id, 1.0, None, 4.0),
     ]
     GraphRenderer()._render_glass(result, glass, tmp_path / "all-missing-oil.png")
-    assert "유면" not in calls
+    assert "관측 유면" not in scatter_calls
 
 
 def _sample(

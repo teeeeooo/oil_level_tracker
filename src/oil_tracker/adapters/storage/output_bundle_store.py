@@ -20,6 +20,7 @@ from oil_tracker.application.ports.progress import (
     AnalysisStage,
     build_progress_update,
 )
+from oil_tracker.application.services.report_presentation import build_report_presentation
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.results import AnalysisResult
 from oil_tracker.domain.session import AnalysisSession
@@ -55,6 +56,7 @@ class OutputBundleStore:
         final = _unique_path(root / name)
         temporary = root / f".{final.name}.tmp-{uuid4().hex[:8]}"
         completion = result.debug_trace_completion
+        report_presentation = build_report_presentation(result, recipe)
         committed = False
         try:
             _check_cancelled(cancellation, AnalysisStage.RESULT_IMAGES)
@@ -72,6 +74,8 @@ class OutputBundleStore:
                 result,
                 session.input_video_path,
                 temporary / "captures",
+                recipe=recipe,
+                presentation=report_presentation,
                 cancellation=cancellation,
                 progress=lambda completed, total: _emit(
                     progress,
@@ -151,6 +155,7 @@ class OutputBundleStore:
                 result,
                 temporary / "graphs",
                 recipe,
+                presentation=report_presentation,
                 cancellation=cancellation,
                 progress=lambda completed, total: _emit(
                     progress,
@@ -162,7 +167,14 @@ class OutputBundleStore:
                 ),
             )
             _check_cancelled(cancellation, AnalysisStage.GRAPHS_AND_REPORT)
-            self.html.render(result, recipe, session, graph_paths, temporary / "report.html")
+            self.html.render(
+                result,
+                recipe,
+                session,
+                graph_paths,
+                temporary / "report.html",
+                presentation=report_presentation,
+            )
             _emit(
                 progress,
                 AnalysisStage.GRAPHS_AND_REPORT,

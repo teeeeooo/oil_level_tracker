@@ -13,37 +13,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from oil_tracker.domain.enums import EventType
+from oil_tracker.application.services.event_presentation import event_type_label
 from oil_tracker.domain.review import ReviewFilter
 from oil_tracker.ui.presentation_labels import result_state_label
 
-
-_EVENT_LABELS = {
-    EventType.ANALYSIS_START: "분석 시작",
-    EventType.ANALYSIS_END: "분석 종료",
-    EventType.COMPRESSOR_START: "압축기 기동",
-    EventType.OIL_BOUNDARY_APPEARED_FROM_TOP: "상단 유면 출현",
-    EventType.OIL_BOUNDARY_APPEARED_FROM_BOTTOM: "하단 유면 출현",
-    EventType.OIL_DROP_START: "유면 하강 시작",
-    EventType.MINIMUM_OIL_LEVEL: "최저 유면",
-    EventType.ZERO_CROSS_UP: "기준점 상향 통과",
-    EventType.ZERO_CROSS_DOWN: "기준점 하향 통과",
-    EventType.ZERO_STABLE_RECOVERY: "기준점 안정 회복",
-    EventType.FULL_NO_INTERFACE_START: "가득 참 시작",
-    EventType.EMPTY_NO_INTERFACE_START: "비어 있음 시작",
-    EventType.FOAM_START: "거품 시작",
-    EventType.FOAM_FRONT_RISING: "거품 경계 상승",
-    EventType.FOAM_REACH_ZERO: "거품 기준점 도달",
-    EventType.FOAM_REACH_TOP: "거품 상단 도달",
-    EventType.FOAM_END: "거품 종료",
-    EventType.LOW_CONFIDENCE_START: "낮은 신뢰도 시작",
-    EventType.LOW_CONFIDENCE_END: "낮은 신뢰도 종료",
-    EventType.DETECTION_LOST: "검출 유실",
-    EventType.FOGGED_OR_GLARE: "흐림 또는 반사광",
-    EventType.REVIEW_REQUIRED: "사용자 검토 필요",
-    EventType.JUDGMENT_PASS: "판정 합격",
-    EventType.JUDGMENT_FAIL: "판정 불합격",
-}
 
 _FILTER_LABELS = (
     (ReviewFilter.ALL, "전체"),
@@ -205,7 +178,7 @@ class ResultReviewNavigation(QWidget):
             duration = f"–{event.end_time_sec:.3f}s" if event.end_time_sec is not None else ""
             capture = " · 캡처 기록됨" if event.capture_path else ""
             item = QListWidgetItem(
-                f"{event.start_time_sec:.3f}s{duration} · {_EVENT_LABELS.get(event.event_type, event.event_type.value)}{capture}"
+                f"{event.start_time_sec:.3f}s{duration} · {event_type_label(event.event_type)}{capture}"
             )
             item.setData(Qt.ItemDataRole.UserRole, event.start_time_sec)
             item.setData(_EVENT_ROLE, event)

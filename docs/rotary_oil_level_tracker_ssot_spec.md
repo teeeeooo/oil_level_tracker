@@ -66,6 +66,8 @@
 
 Detector의 실용 목표는 개별 frame의 유면 Y를 pixel-perfect하게 맞추는 것보다, 사용자가 최종 graph에서 유면의 하강·상승·정체와 최저점/회복 흐름을 이해할 수 있도록 **충분히 자주, 같은 물리적 유면을 대략적으로 추적하는 numeric observation을 제공하는 것**이다. 따라서 detector 개선에서는 usable numeric coverage와 시간축상 관측 분포/graph movement readability를 pixel-level MAE보다 우선할 수 있다. 다만 glass 구조선·반사·glare 등 유면과 무관한 대상을 지속적으로 따라 graph의 방향이나 수준을 왜곡하는 gross wrong-interface 검출은 허용하지 않는다. 관측 근거가 없는 구간을 numeric으로 합성하는 방식으로 coverage를 높여서도 안 된다.
 
+사용자용 결과 보고서의 목표는 detector 내부 상태를 정리하는 것이 아니라, 원본 sight-glass 영상에서 관측된 유면 흐름을 설명하는 것이다. 보고서는 관측된 최고·최저 유면, Foam 발생·소멸과 주요 변화 시점을 graph에 표시하고 해당 원본 영상 장면을 Glass 중심 캡처로 함께 보여준다. 후보 점수, rejection reason, Spatial sector와 같은 debug 정보는 CSV/Result Review/debug artifact에 분리하며 main report의 정보 구조를 지배해서는 안 된다.
+
 ## 1.3 제품 정체성
 
 본 프로그램은 범용 머신비전 개발 플랫폼이 아니다.
@@ -1251,6 +1253,7 @@ COMPRESSOR_START
 OIL_BOUNDARY_APPEARED_FROM_TOP
 OIL_BOUNDARY_APPEARED_FROM_BOTTOM
 OIL_DROP_START
+MAXIMUM_OIL_LEVEL
 MINIMUM_OIL_LEVEL
 ZERO_CROSS_UP
 ZERO_CROSS_DOWN
@@ -1276,6 +1279,8 @@ JUDGMENT_FAIL
 ```
 
 Event는 debounce와 minimum duration을 가져야 하며 한 frame noise로 생성하지 않는다.
+
+Domain event 전체는 engineering/audit surface에 보존한다. 사용자 report는 이 목록을 그대로 확장하지 않고 최고·최저, 압축기 기동, Oil 변화와 bounded Foam episode 등 물리적 landmark를 선별한다. Report-only Foam episode grouping은 저장된 Foam observation을 변경하지 않는다.
 
 각 event는 다음을 가진다.
 
@@ -1439,35 +1444,33 @@ note
 
 필수 section:
 
-1. Test/Run summary
-2. Recipe summary
-3. Overall judgment
-4. Combined graph
-5. Glass별 result summary
-6. Glass별 oil-air/foam graph
-7. FillState timeline
-8. Event table
-9. Event captures
-10. Low confidence / review sections
-11. Analysis settings
-12. Source video metadata
-13. Software/detector version
+1. Test/Run 및 전체 판정 summary
+2. Combined graph
+3. Glass별 관측 흐름 설명
+4. Glass별 annotated oil-air/foam graph
+5. 관측 최고·최저와 주요 물리 event
+6. 주요 event의 inline Glass 중심 source capture
+7. 직접 유면 위치가 없는 구간에 대한 간결한 설명
+8. Glass별 plain-language 판정 안내와 warning
+9. 접을 수 있는 Recipe/analysis/source/software provenance
 
 HTML은 외부 네트워크 없이 열려야 하며 output bundle 안에서 상대 경로를 사용한다.
 
+Main report는 raw event/confidence/debug table이나 source metadata dictionary dump를 표시하지 않는다. 전체 `events.csv`, `tracking_data.csv`, Result Review와 optional debug artifact는 별도 engineering/audit surface로 계속 제공한다.
+
 ## 15.5 Graph 표현 규칙
 
-- oil-air visible: 실선
-- oil-air low confidence: 점선 또는 gap
+- 연속된 finite oil-air observation: 실선
+- 하나 이상의 missing sample을 사이에 둔 두 finite Oil anchor의 graph-only 연결: 점선
 - foam front: 별도 series
 - FULL_NO_INTERFACE: top out-of-range state band
 - EMPTY_NO_INTERFACE: bottom out-of-range state band
 - UNKNOWN_REVIEW: review background band
 - zero line: 고정 기준선
-- event: marker
+- 사용자에게 의미 있는 최고·최저/Foam/기준점 통과 등의 landmark: 한글 label marker
 - numeric 값이 없는 full/empty 상태에 임의의 가짜 높이를 CSV에 쓰지 않는다.
-- Oil series의 저장값은 관측 결과 그대로 유지한다. `null`/non-finite sample은 graph vertex로 만들지 않고, 저장된 finite Oil anchor들만 시간순으로 하나의 presentation polyline으로 연결한다.
-- 위 연결은 누락 timestamp의 CSV/TrackingSample/overlay numeric 값을 만들거나 detector observation을 보간·수정하는 동작이 아니다. `UNKNOWN_REVIEW`와 no-interface 상태 band가 그 사이의 evidence 상태를 계속 표시한다.
+- Oil series의 저장값은 관측 결과 그대로 유지한다. `null`/non-finite sample은 graph vertex로 만들지 않고, 저장된 finite Oil anchor들만 시간순으로 하나의 presentation trajectory로 연결한다. 직접 연속 observation은 실선, missing run을 건너는 연결은 점선으로 구분한다.
+- 점선 bridge는 앞뒤 두 finite anchor만 vertex로 사용하며 누락 timestamp의 CSV/TrackingSample/overlay numeric 값을 만들거나 detector observation을 보간·수정하지 않는다. `UNKNOWN_REVIEW`와 no-interface 상태 표시는 연결 뒤에도 보이되 Oil movement를 가릴 정도로 지배적으로 렌더링하지 않는다.
 - finite Oil anchor가 하나도 없으면 Oil line을 표시하지 않는다. Foam front는 실제 부재 의미를 보존하기 위해 누락 구간을 연결하지 않는다.
 - retrospective FULL/EMPTY가 accepted되어도 graph/overlay에 새 numeric Oil anchor를 합성하지 않는다. Retrospective interpretation만으로 presentation polyline의 시작점·끝점 또는 중간 vertex를 추가할 수 없다.
 

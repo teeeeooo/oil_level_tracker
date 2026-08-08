@@ -129,8 +129,9 @@ Frame processing completion is not overall 100%. Completion is emitted only afte
 - Each Glass detail graph covers the full inner-ellipse analysis range and shows reference zero plus upper/lower analysis boundaries.
 - Combined graphs cover the union of included Glass ranges.
 - Missing/no-interface values remain non-numeric and are never converted to zero, CSV samples or overlay positions.
-- Oil rendering connects only stored finite observed anchors as one presentation polyline while UNKNOWN/no-interface bands continue to expose the intervening evidence state; an all-missing Oil series stays empty.
+- Oil rendering uses solid segments for consecutive finite observed anchors and dashed graph-only bridges across missing runs. Each bridge uses only its stored endpoints while restrained UNKNOWN/no-interface indication exposes the intervening evidence state; an all-missing Oil series stays empty.
 - Foam rendering preserves intermittent gaps and does not connect across absent Foam observations.
+- Static reports label observed highest/lowest Oil and bounded physical landmarks, embed Glass-focused source captures and keep raw debug/event volume outside the main narrative.
 - Result Review, re-detection comparison and HTML report use the same range and font policy.
 - Repeated open/close cycles release Matplotlib callbacks, figures and file handles.
 

@@ -55,7 +55,7 @@ Initial-State Retrospective FULL/EMPTY Reconstruction is allowed only as the sep
 
 Any regression evidence needed because the Lane C implementation materially touches a detector-facing boundary is proportional preservation evidence, not authorization to redesign the detector.
 
-Downstream graph presentation may connect only the finite observed Oil anchors already stored by this detector contract. Validation must prove that no missing timestamp gains a numeric sample or overlay value, state/review bands remain visible, and Foam gaps remain gaps. That presentation behavior is not detector publication or trajectory estimation authority.
+Downstream graph presentation may connect only the finite observed Oil anchors already stored by this detector contract. Direct finite runs use solid segments and display-only edges across missing samples use dashed bridges containing only the two endpoint anchors. Validation must prove that no missing timestamp gains a numeric sample or overlay value, state/review bands remain visible, and Foam gaps remain gaps. That presentation behavior is not detector publication or trajectory estimation authority; its detailed acceptance owner is the [`Result Observation Report Validation Contract`](result-observation-report-validation.md).
 
 ## Claim boundary
 
