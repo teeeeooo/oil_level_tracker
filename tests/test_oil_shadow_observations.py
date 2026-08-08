@@ -9,7 +9,6 @@ import numpy as np
 import pytest
 
 from oil_tracker.adapters.vision.oil_shadow_observations import (
-    _distributed_sobel_observation,
     build_bounded_proposals,
     extract_raw_observations,
 )
@@ -57,32 +56,6 @@ def _step_inputs(y=40, above=170, below=80):
     mask = np.full_like(image, 255)
     pre = preprocess(image, mask, DetectorSettings())
     return image, mask, pre
-
-
-def _distributed_sobel_input(*, compact_only: bool = False):
-    response = np.zeros(240, dtype=np.float64)
-    primary = (
-        (10, 1.0),
-        (40, 0.9),
-        (70, 0.8),
-        (100, 0.7),
-        (180, 0.6),
-        (210, 0.5),
-    )
-    for row, strength in primary:
-        response[row] = strength
-    secondary = (
-        ((130, 0.30), (134, 0.29), (138, 0.28))
-        if compact_only
-        else ((119, 0.30), (125, 0.29), (132, 0.28), (140, 0.27))
-    )
-    for row, strength in secondary:
-        response[row] = strength
-    signed = np.zeros_like(response)
-    signed[[row for row, _strength in secondary]] = -4.0
-    support = np.ones_like(response)
-    horizontal = np.zeros_like(response)
-    return response, signed, support, horizontal
 
 
 def _assert_deep_scalar_immutable(value):
@@ -171,60 +144,18 @@ def test_stable_digest_and_extraction_are_order_independent_and_repeatable():
         groups.setdefault((item.source_family, item.measurement_scale), 0)
         groups[(item.source_family, item.measurement_scale)] += 1
     assert all(count <= OilShadowBounds().observations_per_source_scale for count in groups.values())
+    assert ShadowSourceFamily.REGION_STEP in {item.source_family for item in first}
+    assert not any(
+        item.source_family is ShadowSourceFamily.SOBEL_DISTRIBUTED
+        for item in first
+    )
+    assert {item.source_family for item in first} <= {
+        ShadowSourceFamily.REGION_STEP,
+        ShadowSourceFamily.SOBEL,
+        ShadowSourceFamily.CANNY,
+        ShadowSourceFamily.HOUGH,
+    }
     assert len(first) <= OilShadowBounds().total_raw_observations
-
-
-def test_distributed_sobel_retains_bounded_observable_ridge_without_replacing_primary_peaks():
-    response, signed, support, horizontal = _distributed_sobel_input()
-    observation = _distributed_sobel_observation(
-        response,
-        signed,
-        support,
-        support,
-        horizontal,
-        crop_origin_y=195.0,
-        measurement_width=240,
-        bounds=OilShadowBounds(),
-    )
-    assert observation is not None
-    assert observation.source_family is ShadowSourceFamily.SOBEL_DISTRIBUTED
-    assert observation.measurement_scale == 10
-    assert observation.local_y == 132.0
-    assert observation.source_y == 327.0
-    assert observation.band_height_px == 21.0
-    assert observation.response_strength == pytest.approx(0.285)
-    assert observation.polarity == -1.0
-
-
-def test_distributed_sobel_rejects_compact_unrepresented_structure():
-    response, signed, support, horizontal = _distributed_sobel_input(compact_only=True)
-    assert _distributed_sobel_observation(
-        response,
-        signed,
-        support,
-        support,
-        horizontal,
-        crop_origin_y=0.0,
-        measurement_width=240,
-        bounds=OilShadowBounds(),
-    ) is None
-
-
-def test_distributed_sobel_never_displaces_saturated_ordinary_proposals():
-    bounds = OilShadowBounds()
-    ordinary = tuple(_raw(float(index * 10), index=index) for index in range(12))
-    baseline = build_bounded_proposals(ordinary, bounds)
-    supplemental = _raw(
-        125.0,
-        family=ShadowSourceFamily.SOBEL_DISTRIBUTED,
-        index=0,
-        scale=max(bounds.broad_band_scales),
-    )
-    with_supplemental = build_bounded_proposals(ordinary + (supplemental,), bounds)
-    assert with_supplemental == baseline
-    assert [item.representative_local_y for item in baseline] == [
-        float(index * 10) for index in range(12)
-    ]
 
 
 def test_bounded_diameter_rejects_transitive_bridge_and_accepts_exact_limit():
