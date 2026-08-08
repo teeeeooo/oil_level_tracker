@@ -1741,6 +1741,28 @@ def _narrow_pulse_artifact(narrow: NarrowEvidenceSummary) -> float:
     )
 
 
+def _scoped_plateau_collision_artifact(
+    bright_plateau_artifact: float,
+    broad: BroadEvidenceSummary,
+    narrow: NarrowEvidenceSummary,
+) -> float:
+    localized_structure = (
+        max(0.0, narrow.scale_persistence - narrow.horizontal_coverage)
+        if narrow.available
+        else 0.0
+    )
+    direct_collision = max(
+        _narrow_pulse_artifact(narrow),
+        localized_structure,
+    )
+    direct_collision = _unit(
+        direct_collision
+        + broad.glare_conflict
+        + narrow.border_overlap
+    )
+    return _unit(bright_plateau_artifact * direct_collision)
+
+
 def _semantic_hypothesis(
     proposal: BoundedYProposal,
     members: tuple[RawEdgeObservation, ...],
@@ -1782,10 +1804,15 @@ def _semantic_hypothesis(
         + 0.12 * (1.0 - broad.scale_consistency)
         + 0.12 * (1.0 - broad.polarity_consistency)
     )
+    plateau_collision_artifact = _scoped_plateau_collision_artifact(
+        bright_plateau_artifact,
+        broad,
+        narrow,
+    )
     artifact = _unit(
         structural_artifact * (1.0 - 0.82 * broad.strength)
         + static_prior.contribution
-        + bright_plateau_artifact
+        + plateau_collision_artifact
     )
     ambiguity = _unit(
         0.48 * (1.0 - abs(boundary - artifact))

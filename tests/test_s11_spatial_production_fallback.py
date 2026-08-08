@@ -81,6 +81,7 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         "sample2:30": 599.0,
         "sample2:60": 598.0,
         "sample3:1035": 245.0,
+        "sample4:900": 848.0,
         "sample4:1470": 866.0,
         "sample4:1680": 866.0,
     }
@@ -91,7 +92,6 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         "sample3:900",
         "sample4:0",
         "sample4:450",
-        "sample4:900",
     }
     rows = []
     root = require_s11_local_corpus()
@@ -118,7 +118,7 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
     assert {case_id: oil_y for case_id, _truth, oil_y, _foam, _auth in numeric} == expected_numeric
     assert np.mean(
         [abs(oil_y - truth) for _case_id, truth, oil_y, _foam, _auth in numeric]
-    ) == pytest.approx(7.083333333333333)
+    ) == pytest.approx(6.142857142857143)
     assert {case_id for case_id, _truth, oil_y, _foam, _auth in rows if oil_y is None} == expected_non_numeric
 
     # D4 must not inflate already valid white-Foam support and erase the accepted
@@ -415,7 +415,7 @@ def test_slice_a_removes_distributed_supplemental_authority_without_forced_promo
     )
 
 
-def test_sample4_structural_foam_is_rejected_in_s5a_and_oil_stays_non_numeric() -> None:
+def test_sample4_structural_foam_rejection_remains_independent_from_oil_boundary_authority() -> None:
     root = require_s11_local_corpus()
     cases = {case.case_id: case for case in load_cases(root)}
     for case_id in ("sample4:0", "sample4:450", "sample4:900"):
@@ -432,8 +432,12 @@ def test_sample4_structural_foam_is_rejected_in_s5a_and_oil_stays_non_numeric() 
         assert detection.debug_metrics["foam_component_width_ratio"] >= 0.70, case_id
         assert detection.debug_metrics["foam_bounding_box_fill_ratio"] < 0.30, case_id
         assert detection.debug_metrics["foam_oil_context_authoritative"] is False, case_id
-        assert detection.raw_oil_air_level_y is None, case_id
-        assert detection.debug_metrics["oil_decision_status"] == "ambiguous", case_id
+        if case_id == "sample4:900":
+            assert detection.raw_oil_air_level_y == 848.0
+            assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
+        else:
+            assert detection.raw_oil_air_level_y is None, case_id
+            assert detection.debug_metrics["oil_decision_status"] == "ambiguous", case_id
 
 
 def test_sample4_later_foam_separates_from_structural_substrate() -> None:
@@ -550,7 +554,7 @@ def test_scalar_relative_collision_candidates_cannot_publish_numeric_oil() -> No
         relative_numeric += relative.oil_y is not None
         production_numeric += oil_y is not None
         grouped[scene.collision_id].append(oil_y)
-    assert relative_numeric == 14
+    assert relative_numeric == 16
     assert production_numeric == 0
     assert all(pair == [None, None] for pair in grouped.values())
 
