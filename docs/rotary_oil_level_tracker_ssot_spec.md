@@ -64,6 +64,8 @@
 
 초기 목표는 완전 무인 자동 판정이 아니다. 프로그램은 검출 결과의 confidence와 `REVIEW_REQUIRED` 상태를 명시하여 **시험자의 판독을 정량적으로 보조**해야 한다.
 
+Detector의 실용 목표는 개별 frame의 유면 Y를 pixel-perfect하게 맞추는 것보다, 사용자가 최종 graph에서 유면의 하강·상승·정체와 최저점/회복 흐름을 이해할 수 있도록 **충분히 자주, 같은 물리적 유면을 대략적으로 추적하는 numeric observation을 제공하는 것**이다. 따라서 detector 개선에서는 usable numeric coverage와 시간축상 관측 분포/graph movement readability를 pixel-level MAE보다 우선할 수 있다. 다만 glass 구조선·반사·glare 등 유면과 무관한 대상을 지속적으로 따라 graph의 방향이나 수준을 왜곡하는 gross wrong-interface 검출은 허용하지 않는다. 관측 근거가 없는 구간을 numeric으로 합성하는 방식으로 coverage를 높여서도 안 된다.
+
 ## 1.3 제품 정체성
 
 본 프로그램은 범용 머신비전 개발 플랫폼이 아니다.

@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current engineering gate:** `Orchestrator coverage-first detector acceptance reconciliation`
-**Current owner:** `Orchestrator — detector acceptance authority reconciliation`
+**Current engineering gate:** `S11 Slice B — Scoped Plateau / Collision Authority`
+**Source lane:** `Lane C — S5-B current-frame semantic authority`
 
 ## Current decision
 
@@ -11,30 +11,34 @@ Final Windows field-workflow validation remains paused because fresh real-corpus
 
 **Slice A — Proposal Authority Consolidation is accepted and merged.** It removed the redundant distributed-Sobel supplemental proposal/semantic authority while preserving required current behavior and canonical numeric-publication safety.
 
-The immediate next step is **Orchestrator coverage-first detector acceptance reconciliation**. That reconciliation will durably align architecture/validation wording with the product-level trajectory-usefulness decision. After that reconciliation, source work proceeds to **S11 Slice B — Scoped Plateau / Collision Authority**. Slice B is not authorized during this Close.
+The coverage-first product/architecture/validation reconciliation is now complete. The detector is optimized for useful observed trajectory rather than pixel-perfect per-frame localization: usable numeric coverage and graph gap/readability may take priority over modest pixel error, while persistent gross wrong-interface tracking remains unacceptable.
+
+The current source gate is **S11 Slice B — Scoped Plateau / Collision Authority**.
 
 ## Accepted baseline that remains binding
 
 Only an accepted canonical S5-B boundary may publish numeric Oil. Positive no-interface, unavailable evidence, severe glare/exclusion/border conflict, authoritative Foam topology and the one serialized temporal owner remain fail-closed authority.
 
-S5-A Foam publication and Foam temporal gating, P2 no-interface meaning, D1/D5 Foam/Oil topology, Initial-State Retrospective FULL/EMPTY Reconstruction and observed-anchor graph semantics remain binding and outside this post-merge Close mutation authority.
+S5-A Foam publication and Foam temporal gating, P2 no-interface meaning, D1/D5 Foam/Oil topology, Initial-State Retrospective FULL/EMPTY Reconstruction and observed-anchor graph semantics remain binding and outside Slice B mutation authority.
 
 ## Ordered S11 source sequence
 
 1. **Slice A — Proposal Authority Consolidation — ACCEPTED / MERGED:** redundant distributed-Sobel supplemental proposal/semantic authority has been removed while required current behavior and canonical publication safety remain preserved.
-2. **Orchestrator coverage-first detector acceptance reconciliation:** reconcile the durable architecture/validation wording for the product-level trajectory-usefulness decision before authorizing the next source slice.
-3. **Slice B — Scoped Plateau / Collision Authority:** narrow bright-plateau opposition to the smallest directly evidenced glare/collision responsibility instead of generic artifact authority.
+2. **Coverage-first detector acceptance reconciliation — COMPLETE:** product, architecture and validation authority now prioritize usable observed trajectory over pixel-perfect localization while retaining gross wrong-interface protection.
+3. **Slice B — Scoped Plateau / Collision Authority — CURRENT:** narrow bright-plateau opposition to the smallest directly evidenced glare/collision responsibility instead of generic artifact authority, with a material usable-coverage / ambiguity-gap improvement requirement.
 4. **Slice C — Unified Spatial Corroboration:** after scalar simplification, let the existing bounded Spatial path act as independent corroboration for hard-safe weak candidates without another near-duplicate scalar gate stack.
 5. **Slice D — Effectiveness Reconciliation:** replay the complete local corpus and retained negative populations; authorize another mechanism only for a demonstrated remaining general failure class.
 6. **Final Windows field-workflow validation:** resume only after the simplified detector baseline is accepted.
 
-Later source slices remain sequencing commitments, not implementation authority for this Close.
+Later source slices remain sequencing commitments, not implementation authority for the Slice B Worker.
 
 ## Current acceptance boundary
 
-This post-merge Close may only synchronize the registered checkout, reconcile roadmap/current-status authority, validate and push that documentation, prove local/remote equality, and perform exact safe task-branch hygiene. It does not modify production source, tests, architecture contracts or validation implementation.
+Slice B must demonstrate a material increase in **usable numeric Oil coverage and/or reduction of long ambiguity gaps** across the four-video corpus relative to its exact base. Approximate Y is acceptable when it remains the same physical Oil interface and preserves useful movement shape. Pixel MAE is secondary.
 
-The new product-level trajectory-usefulness decision is queued for the next Orchestrator reconciliation and is not durably redefined by this Close.
+The slice must not gain coverage through persistent glass-structure/reflection/glare tracking, sample identity, truth/Recipe promotion, temporal interpolation, retrospective rewriting or another non-current-frame numeric authority. Existing no-interface, unavailable, severe glare/exclusion/border and authoritative-Foam hard boundaries remain binding.
+
+Evaluate the four samples as one corpus and report per-sample behavior so one video cannot hide a regression in another.
 
 ## Closure boundary
 
@@ -42,4 +46,4 @@ S11 closure remains unapproved. The previous Final Windows field-workflow gate i
 
 ## Next handoff
 
-Assign the **Orchestrator coverage-first detector acceptance reconciliation** on synchronized `main`. After that reconciliation is accepted, proceed to a fresh bounded **S11 Slice B — Scoped Plateau / Collision Authority** source handoff. Slice B implementation, final Windows validation and S12 are explicitly out of scope for this Close.
+Assign a fresh **Lane C Worker** for **S11 Slice B — Scoped Plateau / Collision Authority** from synchronized `main`. The Worker owns one focused branch/PR, bounded current-frame semantic source/tests and source-completing documentation. Slice C, final Windows validation and S12 remain out of scope.

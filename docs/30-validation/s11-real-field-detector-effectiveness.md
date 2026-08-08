@@ -22,13 +22,24 @@ The durable owners in [`../20-architecture/s11-detector-responsibility-architect
 - incompatible/unprojected ambiguity, no-interface and unavailable evidence clearing that pending path;
 - no truth-, Recipe-, frame-identity- or video-identity-based numeric promotion.
 
+## Effectiveness objective and metric priority
+
+The product objective is to make Oil movement understandable from the final observed graph. Detector validation therefore prioritizes:
+
+1. **usable numeric coverage** on frames where the Oil interface is visually identifiable enough to support an approximate current-frame observation;
+2. **time-axis observation distribution and gap behavior**, because long ambiguity runs can hide a fall, minimum, recovery or hold even when isolated accepted points are accurate;
+3. **gross wrong-interface protection**, especially persistent tracking of glass structure, reflection, glare or another unrelated feature that would misstate graph level or movement direction;
+4. **pixel localization error** as a secondary quality metric for accepted observations.
+
+A later S11 slice may be accepted with modestly worse pixel MAE when it materially improves usable coverage/graph readability and does not materially worsen gross wrong-interface behavior. Coverage may not be manufactured through truth/Recipe identity, retrospective rewriting, interpolation, hidden temporal state or numeric publication without accepted current-frame evidence.
+
 ## Subtractive source-slice acceptance
 
 Each subtractive detector slice must use the same repository-local four-video evidence surface rather than a single-sample success criterion. Report at least truth-near representation/publication behavior, numeric error for published truth anchors, ambiguity/abstention behavior and retained false-positive protection.
 
 Slice A must prove that consolidating Y-proposal authority does not reduce blind-visible representation or create new numeric Oil on retained glare, structural, Foam, no-interface or transient-false-line negatives. A lower raw-observation/proposal load is supporting evidence only; it does not substitute for correctness.
 
-Later Slice B/C work must preserve the same hard-safety boundary and independently prove the responsibility it removes or transfers. If a subtractive change exposes a retained negative family, repair only the smallest demonstrated safety responsibility rather than restoring an undifferentiated prior heuristic stack.
+Slice B/C work must preserve the accepted hard-safety boundary and independently prove the responsibility it removes or transfers. For Slice B and later coverage work, unchanged publication is not a success criterion: the change should materially improve usable observed coverage or graph-gap behavior while retaining gross wrong-interface protection. If a subtractive change exposes a retained negative family, repair only the smallest demonstrated safety responsibility rather than restoring an undifferentiated prior heuristic stack.
 
 No slice may claim acceptance from publication count alone, from one sample, or from temporal/result interpolation of missing current-frame Oil.
 

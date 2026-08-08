@@ -1,6 +1,6 @@
 # S11 Subtractive Detector Simplification Architecture
 
-**Status:** `ACTIVE DESIGN — implementation pending`
+**Status:** `ACTIVE — Slice A accepted; Slice B current`
 
 ## Purpose
 
@@ -14,7 +14,7 @@ A fresh read-only review on synchronized `main` at `ce9f37f2e5a25888f48ebd69f8c2
 
 The same review found that difficult frames commonly retain material current-frame hypotheses near user-confirmed Oil. The dominant problem is therefore not simply missing image primitives: bounded proposal competition and repeated semantic opposition can suppress already-observed evidence.
 
-Subtractive ablation also showed that `REGION_STEP` alone preserved the blind-visible representation coverage of the full observation stack while improving user-confirmed truth representation and roughly halving raw observation load. Sobel/Canny/Hough-derived proposal ownership therefore has no demonstrated corpus-wide necessity at the current baseline.
+Initial subtractive ablation suggested that `REGION_STEP` alone could preserve the available-corpus representation surface. Slice A then expanded retained positive/negative evidence and disproved the stronger removal hypothesis: ordinary Sobel, Canny and Hough each retained a distinct competing-proposal responsibility, while distributed-Sobel supplemental authority had no remaining required production responsibility and was removed.
 
 The bright-plateau artifact heuristic is a second demonstrated overreach. On real user-confirmed sample2/sample4 Oil hypotheses it can dominate artifact likelihood even when direct broad/narrow glare overlap is zero. Removing it globally is not yet safe: a retained `foam-clipped-glare` negative family can become false Oil. That negative family, however, carries direct glare/collision evidence, so plateau authority should be narrowed to proven collision support rather than remain generic opposition for every hypothesis.
 
@@ -25,23 +25,31 @@ The existing offline trajectory probe remains negative evidence against solving 
 ## Design principles
 
 1. **Subtract before adding.** No new CV primitive, dependency, ML model, optical flow or raster history is justified while removing redundant authority preserves or improves evidence coverage.
-2. **One primary Y-proposal responsibility.** Current evidence supports region/phase-transition representation as the primary bounded Oil proposal owner. Edge primitives may remain corroborating features without independently consuming proposal capacity.
+2. **Primary representation with only proven competitors.** Region/phase-transition evidence is the primary Oil Y-proposal responsibility. Ordinary Sobel, Canny and Hough may retain bounded competing proposal evidence only where retained failures prove a distinct current responsibility; supplemental proposal families without such proof should be removed.
 3. **Keep only demonstrated hard invalidity hard.** Accepted no-interface, unavailable evidence, severe glare/exclusion/border conflict and authoritative Foam topology remain fail-closed.
 4. **Compose soft semantics once.** Boundary, artifact, morphology, polarity and ambiguity evidence must not repeatedly veto the same candidate through multiple correlated routes.
 5. **Use Spatial as independent proof.** The existing bounded cross-ROI path may corroborate a hard-safe weak candidate when scalar uniqueness is insufficient; it must not become another duplicate stack of the same semantic thresholds.
 6. **Preserve one numeric-publication owner and one serialized temporal owner.** Only a canonical accepted boundary may publish numeric Oil; temporal confirmation semantics remain downstream and unchanged.
 
+## Product optimization objective
+
+The detector is optimized for **usable observed trajectory**, not pixel-perfect frame localization. A coarse current-frame Oil boundary may be more valuable than abstention when it still represents the same physical Oil interface and helps the final graph communicate rise, fall, hold, minimum and recovery behavior.
+
+Accordingly, later slices may trade a modest increase in pixel error for materially higher usable numeric coverage and better time-axis observation distribution. That trade is not allowed to create persistent gross wrong-interface tracking of glass structure, reflection, glare or another unrelated feature, and it never authorizes synthetic numeric values where current-frame evidence is absent.
+
 ## Ordered source slices
 
-### Slice A — Proposal Authority Consolidation
+### Slice A — Proposal Authority Consolidation — ACCEPTED
 
-Make region/phase-transition evidence the primary Oil Y-proposal owner inside the existing S5-B current-frame pipeline. Sobel, Canny, Hough and distributed-Sobel evidence may remain available as local corroborating measurements where still useful, but they must not independently consume bounded proposal slots unless the Worker proves a retained failure family that requires that ownership.
+Slice A removed the distributed-Sobel supplemental producer and its separate raw/proposal/semantic capacity policy. Ordinary Region, Sobel, Canny and Hough proposal evidence remains because retained failure evidence demonstrated distinct current responsibilities. Canonical publication behavior was preserved.
 
-Acceptance is not “fewer lines.” The slice must preserve or improve truth-near representation across the four-video corpus, preserve blind-visible representation, retain current numeric-publication safety, and reduce redundant proposal competition without changing temporal, Foam, result or persisted contracts.
+This accepted slice is the simplified baseline for later coverage work; removed distributed-Sobel authority must not be restored merely to increase a benchmark count.
 
 ### Slice B — Scoped Plateau / Collision Authority
 
-After Slice A is accepted, remove bright-plateau evidence from unconditional generic artifact opposition. Retain only the smallest directly evidenced collision responsibility needed to protect real glare/foam-glare failures. Do not replace the removed broad authority with new appearance carve-outs or sample-specific thresholds.
+Remove bright-plateau evidence from unconditional generic artifact opposition. Retain only the smallest directly evidenced collision responsibility needed to protect real glare/foam-glare failures. Do not replace the removed broad authority with new appearance carve-outs or sample-specific thresholds.
+
+Slice B is the first coverage-improvement slice. It should materially increase usable numeric Oil observations and reduce long ambiguity gaps when the same physical Oil interface remains approximately represented. Pixel MAE is secondary; persistent gross wrong-interface tracking remains a blocking regression.
 
 ### Slice C — Unified Spatial Corroboration
 
