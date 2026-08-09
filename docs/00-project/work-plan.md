@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `Behavior-preserving MainWindow responsibility modularization`
+**Current gate:** `Behavior-preserving detector-pipeline responsibility modularization`
 **Source authority:** `structural responsibility separation only; detector/report/product behavior changes are not authorized`
 
 ## Accepted source baseline
@@ -20,17 +20,19 @@ S11-R2 implementation and replay evidence is [`../60-evidence/s11/s11-r2-foam-sp
 
 The post-R2 review and baseline-validation repair evidence is [`../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md`](../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md). It preserves the accepted detector stream and does not reopen general detector tuning.
 
+The stacked MainWindow structural head `79d97378b81770b4465dc68f9affd25aae9d33fd` moved playback/live-preview and Profile lifecycle ownership into explicit UI collaborators and passed fresh independent exact-head verification. This records a completed structural gate only; it does not claim merge, S11 `DONE` or Windows acceptance.
+
 ## Current gate scope
 
-Refactor the Workbench UI shell so `MainWindow` no longer directly owns every Profile and video/preview lifecycle responsibility:
+Refactor the detector pipeline so `oil_shadow_pipeline.py` retains serialized orchestration without also directly owning all canonical/invariant validation and runtime/debug projection responsibilities:
 
-1. move material Workbench playback/live-preview state and the simplest cohesive Profile lifecycle state into explicit UI collaborators;
-2. retain bounded compatibility delegates where adjacent accepted coordinators or tests require the established MainWindow surface;
-3. preserve Korean labels/layout, signal routing, frame/time/index semantics, preview debounce and stale suppression, playback end/step/seek behavior, reader cleanup, recent Profile navigation and Save/Discard/Cancel close behavior;
-4. prove the new ownership and delegation with targeted automated tests and a fresh independent exact-head audit;
-5. do not change detector implementation, report behavior, thresholds, public or persisted schemas, packaging or product workflow semantics.
+1. retain `OilHypothesisPipeline` as the single serialized current-frame/temporal queue and store owner and retain exactly one fixed reducer owner;
+2. transfer canonical evidence, reduction, transition and store-invariant validation into a stateless collaborator that receives explicit bounds and values but no pipeline back-reference or mutation authority;
+3. transfer runtime metrics and debug-detail projection into a dependency-cycle-free diagnostics owner while preserving `OilHypothesisPipeline`, `OilShadowPipeline`, `outcome_hypotheses`, `oil_runtime_metrics`, `oil_debug_detail` and established private validation/failure-injection seams;
+4. preserve thresholds, proposal/candidate and transition ordering, accepted/failure reasons, fail-closed semantics, debug/resource keys and shapes, public/persisted schemas, tracking fingerprints and OpenCV integration exactly;
+5. prove ownership, dependency direction, import compatibility and the accepted Oil/Foam/Spatial behavior with targeted automated tests, then hand the exact head to a fresh independent Auditor for focused review and the fixed four-video S11-R2 replay.
 
-After this gate is independently accepted, perform the same behavior-preserving responsibility modularization and independent verification for the detector pipeline. The final target-Windows field-workflow validation remains the S11 closure gate but is intentionally sequenced after both structural gates.
+The final target-Windows field-workflow validation remains the S11 closure gate but is intentionally sequenced after this detector structural gate and its independent exact-head verification.
 
 ## Subsequent target-Windows closure gate
 
@@ -68,4 +70,4 @@ S11 closes only after the MainWindow and detector-pipeline responsibility modula
 
 ## Next handoff
 
-Complete the bounded MainWindow source, test and current-gate documentation change, then hand the exact head to a fresh independent Lane C Auditor for focused review and validation. Do not start target-Windows closure validation from an intermediate structural head.
+Complete the bounded detector-pipeline source, ownership test and current-gate documentation change, then hand the exact head to a fresh independent Lane C Auditor for focused review and the fixed four-video S11-R2 replay. Do not start target-Windows closure validation from an unaudited structural head.

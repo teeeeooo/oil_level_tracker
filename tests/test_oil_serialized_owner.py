@@ -693,6 +693,8 @@ def test_obsolete_transaction_and_parallel_mutation_surface_is_absent():
         path.read_text(encoding="utf-8")
         for path in (
             source_root / "oil_shadow_pipeline.py",
+            source_root / "oil_pipeline_validation.py",
+            source_root / "oil_pipeline_diagnostics.py",
             source_root / "oil_shadow_temporal.py",
             source_root / "opencv_phase_detector.py",
             source_root / "oil_hypothesis_projection.py",
