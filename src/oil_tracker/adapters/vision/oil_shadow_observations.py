@@ -38,8 +38,8 @@ from .oil_shadow_types import (
 
 _ORDINARY_BOUNDARY_LIKELIHOOD_FLOOR = 0.48
 _FOAM_SEPARATED_MIN_HORIZONTAL_COVERAGE = 0.30
-_FOAM_TEXTURE_MAX_BROAD_STRENGTH = 0.10
-_FOAM_TEXTURE_MIN_NARROW_COVERAGE = 0.90
+_FOAM_RECOVERY_MIN_BROAD_STRENGTH = 0.10
+_FOAM_RECOVERY_MIN_SATURATED_NARROW_COVERAGE = 0.90
 
 
 @dataclass(frozen=True)
@@ -419,6 +419,8 @@ def evaluate_typed_current_observation(
         ordered,
         no_interface,
         accepted_foam_front_local_y=accepted_foam_front_local_y,
+        accepted_foam_component_mask=accepted_foam_component_mask,
+        base_effective_mask=effective_mask,
     )
     if recovered is None and allow_comparative_recovery:
         recovered = _select_comparative_textured_boundary(
@@ -428,6 +430,8 @@ def evaluate_typed_current_observation(
             no_interface,
             bounds,
             accepted_foam_front_local_y=accepted_foam_front_local_y,
+            accepted_foam_component_mask=accepted_foam_component_mask,
+            base_effective_mask=effective_mask,
         )
     if (
         recovered is None
@@ -538,14 +542,7 @@ def _has_hard_current_frame_support(
 
     if (
         accepted_foam_front_local_y is not None
-        and (
-            candidate.representative_local_y <= accepted_foam_front_local_y
-            or (
-                candidate.broad.strength < _FOAM_TEXTURE_MAX_BROAD_STRENGTH
-                and candidate.narrow.horizontal_coverage
-                >= _FOAM_TEXTURE_MIN_NARROW_COVERAGE
-            )
-        )
+        and candidate.representative_local_y <= accepted_foam_front_local_y
     ):
         return False
     spatial_conflict = max(
@@ -560,6 +557,46 @@ def _has_hard_current_frame_support(
         and candidate.evidence_availability >= 0.30
         and spatial_conflict < 0.55
     )
+
+
+def _has_foam_context_recovery_support(
+    effective_mask: np.ndarray,
+    accepted_foam_component_mask: np.ndarray | None,
+    candidate: SemanticHypothesis,
+) -> bool:
+    """Require weak recovery evidence to be distinct from accepted Foam texture.
+
+    A real Oil boundary may lie inside the accepted Foam component, especially
+    at the Foam/Oil transition, so overlap alone cannot reject it.  The
+    component only explains away a candidate when it dominates the candidate
+    row *and* the remaining evidence has the weak-broad/saturated-narrow shape
+    produced by accepted Foam texture.  This is eligibility for fallback
+    recovery, not canonical hard safety.
+    """
+
+    if accepted_foam_component_mask is None:
+        return True
+    _validate_same_shape(effective_mask, accepted_foam_component_mask)
+    height = effective_mask.shape[0]
+    local_y = candidate.representative_local_y
+    first_row = max(0, min(height - 1, int(math.floor(local_y))))
+    last_row = max(0, min(height - 1, int(math.ceil(local_y))))
+    row_slice = slice(first_row, last_row + 1)
+    effective = effective_mask[row_slice] > 0
+    available = int(np.count_nonzero(effective))
+    if available == 0:
+        return False
+    residual = effective & ~(accepted_foam_component_mask[row_slice] > 0)
+    residual_fraction = float(np.count_nonzero(residual)) / available
+    component_dominated = (
+        residual_fraction + 1e-12 < _FOAM_SEPARATED_MIN_HORIZONTAL_COVERAGE
+    )
+    unresolved_foam_texture = bool(
+        candidate.broad.strength < _FOAM_RECOVERY_MIN_BROAD_STRENGTH
+        and candidate.narrow.horizontal_coverage
+        >= _FOAM_RECOVERY_MIN_SATURATED_NARROW_COVERAGE
+    )
+    return not (component_dominated and unresolved_foam_texture)
 
 
 def _comparative_authority_score(
@@ -647,6 +684,8 @@ def _select_comparative_textured_boundary(
     bounds: OilShadowBounds,
     *,
     accepted_foam_front_local_y: float | None = None,
+    accepted_foam_component_mask: np.ndarray | None = None,
+    base_effective_mask: np.ndarray | None = None,
 ) -> SemanticHypothesis | None:
     """Compare every hard-safe weak hypothesis using independent texture proof.
 
@@ -656,12 +695,18 @@ def _select_comparative_textured_boundary(
     continuous collision evidence are independent current-frame corroboration.
     """
 
+    support_mask = effective_mask if base_effective_mask is None else base_effective_mask
     hard_safe = [
         candidate
         for candidate in ordered
         if _has_hard_current_frame_support(
             candidate,
             accepted_foam_front_local_y,
+        )
+        and _has_foam_context_recovery_support(
+            support_mask,
+            accepted_foam_component_mask,
+            candidate,
         )
     ]
     if not hard_safe:
@@ -726,10 +771,19 @@ def _select_textured_low_contrast_boundary(
     no_interface: ShadowNoInterfaceEvidence,
     *,
     accepted_foam_front_local_y: float | None = None,
+    accepted_foam_component_mask: np.ndarray | None = None,
+    base_effective_mask: np.ndarray | None = None,
 ) -> SemanticHypothesis | None:
     """Retain the accepted D2 scalar safety envelope for Spatial internals."""
 
+    support_mask = effective_mask if base_effective_mask is None else base_effective_mask
     for candidate in ordered:
+        if not _has_foam_context_recovery_support(
+            support_mask,
+            accepted_foam_component_mask,
+            candidate,
+        ):
+            continue
         spatial_conflict = max(
             candidate.broad.glare_conflict,
             candidate.broad.exclusion_conflict,

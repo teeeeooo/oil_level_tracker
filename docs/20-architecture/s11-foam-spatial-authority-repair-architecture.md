@@ -47,11 +47,24 @@ The D5 Foam-separated narrow candidate requires horizontal material coverage of 
 
 No other D5 score, geometry, Foam-front distance or topology threshold changes.
 
+## Accepted-Foam texture-recovery eligibility
+
+The post-R2 validation repair keeps accepted-Foam texture attribution out of generic hard safety. A below-front hypothesis remains hard-safe based on topology, visibility and conflict evidence; it is not rejected merely because broad strength is weak and narrow coverage is wide.
+
+Comparative and Spatial fallback recovery may withhold authority only when the accepted Foam component itself materially explains that texture. The candidate is unresolved Foam texture when the following conditions are all true:
+
+1. less than `0.30` of the effective candidate row remains outside the accepted Foam component;
+2. broad phase strength is below `0.10`; and
+3. narrow horizontal coverage is at least `0.90`.
+
+Component dominance alone cannot reject a real Foam/Oil transition, and the scalar texture shape alone cannot reject a spatially separate weak Oil boundary. The ordinary canonical boundary path and the existing Foam-separated phase selector retain their own accepted rules. This is a scoped positive-evidence requirement for fallback recovery, not a new Foam publication owner or general artifact veto.
+
 ## Invariants
 
 R2 must preserve all of the following:
 
 - positive no-interface, unavailable evidence, severe glare/exclusion/border conflict and authoritative Foam topology remain fail-closed;
+- accepted-Foam overlap alone cannot invalidate a below-front Oil hypothesis;
 - weak Spatial recovery still requires the existing full `5/5` cross-ROI proof;
 - paired-edge, sector count, local-authority tie and scalar semantic thresholds are unchanged;
 - no video, frame, Recipe, truth or repository-sample identity is available to production decisions;
@@ -65,7 +78,7 @@ R2 is not intended to maximize raw numeric coverage, guarantee 50% corpus public
 
 ## Source ownership
 
-- `oil_shadow_observations.py` owns the Foam-separated material-support floor.
+- `oil_shadow_observations.py` owns the Foam-separated material-support floor and component-scoped texture-recovery eligibility.
 - `oil_spatial_fallback.py` owns incumbent eligibility, path validation and challenger comparison.
 - `oil_shadow_pipeline.py` owns invoking the bounded challenger route in accepted-Foam context while retaining one current-frame result.
 - the existing report architecture owns presentation only and receives no new estimation authority.

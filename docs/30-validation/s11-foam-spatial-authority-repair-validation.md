@@ -35,6 +35,7 @@ The source implementation must prove:
 4. an incumbent that is not artifact-dominant or that passes its own Spatial path remains unchanged;
 5. a challenger without at least `0.08` semantic-margin improvement remains non-authoritative;
 6. a qualifying challenger still resolves through canonical current-frame publication and the unchanged serialized reducer.
+7. weak-broad/full-width texture remains eligible when spatially separate from the accepted Foam component, but remains non-numeric when the accepted component dominates its row and can explain that same weak texture; established sample3 D5 Oil anchors must remain unchanged.
 
 ## Preservation suite
 
@@ -44,6 +45,7 @@ Run the focused Oil/Spatial/Foam tests and the retained detector preservation su
 - glare, collision, border and exclusion conflicts;
 - structural and explanatory-overlay false lines;
 - Foam publication/topology and Oil-below-Foam behavior;
+- accepted low-light Foam texture that must not become Oil, paired with component-separated weak-boundary and existing real D5 positive controls;
 - current-frame ambiguity, canonical publication and serialized reacquisition;
 - existing report observation-stream and display-only bridge invariants.
 

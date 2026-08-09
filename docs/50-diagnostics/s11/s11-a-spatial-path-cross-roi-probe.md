@@ -108,11 +108,11 @@ Residual misses after the variant remain `base_sample_1:156`, `base_sample_1:240
 
 ### S5-B observational-equivalence collision
 
-The prior scalar relative-phase route produced numeric Oil on `16 / 16` collision scenes. The same
-16 candidates reach the spatial gate, but all 16 are rejected as `degenerate_scalar_row` because
+The prior scalar relative-phase route produced numeric Oil on `14 / 16` collision scenes. The same
+14 candidates reach the spatial gate, but all 14 are rejected as `degenerate_scalar_row` because
 their independently optimized sector path spans only `0–1 px`.
 
-- scalar P1 collision numeric: `16 / 16`
+- scalar P1 collision numeric: `14 / 16`
 - spatial-gated collision numeric: `0 / 16`
 - pair-output divergence: none
 

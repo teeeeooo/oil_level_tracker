@@ -8,7 +8,8 @@ It is not production trajectory approval, detector/general-field accuracy approv
 Starting production authority for the probe is:
 
 - repository: `teeeeooo/oil_level_tracker`
-- accepted base: `4bb52a2718d176874c59a97b9164453165a90c00`
+- estimator design base: `4bb52a2718d176874c59a97b9164453165a90c00`
+- reconciled production-stream baseline: `16ea0cd1e63b929db469946ccddd75a8762042fb`
 - current production Oil layer: P0/D4/P2/Spatial single-frame observation plus the accepted serialized S5-B temporal/reducer/projection ownership
 
 The probe does **not** modify `src/`, `TrackingSample`, `AnalysisResult`, CSV/result persistence, Result Review, graph rendering, detector history, or the canonical reducer/projection contract.
@@ -55,6 +56,11 @@ Two production views are kept distinct:
 1. **Truth-anchor baseline**: each of the 13 usable truth frames is passed through the current production `OpenCvPhaseDetector`, matching the existing S11 production truth-frame baseline.
 2. **Trajectory input stream**: the current serialized detector path is replayed at `2 Hz`, including production static-artifact learning, over the bounded Recipe qualification windows.
 
+Manifest schema v2 preserves the original estimator design authority while identifying the
+later accepted S11-R2 production stream used for this reconciliation. The original v1 probe
+payload remains available in Git history; the figures below describe the reconciled stream and
+must not be attributed to the earlier design-base detector output.
+
 The trajectory input stream contains 299 scheduled detections. The held-out evaluation never injects truth Y into that stream. When a truth frame is already a scheduled production row, every row with that same frame index is excluded as estimator support.
 
 | video | stream samples | observed raw Oil | missing raw Oil | max consecutive missing |
@@ -98,7 +104,7 @@ Across all 13 usable truth anchors:
 | `sample2:30` | observed `599` | unavailable | no left observed anchor after hold-out | — |
 | `sample2:60` | observed `598` | unavailable | no right observed anchor after hold-out | — |
 | `sample3:900` | unavailable | unavailable | no left observed anchor | — |
-| `sample3:1035` | observed `245` | unavailable | `32.5325@269` → `35.035@240`, `2.5025 s` unsupported gap | — |
+| `sample3:1035` | observed `245` | unavailable | `33.033@294` → `35.035@240`, `2.002 s` unsupported gap | — |
 | `sample4:0` | unavailable | unavailable | no left observed anchor | — |
 | `sample4:450` | observed `853` | estimated `850.5` | `14.5@850` → `15.5@851` | `2.0` |
 | `sample4:900` | observed `848` | estimated `840.0` | `29.5@838` → `30.5@842` | `8.5` |
@@ -113,7 +119,7 @@ The current difficult production misses are `base_sample_1:156`, `base_sample_1:
 
 `sample4:1470` is the material worst case: bounded bracketing produces `866.5 px` against truth `855 px`. Dense observations therefore do not imply trustworthy physical trajectory when the observation owner can remain on a wrong structural path.
 
-The estimator creates no continuity across unsupported long gaps. `sample3:1035` has two numeric anchors but their `2.5025 s` span exceeds the `1.0 s` bound, so the result remains unavailable.
+The estimator creates no continuity across unsupported long gaps. `sample3:1035` has two numeric anchors but their `2.002 s` span exceeds the `1.0 s` bound, so the result remains unavailable.
 
 The natural four-video stream contains no FULL/EMPTY no-interface rows in the selected qualification windows. The diagnostic contract is nevertheless locked by development tests: no-interface at the target or inside support is censored and forces abstention; it is never an exact Oil measurement. Synthetic tests also lock abstention for occlusion/detection-loss blockers, repeated ambiguity across a long gap, and contradictory anchor jumps.
 
@@ -138,7 +144,7 @@ If a later gate nevertheless elects to expose an estimated trajectory, that is a
 Reproducible machine evidence is checked in at:
 
 - `docs/50-diagnostics/s11/s11-offline-temporal-trajectory-probe-manifest.json`
-- fingerprint: `e397c67c95ccb8380d41f6c1f748cb1fb24847f305c15fd6ba332adb2ffb2b6d`
+- fingerprint: `84eaff639c2fe7f264f47dfe1dcab95392c26210e764512c6deb8728c6387a4d`
 
 ## Validation boundary
 

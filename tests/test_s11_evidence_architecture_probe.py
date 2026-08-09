@@ -153,7 +153,13 @@ def test_p1_and_p3_collision_failure_is_explicit_while_p0_and_p2_preserve_observ
                 outputs.append((row.oil_y, row.current_kind))
             pair_outputs[variant][collision_id] = outputs
             assert outputs[0] == outputs[1], (variant, collision_id, outputs)
-    assert counts == {"P0": 0, "P1": 16, "P2": 0, "P3": 16}
+    current_scene_count = sum(len(pair) for pair in grouped.values())
+    assert counts == {
+        "P0": 0,
+        "P1": current_scene_count,
+        "P2": 0,
+        "P3": current_scene_count,
+    }
 
 
 def test_all_probe_variants_keep_structural_foam_false_oil_closed() -> None:

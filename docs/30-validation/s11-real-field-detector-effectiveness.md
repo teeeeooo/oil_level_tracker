@@ -8,6 +8,8 @@ The accepted D1–D5/S5-B and serialized temporal baseline remains the preservat
 
 The bounded S11-R2 Foam/Spatial composition repair is now accepted on top of that floor. It raises available-corpus numeric Oil from `109/299` to `111/299`, preserves `8/13` truth numerics at `5.4375 px` MAE and removes/corrects misleading sample4 bottom-structure extrema. Its exact acceptance record is [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
 
+The post-R2 baseline-validation maintenance keeps that exact `111/299` stream while narrowing the low-light accepted-Foam texture repair to candidates whose row is actually dominated by the accepted component. It also restores immutable historical probe figures and gives the refreshed offline-trajectory manifest explicit design-base versus production-stream provenance. Its review record is [`../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md`](../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md).
+
 ## Accepted detector baseline
 
 The durable owners in [`../20-architecture/s11-detector-responsibility-architecture.md`](../20-architecture/s11-detector-responsibility-architecture.md) remain materially unchanged:

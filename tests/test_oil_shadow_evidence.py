@@ -825,6 +825,71 @@ def test_d3_hard_invalid_foam_hypothesis_cannot_own_comparative_anchor(monkeypat
     assert recovered.hypothesis.identity == safe_target.identity
 
 
+def test_foam_context_texture_recovery_scopes_weak_texture_to_component_overlap(
+    monkeypatch,
+):
+    target = _typed_hypothesis(
+        "foam-component-row-support",
+        y=12.0,
+        boundary=0.30,
+        artifact=0.10,
+        ambiguity=0.62,
+        broad_strength=0.08,
+        broad_scale_consistency=0.90,
+        narrow_peak_strength=0.50,
+        narrow_horizontal_coverage=1.0,
+        paired_edge_strength=0.60,
+    )
+    evidence = oil_shadow_observations._SingleFrameIdentifiabilityEvidence(
+        phase_ceiling_pressure=0.0,
+        texture_relief=0.90,
+        broad_corroboration_deficit=0.8,
+        evidence_reliability=0.90,
+        collision_pressure=0.0,
+        semantic_support=0.20,
+        acceptance_margin=-0.20,
+    )
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_single_frame_identifiability_evidence",
+        lambda *_args: evidence,
+    )
+
+    distinct_component = np.zeros((20, 20), dtype=np.uint8)
+    distinct_component[6:10, :15] = 255
+    recovered = _typed_observation(
+        monkeypatch,
+        (target,),
+        no_interface=0.50,
+        accepted_foam_front_local_y=6.0,
+        accepted_foam_component_mask=distinct_component,
+    )
+    assert isinstance(recovered, ShadowBoundaryObservation)
+    assert recovered.hypothesis.identity == target.identity
+
+    threshold_component = distinct_component.copy()
+    threshold_component[12, :14] = 255
+    threshold_recovered = _typed_observation(
+        monkeypatch,
+        (target,),
+        no_interface=0.50,
+        accepted_foam_front_local_y=6.0,
+        accepted_foam_component_mask=threshold_component,
+    )
+    assert isinstance(threshold_recovered, ShadowBoundaryObservation)
+
+    dominated_component = distinct_component.copy()
+    dominated_component[12, :15] = 255
+    unresolved = _typed_observation(
+        monkeypatch,
+        (target,),
+        no_interface=0.50,
+        accepted_foam_front_local_y=6.0,
+        accepted_foam_component_mask=dominated_component,
+    )
+    assert isinstance(unresolved, ShadowAmbiguousObservation)
+
+
 def test_d3_local_near_tie_fails_closed_after_comparative_recovery(monkeypatch):
     first = _typed_hypothesis(
         "d3-tie-a",

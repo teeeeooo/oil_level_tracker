@@ -22,7 +22,8 @@ from tests.diagnostics.s11_evidence_probe import (
     repository_root,
 )
 
-BASELINE_MAIN_SHA = "4bb52a2718d176874c59a97b9164453165a90c00"
+ESTIMATOR_DESIGN_BASE_SHA = "4bb52a2718d176874c59a97b9164453165a90c00"
+PRODUCTION_STREAM_BASELINE_SHA = "16ea0cd1e63b929db469946ccddd75a8762042fb"
 SAMPLING_FPS = 2.0
 MAXIMUM_SUPPORT_INTERVALS = 2.0
 # These are corpus execution windows only; the estimator never branches by sample identity.
@@ -323,8 +324,9 @@ def build_manifest(
         for sample in CORPUS_STEMS
     }
     payload: dict[str, object] = {
-        "schema": "s11-offline-temporal-trajectory-probe-v1",
-        "baseline_main_sha": BASELINE_MAIN_SHA,
+        "schema": "s11-offline-temporal-trajectory-probe-v2",
+        "estimator_design_base_sha": ESTIMATOR_DESIGN_BASE_SHA,
+        "production_stream_baseline_sha": PRODUCTION_STREAM_BASELINE_SHA,
         "inputs": inputs,
         "estimator": {
             "method": "single-slot-bounded-linear-bracketing",

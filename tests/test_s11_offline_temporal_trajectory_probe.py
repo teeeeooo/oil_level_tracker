@@ -133,6 +133,13 @@ def test_four_video_held_out_reconstruction_is_insufficient_for_integration() ->
     held_out = manifest["held_out_reconstruction"]
     stream = manifest["production_stream_baseline"]["total"]
 
+    assert manifest["schema"] == "s11-offline-temporal-trajectory-probe-v2"
+    assert manifest["estimator_design_base_sha"] == (
+        "4bb52a2718d176874c59a97b9164453165a90c00"
+    )
+    assert manifest["production_stream_baseline_sha"] == (
+        "16ea0cd1e63b929db469946ccddd75a8762042fb"
+    )
     assert truth["usable_truth_count"] == 13
     assert truth["normally_observed_count"] == 8
     assert truth["normally_missing_count"] == 5
@@ -157,7 +164,7 @@ def test_four_video_held_out_reconstruction_is_insufficient_for_integration() ->
     assert held_out["normally_missing_recovered_case_ids"] == []
     assert manifest["conclusion"] == "insufficient_trajectory_evidence"
     assert manifest["result_fingerprint_sha256"] == (
-        "e397c67c95ccb8380d41f6c1f748cb1fb24847f305c15fd6ba332adb2ffb2b6d"
+        "84eaff639c2fe7f264f47dfe1dcab95392c26210e764512c6deb8728c6387a4d"
     )
     assert build_manifest(streams, baselines, estimates)["result_fingerprint_sha256"] == (
         manifest["result_fingerprint_sha256"]

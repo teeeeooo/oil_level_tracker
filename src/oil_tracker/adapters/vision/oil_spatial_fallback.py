@@ -504,6 +504,12 @@ def _select_spatially_corroborated_textured_boundary(
             accepted_foam_front_local_y,
         ):
             continue
+        if not observations._has_foam_context_recovery_support(
+            effective_mask,
+            accepted_foam_component_mask,
+            candidate,
+        ):
+            continue
 
         second_boundary = max(
             (

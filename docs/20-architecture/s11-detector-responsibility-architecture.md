@@ -34,6 +34,8 @@ S5-A owns current-frame Foam support/component classification and its accepted F
 
 When Foam context is authoritative for Oil, its topology is a **constraint on Oil evidence**, not a second Oil semantic system. Accepted Foam pixels may be excluded from independent Oil corroboration so Foam itself cannot supply Oil proof.
 
+Accepted-Foam component overlap is not, by itself, hard Oil invalidity. A physical Oil boundary can lie inside the segmented Foam layer near the Foam/Oil transition. For comparative and Spatial recovery only, Foam texture is considered an unresolved alternative when all three facts coincide: the accepted component leaves less than `0.30` of the effective candidate row outside Foam, broad phase strength is below `0.10`, and narrow horizontal coverage is at least `0.90`. That conjunctive rule withholds fallback authority because the accepted component can explain the weak full-width texture; it does not reject an ordinary canonical boundary, classify the candidate as an artifact, or constrain an equally weak candidate whose row is spatially distinct from the accepted component.
+
 ## D3 comparative current-frame authority
 
 D3 keeps direct observability/topology invalidity hard while treating correlated weak semantic signals as comparative evidence rather than repeated vetoes. Qualified no-interface opposition is resolved once. For hard-safe candidates, positive and opposing evidence are composed once, and locally near-equal alternatives remain fail-closed.
@@ -48,7 +50,7 @@ D5 preserves the accepted D2/Spatial and D3 Oil authorities when genuine accepte
 
 1. S5-B hypotheses and accepted D2/D3 semantic owners remain responsible for Oil.
 2. Authoritative Foam topology is applied as a hard admissibility constraint.
-3. Accepted Foam-component pixels are excluded from independent Oil-identifiability proof where required.
+3. Accepted Foam-component pixels are excluded from independent Oil-identifiability proof where required, while component overlap alone never makes a below-front Oil hypothesis hard-invalid.
 4. no-interface, visibility, glare/exclusion/border and structural safety remain unchanged.
 5. Spatial proves its path on the Foam-excluded residual raster.
 6. any Foam-separated auxiliary selector remains subordinate to these owners and cannot bypass the same hard constraints.

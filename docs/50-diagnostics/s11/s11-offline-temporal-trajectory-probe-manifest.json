@@ -291,7 +291,6 @@
       "truth_oil_y": 848.5
     }
   ],
-  "baseline_main_sha": "4bb52a2718d176874c59a97b9164453165a90c00",
   "conclusion": "insufficient_trajectory_evidence",
   "estimator": {
     "feedback_to_detector_or_tracker": false,
@@ -302,6 +301,7 @@
     "no_interface_semantics": "censored; never numeric",
     "sampling_fps": 2.0
   },
+  "estimator_design_base_sha": "4bb52a2718d176874c59a97b9164453165a90c00",
   "held_out_reconstruction": {
     "abstention_rate": 0.7692307692307693,
     "estimated_mae_px": 7.333333333333333,
@@ -394,6 +394,7 @@
       "unavailable_count": 188
     }
   },
+  "production_stream_baseline_sha": "16ea0cd1e63b929db469946ccddd75a8762042fb",
   "production_truth_anchor_baseline": {
     "normally_missing_count": 5,
     "normally_observed_count": 8,
@@ -408,6 +409,6 @@
     "retained_estimator_temporal_state": 0,
     "retained_images": 0
   },
-  "result_fingerprint_sha256": "e397c67c95ccb8380d41f6c1f748cb1fb24847f305c15fd6ba332adb2ffb2b6d",
-  "schema": "s11-offline-temporal-trajectory-probe-v1"
+  "result_fingerprint_sha256": "84eaff639c2fe7f264f47dfe1dcab95392c26210e764512c6deb8728c6387a4d",
+  "schema": "s11-offline-temporal-trajectory-probe-v2"
 }
