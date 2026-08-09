@@ -5,7 +5,7 @@ from pathlib import Path
 from PySide6.QtCore import QTimer, Signal
 from PySide6.QtWidgets import QLabel, QSizePolicy, QVBoxLayout, QWidget
 
-from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+from oil_tracker.application.ports.video_reader import VideoReader, VideoReaderFactory
 from oil_tracker.ui.widgets.transport_bar import TransportBar
 from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
 
@@ -14,9 +14,10 @@ class VideoPreviewWidget(QWidget):
     timestampChanged = Signal(float)
     videoError = Signal(str)
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent=None, *, reader_factory: VideoReaderFactory) -> None:
         super().__init__(parent)
-        self.reader: OpenCvVideoReader | None = None
+        self.reader_factory = reader_factory
+        self.reader: VideoReader | None = None
         self.current_time = 0.0
         self.current_frame_index = 0
         self.playback_speed = 1.0
@@ -56,7 +57,7 @@ class VideoPreviewWidget(QWidget):
 
     def open_video(self, path: str) -> None:
         self.close_video()
-        self.reader = OpenCvVideoReader(path)
+        self.reader = self.reader_factory(path)
         self.placeholder.setText(Path(path).name)
         self.placeholder.setToolTip(path)
         self.transport.setEnabled(True)

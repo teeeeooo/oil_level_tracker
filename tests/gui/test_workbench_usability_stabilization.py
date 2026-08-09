@@ -82,6 +82,7 @@ def _controller() -> WorkbenchController:
         SaveRecipeUseCase(repository, validator),
         LoadRecipeUseCase(repository),
         ValidateWorkbenchUseCase(validator),
+        reader_factory=lambda _path: None,
     )
 
 

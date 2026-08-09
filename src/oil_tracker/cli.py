@@ -13,9 +13,10 @@ from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
 from oil_tracker.application.ports.progress import ProgressUpdate
 from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
 from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
+from oil_tracker.application.services.initial_state_confirmation import confirm_initial_state
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
 from oil_tracker.domain.enums import InitialObservationState
-from oil_tracker.domain.session import AnalysisSession, InitialStateConfirmation
+from oil_tracker.domain.session import AnalysisSession
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -113,18 +114,7 @@ def _apply_initial_state_confirmations(recipe, session, entries) -> None:
             raise ValueError(
                 f"Unsupported initial-state confirmation for {glass_id}: {raw_state}"
             ) from exc
-        if state is InitialObservationState.AUTO:
-            raise ValueError("AUTO cannot be confirmed for final analysis.")
-        if state is not glass.initial_state:
-            raise ValueError(
-                f"Initial-state confirmation for {glass_id} ({state.value}) does not match "
-                f"the selected Recipe value ({glass.initial_state.value})."
-            )
-        session.initial_state_confirmations[glass_id] = InitialStateConfirmation(
-            state=state,
-            input_video_path=session.input_video_path,
-            analysis_start_sec=session.analysis_start_sec,
-        )
+        confirm_initial_state(glass, session, state)
         seen.add(glass_id)
 
 

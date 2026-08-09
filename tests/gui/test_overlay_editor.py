@@ -214,27 +214,31 @@ def test_context_reset_returns_manual_view_to_fit(qtbot):
     assert canvas.fit_mode is True
 
 
-def test_video_preview_shared_canvas_resets_on_open_and_preserves_frame_zoom(qtbot, monkeypatch):
+def test_video_preview_shared_canvas_resets_on_open_and_preserves_frame_zoom(qtbot):
     import oil_tracker.ui.widgets.video_preview_widget as preview_module
 
     class Reader:
+        instances = []
+
         def __init__(self, path):
             self.metadata = VideoMetadata(str(path), 640, 480, 30.0, 10.0, 300, "fake")
+            self.closed = False
+            self.instances.append(self)
 
         def read_at(self, timestamp):
             return np.zeros((480, 640, 3), dtype=np.uint8), int(timestamp * 30), float(timestamp)
 
         def close(self):
-            pass
+            self.closed = True
 
-    monkeypatch.setattr(preview_module, "OpenCvVideoReader", Reader)
-    preview = preview_module.VideoPreviewWidget()
+    preview = preview_module.VideoPreviewWidget(reader_factory=Reader)
     qtbot.addWidget(preview)
     preview.resize(760, 520)
     preview.show()
     QApplication.processEvents()
 
     preview.open_video("first.mp4")
+    first = Reader.instances[-1]
     assert preview.canvas.fit_mode is True
     preview.canvas.zoom_in()
     manual_scale = preview.canvas.transform().m11()
@@ -243,7 +247,13 @@ def test_video_preview_shared_canvas_resets_on_open_and_preserves_frame_zoom(qtb
     assert abs(preview.canvas.transform().m11() - manual_scale) < 1e-9
 
     preview.open_video("second.mp4")
+    second = Reader.instances[-1]
     assert preview.canvas.fit_mode is True
+    assert first.closed is True
+    assert second.closed is False
+
+    preview.close_video()
+    assert second.closed is True
 
 
 def test_resize_handles_keep_eight_direction_hit_targets_with_restrained_markers(qtbot):

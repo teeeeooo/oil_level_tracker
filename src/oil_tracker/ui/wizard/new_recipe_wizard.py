@@ -21,15 +21,16 @@ from PySide6.QtWidgets import (
     QWizardPage,
 )
 
-from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+from oil_tracker.application.ports.video_reader import VideoReaderFactory
 from oil_tracker.ui.widgets.video_preview_widget import VideoPreviewWidget
 
 
 class NewRecipeWizard(QWizard):
     skipRequested = Signal()
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent=None, *, reader_factory: VideoReaderFactory) -> None:
         super().__init__(parent)
+        self.reader_factory = reader_factory
         self.setWindowTitle("새 분석 프로필 만들기")
         self.setMinimumSize(960, 700)
         self.resize(1120, 800)
@@ -69,7 +70,7 @@ class NewRecipeWizard(QWizard):
         page2_layout = QVBoxLayout(page2)
         page2_layout.setContentsMargins(4, 4, 4, 4)
         page2_layout.setSpacing(6)
-        self.preview = VideoPreviewWidget()
+        self.preview = VideoPreviewWidget(reader_factory=reader_factory)
         self.preview.videoError.connect(
             lambda message: QMessageBox.warning(self, "영상 미리보기 오류", message)
         )
@@ -141,9 +142,13 @@ class NewRecipeWizard(QWizard):
         if not path:
             return
         try:
-            reader = OpenCvVideoReader(path)
-            metadata = reader.metadata
-            reader.close()
+            reader = None
+            try:
+                reader = self.reader_factory(path)
+                metadata = reader.metadata
+            finally:
+                if reader is not None:
+                    reader.close()
             self._video_metadata = metadata
             self.video_path.setText(path)
             self.start.setMaximum(metadata.duration_sec)

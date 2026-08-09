@@ -8,7 +8,22 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 UI_ROOT = ROOT / "src" / "oil_tracker" / "ui"
+APPLICATION_ROOT = ROOT / "src" / "oil_tracker" / "application"
+DOMAIN_ROOT = ROOT / "src" / "oil_tracker" / "domain"
 _FORBIDDEN_IMPORT_ROOTS = {"cv2", "numpy"}
+_INNER_FORBIDDEN_IMPORTS = (
+    "oil_tracker.adapters",
+    "oil_tracker.bootstrap",
+    "oil_tracker.cli",
+    "oil_tracker.ui",
+    "oil_tracker.visualization",
+    "PySide6",
+    "cv2",
+    "jinja2",
+    "matplotlib",
+    "numpy",
+)
+_CONCRETE_VIDEO_READER_MODULE = "oil_tracker.adapters.vision.opencv_video_reader"
 
 
 def _forbidden_imports(source: str) -> set[str]:
@@ -37,6 +52,30 @@ def _ui_import_violations() -> dict[str, set[str]]:
     return violations
 
 
+def _imported_modules(source: str) -> set[str]:
+    modules: set[str] = set()
+    for node in ast.walk(ast.parse(source)):
+        if isinstance(node, ast.Import):
+            modules.update(alias.name for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            modules.add(node.module)
+    return modules
+
+
+def _dependency_violations(root: Path, forbidden: tuple[str, ...]) -> dict[str, set[str]]:
+    violations = {}
+    for path in sorted(root.rglob("*.py")):
+        imported = _imported_modules(path.read_text(encoding="utf-8"))
+        found = {
+            module
+            for module in imported
+            if any(module == prefix or module.startswith(f"{prefix}.") for prefix in forbidden)
+        }
+        if found:
+            violations[path.relative_to(ROOT).as_posix()] = found
+    return violations
+
+
 @pytest.mark.parametrize(
     ("source", "expected"),
     [
@@ -53,6 +92,32 @@ def test_ast_import_guard_detects_forbidden_ui_dependencies(source, expected):
 
 def test_entire_ui_tree_has_no_cv2_or_numpy_imports():
     assert _ui_import_violations() == {}
+
+
+def test_domain_and_application_do_not_depend_on_outer_layers_or_raster_frameworks():
+    assert _dependency_violations(
+        DOMAIN_ROOT,
+        (*_INNER_FORBIDDEN_IMPORTS, "oil_tracker.application"),
+    ) == {}
+    assert _dependency_violations(APPLICATION_ROOT, _INNER_FORBIDDEN_IMPORTS) == {}
+
+
+def test_ui_does_not_import_the_concrete_opencv_video_reader():
+    violations = _dependency_violations(UI_ROOT, (_CONCRETE_VIDEO_READER_MODULE,))
+    assert violations == {}
+
+
+def test_ui_video_acquisition_owners_depend_on_the_application_reader_port():
+    owners = (
+        UI_ROOT / "controllers" / "workbench_controller.py",
+        UI_ROOT / "widgets" / "video_preview_widget.py",
+        UI_ROOT / "wizard" / "new_recipe_wizard.py",
+    )
+    assert {
+        path.relative_to(ROOT).as_posix(): "oil_tracker.application.ports.video_reader"
+        in _imported_modules(path.read_text(encoding="utf-8"))
+        for path in owners
+    } == {path.relative_to(ROOT).as_posix(): True for path in owners}
 
 
 def test_ui_raster_import_guard_has_no_exception_collection():

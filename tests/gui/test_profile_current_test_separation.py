@@ -51,8 +51,8 @@ def _controller():
         SaveRecipeUseCase(repo, validator),
         LoadRecipeUseCase(repo),
         ValidateWorkbenchUseCase(validator),
+        reader_factory=_Reader,
     )
-    controller.reader_factory = _Reader
     return controller
 
 

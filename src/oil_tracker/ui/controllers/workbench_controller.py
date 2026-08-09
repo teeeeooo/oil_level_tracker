@@ -3,10 +3,10 @@ from __future__ import annotations
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable
 from uuid import uuid4
 
-from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+from oil_tracker.application.ports.video_reader import VideoReader, VideoReaderFactory
+from oil_tracker.application.services.initial_state_confirmation import confirm_initial_state
 from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
@@ -24,7 +24,7 @@ class WorkbenchReplacementError(ValueError):
 class PreparedWorkbenchReplacement:
     recipe: InspectionRecipe
     session: AnalysisSession
-    reader: object
+    reader: VideoReader | None
     frame: object
     frame_index: int
     timestamp_sec: float
@@ -41,7 +41,7 @@ class WorkbenchController:
         save_use_case: SaveRecipeUseCase,
         load_use_case: LoadRecipeUseCase,
         validate_use_case: ValidateWorkbenchUseCase,
-        reader_factory: Callable[[str | Path], object] = OpenCvVideoReader,
+        reader_factory: VideoReaderFactory,
     ) -> None:
         self.save_use_case = save_use_case
         self.load_use_case = load_use_case
@@ -53,7 +53,7 @@ class WorkbenchController:
         self.state = WorkbenchState.EMPTY
         self.selected_glass_id: str | None = None
         self.recipe_path: Path | None = None
-        self.video_reader: OpenCvVideoReader | None = None
+        self.video_reader: VideoReader | None = None
 
     def new_document(self, width: int = 1280, height: int = 720, name: str = "새 유면 분석 프로필") -> None:
         self.close_video()
@@ -212,15 +212,7 @@ class WorkbenchController:
 
     def confirm_initial_state(self, glass_id: str) -> InitialStateConfirmation:
         glass = self._glass(glass_id)
-        if glass.initial_state is InitialObservationState.AUTO:
-            raise ValueError("AUTO cannot be confirmed for final analysis.")
-        confirmation = InitialStateConfirmation(
-            state=glass.initial_state,
-            input_video_path=self.session.input_video_path,
-            analysis_start_sec=self.session.analysis_start_sec,
-        )
-        self.session.initial_state_confirmations[glass_id] = confirmation
-        return confirmation
+        return confirm_initial_state(glass, self.session)
 
     def initial_state_confirmation(self, glass_id: str) -> InitialStateConfirmation | None:
         return self.session.initial_state_confirmations.get(glass_id)

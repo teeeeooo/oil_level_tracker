@@ -47,6 +47,7 @@ def controller():
         SaveRecipeUseCase(repo, validator),
         LoadRecipeUseCase(repo),
         ValidateWorkbenchUseCase(validator),
+        reader_factory=lambda _path: None,
     )
 
 
@@ -84,7 +85,7 @@ def test_save_load_model_roundtrip(tmp_path):
 
 
 def test_wizard_has_preview_time_pickers_and_skip(qtbot):
-    wizard = NewRecipeWizard()
+    wizard = NewRecipeWizard(reader_factory=lambda _path: None)
     qtbot.addWidget(wizard)
     assert len(wizard.pageIds()) == 3
     assert wizard.preview.canvas is not None
@@ -94,6 +95,38 @@ def test_wizard_has_preview_time_pickers_and_skip(qtbot):
     assert wizard.preview.transport.minimumSizeHint().height() < 80
     wizard._skip()
     assert wizard.skipped
+
+
+def test_wizard_closes_metadata_reader_when_metadata_access_fails(qtbot, monkeypatch):
+    from PySide6.QtWidgets import QFileDialog, QMessageBox
+
+    class Reader:
+        def __init__(self):
+            self.closed = False
+
+        @property
+        def metadata(self):
+            raise OSError("metadata failed")
+
+        def close(self):
+            self.closed = True
+
+    reader = Reader()
+    wizard = NewRecipeWizard(reader_factory=lambda _path: reader)
+    qtbot.addWidget(wizard)
+    warnings = []
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *_args: ("bad.mp4", ""))
+    monkeypatch.setattr(
+        QMessageBox,
+        "warning",
+        lambda _parent, title, message: warnings.append((title, message)),
+    )
+
+    wizard._browse()
+
+    assert reader.closed is True
+    assert wizard.video_path.text() == ""
+    assert warnings == [("영상 열기 실패", "metadata failed")]
 
 
 def test_preview_request_routing(qtbot):

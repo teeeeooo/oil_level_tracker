@@ -55,6 +55,7 @@ def build_main_window() -> MainWindow:
         SaveRecipeUseCase(repository, validator),
         LoadRecipeUseCase(repository),
         ValidateWorkbenchUseCase(validator),
+        reader_factory=OpenCvVideoReader,
     )
     preview_detector = OpenCvPhaseDetector()
     preview_controller = PreviewController(PreviewDetectionUseCase(preview_detector))

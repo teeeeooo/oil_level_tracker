@@ -5,6 +5,7 @@ import pytest
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.application.preflight import preflight_context_key
 from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
+from oil_tracker.application.services.initial_state_confirmation import confirm_initial_state
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
 from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
@@ -109,6 +110,27 @@ def test_confirmation_round_trips_in_session_but_legacy_session_defaults_empty()
     legacy = session.to_dict()
     legacy.pop("initial_state_confirmations")
     assert AnalysisSession.from_dict(legacy).initial_state_confirmations == {}
+
+
+def test_application_confirmation_policy_validates_and_snapshots_current_run_context():
+    _, glass = _recipe()
+    session = _session()
+
+    confirmation = confirm_initial_state(glass, session)
+
+    assert session.initial_state_confirmations == {glass.id: confirmation}
+    assert confirmation.matches(glass.initial_state, session)
+
+    with pytest.raises(ValueError, match="does not match"):
+        confirm_initial_state(
+            glass,
+            session,
+            InitialObservationState.EMPTY_NO_INTERFACE,
+        )
+
+    glass.initial_state = InitialObservationState.AUTO
+    with pytest.raises(ValueError, match="AUTO cannot be confirmed"):
+        confirm_initial_state(glass, session)
 
 
 def test_preflight_context_does_not_require_or_establish_confirmation():

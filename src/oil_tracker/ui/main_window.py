@@ -459,7 +459,10 @@ class MainWindow(QMainWindow):
         self._record_recipe_change("Glass 초기화", reset)
 
     def new_recipe(self) -> None:
-        wizard = NewRecipeWizard(self)
+        wizard = NewRecipeWizard(
+            reader_factory=self.workbench.reader_factory,
+            parent=self,
+        )
         if wizard.exec() != NewRecipeWizard.DialogCode.Accepted:
             return
         if wizard.skipped:
