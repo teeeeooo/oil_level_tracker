@@ -8,8 +8,13 @@ from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
 from oil_tracker.domain.detection import PhaseDetection
-from oil_tracker.domain.enums import FillState, ValidationSeverity, WorkbenchState
-from oil_tracker.domain.session import VideoMetadata
+from oil_tracker.domain.enums import (
+    FillState,
+    InitialObservationState,
+    ValidationSeverity,
+    WorkbenchState,
+)
+from oil_tracker.domain.session import InitialStateConfirmation, VideoMetadata
 from oil_tracker.domain.validation import ValidationIssue, ValidationResult
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
 from oil_tracker.ui.main_window import MainWindow
@@ -174,11 +179,17 @@ def test_preview_rejects_stale_glass_and_frame_results(qtbot):
 
 def test_inline_validation_does_not_validate_until_explicit_check(qtbot):
     window, workbench, _preview = _window(qtbot)
-    workbench.add_glass()
+    glass = workbench.add_glass()
+    glass.initial_state = InitialObservationState.EMPTY_NO_INTERFACE
     workbench.session.input_video_path = "video.mp4"
     workbench.session.video_metadata = VideoMetadata("video.mp4", 1280, 720, 30.0, 10.0, 300)
     workbench.session.analysis_end_sec = 10.0
     workbench.session.compressor_start_sec = 1.0
+    workbench.session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
+        glass.initial_state,
+        workbench.session.input_video_path,
+        workbench.session.analysis_start_sec,
+    )
     workbench.state = WorkbenchState.DRAFT
     result = window._refresh_inline_validation()
     assert result.is_ready

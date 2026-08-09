@@ -1,6 +1,13 @@
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.domain.enums import FillState, InitialObservationState
-from tests.fixtures.synthetic import empty_frame, full_frame, glare_frame, glass_config, partial_frame
+from tests.fixtures.synthetic import (
+    ambiguous_near_bottom_frame,
+    empty_frame,
+    full_frame,
+    glare_frame,
+    glass_config,
+    partial_frame,
+)
 
 
 def test_full_does_not_force_numeric_interface():
@@ -56,7 +63,9 @@ def test_boundary_appearing_from_top_is_draining_visible():
 def test_near_bottom_boundary_ambiguity_does_not_become_oil_or_foam():
     glass = glass_config()
     glass.initial_state = InitialObservationState.EMPTY_NO_INTERFACE
-    detection, _ = OpenCvPhaseDetector().detect(partial_frame(200), glass, 0, 0)
+    detection, _ = OpenCvPhaseDetector().detect(
+        ambiguous_near_bottom_frame(), glass, 0, 0
+    )
     assert detection.fill_state == FillState.UNKNOWN_REVIEW
     assert detection.oil_air_level_y is None
     assert detection.foam_front_y is None

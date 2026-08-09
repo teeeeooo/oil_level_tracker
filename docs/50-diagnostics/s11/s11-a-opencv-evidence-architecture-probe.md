@@ -258,13 +258,13 @@ The probe variants were also run directly against retained negative/protection f
 
 | protection corpus | P0 false Oil | P1 false Oil | P2 false Oil | P3 false Oil |
 | --- | ---: | ---: | ---: | ---: |
-| S5-B observationally-equivalent collisions (16 scenes) | `0/16` | **`14/16`** | `0/16` | **`14/16`** |
+| S5-B observationally-equivalent collisions (16 scenes) | `0/16` | **`16/16`** | `0/16` | **`16/16`** |
 | historical glare negatives | `0/21` | `0/21` | `0/21` | `0/21` |
 | D4-style accepted-Foam + structural bands | `0/9` | `0/9` | `0/9` | `0/9` |
 
 All nine structural-Foam probe frames retained accepted Foam (`9/9`) under every variant.
 
-The S5-B collision result is decisive.  For seven of eight latent-cause collision pairs, P1/P3
+The S5-B collision result is decisive.  For all eight latent-cause collision pairs, P1/P3
 produce the same numeric Oil for both the latent-glare and latent-Oil member.  The raster evidence
 is observationally equivalent, so relative intensity normalization cannot establish the missing
 causal distinction.  Accepting that output would violate the S5-B contract by converting
@@ -310,7 +310,7 @@ observations, so running them would not change the bounded architecture conclusi
 **No sufficient P0/P1/P2/P3 variant is demonstrated for a production S11 detector cutover.**
 
 - P0 remains the exact `7/13 @ 4.43 px` baseline and is highly exposure-sensitive.
-- P1 improves native coverage to `9/13` but fails S5-B collisions `14/16` and produces a
+- P1 improves native coverage to `9/13` but fails S5-B collisions `16/16` and produces a
   `48.5 px` low-brightness sample4 false boundary.  Reject as production candidate.
 - P2 is the only variant that preserves all retained collision/glare/structural-Foam protection
   while eliminating the demonstrated low-exposure false no-interface cases.  It is a credible

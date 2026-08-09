@@ -26,7 +26,7 @@ def _archived_interaction_manifest():
         Path(__file__).resolve().parents[1]
         / "docs/50-diagnostics/s11/s11-a-p2-spatial-interaction-probe-manifest.json"
     )
-    return json.loads(path.read_text())
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _archived_interaction_rows():

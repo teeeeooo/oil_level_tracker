@@ -38,6 +38,8 @@ from .oil_shadow_types import (
 
 _ORDINARY_BOUNDARY_LIKELIHOOD_FLOOR = 0.48
 _FOAM_SEPARATED_MIN_HORIZONTAL_COVERAGE = 0.30
+_FOAM_TEXTURE_MAX_BROAD_STRENGTH = 0.10
+_FOAM_TEXTURE_MIN_NARROW_COVERAGE = 0.90
 
 
 @dataclass(frozen=True)
@@ -536,7 +538,14 @@ def _has_hard_current_frame_support(
 
     if (
         accepted_foam_front_local_y is not None
-        and candidate.representative_local_y <= accepted_foam_front_local_y
+        and (
+            candidate.representative_local_y <= accepted_foam_front_local_y
+            or (
+                candidate.broad.strength < _FOAM_TEXTURE_MAX_BROAD_STRENGTH
+                and candidate.narrow.horizontal_coverage
+                >= _FOAM_TEXTURE_MIN_NARROW_COVERAGE
+            )
+        )
     ):
         return False
     spatial_conflict = max(

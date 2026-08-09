@@ -97,7 +97,7 @@ The combined mechanism was directly exercised against retained negatives rather 
 protection from the two parent probes.
 
 - S5-B observational-equivalence collisions: `0/16` combined false numeric Oil.
-- The P3 candidate exists on `14/16` collision scenes, but all 14 remain rejected by the unchanged
+- The P3 candidate exists on `16/16` collision scenes, but all 16 remain rejected by the unchanged
   Spatial gate as `degenerate_scalar_row`; latent-glare/Oil pair outputs remain equal.
 - Historical glare negatives: `0/21` combined false numeric Oil.
 - D4-style structural/Foam stress scenes: `0/9` combined false numeric Oil.

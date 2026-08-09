@@ -44,7 +44,7 @@ def test_historical_p0_p1_p2_native_diagnostic_baseline_is_frozen() -> None:
         Path(__file__).resolve().parents[1]
         / "docs/50-diagnostics/s11/s11-a-opencv-evidence-architecture-probe-manifest.json"
     )
-    manifest = json.loads(manifest_path.read_text())
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["baseline_main_sha"] == "0fd8ca0d423a1f632ad9a026d8f396686870d633"
     native = manifest["aggregate"]["brightness_1.00"]
     assert native["P0"]["oil_coverage"] == 7
@@ -153,7 +153,7 @@ def test_p1_and_p3_collision_failure_is_explicit_while_p0_and_p2_preserve_observ
                 outputs.append((row.oil_y, row.current_kind))
             pair_outputs[variant][collision_id] = outputs
             assert outputs[0] == outputs[1], (variant, collision_id, outputs)
-    assert counts == {"P0": 0, "P1": 14, "P2": 0, "P3": 14}
+    assert counts == {"P0": 0, "P1": 16, "P2": 0, "P3": 16}
 
 
 def test_all_probe_variants_keep_structural_foam_false_oil_closed() -> None:

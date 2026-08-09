@@ -41,6 +41,19 @@ def partial_frame(boundary_y: int = 130) -> np.ndarray:
     return frame
 
 
+def ambiguous_near_bottom_frame() -> np.ndarray:
+    frame = base_frame(210)
+    boundary_y = 190
+    mask = np.zeros((HEIGHT, WIDTH), np.uint8)
+    cv2.ellipse(mask, CENTER, AXES, 0, 0, 360, 255, -1)
+    oil = np.zeros_like(mask)
+    oil[boundary_y:, :] = 255
+    oil = cv2.bitwise_and(mask, oil)
+    frame[oil > 0] = (80, 80, 80)
+    cv2.line(frame, (98, boundary_y), (222, boundary_y), (20, 20, 20), 1)
+    return frame
+
+
 def full_frame() -> np.ndarray:
     return base_frame(70)
 
@@ -57,10 +70,17 @@ def glare_frame() -> np.ndarray:
 
 def foam_bottom_frame() -> np.ndarray:
     frame = base_frame(65)
-    for y in range(145, 216, 8):
-        for x in range(105, 216, 9):
-            if ((x - CENTER[0]) / AXES[0]) ** 2 + ((y - CENTER[1]) / AXES[1]) ** 2 <= 1:
-                cv2.circle(frame, (x, y), 3, (210, 210, 210), 1)
+    x0, x1, front, bottom = 105, 216, 145, 216
+    yy, xx = np.indices((bottom - front, x1 - x0))
+    patch = np.where(
+        ((xx // 6 + yy // 6) % 2)[..., None] == 0,
+        210,
+        135,
+    ).astype(np.uint8)
+    frame[front:bottom, x0:x1] = patch
+    for y in range(front + 4, bottom, 12):
+        for x in range(x0 + 4, x1, 14):
+            cv2.circle(frame, (x, y), 3, (225, 225, 225), 1)
     return frame
 
 

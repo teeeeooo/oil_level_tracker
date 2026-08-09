@@ -134,13 +134,15 @@ def test_four_video_held_out_reconstruction_is_insufficient_for_integration() ->
     stream = manifest["production_stream_baseline"]["total"]
 
     assert truth["usable_truth_count"] == 13
-    assert truth["normally_observed_count"] == 9
-    assert truth["normally_missing_count"] == 4
-    assert truth["observed_oil_mae_px"] == 44.0 / 9.0
+    assert truth["normally_observed_count"] == 8
+    assert truth["normally_missing_count"] == 5
+    assert truth["observed_oil_mae_px"] == 43.5 / 8.0
+    assert truth["observed_oil_median_error_px"] == 6.5
+    assert truth["observed_oil_worst_error_px"] == 11.0
     assert stream == {
         "sample_count": 299,
-        "observed_numeric_count": 136,
-        "unavailable_count": 163,
+        "observed_numeric_count": 111,
+        "unavailable_count": 188,
         "no_interface_count": 0,
         "blocking_flag_count": 0,
     }
@@ -148,14 +150,14 @@ def test_four_video_held_out_reconstruction_is_insufficient_for_integration() ->
     assert held_out["unavailable_count"] == 10
     assert held_out["recoverable_coverage"] == 3.0 / 13.0
     assert held_out["abstention_rate"] == 10.0 / 13.0
-    assert held_out["estimated_mae_px"] == 43.0 / 3.0
-    assert held_out["estimated_median_error_px"] == 19.5
-    assert held_out["estimated_worst_error_px"] == 20.5
-    assert held_out["estimated_worst_case_id"] == "sample4:900"
+    assert held_out["estimated_mae_px"] == 22.0 / 3.0
+    assert held_out["estimated_median_error_px"] == 8.5
+    assert held_out["estimated_worst_error_px"] == 11.5
+    assert held_out["estimated_worst_case_id"] == "sample4:1470"
     assert held_out["normally_missing_recovered_case_ids"] == []
     assert manifest["conclusion"] == "insufficient_trajectory_evidence"
     assert manifest["result_fingerprint_sha256"] == (
-        "8b6a7790bf008e7679f63e4ff6bc5d164f9cc5574099bfbe16456cc6c1bf3d6a"
+        "e397c67c95ccb8380d41f6c1f748cb1fb24847f305c15fd6ba332adb2ffb2b6d"
     )
     assert build_manifest(streams, baselines, estimates)["result_fingerprint_sha256"] == (
         manifest["result_fingerprint_sha256"]
@@ -167,7 +169,7 @@ def test_four_video_held_out_reconstruction_is_insufficient_for_integration() ->
         if row.provenance == "estimated"
     }
     assert estimated == {
-        "sample4:450": (849.5, 3.0),
-        "sample4:900": (869.0, 20.5),
-        "sample4:1470": (874.5, 19.5),
+        "sample4:450": (850.5, 2.0),
+        "sample4:900": (840.0, 8.5),
+        "sample4:1470": (866.5, 11.5),
     }

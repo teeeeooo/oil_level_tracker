@@ -59,21 +59,21 @@ The trajectory input stream contains 299 scheduled detections. The held-out eval
 
 | video | stream samples | observed raw Oil | missing raw Oil | max consecutive missing |
 |---|---:|---:|---:|---:|
-| `base_sample_1` | 30 | 2 | 28 | 22 |
+| `base_sample_1` | 30 | 3 | 27 | 19 |
 | `sample2` | 5 | 2 | 3 | 2 |
-| `sample3` | 151 | 22 | 129 | 77 |
-| `sample4` | 113 | 110 | 3 | 1 |
-| **total** | **299** | **136** | **163** | — |
+| `sample3` | 151 | 42 | 109 | 35 |
+| `sample4` | 113 | 64 | 49 | 8 |
+| **total** | **299** | **111** | **188** | — |
 
 This stream density is not an accuracy score. In particular, sample4 has dense accepted observations but also contains stable wrong-boundary runs.
 
 The direct production truth-anchor baseline remains:
 
 - usable truth denominator: `13`
-- normally observed: `9`
-- normally missing: `4`
-- observed-anchor MAE: `4.888889 px`
-- observed-anchor median error: `6.0 px`
+- normally observed: `8`
+- normally missing: `5`
+- observed-anchor MAE: `5.4375 px`
+- observed-anchor median error: `6.5 px`
 - observed-anchor worst error: `11.0 px`
 
 ## Held-out reconstruction result
@@ -84,36 +84,36 @@ Across all 13 usable truth anchors:
 - `unavailable` / abstained: `10`
 - recoverable coverage: `23.08%`
 - abstention rate: `76.92%`
-- estimated reconstruction MAE: `14.333333 px`
-- estimated median error: `19.5 px`
-- material worst error: `20.5 px` at `sample4:900`
-- normally missing production anchors recovered: **`0 / 4`**
+- estimated reconstruction MAE: `7.333333 px`
+- estimated median error: `8.5 px`
+- material worst error: `11.5 px` at `sample4:1470`
+- normally missing production anchors recovered: **`0 / 5`**
 
 | case | production | held-out result | support / reason | estimate error |
 |---|---|---|---|---:|
-| `base_sample_1:144` | observed `395` | unavailable | no right observed anchor | — |
+| `base_sample_1:144` | observed `395` | unavailable | `3.5035@477` → `5.005@395`, `1.5015 s` unsupported gap | — |
 | `base_sample_1:156` | unavailable | unavailable | no right observed anchor | — |
 | `base_sample_1:240` | unavailable | unavailable | no right observed anchor | — |
 | `sample2:0` | unavailable | unavailable | no left observed anchor | — |
 | `sample2:30` | observed `599` | unavailable | no left observed anchor after hold-out | — |
 | `sample2:60` | observed `598` | unavailable | no right observed anchor after hold-out | — |
 | `sample3:900` | unavailable | unavailable | no left observed anchor | — |
-| `sample3:1035` | observed `245` | unavailable | `33.033@272` → `43.043@222.5`, `10.01 s` unsupported gap | — |
-| `sample4:0` | observed `861` | unavailable | no left observed anchor | — |
-| `sample4:450` | observed `853` | estimated `849.5` | `14.5@849` → `15.5@850` | `3.0` |
-| `sample4:900` | observed `848` | estimated `869.0` | `29.5@869` → `30.5@869` | `20.5` |
-| `sample4:1470` | observed `866` | estimated `874.5` | `48.5@883` → `49.5@866` | `19.5` |
+| `sample3:1035` | observed `245` | unavailable | `32.5325@269` → `35.035@240`, `2.5025 s` unsupported gap | — |
+| `sample4:0` | unavailable | unavailable | no left observed anchor | — |
+| `sample4:450` | observed `853` | estimated `850.5` | `14.5@850` → `15.5@851` | `2.0` |
+| `sample4:900` | observed `848` | estimated `840.0` | `29.5@838` → `30.5@842` | `8.5` |
+| `sample4:1470` | observed `866` | estimated `866.5` | `48.5@867` → `49.5@866` | `11.5` |
 | `sample4:1680` | observed `866` | unavailable | no right observed anchor | — |
 
 ## Material interpretation
 
-The current difficult production misses are `base_sample_1:156`, `base_sample_1:240`, `sample2:0`, and `sample3:900`. None gains sufficient two-sided support, so this estimator recovers **zero residual detector misses**.
+The current difficult production misses are `base_sample_1:156`, `base_sample_1:240`, `sample2:0`, `sample3:900`, and `sample4:0`. None gains sufficient two-sided support, so this estimator recovers **zero residual detector misses**.
 
-The strongest negative evidence is `sample4:900`. Its held-out immediate anchors are both accepted at `869 px`, so temporal continuity looks exceptionally strong, yet the existing truth is `848.5 px`. A trajectory model that only rewards continuity would therefore reinforce a persistent wrong boundary and produce a `20.5 px` error.
+`sample4:900` remains negative evidence: its bounded held-out anchors yield `840 px` against the existing `848.5 px` truth. A trajectory model that only rewards local continuity can therefore still reinforce a wrong boundary and produce an `8.5 px` error.
 
-`sample4:1470` supplies the second material failure: bounded bracketing produces `874.5 px` against truth `855 px`. Dense observations therefore do not imply trustworthy physical trajectory when the observation owner can remain on a wrong structural path.
+`sample4:1470` is the material worst case: bounded bracketing produces `866.5 px` against truth `855 px`. Dense observations therefore do not imply trustworthy physical trajectory when the observation owner can remain on a wrong structural path.
 
-The estimator creates no continuity across unsupported long gaps. `sample3:1035` has two numeric anchors but their `10.01 s` span exceeds the `1.0 s` bound, so the result remains unavailable.
+The estimator creates no continuity across unsupported long gaps. `sample3:1035` has two numeric anchors but their `2.5025 s` span exceeds the `1.0 s` bound, so the result remains unavailable.
 
 The natural four-video stream contains no FULL/EMPTY no-interface rows in the selected qualification windows. The diagnostic contract is nevertheless locked by development tests: no-interface at the target or inside support is censored and forces abstention; it is never an exact Oil measurement. Synthetic tests also lock abstention for occlusion/detection-loss blockers, repeated ambiguity across a long gap, and contradictory anchor jumps.
 
@@ -138,7 +138,7 @@ If a later gate nevertheless elects to expose an estimated trajectory, that is a
 Reproducible machine evidence is checked in at:
 
 - `docs/50-diagnostics/s11/s11-offline-temporal-trajectory-probe-manifest.json`
-- fingerprint: `8b6a7790bf008e7679f63e4ff6bc5d164f9cc5574099bfbe16456cc6c1bf3d6a`
+- fingerprint: `e397c67c95ccb8380d41f6c1f748cb1fb24847f305c15fd6ba332adb2ffb2b6d`
 
 ## Validation boundary
 
