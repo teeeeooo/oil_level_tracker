@@ -155,9 +155,9 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
-- **Status:** `VALIDATING`
-- **Major result:** The accepted D1–D5/current-frame, serialized temporal, retrospective and Subtractive Detector Simplification A–D baseline is extended by S11-R2's bounded accepted-Foam/Spatial composition repair. Available-corpus numeric Oil is `111/299`, confirmed truth remains `8/13` at `5.4375 px` MAE, misleading sample4 bottom-structure extrema are removed/corrected, and S11-R1 report semantics present the resulting stream as direct runs, display-only missing bridges and bounded highest/lowest/Foam captures.
-- **Next gate:** Execute final target-Windows field-workflow validation on the accepted exact head.
+- **Status:** `ACTIVE`
+- **Major result:** The accepted D1–D5/current-frame, serialized temporal, retrospective and Subtractive Detector Simplification A–D baseline is extended by S11-R2's bounded accepted-Foam/Spatial composition repair. Available-corpus numeric Oil is `111/299`, confirmed truth remains `8/13` at `5.4375 px` MAE, misleading sample4 bottom-structure extrema are removed/corrected, and S11-R1 report semantics present the resulting stream as direct runs, display-only missing bridges and bounded highest/lowest/Foam captures. Before final target-Windows closure, the application shell and detector pipeline are undergoing behavior-preserving responsibility modularization without changing accepted detector, report or product semantics.
+- **Next gate:** Complete and independently verify MainWindow responsibility separation, then complete and independently verify detector-pipeline modularization; only then execute final target-Windows field-workflow validation on the resulting exact head.
 - **Priority:** `P0`
 - **Detail:** [current work plan](work-plan.md), [R2 architecture](../20-architecture/s11-foam-spatial-authority-repair-architecture.md), [R2 validation](../30-validation/s11-foam-spatial-authority-repair-validation.md), [R2 evidence](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md), [report architecture](../20-architecture/result-observation-report-architecture.md), [report validation](../30-validation/result-observation-report-validation.md), [S11-R1 evidence](../60-evidence/s11/s11-user-observation-report-repair.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
@@ -172,6 +172,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery and numeric trajectory-estimation responsibility, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D, S11-R1 and S11-R2 are accepted, the coverage-first detector contract remains binding, and the exact current S11 gate is **final target-Windows field-workflow validation**. S12 remains blocked until S11 closure.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery and numeric trajectory-estimation responsibility, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D, S11-R1 and S11-R2 are accepted, and the coverage-first detector contract remains binding. The exact current S11 gate is **behavior-preserving MainWindow responsibility modularization and independent verification**; detector-pipeline modularization and its independent verification follow before the deferred final target-Windows field-workflow validation. S12 remains blocked until S11 closure.

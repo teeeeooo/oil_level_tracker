@@ -1,9 +1,9 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `VALIDATING`
-**Current gate:** `Final target-Windows field-workflow validation`
-**Source authority:** `validation only; no detector/report source change is currently authorized`
+**Milestone status:** `ACTIVE`
+**Current gate:** `Behavior-preserving MainWindow responsibility modularization`
+**Source authority:** `structural responsibility separation only; detector/report/product behavior changes are not authorized`
 
 ## Accepted source baseline
 
@@ -22,7 +22,19 @@ The post-R2 review and baseline-validation repair evidence is [`../60-evidence/s
 
 ## Current gate scope
 
-Execute the final checklist on the target Windows environment from the exact candidate head:
+Refactor the Workbench UI shell so `MainWindow` no longer directly owns every Profile and video/preview lifecycle responsibility:
+
+1. move material Workbench playback/live-preview state and the simplest cohesive Profile lifecycle state into explicit UI collaborators;
+2. retain bounded compatibility delegates where adjacent accepted coordinators or tests require the established MainWindow surface;
+3. preserve Korean labels/layout, signal routing, frame/time/index semantics, preview debounce and stale suppression, playback end/step/seek behavior, reader cleanup, recent Profile navigation and Save/Discard/Cancel close behavior;
+4. prove the new ownership and delegation with targeted automated tests and a fresh independent exact-head audit;
+5. do not change detector implementation, report behavior, thresholds, public or persisted schemas, packaging or product workflow semantics.
+
+After this gate is independently accepted, perform the same behavior-preserving responsibility modularization and independent verification for the detector pipeline. The final target-Windows field-workflow validation remains the S11 closure gate but is intentionally sequenced after both structural gates.
+
+## Subsequent target-Windows closure gate
+
+Execute the final checklist on the target Windows environment from the post-modularization exact candidate head:
 
 1. record commit, Python/Qt/OpenCV versions, Windows version and display scale;
 2. run the canonical source-tree suite and supported one-folder packaging checks;
@@ -52,8 +64,8 @@ The Windows gate is an evidence gate, not open-ended tuning authority. If a mate
 
 ## Closure boundary
 
-S11 closes only after exact-head Windows evidence proves the packaged end-to-end workflow and updated user observation report. Source-tree/macOS replay acceptance alone does not constitute Windows PASS. S12 remains blocked until this gate is accepted.
+S11 closes only after the MainWindow and detector-pipeline responsibility modularizations are independently accepted and exact-head Windows evidence proves the packaged end-to-end workflow and updated user observation report. Source-tree/macOS structural or replay acceptance alone does not constitute Windows PASS. S12 remains blocked until this gate is accepted.
 
 ## Next handoff
 
-Build the exact candidate head on the target Windows machine and execute the updated manual checklist. Record failures as evidence before authorizing any further source work.
+Complete the bounded MainWindow source, test and current-gate documentation change, then hand the exact head to a fresh independent Lane C Auditor for focused review and validation. Do not start target-Windows closure validation from an intermediate structural head.

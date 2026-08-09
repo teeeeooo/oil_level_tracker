@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import logging
 from pathlib import Path
 
-from oil_tracker.adapters.presentation.qt_frame_image_converter import blank_bgr_frame
-from PySide6.QtCore import QTimer, QUrl, Qt, Signal
+from PySide6.QtCore import QUrl, Qt, Signal
 from PySide6.QtGui import QAction, QDesktopServices, QKeySequence, QUndoStack
 from PySide6.QtWidgets import (
     QApplication,
@@ -27,15 +25,19 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from oil_tracker.config.defaults import DEFAULT_WINDOW_SIZE, PREVIEW_DEBOUNCE_MS, SUPPORTED_VIDEO_FILTER
+from oil_tracker.config.defaults import DEFAULT_WINDOW_SIZE, SUPPORTED_VIDEO_FILTER
 from oil_tracker.domain.enums import InitialObservationState, JudgmentMode, WorkbenchState
 from oil_tracker.domain.geometry import EllipseGeometry
 from oil_tracker.domain.recipe import DetectorSettings, InspectionRecipe
+from oil_tracker.ui.controllers.workbench_playback_controller import WorkbenchPlaybackController
 from oil_tracker.ui.presentation_labels import (
-    fill_state_label,
     result_state_label,
     validation_issue_message,
     workbench_state_label,
+)
+from oil_tracker.ui.profile_lifecycle_coordinator import (
+    ProfileLifecycleCallbacks,
+    ProfileLifecycleCoordinator,
 )
 from oil_tracker.ui.readiness import (
     build_workbench_progress,
@@ -58,10 +60,6 @@ from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
 from oil_tracker.ui.widgets.video_playback_panel import VideoPlaybackPanel
 from oil_tracker.ui.widgets.wheel_safe_controls import WheelSafeDoubleSpinBox
 from oil_tracker.ui.widgets.workbench_progress import WorkbenchProgressWidget
-from oil_tracker.ui.wizard.new_recipe_wizard import NewRecipeWizard
-
-
-LOGGER = logging.getLogger(__name__)
 
 
 class MainWindow(QMainWindow):
@@ -73,17 +71,9 @@ class MainWindow(QMainWindow):
         self.preview_controller = preview_controller
         self.analysis_controller = analysis_controller
         self.debug_renderer = debug_renderer
-        self.current_frame = blank_bgr_frame(1280, 720)
-        self.current_time = 0.0
-        self.current_frame_index = 0
-        self.playback_speed = 1.0
         self.last_result_path = ""
-        self.last_debug_artifacts = None
-        self.recent_profile_history = None
-        self._pending_profile_path: Path | None = None
         self.undo_stack = QUndoStack(self)
         self._last_validation = None
-        self._preview_context: tuple[str, int, float] | None = None
         self._interaction_glass_id: str | None = None
         self._interaction_target: str | None = None
         self._interaction_zone_id: str | None = None
@@ -91,9 +81,112 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1280, 760)
         self._resize_to_available_screen()
         self._build_ui()
+        self.playback_controller = WorkbenchPlaybackController(
+            self.workbench,
+            self.preview_controller,
+            self.canvas,
+            self.transport,
+            self.detection_summary,
+            self.debug_panel,
+            self.statusBar(),
+            self,
+        )
+        self.profile_lifecycle = ProfileLifecycleCoordinator(
+            self.workbench,
+            self.undo_stack,
+            self.recent_profile_menu,
+            self.actions["load"],
+            ProfileLifecycleCallbacks(
+                clear_interaction_target=self._clear_interaction_target,
+                set_placeholder=self._set_placeholder,
+                load_frame=lambda timestamp, reset_view: self._load_frame(
+                    timestamp,
+                    reset_view=reset_view,
+                ),
+                refresh_all=self._refresh_all,
+                refresh_inline_validation=self._refresh_inline_validation,
+                schedule_preview=self.schedule_preview,
+                update_state=self._update_state,
+                show_status=lambda message: self.statusBar().showMessage(message),
+                report_error=lambda title, message: self._error(title, message),
+            ),
+            self,
+        )
         self._connect()
         self._refresh_all()
         self._refresh_inline_validation()
+
+    @property
+    def current_frame(self):
+        return self.playback_controller.current_frame
+
+    @current_frame.setter
+    def current_frame(self, value) -> None:
+        self.playback_controller.current_frame = value
+
+    @property
+    def current_time(self) -> float:
+        return self.playback_controller.current_time
+
+    @current_time.setter
+    def current_time(self, value: float) -> None:
+        self.playback_controller.current_time = float(value)
+
+    @property
+    def current_frame_index(self) -> int:
+        return self.playback_controller.current_frame_index
+
+    @current_frame_index.setter
+    def current_frame_index(self, value: int) -> None:
+        self.playback_controller.current_frame_index = int(value)
+
+    @property
+    def playback_speed(self) -> float:
+        return self.playback_controller.playback_speed
+
+    @playback_speed.setter
+    def playback_speed(self, value: float) -> None:
+        self.playback_controller.set_playback_speed(value)
+
+    @property
+    def last_debug_artifacts(self):
+        return self.playback_controller.last_debug_artifacts
+
+    @last_debug_artifacts.setter
+    def last_debug_artifacts(self, value) -> None:
+        self.playback_controller.last_debug_artifacts = value
+
+    @property
+    def _preview_context(self):
+        return self.playback_controller.preview_context
+
+    @_preview_context.setter
+    def _preview_context(self, value) -> None:
+        self.playback_controller.preview_context = value
+
+    @property
+    def play_timer(self):
+        return self.playback_controller.play_timer
+
+    @property
+    def preview_timer(self):
+        return self.playback_controller.preview_timer
+
+    @property
+    def recent_profile_history(self):
+        return self.profile_lifecycle.recent_profile_history
+
+    @recent_profile_history.setter
+    def recent_profile_history(self, value) -> None:
+        self.profile_lifecycle.set_recent_profile_history(value)
+
+    @property
+    def _pending_profile_path(self):
+        return self.profile_lifecycle.pending_profile_path
+
+    @_pending_profile_path.setter
+    def _pending_profile_path(self, value) -> None:
+        self.profile_lifecycle.pending_profile_path = value
 
     def _resize_to_available_screen(self) -> None:
         screen = QApplication.primaryScreen()
@@ -137,7 +230,6 @@ class MainWindow(QMainWindow):
         self.recent_profile_menu = QMenu("최근 프로필", self)
         self.recent_profile_menu.setObjectName("recentProfileMenu")
         self.actions["load"].setMenu(self.recent_profile_menu)
-        self._refresh_recent_profile_menu()
         self.actions["debug"].setCheckable(True)
         self.actions["save"].setShortcut(QKeySequence.StandardKey.Save)
 
@@ -225,11 +317,6 @@ class MainWindow(QMainWindow):
         self.debug_dock.resize(980, 720)
         self.debug_dock.hide()
         self.statusBar().showMessage("분석 프로필을 새로 만들거나 열어 주세요.")
-
-        self.play_timer = QTimer(self)
-        self.preview_timer = QTimer(self)
-        self.preview_timer.setSingleShot(True)
-        self.preview_timer.setInterval(PREVIEW_DEBOUNCE_MS)
 
     def _toggle_debug_view(self, visible: bool) -> None:
         if visible:
@@ -337,15 +424,6 @@ class MainWindow(QMainWindow):
         self.settings.resetGlassRequested.connect(self.reset_selected_glass)
         self.settings.initialStateConfirmRequested.connect(self._confirm_initial_state)
         self.detection_summary.initialStateRequested.connect(self._focus_initial_state)
-        self.transport.playToggled.connect(self.toggle_play)
-        self.transport.stepRequested.connect(self.step_frame)
-        self.transport.seekRequested.connect(self.seek_fraction)
-        self.transport.seekReleased.connect(self.schedule_preview)
-        self.transport.speedChanged.connect(lambda value: setattr(self, "playback_speed", value))
-        self.play_timer.timeout.connect(self._play_tick)
-        self.preview_timer.timeout.connect(self.request_preview)
-        self.preview_controller.previewReady.connect(self._preview_ready)
-        self.preview_controller.previewFailed.connect(self._preview_failed)
         self.analysis_controller.progress.connect(self._analysis_progress)
         self.analysis_controller.completed.connect(self._analysis_completed)
         self.analysis_controller.failed.connect(self._analysis_failed)
@@ -459,38 +537,7 @@ class MainWindow(QMainWindow):
         self._record_recipe_change("Glass 초기화", reset)
 
     def new_recipe(self) -> None:
-        wizard = NewRecipeWizard(
-            reader_factory=self.workbench.reader_factory,
-            parent=self,
-        )
-        if wizard.exec() != NewRecipeWizard.DialogCode.Accepted:
-            return
-        if wizard.skipped:
-            self._clear_interaction_target()
-            self.workbench.new_document()
-            self.undo_stack.clear()
-            self._set_placeholder()
-            self._refresh_all()
-            self._refresh_inline_validation()
-            return
-        metadata = wizard.video_metadata
-        width, height = (metadata.width, metadata.height) if metadata else (1280, 720)
-        self._clear_interaction_target()
-        self.workbench.new_document(width, height, wizard.recipe_name.text().strip() or "새 유면 분석 프로필")
-        self.undo_stack.clear()
-        self.workbench.recipe.description = wizard.description.toPlainText()
-        if wizard.video_path.text():
-            self.workbench.open_video(wizard.video_path.text())
-            self.workbench.session.analysis_start_sec = wizard.start.value()
-            self.workbench.session.analysis_end_sec = wizard.end.value()
-            self.workbench.session.compressor_start_sec = wizard.compressor.value()
-            self.workbench.session.sampling_fps = wizard.sampling.value()
-            self._load_frame(self.workbench.session.analysis_start_sec, reset_view=True)
-        if wizard.create_glass.isChecked():
-            self.workbench.add_glass()
-        self._refresh_all()
-        self.schedule_preview()
-        self._refresh_inline_validation()
+        self.profile_lifecycle.new_recipe()
 
     def open_video(self) -> None:
         path, _ = QFileDialog.getOpenFileName(self, "시험 영상 열기", "", SUPPORTED_VIDEO_FILTER)
@@ -688,140 +735,34 @@ class MainWindow(QMainWindow):
         self._refresh_inline_validation()
 
     def toggle_play(self, playing: bool) -> None:
-        if playing and self.workbench.video_reader:
-            fps = max(1.0, self.workbench.video_reader.metadata.fps)
-            self.play_timer.start(max(15, int(1000 / fps)))
-        else:
-            self.play_timer.stop()
-            self.schedule_preview()
+        self.playback_controller.toggle_play(playing)
 
     def _play_tick(self) -> None:
-        metadata = self.workbench.session.video_metadata
-        if metadata is None:
-            self.transport.play.setChecked(False)
-            return
-        step = self.playback_speed / max(1.0, metadata.fps)
-        target = self.current_time + step
-        if target >= metadata.duration_sec:
-            self.transport.play.setChecked(False)
-            return
-        self._load_frame(target)
+        self.playback_controller.play_tick()
 
     def step_frame(self, direction: int) -> None:
-        metadata = self.workbench.session.video_metadata
-        if metadata:
-            self._load_frame(
-                max(
-                    0.0,
-                    min(
-                        metadata.duration_sec,
-                        self.current_time + direction / max(1.0, metadata.fps),
-                    ),
-                )
-            )
-            self.schedule_preview()
+        self.playback_controller.step_frame(direction)
 
     def seek_fraction(self, fraction: float) -> None:
-        metadata = self.workbench.session.video_metadata
-        if metadata:
-            self._load_frame(metadata.duration_sec * fraction)
-            self.preview_timer.start()
+        self.playback_controller.seek_fraction(fraction)
 
     def _load_frame(self, timestamp: float, *, reset_view: bool = False) -> None:
-        try:
-            frame, frame_index, actual = self.workbench.read_at(timestamp)
-            self.current_frame = frame
-            self.current_frame_index = frame_index
-            self.current_time = actual
-            self.canvas.set_frame(frame, reset_view=reset_view)
-            self.transport.set_position(
-                actual,
-                self.workbench.session.video_metadata.duration_sec
-                if self.workbench.session.video_metadata
-                else 0.0,
-                frame_index,
-            )
-            self._invalidate_preview("현재 장면 분석 대기")
-        except Exception as exc:
-            self.statusBar().showMessage(f"영상 장면을 읽지 못했습니다: {exc}")
+        self.playback_controller.load_frame(timestamp, reset_view=reset_view)
 
     def schedule_preview(self) -> None:
-        self._invalidate_preview("현재 장면 분석 대기")
-        if self.workbench.selected_glass() is not None and self.workbench.session.video_metadata is not None:
-            self.preview_timer.start()
-        else:
-            self.preview_timer.stop()
+        self.playback_controller.schedule_preview()
 
     def request_preview(self) -> None:
-        glass = self.workbench.selected_glass()
-        if glass is None or self.current_frame is None or self.workbench.session.video_metadata is None:
-            self._invalidate_preview("시험 영상과 Glass를 선택해 주세요")
-            return
-        self._preview_context = (glass.id, self.current_frame_index, self.current_time)
-        self.detection_summary.set_loading()
-        self.statusBar().showMessage("현재 장면을 분석하고 있습니다...")
-        self.preview_controller.request(
-            self.current_frame,
-            glass,
-            self.current_frame_index,
-            self.current_time,
-        )
+        self.playback_controller.request_preview()
 
     def _preview_ready(self, detection, artifacts) -> None:
-        context = self._preview_context
-        if context is None:
-            return
-        selected_id = self.workbench.selected_glass_id
-        if (
-            detection.glass_id != selected_id
-            or detection.glass_id != context[0]
-            or detection.frame_index != self.current_frame_index
-            or detection.frame_index != context[1]
-            or abs(float(detection.time_sec) - self.current_time) > 1e-6
-            or abs(float(detection.time_sec) - context[2]) > 1e-6
-        ):
-            return
-        glass = self.workbench.selected_glass()
-        if glass is None:
-            return
-        metadata = self.workbench.session.video_metadata
-        tolerance = max(1.0, 2.0 / max(1.0, metadata.fps if metadata else 1.0))
-        near_analysis_start = abs(self.current_time - self.workbench.session.analysis_start_sec) <= tolerance
-        initial_state_needs_review = glass.initial_state in {
-            InitialObservationState.AUTO,
-            InitialObservationState.UNKNOWN_REVIEW,
-        }
-        self.canvas.set_detection(detection)
-        self.detection_summary.set_detection(
-            detection,
-            glass,
-            allow_initial_state_action=near_analysis_start or initial_state_needs_review,
-        )
-        self.debug_panel.set_artifacts(artifacts)
-        self.last_debug_artifacts = artifacts
-        self.statusBar().showMessage(
-            f"현재 상태: {fill_state_label(detection.fill_state)} · 신뢰도 {detection.overall_confidence:.2f}"
-        )
+        self.playback_controller.preview_ready(detection, artifacts)
 
     def _preview_failed(self, message: str) -> None:
-        self.canvas.set_detection(None)
-        self.detection_summary.set_failure(message)
-        self.last_debug_artifacts = None
-        self.statusBar().showMessage(f"현재 장면 분석 실패: {message}")
+        self.playback_controller.preview_failed(message)
 
     def _invalidate_preview(self, message: str) -> None:
-        invalidate = getattr(self.preview_controller, "invalidate", None)
-        if callable(invalidate):
-            invalidate()
-        self._preview_context = None
-        self.canvas.set_detection(None)
-        self.last_debug_artifacts = None
-        if self.workbench.session.video_metadata is None:
-            self.detection_summary.set_empty("시험 영상을 선택해 주세요")
-        elif self.workbench.selected_glass() is None:
-            self.detection_summary.set_empty("Glass를 선택해 주세요")
-        else:
-            self.detection_summary.set_empty(message)
+        self.playback_controller.invalidate_preview(message)
 
     def _focus_initial_state(self) -> None:
         glass = self.workbench.selected_glass()
@@ -866,102 +807,22 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage(f"{glass.name} 현재 Run 초기 상태 확인을 기록했습니다.")
 
     def set_recent_profile_history(self, history) -> None:
-        self.recent_profile_history = history
-        self._refresh_recent_profile_menu()
+        self.profile_lifecycle.set_recent_profile_history(history)
 
     def _refresh_recent_profile_menu(self) -> None:
-        menu = getattr(self, "recent_profile_menu", None)
-        if menu is None:
-            return
-        menu.clear()
-        entries = (
-            self.recent_profile_history.entries()
-            if self.recent_profile_history is not None
-            else ()
-        )
-        if entries:
-            for index, entry in enumerate(entries):
-                name = entry.profile_name or Path(entry.path).stem
-                label = f"{name} — {entry.path}"
-                if not entry.is_available():
-                    label += " (경로를 찾을 수 없음)"
-                action = menu.addAction(label)
-                action.setObjectName(f"recentProfileAction{index}")
-                action.setData(entry.path)
-                action.setEnabled(entry.is_available())
-                action.triggered.connect(
-                    lambda _checked=False, path=entry.path: self.open_recent_profile(path)
-                )
-            menu.addSeparator()
-        else:
-            empty = menu.addAction("최근 프로필 없음")
-            empty.setEnabled(False)
-        manual = menu.addAction("다른 프로필 파일 선택…")
-        manual.setObjectName("otherProfileFileAction")
-        manual.triggered.connect(lambda _checked=False: self.actions["load"].trigger())
+        self.profile_lifecycle.refresh_recent_profile_menu()
 
     def open_recent_profile(self, path: str | Path) -> None:
-        self._pending_profile_path = Path(path)
-        self.actions["load"].trigger()
+        self.profile_lifecycle.open_recent_profile(path)
 
     def _register_recent_profile(self) -> None:
-        if self.recent_profile_history is None or self.workbench.recipe_path is None:
-            return
-        try:
-            self.recent_profile_history.record_recipe(
-                self.workbench.recipe_path,
-                self.workbench.recipe,
-            )
-        except Exception as exc:
-            LOGGER.warning("Recent profile history could not be updated: %s", exc)
-        self._refresh_recent_profile_menu()
+        self.profile_lifecycle.register_recent_profile()
 
     def save_recipe(self) -> bool:
-        path = self.workbench.recipe_path
-        if path is None:
-            selected, _ = QFileDialog.getSaveFileName(
-                self,
-                "분석 프로필 저장",
-                "",
-                "유면 분석 프로필 (*.oilrecipe)",
-            )
-            if not selected:
-                return False
-            path = Path(selected)
-        try:
-            self.workbench.save(path)
-            self._register_recent_profile()
-            self._update_state()
-            actual_path = self.workbench.recipe_path or path
-            self.statusBar().showMessage(f"프로필 저장 완료: {actual_path}")
-            return True
-        except Exception as exc:
-            self._error("프로필 저장 실패", str(exc))
-            return False
+        return self.profile_lifecycle.save_recipe()
 
     def load_recipe(self) -> None:
-        path = self._pending_profile_path
-        self._pending_profile_path = None
-        if path is None:
-            selected, _ = QFileDialog.getOpenFileName(
-                self,
-                "분석 프로필 열기",
-                "",
-                "유면 분석 프로필 (*.oilrecipe)",
-            )
-            if not selected:
-                return
-            path = Path(selected)
-        try:
-            self._clear_interaction_target()
-            self.workbench.load(path)
-            self.undo_stack.clear()
-            self._set_placeholder()
-            self._refresh_all()
-            self._refresh_inline_validation()
-            self._register_recent_profile()
-        except Exception as exc:
-            self._error("프로필 열기 실패", str(exc))
+        self.profile_lifecycle.load_recipe()
 
     def validate_workbench(self):
         result = self.workbench.validate()
@@ -1206,44 +1067,23 @@ class MainWindow(QMainWindow):
         self.action_bar.analyze_button.setEnabled(can_analyze)
 
     def _set_placeholder(self) -> None:
-        self.current_frame = blank_bgr_frame(
-            self.workbench.recipe.reference_frame_width,
-            self.workbench.recipe.reference_frame_height,
-        )
-        self.canvas.set_frame(self.current_frame, reset_view=True)
-        self._invalidate_preview("시험 영상을 선택해 주세요")
+        self.playback_controller.set_placeholder()
 
     def _error(self, title: str, message: str) -> None:
         QMessageBox.critical(self, title, message)
 
     def _confirm_unsaved_profile_close(self):
-        return QMessageBox.warning(
-            self,
-            "저장되지 않은 Profile 변경",
-            "현재 Profile에 아직 안전하게 저장되지 않은 변경이 있습니다.\n\n"
-            "저장 후 닫기: 기존 Profile 저장 절차로 저장한 뒤 닫습니다.\n"
-            "버리고 닫기: Profile 파일을 변경하지 않고 현재 변경을 버립니다.\n"
-            "취소: 닫기를 중단하고 Workbench로 돌아갑니다.",
-            QMessageBox.StandardButton.Save
-            | QMessageBox.StandardButton.Discard
-            | QMessageBox.StandardButton.Cancel,
-            QMessageBox.StandardButton.Cancel,
-        )
+        return self.profile_lifecycle.confirm_unsaved_profile_close()
 
     def closeEvent(self, event) -> None:
-        if self.workbench.profile_has_unsaved_changes:
-            answer = self._confirm_unsaved_profile_close()
-            if answer == QMessageBox.StandardButton.Save:
-                if not self.save_recipe():
-                    event.ignore()
-                    return
-            elif answer != QMessageBox.StandardButton.Discard:
-                event.ignore()
-                return
+        if not self.profile_lifecycle.accept_close(self._confirm_unsaved_profile_close):
+            event.ignore()
+            return
         super().closeEvent(event)
         if not event.isAccepted():
             return
         self.applicationCloseAccepted.emit()
+        self.playback_controller.close()
         self.workbench.close_video()
 
 
