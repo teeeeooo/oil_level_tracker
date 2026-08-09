@@ -70,6 +70,7 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - S11 detector-baseline validation: [`30-validation/s11-real-field-detector-effectiveness.md`](30-validation/s11-real-field-detector-effectiveness.md)
 - Accepted S11-R2 detector validation: [`30-validation/s11-foam-spatial-authority-repair-validation.md`](30-validation/s11-foam-spatial-authority-repair-validation.md)
 - Accepted S11-R2 implementation/replay evidence: [`60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](60-evidence/s11/s11-r2-foam-spatial-authority-repair.md)
+- Accepted post-R2 baseline repair review: [`60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md`](60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md)
 - Active retrospective implementation validation: [`30-validation/initial-state-retrospective-reconstruction-validation.md`](30-validation/initial-state-retrospective-reconstruction-validation.md)
 - S11 diagnostics: [`50-diagnostics/s11/`](50-diagnostics/s11/)
 - S11 historical evidence: [`60-evidence/s11/`](60-evidence/s11/)
