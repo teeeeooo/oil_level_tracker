@@ -26,6 +26,8 @@ Ambiguity remains a valid production result. Hard-invalid evidence must not rega
 
 Spatial is bounded **single-frame positive corroboration**, not a universal discriminator and not temporal tracking. It may add x-resolved phase-path evidence where scalar current-frame semantics remain ambiguous, subject to the existing hard safety envelope. It retains no frame history, cannot override accepted no-interface/unavailable outcomes, and cannot convert a flat or otherwise insufficiently identifiable scene into numeric Oil merely to increase coverage.
 
+Under authoritative accepted-Foam context only, Spatial may also challenge an already numeric incumbent when artifact opposition exceeds boundary likelihood by at least `0.20` and the incumbent fails its own Foam-excluded path. The challenger must satisfy the unchanged Spatial route and improve boundary-minus-artifact margin by at least `0.08`; failed arbitration preserves the incumbent rather than manufacturing ambiguity. A path-invalid preliminary relative candidate may not terminate evaluation of a distinct full-path candidate in this same bounded context. Outside accepted Foam, the prior ambiguity-only fallback remains unchanged.
+
 ## Foam / Oil context ownership
 
 S5-A owns current-frame Foam support/component classification and its accepted Foam outcome. The Foam temporal gate remains a separate downstream owner. D1 established that S5-A publication does not automatically grant every accepted component authority to constrain Oil: structural/refractive Foam-like topology can be withheld from S5-B routing authority while Foam publication remains independently represented.
@@ -50,6 +52,8 @@ D5 preserves the accepted D2/Spatial and D3 Oil authorities when genuine accepte
 4. no-interface, visibility, glare/exclusion/border and structural safety remain unchanged.
 5. Spatial proves its path on the Foam-excluded residual raster.
 6. any Foam-separated auxiliary selector remains subordinate to these owners and cannot bypass the same hard constraints.
+
+Foam-separated auxiliary candidates require at least `0.30` horizontal material support. This support floor and the bounded Spatial arbitration remove short bottom-structure authority without giving Foam a second Oil-publication path.
 
 The accepted comparative-anchor repair closes the D5/D3 seam where a hypothesis already hard-invalid under authoritative accepted-Foam topology could retain comparative anchor/neighborhood authority over hard-safe alternatives. The current temporal source slice does not reopen that authority.
 

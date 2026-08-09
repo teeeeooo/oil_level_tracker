@@ -1,12 +1,12 @@
 # S11 Foam/Spatial Authority Repair Architecture
 
-**Status:** `ACTIVE — S11-R2 implementation and validation`
+**Status:** `ACCEPTED — durable S11-R2 composition contract`
 
 ## Purpose
 
 This document owns the bounded S11-R2 detector change that lets stronger existing Spatial proof challenge a weak accepted Oil boundary under authoritative Foam topology. It is a responsibility repair, not a new detector family or a general threshold-loosening pass.
 
-The causal record is [`../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md`](../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md). Acceptance is owned by [`../30-validation/s11-foam-spatial-authority-repair-validation.md`](../30-validation/s11-foam-spatial-authority-repair-validation.md).
+The causal record is [`../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md`](../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md). Acceptance is owned by [`../30-validation/s11-foam-spatial-authority-repair-validation.md`](../30-validation/s11-foam-spatial-authority-repair-validation.md) and recorded in [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
 
 ## Existing ownership preserved
 

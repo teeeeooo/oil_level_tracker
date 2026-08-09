@@ -1,5 +1,9 @@
 # S11 Foam/Spatial Authority Repair Validation Contract
 
+**Status:** `ACCEPTED — see source-tree/corpus evidence`
+
+Acceptance evidence is [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
+
 ## Scope
 
 This contract accepts or rejects the bounded R2 design in [`../20-architecture/s11-foam-spatial-authority-repair-architecture.md`](../20-architecture/s11-foam-spatial-authority-repair-architecture.md). The objective is a more faithful observed Oil trajectory, not a fixed publication percentage.

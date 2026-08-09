@@ -1,6 +1,6 @@
 # S11 Subtractive Detector Simplification Architecture
 
-**Status:** `BASELINE — Slices A–D accepted; bounded S11-R2 successor active`
+**Status:** `BASELINE — Slices A–D and bounded S11-R2 successor accepted`
 
 ## Purpose
 
@@ -63,7 +63,7 @@ Residual long gaps do not form one material hard-safe general detector failure c
 
 ### S11-R2 successor boundary
 
-Later direct Glass-ROI review isolated a narrower composition defect that Slice D's aggregate reconciliation did not authorize or test: in authoritative accepted-Foam context, an artifact-dominant numeric incumbent can block an already-existing full-path Spatial candidate, and path-invalid preliminary evidence can terminate that existing search. This is not a new detector mechanism or a reopening of global Spatial thresholds. Its active authority is the separate [`S11 Foam/Spatial Authority Repair Architecture`](s11-foam-spatial-authority-repair-architecture.md).
+Later direct Glass-ROI review isolated a narrower composition defect that Slice D's aggregate reconciliation did not authorize or test: in authoritative accepted-Foam context, an artifact-dominant numeric incumbent can block an already-existing full-path Spatial candidate, and path-invalid preliminary evidence can terminate that existing search. This is not a new detector mechanism or a reopening of global Spatial thresholds. Its accepted authority is the separate [`S11 Foam/Spatial Authority Repair Architecture`](s11-foam-spatial-authority-repair-architecture.md).
 
 ## Validation authority
 
@@ -89,4 +89,4 @@ If subtractive simplification violates a retained negative family, the correct r
 
 ## Current executable gate
 
-There is no remaining subtractive detector source gate. **Slices A–D are accepted**. The current source gate is the separately bounded S11-R2 Foam/Spatial composition repair; all other detector mechanisms still require new evidence and are not pre-authorized by this architecture.
+There is no remaining subtractive detector source gate. **Slices A–D and the separately bounded S11-R2 Foam/Spatial composition repair are accepted**. All other detector mechanisms still require new evidence and are not pre-authorized by this architecture; the exact current gate is final target-Windows field-workflow validation.
