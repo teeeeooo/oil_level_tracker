@@ -14,6 +14,7 @@ from .oil_shadow_types import (
     RawEdgeObservation,
     SemanticHypothesis,
     ShadowBoundaryObservation,
+    ShadowCurrentObservation,
     ShadowSourceFamily,
     SuccessfulPipelineFrame,
 )
@@ -22,6 +23,8 @@ from .row_features import masked_band_intensity_profiles
 
 
 _SECTOR_COUNT = 5
+_FOAM_INCUMBENT_ARTIFACT_MARGIN = 0.20
+_SPATIAL_CHALLENGER_MARGIN_GAIN = 0.08
 
 
 @dataclass(frozen=True)
@@ -46,14 +49,25 @@ def build_spatial_positive_fallback_frame(
     bounds: OilShadowBounds,
     accepted_foam_front_local_y: float | None,
     accepted_foam_component_mask: np.ndarray | None,
+    incumbent_observation: ShadowBoundaryObservation | None = None,
 ) -> SuccessfulPipelineFrame | None:
     """Build a secondary boundary frame only from additional cross-ROI evidence.
 
-    The caller owns the P0-first guard and invokes this function only after the
-    ordinary current-frame path has remained ambiguous. Relative phase creates a
+    Ambiguity may request the established fallback directly. In authoritative
+    Foam context, an accepted but artifact-dominant boundary may request a
+    challenger only after failing its own Spatial path. Relative phase creates a
     candidate but is never sufficient for publication by itself; the candidate
-    must also exhibit a bounded, independently optimized five-sector path.
+    must also exhibit a bounded, independently optimized cross-ROI path.
     """
+
+    if incumbent_observation is not None and not _incumbent_requires_challenger(
+        pre,
+        effective_mask,
+        incumbent_observation,
+        accepted_foam_component_mask=accepted_foam_component_mask,
+        bounds=bounds,
+    ):
+        return None
 
     raw = _relative_region_observations(
         pre,
@@ -82,6 +96,44 @@ def build_spatial_positive_fallback_frame(
         accepted_foam_component_mask=accepted_foam_component_mask,
         allow_comparative_recovery=False,
     )
+    current = _spatially_supported_boundary_observation(
+        pre,
+        effective_mask,
+        current,
+        hypotheses,
+        accepted_foam_front_local_y=accepted_foam_front_local_y,
+        accepted_foam_component_mask=accepted_foam_component_mask,
+        bounds=bounds,
+    )
+    if current is None:
+        return None
+    if incumbent_observation is not None and not _challenger_materially_improves(
+        incumbent_observation,
+        current,
+    ):
+        return None
+    return SuccessfulPipelineFrame(
+        raw_observations=raw,
+        proposals=proposals,
+        hypotheses=hypotheses,
+        current_observation=current,
+        frame_height=int(pre.gray.shape[0]),
+        frame_width=int(pre.gray.shape[1]),
+    )
+
+
+def _spatially_supported_boundary_observation(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    current: ShadowCurrentObservation,
+    hypotheses: tuple[SemanticHypothesis, ...],
+    *,
+    accepted_foam_front_local_y: float | None,
+    accepted_foam_component_mask: np.ndarray | None,
+    bounds: OilShadowBounds,
+) -> ShadowBoundaryObservation | None:
+    """Retain a path-valid boundary or search for a distinct valid candidate."""
+
     if isinstance(current, ShadowBoundaryObservation):
         path = _evaluate_spatial_path(
             pre,
@@ -90,30 +142,73 @@ def build_spatial_positive_fallback_frame(
             accepted_foam_component_mask=accepted_foam_component_mask,
             bounds=bounds,
         )
-        if not path.accepted:
+        if path.accepted:
+            return current
+        if accepted_foam_component_mask is None:
             return None
-    else:
-        recovered = _select_spatially_corroborated_textured_boundary(
-            pre,
-            effective_mask,
-            hypotheses,
-            accepted_foam_front_local_y=accepted_foam_front_local_y,
-            accepted_foam_component_mask=accepted_foam_component_mask,
-            bounds=bounds,
-        )
-        if recovered is None:
-            return None
-        current = observations._boundary_observation(
-            recovered,
-            sorted(hypotheses, key=observations._hypothesis_order),
-        )
-    return SuccessfulPipelineFrame(
-        raw_observations=raw,
-        proposals=proposals,
-        hypotheses=hypotheses,
-        current_observation=current,
-        frame_height=int(pre.gray.shape[0]),
-        frame_width=int(pre.gray.shape[1]),
+    recovered = _select_spatially_corroborated_textured_boundary(
+        pre,
+        effective_mask,
+        hypotheses,
+        accepted_foam_front_local_y=accepted_foam_front_local_y,
+        accepted_foam_component_mask=accepted_foam_component_mask,
+        bounds=bounds,
+    )
+    if recovered is None:
+        return None
+    return observations._boundary_observation(
+        recovered,
+        sorted(hypotheses, key=observations._hypothesis_order),
+    )
+
+
+def _incumbent_requires_challenger(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    incumbent: ShadowBoundaryObservation,
+    *,
+    accepted_foam_component_mask: np.ndarray | None,
+    bounds: OilShadowBounds,
+) -> bool:
+    """Admit challenger work only for weak accepted-Foam incumbents."""
+
+    if accepted_foam_component_mask is None:
+        return False
+    hypothesis = incumbent.hypothesis
+    if (
+        hypothesis.artifact_likelihood - hypothesis.boundary_likelihood
+        < _FOAM_INCUMBENT_ARTIFACT_MARGIN
+    ):
+        return False
+    path = _evaluate_spatial_path(
+        pre,
+        effective_mask,
+        candidate_local_y=hypothesis.representative_local_y,
+        accepted_foam_component_mask=accepted_foam_component_mask,
+        bounds=bounds,
+    )
+    return not path.accepted
+
+
+def _challenger_materially_improves(
+    incumbent: ShadowBoundaryObservation,
+    challenger: ShadowBoundaryObservation,
+) -> bool:
+    """Require a bounded semantic-margin gain before replacing a numeric result."""
+
+    incumbent_hypothesis = incumbent.hypothesis
+    challenger_hypothesis = challenger.hypothesis
+    incumbent_margin = (
+        incumbent_hypothesis.boundary_likelihood
+        - incumbent_hypothesis.artifact_likelihood
+    )
+    challenger_margin = (
+        challenger_hypothesis.boundary_likelihood
+        - challenger_hypothesis.artifact_likelihood
+    )
+    return (
+        challenger_margin - incumbent_margin
+        >= _SPATIAL_CHALLENGER_MARGIN_GAIN - 1e-12
     )
 
 

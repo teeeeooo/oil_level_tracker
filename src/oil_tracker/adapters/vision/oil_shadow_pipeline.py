@@ -958,7 +958,16 @@ class OilHypothesisPipeline:
                 frame_height=int(payload.pre.gray.shape[0]),
                 frame_width=int(payload.pre.gray.shape[1]),
             )
-            if isinstance(current, ShadowAmbiguousObservation):
+            incumbent_observation = (
+                current
+                if isinstance(current, ShadowBoundaryObservation)
+                and payload.accepted_foam_component_mask is not None
+                else None
+            )
+            if (
+                isinstance(current, ShadowAmbiguousObservation)
+                or incumbent_observation is not None
+            ):
                 spatial_fallback = build_spatial_positive_fallback_frame(
                     pre=payload.pre,
                     effective_mask=payload.effective_mask,
@@ -970,6 +979,7 @@ class OilHypothesisPipeline:
                     bounds=self.bounds,
                     accepted_foam_front_local_y=payload.accepted_foam_front_local_y,
                     accepted_foam_component_mask=payload.accepted_foam_component_mask,
+                    incumbent_observation=incumbent_observation,
                 )
                 if spatial_fallback is not None:
                     raw_frame = spatial_fallback

@@ -1,6 +1,6 @@
 # S11 Subtractive Detector Simplification Architecture
 
-**Status:** `ACTIVE — Slices A–D accepted; final Windows field-workflow validation next`
+**Status:** `BASELINE — Slices A–D accepted; bounded S11-R2 successor active`
 
 ## Purpose
 
@@ -59,7 +59,11 @@ Slice C preserved the existing scalar-supported Spatial route and added fallback
 
 The accepted A–C baseline was replayed across the complete four-video qualification windows and retained collision/glare/structure/Foam/no-interface populations. Current production coverage is `109/299`; user-confirmed truth coverage is `8/13` with `5.4375 px` MAE. The retained current-frame preservation suite passed `356` tests.
 
-Residual long gaps do not form one material hard-safe general detector failure class: the base-sample long gap is dominated by a static explanatory overlay in the frozen visual evidence, while sample3's longest gap coincides with no-interface/strong motion-reframing blur/unclear evidence. Remaining visually identifiable misses are shorter and bracketed by useful numeric anchors. Another detector mechanism is therefore not authorized by Slice D; the simplified detector source baseline is accepted for final target-Windows field-workflow validation.
+Residual long gaps do not form one material hard-safe general detector failure class: the base-sample long gap is dominated by a static explanatory overlay in the frozen visual evidence, while sample3's longest gap coincides with no-interface/strong motion-reframing blur/unclear evidence. Remaining visually identifiable misses are shorter and bracketed by useful numeric anchors. Another detector mechanism was therefore not authorized by Slice D; this remains the accepted simplified baseline.
+
+### S11-R2 successor boundary
+
+Later direct Glass-ROI review isolated a narrower composition defect that Slice D's aggregate reconciliation did not authorize or test: in authoritative accepted-Foam context, an artifact-dominant numeric incumbent can block an already-existing full-path Spatial candidate, and path-invalid preliminary evidence can terminate that existing search. This is not a new detector mechanism or a reopening of global Spatial thresholds. Its active authority is the separate [`S11 Foam/Spatial Authority Repair Architecture`](s11-foam-spatial-authority-repair-architecture.md).
 
 ## Validation authority
 
@@ -85,4 +89,4 @@ If subtractive simplification violates a retained negative family, the correct r
 
 ## Current executable gate
 
-There is no remaining subtractive detector source gate. **Slices A–D are accepted**, and the exact next gate is the **final Windows field-workflow validation**. Another detector mechanism requires new evidence of a material general failure class and is not pre-authorized by this architecture.
+There is no remaining subtractive detector source gate. **Slices A–D are accepted**. The current source gate is the separately bounded S11-R2 Foam/Spatial composition repair; all other detector mechanisms still require new evidence and are not pre-authorized by this architecture.

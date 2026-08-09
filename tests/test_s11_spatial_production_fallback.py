@@ -176,6 +176,41 @@ def test_unified_spatial_corroboration_replaces_soft_scalar_veto_but_not_no_inte
     assert blocked.debug_metrics["oil_decision_status"] == "ambiguous"
 
 
+@pytest.mark.parametrize(
+    ("frame_index", "expected_oil_y", "expected_foam_y"),
+    (
+        (1080, 842.0, 840.0),
+        (1275, None, 837.0),
+        (1590, 846.0, 832.0),
+    ),
+)
+def test_r2_foam_spatial_authority_prefers_material_interface_over_bottom_structure(
+    frame_index: int,
+    expected_oil_y: float | None,
+    expected_foam_y: float,
+) -> None:
+    root = require_s11_local_corpus()
+    glass = JsonRecipeRepository().load(root / "sample" / "sample4.oilrecipe").glasses[0]
+    frame = _decode_local_video_frame(root, "sample4", frame_index)
+
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        frame,
+        glass,
+        frame_index=frame_index,
+        time_sec=frame_index / 30.0,
+        debug=False,
+    )
+
+    assert detection.debug_metrics["foam_oil_context_authoritative"] is True
+    assert detection.raw_foam_front_y == expected_foam_y
+    assert detection.raw_oil_air_level_y == expected_oil_y
+    if expected_oil_y is None:
+        assert detection.debug_metrics["oil_decision_status"] == "ambiguous"
+    else:
+        assert expected_oil_y > expected_foam_y
+        assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
+
+
 def test_d2_class_a_authority_continues_but_foam_component_exclusion_can_fail_closed() -> None:
     root = require_s11_local_corpus()
     glass = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe").glasses[0]

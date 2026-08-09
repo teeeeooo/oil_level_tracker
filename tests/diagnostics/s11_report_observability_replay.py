@@ -56,6 +56,9 @@ def _session(
     output_root: Path,
     start_sec: float,
     end_sec: float,
+    *,
+    run_label: str,
+    run_note: str,
 ) -> tuple[InspectionRecipe, AnalysisSession]:
     recipe = JsonRecipeRepository().load(video_path.with_suffix(".oilrecipe"))
     reader = OpenCvVideoReader(video_path)
@@ -73,8 +76,8 @@ def _session(
         compressor_start_sec=start_sec,
         sampling_fps=SAMPLING_FPS,
         output_directory=str(output_root),
-        run_name=f"S11-R1 {sample}",
-        run_note="User observation report qualification replay",
+        run_name=f"{run_label} {sample}",
+        run_note=run_note,
         resolution_confirmed=True,
         debug_trace_level=DebugTraceLevel.NONE,
     )
@@ -183,6 +186,11 @@ def run_replay(
     output_root: Path | None = None,
     *,
     verify_accepted_counts: bool = True,
+    expected_numeric_oil_counts: dict[str, int] = ACCEPTED_NUMERIC_OIL_COUNTS,
+    expected_tracking_fingerprints: dict[str, str] = ACCEPTED_TRACKING_FINGERPRINTS,
+    run_label: str = "S11-R1",
+    run_note: str = "User observation report qualification replay",
+    manifest_schema: str = "s11-user-observation-report-replay-v1",
 ) -> dict[str, object]:
     root = repository_root() if root is None else Path(root)
     output_root = (
@@ -201,6 +209,8 @@ def run_replay(
             output_root,
             start_sec,
             end_sec,
+            run_label=run_label,
+            run_note=run_note,
         )
         result = AnalysisPipeline(
             lambda path: OpenCvVideoReader(path),
@@ -217,7 +227,7 @@ def run_replay(
         if verify_accepted_counts:
             expected = (
                 ACCEPTED_ROW_COUNTS[sample],
-                ACCEPTED_NUMERIC_OIL_COUNTS[sample],
+                expected_numeric_oil_counts[sample],
             )
             actual = (
                 summary["tracking_row_count"],
@@ -228,7 +238,7 @@ def run_replay(
                     f"{sample} detector/tracking baseline changed: expected {expected}, got {actual}"
                 )
             fingerprint = str(summary["tracking_fingerprint_sha256"])
-            if fingerprint != ACCEPTED_TRACKING_FINGERPRINTS[sample]:
+            if fingerprint != expected_tracking_fingerprints[sample]:
                 raise AssertionError(
                     f"{sample} tracking fingerprint changed: {fingerprint}"
                 )
@@ -249,7 +259,7 @@ def run_replay(
         for sample in QUALIFICATION_WINDOWS
     }
     manifest = {
-        "schema": "s11-user-observation-report-replay-v1",
+        "schema": manifest_schema,
         "sampling_fps": SAMPLING_FPS,
         "qualification_windows": QUALIFICATION_WINDOWS,
         "accepted_count_check_enabled": verify_accepted_counts,

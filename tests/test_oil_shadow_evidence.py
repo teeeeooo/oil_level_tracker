@@ -7,7 +7,7 @@ import math
 import numpy as np
 import pytest
 
-from oil_tracker.adapters.vision import oil_shadow_observations
+from oil_tracker.adapters.vision import oil_shadow_observations, oil_spatial_fallback
 from oil_tracker.adapters.vision.oil_shadow_observations import (
     evaluate_typed_current_observation,
     semantic_deduplicate,
@@ -978,6 +978,203 @@ def test_accepted_foam_context_recovers_only_a_distinct_broad_phase_below_front(
         accepted_foam_component_mask=foam_component,
     )
     assert isinstance(no_phase, ShadowAmbiguousObservation)
+
+
+@pytest.mark.parametrize(
+    ("horizontal_coverage", "expected_type"),
+    (
+        (0.299, ShadowAmbiguousObservation),
+        (0.300, ShadowBoundaryObservation),
+    ),
+)
+def test_foam_separated_boundary_requires_material_horizontal_support(
+    monkeypatch,
+    horizontal_coverage,
+    expected_type,
+):
+    candidate = _typed_hypothesis(
+        f"foam-separated-coverage-{horizontal_coverage}",
+        y=12.0,
+        boundary=0.30,
+        artifact=0.95,
+        ambiguity=0.35,
+        broad_strength=0.18,
+        broad_scale_consistency=0.90,
+        narrow_peak_strength=0.50,
+        narrow_horizontal_coverage=horizontal_coverage,
+        paired_edge_strength=0.60,
+    )
+    monkeypatch.setattr(
+        oil_shadow_observations,
+        "_has_foam_separated_phase_support",
+        lambda *_args: True,
+    )
+    observation = _typed_observation(
+        monkeypatch,
+        (candidate,),
+        no_interface=0.35,
+        accepted_foam_front_local_y=6.0,
+        accepted_foam_component_mask=np.zeros((20, 20), dtype=np.uint8),
+    )
+    assert isinstance(observation, expected_type)
+
+
+def test_spatial_challenger_requires_full_bounded_semantic_gain():
+    incumbent = ShadowBoundaryObservation(
+        _typed_hypothesis(
+            "challenger-incumbent",
+            boundary=0.30,
+            artifact=0.70,
+        )
+    )
+    exact_gain = ShadowBoundaryObservation(
+        _typed_hypothesis(
+            "challenger-exact-gain",
+            boundary=0.30,
+            artifact=0.62,
+        )
+    )
+    insufficient = ShadowBoundaryObservation(
+        _typed_hypothesis(
+            "challenger-insufficient-gain",
+            boundary=0.30,
+            artifact=0.621,
+        )
+    )
+
+    assert oil_spatial_fallback._challenger_materially_improves(
+        incumbent,
+        exact_gain,
+    )
+    assert not oil_spatial_fallback._challenger_materially_improves(
+        incumbent,
+        insufficient,
+    )
+
+
+def test_spatial_challenger_requires_foam_artifact_dominance_and_failed_path(
+    monkeypatch,
+):
+    image = np.full((20, 20), 100, dtype=np.uint8)
+    mask = np.full_like(image, 255)
+    pre = preprocess(image, mask, DetectorSettings())
+    incumbent = ShadowBoundaryObservation(
+        _typed_hypothesis(
+            "challenger-eligibility",
+            boundary=0.30,
+            artifact=0.70,
+        )
+    )
+    rejected_path = oil_spatial_fallback._SpatialPathEvidence(
+        accepted=False,
+        sector_count=2,
+        rows=(9, 10),
+        span_px=1,
+        maximum_jump_px=1,
+        median_local_y=9.5,
+    )
+    monkeypatch.setattr(
+        oil_spatial_fallback,
+        "_evaluate_spatial_path",
+        lambda *_args, **_kwargs: rejected_path,
+    )
+
+    assert not oil_spatial_fallback._incumbent_requires_challenger(
+        pre,
+        mask,
+        incumbent,
+        accepted_foam_component_mask=None,
+        bounds=OilShadowBounds(),
+    )
+    assert oil_spatial_fallback._incumbent_requires_challenger(
+        pre,
+        mask,
+        incumbent,
+        accepted_foam_component_mask=np.zeros_like(mask),
+        bounds=OilShadowBounds(),
+    )
+
+    supported = replace(
+        rejected_path,
+        accepted=True,
+        sector_count=5,
+        rows=(9, 9, 10, 10, 10),
+    )
+    monkeypatch.setattr(
+        oil_spatial_fallback,
+        "_evaluate_spatial_path",
+        lambda *_args, **_kwargs: supported,
+    )
+    assert not oil_spatial_fallback._incumbent_requires_challenger(
+        pre,
+        mask,
+        incumbent,
+        accepted_foam_component_mask=np.zeros_like(mask),
+        bounds=OilShadowBounds(),
+    )
+
+
+def test_path_invalid_preliminary_boundary_cannot_stop_distinct_spatial_candidate(
+    monkeypatch,
+):
+    image = np.full((20, 20), 100, dtype=np.uint8)
+    mask = np.full_like(image, 255)
+    pre = preprocess(image, mask, DetectorSettings())
+    preliminary = _typed_hypothesis(
+        "path-invalid-preliminary",
+        y=8.0,
+        boundary=0.45,
+        artifact=0.20,
+    )
+    corroborated = _typed_hypothesis(
+        "distinct-spatial-candidate",
+        y=13.0,
+        boundary=0.40,
+        artifact=0.18,
+    )
+    rejected_path = oil_spatial_fallback._SpatialPathEvidence(
+        accepted=False,
+        sector_count=2,
+        rows=(8, 9),
+        span_px=1,
+        maximum_jump_px=1,
+        median_local_y=8.5,
+    )
+    monkeypatch.setattr(
+        oil_spatial_fallback,
+        "_evaluate_spatial_path",
+        lambda *_args, **_kwargs: rejected_path,
+    )
+    monkeypatch.setattr(
+        oil_spatial_fallback,
+        "_select_spatially_corroborated_textured_boundary",
+        lambda *_args, **_kwargs: corroborated,
+    )
+
+    blocked_without_foam = (
+        oil_spatial_fallback._spatially_supported_boundary_observation(
+            pre,
+            mask,
+            ShadowBoundaryObservation(preliminary),
+            (preliminary, corroborated),
+            accepted_foam_front_local_y=None,
+            accepted_foam_component_mask=None,
+            bounds=OilShadowBounds(),
+        )
+    )
+    selected = oil_spatial_fallback._spatially_supported_boundary_observation(
+        pre,
+        mask,
+        ShadowBoundaryObservation(preliminary),
+        (preliminary, corroborated),
+        accepted_foam_front_local_y=4.0,
+        accepted_foam_component_mask=np.zeros_like(mask),
+        bounds=OilShadowBounds(),
+    )
+
+    assert blocked_without_foam is None
+    assert selected is not None
+    assert selected.hypothesis.identity == corroborated.identity
 
 
 def test_accepted_foam_context_requires_persistent_phase_not_structural_context(monkeypatch):

@@ -37,6 +37,7 @@ from .oil_shadow_types import (
 
 
 _ORDINARY_BOUNDARY_LIKELIHOOD_FLOOR = 0.48
+_FOAM_SEPARATED_MIN_HORIZONTAL_COVERAGE = 0.30
 
 
 @dataclass(frozen=True)
@@ -805,7 +806,8 @@ def _select_foam_separated_boundary(
             and candidate.broad.scale_consistency >= 0.80
             and candidate.narrow.available
             and candidate.narrow.peak_strength >= 0.20
-            and candidate.narrow.horizontal_coverage >= 0.20
+            and candidate.narrow.horizontal_coverage
+            >= _FOAM_SEPARATED_MIN_HORIZONTAL_COVERAGE
             and candidate.visibility >= 0.85
             and candidate.evidence_availability >= 0.90
             and spatial_conflict <= 0.15
