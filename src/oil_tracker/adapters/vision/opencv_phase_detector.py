@@ -15,6 +15,7 @@ from .foam_front_detector import (
     FoamDecisionStatus,
     FoamDetectionResult,
     detect_bottom_connected_foam,
+    evaluate_foam_layer_coherence,
     evaluate_foam_oil_context_authority,
 )
 from .foam_temporal_gate import FoamTemporalDecision, FoamTemporalGate
@@ -53,6 +54,7 @@ class OpenCvPhaseDetector:
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
+        self._static_foam_maps: dict[str, np.ndarray] = {}
         self._foam_gate = FoamTemporalGate()
         self._oil_pipeline = OilHypothesisPipeline()
 
@@ -72,12 +74,14 @@ class OpenCvPhaseDetector:
         if glass_id is None:
             self._trackers.clear()
             self._static_maps.clear()
+            self._static_foam_maps.clear()
             self._foam_gate.reset()
             self._reset_oil_pipeline(None)
         else:
             key = str(glass_id)
             self._trackers.pop(key, None)
             self._static_maps.pop(key, None)
+            self._static_foam_maps.pop(key, None)
             self._foam_gate.reset(key)
             self._reset_oil_pipeline(key)
 
@@ -85,12 +89,28 @@ class OpenCvPhaseDetector:
         if not frames:
             return
         maps = []
+        foam_maps = []
         for frame in frames:
             bundle = build_mask_bundle(frame, glass)
             pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
             maps.append((pre.horizontal_mask > 0).astype(np.float32))
+            foam = detect_bottom_connected_foam(
+                bundle.crop,
+                pre.gray,
+                pre.canny,
+                pre.glare_mask,
+                bundle.effective_mask,
+                glass.detector_settings,
+            )
+            foam_maps.append((foam.mask > 0).astype(np.float32))
         persistence = np.mean(maps, axis=0)
         self._static_maps[glass.id] = np.where(persistence >= 0.75, 255, 0).astype(np.uint8)
+        foam_persistence = np.mean(foam_maps, axis=0)
+        self._static_foam_maps[glass.id] = np.where(
+            foam_persistence >= 0.75,
+            255,
+            0,
+        ).astype(np.uint8)
 
     def detect(
         self,
@@ -121,7 +141,16 @@ class OpenCvPhaseDetector:
             bundle.effective_mask,
             settings,
         )
-        foam_temporal = self._foam_gate.evaluate(glass.id, foam, settings)
+        foam_layer = evaluate_foam_layer_coherence(foam)
+        static_foam_map = self._static_foam_maps.get(glass.id)
+        static_foam_overlap = _foam_static_overlap(foam.mask, static_foam_map)
+        foam_temporal = self._foam_gate.evaluate(
+            glass.id,
+            foam,
+            settings,
+            static_overlap_ratio=static_foam_overlap,
+            layer_coherent=foam_layer.coherent,
+        )
         foam_candidate = foam_temporal.candidate
         foam_context = evaluate_foam_oil_context_authority(foam)
         foam_context_authoritative = bool(
@@ -241,6 +270,16 @@ class OpenCvPhaseDetector:
             "foam_component_height_ratio": float(foam.component_height_ratio),
             "foam_component_width_ratio": float(foam.component_width_ratio),
             "foam_bounding_box_fill_ratio": float(foam.bounding_box_fill_ratio),
+            "foam_static_artifact_overlap": float(static_foam_overlap),
+            "foam_static_artifact_pixel_count": (
+                0 if static_foam_map is None else int(np.count_nonzero(static_foam_map))
+            ),
+            "foam_layer_publication_coherent": foam_layer.coherent,
+            "foam_layer_publication_reason": foam_layer.reason,
+            "foam_layer_wide_row_fraction": float(foam_layer.wide_row_fraction),
+            "foam_layer_wide_row_compactness_median": float(
+                foam_layer.wide_row_compactness_median
+            ),
             "foam_oil_context_authoritative": foam_context_authoritative,
             "foam_oil_context_reason": foam_context_reason,
             "foam_oil_context_wide_row_fraction": float(foam_context.wide_row_fraction),
@@ -408,6 +447,11 @@ class OpenCvPhaseDetector:
             "foam_combined_evidence": _unit_image(foam.combined_evidence_map),
             "foam_accepted_component": accepted_mask,
             "static_artifact_map": static_map if static_map is not None else np.zeros_like(bundle.effective_mask),
+            "static_foam_artifact_map": (
+                self._static_foam_maps.get(glass.id)
+                if self._static_foam_maps.get(glass.id) is not None
+                else np.zeros_like(bundle.effective_mask)
+            ),
         }
         rows = []
         for rank, candidate in enumerate(
@@ -522,11 +566,30 @@ def _foam_flags(
         return ["FOAM_EVIDENCE_AMBIGUOUS"]
     if temporal.decision_status is FoamDecisionStatus.GLARE_REJECTED:
         return ["FOAM_GLARE_REJECTED"]
+    if temporal.decision_status is FoamDecisionStatus.INCOHERENT_REJECTED:
+        return ["FOAM_LAYER_INCOHERENT_REJECTED"]
+    if temporal.decision_status is FoamDecisionStatus.STATIC_REJECTED:
+        return ["FOAM_STATIC_ARTIFACT_REJECTED"]
     if temporal.decision_status is FoamDecisionStatus.WEAK_REJECTED or (
         foam.candidate is not None and foam.candidate.rejected
     ):
         return ["FOAM_COMPONENT_REJECTED"]
     return []
+
+
+def _foam_static_overlap(
+    current_mask: np.ndarray,
+    static_map: np.ndarray | None,
+) -> float:
+    if static_map is None:
+        return 0.0
+    if current_mask.shape != static_map.shape:
+        raise ValueError("Foam and learned static maps must share one raster shape.")
+    current = current_mask > 0
+    count = int(np.count_nonzero(current))
+    if count == 0:
+        return 0.0
+    return float(np.count_nonzero(current & (static_map > 0))) / count
 
 
 def _unit_image(values: np.ndarray) -> np.ndarray:

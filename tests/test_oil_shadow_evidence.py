@@ -710,6 +710,7 @@ def test_general_boundary_floor_remains_unchanged(monkeypatch):
 def test_d3_comparative_recovery_softens_correlated_semantic_vetoes(monkeypatch):
     target = _typed_hypothesis(
         "d3-soft-evidence",
+        y=10.0,
         boundary=0.30,
         artifact=0.10,
         ambiguity=0.62,
@@ -752,6 +753,7 @@ def test_d3_comparative_recovery_softens_correlated_semantic_vetoes(monkeypatch)
 def test_d3_subthreshold_no_interface_is_comparative_not_a_veto(monkeypatch):
     target = _typed_hypothesis(
         "d3-subthreshold-absence",
+        y=10.0,
         boundary=0.30,
         artifact=0.10,
         ambiguity=0.62,

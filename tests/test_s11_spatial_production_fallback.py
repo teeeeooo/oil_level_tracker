@@ -668,7 +668,7 @@ def _structural_foam_frames() -> tuple[np.ndarray, ...]:
     return tuple(frames)
 
 
-def test_structural_foam_protection_preserves_s5a_owner() -> None:
+def test_structural_foam_protection_preserves_coherent_owner_or_fails_closed() -> None:
     for index, frame in enumerate(_structural_foam_frames()):
         glass = InspectionRecipe.default_glass(320, 240)
         glass.id = f"s11-production-foam-{index}"
@@ -679,9 +679,14 @@ def test_structural_foam_protection_preserves_s5a_owner() -> None:
             time_sec=0.0,
             debug=False,
         )
-        assert detection.raw_foam_front_y is not None, index
         assert detection.raw_oil_air_level_y is None, index
-        assert detection.debug_metrics["foam_oil_context_authoritative"] is True, index
+        if index < 7:
+            assert detection.raw_foam_front_y is not None, index
+            assert detection.debug_metrics["foam_oil_context_authoritative"] is True, index
+        else:
+            assert detection.raw_foam_front_y is None, index
+            assert detection.debug_metrics["foam_decision_status"] == "incoherent_rejected"
+            assert detection.debug_metrics["foam_oil_context_authoritative"] is False, index
 
 
 def test_p2_semantic_rescues_do_not_gain_spatial_numeric_oil() -> None:

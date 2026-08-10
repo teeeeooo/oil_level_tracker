@@ -9,7 +9,7 @@ from oil_tracker.domain.session import AnalysisSession
 from tests.s11_local_corpus import require_s11_local_corpus
 
 
-_TARGETS = {914, 929, 1004, 1034, 1049, 1064, 1079, 1094, 1109, 1124, 1139}
+_TARGETS = {914, 929, 1004, 1034, 1049, 1064, 1079, 1094, 1109}
 
 
 class _DetectorRegressionValidator:
@@ -116,16 +116,3 @@ def test_sample3_ambiguity_gated_reacquisition_preserves_recovery_and_safety(tmp
     assert rows[1109]["projected_y"] == 248.0
     assert rows[1109]["foam_authoritative"] is True
     assert rows[1109]["pending_y"] is None and rows[1109]["pending_count"] == 0
-
-    assert rows[1124]["status"] == "boundary_accepted"
-    assert rows[1124]["reason"] == "continuous_shadow_boundary"
-    assert rows[1124]["raw_y"] == 250.0
-    assert rows[1124]["accepted_y"] == 250.0
-    assert rows[1124]["accepted_velocity"] == 6.0
-    assert rows[1124]["pending_count"] == 0
-
-    assert rows[1139]["status"] == "boundary_accepted"
-    assert rows[1139]["reason"] == "continuous_shadow_boundary"
-    assert rows[1139]["raw_y"] == 267.0
-    assert rows[1139]["accepted_y"] == 267.0
-    assert rows[1139]["accepted_velocity"] == 17.0

@@ -40,6 +40,13 @@ _ORDINARY_BOUNDARY_LIKELIHOOD_FLOOR = 0.48
 _FOAM_SEPARATED_MIN_HORIZONTAL_COVERAGE = 0.30
 _FOAM_RECOVERY_MIN_BROAD_STRENGTH = 0.10
 _FOAM_RECOVERY_MIN_SATURATED_NARROW_COVERAGE = 0.90
+_UPPER_DARK_CAP_MAX_AREA_FRACTION = 0.12
+_LOWER_DARK_CAP_MAX_AREA_FRACTION = 0.04
+_UPPER_DARK_CAP_MAX_MEDIAN_FRACTION = 0.15
+_LOWER_DARK_CAP_MAX_MEDIAN_FRACTION = 0.20
+_DARK_CAP_MIN_PHASE_CONTRAST = 0.15
+_DARK_CAP_GAP_ROWS = 3
+_COMPARATIVE_MIN_LOWER_PHASE_AREA_FRACTION = 0.18
 
 
 @dataclass(frozen=True)
@@ -350,7 +357,16 @@ def evaluate_typed_current_observation(
         accepted_foam_front_local_y,
         accepted_foam_component_mask,
     )
-    no_interface = _no_interface_evidence(pre, effective_mask, hypotheses)
+    eligible_hypotheses = tuple(
+        item
+        for item in hypotheses
+        if not _is_dark_border_cap_transition(pre, effective_mask, item)
+    )
+    no_interface = _no_interface_evidence(
+        pre,
+        effective_mask,
+        eligible_hypotheses,
+    )
     if not no_interface.available and no_interface.visibility < 0.20:
         return ShadowUnavailableObservation(
             visibility=no_interface.visibility,
@@ -365,7 +381,7 @@ def evaluate_typed_current_observation(
             effective_mask,
         ).astype(effective_mask.dtype, copy=False)
 
-    ordered = sorted(hypotheses, key=_hypothesis_order)
+    ordered = sorted(eligible_hypotheses, key=_hypothesis_order)
     best = ordered[0] if ordered else None
     competing_boundary = 0.0 if best is None else best.boundary_likelihood
     if _positive_no_interface_is_authoritative(no_interface, competing_boundary):
@@ -559,6 +575,82 @@ def _has_hard_current_frame_support(
     )
 
 
+def _is_dark_border_cap_transition(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    candidate: SemanticHypothesis,
+) -> bool:
+    """Identify a saturated Glass border cap with too little phase support.
+
+    Relative contrast can make a dark cap/refraction transition look stronger
+    than a real material interface.  The conjunction below is deliberately
+    polarity- and geometry-bounded: it applies only when a dark phase touches
+    an effective border, occupies little of the visible raster and adjoins a
+    materially brighter interior.  The lower bound is deliberately tighter so
+    a legitimate near-bottom Oil phase retains authority. Evidence remains
+    represented; only Oil/no-interface competition authority is withheld.
+    """
+
+    _validate_same_shape(pre.blurred, pre.glare_mask, effective_mask)
+    visible = (effective_mask > 0) & ~(pre.glare_mask > 0)
+    available = int(np.count_nonzero(visible))
+    if available == 0:
+        return False
+
+    center = min(
+        visible.shape[0] - 1,
+        max(0, int(round(candidate.representative_local_y))),
+    )
+    upper_stop = max(0, center - _DARK_CAP_GAP_ROWS)
+    lower_start = min(visible.shape[0], center + _DARK_CAP_GAP_ROWS + 1)
+    upper = visible[:upper_stop]
+    lower = visible[lower_start:]
+    upper_count = int(np.count_nonzero(upper))
+    lower_count = int(np.count_nonzero(lower))
+    if upper_count < 10 or lower_count < 10:
+        return False
+    gray_scale = _gray_scale(pre.blurred)
+    upper_median = float(np.median(pre.blurred[:upper_stop][upper])) / gray_scale
+    lower_median = float(np.median(pre.blurred[lower_start:][lower])) / gray_scale
+    upper_cap = bool(
+        upper_count / available <= _UPPER_DARK_CAP_MAX_AREA_FRACTION
+        and upper_median <= _UPPER_DARK_CAP_MAX_MEDIAN_FRACTION
+        and lower_median - upper_median >= _DARK_CAP_MIN_PHASE_CONTRAST
+    )
+    lower_cap = bool(
+        lower_count / available <= _LOWER_DARK_CAP_MAX_AREA_FRACTION
+        and lower_median <= _LOWER_DARK_CAP_MAX_MEDIAN_FRACTION
+        and upper_median - lower_median >= _DARK_CAP_MIN_PHASE_CONTRAST
+    )
+    return upper_cap or lower_cap
+
+
+def _has_comparative_lower_phase_area_support(
+    effective_mask: np.ndarray,
+    candidate: SemanticHypothesis,
+) -> bool:
+    """Keep weak D3 comparison away from the lower Glass rim.
+
+    A real near-bottom interface may still use the stronger canonical, D2 or
+    Spatial routes.  The asymmetric rule is intentional: the saturated upper
+    cap has its own photometric guard, while a blanket two-sided area floor
+    removes a retained true filling boundary near the upper Glass edge.
+    """
+
+    effective = effective_mask > 0
+    available = int(np.count_nonzero(effective))
+    if available == 0:
+        return False
+    center = min(
+        effective.shape[0] - 1,
+        max(0, int(round(candidate.representative_local_y))),
+    )
+    lower = int(np.count_nonzero(effective[center + 1 :])) / available
+    return bool(
+        lower + 1e-12 >= _COMPARATIVE_MIN_LOWER_PHASE_AREA_FRACTION
+    )
+
+
 def _has_foam_context_recovery_support(
     effective_mask: np.ndarray,
     accepted_foam_component_mask: np.ndarray | None,
@@ -717,6 +809,14 @@ def _select_comparative_textured_boundary(
         if (
             abs(candidate.representative_local_y - semantic_anchor.representative_local_y)
             > bounds.maximum_proposal_diameter_px + 1e-12
+        ):
+            continue
+        if (
+            accepted_foam_front_local_y is None
+            and not _has_comparative_lower_phase_area_support(
+                effective_mask,
+                candidate,
+            )
         ):
             continue
         second_boundary = max(

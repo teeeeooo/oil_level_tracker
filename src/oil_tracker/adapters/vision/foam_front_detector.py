@@ -28,6 +28,8 @@ class FoamDecisionStatus(str, Enum):
     ACCEPTED_MODERATE = "accepted_moderate"
     ACCEPTED_STRONG = "accepted_strong"
     GLARE_REJECTED = "glare_rejected"
+    INCOHERENT_REJECTED = "incoherent_rejected"
+    STATIC_REJECTED = "static_rejected"
 
 
 @dataclass(frozen=True)
@@ -88,6 +90,9 @@ _OIL_CONTEXT_MAX_HOLLOW_FILL_RATIO = 0.30
 _OIL_CONTEXT_WIDE_ROW_SPAN_RATIO = 0.35
 _OIL_CONTEXT_MIN_WIDE_ROW_FRACTION = 0.25
 _OIL_CONTEXT_MIN_ROW_COMPACTNESS = 0.65
+_PUBLICATION_MIN_WIDE_ROW_FRACTION = 0.50
+_PUBLICATION_NARROW_MAX_WIDTH_RATIO = 0.50
+_PUBLICATION_NARROW_MIN_ROW_COMPACTNESS = 0.95
 
 _CHROMATIC_SUPPORT_MIN_CHROMA_RATIO = 0.20
 _CHROMATIC_SUPPORT_MIN_TEXTURE = 0.05
@@ -107,6 +112,56 @@ class FoamOilContextAuthority:
     reason: str
     wide_row_fraction: float
     wide_row_compactness_median: float
+
+
+@dataclass(frozen=True)
+class FoamLayerCoherence:
+    coherent: bool
+    reason: str
+    wide_row_fraction: float
+    wide_row_compactness_median: float
+
+
+def evaluate_foam_layer_coherence(result: FoamDetectionResult) -> FoamLayerCoherence:
+    """Require an accepted component to represent a coherent material layer.
+
+    A component may have a wide bounding box while every material row remains
+    fragmented. Genuine partial Foam may instead be narrow, but its occupied
+    rows must then remain compact. This publication proof is independent from
+    the D1 Oil-context handoff and preserves the raw current-frame evidence.
+    """
+
+    if result.candidate is None or not np.any(result.mask):
+        return FoamLayerCoherence(
+            False,
+            "foam_layer_not_currently_accepted",
+            0.0,
+            0.0,
+        )
+    _structural, wide_row_fraction, compactness_median = (
+        _wide_hollow_component_metrics(
+            result.mask > 0,
+            width_ratio=float(result.component_width_ratio),
+            fill_ratio=float(result.bounding_box_fill_ratio),
+        )
+    )
+    wide_layer = wide_row_fraction >= _PUBLICATION_MIN_WIDE_ROW_FRACTION
+    narrow_compact_layer = bool(
+        float(result.component_width_ratio)
+        <= _PUBLICATION_NARROW_MAX_WIDTH_RATIO
+        and compactness_median >= _PUBLICATION_NARROW_MIN_ROW_COMPACTNESS
+    )
+    coherent = bool(wide_layer or narrow_compact_layer)
+    return FoamLayerCoherence(
+        coherent,
+        (
+            "foam_layer_row_topology_coherent"
+            if coherent
+            else "foam_layer_row_topology_fragmented"
+        ),
+        float(wide_row_fraction),
+        float(compactness_median),
+    )
 
 
 def evaluate_foam_oil_context_authority(result: FoamDetectionResult) -> FoamOilContextAuthority:
@@ -875,6 +930,8 @@ def _strength_for_status(status: FoamDecisionStatus) -> FoamEvidenceStrength:
         FoamDecisionStatus.WEAK_REJECTED,
         FoamDecisionStatus.AMBIGUOUS,
         FoamDecisionStatus.GLARE_REJECTED,
+        FoamDecisionStatus.INCOHERENT_REJECTED,
+        FoamDecisionStatus.STATIC_REJECTED,
     }:
         return FoamEvidenceStrength.WEAK
     return FoamEvidenceStrength.NONE
@@ -885,6 +942,8 @@ def _reject_reason(status: FoamDecisionStatus) -> str:
         FoamDecisionStatus.WEAK_REJECTED: "foam_evidence_below_minimum",
         FoamDecisionStatus.AMBIGUOUS: "foam_evidence_conflicting",
         FoamDecisionStatus.GLARE_REJECTED: "foam_glare_overlap_exceeded",
+        FoamDecisionStatus.INCOHERENT_REJECTED: "foam_layer_row_topology_fragmented",
+        FoamDecisionStatus.STATIC_REJECTED: "foam_static_artifact_overlap",
     }.get(status, "")
 
 

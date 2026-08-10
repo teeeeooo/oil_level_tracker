@@ -85,10 +85,65 @@ def test_debug_images_are_additive_crop_sized_evidence_artifacts():
         "foam_glare_excluded_mask",
         "foam_combined_evidence",
         "foam_accepted_component",
+        "static_foam_artifact_map",
     ):
         assert key in artifacts.images
         assert artifacts.images[key].shape[:2] == crop_shape
         assert artifacts.images[key].dtype == np.uint8
+
+
+def test_representative_static_foam_is_explained_without_losing_debug_evidence():
+    detector = OpenCvPhaseDetector()
+    glass = _glass()
+    frame = _scene("white-foam").frame
+    detector.learn_static_artifact([frame.copy() for _ in range(3)], glass)
+
+    detection, artifacts = detector.detect(frame, glass, 1, 1.0, debug=True)
+
+    assert artifacts is not None
+    assert detection.raw_foam_front_y is None
+    assert detection.smoothed_foam_front_y is None
+    assert detection.debug_metrics["foam_decision_status"] == "static_rejected"
+    assert detection.debug_metrics["foam_static_artifact_overlap"] >= 0.80
+    assert detection.debug_metrics["foam_static_artifact_pixel_count"] > 0
+    assert "FOAM_STATIC_ARTIFACT_REJECTED" in detection.flags
+    assert np.count_nonzero(artifacts.images["foam_mask"]) > 0
+    assert np.count_nonzero(artifacts.images["static_foam_artifact_map"]) > 0
+    assert np.count_nonzero(artifacts.images["foam_accepted_component"]) == 0
+
+    detector.reset(glass.id)
+    reset_detection, reset_artifacts = detector.detect(
+        frame,
+        glass,
+        2,
+        2.0,
+        debug=True,
+    )
+    assert reset_artifacts is not None
+    assert reset_detection.raw_foam_front_y is not None
+    assert reset_detection.debug_metrics["foam_static_artifact_pixel_count"] == 0
+
+
+def test_transient_foam_in_representative_frames_is_not_learned_as_static():
+    detector = OpenCvPhaseDetector()
+    glass = _glass()
+    foam = _scene("white-foam").frame
+    clear = _scene("full-no-interface").frame
+    detector.learn_static_artifact(
+        [foam.copy(), clear.copy(), clear.copy()],
+        glass,
+    )
+
+    detection, artifacts = detector.detect(foam, glass, 1, 1.0, debug=True)
+
+    assert artifacts is not None
+    assert detection.raw_foam_front_y is not None
+    assert detection.debug_metrics["foam_decision_status"] in {
+        "accepted_strong",
+        "accepted_moderate",
+    }
+    assert detection.debug_metrics["foam_static_artifact_pixel_count"] == 0
+    assert np.count_nonzero(artifacts.images["static_foam_artifact_map"]) == 0
 
 
 def test_accepted_low_light_foam_does_not_invent_an_oil_boundary_below_texture():
@@ -163,7 +218,19 @@ def test_narrow_partial_foam_structural_band_stays_fail_closed(foam_width: int):
     frame = _scene("white-foam").frame.copy()
     frame[120:185, 122 + foam_width : 198] = 45
     cv2.rectangle(frame, (122, 132), (197, 135), (180, 180, 180), -1)
-    _assert_structural_foam_stays_fail_closed(frame, 1.0)
+    detection, _artifacts = OpenCvPhaseDetector().detect(
+        frame,
+        _glass(),
+        frame_index=1,
+        time_sec=1.0,
+        debug=False,
+    )
+
+    assert detection.raw_foam_front_y is None
+    assert detection.debug_metrics["foam_decision_status"] == "incoherent_rejected"
+    assert detection.raw_oil_air_level_y is None
+    assert detection.smoothed_oil_air_level_y is None
+    assert detection.fill_state.value not in {"FULL_WITH_FOAM", "FOAMING_VISIBLE"}
 
 
 def test_transient_shimmer_does_not_create_raw_or_smoothed_foam_front():

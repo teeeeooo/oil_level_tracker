@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `Final target-Windows field-workflow validation`
-**Source authority:** `validation evidence only; reopen source only for the smallest evidence-backed defect`
+**Current gate:** `S11-R3 sequence/static-observability repair implementation and reconciliation`
+**Source authority:** `bounded dark border-cap Oil and learned-static Foam responsibility repair`
 
 ## Accepted source baseline
 
@@ -24,9 +24,9 @@ The behavior-preserving structural sequence is merged to `main` through exact so
 
 ## Current gate scope
 
-Use synchronized `main` as the exact candidate and execute the final target-Windows field-workflow validation. This is an evidence gate: no additional structural refactor, detector tuning, report redesign or product behavior change is authorized. A demonstrated material failure may reopen only the smallest responsible source boundary under the defect-handling rules below.
+Secure-Windows evidence and repository-local sample3 sequence review demonstrated two missing protections that the accepted aggregate/fingerprint gates did not cover: persistent fixed Glass appearance can obtain Foam authority, and relative Spatial evidence can publish the upper Glass cap as Oil after the Glass becomes full. Implement and reconcile the bounded [`S11-R3 Sequence Observability Integrity Architecture`](../20-architecture/s11-sequence-observability-integrity-architecture.md) under its [`validation contract`](../30-validation/s11-sequence-observability-integrity-validation.md). Global detector retuning, interpolation and identity-specific behavior remain unauthorized.
 
-## Executable target-Windows closure gate
+## Subsequent target-Windows closure gate
 
 Execute the final checklist on the target Windows environment from the post-modularization exact candidate head:
 
@@ -68,4 +68,4 @@ This handoff is not current source authority. It must not delay or broaden the a
 
 ## Next handoff
 
-Execute the [`Manual GUI and Windows Acceptance Checklist`](../40-operations/manual-gui-windows-checklist.md) from synchronized `main`, recording the exact candidate head and required environment evidence before the first validation action. Do not reopen source work unless the Windows evidence demonstrates a material defect and identifies its smallest responsible owner.
+Complete R3 mechanism fixtures, sample3 transition validation, four-video/negative reconciliation and report inspection. If accepted, rerun the secure Base/Accum cases and then execute the remaining [`Manual GUI and Windows Acceptance Checklist`](../40-operations/manual-gui-windows-checklist.md) from the synchronized R3 head.

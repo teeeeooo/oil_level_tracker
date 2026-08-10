@@ -10,6 +10,7 @@ from oil_tracker.adapters.vision.foam_front_detector import (
     FoamDecisionStatus,
     FoamEvidenceStrength,
     detect_bottom_connected_foam,
+    evaluate_foam_layer_coherence,
     evaluate_foam_oil_context_authority,
 )
 from oil_tracker.adapters.vision.preprocessing import preprocess
@@ -265,6 +266,38 @@ def test_genuine_foam_retains_oil_context_authority():
         authority = evaluate_foam_oil_context_authority(result)
         assert authority.authoritative
         assert authority.reason == "foam_context_structurally_consistent"
+
+
+def test_foam_publication_requires_wide_rows_or_a_narrow_compact_layer():
+    accepted = _detect(_white_foam())
+    assert accepted.candidate is not None
+    assert evaluate_foam_layer_coherence(accepted).coherent
+
+    fragmented_mask = np.zeros_like(accepted.mask)
+    for y in range(80, 150):
+        offset = (y * 7) % 62
+        fragmented_mask[y, 10 + offset : 13 + offset] = 255
+    fragmented = replace(
+        accepted,
+        mask=fragmented_mask,
+        component_width_ratio=0.78,
+        bounding_box_fill_ratio=0.08,
+    )
+    fragmented_coherence = evaluate_foam_layer_coherence(fragmented)
+    assert not fragmented_coherence.coherent
+    assert fragmented_coherence.reason == "foam_layer_row_topology_fragmented"
+
+    narrow_mask = np.zeros_like(accepted.mask)
+    narrow_mask[80:150, 40:80] = 255
+    narrow = replace(
+        accepted,
+        mask=narrow_mask,
+        component_width_ratio=1.0 / 3.0,
+        bounding_box_fill_ratio=1.0,
+    )
+    narrow_coherence = evaluate_foam_layer_coherence(narrow)
+    assert narrow_coherence.coherent
+    assert narrow_coherence.wide_row_compactness_median == 1.0
 
 
 def test_wide_hollow_structural_component_cannot_gain_oil_context_authority():

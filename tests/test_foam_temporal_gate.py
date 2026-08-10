@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import replace
-
 import numpy as np
+import pytest
 
 from oil_tracker.adapters.vision.foam_front_detector import (
     FoamDecisionStatus,
@@ -134,3 +133,87 @@ def test_ambiguous_and_glare_rejected_never_advance_pending_state():
         assert not decision.accepted
         assert decision.decision_status is status
         assert gate.state_for("g") is None
+
+
+@pytest.mark.parametrize(
+    "status",
+    (
+        FoamDecisionStatus.ACCEPTED_STRONG,
+        FoamDecisionStatus.MODERATE_EVIDENCE,
+    ),
+)
+def test_static_dominated_foam_cannot_publish_or_advance_temporal_state(status):
+    gate = FoamTemporalGate()
+    settings = DetectorSettings(foam_persistence_frames=2)
+    gate.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.MODERATE_EVIDENCE),
+        settings,
+    )
+
+    evidence = _evidence(status)
+    candidate = evidence.candidate
+    decision = gate.evaluate(
+        "g",
+        evidence,
+        settings,
+        static_overlap_ratio=0.80,
+    )
+
+    assert not decision.accepted
+    assert decision.candidate is None
+    assert decision.decision_status is FoamDecisionStatus.STATIC_REJECTED
+    assert decision.evidence_strength is FoamEvidenceStrength.WEAK
+    assert decision.pending_count == 0
+    assert gate.state_for("g") is None
+    assert candidate is not None and candidate.rejected
+    assert candidate.reject_reason == "foam_static_artifact_overlap"
+
+
+def test_static_overlap_boundary_is_bounded_and_validated():
+    settings = DetectorSettings()
+    retained = FoamTemporalGate().evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG),
+        settings,
+        static_overlap_ratio=0.799999,
+    )
+    assert retained.accepted
+
+    for invalid in (-0.01, 1.01, float("nan"), float("inf")):
+        with pytest.raises(ValueError, match="finite and normalized"):
+            FoamTemporalGate().evaluate(
+                "g",
+                _evidence(FoamDecisionStatus.ACCEPTED_STRONG),
+                settings,
+                static_overlap_ratio=invalid,
+            )
+
+
+@pytest.mark.parametrize(
+    "status",
+    (
+        FoamDecisionStatus.ACCEPTED_STRONG,
+        FoamDecisionStatus.MODERATE_EVIDENCE,
+    ),
+)
+def test_fragmented_layer_cannot_publish_or_advance_temporal_state(status):
+    gate = FoamTemporalGate()
+    settings = DetectorSettings(foam_persistence_frames=2)
+
+    evidence = _evidence(status)
+    candidate = evidence.candidate
+    decision = gate.evaluate(
+        "g",
+        evidence,
+        settings,
+        layer_coherent=False,
+    )
+
+    assert not decision.accepted
+    assert decision.candidate is None
+    assert decision.decision_status is FoamDecisionStatus.INCOHERENT_REJECTED
+    assert decision.evidence_strength is FoamEvidenceStrength.WEAK
+    assert gate.state_for("g") is None
+    assert candidate is not None and candidate.rejected
+    assert candidate.reject_reason == "foam_layer_row_topology_fragmented"

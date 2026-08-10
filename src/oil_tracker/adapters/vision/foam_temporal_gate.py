@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 
 from oil_tracker.domain.detection import BoundaryCandidate
@@ -10,6 +11,9 @@ from .foam_front_detector import (
     FoamDetectionResult,
     FoamEvidenceStrength,
 )
+
+
+_STATIC_FOAM_DOMINANCE_FRACTION = 0.80
 
 
 @dataclass(frozen=True)
@@ -58,11 +62,63 @@ class FoamTemporalGate:
         glass_id: str,
         evidence: FoamDetectionResult,
         settings: DetectorSettings,
+        *,
+        static_overlap_ratio: float = 0.0,
+        layer_coherent: bool = True,
     ) -> FoamTemporalDecision:
         key = str(glass_id)
+        static_overlap = float(static_overlap_ratio)
+        if not math.isfinite(static_overlap) or not 0.0 <= static_overlap <= 1.0:
+            raise ValueError("Foam static overlap must be finite and normalized.")
         required = max(1, int(settings.foam_persistence_frames))
         candidate = evidence.candidate
         status = evidence.decision_status
+
+        if (
+            candidate is not None
+            and status
+            in {
+                FoamDecisionStatus.ACCEPTED_STRONG,
+                FoamDecisionStatus.MODERATE_EVIDENCE,
+            }
+            and static_overlap >= _STATIC_FOAM_DOMINANCE_FRACTION
+        ):
+            self._states.pop(key, None)
+            candidate.selected = False
+            candidate.rejected = True
+            candidate.reject_reason = "foam_static_artifact_overlap"
+            return FoamTemporalDecision(
+                candidate=None,
+                accepted=False,
+                evidence_strength=FoamEvidenceStrength.WEAK,
+                decision_status=FoamDecisionStatus.STATIC_REJECTED,
+                pending_count=0,
+                required_count=required,
+                front_delta=None,
+            )
+
+        if (
+            candidate is not None
+            and status
+            in {
+                FoamDecisionStatus.ACCEPTED_STRONG,
+                FoamDecisionStatus.MODERATE_EVIDENCE,
+            }
+            and not bool(layer_coherent)
+        ):
+            self._states.pop(key, None)
+            candidate.selected = False
+            candidate.rejected = True
+            candidate.reject_reason = "foam_layer_row_topology_fragmented"
+            return FoamTemporalDecision(
+                candidate=None,
+                accepted=False,
+                evidence_strength=FoamEvidenceStrength.WEAK,
+                decision_status=FoamDecisionStatus.INCOHERENT_REJECTED,
+                pending_count=0,
+                required_count=required,
+                front_delta=None,
+            )
 
         if status is FoamDecisionStatus.ACCEPTED_STRONG and candidate is not None:
             self._states.pop(key, None)

@@ -485,11 +485,19 @@ def _select_spatially_corroborated_textured_boundary(
     boundary instead of becoming a separate publication owner.
     """
 
-    ordered = sorted(hypotheses, key=observations._hypothesis_order)
+    ordered = [
+        candidate
+        for candidate in sorted(hypotheses, key=observations._hypothesis_order)
+        if not observations._is_dark_border_cap_transition(
+            pre,
+            effective_mask,
+            candidate,
+        )
+    ]
     no_interface = observations._no_interface_evidence(
         pre,
         effective_mask,
-        hypotheses,
+        tuple(ordered),
     )
     if not no_interface.available or no_interface.likelihood > 0.40:
         return None

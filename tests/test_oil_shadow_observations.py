@@ -4,11 +4,14 @@ from dataclasses import FrozenInstanceError, fields, is_dataclass
 from enum import Enum
 from itertools import permutations
 import math
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
 
 from oil_tracker.adapters.vision.oil_shadow_observations import (
+    _has_comparative_lower_phase_area_support,
+    _is_dark_border_cap_transition,
     build_bounded_proposals,
     extract_raw_observations,
 )
@@ -18,7 +21,7 @@ from oil_tracker.adapters.vision.oil_shadow_types import (
     ShadowSourceFamily,
     stable_digest,
 )
-from oil_tracker.adapters.vision.preprocessing import preprocess
+from oil_tracker.adapters.vision.preprocessing import PreprocessResult, preprocess
 from oil_tracker.domain.recipe import DetectorSettings
 
 
@@ -56,6 +59,21 @@ def _step_inputs(y=40, above=170, below=80):
     mask = np.full_like(image, 255)
     pre = preprocess(image, mask, DetectorSettings())
     return image, mask, pre
+
+
+def _preprocessed_gray(gray: np.ndarray) -> PreprocessResult:
+    zeros_u8 = np.zeros_like(gray, dtype=np.uint8)
+    zeros_f = np.zeros_like(gray, dtype=np.float32)
+    return PreprocessResult(
+        gray=gray,
+        normalized=gray.copy(),
+        blurred=gray.copy(),
+        sobel_y_signed=zeros_f,
+        sobel_y_abs=zeros_u8,
+        canny=zeros_u8,
+        horizontal_mask=zeros_u8,
+        glare_mask=zeros_u8,
+    )
 
 
 def _assert_deep_scalar_immutable(value):
@@ -214,3 +232,65 @@ def test_proposal_member_total_and_count_overflow_are_deterministic():
     assert sum(item.member_count for item in forward) <= bounds.total_retained_members
     assert max(item.member_count for item in forward) <= bounds.members_per_proposal
     assert tuple(item.representative_local_y for item in forward) == (0.0, 10.0)
+
+
+def test_dark_border_cap_requires_saturation_contrast_and_small_border_phase():
+    mask = np.full((100, 100), 255, dtype=np.uint8)
+    candidate = SimpleNamespace(representative_local_y=10.0)
+    upper_cap = np.full(mask.shape, 120, dtype=np.uint8)
+    upper_cap[:10] = 20
+
+    assert _is_dark_border_cap_transition(
+        _preprocessed_gray(upper_cap),
+        mask,
+        candidate,
+    )
+
+    non_saturated = upper_cap.copy()
+    non_saturated[:10] = 50
+    assert not _is_dark_border_cap_transition(
+        _preprocessed_gray(non_saturated),
+        mask,
+        candidate,
+    )
+
+    material_upper_phase = np.full(mask.shape, 120, dtype=np.uint8)
+    material_upper_phase[:30] = 20
+    assert not _is_dark_border_cap_transition(
+        _preprocessed_gray(material_upper_phase),
+        mask,
+        SimpleNamespace(representative_local_y=30.0),
+    )
+
+
+def test_lower_cap_guard_is_tighter_than_legitimate_near_bottom_phase():
+    mask = np.full((100, 100), 255, dtype=np.uint8)
+    lower_cap = np.full(mask.shape, 120, dtype=np.uint8)
+    lower_cap[95:] = 20
+
+    assert _is_dark_border_cap_transition(
+        _preprocessed_gray(lower_cap),
+        mask,
+        SimpleNamespace(representative_local_y=95.0),
+    )
+
+    supported_lower_phase = np.full(mask.shape, 120, dtype=np.uint8)
+    supported_lower_phase[82:] = 20
+    assert not _is_dark_border_cap_transition(
+        _preprocessed_gray(supported_lower_phase),
+        mask,
+        SimpleNamespace(representative_local_y=82.0),
+    )
+
+
+def test_weak_comparative_lower_phase_floor_has_an_exact_boundary():
+    mask = np.full((100, 100), 255, dtype=np.uint8)
+
+    assert _has_comparative_lower_phase_area_support(
+        mask,
+        SimpleNamespace(representative_local_y=81.0),
+    )
+    assert not _has_comparative_lower_phase_area_support(
+        mask,
+        SimpleNamespace(representative_local_y=82.0),
+    )

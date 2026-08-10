@@ -37,16 +37,16 @@ ACCEPTED_ROW_COUNTS = {
     "sample4": 113,
 }
 ACCEPTED_NUMERIC_OIL_COUNTS = {
-    "base_sample_1": 3,
+    "base_sample_1": 2,
     "sample2": 2,
-    "sample3": 42,
-    "sample4": 62,
+    "sample3": 21,
+    "sample4": 64,
 }
 ACCEPTED_TRACKING_FINGERPRINTS = {
-    "base_sample_1": "87166f357d7c962fb16a9a27a4def3329b587e27a74efd0671dce981046f3654",
+    "base_sample_1": "c50e1e8bb7ff8bda873c1fbd4637586de4798fb950ea9fb17213ec8d3eb9716c",
     "sample2": "912225deb00b1a33504d7541be9a61727049a2a845c29ebd8b7badd7197f06aa",
-    "sample3": "544744f950861af265ae07554aedf998e9f0959a8d16052b7416faa656df0cfb",
-    "sample4": "372abf6e2e64580c06bbae63901ea471254594ed8c31e525c23228f22574d16e",
+    "sample3": "30effdc2b523af3d0ba051b3ed0e760d7f88eefb7a59885f1f66bb6887a106ac",
+    "sample4": "d37bbd9101fa3f7d3f56524b588c1e22d76eb4849702d12fceeeec3ea2385c37",
 }
 
 

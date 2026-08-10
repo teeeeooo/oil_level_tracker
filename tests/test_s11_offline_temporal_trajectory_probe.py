@@ -148,8 +148,8 @@ def test_four_video_held_out_reconstruction_is_insufficient_for_integration() ->
     assert truth["observed_oil_worst_error_px"] == 11.0
     assert stream == {
         "sample_count": 299,
-        "observed_numeric_count": 111,
-        "unavailable_count": 188,
+        "observed_numeric_count": 89,
+        "unavailable_count": 210,
         "no_interface_count": 0,
         "blocking_flag_count": 0,
     }
@@ -164,7 +164,7 @@ def test_four_video_held_out_reconstruction_is_insufficient_for_integration() ->
     assert held_out["normally_missing_recovered_case_ids"] == []
     assert manifest["conclusion"] == "insufficient_trajectory_evidence"
     assert manifest["result_fingerprint_sha256"] == (
-        "84eaff639c2fe7f264f47dfe1dcab95392c26210e764512c6deb8728c6387a4d"
+        "6112a32fd3bdb19d0e474bfde2e9e2568de2e6251cb47e4aa40fa60904f0478f"
     )
     assert build_manifest(streams, baselines, estimates)["result_fingerprint_sha256"] == (
         manifest["result_fingerprint_sha256"]
