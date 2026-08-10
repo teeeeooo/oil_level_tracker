@@ -58,7 +58,13 @@ The Windows gate is an evidence gate, not open-ended tuning authority. If a mate
 
 ## Closure boundary
 
-S11 closes only after the MainWindow and detector-pipeline responsibility modularizations are independently accepted and exact-head Windows evidence proves the packaged end-to-end workflow and updated user observation report. Source-tree/macOS structural or replay acceptance alone does not constitute Windows PASS. S12 remains blocked until this gate is accepted.
+S11 closes only after the MainWindow and detector-pipeline responsibility modularizations are independently accepted and exact-head Windows evidence proves the packaged end-to-end workflow and updated user observation report. Source-tree/macOS structural or replay acceptance alone does not constitute Windows PASS. The planned S11-M structural-maintainability milestone remains blocked until this gate is accepted, and S12 follows S11-M.
+
+## Planned post-S11 handoff
+
+After S11 closure, activate `S11-M — Post-S11 Structural Maintainability` before S12 feature work. The planned execution order is legacy Vision retirement, current-frame Oil evidence decomposition, OpenCV phase orchestration decomposition, Result Review shell decomposition, Workbench shell completion and only then a conditional package-taxonomy pass. The measurement definitions, hotspot evidence, proportional scope and preservation gates are recorded in the [`Post-S11 Structural Maintainability Assessment`](../50-diagnostics/post-s11-structural-maintainability-assessment.md).
+
+This handoff is not current source authority. It must not delay or broaden the active target-Windows evidence gate, and it does not authorize detector tuning, product behavior change or a mechanical LOC/package-count rewrite.
 
 ## Next handoff
 
