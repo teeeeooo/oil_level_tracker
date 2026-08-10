@@ -4,7 +4,7 @@
       "case_id": "base_sample_1:144",
       "error_px": null,
       "left_anchor_sec": 3.5035000000000003,
-      "left_anchor_y": 477.0,
+      "left_anchor_y": 368.0,
       "oil_y": null,
       "production_error_px": 9.0,
       "production_fill_state": "PARTIAL_VISIBLE",
@@ -342,10 +342,10 @@
         "held_out_estimated_count": 0,
         "maximum_consecutive_missing_samples": 19,
         "no_interface_count": 0,
-        "observed_numeric_count": 3,
-        "observed_numeric_ratio": 0.1,
+        "observed_numeric_count": 2,
+        "observed_numeric_ratio": 0.06666666666666667,
         "sample_count": 30,
-        "unavailable_count": 27,
+        "unavailable_count": 28,
         "unavailable_truth_count": 3,
         "usable_truth_count": 3
       },
@@ -364,12 +364,12 @@
       "sample3": {
         "blocking_flag_count": 0,
         "held_out_estimated_count": 0,
-        "maximum_consecutive_missing_samples": 35,
+        "maximum_consecutive_missing_samples": 97,
         "no_interface_count": 0,
-        "observed_numeric_count": 42,
-        "observed_numeric_ratio": 0.2781456953642384,
+        "observed_numeric_count": 21,
+        "observed_numeric_ratio": 0.1390728476821192,
         "sample_count": 151,
-        "unavailable_count": 109,
+        "unavailable_count": 130,
         "unavailable_truth_count": 2,
         "usable_truth_count": 2
       },
@@ -389,12 +389,12 @@
     "total": {
       "blocking_flag_count": 0,
       "no_interface_count": 0,
-      "observed_numeric_count": 111,
+      "observed_numeric_count": 89,
       "sample_count": 299,
-      "unavailable_count": 188
+      "unavailable_count": 210
     }
   },
-  "production_stream_baseline_sha": "16ea0cd1e63b929db469946ccddd75a8762042fb",
+  "production_stream_baseline_sha": "f8742d0789fc4bcab93224f8866731209031f2f9",
   "production_truth_anchor_baseline": {
     "normally_missing_count": 5,
     "normally_observed_count": 8,
@@ -409,6 +409,6 @@
     "retained_estimator_temporal_state": 0,
     "retained_images": 0
   },
-  "result_fingerprint_sha256": "84eaff639c2fe7f264f47dfe1dcab95392c26210e764512c6deb8728c6387a4d",
+  "result_fingerprint_sha256": "4f8dd7bd4a01ad229dc876370f041dd3634d3a4283619f8a74b3babd40fae113",
   "schema": "s11-offline-temporal-trajectory-probe-v2"
 }

@@ -1,41 +1,48 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `ACTIVE`
-**Current gate:** `S11-R3 sequence/static-observability repair implementation and reconciliation`
-**Source authority:** `bounded dark border-cap Oil and learned-static Foam responsibility repair`
+**Milestone status:** `VALIDATING`
+**Current gate:** `secure-Windows Base/Accum R3 residual and final field-workflow validation`
+**Source authority:** `validation-only; reopen only the smallest evidence-owned defect`
 
 ## Accepted source baseline
 
 The current source baseline includes:
 
 - accepted S11 D1–D5 current-frame responsibility, one serialized temporal owner and Initial-State Retrospective FULL/EMPTY interpretation;
-- accepted Subtractive Detector Simplification Slices A–D plus S11-R2 bounded Foam/Spatial composition, with `111/299` available-corpus numeric Oil, unchanged `8/13` confirmed truth coverage at `5.4375 px` MAE and no demonstrated remaining general hard-safe detector failure class;
-- accepted post-R2 baseline validation repair, which preserves the aggregate `111/299` stream and all four tracking fingerprints while limiting weak accepted-Foam texture recovery rejection to candidates materially overlapping the accepted component and restoring diagnostic provenance;
-- accepted S11-R1 User Observation Report Comprehension Repair, which preserves the exact detector/tracking stream while presenting solid direct-observation runs, dashed missing-run bridges, bounded highest/lowest/Foam landmarks and Glass-focused source captures.
+- accepted Subtractive Detector Simplification A–D, S11-R2 Foam/Spatial composition and post-R2 baseline maintenance;
+- locally accepted S11-R3 dark border-cap invalidity plus learned-static and row-coherent Foam publication opposition at implementation commit `f8742d0789fc4bcab93224f8866731209031f2f9`; and
+- accepted S11-R1 report semantics: solid direct-observation runs, dashed display-only missing bridges, bounded highest/lowest/Foam landmarks and Glass-focused source captures.
 
-S11-R1 implementation and replay evidence is [`../60-evidence/s11/s11-user-observation-report-repair.md`](../60-evidence/s11/s11-user-observation-report-repair.md). Its durable boundaries are the [`Result Observation Report Architecture`](../20-architecture/result-observation-report-architecture.md) and [`Result Observation Report Validation Contract`](../30-validation/result-observation-report-validation.md).
+R3 retains the confirmed `8/13` numeric truth surface at `5.4375 px` MAE. Its four-video numeric count changes from the task-start `109/299` to `89/299`; this is not treated as accuracy or a coverage objective. The reduction removes the visually disproven sample3 full-state Glass-cap plateau and late false Foam episodes while retaining sample2 and improving sample4 from `62/113` to `64/113`. Exact mechanism, replay and report evidence is [`../60-evidence/s11/s11-r3-sequence-observability-integrity.md`](../60-evidence/s11/s11-r3-sequence-observability-integrity.md).
 
-S11-R2 implementation and replay evidence is [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md). Its durable boundary is the accepted [`S11 Foam/Spatial Authority Repair Architecture`](../20-architecture/s11-foam-spatial-authority-repair-architecture.md), and its acceptance owner is the [`S11 Foam/Spatial Authority Repair Validation Contract`](../30-validation/s11-foam-spatial-authority-repair-validation.md).
+S11-R1 implementation and replay evidence is [`../60-evidence/s11/s11-user-observation-report-repair.md`](../60-evidence/s11/s11-user-observation-report-repair.md). Its durable owners are the [`Result Observation Report Architecture`](../20-architecture/result-observation-report-architecture.md) and [`Result Observation Report Validation Contract`](../30-validation/result-observation-report-validation.md). R2 evidence remains at [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md); R3's durable source owner and validation owner are the [`Sequence Observability Integrity Architecture`](../20-architecture/s11-sequence-observability-integrity-architecture.md) and its [`validation contract`](../30-validation/s11-sequence-observability-integrity-validation.md).
 
-The post-R2 review and baseline-validation repair evidence is [`../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md`](../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md). It preserves the accepted detector stream and does not reopen general detector tuning.
+## Latest recorded closeout
 
-The behavior-preserving structural sequence is merged to `main` through exact source head `0b78fda0d4d43a27dc898945d826cc0f3e689781`. MainWindow head `79d97378b81770b4465dc68f9affd25aae9d33fd` moved playback/live-preview and Profile lifecycle ownership into explicit UI collaborators. Detector head `0b78fda0d4d43a27dc898945d826cc0f3e689781` retained the single serialized queue/store and fixed reducer while moving canonical/invariant validation and diagnostics projection into explicit one-way collaborators. Both structural heads passed fresh independent exact-head verification; the detector replay preserved all four accepted fingerprints and the `111/299` stream. This completes the structural gates only and does not claim S11 `DONE` or Windows acceptance.
+- **Result:** R3 implementation and all available local gates accepted; milestone advanced to Windows validation.
+- **Task-start exact head / parent:** `d078040d7fdfe824aeb20e96cd27bfa92b37497d` / `f85654d7fdc6a0c61e7f477070a4441c52b55216`.
+- **Implementation commit / parent:** `f8742d0789fc4bcab93224f8866731209031f2f9` / `d078040d7fdfe824aeb20e96cd27bfa92b37497d`.
+- **Completed scope:** border-cap Oil authority, learned-static and row-coherent Foam publication, sequence/report regression, four-video reconciliation and diagnostic provenance.
+- **Validation:** complete canonical suite `1474 passed`; R3 replay `89/299`; confirmed truth `8/13` at `5.4375 px` MAE; sample3 false cap plateau and Foam-absent drain episodes removed.
+- **Finding:** the checked-in corpus validates learned-static mechanics only; the inaccessible Base/Accum videos remain the effectiveness authority for that field signature.
+- **Open risk:** private-video static overlap and the reported systematic coordinate offset are not locally reproducible.
+- **Next action:** execute the secure Base/Accum residual gate from the synchronized R3 head, then complete the target-Windows checklist.
 
 ## Current gate scope
 
-Secure-Windows evidence and repository-local sample3 sequence review demonstrated two missing protections that the accepted aggregate/fingerprint gates did not cover: persistent fixed Glass appearance can obtain Foam authority, and relative Spatial evidence can publish the upper Glass cap as Oil after the Glass becomes full. Implement and reconcile the bounded [`S11-R3 Sequence Observability Integrity Architecture`](../20-architecture/s11-sequence-observability-integrity-architecture.md) under its [`validation contract`](../30-validation/s11-sequence-observability-integrity-validation.md). Global detector retuning, interpolation and identity-specific behavior remain unauthorized.
+On the secure Windows machine, rerun the reported Base and Accum cases using the synchronized R3 head. Record learned static-Foam overlap, `STATIC_REJECTED`/`INCOHERENT_REJECTED` counts, accepted Foam event timing, Oil/fill-state changes and source-coordinate overlay alignment. Then complete the packaged field-workflow checklist. This is validation-only authority: no threshold adjustment or source change is authorized without preserving a reproducible earliest-loss bundle and reopening a bounded repair.
 
-## Subsequent target-Windows closure gate
+## Target-Windows closure gate
 
-Execute the final checklist on the target Windows environment from the post-modularization exact candidate head:
+Execute the final checklist on the target Windows environment from the synchronized R3 candidate head:
 
 1. record commit, Python/Qt/OpenCV versions, Windows version and display scale;
 2. run the canonical source-tree suite and supported one-folder packaging checks;
 3. analyze representative real videos through the packaged Workbench with explicit initial-state confirmation;
 4. inspect offline `report.html` at 100%, 125% and 150% scale, including Korean fonts, responsive layout and all relative assets;
 5. confirm direct Oil runs are solid, missing-run bridges are dashed, missing samples remain absent from cursor/overlay/CSV and Foam graph gaps remain gaps;
-6. confirm the R2-corrected highest/lowest and retained Foam start/end moments have readable inline Glass-focused captures whose guides align with the source video;
+6. confirm the R3-corrected highest/lowest and retained Foam start/end moments have readable inline Glass-focused captures whose guides align with the source video;
 7. confirm raw tracking/events and optional detector debug remain available outside the main report narrative;
 8. exercise cancellation, Unicode/long output paths, relocation and file/resource release.
 
@@ -68,4 +75,4 @@ This handoff is not current source authority. It must not delay or broaden the a
 
 ## Next handoff
 
-Complete R3 mechanism fixtures, sample3 transition validation, four-video/negative reconciliation and report inspection. If accepted, rerun the secure Base/Accum cases and then execute the remaining [`Manual GUI and Windows Acceptance Checklist`](../40-operations/manual-gui-windows-checklist.md) from the synchronized R3 head.
+Rerun the secure Base/Accum cases and execute the remaining [`Manual GUI and Windows Acceptance Checklist`](../40-operations/manual-gui-windows-checklist.md) from the synchronized R3 head. If evidence fails, stop at the smallest reproducible responsibility boundary rather than resuming general detector tuning.

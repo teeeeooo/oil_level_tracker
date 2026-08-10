@@ -1,6 +1,6 @@
 # S11 Subtractive Detector Simplification Architecture
 
-**Status:** `BASELINE — Slices A–D and bounded S11-R2 successor accepted`
+**Status:** `DONE`
 
 ## Purpose
 
@@ -57,9 +57,9 @@ Slice C preserved the existing scalar-supported Spatial route and added fallback
 
 ### Slice D — Effectiveness Reconciliation — ACCEPTED
 
-The accepted A–C baseline was replayed across the complete four-video qualification windows and retained collision/glare/structure/Foam/no-interface populations. Current production coverage is `109/299`; user-confirmed truth coverage is `8/13` with `5.4375 px` MAE. The retained current-frame preservation suite passed `356` tests.
+The accepted A–C baseline was replayed across the complete four-video qualification windows and retained collision/glare/structure/Foam/no-interface populations. The Slice-D baseline coverage was `109/299`; user-confirmed truth coverage was `8/13` with `5.4375 px` MAE. The retained current-frame preservation suite passed `356` tests.
 
-Residual long gaps do not form one material hard-safe general detector failure class: the base-sample long gap is dominated by a static explanatory overlay in the frozen visual evidence, while sample3's longest gap coincides with no-interface/strong motion-reframing blur/unclear evidence. Remaining visually identifiable misses are shorter and bracketed by useful numeric anchors. Another detector mechanism was therefore not authorized by Slice D; this remains the accepted simplified baseline.
+Residual long gaps did not form one material hard-safe general detector failure class under the Slice-D evidence: the base-sample long gap was dominated by a static explanatory overlay, while the then-reviewed sample3 gap coincided with no-interface/strong motion-reframing blur/unclear evidence. Later direct sequence review disproved some exact sample3 outputs and is owned by the separate [`S11-R3 Sequence Observability Integrity Architecture`](s11-sequence-observability-integrity-architecture.md). Slice D remains the accepted subtractive responsibility baseline, not current exact-output authority.
 
 ### S11-R2 successor boundary
 
@@ -89,4 +89,4 @@ If subtractive simplification violates a retained negative family, the correct r
 
 ## Current executable gate
 
-There is no remaining subtractive detector source gate. **Slices A–D and the separately bounded S11-R2 Foam/Spatial composition repair are accepted**. All other detector mechanisms still require new evidence and are not pre-authorized by this architecture; the exact current gate is final target-Windows field-workflow validation.
+There is no remaining subtractive detector source gate. **Slices A–D, the bounded S11-R2 Foam/Spatial composition repair and the separate R3 sequence-observability repair are accepted on their documented evidence surfaces**. All other detector mechanisms still require new evidence and are not pre-authorized by this architecture; the exact current gate belongs to the [work plan](../00-project/work-plan.md).

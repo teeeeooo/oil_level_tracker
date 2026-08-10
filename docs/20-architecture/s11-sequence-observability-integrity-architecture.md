@@ -1,10 +1,12 @@
 # S11-R3 Sequence Observability Integrity Architecture
 
-**Status:** `ACTIVE DESIGN — field evidence reopened bounded detector source work`
+**Status:** `VALIDATING`
+
+The source-tree and available-corpus implementation is accepted in the [R3 evidence record](../60-evidence/s11/s11-r3-sequence-observability-integrity.md). Secure-Windows Base/Accum validation remains outside this document's authority and is routed by the [current work plan](../00-project/work-plan.md).
 
 ## Purpose
 
-This document owns the bounded S11-R3 repair for two demonstrated ways in which a technically valid detector trace can misdescribe what a user sees in the sight glass:
+This document owns the bounded S11-R3 repair for three demonstrated ways in which a technically valid detector trace can misdescribe what a user sees in the sight glass:
 
 1. a fixed Glass appearance can repeatedly acquire Foam publication authority;
 2. a wide bounding box containing fragmented material rows can be mislabeled as a coherent Foam layer; and
@@ -81,7 +83,7 @@ S5-A strong evidence currently bypasses the moderate-evidence persistence chain.
 The existing analysis preparation already decodes bounded start/middle/end representative frames and learns one static horizontal-artifact map per Glass. R3 uses the same frames and lifecycle to build a second bounded map:
 
 1. run the unchanged current-frame S5-A classifier on each representative frame;
-2. retain only masks from current-frame accepted Foam components;
+2. retain only candidate-bearing strong or moderate current-frame S5-A masks; weak, ambiguous and glare-rejected masks remain empty;
 3. mark a pixel static only when accepted support persists at the existing `0.75` learning fraction; with three preparation frames this requires support in all three; and
 4. store one crop-sized `uint8` map per Glass, cleared by the existing reset boundary.
 

@@ -9,7 +9,7 @@ Starting production authority for the probe is:
 
 - repository: `teeeeooo/oil_level_tracker`
 - estimator design base: `4bb52a2718d176874c59a97b9164453165a90c00`
-- reconciled production-stream baseline: `16ea0cd1e63b929db469946ccddd75a8762042fb`
+- reconciled production-stream baseline: `f8742d0789fc4bcab93224f8866731209031f2f9`
 - current production Oil layer: P0/D4/P2/Spatial single-frame observation plus the accepted serialized S5-B temporal/reducer/projection ownership
 
 The probe does **not** modify `src/`, `TrackingSample`, `AnalysisResult`, CSV/result persistence, Result Review, graph rendering, detector history, or the canonical reducer/projection contract.
@@ -57,7 +57,7 @@ Two production views are kept distinct:
 2. **Trajectory input stream**: the current serialized detector path is replayed at `2 Hz`, including production static-artifact learning, over the bounded Recipe qualification windows.
 
 Manifest schema v2 preserves the original estimator design authority while identifying the
-later accepted S11-R2 production stream used for this reconciliation. The original v1 probe
+later accepted S11-R3 production stream used for this reconciliation. The original v1 probe
 payload remains available in Git history; the figures below describe the reconciled stream and
 must not be attributed to the earlier design-base detector output.
 
@@ -65,13 +65,13 @@ The trajectory input stream contains 299 scheduled detections. The held-out eval
 
 | video | stream samples | observed raw Oil | missing raw Oil | max consecutive missing |
 |---|---:|---:|---:|---:|
-| `base_sample_1` | 30 | 3 | 27 | 19 |
+| `base_sample_1` | 30 | 2 | 28 | 19 |
 | `sample2` | 5 | 2 | 3 | 2 |
-| `sample3` | 151 | 42 | 109 | 35 |
+| `sample3` | 151 | 21 | 130 | 97 |
 | `sample4` | 113 | 64 | 49 | 8 |
-| **total** | **299** | **111** | **188** | — |
+| **total** | **299** | **89** | **210** | — |
 
-This stream density is not an accuracy score. In particular, sample4 has dense accepted observations but also contains stable wrong-boundary runs.
+This stream density is not an accuracy score. R3 deliberately removes sample3 full-state cap observations and false Foam authority, so its longer censored span is evidence correction rather than a coverage regression. Sample4 remains useful negative evidence for trajectory-only reconstruction because dense local continuity can still disagree with physical truth.
 
 The direct production truth-anchor baseline remains:
 
@@ -97,7 +97,7 @@ Across all 13 usable truth anchors:
 
 | case | production | held-out result | support / reason | estimate error |
 |---|---|---|---|---:|
-| `base_sample_1:144` | observed `395` | unavailable | `3.5035@477` → `5.005@395`, `1.5015 s` unsupported gap | — |
+| `base_sample_1:144` | observed `395` | unavailable | `3.5035@368` → `5.005@395`, `1.5015 s` unsupported gap | — |
 | `base_sample_1:156` | unavailable | unavailable | no right observed anchor | — |
 | `base_sample_1:240` | unavailable | unavailable | no right observed anchor | — |
 | `sample2:0` | unavailable | unavailable | no left observed anchor | — |
@@ -144,12 +144,10 @@ If a later gate nevertheless elects to expose an estimated trajectory, that is a
 Reproducible machine evidence is checked in at:
 
 - `docs/50-diagnostics/s11/s11-offline-temporal-trajectory-probe-manifest.json`
-- fingerprint: `84eaff639c2fe7f264f47dfe1dcab95392c26210e764512c6deb8728c6387a4d`
+- fingerprint: `4f8dd7bd4a01ad229dc876370f041dd3634d3a4283619f8a74b3babd40fae113`
 
 ## Validation boundary
 
 Development checks cover same-frame hold-out exclusion, censored no-interface, occlusion/detection-loss, unsupported long gaps, repeated ambiguity, contradictory anchors, and deterministic corpus evidence.
 
-The final Worker validation is intentionally limited to one relevant targeted suite plus `git diff --check`. Full canonical/E2E, Windows packaging, private field-video validation, and the historical pre-P2 P2×Spatial stale assertion are outside this task's acceptance boundary.
-
-Next gate: **Lane B Orchestrator exact-head bounded review**.
+The R3 source-tree validation independently reruns this diagnostic inside the complete canonical suite. Windows packaging and private field-video validation remain outside this local diagnostic's authority.

@@ -1,5 +1,7 @@
 # S11-R3 Sequence Observability Integrity Validation Contract
 
+**Status:** `VALIDATING`
+
 ## Scope
 
 This contract accepts or rejects the bounded design in [`../20-architecture/s11-sequence-observability-integrity-architecture.md`](../20-architecture/s11-sequence-observability-integrity-architecture.md). It supplements the accepted S11 detector baseline; it does not replace canonical Oil/Foam ownership, the serialized reducer or report provenance rules.
@@ -106,6 +108,10 @@ Repository-local acceptance establishes the mechanism and non-regression only. O
 - source-coordinate overlay alignment.
 
 If the persistent false components do not overlap the learned prior, stop and diagnose their earliest current-frame representation instead of lowering the overlap threshold blindly.
+
+## Local gate outcome
+
+Gates 1–5 are accepted on the source tree and available four-video corpus. The exact implementation, replay deltas, visual report inspection and complete-suite result are recorded in the [S11-R3 evidence](../60-evidence/s11/s11-r3-sequence-observability-integrity.md). This validation contract remains `VALIDATING` until the secure-Windows residual gate is executed; local acceptance cannot stand in for the unavailable Base/Accum video evidence.
 
 ## Acceptance and stop rules
 

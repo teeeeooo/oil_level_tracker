@@ -2,13 +2,15 @@
 
 ## Scope
 
-This document owns the lean preservation contract for the accepted S11 **detector baseline**. Historical diagnosis, implementation and audit chronology lives under [`../60-evidence/s11/`](../60-evidence/s11/); the latest bounded detector/graph repair evidence is [`s11-detector-and-observed-graph-continuity.md`](../60-evidence/s11/s11-detector-and-observed-graph-continuity.md). Investigations and machine manifests live under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Current sequencing remains owned by [`../00-project/work-plan.md`](../00-project/work-plan.md).
+This document owns the lean preservation contract for the accepted S11 **detector baseline**. Historical diagnosis, implementation and audit chronology lives under [`../60-evidence/s11/`](../60-evidence/s11/); the latest local detector repair evidence is the [`S11-R3 Sequence Observability Integrity Evidence`](../60-evidence/s11/s11-r3-sequence-observability-integrity.md). Investigations and machine manifests live under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Current sequencing remains owned by [`../00-project/work-plan.md`](../00-project/work-plan.md).
 
-The accepted D1–D5/S5-B and serialized temporal baseline remains the preservation floor. Subtractive detector Slices A–D and the later bounded S11-R2 Foam/Spatial composition repair are accepted. The current work plan authorizes behavior-preserving detector-pipeline responsibility modularization only; detector behavior, tuning, thresholds, ordering, publication semantics and schema changes remain unauthorized. Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate downstream responsibility validated by [`initial-state-retrospective-reconstruction-validation.md`](initial-state-retrospective-reconstruction-validation.md).
+The accepted D1–D5/S5-B and serialized temporal baseline remains the preservation floor. Subtractive detector Slices A–D, S11-R2 Foam/Spatial composition and the locally accepted S11-R3 border-cap/static-and-row-coherent Foam publication repair are preservation authority. Further detector tuning, threshold relaxation, identity behavior, interpolation and publication-owner changes remain unauthorized during the Windows validation gate. Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate downstream responsibility validated by [`initial-state-retrospective-reconstruction-validation.md`](initial-state-retrospective-reconstruction-validation.md).
 
 The bounded S11-R2 Foam/Spatial composition repair is now accepted on top of that floor. It raises available-corpus numeric Oil from `109/299` to `111/299`, preserves `8/13` truth numerics at `5.4375 px` MAE and removes/corrects misleading sample4 bottom-structure extrema. Its exact acceptance record is [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
 
 The post-R2 baseline-validation maintenance keeps that exact `111/299` stream while narrowing the low-light accepted-Foam texture repair to candidates whose row is actually dominated by the accepted component. It also restores immutable historical probe figures and gives the refreshed offline-trajectory manifest explicit design-base versus production-stream provenance. Its review record is [`../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md`](../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md).
+
+R3 supersedes exact-output preservation of that stream where direct review proves it represents Glass structure or fragmented Foam-like appearance. Its dedicated [validation contract](s11-sequence-observability-integrity-validation.md) requires cap-invalidity controls, learned-static lifecycle controls, row-coherent Foam proof, a complete sample3 transition, four-video reconciliation and report inspection. A lower aggregate publication count is acceptable only when the removed observations are physically disproven and the confirmed truth/negative surface remains protected.
 
 ## Accepted detector baseline
 
@@ -17,6 +19,8 @@ The durable owners in [`../20-architecture/s11-detector-responsibility-architect
 - hard current-frame no-interface, unavailable, glare/exclusion/border, structural and authoritative-Foam safety;
 - accepted D2 Spatial, D3 comparative and D5 Foam/Oil authority;
 - D3 subcanonical structural-tail integrity outside authoritative-Foam context, rejecting texture borrowed from a directly dominant local structure without promoting that structure;
+- saturated border-cap hypotheses excluded from direct and indirect Oil authority while ordinary interior, non-saturated-border and retained near-bottom interfaces remain eligible;
+- learned-static and row-coherence opposition withholding Foam publication/fill/Oil-context authority while preserving raw diagnostic evidence;
 - ambiguity as a valid non-numeric outcome;
 - only accepted canonical boundary outcomes publishing numeric Oil;
 - one serialized temporal owner with atomic replacement/invariant validation;
@@ -63,4 +67,4 @@ Downstream graph presentation may connect only the finite observed Oil anchors a
 
 ## Claim boundary
 
-This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. The subtractive detector source sequence is reconciled and accepted on the available local corpus. S11 remains open through the bounded R2 validation and the later **final Windows field-workflow validation**; no source-tree or local-corpus result alone authorizes that Windows PASS.
+This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. The R3 source sequence is reconciled and accepted on the available local corpus, but its learned-static field hypothesis and packaged report remain subject to the secure Base/Accum and final Windows field-workflow gates. No source-tree or local-corpus result alone authorizes that Windows PASS.

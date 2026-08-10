@@ -22,6 +22,8 @@ The following remain hard authority boundaries rather than soft ranking preferen
 
 Ambiguity remains a valid production result. Hard-invalid evidence must not regain authority indirectly through comparison, anchoring, neighborhood selection or a downstream fallback.
 
+R3 makes a saturated dark border-cap transition an explicit structural/border invalidity when the border phase is both geometrically thin and photometrically dark relative to the Glass interior. That hypothesis may remain in raw diagnostics, but it cannot become canonical, enter D2/D3 comparison, own an anchor/neighborhood, oppose no-interface evidence or receive Spatial authority. Weak lower-rim D3 recovery outside authoritative Foam also requires material lower-phase area. These are conjunctive guards: ordinary interior transitions, non-saturated border phases and strong retained near-bottom material interfaces do not become invalid merely because they are near an edge. The exact topology and photometry contract is owned by the [`S11-R3 Sequence Observability Integrity Architecture`](s11-sequence-observability-integrity-architecture.md).
+
 ## Spatial responsibility
 
 Spatial is bounded **single-frame positive corroboration**, not a universal discriminator and not temporal tracking. It may add x-resolved phase-path evidence where scalar current-frame semantics remain ambiguous, subject to the existing hard safety envelope. It retains no frame history, cannot override accepted no-interface/unavailable outcomes, and cannot convert a flat or otherwise insufficiently identifiable scene into numeric Oil merely to increase coverage.
@@ -31,6 +33,8 @@ Under authoritative accepted-Foam context only, Spatial may also challenge an al
 ## Foam / Oil context ownership
 
 S5-A owns current-frame Foam support/component classification and its accepted Foam outcome. The Foam temporal gate remains a separate downstream owner. D1 established that S5-A publication does not automatically grant every accepted component authority to constrain Oil: structural/refractive Foam-like topology can be withheld from S5-B routing authority while Foam publication remains independently represented.
+
+R3 further distinguishes raw current-frame acceptance from publication authority. The existing per-Glass representative-frame lifecycle may learn persistent accepted support as a bounded static-Foam opposition map; a later component materially dominated by that map retains score/mask provenance but cannot update public Foam, fill state or Oil context. Independently, an accepted component must demonstrate layer-like row coherence through materially wide row support or compact narrow support. A fragmented broad bounding box retains diagnostic evidence but cannot publish as Foam. Map lifecycle and row-coherence opposition are publication-gate responsibilities, not new S5-A score terms, Oil evidence or temporal smoothing.
 
 When Foam context is authoritative for Oil, its topology is a **constraint on Oil evidence**, not a second Oil semantic system. Accepted Foam pixels may be excluded from independent Oil corroboration so Foam itself cannot supply Oil proof.
 

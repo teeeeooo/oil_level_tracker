@@ -23,7 +23,7 @@ from tests.diagnostics.s11_evidence_probe import (
 )
 
 ESTIMATOR_DESIGN_BASE_SHA = "4bb52a2718d176874c59a97b9164453165a90c00"
-PRODUCTION_STREAM_BASELINE_SHA = "16ea0cd1e63b929db469946ccddd75a8762042fb"
+PRODUCTION_STREAM_BASELINE_SHA = "f8742d0789fc4bcab93224f8866731209031f2f9"
 SAMPLING_FPS = 2.0
 MAXIMUM_SUPPORT_INTERVALS = 2.0
 # These are corpus execution windows only; the estimator never branches by sample identity.
