@@ -102,6 +102,19 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Build and run the one-folder package on a general office Windows PC without CUDA or any GPU-compute runtime dependency.
 - Repeat with Unicode and long paths, active file locking, cancellation and application close; confirm video/output/debug resources are released.
 
+### S11-R4 secure Base/Accum residual replay
+
+- Record the exact R4 commit, source/package identity, private video hash or approved internal identity, matching Recipe identity, sampling window/cadence and initial-state confirmations before comparison.
+- For Base and Accum separately, export exact, tolerant and reciprocal static-Foam overlap distributions plus tolerance radius and `foam_static_artifact_dominant` count. Do not substitute only the raw Foam score.
+- Record `static_rejected`, `persistence_pending`, accepted strong/moderate, weak, ambiguous and row-incoherent counts, accepted episode start/end times and fill-state distribution.
+- On Base, verify visually Foam remains absent. Compare residual `FULL_WITH_FOAM` against the R3 `32.1%` result and confirm the registered path, rather than a global score change, explains any improvement.
+- On Accum, verify the initially empty interval, rising Oil interval, bounded real turbulent-Foam interval, maximum and later drain. Confirm onset confirmation removes isolated false publication without erasing the real episode.
+- For the earliest accepted Oil before/through each physical transition, capture the source frame with configured ellipse, zero line, canonical Oil and public Foam guides. Record source Y and `zero_line_y - source_y`; do not classify a sign change as a coordinate defect without this overlay.
+- Record numeric Oil, `UNKNOWN_REVIEW`, `FULL_WITH_FOAM`, retrospective accepted/unresolved/conflict and barrier distributions. Confirm Foam-only evidence remains a barrier while valid Foam-plus-canonical-Oil evidence is not discarded solely for coexisting with Foam.
+- Compare visual Oil-drop onset with the stored event and confirm the report says **유면 하강 최초 관찰**. Do not backdate the timestamp through missing observations.
+- Open `report.html` and verify accepted Foam fragments joined by pending continuity appear as one bounded episode where appropriate, while the Foam graph retains missing coordinates and pending evidence never creates an episode start or guide line.
+- If Base fixed Foam remains, stop and preserve the earliest component mask/overlap/coherence/context metrics. If Oil position remains displaced, stop at candidate/overlay evidence. Do not lower Foam/Oil/ambiguity thresholds as a follow-up shortcut.
+
 ## S5-B oil boundary and temporal tracking
 - Validate a real, visually clear oil boundary and a weak transparent-oil boundary against user-recorded truth.
 - Validate transparent-oil agitation, shimmer and heat-haze-like motion without forcing a numeric boundary.

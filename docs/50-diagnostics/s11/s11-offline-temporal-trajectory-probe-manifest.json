@@ -101,9 +101,10 @@
       "left_anchor_y": null,
       "oil_y": null,
       "production_error_px": 7.0,
-      "production_fill_state": "FOAMING_VISIBLE",
+      "production_fill_state": "FILLING_VISIBLE",
       "production_flags": [
-        "FOAM_STRONG_EVIDENCE"
+        "FOAM_PERSISTENCE_PENDING",
+        "LOW_CONFIDENCE"
       ],
       "production_oil_y": 599.0,
       "production_provenance": "observed",
@@ -122,10 +123,10 @@
       "left_anchor_y": 599.0,
       "oil_y": null,
       "production_error_px": 6.0,
-      "production_fill_state": "FOAMING_VISIBLE",
+      "production_fill_state": "FILLING_VISIBLE",
       "production_flags": [
-        "FOAM_REACH_TOP",
-        "FOAM_STRONG_EVIDENCE"
+        "FOAM_PERSISTENCE_PENDING",
+        "LOW_CONFIDENCE"
       ],
       "production_oil_y": 598.0,
       "production_provenance": "observed",
@@ -144,10 +145,9 @@
       "left_anchor_y": 294.0,
       "oil_y": null,
       "production_error_px": 2.0,
-      "production_fill_state": "FOAMING_VISIBLE",
+      "production_fill_state": "PARTIAL_VISIBLE",
       "production_flags": [
-        "FOAM_REACH_TOP",
-        "FOAM_STRONG_EVIDENCE"
+        "FOAM_PERSISTENCE_PENDING"
       ],
       "production_oil_y": 245.0,
       "production_provenance": "observed",
@@ -166,10 +166,12 @@
       "left_anchor_y": null,
       "oil_y": null,
       "production_error_px": null,
-      "production_fill_state": "FULL_WITH_FOAM",
+      "production_fill_state": "UNKNOWN_REVIEW",
       "production_flags": [
-        "FOAM_STRONG_EVIDENCE",
-        "OIL_EVIDENCE_AMBIGUOUS"
+        "FOAM_PERSISTENCE_PENDING",
+        "LOW_CONFIDENCE",
+        "OIL_EVIDENCE_AMBIGUOUS",
+        "REVIEW_REQUIRED"
       ],
       "production_oil_y": null,
       "production_provenance": "unavailable",
@@ -212,9 +214,10 @@
       "left_anchor_y": 867.0,
       "oil_y": 866.5,
       "production_error_px": 11.0,
-      "production_fill_state": "FOAMING_VISIBLE",
+      "production_fill_state": "PARTIAL_VISIBLE",
       "production_flags": [
-        "FOAM_STRONG_EVIDENCE"
+        "FOAM_PERSISTENCE_PENDING",
+        "LOW_CONFIDENCE"
       ],
       "production_oil_y": 866.0,
       "production_provenance": "observed",
@@ -233,9 +236,10 @@
       "left_anchor_y": 866.0,
       "oil_y": null,
       "production_error_px": 7.5,
-      "production_fill_state": "FOAMING_VISIBLE",
+      "production_fill_state": "PARTIAL_VISIBLE",
       "production_flags": [
-        "FOAM_STRONG_EVIDENCE"
+        "FOAM_PERSISTENCE_PENDING",
+        "LOW_CONFIDENCE"
       ],
       "production_oil_y": 866.0,
       "production_provenance": "observed",
@@ -394,7 +398,7 @@
       "unavailable_count": 210
     }
   },
-  "production_stream_baseline_sha": "f8742d0789fc4bcab93224f8866731209031f2f9",
+  "production_stream_baseline_sha": "745c6c923bb7e640ae0895f88c6bdf300198914a",
   "production_truth_anchor_baseline": {
     "normally_missing_count": 5,
     "normally_observed_count": 8,
@@ -409,6 +413,6 @@
     "retained_estimator_temporal_state": 0,
     "retained_images": 0
   },
-  "result_fingerprint_sha256": "4f8dd7bd4a01ad229dc876370f041dd3634d3a4283619f8a74b3babd40fae113",
+  "result_fingerprint_sha256": "61a88c4d618219287443971ab606ea4c58494b09359ece93f78ea45c84a30237",
   "schema": "s11-offline-temporal-trajectory-probe-v2"
 }

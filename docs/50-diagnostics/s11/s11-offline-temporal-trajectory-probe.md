@@ -9,7 +9,7 @@ Starting production authority for the probe is:
 
 - repository: `teeeeooo/oil_level_tracker`
 - estimator design base: `4bb52a2718d176874c59a97b9164453165a90c00`
-- reconciled production-stream baseline: `f8742d0789fc4bcab93224f8866731209031f2f9`
+- reconciled production-stream baseline: `745c6c923bb7e640ae0895f88c6bdf300198914a`
 - current production Oil layer: P0/D4/P2/Spatial single-frame observation plus the accepted serialized S5-B temporal/reducer/projection ownership
 
 The probe does **not** modify `src/`, `TrackingSample`, `AnalysisResult`, CSV/result persistence, Result Review, graph rendering, detector history, or the canonical reducer/projection contract.
@@ -57,7 +57,7 @@ Two production views are kept distinct:
 2. **Trajectory input stream**: the current serialized detector path is replayed at `2 Hz`, including production static-artifact learning, over the bounded Recipe qualification windows.
 
 Manifest schema v2 preserves the original estimator design authority while identifying the
-later accepted S11-R3 production stream used for this reconciliation. The original v1 probe
+later accepted S11-R4 production stream used for this reconciliation. The original v1 probe
 payload remains available in Git history; the figures below describe the reconciled stream and
 must not be attributed to the earlier design-base detector output.
 
@@ -71,7 +71,7 @@ The trajectory input stream contains 299 scheduled detections. The held-out eval
 | `sample4` | 113 | 64 | 49 | 8 |
 | **total** | **299** | **89** | **210** | — |
 
-This stream density is not an accuracy score. R3 deliberately removes sample3 full-state cap observations and false Foam authority, so its longer censored span is evidence correction rather than a coverage regression. Sample4 remains useful negative evidence for trajectory-only reconstruction because dense local continuity can still disagree with physical truth.
+This stream density is not an accuracy score. R3 removed sample3 full-state cap observations and false Foam authority; R4 preserves the same numeric Oil stream while changing Foam publication responsibility. The longer censored span is evidence correction rather than a coverage regression. Sample4 remains useful negative evidence for trajectory-only reconstruction because dense local continuity can still disagree with physical truth.
 
 The direct production truth-anchor baseline remains:
 
@@ -131,7 +131,7 @@ The natural four-video stream contains no FULL/EMPTY no-interface rows in the se
 - estimator-owned temporal state: `0`
 - retained images: `0`
 - detector/tracker feedback calls: `0`
-- first full corpus probe runtime on the current local environment: `113.96 s` (informational, not fingerprinted)
+- latest R4 manifest regeneration runtime on the current local environment: approximately `30.4 s` (informational, not fingerprinted)
 
 ## Conclusion and next contract boundary
 
@@ -144,10 +144,10 @@ If a later gate nevertheless elects to expose an estimated trajectory, that is a
 Reproducible machine evidence is checked in at:
 
 - `docs/50-diagnostics/s11/s11-offline-temporal-trajectory-probe-manifest.json`
-- fingerprint: `4f8dd7bd4a01ad229dc876370f041dd3634d3a4283619f8a74b3babd40fae113`
+- fingerprint: `61a88c4d618219287443971ab606ea4c58494b09359ece93f78ea45c84a30237`
 
 ## Validation boundary
 
 Development checks cover same-frame hold-out exclusion, censored no-interface, occlusion/detection-loss, unsupported long gaps, repeated ambiguity, contradictory anchors, and deterministic corpus evidence.
 
-The R3 source-tree validation independently reruns this diagnostic inside the complete canonical suite. Windows packaging and private field-video validation remain outside this local diagnostic's authority.
+The R4 source-tree validation independently reruns this diagnostic inside the complete canonical suite. Windows packaging and private field-video validation remain outside this local diagnostic's authority.

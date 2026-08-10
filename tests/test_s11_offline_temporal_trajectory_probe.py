@@ -138,7 +138,7 @@ def test_four_video_held_out_reconstruction_is_insufficient_for_integration() ->
         "4bb52a2718d176874c59a97b9164453165a90c00"
     )
     assert manifest["production_stream_baseline_sha"] == (
-        "f8742d0789fc4bcab93224f8866731209031f2f9"
+        "745c6c923bb7e640ae0895f88c6bdf300198914a"
     )
     assert truth["usable_truth_count"] == 13
     assert truth["normally_observed_count"] == 8
@@ -164,7 +164,7 @@ def test_four_video_held_out_reconstruction_is_insufficient_for_integration() ->
     assert held_out["normally_missing_recovered_case_ids"] == []
     assert manifest["conclusion"] == "insufficient_trajectory_evidence"
     assert manifest["result_fingerprint_sha256"] == (
-        "4f8dd7bd4a01ad229dc876370f041dd3634d3a4283619f8a74b3babd40fae113"
+        "61a88c4d618219287443971ab606ea4c58494b09359ece93f78ea45c84a30237"
     )
     assert build_manifest(streams, baselines, estimates)["result_fingerprint_sha256"] == (
         manifest["result_fingerprint_sha256"]

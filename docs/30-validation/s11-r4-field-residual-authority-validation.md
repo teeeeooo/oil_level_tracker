@@ -1,6 +1,6 @@
 # S11-R4 Field Residual Authority Validation Contract
 
-**Status:** `ACTIVE`
+**Status:** `VALIDATING`
 
 ## Scope
 
@@ -45,7 +45,7 @@ Prove:
 
 Verify `OIL_DROP_START` is labeled and described as the first **observed** sustained decrease. Its stored timestamp, event type, source capture and graph position must remain unchanged. Missing spans remain dashed display-only bridges and are not used to backdate the event.
 
-Also prove that one already temporal-confirmed public Foam sample remains a bounded report episode, while an unflagged one-sample flicker remains omitted. Report grouping must not backdate the episode to a pending sample or modify tracking/event history.
+Also prove that one already temporal-confirmed public Foam sample remains a bounded report episode, while an unflagged one-sample flicker remains omitted. Pending flags may connect confirmed observations and defer disappearance only inside the existing bounded dropout rule; they cannot start/backdate an episode, create a Foam coordinate or modify tracking/event history.
 
 ## Gate 5 — repository-local preservation
 

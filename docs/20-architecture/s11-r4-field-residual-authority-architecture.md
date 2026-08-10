@@ -1,6 +1,6 @@
 # S11-R4 Field Residual Authority Architecture
 
-**Status:** `ACTIVE`
+**Status:** `VALIDATING`
 
 ## Purpose
 
@@ -62,7 +62,7 @@ This follows D5 responsibility: accepted Foam constrains Oil, while the accepted
 
 The report does not backdate, interpolate or estimate a hidden start time. Direct graph runs, dashed display-only bridges, state/review bands and source captures retain their existing authority.
 
-The detector publication gate already proves two compatible strong samples (or the configured moderate chain). Report presentation therefore must not require a second independent two-positive gate. A single stored public Foam sample carrying `FOAM_STRONG_EVIDENCE` or `FOAM_MODERATE_EVIDENCE` may form a bounded report episode; an unconfirmed one-sample Foam-like value remains flicker and is omitted. Episode time starts at the stored public sample and is never backdated to the hidden pending sample.
+The detector publication gate already proves two compatible strong samples (or the configured moderate chain). Report presentation therefore must not require a second independent two-positive gate. A single stored public Foam sample carrying `FOAM_STRONG_EVIDENCE` or `FOAM_MODERATE_EVIDENCE` may form a bounded report episode; an unconfirmed one-sample Foam-like value remains flicker and is omitted. Stored `FOAM_PERSISTENCE_PENDING` samples may keep two public observations in the same episode and defer a disappearance claim inside the existing bounded dropout tolerance, but they cannot start an episode, supply a Foam coordinate or backdate its start. Episode time always starts at the first stored public sample.
 
 ## Explicitly rejected alternatives
 

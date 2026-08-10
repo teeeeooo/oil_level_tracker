@@ -19,7 +19,7 @@ This contract owns acceptance for the user-facing observation report defined by 
 - Finite Oil input produces deterministic highest and lowest observed landmarks; all-missing input produces neither.
 - Preferred smoothed/raw and px/mm policies match static and Result Review graph values.
 - The trend sentence is deterministic and uses observation-qualified wording when gaps exist.
-- Unconfirmed one-sample Foam flicker produces no report episode; a single stored temporal-confirmed strong/moderate Foam publication remains eligible without a second presentation gate.
+- Unconfirmed one-sample Foam flicker produces no report episode; a single stored temporal-confirmed strong/moderate Foam publication remains eligible without a second presentation gate. Pending flags may connect/defer disappearance within the bounded dropout rule but cannot create or backdate an episode or Foam coordinate.
 - A bounded short Foam dropout may remain one episode; a longer absence creates separate episodes.
 - Foam disappearance is marked only when a subsequent non-Foam sample exists.
 - Landmark selection is deterministic and never exceeds twelve per Glass or three Foam episodes.

@@ -151,6 +151,49 @@ def test_single_temporally_confirmed_foam_publication_remains_a_report_episode()
     assert [landmark.timestamp_sec for landmark in foam] == [0.5, 1.0]
 
 
+def test_pending_foam_support_connects_but_does_not_backdate_or_end_episode():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    pending = ("FOAM_PERSISTENCE_PENDING",)
+    glass = GlassAnalysisResult(
+        config.id,
+        config.name,
+        ResultState.REVIEW_REQUIRED,
+        samples=[
+            _sample(config.id, 0.0, oil=None, flags=pending),
+            _sample(
+                config.id,
+                0.5,
+                oil=None,
+                foam=4.0,
+                flags=("FOAM_STRONG_EVIDENCE",),
+            ),
+            _sample(config.id, 1.0, oil=None),
+            _sample(config.id, 1.5, oil=None, flags=pending),
+            _sample(config.id, 2.0, oil=None),
+            _sample(
+                config.id,
+                2.5,
+                oil=None,
+                foam=5.0,
+                flags=("FOAM_STRONG_EVIDENCE",),
+            ),
+            _sample(config.id, 3.0, oil=None, flags=pending),
+        ],
+    )
+
+    report = build_glass_report_presentation(glass, config)
+    foam = [
+        landmark
+        for landmark in report.landmarks
+        if landmark.event_type in {EventType.FOAM_START, EventType.FOAM_END}
+    ]
+
+    assert report.foam_episode_count == 1
+    assert [(landmark.event_type, landmark.timestamp_sec) for landmark in foam] == [
+        (EventType.FOAM_START, 0.5)
+    ]
+
+
 def test_short_missing_run_is_still_disclosed_as_a_graph_bridge():
     config = InspectionRecipe.default_glass(320, 240, 1)
     glass = GlassAnalysisResult(

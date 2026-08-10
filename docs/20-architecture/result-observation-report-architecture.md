@@ -74,6 +74,7 @@ Report Foam episodes are a presentation grouping over accepted stored Foam obser
 
 - An unconfirmed one-sample Foam-like observation does not create a report episode.
 - A single stored public Foam sample explicitly marked as strong/moderate accepted evidence may create an episode because the detector temporal gate already confirmed its onset; report presentation does not impose the same gate twice.
+- Stored temporal-pending flags may connect confirmed public observations and defer disappearance within the bounded dropout tolerance, but cannot start an episode or provide a Foam graph coordinate.
 - A short dropout no longer than the bounded presentation tolerance may be bridged inside one episode.
 - Longer absence separates episodes.
 - The report exposes at most three most material episodes per Glass, ordered by time after selection.

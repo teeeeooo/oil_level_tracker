@@ -232,12 +232,16 @@ def _foam_episodes(
     samples: tuple[TrackingSample, ...],
     cadence: float,
 ) -> tuple[_FoamEpisode, ...]:
-    positive = [index for index, sample in enumerate(samples) if _foam_present(sample)]
-    if not positive:
+    support = [
+        index
+        for index, sample in enumerate(samples)
+        if _foam_present(sample) or _foam_confirmation_pending(sample)
+    ]
+    if not support:
         return ()
     dropout_tolerance = max(0.5, min(1.0, cadence))
-    groups: list[list[int]] = [[positive[0]]]
-    for index in positive[1:]:
+    groups: list[list[int]] = [[support[0]]]
+    for index in support[1:]:
         previous = groups[-1][-1]
         absent_span = samples[index].timestamp_sec - samples[previous].timestamp_sec - cadence
         if absent_span <= dropout_tolerance + 1e-9:
@@ -246,22 +250,34 @@ def _foam_episodes(
             groups.append([index])
 
     episodes: list[_FoamEpisode] = []
-    for group in groups:
-        start_index = group[0]
-        end_index = group[-1]
+    for support_group in groups:
+        accepted_group = [
+            index for index in support_group if _foam_present(samples[index])
+        ]
+        if not accepted_group:
+            continue
+        start_index = accepted_group[0]
+        end_index = accepted_group[-1]
         start = samples[start_index]
         last = samples[end_index]
         short_group = (
-            len(group) < 2
+            len(accepted_group) < 2
             or last.timestamp_sec - start.timestamp_sec
             < MINIMUM_FOAM_EPISODE_SEC - 1e-9
         )
         if short_group and not (
-            len(group) == 1 and _confirmed_foam_publication(start)
+            len(accepted_group) == 1 and _confirmed_foam_publication(start)
         ):
             continue
-        disappearance = samples[end_index + 1] if end_index + 1 < len(samples) else None
-        episodes.append(_FoamEpisode(start, last, disappearance, len(group)))
+        support_end_index = support_group[-1]
+        disappearance = (
+            samples[support_end_index + 1]
+            if support_end_index + 1 < len(samples)
+            else None
+        )
+        episodes.append(
+            _FoamEpisode(start, last, disappearance, len(accepted_group))
+        )
 
     material = sorted(
         episodes,
@@ -595,6 +611,10 @@ def _confirmed_foam_publication(sample: TrackingSample) -> bool:
         flag in {"FOAM_STRONG_EVIDENCE", "FOAM_MODERATE_EVIDENCE"}
         for flag in sample.flags
     )
+
+
+def _foam_confirmation_pending(sample: TrackingSample) -> bool:
+    return "FOAM_PERSISTENCE_PENDING" in sample.flags
 
 
 def _finite_first(*values: float | None) -> float | None:
