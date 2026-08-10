@@ -145,6 +145,67 @@ def test_barriers_stop_leading_inference(barrier_sample):
     assert result.barriers
 
 
+def test_authoritative_foam_with_independent_numeric_oil_remains_direction_evidence():
+    glass = glass_config()
+    top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
+    samples = [
+        _sample(0),
+        _sample(1),
+        _sample(
+            2,
+            FillState.FOAMING_VISIBLE,
+            y=top + 10,
+            valid=True,
+            flags=("FOAM_STRONG_EVIDENCE",),
+        ),
+        _sample(
+            3,
+            FillState.FOAMING_VISIBLE,
+            y=top + 20,
+            valid=True,
+            flags=("FOAM_STRONG_EVIDENCE",),
+        ),
+    ]
+
+    result = reconstruct_initial_state(
+        glass,
+        samples,
+        _confirmation(InitialObservationState.FULL_NO_INTERFACE),
+    )
+    projected = project_state_aware_samples(samples, result)
+
+    assert result.status is RetrospectiveStatus.ACCEPTED
+    assert result.evidence_frame_indices == (2, 3)
+    assert projected[0].fill_state is FillState.FULL_NO_INTERFACE
+    assert projected[2] is samples[2]
+    assert projected[2].fill_state is FillState.FOAMING_VISIBLE
+
+
+def test_hard_unavailable_barrier_still_wins_over_malformed_numeric_foam_sample():
+    glass = glass_config()
+    top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
+    samples = [
+        _sample(0),
+        _sample(
+            1,
+            FillState.FOAMING_VISIBLE,
+            y=top + 10,
+            valid=True,
+            flags=("FOAM_STRONG_EVIDENCE", "FOGGED_OR_GLARE"),
+        ),
+        _sample(2, FillState.DRAINING_VISIBLE, y=top + 20, valid=True),
+    ]
+
+    result = reconstruct_initial_state(
+        glass,
+        samples,
+        _confirmation(InitialObservationState.FULL_NO_INTERFACE),
+    )
+
+    assert result.status is RetrospectiveStatus.UNRESOLVED
+    assert result.barriers == ("FOGGED_OR_GLARE",)
+
+
 def test_contradictory_direct_topology_is_conflict_without_interval():
     glass = glass_config()
     bottom = glass.geometry.ellipse.center_y + glass.geometry.ellipse.radius_y

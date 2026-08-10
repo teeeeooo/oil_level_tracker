@@ -28,6 +28,8 @@ Focused tests must cover symmetric `FULL_NO_INTERFACE` and `EMPTY_NO_INTERFACE` 
 - prior-seeded or retrospectively inferred labels cannot circularly confirm the prior;
 - eligible ambiguity may remain in a prefix without contributing confirmation;
 - unavailable/failure/detection-lost/glare/fog evidence, authoritative Foam and contradictory direct evidence form barriers;
+- authoritative Foam without numeric Oil remains a barrier, while valid Foam-plus-canonical-Oil samples may contribute direction evidence and remain excluded from state projection;
+- hard unavailable/failure/glare evidence still blocks malformed samples that also carry a number;
 - prior conflict produces no retrospective interval plus first-class conflict/review;
 - insufficient positive evidence remains unresolved rather than conflict;
 - observed detector state and observed validity are immutable;

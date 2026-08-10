@@ -50,7 +50,7 @@ def test_sample3_sequence_retains_rise_and_censors_full_like_caps_and_false_foam
         compressor_start_sec=30.03,
         sampling_fps=2.0,
         output_directory=str(tmp_path),
-        run_name="S11 R3 sequence observability integrity",
+        run_name="S11 R4 sequence observability integrity",
         resolution_confirmed=True,
     )
     result = AnalysisPipeline(
@@ -82,11 +82,16 @@ def test_sample3_sequence_retains_rise_and_censors_full_like_caps_and_false_foam
         for sample in full_like
         if sample.timestamp_sec >= 42.0
     )
-    assert sum(
-        sample.raw_foam_front_y is not None
+    early_foam = [
+        sample
         for sample in rows
-        if sample.timestamp_sec < 39.0
-    ) >= 8
+        if sample.timestamp_sec < 39.0 and sample.raw_foam_front_y is not None
+    ]
+    # Strong onset confirmation deliberately removes isolated positives, but
+    # the true inflow Foam must remain observable near both ends of the episode.
+    assert len(early_foam) >= 4
+    assert min(sample.timestamp_sec for sample in early_foam) <= 30.60
+    assert max(sample.timestamp_sec for sample in early_foam) >= 37.50
     assert not any(
         sample.raw_foam_front_y is not None
         for sample in rows

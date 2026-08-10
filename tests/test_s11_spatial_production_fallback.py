@@ -14,7 +14,6 @@ from oil_observability_fixtures import (
 )
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.vision.foam_front_detector import detect_bottom_connected_foam
-from oil_tracker.adapters.vision.foam_temporal_gate import FoamTemporalGate
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
 from oil_tracker.adapters.vision.oil_shadow_observations import extract_raw_observations
 from oil_tracker.adapters.vision.oil_shadow_types import (
@@ -75,6 +74,16 @@ def _decode_local_video_frame(root: Path, sample: str, frame_index: int) -> np.n
     return frame
 
 
+def _foam_trace_y(detection) -> float:
+    rows = [
+        candidate
+        for candidate in detection.candidates
+        if candidate.kind.value == "foam_front"
+    ]
+    assert len(rows) == 1
+    return float(rows[0].y)
+
+
 def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() -> None:
     expected_numeric = {
         "base_sample_1:144": 395.0,
@@ -129,19 +138,19 @@ def test_production_native_recovery_preserves_d2_anchors_with_d4_foam_routing() 
         if case_id in {"sample2:30", "sample2:60"}
     } == {"sample2:30": 599.0, "sample2:60": 598.0}
 
-    # Authoritative Foam now constrains the existing Oil authority instead of
-    # selecting a separate stricter semantic stack. The native sample3:1035
-    # boundary therefore remains available below Foam; sample3:900 still fails
-    # closed because its Foam-aware residual Spatial proof is insufficient.
+    # A first strong sample is not public Foam, but its coherent non-static mask
+    # still supplies the D5 safety constraint. The native sample3:1035 boundary
+    # therefore remains available below that mask; sample3:900 still fails closed
+    # because its Foam-aware residual Spatial proof is insufficient.
     sample3_900 = next(item for item in rows if item[0] == "sample3:900")
     assert sample3_900[2] is None
-    assert sample3_900[3] is not None
+    assert sample3_900[3] is None
     assert sample3_900[4] is True
     sample3_1035 = next(item for item in rows if item[0] == "sample3:1035")
     assert sample3_1035[2] == 245.0
-    assert sample3_1035[3] == 226.0
+    assert sample3_1035[3] is None
     assert sample3_1035[4] is True
-    assert sample3_1035[2] > sample3_1035[3]
+    assert sample3_1035[2] > 226.0
 
 
 def test_unified_spatial_corroboration_replaces_soft_scalar_veto_but_not_no_interface() -> None:
@@ -202,7 +211,10 @@ def test_r2_foam_spatial_authority_prefers_material_interface_over_bottom_struct
     )
 
     assert detection.debug_metrics["foam_oil_context_authoritative"] is True
-    assert detection.raw_foam_front_y == expected_foam_y
+    assert detection.debug_metrics["foam_oil_context_publication_accepted"] is False
+    assert detection.debug_metrics["foam_decision_status"] == "persistence_pending"
+    assert detection.raw_foam_front_y is None
+    assert _foam_trace_y(detection) == expected_foam_y
     assert detection.raw_oil_air_level_y == expected_oil_y
     if expected_oil_y is None:
         assert detection.debug_metrics["oil_decision_status"] == "ambiguous"
@@ -275,8 +287,10 @@ def test_d2_class_a_authority_continues_but_foam_component_exclusion_can_fail_cl
         time_sec=29.996633333333335,
         debug=False,
     )
-    assert detection.raw_foam_front_y == 272.0
+    assert detection.raw_foam_front_y is None
+    assert _foam_trace_y(detection) == 272.0
     assert detection.debug_metrics["foam_oil_context_authoritative"] is True
+    assert detection.debug_metrics["foam_oil_context_publication_accepted"] is False
     assert detection.raw_oil_air_level_y is None
     assert detection.debug_metrics["oil_decision_status"] == "ambiguous"
 
@@ -307,8 +321,10 @@ def test_d5_authoritative_foam_preserves_compatible_current_frame_oil_authority(
         debug=False,
     )
 
-    assert detection.raw_foam_front_y == expected_foam_y
+    assert detection.raw_foam_front_y is None
+    assert _foam_trace_y(detection) == expected_foam_y
     assert detection.debug_metrics["foam_oil_context_authoritative"] is True
+    assert detection.debug_metrics["foam_oil_context_publication_accepted"] is False
     assert detection.raw_oil_air_level_y == expected_oil_y
     assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
     assert expected_oil_y > expected_foam_y
@@ -353,8 +369,10 @@ def test_d5_foam_owned_current_frame_evidence_remains_fail_closed() -> None:
         time_sec=1079 / 29.97,
         debug=False,
     )
-    assert detection.raw_foam_front_y == 219.0
+    assert detection.raw_foam_front_y is None
+    assert _foam_trace_y(detection) == 219.0
     assert detection.debug_metrics["foam_oil_context_authoritative"] is True
+    assert detection.debug_metrics["foam_oil_context_publication_accepted"] is False
     assert detection.raw_oil_air_level_y is None
     assert detection.debug_metrics["oil_decision_status"] == "ambiguous"
 
@@ -405,11 +423,13 @@ def test_d3_near_tie_remains_ambiguous_until_foam_residual_evidence_separates_it
         time_sec=30.497133,
         debug=False,
     )
-    assert detection.raw_foam_front_y == 255.0
+    assert detection.raw_foam_front_y is None
+    assert _foam_trace_y(detection) == 255.0
     assert detection.debug_metrics["foam_oil_context_authoritative"] is True
+    assert detection.debug_metrics["foam_oil_context_publication_accepted"] is False
     assert detection.raw_oil_air_level_y == 301.0
     assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
-    assert detection.raw_oil_air_level_y > detection.raw_foam_front_y
+    assert detection.raw_oil_air_level_y > 255.0
 
 
 def test_d2_spatial_recovery_respects_authoritative_foam_front() -> None:
@@ -543,17 +563,23 @@ def test_sample4_later_foam_separates_from_structural_substrate() -> None:
         1350: 836.0,
         1425: 836.0,
     }
-    for frame_index, expected_front in expected_fronts.items():
+    detector = OpenCvPhaseDetector()
+    for position, (frame_index, expected_front) in enumerate(expected_fronts.items()):
         time_sec = frame_index / 30.0
-        detection, _artifacts = OpenCvPhaseDetector().detect(
+        detection, _artifacts = detector.detect(
             _decode_local_video_frame(root, "sample4", frame_index),
             glass,
             frame_index=frame_index,
             time_sec=time_sec,
             debug=False,
         )
-        assert detection.raw_foam_front_y == expected_front, frame_index
-        assert detection.debug_metrics["foam_decision_status"] == "accepted_strong", frame_index
+        if position == 0:
+            assert detection.raw_foam_front_y is None, frame_index
+            assert detection.debug_metrics["foam_decision_status"] == "persistence_pending"
+        else:
+            assert detection.raw_foam_front_y == expected_front, frame_index
+            assert detection.debug_metrics["foam_decision_status"] == "accepted_strong", frame_index
+        assert _foam_trace_y(detection) == expected_front, frame_index
         assert detection.debug_metrics["foam_oil_context_authoritative"] is True, frame_index
         assert detection.debug_metrics["foam_component_width_ratio"] < 0.70, frame_index
 
@@ -591,17 +617,11 @@ def test_recovered_native_rows_use_genuine_cross_roi_path_information() -> None:
             bundle.effective_mask,
             case.glass.detector_settings,
         )
-        foam_temporal = FoamTemporalGate().evaluate(
-            case.glass.id,
-            foam,
-            case.glass.detector_settings,
-        )
-        accepted_foam_mask = None if foam_temporal.candidate is None else foam.mask
         path = _evaluate_spatial_path(
             pre,
             bundle.effective_mask,
             candidate_local_y=source_y - float(bundle.crop_origin[1]),
-            accepted_foam_component_mask=accepted_foam_mask,
+            accepted_foam_component_mask=foam.mask,
             bounds=OilShadowBounds(),
         )
         assert path.accepted
@@ -681,7 +701,9 @@ def test_structural_foam_protection_preserves_coherent_owner_or_fails_closed() -
         )
         assert detection.raw_oil_air_level_y is None, index
         if index < 7:
-            assert detection.raw_foam_front_y is not None, index
+            assert detection.raw_foam_front_y is None, index
+            assert detection.debug_metrics["foam_decision_status"] == "persistence_pending"
+            assert _foam_trace_y(detection) > 0.0
             assert detection.debug_metrics["foam_oil_context_authoritative"] is True, index
         else:
             assert detection.raw_foam_front_y is None, index

@@ -44,9 +44,9 @@ ACCEPTED_NUMERIC_OIL_COUNTS = {
 }
 ACCEPTED_TRACKING_FINGERPRINTS = {
     "base_sample_1": "c50e1e8bb7ff8bda873c1fbd4637586de4798fb950ea9fb17213ec8d3eb9716c",
-    "sample2": "912225deb00b1a33504d7541be9a61727049a2a845c29ebd8b7badd7197f06aa",
-    "sample3": "30effdc2b523af3d0ba051b3ed0e760d7f88eefb7a59885f1f66bb6887a106ac",
-    "sample4": "d37bbd9101fa3f7d3f56524b588c1e22d76eb4849702d12fceeeec3ea2385c37",
+    "sample2": "392a9a05f03e2831dcfcedc52cb0fa55743022d3d150fab15e6a23a874977eda",
+    "sample3": "f3caf5e79e7663ca9a3d28b2a173c6237d886ae4e5c19482ad31f07aea481fd9",
+    "sample4": "23b0568b0184f6a7972947d48d52e9122214d419ba67f4c6c5c0cd351116d3fb",
 }
 
 

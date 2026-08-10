@@ -13,7 +13,44 @@ from .foam_front_detector import (
 )
 
 
-_STATIC_FOAM_DOMINANCE_FRACTION = 0.80
+_STATIC_FOAM_EXACT_DOMINANCE_FRACTION = 0.80
+_STATIC_FOAM_REGISTERED_MIN_EXACT_FRACTION = 0.70
+_STATIC_FOAM_REGISTERED_MIN_CURRENT_FRACTION = 0.90
+_STATIC_FOAM_REGISTERED_MIN_RECIPROCAL_FRACTION = 0.70
+_STRONG_FOAM_CONFIRMATION_FRAMES = 2
+
+
+@dataclass(frozen=True)
+class FoamStaticMatch:
+    exact_overlap: float = 0.0
+    tolerant_overlap: float = 0.0
+    reciprocal_overlap: float = 0.0
+    tolerance_radius_px: int = 0
+
+    def __post_init__(self) -> None:
+        for name, value in (
+            ("exact overlap", self.exact_overlap),
+            ("tolerant overlap", self.tolerant_overlap),
+            ("reciprocal overlap", self.reciprocal_overlap),
+        ):
+            if not math.isfinite(float(value)) or not 0.0 <= float(value) <= 1.0:
+                raise ValueError(f"Foam static {name} must be finite and normalized.")
+        if type(self.tolerance_radius_px) is not int or self.tolerance_radius_px < 0:
+            raise ValueError("Foam static tolerance radius must be a non-negative integer.")
+
+    @property
+    def dominant(self) -> bool:
+        exact = float(self.exact_overlap)
+        return bool(
+            exact >= _STATIC_FOAM_EXACT_DOMINANCE_FRACTION
+            or (
+                exact >= _STATIC_FOAM_REGISTERED_MIN_EXACT_FRACTION
+                and float(self.tolerant_overlap)
+                >= _STATIC_FOAM_REGISTERED_MIN_CURRENT_FRACTION
+                and float(self.reciprocal_overlap)
+                >= _STATIC_FOAM_REGISTERED_MIN_RECIPROCAL_FRACTION
+            )
+        )
 
 
 @dataclass(frozen=True)
@@ -35,7 +72,7 @@ class FoamTemporalDecision:
 
 
 class FoamTemporalGate:
-    """Bounded per-Glass persistence gate for moderate Foam evidence.
+    """Bounded per-Glass publication gate for strong/moderate Foam evidence.
 
     The gate stores only counters and finite scalar evidence. It never retains an
     image, map, mask or candidate object between samples.
@@ -63,16 +100,21 @@ class FoamTemporalGate:
         evidence: FoamDetectionResult,
         settings: DetectorSettings,
         *,
-        static_overlap_ratio: float = 0.0,
+        static_match: FoamStaticMatch | None = None,
         layer_coherent: bool = True,
     ) -> FoamTemporalDecision:
         key = str(glass_id)
-        static_overlap = float(static_overlap_ratio)
-        if not math.isfinite(static_overlap) or not 0.0 <= static_overlap <= 1.0:
-            raise ValueError("Foam static overlap must be finite and normalized.")
+        match = FoamStaticMatch() if static_match is None else static_match
+        if type(match) is not FoamStaticMatch:
+            raise TypeError("Foam temporal gate requires FoamStaticMatch evidence.")
         required = max(1, int(settings.foam_persistence_frames))
         candidate = evidence.candidate
         status = evidence.decision_status
+        decision_required = (
+            _STRONG_FOAM_CONFIRMATION_FRAMES
+            if status is FoamDecisionStatus.ACCEPTED_STRONG
+            else required
+        )
 
         if (
             candidate is not None
@@ -81,7 +123,7 @@ class FoamTemporalGate:
                 FoamDecisionStatus.ACCEPTED_STRONG,
                 FoamDecisionStatus.MODERATE_EVIDENCE,
             }
-            and static_overlap >= _STATIC_FOAM_DOMINANCE_FRACTION
+            and match.dominant
         ):
             self._states.pop(key, None)
             candidate.selected = False
@@ -93,7 +135,7 @@ class FoamTemporalGate:
                 evidence_strength=FoamEvidenceStrength.WEAK,
                 decision_status=FoamDecisionStatus.STATIC_REJECTED,
                 pending_count=0,
-                required_count=required,
+                required_count=decision_required,
                 front_delta=None,
             )
 
@@ -116,12 +158,41 @@ class FoamTemporalGate:
                 evidence_strength=FoamEvidenceStrength.WEAK,
                 decision_status=FoamDecisionStatus.INCOHERENT_REJECTED,
                 pending_count=0,
-                required_count=required,
+                required_count=decision_required,
                 front_delta=None,
             )
 
         if status is FoamDecisionStatus.ACCEPTED_STRONG and candidate is not None:
-            self._states.pop(key, None)
+            previous = self._states.get(key)
+            delta = (
+                None
+                if previous is None or previous.last_y is None
+                else abs(float(candidate.y) - previous.last_y)
+            )
+            max_jump = max(0.0, float(settings.foam_max_front_jump_px))
+            continuous = previous is not None and delta is not None and delta <= max_jump
+            pending_count = min(
+                _STRONG_FOAM_CONFIRMATION_FRAMES,
+                previous.pending_count + 1 if continuous else 1,
+            )
+            self._states[key] = FoamTemporalState(
+                pending_count=pending_count,
+                last_y=float(candidate.y),
+                last_score=float(candidate.final_score),
+            )
+            if pending_count < _STRONG_FOAM_CONFIRMATION_FRAMES:
+                candidate.selected = False
+                candidate.rejected = True
+                candidate.reject_reason = "foam_persistence_pending"
+                return FoamTemporalDecision(
+                    candidate=None,
+                    accepted=False,
+                    evidence_strength=FoamEvidenceStrength.STRONG,
+                    decision_status=FoamDecisionStatus.PERSISTENCE_PENDING,
+                    pending_count=pending_count,
+                    required_count=_STRONG_FOAM_CONFIRMATION_FRAMES,
+                    front_delta=delta,
+                )
             candidate.selected = True
             candidate.rejected = False
             candidate.reject_reason = ""
@@ -130,9 +201,9 @@ class FoamTemporalGate:
                 accepted=True,
                 evidence_strength=FoamEvidenceStrength.STRONG,
                 decision_status=FoamDecisionStatus.ACCEPTED_STRONG,
-                pending_count=required,
-                required_count=required,
-                front_delta=None,
+                pending_count=pending_count,
+                required_count=_STRONG_FOAM_CONFIRMATION_FRAMES,
+                front_delta=delta,
             )
 
         if status is FoamDecisionStatus.MODERATE_EVIDENCE and candidate is not None:
@@ -140,7 +211,10 @@ class FoamTemporalGate:
             delta = None if previous is None or previous.last_y is None else abs(float(candidate.y) - previous.last_y)
             max_jump = max(0.0, float(settings.foam_max_front_jump_px))
             continuous = previous is not None and delta is not None and delta <= max_jump
-            pending_count = previous.pending_count + 1 if continuous else 1
+            pending_count = min(
+                required,
+                previous.pending_count + 1 if continuous else 1,
+            )
             state = FoamTemporalState(
                 pending_count=pending_count,
                 last_y=float(candidate.y),

@@ -251,7 +251,14 @@ def _foam_episodes(
         end_index = group[-1]
         start = samples[start_index]
         last = samples[end_index]
-        if len(group) < 2 or last.timestamp_sec - start.timestamp_sec < MINIMUM_FOAM_EPISODE_SEC - 1e-9:
+        short_group = (
+            len(group) < 2
+            or last.timestamp_sec - start.timestamp_sec
+            < MINIMUM_FOAM_EPISODE_SEC - 1e-9
+        )
+        if short_group and not (
+            len(group) == 1 and _confirmed_foam_publication(start)
+        ):
             continue
         disappearance = samples[end_index + 1] if end_index + 1 < len(samples) else None
         episodes.append(_FoamEpisode(start, last, disappearance, len(group)))
@@ -273,7 +280,7 @@ def _foam_landmarks(
             glass,
             EventType.FOAM_START,
             episode.start,
-            f"연속된 거품 관측 구간 {number}이 시작된 시점입니다.",
+            f"확인된 거품 관측 구간 {number}이 시작된 시점입니다.",
             "foam",
             priority=10,
             end_time_sec=episode.last_present.timestamp_sec,
@@ -301,7 +308,10 @@ def _physical_event_landmarks(
 ) -> tuple[ReportLandmark, ...]:
     descriptions = {
         EventType.COMPRESSOR_START: "시험에서 기록한 압축기 기동 시점입니다.",
-        EventType.OIL_DROP_START: "관측된 유면이 지속적으로 낮아지기 시작한 시점입니다.",
+        EventType.OIL_DROP_START: (
+            "저장된 관측에서 유면의 지속 하강이 처음 확인된 시점입니다. "
+            "관측 공백이 있으면 실제 물리적 시작은 더 이를 수 있습니다."
+        ),
         EventType.ZERO_CROSS_DOWN: "관측 유면이 기준점 아래로 이동한 시점입니다.",
         EventType.ZERO_CROSS_UP: "관측 유면이 기준점 위로 회복된 시점입니다.",
         EventType.ZERO_STABLE_RECOVERY: "관측 유면이 기준점 위에서 안정적으로 유지되기 시작한 시점입니다.",
@@ -577,6 +587,13 @@ def _foam_present(sample: TrackingSample) -> bool:
         _foam_px(sample) is not None
         or _finite_first(sample.raw_foam_front_y) is not None
         or sample.fill_state in {FillState.FULL_WITH_FOAM, FillState.FOAMING_VISIBLE}
+    )
+
+
+def _confirmed_foam_publication(sample: TrackingSample) -> bool:
+    return any(
+        flag in {"FOAM_STRONG_EVIDENCE", "FOAM_MODERATE_EVIDENCE"}
+        for flag in sample.flags
     )
 
 

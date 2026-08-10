@@ -9,7 +9,7 @@ EVENT_TYPE_LABELS: dict[EventType, str] = {
     EventType.COMPRESSOR_START: "압축기 기동",
     EventType.OIL_BOUNDARY_APPEARED_FROM_TOP: "상단에서 유면 출현",
     EventType.OIL_BOUNDARY_APPEARED_FROM_BOTTOM: "하단에서 유면 출현",
-    EventType.OIL_DROP_START: "유면 하강 시작",
+    EventType.OIL_DROP_START: "유면 하강 최초 관찰",
     EventType.MAXIMUM_OIL_LEVEL: "관측 최고 유면",
     EventType.MINIMUM_OIL_LEVEL: "관측 최저 유면",
     EventType.ZERO_CROSS_UP: "기준점 상향 통과",

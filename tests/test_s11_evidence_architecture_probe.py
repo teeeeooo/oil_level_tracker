@@ -190,5 +190,7 @@ def test_all_probe_variants_keep_structural_foam_false_oil_closed() -> None:
             glass.id = f"s11-foam-{variant}-{index}"
             case = _diagnostic_case(frame, glass, f"foam-{index}", foam=True)
             row = run_variant(frame.copy(), case, variant)
-            assert row.foam_y is not None, (variant, index)
+            # The probe receives one frame, so R4 keeps public Foam pending. Its
+            # coherent raw mask still protects every Oil variant from the band.
+            assert row.foam_y is None, (variant, index)
             assert row.oil_y is None, (variant, index)

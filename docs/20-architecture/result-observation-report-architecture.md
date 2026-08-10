@@ -72,11 +72,13 @@ The overall movement sentence compares observed start/end anchors with a bounded
 
 Report Foam episodes are a presentation grouping over accepted stored Foam observations, not a new Foam detector result.
 
-- A one-sample Foam observation does not create a report episode.
+- An unconfirmed one-sample Foam-like observation does not create a report episode.
+- A single stored public Foam sample explicitly marked as strong/moderate accepted evidence may create an episode because the detector temporal gate already confirmed its onset; report presentation does not impose the same gate twice.
 - A short dropout no longer than the bounded presentation tolerance may be bridged inside one episode.
 - Longer absence separates episodes.
 - The report exposes at most three most material episodes per Glass, ordered by time after selection.
 - Episode start uses the first accepted Foam sample.
+- Episode time is never backdated to a detector-pending sample hidden before publication.
 - Episode end uses the first subsequent non-Foam sample when disappearance is observed. If Foam persists through analysis end, the report does not claim a disappearance time.
 
 The complete ungrouped domain event history remains available in `events.csv` and Result Review. Presentation grouping must not rewrite it.

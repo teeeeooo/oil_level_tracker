@@ -10,11 +10,17 @@ import time
 import numpy as np
 
 from oil_tracker.adapters.vision import oil_shadow_observations as observations
-from oil_tracker.adapters.vision.foam_front_detector import detect_bottom_connected_foam
-from oil_tracker.adapters.vision.foam_temporal_gate import FoamTemporalGate
+from oil_tracker.adapters.vision.foam_front_detector import (
+    detect_bottom_connected_foam,
+    evaluate_foam_layer_coherence,
+)
+from oil_tracker.adapters.vision.foam_temporal_gate import FoamStaticMatch, FoamTemporalGate
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
 from oil_tracker.adapters.vision.oil_shadow_types import OilShadowBounds
 from oil_tracker.adapters.vision.preprocessing import preprocess
+from oil_tracker.adapters.vision.opencv_phase_detector import (
+    _foam_oil_constraint_candidate,
+)
 from tests.diagnostics import s11_evidence_probe as prior_probe
 
 
@@ -68,12 +74,17 @@ def _spatial_inputs(frame: np.ndarray, case: prior_probe.ProbeCase):
         foam,
         case.glass.detector_settings,
     )
-    foam_candidate = foam_temporal.candidate
+    foam_candidate = _foam_oil_constraint_candidate(
+        foam,
+        foam_temporal,
+        layer_coherent=evaluate_foam_layer_coherence(foam).coherent,
+        static_match=FoamStaticMatch(),
+    )
     foam_mask = None if foam_candidate is None else foam.mask
     foam_y = (
         None
-        if foam_candidate is None
-        else float(foam_candidate.y + bundle.crop_origin[1])
+        if foam_temporal.candidate is None
+        else float(foam_temporal.candidate.y + bundle.crop_origin[1])
     )
     return bundle, pre, foam_mask, foam_y
 

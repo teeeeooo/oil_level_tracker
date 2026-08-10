@@ -74,7 +74,29 @@ def test_feature_detector_meets_controlled_foam_and_shimmer_acceptance(tmp_path)
     assert payload["detector"]["version"] == "opencv-phase-detector-s5b-typed-production-v1"
     assert _metric(shimmer, "shimmer_foam_false_positive_rate") == 0.0
     assert _metric(micro, "foam_precision") == 1.0
-    assert _metric(micro, "foam_recall") >= 0.80
+    # The v1 fixture mixes three independent snapshots with one three-frame
+    # sequence. R4 intentionally withholds every first strong observation, so
+    # singleton frame-level recall is no longer a valid publication gate. The
+    # persistent sequence must instead transition pending -> accepted -> accepted.
+    assert _metric(micro, "foam_recall") == 2 / 6
+    persistent = sorted(
+        (
+            case
+            for case in payload["cases"]
+            if case["sequence_id"] == "persistent-foam"
+        ),
+        key=lambda case: case["sequence_order"],
+    )
+    assert [case["raw_foam_present"] for case in persistent] == [False, True, True]
+    assert "FOAM_PERSISTENCE_PENDING" in persistent[0]["flags"]
+    assert all("FOAM_STRONG_EVIDENCE" in case["flags"] for case in persistent[1:])
+    singletons = [
+        case
+        for case in payload["cases"]
+        if case["category"] == "white_foam" and case["sequence_id"] is None
+    ]
+    assert len(singletons) == 3
+    assert all("FOAM_PERSISTENCE_PENDING" in case["flags"] for case in singletons)
     assert _metric(white, "fill_state_accuracy") is not None
 
 

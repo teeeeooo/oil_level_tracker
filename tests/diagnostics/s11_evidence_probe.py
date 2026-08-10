@@ -16,8 +16,11 @@ import numpy as np
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.storage.json_truth_repository import JsonTruthRepository
 from oil_tracker.adapters.vision import oil_shadow_observations as observations
-from oil_tracker.adapters.vision.foam_front_detector import detect_bottom_connected_foam
-from oil_tracker.adapters.vision.foam_temporal_gate import FoamTemporalGate
+from oil_tracker.adapters.vision.foam_front_detector import (
+    detect_bottom_connected_foam,
+    evaluate_foam_layer_coherence,
+)
+from oil_tracker.adapters.vision.foam_temporal_gate import FoamStaticMatch, FoamTemporalGate
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
 from oil_tracker.adapters.vision.oil_hypothesis_projection import project_production_result
 from oil_tracker.adapters.vision.oil_shadow_pipeline import _FixedCanonicalReducer
@@ -32,6 +35,9 @@ from oil_tracker.adapters.vision.oil_shadow_types import (
     ShadowNoInterfaceObservation,
     ShadowSourceFamily,
     SuccessfulPipelineFrame,
+)
+from oil_tracker.adapters.vision.opencv_phase_detector import (
+    _foam_oil_constraint_candidate,
 )
 from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.adapters.vision.row_features import masked_band_intensity_profiles, masked_row_mean
@@ -443,9 +449,16 @@ def run_variant(frame: np.ndarray, case: ProbeCase, variant: str) -> ProbeResult
         bundle.effective_mask, settings,
     )
     foam_temporal = FoamTemporalGate().evaluate(glass.id, foam, settings)
-    foam_candidate = foam_temporal.candidate
-    accepted_foam_front_local_y = None if foam_candidate is None else float(foam_candidate.y)
-    accepted_foam_component_mask = None if foam_candidate is None else foam.mask
+    foam_constraint = _foam_oil_constraint_candidate(
+        foam,
+        foam_temporal,
+        layer_coherent=evaluate_foam_layer_coherence(foam).coherent,
+        static_match=FoamStaticMatch(),
+    )
+    accepted_foam_front_local_y = (
+        None if foam_constraint is None else float(foam_constraint.y)
+    )
+    accepted_foam_component_mask = None if foam_constraint is None else foam.mask
     bounds = OilShadowBounds()
     relative_phase = variant in {"P1", "P3"}
     decoupled_absence = variant in {"P2", "P3"}
@@ -492,8 +505,8 @@ def run_variant(frame: np.ndarray, case: ProbeCase, variant: str) -> ProbeResult
     oil_y = None if projection.raw_source_y is None else float(projection.raw_source_y)
     oil_error = None if oil_y is None else abs(oil_y - case.truth_oil_y)
     foam_y = (
-        None if foam_candidate is None
-        else float(foam_candidate.y + bundle.crop_origin[1])
+        None if foam_temporal.candidate is None
+        else float(foam_temporal.candidate.y + bundle.crop_origin[1])
     )
     elapsed_ms = (time.perf_counter_ns() - started) / 1_000_000.0
     return ProbeResult(

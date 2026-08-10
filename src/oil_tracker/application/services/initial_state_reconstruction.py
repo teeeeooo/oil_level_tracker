@@ -47,12 +47,15 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
                 confirmed_prior=prior,
                 reason=contradiction,
             )
-        barrier = _barrier_reason(sample)
+        boundary_y = _accepted_boundary_y(sample)
+        barrier = _barrier_reason(
+            sample,
+            has_numeric_boundary=boundary_y is not None,
+        )
         if barrier:
             if len(accepted) < 2:
                 return _unresolved(glass.id, prior, "Inference barrier before sufficient positive evidence.", (barrier,))
             break
-        boundary_y = _accepted_boundary_y(sample)
         if boundary_y is None:
             continue
         if first_boundary_index is None:
@@ -266,7 +269,19 @@ def _contradiction_reason(sample: TrackingSample, prior: InitialObservationState
     return ""
 
 
-def _barrier_reason(sample: TrackingSample) -> str:
+def _barrier_reason(
+    sample: TrackingSample,
+    *,
+    has_numeric_boundary: bool = False,
+) -> str:
+    """Return sequence evidence that blocks a leading-state interpretation.
+
+    Hard unavailable/failure evidence remains a barrier even on malformed input
+    that also carries a number.  Authoritative Foam alone is a barrier, but it
+    cannot erase an independently accepted canonical Oil boundary already
+    constrained by the current-frame Foam topology.
+    """
+
     flags = {str(flag).strip().upper() for flag in sample.flags}
     for flag in sorted(flags):
         if (
@@ -279,7 +294,7 @@ def _barrier_reason(sample: TrackingSample) -> str:
             or "DETECTION_LOST" in flag
         ):
             return flag
-    if (
+    if not has_numeric_boundary and (
         sample.fill_state in _FOAM_STATES
         or "FOAM_REACH_TOP" in flags
         or "FOAM_STRONG_EVIDENCE" in flags

@@ -174,7 +174,9 @@ def test_structural_foam_protection_and_foam_owner_stay_independent() -> None:
         case = _diagnostic_case(frame, glass, f"foam-{index}", foam=True)
         p0 = run_variant(frame.copy(), case, "P0")
         result = run_spatial_variant(frame.copy(), case)
-        assert p0.foam_y is not None, index
+        # An isolated strong frame is withheld from public Foam, while the raw
+        # material mask still protects the Oil semantic path in both probes.
+        assert p0.foam_y is None, index
         assert result.foam_y == p0.foam_y, index
         assert result.oil_y is None, index
 

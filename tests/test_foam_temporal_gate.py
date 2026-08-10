@@ -8,7 +8,10 @@ from oil_tracker.adapters.vision.foam_front_detector import (
     FoamDetectionResult,
     FoamEvidenceStrength,
 )
-from oil_tracker.adapters.vision.foam_temporal_gate import FoamTemporalGate
+from oil_tracker.adapters.vision.foam_temporal_gate import (
+    FoamStaticMatch,
+    FoamTemporalGate,
+)
 from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import BoundaryKind
 from oil_tracker.domain.recipe import DetectorSettings
@@ -59,13 +62,58 @@ def _evidence(status: FoamDecisionStatus, y: float = 50.0, score: float = 0.60):
     )
 
 
-def test_strong_evidence_is_accepted_immediately():
+def test_strong_evidence_requires_two_compatible_samples_then_stays_accepted():
     gate = FoamTemporalGate()
-    decision = gate.evaluate("glass-1", _evidence(FoamDecisionStatus.ACCEPTED_STRONG), DetectorSettings())
-    assert decision.accepted
-    assert decision.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
-    assert decision.candidate is not None and decision.candidate.selected
-    assert gate.state_count == 0
+    settings = DetectorSettings(foam_max_front_jump_px=4.0)
+    first = gate.evaluate(
+        "glass-1",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG, 50),
+        settings,
+    )
+    second = gate.evaluate(
+        "glass-1",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG, 52),
+        settings,
+    )
+    third = gate.evaluate(
+        "glass-1",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG, 51),
+        settings,
+    )
+
+    assert not first.accepted
+    assert first.decision_status is FoamDecisionStatus.PERSISTENCE_PENDING
+    assert first.pending_count == 1 and first.required_count == 2
+    assert second.accepted and third.accepted
+    assert second.decision_status is FoamDecisionStatus.ACCEPTED_STRONG
+    assert third.pending_count == 2
+    assert third.candidate is not None and third.candidate.selected
+    assert gate.state_count == 1
+
+
+def test_strong_front_jump_restarts_onset_confirmation():
+    gate = FoamTemporalGate()
+    settings = DetectorSettings(foam_max_front_jump_px=3.0)
+    first = gate.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG, 40),
+        settings,
+    )
+    jumped = gate.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG, 50),
+        settings,
+    )
+    accepted = gate.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG, 51),
+        settings,
+    )
+
+    assert first.pending_count == 1
+    assert not jumped.accepted and jumped.pending_count == 1
+    assert jumped.front_delta == 10.0
+    assert accepted.accepted and accepted.pending_count == 2
 
 
 def test_moderate_evidence_requires_persistence_and_accepts_current_candidate():
@@ -78,6 +126,48 @@ def test_moderate_evidence_requires_persistence_and_accepts_current_candidate():
     assert not second.accepted and second.pending_count == 2
     assert third.accepted and third.pending_count == 3
     assert third.decision_status is FoamDecisionStatus.ACCEPTED_MODERATE
+
+
+def test_compatible_strong_and_moderate_samples_share_one_bounded_chain():
+    settings = DetectorSettings(
+        foam_persistence_frames=3,
+        foam_max_front_jump_px=4.0,
+    )
+
+    moderate_then_strong = FoamTemporalGate()
+    first = moderate_then_strong.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.MODERATE_EVIDENCE, 50),
+        settings,
+    )
+    second = moderate_then_strong.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG, 51),
+        settings,
+    )
+    assert first.pending_count == 1 and not first.accepted
+    assert second.pending_count == 2 and second.accepted
+
+    strong_then_moderate = FoamTemporalGate()
+    strong = strong_then_moderate.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG, 50),
+        settings,
+    )
+    moderate = strong_then_moderate.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.MODERATE_EVIDENCE, 51),
+        settings,
+    )
+    confirmed = strong_then_moderate.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.MODERATE_EVIDENCE, 52),
+        settings,
+    )
+    assert strong.pending_count == 1 and not strong.accepted
+    assert moderate.pending_count == 2 and not moderate.accepted
+    assert moderate.required_count == 3
+    assert confirmed.pending_count == 3 and confirmed.accepted
 
 
 def test_transient_shimmer_dropout_and_jump_restart_chain():
@@ -157,7 +247,7 @@ def test_static_dominated_foam_cannot_publish_or_advance_temporal_state(status):
         "g",
         evidence,
         settings,
-        static_overlap_ratio=0.80,
+        static_match=FoamStaticMatch(exact_overlap=0.80),
     )
 
     assert not decision.accepted
@@ -172,22 +262,42 @@ def test_static_dominated_foam_cannot_publish_or_advance_temporal_state(status):
 
 def test_static_overlap_boundary_is_bounded_and_validated():
     settings = DetectorSettings()
-    retained = FoamTemporalGate().evaluate(
+    gate = FoamTemporalGate()
+    pending = gate.evaluate(
         "g",
         _evidence(FoamDecisionStatus.ACCEPTED_STRONG),
         settings,
-        static_overlap_ratio=0.799999,
+        static_match=FoamStaticMatch(exact_overlap=0.799999),
     )
+    retained = gate.evaluate(
+        "g",
+        _evidence(FoamDecisionStatus.ACCEPTED_STRONG),
+        settings,
+        static_match=FoamStaticMatch(exact_overlap=0.799999),
+    )
+    assert not pending.accepted
     assert retained.accepted
 
     for invalid in (-0.01, 1.01, float("nan"), float("inf")):
         with pytest.raises(ValueError, match="finite and normalized"):
-            FoamTemporalGate().evaluate(
-                "g",
-                _evidence(FoamDecisionStatus.ACCEPTED_STRONG),
-                settings,
-                static_overlap_ratio=invalid,
-            )
+            FoamStaticMatch(exact_overlap=invalid)
+
+
+def test_registered_static_match_requires_all_conjunctive_support():
+    accepted = FoamStaticMatch(
+        exact_overlap=0.70,
+        tolerant_overlap=0.90,
+        reciprocal_overlap=0.70,
+        tolerance_radius_px=2,
+    )
+    assert accepted.dominant
+
+    for match in (
+        FoamStaticMatch(0.699999, 1.0, 1.0, 2),
+        FoamStaticMatch(0.75, 0.899999, 1.0, 2),
+        FoamStaticMatch(0.75, 1.0, 0.699999, 2),
+    ):
+        assert not match.dominant
 
 
 @pytest.mark.parametrize(

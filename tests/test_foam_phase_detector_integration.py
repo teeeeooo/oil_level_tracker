@@ -8,7 +8,10 @@ import pytest
 
 from foam_benchmark_fixtures import controlled_scenes
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
-from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+from oil_tracker.adapters.vision.opencv_phase_detector import (
+    OpenCvPhaseDetector,
+    _foam_static_match,
+)
 from oil_tracker.domain.enums import BoundaryKind
 from oil_tracker.domain.recipe import InspectionRecipe
 
@@ -23,12 +26,29 @@ def _scene(case_id: str):
     return next(scene for scene in controlled_scenes() if scene.case_id == case_id)
 
 
+def _confirmed_detection(
+    detector: OpenCvPhaseDetector,
+    glass,
+    frame: np.ndarray,
+    *,
+    time_sec: float = 1.0,
+    debug: bool = False,
+):
+    detector.detect(frame, glass, 0, time_sec - 0.5, debug=False)
+    return detector.detect(frame, glass, 1, time_sec, debug=debug)
+
+
 def test_detector_identity_input_immutability_and_debug_false_fast_path():
     detector = OpenCvPhaseDetector()
     glass = _glass()
     frame = _scene("white-foam").frame
     before = frame.copy()
-    detection, artifacts = detector.detect(frame, glass, 1, 1.0, debug=False)
+    detection, artifacts = _confirmed_detection(
+        detector,
+        glass,
+        frame,
+        debug=False,
+    )
     assert OpenCvPhaseDetector.version == "opencv-phase-detector-s5b-typed-production-v1"
     assert artifacts is None
     assert np.array_equal(frame, before)
@@ -42,7 +62,12 @@ def test_detector_uses_canonical_source_coordinates_and_exposes_finite_evidence(
     glass = _glass()
     frame = _scene("white-foam").frame
     bundle = build_mask_bundle(frame, glass)
-    detection, artifacts = detector.detect(frame, glass, 1, 1.0, debug=True)
+    detection, artifacts = _confirmed_detection(
+        detector,
+        glass,
+        frame,
+        debug=True,
+    )
     assert artifacts is not None
     foam_rows = [candidate for candidate in detection.candidates if candidate.kind is BoundaryKind.FOAM_FRONT]
     assert foam_rows
@@ -76,7 +101,12 @@ def test_debug_images_are_additive_crop_sized_evidence_artifacts():
     glass = _glass()
     frame = _scene("white-foam").frame
     bundle = build_mask_bundle(frame, glass)
-    _detection, artifacts = detector.detect(frame, glass, 1, 1.0, debug=True)
+    _detection, artifacts = _confirmed_detection(
+        detector,
+        glass,
+        frame,
+        debug=True,
+    )
     assert artifacts is not None
     crop_shape = bundle.crop.shape[:2]
     for key in (
@@ -105,6 +135,11 @@ def test_representative_static_foam_is_explained_without_losing_debug_evidence()
     assert detection.smoothed_foam_front_y is None
     assert detection.debug_metrics["foam_decision_status"] == "static_rejected"
     assert detection.debug_metrics["foam_static_artifact_overlap"] >= 0.80
+    assert detection.debug_metrics["foam_static_artifact_tolerant_overlap"] >= 0.80
+    assert detection.debug_metrics["foam_static_artifact_reciprocal_overlap"] >= 0.80
+    assert detection.debug_metrics["foam_static_artifact_dominant"] is True
+    assert detection.debug_metrics["foam_oil_context_authoritative"] is False
+    assert detection.debug_metrics["foam_oil_context_publication_accepted"] is False
     assert detection.debug_metrics["foam_static_artifact_pixel_count"] > 0
     assert "FOAM_STATIC_ARTIFACT_REJECTED" in detection.flags
     assert np.count_nonzero(artifacts.images["foam_mask"]) > 0
@@ -120,8 +155,50 @@ def test_representative_static_foam_is_explained_without_losing_debug_evidence()
         debug=True,
     )
     assert reset_artifacts is not None
-    assert reset_detection.raw_foam_front_y is not None
+    assert reset_detection.raw_foam_front_y is None
+    assert reset_detection.debug_metrics["foam_decision_status"] == "persistence_pending"
+    assert reset_detection.debug_metrics["foam_oil_context_authoritative"] is True
+    assert reset_detection.debug_metrics["foam_oil_context_publication_accepted"] is False
     assert reset_detection.debug_metrics["foam_static_artifact_pixel_count"] == 0
+    confirmed, _ = detector.detect(frame, glass, 3, 2.5, debug=False)
+    assert confirmed.raw_foam_front_y is not None
+    assert confirmed.debug_metrics["foam_oil_context_authoritative"] is True
+    assert confirmed.debug_metrics["foam_oil_context_publication_accepted"] is True
+
+
+def test_registered_static_match_recovers_bounded_mask_shift():
+    static = np.zeros((240, 320), dtype=np.uint8)
+    current = np.zeros_like(static)
+    static[100:120, 100:110] = 255
+    current[100:120, 103:113] = 255
+
+    match = _foam_static_match(current, static)
+
+    assert match.tolerance_radius_px == 2
+    assert match.exact_overlap == pytest.approx(0.70)
+    assert match.tolerant_overlap == pytest.approx(0.90)
+    assert match.reciprocal_overlap == pytest.approx(0.90)
+    assert match.dominant
+
+
+def test_registered_static_match_does_not_explain_materially_larger_new_support():
+    static = np.zeros((240, 320), dtype=np.uint8)
+    current = np.zeros_like(static)
+    static[100:120, 100:110] = 255
+    current[100:140, 103:123] = 255
+
+    match = _foam_static_match(current, static)
+
+    assert match.exact_overlap < 0.70
+    assert not match.dominant
+
+
+def test_registered_static_match_rejects_shape_mismatch():
+    with pytest.raises(ValueError, match="share one raster shape"):
+        _foam_static_match(
+            np.zeros((20, 20), dtype=np.uint8),
+            np.zeros((21, 20), dtype=np.uint8),
+        )
 
 
 def test_transient_foam_in_representative_frames_is_not_learned_as_static():
@@ -134,7 +211,12 @@ def test_transient_foam_in_representative_frames_is_not_learned_as_static():
         glass,
     )
 
-    detection, artifacts = detector.detect(foam, glass, 1, 1.0, debug=True)
+    detection, artifacts = _confirmed_detection(
+        detector,
+        glass,
+        foam,
+        debug=True,
+    )
 
     assert artifacts is not None
     assert detection.raw_foam_front_y is not None
@@ -150,11 +232,11 @@ def test_accepted_low_light_foam_does_not_invent_an_oil_boundary_below_texture()
     detector = OpenCvPhaseDetector()
     glass = _glass()
     scene = _scene("low-light-foam")
-    detection, _artifacts = detector.detect(
-        scene.frame,
+    detection, _artifacts = _confirmed_detection(
+        detector,
         glass,
-        1,
-        scene.timestamp,
+        scene.frame,
+        time_sec=scene.timestamp,
         debug=False,
     )
     assert detection.raw_foam_front_y is not None
@@ -165,7 +247,13 @@ def test_accepted_low_light_foam_does_not_invent_an_oil_boundary_below_texture()
 def _assert_structural_foam_stays_fail_closed(frame: np.ndarray, timestamp: float) -> None:
     detector = OpenCvPhaseDetector()
     glass = _glass()
-    detection, _artifacts = detector.detect(frame, glass, 1, timestamp, debug=False)
+    detection, _artifacts = _confirmed_detection(
+        detector,
+        glass,
+        frame,
+        time_sec=timestamp,
+        debug=False,
+    )
 
     assert detection.raw_foam_front_y is not None
     assert detection.debug_metrics["foam_decision_status"] in {

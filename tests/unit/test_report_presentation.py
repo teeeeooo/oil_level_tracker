@@ -17,6 +17,7 @@ def _sample(
     oil: float | None = 0.0,
     foam: float | None = None,
     state: FillState = FillState.PARTIAL_VISIBLE,
+    flags: tuple[str, ...] = (),
 ) -> TrackingSample:
     return TrackingSample(
         run_id="run",
@@ -28,6 +29,7 @@ def _sample(
         smoothed_foam_front_px_from_zero=foam,
         overall_confidence=0.8,
         is_valid=oil is not None,
+        flags=flags,
     )
 
 
@@ -119,6 +121,36 @@ def test_all_missing_oil_does_not_claim_extrema_or_direction():
     assert "유면 선을 표시하지 않습니다" in report.observation_note
 
 
+def test_single_temporally_confirmed_foam_publication_remains_a_report_episode():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = GlassAnalysisResult(
+        config.id,
+        config.name,
+        ResultState.REVIEW_REQUIRED,
+        samples=[
+            _sample(config.id, 0.0, oil=None),
+            _sample(
+                config.id,
+                0.5,
+                oil=None,
+                foam=4.0,
+                flags=("FOAM_STRONG_EVIDENCE",),
+            ),
+            _sample(config.id, 1.0, oil=None),
+        ],
+    )
+
+    report = build_glass_report_presentation(glass, config)
+
+    assert report.foam_episode_count == 1
+    foam = [
+        landmark
+        for landmark in report.landmarks
+        if landmark.event_type in {EventType.FOAM_START, EventType.FOAM_END}
+    ]
+    assert [landmark.timestamp_sec for landmark in foam] == [0.5, 1.0]
+
+
 def test_short_missing_run_is_still_disclosed_as_a_graph_bridge():
     config = InspectionRecipe.default_glass(320, 240, 1)
     glass = GlassAnalysisResult(
@@ -156,3 +188,37 @@ def test_leading_or_trailing_missing_samples_are_not_described_as_bridges():
 
     assert "점선" not in report.observation_note
     assert "첫 관측 전" in report.observation_note
+
+
+def test_oil_drop_landmark_states_observed_onset_without_backdating_timestamp():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    samples = [
+        _sample(config.id, 0.0, oil=10.0),
+        _sample(config.id, 0.5, oil=None, state=FillState.UNKNOWN_REVIEW),
+        _sample(config.id, 1.0, oil=4.0),
+    ]
+    glass = GlassAnalysisResult(
+        config.id,
+        config.name,
+        ResultState.REVIEW_REQUIRED,
+        samples=samples,
+        events=[
+            EventMarker(
+                "run",
+                config.id,
+                EventType.OIL_DROP_START,
+                1.0,
+            )
+        ],
+    )
+
+    report = build_glass_report_presentation(glass, config)
+    landmark = next(
+        item
+        for item in report.landmarks
+        if item.event_type is EventType.OIL_DROP_START
+    )
+
+    assert landmark.timestamp_sec == 1.0
+    assert landmark.label == "유면 하강 최초 관찰"
+    assert "실제 물리적 시작은 더 이를 수" in landmark.description

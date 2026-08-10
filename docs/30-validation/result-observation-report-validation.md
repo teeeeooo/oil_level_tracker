@@ -19,7 +19,7 @@ This contract owns acceptance for the user-facing observation report defined by 
 - Finite Oil input produces deterministic highest and lowest observed landmarks; all-missing input produces neither.
 - Preferred smoothed/raw and px/mm policies match static and Result Review graph values.
 - The trend sentence is deterministic and uses observation-qualified wording when gaps exist.
-- One-sample Foam flicker produces no report episode.
+- Unconfirmed one-sample Foam flicker produces no report episode; a single stored temporal-confirmed strong/moderate Foam publication remains eligible without a second presentation gate.
 - A bounded short Foam dropout may remain one episode; a longer absence creates separate episodes.
 - Foam disappearance is marked only when a subsequent non-Foam sample exists.
 - Landmark selection is deterministic and never exceeds twelve per Glass or three Foam episodes.
@@ -56,7 +56,7 @@ Replay all established qualification windows at 2 FPS using the matching Recipes
 
 Acceptance requires:
 
-1. tracking rows and detector numeric Oil output remain unchanged from the accepted `e27b2cca` baseline;
+1. tracking row identities, accepted numeric Oil counts and fingerprints match the current accepted detector evidence, with every intentional detector delta explicitly reconciled;
 2. every Glass with finite Oil has visible highest/lowest graph markers and corresponding inline source captures;
 3. capture volume is bounded by the landmark contract rather than domain-event count;
 4. repeated Foam flicker is represented as bounded episodes, not dozens of equal-weight report cards;

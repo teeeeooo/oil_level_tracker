@@ -38,6 +38,8 @@ The leading prefix stops being retrospectively eligible when sequence evidence i
 
 Direct contradictory sequence evidence overrides prior-based eligibility. A prior conflict yields **no retrospective interval**, a first-class conflict status and review requirement. A lack of enough confirming evidence without contradiction is **unresolved**, not conflict.
 
+Hard unavailable/failure/detection-lost/glare/fog evidence remains a barrier even if malformed input also carries a number. Authoritative Foam is a barrier when the sample has no independently accepted finite canonical Oil boundary. When valid numeric Oil coexists with Foam, D5 has already applied the physical topology constraint; that numeric observation may contribute direction/topology evidence, while the Foam sample itself remains immutable and is excluded from retrospective state projection. Foam-only prefixes remain unresolved.
+
 ## Non-authorities
 
 This responsibility must not introduce:

@@ -6,7 +6,7 @@ from typing import Any
 import cv2
 import numpy as np
 
-from oil_tracker.domain.detection import PhaseDetection
+from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 from oil_tracker.domain.enums import FillState, InitialObservationState
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
@@ -14,11 +14,12 @@ from .fill_state_classifier import classify_fill_state
 from .foam_front_detector import (
     FoamDecisionStatus,
     FoamDetectionResult,
+    FoamEvidenceStrength,
     detect_bottom_connected_foam,
     evaluate_foam_layer_coherence,
     evaluate_foam_oil_context_authority,
 )
-from .foam_temporal_gate import FoamTemporalDecision, FoamTemporalGate
+from .foam_temporal_gate import FoamStaticMatch, FoamTemporalDecision, FoamTemporalGate
 from .geometry_masks import MaskBundle, build_mask_bundle
 from .oil_hypothesis_projection import (
     build_hypothesis_debug_profiles,
@@ -143,22 +144,33 @@ class OpenCvPhaseDetector:
         )
         foam_layer = evaluate_foam_layer_coherence(foam)
         static_foam_map = self._static_foam_maps.get(glass.id)
-        static_foam_overlap = _foam_static_overlap(foam.mask, static_foam_map)
+        static_foam_match = _foam_static_match(foam.mask, static_foam_map)
         foam_temporal = self._foam_gate.evaluate(
             glass.id,
             foam,
             settings,
-            static_overlap_ratio=static_foam_overlap,
+            static_match=static_foam_match,
             layer_coherent=foam_layer.coherent,
         )
         foam_candidate = foam_temporal.candidate
+        foam_oil_constraint_candidate = _foam_oil_constraint_candidate(
+            foam,
+            foam_temporal,
+            layer_coherent=foam_layer.coherent,
+            static_match=static_foam_match,
+        )
         foam_context = evaluate_foam_oil_context_authority(foam)
         foam_context_authoritative = bool(
-            foam_candidate is not None and foam_context.authoritative
+            foam_oil_constraint_candidate is not None and foam_context.authoritative
         )
         foam_context_reason = (
-            foam_context.reason
-            if foam_candidate is not None
+            (
+                "strong_onset_pending_safety_constraint"
+                if foam_candidate is None
+                and foam_oil_constraint_candidate is not None
+                else foam_context.reason
+            )
+            if foam_oil_constraint_candidate is not None
             else "foam_context_not_temporally_accepted"
         )
         accepted_foam_component_mask = (
@@ -170,7 +182,9 @@ class OpenCvPhaseDetector:
             bundle,
             static_map,
             accepted_foam_front_local_y=(
-                float(foam_candidate.y) if foam_context_authoritative else None
+                float(foam_oil_constraint_candidate.y)
+                if foam_context_authoritative
+                else None
             ),
             accepted_foam_component_mask=accepted_foam_component_mask,
         )
@@ -252,6 +266,15 @@ class OpenCvPhaseDetector:
             foam_trace_candidate.features["temporal_pending_count"] = float(foam_temporal.pending_count)
             foam_trace_candidate.features["temporal_required_count"] = float(foam_temporal.required_count)
             foam_trace_candidate.features["temporal_front_delta"] = float(foam_temporal.front_delta or 0.0)
+            foam_trace_candidate.features["static_exact_overlap"] = float(
+                static_foam_match.exact_overlap
+            )
+            foam_trace_candidate.features["static_tolerant_overlap"] = float(
+                static_foam_match.tolerant_overlap
+            )
+            foam_trace_candidate.features["static_reciprocal_overlap"] = float(
+                static_foam_match.reciprocal_overlap
+            )
             foam_trace_candidate.y += origin_y
             candidates.append(foam_trace_candidate)
 
@@ -270,7 +293,17 @@ class OpenCvPhaseDetector:
             "foam_component_height_ratio": float(foam.component_height_ratio),
             "foam_component_width_ratio": float(foam.component_width_ratio),
             "foam_bounding_box_fill_ratio": float(foam.bounding_box_fill_ratio),
-            "foam_static_artifact_overlap": float(static_foam_overlap),
+            "foam_static_artifact_overlap": float(static_foam_match.exact_overlap),
+            "foam_static_artifact_tolerant_overlap": float(
+                static_foam_match.tolerant_overlap
+            ),
+            "foam_static_artifact_reciprocal_overlap": float(
+                static_foam_match.reciprocal_overlap
+            ),
+            "foam_static_artifact_tolerance_radius_px": int(
+                static_foam_match.tolerance_radius_px
+            ),
+            "foam_static_artifact_dominant": static_foam_match.dominant,
             "foam_static_artifact_pixel_count": (
                 0 if static_foam_map is None else int(np.count_nonzero(static_foam_map))
             ),
@@ -281,6 +314,7 @@ class OpenCvPhaseDetector:
                 foam_layer.wide_row_compactness_median
             ),
             "foam_oil_context_authoritative": foam_context_authoritative,
+            "foam_oil_context_publication_accepted": foam_candidate is not None,
             "foam_oil_context_reason": foam_context_reason,
             "foam_oil_context_wide_row_fraction": float(foam_context.wide_row_fraction),
             "foam_oil_context_wide_row_compactness_median": float(
@@ -577,19 +611,64 @@ def _foam_flags(
     return []
 
 
-def _foam_static_overlap(
+def _foam_static_match(
     current_mask: np.ndarray,
     static_map: np.ndarray | None,
-) -> float:
+) -> FoamStaticMatch:
     if static_map is None:
-        return 0.0
+        return FoamStaticMatch()
     if current_mask.shape != static_map.shape:
         raise ValueError("Foam and learned static maps must share one raster shape.")
     current = current_mask > 0
-    count = int(np.count_nonzero(current))
-    if count == 0:
-        return 0.0
-    return float(np.count_nonzero(current & (static_map > 0))) / count
+    static = static_map > 0
+    current_count = int(np.count_nonzero(current))
+    static_count = int(np.count_nonzero(static))
+    if current_count == 0 or static_count == 0:
+        return FoamStaticMatch()
+
+    radius = max(1, min(3, int(round(min(current.shape[:2]) * 0.01))))
+    kernel = cv2.getStructuringElement(
+        cv2.MORPH_ELLIPSE,
+        (2 * radius + 1, 2 * radius + 1),
+    )
+    dilated_static = cv2.dilate(static.astype(np.uint8), kernel) > 0
+    dilated_current = cv2.dilate(current.astype(np.uint8), kernel) > 0
+    return FoamStaticMatch(
+        exact_overlap=(
+            float(np.count_nonzero(current & static)) / current_count
+        ),
+        tolerant_overlap=(
+            float(np.count_nonzero(current & dilated_static)) / current_count
+        ),
+        reciprocal_overlap=(
+            float(np.count_nonzero(static & dilated_current)) / static_count
+        ),
+        tolerance_radius_px=radius,
+    )
+
+
+def _foam_oil_constraint_candidate(
+    foam: FoamDetectionResult,
+    temporal: FoamTemporalDecision,
+    *,
+    layer_coherent: bool,
+    static_match: FoamStaticMatch,
+) -> BoundaryCandidate | None:
+    if temporal.candidate is not None:
+        return temporal.candidate
+    if (
+        temporal.decision_status is FoamDecisionStatus.PERSISTENCE_PENDING
+        and temporal.evidence_strength is FoamEvidenceStrength.STRONG
+        and foam.candidate is not None
+        and bool(layer_coherent)
+        and not static_match.dominant
+    ):
+        # Publication confirmation must not open a one-frame hole in the
+        # existing D5 physical constraint. A coherent, non-static strong
+        # component can protect Oil semantics immediately while public Foam
+        # remains withheld until the next compatible sample.
+        return foam.candidate
+    return None
 
 
 def _unit_image(values: np.ndarray) -> np.ndarray:

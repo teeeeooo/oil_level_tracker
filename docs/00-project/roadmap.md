@@ -155,11 +155,11 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
-- **Status:** `VALIDATING`
-- **Major result:** The accepted D1–D5/current-frame, serialized temporal, retrospective and subtractive baseline is extended by R2 Foam/Spatial composition and the locally accepted R3 sequence-observability repair. R3 withholds saturated Glass-cap Oil authority and fixed/row-incoherent Foam publication while retaining the confirmed truth surface. Sample3 no longer reports a false full-state cap plateau or Foam-absent drain episodes, sample2 is retained and sample4 improves. S11-R1 report semantics present the stream as direct runs, display-only missing bridges and bounded source captures.
-- **Next gate:** Repeat the secure Base/Accum R3 cases and complete final target-Windows field-workflow validation; reopen source only for the smallest reproduced failing responsibility.
+- **Status:** `ACTIVE`
+- **Major result:** The accepted D1–D5/current-frame, serialized temporal, retrospective and subtractive baseline is extended by R2 Foam/Spatial composition and the locally accepted R3 sequence-observability repair. R3 removes the repository-local false full-state cap plateau and materially improves secure-Windows fixed-Foam rejection, but the field replay shows residual publication near the exact static cutoff plus a Foam/retrospective authority seam. R4 is bounded to robust static matching, strong-Foam onset confirmation, independent numeric-Oil retrospective composition and honest observed-onset report language.
+- **Next gate:** Complete R4 local reconciliation, repeat the same secure Base/Accum cases, then finish target-Windows field-workflow validation.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R3 architecture](../20-architecture/s11-sequence-observability-integrity-architecture.md), [R3 validation](../30-validation/s11-sequence-observability-integrity-validation.md), [R3 evidence](../60-evidence/s11/s11-r3-sequence-observability-integrity.md), [report architecture](../20-architecture/result-observation-report-architecture.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R4 architecture](../20-architecture/s11-r4-field-residual-authority-architecture.md), [R4 validation](../30-validation/s11-r4-field-residual-authority-validation.md), [R4 diagnostic](../50-diagnostics/s11/s11-r4-windows-residual-authority-diagnostic.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING` → `S11-M PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE` → `S11-M PLANNED` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery and numeric trajectory-estimation responsibility, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D, S11-R1, S11-R2 and the available-corpus R3 repair are locally accepted. R3 remains in secure-Windows validation because the private Base/Accum field signature cannot be reproduced from repository inputs. S11-M remains blocked until S11 closes, and S12 follows S11-M rather than accumulating new behavior in the remaining hotspots first.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery and numeric trajectory-estimation responsibility, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D, S11-R1, S11-R2 and the available-corpus R3 repair are locally accepted. The first secure-Windows R3 replay reopened only the bounded R4 residual authority seams; it does not authorize general detector tuning. S11-M remains blocked until S11 closes, and S12 follows S11-M rather than accumulating new behavior in the remaining hotspots first.

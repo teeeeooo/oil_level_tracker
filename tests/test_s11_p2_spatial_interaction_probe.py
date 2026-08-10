@@ -168,7 +168,7 @@ def test_structural_foam_protection_and_foam_owner_stay_independent() -> None:
         case = _diagnostic_case(frame, glass, f"foam-{index}", foam=True)
         p0 = evidence_probe.run_variant(frame.copy(), case, "P0")
         row = run_interaction_variant(frame.copy(), case)
-        assert p0.foam_y is not None, index
+        assert p0.foam_y is None, index
         assert row.foam_y == p0.foam_y, index
         assert row.combined_oil_y is None, index
 
