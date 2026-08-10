@@ -1,9 +1,9 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `ACTIVE`
-**Current gate:** `S11-R4 registered-static Foam, onset confirmation and retrospective composition repair`
-**Source authority:** `four bounded R4 responsibilities; no global Oil/Foam tuning`
+**Milestone status:** `VALIDATING`
+**Current gate:** `secure-Windows R4 Base/Accum replay and final packaged field workflow`
+**Source authority:** `R4 detector 745c6c923bb7e640ae0895f88c6bdf300198914a + report closeout cc3d358ee735dc433692dbbe3722057bd0c2ae9a; validation-only unless new bounded evidence reopens source`
 
 ## Accepted source baseline
 
@@ -20,29 +20,31 @@ S11-R1 implementation and replay evidence is [`../60-evidence/s11/s11-user-obser
 
 The evidence-reopened R4 source owner is the [`Field Residual Authority Architecture`](../20-architecture/s11-r4-field-residual-authority-architecture.md), with acceptance defined by its [`validation contract`](../30-validation/s11-r4-field-residual-authority-validation.md) and cause recorded in the [`Windows residual diagnostic`](../50-diagnostics/s11/s11-r4-windows-residual-authority-diagnostic.md).
 
+R4 is locally accepted at detector commit `745c6c923bb7e640ae0895f88c6bdf300198914a` plus report-continuity/validated source-test head `cc3d358ee735dc433692dbbe3722057bd0c2ae9a`. It adds conjunctive registered static-Foam opposition, two-sample strong publication confirmation, immediate non-public D5 safety for coherent/non-static pending strong support, Foam-plus-canonical-Oil retrospective composition and observation-qualified report grouping. Exact evidence is [`../60-evidence/s11/s11-r4-field-residual-authority.md`](../60-evidence/s11/s11-r4-field-residual-authority.md).
+
 ## Latest recorded closeout
 
-- **Result:** secure-Windows R3 replay partially passed and reopened bounded source work.
-- **Validated head:** `ac3b02b3b50e70f8f50685bc518a8ccf96b89ed0`.
-- **Passed behavior:** Base static rejection materially reduced `FULL_WITH_FOAM`; Accum weak/incoherent/ambiguous rejection and lifecycle events became observable.
-- **Blocking findings:** Base exact static overlap clusters around the `0.80` cutoff with residual false Foam; strong Foam still bypasses onset confirmation; Foam is checked before independent numeric Oil in retrospective reconstruction.
-- **Open risks:** private Oil candidate static/residual metrics and the reported zero-line coordinate offset remain unavailable locally.
-- **Next action:** implement and reconcile the four bounded R4 responsibilities, then rerun the same secure Base/Accum bundle.
+- **Result:** R4 source mechanism and repository-local report behavior accepted; secure-Windows field closure remains open.
+- **Validated source-test head:** `cc3d358ee735dc433692dbbe3722057bd0c2ae9a` (detector core `745c6c923bb7e640ae0895f88c6bdf300198914a`).
+- **Local preservation:** `89/299` numeric Oil, confirmed truth `8/13`, `5.4375 px` MAE, no Base/late-sample3 false Foam, and retained report Foam episodes for sample2/sample3/sample4.
+- **Report outcome:** `22` bounded landmarks and `21` source captures; sample3 inflow Foam is one confirmed episode rather than three publication fragments.
+- **Open risks:** the private Base `0.793` overlap population, Accum true-Foam retention, private Oil candidate position and zero-line overlay remain unavailable locally.
+- **Next action:** rerun the same secure Base/Accum bundle from the synchronized R4 head, then complete the packaged field workflow.
 
 ## Current gate scope
 
-Implement registered static-Foam matching, two-sample strong-Foam onset confirmation, Foam/numeric retrospective composition and observed-onset report wording. Reconcile controlled fixtures, sample3 sequence, four-video replay, confirmed truth and the full suite. Oil threshold/ambiguity tuning, hard static-Oil veto, zero-line correction and interpolation remain unauthorized.
+No further local detector tuning is authorized by the accepted R4 evidence. The current gate is to measure exact/tolerant/reciprocal overlap, pending/accepted Foam, Oil/fill-state/retrospective distributions and source-coordinate overlays on the same private Base/Accum bundle. Oil threshold/ambiguity tuning, hard static-Oil veto, zero-line correction and interpolation remain unauthorized without new causal evidence.
 
 ## Target-Windows closure gate
 
-Execute the final checklist on the target Windows environment from the synchronized R3 candidate head:
+Execute the final checklist on the target Windows environment from the synchronized R4 candidate head:
 
 1. record commit, Python/Qt/OpenCV versions, Windows version and display scale;
 2. run the canonical source-tree suite and supported one-folder packaging checks;
 3. analyze representative real videos through the packaged Workbench with explicit initial-state confirmation;
 4. inspect offline `report.html` at 100%, 125% and 150% scale, including Korean fonts, responsive layout and all relative assets;
 5. confirm direct Oil runs are solid, missing-run bridges are dashed, missing samples remain absent from cursor/overlay/CSV and Foam graph gaps remain gaps;
-6. confirm the R3-corrected highest/lowest and retained Foam start/end moments have readable inline Glass-focused captures whose guides align with the source video;
+6. confirm the R4-corrected highest/lowest and retained Foam start/end moments have readable inline Glass-focused captures whose guides align with the source video;
 7. confirm raw tracking/events and optional detector debug remain available outside the main report narrative;
 8. exercise cancellation, Unicode/long output paths, relocation and file/resource release.
 
@@ -52,7 +54,7 @@ The exact executable owner is the [`Manual GUI and Windows Acceptance Checklist`
 
 Only the accepted canonical S5-B boundary may publish numeric Oil. Positive no-interface, unavailable evidence, severe glare/exclusion/border conflict, authoritative Foam topology, unresolved authority ties and unsupported Spatial geometry remain fail-closed. The serialized reducer remains the only online temporal owner.
 
-Report presentation may connect only stored finite Oil anchors. A dashed bridge is display-only and cannot create a TrackingSample, CSV/overlay value, event evidence, retrospective Oil anchor or detector-history input. Report Foam episodes group stored accepted observations only and cannot rewrite Foam detector history or `events.csv`.
+Report presentation may connect only stored finite Oil anchors. A dashed bridge is display-only and cannot create a TrackingSample, CSV/overlay value, event evidence, retrospective Oil anchor or detector-history input. Report Foam episodes begin only at stored accepted observations; pending flags may connect/defer disappearance inside the bounded presentation rule but cannot create a coordinate, start an episode, rewrite Foam detector history or alter `events.csv`.
 
 ## Defect handling during validation
 
