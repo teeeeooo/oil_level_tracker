@@ -14,11 +14,11 @@ This file owns **affirmatively retained work that is not the current executable 
 ## Observed / estimated / unavailable trajectory responsibility
 
 - **Responsibility:** define, if justified, a product-visible distinction among directly observed Oil, defensibly estimated Oil, and unavailable trajectory regions.
-- **Classification:** `EVIDENCE-GATED`
-- **Authoritative source / rationale:** the completed offline temporal trajectory probe found insufficient evidence for production interpolation and showed that temporally consistent anchors can reinforce a persistent wrong boundary.
-- **Activation condition:** new evidence demonstrates a safe, useful temporal responsibility with explicit provenance and acceptance criteria that cannot be satisfied by the existing current-frame/serialized owner alone.
-- **Routing owner:** future architecture plus validation decision; diagnostic provenance lives under [`../50-diagnostics/s11/`](../50-diagnostics/s11/).
-- **Current-gate boundary:** no separate production trajectory-estimation responsibility is authorized; this remains evidence-gated and is not the current S11 gate. Connecting already stored finite observed anchors as a graph-only presentation polyline does not activate this responsibility because it creates no intermediate numeric sample, overlay value, provenance claim or detector-history input.
+- **Classification:** `ACTIVATED / ROUTED TO S11-R5`
+- **Authoritative source / rationale:** the interpolation-over-accepted-anchors probe remains rejected, but new secure-Windows evidence demonstrates that the existing current-frame/serialized owner cannot compare alternate candidates across time and therefore cannot express the visible physical history.
+- **Activation condition:** satisfied by the R5 root-cause evidence; implementation is owned by the current work plan.
+- **Routing owner:** [`../20-architecture/s11-r5-sequence-first-trajectory-architecture.md`](../20-architecture/s11-r5-sequence-first-trajectory-architecture.md) and its [`validation contract`](../30-validation/s11-r5-sequence-first-trajectory-validation.md).
+- **Current-gate boundary:** R5 may select only a coordinate observed as a same-frame candidate and must label sequence provenance; numeric interpolation/prediction remains unauthorized. Because this responsibility is now current, this entry is retained only as the activation handoff and should be removed when R5 reaches a durable accepted owner.
 
 ## Explicitly superseded recurring dependency
 

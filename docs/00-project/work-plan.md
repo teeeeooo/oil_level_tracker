@@ -1,80 +1,51 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `VALIDATING`
-**Current gate:** `secure-Windows R4 Base/Accum replay and final packaged field workflow`
-**Source authority:** `R4 detector 745c6c923bb7e640ae0895f88c6bdf300198914a + report closeout cc3d358ee735dc433692dbbe3722057bd0c2ae9a; validation-only unless new bounded evidence reopens source`
+**Milestone status:** `ACTIVE`
+**Current gate:** `R5 sequence-first observation implementation and local real-video qualification`
+**Source authority:** `R4 baseline 20d6b47e94f38a4a12c4bc1b9f1d571300408bca; R5 design is implementing and not yet accepted`
 
-## Accepted source baseline
+## Why source work is reopened
 
-The current source baseline includes:
+The latest secure-Windows R4 replay is new causal evidence. Direct visual review shows no Base Foam, a confirmed FULL-to-visible descent/recovery, and an Accum EMPTY-to-rise/Foam/high/fall transition. R4 instead leaves `71.9–87.0%` of samples in `UNKNOWN_REVIEW`, publishes numeric Oil in only about `8–10%`, and can let fixed glare/lower-edge appearance control Foam, extrema and the graph.
 
-- accepted S11 D1–D5 current-frame responsibility, one serialized temporal owner and Initial-State Retrospective FULL/EMPTY interpretation;
-- accepted Subtractive Detector Simplification A–D, S11-R2 Foam/Spatial composition and post-R2 baseline maintenance;
-- locally accepted S11-R3 dark border-cap invalidity plus learned-static and row-coherent Foam publication opposition at implementation commit `f8742d0789fc4bcab93224f8866731209031f2f9`; and
-- accepted S11-R1 report semantics: solid direct-observation runs, dashed display-only missing bridges, bounded highest/lowest/Foam landmarks and Glass-focused source captures.
+This is not an authorization to chase a publication percentage. Roughly ten Oil hypotheses already exist per frame; the earliest demonstrated loss is that current-frame semantics discards alternatives before temporal reasoning can compare them. Repeated threshold and rejection tuning has not repaired that authority ordering.
 
-R3 retains the confirmed `8/13` numeric truth surface at `5.4375 px` MAE. Its four-video numeric count changes from the task-start `109/299` to `89/299`; this is not treated as accuracy or a coverage objective. The reduction removes the visually disproven sample3 full-state Glass-cap plateau and late false Foam episodes while retaining sample2 and improving sample4 from `62/113` to `64/113`. Exact mechanism, replay and report evidence is [`../60-evidence/s11/s11-r3-sequence-observability-integrity.md`](../60-evidence/s11/s11-r3-sequence-observability-integrity.md).
+## Active design and validation owners
 
-S11-R1 implementation and replay evidence is [`../60-evidence/s11/s11-user-observation-report-repair.md`](../60-evidence/s11/s11-user-observation-report-repair.md). Its durable owners are the [`Result Observation Report Architecture`](../20-architecture/result-observation-report-architecture.md) and [`Result Observation Report Validation Contract`](../30-validation/result-observation-report-validation.md). R2 evidence remains at [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md); R3's durable source owner and validation owner are the [`Sequence Observability Integrity Architecture`](../20-architecture/s11-sequence-observability-integrity-architecture.md) and its [`validation contract`](../30-validation/s11-sequence-observability-integrity-validation.md).
+- Architecture: [S11-R5 Sequence-First Observation Architecture](../20-architecture/s11-r5-sequence-first-trajectory-architecture.md)
+- Validation: [S11-R5 Sequence-First Observation Validation Contract](../30-validation/s11-r5-sequence-first-trajectory-validation.md)
+- Root cause: [S11-R5 Current-Frame Authority Root-Cause Record](../50-diagnostics/s11/s11-r5-current-frame-authority-root-cause.md)
 
-The evidence-reopened R4 source owner is the [`Field Residual Authority Architecture`](../20-architecture/s11-r4-field-residual-authority-architecture.md), with acceptance defined by its [`validation contract`](../30-validation/s11-r4-field-residual-authority-validation.md) and cause recorded in the [`Windows residual diagnostic`](../50-diagnostics/s11/s11-r4-windows-residual-authority-diagnostic.md).
+R4 remains the exact comparison baseline. Its architecture/evidence is historical accepted provenance, not the active source constraint after the new Windows failure.
 
-R4 is locally accepted at detector commit `745c6c923bb7e640ae0895f88c6bdf300198914a` plus report-continuity/validated source-test head `cc3d358ee735dc433692dbbe3722057bd0c2ae9a`. It adds conjunctive registered static-Foam opposition, two-sample strong publication confirmation, immediate non-public D5 safety for coherent/non-static pending strong support, Foam-plus-canonical-Oil retrospective composition and observation-qualified report grouping. Exact evidence is [`../60-evidence/s11/s11-r4-field-residual-authority.md`](../60-evidence/s11/s11-r4-field-residual-authority.md).
+## Executable sequence
 
-## Latest recorded closeout
+1. audit candidate representation against direct images in sample2/sample3/sample4 and interpretable Base intervals;
+2. implement a bounded candidate/state lattice with recurring-artifact opposition and confirmed FULL/EMPTY sequence priors;
+3. integrate whole-window resolution before TrackingSample/event/judgment finalization;
+4. implement independent temporal Foam episode resolution and post-Oil state composition;
+5. generate baseline/R5 local replays, graphs and source overlays, then review them visually;
+6. run focused and complete regression suites and reconcile every material output delta;
+7. record implementation/effectiveness evidence and prepare the single final push; and
+8. rerun the secure Base/Accum bundle and packaged field workflow on Windows before S11 closure.
 
-- **Result:** R4 source mechanism and repository-local report behavior accepted; secure-Windows field closure remains open.
-- **Validated source-test head:** `cc3d358ee735dc433692dbbe3722057bd0c2ae9a` (detector core `745c6c923bb7e640ae0895f88c6bdf300198914a`).
-- **Local preservation:** `89/299` numeric Oil, confirmed truth `8/13`, `5.4375 px` MAE, no Base/late-sample3 false Foam, and retained report Foam episodes for sample2/sample3/sample4.
-- **Report outcome:** `22` bounded landmarks and `21` source captures; sample3 inflow Foam is one confirmed episode rather than three publication fragments.
-- **Open risks:** the private Base `0.793` overlap population, Accum true-Foam retention, private Oil candidate position and zero-line overlay remain unavailable locally.
-- **Next action:** rerun the same secure Base/Accum bundle from the synchronized R4 head, then complete the packaged field workflow.
+## Preservation and provenance boundary
 
-## Current gate scope
+R5 may choose only an Oil hypothesis that exists in the same sampled frame. It may emit explicit FULL/EMPTY with no coordinate or remain UNKNOWN. It may not interpolate, carry forward, predict or inject the confirmed initial state as a number.
 
-No further local detector tuning is authorized by the accepted R4 evidence. The current gate is to measure exact/tolerant/reciprocal overlap, pending/accepted Foam, Oil/fill-state/retrospective distributions and source-coordinate overlays on the same private Base/Accum bundle. Oil threshold/ambiguity tuning, hard static-Oil veto, zero-line correction and interpolation remain unauthorized without new causal evidence.
+Hard unavailable/glare/exclusion/border/physical-topology conflicts remain protected. A stationary row is not automatically rejected; recurring-artifact opposition is conjunctive and soft. Foam is resolved as an independent episode after Oil/state and cannot choose Oil or force FULL.
 
-## Target-Windows closure gate
+The main report consumes sequence-resolved samples and remains observation-focused. Candidate scores/path costs stay in debug evidence. Existing dashed graph bridges remain display-only and may not create samples, cursor values, overlays, CSV values, events, judgments or detector feedback.
 
-Execute the final checklist on the target Windows environment from the synchronized R4 candidate head:
+## Local acceptance boundary
 
-1. record commit, Python/Qt/OpenCV versions, Windows version and display scale;
-2. run the canonical source-tree suite and supported one-folder packaging checks;
-3. analyze representative real videos through the packaged Workbench with explicit initial-state confirmation;
-4. inspect offline `report.html` at 100%, 125% and 150% scale, including Korean fonts, responsive layout and all relative assets;
-5. confirm direct Oil runs are solid, missing-run bridges are dashed, missing samples remain absent from cursor/overlay/CSV and Foam graph gaps remain gaps;
-6. confirm the R4-corrected highest/lowest and retained Foam start/end moments have readable inline Glass-focused captures whose guides align with the source video;
-7. confirm raw tracking/events and optional detector debug remain available outside the main report narrative;
-8. exercise cancellation, Unicode/long output paths, relocation and file/resource release.
+Local acceptance requires a materially more faithful and understandable physical story on direct review of the four checked-in MP4s, especially sample3 inflow-to-full, without a new continuous wrong-interface track or loss of the retained stationary sample2 interface and genuine sample3/sample4 Foam.
 
-The exact executable owner is the [`Manual GUI and Windows Acceptance Checklist`](../40-operations/manual-gui-windows-checklist.md). The detector preservation boundary remains the [`S11 Real-Field Detector Effectiveness Validation Contract`](../30-validation/s11-real-field-detector-effectiveness.md).
+Aggregate coverage and old exact fingerprints are supporting evidence only. If visually clear frames lack a usable candidate in most cases, stop sequence tuning and reopen representation. If a mechanism makes a false artifact more continuous, narrow or revert it.
 
-## Preservation boundary
+## Secure-Windows closure boundary
 
-Only the accepted canonical S5-B boundary may publish numeric Oil. Positive no-interface, unavailable evidence, severe glare/exclusion/border conflict, authoritative Foam topology, unresolved authority ties and unsupported Spatial geometry remain fail-closed. The serialized reducer remains the only online temporal owner.
+The private Base/Accum video is unavailable locally, so repository validation cannot close the field defect. A synchronized-head Windows replay must verify state intervals, selected source-coordinate overlays, artifact tracks, confirmed Foam episodes, initial-state release and event/capture timing. The conflicting prior notes that place Accum Foam onset near both `492 s` and `672 s` must be resolved from the source video rather than encoded as truth.
 
-Report presentation may connect only stored finite Oil anchors. A dashed bridge is display-only and cannot create a TrackingSample, CSV/overlay value, event evidence, retrospective Oil anchor or detector-history input. Report Foam episodes begin only at stored accepted observations; pending flags may connect/defer disappearance inside the bounded presentation rule but cannot create a coordinate, start an episode, rewrite Foam detector history or alter `events.csv`.
-
-## Defect handling during validation
-
-The Windows gate is an evidence gate, not open-ended tuning authority. If a material failure is found:
-
-- preserve the exact failing bundle, source video, Recipe/session and environment record;
-- classify whether the earliest loss is detector, serialized temporal, bundle/report adapter, packaged-resource or UI/layout responsibility;
-- reopen only the smallest bounded source gate owned by that evidence;
-- do not lower thresholds, add identity-specific behavior or interpolate missing Oil merely to pass the workflow.
-
-## Closure boundary
-
-S11 closes only after the MainWindow and detector-pipeline responsibility modularizations are independently accepted and exact-head Windows evidence proves the packaged end-to-end workflow and updated user observation report. Source-tree/macOS structural or replay acceptance alone does not constitute Windows PASS. The planned S11-M structural-maintainability milestone remains blocked until this gate is accepted, and S12 follows S11-M.
-
-## Planned post-S11 handoff
-
-After S11 closure, activate `S11-M — Post-S11 Structural Maintainability` before S12 feature work. The planned execution order is legacy Vision retirement, current-frame Oil evidence decomposition, OpenCV phase orchestration decomposition, Result Review shell decomposition, Workbench shell completion and only then a conditional package-taxonomy pass. The measurement definitions, hotspot evidence, proportional scope and preservation gates are recorded in the [`Post-S11 Structural Maintainability Assessment`](../50-diagnostics/post-s11-structural-maintainability-assessment.md).
-
-This handoff is not current source authority. It must not delay or broaden the active target-Windows evidence gate, and it does not authorize detector tuning, product behavior change or a mechanical LOC/package-count rewrite.
-
-## Next handoff
-
-After local R4 acceptance, rerun the secure Base/Accum cases and execute the remaining [`Manual GUI and Windows Acceptance Checklist`](../40-operations/manual-gui-windows-checklist.md) from the synchronized R4 head. If evidence fails, stop at the smallest reproducible responsibility boundary rather than resuming general detector tuning.
+S11 closes only after R5 local acceptance, the secure-Windows Base/Accum replay and the final packaged field-workflow checklist pass. S11-M and S12 remain downstream.
