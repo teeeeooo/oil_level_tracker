@@ -33,7 +33,7 @@ immutable TrackingSamples + domain EventMarkers + Recipe + Session
 ### Detector and result owners
 
 S5-B/S11 remains the only detector owner of numeric Oil publication. In the
-active R6 production analysis, `ObservationSequenceResolver` is the final
+active R7 production analysis, `ObservationSequenceResolver` is the final
 composition owner: its Oil resolver may select only an eligible same-frame
 candidate, and its independent Foam episode resolver runs after Oil/state is
 fixed. Legacy detectors retain their existing projection. The report must not
@@ -77,7 +77,7 @@ The overall movement sentence compares observed start/end anchors with a bounded
 ## Foam presentation episodes
 
 Report Foam episodes are a presentation grouping over accepted stored Foam
-observations, including R6 episode-confirmed Foam, not a new Foam detector
+observations, including R7 episode-confirmed Foam, not a new Foam detector
 result.
 
 - An unconfirmed one-sample Foam-like observation does not create a report episode.

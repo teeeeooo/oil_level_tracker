@@ -34,7 +34,7 @@ Semantic scoring may combine correlated photometric/morphological evidence, but 
 
 Spatial positive corroboration is an S11 evidence responsibility layered on this
 same S5-B pipeline, not an alternate publication system. Foam material is
-represented independently. Under the active R6 contract, raw/current-frame Foam
+represented independently. Under the active R7 contract, raw/current-frame Foam
 cannot mask Oil pixels, impose a front cutoff, select or veto an Oil hypothesis,
 or become an Oil comparison anchor. Confirmed Foam is composed only after the
 final Oil/state observation is fixed. The durable composition contract is owned
@@ -63,20 +63,20 @@ Any failure before replacement leaves the exact prior store unchanged and return
 The current-frame projection is one-way. Ordinary downstream/report code may
 project the already accepted closed outcome, but it cannot reread temporal state,
 independently reject a committed outcome or inject a numeric Oil result. The only
-later candidate-selection authority is the R6 completed-window
+later candidate-selection authority is the R7 completed-window
 `OilObservationResolver`, which consumes preserved per-frame evidence without
 mutating or feeding back into this online store and may publish only an eligible
 same-frame candidate.
 
 Result-layer interpolation and offline numeric trajectory estimation are not
-part of the production contract. R6 completed-analysis resolution is the
+part of the production contract. R7 completed-analysis resolution is the
 separately owned Oil/state and independent Foam responsibility in
-[`s11-r6-optics-aware-observation-architecture.md`](s11-r6-optics-aware-observation-architecture.md);
+[`s11-r7-evidence-tiered-trajectory-architecture.md`](s11-r7-evidence-tiered-trajectory-architecture.md);
 it leaves unsupported timestamps unavailable. Initial-State Retrospective
 FULL/EMPTY Reconstruction remains a compatibility interpretation for legacy or
 current-frame-only streams and cannot inject current-frame or numeric Oil
-authority back into this pipeline. R6 streams are not reconstructed a second
-time.
+authority back into this pipeline. R7 retrospective interpretation remains
+separate from detector publication and cannot rewrite this pipeline.
 
 ## Historical development evidence
 

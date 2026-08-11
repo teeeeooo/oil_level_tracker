@@ -62,18 +62,17 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
 - Current target-Windows procedure: [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md)
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
-- Active S11-R6 optics-aware observation architecture: [`20-architecture/s11-r6-optics-aware-observation-architecture.md`](20-architecture/s11-r6-optics-aware-observation-architecture.md)
-- Active R6 detector-baseline validation: [`30-validation/s11-real-field-detector-effectiveness.md`](30-validation/s11-real-field-detector-effectiveness.md)
-- S11-R6 dedicated validation contract: [`30-validation/s11-r6-optics-aware-observation-validation.md`](30-validation/s11-r6-optics-aware-observation-validation.md)
-- S11-R6 checked-video diagnostic: [`50-diagnostics/s11/s11-r6-checked-video-reconciliation.md`](50-diagnostics/s11/s11-r6-checked-video-reconciliation.md)
-- S11-R6 local implementation/replay evidence: [`60-evidence/s11/s11-r6-optics-aware-observation.md`](60-evidence/s11/s11-r6-optics-aware-observation.md)
+- Active S11-R7 evidence-tiered trajectory architecture: [`20-architecture/s11-r7-evidence-tiered-trajectory-architecture.md`](20-architecture/s11-r7-evidence-tiered-trajectory-architecture.md)
+- Active S11-R7 validation contract: [`30-validation/s11-r7-evidence-tiered-trajectory-validation.md`](30-validation/s11-r7-evidence-tiered-trajectory-validation.md)
+- Active detector-baseline validation: [`30-validation/s11-real-field-detector-effectiveness.md`](30-validation/s11-real-field-detector-effectiveness.md)
+- S11-R6 secure-Windows field failure: [`50-diagnostics/s11/s11-r6-secure-windows-field-failure.md`](50-diagnostics/s11/s11-r6-secure-windows-field-failure.md)
 - Active user observation report architecture: [`20-architecture/result-observation-report-architecture.md`](20-architecture/result-observation-report-architecture.md)
 - Active user observation report validation: [`30-validation/result-observation-report-validation.md`](30-validation/result-observation-report-validation.md)
 - S11 legacy/current-frame retrospective sequence responsibility: [`20-architecture/initial-state-retrospective-reconstruction-architecture.md`](20-architecture/initial-state-retrospective-reconstruction-architecture.md)
 - Legacy/current-frame retrospective implementation validation: [`30-validation/initial-state-retrospective-reconstruction-validation.md`](30-validation/initial-state-retrospective-reconstruction-validation.md)
 - S5-B base observability architecture: [`20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
 
-### Historical pre-R6 provenance
+### Historical detector provenance
 
 - Accepted S11-R1 report evidence: [`60-evidence/s11/s11-user-observation-report-repair.md`](60-evidence/s11/s11-user-observation-report-repair.md)
 - Historical pre-R6 subtractive detector design/evidence provenance: [`20-architecture/s11-subtractive-detector-simplification-architecture.md`](20-architecture/s11-subtractive-detector-simplification-architecture.md)
@@ -94,6 +93,10 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - S11-R5 current-frame authority root cause: [`50-diagnostics/s11/s11-r5-current-frame-authority-root-cause.md`](50-diagnostics/s11/s11-r5-current-frame-authority-root-cause.md)
 - S11-R5 secure-Windows field failure: [`50-diagnostics/s11/s11-r5-secure-windows-field-failure.md`](50-diagnostics/s11/s11-r5-secure-windows-field-failure.md)
 - S11-R5 local implementation/replay evidence: [`60-evidence/s11/s11-r5-sequence-first-observation.md`](60-evidence/s11/s11-r5-sequence-first-observation.md)
+- Superseded S11-R6 optics-aware observation architecture: [`20-architecture/s11-r6-optics-aware-observation-architecture.md`](20-architecture/s11-r6-optics-aware-observation-architecture.md)
+- Failed S11-R6 validation contract: [`30-validation/s11-r6-optics-aware-observation-validation.md`](30-validation/s11-r6-optics-aware-observation-validation.md)
+- S11-R6 checked-video diagnostic: [`50-diagnostics/s11/s11-r6-checked-video-reconciliation.md`](50-diagnostics/s11/s11-r6-checked-video-reconciliation.md)
+- S11-R6 local implementation/replay evidence: [`60-evidence/s11/s11-r6-optics-aware-observation.md`](60-evidence/s11/s11-r6-optics-aware-observation.md)
 
 ### Supporting collections
 

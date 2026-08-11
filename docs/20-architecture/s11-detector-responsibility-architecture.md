@@ -1,6 +1,6 @@
 # S11 Detector Responsibility Architecture
 
-**Status:** `ACTIVE`
+**Status:** `TRANSITIONING TO R7 — IMPLEMENTATION GATE ACTIVE`
 
 ## Purpose and authority
 
@@ -8,10 +8,12 @@ This document is the durable responsibility owner for the production S11
 detector. The exact current gate remains in the [work plan](../00-project/work-plan.md),
 and completed measurements remain in [`../60-evidence/s11/`](../60-evidence/s11/).
 
-The active implementation is R6. R2–R5 documents preserve the causes, controls
-and failed alternatives that led here; they do not define current runtime
-routing when they conflict with this document or the
-[R6 architecture](s11-r6-optics-aware-observation-architecture.md).
+R6 remains the checked-in runtime until the R7 implementation commit, but it
+failed the secure-Windows holdout and has no acceptance authority. R7 is the
+authorized replacement contract. R2–R6 documents preserve the causes, controls
+and failed alternatives that led here; they do not define target runtime routing
+when they conflict with this document or the
+[R7 architecture](s11-r7-evidence-tiered-trajectory-architecture.md).
 
 ## Production observation path
 
@@ -89,8 +91,8 @@ overlap is explicit opposition rather than a universal mask.
 
 Foam classification is deliberately absent from this Oil hard-safety list. R6
 removed the historical D5 rule that made accepted Foam topology an Oil-routing
-authority. Oil and Foam are resolved independently and meet only during final
-composition.
+authority, and R7 preserves that separation. Oil and Foam are resolved
+independently and meet only during final composition.
 
 ## Oil and state sequence authority
 
@@ -133,17 +135,19 @@ second final owner.
 The serialized online reducer retains acquisition-time continuity and bounded
 reacquisition semantics for preview/current-frame evidence. It does not feed
 coordinates into the completed-window owner and does not compete with the final
-R6 projection.
+R7 projection.
 
 The completed-window resolvers use bounded history only to select observations
 already supported by their own frames. Missing intervals stay missing. A
 user-confirmed initial FULL/EMPTY state affects the initial distribution and
 report context only; it cannot create a valid detector sample or a numeric
-coordinate. FULL/EMPTY counts as valid only with `R6_IMAGE_SUPPORTED_STATE`.
+coordinate. FULL/EMPTY counts as valid only with explicit current-image state
+provenance.
 
 [Initial-State Retrospective Reconstruction](initial-state-retrospective-reconstruction-architecture.md)
-remains a compatibility responsibility for legacy/current-frame streams. An R6
-stream is not retrospectively projected a second time.
+remains a separate downstream interpretation. R7 permits it to interpret only
+the leading unresolved prefix after anchor-grade direction proof; it cannot
+rewrite observed samples, coverage or numeric Oil.
 
 ## Public projection and report boundary
 
@@ -164,13 +168,13 @@ observed samples only. Detailed presentation ownership belongs to the
 - S5-B and S11 Slices A–D preserve proposal, ambiguity and hard-safety lessons.
 - R2, R3 and R4 preserve causal diagnostics and controlled negative families,
   but their D5/Foam-to-Oil routing is not current runtime authority.
-- R5 is a field-failed, superseded sequence design and must not be restored as an
-  alternate owner.
+- R5 and R6 are field-failed, superseded sequence designs and must not be
+  restored as alternate owners.
 - Historical exact counts and fingerprints are evidence provenance, not current
   acceptance targets.
 
 The current preservation and holdout gates are defined by the
-[R6 validation contract](../30-validation/s11-r6-optics-aware-observation-validation.md)
+[R7 validation contract](../30-validation/s11-r7-evidence-tiered-trajectory-validation.md)
 and the [S11 real-field validation contract](../30-validation/s11-real-field-detector-effectiveness.md).
 
 ## Non-authorities

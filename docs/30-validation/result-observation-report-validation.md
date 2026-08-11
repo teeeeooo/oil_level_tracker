@@ -47,7 +47,7 @@ This contract owns acceptance for the user-facing observation report defined by 
 
 Replay all established qualification windows at 2 FPS using the matching
 Recipes and the production `OpenCvPhaseDetector`, static-artifact preparation,
-current-frame evidence acquisition and the R6 `ObservationSequenceResolver`:
+current-frame evidence acquisition and the R7 `ObservationSequenceResolver`:
 
 | Sample | Window |
 | --- | --- |

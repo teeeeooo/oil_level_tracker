@@ -1,6 +1,12 @@
 # S11-R6 Optics-Aware Observation Validation
 
-**Status:** `LOCAL PASS — SECURE-WINDOWS PENDING`
+**Status:** `FAILED — SECURE-WINDOWS HOLDOUT`
+
+The local gates remain historical evidence of what R6 preserved. The private
+holdout produced mostly UNKNOWN output, selected weak ambiguous shadows, missed
+Accum inflow, retained false Base Foam and disabled the required leading-state
+interpretation. Current acceptance is owned by the
+[R7 validation contract](s11-r7-evidence-tiered-trajectory-validation.md).
 
 ## Oracle and comparison
 
@@ -72,7 +78,7 @@ analysis/report integration and the complete test suite. Runtime remains within
 the existing bounded CPU contract. Changed fingerprints require image-based
 reconciliation.
 
-## Secure-Windows holdout
+## Historical secure-Windows holdout
 
 The exact committed R6 head must be replayed on the private Base/Accum video.
 
@@ -88,9 +94,10 @@ Any Base false Foam episode or Accum lock-in through the visible transition is a
 field FAIL independent of overall coverage. The private result must be recorded
 before S11 can close.
 
-## Local disposition
+## Historical local disposition
 
 Gates 1–5 pass on the checked-in corpus at `f2369ab`. The exact replay and
 direct-image reconciliation are recorded in the
 [R6 local evidence](../60-evidence/s11/s11-r6-optics-aware-observation.md).
-This status does not satisfy the secure-Windows holdout.
+This local status did not satisfy the secure-Windows holdout and is superseded
+by the recorded field failure.

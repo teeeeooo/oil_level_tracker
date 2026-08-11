@@ -155,11 +155,11 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
-- **Status:** `VALIDATING`
-- **Major result:** R6 replaced and deleted the field-failed R5 runtime owners, separated Oil/state/Foam authority, added optics-aware and registered material evidence, passed `1,502` tests and produced a directly reviewed deterministic four-video replay with `190/299` same-frame numeric Oil observations. Local acceptance is evidence-based and does not close the private field defect.
-- **Next gate:** Replay the exact pushed R6 head on the synchronized secure-Windows Base/Accum holdout and reject any Base false Foam, Accum initial-state lock-in or long fixed-optics Oil track before report/event acceptance.
+- **Status:** `IN PROGRESS`
+- **Major result:** The secure-Windows holdout rejected R6: Base/Accum coverage fell to `20.1%/3.2%`, weak ambiguous current-frame selections could seed final Oil anchors, Base still published false Foam, and every R6 stream bypassed the required leading FULL/EMPTY retrospective interpretation. R7 is authorized as a vertical authority replacement: typed anchor/continuation evidence, no old-tracker anchor input, separate initial-state inference, multi-frame Foam onset and anchor-owned events.
+- **Next gate:** Implement R7, pass controlled authority/retrospective/Foam/event tests and direct-image four-video reconciliation, then replay the exact pushed R7 head on the secure-Windows Base/Accum holdout.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R6 architecture](../20-architecture/s11-r6-optics-aware-observation-architecture.md), [R6 validation](../30-validation/s11-r6-optics-aware-observation-validation.md), [R5 field failure](../50-diagnostics/s11/s11-r5-secure-windows-field-failure.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R7 architecture](../20-architecture/s11-r7-evidence-tiered-trajectory-architecture.md), [R7 validation](../30-validation/s11-r7-evidence-tiered-trajectory-validation.md), [R6 field failure](../50-diagnostics/s11/s11-r6-secure-windows-field-failure.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING` → `S11-M PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 IN PROGRESS` → `S11-M PLANNED` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5 failed its private field holdout and is superseded as runtime authority by the active R6 replacement. S11-M remains blocked until the private-Windows and packaged-workflow S11 gate closes, and S12 follows S11-M.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5 and R6 both failed private field holdouts. R7 is the active replacement authority. S11-M remains blocked until the private-Windows and packaged-workflow S11 gate closes, and S12 follows S11-M.

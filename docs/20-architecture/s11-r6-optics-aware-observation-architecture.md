@@ -1,6 +1,12 @@
 # S11-R6 Optics-Aware Observation Architecture
 
-**Status:** `ACTIVE`
+**Status:** `SUPERSEDED — FAILED SECURE-WINDOWS HOLDOUT`
+
+R6 remains a design-history and local-mechanism record. The private Base/Accum
+replay disproved its final candidate authority, initial-state interpretation and
+Foam episode sufficiency. Current repair authority belongs to the
+[R7 Evidence-Tiered Trajectory Architecture](s11-r7-evidence-tiered-trajectory-architecture.md)
+and its [field-failure diagnostic](../50-diagnostics/s11/s11-r6-secure-windows-field-failure.md).
 
 ## Purpose
 

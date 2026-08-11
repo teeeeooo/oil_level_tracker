@@ -2,7 +2,13 @@
 
 ## Purpose and authority
 
-This document owns the durable sequence-level responsibility for **Initial-State Retrospective FULL/EMPTY Reconstruction** on legacy/current-frame result streams. It is downstream of immutable detector observations and upstream of official event, judgment and state-aware coverage projection. Current sequencing remains owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md); implementation acceptance is owned by the [dedicated validation contract](../30-validation/initial-state-retrospective-reconstruction-validation.md).
+This document owns the durable sequence-level responsibility for **Initial-State
+Retrospective FULL/EMPTY Reconstruction** on immutable detector result streams,
+including R7. It is downstream of detector observations and upstream of official
+event, judgment and state-aware report projection. Current sequencing remains
+owned by the [roadmap](../00-project/roadmap.md) and
+[work plan](../00-project/work-plan.md); implementation acceptance is owned by
+the [dedicated validation contract](../30-validation/initial-state-retrospective-reconstruction-validation.md).
 
 This responsibility does not modify S5-B current-frame evidence, the R6
 Oil/state or Foam owners, final composition, or the serialized online temporal
@@ -15,14 +21,13 @@ Historical D1–D5 routing is not a current authority surface.
 
 The responsibility runs only after the analysis has collected its immutable observed `TrackingSample` sequence and before official event/judgment projection consumes any retrospective state interpretation.
 
-An R6 production analysis resolves only image-supported state inside its final
-Oil/state owner before `TrackingSample` creation. A confirmed initial state is
-context only. When the first sample carries R6 observation provenance
-(`R6_IMAGE_SUPPORTED_STATE`, `R6_OBSERVATION_UNAVAILABLE` or
-`R6_RESOLVED_OIL`), this retrospective owner returns `NOT_APPLICABLE` and
-performs no second projection. `SEQUENCE_RESOLVED_STATE` remains a compatibility
-marker for an already resolved legacy stream. State remains non-numeric and
-carries explicit provenance.
+R7 resolves only image-supported Oil/state inside the detector before
+`TrackingSample` creation. A confirmed initial state is not detector evidence,
+but the retrospective owner may later interpret the leading unresolved prefix
+when anchor-grade direction/topology proves a compatible transition. R7
+observation provenance therefore does not make this owner globally
+`NOT_APPLICABLE`. A legacy stream explicitly carrying a prior-projected
+`SEQUENCE_INITIAL_STATE_PRIOR` remains ineligible for a second projection.
 
 - observed detector `fill_state`, validity, numeric Oil and Foam evidence remain historical observation and are never rewritten;
 - retrospective FULL/EMPTY is a separate sequence interpretation with explicit status and provenance;
@@ -41,31 +46,29 @@ Retrospective interpretation is limited to the **leading unresolved interval** b
 
 Eligibility requires later real accepted detector evidence, not prior-seeded labels. The evidence set must materially establish the relevant numeric-boundary/topology/direction interpretation.
 
-- direction evidence requires at least **two real accepted boundary observations**;
+- direction evidence requires at least **two real accepted anchor-grade boundary
+  observations** for R7; legacy streams use their existing canonical boundary
+  authority;
 - prior-seeded or retrospectively interpreted state labels cannot serve as the sole confirmation of direction or topology;
 - canonical ambiguity may remain inside an otherwise eligible leading prefix only when it introduces no barrier or contradiction, but ambiguity contributes no positive confirmation;
 - insufficient positive evidence leaves the interval unresolved rather than converting the prior into truth.
 
 ## Barriers, contradiction and conflict
 
-For an eligible legacy/current-frame-only stream, the leading prefix stops being
-retrospectively eligible when sequence evidence introduces an inference barrier
-or contradicts the confirmed prior. Barriers materially include
-unavailable/failure/detection-lost/glare/fog evidence, already-published Foam
-without numeric Oil, and other direct evidence that prevents a defensible
-FULL/EMPTY interpretation across the interval. Raw, rejected or pending Foam is
-never a retrospective barrier.
+The leading prefix stops being retrospectively eligible when direct
+image-supported state contradicts the confirmed prior or trusted Oil direction
+is incompatible. Ordinary UNKNOWN, unavailable/decode-failure markers and
+raw/rejected/pending Foam contribute no positive proof but do not erase the
+explicit run-scoped initial context. They remain visible in observed data and
+prevent any claim that the state was directly observed.
 
 Direct contradictory sequence evidence overrides prior-based eligibility. A prior conflict yields **no retrospective interval**, a first-class conflict status and review requirement. A lack of enough confirming evidence without contradiction is **unresolved**, not conflict.
 
-Hard unavailable/failure/detection-lost/glare/fog evidence remains a barrier even
-if malformed legacy input also carries a number. Published Foam is a legacy
-barrier when the sample has no independently accepted finite canonical Oil
-boundary. When valid numeric Oil coexists with published Foam, that numeric
-observation may contribute direction/topology evidence, while the Foam sample
-itself remains immutable and is excluded from retrospective state projection.
-Foam-only legacy prefixes remain unresolved. R6 observations never enter this
-path, so this compatibility rule grants Foam no current Oil/state authority.
+Malformed samples cannot contribute numeric or direction proof. Published Foam
+does not confirm or contradict FULL/EMPTY by itself and grants no Oil/state
+authority. A valid anchor-grade Oil observation may contribute direction even
+when confirmed Foam coexists, while the Foam sample itself remains immutable and
+is excluded from retrospective state projection.
 
 ## Non-authorities
 

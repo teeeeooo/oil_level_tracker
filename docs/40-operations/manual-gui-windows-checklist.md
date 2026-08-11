@@ -76,13 +76,13 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Confirm missing numeric Oil remains absent from samples and overlays. In graphs, verify consecutive finite observations use solid segments, a missing-run connection uses a dashed endpoint-only bridge, no retrospective FULL/EMPTY anchor is fabricated, and observed `UNKNOWN_REVIEW`/no-interface bands remain visible between anchors.
 - Open a legacy v1 observed-only bundle in the new reader and confirm its original meaning remains readable; verify a v1-only consumer does not silently present a newer retrospective-semantics bundle as ordinary v1.
 - In re-detection, confirm CURRENT/local scope cannot silently rebuild the initial sequence without full leading context, while a full-sequence rerun keeps its retrospective provenance separate from the saved official result.
-- For an R6 result carrying `R6_IMAGE_SUPPORTED_STATE`,
-  `R6_OBSERVATION_UNAVAILABLE` or `R6_RESOLVED_OIL`, confirm retrospective
-  reconstruction is `NOT_APPLICABLE`; the confirmed initial state remains report
-  context and never creates a valid detector row.
+- For an R7 result, confirm at least two anchor-grade observations with compatible
+  direction can infer the leading FULL/EMPTY prefix while raw detector rows,
+  observed coverage and numeric Oil remain unchanged. Continuation-only evidence
+  must not confirm the prior.
 
 > Retrospective acceptance cases above exercise legacy/current-frame compatibility.
-> They do not authorize a second projection over R6 and do not execute or approve
+> They do not authorize detector-sample rewriting and do not execute or approve
 > the final Windows field-workflow check.
 
 ## Preview/debug
@@ -108,9 +108,9 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Build and run the one-folder package on a general office Windows PC without CUDA or any GPU-compute runtime dependency.
 - Repeat with Unicode and long paths, active file locking, cancellation and application close; confirm video/output/debug resources are released.
 
-### S11-R6 secure Base/Accum holdout
+### S11-R7 secure Base/Accum holdout
 
-- Record the exact R6 commit, source/package identity, private video hash or
+- Record the exact R7 commit, source/package identity, private video hash or
   approved internal identity, matching Recipe identity, sampling window/cadence
   and initial-state confirmations before comparison. The tested source must match
   the exact pushed head named by the [current work plan](../00-project/work-plan.md).
@@ -120,10 +120,10 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - For every numeric Oil row, confirm an eligible same-frame candidate and
   `SEQUENCE_SAME_FRAME_CANDIDATE` provenance. Verify no coordinate is carried,
   interpolated or projected from the initial state through an unavailable frame.
-- Separate `R6_IMAGE_SUPPORTED_STATE`, `R6_RESOLVED_OIL`,
-  `R6_OBSERVATION_UNAVAILABLE` and `R6_INITIAL_STATE_CONTEXT_ONLY` counts. Initial
-  FULL/EMPTY context must not count as valid detector coverage without current
-  raster support.
+- Separate image-supported state, `R7_OIL_ANCHOR`, `R7_OIL_CONTINUATION`,
+  unavailable and retrospectively inferred prefix counts. Initial FULL/EMPTY
+  interpretation must not count as observed detector coverage or create a
+  numeric coordinate.
 - On Base, verify direct review still shows no Foam and require zero public Foam
   frames/episodes. Confirm initial FULL is context only, then verify the real
   top-entering descent, lowest observed point and recovery are acquired without
@@ -154,7 +154,7 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
   long fixed-glare/caustic Oil track as a field failure regardless of nominal
   coverage. Preserve the earliest source frame, overlay and relevant evidence;
   do not respond by globally lowering Foam/Oil/ambiguity thresholds.
-- Record the result as new R6 evidence. Do not rewrite the historical R4/R5
+- Record the result as new R7 evidence. Do not rewrite the historical R4/R5/R6
   evidence documents or compare against their exact output fingerprints as a
   pass criterion.
 
