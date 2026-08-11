@@ -2,13 +2,15 @@
 
 ## Purpose and authority
 
-This document owns the durable sequence-level responsibility for **Initial-State Retrospective FULL/EMPTY Reconstruction**. It is downstream of immutable detector observations and upstream of official event, judgment and state-aware coverage projection. Current sequencing remains owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md); implementation acceptance is owned by the [dedicated validation contract](../30-validation/initial-state-retrospective-reconstruction-validation.md).
+This document owns the durable sequence-level responsibility for **Initial-State Retrospective FULL/EMPTY Reconstruction** on legacy/current-frame result streams. It is downstream of immutable detector observations and upstream of official event, judgment and state-aware coverage projection. Current sequencing remains owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md); implementation acceptance is owned by the [dedicated validation contract](../30-validation/initial-state-retrospective-reconstruction-validation.md).
 
 This responsibility does not modify S5-B current-frame evidence, S11 D1–D5 authority, or the serialized online temporal owner. Those accepted detector boundaries remain authoritative in [S5-B Oil Boundary Hypothesis Architecture](s5b-oil-boundary-hypothesis-architecture.md) and [S11 Detector Responsibility Architecture](s11-detector-responsibility-architecture.md).
 
 ## Placement and immutable observation boundary
 
 The responsibility runs only after the analysis has collected its immutable observed `TrackingSample` sequence and before official event/judgment projection consumes any retrospective state interpretation.
+
+An R5-capable production analysis resolves the confirmed leading state inside the final sequence owner before `TrackingSample` creation. When the first sample carries `SEQUENCE_RESOLVED_STATE`, this retrospective owner returns `NOT_APPLICABLE` and performs no second projection. The sequence state remains non-numeric and carries its own provenance.
 
 - observed detector `fill_state`, validity, numeric Oil and Foam evidence remain historical observation and are never rewritten;
 - retrospective FULL/EMPTY is a separate sequence interpretation with explicit status and provenance;

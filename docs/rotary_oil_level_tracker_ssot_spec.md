@@ -936,11 +936,15 @@ Effective ROI 생성
 → Row features
 → 후보 생성
 → 후보 scoring
-→ FillState 분류
-→ Temporal state tracking
-→ oil-air boundary / foam front 선택
+→ current-frame semantic / hard-safety 분류
+→ serialized online observation 기록
+→ 전체 분석 window의 Oil/FULL/EMPTY/UNKNOWN sequence resolution
+→ Oil/state 확정 후 독립 Foam episode resolution
+→ oil-air boundary / foam front 최종 projection
 → confidence와 debug data 반환
 ```
+
+최종 numeric Oil은 해당 sampled frame에 실제 존재하는 hard-safe 후보 중 하나여야 한다. Sequence resolver는 다른 frame의 위치를 carry/interpolate/predict하여 빈 frame에 숫자를 만들 수 없다. 좌표 근거가 없는 frame은 explicit FULL/EMPTY state 또는 `UNKNOWN_REVIEW`로 남긴다.
 
 ## 11.2 Effective Detection Region
 
@@ -1036,6 +1040,8 @@ Foam 후보 score feature:
 Score weight는 `DetectorSettings`에서 조절한다.
 
 최고점 후보라도 minimum confidence 미만이면 선택하지 않는다.
+
+Current-frame semantic이 최종 선택하지 않은 bounded hard-safe 후보도 completed-analysis sequence 비교를 위해 provenance와 함께 보존할 수 있다. Sequence comparison은 물리적 이동 연속성, material anchor cluster, no-interface state evidence와 conjunctive recurring-artifact opposition을 사용한다. 고정 row라는 사실만으로 후보를 hard reject하지 않으며, 매끄러운 path라는 이유만으로 약한 후보 chain을 numeric trajectory로 승격하지 않는다.
 
 ## 11.5 Artifact Handling
 
@@ -1136,9 +1142,9 @@ MVP 정의:
 
 하단과 연결되지 않은 산발적 bubble cluster는 foam presence/coverage flag로 기록할 수 있지만 foam front line으로 확정하지 않는다.
 
-## 11.8 Temporal Tracker
+## 11.8 Current-Frame Tracker and Final Sequence Resolver
 
-Temporal tracker는 다음을 수행한다.
+Serialized current-frame tracker는 online/preview observation에 대해 다음을 수행한다.
 
 - previous selected y
 - estimated velocity
@@ -1150,6 +1156,20 @@ Temporal tracker는 다음을 수행한다.
 - full/empty out-of-range 상태 유지
 
 고정 artifact는 시간적으로 안정적일 수 있으므로 “N frame 같은 위치”만으로 유면을 확정하면 안 된다.
+
+Completed production analysis는 sampled window가 모두 수집된 뒤 하나의 bounded deterministic sequence owner를 추가로 적용한다.
+
+- same-frame Oil 후보, explicit no-interface state와 UNKNOWN을 함께 비교
+- confirmed initial FULL/EMPTY는 state prior로만 사용하고 numeric 위치로 변환 금지
+- hard unavailable, severe glare/exclusion/border, 구조/물리 topology conflict 유지
+- 장구간 후보 path는 독립 material anchor cluster가 없으면 UNKNOWN 처리
+- near-black/reframe 구간은 전처리 후의 가짜 구조가 아니라 raw effective-ROI photometry로 unavailable 처리
+- 최종 frame 수, timestamp, Glass identity 보존
+- resolver 실패 또는 identity/cardinality 변경 시 분석 실패 처리
+
+Final Oil/state가 확정된 뒤 Foam sequence owner가 current-frame component의 adjacent-frame 변화/front evolution을 비교한다. Static prelude, 한 방울/단일 frame component와 장기 미지원 gap은 Foam episode를 만들 수 없고, Foam은 Oil 후보나 FULL/EMPTY를 선택할 권한이 없다.
+
+Final result의 missing run은 missing으로 유지한다. Graph의 점선 bridge는 저장된 두 관측 endpoint만 연결하는 display 표현이며 sample, event, judgment, overlay 또는 detector feedback을 만들지 않는다.
 
 ## 11.9 Detector Output
 
@@ -1176,6 +1196,7 @@ PhaseDetection:
     raw values
     smoothed values
     selected candidates
+    sequence provenance / unavailable reason
     flags
     debug payload
 ```
@@ -1227,21 +1248,23 @@ GUI event loop를 block하지 않는다.
 4. Optional static artifact sampling
 5. Frame decode
 6. Per-glass phase detection
-7. Temporal smoothing/state tracking
-8. Eligible leading-interval retrospective FULL/EMPTY interpretation
-9. Event detection
-10. Judgment
-11. Event frame capture
-12. Graph rendering
-13. HTML/CSV export
-14. Result summary
+7. Completed-window Oil/FULL/EMPTY/UNKNOWN sequence resolution (지원 detector)
+8. Post-Oil Foam episode resolution (지원 detector)
+9. TrackingSample 최종 projection
+10. Legacy/current-frame stream의 eligible leading-interval retrospective FULL/EMPTY interpretation
+11. Event detection
+12. Judgment
+13. Event frame capture
+14. Graph rendering
+15. HTML/CSV export
+16. Result summary
 ```
 
 ---
 
 # 13. Event Detection
 
-Event detector는 raw image를 직접 해석하지 않고 immutable observed `TrackingSample`과, 적용 가능한 경우 별도로 provenance가 유지되는 retrospective sequence interpretation을 사용한다. Retrospective state가 event semantics에 참여하면 inferred state 사용 사실이 first-class evidence로 남아야 하며 observed `fill_state` 자체는 변경하지 않는다.
+Event detector는 raw image를 직접 해석하지 않고 immutable final-analysis `TrackingSample`과, legacy/current-frame stream에 적용 가능한 경우 별도로 provenance가 유지되는 retrospective sequence interpretation을 사용한다. R5 sequence-resolved state는 retrospective owner가 다시 변경하지 않는다. Retrospective state가 event semantics에 참여하면 inferred state 사용 사실이 first-class evidence로 남아야 하며 observed `fill_state` 자체는 변경하지 않는다.
 
 필수 이벤트:
 

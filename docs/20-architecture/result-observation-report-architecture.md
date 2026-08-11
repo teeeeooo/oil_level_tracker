@@ -32,7 +32,7 @@ immutable TrackingSamples + domain EventMarkers + Recipe + Session
 
 ### Detector and result owners
 
-S5-B/S11 remains the only owner of canonical numeric Oil publication. S5-A and its temporal gate remain the owners of accepted Foam observations. The report must not feed either owner, alter serialized history or write a value into a missing sample.
+S5-B/S11 remains the only detector owner of numeric Oil publication. For R5-capable production analysis, the completed-window sequence resolver is the final projection owner and may select only a hard-safe same-frame candidate; legacy detectors retain their existing projection. The independent R5 Foam episode resolver owns accepted final-analysis Foam after Oil/state is fixed. The report must not feed any owner, alter current-frame or sequence history, or write a value into a missing sample.
 
 ### Report presentation builder
 
@@ -70,7 +70,7 @@ The overall movement sentence compares observed start/end anchors with a bounded
 
 ## Foam presentation episodes
 
-Report Foam episodes are a presentation grouping over accepted stored Foam observations, not a new Foam detector result.
+Report Foam episodes are a presentation grouping over accepted stored Foam observations, including R5 sequence-confirmed Foam, not a new Foam detector result.
 
 - An unconfirmed one-sample Foam-like observation does not create a report episode.
 - A single stored public Foam sample explicitly marked as strong/moderate accepted evidence may create an episode because the detector temporal gate already confirmed its onset; report presentation does not impose the same gate twice.

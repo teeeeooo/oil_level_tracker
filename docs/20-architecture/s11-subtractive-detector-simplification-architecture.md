@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This document owns the active S11 design for improving general Oil-boundary effectiveness by **removing redundant authority before adding new detector mechanisms**. It does not supersede the accepted S5-B/S11 safety contracts until each source slice is implemented, independently accepted at its assigned lane, and reconciled into the durable baseline.
+This document owns the completed S11 A–D design for improving current-frame Oil-boundary effectiveness by **removing redundant authority before adding new detector mechanisms**. Its final-analysis publication boundary is historical and is superseded by the locally accepted [`S11-R5 Sequence-First Observation Architecture`](s11-r5-sequence-first-trajectory-architecture.md); its proposal simplification and hard-safety results remain preservation authority.
 
 The design is corpus-wide. It is not a `sample3` repair and MUST NOT introduce video-, frame-, Recipe-, truth- or sample-identity branches.
 
@@ -29,7 +29,7 @@ The existing offline trajectory probe remains negative evidence against solving 
 3. **Keep only demonstrated hard invalidity hard.** Accepted no-interface, unavailable evidence, severe glare/exclusion/border conflict and authoritative Foam topology remain fail-closed.
 4. **Compose soft semantics once.** Boundary, artifact, morphology, polarity and ambiguity evidence must not repeatedly veto the same candidate through multiple correlated routes.
 5. **Use Spatial as independent proof.** The existing bounded cross-ROI path may corroborate a hard-safe weak candidate when scalar uniqueness is insufficient; it must not become another duplicate stack of the same semantic thresholds.
-6. **Preserve one numeric-publication owner and one serialized temporal owner.** Only a canonical accepted boundary may publish numeric Oil; temporal confirmation semantics remain downstream and unchanged.
+6. **Preserve one current-frame numeric owner and one serialized online owner.** Only a canonical accepted boundary may publish current-frame Oil. R5 later adds one separate completed-analysis projection owner without changing this acquisition-time contract.
 
 ## Product optimization objective
 
@@ -76,12 +76,12 @@ The first three slices are source changes to the accepted S5-B observability res
 
 This design does not authorize changes to:
 
-- S5-A Foam publication or Foam temporal-gate semantics;
+- S5-A current-frame Foam classification/publication or online Foam temporal-gate semantics;
 - positive no-interface meaning established by P2;
 - Recipe, truth, result, CSV, debug or persisted public schemas;
 - Initial-State Retrospective FULL/EMPTY reconstruction;
 - Result Review observed-anchor presentation semantics;
-- the one serialized S5-B temporal owner or two-real-boundary reacquisition contract;
+- the one serialized current-frame S5-B temporal owner or two-real-boundary reacquisition contract;
 - offline interpolation, estimated trajectory publication or hidden temporal state;
 - detector behavior keyed to repository sample identity.
 
@@ -89,4 +89,4 @@ If subtractive simplification violates a retained negative family, the correct r
 
 ## Current executable gate
 
-There is no remaining subtractive detector source gate. **Slices A–D, the bounded S11-R2 Foam/Spatial composition repair and the separate R3 sequence-observability repair are accepted on their documented evidence surfaces**. All other detector mechanisms still require new evidence and are not pre-authorized by this architecture; the exact current gate belongs to the [work plan](../00-project/work-plan.md).
+There is no remaining subtractive detector source gate. **Slices A–D, the bounded S11-R2 Foam/Spatial composition repair and the later R3/R4 repairs are accepted on their documented evidence surfaces**. R5 owns the newer final-analysis sequence responsibility; all other detector mechanisms still require new evidence and are not pre-authorized by this architecture. The exact current gate belongs to the [work plan](../00-project/work-plan.md).

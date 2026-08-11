@@ -10,7 +10,7 @@ The causal record is [`../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagn
 
 ## Existing ownership preserved
 
-The production flow remains:
+The R2 current-frame flow remains:
 
 `current-frame evidence -> typed semantic result -> canonical boundary -> serialized temporal owner -> public Oil Y`
 
@@ -20,6 +20,8 @@ The production flow remains:
 - the serialized reducer remains the sole temporal owner.
 
 Spatial does not publish independently, invent missing observations or use future frames.
+
+R5 later adds a separate completed-analysis projection after this current-frame evidence record. It may compare preserved same-frame candidates across the sampled window, but it does not change R2 Spatial arbitration or allow Spatial itself to publish.
 
 ## R2 arbitration contract
 

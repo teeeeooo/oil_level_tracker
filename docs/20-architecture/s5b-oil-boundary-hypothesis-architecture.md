@@ -2,7 +2,7 @@
 
 ## Purpose
 
-S5-B owns the durable Oil observability pipeline. It exists to prevent a physical expectation or a single strong image feature from becoming numeric Oil unless the **current observable evidence** can support a canonical boundary outcome. S11-specific accepted composition responsibilities are consolidated in [`s11-detector-responsibility-architecture.md`](s11-detector-responsibility-architecture.md).
+S5-B owns the durable current-frame Oil observability pipeline. It exists to prevent a physical expectation or a single strong image feature from becoming numeric Oil unless the **current observable evidence** can support a canonical boundary outcome. S11-specific current-frame and completed-analysis responsibilities are consolidated in [`s11-detector-responsibility-architecture.md`](s11-detector-responsibility-architecture.md).
 
 ## Physical truth versus observable evidence
 
@@ -14,7 +14,7 @@ A non-numeric result therefore means that the detector cannot safely publish a b
 
 The durable path is:
 
-`raw observations → bounded proposals → semantic hypotheses → typed current observation → canonical evidence validation → serialized temporal reducer → public projection`
+`raw observations → bounded proposals → semantic hypotheses → typed current observation → canonical evidence validation → serialized temporal reducer → current-frame projection`
 
 Each stage preserves provenance and bounded resource ownership. Numeric Oil originates only from an accepted typed/canonical boundary. Fallbacks may add evidence inside this ownership chain but may not inject a numeric result after it.
 
@@ -38,7 +38,7 @@ In particular, accepted Foam context constrains Oil admissibility and independen
 
 ## Serialized temporal ownership
 
-There is exactly one serialized production owner for S5-B temporal state after current-frame canonical evidence. All Glass-local frame reductions, Glass reset, global reset, temporal snapshot and state-count operations enter one owner-defined total order; different-Glass temporal mutation parallelism is not a production requirement.
+There is exactly one serialized online owner for S5-B temporal state after current-frame canonical evidence. All Glass-local frame reductions, Glass reset, global reset, temporal snapshot and state-count operations enter one owner-defined total order; different-Glass temporal mutation parallelism is not a production requirement.
 
 The owner holds one immutable store value containing Glass-local immutable records. A missing record denotes the canonical initial state without creating live state. A successful mutation prepares the complete replacement store first and then replaces the live owner-state reference exactly once. No field-by-field live mutation, external commit phase, rollback protocol, per-Glass lock graph, lifecycle barrier, generation/CAS token or second temporal store is part of the accepted architecture.
 
@@ -56,9 +56,9 @@ The fixed reducer creates the decision, next record, canonical outcome and track
 
 Any failure before replacement leaves the exact prior store unchanged and returns the canonical failure behavior: no numeric Oil or selected candidate, tracker `NO_UPDATE`, smoothing `PRESERVE`, no legacy fallback and no post-failure promotion. There is no load-bearing validation or failure conversion after the successful state replacement.
 
-Detector projection is one-way. Downstream code may project the already accepted closed outcome, but it cannot reread temporal state, independently reject a committed outcome, select a raw candidate after canonical publication or inject a numeric Oil result.
+The current-frame projection is one-way. Ordinary downstream/report code may project the already accepted closed outcome, but it cannot reread temporal state, independently reject a committed outcome or inject a numeric Oil result. The only later candidate-selection authority is the dedicated R5 completed-analysis sequence owner, which consumes the preserved per-frame evidence without mutating or feeding back into this online store and may publish only an eligible same-frame candidate.
 
-Result-layer interpolation and offline trajectory estimation are not part of the current production S5-B contract. Initial-State Retrospective FULL/EMPTY Reconstruction is likewise not S5-B behavior: it is the separately owned downstream sequence interpretation in [`initial-state-retrospective-reconstruction-architecture.md`](initial-state-retrospective-reconstruction-architecture.md), operating only after immutable observed TrackingSamples are collected and without injecting current-frame or numeric Oil authority back into this pipeline. Any future broader observed/estimated/unavailable trajectory responsibility remains evidence-gated through [`../00-project/retained-commitments.md`](../00-project/retained-commitments.md).
+Result-layer interpolation and offline numeric trajectory estimation are not part of the production contract. R5 completed-analysis resolution is the separately owned same-frame-candidate/state responsibility in [`s11-r5-sequence-first-trajectory-architecture.md`](s11-r5-sequence-first-trajectory-architecture.md); it leaves unsupported timestamps unavailable. Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate downstream interpretation for streams not already R5 state-resolved and cannot inject current-frame or numeric Oil authority back into this pipeline.
 
 ## Historical development evidence
 
