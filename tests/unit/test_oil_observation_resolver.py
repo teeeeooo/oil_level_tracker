@@ -19,6 +19,7 @@ def _candidate(
     glare: float = 0.0,
     border: float = 0.0,
     material_texture_conflict: float = 0.0,
+    registered_internal_motion: float = 0.0,
     source: str | None = None,
     selected: bool = False,
 ) -> BoundaryCandidate:
@@ -39,6 +40,9 @@ def _candidate(
             "polarity_confidence": 0.65,
             "static_prior_contribution": static,
             "sequence_eligible": 1.0,
+            "registered_motion_available": float(registered_internal_motion > 0.0),
+            "registered_internal_motion_support": registered_internal_motion,
+            "registered_dynamic_support": registered_internal_motion,
         },
         penalties={
             "artifact_likelihood": artifact,
@@ -389,6 +393,50 @@ def test_selected_row_inside_coherent_material_texture_cannot_anchor_oil() -> No
     result = OilObservationResolver().resolve(detections, glass_config())
 
     assert _oil_y(result) == [None] * len(detections)
+
+
+def test_registered_material_motion_distinguishes_dynamic_layer_from_static_twin() -> None:
+    static = tuple(
+        _detection(
+            index,
+            _candidate(
+                132.0,
+                boundary=0.82,
+                broad=0.82,
+                material_texture_conflict=0.66,
+                selected=True,
+            ),
+            ambiguity=0.20,
+        )
+        for index in range(6)
+    )
+    dynamic = tuple(
+        _detection(
+            index,
+            _candidate(
+                132.0 - index,
+                boundary=0.82,
+                broad=0.82,
+                material_texture_conflict=0.66,
+                registered_internal_motion=0.30,
+                selected=True,
+            ),
+            ambiguity=0.20,
+        )
+        for index in range(6)
+    )
+
+    resolver = OilObservationResolver()
+
+    assert _oil_y(resolver.resolve(static, glass_config())) == [None] * 6
+    assert _oil_y(resolver.resolve(dynamic, glass_config())) == [
+        132.0,
+        131.0,
+        130.0,
+        129.0,
+        128.0,
+        127.0,
+    ]
 
 
 def test_terminal_material_fallback_requires_broad_cross_roi_support() -> None:

@@ -195,6 +195,14 @@ class OpenCvPhaseDetector:
             and float(foam.component_width_ratio) >= 0.30
             and float(foam.bounding_box_fill_ratio) >= 0.30
         )
+        foam_motion = self._foam_motion_tracker.evaluate(
+            glass.id,
+            pre.gray,
+            bundle.effective_mask,
+            foam.mask,
+            foam.front_y,
+        )
+        material_motion_features = registered_foam_motion_features(foam_motion)
         material_path_candidates: list[BoundaryCandidate] = []
         for candidate in generate_material_path_candidates(
                 pre,
@@ -215,6 +223,7 @@ class OpenCvPhaseDetector:
             path_features = {
                 **candidate.features,
                 **material_context,
+                **material_motion_features,
                 "sequence_material_layer_topology": float(
                     material_layer_topology
                 ),
@@ -240,13 +249,6 @@ class OpenCvPhaseDetector:
                     penalties=path_penalties,
                 )
             )
-        foam_motion = self._foam_motion_tracker.evaluate(
-            glass.id,
-            pre.gray,
-            bundle.effective_mask,
-            foam.mask,
-            foam.front_y,
-        )
         static_foam_map = self._static_foam_maps.get(glass.id)
         static_foam_match = _foam_static_match(foam.mask, static_foam_map)
         foam_temporal = self._foam_gate.evaluate(
@@ -340,6 +342,7 @@ class OpenCvPhaseDetector:
             )
             candidate_features = dict(candidate.features)
             candidate_features.update(material_context)
+            candidate_features.update(material_motion_features)
             candidate_penalties = dict(candidate.penalties)
             candidate_penalties["material_texture_conflict"] = float(
                 material_context["material_texture_conflict"]
@@ -393,7 +396,7 @@ class OpenCvPhaseDetector:
             foam_features["sequence_foam_eligible"] = float(
                 sequence_foam_eligible
             )
-            foam_features.update(registered_foam_motion_features(foam_motion))
+            foam_features.update(material_motion_features)
             foam_trace_candidate = replace(
                 raw_foam_candidate,
                 y=float(raw_foam_candidate.y + origin_y),

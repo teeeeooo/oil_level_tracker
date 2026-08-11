@@ -39,6 +39,8 @@ class OilObservationResolverConfig:
     direct_anchor_min_material: float = 0.24
     direct_anchor_max_artifact: float = 0.31
     direct_anchor_max_material_texture_conflict: float = 0.60
+    dynamic_anchor_max_material_texture_conflict: float = 0.76
+    dynamic_anchor_min_internal_motion: float = 0.15
     terminal_anchor_min_sector_fraction: float = 0.78
     state_min_evidence: float = 0.58
     black_frame_max_mean: float = 2.0
@@ -195,8 +197,7 @@ class OilObservationResolver:
             and _finite(item.y)
             and item.selected
             and _unit(item.features.get("r6_material_path", 0.0)) < 0.5
-            and _candidate_material_texture_conflict(item)
-            <= self.config.direct_anchor_max_material_texture_conflict
+            and _material_texture_anchor_allowed(item, self.config)
         )
         semantic_sequence_available = bool(semantic_anchors)
         for frame_offset, detection in enumerate(detections):
@@ -208,8 +209,7 @@ class OilObservationResolver:
                 and _finite(item.y)
                 and item.selected
                 and _unit(item.features.get("r6_material_path", 0.0)) < 0.5
-                and _candidate_material_texture_conflict(item)
-                <= self.config.direct_anchor_max_material_texture_conflict
+                and _material_texture_anchor_allowed(item, self.config)
             )
             for candidate_offset, candidate in enumerate(detection.candidates):
                 if candidate.kind is not BoundaryKind.OIL_AIR or not _finite(candidate.y):
@@ -220,9 +220,6 @@ class OilObservationResolver:
                 material = _candidate_material_support(candidate)
                 artifact = _candidate_artifact_signature(candidate)
                 ambiguity = _candidate_ambiguity(candidate)
-                material_texture_conflict = _candidate_material_texture_conflict(
-                    candidate
-                )
                 material_path = bool(
                     _unit(candidate.features.get("r6_material_path", 0.0)) >= 0.5
                 )
@@ -231,8 +228,7 @@ class OilObservationResolver:
                     and material >= 0.68
                     and artifact <= 0.18
                     and ambiguity <= 0.25
-                    and material_texture_conflict
-                    <= self.config.direct_anchor_max_material_texture_conflict
+                    and _material_texture_anchor_allowed(candidate, self.config)
                 )
                 terminal_partition_support = _unit(
                     candidate.features.get(
@@ -279,8 +275,7 @@ class OilObservationResolver:
                     material_path
                     and _unit(candidate.features.get("boundary_likelihood", 0.0)) >= 0.52
                     and _candidate_optics_opposition(candidate) <= 0.30
-                    and material_texture_conflict
-                    <= self.config.direct_anchor_max_material_texture_conflict
+                    and _material_texture_anchor_allowed(candidate, self.config)
                     and _unit(candidate.features.get("material_path_sector_fraction", 0.0)) >= 0.60
                     and (terminal_fallback or semantic_corroboration)
                 )
@@ -290,8 +285,7 @@ class OilObservationResolver:
                         (candidate.selected or strong_material_anchor)
                         and material >= self.config.direct_anchor_min_material
                         and artifact <= self.config.direct_anchor_max_artifact
-                        and material_texture_conflict
-                        <= self.config.direct_anchor_max_material_texture_conflict
+                        and _material_texture_anchor_allowed(candidate, self.config)
                     )
                 )
                 refs.append(
@@ -354,8 +348,7 @@ class OilObservationResolver:
                     ref.candidate.selected
                     and _unit(ref.candidate.features.get("r6_material_path", 0.0))
                     < 0.5
-                    and _candidate_material_texture_conflict(ref.candidate)
-                    <= self.config.direct_anchor_max_material_texture_conflict
+                    and _material_texture_anchor_allowed(ref.candidate, self.config)
                 )
                 support = 1.0 if key in qualified or semantic_current_anchor else 0.0
                 if support < 1.0:
@@ -950,6 +943,27 @@ def _candidate_material_texture_conflict(candidate: BoundaryCandidate) -> float:
             "material_texture_conflict",
             candidate.features.get("material_texture_conflict", 0.0),
         )
+    )
+
+
+def _material_texture_anchor_allowed(
+    candidate: BoundaryCandidate,
+    config: OilObservationResolverConfig,
+) -> bool:
+    conflict = _candidate_material_texture_conflict(candidate)
+    if conflict <= config.direct_anchor_max_material_texture_conflict:
+        return True
+    if conflict > config.dynamic_anchor_max_material_texture_conflict:
+        return False
+    features = candidate.features
+    if _unit(features.get("registered_motion_available", 0.0)) < 0.5:
+        return False
+    return bool(
+        min(
+            _unit(features.get("registered_internal_motion_support", 0.0)),
+            _unit(features.get("registered_dynamic_support", 0.0)),
+        )
+        >= config.dynamic_anchor_min_internal_motion
     )
 
 

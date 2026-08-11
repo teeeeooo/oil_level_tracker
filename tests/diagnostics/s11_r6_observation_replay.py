@@ -15,27 +15,21 @@ from tests.diagnostics.s11_observation_replay_audit import (
 from tests.diagnostics.s11_report_observability_replay import run_replay
 
 
-R5_NUMERIC_OIL_COUNTS = {
+R6_NUMERIC_OIL_COUNTS = {
     "base_sample_1": 0,
-    "sample2": 2,
-    "sample3": 49,
-    "sample4": 97,
+    "sample2": 5,
+    "sample3": 96,
+    "sample4": 89,
 }
-R5_TRACKING_FINGERPRINTS = {
-    "base_sample_1": "a28aeaa603fb5912aaedf132423d8f78badf9a8a898bcdc9e937af911503af80",
-    "sample2": "61a55cc9f0992f8027d0add32c3679e994c4f62688be79893ea438cafd8db9ae",
-    "sample3": "476f49c9f13b3fc93e0aaff97238fb0bdf85cfc69353b29de074023cbc6c68f5",
-    "sample4": "8cb1785825eab4124000c56bc5d4e20859a712c63302f2a0e996cb1ccf37b21b",
-}
-R4_NUMERIC_OIL_REFERENCE = {
-    "base_sample_1": 2,
-    "sample2": 2,
-    "sample3": 21,
-    "sample4": 64,
+R6_TRACKING_FINGERPRINTS = {
+    "base_sample_1": "83279239b61464ebecc6d7ce04a6695d6256d288ad6ef65df2eed8833f870e6e",
+    "sample2": "55d608e38032ab03db49cb52ad6640d3f7ed73f0c8942847c698242bb73670b3",
+    "sample3": "01f62d65b4556d2ebb6f7e66012b505e18ab20635cd50fc55c427446884b1f0d",
+    "sample4": "e7a3410e06e475e4fd63c5d8b21fd49d1071747b66eca3b7953b8bc560283e22",
 }
 
 
-def run_r5_replay(
+def run_r6_replay(
     *,
     root: Path | None = None,
     output_root: Path | None = None,
@@ -43,7 +37,7 @@ def run_r5_replay(
 ) -> dict[str, object]:
     root = repository_root() if root is None else Path(root)
     output_root = (
-        root / "sample" / "output" / "s11-r5-sequence-first"
+        root / "sample" / "output" / "s11-r6-optics-aware"
         if output_root is None
         else Path(output_root)
     )
@@ -51,16 +45,18 @@ def run_r5_replay(
         root=root,
         output_root=output_root,
         verify_accepted_counts=verify_fingerprints,
-        expected_numeric_oil_counts=R5_NUMERIC_OIL_COUNTS,
-        expected_tracking_fingerprints=R5_TRACKING_FINGERPRINTS,
-        run_label="S11-R5",
-        run_note="Sequence-first Oil/state and independent Foam episode replay",
-        manifest_schema="s11-r5-sequence-first-replay-v1",
+        expected_numeric_oil_counts=R6_NUMERIC_OIL_COUNTS,
+        expected_tracking_fingerprints=R6_TRACKING_FINGERPRINTS,
+        run_label="S11-R6",
+        run_note="Optics-aware image-supported observation replay",
+        manifest_schema="s11-r6-optics-aware-observation-replay-v1",
     )
     audits: dict[str, object] = {}
+    rows_by_sample: dict[str, list[dict[str, object]]] = {}
     for summary in manifest["samples"]:
         sample = str(summary["sample"])
         rows = tracking_rows(Path(str(summary["bundle"])))
+        rows_by_sample[sample] = rows
         sequence = sequence_audit(rows)
         if sequence["numeric_without_same_frame_provenance"]:
             raise AssertionError(f"{sample}: numeric Oil lacks same-frame provenance")
@@ -70,29 +66,25 @@ def run_r5_replay(
             "user_truth": user_truth_audit(root, sample, rows),
         }
 
-    if audits["base_sample_1"]["sequence"]["numeric_count"] != 0:
-        raise AssertionError("Base explanatory-overlay window became numeric")
-    if audits["base_sample_1"]["sequence"]["foam_numeric_count"] != 0:
-        raise AssertionError("Base Foam-absent window published Foam")
-    if audits["sample2"]["sequence"]["foam_numeric_count"] != 0:
-        raise AssertionError("Sample2 unclear/static appearance published Foam")
-    sample3_rows = tracking_rows(
-        Path(
-            next(
-                str(summary["bundle"])
-                for summary in manifest["samples"]
-                if summary["sample"] == "sample3"
-            )
-        )
-    )
-    black_row = nearest(sample3_rows, 67.0)
+    base = audits["base_sample_1"]["sequence"]
+    if base["numeric_count"] != 0 or base["foam_numeric_count"] != 0:
+        raise AssertionError("Base encoded-overlay window must remain unavailable")
+    sample2 = audits["sample2"]["sequence"]
+    if sample2["numeric_count"] != 5 or sample2["foam_numeric_count"] != 0:
+        raise AssertionError("Sample2 clear boundary/static-Foam control regressed")
+    black_row = nearest(rows_by_sample["sample3"], 67.0)
     if black_row["fill_state"] != "UNKNOWN_REVIEW" or black_row["oil_y"] is not None:
         raise AssertionError("Sample3 black/reframe barrier did not resolve UNKNOWN")
+    if any(
+        row["foam_y"] is not None
+        for row in rows_by_sample["sample4"]
+        if float(row["timestamp_sec"]) <= 33.6
+    ):
+        raise AssertionError("Sample4 annotated Foam-absent interval published Foam")
 
-    manifest["r4_numeric_oil_reference"] = R4_NUMERIC_OIL_REFERENCE
-    manifest["r5_visual_audit"] = audits
+    manifest["r6_visual_audit"] = audits
     manifest["secure_windows_status"] = (
-        "NOT_RUN_PRIVATE_VIDEO_UNAVAILABLE_IN_THIS_CHECKOUT"
+        "PENDING_PRIVATE_VIDEO_UNAVAILABLE_IN_THIS_CHECKOUT"
     )
     manifest_path = output_root / "replay_manifest.json"
     manifest_path.write_text(
@@ -104,16 +96,16 @@ def run_r5_replay(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Replay and visually reconcile the historical S11-R5 resolver."
+        description="Replay and visually reconcile the S11-R6 observation owners."
     )
     parser.add_argument(
         "--output-root",
         type=Path,
-        default=Path("sample/output/s11-r5-sequence-first"),
+        default=Path("sample/output/s11-r6-optics-aware"),
     )
     parser.add_argument("--skip-fingerprint-check", action="store_true")
     args = parser.parse_args()
-    manifest = run_r5_replay(
+    manifest = run_r6_replay(
         output_root=args.output_root,
         verify_fingerprints=not args.skip_fingerprint_check,
     )
