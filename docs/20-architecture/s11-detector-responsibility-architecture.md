@@ -1,94 +1,182 @@
 # S11 Detector Responsibility Architecture
 
+**Status:** `ACTIVE`
+
 ## Purpose and authority
 
-This document owns the **durable accepted responsibility boundaries** established by S11 detector work. It intentionally excludes Worker/Auditor chronology, exact frame counts, PR status prose and transient benchmark totals; those belong to [`../60-evidence/s11/`](../60-evidence/s11/). Current sequencing belongs to the [`roadmap`](../00-project/roadmap.md) and [`work plan`](../00-project/work-plan.md).
+This document is the durable responsibility owner for the production S11
+detector. The exact current gate remains in the [work plan](../00-project/work-plan.md),
+and completed measurements remain in [`../60-evidence/s11/`](../60-evidence/s11/).
 
-## Latent Oil versus observable Oil
+The active implementation is R6. R2–R5 documents preserve the causes, controls
+and failed alternatives that led here; they do not define current runtime
+routing when they conflict with this document or the
+[R6 architecture](s11-r6-optics-aware-observation-architecture.md).
 
-Physical Oil may exist even when the current raster cannot identify a unique boundary. Production therefore distinguishes latent physical Oil from observable current-frame Oil evidence. A missing numeric boundary is not proof of no Oil, and truth/Recipe context cannot inject a numeric Oil result into the detector.
+## Production observation path
 
-S5-B remains evidence-preserving and fail-closed: raw observations form bounded proposals, proposals form semantic hypotheses, and a typed current observation is validated by the canonical evidence graph. The serialized current-frame reducer still owns online/preview continuity and contributes evidence to analysis. For a completed production analysis window, R5 preserves the bounded same-frame alternatives and makes one final sequence projection before any public `TrackingSample`, event, judgment or report is built.
+```text
+Glass ROI / exclusions
+  -> photometric preprocessing and optics opposition
+  -> independent Oil candidates, typed no-interface evidence and raw Foam material
+  -> bounded registered temporal evidence
+  -> OilObservationResolver (Oil or image-supported FULL/EMPTY)
+  -> FoamEpisodeResolver (independent Foam episode)
+  -> ObservationSequenceResolver (one composition point)
+  -> one PhaseDetection per sampled frame
+  -> TrackingSample / events / judgment / report
+```
 
-The current-frame result and the R5 result are not two competing public truths. Current-frame output is the acquisition-time observation record; the R5 resolver is the sole final-analysis projection owner when the detector exposes that capability. A legacy detector without the resolver retains its original one-pass projection.
+The detector is evidence-preserving and fail-closed. It may retain several
+same-frame candidates, but only one eligible same-frame Oil candidate can become
+the canonical numeric observation for a frame. Absence of a numeric boundary is
+not proof that physical Oil is absent.
 
-## Hard current-frame safety
+## Owner map
 
-The following remain hard authority boundaries rather than soft ranking preferences:
+| Responsibility | Production owner | Authority boundary |
+|---|---|---|
+| ROI preprocessing and optics opposition | vision preprocessing | produces evidence; cannot publish Oil, Foam or state |
+| current-frame Oil proposals and semantics | S5-B observation pipeline | produces bounded eligible hypotheses and typed evidence |
+| completed-window Oil/FULL/EMPTY selection | `OilObservationResolver` | sole final Oil/state selection owner |
+| completed-window Foam confirmation | `FoamEpisodeResolver` | sole final Foam episode owner; runs after Oil/state |
+| per-frame composition and identity checks | `ObservationSequenceResolver` | sole final composition point |
+| acquisition-time continuity | serialized online Oil reducer | preview/current-frame evidence only; no completed-analysis override |
+| `TrackingSample`, events and report | application/report projection | consumes final observations; cannot repair or invent them |
 
-- authoritative positive no-interface evidence;
-- unavailable/insufficient visibility or evidence;
-- severe glare, exclusion and border conflict;
-- structural/refractive invalidity where the accepted owner proves that topology;
-- accepted-Foam topology that makes an Oil hypothesis physically invalid, including Oil at or above an authoritative Foam front.
+## Current-frame evidence responsibilities
 
-Ambiguity remains a valid production result. Hard-invalid evidence must not regain authority indirectly through comparison, anchoring, neighborhood selection or a downstream fallback.
+### Oil candidates
 
-R3 makes a saturated dark border-cap transition an explicit structural/border invalidity when the border phase is both geometrically thin and photometrically dark relative to the Glass interior. That hypothesis may remain in raw diagnostics, but it cannot become canonical, enter D2/D3 comparison, own an anchor/neighborhood, oppose no-interface evidence or receive Spatial authority. Weak lower-rim D3 recovery outside authoritative Foam also requires material lower-phase area. These are conjunctive guards: ordinary interior transitions, non-saturated border phases and strong retained near-bottom material interfaces do not become invalid merely because they are near an edge. The exact topology and photometry contract is owned by the [`S11-R3 Sequence Observability Integrity Architecture`](s11-sequence-observability-integrity-architecture.md).
+Oil proposals are generated from the base effective ROI, without a Foam mask or
+Foam-front cutoff. Region/phase, Sobel, Canny and Hough evidence may propose
+competing rows; Spatial may provide bounded x-resolved positive corroboration.
+Every candidate retains eligibility, material/phase support, optical opposition,
+anchor provenance and any registered temporal support needed by the final owner.
 
-## Spatial responsibility
+Spatial is evidence, not a publication owner. It cannot override unavailable or
+affirmative no-interface evidence, and it cannot turn a flat or unidentifiable
+scene into numeric Oil merely to improve coverage.
 
-Spatial is bounded **single-frame positive corroboration**, not a universal discriminator and not temporal tracking. It may add x-resolved phase-path evidence where scalar current-frame semantics remain ambiguous, subject to the existing hard safety envelope. It retains no frame history, cannot override accepted no-interface/unavailable outcomes, and cannot convert a flat or otherwise insufficiently identifiable scene into numeric Oil merely to increase coverage.
+### No-interface state evidence
 
-Under authoritative accepted-Foam context only, Spatial may also challenge an already numeric incumbent when artifact opposition exceeds boundary likelihood by at least `0.20` and the incumbent fails its own Foam-excluded path. The challenger must satisfy the unchanged Spatial route and improve boundary-minus-artifact margin by at least `0.08`; failed arbitration preserves the incumbent rather than manufacturing ambiguity. A path-invalid preliminary relative candidate may not terminate evaluation of a distinct full-path candidate in this same bounded context. Outside accepted Foam, the prior ambiguity-only fallback remains unchanged.
+FULL and EMPTY are typed current-raster observations, not inferred numeric
+levels. Their emission uses raw no-interface likelihood for the same frame. A
+previously projected fill state, Recipe value or initial-state confirmation
+cannot serve as evidence for the current frame.
 
-## Foam / Oil context ownership
+### Foam material evidence
 
-S5-A owns current-frame Foam support/component classification. Its bounded current-frame temporal gate remains part of the raw observation record and immediate D5 safety context. D1 established that S5-A classification does not automatically grant every component authority to constrain Oil: structural/refractive Foam-like topology can be withheld from S5-B routing authority while Foam evidence remains independently represented.
+Current-frame Foam processing produces raw material, topology and optics
+features. Raw or rejected Foam remains diagnostic evidence only. It has no
+authority to mask Oil pixels, cut off Oil candidates, select an Oil boundary,
+veto an Oil candidate or establish FULL/EMPTY.
 
-R3 further distinguishes raw current-frame acceptance from publication authority. The existing per-Glass representative-frame lifecycle may learn persistent accepted support as a bounded static-Foam opposition map; a later component materially dominated by that map retains score/mask provenance but cannot update public Foam, fill state or Oil context. Independently, an accepted component must demonstrate layer-like row coherence through materially wide row support or compact narrow support. A fragmented broad bounding box retains diagnostic evidence but cannot publish as Foam. Map lifecycle and row-coherence opposition are publication-gate responsibilities, not new S5-A score terms, Oil evidence or temporal smoothing.
+## Hard safety boundary
 
-R4 makes static opposition tolerant to bounded mask registration only through conjunctive exact, dilated-current and reciprocal-map coverage; a threshold reduction alone is not static proof. Strong Foam publication requires two front-compatible samples and then stays accepted while compatible. The first coherent/non-static strong sample may nevertheless apply the existing D5 front/mask safety constraint to Oil immediately. This pending safety authority cannot update public Foam, fill state, the Foam tracker or retrospective Foam history. Static-dominated, row-incoherent and moderate-pending components retain no Oil-context authority.
+The following remain hard failures for the responsibility they invalidate:
 
-When Foam context is authoritative for Oil, its topology is a **constraint on Oil evidence**, not a second Oil semantic system. Accepted Foam pixels may be excluded from independent Oil corroboration so Foam itself cannot supply Oil proof.
+- unavailable or materially insufficient image evidence;
+- severe glare/optics conflict, exclusion conflict or border conflict;
+- affirmative same-frame no-interface evidence opposing a numeric Oil boundary;
+- proven structural/refractive invalidity; and
+- unresolved competing-interface collision where no unique observation is
+  defensible.
 
-For completed production analysis, R5 resolves public Foam only after the Oil/FULL/EMPTY path is fixed. The sequence Foam owner requires coherent support plus adjacent-frame material/front evolution, rejects a static prelude, permits only bounded internal dropout and cannot choose Oil, create FULL/EMPTY or promote UNKNOWN. The earlier current-frame Foam gate may supply raw masks, scores and safety context, but it is not a second final Foam publication owner.
+Hard-invalid evidence cannot regain authority through ranking, anchoring,
+neighborhood borrowing, Spatial or temporal selection. Lesser optical/static
+overlap is explicit opposition rather than a universal mask.
 
-Accepted-Foam component overlap is not, by itself, hard Oil invalidity. A physical Oil boundary can lie inside the segmented Foam layer near the Foam/Oil transition. For comparative and Spatial recovery only, Foam texture is considered an unresolved alternative when all three facts coincide: the accepted component leaves less than `0.30` of the effective candidate row outside Foam, broad phase strength is below `0.10`, and narrow horizontal coverage is at least `0.90`. That conjunctive rule withholds fallback authority because the accepted component can explain the weak full-width texture; it does not reject an ordinary canonical boundary, classify the candidate as an artifact, or constrain an equally weak candidate whose row is spatially distinct from the accepted component.
+Foam classification is deliberately absent from this Oil hard-safety list. R6
+removed the historical D5 rule that made accepted Foam topology an Oil-routing
+authority. Oil and Foam are resolved independently and meet only during final
+composition.
 
-## D3 comparative current-frame authority
+## Oil and state sequence authority
 
-D3 keeps direct observability/topology invalidity hard while treating correlated weak semantic signals as comparative evidence rather than repeated vetoes. Qualified no-interface opposition is resolved once. For hard-safe candidates, positive and opposing evidence are composed once, and locally near-equal alternatives remain fail-closed.
+`OilObservationResolver` may select only an explicitly eligible hypothesis from
+the same frame. It may compare physical continuity, material anchors, registered
+exposure-compensated change, optics/static opposition and typed no-interface
+evidence over a bounded completed window.
 
-D3 comparative authority is deliberately local: a semantic anchor/neighborhood bounds which hard-safe alternatives may be compared. That comparative mechanism does not authorize a hard-invalid hypothesis to act as the anchor or neighborhood owner.
+A recurring fixed row is not trusted solely because it persists. A conflicted
+candidate may regain anchor authority only when independent registered internal
+raster change supports material evolution. Conversely, a stationary real Oil
+interface may remain eligible when its direct phase/material evidence is strong.
 
-Outside authoritative accepted-Foam context, the local comparison also preserves structural-neighborhood integrity. A comparative candidate below the existing ordinary `0.48` boundary floor may not borrow texture from a nearby hypothesis that retains at least twice its direct narrow response, at least as much boundary likelihood and greater artifact opposition. This is a post-ranking fail-closed check: it cannot promote the stronger neighbor, does not affect candidates already meeting the ordinary boundary floor, and does not replace glare/structure/no-interface safety. Authoritative-Foam scenes retain the accepted D5 residual-raster and topology owners below.
+The resolver never interpolates, carries forward or invents an Oil coordinate.
+Every numeric result must retain same-frame candidate provenance. A frame with no
+defensible candidate remains image-supported FULL/EMPTY or `UNKNOWN_REVIEW`.
 
-## D5 Foam-constrained D2/D3 composition
+## Foam episode authority and composition
 
-D5 preserves the accepted D2/Spatial and D3 Oil authorities when genuine accepted Foam context is present instead of replacing them wholesale with a stricter Foam-only selector. The composition contract is:
+`FoamEpisodeResolver` receives only eligible coherent raw Foam material after the
+Oil/state path is fixed. Confirmation requires layer topology plus registered,
+exposure-compensated material evolution or another independent dynamic cue.
+Brightness, a single bubble, component-mask jitter, global exposure change or a
+static glare prelude is insufficient.
 
-1. S5-B hypotheses and accepted D2/D3 semantic owners remain responsible for Oil.
-2. Authoritative Foam topology is applied as a hard admissibility constraint.
-3. Accepted Foam-component pixels are excluded from independent Oil-identifiability proof where required, while component overlap alone never makes a below-front Oil hypothesis hard-invalid.
-4. no-interface, visibility, glare/exclusion/border and structural safety remain unchanged.
-5. Spatial proves its path on the Foam-excluded residual raster.
-6. any Foam-separated auxiliary selector remains subordinate to these owners and cannot bypass the same hard constraints.
+The final composition rules are:
 
-Foam-separated auxiliary candidates require at least `0.30` horizontal material support. This support floor and the bounded Spatial arbitration remove short bottom-structure authority without giving Foam a second Oil-publication path.
+- visible Oil plus confirmed Foam becomes `FOAMING_VISIBLE`;
+- image-supported FULL plus confirmed Foam becomes `FULL_WITH_FOAM`;
+- EMPTY or UNKNOWN is not promoted merely because Foam-like evidence exists;
+- rejected or pending Foam remains non-public diagnostic evidence; and
+- Foam cannot change the selected Oil coordinate or state path.
 
-The accepted comparative-anchor repair closes the D5/D3 seam where a hypothesis already hard-invalid under authoritative accepted-Foam topology could retain comparative anchor/neighborhood authority over hard-safe alternatives. The current temporal source slice does not reopen that authority.
+There is one final Foam owner and one Oil/state owner, joined once by
+`ObservationSequenceResolver`. No historical current-frame Foam gate remains a
+second final owner.
 
-## Current-frame and final-sequence temporal boundaries
+## Temporal and initial-state boundaries
 
-Current-frame detection retains **one serialized online owner** after canonical evidence. A canonical ambiguous observation remains non-numeric and cannot itself confirm reacquisition. Accepted-boundary continuity, real-boundary pending consistency and ambiguity compatibility share one bounded per-observation motion envelope. When an existing pending reacquisition path is present, ambiguity may preserve that exact pending state only if its canonical projected Y is compatible with the pending position or prediction inside that envelope; preservation does not increment the confirmation count or update pending motion. Only a second real compatible boundary confirms reacquisition. Incompatible or unprojected ambiguity, no-interface and unavailable evidence clear pending reacquisition state.
+The serialized online reducer retains acquisition-time continuity and bounded
+reacquisition semantics for preview/current-frame evidence. It does not feed
+coordinates into the completed-window owner and does not compete with the final
+R6 projection.
 
-The reducer and its same-owner transition-coherence validator jointly own this rule. Retained ambiguous pending state must be unchanged and geometrically compatible, otherwise the transition fails closed before atomic store replacement. Existing accepted-boundary continuity, pending-consistency and real-boundary confirmation semantics remain authoritative.
+The completed-window resolvers use bounded history only to select observations
+already supported by their own frames. Missing intervals stay missing. A
+user-confirmed initial FULL/EMPTY state affects the initial distribution and
+report context only; it cannot create a valid detector sample or a numeric
+coordinate. FULL/EMPTY counts as valid only with `R6_IMAGE_SUPPORTED_STATE`.
 
-R5 adds one bounded **final-analysis sequence owner**, not a second serialized feedback tracker. It receives the completed immutable per-frame detections, uses deterministic bounded dynamic programming and returns exactly one result with the same Glass/frame/timestamp identity for every input. A numeric result must reference a hard-safe candidate from that same frame and carries sequence/same-frame provenance. A frame without a selected candidate remains state-only or UNKNOWN; no path cost can create an intermediate coordinate.
+[Initial-State Retrospective Reconstruction](initial-state-retrospective-reconstruction-architecture.md)
+remains a compatibility responsibility for legacy/current-frame streams. An R6
+stream is not retrospectively projected a second time.
 
-Sequence transitions compare physical continuity, confirmed initial FULL/EMPTY state, material anchors and conjunctive recurring-artifact opposition. Near-black/hard-unavailable frames are UNKNOWN. State entry requires affirmative no-interface support, and long candidate-only spans without independent anchor clusters are censored. Initial state is a state prior only and never supplies a coordinate. Exact mechanics belong to the [`S11-R5 Sequence-First Observation Architecture`](s11-r5-sequence-first-trajectory-architecture.md).
+## Public projection and report boundary
 
-The final sequence result is built before `TrackingSample`, retrospective interpretation, events and judgment. Resolver failure, changed frame identity or changed result cardinality aborts analysis. The resolver does not feed its result back into current-frame detection, and report/graph code cannot alter it.
+Final sequence resolution occurs before `TrackingSample`, events, judgments and
+report generation. Resolver failure, changed frame identity or changed result
+cardinality aborts analysis. Downstream code cannot reread candidates or debug
+metrics to replace the final observation.
 
-Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate **downstream sequence interpretation** for legacy/current-frame result streams, owned by [`initial-state-retrospective-reconstruction-architecture.md`](initial-state-retrospective-reconstruction-architecture.md). A stream already marked `SEQUENCE_RESOLVED_STATE` is not reconstructed a second time. Neither path can transfer retrospective authority into S5-B, D1–D5, the serialized online owner or numeric sequence publication.
+The Oil graph may connect stored finite anchors across a missing run with a
+lower-emphasis dashed display bridge. Such a bridge contains only its observed
+endpoints and creates no sample, coordinate, CSV value, event evidence, capture
+guide or detector history. Extrema, lifecycle events, captures and judgments use
+observed samples only. Detailed presentation ownership belongs to the
+[Result Observation Report Architecture](result-observation-report-architecture.md).
 
-## Observed-graph presentation boundary
+## Historical preservation boundary
 
-Result presentation may omit missing/non-finite vertices and visually connect the remaining stored finite Oil anchors in timestamp order. Consecutive finite observations form solid segments; an edge that crosses one or more missing samples is a lower-emphasis dashed bridge containing only the stored endpoint anchors. This makes the overall movement readable while distinguishing direct observation from a display-only connection. It does not create a value at an omitted timestamp, mutate an official TrackingSample/CSV, supply an overlay position, feed detector history or claim estimated trajectory provenance. `UNKNOWN_REVIEW` and no-interface state bands remain visible across the connected span. Foam keeps gap-preserving rendering because Foam absence is itself meaningful.
+- S5-B and S11 Slices A–D preserve proposal, ambiguity and hard-safety lessons.
+- R2, R3 and R4 preserve causal diagnostics and controlled negative families,
+  but their D5/Foam-to-Oil routing is not current runtime authority.
+- R5 is a field-failed, superseded sequence design and must not be restored as an
+  alternate owner.
+- Historical exact counts and fingerprints are evidence provenance, not current
+  acceptance targets.
 
-This presentation rule does not turn unavailable intervals into estimated observations. The user-facing summary, landmarks and source captures are owned by the separate [`Result Observation Report Architecture`](result-observation-report-architecture.md). R5 identifies observed versus unavailable final-analysis samples; numeric estimation between anchors remains unauthorized by both detector and report architecture.
+The current preservation and holdout gates are defined by the
+[R6 validation contract](../30-validation/s11-r6-optics-aware-observation-validation.md)
+and the [S11 real-field validation contract](../30-validation/s11-real-field-detector-effectiveness.md).
 
 ## Non-authorities
 
-Diagnostic probes, machine manifests, exact historical frame counts and milestone audit records are supporting evidence only. They may explain why a responsibility exists, but they do not supersede this durable boundary or the active project gate.
+Truth files, provisional annotations, source-video identity, Recipe identity,
+frame identity and private field timestamps may validate the detector but cannot
+change production behavior. Debug probes, report presentation, retrospective
+interpretation and aggregate coverage likewise cannot publish a detector
+observation.

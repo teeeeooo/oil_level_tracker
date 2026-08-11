@@ -1,10 +1,16 @@
 # S11 Subtractive Detector Simplification Architecture
 
-**Status:** `DONE`
+**Status:** `HISTORICAL PRE-R6 — A–D EVIDENCE PROVENANCE`
 
 ## Purpose
 
-This document owns the completed S11 A–D design for improving current-frame Oil-boundary effectiveness by **removing redundant authority before adding new detector mechanisms**. Its final-analysis publication boundary is historical and is superseded by the locally accepted [`S11-R5 Sequence-First Observation Architecture`](s11-r5-sequence-first-trajectory-architecture.md); its proposal simplification and hard-safety results remain preservation authority.
+This document preserves the completed S11 A–D design for improving current-frame
+Oil-boundary effectiveness by **removing redundant authority before adding new
+detector mechanisms**. Its runtime routing and final-analysis publication
+boundary are historical and are superseded by the active
+[`S11-R6 Optics-Aware Observation Architecture`](s11-r6-optics-aware-observation-architecture.md).
+Its proposal simplification, negative families and fail-closed lessons remain
+validation provenance; they do not restore a pre-R6 owner.
 
 The design is corpus-wide. It is not a `sample3` repair and MUST NOT introduce video-, frame-, Recipe-, truth- or sample-identity branches.
 
@@ -26,10 +32,17 @@ The existing offline trajectory probe remains negative evidence against solving 
 
 1. **Subtract before adding.** No new CV primitive, dependency, ML model, optical flow or raster history is justified while removing redundant authority preserves or improves evidence coverage.
 2. **Primary representation with only proven competitors.** Region/phase-transition evidence is the primary Oil Y-proposal responsibility. Ordinary Sobel, Canny and Hough may retain bounded competing proposal evidence only where retained failures prove a distinct current responsibility; supplemental proposal families without such proof should be removed.
-3. **Keep only demonstrated hard invalidity hard.** Accepted no-interface, unavailable evidence, severe glare/exclusion/border conflict and authoritative Foam topology remain fail-closed.
+3. **Keep only demonstrated hard invalidity hard.** At the A–D design point,
+   accepted no-interface, unavailable evidence, severe glare/exclusion/border
+   conflict and authoritative Foam topology remained fail-closed. R6 later
+   removed Foam topology from Oil authority; that replacement controls current
+   runtime behavior.
 4. **Compose soft semantics once.** Boundary, artifact, morphology, polarity and ambiguity evidence must not repeatedly veto the same candidate through multiple correlated routes.
 5. **Use Spatial as independent proof.** The existing bounded cross-ROI path may corroborate a hard-safe weak candidate when scalar uniqueness is insufficient; it must not become another duplicate stack of the same semantic thresholds.
-6. **Preserve one current-frame numeric owner and one serialized online owner.** Only a canonical accepted boundary may publish current-frame Oil. R5 later adds one separate completed-analysis projection owner without changing this acquisition-time contract.
+6. **Preserve one current-frame numeric owner and one serialized online owner.**
+   Only a canonical accepted boundary may publish current-frame Oil. The current
+   completed-analysis owner is R6 and may publish only an eligible same-frame
+   candidate.
 
 ## Product optimization objective
 
@@ -72,9 +85,11 @@ Acceptance must report coverage together with truth-near error and false-positiv
 
 The first three slices are source changes to the accepted S5-B observability responsibility and therefore require one focused branch/PR each unless a Worker proves they are inseparable in the same owner. The Orchestrator must classify actual blast radius at handoff; architecture/semantic authority movement is expected to require fresh independent review.
 
-## Preserved boundaries
+## Historical slice boundaries
 
-This design does not authorize changes to:
+For the A–D source slices, this design did not authorize changes to the following
+then-current responsibilities. The active R6 architecture supersedes any
+conflicting Foam/Oil or final-analysis routing below:
 
 - S5-A current-frame Foam classification/publication or online Foam temporal-gate semantics;
 - positive no-interface meaning established by P2;
@@ -89,4 +104,9 @@ If subtractive simplification violates a retained negative family, the correct r
 
 ## Current executable gate
 
-There is no remaining subtractive detector source gate. **Slices A–D, the bounded S11-R2 Foam/Spatial composition repair and the later R3/R4 repairs are accepted on their documented evidence surfaces**. R5 owns the newer final-analysis sequence responsibility; all other detector mechanisms still require new evidence and are not pre-authorized by this architecture. The exact current gate belongs to the [work plan](../00-project/work-plan.md).
+There is no remaining subtractive detector source gate. Slices A–D and the R2–R4
+repairs remain accepted as historical evidence/fixture surfaces, not as active
+owner topology. R6 owns current Oil/state, independent Foam and final composition
+responsibility. All other detector mechanisms still require new evidence and are
+not pre-authorized by this architecture. The exact current gate belongs to the
+[work plan](../00-project/work-plan.md).

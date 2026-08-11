@@ -1,6 +1,10 @@
 # S11 Foam/Spatial Authority Repair Validation Contract
 
-**Status:** `ACCEPTED — see source-tree/corpus evidence`
+**Status:** `HISTORICAL PRE-R6 — ACCEPTED EVIDENCE SURFACE`
+
+> This contract records how R2 was accepted at the time. Its fixtures remain
+> useful preservation evidence, but its D5/Foam-to-Oil ownership is superseded by
+> the [active R6 validation contract](s11-r6-optics-aware-observation-validation.md).
 
 Acceptance evidence is [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
 

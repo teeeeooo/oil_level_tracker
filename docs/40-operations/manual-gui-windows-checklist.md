@@ -76,8 +76,14 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Confirm missing numeric Oil remains absent from samples and overlays. In graphs, verify consecutive finite observations use solid segments, a missing-run connection uses a dashed endpoint-only bridge, no retrospective FULL/EMPTY anchor is fabricated, and observed `UNKNOWN_REVIEW`/no-interface bands remain visible between anchors.
 - Open a legacy v1 observed-only bundle in the new reader and confirm its original meaning remains readable; verify a v1-only consumer does not silently present a newer retrospective-semantics bundle as ordinary v1.
 - In re-detection, confirm CURRENT/local scope cannot silently rebuild the initial sequence without full leading context, while a full-sequence rerun keeps its retrospective provenance separate from the saved official result.
+- For an R6 result carrying `R6_IMAGE_SUPPORTED_STATE`,
+  `R6_OBSERVATION_UNAVAILABLE` or `R6_RESOLVED_OIL`, confirm retrospective
+  reconstruction is `NOT_APPLICABLE`; the confirmed initial state remains report
+  context and never creates a valid detector row.
 
-> These obligations become executable only after the retrospective implementation exists. Recording them here does not execute or approve the final Windows field-workflow check.
+> Retrospective acceptance cases above exercise legacy/current-frame compatibility.
+> They do not authorize a second projection over R6 and do not execute or approve
+> the final Windows field-workflow check.
 
 ## Preview/debug
 - Rapidly scrub seek bar and verify only latest preview appears.
@@ -102,18 +108,55 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Build and run the one-folder package on a general office Windows PC without CUDA or any GPU-compute runtime dependency.
 - Repeat with Unicode and long paths, active file locking, cancellation and application close; confirm video/output/debug resources are released.
 
-### S11-R4 secure Base/Accum residual replay
+### S11-R6 secure Base/Accum holdout
 
-- Record the exact R4 commit, source/package identity, private video hash or approved internal identity, matching Recipe identity, sampling window/cadence and initial-state confirmations before comparison.
-- For Base and Accum separately, export exact, tolerant and reciprocal static-Foam overlap distributions plus tolerance radius and `foam_static_artifact_dominant` count. Do not substitute only the raw Foam score.
-- Record `static_rejected`, `persistence_pending`, accepted strong/moderate, weak, ambiguous and row-incoherent counts, accepted episode start/end times and fill-state distribution.
-- On Base, verify visually Foam remains absent. Compare residual `FULL_WITH_FOAM` against the R3 `32.1%` result and confirm the registered path, rather than a global score change, explains any improvement.
-- On Accum, verify the initially empty interval, rising Oil interval, bounded real turbulent-Foam interval, maximum and later drain. Confirm onset confirmation removes isolated false publication without erasing the real episode.
-- For the earliest accepted Oil before/through each physical transition, capture the source frame with configured ellipse, zero line, canonical Oil and public Foam guides. Record source Y and `zero_line_y - source_y`; do not classify a sign change as a coordinate defect without this overlay.
-- Record numeric Oil, `UNKNOWN_REVIEW`, `FULL_WITH_FOAM`, retrospective accepted/unresolved/conflict and barrier distributions. Confirm Foam-only evidence remains a barrier while valid Foam-plus-canonical-Oil evidence is not discarded solely for coexisting with Foam.
-- Compare visual Oil-drop onset with the stored event and confirm the report says **유면 하강 최초 관찰**. Do not backdate the timestamp through missing observations.
-- Open `report.html` and verify accepted Foam fragments joined by pending continuity appear as one bounded episode where appropriate, while the Foam graph retains missing coordinates and pending evidence never creates an episode start or guide line.
-- If Base fixed Foam remains, stop and preserve the earliest component mask/overlap/coherence/context metrics. If Oil position remains displaced, stop at candidate/overlay evidence. Do not lower Foam/Oil/ambiguity thresholds as a follow-up shortcut.
+- Record the exact R6 commit, source/package identity, private video hash or
+  approved internal identity, matching Recipe identity, sampling window/cadence
+  and initial-state confirmations before comparison. The tested source must match
+  the exact pushed head named by the [current work plan](../00-project/work-plan.md).
+- Review original source frames, configured-ROI overlays, tracking CSV, events and
+  `report.html` together. Aggregate valid coverage or state distribution alone is
+  not an oracle.
+- For every numeric Oil row, confirm an eligible same-frame candidate and
+  `SEQUENCE_SAME_FRAME_CANDIDATE` provenance. Verify no coordinate is carried,
+  interpolated or projected from the initial state through an unavailable frame.
+- Separate `R6_IMAGE_SUPPORTED_STATE`, `R6_RESOLVED_OIL`,
+  `R6_OBSERVATION_UNAVAILABLE` and `R6_INITIAL_STATE_CONTEXT_ONLY` counts. Initial
+  FULL/EMPTY context must not count as valid detector coverage without current
+  raster support.
+- On Base, verify direct review still shows no Foam and require zero public Foam
+  frames/episodes. Confirm initial FULL is context only, then verify the real
+  top-entering descent, lowest observed point and recovery are acquired without
+  following the persistent glare/caustic row.
+- On Accum, verify EMPTY is retained only while the image supports no interface.
+  Confirm acquisition of the rising Oil boundary before the former mid-Glass
+  lock-in, the bounded turbulent Foam episode, the highest observed point and the
+  later fall.
+- For Base and Accum, record first-acquisition latency after each visually clear
+  entry, longest missing run, longest gross-wrong-interface run, public Foam
+  frames/episodes and image-supported versus context-only state duration.
+- Inspect raw/rejected/pending Foam around every public episode. Confirm rejected
+  or static Foam-like glare is never resurrected by the episode resolver and
+  never masks, selects or vetoes Oil. A raw high Foam score alone is not a public
+  Foam observation.
+- For the earliest accepted Oil before/through each physical transition, capture
+  the source frame with configured ellipse, zero line, final Oil and public Foam
+  guides. Record source Y and `zero_line_y - source_y`; do not diagnose direction
+  from the sign alone without checking the overlay.
+- Compare visual rise/fall/high/low/Foam transition times with stored events and
+  captures. Do not backdate an event through missing observations. Confirm report
+  extrema and captures come only from observed samples.
+- Open `report.html` and verify solid observed runs, dashed display-only bridges
+  across missing Oil samples, gap-preserving Foam and no line outside observed
+  endpoints. Dashed bridges must add no CSV value, event, capture guide or cursor
+  coordinate.
+- Treat any Base public Foam episode, Accum EMPTY lock-in through visible Oil, or
+  long fixed-glare/caustic Oil track as a field failure regardless of nominal
+  coverage. Preserve the earliest source frame, overlay and relevant evidence;
+  do not respond by globally lowering Foam/Oil/ambiguity thresholds.
+- Record the result as new R6 evidence. Do not rewrite the historical R4/R5
+  evidence documents or compare against their exact output fingerprints as a
+  pass criterion.
 
 ## S5-B oil boundary and temporal tracking
 - Validate a real, visually clear oil boundary and a weak transparent-oil boundary against user-recorded truth.

@@ -32,9 +32,13 @@ Semantic scoring may combine correlated photometric/morphological evidence, but 
 
 ## Spatial and Foam composition
 
-Spatial positive corroboration and accepted Foam/Oil context are S11 responsibilities layered on this same S5-B pipeline, not alternate publication systems. Their accepted durable contract is owned by [`s11-detector-responsibility-architecture.md`](s11-detector-responsibility-architecture.md).
-
-In particular, accepted Foam context constrains Oil admissibility and independent evidence; it does not replace S5-B with a second semantic authority stack. A hard-invalid Foam-topology hypothesis cannot obtain authority indirectly through comparison or anchoring.
+Spatial positive corroboration is an S11 evidence responsibility layered on this
+same S5-B pipeline, not an alternate publication system. Foam material is
+represented independently. Under the active R6 contract, raw/current-frame Foam
+cannot mask Oil pixels, impose a front cutoff, select or veto an Oil hypothesis,
+or become an Oil comparison anchor. Confirmed Foam is composed only after the
+final Oil/state observation is fixed. The durable composition contract is owned
+by [`s11-detector-responsibility-architecture.md`](s11-detector-responsibility-architecture.md).
 
 ## Serialized temporal ownership
 
@@ -56,9 +60,23 @@ The fixed reducer creates the decision, next record, canonical outcome and track
 
 Any failure before replacement leaves the exact prior store unchanged and returns the canonical failure behavior: no numeric Oil or selected candidate, tracker `NO_UPDATE`, smoothing `PRESERVE`, no legacy fallback and no post-failure promotion. There is no load-bearing validation or failure conversion after the successful state replacement.
 
-The current-frame projection is one-way. Ordinary downstream/report code may project the already accepted closed outcome, but it cannot reread temporal state, independently reject a committed outcome or inject a numeric Oil result. The only later candidate-selection authority is the dedicated R5 completed-analysis sequence owner, which consumes the preserved per-frame evidence without mutating or feeding back into this online store and may publish only an eligible same-frame candidate.
+The current-frame projection is one-way. Ordinary downstream/report code may
+project the already accepted closed outcome, but it cannot reread temporal state,
+independently reject a committed outcome or inject a numeric Oil result. The only
+later candidate-selection authority is the R6 completed-window
+`OilObservationResolver`, which consumes preserved per-frame evidence without
+mutating or feeding back into this online store and may publish only an eligible
+same-frame candidate.
 
-Result-layer interpolation and offline numeric trajectory estimation are not part of the production contract. R5 completed-analysis resolution is the separately owned same-frame-candidate/state responsibility in [`s11-r5-sequence-first-trajectory-architecture.md`](s11-r5-sequence-first-trajectory-architecture.md); it leaves unsupported timestamps unavailable. Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate downstream interpretation for streams not already R5 state-resolved and cannot inject current-frame or numeric Oil authority back into this pipeline.
+Result-layer interpolation and offline numeric trajectory estimation are not
+part of the production contract. R6 completed-analysis resolution is the
+separately owned Oil/state and independent Foam responsibility in
+[`s11-r6-optics-aware-observation-architecture.md`](s11-r6-optics-aware-observation-architecture.md);
+it leaves unsupported timestamps unavailable. Initial-State Retrospective
+FULL/EMPTY Reconstruction remains a compatibility interpretation for legacy or
+current-frame-only streams and cannot inject current-frame or numeric Oil
+authority back into this pipeline. R6 streams are not reconstructed a second
+time.
 
 ## Historical development evidence
 

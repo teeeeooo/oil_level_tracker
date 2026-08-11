@@ -1,6 +1,11 @@
 # S11-R4 Field Residual Authority Validation Contract
 
-**Status:** `VALIDATING`
+**Status:** `HISTORICAL PRE-R6 — PRESERVATION EVIDENCE`
+
+> This is the contemporaneous R4 acceptance contract, not the current executable
+> gate. Its controlled cases remain preservation evidence under the
+> [active R6 validation contract](s11-r6-optics-aware-observation-validation.md);
+> R4 Foam/Oil authority must not be reactivated.
 
 ## Scope
 

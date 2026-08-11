@@ -1,74 +1,143 @@
 # S11 Real-Field Detector Effectiveness Validation Contract
 
-## Scope
+**Status:** `ACTIVE R6 CONTRACT`
 
-This document owns the lean preservation contract for the accepted S11 **detector baseline**. Historical diagnosis, implementation and audit chronology lives under [`../60-evidence/s11/`](../60-evidence/s11/); the latest local detector repair evidence is the [`S11-R5 Sequence-First Observation Evidence`](../60-evidence/s11/s11-r5-sequence-first-observation.md). Investigations and machine manifests live under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Current sequencing remains owned by [`../00-project/work-plan.md`](../00-project/work-plan.md).
+## Scope and oracle
 
-The accepted D1–D5/S5-B and serialized current-frame baseline remains the evidence/safety floor. Subtractive detector Slices A–D, S11-R2 Foam/Spatial composition, R3 border-cap/static-and-row-coherent Foam repair and R4 residual authority repair remain preservation authority. R5 adds the locally accepted final-analysis sequence projection defined by its dedicated [architecture](../20-architecture/s11-r5-sequence-first-trajectory-architecture.md) and [validation contract](s11-r5-sequence-first-trajectory-validation.md). Further threshold relaxation, identity behavior, interpolation and additional publication-owner changes remain unauthorized during the Windows validation gate. Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate downstream responsibility for streams not already sequence-resolved.
+This document owns the durable detector-effectiveness acceptance boundary for
+S11. The active production design is R6, defined by the
+[durable detector architecture](../20-architecture/s11-detector-responsibility-architecture.md)
+and the dedicated
+[R6 architecture](../20-architecture/s11-r6-optics-aware-observation-architecture.md).
+The exact current action remains in the [work plan](../00-project/work-plan.md),
+while completed measurements belong in
+[`../60-evidence/s11/`](../60-evidence/s11/).
 
-The bounded S11-R2 Foam/Spatial composition repair is now accepted on top of that floor. It raises available-corpus numeric Oil from `109/299` to `111/299`, preserves `8/13` truth numerics at `5.4375 px` MAE and removes/corrects misleading sample4 bottom-structure extrema. Its exact acceptance record is [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
+The primary oracle is direct source-frame review inside each configured Glass
+ROI. Checked `.oiltruth`, blind provisional annotations and controlled fixtures
+support that review. Historical fingerprints, aggregate publication counts and
+prior validation outputs cannot override the images.
 
-The post-R2 baseline-validation maintenance keeps that exact `111/299` stream while narrowing the low-light accepted-Foam texture repair to candidates whose row is actually dominated by the accepted component. It also restores immutable historical probe figures and gives the refreshed offline-trajectory manifest explicit design-base versus production-stream provenance. Its review record is [`../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md`](../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md).
+## Required production ownership
 
-R3 supersedes exact-output preservation of that stream where direct review proves it represents Glass structure or fragmented Foam-like appearance. Its dedicated [validation contract](s11-sequence-observability-integrity-validation.md) requires cap-invalidity controls, learned-static lifecycle controls, row-coherent Foam proof, a complete sample3 transition, four-video reconciliation and report inspection. A lower aggregate publication count is acceptable only when the removed observations are physically disproven and the confirmed truth/negative surface remains protected.
+Validation must prove the following current responsibilities:
 
-R5 supersedes current-frame exact output as the completed-analysis publication surface. It preserves hard-safe same-frame alternatives, resolves Oil/FULL/EMPTY over the sampled window, then resolves dynamic Foam independently. Local acceptance is `148/299` same-frame-provenance numeric observations with explicit UNKNOWN gaps, not `148/299` inferred values or an accuracy claim. Its private Base/Accum field effectiveness remains unaccepted until synchronized Windows replay.
+1. current-frame processing preserves bounded Oil candidates, typed
+   no-interface evidence, optics opposition and raw Foam material independently;
+2. final Oil/FULL/EMPTY selection is owned only by `OilObservationResolver`;
+3. every numeric Oil result selects an eligible candidate from that same frame;
+4. FULL/EMPTY validity requires affirmative current-raster state evidence;
+5. the initial state is context/initial distribution only and cannot create
+   valid coverage;
+6. `FoamEpisodeResolver` confirms Foam only after Oil/state is fixed;
+7. raw, rejected or pending Foam cannot mask, select or veto Oil and cannot be
+   resurrected by final sequence processing;
+8. `ObservationSequenceResolver` is the single final composition point; and
+9. no resolver interpolates, carries or invents a coordinate.
 
-## Accepted detector baseline
+Superseded R5 owners and historical D5 Foam-to-Oil routing must remain absent
+from production call paths.
 
-The durable owners in [`../20-architecture/s11-detector-responsibility-architecture.md`](../20-architecture/s11-detector-responsibility-architecture.md) remain materially unchanged:
+## Effectiveness priorities
 
-- hard current-frame no-interface, unavailable, glare/exclusion/border, structural and authoritative-Foam safety;
-- accepted D2 Spatial, D3 comparative and D5 Foam/Oil authority;
-- D3 subcanonical structural-tail integrity outside authoritative-Foam context, rejecting texture borrowed from a directly dominant local structure without promoting that structure;
-- saturated border-cap hypotheses excluded from direct and indirect Oil authority while ordinary interior, non-saturated-border and retained near-bottom interfaces remain eligible;
-- learned-static and row-coherence opposition withholding Foam publication/fill/Oil-context authority while preserving raw diagnostic evidence;
-- ambiguity as a valid non-numeric outcome;
-- only accepted canonical boundary outcomes publishing numeric Oil in the current-frame/online stream;
-- one serialized current-frame temporal owner with atomic replacement/invariant validation;
-- one bounded per-observation motion envelope shared by accepted-boundary continuity, pending consistency and ambiguity compatibility;
-- two-real-boundary reacquisition confirmation semantics;
-- compatible canonical ambiguity preserving an already-pending reacquisition path without count advancement or numeric publication;
-- incompatible/unprojected ambiguity, no-interface and unavailable evidence clearing that pending path;
-- one deterministic R5 final-analysis owner that may select only a hard-safe candidate from the same frame, preserves frame cardinality/identity and cannot fabricate a coordinate across a gap;
-- one post-Oil dynamic Foam episode owner that cannot select Oil or promote state-only/UNKNOWN output;
-- no truth-, Recipe-, frame-identity- or video-identity-based numeric promotion.
+Acceptance prioritizes physical meaning in this order:
 
-## Effectiveness objective and metric priority
+1. no long wrong-interface run on glass structure, glare, caustic reflection,
+   encoded overlay or another fixed artifact;
+2. no published Foam episode on a directly reviewed Foam-absent interval;
+3. timely observation of visible entry, rise, fall, hold, minimum and recovery;
+4. graph-gap length and distribution over visually supportable intervals;
+5. localization error of accepted observations; and
+6. aggregate numeric observation density as supporting evidence only.
 
-The product objective is to make Oil movement understandable from the final observed graph. Detector validation therefore prioritizes:
+A higher coverage number fails when it is produced by prior lock-in, fixed-optics
+tracking, false Foam, truth/Recipe identity, interpolation or unsupported state.
+An unclear frame may remain `UNKNOWN_REVIEW`.
 
-1. **usable numeric coverage** on frames where the Oil interface is visually identifiable enough to support an approximate current-frame observation;
-2. **time-axis observation distribution and gap behavior**, because long ambiguity runs can hide a fall, minimum, recovery or hold even when isolated accepted points are accurate;
-3. **gross wrong-interface protection**, especially persistent tracking of glass structure, reflection, glare or another unrelated feature that would misstate graph level or movement direction;
-4. **pixel localization error** as a secondary quality metric for accepted observations.
+## Controlled preservation surface
 
-A later S11 slice may be accepted with modestly worse pixel MAE when it materially improves usable coverage/graph readability and does not materially worsen gross wrong-interface behavior. Coverage may not be manufactured through truth/Recipe identity, retrospective rewriting, interpolation, unrecorded temporal state or numeric publication without an eligible same-frame candidate.
+Focused and repository regression tests must preserve all of the following
+physical classes:
 
-## Subtractive source-slice acceptance
+- hard unavailable, low-exposure and positive no-interface evidence;
+- saturated glare and unsaturated vertical caustic/ridge optics;
+- exclusion, border-cap, rim, structure and encoded-overlay conflicts;
+- static textured reflection and pixel-identical latent-cause collision pairs;
+- global exposure changes and subpixel component-mask jitter;
+- one droplet, fragmented/non-layer Foam-like material and coherent dynamic Foam;
+- strong stationary Oil, moving low-contrast material interfaces and Oil with
+  partial glare;
+- same-frame candidate provenance, initial-prior release and image-supported
+  FULL/EMPTY validity; and
+- resolver identity/cardinality and deterministic bounded-resource behavior.
 
-Each subtractive detector slice must use the same repository-local four-video evidence surface rather than a single-sample success criterion. Report at least truth-near representation/publication behavior, numeric error for published truth anchors, ambiguity/abstention behavior and retained false-positive protection.
+The valid negative and non-regression classes discovered in Slices A–D and
+R2–R4 remain preservation obligations. Their historical owner topology and exact
+output streams are not preservation obligations when R6 explicitly replaced
+them.
 
-Slice A must prove that consolidating Y-proposal authority does not reduce blind-visible representation or create new numeric Oil on retained glare, structural, Foam, no-interface or transient-false-line negatives. A lower raw-observation/proposal load is supporting evidence only; it does not substitute for correctness.
+## Checked-in video gate
 
-Slice B is accepted: scoped plateau/collision authority increased corpus coverage from 67/299 to 71/299 and reduced sample4 longest missing span from 35.5 s to 12.5 s while retained gross wrong-interface controls remained non-numeric. That accepted behavior is the exact coverage-first baseline for Slice C; later work must not treat the old generic plateau veto as preservation authority.
+Replay all established qualification windows using each matching MP4, Recipe,
+truth/provisional annotation, static-artifact preparation, production detector,
+completed-window observation resolver and report path.
 
-Slice C is accepted: unified bounded Spatial corroboration increased corpus coverage from `71/299` to `109/299` with no removed production numerics, improved sample4 from `26/113` to `62/113`, and reduced its longest missing span from `12.5 s` to `3.5 s` while retaining hard safety and canonical/serialized ownership.
+For every video, record and directly reconcile:
 
-Slice D is accepted: exact-current-main replay reproduced `109/299` across the four qualification windows; the retained user-confirmed truth surface is `8/13` numeric with `5.4375 px` MAE, and the retained collision/glare/structure/Foam/no-interface preservation suite passed `356` tests. Residual long gaps were attributable to overlay-dominated or severe blur/reframing/no-interface/unclear evidence rather than one material general hard-safe detector failure class. Slice D itself authorizes no additional detector mechanism. A later bounded Foam/Spatial composition defect is governed independently by the [`S11 Foam/Spatial Authority Repair Validation Contract`](s11-foam-spatial-authority-repair-validation.md).
+- visually supportable Oil observations and checked truth error;
+- longest missing and gross-wrong-interface runs;
+- Foam frames/episodes against annotated present and absent intervals;
+- acquisition latency after a visibly entering interface;
+- image-supported versus prior-only state duration;
+- same-frame provenance for every numeric coordinate; and
+- event, extremum and capture agreement with the accepted observation stream.
 
-Slice B/C work must preserve the accepted hard-safety boundary and independently prove the responsibility it removes or transfers. For Slice B and later coverage work, unchanged publication is not a success criterion: the change should materially improve usable observed coverage or graph-gap behavior while retaining gross wrong-interface protection. If a subtractive change exposes a retained negative family, repair only the smallest demonstrated safety responsibility rather than restoring an undifferentiated prior heuristic stack.
+The complete repository-local corpus is one validation surface. No sample,
+timestamp, Recipe, truth row or expected output fingerprint may become a
+production branch or single-video tuning target.
 
-No slice may claim acceptance from publication count alone, from one sample, or from temporal/result interpolation of missing current-frame Oil.
+Sample3 `30–60 s` must communicate EMPTY/inflow/Foam/full without turning a fixed
+row into the trajectory. Retained sample2 stationary Oil and genuine
+sample3/sample4 Foam are mandatory non-regressions. Visually unclear or
+overlay-dominated spans may remain unavailable.
 
-## Downstream preservation requirement
+## Secure-Windows holdout
 
-Initial-State Retrospective FULL/EMPTY Reconstruction is allowed only as the separate downstream responsibility defined by [`../20-architecture/initial-state-retrospective-reconstruction-architecture.md`](../20-architecture/initial-state-retrospective-reconstruction-architecture.md). Its implementation must consume immutable observed detector results and must not alter this detector validation contract, detector thresholds, D1–D5/S5-B authority or serialized temporal history. A stream carrying R5 sequence-state provenance must not be reconstructed a second time.
+The exact committed R6 head must be replayed on the private Base/Accum video
+before S11 closure.
 
-Any regression evidence needed because the Lane C implementation materially touches a detector-facing boundary is proportional preservation evidence, not authorization to redesign the detector.
+- Base must publish no Foam over the directly reviewed Foam-absent run, keep
+  initial FULL as context only, and acquire the real descending/recovering
+  interface without following fixed glare or caustics.
+- Accum must retain EMPTY only while same-frame image evidence supports it,
+  acquire visible inflow before the former mid-Glass lock-in, retain only the
+  bounded turbulent Foam episode, and follow the high/fall trajectory.
+- Both Glasses must preserve same-frame numeric provenance and derive lifecycle
+  timestamps/captures only from accepted observations.
 
-Downstream graph presentation may connect only the finite observed Oil anchors already stored by this detector contract. Direct finite runs use solid segments and display-only edges across missing samples use dashed bridges containing only the two endpoint anchors. Validation must prove that no missing timestamp gains a numeric sample or overlay value, state/review bands remain visible, and Foam gaps remain gaps. That presentation behavior is not detector publication or trajectory estimation authority; its detailed acceptance owner is the [`Result Observation Report Validation Contract`](result-observation-report-validation.md).
+Any Base false Foam episode, Accum prior lock-in through visible Oil, or long
+fixed-optics Oil path is a field failure regardless of aggregate coverage.
 
-## Claim boundary
+## Downstream and report boundary
 
-This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. R5 source, sequence and report behavior are reconciled and accepted on the available local corpus, but fixed-artifact/Foam effectiveness and the packaged report remain subject to the secure Base/Accum and final Windows field-workflow gates. No source-tree or local-corpus result alone authorizes that Windows PASS.
+R6 streams are not eligible for a second retrospective state projection. The
+legacy [Initial-State Retrospective Reconstruction](../20-architecture/initial-state-retrospective-reconstruction-architecture.md)
+must leave R6 observations unchanged.
+
+Report code may draw only finite stored Oil anchors. A dashed connection across
+a missing run is display-only and must not create an intermediate sample, CSV
+value, overlay coordinate, event, extremum or capture guide. Foam gaps remain
+gaps. Detailed report acceptance belongs to the
+[Result Observation Report Validation Contract](result-observation-report-validation.md).
+
+## Historical and claim boundary
+
+R2–R4 architecture/validation documents preserve causal history and fixture
+intent. R5 documents preserve a failed design and field-failure record. None is
+an alternate current acceptance owner.
+
+Passing local tests establishes only checked-in-corpus suitability for the
+secure holdout. It does not establish general-field detector accuracy, authorize
+numeric trajectory estimation or satisfy the private Windows gate. The current
+local evidence is recorded in the
+[R6 evidence record](../60-evidence/s11/s11-r6-optics-aware-observation.md).

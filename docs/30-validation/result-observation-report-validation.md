@@ -45,7 +45,9 @@ This contract owns acceptance for the user-facing observation report defined by 
 
 ## Four-video field-corpus acceptance
 
-Replay all established qualification windows at 2 FPS using the matching Recipes and the production `OpenCvPhaseDetector`, static-artifact learning, current-frame acquisition and the R5 final-analysis sequence owner:
+Replay all established qualification windows at 2 FPS using the matching
+Recipes and the production `OpenCvPhaseDetector`, static-artifact preparation,
+current-frame evidence acquisition and the R6 `ObservationSequenceResolver`:
 
 | Sample | Window |
 | --- | --- |

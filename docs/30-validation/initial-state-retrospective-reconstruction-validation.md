@@ -22,14 +22,22 @@ Acceptance must prove that final analysis:
 
 Focused tests must cover symmetric `FULL_NO_INTERFACE` and `EMPTY_NO_INTERFACE` reconstruction and prove:
 
-- an R5 `SEQUENCE_RESOLVED_STATE` stream is not reconstructed or projected a second time;
+- an R6 stream carrying `R6_IMAGE_SUPPORTED_STATE`,
+  `R6_OBSERVATION_UNAVAILABLE` or `R6_RESOLVED_OIL` is not reconstructed or
+  projected a second time;
+- a legacy stream already marked `SEQUENCE_RESOLVED_STATE` is likewise not
+  projected a second time;
 - only the leading unresolved interval is eligible;
 - later real accepted numeric-boundary/topology/direction evidence is required;
 - direction evidence contains at least two real accepted boundary observations;
 - prior-seeded or retrospectively inferred labels cannot circularly confirm the prior;
 - eligible ambiguity may remain in a prefix without contributing confirmation;
-- unavailable/failure/detection-lost/glare/fog evidence, authoritative Foam and contradictory direct evidence form barriers;
-- authoritative Foam without numeric Oil remains a barrier, while valid Foam-plus-canonical-Oil samples may contribute direction evidence and remain excluded from state projection;
+- unavailable/failure/detection-lost/glare/fog evidence, already-published
+  legacy Foam and contradictory direct evidence form barriers;
+- published legacy Foam without numeric Oil remains a barrier, while valid
+  Foam-plus-canonical-Oil samples may contribute direction evidence and remain
+  excluded from state projection;
+- raw, rejected or pending Foam never becomes a retrospective barrier;
 - hard unavailable/failure/glare evidence still blocks malformed samples that also carry a number;
 - prior conflict produces no retrospective interval plus first-class conflict/review;
 - insufficient positive evidence remains unresolved rather than conflict;
@@ -71,6 +79,10 @@ Result Review acceptance must prove:
 
 ## Preservation and claim boundary
 
-The accepted S5-B and S11 current-frame/serialized temporal authorities remain unchanged. No detector thresholds, D1–D5 rules, online temporal behavior, Recipe schema migration, truth data or arbitrary middle-run trajectory estimation is part of this acceptance contract.
+The accepted S5-B and R6 current-frame/final observation authorities remain
+unchanged. No detector thresholds, Oil/state or Foam resolver behavior, online
+temporal behavior, Recipe schema migration, truth data or arbitrary middle-run
+trajectory estimation is part of this acceptance contract. Historical D1–D5
+routing is outside this compatibility contract.
 
 The final Windows field-workflow check remains a later closure obligation after this Lane C implementation and its required validation are accepted; this contract does not authorize executing that final field check.

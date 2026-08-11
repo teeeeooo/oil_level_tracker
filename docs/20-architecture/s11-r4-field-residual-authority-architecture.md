@@ -1,6 +1,12 @@
 # S11-R4 Field Residual Authority Architecture
 
-**Status:** `VALIDATING`
+**Status:** `HISTORICAL PRE-R6 — LOCAL EVIDENCE RETAINED`
+
+> This document preserves the contemporaneous R4 residual repair and fixture
+> intent. Its Foam/Oil authority and sequence behavior are not current runtime
+> contracts. Use the
+> [durable detector architecture](s11-detector-responsibility-architecture.md)
+> and [R6 architecture](s11-r6-optics-aware-observation-architecture.md).
 
 ## Purpose
 

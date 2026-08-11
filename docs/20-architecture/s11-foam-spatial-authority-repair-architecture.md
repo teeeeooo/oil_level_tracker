@@ -1,6 +1,11 @@
 # S11 Foam/Spatial Authority Repair Architecture
 
-**Status:** `ACCEPTED — durable S11-R2 composition contract`
+**Status:** `HISTORICAL PRE-R6 — ACCEPTED CAUSAL/FIXTURE EVIDENCE`
+
+> This document preserves the contemporaneous R2 design and its regression
+> intent. R6 supersedes its D5/Foam-to-Oil routing and final owner topology. Use
+> the [durable detector architecture](s11-detector-responsibility-architecture.md)
+> for current production authority.
 
 ## Purpose
 

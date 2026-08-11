@@ -4,13 +4,25 @@
 
 This document owns the durable sequence-level responsibility for **Initial-State Retrospective FULL/EMPTY Reconstruction** on legacy/current-frame result streams. It is downstream of immutable detector observations and upstream of official event, judgment and state-aware coverage projection. Current sequencing remains owned by the [roadmap](../00-project/roadmap.md) and [work plan](../00-project/work-plan.md); implementation acceptance is owned by the [dedicated validation contract](../30-validation/initial-state-retrospective-reconstruction-validation.md).
 
-This responsibility does not modify S5-B current-frame evidence, S11 D1–D5 authority, or the serialized online temporal owner. Those accepted detector boundaries remain authoritative in [S5-B Oil Boundary Hypothesis Architecture](s5b-oil-boundary-hypothesis-architecture.md) and [S11 Detector Responsibility Architecture](s11-detector-responsibility-architecture.md).
+This responsibility does not modify S5-B current-frame evidence, the R6
+Oil/state or Foam owners, final composition, or the serialized online temporal
+owner. Those detector boundaries are authoritative in
+[S5-B Oil Boundary Hypothesis Architecture](s5b-oil-boundary-hypothesis-architecture.md)
+and [S11 Detector Responsibility Architecture](s11-detector-responsibility-architecture.md).
+Historical D1–D5 routing is not a current authority surface.
 
 ## Placement and immutable observation boundary
 
 The responsibility runs only after the analysis has collected its immutable observed `TrackingSample` sequence and before official event/judgment projection consumes any retrospective state interpretation.
 
-An R5-capable production analysis resolves the confirmed leading state inside the final sequence owner before `TrackingSample` creation. When the first sample carries `SEQUENCE_RESOLVED_STATE`, this retrospective owner returns `NOT_APPLICABLE` and performs no second projection. The sequence state remains non-numeric and carries its own provenance.
+An R6 production analysis resolves only image-supported state inside its final
+Oil/state owner before `TrackingSample` creation. A confirmed initial state is
+context only. When the first sample carries R6 observation provenance
+(`R6_IMAGE_SUPPORTED_STATE`, `R6_OBSERVATION_UNAVAILABLE` or
+`R6_RESOLVED_OIL`), this retrospective owner returns `NOT_APPLICABLE` and
+performs no second projection. `SEQUENCE_RESOLVED_STATE` remains a compatibility
+marker for an already resolved legacy stream. State remains non-numeric and
+carries explicit provenance.
 
 - observed detector `fill_state`, validity, numeric Oil and Foam evidence remain historical observation and are never rewritten;
 - retrospective FULL/EMPTY is a separate sequence interpretation with explicit status and provenance;
@@ -36,11 +48,24 @@ Eligibility requires later real accepted detector evidence, not prior-seeded lab
 
 ## Barriers, contradiction and conflict
 
-The leading prefix stops being retrospectively eligible when sequence evidence introduces an inference barrier or contradicts the confirmed prior. Barriers materially include unavailable/failure/detection-lost/glare/fog evidence, authoritative Foam, and other direct evidence that prevents a defensible FULL/EMPTY interpretation across the interval.
+For an eligible legacy/current-frame-only stream, the leading prefix stops being
+retrospectively eligible when sequence evidence introduces an inference barrier
+or contradicts the confirmed prior. Barriers materially include
+unavailable/failure/detection-lost/glare/fog evidence, already-published Foam
+without numeric Oil, and other direct evidence that prevents a defensible
+FULL/EMPTY interpretation across the interval. Raw, rejected or pending Foam is
+never a retrospective barrier.
 
 Direct contradictory sequence evidence overrides prior-based eligibility. A prior conflict yields **no retrospective interval**, a first-class conflict status and review requirement. A lack of enough confirming evidence without contradiction is **unresolved**, not conflict.
 
-Hard unavailable/failure/detection-lost/glare/fog evidence remains a barrier even if malformed input also carries a number. Authoritative Foam is a barrier when the sample has no independently accepted finite canonical Oil boundary. When valid numeric Oil coexists with Foam, D5 has already applied the physical topology constraint; that numeric observation may contribute direction/topology evidence, while the Foam sample itself remains immutable and is excluded from retrospective state projection. Foam-only prefixes remain unresolved.
+Hard unavailable/failure/detection-lost/glare/fog evidence remains a barrier even
+if malformed legacy input also carries a number. Published Foam is a legacy
+barrier when the sample has no independently accepted finite canonical Oil
+boundary. When valid numeric Oil coexists with published Foam, that numeric
+observation may contribute direction/topology evidence, while the Foam sample
+itself remains immutable and is excluded from retrospective state projection.
+Foam-only legacy prefixes remain unresolved. R6 observations never enter this
+path, so this compatibility rule grants Foam no current Oil/state authority.
 
 ## Non-authorities
 
@@ -49,7 +74,8 @@ This responsibility must not introduce:
 - synthetic numeric Oil boundaries or out-of-range numeric stand-ins;
 - interpolation or arbitrary middle-run gap filling;
 - rewriting of detector samples, validity or serialized temporal history;
-- a second/hidden temporal owner, lookahead authority inside S5-B, or retrospective authority inside D1–D5;
+- a second/hidden temporal owner, lookahead authority inside S5-B, or
+  retrospective authority inside the R6 Oil/state, Foam or composition owners;
 - circular proof in which prior-derived labels become the evidence that confirms the prior.
 
 `RECOVERY` and any other numeric Oil judgment remain dependent on observed numeric Oil where that judgment requires a numeric boundary.

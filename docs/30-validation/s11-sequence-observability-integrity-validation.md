@@ -1,6 +1,11 @@
 # S11-R3 Sequence Observability Integrity Validation Contract
 
-**Status:** `VALIDATING`
+**Status:** `HISTORICAL PRE-R6 — PRESERVATION EVIDENCE`
+
+> This is the contemporaneous R3 acceptance contract, not the current executable
+> gate. Retain its physical negative families under the
+> [active R6 validation contract](s11-r6-optics-aware-observation-validation.md)
+> without restoring the R3 owner topology.
 
 ## Scope
 
