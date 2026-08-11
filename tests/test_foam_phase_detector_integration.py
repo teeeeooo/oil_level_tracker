@@ -38,6 +38,26 @@ def _confirmed_detection(
     return detector.detect(frame, glass, 1, time_sec, debug=debug)
 
 
+def _resolve_repeated_static_frame(
+    frame: np.ndarray,
+    *,
+    count: int = 8,
+):
+    detector = OpenCvPhaseDetector()
+    glass = _glass()
+    raw = [
+        detector.detect(
+            frame.copy(),
+            glass,
+            index,
+            index * 0.5,
+            debug=False,
+        )[0]
+        for index in range(count)
+    ]
+    return raw, detector.resolve_sequence(raw, glass)
+
+
 def test_detector_identity_input_immutability_and_debug_false_fast_path():
     detector = OpenCvPhaseDetector()
     glass = _glass()
@@ -49,12 +69,13 @@ def test_detector_identity_input_immutability_and_debug_false_fast_path():
         frame,
         debug=False,
     )
-    assert OpenCvPhaseDetector.version == "opencv-phase-detector-s5b-typed-production-v1"
+    assert OpenCvPhaseDetector.version == "opencv-phase-detector-r6-optics-aware-v1"
     assert artifacts is None
     assert np.array_equal(frame, before)
-    assert detection.raw_foam_front_y is not None
-    assert detection.smoothed_foam_front_y is not None
-    assert detection.foam_front_px_from_zero is not None
+    assert any(
+        candidate.kind is BoundaryKind.FOAM_FRONT
+        for candidate in detection.candidates
+    )
 
 
 def test_detector_uses_canonical_source_coordinates_and_exposes_finite_evidence():
@@ -73,7 +94,7 @@ def test_detector_uses_canonical_source_coordinates_and_exposes_finite_evidence(
     assert foam_rows
     foam = foam_rows[0]
     assert math.isclose(foam.y, float(foam.features["local_y"]) + bundle.crop_origin[1])
-    assert detection.raw_foam_front_y == foam.y
+    assert foam.features["sequence_foam_eligible"] == 1.0
     for key in (
         "foam_evidence_score",
         "foam_whiteness_ratio",
@@ -90,10 +111,7 @@ def test_detector_uses_canonical_source_coordinates_and_exposes_finite_evidence(
         value = detection.debug_metrics[key]
         assert isinstance(value, (int, float))
         assert math.isfinite(float(value))
-    assert detection.debug_metrics["foam_decision_status"] in {
-        "accepted_strong",
-        "accepted_moderate",
-    }
+    assert detection.debug_metrics["foam_registered_internal_motion_support"] >= 0.0
 
 
 def test_debug_images_are_additive_crop_sized_evidence_artifacts():
@@ -157,13 +175,16 @@ def test_representative_static_foam_is_explained_without_losing_debug_evidence()
     assert reset_artifacts is not None
     assert reset_detection.raw_foam_front_y is None
     assert reset_detection.debug_metrics["foam_decision_status"] == "persistence_pending"
-    assert reset_detection.debug_metrics["foam_oil_context_authoritative"] is True
+    assert reset_detection.debug_metrics["foam_oil_context_authoritative"] is False
     assert reset_detection.debug_metrics["foam_oil_context_publication_accepted"] is False
     assert reset_detection.debug_metrics["foam_static_artifact_pixel_count"] == 0
-    confirmed, _ = detector.detect(frame, glass, 3, 2.5, debug=False)
-    assert confirmed.raw_foam_front_y is not None
-    assert confirmed.debug_metrics["foam_oil_context_authoritative"] is True
-    assert confirmed.debug_metrics["foam_oil_context_publication_accepted"] is True
+    raw, resolution = _resolve_repeated_static_frame(frame)
+    assert all(
+        any(candidate.kind is BoundaryKind.FOAM_FRONT for candidate in item.candidates)
+        for item in raw
+    )
+    assert resolution.diagnostics.foam_episode_count == 0
+    assert all(item.raw_foam_front_y is None for item in resolution.detections)
 
 
 def test_registered_static_match_recovers_bounded_mask_shift():
@@ -229,42 +250,25 @@ def test_transient_foam_in_representative_frames_is_not_learned_as_static():
 
 
 def test_accepted_low_light_foam_does_not_invent_an_oil_boundary_below_texture():
-    detector = OpenCvPhaseDetector()
-    glass = _glass()
     scene = _scene("low-light-foam")
-    detection, _artifacts = _confirmed_detection(
-        detector,
-        glass,
-        scene.frame,
-        time_sec=scene.timestamp,
-        debug=False,
+    raw, resolution = _resolve_repeated_static_frame(scene.frame)
+
+    assert any(
+        candidate.kind is BoundaryKind.FOAM_FRONT
+        for candidate in raw[0].candidates
     )
-    assert detection.raw_foam_front_y is not None
-    assert detection.raw_oil_air_level_y is None
-    assert detection.smoothed_oil_air_level_y is None
+    assert resolution.diagnostics.foam_episode_count == 0
+    assert all(item.raw_oil_air_level_y is None for item in resolution.detections)
+    assert all(item.raw_foam_front_y is None for item in resolution.detections)
 
 
 def _assert_structural_foam_stays_fail_closed(frame: np.ndarray, timestamp: float) -> None:
-    detector = OpenCvPhaseDetector()
-    glass = _glass()
-    detection, _artifacts = _confirmed_detection(
-        detector,
-        glass,
-        frame,
-        time_sec=timestamp,
-        debug=False,
-    )
+    _raw, resolution = _resolve_repeated_static_frame(frame)
 
-    assert detection.raw_foam_front_y is not None
-    assert detection.debug_metrics["foam_decision_status"] in {
-        "accepted_strong",
-        "accepted_moderate",
-    }
-    assert detection.debug_metrics["foam_oil_context_authoritative"] is True
-    assert detection.raw_oil_air_level_y is None
-    assert detection.smoothed_oil_air_level_y is None
-    assert detection.fill_state.value != "FOAMING_VISIBLE"
-    assert "OIL_EVIDENCE_AMBIGUOUS" in detection.flags
+    assert resolution.diagnostics.foam_episode_count == 0
+    assert all(item.raw_foam_front_y is None for item in resolution.detections)
+    assert all(item.raw_oil_air_level_y is None for item in resolution.detections)
+    assert all(item.fill_state.value != "FOAMING_VISIBLE" for item in resolution.detections)
 
 
 def test_accepted_white_foam_plus_structural_band_does_not_create_false_oil():

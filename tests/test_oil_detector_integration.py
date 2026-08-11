@@ -7,7 +7,7 @@ from oil_tracker.domain.enums import FillState, InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
 
 
-DETECTOR_VERSION = "opencv-phase-detector-s5b-typed-production-v1"
+DETECTOR_VERSION = "opencv-phase-detector-r6-optics-aware-v1"
 
 
 def glass(initial=InitialObservationState.AUTO, glass_id="glass-oil"):
@@ -74,9 +74,22 @@ def test_detector_version_canonical_coordinates_and_typed_debug_evidence():
     } <= set(artifacts.profiles)
     assert detection.debug_metrics["oil_decision_status"] == "boundary_accepted"
     candidates = _oil_candidates(detection)
+    semantic = [
+        item for item in candidates if item.source.startswith("oil_hypothesis:")
+    ]
+    supplemental = [
+        item for item in candidates if item.source == "r6_material_path"
+    ]
     assert candidates
-    assert all(item.source.startswith("oil_hypothesis:") for item in candidates)
-    assert all("local_y" in item.features and "source_y" in item.features for item in candidates)
+    assert semantic
+    assert supplemental
+    assert all(
+        "local_y" in item.features and "source_y" in item.features
+        for item in candidates
+    )
+    selected = [item for item in candidates if item.selected]
+    assert len(selected) == 1
+    assert selected == [item for item in semantic if item.selected]
     assert not any(item.source == "oil_consensus" for item in detection.candidates)
 
 
@@ -141,10 +154,23 @@ def test_static_structure_is_not_false_boundary_and_real_boundary_reappears():
         assert detection.raw_oil_air_level_y is None
         assert detection.smoothed_oil_air_level_y is None
         candidates = _oil_candidates(detection)
+        semantic = [
+            item for item in candidates if item.source.startswith("oil_hypothesis:")
+        ]
+        supplemental = [
+            item for item in candidates if item.source == "r6_material_path"
+        ]
         assert candidates
+        assert semantic
+        assert supplemental
         assert all(not item.selected for item in candidates)
-        assert any(item.features["static_prior_contribution"] > 0.0 for item in candidates)
-        assert all(item.source.startswith("oil_hypothesis:") for item in candidates)
+        assert any(
+            item.features["static_prior_contribution"] > 0.0
+            for item in semantic
+        )
+        assert all(
+            "sequence_eligible" in item.features for item in supplemental
+        )
 
     reappeared, _ = detector.detect(oil_frame(130), config, 4, 1.5, debug=True)
     assert reappeared.raw_oil_air_level_y is not None
@@ -165,7 +191,14 @@ def test_partial_static_prior_remains_soft_and_provenance_is_exposed():
     detection, _ = detector.detect(multi_edge_static_band(), config, 1, 0.0, debug=True)
     assert detection.raw_oil_air_level_y is None
     candidates = _oil_candidates(detection)
+    semantic = [
+        item for item in candidates if item.source.startswith("oil_hypothesis:")
+    ]
     assert candidates
+    assert semantic
     assert all(not item.selected for item in candidates)
-    assert all(item.features["provenance_count"] > 0.0 for item in candidates)
-    assert all(0.0 <= item.features["static_prior_contribution"] <= 1.0 for item in candidates)
+    assert all(item.features["provenance_count"] > 0.0 for item in semantic)
+    assert all(
+        0.0 <= item.features["static_prior_contribution"] <= 1.0
+        for item in semantic
+    )

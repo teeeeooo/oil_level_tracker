@@ -18,9 +18,6 @@ from oil_tracker.adapters.vision.foam_temporal_gate import FoamStaticMatch, Foam
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
 from oil_tracker.adapters.vision.oil_shadow_types import OilShadowBounds
 from oil_tracker.adapters.vision.preprocessing import preprocess
-from oil_tracker.adapters.vision.opencv_phase_detector import (
-    _foam_oil_constraint_candidate,
-)
 from tests.diagnostics import s11_evidence_probe as prior_probe
 
 
@@ -74,7 +71,7 @@ def _spatial_inputs(frame: np.ndarray, case: prior_probe.ProbeCase):
         foam,
         case.glass.detector_settings,
     )
-    foam_candidate = _foam_oil_constraint_candidate(
+    foam_candidate = prior_probe._historical_foam_oil_constraint_candidate(
         foam,
         foam_temporal,
         layer_coherent=evaluate_foam_layer_coherence(foam).coherent,

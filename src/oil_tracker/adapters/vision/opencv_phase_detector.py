@@ -7,23 +7,25 @@ import cv2
 import numpy as np
 
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
-from oil_tracker.domain.enums import FillState, InitialObservationState
+from oil_tracker.domain.enums import BoundaryKind, FillState, InitialObservationState
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
 from .fill_state_classifier import classify_fill_state
 from .foam_front_detector import (
     FoamDecisionStatus,
     FoamDetectionResult,
-    FoamEvidenceStrength,
     detect_bottom_connected_foam,
     evaluate_foam_layer_coherence,
-    evaluate_foam_oil_context_authority,
 )
 from .foam_temporal_gate import FoamStaticMatch, FoamTemporalDecision, FoamTemporalGate
 from .geometry_masks import MaskBundle, build_mask_bundle
 from .oil_hypothesis_projection import (
     build_hypothesis_debug_profiles,
     project_production_result,
+)
+from .oil_material_path import (
+    generate_material_path_candidates,
+    material_layer_context_features,
 )
 from .oil_shadow_pipeline import (
     OilHypothesisPipeline,
@@ -38,14 +40,13 @@ from .oil_shadow_types import (
     PipelineFailureStage,
 )
 from .preprocessing import PreprocessResult, preprocess
-from .sequence_foam_resolver import (
-    FoamAdjacentEvidenceTracker,
-    SequenceFoamEpisodeResolver,
-    adjacent_evidence_features,
+from .observation_sequence_resolver import (
+    ObservationSequenceResolution,
+    ObservationSequenceResolver,
 )
-from .sequence_trajectory_resolver import (
-    SequenceResolution,
-    SequenceTrajectoryResolver,
+from .temporal_raster_evidence import (
+    RegisteredFoamMotionTracker,
+    registered_foam_motion_features,
 )
 from .temporal_tracker import TemporalTracker
 
@@ -59,7 +60,7 @@ class PhaseDetectionDebugArtifacts:
 
 
 class OpenCvPhaseDetector:
-    version = "opencv-phase-detector-s5b-typed-production-v1"
+    version = "opencv-phase-detector-r6-optics-aware-v1"
 
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
@@ -67,9 +68,8 @@ class OpenCvPhaseDetector:
         self._static_foam_maps: dict[str, np.ndarray] = {}
         self._foam_gate = FoamTemporalGate()
         self._oil_pipeline = OilHypothesisPipeline()
-        self._foam_adjacent_tracker = FoamAdjacentEvidenceTracker()
-        self._sequence_trajectory_resolver = SequenceTrajectoryResolver()
-        self._sequence_foam_resolver = SequenceFoamEpisodeResolver()
+        self._foam_motion_tracker = RegisteredFoamMotionTracker()
+        self._observation_sequence_resolver = ObservationSequenceResolver()
 
     @property
     def foam_temporal_state_count(self) -> int:
@@ -89,7 +89,7 @@ class OpenCvPhaseDetector:
             self._static_maps.clear()
             self._static_foam_maps.clear()
             self._foam_gate.reset()
-            self._foam_adjacent_tracker.reset()
+            self._foam_motion_tracker.reset()
             self._reset_oil_pipeline(None)
         else:
             key = str(glass_id)
@@ -97,7 +97,7 @@ class OpenCvPhaseDetector:
             self._static_maps.pop(key, None)
             self._static_foam_maps.pop(key, None)
             self._foam_gate.reset(key)
-            self._foam_adjacent_tracker.reset(key)
+            self._foam_motion_tracker.reset(key)
             self._reset_oil_pipeline(key)
 
     def resolve_sequence(
@@ -105,28 +105,14 @@ class OpenCvPhaseDetector:
         detections: list[PhaseDetection] | tuple[PhaseDetection, ...],
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None = None,
-    ) -> SequenceResolution:
+    ) -> ObservationSequenceResolution:
         """Resolve the completed analysis window before public sample projection."""
 
-        oil = self._sequence_trajectory_resolver.resolve(
+        return self._observation_sequence_resolver.resolve(
             detections,
             glass,
             confirmed_initial_state,
         )
-        foam_detections, foam = self._sequence_foam_resolver.resolve(
-            oil.detections,
-            glass,
-        )
-        diagnostics = replace(
-            oil.diagnostics,
-            foam_raw_candidate_count=foam.raw_candidate_count,
-            foam_confirmed_frame_count=foam.confirmed_frame_count,
-            foam_bridged_frame_count=foam.bridged_frame_count,
-            foam_episode_count=foam.episode_count,
-            foam_rejected_static_episode_count=foam.rejected_static_episode_count,
-            foam_rejected_unconfirmed_episode_count=foam.rejected_unconfirmed_episode_count,
-        )
-        return SequenceResolution(foam_detections, diagnostics)
 
     def learn_static_artifact(self, frames: list[np.ndarray], glass: GlassInspectionConfig) -> None:
         if not frames:
@@ -176,6 +162,17 @@ class OpenCvPhaseDetector:
         bundle = build_mask_bundle(frame, glass)
         pre = preprocess(bundle.crop, bundle.effective_mask, settings)
         static_map = self._static_maps.get(glass.id)
+        # R6 generates Oil evidence from the base effective raster. Raw or
+        # current-frame accepted Foam cannot remove a candidate before the
+        # independent observation owners have evaluated it.
+        oil_result = self._evaluate_oil_pipeline(
+            glass.id,
+            pre,
+            bundle,
+            static_map,
+        )
+        oil_projection = project_production_result(oil_result)
+        selected = oil_projection.selected_candidate
         foam = detect_bottom_connected_foam(
             bundle.crop,
             pre.gray,
@@ -184,12 +181,72 @@ class OpenCvPhaseDetector:
             bundle.effective_mask,
             settings,
         )
-        foam_adjacent = self._foam_adjacent_tracker.evaluate(
+        foam_layer = evaluate_foam_layer_coherence(foam)
+        material_layer_topology = bool(
+            foam_layer.coherent
+            and float(foam.component_width_ratio) >= 0.55
+            and float(foam.bounding_box_fill_ratio) >= 0.35
+        )
+        white_material_layer_topology = bool(
+            material_layer_topology and float(foam.whiteness_ratio) >= 0.55
+        )
+        white_material_texture_present = bool(
+            float(foam.whiteness_ratio) >= 0.55
+            and float(foam.component_width_ratio) >= 0.30
+            and float(foam.bounding_box_fill_ratio) >= 0.30
+        )
+        material_path_candidates: list[BoundaryCandidate] = []
+        for candidate in generate_material_path_candidates(
+                pre,
+                bundle.effective_mask,
+                static_map,
+                crop_origin_y=float(bundle.crop_origin[1]),
+                top_k=max(1, min(6, int(settings.candidate_top_k))),
+                # Generic material texture is corroboration for a lower phase
+                # boundary; it is not accepted/public Foam authority.
+                material_evidence_map=foam.combined_evidence_map,
+            ):
+            material_context = material_layer_context_features(
+                foam.combined_evidence_map,
+                bundle.effective_mask,
+                pre.glare_mask,
+                local_y=float(candidate.y) - float(bundle.crop_origin[1]),
+            )
+            path_features = {
+                **candidate.features,
+                **material_context,
+                "sequence_material_layer_topology": float(
+                    material_layer_topology
+                ),
+                "sequence_white_material_layer_topology": float(
+                    white_material_layer_topology
+                ),
+                "sequence_white_material_texture_present": float(
+                    white_material_texture_present
+                ),
+            }
+            path_penalties = {
+                **candidate.penalties,
+                "material_texture_conflict": float(
+                    material_context["material_texture_conflict"]
+                    if white_material_texture_present
+                    else 0.0
+                ),
+            }
+            material_path_candidates.append(
+                replace(
+                    candidate,
+                    features=path_features,
+                    penalties=path_penalties,
+                )
+            )
+        foam_motion = self._foam_motion_tracker.evaluate(
             glass.id,
+            pre.gray,
+            bundle.effective_mask,
             foam.mask,
             foam.front_y,
         )
-        foam_layer = evaluate_foam_layer_coherence(foam)
         static_foam_map = self._static_foam_maps.get(glass.id)
         static_foam_match = _foam_static_match(foam.mask, static_foam_map)
         foam_temporal = self._foam_gate.evaluate(
@@ -200,43 +257,8 @@ class OpenCvPhaseDetector:
             layer_coherent=foam_layer.coherent,
         )
         foam_candidate = foam_temporal.candidate
-        foam_oil_constraint_candidate = _foam_oil_constraint_candidate(
-            foam,
-            foam_temporal,
-            layer_coherent=foam_layer.coherent,
-            static_match=static_foam_match,
-        )
-        foam_context = evaluate_foam_oil_context_authority(foam)
-        foam_context_authoritative = bool(
-            foam_oil_constraint_candidate is not None and foam_context.authoritative
-        )
-        foam_context_reason = (
-            (
-                "strong_onset_pending_safety_constraint"
-                if foam_candidate is None
-                and foam_oil_constraint_candidate is not None
-                else foam_context.reason
-            )
-            if foam_oil_constraint_candidate is not None
-            else "foam_context_not_temporally_accepted"
-        )
-        accepted_foam_component_mask = (
-            foam.mask if foam_context_authoritative else None
-        )
-        oil_result = self._evaluate_oil_pipeline(
-            glass.id,
-            pre,
-            bundle,
-            static_map,
-            accepted_foam_front_local_y=(
-                float(foam_oil_constraint_candidate.y)
-                if foam_context_authoritative
-                else None
-            ),
-            accepted_foam_component_mask=accepted_foam_component_mask,
-        )
-        oil_projection = project_production_result(oil_result)
-        selected = oil_projection.selected_candidate
+        foam_context_authoritative = False
+        foam_context_reason = "r6_independent_oil_evidence"
         previous_state = tracker.current_state
         proposed_state, visibility, flags = classify_fill_state(
             pre.gray,
@@ -305,27 +327,85 @@ class OpenCvPhaseDetector:
             if debug
             else {}
         )
-        candidates = list(oil_projection.candidates)
-        foam_trace_candidate = foam.candidate
-        if foam_trace_candidate is not None:
-            foam_trace_candidate.features.setdefault("local_y", foam_trace_candidate.y)
-            foam_trace_candidate.features["source_y"] = float(foam_trace_candidate.y + origin_y)
-            foam_trace_candidate.features["temporal_pending_count"] = float(foam_temporal.pending_count)
-            foam_trace_candidate.features["temporal_required_count"] = float(foam_temporal.required_count)
-            foam_trace_candidate.features["temporal_front_delta"] = float(foam_temporal.front_delta or 0.0)
-            foam_trace_candidate.features["static_exact_overlap"] = float(
+        oil_candidates: list[BoundaryCandidate] = []
+        for candidate in oil_projection.candidates:
+            if candidate.kind is not BoundaryKind.OIL_AIR:
+                oil_candidates.append(candidate)
+                continue
+            material_context = material_layer_context_features(
+                foam.combined_evidence_map,
+                bundle.effective_mask,
+                pre.glare_mask,
+                local_y=float(candidate.y) - float(origin_y),
+            )
+            candidate_features = dict(candidate.features)
+            candidate_features.update(material_context)
+            candidate_penalties = dict(candidate.penalties)
+            candidate_penalties["material_texture_conflict"] = float(
+                material_context["material_texture_conflict"]
+                if white_material_texture_present
+                else 0.0
+            )
+            oil_candidates.append(
+                replace(
+                    candidate,
+                    features=candidate_features,
+                    penalties=candidate_penalties,
+                )
+            )
+        candidates = [*oil_candidates, *material_path_candidates]
+        raw_foam_candidate = foam.candidate
+        if raw_foam_candidate is not None:
+            sequence_foam_eligible = bool(
+                foam_layer.coherent
+                and not static_foam_match.dominant
+                and float(foam.glare_overlap_ratio)
+                <= float(settings.foam_max_glare_overlap_ratio)
+                # A public Foam episode is a cross-Glass material layer, not a
+                # narrow bottom texture strip or one bright boundary.
+                and float(foam.component_width_ratio) >= 0.55
+                and float(foam.bounding_box_fill_ratio) >= 0.35
+            )
+            foam_features = dict(raw_foam_candidate.features)
+            foam_features.setdefault("local_y", raw_foam_candidate.y)
+            foam_features["source_y"] = float(raw_foam_candidate.y + origin_y)
+            foam_features["temporal_pending_count"] = float(foam_temporal.pending_count)
+            foam_features["temporal_required_count"] = float(foam_temporal.required_count)
+            foam_features["temporal_front_delta"] = float(foam_temporal.front_delta or 0.0)
+            foam_features["static_exact_overlap"] = float(
                 static_foam_match.exact_overlap
             )
-            foam_trace_candidate.features["static_tolerant_overlap"] = float(
+            foam_features["static_tolerant_overlap"] = float(
                 static_foam_match.tolerant_overlap
             )
-            foam_trace_candidate.features["static_reciprocal_overlap"] = float(
+            foam_features["static_reciprocal_overlap"] = float(
                 static_foam_match.reciprocal_overlap
             )
-            foam_trace_candidate.features.update(
-                adjacent_evidence_features(foam_adjacent)
+            foam_features["foam_layer_coherent"] = float(foam_layer.coherent)
+            material_rows = np.flatnonzero(
+                np.any(foam.material_support_mask > 0, axis=1)
             )
-            foam_trace_candidate.y += origin_y
+            foam_features["material_component_bottom_y"] = (
+                float(raw_foam_candidate.y + origin_y)
+                if material_rows.size == 0
+                else float(material_rows[-1] + origin_y)
+            )
+            foam_features["sequence_foam_eligible"] = float(
+                sequence_foam_eligible
+            )
+            foam_features.update(registered_foam_motion_features(foam_motion))
+            foam_trace_candidate = replace(
+                raw_foam_candidate,
+                y=float(raw_foam_candidate.y + origin_y),
+                features=foam_features,
+                selected=False,
+                rejected=not sequence_foam_eligible,
+                reject_reason=(
+                    ""
+                    if sequence_foam_eligible
+                    else "r6_foam_candidate_ineligible"
+                ),
+            )
             candidates.append(foam_trace_candidate)
 
         debug_metrics = {
@@ -333,6 +413,7 @@ class OpenCvPhaseDetector:
             / max(1, np.count_nonzero(bundle.effective_mask)),
             "oil_smoothing_sample_count": int(tracker.oil_sample_count),
             "oil_hypothesis_candidate_count": len(oil_projection.candidates),
+            "r6_material_path_candidate_count": len(material_path_candidates),
             "foam_bottom_connected_area_ratio": float(foam.bottom_connected_area_ratio),
             "foam_evidence_score": float(foam.final_evidence_score),
             "foam_evidence_strength": foam_temporal.evidence_strength.value,
@@ -366,23 +447,31 @@ class OpenCvPhaseDetector:
             "foam_oil_context_authoritative": foam_context_authoritative,
             "foam_oil_context_publication_accepted": foam_candidate is not None,
             "foam_oil_context_reason": foam_context_reason,
-            "foam_oil_context_wide_row_fraction": float(foam_context.wide_row_fraction),
-            "foam_oil_context_wide_row_compactness_median": float(
-                foam_context.wide_row_compactness_median
-            ),
+            "foam_oil_context_wide_row_fraction": 0.0,
+            "foam_oil_context_wide_row_compactness_median": 0.0,
             "foam_temporal_pending_count": int(foam_temporal.pending_count),
             "foam_temporal_required_count": int(foam_temporal.required_count),
             "foam_front_delta": (
                 None if foam_temporal.front_delta is None else float(foam_temporal.front_delta)
             ),
-            "foam_adjacent_evidence_available": foam_adjacent.available,
-            "foam_adjacent_exact_overlap": float(foam_adjacent.exact_overlap),
-            "foam_adjacent_tolerant_overlap": float(foam_adjacent.tolerant_overlap),
-            "foam_adjacent_reciprocal_overlap": float(foam_adjacent.reciprocal_overlap),
-            "foam_adjacent_mask_turnover": float(foam_adjacent.mask_turnover),
-            "foam_adjacent_area_change_ratio": float(foam_adjacent.area_change_ratio),
-            "foam_adjacent_front_delta_ratio": float(foam_adjacent.front_delta_ratio),
-            "foam_adjacent_dynamic_support": float(foam_adjacent.dynamic_support),
+            "foam_adjacent_evidence_available": foam_motion.available,
+            "foam_adjacent_exact_overlap": float(foam_motion.exact_overlap),
+            "foam_adjacent_tolerant_overlap": float(foam_motion.tolerant_overlap),
+            "foam_adjacent_reciprocal_overlap": float(foam_motion.reciprocal_overlap),
+            "foam_adjacent_mask_turnover": float(foam_motion.mask_turnover),
+            "foam_adjacent_area_change_ratio": float(foam_motion.area_change_ratio),
+            "foam_adjacent_front_delta_ratio": float(foam_motion.front_delta_ratio),
+            "foam_adjacent_dynamic_support": float(foam_motion.dynamic_support),
+            "foam_registered_internal_motion_ratio": float(
+                foam_motion.internal_motion_ratio
+            ),
+            "foam_registered_internal_motion_support": float(
+                foam_motion.internal_motion_support
+            ),
+            "foam_registered_dx": float(foam_motion.registration_dx),
+            "foam_registered_dy": float(foam_motion.registration_dy),
+            "foam_registered_exposure_gain": float(foam_motion.exposure_gain),
+            "foam_registered_exposure_offset": float(foam_motion.exposure_offset),
             "foam_min_evidence_score": float(settings.foam_min_evidence_score),
             "foam_strong_evidence_score": float(settings.foam_strong_evidence_score),
             "effective_area": int(np.count_nonzero(bundle.effective_mask)),
@@ -532,6 +621,7 @@ class OpenCvPhaseDetector:
             "horizontal_mask": pre.horizontal_mask,
             "glare_mask": pre.glare_mask,
             "foam_mask": foam.mask,
+            "foam_material_support_mask": foam.material_support_mask,
             "foam_variance": cv2.normalize(foam.variance_map, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8),
             "foam_edge_density": _unit_image(foam.edge_density_map),
             "foam_whiteness": _unit_image(foam.whiteness_map),
@@ -704,30 +794,6 @@ def _foam_static_match(
         ),
         tolerance_radius_px=radius,
     )
-
-
-def _foam_oil_constraint_candidate(
-    foam: FoamDetectionResult,
-    temporal: FoamTemporalDecision,
-    *,
-    layer_coherent: bool,
-    static_match: FoamStaticMatch,
-) -> BoundaryCandidate | None:
-    if temporal.candidate is not None:
-        return temporal.candidate
-    if (
-        temporal.decision_status is FoamDecisionStatus.PERSISTENCE_PENDING
-        and temporal.evidence_strength is FoamEvidenceStrength.STRONG
-        and foam.candidate is not None
-        and bool(layer_coherent)
-        and not static_match.dominant
-    ):
-        # Publication confirmation must not open a one-frame hole in the
-        # existing D5 physical constraint. A coherent, non-static strong
-        # component can protect Oil semantics immediately while public Foam
-        # remains withheld until the next compatible sample.
-        return foam.candidate
-    return None
 
 
 def _effective_photometric_metrics(

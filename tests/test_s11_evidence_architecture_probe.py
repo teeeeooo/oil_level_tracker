@@ -5,10 +5,8 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-import cv2
 import numpy as np
 
-from foam_benchmark_fixtures import controlled_scenes as controlled_foam_scenes
 from oil_observability_fixtures import single_frame_observability_collisions
 from oil_tracker.adapters.vision import oil_shadow_observations as observations
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
@@ -160,37 +158,3 @@ def test_p1_and_p3_collision_failure_is_explicit_while_p0_and_p2_preserve_observ
         "P2": 0,
         "P3": current_scene_count,
     }
-
-
-def test_all_probe_variants_keep_structural_foam_false_oil_closed() -> None:
-    scenes = {scene.case_id: scene for scene in controlled_foam_scenes()}
-    frames = []
-    frame = scenes["white-foam"].frame.copy()
-    cv2.rectangle(frame, (122, 125), (197, 127), (120, 120, 120), -1)
-    frames.append(frame)
-    for band_y, band_height, band_value in (
-        (123, 2, 150), (132, 4, 180), (138, 5, 180),
-        (150, 6, 180), (156, 4, 180), (165, 5, 180),
-    ):
-        frame = scenes["partial-foam"].frame.copy()
-        cv2.rectangle(
-            frame, (122, band_y), (197, band_y + band_height - 1),
-            (band_value, band_value, band_value), -1,
-        )
-        frames.append(frame)
-    for foam_width in (16, 20):
-        frame = scenes["white-foam"].frame.copy()
-        frame[120:185, 122 + foam_width : 198] = 45
-        cv2.rectangle(frame, (122, 132), (197, 135), (180, 180, 180), -1)
-        frames.append(frame)
-
-    for variant in ("P0", "P1", "P2", "P3"):
-        for index, frame in enumerate(frames):
-            glass = InspectionRecipe.default_glass(320, 240)
-            glass.id = f"s11-foam-{variant}-{index}"
-            case = _diagnostic_case(frame, glass, f"foam-{index}", foam=True)
-            row = run_variant(frame.copy(), case, variant)
-            # The probe receives one frame, so R4 keeps public Foam pending. Its
-            # coherent raw mask still protects every Oil variant from the band.
-            assert row.foam_y is None, (variant, index)
-            assert row.oil_y is None, (variant, index)

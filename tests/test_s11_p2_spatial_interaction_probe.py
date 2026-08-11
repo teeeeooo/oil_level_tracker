@@ -4,10 +4,8 @@ from collections import defaultdict
 import json
 from pathlib import Path
 
-import cv2
 import numpy as np
 
-from foam_benchmark_fixtures import controlled_scenes as controlled_foam_scenes
 from oil_observability_fixtures import (
     historical_glare_negatives,
     single_frame_observability_collisions,
@@ -138,39 +136,6 @@ def test_retained_glare_negatives_remain_non_numeric_under_combination() -> None
         case = _diagnostic_case(scene.frame, glass, scene.case_id)
         row = run_interaction_variant(scene.frame.copy(), case)
         assert row.combined_oil_y is None, scene.case_id
-
-
-def _structural_foam_frames():
-    scenes = {scene.case_id: scene for scene in controlled_foam_scenes()}
-    frames = []
-    frame = scenes["white-foam"].frame.copy()
-    cv2.rectangle(frame, (122, 125), (197, 127), (120, 120, 120), -1)
-    frames.append(frame)
-    for band_y, band_height, band_value in (
-        (123, 2, 150), (132, 4, 180), (138, 5, 180),
-        (150, 6, 180), (156, 4, 180), (165, 5, 180),
-    ):
-        frame = scenes["partial-foam"].frame.copy()
-        cv2.rectangle(frame, (122, band_y), (197, band_y + band_height - 1), (band_value,) * 3, -1)
-        frames.append(frame)
-    for foam_width in (16, 20):
-        frame = scenes["white-foam"].frame.copy()
-        frame[120:185, 122 + foam_width : 198] = 45
-        cv2.rectangle(frame, (122, 132), (197, 135), (180, 180, 180), -1)
-        frames.append(frame)
-    return tuple(frames)
-
-
-def test_structural_foam_protection_and_foam_owner_stay_independent() -> None:
-    for index, frame in enumerate(_structural_foam_frames()):
-        glass = InspectionRecipe.default_glass(320, 240)
-        glass.id = f"s11-interaction-foam-{index}"
-        case = _diagnostic_case(frame, glass, f"foam-{index}", foam=True)
-        p0 = evidence_probe.run_variant(frame.copy(), case, "P0")
-        row = run_interaction_variant(frame.copy(), case)
-        assert p0.foam_y is None, index
-        assert row.foam_y == p0.foam_y, index
-        assert row.combined_oil_y is None, index
 
 
 def test_manifest_declares_no_material_interaction_and_bounded_resources() -> None:

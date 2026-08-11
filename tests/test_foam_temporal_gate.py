@@ -38,6 +38,7 @@ def _evidence(status: FoamDecisionStatus, y: float = 50.0, score: float = 0.60):
     )
     return FoamDetectionResult(
         mask=zeros_u8,
+        material_support_mask=zeros_u8.copy(),
         variance_map=zeros_f,
         edge_density_map=zeros_f,
         whiteness_map=zeros_f,

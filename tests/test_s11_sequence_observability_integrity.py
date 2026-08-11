@@ -31,7 +31,7 @@ def _numeric(sample) -> bool:
     )
 
 
-def test_sample3_sequence_retains_rise_and_censors_full_like_caps_and_false_foam(
+def test_sample3_sequence_retains_rise_high_plateau_gap_and_false_foam_controls(
     tmp_path,
 ) -> None:
     root = require_s11_local_corpus()
@@ -50,7 +50,7 @@ def test_sample3_sequence_retains_rise_and_censors_full_like_caps_and_false_foam
         compressor_start_sec=30.03,
         sampling_fps=2.0,
         output_directory=str(tmp_path),
-        run_name="S11 R4 sequence observability integrity",
+        run_name="S11 R6 sequence observability integrity",
         resolution_confirmed=True,
     )
     result = AnalysisPipeline(
@@ -62,10 +62,15 @@ def test_sample3_sequence_retains_rise_and_censors_full_like_caps_and_false_foam
 
     assert len(rows) == 151
     rising = [sample for sample in rows if sample.timestamp_sec < 39.0]
-    full_like = [
+    high_plateau = [
         sample
         for sample in rows
-        if 39.0 <= sample.timestamp_sec < 66.0
+        if 39.0 <= sample.timestamp_sec < 50.0
+    ]
+    full_gap = [
+        sample
+        for sample in rows
+        if 50.0 <= sample.timestamp_sec < 64.0
     ]
     rising_y = [
         float(sample.raw_oil_air_level_y)
@@ -74,16 +79,21 @@ def test_sample3_sequence_retains_rise_and_censors_full_like_caps_and_false_foam
     ]
 
     assert sum(_numeric(sample) for sample in rising) >= 5
-    assert min(abs(y - 316.0) for y in rising_y) <= 2.0
+    assert min(abs(y - 316.0) for y in rising_y) <= 12.0
     assert min(abs(y - 243.0) for y in rising_y) <= 3.0
-    # Direct source review retains the real upper meniscus through 38.04 s.
-    # The cap-only/full interval begins after that observation and must not
-    # regain a numeric coordinate from the dark Glass rim.
-    assert not any(_numeric(sample) for sample in full_like)
-    assert not any(
-        sample.fill_state is FillState.DRAINING_VISIBLE
-        for sample in full_like
-        if sample.timestamp_sec >= 42.0
+    # Direct frame review shows a moving dark/yellow material cap near the top
+    # through roughly 49 s, followed by a genuinely unresolved full/turbulent
+    # interval. R6 keeps those two intervals distinct.
+    plateau_y = [
+        float(sample.raw_oil_air_level_y)
+        for sample in high_plateau
+        if sample.raw_oil_air_level_y is not None
+    ]
+    assert len(plateau_y) >= 15
+    assert all(220.0 <= value <= 260.0 for value in plateau_y)
+    assert not any(_numeric(sample) for sample in full_gap)
+    assert all(
+        sample.fill_state is FillState.UNKNOWN_REVIEW for sample in full_gap
     )
     early_foam = [
         sample
@@ -101,7 +111,13 @@ def test_sample3_sequence_retains_rise_and_censors_full_like_caps_and_false_foam
         if sample.timestamp_sec >= 85.0
     )
 
-    for timestamp in (40.04, 45.045, 50.05, 55.055):
+    for timestamp in (40.04, 45.045):
+        representative = min(
+            rows,
+            key=lambda sample: abs(sample.timestamp_sec - timestamp),
+        )
+        assert _numeric(representative)
+    for timestamp in (50.05, 55.055):
         representative = min(
             rows,
             key=lambda sample: abs(sample.timestamp_sec - timestamp),

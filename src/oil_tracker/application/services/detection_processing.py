@@ -81,12 +81,17 @@ def tracking_sample_from_detection(
         FillState.FULL_NO_INTERFACE,
         FillState.EMPTY_NO_INTERFACE,
     }
+    flags = {str(flag).strip().upper() for flag in detection.flags}
+    sequence_state = "SEQUENCE_RESOLVED_STATE" in flags
+    image_supported_state = explicit_state and (
+        not sequence_state or "R6_IMAGE_SUPPORTED_STATE" in flags
+    )
     visible_valid = detection.fill_state is not FillState.UNKNOWN_REVIEW and (
         oil_px is not None or detection.fill_state is FillState.FULL_WITH_FOAM
     )
     valid = (
         detection.overall_confidence >= glass.detector_settings.minimum_final_confidence
-        and (explicit_state or visible_valid)
+        and (image_supported_state or visible_valid)
     )
     return TrackingSample(
         run_id=run_id,

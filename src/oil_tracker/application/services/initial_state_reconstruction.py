@@ -35,6 +35,23 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
         )
     if not samples:
         return _unresolved(glass.id, prior, "No observed samples are available.")
+    if any(
+        flag in samples[0].flags
+        for flag in (
+            "R6_IMAGE_SUPPORTED_STATE",
+            "R6_OBSERVATION_UNAVAILABLE",
+            "R6_RESOLVED_OIL",
+        )
+    ):
+        return RetrospectiveInterpretation(
+            glass_id=glass.id,
+            status=RetrospectiveStatus.NOT_APPLICABLE,
+            confirmed_prior=prior,
+            reason=(
+                "R6 keeps the confirmed initial state as report context only; "
+                "it does not project prior-only detector samples."
+            ),
+        )
     if "SEQUENCE_RESOLVED_STATE" in samples[0].flags:
         return RetrospectiveInterpretation(
             glass_id=glass.id,

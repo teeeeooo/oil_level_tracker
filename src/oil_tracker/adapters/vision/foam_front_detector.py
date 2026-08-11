@@ -53,6 +53,7 @@ class FoamComponentEvidence:
 @dataclass(frozen=True)
 class FoamDetectionResult:
     mask: np.ndarray
+    material_support_mask: np.ndarray
     variance_map: np.ndarray
     edge_density_map: np.ndarray
     whiteness_map: np.ndarray
@@ -315,15 +316,20 @@ def detect_bottom_connected_foam(
     glare_excluded = valid & ~glare
     whiteness = np.where(glare_excluded, raw_whiteness, 0.0).astype(np.float32)
 
-    variance, edge_density, texture = _texture_evidence(gray, canny, valid, settings)
+    variance, edge_density, texture = _texture_evidence(
+        gray,
+        canny,
+        glare_excluded,
+        settings,
+    )
     chromatic_support, chromatic_evidence = _chromatic_foam_support(
-        chroma, warm_chroma, texture, valid, settings
+        chroma, warm_chroma, texture, glare_excluded, settings
     )
     white_support = (
-        valid
-        & (raw_whiteness >= 0.12)
+        glare_excluded
+        & (whiteness >= 0.12)
         & (texture >= 0.18)
-        & ((0.50 * raw_whiteness + 0.35 * texture) >= 0.24)
+        & ((0.50 * whiteness + 0.35 * texture) >= 0.24)
     )
     white_clean = _clean_support_mask(
         white_support.astype(np.uint8) * 255,
@@ -339,6 +345,10 @@ def detect_bottom_connected_foam(
             raw_support.astype(np.uint8) * 255,
             min(gray.shape[:2]),
         )
+    support = cv2.bitwise_and(
+        support,
+        glare_excluded.astype(np.uint8) * 255,
+    )
     combined = np.maximum(
         np.clip(
             0.50 * whiteness + 0.35 * texture + 0.15 * np.minimum(whiteness, texture),
@@ -390,6 +400,7 @@ def detect_bottom_connected_foam(
     if selected is None:
         return FoamDetectionResult(
             mask=np.zeros_like(gray, dtype=np.uint8),
+            material_support_mask=np.zeros_like(gray, dtype=np.uint8),
             variance_map=variance,
             edge_density_map=edge_density,
             whiteness_map=whiteness,
@@ -446,6 +457,7 @@ def detect_bottom_connected_foam(
     )
     return FoamDetectionResult(
         mask=mask,
+        material_support_mask=selected_mask.astype(np.uint8) * 255,
         variance_map=variance,
         edge_density_map=edge_density,
         whiteness_map=whiteness,
@@ -475,6 +487,7 @@ def _empty_result(shape: tuple[int, int]) -> FoamDetectionResult:
     zeros_f = np.zeros(shape, dtype=np.float32)
     return FoamDetectionResult(
         mask=zeros_u8,
+        material_support_mask=zeros_u8.copy(),
         variance_map=zeros_f,
         edge_density_map=zeros_f.copy(),
         whiteness_map=zeros_f.copy(),

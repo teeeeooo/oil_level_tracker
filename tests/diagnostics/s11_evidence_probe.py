@@ -17,6 +17,8 @@ from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeReposi
 from oil_tracker.adapters.storage.json_truth_repository import JsonTruthRepository
 from oil_tracker.adapters.vision import oil_shadow_observations as observations
 from oil_tracker.adapters.vision.foam_front_detector import (
+    FoamDecisionStatus,
+    FoamEvidenceStrength,
     detect_bottom_connected_foam,
     evaluate_foam_layer_coherence,
 )
@@ -35,9 +37,6 @@ from oil_tracker.adapters.vision.oil_shadow_types import (
     ShadowNoInterfaceObservation,
     ShadowSourceFamily,
     SuccessfulPipelineFrame,
-)
-from oil_tracker.adapters.vision.opencv_phase_detector import (
-    _foam_oil_constraint_candidate,
 )
 from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.adapters.vision.row_features import masked_band_intensity_profiles, masked_row_mean
@@ -436,6 +435,28 @@ def _evaluate_current(pre, bundle, hypotheses, *, decoupled_absence: bool, foam_
         )
 
 
+def _historical_foam_oil_constraint_candidate(
+    foam,
+    temporal,
+    *,
+    layer_coherent: bool,
+    static_match: FoamStaticMatch,
+):
+    """Reproduce the removed R4/D5 probe seam without restoring production authority."""
+
+    if temporal.candidate is not None:
+        return temporal.candidate
+    if (
+        temporal.decision_status is FoamDecisionStatus.PERSISTENCE_PENDING
+        and temporal.evidence_strength is FoamEvidenceStrength.STRONG
+        and foam.candidate is not None
+        and bool(layer_coherent)
+        and not static_match.dominant
+    ):
+        return foam.candidate
+    return None
+
+
 def run_variant(frame: np.ndarray, case: ProbeCase, variant: str) -> ProbeResult:
     if variant not in VARIANTS:
         raise ValueError(f"Unsupported variant: {variant}")
@@ -449,7 +470,7 @@ def run_variant(frame: np.ndarray, case: ProbeCase, variant: str) -> ProbeResult
         bundle.effective_mask, settings,
     )
     foam_temporal = FoamTemporalGate().evaluate(glass.id, foam, settings)
-    foam_constraint = _foam_oil_constraint_candidate(
+    foam_constraint = _historical_foam_oil_constraint_candidate(
         foam,
         foam_temporal,
         layer_coherent=evaluate_foam_layer_coherence(foam).coherent,

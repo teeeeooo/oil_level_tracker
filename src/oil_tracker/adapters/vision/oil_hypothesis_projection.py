@@ -133,6 +133,20 @@ def _candidate_from_hypothesis(
     selected = selected_id == item.identity
     confidence = 0.0 if isinstance(outcome, PipelineFailureOutcome) else float(outcome.confidence)
     margin = 0.0 if isinstance(outcome, PipelineFailureOutcome) else float(outcome.decision_margin)
+    glare_conflict = float(max(item.broad.glare_conflict, item.narrow.glare_overlap))
+    exclusion_conflict = float(
+        max(item.broad.exclusion_conflict, item.narrow.exclusion_overlap)
+    )
+    sequence_eligible = bool(
+        item.visibility >= 0.30
+        and item.evidence_availability >= 0.30
+        and max(
+            glare_conflict,
+            exclusion_conflict,
+            float(item.narrow.border_overlap),
+        )
+        < 0.55
+    )
     features = {
         "hypothesis_identity_token": _identity_token(item.identity),
         "provenance_token": _identity_token("|".join(item.provenance)),
@@ -179,16 +193,14 @@ def _candidate_from_hypothesis(
         "temporal_selected": float(selected),
         "temporal_confidence": confidence,
         "temporal_decision_margin": margin,
+        "sequence_eligible": float(sequence_eligible),
     }
-    glare_conflict = float(max(item.broad.glare_conflict, item.narrow.glare_overlap))
-    exclusion_conflict = float(
-        max(item.broad.exclusion_conflict, item.narrow.exclusion_overlap)
-    )
     penalties = {
         "artifact_likelihood": float(item.artifact_likelihood),
         "ambiguity_likelihood": float(item.ambiguity_likelihood),
         "static_prior_contribution": float(item.static_prior.contribution),
         "glare_conflict": glare_conflict,
+        "optics_conflict": glare_conflict,
         "exclusion_conflict": exclusion_conflict,
         "glare_penalty": glare_conflict,
         "border_penalty": float(item.narrow.border_overlap),
