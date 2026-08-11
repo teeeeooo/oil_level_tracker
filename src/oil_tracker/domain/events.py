@@ -14,6 +14,9 @@ class DebounceConfig:
     low_confidence_threshold: float = 0.35
     movement_threshold_px: float = 1.0
     stable_recovery_sec: float = 1.0
+    oil_drop_confirmation_sec: float = 1.5
+    oil_drop_minimum_delta_px: float = 10.0
+    oil_drop_baseline_sec: float = 1.5
 
 
 def detect_events_for_glass(
@@ -194,7 +197,6 @@ def _crossing_events(
         prev = previous.smoothed_oil_air_level_px_from_zero if previous else None
         if curr is not None and prev is not None:
             if prev < 0 <= curr:
-                events.append(_event_from_sample(run_id, glass_id, EventType.ZERO_CROSS_UP, current))
                 recovery_end = _continuous_condition_end(
                     samples,
                     index,
@@ -202,6 +204,15 @@ def _crossing_events(
                     and _numeric(s.smoothed_oil_air_level_px_from_zero) >= 0
                     and s.fill_state != FillState.UNKNOWN_REVIEW,
                 )
+                if _duration(current, recovery_end) >= config.minimum_duration_sec:
+                    events.append(
+                        _event_from_sample(
+                            run_id,
+                            glass_id,
+                            EventType.ZERO_CROSS_UP,
+                            current,
+                        )
+                    )
                 if _duration(current, recovery_end) >= config.stable_recovery_sec:
                     events.append(
                         _event_from_sample(
@@ -213,7 +224,22 @@ def _crossing_events(
                         )
                     )
             elif prev >= 0 > curr:
-                events.append(_event_from_sample(run_id, glass_id, EventType.ZERO_CROSS_DOWN, current))
+                below_end = _continuous_condition_end(
+                    samples,
+                    index,
+                    lambda s: s.smoothed_oil_air_level_px_from_zero is not None
+                    and _numeric(s.smoothed_oil_air_level_px_from_zero) < 0
+                    and s.fill_state != FillState.UNKNOWN_REVIEW,
+                )
+                if _duration(current, below_end) >= config.minimum_duration_sec:
+                    events.append(
+                        _event_from_sample(
+                            run_id,
+                            glass_id,
+                            EventType.ZERO_CROSS_DOWN,
+                            current,
+                        )
+                    )
         previous = current
 
 
@@ -242,27 +268,71 @@ def _oil_drop_event(
     events: list[EventMarker],
     config: DebounceConfig,
 ) -> None:
-    """Emit the first sustained decrease in engineering oil height."""
-    start: TrackingSample | None = None
-    last: TrackingSample | None = None
-    previous: TrackingSample | None = None
+    """Emit the first multi-sample decrease in engineering oil height."""
+
+    required_duration = max(
+        config.minimum_duration_sec,
+        config.oil_drop_confirmation_sec,
+    )
+    required_delta = max(
+        config.oil_drop_minimum_delta_px,
+        config.movement_threshold_px * 3.0,
+    )
+    for run in _numeric_sample_runs(samples):
+        for start_offset, start in enumerate(run[:-1]):
+            if _duration(run[0], start) < config.oil_drop_baseline_sec:
+                continue
+            start_level = _oil_level(start)
+            assert start_level is not None
+            for end_offset in range(start_offset + 1, len(run)):
+                end = run[end_offset]
+                if _duration(start, end) < required_duration:
+                    continue
+                if _duration(start, end) > required_duration * 2.0:
+                    break
+                segment = run[start_offset : end_offset + 1]
+                end_level = _oil_level(end)
+                assert end_level is not None
+                deltas = [
+                    float(_oil_level(current)) - float(_oil_level(previous))
+                    for previous, current in zip(segment, segment[1:])
+                ]
+                decreasing_steps = sum(
+                    delta < -config.movement_threshold_px
+                    for delta in deltas
+                )
+                required_steps = max(2, math.ceil(len(deltas) * 0.60))
+                if (
+                    float(start_level) - float(end_level) >= required_delta
+                    and decreasing_steps >= required_steps
+                ):
+                    events.append(
+                        _event_from_sample(
+                            run_id,
+                            glass_id,
+                            EventType.OIL_DROP_START,
+                            start,
+                            end.timestamp_sec,
+                        )
+                    )
+                    return
+
+
+def _numeric_sample_runs(
+    samples: list[TrackingSample],
+) -> tuple[tuple[TrackingSample, ...], ...]:
+    runs: list[tuple[TrackingSample, ...]] = []
+    current: list[TrackingSample] = []
     for sample in samples:
-        level = sample.smoothed_oil_air_level_px_from_zero
-        prior_level = previous.smoothed_oil_air_level_px_from_zero if previous else None
-        decreasing = (
-            level is not None
-            and prior_level is not None
-            and _numeric(level) < _numeric(prior_level) - config.movement_threshold_px
-        )
-        if decreasing:
-            start = start or previous or sample
-            last = sample
-            if start is not None and last is not None and _duration(start, last) >= config.minimum_duration_sec:
-                events.append(_event_from_sample(run_id, glass_id, EventType.OIL_DROP_START, start, last.timestamp_sec))
-                return
-        else:
-            start = last = None
-        previous = sample
+        if _oil_level(sample) is None or sample.fill_state is FillState.UNKNOWN_REVIEW:
+            if current:
+                runs.append(tuple(current))
+                current = []
+            continue
+        current.append(sample)
+    if current:
+        runs.append(tuple(current))
+    return tuple(runs)
 
 
 def _continuous_condition_end(

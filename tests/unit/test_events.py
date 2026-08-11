@@ -13,7 +13,17 @@ def test_single_frame_low_confidence_is_debounced():
 
 
 def test_zero_cross_events():
-    events = detect_events_for_glass("r", "g", [s(0, level=-1), s(1, level=2), s(2, level=-1)])
+    events = detect_events_for_glass(
+        "r",
+        "g",
+        [
+            s(0, level=-1),
+            s(1, level=2),
+            s(1.5, level=2),
+            s(2, level=-1),
+            s(2.5, level=-1),
+        ],
+    )
     types = [e.event_type for e in events]
     assert EventType.ZERO_CROSS_UP in types
     assert EventType.ZERO_CROSS_DOWN in types
@@ -21,12 +31,16 @@ def test_zero_cross_events():
 
 def test_oil_drop_and_stable_recovery_events():
     samples = [
-        s(0.0, level=4),
-        s(0.5, level=2),
-        s(1.0, level=-2),
-        s(1.5, level=1),
-        s(2.0, level=2),
-        s(2.5, level=2),
+        s(0.0, level=8),
+        s(0.5, level=8),
+        s(1.0, level=8),
+        s(1.5, level=8),
+        s(2.0, level=4),
+        s(2.5, level=-2),
+        s(3.0, level=-3),
+        s(3.5, level=1),
+        s(4.0, level=2),
+        s(4.5, level=2),
     ]
     events = detect_events_for_glass(
         "r", "g", samples,
@@ -35,6 +49,20 @@ def test_oil_drop_and_stable_recovery_events():
     types = [e.event_type for e in events]
     assert EventType.OIL_DROP_START in types
     assert EventType.ZERO_STABLE_RECOVERY in types
+
+
+def test_single_step_oil_jitter_does_not_start_drop_event():
+    samples = [
+        s(0.0, level=10),
+        s(0.5, level=5),
+        s(1.0, level=11),
+        s(1.5, level=10),
+        s(2.0, level=12),
+    ]
+
+    events = detect_events_for_glass("r", "g", samples)
+
+    assert EventType.OIL_DROP_START not in [event.event_type for event in events]
 
 
 def test_semantic_flag_events_are_emitted():
