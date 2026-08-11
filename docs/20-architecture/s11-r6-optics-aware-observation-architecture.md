@@ -69,6 +69,25 @@ carry a coordinate. A recurring fixed row is opposed only when it is both
 optically/static-like and lacks registered material evolution. Stationary real
 Oil remains possible when phase/material evidence is strong.
 
+### Material-texture conflict
+
+A wide bright or textured layer is deliberately not synonymous with Foam, but a
+row inside that layer also cannot become an Oil anchor merely because it repeats.
+R6 therefore separates candidate existence from anchor authority:
+
+- a low-conflict cross-ROI phase path may anchor directly;
+- a terminal supplemental path without semantic anchors requires broad support
+  across the ROI sectors;
+- a moderately conflicted material boundary may recover anchor authority only
+  when registered, exposure-compensated internal raster change independently
+  proves material evolution; and
+- an identical/static conflicted raster remains unanchored even when repeated.
+
+Registered material change is an Oil-anchor feature, not accepted Foam and not a
+permission for Foam to mask or select Oil. This distinction preserves the late
+sample4 material boundary while keeping pixel-identical Oil/glare latent-cause
+collisions fail-closed.
+
 ## FULL/EMPTY and initial state
 
 FULL/EMPTY nodes receive emission only from typed current-raster no-interface

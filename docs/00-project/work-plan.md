@@ -1,59 +1,55 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `ACTIVE`
-**Current gate:** `R6 optics-aware current-frame evidence and bounded temporal observation replacement`
-**Source authority:** `R5 secure-Windows field failure; R5 local acceptance withdrawn`
+**Milestone status:** `VALIDATING`
+**Current gate:** `Exact-head secure-Windows R6 Base/Accum holdout`
+**Source authority:** `R6 local evidence + R5 secure-Windows field failure`
 
-## Why R6 is active
+## Local result accepted for field validation
 
-The synchronized private Base/Accum replay disproved R5's local acceptance. R5 increased nominal valid coverage to `98.8–99.8%`, but most of that coverage was not image-supported:
+R6 completed the planned vertical replacement and local direct-image gate:
 
-- Base visually contains no Foam, while `490/601` frames became `FULL_WITH_FOAM`; fixed vertical light streaks, glare and caustic reflection were published as Foam.
-- Accum remained `EMPTY_NO_INTERFACE` for `555/601` frames and missed the visible rise/Foam/high/fall cycle until roughly `52 s` after the visual maximum.
-- an initial FULL/EMPTY prior was reused as recurring state evidence, and raw Foam candidates could regain final publication authority after current-frame rejection.
-- Oil and Foam sequence selection consumed candidate scores produced from the same weak saturation-only glare model; a smoother path therefore amplified incorrect evidence instead of repairing detection.
+- deleted the R5 trajectory/Foam runtime owners instead of stacking a new
+  reducer over them;
+- made Oil candidate generation independent of Foam publication;
+- added optics-aware caustic/overlay opposition, generic material paths and
+  registered exposure-compensated raster evidence;
+- limited FULL/EMPTY to image-supported state and initial state to context;
+- retained same-frame coordinates only, with UNKNOWN and display-only dashed
+  graph gaps where no coordinate is supported; and
+- passed `1,502` repository tests plus the deterministic four-video replay.
 
-R5 remains historical evidence for a failed approach. It is not the production acceptance baseline and must not be tuned with additional threshold exceptions.
+The local replay publishes `190/299` numeric Oil rows, all with same-frame
+provenance. This number is observation density, not accuracy. Direct review and
+truth/provisional reconciliation are in the
+[R6 evidence](../60-evidence/s11/s11-r6-optics-aware-observation.md) and
+[checked-video diagnostic](../50-diagnostics/s11/s11-r6-checked-video-reconciliation.md).
 
-## Active owners
+## Current executable action
 
-- Architecture: [S11-R6 Optics-Aware Observation Architecture](../20-architecture/s11-r6-optics-aware-observation-architecture.md)
-- Validation: [S11-R6 Optics-Aware Observation Validation](../30-validation/s11-r6-optics-aware-observation-validation.md)
-- Field root cause: [S11-R5 Secure-Windows Field Failure](../50-diagnostics/s11/s11-r5-secure-windows-field-failure.md)
-- Historical R5 evidence: [S11-R5 Sequence-First Observation Evidence](../60-evidence/s11/s11-r5-sequence-first-observation.md)
+Run the exact pushed head on the private Windows Base/Accum video using the
+existing synchronized workflow and review source frames, overlays, tracking CSV,
+events and report together.
 
-## Executable sequence
+Pass requires:
 
-1. replace the R5 sequence/publication seam rather than stacking an R6 branch on it;
-2. make Oil proposal generation independent of unconfirmed Foam and expose explicit candidate eligibility/provenance;
-3. replace saturation-only glare with bounded optics-aware opposition and exposure-compensated temporal evidence;
-4. resolve Oil, affirmative no-interface state and Foam independently, then compose one public observation;
-5. validate directly against checked-in source images, truth/provisional annotations and controlled negatives;
-6. run the same build on the private Windows Base/Accum holdout; and
-7. reconnect event/report acceptance only after detector observations pass the field gate.
+- Base: no published Foam over the visually Foam-absent run; initial FULL stays
+  context only; the real top-entering descent, low and recovery are acquired
+  without following the fixed glare/caustic;
+- Accum: EMPTY is retained only while current image evidence supports it; the
+  rising boundary is acquired before the former mid-Glass lock-in; high/fall are
+  followed; and only the bounded turbulent Foam episode is published;
+- both: every numeric coordinate has a supportable same-frame source candidate,
+  and lifecycle captures/timestamps correspond to the accepted observation
+  trajectory.
 
-## Cleanup boundary
+A Base false Foam episode, Accum prior lock-in through visible Oil, or a long
+fixed-optics Oil track is a field FAIL independent of aggregate coverage.
 
-R6 is a vertical replacement, not an additional reducer:
+## Authority links
 
-- remove R5's `SequenceTrajectoryResolver` and `SequenceFoamEpisodeResolver` after their replacement tests migrate;
-- do not infer state evidence from a previously projected `fill_state`;
-- do not count prior-only FULL/EMPTY as valid detector coverage;
-- do not let a raw/rejected Foam candidate mask Oil or become public Foam;
-- keep current-frame preview and completed-analysis publication under one evidence vocabulary; and
-- retain debug traces and historical documents, but remove obsolete runtime owners and compatibility branches once no caller remains.
-
-## Acceptance boundary
-
-Aggregate valid coverage is not an acceptance measure. R6 is evaluated with:
-
-- observed Oil coverage only on visually supportable intervals;
-- image-supported FULL/EMPTY duration, reported separately from prior-only context;
-- gross wrong-interface duration and longest wrong-track run;
-- false published Foam frames/episodes on Foam-absent intervals;
-- acquisition latency after a visually supportable boundary appears;
-- Oil coordinate error at checked-in truth anchors; and
-- event timing only after the underlying observation track is visually accepted.
-
-Local samples cannot close the private field defect. The exact R6 head must produce synchronized overlays and detector/report output on Windows. A Base Foam false episode, an Accum initial-state lock-in through the visible rise, or a long fixed-glare Oil track fails the gate even if aggregate coverage increases.
+- [R6 architecture](../20-architecture/s11-r6-optics-aware-observation-architecture.md)
+- [R6 validation contract](../30-validation/s11-r6-optics-aware-observation-validation.md)
+- [R6 local evidence](../60-evidence/s11/s11-r6-optics-aware-observation.md)
+- [R5 private field failure](../50-diagnostics/s11/s11-r5-secure-windows-field-failure.md)
+- [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)

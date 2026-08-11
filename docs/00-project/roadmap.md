@@ -1,6 +1,6 @@
 # Project Roadmap
 
-**Status:** `ACTIVE`
+**Status:** `VALIDATING`
 
 This document is the long-term milestone SSOT. It owns milestone order, scope and state. Exact branch progress, findings and immediate next action belong only in the [current work plan](work-plan.md).
 
@@ -155,9 +155,9 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
-- **Status:** `ACTIVE`
-- **Major result:** The secure-Windows holdout rejected R5: its near-total nominal coverage was dominated by Base glare-to-Foam publication and Accum initial-EMPTY lock-in. R6 is replacing the mixed current-frame/sequence authority with optics-aware evidence, independent Oil/state/Foam resolution and explicit removal of superseded R5 runtime owners.
-- **Next gate:** Complete the R6 vertical replacement, direct-image local corpus/negative validation and then the synchronized secure-Windows Base/Accum holdout before report/event acceptance.
+- **Status:** `VALIDATING`
+- **Major result:** R6 replaced and deleted the field-failed R5 runtime owners, separated Oil/state/Foam authority, added optics-aware and registered material evidence, passed `1,502` tests and produced a directly reviewed deterministic four-video replay with `190/299` same-frame numeric Oil observations. Local acceptance is evidence-based and does not close the private field defect.
+- **Next gate:** Replay the exact pushed R6 head on the synchronized secure-Windows Base/Accum holdout and reject any Base false Foam, Accum initial-state lock-in or long fixed-optics Oil track before report/event acceptance.
 - **Priority:** `P0`
 - **Detail:** [current work plan](work-plan.md), [R6 architecture](../20-architecture/s11-r6-optics-aware-observation-architecture.md), [R6 validation](../30-validation/s11-r6-optics-aware-observation-validation.md), [R5 field failure](../50-diagnostics/s11/s11-r5-secure-windows-field-failure.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE` → `S11-M PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING` → `S11-M PLANNED` → `S12 PLANNED`.
 
 Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5 failed its private field holdout and is superseded as runtime authority by the active R6 replacement. S11-M remains blocked until the private-Windows and packaged-workflow S11 gate closes, and S12 follows S11-M.

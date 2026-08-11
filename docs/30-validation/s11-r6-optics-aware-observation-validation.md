@@ -1,6 +1,6 @@
 # S11-R6 Optics-Aware Observation Validation
 
-**Status:** `ACTIVE`
+**Status:** `LOCAL PASS — SECURE-WINDOWS PENDING`
 
 ## Oracle and comparison
 
@@ -30,6 +30,11 @@ all Foam-absent controls publish no Foam, while retained real Foam episodes rema
 
 Temporal Foam evidence must be exposure-compensated and bounded. A global
 brightness step or subpixel mask jitter alone cannot confirm an episode.
+
+Pixel-identical latent-cause collision pairs must remain non-numeric even after
+repetition. A dynamic material twin may regain anchor authority only from
+registered internal change, and removing that allowance must not be accepted if
+it creates a visually false long graph gap.
 
 ## Gate 3 — Oil/state mechanics
 
@@ -82,3 +87,10 @@ The exact committed R6 head must be replayed on the private Base/Accum video.
 Any Base false Foam episode or Accum lock-in through the visible transition is a
 field FAIL independent of overall coverage. The private result must be recorded
 before S11 can close.
+
+## Local disposition
+
+Gates 1–5 pass on the checked-in corpus at `f2369ab`. The exact replay and
+direct-image reconciliation are recorded in the
+[R6 local evidence](../60-evidence/s11/s11-r6-optics-aware-observation.md).
+This status does not satisfy the secure-Windows holdout.
