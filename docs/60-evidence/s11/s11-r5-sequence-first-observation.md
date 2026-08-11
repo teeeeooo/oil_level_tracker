@@ -1,6 +1,6 @@
 # S11-R5 Sequence-First Observation Evidence
 
-**Status:** `LOCAL_ACCEPTED — SECURE WINDOWS REQUIRED`
+**Status:** `LOCAL_RESULT RETAINED — FIELD REJECTED`
 
 **R4 comparison baseline:** `20d6b47e94f38a4a12c4bc1b9f1d571300408bca`
 
@@ -17,6 +17,14 @@
 **Direct-image guard correction commit:** `ac45a027ffe6676f64d83a7a741d87a3b3a741b9`
 
 ## Outcome
+
+> **Field disposition (2026-08-11):** the synchronized secure-Windows
+> Base/Accum holdout rejected this local result. Base published false Foam on
+> `490/601` frames despite no visual Foam, and Accum stayed initial-EMPTY through
+> the visible rise/high/fall cycle. The counts below remain truthful local
+> provenance; they are not current acceptance evidence. See the
+> [field-failure diagnostic](../../50-diagnostics/s11/s11-r5-secure-windows-field-failure.md)
+> and the [R6 replacement architecture](../../20-architecture/s11-r6-optics-aware-observation-architecture.md).
 
 R5 locally accepts a change in final-analysis authority rather than another current-frame threshold adjustment. Raw current-frame observations remain available, but the production analysis now compares bounded Oil candidates, explicit FULL/EMPTY states and UNKNOWN over the complete sampled window before creating public `TrackingSample`, event, judgment and report data.
 

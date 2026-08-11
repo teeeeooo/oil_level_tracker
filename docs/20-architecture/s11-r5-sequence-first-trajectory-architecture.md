@@ -1,6 +1,11 @@
 # S11-R5 Sequence-First Observation Architecture
 
-**Status:** `LOCAL_ACCEPTED — SECURE WINDOWS REQUIRED`
+**Status:** `SUPERSEDED — FAILED SECURE-WINDOWS HOLDOUT`
+
+R5 is retained as a design-history record. The private holdout demonstrated that
+its state prior, candidate resurrection and Foam episode authority could turn
+weak current-frame evidence into confident but false history. It is replaced by
+the [R6 optics-aware observation architecture](s11-r6-optics-aware-observation-architecture.md).
 
 ## Purpose
 

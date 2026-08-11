@@ -1,6 +1,11 @@
 # S11-R5 Sequence-First Observation Validation Contract
 
-**Status:** `LOCAL_ACCEPTED — SECURE WINDOWS REQUIRED`
+**Status:** `FAILED — SECURE-WINDOWS HOLDOUT`
+
+The local gates below remain historical evidence of what was tested. They did
+not predict the Base glare-to-Foam and Accum initial-state lock-in failures in
+the private holdout. Current acceptance is owned by
+[S11-R6 Optics-Aware Observation Validation](s11-r6-optics-aware-observation-validation.md).
 
 ## Scope and oracle
 

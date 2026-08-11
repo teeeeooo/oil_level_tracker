@@ -155,11 +155,11 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
-- **Status:** `VALIDATING`
-- **Major result:** R5 locally replaces current-frame final reduction with a bounded sequence-first candidate/state resolver, independent dynamic Foam episodes and persistent lifecycle events. Four-video production replay and direct image review accept `148/299` same-frame-provenance observations, improved sample3/sample4 report narratives, retained sample2 and censored Base overlay artifacts; known coordinate residuals remain explicit.
-- **Next gate:** Rerun the exact R5 head on the synchronized secure-Windows Base/Accum video and complete the packaged field workflow before S11 closure.
+- **Status:** `ACTIVE`
+- **Major result:** The secure-Windows holdout rejected R5: its near-total nominal coverage was dominated by Base glare-to-Foam publication and Accum initial-EMPTY lock-in. R6 is replacing the mixed current-frame/sequence authority with optics-aware evidence, independent Oil/state/Foam resolution and explicit removal of superseded R5 runtime owners.
+- **Next gate:** Complete the R6 vertical replacement, direct-image local corpus/negative validation and then the synchronized secure-Windows Base/Accum holdout before report/event acceptance.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R5 architecture](../20-architecture/s11-r5-sequence-first-trajectory-architecture.md), [R5 validation](../30-validation/s11-r5-sequence-first-trajectory-validation.md), [R5 evidence](../60-evidence/s11/s11-r5-sequence-first-observation.md), [R5 root cause](../50-diagnostics/s11/s11-r5-current-frame-authority-root-cause.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R6 architecture](../20-architecture/s11-r6-optics-aware-observation-architecture.md), [R6 validation](../30-validation/s11-r6-optics-aware-observation-validation.md), [R5 field failure](../50-diagnostics/s11/s11-r5-secure-windows-field-failure.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING` → `S11-M PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE` → `S11-M PLANNED` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain accepted historical baselines; R5 is locally accepted without authorizing general threshold tuning. S11-M remains blocked until the private-Windows and packaged-workflow S11 gate closes, and S12 follows S11-M rather than accumulating new behavior in the remaining hotspots first.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5 failed its private field holdout and is superseded as runtime authority by the active R6 replacement. S11-M remains blocked until the private-Windows and packaged-workflow S11 gate closes, and S12 follows S11-M.
