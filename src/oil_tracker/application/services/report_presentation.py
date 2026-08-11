@@ -206,8 +206,15 @@ def _extrema_landmarks(
     if not numeric:
         return ()
     finite = tuple((sample, float(value)) for sample, value in numeric if value is not None)
-    maximum = max(finite, key=lambda item: (item[1], -item[0].timestamp_sec))[0]
-    minimum = min(finite, key=lambda item: (item[1], item[0].timestamp_sec))[0]
+    trusted = (
+        tuple(item for item in finite if _r7_anchor(item[0]))
+        if _is_r7_stream(sample for sample, _value in finite)
+        else finite
+    )
+    if not trusted:
+        return ()
+    maximum = max(trusted, key=lambda item: (item[1], -item[0].timestamp_sec))[0]
+    minimum = min(trusted, key=lambda item: (item[1], item[0].timestamp_sec))[0]
     return (
         _landmark_from_sample(
             glass,
@@ -445,8 +452,20 @@ def _movement_summary(
         change < 0 for change in meaningful_deltas
     ):
         summary += " 분석 구간 중 상승과 하강이 모두 관측되었습니다."
-    maximum_sample, _ = max(finite, key=lambda item: (item[1], -item[0].timestamp_sec))
-    minimum_sample, _ = min(finite, key=lambda item: (item[1], item[0].timestamp_sec))
+    trusted = (
+        tuple(item for item in finite if _r7_anchor(item[0]))
+        if _is_r7_stream(sample for sample, _value in finite)
+        else finite
+    )
+    extrema_source = trusted or finite
+    maximum_sample, _ = max(
+        extrema_source,
+        key=lambda item: (item[1], -item[0].timestamp_sec),
+    )
+    minimum_sample, _ = min(
+        extrema_source,
+        key=lambda item: (item[1], item[0].timestamp_sec),
+    )
     summary += (
         f" 관측 최고는 {maximum_sample.timestamp_sec:.1f}초 {_sample_level_text(maximum_sample, config)},"
         f" 관측 최저는 {minimum_sample.timestamp_sec:.1f}초 {_sample_level_text(minimum_sample, config)}입니다."
@@ -615,6 +634,19 @@ def _confirmed_foam_publication(sample: TrackingSample) -> bool:
 
 def _foam_confirmation_pending(sample: TrackingSample) -> bool:
     return "FOAM_PERSISTENCE_PENDING" in sample.flags
+
+
+def _is_r7_stream(samples) -> bool:
+    return any(
+        any(str(flag).strip().upper().startswith("R7_") for flag in sample.flags)
+        for sample in samples
+    )
+
+
+def _r7_anchor(sample: TrackingSample) -> bool:
+    return "R7_OIL_ANCHOR" in {
+        str(flag).strip().upper() for flag in sample.flags
+    }
 
 
 def _finite_first(*values: float | None) -> float | None:

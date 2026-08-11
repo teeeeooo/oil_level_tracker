@@ -11,7 +11,7 @@ from .foam_episode_resolver import FoamEpisodeResolver
 from .oil_observation_resolver import OilObservationResolver
 
 
-OBSERVATION_SEQUENCE_VERSION = "r6-optics-aware-observation-v1"
+OBSERVATION_SEQUENCE_VERSION = "r7-evidence-tiered-trajectory-v1"
 
 
 @dataclass(frozen=True)
@@ -26,6 +26,10 @@ class ObservationSequenceDiagnostics:
     ineligible_oil_candidate_count: int
     recurring_track_count: int
     maximum_track_opposition: float
+    oil_candidate_only_count: int
+    oil_continuation_eligible_count: int
+    oil_anchor_eligible_count: int
+    oil_qualified_anchor_count: int
     foam_raw_candidate_count: int
     foam_eligible_candidate_count: int
     foam_confirmed_frame_count: int
@@ -72,6 +76,12 @@ class ObservationSequenceResolver:
             ineligible_oil_candidate_count=oil.diagnostics.ineligible_candidate_count,
             recurring_track_count=oil.diagnostics.recurring_track_count,
             maximum_track_opposition=oil.diagnostics.maximum_track_opposition,
+            oil_candidate_only_count=oil.diagnostics.candidate_only_count,
+            oil_continuation_eligible_count=(
+                oil.diagnostics.continuation_eligible_count
+            ),
+            oil_anchor_eligible_count=oil.diagnostics.anchor_eligible_count,
+            oil_qualified_anchor_count=oil.diagnostics.qualified_anchor_count,
             foam_raw_candidate_count=foam.raw_candidate_count,
             foam_eligible_candidate_count=foam.eligible_candidate_count,
             foam_confirmed_frame_count=foam.confirmed_frame_count,

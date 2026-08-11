@@ -35,6 +35,10 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
         )
     if not samples:
         return _unresolved(glass.id, prior, "No observed samples are available.")
+    r7_stream = any(
+        any(str(flag).strip().upper().startswith("R7_") for flag in sample.flags)
+        for sample in samples
+    )
     if any(
         flag in samples[0].flags
         for flag in (
@@ -52,7 +56,10 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
                 "it does not project prior-only detector samples."
             ),
         )
-    if "SEQUENCE_RESOLVED_STATE" in samples[0].flags:
+    if (
+        "SEQUENCE_RESOLVED_STATE" in samples[0].flags
+        and "SEQUENCE_INITIAL_STATE_PRIOR" in samples[0].flags
+    ):
         return RetrospectiveInterpretation(
             glass_id=glass.id,
             status=RetrospectiveStatus.NOT_APPLICABLE,
@@ -78,6 +85,7 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
         barrier = _barrier_reason(
             sample,
             has_numeric_boundary=boundary_y is not None,
+            r7_stream=r7_stream,
         )
         if barrier:
             if len(accepted) < 2:
@@ -107,17 +115,21 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
     first_index, first, first_relative = accepted[0]
     _second_index, second, second_relative = accepted[1]
     delta_y = float(second.raw_oil_air_level_y) - float(first.raw_oil_air_level_y)
+    direction_tolerance = max(
+        2.0,
+        0.01 * float(glass.geometry.ellipse.radius_y) * 2.0,
+    )
     if prior is InitialObservationState.FULL_NO_INTERFACE:
         topology_ok = first_relative <= TOP_ENTRANCE_MAX_RELATIVE_POSITION
         topology_opposite = first_relative >= BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION
-        direction_ok = delta_y > 1e-9
-        direction_opposite = delta_y < -1e-9
+        direction_ok = delta_y >= direction_tolerance
+        direction_opposite = delta_y <= -direction_tolerance
         state = FillState.FULL_NO_INTERFACE
     else:
         topology_ok = first_relative >= BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION
         topology_opposite = first_relative <= TOP_ENTRANCE_MAX_RELATIVE_POSITION
-        direction_ok = delta_y < -1e-9
-        direction_opposite = delta_y > 1e-9
+        direction_ok = delta_y <= -direction_tolerance
+        direction_opposite = delta_y >= direction_tolerance
         state = FillState.EMPTY_NO_INTERFACE
 
     evidence_kwargs = dict(
@@ -125,20 +137,24 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
         evidence_timestamps_sec=(first.timestamp_sec, second.timestamp_sec),
         evidence_relative_positions=(first_relative, second_relative),
     )
-    if topology_opposite or (topology_ok and direction_opposite):
+    if direction_opposite:
         return RetrospectiveInterpretation(
             glass_id=glass.id,
             status=RetrospectiveStatus.CONFLICT,
             confirmed_prior=prior,
-            reason="Prior-independent numeric boundary topology/direction contradicts the confirmed prior.",
+            reason="Anchor-grade Oil motion direction contradicts the confirmed prior.",
             **evidence_kwargs,
         )
-    if not topology_ok or not direction_ok:
+    if not direction_ok:
         return RetrospectiveInterpretation(
             glass_id=glass.id,
             status=RetrospectiveStatus.UNRESOLVED,
             confirmed_prior=prior,
-            reason="Numeric evidence is real but does not establish compatible entrance topology and direction.",
+            reason=(
+                "Anchor-grade Oil evidence is real but does not establish a "
+                "compatible movement direction. The first observed boundary "
+                f"topology was {'opposite-edge' if topology_opposite else ('edge-compatible' if topology_ok else 'mid-Glass')}."
+            ),
             **evidence_kwargs,
         )
 
@@ -152,7 +168,12 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
         end_time_sec=prefix[-1].timestamp_sec,
         start_frame_index=prefix[0].frame_index,
         end_frame_index=prefix[-1].frame_index,
-        reason="Leading unresolved interval reconstructed from confirmed prior plus independent numeric entrance topology and direction.",
+        reason=(
+            "Leading unresolved interval reconstructed from the confirmed prior "
+            "plus two R7 anchor-grade entrance observations and compatible direction."
+            if r7_stream
+            else "Leading unresolved interval reconstructed from confirmed prior plus independent numeric entrance topology and direction."
+        ),
         **evidence_kwargs,
     )
 
@@ -273,6 +294,20 @@ def _accepted_boundary_y(sample: TrackingSample) -> float | None:
     value = sample.raw_oil_air_level_y
     if not sample.is_valid or value is None:
         return None
+    flags = {str(flag).strip().upper() for flag in sample.flags}
+    if any(flag.startswith("R7_") for flag in flags):
+        if "R7_OIL_ANCHOR" not in flags:
+            return None
+        if any(
+            flag in _BARRIER_FLAGS
+            or "FAILURE" in flag
+            or "FAILED" in flag
+            or "GLARE" in flag
+            or "FOG" in flag
+            or "DETECTION_LOST" in flag
+            for flag in flags
+        ):
+            return None
     try:
         numeric = float(value)
     except (TypeError, ValueError):
@@ -300,6 +335,7 @@ def _barrier_reason(
     sample: TrackingSample,
     *,
     has_numeric_boundary: bool = False,
+    r7_stream: bool = False,
 ) -> str:
     """Return sequence evidence that blocks a leading-state interpretation.
 
@@ -310,6 +346,11 @@ def _barrier_reason(
     """
 
     flags = {str(flag).strip().upper() for flag in sample.flags}
+    if r7_stream:
+        # R7 uses only anchor-grade numeric observations as positive proof.
+        # Missing/unknown/rejected-Foam frames neither prove nor contradict the
+        # confirmed prior, so they cannot erase a later compatible entrance.
+        return ""
     for flag in sorted(flags):
         if (
             flag in _BARRIER_FLAGS

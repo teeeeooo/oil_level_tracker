@@ -121,6 +121,39 @@ def test_all_missing_oil_does_not_claim_extrema_or_direction():
     assert "유면 선을 표시하지 않습니다" in report.observation_note
 
 
+def test_r7_report_extrema_and_capture_samples_use_anchor_grade_oil() -> None:
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    anchor = ("R7_RESOLVED_OIL", "R7_OIL_ANCHOR")
+    continuation = ("R7_RESOLVED_OIL", "R7_OIL_CONTINUATION")
+    samples = [
+        _sample(config.id, 0.0, oil=5.0, flags=anchor),
+        _sample(config.id, 0.5, oil=100.0, flags=continuation),
+        _sample(config.id, 1.0, oil=-100.0, flags=continuation),
+        _sample(config.id, 1.5, oil=0.0, flags=anchor),
+    ]
+    glass = GlassAnalysisResult(
+        config.id,
+        config.name,
+        ResultState.REVIEW_REQUIRED,
+        samples=samples,
+    )
+
+    report = build_glass_report_presentation(glass, config)
+    maximum = next(
+        item
+        for item in report.landmarks
+        if item.event_type is EventType.MAXIMUM_OIL_LEVEL
+    )
+    minimum = next(
+        item
+        for item in report.landmarks
+        if item.event_type is EventType.MINIMUM_OIL_LEVEL
+    )
+
+    assert maximum.sample is samples[0]
+    assert minimum.sample is samples[3]
+
+
 def test_single_temporally_confirmed_foam_publication_remains_a_report_episode():
     config = InspectionRecipe.default_glass(320, 240, 1)
     glass = GlassAnalysisResult(

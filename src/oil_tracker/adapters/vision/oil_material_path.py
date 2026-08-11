@@ -10,6 +10,7 @@ from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import BoundaryKind
 
 from .preprocessing import PreprocessResult
+from .oil_phase_topology import dark_border_cap_conflict
 
 
 @dataclass(frozen=True)
@@ -151,7 +152,16 @@ def generate_material_path_candidates(
             break
 
     candidates = tuple(
-        _candidate_from_path(item, crop_origin_y=crop_origin_y)
+        _candidate_from_path(
+            item,
+            crop_origin_y=crop_origin_y,
+            border_cap_conflict=dark_border_cap_conflict(
+                pre.blurred,
+                effective_mask,
+                pre.glare_mask,
+                local_y=item.local_y,
+            ),
+        )
         for item in paths
     )
     return tuple(
@@ -496,6 +506,7 @@ def _candidate_from_path(
     evidence: MaterialPathEvidence,
     *,
     crop_origin_y: float,
+    border_cap_conflict: bool,
 ) -> BoundaryCandidate:
     path_consistency = _unit(1.0 - evidence.maximum_jump_px / 15.0)
     strength = _unit(evidence.median_strength / 0.32)
@@ -538,7 +549,10 @@ def _candidate_from_path(
             "material_terminal_partition_support": float(
                 evidence.terminal_material_partition
             ),
-            "sequence_eligible": float(evidence.optics_overlap < 0.55),
+            "material_path_dark_border_cap_conflict": float(border_cap_conflict),
+            "sequence_eligible": float(
+                evidence.optics_overlap < 0.55 and not border_cap_conflict
+            ),
         },
         penalties={
             "artifact_likelihood": artifact,
@@ -548,7 +562,7 @@ def _candidate_from_path(
             "glare_conflict": evidence.optics_overlap,
             "optics_conflict": evidence.optics_overlap,
             "exclusion_conflict": 0.0,
-            "border_penalty": 0.0,
+            "border_penalty": float(border_cap_conflict),
         },
         feature_score=boundary,
         penalty=_unit(artifact + ambiguity),

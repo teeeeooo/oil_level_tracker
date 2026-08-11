@@ -7,7 +7,7 @@ from oil_tracker.domain.enums import FillState, InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
 
 
-DETECTOR_VERSION = "opencv-phase-detector-r6-optics-aware-v1"
+DETECTOR_VERSION = "opencv-phase-detector-r7-evidence-tiered-v1"
 
 
 def glass(initial=InitialObservationState.AUTO, glass_id="glass-oil"):
@@ -85,6 +85,15 @@ def test_detector_version_canonical_coordinates_and_typed_debug_evidence():
     assert supplemental
     assert all(
         "local_y" in item.features and "source_y" in item.features
+        for item in candidates
+    )
+    assert all(
+        {
+            "registered_oil_motion_available",
+            "registered_oil_band_motion_support",
+            "sequence_material_layer_topology",
+        }
+        <= set(item.features)
         for item in candidates
     )
     selected = [item for item in candidates if item.selected]

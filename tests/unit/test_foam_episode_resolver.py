@@ -89,7 +89,7 @@ def test_constant_high_score_static_appearance_is_not_a_foam_episode() -> None:
     assert diagnostics.episode_count == 0
     assert diagnostics.rejected_static_episode_count == 1
     assert all(item.raw_foam_front_y is None for item in resolved)
-    assert all("R6_FOAM_STATIC_ARTIFACT_REJECTED" in item.flags for item in resolved)
+    assert all("R7_FOAM_STATIC_ARTIFACT_REJECTED" in item.flags for item in resolved)
 
 
 def test_single_strong_component_does_not_start_foam() -> None:
@@ -121,7 +121,7 @@ def test_dynamic_coherent_episode_composes_after_oil_without_fabricating_gap() -
     assert resolved[2].fill_state is FillState.PARTIAL_VISIBLE
     assert resolved[2].raw_foam_front_y is None
     assert resolved[0].raw_foam_front_y == 190.0
-    assert "R6_FOAM_EPISODE_CONFIRMED" in resolved[0].flags
+    assert "R7_FOAM_EPISODE_CONFIRMED" in resolved[0].flags
 
 
 def test_dynamic_episode_does_not_backfill_a_static_prelude() -> None:
@@ -140,7 +140,7 @@ def test_dynamic_episode_does_not_backfill_a_static_prelude() -> None:
     assert diagnostics.confirmed_frame_count == 2
     assert resolved[0].fill_state is FillState.PARTIAL_VISIBLE
     assert resolved[0].raw_foam_front_y is None
-    assert "R6_FOAM_UNCONFIRMED" in resolved[0].flags
+    assert "R7_FOAM_UNCONFIRMED" in resolved[0].flags
     assert all(
         item.fill_state is FillState.FOAMING_VISIBLE
         for item in resolved[1:]
@@ -180,3 +180,25 @@ def test_foam_composes_with_full_but_cannot_promote_unknown() -> None:
     assert all(item.fill_state is FillState.FULL_WITH_FOAM for item in full_result)
     assert all(item.fill_state is FillState.UNKNOWN_REVIEW for item in unknown_result)
     assert all(item.raw_foam_front_y is None for item in unknown_result)
+
+
+def test_one_registered_motion_spike_inside_static_glare_cannot_confirm_foam() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(
+                185.0,
+                dynamic=0.90 if index == 3 else 0.0,
+                static=0.86,
+            ),
+        )
+        for index in range(8)
+    )
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 0
+    assert all(item.raw_foam_front_y is None for item in resolved)

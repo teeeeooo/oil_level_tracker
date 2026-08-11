@@ -152,6 +152,29 @@ def test_multiple_same_frame_candidates_do_not_fragment_anchor_track() -> None:
     assert _oil_y(result) == [128.0 + index for index in range(7)]
 
 
+def test_weak_third_row_cannot_inherit_two_seed_anchor_authority() -> None:
+    detections = (
+        _detection(0, _candidate(150.0, boundary=0.82, broad=0.72), ambiguity=0.12),
+        _detection(1, _candidate(140.0, boundary=0.82, broad=0.72), ambiguity=0.12),
+        _detection(
+            2,
+            _candidate(
+                150.0,
+                boundary=0.30,
+                broad=0.30,
+                artifact=0.10,
+                ambiguity=0.44,
+            ),
+            ambiguity=0.44,
+        ),
+    )
+
+    result = OilObservationResolver().resolve(detections, glass_config())
+
+    assert result.diagnostics.qualified_anchor_count == 2
+    assert "R7_OIL_ANCHOR" not in result.detections[2].flags
+
+
 def test_stationary_material_supported_interface_is_not_a_static_hard_veto() -> None:
     detections = tuple(
         _detection(
@@ -321,7 +344,7 @@ def test_supported_top_trajectory_can_enter_full_with_no_interface_evidence() ->
     assert result.detections[-1].raw_oil_air_level_y is None
 
 
-def test_long_gap_between_qualified_anchor_clusters_stays_non_numeric() -> None:
+def test_continuous_same_frame_support_between_anchor_clusters_remains_numeric() -> None:
     detections = tuple(
         _detection(
             index,
@@ -337,9 +360,8 @@ def test_long_gap_between_qualified_anchor_clusters_stays_non_numeric() -> None:
 
     result = OilObservationResolver().resolve(detections, glass_config())
 
-    assert all(value is not None for value in _oil_y(result)[:3])
-    assert _oil_y(result)[3:10] == [None] * 7
-    assert all(value is not None for value in _oil_y(result)[10:])
+    assert _oil_y(result) == [150.0 + index for index in range(13)]
+    assert all("SEQUENCE_SAME_FRAME_CANDIDATE" in item.flags for item in result.detections)
 
 
 def test_short_edge_before_first_qualified_anchor_remains_observable() -> None:
@@ -362,16 +384,19 @@ def test_short_edge_before_first_qualified_anchor_remains_observable() -> None:
 
 
 def test_foam_only_glare_rejection_does_not_erase_independent_oil_candidate() -> None:
-    detection = _detection(
-        0,
-        _candidate(150.0, selected=True),
-        flags=("FOAM_GLARE_REJECTED",),
-        ambiguity=0.1,
+    detections = tuple(
+        _detection(
+            index,
+            _candidate(150.0 + index, selected=True),
+            flags=("FOAM_GLARE_REJECTED",),
+            ambiguity=0.1,
+        )
+        for index in range(3)
     )
 
-    result = OilObservationResolver().resolve((detection,), glass_config())
+    result = OilObservationResolver().resolve(detections, glass_config())
 
-    assert result.detections[0].raw_oil_air_level_y == 150.0
+    assert _oil_y(result) == [150.0, 151.0, 152.0]
 
 
 def test_selected_row_inside_coherent_material_texture_cannot_anchor_oil() -> None:
@@ -395,7 +420,7 @@ def test_selected_row_inside_coherent_material_texture_cannot_anchor_oil() -> No
     assert _oil_y(result) == [None] * len(detections)
 
 
-def test_registered_material_motion_distinguishes_dynamic_layer_from_static_twin() -> None:
+def test_foam_raster_motion_cannot_grant_oil_authority_to_texture_twin() -> None:
     static = tuple(
         _detection(
             index,
@@ -429,14 +454,7 @@ def test_registered_material_motion_distinguishes_dynamic_layer_from_static_twin
     resolver = OilObservationResolver()
 
     assert _oil_y(resolver.resolve(static, glass_config())) == [None] * 6
-    assert _oil_y(resolver.resolve(dynamic, glass_config())) == [
-        132.0,
-        131.0,
-        130.0,
-        129.0,
-        128.0,
-        127.0,
-    ]
+    assert _oil_y(resolver.resolve(dynamic, glass_config())) == [None] * 6
 
 
 def test_terminal_material_fallback_requires_broad_cross_roi_support() -> None:
@@ -444,7 +462,7 @@ def test_terminal_material_fallback_requires_broad_cross_roi_support() -> None:
     for index in range(6):
         candidate = _candidate(
             150.0,
-            boundary=0.82,
+            boundary=0.65,
             broad=0.82,
             source="r6_material_path",
         )
@@ -460,6 +478,86 @@ def test_terminal_material_fallback_requires_broad_cross_roi_support() -> None:
     result = OilObservationResolver().resolve(tuple(candidates), glass_config())
 
     assert _oil_y(result) == [None] * len(candidates)
+
+
+def test_short_window_strong_terminal_material_path_can_use_three_sectors() -> None:
+    detections = []
+    for index in range(5):
+        candidate = _candidate(
+            150.0 + index,
+            boundary=0.82,
+            broad=0.82,
+            source="r6_material_path",
+        )
+        candidate.features.update(
+            {
+                "r6_material_path": 1.0,
+                "material_terminal_partition_support": 0.90,
+                "material_path_sector_fraction": 0.60,
+            }
+        )
+        detections.append(_detection(index, candidate, ambiguity=0.20))
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert _oil_y(result) == [150.0 + index for index in range(5)]
+
+
+def test_material_layer_terminal_cannot_become_long_window_oil_anchor() -> None:
+    detections = []
+    for index in range(8):
+        candidate = _candidate(
+            150.0,
+            boundary=0.86,
+            broad=0.86,
+            source="r6_material_path",
+        )
+        candidate.features.update(
+            {
+                "r6_material_path": 1.0,
+                "material_terminal_partition_support": 0.95,
+                "material_path_sector_fraction": 1.0,
+                "sequence_material_layer_topology": 1.0,
+            }
+        )
+        detections.append(_detection(index, candidate, ambiguity=0.10))
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert _oil_y(result) == [None] * len(detections)
+
+
+def test_completed_fill_gap_blocks_upper_texture_reacquisition() -> None:
+    glass = glass_config()
+    ellipse = glass.geometry.ellipse
+    top = ellipse.center_y - ellipse.radius_y
+    height = ellipse.radius_y * 2.0
+    rise = (0.58, 0.48, 0.38, 0.28, 0.22, 0.18)
+    detections = [
+        _detection(
+            index,
+            _candidate(top + height * relative, boundary=0.78),
+            ambiguity=0.15,
+        )
+        for index, relative in enumerate(rise)
+    ]
+    detections.extend(
+        _detection(index, ambiguity=0.85)
+        for index in range(len(detections), len(detections) + 6)
+    )
+    detections.extend(
+        _detection(
+            index,
+            _candidate(top + height * 0.20, boundary=0.78),
+            ambiguity=0.15,
+        )
+        for index in range(len(detections), len(detections) + 3)
+    )
+
+    result = OilObservationResolver().resolve(tuple(detections), glass)
+
+    assert all(value is not None for value in _oil_y(result)[:6])
+    assert _oil_y(result)[6:] == [None] * 9
 
 
 def test_selected_coordinate_is_always_a_candidate_from_the_same_frame() -> None:
@@ -478,3 +576,204 @@ def test_selected_coordinate_is_always_a_candidate_from_the_same_frame() -> None
             continue
         assert resolved.raw_oil_air_level_y in {candidate.y for candidate in original.candidates}
         assert sum(candidate.selected for candidate in resolved.candidates) == 1
+
+
+def test_weak_ambiguous_selected_shadow_cannot_start_oil() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _candidate(
+                150.0,
+                boundary=0.216,
+                broad=0.10,
+                artifact=0.216,
+                ambiguity=0.605,
+                selected=True,
+            ),
+            ambiguity=0.605,
+        )
+        for index in range(8)
+    )
+
+    result = OilObservationResolver().resolve(detections, glass_config())
+
+    assert _oil_y(result) == [None] * len(detections)
+    assert result.diagnostics.qualified_anchor_count == 0
+
+
+def test_current_frame_selected_bit_cannot_change_r7_path() -> None:
+    selected_first = tuple(
+        _detection(
+            index,
+            _candidate(140.0 + index, boundary=0.72, selected=True),
+            _candidate(205.0 - index * 3.0, boundary=0.68),
+            ambiguity=0.20,
+        )
+        for index in range(6)
+    )
+    selected_second = tuple(
+        _detection(
+            index,
+            _candidate(140.0 + index, boundary=0.72),
+            _candidate(205.0 - index * 3.0, boundary=0.68, selected=True),
+            ambiguity=0.20,
+        )
+        for index in range(6)
+    )
+
+    resolver = OilObservationResolver()
+
+    assert _oil_y(resolver.resolve(selected_first, glass_config())) == _oil_y(
+        resolver.resolve(selected_second, glass_config())
+    )
+
+
+def test_missing_candidate_remains_a_real_gap_between_anchor_clusters() -> None:
+    detections = (
+        *(
+            _detection(index, _candidate(150.0 - index, boundary=0.72), ambiguity=0.2)
+            for index in range(3)
+        ),
+        _detection(3, ambiguity=0.8),
+        *(
+            _detection(index, _candidate(146.0 - index, boundary=0.72), ambiguity=0.2)
+            for index in range(4, 7)
+        ),
+    )
+
+    result = OilObservationResolver().resolve(detections, glass_config())
+
+    assert _oil_y(result)[3] is None
+    assert all(value is not None for value in (*_oil_y(result)[:3], *_oil_y(result)[4:]))
+
+
+def test_weaker_one_frame_partition_spike_is_censored_not_interpolated() -> None:
+    detections = []
+    for index in range(7):
+        if index == 3:
+            detections.append(
+                _detection(
+                    index,
+                    _candidate(120.0, boundary=0.82, broad=0.72),
+                    ambiguity=0.12,
+                )
+            )
+            continue
+        terminal = _candidate(
+            150.0,
+            boundary=0.86,
+            broad=0.86,
+            source="r6_material_path",
+        )
+        terminal.features.update(
+            {
+                "r6_material_path": 1.0,
+                "material_terminal_partition_support": 0.92,
+                "material_path_sector_fraction": 1.0,
+            }
+        )
+        detections.append(
+            _detection(
+                index,
+                terminal,
+                _candidate(150.0, boundary=0.76, broad=0.68),
+                ambiguity=0.12,
+            )
+        )
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert _oil_y(result)[:3] == [150.0, 150.0, 150.0]
+    assert _oil_y(result)[3] is None
+    assert _oil_y(result)[4:] == [150.0, 150.0, 150.0]
+    assert "SEQUENCE_SAME_FRAME_CANDIDATE" not in result.detections[3].flags
+
+
+def test_weaker_partition_spike_is_censored_across_one_missing_frame() -> None:
+    detections = []
+    for index in range(9):
+        if index == 3:
+            detections.append(
+                _detection(
+                    index,
+                    _candidate(120.0, boundary=0.82, broad=0.72),
+                    ambiguity=0.12,
+                )
+            )
+            continue
+        if index == 4:
+            detections.append(_detection(index, ambiguity=0.85))
+            continue
+        terminal = _candidate(
+            150.0,
+            boundary=0.86,
+            broad=0.86,
+            source="r6_material_path",
+        )
+        terminal.features.update(
+            {
+                "r6_material_path": 1.0,
+                "material_terminal_partition_support": 0.92,
+                "material_path_sector_fraction": 1.0,
+            }
+        )
+        detections.append(
+            _detection(
+                index,
+                terminal,
+                _candidate(150.0, boundary=0.76, broad=0.68),
+                ambiguity=0.12,
+            )
+        )
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert _oil_y(result)[3:5] == [None, None]
+    assert all(value == 150.0 for value in (*_oil_y(result)[:3], *_oil_y(result)[5:]))
+
+
+def test_one_sided_continuation_decays_after_anchor_cluster() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _candidate(
+                150.0 - index,
+                boundary=0.72 if index < 3 else 0.24,
+                broad=0.62 if index < 3 else 0.30,
+                artifact=0.08 if index < 3 else 0.21,
+                ambiguity=0.20 if index < 3 else 0.62,
+            ),
+            ambiguity=0.20 if index < 3 else 0.62,
+        )
+        for index in range(8)
+    )
+
+    result = OilObservationResolver().resolve(detections, glass_config())
+
+    assert all(value is not None for value in _oil_y(result)[:5])
+    assert _oil_y(result)[5:] == [None, None, None]
+
+
+def test_continuation_between_anchor_clusters_can_publish_same_frame_rows() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _candidate(
+                160.0 - index,
+                boundary=0.72 if index < 3 or index >= 8 else 0.24,
+                broad=0.62 if index < 3 or index >= 8 else 0.30,
+                artifact=0.08 if index < 3 or index >= 8 else 0.21,
+                ambiguity=0.20 if index < 3 or index >= 8 else 0.62,
+            ),
+            ambiguity=0.20 if index < 3 or index >= 8 else 0.62,
+        )
+        for index in range(11)
+    )
+
+    result = OilObservationResolver().resolve(detections, glass_config())
+
+    assert _oil_y(result) == [160.0 - index for index in range(11)]
+    assert all(
+        "R7_OIL_CONTINUATION" in result.detections[index].flags
+        for index in range(3, 8)
+    )

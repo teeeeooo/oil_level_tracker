@@ -345,7 +345,7 @@ def test_feature_detector_meets_controlled_oil_absolute_gates(tmp_path):
     dataset_path, _scenes = generate_controlled_oil_dataset(tmp_path)
     payload = _service().run(dataset_path, tmp_path / "results").payload
     assert payload["benchmark_schema_version"] == 1
-    assert payload["detector"]["version"] == "opencv-phase-detector-r6-optics-aware-v1"
+    assert payload["detector"]["version"] == "opencv-phase-detector-r7-evidence-tiered-v1"
 
     clear = payload["category_summaries"]["clear_oil_boundary"]
     rapid = payload["category_summaries"]["rapid_oil_flow"]

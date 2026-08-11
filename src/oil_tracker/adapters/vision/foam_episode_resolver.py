@@ -36,10 +36,9 @@ class _FoamEvidence:
 class FoamEpisodeResolver:
     """Publish only explicitly eligible, materially changing Foam episodes.
 
-    R5 read the first finite raw Foam candidate and let unregistered mask/front
-    jitter override static opposition. R6 requires current-frame eligibility and
-    registered internal material motion. This owner runs after Oil/state and has
-    no authority to select or mask Oil.
+    R7 requires current-frame eligibility plus multi-frame registered internal
+    material evolution. This owner runs after Oil/state and has no authority to
+    select or mask Oil.
     """
 
     def resolve(
@@ -61,25 +60,32 @@ class FoamEpisodeResolver:
         static_count = 0
         unconfirmed_count = 0
         for group in groups:
-            accepted, static_dominated = _episode_accepted(group, glass)
             group_frames = {item.frame_offset for item in group}
-            if accepted:
-                supported = _supported_episode(group, glass)
+            onset_groups = _dynamic_onset_groups(group)
+            rejected_unconfirmed_frames.update(group_frames)
+            accepted_any = False
+            static_dominated_any = False
+            for onset in onset_groups or (group,):
+                accepted, static_dominated = _episode_accepted(onset, glass)
+                static_dominated_any = static_dominated_any or static_dominated
+                if not accepted:
+                    continue
+                supported = _supported_episode(onset, glass)
                 if supported:
+                    accepted_any = True
                     episode_count += 1
                     confirmed_frames.update(item.frame_offset for item in supported)
-                    rejected_unconfirmed_frames.update(
-                        group_frames - {item.frame_offset for item in supported}
+                    rejected_unconfirmed_frames.difference_update(
+                        item.frame_offset for item in supported
                     )
-                else:
-                    unconfirmed_count += 1
-                    rejected_unconfirmed_frames.update(group_frames)
-            elif static_dominated:
+            if accepted_any:
+                continue
+            if static_dominated_any:
                 static_count += 1
                 rejected_static_frames.update(group_frames)
+                rejected_unconfirmed_frames.difference_update(group_frames)
             else:
                 unconfirmed_count += 1
-                rejected_unconfirmed_frames.update(group_frames)
 
         resolved = tuple(
             self._project(
@@ -205,6 +211,14 @@ class FoamEpisodeResolver:
                 "FOAM_REACH_TOP",
                 "FOAM_STRONG_EVIDENCE",
                 "FOAM_SEQUENCE_CONFIRMED",
+                "R6_FOAM_EPISODE_CONFIRMED",
+                "R6_FOAM_OIL_TOPOLOGY_CONFLICT",
+                "R6_FOAM_STATIC_ARTIFACT_REJECTED",
+                "R6_FOAM_UNCONFIRMED",
+                "R7_FOAM_EPISODE_CONFIRMED",
+                "R7_FOAM_OIL_TOPOLOGY_CONFLICT",
+                "R7_FOAM_STATIC_ARTIFACT_REJECTED",
+                "R7_FOAM_UNCONFIRMED",
             }
         ]
         candidates = [
@@ -214,7 +228,7 @@ class FoamEpisodeResolver:
                 rejected=True,
                 reject_reason=(
                     candidate.reject_reason
-                    or "not_confirmed_by_r6_foam_episode"
+                    or "not_confirmed_by_r7_foam_episode"
                 ),
             )
             if candidate.kind is BoundaryKind.FOAM_FRONT
@@ -224,11 +238,11 @@ class FoamEpisodeResolver:
         metrics = dict(detection.debug_metrics)
         metrics.update(
             {
-                "r6_foam_episode_confirmed": bool(confirmed),
-                "r6_foam_internal_motion_support": (
+                "r7_foam_episode_confirmed": bool(confirmed),
+                "r7_foam_internal_motion_support": (
                     0.0 if evidence is None else float(evidence.internal_motion)
                 ),
-                "r6_foam_dynamic_support": (
+                "r7_foam_dynamic_support": (
                     0.0 if evidence is None else float(evidence.dynamic_support)
                 ),
             }
@@ -245,9 +259,9 @@ class FoamEpisodeResolver:
             debug_metrics=metrics,
         )
         if static_rejected:
-            flags.append("R6_FOAM_STATIC_ARTIFACT_REJECTED")
+            flags.append("R7_FOAM_STATIC_ARTIFACT_REJECTED")
         elif unconfirmed_rejected:
-            flags.append("R6_FOAM_UNCONFIRMED")
+            flags.append("R7_FOAM_UNCONFIRMED")
 
         topology_conflict = bool(
             confirmed
@@ -257,13 +271,13 @@ class FoamEpisodeResolver:
             and float(base.oil_air_level_y) <= evidence.material_bottom_y
         )
         if topology_conflict:
-            flags.append("R6_FOAM_OIL_TOPOLOGY_CONFLICT")
+            flags.append("R7_FOAM_OIL_TOPOLOGY_CONFLICT")
             conflicted_candidates = [
                 replace(
                     candidate,
                     selected=False,
                     rejected=True,
-                    reject_reason="r6_confirmed_foam_oil_topology_conflict",
+                    reject_reason="r7_confirmed_foam_oil_topology_conflict",
                 )
                 if candidate.kind in {BoundaryKind.OIL_AIR, BoundaryKind.FOAM_FRONT}
                 else candidate
@@ -325,7 +339,7 @@ class FoamEpisodeResolver:
             if base.fill_state is FillState.FULL_NO_INTERFACE
             else FillState.FOAMING_VISIBLE
         )
-        flags.extend(("R6_FOAM_EPISODE_CONFIRMED", "FOAM_STRONG_EVIDENCE"))
+        flags.extend(("R7_FOAM_EPISODE_CONFIRMED", "FOAM_STRONG_EVIDENCE"))
         top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
         bottom = glass.geometry.ellipse.center_y + glass.geometry.ellipse.radius_y
         if (y - top) / max(1.0, bottom - top) <= 0.12:
@@ -368,6 +382,46 @@ def _candidate_groups(
     return tuple(tuple(group) for group in groups)
 
 
+def _dynamic_onset_groups(
+    group: tuple[_FoamEvidence, ...],
+) -> tuple[tuple[_FoamEvidence, ...], ...]:
+    dynamic = tuple(
+        item
+        for item in group
+        if min(item.internal_motion, item.dynamic_support) >= 0.15
+    )
+    if not dynamic:
+        return ()
+    clusters: list[list[_FoamEvidence]] = [[dynamic[0]]]
+    for item in dynamic[1:]:
+        if item.frame_offset - clusters[-1][-1].frame_offset <= 2:
+            clusters[-1].append(item)
+        else:
+            clusters.append([item])
+    output: list[tuple[_FoamEvidence, ...]] = []
+    for cluster in clusters:
+        first = cluster[0].frame_offset
+        last = cluster[-1].frame_offset
+        selected = [
+            item
+            for item in group
+            if first <= item.frame_offset <= last
+        ]
+        following = next(
+            (
+                item
+                for item in group
+                if item.frame_offset > last
+                and item.frame_offset - last <= 2
+            ),
+            None,
+        )
+        if following is not None:
+            selected.append(following)
+        output.append(tuple(selected))
+    return tuple(output)
+
+
 def _episode_accepted(
     group: tuple[_FoamEvidence, ...],
     glass: GlassInspectionConfig,
@@ -377,21 +431,17 @@ def _episode_accepted(
     material = sum(item.material_support for item in group) / len(group)
     coherent_ratio = sum(item.coherent for item in group) / len(group)
     static = sum(item.static_opposition for item in group) / len(group)
-    dynamic_frames = sum(item.internal_motion >= 0.15 for item in group)
-    supported_dynamic = tuple(
-        item.dynamic_support
+    registered_evolution = tuple(
+        min(item.internal_motion, item.dynamic_support)
         for item in group
-        if item.internal_motion >= 0.15
     )
-    dynamic = (
-        0.0
-        if not supported_dynamic
-        else sum(supported_dynamic) / len(supported_dynamic)
-    )
-    strong_dynamic_frames = sum(item.internal_motion >= 0.20 for item in group)
+    dynamic_frames = sum(value >= 0.15 for value in registered_evolution)
+    dynamic = sum(registered_evolution) / len(registered_evolution)
+    dynamic_frame_ratio = dynamic_frames / len(group)
+    strong_dynamic_frames = sum(value >= 0.20 for value in registered_evolution)
     static_dominated = bool(
         static >= 0.65
-        and (strong_dynamic_frames < 2 or max(item.internal_motion for item in group) < 0.28)
+        and (strong_dynamic_frames < 2 or max(registered_evolution) < 0.28)
     )
     required_material = max(
         0.30,
@@ -401,8 +451,9 @@ def _episode_accepted(
         not static_dominated
         and material >= required_material
         and coherent_ratio >= 0.60
-        and dynamic >= 0.12
-        and dynamic_frames >= 1
+        and dynamic >= 0.10
+        and dynamic_frames >= 2
+        and dynamic_frame_ratio >= 0.50
     )
     return accepted, static_dominated
 
@@ -414,7 +465,7 @@ def _supported_episode(
     activation = [
         index
         for index, item in enumerate(group)
-        if item.internal_motion >= 0.15
+        if min(item.internal_motion, item.dynamic_support) >= 0.15
     ]
     if not activation:
         return ()

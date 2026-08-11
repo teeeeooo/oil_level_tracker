@@ -34,7 +34,7 @@ def test_current_detector_runs_headlessly_on_phase2c3_fixture_dataset(tmp_path):
     run = _service().run(dataset, tmp_path / "output")
     assert run.output_path.is_dir()
     assert run.payload["case_count"] == 1
-    assert run.payload["detector"]["version"] == "opencv-phase-detector-r6-optics-aware-v1"
+    assert run.payload["detector"]["version"] == "opencv-phase-detector-r7-evidence-tiered-v1"
     assert run.payload["detector"]["settings_snapshots"]
     assert run.payload["cases"][0]["settings_fingerprint"]
     assert run.payload["cases"][0]["category"] == "clear_oil_boundary"

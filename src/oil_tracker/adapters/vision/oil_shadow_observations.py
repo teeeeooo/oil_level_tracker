@@ -7,6 +7,7 @@ from statistics import median
 import cv2
 import numpy as np
 
+from .oil_phase_topology import dark_border_cap_conflict
 from .preprocessing import PreprocessResult
 from .row_features import (
     binary_band_overlap_profile,
@@ -40,12 +41,6 @@ _ORDINARY_BOUNDARY_LIKELIHOOD_FLOOR = 0.48
 _FOAM_SEPARATED_MIN_HORIZONTAL_COVERAGE = 0.30
 _FOAM_RECOVERY_MIN_BROAD_STRENGTH = 0.10
 _FOAM_RECOVERY_MIN_SATURATED_NARROW_COVERAGE = 0.90
-_UPPER_DARK_CAP_MAX_AREA_FRACTION = 0.12
-_LOWER_DARK_CAP_MAX_AREA_FRACTION = 0.04
-_UPPER_DARK_CAP_MAX_MEDIAN_FRACTION = 0.15
-_LOWER_DARK_CAP_MAX_MEDIAN_FRACTION = 0.20
-_DARK_CAP_MIN_PHASE_CONTRAST = 0.15
-_DARK_CAP_GAP_ROWS = 3
 _COMPARATIVE_MIN_LOWER_PHASE_AREA_FRACTION = 0.18
 
 
@@ -591,38 +586,12 @@ def _is_dark_border_cap_transition(
     represented; only Oil/no-interface competition authority is withheld.
     """
 
-    _validate_same_shape(pre.blurred, pre.glare_mask, effective_mask)
-    visible = (effective_mask > 0) & ~(pre.glare_mask > 0)
-    available = int(np.count_nonzero(visible))
-    if available == 0:
-        return False
-
-    center = min(
-        visible.shape[0] - 1,
-        max(0, int(round(candidate.representative_local_y))),
+    return dark_border_cap_conflict(
+        pre.blurred,
+        effective_mask,
+        pre.glare_mask,
+        local_y=float(candidate.representative_local_y),
     )
-    upper_stop = max(0, center - _DARK_CAP_GAP_ROWS)
-    lower_start = min(visible.shape[0], center + _DARK_CAP_GAP_ROWS + 1)
-    upper = visible[:upper_stop]
-    lower = visible[lower_start:]
-    upper_count = int(np.count_nonzero(upper))
-    lower_count = int(np.count_nonzero(lower))
-    if upper_count < 10 or lower_count < 10:
-        return False
-    gray_scale = _gray_scale(pre.blurred)
-    upper_median = float(np.median(pre.blurred[:upper_stop][upper])) / gray_scale
-    lower_median = float(np.median(pre.blurred[lower_start:][lower])) / gray_scale
-    upper_cap = bool(
-        upper_count / available <= _UPPER_DARK_CAP_MAX_AREA_FRACTION
-        and upper_median <= _UPPER_DARK_CAP_MAX_MEDIAN_FRACTION
-        and lower_median - upper_median >= _DARK_CAP_MIN_PHASE_CONTRAST
-    )
-    lower_cap = bool(
-        lower_count / available <= _LOWER_DARK_CAP_MAX_AREA_FRACTION
-        and lower_median <= _LOWER_DARK_CAP_MAX_MEDIAN_FRACTION
-        and upper_median - lower_median >= _DARK_CAP_MIN_PHASE_CONTRAST
-    )
-    return upper_cap or lower_cap
 
 
 def _has_comparative_lower_phase_area_support(

@@ -86,6 +86,125 @@ def test_full_and_empty_reconstruction_are_symmetric(prior, expected):
     assert result.evidence_frame_indices == (2, 3)
 
 
+@pytest.mark.parametrize(
+    ("prior", "visible", "expected"),
+    [
+        (
+            InitialObservationState.FULL_NO_INTERFACE,
+            FillState.DRAINING_VISIBLE,
+            FillState.FULL_NO_INTERFACE,
+        ),
+        (
+            InitialObservationState.EMPTY_NO_INTERFACE,
+            FillState.FILLING_VISIBLE,
+            FillState.EMPTY_NO_INTERFACE,
+        ),
+    ],
+)
+def test_r7_anchor_trajectory_reconstructs_leading_initial_state(
+    prior,
+    visible,
+    expected,
+):
+    glass = glass_config()
+    top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
+    bottom = glass.geometry.ellipse.center_y + glass.geometry.ellipse.radius_y
+    first, second = (
+        (top + 10.0, top + 22.0)
+        if prior is InitialObservationState.FULL_NO_INTERFACE
+        else (bottom - 10.0, bottom - 22.0)
+    )
+    samples = [
+        _sample(0, flags=("R7_OBSERVATION_UNAVAILABLE",)),
+        _sample(1, flags=("R7_FOAM_UNCONFIRMED",)),
+        _sample(
+            2,
+            visible,
+            y=first,
+            valid=True,
+            flags=("R7_RESOLVED_OIL", "R7_OIL_ANCHOR"),
+        ),
+        _sample(
+            3,
+            visible,
+            y=second,
+            valid=True,
+            flags=("R7_RESOLVED_OIL", "R7_OIL_ANCHOR"),
+        ),
+    ]
+
+    result = reconstruct_initial_state(glass, samples, _confirmation(prior))
+
+    assert result.status is RetrospectiveStatus.ACCEPTED
+    assert result.interpreted_state is expected
+    assert result.evidence_frame_indices == (2, 3)
+
+
+def test_r7_continuation_only_cannot_confirm_initial_state() -> None:
+    glass = glass_config()
+    top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
+    samples = [
+        _sample(0, flags=("R7_OBSERVATION_UNAVAILABLE",)),
+        _sample(
+            1,
+            FillState.DRAINING_VISIBLE,
+            y=top + 10.0,
+            valid=True,
+            flags=("R7_RESOLVED_OIL", "R7_OIL_CONTINUATION"),
+        ),
+        _sample(
+            2,
+            FillState.DRAINING_VISIBLE,
+            y=top + 20.0,
+            valid=True,
+            flags=("R7_RESOLVED_OIL", "R7_OIL_CONTINUATION"),
+        ),
+    ]
+
+    result = reconstruct_initial_state(
+        glass,
+        samples,
+        _confirmation(InitialObservationState.FULL_NO_INTERFACE),
+    )
+
+    assert result.status is RetrospectiveStatus.UNRESOLVED
+    assert not result.evidence_frame_indices
+
+
+def test_r7_missing_or_rejected_foam_frames_do_not_block_later_anchors() -> None:
+    glass = glass_config()
+    top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
+    samples = [
+        _sample(
+            0,
+            flags=("R7_OBSERVATION_UNAVAILABLE", "FOGGED_OR_GLARE"),
+        ),
+        _sample(1, flags=("R7_FOAM_STATIC_ARTIFACT_REJECTED",)),
+        _sample(
+            2,
+            FillState.DRAINING_VISIBLE,
+            y=top + 10.0,
+            valid=True,
+            flags=("R7_RESOLVED_OIL", "R7_OIL_ANCHOR"),
+        ),
+        _sample(
+            3,
+            FillState.DRAINING_VISIBLE,
+            y=top + 20.0,
+            valid=True,
+            flags=("R7_RESOLVED_OIL", "R7_OIL_ANCHOR"),
+        ),
+    ]
+
+    result = reconstruct_initial_state(
+        glass,
+        samples,
+        _confirmation(InitialObservationState.FULL_NO_INTERFACE),
+    )
+
+    assert result.status is RetrospectiveStatus.ACCEPTED
+
+
 def test_projection_is_separate_and_does_not_fabricate_numeric_oil():
     glass, samples = _accepted_sequence(InitialObservationState.FULL_NO_INTERFACE)
     original = deepcopy(samples)

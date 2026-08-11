@@ -70,10 +70,12 @@ def detect_events_for_glass(
     _appearance_events(run_id, glass_id, samples, events)
     _oil_drop_event(run_id, glass_id, samples, events, config)
 
+    r7_stream = _is_r7_stream(samples)
     numeric = [
         (sample, _oil_level(sample))
         for sample in samples
         if _oil_level(sample) is not None
+        and (not r7_stream or _r7_anchor(sample))
     ]
     if numeric:
         maximum = max(numeric, key=lambda item: (float(item[1]), -item[0].timestamp_sec))[0]
@@ -195,7 +197,11 @@ def _crossing_events(
     for index, current in enumerate(samples):
         curr = current.smoothed_oil_air_level_px_from_zero
         prev = previous.smoothed_oil_air_level_px_from_zero if previous else None
-        if curr is not None and prev is not None:
+        if (
+            curr is not None
+            and prev is not None
+            and _crossing_has_anchor_authority(samples, index)
+        ):
             if prev < 0 <= curr:
                 recovery_end = _continuous_condition_end(
                     samples,
@@ -251,12 +257,13 @@ def _appearance_events(
 ) -> None:
     previous_state: FillState | None = None
     for sample in samples:
-        if sample.fill_state == FillState.DRAINING_VISIBLE and previous_state in {
+        has_authority = not _is_r7_sample(sample) or _r7_anchor(sample)
+        if has_authority and sample.fill_state == FillState.DRAINING_VISIBLE and previous_state in {
             FillState.FULL_NO_INTERFACE,
             FillState.FULL_WITH_FOAM,
         }:
             events.append(_event_from_sample(run_id, glass_id, EventType.OIL_BOUNDARY_APPEARED_FROM_TOP, sample))
-        if sample.fill_state == FillState.FILLING_VISIBLE and previous_state == FillState.EMPTY_NO_INTERFACE:
+        if has_authority and sample.fill_state == FillState.FILLING_VISIBLE and previous_state == FillState.EMPTY_NO_INTERFACE:
             events.append(_event_from_sample(run_id, glass_id, EventType.OIL_BOUNDARY_APPEARED_FROM_BOTTOM, sample))
         previous_state = sample.fill_state
 
@@ -306,12 +313,29 @@ def _oil_drop_event(
                     float(start_level) - float(end_level) >= required_delta
                     and decreasing_steps >= required_steps
                 ):
+                    event_sample = start
+                    if _is_r7_stream(samples):
+                        anchors = tuple(
+                            item for item in segment if _r7_anchor(item)
+                        )
+                        if len(anchors) < 2:
+                            continue
+                        anchor_start = _oil_level(anchors[0])
+                        anchor_end = _oil_level(anchors[-1])
+                        if (
+                            anchor_start is None
+                            or anchor_end is None
+                            or float(anchor_start) - float(anchor_end)
+                            < required_delta
+                        ):
+                            continue
+                        event_sample = anchors[0]
                     events.append(
                         _event_from_sample(
                             run_id,
                             glass_id,
                             EventType.OIL_DROP_START,
-                            start,
+                            event_sample,
                             end.timestamp_sec,
                         )
                     )
@@ -333,6 +357,49 @@ def _numeric_sample_runs(
     if current:
         runs.append(tuple(current))
     return tuple(runs)
+
+
+def _crossing_has_anchor_authority(
+    samples: list[TrackingSample],
+    index: int,
+) -> bool:
+    if not _is_r7_stream(samples):
+        return True
+    start = index - 1
+    while (
+        start > 0
+        and _oil_level(samples[start - 1]) is not None
+        and samples[start - 1].fill_state is not FillState.UNKNOWN_REVIEW
+    ):
+        start -= 1
+    end = index
+    while (
+        end + 1 < len(samples)
+        and _oil_level(samples[end + 1]) is not None
+        and samples[end + 1].fill_state is not FillState.UNKNOWN_REVIEW
+    ):
+        end += 1
+    return bool(
+        any(_r7_anchor(sample) for sample in samples[start : index + 1])
+        and any(_r7_anchor(sample) for sample in samples[index : end + 1])
+    )
+
+
+def _is_r7_stream(samples: Iterable[TrackingSample]) -> bool:
+    return any(_is_r7_sample(sample) for sample in samples)
+
+
+def _is_r7_sample(sample: TrackingSample) -> bool:
+    return any(
+        str(flag).strip().upper().startswith("R7_")
+        for flag in sample.flags
+    )
+
+
+def _r7_anchor(sample: TrackingSample) -> bool:
+    return "R7_OIL_ANCHOR" in {
+        str(flag).strip().upper() for flag in sample.flags
+    }
 
 
 def _continuous_condition_end(

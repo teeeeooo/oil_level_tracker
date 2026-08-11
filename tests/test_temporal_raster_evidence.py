@@ -5,6 +5,8 @@ import numpy as np
 
 from oil_tracker.adapters.vision.temporal_raster_evidence import (
     RegisteredFoamMotionTracker,
+    RegisteredOilMotionTracker,
+    registered_oil_candidate_features,
 )
 
 
@@ -78,3 +80,36 @@ def test_tracker_reset_isolated_by_glass() -> None:
     assert tracker.state_count == 1
     assert not tracker.evaluate("a", gray, effective, mask, 20.0).available
     assert tracker.evaluate("b", gray, effective, mask, 20.0).available
+
+
+def test_registered_oil_motion_is_candidate_local_not_foam_global() -> None:
+    tracker = RegisteredOilMotionTracker()
+    effective = np.full((100, 90), 255, dtype=np.uint8)
+    first = np.full((100, 90), 80, dtype=np.uint8)
+    second = first.copy()
+    cv2.line(first, (8, 60), (82, 60), 170, 3)
+    cv2.line(second, (8, 65), (82, 65), 170, 3)
+
+    assert not tracker.evaluate("g", first, effective).available
+    evidence = tracker.evaluate("g", second, effective)
+    moving = registered_oil_candidate_features(evidence, local_y=62.0)
+    unrelated = registered_oil_candidate_features(evidence, local_y=20.0)
+
+    assert moving["registered_oil_motion_available"] == 1.0
+    assert moving["registered_oil_band_motion_coverage"] >= 0.80
+    assert moving["registered_oil_band_motion_support"] > 0.20
+    assert unrelated["registered_oil_band_motion_support"] < 0.05
+
+
+def test_registered_oil_motion_rejects_exposure_and_translation_jitter() -> None:
+    tracker = RegisteredOilMotionTracker()
+    effective = np.full((100, 90), 255, dtype=np.uint8)
+    first, _ = _scene()
+    second, _ = _scene(exposure=9, shift_x=1)
+
+    tracker.evaluate("g", first, effective)
+    evidence = tracker.evaluate("g", second, effective)
+    features = registered_oil_candidate_features(evidence, local_y=50.0)
+
+    assert evidence.available
+    assert features["registered_oil_band_motion_support"] < 0.10

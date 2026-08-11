@@ -46,7 +46,9 @@ from .observation_sequence_resolver import (
 )
 from .temporal_raster_evidence import (
     RegisteredFoamMotionTracker,
+    RegisteredOilMotionTracker,
     registered_foam_motion_features,
+    registered_oil_candidate_features,
 )
 from .temporal_tracker import TemporalTracker
 
@@ -60,7 +62,7 @@ class PhaseDetectionDebugArtifacts:
 
 
 class OpenCvPhaseDetector:
-    version = "opencv-phase-detector-r6-optics-aware-v1"
+    version = "opencv-phase-detector-r7-evidence-tiered-v1"
 
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
@@ -69,6 +71,7 @@ class OpenCvPhaseDetector:
         self._foam_gate = FoamTemporalGate()
         self._oil_pipeline = OilHypothesisPipeline()
         self._foam_motion_tracker = RegisteredFoamMotionTracker()
+        self._oil_motion_tracker = RegisteredOilMotionTracker()
         self._observation_sequence_resolver = ObservationSequenceResolver()
 
     @property
@@ -90,6 +93,7 @@ class OpenCvPhaseDetector:
             self._static_foam_maps.clear()
             self._foam_gate.reset()
             self._foam_motion_tracker.reset()
+            self._oil_motion_tracker.reset()
             self._reset_oil_pipeline(None)
         else:
             key = str(glass_id)
@@ -98,6 +102,7 @@ class OpenCvPhaseDetector:
             self._static_foam_maps.pop(key, None)
             self._foam_gate.reset(key)
             self._foam_motion_tracker.reset(key)
+            self._oil_motion_tracker.reset(key)
             self._reset_oil_pipeline(key)
 
     def resolve_sequence(
@@ -203,6 +208,11 @@ class OpenCvPhaseDetector:
             foam.front_y,
         )
         material_motion_features = registered_foam_motion_features(foam_motion)
+        oil_motion = self._oil_motion_tracker.evaluate(
+            glass.id,
+            pre.gray,
+            bundle.effective_mask,
+        )
         material_path_candidates: list[BoundaryCandidate] = []
         for candidate in generate_material_path_candidates(
                 pre,
@@ -223,7 +233,10 @@ class OpenCvPhaseDetector:
             path_features = {
                 **candidate.features,
                 **material_context,
-                **material_motion_features,
+                **registered_oil_candidate_features(
+                    oil_motion,
+                    local_y=float(candidate.y) - float(bundle.crop_origin[1]),
+                ),
                 "sequence_material_layer_topology": float(
                     material_layer_topology
                 ),
@@ -342,7 +355,25 @@ class OpenCvPhaseDetector:
             )
             candidate_features = dict(candidate.features)
             candidate_features.update(material_context)
-            candidate_features.update(material_motion_features)
+            candidate_features.update(
+                registered_oil_candidate_features(
+                    oil_motion,
+                    local_y=float(candidate.y) - float(origin_y),
+                )
+            )
+            candidate_features.update(
+                {
+                    "sequence_material_layer_topology": float(
+                        material_layer_topology
+                    ),
+                    "sequence_white_material_layer_topology": float(
+                        white_material_layer_topology
+                    ),
+                    "sequence_white_material_texture_present": float(
+                        white_material_texture_present
+                    ),
+                }
+            )
             candidate_penalties = dict(candidate.penalties)
             candidate_penalties["material_texture_conflict"] = float(
                 material_context["material_texture_conflict"]
@@ -475,6 +506,12 @@ class OpenCvPhaseDetector:
             "foam_registered_dy": float(foam_motion.registration_dy),
             "foam_registered_exposure_gain": float(foam_motion.exposure_gain),
             "foam_registered_exposure_offset": float(foam_motion.exposure_offset),
+            "oil_registered_motion_available": oil_motion.available,
+            "oil_registered_dx": float(oil_motion.registration_dx),
+            "oil_registered_dy": float(oil_motion.registration_dy),
+            "oil_registered_response": float(oil_motion.registration_response),
+            "oil_registered_exposure_gain": float(oil_motion.exposure_gain),
+            "oil_registered_exposure_offset": float(oil_motion.exposure_offset),
             "foam_min_evidence_score": float(settings.foam_min_evidence_score),
             "foam_strong_evidence_score": float(settings.foam_strong_evidence_score),
             "effective_area": int(np.count_nonzero(bundle.effective_mask)),
