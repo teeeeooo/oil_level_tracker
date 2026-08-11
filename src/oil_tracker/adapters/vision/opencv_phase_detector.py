@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 import cv2
@@ -38,6 +38,15 @@ from .oil_shadow_types import (
     PipelineFailureStage,
 )
 from .preprocessing import PreprocessResult, preprocess
+from .sequence_foam_resolver import (
+    FoamAdjacentEvidenceTracker,
+    SequenceFoamEpisodeResolver,
+    adjacent_evidence_features,
+)
+from .sequence_trajectory_resolver import (
+    SequenceResolution,
+    SequenceTrajectoryResolver,
+)
 from .temporal_tracker import TemporalTracker
 
 
@@ -58,6 +67,9 @@ class OpenCvPhaseDetector:
         self._static_foam_maps: dict[str, np.ndarray] = {}
         self._foam_gate = FoamTemporalGate()
         self._oil_pipeline = OilHypothesisPipeline()
+        self._foam_adjacent_tracker = FoamAdjacentEvidenceTracker()
+        self._sequence_trajectory_resolver = SequenceTrajectoryResolver()
+        self._sequence_foam_resolver = SequenceFoamEpisodeResolver()
 
     @property
     def foam_temporal_state_count(self) -> int:
@@ -77,6 +89,7 @@ class OpenCvPhaseDetector:
             self._static_maps.clear()
             self._static_foam_maps.clear()
             self._foam_gate.reset()
+            self._foam_adjacent_tracker.reset()
             self._reset_oil_pipeline(None)
         else:
             key = str(glass_id)
@@ -84,7 +97,36 @@ class OpenCvPhaseDetector:
             self._static_maps.pop(key, None)
             self._static_foam_maps.pop(key, None)
             self._foam_gate.reset(key)
+            self._foam_adjacent_tracker.reset(key)
             self._reset_oil_pipeline(key)
+
+    def resolve_sequence(
+        self,
+        detections: list[PhaseDetection] | tuple[PhaseDetection, ...],
+        glass: GlassInspectionConfig,
+        confirmed_initial_state: InitialObservationState | None = None,
+    ) -> SequenceResolution:
+        """Resolve the completed analysis window before public sample projection."""
+
+        oil = self._sequence_trajectory_resolver.resolve(
+            detections,
+            glass,
+            confirmed_initial_state,
+        )
+        foam_detections, foam = self._sequence_foam_resolver.resolve(
+            oil.detections,
+            glass,
+        )
+        diagnostics = replace(
+            oil.diagnostics,
+            foam_raw_candidate_count=foam.raw_candidate_count,
+            foam_confirmed_frame_count=foam.confirmed_frame_count,
+            foam_bridged_frame_count=foam.bridged_frame_count,
+            foam_episode_count=foam.episode_count,
+            foam_rejected_static_episode_count=foam.rejected_static_episode_count,
+            foam_rejected_unconfirmed_episode_count=foam.rejected_unconfirmed_episode_count,
+        )
+        return SequenceResolution(foam_detections, diagnostics)
 
     def learn_static_artifact(self, frames: list[np.ndarray], glass: GlassInspectionConfig) -> None:
         if not frames:
@@ -141,6 +183,11 @@ class OpenCvPhaseDetector:
             pre.glare_mask,
             bundle.effective_mask,
             settings,
+        )
+        foam_adjacent = self._foam_adjacent_tracker.evaluate(
+            glass.id,
+            foam.mask,
+            foam.front_y,
         )
         foam_layer = evaluate_foam_layer_coherence(foam)
         static_foam_map = self._static_foam_maps.get(glass.id)
@@ -275,6 +322,9 @@ class OpenCvPhaseDetector:
             foam_trace_candidate.features["static_reciprocal_overlap"] = float(
                 static_foam_match.reciprocal_overlap
             )
+            foam_trace_candidate.features.update(
+                adjacent_evidence_features(foam_adjacent)
+            )
             foam_trace_candidate.y += origin_y
             candidates.append(foam_trace_candidate)
 
@@ -325,6 +375,14 @@ class OpenCvPhaseDetector:
             "foam_front_delta": (
                 None if foam_temporal.front_delta is None else float(foam_temporal.front_delta)
             ),
+            "foam_adjacent_evidence_available": foam_adjacent.available,
+            "foam_adjacent_exact_overlap": float(foam_adjacent.exact_overlap),
+            "foam_adjacent_tolerant_overlap": float(foam_adjacent.tolerant_overlap),
+            "foam_adjacent_reciprocal_overlap": float(foam_adjacent.reciprocal_overlap),
+            "foam_adjacent_mask_turnover": float(foam_adjacent.mask_turnover),
+            "foam_adjacent_area_change_ratio": float(foam_adjacent.area_change_ratio),
+            "foam_adjacent_front_delta_ratio": float(foam_adjacent.front_delta_ratio),
+            "foam_adjacent_dynamic_support": float(foam_adjacent.dynamic_support),
             "foam_min_evidence_score": float(settings.foam_min_evidence_score),
             "foam_strong_evidence_score": float(settings.foam_strong_evidence_score),
             "effective_area": int(np.count_nonzero(bundle.effective_mask)),
@@ -332,6 +390,7 @@ class OpenCvPhaseDetector:
             "proposed_state": proposed_state.value,
             "stabilized_state": stabilized_state.value,
         }
+        debug_metrics.update(_effective_photometric_metrics(pre, bundle.effective_mask))
         debug_metrics.update(oil_runtime_metrics(oil_result))
         oil_detail = oil_debug_detail(oil_result) if debug else None
         detection = PhaseDetection(
@@ -669,6 +728,29 @@ def _foam_oil_constraint_candidate(
         # remains withheld until the next compatible sample.
         return foam.candidate
     return None
+
+
+def _effective_photometric_metrics(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+) -> dict[str, float]:
+    effective = effective_mask > 0
+    values = pre.gray[effective].astype(np.float32, copy=False)
+    if values.size == 0:
+        return {
+            "effective_gray_mean": 0.0,
+            "effective_gray_std": 0.0,
+            "effective_gray_dynamic_range": 0.0,
+            "effective_edge_density": 0.0,
+        }
+    lower, upper = np.percentile(values, (5.0, 95.0))
+    return {
+        "effective_gray_mean": float(np.mean(values)),
+        "effective_gray_std": float(np.std(values)),
+        "effective_gray_dynamic_range": float(upper - lower),
+        "effective_edge_density": float(np.count_nonzero(pre.canny[effective]))
+        / float(values.size),
+    }
 
 
 def _unit_image(values: np.ndarray) -> np.ndarray:

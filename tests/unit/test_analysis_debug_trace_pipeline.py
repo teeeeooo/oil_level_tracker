@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -77,6 +78,32 @@ class FakeDetector:
             state={"previous_state": "PARTIAL_VISIBLE", "proposed_state": "PARTIAL_VISIBLE"},
         ) if debug else None
         return detection, artifacts
+
+
+class SequenceFakeDetector(FakeDetector):
+    version = "sequence-fake-v1"
+
+    def __init__(self):
+        super().__init__()
+        self.sequence_calls = []
+
+    def resolve_sequence(self, detections, glass, confirmed_initial_state):
+        self.sequence_calls.append((len(detections), glass.id, confirmed_initial_state))
+        resolved = tuple(
+            replace(
+                detection,
+                raw_oil_air_level_y=110.0 + index,
+                smoothed_oil_air_level_y=110.0 + index,
+                oil_air_level_y=110.0 + index,
+                oil_air_level_px_from_zero=glass.geometry.zero_line_y - (110.0 + index),
+                flags=[*detection.flags, "SEQUENCE_RESOLVED_OIL"],
+            )
+            for index, detection in enumerate(detections)
+        )
+        return SimpleNamespace(
+            detections=resolved,
+            diagnostics={"version": self.version, "frame_count": len(resolved)},
+        )
 
 
 class FakeSink:
@@ -188,6 +215,26 @@ def test_official_tracking_is_identical_across_levels():
         samples = result.glass_results[0].samples
         results.append([(sample.frame_index, sample.timestamp_sec, sample.fill_state, sample.raw_oil_air_level_y, sample.overall_confidence) for sample in samples])
     assert results[0] == results[1] == results[2]
+
+
+def test_sequence_capable_detector_resolves_once_before_public_samples() -> None:
+    detector = SequenceFakeDetector()
+
+    result, _reader, detector = _run(DebugTraceLevel.NONE, detector=detector)
+
+    samples = result.glass_results[0].samples
+    assert detector.sequence_calls == [
+        (5, result.glass_results[0].glass_id, InitialObservationState.UNKNOWN_REVIEW)
+    ]
+    assert [sample.raw_oil_air_level_y for sample in samples] == [
+        110.0,
+        111.0,
+        112.0,
+        113.0,
+        114.0,
+    ]
+    assert result.manifest["sequence_resolver_enabled"] is True
+    assert result.manifest["sequence_resolver"][samples[0].glass_id]["version"] == "sequence-fake-v1"
 
 
 def test_cancellation_aborts_sink_and_closes_reader():

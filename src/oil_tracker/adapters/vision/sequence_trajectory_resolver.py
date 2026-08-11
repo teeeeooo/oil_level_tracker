@@ -38,6 +38,12 @@ class SequenceResolverConfig:
     recurring_track_min_frames: int = 6
     recurring_track_min_ratio: float = 0.18
     recurring_track_tolerance_ratio: float = 0.018
+    direct_anchor_min_material: float = 0.24
+    direct_anchor_max_artifact: float = 0.31
+    state_entry_min_evidence: float = 0.30
+    black_frame_max_mean: float = 2.0
+    black_frame_max_std: float = 2.0
+    black_frame_max_dynamic_range: float = 4.0
     unknown_transition_cost: float = 0.24
     state_transition_cost: float = 0.10
     incompatible_state_transition_cost: float = 3.0
@@ -53,6 +59,12 @@ class SequenceResolutionDiagnostics:
     unknown_frame_count: int
     recurring_track_count: int
     maximum_track_opposition: float
+    foam_raw_candidate_count: int = 0
+    foam_confirmed_frame_count: int = 0
+    foam_bridged_frame_count: int = 0
+    foam_episode_count: int = 0
+    foam_rejected_static_episode_count: int = 0
+    foam_rejected_unconfirmed_episode_count: int = 0
 
 
 @dataclass(frozen=True)
@@ -67,6 +79,8 @@ class _CandidateRef:
     candidate_offset: int
     candidate: BoundaryCandidate
     local_quality: float
+    direct_anchor: bool = False
+    anchor_support: float = 0.0
     track_opposition: float = 0.0
 
 
@@ -76,6 +90,7 @@ class _Node:
     emission: float
     identity: str
     candidate_ref: _CandidateRef | None = None
+    state_evidence: float = 0.0
 
     @property
     def y(self) -> float | None:
@@ -118,6 +133,7 @@ class SequenceTrajectoryResolver:
                 ),
             )
         refs_by_frame = self._candidate_refs(source, glass)
+        refs_by_frame = self._apply_anchor_support(refs_by_frame, glass)
         refs_by_frame, track_count, maximum_track_opposition = self._apply_track_opposition(
             refs_by_frame,
             glass,
@@ -132,6 +148,7 @@ class SequenceTrajectoryResolver:
             for index, detection in enumerate(source)
         )
         path = self._best_path(layers, source, glass, confirmed_initial_state)
+        path = self._bound_unanchored_oil_run_edges(path, layers, glass)
         resolved = tuple(
             self._project_detection(
                 detection,
@@ -172,12 +189,22 @@ class SequenceTrajectoryResolver:
                     continue
                 if self._hard_candidate_conflict(candidate):
                     continue
+                material = _candidate_material_support(candidate)
+                artifact = _candidate_artifact_signature(candidate)
+                direct_anchor = bool(
+                    candidate.selected
+                    and detection.fill_state is not FillState.FULL_WITH_FOAM
+                    and material >= self.config.direct_anchor_min_material
+                    and artifact <= self.config.direct_anchor_max_artifact
+                )
                 refs.append(
                     _CandidateRef(
                         frame_offset,
                         candidate_offset,
                         candidate,
-                        _candidate_quality(candidate),
+                        _candidate_quality(candidate)
+                        + (0.42 if direct_anchor else 0.0),
+                        direct_anchor=direct_anchor,
                     )
                 )
             refs.sort(
@@ -189,6 +216,60 @@ class SequenceTrajectoryResolver:
             )
             rows.append(tuple(refs[:limit]))
         return tuple(rows)
+
+    def _apply_anchor_support(
+        self,
+        refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
+        glass: GlassInspectionConfig,
+    ) -> tuple[tuple[_CandidateRef, ...], ...]:
+        direct_anchors = tuple(
+            ref
+            for refs in refs_by_frame
+            for ref in refs
+            if ref.direct_anchor
+        )
+        horizon = max(
+            2,
+            min(3, int(glass.detector_settings.oil_path_window)),
+        )
+        maximum_jump = max(
+            1.0,
+            float(glass.detector_settings.temporal_max_jump_px),
+        )
+        qualified_keys = _qualified_anchor_keys(
+            direct_anchors,
+            frame_count=len(refs_by_frame),
+            horizon=horizon,
+            maximum_jump=maximum_jump,
+        )
+        anchors = tuple(
+            ref
+            for ref in direct_anchors
+            if (ref.frame_offset, ref.candidate_offset) in qualified_keys
+        )
+        output: list[tuple[_CandidateRef, ...]] = []
+        for refs in refs_by_frame:
+            rows: list[_CandidateRef] = []
+            for ref in refs:
+                if (ref.frame_offset, ref.candidate_offset) in qualified_keys:
+                    support = 1.0
+                else:
+                    support = 0.0
+                    for anchor in anchors:
+                        gap = abs(anchor.frame_offset - ref.frame_offset)
+                        if gap == 0 or gap > horizon:
+                            continue
+                        allowed = maximum_jump * gap * 0.65
+                        distance = abs(
+                            float(anchor.candidate.y) - float(ref.candidate.y)
+                        )
+                        support = max(
+                            support,
+                            _unit(1.0 - distance / max(1.0, allowed)),
+                        )
+                rows.append(replace(ref, anchor_support=support))
+            output.append(tuple(rows))
+        return tuple(output)
 
     def _hard_candidate_conflict(self, candidate: BoundaryCandidate) -> bool:
         features = candidate.features
@@ -246,18 +327,24 @@ class SequenceTrajectoryResolver:
                 continue
             opposition = sum(_candidate_artifact_signature(item.candidate) for item in ordered) / len(ordered)
             material = sum(_candidate_material_support(item.candidate) for item in ordered) / len(ordered)
-            contradiction = max(0.0, opposition - 0.42 * material - 0.08)
+            contradiction = max(0.0, opposition - 0.35 * material - 0.04)
             recurrence = _unit(
                 (presence_ratio - self.config.recurring_track_min_ratio)
                 / max(0.01, 0.70 - self.config.recurring_track_min_ratio)
             )
-            track_penalty = _unit(recurrence * stability * contradiction * 2.8)
+            track_penalty = _unit(
+                recurrence
+                * stability
+                * (0.22 + contradiction * 2.4)
+            )
             if track_penalty <= 0.0:
                 continue
             recurring += 1
             maximum = max(maximum, track_penalty)
             for item in refs:
-                penalties[(item.frame_offset, item.candidate_offset)] = track_penalty
+                penalties[(item.frame_offset, item.candidate_offset)] = (
+                    track_penalty * (1.0 - 0.70 * item.anchor_support)
+                )
 
         output = tuple(
             tuple(
@@ -281,7 +368,7 @@ class SequenceTrajectoryResolver:
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None,
     ) -> tuple[_Node, ...]:
-        if _hard_unavailable(detection):
+        if _hard_unavailable(detection, self.config):
             return (_Node("unknown", 1.25, "unknown"),)
 
         oil_nodes = tuple(
@@ -297,16 +384,41 @@ class SequenceTrajectoryResolver:
         empty_strength = _state_evidence(detection, FillState.EMPTY_NO_INTERFACE)
         prior_full = confirmed_initial_state is InitialObservationState.FULL_NO_INTERFACE
         prior_empty = confirmed_initial_state is InitialObservationState.EMPTY_NO_INTERFACE
-        full_emission = -0.10 + 0.85 * full_strength + (0.12 if prior_full else 0.0)
-        empty_emission = -0.10 + 0.85 * empty_strength + (0.12 if prior_empty else 0.0)
+        generic_no_interface = _unit(
+            detection.debug_metrics.get("oil_no_interface_score", 0.0)
+        )
+        full_emission = (
+            -0.10
+            + 0.85 * full_strength
+            + 0.24 * generic_no_interface
+        )
+        empty_emission = (
+            -0.10
+            + 0.85 * empty_strength
+            + 0.24 * generic_no_interface
+        )
         best_quality = max((ref.local_quality for ref in refs), default=0.0)
         ambiguity = _unit(detection.debug_metrics.get("oil_ambiguity_score", 0.0))
         no_interface = _unit(detection.debug_metrics.get("oil_no_interface_score", 0.0))
-        unknown_emission = 0.02 + 0.28 * ambiguity + 0.10 * no_interface - 0.13 * best_quality
+        unknown_emission = 0.10 + 0.30 * ambiguity + 0.12 * no_interface - 0.10 * best_quality
+        if prior_full:
+            full_emission = max(full_emission, unknown_emission)
+        if prior_empty:
+            empty_emission = max(empty_emission, unknown_emission)
         return (
             *oil_nodes,
-            _Node("full", full_emission, "full"),
-            _Node("empty", empty_emission, "empty"),
+            _Node(
+                "full",
+                full_emission,
+                "full",
+                state_evidence=max(full_strength, generic_no_interface),
+            ),
+            _Node(
+                "empty",
+                empty_emission,
+                "empty",
+                state_evidence=max(empty_strength, generic_no_interface),
+            ),
             _Node("unknown", unknown_emission, "unknown"),
         )
 
@@ -344,6 +456,7 @@ class SequenceTrajectoryResolver:
                             node,
                             glass,
                             dt,
+                            confirmed_initial_state,
                         ),
                         prior_offset,
                     )
@@ -371,12 +484,60 @@ class SequenceTrajectoryResolver:
         offsets.reverse()
         return tuple(layers[index][offset] for index, offset in enumerate(offsets))
 
+    def _bound_unanchored_oil_run_edges(
+        self,
+        path: tuple[_Node, ...],
+        layers: tuple[tuple[_Node, ...], ...],
+        glass: GlassInspectionConfig,
+    ) -> tuple[_Node, ...]:
+        bounded = list(path)
+        horizon = max(2, min(3, int(glass.detector_settings.oil_path_window)))
+        offset = 0
+        while offset < len(path):
+            if path[offset].kind != "oil":
+                offset += 1
+                continue
+            start = offset
+            while offset + 1 < len(path) and path[offset + 1].kind == "oil":
+                offset += 1
+            end = offset
+            qualified = [
+                index
+                for index in range(start, end + 1)
+                if path[index].candidate_ref is not None
+                and path[index].candidate_ref.direct_anchor
+                and path[index].candidate_ref.anchor_support >= 0.99
+            ]
+            if qualified:
+                prior_kind = path[start - 1].kind if start > 0 else None
+                next_node = path[end + 1] if end + 1 < len(path) else None
+                if prior_kind not in {"full", "empty"}:
+                    for index in range(start, max(start, qualified[0] - horizon)):
+                        bounded[index] = _unknown_node(layers[index])
+                for prior_anchor, next_anchor in zip(qualified, qualified[1:]):
+                    if next_anchor - prior_anchor <= horizon * 2:
+                        continue
+                    for index in range(prior_anchor + 1, next_anchor):
+                        bounded[index] = _unknown_node(layers[index])
+                supported_state_entry = bool(
+                    next_node is not None
+                    and next_node.kind in {"full", "empty"}
+                    and next_node.state_evidence >= self.config.state_entry_min_evidence
+                )
+                if not supported_state_entry:
+                    trailing_start = min(end + 1, qualified[-1] + horizon + 1)
+                    for index in range(trailing_start, end + 1):
+                        bounded[index] = _unknown_node(layers[index])
+            offset += 1
+        return tuple(bounded)
+
     def _transition_score(
         self,
         prior: _Node,
         current: _Node,
         glass: GlassInspectionConfig,
         dt: float,
+        confirmed_initial_state: InitialObservationState | None,
     ) -> float:
         if prior.kind == current.kind:
             if current.kind == "oil":
@@ -384,19 +545,41 @@ class SequenceTrajectoryResolver:
                 maximum = max(1.0, float(glass.detector_settings.temporal_max_jump_px))
                 time_scale = max(1.0, dt / 0.5)
                 normalized = abs(current.y - prior.y) / (maximum * time_scale)
-                return -(0.12 * normalized + 0.30 * normalized * normalized)
+                return 0.22 - (0.12 * normalized + 0.30 * normalized * normalized)
             if current.kind in {"full", "empty"}:
-                return 0.14
+                confirmed_kind = (
+                    "full"
+                    if confirmed_initial_state is InitialObservationState.FULL_NO_INTERFACE
+                    else "empty"
+                    if confirmed_initial_state is InitialObservationState.EMPTY_NO_INTERFACE
+                    else None
+                )
+                if current.kind == confirmed_kind:
+                    return 0.22
+                return 0.35
             return 0.02
 
         if prior.kind == "unknown" or current.kind == "unknown":
+            if (
+                prior.kind == "unknown"
+                and current.kind in {"full", "empty"}
+                and current.state_evidence < 0.58
+            ):
+                return -1_000_000.0
             return -self.config.unknown_transition_cost
         if prior.kind in {"full", "empty"} and current.kind in {"full", "empty"}:
             return -self.config.incompatible_state_transition_cost
         if prior.kind == "oil" and current.kind in {"full", "empty"}:
+            if (
+                prior.candidate_ref is None
+                or prior.candidate_ref.anchor_support < 0.45
+                or current.state_evidence < self.config.state_entry_min_evidence
+            ):
+                return -self.config.incompatible_state_transition_cost
             return -self._edge_transition_cost(prior, current.kind, glass)
         if current.kind == "oil" and prior.kind in {"full", "empty"}:
-            return -self._edge_transition_cost(current, prior.kind, glass)
+            cost = self._edge_transition_cost(current, prior.kind, glass)
+            return 0.18 if cost <= self.config.state_transition_cost else -cost
         return -self.config.state_transition_cost
 
     def _edge_transition_cost(
@@ -413,7 +596,7 @@ class SequenceTrajectoryResolver:
         else:
             overflow = max(0.0, (1.0 - band) - relative)
         if overflow <= 0.0:
-            return self.config.state_transition_cost
+            return self.config.state_transition_cost * 0.50
         return 0.80 + 3.0 * overflow
 
     def _project_detection(
@@ -437,7 +620,12 @@ class SequenceTrajectoryResolver:
                 "sequence_track_opposition": (
                     0.0
                     if node.candidate_ref is None
-                    else float(node.candidate_ref.track_opposition)
+                        else float(node.candidate_ref.track_opposition)
+                ),
+                "sequence_anchor_support": (
+                    0.0
+                    if node.candidate_ref is None
+                    else float(node.candidate_ref.anchor_support)
                 ),
             }
         )
@@ -558,12 +746,14 @@ def _oil_emission(ref: _CandidateRef) -> float:
     )
     ambiguity = _unit(features.get("ambiguity_likelihood", candidate.penalties.get("ambiguity_likelihood", 0.0)))
     return (
-        0.10
-        + 0.92 * _candidate_material_support(candidate)
-        + 0.16 * availability
-        - 0.25 * _candidate_artifact_signature(candidate)
-        - 0.16 * ambiguity
-        - 0.58 * ref.track_opposition
+        -0.20
+        + 0.65 * _candidate_material_support(candidate)
+        + 0.10 * availability
+        + (0.42 if ref.direct_anchor else 0.0)
+        + 0.50 * ref.anchor_support
+        - 0.70 * _candidate_artifact_signature(candidate)
+        - 0.18 * ambiguity
+        - 0.72 * ref.track_opposition
     )
 
 
@@ -587,8 +777,7 @@ def _state_evidence(detection: PhaseDetection, state: FillState) -> float:
         else "oil_no_interface_empty_likelihood"
     )
     value = _unit(detection.debug_metrics.get(key, 0.0))
-    proposed = str(detection.debug_metrics.get("proposed_state", ""))
-    if detection.fill_state is state or proposed == state.value:
+    if detection.fill_state is state:
         value = max(value, 0.82)
     return value
 
@@ -612,6 +801,8 @@ def _initial_score(
             return -2.0
         if node.kind == "oil" and node.y is not None:
             return 0.25 if _relative_y(node.y, glass) >= 0.73 else -0.75
+    if node.kind in {"full", "empty"}:
+        return 0.0 if node.state_evidence >= 0.58 else -1_000_000.0
     return 0.0
 
 
@@ -659,9 +850,28 @@ def _project_candidates(
     return output
 
 
-def _hard_unavailable(detection: PhaseDetection) -> bool:
+def _hard_unavailable(
+    detection: PhaseDetection,
+    config: SequenceResolverConfig,
+) -> bool:
     flags = {str(flag).strip().upper() for flag in detection.flags}
-    return bool(flags.intersection(_HARD_UNAVAILABLE_FLAGS))
+    if flags.intersection(_HARD_UNAVAILABLE_FLAGS):
+        return True
+    mean = _optional_finite(detection.debug_metrics.get("effective_gray_mean"))
+    standard_deviation = _optional_finite(
+        detection.debug_metrics.get("effective_gray_std")
+    )
+    dynamic_range = _optional_finite(
+        detection.debug_metrics.get("effective_gray_dynamic_range")
+    )
+    return bool(
+        mean is not None
+        and standard_deviation is not None
+        and dynamic_range is not None
+        and mean <= config.black_frame_max_mean
+        and standard_deviation <= config.black_frame_max_std
+        and dynamic_range <= config.black_frame_max_dynamic_range
+    )
 
 
 def _relative_y(y: float, glass: GlassInspectionConfig) -> float:
@@ -682,6 +892,52 @@ def _longest_consecutive(indices: tuple[int, ...]) -> int:
     return longest
 
 
+def _qualified_anchor_keys(
+    anchors: tuple[_CandidateRef, ...],
+    *,
+    frame_count: int,
+    horizon: int,
+    maximum_jump: float,
+) -> set[tuple[int, int]]:
+    if not anchors:
+        return set()
+    ordered = sorted(
+        anchors,
+        key=lambda item: (
+            item.frame_offset,
+            float(item.candidate.y),
+            item.candidate.source,
+        ),
+    )
+    groups: list[list[_CandidateRef]] = []
+    current: list[_CandidateRef] = []
+    for anchor in ordered:
+        if not current:
+            current = [anchor]
+            continue
+        prior = current[-1]
+        gap = anchor.frame_offset - prior.frame_offset
+        distance = abs(float(anchor.candidate.y) - float(prior.candidate.y))
+        if (
+            0 < gap <= horizon * 2
+            and distance <= maximum_jump * gap * 0.90
+        ):
+            current.append(anchor)
+        else:
+            groups.append(current)
+            current = [anchor]
+    if current:
+        groups.append(current)
+
+    minimum = 2 if frame_count <= max(6, horizon * 2) else 3
+    return {
+        (anchor.frame_offset, anchor.candidate_offset)
+        for group in groups
+        if len(group) >= minimum
+        for anchor in group
+    }
+
+
 def _node_order(node: _Node) -> int:
     base = {"oil": 0, "full": 1, "empty": 2, "unknown": 3}[node.kind]
     if node.y is None:
@@ -689,11 +945,25 @@ def _node_order(node: _Node) -> int:
     return base * 1_000_000 + int(round(node.y * 100.0))
 
 
+def _unknown_node(layer: tuple[_Node, ...]) -> _Node:
+    return next(node for node in layer if node.kind == "unknown")
+
+
 def _finite(value: object) -> bool:
     try:
         return math.isfinite(float(value))
     except (TypeError, ValueError):
         return False
+
+
+def _optional_finite(value: object) -> float | None:
+    if value is None:
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    return number if math.isfinite(number) else None
 
 
 def _unit(value: object) -> float:

@@ -181,6 +181,33 @@ def test_authoritative_foam_with_independent_numeric_oil_remains_direction_evide
     assert projected[2].fill_state is FillState.FOAMING_VISIBLE
 
 
+def test_sequence_resolved_leading_state_is_not_reconstructed_twice():
+    glass = glass_config()
+    samples = [
+        _sample(
+            0,
+            FillState.FULL_NO_INTERFACE,
+            valid=True,
+            flags=("SEQUENCE_RESOLVED_STATE", "SEQUENCE_INITIAL_STATE_PRIOR"),
+        ),
+        _sample(
+            1,
+            FillState.FULL_NO_INTERFACE,
+            valid=True,
+            flags=("SEQUENCE_RESOLVED_STATE", "SEQUENCE_INITIAL_STATE_PRIOR"),
+        ),
+    ]
+
+    result = reconstruct_initial_state(
+        glass,
+        samples,
+        _confirmation(InitialObservationState.FULL_NO_INTERFACE),
+    )
+
+    assert result.status is RetrospectiveStatus.NOT_APPLICABLE
+    assert "sequence resolver" in result.reason
+
+
 def test_hard_unavailable_barrier_still_wins_over_malformed_numeric_foam_sample():
     glass = glass_config()
     top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y

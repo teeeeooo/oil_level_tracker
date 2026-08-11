@@ -35,6 +35,16 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
         )
     if not samples:
         return _unresolved(glass.id, prior, "No observed samples are available.")
+    if "SEQUENCE_RESOLVED_STATE" in samples[0].flags:
+        return RetrospectiveInterpretation(
+            glass_id=glass.id,
+            status=RetrospectiveStatus.NOT_APPLICABLE,
+            confirmed_prior=prior,
+            reason=(
+                "The final-analysis sequence resolver already projected the "
+                "confirmed leading state without creating a numeric boundary."
+            ),
+        )
 
     accepted: list[tuple[int, TrackingSample, float]] = []
     first_boundary_index: int | None = None

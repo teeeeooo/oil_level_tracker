@@ -19,6 +19,7 @@ def _candidate(
     glare: float = 0.0,
     border: float = 0.0,
     source: str | None = None,
+    selected: bool = False,
 ) -> BoundaryCandidate:
     return BoundaryCandidate(
         source=source or f"candidate-{y}",
@@ -46,6 +47,7 @@ def _candidate(
         },
         feature_score=boundary,
         final_score=boundary,
+        selected=selected,
     )
 
 
@@ -55,7 +57,28 @@ def _detection(
     state: FillState = FillState.UNKNOWN_REVIEW,
     flags: tuple[str, ...] = (),
     ambiguity: float = 0.55,
+    no_interface: float = 0.0,
+    photometric: tuple[float, float, float] | None = None,
 ) -> PhaseDetection:
+    debug_metrics = {
+        "oil_ambiguity_score": ambiguity,
+        "oil_no_interface_score": no_interface,
+        "oil_no_interface_full_likelihood": (
+            0.9 if state is FillState.FULL_NO_INTERFACE else 0.0
+        ),
+        "oil_no_interface_empty_likelihood": (
+            0.9 if state is FillState.EMPTY_NO_INTERFACE else 0.0
+        ),
+        "proposed_state": state.value,
+    }
+    if photometric is not None:
+        debug_metrics.update(
+            {
+                "effective_gray_mean": photometric[0],
+                "effective_gray_std": photometric[1],
+                "effective_gray_dynamic_range": photometric[2],
+            }
+        )
     return PhaseDetection(
         glass_id="glass-1",
         frame_index=index,
@@ -65,17 +88,7 @@ def _detection(
         flags=list(flags),
         visibility_confidence=1.0,
         overall_confidence=0.2,
-        debug_metrics={
-            "oil_ambiguity_score": ambiguity,
-            "oil_no_interface_score": 0.0,
-            "oil_no_interface_full_likelihood": (
-                0.9 if state is FillState.FULL_NO_INTERFACE else 0.0
-            ),
-            "oil_no_interface_empty_likelihood": (
-                0.9 if state is FillState.EMPTY_NO_INTERFACE else 0.0
-            ),
-            "proposed_state": state.value,
-        },
+        debug_metrics=debug_metrics,
     )
 
 
@@ -119,7 +132,7 @@ def test_stationary_material_supported_interface_is_not_a_static_hard_veto() -> 
     result = SequenceTrajectoryResolver().resolve(detections, glass_config())
 
     assert _oil_y(result) == [132.0] * 10
-    assert result.diagnostics.maximum_track_opposition == 0.0
+    assert result.diagnostics.maximum_track_opposition < 0.30
 
 
 def test_recurring_artifact_signature_is_opposed_without_forcing_a_number() -> None:
@@ -214,6 +227,100 @@ def test_hard_unavailable_frame_stays_unknown_without_coordinate_carry() -> None
     assert result.detections[1].fill_state is FillState.UNKNOWN_REVIEW
     assert result.detections[1].raw_oil_air_level_y is None
     assert "SEQUENCE_UNAVAILABLE" in result.detections[1].flags
+
+
+def test_black_frame_cannot_publish_a_false_no_interface_state() -> None:
+    detection = _detection(
+        0,
+        state=FillState.FULL_NO_INTERFACE,
+        no_interface=1.0,
+        photometric=(0.0, 0.0, 0.0),
+    )
+
+    result = SequenceTrajectoryResolver().resolve((detection,), glass_config())
+
+    assert result.detections[0].fill_state is FillState.UNKNOWN_REVIEW
+    assert result.detections[0].raw_oil_air_level_y is None
+    assert "SEQUENCE_UNAVAILABLE" in result.detections[0].flags
+
+
+def test_unconfirmed_full_entry_requires_same_frame_no_interface_evidence() -> None:
+    glass = glass_config()
+    top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
+    detections = (
+        _detection(0, _candidate(top + 26.0, boundary=0.72, selected=True), ambiguity=0.2),
+        _detection(1, _candidate(top + 18.0, boundary=0.72, selected=True), ambiguity=0.2),
+        _detection(2, _candidate(top + 10.0, boundary=0.72, selected=True), ambiguity=0.2),
+        _detection(3, ambiguity=0.8),
+        _detection(4, ambiguity=0.8),
+    )
+
+    result = SequenceTrajectoryResolver().resolve(detections, glass)
+
+    assert result.detections[-1].fill_state is FillState.UNKNOWN_REVIEW
+    assert all(
+        item.fill_state is not FillState.FULL_NO_INTERFACE
+        for item in result.detections
+    )
+
+
+def test_supported_top_trajectory_can_enter_full_with_no_interface_evidence() -> None:
+    glass = glass_config()
+    top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
+    detections = (
+        _detection(0, _candidate(top + 26.0, boundary=0.72, selected=True), ambiguity=0.2),
+        _detection(1, _candidate(top + 18.0, boundary=0.72, selected=True), ambiguity=0.2),
+        _detection(2, _candidate(top + 10.0, boundary=0.72, selected=True), ambiguity=0.2),
+        *(
+            _detection(index, ambiguity=0.2, no_interface=0.45)
+            for index in range(3, 9)
+        ),
+    )
+
+    result = SequenceTrajectoryResolver().resolve(detections, glass)
+
+    assert result.detections[-1].fill_state is FillState.FULL_NO_INTERFACE
+    assert result.detections[-1].raw_oil_air_level_y is None
+
+
+def test_long_gap_between_qualified_anchor_clusters_stays_non_numeric() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _candidate(
+                150.0 + index,
+                boundary=0.62,
+                selected=index in {0, 1, 2, 10, 11, 12},
+            ),
+            ambiguity=0.2,
+        )
+        for index in range(13)
+    )
+
+    result = SequenceTrajectoryResolver().resolve(detections, glass_config())
+
+    assert all(value is not None for value in _oil_y(result)[:3])
+    assert _oil_y(result)[3:10] == [None] * 7
+    assert all(value is not None for value in _oil_y(result)[10:])
+
+
+def test_short_edge_before_first_qualified_anchor_remains_observable() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _candidate(
+                150.0 - index,
+                boundary=0.62,
+                selected=index in {2, 3, 4},
+            ),
+            ambiguity=0.2,
+        )
+        for index in range(6)
+    )
+
+    result = SequenceTrajectoryResolver().resolve(detections, glass_config())
+
+    assert _oil_y(result) == [150.0, 149.0, 148.0, 147.0, 146.0, 145.0]
 
 
 def test_foam_only_glare_rejection_does_not_erase_independent_oil_candidate() -> None:

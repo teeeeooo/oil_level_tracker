@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, is_dataclass
 from datetime import datetime, timezone
 import hashlib
 import time
@@ -93,7 +93,10 @@ class AnalysisPipeline:
         )
         if not schedules:
             raise ValueError("Timestamp schedule is empty.")
+        detections_by_glass = {g.id: [] for g in enabled}
         by_glass: dict[str, list[TrackingSample]] = {g.id: [] for g in enabled}
+        sequence_diagnostics: dict[str, object] = {}
+        sequence_resolver_enabled = False
         previous_detections = {}
         compressor_index = None
         if session.compressor_start_sec is not None:
@@ -147,13 +150,17 @@ class AnalysisPipeline:
                             actual_time,
                             debug=debug_enabled,
                         )
-                        sample = tracking_sample_from_detection(run_id, glass, detection)
-                        by_glass[glass.id].append(sample)
+                        detections_by_glass[glass.id].append(detection)
+                        current_frame_sample = tracking_sample_from_detection(
+                            run_id,
+                            glass,
+                            detection,
+                        )
                         if sink is not None:
                             decision = self.capture_policy.decide(
                                 session.debug_trace_level,
                                 detection,
-                                is_valid=sample.is_valid,
+                                is_valid=current_frame_sample.is_valid,
                                 minimum_confidence=glass.detector_settings.minimum_final_confidence,
                                 effective_height=effective_observation_height(glass),
                                 first_sample=index == 0,
@@ -181,6 +188,29 @@ class AnalysisPipeline:
                         )
             finally:
                 reader.close()
+
+            for glass in enabled:
+                _check_cancelled(cancellation)
+                confirmation = session.initial_state_confirmations.get(glass.id)
+                confirmed_state = (
+                    confirmation.state
+                    if confirmation is not None
+                    and confirmation.matches(glass.initial_state, session)
+                    else None
+                )
+                resolved, diagnostics = _resolve_detection_sequence(
+                    self.detector,
+                    detections_by_glass[glass.id],
+                    glass,
+                    confirmed_state,
+                )
+                sequence_resolver_enabled = sequence_resolver_enabled or diagnostics is not None
+                if diagnostics is not None:
+                    sequence_diagnostics[glass.id] = diagnostics
+                by_glass[glass.id] = [
+                    tracking_sample_from_detection(run_id, glass, detection)
+                    for detection in resolved
+                ]
 
             _check_cancelled(cancellation)
             _emit(
@@ -336,6 +366,8 @@ class AnalysisPipeline:
                     "debug_record_count": completion.record_count
                     if completion is not None
                     else 0,
+                    "sequence_resolver_enabled": sequence_resolver_enabled,
+                    "sequence_resolver": sequence_diagnostics,
                 },
                 debug_trace_completion=completion,
             )
@@ -387,3 +419,41 @@ def _stable_recipe_bytes(recipe: InspectionRecipe) -> bytes:
         sort_keys=True,
         separators=(",", ":"),
     ).encode("utf-8")
+
+
+def _resolve_detection_sequence(
+    detector,
+    detections,
+    glass,
+    confirmed_initial_state,
+):
+    resolver = getattr(detector, "resolve_sequence", None)
+    if not callable(resolver):
+        return tuple(detections), None
+    result = resolver(
+        tuple(detections),
+        glass,
+        confirmed_initial_state,
+    )
+    resolved = tuple(getattr(result, "detections", result))
+    if len(resolved) != len(detections):
+        raise ValueError(
+            "Sequence resolver must return exactly one detection per input frame."
+        )
+    for source, projected in zip(detections, resolved, strict=True):
+        if (
+            source.glass_id != projected.glass_id
+            or source.frame_index != projected.frame_index
+            or abs(float(source.time_sec) - float(projected.time_sec)) > 1e-9
+        ):
+            raise ValueError(
+                "Sequence resolver changed Glass, frame or timestamp identity."
+            )
+    diagnostics = getattr(result, "diagnostics", None)
+    if diagnostics is None:
+        return resolved, {"version": str(getattr(detector, "version", "unknown"))}
+    if is_dataclass(diagnostics):
+        return resolved, asdict(diagnostics)
+    if isinstance(diagnostics, dict):
+        return resolved, dict(diagnostics)
+    return resolved, {"summary": str(diagnostics)}
