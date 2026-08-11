@@ -61,11 +61,11 @@ def test_sample3_sequence_retains_rise_and_censors_full_like_caps_and_false_foam
     rows = result.glass_results[0].samples
 
     assert len(rows) == 151
-    rising = [sample for sample in rows if sample.timestamp_sec < 36.70]
+    rising = [sample for sample in rows if sample.timestamp_sec < 39.0]
     full_like = [
         sample
         for sample in rows
-        if 36.70 <= sample.timestamp_sec < 66.0
+        if 39.0 <= sample.timestamp_sec < 66.0
     ]
     rising_y = [
         float(sample.raw_oil_air_level_y)
@@ -76,7 +76,10 @@ def test_sample3_sequence_retains_rise_and_censors_full_like_caps_and_false_foam
     assert sum(_numeric(sample) for sample in rising) >= 5
     assert min(abs(y - 316.0) for y in rising_y) <= 2.0
     assert min(abs(y - 243.0) for y in rising_y) <= 3.0
-    assert sum(_numeric(sample) for sample in full_like) <= 2
+    # Direct source review retains the real upper meniscus through 38.04 s.
+    # The cap-only/full interval begins after that observation and must not
+    # regain a numeric coordinate from the dark Glass rim.
+    assert not any(_numeric(sample) for sample in full_like)
     assert not any(
         sample.fill_state is FillState.DRAINING_VISIBLE
         for sample in full_like
