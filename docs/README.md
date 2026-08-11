@@ -64,6 +64,8 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
 - Active S11-R7 evidence-tiered trajectory architecture: [`20-architecture/s11-r7-evidence-tiered-trajectory-architecture.md`](20-architecture/s11-r7-evidence-tiered-trajectory-architecture.md)
 - Active S11-R7 validation contract: [`30-validation/s11-r7-evidence-tiered-trajectory-validation.md`](30-validation/s11-r7-evidence-tiered-trajectory-validation.md)
+- S11-R7 checked-video direct-image reconciliation: [`50-diagnostics/s11/s11-r7-checked-video-direct-image-reconciliation.md`](50-diagnostics/s11/s11-r7-checked-video-direct-image-reconciliation.md)
+- S11-R7 local implementation/replay evidence: [`60-evidence/s11/s11-r7-evidence-tiered-trajectory.md`](60-evidence/s11/s11-r7-evidence-tiered-trajectory.md)
 - Active detector-baseline validation: [`30-validation/s11-real-field-detector-effectiveness.md`](30-validation/s11-real-field-detector-effectiveness.md)
 - S11-R6 secure-Windows field failure: [`50-diagnostics/s11/s11-r6-secure-windows-field-failure.md`](50-diagnostics/s11/s11-r6-secure-windows-field-failure.md)
 - Active user observation report architecture: [`20-architecture/result-observation-report-architecture.md`](20-architecture/result-observation-report-architecture.md)
@@ -97,6 +99,7 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - Failed S11-R6 validation contract: [`30-validation/s11-r6-optics-aware-observation-validation.md`](30-validation/s11-r6-optics-aware-observation-validation.md)
 - S11-R6 checked-video diagnostic: [`50-diagnostics/s11/s11-r6-checked-video-reconciliation.md`](50-diagnostics/s11/s11-r6-checked-video-reconciliation.md)
 - S11-R6 local implementation/replay evidence: [`60-evidence/s11/s11-r6-optics-aware-observation.md`](60-evidence/s11/s11-r6-optics-aware-observation.md)
+- S11-R7 implemented local baseline and pending field gate: [`60-evidence/s11/s11-r7-evidence-tiered-trajectory.md`](60-evidence/s11/s11-r7-evidence-tiered-trajectory.md)
 
 ### Supporting collections
 

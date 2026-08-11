@@ -23,7 +23,8 @@ Acceptance must prove that final analysis:
 Focused tests must cover symmetric `FULL_NO_INTERFACE` and `EMPTY_NO_INTERFACE` reconstruction and prove:
 
 - an R7 stream is eligible only when at least two `R7_OIL_ANCHOR` observations
-  establish compatible direction/topology;
+  establish compatible direction; a first mid-Glass catch remains eligible and
+  its entrance topology is recorded as provenance;
 - an R7 continuation-only observation cannot confirm the prior;
 - a legacy stream already carrying `SEQUENCE_INITIAL_STATE_PRIOR` is not
   projected a second time;

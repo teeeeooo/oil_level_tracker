@@ -1,6 +1,6 @@
 # S11 Detector Responsibility Architecture
 
-**Status:** `TRANSITIONING TO R7 — IMPLEMENTATION GATE ACTIVE`
+**Status:** `R7 IMPLEMENTED — WINDOWS VALIDATION PENDING`
 
 ## Purpose and authority
 
@@ -8,11 +8,10 @@ This document is the durable responsibility owner for the production S11
 detector. The exact current gate remains in the [work plan](../00-project/work-plan.md),
 and completed measurements remain in [`../60-evidence/s11/`](../60-evidence/s11/).
 
-R6 remains the checked-in runtime until the R7 implementation commit, but it
-failed the secure-Windows holdout and has no acceptance authority. R7 is the
-authorized replacement contract. R2–R6 documents preserve the causes, controls
-and failed alternatives that led here; they do not define target runtime routing
-when they conflict with this document or the
+R7 is the checked-in production runtime. R6 failed the secure-Windows holdout and
+has no acceptance authority. R2–R6 documents preserve the causes, controls and
+failed alternatives that led here; they do not define runtime routing when they
+conflict with this document or the
 [R7 architecture](s11-r7-evidence-tiered-trajectory-architecture.md).
 
 ## Production observation path
@@ -176,6 +175,8 @@ observed samples only. Detailed presentation ownership belongs to the
 The current preservation and holdout gates are defined by the
 [R7 validation contract](../30-validation/s11-r7-evidence-tiered-trajectory-validation.md)
 and the [S11 real-field validation contract](../30-validation/s11-real-field-detector-effectiveness.md).
+The completed local implementation evidence is
+[S11-R7 Evidence-Tiered Trajectory](../60-evidence/s11/s11-r7-evidence-tiered-trajectory.md).
 
 ## Non-authorities
 

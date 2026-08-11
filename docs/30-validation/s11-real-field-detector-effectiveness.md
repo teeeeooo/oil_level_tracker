@@ -146,7 +146,8 @@ failure records. None is an alternate current acceptance owner.
 
 Passing local tests establishes only checked-in-corpus suitability for the
 secure holdout. It does not establish general-field detector accuracy, authorize
-numeric trajectory estimation or satisfy the private Windows gate. R7 acceptance
-must be recorded in a new evidence record; the
+numeric trajectory estimation or satisfy the private Windows gate. The local R7
+disposition is recorded in the
+[R7 evidence](../60-evidence/s11/s11-r7-evidence-tiered-trajectory.md); the
 [R6 evidence](../60-evidence/s11/s11-r6-optics-aware-observation.md) remains
 historical comparison only.

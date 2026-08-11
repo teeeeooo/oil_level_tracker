@@ -1,6 +1,6 @@
 # S11-R7 Evidence-Tiered Trajectory Validation Contract
 
-**Status:** `ACTIVE IMPLEMENTATION CONTRACT`
+**Status:** `LOCAL PASS — SECURE WINDOWS HOLDOUT PENDING`
 
 ## Oracle and comparison
 
@@ -41,8 +41,9 @@ Controlled sequences must prove:
 
 Prove symmetric FULL/descending and EMPTY/rising cases:
 
-- current-run confirmation plus at least two anchor-grade observations can infer
-  the leading prefix;
+- current-run confirmation plus at least two anchor-grade observations with
+  compatible direction can infer the leading prefix even when the first catch
+  is already mid-Glass;
 - inferred state is separately persisted and leaves observed samples/coverage
   unchanged;
 - ordinary UNKNOWN and rejected/raw Foam do not block inference;
@@ -107,6 +108,11 @@ image agreement and gap distribution without a new gross wrong-interface run.
 Run focused Oil/Foam/retrospective/event/report tests, controlled benchmarks,
 deterministic four-video replay, compile checks and the complete suite. Runtime
 and memory remain within the existing bounded CPU contract.
+
+The local implementation and replay disposition is recorded in
+[S11-R7 local evidence](../60-evidence/s11/s11-r7-evidence-tiered-trajectory.md).
+Exact measurements remain evidence rather than acceptance thresholds in this
+contract.
 
 ## Secure-Windows holdout
 

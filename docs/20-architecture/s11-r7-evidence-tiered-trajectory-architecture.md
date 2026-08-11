@@ -1,10 +1,10 @@
 # S11-R7 Evidence-Tiered Trajectory Architecture
 
-**Status:** `AUTHORIZED FOR IMPLEMENTATION`
+**Status:** `IMPLEMENTED — LOCAL VALIDATION PASSED`
 
 ## Purpose
 
-R7 replaces the field-failed R6 final observation authority. It preserves R6's
+R7 is the production replacement for the field-failed R6 final observation authority. It preserves R6's
 independent Oil/Foam rasters, optics evidence and same-frame provenance, but
 removes the remaining hidden dependence on the old current-frame temporal
 selection.
@@ -160,10 +160,16 @@ interpret the leading unresolved prefix as the explicitly confirmed initial
 `FULL_NO_INTERFACE` or `EMPTY_NO_INTERFACE` when:
 
 - the confirmation is current-run/session scoped;
-- at least two anchor-grade Oil observations establish one consistent initial
-  transition trajectory;
-- the direction/topology agrees with the confirmed state; and
+- at least two anchor-grade Oil observations establish one consistent transition
+  trajectory;
+- the observed direction agrees with the confirmed state; and
 - no direct contradictory image-supported state occurs first.
+
+The first trusted boundary may already be in the middle of the Glass. Entrance
+topology is retained as explanatory provenance, but is not a prerequisite that
+would discard a real transition simply because acquisition occurred after the
+interface crossed the top/bottom entrance band. Opposite anchor motion remains a
+conflict.
 
 Ordinary UNKNOWN frames and raw/rejected Foam do not block this interpretation.
 Hard decode failure remains recorded but does not turn the prior into detector
@@ -216,6 +222,23 @@ provenance flag is additive.
 Legacy/fake detectors without R7 candidate tiers retain their compatibility
 projection but cannot silently claim R7 authority. R6 exact fingerprints become
 historical evidence and are not golden outputs.
+
+## Implementation and cleanup boundary
+
+R7 is a vertical replacement at the final-authority seam, not another revision
+branch layered over R4/R5/R6. `ObservationSequenceResolver` calls one R7 Oil/state
+owner and one R7 Foam owner. The old online reducer remains upstream diagnostic
+compatibility only.
+
+Candidate-local raster evolution is isolated in `temporal_raster_evidence.py`,
+and ordinary/supplemental proposal families share hard terminal-cap topology
+through `oil_phase_topology.py`. The raw feature key `r6_material_path` is retained
+for compatible candidate/debug schema only; it grants no R6 authority. Larger
+mechanical package splitting remains the separately gated S11-M maintainability
+work and must not be mixed with the private field qualification.
+
+Local implementation evidence is recorded in
+[S11-R7 Evidence-Tiered Trajectory](../60-evidence/s11/s11-r7-evidence-tiered-trajectory.md).
 
 ## Stop conditions
 
