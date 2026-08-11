@@ -140,6 +140,58 @@ def test_r7_anchor_trajectory_reconstructs_leading_initial_state(
     assert result.evidence_frame_indices == (2, 3)
 
 
+@pytest.mark.parametrize(
+    ("prior", "visible", "expected", "direction"),
+    [
+        (
+            InitialObservationState.FULL_NO_INTERFACE,
+            FillState.DRAINING_VISIBLE,
+            FillState.FULL_NO_INTERFACE,
+            1.0,
+        ),
+        (
+            InitialObservationState.EMPTY_NO_INTERFACE,
+            FillState.FILLING_VISIBLE,
+            FillState.EMPTY_NO_INTERFACE,
+            -1.0,
+        ),
+    ],
+)
+def test_r7_mid_glass_first_catch_still_reconstructs_confirmed_prefix(
+    prior,
+    visible,
+    expected,
+    direction,
+):
+    glass = glass_config()
+    center = glass.geometry.ellipse.center_y
+    samples = [
+        _sample(0, flags=("R7_OBSERVATION_UNAVAILABLE",)),
+        _sample(1, flags=("R7_FOAM_UNCONFIRMED",)),
+        _sample(
+            2,
+            visible,
+            y=center - direction * 8.0,
+            valid=True,
+            flags=("R7_RESOLVED_OIL", "R7_OIL_ANCHOR"),
+        ),
+        _sample(
+            3,
+            visible,
+            y=center + direction * 8.0,
+            valid=True,
+            flags=("R7_RESOLVED_OIL", "R7_OIL_ANCHOR"),
+        ),
+    ]
+
+    result = reconstruct_initial_state(glass, samples, _confirmation(prior))
+
+    assert result.status is RetrospectiveStatus.ACCEPTED
+    assert result.interpreted_state is expected
+    assert result.evidence_frame_indices == (2, 3)
+    assert all(0.32 < value < 0.68 for value in result.evidence_relative_positions)
+
+
 def test_r7_continuation_only_cannot_confirm_initial_state() -> None:
     glass = glass_config()
     top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
