@@ -1,34 +1,35 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `ACTIVE`
-**Current gate:** `R5 sequence-first observation implementation and local real-video qualification`
-**Source authority:** `R4 baseline 20d6b47e94f38a4a12c4bc1b9f1d571300408bca; R5 design is implementing and not yet accepted`
+**Milestone status:** `VALIDATING`
+**Current gate:** `R5 synchronized secure-Windows Base/Accum and packaged field-workflow validation`
+**Source authority:** `R5 local implementation/replay and direct-image guards accepted through ac45a027ffe6676f64d83a7a741d87a3b3a741b9; private field defect remains open`
 
-## Why source work is reopened
+## Why field validation remains open
 
-The latest secure-Windows R4 replay is new causal evidence. Direct visual review shows no Base Foam, a confirmed FULL-to-visible descent/recovery, and an Accum EMPTY-to-rise/Foam/high/fall transition. R4 instead leaves `71.9–87.0%` of samples in `UNKNOWN_REVIEW`, publishes numeric Oil in only about `8–10%`, and can let fixed glare/lower-edge appearance control Foam, extrema and the graph.
+The secure-Windows R4 replay is the causal field evidence. Direct visual review shows no Base Foam, a confirmed FULL-to-visible descent/recovery, and an Accum EMPTY-to-rise/Foam/high/fall transition. R4 instead leaves `71.9–87.0%` of samples in `UNKNOWN_REVIEW`, publishes numeric Oil in only about `8–10%`, and can let fixed glare/lower-edge appearance control Foam, extrema and the graph.
 
-This is not an authorization to chase a publication percentage. Roughly ten Oil hypotheses already exist per frame; the earliest demonstrated loss is that current-frame semantics discards alternatives before temporal reasoning can compare them. Repeated threshold and rejection tuning has not repaired that authority ordering.
+R5 locally repairs that authority ordering with a bounded whole-window candidate/state resolver, independent Foam episodes and persistent report events. The four checked-in videos now produce `148/299` same-frame-provenance numeric observations versus R4's `89/299`, remove Base overlay false numerics, retain sample2, and materially improve sample3/sample4 trajectory readability. That ratio is not an accuracy claim; known sample3 coordinate errors remain recorded.
+
+The private Base/Accum video cannot be moved into this checkout. Only the synchronized secure-Windows run can prove whether the original fixed-artifact/Foam failure is closed.
 
 ## Active design and validation owners
 
 - Architecture: [S11-R5 Sequence-First Observation Architecture](../20-architecture/s11-r5-sequence-first-trajectory-architecture.md)
 - Validation: [S11-R5 Sequence-First Observation Validation Contract](../30-validation/s11-r5-sequence-first-trajectory-validation.md)
 - Root cause: [S11-R5 Current-Frame Authority Root-Cause Record](../50-diagnostics/s11/s11-r5-current-frame-authority-root-cause.md)
+- Local evidence: [S11-R5 Sequence-First Observation Evidence](../60-evidence/s11/s11-r5-sequence-first-observation.md)
 
 R4 remains the exact comparison baseline. Its architecture/evidence is historical accepted provenance, not the active source constraint after the new Windows failure.
 
 ## Executable sequence
 
-1. audit candidate representation against direct images in sample2/sample3/sample4 and interpretable Base intervals;
-2. implement a bounded candidate/state lattice with recurring-artifact opposition and confirmed FULL/EMPTY sequence priors;
-3. integrate whole-window resolution before TrackingSample/event/judgment finalization;
-4. implement independent temporal Foam episode resolution and post-Oil state composition;
-5. generate baseline/R5 local replays, graphs and source overlays, then review them visually;
-6. run focused and complete regression suites and reconcile every material output delta;
-7. record implementation/effectiveness evidence and prepare the single final push; and
-8. rerun the secure Base/Accum bundle and packaged field workflow on Windows before S11 closure.
+1. transfer the exact R5 head to the secure Windows machine without changing Recipe or private video inputs;
+2. replay both Base/Accum Glasses with synchronized source overlays, sequence diagnostics and production reports;
+3. review resolved FULL/EMPTY/visible/UNKNOWN intervals, selected source Y, recurring artifact tracks and raw/confirmed Foam episodes against the video;
+4. compare rise/drop/high/low/Foam timing and ensure report captures show the claimed physical moments;
+5. run the packaged field-workflow checklist; and
+6. record PASS or evidence-backed residual failure before closing or reopening S11.
 
 ## Preservation and provenance boundary
 
@@ -38,11 +39,11 @@ Hard unavailable/glare/exclusion/border/physical-topology conflicts remain prote
 
 The main report consumes sequence-resolved samples and remains observation-focused. Candidate scores/path costs stay in debug evidence. Existing dashed graph bridges remain display-only and may not create samples, cursor values, overlays, CSV values, events, judgments or detector feedback.
 
-## Local acceptance boundary
+## Local acceptance result
 
-Local acceptance requires a materially more faithful and understandable physical story on direct review of the four checked-in MP4s, especially sample3 inflow-to-full, without a new continuous wrong-interface track or loss of the retained stationary sample2 interface and genuine sample3/sample4 Foam.
+The local boundary is accepted. Direct review of the four checked-in MP4s shows a materially more understandable sample3 inflow/full/drain story, a mostly observed sample4 trajectory with explicit gaps, retention of sample2's stationary interface and removal of Base explanatory-overlay numerics. Genuine sample3/sample4 Foam remains independently bounded.
 
-Aggregate coverage and old exact fingerprints are supporting evidence only. If visually clear frames lack a usable candidate in most cases, stop sequence tuning and reopen representation. If a mechanism makes a false artifact more continuous, narrow or revert it.
+Every numeric observation is a same-frame candidate. Unsafe high-coverage, second-order smoothing and relaxed-motion variants were rejected by image review. Aggregate coverage and fingerprints remain supporting evidence only; sample3 first/late coordinate residuals are not accepted as solved.
 
 ## Secure-Windows closure boundary
 

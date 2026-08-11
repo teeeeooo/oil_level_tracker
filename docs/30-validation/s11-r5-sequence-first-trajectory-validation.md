@@ -1,6 +1,6 @@
 # S11-R5 Sequence-First Observation Validation Contract
 
-**Status:** `IMPLEMENTING`
+**Status:** `LOCAL_ACCEPTED — SECURE WINDOWS REQUIRED`
 
 ## Scope and oracle
 
@@ -109,3 +109,15 @@ The conflicting prior notes that place Accum Foam onset near both `492 s` and `6
 ## Stop boundary
 
 Stop or narrow implementation if representation Gate 0 fails, if R5 extends a wrong artifact more continuously than R4, if it removes a retained real interface/Foam episode, if it requires video identity or truth at runtime, or if improvements exist only in aggregate coverage without better source-image agreement.
+
+## Local disposition
+
+Gates 0–5 are locally accepted by the [R5 implementation and replay evidence](../60-evidence/s11/s11-r5-sequence-first-observation.md). The acceptance is deliberately limited:
+
+- the four checked-in videos, matching Recipes, blind annotations and user-truth files were replayed through the production pipeline;
+- every numeric R5 point retains same-frame candidate provenance;
+- direct graph/capture review rejected unsafe high-coverage and over-smoothed variants before accepting the bounded resolver;
+- controlled unit and complete repository regression suites pass; and
+- known sample3 first/late candidate-selection errors remain recorded rather than hidden by interpolation.
+
+The secure-Windows acceptance section remains open and is the S11 closure gate. Local acceptance does not claim that the private Base/Accum failure has passed.

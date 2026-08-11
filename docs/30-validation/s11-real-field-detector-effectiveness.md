@@ -2,15 +2,17 @@
 
 ## Scope
 
-This document owns the lean preservation contract for the accepted S11 **detector baseline**. Historical diagnosis, implementation and audit chronology lives under [`../60-evidence/s11/`](../60-evidence/s11/); the latest local detector repair evidence is the [`S11-R3 Sequence Observability Integrity Evidence`](../60-evidence/s11/s11-r3-sequence-observability-integrity.md). Investigations and machine manifests live under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Current sequencing remains owned by [`../00-project/work-plan.md`](../00-project/work-plan.md).
+This document owns the lean preservation contract for the accepted S11 **detector baseline**. Historical diagnosis, implementation and audit chronology lives under [`../60-evidence/s11/`](../60-evidence/s11/); the latest local detector repair evidence is the [`S11-R5 Sequence-First Observation Evidence`](../60-evidence/s11/s11-r5-sequence-first-observation.md). Investigations and machine manifests live under [`../50-diagnostics/s11/`](../50-diagnostics/s11/). Current sequencing remains owned by [`../00-project/work-plan.md`](../00-project/work-plan.md).
 
-The accepted D1–D5/S5-B and serialized temporal baseline remains the preservation floor. Subtractive detector Slices A–D, S11-R2 Foam/Spatial composition and the locally accepted S11-R3 border-cap/static-and-row-coherent Foam publication repair are preservation authority. Further detector tuning, threshold relaxation, identity behavior, interpolation and publication-owner changes remain unauthorized during the Windows validation gate. Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate downstream responsibility validated by [`initial-state-retrospective-reconstruction-validation.md`](initial-state-retrospective-reconstruction-validation.md).
+The accepted D1–D5/S5-B and serialized current-frame baseline remains the evidence/safety floor. Subtractive detector Slices A–D, S11-R2 Foam/Spatial composition, R3 border-cap/static-and-row-coherent Foam repair and R4 residual authority repair remain preservation authority. R5 adds the locally accepted final-analysis sequence projection defined by its dedicated [architecture](../20-architecture/s11-r5-sequence-first-trajectory-architecture.md) and [validation contract](s11-r5-sequence-first-trajectory-validation.md). Further threshold relaxation, identity behavior, interpolation and additional publication-owner changes remain unauthorized during the Windows validation gate. Initial-State Retrospective FULL/EMPTY Reconstruction remains a separate downstream responsibility for streams not already sequence-resolved.
 
 The bounded S11-R2 Foam/Spatial composition repair is now accepted on top of that floor. It raises available-corpus numeric Oil from `109/299` to `111/299`, preserves `8/13` truth numerics at `5.4375 px` MAE and removes/corrects misleading sample4 bottom-structure extrema. Its exact acceptance record is [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
 
 The post-R2 baseline-validation maintenance keeps that exact `111/299` stream while narrowing the low-light accepted-Foam texture repair to candidates whose row is actually dominated by the accepted component. It also restores immutable historical probe figures and gives the refreshed offline-trajectory manifest explicit design-base versus production-stream provenance. Its review record is [`../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md`](../60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md).
 
 R3 supersedes exact-output preservation of that stream where direct review proves it represents Glass structure or fragmented Foam-like appearance. Its dedicated [validation contract](s11-sequence-observability-integrity-validation.md) requires cap-invalidity controls, learned-static lifecycle controls, row-coherent Foam proof, a complete sample3 transition, four-video reconciliation and report inspection. A lower aggregate publication count is acceptable only when the removed observations are physically disproven and the confirmed truth/negative surface remains protected.
+
+R5 supersedes current-frame exact output as the completed-analysis publication surface. It preserves hard-safe same-frame alternatives, resolves Oil/FULL/EMPTY over the sampled window, then resolves dynamic Foam independently. Local acceptance is `148/299` same-frame-provenance numeric observations with explicit UNKNOWN gaps, not `148/299` inferred values or an accuracy claim. Its private Base/Accum field effectiveness remains unaccepted until synchronized Windows replay.
 
 ## Accepted detector baseline
 
@@ -22,12 +24,14 @@ The durable owners in [`../20-architecture/s11-detector-responsibility-architect
 - saturated border-cap hypotheses excluded from direct and indirect Oil authority while ordinary interior, non-saturated-border and retained near-bottom interfaces remain eligible;
 - learned-static and row-coherence opposition withholding Foam publication/fill/Oil-context authority while preserving raw diagnostic evidence;
 - ambiguity as a valid non-numeric outcome;
-- only accepted canonical boundary outcomes publishing numeric Oil;
-- one serialized temporal owner with atomic replacement/invariant validation;
+- only accepted canonical boundary outcomes publishing numeric Oil in the current-frame/online stream;
+- one serialized current-frame temporal owner with atomic replacement/invariant validation;
 - one bounded per-observation motion envelope shared by accepted-boundary continuity, pending consistency and ambiguity compatibility;
 - two-real-boundary reacquisition confirmation semantics;
 - compatible canonical ambiguity preserving an already-pending reacquisition path without count advancement or numeric publication;
 - incompatible/unprojected ambiguity, no-interface and unavailable evidence clearing that pending path;
+- one deterministic R5 final-analysis owner that may select only a hard-safe candidate from the same frame, preserves frame cardinality/identity and cannot fabricate a coordinate across a gap;
+- one post-Oil dynamic Foam episode owner that cannot select Oil or promote state-only/UNKNOWN output;
 - no truth-, Recipe-, frame-identity- or video-identity-based numeric promotion.
 
 ## Effectiveness objective and metric priority
@@ -39,7 +43,7 @@ The product objective is to make Oil movement understandable from the final obse
 3. **gross wrong-interface protection**, especially persistent tracking of glass structure, reflection, glare or another unrelated feature that would misstate graph level or movement direction;
 4. **pixel localization error** as a secondary quality metric for accepted observations.
 
-A later S11 slice may be accepted with modestly worse pixel MAE when it materially improves usable coverage/graph readability and does not materially worsen gross wrong-interface behavior. Coverage may not be manufactured through truth/Recipe identity, retrospective rewriting, interpolation, hidden temporal state or numeric publication without accepted current-frame evidence.
+A later S11 slice may be accepted with modestly worse pixel MAE when it materially improves usable coverage/graph readability and does not materially worsen gross wrong-interface behavior. Coverage may not be manufactured through truth/Recipe identity, retrospective rewriting, interpolation, unrecorded temporal state or numeric publication without an eligible same-frame candidate.
 
 ## Subtractive source-slice acceptance
 
@@ -59,7 +63,7 @@ No slice may claim acceptance from publication count alone, from one sample, or 
 
 ## Downstream preservation requirement
 
-Initial-State Retrospective FULL/EMPTY Reconstruction is allowed only as the separate downstream responsibility defined by [`../20-architecture/initial-state-retrospective-reconstruction-architecture.md`](../20-architecture/initial-state-retrospective-reconstruction-architecture.md). Its implementation must consume immutable observed detector results and must not alter this detector validation contract, detector thresholds, D1–D5/S5-B authority or serialized temporal history.
+Initial-State Retrospective FULL/EMPTY Reconstruction is allowed only as the separate downstream responsibility defined by [`../20-architecture/initial-state-retrospective-reconstruction-architecture.md`](../20-architecture/initial-state-retrospective-reconstruction-architecture.md). Its implementation must consume immutable observed detector results and must not alter this detector validation contract, detector thresholds, D1–D5/S5-B authority or serialized temporal history. A stream carrying R5 sequence-state provenance must not be reconstructed a second time.
 
 Any regression evidence needed because the Lane C implementation materially touches a detector-facing boundary is proportional preservation evidence, not authorization to redesign the detector.
 
@@ -67,4 +71,4 @@ Downstream graph presentation may connect only the finite observed Oil anchors a
 
 ## Claim boundary
 
-This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. The R3 source sequence is reconciled and accepted on the available local corpus, but its learned-static field hypothesis and packaged report remain subject to the secure Base/Accum and final Windows field-workflow gates. No source-tree or local-corpus result alone authorizes that Windows PASS.
+This contract does not establish general-field detector accuracy, numeric trajectory interpolation or arbitrary gap filling. R5 source, sequence and report behavior are reconciled and accepted on the available local corpus, but fixed-artifact/Foam effectiveness and the packaged report remain subject to the secure Base/Accum and final Windows field-workflow gates. No source-tree or local-corpus result alone authorizes that Windows PASS.

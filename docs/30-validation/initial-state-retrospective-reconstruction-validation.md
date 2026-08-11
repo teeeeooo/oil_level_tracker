@@ -22,6 +22,7 @@ Acceptance must prove that final analysis:
 
 Focused tests must cover symmetric `FULL_NO_INTERFACE` and `EMPTY_NO_INTERFACE` reconstruction and prove:
 
+- an R5 `SEQUENCE_RESOLVED_STATE` stream is not reconstructed or projected a second time;
 - only the leading unresolved interval is eligible;
 - later real accepted numeric-boundary/topology/direction evidence is required;
 - direction evidence contains at least two real accepted boundary observations;

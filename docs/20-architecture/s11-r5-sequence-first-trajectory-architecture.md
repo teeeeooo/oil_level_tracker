@@ -1,6 +1,6 @@
 # S11-R5 Sequence-First Observation Architecture
 
-**Status:** `IMPLEMENTING`
+**Status:** `LOCAL_ACCEPTED — SECURE WINDOWS REQUIRED`
 
 ## Purpose
 
@@ -74,6 +74,10 @@ Transitions encode physical continuity:
 - UNKNOWN is always available, so the resolver is never forced to invent a line; and
 - short missing spans may preserve state continuity, but may not create a numeric coordinate without a current-frame candidate.
 
+An unconfirmed FULL/EMPTY transition additionally requires affirmative same-frame no-interface support. A trajectory that merely approaches an edge cannot materialize a state and accumulate persistence reward by itself. Near-black frames are classified as hard unavailable from raw effective-ROI photometric statistics before CLAHE can turn codec black into apparent structure.
+
+Direct current-frame selections act as bounded anchors only when they retain material support and low artifact opposition. Long analysis windows require a cluster of compatible anchors; a pair is sufficient only in a genuinely short window. Candidate-only points may connect nearby anchors, but a long interval between independent anchor clusters stays UNKNOWN. This prevents a soft candidate chain from turning one fixed row into a continuous report line while retaining low-contrast movement inside a supported run.
+
 The implementation uses deterministic bounded dynamic programming. It keeps only scalar costs/back-pointers for the sampled window and at most `candidate_top_k` Oil nodes per frame. Tie-breaking is stable by state kind, source Y and hypothesis identity.
 
 ## Recurring artifact tracks
@@ -119,11 +123,15 @@ Foam does not choose Oil or FULL/EMPTY. Composition occurs only after the Oil/st
 
 Episode start/end are the first/last supported sampled observations. No backdating through a missing interval is permitted.
 
+An accepted episode does not retroactively authorize a static prelude. Public onset begins at the first adjacent-frame change/front evolution that confirms the material component, and only bounded persistence may follow the last changing observation. This keeps a later real Foam episode from converting earlier glare/residue into Foam history.
+
 ## Report consequence
 
 The primary report consumes sequence-resolved samples and continues to focus on the observation narrative: level trajectory, FULL/EMPTY intervals, bounded Foam episodes, highest/lowest level and state-change moments with Glass-focused captures. Raw candidates, rejection scores and resolver costs remain in debug artifacts, not in the main report.
 
 Highest/lowest and Oil-drop events require a supported run; a lone point after a long UNKNOWN interval cannot establish an extremum or onset by itself. Event time means first observed support, not an estimated hidden physical time.
+
+`OIL_DROP_START` also requires an observed numeric baseline, a multi-sample confirmation window, a material net decrease and a majority of decreasing steps. A one-step candidate switch is not a lifecycle event. Zero crossings require the new side of zero to persist for the debounce interval before publication.
 
 ## Rejected alternatives
 
