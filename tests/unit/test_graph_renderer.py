@@ -5,8 +5,16 @@ import math
 from matplotlib.axes import Axes
 
 from oil_tracker.adapters.reporting.graph_renderer import GraphRenderer
-from oil_tracker.domain.enums import FillState, ResultState
+from oil_tracker.domain.enums import (
+    FillState,
+    InitialObservationState,
+    ResultState,
+)
 from oil_tracker.domain.recipe import InspectionRecipe
+from oil_tracker.domain.retrospective import (
+    RetrospectiveInterpretation,
+    RetrospectiveStatus,
+)
 from oil_tracker.domain.results import GlassAnalysisResult, TrackingSample
 
 
@@ -82,3 +90,40 @@ def _sample(
         raw_oil_air_level_px_from_zero=oil,
         raw_foam_front_px_from_zero=foam,
     )
+
+
+def test_detail_graph_renders_confirmed_initial_state_hold_without_oil_line(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    spans: list[str | None] = []
+    original = Axes.axvspan
+
+    def recording_span(self, xmin, xmax, *args, **kwargs):
+        spans.append(kwargs.get("label"))
+        return original(self, xmin, xmax, *args, **kwargs)
+
+    monkeypatch.setattr(Axes, "axvspan", recording_span)
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    result = GlassAnalysisResult(
+        glass_id=config.id,
+        glass_name=config.name,
+        result_state=ResultState.REVIEW_REQUIRED,
+        samples=[
+            _sample(config.id, 0.0, None, None),
+            _sample(config.id, 1.0, None, None),
+        ],
+        retrospective=RetrospectiveInterpretation(
+            glass_id=config.id,
+            status=RetrospectiveStatus.ACCEPTED,
+            confirmed_prior=InitialObservationState.FULL_NO_INTERFACE,
+            interpreted_state=FillState.FULL_NO_INTERFACE,
+            start_time_sec=0.0,
+            end_time_sec=1.0,
+            provenance="confirmed_initial_state_hold_v1",
+        ),
+    )
+
+    GraphRenderer()._render_glass(result, config, tmp_path / "initial-hold.png")
+
+    assert "확정 초기 상태 유지 가정 (FULL)" in spans

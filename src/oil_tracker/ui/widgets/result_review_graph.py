@@ -70,6 +70,26 @@ class ResultReviewGraph(QWidget):
             )
         self.axes.axvline(model.analysis_start_sec, linewidth=0.8, alpha=0.45, label="분석 범위")
         self.axes.axvline(model.analysis_end_sec, linewidth=0.8, alpha=0.45)
+        if (
+            model.assumed_initial_state
+            and model.assumed_state_start_sec is not None
+            and model.assumed_state_end_sec is not None
+        ):
+            full = model.assumed_initial_state in {
+                "FULL_NO_INTERFACE",
+                "FULL_WITH_FOAM",
+            }
+            self.axes.axvspan(
+                model.assumed_state_start_sec,
+                model.assumed_state_end_sec,
+                alpha=0.09,
+                color="#3b82f6" if full else "#f59e0b",
+                label=(
+                    "확정 초기 상태 유지 가정 (FULL)"
+                    if full
+                    else "확정 초기 상태 유지 가정 (EMPTY)"
+                ),
+            )
         if model.compressor_start_sec is not None:
             self.axes.axvline(model.compressor_start_sec, linestyle="--", linewidth=1.0, label="압축기 기동")
         for highlight in model.highlights:

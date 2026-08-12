@@ -13,6 +13,9 @@ from oil_tracker.application.services.graph_axis import (
     graph_axis_range_for_glass,
 )
 from oil_tracker.application.services.graph_series import observed_trajectory
+from oil_tracker.application.services.initial_state_reconstruction import (
+    project_state_aware_samples,
+)
 from oil_tracker.application.services.report_presentation import (
     ReportGlassPresentation,
     ReportPresentation,
@@ -194,21 +197,54 @@ class GraphRenderer:
     def _state_bands(self, ax, glass: GlassAnalysisResult) -> None:
         if not glass.samples:
             return
+        samples = project_state_aware_samples(
+            glass.samples,
+            glass.retrospective,
+        )
+        initial_hold = bool(
+            glass.retrospective is not None
+            and glass.retrospective.accepted
+            and glass.retrospective.provenance
+            == "confirmed_initial_state_hold_v1"
+        )
         groups = []
-        start = glass.samples[0]
+        start = samples[0]
         previous = start
-        for current in glass.samples[1:]:
+        for current in samples[1:]:
             if current.fill_state != start.fill_state:
                 groups.append((start, previous))
                 start = current
             previous = current
         groups.append((start, previous))
         unknown_labeled = False
+        hold_labeled = False
         for begin, end in groups:
             if begin.fill_state in {FillState.FULL_NO_INTERFACE, FillState.FULL_WITH_FOAM}:
-                ax.axvspan(begin.timestamp_sec, end.timestamp_sec, alpha=0.035, color="#3b82f6")
+                ax.axvspan(
+                    begin.timestamp_sec,
+                    end.timestamp_sec,
+                    alpha=0.09 if initial_hold else 0.035,
+                    color="#3b82f6",
+                    label=(
+                        "확정 초기 상태 유지 가정 (FULL)"
+                        if initial_hold and not hold_labeled
+                        else None
+                    ),
+                )
+                hold_labeled = hold_labeled or initial_hold
             elif begin.fill_state == FillState.EMPTY_NO_INTERFACE:
-                ax.axvspan(begin.timestamp_sec, end.timestamp_sec, alpha=0.035, color="#f59e0b")
+                ax.axvspan(
+                    begin.timestamp_sec,
+                    end.timestamp_sec,
+                    alpha=0.09 if initial_hold else 0.035,
+                    color="#f59e0b",
+                    label=(
+                        "확정 초기 상태 유지 가정 (EMPTY)"
+                        if initial_hold and not hold_labeled
+                        else None
+                    ),
+                )
+                hold_labeled = hold_labeled or initial_hold
             elif begin.fill_state == FillState.UNKNOWN_REVIEW:
                 ax.axvspan(
                     begin.timestamp_sec,

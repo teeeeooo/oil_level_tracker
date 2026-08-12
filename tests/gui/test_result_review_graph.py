@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from types import SimpleNamespace
 
 from PySide6.QtWidgets import QApplication
@@ -76,6 +77,30 @@ def test_cursor_update_does_not_rebuild_series(qtbot):
     graph.set_cursor(1.75)
     assert graph.series_rebuild_count == count
     assert list(graph.cursor_artist.get_xdata()) == [1.75, 1.75]
+
+
+def test_graph_renders_confirmed_initial_state_hold_as_disclosed_band(qtbot):
+    graph = ResultReviewGraph()
+    qtbot.addWidget(graph)
+    model = replace(
+        _model(foam=False),
+        oil_air=ReviewGraphSeries(
+            "유면",
+            (
+                ReviewGraphPoint(0.0, None, False, 0.2),
+                ReviewGraphPoint(2.0, None, False, 0.2),
+            ),
+        ),
+        assumed_initial_state="FULL_NO_INTERFACE",
+        assumed_state_start_sec=0.0,
+        assumed_state_end_sec=2.0,
+    )
+
+    graph.set_model(model)
+
+    labels = graph.axes.get_legend_handles_labels()[1]
+    assert "확정 초기 상태 유지 가정 (FULL)" in labels
+    assert "유면" not in labels
 
 
 def test_sustained_cursor_updates_keep_minimum_height_layout_stable_and_allow_model_replace(qtbot):

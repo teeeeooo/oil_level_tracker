@@ -5,8 +5,17 @@ from oil_tracker.application.services.report_presentation import (
     build_glass_report_presentation,
     format_landmark_level,
 )
-from oil_tracker.domain.enums import EventType, FillState, ResultState
+from oil_tracker.domain.enums import (
+    EventType,
+    FillState,
+    InitialObservationState,
+    ResultState,
+)
 from oil_tracker.domain.recipe import InspectionRecipe
+from oil_tracker.domain.retrospective import (
+    RetrospectiveInterpretation,
+    RetrospectiveStatus,
+)
 from oil_tracker.domain.results import EventMarker, GlassAnalysisResult, TrackingSample
 
 
@@ -119,6 +128,34 @@ def test_all_missing_oil_does_not_claim_extrema_or_direction():
     }.intersection(landmark.event_type for landmark in report.landmarks)
     assert "확정할 수 없습니다" in report.movement_summary
     assert "유면 선을 표시하지 않습니다" in report.observation_note
+
+
+def test_all_missing_oil_discloses_confirmed_initial_state_graph_hold():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = GlassAnalysisResult(
+        config.id,
+        config.name,
+        ResultState.REVIEW_REQUIRED,
+        samples=[
+            _sample(config.id, 0.0, oil=None, state=FillState.UNKNOWN_REVIEW),
+            _sample(config.id, 1.0, oil=None, state=FillState.UNKNOWN_REVIEW),
+        ],
+        retrospective=RetrospectiveInterpretation(
+            glass_id=config.id,
+            status=RetrospectiveStatus.ACCEPTED,
+            confirmed_prior=InitialObservationState.FULL_NO_INTERFACE,
+            interpreted_state=FillState.FULL_NO_INTERFACE,
+            start_time_sec=0.0,
+            end_time_sec=1.0,
+            provenance="confirmed_initial_state_hold_v1",
+        ),
+    )
+
+    report = build_glass_report_presentation(glass, config)
+
+    assert report.has_oil is False
+    assert "유면 선은 표시하지 않습니다" in report.observation_note
+    assert "분석 종료까지 상태 배경" in report.observation_note
 
 
 def test_r7_report_extrema_and_capture_samples_use_anchor_grade_oil() -> None:

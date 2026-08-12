@@ -4,7 +4,7 @@ from pathlib import Path
 
 from oil_tracker.application.services.review_graph import build_review_graph_model
 from oil_tracker.application.services.review_query import ReviewQueryModel
-from oil_tracker.domain.enums import EventType, FillState
+from oil_tracker.domain.enums import EventType, FillState, InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.review import (
     ReviewBundle,
@@ -14,6 +14,10 @@ from oil_tracker.domain.review import (
     ReviewTrackingSample,
 )
 from oil_tracker.domain.session import AnalysisSession
+from oil_tracker.domain.retrospective import (
+    RetrospectiveInterpretation,
+    RetrospectiveStatus,
+)
 
 
 def _sample(glass_id, timestamp, frame, **values):
@@ -140,3 +144,34 @@ def test_graph_builder_does_not_mutate_bundle_samples():
     bundle.samples = original
     build_review_graph_model(bundle, glass.id)
     assert bundle.samples is original
+
+
+def test_graph_model_exposes_confirmed_initial_state_hold_without_oil_values():
+    bundle, glass = _bundle([])
+    bundle.samples = (
+        _sample(
+            glass.id,
+            1.0,
+            10,
+            fill_state=FillState.UNKNOWN_REVIEW,
+            is_valid=False,
+        ),
+    )
+    bundle.retrospective_interpretations = (
+        RetrospectiveInterpretation(
+            glass_id=glass.id,
+            status=RetrospectiveStatus.ACCEPTED,
+            confirmed_prior=InitialObservationState.FULL_NO_INTERFACE,
+            interpreted_state=FillState.FULL_NO_INTERFACE,
+            start_time_sec=1.0,
+            end_time_sec=4.0,
+            provenance="confirmed_initial_state_hold_v1",
+        ),
+    )
+
+    model = build_review_graph_model(bundle, glass.id)
+
+    assert not model.oil_air.has_values
+    assert model.assumed_initial_state == "FULL_NO_INTERFACE"
+    assert model.assumed_state_start_sec == 1.0
+    assert model.assumed_state_end_sec == 4.0

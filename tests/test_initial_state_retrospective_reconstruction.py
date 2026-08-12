@@ -279,7 +279,7 @@ def test_projection_is_separate_and_does_not_fabricate_numeric_oil():
     assert effective_state_aware_coverage(samples, result) == pytest.approx(1.0)
 
 
-def test_prior_seeded_visible_labels_are_not_positive_proof():
+def test_no_public_oil_keeps_confirmed_initial_state_as_presentation_hold():
     glass = glass_config()
     samples = [
         _sample(0, FillState.DRAINING_VISIBLE),
@@ -290,8 +290,15 @@ def test_prior_seeded_visible_labels_are_not_positive_proof():
         samples,
         _confirmation(InitialObservationState.FULL_NO_INTERFACE),
     )
-    assert result.status is RetrospectiveStatus.UNRESOLVED
+    assert result.status is RetrospectiveStatus.ACCEPTED
+    assert result.interpreted_state is FillState.FULL_NO_INTERFACE
+    assert (result.start_frame_index, result.end_frame_index) == (0, 1)
     assert not result.evidence_frame_indices
+    assert result.provenance == "confirmed_initial_state_hold_v1"
+    projected = project_state_aware_samples(samples, result)
+    assert all(item.fill_state is FillState.FULL_NO_INTERFACE for item in projected)
+    assert all(item.raw_oil_air_level_y is None for item in projected)
+    assert all("R8_CONFIRMED_INITIAL_STATE_HOLD" in item.flags for item in projected)
 
 
 @pytest.mark.parametrize(

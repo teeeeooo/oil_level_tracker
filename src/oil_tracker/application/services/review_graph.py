@@ -92,6 +92,12 @@ def build_review_graph_model(
         for summary in debug_summaries
         if summary.glass_id == glass_id and bundle.analysis_start_sec <= summary.timestamp_sec <= bundle.analysis_end_sec
     )
+    retrospective = bundle.retrospective_for_glass(glass_id)
+    initial_hold = bool(
+        retrospective is not None
+        and retrospective.accepted
+        and retrospective.provenance == "confirmed_initial_state_hold_v1"
+    )
     return ReviewGraphModel(
         glass_id=glass_id,
         glass_name=glass.name,
@@ -112,6 +118,17 @@ def build_review_graph_model(
         analysis_bottom_boundary_value=axis_range.analysis_bottom_boundary,
         range_source=axis_range.source,
         range_reason=axis_range.reason,
+        assumed_initial_state=(
+            retrospective.interpreted_state.value
+            if initial_hold and retrospective.interpreted_state is not None
+            else ""
+        ),
+        assumed_state_start_sec=(
+            retrospective.start_time_sec if initial_hold else None
+        ),
+        assumed_state_end_sec=(
+            retrospective.end_time_sec if initial_hold else None
+        ),
     )
 
 

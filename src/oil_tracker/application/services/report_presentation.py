@@ -148,6 +148,12 @@ def build_glass_report_presentation(
     selected = _bounded_landmarks((*extrema, *foam_landmarks, *physical))
     has_missing_oil = len(numeric) < len(samples)
     has_internal_gap, has_edge_missing = _oil_gap_shape(samples)
+    initial_state_hold = bool(
+        glass.retrospective is not None
+        and glass.retrospective.accepted
+        and glass.retrospective.provenance
+        == "confirmed_initial_state_hold_v1"
+    )
     movement_summary = _movement_summary(
         config,
         numeric,
@@ -160,6 +166,7 @@ def build_glass_report_presentation(
         has_internal_gap,
         has_edge_missing,
         bool(numeric),
+        initial_state_hold=initial_state_hold,
     )
     return ReportGlassPresentation(
         glass_id=glass.glass_id,
@@ -481,10 +488,18 @@ def _observation_note(
     has_internal_gap: bool,
     has_edge_missing: bool,
     has_oil: bool,
+    *,
+    initial_state_hold: bool = False,
 ) -> str:
     if not has_missing_oil:
         return "그래프의 실선은 연속된 직접 관측 구간입니다."
     if not has_oil:
+        if initial_state_hold:
+            return (
+                "직접 관측된 유면 위치가 없어 유면 선은 표시하지 않습니다. "
+                "사용자가 확정한 초기 상태는 반대 관측이 없다는 가정 아래 "
+                "분석 종료까지 상태 배경으로 표시합니다."
+            )
         return "분석 구간에 직접 관측된 유면 위치가 없어 유면 선을 표시하지 않습니다."
     parts: list[str] = []
     if intervals:

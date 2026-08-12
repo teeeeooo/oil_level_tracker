@@ -195,6 +195,9 @@ class ReviewGraphModel:
     analysis_bottom_boundary_value: float | None = None
     range_source: str = "unavailable"
     range_reason: str = ""
+    assumed_initial_state: str = ""
+    assumed_state_start_sec: float | None = None
+    assumed_state_end_sec: float | None = None
 
 
 @dataclass

@@ -70,6 +70,44 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
             ),
         )
 
+    contradiction = next(
+        (
+            reason
+            for sample in samples
+            if (reason := _contradiction_reason(sample, prior))
+        ),
+        "",
+    )
+    if contradiction:
+        return RetrospectiveInterpretation(
+            glass_id=glass.id,
+            status=RetrospectiveStatus.CONFLICT,
+            confirmed_prior=prior,
+            reason=contradiction,
+        )
+    if not any(_finite_public_oil(sample) for sample in samples):
+        state = (
+            FillState.FULL_NO_INTERFACE
+            if prior is InitialObservationState.FULL_NO_INTERFACE
+            else FillState.EMPTY_NO_INTERFACE
+        )
+        return RetrospectiveInterpretation(
+            glass_id=glass.id,
+            status=RetrospectiveStatus.ACCEPTED,
+            confirmed_prior=prior,
+            interpreted_state=state,
+            start_time_sec=samples[0].timestamp_sec,
+            end_time_sec=samples[-1].timestamp_sec,
+            start_frame_index=samples[0].frame_index,
+            end_frame_index=samples[-1].frame_index,
+            reason=(
+                "No public numeric Oil observation contradicted the confirmed "
+                "initial state, so presentation keeps that state through the "
+                "analysis window without creating an Oil coordinate."
+            ),
+            provenance="confirmed_initial_state_hold_v1",
+        )
+
     accepted: list[tuple[int, TrackingSample, float]] = []
     first_boundary_index: int | None = None
     for index, sample in enumerate(samples):
@@ -192,7 +230,16 @@ def project_state_aware_samples(
                     sample,
                     fill_state=interpretation.interpreted_state,
                     is_valid=True,
-                    flags=[*sample.flags, "RETROSPECTIVE_INITIAL_STATE"],
+                    flags=[
+                        *sample.flags,
+                        "RETROSPECTIVE_INITIAL_STATE",
+                        *(
+                            ["R8_CONFIRMED_INITIAL_STATE_HOLD"]
+                            if interpretation.provenance
+                            == "confirmed_initial_state_hold_v1"
+                            else []
+                        ),
+                    ],
                 )
             )
         else:
@@ -313,6 +360,17 @@ def _accepted_boundary_y(sample: TrackingSample) -> float | None:
     except (TypeError, ValueError):
         return None
     return numeric if math.isfinite(numeric) else None
+
+
+def _finite_public_oil(sample: TrackingSample) -> bool:
+    try:
+        return (
+            sample.is_valid
+            and sample.raw_oil_air_level_y is not None
+            and math.isfinite(float(sample.raw_oil_air_level_y))
+        )
+    except (TypeError, ValueError):
+        return False
 
 
 def _contradiction_reason(sample: TrackingSample, prior: InitialObservationState) -> str:
