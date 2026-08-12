@@ -1,16 +1,15 @@
 from __future__ import annotations
 
-from types import SimpleNamespace
-
 import numpy as np
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
+from oil_tracker.adapters.vision.artifact_calibration import template_from_candidate
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
 from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
-from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
-from oil_tracker.domain.enums import BoundaryKind, FillState, ValidationSeverity
+from oil_tracker.domain.detection import BoundaryCandidate
+from oil_tracker.domain.enums import BoundaryKind, ValidationSeverity
 from oil_tracker.domain.geometry import EllipseGeometry
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.validation import ValidationIssue, ValidationResult
@@ -104,23 +103,11 @@ def test_roi_editor_accepts_detector_artifact_proposal_on_private_copy(
         final_score=0.8,
     )
 
-    class FakeDetector:
-        def detect(self, _frame, glass, _frame_index, _time_sec, *, debug):
-            assert debug is True
-            return (
-                PhaseDetection(
-                    glass_id=glass.id,
-                    frame_index=0,
-                    time_sec=0.0,
-                    fill_state=FillState.UNKNOWN_REVIEW,
-                    candidates=[candidate],
-                ),
-                SimpleNamespace(images={"glare_mask": np.zeros((100, 80), dtype=np.uint8)}),
-            )
-
     monkeypatch.setattr(
-        "oil_tracker.ui.widgets.roi_editor_dialog.OpenCvPhaseDetector",
-        FakeDetector,
+        "oil_tracker.ui.widgets.roi_editor_dialog.propose_artifact_templates",
+        lambda _frame, _glass: [
+            template_from_candidate(candidate, name="경계 후보 1")
+        ],
     )
     glass = InspectionRecipe.default_glass(640, 480)
     dialog = RoiEditorDialog(

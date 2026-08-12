@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 from copy import deepcopy
-import math
 from uuid import uuid4
 
-import cv2
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QComboBox,
@@ -19,11 +17,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from oil_tracker.adapters.vision.artifact_calibration import (
-    region_template_from_source_rect,
-    template_from_candidate,
-)
-from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+from oil_tracker.adapters.vision.artifact_proposal import propose_artifact_templates
 from oil_tracker.domain.geometry import ExclusionZone, Rect
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
@@ -205,75 +199,14 @@ class RoiEditorDialog(QDialog):
         if self._frame is None:
             self.artifact_status.setText("현재 프레임이 없어 후보를 만들 수 없습니다.")
             return
-        detector_glass = deepcopy(self._working)
-        detector_glass.geometry.artifact_templates.clear()
         try:
-            detection, artifacts = OpenCvPhaseDetector().detect(
+            proposals = propose_artifact_templates(
                 self._frame,
-                detector_glass,
-                0,
-                0.0,
-                debug=True,
+                self._working,
             )
         except Exception as exc:
             self.artifact_status.setText(f"후보 생성 실패: {exc}")
             return
-
-        proposals = []
-        candidates = sorted(
-            detection.candidates,
-            key=lambda candidate: (-float(candidate.final_score), float(candidate.y)),
-        )
-        for candidate in candidates:
-            if not math.isfinite(float(candidate.y)):
-                continue
-            template = template_from_candidate(
-                candidate,
-                name=f"경계 후보 {len(proposals) + 1}",
-            )
-            if template is None or any(
-                abs(template.center_y - existing.center_y) <= 0.025
-                and abs(template.center_x - existing.center_x) <= 0.08
-                for existing in proposals
-            ):
-                continue
-            proposals.append(template)
-            if len(proposals) >= 10:
-                break
-
-        if artifacts is not None:
-            glare = artifacts.images.get("glare_mask")
-            if glare is not None and glare.ndim == 2:
-                count, _labels, stats, _centroids = cv2.connectedComponentsWithStats(
-                    (glare > 0).astype("uint8"),
-                    connectivity=8,
-                )
-                origin_x = max(
-                    0,
-                    int(math.floor(detector_glass.geometry.ellipse.bounds.x)),
-                )
-                origin_y = max(
-                    0,
-                    int(math.floor(detector_glass.geometry.ellipse.bounds.y)),
-                )
-                regions = sorted(
-                    range(1, count),
-                    key=lambda label: -int(stats[label, cv2.CC_STAT_AREA]),
-                )
-                for label in regions[:4]:
-                    x = int(stats[label, cv2.CC_STAT_LEFT])
-                    y = int(stats[label, cv2.CC_STAT_TOP])
-                    width = int(stats[label, cv2.CC_STAT_WIDTH])
-                    height = int(stats[label, cv2.CC_STAT_HEIGHT])
-                    if width * height < 8:
-                        continue
-                    proposals.append(
-                        region_template_from_source_rect(
-                            Rect(origin_x + x, origin_y + y, width, height),
-                            detector_glass,
-                            name=f"광학 구역 후보 {len(proposals) + 1}",
-                        )
-                    )
 
         self._artifact_proposals = proposals
         self.artifact_proposal_list.clear()
