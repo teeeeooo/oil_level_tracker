@@ -1,6 +1,6 @@
 # S11 Detector Responsibility Architecture
 
-**Status:** `R7 IMPLEMENTED — WINDOWS VALIDATION PENDING`
+**Status:** `R8 IMPLEMENTED — WINDOWS VALIDATION PENDING`
 
 ## Purpose and authority
 
@@ -8,11 +8,11 @@ This document is the durable responsibility owner for the production S11
 detector. The exact current gate remains in the [work plan](../00-project/work-plan.md),
 and completed measurements remain in [`../60-evidence/s11/`](../60-evidence/s11/).
 
-R7 is the checked-in production runtime. R6 failed the secure-Windows holdout and
-has no acceptance authority. R2–R6 documents preserve the causes, controls and
+R8 is the checked-in production runtime. R5–R7 failed secure-Windows holdouts and
+have no acceptance authority. R2–R7 documents preserve the causes, controls and
 failed alternatives that led here; they do not define runtime routing when they
 conflict with this document or the
-[R7 architecture](s11-r7-evidence-tiered-trajectory-architecture.md).
+[R8 architecture](s11-r8-observation-recovery-architecture.md).
 
 ## Production observation path
 
@@ -167,16 +167,16 @@ observed samples only. Detailed presentation ownership belongs to the
 - S5-B and S11 Slices A–D preserve proposal, ambiguity and hard-safety lessons.
 - R2, R3 and R4 preserve causal diagnostics and controlled negative families,
   but their D5/Foam-to-Oil routing is not current runtime authority.
-- R5 and R6 are field-failed, superseded sequence designs and must not be
+- R5, R6 and R7 are field-failed, superseded sequence designs and must not be
   restored as alternate owners.
 - Historical exact counts and fingerprints are evidence provenance, not current
   acceptance targets.
 
 The current preservation and holdout gates are defined by the
-[R7 validation contract](../30-validation/s11-r7-evidence-tiered-trajectory-validation.md)
+[R8 validation contract](../30-validation/s11-r8-observation-recovery-validation.md)
 and the [S11 real-field validation contract](../30-validation/s11-real-field-detector-effectiveness.md).
 The completed local implementation evidence is
-[S11-R7 Evidence-Tiered Trajectory](../60-evidence/s11/s11-r7-evidence-tiered-trajectory.md).
+[S11-R8 Observation Recovery](../60-evidence/s11/s11-r8-observation-recovery.md).
 
 ## Non-authorities
 

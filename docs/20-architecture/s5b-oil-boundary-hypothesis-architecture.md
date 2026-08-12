@@ -34,7 +34,7 @@ Semantic scoring may combine correlated photometric/morphological evidence, but 
 
 Spatial positive corroboration is an S11 evidence responsibility layered on this
 same S5-B pipeline, not an alternate publication system. Foam material is
-represented independently. Under the active R7 contract, raw/current-frame Foam
+represented independently. Under the active R8 contract, raw/current-frame Foam
 cannot mask Oil pixels, impose a front cutoff, select or veto an Oil hypothesis,
 or become an Oil comparison anchor. Confirmed Foam is composed only after the
 final Oil/state observation is fixed. The durable composition contract is owned

@@ -1,5 +1,9 @@
 # S11-R7 Evidence-Tiered Trajectory — Local Implementation Evidence
 
+> Historical local evidence. The later secure-Windows result failed; see the
+> [R7 Windows diagnostic](../../50-diagnostics/s11/s11-r7-windows-observation-recovery-diagnostic.md)
+> and current [R8 evidence](s11-r8-observation-recovery.md).
+
 **Evidence disposition:** `LOCAL PASS — SECURE WINDOWS HOLDOUT PENDING`
 
 ## Implemented head

@@ -4,13 +4,13 @@
 
 This document owns the durable sequence-level responsibility for **Initial-State
 Retrospective FULL/EMPTY Reconstruction** on immutable detector result streams,
-including R7. It is downstream of detector observations and upstream of official
+including R7/R8 streams. It is downstream of detector observations and upstream of official
 event, judgment and state-aware report projection. Current sequencing remains
 owned by the [roadmap](../00-project/roadmap.md) and
 [work plan](../00-project/work-plan.md); implementation acceptance is owned by
 the [dedicated validation contract](../30-validation/initial-state-retrospective-reconstruction-validation.md).
 
-This responsibility does not modify S5-B current-frame evidence, the R7
+This responsibility does not modify S5-B current-frame evidence, the R8
 Oil/state or Foam owners, final composition, or the serialized online temporal
 owner. Those detector boundaries are authoritative in
 [S5-B Oil Boundary Hypothesis Architecture](s5b-oil-boundary-hypothesis-architecture.md)
@@ -21,10 +21,11 @@ Historical D1–D5 routing is not a current authority surface.
 
 The responsibility runs only after the analysis has collected its immutable observed `TrackingSample` sequence and before official event/judgment projection consumes any retrospective state interpretation.
 
-R7 resolves only image-supported Oil/state inside the detector before
+R8 resolves only image-supported Oil/state inside the detector before
 `TrackingSample` creation. A confirmed initial state is not detector evidence,
 but the retrospective owner may later interpret the leading unresolved prefix
-when anchor-grade direction proves a compatible transition. R7
+when anchor-grade direction proves a compatible transition. R8 retains the
+historical `R7_OIL_ANCHOR` provenance flag for bundle compatibility; that
 observation provenance therefore does not make this owner globally
 `NOT_APPLICABLE`. A legacy stream explicitly carrying a prior-projected
 `SEQUENCE_INITIAL_STATE_PRIOR` remains ineligible for a second projection.
@@ -47,7 +48,7 @@ Retrospective interpretation is limited to the **leading unresolved interval** b
 Eligibility requires later real accepted detector evidence, not prior-seeded labels. The evidence set must materially establish the relevant numeric-boundary/topology/direction interpretation.
 
 - direction evidence requires at least **two real accepted anchor-grade boundary
-  observations** for R7; legacy streams use their existing canonical boundary
+  observations** for R7/R8; legacy streams use their existing canonical boundary
   authority;
 - the first anchor may already be mid-Glass; entrance topology is retained in
   provenance but does not block inference when anchor motion is compatible with
@@ -81,10 +82,18 @@ This responsibility must not introduce:
 - interpolation or arbitrary middle-run gap filling;
 - rewriting of detector samples, validity or serialized temporal history;
 - a second/hidden temporal owner, lookahead authority inside S5-B, or
-  retrospective authority inside the R7 Oil/state, Foam or composition owners;
+  retrospective authority inside the R8 Oil/state, Foam or composition owners;
 - circular proof in which prior-derived labels become the evidence that confirms the prior.
 
 `RECOVERY` and any other numeric Oil judgment remain dependent on observed numeric Oil where that judgment requires a numeric boundary.
+
+R8 additionally permits a presentation-only hold when a current-run FULL/EMPTY
+confirmation has no public Oil anywhere and no direct contradiction. It may draw
+only a labeled graph/report background through analysis end. It creates no Oil
+coordinate, does not alter observed coverage, and is not passed into event or
+judgment evaluation. This all-missing hold is distinct from an anchor-backed
+leading-prefix reconstruction whose inferred state can participate in official
+state-aware semantics with provenance.
 
 ## Result and compatibility responsibility
 
@@ -101,4 +110,4 @@ The implemented run-scoped confirmation lives only in `AnalysisSession.initial_s
 
 Bundles written with this responsibility use result/review semantics version **2**. `review_index.json` has `schema_version: 2` and `result_semantics_version: 2`, and `analysis_manifest.json` repeats the result semantics version plus a pointer to `retrospective_interpretation.json`. The separate retrospective artifact currently uses `schema_version: 1` and records the saved current-run confirmation provenance, per-Glass accepted/unresolved/conflict interpretation, evidence/interval provenance, and observed versus effective state-aware coverage. `session.json` carries the run confirmation snapshot; `tracking_data.csv` remains observed-only.
 
-The reader treats legacy review-index v1 as result semantics v1 observed-only, supports the v2 shape above, and rejects unsupported or internally mismatched versions explicitly. Full-sequence re-detection may recompute only when the saved session contains current-run confirmation; legacy bundles without that confirmation remain observed-only. The extracted top/bottom entrance constants retain the pre-existing S5-B `0.32` / `0.68` topology boundaries for provenance and legacy interpretation. They do not gate a direction-compatible R7 inference and do not change detector thresholds or authority.
+The reader treats legacy review-index v1 as result semantics v1 observed-only, supports the v2 shape above, and rejects unsupported or internally mismatched versions explicitly. Full-sequence re-detection may recompute only when the saved session contains current-run confirmation; legacy bundles without that confirmation remain observed-only. The extracted top/bottom entrance constants retain the pre-existing S5-B `0.32` / `0.68` topology boundaries for provenance and legacy interpretation. They do not gate a direction-compatible R7/R8 inference and do not change detector thresholds or authority.

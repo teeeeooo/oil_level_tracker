@@ -62,8 +62,10 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
 - Current target-Windows procedure: [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md)
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
-- Active S11-R7 evidence-tiered trajectory architecture: [`20-architecture/s11-r7-evidence-tiered-trajectory-architecture.md`](20-architecture/s11-r7-evidence-tiered-trajectory-architecture.md)
-- Active S11-R7 validation contract: [`30-validation/s11-r7-evidence-tiered-trajectory-validation.md`](30-validation/s11-r7-evidence-tiered-trajectory-validation.md)
+- Active S11-R8 observation-recovery architecture: [`20-architecture/s11-r8-observation-recovery-architecture.md`](20-architecture/s11-r8-observation-recovery-architecture.md)
+- Active S11-R8 validation contract: [`30-validation/s11-r8-observation-recovery-validation.md`](30-validation/s11-r8-observation-recovery-validation.md)
+- S11-R8 local implementation/replay evidence: [`60-evidence/s11/s11-r8-observation-recovery.md`](60-evidence/s11/s11-r8-observation-recovery.md)
+- S11-R7 secure-Windows root cause: [`50-diagnostics/s11/s11-r7-windows-observation-recovery-diagnostic.md`](50-diagnostics/s11/s11-r7-windows-observation-recovery-diagnostic.md)
 - S11-R7 checked-video direct-image reconciliation: [`50-diagnostics/s11/s11-r7-checked-video-direct-image-reconciliation.md`](50-diagnostics/s11/s11-r7-checked-video-direct-image-reconciliation.md)
 - S11-R7 local implementation/replay evidence: [`60-evidence/s11/s11-r7-evidence-tiered-trajectory.md`](60-evidence/s11/s11-r7-evidence-tiered-trajectory.md)
 - Active detector-baseline validation: [`30-validation/s11-real-field-detector-effectiveness.md`](30-validation/s11-real-field-detector-effectiveness.md)
@@ -99,7 +101,7 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - Failed S11-R6 validation contract: [`30-validation/s11-r6-optics-aware-observation-validation.md`](30-validation/s11-r6-optics-aware-observation-validation.md)
 - S11-R6 checked-video diagnostic: [`50-diagnostics/s11/s11-r6-checked-video-reconciliation.md`](50-diagnostics/s11/s11-r6-checked-video-reconciliation.md)
 - S11-R6 local implementation/replay evidence: [`60-evidence/s11/s11-r6-optics-aware-observation.md`](60-evidence/s11/s11-r6-optics-aware-observation.md)
-- S11-R7 implemented local baseline and pending field gate: [`60-evidence/s11/s11-r7-evidence-tiered-trajectory.md`](60-evidence/s11/s11-r7-evidence-tiered-trajectory.md)
+- S11-R7 historical local baseline before its failed field gate: [`60-evidence/s11/s11-r7-evidence-tiered-trajectory.md`](60-evidence/s11/s11-r7-evidence-tiered-trajectory.md)
 
 ### Supporting collections
 

@@ -158,6 +158,48 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
   evidence documents or compare against their exact output fingerprints as a
   pass criterion.
 
+### S11-R8 secure Base/Accum observation recovery
+
+- Record the exact pushed R8 SHA, detector/resolver versions, private video and
+  Recipe identities, analysis bounds, cadence and current-run initial-state
+  confirmations.
+- Run each Glass first with artifact templates disabled. Then open the ellipse
+  editor, run **Detector 후보 찾기**, inspect proposals against source frames and
+  select only persistent glare/rim/scratch geometry. Save the proposal list,
+  selected template ids/kinds/normalized coordinates and calibrated Recipe.
+  Never accept every proposal automatically.
+- Repeat the identical analysis with calibration enabled. Compare numeric Oil,
+  first acquisition, longest missing run, longest wrong-interface run, public
+  Foam, event/capture timing and debug-disabled frame time. Coverage alone is
+  not a pass criterion.
+- Confirm `R8_CALIBRATED_ARTIFACT_REJECTED` and
+  `calibrated_artifact:<template-id>` appear for matching candidates, raw
+  candidate scores remain inspectable and the same Y outside the selected
+  horizontal geometry is not excluded.
+- Confirm selected artifacts do not consume the ordinary candidate budget. A
+  real Oil candidate competing with an artifact must remain in the completed
+  sequence and may gain coverage; if all candidates are excluded the frame must
+  remain `UNKNOWN_REVIEW`.
+- On Base, require zero public Foam and inspect 540 s descent, 634 s low and
+  674 s recovery. The chosen Oil path must not follow the calibrated glare,
+  rim or scratch.
+- On Accum, inspect 653 s rise, 672 s real Foam onset, 685 s high and 689 s
+  observation. Confirm Foam texture does not veto Oil, real dynamic Foam is
+  public even when Oil/state is unavailable, and Foam/Oil alias rejection does
+  not remove the distinct real Foam layer.
+- For every numeric Oil row require an eligible same-frame candidate and
+  `SEQUENCE_SAME_FRAME_CANDIDATE`. For every public Foam row require a confirmed
+  dynamic episode. Inspect alias and topology flags independently.
+- If no Oil is observed for the entire window, confirm the user-confirmed
+  FULL/EMPTY initial state is drawn to analysis end only as the labeled
+  **확정 초기 상태 유지 가정** background. CSV numeric Oil and observed coverage
+  must remain empty/unchanged.
+- Compare debug-disabled median/total frame time with R7 on the same machine.
+  Record detector time separately from video seek, report and capture time.
+- Treat false Base Foam, a persistent artifact Oil path, lost real Accum Foam,
+  calibration that suppresses actual Oil, or unlabeled initial-state projection
+  as field failure regardless of aggregate coverage.
+
 ## S5-B oil boundary and temporal tracking
 - Validate a real, visually clear oil boundary and a weak transparent-oil boundary against user-recorded truth.
 - Validate transparent-oil agitation, shimmer and heat-haze-like motion without forcing a numeric boundary.

@@ -1,6 +1,9 @@
 # S11-R7 Evidence-Tiered Trajectory Validation Contract
 
-**Status:** `LOCAL PASS — SECURE WINDOWS HOLDOUT PENDING`
+> Historical failed field contract. Current validation is
+> [R8 observation recovery](s11-r8-observation-recovery-validation.md).
+
+**Status:** `HISTORICAL — SECURE WINDOWS HOLDOUT FAILED`
 
 ## Oracle and comparison
 

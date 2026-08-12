@@ -54,6 +54,8 @@ Acceptance must demonstrate that:
 - judgment/event outputs retain explicit provenance when retrospective state affects official semantics;
 - `RECOVERY` numeric recovery remains dependent on observed numeric Oil rather than retrospective FULL/EMPTY;
 - graph/overlay paths preserve numeric gaps and never synthesize an Oil line for inferred out-of-range state.
+- an all-missing R8 confirmed-state hold is visibly labeled, leaves raw Oil and
+  observed coverage unchanged, and cannot add state events or alter judgment;
 
 ## Versioned compatibility acceptance
 
@@ -79,7 +81,7 @@ Result Review acceptance must prove:
 
 ## Preservation and claim boundary
 
-The accepted S5-B and R7 current-frame/final observation authorities remain
+The accepted S5-B and R8 current-frame/final observation authorities remain
 unchanged. No detector thresholds, Oil/state or Foam resolver behavior, online
 temporal behavior, Recipe schema migration, truth data or arbitrary middle-run
 trajectory estimation is part of this acceptance contract. Historical D1–D5

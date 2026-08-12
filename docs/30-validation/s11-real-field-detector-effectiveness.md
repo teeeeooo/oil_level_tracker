@@ -1,14 +1,14 @@
 # S11 Real-Field Detector Effectiveness Validation Contract
 
-**Status:** `ACTIVE R7 CONTRACT`
+**Status:** `ACTIVE R8 CONTRACT`
 
 ## Scope and oracle
 
 This document owns the durable detector-effectiveness acceptance boundary for
-S11. The active replacement design is R7, defined by the
+S11. The active replacement design is R8, defined by the
 [durable detector architecture](../20-architecture/s11-detector-responsibility-architecture.md)
 and the dedicated
-[R7 architecture](../20-architecture/s11-r7-evidence-tiered-trajectory-architecture.md).
+[R8 architecture](../20-architecture/s11-r8-observation-recovery-architecture.md).
 The exact current action remains in the [work plan](../00-project/work-plan.md),
 while completed measurements belong in
 [`../60-evidence/s11/`](../60-evidence/s11/).
@@ -24,7 +24,7 @@ Validation must prove the following current responsibilities:
 
 1. current-frame processing preserves bounded Oil candidates, typed
    no-interface evidence, optics opposition and raw Foam material independently;
-2. final Oil/FULL/EMPTY selection is owned only by the R7
+2. final Oil/FULL/EMPTY selection is owned only by the R8
    `OilObservationResolver`;
 3. every candidate has one explicit final authority tier, and old current-frame
    temporal selection has no final anchor authority;
@@ -40,7 +40,7 @@ Validation must prove the following current responsibilities:
 9. `ObservationSequenceResolver` is the single final composition point; and
 10. no resolver interpolates, carries or invents a coordinate.
 
-Superseded R5 owners, R6 selected-candidate anchor authority and historical D5
+Superseded R5–R7 owners, selected-candidate anchor authority and historical D5
 Foam-to-Oil routing must remain absent from production call paths.
 
 ## Effectiveness priorities
@@ -108,7 +108,8 @@ overlay-dominated spans may remain unavailable.
 
 ## Secure-Windows holdout
 
-The exact committed R7 head must be replayed on the private Base/Accum video
+The exact committed R8 head must be replayed on the private Base/Accum video,
+both without calibration and with operator-selected detector artifact proposals,
 before S11 closure.
 
 - Base must publish no Foam over the directly reviewed Foam-absent run, keep
@@ -125,7 +126,7 @@ fixed-optics Oil path is a field failure regardless of aggregate coverage.
 
 ## Downstream and report boundary
 
-R7 detector samples remain immutable, but their leading unresolved prefix is
+R8 detector samples remain immutable, but their leading unresolved prefix is
 eligible for the separately persisted
 [Initial-State Retrospective Reconstruction](../20-architecture/initial-state-retrospective-reconstruction-architecture.md)
 when current-run confirmation and anchor-grade direction evidence satisfy its
@@ -141,13 +142,13 @@ gaps. Detailed report acceptance belongs to the
 ## Historical and claim boundary
 
 R2–R4 architecture/validation documents preserve causal history and fixture
-intent. R5 and R6 documents preserve failed designs, local evidence and field
+intent. R5–R7 documents preserve failed designs, local evidence and field
 failure records. None is an alternate current acceptance owner.
 
 Passing local tests establishes only checked-in-corpus suitability for the
 secure holdout. It does not establish general-field detector accuracy, authorize
-numeric trajectory estimation or satisfy the private Windows gate. The local R7
+numeric trajectory estimation or satisfy the private Windows gate. The local R8
 disposition is recorded in the
-[R7 evidence](../60-evidence/s11/s11-r7-evidence-tiered-trajectory.md); the
+[R8 evidence](../60-evidence/s11/s11-r8-observation-recovery.md); the
 [R6 evidence](../60-evidence/s11/s11-r6-optics-aware-observation.md) remains
 historical comparison only.

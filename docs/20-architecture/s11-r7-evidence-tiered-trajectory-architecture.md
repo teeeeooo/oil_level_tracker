@@ -1,5 +1,8 @@
 # S11-R7 Evidence-Tiered Trajectory Architecture
 
+> Historical architecture. The secure-Windows R7 holdout failed; current
+> authority is [R8 observation recovery](s11-r8-observation-recovery-architecture.md).
+
 **Status:** `IMPLEMENTED — LOCAL VALIDATION PASSED`
 
 ## Purpose
