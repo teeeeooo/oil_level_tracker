@@ -75,6 +75,8 @@ class OilObservationResolverConfig:
     completed_fill_min_span_ratio: float = 0.20
     completed_fill_gap_frames: int = 6
     completed_fill_release_ratio: float = 0.40
+    completed_fill_release_lookahead_frames: int = 6
+    completed_fill_release_min_downward_ratio: float = 0.025
     trajectory_spike_min_px: float = 8.0
     trajectory_spike_tolerance_ratio: float = 0.25
     trajectory_spike_lookaround_frames: int = 3
@@ -984,7 +986,14 @@ class OilObservationResolver:
             if node.kind == "oil" and node.y is not None:
                 relative = _relative_y(node.y, glass)
                 if blocked:
-                    if relative >= self.config.completed_fill_release_ratio:
+                    if (
+                        relative >= self.config.completed_fill_release_ratio
+                        and self._is_confirmed_downward_reacquisition(
+                            path,
+                            index,
+                            glass,
+                        )
+                    ):
                         blocked = False
                         highest_relative = relative
                         oil_count = 1
@@ -1010,6 +1019,42 @@ class OilObservationResolver:
             if missing >= self.config.completed_fill_gap_frames:
                 blocked = True
         return tuple(output)
+
+    def _is_confirmed_downward_reacquisition(
+        self,
+        path: tuple[_Node, ...],
+        start: int,
+        glass: GlassInspectionConfig,
+    ) -> bool:
+        """Release a completed-fill barrier only for an emerging drain path.
+
+        A turbulent cap can form a strong, moving upper boundary after the real
+        free interface has left the Glass.  Position alone cannot distinguish
+        that cap from a missed drain entrance.  A real drain must progress
+        downward (increasing image Y) within a small bounded lookahead; this
+        check neither creates coordinates nor applies before a completed fill.
+        """
+
+        first = path[start]
+        if first.y is None:
+            return False
+        stop = min(
+            len(path),
+            start + max(2, self.config.completed_fill_release_lookahead_frames) + 1,
+        )
+        observed = [
+            float(path[index].y)
+            for index in range(start, stop)
+            if path[index].kind == "oil" and path[index].y is not None
+        ]
+        if len(observed) < 3:
+            return False
+        height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
+        minimum_progress = max(
+            4.0,
+            height * self.config.completed_fill_release_min_downward_ratio,
+        )
+        return max(observed[1:]) - observed[0] >= minimum_progress
 
     def _transition_score(
         self,

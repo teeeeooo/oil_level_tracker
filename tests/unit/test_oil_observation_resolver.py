@@ -703,6 +703,41 @@ def test_completed_fill_gap_blocks_upper_texture_reacquisition() -> None:
     assert _oil_y(result)[6:] == [None] * 9
 
 
+def test_completed_fill_barrier_releases_only_for_downward_drain_motion() -> None:
+    glass = glass_config()
+    ellipse = glass.geometry.ellipse
+    top = ellipse.center_y - ellipse.radius_y
+    height = ellipse.radius_y * 2.0
+    rise = (0.58, 0.48, 0.38, 0.28, 0.22, 0.18)
+    detections = [
+        _detection(
+            index,
+            _candidate(top + height * relative, boundary=0.78),
+            ambiguity=0.15,
+        )
+        for index, relative in enumerate(rise)
+    ]
+    detections.extend(
+        _detection(index, ambiguity=0.85)
+        for index in range(len(detections), len(detections) + 6)
+    )
+    drain = (0.44, 0.43, 0.47, 0.50, 0.54, 0.58)
+    detections.extend(
+        _detection(
+            index,
+            _candidate(top + height * relative, boundary=0.78),
+            ambiguity=0.15,
+        )
+        for index, relative in enumerate(drain, start=len(detections))
+    )
+
+    result = OilObservationResolver().resolve(tuple(detections), glass)
+
+    assert all(value is not None for value in _oil_y(result)[:6])
+    assert _oil_y(result)[6:12] == [None] * 6
+    assert all(value is not None for value in _oil_y(result)[12:])
+
+
 def test_selected_coordinate_is_always_a_candidate_from_the_same_frame() -> None:
     detections = tuple(
         _detection(index, _candidate(100.0 + index), _candidate(180.0 - index))
