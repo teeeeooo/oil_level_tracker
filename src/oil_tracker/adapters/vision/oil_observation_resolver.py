@@ -10,7 +10,7 @@ from oil_tracker.domain.enums import BoundaryKind, FillState, InitialObservation
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r7-evidence-tiered-trajectory-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r8-observation-recovery-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -61,7 +61,6 @@ class OilObservationResolverConfig:
     continuation_min_boundary: float = 0.18
     continuation_max_artifact: float = 0.46
     continuation_max_ambiguity: float = 0.84
-    anchor_max_material_texture_conflict: float = 0.60
     terminal_anchor_min_support: float = 0.55
     terminal_anchor_min_sector_fraction: float = 0.78
     dynamic_anchor_min_support: float = 0.18
@@ -342,7 +341,19 @@ class OilObservationResolver:
                     item.candidate.source,
                 )
             )
-            rows.append(tuple(refs[:limit]))
+            selected_refs = list(refs[:limit])
+            if not any(_candidate_is_r8_supplemental(ref.candidate) for ref in selected_refs):
+                supplemental = next(
+                    (
+                        ref
+                        for ref in refs[limit:]
+                        if _candidate_is_r8_supplemental(ref.candidate)
+                    ),
+                    None,
+                )
+                if supplemental is not None:
+                    selected_refs.append(supplemental)
+            rows.append(tuple(selected_refs))
         return tuple(rows), ineligible
 
     def _apply_cluster_and_trajectory_support(
@@ -451,8 +462,7 @@ class OilObservationResolver:
                 for item in ordered
             ) / len(ordered)
             supplemental_ratio = sum(
-                _unit(item.candidate.features.get("r6_material_path", 0.0)) >= 0.5
-                for item in ordered
+                _candidate_is_material_path(item.candidate) for item in ordered
             ) / len(ordered)
             semantic_support = sum(
                 item.semantic_corridor_support for item in ordered
@@ -609,18 +619,13 @@ class OilObservationResolver:
         for refs in output:
             row: list[_CandidateRef] = []
             for ref in refs:
-                material_path = _unit(
-                    ref.candidate.features.get("r6_material_path", 0.0)
-                ) >= 0.5
+                material_path = _candidate_is_material_path(ref.candidate)
                 opposed_peer = next(
                     (
                         peer
                         for peer in refs
                         if not material_path
-                        and _unit(
-                            peer.candidate.features.get("r6_material_path", 0.0)
-                        )
-                        >= 0.5
+                        and _candidate_is_material_path(peer.candidate)
                         and peer.track_opposition
                         >= self.config.recurring_track_reject_opposition
                         and abs(float(peer.candidate.y) - float(ref.candidate.y))
@@ -808,6 +813,10 @@ class OilObservationResolver:
 
         bounded = list(path)
         edge = max(0, int(self.config.continuation_edge_frames))
+        dynamic_horizon = max(
+            2,
+            min(3, int(glass.detector_settings.oil_path_window)),
+        ) * 2
         minimum_confidence = float(
             glass.detector_settings.minimum_final_confidence
         )
@@ -837,9 +846,17 @@ class OilObservationResolver:
             keep_end = min(end, qualified[-1] + edge)
             for index in range(start, end + 1):
                 ref = path[index].candidate_ref
+                dynamic_extension = bool(
+                    ref is not None
+                    and min(abs(index - anchor) for anchor in qualified)
+                    <= dynamic_horizon
+                    and _candidate_registered_motion(ref.candidate)
+                    >= self.config.dynamic_anchor_min_support
+                    and _candidate_registered_motion_coverage(ref.candidate)
+                    >= self.config.dynamic_anchor_min_coverage
+                )
                 if (
-                    index < keep_start
-                    or index > keep_end
+                    ((index < keep_start or index > keep_end) and not dynamic_extension)
                     or ref is None
                     or ref.trajectory_support < 0.99
                     or _oil_confidence(ref) + 1e-9 < minimum_confidence
@@ -1164,6 +1181,8 @@ class OilObservationResolver:
 
 
 def _candidate_eligible(candidate: BoundaryCandidate) -> bool:
+    if _unit(candidate.features.get("calibrated_artifact_match", 0.0)) >= 0.72:
+        return False
     explicit = candidate.features.get("sequence_eligible")
     if explicit is not None:
         return _unit(explicit) >= 0.5
@@ -1192,7 +1211,7 @@ def _cross_representation_support(
     are not consulted.
     """
 
-    candidate_is_path = _unit(candidate.features.get("r6_material_path", 0.0)) >= 0.5
+    candidate_is_path = _candidate_is_material_path(candidate)
     tolerance = max(
         8.0,
         float(glass.detector_settings.temporal_max_jump_px) * 0.375,
@@ -1201,7 +1220,7 @@ def _cross_representation_support(
     for peer in candidates:
         if peer is candidate:
             continue
-        peer_is_path = _unit(peer.features.get("r6_material_path", 0.0)) >= 0.5
+        peer_is_path = _candidate_is_material_path(peer)
         if peer_is_path == candidate_is_path or not _candidate_eligible(peer):
             continue
         distance = abs(float(peer.y) - float(candidate.y))
@@ -1267,7 +1286,6 @@ def _candidate_authority(
     artifact = _candidate_artifact_signature(candidate)
     ambiguity = _candidate_ambiguity(candidate)
     optics = _candidate_optics_opposition(candidate)
-    texture_allowed = _material_texture_anchor_allowed(candidate, config)
     narrow = _unit(
         features.get("narrow_peak_strength", features.get("edge_strength", 0.0))
     )
@@ -1278,7 +1296,8 @@ def _candidate_authority(
         )
     )
     sector_fraction = _unit(features.get("material_path_sector_fraction", 0.0))
-    material_path = _unit(features.get("r6_material_path", 0.0)) >= 0.5
+    material_path = _candidate_is_material_path(candidate)
+    supplemental = _candidate_is_r8_supplemental(candidate)
     terminal_partition = _candidate_terminal_support(candidate)
     material_layer_terminal = bool(
         material_path
@@ -1291,16 +1310,22 @@ def _candidate_authority(
     registered_motion_coverage = _unit(
         features.get("registered_oil_band_motion_coverage", 0.0)
     )
+    static_material_front_twin = bool(
+        _unit(features.get("raw_material_row_support", 0.0)) >= 0.60
+        and representation_support >= 0.20
+        and registered_motion < config.dynamic_anchor_min_support
+        and registered_motion_coverage < config.dynamic_anchor_min_coverage
+    )
 
     boundary_dominant = bool(
         not material_path
+        and not supplemental
         and material >= config.anchor_min_material
         and boundary >= config.anchor_min_boundary
         and boundary - artifact_likelihood >= config.anchor_min_boundary_advantage
         and artifact <= config.anchor_max_artifact
         and ambiguity <= config.anchor_max_ambiguity
         and optics <= 0.38
-        and texture_allowed
         and (
             (narrow >= 0.34 and coverage >= 0.20)
             or (coverage >= 0.08 and _unit(features.get("broad_strength", 0.0)) >= 0.42)
@@ -1308,6 +1333,13 @@ def _candidate_authority(
     )
     corroborated_material_path = bool(
         material_path
+        and (
+            not supplemental
+            or (
+                registered_motion >= config.dynamic_anchor_min_support
+                and registered_motion_coverage >= config.dynamic_anchor_min_coverage
+            )
+        )
         and representation_support >= 0.24
         and (
             not semantic_sequence_available
@@ -1318,12 +1350,12 @@ def _candidate_authority(
         and artifact <= 0.36
         and optics <= 0.30
         and ambiguity <= 0.55
-        and texture_allowed
         and sector_fraction >= 0.80
         and static_contradiction <= 0.58
     )
     terminal_material_boundary = bool(
         material_path
+        and not supplemental
         and allow_terminal_anchor
         and (
             _unit(features.get("sequence_material_layer_topology", 0.0)) < 0.5
@@ -1335,7 +1367,6 @@ def _candidate_authority(
         and artifact <= 0.42
         and optics <= 0.34
         and ambiguity <= 0.62
-        and texture_allowed
         and (
             sector_fraction >= config.terminal_anchor_min_sector_fraction
             or (
@@ -1360,10 +1391,11 @@ def _candidate_authority(
         and artifact <= 0.44
         and optics <= 0.38
         and ambiguity <= 0.68
-        and texture_allowed
         and sector_fraction >= 0.60
     )
     if material_layer_terminal:
+        return OilCandidateAuthority.CANDIDATE_ONLY
+    if static_material_front_twin:
         return OilCandidateAuthority.CANDIDATE_ONLY
     if (
         boundary_dominant
@@ -1378,6 +1410,10 @@ def _candidate_authority(
         material_path
         and semantic_sequence_available
         and semantic_corridor_support < 0.20
+        and not (
+            registered_motion >= config.dynamic_anchor_min_support
+            and registered_motion_coverage >= config.dynamic_anchor_min_coverage
+        )
     ):
         return OilCandidateAuthority.CANDIDATE_ONLY
 
@@ -1388,7 +1424,6 @@ def _candidate_authority(
         and artifact <= config.continuation_max_artifact
         and ambiguity <= config.continuation_max_ambiguity
         and optics <= 0.46
-        and texture_allowed
     )
     if continuation:
         return OilCandidateAuthority.CONTINUATION_ELIGIBLE
@@ -1432,6 +1467,18 @@ def _candidate_registered_motion(candidate: BoundaryCandidate) -> float:
     return _unit(candidate.features.get("registered_oil_band_motion_support", 0.0))
 
 
+def _candidate_registered_motion_coverage(candidate: BoundaryCandidate) -> float:
+    return _unit(candidate.features.get("registered_oil_band_motion_coverage", 0.0))
+
+
+def _candidate_is_material_path(candidate: BoundaryCandidate) -> bool:
+    return _unit(candidate.features.get("r6_material_path", 0.0)) >= 0.5
+
+
+def _candidate_is_r8_supplemental(candidate: BoundaryCandidate) -> bool:
+    return _unit(candidate.features.get("r8_supplemental_path", 0.0)) >= 0.5
+
+
 def _candidate_optics_opposition(candidate: BoundaryCandidate) -> float:
     penalties = candidate.penalties
     return _unit(
@@ -1452,23 +1499,6 @@ def _candidate_artifact_signature(candidate: BoundaryCandidate) -> float:
         + 0.12 * _unit(penalties.get("border_penalty", 0.0))
         + 0.10 * _unit(penalties.get("exclusion_conflict", penalties.get("exclusion_penalty", 0.0)))
     )
-
-
-def _candidate_material_texture_conflict(candidate: BoundaryCandidate) -> float:
-    return _unit(
-        candidate.penalties.get(
-            "material_texture_conflict",
-            candidate.features.get("material_texture_conflict", 0.0),
-        )
-    )
-
-
-def _material_texture_anchor_allowed(
-    candidate: BoundaryCandidate,
-    config: OilObservationResolverConfig,
-) -> bool:
-    conflict = _candidate_material_texture_conflict(candidate)
-    return conflict <= config.anchor_max_material_texture_conflict
 
 
 def _candidate_ambiguity(candidate: BoundaryCandidate) -> float:
@@ -1497,7 +1527,6 @@ def _candidate_quality(
         - 0.14 * _candidate_ambiguity(candidate)
         - 0.24 * _candidate_artifact_signature(candidate)
         - 0.18 * _candidate_static_contradiction(candidate)
-        - 0.12 * _candidate_material_texture_conflict(candidate)
         + (
             0.18 * _candidate_terminal_support(candidate)
             if terminal_fallback
@@ -1531,7 +1560,6 @@ def _oil_emission(ref: _CandidateRef) -> float:
         - 0.34 * _candidate_static_contradiction(candidate)
         - 0.28 * _candidate_ambiguity(candidate)
         - 0.72 * ref.track_opposition
-        - 0.28 * _candidate_material_texture_conflict(candidate)
         + (
             0.22 * _candidate_terminal_support(candidate)
             if ref.terminal_fallback
@@ -1553,7 +1581,6 @@ def _oil_confidence(ref: _CandidateRef) -> float:
         - 0.10 * _candidate_static_contradiction(ref.candidate)
         - 0.12 * _candidate_ambiguity(ref.candidate)
         - 0.22 * ref.track_opposition
-        - 0.14 * _candidate_material_texture_conflict(ref.candidate)
         + (
             0.08 * _candidate_terminal_support(ref.candidate)
             if ref.terminal_fallback
@@ -1665,9 +1692,15 @@ def _project_candidates(
                     ""
                     if selected
                     else (
-                        "r7_candidate_hard_invalid"
-                        if not eligible
-                        else "not_selected_by_r7_observation_resolver"
+                        candidate.reject_reason
+                        if candidate.reject_reason.startswith(
+                            "calibrated_artifact:"
+                        )
+                        else (
+                            "r7_candidate_hard_invalid"
+                            if not eligible
+                            else "not_selected_by_r7_observation_resolver"
+                        )
                     )
                 ),
             )
@@ -1974,7 +2007,8 @@ def _ordinary_semantic_candidate(candidate: BoundaryCandidate) -> bool:
     if (
         candidate.kind is not BoundaryKind.OIL_AIR
         or not _finite(candidate.y)
-        or _unit(candidate.features.get("r6_material_path", 0.0)) >= 0.5
+        or _candidate_is_material_path(candidate)
+        or _candidate_is_r8_supplemental(candidate)
         or not _candidate_eligible(candidate)
     ):
         return False
@@ -2004,7 +2038,6 @@ def _ordinary_semantic_candidate(candidate: BoundaryCandidate) -> bool:
         and artifact <= 0.76
         and _candidate_ambiguity(candidate) <= 0.68
         and _candidate_optics_opposition(candidate) <= 0.38
-        and _candidate_material_texture_conflict(candidate) <= 0.60
         and coverage >= 0.02
     )
 

@@ -96,6 +96,10 @@ class TemporalTracker:
         self._oil_values.clear()
         self.previous_y = None
 
+    def clear_foam(self) -> None:
+        self._foam_values.clear()
+        self.previous_foam_y = None
+
     def reset(self) -> None:
         self.previous_y = None
         self.previous_foam_y = None

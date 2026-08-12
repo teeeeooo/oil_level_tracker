@@ -113,6 +113,33 @@ class RecipeValidationService:
                             "exclusions",
                         )
                     )
+            for template in glass.geometry.artifact_templates:
+                values = (
+                    template.center_x,
+                    template.center_y,
+                    template.width,
+                    template.height,
+                    template.angle_deg,
+                )
+                valid_kind = template.kind in {"point", "line", "region"}
+                valid_geometry = bool(
+                    all(math.isfinite(value) for value in values)
+                    and 0.0 <= template.center_x <= 1.0
+                    and 0.0 <= template.center_y <= 1.0
+                    and 0.0 < template.width <= 1.0
+                    and 0.0 < template.height <= 1.0
+                    and -180.0 <= template.angle_deg <= 180.0
+                )
+                if not valid_kind or not valid_geometry:
+                    issues.append(
+                        ValidationIssue(
+                            ValidationSeverity.ERROR,
+                            "STRUCT_ARTIFACT_TEMPLATE",
+                            "Artifact calibration template is invalid.",
+                            glass.id,
+                            "artifact_templates",
+                        )
+                    )
             if glass.mm_per_pixel is not None:
                 try:
                     scale = float(glass.mm_per_pixel)

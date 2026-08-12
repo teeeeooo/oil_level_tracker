@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import numpy as np
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
@@ -7,7 +9,8 @@ from oil_tracker.application.services.recipe_validation_service import RecipeVal
 from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
-from oil_tracker.domain.enums import ValidationSeverity
+from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
+from oil_tracker.domain.enums import BoundaryKind, FillState, ValidationSeverity
 from oil_tracker.domain.geometry import EllipseGeometry
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.validation import ValidationIssue, ValidationResult
@@ -81,6 +84,62 @@ def test_roi_editor_uses_private_copy_until_applied(qtbot):
     dialog._ellipse_changed(glass.id, edited)
     assert glass.geometry.ellipse.center_x == original.center_x
     assert dialog.edited_glass().geometry.ellipse.center_x == original.center_x + 25
+
+
+def test_roi_editor_accepts_detector_artifact_proposal_on_private_copy(
+    qtbot,
+    monkeypatch,
+):
+    candidate = BoundaryCandidate(
+        source="test-proposal",
+        kind=BoundaryKind.OIL_AIR,
+        y=200.0,
+        features={
+            "artifact_center_x_norm": 0.5,
+            "artifact_center_y_norm": 0.4,
+            "artifact_width_norm": 0.6,
+            "artifact_height_norm": 0.02,
+            "artifact_angle_deg": 0.0,
+        },
+        final_score=0.8,
+    )
+
+    class FakeDetector:
+        def detect(self, _frame, glass, _frame_index, _time_sec, *, debug):
+            assert debug is True
+            return (
+                PhaseDetection(
+                    glass_id=glass.id,
+                    frame_index=0,
+                    time_sec=0.0,
+                    fill_state=FillState.UNKNOWN_REVIEW,
+                    candidates=[candidate],
+                ),
+                SimpleNamespace(images={"glare_mask": np.zeros((100, 80), dtype=np.uint8)}),
+            )
+
+    monkeypatch.setattr(
+        "oil_tracker.ui.widgets.roi_editor_dialog.OpenCvPhaseDetector",
+        FakeDetector,
+    )
+    glass = InspectionRecipe.default_glass(640, 480)
+    dialog = RoiEditorDialog(
+        np.zeros((480, 640, 3), dtype=np.uint8),
+        glass,
+        640,
+        480,
+    )
+    qtbot.addWidget(dialog)
+
+    dialog._scan_artifacts()
+    dialog.artifact_proposal_list.setCurrentRow(0)
+    dialog._accept_artifact()
+
+    assert glass.geometry.artifact_templates == []
+    templates = dialog.edited_glass().geometry.artifact_templates
+    assert len(templates) == 1
+    assert templates[0].kind == "line"
+    assert templates[0].center_y == 0.4
 
 
 def test_recipe_snapshot_command_restores_before_and_after(qtbot):

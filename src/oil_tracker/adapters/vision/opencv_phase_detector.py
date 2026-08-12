@@ -11,6 +11,10 @@ from oil_tracker.domain.enums import BoundaryKind, FillState, InitialObservation
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
 from .fill_state_classifier import classify_fill_state
+from .artifact_calibration import (
+    apply_artifact_templates,
+    attach_spatial_signature,
+)
 from .foam_front_detector import (
     FoamDecisionStatus,
     FoamDetectionResult,
@@ -27,6 +31,7 @@ from .oil_material_path import (
     generate_material_path_candidates,
     material_layer_context_features,
 )
+from .oil_supplemental_path import generate_distributed_sobel_candidates
 from .oil_shadow_pipeline import (
     OilHypothesisPipeline,
     oil_debug_detail,
@@ -34,10 +39,12 @@ from .oil_shadow_pipeline import (
     outcome_hypotheses,
 )
 from .oil_shadow_types import (
+    CompatibilityTrackerAction,
     EvidenceUnavailableOutcome,
     OilCanonicalOutcome,
     PipelineFailureOutcome,
     PipelineFailureStage,
+    SmoothingAction,
 )
 from .preprocessing import PreprocessResult, preprocess
 from .observation_sequence_resolver import (
@@ -62,7 +69,7 @@ class PhaseDetectionDebugArtifacts:
 
 
 class OpenCvPhaseDetector:
-    version = "opencv-phase-detector-r7-evidence-tiered-v1"
+    version = "opencv-phase-detector-r8-observation-recovery-v1"
 
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
@@ -178,6 +185,21 @@ class OpenCvPhaseDetector:
         )
         oil_projection = project_production_result(oil_result)
         selected = oil_projection.selected_candidate
+        selected_calibrated_artifact = False
+        if selected is not None and glass.geometry.artifact_templates:
+            signed_selected = attach_spatial_signature(
+                selected,
+                pre.horizontal_mask,
+                glass,
+                crop_origin=bundle.crop_origin,
+            )
+            _selected_candidates, selected_rejected_count = apply_artifact_templates(
+                [signed_selected],
+                glass,
+            )
+            selected_calibrated_artifact = selected_rejected_count > 0
+            if selected_calibrated_artifact:
+                selected = None
         foam = detect_bottom_connected_foam(
             bundle.crop,
             pre.gray,
@@ -262,6 +284,59 @@ class OpenCvPhaseDetector:
                     penalties=path_penalties,
                 )
             )
+        # Keep a bounded phase-path proposal independent of the raw Foam-like
+        # material raster. It is additive and starts without direct anchor
+        # authority, so a false Foam texture cannot monopolize proposals.
+        raster_material_path_candidates: list[BoundaryCandidate] = []
+        for candidate in generate_material_path_candidates(
+            pre,
+            bundle.effective_mask,
+            static_map,
+            crop_origin_y=float(bundle.crop_origin[1]),
+            top_k=max(1, min(4, int(settings.candidate_top_k))),
+            material_evidence_map=None,
+        ):
+            if any(
+                abs(float(candidate.y) - float(existing.y)) <= 6.0
+                for existing in material_path_candidates
+            ):
+                continue
+            local_y = float(candidate.y) - float(bundle.crop_origin[1])
+            raster_material_path_candidates.append(
+                replace(
+                    candidate,
+                    source="r8_raster_material_path",
+                    features={
+                        **candidate.features,
+                        **registered_oil_candidate_features(
+                            oil_motion,
+                            local_y=local_y,
+                        ),
+                        "r8_supplemental_path": 1.0,
+                        "sequence_material_layer_topology": 0.0,
+                        "sequence_white_material_layer_topology": 0.0,
+                        "sequence_white_material_texture_present": 0.0,
+                    },
+                )
+            )
+        distributed_sobel_candidates = [
+            replace(
+                candidate,
+                features={
+                    **candidate.features,
+                    **registered_oil_candidate_features(
+                        oil_motion,
+                        local_y=float(candidate.y) - float(bundle.crop_origin[1]),
+                    ),
+                },
+            )
+            for candidate in generate_distributed_sobel_candidates(
+                pre,
+                bundle.effective_mask,
+                static_map,
+                crop_origin_y=float(bundle.crop_origin[1]),
+            )
+        ]
         static_foam_map = self._static_foam_maps.get(glass.id)
         static_foam_match = _foam_static_match(foam.mask, static_foam_map)
         foam_temporal = self._foam_gate.evaluate(
@@ -272,6 +347,25 @@ class OpenCvPhaseDetector:
             layer_coherent=foam_layer.coherent,
         )
         foam_candidate = foam_temporal.candidate
+        foam_calibrated_artifact = False
+        if foam_candidate is not None and glass.geometry.artifact_templates:
+            source_foam_candidate = replace(
+                foam_candidate,
+                y=float(foam_candidate.y + bundle.crop_origin[1]),
+            )
+            signed_foam = attach_spatial_signature(
+                source_foam_candidate,
+                foam.material_support_mask,
+                glass,
+                crop_origin=bundle.crop_origin,
+            )
+            _foam_candidates, foam_rejected_count = apply_artifact_templates(
+                [signed_foam],
+                glass,
+            )
+            foam_calibrated_artifact = foam_rejected_count > 0
+            if foam_calibrated_artifact:
+                foam_candidate = None
         foam_context_authoritative = False
         foam_context_reason = "r6_independent_oil_evidence"
         previous_state = tracker.current_state
@@ -288,6 +382,8 @@ class OpenCvPhaseDetector:
         )
         flags.extend(_foam_flags(foam, foam_temporal))
         flags.extend(oil_projection.flags)
+        if selected_calibrated_artifact or foam_calibrated_artifact:
+            flags.append("R8_CALIBRATED_ARTIFACT_REJECTED")
         valid_rows = np.where(bundle.effective_mask.any(axis=1))[0]
         if (
             selected is None
@@ -305,20 +401,38 @@ class OpenCvPhaseDetector:
                 flags.append("FOAM_REACH_TOP")
 
         origin_y = bundle.crop_origin[1]
-        raw_oil_source = oil_projection.raw_source_y
+        raw_oil_source = (
+            None
+            if selected_calibrated_artifact
+            else oil_projection.raw_source_y
+        )
         raw_foam_source = foam_candidate.y + origin_y if foam_candidate else None
         review_override = proposed_state is FillState.UNKNOWN_REVIEW or "REVIEW_REQUIRED" in flags
+        if foam_calibrated_artifact:
+            tracker.clear_foam()
         smoothed_oil, smoothed_foam, stabilized_state = tracker.update(
             raw_oil_source,
             raw_foam_source,
             proposed_state,
-            oil_tracker_action=oil_projection.tracker_action,
-            oil_smoothing_action=oil_projection.smoothing_action,
+            oil_tracker_action=(
+                CompatibilityTrackerAction.NO_UPDATE
+                if selected_calibrated_artifact
+                else oil_projection.tracker_action
+            ),
+            oil_smoothing_action=(
+                SmoothingAction.CLEAR_STALE_AFTER_STABLE_ABSENCE
+                if selected_calibrated_artifact
+                else oil_projection.smoothing_action
+            ),
             foam_update_accepted=foam_candidate is not None,
             review_override=review_override,
         )
 
-        oil_conf = oil_projection.confidence
+        oil_conf = (
+            0.0
+            if selected_calibrated_artifact
+            else oil_projection.confidence
+        )
         foam_conf = foam_candidate.final_score if foam_candidate else 0.0
         overall = _overall_confidence(stabilized_state, oil_conf, foam_conf, visibility)
         if overall < settings.minimum_final_confidence:
@@ -387,7 +501,12 @@ class OpenCvPhaseDetector:
                     penalties=candidate_penalties,
                 )
             )
-        candidates = [*oil_candidates, *material_path_candidates]
+        candidates = [
+            *oil_candidates,
+            *material_path_candidates,
+            *raster_material_path_candidates,
+            *distributed_sobel_candidates,
+        ]
         raw_foam_candidate = foam.candidate
         if raw_foam_candidate is not None:
             sequence_foam_eligible = bool(
@@ -442,12 +561,41 @@ class OpenCvPhaseDetector:
             )
             candidates.append(foam_trace_candidate)
 
+        candidates = [
+            attach_spatial_signature(
+                candidate,
+                (
+                    foam.material_support_mask
+                    if candidate.kind is BoundaryKind.FOAM_FRONT
+                    else pre.horizontal_mask
+                ),
+                glass,
+                crop_origin=bundle.crop_origin,
+            )
+            for candidate in candidates
+        ]
+        candidates, calibrated_artifact_rejected_count = apply_artifact_templates(
+            candidates,
+            glass,
+        )
+        if calibrated_artifact_rejected_count:
+            flags.append("R8_CALIBRATED_ARTIFACT_REJECTED")
+
         debug_metrics = {
             "glare_ratio": float(np.count_nonzero(pre.glare_mask))
             / max(1, np.count_nonzero(bundle.effective_mask)),
             "oil_smoothing_sample_count": int(tracker.oil_sample_count),
             "oil_hypothesis_candidate_count": len(oil_projection.candidates),
             "r6_material_path_candidate_count": len(material_path_candidates),
+            "r8_raster_material_path_candidate_count": len(
+                raster_material_path_candidates
+            ),
+            "r8_distributed_sobel_candidate_count": len(
+                distributed_sobel_candidates
+            ),
+            "r8_calibrated_artifact_rejected_count": (
+                calibrated_artifact_rejected_count
+            ),
             "foam_bottom_connected_area_ratio": float(foam.bottom_connected_area_ratio),
             "foam_evidence_score": float(foam.final_evidence_score),
             "foam_evidence_strength": foam_temporal.evidence_strength.value,

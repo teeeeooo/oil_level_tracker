@@ -83,12 +83,28 @@ class ExclusionZone:
     note: str = ""
 
 
+@dataclass(frozen=True)
+class ArtifactTemplate:
+    """User-confirmed visual artifact in normalized ellipse coordinates."""
+
+    id: str
+    kind: str
+    center_x: float
+    center_y: float
+    width: float
+    height: float
+    angle_deg: float = 0.0
+    name: str = "Artifact"
+    note: str = ""
+
+
 @dataclass
 class GlassGeometry:
     ellipse: EllipseGeometry
     zero_line_y: float | None = None
     margin_ratio: float = 0.08
     exclusions: list[ExclusionZone] = field(default_factory=list)
+    artifact_templates: list[ArtifactTemplate] = field(default_factory=list)
 
     @property
     def crop_roi(self) -> Rect:
@@ -130,6 +146,7 @@ class GlassGeometry:
             self.zero_line_y * sy if self.zero_line_y is not None else None,
             self.margin_ratio,
             exclusions,
+            list(self.artifact_templates),
         )
 
 

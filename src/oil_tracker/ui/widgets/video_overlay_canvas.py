@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 )
 
 from oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter
+from oil_tracker.adapters.vision.artifact_calibration import template_source_rect
 from oil_tracker.domain.geometry import EllipseGeometry, Rect
 from oil_tracker.ui.presentation_labels import fill_state_label
 
@@ -501,6 +502,8 @@ class VideoOverlayCanvas(QGraphicsView):
         self._margin_item = None
         self._zero_line_item = None
         self._exclusion_items: dict[str, EditableRectItem] = {}
+        self._artifact_items: list[QGraphicsItem] = []
+        self._artifact_proposals = []
         self._active_target: str | None = None
         self._active_zone_id: str | None = None
         self._fit_mode = True
@@ -588,6 +591,10 @@ class VideoOverlayCanvas(QGraphicsView):
         self._detection = detection
         self._refresh_detection_status()
 
+    def set_artifact_proposals(self, proposals) -> None:
+        self._artifact_proposals = list(proposals)
+        self.rebuild_overlays()
+
     def rebuild_overlays(self) -> None:
         for item in list(self._scene.items()):
             if item is not self._pixmap_item:
@@ -598,6 +605,7 @@ class VideoOverlayCanvas(QGraphicsView):
         self._margin_item = None
         self._zero_line_item = None
         self._exclusion_items = {}
+        self._artifact_items = []
         selected = None
         for glass in self._glasses:
             e = glass.geometry.ellipse
@@ -661,11 +669,37 @@ class VideoOverlayCanvas(QGraphicsView):
             item.setData(0, glass.id)
             self._exclusion_items[zone.id] = item
             self._scene.addItem(item)
+        for template in glass.geometry.artifact_templates:
+            self._add_artifact_template(template, glass, proposed=False)
+        for template in self._artifact_proposals:
+            self._add_artifact_template(template, glass, proposed=True)
         label = QGraphicsSimpleTextItem(glass.name)
         label.setBrush(QBrush(QColor(255, 255, 255)))
         label.setPos(e.bounds.x, max(0, e.bounds.y - 22))
         label.setZValue(90)
         self._scene.addItem(label)
+
+    def _add_artifact_template(self, template, glass, *, proposed: bool) -> None:
+        rect = template_source_rect(template, glass)
+        qrect = QRectF(rect.x, rect.y, rect.width, rect.height)
+        color = QColor(70, 210, 255) if proposed else QColor(255, 145, 45)
+        pen = QPen(color, 2 if not proposed else 1, Qt.PenStyle.DashLine)
+        if template.kind == "line":
+            item = QGraphicsLineItem(
+                qrect.left(),
+                qrect.center().y(),
+                qrect.right(),
+                qrect.center().y(),
+            )
+        elif template.kind == "point":
+            item = QGraphicsEllipseItem(qrect)
+        else:
+            item = QGraphicsRectItem(qrect)
+        item.setPen(pen)
+        item.setZValue(70 if proposed else 72)
+        item.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+        self._artifact_items.append(item)
+        self._scene.addItem(item)
 
     def _add_detection_status(self, glass, detection) -> None:
         e = glass.geometry.ellipse

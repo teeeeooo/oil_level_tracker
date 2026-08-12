@@ -1,19 +1,29 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import math
 from uuid import uuid4
 
+import cv2
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QComboBox,
     QDialog,
     QDialogButtonBox,
+    QGroupBox,
     QHBoxLayout,
     QLabel,
+    QListWidget,
+    QListWidgetItem,
     QPushButton,
     QVBoxLayout,
 )
 
+from oil_tracker.adapters.vision.artifact_calibration import (
+    region_template_from_source_rect,
+    template_from_candidate,
+)
+from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.domain.geometry import ExclusionZone, Rect
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
@@ -29,7 +39,9 @@ class RoiEditorDialog(QDialog):
         self.resize(1200, 840)
         self._frame_width = frame_width
         self._frame_height = frame_height
+        self._frame = frame
         self._working = deepcopy(glass)
+        self._artifact_proposals = []
 
         instruction = QLabel(
             "분석 영역 타원의 파란 조절점을 드래그해 크기를 바꾸고, 노란 기준선을 위아래로 움직이세요. "
@@ -59,6 +71,32 @@ class RoiEditorDialog(QDialog):
         controls.addStretch(1)
         controls.addWidget(self.reset_geometry_button)
 
+        artifact_group = QGroupBox("사용자 Artifact Calibration")
+        artifact_layout = QVBoxLayout(artifact_group)
+        artifact_hint = QLabel(
+            "현재 화면에서 detector가 제안한 고정 반사·흠집 후보를 선택하면 "
+            "정규화된 점·선·구역 템플릿으로 저장됩니다. 같은 Y 전체를 제외하지 않습니다."
+        )
+        artifact_hint.setWordWrap(True)
+        artifact_layout.addWidget(artifact_hint)
+        artifact_lists = QHBoxLayout()
+        self.artifact_proposal_list = QListWidget()
+        self.artifact_template_list = QListWidget()
+        artifact_lists.addWidget(self.artifact_proposal_list, 1)
+        artifact_lists.addWidget(self.artifact_template_list, 1)
+        artifact_layout.addLayout(artifact_lists)
+        artifact_buttons = QHBoxLayout()
+        self.scan_artifacts_button = QPushButton("Detector 후보 찾기")
+        self.accept_artifact_button = QPushButton("선택 후보를 Artifact로 지정")
+        self.delete_artifact_button = QPushButton("선택 Artifact 삭제")
+        artifact_buttons.addWidget(self.scan_artifacts_button)
+        artifact_buttons.addWidget(self.accept_artifact_button)
+        artifact_buttons.addWidget(self.delete_artifact_button)
+        artifact_layout.addLayout(artifact_buttons)
+        self.artifact_status = QLabel("후보 찾기를 실행한 뒤 필요한 항목만 선택하세요.")
+        self.artifact_status.setObjectName("ownershipHint")
+        artifact_layout.addWidget(self.artifact_status)
+
         self.buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         self.buttons.button(QDialogButtonBox.StandardButton.Ok).setText("적용")
         self.buttons.button(QDialogButtonBox.StandardButton.Cancel).setText("취소")
@@ -71,11 +109,15 @@ class RoiEditorDialog(QDialog):
         layout.addWidget(instruction)
         layout.addWidget(self.canvas, 1)
         layout.addLayout(controls)
+        layout.addWidget(artifact_group)
         layout.addWidget(self.buttons)
 
         self.add_exclusion_button.clicked.connect(self._add_exclusion)
         self.delete_exclusion_button.clicked.connect(self._delete_exclusion)
         self.reset_geometry_button.clicked.connect(self._reset_geometry)
+        self.scan_artifacts_button.clicked.connect(self._scan_artifacts)
+        self.accept_artifact_button.clicked.connect(self._accept_artifact)
+        self.delete_artifact_button.clicked.connect(self._delete_artifact)
         self._refresh()
 
     def edited_glass(self):
@@ -92,6 +134,22 @@ class RoiEditorDialog(QDialog):
             if index >= 0:
                 self.exclusion_combo.setCurrentIndex(index)
         self.delete_exclusion_button.setEnabled(self.exclusion_combo.count() > 0)
+        current_template_id = (
+            self.artifact_template_list.currentItem().data(Qt.ItemDataRole.UserRole)
+            if self.artifact_template_list.currentItem() is not None
+            else None
+        )
+        self.artifact_template_list.clear()
+        for template in self._working.geometry.artifact_templates:
+            item = QListWidgetItem(f"{template.name} · {template.kind}")
+            item.setData(Qt.ItemDataRole.UserRole, template.id)
+            self.artifact_template_list.addItem(item)
+            if template.id == current_template_id:
+                self.artifact_template_list.setCurrentItem(item)
+        self.delete_artifact_button.setEnabled(
+            bool(self._working.geometry.artifact_templates)
+        )
+        self.canvas.set_artifact_proposals(self._artifact_proposals)
 
     def _ellipse_changed(self, _glass_id: str, ellipse) -> None:
         self._working.geometry.ellipse = ellipse
@@ -139,4 +197,123 @@ class RoiEditorDialog(QDialog):
     def _reset_geometry(self) -> None:
         default = InspectionRecipe.default_glass(self._frame_width, self._frame_height)
         self._working.geometry = deepcopy(default.geometry)
+        self._artifact_proposals = []
+        self.artifact_proposal_list.clear()
+        self._refresh()
+
+    def _scan_artifacts(self) -> None:
+        if self._frame is None:
+            self.artifact_status.setText("현재 프레임이 없어 후보를 만들 수 없습니다.")
+            return
+        detector_glass = deepcopy(self._working)
+        detector_glass.geometry.artifact_templates.clear()
+        try:
+            detection, artifacts = OpenCvPhaseDetector().detect(
+                self._frame,
+                detector_glass,
+                0,
+                0.0,
+                debug=True,
+            )
+        except Exception as exc:
+            self.artifact_status.setText(f"후보 생성 실패: {exc}")
+            return
+
+        proposals = []
+        candidates = sorted(
+            detection.candidates,
+            key=lambda candidate: (-float(candidate.final_score), float(candidate.y)),
+        )
+        for candidate in candidates:
+            if not math.isfinite(float(candidate.y)):
+                continue
+            template = template_from_candidate(
+                candidate,
+                name=f"경계 후보 {len(proposals) + 1}",
+            )
+            if template is None or any(
+                abs(template.center_y - existing.center_y) <= 0.025
+                and abs(template.center_x - existing.center_x) <= 0.08
+                for existing in proposals
+            ):
+                continue
+            proposals.append(template)
+            if len(proposals) >= 10:
+                break
+
+        if artifacts is not None:
+            glare = artifacts.images.get("glare_mask")
+            if glare is not None and glare.ndim == 2:
+                count, _labels, stats, _centroids = cv2.connectedComponentsWithStats(
+                    (glare > 0).astype("uint8"),
+                    connectivity=8,
+                )
+                origin_x = max(
+                    0,
+                    int(math.floor(detector_glass.geometry.ellipse.bounds.x)),
+                )
+                origin_y = max(
+                    0,
+                    int(math.floor(detector_glass.geometry.ellipse.bounds.y)),
+                )
+                regions = sorted(
+                    range(1, count),
+                    key=lambda label: -int(stats[label, cv2.CC_STAT_AREA]),
+                )
+                for label in regions[:4]:
+                    x = int(stats[label, cv2.CC_STAT_LEFT])
+                    y = int(stats[label, cv2.CC_STAT_TOP])
+                    width = int(stats[label, cv2.CC_STAT_WIDTH])
+                    height = int(stats[label, cv2.CC_STAT_HEIGHT])
+                    if width * height < 8:
+                        continue
+                    proposals.append(
+                        region_template_from_source_rect(
+                            Rect(origin_x + x, origin_y + y, width, height),
+                            detector_glass,
+                            name=f"광학 구역 후보 {len(proposals) + 1}",
+                        )
+                    )
+
+        self._artifact_proposals = proposals
+        self.artifact_proposal_list.clear()
+        for index, template in enumerate(proposals):
+            item = QListWidgetItem(
+                f"{index + 1}. {template.kind} · Y {template.center_y:.3f}"
+            )
+            item.setData(Qt.ItemDataRole.UserRole, index)
+            self.artifact_proposal_list.addItem(item)
+        self.artifact_status.setText(
+            f"{len(proposals)}개 후보를 표시했습니다. 선택 전에는 Profile에 반영되지 않습니다."
+        )
+        self._refresh()
+
+    def _accept_artifact(self) -> None:
+        item = self.artifact_proposal_list.currentItem()
+        if item is None:
+            self.artifact_status.setText("먼저 Artifact 후보를 선택하세요.")
+            return
+        index = int(item.data(Qt.ItemDataRole.UserRole))
+        template = self._artifact_proposals[index]
+        if not any(
+            existing.id == template.id
+            for existing in self._working.geometry.artifact_templates
+        ):
+            self._working.geometry.artifact_templates.append(template)
+        self.artifact_status.setText(
+            "선택한 후보를 Artifact로 지정했습니다. 적용 버튼을 눌러 Profile에 저장하세요."
+        )
+        self._refresh()
+
+    def _delete_artifact(self) -> None:
+        item = self.artifact_template_list.currentItem()
+        if item is None:
+            return
+        template_id = str(item.data(Qt.ItemDataRole.UserRole))
+        self._working.geometry.artifact_templates = [
+            template
+            for template in self._working.geometry.artifact_templates
+            if template.id != template_id
+        ]
+        self.artifact_status.setText("선택한 Artifact 지정을 삭제했습니다.")
         self._refresh()

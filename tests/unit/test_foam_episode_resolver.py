@@ -153,7 +153,11 @@ def test_confirming_foam_preserves_independently_selected_oil_provenance() -> No
         _detection(1, _foam_candidate(184.0, dynamic=0.16)),
     )
     for detection in detections:
-        detection.candidates.insert(0, _selected_oil_candidate())
+        oil = _selected_oil_candidate()
+        oil.y = 170.0
+        detection.candidates.insert(0, oil)
+        detection.raw_oil_air_level_y = 170.0
+        detection.oil_air_level_y = 170.0
 
     resolved, _ = FoamEpisodeResolver().resolve(detections, glass_config())
 
@@ -163,7 +167,7 @@ def test_confirming_foam_preserves_independently_selected_oil_provenance() -> No
     )
 
 
-def test_foam_composes_with_full_but_cannot_promote_unknown() -> None:
+def test_foam_composes_with_full_and_preserves_unknown_observation() -> None:
     full = (
         _detection(0, _foam_candidate(180.0, dynamic=0.2), state=FillState.FULL_NO_INTERFACE),
         _detection(1, _foam_candidate(174.0, dynamic=0.2), state=FillState.FULL_NO_INTERFACE),
@@ -179,7 +183,38 @@ def test_foam_composes_with_full_but_cannot_promote_unknown() -> None:
 
     assert all(item.fill_state is FillState.FULL_WITH_FOAM for item in full_result)
     assert all(item.fill_state is FillState.UNKNOWN_REVIEW for item in unknown_result)
-    assert all(item.raw_foam_front_y is None for item in unknown_result)
+    assert [item.raw_foam_front_y for item in unknown_result] == [180.0, 174.0]
+    assert all(
+        "R8_FOAM_WITHOUT_RESOLVED_OIL_STATE" in item.flags
+        for item in unknown_result
+    )
+    assert all(
+        "R8_FOAM_EVIDENCE_PRESERVED" in item.flags
+        for item in unknown_result
+    )
+
+
+def test_topology_conflict_preserves_both_observations_but_state_is_unknown() -> None:
+    detections = (
+        _detection(0, _foam_candidate(190.0, dynamic=0.20)),
+        _detection(1, _foam_candidate(184.0, dynamic=0.20)),
+    )
+    for detection in detections:
+        oil = _selected_oil_candidate()
+        oil.y = 170.0
+        detection.candidates.insert(0, oil)
+        detection.raw_oil_air_level_y = 170.0
+        detection.oil_air_level_y = 170.0
+
+    resolved, _ = FoamEpisodeResolver().resolve(detections, glass_config())
+
+    assert all(item.fill_state is FillState.UNKNOWN_REVIEW for item in resolved)
+    assert [item.raw_oil_air_level_y for item in resolved] == [170.0, 170.0]
+    assert [item.raw_foam_front_y for item in resolved] == [190.0, 184.0]
+    assert all(
+        "R8_FOAM_OIL_TOPOLOGY_CONFLICT" in item.flags
+        for item in resolved
+    )
 
 
 def test_one_registered_motion_spike_inside_static_glare_cannot_confirm_foam() -> None:

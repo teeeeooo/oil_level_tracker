@@ -20,6 +20,8 @@ def _candidate(
     border: float = 0.0,
     material_texture_conflict: float = 0.0,
     registered_internal_motion: float = 0.0,
+    registered_oil_motion: float = 0.0,
+    registered_oil_motion_coverage: float = 0.0,
     source: str | None = None,
     selected: bool = False,
 ) -> BoundaryCandidate:
@@ -43,6 +45,8 @@ def _candidate(
             "registered_motion_available": float(registered_internal_motion > 0.0),
             "registered_internal_motion_support": registered_internal_motion,
             "registered_dynamic_support": registered_internal_motion,
+            "registered_oil_band_motion_support": registered_oil_motion,
+            "registered_oil_band_motion_coverage": registered_oil_motion_coverage,
         },
         penalties={
             "artifact_likelihood": artifact,
@@ -399,8 +403,26 @@ def test_foam_only_glare_rejection_does_not_erase_independent_oil_candidate() ->
     assert _oil_y(result) == [150.0, 151.0, 152.0]
 
 
-def test_selected_row_inside_coherent_material_texture_cannot_anchor_oil() -> None:
-    detections = tuple(
+def test_user_calibrated_artifact_is_ineligible_but_stays_in_trace() -> None:
+    detections = []
+    for index in range(4):
+        candidate = _candidate(150.0, boundary=0.88, broad=0.88, selected=True)
+        candidate.features["calibrated_artifact_match"] = 0.95
+        candidate.rejected = True
+        candidate.reject_reason = "calibrated_artifact:template-1"
+        detections.append(_detection(index, candidate, ambiguity=0.10))
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert _oil_y(result) == [None] * 4
+    assert all(
+        detection.candidates[0].reject_reason == "calibrated_artifact:template-1"
+        for detection in result.detections
+    )
+
+
+def test_foam_material_texture_cannot_veto_independent_oil_authority() -> None:
+    conflicted = tuple(
         _detection(
             index,
             _candidate(
@@ -414,20 +436,35 @@ def test_selected_row_inside_coherent_material_texture_cannot_anchor_oil() -> No
         )
         for index in range(8)
     )
-
-    result = OilObservationResolver().resolve(detections, glass_config())
-
-    assert _oil_y(result) == [None] * len(detections)
-
-
-def test_foam_raster_motion_cannot_grant_oil_authority_to_texture_twin() -> None:
-    static = tuple(
+    neutral = tuple(
         _detection(
             index,
             _candidate(
                 132.0,
                 boundary=0.82,
                 broad=0.82,
+                selected=True,
+            ),
+            ambiguity=0.20,
+        )
+        for index in range(8)
+    )
+
+    resolver = OilObservationResolver()
+
+    assert _oil_y(resolver.resolve(conflicted, glass_config())) == _oil_y(
+        resolver.resolve(neutral, glass_config())
+    )
+
+
+def test_foam_raster_motion_is_not_oil_motion_authority() -> None:
+    static = tuple(
+        _detection(
+            index,
+            _candidate(
+                132.0,
+                boundary=0.16,
+                broad=0.16,
                 material_texture_conflict=0.66,
                 selected=True,
             ),
@@ -440,8 +477,8 @@ def test_foam_raster_motion_cannot_grant_oil_authority_to_texture_twin() -> None
             index,
             _candidate(
                 132.0 - index,
-                boundary=0.82,
-                broad=0.82,
+                boundary=0.16,
+                broad=0.16,
                 material_texture_conflict=0.66,
                 registered_internal_motion=0.30,
                 selected=True,
@@ -455,6 +492,42 @@ def test_foam_raster_motion_cannot_grant_oil_authority_to_texture_twin() -> None
 
     assert _oil_y(resolver.resolve(static, glass_config())) == [None] * 6
     assert _oil_y(resolver.resolve(dynamic, glass_config())) == [None] * 6
+
+
+def test_registered_oil_motion_extends_anchor_backed_material_continuation() -> None:
+    detections = []
+    for index in range(8):
+        if index < 5:
+            candidate = _candidate(
+                170.0 - index * 4.0,
+                boundary=0.46,
+                broad=0.50,
+                source="r6_material_path",
+                registered_oil_motion=1.0,
+                registered_oil_motion_coverage=1.0,
+            )
+            candidate.features.update(
+                {
+                    "r6_material_path": 1.0,
+                    "material_path_sector_fraction": 1.0,
+                }
+            )
+        else:
+            candidate = _candidate(
+                170.0 - index * 4.0,
+                boundary=0.82,
+                broad=0.82,
+                selected=True,
+            )
+        detections.append(_detection(index, candidate, ambiguity=0.20))
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert _oil_y(result) == [170.0 - index * 4.0 for index in range(8)]
+    assert all(
+        "R7_OIL_CONTINUATION" in item.flags
+        for item in result.detections[:5]
+    )
 
 
 def test_terminal_material_fallback_requires_broad_cross_roi_support() -> None:

@@ -219,6 +219,11 @@ class FoamEpisodeResolver:
                 "R7_FOAM_OIL_TOPOLOGY_CONFLICT",
                 "R7_FOAM_STATIC_ARTIFACT_REJECTED",
                 "R7_FOAM_UNCONFIRMED",
+                "R8_FOAM_EPISODE_CONFIRMED",
+                "R8_FOAM_EVIDENCE_PRESERVED",
+                "R8_FOAM_WITHOUT_RESOLVED_OIL_STATE",
+                "R8_FOAM_EMPTY_STATE_CONFLICT",
+                "R8_FOAM_OIL_TOPOLOGY_CONFLICT",
             }
         ]
         candidates = [
@@ -245,6 +250,9 @@ class FoamEpisodeResolver:
                 "r7_foam_dynamic_support": (
                     0.0 if evidence is None else float(evidence.dynamic_support)
                 ),
+                "r8_foam_evidence_preserved": bool(
+                    confirmed and evidence is not None
+                ),
             }
         )
         base = replace(
@@ -263,47 +271,7 @@ class FoamEpisodeResolver:
         elif unconfirmed_rejected:
             flags.append("R7_FOAM_UNCONFIRMED")
 
-        topology_conflict = bool(
-            confirmed
-            and evidence is not None
-            and evidence.whiteness >= 0.55
-            and base.oil_air_level_y is not None
-            and float(base.oil_air_level_y) <= evidence.material_bottom_y
-        )
-        if topology_conflict:
-            flags.append("R7_FOAM_OIL_TOPOLOGY_CONFLICT")
-            conflicted_candidates = [
-                replace(
-                    candidate,
-                    selected=False,
-                    rejected=True,
-                    reject_reason="r7_confirmed_foam_oil_topology_conflict",
-                )
-                if candidate.kind in {BoundaryKind.OIL_AIR, BoundaryKind.FOAM_FRONT}
-                else candidate
-                for candidate in base.candidates
-            ]
-            return replace(
-                base,
-                fill_state=FillState.UNKNOWN_REVIEW,
-                oil_air_level_y=None,
-                oil_air_level_px_from_zero=None,
-                oil_air_level_mm_from_zero=None,
-                oil_air_confidence=0.0,
-                overall_confidence=min(base.overall_confidence, 0.40),
-                raw_oil_air_level_y=None,
-                smoothed_oil_air_level_y=None,
-                candidates=conflicted_candidates,
-                flags=sorted(set(flags)),
-            )
-
-        state_known = base.fill_state in {
-            FillState.FULL_NO_INTERFACE,
-            FillState.FILLING_VISIBLE,
-            FillState.PARTIAL_VISIBLE,
-            FillState.DRAINING_VISIBLE,
-        }
-        if not confirmed or evidence is None or not state_known:
+        if not confirmed or evidence is None:
             return replace(base, flags=sorted(set(flags)))
 
         y = float(evidence.candidate.y)
@@ -334,12 +302,45 @@ class FoamEpisodeResolver:
                     reject_reason="" if selected else candidate.reject_reason,
                 )
             )
-        composed = (
-            FillState.FULL_WITH_FOAM
-            if base.fill_state is FillState.FULL_NO_INTERFACE
-            else FillState.FOAMING_VISIBLE
+        topology_conflict = bool(
+            evidence.whiteness >= 0.55
+            and base.oil_air_level_y is not None
+            and float(base.oil_air_level_y) <= evidence.material_bottom_y
         )
-        flags.extend(("R7_FOAM_EPISODE_CONFIRMED", "FOAM_STRONG_EVIDENCE"))
+        if topology_conflict:
+            composed = FillState.UNKNOWN_REVIEW
+            flags.extend(
+                (
+                    "R7_FOAM_OIL_TOPOLOGY_CONFLICT",
+                    "R8_FOAM_OIL_TOPOLOGY_CONFLICT",
+                )
+            )
+        elif base.fill_state in {
+            FillState.FULL_NO_INTERFACE,
+            FillState.FULL_WITH_FOAM,
+        }:
+            composed = FillState.FULL_WITH_FOAM
+        elif base.fill_state in {
+            FillState.FILLING_VISIBLE,
+            FillState.PARTIAL_VISIBLE,
+            FillState.DRAINING_VISIBLE,
+            FillState.FOAMING_VISIBLE,
+        }:
+            composed = FillState.FOAMING_VISIBLE
+        elif base.fill_state is FillState.EMPTY_NO_INTERFACE:
+            composed = FillState.UNKNOWN_REVIEW
+            flags.append("R8_FOAM_EMPTY_STATE_CONFLICT")
+        else:
+            composed = FillState.UNKNOWN_REVIEW
+            flags.append("R8_FOAM_WITHOUT_RESOLVED_OIL_STATE")
+        flags.extend(
+            (
+                "R7_FOAM_EPISODE_CONFIRMED",
+                "R8_FOAM_EPISODE_CONFIRMED",
+                "R8_FOAM_EVIDENCE_PRESERVED",
+                "FOAM_STRONG_EVIDENCE",
+            )
+        )
         top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
         bottom = glass.geometry.ellipse.center_y + glass.geometry.ellipse.radius_y
         if (y - top) / max(1.0, bottom - top) <= 0.12:
@@ -351,7 +352,11 @@ class FoamEpisodeResolver:
             foam_front_px_from_zero=px,
             foam_front_mm_from_zero=mm,
             foam_confidence=confidence,
-            overall_confidence=max(base.overall_confidence, confidence * 0.85),
+            overall_confidence=(
+                min(0.40, max(base.overall_confidence, confidence * 0.50))
+                if composed is FillState.UNKNOWN_REVIEW
+                else max(base.overall_confidence, confidence * 0.85)
+            ),
             raw_foam_front_y=y,
             smoothed_foam_front_y=y,
             candidates=selected_candidates,

@@ -6,7 +6,13 @@ from typing import Any
 from uuid import uuid4
 
 from .enums import InitialObservationState, JudgmentMode
-from .geometry import EllipseGeometry, ExclusionZone, GlassGeometry, Rect
+from .geometry import (
+    ArtifactTemplate,
+    EllipseGeometry,
+    ExclusionZone,
+    GlassGeometry,
+    Rect,
+)
 
 SCHEMA_VERSION = 1
 
@@ -137,6 +143,10 @@ class InspectionRecipe:
                         "exclusions": [
                             {"id": z.id, "name": z.name, "note": z.note, "rect": rect_dict(z.rect)} for z in g.geometry.exclusions
                         ],
+                        "artifact_templates": [
+                            asdict(template)
+                            for template in g.geometry.artifact_templates
+                        ],
                     },
                     "initial_state": g.initial_state.value,
                     "mm_per_pixel": g.mm_per_pixel,
@@ -171,7 +181,27 @@ class InspectionRecipe:
             for z in geo.get("exclusions", []):
                 r = z["rect"]
                 exclusions.append(ExclusionZone(z["id"], Rect(float(r["x"]), float(r["y"]), float(r["width"]), float(r["height"])), z.get("name", "Exclusion"), z.get("note", "")))
-            geometry = GlassGeometry(ellipse, geo.get("zero_line_y"), float(geo.get("margin_ratio", 0.08)), exclusions)
+            artifact_templates = [
+                ArtifactTemplate(
+                    id=str(value["id"]),
+                    kind=str(value["kind"]),
+                    center_x=float(value["center_x"]),
+                    center_y=float(value["center_y"]),
+                    width=float(value["width"]),
+                    height=float(value["height"]),
+                    angle_deg=float(value.get("angle_deg", 0.0)),
+                    name=str(value.get("name", "Artifact")),
+                    note=str(value.get("note", "")),
+                )
+                for value in geo.get("artifact_templates", [])
+            ]
+            geometry = GlassGeometry(
+                ellipse,
+                geo.get("zero_line_y"),
+                float(geo.get("margin_ratio", 0.08)),
+                exclusions,
+                artifact_templates,
+            )
             jr = dict(raw.get("judgment_rule", {}))
             jr["mode"] = JudgmentMode(jr.get("mode", JudgmentMode.RECOVERY.value))
             ds = DetectorSettings(**raw.get("detector_settings", {}))

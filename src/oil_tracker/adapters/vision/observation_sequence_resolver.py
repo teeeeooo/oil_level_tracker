@@ -11,7 +11,7 @@ from .foam_episode_resolver import FoamEpisodeResolver
 from .oil_observation_resolver import OilObservationResolver
 
 
-OBSERVATION_SEQUENCE_VERSION = "r7-evidence-tiered-trajectory-v1"
+OBSERVATION_SEQUENCE_VERSION = "r8-observation-recovery-v1"
 
 
 @dataclass(frozen=True)

@@ -788,6 +788,7 @@ def _translate_glass_to_crop(
         else glass.geometry.zero_line_y - oy,
         glass.geometry.margin_ratio,
         exclusions,
+        list(glass.geometry.artifact_templates),
     )
     return replace(glass, geometry=geometry)
 

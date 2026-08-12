@@ -7,6 +7,7 @@ import numpy as np
 import pytest
 
 from foam_benchmark_fixtures import controlled_scenes
+from oil_tracker.adapters.vision.artifact_calibration import template_from_candidate
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
 from oil_tracker.adapters.vision.opencv_phase_detector import (
     OpenCvPhaseDetector,
@@ -69,7 +70,7 @@ def test_detector_identity_input_immutability_and_debug_false_fast_path():
         frame,
         debug=False,
     )
-    assert OpenCvPhaseDetector.version == "opencv-phase-detector-r7-evidence-tiered-v1"
+    assert OpenCvPhaseDetector.version == "opencv-phase-detector-r8-observation-recovery-v1"
     assert artifacts is None
     assert np.array_equal(frame, before)
     assert any(
@@ -112,6 +113,39 @@ def test_detector_uses_canonical_source_coordinates_and_exposes_finite_evidence(
         assert isinstance(value, (int, float))
         assert math.isfinite(float(value))
     assert detection.debug_metrics["foam_registered_internal_motion_support"] >= 0.0
+
+
+def test_user_calibrated_boundary_is_removed_from_live_preview_authority():
+    frame = _scene("clear-boundary").frame
+    source_glass = _glass()
+    source, _ = _confirmed_detection(
+        OpenCvPhaseDetector(),
+        source_glass,
+        frame,
+    )
+    selected = next(
+        candidate
+        for candidate in source.candidates
+        if candidate.kind is BoundaryKind.OIL_AIR and candidate.selected
+    )
+    template = template_from_candidate(selected, name="사용자 지정 반사선")
+    assert template is not None
+
+    calibrated_glass = _glass()
+    calibrated_glass.geometry.artifact_templates.append(template)
+    calibrated, _ = _confirmed_detection(
+        OpenCvPhaseDetector(),
+        calibrated_glass,
+        frame,
+    )
+
+    assert calibrated.raw_oil_air_level_y is None
+    assert calibrated.oil_air_level_y is None
+    assert "R8_CALIBRATED_ARTIFACT_REJECTED" in calibrated.flags
+    assert any(
+        candidate.reject_reason == f"calibrated_artifact:{template.id}"
+        for candidate in calibrated.candidates
+    )
 
 
 def test_debug_images_are_additive_crop_sized_evidence_artifacts():
