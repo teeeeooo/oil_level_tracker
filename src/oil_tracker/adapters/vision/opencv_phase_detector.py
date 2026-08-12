@@ -236,12 +236,18 @@ class OpenCvPhaseDetector:
             bundle.effective_mask,
         )
         material_path_candidates: list[BoundaryCandidate] = []
+        artifact_template_count = len(glass.geometry.artifact_templates)
         for candidate in generate_material_path_candidates(
                 pre,
                 bundle.effective_mask,
                 static_map,
                 crop_origin_y=float(bundle.crop_origin[1]),
-                top_k=max(1, min(6, int(settings.candidate_top_k))),
+                top_k=_artifact_compensated_top_k(
+                    settings.candidate_top_k,
+                    artifact_template_count,
+                    base_cap=6,
+                    calibrated_cap=8,
+                ),
                 # Generic material texture is corroboration for a lower phase
                 # boundary; it is not accepted/public Foam authority.
                 material_evidence_map=foam.combined_evidence_map,
@@ -293,7 +299,12 @@ class OpenCvPhaseDetector:
             bundle.effective_mask,
             static_map,
             crop_origin_y=float(bundle.crop_origin[1]),
-            top_k=max(1, min(4, int(settings.candidate_top_k))),
+            top_k=_artifact_compensated_top_k(
+                settings.candidate_top_k,
+                artifact_template_count,
+                base_cap=4,
+                calibrated_cap=6,
+            ),
             material_evidence_map=None,
         ):
             if any(
@@ -868,6 +879,18 @@ class OpenCvPhaseDetector:
             },
         )
 
+def _artifact_compensated_top_k(
+    configured: int,
+    artifact_template_count: int,
+    *,
+    base_cap: int,
+    calibrated_cap: int,
+) -> int:
+    """Keep the ordinary proposal budget after user-confirmed exclusions."""
+
+    ordinary = max(1, min(int(base_cap), int(configured)))
+    compensation = min(3, max(0, int(artifact_template_count)))
+    return min(int(calibrated_cap), ordinary + compensation)
 
 
 def _isolated_pipeline_inputs(

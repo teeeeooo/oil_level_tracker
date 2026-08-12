@@ -421,6 +421,35 @@ def test_user_calibrated_artifact_is_ineligible_but_stays_in_trace() -> None:
     )
 
 
+def test_calibrated_artifacts_do_not_consume_actual_oil_top_k_capacity() -> None:
+    detections = []
+    for index in range(5):
+        artifacts = []
+        for offset in range(5):
+            candidate = _candidate(
+                60.0 + offset * 18.0,
+                boundary=0.94 - offset * 0.01,
+                broad=0.92,
+            )
+            candidate.features["calibrated_artifact_match"] = 0.95
+            candidate.rejected = True
+            candidate.reject_reason = f"calibrated_artifact:template-{offset}"
+            artifacts.append(candidate)
+        detections.append(
+            _detection(
+                index,
+                *artifacts,
+                _candidate(180.0 + index, boundary=0.82, broad=0.82),
+                ambiguity=0.10,
+            )
+        )
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert _oil_y(result) == [180.0 + index for index in range(5)]
+    assert result.diagnostics.ineligible_candidate_count == 25
+
+
 def test_foam_material_texture_cannot_veto_independent_oil_authority() -> None:
     conflicted = tuple(
         _detection(
