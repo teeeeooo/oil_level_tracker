@@ -17,6 +17,7 @@ class FoamEpisodeDiagnostics:
     episode_count: int
     rejected_static_episode_count: int
     rejected_unconfirmed_episode_count: int
+    rejected_oil_alias_episode_count: int
 
 
 @dataclass(frozen=True)
@@ -56,15 +57,20 @@ class FoamEpisodeResolver:
         confirmed_frames: set[int] = set()
         rejected_static_frames: set[int] = set()
         rejected_unconfirmed_frames: set[int] = set()
+        rejected_oil_alias_frames: set[int] = set()
         episode_count = 0
         static_count = 0
         unconfirmed_count = 0
+        oil_alias_count = 0
+        oil_alias_tracks: list[tuple[int, float]] = []
         for group in groups:
             group_frames = {item.frame_offset for item in group}
             onset_groups = _dynamic_onset_groups(group)
             rejected_unconfirmed_frames.update(group_frames)
             accepted_any = False
             static_dominated_any = False
+            oil_alias_any = False
+            alias_group_frames: set[int] = set()
             for onset in onset_groups or (group,):
                 accepted, static_dominated = _episode_accepted(onset, glass)
                 static_dominated_any = static_dominated_any or static_dominated
@@ -72,6 +78,28 @@ class FoamEpisodeResolver:
                     continue
                 supported = _supported_episode(onset, glass)
                 if supported:
+                    if _episode_aliases_oil(
+                        supported,
+                        source,
+                        glass,
+                    ) or _episode_continues_oil_alias(
+                        supported,
+                        oil_alias_tracks,
+                        glass,
+                    ):
+                        oil_alias_any = True
+                        alias_frames = {
+                            item.frame_offset for item in supported
+                        }
+                        alias_group_frames.update(alias_frames)
+                        rejected_oil_alias_frames.update(alias_frames)
+                        oil_alias_tracks.append(
+                            (
+                                supported[-1].frame_offset,
+                                float(supported[-1].candidate.y),
+                            )
+                        )
+                        continue
                     accepted_any = True
                     episode_count += 1
                     confirmed_frames.update(item.frame_offset for item in supported)
@@ -79,6 +107,10 @@ class FoamEpisodeResolver:
                         item.frame_offset for item in supported
                     )
             if accepted_any:
+                continue
+            if oil_alias_any:
+                oil_alias_count += 1
+                rejected_unconfirmed_frames.difference_update(alias_group_frames)
                 continue
             if static_dominated_any:
                 static_count += 1
@@ -95,6 +127,7 @@ class FoamEpisodeResolver:
                 confirmed=index in confirmed_frames,
                 static_rejected=index in rejected_static_frames,
                 unconfirmed_rejected=index in rejected_unconfirmed_frames,
+                oil_alias_rejected=index in rejected_oil_alias_frames,
             )
             for index, detection in enumerate(source)
         )
@@ -111,6 +144,7 @@ class FoamEpisodeResolver:
             episode_count=episode_count,
             rejected_static_episode_count=static_count,
             rejected_unconfirmed_episode_count=unconfirmed_count,
+            rejected_oil_alias_episode_count=oil_alias_count,
         )
 
     def _frame_evidence(
@@ -200,6 +234,7 @@ class FoamEpisodeResolver:
         confirmed: bool,
         static_rejected: bool,
         unconfirmed_rejected: bool,
+        oil_alias_rejected: bool,
     ) -> PhaseDetection:
         flags = [
             flag
@@ -224,6 +259,7 @@ class FoamEpisodeResolver:
                 "R8_FOAM_WITHOUT_RESOLVED_OIL_STATE",
                 "R8_FOAM_EMPTY_STATE_CONFLICT",
                 "R8_FOAM_OIL_TOPOLOGY_CONFLICT",
+                "R8_FOAM_OIL_ALIAS_REJECTED",
             }
         ]
         candidates = [
@@ -268,6 +304,8 @@ class FoamEpisodeResolver:
         )
         if static_rejected:
             flags.append("R7_FOAM_STATIC_ARTIFACT_REJECTED")
+        elif oil_alias_rejected:
+            flags.append("R8_FOAM_OIL_ALIAS_REJECTED")
         elif unconfirmed_rejected:
             flags.append("R7_FOAM_UNCONFIRMED")
 
@@ -490,6 +528,52 @@ def _supported_episode(
         if jump <= maximum_jump * max(1, frame_gap):
             supported.append(item)
     return tuple(supported)
+
+
+def _episode_aliases_oil(
+    group: tuple[_FoamEvidence, ...],
+    detections: tuple[PhaseDetection, ...],
+    glass: GlassInspectionConfig,
+) -> bool:
+    """Reject a Foam track repeatedly coincident with same-frame Oil."""
+
+    tolerance = max(
+        10.0,
+        float(glass.detector_settings.temporal_max_jump_px) * 0.65,
+    )
+    matched = 0
+    for evidence in group:
+        oil_y = detections[evidence.frame_offset].raw_oil_air_level_y
+        if _finite(oil_y) and abs(
+            float(evidence.candidate.y) - float(oil_y)
+        ) <= tolerance:
+            matched += 1
+    required = min(2, len(group))
+    return required > 0 and matched >= required
+
+
+def _episode_continues_oil_alias(
+    group: tuple[_FoamEvidence, ...],
+    aliases: list[tuple[int, float]],
+    glass: GlassInspectionConfig,
+) -> bool:
+    if not group or not aliases:
+        return False
+    horizon = max(4, int(glass.detector_settings.oil_path_window) * 2)
+    tolerance = max(
+        10.0,
+        float(glass.detector_settings.temporal_max_jump_px) * 0.65,
+    )
+    first_frame = group[0].frame_offset
+    return any(
+        0 < first_frame - alias_frame <= horizon
+        and min(
+            abs(float(item.candidate.y) - alias_y)
+            for item in group
+        )
+        <= tolerance
+        for alias_frame, alias_y in aliases
+    )
 
 
 def _finite(value: object) -> bool:

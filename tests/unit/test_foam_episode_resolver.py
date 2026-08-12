@@ -154,10 +154,10 @@ def test_confirming_foam_preserves_independently_selected_oil_provenance() -> No
     )
     for detection in detections:
         oil = _selected_oil_candidate()
-        oil.y = 170.0
+        oil.y = 100.0
         detection.candidates.insert(0, oil)
-        detection.raw_oil_air_level_y = 170.0
-        detection.oil_air_level_y = 170.0
+        detection.raw_oil_air_level_y = 100.0
+        detection.oil_air_level_y = 100.0
 
     resolved, _ = FoamEpisodeResolver().resolve(detections, glass_config())
 
@@ -194,7 +194,7 @@ def test_foam_composes_with_full_and_preserves_unknown_observation() -> None:
     )
 
 
-def test_topology_conflict_preserves_both_observations_but_state_is_unknown() -> None:
+def test_foam_track_aliasing_oil_is_rejected_with_raw_candidate_preserved() -> None:
     detections = (
         _detection(0, _foam_candidate(190.0, dynamic=0.20)),
         _detection(1, _foam_candidate(184.0, dynamic=0.20)),
@@ -208,12 +208,50 @@ def test_topology_conflict_preserves_both_observations_but_state_is_unknown() ->
 
     resolved, _ = FoamEpisodeResolver().resolve(detections, glass_config())
 
-    assert all(item.fill_state is FillState.UNKNOWN_REVIEW for item in resolved)
+    assert all(item.fill_state is FillState.PARTIAL_VISIBLE for item in resolved)
     assert [item.raw_oil_air_level_y for item in resolved] == [170.0, 170.0]
-    assert [item.raw_foam_front_y for item in resolved] == [190.0, 184.0]
+    assert [item.raw_foam_front_y for item in resolved] == [None, None]
     assert all(
-        "R8_FOAM_OIL_TOPOLOGY_CONFLICT" in item.flags
+        "R8_FOAM_OIL_ALIAS_REJECTED" in item.flags
         for item in resolved
+    )
+    assert all(
+        any(candidate.kind is BoundaryKind.FOAM_FRONT for candidate in item.candidates)
+        for item in resolved
+    )
+
+
+def test_later_foam_group_continuing_rejected_oil_alias_is_also_rejected() -> None:
+    detections = (
+        _detection(0, _foam_candidate(190.0, dynamic=0.20)),
+        _detection(1, _foam_candidate(189.0, dynamic=0.20)),
+        _detection(2, None, state=FillState.UNKNOWN_REVIEW),
+        _detection(3, None, state=FillState.UNKNOWN_REVIEW),
+        _detection(
+            4,
+            _foam_candidate(188.0, dynamic=0.20),
+            state=FillState.UNKNOWN_REVIEW,
+        ),
+        _detection(
+            5,
+            _foam_candidate(187.0, dynamic=0.20),
+            state=FillState.UNKNOWN_REVIEW,
+        ),
+    )
+    for detection in detections[:2]:
+        detection.raw_oil_air_level_y = 170.0
+        detection.oil_air_level_y = 170.0
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.rejected_oil_alias_episode_count == 2
+    assert all(item.raw_foam_front_y is None for item in resolved)
+    assert all(
+        "R8_FOAM_OIL_ALIAS_REJECTED" in resolved[index].flags
+        for index in (0, 1, 4, 5)
     )
 
 

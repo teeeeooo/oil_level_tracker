@@ -36,6 +36,7 @@ class ObservationSequenceDiagnostics:
     foam_episode_count: int
     foam_rejected_static_episode_count: int
     foam_rejected_unconfirmed_episode_count: int
+    foam_rejected_oil_alias_episode_count: int
 
 
 @dataclass(frozen=True)
@@ -89,6 +90,9 @@ class ObservationSequenceResolver:
             foam_rejected_static_episode_count=foam.rejected_static_episode_count,
             foam_rejected_unconfirmed_episode_count=(
                 foam.rejected_unconfirmed_episode_count
+            ),
+            foam_rejected_oil_alias_episode_count=(
+                foam.rejected_oil_alias_episode_count
             ),
         )
         return ObservationSequenceResolution(foam_detections, diagnostics)
