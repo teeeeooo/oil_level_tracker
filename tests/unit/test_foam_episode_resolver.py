@@ -255,6 +255,44 @@ def test_later_foam_group_continuing_rejected_oil_alias_is_also_rejected() -> No
     )
 
 
+def test_foam_aliases_strong_same_frame_oil_candidate_before_publication() -> None:
+    detections = (
+        _detection(
+            0,
+            _foam_candidate(190.0, dynamic=0.20),
+            state=FillState.UNKNOWN_REVIEW,
+        ),
+        _detection(
+            1,
+            _foam_candidate(184.0, dynamic=0.20),
+            state=FillState.UNKNOWN_REVIEW,
+        ),
+    )
+    for index, detection in enumerate(detections):
+        detection.candidates.insert(
+            0,
+            BoundaryCandidate(
+                source="material_path",
+                kind=BoundaryKind.OIL_AIR,
+                y=188.0 - index * 4.0,
+                features={
+                    "boundary_likelihood": 0.94,
+                    "artifact_likelihood": 0.08,
+                },
+                final_score=0.94,
+            ),
+        )
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.rejected_oil_alias_episode_count == 1
+    assert all(item.raw_foam_front_y is None for item in resolved)
+    assert all("R8_FOAM_OIL_ALIAS_REJECTED" in item.flags for item in resolved)
+
+
 def test_one_registered_motion_spike_inside_static_glare_cannot_confirm_foam() -> None:
     detections = tuple(
         _detection(

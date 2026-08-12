@@ -126,6 +126,7 @@ class _CandidateRef:
     cluster_support: float = 0.0
     trajectory_support: float = 0.0
     track_opposition: float = 0.0
+    foam_alias_penalty: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -279,6 +280,14 @@ class OilObservationResolver:
                 if candidate.kind is BoundaryKind.OIL_AIR
                 and _finite(candidate.y)
             )
+            foam_rows = tuple(
+                float(candidate.y)
+                for candidate in detection.candidates
+                if candidate.kind is BoundaryKind.FOAM_FRONT
+                and _finite(candidate.y)
+                and _unit(candidate.features.get("sequence_foam_eligible", 0.0))
+                >= 0.5
+            )
             for candidate_offset, candidate in enumerate(detection.candidates):
                 if candidate.kind is not BoundaryKind.OIL_AIR or not _finite(candidate.y):
                     continue
@@ -311,6 +320,11 @@ class OilObservationResolver:
                 if authority is OilCandidateAuthority.HARD_INVALID:
                     ineligible += 1
                     continue
+                foam_alias_penalty = _foam_front_alias_penalty(
+                    candidate,
+                    foam_rows,
+                    glass,
+                )
                 refs.append(
                     _CandidateRef(
                         frame_offset=frame_offset,
@@ -322,6 +336,7 @@ class OilObservationResolver:
                         )
                         + 0.14 * representation_support
                         + 0.18 * semantic_corridor_support
+                        - foam_alias_penalty
                         + (
                             0.16
                             if authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
@@ -331,6 +346,7 @@ class OilObservationResolver:
                         representation_support=representation_support,
                         semantic_corridor_support=semantic_corridor_support,
                         terminal_fallback=allow_terminal_anchor,
+                        foam_alias_penalty=foam_alias_penalty,
                     )
                 )
             refs.sort(
@@ -1479,6 +1495,21 @@ def _candidate_is_r8_supplemental(candidate: BoundaryCandidate) -> bool:
     return _unit(candidate.features.get("r8_supplemental_path", 0.0)) >= 0.5
 
 
+def _foam_front_alias_penalty(
+    candidate: BoundaryCandidate,
+    foam_rows: tuple[float, ...],
+    glass: GlassInspectionConfig,
+) -> float:
+    if not foam_rows:
+        return 0.0
+    tolerance = max(
+        8.0,
+        float(glass.detector_settings.temporal_max_jump_px) * 0.35,
+    )
+    distance = min(abs(float(candidate.y) - y) for y in foam_rows)
+    return 0.52 * _unit(1.0 - distance / tolerance)
+
+
 def _candidate_optics_opposition(candidate: BoundaryCandidate) -> float:
     penalties = candidate.penalties
     return _unit(
@@ -1560,6 +1591,7 @@ def _oil_emission(ref: _CandidateRef) -> float:
         - 0.34 * _candidate_static_contradiction(candidate)
         - 0.28 * _candidate_ambiguity(candidate)
         - 0.72 * ref.track_opposition
+        - ref.foam_alias_penalty
         + (
             0.22 * _candidate_terminal_support(candidate)
             if ref.terminal_fallback

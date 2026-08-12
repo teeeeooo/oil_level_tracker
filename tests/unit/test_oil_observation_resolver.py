@@ -403,6 +403,47 @@ def test_foam_only_glare_rejection_does_not_erase_independent_oil_candidate() ->
     assert _oil_y(result) == [150.0, 151.0, 152.0]
 
 
+def test_foam_front_proximity_is_comparative_not_an_oil_veto() -> None:
+    with_alternative = tuple(
+        _detection(
+            index,
+            _candidate(184.0 + index, boundary=0.84, broad=0.84),
+            _candidate(150.0 + index, boundary=0.80, broad=0.80),
+            BoundaryCandidate(
+                source="foam_evidence",
+                kind=BoundaryKind.FOAM_FRONT,
+                y=182.0 + index,
+                features={"sequence_foam_eligible": 1.0},
+            ),
+            ambiguity=0.10,
+        )
+        for index in range(5)
+    )
+    only_alias = tuple(
+        _detection(
+            index,
+            _candidate(184.0 + index, boundary=0.84, broad=0.84),
+            BoundaryCandidate(
+                source="foam_evidence",
+                kind=BoundaryKind.FOAM_FRONT,
+                y=182.0 + index,
+                features={"sequence_foam_eligible": 1.0},
+            ),
+            ambiguity=0.10,
+        )
+        for index in range(5)
+    )
+
+    alternative = OilObservationResolver().resolve(
+        with_alternative,
+        glass_config(),
+    )
+    alias_only = OilObservationResolver().resolve(only_alias, glass_config())
+
+    assert _oil_y(alternative) == [150.0 + index for index in range(5)]
+    assert _oil_y(alias_only) == [184.0 + index for index in range(5)]
+
+
 def test_user_calibrated_artifact_is_ineligible_but_stays_in_trace() -> None:
     detections = []
     for index in range(4):

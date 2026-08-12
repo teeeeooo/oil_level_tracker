@@ -543,9 +543,32 @@ def _episode_aliases_oil(
     )
     matched = 0
     for evidence in group:
-        oil_y = detections[evidence.frame_offset].raw_oil_air_level_y
-        if _finite(oil_y) and abs(
-            float(evidence.candidate.y) - float(oil_y)
+        detection = detections[evidence.frame_offset]
+        oil_rows = [
+            float(candidate.y)
+            for candidate in detection.candidates
+            if candidate.kind is BoundaryKind.OIL_AIR
+            and _finite(candidate.y)
+            and _unit(
+                candidate.features.get(
+                    "boundary_likelihood",
+                    candidate.feature_score,
+                )
+            )
+            >= 0.90
+            and _unit(
+                candidate.features.get(
+                    "artifact_likelihood",
+                    candidate.penalties.get("artifact_likelihood", 0.0),
+                )
+            )
+            <= 0.46
+        ]
+        if _finite(detection.raw_oil_air_level_y):
+            oil_rows.append(float(detection.raw_oil_air_level_y))
+        if oil_rows and min(
+            abs(float(evidence.candidate.y) - oil_y)
+            for oil_y in oil_rows
         ) <= tolerance:
             matched += 1
     required = min(2, len(group))
