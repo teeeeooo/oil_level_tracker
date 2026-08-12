@@ -272,29 +272,40 @@ def _window_mean(
     *,
     before: bool,
 ) -> np.ndarray:
-    output = np.zeros_like(values, dtype=np.float32)
-    for row in range(values.size):
-        if before:
-            start, stop = max(0, row - scale), row
-        else:
-            start, stop = row + 1, min(values.size, row + scale + 1)
-        if stop <= start:
-            continue
-        weights = support[start:stop]
-        total = float(np.sum(weights))
-        if total <= 1e-6:
-            continue
-        output[row] = float(np.sum(values[start:stop] * weights) / total)
-    return output
+    size = int(values.size)
+    if size == 0:
+        return np.zeros_like(values, dtype=np.float32)
+    rows = np.arange(size, dtype=np.int64)
+    if before:
+        starts = np.maximum(0, rows - int(scale))
+        stops = rows
+    else:
+        starts = rows + 1
+        stops = np.minimum(size, rows + int(scale) + 1)
+    weights = support.astype(np.float64, copy=False)
+    weighted = values.astype(np.float64, copy=False) * weights
+    weight_prefix = np.concatenate(([0.0], np.cumsum(weights)))
+    value_prefix = np.concatenate(([0.0], np.cumsum(weighted)))
+    totals = weight_prefix[stops] - weight_prefix[starts]
+    numerators = value_prefix[stops] - value_prefix[starts]
+    output = np.zeros(size, dtype=np.float64)
+    np.divide(numerators, totals, out=output, where=totals > 1e-6)
+    return output.astype(np.float32)
 
 
 def _window_support(support: np.ndarray, scale: int) -> np.ndarray:
-    output = np.zeros_like(support, dtype=np.float32)
-    for row in range(support.size):
-        start = max(0, row - scale)
-        stop = min(support.size, row + scale + 1)
-        output[row] = float(np.mean(support[start:stop]))
-    return output
+    size = int(support.size)
+    if size == 0:
+        return np.zeros_like(support, dtype=np.float32)
+    rows = np.arange(size, dtype=np.int64)
+    starts = np.maximum(0, rows - int(scale))
+    stops = np.minimum(size, rows + int(scale) + 1)
+    prefix = np.concatenate(
+        ([0.0], np.cumsum(support.astype(np.float64, copy=False)))
+    )
+    totals = prefix[stops] - prefix[starts]
+    counts = np.maximum(1, stops - starts)
+    return (totals / counts).astype(np.float32)
 
 
 def _seed_rows(profiles: list[_SectorProfile]) -> tuple[int, ...]:

@@ -1043,18 +1043,22 @@ def _robust_sector_phase(
 ) -> tuple[float, float] | None:
     """Return median/MAD only when every visible sector row retains samples."""
 
-    chunks: list[np.ndarray] = []
-    for row in rows:
-        reference = reference_mask[row, first_column:last_column]
-        if not np.any(reference):
-            continue
-        selected = residual_mask[row, first_column:last_column]
-        if not np.any(selected):
-            return None
-        chunks.append(image[row, first_column:last_column][selected].astype(np.float64))
-    if not chunks:
+    row_slice = slice(rows.start, rows.stop, rows.step)
+    reference = reference_mask[row_slice, first_column:last_column]
+    selected = residual_mask[row_slice, first_column:last_column]
+    if reference.size == 0 or selected.size == 0:
         return None
-    values = np.concatenate(chunks)
+    reference_rows = np.any(reference, axis=1)
+    if not np.any(reference_rows):
+        return None
+    selected_rows = np.any(selected, axis=1)
+    if np.any(reference_rows & ~selected_rows):
+        return None
+    values = image[row_slice, first_column:last_column][
+        selected & reference_rows[:, None]
+    ].astype(np.float64)
+    if values.size == 0:
+        return None
     center = float(np.median(values))
     mad = float(np.median(np.abs(values - center)))
     return center, mad
