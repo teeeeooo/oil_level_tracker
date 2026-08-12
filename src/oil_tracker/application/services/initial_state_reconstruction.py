@@ -259,7 +259,10 @@ def effective_state_aware_coverage(
 
 
 def samples_for_judgment(samples, interpretation, mode: JudgmentMode):
-    if mode is JudgmentMode.RECOVERY:
+    if (
+        mode is JudgmentMode.RECOVERY
+        or _is_presentation_only_hold(interpretation)
+    ):
         return list(samples)
     return project_state_aware_samples(list(samples), interpretation)
 
@@ -282,7 +285,12 @@ def annotate_judgment_provenance(
     interpretation: RetrospectiveInterpretation | None,
     mode: JudgmentMode,
 ):
-    if interpretation is None or not interpretation.accepted or mode is JudgmentMode.RECOVERY:
+    if (
+        interpretation is None
+        or not interpretation.accepted
+        or mode is JudgmentMode.RECOVERY
+        or _is_presentation_only_hold(interpretation)
+    ):
         return outcome
     return replace(
         outcome,
@@ -314,7 +322,11 @@ def merge_state_aware_events(
     interpretation: RetrospectiveInterpretation | None,
 ):
     """Keep observed-quality/numeric events and add only retrospective state events."""
-    if interpretation is None or not interpretation.accepted:
+    if (
+        interpretation is None
+        or not interpretation.accepted
+        or _is_presentation_only_hold(interpretation)
+    ):
         return list(observed_events)
     attributable = {
         "FULL_NO_INTERFACE_START",
@@ -335,6 +347,15 @@ def merge_state_aware_events(
             output.append(event)
             existing.add(key)
     return sorted(output, key=lambda event: (event.start_time_sec, event.event_type.value))
+
+
+def _is_presentation_only_hold(
+    interpretation: RetrospectiveInterpretation | None,
+) -> bool:
+    return bool(
+        interpretation is not None
+        and interpretation.provenance == "confirmed_initial_state_hold_v1"
+    )
 
 
 def _accepted_boundary_y(sample: TrackingSample) -> float | None:

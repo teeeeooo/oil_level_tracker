@@ -299,6 +299,20 @@ def test_no_public_oil_keeps_confirmed_initial_state_as_presentation_hold():
     assert all(item.fill_state is FillState.FULL_NO_INTERFACE for item in projected)
     assert all(item.raw_oil_air_level_y is None for item in projected)
     assert all("R8_CONFIRMED_INITIAL_STATE_HOLD" in item.flags for item in projected)
+    assert samples_for_judgment(
+        samples,
+        result,
+        JudgmentMode.HOLD_BELOW_ZERO,
+    ) == samples
+    observed = detect_events_for_glass("run", glass.id, samples)
+    projected_events = detect_events_for_glass("run", glass.id, projected)
+    assert merge_state_aware_events(observed, projected_events, result) == observed
+    base = JudgmentOutcome(ResultState.PASS, 1.0, "base")
+    assert annotate_judgment_provenance(
+        base,
+        result,
+        JudgmentMode.HOLD_BELOW_ZERO,
+    ) == base
 
 
 @pytest.mark.parametrize(
