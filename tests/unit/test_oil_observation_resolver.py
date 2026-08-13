@@ -3,8 +3,11 @@ from __future__ import annotations
 from oil_tracker.adapters.vision.oil_observation_resolver import (
     OilObservationResolver,
 )
+from dataclasses import replace
+
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 from oil_tracker.domain.enums import BoundaryKind, FillState, InitialObservationState
+from oil_tracker.domain.geometry import ArtifactTemplate
 from tests.fixtures.synthetic import glass_config
 
 
@@ -105,6 +108,98 @@ def _detection(
 
 def _oil_y(result) -> list[float | None]:
     return [item.raw_oil_air_level_y for item in result.detections]
+
+
+def _calibrated_candidate(y: float, *, source: str = "calibrated") -> BoundaryCandidate:
+    candidate = _candidate(
+        y,
+        boundary=0.36,
+        broad=0.38,
+        artifact=0.08,
+        ambiguity=0.32,
+        registered_oil_motion=0.82,
+        registered_oil_motion_coverage=0.88,
+        source=source,
+    )
+    return replace(
+        candidate,
+        features={
+            **candidate.features,
+            "r8_supplemental_path": 1.0,
+            "r9_calibrated_high_recall": 1.0,
+        },
+    )
+
+
+def _with_artifact_calibration():
+    glass = glass_config()
+    glass.geometry.artifact_templates.append(
+        ArtifactTemplate(
+            id="fixed-rim",
+            kind="line",
+            center_x=0.5,
+            center_y=0.8,
+            width=0.8,
+            height=0.02,
+        )
+    )
+    return glass
+
+
+def test_calibrated_dynamic_seed_requires_explicit_artifact_calibration() -> None:
+    detections = tuple(
+        _detection(index, _calibrated_candidate(184.0 - 7.0 * index), ambiguity=0.25)
+        for index in range(8)
+    )
+
+    result = OilObservationResolver().resolve(detections, glass_config())
+
+    assert _oil_y(result) == [None] * 8
+
+
+def test_calibrated_dynamic_seed_bootstraps_one_moving_oil_path() -> None:
+    detections = tuple(
+        _detection(index, _calibrated_candidate(184.0 - 7.0 * index), ambiguity=0.25)
+        for index in range(8)
+    )
+
+    result = OilObservationResolver().resolve(
+        detections,
+        _with_artifact_calibration(),
+    )
+
+    assert _oil_y(result) == [184.0 - 7.0 * index for index in range(8)]
+    assert result.diagnostics.qualified_anchor_count == 8
+    assert all(
+        any(
+            candidate.features.get("r9_calibrated_dynamic_seed") == 1.0
+            for candidate in detection.candidates
+        )
+        for detection in result.detections
+    )
+
+
+def test_calibrated_dynamic_seed_rejects_static_or_competing_paths() -> None:
+    static = tuple(
+        _detection(index, _calibrated_candidate(150.0), ambiguity=0.25)
+        for index in range(8)
+    )
+    competing = tuple(
+        _detection(
+            index,
+            _calibrated_candidate(184.0 - 7.0 * index, source="path-a"),
+            _calibrated_candidate(112.0 + 7.0 * index, source="path-b"),
+            ambiguity=0.25,
+        )
+        for index in range(8)
+    )
+    glass = _with_artifact_calibration()
+
+    static_result = OilObservationResolver().resolve(static, glass)
+    competing_result = OilObservationResolver().resolve(competing, glass)
+
+    assert _oil_y(static_result) == [None] * 8
+    assert _oil_y(competing_result) == [None] * 8
 
 
 def test_continuous_material_path_beats_disconnected_stronger_rows() -> None:

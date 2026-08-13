@@ -12,6 +12,155 @@ from .preprocessing import PreprocessResult
 from .row_features import masked_row_mean, row_coverage
 
 
+def generate_calibrated_high_recall_candidates(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    static_artifact_map: np.ndarray | None,
+    *,
+    crop_origin_y: float,
+    limit: int = 8,
+) -> tuple[BoundaryCandidate, ...]:
+    """Expose weak distributed rows after explicit negative calibration.
+
+    This lane is called only when the operator has saved artifact templates.
+    It deliberately retains more weak rows than the ordinary detector, while
+    preserving the same hard visibility/optics boundary. Templates are applied
+    to the returned spatial signatures before sequence resolution, so excluded
+    structures cannot consume the useful calibrated budget.
+    """
+
+    if pre.sobel_y_abs.shape != effective_mask.shape:
+        raise ValueError("Calibrated Sobel inputs must share one raster shape.")
+    if (
+        static_artifact_map is not None
+        and static_artifact_map.shape != effective_mask.shape
+    ):
+        raise ValueError("Calibrated Sobel static map must match the Oil raster.")
+    if limit < 1:
+        return ()
+
+    effective = effective_mask > 0
+    visible = effective & ~(pre.glare_mask > 0)
+    height, width = effective.shape
+    if height < 32 or width < 12 or np.count_nonzero(visible) < 32:
+        return ()
+
+    energy = masked_row_mean(pre.sobel_y_abs, visible)
+    maximum = float(np.max(energy)) if energy.size else 0.0
+    if maximum <= 0.0:
+        return ()
+    response = np.clip(energy / maximum, 0.0, 1.0)
+    signed = masked_row_mean(pre.sobel_y_signed, visible)
+    canny_coverage = row_coverage(pre.horizontal_mask, visible)
+    support = np.count_nonzero(visible, axis=1).astype(np.float32) / max(1, width)
+    distributed = _distributed_band_support(pre.sobel_y_abs, visible)
+    combined = np.clip(
+        0.46 * response
+        + 0.27 * distributed
+        + 0.17 * canny_coverage
+        + 0.10 * support,
+        0.0,
+        1.0,
+    )
+    # Mask coverage contributes at most 0.10 by itself; keep the floor above
+    # that value so a completely flat visible row is never proposed.
+    rows = _bounded_peak_rows(combined, max(limit * 4, 24), minimum=0.14)
+    ranked = sorted(rows, key=lambda row: (-float(combined[row]), row))
+    selected: list[int] = []
+    for row in ranked:
+        if support[row] < 0.25:
+            continue
+        optics = _band_overlap(pre.glare_mask, effective, row, radius=2)
+        if optics >= 0.55:
+            continue
+        if any(abs(row - existing) <= 5 for existing in selected):
+            continue
+        selected.append(row)
+        if len(selected) >= limit:
+            break
+
+    output = []
+    for row in selected:
+        strength = _unit(float(response[row]))
+        horizontal = _unit(float(max(canny_coverage[row], distributed[row])))
+        availability = _unit(float(support[row]))
+        polarity = _unit(abs(float(signed[row])) / 80.0)
+        static = _band_overlap(static_artifact_map, effective, row, radius=2)
+        optics = _band_overlap(pre.glare_mask, effective, row, radius=2)
+        boundary = _unit(
+            0.42 * strength
+            + 0.28 * horizontal
+            + 0.14 * polarity
+            + 0.16 * availability
+        )
+        artifact = _unit(0.65 * optics + 0.35 * static)
+        ambiguity = _unit(
+            0.42 * (1.0 - strength)
+            + 0.26 * (1.0 - horizontal)
+            + 0.20 * artifact
+            + 0.12 * (1.0 - polarity)
+        )
+        source_y = float(crop_origin_y + row)
+        output.append(
+            BoundaryCandidate(
+                source="r9_calibrated_high_recall",
+                kind=BoundaryKind.OIL_AIR,
+                y=source_y,
+                features={
+                    "r8_supplemental_path": 1.0,
+                    "r9_calibrated_high_recall": 1.0,
+                    "local_y": float(row),
+                    "source_y": source_y,
+                    "boundary_likelihood": boundary,
+                    "artifact_likelihood": artifact,
+                    "ambiguity_likelihood": ambiguity,
+                    "evidence_availability": availability,
+                    "visibility": _unit(1.0 - optics),
+                    "broad_strength": strength,
+                    "narrow_peak_strength": strength,
+                    "narrow_horizontal_coverage": horizontal,
+                    "broad_scale_consistency": horizontal,
+                    "polarity_confidence": polarity,
+                    "static_prior_contribution": static,
+                    "sequence_eligible": 1.0,
+                },
+                penalties={
+                    "artifact_likelihood": artifact,
+                    "ambiguity_likelihood": ambiguity,
+                    "static_prior_contribution": static,
+                    "static_artifact_penalty": static,
+                    "glare_conflict": optics,
+                    "optics_conflict": optics,
+                    "exclusion_conflict": 0.0,
+                    "border_penalty": 0.0,
+                },
+                feature_score=boundary,
+                penalty=_unit(artifact + ambiguity),
+                final_score=boundary,
+                selected=False,
+                rejected=False,
+            )
+        )
+    return tuple(output)
+
+
+def _distributed_band_support(
+    sobel: np.ndarray,
+    visible: np.ndarray,
+) -> np.ndarray:
+    values = sobel.astype(np.float32, copy=False)
+    visible_values = values[visible]
+    if not visible_values.size:
+        return np.zeros(values.shape[0], dtype=np.float32)
+    threshold = max(4.0, float(np.percentile(visible_values, 65.0)))
+    supported = visible & (values >= threshold)
+    counts = np.count_nonzero(visible, axis=1)
+    return np.divide(
+        np.count_nonzero(supported, axis=1).astype(np.float32),
+        np.maximum(1, counts),
+    ).astype(np.float32)
+
+
 def generate_distributed_sobel_candidates(
     pre: PreprocessResult,
     effective_mask: np.ndarray,

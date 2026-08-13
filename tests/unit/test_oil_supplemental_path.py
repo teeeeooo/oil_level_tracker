@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from oil_tracker.adapters.vision.oil_supplemental_path import (
+    generate_calibrated_high_recall_candidates,
     generate_distributed_sobel_candidates,
 )
 from oil_tracker.adapters.vision.preprocessing import PreprocessResult
@@ -69,3 +70,38 @@ def test_distributed_sobel_requires_matching_raster_shapes() -> None:
         assert "share one raster shape" in str(exc)
     else:
         raise AssertionError("shape mismatch must be rejected")
+
+
+def test_calibrated_high_recall_keeps_multiple_distributed_weak_rows() -> None:
+    pre, mask = _preprocess_with_hidden_distributed_ridge()
+
+    candidates = generate_calibrated_high_recall_candidates(
+        pre,
+        mask,
+        None,
+        crop_origin_y=100.0,
+        limit=5,
+    )
+
+    assert 2 <= len(candidates) <= 5
+    assert all(candidate.source == "r9_calibrated_high_recall" for candidate in candidates)
+    assert all(
+        candidate.features["r9_calibrated_high_recall"] == 1.0
+        for candidate in candidates
+    )
+    assert all(candidate.features["sequence_eligible"] == 1.0 for candidate in candidates)
+
+
+def test_calibrated_high_recall_excludes_glare_dominated_rows() -> None:
+    pre, mask = _preprocess_with_hidden_distributed_ridge()
+    pre.glare_mask[26:31] = 255
+
+    candidates = generate_calibrated_high_recall_candidates(
+        pre,
+        mask,
+        None,
+        crop_origin_y=0.0,
+        limit=12,
+    )
+
+    assert all(abs(candidate.y - 28.0) > 5.0 for candidate in candidates)

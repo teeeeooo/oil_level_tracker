@@ -80,6 +80,9 @@ class OilObservationResolverConfig:
     trajectory_spike_min_px: float = 8.0
     trajectory_spike_tolerance_ratio: float = 0.25
     trajectory_spike_lookaround_frames: int = 3
+    calibrated_seed_min_frames: int = 6
+    calibrated_seed_min_span_ratio: float = 0.035
+    calibrated_seed_competition_margin: float = 0.06
 
 
 class OilCandidateAuthority(IntEnum):
@@ -185,6 +188,10 @@ class OilObservationResolver:
         refs_by_frame, ineligible_count = self._candidate_refs(source, glass)
         refs_by_frame, track_count, maximum_track_opposition = (
             self._apply_track_opposition(refs_by_frame, glass)
+        )
+        refs_by_frame = self._apply_calibrated_dynamic_seed(
+            refs_by_frame,
+            glass,
         )
         refs_by_frame = self._apply_cluster_and_trajectory_support(
             refs_by_frame,
@@ -373,6 +380,55 @@ class OilObservationResolver:
                     selected_refs.append(supplemental)
             rows.append(tuple(selected_refs))
         return tuple(rows), ineligible
+
+    def _apply_calibrated_dynamic_seed(
+        self,
+        refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
+        glass: GlassInspectionConfig,
+    ) -> tuple[tuple[_CandidateRef, ...], ...]:
+        """Bootstrap one moving Oil path after explicit artifact calibration.
+
+        The seed cannot exist without a user template, cannot use a candidate
+        near eligible Foam, and must move materially across at least six frames.
+        A similarly strong competing path leaves all candidates unchanged.
+        """
+
+        if not glass.geometry.artifact_templates:
+            return refs_by_frame
+        paths = _calibrated_dynamic_paths(refs_by_frame, glass, self.config)
+        if not paths:
+            return refs_by_frame
+        best = paths[0]
+        if (
+            len(paths) > 1
+            and paths[1][0] >= best[0] * 0.80
+            and paths[1][1]
+            >= best[1] - self.config.calibrated_seed_competition_margin
+        ):
+            return refs_by_frame
+        promoted = {
+            (ref.frame_offset, ref.candidate_offset) for ref in best[2]
+        }
+        return tuple(
+            tuple(
+                replace(
+                    ref,
+                    candidate=replace(
+                        ref.candidate,
+                        features={
+                            **ref.candidate.features,
+                            "r9_calibrated_dynamic_seed": 1.0,
+                        },
+                    ),
+                    authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                    local_quality=ref.local_quality + 0.08,
+                )
+                if (ref.frame_offset, ref.candidate_offset) in promoted
+                else ref
+                for ref in refs
+            )
+            for refs in refs_by_frame
+        )
 
     def _apply_cluster_and_trajectory_support(
         self,
@@ -1540,6 +1596,147 @@ def _candidate_is_r8_supplemental(candidate: BoundaryCandidate) -> bool:
     return _unit(candidate.features.get("r8_supplemental_path", 0.0)) >= 0.5
 
 
+def _calibrated_dynamic_paths(
+    refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
+    glass: GlassInspectionConfig,
+    config: OilObservationResolverConfig,
+) -> tuple[tuple[int, float, tuple[_CandidateRef, ...]], ...]:
+    """Return distinct, materially moving continuation paths.
+
+    This is intentionally a bootstrap mechanism, not a second resolver.  It
+    only considers candidates that already passed ordinary continuation gates,
+    have candidate-local registered motion, and are separated from an eligible
+    Foam front.  Explicit artifact calibration is checked by the caller and by
+    the candidate eligibility gate before refs reach this function.
+    """
+
+    maximum_jump = max(
+        4.0,
+        float(glass.detector_settings.temporal_max_jump_px) * 0.75,
+    )
+    minimum_span = max(
+        10.0,
+        float(glass.geometry.ellipse.radius_y)
+        * 2.0
+        * config.calibrated_seed_min_span_ratio,
+    )
+    paths_by_key: dict[
+        tuple[int, int],
+        tuple[tuple[_CandidateRef, ...], ...],
+    ] = {}
+    for frame_offset, refs in enumerate(refs_by_frame):
+        eligible = tuple(
+            ref
+            for ref in refs
+            if ref.authority >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
+            and ref.track_opposition < config.recurring_track_reject_opposition
+            and ref.foam_alias_penalty <= 0.12
+            and _candidate_registered_motion(ref.candidate)
+            >= config.dynamic_anchor_min_support
+            and _candidate_registered_motion_coverage(ref.candidate)
+            >= config.dynamic_anchor_min_coverage
+            and _candidate_artifact_signature(ref.candidate)
+            <= config.continuation_max_artifact
+            and _candidate_ambiguity(ref.candidate)
+            <= config.continuation_max_ambiguity
+        )
+        for ref in eligible:
+            choices: list[tuple[_CandidateRef, ...]] = [(ref,)]
+            for gap in (1, 2):
+                prior_frame = frame_offset - gap
+                if prior_frame < 0:
+                    continue
+                for prior in refs_by_frame[prior_frame]:
+                    prior_paths = paths_by_key.get(
+                        (prior.frame_offset, prior.candidate_offset),
+                        (),
+                    )
+                    if not prior_paths:
+                        continue
+                    if abs(float(ref.candidate.y) - float(prior.candidate.y)) > (
+                        maximum_jump * gap
+                    ):
+                        continue
+                    choices.extend((*prior_path, ref) for prior_path in prior_paths)
+            choices.sort(
+                key=lambda path: (
+                    -len(path),
+                    -_path_directional_ratio(path),
+                    -sum(item.local_quality for item in path),
+                )
+            )
+            unique: list[tuple[_CandidateRef, ...]] = []
+            seen: set[tuple[tuple[int, int], ...]] = set()
+            for path in choices:
+                identity = tuple(
+                    (item.frame_offset, item.candidate_offset) for item in path
+                )
+                if identity in seen:
+                    continue
+                seen.add(identity)
+                unique.append(path)
+                if len(unique) >= 4:
+                    break
+            paths_by_key[(ref.frame_offset, ref.candidate_offset)] = tuple(unique)
+
+    candidates: list[tuple[int, float, tuple[_CandidateRef, ...]]] = []
+    for paths in paths_by_key.values():
+        for path in paths:
+            if len(path) < config.calibrated_seed_min_frames:
+                continue
+            ys = tuple(float(ref.candidate.y) for ref in path)
+            if max(ys) - min(ys) < minimum_span:
+                continue
+            directional_ratio = _path_directional_ratio(path)
+            if directional_ratio < 0.67:
+                continue
+            mean_quality = sum(ref.local_quality for ref in path) / len(path)
+            mean_motion = sum(
+                _candidate_registered_motion(ref.candidate) for ref in path
+            ) / len(path)
+            score = _unit(
+                0.68 * mean_quality
+                + 0.20 * mean_motion
+                + 0.12 * directional_ratio
+            )
+            candidates.append((len(path), score, path))
+
+    candidates.sort(key=lambda item: (-item[0], -item[1]))
+    distinct: list[tuple[int, float, tuple[_CandidateRef, ...]]] = []
+    for item in candidates:
+        keys = {
+            (ref.frame_offset, ref.candidate_offset) for ref in item[2]
+        }
+        if any(
+            len(
+                keys
+                & {
+                    (ref.frame_offset, ref.candidate_offset)
+                    for ref in existing[2]
+                }
+            )
+            >= 0.70 * min(len(keys), existing[0])
+            for existing in distinct
+        ):
+            continue
+        distinct.append(item)
+    return tuple(distinct)
+
+
+def _path_directional_ratio(path: tuple[_CandidateRef, ...]) -> float:
+    ys = tuple(float(ref.candidate.y) for ref in path)
+    deltas = tuple(
+        current - prior
+        for prior, current in zip(ys, ys[1:], strict=False)
+        if abs(current - prior) >= 1.0
+    )
+    if not deltas:
+        return 0.0
+    positive = sum(delta > 0.0 for delta in deltas)
+    negative = sum(delta < 0.0 for delta in deltas)
+    return max(positive, negative) / len(deltas)
+
+
 def _foam_front_alias_penalty(
     candidate: BoundaryCandidate,
     foam_rows: tuple[float, ...],
@@ -1759,6 +1956,11 @@ def _project_candidates(
             output.append(candidate)
             continue
         selected = selected_ref is not None and offset == selected_ref.candidate_offset
+        if selected:
+            # Sequence stages may add evidence to their immutable candidate
+            # ref (for example the calibrated dynamic seed).  Preserve that
+            # final evidence in the published candidate/debug surface.
+            candidate = selected_ref.candidate
         eligible = _candidate_eligible(candidate)
         output.append(
             replace(

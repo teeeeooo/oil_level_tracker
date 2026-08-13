@@ -31,7 +31,10 @@ from .oil_material_path import (
     generate_material_path_candidates,
     material_layer_context_features,
 )
-from .oil_supplemental_path import generate_distributed_sobel_candidates
+from .oil_supplemental_path import (
+    generate_calibrated_high_recall_candidates,
+    generate_distributed_sobel_candidates,
+)
 from .oil_shadow_pipeline import (
     OilHypothesisPipeline,
     oil_debug_detail,
@@ -348,6 +351,29 @@ class OpenCvPhaseDetector:
                 crop_origin_y=float(bundle.crop_origin[1]),
             )
         ]
+        calibrated_high_recall_candidates = [
+            replace(
+                candidate,
+                features={
+                    **candidate.features,
+                    **registered_oil_candidate_features(
+                        oil_motion,
+                        local_y=float(candidate.y) - float(bundle.crop_origin[1]),
+                    ),
+                },
+            )
+            for candidate in (
+                generate_calibrated_high_recall_candidates(
+                    pre,
+                    bundle.effective_mask,
+                    static_map,
+                    crop_origin_y=float(bundle.crop_origin[1]),
+                    limit=min(12, 6 + artifact_template_count),
+                )
+                if artifact_template_count
+                else ()
+            )
+        ]
         static_foam_map = self._static_foam_maps.get(glass.id)
         static_foam_match = _foam_static_match(foam.mask, static_foam_map)
         foam_temporal = self._foam_gate.evaluate(
@@ -517,6 +543,7 @@ class OpenCvPhaseDetector:
             *material_path_candidates,
             *raster_material_path_candidates,
             *distributed_sobel_candidates,
+            *calibrated_high_recall_candidates,
         ]
         raw_foam_candidate = foam.candidate
         if raw_foam_candidate is not None:
@@ -603,6 +630,9 @@ class OpenCvPhaseDetector:
             ),
             "r8_distributed_sobel_candidate_count": len(
                 distributed_sobel_candidates
+            ),
+            "r9_calibrated_high_recall_candidate_count": len(
+                calibrated_high_recall_candidates
             ),
             "r8_calibrated_artifact_rejected_count": (
                 calibrated_artifact_rejected_count
