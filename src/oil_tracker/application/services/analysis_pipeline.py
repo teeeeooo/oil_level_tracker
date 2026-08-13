@@ -207,6 +207,9 @@ class AnalysisPipeline:
                 sequence_resolver_enabled = sequence_resolver_enabled or diagnostics is not None
                 if diagnostics is not None:
                     sequence_diagnostics[glass.id] = diagnostics
+                annotate_sequence = getattr(sink, "annotate_sequence", None)
+                if callable(annotate_sequence):
+                    annotate_sequence(glass, resolved)
                 by_glass[glass.id] = [
                     tracking_sample_from_detection(run_id, glass, detection)
                     for detection in resolved

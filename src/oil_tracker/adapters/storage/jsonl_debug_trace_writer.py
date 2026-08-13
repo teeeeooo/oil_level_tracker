@@ -95,6 +95,7 @@ class JsonlDebugTraceWriter:
         self._handle = self.trace_path.open("wb")
         self._summaries: list[dict[str, Any]] = []
         self._keys: set[tuple[str, int, int]] = set()
+        self._sequence_annotations: dict[str, dict[str, Any]] = {}
         self._closed = False
         self._finalized = False
 
@@ -227,6 +228,27 @@ class JsonlDebugTraceWriter:
         )
         return record_id
 
+    def annotate_sequence(self, glass, detections) -> None:
+        """Attach final sequence decisions without re-running detection.
+
+        Frame images and the top-level record remain the raw current-frame
+        observation. The compact ``sequence`` member is added during finalize
+        so one record exposes both pre- and post-resolver truth.
+        """
+
+        if self._closed:
+            raise RuntimeError("Debug trace writer is closed.")
+        captured_ids = {summary["record_id"] for summary in self._summaries}
+        for detection in detections:
+            record_id = _record_id(
+                glass.id,
+                detection.frame_index,
+                detection.time_sec,
+            )
+            if record_id not in captured_ids:
+                continue
+            self._sequence_annotations[record_id] = _sequence_snapshot(detection)
+
     def finalize(self) -> DebugTraceCompletion:
         if self._finalized:
             return DebugTraceCompletion(
@@ -240,6 +262,8 @@ class JsonlDebugTraceWriter:
         os.fsync(self._handle.fileno())
         self._handle.close()
         self._closed = True
+        if self._sequence_annotations:
+            self._apply_sequence_annotations()
         glass_counts = Counter(summary["glass_id"] for summary in self._summaries)
         reason_counts = Counter(
             reason
@@ -273,6 +297,37 @@ class JsonlDebugTraceWriter:
             self.trace_level.value,
             self.record_count,
         )
+
+    def _apply_sequence_annotations(self) -> None:
+        temporary = self.trace_path.with_suffix(".jsonl.tmp")
+        try:
+            with self.trace_path.open("rb") as source, temporary.open("wb") as target:
+                for summary in self._summaries:
+                    line = source.readline()
+                    if not line:
+                        raise OSError("Debug trace ended before its index summaries.")
+                    record = json.loads(line)
+                    annotation = self._sequence_annotations.get(summary["record_id"])
+                    if annotation is not None:
+                        record["sequence"] = annotation
+                        summary["fill_state"] = annotation["fill_state"]
+                        summary["confidence"] = annotation["confidence"]["overall"]
+                    encoded = json.dumps(
+                        _json_safe(record),
+                        ensure_ascii=False,
+                        separators=(",", ":"),
+                        allow_nan=False,
+                    ).encode("utf-8")
+                    summary["byte_offset"] = target.tell()
+                    summary["byte_length"] = len(encoded)
+                    target.write(encoded)
+                    target.write(b"\n")
+                if source.readline():
+                    raise OSError("Debug trace has records missing from its index.")
+            os.replace(temporary, self.trace_path)
+        except Exception:
+            temporary.unlink(missing_ok=True)
+            raise
 
     def abort(self) -> None:
         if not self._closed:
@@ -322,6 +377,111 @@ def _finite_or_none(value: Any):
     except (TypeError, ValueError):
         return None
     return number if math.isfinite(number) else None
+
+
+def _sequence_snapshot(detection) -> dict[str, Any]:
+    candidates = []
+    for candidate in sorted(
+        detection.candidates,
+        key=lambda item: item.final_score,
+        reverse=True,
+    ):
+        if candidate.kind.value not in {"oil_air", "foam_front"}:
+            continue
+        features = candidate.features
+        initial = _authority_name(features.get("r9_initial_authority_tier"))
+        post_track = _authority_name(features.get("r9_post_track_authority_tier"))
+        authority = _authority_name(features.get("r9_final_authority_tier"))
+        candidates.append(
+            {
+                "kind": candidate.kind.value,
+                "source": candidate.source,
+                "canonical_y": candidate.y,
+                "initial_authority": initial,
+                "post_track_authority": post_track,
+                "authority": authority,
+                "cross_representation_support": features.get(
+                    "r9_cross_representation_support"
+                ),
+                "semantic_corridor_support": features.get(
+                    "r9_semantic_corridor_support"
+                ),
+                "track_opposition": features.get("r9_track_opposition"),
+                "cluster_support": features.get("r9_cluster_support"),
+                "trajectory_support": features.get("r9_trajectory_support"),
+                "foam_alias_penalty": features.get("r9_foam_alias_penalty"),
+                "calibrated_dynamic_seed": features.get(
+                    "r9_calibrated_dynamic_seed",
+                    0.0,
+                ),
+                "selected": candidate.selected,
+                "reject_stage": _sequence_reject_stage(candidate, authority),
+            }
+        )
+    state = {
+        str(key): value
+        for key, value in detection.debug_metrics.items()
+        if str(key).startswith(("sequence_", "r7_", "r8_", "r9_"))
+    }
+    return _json_safe(
+        {
+            "fill_state": detection.fill_state.value,
+            "confidence": {
+                "oil": detection.oil_air_confidence,
+                "foam": detection.foam_confidence,
+                "visibility": detection.visibility_confidence,
+                "overall": detection.overall_confidence,
+            },
+            "positions": {
+                "raw_oil_y": detection.raw_oil_air_level_y,
+                "smoothed_oil_y": detection.smoothed_oil_air_level_y,
+                "raw_foam_y": detection.raw_foam_front_y,
+                "smoothed_foam_y": detection.smoothed_foam_front_y,
+            },
+            "flags": list(detection.flags),
+            "state": state,
+            "candidates": candidates,
+        }
+    )
+
+
+def _authority_name(value: Any) -> str | None:
+    try:
+        tier = int(float(value))
+    except (TypeError, ValueError):
+        return None
+    return {
+        0: "HARD_INVALID",
+        1: "CANDIDATE_ONLY",
+        2: "CONTINUATION_ELIGIBLE",
+        3: "ANCHOR_ELIGIBLE",
+    }.get(tier)
+
+
+def _sequence_reject_stage(
+    candidate,
+    authority: str | None,
+) -> str:
+    if candidate.selected:
+        return "ACCEPTED"
+    if authority is None:
+        return (
+            "HARD_INVALID"
+            if candidate.reject_reason == "r7_candidate_hard_invalid"
+            else "TOP_K_PRUNED_OR_HARD_INVALID"
+        )
+    features = candidate.features
+    if authority == "CANDIDATE_ONLY":
+        if float(features.get("r9_track_opposition", 0.0)) >= 0.60:
+            return "TRACK_OPPOSITION"
+        return "CANDIDATE_ONLY"
+    if authority == "ANCHOR_ELIGIBLE" and float(
+        features.get("r9_cluster_support", 0.0)
+    ) < 0.99:
+        return "NO_CLUSTER_SUPPORT"
+    if float(features.get("r9_trajectory_support", 0.0)) < 0.99:
+        return "NO_TRAJECTORY_SUPPORT"
+    return "GLOBAL_PATH_OR_RUN_BOUND"
 
 
 def _json_safe(value: Any):

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 import shutil
 from types import SimpleNamespace
@@ -146,6 +147,52 @@ def test_duplicate_glass_frame_timestamp_is_not_written_twice(tmp_path):
     index = json.loads((Path(completion.staging_directory) / "debug_index.json").read_text(encoding="utf-8"))
     assert index["record_count"] == 1
     assert len((Path(completion.staging_directory) / "debug_trace.jsonl").read_text(encoding="utf-8").splitlines()) == 1
+
+
+def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_path):
+    glass = _glass("g1")
+    writer = JsonlDebugTraceWriter(
+        "run-1",
+        DebugTraceLevel.BASIC,
+        staging_parent=tmp_path,
+    )
+    raw = _detection(glass.id)
+    writer.write(glass, raw, _artifacts(), _decision())
+    final_candidate = replace(
+        raw.candidates[0],
+        features={
+            **raw.candidates[0].features,
+            "r9_initial_authority_tier": 2.0,
+            "r9_post_track_authority_tier": 2.0,
+            "r9_final_authority_tier": 3.0,
+            "r9_trajectory_support": 1.0,
+            "r9_cluster_support": 1.0,
+            "r9_sequence_selected": 1.0,
+        },
+    )
+    final = replace(
+        raw,
+        raw_oil_air_level_y=118.0,
+        fill_state=FillState.DRAINING_VISIBLE,
+        candidates=[final_candidate],
+        flags=["SEQUENCE_RESOLVED_OIL"],
+        debug_metrics={"sequence_resolved_kind": "oil"},
+    )
+
+    writer.annotate_sequence(glass, (final,))
+    completion = writer.finalize()
+    staging = Path(completion.staging_directory)
+    record = json.loads(
+        (staging / "debug_trace.jsonl").read_text(encoding="utf-8").splitlines()[0]
+    )
+    index = json.loads((staging / "debug_index.json").read_text(encoding="utf-8"))
+
+    assert record["positions"]["raw_oil_y"] == 120.0
+    assert record["sequence"]["positions"]["raw_oil_y"] == 118.0
+    assert record["sequence"]["candidates"][0]["initial_authority"] == "CONTINUATION_ELIGIBLE"
+    assert record["sequence"]["candidates"][0]["authority"] == "ANCHOR_ELIGIBLE"
+    assert record["sequence"]["candidates"][0]["reject_stage"] == "ACCEPTED"
+    assert index["records"][0]["fill_state"] == FillState.DRAINING_VISIBLE.value
 
 
 def test_abort_removes_staging_directory(tmp_path):

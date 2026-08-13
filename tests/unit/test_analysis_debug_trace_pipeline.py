@@ -113,12 +113,18 @@ class FakeSink:
         self.aborted = False
         self.fail_write = fail_write
         self.fail_finalize = fail_finalize
+        self.sequence_annotations = []
 
     def write(self, glass, detection, artifacts, decision):
         if self.fail_write:
             raise OSError("trace write failed")
         assert artifacts is not None
         self.records.append((glass.id, detection.frame_index, tuple(reason.value for reason in decision.reasons)))
+
+    def annotate_sequence(self, glass, detections):
+        self.sequence_annotations.append(
+            (glass.id, tuple(item.raw_oil_air_level_y for item in detections))
+        )
 
     def finalize(self):
         if self.fail_finalize:
@@ -235,6 +241,24 @@ def test_sequence_capable_detector_resolves_once_before_public_samples() -> None
     ]
     assert result.manifest["sequence_resolver_enabled"] is True
     assert result.manifest["sequence_resolver"][samples[0].glass_id]["version"] == "sequence-fake-v1"
+
+
+def test_debug_sink_receives_final_sequence_annotations() -> None:
+    detector = SequenceFakeDetector()
+    factory = FakeSinkFactory()
+
+    result, _reader, _detector = _run(
+        DebugTraceLevel.BASIC,
+        detector=detector,
+        factory=factory,
+    )
+
+    assert factory.sink.sequence_annotations == [
+        (
+            result.glass_results[0].glass_id,
+            (110.0, 111.0, 112.0, 113.0, 114.0),
+        )
+    ]
 
 
 def test_cancellation_aborts_sink_and_closes_reader():

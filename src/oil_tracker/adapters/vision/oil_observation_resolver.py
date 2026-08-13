@@ -125,6 +125,8 @@ class _CandidateRef:
     candidate: BoundaryCandidate
     local_quality: float
     authority: OilCandidateAuthority
+    initial_authority: OilCandidateAuthority = OilCandidateAuthority.CANDIDATE_ONLY
+    post_track_authority: OilCandidateAuthority = OilCandidateAuthority.CANDIDATE_ONLY
     representation_support: float = 0.0
     semantic_corridor_support: float = 0.0
     terminal_fallback: bool = False
@@ -214,6 +216,7 @@ class OilObservationResolver:
             self._project_detection(
                 detection,
                 node,
+                refs_by_frame[index],
                 path,
                 index,
                 glass,
@@ -352,6 +355,8 @@ class OilObservationResolver:
                             else 0.0
                         ),
                         authority=authority,
+                        initial_authority=authority,
+                        post_track_authority=authority,
                         representation_support=representation_support,
                         semantic_corridor_support=semantic_corridor_support,
                         terminal_fallback=allow_terminal_anchor,
@@ -759,6 +764,13 @@ class OilObservationResolver:
                 )
             reconciled.append(tuple(row))
         output = tuple(reconciled)
+        output = tuple(
+            tuple(
+                replace(ref, post_track_authority=ref.authority)
+                for ref in refs
+            )
+            for refs in output
+        )
         return output, len(recurring_tracks), maximum
 
     def _nodes_for_frame(
@@ -1161,13 +1173,18 @@ class OilObservationResolver:
         self,
         detection: PhaseDetection,
         node: _Node,
+        refs: tuple[_CandidateRef, ...],
         path: tuple[_Node, ...],
         frame_offset: int,
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None,
     ) -> PhaseDetection:
         flags = [flag for flag in detection.flags if flag not in _OIL_REPLACED_FLAGS]
-        candidates = _project_candidates(detection.candidates, node.candidate_ref)
+        candidates = _project_candidates(
+            detection.candidates,
+            node.candidate_ref,
+            refs,
+        )
         metrics = dict(detection.debug_metrics)
         metrics.update(
             {
@@ -1949,18 +1966,43 @@ def _visible_state(path: tuple[_Node, ...], index: int) -> FillState:
 def _project_candidates(
     candidates: Iterable[BoundaryCandidate],
     selected_ref: _CandidateRef | None,
+    refs: tuple[_CandidateRef, ...],
 ) -> list[BoundaryCandidate]:
     output: list[BoundaryCandidate] = []
+    refs_by_offset = {ref.candidate_offset: ref for ref in refs}
     for offset, candidate in enumerate(candidates):
         if candidate.kind is not BoundaryKind.OIL_AIR:
             output.append(candidate)
             continue
         selected = selected_ref is not None and offset == selected_ref.candidate_offset
-        if selected:
+        ref = refs_by_offset.get(offset)
+        if ref is not None:
             # Sequence stages may add evidence to their immutable candidate
-            # ref (for example the calibrated dynamic seed).  Preserve that
-            # final evidence in the published candidate/debug surface.
-            candidate = selected_ref.candidate
+            # refs. Preserve both the final evidence and the stage-specific
+            # authority needed for exact post-run diagnostics.
+            candidate = replace(
+                ref.candidate,
+                features={
+                    **ref.candidate.features,
+                    "r9_sequence_top_k": 1.0,
+                    "r9_initial_authority_tier": float(ref.initial_authority),
+                    "r9_post_track_authority_tier": float(
+                        ref.post_track_authority
+                    ),
+                    "r9_final_authority_tier": float(ref.authority),
+                    "r9_cross_representation_support": float(
+                        ref.representation_support
+                    ),
+                    "r9_semantic_corridor_support": float(
+                        ref.semantic_corridor_support
+                    ),
+                    "r9_track_opposition": float(ref.track_opposition),
+                    "r9_cluster_support": float(ref.cluster_support),
+                    "r9_trajectory_support": float(ref.trajectory_support),
+                    "r9_foam_alias_penalty": float(ref.foam_alias_penalty),
+                    "r9_sequence_selected": float(selected),
+                },
+            )
         eligible = _candidate_eligible(candidate)
         output.append(
             replace(
