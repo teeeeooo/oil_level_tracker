@@ -5,6 +5,7 @@ from uuid import uuid4
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
+    QAbstractItemView,
     QComboBox,
     QDialog,
     QDialogButtonBox,
@@ -14,7 +15,10 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QPushButton,
+    QScrollArea,
+    QSplitter,
     QVBoxLayout,
+    QWidget,
 )
 
 from oil_tracker.adapters.vision.artifact_proposal import propose_artifact_templates
@@ -45,7 +49,7 @@ class RoiEditorDialog(QDialog):
         instruction.setObjectName("roiEditorHint")
 
         self.canvas = VideoOverlayCanvas()
-        self.canvas.setMinimumSize(900, 560)
+        self.canvas.setMinimumSize(640, 320)
         self.canvas.set_frame(frame)
         self.canvas.geometryChanged.connect(self._ellipse_changed)
         self.canvas.zeroLineChanged.connect(self._zero_changed)
@@ -75,15 +79,20 @@ class RoiEditorDialog(QDialog):
         artifact_layout.addWidget(artifact_hint)
         artifact_lists = QHBoxLayout()
         self.artifact_proposal_list = QListWidget()
+        self.artifact_proposal_list.setSelectionMode(
+            QAbstractItemView.SelectionMode.ExtendedSelection
+        )
         self.artifact_template_list = QListWidget()
         artifact_lists.addWidget(self.artifact_proposal_list, 1)
         artifact_lists.addWidget(self.artifact_template_list, 1)
         artifact_layout.addLayout(artifact_lists)
         artifact_buttons = QHBoxLayout()
         self.scan_artifacts_button = QPushButton("Detector 후보 찾기")
-        self.accept_artifact_button = QPushButton("선택 후보를 Artifact로 지정")
+        self.select_all_artifacts_button = QPushButton("모든 후보 선택")
+        self.accept_artifact_button = QPushButton("선택 후보 일괄 Artifact 지정")
         self.delete_artifact_button = QPushButton("선택 Artifact 삭제")
         artifact_buttons.addWidget(self.scan_artifacts_button)
+        artifact_buttons.addWidget(self.select_all_artifacts_button)
         artifact_buttons.addWidget(self.accept_artifact_button)
         artifact_buttons.addWidget(self.delete_artifact_button)
         artifact_layout.addLayout(artifact_buttons)
@@ -101,17 +110,41 @@ class RoiEditorDialog(QDialog):
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(8)
         layout.addWidget(instruction)
-        layout.addWidget(self.canvas, 1)
-        layout.addLayout(controls)
-        layout.addWidget(artifact_group)
+        settings = QWidget()
+        settings_layout = QVBoxLayout(settings)
+        settings_layout.setContentsMargins(4, 4, 4, 4)
+        settings_layout.addLayout(controls)
+        settings_layout.addWidget(artifact_group)
+        settings_scroll = QScrollArea()
+        settings_scroll.setWidgetResizable(True)
+        settings_scroll.setFrameShape(QScrollArea.Shape.NoFrame)
+        settings_scroll.setWidget(settings)
+        settings_scroll.setMinimumHeight(210)
+
+        splitter = QSplitter(Qt.Orientation.Vertical)
+        splitter.setChildrenCollapsible(False)
+        splitter.addWidget(self.canvas)
+        splitter.addWidget(settings_scroll)
+        splitter.setStretchFactor(0, 4)
+        splitter.setStretchFactor(1, 1)
+        splitter.setSizes([560, 250])
+        self.content_splitter = splitter
+        self.settings_scroll = settings_scroll
+        layout.addWidget(splitter, 1)
         layout.addWidget(self.buttons)
 
         self.add_exclusion_button.clicked.connect(self._add_exclusion)
         self.delete_exclusion_button.clicked.connect(self._delete_exclusion)
         self.reset_geometry_button.clicked.connect(self._reset_geometry)
         self.scan_artifacts_button.clicked.connect(self._scan_artifacts)
+        self.select_all_artifacts_button.clicked.connect(
+            self.artifact_proposal_list.selectAll
+        )
         self.accept_artifact_button.clicked.connect(self._accept_artifact)
         self.delete_artifact_button.clicked.connect(self._delete_artifact)
+        self.artifact_proposal_list.itemSelectionChanged.connect(
+            self._artifact_proposal_selection_changed
+        )
         self._refresh()
 
     def edited_glass(self):
@@ -144,6 +177,7 @@ class RoiEditorDialog(QDialog):
             bool(self._working.geometry.artifact_templates)
         )
         self.canvas.set_artifact_proposals(self._artifact_proposals)
+        self._artifact_proposal_selection_changed()
 
     def _ellipse_changed(self, _glass_id: str, ellipse) -> None:
         self._working.geometry.ellipse = ellipse
@@ -222,21 +256,37 @@ class RoiEditorDialog(QDialog):
         self._refresh()
 
     def _accept_artifact(self) -> None:
-        item = self.artifact_proposal_list.currentItem()
-        if item is None:
+        items = self.artifact_proposal_list.selectedItems()
+        if not items:
             self.artifact_status.setText("먼저 Artifact 후보를 선택하세요.")
             return
-        index = int(item.data(Qt.ItemDataRole.UserRole))
-        template = self._artifact_proposals[index]
-        if not any(
-            existing.id == template.id
-            for existing in self._working.geometry.artifact_templates
-        ):
+        existing_ids = {
+            template.id for template in self._working.geometry.artifact_templates
+        }
+        added = 0
+        for item in items:
+            index = int(item.data(Qt.ItemDataRole.UserRole))
+            template = self._artifact_proposals[index]
+            if template.id in existing_ids:
+                continue
             self._working.geometry.artifact_templates.append(template)
+            existing_ids.add(template.id)
+            added += 1
         self.artifact_status.setText(
-            "선택한 후보를 Artifact로 지정했습니다. 적용 버튼을 눌러 Profile에 저장하세요."
+            f"선택한 후보 {added}개를 Artifact로 지정했습니다. "
+            "적용 버튼을 눌러 Profile에 저장하세요."
         )
         self._refresh()
+
+    def _artifact_proposal_selection_changed(self) -> None:
+        proposal_ids = {
+            self._artifact_proposals[int(item.data(Qt.ItemDataRole.UserRole))].id
+            for item in self.artifact_proposal_list.selectedItems()
+            if 0
+            <= int(item.data(Qt.ItemDataRole.UserRole))
+            < len(self._artifact_proposals)
+        }
+        self.canvas.set_highlighted_artifact_proposals(proposal_ids)
 
     def _delete_artifact(self) -> None:
         item = self.artifact_template_list.currentItem()

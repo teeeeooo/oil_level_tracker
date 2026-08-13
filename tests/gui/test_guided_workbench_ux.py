@@ -129,6 +129,58 @@ def test_roi_editor_accepts_detector_artifact_proposal_on_private_copy(
     assert templates[0].center_y == 0.4
 
 
+def test_roi_editor_bulk_selects_and_highlights_artifact_proposals(
+    qtbot,
+    monkeypatch,
+):
+    candidates = [
+        BoundaryCandidate(
+            source=f"proposal-{index}",
+            kind=BoundaryKind.OIL_AIR,
+            y=180.0 + index * 40.0,
+            features={
+                "artifact_center_x_norm": 0.5,
+                "artifact_center_y_norm": 0.3 + index * 0.2,
+                "artifact_width_norm": 0.6,
+                "artifact_height_norm": 0.02,
+                "artifact_angle_deg": 0.0,
+            },
+            final_score=0.8,
+        )
+        for index in range(2)
+    ]
+    proposals = [
+        template_from_candidate(candidate, name=f"경계 후보 {index + 1}")
+        for index, candidate in enumerate(candidates)
+    ]
+    monkeypatch.setattr(
+        "oil_tracker.ui.widgets.roi_editor_dialog.propose_artifact_templates",
+        lambda _frame, _glass: proposals,
+    )
+    glass = InspectionRecipe.default_glass(640, 480)
+    dialog = RoiEditorDialog(
+        np.zeros((480, 640, 3), dtype=np.uint8),
+        glass,
+        640,
+        480,
+    )
+    qtbot.addWidget(dialog)
+    dialog.show()
+    qtbot.wait(10)
+
+    dialog._scan_artifacts()
+    dialog.select_all_artifacts_button.click()
+    assert len(dialog.artifact_proposal_list.selectedItems()) == 2
+    assert dialog.canvas._highlighted_artifact_proposal_ids == {
+        proposal.id for proposal in proposals
+    }
+    assert all(item.pen().width() == 4 for item in dialog.canvas._artifact_items)
+
+    dialog.accept_artifact_button.click()
+    assert len(dialog.edited_glass().geometry.artifact_templates) == 2
+    assert dialog.canvas.geometry().bottom() <= dialog.settings_scroll.geometry().top()
+
+
 def test_recipe_snapshot_command_restores_before_and_after(qtbot):
     from PySide6.QtGui import QUndoStack
 

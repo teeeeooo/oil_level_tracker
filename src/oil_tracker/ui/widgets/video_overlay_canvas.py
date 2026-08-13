@@ -504,6 +504,7 @@ class VideoOverlayCanvas(QGraphicsView):
         self._exclusion_items: dict[str, EditableRectItem] = {}
         self._artifact_items: list[QGraphicsItem] = []
         self._artifact_proposals = []
+        self._highlighted_artifact_proposal_ids: set[str] = set()
         self._active_target: str | None = None
         self._active_zone_id: str | None = None
         self._fit_mode = True
@@ -595,6 +596,13 @@ class VideoOverlayCanvas(QGraphicsView):
         self._artifact_proposals = list(proposals)
         self.rebuild_overlays()
 
+    def set_highlighted_artifact_proposals(self, proposal_ids) -> None:
+        selected = {str(value) for value in proposal_ids}
+        if selected == self._highlighted_artifact_proposal_ids:
+            return
+        self._highlighted_artifact_proposal_ids = selected
+        self.rebuild_overlays()
+
     def rebuild_overlays(self) -> None:
         for item in list(self._scene.items()):
             if item is not self._pixmap_item:
@@ -682,8 +690,21 @@ class VideoOverlayCanvas(QGraphicsView):
     def _add_artifact_template(self, template, glass, *, proposed: bool) -> None:
         rect = template_source_rect(template, glass)
         qrect = QRectF(rect.x, rect.y, rect.width, rect.height)
-        color = QColor(70, 210, 255) if proposed else QColor(255, 145, 45)
-        pen = QPen(color, 2 if not proposed else 1, Qt.PenStyle.DashLine)
+        highlighted = bool(
+            proposed and template.id in self._highlighted_artifact_proposal_ids
+        )
+        color = (
+            QColor(255, 70, 210)
+            if highlighted
+            else QColor(70, 210, 255)
+            if proposed
+            else QColor(255, 145, 45)
+        )
+        pen = QPen(
+            color,
+            4 if highlighted else 2 if not proposed else 1,
+            Qt.PenStyle.SolidLine if highlighted else Qt.PenStyle.DashLine,
+        )
         if template.kind == "line":
             item = QGraphicsLineItem(
                 qrect.left(),
@@ -696,7 +717,11 @@ class VideoOverlayCanvas(QGraphicsView):
         else:
             item = QGraphicsRectItem(qrect)
         item.setPen(pen)
+        if highlighted and isinstance(item, (QGraphicsEllipseItem, QGraphicsRectItem)):
+            item.setBrush(QBrush(QColor(255, 70, 210, 65)))
         item.setZValue(70 if proposed else 72)
+        if highlighted:
+            item.setZValue(78)
         item.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
         self._artifact_items.append(item)
         self._scene.addItem(item)
