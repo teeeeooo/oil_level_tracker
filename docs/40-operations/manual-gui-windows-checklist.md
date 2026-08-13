@@ -200,6 +200,48 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
   calibration that suppresses actual Oil, or unlabeled initial-state projection
   as field failure regardless of aggregate coverage.
 
+### S11-R9 secure Base/Accum calibrated observation
+
+- Record the exact pushed R9 SHA, detector/resolver versions, private video and
+  Recipe identities, analysis bounds, cadence and current-run initial-state
+  confirmations. Preserve the R8 result as the comparison baseline.
+- At 100%, 125% and 150% Windows scale, open **분석 영역 편집** and resize the
+  window. Confirm the scrollable lower settings pane never overlays the video
+  and the splitter keeps both panes usable.
+- Run detector proposals. Click one, Ctrl/Shift-select several and use
+  **모든 후보 선택**; confirm every selected point/line/region is highlighted
+  on the source image and deselection removes only its highlight.
+- Use **선택 후보 일괄 Artifact 지정** only after reviewing the selection.
+  Confirm exactly those normalized templates are added and Apply/Cancel, Recipe
+  dirty state, undo/redo and exclusion geometry remain correct. Select-all is
+  not permission to accept an actual Oil boundary blindly.
+- Run both Glasses without templates, then with the reviewed artifact set.
+  Record proposal/template geometry, numeric Oil, public Foam, first acquisition,
+  longest missing and wrong-interface runs, events/captures and debug-disabled
+  detector time.
+- On Base, review source-frame overlays near 540, 634 and 674 s. Record the exact
+  reviewed Y and all candidates within ±25 px. Do not reuse the invalid ~660
+  detector row or old-bundle 366/580/327 values as R9 truth.
+- For any Base recovery, inspect `r9_calibrated_high_recall_candidate_count`,
+  `r9_calibrated_dynamic_seed`, authority, cluster and trajectory. Bootstrap
+  must remain absent when an ordinary qualified path exists and must reject a
+  static or similarly strong competing path. Require zero public Base Foam.
+- On Accum, inspect 653 s rise, the distinct Oil/Foam layers near 672 s, the
+  high near 685 s and later observation near 689 s. Confirm both separated
+  coordinates may be public and stale alias history alone does not reject Foam.
+- In each captured `debug_trace.jsonl` record, keep top-level raw current-frame
+  evidence separate from the final `sequence` member. Confirm sequence Oil Y,
+  authority, trajectory, selected bit and reject stage match `tracking.csv`.
+- Require same-frame candidate provenance for every numeric Oil and a confirmed
+  dynamic episode for every public Foam. Missing frames must not receive carried
+  or interpolated coordinates.
+- If a Glass has zero Oil observations, verify only the labeled **확정 초기 상태
+  유지 가정** graph background reaches analysis end. CSV Oil, observed coverage,
+  extrema, events and captures must remain unmodified.
+- Treat overlap/clipping, invisible selection, wrong bulk application, a long
+  artifact path, false Base Foam, lost distinct Accum Foam, or material Windows
+  performance regression as failure regardless of aggregate coverage.
+
 ## S5-B oil boundary and temporal tracking
 - Validate a real, visually clear oil boundary and a weak transparent-oil boundary against user-recorded truth.
 - Validate transparent-oil agitation, shimmer and heat-haze-like motion without forcing a numeric boundary.

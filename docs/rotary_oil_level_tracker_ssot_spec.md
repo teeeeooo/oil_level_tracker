@@ -1073,6 +1073,20 @@ Current-frame semantic이 최종 선택하지 않은 bounded hard-safe 후보도
 - penalty feature로만 사용
 - 실제 유면이 정지해 있을 가능성을 고려
 
+### User-confirmed Artifact Templates
+
+Detector가 분석 ellipse 내부의 point/line/region artifact 후보를 제안할 수
+있다. 사용자는 source frame 위의 선택 highlight를 확인하고 하나 또는
+여러 후보를 명시적으로 Artifact로 적용한다. 일괄 적용은 사용자가 검토한
+선택 집합에 대한 편집 편의이며 자동 truth가 아니다.
+
+- 저장 geometry는 ellipse-relative normalized coordinate를 사용
+- 선택 전에는 detector 결과나 Recipe를 변경하지 않음
+- user-confirmed match는 후보 provenance를 보존한 채 publication에서 제외
+- 하나의 Y 전체를 제거하지 않고 선택한 horizontal/spatial geometry만 적용
+- calibration으로 모든 후보가 사라지면 `UNKNOWN_REVIEW` 유지
+- calibration 자체는 Oil/Foam/FULL/EMPTY를 증명하지 않음
+
 ## 11.6 FillState
 
 ```python

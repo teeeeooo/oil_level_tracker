@@ -49,6 +49,22 @@ Advanced mode retains geometry coordinates, mm/pixel details, margin and detecto
 - Apply creates one undo operation.
 - Geometry remains in source-frame coordinates and inside the frame.
 
+### Detector-proposed artifact editing
+
+- Artifact proposals appear in a scrollable settings pane below a resizable
+  source-video pane; controls must not overlap the image on supported Windows
+  display scales.
+- Selecting one or several proposal rows highlights the exact matching
+  point/line/region on the video so list state is visually unambiguous.
+- Users may select all proposals and explicitly apply the selected set as
+  Artifacts in one action. Select-all is only an editing shortcut: proposals
+  still require visual review because a real Oil boundary may be proposed.
+- Proposal selection/highlight is transient presentation state. Only explicit
+  Artifact apply mutates normalized Recipe templates and participates in the
+  existing Apply/Cancel and undo contract.
+- Detector proposal generation and raster interpretation remain outside the Qt
+  presentation layer.
+
 ### Fixed execution area and validation
 
 The execution area remains visible and exposes setup status, validation, profile save and analysis execution. Field-level errors use adjacent Korean guidance and route the user to the affected Glass/input. Analysis remains disabled while readiness errors exist.

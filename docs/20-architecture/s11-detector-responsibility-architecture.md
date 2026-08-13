@@ -1,6 +1,6 @@
 # S11 Detector Responsibility Architecture
 
-**Status:** `R8 IMPLEMENTED — WINDOWS VALIDATION PENDING`
+**Status:** `R9 IMPLEMENTED — WINDOWS VALIDATION PENDING`
 
 ## Purpose and authority
 
@@ -8,11 +8,11 @@ This document is the durable responsibility owner for the production S11
 detector. The exact current gate remains in the [work plan](../00-project/work-plan.md),
 and completed measurements remain in [`../60-evidence/s11/`](../60-evidence/s11/).
 
-R8 is the checked-in production runtime. R5–R7 failed secure-Windows holdouts and
-have no acceptance authority. R2–R7 documents preserve the causes, controls and
+R9 is the checked-in production runtime. R5–R8 failed secure-Windows holdouts and
+have no acceptance authority. R2–R8 documents preserve the causes, controls and
 failed alternatives that led here; they do not define runtime routing when they
 conflict with this document or the
-[R8 architecture](s11-r8-observation-recovery-architecture.md).
+[R9 architecture](s11-r9-calibrated-observation-architecture.md).
 
 ## Production observation path
 
@@ -55,6 +55,11 @@ competing rows; Spatial may provide bounded x-resolved positive corroboration.
 Every candidate retains eligibility, material/phase support, optical opposition,
 anchor provenance and any registered temporal support needed by the final owner.
 
+User-confirmed artifact templates may enable the bounded R9 high-recall lane.
+Those candidates cannot consume ordinary top-k capacity, seed the ordinary
+semantic corridor or corroborate an existing path. They may bootstrap one
+unique registered moving path only when no qualified anchor path exists.
+
 Spatial is evidence, not a publication owner. It cannot override unavailable or
 affirmative no-interface evidence, and it cannot turn a flat or unidentifiable
 scene into numeric Oil merely to improve coverage.
@@ -90,7 +95,7 @@ overlap is explicit opposition rather than a universal mask.
 
 Foam classification is deliberately absent from this Oil hard-safety list. R6
 removed the historical D5 rule that made accepted Foam topology an Oil-routing
-authority, and R7 preserves that separation. Oil and Foam are resolved
+authority, and R9 preserves that separation. Oil and Foam are resolved
 independently and meet only during final composition.
 
 ## Oil and state sequence authority
@@ -125,6 +130,10 @@ The final composition rules are:
 - rejected or pending Foam remains non-public diagnostic evidence; and
 - Foam cannot change the selected Oil coordinate or state path.
 
+A previous rejected Foam/Oil alias is not sufficient to reject a later Foam
+episode. Alias continuation also requires new same-frame coincidence evidence,
+so vertically separated Oil and Foam layers may both remain public.
+
 There is one final Foam owner and one Oil/state owner, joined once by
 `ObservationSequenceResolver`. No historical current-frame Foam gate remains a
 second final owner.
@@ -134,7 +143,7 @@ second final owner.
 The serialized online reducer retains acquisition-time continuity and bounded
 reacquisition semantics for preview/current-frame evidence. It does not feed
 coordinates into the completed-window owner and does not compete with the final
-R7 projection.
+R9 projection.
 
 The completed-window resolvers use bounded history only to select observations
 already supported by their own frames. Missing intervals stay missing. A
@@ -144,7 +153,7 @@ coordinate. FULL/EMPTY counts as valid only with explicit current-image state
 provenance.
 
 [Initial-State Retrospective Reconstruction](initial-state-retrospective-reconstruction-architecture.md)
-remains a separate downstream interpretation. R7 permits it to interpret only
+remains a separate downstream interpretation. R9 permits it to interpret only
 the leading unresolved prefix after anchor-grade direction proof; it cannot
 rewrite observed samples, coverage or numeric Oil.
 
@@ -167,16 +176,16 @@ observed samples only. Detailed presentation ownership belongs to the
 - S5-B and S11 Slices A–D preserve proposal, ambiguity and hard-safety lessons.
 - R2, R3 and R4 preserve causal diagnostics and controlled negative families,
   but their D5/Foam-to-Oil routing is not current runtime authority.
-- R5, R6 and R7 are field-failed, superseded sequence designs and must not be
+- R5 through R8 are field-failed, superseded sequence designs and must not be
   restored as alternate owners.
 - Historical exact counts and fingerprints are evidence provenance, not current
   acceptance targets.
 
 The current preservation and holdout gates are defined by the
-[R8 validation contract](../30-validation/s11-r8-observation-recovery-validation.md)
+[R9 validation contract](../30-validation/s11-r9-calibrated-observation-validation.md)
 and the [S11 real-field validation contract](../30-validation/s11-real-field-detector-effectiveness.md).
 The completed local implementation evidence is
-[S11-R8 Observation Recovery](../60-evidence/s11/s11-r8-observation-recovery.md).
+[S11-R9 Calibrated Observation](../60-evidence/s11/s11-r9-calibrated-observation.md).
 
 ## Non-authorities
 
