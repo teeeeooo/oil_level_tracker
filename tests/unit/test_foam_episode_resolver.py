@@ -221,7 +221,7 @@ def test_foam_track_aliasing_oil_is_rejected_with_raw_candidate_preserved() -> N
     )
 
 
-def test_later_foam_group_continuing_rejected_oil_alias_is_also_rejected() -> None:
+def test_prior_oil_alias_does_not_suppress_later_independent_foam() -> None:
     detections = (
         _detection(0, _foam_candidate(190.0, dynamic=0.20)),
         _detection(1, _foam_candidate(189.0, dynamic=0.20)),
@@ -247,12 +247,54 @@ def test_later_foam_group_continuing_rejected_oil_alias_is_also_rejected() -> No
         glass_config(),
     )
 
-    assert diagnostics.rejected_oil_alias_episode_count == 2
-    assert all(item.raw_foam_front_y is None for item in resolved)
+    assert diagnostics.rejected_oil_alias_episode_count == 1
+    assert diagnostics.episode_count == 1
+    assert [item.raw_foam_front_y for item in resolved] == [
+        None,
+        None,
+        None,
+        None,
+        188.0,
+        187.0,
+    ]
     assert all(
         "R8_FOAM_OIL_ALIAS_REJECTED" in resolved[index].flags
-        for index in (0, 1, 4, 5)
+        for index in (0, 1)
     )
+
+
+def test_separated_oil_and_foam_are_both_published() -> None:
+    detections = (
+        _detection(0, _foam_candidate(411.0, dynamic=0.20)),
+        _detection(1, _foam_candidate(410.0, dynamic=0.20)),
+    )
+    for detection in detections:
+        detection.raw_oil_air_level_y = 448.0
+        detection.oil_air_level_y = 448.0
+        detection.candidates.insert(
+            0,
+            BoundaryCandidate(
+                source="oil",
+                kind=BoundaryKind.OIL_AIR,
+                y=448.0,
+                features={
+                    "boundary_likelihood": 0.94,
+                    "artifact_likelihood": 0.08,
+                },
+                selected=True,
+                final_score=0.94,
+            ),
+        )
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 1
+    assert diagnostics.rejected_oil_alias_episode_count == 0
+    assert [item.raw_oil_air_level_y for item in resolved] == [448.0, 448.0]
+    assert [item.raw_foam_front_y for item in resolved] == [411.0, 410.0]
 
 
 def test_foam_aliases_strong_same_frame_oil_candidate_before_publication() -> None:

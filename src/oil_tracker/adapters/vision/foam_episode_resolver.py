@@ -85,6 +85,7 @@ class FoamEpisodeResolver:
                     ) or _episode_continues_oil_alias(
                         supported,
                         oil_alias_tracks,
+                        source,
                         glass,
                     ):
                         oil_alias_any = True
@@ -537,6 +538,18 @@ def _episode_aliases_oil(
 ) -> bool:
     """Reject a Foam track repeatedly coincident with same-frame Oil."""
 
+    matched = _same_frame_oil_alias_matches(group, detections, glass)
+    required = min(2, len(group))
+    return required > 0 and matched >= required
+
+
+def _same_frame_oil_alias_matches(
+    group: tuple[_FoamEvidence, ...],
+    detections: tuple[PhaseDetection, ...],
+    glass: GlassInspectionConfig,
+) -> int:
+    """Count current-frame Oil rows that actually coincide with Foam."""
+
     tolerance = max(
         10.0,
         float(glass.detector_settings.temporal_max_jump_px) * 0.65,
@@ -571,16 +584,22 @@ def _episode_aliases_oil(
             for oil_y in oil_rows
         ) <= tolerance:
             matched += 1
-    required = min(2, len(group))
-    return required > 0 and matched >= required
+    return matched
 
 
 def _episode_continues_oil_alias(
     group: tuple[_FoamEvidence, ...],
     aliases: list[tuple[int, float]],
+    detections: tuple[PhaseDetection, ...],
     glass: GlassInspectionConfig,
 ) -> bool:
     if not group or not aliases:
+        return False
+    # A prior rejected alias is context, never evidence for the next group.
+    # Require at least one current same-frame Oil coincidence before bridging
+    # a short dropout.  Otherwise a real Foam front that separates from Oil
+    # (or appears while Oil is unavailable) would be suppressed indefinitely.
+    if _same_frame_oil_alias_matches(group, detections, glass) < 1:
         return False
     horizon = max(4, int(glass.detector_settings.oil_path_window) * 2)
     tolerance = max(
