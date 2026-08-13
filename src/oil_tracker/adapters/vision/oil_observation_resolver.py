@@ -371,18 +371,34 @@ class OilObservationResolver:
                     item.candidate.source,
                 )
             )
-            selected_refs = list(refs[:limit])
-            if not any(_candidate_is_r8_supplemental(ref.candidate) for ref in selected_refs):
+            selected_refs = list(
+                ref
+                for ref in refs
+                if not _candidate_is_r9_calibrated(ref.candidate)
+            )[:limit]
+            if not any(
+                _candidate_is_r8_supplemental(ref.candidate)
+                and not _candidate_is_r9_calibrated(ref.candidate)
+                for ref in selected_refs
+            ):
                 supplemental = next(
                     (
                         ref
-                        for ref in refs[limit:]
+                        for ref in refs
                         if _candidate_is_r8_supplemental(ref.candidate)
+                        and not _candidate_is_r9_calibrated(ref.candidate)
+                        and ref not in selected_refs
                     ),
                     None,
                 )
                 if supplemental is not None:
                     selected_refs.append(supplemental)
+            calibrated = [
+                ref
+                for ref in refs
+                if _candidate_is_r9_calibrated(ref.candidate)
+            ][: min(4, limit)]
+            selected_refs.extend(calibrated)
             rows.append(tuple(selected_refs))
         return tuple(rows), ineligible
 
@@ -399,6 +415,27 @@ class OilObservationResolver:
         """
 
         if not glass.geometry.artifact_templates:
+            return refs_by_frame
+        existing_anchors = tuple(
+            ref
+            for refs in refs_by_frame
+            for ref in refs
+            if ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
+        )
+        if _qualified_anchor_keys(
+            existing_anchors,
+            frame_count=len(refs_by_frame),
+            horizon=max(
+                2,
+                min(3, int(glass.detector_settings.oil_path_window)),
+            ),
+            maximum_jump=max(
+                1.0,
+                float(glass.detector_settings.temporal_max_jump_px),
+            ),
+        ):
+            # Calibration recovery is a no-observation bootstrap. It must not
+            # compete with or replace an already qualified ordinary path.
             return refs_by_frame
         paths = _calibrated_dynamic_paths(refs_by_frame, glass, self.config)
         if not paths:
@@ -790,6 +827,16 @@ class OilObservationResolver:
             )
             for ref in refs
             if ref.authority >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
+            and (
+                not _candidate_is_r9_calibrated(ref.candidate)
+                or _unit(
+                    ref.candidate.features.get(
+                        "r9_calibrated_dynamic_seed",
+                        0.0,
+                    )
+                )
+                >= 0.5
+            )
         ]
         full = _raw_state_evidence(detection, FillState.FULL_NO_INTERFACE)
         empty = _raw_state_evidence(detection, FillState.EMPTY_NO_INTERFACE)
@@ -1345,6 +1392,8 @@ def _cross_representation_support(
     are not consulted.
     """
 
+    if _candidate_is_r9_calibrated(candidate):
+        return 0.0
     candidate_is_path = _candidate_is_material_path(candidate)
     tolerance = max(
         8.0,
@@ -1353,6 +1402,8 @@ def _cross_representation_support(
     support = 0.0
     for peer in candidates:
         if peer is candidate:
+            continue
+        if _candidate_is_r9_calibrated(peer):
             continue
         peer_is_path = _candidate_is_material_path(peer)
         if peer_is_path == candidate_is_path or not _candidate_eligible(peer):
@@ -1611,6 +1662,10 @@ def _candidate_is_material_path(candidate: BoundaryCandidate) -> bool:
 
 def _candidate_is_r8_supplemental(candidate: BoundaryCandidate) -> bool:
     return _unit(candidate.features.get("r8_supplemental_path", 0.0)) >= 0.5
+
+
+def _candidate_is_r9_calibrated(candidate: BoundaryCandidate) -> bool:
+    return _unit(candidate.features.get("r9_calibrated_high_recall", 0.0)) >= 0.5
 
 
 def _calibrated_dynamic_paths(

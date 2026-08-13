@@ -202,6 +202,30 @@ def test_calibrated_dynamic_seed_rejects_static_or_competing_paths() -> None:
     assert _oil_y(competing_result) == [None] * 8
 
 
+def test_calibrated_dynamic_seed_does_not_compete_with_qualified_path() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _candidate(150.0, boundary=0.78, broad=0.78, source="ordinary"),
+            _calibrated_candidate(210.0 - 7.0 * index),
+            ambiguity=0.20,
+        )
+        for index in range(8)
+    )
+
+    result = OilObservationResolver().resolve(
+        detections,
+        _with_artifact_calibration(),
+    )
+
+    assert _oil_y(result) == [150.0] * 8
+    assert all(
+        candidate.features.get("r9_calibrated_dynamic_seed", 0.0) == 0.0
+        for detection in result.detections
+        for candidate in detection.candidates
+    )
+
+
 def test_continuous_material_path_beats_disconnected_stronger_rows() -> None:
     detections = []
     for index, y in enumerate((150.0, 145.0, 140.0, 135.0, 130.0, 125.0)):
