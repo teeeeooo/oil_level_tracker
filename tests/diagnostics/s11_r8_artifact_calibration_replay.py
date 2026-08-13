@@ -64,6 +64,8 @@ def run(
     output_root: Path,
     proposal_index: int,
     proposal_time_sec: float = 3.0,
+    run_label: str = "S11-R8-CAL",
+    run_note: str = "User-selected detector artifact proposal replay",
 ) -> dict[str, object]:
     sample = "sample4"
     video = root / "sample" / f"{sample}.mp4"
@@ -72,8 +74,8 @@ def run(
         video,
         output_root,
         *replay.QUALIFICATION_WINDOWS[sample],
-        run_label="S11-R8-CAL",
-        run_note="User-selected detector artifact proposal replay",
+        run_label=run_label,
+        run_note=run_note,
     )
     glass = next(item for item in recipe.glasses if item.enabled)
     reader = OpenCvVideoReader(video)

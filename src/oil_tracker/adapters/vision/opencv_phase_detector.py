@@ -72,7 +72,7 @@ class PhaseDetectionDebugArtifacts:
 
 
 class OpenCvPhaseDetector:
-    version = "opencv-phase-detector-r8-observation-recovery-v1"
+    version = "opencv-phase-detector-r9-calibrated-observation-v1"
 
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}

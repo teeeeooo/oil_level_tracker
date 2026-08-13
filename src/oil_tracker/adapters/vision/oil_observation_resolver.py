@@ -10,7 +10,7 @@ from oil_tracker.domain.enums import BoundaryKind, FillState, InitialObservation
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r8-observation-recovery-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r9-calibrated-observation-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
