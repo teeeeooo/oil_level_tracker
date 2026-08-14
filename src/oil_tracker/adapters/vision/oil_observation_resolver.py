@@ -10,7 +10,7 @@ from oil_tracker.domain.enums import BoundaryKind, FillState, InitialObservation
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r9-calibrated-observation-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r10-calibrated-path-and-layer-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -83,6 +83,9 @@ class OilObservationResolverConfig:
     calibrated_seed_min_frames: int = 6
     calibrated_seed_min_span_ratio: float = 0.035
     calibrated_seed_competition_margin: float = 0.06
+    calibrated_seed_min_motion_keyframes: int = 2
+    calibrated_seed_max_gap_frames: int = 4
+    calibrated_candidate_ref_limit: int = 8
 
 
 class OilCandidateAuthority(IntEnum):
@@ -397,7 +400,13 @@ class OilObservationResolver:
                 ref
                 for ref in refs
                 if _candidate_is_r9_calibrated(ref.candidate)
-            ][: min(4, limit)]
+            ][: min(
+                12,
+                max(
+                    4,
+                    min(limit, int(self.config.calibrated_candidate_ref_limit)),
+                ),
+            )]
             selected_refs.extend(calibrated)
             rows.append(tuple(selected_refs))
         return tuple(rows), ineligible
@@ -460,6 +469,13 @@ class OilObservationResolver:
                         features={
                             **ref.candidate.features,
                             "r9_calibrated_dynamic_seed": 1.0,
+                            "r10_calibrated_path_member": 1.0,
+                            "r10_calibrated_motion_keyframe": float(
+                                _calibrated_motion_keyframe(
+                                    ref,
+                                    self.config,
+                                )
+                            ),
                         },
                     ),
                     authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
@@ -1686,6 +1702,7 @@ def _calibrated_dynamic_paths(
         4.0,
         float(glass.detector_settings.temporal_max_jump_px) * 0.75,
     )
+    maximum_gap = max(2, int(config.calibrated_seed_max_gap_frames))
     minimum_span = max(
         10.0,
         float(glass.geometry.ellipse.radius_y)
@@ -1700,13 +1717,10 @@ def _calibrated_dynamic_paths(
         eligible = tuple(
             ref
             for ref in refs
-            if ref.authority >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
+            if _candidate_is_r9_calibrated(ref.candidate)
+            and ref.authority >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
             and ref.track_opposition < config.recurring_track_reject_opposition
             and ref.foam_alias_penalty <= 0.12
-            and _candidate_registered_motion(ref.candidate)
-            >= config.dynamic_anchor_min_support
-            and _candidate_registered_motion_coverage(ref.candidate)
-            >= config.dynamic_anchor_min_coverage
             and _candidate_artifact_signature(ref.candidate)
             <= config.continuation_max_artifact
             and _candidate_ambiguity(ref.candidate)
@@ -1714,7 +1728,7 @@ def _calibrated_dynamic_paths(
         )
         for ref in eligible:
             choices: list[tuple[_CandidateRef, ...]] = [(ref,)]
-            for gap in (1, 2):
+            for gap in range(1, maximum_gap + 1):
                 prior_frame = frame_offset - gap
                 if prior_frame < 0:
                     continue
@@ -1756,6 +1770,18 @@ def _calibrated_dynamic_paths(
         for path in paths:
             if len(path) < config.calibrated_seed_min_frames:
                 continue
+            keyframes = tuple(
+                ref
+                for ref in path
+                if _calibrated_motion_keyframe(ref, config)
+            )
+            if len(keyframes) < config.calibrated_seed_min_motion_keyframes:
+                continue
+            if (
+                keyframes[-1].frame_offset - keyframes[0].frame_offset
+                < config.calibrated_seed_min_frames - 1
+            ):
+                continue
             ys = tuple(float(ref.candidate.y) for ref in path)
             if max(ys) - min(ys) < minimum_span:
                 continue
@@ -1766,9 +1792,11 @@ def _calibrated_dynamic_paths(
             mean_motion = sum(
                 _candidate_registered_motion(ref.candidate) for ref in path
             ) / len(path)
+            keyframe_ratio = len(keyframes) / len(path)
             score = _unit(
-                0.68 * mean_quality
-                + 0.20 * mean_motion
+                0.62 * mean_quality
+                + 0.14 * mean_motion
+                + 0.12 * keyframe_ratio
                 + 0.12 * directional_ratio
             )
             candidates.append((len(path), score, path))
@@ -1793,6 +1821,18 @@ def _calibrated_dynamic_paths(
             continue
         distinct.append(item)
     return tuple(distinct)
+
+
+def _calibrated_motion_keyframe(
+    ref: _CandidateRef,
+    config: OilObservationResolverConfig,
+) -> bool:
+    return bool(
+        _candidate_registered_motion(ref.candidate)
+        >= config.dynamic_anchor_min_support
+        and _candidate_registered_motion_coverage(ref.candidate)
+        >= config.dynamic_anchor_min_coverage
+    )
 
 
 def _path_directional_ratio(path: tuple[_CandidateRef, ...]) -> float:

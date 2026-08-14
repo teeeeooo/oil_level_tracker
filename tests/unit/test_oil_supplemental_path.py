@@ -90,6 +90,10 @@ def test_calibrated_high_recall_keeps_multiple_distributed_weak_rows() -> None:
         for candidate in candidates
     )
     assert all(candidate.features["sequence_eligible"] == 1.0 for candidate in candidates)
+    assert any(
+        candidate.features["r10_calibrated_vertical_reserve"] == 1.0
+        for candidate in candidates
+    )
 
 
 def test_calibrated_high_recall_excludes_glare_dominated_rows() -> None:

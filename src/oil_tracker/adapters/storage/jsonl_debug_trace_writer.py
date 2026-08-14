@@ -414,6 +414,14 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                     "r9_calibrated_dynamic_seed",
                     0.0,
                 ),
+                "calibrated_path_member": features.get(
+                    "r10_calibrated_path_member",
+                    0.0,
+                ),
+                "calibrated_motion_keyframe": features.get(
+                    "r10_calibrated_motion_keyframe",
+                    0.0,
+                ),
                 "selected": candidate.selected,
                 "reject_stage": _sequence_reject_stage(candidate, authority),
             }
@@ -421,7 +429,7 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
     state = {
         str(key): value
         for key, value in detection.debug_metrics.items()
-        if str(key).startswith(("sequence_", "r7_", "r8_", "r9_"))
+        if str(key).startswith(("sequence_", "r7_", "r8_", "r9_", "r10_"))
     }
     return _json_safe(
         {

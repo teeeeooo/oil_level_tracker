@@ -66,20 +66,52 @@ def generate_calibrated_high_recall_candidates(
     # that value so a completely flat visible row is never proposed.
     rows = _bounded_peak_rows(combined, max(limit * 4, 24), minimum=0.14)
     ranked = sorted(rows, key=lambda row: (-float(combined[row]), row))
-    selected: list[int] = []
+    eligible: list[int] = []
     for row in ranked:
         if support[row] < 0.25:
             continue
         optics = _band_overlap(pre.glare_mask, effective, row, radius=2)
         if optics >= 0.55:
             continue
+        eligible.append(row)
+
+    selected: list[int] = []
+    primary_count = max(1, limit // 2)
+    for row in eligible:
         if any(abs(row - existing) <= 5 for existing in selected):
             continue
         selected.append(row)
-        if len(selected) >= limit:
+        if len(selected) >= primary_count:
             break
 
+    # Reserve the remaining fixed budget for vertical coverage. Strong rim or
+    # texture rows often cluster in one part of the ellipse; pure score order
+    # removed every weaker Oil row from other bands in the R9 Windows Base
+    # replay. This does not lower the proposal floor or expand the total budget.
+    reserve = max(0, limit - len(selected))
+    for band in range(reserve):
+        first = int(round(height * band / max(1, reserve)))
+        last = int(round(height * (band + 1) / max(1, reserve)))
+        choice = next(
+            (
+                row
+                for row in eligible
+                if first <= row < last
+                and all(abs(row - existing) > 5 for existing in selected)
+            ),
+            None,
+        )
+        if choice is not None:
+            selected.append(choice)
+
+    for row in eligible:
+        if len(selected) >= limit:
+            break
+        if all(abs(row - existing) > 5 for existing in selected):
+            selected.append(row)
+
     output = []
+    primary_rows = set(selected[:primary_count])
     for row in selected:
         strength = _unit(float(response[row]))
         horizontal = _unit(float(max(canny_coverage[row], distributed[row])))
@@ -109,6 +141,9 @@ def generate_calibrated_high_recall_candidates(
                 features={
                     "r8_supplemental_path": 1.0,
                     "r9_calibrated_high_recall": 1.0,
+                    "r10_calibrated_vertical_reserve": float(
+                        row not in primary_rows
+                    ),
                     "local_y": float(row),
                     "source_y": source_y,
                     "boundary_likelihood": boundary,

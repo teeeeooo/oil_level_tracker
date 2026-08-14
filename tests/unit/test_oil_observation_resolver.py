@@ -110,15 +110,21 @@ def _oil_y(result) -> list[float | None]:
     return [item.raw_oil_air_level_y for item in result.detections]
 
 
-def _calibrated_candidate(y: float, *, source: str = "calibrated") -> BoundaryCandidate:
+def _calibrated_candidate(
+    y: float,
+    *,
+    source: str = "calibrated",
+    motion: float = 0.82,
+    motion_coverage: float = 0.88,
+) -> BoundaryCandidate:
     candidate = _candidate(
         y,
         boundary=0.36,
         broad=0.38,
         artifact=0.08,
         ambiguity=0.32,
-        registered_oil_motion=0.82,
-        registered_oil_motion_coverage=0.88,
+        registered_oil_motion=motion,
+        registered_oil_motion_coverage=motion_coverage,
         source=source,
     )
     return replace(
@@ -177,6 +183,58 @@ def test_calibrated_dynamic_seed_bootstraps_one_moving_oil_path() -> None:
         )
         for detection in result.detections
     )
+
+
+def test_calibrated_dynamic_seed_bridges_sparse_motion_keyframes() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _calibrated_candidate(
+                190.0 - 6.0 * index,
+                motion=0.82 if index in {0, 9} else 0.24,
+                motion_coverage=0.88 if index in {0, 9} else 0.12,
+            ),
+            ambiguity=0.25,
+        )
+        for index in range(10)
+    )
+
+    result = OilObservationResolver().resolve(
+        detections,
+        _with_artifact_calibration(),
+    )
+
+    assert _oil_y(result) == [190.0 - 6.0 * index for index in range(10)]
+    keyframe_flags = [
+        detection.candidates[0].features.get(
+            "r10_calibrated_motion_keyframe",
+            0.0,
+        )
+        for detection in result.detections
+    ]
+    assert keyframe_flags == [1.0, *([0.0] * 8), 1.0]
+
+
+def test_calibrated_dynamic_seed_requires_two_spaced_motion_keyframes() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _calibrated_candidate(
+                190.0 - 6.0 * index,
+                motion=0.82 if index == 0 else 0.24,
+                motion_coverage=0.88 if index == 0 else 0.12,
+            ),
+            ambiguity=0.25,
+        )
+        for index in range(10)
+    )
+
+    result = OilObservationResolver().resolve(
+        detections,
+        _with_artifact_calibration(),
+    )
+
+    assert _oil_y(result) == [None] * 10
 
 
 def test_calibrated_dynamic_seed_rejects_static_or_competing_paths() -> None:
