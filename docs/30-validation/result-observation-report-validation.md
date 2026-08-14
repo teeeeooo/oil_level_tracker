@@ -11,7 +11,9 @@ This contract owns acceptance for the user-facing observation report defined by 
 - Report building, graph rendering and capture generation do not mutate any `TrackingSample` numeric/state field.
 - Missing/non-finite Oil timestamps never appear as graph vertices, CSV values, overlay positions or extrema.
 - A graph bridge contains exactly the finite anchor before and after a missing run.
-- Foam graph values remain gap-preserving.
+- Foam graph values remain gap-preserving, and every finite stored Foam value
+  renders a visible point even when isolated or whole-sample `is_valid` is
+  false.
 - Retrospective FULL/EMPTY cannot produce an Oil landmark.
 
 ### Presentation model
@@ -31,6 +33,8 @@ This contract owns acceptance for the user-facing observation report defined by 
 - Oil edges crossing missing samples render as dashed bridges while remaining visually connected.
 - Highest/lowest and selected physical landmarks are labeled in the static detail graph.
 - Unavailable/review indication remains visible without replacing the Oil line.
+- Static and interactive graphs show isolated finite Foam points without
+  connecting across a missing row.
 - Repeated Result Review cursor updates still do not rebuild series or collapse layout.
 
 ### Captures and HTML

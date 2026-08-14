@@ -2,76 +2,103 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `VALIDATING`
-**Current gate:** `Exact pushed R9 secure-Windows Base/Accum replay`
-**Source authority:** `R9 architecture + R8 Windows diagnostic + R9 local evidence`
+**Current gate:** `Exact pushed R10 secure-Windows Base/Accum replay`
+**Source authority:** `R10 architecture + R9 Windows diagnostic + R10 local evidence`
 
-## Accepted R9 implementation
+## Why R9 failed the field gate
 
-The secure-Windows R8 replay failed with Base 0/601 numeric Oil and Accum
-189/601 numeric Oil that did not reliably separate the real Foam layer. Exact
-source-frame reconciliation showed that Base lacked a near-boundary candidate
-at two of three reviewed checkpoints, while Accum's separated Foam was rejected
-through stale alias history. The R8 trace was recorded before final sequence
-resolution and therefore omitted the final authority path.
+The reviewed secure-Windows R9 replay remained Base 0/601 numeric Oil. R9
+generated 5,221 initial continuation rows and retained 5,002 after track
+opposition, but no calibrated dynamic seed or trajectory formed. Only 288 rows
+passed the per-candidate motion-coverage gate and 27 retained local support;
+none formed the required six-frame path. At the reviewed Base checkpoints the
+nearest R9 candidate errors were 46 px at 540 s, 16 px at 634 s and 84 px at
+674 s.
 
-R9 keeps one detector and adds:
+Accum confirmed five real Foam frames and stored them in `tracking.csv`, but
+isolated Foam values were invisible in line-only graphs because composed
+samples were invalid. Two additional real Foam rows 17 px above selected Oil
+were rejected because Foam/Oil identity reused the much wider Oil temporal
+jump tolerance. The Artifact editor no longer overlapped video, but its primary
+actions were below the initial scroll fold.
 
-- a responsive artifact editor with selected-proposal highlight, multi-select,
-  select-all and explicit bulk Artifact apply;
-- up to twelve calibration-only high-recall rows that do not consume normal
-  proposal capacity or seed ordinary authority;
-- a unique registered moving-path bootstrap only when no qualified anchor path
-  exists;
-- Oil/Foam alias continuation that requires new same-frame coincidence;
-- final sequence authority/support/reject-stage annotation inside raw trace; and
-- the existing non-numeric confirmed-initial-state graph hold.
+## Implemented R10 boundary
 
-An unsafe intermediate calibration reached 112/113 sample4 numeric but drifted
-25–47.5 px late in the video. It was rejected. The final isolation boundary
-restored the accepted 81/113 calibrated behavior and existing events.
+R10 remains one generic detector/resolver for Base and Accum. It adds:
+
+- a resizable horizontal **분석 영역 편집** layout with video on the left and
+  first-view Artifact explanation/actions/lists on the right;
+- a fixed-budget calibration pool that reserves vertically distributed local
+  peaks without globally lowering thresholds or consuming ordinary authority;
+- calibration-only long-horizon bootstrap using sparse registered-motion
+  keyframes and safe continuation members rather than per-row motion coverage;
+- path-level minimum span/direction/uniqueness checks, exact same-frame
+  provenance and no interpolation;
+- signed Oil/Foam composition: a positive `OilY - FoamY` above the small
+  identity tolerance preserves both layers, while inverted/near-coincident
+  boundaries remain aliases;
+- a separate bounded strong-candidate alias screen only while Oil is unresolved;
+  and
+- visible point markers for every finite stored Foam observation in static and
+  interactive graphs, regardless of whole-sample validity.
 
 ## Local accepted evidence
 
-The uncalibrated four-video replay produced 299 rows and 142 numeric Oil rows.
-Checked truth was numeric at 10/13 points with 5.85 px MAE and 11 px maximum
-error; every numeric row retained same-frame provenance. Public Foam remained
-zero on base/sample2/sample4 and sample3 retained five reviewed early frames.
+The exact R10 uncalibrated four-video replay produced 299 rows and 142 numeric
+Oil rows. Checked truth remained numeric at 10/13 points with 5.85 px MAE and
+11 px maximum error; every numeric row retained same-frame provenance. Public
+Foam remained zero on base/sample2/sample4, while sample3 retained five
+reviewed early Foam observations and its unclear/changing-focus 39–90 s span
+remained conservatively missing.
 
 User-like sample4 lower-rim calibration changed Oil coverage 76→81/113 while
 public Foam stayed zero and checked truth remained 2/5 numeric with 0.5 px
-MAE/max error. Direct detector time was 7.146 s calibration-off and 7.296 s
-calibration-on over 113 frames. The full suite passed with 1,557 tests.
+MAE/max error. A 17 px dynamic Foam layer above public Oil survives even when
+Oil temporal jump is 64 px, while inverted topology remains rejected. At
+980×700 the editor showed all primary Artifact actions without scrolling.
+
+Direct debug-disabled detector timing over the same 113 in-memory sample4
+frames was 7.062 s off (62.5 ms/frame) and 7.182 s on (63.6 ms/frame). The R9
+local reference was 7.146/7.296 s, so R10 did not add a material per-frame
+regression in this local diagnostic.
+
+The full repository regression passed with 1,562 tests in 114.78 s; R10
+compile, focused integration and exact replay gates also passed.
 
 ## Current executable action
 
-Push the exact final R9 head once, then execute the
-[R9 Windows checklist](../40-operations/manual-gui-windows-checklist.md#s11-r9-secure-baseaccum-calibrated-observation)
+Push the exact final R10 head once, then execute the
+[R10 Windows checklist](../40-operations/manual-gui-windows-checklist.md#s11-r10-secure-baseaccum-calibrated-path-and-layer)
 on the private Base/Accum videos.
 
-First verify the editor no longer overlaps the video and that single/multiple
-proposal selection highlights the exact line or region. Preserve an uncalibrated
-reference, then review and apply the persistent artifact proposals. Select-all
-is allowed only after review; it is never automatic detector truth.
+At 100%, 125% and 150% scale, verify the editor first view, resize/maximize,
+splitter, selection highlight and reviewed bulk Artifact application. Run both
+Glasses with the saved templates and preserve the exact Recipe/video/session
+identity.
 
-For Base, use source-frame overlays to re-establish the actual Oil Y near 540,
-634 and 674 s. Record near-candidate availability, calibrated generator/seed
-flags, first acquisition and wrong-interface/missing runs. Require zero public
-Foam. For Accum, verify Oil rise, a distinct Oil/Foam pair near 672 s, the high
-near 685 s and later observation. Inspect the final `sequence` trace member;
-do not reverse-calculate authority from raw current-frame fields.
+For Base, reconcile source-frame Oil around 540, 634 and 674 s. Record retained
+calibrated rows, path membership, motion-keyframe membership, first numeric
+acquisition, coverage and every long missing/wrong-interface run. Require zero
+public Foam. A static or wrong path is a failure regardless of coverage.
 
-Every numeric Oil requires same-frame selection and every public Foam row must
-belong to a confirmed dynamic episode. If Base remains all-missing, the graph
-may show only the labeled confirmed-initial-state background; CSV Oil and
-observed coverage remain empty. Compare debug-disabled detector time with R8 on
-the same Windows machine. Any long wrong-interface run, false Base Foam, lost
-real Accum Foam or automatic/unreviewed calibration is a field failure.
+For Accum, independently inspect Oil rise, Foam onset, the separated Oil/Foam
+layer, highest Oil and recovery. Confirm finite confirmed Foam appears in CSV
+and graph even when `is_valid=False`. Every alias rejection must expose the
+effective identity rule and exact Oil row; Oil temporal jump may not erase a
+distinct layer.
+
+Every numeric Oil requires an exact same-frame candidate. Missing Oil remains
+missing; the confirmed initial state may continue only as the labeled graph
+assumption and must not create CSV Oil, extrema, events or captures. Compare
+debug-disabled detector time with R9 on the same Windows machine. Local gates
+do not establish private-field or general-field accuracy.
 
 ## Authority links
 
-- [R9 architecture](../20-architecture/s11-r9-calibrated-observation-architecture.md)
-- [R9 validation](../30-validation/s11-r9-calibrated-observation-validation.md)
-- [R9 local evidence](../60-evidence/s11/s11-r9-calibrated-observation.md)
-- [R8 Windows root cause](../50-diagnostics/s11/s11-r8-windows-calibrated-observation-diagnostic.md)
+- [R10 architecture](../20-architecture/s11-r10-calibrated-path-and-layer-architecture.md)
+- [R10 validation](../30-validation/s11-r10-calibrated-path-and-layer-validation.md)
+- [R10 local evidence](../60-evidence/s11/s11-r10-calibrated-path-and-layer.md)
+- [R9 Windows root cause](../50-diagnostics/s11/s11-r9-windows-calibrated-observation-diagnostic.md)
 - [Durable detector responsibility](../20-architecture/s11-detector-responsibility-architecture.md)
+- [Result observation/report architecture](../20-architecture/result-observation-report-architecture.md)
 - [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)

@@ -95,3 +95,15 @@ the same machine.
 
 Passing local gates does not establish private-field or general-field accuracy.
 That claim remains pending until this secure-Windows gate is reconciled.
+
+## Reproducible local commands
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_foam_episode_resolver.py \
+  tests/gui/test_result_review_graph.py tests/unit/test_graph_renderer.py -q
+.venv/bin/python -m tests.diagnostics.s11_r10_calibrated_path_and_layer_replay
+.venv/bin/python -m tests.diagnostics.s11_r10_artifact_calibration_replay
+.venv/bin/python -m pytest -q
+.venv/bin/python -m compileall -q src tests/diagnostics
+git diff --check
+```

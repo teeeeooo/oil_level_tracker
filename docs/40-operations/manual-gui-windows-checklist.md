@@ -242,6 +242,41 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
   artifact path, false Base Foam, lost distinct Accum Foam, or material Windows
   performance regression as failure regardless of aggregate coverage.
 
+### S11-R10 secure Base/Accum calibrated path and layer
+
+- Record the exact pushed R10 SHA, detector/resolver versions, private video,
+  Recipe/template identities, analysis bounds, cadence and confirmed initial
+  states. Preserve R9 results as the comparison baseline.
+- At 100%, 125% and 150% scale open **분석 영역 편집**. At first view confirm
+  video is left, Artifact guidance/actions are right, **Detector 후보 찾기** and
+  bulk actions are visible without scrolling, and resize/maximize plus both
+  splitters remain usable at the minimum window size.
+- Find proposals, exercise single/multiple/select-all selection and verify the
+  exact point/line/region highlights. Apply only reviewed proposals and confirm
+  precisely those templates persist; automatic detector acceptance is invalid.
+- Replay Base with the reviewed templates. Around 540, 634 and 674 s record the
+  reviewed source Y, nearest calibrated candidates, `r10_calibrated_path_member`,
+  `r10_calibrated_motion_keyframe`, authority/trajectory and first reject stage.
+  Record first acquisition, numeric coverage, longest missing and wrong-path
+  runs. Require zero public Base Foam and reject static/wrong-path coverage.
+- Replay Accum and inspect Oil rise, Foam onset, separated layers, highest Oil
+  and recovery independently. Every confirmed finite Foam row must be visible
+  in CSV and as a graph point even when `is_valid=False` or adjacent rows are
+  missing.
+- For any Foam alias rejection record Foam Y, exact public/strong Oil Y,
+  signed `OilY - FoamY`, effective identity tolerance and branch. A positive
+  separated layer above tolerance must retain both rows; inverted or
+  near-coincident topology may be rejected. Oil temporal jump is not identity.
+- Match final `sequence` trace to `tracking.csv`, graph, events and captures.
+  Require exact same-frame provenance for numeric Oil and a confirmed dynamic
+  episode for public Foam. Do not accept carried/interpolated coordinates.
+- If Oil remains all-missing, confirm only the labeled **확정 초기 상태 유지
+  가정** background reaches analysis end. CSV Oil, observed coverage, extrema,
+  events and captures must remain empty/unchanged.
+- Compare debug-disabled detector total/mean time with R9 on the same Windows
+  machine. Treat hidden controls, wrong selection, false Base Foam, lost Accum
+  Foam, a wrong Oil path or material runtime regression as field failure.
+
 ## S5-B oil boundary and temporal tracking
 - Validate a real, visually clear oil boundary and a weak transparent-oil boundary against user-recorded truth.
 - Validate transparent-oil agitation, shimmer and heat-haze-like motion without forcing a numeric boundary.

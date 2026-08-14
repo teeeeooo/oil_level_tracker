@@ -64,7 +64,7 @@ Finite stored Oil anchors remain the only graph vertices. Presentation distingui
 
 A bridge contains only its two existing endpoint anchors. It creates no intermediate value, sample, cursor/overlay position, CSV cell, event evidence or detector-history input. There is no line before the first finite anchor or after the last finite anchor. An all-missing Oil series remains empty.
 
-Unknown/no-interface information remains visible using restrained state or unavailable highlights. It must not visually overwhelm the trajectory. Foam retains gap-preserving rendering because Foam absence is meaningful.
+Unknown/no-interface information remains visible using restrained state or unavailable highlights. It must not visually overwhelm the trajectory. Foam retains gap-preserving rendering because Foam absence is meaningful. Every finite stored Foam observation has a visible point marker even when it is isolated or the composed sample is invalid; lines may connect only consecutive finite Foam observations.
 
 ## Extrema and trend summary
 
