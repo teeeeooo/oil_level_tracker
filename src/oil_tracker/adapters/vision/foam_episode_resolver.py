@@ -261,6 +261,7 @@ class FoamEpisodeResolver:
                 "R8_FOAM_EMPTY_STATE_CONFLICT",
                 "R8_FOAM_OIL_TOPOLOGY_CONFLICT",
                 "R8_FOAM_OIL_ALIAS_REJECTED",
+                "R10_FOAM_LAYER_SEPARATED",
             }
         ]
         candidates = [
@@ -278,6 +279,17 @@ class FoamEpisodeResolver:
             for candidate in detection.candidates
         ]
         metrics = dict(detection.debug_metrics)
+        identity_tolerance = _oil_foam_identity_tolerance(glass)
+        source_oil_y = (
+            detection.raw_oil_air_level_y
+            if _finite(detection.raw_oil_air_level_y)
+            else detection.oil_air_level_y
+        )
+        oil_foam_separation = (
+            None
+            if evidence is None or not _finite(source_oil_y)
+            else float(source_oil_y) - float(evidence.candidate.y)
+        )
         metrics.update(
             {
                 "r7_foam_episode_confirmed": bool(confirmed),
@@ -290,6 +302,8 @@ class FoamEpisodeResolver:
                 "r8_foam_evidence_preserved": bool(
                     confirmed and evidence is not None
                 ),
+                "r10_foam_oil_identity_tolerance_px": identity_tolerance,
+                "r10_foam_oil_layer_separation_px": oil_foam_separation,
             }
         )
         base = replace(
@@ -384,6 +398,11 @@ class FoamEpisodeResolver:
         bottom = glass.geometry.ellipse.center_y + glass.geometry.ellipse.radius_y
         if (y - top) / max(1.0, bottom - top) <= 0.12:
             flags.append("FOAM_REACH_TOP")
+        if (
+            oil_foam_separation is not None
+            and oil_foam_separation > identity_tolerance
+        ):
+            flags.append("R10_FOAM_LAYER_SEPARATED")
         return replace(
             base,
             fill_state=composed,
@@ -550,10 +569,7 @@ def _same_frame_oil_alias_matches(
 ) -> int:
     """Count current-frame Oil rows that actually coincide with Foam."""
 
-    tolerance = max(
-        10.0,
-        float(glass.detector_settings.temporal_max_jump_px) * 0.65,
-    )
+    tolerance = _oil_foam_identity_tolerance(glass)
     matched = 0
     for evidence in group:
         detection = detections[evidence.frame_offset]
@@ -602,10 +618,7 @@ def _episode_continues_oil_alias(
     if _same_frame_oil_alias_matches(group, detections, glass) < 1:
         return False
     horizon = max(4, int(glass.detector_settings.oil_path_window) * 2)
-    tolerance = max(
-        10.0,
-        float(glass.detector_settings.temporal_max_jump_px) * 0.65,
-    )
+    tolerance = _oil_foam_identity_tolerance(glass)
     first_frame = group[0].frame_offset
     return any(
         0 < first_frame - alias_frame <= horizon
@@ -616,6 +629,18 @@ def _episode_continues_oil_alias(
         <= tolerance
         for alias_frame, alias_y in aliases
     )
+
+
+def _oil_foam_identity_tolerance(glass: GlassInspectionConfig) -> float:
+    """Return same-boundary tolerance independent of Oil temporal motion.
+
+    A temporal jump allowance may be tens of pixels, while two material layers
+    in one frame can legitimately be separated by that distance. Identity is
+    therefore bounded to a small fraction of the analysis height.
+    """
+
+    height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
+    return max(3.0, min(8.0, height * 0.01))
 
 
 def _finite(value: object) -> bool:

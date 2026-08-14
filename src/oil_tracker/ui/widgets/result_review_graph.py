@@ -214,6 +214,8 @@ class ResultReviewGraph(QWidget):
                 linestyle=linestyle,
                 linewidth=1.6,
                 color="#f97316" if label == "거품 경계" else None,
+                marker="o" if label == "거품 경계" else None,
+                markersize=4 if label == "거품 경계" else None,
                 label=label,
             )
 

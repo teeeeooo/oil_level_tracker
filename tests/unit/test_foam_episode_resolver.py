@@ -199,17 +199,17 @@ def test_foam_track_aliasing_oil_is_rejected_with_raw_candidate_preserved() -> N
         _detection(0, _foam_candidate(190.0, dynamic=0.20)),
         _detection(1, _foam_candidate(184.0, dynamic=0.20)),
     )
-    for detection in detections:
+    for index, detection in enumerate(detections):
         oil = _selected_oil_candidate()
-        oil.y = 170.0
+        oil.y = 188.0 - 6.0 * index
         detection.candidates.insert(0, oil)
-        detection.raw_oil_air_level_y = 170.0
-        detection.oil_air_level_y = 170.0
+        detection.raw_oil_air_level_y = oil.y
+        detection.oil_air_level_y = oil.y
 
     resolved, _ = FoamEpisodeResolver().resolve(detections, glass_config())
 
     assert all(item.fill_state is FillState.PARTIAL_VISIBLE for item in resolved)
-    assert [item.raw_oil_air_level_y for item in resolved] == [170.0, 170.0]
+    assert [item.raw_oil_air_level_y for item in resolved] == [188.0, 182.0]
     assert [item.raw_foam_front_y for item in resolved] == [None, None]
     assert all(
         "R8_FOAM_OIL_ALIAS_REJECTED" in item.flags
@@ -238,9 +238,9 @@ def test_prior_oil_alias_does_not_suppress_later_independent_foam() -> None:
             state=FillState.UNKNOWN_REVIEW,
         ),
     )
-    for detection in detections[:2]:
-        detection.raw_oil_air_level_y = 170.0
-        detection.oil_air_level_y = 170.0
+    for index, detection in enumerate(detections[:2]):
+        detection.raw_oil_air_level_y = 188.0 + index
+        detection.oil_air_level_y = 188.0 + index
 
     resolved, diagnostics = FoamEpisodeResolver().resolve(
         detections,
@@ -295,6 +295,39 @@ def test_separated_oil_and_foam_are_both_published() -> None:
     assert diagnostics.rejected_oil_alias_episode_count == 0
     assert [item.raw_oil_air_level_y for item in resolved] == [448.0, 448.0]
     assert [item.raw_foam_front_y for item in resolved] == [411.0, 410.0]
+
+
+def test_thin_dynamic_foam_layer_is_not_alias_under_large_oil_jump_setting() -> None:
+    glass = glass_config()
+    glass.detector_settings.temporal_max_jump_px = 64.0
+    detections = (
+        _detection(0, _foam_candidate(219.0, dynamic=0.20)),
+        _detection(1, _foam_candidate(218.0, dynamic=0.20)),
+    )
+    for index, detection in enumerate(detections):
+        oil_y = 236.0 - index
+        detection.raw_oil_air_level_y = oil_y
+        detection.oil_air_level_y = oil_y
+        detection.candidates.insert(
+            0,
+            BoundaryCandidate(
+                source="selected-oil",
+                kind=BoundaryKind.OIL_AIR,
+                y=oil_y,
+                selected=True,
+                final_score=0.94,
+            ),
+        )
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(detections, glass)
+
+    assert diagnostics.rejected_oil_alias_episode_count == 0
+    assert [item.raw_foam_front_y for item in resolved] == [219.0, 218.0]
+    assert all("R10_FOAM_LAYER_SEPARATED" in item.flags for item in resolved)
+    assert all(
+        item.debug_metrics["r10_foam_oil_identity_tolerance_px"] <= 8.0
+        for item in resolved
+    )
 
 
 def test_foam_aliases_strong_same_frame_oil_candidate_before_publication() -> None:

@@ -22,7 +22,7 @@ def test_static_detail_connects_oil_anchors_but_preserves_foam_gaps(
     tmp_path,
     monkeypatch,
 ) -> None:
-    calls: dict[str, tuple[tuple[float, ...], tuple[float, ...]]] = {}
+    calls: dict[str, tuple[tuple[float, ...], tuple[float, ...], str]] = {}
     scatter_calls: dict[str, tuple[tuple[float, ...], tuple[float, ...]]] = {}
     original_plot = Axes.plot
     original_scatter = Axes.scatter
@@ -30,7 +30,11 @@ def test_static_detail_connects_oil_anchors_but_preserves_foam_gaps(
     def recording_plot(self, x_values, y_values, *args, **kwargs):
         label = kwargs.get("label")
         if label in {"관측 공백 연결", "거품 경계"}:
-            calls[label] = (tuple(x_values), tuple(y_values))
+            calls[label] = (
+                tuple(x_values),
+                tuple(y_values),
+                kwargs.get("marker", ""),
+            )
         return original_plot(self, x_values, y_values, *args, **kwargs)
 
     def recording_scatter(self, x_values, y_values, *args, **kwargs):
@@ -58,12 +62,13 @@ def test_static_detail_connects_oil_anchors_but_preserves_foam_gaps(
 
     assert output.is_file()
     assert scatter_calls["관측 유면"] == ((0.0, 2.0), (1.0, 3.0))
-    assert calls["관측 공백 연결"] == ((0.0, 2.0), (1.0, 3.0))
-    foam_times, foam_values = calls["거품 경계"]
+    assert calls["관측 공백 연결"][:2] == ((0.0, 2.0), (1.0, 3.0))
+    foam_times, foam_values, foam_marker = calls["거품 경계"]
     assert foam_times == (0.0, 1.0, 2.0)
     assert math.isnan(foam_values[0])
     assert foam_values[1] == 4.0
     assert math.isnan(foam_values[2])
+    assert foam_marker == "o"
 
     calls.clear()
     scatter_calls.clear()

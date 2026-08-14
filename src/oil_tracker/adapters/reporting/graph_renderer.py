@@ -99,6 +99,8 @@ class GraphRenderer:
                     times,
                     _gaps(foam),
                     linestyle="--",
+                    marker="o",
+                    markersize=3.5,
                     label=f"{glass.glass_name} 거품 경계",
                 )
         ranges = []
@@ -163,6 +165,8 @@ class GraphRenderer:
                 times,
                 _gaps(foam),
                 linestyle=(0, (5, 3)),
+                marker="o",
+                markersize=4,
                 label="거품 경계",
                 linewidth=2,
                 color="#f97316",

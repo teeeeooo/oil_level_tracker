@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+import math
 from types import SimpleNamespace
 
 from PySide6.QtWidgets import QApplication
@@ -59,6 +60,12 @@ def test_graph_renders_selected_glass_unit_boundaries_and_optional_foam(qtbot):
     assert "기준선" in labels
     assert "분석 영역 위쪽 경계" in labels
     assert "분석 영역 아래쪽 경계" in labels
+    foam_line = next(line for line in graph.axes.lines if line.get_label() == "거품 경계")
+    assert foam_line.get_marker() == "o"
+    assert tuple(foam_line.get_xdata()) == (0.0, 1.0)
+    foam_values = tuple(foam_line.get_ydata())
+    assert math.isnan(foam_values[0])
+    assert foam_values[1] == 4.0
     bridge = next(line for line in graph.axes.lines if line.get_label() == "관측 공백 연결")
     assert tuple(bridge.get_xdata()) == (0.0, 2.0)
     assert tuple(bridge.get_ydata()) == (1.0, 3.0)
