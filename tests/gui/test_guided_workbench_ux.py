@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+from PySide6.QtCore import Qt
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.vision.artifact_calibration import template_from_candidate
@@ -178,7 +179,46 @@ def test_roi_editor_bulk_selects_and_highlights_artifact_proposals(
 
     dialog.accept_artifact_button.click()
     assert len(dialog.edited_glass().geometry.artifact_templates) == 2
-    assert dialog.canvas.geometry().bottom() <= dialog.settings_scroll.geometry().top()
+    assert dialog.content_splitter.orientation() == Qt.Orientation.Horizontal
+    canvas_right = dialog.canvas.mapTo(
+        dialog,
+        dialog.canvas.rect().bottomRight(),
+    ).x()
+    artifact_left = dialog.artifact_group.mapTo(
+        dialog,
+        dialog.artifact_group.rect().topLeft(),
+    ).x()
+    assert canvas_right < artifact_left
+
+
+def test_roi_editor_primary_artifact_actions_are_visible_without_scrolling(qtbot):
+    glass = InspectionRecipe.default_glass(1920, 1080)
+    dialog = RoiEditorDialog(
+        np.zeros((1080, 1920, 3), dtype=np.uint8),
+        glass,
+        1920,
+        1080,
+    )
+    qtbot.addWidget(dialog)
+    dialog.resize(980, 700)
+    dialog.show()
+    qtbot.wait(10)
+
+    for widget in (
+        dialog.scan_artifacts_button,
+        dialog.select_all_artifacts_button,
+        dialog.accept_artifact_button,
+    ):
+        assert widget.isVisible()
+        top_left = widget.mapTo(dialog, widget.rect().topLeft())
+        bottom_right = widget.mapTo(dialog, widget.rect().bottomRight())
+        assert dialog.rect().contains(top_left)
+        assert dialog.rect().contains(bottom_right)
+
+    assert dialog.isSizeGripEnabled()
+    assert dialog.windowFlags() & Qt.WindowType.WindowMaximizeButtonHint
+    assert dialog.content_splitter.orientation() == Qt.Orientation.Horizontal
+    assert all(size > 0 for size in dialog.content_splitter.sizes())
 
 
 def test_recipe_snapshot_command_restores_before_and_after(qtbot):

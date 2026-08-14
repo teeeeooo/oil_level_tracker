@@ -15,7 +15,6 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QPushButton,
-    QScrollArea,
     QSplitter,
     QVBoxLayout,
     QWidget,
@@ -33,8 +32,10 @@ class RoiEditorDialog(QDialog):
     def __init__(self, frame, glass, frame_width: int, frame_height: int, parent=None) -> None:
         super().__init__(parent)
         self.setWindowTitle("분석 영역 편집")
-        self.setMinimumSize(980, 700)
-        self.resize(1200, 840)
+        self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
+        self.setSizeGripEnabled(True)
+        self.setMinimumSize(980, 650)
+        self.resize(1280, 800)
         self._frame_width = frame_width
         self._frame_height = frame_height
         self._frame = frame
@@ -49,7 +50,7 @@ class RoiEditorDialog(QDialog):
         instruction.setObjectName("roiEditorHint")
 
         self.canvas = VideoOverlayCanvas()
-        self.canvas.setMinimumSize(640, 320)
+        self.canvas.setMinimumSize(520, 320)
         self.canvas.set_frame(frame)
         self.canvas.geometryChanged.connect(self._ellipse_changed)
         self.canvas.zeroLineChanged.connect(self._zero_changed)
@@ -70,6 +71,7 @@ class RoiEditorDialog(QDialog):
         controls.addWidget(self.reset_geometry_button)
 
         artifact_group = QGroupBox("사용자 Artifact Calibration")
+        artifact_group.setMinimumWidth(350)
         artifact_layout = QVBoxLayout(artifact_group)
         artifact_hint = QLabel(
             "현재 화면에서 detector가 제안한 고정 반사·흠집 후보를 선택하면 "
@@ -77,28 +79,51 @@ class RoiEditorDialog(QDialog):
         )
         artifact_hint.setWordWrap(True)
         artifact_layout.addWidget(artifact_hint)
-        artifact_lists = QHBoxLayout()
+
+        self.scan_artifacts_button = QPushButton("Detector 후보 찾기")
+        self.scan_artifacts_button.setObjectName("primaryArtifactAction")
+        artifact_layout.addWidget(self.scan_artifacts_button)
+
+        artifact_buttons = QHBoxLayout()
+        self.select_all_artifacts_button = QPushButton("모든 후보 선택")
+        self.accept_artifact_button = QPushButton("선택 후보 일괄 Artifact 지정")
+        artifact_buttons.addWidget(self.select_all_artifacts_button)
+        artifact_buttons.addWidget(self.accept_artifact_button, 1)
+        artifact_layout.addLayout(artifact_buttons)
+
+        self.artifact_status = QLabel("후보 찾기를 실행한 뒤 필요한 항목만 선택하세요.")
+        self.artifact_status.setObjectName("ownershipHint")
+        self.artifact_status.setWordWrap(True)
+        artifact_layout.addWidget(self.artifact_status)
+
         self.artifact_proposal_list = QListWidget()
         self.artifact_proposal_list.setSelectionMode(
             QAbstractItemView.SelectionMode.ExtendedSelection
         )
         self.artifact_template_list = QListWidget()
-        artifact_lists.addWidget(self.artifact_proposal_list, 1)
-        artifact_lists.addWidget(self.artifact_template_list, 1)
-        artifact_layout.addLayout(artifact_lists)
-        artifact_buttons = QHBoxLayout()
-        self.scan_artifacts_button = QPushButton("Detector 후보 찾기")
-        self.select_all_artifacts_button = QPushButton("모든 후보 선택")
-        self.accept_artifact_button = QPushButton("선택 후보 일괄 Artifact 지정")
+        proposal_panel = QWidget()
+        proposal_layout = QVBoxLayout(proposal_panel)
+        proposal_layout.setContentsMargins(0, 0, 0, 0)
+        proposal_layout.addWidget(QLabel("Detector 제안 후보"))
+        proposal_layout.addWidget(self.artifact_proposal_list, 1)
+        template_panel = QWidget()
+        template_layout = QVBoxLayout(template_panel)
+        template_layout.setContentsMargins(0, 0, 0, 0)
+        template_layout.addWidget(QLabel("지정된 Artifact"))
+        template_layout.addWidget(self.artifact_template_list, 1)
+        artifact_lists = QSplitter(Qt.Orientation.Vertical)
+        artifact_lists.setChildrenCollapsible(False)
+        artifact_lists.addWidget(proposal_panel)
+        artifact_lists.addWidget(template_panel)
+        artifact_lists.setStretchFactor(0, 3)
+        artifact_lists.setStretchFactor(1, 2)
+        artifact_lists.setSizes([280, 180])
+        artifact_layout.addWidget(artifact_lists, 1)
+
         self.delete_artifact_button = QPushButton("선택 Artifact 삭제")
-        artifact_buttons.addWidget(self.scan_artifacts_button)
-        artifact_buttons.addWidget(self.select_all_artifacts_button)
-        artifact_buttons.addWidget(self.accept_artifact_button)
-        artifact_buttons.addWidget(self.delete_artifact_button)
-        artifact_layout.addLayout(artifact_buttons)
-        self.artifact_status = QLabel("후보 찾기를 실행한 뒤 필요한 항목만 선택하세요.")
-        self.artifact_status.setObjectName("ownershipHint")
-        artifact_layout.addWidget(self.artifact_status)
+        artifact_layout.addWidget(self.delete_artifact_button)
+        self.artifact_group = artifact_group
+        self.artifact_lists_splitter = artifact_lists
 
         self.buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         self.buttons.button(QDialogButtonBox.StandardButton.Ok).setText("적용")
@@ -110,26 +135,23 @@ class RoiEditorDialog(QDialog):
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(8)
         layout.addWidget(instruction)
-        settings = QWidget()
-        settings_layout = QVBoxLayout(settings)
-        settings_layout.setContentsMargins(4, 4, 4, 4)
-        settings_layout.addLayout(controls)
-        settings_layout.addWidget(artifact_group)
-        settings_scroll = QScrollArea()
-        settings_scroll.setWidgetResizable(True)
-        settings_scroll.setFrameShape(QScrollArea.Shape.NoFrame)
-        settings_scroll.setWidget(settings)
-        settings_scroll.setMinimumHeight(210)
+        video_panel = QWidget()
+        video_layout = QVBoxLayout(video_panel)
+        video_layout.setContentsMargins(0, 0, 0, 0)
+        video_layout.setSpacing(7)
+        video_layout.addWidget(self.canvas, 1)
+        video_layout.addLayout(controls)
 
-        splitter = QSplitter(Qt.Orientation.Vertical)
+        splitter = QSplitter(Qt.Orientation.Horizontal)
         splitter.setChildrenCollapsible(False)
-        splitter.addWidget(self.canvas)
-        splitter.addWidget(settings_scroll)
-        splitter.setStretchFactor(0, 4)
-        splitter.setStretchFactor(1, 1)
-        splitter.setSizes([560, 250])
+        splitter.setHandleWidth(8)
+        splitter.addWidget(video_panel)
+        splitter.addWidget(artifact_group)
+        splitter.setStretchFactor(0, 3)
+        splitter.setStretchFactor(1, 2)
+        splitter.setSizes([790, 450])
         self.content_splitter = splitter
-        self.settings_scroll = settings_scroll
+        self.video_panel = video_panel
         layout.addWidget(splitter, 1)
         layout.addWidget(self.buttons)
 
