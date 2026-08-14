@@ -39,8 +39,13 @@ Tests must prove:
 
 - repeated practically coincident Foam/Oil rows may still be rejected as an
   alias;
+- inverted public Oil/Foam topology is rejected even when separation exceeds
+  the small same-boundary tolerance;
 - a confirmed dynamic Foam front 17 px above selected Oil remains public under
   the representative secure-Windows geometry/settings;
+- an unselected coincident proposal cannot erase a separated selected pair;
+- unresolved Oil may suppress Foam only through repeated strong,
+  low-artifact same-frame proposals and the bounded candidate-only tolerance;
 - Oil temporal jump settings cannot widen Foam/Oil identity tolerance;
 - Foam publication never changes selected Oil provenance;
 - confirmed Foam remains stored when state is `UNKNOWN_REVIEW` and

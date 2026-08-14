@@ -154,10 +154,9 @@ def test_confirming_foam_preserves_independently_selected_oil_provenance() -> No
     )
     for detection in detections:
         oil = _selected_oil_candidate()
-        oil.y = 100.0
         detection.candidates.insert(0, oil)
-        detection.raw_oil_air_level_y = 100.0
-        detection.oil_air_level_y = 100.0
+        detection.raw_oil_air_level_y = oil.y
+        detection.oil_air_level_y = oil.y
 
     resolved, _ = FoamEpisodeResolver().resolve(detections, glass_config())
 
@@ -318,6 +317,19 @@ def test_thin_dynamic_foam_layer_is_not_alias_under_large_oil_jump_setting() -> 
                 final_score=0.94,
             ),
         )
+        detection.candidates.append(
+            BoundaryCandidate(
+                source="unselected-foam-twin",
+                kind=BoundaryKind.OIL_AIR,
+                y=219.0 - index,
+                features={
+                    "boundary_likelihood": 0.96,
+                    "artifact_likelihood": 0.02,
+                },
+                selected=False,
+                final_score=0.96,
+            )
+        )
 
     resolved, diagnostics = FoamEpisodeResolver().resolve(detections, glass)
 
@@ -328,6 +340,35 @@ def test_thin_dynamic_foam_layer_is_not_alias_under_large_oil_jump_setting() -> 
         item.debug_metrics["r10_foam_oil_identity_tolerance_px"] <= 8.0
         for item in resolved
     )
+
+
+def test_inverted_public_oil_foam_topology_is_rejected_beyond_identity_tolerance() -> None:
+    detections = (
+        _detection(0, _foam_candidate(190.0, dynamic=0.20)),
+        _detection(1, _foam_candidate(184.0, dynamic=0.20)),
+    )
+    for index, detection in enumerate(detections):
+        oil_y = 170.0 - index * 6.0
+        detection.raw_oil_air_level_y = oil_y
+        detection.oil_air_level_y = oil_y
+        detection.candidates.insert(
+            0,
+            BoundaryCandidate(
+                source="selected-inverted-oil",
+                kind=BoundaryKind.OIL_AIR,
+                y=oil_y,
+                selected=True,
+                final_score=0.94,
+            ),
+        )
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.rejected_oil_alias_episode_count == 1
+    assert [item.raw_foam_front_y for item in resolved] == [None, None]
 
 
 def test_foam_aliases_strong_same_frame_oil_candidate_before_publication() -> None:

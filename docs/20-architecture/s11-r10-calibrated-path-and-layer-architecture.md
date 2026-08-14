@@ -75,14 +75,18 @@ two similarly credible paths leave the sequence unresolved.
 ## Independent Oil/Foam layer identity
 
 Oil temporal jump tolerance and Oil/Foam identity tolerance are separate.
-Confirmed dynamic Foam above selected Oil is a legitimate layered observation,
-including a thin layer. Alias hard rejection is limited to repeated
-near-coincident boundaries under a small scale-bounded identity tolerance.
+Source Y grows downward, so a confirmed dynamic Foam front above selected Oil
+has positive `OilY - FoamY` and is a legitimate layered observation, including
+a thin layer. Repeated inverted topology or near-coincident rows are treated as
+the same material edge under a small scale-bounded identity tolerance.
 
-When separation exceeds identity tolerance, both selected Oil and confirmed
-Foam remain public. Uncertain proximity may carry a review/possible-alias flag,
-but it must not erase a materially changing confirmed episode solely because
-Oil exists nearby. Foam still cannot create or move Oil/state authority.
+When selected/public Oil establishes a positive layer thickness greater than
+identity tolerance, both Oil and confirmed Foam remain public. An unselected
+duplicate proposal cannot override that public composition. If Oil is not yet
+public, only a repeated, very strong, low-artifact same-frame Oil proposal may
+suppress Foam through a separate bounded candidate-only tolerance; that
+tolerance is also independent of temporal jump settings. Foam still cannot
+create or move Oil/state authority.
 
 ## Graph observation contract
 

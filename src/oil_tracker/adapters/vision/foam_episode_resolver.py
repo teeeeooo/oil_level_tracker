@@ -573,6 +573,27 @@ def _same_frame_oil_alias_matches(
     matched = 0
     for evidence in group:
         detection = detections[evidence.frame_offset]
+        if _finite(detection.raw_oil_air_level_y):
+            # A public selected Oil row is authoritative composition context.
+            # Do not let a nearby unselected duplicate erase a real thin Foam
+            # layer above it.
+            # Source Y increases downward. A real Foam front must be above the
+            # Oil surface, so OilY - FoamY is a positive layer thickness.
+            # Negative separation is inverted topology and small positive
+            # separation is the same boundary within identity tolerance.
+            if (
+                float(detection.raw_oil_air_level_y)
+                - float(evidence.candidate.y)
+                <= tolerance
+            ):
+                matched += 1
+            continue
+
+        # When Oil is unresolved, a very strong same-frame Oil proposal may be
+        # the same material edge duplicated as Foam. Keep this candidate-only
+        # screen independent of temporal jump settings and bounded by analysis
+        # scale; it cannot override an already selected public Oil/Foam pair.
+        candidate_tolerance = _unresolved_oil_candidate_alias_tolerance(glass)
         oil_rows = [
             float(candidate.y)
             for candidate in detection.candidates
@@ -593,12 +614,10 @@ def _same_frame_oil_alias_matches(
             )
             <= 0.46
         ]
-        if _finite(detection.raw_oil_air_level_y):
-            oil_rows.append(float(detection.raw_oil_air_level_y))
         if oil_rows and min(
             abs(float(evidence.candidate.y) - oil_y)
             for oil_y in oil_rows
-        ) <= tolerance:
+        ) <= candidate_tolerance:
             matched += 1
     return matched
 
@@ -641,6 +660,13 @@ def _oil_foam_identity_tolerance(glass: GlassInspectionConfig) -> float:
 
     height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
     return max(3.0, min(8.0, height * 0.01))
+
+
+def _unresolved_oil_candidate_alias_tolerance(
+    glass: GlassInspectionConfig,
+) -> float:
+    height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
+    return max(21.0, min(24.0, height * 0.11))
 
 
 def _finite(value: object) -> bool:
