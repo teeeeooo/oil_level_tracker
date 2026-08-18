@@ -400,6 +400,7 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 "initial_authority": initial,
                 "post_track_authority": post_track,
                 "authority": authority,
+                "authority_reason": features.get("r11_authority_reason"),
                 "cross_representation_support": features.get(
                     "r9_cross_representation_support"
                 ),
@@ -429,7 +430,9 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
     state = {
         str(key): value
         for key, value in detection.debug_metrics.items()
-        if str(key).startswith(("sequence_", "r7_", "r8_", "r9_", "r10_"))
+        if str(key).startswith(
+            ("sequence_", "r7_", "r8_", "r9_", "r10_", "r11_")
+        )
     }
     return _json_safe(
         {
