@@ -85,10 +85,9 @@ rows agree exactly and every numeric row owns one equal-Y same-frame candidate.
 
 ## Current executable action
 
-Close R11 evidence, remove confirmed unreachable symbol/test compatibility
-debt without changing fingerprints, then replace the failed policies through a
-single R12 semantic pipeline. R12 must not add Base/Accum or version-specific
-branches. It must replace motion-only authority, unbounded material identity,
+R11 evidence and the confirmed dead compatibility cleanup are complete. R12 is
+now implementing one replacement semantic pipeline, not another R11 policy
+layer. It removes motion-only authority, unbounded material identity,
 distinct-lower anchoring, material-bottom topology veto and shared series
 validity. Logical commits are pushed once after local replay, full regression,
 runtime and documentation gates pass.
@@ -101,6 +100,8 @@ runtime and documentation gates pass.
 - [R11 local evidence](../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md)
 - [R11 Windows result](../60-evidence/s11/s11-r11-secure-windows-field-result.md)
 - [R11 Windows diagnostic](../50-diagnostics/s11/s11-r11-windows-bootstrap-composition-diagnostic.md)
+- [R12 replacement architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md)
+- [R12 validation](../30-validation/s11-r12-phase-composition-replacement-validation.md)
 - [Durable detector responsibilities](../20-architecture/s11-detector-responsibility-architecture.md)
 - [Structural maintainability assessment](../50-diagnostics/post-s11-structural-maintainability-assessment.md)
 - [Windows checklist](../40-operations/manual-gui-windows-checklist.md)
