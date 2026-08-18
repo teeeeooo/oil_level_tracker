@@ -1,5 +1,20 @@
 # Post-S11 Structural Maintainability Assessment
 
+## R11 execution addendum (2026-08-18)
+
+R11 pulled forward the detector-only portion of this assessment because the
+R10 field failure proved the debt was already a correctness blocker. The five
+legacy selector modules below are now removed and guarded by an explicit
+production-cutover absence test. Typed authority/evidence, candidate assembly,
+Foam material identity and sequence row types are separate owners. The
+behavior-preserving midpoint retained all four R10 fingerprints.
+
+The remaining UI slices and conditional package taxonomy stay post-S11. The
+sequence resolver remains above the soft LOC signal; its global path and run
+bounding are a later cohesion review, not a reason to move code during the R11
+field gate. See the completed
+[`../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md`](../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md).
+
 ## Responsibility and snapshot
 
 This diagnostic records the maintainability assessment requested before future

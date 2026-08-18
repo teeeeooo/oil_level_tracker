@@ -1,5 +1,8 @@
 # S11-R11 Detector Architecture Reset
 
+**Implementation status:** local architecture/behavior gate complete; exact-head
+secure-Windows Base/Accum validation pending.
+
 ## Purpose
 
 R11 replaces accumulated version-coupled detector ownership with explicit raw
@@ -99,6 +102,12 @@ Version-prefixed flags may remain in exported trace compatibility, but new
 internal control flow uses semantic names. R11 introduces no Base/Accum,
 filename, timestamp or private-video branch.
 
+The R11 implementation retires the five unreachable selection modules and
+extracts typed candidate evidence, authority decisions, candidate-family
+assembly, Foam material identity and immutable sequence types. Global path and
+run bounding remain cohesive inside the sequence resolver; they are not split
+merely for LOC compliance during this correctness gate.
+
 ## Performance and migration
 
 Structural commits preserve candidate/output fingerprints and debug-disabled
@@ -107,4 +116,3 @@ fingerprints and causal evidence. The reset is complete when production has one
 final authority owner, authority reasons are observable, bootstrap and material
 identity are independently testable, and central orchestration no longer owns
 their decision details.
-

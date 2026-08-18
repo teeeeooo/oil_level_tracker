@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `IMPLEMENTING`
-**Current gate:** `R11 detector architecture reset, then Base/Accum repair`
-**Source authority:** `R11 architecture + R10 Windows diagnostic`
+**Current gate:** `Exact pushed R11 secure-Windows Base/Accum validation`
+**Source authority:** `R11 architecture + local evidence + R10 Windows diagnostic`
 
 ## R10 field result
 
@@ -60,18 +60,29 @@ After structural preservation passes:
 Every numeric Oil remains an exact same-frame candidate. No state, Foam,
 bootstrap or graph projection may create/interpolate/carry a coordinate.
 
+## Local R11 result
+
+The structural reset, bounded bootstrap and Foam-material identity repair are
+implemented and locally validated. The behavior-preserving midpoint retained
+all R10 fingerprints. Final R11 replay produced 129/299 numeric Oil with 10/13
+checked truth, 5.95 px MAE, 11 px maximum error and complete same-frame
+provenance. User-like Artifact replay produced 92/113 sample4 numeric Oil and
+3/5 checked truth. Full regression is 1,524 passed; direct detector timing is
+43.0 ms/frame off and 44.0 ms/frame on.
+
 ## Current executable action
 
-Complete the structural reset through independently verifiable logical commits,
-run the R10 preservation gate, then implement and locally validate R11. Update
-completed evidence and push once after the full exact-head gate. The next field
-action is secure-Windows replay of that exact pushed R11 head.
+Push the exact validated head once, then run secure-Windows Base/Accum with the
+same Recipes, templates and bounds. Reconcile Base wrong-path suppression,
+Accum residue/Oil separation and the calibrated sample4 Foam episodes. No
+further threshold change is authorized before that evidence returns.
 
 ## Authority links
 
 - [R11 architecture](../20-architecture/s11-r11-detector-architecture-reset.md)
 - [R11 validation](../30-validation/s11-r11-detector-architecture-reset-validation.md)
 - [R10 Windows diagnostic](../50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md)
+- [R11 local evidence](../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md)
 - [Durable detector responsibilities](../20-architecture/s11-detector-responsibility-architecture.md)
 - [Structural maintainability assessment](../50-diagnostics/post-s11-structural-maintainability-assessment.md)
 - [Windows checklist](../40-operations/manual-gui-windows-checklist.md)

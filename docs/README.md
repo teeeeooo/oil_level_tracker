@@ -64,6 +64,7 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
 - Active S11-R11 detector reset architecture: [`20-architecture/s11-r11-detector-architecture-reset.md`](20-architecture/s11-r11-detector-architecture-reset.md)
 - Active S11-R11 validation contract: [`30-validation/s11-r11-detector-architecture-reset-validation.md`](30-validation/s11-r11-detector-architecture-reset-validation.md)
+- S11-R11 local implementation/replay evidence: [`60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md`](60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md)
 - S11-R10 secure-Windows root cause: [`50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md`](50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md)
 - S11-R10 historical local implementation/replay evidence: [`60-evidence/s11/s11-r10-calibrated-path-and-layer.md`](60-evidence/s11/s11-r10-calibrated-path-and-layer.md)
 - S11-R9 secure-Windows root cause: [`50-diagnostics/s11/s11-r9-windows-calibrated-observation-diagnostic.md`](50-diagnostics/s11/s11-r9-windows-calibrated-observation-diagnostic.md)

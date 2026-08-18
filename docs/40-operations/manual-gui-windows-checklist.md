@@ -277,6 +277,31 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
   machine. Treat hidden controls, wrong selection, false Base Foam, lost Accum
   Foam, a wrong Oil path or material runtime regression as field failure.
 
+### S11-R11 secure Base/Accum bounded path and material identity
+
+- Record the exact pushed SHA and confirm detector version
+  `opencv-phase-detector-r11-bounded-bootstrap-and-material-identity-v1` and
+  sequence resolver version `r11-bounded-bootstrap-and-material-identity-v1`.
+- Reuse the R10 private videos, Recipe/template identities, bounds, cadence and
+  confirmed initial states. Do not redraw truth from detector overlays.
+- On Base, inspect 540, 634 and 674 s plus the complete 480–777.5 s window.
+  Record `r10_calibrated_motion_keyframe`, `r10_calibrated_path_member`,
+  `authority_reason`, failed gates and every numeric run. The two late R10
+  keyframes must not promote the old 583-frame lower-structure prefix.
+- On Accum, inspect actual Oil near Y450 and the Foam/residue track Y191–297.
+  Record `r11_foam_material_identity`, distinct-lower reserve, authority reason,
+  selected source/Y and first reject stage. Residue must not become public Oil;
+  separately evidenced lower Oil must remain admissible.
+- Record Foam and Oil independently around onset, highest Oil, disappearance
+  and recovery. A public Foam row requires a confirmed dynamic episode; an Oil
+  row requires exact same-frame candidate provenance.
+- In Artifact-calibrated replay, classify the sample4-like wide/dense dynamic
+  Foam episodes by direct video review. Do not accept or reject them merely
+  because R10 Oil-alias behavior differed.
+- Report Base/Accum numeric coverage, longest missing run, wrong-interface run,
+  public Foam count, checked point errors, events/captures and debug-disabled
+  mean frame time. Coverage alone is never PASS.
+
 ## S5-B oil boundary and temporal tracking
 - Validate a real, visually clear oil boundary and a weak transparent-oil boundary against user-recorded truth.
 - Validate transparent-oil agitation, shimmer and heat-haze-like motion without forcing a numeric boundary.

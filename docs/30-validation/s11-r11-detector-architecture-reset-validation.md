@@ -1,5 +1,16 @@
 # S11-R11 Detector Architecture Reset Validation
 
+## Local gate status
+
+Local implementation validation is complete. The behavior-preserving midpoint
+retained the four R10 fingerprints. Final R11 four-video replay, user-like
+Artifact replay, same-frame provenance, compile, runtime and 1,524-test full
+regression gates pass. Exact measurements and the unresolved calibrated
+sample4 Foam review boundary are recorded in
+[`../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md`](../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md).
+
+Secure-Windows Base/Accum remains pending; local PASS is not field PASS.
+
 ## Structural preservation gate
 
 Before intentional R11 behavior changes, every extraction/removal commit must
@@ -65,3 +76,12 @@ must not reproduce the 480–777.5 s lower-structure path. Accum must not reuse
 the Y191–297 Foam/residue track as Oil when a visible lower interface exists.
 Coverage alone is never a PASS.
 
+## Reproducible commands
+
+```bash
+.venv/bin/python -m tests.diagnostics.s11_r11_bounded_material_identity_replay
+.venv/bin/python -m tests.diagnostics.s11_r11_artifact_calibration_replay
+.venv/bin/python -m pytest -q
+.venv/bin/python -m compileall -q src tests
+git diff --check
+```
