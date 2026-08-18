@@ -66,6 +66,8 @@ def run(
     proposal_time_sec: float = 3.0,
     run_label: str = "S11-R8-CAL",
     run_note: str = "User-selected detector artifact proposal replay",
+    minimum_numeric_reference: int = 76,
+    allow_public_foam: bool = False,
 ) -> dict[str, object]:
     sample = "sample4"
     video = root / "sample" / f"{sample}.mp4"
@@ -121,9 +123,9 @@ def run(
         "provisional_visual": provisional_audit(root, sample, rows),
         "uncalibrated_r8_numeric_reference": 76,
     }
-    if payload["sequence"]["numeric_count"] < 76:
+    if payload["sequence"]["numeric_count"] < minimum_numeric_reference:
         raise AssertionError("Selected artifact reduced sample4 Oil coverage")
-    if payload["sequence"]["foam_numeric_count"]:
+    if payload["sequence"]["foam_numeric_count"] and not allow_public_foam:
         raise AssertionError("Selected artifact introduced public Foam")
     if payload["sequence"]["numeric_without_same_frame_provenance"]:
         raise AssertionError("Selected artifact introduced unprovenanced Oil")
