@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import fields
 import hashlib
+import importlib.util
 import inspect
 import json
 
@@ -9,14 +10,7 @@ import numpy as np
 import pytest
 
 from foam_benchmark_fixtures import controlled_scenes
-from oil_tracker.adapters.vision import (
-    candidate_generators,
-    candidate_scorer,
-    oil_candidate_consensus,
-    oil_no_interface,
-    oil_temporal_path,
-    opencv_phase_detector as detector_module,
-)
+from oil_tracker.adapters.vision import opencv_phase_detector as detector_module
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
 from oil_tracker.adapters.vision.oil_hypothesis_projection import project_production_result
 from oil_tracker.adapters.vision.oil_shadow_pipeline import OilHypothesisPipeline
@@ -154,8 +148,19 @@ def test_failure_unavailable_and_numeric_ownership_are_structurally_distinct():
     assert type(unavailable) is not type(failure)
 
 
-def test_production_detector_does_not_call_legacy_oil_owners(monkeypatch):
+def test_legacy_oil_owners_are_retired_from_the_runtime_package():
     source = inspect.getsource(OpenCvPhaseDetector)
+    legacy_modules = (
+        "candidate_generators",
+        "candidate_scorer",
+        "oil_candidate_consensus",
+        "oil_no_interface",
+        "oil_temporal_path",
+    )
+    for module_name in legacy_modules:
+        assert importlib.util.find_spec(
+            f"oil_tracker.adapters.vision.{module_name}"
+        ) is None
     for forbidden_name in (
         "generate_oil_air_candidates",
         "build_oil_candidate_consensus",
@@ -164,15 +169,6 @@ def test_production_detector_does_not_call_legacy_oil_owners(monkeypatch):
         "OilTemporalPath",
     ):
         assert forbidden_name not in source
-
-    def forbidden(*_args, **_kwargs):
-        raise AssertionError("legacy oil owner was called")
-
-    monkeypatch.setattr(candidate_generators, "generate_oil_air_candidates", forbidden)
-    monkeypatch.setattr(oil_candidate_consensus, "build_oil_candidate_consensus", forbidden)
-    monkeypatch.setattr(candidate_scorer, "score_candidates", forbidden)
-    monkeypatch.setattr(oil_no_interface, "evaluate_no_interface", forbidden)
-    monkeypatch.setattr(oil_temporal_path.OilTemporalPath, "evaluate", forbidden)
 
     detection, _ = OpenCvPhaseDetector().detect(_oil_frame(), _glass(), 1, 0.0)
     assert detection.raw_oil_air_level_y is not None
