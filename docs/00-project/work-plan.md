@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `IMPLEMENTING`
-**Current gate:** `Exact pushed R11 secure-Windows Base/Accum validation`
-**Source authority:** `R11 architecture + local evidence + R10 Windows diagnostic`
+**Current gate:** `R12 replacement architecture, implementation and validation`
+**Source authority:** `R11 Windows field diagnostic + durable detector responsibilities`
 
 ## R10 field result
 
@@ -70,12 +70,28 @@ provenance. User-like Artifact replay produced 92/113 sample4 numeric Oil and
 3/5 checked truth. Full regression is 1,524 passed; direct detector timing is
 43.0 ms/frame off and 44.0 ms/frame on.
 
+## R11 field disposition
+
+The exact pushed R11 head failed secure-Windows Base/Accum effectiveness. R11
+removed the R10 unbounded prefix but a later motion-only path still changed
+identity between reflection, actual liquid and bracket reflection. Accum's
+distinct-lower reserve became generic anchor authority while actual lower Oil
+was pruned. Real dynamic Foam was halved by fixed width admission, fragmented
+by sequence bounds and then made invalid by a broad material-bottom topology
+veto plus shared Oil/Foam graph validity.
+
+Final sequence and CSV ownership remain sound: Base 39 and Accum 418 numeric Oil
+rows agree exactly and every numeric row owns one equal-Y same-frame candidate.
+
 ## Current executable action
 
-Push the exact validated head once, then run secure-Windows Base/Accum with the
-same Recipes, templates and bounds. Reconcile Base wrong-path suppression,
-Accum residue/Oil separation and the calibrated sample4 Foam episodes. No
-further threshold change is authorized before that evidence returns.
+Close R11 evidence, remove confirmed unreachable symbol/test compatibility
+debt without changing fingerprints, then replace the failed policies through a
+single R12 semantic pipeline. R12 must not add Base/Accum or version-specific
+branches. It must replace motion-only authority, unbounded material identity,
+distinct-lower anchoring, material-bottom topology veto and shared series
+validity. Logical commits are pushed once after local replay, full regression,
+runtime and documentation gates pass.
 
 ## Authority links
 
@@ -83,6 +99,8 @@ further threshold change is authorized before that evidence returns.
 - [R11 validation](../30-validation/s11-r11-detector-architecture-reset-validation.md)
 - [R10 Windows diagnostic](../50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md)
 - [R11 local evidence](../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md)
+- [R11 Windows result](../60-evidence/s11/s11-r11-secure-windows-field-result.md)
+- [R11 Windows diagnostic](../50-diagnostics/s11/s11-r11-windows-bootstrap-composition-diagnostic.md)
 - [Durable detector responsibilities](../20-architecture/s11-detector-responsibility-architecture.md)
 - [Structural maintainability assessment](../50-diagnostics/post-s11-structural-maintainability-assessment.md)
 - [Windows checklist](../40-operations/manual-gui-windows-checklist.md)

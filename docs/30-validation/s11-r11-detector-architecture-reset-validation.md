@@ -1,5 +1,15 @@
 # S11-R11 Detector Architecture Reset Validation
 
+## Gate status
+
+**Final status:** secure-Windows field gate failed.
+
+The exact pushed head preserved final sequence/CSV integrity but failed physical
+effectiveness on Base bootstrap identity, Accum residue/Oil separation and Foam
+graph continuity. See the
+[field result](../60-evidence/s11/s11-r11-secure-windows-field-result.md) and
+[causal diagnostic](../50-diagnostics/s11/s11-r11-windows-bootstrap-composition-diagnostic.md).
+
 ## Local gate status
 
 Local implementation validation is complete. The behavior-preserving midpoint

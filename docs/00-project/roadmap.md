@@ -156,8 +156,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `IMPLEMENTING`
-- **Major result:** R11 retired the unreachable five-module selector cluster, centralized typed authority, extracted candidate assembly, bounded calibrated bootstrap to local keyframes and added observation-only Foam material identity plus a distinct-lower reserve. Local four-video replay is 129/299 numeric with complete same-frame provenance; full regression is 1,524 passed and detector runtime did not regress.
-- **Next gate:** Replay the exact pushed R11 head on secure-Windows Base/Accum. Require suppression of the Base 583-frame lower-structure path, separation of Accum residue Y191–297 from actual Oil near Y450, and direct classification of the calibrated sample4 Foam episodes.
+- **Major result:** R11 retired the unreachable five-module selector cluster and passed local replay/runtime gates, but its exact pushed head failed secure-Windows Base/Accum. Motion-only bootstrap changed identity across reflection/liquid/bracket; distinct-lower anchoring retained Accum residue while lower Oil was pruned; confirmed dynamic Foam was fragmented and invalidated by material-bottom topology plus shared graph validity.
+- **Next gate:** Replace those policies through one semantic R12 pipeline after behavior-neutral dead-code cleanup. Require material-phase path identity, bounded cross-family Foam identity, non-authoritative lower-candidate reservation, independent Foam/Oil composition validity and complete same-frame provenance.
 - **Priority:** `P0`
 - **Detail:** [current work plan](work-plan.md), [R11 architecture](../20-architecture/s11-r11-detector-architecture-reset.md), [R11 validation](../30-validation/s11-r11-detector-architecture-reset-validation.md), [R11 local evidence](../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md), [R10 Windows root cause](../50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 IMPLEMENTING (R11 detector reset)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 IMPLEMENTING (R12 policy replacement)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
 
 Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R10 failed private field holdouts. R11 is the active detector architecture/correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and S12 follows that remainder.
