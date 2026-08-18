@@ -6,7 +6,7 @@ from typing import Any
 import cv2
 import numpy as np
 
-from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
+from oil_tracker.domain.detection import PhaseDetection
 from oil_tracker.domain.enums import BoundaryKind, FillState, InitialObservationState
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
@@ -27,13 +27,9 @@ from .oil_hypothesis_projection import (
     build_hypothesis_debug_profiles,
     project_production_result,
 )
-from .oil_material_path import (
-    generate_material_path_candidates,
-    material_layer_context_features,
-)
-from .oil_supplemental_path import (
-    generate_calibrated_high_recall_candidates,
-    generate_distributed_sobel_candidates,
+from .phase_candidate_assembler import (
+    artifact_compensated_top_k as _artifact_compensated_top_k,
+    assemble_phase_candidates,
 )
 from .oil_shadow_pipeline import (
     OilHypothesisPipeline,
@@ -58,7 +54,6 @@ from .temporal_raster_evidence import (
     RegisteredFoamMotionTracker,
     RegisteredOilMotionTracker,
     registered_foam_motion_features,
-    registered_oil_candidate_features,
 )
 from .temporal_tracker import TemporalTracker
 
@@ -238,142 +233,20 @@ class OpenCvPhaseDetector:
             pre.gray,
             bundle.effective_mask,
         )
-        material_path_candidates: list[BoundaryCandidate] = []
         artifact_template_count = len(glass.geometry.artifact_templates)
-        for candidate in generate_material_path_candidates(
-                pre,
-                bundle.effective_mask,
-                static_map,
-                crop_origin_y=float(bundle.crop_origin[1]),
-                top_k=_artifact_compensated_top_k(
-                    settings.candidate_top_k,
-                    artifact_template_count,
-                    base_cap=6,
-                    calibrated_cap=8,
-                ),
-                # Generic material texture is corroboration for a lower phase
-                # boundary; it is not accepted/public Foam authority.
-                material_evidence_map=foam.combined_evidence_map,
-            ):
-            material_context = material_layer_context_features(
-                foam.combined_evidence_map,
-                bundle.effective_mask,
-                pre.glare_mask,
-                local_y=float(candidate.y) - float(bundle.crop_origin[1]),
-            )
-            path_features = {
-                **candidate.features,
-                **material_context,
-                **registered_oil_candidate_features(
-                    oil_motion,
-                    local_y=float(candidate.y) - float(bundle.crop_origin[1]),
-                ),
-                "sequence_material_layer_topology": float(
-                    material_layer_topology
-                ),
-                "sequence_white_material_layer_topology": float(
-                    white_material_layer_topology
-                ),
-                "sequence_white_material_texture_present": float(
-                    white_material_texture_present
-                ),
-            }
-            path_penalties = {
-                **candidate.penalties,
-                "material_texture_conflict": float(
-                    material_context["material_texture_conflict"]
-                    if white_material_texture_present
-                    else 0.0
-                ),
-            }
-            material_path_candidates.append(
-                replace(
-                    candidate,
-                    features=path_features,
-                    penalties=path_penalties,
-                )
-            )
-        # Keep a bounded phase-path proposal independent of the raw Foam-like
-        # material raster. It is additive and starts without direct anchor
-        # authority, so a false Foam texture cannot monopolize proposals.
-        raster_material_path_candidates: list[BoundaryCandidate] = []
-        for candidate in generate_material_path_candidates(
-            pre,
-            bundle.effective_mask,
-            static_map,
-            crop_origin_y=float(bundle.crop_origin[1]),
-            top_k=_artifact_compensated_top_k(
-                settings.candidate_top_k,
-                artifact_template_count,
-                base_cap=4,
-                calibrated_cap=6,
-            ),
-            material_evidence_map=None,
-        ):
-            if any(
-                abs(float(candidate.y) - float(existing.y)) <= 6.0
-                for existing in material_path_candidates
-            ):
-                continue
-            local_y = float(candidate.y) - float(bundle.crop_origin[1])
-            raster_material_path_candidates.append(
-                replace(
-                    candidate,
-                    source="r8_raster_material_path",
-                    features={
-                        **candidate.features,
-                        **registered_oil_candidate_features(
-                            oil_motion,
-                            local_y=local_y,
-                        ),
-                        "r8_supplemental_path": 1.0,
-                        "sequence_material_layer_topology": 0.0,
-                        "sequence_white_material_layer_topology": 0.0,
-                        "sequence_white_material_texture_present": 0.0,
-                    },
-                )
-            )
-        distributed_sobel_candidates = [
-            replace(
-                candidate,
-                features={
-                    **candidate.features,
-                    **registered_oil_candidate_features(
-                        oil_motion,
-                        local_y=float(candidate.y) - float(bundle.crop_origin[1]),
-                    ),
-                },
-            )
-            for candidate in generate_distributed_sobel_candidates(
-                pre,
-                bundle.effective_mask,
-                static_map,
-                crop_origin_y=float(bundle.crop_origin[1]),
-            )
-        ]
-        calibrated_high_recall_candidates = [
-            replace(
-                candidate,
-                features={
-                    **candidate.features,
-                    **registered_oil_candidate_features(
-                        oil_motion,
-                        local_y=float(candidate.y) - float(bundle.crop_origin[1]),
-                    ),
-                },
-            )
-            for candidate in (
-                generate_calibrated_high_recall_candidates(
-                    pre,
-                    bundle.effective_mask,
-                    static_map,
-                    crop_origin_y=float(bundle.crop_origin[1]),
-                    limit=min(12, 6 + artifact_template_count),
-                )
-                if artifact_template_count
-                else ()
-            )
-        ]
+        candidate_assembly = assemble_phase_candidates(
+            oil_projection.candidates,
+            pre=pre,
+            bundle=bundle,
+            static_map=static_map,
+            foam=foam,
+            oil_motion=oil_motion,
+            settings=settings,
+            artifact_template_count=artifact_template_count,
+            material_layer_topology=material_layer_topology,
+            white_material_layer_topology=white_material_layer_topology,
+            white_material_texture_present=white_material_texture_present,
+        )
         static_foam_map = self._static_foam_maps.get(glass.id)
         static_foam_match = _foam_static_match(foam.mask, static_foam_map)
         foam_temporal = self._foam_gate.evaluate(
@@ -493,58 +366,7 @@ class OpenCvPhaseDetector:
             if debug
             else {}
         )
-        oil_candidates: list[BoundaryCandidate] = []
-        for candidate in oil_projection.candidates:
-            if candidate.kind is not BoundaryKind.OIL_AIR:
-                oil_candidates.append(candidate)
-                continue
-            material_context = material_layer_context_features(
-                foam.combined_evidence_map,
-                bundle.effective_mask,
-                pre.glare_mask,
-                local_y=float(candidate.y) - float(origin_y),
-            )
-            candidate_features = dict(candidate.features)
-            candidate_features.update(material_context)
-            candidate_features.update(
-                registered_oil_candidate_features(
-                    oil_motion,
-                    local_y=float(candidate.y) - float(origin_y),
-                )
-            )
-            candidate_features.update(
-                {
-                    "sequence_material_layer_topology": float(
-                        material_layer_topology
-                    ),
-                    "sequence_white_material_layer_topology": float(
-                        white_material_layer_topology
-                    ),
-                    "sequence_white_material_texture_present": float(
-                        white_material_texture_present
-                    ),
-                }
-            )
-            candidate_penalties = dict(candidate.penalties)
-            candidate_penalties["material_texture_conflict"] = float(
-                material_context["material_texture_conflict"]
-                if white_material_texture_present
-                else 0.0
-            )
-            oil_candidates.append(
-                replace(
-                    candidate,
-                    features=candidate_features,
-                    penalties=candidate_penalties,
-                )
-            )
-        candidates = [
-            *oil_candidates,
-            *material_path_candidates,
-            *raster_material_path_candidates,
-            *distributed_sobel_candidates,
-            *calibrated_high_recall_candidates,
-        ]
+        candidates = list(candidate_assembly.candidates)
         raw_foam_candidate = foam.candidate
         if raw_foam_candidate is not None:
             sequence_foam_eligible = bool(
@@ -624,15 +446,15 @@ class OpenCvPhaseDetector:
             / max(1, np.count_nonzero(bundle.effective_mask)),
             "oil_smoothing_sample_count": int(tracker.oil_sample_count),
             "oil_hypothesis_candidate_count": len(oil_projection.candidates),
-            "r6_material_path_candidate_count": len(material_path_candidates),
-            "r8_raster_material_path_candidate_count": len(
-                raster_material_path_candidates
+            "r6_material_path_candidate_count": candidate_assembly.material_path_count,
+            "r8_raster_material_path_candidate_count": (
+                candidate_assembly.raster_material_path_count
             ),
-            "r8_distributed_sobel_candidate_count": len(
-                distributed_sobel_candidates
+            "r8_distributed_sobel_candidate_count": (
+                candidate_assembly.distributed_sobel_count
             ),
-            "r9_calibrated_high_recall_candidate_count": len(
-                calibrated_high_recall_candidates
+            "r9_calibrated_high_recall_candidate_count": (
+                candidate_assembly.calibrated_high_recall_count
             ),
             "r8_calibrated_artifact_rejected_count": (
                 calibrated_artifact_rejected_count
@@ -908,20 +730,6 @@ class OpenCvPhaseDetector:
                 **detection.debug_metrics,
             },
         )
-
-def _artifact_compensated_top_k(
-    configured: int,
-    artifact_template_count: int,
-    *,
-    base_cap: int,
-    calibrated_cap: int,
-) -> int:
-    """Keep the ordinary proposal budget after user-confirmed exclusions."""
-
-    ordinary = max(1, min(int(base_cap), int(configured)))
-    compensation = min(3, max(0, int(artifact_template_count)))
-    return min(int(calibrated_cap), ordinary + compensation)
-
 
 def _isolated_pipeline_inputs(
     *,
