@@ -1,6 +1,6 @@
 # Post-S11 Structural Maintainability Assessment
 
-## R11 execution addendum (2026-08-18)
+## R12 execution addendum (2026-08-18)
 
 R11 pulled forward the detector-only portion of this assessment because the
 R10 field failure proved the debt was already a correctness blocker. The five
@@ -9,11 +9,18 @@ production-cutover absence test. Typed authority/evidence, candidate assembly,
 Foam material identity and sequence row types are separate owners. The
 behavior-preserving midpoint retained all four R10 fingerprints.
 
+A second static import/call-site audit before R12 removed another 251 lines of
+unused Vision compatibility wrappers and aliases. Remaining `adapters/vision`
+modules are either reachable production owners or retained diagnostic/type
+boundaries with explicit importers; no additional module-sized dead selection
+path was found. R12 then reduced the completed-window resolver by deleting the
+calibrated-bootstrap implementation instead of leaving a disabled branch.
+
 The remaining UI slices and conditional package taxonomy stay post-S11. The
 sequence resolver remains above the soft LOC signal; its global path and run
-bounding are a later cohesion review, not a reason to move code during the R11
+bounding are a later cohesion review, not a reason to move code during the R12
 field gate. See the completed
-[`../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md`](../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md).
+[`../60-evidence/s11/s11-r12-phase-composition-replacement.md`](../60-evidence/s11/s11-r12-phase-composition-replacement.md).
 
 ## Responsibility and snapshot
 
@@ -104,6 +111,9 @@ violation; any future split must first prove cycle-free type-family boundaries.
 
 ## Legacy Vision retirement candidate
 
+**Disposition:** completed before R12. The list below is retained as the audit
+input that justified deletion, not as current source inventory.
+
 The static production import graph has no path from a production entry point to
 the following legacy Oil selection cluster:
 
@@ -140,8 +150,9 @@ detector tuning and not an after-S12 cleanup backlog.
 
 This sequence activates only after S11 receives final target-Windows acceptance:
 
-1. **R1 — Legacy Vision retirement:** prove and remove the isolated five-module
-   legacy cluster; preserve a production-cutover guard.
+1. **R1 — Legacy Vision retirement (`DONE`):** the isolated five-module legacy
+   cluster and later unused compatibility seams are removed; preserve the
+   production-cutover guard.
 2. **R2 — Current-frame Oil evidence decomposition:** split raw extraction,
    current-observation interpretation, evidence summaries and semantic
    hypothesis construction without changing thresholds, ordering or outputs.

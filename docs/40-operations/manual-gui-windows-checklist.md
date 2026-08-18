@@ -302,6 +302,41 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
   public Foam count, checked point errors, events/captures and debug-disabled
   mean frame time. Coverage alone is never PASS.
 
+### S11-R12 secure Base/Accum phase/composition replacement
+
+- Record the exact pushed SHA and confirm detector version
+  `opencv-phase-detector-r12-phase-composition-replacement-v1` and sequence
+  resolver version `r12-phase-composition-replacement-v1`.
+- Reuse the private Base/Accum videos, bounds, cadence, confirmed initial states
+  and saved reviewed Artifact templates. Do not redraw truth from a selected
+  detector row or mix source and ROI-local coordinates.
+- On Base inspect 540, 634 and 674 s, plus the former late Y724–873 run. For the
+  nearest actual-Oil and selected candidates record evidence availability,
+  authority reason, representation/semantic support, trajectory, final
+  selection and first reject stage. Registered motion alone must never establish
+  a path; require zero public Base Foam.
+- On Accum inspect the actual lower Oil near Y450, Foam front, and former residue
+  Y190–297 independently from onset through disappearance. Record bounded Foam
+  material identity age/row/opposition, selected authority and whether the lower
+  Oil candidate survived admission. Vertical separation alone is not authority.
+- For Foam record raw, dynamic-narrow/wide eligible, episode-confirmed, CSV
+  finite and graph-valid counts. Confirm rapid rising-front jumps may stay in one
+  bounded episode without inventing coordinates in missing frames.
+- Compare `foam_y` directly with `oil_y` for composition. A broad raw material
+  mask or `material_component_bottom_y` crossing Oil is diagnostic only and must
+  not invalidate otherwise ordered fronts. Reversed or near-coincident fronts
+  remain reviewable conflicts.
+- Confirm `oil_is_valid` and `foam_is_valid` in CSV and graph independently.
+  Confirmed Foam may be visible when Oil/state is unresolved; invalid Foam must
+  not affect Oil events, extrema, captures or judgment.
+- Match every numeric Oil/Foam row to exactly one selected same-frame candidate
+  in final `sequence`. Missing rows must remain missing. Record longest missing
+  and wrong-interface run, event/capture agreement and debug-disabled detector
+  and resolver time separately.
+- Treat any long Base reflection/bracket Oil path, Accum residue-as-Oil path,
+  false Base Foam, lost dynamic Accum Foam, shared-validity graph loss or material
+  runtime regression as failure regardless of aggregate coverage.
+
 ## S5-B oil boundary and temporal tracking
 - Validate a real, visually clear oil boundary and a weak transparent-oil boundary against user-recorded truth.
 - Validate transparent-oil agitation, shimmer and heat-haze-like motion without forcing a numeric boundary.

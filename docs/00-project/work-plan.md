@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `IMPLEMENTING`
-**Current gate:** `R12 replacement architecture, implementation and validation`
-**Source authority:** `R11 Windows field diagnostic + durable detector responsibilities`
+**Current gate:** `Exact pushed R12 secure-Windows Base/Accum replay`
+**Source authority:** `R12 local evidence + R11 Windows field diagnostic`
 
 ## R10 field result
 
@@ -85,12 +85,21 @@ rows agree exactly and every numeric row owns one equal-Y same-frame candidate.
 
 ## Current executable action
 
-R11 evidence and the confirmed dead compatibility cleanup are complete. R12 is
-now implementing one replacement semantic pipeline, not another R11 policy
-layer. It removes motion-only authority, unbounded material identity,
-distinct-lower anchoring, material-bottom topology veto and shared series
-validity. Logical commits are pushed once after local replay, full regression,
-runtime and documentation gates pass.
+R11 evidence and the confirmed dead compatibility cleanup are complete. R12
+implemented one replacement semantic pipeline, not another R11 policy layer.
+It removes motion-only authority, unbounded material identity, distinct-lower
+anchoring, material-bottom topology veto and shared series validity.
+
+Local R12 replay processed 299 rows with 133 numeric Oil, 10/13 checked truth,
+5.95 px MAE, 11 px maximum error and complete same-frame provenance. Sample3
+retains Y245 for the reviewed Y243 rise and publishes five independently valid
+Foam points. User-like Artifact replay produced 82/113 sample4 numeric Oil and
+zero Foam. Full regression is 1,526 passed. Same-session R11/R12 direct timing
+is 70.5/72.6 ms per frame, a 2.9% total increase.
+
+The next action is exact pushed-head R12 replay on private Windows Base/Accum,
+first with the saved reviewed Artifact templates. Evaluate interface accuracy,
+Foam publication and longest wrong/missing runs rather than coverage alone.
 
 ## Authority links
 
@@ -102,6 +111,7 @@ runtime and documentation gates pass.
 - [R11 Windows diagnostic](../50-diagnostics/s11/s11-r11-windows-bootstrap-composition-diagnostic.md)
 - [R12 replacement architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md)
 - [R12 validation](../30-validation/s11-r12-phase-composition-replacement-validation.md)
+- [R12 local evidence](../60-evidence/s11/s11-r12-phase-composition-replacement.md)
 - [Durable detector responsibilities](../20-architecture/s11-detector-responsibility-architecture.md)
 - [Structural maintainability assessment](../50-diagnostics/post-s11-structural-maintainability-assessment.md)
 - [Windows checklist](../40-operations/manual-gui-windows-checklist.md)

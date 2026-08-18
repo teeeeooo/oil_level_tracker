@@ -156,10 +156,10 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `IMPLEMENTING`
-- **Major result:** R11 retired the unreachable five-module selector cluster and passed local replay/runtime gates, but its exact pushed head failed secure-Windows Base/Accum. Motion-only bootstrap changed identity across reflection/liquid/bracket; distinct-lower anchoring retained Accum residue while lower Oil was pruned; confirmed dynamic Foam was fragmented and invalidated by material-bottom topology plus shared graph validity.
-- **Next gate:** Implement the documented R12 replacement pipeline after the completed behavior-neutral dead-code cleanup. Require explicit evidence availability, material-phase path identity, bounded cross-family Foam identity, non-authoritative lower-candidate reservation, independent Foam/Oil composition validity and complete same-frame provenance.
+- **Major result:** R12 replaced rather than layered over R11: confirmed dead Vision seams were removed, evidence availability is explicit, motion-only and distinct-lower anchor routes are gone, Foam identity is bounded across candidate families, material-mask bottom no longer defines topology and Oil/Foam graph validity is independent. Local gates passed with 1,526 tests, 133/299 replay Oil rows, 10/13 checked truth at 5.95 px MAE and complete same-frame provenance.
+- **Next gate:** Replay the exact pushed R12 head on secure-Windows Base/Accum with reviewed Artifact templates. Reject any long Base reflection/bracket path, Accum residue-as-Oil path, false Base Foam or loss of independent dynamic Accum Foam regardless of aggregate coverage.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R12 architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md), [R12 validation](../30-validation/s11-r12-phase-composition-replacement-validation.md), [R11 field result](../60-evidence/s11/s11-r11-secure-windows-field-result.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R12 architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md), [R12 validation](../30-validation/s11-r12-phase-composition-replacement-validation.md), [R12 local evidence](../60-evidence/s11/s11-r12-phase-composition-replacement.md), [R11 field result](../60-evidence/s11/s11-r11-secure-windows-field-result.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 IMPLEMENTING (R12 policy replacement)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 IMPLEMENTING (R12 Windows gate)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
 
 Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R11 failed private field holdouts. R12 is the active detector architecture/correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and product milestone S12 follows that remainder.

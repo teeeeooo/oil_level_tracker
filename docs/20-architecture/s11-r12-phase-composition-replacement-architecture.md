@@ -1,6 +1,7 @@
 # S11-R12 Phase/Composition Replacement Architecture
 
-**Implementation status:** designed; implementation in progress.
+**Implementation status:** implemented and locally validated; secure-Windows
+Base/Accum validation pending.
 
 ## Purpose
 

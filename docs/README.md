@@ -64,6 +64,7 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
 - Active S11-R12 replacement architecture: [`20-architecture/s11-r12-phase-composition-replacement-architecture.md`](20-architecture/s11-r12-phase-composition-replacement-architecture.md)
 - Active S11-R12 validation contract: [`30-validation/s11-r12-phase-composition-replacement-validation.md`](30-validation/s11-r12-phase-composition-replacement-validation.md)
+- S11-R12 local implementation/replay evidence: [`60-evidence/s11/s11-r12-phase-composition-replacement.md`](60-evidence/s11/s11-r12-phase-composition-replacement.md)
 - Historical S11-R11 detector reset architecture: [`20-architecture/s11-r11-detector-architecture-reset.md`](20-architecture/s11-r11-detector-architecture-reset.md)
 - Failed S11-R11 validation contract: [`30-validation/s11-r11-detector-architecture-reset-validation.md`](30-validation/s11-r11-detector-architecture-reset-validation.md)
 - S11-R11 local implementation/replay evidence: [`60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md`](60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md)

@@ -1,6 +1,6 @@
 # S11 Detector Responsibility Architecture
 
-**Status:** `R9 IMPLEMENTED — WINDOWS VALIDATION PENDING`
+**Status:** `R12 IMPLEMENTED — SECURE-WINDOWS VALIDATION PENDING`
 
 ## Purpose and authority
 
@@ -8,11 +8,11 @@ This document is the durable responsibility owner for the production S11
 detector. The exact current gate remains in the [work plan](../00-project/work-plan.md),
 and completed measurements remain in [`../60-evidence/s11/`](../60-evidence/s11/).
 
-R9 is the checked-in production runtime. R5–R8 failed secure-Windows holdouts and
-have no acceptance authority. R2–R8 documents preserve the causes, controls and
-failed alternatives that led here; they do not define runtime routing when they
-conflict with this document or the
-[R9 architecture](s11-r9-calibrated-observation-architecture.md).
+R12 is the checked-in production runtime. R5–R11 failed secure-Windows holdouts
+and have no acceptance authority. Their documents preserve causes, controls and
+failed alternatives; they do not define runtime routing when they conflict with
+this document or the
+[R12 architecture](s11-r12-phase-composition-replacement-architecture.md).
 
 ## Production observation path
 
@@ -55,10 +55,16 @@ competing rows; Spatial may provide bounded x-resolved positive corroboration.
 Every candidate retains eligibility, material/phase support, optical opposition,
 anchor provenance and any registered temporal support needed by the final owner.
 
-User-confirmed artifact templates may enable the bounded R9 high-recall lane.
-Those candidates cannot consume ordinary top-k capacity, seed the ordinary
-semantic corridor or corroborate an existing path. They may bootstrap one
-unique registered moving path only when no qualified anchor path exists.
+User-confirmed artifact templates reject only candidate geometry that matches
+the reviewed point, line or region. High-recall candidates have a bounded
+family reserve so stronger residue rows cannot consume all admission capacity,
+but calibration does not grant authority to any unmatched row. Registered
+motion may group candidates; it cannot create Oil identity or an anchor.
+
+All candidate families expose typed evidence availability. Missing material,
+phase, motion, optics or artifact evidence is unknown, not measured zero. A
+candidate cannot satisfy an anchor gate through a feature its representation
+never computed.
 
 Spatial is evidence, not a publication owner. It cannot override unavailable or
 affirmative no-interface evidence, and it cannot turn a flat or unidentifiable
@@ -95,7 +101,7 @@ overlap is explicit opposition rather than a universal mask.
 
 Foam classification is deliberately absent from this Oil hard-safety list. R6
 removed the historical D5 rule that made accepted Foam topology an Oil-routing
-authority, and R9 preserves that separation. Oil and Foam are resolved
+authority, and R12 preserves that separation. Oil and Foam are resolved
 independently and meet only during final composition.
 
 ## Oil and state sequence authority
@@ -105,10 +111,13 @@ the same frame. It may compare physical continuity, material anchors, registered
 exposure-compensated change, optics/static opposition and typed no-interface
 evidence over a bounded completed window.
 
-A recurring fixed row is not trusted solely because it persists. A conflicted
-candidate may regain anchor authority only when independent registered internal
-raster change supports material evolution. Conversely, a stationary real Oil
-interface may remain eligible when its direct phase/material evidence is strong.
+A recurring fixed row is not trusted solely because it persists. Anchor
+authority requires independent same-frame phase/material identity or strong
+same-frame corroboration. Motion-only bootstrap and the R11 distinct-lower
+anchor route do not exist. A lower candidate may be reserved for fair
+evaluation, but geometry alone cannot publish it. Conversely, a stationary real
+Oil interface may remain eligible when its direct phase/material evidence is
+strong.
 
 The resolver never interpolates, carries forward or invents an Oil coordinate.
 Every numeric result must retain same-frame candidate provenance. A frame with no
@@ -122,13 +131,19 @@ exposure-compensated material evolution or another independent dynamic cue.
 Brightness, a single bubble, component-mask jitter, global exposure change or a
 static glare prelude is insufficient.
 
-The final composition rules are:
+Foam/residue identity is bounded by age, missing duration and cumulative drift.
+It may oppose a matching row from any candidate family but cannot persist
+indefinitely after the observed material disappears. The final composition
+rules are:
 
 - visible Oil plus confirmed Foam becomes `FOAMING_VISIBLE`;
 - image-supported FULL plus confirmed Foam becomes `FULL_WITH_FOAM`;
-- EMPTY or UNKNOWN is not promoted merely because Foam-like evidence exists;
+- confirmed Foam may remain public and graph-valid while Oil/state is unknown;
 - rejected or pending Foam remains non-public diagnostic evidence; and
-- Foam cannot change the selected Oil coordinate or state path.
+- Foam cannot change the selected Oil coordinate or state path;
+- normal composition uses the ordered fronts `foam_y < oil_y`; and
+- the bottom of a broad raw material mask is diagnostic and cannot veto an
+  otherwise ordered pair.
 
 A previous rejected Foam/Oil alias is not sufficient to reject a later Foam
 episode. Alias continuation also requires new same-frame coincidence evidence,
@@ -143,7 +158,7 @@ second final owner.
 The serialized online reducer retains acquisition-time continuity and bounded
 reacquisition semantics for preview/current-frame evidence. It does not feed
 coordinates into the completed-window owner and does not compete with the final
-R9 projection.
+R12 projection.
 
 The completed-window resolvers use bounded history only to select observations
 already supported by their own frames. Missing intervals stay missing. A
@@ -153,7 +168,7 @@ coordinate. FULL/EMPTY counts as valid only with explicit current-image state
 provenance.
 
 [Initial-State Retrospective Reconstruction](initial-state-retrospective-reconstruction-architecture.md)
-remains a separate downstream interpretation. R9 permits it to interpret only
+remains a separate downstream interpretation. R12 permits it to interpret only
 the leading unresolved prefix after anchor-grade direction proof; it cannot
 rewrite observed samples, coverage or numeric Oil.
 
@@ -162,7 +177,10 @@ rewrite observed samples, coverage or numeric Oil.
 Final sequence resolution occurs before `TrackingSample`, events, judgments and
 report generation. Resolver failure, changed frame identity or changed result
 cardinality aborts analysis. Downstream code cannot reread candidates or debug
-metrics to replace the final observation.
+metrics to replace the final observation. `TrackingSample` stores independent
+`oil_is_valid` and `foam_is_valid`; legacy `is_valid` remains Oil/state validity
+for events, extrema, captures and judgments. The graph uses each series' own
+validity.
 
 The Oil graph may connect stored finite anchors across a missing run with a
 lower-emphasis dashed display bridge. Such a bridge contains only its observed
@@ -176,16 +194,16 @@ observed samples only. Detailed presentation ownership belongs to the
 - S5-B and S11 Slices A–D preserve proposal, ambiguity and hard-safety lessons.
 - R2, R3 and R4 preserve causal diagnostics and controlled negative families,
   but their D5/Foam-to-Oil routing is not current runtime authority.
-- R5 through R8 are field-failed, superseded sequence designs and must not be
+- R5 through R11 are field-failed, superseded sequence designs and must not be
   restored as alternate owners.
 - Historical exact counts and fingerprints are evidence provenance, not current
   acceptance targets.
 
 The current preservation and holdout gates are defined by the
-[R9 validation contract](../30-validation/s11-r9-calibrated-observation-validation.md)
+[R12 validation contract](../30-validation/s11-r12-phase-composition-replacement-validation.md)
 and the [S11 real-field validation contract](../30-validation/s11-real-field-detector-effectiveness.md).
 The completed local implementation evidence is
-[S11-R9 Calibrated Observation](../60-evidence/s11/s11-r9-calibrated-observation.md).
+[S11-R12 Phase/Composition Replacement](../60-evidence/s11/s11-r12-phase-composition-replacement.md).
 
 ## Non-authorities
 

@@ -2,7 +2,7 @@
 
 ## Gate status
 
-**Status:** active implementation contract. Secure-Windows validation pending.
+**Status:** local gate passed. Secure-Windows validation pending.
 
 R12 passes locally only when the replacement policies, replay, provenance,
 runtime and full regression gates pass. Local success authorizes a Windows
