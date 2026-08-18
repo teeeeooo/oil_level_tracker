@@ -119,12 +119,6 @@ def selected_hypothesis(outcome: OilCanonicalOutcome) -> SemanticHypothesis | No
     return None
 
 
-def current_no_interface_evidence(
-    outcome: OilCanonicalOutcome,
-) -> ShadowNoInterfaceEvidence | None:
-    return outcome.evidence if isinstance(outcome, NoInterfaceOutcome) else None
-
-
 def _candidate_from_hypothesis(
     item: SemanticHypothesis,
     outcome: OilCanonicalOutcome,

@@ -24,10 +24,6 @@ class TemporalTracker:
     def oil_sample_count(self) -> int:
         return len(self._oil_values)
 
-    @property
-    def foam_sample_count(self) -> int:
-        return len(self._foam_values)
-
     def update(
         self,
         raw_y: float | None,
@@ -91,10 +87,6 @@ class TemporalTracker:
         else:
             state = self._stabilize_state(proposed_state)
         return oil, foam, state
-
-    def clear_oil(self) -> None:
-        self._oil_values.clear()
-        self.previous_y = None
 
     def clear_foam(self) -> None:
         self._foam_values.clear()

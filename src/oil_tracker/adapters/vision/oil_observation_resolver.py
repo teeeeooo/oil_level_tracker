@@ -1491,31 +1491,6 @@ def _cross_representation_support(
     return _unit(support)
 
 
-def _candidate_authority(
-    candidate: BoundaryCandidate,
-    config: OilObservationResolverConfig,
-    *,
-    representation_support: float = 0.0,
-    semantic_corridor_support: float = 0.0,
-    semantic_sequence_available: bool = False,
-    semantic_sequence_anchor: bool = False,
-    allow_terminal_anchor: bool = True,
-    allow_material_layer_terminal: bool = False,
-) -> OilCandidateAuthority:
-    return evaluate_candidate_authority(
-        candidate,
-        config,
-        AuthorityContext(
-            representation_support=representation_support,
-            semantic_corridor_support=semantic_corridor_support,
-            semantic_sequence_available=semantic_sequence_available,
-            semantic_sequence_anchor=semantic_sequence_anchor,
-            allow_terminal_anchor=allow_terminal_anchor,
-            allow_material_layer_terminal=allow_material_layer_terminal,
-        ),
-    ).tier
-
-
 def _candidate_material_support(candidate: BoundaryCandidate) -> float:
     return OilCandidateEvidence.from_candidate(candidate).material_support
 

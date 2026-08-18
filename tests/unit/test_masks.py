@@ -2,7 +2,7 @@ from dataclasses import replace
 
 import numpy as np
 
-from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle, effective_area_ratio
+from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
 from oil_tracker.domain.geometry import ExclusionZone, Rect
 from tests.fixtures.synthetic import glass_config, partial_frame
 
@@ -26,4 +26,7 @@ def test_exclusion_zone_removed_from_effective_mask():
     x0, y0 = bundle.crop_origin
     assert bundle.exclusion_mask[110-y0, 150-x0] == 255
     assert bundle.effective_mask[110-y0, 150-x0] == 0
-    assert 0 < effective_area_ratio(bundle) < 1
+    area_ratio = float(np.count_nonzero(bundle.effective_mask)) / np.count_nonzero(
+        bundle.ellipse_mask
+    )
+    assert 0 < area_ratio < 1

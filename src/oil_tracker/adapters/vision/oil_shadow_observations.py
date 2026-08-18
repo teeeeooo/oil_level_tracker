@@ -1640,19 +1640,6 @@ def _narrow_summary(
     )
 
 
-def _persistent_plateau_artifact(
-    gray: np.ndarray,
-    effective_mask: np.ndarray,
-    center_y: float,
-) -> float:
-    """Measure plateau evidence through one immutable per-frame context."""
-
-    return _plateau_artifact_from_context(
-        _build_plateau_evidence_context(gray, effective_mask),
-        center_y,
-    )
-
-
 def _build_plateau_evidence_context(
     gray: np.ndarray,
     effective_mask: np.ndarray,

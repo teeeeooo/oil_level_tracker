@@ -138,28 +138,3 @@ def binary_band_overlap_profile(
         out=np.zeros(height, dtype=np.float32),
         where=window_counts > 0,
     ).astype(np.float32)
-
-
-def local_maxima(
-    profile: np.ndarray,
-    top_k: int,
-    minimum: float = 0.0,
-    separation: int = 4,
-) -> list[int]:
-    if profile.size < 3:
-        return []
-    candidates = [
-        i
-        for i in range(1, len(profile) - 1)
-        if profile[i] >= profile[i - 1]
-        and profile[i] >= profile[i + 1]
-        and profile[i] >= minimum
-    ]
-    candidates.sort(key=lambda i: float(profile[i]), reverse=True)
-    selected: list[int] = []
-    for idx in candidates:
-        if all(abs(idx - prior) >= separation for prior in selected):
-            selected.append(idx)
-        if len(selected) >= top_k:
-            break
-    return selected

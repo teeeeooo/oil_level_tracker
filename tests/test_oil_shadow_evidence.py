@@ -12,7 +12,7 @@ from oil_tracker.adapters.vision.oil_shadow_observations import (
     evaluate_typed_current_observation,
     semantic_deduplicate,
 )
-from oil_tracker.adapters.vision.oil_shadow_pipeline import OilShadowPipeline
+from oil_tracker.adapters.vision.oil_shadow_pipeline import OilHypothesisPipeline
 from oil_tracker.adapters.vision.oil_shadow_types import (
     AcceptedBoundaryOutcome,
     AmbiguousOutcome,
@@ -55,7 +55,7 @@ def _run(image, *, static=None, exclusion=None, effective=None, glare_threshold=
     mask = np.full(image.shape[:2], 255, dtype=np.uint8) if effective is None else effective
     exclusion = np.zeros_like(mask) if exclusion is None else exclusion
     pre = preprocess(image, mask, DetectorSettings(glare_threshold=glare_threshold))
-    return OilShadowPipeline().run(
+    return OilHypothesisPipeline().run(
         glass_id="glass-evidence",
         pre=pre,
         effective_mask=mask,
@@ -72,6 +72,11 @@ def _step(above=170, below=80, *, line=True):
     if line:
         image[39:42] = min(255, above + 50)
     return image
+
+
+def _plateau_score(gray: np.ndarray, mask: np.ndarray, center_y: float) -> float:
+    context = oil_shadow_observations._build_plateau_evidence_context(gray, mask)
+    return oil_shadow_observations._plateau_artifact_from_context(context, center_y)
 
 
 def test_broad_and_narrow_evidence_are_separate_for_clear_and_weak_steps():
@@ -130,7 +135,7 @@ def test_plateau_artifact_separates_glare_from_legitimate_phase_texture():
     distributed_fine_glare[42:] = 244
     distributed_fine_glare[42:, ::2] = 240
 
-    score = oil_shadow_observations._persistent_plateau_artifact
+    score = _plateau_score
     assert score(uniform_bright_phase, mask, 40.0) == 0.0
     assert score(local_line, mask, 40.0) == 0.0
     assert score(weak_stripes, mask, 40.0) < 0.01
@@ -152,7 +157,7 @@ def test_plateau_artifact_scales_with_roi_and_rejects_fragmented_support(shape):
     fragmented = np.zeros(shape, dtype=np.uint8)
     fragmented[:, ::8] = 255
 
-    score = oil_shadow_observations._persistent_plateau_artifact
+    score = _plateau_score
     assert score(plateau, broad, float(center)) > 0.80
     assert score(plateau, sparse, float(center)) == 0.0
     assert score(plateau, fragmented, float(center)) == 0.0

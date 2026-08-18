@@ -11,7 +11,6 @@ from oil_tracker.adapters.vision import (
 from oil_tracker.adapters.vision.oil_pipeline_validation import OilPipelineValidator
 from oil_tracker.adapters.vision.oil_shadow_pipeline import (
     OilHypothesisPipeline,
-    OilShadowPipeline,
     _FixedCanonicalReducer,
 )
 
@@ -52,8 +51,7 @@ def test_pipeline_dependencies_are_one_way_and_collaborators_are_state_bounded()
     } & set(OilPipelineValidator.__dict__)
 
 
-def test_established_imports_are_compatibility_reexports_from_diagnostics_owner():
-    assert OilShadowPipeline is OilHypothesisPipeline
+def test_diagnostics_imports_are_reexports_from_explicit_owner():
     assert pipeline_module.outcome_hypotheses is diagnostics_module.outcome_hypotheses
     assert pipeline_module.oil_runtime_metrics is diagnostics_module.oil_runtime_metrics
     assert pipeline_module.oil_debug_detail is diagnostics_module.oil_debug_detail

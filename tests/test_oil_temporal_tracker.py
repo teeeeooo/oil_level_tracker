@@ -168,5 +168,4 @@ def test_missing_sample_never_returns_stale_numeric_and_reset_is_bounded():
     assert tracker.oil_sample_count == 3
     tracker.reset()
     assert tracker.oil_sample_count == 0
-    assert tracker.foam_sample_count == 0
     assert tracker.previous_y is None

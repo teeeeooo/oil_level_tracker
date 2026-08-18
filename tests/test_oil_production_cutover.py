@@ -21,7 +21,6 @@ from oil_tracker.adapters.vision.oil_shadow_types import (
     BoundaryAcceptedDecision,
     EvidenceUnavailableDecision,
     EvidenceUnavailableOutcome,
-    FailedPipelineFrame,
     NoInterfaceAcceptedDecision,
     NoInterfaceOutcome,
     PipelineFailureOutcome,
@@ -124,10 +123,6 @@ def test_closed_models_have_no_stored_duplicate_discriminators_or_clear_boolean(
 
     assert "current_observation" in {item.name for item in fields(SuccessfulPipelineFrame)}
     assert "failure" not in {item.name for item in fields(SuccessfulPipelineFrame)}
-    failed_names = {item.name for item in fields(FailedPipelineFrame)}
-    assert "current_observation" not in failed_names
-    assert "hypotheses" not in failed_names
-    assert "selected_hypothesis" not in failed_names
 
 
 def test_failure_unavailable_and_numeric_ownership_are_structurally_distinct():

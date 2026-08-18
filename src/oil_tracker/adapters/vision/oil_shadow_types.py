@@ -575,10 +575,6 @@ class BoundaryAcceptedDecision:
         return ShadowTemporalStatus.BOUNDARY_ACCEPTED
 
     @property
-    def observation_kind(self) -> ShadowObservationKind:
-        return ShadowObservationKind.BOUNDARY
-
-    @property
     def tracker_action(self) -> CompatibilityTrackerAction:
         return CompatibilityTrackerAction.ACCEPT_BOUNDARY
 
@@ -615,10 +611,6 @@ class NoInterfaceAcceptedDecision:
         return ShadowTemporalStatus.NO_INTERFACE_ACCEPTED
 
     @property
-    def observation_kind(self) -> ShadowObservationKind:
-        return ShadowObservationKind.NO_INTERFACE
-
-    @property
     def tracker_action(self) -> CompatibilityTrackerAction:
         return CompatibilityTrackerAction.NO_UPDATE
 
@@ -653,10 +645,6 @@ class AmbiguousDecision:
         return ShadowTemporalStatus.AMBIGUOUS
 
     @property
-    def observation_kind(self) -> ShadowObservationKind:
-        return ShadowObservationKind.AMBIGUOUS
-
-    @property
     def tracker_action(self) -> CompatibilityTrackerAction:
         return CompatibilityTrackerAction.NO_UPDATE
 
@@ -688,10 +676,6 @@ class EvidenceUnavailableDecision:
         return ShadowTemporalStatus.UNAVAILABLE
 
     @property
-    def observation_kind(self) -> ShadowObservationKind:
-        return ShadowObservationKind.UNAVAILABLE
-
-    @property
     def tracker_action(self) -> CompatibilityTrackerAction:
         return CompatibilityTrackerAction.NO_UPDATE
 
@@ -721,10 +705,6 @@ class ReacquisitionPendingDecision:
     @property
     def status(self) -> ShadowTemporalStatus:
         return ShadowTemporalStatus.REACQUISITION_PENDING
-
-    @property
-    def observation_kind(self) -> ShadowObservationKind:
-        return ShadowObservationKind.BOUNDARY
 
     @property
     def tracker_action(self) -> CompatibilityTrackerAction:
@@ -822,22 +802,6 @@ class SuccessfulPipelineFrame:
             raise TypeError("Successful pipeline evidence must use immutable tuples.")
         if self.frame_height < 1 or self.frame_width < 1:
             raise ValueError("Successful pipeline frame dimensions must be positive.")
-        _diagnostics(self.diagnostics)
-
-
-@dataclass(frozen=True)
-class FailedPipelineFrame:
-    reason: str
-    stage: PipelineFailureStage
-    visibility: float = 0.0
-    diagnostics: DiagnosticItems = ()
-
-    def __post_init__(self) -> None:
-        if not self.reason:
-            raise ValueError("Failed pipeline frame requires a reason.")
-        if not isinstance(self.stage, PipelineFailureStage):
-            raise TypeError("Failed pipeline frame requires a closed failure stage.")
-        _unit(self.visibility, "failure visibility")
         _diagnostics(self.diagnostics)
 
 
@@ -1072,9 +1036,6 @@ OilCanonicalOutcome: TypeAlias = (
     | ReacquisitionPendingOutcome
     | PipelineFailureOutcome
 )
-OilShadowFrameResult: TypeAlias = OilCanonicalOutcome
-
-
 def _diagnostics(items: DiagnosticItems) -> None:
     if not isinstance(items, tuple):
         raise TypeError("Diagnostics must be an immutable tuple.")

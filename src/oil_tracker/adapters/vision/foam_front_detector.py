@@ -108,14 +108,6 @@ _LAYER_MIN_EDGE_CONCENTRATION_RATIO = 1.30
 
 
 @dataclass(frozen=True)
-class FoamOilContextAuthority:
-    authoritative: bool
-    reason: str
-    wide_row_fraction: float
-    wide_row_compactness_median: float
-
-
-@dataclass(frozen=True)
 class FoamLayerCoherence:
     coherent: bool
     reason: str
@@ -160,42 +152,6 @@ def evaluate_foam_layer_coherence(result: FoamDetectionResult) -> FoamLayerCoher
             if coherent
             else "foam_layer_row_topology_fragmented"
         ),
-        float(wide_row_fraction),
-        float(compactness_median),
-    )
-
-
-def evaluate_foam_oil_context_authority(result: FoamDetectionResult) -> FoamOilContextAuthority:
-    """Qualify whether accepted Foam may constrain S5-B Oil observation.
-
-    S5-A Foam publication and S5-B routing are separate responsibilities.  A
-    bright sight-glass rim can form one wide connected U-shaped component while
-    remaining hollow across individual rows. S5-A rejects that known structural
-    class, while this handoff check independently keeps the same class from
-    masking or re-routing Oil evidence if an accepted input still reaches D1.
-    """
-
-    if result.candidate is None or not np.any(result.mask):
-        return FoamOilContextAuthority(False, "foam_context_not_currently_accepted", 0.0, 0.0)
-
-    support = result.mask > 0
-    wide_hollow_structure, wide_row_fraction, compactness_median = (
-        _wide_hollow_component_metrics(
-            support,
-            width_ratio=float(result.component_width_ratio),
-            fill_ratio=float(result.bounding_box_fill_ratio),
-        )
-    )
-    if wide_hollow_structure:
-        return FoamOilContextAuthority(
-            False,
-            "wide_hollow_structural_or_refractive_component",
-            float(wide_row_fraction),
-            float(compactness_median),
-        )
-    return FoamOilContextAuthority(
-        True,
-        "foam_context_structurally_consistent",
         float(wide_row_fraction),
         float(compactness_median),
     )
@@ -275,34 +231,12 @@ def _chromatic_foam_support(
 def detect_bottom_connected_foam(
     crop: np.ndarray,
     gray: np.ndarray,
-    canny: np.ndarray | None = None,
-    glare_mask: np.ndarray | DetectorSettings | None = None,
-    effective_mask: np.ndarray | None = None,
-    settings: DetectorSettings | None = None,
+    canny: np.ndarray,
+    glare_mask: np.ndarray,
+    effective_mask: np.ndarray,
+    settings: DetectorSettings,
 ) -> FoamDetectionResult:
-    """Evaluate generalized Foam evidence without mutating any input array.
-
-    The preferred S5-A call supplies BGR/grayscale crop, gray, Canny, glare mask,
-    effective mask and settings. The legacy four-argument adapter helper call
-    ``(gray, canny, effective_mask, settings)`` remains supported for existing
-    callers and uses the documented grayscale/no-glare fallback.
-    """
-
-    if settings is None and isinstance(glare_mask, DetectorSettings):
-        legacy_gray = crop
-        legacy_canny = gray
-        legacy_effective_mask = canny
-        settings = glare_mask
-        crop = legacy_gray
-        gray = legacy_gray
-        canny = legacy_canny
-        effective_mask = legacy_effective_mask
-        glare_mask = np.zeros_like(legacy_gray, dtype=np.uint8)
-    if settings is None or canny is None or glare_mask is None or effective_mask is None:
-        raise TypeError(
-            "detect_bottom_connected_foam requires either the six-argument S5-A "
-            "contract or the legacy four-argument grayscale contract."
-        )
+    """Evaluate generalized Foam evidence without mutating any input array."""
 
     _validate_shapes(crop, gray, canny, glare_mask, effective_mask)
     valid = effective_mask > 0

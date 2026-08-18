@@ -11,7 +11,6 @@ from oil_tracker.adapters.vision.foam_front_detector import (
     FoamEvidenceStrength,
     detect_bottom_connected_foam,
     evaluate_foam_layer_coherence,
-    evaluate_foam_oil_context_authority,
 )
 from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.domain.recipe import DetectorSettings
@@ -109,8 +108,6 @@ def test_bottom_connected_dark_yellow_tapered_foam_requires_and_keeps_layer_topo
             image[y, x] = warm_a if ((x // 3 + y // 3) % 2 == 0) else warm_b
 
     result = _detect(image)
-    authority = evaluate_foam_oil_context_authority(result)
-
     assert result.candidate is not None
     assert result.selected_component is not None
     assert result.selected_component.bottom_connected
@@ -118,7 +115,6 @@ def test_bottom_connected_dark_yellow_tapered_foam_requires_and_keeps_layer_topo
     assert result.whiteness_ratio == 0.0
     assert result.texture_support_ratio >= 0.28
     assert result.front_y == 55.0
-    assert authority.authoritative
 
 
 @pytest.mark.parametrize("pattern", ("vertical", "horizontal", "grid", "random"))
@@ -140,14 +136,11 @@ def test_representative_detached_warm_structure_cannot_gain_foam_authority(patte
     image[mask] = warm
 
     result = _detect(image)
-    authority = evaluate_foam_oil_context_authority(result)
-
     assert result.candidate is None
     assert result.decision_status not in {
         FoamDecisionStatus.ACCEPTED_STRONG,
         FoamDecisionStatus.MODERATE_EVIDENCE,
     }
-    assert not authority.authoritative
 
 
 @pytest.mark.parametrize("pattern", ("vertical", "horizontal", "grid", "random", "panel"))
@@ -176,14 +169,11 @@ def test_representative_bottom_connected_warm_structure_remains_non_authoritativ
         )
 
     result = _detect(image)
-    authority = evaluate_foam_oil_context_authority(result)
-
     assert result.candidate is None
     assert result.decision_status not in {
         FoamDecisionStatus.ACCEPTED_STRONG,
         FoamDecisionStatus.MODERATE_EVIDENCE,
     }
-    assert not authority.authoritative
 
 
 @pytest.mark.parametrize("appearance", ("white", "warm"))
@@ -254,7 +244,7 @@ def test_wide_hollow_rim_is_rejected_but_filled_foam_can_replace_its_authority()
     assert accepted.bounding_box_fill_ratio > 0.30
 
 
-def test_genuine_foam_retains_oil_context_authority():
+def test_genuine_foam_retains_layer_coherence():
     full = _detect(_white_foam())
     low_light = _detect(_white_foam(level=165))
     partial = _white_foam()
@@ -263,9 +253,7 @@ def test_genuine_foam_retains_oil_context_authority():
 
     for result in (full, low_light, partial_result):
         assert result.candidate is not None
-        authority = evaluate_foam_oil_context_authority(result)
-        assert authority.authoritative
-        assert authority.reason == "foam_context_structurally_consistent"
+        assert evaluate_foam_layer_coherence(result).coherent
 
 
 def test_foam_publication_requires_wide_rows_or_a_narrow_compact_layer():
@@ -298,30 +286,6 @@ def test_foam_publication_requires_wide_rows_or_a_narrow_compact_layer():
     narrow_coherence = evaluate_foam_layer_coherence(narrow)
     assert narrow_coherence.coherent
     assert narrow_coherence.wide_row_compactness_median == 1.0
-
-
-def test_wide_hollow_structural_component_cannot_gain_oil_context_authority():
-    accepted = _detect(_white_foam())
-    assert accepted.candidate is not None
-
-    mask = np.zeros_like(accepted.mask)
-    mask[60:150, 10:16] = 255
-    mask[60:150, 104:110] = 255
-    mask[144:150, 10:110] = 255
-    bbox_area = (150 - 60) * (110 - 10)
-    structural = replace(
-        accepted,
-        mask=mask,
-        component_width_ratio=(110 - 10) / mask.shape[1],
-        bounding_box_fill_ratio=float(np.count_nonzero(mask)) / bbox_area,
-    )
-
-    authority = evaluate_foam_oil_context_authority(structural)
-    assert structural.candidate is not None  # D1 remains defense in depth for handoff inputs.
-    assert not authority.authoritative
-    assert authority.reason == "wide_hollow_structural_or_refractive_component"
-    assert authority.wide_row_fraction >= 0.25
-    assert authority.wide_row_compactness_median < 0.65
 
 
 def test_saturated_high_variance_shimmer_is_not_accepted_as_foam():

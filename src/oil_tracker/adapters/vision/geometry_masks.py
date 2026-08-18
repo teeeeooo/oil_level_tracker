@@ -53,8 +53,3 @@ def build_mask_bundle(frame: np.ndarray, glass: GlassInspectionConfig) -> MaskBu
             cv2.rectangle(exclusion_mask, (zx0, zy0), (zx1 - 1, zy1 - 1), 255, -1)
     effective_mask = cv2.bitwise_and(margin_mask, cv2.bitwise_not(exclusion_mask))
     return MaskBundle(crop, (x0, y0), ellipse_mask, margin_mask, exclusion_mask, effective_mask)
-
-
-def effective_area_ratio(bundle: MaskBundle) -> float:
-    ellipse_area = int(np.count_nonzero(bundle.ellipse_mask))
-    return 0.0 if ellipse_area == 0 else float(np.count_nonzero(bundle.effective_mask)) / ellipse_area

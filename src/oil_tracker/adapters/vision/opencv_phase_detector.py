@@ -87,10 +87,6 @@ class OpenCvPhaseDetector:
     def oil_temporal_state_count(self) -> int:
         return self._oil_pipeline.temporal_state_count
 
-    @property
-    def oil_bounds(self):
-        return self._oil_pipeline.bounds
-
     def reset(self, glass_id: str | None = None) -> None:
         if glass_id is None:
             self._trackers.clear()

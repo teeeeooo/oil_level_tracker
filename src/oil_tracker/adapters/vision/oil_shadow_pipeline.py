@@ -1231,7 +1231,6 @@ def _unit(value: float) -> float:
     return min(1.0, max(0.0, number))
 
 
-OilShadowPipeline = OilHypothesisPipeline
 
 
 def _failure_reason(exc: Exception) -> str:
