@@ -414,6 +414,20 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 "cluster_support": features.get("r9_cluster_support"),
                 "trajectory_support": features.get("r9_trajectory_support"),
                 "foam_alias_penalty": features.get("r9_foam_alias_penalty"),
+                "evidence_availability": {
+                    "boundary": features.get(
+                        "r12_boundary_evidence_available"
+                    ),
+                    "phase": features.get("r12_phase_evidence_available"),
+                    "optics": features.get("r12_optics_evidence_available"),
+                    "artifact": features.get(
+                        "r12_artifact_evidence_available"
+                    ),
+                    "motion": features.get("r12_motion_evidence_available"),
+                    "material_texture": features.get(
+                        "r12_material_texture_evidence_available"
+                    ),
+                },
                 "calibrated_dynamic_seed": features.get(
                     "r9_calibrated_dynamic_seed",
                     0.0,

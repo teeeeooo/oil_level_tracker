@@ -82,6 +82,7 @@ def assemble_phase_candidates(
                 features={
                     **candidate.features,
                     **material_context,
+                    "r12_material_texture_evidence_available": 1.0,
                     **registered_oil_candidate_features(
                         oil_motion,
                         local_y=float(candidate.y) - origin_y,
@@ -124,12 +125,20 @@ def assemble_phase_candidates(
             for existing in material_path_candidates
         ):
             continue
+        material_context = material_layer_context_features(
+            foam.combined_evidence_map,
+            bundle.effective_mask,
+            pre.glare_mask,
+            local_y=float(candidate.y) - origin_y,
+        )
         raster_material_path_candidates.append(
             replace(
                 candidate,
                 source="r8_raster_material_path",
                 features={
                     **candidate.features,
+                    **material_context,
+                    "r12_material_texture_evidence_available": 1.0,
                     **registered_oil_candidate_features(
                         oil_motion,
                         local_y=float(candidate.y) - origin_y,
@@ -137,19 +146,23 @@ def assemble_phase_candidates(
                     "r8_supplemental_path": 1.0,
                     **_layer_features(False, False, False),
                 },
+                penalties={
+                    **candidate.penalties,
+                    "material_texture_conflict": float(
+                        material_context["material_texture_conflict"]
+                    ),
+                },
             )
         )
 
     distributed_sobel_candidates = tuple(
-        replace(
+        _enrich_generated_candidate(
             candidate,
-            features={
-                **candidate.features,
-                **registered_oil_candidate_features(
-                    oil_motion,
-                    local_y=float(candidate.y) - origin_y,
-                ),
-            },
+            pre=pre,
+            bundle=bundle,
+            foam=foam,
+            oil_motion=oil_motion,
+            layer_features=_layer_features(False, False, False),
         )
         for candidate in generate_distributed_sobel_candidates(
             pre,
@@ -159,15 +172,13 @@ def assemble_phase_candidates(
         )
     )
     calibrated_high_recall_candidates = tuple(
-        replace(
+        _enrich_generated_candidate(
             candidate,
-            features={
-                **candidate.features,
-                **registered_oil_candidate_features(
-                    oil_motion,
-                    local_y=float(candidate.y) - origin_y,
-                ),
-            },
+            pre=pre,
+            bundle=bundle,
+            foam=foam,
+            oil_motion=oil_motion,
+            layer_features=_layer_features(False, False, False),
         )
         for candidate in (
             generate_calibrated_high_recall_candidates(
@@ -252,6 +263,7 @@ def _enrich_projection_candidate(
         features={
             **candidate.features,
             **material_context,
+            "r12_material_texture_evidence_available": 1.0,
             **registered_oil_candidate_features(
                 oil_motion,
                 local_y=float(candidate.y) - origin_y,
@@ -264,6 +276,43 @@ def _enrich_projection_candidate(
                 material_context["material_texture_conflict"]
                 if white_material_texture_present
                 else 0.0
+            ),
+        },
+    )
+
+
+def _enrich_generated_candidate(
+    candidate: BoundaryCandidate,
+    *,
+    pre: PreprocessResult,
+    bundle: MaskBundle,
+    foam: FoamDetectionResult,
+    oil_motion: RegisteredOilRasterEvidence,
+    layer_features: dict[str, float],
+) -> BoundaryCandidate:
+    origin_y = float(bundle.crop_origin[1])
+    material_context = material_layer_context_features(
+        foam.combined_evidence_map,
+        bundle.effective_mask,
+        pre.glare_mask,
+        local_y=float(candidate.y) - origin_y,
+    )
+    return replace(
+        candidate,
+        features={
+            **candidate.features,
+            **material_context,
+            "r12_material_texture_evidence_available": 1.0,
+            **registered_oil_candidate_features(
+                oil_motion,
+                local_y=float(candidate.y) - origin_y,
+            ),
+            **layer_features,
+        },
+        penalties={
+            **candidate.penalties,
+            "material_texture_conflict": float(
+                material_context["material_texture_conflict"]
             ),
         },
     )

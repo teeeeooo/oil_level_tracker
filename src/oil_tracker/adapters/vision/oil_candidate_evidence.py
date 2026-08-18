@@ -6,6 +6,28 @@ from oil_tracker.domain.detection import BoundaryCandidate
 
 
 @dataclass(frozen=True)
+class EvidenceAvailability:
+    boundary: bool
+    phase: bool
+    optics: bool
+    artifact: bool
+    motion: bool
+    material_texture: bool
+
+    def as_features(self) -> dict[str, float]:
+        return {
+            "r12_boundary_evidence_available": float(self.boundary),
+            "r12_phase_evidence_available": float(self.phase),
+            "r12_optics_evidence_available": float(self.optics),
+            "r12_artifact_evidence_available": float(self.artifact),
+            "r12_motion_evidence_available": float(self.motion),
+            "r12_material_texture_evidence_available": float(
+                self.material_texture
+            ),
+        }
+
+
+@dataclass(frozen=True)
 class OilCandidateEvidence:
     """Semantic view over compatibility candidate dictionaries.
 
@@ -33,11 +55,51 @@ class OilCandidateEvidence:
     material_path: bool
     supplemental: bool
     calibrated_high_recall: bool
+    availability: EvidenceAvailability
 
     @classmethod
     def from_candidate(cls, candidate: BoundaryCandidate) -> OilCandidateEvidence:
         features = candidate.features
         penalties = candidate.penalties
+        phase_keys = {
+            "broad_strength",
+            "region_contrast",
+            "narrow_peak_strength",
+            "edge_strength",
+            "polarity_confidence",
+        }
+        optics_keys = {
+            "optics_conflict",
+            "glare_conflict",
+            "glare_penalty",
+        }
+        artifact_keys = {
+            "artifact_likelihood",
+            "static_prior_contribution",
+            "static_artifact_penalty",
+            "border_penalty",
+            "exclusion_conflict",
+            "exclusion_penalty",
+        }
+        availability = EvidenceAvailability(
+            boundary=(
+                "boundary_likelihood" in features
+                or candidate.feature_score is not None
+            ),
+            phase=any(key in features for key in phase_keys),
+            optics=any(key in features or key in penalties for key in optics_keys),
+            artifact=any(
+                key in features or key in penalties for key in artifact_keys
+            ),
+            motion=(
+                "registered_oil_band_motion_support" in features
+                and "registered_oil_band_motion_coverage" in features
+            ),
+            material_texture=(
+                "material_texture_conflict" in features
+                or "material_texture_conflict" in penalties
+            ),
+        )
         boundary = unit(features.get("boundary_likelihood", candidate.feature_score))
         artifact_likelihood = unit(
             features.get(
@@ -141,6 +203,7 @@ class OilCandidateEvidence:
             calibrated_high_recall=(
                 unit(features.get("r9_calibrated_high_recall", 0.0)) >= 0.5
             ),
+            availability=availability,
         )
 
 

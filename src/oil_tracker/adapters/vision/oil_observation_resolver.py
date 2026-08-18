@@ -1967,6 +1967,9 @@ def _project_candidates(
                     "r11_foam_material_identity": float(
                         ref.foam_material_identity
                     ),
+                    **OilCandidateEvidence.from_candidate(
+                        ref.candidate
+                    ).availability.as_features(),
                 },
             )
         eligible = _candidate_eligible(candidate)

@@ -106,6 +106,22 @@ def test_typed_evidence_uses_strongest_texture_conflict_source() -> None:
     assert evidence.material_texture_conflict == 0.72
 
 
+def test_typed_evidence_distinguishes_missing_from_measured_zero() -> None:
+    measured = OilCandidateEvidence.from_candidate(_candidate())
+    missing_candidate = _candidate()
+    missing_candidate.features.pop("material_texture_conflict")
+    missing_candidate.penalties.pop("material_texture_conflict")
+    missing_candidate.features.pop("registered_oil_band_motion_support")
+    missing_candidate.features.pop("registered_oil_band_motion_coverage")
+    missing = OilCandidateEvidence.from_candidate(missing_candidate)
+
+    assert measured.material_texture_conflict == missing.material_texture_conflict == 0.0
+    assert measured.availability.material_texture
+    assert measured.availability.motion
+    assert not missing.availability.material_texture
+    assert not missing.availability.motion
+
+
 def test_terminal_support_only_relaxes_static_material_path() -> None:
     ordinary = _candidate()
     ordinary.features.update(
