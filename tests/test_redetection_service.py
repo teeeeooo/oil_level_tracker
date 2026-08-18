@@ -192,6 +192,27 @@ def test_tracking_conversion_handles_explicit_full_state_and_minimum_confidence(
     assert not tracking_sample_from_detection("run", glass, detection).is_valid
 
 
+def test_tracking_conversion_keeps_confirmed_foam_valid_when_oil_is_unknown():
+    glass = InspectionRecipe.default_glass(320, 240)
+    detection = PhaseDetection(
+        glass.id,
+        1,
+        1.0,
+        FillState.UNKNOWN_REVIEW,
+        raw_foam_front_y=120.0,
+        foam_front_px_from_zero=30.0,
+        foam_confidence=0.9,
+        overall_confidence=0.4,
+        flags=["R8_FOAM_EPISODE_CONFIRMED"],
+    )
+
+    sample = tracking_sample_from_detection("run", glass, detection)
+
+    assert not sample.is_valid
+    assert sample.oil_is_valid is False
+    assert sample.foam_is_valid is True
+
+
 def test_current_frame_has_one_detection_fresh_detector_and_lazy_artifact(tmp_path):
     _reset_fakes()
     bundle = make_bundle(tmp_path)

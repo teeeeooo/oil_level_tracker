@@ -12,7 +12,13 @@ TRACKING_COLUMNS = [
     "smoothed_oil_air_level_px_from_zero", "smoothed_oil_air_level_mm_from_zero", "oil_air_confidence",
     "raw_foam_front_y", "raw_foam_front_px_from_zero", "raw_foam_front_mm_from_zero",
     "smoothed_foam_front_px_from_zero", "smoothed_foam_front_mm_from_zero", "foam_confidence",
-    "visibility_confidence", "overall_confidence", "is_valid", "flags",
+    "visibility_confidence", "overall_confidence", "is_valid", "oil_is_valid", "foam_is_valid", "flags",
+]
+
+TRACKING_REQUIRED_COLUMNS = [
+    column
+    for column in TRACKING_COLUMNS
+    if column not in {"oil_is_valid", "foam_is_valid"}
 ]
 
 EVENT_COLUMNS = [

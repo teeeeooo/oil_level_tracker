@@ -23,6 +23,8 @@ class FoamEpisodeDiagnostics:
 @dataclass(frozen=True)
 class _FoamEvidence:
     frame_offset: int
+    time_sec: float
+    oil_y: float | None
     candidate_offset: int
     candidate: BoundaryCandidate
     material_support: float
@@ -108,6 +110,8 @@ class FoamEpisodeResolver:
                         item.frame_offset for item in supported
                     )
             if accepted_any:
+                if oil_alias_any:
+                    oil_alias_count += 1
                 continue
             if oil_alias_any:
                 oil_alias_count += 1
@@ -213,6 +217,12 @@ class FoamEpisodeResolver:
         )
         return _FoamEvidence(
             frame_offset=frame_offset,
+            time_sec=float(detection.time_sec),
+            oil_y=(
+                float(detection.raw_oil_air_level_y)
+                if _finite(detection.raw_oil_air_level_y)
+                else None
+            ),
             candidate_offset=candidate_offset,
             candidate=candidate,
             material_support=material,
@@ -358,7 +368,7 @@ class FoamEpisodeResolver:
         topology_conflict = bool(
             evidence.whiteness >= 0.55
             and base.oil_air_level_y is not None
-            and float(base.oil_air_level_y) <= evidence.material_bottom_y
+            and float(base.oil_air_level_y) - y <= identity_tolerance
         )
         if topology_conflict:
             composed = FillState.UNKNOWN_REVIEW
@@ -378,7 +388,7 @@ class FoamEpisodeResolver:
             FillState.PARTIAL_VISIBLE,
             FillState.DRAINING_VISIBLE,
             FillState.FOAMING_VISIBLE,
-        }:
+        } or _finite(base.oil_air_level_y):
             composed = FillState.FOAMING_VISIBLE
         elif base.fill_state is FillState.EMPTY_NO_INTERFACE:
             composed = FillState.UNKNOWN_REVIEW
@@ -435,7 +445,8 @@ def _candidate_groups(
             continue
         prior = current[-1]
         frame_gap = item.frame_offset - prior.frame_offset
-        if 0 < frame_gap <= 2:
+        time_gap = item.time_sec - prior.time_sec
+        if 0 < frame_gap <= 4 and 0.0 < time_gap <= 2.0:
             current.append(item)
         else:
             groups.append(current)
@@ -457,7 +468,17 @@ def _dynamic_onset_groups(
         return ()
     clusters: list[list[_FoamEvidence]] = [[dynamic[0]]]
     for item in dynamic[1:]:
-        if item.frame_offset - clusters[-1][-1].frame_offset <= 2:
+        prior = clusters[-1][-1]
+        frame_gap = item.frame_offset - prior.frame_offset
+        oil_context_break = bool(
+            frame_gap > 1
+            and (prior.oil_y is None) != (item.oil_y is None)
+        )
+        if (
+            frame_gap <= 4
+            and item.time_sec - prior.time_sec <= 2.0
+            and not oil_context_break
+        ):
             clusters[-1].append(item)
         else:
             clusters.append([item])

@@ -25,10 +25,9 @@ class AuthorityReason(str, Enum):
     CORROBORATED_MATERIAL_PATH = "corroborated_material_path"
     TERMINAL_MATERIAL_BOUNDARY = "terminal_material_boundary"
     REGISTERED_DYNAMIC_MATERIAL_PATH = "registered_dynamic_material_path"
-    FOAM_DISTINCT_LOWER_BOUNDARY = "foam_distinct_lower_boundary"
     FOAM_MATERIAL_IDENTITY = "foam_material_identity"
     MATERIAL_TEXTURE_CONFLICT = "material_texture_conflict"
-    CALIBRATED_BOOTSTRAP = "calibrated_bootstrap"
+    MATERIAL_EVIDENCE_UNAVAILABLE = "material_evidence_unavailable"
     MATERIAL_PATH_NO_CORRIDOR = "material_path_no_corridor"
     CONTINUATION = "continuation"
     INSUFFICIENT_AUTHORITY = "insufficient_authority"
@@ -50,7 +49,6 @@ class AuthorityContext:
     allow_terminal_anchor: bool = True
     allow_material_layer_terminal: bool = False
     foam_material_identity: float = 0.0
-    foam_distinct_lower: bool = False
 
 
 class AuthorityThresholds(Protocol):
@@ -101,7 +99,7 @@ def evaluate_candidate_authority(
             AuthorityReason.STATIC_MATERIAL_FRONT_TWIN,
         )
 
-    if evidence.material_path and context.foam_material_identity >= 0.50:
+    if context.foam_material_identity >= 0.50:
         return AuthorityDecision(
             OilCandidateAuthority.CANDIDATE_ONLY,
             AuthorityReason.FOAM_MATERIAL_IDENTITY,
@@ -111,6 +109,7 @@ def evaluate_candidate_authority(
     boundary_dominant = bool(
         not evidence.material_path
         and not evidence.supplemental
+        and evidence.availability.phase
         and evidence.material_support >= config.anchor_min_material
         and evidence.boundary >= config.anchor_min_boundary
         and evidence.boundary - evidence.artifact_likelihood
@@ -128,6 +127,7 @@ def evaluate_candidate_authority(
     )
     corroborated_material_path = bool(
         evidence.material_path
+        and evidence.availability.material_texture
         and (
             not evidence.supplemental
             or (
@@ -152,6 +152,7 @@ def evaluate_candidate_authority(
     )
     terminal_material_boundary = bool(
         evidence.material_path
+        and evidence.availability.material_texture
         and not evidence.supplemental
         and context.allow_terminal_anchor
         and (
@@ -177,6 +178,8 @@ def evaluate_candidate_authority(
     )
     registered_dynamic_material_path = bool(
         evidence.material_path
+        and evidence.availability.material_texture
+        and evidence.availability.motion
         and context.representation_support >= 0.20
         and (
             not context.semantic_sequence_available
@@ -192,22 +195,15 @@ def evaluate_candidate_authority(
         and evidence.sector_fraction >= 0.60
         and evidence.material_texture_conflict < 0.50
     )
-    foam_distinct_lower_boundary = bool(
-        context.foam_distinct_lower
-        and evidence.calibrated_high_recall
-        and evidence.material_support >= 0.28
-        and evidence.boundary >= 0.32
-        and evidence.artifact_signature <= 0.34
-        and evidence.ambiguity <= 0.64
-        and evidence.optics_opposition <= 0.30
-        and evidence.horizontal_coverage >= 0.16
-    )
-
     semantic_sequence_anchor = bool(
         context.semantic_sequence_anchor
+        and evidence.availability.phase
         and (
             not evidence.material_path
-            or evidence.material_texture_conflict < 0.60
+            or (
+                evidence.availability.material_texture
+                and evidence.material_texture_conflict < 0.60
+            )
         )
     )
     for accepted, reason in (
@@ -216,13 +212,13 @@ def evaluate_candidate_authority(
         (corroborated_material_path, AuthorityReason.CORROBORATED_MATERIAL_PATH),
         (terminal_material_boundary, AuthorityReason.TERMINAL_MATERIAL_BOUNDARY),
         (registered_dynamic_material_path, AuthorityReason.REGISTERED_DYNAMIC_MATERIAL_PATH),
-        (foam_distinct_lower_boundary, AuthorityReason.FOAM_DISTINCT_LOWER_BOUNDARY),
     ):
         if accepted:
             return AuthorityDecision(OilCandidateAuthority.ANCHOR_ELIGIBLE, reason)
 
     dynamic_without_texture_gate = bool(
         evidence.material_path
+        and evidence.availability.motion
         and context.representation_support >= 0.20
         and (
             not context.semantic_sequence_available
@@ -237,6 +233,12 @@ def evaluate_candidate_authority(
         and evidence.ambiguity <= 0.68
         and evidence.sector_fraction >= 0.60
     )
+    if dynamic_without_texture_gate and not evidence.availability.material_texture:
+        return AuthorityDecision(
+            OilCandidateAuthority.CANDIDATE_ONLY,
+            AuthorityReason.MATERIAL_EVIDENCE_UNAVAILABLE,
+            ("material_texture_evidence_available",),
+        )
     if dynamic_without_texture_gate and evidence.material_texture_conflict >= 0.50:
         return AuthorityDecision(
             OilCandidateAuthority.CANDIDATE_ONLY,

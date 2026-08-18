@@ -160,7 +160,7 @@ def test_dynamic_material_texture_conflict_is_named_candidate_only_reason() -> N
     assert decision.failed_gates == ("material_texture_conflict<0.50",)
 
 
-def test_foam_material_identity_blocks_material_anchor_not_distinct_lower_row() -> None:
+def test_foam_material_identity_blocks_matching_candidate_not_independent_row() -> None:
     material_decision = evaluate_candidate_authority(
         _candidate(boundary=0.80, material_path=True, motion=0.80, motion_coverage=1.0),
         OilObservationResolverConfig(),
@@ -172,10 +172,10 @@ def test_foam_material_identity_blocks_material_anchor_not_distinct_lower_row() 
     lower_decision = evaluate_candidate_authority(
         _candidate(boundary=0.48),
         OilObservationResolverConfig(),
-        AuthorityContext(foam_distinct_lower=True),
+        AuthorityContext(),
     )
 
     assert material_decision.tier is OilCandidateAuthority.CANDIDATE_ONLY
     assert material_decision.reason is AuthorityReason.FOAM_MATERIAL_IDENTITY
-    # The generic row is independent but not the calibrated lower-reserve lane.
+    # A geometrically separate ordinary row uses only its own Oil evidence.
     assert lower_decision.reason is AuthorityReason.BOUNDARY_DOMINANT

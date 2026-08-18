@@ -400,9 +400,13 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 "initial_authority": initial,
                 "post_track_authority": post_track,
                 "authority": authority,
-                "authority_reason": features.get("r11_authority_reason"),
+                "authority_reason": features.get(
+                    "sequence_authority_reason",
+                    features.get("r11_authority_reason"),
+                ),
                 "authority_failed_gates": features.get(
-                    "r11_authority_failed_gates"
+                    "sequence_authority_failed_gates",
+                    features.get("r11_authority_failed_gates"),
                 ),
                 "cross_representation_support": features.get(
                     "r9_cross_representation_support"
@@ -448,7 +452,7 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
         str(key): value
         for key, value in detection.debug_metrics.items()
         if str(key).startswith(
-            ("sequence_", "r7_", "r8_", "r9_", "r10_", "r11_")
+            ("sequence_", "r7_", "r8_", "r9_", "r10_", "r11_", "r12_")
         )
     }
     return _json_safe(

@@ -67,7 +67,7 @@ class PhaseDetectionDebugArtifacts:
 
 
 class OpenCvPhaseDetector:
-    version = "opencv-phase-detector-r11-bounded-bootstrap-and-material-identity-v1"
+    version = "opencv-phase-detector-r12-phase-composition-replacement-v1"
 
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
@@ -365,15 +365,25 @@ class OpenCvPhaseDetector:
         candidates = list(candidate_assembly.candidates)
         raw_foam_candidate = foam.candidate
         if raw_foam_candidate is not None:
+            wide_layer = bool(
+                float(foam.component_width_ratio) >= 0.55
+                and float(foam.bounding_box_fill_ratio) >= 0.35
+            )
+            dynamic_narrow_layer = bool(
+                float(foam.component_width_ratio) >= 0.30
+                and float(foam.bounding_box_fill_ratio) >= 0.30
+                and min(
+                    float(foam_motion.internal_motion_support),
+                    float(foam_motion.dynamic_support),
+                )
+                >= 0.15
+            )
             sequence_foam_eligible = bool(
                 foam_layer.coherent
                 and not static_foam_match.dominant
                 and float(foam.glare_overlap_ratio)
                 <= float(settings.foam_max_glare_overlap_ratio)
-                # A public Foam episode is a cross-Glass material layer, not a
-                # narrow bottom texture strip or one bright boundary.
-                and float(foam.component_width_ratio) >= 0.55
-                and float(foam.bounding_box_fill_ratio) >= 0.35
+                and (wide_layer or dynamic_narrow_layer)
             )
             foam_features = dict(raw_foam_candidate.features)
             foam_features.setdefault("local_y", raw_foam_candidate.y)
@@ -401,6 +411,10 @@ class OpenCvPhaseDetector:
             )
             foam_features["sequence_foam_eligible"] = float(
                 sequence_foam_eligible
+            )
+            foam_features["r12_foam_wide_layer"] = float(wide_layer)
+            foam_features["r12_foam_dynamic_narrow_layer"] = float(
+                dynamic_narrow_layer
             )
             foam_features.update(material_motion_features)
             foam_trace_candidate = replace(

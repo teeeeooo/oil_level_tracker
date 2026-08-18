@@ -35,17 +35,24 @@ def track_foam_material_identity(
     detections: Sequence[PhaseDetection],
     glass: GlassInspectionConfig,
     *,
-    maximum_missing_frames: int = 4,
+    maximum_missing_seconds: float = 3.0,
+    maximum_seed_age_seconds: float = 12.0,
 ) -> FoamMaterialIdentity:
-    """Follow eligible Foam into a nearby material-path residue boundary."""
+    """Follow eligible Foam into a bounded cross-family residue identity."""
 
     maximum_jump = max(
         12.0,
         float(glass.detector_settings.temporal_max_jump_px),
     )
-    match_tolerance = max(18.0, maximum_jump * 0.75)
+    match_tolerance = foam_material_identity_tolerance(glass)
+    maximum_drift = max(
+        36.0,
+        min(72.0, float(glass.geometry.ellipse.radius_y) * 2.0 * 0.12),
+    )
     active_y: float | None = None
-    missing = 0
+    seed_y: float | None = None
+    seed_time: float | None = None
+    last_time: float | None = None
     seeded = 0
     continued = 0
     opposition: dict[tuple[int, int], float] = {}
@@ -64,15 +71,31 @@ def track_foam_material_identity(
                 if active_y is not None
                 else max(foam_rows)
             )
-            missing = 0
+            seed_y = active_y
+            seed_time = float(detection.time_sec)
+            last_time = seed_time
             seeded += 1
         elif active_y is not None:
+            now = float(detection.time_sec)
+            if (
+                seed_y is None
+                or seed_time is None
+                or last_time is None
+                or now - seed_time > maximum_seed_age_seconds
+                or now - last_time > maximum_missing_seconds
+            ):
+                active_y = None
+                seed_y = None
+                seed_time = None
+                last_time = None
+                continue
             continuations = tuple(
                 (candidate_offset, candidate)
                 for candidate_offset, candidate in enumerate(detection.candidates)
                 if candidate.kind is BoundaryKind.OIL_AIR
                 and _can_continue_material_identity(candidate)
                 and abs(float(candidate.y) - active_y) <= maximum_jump
+                and abs(float(candidate.y) - seed_y) <= maximum_drift
             )
             if continuations:
                 _offset, continuation = min(
@@ -83,12 +106,14 @@ def track_foam_material_identity(
                     ),
                 )
                 active_y = float(continuation.y)
-                missing = 0
+                last_time = now
                 continued += 1
             else:
-                missing += 1
-                if missing > maximum_missing_frames:
+                if now - last_time > maximum_missing_seconds:
                     active_y = None
+                    seed_y = None
+                    seed_time = None
+                    last_time = None
 
         if active_y is None:
             continue
@@ -97,7 +122,7 @@ def track_foam_material_identity(
             if candidate.kind is not BoundaryKind.OIL_AIR:
                 continue
             evidence = OilCandidateEvidence.from_candidate(candidate)
-            if not evidence.material_path:
+            if not _has_material_identity_evidence(evidence):
                 continue
             distance = abs(float(candidate.y) - active_y)
             if distance > match_tolerance:
@@ -117,12 +142,23 @@ def track_foam_material_identity(
 def _can_continue_material_identity(candidate: BoundaryCandidate) -> bool:
     evidence = OilCandidateEvidence.from_candidate(candidate)
     return bool(
-        evidence.material_path
-        and (
-            evidence.material_texture_conflict >= 0.30
-            or evidence.raw_material_row_support >= 0.35
-            or evidence.sector_fraction >= 0.60
-        )
+        _has_material_identity_evidence(evidence)
         and evidence.artifact_signature <= 0.48
         and evidence.ambiguity <= 0.75
     )
+
+
+def _has_material_identity_evidence(evidence: OilCandidateEvidence) -> bool:
+    return bool(
+        evidence.availability.material_texture
+        and (
+            evidence.material_texture_conflict >= 0.30
+            or evidence.raw_material_row_support >= 0.35
+            or (evidence.material_path and evidence.sector_fraction >= 0.60)
+        )
+    )
+
+
+def foam_material_identity_tolerance(glass: GlassInspectionConfig) -> float:
+    height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
+    return max(5.0, min(10.0, height * 0.012))

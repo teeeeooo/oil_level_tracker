@@ -5,7 +5,10 @@ import json
 from pathlib import Path
 from typing import Any
 
-from oil_tracker.adapters.reporting.csv_exporter import EVENT_COLUMNS, TRACKING_COLUMNS
+from oil_tracker.adapters.reporting.csv_exporter import (
+    EVENT_COLUMNS,
+    TRACKING_REQUIRED_COLUMNS,
+)
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.domain.enums import EventType, FillState, ResultState
 from oil_tracker.domain.retrospective import RetrospectiveInterpretation
@@ -314,7 +317,7 @@ class ResultBundleReader:
         return payload
 
     def _read_tracking(self, path: Path, known_glass_ids: set[str]) -> list[ReviewTrackingSample]:
-        rows = self._read_csv(path, TRACKING_COLUMNS)
+        rows = self._read_csv(path, TRACKING_REQUIRED_COLUMNS)
         samples: list[ReviewTrackingSample] = []
         for order, row in enumerate(rows, start=1):
             line = order + 1
@@ -322,6 +325,17 @@ class ResultBundleReader:
                 glass_id = self._required_text(row.get("glass_id"), path.name, line, "glass_id")
                 if glass_id not in known_glass_ids:
                     raise ResultBundleError(f"{path.name} row {line}: snapshot에 없는 glass_id입니다: {glass_id}")
+                legacy_valid = self._row_bool(row, path, line, "is_valid")
+                oil_is_valid = (
+                    legacy_valid
+                    if row.get("oil_is_valid") in (None, "")
+                    else self._row_bool(row, path, line, "oil_is_valid")
+                )
+                foam_is_valid = (
+                    legacy_valid
+                    if row.get("foam_is_valid") in (None, "")
+                    else self._row_bool(row, path, line, "foam_is_valid")
+                )
                 samples.append(
                     ReviewTrackingSample(
                         run_id=self._required_text(row.get("run_id"), path.name, line, "run_id"),
@@ -343,7 +357,9 @@ class ResultBundleReader:
                         foam_confidence=self._row_float(row, path, line, "foam_confidence"),
                         visibility_confidence=self._row_float(row, path, line, "visibility_confidence"),
                         overall_confidence=self._row_float(row, path, line, "overall_confidence"),
-                        is_valid=self._row_bool(row, path, line, "is_valid"),
+                        is_valid=legacy_valid,
+                        oil_is_valid=oil_is_valid,
+                        foam_is_valid=foam_is_valid,
                         flags=tuple(flag.strip() for flag in str(row.get("flags", "")).split(";") if flag.strip()),
                         input_order=order,
                     )

@@ -124,6 +124,38 @@ def test_dynamic_coherent_episode_composes_after_oil_without_fabricating_gap() -
     assert "R7_FOAM_EPISODE_CONFIRMED" in resolved[0].flags
 
 
+def test_rapid_rising_foam_links_across_bounded_sample_gaps() -> None:
+    rows = {0: 437.0, 2: 411.0, 5: 346.0, 8: 282.0, 11: 224.0, 12: 218.0}
+    detections = tuple(
+        _detection(
+            index,
+            None
+            if index not in rows
+            else _foam_candidate(rows[index], dynamic=0.30),
+        )
+        for index in range(13)
+    )
+    for detection in detections:
+        detection.raw_oil_air_level_y = 550.0
+        detection.oil_air_level_y = 550.0
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 1
+    assert diagnostics.confirmed_frame_count == len(rows)
+    assert [
+        resolved[index].raw_foam_front_y for index in sorted(rows)
+    ] == list(rows.values())
+    assert all(
+        resolved[index].raw_foam_front_y is None
+        for index in range(13)
+        if index not in rows
+    )
+
+
 def test_dynamic_episode_does_not_backfill_a_static_prelude() -> None:
     detections = (
         _detection(0, _foam_candidate(190.0, dynamic=0.0)),
@@ -268,6 +300,11 @@ def test_separated_oil_and_foam_are_both_published() -> None:
         _detection(1, _foam_candidate(410.0, dynamic=0.20)),
     )
     for detection in detections:
+        next(
+            candidate
+            for candidate in detection.candidates
+            if candidate.kind is BoundaryKind.FOAM_FRONT
+        ).features["material_component_bottom_y"] = 520.0
         detection.raw_oil_air_level_y = 448.0
         detection.oil_air_level_y = 448.0
         detection.candidates.insert(
@@ -294,6 +331,11 @@ def test_separated_oil_and_foam_are_both_published() -> None:
     assert diagnostics.rejected_oil_alias_episode_count == 0
     assert [item.raw_oil_air_level_y for item in resolved] == [448.0, 448.0]
     assert [item.raw_foam_front_y for item in resolved] == [411.0, 410.0]
+    assert all(item.fill_state is FillState.FOAMING_VISIBLE for item in resolved)
+    assert all(
+        "R8_FOAM_OIL_TOPOLOGY_CONFLICT" not in item.flags
+        for item in resolved
+    )
 
 
 def test_thin_dynamic_foam_layer_is_not_alias_under_large_oil_jump_setting() -> None:

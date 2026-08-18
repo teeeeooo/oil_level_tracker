@@ -91,9 +91,24 @@ def tracking_sample_from_detection(
     visible_valid = detection.fill_state is not FillState.UNKNOWN_REVIEW and (
         oil_px is not None or detection.fill_state is FillState.FULL_WITH_FOAM
     )
-    valid = (
+    oil_valid = (
         detection.overall_confidence >= glass.detector_settings.minimum_final_confidence
         and (image_supported_state or visible_valid)
+    )
+    foam_observed = detection.raw_foam_front_y is not None or foam_px is not None
+    foam_topology_conflict = bool(
+        flags.intersection(
+            {
+                "R7_FOAM_OIL_TOPOLOGY_CONFLICT",
+                "R8_FOAM_OIL_TOPOLOGY_CONFLICT",
+            }
+        )
+    )
+    foam_valid = bool(
+        foam_observed
+        and not foam_topology_conflict
+        and detection.foam_confidence
+        >= glass.detector_settings.minimum_final_confidence
     )
     return TrackingSample(
         run_id=run_id,
@@ -119,7 +134,9 @@ def tracking_sample_from_detection(
         foam_confidence=detection.foam_confidence,
         visibility_confidence=detection.visibility_confidence,
         overall_confidence=detection.overall_confidence,
-        is_valid=valid,
+        is_valid=oil_valid,
+        oil_is_valid=oil_valid,
+        foam_is_valid=foam_valid,
         flags=list(detection.flags),
     )
 

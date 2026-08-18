@@ -43,7 +43,11 @@ def build_review_graph_model(
         ReviewGraphPoint(
             timestamp_sec=sample.timestamp_sec,
             value=_oil_value(sample, unit),
-            is_valid=sample.is_valid,
+            is_valid=(
+                sample.is_valid
+                if sample.oil_is_valid is None
+                else sample.oil_is_valid
+            ),
             confidence=sample.overall_confidence,
         )
         for sample in samples
@@ -52,7 +56,11 @@ def build_review_graph_model(
         ReviewGraphPoint(
             timestamp_sec=sample.timestamp_sec,
             value=_foam_value(sample, unit),
-            is_valid=sample.is_valid,
+            is_valid=(
+                sample.is_valid
+                if sample.foam_is_valid is None
+                else sample.foam_is_valid
+            ),
             confidence=sample.overall_confidence,
         )
         for sample in samples

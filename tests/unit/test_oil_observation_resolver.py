@@ -185,7 +185,7 @@ def _with_artifact_calibration():
     return glass
 
 
-def test_calibrated_dynamic_seed_requires_explicit_artifact_calibration() -> None:
+def test_motion_only_high_recall_is_never_numeric_without_calibration() -> None:
     detections = tuple(
         _detection(index, _calibrated_candidate(184.0 - 7.0 * index), ambiguity=0.25)
         for index in range(8)
@@ -196,7 +196,7 @@ def test_calibrated_dynamic_seed_requires_explicit_artifact_calibration() -> Non
     assert _oil_y(result) == [None] * 8
 
 
-def test_calibrated_dynamic_seed_bootstraps_one_moving_oil_path() -> None:
+def test_motion_only_high_recall_is_not_authority_after_calibration() -> None:
     detections = tuple(
         _detection(index, _calibrated_candidate(184.0 - 7.0 * index), ambiguity=0.25)
         for index in range(8)
@@ -207,18 +207,11 @@ def test_calibrated_dynamic_seed_bootstraps_one_moving_oil_path() -> None:
         _with_artifact_calibration(),
     )
 
-    assert _oil_y(result) == [184.0 - 7.0 * index for index in range(8)]
-    assert result.diagnostics.qualified_anchor_count == 8
-    assert all(
-        any(
-            candidate.features.get("r9_calibrated_dynamic_seed") == 1.0
-            for candidate in detection.candidates
-        )
-        for detection in result.detections
-    )
+    assert _oil_y(result) == [None] * 8
+    assert result.diagnostics.qualified_anchor_count == 0
 
 
-def test_calibrated_dynamic_seed_bridges_sparse_motion_keyframes() -> None:
+def test_motion_keyframes_cannot_bridge_an_anchor_free_high_recall_path() -> None:
     detections = tuple(
         _detection(
             index,
@@ -237,40 +230,10 @@ def test_calibrated_dynamic_seed_bridges_sparse_motion_keyframes() -> None:
         _with_artifact_calibration(),
     )
 
-    assert _oil_y(result) == [190.0 - 6.0 * index for index in range(10)]
-    keyframe_flags = [
-        detection.candidates[0].features.get(
-            "r10_calibrated_motion_keyframe",
-            0.0,
-        )
-        for detection in result.detections
-    ]
-    assert keyframe_flags == [1.0, *([0.0] * 8), 1.0]
-
-
-def test_calibrated_dynamic_seed_requires_two_spaced_motion_keyframes() -> None:
-    detections = tuple(
-        _detection(
-            index,
-            _calibrated_candidate(
-                190.0 - 6.0 * index,
-                motion=0.82 if index == 0 else 0.24,
-                motion_coverage=0.88 if index == 0 else 0.12,
-            ),
-            ambiguity=0.25,
-        )
-        for index in range(10)
-    )
-
-    result = OilObservationResolver().resolve(
-        detections,
-        _with_artifact_calibration(),
-    )
-
     assert _oil_y(result) == [None] * 10
 
 
-def test_calibrated_dynamic_seed_cannot_promote_a_long_prefix() -> None:
+def test_late_motion_keyframes_cannot_promote_a_long_prefix() -> None:
     detections = tuple(
         _detection(
             index,
@@ -288,17 +251,10 @@ def test_calibrated_dynamic_seed_cannot_promote_a_long_prefix() -> None:
         detections,
         _with_artifact_calibration(),
     )
-    numeric_frames = [
-        index for index, value in enumerate(_oil_y(result)) if value is not None
-    ]
-
-    assert numeric_frames
-    assert min(numeric_frames) >= 78
-    assert max(numeric_frames) <= 90
-    assert _oil_y(result)[:78] == [None] * 78
+    assert _oil_y(result) == [None] * 100
 
 
-def test_calibrated_dynamic_seed_rejects_static_or_competing_paths() -> None:
+def test_high_recall_static_or_competing_paths_remain_non_numeric() -> None:
     static = tuple(
         _detection(index, _calibrated_candidate(150.0), ambiguity=0.25)
         for index in range(8)
@@ -321,7 +277,7 @@ def test_calibrated_dynamic_seed_rejects_static_or_competing_paths() -> None:
     assert _oil_y(competing_result) == [None] * 8
 
 
-def test_calibrated_dynamic_seed_does_not_compete_with_qualified_path() -> None:
+def test_high_recall_path_does_not_compete_with_qualified_path() -> None:
     detections = tuple(
         _detection(
             index,
@@ -339,13 +295,13 @@ def test_calibrated_dynamic_seed_does_not_compete_with_qualified_path() -> None:
 
     assert _oil_y(result) == [150.0] * 8
     assert all(
-        candidate.features.get("r9_calibrated_dynamic_seed", 0.0) == 0.0
+        candidate.features.get("r12_distinct_lower_reserve", 0.0) == 0.0
         for detection in result.detections
         for candidate in detection.candidates
     )
 
 
-def test_foam_material_identity_blocks_residue_and_preserves_lower_oil() -> None:
+def test_foam_material_identity_blocks_residue_and_reserves_lower_candidate() -> None:
     detections = tuple(
         _detection(
             index,
@@ -370,7 +326,7 @@ def test_foam_material_identity_blocks_residue_and_preserves_lower_oil() -> None
         _with_artifact_calibration(),
     )
 
-    assert all(value is not None and value >= 450.0 for value in _oil_y(result))
+    assert _oil_y(result) == [None] * 8
     assert result.diagnostics.foam_material_seeded_frame_count == 1
     assert result.diagnostics.foam_material_continued_frame_count == 7
     assert result.diagnostics.foam_material_opposed_candidate_count == 8
@@ -380,6 +336,14 @@ def test_foam_material_identity_blocks_residue_and_preserves_lower_oil() -> None
             == "foam_material_identity"
             for candidate in detection.candidates
             if candidate.source == "r6_material_path"
+        )
+        for detection in result.detections
+    )
+    assert all(
+        any(
+            candidate.features.get("r12_distinct_lower_reserve") == 1.0
+            for candidate in detection.candidates
+            if candidate.source == "calibrated"
         )
         for detection in result.detections
     )

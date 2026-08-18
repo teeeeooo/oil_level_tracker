@@ -148,6 +148,8 @@ def test_reader_parses_bom_nullable_bool_flags_and_sorts(tmp_path):
     assert [sample.timestamp_sec for sample in bundle.samples] == [1.0, 2.0]
     assert bundle.samples[0].smoothed_oil_air_level_mm_from_zero is None
     assert bundle.samples[1].is_valid is False
+    assert bundle.samples[1].oil_is_valid is False
+    assert bundle.samples[1].foam_is_valid is False
     assert bundle.samples[1].flags == ("LOW_CONFIDENCE", "REVIEW_REQUIRED")
     assert bundle.events[0].end_time_sec == 2.5
 

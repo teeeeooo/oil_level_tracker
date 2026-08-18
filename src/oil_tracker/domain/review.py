@@ -56,6 +56,8 @@ class ReviewTrackingSample:
     visibility_confidence: float = 0.0
     overall_confidence: float = 0.0
     is_valid: bool = False
+    oil_is_valid: bool | None = None
+    foam_is_valid: bool | None = None
     flags: tuple[str, ...] = ()
     input_order: int = 0
 
