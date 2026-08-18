@@ -15,9 +15,14 @@ from .oil_candidate_authority import (
     evaluate_candidate_authority,
 )
 from .oil_candidate_evidence import OilCandidateEvidence, candidate_is_eligible
+from .foam_material_identity import FoamMaterialIdentity, track_foam_material_identity
+from .oil_sequence_types import (
+    OilCandidateRef as _CandidateRef,
+    OilSequenceNode as _Node,
+)
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r10-calibrated-path-and-layer-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r11-bounded-bootstrap-and-material-identity-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -92,6 +97,9 @@ class OilObservationResolverConfig:
     calibrated_seed_competition_margin: float = 0.06
     calibrated_seed_min_motion_keyframes: int = 2
     calibrated_seed_max_gap_frames: int = 4
+    calibrated_seed_max_keyframe_gap_frames: int = 12
+    calibrated_seed_edge_frames: int = 2
+    calibrated_seed_min_keyframe_ratio: float = 0.15
     calibrated_candidate_ref_limit: int = 8
 
 
@@ -111,46 +119,15 @@ class OilObservationDiagnostics:
     continuation_eligible_count: int = 0
     anchor_eligible_count: int = 0
     qualified_anchor_count: int = 0
+    foam_material_seeded_frame_count: int = 0
+    foam_material_continued_frame_count: int = 0
+    foam_material_opposed_candidate_count: int = 0
 
 
 @dataclass(frozen=True)
 class OilObservationResolution:
     detections: tuple[PhaseDetection, ...]
     diagnostics: OilObservationDiagnostics
-
-
-@dataclass(frozen=True)
-class _CandidateRef:
-    frame_offset: int
-    candidate_offset: int
-    candidate: BoundaryCandidate
-    local_quality: float
-    authority: OilCandidateAuthority
-    initial_authority: OilCandidateAuthority = OilCandidateAuthority.CANDIDATE_ONLY
-    post_track_authority: OilCandidateAuthority = OilCandidateAuthority.CANDIDATE_ONLY
-    representation_support: float = 0.0
-    semantic_corridor_support: float = 0.0
-    terminal_fallback: bool = False
-    cluster_support: float = 0.0
-    trajectory_support: float = 0.0
-    track_opposition: float = 0.0
-    foam_alias_penalty: float = 0.0
-    authority_reason: AuthorityReason = AuthorityReason.INSUFFICIENT_AUTHORITY
-
-
-@dataclass(frozen=True)
-class _Node:
-    kind: str
-    emission: float
-    identity: str
-    candidate_ref: _CandidateRef | None = None
-    state_evidence: float = 0.0
-
-    @property
-    def y(self) -> float | None:
-        if self.candidate_ref is None:
-            return None
-        return float(self.candidate_ref.candidate.y)
 
 
 class OilObservationResolver:
@@ -189,7 +166,10 @@ class OilObservationResolver:
                     0.0,
                 ),
             )
-        refs_by_frame, ineligible_count = self._candidate_refs(source, glass)
+        refs_by_frame, ineligible_count, foam_material_identity = self._candidate_refs(
+            source,
+            glass,
+        )
         refs_by_frame, track_count, maximum_track_opposition = (
             self._apply_track_opposition(refs_by_frame, glass)
         )
@@ -263,6 +243,15 @@ class OilObservationResolver:
                     for refs in refs_by_frame
                     for ref in refs
                 ),
+                foam_material_seeded_frame_count=(
+                    foam_material_identity.seeded_frame_count
+                ),
+                foam_material_continued_frame_count=(
+                    foam_material_identity.continued_frame_count
+                ),
+                foam_material_opposed_candidate_count=len(
+                    foam_material_identity.opposition_by_candidate
+                ),
             ),
         )
 
@@ -270,7 +259,11 @@ class OilObservationResolver:
         self,
         detections: tuple[PhaseDetection, ...],
         glass: GlassInspectionConfig,
-    ) -> tuple[tuple[tuple[_CandidateRef, ...], ...], int]:
+    ) -> tuple[
+        tuple[tuple[_CandidateRef, ...], ...],
+        int,
+        FoamMaterialIdentity,
+    ]:
         limit = max(1, int(glass.detector_settings.candidate_top_k))
         rows: list[tuple[_CandidateRef, ...]] = []
         ineligible = 0
@@ -285,6 +278,11 @@ class OilObservationResolver:
         terminal_fallback_mode = (
             not semantic_anchor_keys
             or len(detections) <= 6
+        )
+        foam_material_identity = track_foam_material_identity(detections, glass)
+        distinct_lower_separation = max(
+            40.0,
+            float(glass.geometry.ellipse.radius_y) * 2.0 * 0.08,
         )
         for frame_offset, detection in enumerate(detections):
             refs: list[_CandidateRef] = []
@@ -305,6 +303,27 @@ class OilObservationResolver:
             for candidate_offset, candidate in enumerate(detection.candidates):
                 if candidate.kind is not BoundaryKind.OIL_AIR or not _finite(candidate.y):
                     continue
+                material_identity_opposition = foam_material_identity.opposition(
+                    frame_offset,
+                    candidate_offset,
+                )
+                material_identity_row = foam_material_identity.row(frame_offset)
+                foam_distinct_lower = bool(
+                    material_identity_row is not None
+                    and float(candidate.y)
+                    >= material_identity_row + distinct_lower_separation
+                    and material_identity_opposition < 0.20
+                )
+                candidate = replace(
+                    candidate,
+                    features={
+                        **candidate.features,
+                        "r11_foam_material_identity": material_identity_opposition,
+                        "r11_foam_distinct_lower_reserve": float(
+                            foam_distinct_lower
+                        ),
+                    },
+                )
                 representation_support = _cross_representation_support(
                     candidate,
                     oil_candidates,
@@ -331,6 +350,8 @@ class OilObservationResolver:
                         in semantic_anchor_keys,
                         allow_terminal_anchor=allow_terminal_anchor,
                         allow_material_layer_terminal=len(detections) <= 6,
+                        foam_material_identity=material_identity_opposition,
+                        foam_distinct_lower=foam_distinct_lower,
                     ),
                 )
                 authority = authority_decision.tier
@@ -354,6 +375,8 @@ class OilObservationResolver:
                         + 0.14 * representation_support
                         + 0.18 * semantic_corridor_support
                         - foam_alias_penalty
+                        - 0.40 * material_identity_opposition
+                        + 0.08 * float(foam_distinct_lower)
                         + (
                             0.16
                             if authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
@@ -367,6 +390,8 @@ class OilObservationResolver:
                         terminal_fallback=allow_terminal_anchor,
                         foam_alias_penalty=foam_alias_penalty,
                         authority_reason=authority_decision.reason,
+                        authority_failed_gates=authority_decision.failed_gates,
+                        foam_material_identity=material_identity_opposition,
                     )
                 )
             refs.sort(
@@ -412,7 +437,7 @@ class OilObservationResolver:
             )]
             selected_refs.extend(calibrated)
             rows.append(tuple(selected_refs))
-        return tuple(rows), ineligible
+        return tuple(rows), ineligible, foam_material_identity
 
     def _apply_calibrated_dynamic_seed(
         self,
@@ -483,6 +508,7 @@ class OilObservationResolver:
                     ),
                     authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
                     local_quality=ref.local_quality + 0.08,
+                    authority_reason=AuthorityReason.CALIBRATED_BOOTSTRAP,
                 )
                 if (ref.frame_offset, ref.candidate_offset) in promoted
                 else ref
@@ -851,6 +877,13 @@ class OilObservationResolver:
                 or _unit(
                     ref.candidate.features.get(
                         "r9_calibrated_dynamic_seed",
+                        0.0,
+                    )
+                )
+                >= 0.5
+                or _unit(
+                    ref.candidate.features.get(
+                        "r11_foam_distinct_lower_reserve",
                         0.0,
                     )
                 )
@@ -1307,6 +1340,16 @@ class OilObservationResolver:
                     if node.candidate_ref is None
                     else node.candidate_ref.authority_reason.value
                 ),
+                "r11_selected_foam_material_identity": (
+                    0.0
+                    if node.candidate_ref is None
+                    else float(node.candidate_ref.foam_material_identity)
+                ),
+                "r11_selected_authority_failed_gates": (
+                    ""
+                    if node.candidate_ref is None
+                    else ";".join(node.candidate_ref.authority_failed_gates)
+                ),
                 "r7_state_image_evidence": float(node.state_evidence),
             }
         )
@@ -1590,38 +1633,34 @@ def _calibrated_dynamic_paths(
     candidates: list[tuple[int, float, tuple[_CandidateRef, ...]]] = []
     for paths in paths_by_key.values():
         for path in paths:
-            if len(path) < config.calibrated_seed_min_frames:
-                continue
             keyframes = tuple(
                 ref
                 for ref in path
                 if _calibrated_motion_keyframe(ref, config)
             )
-            if len(keyframes) < config.calibrated_seed_min_motion_keyframes:
-                continue
-            if (
-                keyframes[-1].frame_offset - keyframes[0].frame_offset
-                < config.calibrated_seed_min_frames - 1
+            for segment, segment_keyframes in _bounded_calibrated_seed_segments(
+                path,
+                keyframes,
+                config,
             ):
-                continue
-            ys = tuple(float(ref.candidate.y) for ref in path)
-            if max(ys) - min(ys) < minimum_span:
-                continue
-            directional_ratio = _path_directional_ratio(path)
-            if directional_ratio < 0.67:
-                continue
-            mean_quality = sum(ref.local_quality for ref in path) / len(path)
-            mean_motion = sum(
-                _candidate_registered_motion(ref.candidate) for ref in path
-            ) / len(path)
-            keyframe_ratio = len(keyframes) / len(path)
-            score = _unit(
-                0.62 * mean_quality
-                + 0.14 * mean_motion
-                + 0.12 * keyframe_ratio
-                + 0.12 * directional_ratio
-            )
-            candidates.append((len(path), score, path))
+                ys = tuple(float(ref.candidate.y) for ref in segment)
+                if max(ys) - min(ys) < minimum_span:
+                    continue
+                directional_ratio = _path_directional_ratio(segment)
+                if directional_ratio < 0.67:
+                    continue
+                mean_quality = sum(ref.local_quality for ref in segment) / len(segment)
+                mean_motion = sum(
+                    _candidate_registered_motion(ref.candidate) for ref in segment
+                ) / len(segment)
+                keyframe_ratio = len(segment_keyframes) / len(segment)
+                score = _unit(
+                    0.62 * mean_quality
+                    + 0.14 * mean_motion
+                    + 0.12 * keyframe_ratio
+                    + 0.12 * directional_ratio
+                )
+                candidates.append((len(segment), score, segment))
 
     candidates.sort(key=lambda item: (-item[0], -item[1]))
     distinct: list[tuple[int, float, tuple[_CandidateRef, ...]]] = []
@@ -1643,6 +1682,53 @@ def _calibrated_dynamic_paths(
             continue
         distinct.append(item)
     return tuple(distinct)
+
+
+def _bounded_calibrated_seed_segments(
+    path: tuple[_CandidateRef, ...],
+    keyframes: tuple[_CandidateRef, ...],
+    config: OilObservationResolverConfig,
+) -> tuple[tuple[tuple[_CandidateRef, ...], tuple[_CandidateRef, ...]], ...]:
+    """Bound bootstrap authority to locally distributed motion keyframes."""
+
+    if len(keyframes) < config.calibrated_seed_min_motion_keyframes:
+        return ()
+    maximum_keyframe_gap = max(
+        1,
+        int(config.calibrated_seed_max_keyframe_gap_frames),
+    )
+    groups: list[list[_CandidateRef]] = []
+    for keyframe in keyframes:
+        if (
+            not groups
+            or keyframe.frame_offset - groups[-1][-1].frame_offset
+            > maximum_keyframe_gap
+        ):
+            groups.append([keyframe])
+        else:
+            groups[-1].append(keyframe)
+
+    edge = max(0, int(config.calibrated_seed_edge_frames))
+    output = []
+    for group in groups:
+        if len(group) < config.calibrated_seed_min_motion_keyframes:
+            continue
+        if (
+            group[-1].frame_offset - group[0].frame_offset
+            < config.calibrated_seed_min_frames - 1
+        ):
+            continue
+        first = group[0].frame_offset - edge
+        last = group[-1].frame_offset + edge
+        segment = tuple(
+            ref for ref in path if first <= ref.frame_offset <= last
+        )
+        if len(segment) < config.calibrated_seed_min_frames:
+            continue
+        if len(group) / len(segment) < config.calibrated_seed_min_keyframe_ratio:
+            continue
+        output.append((segment, tuple(group)))
+    return tuple(output)
 
 
 def _calibrated_motion_keyframe(
@@ -1900,6 +1986,12 @@ def _project_candidates(
                     "r9_foam_alias_penalty": float(ref.foam_alias_penalty),
                     "r9_sequence_selected": float(selected),
                     "r11_authority_reason": ref.authority_reason.value,
+                    "r11_authority_failed_gates": ";".join(
+                        ref.authority_failed_gates
+                    ),
+                    "r11_foam_material_identity": float(
+                        ref.foam_material_identity
+                    ),
                 },
             )
         eligible = _candidate_eligible(candidate)

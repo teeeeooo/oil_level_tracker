@@ -11,7 +11,7 @@ from .foam_episode_resolver import FoamEpisodeResolver
 from .oil_observation_resolver import OilObservationResolver
 
 
-OBSERVATION_SEQUENCE_VERSION = "r10-calibrated-path-and-layer-v1"
+OBSERVATION_SEQUENCE_VERSION = "r11-bounded-bootstrap-and-material-identity-v1"
 
 
 @dataclass(frozen=True)
@@ -30,6 +30,9 @@ class ObservationSequenceDiagnostics:
     oil_continuation_eligible_count: int
     oil_anchor_eligible_count: int
     oil_qualified_anchor_count: int
+    foam_material_seeded_frame_count: int
+    foam_material_continued_frame_count: int
+    foam_material_opposed_candidate_count: int
     foam_raw_candidate_count: int
     foam_eligible_candidate_count: int
     foam_confirmed_frame_count: int
@@ -83,6 +86,15 @@ class ObservationSequenceResolver:
             ),
             oil_anchor_eligible_count=oil.diagnostics.anchor_eligible_count,
             oil_qualified_anchor_count=oil.diagnostics.qualified_anchor_count,
+            foam_material_seeded_frame_count=(
+                oil.diagnostics.foam_material_seeded_frame_count
+            ),
+            foam_material_continued_frame_count=(
+                oil.diagnostics.foam_material_continued_frame_count
+            ),
+            foam_material_opposed_candidate_count=(
+                oil.diagnostics.foam_material_opposed_candidate_count
+            ),
             foam_raw_candidate_count=foam.raw_candidate_count,
             foam_eligible_candidate_count=foam.eligible_candidate_count,
             foam_confirmed_frame_count=foam.confirmed_frame_count,

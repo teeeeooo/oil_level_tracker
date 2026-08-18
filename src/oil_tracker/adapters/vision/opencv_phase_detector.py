@@ -67,7 +67,7 @@ class PhaseDetectionDebugArtifacts:
 
 
 class OpenCvPhaseDetector:
-    version = "opencv-phase-detector-r10-calibrated-path-and-layer-v1"
+    version = "opencv-phase-detector-r11-bounded-bootstrap-and-material-identity-v1"
 
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
@@ -457,6 +457,9 @@ class OpenCvPhaseDetector:
                 candidate_assembly.calibrated_high_recall_count
             ),
             "r8_calibrated_artifact_rejected_count": (
+                calibrated_artifact_rejected_count
+            ),
+            "r11_frame_artifact_rejected_candidate_count": (
                 calibrated_artifact_rejected_count
             ),
             "foam_bottom_connected_area_ratio": float(foam.bottom_connected_area_ratio),

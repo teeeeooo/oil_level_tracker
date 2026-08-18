@@ -401,6 +401,9 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 "post_track_authority": post_track,
                 "authority": authority,
                 "authority_reason": features.get("r11_authority_reason"),
+                "authority_failed_gates": features.get(
+                    "r11_authority_failed_gates"
+                ),
                 "cross_representation_support": features.get(
                     "r9_cross_representation_support"
                 ),

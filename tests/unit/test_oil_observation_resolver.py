@@ -137,6 +137,39 @@ def _calibrated_candidate(
     )
 
 
+def _foam_candidate(y: float) -> BoundaryCandidate:
+    return BoundaryCandidate(
+        source="foam_evidence",
+        kind=BoundaryKind.FOAM_FRONT,
+        y=y,
+        features={"sequence_foam_eligible": 1.0},
+        feature_score=0.9,
+        final_score=0.9,
+    )
+
+
+def _material_candidate(y: float) -> BoundaryCandidate:
+    candidate = _candidate(
+        y,
+        boundary=0.82,
+        broad=0.82,
+        material_texture_conflict=0.78,
+        registered_oil_motion=0.90,
+        registered_oil_motion_coverage=1.0,
+        source="r6_material_path",
+    )
+    return replace(
+        candidate,
+        features={
+            **candidate.features,
+            "r6_material_path": 1.0,
+            "material_path_sector_fraction": 1.0,
+            "raw_material_row_support": 0.9,
+            "material_texture_conflict": 0.78,
+        },
+    )
+
+
 def _with_artifact_calibration():
     glass = glass_config()
     glass.geometry.artifact_templates.append(
@@ -237,6 +270,34 @@ def test_calibrated_dynamic_seed_requires_two_spaced_motion_keyframes() -> None:
     assert _oil_y(result) == [None] * 10
 
 
+def test_calibrated_dynamic_seed_cannot_promote_a_long_prefix() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _calibrated_candidate(
+                360.0 - 2.0 * index,
+                motion=0.82 if index in {80, 88} else 0.04,
+                motion_coverage=0.88 if index in {80, 88} else 0.0,
+            ),
+            ambiguity=0.25,
+        )
+        for index in range(100)
+    )
+
+    result = OilObservationResolver().resolve(
+        detections,
+        _with_artifact_calibration(),
+    )
+    numeric_frames = [
+        index for index, value in enumerate(_oil_y(result)) if value is not None
+    ]
+
+    assert numeric_frames
+    assert min(numeric_frames) >= 78
+    assert max(numeric_frames) <= 90
+    assert _oil_y(result)[:78] == [None] * 78
+
+
 def test_calibrated_dynamic_seed_rejects_static_or_competing_paths() -> None:
     static = tuple(
         _detection(index, _calibrated_candidate(150.0), ambiguity=0.25)
@@ -281,6 +342,46 @@ def test_calibrated_dynamic_seed_does_not_compete_with_qualified_path() -> None:
         candidate.features.get("r9_calibrated_dynamic_seed", 0.0) == 0.0
         for detection in result.detections
         for candidate in detection.candidates
+    )
+
+
+def test_foam_material_identity_blocks_residue_and_preserves_lower_oil() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            *(
+                (_foam_candidate(218.0),)
+                if index == 0
+                else ()
+            ),
+            _material_candidate(218.0 + min(index, 3)),
+            _calibrated_candidate(
+                450.0 + (index % 2),
+                motion=0.05,
+                motion_coverage=0.0,
+            ),
+            ambiguity=0.20,
+        )
+        for index in range(8)
+    )
+
+    result = OilObservationResolver().resolve(
+        detections,
+        _with_artifact_calibration(),
+    )
+
+    assert all(value is not None and value >= 450.0 for value in _oil_y(result))
+    assert result.diagnostics.foam_material_seeded_frame_count == 1
+    assert result.diagnostics.foam_material_continued_frame_count == 7
+    assert result.diagnostics.foam_material_opposed_candidate_count == 8
+    assert all(
+        any(
+            candidate.features.get("r11_authority_reason")
+            == "foam_material_identity"
+            for candidate in detection.candidates
+            if candidate.source == "r6_material_path"
+        )
+        for detection in result.detections
     )
 
 
