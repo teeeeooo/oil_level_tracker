@@ -1,104 +1,77 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `VALIDATING`
-**Current gate:** `Exact pushed R10 secure-Windows Base/Accum replay`
-**Source authority:** `R10 architecture + R9 Windows diagnostic + R10 local evidence`
+**Milestone status:** `IMPLEMENTING`
+**Current gate:** `R11 detector architecture reset, then Base/Accum repair`
+**Source authority:** `R11 architecture + R10 Windows diagnostic`
 
-## Why R9 failed the field gate
+## R10 field result
 
-The reviewed secure-Windows R9 replay remained Base 0/601 numeric Oil. R9
-generated 5,221 initial continuation rows and retained 5,002 after track
-opposition, but no calibrated dynamic seed or trajectory formed. Only 288 rows
-passed the per-candidate motion-coverage gate and 27 retained local support;
-none formed the required six-frame path. At the reviewed Base checkpoints the
-nearest R9 candidate errors were 46 px at 540 s, 16 px at 634 s and 84 px at
-674 s.
+R10 increased private-Windows coverage but failed interface accuracy.
 
-Accum confirmed five real Foam frames and stored them in `tracking.csv`, but
-isolated Foam values were invisible in line-only graphs because composed
-samples were invalid. Two additional real Foam rows 17 px above selected Oil
-were rejected because Foam/Oil identity reused the much wider Oil temporal
-jump tolerance. The Artifact editor no longer overlapped video, but its primary
-actions were below the initial scroll fold.
+- Base published one incorrect 583-frame run from 480–777.5 s. A calibrated
+  lower-rim/texture path had 567 promoted members but only two motion keyframes
+  at 750 and 774 s; those future keyframes retroactively anchored the complete
+  path. No selected row matched reviewed Oil.
+- Accum selected an ordinary `r6_material_path` at Y191–297 that overlays prove
+  was Foam/residue. Actual Oil was near Y450. The wrong path retained high
+  registered motion after public Foam disappeared, while actual-Oil-near rows
+  were usually top-k-pruned.
+- Candidate-local material texture conflict was high on several wrong Accum
+  anchors but was absent from authority. Current-frame-only conflict is still
+  insufficient because a representative residue row had zero conflict after
+  the Foam raster disappeared.
+- Frame-level `R8_CALIBRATED_ARTIFACT_REJECTED` did not describe the selected
+  row; selected Base rows had zero Artifact match.
 
-## Implemented R10 boundary
+## Activated structural reset
 
-R10 remains one generic detector/resolver for Base and Accum. It adds:
+The prior post-S11 detector-maintainability slice is pulled forward because
+architecture debt now blocks correctness work. UI/MainWindow/Result Review
+maintainability remains post-S11.
 
-- a resizable horizontal **분석 영역 편집** layout with video on the left and
-  first-view Artifact explanation/actions/lists on the right;
-- a fixed-budget calibration pool that reserves vertically distributed local
-  peaks without globally lowering thresholds or consuming ordinary authority;
-- calibration-only long-horizon bootstrap using sparse registered-motion
-  keyframes and safe continuation members rather than per-row motion coverage;
-- path-level minimum span/direction/uniqueness checks, exact same-frame
-  provenance and no interpolation;
-- signed Oil/Foam composition: a positive `OilY - FoamY` above the small
-  identity tolerance preserves both layers, while inverted/near-coincident
-  boundaries remain aliases;
-- a separate bounded strong-candidate alias screen only while Oil is unresolved;
-  and
-- visible point markers for every finite stored Foam observation in static and
-  interactive graphs, regardless of whole-sample validity.
+R11 first performs behavior-preserving structural work:
 
-## Local accepted evidence
+1. retire production-unreachable legacy selectors;
+2. introduce typed candidate evidence and explicit authority reasons;
+3. separate current-frame evidence, candidate assembly, Artifact filtering and
+   debug projection;
+4. split admission, authority, track opposition, bootstrap, trajectory, global
+   path and final projection responsibilities; and
+5. introduce an observation-only Foam material track before applying R11
+   behavior.
 
-The exact R10 uncalibrated four-video replay produced 299 rows and 142 numeric
-Oil rows. Checked truth remained numeric at 10/13 points with 5.85 px MAE and
-11 px maximum error; every numeric row retained same-frame provenance. Public
-Foam remained zero on base/sample2/sample4, while sample3 retained five
-reviewed early Foam observations and its unclear/changing-focus 39–90 s span
-remained conservatively missing.
+Structural commits preserve R10 four-video and Artifact replay fingerprints.
+They do not claim the known R10 Windows path is correct.
 
-User-like sample4 lower-rim calibration changed Oil coverage 76→81/113 while
-public Foam stayed zero and checked truth remained 2/5 numeric with 0.5 px
-MAE/max error. A 17 px dynamic Foam layer above public Oil survives even when
-Oil temporal jump is 64 px, while inverted topology remains rejected. At
-980×700 the editor showed all primary Artifact actions without scrolling.
+## R11 behavior repair
 
-Direct debug-disabled detector timing over the same 113 in-memory sample4
-frames was 7.062 s off (62.5 ms/frame) and 7.182 s on (63.6 ms/frame). The R9
-local reference was 7.146/7.296 s, so R10 did not add a material per-frame
-regression in this local diagnostic.
+After structural preservation passes:
 
-The full repository regression passed with 1,562 tests in 114.78 s; R10
-compile, focused integration and exact replay gates also passed.
+- calibrated bootstrap is bounded to locally distributed motion keyframes and
+  cannot promote an unbounded prefix/suffix;
+- registered dynamic material paths with high texture conflict are demoted,
+  with no silent semantic/terminal bypass;
+- Foam/residue material identity may oppose reuse of the same upper track as
+  Oil without publishing Foam or blocking unrelated Oil; and
+- a bounded vertically separated lower candidate is retained so actual Oil is
+  not removed before authority evaluation.
+
+Every numeric Oil remains an exact same-frame candidate. No state, Foam,
+bootstrap or graph projection may create/interpolate/carry a coordinate.
 
 ## Current executable action
 
-Push the exact final R10 head once, then execute the
-[R10 Windows checklist](../40-operations/manual-gui-windows-checklist.md#s11-r10-secure-baseaccum-calibrated-path-and-layer)
-on the private Base/Accum videos.
-
-At 100%, 125% and 150% scale, verify the editor first view, resize/maximize,
-splitter, selection highlight and reviewed bulk Artifact application. Run both
-Glasses with the saved templates and preserve the exact Recipe/video/session
-identity.
-
-For Base, reconcile source-frame Oil around 540, 634 and 674 s. Record retained
-calibrated rows, path membership, motion-keyframe membership, first numeric
-acquisition, coverage and every long missing/wrong-interface run. Require zero
-public Foam. A static or wrong path is a failure regardless of coverage.
-
-For Accum, independently inspect Oil rise, Foam onset, the separated Oil/Foam
-layer, highest Oil and recovery. Confirm finite confirmed Foam appears in CSV
-and graph even when `is_valid=False`. Every alias rejection must expose the
-effective identity rule and exact Oil row; Oil temporal jump may not erase a
-distinct layer.
-
-Every numeric Oil requires an exact same-frame candidate. Missing Oil remains
-missing; the confirmed initial state may continue only as the labeled graph
-assumption and must not create CSV Oil, extrema, events or captures. Compare
-debug-disabled detector time with R9 on the same Windows machine. Local gates
-do not establish private-field or general-field accuracy.
+Complete the structural reset through independently verifiable logical commits,
+run the R10 preservation gate, then implement and locally validate R11. Update
+completed evidence and push once after the full exact-head gate. The next field
+action is secure-Windows replay of that exact pushed R11 head.
 
 ## Authority links
 
-- [R10 architecture](../20-architecture/s11-r10-calibrated-path-and-layer-architecture.md)
-- [R10 validation](../30-validation/s11-r10-calibrated-path-and-layer-validation.md)
-- [R10 local evidence](../60-evidence/s11/s11-r10-calibrated-path-and-layer.md)
-- [R9 Windows root cause](../50-diagnostics/s11/s11-r9-windows-calibrated-observation-diagnostic.md)
-- [Durable detector responsibility](../20-architecture/s11-detector-responsibility-architecture.md)
-- [Result observation/report architecture](../20-architecture/result-observation-report-architecture.md)
-- [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- [R11 architecture](../20-architecture/s11-r11-detector-architecture-reset.md)
+- [R11 validation](../30-validation/s11-r11-detector-architecture-reset-validation.md)
+- [R10 Windows diagnostic](../50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md)
+- [Durable detector responsibilities](../20-architecture/s11-detector-responsibility-architecture.md)
+- [Structural maintainability assessment](../50-diagnostics/post-s11-structural-maintainability-assessment.md)
+- [Windows checklist](../40-operations/manual-gui-windows-checklist.md)

@@ -155,18 +155,18 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
-- **Status:** `VALIDATING`
-- **Major result:** The private R9 holdout still produced Base 0/601 numeric Oil: 5,002 continuation rows collapsed before a trajectory because every member required local registered-motion coverage. Accum confirmed Foam existed in CSV but isolated points were invisible and a real 17 px Foam/Oil layer was rejected through Oil temporal jump tolerance. R10 is the implemented generic successor: a first-view horizontal Artifact editor, vertically distributed calibrated proposals, sparse motion-keyframe path bootstrap, signed Oil/Foam layer identity and visible isolated Foam points. Local uncalibrated and user-like calibration replays pass without safety-corpus coverage or truth regression.
-- **Next gate:** Replay the exact pushed R10 head on secure-Windows Base/Accum with reviewed Artifact templates, then reconcile source-frame Oil path membership, separated Oil/Foam publication, graph visibility, events/captures and debug-disabled frame time.
+- **Status:** `IMPLEMENTING`
+- **Major result:** The private R10 holdout exposed two incorrect-coverage paths: two late calibrated motion keyframes retroactively promoted a 583-frame Base lower-structure run, and Accum ordinary material authority reused a Foam/residue track at Y191–297 while actual Oil near Y450 was pruned. The accumulated D-era plus R6–R10 ownership has become a correctness blocker, so the detector portion of S11-M is activated as the R11 architecture reset before behavior repair.
+- **Next gate:** Complete behavior-preserving legacy retirement, typed evidence and detector/resolver responsibility extraction; then apply bounded bootstrap and Foam-material identity/lower-candidate R11 repairs and replay the exact pushed head on secure-Windows Base/Accum.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R10 architecture](../20-architecture/s11-r10-calibrated-path-and-layer-architecture.md), [R10 validation](../30-validation/s11-r10-calibrated-path-and-layer-validation.md), [R10 local evidence](../60-evidence/s11/s11-r10-calibrated-path-and-layer.md), [R9 Windows root cause](../50-diagnostics/s11/s11-r9-windows-calibrated-observation-diagnostic.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R11 architecture](../20-architecture/s11-r11-detector-architecture-reset.md), [R11 validation](../30-validation/s11-r11-detector-architecture-reset-validation.md), [R10 Windows root cause](../50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md), [durable S11 detector architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
 - **Purpose:** Reduce the remaining evidence-backed UI and detector responsibility hotspots before new S12 UX behavior is added, without turning size thresholds into mechanical package churn.
 - **Status:** `PLANNED`
 - **Major result:** The source assessment identifies a five-module legacy Vision retirement candidate, the active current-frame observation and phase-composition hotspots, and remaining Result Review/Workbench shell concentration. Raw class count and flat package size are retained as review signals rather than automatic split requirements.
-- **Next gate:** Activate only after S11 target-Windows closure, then execute independently reviewable legacy-retirement, detector-responsibility, UI-shell and conditional taxonomy slices before S12 feature implementation.
+- **Next gate:** Detector legacy-retirement and responsibility slices are activated inside R11 because they now block S11 correctness. UI-shell and conditional taxonomy slices remain after target-Windows S11 closure.
 - **Priority:** `P1`
 - **Detail:** [Post-S11 structural maintainability assessment](../50-diagnostics/post-s11-structural-maintainability-assessment.md)
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING` → `S11-M PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 IMPLEMENTING (R11 detector reset)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R9 failed private field holdouts. R10 is the implemented authority under private-Windows validation. S11-M remains blocked until the private-Windows and packaged-workflow S11 gate closes, and S12 follows S11-M.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R10 failed private field holdouts. R11 is the active detector architecture/correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and S12 follows that remainder.
