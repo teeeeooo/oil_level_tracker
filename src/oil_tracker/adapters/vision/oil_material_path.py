@@ -535,11 +535,11 @@ def _candidate_from_path(
     ambiguity = _unit(0.48 * (1.0 - strength) + 0.32 * (1.0 - evidence.sector_fraction) + 0.20 * artifact)
     source_y = float(crop_origin_y + evidence.local_y)
     return BoundaryCandidate(
-        source="r6_material_path",
+        source="material_path",
         kind=BoundaryKind.OIL_AIR,
         y=source_y,
         features={
-            "r6_material_path": 1.0,
+            "material_path": 1.0,
             "local_y": float(evidence.local_y),
             "source_y": source_y,
             "boundary_likelihood": boundary,

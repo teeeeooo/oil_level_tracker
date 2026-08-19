@@ -78,7 +78,7 @@ def test_detector_version_canonical_coordinates_and_typed_debug_evidence():
         item for item in candidates if item.source.startswith("oil_hypothesis:")
     ]
     supplemental = [
-        item for item in candidates if item.source == "r6_material_path"
+        item for item in candidates if item.source == "material_path"
     ]
     assert candidates
     assert semantic
@@ -167,7 +167,7 @@ def test_static_structure_is_not_false_boundary_and_real_boundary_reappears():
             item for item in candidates if item.source.startswith("oil_hypothesis:")
         ]
         supplemental = [
-            item for item in candidates if item.source == "r6_material_path"
+            item for item in candidates if item.source == "material_path"
         ]
         assert candidates
         assert semantic

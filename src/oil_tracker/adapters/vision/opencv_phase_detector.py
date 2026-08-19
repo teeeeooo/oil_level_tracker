@@ -412,8 +412,8 @@ class OpenCvPhaseDetector:
             foam_features["sequence_foam_eligible"] = float(
                 sequence_foam_eligible
             )
-            foam_features["r12_foam_wide_layer"] = float(wide_layer)
-            foam_features["r12_foam_dynamic_narrow_layer"] = float(
+            foam_features["foam_wide_layer"] = float(wide_layer)
+            foam_features["foam_dynamic_narrow_layer"] = float(
                 dynamic_narrow_layer
             )
             foam_features.update(material_motion_features)
@@ -456,20 +456,20 @@ class OpenCvPhaseDetector:
             / max(1, np.count_nonzero(bundle.effective_mask)),
             "oil_smoothing_sample_count": int(tracker.oil_sample_count),
             "oil_hypothesis_candidate_count": len(oil_projection.candidates),
-            "r6_material_path_candidate_count": candidate_assembly.material_path_count,
-            "r8_raster_material_path_candidate_count": (
+            "material_path_candidate_count": candidate_assembly.material_path_count,
+            "raster_material_path_candidate_count": (
                 candidate_assembly.raster_material_path_count
             ),
-            "r8_distributed_sobel_candidate_count": (
+            "distributed_sobel_candidate_count": (
                 candidate_assembly.distributed_sobel_count
             ),
-            "r9_calibrated_high_recall_candidate_count": (
+            "calibrated_high_recall_candidate_count": (
                 candidate_assembly.calibrated_high_recall_count
             ),
-            "r8_calibrated_artifact_rejected_count": (
-                calibrated_artifact_rejected_count
+            "phase_transition_candidate_count": (
+                candidate_assembly.phase_transition_count
             ),
-            "r11_frame_artifact_rejected_candidate_count": (
+            "calibrated_artifact_rejected_candidate_count": (
                 calibrated_artifact_rejected_count
             ),
             "foam_bottom_connected_area_ratio": float(foam.bottom_connected_area_ratio),

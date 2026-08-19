@@ -135,13 +135,13 @@ def generate_calibrated_high_recall_candidates(
         source_y = float(crop_origin_y + row)
         output.append(
             BoundaryCandidate(
-                source="r9_calibrated_high_recall",
+                source="calibrated_high_recall",
                 kind=BoundaryKind.OIL_AIR,
                 y=source_y,
                 features={
-                    "r8_supplemental_path": 1.0,
-                    "r9_calibrated_high_recall": 1.0,
-                    "r10_calibrated_vertical_reserve": float(
+                    "supplemental_path": 1.0,
+                    "calibrated_high_recall": 1.0,
+                    "vertical_reserve": float(
                         row not in primary_rows
                     ),
                     "local_y": float(row),
@@ -177,6 +177,215 @@ def generate_calibrated_high_recall_candidates(
             )
         )
     return tuple(output)
+
+
+def generate_phase_transition_candidates(
+    pre: PreprocessResult,
+    effective_mask: np.ndarray,
+    static_artifact_map: np.ndarray | None,
+    *,
+    crop_origin_y: float,
+    limit: int = 4,
+) -> tuple[BoundaryCandidate, ...]:
+    """Propose diffuse cross-row phase transitions without a local-peak gate.
+
+    Each proposal must be distributed across horizontal sectors and survive at
+    multiple vertical scales.  Selection is band-bounded and candidate-only;
+    sequence authority is decided later from the shared phase identity.
+    """
+
+    if pre.normalized.shape != effective_mask.shape:
+        raise ValueError("Phase-transition inputs must share one raster shape.")
+    if (
+        static_artifact_map is not None
+        and static_artifact_map.shape != effective_mask.shape
+    ):
+        raise ValueError("Phase-transition static map must match the Oil raster.")
+    if limit < 1:
+        return ()
+
+    effective = effective_mask > 0
+    visible = effective & ~(pre.glare_mask > 0)
+    height, width = effective.shape
+    if height < 48 or width < 20 or np.count_nonzero(visible) < 64:
+        return ()
+
+    response, horizontal, scale_consistency, signed = _phase_transition_profile(
+        pre.normalized,
+        visible,
+    )
+    support = np.count_nonzero(visible, axis=1).astype(np.float32) / max(1, width)
+    eligible = [
+        row
+        for row in range(12, height - 12)
+        if response[row] >= 0.10
+        and horizontal[row] >= 0.60
+        and scale_consistency[row] >= 0.34
+        and support[row] >= 0.25
+        and _band_overlap(pre.glare_mask, effective, row, radius=3) < 0.55
+    ]
+    if not eligible:
+        return ()
+
+    selected: list[int] = []
+    band_count = max(1, min(limit, 6))
+    for band in range(band_count):
+        first = int(round(height * band / band_count))
+        last = int(round(height * (band + 1) / band_count))
+        choices = [row for row in eligible if first <= row < last]
+        if not choices:
+            continue
+        row = max(
+            choices,
+            key=lambda item: (
+                float(response[item] + 0.12 * scale_consistency[item]),
+                -item,
+            ),
+        )
+        if all(abs(row - existing) > 8 for existing in selected):
+            selected.append(row)
+
+    for row in sorted(
+        eligible,
+        key=lambda item: (
+            -float(response[item] + 0.12 * scale_consistency[item]),
+            item,
+        ),
+    ):
+        if len(selected) >= limit:
+            break
+        if all(abs(row - existing) > 8 for existing in selected):
+            selected.append(row)
+
+    output: list[BoundaryCandidate] = []
+    for row in sorted(selected):
+        strength = _unit(float(response[row]))
+        coverage = _unit(float(horizontal[row]))
+        consistency = _unit(float(scale_consistency[row]))
+        availability = _unit(float(support[row]))
+        polarity = _unit(abs(float(signed[row])))
+        static = _band_overlap(static_artifact_map, effective, row, radius=3)
+        optics = _band_overlap(pre.glare_mask, effective, row, radius=3)
+        boundary = _unit(
+            0.42 * strength
+            + 0.24 * coverage
+            + 0.18 * consistency
+            + 0.16 * availability
+        )
+        artifact = _unit(0.65 * optics + 0.35 * static)
+        ambiguity = _unit(
+            0.40 * (1.0 - strength)
+            + 0.24 * (1.0 - coverage)
+            + 0.20 * (1.0 - consistency)
+            + 0.16 * artifact
+        )
+        source_y = float(crop_origin_y + row)
+        output.append(
+            BoundaryCandidate(
+                source="phase_transition_scan",
+                kind=BoundaryKind.OIL_AIR,
+                y=source_y,
+                features={
+                    "supplemental_path": 1.0,
+                    "calibrated_high_recall": 1.0,
+                    "phase_transition_scan": 1.0,
+                    "local_y": float(row),
+                    "source_y": source_y,
+                    "boundary_likelihood": boundary,
+                    "artifact_likelihood": artifact,
+                    "ambiguity_likelihood": ambiguity,
+                    "evidence_availability": availability,
+                    "visibility": _unit(1.0 - optics),
+                    "broad_strength": strength,
+                    "narrow_peak_strength": strength,
+                    "narrow_horizontal_coverage": coverage,
+                    "broad_scale_consistency": consistency,
+                    "polarity_confidence": polarity,
+                    "static_prior_contribution": static,
+                    "sequence_eligible": 1.0,
+                },
+                penalties={
+                    "artifact_likelihood": artifact,
+                    "ambiguity_likelihood": ambiguity,
+                    "static_prior_contribution": static,
+                    "static_artifact_penalty": static,
+                    "glare_conflict": optics,
+                    "optics_conflict": optics,
+                    "exclusion_conflict": 0.0,
+                    "border_penalty": 0.0,
+                },
+                feature_score=boundary,
+                penalty=_unit(artifact + ambiguity),
+                final_score=boundary,
+                selected=False,
+                rejected=False,
+            )
+        )
+    return tuple(output)
+
+
+def _phase_transition_profile(
+    gray: np.ndarray,
+    visible: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    height, width = gray.shape
+    sector_edges = np.linspace(0, width, 6, dtype=int)
+    scale_responses: list[np.ndarray] = []
+    scale_signs: list[np.ndarray] = []
+    scale_coverages: list[np.ndarray] = []
+    values = gray.astype(np.float32, copy=False)
+    for radius in (3, 6, 10):
+        response = np.zeros(height, dtype=np.float32)
+        signs = np.zeros(height, dtype=np.float32)
+        coverage = np.zeros(height, dtype=np.float32)
+        for row in range(radius, height - radius):
+            sector_values: list[float] = []
+            sector_signs: list[float] = []
+            for first, last in zip(sector_edges[:-1], sector_edges[1:], strict=True):
+                upper_visible = visible[row - radius : row, first:last]
+                lower_visible = visible[row + 1 : row + radius + 1, first:last]
+                minimum_pixels = max(2, int(radius * max(1, last - first) * 0.25))
+                if (
+                    np.count_nonzero(upper_visible) < minimum_pixels
+                    or np.count_nonzero(lower_visible) < minimum_pixels
+                ):
+                    continue
+                upper = float(
+                    np.mean(values[row - radius : row, first:last][upper_visible])
+                )
+                lower = float(
+                    np.mean(values[row + 1 : row + radius + 1, first:last][lower_visible])
+                )
+                difference = lower - upper
+                sector_values.append(abs(difference) / 48.0)
+                sector_signs.append(difference / 48.0)
+            if len(sector_values) < 3:
+                continue
+            response[row] = _unit(float(np.median(sector_values)))
+            signs[row] = float(np.median(sector_signs))
+            coverage[row] = len(sector_values) / 5.0
+        scale_responses.append(response)
+        scale_signs.append(signs)
+        scale_coverages.append(coverage)
+
+    stacked = np.stack(scale_responses)
+    strongest = np.max(stacked, axis=0)
+    consistency = np.mean(
+        stacked >= np.maximum(0.08, strongest * 0.60),
+        axis=0,
+    ).astype(np.float32)
+    best_scale = np.argmax(stacked, axis=0)
+    signs = np.take_along_axis(
+        np.stack(scale_signs),
+        best_scale.reshape(1, -1),
+        axis=0,
+    ).reshape(-1)
+    coverage = np.take_along_axis(
+        np.stack(scale_coverages),
+        best_scale.reshape(1, -1),
+        axis=0,
+    ).reshape(-1)
+    return strongest, coverage, consistency, signs
 
 
 def _distributed_band_support(
@@ -279,11 +488,11 @@ def generate_distributed_sobel_candidates(
     source_y = float(crop_origin_y + row)
     return (
         BoundaryCandidate(
-            source="r8_distributed_sobel_path",
+            source="distributed_sobel_path",
             kind=BoundaryKind.OIL_AIR,
             y=source_y,
             features={
-                "r8_supplemental_path": 1.0,
+                "supplemental_path": 1.0,
                 "local_y": float(row),
                 "source_y": source_y,
                 "boundary_likelihood": boundary,

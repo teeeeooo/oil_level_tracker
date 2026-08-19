@@ -18,6 +18,7 @@ from .oil_material_path import (
 from .oil_supplemental_path import (
     generate_calibrated_high_recall_candidates,
     generate_distributed_sobel_candidates,
+    generate_phase_transition_candidates,
 )
 from .preprocessing import PreprocessResult
 from .temporal_raster_evidence import (
@@ -35,6 +36,7 @@ class PhaseCandidateAssembly:
     raster_material_path_count: int
     distributed_sobel_count: int
     calibrated_high_recall_count: int
+    phase_transition_count: int
 
 
 def assemble_phase_candidates(
@@ -82,7 +84,7 @@ def assemble_phase_candidates(
                 features={
                     **candidate.features,
                     **material_context,
-                    "r12_material_texture_evidence_available": 1.0,
+                    "material_texture_evidence_available": 1.0,
                     **registered_oil_candidate_features(
                         oil_motion,
                         local_y=float(candidate.y) - origin_y,
@@ -134,16 +136,16 @@ def assemble_phase_candidates(
         raster_material_path_candidates.append(
             replace(
                 candidate,
-                source="r8_raster_material_path",
+                source="raster_material_path",
                 features={
                     **candidate.features,
                     **material_context,
-                    "r12_material_texture_evidence_available": 1.0,
+                    "material_texture_evidence_available": 1.0,
                     **registered_oil_candidate_features(
                         oil_motion,
                         local_y=float(candidate.y) - origin_y,
                     ),
-                    "r8_supplemental_path": 1.0,
+                    "supplemental_path": 1.0,
                     **_layer_features(False, False, False),
                 },
                 penalties={
@@ -192,6 +194,27 @@ def assemble_phase_candidates(
             else ()
         )
     )
+    phase_transition_candidates = tuple(
+        _enrich_generated_candidate(
+            candidate,
+            pre=pre,
+            bundle=bundle,
+            foam=foam,
+            oil_motion=oil_motion,
+            layer_features=_layer_features(False, False, False),
+        )
+        for candidate in (
+            generate_phase_transition_candidates(
+                pre,
+                bundle.effective_mask,
+                static_map,
+                crop_origin_y=origin_y,
+                limit=min(6, 3 + artifact_template_count),
+            )
+            if artifact_template_count
+            else ()
+        )
+    )
 
     oil_candidates = tuple(
         _enrich_projection_candidate(
@@ -215,13 +238,18 @@ def assemble_phase_candidates(
         *raster_material_path_candidates,
         *distributed_sobel_candidates,
         *calibrated_high_recall_candidates,
+        *phase_transition_candidates,
     )
     return PhaseCandidateAssembly(
         candidates=all_candidates,
         material_path_count=len(material_path_candidates),
         raster_material_path_count=len(raster_material_path_candidates),
         distributed_sobel_count=len(distributed_sobel_candidates),
-        calibrated_high_recall_count=len(calibrated_high_recall_candidates),
+        calibrated_high_recall_count=(
+            len(calibrated_high_recall_candidates)
+            + len(phase_transition_candidates)
+        ),
+        phase_transition_count=len(phase_transition_candidates),
     )
 
 
@@ -263,7 +291,7 @@ def _enrich_projection_candidate(
         features={
             **candidate.features,
             **material_context,
-            "r12_material_texture_evidence_available": 1.0,
+            "material_texture_evidence_available": 1.0,
             **registered_oil_candidate_features(
                 oil_motion,
                 local_y=float(candidate.y) - origin_y,
@@ -302,7 +330,7 @@ def _enrich_generated_candidate(
         features={
             **candidate.features,
             **material_context,
-            "r12_material_texture_evidence_available": 1.0,
+            "material_texture_evidence_available": 1.0,
             **registered_oil_candidate_features(
                 oil_motion,
                 local_y=float(candidate.y) - origin_y,
