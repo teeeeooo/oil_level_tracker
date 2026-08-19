@@ -379,7 +379,7 @@ def test_thin_dynamic_foam_layer_is_not_alias_under_large_oil_jump_setting() -> 
     assert [item.raw_foam_front_y for item in resolved] == [219.0, 218.0]
     assert all("R10_FOAM_LAYER_SEPARATED" in item.flags for item in resolved)
     assert all(
-        item.debug_metrics["r10_foam_oil_identity_tolerance_px"] <= 8.0
+        item.debug_metrics["foam_oil_identity_tolerance_px"] <= 8.0
         for item in resolved
     )
 

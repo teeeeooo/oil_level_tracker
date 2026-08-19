@@ -302,18 +302,18 @@ class FoamEpisodeResolver:
         )
         metrics.update(
             {
-                "r7_foam_episode_confirmed": bool(confirmed),
-                "r7_foam_internal_motion_support": (
+                "foam_episode_confirmed": bool(confirmed),
+                "foam_internal_motion_support": (
                     0.0 if evidence is None else float(evidence.internal_motion)
                 ),
-                "r7_foam_dynamic_support": (
+                "foam_dynamic_support": (
                     0.0 if evidence is None else float(evidence.dynamic_support)
                 ),
-                "r8_foam_evidence_preserved": bool(
+                "foam_evidence_preserved": bool(
                     confirmed and evidence is not None
                 ),
-                "r10_foam_oil_identity_tolerance_px": identity_tolerance,
-                "r10_foam_oil_layer_separation_px": oil_foam_separation,
+                "foam_oil_identity_tolerance_px": identity_tolerance,
+                "foam_oil_layer_separation_px": oil_foam_separation,
             }
         )
         base = replace(
