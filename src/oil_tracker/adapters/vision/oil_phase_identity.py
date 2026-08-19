@@ -96,6 +96,10 @@ def evaluate_phase_identity(
         ordered_lower
         and direct_quality
         and context.representation_support >= 0.20
+        and (
+            float(candidate.features.get("phase_transition_scan", 0.0)) < 0.5
+            or texture_clean
+        )
     ):
         return PhaseIdentityDecision(
             OilPhaseIdentity.ORDERED_LOWER_INTERFACE,

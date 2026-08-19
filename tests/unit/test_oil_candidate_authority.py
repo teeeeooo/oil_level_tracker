@@ -230,3 +230,28 @@ def test_distributed_phase_scan_anchors_only_with_strong_direct_identity() -> No
 
     assert decision.tier is OilCandidateAuthority.ANCHOR_ELIGIBLE
     assert decision.reason is AuthorityReason.DISTRIBUTED_PHASE_INTERFACE
+
+
+def test_high_conflict_phase_scan_cannot_use_ordered_lower_exception() -> None:
+    candidate = _candidate(texture_conflict_feature=0.82)
+    candidate.features.update(
+        {
+            "supplemental_path": 1.0,
+            "calibrated_high_recall": 1.0,
+            "phase_transition_scan": 1.0,
+            "broad_scale_consistency": 0.80,
+        }
+    )
+
+    decision = evaluate_candidate_authority(
+        candidate,
+        OilObservationResolverConfig(),
+        AuthorityContext(
+            representation_support=0.60,
+            foam_material_row=50.0,
+            lower_separation_px=8.0,
+        ),
+    )
+
+    assert decision.tier is OilCandidateAuthority.CONTINUATION_ELIGIBLE
+    assert decision.reason is AuthorityReason.CONTINUATION
