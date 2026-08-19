@@ -929,6 +929,31 @@ def test_short_window_strong_terminal_material_path_can_use_three_sectors() -> N
     assert _oil_y(result) == [150.0 + index for index in range(5)]
 
 
+def test_short_duration_terminal_fallback_is_bounded_by_elapsed_time() -> None:
+    detections = []
+    for index in range(11):
+        candidate = _candidate(
+            150.0 + index,
+            boundary=0.82,
+            broad=0.82,
+            source="r6_material_path",
+        )
+        candidate.features.update(
+            {
+                "r6_material_path": 1.0,
+                "material_terminal_partition_support": 0.90,
+                "material_path_sector_fraction": 0.60,
+            }
+        )
+        detections.append(
+            replace(_detection(index, candidate, ambiguity=0.20), time_sec=index * 0.2)
+        )
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert all(value is not None for value in _oil_y(result))
+
+
 def test_material_layer_terminal_cannot_become_long_window_oil_anchor() -> None:
     detections = []
     for index in range(8):

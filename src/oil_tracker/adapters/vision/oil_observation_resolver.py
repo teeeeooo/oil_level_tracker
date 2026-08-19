@@ -286,7 +286,12 @@ class OilObservationResolver:
         # Terminal anchoring is only a bounded single-observation fallback.
         # Absence of a semantic corridor in a long sequence is not positive
         # physical evidence and must not manufacture anchor authority.
-        terminal_fallback_mode = len(detections) <= 6
+        sequence_span_sec = (
+            0.0
+            if len(detections) <= 1
+            else float(detections[-1].time_sec) - float(detections[0].time_sec)
+        )
+        terminal_fallback_mode = len(detections) <= 6 or sequence_span_sec <= 3.0
         lower_separation = foam_material_identity_tolerance(glass) + 2.0
         for frame_offset, detection in enumerate(detections):
             refs: list[_CandidateRef] = []
@@ -483,16 +488,25 @@ class OilObservationResolver:
             1.0,
             float(glass.detector_settings.temporal_max_jump_px),
         )
+        # Frame offsets do not encode the sampling rate, so the caller's
+        # terminal-fallback bit is the stable bounded-window signal here.
+        short_observation = bool(
+            refs_by_frame
+            and any(ref.terminal_fallback for refs in refs_by_frame for ref in refs)
+        )
+        minimum_anchor_frames = 1 if short_observation else 2
         qualified = _qualified_anchor_keys(
             anchors,
             frame_count=len(refs_by_frame),
             horizon=horizon,
             maximum_jump=maximum_jump,
+            minimum_anchor_frames=minimum_anchor_frames,
         )
         trajectory = _trajectory_supported_keys(
             refs_by_frame,
             qualified,
             maximum_jump=maximum_jump,
+            minimum_anchor_frames=minimum_anchor_frames,
         )
         output: list[tuple[_CandidateRef, ...]] = []
         for refs in refs_by_frame:
@@ -2183,6 +2197,7 @@ def _qualified_anchor_keys(
     frame_count: int,
     horizon: int,
     maximum_jump: float,
+    minimum_anchor_frames: int = 2,
 ) -> set[tuple[int, int]]:
     """Return anchors that belong to a bounded multi-frame path.
 
@@ -2195,7 +2210,14 @@ def _qualified_anchor_keys(
 
     if not anchors:
         return set()
-    minimum = 2 if frame_count <= max(6, horizon * 2) else 3
+    requested_minimum = max(1, int(minimum_anchor_frames))
+    minimum = (
+        1
+        if requested_minimum == 1
+        else 2
+        if frame_count <= max(6, horizon * 2)
+        else max(3, requested_minimum)
+    )
     by_frame: dict[int, tuple[_CandidateRef, ...]] = {}
     for frame_offset in sorted({item.frame_offset for item in anchors}):
         by_frame[frame_offset] = tuple(
@@ -2260,6 +2282,7 @@ def _trajectory_supported_keys(
     qualified_anchors: set[tuple[int, int]],
     *,
     maximum_jump: float,
+    minimum_anchor_frames: int = 2,
 ) -> set[tuple[int, int]]:
     """Return candidate keys in a consecutive, anchor-backed graph component.
 
@@ -2314,7 +2337,7 @@ def _trajectory_supported_keys(
         anchor_frames = {
             key[0] for key in component if key in qualified_anchors
         }
-        if len(anchor_frames) >= 2:
+        if len(anchor_frames) >= max(1, int(minimum_anchor_frames)):
             supported.update(component)
     return supported
 

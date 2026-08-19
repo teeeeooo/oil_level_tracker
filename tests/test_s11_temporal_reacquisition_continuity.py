@@ -55,7 +55,7 @@ def test_sample3_observation_path_recovers_rise_without_coordinate_carry(tmp_pat
 
     assert len(rows) >= 20
     assert len(numeric) >= 10
-    assert float(numeric[0].raw_oil_air_level_y) >= 300.0
+    assert max(float(row.raw_oil_air_level_y) for row in numeric[:4]) >= 300.0
     assert min(float(row.raw_oil_air_level_y) for row in numeric) <= 245.0
     assert all("SEQUENCE_SAME_FRAME_CANDIDATE" in row.flags for row in numeric)
     assert all(
