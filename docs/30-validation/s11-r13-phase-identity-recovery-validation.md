@@ -2,10 +2,13 @@
 
 ## Gate status
 
-**Status:** implementation pending.
+**Status:** local PASS; exact-head private-Windows Base/Accum replay pending.
 
 Local PASS authorizes another private-Windows Base/Accum replay. It does not
 close S11.
+
+The local result is recorded in
+[S11-R13 phase-identity recovery evidence](../60-evidence/s11/s11-r13-phase-identity-recovery.md).
 
 ## Structural replacement gate
 
@@ -105,3 +108,16 @@ git diff --check
 Record numeric counts, checked-truth error, independent Foam counts, exact
 same-frame provenance and R12/R13 same-session detector/resolver time. Coverage
 alone is never PASS.
+
+## Local gate result
+
+- four-video replay: 299 rows / 121 numeric Oil;
+- checked truth: 9/13 numeric, 5.28 px MAE, 11 px maximum error;
+- same-frame provenance: PASS;
+- sample3 completed-fill internal-material interval: zero numeric Oil;
+- Artifact replay: 97/113 numeric Oil, zero Foam, complete provenance;
+- direct runtime: 69.5 ms/frame versus documented R12 72.6 ms/frame; and
+- repository regression: 1,537 passed.
+
+The private Windows gates above remain open and are the only current execution
+gate.

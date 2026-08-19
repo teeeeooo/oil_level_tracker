@@ -1,9 +1,9 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `IMPLEMENTING`
-**Current gate:** `R13 phase-identity recovery design and implementation`
-**Source authority:** `R12 secure-Windows field result and diagnostic`
+**Milestone status:** `VALIDATING`
+**Current gate:** `exact-head R13 private-Windows Base/Accum replay`
+**Source authority:** `R13 local evidence and R12 secure-Windows diagnostic`
 
 ## R10 field result
 
@@ -98,33 +98,35 @@ R12's independent Foam validity is retained: confirmed Foam rows at 670.5 and
 The Result Review renderer nevertheless plots finite points without applying
 their per-series valid bit and must be corrected.
 
+## R13 local result
+
+R13 replaced the remaining R12 authority leak with one phase-identity decision
+shared by authority and trajectory. Stale semantic-direct, terminal-fallback,
+track-promotion, duplicate dynamic-material and no-reader diagnostic paths were
+removed. Bounded calibrated phase proposals do not receive proposal or motion
+authority. Per-series graph validity is enforced.
+
+Local replay processed 299 rows with 121 numeric Oil, 9/13 checked truth,
+5.28 px MAE, 11 px maximum error and complete same-frame provenance. The
+sample3 completed-fill internal-material interval remains non-numeric.
+User-like Artifact replay produced 97/113 sample4 numeric Oil, zero Foam and
+complete provenance. Full regression is 1,537 passed. Direct total timing is
+69.5 ms/frame versus the documented R12 72.6 ms/frame.
+
 ## Current executable action
 
-R11 evidence and the confirmed dead compatibility cleanup are complete. R12
-implemented one replacement semantic pipeline, not another R11 policy layer.
-It removes motion-only authority, unbounded material identity, distinct-lower
-anchoring, material-bottom topology veto and shared series validity.
-
-Local R12 replay processed 299 rows with 133 numeric Oil, 10/13 checked truth,
-5.95 px MAE, 11 px maximum error and complete same-frame provenance. Sample3
-retains Y245 for the reviewed Y243 rise and publishes five independently valid
-Foam points. User-like Artifact replay produced 82/113 sample4 numeric Oil and
-zero Foam. Full regression is 1,526 passed. Same-session R11/R12 direct timing
-is 70.5/72.6 ms per frame, a 2.9% total increase.
-
-R13 replaces the remaining phase-authority leak instead of adding an R12
-threshold layer. First remove stale compatibility control/diagnostic seams.
-Then recover bounded non-local Base proposals without proposal-only authority,
-introduce one composition-aware lower-Oil identity shared by admission,
-authority, trajectory and track opposition, and prevent weak/high-conflict
-ordinary semantic rows from anchoring residue. Preserve independent Foam
-validity, make basic trace identify the first path-stage mutation and make the
-review renderer mask each series by its own validity.
+Move the exact pushed R13 head to the secure Windows host and replay Base and
+Accum with the saved Artifact templates. Base must be judged on proposal recall
+near reviewed Oil separately from numeric coverage and must not restore the
+former Y724–873 path. Accum must reject Y190–297 residue, select independently
+identified lower Oil near Y425–475, and publish the rapidly rising Foam front
+under its own validity. Coverage alone is not PASS.
 
 ## Authority links
 
 - [R13 phase-identity architecture](../20-architecture/s11-r13-phase-identity-recovery-architecture.md)
 - [R13 validation](../30-validation/s11-r13-phase-identity-recovery-validation.md)
+- [R13 local evidence](../60-evidence/s11/s11-r13-phase-identity-recovery.md)
 - [R11 architecture](../20-architecture/s11-r11-detector-architecture-reset.md)
 - [R11 validation](../30-validation/s11-r11-detector-architecture-reset-validation.md)
 - [R10 Windows diagnostic](../50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md)

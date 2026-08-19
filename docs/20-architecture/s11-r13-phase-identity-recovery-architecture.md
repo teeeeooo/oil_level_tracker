@@ -1,7 +1,7 @@
 # S11-R13 Phase-Identity Recovery Architecture
 
-**Implementation status:** designed; implementation and local validation in
-progress.
+**Implementation status:** implemented and locally validated; exact-head
+private-Windows validation pending.
 
 ## Purpose
 
