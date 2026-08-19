@@ -283,10 +283,10 @@ class OilObservationResolver:
             (frame_offset, float(detections[frame_offset].candidates[candidate_offset].y))
             for frame_offset, candidate_offset in sorted(semantic_anchor_keys)
         )
-        terminal_fallback_mode = (
-            not semantic_anchor_keys
-            or len(detections) <= 6
-        )
+        # Terminal anchoring is only a bounded single-observation fallback.
+        # Absence of a semantic corridor in a long sequence is not positive
+        # physical evidence and must not manufacture anchor authority.
+        terminal_fallback_mode = len(detections) <= 6
         lower_separation = foam_material_identity_tolerance(glass) + 2.0
         for frame_offset, detection in enumerate(detections):
             refs: list[_CandidateRef] = []
@@ -531,7 +531,6 @@ class OilObservationResolver:
                     buckets.setdefault((phase, bucket), []).append(ref)
 
         penalties: dict[tuple[int, int], float] = {}
-        terminal_promotions: set[tuple[int, int]] = set()
         recurring_tracks: set[int] = set()
         maximum = 0.0
         for bucket_refs in buckets.values():
@@ -581,36 +580,6 @@ class OilObservationResolver:
             semantic_mode_ratio = sum(
                 not item.terminal_fallback for item in ordered
             ) / len(ordered)
-            terminal_support = sum(
-                _candidate_terminal_support(item.candidate) for item in ordered
-            ) / len(ordered)
-            material_layer_topology = max(
-                _unit(
-                    item.candidate.features.get(
-                        "sequence_material_layer_topology",
-                        0.0,
-                    )
-                )
-                for item in ordered
-            )
-            boundary_support = sum(
-                _unit(
-                    item.candidate.features.get(
-                        "boundary_likelihood",
-                        item.candidate.feature_score,
-                    )
-                )
-                for item in ordered
-            ) / len(ordered)
-            artifact_support = sum(
-                _unit(
-                    item.candidate.features.get(
-                        "artifact_likelihood",
-                        item.candidate.penalties.get("artifact_likelihood", 0.0),
-                    )
-                )
-                for item in ordered
-            ) / len(ordered)
             registered_motion = sum(
                 _candidate_registered_motion(item.candidate)
                 for item in ordered
@@ -624,19 +593,6 @@ class OilObservationResolver:
                 )
                 for item in ordered
             ) / len(ordered)
-            if (
-                supplemental_ratio >= 0.95
-                and semantic_mode_ratio >= 0.50
-                and terminal_support >= 0.75
-                and material_layer_topology < 0.50
-                and boundary_support >= 0.65
-                and artifact_support <= 0.25
-                and stability >= 0.55
-            ):
-                terminal_promotions.update(
-                    (item.frame_offset, item.candidate_offset)
-                    for item in ordered
-                )
             contradiction = max(
                 0.0,
                 max(opposition, optics) - 0.35 * material - 0.04,
@@ -711,12 +667,7 @@ class OilObservationResolver:
                         )
                         >= self.config.recurring_track_reject_opposition
                         and not ref.ordered_lower
-                        else (
-                            OilCandidateAuthority.ANCHOR_ELIGIBLE
-                            if (ref.frame_offset, ref.candidate_offset)
-                            in terminal_promotions
-                            else ref.authority
-                        )
+                        else ref.authority
                     ),
                     track_opposition=penalties.get(
                         (ref.frame_offset, ref.candidate_offset),
@@ -1085,12 +1036,13 @@ class OilObservationResolver:
         fill_armed = False
         missing = 0
         blocked = False
+        release_armed = False
         for index, node in enumerate(path):
             if node.kind == "oil" and node.y is not None:
                 relative = _relative_y(node.y, glass)
                 if blocked:
                     if (
-                        relative >= self.config.completed_fill_release_ratio
+                        release_armed
                         and self._is_confirmed_downward_reacquisition(
                             path,
                             index,
@@ -1102,8 +1054,20 @@ class OilObservationResolver:
                         oil_count = 1
                         fill_armed = False
                         missing = 0
+                        release_armed = False
                     else:
                         output[index] = _unknown_node(layers[index])
+                        if not release_armed:
+                            missing = 0
+                    continue
+                if fill_armed and relative > self.config.entrance_band_ratio:
+                    # Once the observed interface has reached the entrance, a
+                    # lower material cap is not a new free interface. Require
+                    # a real observation gap before a later drain may reopen
+                    # the phase track.
+                    blocked = True
+                    missing = 0
+                    output[index] = _unknown_node(layers[index])
                     continue
                 highest_relative = max(highest_relative, relative)
                 oil_count += 1
@@ -1116,11 +1080,12 @@ class OilObservationResolver:
                 ):
                     fill_armed = True
                 continue
-            if not fill_armed or blocked:
+            if not fill_armed and not blocked:
                 continue
             missing += 1
             if missing >= self.config.completed_fill_gap_frames:
                 blocked = True
+                release_armed = True
         return tuple(output)
 
     def _is_confirmed_downward_reacquisition(

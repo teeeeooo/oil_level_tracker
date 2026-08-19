@@ -986,6 +986,28 @@ def test_completed_fill_gap_blocks_upper_texture_reacquisition() -> None:
     assert _oil_y(result)[6:] == [None] * 9
 
 
+def test_completed_fill_blocks_contiguous_lower_material_cap_until_real_gap() -> None:
+    glass = glass_config()
+    ellipse = glass.geometry.ellipse
+    top = ellipse.center_y - ellipse.radius_y
+    height = ellipse.radius_y * 2.0
+    rise = (0.58, 0.48, 0.38, 0.28, 0.22, 0.18)
+    cap = (0.42, 0.44, 0.47, 0.45, 0.50, 0.48)
+    detections = [
+        _detection(
+            index,
+            _candidate(top + height * relative, boundary=0.78),
+            ambiguity=0.15,
+        )
+        for index, relative in enumerate(rise + cap)
+    ]
+
+    result = OilObservationResolver().resolve(tuple(detections), glass)
+
+    assert all(value is not None for value in _oil_y(result)[:6])
+    assert _oil_y(result)[6:] == [None] * len(cap)
+
+
 def test_completed_fill_barrier_releases_only_for_downward_drain_motion() -> None:
     glass = glass_config()
     ellipse = glass.geometry.ellipse
