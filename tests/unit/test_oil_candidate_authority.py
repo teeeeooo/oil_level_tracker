@@ -64,20 +64,20 @@ def test_boundary_dominant_candidate_reports_named_anchor_reason() -> None:
     assert decision.reason is AuthorityReason.BOUNDARY_DOMINANT
 
 
-def test_registered_material_motion_reports_dynamic_anchor_reason() -> None:
+def test_registered_material_motion_corroborates_direct_phase_identity() -> None:
     decision = evaluate_candidate_authority(
         _candidate(
-            boundary=0.48,
+            boundary=0.50,
             material_path=True,
             motion=0.80,
             motion_coverage=0.80,
         ),
         OilObservationResolverConfig(),
-        AuthorityContext(representation_support=0.21),
+        AuthorityContext(representation_support=0.24),
     )
 
     assert decision.tier is OilCandidateAuthority.ANCHOR_ELIGIBLE
-    assert decision.reason is AuthorityReason.REGISTERED_DYNAMIC_MATERIAL_PATH
+    assert decision.reason is AuthorityReason.CORROBORATED_MATERIAL_PATH
 
 
 def test_material_path_without_semantic_corridor_reports_hard_branch() -> None:
@@ -157,7 +157,7 @@ def test_dynamic_material_texture_conflict_is_named_candidate_only_reason() -> N
 
     assert decision.tier is OilCandidateAuthority.CANDIDATE_ONLY
     assert decision.reason is AuthorityReason.MATERIAL_TEXTURE_CONFLICT
-    assert decision.failed_gates == ("material_texture_conflict<0.50",)
+    assert decision.failed_gates == ("material_texture_conflict<0.60",)
 
 
 def test_foam_material_identity_blocks_matching_candidate_not_independent_row() -> None:
