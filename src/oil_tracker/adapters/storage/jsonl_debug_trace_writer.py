@@ -389,9 +389,11 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
         if candidate.kind.value not in {"oil_air", "foam_front"}:
             continue
         features = candidate.features
-        initial = _authority_name(features.get("r9_initial_authority_tier"))
-        post_track = _authority_name(features.get("r9_post_track_authority_tier"))
-        authority = _authority_name(features.get("r9_final_authority_tier"))
+        initial = _authority_name(features.get("sequence_initial_authority_tier"))
+        post_track = _authority_name(
+            features.get("sequence_post_track_authority_tier")
+        )
+        authority = _authority_name(features.get("sequence_final_authority_tier"))
         candidates.append(
             {
                 "kind": candidate.kind.value,
@@ -400,50 +402,35 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 "initial_authority": initial,
                 "post_track_authority": post_track,
                 "authority": authority,
-                "authority_reason": features.get(
-                    "sequence_authority_reason",
-                    features.get("r11_authority_reason"),
-                ),
+                "authority_reason": features.get("sequence_authority_reason"),
                 "authority_failed_gates": features.get(
-                    "sequence_authority_failed_gates",
-                    features.get("r11_authority_failed_gates"),
+                    "sequence_authority_failed_gates"
                 ),
+                "phase_identity": features.get("sequence_phase_identity"),
+                "phase_identity_failed_gates": features.get(
+                    "sequence_phase_identity_failed_gates"
+                ),
+                "ordered_lower": features.get("sequence_ordered_lower"),
                 "cross_representation_support": features.get(
-                    "r9_cross_representation_support"
+                    "sequence_cross_representation_support"
                 ),
                 "semantic_corridor_support": features.get(
-                    "r9_semantic_corridor_support"
+                    "sequence_semantic_corridor_support"
                 ),
-                "track_opposition": features.get("r9_track_opposition"),
-                "cluster_support": features.get("r9_cluster_support"),
-                "trajectory_support": features.get("r9_trajectory_support"),
-                "foam_alias_penalty": features.get("r9_foam_alias_penalty"),
+                "track_opposition": features.get("sequence_track_opposition"),
+                "cluster_support": features.get("sequence_cluster_support"),
+                "trajectory_support": features.get("sequence_trajectory_support"),
+                "foam_alias_penalty": features.get("sequence_foam_alias_penalty"),
                 "evidence_availability": {
-                    "boundary": features.get(
-                        "r12_boundary_evidence_available"
-                    ),
-                    "phase": features.get("r12_phase_evidence_available"),
-                    "optics": features.get("r12_optics_evidence_available"),
-                    "artifact": features.get(
-                        "r12_artifact_evidence_available"
-                    ),
-                    "motion": features.get("r12_motion_evidence_available"),
+                    "boundary": features.get("boundary_evidence_available"),
+                    "phase": features.get("phase_evidence_available"),
+                    "optics": features.get("optics_evidence_available"),
+                    "artifact": features.get("artifact_evidence_available"),
+                    "motion": features.get("motion_evidence_available"),
                     "material_texture": features.get(
-                        "r12_material_texture_evidence_available"
+                        "material_texture_evidence_available"
                     ),
                 },
-                "calibrated_dynamic_seed": features.get(
-                    "r9_calibrated_dynamic_seed",
-                    0.0,
-                ),
-                "calibrated_path_member": features.get(
-                    "r10_calibrated_path_member",
-                    0.0,
-                ),
-                "calibrated_motion_keyframe": features.get(
-                    "r10_calibrated_motion_keyframe",
-                    0.0,
-                ),
                 "selected": candidate.selected,
                 "reject_stage": _sequence_reject_stage(candidate, authority),
             }
@@ -451,9 +438,7 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
     state = {
         str(key): value
         for key, value in detection.debug_metrics.items()
-        if str(key).startswith(
-            ("sequence_", "r7_", "r8_", "r9_", "r10_", "r11_", "r12_")
-        )
+        if str(key).startswith("sequence_")
     }
     return _json_safe(
         {
@@ -499,19 +484,19 @@ def _sequence_reject_stage(
     if authority is None:
         return (
             "HARD_INVALID"
-            if candidate.reject_reason == "r7_candidate_hard_invalid"
+            if candidate.reject_reason == "sequence_candidate_hard_invalid"
             else "TOP_K_PRUNED_OR_HARD_INVALID"
         )
     features = candidate.features
     if authority == "CANDIDATE_ONLY":
-        if float(features.get("r9_track_opposition", 0.0)) >= 0.60:
+        if float(features.get("sequence_track_opposition", 0.0)) >= 0.60:
             return "TRACK_OPPOSITION"
         return "CANDIDATE_ONLY"
     if authority == "ANCHOR_ELIGIBLE" and float(
-        features.get("r9_cluster_support", 0.0)
+        features.get("sequence_cluster_support", 0.0)
     ) < 0.99:
         return "NO_CLUSTER_SUPPORT"
-    if float(features.get("r9_trajectory_support", 0.0)) < 0.99:
+    if float(features.get("sequence_trajectory_support", 0.0)) < 0.99:
         return "NO_TRAJECTORY_SUPPORT"
     return "GLOBAL_PATH_OR_RUN_BOUND"
 

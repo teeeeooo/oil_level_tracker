@@ -7,6 +7,12 @@ from typing import Protocol
 from oil_tracker.domain.detection import BoundaryCandidate
 
 from .oil_candidate_evidence import OilCandidateEvidence, candidate_is_eligible
+from .oil_phase_identity import (
+    OilPhaseIdentity,
+    PhaseIdentityContext,
+    PhaseIdentityDecision,
+    evaluate_phase_identity,
+)
 
 
 class OilCandidateAuthority(IntEnum):
@@ -21,7 +27,8 @@ class AuthorityReason(str, Enum):
     MATERIAL_LAYER_TERMINAL = "material_layer_terminal"
     STATIC_MATERIAL_FRONT_TWIN = "static_material_front_twin"
     BOUNDARY_DOMINANT = "boundary_dominant"
-    SEMANTIC_SEQUENCE_ANCHOR = "semantic_sequence_anchor"
+    DISTRIBUTED_PHASE_INTERFACE = "distributed_phase_interface"
+    ORDERED_LOWER_INTERFACE = "ordered_lower_interface"
     CORROBORATED_MATERIAL_PATH = "corroborated_material_path"
     TERMINAL_MATERIAL_BOUNDARY = "terminal_material_boundary"
     REGISTERED_DYNAMIC_MATERIAL_PATH = "registered_dynamic_material_path"
@@ -45,10 +52,12 @@ class AuthorityContext:
     representation_support: float = 0.0
     semantic_corridor_support: float = 0.0
     semantic_sequence_available: bool = False
-    semantic_sequence_anchor: bool = False
     allow_terminal_anchor: bool = True
     allow_material_layer_terminal: bool = False
     foam_material_identity: float = 0.0
+    foam_material_row: float | None = None
+    lower_separation_px: float = 0.0
+    phase_identity: PhaseIdentityDecision | None = None
 
 
 class AuthorityThresholds(Protocol):
@@ -76,6 +85,16 @@ def evaluate_candidate_authority(
         return AuthorityDecision(OilCandidateAuthority.HARD_INVALID, AuthorityReason.INELIGIBLE)
 
     evidence = OilCandidateEvidence.from_candidate(candidate)
+    phase_identity = context.phase_identity or evaluate_phase_identity(
+        candidate,
+        config,
+        PhaseIdentityContext(
+            representation_support=context.representation_support,
+            foam_material_identity=context.foam_material_identity,
+            foam_material_row=context.foam_material_row,
+            lower_separation_px=context.lower_separation_px,
+        ),
+    )
     static_material_front_twin = bool(
         evidence.raw_material_row_support >= 0.60
         and context.representation_support >= 0.20
@@ -99,15 +118,32 @@ def evaluate_candidate_authority(
             AuthorityReason.STATIC_MATERIAL_FRONT_TWIN,
         )
 
-    if context.foam_material_identity >= 0.50:
+    if phase_identity.identity is OilPhaseIdentity.OPPOSED_MATERIAL:
         return AuthorityDecision(
             OilCandidateAuthority.CANDIDATE_ONLY,
             AuthorityReason.FOAM_MATERIAL_IDENTITY,
             ("independent_from_foam_material_track",),
         )
 
+    if phase_identity.identity is OilPhaseIdentity.ORDERED_LOWER_INTERFACE:
+        return AuthorityDecision(
+            OilCandidateAuthority.ANCHOR_ELIGIBLE,
+            AuthorityReason.ORDERED_LOWER_INTERFACE,
+        )
+
+    distributed_phase_interface = bool(
+        phase_identity.identity is OilPhaseIdentity.DIRECT_INTERFACE
+        and float(candidate.features.get("phase_transition_scan", 0.0)) >= 0.5
+        and evidence.boundary >= 0.44
+        and evidence.artifact_signature <= 0.25
+        and evidence.ambiguity <= 0.52
+        and evidence.horizontal_coverage >= 0.60
+        and float(candidate.features.get("broad_scale_consistency", 0.0)) >= 0.66
+    )
+
     boundary_dominant = bool(
-        not evidence.material_path
+        phase_identity.identity is OilPhaseIdentity.DIRECT_INTERFACE
+        and not evidence.material_path
         and not evidence.supplemental
         and evidence.availability.phase
         and evidence.material_support >= config.anchor_min_material
@@ -126,7 +162,8 @@ def evaluate_candidate_authority(
         )
     )
     corroborated_material_path = bool(
-        evidence.material_path
+        phase_identity.identity is OilPhaseIdentity.DIRECT_INTERFACE
+        and evidence.material_path
         and evidence.availability.material_texture
         and (
             not evidence.supplemental
@@ -151,7 +188,8 @@ def evaluate_candidate_authority(
         and evidence.material_texture_conflict < 0.60
     )
     terminal_material_boundary = bool(
-        evidence.material_path
+        phase_identity.identity is OilPhaseIdentity.DIRECT_INTERFACE
+        and evidence.material_path
         and evidence.availability.material_texture
         and not evidence.supplemental
         and context.allow_terminal_anchor
@@ -177,7 +215,8 @@ def evaluate_candidate_authority(
         and evidence.material_texture_conflict < 0.60
     )
     registered_dynamic_material_path = bool(
-        evidence.material_path
+        phase_identity.identity is OilPhaseIdentity.DIRECT_INTERFACE
+        and evidence.material_path
         and evidence.availability.material_texture
         and evidence.availability.motion
         and context.representation_support >= 0.20
@@ -195,20 +234,12 @@ def evaluate_candidate_authority(
         and evidence.sector_fraction >= 0.60
         and evidence.material_texture_conflict < 0.50
     )
-    semantic_sequence_anchor = bool(
-        context.semantic_sequence_anchor
-        and evidence.availability.phase
-        and (
-            not evidence.material_path
-            or (
-                evidence.availability.material_texture
-                and evidence.material_texture_conflict < 0.60
-            )
-        )
-    )
     for accepted, reason in (
+        (
+            distributed_phase_interface,
+            AuthorityReason.DISTRIBUTED_PHASE_INTERFACE,
+        ),
         (boundary_dominant, AuthorityReason.BOUNDARY_DOMINANT),
-        (semantic_sequence_anchor, AuthorityReason.SEMANTIC_SEQUENCE_ANCHOR),
         (corroborated_material_path, AuthorityReason.CORROBORATED_MATERIAL_PATH),
         (terminal_material_boundary, AuthorityReason.TERMINAL_MATERIAL_BOUNDARY),
         (registered_dynamic_material_path, AuthorityReason.REGISTERED_DYNAMIC_MATERIAL_PATH),
@@ -272,8 +303,10 @@ def evaluate_candidate_authority(
         return AuthorityDecision(
             OilCandidateAuthority.CONTINUATION_ELIGIBLE,
             AuthorityReason.CONTINUATION,
+            phase_identity.failed_gates,
         )
     return AuthorityDecision(
         OilCandidateAuthority.CANDIDATE_ONLY,
         AuthorityReason.INSUFFICIENT_AUTHORITY,
+        phase_identity.failed_gates,
     )

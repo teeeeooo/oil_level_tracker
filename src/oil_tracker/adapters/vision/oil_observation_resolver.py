@@ -24,9 +24,10 @@ from .oil_sequence_types import (
     OilCandidateRef as _CandidateRef,
     OilSequenceNode as _Node,
 )
+from .oil_phase_identity import PhaseIdentityContext, evaluate_phase_identity
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r12-phase-composition-replacement-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r13-phase-identity-recovery-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -177,21 +178,35 @@ class OilObservationResolver:
             self._nodes_for_frame(detection, refs_by_frame[index])
             for index, detection in enumerate(source)
         )
-        path = self._best_path(
+        best_path = self._best_path(
             layers,
             source,
             glass,
             confirmed_initial_state,
         )
-        path = self._bound_continuation_runs(path, layers, glass)
-        path = self._suppress_trajectory_spikes(path, layers, glass)
-        path = self._suppress_completed_fill_reacquisition(path, layers, glass)
+        bounded_path = self._bound_continuation_runs(best_path, layers, glass)
+        spike_suppressed_path = self._suppress_trajectory_spikes(
+            bounded_path,
+            layers,
+            glass,
+        )
+        path = self._suppress_completed_fill_reacquisition(
+            spike_suppressed_path,
+            layers,
+            glass,
+        )
         resolved = tuple(
             self._project_detection(
                 detection,
                 node,
                 refs_by_frame[index],
                 path,
+                (
+                    best_path[index],
+                    bounded_path[index],
+                    spike_suppressed_path[index],
+                    path[index],
+                ),
                 index,
                 glass,
                 confirmed_initial_state,
@@ -259,6 +274,7 @@ class OilObservationResolver:
         limit = max(1, int(glass.detector_settings.candidate_top_k))
         rows: list[tuple[_CandidateRef, ...]] = []
         ineligible = 0
+        foam_material_identity = track_foam_material_identity(detections, glass)
         semantic_anchor_keys = _qualified_ordinary_semantic_keys(
             detections,
             glass,
@@ -271,8 +287,7 @@ class OilObservationResolver:
             not semantic_anchor_keys
             or len(detections) <= 6
         )
-        foam_material_identity = track_foam_material_identity(detections, glass)
-        distinct_lower_separation = foam_material_identity_tolerance(glass) + 2.0
+        lower_separation = foam_material_identity_tolerance(glass) + 2.0
         for frame_offset, detection in enumerate(detections):
             refs: list[_CandidateRef] = []
             oil_candidates = tuple(
@@ -297,20 +312,18 @@ class OilObservationResolver:
                     candidate_offset,
                 )
                 material_identity_row = foam_material_identity.row(frame_offset)
-                distinct_lower_reserve = bool(
+                ordered_lower = bool(
                     material_identity_row is not None
                     and float(candidate.y)
-                    >= material_identity_row + distinct_lower_separation
+                    >= material_identity_row + lower_separation
                     and material_identity_opposition < 0.20
                 )
                 candidate = replace(
                     candidate,
                     features={
                         **candidate.features,
-                        "r11_foam_material_identity": material_identity_opposition,
-                        "r12_distinct_lower_reserve": float(
-                            distinct_lower_reserve
-                        ),
+                        "foam_material_identity": material_identity_opposition,
+                        "composition_lower_reserve": float(ordered_lower),
                     },
                 )
                 representation_support = _cross_representation_support(
@@ -325,6 +338,16 @@ class OilObservationResolver:
                     glass,
                 )
                 allow_terminal_anchor = terminal_fallback_mode
+                phase_identity = evaluate_phase_identity(
+                    candidate,
+                    self.config,
+                    PhaseIdentityContext(
+                        representation_support=representation_support,
+                        foam_material_identity=material_identity_opposition,
+                        foam_material_row=material_identity_row,
+                        lower_separation_px=lower_separation,
+                    ),
+                )
                 authority_decision = evaluate_candidate_authority(
                     candidate,
                     self.config,
@@ -332,14 +355,12 @@ class OilObservationResolver:
                         representation_support=representation_support,
                         semantic_corridor_support=semantic_corridor_support,
                         semantic_sequence_available=bool(semantic_anchor_keys),
-                        semantic_sequence_anchor=(
-                            frame_offset,
-                            candidate_offset,
-                        )
-                        in semantic_anchor_keys,
                         allow_terminal_anchor=allow_terminal_anchor,
                         allow_material_layer_terminal=len(detections) <= 6,
                         foam_material_identity=material_identity_opposition,
+                        foam_material_row=material_identity_row,
+                        lower_separation_px=lower_separation,
+                        phase_identity=phase_identity,
                     ),
                 )
                 authority = authority_decision.tier
@@ -379,6 +400,9 @@ class OilObservationResolver:
                         authority_reason=authority_decision.reason,
                         authority_failed_gates=authority_decision.failed_gates,
                         foam_material_identity=material_identity_opposition,
+                        phase_identity=phase_identity.identity,
+                        phase_identity_failed_gates=phase_identity.failed_gates,
+                        ordered_lower=phase_identity.ordered_lower,
                     )
                 )
             refs.sort(
@@ -392,19 +416,19 @@ class OilObservationResolver:
             selected_refs = list(
                 ref
                 for ref in refs
-                if not _candidate_is_r9_calibrated(ref.candidate)
+                if not _candidate_is_calibrated_high_recall(ref.candidate)
             )[:limit]
             if not any(
-                _candidate_is_r8_supplemental(ref.candidate)
-                and not _candidate_is_r9_calibrated(ref.candidate)
+                _candidate_is_supplemental(ref.candidate)
+                and not _candidate_is_calibrated_high_recall(ref.candidate)
                 for ref in selected_refs
             ):
                 supplemental = next(
                     (
                         ref
                         for ref in refs
-                        if _candidate_is_r8_supplemental(ref.candidate)
-                        and not _candidate_is_r9_calibrated(ref.candidate)
+                        if _candidate_is_supplemental(ref.candidate)
+                        and not _candidate_is_calibrated_high_recall(ref.candidate)
                         and ref not in selected_refs
                     ),
                     None,
@@ -414,7 +438,7 @@ class OilObservationResolver:
             high_recall = [
                 ref
                 for ref in refs
-                if _candidate_is_r9_calibrated(ref.candidate)
+                if _candidate_is_calibrated_high_recall(ref.candidate)
             ][: min(
                 12,
                 max(
@@ -429,7 +453,7 @@ class OilObservationResolver:
                     for ref in refs
                     if _unit(
                         ref.candidate.features.get(
-                            "r12_distinct_lower_reserve",
+                            "composition_lower_reserve",
                             0.0,
                         )
                     )
@@ -686,6 +710,7 @@ class OilObservationResolver:
                             0.0,
                         )
                         >= self.config.recurring_track_reject_opposition
+                        and not ref.ordered_lower
                         else (
                             OilCandidateAuthority.ANCHOR_ELIGIBLE
                             if (ref.frame_offset, ref.candidate_offset)
@@ -720,7 +745,7 @@ class OilObservationResolver:
                     ),
                     None,
                 )
-                if opposed_peer is not None:
+                if opposed_peer is not None and not ref.ordered_lower:
                     ref = replace(
                         ref,
                         authority=OilCandidateAuthority.CANDIDATE_ONLY,
@@ -760,7 +785,7 @@ class OilObservationResolver:
                     ),
                     None,
                 )
-                if superior_partition is None:
+                if superior_partition is None or ref.ordered_lower:
                     row.append(ref)
                     continue
                 row.append(
@@ -799,7 +824,7 @@ class OilObservationResolver:
             for ref in refs
             if ref.authority >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
             and (
-                not _candidate_is_r9_calibrated(ref.candidate)
+                not _candidate_is_calibrated_high_recall(ref.candidate)
                 or ref.trajectory_support >= 0.99
             )
         ]
@@ -1195,6 +1220,7 @@ class OilObservationResolver:
         node: _Node,
         refs: tuple[_CandidateRef, ...],
         path: tuple[_Node, ...],
+        stage_nodes: tuple[_Node, _Node, _Node, _Node],
         frame_offset: int,
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None,
@@ -1212,6 +1238,14 @@ class OilObservationResolver:
                 "sequence_resolved_kind": node.kind,
                 "sequence_resolved_source_y": node.y,
                 "sequence_emission": float(node.emission),
+                "sequence_stage_best_path_kind": stage_nodes[0].kind,
+                "sequence_stage_best_path_y": stage_nodes[0].y,
+                "sequence_stage_continuation_bound_kind": stage_nodes[1].kind,
+                "sequence_stage_continuation_bound_y": stage_nodes[1].y,
+                "sequence_stage_spike_suppressed_kind": stage_nodes[2].kind,
+                "sequence_stage_spike_suppressed_y": stage_nodes[2].y,
+                "sequence_stage_completed_fill_kind": stage_nodes[3].kind,
+                "sequence_stage_completed_fill_y": stage_nodes[3].y,
                 "sequence_track_opposition": (
                     0.0
                     if node.candidate_ref is None
@@ -1222,66 +1256,66 @@ class OilObservationResolver:
                     if node.candidate_ref is None
                     else float(node.candidate_ref.cluster_support)
                 ),
-                "r7_trajectory_support": (
+                "sequence_trajectory_support": (
                     0.0
                     if node.candidate_ref is None
                     else float(node.candidate_ref.trajectory_support)
                 ),
-                "r7_cross_representation_support": (
+                "sequence_cross_representation_support": (
                     0.0
                     if node.candidate_ref is None
                     else float(node.candidate_ref.representation_support)
                 ),
-                "r7_semantic_corridor_support": (
+                "sequence_semantic_corridor_support": (
                     0.0
                     if node.candidate_ref is None
                     else float(node.candidate_ref.semantic_corridor_support)
                 ),
-                "r7_terminal_partition_support": (
+                "sequence_terminal_partition_support": (
                     0.0
                     if node.candidate_ref is None
                     else _candidate_terminal_support(node.candidate_ref.candidate)
                 ),
-                "r7_terminal_fallback_mode": float(
+                "sequence_terminal_fallback_mode": float(
                     node.candidate_ref is not None
                     and node.candidate_ref.terminal_fallback
                 ),
-                "r7_registered_candidate_motion_support": (
+                "sequence_registered_candidate_motion_support": (
                     0.0
                     if node.candidate_ref is None
                     else _candidate_registered_motion(node.candidate_ref.candidate)
                 ),
-                "r7_selected_authority_tier": (
+                "sequence_selected_authority_tier": (
                     OilCandidateAuthority.HARD_INVALID.name
                     if node.candidate_ref is None
                     else node.candidate_ref.authority.name
-                ),
-                "r11_selected_authority_reason": (
-                    None
-                    if node.candidate_ref is None
-                    else node.candidate_ref.authority_reason.value
                 ),
                 "sequence_selected_authority_reason": (
                     None
                     if node.candidate_ref is None
                     else node.candidate_ref.authority_reason.value
                 ),
-                "r11_selected_foam_material_identity": (
+                "sequence_selected_foam_material_identity": (
                     0.0
                     if node.candidate_ref is None
                     else float(node.candidate_ref.foam_material_identity)
-                ),
-                "r11_selected_authority_failed_gates": (
-                    ""
-                    if node.candidate_ref is None
-                    else ";".join(node.candidate_ref.authority_failed_gates)
                 ),
                 "sequence_selected_authority_failed_gates": (
                     ""
                     if node.candidate_ref is None
                     else ";".join(node.candidate_ref.authority_failed_gates)
                 ),
-                "r7_state_image_evidence": float(node.state_evidence),
+                "sequence_selected_phase_identity": (
+                    None
+                    if node.candidate_ref is None
+                    else node.candidate_ref.phase_identity.value
+                ),
+                "sequence_selected_phase_identity_failed_gates": (
+                    ""
+                    if node.candidate_ref is None
+                    else ";".join(node.candidate_ref.phase_identity_failed_gates)
+                ),
+                "sequence_state_image_evidence": float(node.state_evidence),
             }
         )
         if node.kind == "oil":
@@ -1376,9 +1410,7 @@ def _cross_representation_support(
     are not consulted.
     """
 
-    if _candidate_is_r9_calibrated(candidate):
-        return 0.0
-    candidate_is_path = _candidate_is_material_path(candidate)
+    candidate_family = _candidate_representation_family(candidate)
     tolerance = max(
         8.0,
         float(glass.detector_settings.temporal_max_jump_px) * 0.375,
@@ -1387,10 +1419,13 @@ def _cross_representation_support(
     for peer in candidates:
         if peer is candidate:
             continue
-        if _candidate_is_r9_calibrated(peer):
+        peer_family = _candidate_representation_family(peer)
+        if peer_family == candidate_family or not _candidate_eligible(peer):
             continue
-        peer_is_path = _candidate_is_material_path(peer)
-        if peer_is_path == candidate_is_path or not _candidate_eligible(peer):
+        if "calibrated_raster" in {candidate_family, peer_family} and "material" not in {
+            candidate_family,
+            peer_family,
+        }:
             continue
         distance = abs(float(peer.y) - float(candidate.y))
         if distance > tolerance:
@@ -1447,12 +1482,21 @@ def _candidate_is_material_path(candidate: BoundaryCandidate) -> bool:
     return OilCandidateEvidence.from_candidate(candidate).material_path
 
 
-def _candidate_is_r8_supplemental(candidate: BoundaryCandidate) -> bool:
+def _candidate_is_supplemental(candidate: BoundaryCandidate) -> bool:
     return OilCandidateEvidence.from_candidate(candidate).supplemental
 
 
-def _candidate_is_r9_calibrated(candidate: BoundaryCandidate) -> bool:
+def _candidate_is_calibrated_high_recall(candidate: BoundaryCandidate) -> bool:
     return OilCandidateEvidence.from_candidate(candidate).calibrated_high_recall
+
+
+def _candidate_representation_family(candidate: BoundaryCandidate) -> str:
+    evidence = OilCandidateEvidence.from_candidate(candidate)
+    if evidence.material_path:
+        return "material"
+    if evidence.calibrated_high_recall or evidence.supplemental:
+        return "calibrated_raster"
+    return "phase_hypothesis"
 
 
 def _foam_front_alias_penalty(
@@ -1688,34 +1732,35 @@ def _project_candidates(
                 ref.candidate,
                 features={
                     **ref.candidate.features,
-                    "r9_sequence_top_k": 1.0,
-                    "r9_initial_authority_tier": float(ref.initial_authority),
-                    "r9_post_track_authority_tier": float(
+                    "sequence_top_k": 1.0,
+                    "sequence_initial_authority_tier": float(ref.initial_authority),
+                    "sequence_post_track_authority_tier": float(
                         ref.post_track_authority
                     ),
-                    "r9_final_authority_tier": float(ref.authority),
-                    "r9_cross_representation_support": float(
+                    "sequence_final_authority_tier": float(ref.authority),
+                    "sequence_cross_representation_support": float(
                         ref.representation_support
                     ),
-                    "r9_semantic_corridor_support": float(
+                    "sequence_semantic_corridor_support": float(
                         ref.semantic_corridor_support
                     ),
-                    "r9_track_opposition": float(ref.track_opposition),
-                    "r9_cluster_support": float(ref.cluster_support),
-                    "r9_trajectory_support": float(ref.trajectory_support),
-                    "r9_foam_alias_penalty": float(ref.foam_alias_penalty),
-                    "r9_sequence_selected": float(selected),
-                    "r11_authority_reason": ref.authority_reason.value,
+                    "sequence_track_opposition": float(ref.track_opposition),
+                    "sequence_cluster_support": float(ref.cluster_support),
+                    "sequence_trajectory_support": float(ref.trajectory_support),
+                    "sequence_foam_alias_penalty": float(ref.foam_alias_penalty),
+                    "sequence_selected": float(selected),
                     "sequence_authority_reason": ref.authority_reason.value,
-                    "r11_authority_failed_gates": ";".join(
-                        ref.authority_failed_gates
-                    ),
                     "sequence_authority_failed_gates": ";".join(
                         ref.authority_failed_gates
                     ),
-                    "r11_foam_material_identity": float(
+                    "sequence_foam_material_identity": float(
                         ref.foam_material_identity
                     ),
+                    "sequence_phase_identity": ref.phase_identity.value,
+                    "sequence_phase_identity_failed_gates": ";".join(
+                        ref.phase_identity_failed_gates
+                    ),
+                    "sequence_ordered_lower": float(ref.ordered_lower),
                     **OilCandidateEvidence.from_candidate(
                         ref.candidate
                     ).availability.as_features(),
@@ -1736,9 +1781,9 @@ def _project_candidates(
                             "calibrated_artifact:"
                         )
                         else (
-                            "r7_candidate_hard_invalid"
+                            "sequence_candidate_hard_invalid"
                             if not eligible
-                            else "not_selected_by_r7_observation_resolver"
+                            else "not_selected_by_observation_resolver"
                         )
                     )
                 ),
@@ -2047,11 +2092,17 @@ def _ordinary_semantic_candidate(candidate: BoundaryCandidate) -> bool:
         candidate.kind is not BoundaryKind.OIL_AIR
         or not _finite(candidate.y)
         or _candidate_is_material_path(candidate)
-        or _candidate_is_r8_supplemental(candidate)
+        or _candidate_is_supplemental(candidate)
         or not _candidate_eligible(candidate)
     ):
         return False
     features = candidate.features
+    evidence = OilCandidateEvidence.from_candidate(candidate)
+    if (
+        not evidence.availability.material_texture
+        or evidence.material_texture_conflict >= 0.60
+    ):
+        return False
     if (
         _unit(features.get("sequence_material_layer_topology", 0.0)) >= 0.5
         and _unit(features.get("material_terminal_partition_support", 0.0))

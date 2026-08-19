@@ -179,3 +179,54 @@ def test_foam_material_identity_blocks_matching_candidate_not_independent_row() 
     assert material_decision.reason is AuthorityReason.FOAM_MATERIAL_IDENTITY
     # A geometrically separate ordinary row uses only its own Oil evidence.
     assert lower_decision.reason is AuthorityReason.BOUNDARY_DOMINANT
+
+
+def test_high_conflict_ordinary_candidate_cannot_bypass_typed_phase_identity() -> None:
+    decision = evaluate_candidate_authority(
+        _candidate(texture_conflict_feature=0.82),
+        OilObservationResolverConfig(),
+        AuthorityContext(
+            semantic_sequence_available=True,
+            semantic_corridor_support=1.0,
+        ),
+    )
+
+    assert decision.tier is OilCandidateAuthority.CONTINUATION_ELIGIBLE
+    assert decision.reason is AuthorityReason.CONTINUATION
+    assert "material_texture_clean_or_ordered_lower" in decision.failed_gates
+
+
+def test_strong_ordered_lower_interface_can_anchor_despite_broad_mask_conflict() -> None:
+    decision = evaluate_candidate_authority(
+        _candidate(texture_conflict_feature=0.82),
+        OilObservationResolverConfig(),
+        AuthorityContext(
+            representation_support=0.60,
+            foam_material_row=50.0,
+            lower_separation_px=8.0,
+        ),
+    )
+
+    assert decision.tier is OilCandidateAuthority.ANCHOR_ELIGIBLE
+    assert decision.reason is AuthorityReason.ORDERED_LOWER_INTERFACE
+
+
+def test_distributed_phase_scan_anchors_only_with_strong_direct_identity() -> None:
+    candidate = _candidate()
+    candidate.features.update(
+        {
+            "supplemental_path": 1.0,
+            "calibrated_high_recall": 1.0,
+            "phase_transition_scan": 1.0,
+            "broad_scale_consistency": 0.80,
+        }
+    )
+
+    decision = evaluate_candidate_authority(
+        candidate,
+        OilObservationResolverConfig(),
+        AuthorityContext(),
+    )
+
+    assert decision.tier is OilCandidateAuthority.ANCHOR_ELIGIBLE
+    assert decision.reason is AuthorityReason.DISTRIBUTED_PHASE_INTERFACE

@@ -131,8 +131,8 @@ def _calibrated_candidate(
         candidate,
         features={
             **candidate.features,
-            "r8_supplemental_path": 1.0,
-            "r9_calibrated_high_recall": 1.0,
+            "supplemental_path": 1.0,
+            "calibrated_high_recall": 1.0,
         },
     )
 
@@ -295,7 +295,7 @@ def test_high_recall_path_does_not_compete_with_qualified_path() -> None:
 
     assert _oil_y(result) == [150.0] * 8
     assert all(
-        candidate.features.get("r12_distinct_lower_reserve", 0.0) == 0.0
+        candidate.features.get("composition_lower_reserve", 0.0) == 0.0
         for detection in result.detections
         for candidate in detection.candidates
     )
@@ -332,7 +332,7 @@ def test_foam_material_identity_blocks_residue_and_reserves_lower_candidate() ->
     assert result.diagnostics.foam_material_opposed_candidate_count == 8
     assert all(
         any(
-            candidate.features.get("r11_authority_reason")
+            candidate.features.get("sequence_authority_reason")
             == "foam_material_identity"
             for candidate in detection.candidates
             if candidate.source == "r6_material_path"
@@ -341,9 +341,44 @@ def test_foam_material_identity_blocks_residue_and_reserves_lower_candidate() ->
     )
     assert all(
         any(
-            candidate.features.get("r12_distinct_lower_reserve") == 1.0
+            candidate.features.get("composition_lower_reserve") == 1.0
             for candidate in detection.candidates
             if candidate.source == "calibrated"
+        )
+        for detection in result.detections
+    )
+
+
+def test_ordered_lower_interface_can_anchor_inside_broad_material_mask() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            *((_foam_candidate(218.0),) if index == 0 else ()),
+            _material_candidate(218.0 + min(index, 3)),
+            _material_candidate(450.0 + (index % 2)),
+            _calibrated_candidate(
+                450.0 + (index % 2),
+                motion=0.05,
+                motion_coverage=0.0,
+            ),
+            ambiguity=0.20,
+        )
+        for index in range(8)
+    )
+
+    result = OilObservationResolver().resolve(
+        detections,
+        _with_artifact_calibration(),
+    )
+
+    assert all(y is not None and 449.0 <= y <= 452.0 for y in _oil_y(result))
+    assert all(
+        any(
+            candidate.selected
+            and candidate.features.get("sequence_phase_identity")
+            == "ordered_lower_interface"
+            for candidate in detection.candidates
+            if candidate.kind is BoundaryKind.OIL_AIR
         )
         for detection in result.detections
     )
@@ -376,6 +411,13 @@ def test_continuous_material_path_beats_disconnected_stronger_rows() -> None:
 
     assert _oil_y(result) == [150.0, 145.0, 140.0, 135.0, 130.0, 125.0]
     assert all("SEQUENCE_RESOLVED_OIL" in item.flags for item in result.detections)
+    assert all(
+        item.debug_metrics["sequence_stage_best_path_kind"] == "oil"
+        and item.debug_metrics["sequence_stage_continuation_bound_kind"] == "oil"
+        and item.debug_metrics["sequence_stage_spike_suppressed_kind"] == "oil"
+        and item.debug_metrics["sequence_stage_completed_fill_kind"] == "oil"
+        for item in result.detections
+    )
 
 
 def test_multiple_same_frame_candidates_do_not_fragment_anchor_track() -> None:
@@ -733,7 +775,7 @@ def test_calibrated_artifacts_do_not_consume_actual_oil_top_k_capacity() -> None
     assert result.diagnostics.ineligible_candidate_count == 25
 
 
-def test_foam_material_texture_cannot_veto_independent_oil_authority() -> None:
+def test_high_texture_conflict_blocks_ordinary_semantic_authority() -> None:
     conflicted = tuple(
         _detection(
             index,
@@ -764,9 +806,8 @@ def test_foam_material_texture_cannot_veto_independent_oil_authority() -> None:
 
     resolver = OilObservationResolver()
 
-    assert _oil_y(resolver.resolve(conflicted, glass_config())) == _oil_y(
-        resolver.resolve(neutral, glass_config())
-    )
+    assert _oil_y(resolver.resolve(conflicted, glass_config())) == [None] * 8
+    assert _oil_y(resolver.resolve(neutral, glass_config())) == [132.0] * 8
 
 
 def test_foam_raster_motion_is_not_oil_motion_authority() -> None:

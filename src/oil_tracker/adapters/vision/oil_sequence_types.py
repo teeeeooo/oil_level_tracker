@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from oil_tracker.domain.detection import BoundaryCandidate
 
 from .oil_candidate_authority import AuthorityReason, OilCandidateAuthority
+from .oil_phase_identity import OilPhaseIdentity
 
 
 @dataclass(frozen=True)
@@ -26,6 +27,9 @@ class OilCandidateRef:
     authority_reason: AuthorityReason = AuthorityReason.INSUFFICIENT_AUTHORITY
     authority_failed_gates: tuple[str, ...] = ()
     foam_material_identity: float = 0.0
+    phase_identity: OilPhaseIdentity = OilPhaseIdentity.CONTINUATION_ONLY
+    phase_identity_failed_gates: tuple[str, ...] = ()
+    ordered_lower: bool = False
 
 
 @dataclass(frozen=True)

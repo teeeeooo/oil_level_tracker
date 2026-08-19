@@ -16,12 +16,12 @@ class EvidenceAvailability:
 
     def as_features(self) -> dict[str, float]:
         return {
-            "r12_boundary_evidence_available": float(self.boundary),
-            "r12_phase_evidence_available": float(self.phase),
-            "r12_optics_evidence_available": float(self.optics),
-            "r12_artifact_evidence_available": float(self.artifact),
-            "r12_motion_evidence_available": float(self.motion),
-            "r12_material_texture_evidence_available": float(
+            "boundary_evidence_available": float(self.boundary),
+            "phase_evidence_available": float(self.phase),
+            "optics_evidence_available": float(self.optics),
+            "artifact_evidence_available": float(self.artifact),
+            "motion_evidence_available": float(self.motion),
+            "material_texture_evidence_available": float(
                 self.material_texture
             ),
         }
@@ -117,7 +117,9 @@ class OilCandidateEvidence:
             )
         )
         terminal = unit(features.get("material_terminal_partition_support", 0.0))
-        material_path = unit(features.get("r6_material_path", 0.0)) >= 0.5
+        material_path = unit(
+            features.get("material_path", features.get("r6_material_path", 0.0))
+        ) >= 0.5
         static = unit(
             features.get(
                 "static_prior_contribution",
@@ -199,9 +201,21 @@ class OilCandidateEvidence:
                 features.get("sequence_material_layer_topology", 0.0)
             ),
             material_path=material_path,
-            supplemental=unit(features.get("r8_supplemental_path", 0.0)) >= 0.5,
+            supplemental=unit(
+                features.get(
+                    "supplemental_path",
+                    features.get("r8_supplemental_path", 0.0),
+                )
+            )
+            >= 0.5,
             calibrated_high_recall=(
-                unit(features.get("r9_calibrated_high_recall", 0.0)) >= 0.5
+                unit(
+                    features.get(
+                        "calibrated_high_recall",
+                        features.get("r9_calibrated_high_recall", 0.0),
+                    )
+                )
+                >= 0.5
             ),
             availability=availability,
         )

@@ -162,12 +162,14 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
         raw.candidates[0],
         features={
             **raw.candidates[0].features,
-            "r9_initial_authority_tier": 2.0,
-            "r9_post_track_authority_tier": 2.0,
-            "r9_final_authority_tier": 3.0,
-            "r9_trajectory_support": 1.0,
-            "r9_cluster_support": 1.0,
-            "r9_sequence_selected": 1.0,
+            "sequence_initial_authority_tier": 2.0,
+            "sequence_post_track_authority_tier": 2.0,
+            "sequence_final_authority_tier": 3.0,
+            "sequence_trajectory_support": 1.0,
+            "sequence_cluster_support": 1.0,
+            "sequence_selected": 1.0,
+            "sequence_phase_identity": "direct_interface",
+            "sequence_phase_identity_failed_gates": "",
         },
     )
     final = replace(
@@ -191,6 +193,7 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
     assert record["sequence"]["positions"]["raw_oil_y"] == 118.0
     assert record["sequence"]["candidates"][0]["initial_authority"] == "CONTINUATION_ELIGIBLE"
     assert record["sequence"]["candidates"][0]["authority"] == "ANCHOR_ELIGIBLE"
+    assert record["sequence"]["candidates"][0]["phase_identity"] == "direct_interface"
     assert record["sequence"]["candidates"][0]["reject_stage"] == "ACCEPTED"
     assert index["records"][0]["fill_state"] == FillState.DRAINING_VISIBLE.value
 
