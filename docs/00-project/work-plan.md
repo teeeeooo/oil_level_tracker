@@ -123,6 +123,8 @@ review renderer mask each series by its own validity.
 
 ## Authority links
 
+- [R13 phase-identity architecture](../20-architecture/s11-r13-phase-identity-recovery-architecture.md)
+- [R13 validation](../30-validation/s11-r13-phase-identity-recovery-validation.md)
 - [R11 architecture](../20-architecture/s11-r11-detector-architecture-reset.md)
 - [R11 validation](../30-validation/s11-r11-detector-architecture-reset-validation.md)
 - [R10 Windows diagnostic](../50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md)

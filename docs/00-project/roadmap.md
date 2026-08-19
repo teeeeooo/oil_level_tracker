@@ -159,7 +159,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Major result:** R12 removed the unsafe Base motion path and made Foam validity independent, but its secure-Windows field gate failed: Base Oil remained 0/601 and Accum published 92 upper-residue rows. Weak ordinary semantic rows bypassed typed material conflict and became the 33 anchors supporting the wrong trajectory; the review renderer also failed to mask invalid finite points.
 - **Next gate:** Implement and locally validate R13 as a replacement phase-identity path: recover bounded Base proposals without proposal authority, share composition-aware identity across authority/trajectory/opposition, remove stale compatibility seams, retain independent Foam and enforce per-series graph validity.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R12 Windows result](../60-evidence/s11/s11-r12-secure-windows-field-result.md), [R12 Windows diagnostic](../50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md), [R12 architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R13 architecture](../20-architecture/s11-r13-phase-identity-recovery-architecture.md), [R13 validation](../30-validation/s11-r13-phase-identity-recovery-validation.md), [R12 Windows result](../60-evidence/s11/s11-r12-secure-windows-field-result.md), [R12 Windows diagnostic](../50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
