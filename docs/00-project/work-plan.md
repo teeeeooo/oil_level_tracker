@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `IMPLEMENTING`
-**Current gate:** `Exact pushed R12 secure-Windows Base/Accum replay`
-**Source authority:** `R12 local evidence + R11 Windows field diagnostic`
+**Current gate:** `R13 phase-identity recovery design and implementation`
+**Source authority:** `R12 secure-Windows field result and diagnostic`
 
 ## R10 field result
 
@@ -83,6 +83,21 @@ veto plus shared Oil/Foam graph validity.
 Final sequence and CSV ownership remain sound: Base 39 and Accum 418 numeric Oil
 rows agree exactly and every numeric row owns one equal-Y same-frame candidate.
 
+## R12 field disposition
+
+The secure-Windows R12 bundle reports the expected sequence resolver version
+but no Git SHA or detector version. It fails the field gate. Base publishes no
+Oil and has no qualified anchor; at 540 and 674 s the reviewed row is absent
+from even the bounded proposal neighborhood. Accum publishes 92 wrong residue
+rows at Y190–297. Twenty-five weak ordinary rows bypass material conflict
+through `semantic_sequence_anchor`, eight more use corroborated-material
+authority, and those 33 anchors support the complete wrong trajectory.
+
+R12's independent Foam validity is retained: confirmed Foam rows at 670.5 and
+673 s have `foam_is_valid=True` while Oil and legacy state validity are false.
+The Result Review renderer nevertheless plots finite points without applying
+their per-series valid bit and must be corrected.
+
 ## Current executable action
 
 R11 evidence and the confirmed dead compatibility cleanup are complete. R12
@@ -97,9 +112,14 @@ Foam points. User-like Artifact replay produced 82/113 sample4 numeric Oil and
 zero Foam. Full regression is 1,526 passed. Same-session R11/R12 direct timing
 is 70.5/72.6 ms per frame, a 2.9% total increase.
 
-The next action is exact pushed-head R12 replay on private Windows Base/Accum,
-first with the saved reviewed Artifact templates. Evaluate interface accuracy,
-Foam publication and longest wrong/missing runs rather than coverage alone.
+R13 replaces the remaining phase-authority leak instead of adding an R12
+threshold layer. First remove stale compatibility control/diagnostic seams.
+Then recover bounded non-local Base proposals without proposal-only authority,
+introduce one composition-aware lower-Oil identity shared by admission,
+authority, trajectory and track opposition, and prevent weak/high-conflict
+ordinary semantic rows from anchoring residue. Preserve independent Foam
+validity, make basic trace identify the first path-stage mutation and make the
+review renderer mask each series by its own validity.
 
 ## Authority links
 
@@ -112,6 +132,8 @@ Foam publication and longest wrong/missing runs rather than coverage alone.
 - [R12 replacement architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md)
 - [R12 validation](../30-validation/s11-r12-phase-composition-replacement-validation.md)
 - [R12 local evidence](../60-evidence/s11/s11-r12-phase-composition-replacement.md)
+- [R12 Windows result](../60-evidence/s11/s11-r12-secure-windows-field-result.md)
+- [R12 Windows diagnostic](../50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md)
 - [Durable detector responsibilities](../20-architecture/s11-detector-responsibility-architecture.md)
 - [Structural maintainability assessment](../50-diagnostics/post-s11-structural-maintainability-assessment.md)
 - [Windows checklist](../40-operations/manual-gui-windows-checklist.md)

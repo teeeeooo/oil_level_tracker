@@ -1,6 +1,6 @@
 # Project Roadmap
 
-**Status:** `VALIDATING`
+**Status:** `IMPLEMENTING`
 
 This document is the long-term milestone SSOT. It owns milestone order, scope and state. Exact branch progress, findings and immediate next action belong only in the [current work plan](work-plan.md).
 
@@ -156,10 +156,10 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `IMPLEMENTING`
-- **Major result:** R12 replaced rather than layered over R11: confirmed dead Vision seams were removed, evidence availability is explicit, motion-only and distinct-lower anchor routes are gone, Foam identity is bounded across candidate families, material-mask bottom no longer defines topology and Oil/Foam graph validity is independent. Local gates passed with 1,526 tests, 133/299 replay Oil rows, 10/13 checked truth at 5.95 px MAE and complete same-frame provenance.
-- **Next gate:** Replay the exact pushed R12 head on secure-Windows Base/Accum with reviewed Artifact templates. Reject any long Base reflection/bracket path, Accum residue-as-Oil path, false Base Foam or loss of independent dynamic Accum Foam regardless of aggregate coverage.
+- **Major result:** R12 removed the unsafe Base motion path and made Foam validity independent, but its secure-Windows field gate failed: Base Oil remained 0/601 and Accum published 92 upper-residue rows. Weak ordinary semantic rows bypassed typed material conflict and became the 33 anchors supporting the wrong trajectory; the review renderer also failed to mask invalid finite points.
+- **Next gate:** Implement and locally validate R13 as a replacement phase-identity path: recover bounded Base proposals without proposal authority, share composition-aware identity across authority/trajectory/opposition, remove stale compatibility seams, retain independent Foam and enforce per-series graph validity.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R12 architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md), [R12 validation](../30-validation/s11-r12-phase-composition-replacement-validation.md), [R12 local evidence](../60-evidence/s11/s11-r12-phase-composition-replacement.md), [R11 field result](../60-evidence/s11/s11-r11-secure-windows-field-result.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R12 Windows result](../60-evidence/s11/s11-r12-secure-windows-field-result.md), [R12 Windows diagnostic](../50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md), [R12 architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 IMPLEMENTING (R12 Windows gate)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 IMPLEMENTING (R13 phase-identity recovery)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R11 failed private field holdouts. R12 is the active detector architecture/correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and product milestone S12 follows that remainder.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R12 failed private field holdouts. R13 is the active detector architecture/correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and product milestone S12 follows that remainder.

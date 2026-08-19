@@ -65,6 +65,8 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - Active S11-R12 replacement architecture: [`20-architecture/s11-r12-phase-composition-replacement-architecture.md`](20-architecture/s11-r12-phase-composition-replacement-architecture.md)
 - Active S11-R12 validation contract: [`30-validation/s11-r12-phase-composition-replacement-validation.md`](30-validation/s11-r12-phase-composition-replacement-validation.md)
 - S11-R12 local implementation/replay evidence: [`60-evidence/s11/s11-r12-phase-composition-replacement.md`](60-evidence/s11/s11-r12-phase-composition-replacement.md)
+- S11-R12 secure-Windows field result: [`60-evidence/s11/s11-r12-secure-windows-field-result.md`](60-evidence/s11/s11-r12-secure-windows-field-result.md)
+- S11-R12 secure-Windows root cause: [`50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md`](50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md)
 - Historical S11-R11 detector reset architecture: [`20-architecture/s11-r11-detector-architecture-reset.md`](20-architecture/s11-r11-detector-architecture-reset.md)
 - Failed S11-R11 validation contract: [`30-validation/s11-r11-detector-architecture-reset-validation.md`](30-validation/s11-r11-detector-architecture-reset-validation.md)
 - S11-R11 local implementation/replay evidence: [`60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md`](60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md)
