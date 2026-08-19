@@ -19,7 +19,7 @@ from oil_tracker.ui.widgets.result_review_graph import ResultReviewGraph
 def _model(cursor=1.0, *, glass_name="Glass A", foam=True):
     oil = ReviewGraphSeries("유면", (
         ReviewGraphPoint(0.0, 1.0, True, 0.9),
-        ReviewGraphPoint(1.0, None, False, 0.2),
+        ReviewGraphPoint(1.0, 99.0, False, 0.2),
         ReviewGraphPoint(2.0, 3.0, True, 0.8),
     ))
     foam_points = (
@@ -73,6 +73,22 @@ def test_graph_renders_selected_glass_unit_boundaries_and_optional_foam(qtbot):
     assert tuple(tuple(value) for value in oil_anchors.get_offsets()) == ((0.0, 1.0), (2.0, 3.0))
     graph.set_model(_model(glass_name="Glass B", foam=False))
     assert "Glass B" in graph.axes.get_title()
+    assert "거품 경계" not in graph.axes.get_legend_handles_labels()[1]
+
+
+def test_graph_hides_invalid_finite_foam_point(qtbot):
+    graph = ResultReviewGraph()
+    qtbot.addWidget(graph)
+    model = replace(
+        _model(foam=False),
+        foam_front=ReviewGraphSeries(
+            "거품 경계",
+            (ReviewGraphPoint(1.0, 4.0, False, 0.8),),
+        ),
+    )
+
+    graph.set_model(model)
+
     assert "거품 경계" not in graph.axes.get_legend_handles_labels()[1]
 
 

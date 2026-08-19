@@ -119,6 +119,29 @@ def test_oil_and_foam_graph_points_use_independent_validity():
 
     assert not model.oil_air.points[0].is_valid
     assert model.foam_front.points[0].is_valid
+    assert not model.oil_air.has_values
+    assert model.foam_front.has_values
+
+
+def test_invalid_finite_points_do_not_expand_graph_axis():
+    bundle, glass = _bundle([])
+    bundle.samples = (
+        _sample(
+            glass.id,
+            1.0,
+            10,
+            raw_oil_air_level_px_from_zero=10_000.0,
+            raw_foam_front_px_from_zero=7.0,
+            is_valid=False,
+            oil_is_valid=False,
+            foam_is_valid=True,
+        ),
+    )
+
+    model = build_review_graph_model(bundle, glass.id)
+
+    assert model.axis_upper is not None
+    assert model.axis_upper < 10_000.0
 
 
 def test_graph_excludes_samples_outside_analysis_range_and_sorts_deterministically():

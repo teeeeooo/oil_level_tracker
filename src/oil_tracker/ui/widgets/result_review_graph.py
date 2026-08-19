@@ -168,7 +168,12 @@ class ResultReviewGraph(QWidget):
         connect_observed_anchors: bool = False,
     ) -> None:
         times = [point.timestamp_sec for point in points]
-        values = [float("nan") if point.value is None else point.value for point in points]
+        values = [
+            float("nan")
+            if point.value is None or not point.is_valid
+            else point.value
+            for point in points
+        ]
         if connect_observed_anchors:
             trajectory = observed_trajectory(times, values)
             anchors = trajectory.anchors

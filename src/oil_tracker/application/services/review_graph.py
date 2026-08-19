@@ -69,8 +69,14 @@ def build_review_graph_model(
         glass,
         unit=unit,
         observed_values=(
-            *(point.value for point in oil_points),
-            *(point.value for point in foam_points),
+            *(
+                point.value if point.is_valid else None
+                for point in oil_points
+            ),
+            *(
+                point.value if point.is_valid else None
+                for point in foam_points
+            ),
         ),
     )
     events = tuple(

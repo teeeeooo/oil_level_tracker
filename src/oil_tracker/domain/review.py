@@ -141,7 +141,7 @@ class ReviewGraphSeries:
 
     @property
     def has_values(self) -> bool:
-        return any(point.value is not None for point in self.points)
+        return any(point.is_valid and point.value is not None for point in self.points)
 
 
 @dataclass(frozen=True)
