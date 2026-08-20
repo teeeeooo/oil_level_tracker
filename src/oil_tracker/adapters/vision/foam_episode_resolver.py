@@ -36,6 +36,21 @@ class _FoamEvidence:
     coherent: bool
 
 
+@dataclass(frozen=True)
+class _OilFoamRelation:
+    kind: str
+    oil_y: float | None
+    separation: float | None
+
+    @property
+    def aliases(self) -> bool:
+        return self.kind == "same_boundary"
+
+    @property
+    def inverted(self) -> bool:
+        return self.kind == "inverted_topology"
+
+
 class FoamEpisodeResolver:
     """Publish only explicitly eligible, materially changing Foam episodes.
 
@@ -64,7 +79,6 @@ class FoamEpisodeResolver:
         static_count = 0
         unconfirmed_count = 0
         oil_alias_count = 0
-        oil_alias_tracks: list[tuple[int, float]] = []
         for group in groups:
             group_frames = {item.frame_offset for item in group}
             onset_groups = _dynamic_onset_groups(group)
@@ -80,28 +94,13 @@ class FoamEpisodeResolver:
                     continue
                 supported = _supported_episode(onset, glass)
                 if supported:
-                    if _episode_aliases_oil(
-                        supported,
-                        source,
-                        glass,
-                    ) or _episode_continues_oil_alias(
-                        supported,
-                        oil_alias_tracks,
-                        source,
-                        glass,
-                    ):
+                    if _episode_aliases_oil(supported, source, glass):
                         oil_alias_any = True
                         alias_frames = {
                             item.frame_offset for item in supported
                         }
                         alias_group_frames.update(alias_frames)
                         rejected_oil_alias_frames.update(alias_frames)
-                        oil_alias_tracks.append(
-                            (
-                                supported[-1].frame_offset,
-                                float(supported[-1].candidate.y),
-                            )
-                        )
                         continue
                     accepted_any = True
                     episode_count += 1
@@ -290,6 +289,7 @@ class FoamEpisodeResolver:
         ]
         metrics = dict(detection.debug_metrics)
         identity_tolerance = _oil_foam_identity_tolerance(glass)
+        relation = _oil_foam_relation(evidence, detection, glass)
         source_oil_y = (
             detection.raw_oil_air_level_y
             if _finite(detection.raw_oil_air_level_y)
@@ -314,6 +314,9 @@ class FoamEpisodeResolver:
                 ),
                 "foam_oil_identity_tolerance_px": identity_tolerance,
                 "foam_oil_layer_separation_px": oil_foam_separation,
+                "foam_oil_relation": relation.kind,
+                "foam_oil_alias_match": relation.aliases,
+                "foam_oil_matched_y": relation.oil_y,
             }
         )
         base = replace(
@@ -365,11 +368,7 @@ class FoamEpisodeResolver:
                     reject_reason="" if selected else candidate.reject_reason,
                 )
             )
-        topology_conflict = bool(
-            evidence.whiteness >= 0.55
-            and base.oil_air_level_y is not None
-            and float(base.oil_air_level_y) - y <= identity_tolerance
-        )
+        topology_conflict = relation.inverted
         if topology_conflict:
             composed = FillState.UNKNOWN_REVIEW
             flags.extend(
@@ -588,87 +587,35 @@ def _same_frame_oil_alias_matches(
     detections: tuple[PhaseDetection, ...],
     glass: GlassInspectionConfig,
 ) -> int:
-    """Count current-frame Oil rows that actually coincide with Foam."""
+    """Count final Oil rows that identify the same material boundary."""
 
-    tolerance = _oil_foam_identity_tolerance(glass)
-    matched = 0
-    for evidence in group:
-        detection = detections[evidence.frame_offset]
-        if _finite(detection.raw_oil_air_level_y):
-            # A public selected Oil row is authoritative composition context.
-            # Do not let a nearby unselected duplicate erase a real thin Foam
-            # layer above it.
-            # Source Y increases downward. A real Foam front must be above the
-            # Oil surface, so OilY - FoamY is a positive layer thickness.
-            # Negative separation is inverted topology and small positive
-            # separation is the same boundary within identity tolerance.
-            if (
-                float(detection.raw_oil_air_level_y)
-                - float(evidence.candidate.y)
-                <= tolerance
-            ):
-                matched += 1
-            continue
-
-        # When Oil is unresolved, a very strong same-frame Oil proposal may be
-        # the same material edge duplicated as Foam. Keep this candidate-only
-        # screen independent of temporal jump settings and bounded by analysis
-        # scale; it cannot override an already selected public Oil/Foam pair.
-        candidate_tolerance = _unresolved_oil_candidate_alias_tolerance(glass)
-        oil_rows = [
-            float(candidate.y)
-            for candidate in detection.candidates
-            if candidate.kind is BoundaryKind.OIL_AIR
-            and _finite(candidate.y)
-            and _unit(
-                candidate.features.get(
-                    "boundary_likelihood",
-                    candidate.feature_score,
-                )
-            )
-            >= 0.90
-            and _unit(
-                candidate.features.get(
-                    "artifact_likelihood",
-                    candidate.penalties.get("artifact_likelihood", 0.0),
-                )
-            )
-            <= 0.46
-        ]
-        if oil_rows and min(
-            abs(float(evidence.candidate.y) - oil_y)
-            for oil_y in oil_rows
-        ) <= candidate_tolerance:
-            matched += 1
-    return matched
-
-
-def _episode_continues_oil_alias(
-    group: tuple[_FoamEvidence, ...],
-    aliases: list[tuple[int, float]],
-    detections: tuple[PhaseDetection, ...],
-    glass: GlassInspectionConfig,
-) -> bool:
-    if not group or not aliases:
-        return False
-    # A prior rejected alias is context, never evidence for the next group.
-    # Require at least one current same-frame Oil coincidence before bridging
-    # a short dropout.  Otherwise a real Foam front that separates from Oil
-    # (or appears while Oil is unavailable) would be suppressed indefinitely.
-    if _same_frame_oil_alias_matches(group, detections, glass) < 1:
-        return False
-    horizon = max(4, int(glass.detector_settings.oil_path_window) * 2)
-    tolerance = _oil_foam_identity_tolerance(glass)
-    first_frame = group[0].frame_offset
-    return any(
-        0 < first_frame - alias_frame <= horizon
-        and min(
-            abs(float(item.candidate.y) - alias_y)
-            for item in group
-        )
-        <= tolerance
-        for alias_frame, alias_y in aliases
+    return sum(
+        _oil_foam_relation(
+            evidence,
+            detections[evidence.frame_offset],
+            glass,
+        ).aliases
+        for evidence in group
     )
+
+
+def _oil_foam_relation(
+    evidence: _FoamEvidence | None,
+    detection: PhaseDetection,
+    glass: GlassInspectionConfig,
+) -> _OilFoamRelation:
+    if evidence is None or not _finite(detection.raw_oil_air_level_y):
+        return _OilFoamRelation("no_resolved_oil", None, None)
+    oil_y = float(detection.raw_oil_air_level_y)
+    separation = oil_y - float(evidence.candidate.y)
+    tolerance = _oil_foam_identity_tolerance(glass)
+    if abs(separation) <= tolerance:
+        kind = "same_boundary"
+    elif separation < -tolerance:
+        kind = "inverted_topology"
+    else:
+        kind = "distinct_lower_oil"
+    return _OilFoamRelation(kind, oil_y, separation)
 
 
 def _oil_foam_identity_tolerance(glass: GlassInspectionConfig) -> float:
@@ -681,13 +628,6 @@ def _oil_foam_identity_tolerance(glass: GlassInspectionConfig) -> float:
 
     height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
     return max(3.0, min(8.0, height * 0.01))
-
-
-def _unresolved_oil_candidate_alias_tolerance(
-    glass: GlassInspectionConfig,
-) -> float:
-    height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
-    return max(21.0, min(24.0, height * 0.11))
 
 
 def _finite(value: object) -> bool:

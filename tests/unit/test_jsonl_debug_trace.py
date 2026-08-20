@@ -149,6 +149,42 @@ def test_duplicate_glass_frame_timestamp_is_not_written_twice(tmp_path):
     assert len((Path(completion.staging_directory) / "debug_trace.jsonl").read_text(encoding="utf-8").splitlines()) == 1
 
 
+def test_foam_candidate_uses_foam_episode_stage_not_oil_top_k(tmp_path):
+    glass = _glass("g-foam")
+    detection = _detection(glass.id)
+    detection.candidates.append(
+        BoundaryCandidate(
+            source="foam_evidence",
+            kind=BoundaryKind.FOAM_FRONT,
+            y=90.0,
+            features={"sequence_foam_eligible": 1.0},
+            rejected=True,
+        )
+    )
+    detection.flags.append("R7_FOAM_UNCONFIRMED")
+    writer = JsonlDebugTraceWriter(
+        "run-foam",
+        DebugTraceLevel.BASIC,
+        staging_parent=tmp_path,
+    )
+    writer.write(glass, detection, _artifacts(), _decision())
+    writer.annotate_sequence(glass, (detection,))
+    completion = writer.finalize()
+    record = json.loads(
+        Path(completion.staging_directory)
+        .joinpath("debug_trace.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()[0]
+    )
+    foam = next(
+        item
+        for item in record["sequence"]["candidates"]
+        if item["kind"] == "foam_front"
+    )
+    assert foam["sequence_foam_eligible"] == 1.0
+    assert foam["reject_stage"] == "FOAM_EPISODE_UNCONFIRMED"
+
+
 def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_path):
     glass = _glass("g1")
     writer = JsonlDebugTraceWriter(

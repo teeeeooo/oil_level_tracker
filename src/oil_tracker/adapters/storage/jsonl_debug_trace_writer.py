@@ -425,6 +425,7 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 "cluster_support": features.get("sequence_cluster_support"),
                 "trajectory_support": features.get("sequence_trajectory_support"),
                 "foam_alias_penalty": features.get("sequence_foam_alias_penalty"),
+                "sequence_foam_eligible": features.get("sequence_foam_eligible"),
                 "evidence_availability": {
                     "boundary": features.get("boundary_evidence_available"),
                     "phase": features.get("phase_evidence_available"),
@@ -436,7 +437,11 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                     ),
                 },
                 "selected": candidate.selected,
-                "reject_stage": _sequence_reject_stage(candidate, authority),
+                "reject_stage": (
+                    _foam_reject_stage(detection, candidate)
+                    if candidate.kind.value == "foam_front"
+                    else _sequence_reject_stage(candidate, authority)
+                ),
             }
         )
     state = {
@@ -503,6 +508,21 @@ def _sequence_reject_stage(
     if float(features.get("sequence_trajectory_support", 0.0)) < 0.99:
         return "NO_TRAJECTORY_SUPPORT"
     return "GLOBAL_PATH_OR_RUN_BOUND"
+
+
+def _foam_reject_stage(detection, candidate) -> str:
+    if candidate.selected:
+        return "ACCEPTED"
+    if float(candidate.features.get("sequence_foam_eligible", 0.0)) < 0.5:
+        return "FOAM_INELIGIBLE"
+    flags = set(detection.flags)
+    if "R8_FOAM_OIL_ALIAS_REJECTED" in flags:
+        return "FOAM_OIL_ALIAS_REJECTED"
+    if "R7_FOAM_STATIC_ARTIFACT_REJECTED" in flags:
+        return "FOAM_STATIC_ARTIFACT_REJECTED"
+    if "R7_FOAM_UNCONFIRMED" in flags:
+        return "FOAM_EPISODE_UNCONFIRMED"
+    return "FOAM_EPISODE_NOT_SELECTED"
 
 
 def _json_safe(value: Any):

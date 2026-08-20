@@ -409,11 +409,17 @@ def test_inverted_public_oil_foam_topology_is_rejected_beyond_identity_tolerance
         glass_config(),
     )
 
-    assert diagnostics.rejected_oil_alias_episode_count == 1
-    assert [item.raw_foam_front_y for item in resolved] == [None, None]
+    assert diagnostics.rejected_oil_alias_episode_count == 0
+    assert [item.raw_foam_front_y for item in resolved] == [190.0, 184.0]
+    assert all(
+        "R8_FOAM_OIL_TOPOLOGY_CONFLICT" in item.flags
+        and "R8_FOAM_OIL_ALIAS_REJECTED" not in item.flags
+        and item.debug_metrics["foam_oil_relation"] == "inverted_topology"
+        for item in resolved
+    )
 
 
-def test_foam_aliases_strong_same_frame_oil_candidate_before_publication() -> None:
+def test_unselected_oil_candidate_cannot_veto_dynamic_foam() -> None:
     detections = (
         _detection(
             0,
@@ -446,9 +452,13 @@ def test_foam_aliases_strong_same_frame_oil_candidate_before_publication() -> No
         glass_config(),
     )
 
-    assert diagnostics.rejected_oil_alias_episode_count == 1
-    assert all(item.raw_foam_front_y is None for item in resolved)
-    assert all("R8_FOAM_OIL_ALIAS_REJECTED" in item.flags for item in resolved)
+    assert diagnostics.rejected_oil_alias_episode_count == 0
+    assert [item.raw_foam_front_y for item in resolved] == [190.0, 184.0]
+    assert all(
+        item.debug_metrics["foam_oil_relation"] == "no_resolved_oil"
+        and "R8_FOAM_OIL_ALIAS_REJECTED" not in item.flags
+        for item in resolved
+    )
 
 
 def test_one_registered_motion_spike_inside_static_glare_cannot_confirm_foam() -> None:
