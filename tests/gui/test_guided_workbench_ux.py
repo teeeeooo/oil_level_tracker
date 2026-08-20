@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QMessageBox
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.vision.artifact_calibration import template_from_candidate
@@ -218,6 +219,66 @@ def test_roi_editor_primary_artifact_actions_are_visible_without_scrolling(qtbot
     assert dialog.isSizeGripEnabled()
     assert dialog.windowFlags() & Qt.WindowType.WindowMaximizeButtonHint
     assert dialog.content_splitter.orientation() == Qt.Orientation.Horizontal
+
+
+def test_roi_editor_bulk_selects_highlights_and_deletes_confirmed_artifacts(
+    qtbot,
+    monkeypatch,
+):
+    glass = InspectionRecipe.default_glass(640, 480)
+    candidates = [
+        BoundaryCandidate(
+            source=f"confirmed-{index}",
+            kind=BoundaryKind.OIL_AIR,
+            y=160.0 + 40.0 * index,
+            features={
+                "artifact_center_x_norm": 0.5,
+                "artifact_center_y_norm": 0.25 + 0.2 * index,
+                "artifact_width_norm": 0.6,
+                "artifact_height_norm": 0.02,
+                "artifact_angle_deg": 0.0,
+            },
+            final_score=0.8,
+        )
+        for index in range(3)
+    ]
+    glass.geometry.artifact_templates = [
+        template_from_candidate(candidate, name=f"지정 후보 {index + 1}")
+        for index, candidate in enumerate(candidates)
+    ]
+    original_ids = [template.id for template in glass.geometry.artifact_templates]
+    dialog = RoiEditorDialog(
+        np.zeros((480, 640, 3), dtype=np.uint8),
+        glass,
+        640,
+        480,
+    )
+    qtbot.addWidget(dialog)
+
+    first = dialog.artifact_template_list.item(0)
+    third = dialog.artifact_template_list.item(2)
+    first.setSelected(True)
+    third.setSelected(True)
+    assert dialog.canvas._highlighted_artifact_template_ids == {
+        original_ids[0],
+        original_ids[2],
+    }
+    assert "2개" in dialog.delete_artifact_button.text()
+
+    dialog.delete_artifact_button.click()
+    assert [
+        template.id for template in dialog.edited_glass().geometry.artifact_templates
+    ] == [original_ids[1]]
+    assert [template.id for template in glass.geometry.artifact_templates] == original_ids
+
+    dialog.select_all_templates_button.click()
+    monkeypatch.setattr(
+        QMessageBox,
+        "question",
+        lambda *_args, **_kwargs: QMessageBox.StandardButton.Yes,
+    )
+    dialog.delete_artifact_button.click()
+    assert dialog.edited_glass().geometry.artifact_templates == []
     assert all(size > 0 for size in dialog.content_splitter.sizes())
 
 

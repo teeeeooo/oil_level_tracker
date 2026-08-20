@@ -505,6 +505,7 @@ class VideoOverlayCanvas(QGraphicsView):
         self._artifact_items: list[QGraphicsItem] = []
         self._artifact_proposals = []
         self._highlighted_artifact_proposal_ids: set[str] = set()
+        self._highlighted_artifact_template_ids: set[str] = set()
         self._active_target: str | None = None
         self._active_zone_id: str | None = None
         self._fit_mode = True
@@ -603,6 +604,13 @@ class VideoOverlayCanvas(QGraphicsView):
         self._highlighted_artifact_proposal_ids = selected
         self.rebuild_overlays()
 
+    def set_highlighted_artifact_templates(self, template_ids) -> None:
+        selected = {str(value) for value in template_ids}
+        if selected == self._highlighted_artifact_template_ids:
+            return
+        self._highlighted_artifact_template_ids = selected
+        self.rebuild_overlays()
+
     def rebuild_overlays(self) -> None:
         for item in list(self._scene.items()):
             if item is not self._pixmap_item:
@@ -691,7 +699,12 @@ class VideoOverlayCanvas(QGraphicsView):
         rect = template_source_rect(template, glass)
         qrect = QRectF(rect.x, rect.y, rect.width, rect.height)
         highlighted = bool(
-            proposed and template.id in self._highlighted_artifact_proposal_ids
+            template.id
+            in (
+                self._highlighted_artifact_proposal_ids
+                if proposed
+                else self._highlighted_artifact_template_ids
+            )
         )
         color = (
             QColor(255, 70, 210)

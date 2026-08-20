@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QListWidget,
     QListWidgetItem,
+    QMessageBox,
     QPushButton,
     QSplitter,
     QVBoxLayout,
@@ -101,6 +102,9 @@ class RoiEditorDialog(QDialog):
             QAbstractItemView.SelectionMode.ExtendedSelection
         )
         self.artifact_template_list = QListWidget()
+        self.artifact_template_list.setSelectionMode(
+            QAbstractItemView.SelectionMode.ExtendedSelection
+        )
         proposal_panel = QWidget()
         proposal_layout = QVBoxLayout(proposal_panel)
         proposal_layout.setContentsMargins(0, 0, 0, 0)
@@ -120,8 +124,14 @@ class RoiEditorDialog(QDialog):
         artifact_lists.setSizes([280, 180])
         artifact_layout.addWidget(artifact_lists, 1)
 
-        self.delete_artifact_button = QPushButton("선택 Artifact 삭제")
-        artifact_layout.addWidget(self.delete_artifact_button)
+        template_buttons = QHBoxLayout()
+        self.select_all_templates_button = QPushButton("지정 Artifact 모두 선택")
+        self.clear_template_selection_button = QPushButton("선택 해제")
+        self.delete_artifact_button = QPushButton("선택 Artifact 일괄 삭제")
+        template_buttons.addWidget(self.select_all_templates_button)
+        template_buttons.addWidget(self.clear_template_selection_button)
+        template_buttons.addWidget(self.delete_artifact_button, 1)
+        artifact_layout.addLayout(template_buttons)
         self.artifact_group = artifact_group
         self.artifact_lists_splitter = artifact_lists
 
@@ -163,9 +173,18 @@ class RoiEditorDialog(QDialog):
             self.artifact_proposal_list.selectAll
         )
         self.accept_artifact_button.clicked.connect(self._accept_artifact)
+        self.select_all_templates_button.clicked.connect(
+            self.artifact_template_list.selectAll
+        )
+        self.clear_template_selection_button.clicked.connect(
+            self.artifact_template_list.clearSelection
+        )
         self.delete_artifact_button.clicked.connect(self._delete_artifact)
         self.artifact_proposal_list.itemSelectionChanged.connect(
             self._artifact_proposal_selection_changed
+        )
+        self.artifact_template_list.itemSelectionChanged.connect(
+            self._artifact_template_selection_changed
         )
         self._refresh()
 
@@ -183,21 +202,18 @@ class RoiEditorDialog(QDialog):
             if index >= 0:
                 self.exclusion_combo.setCurrentIndex(index)
         self.delete_exclusion_button.setEnabled(self.exclusion_combo.count() > 0)
-        current_template_id = (
-            self.artifact_template_list.currentItem().data(Qt.ItemDataRole.UserRole)
-            if self.artifact_template_list.currentItem() is not None
-            else None
-        )
+        selected_template_ids = {
+            str(item.data(Qt.ItemDataRole.UserRole))
+            for item in self.artifact_template_list.selectedItems()
+        }
         self.artifact_template_list.clear()
         for template in self._working.geometry.artifact_templates:
             item = QListWidgetItem(f"{template.name} · {template.kind}")
             item.setData(Qt.ItemDataRole.UserRole, template.id)
             self.artifact_template_list.addItem(item)
-            if template.id == current_template_id:
-                self.artifact_template_list.setCurrentItem(item)
-        self.delete_artifact_button.setEnabled(
-            bool(self._working.geometry.artifact_templates)
-        )
+            if template.id in selected_template_ids:
+                item.setSelected(True)
+        self._artifact_template_selection_changed()
         self.canvas.set_artifact_proposals(self._artifact_proposals)
         self._artifact_proposal_selection_changed()
 
@@ -310,15 +326,51 @@ class RoiEditorDialog(QDialog):
         }
         self.canvas.set_highlighted_artifact_proposals(proposal_ids)
 
+    def _artifact_template_selection_changed(self) -> None:
+        template_ids = {
+            str(item.data(Qt.ItemDataRole.UserRole))
+            for item in self.artifact_template_list.selectedItems()
+        }
+        count = len(template_ids)
+        self.canvas.set_highlighted_artifact_templates(template_ids)
+        self.delete_artifact_button.setEnabled(count > 0)
+        self.clear_template_selection_button.setEnabled(count > 0)
+        self.select_all_templates_button.setEnabled(
+            self.artifact_template_list.count() > count
+        )
+        self.delete_artifact_button.setText(
+            f"선택 Artifact {count}개 일괄 삭제"
+            if count
+            else "선택 Artifact 일괄 삭제"
+        )
+
     def _delete_artifact(self) -> None:
-        item = self.artifact_template_list.currentItem()
-        if item is None:
+        items = self.artifact_template_list.selectedItems()
+        if not items:
             return
-        template_id = str(item.data(Qt.ItemDataRole.UserRole))
+        template_ids = {
+            str(item.data(Qt.ItemDataRole.UserRole)) for item in items
+        }
+        if (
+            template_ids
+            and len(template_ids) == len(self._working.geometry.artifact_templates)
+            and QMessageBox.question(
+                self,
+                "모든 Artifact 지정 삭제",
+                "지정된 Artifact를 모두 삭제할까요? 적용 전까지는 원래 Profile이 변경되지 않습니다.",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            != QMessageBox.StandardButton.Yes
+        ):
+            return
         self._working.geometry.artifact_templates = [
             template
             for template in self._working.geometry.artifact_templates
-            if template.id != template_id
+            if template.id not in template_ids
         ]
-        self.artifact_status.setText("선택한 Artifact 지정을 삭제했습니다.")
+        self.artifact_status.setText(
+            f"선택한 Artifact 지정 {len(template_ids)}개를 삭제했습니다. "
+            "적용 버튼을 눌러 Profile에 저장하세요."
+        )
         self._refresh()
