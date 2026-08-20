@@ -40,4 +40,3 @@ R14 replaces these paths rather than wrapping them:
 
 Stored Recipes and candidate feature dictionaries remain readable. No
 Base/Accum coordinate or timestamp may enter production policy.
-

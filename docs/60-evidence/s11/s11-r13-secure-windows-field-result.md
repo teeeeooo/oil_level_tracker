@@ -72,7 +72,7 @@ and component ownership, and does not tune the failed prototype.
 
 - candidate generation recall and publication authority are separate metrics;
 - calibration templates reject matching geometry only;
-- a high-conflict ordered-lower row cannot be an independent anchor;
+- a high-conflict ordered-lower row cannot anchor from stale material identity;
+  the bounded recent direct-Foam composition is evaluated separately;
 - recurrence alone cannot hard-demote a low-conflict direct candidate; and
 - trajectory/run continuity must be owned by an explicit compatible component.
-
