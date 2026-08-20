@@ -28,7 +28,6 @@ from .oil_hypothesis_projection import (
     project_production_result,
 )
 from .phase_candidate_assembler import (
-    artifact_compensated_top_k as _artifact_compensated_top_k,
     assemble_phase_candidates,
 )
 from .oil_shadow_pipeline import (
@@ -67,7 +66,7 @@ class PhaseDetectionDebugArtifacts:
 
 
 class OpenCvPhaseDetector:
-    version = "opencv-phase-detector-r13-phase-identity-recovery-v1"
+    version = "opencv-phase-detector-r14-phase-component-replacement-v1"
 
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
@@ -229,7 +228,6 @@ class OpenCvPhaseDetector:
             pre.gray,
             bundle.effective_mask,
         )
-        artifact_template_count = len(glass.geometry.artifact_templates)
         candidate_assembly = assemble_phase_candidates(
             oil_projection.candidates,
             pre=pre,
@@ -238,7 +236,6 @@ class OpenCvPhaseDetector:
             foam=foam,
             oil_motion=oil_motion,
             settings=settings,
-            artifact_template_count=artifact_template_count,
             material_layer_topology=material_layer_topology,
             white_material_layer_topology=white_material_layer_topology,
             white_material_texture_present=white_material_texture_present,

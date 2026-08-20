@@ -55,6 +55,7 @@ class AuthorityContext:
     allow_material_layer_terminal: bool = False
     foam_material_identity: float = 0.0
     foam_material_row: float | None = None
+    foam_seed_age_seconds: float | None = None
     lower_separation_px: float = 0.0
     phase_identity: PhaseIdentityDecision | None = None
 
@@ -91,6 +92,7 @@ def evaluate_candidate_authority(
             representation_support=context.representation_support,
             foam_material_identity=context.foam_material_identity,
             foam_material_row=context.foam_material_row,
+            foam_seed_age_seconds=context.foam_seed_age_seconds,
             lower_separation_px=context.lower_separation_px,
         ),
     )

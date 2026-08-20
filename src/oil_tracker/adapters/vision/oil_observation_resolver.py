@@ -24,10 +24,14 @@ from .oil_sequence_types import (
     OilCandidateRef as _CandidateRef,
     OilSequenceNode as _Node,
 )
-from .oil_phase_identity import PhaseIdentityContext, evaluate_phase_identity
+from .oil_phase_identity import (
+    OilPhaseIdentity,
+    PhaseIdentityContext,
+    evaluate_phase_identity,
+)
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r13-phase-identity-recovery-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r14-phase-component-replacement-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -94,6 +98,7 @@ class OilObservationResolverConfig:
     completed_fill_release_ratio: float = 0.40
     completed_fill_release_lookahead_frames: int = 6
     completed_fill_release_min_downward_ratio: float = 0.025
+    completed_fill_release_directional_ratio: float = 0.60
     trajectory_spike_min_px: float = 8.0
     trajectory_spike_tolerance_ratio: float = 0.25
     trajectory_spike_lookaround_frames: int = 3
@@ -317,6 +322,9 @@ class OilObservationResolver:
                     candidate_offset,
                 )
                 material_identity_row = foam_material_identity.row(frame_offset)
+                foam_seed_age_seconds = foam_material_identity.seed_age_seconds(
+                    frame_offset
+                )
                 ordered_lower = bool(
                     material_identity_row is not None
                     and float(candidate.y)
@@ -350,6 +358,7 @@ class OilObservationResolver:
                         representation_support=representation_support,
                         foam_material_identity=material_identity_opposition,
                         foam_material_row=material_identity_row,
+                        foam_seed_age_seconds=foam_seed_age_seconds,
                         lower_separation_px=lower_separation,
                     ),
                 )
@@ -364,6 +373,7 @@ class OilObservationResolver:
                         allow_material_layer_terminal=len(detections) <= 6,
                         foam_material_identity=material_identity_opposition,
                         foam_material_row=material_identity_row,
+                        foam_seed_age_seconds=foam_seed_age_seconds,
                         lower_separation_px=lower_separation,
                         phase_identity=phase_identity,
                     ),
@@ -410,6 +420,7 @@ class OilObservationResolver:
                         ordered_lower=phase_identity.ordered_lower,
                     )
                 )
+            refs = _demote_non_nearest_ordered_lower_anchors(refs, glass)
             refs.sort(
                 key=lambda item: (
                     -int(item.authority),
@@ -502,7 +513,7 @@ class OilObservationResolver:
             maximum_jump=maximum_jump,
             minimum_anchor_frames=minimum_anchor_frames,
         )
-        trajectory = _trajectory_supported_keys(
+        trajectory, component_ids = _trajectory_supported_keys(
             refs_by_frame,
             qualified,
             maximum_jump=maximum_jump,
@@ -518,6 +529,7 @@ class OilObservationResolver:
                         ref,
                         cluster_support=1.0 if key in qualified else 0.0,
                         trajectory_support=1.0 if key in trajectory else 0.0,
+                        component_id=component_ids.get(key),
                     )
                 )
             output.append(tuple(row))
@@ -680,7 +692,7 @@ class OilObservationResolver:
                             0.0,
                         )
                         >= self.config.recurring_track_reject_opposition
-                        and not ref.ordered_lower
+                        and _recurrence_hard_contradiction(ref)
                         else ref.authority
                     ),
                     track_opposition=penalties.get(
@@ -710,7 +722,7 @@ class OilObservationResolver:
                     ),
                     None,
                 )
-                if opposed_peer is not None and not ref.ordered_lower:
+                if opposed_peer is not None and _recurrence_hard_contradiction(ref):
                     ref = replace(
                         ref,
                         authority=OilCandidateAuthority.CANDIDATE_ONLY,
@@ -750,7 +762,7 @@ class OilObservationResolver:
                     ),
                     None,
                 )
-                if superior_partition is None or ref.ordered_lower:
+                if superior_partition is None or not _recurrence_hard_contradiction(ref):
                     row.append(ref)
                     continue
                 row.append(
@@ -914,7 +926,12 @@ class OilObservationResolver:
                 offset += 1
                 continue
             start = offset
-            while offset + 1 < len(path) and path[offset + 1].kind == "oil":
+            component_id = _node_component_id(path[offset])
+            while (
+                offset + 1 < len(path)
+                and path[offset + 1].kind == "oil"
+                and _node_component_id(path[offset + 1]) == component_id
+            ):
                 offset += 1
             end = offset
             qualified = [
@@ -1120,6 +1137,12 @@ class OilObservationResolver:
         first = path[start]
         if first.y is None:
             return False
+        if _relative_y(first.y, glass) > self.config.completed_fill_release_ratio:
+            # A drain must re-enter through the physical top of the sight
+            # glass. An internal cap that first appears deep in the vessel is
+            # not a missed entrance and cannot release the completed-fill
+            # barrier merely by wobbling downward for a few frames.
+            return False
         stop = min(
             len(path),
             start + max(2, self.config.completed_fill_release_lookahead_frames) + 1,
@@ -1136,7 +1159,19 @@ class OilObservationResolver:
             4.0,
             height * self.config.completed_fill_release_min_downward_ratio,
         )
-        return max(observed[1:]) - observed[0] >= minimum_progress
+        deltas = [
+            following - prior
+            for prior, following in zip(observed, observed[1:])
+        ]
+        downward_ratio = sum(delta >= 0.0 for delta in deltas) / max(
+            1,
+            len(deltas),
+        )
+        return bool(
+            observed[-1] - observed[0] >= minimum_progress
+            and downward_ratio
+            >= self.config.completed_fill_release_directional_ratio
+        )
 
     def _transition_score(
         self,
@@ -1148,6 +1183,8 @@ class OilObservationResolver:
         if prior.kind == current.kind:
             if current.kind == "oil":
                 assert prior.y is not None and current.y is not None
+                if _node_component_id(prior) != _node_component_id(current):
+                    return float("-inf")
                 maximum = max(
                     1.0,
                     float(glass.detector_settings.temporal_max_jump_px),
@@ -1230,6 +1267,11 @@ class OilObservationResolver:
                     if node.candidate_ref is None
                     else float(node.candidate_ref.track_opposition)
                 ),
+                "sequence_effective_track_opposition": (
+                    0.0
+                    if node.candidate_ref is None
+                    else float(_effective_track_opposition(node.candidate_ref))
+                ),
                 "sequence_anchor_support": (
                     0.0
                     if node.candidate_ref is None
@@ -1293,6 +1335,11 @@ class OilObservationResolver:
                     ""
                     if node.candidate_ref is None
                     else ";".join(node.candidate_ref.phase_identity_failed_gates)
+                ),
+                "sequence_selected_component_id": (
+                    ""
+                    if node.candidate_ref is None
+                    else node.candidate_ref.component_id or ""
                 ),
                 "sequence_state_image_evidence": float(node.state_evidence),
             }
@@ -1401,6 +1448,15 @@ def _cross_representation_support(
         peer_family = _candidate_representation_family(peer)
         if peer_family == candidate_family or not _candidate_eligible(peer):
             continue
+        peer_evidence = OilCandidateEvidence.from_candidate(peer)
+        if (
+            peer_evidence.material_texture_conflict >= 0.60
+            or peer_evidence.artifact_signature >= 0.44
+            or peer_evidence.optics_opposition >= 0.46
+        ):
+            # Two generators observing the same contradicted material/optical
+            # structure are not independent phase corroboration.
+            continue
         if "calibrated_raster" in {candidate_family, peer_family} and "material" not in {
             candidate_family,
             peer_family,
@@ -1478,6 +1534,53 @@ def _candidate_representation_family(candidate: BoundaryCandidate) -> str:
     return "phase_hypothesis"
 
 
+def _demote_non_nearest_ordered_lower_anchors(
+    refs: list[_CandidateRef],
+    glass: GlassInspectionConfig,
+) -> list[_CandidateRef]:
+    """Only the first independently identified interface below Foam may anchor.
+
+    Multiple proposal families may describe the same boundary within a small
+    tolerance. Deeper rows remain continuation observations, but cannot create
+    a competing Oil component from another bubble, residue or vessel edge.
+    """
+
+    anchors = tuple(
+        ref
+        for ref in refs
+        if ref.phase_identity is OilPhaseIdentity.ORDERED_LOWER_INTERFACE
+        and ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
+    )
+    if not anchors:
+        return refs
+    first_y = min(float(ref.candidate.y) for ref in anchors)
+    tolerance = max(
+        6.0,
+        float(glass.detector_settings.temporal_max_jump_px) * 0.25,
+    )
+    output: list[_CandidateRef] = []
+    for ref in refs:
+        if (
+            ref in anchors
+            and float(ref.candidate.y) > first_y + tolerance
+        ):
+            output.append(
+                replace(
+                    ref,
+                    authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                    initial_authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                    post_track_authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                    authority_reason=AuthorityReason.CONTINUATION,
+                    authority_failed_gates=("nearest_ordered_lower_interface",),
+                    phase_identity=OilPhaseIdentity.CONTINUATION_ONLY,
+                    phase_identity_failed_gates=("nearest_ordered_lower_interface",),
+                )
+            )
+        else:
+            output.append(ref)
+    return output
+
+
 def _foam_front_alias_penalty(
     candidate: BoundaryCandidate,
     foam_rows: tuple[float, ...],
@@ -1531,6 +1634,34 @@ def _candidate_quality(
     )
 
 
+def _recurrence_hard_contradiction(ref: _CandidateRef) -> bool:
+    """Return whether recurrence may revoke candidate authority.
+
+    Persistence is not physical contradiction: a real interface can remain at
+    one level. Hard demotion therefore needs independent candidate-local
+    evidence that the row is material, optical or structural noise.
+    """
+
+    evidence = OilCandidateEvidence.from_candidate(ref.candidate)
+    return bool(
+        ref.phase_identity is OilPhaseIdentity.OPPOSED_MATERIAL
+        or evidence.material_texture_conflict >= 0.60
+        or evidence.artifact_signature >= 0.44
+        or evidence.optics_opposition >= 0.46
+    )
+
+
+def _effective_track_opposition(ref: _CandidateRef) -> float:
+    """Keep recurrence comparative when no physical contradiction exists."""
+
+    if (
+        ref.phase_identity is OilPhaseIdentity.DIRECT_INTERFACE
+        and not _recurrence_hard_contradiction(ref)
+    ):
+        return 0.25 * ref.track_opposition
+    return ref.track_opposition
+
+
 def _independent_anchor(ref: _CandidateRef) -> bool:
     """Return anchors backed by an independent same-frame identity proof.
 
@@ -1576,7 +1707,7 @@ def _oil_emission(ref: _CandidateRef) -> float:
         - 0.65 * _candidate_artifact_signature(candidate)
         - 0.34 * _candidate_static_contradiction(candidate)
         - 0.28 * _candidate_ambiguity(candidate)
-        - 0.72 * ref.track_opposition
+        - 0.72 * _effective_track_opposition(ref)
         - ref.foam_alias_penalty
         + (
             0.22 * _candidate_terminal_support(candidate)
@@ -1598,7 +1729,7 @@ def _oil_confidence(ref: _CandidateRef) -> float:
         - 0.20 * _candidate_artifact_signature(ref.candidate)
         - 0.10 * _candidate_static_contradiction(ref.candidate)
         - 0.12 * _candidate_ambiguity(ref.candidate)
-        - 0.22 * ref.track_opposition
+        - 0.22 * _effective_track_opposition(ref)
         + (
             0.08 * _candidate_terminal_support(ref.candidate)
             if ref.terminal_fallback
@@ -1724,6 +1855,9 @@ def _project_candidates(
                         ref.semantic_corridor_support
                     ),
                     "sequence_track_opposition": float(ref.track_opposition),
+                    "sequence_effective_track_opposition": float(
+                        _effective_track_opposition(ref)
+                    ),
                     "sequence_cluster_support": float(ref.cluster_support),
                     "sequence_trajectory_support": float(ref.trajectory_support),
                     "sequence_foam_alias_penalty": float(ref.foam_alias_penalty),
@@ -1740,6 +1874,7 @@ def _project_candidates(
                         ref.phase_identity_failed_gates
                     ),
                     "sequence_ordered_lower": float(ref.ordered_lower),
+                    "sequence_component_id": ref.component_id or "",
                     **OilCandidateEvidence.from_candidate(
                         ref.candidate
                     ).availability.as_features(),
@@ -2235,6 +2370,9 @@ def _qualified_anchor_keys(
             gap = anchor.frame_offset - prior_frame
             for prior in by_frame.get(prior_frame, ()):
                 if (
+                    _phase_component_class(anchor)
+                    == _phase_component_class(prior)
+                    and
                     abs(float(anchor.candidate.y) - float(prior.candidate.y))
                     <= maximum_jump * gap * 0.90
                 ):
@@ -2258,6 +2396,9 @@ def _qualified_anchor_keys(
             gap = next_frame - anchor.frame_offset
             for following in by_frame.get(next_frame, ()):
                 if (
+                    _phase_component_class(anchor)
+                    == _phase_component_class(following)
+                    and
                     abs(float(anchor.candidate.y) - float(following.candidate.y))
                     <= maximum_jump * gap * 0.90
                 ):
@@ -2283,7 +2424,7 @@ def _trajectory_supported_keys(
     *,
     maximum_jump: float,
     minimum_anchor_frames: int = 2,
-) -> set[tuple[int, int]]:
+) -> tuple[set[tuple[int, int]], dict[tuple[int, int], str]]:
     """Return candidate keys in a consecutive, anchor-backed graph component.
 
     Edges cross exactly one sampled frame.  A frame with no candidate therefore
@@ -2315,6 +2456,8 @@ def _trajectory_supported_keys(
                 if (
                     abs(float(current.candidate.y) - float(prior.candidate.y))
                     > maximum_jump
+                    or _phase_component_class(current)
+                    != _phase_component_class(prior)
                 ):
                     continue
                 current_key = (current.frame_offset, current.candidate_offset)
@@ -2322,6 +2465,7 @@ def _trajectory_supported_keys(
                 neighbors[current_key].add(prior_key)
 
     supported: set[tuple[int, int]] = set()
+    component_ids: dict[tuple[int, int], str] = {}
     unseen = set(refs_by_key)
     while unseen:
         seed = min(unseen)
@@ -2339,7 +2483,22 @@ def _trajectory_supported_keys(
         }
         if len(anchor_frames) >= max(1, int(minimum_anchor_frames)):
             supported.update(component)
-    return supported
+            owner = min(component)
+            component_id = f"oil-component:{owner[0]}:{owner[1]}"
+            component_ids.update({key: component_id for key in component})
+    return supported, component_ids
+
+
+def _phase_component_class(ref: _CandidateRef) -> str:
+    """Return the physical side of the tracked phase component."""
+
+    return "ordered_lower" if ref.ordered_lower else "direct"
+
+
+def _node_component_id(node: _Node) -> str | None:
+    if node.candidate_ref is None:
+        return None
+    return node.candidate_ref.component_id
 
 
 def _node_order(node: _Node) -> int:

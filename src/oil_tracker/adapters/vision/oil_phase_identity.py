@@ -21,6 +21,7 @@ class PhaseIdentityContext:
     representation_support: float = 0.0
     foam_material_identity: float = 0.0
     foam_material_row: float | None = None
+    foam_seed_age_seconds: float | None = None
     lower_separation_px: float = 0.0
 
 
@@ -91,21 +92,34 @@ def evaluate_phase_identity(
         evidence.availability.material_texture
         and evidence.material_texture_conflict < 0.60
     )
+    recent_direct_foam = bool(
+        context.foam_seed_age_seconds is not None
+        and context.foam_seed_age_seconds <= 3.0
+    )
+    calibrated_proposal = bool(
+        evidence.calibrated_high_recall
+        or float(candidate.features.get("phase_transition_scan", 0.0)) >= 0.5
+    )
+    independently_corroborated = bool(
+        not calibrated_proposal or context.representation_support >= 0.20
+    )
 
     if (
         ordered_lower
         and direct_quality
-        and context.representation_support >= 0.20
-        and (
-            float(candidate.features.get("phase_transition_scan", 0.0)) < 0.5
-            or texture_clean
-        )
+        and recent_direct_foam
+        and context.representation_support >= 0.12
     ):
         return PhaseIdentityDecision(
             OilPhaseIdentity.ORDERED_LOWER_INTERFACE,
             ordered_lower=True,
         )
-    if direct_quality and texture_clean:
+    if (
+        not ordered_lower
+        and direct_quality
+        and texture_clean
+        and independently_corroborated
+    ):
         return PhaseIdentityDecision(OilPhaseIdentity.DIRECT_INTERFACE)
 
     failed: list[str] = []
@@ -119,10 +133,14 @@ def evaluate_phase_identity(
         failed.append("ambiguity")
     if not localized_boundary:
         failed.append("localized_boundary")
-    if not texture_clean and not ordered_lower:
-        failed.append("material_texture_clean_or_ordered_lower")
+    if not texture_clean:
+        failed.append("material_texture_conflict<0.60")
+    if calibrated_proposal and context.representation_support < 0.20:
+        failed.append("calibrated_independent_representation")
     if ordered_lower and context.representation_support < 0.20:
         failed.append("ordered_lower_cross_representation")
+    if ordered_lower and not recent_direct_foam:
+        failed.append("ordered_lower_recent_direct_foam")
     return PhaseIdentityDecision(
         OilPhaseIdentity.CONTINUATION_ONLY,
         ordered_lower=ordered_lower,

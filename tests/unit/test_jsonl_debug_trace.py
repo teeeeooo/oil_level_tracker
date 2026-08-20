@@ -170,6 +170,9 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
             "sequence_selected": 1.0,
             "sequence_phase_identity": "direct_interface",
             "sequence_phase_identity_failed_gates": "",
+            "sequence_track_opposition": 0.8,
+            "sequence_effective_track_opposition": 0.2,
+            "sequence_component_id": "oil-component:0:0",
         },
     )
     final = replace(
@@ -194,6 +197,9 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
     assert record["sequence"]["candidates"][0]["initial_authority"] == "CONTINUATION_ELIGIBLE"
     assert record["sequence"]["candidates"][0]["authority"] == "ANCHOR_ELIGIBLE"
     assert record["sequence"]["candidates"][0]["phase_identity"] == "direct_interface"
+    assert record["sequence"]["candidates"][0]["track_opposition"] == 0.8
+    assert record["sequence"]["candidates"][0]["effective_track_opposition"] == 0.2
+    assert record["sequence"]["candidates"][0]["component_id"] == "oil-component:0:0"
     assert record["sequence"]["candidates"][0]["reject_stage"] == "ACCEPTED"
     assert index["records"][0]["fill_state"] == FillState.DRAINING_VISIBLE.value
 

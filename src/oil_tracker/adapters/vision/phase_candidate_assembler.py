@@ -48,7 +48,6 @@ def assemble_phase_candidates(
     foam: FoamDetectionResult,
     oil_motion: RegisteredOilRasterEvidence,
     settings: DetectorSettings,
-    artifact_template_count: int,
     material_layer_topology: bool,
     white_material_layer_topology: bool,
     white_material_texture_present: bool,
@@ -62,12 +61,7 @@ def assemble_phase_candidates(
         bundle.effective_mask,
         static_map,
         crop_origin_y=origin_y,
-        top_k=artifact_compensated_top_k(
-            settings.candidate_top_k,
-            artifact_template_count,
-            base_cap=6,
-            calibrated_cap=8,
-        ),
+        top_k=bounded_candidate_top_k(settings.candidate_top_k, cap=6),
         # Generic material texture corroborates a lower phase boundary. It is
         # not accepted/public Foam authority.
         material_evidence_map=foam.combined_evidence_map,
@@ -114,12 +108,7 @@ def assemble_phase_candidates(
         bundle.effective_mask,
         static_map,
         crop_origin_y=origin_y,
-        top_k=artifact_compensated_top_k(
-            settings.candidate_top_k,
-            artifact_template_count,
-            base_cap=4,
-            calibrated_cap=6,
-        ),
+        top_k=bounded_candidate_top_k(settings.candidate_top_k, cap=4),
         material_evidence_map=None,
     ):
         if any(
@@ -182,16 +171,12 @@ def assemble_phase_candidates(
             oil_motion=oil_motion,
             layer_features=_layer_features(False, False, False),
         )
-        for candidate in (
-            generate_calibrated_high_recall_candidates(
-                pre,
-                bundle.effective_mask,
-                static_map,
-                crop_origin_y=origin_y,
-                limit=min(12, 6 + artifact_template_count),
-            )
-            if artifact_template_count
-            else ()
+        for candidate in generate_calibrated_high_recall_candidates(
+            pre,
+            bundle.effective_mask,
+            static_map,
+            crop_origin_y=origin_y,
+            limit=6,
         )
     )
     phase_transition_candidates = tuple(
@@ -203,16 +188,12 @@ def assemble_phase_candidates(
             oil_motion=oil_motion,
             layer_features=_layer_features(False, False, False),
         )
-        for candidate in (
-            generate_phase_transition_candidates(
-                pre,
-                bundle.effective_mask,
-                static_map,
-                crop_origin_y=origin_y,
-                limit=min(6, 3 + artifact_template_count),
-            )
-            if artifact_template_count
-            else ()
+        for candidate in generate_phase_transition_candidates(
+            pre,
+            bundle.effective_mask,
+            static_map,
+            crop_origin_y=origin_y,
+            limit=3,
         )
     )
 
@@ -253,18 +234,10 @@ def assemble_phase_candidates(
     )
 
 
-def artifact_compensated_top_k(
-    configured: int,
-    artifact_template_count: int,
-    *,
-    base_cap: int,
-    calibrated_cap: int,
-) -> int:
-    """Keep the ordinary proposal budget after user-confirmed exclusions."""
+def bounded_candidate_top_k(configured: int, *, cap: int) -> int:
+    """Return a stable proposal budget independent of calibration data."""
 
-    ordinary = max(1, min(int(base_cap), int(configured)))
-    compensation = min(3, max(0, int(artifact_template_count)))
-    return min(int(calibrated_cap), ordinary + compensation)
+    return max(1, min(int(cap), int(configured)))
 
 
 def _enrich_projection_candidate(

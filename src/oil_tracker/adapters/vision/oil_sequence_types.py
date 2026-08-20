@@ -30,6 +30,7 @@ class OilCandidateRef:
     phase_identity: OilPhaseIdentity = OilPhaseIdentity.CONTINUATION_ONLY
     phase_identity_failed_gates: tuple[str, ...] = ()
     ordered_lower: bool = False
+    component_id: str | None = None
 
 
 @dataclass(frozen=True)

@@ -21,6 +21,7 @@ class FoamMaterialIdentity:
 
     opposition_by_candidate: dict[tuple[int, int], float]
     row_by_frame: dict[int, float]
+    seed_age_seconds_by_frame: dict[int, float]
     seeded_frame_count: int
     continued_frame_count: int
 
@@ -29,6 +30,15 @@ class FoamMaterialIdentity:
 
     def row(self, frame_offset: int) -> float | None:
         return self.row_by_frame.get(frame_offset)
+
+    def seed_age_seconds(self, frame_offset: int) -> float | None:
+        """Return age of the latest direct Foam observation at this frame.
+
+        A continued residue row remains useful as opposition evidence, but its
+        mere persistence must not grant a new Oil anchor below it.
+        """
+
+        return self.seed_age_seconds_by_frame.get(frame_offset)
 
 
 def track_foam_material_identity(
@@ -57,6 +67,7 @@ def track_foam_material_identity(
     continued = 0
     opposition: dict[tuple[int, int], float] = {}
     rows: dict[int, float] = {}
+    seed_ages: dict[int, float] = {}
 
     for frame_offset, detection in enumerate(detections):
         foam_rows = tuple(
@@ -118,6 +129,11 @@ def track_foam_material_identity(
         if active_y is None:
             continue
         rows[frame_offset] = active_y
+        if seed_time is not None:
+            seed_ages[frame_offset] = max(
+                0.0,
+                float(detection.time_sec) - seed_time,
+            )
         for candidate_offset, candidate in enumerate(detection.candidates):
             if candidate.kind is not BoundaryKind.OIL_AIR:
                 continue
@@ -134,6 +150,7 @@ def track_foam_material_identity(
     return FoamMaterialIdentity(
         opposition_by_candidate=opposition,
         row_by_frame=rows,
+        seed_age_seconds_by_frame=seed_ages,
         seeded_frame_count=seeded,
         continued_frame_count=continued,
     )

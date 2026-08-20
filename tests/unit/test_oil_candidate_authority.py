@@ -193,22 +193,44 @@ def test_high_conflict_ordinary_candidate_cannot_bypass_typed_phase_identity() -
 
     assert decision.tier is OilCandidateAuthority.CONTINUATION_ELIGIBLE
     assert decision.reason is AuthorityReason.CONTINUATION
-    assert "material_texture_clean_or_ordered_lower" in decision.failed_gates
+    assert "material_texture_conflict<0.60" in decision.failed_gates
 
 
-def test_strong_ordered_lower_interface_can_anchor_despite_broad_mask_conflict() -> None:
+def test_recent_foam_allows_distinct_lower_interface_despite_mask_texture() -> None:
+    candidate = _candidate(
+        material_path=True,
+        texture_conflict_feature=0.82,
+    )
+    candidate.features["material_terminal_partition_support"] = 0.90
     decision = evaluate_candidate_authority(
-        _candidate(texture_conflict_feature=0.82),
+        candidate,
         OilObservationResolverConfig(),
         AuthorityContext(
             representation_support=0.60,
             foam_material_row=50.0,
+            foam_seed_age_seconds=0.5,
             lower_separation_px=8.0,
         ),
     )
 
     assert decision.tier is OilCandidateAuthority.ANCHOR_ELIGIBLE
     assert decision.reason is AuthorityReason.ORDERED_LOWER_INTERFACE
+
+
+def test_stale_foam_residue_cannot_create_ordered_lower_anchor() -> None:
+    decision = evaluate_candidate_authority(
+        _candidate(material_path=True),
+        OilObservationResolverConfig(),
+        AuthorityContext(
+            representation_support=0.60,
+            foam_material_row=50.0,
+            foam_seed_age_seconds=4.0,
+            lower_separation_px=8.0,
+        ),
+    )
+
+    assert decision.tier is OilCandidateAuthority.CONTINUATION_ELIGIBLE
+    assert "ordered_lower_recent_direct_foam" in decision.failed_gates
 
 
 def test_distributed_phase_scan_anchors_only_with_strong_direct_identity() -> None:
@@ -225,11 +247,31 @@ def test_distributed_phase_scan_anchors_only_with_strong_direct_identity() -> No
     decision = evaluate_candidate_authority(
         candidate,
         OilObservationResolverConfig(),
-        AuthorityContext(),
+        AuthorityContext(representation_support=0.40),
     )
 
     assert decision.tier is OilCandidateAuthority.ANCHOR_ELIGIBLE
     assert decision.reason is AuthorityReason.DISTRIBUTED_PHASE_INTERFACE
+
+
+def test_uncorroborated_calibrated_direct_interface_stays_continuation_only() -> None:
+    candidate = _candidate()
+    candidate.features.update(
+        {
+            "supplemental_path": 1.0,
+            "calibrated_high_recall": 1.0,
+            "broad_scale_consistency": 0.80,
+        }
+    )
+
+    decision = evaluate_candidate_authority(
+        candidate,
+        OilObservationResolverConfig(),
+        AuthorityContext(representation_support=0.0),
+    )
+
+    assert decision.tier is OilCandidateAuthority.CONTINUATION_ELIGIBLE
+    assert "calibrated_independent_representation" in decision.failed_gates
 
 
 def test_high_conflict_phase_scan_cannot_use_ordered_lower_exception() -> None:

@@ -11,9 +11,7 @@ from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import BoundaryKind
 from oil_tracker.domain.geometry import ArtifactTemplate
 from oil_tracker.domain.recipe import InspectionRecipe
-from oil_tracker.adapters.vision.opencv_phase_detector import (
-    _artifact_compensated_top_k,
-)
+from oil_tracker.adapters.vision.phase_candidate_assembler import bounded_candidate_top_k
 
 
 def _candidate(y: float = 120.0) -> BoundaryCandidate:
@@ -94,22 +92,6 @@ def test_legacy_recipe_without_artifact_templates_remains_supported() -> None:
     assert restored.glasses[0].geometry.artifact_templates == []
 
 
-def test_user_artifact_templates_restore_generator_capacity_with_a_bound() -> None:
-    assert _artifact_compensated_top_k(
-        5,
-        0,
-        base_cap=6,
-        calibrated_cap=8,
-    ) == 5
-    assert _artifact_compensated_top_k(
-        5,
-        2,
-        base_cap=6,
-        calibrated_cap=8,
-    ) == 7
-    assert _artifact_compensated_top_k(
-        5,
-        20,
-        base_cap=6,
-        calibrated_cap=8,
-    ) == 8
+def test_artifact_templates_do_not_control_generator_capacity() -> None:
+    assert bounded_candidate_top_k(5, cap=6) == 5
+    assert bounded_candidate_top_k(20, cap=6) == 6

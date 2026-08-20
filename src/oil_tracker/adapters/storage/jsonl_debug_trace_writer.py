@@ -418,6 +418,10 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                     "sequence_semantic_corridor_support"
                 ),
                 "track_opposition": features.get("sequence_track_opposition"),
+                "effective_track_opposition": features.get(
+                    "sequence_effective_track_opposition"
+                ),
+                "component_id": features.get("sequence_component_id"),
                 "cluster_support": features.get("sequence_cluster_support"),
                 "trajectory_support": features.get("sequence_trajectory_support"),
                 "foam_alias_penalty": features.get("sequence_foam_alias_penalty"),

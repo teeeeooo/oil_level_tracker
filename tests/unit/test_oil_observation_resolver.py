@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from oil_tracker.adapters.vision.oil_observation_resolver import (
     OilObservationResolver,
+    _effective_track_opposition,
 )
+from oil_tracker.adapters.vision.oil_candidate_authority import OilCandidateAuthority
+from oil_tracker.adapters.vision.oil_phase_identity import OilPhaseIdentity
+from oil_tracker.adapters.vision.oil_sequence_types import OilCandidateRef
 from dataclasses import replace
 
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
@@ -148,12 +152,17 @@ def _foam_candidate(y: float) -> BoundaryCandidate:
     )
 
 
-def _material_candidate(y: float) -> BoundaryCandidate:
+def _material_candidate(
+    y: float,
+    *,
+    material_texture_conflict: float = 0.78,
+    terminal_support: float = 0.0,
+) -> BoundaryCandidate:
     candidate = _candidate(
         y,
         boundary=0.82,
         broad=0.82,
-        material_texture_conflict=0.78,
+        material_texture_conflict=material_texture_conflict,
         registered_oil_motion=0.90,
         registered_oil_motion_coverage=1.0,
         source="r6_material_path",
@@ -165,7 +174,8 @@ def _material_candidate(y: float) -> BoundaryCandidate:
             "r6_material_path": 1.0,
             "material_path_sector_fraction": 1.0,
             "raw_material_row_support": 0.9,
-            "material_texture_conflict": 0.78,
+            "material_texture_conflict": material_texture_conflict,
+            "material_terminal_partition_support": terminal_support,
         },
     )
 
@@ -355,7 +365,11 @@ def test_ordered_lower_interface_can_anchor_inside_broad_material_mask() -> None
             index,
             *((_foam_candidate(218.0),) if index == 0 else ()),
             _material_candidate(218.0 + min(index, 3)),
-            _material_candidate(450.0 + (index % 2)),
+            _material_candidate(
+                450.0 + (index % 2),
+                material_texture_conflict=0.35,
+                terminal_support=0.90,
+            ),
             _calibrated_candidate(
                 450.0 + (index % 2),
                 motion=0.05,
@@ -372,15 +386,17 @@ def test_ordered_lower_interface_can_anchor_inside_broad_material_mask() -> None
     )
 
     assert all(y is not None and 449.0 <= y <= 452.0 for y in _oil_y(result))
-    assert all(
-        any(
-            candidate.selected
-            and candidate.features.get("sequence_phase_identity")
-            == "ordered_lower_interface"
+    selected_identities = [
+        next(
+            candidate.features.get("sequence_phase_identity")
             for candidate in detection.candidates
-            if candidate.kind is BoundaryKind.OIL_AIR
+            if candidate.kind is BoundaryKind.OIL_AIR and candidate.selected
         )
         for detection in result.detections
+    ]
+    assert "ordered_lower_interface" in selected_identities[:2]
+    assert set(selected_identities).issubset(
+        {"ordered_lower_interface", "continuation_only"}
     )
 
 
@@ -477,6 +493,30 @@ def test_stationary_material_supported_interface_is_not_a_static_hard_veto() -> 
 
     assert _oil_y(result) == [132.0] * 10
     assert result.diagnostics.maximum_track_opposition < 0.30
+
+
+def test_clean_direct_interface_uses_soft_recurring_track_opposition() -> None:
+    candidate = _candidate(132.0, boundary=0.78, broad=0.80, artifact=0.04)
+    ref = OilCandidateRef(
+        frame_offset=0,
+        candidate_offset=0,
+        candidate=candidate,
+        local_quality=0.8,
+        authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+        phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+        track_opposition=0.80,
+    )
+
+    assert _effective_track_opposition(ref) == 0.20
+
+    contradicted = replace(
+        ref,
+        candidate=replace(
+            candidate,
+            penalties={**candidate.penalties, "material_texture_conflict": 0.75},
+        ),
+    )
+    assert _effective_track_opposition(contradicted) == 0.80
 
 
 def test_recurring_artifact_signature_is_opposed_without_forcing_a_number() -> None:
@@ -1029,8 +1069,35 @@ def test_completed_fill_blocks_contiguous_lower_material_cap_until_real_gap() ->
 
     result = OilObservationResolver().resolve(tuple(detections), glass)
 
-    assert all(value is not None for value in _oil_y(result)[:6])
+    # The next incompatible component must be preceded by UNKNOWN; the global
+    # path may place that boundary gap on the last rising sample.
+    assert all(value is not None for value in _oil_y(result)[:5])
+    assert _oil_y(result)[5] is None
     assert _oil_y(result)[6:] == [None] * len(cap)
+
+
+def test_incompatible_oil_components_require_unknown_handoff() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _candidate(120.0 if index < 4 else 190.0, boundary=0.82),
+            ambiguity=0.12,
+        )
+        for index in range(8)
+    )
+
+    result = OilObservationResolver().resolve(detections, glass_config())
+    ys = _oil_y(result)
+
+    assert 120.0 in ys
+    assert 190.0 in ys
+    assert any(value is None for value in ys[2:6])
+    component_ids = {
+        detection.debug_metrics.get("sequence_selected_component_id")
+        for detection in result.detections
+        if detection.raw_oil_air_level_y is not None
+    }
+    assert len(component_ids) == 2
 
 
 def test_completed_fill_barrier_releases_only_for_downward_drain_motion() -> None:
@@ -1051,7 +1118,7 @@ def test_completed_fill_barrier_releases_only_for_downward_drain_motion() -> Non
         _detection(index, ambiguity=0.85)
         for index in range(len(detections), len(detections) + 6)
     )
-    drain = (0.44, 0.43, 0.47, 0.50, 0.54, 0.58)
+    drain = (0.38, 0.40, 0.44, 0.48, 0.53, 0.58)
     detections.extend(
         _detection(
             index,

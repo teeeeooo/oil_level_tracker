@@ -11,7 +11,7 @@ from .foam_episode_resolver import FoamEpisodeResolver
 from .oil_observation_resolver import OilObservationResolver
 
 
-OBSERVATION_SEQUENCE_VERSION = "r13-phase-identity-recovery-v1"
+OBSERVATION_SEQUENCE_VERSION = "r14-phase-component-replacement-v1"
 
 
 @dataclass(frozen=True)
