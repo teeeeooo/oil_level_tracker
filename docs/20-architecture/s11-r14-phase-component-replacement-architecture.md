@@ -25,9 +25,17 @@ identity.
 - A direct identity requires texture-clean phase evidence. Calibrated/scan
   proposals additionally require a genuinely different representation near the
   same row. A scan by itself stays continuation-only.
-- An ordered-lower identity requires a tracked upper material row, minimum
-  separation, independent representation and material-texture conflict below
-  0.60. Being below a broad Foam/material mask is not an exception.
+- An ordered-lower identity is a short-lived composition of a directly
+  detected Foam seed and the first independently supported interface below it.
+  The seed must be at most three seconds old, the row must meet minimum
+  separation and cross-representation support must be at least 0.12. A stale
+  Foam-material continuation is opposition evidence only and never grants Oil
+  authority.
+- Direct interfaces remain texture-clean. The recent-Foam ordered-lower case is
+  the one bounded exception because the accepted Foam/material mask can overlap
+  the physical Oil row and therefore make material-texture conflict high. Only
+  the nearest plausible lower interface may anchor; deeper rows are demoted to
+  continuation-only.
 - Motion, persistence, source name and candidate density never create identity.
 
 ## Track opposition
@@ -50,6 +58,11 @@ independent anchor. Continuation bounding splits runs whenever component identit
 changes, and each sub-run must contain its own independent anchor. This is not a
 large-distance penalty and does not interpolate missing coordinates.
 
+A completed-fill barrier can reopen only when an observed component enters
+through the upper 40% of the Glass and shows net downward progress with at least
+0.60 directional agreement inside the bounded lookahead. Moving internal caps
+cannot release the barrier merely because they form a coherent component.
+
 ## Publication and observability
 
 Every numeric Oil remains one eligible selected candidate from the same frame.
@@ -63,4 +76,3 @@ Confirmed templates support normal single selection, Shift range selection,
 Ctrl/Cmd toggle, select-all, clear-selection and one bulk deletion. All selected
 templates are highlighted together. Changes remain on the editor's private
 copy until Apply and then persist through the existing Recipe repository.
-

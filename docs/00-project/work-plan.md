@@ -1,9 +1,9 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `IMPLEMENTING`
-**Current gate:** `R14 phase-component replacement and local validation`
-**Source authority:** `R13 secure-Windows result and identity/component diagnostic`
+**Milestone status:** `VALIDATING`
+**Current gate:** `R14 exact pushed head private Windows Base/Accum replay`
+**Source authority:** `R14 local evidence; R13 secure-Windows root cause`
 
 ## R10 field result
 
@@ -127,19 +127,32 @@ Base Oil entirely.
 
 ## Current executable action
 
-Implement R14 as a replacement: decouple templates from proposal policy,
-require independent direct/ordered phase identity, make recurrence a soft
-penalty unless contradicted, and assign explicit component ownership to
-trajectory, Viterbi transitions and continuation bounds. In the same milestone,
-add multi-selection, multiple highlight and bulk deletion for confirmed
-Artifact templates. Retire stale R13 paths while preserving stored-Recipe and
-same-frame publication compatibility. After local gates pass, perform one new
-private Windows Base/Accum replay; coverage alone is not PASS.
+Replay the exact pushed R14 head on private Windows Base/Accum with the saved
+Artifact templates. Record proposal recall, phase identity, component identity,
+path-stage mutations, final-publication integrity and independent Foam validity;
+coverage alone is not PASS. The local replacement, bulk confirmed-Artifact
+editing, exact replay, runtime gate and repository regression are complete.
+
+## Local R14 result
+
+R14 decouples Artifact templates from fixed proposal budgets, replaces local
+phase promotion with recent-Foam composition and explicit component ownership,
+and bounds completed-fill reopening to upper-entry directional drain evidence.
+Confirmed Artifact templates now support Shift/Ctrl/Cmd multi-selection,
+select-all, clear-selection, simultaneous overlay highlight and bulk deletion.
+
+The exact four-video replay processed 299 rows with 187 numeric Oil and complete
+same-frame provenance. Checked truth is 10/13, MAE 8.5 px and maximum error
+26 px. The sample3 completed-fill internal cap has zero numeric Oil, late drain
+has 18 numeric rows, and sample4 has eight strict reviewed-range matches. Direct
+runtime is 96.8 ms/frame against the 104.25 ms/frame ceiling. Private-Windows
+Base/Accum effectiveness remains unproven.
 
 ## Authority links
 
 - [R14 phase-component architecture](../20-architecture/s11-r14-phase-component-replacement-architecture.md)
 - [R14 validation](../30-validation/s11-r14-phase-component-replacement-validation.md)
+- [R14 local evidence](../60-evidence/s11/s11-r14-phase-component-replacement.md)
 - [R13 Windows result](../60-evidence/s11/s11-r13-secure-windows-field-result.md)
 - [R13 Windows diagnostic](../50-diagnostics/s11/s11-r13-windows-identity-component-diagnostic.md)
 - [R13 phase-identity architecture](../20-architecture/s11-r13-phase-identity-recovery-architecture.md)

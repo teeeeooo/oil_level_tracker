@@ -2,9 +2,9 @@
 
 ## Acceptance boundary
 
-R14 remains open until local regression/replay and private Windows Base/Accum
-field validation pass. Local success authorizes the Windows replay; it does not
-close S11.
+R14 passed its local regression/replay gate. Private Windows Base/Accum field
+validation remains open; local success authorizes that replay but does not close
+S11.
 
 ## Required automated gates
 
@@ -30,6 +30,20 @@ numeric Oil, checked truth, MAE, maximum error, same-frame provenance, Foam
 publication and fingerprints. Any accepted fingerprint change must be explained
 by the R14 responsibility change rather than silently updated.
 
+The accepted local replay processed 299 rows and published 187 numeric Oil
+rows. Checked truth is 10/13 with 8.5 px MAE and 26 px maximum error; every
+numeric row retains same-frame provenance. The sample3 internal completed-fill
+interval publishes zero Oil, its late drain publishes 18 rows, and sample4 has
+eight strict reviewed-range matches. Exact per-video counts and fingerprints
+are owned by `tests/diagnostics/s11_r14_phase_component_replay.py` and the R14
+evidence record.
+
+The local runtime gate is 96.8 ms/frame over the decoded 113-frame sample4
+workload, including official three-frame static learning and excluding seek,
+report and debug output. This is below the 104.25 ms/frame acceptance ceiling,
+although slower than R13 and therefore still a Windows observation item.
+Python compile and the full repository regression pass with 1,542 tests.
+
 ## Private Windows gate
 
 Use the saved Base/Accum Recipes, including Artifact templates. Record detector
@@ -42,4 +56,3 @@ PASS requires materially correct reviewed Oil and Foam behavior, not coverage.
 The known rim/bracket, broad material/residue and upper residue components must
 not form a published Oil run. If reviewed Oil has no proposal, classify that as
 generation failure instead of weakening authority globally.
-
