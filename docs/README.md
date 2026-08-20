@@ -64,6 +64,7 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
 - Active S11-R15 replacement architecture: [`20-architecture/s11-r15-state-aware-material-ownership-architecture.md`](20-architecture/s11-r15-state-aware-material-ownership-architecture.md)
 - Active S11-R15 validation contract: [`30-validation/s11-r15-state-aware-material-ownership-validation.md`](30-validation/s11-r15-state-aware-material-ownership-validation.md)
+- S11-R15 local implementation/replay evidence: [`60-evidence/s11/s11-r15-state-aware-material-ownership.md`](60-evidence/s11/s11-r15-state-aware-material-ownership.md)
 - S11-R14 secure-Windows field result: [`60-evidence/s11/s11-r14-secure-windows-field-result.md`](60-evidence/s11/s11-r14-secure-windows-field-result.md)
 - S11-R14 secure-Windows root cause: [`50-diagnostics/s11/s11-r14-windows-state-and-foam-ownership-diagnostic.md`](50-diagnostics/s11/s11-r14-windows-state-and-foam-ownership-diagnostic.md)
 - Historical S11-R14 replacement architecture: [`20-architecture/s11-r14-phase-component-replacement-architecture.md`](20-architecture/s11-r14-phase-component-replacement-architecture.md)

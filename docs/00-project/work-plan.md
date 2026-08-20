@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R15 state-aware material ownership implementation and local validation`
+**Current gate:** `R15 exact-head private-Windows Base/Accum validation`
 **Source authority:** `R14 private-Windows root cause; R15 replacement architecture`
 
 ## R10 field result
@@ -136,7 +136,11 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Implement the [R15 replacement architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md): replace Foam alias ownership, initial-EMPTY admission, one-sided component continuation and detached Foam shape classification. Remove superseded R14 alias propagation, candidate-only Foam veto and shared Oil/Foam reject-stage diagnostics. Run the [R15 validation contract](../30-validation/s11-r15-state-aware-material-ownership-validation.md), then push one exact head for private-Windows replay.
+Push the one validated R15 head, then replay that exact head on private Windows
+Base/Accum using the saved Recipes and Artifact templates. Evaluate Base gaps,
+Accum initial EMPTY, real bottom-entry Oil, the 656.5--677 s dynamic Foam group,
+static Y80 prefixes and detached Foam as separate gates. Count only final
+sequence publication and cross-check CSV equality.
 
 ## Local R14 result
 
@@ -153,10 +157,26 @@ has 18 numeric rows, and sample4 has eight strict reviewed-range matches. Direct
 runtime is 96.8 ms/frame against the 104.25 ms/frame ceiling. Private-Windows
 Base/Accum effectiveness remains unproven.
 
+## Local R15 result
+
+R15 removes candidate-only and prior-track Foam alias vetoes, admits initial
+EMPTY Oil only through bounded lower-entry upward progress, replaces the fixed
+continuation horizon with continuous registered same-component motion and
+classifies detached layer/droplet Foam through one material phenotype owner.
+Shared Oil optics remain unchanged; bright-droplet recovery is confined to the
+Foam detector and still requires registered dynamics for sequence eligibility.
+
+The exact four-video replay processed 299 rows with 187 numeric Oil and complete
+same-frame provenance. Checked truth is 10/13, MAE 8.1 px and maximum error
+24.5 px. Sample3 completed fill remains non-numeric, late drain has 18 numeric
+rows and sample4 has eight strict reviewed-range matches. Fixed fingerprints
+passed. Full regression is 1,549 passed; compile and diff checks passed.
+
 ## Authority links
 
 - [R15 state-aware material ownership architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md)
 - [R15 validation](../30-validation/s11-r15-state-aware-material-ownership-validation.md)
+- [R15 local evidence](../60-evidence/s11/s11-r15-state-aware-material-ownership.md)
 - [R14 Windows field result](../60-evidence/s11/s11-r14-secure-windows-field-result.md)
 - [R14 Windows diagnostic](../50-diagnostics/s11/s11-r14-windows-state-and-foam-ownership-diagnostic.md)
 - [R14 phase-component architecture](../20-architecture/s11-r14-phase-component-replacement-architecture.md)

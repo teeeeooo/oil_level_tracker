@@ -1,6 +1,6 @@
 # Project Roadmap
 
-**Status:** `IMPLEMENTING`
+**Status:** `VALIDATING`
 
 This document is the long-term milestone SSOT. It owns milestone order, scope and state. Exact branch progress, findings and immediate next action belong only in the [current work plan](work-plan.md).
 
@@ -156,8 +156,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
-- **Major result:** R14 first recovered material Base Oil coverage but failed private-Windows state/material ownership: anchor-free continuation tails were cut, a stationary lower Accum structure published during confirmed EMPTY, and inverted/pre-publication Oil evidence rejected real dynamic Foam. R15 replaces those owners and adds a dynamic detached-droplet Foam phenotype without field coordinates.
-- **Next gate:** Implement and locally validate the R15 replacement, then replay its exact pushed head on private Windows Base/Accum. Final Oil accuracy, EMPTY false-positive suppression, independent Foam publication and detached-Foam recall are separate PASS conditions.
+- **Major result:** R15 replaces candidate-only/prior-track Foam alias vetoes, stationary initial-EMPTY admission, fixed-horizon Oil continuation and detached-layer-only Foam classification. Local four-video replay passed fixed fingerprints with 187 numeric Oil rows, 10/13 checked truth and complete same-frame provenance; full regression is 1,549 passed.
+- **Next gate:** Replay the exact pushed R15 head on private Windows Base/Accum. Final Oil accuracy, EMPTY false-positive suppression, independent Foam publication and detached-Foam recall are separate PASS conditions.
 - **Priority:** `P0`
 - **Detail:** [current work plan](work-plan.md), [R15 architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md), [R15 validation](../30-validation/s11-r15-state-aware-material-ownership-validation.md), [R14 Windows result](../60-evidence/s11/s11-r14-secure-windows-field-result.md), [R14 diagnostic](../50-diagnostics/s11/s11-r14-windows-state-and-foam-ownership-diagnostic.md), [R14 local evidence](../60-evidence/s11/s11-r14-phase-component-replacement.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R15)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R15 private validation)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R14 failed private field holdouts. R15 implementation is the active detector correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and product milestone S12 follows that remainder.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R14 failed private field holdouts. R15 exact-head private validation is the active detector correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and product milestone S12 follows that remainder.
