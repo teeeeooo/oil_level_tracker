@@ -5,17 +5,10 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-import subprocess
-import sys
 
 from tests.diagnostics import s11_report_observability_replay as replay
 from tests.diagnostics.s11_evidence_probe import repository_root
-from tests.diagnostics.s11_observation_replay_audit import (
-    provisional_audit,
-    sequence_audit,
-    tracking_rows,
-    user_truth_audit,
-)
+from tests.diagnostics.s11_isolated_replay import run_isolated_replay
 from tests.diagnostics.s11_r8_observation_recovery_replay import _aggregate_truth
 
 
@@ -55,27 +48,6 @@ def _run_worker(
     )
 
 
-def _spawn_worker(
-    *, root: Path, output_root: Path, sample: str, verify_fingerprints: bool
-) -> Path:
-    sample_output = (output_root / sample).resolve()
-    command = [
-        sys.executable,
-        "-m",
-        _MODULE,
-        "--root",
-        str(root.resolve()),
-        "--output-root",
-        str(sample_output),
-        "--worker-sample",
-        sample,
-    ]
-    if not verify_fingerprints:
-        command.append("--skip-fingerprint-check")
-    subprocess.run(command, cwd=root, check=True)
-    return sample_output / "replay_manifest.json"
-
-
 def run_r14_replay(
     *,
     root: Path | None = None,
@@ -83,59 +55,25 @@ def run_r14_replay(
     verify_fingerprints: bool = True,
 ) -> dict[str, object]:
     root = repository_root() if root is None else Path(root)
-    output_root = (
+    destination = (
         root / "sample" / "output" / "s11-r14-phase-component"
         if output_root is None
         else Path(output_root)
-    ).resolve()
-    output_root.mkdir(parents=True, exist_ok=True)
-    worker_manifests = [
-        _spawn_worker(
-            root=root,
-            output_root=output_root,
-            sample=sample,
-            verify_fingerprints=verify_fingerprints,
-        )
-        for sample in replay.QUALIFICATION_WINDOWS
-    ]
-    workers = [json.loads(path.read_text(encoding="utf-8")) for path in worker_manifests]
-    summaries = [worker["samples"][0] for worker in workers]
-    audits: dict[str, dict[str, object]] = {}
-    rows_by_sample: dict[str, list[dict[str, object]]] = {}
-    for summary in summaries:
-        sample = str(summary["sample"])
-        rows = tracking_rows(Path(str(summary["bundle"])))
-        rows_by_sample[sample] = rows
-        audits[sample] = {
-            "sequence": sequence_audit(rows),
-            "provisional_visual": provisional_audit(root, sample, rows),
-            "user_truth": user_truth_audit(root, sample, rows),
-        }
-
-    contract = _assert_r14_contract(audits, rows_by_sample)
-    manifest = {
-        "schema": "s11-r14-phase-component-isolated-replay-v1",
-        "sampling_fps": replay.SAMPLING_FPS,
-        "qualification_windows": replay.QUALIFICATION_WINDOWS,
-        "accepted_count_check_enabled": verify_fingerprints,
-        "worker_isolation": "one_video_per_process",
-        "worker_manifests": [str(path) for path in worker_manifests],
-        "samples": summaries,
-        "total_tracking_rows": sum(int(item["tracking_row_count"]) for item in summaries),
-        "total_numeric_oil": sum(int(item["numeric_oil_count"]) for item in summaries),
-        "r14_visual_audit": audits,
-        "r14_contract": contract,
-        "secure_windows_status": "PENDING_R14_PRIVATE_VIDEO_REPLAY",
-    }
-    path = output_root / "replay_manifest.json"
-    path.write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
-        encoding="utf-8",
     )
-    return manifest
+    return run_isolated_replay(
+        module=_MODULE,
+        root=root,
+        output_root=destination,
+        verify_fingerprints=verify_fingerprints,
+        manifest_schema="s11-r14-phase-component-isolated-replay-v1",
+        audit_key="r14_visual_audit",
+        contract_key="r14_contract",
+        secure_windows_status="PENDING_R14_PRIVATE_VIDEO_REPLAY",
+        assert_contract=_assert_phase_component_contract,
+    )
 
 
-def _assert_r14_contract(
+def _assert_phase_component_contract(
     audits: dict[str, dict[str, object]],
     rows_by_sample: dict[str, list[dict[str, object]]],
 ) -> dict[str, object]:
@@ -164,11 +102,11 @@ def _assert_r14_contract(
 
     truth = _aggregate_truth(audits)
     if truth["case_count"] != 13 or int(truth["numeric_count"]) < 10:
-        raise AssertionError(f"R14 checked truth coverage regressed: {truth}")
+        raise AssertionError(f"Phase-component checked truth coverage regressed: {truth}")
     if float(truth["mean_absolute_error_px"]) > 9.0:
-        raise AssertionError(f"R14 checked truth MAE regressed: {truth}")
+        raise AssertionError(f"Phase-component checked truth MAE regressed: {truth}")
     if float(truth["maximum_absolute_error_px"]) > 26.0:
-        raise AssertionError(f"R14 checked truth maximum error regressed: {truth}")
+        raise AssertionError(f"Phase-component checked truth maximum error regressed: {truth}")
     return {
         "combined_user_truth": truth,
         "sample3_completed_fill_numeric_count": 0,
