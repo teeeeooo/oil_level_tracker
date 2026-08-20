@@ -31,7 +31,7 @@ from .oil_phase_identity import (
 )
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r14-phase-component-replacement-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r15-state-aware-material-ownership-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
