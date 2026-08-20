@@ -82,10 +82,23 @@ def _optical_glare_mask(
         & (gray_f >= bright_floor)
         & (residual >= residual_floor)
     )
-    # Keep only optically elongated or hollow residuals. A straight caustic is
-    # very tall and narrow; a curved crescent may be less elongated but remains
-    # sparse inside its bounding box. Filled compact material, including a
-    # large Foam droplet, must remain available to the material classifier.
+    vertical_core = np.zeros_like(gray, dtype=np.uint8)
+    if np.any(bright_residual):
+        vertical_length = max(7, int(round(gray.shape[0] * 0.10)))
+        vertical_length = min(vertical_length, 41)
+        vertical_kernel = cv2.getStructuringElement(
+            cv2.MORPH_RECT,
+            (3, vertical_length),
+        )
+        vertical_core = cv2.morphologyEx(
+            bright_residual.astype(np.uint8) * 255,
+            cv2.MORPH_OPEN,
+            vertical_kernel,
+        )
+
+    # Curved crescents may not survive a straight opening. Retain only
+    # connected residuals with clear vertical extent; small foam bubbles and
+    # bright droplets stay unmasked.
     component_mask = np.zeros_like(gray, dtype=np.uint8)
     count, labels, stats, _centroids = cv2.connectedComponentsWithStats(
         bright_residual.astype(np.uint8),
@@ -96,16 +109,11 @@ def _optical_glare_mask(
         width = max(1, int(stats[label, cv2.CC_STAT_WIDTH]))
         height = max(1, int(stats[label, cv2.CC_STAT_HEIGHT]))
         area = int(stats[label, cv2.CC_STAT_AREA])
-        aspect_ratio = height / width
-        fill_ratio = area / max(1, width * height)
-        caustic_shape = aspect_ratio >= 2.0 or (
-            aspect_ratio >= 1.35 and fill_ratio <= 0.55
-        )
-        if height < minimum_height or not caustic_shape or area < minimum_height:
+        if height < minimum_height or height / width < 1.35 or area < minimum_height:
             continue
         component_mask[labels == label] = 255
 
-    caustic = component_mask
+    caustic = cv2.bitwise_or(vertical_core, component_mask)
     if np.any(caustic):
         radius = max(1, min(3, int(round(base * 0.012))))
         kernel = cv2.getStructuringElement(

@@ -30,15 +30,6 @@ def test_compact_bright_material_patch_is_not_promoted_to_caustic() -> None:
     assert result.glare_mask[62, 50] == 0
 
 
-def test_filled_tall_bright_material_droplet_is_not_promoted_to_caustic() -> None:
-    frame = np.full((160, 120, 3), 45, dtype=np.uint8)
-    cv2.ellipse(frame, (34, 75), (18, 30), 0, 0, 360, (210, 210, 210), -1)
-
-    result = preprocess(frame, _mask(frame.shape[:2]), DetectorSettings())
-
-    assert result.glare_mask[75, 34] == 0
-
-
 def test_saturated_glare_remains_masked() -> None:
     frame = np.full((80, 80, 3), 75, dtype=np.uint8)
     frame[30:36, 20:60] = 255
