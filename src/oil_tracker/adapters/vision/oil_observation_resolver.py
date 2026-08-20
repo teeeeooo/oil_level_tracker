@@ -103,6 +103,9 @@ class OilObservationResolverConfig:
     trajectory_spike_tolerance_ratio: float = 0.25
     trajectory_spike_lookaround_frames: int = 3
     high_recall_candidate_ref_limit: int = 8
+    empty_entry_lookahead_frames: int = 6
+    empty_entry_min_upward_ratio: float = 0.025
+    empty_entry_directional_ratio: float = 0.60
 
 
 @dataclass(frozen=True)
@@ -182,6 +185,11 @@ class OilObservationResolver:
         layers = tuple(
             self._nodes_for_frame(detection, refs_by_frame[index])
             for index, detection in enumerate(source)
+        )
+        layers = self._admit_initial_empty_entry(
+            layers,
+            glass,
+            confirmed_initial_state,
         )
         best_path = self._best_path(
             layers,
@@ -897,6 +905,31 @@ class OilObservationResolver:
             for index, offset in enumerate(offsets)
         )
 
+    def _admit_initial_empty_entry(
+        self,
+        layers: tuple[tuple[_Node, ...], ...],
+        glass: GlassInspectionConfig,
+        confirmed_initial_state: InitialObservationState | None,
+    ) -> tuple[tuple[_Node, ...], ...]:
+        """Keep initial EMPTY Oil provisional until a physical rise enters.
+
+        This is completed-window candidate admission, not a post-publication
+        censor.  Position only identifies the lower entrance; bounded upward
+        progress distinguishes arriving Oil from a stationary lower structure.
+        """
+
+        if confirmed_initial_state is not InitialObservationState.EMPTY_NO_INTERFACE:
+            return layers
+        entry = _initial_empty_entry_start(layers, glass, self.config)
+        output: list[tuple[_Node, ...]] = []
+        for index, layer in enumerate(layers):
+            if entry is not None and index >= entry:
+                output.append(layer)
+                continue
+            filtered = tuple(node for node in layer if node.kind != "oil")
+            output.append(filtered or (_unknown_node(layer),))
+        return tuple(output)
+
     def _bound_continuation_runs(
         self,
         path: tuple[_Node, ...],
@@ -913,10 +946,6 @@ class OilObservationResolver:
 
         bounded = list(path)
         edge = max(0, int(self.config.continuation_edge_frames))
-        dynamic_horizon = max(
-            2,
-            min(3, int(glass.detector_settings.oil_path_window)),
-        ) * 2
         minimum_confidence = float(
             glass.detector_settings.minimum_final_confidence
         )
@@ -949,14 +978,12 @@ class OilObservationResolver:
             keep_end = min(end, qualified[-1] + edge)
             for index in range(start, end + 1):
                 ref = path[index].candidate_ref
-                dynamic_extension = bool(
-                    ref is not None
-                    and min(abs(index - anchor) for anchor in qualified)
-                    <= dynamic_horizon
-                    and _candidate_registered_motion(ref.candidate)
-                    >= self.config.dynamic_anchor_min_support
-                    and _candidate_registered_motion_coverage(ref.candidate)
-                    >= self.config.dynamic_anchor_min_coverage
+                dynamic_extension = _continuous_registered_motion_extension(
+                    path,
+                    index,
+                    qualified,
+                    minimum_support=self.config.dynamic_anchor_min_support,
+                    minimum_coverage=self.config.dynamic_anchor_min_coverage,
                 )
                 if (
                     ((index < keep_start or index > keep_end) and not dynamic_extension)
@@ -1768,6 +1795,85 @@ def _initial_score(
         if node.kind == "oil" and node.y is not None:
             return 0.18 if _relative_y(node.y, glass) >= 0.73 else -0.18
     return 0.06 if node.kind == "unknown" else 0.0
+
+
+def _initial_empty_entry_start(
+    layers: tuple[tuple[_Node, ...], ...],
+    glass: GlassInspectionConfig,
+    config: OilObservationResolverConfig,
+) -> int | None:
+    lookahead = max(2, int(config.empty_entry_lookahead_frames))
+    height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
+    minimum_progress = max(4.0, height * config.empty_entry_min_upward_ratio)
+    lower_entrance = 1.0 - config.entrance_band_ratio
+    for start, layer in enumerate(layers):
+        anchors = tuple(
+            node
+            for node in layer
+            if node.kind == "oil"
+            and node.y is not None
+            and node.candidate_ref is not None
+            and _independent_anchor(node.candidate_ref)
+            and _relative_y(node.y, glass) >= lower_entrance
+        )
+        for anchor in anchors:
+            component_id = _node_component_id(anchor)
+            observed: list[tuple[int, float]] = []
+            for frame in range(start, min(len(layers), start + lookahead + 1)):
+                compatible = tuple(
+                    node
+                    for node in layers[frame]
+                    if node.kind == "oil"
+                    and node.y is not None
+                    and _node_component_id(node) == component_id
+                )
+                if not compatible:
+                    continue
+                best = max(compatible, key=lambda node: node.emission)
+                observed.append((frame, float(best.y)))
+            if len(observed) < 3:
+                continue
+            deltas = [
+                following[1] - prior[1]
+                for prior, following in zip(observed, observed[1:])
+            ]
+            upward_ratio = sum(delta <= 0.0 for delta in deltas) / len(deltas)
+            if (
+                observed[0][1] - observed[-1][1] >= minimum_progress
+                and upward_ratio >= config.empty_entry_directional_ratio
+            ):
+                return start
+    return None
+
+
+def _continuous_registered_motion_extension(
+    path: tuple[_Node, ...],
+    index: int,
+    qualified: list[int],
+    *,
+    minimum_support: float,
+    minimum_coverage: float,
+) -> bool:
+    if not qualified or qualified[0] <= index <= qualified[-1]:
+        return False
+    anchor = qualified[0] if index < qualified[0] else qualified[-1]
+    start, end = sorted((anchor, index))
+    continuation = (
+        path[start:end]
+        if index < anchor
+        else path[start + 1 : end + 1]
+    )
+    for node in continuation:
+        ref = node.candidate_ref
+        if (
+            node.kind != "oil"
+            or ref is None
+            or ref.trajectory_support < 0.99
+            or _candidate_registered_motion(ref.candidate) < minimum_support
+            or _candidate_registered_motion_coverage(ref.candidate) < minimum_coverage
+        ):
+            return False
+    return True
 
 
 def _edge_transition_cost(

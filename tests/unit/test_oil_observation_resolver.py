@@ -574,12 +574,12 @@ def test_confirmed_empty_does_not_lock_out_a_sustained_late_visible_path() -> No
     glass = glass_config()
     ellipse = glass.geometry.ellipse
     bottom = ellipse.center_y + ellipse.radius_y
-    central = ellipse.center_y
+    height = ellipse.radius_y * 2.0
     detections = (
         _detection(0, ambiguity=0.8),
-        _detection(1, _candidate(central + 18.0, boundary=0.74, selected=True), ambiguity=0.2),
-        _detection(2, _candidate(central + 5.0, boundary=0.74, selected=True), ambiguity=0.2),
-        _detection(3, _candidate(central - 9.0, boundary=0.74, selected=True), ambiguity=0.2),
+        _detection(1, _candidate(bottom - height * 0.08, boundary=0.74, selected=True), ambiguity=0.2),
+        _detection(2, _candidate(bottom - height * 0.12, boundary=0.74, selected=True), ambiguity=0.2),
+        _detection(3, _candidate(bottom - height * 0.17, boundary=0.74, selected=True), ambiguity=0.2),
     )
 
     result = OilObservationResolver().resolve(
@@ -590,8 +590,78 @@ def test_confirmed_empty_does_not_lock_out_a_sustained_late_visible_path() -> No
 
     assert result.detections[0].fill_state is FillState.UNKNOWN_REVIEW
     assert result.detections[0].raw_oil_air_level_y is None
-    assert _oil_y(result)[1:] == [central + 18.0, central + 5.0, central - 9.0]
+    assert _oil_y(result)[1:] == [
+        bottom - height * 0.08,
+        bottom - height * 0.12,
+        bottom - height * 0.17,
+    ]
     assert result.detections[-1].fill_state is FillState.FILLING_VISIBLE
+
+
+def test_confirmed_empty_rejects_stationary_lower_component() -> None:
+    glass = glass_config()
+    bottom = glass.geometry.ellipse.center_y + glass.geometry.ellipse.radius_y
+    detections = tuple(
+        _detection(
+            index,
+            _candidate(bottom - 4.0 + index % 2, boundary=0.82, selected=True),
+            ambiguity=0.15,
+        )
+        for index in range(8)
+    )
+
+    result = OilObservationResolver().resolve(
+        detections,
+        glass,
+        InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert _oil_y(result) == [None] * len(detections)
+
+
+def test_registered_motion_extends_same_component_tail_beyond_old_horizon() -> None:
+    detections = []
+    for index in range(12):
+        candidate = _candidate(
+            180.0 + index,
+            boundary=0.76 if index < 3 else 0.46,
+            selected=index < 3,
+            registered_oil_motion=0.85,
+            registered_oil_motion_coverage=0.90,
+            source="ordinary" if index < 3 else "r6_material_path",
+        )
+        if index >= 3:
+            candidate.features.update(
+                {"r6_material_path": 1.0, "material_path_sector_fraction": 1.0}
+            )
+        detections.append(_detection(index, candidate, ambiguity=0.15))
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert _oil_y(result) == [180.0 + index for index in range(12)]
+
+
+def test_registered_motion_tail_stops_at_first_coverage_break() -> None:
+    detections = []
+    for index in range(12):
+        candidate = _candidate(
+            180.0 + index,
+            boundary=0.76 if index < 3 else 0.46,
+            selected=index < 3,
+            registered_oil_motion=0.85,
+            registered_oil_motion_coverage=0.90 if index < 8 else 0.0,
+            source="ordinary" if index < 3 else "r6_material_path",
+        )
+        if index >= 3:
+            candidate.features.update(
+                {"r6_material_path": 1.0, "material_path_sector_fraction": 1.0}
+            )
+        detections.append(_detection(index, candidate, ambiguity=0.15))
+
+    result = OilObservationResolver().resolve(tuple(detections), glass_config())
+
+    assert _oil_y(result)[:8] == [180.0 + index for index in range(8)]
+    assert _oil_y(result)[8:] == [None] * 4
 
 
 def test_hard_unavailable_frame_stays_unknown_without_coordinate_carry() -> None:
