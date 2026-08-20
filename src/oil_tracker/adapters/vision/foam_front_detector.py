@@ -48,6 +48,7 @@ class FoamComponentEvidence:
     front_y: float
     final_score: float
     decision_status: FoamDecisionStatus
+    material_phenotype: str = "none"
 
 
 @dataclass(frozen=True)
@@ -105,6 +106,13 @@ _LAYER_MAX_HEIGHT_RATIO = 0.68
 _LAYER_MIN_WIDTH_RATIO = 0.55
 _LAYER_MIN_DOMINANT_THIRD_OCCUPANCY = 0.20
 _LAYER_MIN_EDGE_CONCENTRATION_RATIO = 1.30
+_DROPLET_MIN_AREA_MULTIPLIER = 1.5
+_DROPLET_MAX_HEIGHT_RATIO = 0.55
+_DROPLET_MIN_WIDTH_RATIO = 0.18
+_DROPLET_MAX_WIDTH_RATIO = 0.65
+_DROPLET_MIN_FILL_RATIO = 0.32
+_DROPLET_MIN_TEXTURE_RATIO = 0.06
+_DROPLET_MIN_WHITENESS_RATIO = 0.65
 
 
 @dataclass(frozen=True)
@@ -259,30 +267,42 @@ def detect_bottom_connected_foam(
     chromatic_support, chromatic_evidence = _chromatic_foam_support(
         chroma, warm_chroma, texture, glare_excluded, settings
     )
-    white_support = (
+    textured_white_support = (
         glare_excluded
         & (whiteness >= 0.12)
         & (texture >= 0.18)
         & ((0.50 * whiteness + 0.35 * texture) >= 0.24)
     )
+    smooth_droplet_support = (
+        glare_excluded
+        & (whiteness >= 0.24)
+        & (texture >= 0.06)
+    )
     white_clean = _clean_support_mask(
-        white_support.astype(np.uint8) * 255,
+        (textured_white_support | smooth_droplet_support).astype(np.uint8) * 255,
         min(gray.shape[:2]),
     )
+    recovered_droplet_support = _compact_bright_material_support(
+        raw_whiteness,
+        valid,
+        settings,
+    )
+    material_visible = glare_excluded | (recovered_droplet_support > 0)
+    material_glare = glare & ~(recovered_droplet_support > 0)
+    whiteness = np.where(material_visible, raw_whiteness, 0.0).astype(np.float32)
+    raw_white_support = textured_white_support | smooth_droplet_support
     if _has_material_nonstructural_support_component(white_clean, valid, settings):
         chromatic_support = np.zeros_like(valid, dtype=bool)
         chromatic_evidence = np.zeros_like(texture, dtype=np.float32)
         support = white_clean
     else:
-        raw_support = white_support | chromatic_support
+        raw_support = raw_white_support | chromatic_support
         support = _clean_support_mask(
             raw_support.astype(np.uint8) * 255,
             min(gray.shape[:2]),
         )
-    support = cv2.bitwise_and(
-        support,
-        glare_excluded.astype(np.uint8) * 255,
-    )
+    support = cv2.bitwise_or(support, recovered_droplet_support)
+    support = cv2.bitwise_and(support, material_visible.astype(np.uint8) * 255)
     combined = np.maximum(
         np.clip(
             0.50 * whiteness + 0.35 * texture + 0.15 * np.minimum(whiteness, texture),
@@ -320,7 +340,7 @@ def detect_bottom_connected_foam(
             whiteness,
             texture,
             chromatic_support,
-            glare,
+            material_glare,
             effective_area,
             settings,
             structural_substrate_present=structural_substrate_present,
@@ -358,7 +378,7 @@ def detect_bottom_connected_foam(
             front_y=None,
         )
 
-    selected_mask = component_masks[selected.label] & glare_excluded
+    selected_mask = component_masks[selected.label] & material_visible
     mask = selected_mask.astype(np.uint8) * 255
     status = selected.decision_status
     strength = _strength_for_status(status)
@@ -378,6 +398,10 @@ def detect_bottom_connected_foam(
             "glare_overlap_ratio": float(selected.glare_overlap_ratio),
             "front_vertical_extent": float(selected.front_vertical_extent),
             "thin_horizontal": 1.0 if selected.thin_horizontal else 0.0,
+            "foam_material_phenotype": selected.material_phenotype,
+            "foam_detached_droplet": float(
+                selected.material_phenotype == "detached_droplet"
+            ),
         },
         feature_score=float(selected.final_score),
         final_score=float(selected.final_score),
@@ -559,6 +583,50 @@ def _clean_support_mask(mask: np.ndarray, base: int) -> np.ndarray:
     )
 
 
+def _compact_bright_material_support(
+    raw_whiteness: np.ndarray,
+    valid: np.ndarray,
+    settings: DetectorSettings,
+) -> np.ndarray:
+    """Recover filled droplet material that an optics mask may over-cover.
+
+    This path only restores compact, filled components. Elongated caustics,
+    thin reflections and broad static fields remain optics opposition. Final
+    sequence publication still requires registered material dynamics.
+    """
+
+    bright = valid & (raw_whiteness >= 0.24)
+    cleaned = _clean_support_mask(
+        bright.astype(np.uint8) * 255,
+        min(raw_whiteness.shape[:2]),
+    )
+    count, labels, stats, _centroids = cv2.connectedComponentsWithStats(
+        (cleaned > 0).astype(np.uint8),
+        connectivity=8,
+    )
+    height, width = valid.shape
+    effective_area = max(1, int(np.count_nonzero(valid)))
+    minimum_area = max(1e-6, float(settings.foam_min_area_ratio))
+    recovered = np.zeros_like(cleaned)
+    for label in range(1, count):
+        component_width = max(1, int(stats[label, cv2.CC_STAT_WIDTH]))
+        component_height = max(1, int(stats[label, cv2.CC_STAT_HEIGHT]))
+        area = int(stats[label, cv2.CC_STAT_AREA])
+        area_ratio = area / effective_area
+        height_ratio = component_height / max(1, height)
+        width_ratio = component_width / max(1, width)
+        fill_ratio = area / max(1, component_width * component_height)
+        if not (
+            area_ratio >= minimum_area * _DROPLET_MIN_AREA_MULTIPLIER
+            and 0.075 <= height_ratio <= _DROPLET_MAX_HEIGHT_RATIO
+            and _DROPLET_MIN_WIDTH_RATIO <= width_ratio <= _DROPLET_MAX_WIDTH_RATIO
+            and fill_ratio >= _DROPLET_MIN_FILL_RATIO
+        ):
+            continue
+        recovered[labels == label] = 255
+    return recovered
+
+
 def _has_material_nonstructural_support_component(
     support: np.ndarray,
     valid: np.ndarray,
@@ -688,16 +756,17 @@ def _has_one_sided_layer_occupancy(
     )
 
 
-def _detached_layer_topology(
+def _detached_material_phenotype(
     component: np.ndarray,
     *,
     area_ratio: float,
     height_ratio: float,
     width_ratio: float,
+    fill_ratio: float,
     bottom_connected: bool,
     min_area: float,
     front_from_lower_edge: bool,
-) -> tuple[bool, float]:
+) -> tuple[str, float]:
     ys = np.where(component)[0]
     default_front = float(ys.min()) if ys.size else float(component.shape[0] - 1)
     if (
@@ -710,11 +779,22 @@ def _detached_layer_topology(
         )
         or not _has_one_sided_layer_occupancy(component)
     ):
-        return False, default_front
+        layer = False
+    else:
+        layer = True
 
     y0, y1 = int(ys.min()), int(ys.max())
     front_y = float(y1 if front_from_lower_edge else y0)
-    return True, front_y
+    if layer:
+        return "detached_layer", front_y
+    droplet = bool(
+        not bottom_connected
+        and area_ratio >= min_area * _DROPLET_MIN_AREA_MULTIPLIER
+        and 0.075 <= height_ratio <= _DROPLET_MAX_HEIGHT_RATIO
+        and _DROPLET_MIN_WIDTH_RATIO <= width_ratio <= _DROPLET_MAX_WIDTH_RATIO
+        and fill_ratio >= _DROPLET_MIN_FILL_RATIO
+    )
+    return ("detached_droplet", default_front) if droplet else ("none", default_front)
 
 
 def _component_evidence(
@@ -759,21 +839,28 @@ def _component_evidence(
         width_ratio=width_ratio,
         fill_ratio=fill_ratio,
     )
-    detached_layer, detached_front_y = _detached_layer_topology(
+    material_phenotype, detached_front_y = _detached_material_phenotype(
         component,
         area_ratio=area_ratio,
         height_ratio=height_ratio,
         width_ratio=width_ratio,
+        fill_ratio=fill_ratio,
         bottom_connected=bottom_connected,
         min_area=min_area,
         front_from_lower_edge=front_from_lower_edge,
     )
-    detached_layer = (
-        detached_layer
-        and texture_ratio >= 0.28
+    if material_phenotype == "detached_layer" and not (
+        texture_ratio >= 0.28
         and (white_ok or chromatic_ok)
         and (not structural_substrate_present or front_from_lower_edge)
-    )
+    ):
+        material_phenotype = "none"
+    if material_phenotype == "detached_droplet" and not (
+        texture_ratio >= _DROPLET_MIN_TEXTURE_RATIO
+        and whiteness_ratio >= _DROPLET_MIN_WHITENESS_RATIO
+        and not structural_substrate_present
+    ):
+        material_phenotype = "none"
     bottom_chromatic_layer = (
         bottom_connected
         and not white_ok
@@ -789,7 +876,7 @@ def _component_evidence(
     )
     if bottom_connected and ys.size:
         front_y = float(ys.min())
-    elif detached_layer:
+    elif material_phenotype != "none":
         front_y = float(detached_front_y)
     else:
         front_y = float(ys.min()) if ys.size else float(h - 1)
@@ -817,7 +904,11 @@ def _component_evidence(
     minimum = float(settings.foam_min_evidence_score)
     strong = float(settings.foam_strong_evidence_score)
     shape_ok = (
-        ((bottom_connected and white_ok) or bottom_chromatic_layer or detached_layer)
+        (
+            (bottom_connected and white_ok)
+            or bottom_chromatic_layer
+            or material_phenotype != "none"
+        )
         and area_ratio >= min_area
         and height_ratio >= 0.075
         and not thin_horizontal
@@ -825,7 +916,13 @@ def _component_evidence(
     )
     strong_appearance_ok = white_ok or chromatic_ok
     moderate_appearance_ok = whiteness_ratio >= min_whiteness * 0.75 or chromatic_ok
-    texture_ok = texture_ratio >= 0.28
+    texture_ok = bool(
+        texture_ratio >= 0.28
+        or (
+            material_phenotype == "detached_droplet"
+            and texture_ratio >= _DROPLET_MIN_TEXTURE_RATIO
+        )
+    )
     if glare_ratio > float(settings.foam_max_glare_overlap_ratio):
         status = FoamDecisionStatus.GLARE_REJECTED
     elif structural:
@@ -854,6 +951,7 @@ def _component_evidence(
         front_y=float(front_y),
         final_score=float(score),
         decision_status=status,
+        material_phenotype=material_phenotype,
     )
 
 

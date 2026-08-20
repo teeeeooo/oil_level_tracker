@@ -96,6 +96,22 @@ def test_dark_yellow_tapered_foam_survives_without_whiteness_membership():
     assert result.front_y == 45.0
 
 
+def test_compact_detached_white_droplet_is_preserved_as_material_candidate():
+    height, width = 160, 120
+    image = np.full((height, width, 3), 45, dtype=np.uint8)
+    cv2.ellipse(image, (34, 75), (18, 30), 0, 0, 360, (210, 210, 210), -1)
+    for y in range(50, 100, 7):
+        cv2.circle(image, (34 + (y % 3) - 1, y), 3, (245, 245, 245), 1)
+
+    result = _detect(image)
+
+    assert result.candidate is not None
+    assert result.selected_component is not None
+    assert result.selected_component.material_phenotype == "detached_droplet"
+    assert result.candidate.features["foam_detached_droplet"] == 1.0
+    assert not result.selected_component.bottom_connected
+
+
 def test_bottom_connected_dark_yellow_tapered_foam_requires_and_keeps_layer_topology():
     height, width = 160, 120
     image = np.full((height, width, 3), 45, dtype=np.uint8)

@@ -375,12 +375,27 @@ class OpenCvPhaseDetector:
                 )
                 >= 0.15
             )
+            dynamic_detached_droplet = bool(
+                raw_foam_candidate.features.get("foam_detached_droplet", 0.0)
+                >= 0.5
+                and float(foam.component_width_ratio) >= 0.18
+                and float(foam.bounding_box_fill_ratio) >= 0.32
+                and min(
+                    float(foam_motion.internal_motion_support),
+                    float(foam_motion.dynamic_support),
+                )
+                >= 0.15
+            )
             sequence_foam_eligible = bool(
                 foam_layer.coherent
                 and not static_foam_match.dominant
                 and float(foam.glare_overlap_ratio)
                 <= float(settings.foam_max_glare_overlap_ratio)
-                and (wide_layer or dynamic_narrow_layer)
+                and (
+                    wide_layer
+                    or dynamic_narrow_layer
+                    or dynamic_detached_droplet
+                )
             )
             foam_features = dict(raw_foam_candidate.features)
             foam_features.setdefault("local_y", raw_foam_candidate.y)
@@ -412,6 +427,9 @@ class OpenCvPhaseDetector:
             foam_features["foam_wide_layer"] = float(wide_layer)
             foam_features["foam_dynamic_narrow_layer"] = float(
                 dynamic_narrow_layer
+            )
+            foam_features["foam_dynamic_detached_droplet"] = float(
+                dynamic_detached_droplet
             )
             foam_features.update(material_motion_features)
             foam_trace_candidate = replace(

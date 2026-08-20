@@ -59,6 +59,29 @@ def _resolve_repeated_static_frame(
     return raw, detector.resolve_sequence(raw, glass)
 
 
+def _detached_droplet_frame(center_x: int, center_y: int) -> np.ndarray:
+    frame = np.full((240, 320, 3), 45, dtype=np.uint8)
+    cv2.ellipse(
+        frame,
+        (center_x, center_y),
+        (14, 25),
+        0,
+        0,
+        360,
+        (210, 210, 210),
+        -1,
+    )
+    for y in range(center_y - 18, center_y + 19, 6):
+        cv2.circle(
+            frame,
+            (center_x + (y % 3) - 1, y),
+            2,
+            (240, 240, 240),
+            1,
+        )
+    return frame
+
+
 def test_detector_identity_input_immutability_and_debug_false_fast_path():
     detector = OpenCvPhaseDetector()
     glass = _glass()
@@ -113,6 +136,49 @@ def test_detector_uses_canonical_source_coordinates_and_exposes_finite_evidence(
         assert isinstance(value, (int, float))
         assert math.isfinite(float(value))
     assert detection.debug_metrics["foam_registered_internal_motion_support"] >= 0.0
+
+
+def test_static_detached_droplet_remains_sequence_ineligible() -> None:
+    detector = OpenCvPhaseDetector()
+    glass = _glass()
+    frame = _detached_droplet_frame(158, 130)
+
+    detection, _artifacts = _confirmed_detection(detector, glass, frame)
+
+    foam = next(
+        candidate
+        for candidate in detection.candidates
+        if candidate.kind is BoundaryKind.FOAM_FRONT
+    )
+    assert foam.features["foam_detached_droplet"] == 1.0
+    assert foam.features["foam_dynamic_detached_droplet"] == 0.0
+    assert foam.features["sequence_foam_eligible"] == 0.0
+
+
+def test_registered_dynamic_detached_droplet_becomes_sequence_eligible() -> None:
+    detector = OpenCvPhaseDetector()
+    glass = _glass()
+    detection = None
+    for index, (center_x, center_y) in enumerate(
+        ((154, 140), (158, 130), (162, 120), (166, 110))
+    ):
+        detection, _artifacts = detector.detect(
+            _detached_droplet_frame(center_x, center_y),
+            glass,
+            index,
+            index * 0.5,
+            debug=False,
+        )
+
+    assert detection is not None
+    foam = next(
+        candidate
+        for candidate in detection.candidates
+        if candidate.kind is BoundaryKind.FOAM_FRONT
+    )
+    assert foam.features["foam_detached_droplet"] == 1.0
+    assert foam.features["foam_dynamic_detached_droplet"] == 1.0
+    assert foam.features["sequence_foam_eligible"] == 1.0
 
 
 def test_user_calibrated_boundary_is_removed_from_live_preview_authority():
