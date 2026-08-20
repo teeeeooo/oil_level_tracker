@@ -155,11 +155,11 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
-- **Status:** `VALIDATING`
-- **Major result:** R14 replaced R13 local identity and component-free paths, decoupled Artifact templates from proposal policy, added recent-Foam/lower-interface composition and completed the confirmed-Artifact bulk-edit workflow. Local exact replay passed at 10/13 truth, 8.5 px MAE, 26 px maximum error with zero completed-fill cap leakage and complete same-frame provenance.
-- **Next gate:** Replay the exact pushed R14 head on private Windows Base/Accum. Proposal recall, phase/component identity, final Oil accuracy and independent Foam publication are separate PASS conditions; coverage alone is not PASS.
+- **Status:** `ACTIVE`
+- **Major result:** R14 first recovered material Base Oil coverage but failed private-Windows state/material ownership: anchor-free continuation tails were cut, a stationary lower Accum structure published during confirmed EMPTY, and inverted/pre-publication Oil evidence rejected real dynamic Foam. R15 replaces those owners and adds a dynamic detached-droplet Foam phenotype without field coordinates.
+- **Next gate:** Implement and locally validate the R15 replacement, then replay its exact pushed head on private Windows Base/Accum. Final Oil accuracy, EMPTY false-positive suppression, independent Foam publication and detached-Foam recall are separate PASS conditions.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R14 architecture](../20-architecture/s11-r14-phase-component-replacement-architecture.md), [R14 validation](../30-validation/s11-r14-phase-component-replacement-validation.md), [R14 local evidence](../60-evidence/s11/s11-r14-phase-component-replacement.md), [R13 Windows result](../60-evidence/s11/s11-r13-secure-windows-field-result.md), [R13 diagnostic](../50-diagnostics/s11/s11-r13-windows-identity-component-diagnostic.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R15 architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md), [R15 validation](../30-validation/s11-r15-state-aware-material-ownership-validation.md), [R14 Windows result](../60-evidence/s11/s11-r14-secure-windows-field-result.md), [R14 diagnostic](../50-diagnostics/s11/s11-r14-windows-state-and-foam-ownership-diagnostic.md), [R14 local evidence](../60-evidence/s11/s11-r14-phase-component-replacement.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING (R14)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R15)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R13 failed private field holdouts. R14 private-Windows validation is the active detector correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and product milestone S12 follows that remainder.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R14 failed private field holdouts. R15 implementation is the active detector correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and product milestone S12 follows that remainder.

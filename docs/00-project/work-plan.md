@@ -1,9 +1,9 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `VALIDATING`
-**Current gate:** `R14 exact pushed head private Windows Base/Accum replay`
-**Source authority:** `R14 local evidence; R13 secure-Windows root cause`
+**Milestone status:** `ACTIVE`
+**Current gate:** `R15 state-aware material ownership implementation and local validation`
+**Source authority:** `R14 private-Windows root cause; R15 replacement architecture`
 
 ## R10 field result
 
@@ -125,13 +125,18 @@ texture/corroboration gates reduce some wrong rows without recovering truth,
 the distance-split prototype over-suppresses, and disabling generators removes
 Base Oil entirely.
 
+## R14 field disposition
+
+The exact pushed R14 head failed private-Windows acceptance. Base recovered
+real Oil for the first time but lost anchor-free same-component tails. Accum
+published four stationary lower-structure runs during confirmed EMPTY. A real
+dynamic Foam group was rejected because signed inverted Oil topology and
+pre-publication Oil proposals were treated as same-material authority. Later
+dynamic-onset Foam publication remained internally consistent.
+
 ## Current executable action
 
-Replay the exact pushed R14 head on private Windows Base/Accum with the saved
-Artifact templates. Record proposal recall, phase identity, component identity,
-path-stage mutations, final-publication integrity and independent Foam validity;
-coverage alone is not PASS. The local replacement, bulk confirmed-Artifact
-editing, exact replay, runtime gate and repository regression are complete.
+Implement the [R15 replacement architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md): replace Foam alias ownership, initial-EMPTY admission, one-sided component continuation and detached Foam shape classification. Remove superseded R14 alias propagation, candidate-only Foam veto and shared Oil/Foam reject-stage diagnostics. Run the [R15 validation contract](../30-validation/s11-r15-state-aware-material-ownership-validation.md), then push one exact head for private-Windows replay.
 
 ## Local R14 result
 
@@ -150,6 +155,10 @@ Base/Accum effectiveness remains unproven.
 
 ## Authority links
 
+- [R15 state-aware material ownership architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md)
+- [R15 validation](../30-validation/s11-r15-state-aware-material-ownership-validation.md)
+- [R14 Windows field result](../60-evidence/s11/s11-r14-secure-windows-field-result.md)
+- [R14 Windows diagnostic](../50-diagnostics/s11/s11-r14-windows-state-and-foam-ownership-diagnostic.md)
 - [R14 phase-component architecture](../20-architecture/s11-r14-phase-component-replacement-architecture.md)
 - [R14 validation](../30-validation/s11-r14-phase-component-replacement-validation.md)
 - [R14 local evidence](../60-evidence/s11/s11-r14-phase-component-replacement.md)
