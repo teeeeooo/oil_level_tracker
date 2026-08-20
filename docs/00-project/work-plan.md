@@ -1,9 +1,9 @@
 # Current Work Plan
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `VALIDATING`
-**Current gate:** `exact-head R13 private-Windows Base/Accum replay`
-**Source authority:** `R13 local evidence and R12 secure-Windows diagnostic`
+**Milestone status:** `IMPLEMENTING`
+**Current gate:** `R14 phase-component replacement and local validation`
+**Source authority:** `R13 secure-Windows result and identity/component diagnostic`
 
 ## R10 field result
 
@@ -113,17 +113,35 @@ User-like Artifact replay produced 97/113 sample4 numeric Oil, zero Foam and
 complete provenance. Full regression is 1,537 passed. Direct total timing is
 69.5 ms/frame versus the documented R12 72.6 ms/frame.
 
+## R13 field disposition
+
+The secure-Windows replay failed. Final publication integrity was exact
+(Base 345, Accum 102), but reviewed truth was 0/3 and 0/5. R13 converted local
+phase appearance and broad-mask ordering into identity, permitted high-conflict
+ordered-lower anchors, and connected unrelated rows through a component-free
+trajectory/run. Artifact templates were active, but their count also enabled
+and enlarged proposal generators. Complete pipeline counterfactuals showed that
+texture/corroboration gates reduce some wrong rows without recovering truth,
+the distance-split prototype over-suppresses, and disabling generators removes
+Base Oil entirely.
+
 ## Current executable action
 
-Move the exact pushed R13 head to the secure Windows host and replay Base and
-Accum with the saved Artifact templates. Base must be judged on proposal recall
-near reviewed Oil separately from numeric coverage and must not restore the
-former Y724–873 path. Accum must reject Y190–297 residue, select independently
-identified lower Oil near Y425–475, and publish the rapidly rising Foam front
-under its own validity. Coverage alone is not PASS.
+Implement R14 as a replacement: decouple templates from proposal policy,
+require independent direct/ordered phase identity, make recurrence a soft
+penalty unless contradicted, and assign explicit component ownership to
+trajectory, Viterbi transitions and continuation bounds. In the same milestone,
+add multi-selection, multiple highlight and bulk deletion for confirmed
+Artifact templates. Retire stale R13 paths while preserving stored-Recipe and
+same-frame publication compatibility. After local gates pass, perform one new
+private Windows Base/Accum replay; coverage alone is not PASS.
 
 ## Authority links
 
+- [R14 phase-component architecture](../20-architecture/s11-r14-phase-component-replacement-architecture.md)
+- [R14 validation](../30-validation/s11-r14-phase-component-replacement-validation.md)
+- [R13 Windows result](../60-evidence/s11/s11-r13-secure-windows-field-result.md)
+- [R13 Windows diagnostic](../50-diagnostics/s11/s11-r13-windows-identity-component-diagnostic.md)
 - [R13 phase-identity architecture](../20-architecture/s11-r13-phase-identity-recovery-architecture.md)
 - [R13 validation](../30-validation/s11-r13-phase-identity-recovery-validation.md)
 - [R13 local evidence](../60-evidence/s11/s11-r13-phase-identity-recovery.md)

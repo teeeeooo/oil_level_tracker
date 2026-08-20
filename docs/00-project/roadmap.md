@@ -155,11 +155,11 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S11 — Real-Field Detector Effectiveness Recovery
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
-- **Status:** `VALIDATING`
-- **Major result:** R13 locally replaced the R12 authority leak with shared typed phase identity, removed stale authority/diagnostic seams, added bounded proposal recovery without proposal authority and enforced per-series graph validity. Four-video replay is 299 rows / 121 numeric Oil with 9/13 checked truth, 5.28 px MAE, 11 px maximum error and complete same-frame provenance; full regression is 1,537 passed.
-- **Next gate:** Replay the exact pushed R13 head on private Windows Base/Accum. Base proposal recall and the former wrong lower path, Accum residue-vs-lower-Oil identity, and independent Foam publication are evaluated separately; coverage alone is not PASS.
+- **Status:** `ACTIVE`
+- **Major result:** R13 preserved final-publication integrity but failed private Windows reviewed truth at 0/3 Base and 0/5 Accum. Its local phase identities and component-free path promoted rim/bracket and Foam/residue rows; template count also controlled proposal generation. R14 is replacing those responsibilities while adding bulk confirmed-Artifact editing.
+- **Next gate:** Complete R14 implementation and local replay/regression, then replay the exact pushed R14 head on private Windows Base/Accum. Proposal recall, phase/component identity, final Oil accuracy and independent Foam publication are separate PASS conditions.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R13 architecture](../20-architecture/s11-r13-phase-identity-recovery-architecture.md), [R13 validation](../30-validation/s11-r13-phase-identity-recovery-validation.md), [R13 local evidence](../60-evidence/s11/s11-r13-phase-identity-recovery.md), [R12 Windows result](../60-evidence/s11/s11-r12-secure-windows-field-result.md), [R12 Windows diagnostic](../50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R14 architecture](../20-architecture/s11-r14-phase-component-replacement-architecture.md), [R14 validation](../30-validation/s11-r14-phase-component-replacement-validation.md), [R13 Windows result](../60-evidence/s11/s11-r13-secure-windows-field-result.md), [R13 diagnostic](../50-diagnostics/s11/s11-r13-windows-identity-component-diagnostic.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 VALIDATING (R13 Windows)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R14)` → `S11-M UI remainder PLANNED` → `S12 PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R12 failed private field holdouts. R13 has local PASS and its exact-head private-Windows replay is the active detector correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and product milestone S12 follows that remainder.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R13 failed private field holdouts. R14 implementation and local validation are the active detector correctness gate. Only the detector portion of S11-M is pulled forward; its UI remainder stays blocked until S11 field closure, and product milestone S12 follows that remainder.
