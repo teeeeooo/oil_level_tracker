@@ -25,6 +25,10 @@ from .row_features import masked_band_intensity_profiles
 _SECTOR_COUNT = 5
 _FOAM_INCUMBENT_ARTIFACT_MARGIN = 0.20
 _SPATIAL_CHALLENGER_MARGIN_GAIN = 0.08
+_SpatialPhaseCache = dict[
+    tuple[int, int, int, int, int],
+    tuple[int, bool, float] | None,
+]
 
 
 @dataclass(frozen=True)
@@ -134,6 +138,7 @@ def _spatially_supported_boundary_observation(
 ) -> ShadowBoundaryObservation | None:
     """Retain a path-valid boundary or search for a distinct valid candidate."""
 
+    phase_cache: _SpatialPhaseCache = {}
     if isinstance(current, ShadowBoundaryObservation):
         path = _evaluate_spatial_path(
             pre,
@@ -141,6 +146,7 @@ def _spatially_supported_boundary_observation(
             candidate_local_y=current.hypothesis.representative_local_y,
             accepted_foam_component_mask=accepted_foam_component_mask,
             bounds=bounds,
+            phase_cache=phase_cache,
         )
         if path.accepted:
             return current
@@ -153,6 +159,7 @@ def _spatially_supported_boundary_observation(
         accepted_foam_front_local_y=accepted_foam_front_local_y,
         accepted_foam_component_mask=accepted_foam_component_mask,
         bounds=bounds,
+        phase_cache=phase_cache,
     )
     if recovered is None:
         return None
@@ -475,6 +482,7 @@ def _select_spatially_corroborated_textured_boundary(
     accepted_foam_front_local_y: float | None,
     accepted_foam_component_mask: np.ndarray | None,
     bounds: OilShadowBounds,
+    phase_cache: _SpatialPhaseCache | None = None,
 ) -> SemanticHypothesis | None:
     """Recover a hard-safe weak candidate when Spatial independently corroborates it.
 
@@ -577,6 +585,7 @@ def _select_spatially_corroborated_textured_boundary(
             candidate_local_y=candidate.representative_local_y,
             accepted_foam_component_mask=accepted_foam_component_mask,
             bounds=bounds,
+            phase_cache=phase_cache,
         )
         path_alignment = (
             float("inf")
@@ -615,6 +624,7 @@ def _evaluate_spatial_path(
     candidate_local_y: float,
     accepted_foam_component_mask: np.ndarray | None,
     bounds: OilShadowBounds,
+    phase_cache: _SpatialPhaseCache | None = None,
 ) -> _SpatialPathEvidence:
     effective = effective_mask > 0
     visible = effective & ~(pre.glare_mask > 0)
@@ -651,6 +661,7 @@ def _evaluate_spatial_path(
             depth=depth,
             gap=gap,
             radius=bounds.narrow_lobe_search_radius_px,
+            phase_cache=phase_cache,
         )
         if value is not None:
             row, sign, strong, strength = value
@@ -711,6 +722,7 @@ def _best_sector_phase(
     depth: int,
     gap: int,
     radius: int,
+    phase_cache: _SpatialPhaseCache | None = None,
 ) -> tuple[int, int, bool, float] | None:
     height = visible.shape[0]
     quantization = observations._gray_quantization_step(pre.blurred)
@@ -720,6 +732,16 @@ def _best_sector_phase(
         max(depth + gap, int(round(center)) - radius),
         min(height - depth - gap, int(round(center)) + radius + 1),
     ):
+        cache_key = (first_column, last_column, depth, gap, row)
+        if phase_cache is not None and cache_key in phase_cache:
+            value = phase_cache[cache_key]
+            if value is None:
+                continue
+            sign, strong, strength = value
+            key = (-strength, abs(float(row) - center), row)
+            if best is None or key < best[0]:
+                best = (key, row, sign, strong, strength)
+            continue
         top = observations._robust_sector_phase(
             pre.blurred,
             visible,
@@ -737,19 +759,23 @@ def _best_sector_phase(
             last_column,
         )
         if top is None or bottom is None:
+            if phase_cache is not None:
+                phase_cache[cache_key] = None
             continue
         top_median, top_mad = top
         bottom_median, bottom_mad = bottom
         contrast = (top_median - bottom_median) / gray_scale
         noise = max(top_mad, bottom_mad, quantization) / gray_scale
         strength = abs(contrast) / max(noise, 1e-12)
+        sign = 1 if contrast > 0.0 else -1
+        strong = (
+            abs(contrast) > noise
+            and abs(contrast) > quantization / gray_scale
+        )
+        if phase_cache is not None:
+            phase_cache[cache_key] = (sign, strong, strength)
         key = (-strength, abs(float(row) - center), row)
         if best is None or key < best[0]:
-            sign = 1 if contrast > 0.0 else -1
-            strong = (
-                abs(contrast) > noise
-                and abs(contrast) > quantization / gray_scale
-            )
             best = (key, row, sign, strong, strength)
     if best is None:
         return None

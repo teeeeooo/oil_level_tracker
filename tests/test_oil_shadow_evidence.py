@@ -1249,6 +1249,60 @@ def test_path_invalid_preliminary_boundary_cannot_stop_distinct_spatial_candidat
     assert selected.hypothesis.identity == corroborated.identity
 
 
+def test_spatial_phase_statistics_are_reused_without_changing_the_result(
+    monkeypatch,
+):
+    image = _step(line=False)
+    mask = np.full_like(image, 255)
+    pre = preprocess(image, mask, DetectorSettings())
+    visible = mask > 0
+    calls = 0
+    original = oil_shadow_observations._robust_sector_phase
+
+    def counted(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(oil_shadow_observations, "_robust_sector_phase", counted)
+    arguments = {
+        "center": 40.0,
+        "first_column": 0,
+        "last_column": 20,
+        "depth": 10,
+        "gap": 3,
+        "radius": 12,
+    }
+    uncached = oil_spatial_fallback._best_sector_phase(
+        pre,
+        visible,
+        visible,
+        **arguments,
+    )
+    uncached_calls = calls
+    phase_cache = {}
+    first_cached = oil_spatial_fallback._best_sector_phase(
+        pre,
+        visible,
+        visible,
+        phase_cache=phase_cache,
+        **arguments,
+    )
+    populated_calls = calls
+    second_cached = oil_spatial_fallback._best_sector_phase(
+        pre,
+        visible,
+        visible,
+        phase_cache=phase_cache,
+        **arguments,
+    )
+
+    assert first_cached == uncached == second_cached
+    assert uncached_calls > 0
+    assert populated_calls - uncached_calls == uncached_calls
+    assert calls == populated_calls
+
+
 def test_accepted_foam_context_requires_persistent_phase_not_structural_context(monkeypatch):
     structural = _typed_hypothesis(
         "foam-context-structural-artifact",

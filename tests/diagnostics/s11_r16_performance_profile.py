@@ -15,6 +15,9 @@ import time
 import cv2
 import numpy as np
 
+from oil_tracker.adapters.storage.jsonl_debug_trace_writer import (
+    JsonlDebugTraceWriterFactory,
+)
 from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
@@ -22,6 +25,7 @@ from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
 from oil_tracker.application.services.recipe_validation_service import (
     RecipeValidationService,
 )
+from oil_tracker.domain.session import DebugTraceLevel
 from tests.diagnostics import s11_report_observability_replay as replay
 from tests.diagnostics.s11_evidence_probe import repository_root
 from tests.diagnostics.s11_r15_material_ownership_replay import (
@@ -147,6 +151,7 @@ def _run_once(
     output_root: Path,
     sample: str,
     repeat: int,
+    debug_trace_level: DebugTraceLevel,
 ) -> dict[str, object]:
     start_sec, end_sec = replay.QUALIFICATION_WINDOWS[sample]
     video_path = root / "sample" / f"{sample}.mp4"
@@ -164,6 +169,7 @@ def _run_once(
         run_label="S11-R16 PERF",
         run_note="R0 behavior-preserving performance baseline",
     )
+    session.debug_trace_level = debug_trace_level
     session_setup_sec = time.perf_counter() - setup_started
 
     timings = _Timings()
@@ -173,6 +179,11 @@ def _run_once(
         _reader_factory(timings),
         detector,
         RecipeValidationService(),
+        (
+            None
+            if debug_trace_level is DebugTraceLevel.NONE
+            else JsonlDebugTraceWriterFactory(staging_parent=repeat_root)
+        ),
     ).run(recipe, session)
     pipeline_sec = time.perf_counter() - pipeline_started
 
@@ -270,6 +281,7 @@ def run_profile(
     output_root: Path,
     sample: str = "sample4",
     repeats: int = 3,
+    debug_trace_level: DebugTraceLevel = DebugTraceLevel.NONE,
 ) -> dict[str, object]:
     root = root.resolve()
     output_root = output_root.resolve()
@@ -280,6 +292,7 @@ def run_profile(
             output_root=output_root,
             sample=sample,
             repeat=repeat,
+            debug_trace_level=debug_trace_level,
         )
         for repeat in range(1, repeats + 1)
     ]
@@ -295,7 +308,7 @@ def run_profile(
         "repeats": repeats,
         "normal_operational_config": {
             "sampling_fps": replay.SAMPLING_FPS,
-            "debug_trace_level": "NONE",
+            "debug_trace_level": debug_trace_level.value.upper(),
             "official_static_learning": "start/middle/end",
             "official_bundle_output": True,
         },
@@ -345,6 +358,11 @@ def main() -> int:
     )
     parser.add_argument("--sample", choices=tuple(replay.QUALIFICATION_WINDOWS), default="sample4")
     parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument(
+        "--debug-trace-level",
+        choices=tuple(level.value for level in DebugTraceLevel),
+        default=DebugTraceLevel.NONE.value,
+    )
     args = parser.parse_args()
     if args.repeats < 1:
         parser.error("--repeats must be at least 1")
@@ -353,6 +371,7 @@ def main() -> int:
         output_root=args.output_root,
         sample=args.sample,
         repeats=args.repeats,
+        debug_trace_level=DebugTraceLevel(args.debug_trace_level),
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False))
     return 0
