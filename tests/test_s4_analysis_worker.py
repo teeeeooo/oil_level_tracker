@@ -20,15 +20,9 @@ class _FailingUseCase:
         raise OSError("capture write failed")
 
 
-class _UnusedStore:
-    def write_bundle(self, *_args, **_kwargs):
-        raise AssertionError("The store must not run after analysis failure.")
-
-
 def test_worker_failure_identifies_the_active_lifecycle_stage(qtbot) -> None:
     worker = AnalysisWorker(
         _FailingUseCase(),
-        _UnusedStore(),
         object(),
         SimpleNamespace(output_directory=""),
         SimpleCancellationToken(),

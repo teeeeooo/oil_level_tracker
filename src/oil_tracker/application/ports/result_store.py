@@ -9,4 +9,14 @@ from oil_tracker.domain.session import AnalysisSession
 
 
 class ResultStore(Protocol):
-    def write_bundle(self, result: AnalysisResult, recipe: InspectionRecipe, session: AnalysisSession, root: Path | None = None, debug_artifacts: dict | None = None) -> Path: ...
+    def write_bundle(
+        self,
+        result: AnalysisResult,
+        recipe: InspectionRecipe,
+        session: AnalysisSession,
+        root: Path | None = None,
+        debug_artifacts: dict | None = None,
+        *,
+        progress=None,
+        cancellation=None,
+    ) -> Path: ...

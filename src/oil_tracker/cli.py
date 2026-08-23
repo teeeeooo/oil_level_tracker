@@ -15,6 +15,7 @@ from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
 from oil_tracker.application.services.detector_benchmark_service import DetectorBenchmarkService
 from oil_tracker.application.services.initial_state_confirmation import confirm_initial_state
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
+from oil_tracker.application.use_cases.analyze_video import AnalyzeVideoUseCase
 from oil_tracker.domain.enums import InitialObservationState
 from oil_tracker.domain.session import AnalysisSession
 
@@ -148,19 +149,13 @@ def _run_analyze(args) -> int:
         OpenCvPhaseDetector(),
         RecipeValidationService(),
     )
-    result = pipeline.run(
+    execution = AnalyzeVideoUseCase(pipeline, OutputBundleStore()).execute(
         recipe,
         session,
+        output_root=Path(args.output),
         progress=_print_analysis_progress,
     )
-    output = OutputBundleStore().write_bundle(
-        result,
-        recipe,
-        session,
-        Path(args.output),
-        progress=_print_analysis_progress,
-    )
-    print(f"\n{result.overall_state.value}: {output}")
+    print(f"\n{execution.result.overall_state.value}: {execution.output_path}")
     return 0
 
 

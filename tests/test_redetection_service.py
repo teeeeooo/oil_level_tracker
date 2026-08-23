@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 
 import oil_tracker.application.services.redetection_service as redetection_service_module
+import oil_tracker.application.services.analysis_outcome as analysis_outcome_module
 from oil_tracker.adapters.storage.redetection_workspace import (
     RedetectionWorkspace,
     RedetectionWorkspaceError,
@@ -420,7 +421,7 @@ def test_full_redetection_recomputes_retrospective_from_saved_confirmation_and_c
         calls.append((glass.id, len(samples), confirmation))
         return rerun
 
-    monkeypatch.setattr(redetection_service_module, "reconstruct_initial_state", fake_reconstruct)
+    monkeypatch.setattr(analysis_outcome_module, "reconstruct_initial_state", fake_reconstruct)
     output = _service().run(_request(bundle, RedetectionMode.FULL), bundle)
     try:
         assert len(calls) == 1
@@ -445,7 +446,7 @@ def test_local_redetection_does_not_reconstruct_leading_sequence(tmp_path, monke
     def forbidden(*_args, **_kwargs):
         raise AssertionError("local redetection must not reconstruct the leading sequence")
 
-    monkeypatch.setattr(redetection_service_module, "reconstruct_initial_state", forbidden)
+    monkeypatch.setattr(analysis_outcome_module, "reconstruct_initial_state", forbidden)
     kwargs = {"before_sec": 0.5, "after_sec": 0.5} if mode is RedetectionMode.SHORT else {}
     output = _service().run(_request(bundle, mode, **kwargs), bundle)
     try:
@@ -465,7 +466,7 @@ def test_full_legacy_bundle_without_saved_confirmation_stays_observed_only(tmp_p
     def forbidden(*_args, **_kwargs):
         raise AssertionError("legacy observed-only bundle must not synthesize retrospective interpretation")
 
-    monkeypatch.setattr(redetection_service_module, "reconstruct_initial_state", forbidden)
+    monkeypatch.setattr(analysis_outcome_module, "reconstruct_initial_state", forbidden)
     output = _service().run(_request(bundle, RedetectionMode.FULL), bundle)
     try:
         assert output.result.official_retrospective is None

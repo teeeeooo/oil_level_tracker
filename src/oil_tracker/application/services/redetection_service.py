@@ -7,24 +7,24 @@ from pathlib import Path
 from typing import Any, Callable
 
 from oil_tracker.application.ports.phase_detector import PreparedFrameDetector
+from oil_tracker.application.services.analysis_outcome import (
+    StateAwareOutcomeAssembler,
+    StateAwareOutcomeMode,
+)
 from oil_tracker.application.services.detection_processing import (
-    learn_static_artifacts,
     tracking_sample_from_detection,
+)
+from oil_tracker.application.services.detection_run import (
+    ConsecutiveDetectionFailures,
+    DetectionRunCoordinator,
+    DetectionRunPolicy,
+    DetectionTarget,
+    SequenceResolutionMode,
 )
 from oil_tracker.application.services.detector_settings import (
     compare_detector_settings,
     detector_settings_from_json,
     validate_detector_settings,
-)
-from oil_tracker.application.services.initial_state_reconstruction import (
-    annotate_judgment_provenance,
-    effective_state_aware_coverage,
-    enforce_conflict_review,
-    merge_state_aware_events,
-    observed_coverage,
-    project_state_aware_samples,
-    reconstruct_initial_state,
-    samples_for_judgment,
 )
 from oil_tracker.application.services.redetection_comparison import (
     align_redetection_samples,
@@ -36,9 +36,7 @@ from oil_tracker.application.services.redetection_request import (
     full_static_artifact_schedule,
     redetection_schedule,
 )
-from oil_tracker.domain.enums import EventType, FillState, ResultState
-from oil_tracker.domain.events import detect_events_for_glass
-from oil_tracker.domain.judgment import judge_samples
+from oil_tracker.domain.enums import EventType, FillState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.redetection import (
     RedetectionCandidate,
@@ -79,11 +77,13 @@ class PartialRedetectionService:
         workspace_factory: Callable[..., Any],
         *,
         policy: RedetectionPolicy | None = None,
+        outcome_assembler: StateAwareOutcomeAssembler | None = None,
     ) -> None:
         self.video_reader_factory = video_reader_factory
         self.detector_factory = detector_factory
         self.workspace_factory = workspace_factory
         self.policy = policy or RedetectionPolicy()
+        self.outcome_assembler = outcome_assembler or StateAwareOutcomeAssembler()
 
     def run(
         self,
@@ -136,91 +136,60 @@ class PartialRedetectionService:
         detector = self.detector_factory()
         if detector is None:
             raise RedetectionError("재검출 detector를 만들 수 없습니다.")
-        detector.reset()
         workspace = None
-        reader = None
-        decoded_frame_cache: dict[float, tuple[Any, int, float]] = {}
         try:
             workspace = self.workspace_factory(recipe, policy=self.policy)
-            reader = self.video_reader_factory(str(source))
-            metadata = getattr(reader, "metadata", None)
-            if metadata is None:
-                raise RedetectionError("원본 영상 metadata를 읽을 수 없습니다.")
-            if (int(metadata.width), int(metadata.height)) != (
-                recipe.reference_frame_width,
-                recipe.reference_frame_height,
-            ):
-                raise RedetectionError(
-                    "원본 영상 해상도가 결과 snapshot과 일치하지 않습니다. "
-                    f"영상 {metadata.width}×{metadata.height}, snapshot "
-                    f"{recipe.reference_frame_width}×{recipe.reference_frame_height}"
-                )
-
-            self._check_cancelled(cancellation)
-            self._emit(
-                progress,
-                request,
-                "static_artifact_learning",
-                0,
-                display_total,
-                None,
-                "고정 artifact 학습",
-            )
-            learn_static_artifacts(
-                reader,
-                detector,
-                [glass],
-                full_static_artifact_schedule(request),
-                decoded_frame_cache=decoded_frame_cache,
-            )
-
             display_samples: list[RedetectionSample] = []
             processed_display = 0
-            consecutive_failures = 0
-            for nominal_timestamp, warmup in schedule:
-                self._check_cancelled(cancellation)
-                detection = None
-                artifacts = None
-                frame_index = None
-                actual_timestamp = None
-                detection_error: Exception | None = None
-                try:
-                    decoded = decoded_frame_cache.pop(nominal_timestamp, None)
-                    if decoded is None:
-                        decoded = reader.read_at(nominal_timestamp)
-                    frame, frame_index, actual_timestamp = decoded
-                    detection, artifacts = detector.detect(
-                        frame,
-                        glass,
-                        frame_index,
-                        actual_timestamp,
-                        debug=True,
-                    )
-                except Exception as exc:
-                    detection_error = exc
-                    consecutive_failures += 1
-                    LOGGER.exception(
-                        "Redetection sample failed at %.9f", nominal_timestamp
-                    )
-                else:
-                    consecutive_failures = 0
+            latest_detection_error: list[Exception | None] = [None]
 
-                if detection_error is not None:
-                    if request.mode is RedetectionMode.CURRENT:
-                        raise RedetectionError(
-                            "현재 장면 재검출에 실패했습니다: "
-                            f"{type(detection_error).__name__}: {detection_error}"
-                        ) from detection_error
+            def validate_reader(reader) -> None:
+                metadata = getattr(reader, "metadata", None)
+                if metadata is None:
+                    raise RedetectionError(
+                        "원본 영상 metadata를 읽을 수 없습니다."
+                    )
+                if (int(metadata.width), int(metadata.height)) != (
+                    recipe.reference_frame_width,
+                    recipe.reference_frame_height,
+                ):
+                    raise RedetectionError(
+                        "원본 영상 해상도가 결과 snapshot과 일치하지 않습니다. "
+                        f"영상 {metadata.width}×{metadata.height}, snapshot "
+                        f"{recipe.reference_frame_width}×"
+                        f"{recipe.reference_frame_height}"
+                    )
+
+            def static_start() -> None:
+                self._emit(
+                    progress,
+                    request,
+                    "static_artifact_learning",
+                    0,
+                    display_total,
+                    None,
+                    "고정 artifact 학습",
+                )
+
+            def observed(observation) -> None:
+                nonlocal processed_display
+                nominal_timestamp = observation.target.timestamp_sec
+                if observation.error is not None:
+                    latest_detection_error[0] = observation.error
+                    LOGGER.error(
+                        "Redetection sample failed at %.9f",
+                        nominal_timestamp,
+                        exc_info=(
+                            type(observation.error),
+                            observation.error,
+                            observation.error.__traceback__,
+                        ),
+                    )
                     if (
-                        consecutive_failures
-                        >= self.policy.max_consecutive_sample_failures
+                        request.mode is RedetectionMode.CURRENT
+                        or not observation.target.publish
                     ):
-                        raise RedetectionError(
-                            "연속된 frame decode 또는 detector 실패로 재검출을 "
-                            "계속할 수 없습니다."
-                        ) from detection_error
-                    if warmup:
-                        continue
+                        return
                     sample = RedetectionSample(
                         nominal_timestamp_sec=nominal_timestamp,
                         requested_timestamp_sec=nominal_timestamp,
@@ -234,12 +203,16 @@ class PartialRedetectionService:
                         selected_candidate=None,
                         debug_record_id="",
                         error_message=(
-                            f"{type(detection_error).__name__}: {detection_error}"
+                            f"{type(observation.error).__name__}: "
+                            f"{observation.error}"
                         ),
                     )
                 else:
-                    if warmup:
-                        continue
+                    latest_detection_error[0] = None
+                    if not observation.target.publish:
+                        return
+                    detection = observation.detection
+                    assert detection is not None
                     tracking = tracking_sample_from_detection(
                         workspace.run_id,
                         glass,
@@ -248,13 +221,13 @@ class PartialRedetectionService:
                     record_id = workspace.write_detection(
                         glass,
                         detection,
-                        artifacts,
+                        observation.artifacts,
                     )
                     sample = RedetectionSample(
                         nominal_timestamp_sec=nominal_timestamp,
                         requested_timestamp_sec=nominal_timestamp,
-                        actual_timestamp_sec=actual_timestamp,
-                        frame_index=frame_index,
+                        actual_timestamp_sec=observation.actual_timestamp_sec,
+                        frame_index=observation.frame_index,
                         tracking_sample=tracking,
                         fill_state=tracking.fill_state,
                         confidence=tracking.overall_confidence,
@@ -275,6 +248,55 @@ class PartialRedetectionService:
                     nominal_timestamp,
                     "재검출",
                 )
+
+            try:
+                DetectionRunCoordinator(
+                    self.video_reader_factory,
+                    detector,
+                ).run(
+                    source_video_path=str(source),
+                    glasses=(glass,),
+                    targets=tuple(
+                        DetectionTarget(timestamp, publish=not warmup)
+                        for timestamp, warmup in schedule
+                    ),
+                    static_schedule=full_static_artifact_schedule(request),
+                    policy=DetectionRunPolicy(
+                        resolution_mode=(
+                            SequenceResolutionMode.CURRENT_FRAME_COMPATIBILITY
+                        ),
+                        debug=True,
+                        reuse_static_decodes=True,
+                        maximum_consecutive_failures=(
+                            0
+                            if request.mode is RedetectionMode.CURRENT
+                            else self.policy.max_consecutive_sample_failures
+                        ),
+                        suppress_reader_close_errors=True,
+                    ),
+                    check_cancelled=lambda: self._check_cancelled(cancellation),
+                    validate_reader=validate_reader,
+                    on_static_start=static_start,
+                    on_observation=observed,
+                    on_reader_close_error=lambda _exc: LOGGER.exception(
+                        "Redetection reader close failed"
+                    ),
+                )
+            except ConsecutiveDetectionFailures as exc:
+                raise RedetectionError(
+                    "연속된 frame decode 또는 detector 실패로 재검출을 "
+                    "계속할 수 없습니다."
+                ) from exc.cause
+            except Exception as exc:
+                if (
+                    request.mode is RedetectionMode.CURRENT
+                    and exc is latest_detection_error[0]
+                ):
+                    raise RedetectionError(
+                        "현재 장면 재검출에 실패했습니다: "
+                        f"{type(exc).__name__}: {exc}"
+                    ) from exc
+                raise
 
             succeeded = [sample for sample in display_samples if sample.succeeded]
             if not succeeded:
@@ -330,96 +352,32 @@ class PartialRedetectionService:
                     _tracking_for_event_and_judgment(workspace.run_id, glass.id, sample)
                     for sample in display_samples
                 ]
-                event_samples = tracking_samples
-                if request.mode is RedetectionMode.FULL:
-                    confirmation = session.initial_state_confirmations.get(glass.id)
-                    if confirmation is not None:
-                        rerun_retrospective = reconstruct_initial_state(
-                            glass,
-                            tracking_samples,
-                            confirmation,
-                        )
-                        event_samples = project_state_aware_samples(
-                            tracking_samples,
-                            rerun_retrospective,
-                        )
-                observed_rerun_events = detect_events_for_glass(
-                    workspace.run_id,
-                    glass.id,
-                    tracking_samples,
+                full = request.mode is RedetectionMode.FULL
+                assembly = self.outcome_assembler.assemble(
+                    run_id=workspace.run_id,
+                    glass=glass,
+                    samples=tracking_samples,
+                    confirmation=(
+                        session.initial_state_confirmations.get(glass.id)
+                        if full
+                        else None
+                    ),
+                    compressor_start_sec=session.compressor_start_sec,
+                    mode=(
+                        StateAwareOutcomeMode.FULL_REDETECTION
+                        if full
+                        else StateAwareOutcomeMode.INTERVAL_REDETECTION
+                    ),
                 )
-                projected_rerun_events = detect_events_for_glass(
-                    workspace.run_id,
-                    glass.id,
-                    event_samples,
-                )
-                rerun_events = merge_state_aware_events(
-                    observed_rerun_events,
-                    projected_rerun_events,
-                    rerun_retrospective,
-                )
-                if request.mode is RedetectionMode.FULL:
-                    if session.compressor_start_sec is not None:
-                        closest = min(
-                            tracking_samples,
-                            key=lambda item: abs(
-                                item.timestamp_sec - session.compressor_start_sec
-                            ),
-                        )
-                        rerun_events.append(
-                            EventMarker(
-                                workspace.run_id,
-                                glass.id,
-                                EventType.COMPRESSOR_START,
-                                session.compressor_start_sec,
-                                representative_frame_index=(
-                                    closest.frame_index if closest.frame_index >= 0 else None
-                                ),
-                                confidence=1.0,
-                            )
-                        )
-                    judgment_samples = samples_for_judgment(
-                        tracking_samples,
-                        rerun_retrospective,
-                        glass.judgment_rule.mode,
-                    )
-                    outcome = judge_samples(
-                        judgment_samples,
-                        glass.judgment_rule,
-                        session.compressor_start_sec,
-                    )
-                    outcome = annotate_judgment_provenance(
-                        outcome,
-                        rerun_retrospective,
-                        glass.judgment_rule.mode,
-                    )
-                    outcome = enforce_conflict_review(outcome, rerun_retrospective)
+                rerun_retrospective = assembly.retrospective
+                rerun_events = list(assembly.events)
+                if full:
+                    outcome = assembly.judgment
+                    assert outcome is not None
                     rerun_state = outcome.state
                     rerun_note = outcome.note
-                    rerun_coverage = observed_coverage(tracking_samples)
-                    rerun_effective_coverage = effective_state_aware_coverage(
-                        tracking_samples,
-                        rerun_retrospective,
-                    )
-                    rerun_events.append(
-                        EventMarker(
-                            workspace.run_id,
-                            glass.id,
-                            EventType.JUDGMENT_PASS
-                            if outcome.state is ResultState.PASS
-                            else EventType.JUDGMENT_FAIL
-                            if outcome.state is ResultState.FAIL
-                            else EventType.REVIEW_REQUIRED,
-                            tracking_samples[-1].timestamp_sec,
-                            representative_frame_index=(
-                                tracking_samples[-1].frame_index
-                                if tracking_samples[-1].frame_index >= 0
-                                else None
-                            ),
-                            confidence=outcome.valid_coverage_ratio,
-                            note=outcome.note,
-                        )
-                    )
+                    rerun_coverage = assembly.observed_coverage_ratio
+                    rerun_effective_coverage = assembly.effective_coverage_ratio
                     official_summary = official_bundle.glass_summary(glass.id)
                     if official_summary is not None:
                         official_state = official_summary.result_state
@@ -512,12 +470,6 @@ class PartialRedetectionService:
                 workspace.cleanup()
             raise
         finally:
-            decoded_frame_cache.clear()
-            if reader is not None:
-                try:
-                    reader.close()
-                except Exception:
-                    LOGGER.exception("Redetection reader close failed")
             detector = None
 
     @staticmethod

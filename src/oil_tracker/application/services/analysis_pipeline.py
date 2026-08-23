@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, is_dataclass
+from dataclasses import dataclass
 from datetime import datetime, timezone
 import hashlib
 import time
@@ -15,28 +15,25 @@ from oil_tracker.application.ports.progress import (
     ProgressSink,
     build_progress_update,
 )
+from oil_tracker.application.services.analysis_outcome import (
+    StateAwareOutcomeAssembler,
+    StateAwareOutcomeMode,
+)
 from oil_tracker.application.services.debug_capture_policy import DebugCapturePolicy
 from oil_tracker.application.services.detection_processing import (
     effective_observation_height,
-    learn_static_artifacts,
     tracking_sample_from_detection,
 )
-from oil_tracker.application.services.initial_state_reconstruction import (
-    annotate_judgment_provenance,
-    effective_state_aware_coverage,
-    enforce_conflict_review,
-    merge_state_aware_events,
-    observed_coverage,
-    project_state_aware_samples,
-    reconstruct_initial_state,
-    samples_for_judgment,
+from oil_tracker.application.services.detection_run import (
+    DetectionRunCoordinator,
+    DetectionRunPolicy,
+    DetectionTarget,
+    SequenceResolutionMode,
 )
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
-from oil_tracker.domain.enums import EventType, ResultState
-from oil_tracker.domain.events import detect_events_for_glass
-from oil_tracker.domain.judgment import judge_samples
+from oil_tracker.domain.enums import ResultState
 from oil_tracker.domain.recipe import InspectionRecipe
-from oil_tracker.domain.results import AnalysisResult, EventMarker, GlassAnalysisResult, TrackingSample
+from oil_tracker.domain.results import AnalysisResult, GlassAnalysisResult, TrackingSample
 from oil_tracker.domain.session import AnalysisSession, DebugTraceLevel
 
 
@@ -60,12 +57,14 @@ class AnalysisPipeline:
         validator: RecipeValidationService,
         debug_trace_sink_factory=None,
         capture_policy: DebugCapturePolicy | None = None,
+        outcome_assembler: StateAwareOutcomeAssembler | None = None,
     ) -> None:
         self.video_reader_factory = video_reader_factory
         self.detector = detector
         self.validator = validator
         self.debug_trace_sink_factory = debug_trace_sink_factory
         self.capture_policy = capture_policy or DebugCapturePolicy()
+        self.outcome_assembler = outcome_assembler or StateAwareOutcomeAssembler()
 
     def run(
         self,
@@ -95,8 +94,6 @@ class AnalysisPipeline:
             raise ValueError("Timestamp schedule is empty.")
         detections_by_glass = {g.id: [] for g in enabled}
         by_glass: dict[str, list[TrackingSample]] = {g.id: [] for g in enabled}
-        sequence_diagnostics: dict[str, object] = {}
-        sequence_resolver_enabled = False
         previous_detections = {}
         compressor_index = None
         if session.compressor_start_sec is not None:
@@ -114,7 +111,6 @@ class AnalysisPipeline:
             else None
         )
         completion = None
-        self.detector.reset()
         _emit(
             progress,
             AnalysisStage.VIDEO_ANALYSIS,
@@ -124,11 +120,9 @@ class AnalysisPipeline:
         )
 
         try:
-            reader = self.video_reader_factory(session.input_video_path)
-            try:
-                _check_cancelled(cancellation)
-                learn_static_artifacts(reader, self.detector, enabled, schedules)
-                _check_cancelled(cancellation)
+            detection_began = [0.0]
+
+            def static_ready() -> None:
                 _emit(
                     progress,
                     AnalysisStage.VIDEO_ANALYSIS,
@@ -136,80 +130,104 @@ class AnalysisPipeline:
                     message="고정 artifact 준비를 마쳤습니다.",
                     total=len(schedules) * len(enabled),
                 )
-                began = time.perf_counter()
-                total_detections = len(schedules) * len(enabled)
-                for index, target_time in enumerate(schedules):
-                    _check_cancelled(cancellation)
-                    frame, frame_index, actual_time = reader.read_at(target_time)
-                    for glass_index, glass in enumerate(enabled):
-                        _check_cancelled(cancellation)
-                        detection, artifacts = self.detector.detect(
-                            frame,
-                            glass,
-                            frame_index,
-                            actual_time,
-                            debug=debug_enabled,
-                        )
-                        detections_by_glass[glass.id].append(detection)
-                        current_frame_sample = tracking_sample_from_detection(
-                            run_id,
+                detection_began[0] = time.perf_counter()
+
+            def observed(observation) -> None:
+                if not observation.succeeded or observation.detection is None:
+                    return
+                detection = observation.detection
+                glass = observation.glass
+                detections_by_glass[glass.id].append(detection)
+                current_frame_sample = tracking_sample_from_detection(
+                    run_id,
+                    glass,
+                    detection,
+                )
+                if sink is not None:
+                    index = len(detections_by_glass[glass.id]) - 1
+                    decision = self.capture_policy.decide(
+                        session.debug_trace_level,
+                        detection,
+                        is_valid=current_frame_sample.is_valid,
+                        minimum_confidence=(
+                            glass.detector_settings.minimum_final_confidence
+                        ),
+                        effective_height=effective_observation_height(glass),
+                        first_sample=index == 0,
+                        last_sample=index == len(schedules) - 1,
+                        compressor_nearest=index == compressor_index,
+                        previous_detection=previous_detections.get(glass.id),
+                    )
+                    if decision.capture:
+                        sink.write(
                             glass,
                             detection,
+                            observation.artifacts,
+                            decision,
                         )
-                        if sink is not None:
-                            decision = self.capture_policy.decide(
-                                session.debug_trace_level,
-                                detection,
-                                is_valid=current_frame_sample.is_valid,
-                                minimum_confidence=glass.detector_settings.minimum_final_confidence,
-                                effective_height=effective_observation_height(glass),
-                                first_sample=index == 0,
-                                last_sample=index == len(schedules) - 1,
-                                compressor_nearest=index == compressor_index,
-                                previous_detection=previous_detections.get(glass.id),
-                            )
-                            if decision.capture:
-                                sink.write(glass, detection, artifacts, decision)
-                        previous_detections[glass.id] = detection
-                        artifacts = None
-                        completed_detections = index * len(enabled) + glass_index + 1
-                        elapsed = max(1e-6, time.perf_counter() - began)
-                        frame_fraction = completed_detections / max(1, total_detections)
-                        _emit(
-                            progress,
-                            AnalysisStage.VIDEO_ANALYSIS,
-                            0.02 + 0.98 * frame_fraction,
-                            message=f"{glass.name} 검출 중",
-                            completed=completed_detections,
-                            total=total_detections,
-                            timestamp_sec=actual_time,
-                            glass_name=glass.name,
-                            rate_fps=(index + 1) / elapsed,
-                        )
-            finally:
-                reader.close()
+                previous_detections[glass.id] = detection
 
+            def detection_progress(observation, completed, total) -> None:
+                if not observation.succeeded:
+                    return
+                elapsed = max(1e-6, time.perf_counter() - detection_began[0])
+                frame_number = (completed - 1) // max(1, len(enabled)) + 1
+                frame_fraction = completed / max(1, total)
+                _emit(
+                    progress,
+                    AnalysisStage.VIDEO_ANALYSIS,
+                    0.02 + 0.98 * frame_fraction,
+                    message=f"{observation.glass.name} 검출 중",
+                    completed=completed,
+                    total=total,
+                    timestamp_sec=observation.actual_timestamp_sec,
+                    glass_name=observation.glass.name,
+                    rate_fps=frame_number / elapsed,
+                )
+
+            def annotate_sequence(glass, resolved) -> None:
+                annotate = getattr(sink, "annotate_sequence", None)
+                if callable(annotate):
+                    annotate(glass, resolved)
+
+            confirmed_initial_states = {}
             for glass in enabled:
-                _check_cancelled(cancellation)
                 confirmation = session.initial_state_confirmations.get(glass.id)
-                confirmed_state = (
+                confirmed_initial_states[glass.id] = (
                     confirmation.state
                     if confirmation is not None
                     and confirmation.matches(glass.initial_state, session)
                     else None
                 )
-                resolved, diagnostics = _resolve_detection_sequence(
-                    self.detector,
-                    detections_by_glass[glass.id],
-                    glass,
-                    confirmed_state,
+
+            detection_run = DetectionRunCoordinator(
+                self.video_reader_factory,
+                self.detector,
+                self.detector,
+            ).run(
+                source_video_path=session.input_video_path,
+                glasses=enabled,
+                targets=tuple(DetectionTarget(value) for value in schedules),
+                static_schedule=schedules,
+                policy=DetectionRunPolicy(
+                    resolution_mode=SequenceResolutionMode.COMPLETED_WINDOW,
+                    debug=debug_enabled,
+                    reuse_static_decodes=False,
+                ),
+                confirmed_initial_states=confirmed_initial_states,
+                check_cancelled=lambda: _check_cancelled(cancellation),
+                on_static_ready=static_ready,
+                on_observation=observed,
+                on_sequence=annotate_sequence,
+                on_progress=detection_progress,
+            )
+
+            for glass in enabled:
+                resolved = tuple(
+                    observation.resolved_detection
+                    for observation in detection_run.observations_by_glass[glass.id]
+                    if observation.resolved_detection is not None
                 )
-                sequence_resolver_enabled = sequence_resolver_enabled or diagnostics is not None
-                if diagnostics is not None:
-                    sequence_diagnostics[glass.id] = diagnostics
-                annotate_sequence = getattr(sink, "annotate_sequence", None)
-                if callable(annotate_sequence):
-                    annotate_sequence(glass, resolved)
                 by_glass[glass.id] = [
                     tracking_sample_from_detection(run_id, glass, detection)
                     for detection in resolved
@@ -237,63 +255,16 @@ class AnalysisPipeline:
                 _check_cancelled(cancellation)
                 samples = by_glass[glass.id]
                 confirmation = session.initial_state_confirmations.get(glass.id)
-                retrospective = reconstruct_initial_state(glass, samples, confirmation)
-                effective_samples = project_state_aware_samples(samples, retrospective)
-                observed_events = detect_events_for_glass(run_id, glass.id, samples)
-                projected_events = detect_events_for_glass(run_id, glass.id, effective_samples)
-                events = merge_state_aware_events(
-                    observed_events,
-                    projected_events,
-                    retrospective,
+                assembly = self.outcome_assembler.assemble(
+                    run_id=run_id,
+                    glass=glass,
+                    samples=samples,
+                    confirmation=confirmation,
+                    compressor_start_sec=session.compressor_start_sec,
+                    mode=StateAwareOutcomeMode.OFFICIAL_ANALYSIS,
                 )
-                if session.compressor_start_sec is not None:
-                    closest = min(
-                        samples,
-                        key=lambda sample: abs(
-                            sample.timestamp_sec - session.compressor_start_sec
-                        ),
-                    )
-                    events.append(
-                        EventMarker(
-                            run_id,
-                            glass.id,
-                            EventType.COMPRESSOR_START,
-                            session.compressor_start_sec,
-                            representative_frame_index=closest.frame_index,
-                            confidence=1.0,
-                        )
-                    )
-                judgment_samples = samples_for_judgment(
-                    samples,
-                    retrospective,
-                    glass.judgment_rule.mode,
-                )
-                outcome = judge_samples(
-                    judgment_samples,
-                    glass.judgment_rule,
-                    session.compressor_start_sec,
-                )
-                outcome = annotate_judgment_provenance(
-                    outcome,
-                    retrospective,
-                    glass.judgment_rule.mode,
-                )
-                outcome = enforce_conflict_review(outcome, retrospective)
-                events.append(
-                    EventMarker(
-                        run_id,
-                        glass.id,
-                        EventType.JUDGMENT_PASS
-                        if outcome.state == ResultState.PASS
-                        else EventType.JUDGMENT_FAIL
-                        if outcome.state == ResultState.FAIL
-                        else EventType.REVIEW_REQUIRED,
-                        samples[-1].timestamp_sec,
-                        representative_frame_index=samples[-1].frame_index,
-                        confidence=outcome.valid_coverage_ratio,
-                        note=outcome.note,
-                    )
-                )
+                outcome = assembly.judgment
+                assert outcome is not None
                 glass_results.append(
                     GlassAnalysisResult(
                         glass_id=glass.id,
@@ -301,19 +272,18 @@ class AnalysisPipeline:
                         result_state=outcome.state,
                         samples=samples,
                         events=sorted(
-                            events,
+                            assembly.events,
                             key=lambda event: (
                                 event.start_time_sec,
                                 event.event_type.value,
                             ),
                         ),
-                        valid_coverage_ratio=observed_coverage(samples),
-                        effective_state_aware_coverage_ratio=effective_state_aware_coverage(
-                            samples,
-                            retrospective,
+                        valid_coverage_ratio=assembly.observed_coverage_ratio or 0.0,
+                        effective_state_aware_coverage_ratio=(
+                            assembly.effective_coverage_ratio or 0.0
                         ),
                         judgment_note=outcome.note,
-                        retrospective=retrospective,
+                        retrospective=assembly.retrospective,
                     )
                 )
                 _emit(
@@ -369,8 +339,12 @@ class AnalysisPipeline:
                     "debug_record_count": completion.record_count
                     if completion is not None
                     else 0,
-                    "sequence_resolver_enabled": sequence_resolver_enabled,
-                    "sequence_resolver": sequence_diagnostics,
+                    "sequence_resolver_enabled": (
+                        detection_run.sequence_resolver_enabled
+                    ),
+                    "sequence_resolver": dict(
+                        detection_run.sequence_diagnostics
+                    ),
                 },
                 debug_trace_completion=completion,
             )
@@ -422,38 +396,3 @@ def _stable_recipe_bytes(recipe: InspectionRecipe) -> bytes:
         sort_keys=True,
         separators=(",", ":"),
     ).encode("utf-8")
-
-
-def _resolve_detection_sequence(
-    detector,
-    detections,
-    glass,
-    confirmed_initial_state,
-):
-    result = detector.resolve_sequence(
-        tuple(detections),
-        glass,
-        confirmed_initial_state,
-    )
-    resolved = tuple(result.detections)
-    if len(resolved) != len(detections):
-        raise ValueError(
-            "Sequence resolver must return exactly one detection per input frame."
-        )
-    for source, projected in zip(detections, resolved, strict=True):
-        if (
-            source.glass_id != projected.glass_id
-            or source.frame_index != projected.frame_index
-            or abs(float(source.time_sec) - float(projected.time_sec)) > 1e-9
-        ):
-            raise ValueError(
-                "Sequence resolver changed Glass, frame or timestamp identity."
-            )
-    diagnostics = result.diagnostics
-    if diagnostics is None:
-        return resolved, None
-    if is_dataclass(diagnostics):
-        return resolved, asdict(diagnostics)
-    if isinstance(diagnostics, dict):
-        return resolved, dict(diagnostics)
-    return resolved, {"summary": str(diagnostics)}

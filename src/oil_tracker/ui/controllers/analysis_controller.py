@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 from PySide6.QtCore import QObject, QThread, Signal, Slot
 
 from oil_tracker.application.ports.progress import AnalysisCancelled, MonotonicProgressSink
@@ -14,10 +12,9 @@ class AnalysisWorker(QObject):
     failed = Signal(str)
     cancelled = Signal()
 
-    def __init__(self, analyze_use_case, result_store, recipe, session, cancellation) -> None:
+    def __init__(self, analyze_use_case, recipe, session, cancellation) -> None:
         super().__init__()
         self.analyze_use_case = analyze_use_case
-        self.result_store = result_store
         self.recipe = recipe
         self.session = session
         self.cancellation = cancellation
@@ -27,23 +24,13 @@ class AnalysisWorker(QObject):
     def run(self) -> None:
         reporter = MonotonicProgressSink(self.progress.emit)
         try:
-            result = self.analyze_use_case.execute(
+            output = self.analyze_use_case.execute(
                 self.recipe,
                 self.session,
                 progress=reporter,
                 cancellation=self.cancellation,
             )
-            output = self.result_store.write_bundle(
-                result,
-                self.recipe,
-                self.session,
-                Path(self.session.output_directory)
-                if self.session.output_directory
-                else None,
-                progress=reporter,
-                cancellation=self.cancellation,
-            )
-            self._emit_completed(result, str(output))
+            self._emit_completed(output.result, str(output.output_path))
         except AnalysisCancelled:
             self._emit_cancelled()
         except Exception as exc:
@@ -75,10 +62,9 @@ class AnalysisController(QObject):
     failed = Signal(str)
     cancelled = Signal()
 
-    def __init__(self, analyze_use_case, result_store, parent=None) -> None:
+    def __init__(self, analyze_use_case, parent=None) -> None:
         super().__init__(parent)
         self.analyze_use_case = analyze_use_case
-        self.result_store = result_store
         self.thread: QThread | None = None
         self.worker: AnalysisWorker | None = None
         self.cancellation: SimpleCancellationToken | None = None
@@ -96,7 +82,6 @@ class AnalysisController(QObject):
         self.thread = QThread(self)
         self.worker = AnalysisWorker(
             self.analyze_use_case,
-            self.result_store,
             recipe,
             session,
             self.cancellation,
