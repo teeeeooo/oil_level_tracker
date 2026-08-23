@@ -7,6 +7,7 @@ from oil_tracker.adapters.vision.oil_observation_resolver import (
 from oil_tracker.adapters.vision.oil_candidate_authority import OilCandidateAuthority
 from oil_tracker.adapters.vision.oil_phase_identity import OilPhaseIdentity
 from oil_tracker.adapters.vision.oil_sequence_types import OilCandidateRef
+from oil_tracker.adapters.vision.oil_candidate_evidence import OilCandidateEvidence
 from dataclasses import replace
 
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
@@ -501,6 +502,7 @@ def test_clean_direct_interface_uses_soft_recurring_track_opposition() -> None:
         frame_offset=0,
         candidate_offset=0,
         candidate=candidate,
+        evidence=OilCandidateEvidence.from_candidate(candidate),
         local_quality=0.8,
         authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
         phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
@@ -509,12 +511,14 @@ def test_clean_direct_interface_uses_soft_recurring_track_opposition() -> None:
 
     assert _effective_track_opposition(ref) == 0.20
 
+    contradicted_candidate = replace(
+        candidate,
+        penalties={**candidate.penalties, "material_texture_conflict": 0.75},
+    )
     contradicted = replace(
         ref,
-        candidate=replace(
-            candidate,
-            penalties={**candidate.penalties, "material_texture_conflict": 0.75},
-        ),
+        candidate=contradicted_candidate,
+        evidence=OilCandidateEvidence.from_candidate(contradicted_candidate),
     )
     assert _effective_track_opposition(contradicted) == 0.80
 

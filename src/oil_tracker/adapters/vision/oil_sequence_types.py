@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from oil_tracker.domain.detection import BoundaryCandidate
 
 from .oil_candidate_authority import AuthorityReason, OilCandidateAuthority
+from .oil_candidate_evidence import OilCandidateEvidence
 from .oil_phase_identity import OilPhaseIdentity
 
 
@@ -13,6 +14,7 @@ class OilCandidateRef:
     frame_offset: int
     candidate_offset: int
     candidate: BoundaryCandidate
+    evidence: OilCandidateEvidence
     local_quality: float
     authority: OilCandidateAuthority
     initial_authority: OilCandidateAuthority = OilCandidateAuthority.CANDIDATE_ONLY

@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from oil_tracker.domain.detection import BoundaryCandidate
+from collections.abc import Sequence
+
+from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 
 
 @dataclass(frozen=True)
@@ -221,7 +223,35 @@ class OilCandidateEvidence:
         )
 
 
-def candidate_is_eligible(candidate: BoundaryCandidate) -> bool:
+class OilCandidateEvidenceIndex:
+    """Normalize each run-local candidate dictionary exactly once."""
+
+    def __init__(self, detections: Sequence[PhaseDetection] = ()) -> None:
+        self._by_identity: dict[int, OilCandidateEvidence] = {}
+        for detection in detections:
+            for candidate in detection.candidates:
+                self.register(candidate)
+
+    def register(
+        self,
+        candidate: BoundaryCandidate,
+        evidence: OilCandidateEvidence | None = None,
+    ) -> OilCandidateEvidence:
+        normalized = evidence or OilCandidateEvidence.from_candidate(candidate)
+        self._by_identity[id(candidate)] = normalized
+        return normalized
+
+    def evidence(self, candidate: BoundaryCandidate) -> OilCandidateEvidence:
+        normalized = self._by_identity.get(id(candidate))
+        if normalized is None:
+            normalized = self.register(candidate)
+        return normalized
+
+
+def candidate_is_eligible(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> bool:
     if unit(candidate.features.get("calibrated_artifact_match", 0.0)) >= 0.72:
         return False
     explicit = candidate.features.get("sequence_eligible")
@@ -230,7 +260,7 @@ def candidate_is_eligible(candidate: BoundaryCandidate) -> bool:
     availability = unit(candidate.features.get("evidence_availability", 1.0))
     visibility = unit(candidate.features.get("visibility", 1.0))
     conflicts = (
-        OilCandidateEvidence.from_candidate(candidate).optics_opposition,
+        (evidence or OilCandidateEvidence.from_candidate(candidate)).optics_opposition,
         unit(candidate.penalties.get("exclusion_conflict", 0.0)),
         unit(candidate.penalties.get("border_penalty", 0.0)),
     )

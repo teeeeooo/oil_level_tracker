@@ -51,10 +51,11 @@ def evaluate_phase_identity(
     candidate: BoundaryCandidate,
     config: PhaseIdentityThresholds,
     context: PhaseIdentityContext,
+    evidence: OilCandidateEvidence | None = None,
 ) -> PhaseIdentityDecision:
     """Classify physical Oil identity before authority or trajectory policy."""
 
-    evidence = OilCandidateEvidence.from_candidate(candidate)
+    evidence = evidence or OilCandidateEvidence.from_candidate(candidate)
     if context.foam_material_identity >= 0.50:
         return PhaseIdentityDecision(
             OilPhaseIdentity.OPPOSED_MATERIAL,

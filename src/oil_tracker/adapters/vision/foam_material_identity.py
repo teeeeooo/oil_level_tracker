@@ -7,7 +7,11 @@ from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 from oil_tracker.domain.enums import BoundaryKind
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
-from .oil_candidate_evidence import OilCandidateEvidence, unit
+from .oil_candidate_evidence import (
+    OilCandidateEvidence,
+    OilCandidateEvidenceIndex,
+    unit,
+)
 
 
 @dataclass(frozen=True)
@@ -47,6 +51,7 @@ def track_foam_material_identity(
     *,
     maximum_missing_seconds: float = 3.0,
     maximum_seed_age_seconds: float = 12.0,
+    evidence_index: OilCandidateEvidenceIndex | None = None,
 ) -> FoamMaterialIdentity:
     """Follow eligible Foam into a bounded cross-family residue identity."""
 
@@ -104,7 +109,10 @@ def track_foam_material_identity(
                 (candidate_offset, candidate)
                 for candidate_offset, candidate in enumerate(detection.candidates)
                 if candidate.kind is BoundaryKind.OIL_AIR
-                and _can_continue_material_identity(candidate)
+                and _can_continue_material_identity(
+                    candidate,
+                    evidence_index=evidence_index,
+                )
                 and abs(float(candidate.y) - active_y) <= maximum_jump
                 and abs(float(candidate.y) - seed_y) <= maximum_drift
             )
@@ -137,7 +145,7 @@ def track_foam_material_identity(
         for candidate_offset, candidate in enumerate(detection.candidates):
             if candidate.kind is not BoundaryKind.OIL_AIR:
                 continue
-            evidence = OilCandidateEvidence.from_candidate(candidate)
+            evidence = _evidence(candidate, evidence_index)
             if not _has_material_identity_evidence(evidence):
                 continue
             distance = abs(float(candidate.y) - active_y)
@@ -156,13 +164,26 @@ def track_foam_material_identity(
     )
 
 
-def _can_continue_material_identity(candidate: BoundaryCandidate) -> bool:
-    evidence = OilCandidateEvidence.from_candidate(candidate)
+def _can_continue_material_identity(
+    candidate: BoundaryCandidate,
+    *,
+    evidence_index: OilCandidateEvidenceIndex | None = None,
+) -> bool:
+    evidence = _evidence(candidate, evidence_index)
     return bool(
         _has_material_identity_evidence(evidence)
         and evidence.artifact_signature <= 0.48
         and evidence.ambiguity <= 0.75
     )
+
+
+def _evidence(
+    candidate: BoundaryCandidate,
+    evidence_index: OilCandidateEvidenceIndex | None,
+) -> OilCandidateEvidence:
+    if evidence_index is None:
+        return OilCandidateEvidence.from_candidate(candidate)
+    return evidence_index.evidence(candidate)
 
 
 def _has_material_identity_evidence(evidence: OilCandidateEvidence) -> bool:

@@ -14,7 +14,11 @@ from .oil_candidate_authority import (
     OilCandidateAuthority,
     evaluate_candidate_authority,
 )
-from .oil_candidate_evidence import OilCandidateEvidence, candidate_is_eligible
+from .oil_candidate_evidence import (
+    OilCandidateEvidence,
+    OilCandidateEvidenceIndex,
+    candidate_is_eligible,
+)
 from .foam_material_identity import (
     FoamMaterialIdentity,
     foam_material_identity_tolerance,
@@ -135,150 +139,38 @@ class OilObservationResolution:
     diagnostics: OilObservationDiagnostics
 
 
-class OilObservationResolver:
-    """Resolve one image-supported Oil/state observation per sampled frame.
+@dataclass(frozen=True)
+class OilPathLifecycleResult:
+    layers: tuple[tuple[_Node, ...], ...]
+    best_path: tuple[_Node, ...]
+    bounded_path: tuple[_Node, ...]
+    spike_suppressed_path: tuple[_Node, ...]
+    path: tuple[_Node, ...]
 
-    Initial state is used only in the first-layer prior. FULL/EMPTY emissions
-    come only from raw typed no-interface metrics, and every numeric output is
-    copied from an explicitly eligible candidate in that same frame.
-    """
 
-    version = OIL_OBSERVATION_RESOLVER_VERSION
+class OilAdmissionEvidenceOwner:
+    """Normalize candidates and establish same-frame admission evidence."""
 
-    def __init__(self, config: OilObservationResolverConfig | None = None) -> None:
-        self.config = config or OilObservationResolverConfig()
+    def __init__(self, config: OilObservationResolverConfig) -> None:
+        self.config = config
 
-    def resolve(
+    def prepare(
         self,
-        detections: Sequence[PhaseDetection],
+        detections: tuple[PhaseDetection, ...],
         glass: GlassInspectionConfig,
-        confirmed_initial_state: InitialObservationState | None = None,
-    ) -> OilObservationResolution:
-        source = tuple(detections)
-        if not source:
-            return OilObservationResolution(
-                (),
-                OilObservationDiagnostics(
-                    self.version,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0.0,
-                ),
-            )
-        refs_by_frame, ineligible_count, foam_material_identity = self._candidate_refs(
-            source,
-            glass,
-        )
-        refs_by_frame, track_count, maximum_track_opposition = (
-            self._apply_track_opposition(refs_by_frame, glass)
-        )
-        refs_by_frame = self._apply_cluster_and_trajectory_support(
-            refs_by_frame,
-            glass,
-        )
-        layers = tuple(
-            self._nodes_for_frame(detection, refs_by_frame[index])
-            for index, detection in enumerate(source)
-        )
-        layers = self._admit_initial_empty_entry(
-            layers,
-            glass,
-            confirmed_initial_state,
-        )
-        best_path = self._best_path(
-            layers,
-            source,
-            glass,
-            confirmed_initial_state,
-        )
-        bounded_path = self._bound_continuation_runs(best_path, layers, glass)
-        spike_suppressed_path = self._suppress_trajectory_spikes(
-            bounded_path,
-            layers,
-            glass,
-        )
-        path = self._suppress_completed_fill_reacquisition(
-            spike_suppressed_path,
-            layers,
-            glass,
-        )
-        resolved = tuple(
-            self._project_detection(
-                detection,
-                node,
-                refs_by_frame[index],
-                path,
-                (
-                    best_path[index],
-                    bounded_path[index],
-                    spike_suppressed_path[index],
-                    path[index],
-                ),
-                index,
-                glass,
-                confirmed_initial_state,
-            )
-            for index, (detection, node) in enumerate(zip(source, path, strict=True))
-        )
-        counts = {
-            kind: sum(node.kind == kind for node in path)
-            for kind in ("oil", "full", "empty", "unknown")
-        }
-        return OilObservationResolution(
-            resolved,
-            OilObservationDiagnostics(
-                version=self.version,
-                frame_count=len(resolved),
-                oil_frame_count=counts["oil"],
-                full_frame_count=counts["full"],
-                empty_frame_count=counts["empty"],
-                unknown_frame_count=counts["unknown"],
-                eligible_candidate_count=sum(map(len, refs_by_frame)),
-                ineligible_candidate_count=ineligible_count,
-                recurring_track_count=track_count,
-                maximum_track_opposition=maximum_track_opposition,
-                candidate_only_count=sum(
-                    ref.authority is OilCandidateAuthority.CANDIDATE_ONLY
-                    for refs in refs_by_frame
-                    for ref in refs
-                ),
-                continuation_eligible_count=sum(
-                    ref.authority is OilCandidateAuthority.CONTINUATION_ELIGIBLE
-                    for refs in refs_by_frame
-                    for ref in refs
-                ),
-                anchor_eligible_count=sum(
-                    ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
-                    for refs in refs_by_frame
-                    for ref in refs
-                ),
-                qualified_anchor_count=sum(
-                    ref.cluster_support >= 0.99
-                    for refs in refs_by_frame
-                    for ref in refs
-                ),
-                foam_material_seeded_frame_count=(
-                    foam_material_identity.seeded_frame_count
-                ),
-                foam_material_continued_frame_count=(
-                    foam_material_identity.continued_frame_count
-                ),
-                foam_material_opposed_candidate_count=len(
-                    foam_material_identity.opposition_by_candidate
-                ),
-            ),
-        )
+        evidence_index: OilCandidateEvidenceIndex,
+    ) -> tuple[
+        tuple[tuple[_CandidateRef, ...], ...],
+        int,
+        FoamMaterialIdentity,
+    ]:
+        return self._candidate_refs(detections, glass, evidence_index)
 
     def _candidate_refs(
         self,
         detections: tuple[PhaseDetection, ...],
         glass: GlassInspectionConfig,
+        evidence_index: OilCandidateEvidenceIndex,
     ) -> tuple[
         tuple[tuple[_CandidateRef, ...], ...],
         int,
@@ -287,10 +179,15 @@ class OilObservationResolver:
         limit = max(1, int(glass.detector_settings.candidate_top_k))
         rows: list[tuple[_CandidateRef, ...]] = []
         ineligible = 0
-        foam_material_identity = track_foam_material_identity(detections, glass)
+        foam_material_identity = track_foam_material_identity(
+            detections,
+            glass,
+            evidence_index=evidence_index,
+        )
         semantic_anchor_keys = _qualified_ordinary_semantic_keys(
             detections,
             glass,
+            evidence_index=evidence_index,
         )
         semantic_anchor_rows = tuple(
             (frame_offset, float(detections[frame_offset].candidates[candidate_offset].y))
@@ -325,6 +222,7 @@ class OilObservationResolver:
             for candidate_offset, candidate in enumerate(detection.candidates):
                 if candidate.kind is not BoundaryKind.OIL_AIR or not _finite(candidate.y):
                     continue
+                evidence = evidence_index.evidence(candidate)
                 material_identity_opposition = foam_material_identity.opposition(
                     frame_offset,
                     candidate_offset,
@@ -347,10 +245,12 @@ class OilObservationResolver:
                         "composition_lower_reserve": float(ordered_lower),
                     },
                 )
+                evidence_index.register(candidate, evidence)
                 representation_support = _cross_representation_support(
                     candidate,
                     oil_candidates,
                     glass,
+                    evidence_index=evidence_index,
                 )
                 semantic_corridor_support = _semantic_corridor_support(
                     frame_offset,
@@ -369,6 +269,7 @@ class OilObservationResolver:
                         foam_seed_age_seconds=foam_seed_age_seconds,
                         lower_separation_px=lower_separation,
                     ),
+                    evidence=evidence,
                 )
                 authority_decision = evaluate_candidate_authority(
                     candidate,
@@ -385,6 +286,7 @@ class OilObservationResolver:
                         lower_separation_px=lower_separation,
                         phase_identity=phase_identity,
                     ),
+                    evidence=evidence,
                 )
                 authority = authority_decision.tier
                 if authority is OilCandidateAuthority.HARD_INVALID:
@@ -400,8 +302,10 @@ class OilObservationResolver:
                         frame_offset=frame_offset,
                         candidate_offset=candidate_offset,
                         candidate=candidate,
+                        evidence=evidence,
                         local_quality=_candidate_quality(
                             candidate,
+                            evidence=evidence,
                             terminal_fallback=allow_terminal_anchor,
                         )
                         + 0.14 * representation_support
@@ -440,19 +344,19 @@ class OilObservationResolver:
             selected_refs = list(
                 ref
                 for ref in refs
-                if not _candidate_is_calibrated_high_recall(ref.candidate)
+                if not ref.evidence.calibrated_high_recall
             )[:limit]
             if not any(
-                _candidate_is_supplemental(ref.candidate)
-                and not _candidate_is_calibrated_high_recall(ref.candidate)
+                ref.evidence.supplemental
+                and not ref.evidence.calibrated_high_recall
                 for ref in selected_refs
             ):
                 supplemental = next(
                     (
                         ref
                         for ref in refs
-                        if _candidate_is_supplemental(ref.candidate)
-                        and not _candidate_is_calibrated_high_recall(ref.candidate)
+                        if ref.evidence.supplemental
+                        and not ref.evidence.calibrated_high_recall
                         and ref not in selected_refs
                     ),
                     None,
@@ -462,7 +366,7 @@ class OilObservationResolver:
             high_recall = [
                 ref
                 for ref in refs
-                if _candidate_is_calibrated_high_recall(ref.candidate)
+                if ref.evidence.calibrated_high_recall
             ][: min(
                 12,
                 max(
@@ -490,6 +394,28 @@ class OilObservationResolver:
                 selected_refs.append(lower_reserve)
             rows.append(tuple(selected_refs))
         return tuple(rows), ineligible, foam_material_identity
+
+
+class OilConnectivityTrackOppositionOwner:
+    """Apply coarse component support and comparative recurring-row opposition."""
+
+    def __init__(self, config: OilObservationResolverConfig) -> None:
+        self.config = config
+
+    def resolve(
+        self,
+        refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
+        glass: GlassInspectionConfig,
+    ) -> tuple[tuple[tuple[_CandidateRef, ...], ...], int, float]:
+        opposed, track_count, maximum = self._apply_track_opposition(
+            refs_by_frame,
+            glass,
+        )
+        supported = self._apply_cluster_and_trajectory_support(
+            opposed,
+            glass,
+        )
+        return supported, track_count, maximum
 
     def _apply_cluster_and_trajectory_support(
         self,
@@ -594,19 +520,19 @@ class OilObservationResolver:
             if stability <= 0.0:
                 continue
             opposition = sum(
-                _candidate_artifact_signature(item.candidate)
+                item.evidence.artifact_signature
                 for item in ordered
             ) / len(ordered)
             optics = sum(
-                _candidate_optics_opposition(item.candidate)
+                item.evidence.optics_opposition
                 for item in ordered
             ) / len(ordered)
             material = sum(
-                _candidate_material_support(item.candidate)
+                item.evidence.material_support
                 for item in ordered
             ) / len(ordered)
             supplemental_ratio = sum(
-                _candidate_is_material_path(item.candidate) for item in ordered
+                item.evidence.material_path for item in ordered
             ) / len(ordered)
             semantic_support = sum(
                 item.semantic_corridor_support for item in ordered
@@ -615,16 +541,11 @@ class OilObservationResolver:
                 not item.terminal_fallback for item in ordered
             ) / len(ordered)
             registered_motion = sum(
-                _candidate_registered_motion(item.candidate)
+                item.evidence.registered_motion
                 for item in ordered
             ) / len(ordered)
             registered_coverage = sum(
-                _unit(
-                    item.candidate.features.get(
-                        "registered_oil_band_motion_coverage",
-                        0.0,
-                    )
-                )
+                item.evidence.registered_motion_coverage
                 for item in ordered
             ) / len(ordered)
             contradiction = max(
@@ -716,13 +637,13 @@ class OilObservationResolver:
         for refs in output:
             row: list[_CandidateRef] = []
             for ref in refs:
-                material_path = _candidate_is_material_path(ref.candidate)
+                material_path = ref.evidence.material_path
                 opposed_peer = next(
                     (
                         peer
                         for peer in refs
                         if not material_path
-                        and _candidate_is_material_path(peer.candidate)
+                        and peer.evidence.material_path
                         and peer.track_opposition
                         >= self.config.recurring_track_reject_opposition
                         and abs(float(peer.candidate.y) - float(ref.candidate.y))
@@ -739,13 +660,18 @@ class OilObservationResolver:
                             opposed_peer.track_opposition,
                         ),
                     )
-                terminal = _candidate_terminal_support(ref.candidate)
+                terminal = (
+                    ref.evidence.terminal_support
+                    if ref.evidence.material_path
+                    else 0.0
+                )
                 superior_partition = next(
                     (
                         peer
                         for peer in refs
                         if peer is not ref
-                        and _candidate_terminal_support(peer.candidate) >= 0.60
+                        and peer.evidence.material_path
+                        and peer.evidence.terminal_support >= 0.60
                         and _unit(
                             peer.candidate.features.get(
                                 "sequence_material_layer_topology",
@@ -791,6 +717,58 @@ class OilObservationResolver:
         )
         return output, len(recurring_tracks), maximum
 
+
+class OilPathLifecycleOwner:
+    """Resolve path transitions and apply bounded compatibility lifecycle rules."""
+
+    def __init__(self, config: OilObservationResolverConfig) -> None:
+        self.config = config
+
+    def resolve(
+        self,
+        detections: tuple[PhaseDetection, ...],
+        refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
+        glass: GlassInspectionConfig,
+        confirmed_initial_state: InitialObservationState | None,
+    ) -> OilPathLifecycleResult:
+        layers = tuple(
+            self._nodes_for_frame(detection, refs_by_frame[index])
+            for index, detection in enumerate(detections)
+        )
+        layers = self._admit_initial_empty_entry(
+            layers,
+            glass,
+            confirmed_initial_state,
+        )
+        best_path = self._best_path(
+            layers,
+            detections,
+            glass,
+            confirmed_initial_state,
+        )
+        bounded_path = self._bound_continuation_runs(
+            best_path,
+            layers,
+            glass,
+        )
+        spike_suppressed_path = self._suppress_trajectory_spikes(
+            bounded_path,
+            layers,
+            glass,
+        )
+        path = self._suppress_completed_fill_reacquisition(
+            spike_suppressed_path,
+            layers,
+            glass,
+        )
+        return OilPathLifecycleResult(
+            layers=layers,
+            best_path=best_path,
+            bounded_path=bounded_path,
+            spike_suppressed_path=spike_suppressed_path,
+            path=path,
+        )
+
     def _nodes_for_frame(
         self,
         detection: PhaseDetection,
@@ -809,7 +787,7 @@ class OilObservationResolver:
             for ref in refs
             if ref.authority >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
             and (
-                not _candidate_is_calibrated_high_recall(ref.candidate)
+                not ref.evidence.calibrated_high_recall
                 or ref.trajectory_support >= 0.99
             )
         ]
@@ -1062,11 +1040,18 @@ class OilObservationResolver:
             if abs(current.y - expected) <= tolerance:
                 continue
             neighboring_partition = min(
-                _candidate_terminal_support(prior.candidate_ref.candidate),
-                _candidate_terminal_support(following.candidate_ref.candidate),
+                _candidate_terminal_support(
+                    prior.candidate_ref.candidate,
+                    prior.candidate_ref.evidence,
+                ),
+                _candidate_terminal_support(
+                    following.candidate_ref.candidate,
+                    following.candidate_ref.evidence,
+                ),
             )
             current_partition = _candidate_terminal_support(
-                current.candidate_ref.candidate
+                current.candidate_ref.candidate,
+                current.candidate_ref.evidence,
             )
             if current_partition + 0.20 >= neighboring_partition:
                 continue
@@ -1257,6 +1242,101 @@ class OilObservationResolver:
             return -max(0.35, edge_cost)
         return -0.10
 
+
+class OilResolutionProjectionOwner:
+    """Project resolved nodes back to same-frame public candidates and metrics."""
+
+    def __init__(self, version: str) -> None:
+        self.version = version
+
+    def project(
+        self,
+        detections: tuple[PhaseDetection, ...],
+        refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
+        lifecycle: OilPathLifecycleResult,
+        glass: GlassInspectionConfig,
+        confirmed_initial_state: InitialObservationState | None,
+        evidence_index: OilCandidateEvidenceIndex,
+    ) -> tuple[PhaseDetection, ...]:
+        return tuple(
+            self._project_detection(
+                detection,
+                node,
+                refs_by_frame[index],
+                lifecycle.path,
+                (
+                    lifecycle.best_path[index],
+                    lifecycle.bounded_path[index],
+                    lifecycle.spike_suppressed_path[index],
+                    lifecycle.path[index],
+                ),
+                index,
+                glass,
+                confirmed_initial_state,
+                evidence_index,
+            )
+            for index, (detection, node) in enumerate(
+                zip(detections, lifecycle.path, strict=True)
+            )
+        )
+
+    def diagnostics(
+        self,
+        resolved: tuple[PhaseDetection, ...],
+        refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
+        lifecycle: OilPathLifecycleResult,
+        *,
+        ineligible_count: int,
+        track_count: int,
+        maximum_track_opposition: float,
+        foam_material_identity: FoamMaterialIdentity,
+    ) -> OilObservationDiagnostics:
+        counts = {
+            kind: sum(node.kind == kind for node in lifecycle.path)
+            for kind in ("oil", "full", "empty", "unknown")
+        }
+        return OilObservationDiagnostics(
+            version=self.version,
+            frame_count=len(resolved),
+            oil_frame_count=counts["oil"],
+            full_frame_count=counts["full"],
+            empty_frame_count=counts["empty"],
+            unknown_frame_count=counts["unknown"],
+            eligible_candidate_count=sum(map(len, refs_by_frame)),
+            ineligible_candidate_count=ineligible_count,
+            recurring_track_count=track_count,
+            maximum_track_opposition=maximum_track_opposition,
+            candidate_only_count=sum(
+                ref.authority is OilCandidateAuthority.CANDIDATE_ONLY
+                for refs in refs_by_frame
+                for ref in refs
+            ),
+            continuation_eligible_count=sum(
+                ref.authority is OilCandidateAuthority.CONTINUATION_ELIGIBLE
+                for refs in refs_by_frame
+                for ref in refs
+            ),
+            anchor_eligible_count=sum(
+                ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
+                for refs in refs_by_frame
+                for ref in refs
+            ),
+            qualified_anchor_count=sum(
+                ref.cluster_support >= 0.99
+                for refs in refs_by_frame
+                for ref in refs
+            ),
+            foam_material_seeded_frame_count=(
+                foam_material_identity.seeded_frame_count
+            ),
+            foam_material_continued_frame_count=(
+                foam_material_identity.continued_frame_count
+            ),
+            foam_material_opposed_candidate_count=len(
+                foam_material_identity.opposition_by_candidate
+            ),
+        )
+
     def _project_detection(
         self,
         detection: PhaseDetection,
@@ -1267,12 +1347,14 @@ class OilObservationResolver:
         frame_offset: int,
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None,
+        evidence_index: OilCandidateEvidenceIndex,
     ) -> PhaseDetection:
         flags = [flag for flag in detection.flags if flag not in _OIL_REPLACED_FLAGS]
         candidates = _project_candidates(
             detection.candidates,
             node.candidate_ref,
             refs,
+            evidence_index,
         )
         metrics = dict(detection.debug_metrics)
         metrics.update(
@@ -1322,7 +1404,10 @@ class OilObservationResolver:
                 "sequence_terminal_partition_support": (
                     0.0
                     if node.candidate_ref is None
-                    else _candidate_terminal_support(node.candidate_ref.candidate)
+                    else _candidate_terminal_support(
+                        node.candidate_ref.candidate,
+                        node.candidate_ref.evidence,
+                    )
                 ),
                 "sequence_terminal_fallback_mode": float(
                     node.candidate_ref is not None
@@ -1331,7 +1416,7 @@ class OilObservationResolver:
                 "sequence_registered_candidate_motion_support": (
                     0.0
                     if node.candidate_ref is None
-                    else _candidate_registered_motion(node.candidate_ref.candidate)
+                    else node.candidate_ref.evidence.registered_motion
                 ),
                 "sequence_selected_authority_tier": (
                     OilCandidateAuthority.HARD_INVALID.name
@@ -1446,14 +1531,94 @@ class OilObservationResolver:
         )
 
 
-def _candidate_eligible(candidate: BoundaryCandidate) -> bool:
-    return candidate_is_eligible(candidate)
+class OilObservationResolver:
+    """Coordinate completed-window Oil owners without inventing observations."""
+
+    version = OIL_OBSERVATION_RESOLVER_VERSION
+
+    def __init__(self, config: OilObservationResolverConfig | None = None) -> None:
+        self.config = config or OilObservationResolverConfig()
+        self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
+        self.connectivity_opposition = OilConnectivityTrackOppositionOwner(
+            self.config
+        )
+        self.path_lifecycle = OilPathLifecycleOwner(self.config)
+        self.projection = OilResolutionProjectionOwner(self.version)
+
+    def resolve(
+        self,
+        detections: Sequence[PhaseDetection],
+        glass: GlassInspectionConfig,
+        confirmed_initial_state: InitialObservationState | None = None,
+    ) -> OilObservationResolution:
+        source = tuple(detections)
+        if not source:
+            return OilObservationResolution(
+                (),
+                OilObservationDiagnostics(
+                    self.version,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0.0,
+                ),
+            )
+
+        evidence_index = OilCandidateEvidenceIndex(source)
+        refs_by_frame, ineligible_count, foam_material_identity = (
+            self.admission_evidence.prepare(
+                source,
+                glass,
+                evidence_index,
+            )
+        )
+        refs_by_frame, track_count, maximum_track_opposition = (
+            self.connectivity_opposition.resolve(refs_by_frame, glass)
+        )
+        lifecycle = self.path_lifecycle.resolve(
+            source,
+            refs_by_frame,
+            glass,
+            confirmed_initial_state,
+        )
+        resolved = self.projection.project(
+            source,
+            refs_by_frame,
+            lifecycle,
+            glass,
+            confirmed_initial_state,
+            evidence_index,
+        )
+        diagnostics = self.projection.diagnostics(
+            resolved,
+            refs_by_frame,
+            lifecycle,
+            ineligible_count=ineligible_count,
+            track_count=track_count,
+            maximum_track_opposition=maximum_track_opposition,
+            foam_material_identity=foam_material_identity,
+        )
+        return OilObservationResolution(resolved, diagnostics)
+
+
+def _candidate_eligible(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> bool:
+    return candidate_is_eligible(candidate, evidence)
 
 
 def _cross_representation_support(
     candidate: BoundaryCandidate,
     candidates: tuple[BoundaryCandidate, ...],
     glass: GlassInspectionConfig,
+    *,
+    evidence_index: OilCandidateEvidenceIndex,
 ) -> float:
     """Measure same-frame agreement between independent proposal families.
 
@@ -1463,7 +1628,10 @@ def _cross_representation_support(
     are not consulted.
     """
 
-    candidate_family = _candidate_representation_family(candidate)
+    candidate_family = _candidate_representation_family(
+        candidate,
+        evidence_index.evidence(candidate),
+    )
     tolerance = max(
         8.0,
         float(glass.detector_settings.temporal_max_jump_px) * 0.375,
@@ -1472,10 +1640,13 @@ def _cross_representation_support(
     for peer in candidates:
         if peer is candidate:
             continue
-        peer_family = _candidate_representation_family(peer)
-        if peer_family == candidate_family or not _candidate_eligible(peer):
+        peer_evidence = evidence_index.evidence(peer)
+        peer_family = _candidate_representation_family(peer, peer_evidence)
+        if peer_family == candidate_family or not _candidate_eligible(
+            peer,
+            peer_evidence,
+        ):
             continue
-        peer_evidence = OilCandidateEvidence.from_candidate(peer)
         if (
             peer_evidence.material_texture_conflict >= 0.60
             or peer_evidence.artifact_signature >= 0.44
@@ -1510,7 +1681,7 @@ def _cross_representation_support(
         )
         advantage = _unit((peer_boundary - peer_artifact + 0.10) / 0.30)
         evidence = _unit(
-            0.55 * _candidate_material_support(peer)
+            0.55 * peer_evidence.material_support
             + 0.25 * peer_coverage
             + 0.20 * advantage
         )
@@ -1519,41 +1690,72 @@ def _cross_representation_support(
     return _unit(support)
 
 
-def _candidate_material_support(candidate: BoundaryCandidate) -> float:
-    return OilCandidateEvidence.from_candidate(candidate).material_support
+def _candidate_material_support(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> float:
+    return (evidence or OilCandidateEvidence.from_candidate(candidate)).material_support
 
 
-def _candidate_terminal_support(candidate: BoundaryCandidate) -> float:
-    evidence = OilCandidateEvidence.from_candidate(candidate)
+def _candidate_terminal_support(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> float:
+    evidence = evidence or OilCandidateEvidence.from_candidate(candidate)
     return evidence.terminal_support if evidence.material_path else 0.0
 
 
-def _candidate_static_contradiction(candidate: BoundaryCandidate) -> float:
-    return OilCandidateEvidence.from_candidate(candidate).static_contradiction
+def _candidate_static_contradiction(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> float:
+    return (evidence or OilCandidateEvidence.from_candidate(candidate)).static_contradiction
 
 
-def _candidate_registered_motion(candidate: BoundaryCandidate) -> float:
-    return OilCandidateEvidence.from_candidate(candidate).registered_motion
+def _candidate_registered_motion(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> float:
+    return (evidence or OilCandidateEvidence.from_candidate(candidate)).registered_motion
 
 
-def _candidate_registered_motion_coverage(candidate: BoundaryCandidate) -> float:
-    return OilCandidateEvidence.from_candidate(candidate).registered_motion_coverage
+def _candidate_registered_motion_coverage(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> float:
+    return (
+        evidence or OilCandidateEvidence.from_candidate(candidate)
+    ).registered_motion_coverage
 
 
-def _candidate_is_material_path(candidate: BoundaryCandidate) -> bool:
-    return OilCandidateEvidence.from_candidate(candidate).material_path
+def _candidate_is_material_path(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> bool:
+    return (evidence or OilCandidateEvidence.from_candidate(candidate)).material_path
 
 
-def _candidate_is_supplemental(candidate: BoundaryCandidate) -> bool:
-    return OilCandidateEvidence.from_candidate(candidate).supplemental
+def _candidate_is_supplemental(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> bool:
+    return (evidence or OilCandidateEvidence.from_candidate(candidate)).supplemental
 
 
-def _candidate_is_calibrated_high_recall(candidate: BoundaryCandidate) -> bool:
-    return OilCandidateEvidence.from_candidate(candidate).calibrated_high_recall
+def _candidate_is_calibrated_high_recall(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> bool:
+    return (
+        evidence or OilCandidateEvidence.from_candidate(candidate)
+    ).calibrated_high_recall
 
 
-def _candidate_representation_family(candidate: BoundaryCandidate) -> str:
-    evidence = OilCandidateEvidence.from_candidate(candidate)
+def _candidate_representation_family(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> str:
+    evidence = evidence or OilCandidateEvidence.from_candidate(candidate)
     if evidence.material_path:
         return "material"
     if evidence.calibrated_high_recall or evidence.supplemental:
@@ -1623,25 +1825,36 @@ def _foam_front_alias_penalty(
     return 0.52 * _unit(1.0 - distance / tolerance)
 
 
-def _candidate_optics_opposition(candidate: BoundaryCandidate) -> float:
-    return OilCandidateEvidence.from_candidate(candidate).optics_opposition
+def _candidate_optics_opposition(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> float:
+    return (evidence or OilCandidateEvidence.from_candidate(candidate)).optics_opposition
 
 
-def _candidate_artifact_signature(candidate: BoundaryCandidate) -> float:
-    return OilCandidateEvidence.from_candidate(candidate).artifact_signature
+def _candidate_artifact_signature(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> float:
+    return (evidence or OilCandidateEvidence.from_candidate(candidate)).artifact_signature
 
 
-def _candidate_ambiguity(candidate: BoundaryCandidate) -> float:
-    return OilCandidateEvidence.from_candidate(candidate).ambiguity
+def _candidate_ambiguity(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> float:
+    return (evidence or OilCandidateEvidence.from_candidate(candidate)).ambiguity
 
 
 def _candidate_quality(
     candidate: BoundaryCandidate,
     *,
+    evidence: OilCandidateEvidence | None = None,
     terminal_fallback: bool = False,
 ) -> float:
+    evidence = evidence or OilCandidateEvidence.from_candidate(candidate)
     features = candidate.features
-    material = _candidate_material_support(candidate)
+    material = evidence.material_support
     availability = min(
         _unit(features.get("evidence_availability", 1.0)),
         _unit(features.get("visibility", 1.0)),
@@ -1649,15 +1862,16 @@ def _candidate_quality(
     return (
         0.64 * material
         + 0.18 * availability
-        - 0.14 * _candidate_ambiguity(candidate)
-        - 0.24 * _candidate_artifact_signature(candidate)
-        - 0.18 * _candidate_static_contradiction(candidate)
+        - 0.14 * evidence.ambiguity
+        - 0.24 * evidence.artifact_signature
+        - 0.18 * evidence.static_contradiction
         + (
-            0.18 * _candidate_terminal_support(candidate)
+            0.18
+            * (evidence.terminal_support if evidence.material_path else 0.0)
             if terminal_fallback
             else 0.0
         )
-        + 0.12 * _candidate_registered_motion(candidate)
+        + 0.12 * evidence.registered_motion
     )
 
 
@@ -1669,7 +1883,7 @@ def _recurrence_hard_contradiction(ref: _CandidateRef) -> bool:
     evidence that the row is material, optical or structural noise.
     """
 
-    evidence = OilCandidateEvidence.from_candidate(ref.candidate)
+    evidence = ref.evidence
     return bool(
         ref.phase_identity is OilPhaseIdentity.OPPOSED_MATERIAL
         or evidence.material_texture_conflict >= 0.60
@@ -1703,7 +1917,7 @@ def _independent_anchor(ref: _CandidateRef) -> bool:
         return False
     if ref.cluster_support >= 0.99:
         return True
-    evidence = OilCandidateEvidence.from_candidate(ref.candidate)
+    evidence = ref.evidence
     return bool(
         evidence.availability.phase
         and ref.representation_support >= 0.50
@@ -1713,6 +1927,7 @@ def _independent_anchor(ref: _CandidateRef) -> bool:
 
 def _oil_emission(ref: _CandidateRef) -> float:
     candidate = ref.candidate
+    evidence = ref.evidence
     features = candidate.features
     availability = min(
         _unit(features.get("evidence_availability", 1.0)),
@@ -1720,7 +1935,7 @@ def _oil_emission(ref: _CandidateRef) -> float:
     )
     return (
         -0.18
-        + 0.62 * _candidate_material_support(candidate)
+        + 0.62 * evidence.material_support
         + 0.08 * availability
         + (
             0.18
@@ -1731,38 +1946,41 @@ def _oil_emission(ref: _CandidateRef) -> float:
         + 0.30 * ref.trajectory_support
         + 0.14 * ref.representation_support
         + 0.24 * ref.semantic_corridor_support
-        - 0.65 * _candidate_artifact_signature(candidate)
-        - 0.34 * _candidate_static_contradiction(candidate)
-        - 0.28 * _candidate_ambiguity(candidate)
+        - 0.65 * evidence.artifact_signature
+        - 0.34 * evidence.static_contradiction
+        - 0.28 * evidence.ambiguity
         - 0.72 * _effective_track_opposition(ref)
         - ref.foam_alias_penalty
         + (
-            0.22 * _candidate_terminal_support(candidate)
+            0.22
+            * (evidence.terminal_support if evidence.material_path else 0.0)
             if ref.terminal_fallback
             else 0.0
         )
-        + 0.24 * _candidate_registered_motion(candidate)
+        + 0.24 * evidence.registered_motion
     )
 
 
 def _oil_confidence(ref: _CandidateRef) -> float:
+    evidence = ref.evidence
     return _unit(
         0.28
-        + 0.50 * _candidate_material_support(ref.candidate)
+        + 0.50 * evidence.material_support
         + 0.16 * ref.cluster_support
         + 0.10 * ref.trajectory_support
         + 0.08 * ref.representation_support
         + 0.08 * ref.semantic_corridor_support
-        - 0.20 * _candidate_artifact_signature(ref.candidate)
-        - 0.10 * _candidate_static_contradiction(ref.candidate)
-        - 0.12 * _candidate_ambiguity(ref.candidate)
+        - 0.20 * evidence.artifact_signature
+        - 0.10 * evidence.static_contradiction
+        - 0.12 * evidence.ambiguity
         - 0.22 * _effective_track_opposition(ref)
         + (
-            0.08 * _candidate_terminal_support(ref.candidate)
+            0.08
+            * (evidence.terminal_support if evidence.material_path else 0.0)
             if ref.terminal_fallback
             else 0.0
         )
-        + 0.08 * _candidate_registered_motion(ref.candidate)
+        + 0.08 * evidence.registered_motion
     )
 
 
@@ -1869,8 +2087,8 @@ def _continuous_registered_motion_extension(
             node.kind != "oil"
             or ref is None
             or ref.trajectory_support < 0.99
-            or _candidate_registered_motion(ref.candidate) < minimum_support
-            or _candidate_registered_motion_coverage(ref.candidate) < minimum_coverage
+            or ref.evidence.registered_motion < minimum_support
+            or ref.evidence.registered_motion_coverage < minimum_coverage
         ):
             return False
     return True
@@ -1931,6 +2149,7 @@ def _project_candidates(
     candidates: Iterable[BoundaryCandidate],
     selected_ref: _CandidateRef | None,
     refs: tuple[_CandidateRef, ...],
+    evidence_index: OilCandidateEvidenceIndex,
 ) -> list[BoundaryCandidate]:
     output: list[BoundaryCandidate] = []
     refs_by_offset = {ref.candidate_offset: ref for ref in refs}
@@ -1981,12 +2200,15 @@ def _project_candidates(
                     ),
                     "sequence_ordered_lower": float(ref.ordered_lower),
                     "sequence_component_id": ref.component_id or "",
-                    **OilCandidateEvidence.from_candidate(
-                        ref.candidate
-                    ).availability.as_features(),
+                    **ref.evidence.availability.as_features(),
                 },
             )
-        eligible = _candidate_eligible(candidate)
+        evidence = (
+            ref.evidence
+            if ref is not None
+            else evidence_index.evidence(candidate)
+        )
+        eligible = _candidate_eligible(candidate, evidence)
         output.append(
             replace(
                 candidate,
@@ -2057,6 +2279,8 @@ def _longest_consecutive(indices: tuple[int, ...]) -> int:
 def _qualified_ordinary_semantic_keys(
     detections: tuple[PhaseDetection, ...],
     glass: GlassInspectionConfig,
+    *,
+    evidence_index: OilCandidateEvidenceIndex,
 ) -> set[tuple[int, int]]:
     """Find an evidence-seeded ordinary semantic corridor.
 
@@ -2073,17 +2297,19 @@ def _qualified_ordinary_semantic_keys(
     for frame_offset, detection in enumerate(detections):
         ranked: list[tuple[int, BoundaryCandidate, float, float]] = []
         for candidate_offset, candidate in enumerate(detection.candidates):
-            if not _ordinary_semantic_candidate(candidate):
+            evidence = evidence_index.evidence(candidate)
+            if not _ordinary_semantic_candidate(candidate, evidence):
                 continue
             ranked.append(
                 (
                     candidate_offset,
                     candidate,
-                    _ordinary_semantic_rank(candidate),
+                    _ordinary_semantic_rank(candidate, evidence),
                     _ordinary_terminal_peer_support(
                         candidate,
                         detection.candidates,
                         glass,
+                        evidence_index=evidence_index,
                     ),
                 )
             )
@@ -2147,7 +2373,10 @@ def _qualified_ordinary_semantic_keys(
                             candidates = (first, second, third)
                             frames = (first_frame, second_frame, third_frame)
                             seed_flags = tuple(
-                                _ordinary_semantic_seed(candidate)
+                                _ordinary_semantic_seed(
+                                    candidate,
+                                    evidence_index.evidence(candidate),
+                                )
                                 for candidate in candidates
                             )
                             seed_count = sum(
@@ -2205,6 +2434,8 @@ def _ordinary_terminal_peer_support(
     candidate: BoundaryCandidate,
     candidates: Sequence[BoundaryCandidate],
     glass: GlassInspectionConfig,
+    *,
+    evidence_index: OilCandidateEvidenceIndex,
 ) -> float:
     tolerance = max(
         8.0,
@@ -2212,10 +2443,13 @@ def _ordinary_terminal_peer_support(
     )
     return max(
         (
-            _candidate_terminal_support(peer)
+            _candidate_terminal_support(
+                peer,
+                evidence_index.evidence(peer),
+            )
             for peer in candidates
             if peer is not candidate
-            and _candidate_eligible(peer)
+            and _candidate_eligible(peer, evidence_index.evidence(peer))
             and abs(float(peer.y) - float(candidate.y)) <= tolerance
         ),
         default=0.0,
@@ -2307,17 +2541,20 @@ def _semantic_corridor_support(
     return proximity(nearest[1])
 
 
-def _ordinary_semantic_candidate(candidate: BoundaryCandidate) -> bool:
+def _ordinary_semantic_candidate(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> bool:
+    evidence = evidence or OilCandidateEvidence.from_candidate(candidate)
     if (
         candidate.kind is not BoundaryKind.OIL_AIR
         or not _finite(candidate.y)
-        or _candidate_is_material_path(candidate)
-        or _candidate_is_supplemental(candidate)
-        or not _candidate_eligible(candidate)
+        or evidence.material_path
+        or evidence.supplemental
+        or not _candidate_eligible(candidate, evidence)
     ):
         return False
     features = candidate.features
-    evidence = OilCandidateEvidence.from_candidate(candidate)
     if (
         not evidence.availability.material_texture
         or evidence.material_texture_conflict >= 0.60
@@ -2343,16 +2580,19 @@ def _ordinary_semantic_candidate(candidate: BoundaryCandidate) -> bool:
         )
     )
     return bool(
-        _candidate_material_support(candidate) >= 0.30
+        evidence.material_support >= 0.30
         and boundary >= 0.26
         and artifact <= 0.76
-        and _candidate_ambiguity(candidate) <= 0.68
-        and _candidate_optics_opposition(candidate) <= 0.38
+        and evidence.ambiguity <= 0.68
+        and evidence.optics_opposition <= 0.38
         and coverage >= 0.02
     )
 
 
-def _ordinary_semantic_seed(candidate: BoundaryCandidate) -> bool:
+def _ordinary_semantic_seed(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> bool:
     """Return localized interface evidence within the ordinary family.
 
     A broad moving brightness field is common inside a full, turbulent Glass.
@@ -2360,7 +2600,8 @@ def _ordinary_semantic_seed(candidate: BoundaryCandidate) -> bool:
     wide cross-ROI boundary accompanies the semantic advantage.
     """
 
-    if not _ordinary_semantic_candidate(candidate):
+    evidence = evidence or OilCandidateEvidence.from_candidate(candidate)
+    if not _ordinary_semantic_candidate(candidate, evidence):
         return False
     features = candidate.features
     boundary = _unit(features.get("boundary_likelihood", candidate.feature_score))
@@ -2394,10 +2635,14 @@ def _ordinary_semantic_seed(candidate: BoundaryCandidate) -> bool:
     )
 
 
-def _ordinary_semantic_rank(candidate: BoundaryCandidate) -> float:
+def _ordinary_semantic_rank(
+    candidate: BoundaryCandidate,
+    evidence: OilCandidateEvidence | None = None,
+) -> float:
     """Rank ordinary rows using image evidence, never legacy selection."""
 
     features = candidate.features
+    evidence = evidence or OilCandidateEvidence.from_candidate(candidate)
     boundary = _unit(features.get("boundary_likelihood", candidate.feature_score))
     artifact = _unit(
         features.get(
@@ -2427,8 +2672,8 @@ def _ordinary_semantic_rank(candidate: BoundaryCandidate) -> float:
         + 0.12 * terminal
         + 0.08 * scale
         - 0.30 * artifact
-        - 0.15 * _candidate_ambiguity(candidate)
-        - 0.10 * _candidate_static_contradiction(candidate)
+        - 0.15 * evidence.ambiguity
+        - 0.10 * evidence.static_contradiction
     )
 
 

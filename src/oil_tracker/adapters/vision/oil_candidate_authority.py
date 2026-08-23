@@ -80,11 +80,13 @@ def evaluate_candidate_authority(
     candidate: BoundaryCandidate,
     config: AuthorityThresholds,
     context: AuthorityContext,
+    evidence: OilCandidateEvidence | None = None,
 ) -> AuthorityDecision:
-    if not candidate_is_eligible(candidate):
+    normalized = evidence or OilCandidateEvidence.from_candidate(candidate)
+    if not candidate_is_eligible(candidate, normalized):
         return AuthorityDecision(OilCandidateAuthority.HARD_INVALID, AuthorityReason.INELIGIBLE)
 
-    evidence = OilCandidateEvidence.from_candidate(candidate)
+    evidence = normalized
     phase_identity = context.phase_identity or evaluate_phase_identity(
         candidate,
         config,
@@ -95,6 +97,7 @@ def evaluate_candidate_authority(
             foam_seed_age_seconds=context.foam_seed_age_seconds,
             lower_separation_px=context.lower_separation_px,
         ),
+        evidence=evidence,
     )
     static_material_front_twin = bool(
         evidence.raw_material_row_support >= 0.60
