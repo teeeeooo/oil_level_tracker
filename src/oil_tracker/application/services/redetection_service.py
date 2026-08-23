@@ -6,6 +6,7 @@ import logging
 from pathlib import Path
 from typing import Any, Callable
 
+from oil_tracker.application.ports.phase_detector import PreparedFrameDetector
 from oil_tracker.application.services.detection_processing import (
     learn_static_artifacts,
     tracking_sample_from_detection,
@@ -74,7 +75,7 @@ class PartialRedetectionService:
     def __init__(
         self,
         video_reader_factory: Callable[[str], Any],
-        detector_factory: Callable[[], Any],
+        detector_factory: Callable[[], PreparedFrameDetector],
         workspace_factory: Callable[..., Any],
         *,
         policy: RedetectionPolicy | None = None,

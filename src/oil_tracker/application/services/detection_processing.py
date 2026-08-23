@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Iterable, MutableMapping, Sequence
 from typing import Any
 
+from oil_tracker.application.ports.phase_detector import StaticArtifactLearner
 from oil_tracker.domain.enums import FillState
 from oil_tracker.domain.recipe import GlassInspectionConfig
 from oil_tracker.domain.results import TrackingSample
@@ -21,7 +22,7 @@ def static_artifact_sample_timestamps(schedule: Sequence[float]) -> tuple[float,
 
 def learn_static_artifacts(
     reader,
-    detector,
+    detector: StaticArtifactLearner,
     glasses: Iterable[GlassInspectionConfig],
     schedule: Sequence[float],
     *,
@@ -34,9 +35,8 @@ def learn_static_artifacts(
     are decoded only once. The official pipeline leaves the cache unset and retains
     its established behavior.
     """
-    learn = getattr(detector, "learn_static_artifact", None)
     targets = static_artifact_sample_timestamps(schedule)
-    if learn is None or not targets:
+    if not targets:
         return ()
     frames = []
     decoded_targets: list[float] = []
@@ -53,7 +53,7 @@ def learn_static_artifacts(
     if not frames:
         return ()
     for glass in tuple(glasses):
-        learn(frames, glass)
+        detector.learn_static_artifact(frames, glass)
     return tuple(decoded_targets)
 
 

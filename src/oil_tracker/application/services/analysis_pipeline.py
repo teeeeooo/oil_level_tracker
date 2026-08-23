@@ -7,7 +7,7 @@ import time
 from typing import Callable
 from uuid import uuid4
 
-from oil_tracker.application.ports.phase_detector import PhaseDetector
+from oil_tracker.application.ports.phase_detector import AnalysisDetector
 from oil_tracker.application.ports.progress import (
     AnalysisCancelled,
     AnalysisStage,
@@ -56,7 +56,7 @@ class AnalysisPipeline:
     def __init__(
         self,
         video_reader_factory: Callable[[str], object],
-        detector: PhaseDetector,
+        detector: AnalysisDetector,
         validator: RecipeValidationService,
         debug_trace_sink_factory=None,
         capture_policy: DebugCapturePolicy | None = None,
@@ -430,15 +430,12 @@ def _resolve_detection_sequence(
     glass,
     confirmed_initial_state,
 ):
-    resolver = getattr(detector, "resolve_sequence", None)
-    if not callable(resolver):
-        return tuple(detections), None
-    result = resolver(
+    result = detector.resolve_sequence(
         tuple(detections),
         glass,
         confirmed_initial_state,
     )
-    resolved = tuple(getattr(result, "detections", result))
+    resolved = tuple(result.detections)
     if len(resolved) != len(detections):
         raise ValueError(
             "Sequence resolver must return exactly one detection per input frame."
@@ -452,9 +449,9 @@ def _resolve_detection_sequence(
             raise ValueError(
                 "Sequence resolver changed Glass, frame or timestamp identity."
             )
-    diagnostics = getattr(result, "diagnostics", None)
+    diagnostics = result.diagnostics
     if diagnostics is None:
-        return resolved, {"version": str(getattr(detector, "version", "unknown"))}
+        return resolved, None
     if is_dataclass(diagnostics):
         return resolved, asdict(diagnostics)
     if isinstance(diagnostics, dict):

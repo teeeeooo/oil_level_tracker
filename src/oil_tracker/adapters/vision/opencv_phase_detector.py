@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field, replace
 from typing import Any
 
@@ -107,7 +108,7 @@ class OpenCvPhaseDetector:
 
     def resolve_sequence(
         self,
-        detections: list[PhaseDetection] | tuple[PhaseDetection, ...],
+        detections: Sequence[PhaseDetection],
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None = None,
     ) -> ObservationSequenceResolution:
@@ -119,7 +120,11 @@ class OpenCvPhaseDetector:
             confirmed_initial_state,
         )
 
-    def learn_static_artifact(self, frames: list[np.ndarray], glass: GlassInspectionConfig) -> None:
+    def learn_static_artifact(
+        self,
+        frames: Sequence[np.ndarray],
+        glass: GlassInspectionConfig,
+    ) -> None:
         if not frames:
             return
         maps = []

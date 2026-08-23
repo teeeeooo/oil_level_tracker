@@ -30,6 +30,8 @@ class FakeReader:
 
 
 class FakeDetector:
+    version = "frame-fake-v1"
+
     def __init__(self, fail_at=None):
         self.calls = []
         self.reset_count = 0
@@ -41,6 +43,10 @@ class FakeDetector:
 
     def learn_static_artifact(self, frames, glass):
         self.learn_calls += 1
+
+    def resolve_sequence(self, detections, glass, confirmed_initial_state):
+        del glass, confirmed_initial_state
+        return SimpleNamespace(detections=tuple(detections), diagnostics=None)
 
     def detect(self, frame, glass, frame_index, timestamp, debug=False):
         self.calls.append((frame_index, timestamp, debug))

@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Callable, Mapping
 
 from oil_tracker.application.ports.benchmark_result_writer import BenchmarkResultWriter
+from oil_tracker.application.ports.phase_detector import PhaseDetector
 from oil_tracker.application.ports.regression_dataset_reader import (
     RegressionDataset,
     RegressionDatasetCase,
@@ -39,7 +40,7 @@ class DetectorBenchmarkService:
         self,
         dataset_reader: RegressionDatasetReader,
         result_writer: BenchmarkResultWriter,
-        detector_factory: Callable[[], object],
+        detector_factory: Callable[[], PhaseDetector],
         *,
         clock: Callable[[], datetime] | None = None,
         runtime_metadata_factory: Callable[[], Mapping[str, Any]] | None = None,
@@ -67,17 +68,8 @@ class DetectorBenchmarkService:
 
         for group in _case_groups(dataset):
             detector = self.detector_factory()
-            reset = getattr(detector, "reset", None)
-            if reset is None:
-                raise TypeError("benchmark detector must provide reset()")
-            reset()
-            detector_version = str(
-                getattr(
-                    detector,
-                    "version",
-                    f"{detector.__class__.__module__}.{detector.__class__.__qualname__}",
-                )
-            )
+            detector.reset()
+            detector_version = str(detector.version)
             detector_versions.add(detector_version)
             for case in group:
                 settings = asdict(case.glass.detector_settings)

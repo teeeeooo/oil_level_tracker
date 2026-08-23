@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from types import SimpleNamespace
 
 import cv2
 import numpy as np
@@ -166,11 +167,20 @@ def test_cancellation_stops_before_decode():
 
 
 class _RetrospectiveSequenceDetector:
+    version = "retrospective-frame-fake-v1"
+
     def __init__(self) -> None:
         self.calls = 0
 
     def reset(self) -> None:
         self.calls = 0
+
+    def learn_static_artifact(self, frames, glass) -> None:
+        del frames, glass
+
+    def resolve_sequence(self, detections, glass, confirmed_initial_state):
+        del glass, confirmed_initial_state
+        return SimpleNamespace(detections=tuple(detections), diagnostics=None)
 
     def detect(self, _frame, glass, frame_index, time_sec, debug=False):
         del debug
