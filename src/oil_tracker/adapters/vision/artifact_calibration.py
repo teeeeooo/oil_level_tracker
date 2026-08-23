@@ -7,7 +7,11 @@ from uuid import uuid4
 import numpy as np
 
 from oil_tracker.domain.detection import BoundaryCandidate
-from oil_tracker.domain.geometry import ArtifactTemplate, Rect
+from oil_tracker.domain.geometry import (
+    ArtifactTemplate,
+    Rect,
+    artifact_template_source_rect,
+)
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
 
@@ -205,12 +209,7 @@ def template_source_rect(
     template: ArtifactTemplate,
     glass: GlassInspectionConfig,
 ) -> Rect:
-    bounds = glass.geometry.ellipse.bounds
-    width = template.width * bounds.width
-    height = template.height * bounds.height
-    center_x = bounds.x + template.center_x * bounds.width
-    center_y = bounds.y + template.center_y * bounds.height
-    return Rect(center_x - width * 0.5, center_y - height * 0.5, width, height)
+    return artifact_template_source_rect(template, glass.geometry)
 
 
 def _unit(value: object) -> float:

@@ -10,6 +10,7 @@ from oil_tracker.adapters.reporting.csv_exporter import (
     TRACKING_REQUIRED_COLUMNS,
 )
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
+from oil_tracker.application.ports.review_io import ResultBundleError
 from oil_tracker.domain.enums import EventType, FillState, ResultState
 from oil_tracker.domain.retrospective import RetrospectiveInterpretation
 from oil_tracker.domain.review import ReviewBundle, ReviewEvent, ReviewGlass, ReviewTrackingSample
@@ -18,10 +19,6 @@ from oil_tracker.domain.session import AnalysisSession, DebugTraceLevel, VideoMe
 
 SUPPORTED_REVIEW_INDEX_VERSIONS = {1, 2}
 SUPPORTED_RESULT_SEMANTICS_VERSIONS = {1, 2}
-
-
-class ResultBundleError(ValueError):
-    """A user-correctable result-bundle validation or parsing error."""
 
 
 class ResultBundleReader:

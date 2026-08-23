@@ -6,6 +6,7 @@ from types import SimpleNamespace
 import numpy as np
 from PySide6.QtCore import Qt
 
+from oil_tracker.adapters.storage.debug_case_exporter import DebugCaseExporter
 from oil_tracker.adapters.vision.source_video_resolver import SourceVideoResolver
 from oil_tracker.domain.debug_trace import DebugBundleIndex, DebugTraceRecord, DebugTraceSummary
 from oil_tracker.domain.enums import FillState, ResultState
@@ -228,6 +229,7 @@ def _window(bundle, repository_holder=None):
         source_resolver=SourceVideoResolver(raw_factory),
         playback_controller=ResultReviewController(presented_reader_factory(raw_factory)),
         debug_repository_factory=factory,
+        debug_case_exporter=DebugCaseExporter(),
         png_exporter=png_exporter(),
         debug_artifact_presenter=debug_artifact_presenter(),
     )

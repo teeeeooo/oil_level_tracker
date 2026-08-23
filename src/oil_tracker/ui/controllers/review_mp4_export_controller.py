@@ -4,7 +4,7 @@ import logging
 
 from PySide6.QtCore import QObject, QThread, Signal, Slot
 
-from oil_tracker.adapters.storage.review_mp4_exporter import ReviewMp4ExportCancelled
+from oil_tracker.application.ports.review_io import ExportCancelled
 from oil_tracker.application.services.analysis_pipeline import SimpleCancellationToken
 
 
@@ -32,7 +32,7 @@ class ReviewMp4ExportWorker(QObject):
                 cancellation=self.cancellation,
                 progress=lambda update: self.progress.emit(self.generation, update),
             )
-        except ReviewMp4ExportCancelled:
+        except ExportCancelled:
             self.cancelled.emit(self.generation)
         except Exception as exc:
             LOGGER.exception("Annotated MP4 export worker failed")

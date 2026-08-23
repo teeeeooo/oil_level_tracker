@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-
-class BundleAssetError(ValueError):
-    """A bundle asset is missing, unsafe, or has the wrong filesystem type."""
+from oil_tracker.application.ports.review_io import BundleAssetError
 
 
 class BundleAssetResolver:

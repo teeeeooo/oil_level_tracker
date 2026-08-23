@@ -11,11 +11,7 @@ from uuid import uuid4
 import cv2
 
 from oil_tracker.adapters.storage.debug_trace_repository import DebugTraceError
-
-
-class DebugCaseExportError(ValueError):
-    pass
-
+from oil_tracker.application.ports.review_io import DebugCaseExportError
 
 class DebugCaseExporter:
     CONTEXT_OFFSET_SEC = 1.0

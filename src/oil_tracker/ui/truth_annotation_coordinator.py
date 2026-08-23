@@ -7,18 +7,18 @@ from PySide6.QtCore import QObject
 from PySide6.QtGui import QImage
 from PySide6.QtWidgets import QFileDialog, QMessageBox
 
-from oil_tracker.adapters.storage.json_truth_repository import (
-    JsonTruthRepository,
+from oil_tracker.application.ports.review_io import (
+    TruthFixtureExporterPort,
     TruthIdentityMismatchError,
     TruthRepositoryError,
-    build_truth_bundle_identity,
+    TruthRepositoryPort,
 )
-from oil_tracker.adapters.storage.regression_fixture_exporter import RegressionFixtureExporter
 from oil_tracker.application.services.user_truth import (
     TruthFrameContext,
     TruthSession,
     UserTruthService,
 )
+from oil_tracker.application.services.truth_identity import build_truth_bundle_identity
 from oil_tracker.domain.user_truth import (
     TruthDisposition,
     TruthValidationError,
@@ -39,16 +39,16 @@ class TruthAnnotationCoordinator(QObject):
         self,
         viewer,
         *,
-        repository: JsonTruthRepository | None = None,
+        repository: TruthRepositoryPort | None = None,
         service: UserTruthService | None = None,
-        exporter: RegressionFixtureExporter | None = None,
+        exporter: TruthFixtureExporterPort | None = None,
         parent=None,
     ) -> None:
         super().__init__(parent or viewer)
         self.viewer = viewer
-        self.repository = repository or JsonTruthRepository()
+        self.repository = repository
         self.service = service or UserTruthService()
-        self.export_controller = TruthExportController(exporter or RegressionFixtureExporter(), self)
+        self.export_controller = TruthExportController(exporter, self)
         self.window: TruthAnnotationWindow | None = None
         self.session = TruthSession()
         self.identity = None
@@ -277,6 +277,9 @@ class TruthAnnotationCoordinator(QObject):
         )
         if not selected:
             return
+        if self.repository is None:
+            QMessageBox.critical(self.window, "사용자 정답 열기 실패", "사용자 정답 저장소가 구성되지 않았습니다.")
+            return
         expected = build_truth_bundle_identity(self.viewer.bundle)
         try:
             result = self.repository.load(
@@ -305,6 +308,9 @@ class TruthAnnotationCoordinator(QObject):
 
     def save_truth_set(self, *, save_as: bool = False) -> bool:
         if self.viewer.bundle is None or self.session.truth_set is None:
+            return False
+        if self.repository is None:
+            QMessageBox.critical(self.window or self.viewer, "사용자 정답 저장 실패", "사용자 정답 저장소가 구성되지 않았습니다.")
             return False
         self._ensure_window()
         destination = None if save_as else self.session.path

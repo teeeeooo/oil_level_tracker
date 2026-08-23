@@ -6,6 +6,7 @@ import numpy as np
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMessageBox
 
+from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetResolver
 from oil_tracker.adapters.vision.source_video_resolver import SourceVideoResolver
 from oil_tracker.domain.enums import EventType, FillState, ResultState
 from oil_tracker.domain.recipe import InspectionRecipe
@@ -138,7 +139,11 @@ def _window(bundle, *, opener=None):
         bundle_reader=_BundleReader(bundle),
         source_resolver=SourceVideoResolver(raw_factory),
         playback_controller=ResultReviewController(presented_reader_factory(raw_factory)),
-        action_service=ResultActionService(opener=opener) if opener is not None else None,
+        action_service=(
+            ResultActionService(BundleAssetResolver(), opener=opener)
+            if opener is not None
+            else None
+        ),
         png_exporter=png_exporter(),
         debug_artifact_presenter=debug_artifact_presenter(),
     )

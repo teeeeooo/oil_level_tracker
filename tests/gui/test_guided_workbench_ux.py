@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import numpy as np
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMessageBox
@@ -105,11 +107,10 @@ def test_roi_editor_accepts_detector_artifact_proposal_on_private_copy(
         final_score=0.8,
     )
 
-    monkeypatch.setattr(
-        "oil_tracker.ui.widgets.roi_editor_dialog.propose_artifact_templates",
-        lambda _frame, _glass: [
+    proposer = SimpleNamespace(
+        propose=lambda _frame, _glass: [
             template_from_candidate(candidate, name="경계 후보 1")
-        ],
+        ]
     )
     glass = InspectionRecipe.default_glass(640, 480)
     dialog = RoiEditorDialog(
@@ -117,6 +118,7 @@ def test_roi_editor_accepts_detector_artifact_proposal_on_private_copy(
         glass,
         640,
         480,
+        artifact_proposer=proposer,
     )
     qtbot.addWidget(dialog)
 
@@ -155,16 +157,14 @@ def test_roi_editor_bulk_selects_and_highlights_artifact_proposals(
         template_from_candidate(candidate, name=f"경계 후보 {index + 1}")
         for index, candidate in enumerate(candidates)
     ]
-    monkeypatch.setattr(
-        "oil_tracker.ui.widgets.roi_editor_dialog.propose_artifact_templates",
-        lambda _frame, _glass: proposals,
-    )
+    proposer = SimpleNamespace(propose=lambda _frame, _glass: proposals)
     glass = InspectionRecipe.default_glass(640, 480)
     dialog = RoiEditorDialog(
         np.zeros((480, 640, 3), dtype=np.uint8),
         glass,
         640,
         480,
+        artifact_proposer=proposer,
     )
     qtbot.addWidget(dialog)
     dialog.show()

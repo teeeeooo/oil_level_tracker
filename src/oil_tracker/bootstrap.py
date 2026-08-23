@@ -7,15 +7,22 @@ from oil_tracker.adapters.presentation.review_frame_presenter import (
     ReviewPresentedVideoReader,
 )
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
+from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetResolver
+from oil_tracker.adapters.storage.debug_case_exporter import DebugCaseExporter
+from oil_tracker.adapters.storage.debug_trace_repository import DebugTraceRepository
+from oil_tracker.adapters.storage.json_truth_repository import JsonTruthRepository
 from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
 from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
 from oil_tracker.adapters.storage.redetection_workspace import RedetectionWorkspace
 from oil_tracker.adapters.storage.recent_profile_history import RecentProfileHistory
 from oil_tracker.adapters.storage.recent_result_history import RecentResultHistory
+from oil_tracker.adapters.storage.regression_fixture_exporter import RegressionFixtureExporter
+from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleReader
 from oil_tracker.adapters.storage.review_mp4_exporter import ReviewMp4Exporter
 from oil_tracker.adapters.storage.review_png_exporter import ReviewPngExporter
 from oil_tracker.adapters.system.logging_config import configure_logging
 from oil_tracker.adapters.vision.debug_renderer import DebugRenderer
+from oil_tracker.adapters.vision.artifact_proposal import OpenCvArtifactProposalService
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
 from oil_tracker.adapters.vision.review_debug_overlay_renderer import ReviewDebugOverlayRenderer
@@ -45,6 +52,7 @@ from oil_tracker.ui.redetection_result_review_window import RedetectionResultRev
 from oil_tracker.ui.result_actions import ResultActionService
 from oil_tracker.ui.result_review_coordinator import ResultReviewCoordinator
 from oil_tracker.ui.same_profile_analysis_coordinator import SameProfileAnalysisCoordinator
+from oil_tracker.ui.truth_annotation_coordinator import TruthAnnotationCoordinator
 
 
 def build_main_window() -> MainWindow:
@@ -70,7 +78,13 @@ def build_main_window() -> MainWindow:
     analysis_controller = AnalysisController(
         AnalyzeVideoUseCase(pipeline, result_store)
     )
-    window = MainWindow(workbench, preview_controller, analysis_controller, DebugRenderer())
+    window = MainWindow(
+        workbench,
+        preview_controller,
+        analysis_controller,
+        DebugRenderer(),
+        artifact_proposer=OpenCvArtifactProposalService(),
+    )
     analysis_controller.setParent(window)
     window.destroyed.connect(lambda: analysis_controller.shutdown())
     install_debug_trace_selector(window)
@@ -83,9 +97,10 @@ def build_main_window() -> MainWindow:
     preflight_controller = PreflightController(preflight_use_case, window)
     window.preflight_coordinator = PreflightCoordinator(window, preflight_controller)
     window.same_profile_coordinator = SameProfileAnalysisCoordinator(window)
-    window.result_action_service = ResultActionService()
+    bundle_reader = ResultBundleReader()
+    window.result_action_service = ResultActionService(BundleAssetResolver())
     window.set_recent_profile_history(RecentProfileHistory())
-    window.recent_result_history = RecentResultHistory()
+    window.recent_result_history = RecentResultHistory(bundle_reader=bundle_reader)
     window.redetection_service = PartialRedetectionService(
         lambda path: OpenCvVideoReader(path),
         OpenCvPhaseDetector,
@@ -108,9 +123,12 @@ def build_main_window() -> MainWindow:
 
     def review_viewer_factory(parent):
         return RedetectionResultReviewWindow(
+            bundle_reader=bundle_reader,
             source_resolver=SourceVideoResolver(OpenCvVideoReader),
             playback_controller=ResultReviewController(review_reader_factory),
             action_service=window.result_action_service,
+            debug_repository_factory=DebugTraceRepository,
+            debug_case_exporter=DebugCaseExporter(),
             png_exporter=ReviewPngExporter(),
             mp4_export_controller=ReviewMp4ExportController(
                 ReviewMp4Exporter(
@@ -123,6 +141,14 @@ def build_main_window() -> MainWindow:
             parent=parent,
         )
 
+    def truth_coordinator_factory(viewer):
+        return TruthAnnotationCoordinator(
+            viewer,
+            repository=JsonTruthRepository(),
+            exporter=RegressionFixtureExporter(reader_factory=OpenCvVideoReader),
+            parent=viewer,
+        )
+
     window.result_review_coordinator = ResultReviewCoordinator(
         window,
         window.result_action_service,
@@ -130,12 +156,14 @@ def build_main_window() -> MainWindow:
         window.redetection_service,
         viewer_factory=review_viewer_factory,
         recent_result_history=window.recent_result_history,
+        truth_coordinator_factory=truth_coordinator_factory,
     )
     window.analysis_completion_coordinator = AnalysisCompletionCoordinator(
         window,
         window.result_review_coordinator,
         window.same_profile_coordinator,
         window.result_action_service,
+        bundle_reader=bundle_reader,
         recent_result_history=window.recent_result_history,
     )
     try:

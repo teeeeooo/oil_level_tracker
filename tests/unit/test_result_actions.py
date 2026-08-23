@@ -4,7 +4,10 @@ from pathlib import Path
 
 import pytest
 
-from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetError
+from oil_tracker.adapters.storage.bundle_asset_resolver import (
+    BundleAssetError,
+    BundleAssetResolver,
+)
 from oil_tracker.ui.result_actions import ResultActionError, ResultActionService
 
 
@@ -21,6 +24,7 @@ def test_report_folder_and_capture_use_local_file_urls(tmp_path):
     root = _bundle(tmp_path)
     opened = []
     service = ResultActionService(
+        BundleAssetResolver(),
         opener=lambda url: opened.append(Path(url.toLocalFile()).resolve()) or True
     )
     assert service.open_report(root).name == "report.html"
@@ -36,7 +40,7 @@ def test_report_folder_and_capture_use_local_file_urls(tmp_path):
 def test_missing_report_and_capture_are_clear_errors(tmp_path):
     root = tmp_path / "bundle"
     root.mkdir()
-    service = ResultActionService(opener=lambda _url: True)
+    service = ResultActionService(BundleAssetResolver(), opener=lambda _url: True)
     with pytest.raises(BundleAssetError, match="보고서"):
         service.open_report(root)
     with pytest.raises(ResultActionError, match="기록된 캡처"):
@@ -47,7 +51,7 @@ def test_missing_report_and_capture_are_clear_errors(tmp_path):
 
 def test_invalid_capture_path_and_os_open_failure_are_rejected(tmp_path):
     root = _bundle(tmp_path)
-    service = ResultActionService(opener=lambda _url: False)
+    service = ResultActionService(BundleAssetResolver(), opener=lambda _url: False)
     with pytest.raises(BundleAssetError):
         service.open_capture(root, "../outside.png")
     with pytest.raises(ResultActionError, match="운영체제"):

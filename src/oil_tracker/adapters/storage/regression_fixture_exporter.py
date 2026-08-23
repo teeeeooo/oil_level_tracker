@@ -24,6 +24,7 @@ from oil_tracker.adapters.storage.json_truth_repository import (
     sha256_file,
 )
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+from oil_tracker.application.ports.review_io import ExportCancelled
 from oil_tracker.domain.user_truth import UserTruthAnnotation, UserTruthSet
 
 
@@ -36,7 +37,7 @@ class RegressionFixtureExportError(ValueError):
     pass
 
 
-class RegressionFixtureExportCancelled(RegressionFixtureExportError):
+class RegressionFixtureExportCancelled(RegressionFixtureExportError, ExportCancelled):
     pass
 
 

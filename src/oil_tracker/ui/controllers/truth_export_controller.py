@@ -4,10 +4,8 @@ import logging
 
 from PySide6.QtCore import QObject, QThread, QTimer, Signal, Slot
 
+from oil_tracker.application.ports.review_io import ExportCancelled
 from oil_tracker.application.services.analysis_pipeline import SimpleCancellationToken
-from oil_tracker.adapters.storage.regression_fixture_exporter import (
-    RegressionFixtureExportCancelled,
-)
 
 
 LOGGER = logging.getLogger(__name__)
@@ -34,7 +32,7 @@ class TruthExportWorker(QObject):
                 cancellation=self.cancellation,
                 progress=lambda update: self.progress.emit(self.generation, update),
             )
-        except RegressionFixtureExportCancelled:
+        except ExportCancelled:
             self.cancelled.emit(self.generation)
         except Exception as exc:
             LOGGER.exception("Truth fixture export worker failed")
@@ -70,6 +68,10 @@ class TruthExportController(QObject):
 
     def start(self, *, generation: int | None = None, **payload) -> int:
         if self._closing:
+            return self.generation
+        if self.exporter is None:
+            self.generation += 1
+            self.failed.emit(self.generation, "regression fixture export 서비스가 구성되지 않았습니다.")
             return self.generation
         requested = int(generation if generation is not None else self.generation + 1)
         self.generation = max(self.generation + (0 if generation is not None else 1), requested)

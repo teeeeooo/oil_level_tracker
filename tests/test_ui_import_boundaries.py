@@ -24,6 +24,10 @@ _INNER_FORBIDDEN_IMPORTS = (
     "numpy",
 )
 _CONCRETE_VIDEO_READER_MODULE = "oil_tracker.adapters.vision.opencv_video_reader"
+_BUSINESS_ADAPTER_ROOTS = (
+    "oil_tracker.adapters.storage",
+    "oil_tracker.adapters.vision",
+)
 
 
 def _forbidden_imports(source: str) -> set[str]:
@@ -105,6 +109,33 @@ def test_domain_and_application_do_not_depend_on_outer_layers_or_raster_framewor
 def test_ui_does_not_import_the_concrete_opencv_video_reader():
     violations = _dependency_violations(UI_ROOT, (_CONCRETE_VIDEO_READER_MODULE,))
     assert violations == {}
+
+
+def test_ui_depends_on_application_ports_not_storage_or_vision_business_adapters():
+    assert _dependency_violations(UI_ROOT, _BUSINESS_ADAPTER_ROOTS) == {}
+
+
+def test_ui_does_not_construct_business_io_or_detector_proposal_adapters():
+    forbidden = (
+        "BundleAssetResolver(",
+        "DebugCaseExporter(",
+        "DebugTraceRepository(",
+        "JsonTruthRepository(",
+        "RecentResultHistory(",
+        "RegressionFixtureExporter(",
+        "ResultBundleReader(",
+        "SourceVideoResolver(",
+        "OpenCvArtifactProposalService(",
+    )
+    violations = {
+        path.relative_to(ROOT).as_posix(): tuple(
+            value
+            for value in forbidden
+            if value in path.read_text(encoding="utf-8")
+        )
+        for path in sorted(UI_ROOT.rglob("*.py"))
+    }
+    assert {path: values for path, values in violations.items() if values} == {}
 
 
 def test_ui_video_acquisition_owners_depend_on_the_application_reader_port():

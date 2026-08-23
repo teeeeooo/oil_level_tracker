@@ -12,6 +12,7 @@ from oil_tracker.adapters.storage.debug_trace_repository import DebugTraceReposi
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
 from oil_tracker.adapters.vision.review_debug_overlay_renderer import ReviewDebugOverlayRenderer
 from oil_tracker.adapters.vision.review_overlay_renderer import ReviewOverlayRenderer
+from oil_tracker.application.ports.review_io import ExportCancelled
 
 
 _DECODED_TIMELINE_MAX_GAP_PERIODS = 1.5
@@ -29,7 +30,7 @@ class ReviewMp4EncodingError(ReviewMp4ExportError):
     pass
 
 
-class ReviewMp4ExportCancelled(ReviewMp4ExportError):
+class ReviewMp4ExportCancelled(ReviewMp4ExportError, ExportCancelled):
     pass
 
 

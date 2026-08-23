@@ -17,8 +17,11 @@ from PySide6.QtWidgets import (
 )
 
 from oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter
-from oil_tracker.adapters.vision.artifact_calibration import template_source_rect
-from oil_tracker.domain.geometry import EllipseGeometry, Rect
+from oil_tracker.domain.geometry import (
+    EllipseGeometry,
+    Rect,
+    artifact_template_source_rect,
+)
 from oil_tracker.ui.presentation_labels import fill_state_label
 
 
@@ -696,7 +699,7 @@ class VideoOverlayCanvas(QGraphicsView):
         self._scene.addItem(label)
 
     def _add_artifact_template(self, template, glass, *, proposed: bool) -> None:
-        rect = template_source_rect(template, glass)
+        rect = artifact_template_source_rect(template, glass.geometry)
         qrect = QRectF(rect.x, rect.y, rect.width, rect.height)
         highlighted = bool(
             template.id

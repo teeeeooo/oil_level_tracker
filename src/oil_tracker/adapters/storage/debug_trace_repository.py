@@ -9,6 +9,7 @@ import cv2
 import numpy as np
 
 from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetError, BundleAssetResolver
+from oil_tracker.application.ports.review_io import DebugTraceError
 from oil_tracker.domain.debug_trace import (
     DEBUG_TRACE_SCHEMA_VERSION,
     DebugBundleIndex,
@@ -16,10 +17,6 @@ from oil_tracker.domain.debug_trace import (
     DebugTraceSummary,
 )
 from oil_tracker.domain.session import DebugTraceLevel
-
-
-class DebugTraceError(ValueError):
-    """A debug trace is unsupported, malformed, missing, or unsafe."""
 
 
 class DebugTraceRepository:

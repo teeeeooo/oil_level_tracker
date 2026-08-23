@@ -150,6 +150,20 @@ class GlassGeometry:
         )
 
 
+def artifact_template_source_rect(
+    template: ArtifactTemplate,
+    geometry: GlassGeometry,
+) -> Rect:
+    """Project a normalized artifact template into source-frame geometry."""
+
+    bounds = geometry.ellipse.bounds
+    width = template.width * bounds.width
+    height = template.height * bounds.height
+    center_x = bounds.x + template.center_x * bounds.width
+    center_y = bounds.y + template.center_y * bounds.height
+    return Rect(center_x - width * 0.5, center_y - height * 0.5, width, height)
+
+
 @dataclass(frozen=True)
 class CoordinateTransform:
     source_width: float

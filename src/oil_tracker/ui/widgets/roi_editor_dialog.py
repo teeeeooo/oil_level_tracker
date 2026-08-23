@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from oil_tracker.adapters.vision.artifact_proposal import propose_artifact_templates
+from oil_tracker.application.ports.review_io import ArtifactProposalPort
 from oil_tracker.domain.geometry import ExclusionZone, Rect
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
@@ -30,7 +30,16 @@ from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
 class RoiEditorDialog(QDialog):
     """Edit one analysis region on a private copy until the user applies it."""
 
-    def __init__(self, frame, glass, frame_width: int, frame_height: int, parent=None) -> None:
+    def __init__(
+        self,
+        frame,
+        glass,
+        frame_width: int,
+        frame_height: int,
+        parent=None,
+        *,
+        artifact_proposer: ArtifactProposalPort | None = None,
+    ) -> None:
         super().__init__(parent)
         self.setWindowTitle("분석 영역 편집")
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
@@ -42,6 +51,7 @@ class RoiEditorDialog(QDialog):
         self._frame = frame
         self._working = deepcopy(glass)
         self._artifact_proposals = []
+        self._artifact_proposer = artifact_proposer
 
         instruction = QLabel(
             "분석 영역 타원의 파란 조절점을 드래그해 크기를 바꾸고, 노란 기준선을 위아래로 움직이세요. "
@@ -271,8 +281,11 @@ class RoiEditorDialog(QDialog):
         if self._frame is None:
             self.artifact_status.setText("현재 프레임이 없어 후보를 만들 수 없습니다.")
             return
+        if self._artifact_proposer is None:
+            self.artifact_status.setText("Artifact 후보 생성 서비스가 구성되지 않았습니다.")
+            return
         try:
-            proposals = propose_artifact_templates(
+            proposals = self._artifact_proposer.propose(
                 self._frame,
                 self._working,
             )

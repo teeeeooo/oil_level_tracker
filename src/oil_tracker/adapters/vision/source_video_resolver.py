@@ -5,16 +5,12 @@ from pathlib import Path
 from typing import Callable
 
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+from oil_tracker.application.ports.review_io import (
+    SourceVideoError,
+    SourceVideoMismatchError,
+)
 from oil_tracker.domain.review import ReviewBundle
 from oil_tracker.domain.session import VideoMetadata
-
-
-class SourceVideoError(ValueError):
-    pass
-
-
-class SourceVideoMismatchError(SourceVideoError):
-    pass
 
 
 @dataclass(frozen=True)

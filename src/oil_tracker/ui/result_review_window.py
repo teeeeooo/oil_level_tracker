@@ -22,14 +22,18 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetError
-from oil_tracker.adapters.storage.debug_case_exporter import DebugCaseExportError, DebugCaseExporter
-from oil_tracker.adapters.storage.debug_trace_repository import DebugTraceError, DebugTraceRepository
-from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleError, ResultBundleReader
-from oil_tracker.adapters.vision.source_video_resolver import (
+from oil_tracker.application.ports.review_io import (
+    BundleAssetError,
+    DebugCaseExportError,
+    DebugCaseExporterPort,
+    DebugTraceError,
+    DebugTraceRepositoryFactory,
+    DebugTraceRepositoryPort,
+    ResultBundleError,
+    ResultBundleReaderPort,
     SourceVideoError,
     SourceVideoMismatchError,
-    SourceVideoResolver,
+    SourceVideoResolverPort,
 )
 from oil_tracker.application.services.review_graph import build_review_graph_model
 from oil_tracker.application.services.review_query import ReviewQueryModel
@@ -52,24 +56,24 @@ class ResultReviewWindow(QMainWindow):
 
     def __init__(
         self,
-        bundle_reader: ResultBundleReader | None = None,
-        source_resolver: SourceVideoResolver | None = None,
+        bundle_reader: ResultBundleReaderPort | None = None,
+        source_resolver: SourceVideoResolverPort | None = None,
         playback_controller: ResultReviewController | None = None,
         action_service: ResultActionService | None = None,
-        debug_repository_factory=DebugTraceRepository,
-        debug_case_exporter: DebugCaseExporter | None = None,
+        debug_repository_factory: DebugTraceRepositoryFactory | None = None,
+        debug_case_exporter: DebugCaseExporterPort | None = None,
         png_exporter=None,
         mp4_export_controller=None,
         debug_artifact_presenter=None,
         parent=None,
     ) -> None:
         super().__init__(parent)
-        self.bundle_reader = bundle_reader or ResultBundleReader()
-        self.source_resolver = source_resolver or SourceVideoResolver()
+        self.bundle_reader = bundle_reader
+        self.source_resolver = source_resolver
         self.playback = playback_controller or ResultReviewController(parent=self)
-        self.action_service = action_service or ResultActionService()
+        self.action_service = action_service
         self.debug_repository_factory = debug_repository_factory
-        self.debug_case_exporter = debug_case_exporter or DebugCaseExporter()
+        self.debug_case_exporter = debug_case_exporter
         self.png_exporter = png_exporter
         self.mp4_export_controller = mp4_export_controller
         if self.mp4_export_controller is not None and self.mp4_export_controller.parent() is None:
@@ -78,7 +82,7 @@ class ResultReviewWindow(QMainWindow):
         self.debug_artifact_presenter = debug_artifact_presenter
         self.bundle = None
         self.query: ReviewQueryModel | None = None
-        self.debug_repository: DebugTraceRepository | None = None
+        self.debug_repository: DebugTraceRepositoryPort | None = None
         self.selected_glass_id = ""
         self.selected_event = None
         self.selected_debug_summary = None
@@ -223,10 +227,14 @@ class ResultReviewWindow(QMainWindow):
         self.statusBar().showMessage("결과 bundle을 확인하고 있습니다...")
         debug_repository = None
         try:
+            if self.bundle_reader is None:
+                raise ResultBundleError("결과 bundle 접근 서비스가 구성되지 않았습니다.")
             bundle = self.bundle_reader.read(source)
             query = ReviewQueryModel(bundle)
             if bundle.has_debug_trace:
                 try:
+                    if self.debug_repository_factory is None:
+                        raise DebugTraceError("debug trace 접근 서비스가 구성되지 않았습니다.")
                     debug_repository = self.debug_repository_factory(bundle)
                 except DebugTraceError as exc:
                     bundle.debug_warning = str(exc)
@@ -243,11 +251,15 @@ class ResultReviewWindow(QMainWindow):
             return False
 
         selected_glass_id = bundle.glasses[0].id if bundle.glasses else ""
-        resolution = self.source_resolver.resolve(bundle)
+        source_problem = ""
+        if self.source_resolver is None:
+            resolution = None
+            source_problem = "원본 영상 접근 서비스가 구성되지 않았습니다."
+        else:
+            resolution = self.source_resolver.resolve(bundle)
         prepared = None
         validation = None
-        source_problem = ""
-        if resolution.path is not None:
+        if resolution is not None and resolution.path is not None:
             try:
                 validation = self.source_resolver.validate_candidate(bundle, resolution.path)
                 prepared = self.playback.prepare_video(validation.path, bundle.analysis_start_sec, emit_failure=False)
@@ -325,6 +337,9 @@ class ResultReviewWindow(QMainWindow):
 
     def _open_resolved_video(self, path: Path, timestamp: float, *, auto: bool) -> bool:
         assert self.bundle is not None
+        if self.source_resolver is None:
+            QMessageBox.critical(self, "원본 영상 열기 실패", "원본 영상 접근 서비스가 구성되지 않았습니다.")
+            return False
         prepared = None
         try:
             validation = self.source_resolver.validate_candidate(self.bundle, path)
@@ -662,6 +677,9 @@ class ResultReviewWindow(QMainWindow):
         if self.bundle is None or self.debug_repository is None or self.selected_debug_record is None:
             QMessageBox.information(self, "디버그 재현 패키지", "내보낼 디버그 장면을 먼저 선택해 주세요.")
             return
+        if self.debug_case_exporter is None:
+            QMessageBox.critical(self, "디버그 재현 패키지 실패", "debug case export 서비스가 구성되지 않았습니다.")
+            return
         destination = QFileDialog.getExistingDirectory(self, "디버그 재현 패키지를 만들 상위 폴더 선택", str(self.bundle.root.parent))
         if not destination:
             return
@@ -695,6 +713,9 @@ class ResultReviewWindow(QMainWindow):
     def _run_result_action(self, title: str, action) -> bool:
         if self.bundle is None:
             QMessageBox.information(self, title, "먼저 결과 bundle을 열어 주세요.")
+            return False
+        if self.action_service is None:
+            QMessageBox.critical(self, title, "결과 파일 작업 서비스가 구성되지 않았습니다.")
             return False
         try:
             action()

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import json
 import logging
 import os
@@ -9,45 +8,13 @@ from uuid import uuid4
 
 from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleReader
 from oil_tracker.adapters.system.app_paths import user_data_dir
+from oil_tracker.application.ports.review_io import RecentResultEntry
 from oil_tracker.domain.review import ReviewBundle
 
 
 LOGGER = logging.getLogger(__name__)
 RECENT_RESULT_HISTORY_SCHEMA_VERSION = 1
 DEFAULT_RECENT_RESULT_LIMIT = 8
-
-
-@dataclass(frozen=True)
-class RecentResultEntry:
-    path: str
-    run_name: str = ""
-    profile_name: str = ""
-    source_video_name: str = ""
-
-    def is_available(self) -> bool:
-        return Path(self.path).expanduser().is_dir()
-
-    def to_dict(self) -> dict[str, str]:
-        return {
-            "path": self.path,
-            "run_name": self.run_name,
-            "profile_name": self.profile_name,
-            "source_video_name": self.source_video_name,
-        }
-
-    @classmethod
-    def from_dict(cls, payload) -> "RecentResultEntry":
-        if not isinstance(payload, dict):
-            raise ValueError("recent result entry must be an object")
-        path = payload.get("path")
-        if not isinstance(path, str) or not path.strip():
-            raise ValueError("recent result path is missing")
-        return cls(
-            path=path,
-            run_name=_optional_text(payload.get("run_name")),
-            profile_name=_optional_text(payload.get("profile_name")),
-            source_video_name=_optional_text(payload.get("source_video_name")),
-        )
 
 
 class RecentResultHistory:

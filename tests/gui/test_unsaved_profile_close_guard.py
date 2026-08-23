@@ -6,6 +6,7 @@ from PySide6.QtCore import QObject, Signal
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QWidget
 
+from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetResolver
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.vision.debug_renderer import DebugRenderer
 from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
@@ -108,7 +109,7 @@ def _attach_close_lifecycles(window):
     review_widget = _ClosableWidget(window)
     review.viewer = review_widget
     completion = AnalysisCompletionCoordinator(
-        window, review, same_profile, ResultActionService()
+        window, review, same_profile, ResultActionService(BundleAssetResolver())
     )
     completion_widget = _ClosableWidget(window)
     completion.dialog = completion_widget

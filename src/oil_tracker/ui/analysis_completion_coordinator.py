@@ -6,9 +6,12 @@ from pathlib import Path
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QMessageBox
 
-from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetError
-from oil_tracker.adapters.storage.recent_result_history import RecentResultHistory
-from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleError, ResultBundleReader
+from oil_tracker.application.ports.review_io import (
+    BundleAssetError,
+    RecentResultHistoryPort,
+    ResultBundleError,
+    ResultBundleReaderPort,
+)
 from oil_tracker.domain.enums import WorkbenchState
 from oil_tracker.ui.analysis_completion_summary import build_final_run_summary
 from oil_tracker.ui.result_actions import ResultActionError, ResultActionService
@@ -25,15 +28,15 @@ class AnalysisCompletionCoordinator(QObject):
         result_review_coordinator,
         same_profile_coordinator,
         action_service: ResultActionService,
-        bundle_reader: ResultBundleReader | None = None,
-        recent_result_history: RecentResultHistory | None = None,
+        bundle_reader: ResultBundleReaderPort | None = None,
+        recent_result_history: RecentResultHistoryPort | None = None,
     ) -> None:
         super().__init__(window)
         self.window = window
         self.result_review_coordinator = result_review_coordinator
         self.same_profile_coordinator = same_profile_coordinator
         self.action_service = action_service
-        self.bundle_reader = bundle_reader or ResultBundleReader()
+        self.bundle_reader = bundle_reader
         self.recent_result_history = recent_result_history
         self.dialog: AnalysisCompleteDialog | None = None
         self._active_actions: set[str] = set()
@@ -69,6 +72,8 @@ class AnalysisCompletionCoordinator(QObject):
 
     def _build_final_run_summary(self, result, output_path: str | Path):
         try:
+            if self.bundle_reader is None:
+                raise ResultBundleError("결과 bundle 접근 서비스가 구성되지 않았습니다.")
             bundle = self.bundle_reader.read(output_path)
             return build_final_run_summary(result, output_path, bundle)
         except Exception:
@@ -122,6 +127,8 @@ class AnalysisCompletionCoordinator(QObject):
 
     def _same_profile(self, output_path) -> None:
         try:
+            if self.bundle_reader is None:
+                raise ResultBundleError("결과 bundle 접근 서비스가 구성되지 않았습니다.")
             bundle = self.bundle_reader.read(output_path)
         except ResultBundleError as exc:
             QMessageBox.warning(self.dialog or self.window, "같은 프로필로 새 영상 분석", str(exc))

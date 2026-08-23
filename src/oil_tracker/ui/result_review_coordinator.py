@@ -19,7 +19,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from oil_tracker.adapters.storage.recent_result_history import RecentResultEntry, RecentResultHistory
+from oil_tracker.application.ports.review_io import (
+    RecentResultEntry,
+    RecentResultHistoryPort,
+)
 from oil_tracker.ui.controllers.redetection_controller import RedetectionController
 from oil_tracker.ui.redetection_comparison_coordinator import RedetectionComparisonCoordinator
 from oil_tracker.ui.result_actions import ResultActionService
@@ -39,15 +42,17 @@ class ResultReviewCoordinator(QObject):
         same_profile_coordinator=None,
         redetection_service=None,
         viewer_factory=None,
-        recent_result_history: RecentResultHistory | None = None,
+        recent_result_history: RecentResultHistoryPort | None = None,
+        truth_coordinator_factory=None,
     ) -> None:
         super().__init__(window)
         self.window = window
-        self.action_service = action_service or ResultActionService()
+        self.action_service = action_service
         self.same_profile_coordinator = same_profile_coordinator
         self.redetection_service = redetection_service
         self.viewer_factory = viewer_factory
         self.recent_result_history = recent_result_history
+        self.truth_coordinator_factory = truth_coordinator_factory
         self.viewer = None
         self.redetection_controller: RedetectionController | None = None
         self.redetection_coordinator: RedetectionComparisonCoordinator | None = None
@@ -183,9 +188,10 @@ class ResultReviewCoordinator(QObject):
             if self.viewer_factory is None:
                 raise RuntimeError("Result Review viewer factory가 구성되지 않았습니다.")
             self.viewer = self.viewer_factory(self.window)
-            self.truth_coordinator = TruthAnnotationCoordinator(
-                self.viewer,
-                parent=self.viewer,
+            self.truth_coordinator = (
+                self.truth_coordinator_factory(self.viewer)
+                if self.truth_coordinator_factory is not None
+                else TruthAnnotationCoordinator(self.viewer, parent=self.viewer)
             )
             self.viewer.truthMarkerRequested.connect(self._truth_marker_requested)
             if self.same_profile_coordinator is not None:

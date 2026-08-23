@@ -5,7 +5,10 @@ from pathlib import Path
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QDesktopServices
 
-from oil_tracker.adapters.storage.bundle_asset_resolver import BundleAssetError, BundleAssetResolver
+from oil_tracker.application.ports.review_io import (
+    BundleAssetError,
+    BundleAssetResolverPort,
+)
 
 
 class ResultActionError(ValueError):
@@ -13,19 +16,19 @@ class ResultActionError(ValueError):
 
 
 class ResultActionService:
-    def __init__(self, resolver: BundleAssetResolver | None = None, opener=None) -> None:
-        self.resolver = resolver or BundleAssetResolver()
+    def __init__(self, resolver: BundleAssetResolverPort | None = None, opener=None) -> None:
+        self.resolver = resolver
         self.opener = opener or QDesktopServices.openUrl
 
     def open_report(self, bundle_or_root) -> Path:
         root = _root(bundle_or_root)
-        path = self.resolver.resolve_file(root, "report.html", label="결과 보고서")
+        path = self._resolver().resolve_file(root, "report.html", label="결과 보고서")
         self._open(path, "결과 보고서")
         return path
 
     def open_folder(self, bundle_or_root) -> Path:
         root = _root(bundle_or_root)
-        path = self.resolver.resolve_directory(root, ".", label="결과 폴더")
+        path = self._resolver().resolve_directory(root, ".", label="결과 폴더")
         self._open(path, "결과 폴더")
         return path
 
@@ -33,7 +36,7 @@ class ResultActionService:
         if not str(capture_path or "").strip():
             raise ResultActionError("선택한 이벤트에 기록된 캡처가 없습니다.")
         root = _root(bundle_or_root)
-        path = self.resolver.resolve_file(root, capture_path, label="이벤트 캡처")
+        path = self._resolver().resolve_file(root, capture_path, label="이벤트 캡처")
         self._open(path, "이벤트 캡처")
         return path
 
@@ -44,6 +47,11 @@ class ResultActionService:
             raise ResultActionError(f"{label}을 열 수 없습니다: {exc}") from exc
         if not opened:
             raise ResultActionError(f"운영체제에서 {label}을 열지 못했습니다: {path}")
+
+    def _resolver(self) -> BundleAssetResolverPort:
+        if self.resolver is None:
+            raise ResultActionError("결과 파일 접근 서비스가 구성되지 않았습니다.")
+        return self.resolver
 
 
 def _root(bundle_or_root) -> Path:

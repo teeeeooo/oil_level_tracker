@@ -65,12 +65,22 @@ from oil_tracker.ui.widgets.workbench_progress import WorkbenchProgressWidget
 class MainWindow(QMainWindow):
     applicationCloseAccepted = Signal()
 
-    def __init__(self, workbench, preview_controller, analysis_controller, debug_renderer, parent=None) -> None:
+    def __init__(
+        self,
+        workbench,
+        preview_controller,
+        analysis_controller,
+        debug_renderer,
+        parent=None,
+        *,
+        artifact_proposer=None,
+    ) -> None:
         super().__init__(parent)
         self.workbench = workbench
         self.preview_controller = preview_controller
         self.analysis_controller = analysis_controller
         self.debug_renderer = debug_renderer
+        self.artifact_proposer = artifact_proposer
         self.last_result_path = ""
         self.undo_stack = QUndoStack(self)
         self._last_validation = None
@@ -496,6 +506,7 @@ class MainWindow(QMainWindow):
             self.workbench.recipe.reference_frame_width,
             self.workbench.recipe.reference_frame_height,
             self,
+            artifact_proposer=self.artifact_proposer,
         )
         if dialog.exec() != RoiEditorDialog.DialogCode.Accepted:
             return

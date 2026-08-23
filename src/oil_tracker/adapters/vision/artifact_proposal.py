@@ -14,12 +14,23 @@ from .artifact_calibration import (
 from .opencv_phase_detector import OpenCvPhaseDetector
 
 
+class OpenCvArtifactProposalService:
+    """Outer adapter that owns detector-backed artifact proposal generation."""
+
+    def __init__(self, detector=None) -> None:
+        self.detector = detector or OpenCvPhaseDetector()
+
+    def propose(self, frame, glass):
+        return propose_artifact_templates(frame, glass, detector=self.detector)
+
+
 def propose_artifact_templates(
     frame,
     glass,
     *,
     maximum_boundary_proposals: int = 10,
     maximum_glare_regions: int = 4,
+    detector=None,
 ):
     """Return detector-backed templates without mutating the edited Glass.
 
@@ -29,7 +40,7 @@ def propose_artifact_templates(
 
     detector_glass = deepcopy(glass)
     detector_glass.geometry.artifact_templates.clear()
-    detection, artifacts = OpenCvPhaseDetector().detect(
+    detection, artifacts = (detector or OpenCvPhaseDetector()).detect(
         frame,
         detector_glass,
         0,
