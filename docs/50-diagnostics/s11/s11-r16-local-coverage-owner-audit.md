@@ -33,9 +33,38 @@ clear predecessor; a genuine near-cost split terminates the parent and assigns
 new incompatible child IDs. All four drain transitions apply the complete
 current-row material veto, and re-entry applies the ordinary directional
 reversal tolerance in addition to the jump bound. Adversarial controls retain
-a clearly ranked child and a child with another clear predecessor. The repaired
-source/test identity is
-`6462a21c327241f9f0e91fe749ed1892abeb0776`.
+a clearly ranked child and a child with another clear predecessor. The
+lifecycle-repair source/test identity was
+`6462a21c327241f9f0e91fe749ed1892abeb0776`; the final assignment repair below
+supersedes it as the local semantic source.
+
+## Final established/provisional assignment repair
+
+Follow-up review found one narrower matching defect. Established-first greedy
+ordering could exchange two physical IDs even when a provisional predecessor
+was one child's clear owner and the established predecessor was the other
+child's clear owner. The exact probe used parents Y100 established/Y105
+provisional, children Y96/Y103 and costs `0.030500`, `0.061750`, `0.093000`
+and `0.249250`. Established-first chose the crossed pair; reversing child input
+order did not make that physical exchange acceptable.
+
+The final matcher preserves the ordinary established-first baseline and plans
+only a complete reciprocal correction. Both child-to-predecessor edges must be
+clear beyond the ambiguity margin, both tracks must already be assigned to the
+opposite children in that baseline, and both child rows must contain physical
+proposals. A lone provisional best edge cannot evict an established track or
+leave an unmatched residual. A calibrated-high-recall-only child cannot
+redirect the established ID.
+
+That last bound is evidence-bearing rather than corpus-specific. In sample3
+frame 64, the geometric reciprocal pair is Y240/Y250, but Y250 is
+calibrated-high-recall-only (`has_physical_proposal=false`). Permitting that
+weak residual to redirect the mature phase track removed the reviewed
+81.014--85.519 s drain release. The final physical-proposal guard leaves that
+owner intact. The four-video counts, fingerprints, same-frame provenance,
+34--81 s material barrier and reviewed 81--96 s drain are consequently
+unchanged from the accepted lifecycle repair. The final source/test identity
+is `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`.
 
 ## Checked-truth coverage is not an owner
 
@@ -142,7 +171,9 @@ and owner chain.
 ## Reproducibility pointers
 
 - exact-clean-head four-video manifest:
-  `/var/folders/s2/wbnr4dhn1z1bk7tcl342s8bw0000gn/T/r16-audit-repair-four-final.fdf1y2xl/replay_manifest.json`;
+  `/tmp/r16-assignment-repair-four-final.Q7ThtA/replay_manifest.json`;
+- exact-clean-head provenance, truth, Foam and material-cap audit:
+  `/tmp/r16-assignment-repair-four-final.Q7ThtA/validation_audit.json`;
 - candidate-level FULL trace used during the repair:
   `/tmp/r16-drain-veto-audit.oI75nm/oil-debug-trace-s52awykr/debug_trace.jsonl`;
 - composed-lag regression:

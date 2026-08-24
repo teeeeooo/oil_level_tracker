@@ -2,8 +2,10 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R16 repaired exact-head independent re-audit before push`
+**Current gate:** `R16 local complete; push, then private-Windows Base/Accum replay`
 **Source authority:** `R15 field authority; R16 replacement architecture and local evidence`
+**Task-start exact head:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
+**Task-start exact parent:** `878e591266b601b71093e36919d3393815b66239`
 
 ## R10 field result
 
@@ -136,11 +138,11 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Independently re-audit the exact committed repaired R16 candidate. The semantic
-source/test commit is `6462a21c327241f9f0e91fe749ed1892abeb0776`; the
-documentation-only commit that records its contract and regenerated evidence
-is behavior-neutral but remains part of the audited head. Push only if that
-fresh exact-head audit passes.
+Push the locally complete R16 candidate. The final semantic source/test commit
+is `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`; the following documentation-only
+commit records its contract and regenerated evidence without changing runtime
+behavior. The authorized final reciprocal-assignment repair is complete and no
+additional independent auditor is requested.
 
 After push, begin the authorized UI/UX evidence audit. This does not waive the
 still-pending S11 external gate: replay the exact pushed R16 head on private
@@ -195,6 +197,12 @@ and an absolute-jump-only backwards re-entry. The repaired candidate terminates
 genuine split parents without misclassifying clearly owned children, applies
 the complete current-row veto to every drain transition and adds the ordinary
 directional reversal tolerance to phase re-entry.
+
+The final follow-up repair removes a separate established/provisional ID
+exchange. It corrects only an actual baseline two-edge crossing with two
+independently clear physical child proposals. A lone provisional edge or
+calibrated-high-recall-only residual cannot redirect the established owner, so
+the accepted material barrier and 81--96 s drain witnesses remain unchanged.
 
 The local structural, four-video safety, performance, compilation, focused and
 canonical regression gates pass. Exact counts, fingerprints, timing and the

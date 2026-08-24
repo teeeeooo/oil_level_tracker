@@ -2,20 +2,22 @@
 
 ## Disposition
 
-R16 is implemented and passed the repaired local structural, causal,
-provenance, checked-video, performance and full-regression gates. Independent
-review rejected prior candidate head
-`178fdf951d7142c39c6a54109cbaece8b204c476`; this record replaces its
-invalidated replay and timing evidence and supports a fresh independent audit
-of the repaired exact committed candidate. It does not establish private-field
-accuracy, supersede R15 as the field authority or close S11.
+R16 is implemented and passed the final local structural, causal, provenance,
+checked-video, performance and full-regression gates. Independent review
+rejected prior candidate head
+`178fdf951d7142c39c6a54109cbaece8b204c476`; its lifecycle repairs were
+followed by a bounded assignment repair on the final exact committed source.
+The user accepted local completion without requesting another auditor. This
+record replaces all invalidated replay and timing evidence. It does not
+establish private-field accuracy, supersede R15 as the field authority or close
+S11.
 
 The validated runtime identity is:
 
 - detector: `opencv-phase-detector-r16-directed-interface-tracklets-v1`;
 - sequence resolver: `r16-directed-interface-tracklets-v1`; and
-- repaired semantic source/test commit:
-  `6462a21c327241f9f0e91fe749ed1892abeb0776`
+- final semantic source/test commit:
+  `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
   (the following documentation-only commit does not alter runtime behavior).
 
 ## Implementation result
@@ -36,6 +38,19 @@ predecessor to a later strong dynamic owner. The predecessor contributes owner
 chain continuity but not observations, extrema, direction or coordinates.
 Foreign branches, ambiguous handoffs, bounded owner loss and material conflict
 remain `UNKNOWN`.
+
+The final assignment repair removes an established-first ID exchange without
+giving generic authority to provisional rows. It first computes the unchanged
+established-first baseline, then corrects only an actual two-way crossed
+assignment whose two child-to-predecessor edges are independently clear beyond
+the ambiguity margin and whose two children both contain physical proposals.
+The audited costs are provisional→Y103 `0.030500`, established→Y103 `0.061750`,
+established→Y96 `0.093000` and provisional→Y96 `0.249250`; the corrected IDs
+are established→Y96 and provisional→Y103 under either candidate order. A lone
+provisional best edge cannot evict an established identity. The real sample3
+boundary at frame 64 also proves the physical-evidence bound: its reciprocal
+residual Y250 is calibrated-high-recall-only, so it cannot redirect the mature
+phase track and the reviewed 81--96 s drain remains intact.
 
 Drain release, continuation, successor and re-entry now apply the full
 same-frame row material veto, so a clean direct member cannot mask a
@@ -97,11 +112,11 @@ owners.
 
 ## Automated validation
 
-- adversarial split, material-veto and reverse-re-entry repair controls:
-  6 passed;
-- focused production set including both evidence-specific corpus contracts:
-  132 passed in 25.39 s;
-- canonical repository suite: 1,629 passed in 153.44 s;
+- final reciprocal-assignment unit suite: 21 passed in 0.12 s;
+- assignment plus both evidence-specific corpus contracts: 23 passed in
+  23.91 s;
+- focused production set: 135 passed in 0.84 s;
+- canonical repository suite: 1,634 passed in 152.87 s;
 - Python compilation of `src` and `tests`: passed;
 - production hardcoding search: no matches; and
 - `git diff --check`: passed.
@@ -118,10 +133,10 @@ runs all retained 113 rows, 104 numeric Oil and fingerprint
 
 | Measurement | R16 median | Delta from R0 |
 |---|---:|---:|
-| End-to-end wall time | 11.757 s | -24.1% |
-| Real-time factor | 0.210 | -24.1% |
-| Detector mean latency | 64.424 ms/frame | -18.4% |
-| Completed-window resolution | 0.2022 s | -90.2% |
+| End-to-end wall time | 11.706 s | -24.4% |
+| Real-time factor | 0.209 | -24.4% |
+| Detector mean latency | 64.051 ms/frame | -18.9% |
+| Completed-window resolution | 0.2033 s | -90.1% |
 
 The performance runner rejected dirty or mismatched source state and recorded
 the repaired source/test head plus `source_worktree_clean=true`. Accuracy,
@@ -131,9 +146,11 @@ Private-Windows/package timing was not available locally.
 ## Reproducibility artifacts
 
 - exact-clean-head replay manifest:
-  `/var/folders/s2/wbnr4dhn1z1bk7tcl342s8bw0000gn/T/r16-audit-repair-four-final.fdf1y2xl/replay_manifest.json`;
+  `/tmp/r16-assignment-repair-four-final.Q7ThtA/replay_manifest.json`;
+- exact-clean-head provenance, truth, Foam and material-cap audit:
+  `/tmp/r16-assignment-repair-four-final.Q7ThtA/validation_audit.json`;
 - exact-clean-head performance manifest:
-  `/tmp/r16-audit-repair-perf-final.BiYPYc/performance_profile.json`; and
+  `/tmp/r16-assignment-repair-perf-final.7Jp2Fv/performance_profile.json`; and
 - candidate-level repair trace:
   `/tmp/r16-drain-veto-audit.oI75nm/oil-debug-trace-s52awykr/debug_trace.jsonl`.
 
@@ -144,11 +161,11 @@ durable evidence if the temporary files are removed.
 ## Unresolved external gate
 
 Private-Windows Base/Accum replay was not available in this checkout. R15
-therefore remains the field authority. The repaired R16 source/test commit and
-its following documentation-only commit still require a fresh independent
-exact-head audit before push, followed by replay of that pushed head with the
-saved Recipes and Artifact templates. Oil accuracy, Accum initial EMPTY
-false-positive suppression, real bottom-entry admission, Foam publication and
-CSV equality remain separate external checks. Per the authorized sequence, the
-UI/UX evidence audit begins only after the R16 push and does not waive this
-private detector gate.
+therefore remains the field authority. The locally complete R16 source/test
+commit and its following documentation-only commit are ready for push; no
+additional auditor is requested. The next detector authority is replay of that
+pushed head with the saved Recipes and Artifact templates. Oil accuracy, Accum
+initial EMPTY false-positive suppression, real bottom-entry admission, Foam
+publication and CSV equality remain separate external checks. Per the
+authorized sequence, the UI/UX evidence audit begins after the R16 push and
+does not waive this private detector gate.

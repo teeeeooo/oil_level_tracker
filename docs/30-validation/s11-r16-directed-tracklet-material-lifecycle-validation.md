@@ -4,7 +4,8 @@
 
 R16 is a replacement candidate for the R15 private-Accum admission failure and
 the overlapping identity/phase/selection responsibilities accumulated across
-R13--R15. Local regression authorizes an independent exact-commit audit; it
+R13--R15. The authorized local repair and exact-head regression are complete;
+no additional independent auditor is requested before push. Local evidence
 does not replace a new private-Windows Base/Accum replay or supersede R15 as
 the field authority.
 
@@ -29,6 +30,11 @@ Automated evidence must prove all of the following:
   including the symmetric established-parent-to-two-children case;
 - a clearly ranked child continues its established parent, and a child with a
   different clear predecessor cannot create a false split;
+- a baseline established/provisional two-edge exchange is corrected only when
+  both child-to-predecessor choices are independently clear and both children
+  contain physical proposals; candidate-order reversal produces the same IDs,
+  while a calibrated-high-recall-only residual cannot redirect the
+  established ID;
 - tracklet confirmation/loss, phase intent and selection remain bounded;
 - material phase emits the only allowed physical owner set before scoring;
 - filled phase exposes no Oil candidate;
@@ -120,8 +126,8 @@ contract.
 
 ## Private-Windows gate
 
-Only a head that passes independent exact-commit audit and is then pushed may
-be replayed. In addition to the R15 Base/Foam checks, Accum initial EMPTY must
+Only the locally complete head may be pushed and replayed. In addition to the
+R15 Base/Foam checks, Accum initial EMPTY must
 report physical tracklet IDs, row-hypothesis IDs, material phase, allowed owner
 chain, motion/coverage and first publication failure. The audited
 anchor-before-lower-observation pattern must be evaluated without coordinate,

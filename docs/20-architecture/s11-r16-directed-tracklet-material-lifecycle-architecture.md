@@ -1,16 +1,17 @@
 # S11-R16 Directed Tracklet and Material Lifecycle Architecture
 
-**Status:** `PROPOSED REPLACEMENT`
+**Status:** `LOCAL COMPLETE — PRIVATE-WINDOWS FIELD GATE PENDING`
 
 ## Authority boundary
 
 This document defines the R16 replacement candidate. It is not yet the active
 field detector authority and does not supersede the
 [R15 architecture](s11-r15-state-aware-material-ownership-architecture.md).
-Promotion requires an independent audit of the exact committed head before
-push, followed by a new private-Windows Base/Accum replay of that pushed head.
-The current gate is owned by the [work plan](../00-project/work-plan.md); local
-execution results are preserved in the
+The authorized local repair is complete and no additional independent audit is
+requested before push. Promotion still requires a new private-Windows
+Base/Accum replay of the pushed head. The current gate is owned by the
+[work plan](../00-project/work-plan.md); local execution results are preserved
+in the
 [R16 evidence record](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md).
 
 One production detector continues to serve Base and Accum. Product code may
@@ -53,10 +54,17 @@ bounded row tolerance become one same-frame row hypothesis while retaining
 every original candidate and its offset. Tracklets then use deterministic
 one-to-one assignment against only the bounded active set.
 
-- many-to-one or one-to-many matches inside the assignment-cost ambiguity
-  margin are incompatible branches; an established parent owns a split child
-  only when it is also that child's clear predecessor, so a nearby child with
-  another clear physical predecessor does not cause a false split;
+- many-to-one or one-to-many ambiguity involving established physical
+  ownership inside the assignment-cost margin is incompatible; an established
+  parent owns a split child only when it is also that child's clear
+  predecessor, so a nearby child with another clear physical predecessor does
+  not cause a false split;
+- established-first ordering cannot exchange two identities when its baseline
+  assignment crosses a complete pair of independently clear physical child
+  edges. The matcher reserves the reciprocal two-edge correction only when
+  both child rows contain physical proposals; a lone provisional best edge or
+  calibrated-high-recall-only residual cannot evict or redirect an established
+  identity;
 - an ambiguous established parent terminates, every involved child becomes an
   incompatible new ID and no child silently inherits the old identity;
 - a tracklet may be provisional, confirmed, continuing, lost or terminated;
