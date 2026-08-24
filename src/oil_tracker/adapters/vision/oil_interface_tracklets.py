@@ -182,6 +182,9 @@ class _WindowEvidence:
     confirmation_support: float
 
 
+_AssignmentPair = tuple[float, str, str, _TrackState, _RowHypothesis]
+
+
 class DirectedInterfaceTrackletBuilder:
     """Build bounded directed identities without merge/split inheritance.
 
@@ -263,14 +266,9 @@ class DirectedInterfaceTrackletBuilder:
 
             assigned_tracks: set[str] = set()
             assigned_hypotheses: set[str] = set()
-            ordered_pairs = sorted(
+            ordered_pairs = self._ordered_assignment_pairs(
                 pairs,
-                key=lambda item: (
-                    -int(self._established(item[3])),
-                    item[0],
-                    item[1],
-                    item[2],
-                ),
+                conflicted_hypotheses,
             )
             for _cost, _track_id, _hypothesis_id, track, hypothesis in ordered_pairs:
                 if (
@@ -669,6 +667,145 @@ class DirectedInterfaceTrackletBuilder:
             if track.identity in conflicted_track_ids
         }
         return tracks, conflicted_hypotheses
+
+    def _ordered_assignment_pairs(
+        self,
+        pairs: list[_AssignmentPair],
+        conflicted_hypotheses: set[str],
+    ) -> tuple[_AssignmentPair, ...]:
+        established_first = self._established_first_pairs(pairs)
+        assignments = self._greedy_assignments(
+            established_first,
+            conflicted_hypotheses,
+        )
+        by_hypothesis = self._pairs_by_hypothesis(pairs)
+        reserved_predecessor = self._reciprocal_exchange_reservations(
+            assignments,
+            by_hypothesis,
+        )
+        if not reserved_predecessor:
+            return established_first
+        eligible = tuple(
+            pair
+            for pair in pairs
+            if reserved_predecessor.get(pair[2], pair[1]) == pair[1]
+        )
+        return tuple(
+            sorted(
+                eligible,
+                key=lambda item: (
+                    -int(reserved_predecessor.get(item[2]) == item[1]),
+                    -int(self._established(item[3])),
+                    item[0],
+                    item[1],
+                    item[2],
+                ),
+            )
+        )
+
+    def _established_first_pairs(
+        self,
+        pairs: list[_AssignmentPair],
+    ) -> tuple[_AssignmentPair, ...]:
+        return tuple(
+            sorted(
+                pairs,
+                key=lambda item: (
+                    -int(self._established(item[3])),
+                    item[0],
+                    item[1],
+                    item[2],
+                ),
+            )
+        )
+
+    def _pairs_by_hypothesis(
+        self,
+        pairs: list[_AssignmentPair],
+    ) -> dict[str, list[tuple[float, _TrackState, _RowHypothesis]]]:
+        indexed: dict[
+            str,
+            list[tuple[float, _TrackState, _RowHypothesis]],
+        ] = {}
+        for cost, _track_id, _hypothesis_id, track, hypothesis in pairs:
+            indexed.setdefault(hypothesis.identity, []).append(
+                (cost, track, hypothesis)
+            )
+        return indexed
+
+    def _reciprocal_exchange_reservations(
+        self,
+        assignments: tuple[_AssignmentPair, ...],
+        by_hypothesis: dict[
+            str,
+            list[tuple[float, _TrackState, _RowHypothesis]],
+        ],
+    ) -> dict[str, str]:
+        reserved_predecessor: dict[str, str] = {}
+        assignment_by_track = {pair[1]: pair for pair in assignments}
+        for established_pair in assignments:
+            established = established_pair[3]
+            if not self._established(established):
+                continue
+            claimed_hypothesis = established_pair[4]
+            for _cost, predecessor, _hypothesis in by_hypothesis[
+                claimed_hypothesis.identity
+            ]:
+                residual = assignment_by_track.get(predecessor.identity)
+                if (
+                    self._established(predecessor)
+                    or residual is None
+                    or residual[2] == claimed_hypothesis.identity
+                    or not claimed_hypothesis.has_physical_proposal
+                    or not residual[4].has_physical_proposal
+                    or not self._clear_hypothesis_predecessor(
+                        predecessor,
+                        by_hypothesis[claimed_hypothesis.identity],
+                    )
+                    or not self._clear_hypothesis_predecessor(
+                        established,
+                        by_hypothesis[residual[2]],
+                    )
+                ):
+                    continue
+                # The established-first assignment crossed two independently
+                # clear child-to-predecessor edges. Reserve the complete swap;
+                # a lone provisional best edge may not evict an established
+                # identity or create an unmatched residual branch.
+                if (
+                    claimed_hypothesis.identity in reserved_predecessor
+                    or residual[2] in reserved_predecessor
+                    or predecessor.identity in reserved_predecessor.values()
+                    or established.identity in reserved_predecessor.values()
+                ):
+                    continue
+                reserved_predecessor[claimed_hypothesis.identity] = (
+                    predecessor.identity
+                )
+                reserved_predecessor[residual[2]] = established.identity
+        return reserved_predecessor
+
+    def _greedy_assignments(
+        self,
+        ordered_pairs: tuple[_AssignmentPair, ...],
+        conflicted_hypotheses: set[str],
+    ) -> tuple[_AssignmentPair, ...]:
+        assigned_tracks: set[str] = set()
+        assigned_hypotheses: set[str] = set()
+        assignments = []
+        for pair in ordered_pairs:
+            _cost, track_id, hypothesis_id, track, _hypothesis = pair
+            if (
+                track.terminated
+                or track_id in assigned_tracks
+                or hypothesis_id in assigned_hypotheses
+                or hypothesis_id in conflicted_hypotheses
+            ):
+                continue
+            assignments.append(pair)
+            assigned_tracks.add(track_id)
+            assigned_hypotheses.add(hypothesis_id)
+        return tuple(assignments)
 
     def _clear_hypothesis_predecessor(
         self,

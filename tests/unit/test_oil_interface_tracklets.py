@@ -71,6 +71,7 @@ def _ref(
     motion: float = 0.0,
     coverage: float = 0.0,
     ordered_lower: bool = False,
+    calibrated_high_recall: bool = False,
 ) -> OilCandidateRef:
     candidate = BoundaryCandidate(
         source=source,
@@ -90,6 +91,7 @@ def _ref(
             "sequence_eligible": 1.0,
             "registered_oil_band_motion_support": motion,
             "registered_oil_band_motion_coverage": coverage,
+            "calibrated_high_recall": float(calibrated_high_recall),
         },
         penalties={
             "artifact_likelihood": 0.08,
@@ -850,6 +852,204 @@ def test_established_track_does_not_claim_child_with_clear_other_predecessor() -
     assert other_child.tracklet_id == other_id
     assert not parent_child.tracklet_incompatible
     assert not other_child.tracklet_incompatible
+
+
+def _established_and_provisional_predecessor_frames(
+    first_child_y: float,
+    second_child_y: float,
+    *,
+    reverse_children: bool = False,
+) -> tuple[tuple[OilCandidateRef, ...], ...]:
+    frames = (
+        (
+            _ref(
+                0,
+                0,
+                100.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="established-parent",
+            ),
+        ),
+        (
+            _ref(
+                1,
+                0,
+                100.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="established-parent",
+            ),
+        ),
+        (
+            _ref(
+                2,
+                0,
+                100.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="established-parent",
+            ),
+            _ref(
+                2,
+                1,
+                105.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                source="provisional-predecessor",
+            ),
+        ),
+    )
+    children = (
+        _ref(
+            3,
+            0,
+            first_child_y,
+            authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+            source="first-child",
+        ),
+        _ref(
+            3,
+            1,
+            second_child_y,
+            authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            source="second-child",
+        ),
+    )
+    if reverse_children:
+        children = tuple(reversed(children))
+    return frames + (children,)
+
+
+def test_assignment_obeys_clear_predecessor_despite_established_first_order() -> None:
+    policy = replace(_policy(), ambiguity_margin=0.02)
+
+    results = tuple(
+        DirectedInterfaceTrackletBuilder(policy).resolve(
+            _established_and_provisional_predecessor_frames(
+                96.0,
+                103.0,
+                reverse_children=reverse_children,
+            )
+        )
+        for reverse_children in (False, True)
+    )
+
+    for result in results:
+        established_id, provisional_id = (
+            item.tracklet_id for item in result.refs_by_frame[2]
+        )
+        children = {
+            item.candidate.source: item for item in result.refs_by_frame[3]
+        }
+        # Costs are provisional->103 .030500, established->103 .061750,
+        # established->96 .093000 and provisional->96 .249250. Established
+        # priority must not exchange the two physical identities.
+        assert children["first-child"].tracklet_id == established_id
+        assert children["second-child"].tracklet_id == provisional_id
+        assert 3 not in result.incompatible_frames
+        assert not any(item.tracklet_incompatible for item in children.values())
+
+    assert {
+        item.candidate.source: item.tracklet_id
+        for item in results[0].refs_by_frame[3]
+    } == {
+        item.candidate.source: item.tracklet_id
+        for item in results[1].refs_by_frame[3]
+    }
+
+
+def test_clear_established_child_leaves_residual_provisional_assignment() -> None:
+    result = DirectedInterfaceTrackletBuilder(
+        replace(_policy(), ambiguity_margin=0.02)
+    ).resolve(
+        _established_and_provisional_predecessor_frames(96.0, 103.0)
+    )
+    established_id, provisional_id = (
+        item.tracklet_id for item in result.refs_by_frame[2]
+    )
+    first_child, second_child = result.refs_by_frame[3]
+
+    assert first_child.tracklet_id == established_id
+    assert second_child.tracklet_id == provisional_id
+    assert first_child.tracklet_admitted
+    assert not second_child.tracklet_admitted
+    assert second_child.tracklet_lifecycle is TrackletLifecycle.PROVISIONAL
+    assert not second_child.tracklet_incompatible
+    assert second_child.tracklet_failure_reason == "INSUFFICIENT_NET_PROGRESS"
+    assert 3 not in result.incompatible_frames
+    assert not first_child.tracklet_incompatible
+
+
+def test_anchor_residual_can_continue_provisional_predecessor() -> None:
+    frames = _established_and_provisional_predecessor_frames(96.0, 103.0)
+    anchor_children = (
+        frames[-1][0],
+        replace(
+            frames[-1][1],
+            authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+            initial_authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+            post_track_authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+        ),
+    )
+
+    result = DirectedInterfaceTrackletBuilder(
+        replace(_policy(), ambiguity_margin=0.02)
+    ).resolve(
+        frames[:-1] + (anchor_children,)
+    )
+    established_id, provisional_id = (
+        item.tracklet_id for item in result.refs_by_frame[2]
+    )
+    first_child, second_child = result.refs_by_frame[3]
+
+    assert first_child.tracklet_id == established_id
+    assert second_child.tracklet_id == provisional_id
+    assert first_child.tracklet_admitted
+    assert not second_child.tracklet_admitted
+    assert not second_child.tracklet_incompatible
+    assert second_child.tracklet_failure_reason == "INSUFFICIENT_NET_PROGRESS"
+    assert 3 not in result.incompatible_frames
+
+
+def test_reciprocal_assignment_keeps_two_clear_nearby_continuations() -> None:
+    result = DirectedInterfaceTrackletBuilder(
+        replace(_policy(), ambiguity_margin=0.02)
+    ).resolve(
+        _established_and_provisional_predecessor_frames(99.0, 104.0)
+    )
+    established_id, provisional_id = (
+        item.tracklet_id for item in result.refs_by_frame[2]
+    )
+    first_child, second_child = result.refs_by_frame[3]
+
+    assert first_child.tracklet_id == established_id
+    assert second_child.tracklet_id == provisional_id
+    assert 3 not in result.incompatible_frames
+    assert not first_child.tracklet_incompatible
+    assert not second_child.tracklet_incompatible
+
+
+def test_reciprocal_correction_requires_two_physical_children() -> None:
+    frames = _established_and_provisional_predecessor_frames(96.0, 103.0)
+    weak_residual = _ref(
+        3,
+        0,
+        96.0,
+        authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+        source="calibrated-only-residual",
+        calibrated_high_recall=True,
+    )
+
+    result = DirectedInterfaceTrackletBuilder(
+        replace(_policy(), ambiguity_margin=0.02)
+    ).resolve(frames[:-1] + ((weak_residual, frames[-1][1]),))
+    established_id, provisional_id = (
+        item.tracklet_id for item in result.refs_by_frame[2]
+    )
+    first_child, second_child = result.refs_by_frame[3]
+
+    # A complete two-edge correction needs physical support on both child
+    # rows. The calibrated-only residual cannot redirect the established ID.
+    assert first_child.tracklet_id == provisional_id
+    assert second_child.tracklet_id == established_id
+    assert 3 not in result.incompatible_frames
 
 
 def test_sparse_motion_supports_continuation_without_a_per_frame_gate() -> None:
