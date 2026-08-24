@@ -53,6 +53,24 @@ four-video replay with fingerprint regeneration treated as a review event,
 never an automatic update. Any numeric delta requires direct frame review;
 coverage alone is not acceptance.
 
+The replay gate must execute the R14 audit functions, not only count generic
+numeric rows. It records all 13 checked-truth cases, numeric coverage, MAE,
+maximum error, sample3 completed-fill suppression, sample3 late-drain coverage,
+sample4 reviewed-range matches and same-frame provenance. R17 may intentionally
+abstain from an obsolete or contradicted R14 anchor only when a newer source
+review and a named safety assertion document that exception; the raw 13-case
+result is still reported and never omitted.
+
+The drain correction additionally requires:
+
+- the reviewed sample3 drain remains numeric through the clean successor
+  interval after 97 s and includes the 100 s checked-truth band;
+- the Y≈243 foreign fill branch and completed-fill cap remain non-numeric;
+- high-conflict material-only, reversed, distant and ambiguous drain successors
+  remain rejected; and
+- the correction cannot release a filled barrier because it is available only
+  after a drain owner has already been established.
+
 ## Private-Windows gate
 
 The final field replay uses the same Base/Accum source timestamps and reviewed

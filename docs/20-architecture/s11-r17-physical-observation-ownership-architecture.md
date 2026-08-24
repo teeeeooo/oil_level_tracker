@@ -1,6 +1,6 @@
 # S11-R17 Physical Observation Ownership Architecture
 
-**Status:** `DESIGN ACCEPTED — IMPLEMENTATION AUTHORIZED`
+**Status:** `DESIGN CORRECTION ACCEPTED — IMPLEMENTATION AUTHORIZED`
 
 ## Authority and acceptance boundary
 
@@ -122,6 +122,35 @@ owner because it has no upward material progression.
 
 This is a phase handoff, not global mutation of `initial_state`, and it does not
 authorize a mid-Glass candidate merely because a prior owner once existed.
+
+### Checked-truth correction: drain evidence is not material identity
+
+The first R17 local acceptance omitted the R14 13-case checked-truth audit. A
+later audit exposed a concrete sample3 defect: after a reviewed drain owner was
+established, a distinct directionally correct `ANCHOR_TRAJECTORY` tracklet had
+13.75 px progress, 1.0 directional agreement and strong registered motion, but
+could not inherit the drain phase because its historical material-conflict
+average exceeded the material limit. The result was an artificial owner gap
+and loss of the reviewed late-drain trajectory.
+
+The correction keeps the R16 same-row material-veto lesson intact. A clean
+direct representation may not hide a high-conflict material-path sibling. It
+adds one phase-local alternative evidence contract instead:
+
+- the material phase must already be `DRAINING`; this rule cannot release a
+  filled barrier or create an initial drain;
+- the row must be a confirmed `ANCHOR_TRAJECTORY` with positive drain
+  direction, sufficient directional agreement, and registered motion support
+  and coverage;
+- a row containing material-path members is admissible only if it also has an
+  independently anchor-authoritative, low-conflict material-path witness; and
+- geometry, loss bounds, ambiguity handling and same-frame projection remain
+  unchanged.
+
+This separates accumulated texture conflict from a current physical drain
+witness without lowering a threshold. A high-conflict material sibling beside
+only a clean non-material representation remains a veto, as do reversed,
+stationary, distant and ambiguous rows.
 
 ## Physical Foam-front episodes
 
