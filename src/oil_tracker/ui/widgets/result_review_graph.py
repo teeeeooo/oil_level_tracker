@@ -51,13 +51,14 @@ class ResultReviewGraph(QWidget):
         self.axes.set_xlim(model.analysis_start_sec, model.analysis_end_sec)
         if model.axis_lower is not None and model.axis_upper is not None:
             self.axes.set_ylim(model.axis_lower, model.axis_upper)
-        self.axes.axhline(0.0, linestyle=":", linewidth=1.2, label="기준선")
+        self.axes.axhline(0.0, linestyle=":", linewidth=1.2, color="#86868b", label="기준선")
         if model.analysis_top_boundary_value is not None:
             self.axes.axhline(
                 model.analysis_top_boundary_value,
                 linestyle="--",
                 linewidth=0.9,
                 alpha=0.65,
+                color="#86868b",
                 label="분석 영역 위쪽 경계",
             )
         if model.analysis_bottom_boundary_value is not None:
@@ -66,10 +67,11 @@ class ResultReviewGraph(QWidget):
                 linestyle="--",
                 linewidth=0.9,
                 alpha=0.65,
+                color="#86868b",
                 label="분석 영역 아래쪽 경계",
             )
-        self.axes.axvline(model.analysis_start_sec, linewidth=0.8, alpha=0.45, label="분석 범위")
-        self.axes.axvline(model.analysis_end_sec, linewidth=0.8, alpha=0.45)
+        self.axes.axvline(model.analysis_start_sec, linewidth=0.8, alpha=0.45, color="#86868b", label="분석 범위")
+        self.axes.axvline(model.analysis_end_sec, linewidth=0.8, alpha=0.45, color="#86868b")
         if (
             model.assumed_initial_state
             and model.assumed_state_start_sec is not None
@@ -83,7 +85,7 @@ class ResultReviewGraph(QWidget):
                 model.assumed_state_start_sec,
                 model.assumed_state_end_sec,
                 alpha=0.09,
-                color="#3b82f6" if full else "#f59e0b",
+                color="#007aff" if full else "#86868b",
                 label=(
                     "확정 초기 상태 유지 가정 (FULL)"
                     if full
@@ -91,18 +93,31 @@ class ResultReviewGraph(QWidget):
                 ),
             )
         if model.compressor_start_sec is not None:
-            self.axes.axvline(model.compressor_start_sec, linestyle="--", linewidth=1.0, label="압축기 기동")
+            self.axes.axvline(
+                model.compressor_start_sec,
+                linestyle="--",
+                linewidth=1.0,
+                color="#86868b",
+                label="압축기 기동",
+            )
         for highlight in model.highlights:
             end = max(highlight.start_time_sec, highlight.end_time_sec)
-            self.axes.axvspan(highlight.start_time_sec, end, alpha=0.12, hatch="//")
+            self.axes.axvspan(
+                highlight.start_time_sec,
+                end,
+                alpha=0.10,
+                color="#d70015",
+                hatch="//",
+            )
         for marker in model.event_markers:
-            self.axes.axvline(marker.timestamp_sec, linewidth=0.6, alpha=0.18)
+            self.axes.axvline(marker.timestamp_sec, linewidth=0.6, alpha=0.24, color="#d70015")
         for index, marker in enumerate(model.debug_markers):
             artist = self.axes.axvline(
                 marker.timestamp_sec,
                 linestyle="-.",
                 linewidth=2.2 if marker.selected else 0.9,
                 alpha=0.95 if marker.selected else 0.35,
+                color="#007aff" if marker.selected else "#86868b",
                 label="선택 디버그 장면" if marker.selected else "디버그 기록" if index == 0 else None,
             )
             artist.set_gid("debug:" + "|".join(marker.reasons))
@@ -112,6 +127,7 @@ class ResultReviewGraph(QWidget):
                 linestyle=(0, (1.0, 1.4)),
                 linewidth=2.8 if marker.selected else 1.1,
                 alpha=1.0 if marker.selected else 0.55,
+                color="#d70015",
                 label=(
                     "선택 사용자 정답"
                     if marker.selected
@@ -139,12 +155,23 @@ class ResultReviewGraph(QWidget):
         self.cursor_artist = self.axes.axvline(
             model.cursor_timestamp_sec,
             linewidth=1.4,
+            color="#007aff",
             label="현재 영상 시각",
         )
         self.axes.grid(True, alpha=0.2)
         handles, labels = self.axes.get_legend_handles_labels()
         if handles:
-            unique = dict(zip(labels, handles))
+            concise_labels = {
+                "분석 영역 위쪽 경계": "분석 영역 경계",
+                "분석 영역 아래쪽 경계": None,
+                "확정 초기 상태 유지 가정 (FULL)": "초기 상태 가정 (FULL)",
+                "확정 초기 상태 유지 가정 (EMPTY)": "초기 상태 가정 (EMPTY)",
+            }
+            unique = {}
+            for label, handle in zip(labels, handles, strict=True):
+                display_label = concise_labels.get(label, label)
+                if display_label is not None:
+                    unique[display_label] = handle
             self.axes.legend(
                 unique.values(),
                 unique.keys(),
@@ -188,7 +215,7 @@ class ResultReviewGraph(QWidget):
                     run.values,
                     linestyle="-",
                     linewidth=1.7,
-                    color="#2563eb",
+                    color="#007aff",
                     label=label if not labelled else None,
                 )
                 labelled = True
@@ -198,7 +225,7 @@ class ResultReviewGraph(QWidget):
                     bridge.values,
                     linestyle=(0, (4, 3)),
                     linewidth=1.45,
-                    color="#2563eb",
+                    color="#007aff",
                     alpha=0.7,
                     label="관측 공백 연결" if index == 0 else None,
                 )
@@ -207,7 +234,7 @@ class ResultReviewGraph(QWidget):
                 anchor_times,
                 anchor_values,
                 s=10,
-                color="#2563eb",
+                color="#007aff",
                 alpha=0.7,
                 label=label if not labelled else None,
             )
@@ -218,7 +245,7 @@ class ResultReviewGraph(QWidget):
                 values,
                 linestyle=linestyle,
                 linewidth=1.6,
-                color="#f97316" if label == "거품 경계" else None,
+                color="#86868b" if label == "거품 경계" else "#007aff",
                 marker="o" if label == "거품 경계" else None,
                 markersize=4 if label == "거품 경계" else None,
                 label=label,

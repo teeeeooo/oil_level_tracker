@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import QSize, Qt, Signal
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 
 from oil_tracker.application.services.event_presentation import event_type_label
 from oil_tracker.domain.review import ReviewFilter
-from oil_tracker.ui.presentation_labels import result_state_label
+from oil_tracker.ui.presentation_labels import result_state_label, review_reason_label
 
 
 _FILTER_LABELS = (
@@ -58,9 +58,11 @@ class ResultReviewNavigation(QWidget):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setMinimumWidth(300)
+        self.setObjectName("resultReviewNavigation")
+        self.setMinimumWidth(280)
         self.glass_combo = QComboBox()
         self.result_label = QLabel("결과 bundle 없음")
+        self.result_label.setObjectName("resultReviewSummary")
         self.result_label.setWordWrap(True)
         self.tabs = QTabWidget()
         self.event_list = QListWidget()
@@ -83,6 +85,7 @@ class ResultReviewNavigation(QWidget):
         review_layout.addLayout(filter_row)
         review_layout.addWidget(self.review_list, 1)
         self.tabs.addTab(review_page, "검토 필요")
+        self.tabs.setCurrentWidget(review_page)
 
         debug_page = QWidget()
         debug_layout = QVBoxLayout(debug_page)
@@ -107,7 +110,10 @@ class ResultReviewNavigation(QWidget):
         buttons.addWidget(self.previous_button)
         buttons.addWidget(self.next_button)
         layout = QVBoxLayout(self)
-        layout.addWidget(QLabel("관찰창"))
+        heading = QLabel("검토 항목")
+        heading.setObjectName("sectionTitle")
+        layout.addWidget(heading)
+        layout.addWidget(QLabel("Glass"))
         layout.addWidget(self.glass_combo)
         layout.addWidget(self.result_label)
         layout.addWidget(self.tabs, 1)
@@ -166,6 +172,7 @@ class ResultReviewNavigation(QWidget):
         self._debug_summaries = tuple(summaries)
         self._debug_message = message or "이 결과에는 디버그 기록이 없습니다."
         self.tabs.setTabEnabled(self.debug_tab_index, bool(enabled))
+        self.tabs.setTabVisible(self.debug_tab_index, bool(enabled))
         self._refresh_debug_list()
 
     def refresh_items(self, bundle, query, glass_id: str) -> None:
@@ -198,12 +205,18 @@ class ResultReviewNavigation(QWidget):
             self.review_list.addItem(empty)
         else:
             for interval in intervals:
-                reasons = ", ".join(interval.reasons)
+                reasons = ", ".join(
+                    dict.fromkeys(review_reason_label(reason) for reason in interval.reasons)
+                )
                 item = QListWidgetItem(
                     f"{interval.start_time_sec:.3f}–{interval.end_time_sec:.3f}s · 최저 {interval.minimum_confidence:.3f}\n{reasons}"
                 )
+                item.setSizeHint(QSize(0, 48))
                 item.setData(Qt.ItemDataRole.UserRole, interval.representative_time_sec)
-                item.setToolTip("category: " + ", ".join(category.value for category in interval.categories))
+                item.setToolTip(
+                    "기록된 사유: " + ", ".join(interval.reasons)
+                    + "\n분류: " + ", ".join(category.value for category in interval.categories)
+                )
                 self.review_list.addItem(item)
         self._refresh_debug_list()
         self.eventSelected.emit(None)

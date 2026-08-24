@@ -135,6 +135,27 @@ def result_state_label(value: ResultState) -> str:
     return enum_label(value, RESULT_STATE_LABELS)
 
 
+def review_reason_label(value: str) -> str:
+    """Collapse detector-oriented review flags into a small user-facing vocabulary."""
+    raw = str(value or "").strip()
+    if not raw:
+        return "추가 확인 필요"
+    if any("가" <= character <= "힣" for character in raw):
+        return raw
+    normalized = raw.upper()
+    if "LOW_CONFIDENCE" in normalized:
+        return "신뢰도 기준 미달"
+    if "GLARE" in normalized or "FOG" in normalized:
+        return "흐림·반사광 영향"
+    if "LOST" in normalized or "UNAVAILABLE" in normalized:
+        return "검출 정보 부족"
+    if "FOAM" in normalized:
+        return "거품 영향"
+    if "REVIEW" in normalized or "UNKNOWN" in normalized:
+        return "사용자 확인 필요"
+    return "추가 확인 필요"
+
+
 def initial_state_for_ui(value: InitialObservationState) -> InitialObservationState:
     return _INITIAL_STATE_UI_FALLBACK.get(value, value)
 

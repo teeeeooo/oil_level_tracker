@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from PySide6.QtWidgets import QFormLayout, QLabel, QVBoxLayout, QWidget
 
-from oil_tracker.ui.presentation_labels import fill_state_label
+from oil_tracker.application.services.event_presentation import event_type_label
+from oil_tracker.ui.presentation_labels import fill_state_label, review_reason_label
 
 
 class ResultReviewDetails(QWidget):
@@ -13,12 +14,12 @@ class ResultReviewDetails(QWidget):
         form = QFormLayout()
         fields = (
             ("video_time", "영상 시각"),
-            ("frame_index", "decoded 장면"),
-            ("sample_time", "tracking 시각"),
-            ("glass", "선택 관찰창"),
+            ("frame_index", "장면 번호"),
+            ("sample_time", "검출 시각"),
+            ("glass", "선택 Glass"),
             ("fill_state", "관측 상태"),
-            ("retrospective_state", "회고 해석"),
-            ("retrospective_status", "회고 근거 / 상태"),
+            ("retrospective_state", "추정 상태"),
+            ("retrospective_status", "추정 근거"),
             ("oil_y", "유면 Y"),
             ("oil_px", "기준점 대비 px"),
             ("oil_mm", "기준점 대비 mm"),
@@ -27,9 +28,9 @@ class ResultReviewDetails(QWidget):
             ("foam_mm", "거품 기준점 대비 mm"),
             ("confidence", "전체 신뢰도"),
             ("valid", "유효 여부"),
-            ("flags", "flags"),
+            ("flags", "검출 메모"),
             ("active", "활성 이벤트 / 검토 사유"),
-            ("boundary_status", "overlay 상태"),
+            ("boundary_status", "표시 상태"),
         )
         for key, title in fields:
             label = QLabel("-")
@@ -95,8 +96,8 @@ class ResultReviewDetails(QWidget):
             self.values["confidence"].setText(f"{sample.overall_confidence:.3f}")
             self.values["valid"].setText("유효" if sample.is_valid else "확인 필요")
             self.values["flags"].setText(", ".join(sample.flags) if sample.flags else "없음")
-        event_text = [event.event_type.value for event in active_events]
-        event_text.extend(overlay.review_reasons)
+        event_text = [event_type_label(event.event_type) for event in active_events]
+        event_text.extend(review_reason_label(reason) for reason in overlay.review_reasons)
         self.values["active"].setText(", ".join(dict.fromkeys(event_text)) if event_text else "없음")
         status = overlay.boundary_status
         if not overlay.within_analysis_range:

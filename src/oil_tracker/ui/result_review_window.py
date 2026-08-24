@@ -12,12 +12,15 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QLabel,
     QMainWindow,
+    QMenu,
     QMessageBox,
     QProgressDialog,
+    QSizePolicy,
     QSplitter,
     QStackedWidget,
     QStyle,
     QToolBar,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
@@ -105,9 +108,11 @@ class ResultReviewWindow(QMainWindow):
 
     def _build_ui(self) -> None:
         toolbar = QToolBar("결과 검토 도구", self)
+        toolbar.setObjectName("resultReviewToolBar")
         toolbar.setMovable(False)
+        toolbar.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextOnly)
         self.addToolBar(toolbar)
-        self.open_action = QAction(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogOpenButton), "결과 bundle 열기", self)
+        self.open_action = QAction(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogOpenButton), "결과 열기", self)
         self.reassign_action = QAction(self.style().standardIcon(QStyle.StandardPixmap.SP_DriveHDIcon), "원본 영상 다시 지정", self)
         self.report_action = QAction("결과 보고서 열기", self)
         self.folder_action = QAction("결과 폴더 열기", self)
@@ -116,17 +121,9 @@ class ResultReviewWindow(QMainWindow):
         self.save_png_action = QAction(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogSaveButton), "현재 장면 PNG 저장", self)
         self.export_mp4_action = QAction("주석 MP4 내보내기", self)
         self.export_mp4_action.setToolTip("선택한 Glass의 저장된 분석 결과를 분석 구간 전체 MP4에 렌더링합니다.")
+        self.details_action = QAction("세부 정보 보기", self)
+        self.details_action.setCheckable(True)
         toolbar.addAction(self.open_action)
-        toolbar.addAction(self.reassign_action)
-        toolbar.addSeparator()
-        toolbar.addAction(self.report_action)
-        toolbar.addAction(self.folder_action)
-        toolbar.addAction(self.capture_action)
-        toolbar.addAction(self.same_profile_action)
-        toolbar.addSeparator()
-        toolbar.addAction(self.save_png_action)
-        toolbar.addAction(self.export_mp4_action)
-        toolbar.addSeparator()
         toolbar.addWidget(QLabel("보기"))
         self.mode_combo = QComboBox()
         self.mode_combo.setObjectName("resultReviewModeCombo")
@@ -134,8 +131,34 @@ class ResultReviewWindow(QMainWindow):
         self.mode_combo.addItem("디버그", "debug")
         self.mode_combo.setToolTip("일반 검토는 공식 tracking 결과를, 디버그는 분석 당시 저장된 detector trace를 표시합니다.")
         toolbar.addWidget(self.mode_combo)
-        toolbar.addSeparator()
+
+        self.review_actions_menu = QMenu("결과 작업", self)
+        self.review_actions_menu.setObjectName("resultReviewActionMenu")
+        self.review_actions_menu.addSection("보기")
+        self.review_actions_menu.addAction(self.details_action)
+        self.review_actions_menu.addAction(self.reassign_action)
+        self.review_actions_menu.addSection("결과 열기")
+        self.review_actions_menu.addAction(self.report_action)
+        self.review_actions_menu.addAction(self.folder_action)
+        self.review_actions_menu.addAction(self.capture_action)
+        self.review_actions_menu.addSection("내보내기")
+        self.review_actions_menu.addAction(self.save_png_action)
+        self.review_actions_menu.addAction(self.export_mp4_action)
+        self.review_actions_menu.addSection("다음 작업")
+        self.review_actions_menu.addAction(self.same_profile_action)
+        self.review_actions_button = QToolButton(toolbar)
+        self.review_actions_button.setObjectName("toolbarMenuButton")
+        self.review_actions_button.setText("작업")
+        self.review_actions_button.setMenu(self.review_actions_menu)
+        self.review_actions_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        self.review_actions_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        toolbar.addWidget(self.review_actions_button)
+
+        toolbar_spacer = QWidget(toolbar)
+        toolbar_spacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        toolbar.addWidget(toolbar_spacer)
         self.state_label = QLabel()
+        self.state_label.setObjectName("stateBadge")
         toolbar.addWidget(self.state_label)
 
         self.navigation = ResultReviewNavigation()
@@ -150,29 +173,31 @@ class ResultReviewWindow(QMainWindow):
         self.video_path_label = QLabel("원본 영상 정보 없음")
         self.video_path_label.setWordWrap(True)
         self.video_path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-        visual_splitter = QSplitter(Qt.Orientation.Vertical)
-        visual_splitter.setChildrenCollapsible(False)
-        visual_splitter.addWidget(self.canvas)
-        visual_splitter.addWidget(self.graph)
-        visual_splitter.setStretchFactor(0, 1)
-        visual_splitter.setStretchFactor(1, 0)
-        visual_splitter.setSizes([560, 240])
+        self.visual_splitter = QSplitter(Qt.Orientation.Vertical)
+        self.visual_splitter.setChildrenCollapsible(False)
+        self.visual_splitter.addWidget(self.canvas)
+        self.visual_splitter.addWidget(self.graph)
+        self.visual_splitter.setStretchFactor(0, 1)
+        self.visual_splitter.setStretchFactor(1, 0)
+        self.visual_splitter.setSizes([560, 240])
         center = QWidget()
         center_layout = QVBoxLayout(center)
         center_layout.setContentsMargins(6, 6, 6, 6)
         center_layout.addWidget(self.video_path_label)
-        center_layout.addWidget(visual_splitter, 1)
+        center_layout.addWidget(self.visual_splitter, 1)
         center_layout.addWidget(self.transport)
-        splitter = QSplitter(Qt.Orientation.Horizontal)
-        splitter.setChildrenCollapsible(False)
-        splitter.addWidget(self.navigation)
-        splitter.addWidget(center)
-        splitter.addWidget(self.detail_stack)
-        splitter.setStretchFactor(0, 0)
-        splitter.setStretchFactor(1, 1)
-        splitter.setStretchFactor(2, 0)
-        splitter.setSizes([310, 820, 410])
-        self.setCentralWidget(splitter)
+        self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.main_splitter.setChildrenCollapsible(False)
+        self.main_splitter.addWidget(self.navigation)
+        self.main_splitter.addWidget(center)
+        self.main_splitter.addWidget(self.detail_stack)
+        self.main_splitter.setStretchFactor(0, 0)
+        self.main_splitter.setStretchFactor(1, 1)
+        self.main_splitter.setStretchFactor(2, 0)
+        self._details_splitter_sizes = [300, 850, 390]
+        self.main_splitter.setSizes(self._details_splitter_sizes)
+        self.setCentralWidget(self.main_splitter)
+        self._set_details_visible(False)
         self.statusBar().showMessage("결과 bundle을 열어 주세요.")
         self._set_debug_mode_available(False, "이 결과에는 디버그 기록이 없습니다.")
 
@@ -185,6 +210,7 @@ class ResultReviewWindow(QMainWindow):
         self.same_profile_action.triggered.connect(self.prepare_same_profile_analysis)
         self.save_png_action.triggered.connect(self.save_current_png)
         self.export_mp4_action.triggered.connect(self.export_annotated_mp4)
+        self.details_action.toggled.connect(self._set_details_visible)
         self.mode_combo.currentIndexChanged.connect(self._mode_changed)
         self.navigation.glassChanged.connect(self._glass_changed)
         self.navigation.filterChanged.connect(self._review_filter_changed)
@@ -213,6 +239,16 @@ class ResultReviewWindow(QMainWindow):
             self.mp4_export_controller.failed.connect(self._mp4_export_failed)
             self.mp4_export_controller.cancelled.connect(self._mp4_export_cancelled)
             self.mp4_export_controller.runningChanged.connect(self._mp4_export_running_changed)
+
+    def _set_details_visible(self, visible: bool) -> None:
+        visible = bool(visible)
+        self.detail_stack.setVisible(visible)
+        if visible:
+            self.main_splitter.setSizes(self._details_splitter_sizes)
+        if self.details_action.isChecked() != visible:
+            self.details_action.blockSignals(True)
+            self.details_action.setChecked(visible)
+            self.details_action.blockSignals(False)
 
     def choose_bundle(self) -> None:
         directory = QFileDialog.getExistingDirectory(
@@ -507,6 +543,8 @@ class ResultReviewWindow(QMainWindow):
         self.mode = requested
         self.highlighted_candidate = None
         self.detail_stack.setCurrentWidget(self.debug_details if self.mode == "debug" else self.details)
+        if self.mode == "debug":
+            self._set_details_visible(True)
         self._render_current_scene()
         self._rebuild_graph()
         self._refresh_markers()

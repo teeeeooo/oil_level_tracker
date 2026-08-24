@@ -14,7 +14,7 @@ class ResultReviewCanvas(QWidget):
         self.label = QLabel("결과 bundle을 열어 주세요.")
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.setMinimumSize(640, 420)
-        self.label.setStyleSheet("background:#141619; color:#d9dde3;")
+        self.label.setStyleSheet("background:#1d1d1f; color:#f5f5f7;")
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.label)

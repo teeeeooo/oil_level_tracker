@@ -35,10 +35,15 @@ class RedetectionResultReviewWindow(ResultReviewWindow):
         self.truth_action.setToolTip(
             "현재 Glass, 장면과 시각을 유지해 사용자 정답 workflow를 엽니다. 공식 결과는 변경하지 않습니다."
         )
-        toolbar = self.findChild(QToolBar)
-        if toolbar is not None:
-            toolbar.insertAction(self.save_png_action, self.redetection_action)
-            toolbar.insertAction(self.save_png_action, self.truth_action)
+        actions_menu = getattr(self, "review_actions_menu", None)
+        if actions_menu is not None:
+            actions_menu.insertAction(self.same_profile_action, self.redetection_action)
+            actions_menu.insertAction(self.same_profile_action, self.truth_action)
+        else:
+            toolbar = self.findChild(QToolBar)
+            if toolbar is not None:
+                toolbar.insertAction(self.save_png_action, self.redetection_action)
+                toolbar.insertAction(self.save_png_action, self.truth_action)
         self.redetection_action.setEnabled(False)
         self.truth_action.setEnabled(False)
         self.redetection_action.triggered.connect(self.redetectionRequested)
