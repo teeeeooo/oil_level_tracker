@@ -2,10 +2,10 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R16 local complete; push, then private-Windows Base/Accum replay`
-**Source authority:** `R15 field authority; R16 replacement architecture and local evidence`
-**Task-start exact head:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
-**Task-start exact parent:** `878e591266b601b71093e36919d3393815b66239`
+**Current gate:** `R16 Windows FAIL recorded; corrected successor design before implementation`
+**Source authority:** `main at integrated R16 baseline; no field-qualified detector`
+**Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
+**Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
 
 ## R10 field result
 
@@ -138,19 +138,36 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Push the locally complete R16 candidate. The final semantic source/test commit
-is `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`; the following documentation-only
-commit records its contract and regenerated evidence without changing runtime
-behavior. The authorized final reciprocal-assignment repair is complete and no
-additional independent auditor is requested.
+Complete the successor design from the corrected R16 Windows evidence before
+changing production code. The design must keep proposal recall, physical
+tracklet confirmation, material-phase reacquisition and Foam episode identity
+as separate owners and must reconcile the specific R11--R16 failed approaches.
 
-After push, begin the authorized UI/UX evidence audit. This does not waive the
-still-pending S11 external gate: replay the exact pushed R16 head on private
-Windows Base/Accum using the saved Recipes and Artifact templates. Evaluate
-Base gaps, Accum initial EMPTY, real bottom-entry Oil, the 656.5--677 s dynamic
-Foam group, static Y80 prefixes and detached Foam as separate gates. Count only
-final sequence publication and cross-check CSV equality. R15 remains the field
-authority until those external checks pass.
+Implementation is not yet authorized by this record. After a design is
+accepted, source work must preserve Accum initial-EMPTY suppression, real
+bottom-entry admission, the 52 reviewed real Foam rows, calibrated Artifact
+rejection and exact same-frame/CSV provenance. A new private-Windows Base/Accum
+replay remains the final effectiveness gate.
+
+## R16 field disposition
+
+The private-Windows R16 holdout failed. Base published 0/601 Oil and five false
+Foam rows. Accum suppressed the prior initial-EMPTY false Oil runs and admitted
+a real lower-entry tracklet, but published only 31/601 Oil rows, had large
+reviewed-Y errors at 684/689 s and remained non-numeric after 702 s. Accum
+published 97 Foam rows: 52 reviewed real Foam and 45 reviewed false Foam.
+
+Completed-window integrity passed: every one of the 31 Oil rows and all 102
+Foam rows had exactly one equal-Y selected same-frame candidate and equal CSV
+raw Y. Preliminary contrary findings came from reading top-level current-frame
+trace fields instead of nested completed-window fields.
+
+The corrected diagnostic narrows Base to mixed proposal/confirmation failure,
+Accum to upstream truth-row loss plus absent safe mid-glass filling-owner
+reacquisition, and Foam to episode-level discrimination. It explicitly does
+not treat unconfirmed tracklet default-zero metrics as measured witness values,
+does not infer that the static map was absent, and preserves Foam publication
+independence from Oil.
 
 ## Local R14 result
 
@@ -209,7 +226,9 @@ canonical regression gates pass. Exact counts, fingerprints, timing and the
 candidate-level explanation for intentional abstentions are owned by the
 [R16 evidence record](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
 and [owner audit](../50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md).
-Private-Windows Base/Accum behavior remains unverified.
+The later private-Windows result failed and is owned by the
+[R16 Windows field result](../60-evidence/s11/s11-r16-secure-windows-field-result.md)
+and [corrected diagnostic](../50-diagnostics/s11/s11-r16-windows-tracklet-and-foam-diagnostic.md).
 
 ## Authority links
 
@@ -217,6 +236,8 @@ Private-Windows Base/Accum behavior remains unverified.
 - [R16 validation](../30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md)
 - [R16 local evidence](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
 - [R16 owner audit](../50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md)
+- [R16 Windows field result](../60-evidence/s11/s11-r16-secure-windows-field-result.md)
+- [R16 Windows diagnostic](../50-diagnostics/s11/s11-r16-windows-tracklet-and-foam-diagnostic.md)
 - [R15 state-aware material ownership architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md)
 - [R15 validation](../30-validation/s11-r15-state-aware-material-ownership-validation.md)
 - [R15 local evidence](../60-evidence/s11/s11-r15-state-aware-material-ownership.md)

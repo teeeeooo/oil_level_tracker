@@ -4,14 +4,16 @@
 
 R16 is a replacement candidate for the R15 private-Accum admission failure and
 the overlapping identity/phase/selection responsibilities accumulated across
-R13--R15. The authorized local repair and exact-head regression are complete;
-no additional independent auditor is requested before push. Local evidence
-does not replace a new private-Windows Base/Accum replay or supersede R15 as
-the field authority.
+R13--R15. The authorized local repair and exact-head regression completed, but
+the later private-Windows Base/Accum gate failed. R16 is integrated on `main`
+as the successor repair baseline and is not field-qualified.
 
 **Local status:** `PASS` — exact execution results, fingerprints and runtime
 identity are preserved in the
 [R16 evidence record](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md).
+**Private-Windows status:** `FAIL` — final counts and corrected extraction
+semantics are preserved in the
+[R16 Windows field result](../60-evidence/s11/s11-r16-secure-windows-field-result.md).
 The current action and promotion sequence are owned by the
 [work plan](../00-project/work-plan.md).
 
@@ -134,5 +136,6 @@ anchor-before-lower-observation pattern must be evaluated without coordinate,
 timestamp or video-identity exceptions. Final Oil, Foam and CSV values remain
 separate PASS conditions.
 
-Coverage alone is not PASS. R16 remains a replacement candidate until this
-external gate succeeds.
+Coverage alone is not PASS. R16 failed this external gate and any successor
+must rerun an equivalent Base/Accum gate after preserving the R16 integrity and
+safety contracts.

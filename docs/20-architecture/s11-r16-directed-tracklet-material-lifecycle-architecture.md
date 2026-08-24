@@ -1,18 +1,17 @@
 # S11-R16 Directed Tracklet and Material Lifecycle Architecture
 
-**Status:** `LOCAL COMPLETE — PRIVATE-WINDOWS FIELD GATE PENDING`
+**Status:** `INTEGRATED BASELINE — PRIVATE-WINDOWS FIELD GATE FAILED`
 
 ## Authority boundary
 
-This document defines the R16 replacement candidate. It is not yet the active
-field detector authority and does not supersede the
-[R15 architecture](s11-r15-state-aware-material-ownership-architecture.md).
-The authorized local repair is complete and no additional independent audit is
-requested before push. Promotion still requires a new private-Windows
-Base/Accum replay of the pushed head. The current gate is owned by the
-[work plan](../00-project/work-plan.md); local execution results are preserved
-in the
-[R16 evidence record](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md).
+This document defines the R16 architecture now integrated on `main`. Its local
+gates passed, but the private-Windows Base/Accum gate failed, so it is a repair
+baseline rather than field-qualified detector authority. The current gate is
+owned by the [work plan](../00-project/work-plan.md); local execution results
+are preserved in the
+[R16 evidence record](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
+and the external failure in the
+[R16 Windows field result](../60-evidence/s11/s11-r16-secure-windows-field-result.md).
 
 One production detector continues to serve Base and Accum. Product code may
 not branch on video identity, Glass identity, field timestamp, reviewed Y or

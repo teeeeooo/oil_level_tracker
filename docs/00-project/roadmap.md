@@ -1,6 +1,6 @@
 # Project Roadmap
 
-**Status:** `VALIDATING`
+**Status:** `ACTIVE`
 
 This document is the long-term milestone SSOT. It owns milestone order, scope and state. Exact branch progress, findings and immediate next action belong only in the [current work plan](work-plan.md).
 
@@ -156,8 +156,8 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
-- **Major result:** The R16 replacement candidate separates directed physical tracklets, material-phase ownership, candidate-level publication and fixed-lag selection, while the R0--R5 refactor improves detector throughput and responsibility boundaries. The first independent audit found symmetric split, current-row material-veto and reverse-re-entry gaps; a final follow-up repair removed established/provisional reciprocal ID exchange without allowing a weak provisional row to redirect a mature physical owner. All exact-head local gates have been regenerated and pass. R15 remains the field authority until R16 passes its external gate.
-- **Next gate:** Push the locally complete R16 head; no additional auditor is requested. Then replay that pushed head on private Windows Base/Accum. Final Oil accuracy, EMPTY false-positive suppression, independent Foam publication and CSV equality are separate PASS conditions.
+- **Major result:** R16 separates directed physical tracklets, material-phase ownership, candidate-level publication and fixed-lag selection and passed its local gates, but the private-Windows Base/Accum holdout failed. Same-frame and sequence-to-CSV integrity passed and Accum initial-EMPTY false Oil was suppressed; Base Oil was 0/601, Accum Oil was 31/601 with large reviewed-Y errors and post-702 s loss, Base produced five false Foam rows and Accum produced 45 reviewed false Foam rows. R16 is integrated on `main` as the repair baseline, not a field-qualified detector.
+- **Next gate:** Produce a corrected successor design from the R11--R16 failure record before implementation. Preserve initial-EMPTY suppression, lower-entry admission, real Foam recall, Artifact safety and exact provenance; do not reuse the failed global-threshold, broad material-veto, implicit identity-transfer or Oil-dependent Foam approaches.
 - **Priority:** `P0`
 - **Detail:** [current work plan](work-plan.md), [R16 architecture](../20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md), [R16 validation](../30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md), [R16 local evidence](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md), [R15 field architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
@@ -174,13 +174,13 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Address remaining real-use Workbench/setup/review friction after detector effectiveness is restored, while preserving established Profile/session/result and S9 interaction authorities.
 - **Status:** `PLANNED`
-- **Major result:** Scope is intentionally not fixed yet; real-use friction, the existing P3 UX backlog, improved Foam guidance actionability after visual confirmation and clearer historical-result entry-point discoverability are candidate inputs rather than authorized implementation slices.
-- **Next gate:** Begin an evidence-led UI/UX audit after the locally complete R16 head is pushed. Keep the still-pending private-Windows detector gate separate, and authorize implementation slices only after the audit reconciles Workbench and Result Review ownership boundaries.
+- **Major result:** Scope is intentionally not fixed yet; real-use friction, the existing P3 UX backlog, improved Foam guidance actionability after visual confirmation and clearer historical-result entry-point discoverability are candidate inputs rather than authorized implementation slices. The unmerged `codex/ui-ux-refresh` prototype is non-authoritative and excluded from `main`.
+- **Next gate:** Resume an evidence-led UI/UX audit after the active S11 detector gate. Authorize implementation slices only after the audit reconciles Workbench and Result Review ownership boundaries.
 - **Priority:** `P1`
 - **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R16 local complete → push → private-Windows validation)` → `S12 UI/UX audit begins after push while the detector field gate remains pending` → `S11-M/S12 implementation slices PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R16 Windows FAIL → corrected evidence/design → implementation → new Windows gate)` → `S11-M/S12 implementation slices PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R14 failed private field holdouts. R15 remains the field authority while the locally complete R16 candidate awaits push and private validation. No additional local auditor is requested. Per the authorized sequence, UI/UX evidence audit begins after the R16 push; it does not waive or replace the pending detector field gate. Only evidence-backed UI implementation slices proceed from that audit.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R16 failed private field holdouts. R16 is the integrated `main` baseline while S11 remains active and has no field-qualified detector. The unmerged `codex/ui-ux-refresh` work is outside the current detector repair and is not part of `main`.
