@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""Deterministic four-video replay for the corrected S11-R17 contract."""
+"""Deterministic four-video replay for the authoritative S11 truth contract."""
 
 import argparse
 import json
@@ -19,15 +19,15 @@ _MODULE = (
 
 R17_NUMERIC_OIL_COUNTS = {
     "base_sample_1": 28,
-    "sample2": 3,
-    "sample3": 27,
-    "sample4": 104,
+    "sample2": 4,
+    "sample3": 29,
+    "sample4": 101,
 }
 R17_TRACKING_FINGERPRINTS = {
     "base_sample_1": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
-    "sample2": "decaea14a5cdb052333470702acd2bd10075e67fe4fc3835dc69e8cce2a57572",
-    "sample3": "be3c94709e01ab952e9de94816f1ef10e1de5743080a7164ec929e2f96471f92",
-    "sample4": "575dddcc1c5f51de915608a67b5f073421643f99553f14e12f71552e48f0e5cb",
+    "sample2": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+    "sample3": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+    "sample4": "bc3a61417c26a3b64e2d66a6cd836c66b45be3dbb17f602dcb1e5eb6b77f78c2",
 }
 
 
@@ -49,11 +49,11 @@ def _run_worker(
         ),
         run_label="S11-R17",
         run_note=(
-            "Physical observation ownership with checked-truth drain and "
-            "continuing-anchor correction"
+            "Physical observation ownership with authoritative checked truth, "
+            "bounded representation correction, and current-anchor handoff"
         ),
         manifest_schema=(
-            "s11-r17-physical-observation-ownership-worker-replay-v2"
+            "s11-r17-physical-observation-ownership-worker-replay-v3"
         ),
     )
 
@@ -97,42 +97,59 @@ def _assert_r17_contract(
     ):
         raise AssertionError("Base continuing anchor weak frame regressed")
 
-    # These are reported checked-truth misses, not silently removed cases.
-    # The sample3 row is a newer-reviewed foreign branch; sample2 has explicit
-    # provisional no-interface conflict; sample4 has no safe same-frame owner.
-    expected_abstentions = (
-        ("sample2", 0.0),
+    # Checked-in user truth is product authority.  A detector-owned branch
+    # interpretation may explain a miss, but it cannot redefine the truth.
+    required_recoveries = (
         ("sample2", 2.0),
         ("sample3", 34.5345),
-        ("sample4", 0.0),
-        ("sample4", 49.0),
     )
-    for sample, timestamp in expected_abstentions:
-        if nearest(rows_by_sample[sample], timestamp)["oil_y"] is not None:
+    for sample, timestamp in required_recoveries:
+        if nearest(rows_by_sample[sample], timestamp)["oil_y"] is None:
             raise AssertionError(
-                f"{sample} {timestamp:.4f} s safety abstention became numeric"
+                f"{sample} {timestamp:.4f} s authoritative truth is missing"
             )
 
     truth = _aggregate_truth(audits)
-    if truth["case_count"] != 13 or truth["numeric_count"] != 8:
+    if truth["case_count"] != 13 or truth["numeric_count"] < 10:
         raise AssertionError(f"R17 checked truth coverage changed: {truth}")
-    if float(truth["mean_absolute_error_px"]) > 9.0:
+    if float(truth["mean_absolute_error_px"]) > 10.0:
         raise AssertionError(f"R17 checked truth MAE regressed: {truth}")
     if float(truth["maximum_absolute_error_px"]) > 24.5:
         raise AssertionError(f"R17 checked truth maximum error regressed: {truth}")
+    miss_penalty_px = 24.5
+    coverage_adjusted_mae = (
+        float(truth["mean_absolute_error_px"]) * int(truth["numeric_count"])
+        + miss_penalty_px
+        * (int(truth["case_count"]) - int(truth["numeric_count"]))
+    ) / int(truth["case_count"])
+    if coverage_adjusted_mae > 12.0:
+        raise AssertionError(
+            "R17 coverage-adjusted checked truth error regressed: "
+            f"{coverage_adjusted_mae}"
+        )
 
+    checked_truth_misses = [
+        {
+            "sample": sample,
+            "frame_index": int(case["frame_index"]),
+            "timestamp_sec": float(case["truth_timestamp_sec"]),
+            "truth_oil_y": float(case["truth_oil_y"]),
+        }
+        for sample, audit in audits.items()
+        for case in audit["user_truth"]["cases"]
+        if case["resolved_oil_y"] is None
+    ]
     return {
         "combined_user_truth": truth,
+        "checked_truth_miss_penalty_px": miss_penalty_px,
+        "checked_truth_coverage_adjusted_mae_px": coverage_adjusted_mae,
         "sample3_completed_fill_numeric_count": 0,
         "sample3_late_drain_numeric_count": late_drain_count,
         "sample4_visible_range_match_count": int(
             visual["visible_range_match_count"]
         ),
         "same_frame_provenance": "PASS",
-        "reported_checked_truth_abstentions": [
-            {"sample": sample, "timestamp_sec": timestamp}
-            for sample, timestamp in expected_abstentions
-        ],
+        "remaining_checked_truth_misses": checked_truth_misses,
     }
 
 
@@ -154,7 +171,7 @@ def run_r17_replay(
         output_root=destination,
         verify_fingerprints=verify_fingerprints,
         manifest_schema=(
-            "s11-r17-physical-observation-ownership-isolated-replay-v2"
+            "s11-r17-physical-observation-ownership-isolated-replay-v3"
         ),
         audit_key="r17_visual_audit",
         contract_key="r17_contract",

@@ -23,9 +23,9 @@ R0_COMPLETED_WINDOW_FINGERPRINT = (
     "1050ca7966600d67b0cd430225c562c7ea32ae3329c3bad260bff89593b5cbe0"
 )
 R17_PHYSICAL_OBSERVATION_COMPLETED_WINDOW_FINGERPRINT = (
-    # Physical confirmation is initial-state neutral; bounded phase ownership
-    # still censors foreign predecessors and preserves same-frame projection.
-    "92dae92fe7d420fe90c9fafcdd0690992ff4ea30c1dce122117a6e6a5cc382e1"
+    # R17-v3 preserves same-frame projection while allowing only bounded,
+    # same-family anchor correction and transient current-frame ownership.
+    "40dcf6a2176fb580cca67a248ba3e9d0be521949f4eb15490f2c859a504c0bfa"
 )
 
 
