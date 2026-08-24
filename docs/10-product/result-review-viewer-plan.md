@@ -681,3 +681,19 @@ Phase 2B에서는 다음을 구현하지 않았다.
 - 과거 session에 `debug_trace_level`이 없으면 `none`으로 읽어 기존 bundle 호환성을 유지한다.
 - 신규 Workbench session의 기본 debug trace 수준은 문제 장면 중심의 `basic`이다.
 - 디버그 재현 패키지는 공식 result bundle 내부 또는 symlink alias 하위에 저장할 수 없다.
+
+## 14. S12 Result Review information architecture
+
+Result Review opens into the general review task rather than the technical inspection task:
+
+- the persistent toolbar exposes only result open, general/debug view choice and one `작업` menu;
+- report/folder access, source-video reassignment, captures, PNG/MP4 export, same-Profile continuation, partial re-detection and user truth remain available at menu depth two;
+- the left column owns Glass selection and starts on `검토 필요`; event and debug lists remain sibling tabs;
+- the center video, graph and transport remain the dominant workspace; and
+- raw per-frame details are hidden initially, can be opened through `세부 정보 보기`, and open automatically when debug mode requires them.
+
+General review lists collapse detector-oriented flags into a bounded Korean vocabulary such as `거품 영향`, `검출 정보 부족`, `신뢰도 기준 미달` and `사용자 확인 필요`. Exact stored flags remain available in tooltips and debug mode, so simplifying presentation does not rewrite official result data or provenance.
+
+The Viewer follows the shared neutral / blue-interaction / red-review chrome roles. Graph and overlay colors may use additional evidence distinctions only where shape, line style and labels also preserve meaning. No core review, export or follow-up task may exceed three interaction levels.
+
+These changes are presentation-only. The existing read-only bundle snapshot, independent video reader, mode authority, export safety, same-Profile handoff, re-detection, truth and lifecycle contracts remain unchanged.

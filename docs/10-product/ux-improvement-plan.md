@@ -245,6 +245,29 @@ The following remain P3 lower-priority backlog unless explicitly promoted:
 
 S9-B and S9-C remain accepted product contracts; unrelated P3 items remain optional unless promoted. S10 Windows/manual GUI and packaging acceptance is completed historical evidence, while any future proportional revalidation is governed by the [roadmap](../00-project/roadmap.md), [real-world validation plan](../30-validation/real-world-validation-plan.md) and [manual Windows procedure](../40-operations/manual-gui-windows-checklist.md).
 
+## S12 information architecture and visual hierarchy
+
+The Workbench keeps its established left-to-right ownership flow while reducing simultaneous chrome:
+
+- left owns current-scene interpretation and Glass selection;
+- center owns the current-test inputs, video and transport;
+- right owns only the selected Glass settings; when no Glass is selected it shows one empty-state instruction instead of a disabled form; and
+- the fixed lower-right execution area continues to own setup validation, Profile save and analysis execution.
+
+Primary application navigation exposes new Profile, Profile open and Result Review directly. Profile save, the latest report, multi-frame preflight, analysis-area details and undo/redo remain available through one `더보기` menu and their established shortcuts/owners. No normal Workbench task may require more than three interaction levels. The five readiness steps remain directly navigable but use concise labels; detail belongs in tooltips, inline validation and the status bar rather than repeated always-visible prose.
+
+The Profile and current-test ownership groups retain their existing model and persistence authority while using short titles and tooltips instead of colored explanatory panels. Current-scene status remains available in the left column but is compact enough to preserve the Glass list and center video. Optional debug-trace guidance remains attached to its control rather than consuming a separate explanatory column.
+
+Application chrome uses three semantic color roles wherever practical:
+
+- neutral surfaces, dividers and ordinary text;
+- blue for focus, selection and primary interaction; and
+- red only for blocking/error/review attention.
+
+Green/orange success and ownership fills are not required. Video pixels, detector overlays and plotted data may retain additional colors when needed to distinguish evidence, but surrounding application chrome must not add competing semantic palettes. Focus, disabled, warning and error states must remain distinguishable without relying on color alone.
+
+This is a presentation and information-architecture contract. It does not change Recipe, `AnalysisSession`, result-bundle, detector, readiness, undo, preflight, same-Profile or S9 geometry/interaction authority.
+
 ## Implementation principles
 
 1. Preserve domain and persisted-schema compatibility unless an approved design explicitly changes it.

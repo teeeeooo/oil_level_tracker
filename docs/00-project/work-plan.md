@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R16 local complete; push, then private-Windows Base/Accum replay`
+**Current gate:** `R16 pushed; private-Windows Base/Accum and refreshed-UI real-use replay`
 **Source authority:** `R15 field authority; R16 replacement architecture and local evidence`
 **Task-start exact head:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
 **Task-start exact parent:** `878e591266b601b71093e36919d3393815b66239`
@@ -138,19 +138,24 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Push the locally complete R16 candidate. The final semantic source/test commit
-is `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`; the following documentation-only
-commit records its contract and regenerated evidence without changing runtime
-behavior. The authorized final reciprocal-assignment repair is complete and no
-additional independent auditor is requested.
+Use the private Windows real-video session as the next authority. The locally
+complete R16 head is pushed as `origin/codex/r16-tracklet-refactor` at
+`8d43d7510eccdea7a0da95a490c4c42785a80d8e`; no additional independent local
+auditor is requested. Replay that exact head on Base/Accum using the saved
+Recipes and Artifact templates. Evaluate Base gaps, Accum initial EMPTY, real
+bottom-entry Oil, the 656.5--677 s dynamic Foam group, static Y80 prefixes and
+detached Foam as separate gates. Count only final sequence publication and
+cross-check CSV equality. R15 remains the field authority until those external
+checks pass.
 
-After push, begin the authorized UI/UX evidence audit. This does not waive the
-still-pending S11 external gate: replay the exact pushed R16 head on private
-Windows Base/Accum using the saved Recipes and Artifact templates. Evaluate
-Base gaps, Accum initial EMPTY, real bottom-entry Oil, the 656.5--677 s dynamic
-Foam group, static Y80 prefixes and detached Foam as separate gates. Count only
-final sequence publication and cross-check CSV equality. R15 remains the field
-authority until those external checks pass.
+In the same target environment, validate the evidence-led S12 Workbench and
+Result Review information-architecture refresh with real video at 100%, 125%
+and 150% display scale. Confirm the simplified toolbar/menu paths, neutral /
+blue / red chrome, empty-state disclosure, review-first navigation, optional
+technical details and Korean review-reason labels without weakening existing
+S8/S9 workflow, geometry, lifecycle or bundle authority. The UI validation is
+independent of detector field acceptance; neither result substitutes for the
+other.
 
 ## Local R14 result
 

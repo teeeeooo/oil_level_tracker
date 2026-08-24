@@ -12,6 +12,18 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Verify start/end/compressor markers numerically through session fields and report.
 - Verify Korean labels do not clip or wrap awkwardly at 100%, 125%, and 150% display scale.
 
+## S12 information architecture and visual hierarchy
+
+- At 100%, 125% and 150% Windows display scale, confirm the Workbench toolbar keeps only **새 프로필**, **프로필 열기**, **결과 검토** and **더보기** as direct actions, with no clipping or duplicate preflight/debug/undo buttons.
+- Open **더보기** and confirm Profile save, latest report, multi-frame preflight, analysis-area details and undo/redo remain discoverable and execute their established workflows.
+- Starting from an empty Workbench, confirm the right column shows one Glass-selection instruction rather than a disabled settings form. Add/select a Glass and confirm the complete settings form returns.
+- Complete video selection, time setup, Glass setup, validation, analysis and Result Review entry while confirming no required action path exceeds three interaction levels.
+- Confirm ordinary chrome uses neutral surfaces/text, blue focus/selection/primary actions and red blocking/review feedback. Treat source video, detector overlay and graph evidence colors as data rather than additional application-chrome states.
+- In Result Review, confirm the toolbar exposes only **결과 열기**, view mode and **작업**; verify report/folder, source reassignment, capture, PNG/MP4 export and follow-up workflows remain available one menu level below.
+- Confirm Result Review starts on **검토 필요**, renders detector review flags as concise Korean reasons, and retains exact stored codes in tooltips/debug surfaces.
+- Confirm per-frame technical details are closed initially, can be toggled through **세부 정보 보기**, and open automatically for debug records without shrinking or corrupting video/graph state.
+- Repeat the above with keyboard shortcuts, long Korean paths and one narrow 1280 px window; verify menu closure/focus and window resize do not lose state.
+
 ## Glass and analysis region editor
 - Add three Glass items and alternate selection.
 - Confirm the current-scene detection summary remains readable above the Glass list without hiding its add/delete/copy actions.

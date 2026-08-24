@@ -157,7 +157,7 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
 - **Major result:** The R16 replacement candidate separates directed physical tracklets, material-phase ownership, candidate-level publication and fixed-lag selection, while the R0--R5 refactor improves detector throughput and responsibility boundaries. The first independent audit found symmetric split, current-row material-veto and reverse-re-entry gaps; a final follow-up repair removed established/provisional reciprocal ID exchange without allowing a weak provisional row to redirect a mature physical owner. All exact-head local gates have been regenerated and pass. R15 remains the field authority until R16 passes its external gate.
-- **Next gate:** Push the locally complete R16 head; no additional auditor is requested. Then replay that pushed head on private Windows Base/Accum. Final Oil accuracy, EMPTY false-positive suppression, independent Foam publication and CSV equality are separate PASS conditions.
+- **Next gate:** Replay the pushed R16 head on private Windows Base/Accum; no additional local auditor is requested. Final Oil accuracy, EMPTY false-positive suppression, independent Foam publication and CSV equality are separate PASS conditions.
 - **Priority:** `P0`
 - **Detail:** [current work plan](work-plan.md), [R16 architecture](../20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md), [R16 validation](../30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md), [R16 local evidence](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md), [R15 field architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
 
@@ -173,14 +173,14 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 ### S12 — Post-S10 UI/UX Refinement
 
 - **Purpose:** Address remaining real-use Workbench/setup/review friction after detector effectiveness is restored, while preserving established Profile/session/result and S9 interaction authorities.
-- **Status:** `PLANNED`
-- **Major result:** Scope is intentionally not fixed yet; real-use friction, the existing P3 UX backlog, improved Foam guidance actionability after visual confirmation and clearer historical-result entry-point discoverability are candidate inputs rather than authorized implementation slices.
-- **Next gate:** Begin an evidence-led UI/UX audit after the locally complete R16 head is pushed. Keep the still-pending private-Windows detector gate separate, and authorize implementation slices only after the audit reconciles Workbench and Result Review ownership boundaries.
+- **Status:** `VALIDATING`
+- **Major result:** A screenshot-led Workbench, wizard and Result Review audit authorized a bounded information-architecture refresh. Primary navigation remains visible, secondary work moves to one-step menus, empty and technical detail states use progressive disclosure, Result Review starts from review-required items, detector flags collapse to user language, and application chrome uses neutral, blue-interaction and red-blocking color roles without changing Profile/session/result/detector ownership.
+- **Next gate:** Validate the refreshed Workbench and Result Review with real video at supported Windows display scales, including clipping, menu discoverability, at-most-three-level task paths and preservation of S8/S9 lifecycle and geometry behavior. This UI gate remains separate from R16 detector field acceptance.
 - **Priority:** `P1`
-- **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md)
+- **Detail:** [UX improvement plan](../10-product/ux-improvement-plan.md), [local S12 UI evidence](../60-evidence/s12/s12-ui-information-architecture-refresh.md), [Windows checklist](../40-operations/manual-gui-windows-checklist.md)
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R16 local complete → push → private-Windows validation)` → `S12 UI/UX audit begins after push while the detector field gate remains pending` → `S11-M/S12 implementation slices PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R16 pushed → private-Windows validation)` → `S12 VALIDATING (information-architecture refresh → Windows real-use validation)` → `S11-M residual slices PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R14 failed private field holdouts. R15 remains the field authority while the locally complete R16 candidate awaits push and private validation. No additional local auditor is requested. Per the authorized sequence, UI/UX evidence audit begins after the R16 push; it does not waive or replace the pending detector field gate. Only evidence-backed UI implementation slices proceed from that audit.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R14 failed private field holdouts. R15 remains the field authority while the pushed R16 candidate awaits private validation. No additional local auditor is requested. The evidence-backed S12 information-architecture refresh is now independently validating and does not waive or replace the pending detector field gate.
