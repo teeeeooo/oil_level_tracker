@@ -6,9 +6,9 @@ R17 is locally accepted and remains `WINDOWS_PENDING`. The exact private
 Base/Accum field replay was not available in this checkout, so this evidence
 does not claim field accuracy or close S11.
 
-The detector/runtime identity is
-`opencv-phase-detector-r17-physical-observation-ownership-v1`; the sequence
-resolver identity is `r17-physical-observation-ownership-v1`.
+The corrected detector/runtime identity is
+`opencv-phase-detector-r17-physical-observation-ownership-v2`; the sequence
+resolver identity is `r17-physical-observation-ownership-v2`.
 
 ## Implemented replacement
 
@@ -31,7 +31,11 @@ The implementation is carried by:
 - `eca376a` — physical Oil identity and phase-state separation;
 - `5891060` — physical Foam-front evolution;
 - `d1b9fee` — R17 runtime identity; and
-- `b20eed5` — final design correction after the rejected admission experiment.
+- `b20eed5` — final design correction after the rejected admission experiment;
+- `63187d4` — checked-truth correction design and mandatory replay gate;
+- `1d02943` — bounded drain ownership and continuing-anchor publication
+  correction; and
+- `006f08c` — R17-v2 identity plus the executable 13-case replay contract.
 
 ## Rejected implementation experiment
 
@@ -47,6 +51,29 @@ cannot be increased by admitting weaker rows without a physical selection
 contract. R17 therefore repairs ownership and episode identity only; it does
 not claim to repair every Base proposal-recall gap observed on Windows.
 
+## Checked-truth omission and correction
+
+The first R17 acceptance ran the four qualification videos but did not call the
+R14 `user_truth_audit`/`_aggregate_truth` contract. That was a validation gap.
+Running it later produced only 6/13 numeric truth, 7.67 px MAE and 24.5 px
+maximum error, and failed first on sample3 late-drain coverage (6 rows).
+
+Code/trace review found two correctable ownership seams:
+
+- a strong directionally correct drain successor was blocked by accumulated
+  texture conflict even when current physical motion and a clean material
+  anchor proved the row; and
+- a Base same-frame candidate on an already continuing anchor trajectory was
+  removed solely by the current-frame confidence seam.
+
+R17-v2 adds typed alternatives for those two cases without changing global
+thresholds. The drain alternative exists only after a drain phase has already
+been established, and material rows still need a clean anchor-authoritative
+material witness. The publication alternative requires a continuing
+`ANCHOR_TRAJECTORY`, complete trajectory support and no current hard
+contradiction. Initial release, same-row material veto, geometry, ambiguity and
+same-frame projection contracts remain unchanged.
+
 ## Automated validation
 
 - Oil/Foam owner and S11 lifecycle contracts: 138 passed;
@@ -54,55 +81,68 @@ not claim to repair every Base proposal-recall gap observed on Windows.
   passed;
 - Foam-focused regression after preserving the reviewed second sample3
   episode: 45 passed;
-- canonical repository suite: 1,639 passed in 153.43 s;
+- canonical repository suite: 1,644 passed in 152.83 s;
 - Python compilation of `src` and `tests`: passed; and
 - `git diff --check`: passed.
 
 The R17 completed-window characterization fingerprint is
-`33d9b6733abaca0485aaa4836a5d6a51e93bc144ad6e89af9ee2d962817b7a05`.
+`92dae92fe7d420fe90c9fafcdd0690992ff4ea30c1dce122117a6e6a5cc382e1`.
 
 ## Checked four-video replay
 
-The fixed 2 FPS qualification windows produced 299 rows and 155 numeric Oil
-rows. Fingerprint regeneration was treated as a review event; counts and the
-reviewed sample3 safety assertions were checked before recording them.
+The fixed 2 FPS qualification windows produced 299 rows and 162 numeric Oil
+rows. Fingerprint regeneration was treated as a review event. The executable
+R17 replay now runs the R14 truth audit as part of its acceptance contract.
 
 | Sample | Rows | Numeric Oil | Foam episodes | Tracking fingerprint |
 |---|---:|---:|---:|---|
-| `base_sample_1` | 30 | 27 | 0 | `6cc4478bf93b83911b111d261ba610a8ac3a1f220829a35036a504e48e9814f8` |
+| `base_sample_1` | 30 | 28 | 0 | `5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7` |
 | `sample2` | 5 | 3 | 0 | `decaea14a5cdb052333470702acd2bd10075e67fe4fc3835dc69e8cce2a57572` |
-| `sample3` | 151 | 21 | 2 | `f9d7dae6bcf43f290c7668dbed4efbec91da69831d59418910cf896b95b868e0` |
+| `sample3` | 151 | 27 | 2 | `be3c94709e01ab952e9de94816f1ef10e1de5743080a7164ec929e2f96471f92` |
 | `sample4` | 113 | 104 | 1 | `575dddcc1c5f51de915608a67b5f073421643f99553f14e12f71552e48f0e5cb` |
 
-Oil counts match the repaired R16 local stream. Sample3 preserves both reviewed
-dynamic Foam episodes at 30.53–32.53 s and 37.04–38.04 s, keeps the foreign
-34–39 s branch and completed-fill cap non-numeric, preserves same-frame drain
-witnesses through 96.53 s, and rejects the unsafe later re-entry. The first R17
-Foam implementation rejected the second real episode because an absolute
-component-width change was too strict; using relative component evolution
-restored it without reopening the constant-glare unit cases.
+Checked truth is 8/13 with 9.0 px MAE and 24.5 px maximum error. Sample3 keeps
+the foreign 34–39 s branch and completed-fill cap non-numeric, restores the
+reviewed physical drain successor through 101.53 s, and increases numeric late
+drain rows from six to twelve. Sample4 retains eight strict reviewed-range
+matches. Every numeric Oil row retains same-frame provenance.
+
+The five raw checked-truth abstentions remain visible in the manifest:
+
+| Sample/time | Classification |
+|---|---|
+| `sample2` 0.0 s and 2.0 s | checked Oil truth conflicts with provisional no-interface review |
+| `sample3` 34.5345 s | newer source review identifies Y≈243 as the foreign/opposite branch; safety abstention |
+| `sample4` 0.0 s | no publishable same-frame proposal; unresolved proposal-recall miss |
+| `sample4` 49.0 s | nearby tracklets have opposed direction/high material conflict; unresolved identity miss |
+
+R14 reported 10/13, 8.5 px MAE and 26 px maximum error. R17-v2 therefore does
+not claim raw coverage parity. It improves Base truth coverage and maximum
+error while retaining the newer sample3 safety correction; the remaining
+sample4 misses stay explicit rather than being filled by a conflicting row.
 
 The reproducibility manifest is
-`/tmp/s11-r17-replay-final.80kTMm/replay_manifest.json`. It is an ignored local
-artifact; the durable counts and hashes are recorded above.
+`/tmp/s11-r17-corrected-final-audit/replay_manifest.json`. It is an ignored
+local artifact; the durable counts, hashes and abstention set are recorded
+above and in the checked diagnostic script.
 
 ## Performance
 
 An exact-clean-head profile ran at
-`b20eed5fd30ff2fa0cd8ba6043111cd1f1e2374c` using sample4, 0–56 s, 2 FPS,
+`006f08ce0523e240b56a3f2cce662ecc5a9b8c77` using sample4, 0–56 s, 2 FPS,
 debug disabled, official static learning and bundle output. Three runs all
 retained 113 rows, 104 numeric Oil and the sample4 fingerprint above.
 
 | Measurement | R17 median |
 |---|---:|
-| End-to-end wall time | 11.818 s |
-| Real-time factor | 0.211 |
-| Detector mean latency | 64.569 ms/frame |
-| Completed-window resolution | 0.2031 s |
+| End-to-end wall time | 11.646 s |
+| Real-time factor | 0.208 |
+| Detector mean latency | 64.009 ms/frame |
+| Completed-window resolution | 0.2027 s |
 
-This is approximately 1% above the recorded R16 end-to-end median and is not a
-material performance regression. The manifest is
-`/tmp/s11-r17-perf.XzPlTY/performance_profile.json`.
+This is faster than the first R17 median and is not a material performance
+regression. The manifest is
+`/tmp/s11-r17-v2-perf/performance_profile.json`.
 
 ## Remaining external gate
 

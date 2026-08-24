@@ -61,6 +61,14 @@ abstain from an obsolete or contradicted R14 anchor only when a newer source
 review and a named safety assertion document that exception; the raw 13-case
 result is still reported and never omitted.
 
+The accepted R17-v2 local baseline is 13 checked cases, eight numeric cases,
+9.0 px MAE and 24.5 px maximum error. The five abstentions are emitted in the
+replay manifest by sample and timestamp. This is not presented as parity with
+R14's 10/13 coverage: one R14 numeric case is the newer-reviewed sample3
+foreign branch, while the remaining missing rows are explicit unresolved or
+conflicting-evidence cases. A future change must improve those rows through
+same-frame physical evidence and may not delete or silently reclassify them.
+
 The drain correction additionally requires:
 
 - the reviewed sample3 drain remains numeric through the clean successor

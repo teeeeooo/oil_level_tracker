@@ -1,15 +1,14 @@
 # S11-R17 Physical Observation Ownership Architecture
 
-**Status:** `DESIGN CORRECTION ACCEPTED — IMPLEMENTATION AUTHORIZED`
+**Status:** `IMPLEMENTED — LOCAL GATE PASS`
 
 ## Authority and acceptance boundary
 
 R17 is the successor to the field-failed R16 detector. It is designed from the
 complete S11 history: the initial report/observation repair, slices A--D,
-R2--R4 current-frame opposition, and every R5--R16 private-field failure. R16
-remains the integrated baseline until this design is implemented and locally
-validated. Only a new private-Windows Base/Accum replay can establish field
-effectiveness.
+R2--R4 current-frame opposition, and every R5--R16 private-field failure. The
+implemented R17-v2 contract is the local baseline. Only a new private-Windows
+Base/Accum replay can establish field effectiveness.
 
 One detector serves every Glass. Product control flow may not depend on a
 video, Glass ID, timestamp, reviewed coordinate or truth annotation. Every

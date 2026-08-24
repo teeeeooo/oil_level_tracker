@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R17 local implementation accepted; private-Windows Base/Accum replay pending`
-**Source authority:** `main at locally accepted R17; no field-qualified detector`
+**Current gate:** `R17-v2 checked-truth correction accepted locally; private-Windows Base/Accum replay pending`
+**Source authority:** `main at locally accepted R17-v2; no field-qualified detector`
 **Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
 **Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
 
@@ -138,12 +138,15 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Run the private-Windows Base/Accum replay against the locally accepted R17
+Run the private-Windows Base/Accum replay against the locally accepted R17-v2
 implementation. Physical Oil identity is separated from initial-state phase
-semantics, bounded fill-owner re-entry is explicit, and time-only Foam grouping
-has been replaced by physical-front evolution. Local owner, integration,
-four-video, full-suite and performance gates passed; the field detector remains
-unqualified until the Windows cohorts pass.
+semantics, bounded drain handoff now distinguishes current strong physical
+motion from stale texture averages, and weak current frames may publish only
+from an established non-contradicted anchor trajectory. Time-only Foam grouping
+has been replaced by physical-front evolution. The explicit 13-case audit is
+8/13 with five named abstentions; local owner, four-video, full-suite and
+performance gates passed. The field detector remains unqualified until the
+Windows cohorts pass.
 
 Use the [R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md),
 [validation contract](../30-validation/s11-r17-physical-observation-ownership-validation.md)
