@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R15 exact-head private-Windows Base/Accum validation`
-**Source authority:** `R14 private-Windows root cause; R15 replacement architecture`
+**Current gate:** `R16 independent exact-head audit before push`
+**Source authority:** `R15 field authority; R16 replacement architecture and local evidence`
 
 ## R10 field result
 
@@ -136,11 +136,18 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Push the one validated R15 head, then replay that exact head on private Windows
-Base/Accum using the saved Recipes and Artifact templates. Evaluate Base gaps,
-Accum initial EMPTY, real bottom-entry Oil, the 656.5--677 s dynamic Foam group,
-static Y80 prefixes and detached Foam as separate gates. Count only final
-sequence publication and cross-check CSV equality.
+Independently audit the exact committed R16 candidate. The semantic source/test
+commit is `ea866ba8f77f9ae49d3efa22d66f952bdd08aa3a`; the documentation commit that
+records its contract and evidence is behavior-neutral but remains part of the
+audited head. Push only if that exact-head audit passes.
+
+After push, begin the authorized UI/UX evidence audit. This does not waive the
+still-pending S11 external gate: replay the exact pushed R16 head on private
+Windows Base/Accum using the saved Recipes and Artifact templates. Evaluate
+Base gaps, Accum initial EMPTY, real bottom-entry Oil, the 656.5--677 s dynamic
+Foam group, static Y80 prefixes and detached Foam as separate gates. Count only
+final sequence publication and cross-check CSV equality. R15 remains the field
+authority until those external checks pass.
 
 ## Local R14 result
 
@@ -172,8 +179,28 @@ same-frame provenance. Checked truth is 10/13, MAE 8.1 px and maximum error
 rows and sample4 has eight strict reviewed-range matches. Fixed fingerprints
 passed. Full regression is 1,549 passed; compile and diff checks passed.
 
+## Local R16 candidate
+
+R16 replaces overlapping component, phase and final-selection responsibility
+with directed physical tracklets, a forward material lifecycle and a separate
+candidate-publishable fixed-lag selector. It preserves exact same-frame
+provenance, makes ambiguous or foreign ownership fail closed, and establishes
+an 11-sampled-frame end-to-end commitment bound while keeping each individual
+confirmation/selection stage bounded to six frames.
+
+The local structural, four-video safety, performance, compilation, focused and
+canonical regression gates pass. Exact counts, fingerprints, timing and the
+candidate-level explanation for intentional abstentions are owned by the
+[R16 evidence record](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
+and [owner audit](../50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md).
+Private-Windows Base/Accum behavior remains unverified.
+
 ## Authority links
 
+- [R16 directed tracklet/material lifecycle architecture](../20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md)
+- [R16 validation](../30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md)
+- [R16 local evidence](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
+- [R16 owner audit](../50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md)
 - [R15 state-aware material ownership architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md)
 - [R15 validation](../30-validation/s11-r15-state-aware-material-ownership-validation.md)
 - [R15 local evidence](../60-evidence/s11/s11-r15-state-aware-material-ownership.md)
