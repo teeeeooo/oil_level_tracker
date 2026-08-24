@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, QSizePolicy
+from PySide6.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, QSizePolicy, QVBoxLayout
 
 from oil_tracker.ui.readiness import build_detection_summary
 
@@ -10,22 +10,22 @@ class DetectionSummaryCard(QGroupBox):
     initialStateRequested = Signal()
 
     def __init__(self, parent=None) -> None:
-        super().__init__("현재 장면 검출 안내", parent)
+        super().__init__("현재 장면", parent)
         self.setObjectName("detectionSummaryCard")
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
-        layout = QGridLayout(self)
+        layout = QVBoxLayout(self)
         layout.setContentsMargins(8, 7, 8, 7)
-        layout.setHorizontalSpacing(8)
-        layout.setVerticalSpacing(3)
+        layout.setSpacing(5)
         self.values: dict[str, QLabel] = {}
-        for row, (key, label) in enumerate(
+        metrics = QGridLayout()
+        metrics.setHorizontalSpacing(8)
+        metrics.setVerticalSpacing(2)
+        for column, (key, label) in enumerate(
             (
                 ("status", "상태"),
                 ("fill_state", "관측 상태"),
                 ("confidence", "신뢰도"),
                 ("reference", "기준점"),
-                ("interpretation", "검출 해석"),
-                ("recommendation", "권장 조치"),
             )
         ):
             heading = QLabel(label)
@@ -34,16 +34,26 @@ class DetectionSummaryCard(QGroupBox):
             value.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
             value.setWordWrap(True)
             self.values[key] = value
-            layout.addWidget(heading, row, 0)
-            layout.addWidget(value, row, 1)
+            metrics.addWidget(heading, 0, column)
+            metrics.addWidget(value, 1, column)
+            metrics.setColumnStretch(column, 1)
+        layout.addLayout(metrics)
+
+        self.values["interpretation"] = QLabel("-")
+        self.values["interpretation"].setObjectName("detectionSummaryInterpretation")
+        self.values["interpretation"].setWordWrap(True)
+        layout.addWidget(self.values["interpretation"])
+        self.values["recommendation"] = QLabel("-")
+        self.values["recommendation"].setObjectName("detectionSummaryRecommendation")
+        self.values["recommendation"].setWordWrap(True)
+        layout.addWidget(self.values["recommendation"])
         # Keep the pre-S3 field lookup available for callers while presenting the new wording.
         self.values["judgment"] = self.values["interpretation"]
         self.action_button = QPushButton("초기 상태 설정으로 이동")
         self.action_button.setObjectName("secondaryActionButton")
         self.action_button.clicked.connect(self.initialStateRequested)
         self.action_button.hide()
-        layout.addWidget(self.action_button, 6, 0, 1, 2)
-        layout.setColumnStretch(1, 1)
+        layout.addWidget(self.action_button)
         self.set_empty("시험 영상과 Glass를 선택해 주세요")
 
     def set_empty(self, message: str) -> None:

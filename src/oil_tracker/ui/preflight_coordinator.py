@@ -24,10 +24,14 @@ class PreflightCoordinator(QObject):
             "여러 시점 점검",
             window,
         )
-        toolbar = window.findChild(QToolBar, "mainToolBar")
-        if toolbar is not None:
-            toolbar.addSeparator()
-            toolbar.addAction(self.action)
+        actions_menu = getattr(window, "workbench_menu", None)
+        if actions_menu is not None:
+            actions_menu.insertAction(window.actions.get("debug"), self.action)
+        else:
+            toolbar = window.findChild(QToolBar, "mainToolBar")
+            if toolbar is not None:
+                toolbar.addSeparator()
+                toolbar.addAction(self.action)
         self.last_result = None
         self._request_context_key: str | None = None
         self._context_check_pending = False

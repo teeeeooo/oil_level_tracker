@@ -51,9 +51,10 @@ class VideoPlaybackPanel(QFrame):
             self.actual_size_button,
         ):
             controls.addWidget(button)
-        hint = QLabel("Ctrl+휠 확대/축소 · 가운데 버튼 드래그 이동")
+        hint = QLabel("Ctrl+휠 확대/축소 · 가운데 버튼 드래그 이동", self.view_controls)
         hint.setObjectName("canvasViewHint")
-        controls.addWidget(hint)
+        hint.hide()
+        self.view_controls.setToolTip(hint.text())
         controls.addStretch(1)
 
         layout = QVBoxLayout(self)

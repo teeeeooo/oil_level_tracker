@@ -38,10 +38,11 @@ def install_debug_trace_selector(window) -> QComboBox:
     title = QLabel("분석 기록 옵션")
     title.setToolTip(combo.toolTip())
     layout.addWidget(title, row, 0)
-    layout.addWidget(combo, row, 1, 1, 3)
+    layout.addWidget(combo, row, 1, 1, 7)
     note = QLabel("문제 장면만 저장이 일반 분석의 권장 기본값입니다.")
     note.setWordWrap(True)
-    layout.addWidget(note, row, 4, 1, 4)
+    note.setToolTip(combo.toolTip())
+    note.hide()
     window.debug_trace_selector = combo
     window.debug_trace_note = note
     sync_debug_trace_selector(window)

@@ -26,7 +26,7 @@ class MarkerSlider(QSlider):
         self._truth_points: list[tuple[float, str, bool]] = []
         self.setMinimumWidth(180)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        self.setToolTip("파랑: 분석 시작·종료 / 주황: 압축기 기동")
+        self.setToolTip("파랑: 분석 범위 / 회색: 압축기 기동")
 
     def set_markers(
         self,
@@ -37,9 +37,9 @@ class MarkerSlider(QSlider):
     ) -> None:
         self._duration = max(0.0, duration)
         self._markers = [
-            (analysis_start, QColor(40, 170, 255)),
-            (analysis_end, QColor(40, 170, 255)),
-            (compressor_start, QColor(255, 120, 30)),
+            (analysis_start, QColor("#007aff")),
+            (analysis_end, QColor("#007aff")),
+            (compressor_start, QColor("#86868b")),
         ]
         self.update()
 
@@ -51,12 +51,12 @@ class MarkerSlider(QSlider):
     ) -> None:
         self._duration = max(0.0, duration)
         self._review_points = [
-            (float(timestamp), QColor(180, 100, 255))
+            (float(timestamp), QColor("#007aff"))
             for timestamp in event_timestamps
             if timestamp is not None
         ]
         self._review_intervals = [
-            (float(start), float(end), QColor(255, 80, 80, 90))
+            (float(start), float(end), QColor(215, 0, 21, 70))
             for start, end in review_intervals
             if start is not None and end is not None
         ]
@@ -92,7 +92,7 @@ class MarkerSlider(QSlider):
         self._review_intervals.clear()
         self._debug_points.clear()
         self._truth_points.clear()
-        self.setToolTip("파랑: 분석 시작·종료 / 주황: 압축기 기동")
+        self.setToolTip("파랑: 분석 범위 / 회색: 압축기 기동")
         self.update()
 
     def paintEvent(self, event) -> None:
@@ -148,7 +148,7 @@ class MarkerSlider(QSlider):
     def _draw_debug_square(self, painter, groove, timestamp: float, selected: bool) -> None:
         x = groove.left() + self._ratio(timestamp) * groove.width()
         size = 8 if selected else 5
-        color = QColor(20, 210, 210)
+        color = QColor("#007aff") if selected else QColor("#86868b")
         painter.setPen(color)
         painter.setBrush(color if selected else Qt.BrushStyle.NoBrush)
         painter.drawRect(QRectF(x - size / 2, groove.center().y() - size / 2, size, size))
@@ -158,10 +158,10 @@ class MarkerSlider(QSlider):
         y = groove.center().y()
         size = 9 if selected else 6
         color = {
-            "confirmed_correct": QColor(80, 210, 120),
-            "corrected": QColor(255, 210, 50),
-            "unusable": QColor(230, 100, 100),
-        }.get(disposition, QColor(230, 230, 230))
+            "confirmed_correct": QColor("#007aff"),
+            "corrected": QColor("#d70015"),
+            "unusable": QColor("#86868b"),
+        }.get(disposition, QColor("#86868b"))
         painter.setPen(color)
         painter.setBrush(color if selected else Qt.BrushStyle.NoBrush)
         painter.drawPolygon(
@@ -176,9 +176,9 @@ class MarkerSlider(QSlider):
         )
 
     def _update_tooltip(self) -> None:
-        parts = ["파랑: 분석 범위", "주황: 압축기 기동", "보라 삼각형: 이벤트", "빨강 영역: 검토 필요"]
+        parts = ["파랑: 분석 범위·이벤트", "회색: 압축기 기동", "빨강 영역: 검토 필요"]
         if self._debug_points:
-            parts.append("청록 사각형: 디버그 기록(채움: 선택 기록)")
+            parts.append("사각형: 디버그 기록(파랑 채움: 선택 기록)")
         if self._truth_points:
             parts.append("마름모: 사용자 정답(채움: 선택 정답)")
         self.setToolTip(" / ".join(parts))

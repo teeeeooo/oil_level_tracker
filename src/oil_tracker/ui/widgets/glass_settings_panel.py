@@ -65,8 +65,9 @@ class GlassSettingsPanel(QWidget):
         self.ownership_hint = QLabel("아래 Glass 설정은 .oilrecipe Profile에 저장되어 다음 시험에서도 재사용됩니다.")
         self.ownership_hint.setObjectName("ownershipHint")
         self.ownership_hint.setWordWrap(True)
+        self.ownership_label.setToolTip(self.ownership_hint.text())
+        self.ownership_hint.hide()
         container_layout.addWidget(self.ownership_label)
-        container_layout.addWidget(self.ownership_hint)
 
         self.name = QLineEdit()
         self.enabled = QCheckBox("이 Glass를 분석에 포함")
@@ -209,7 +210,13 @@ class GlassSettingsPanel(QWidget):
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(4, 4, 4, 4)
+        self.empty_state = QLabel("왼쪽에서 Glass를 추가하거나 선택하세요.")
+        self.empty_state.setObjectName("emptyPanelState")
+        self.empty_state.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.empty_state.setWordWrap(True)
+        layout.addWidget(self.empty_state)
         layout.addWidget(self.scroll)
+        self.scroll.hide()
         self.setMinimumWidth(370)
         self.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         self.setObjectName("settingsPanel")
@@ -304,7 +311,8 @@ class GlassSettingsPanel(QWidget):
     def set_glass(self, glass) -> None:
         self._updating = True
         previous_glass_id = self._selected_glass_id
-        self.setEnabled(glass is not None)
+        self.scroll.setVisible(glass is not None)
+        self.empty_state.setVisible(glass is None)
         if glass is None:
             self._selected_glass_id = None
             self._interaction_target = None

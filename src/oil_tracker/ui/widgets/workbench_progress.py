@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QSizePolicy, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QSizePolicy, QWidget
 
 from oil_tracker.ui.readiness import ProgressStepState
 
@@ -32,12 +32,13 @@ class WorkbenchProgressWidget(QWidget):
         self.setObjectName("workbenchProgress")
         title = QLabel("작업 진행")
         title.setObjectName("progressTitle")
-        self.preflight_status = QLabel("여러 시점 점검: 점검하지 않음")
+        title.hide()
+        self.preflight_status = QLabel("사전 점검 · 미실행")
         self.preflight_status.setObjectName("preflightProgressStatus")
         self._buttons: dict[str, QPushButton] = {}
-        steps_layout = QHBoxLayout()
-        steps_layout.setContentsMargins(0, 0, 0, 0)
-        steps_layout.setSpacing(4)
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(10, 6, 10, 6)
+        layout.setSpacing(5)
         for index, (key, label) in enumerate(
             (
                 ("video", "영상 선택"),
@@ -54,33 +55,25 @@ class WorkbenchProgressWidget(QWidget):
             button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
             button.clicked.connect(lambda _checked=False, step_key=key: self.stepActivated.emit(step_key))
             self._buttons[key] = button
-            steps_layout.addWidget(button, 1)
+            layout.addWidget(button, 1)
             if index < 4:
                 arrow = QLabel("→")
                 arrow.setObjectName("progressArrow")
-                steps_layout.addWidget(arrow)
+                layout.addWidget(arrow)
 
-        self.next_issue = QPushButton("다음 문제로 이동")
+        self.next_issue = QPushButton("문제 위치")
         self.next_issue.setObjectName("nextIssueButton")
         self.next_issue.clicked.connect(self.nextIssueRequested)
         self.next_issue.hide()
 
-        top = QHBoxLayout()
-        top.addWidget(title)
-        top.addWidget(self.preflight_status)
-        top.addStretch(1)
-        top.addWidget(self.next_issue)
-
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(8, 5, 8, 5)
-        layout.setSpacing(4)
-        layout.addLayout(top)
-        layout.addLayout(steps_layout)
+        layout.addSpacing(5)
+        layout.addWidget(self.preflight_status)
+        layout.addWidget(self.next_issue)
 
     def set_steps(self, steps, has_glass_issue: bool) -> None:
         for step in steps:
             button = self._buttons[step.key]
-            button.setText(f"{_SYMBOLS[step.state]} {step.label} · {_LABELS[step.state]}")
+            button.setText(f"{_SYMBOLS[step.state]} {step.label}")
             button.setToolTip(step.detail)
             button.setProperty("stepState", step.state.value)
             button.style().unpolish(button)
@@ -88,7 +81,7 @@ class WorkbenchProgressWidget(QWidget):
         self.next_issue.setVisible(has_glass_issue)
 
     def set_preflight_status(self, status: str, detail: str) -> None:
-        self.preflight_status.setText(f"여러 시점 점검: {status}")
+        self.preflight_status.setText(f"사전 점검 · {status}")
         self.preflight_status.setToolTip(detail)
         self.preflight_status.setProperty("preflightState", status)
         self.preflight_status.style().unpolish(self.preflight_status)

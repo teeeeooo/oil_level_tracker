@@ -212,8 +212,9 @@ class MainWindow(QMainWindow):
         toolbar = QToolBar("분석 프로필 도구", self)
         toolbar.setObjectName("mainToolBar")
         toolbar.setMovable(False)
-        toolbar.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        toolbar.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextOnly)
         self.addToolBar(toolbar)
+        self.main_toolbar = toolbar
         self.actions = {}
         definitions = (
             ("new", "새 프로필", QStyle.StandardPixmap.SP_FileIcon),
@@ -224,19 +225,9 @@ class MainWindow(QMainWindow):
             ("result", "결과 보고서", QStyle.StandardPixmap.SP_FileDialogDetailedView),
             ("debug", "분석 영역 상세보기", QStyle.StandardPixmap.SP_ComputerIcon),
         )
-        toolbar_keys = {"new", "load", "result", "debug"}
         for key, label, icon in definitions:
             action = QAction(self.style().standardIcon(icon), label, self)
             self.actions[key] = action
-            if key not in toolbar_keys:
-                continue
-            toolbar.addAction(action)
-            button = toolbar.widgetForAction(action)
-            if isinstance(button, QToolButton):
-                button.setObjectName("toolbarButton")
-                button.setCursor(Qt.CursorShape.PointingHandCursor)
-            if key in {"load", "result"}:
-                toolbar.addSeparator()
         self.recent_profile_menu = QMenu("최근 프로필", self)
         self.recent_profile_menu.setObjectName("recentProfileMenu")
         self.actions["load"].setMenu(self.recent_profile_menu)
@@ -249,14 +240,34 @@ class MainWindow(QMainWindow):
         self.actions["redo"].setShortcut(QKeySequence.StandardKey.Redo)
         self.actions["undo"].setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowBack))
         self.actions["redo"].setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowForward))
-        toolbar.addAction(self.actions["undo"])
-        toolbar.addAction(self.actions["redo"])
-        for key in ("undo", "redo"):
+
+        for key in ("new", "load"):
+            toolbar.addAction(self.actions[key])
             button = toolbar.widgetForAction(self.actions[key])
             if isinstance(button, QToolButton):
                 button.setObjectName("toolbarButton")
                 button.setCursor(Qt.CursorShape.PointingHandCursor)
-        toolbar.addSeparator()
+
+        self.workbench_menu = QMenu("워크벤치 작업", self)
+        self.workbench_menu.setObjectName("workbenchActionMenu")
+        self.workbench_menu.addAction(self.actions["save"])
+        self.workbench_menu.addSeparator()
+        self.workbench_menu.addAction(self.actions["result"])
+        self.workbench_menu.addAction(self.actions["debug"])
+        self.workbench_menu.addSeparator()
+        self.workbench_menu.addAction(self.actions["undo"])
+        self.workbench_menu.addAction(self.actions["redo"])
+        self.workbench_menu_button = QToolButton(toolbar)
+        self.workbench_menu_button.setObjectName("toolbarMenuButton")
+        self.workbench_menu_button.setText("더보기")
+        self.workbench_menu_button.setMenu(self.workbench_menu)
+        self.workbench_menu_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        self.workbench_menu_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.toolbar_more_action = toolbar.addWidget(self.workbench_menu_button)
+
+        toolbar_spacer = QWidget(toolbar)
+        toolbar_spacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self.toolbar_spacer_action = toolbar.addWidget(toolbar_spacer)
         self.state_label = QLabel()
         self.state_label.setObjectName("stateBadge")
         toolbar.addWidget(self.state_label)
@@ -345,8 +356,9 @@ class MainWindow(QMainWindow):
         self.actions["debug"].blockSignals(False)
 
     def _build_profile_context(self) -> QWidget:
-        group = QGroupBox("Profile — 재사용 설정 · 아래 Glass/검출/판정 설정이 저장됩니다")
+        group = QGroupBox("Profile — 재사용 설정")
         group.setObjectName("profileOwnershipGroup")
+        group.setToolTip("Glass, 검출과 판정 설정은 이 Profile에 저장됩니다.")
         layout = QGridLayout(group)
         self.profile_name_label = QLabel()
         self.profile_name_label.setObjectName("profileIdentityName")
@@ -362,10 +374,11 @@ class MainWindow(QMainWindow):
         return group
 
     def _build_session_bar(self) -> QWidget:
-        group = QGroupBox("현재 시험 — 이번 분석에만 적용 · Profile에는 저장되지 않음")
+        group = QGroupBox("현재 시험 — Profile에는 저장되지 않음")
         group.setObjectName("currentTestOwnershipGroup")
+        group.setToolTip("영상, 시험 이름과 시간 범위는 이번 분석에만 적용됩니다.")
         layout = QGridLayout(group)
-        self.open_video_button = QPushButton("시험 영상 열기")
+        self.open_video_button = QPushButton("영상 선택")
         self.open_video_button.setObjectName("secondaryActionButton")
         self.video_path_label = QLabel("선택된 시험 영상이 없습니다.")
         self.video_path_label.setObjectName("videoPathLabel")
@@ -373,7 +386,7 @@ class MainWindow(QMainWindow):
         self.video_path_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.run_name_edit = QLineEdit()
         self.run_name_edit.setMaxLength(160)
-        self.run_name_edit.setPlaceholderText("예: TC-03 냉방 기동 회수 시험")
+        self.run_name_edit.setPlaceholderText("시험 이름 (선택)")
         self.run_name_edit.setToolTip(
             "현재 시험에만 적용되는 이름입니다. 프로필에는 저장되지 않으며 결과 bundle 이름과 metadata에 사용됩니다."
         )
@@ -386,7 +399,7 @@ class MainWindow(QMainWindow):
         self.sampling_spin.setValue(2.0)
         layout.addWidget(self.open_video_button, 0, 0)
         layout.addWidget(self.video_path_label, 0, 1, 1, 7)
-        layout.addWidget(QLabel("현재 시험 이름"), 1, 0)
+        layout.addWidget(QLabel("시험 이름"), 1, 0)
         layout.addWidget(self.run_name_edit, 1, 1, 1, 7)
         layout.addWidget(QLabel("분석 시작"), 2, 0)
         layout.addWidget(self.start_spin, 2, 1)

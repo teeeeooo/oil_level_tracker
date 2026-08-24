@@ -65,7 +65,8 @@ class ResultReviewCoordinator(QObject):
         window.actions["review"] = self.action
         toolbar = window.findChild(QToolBar, "mainToolBar")
         if toolbar is not None:
-            toolbar.insertAction(window.actions.get("debug"), self.action)
+            anchor = getattr(window, "toolbar_more_action", None)
+            toolbar.insertAction(anchor, self.action)
             button = toolbar.widgetForAction(self.action)
             if isinstance(button, QToolButton):
                 button.setObjectName("toolbarButton")
