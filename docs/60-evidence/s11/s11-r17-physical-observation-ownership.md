@@ -150,20 +150,20 @@ above and in the checked diagnostic script.
 ## Performance
 
 An exact-clean-head profile ran at
-`006f08ce0523e240b56a3f2cce662ecc5a9b8c77` using sample4, 0–56 s, 2 FPS,
+`6f475209d58b41f875edcc983e90e7f27fb2301e` using sample4, 0–56 s, 2 FPS,
 debug disabled, official static learning and bundle output. Three runs all
-retained 113 rows, 104 numeric Oil and the sample4 fingerprint above.
+retained 113 rows, 101 numeric Oil and the sample4 R17-v3 fingerprint above.
 
 | Measurement | R17 median |
 |---|---:|
-| End-to-end wall time | 11.646 s |
-| Real-time factor | 0.208 |
-| Detector mean latency | 64.009 ms/frame |
-| Completed-window resolution | 0.2027 s |
+| End-to-end wall time | 11.666 s |
+| Real-time factor | 0.2083 |
+| Detector mean latency | 64.404 ms/frame |
+| Completed-window resolution | 0.1973 s |
 
 This is faster than the first R17 median and is not a material performance
 regression. The manifest is
-`/tmp/s11-r17-v2-perf/performance_profile.json`.
+`/tmp/s11-r17-v3-perf/performance_profile.json`.
 
 ## Remaining external gate
 
