@@ -78,6 +78,8 @@ class _FillObservation:
     material_veto: bool
     independent_anchor: bool
     confirmation_profile: TrackletConfirmationProfile
+    net_progress_px: float
+    directional_agreement: float
     motion_support: float
     motion_coverage: float
 
@@ -86,6 +88,7 @@ class _FillObservation:
 class _FillChain:
     owner: str
     owners: tuple[str, ...]
+    origin_y: float
     observations: tuple[_FillObservation, ...]
 
     @property
@@ -129,6 +132,7 @@ class OilMaterialPhaseLifecycleOwner:
         filled_frame: int | None = None
         fill_terminal_owner: str | None = None
         fill_owner_open = False
+        established_fill_chain: _FillChain | None = None
         drain_chain: _DrainChain | None = None
         fill_confirmation_profile = OilFillConfirmationProfile.NONE
 
@@ -136,6 +140,7 @@ class OilMaterialPhaseLifecycleOwner:
             prior_phase = phase
             reason = "OPEN"
             allowed: frozenset[str] | None = None
+            fill_phase_reentered = False
             if phase in {OilMaterialPhase.OPEN, OilMaterialPhase.FILLING}:
                 chains, chain_ambiguity, chain_reason = self._advance_fill_chains(
                     chains,
@@ -159,7 +164,63 @@ class OilMaterialPhaseLifecycleOwner:
                     owner
                     for owner, chain in chains.items()
                     if self._chain_is_dynamic_fill_owner(chain)
+                    or (
+                        established_fill_chain is not None
+                        and chain.owners[: len(established_fill_chain.owners)]
+                        == established_fill_chain.owners
+                    )
                 )
+                if (
+                    established_fill_chain is not None
+                    and not dynamic_fill_owners
+                ):
+                    reentries = tuple(
+                        row
+                        for row in rows
+                        if self._fill_phase_reentry(
+                            established_fill_chain,
+                            row,
+                            frame,
+                        )
+                    )
+                    ranked_reentries = tuple(
+                        sorted(
+                            (
+                                abs(row.y - established_fill_chain.last.y)
+                                / self.policy.maximum_jump_px,
+                                row.tracklet_id,
+                                row,
+                            )
+                            for row in reentries
+                        )
+                    )
+                    chosen = _clear_choice(
+                        tuple(
+                            (cost, owner)
+                            for cost, owner, _row in ranked_reentries
+                        ),
+                        self.policy.handoff_ambiguity_margin,
+                    )
+                    if chosen is None and ranked_reentries:
+                        chains = {}
+                        ambiguous_frames.add(frame)
+                        reason = "FILL_PHASE_REENTRY_AMBIGUOUS"
+                    elif chosen is not None:
+                        successor = next(
+                            row
+                            for _cost, owner, row in ranked_reentries
+                            if owner == chosen
+                        )
+                        reentry_chain = _handoff_chain(
+                            established_fill_chain,
+                            successor,
+                            frame,
+                            self.policy.fill_evidence_window_frames,
+                        )
+                        chains = {chosen: reentry_chain}
+                        dynamic_fill_owners = frozenset({chosen})
+                        fill_phase_reentered = True
+                        reason = "FILL_PHASE_REENTRY"
                 established_interface_blocker = bool(
                     not self.policy.empty_entrance_motion_enabled
                     and any(
@@ -209,18 +270,31 @@ class OilMaterialPhaseLifecycleOwner:
                 else:
                     if not dynamic_fill_owners:
                         phase = OilMaterialPhase.OPEN
-                        allowed = None
+                        allowed = (
+                            frozenset()
+                            if self.policy.empty_entrance_motion_enabled
+                            else None
+                        )
                         if chains:
                             reason = (
                                 "FILL_ESTABLISHED_INTERFACE"
                                 if established_interface_blocker
                                 else "FILL_EVIDENCE_ACCUMULATING"
                             )
+                        elif self.policy.empty_entrance_motion_enabled:
+                            reason = "INITIAL_EMPTY_ENTRY_PENDING"
                     elif len(dynamic_fill_owners) == 1:
                         phase = OilMaterialPhase.FILLING
                         allowed = dynamic_fill_owners
-                        reason = "FILL_MOTION_OWNER"
-                        if prior_phase is OilMaterialPhase.OPEN:
+                        reason = (
+                            "FILL_PHASE_REENTRY"
+                            if fill_phase_reentered
+                            else "FILL_MOTION_OWNER"
+                        )
+                        if (
+                            prior_phase is OilMaterialPhase.OPEN
+                            and not fill_phase_reentered
+                        ):
                             dynamic_owner = next(iter(dynamic_fill_owners))
                             chain = chains[dynamic_owner]
                             predecessor, predecessor_ambiguous = (
@@ -245,6 +319,7 @@ class OilMaterialPhaseLifecycleOwner:
                                 allowed_tracklet_ids=allowed_tracklet_ids,
                                 ambiguous_frames=ambiguous_frames,
                             )
+                        established_fill_chain = chains[next(iter(allowed))]
                     else:
                         phase = OilMaterialPhase.FILLING
                         allowed = frozenset()
@@ -607,7 +682,7 @@ class OilMaterialPhaseLifecycleOwner:
 
     def _chain_is_dynamic_fill_owner(self, chain: _FillChain) -> bool:
         origin_relative = (
-            chain.observations[0].y - self.policy.geometry_top_y
+            chain.origin_y - self.policy.geometry_top_y
         ) / self.policy.geometry_height
         lower_entrance = (
             origin_relative >= 1.0 - self.policy.entrance_band_ratio
@@ -624,16 +699,27 @@ class OilMaterialPhaseLifecycleOwner:
                 and observation.motion_coverage
                 >= self.policy.fill_minimum_motion_coverage
             )
-            if not strong_motion:
-                continue
             if self.policy.empty_entrance_motion_enabled:
                 if (
                     lower_entrance
                     and observation.confirmation_profile
-                    is TrackletConfirmationProfile.ENTRANCE_MOTION
+                    in {
+                        TrackletConfirmationProfile.ANCHOR_CORRIDOR,
+                        TrackletConfirmationProfile.ANCHOR_TRAJECTORY,
+                        TrackletConfirmationProfile.MOTION_TRAJECTORY,
+                    }
+                    and observation.net_progress_px
+                    >= max(
+                        4.0,
+                        self.policy.geometry_height
+                        * self.policy.drain_minimum_progress_ratio,
+                    )
+                    and observation.directional_agreement
+                    >= self.policy.minimum_directional_agreement
+                    and (strong_motion or observation.independent_anchor)
                 ):
                     return True
-            elif (
+            elif strong_motion and (
                 central_origin
                 and observation.confirmation_profile
                 is TrackletConfirmationProfile.MOTION_TRAJECTORY
@@ -798,6 +884,30 @@ class OilMaterialPhaseLifecycleOwner:
             <= self.policy.maximum_jump_px * gap
         )
 
+    def _fill_phase_reentry(
+        self,
+        chain: _FillChain,
+        row: _ObservedRow,
+        frame: int,
+    ) -> bool:
+        gap = frame - chain.last.frame
+        return bool(
+            1 <= gap <= self.policy.fill_evidence_window_frames * 2
+            and _bounded_confirmed_observation(row.ref)
+            and not row.ref.tracklet_incompatible
+            and not row.current_material_veto
+            and row.ref.tracklet_direction < 0
+            and row.ref.tracklet_directional_agreement
+            >= self.policy.minimum_directional_agreement
+            and row.ref.tracklet_material_conflict
+            < self.policy.material_conflict_limit
+            and row.current_material_conflict
+            < self.policy.material_conflict_limit
+            and row.y
+            <= chain.last.y + self.policy.handoff_direction_reversal_tolerance_px
+            and abs(row.y - chain.last.y) <= self.policy.maximum_jump_px
+        )
+
     def _handoff_cost(
         self,
         chain: _FillChain,
@@ -833,7 +943,12 @@ class OilMaterialPhaseLifecycleOwner:
         )
         geometry_confirmed = bool(
             relative <= self.policy.entrance_band_ratio
-            and first.y - last.y
+            and (
+                chain.origin_y
+                if self.policy.empty_entrance_motion_enabled
+                else first.y
+            )
+            - last.y
             >= self.policy.geometry_height
             * self.policy.fill_minimum_span_ratio
             and directional_agreement
@@ -844,15 +959,37 @@ class OilMaterialPhaseLifecycleOwner:
         if any(item.independent_anchor for item in observations):
             return OilFillConfirmationProfile.UNKNOWN_FILL_ANCHORED
         lower_entrance = (
-            first.y - self.policy.geometry_top_y
+            (
+                chain.origin_y
+                if self.policy.empty_entrance_motion_enabled
+                else first.y
+            )
+            - self.policy.geometry_top_y
         ) / self.policy.geometry_height >= 1.0 - self.policy.entrance_band_ratio
         strong_entrance_motion = any(
             item.confirmation_profile
-            is TrackletConfirmationProfile.ENTRANCE_MOTION
-            and item.motion_support
-            >= self.policy.fill_minimum_motion_support
-            and item.motion_coverage
-            >= self.policy.fill_minimum_motion_coverage
+            in {
+                TrackletConfirmationProfile.ANCHOR_CORRIDOR,
+                TrackletConfirmationProfile.ANCHOR_TRAJECTORY,
+                TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            }
+            and item.net_progress_px
+            >= max(
+                4.0,
+                self.policy.geometry_height
+                * self.policy.drain_minimum_progress_ratio,
+            )
+            and item.directional_agreement
+            >= self.policy.minimum_directional_agreement
+            and (
+                item.independent_anchor
+                or (
+                    item.motion_support
+                    >= self.policy.fill_minimum_motion_support
+                    and item.motion_coverage
+                    >= self.policy.fill_minimum_motion_coverage
+                )
+            )
             for item in observations
         )
         if (
@@ -1053,6 +1190,7 @@ def _new_chain(row: _ObservedRow, frame: int) -> _FillChain:
     return _FillChain(
         owner=row.tracklet_id,
         owners=(row.tracklet_id,),
+        origin_y=row.y,
         observations=(_fill_observation(row, frame),),
     )
 
@@ -1072,6 +1210,7 @@ def _prepend_owner(chain: _FillChain, owner: str) -> _FillChain:
     return _FillChain(
         owner=chain.owner,
         owners=(owner,) + chain.owners,
+        origin_y=chain.origin_y,
         observations=chain.observations,
     )
 
@@ -1085,6 +1224,7 @@ def _extend_chain(
     return _FillChain(
         owner=chain.owner,
         owners=chain.owners,
+        origin_y=chain.origin_y,
         observations=_bounded_fill_observations(
             chain.observations + (_fill_observation(row, frame),),
             frame,
@@ -1101,7 +1241,8 @@ def _handoff_chain(
 ) -> _FillChain:
     return _FillChain(
         owner=row.tracklet_id,
-        owners=chain.owners + (row.tracklet_id,),
+        owners=_append_unique_owner(chain.owners, row.tracklet_id),
+        origin_y=chain.origin_y,
         observations=_bounded_fill_observations(
             chain.observations + (_fill_observation(row, frame),),
             frame,
@@ -1125,6 +1266,8 @@ def _fill_observation(
             for node in row.nodes
         ),
         confirmation_profile=row.ref.tracklet_confirmation_profile,
+        net_progress_px=row.ref.tracklet_net_progress_px,
+        directional_agreement=row.ref.tracklet_directional_agreement,
         motion_support=max(
             (
                 node.candidate_ref.tracklet_motion_support

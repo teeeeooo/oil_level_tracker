@@ -4,8 +4,6 @@ from dataclasses import dataclass, replace
 import math
 from statistics import median
 
-from oil_tracker.domain.enums import InitialObservationState
-
 from .oil_candidate_authority import OilCandidateAuthority
 from .oil_sequence_types import (
     OilCandidateRef,
@@ -31,8 +29,6 @@ class DirectedTrackletPolicy:
     continuation_grace_frames: int
     continuation_min_motion_energy: float
     continuation_min_motion_coverage: float
-    entrance_band_ratio: float
-    initial_state: InitialObservationState | None
     ambiguity_margin: float = 0.08
 
     def __post_init__(self) -> None:
@@ -61,7 +57,6 @@ class DirectedTrackletPolicy:
             ),
             ("motion coverage", self.confirmation_min_motion_coverage),
             ("continuation coverage", self.continuation_min_motion_coverage),
-            ("entrance band ratio", self.entrance_band_ratio),
         ):
             if not 0.0 <= value <= 1.0:
                 raise ValueError(f"Tracklet {name} must be in [0, 1].")
@@ -177,7 +172,6 @@ class _WindowEvidence:
     motion_coverage: float
     material_conflict: float
     anchor_frames: int
-    entrance_origin: bool
     profile: TrackletConfirmationProfile
     confirmation_support: float
 
@@ -851,9 +845,22 @@ class DirectedInterfaceTrackletBuilder:
 
         if confirmation_offset is None or witness is None:
             reason = self._track_failure_reason(track.observations)
+            measured = self._best_failure_evidence(track.observations)
             for observation in track.observations:
                 if not observation.incompatible:
                     observation.failure_reason = reason
+                    observation.confirmation_support = (
+                        measured.confirmation_support
+                    )
+                    observation.net_progress_px = measured.net_progress_px
+                    observation.direction = measured.direction
+                    observation.directional_agreement = (
+                        measured.directional_agreement
+                    )
+                    observation.motion_support = measured.motion_support
+                    observation.motion_energy = measured.motion_energy
+                    observation.motion_coverage = measured.motion_coverage
+                    observation.material_conflict = measured.material_conflict
             return
 
         witness_offsets = range(
@@ -980,27 +987,13 @@ class DirectedInterfaceTrackletBuilder:
         physical_proposal = any(
             item.hypothesis.has_physical_proposal for item in valid
         )
-        state = self.policy.initial_state
-        state_direction = _initial_direction(state)
-        if state_direction < 0:
-            net_progress = first.y - last.y
-            observed_direction = state_direction
-            directional = sum(delta <= 0.0 for delta in deltas) / len(deltas)
-        elif state_direction > 0:
-            net_progress = last.y - first.y
-            observed_direction = state_direction
-            directional = sum(delta >= 0.0 for delta in deltas) / len(deltas)
-        else:
-            signed = last.y - first.y
-            net_progress = abs(signed)
-            observed_direction = (
-                -1 if signed < 0.0 else (1 if signed > 0.0 else 0)
-            )
-            directional = max(
-                sum(delta <= 0.0 for delta in deltas),
-                sum(delta >= 0.0 for delta in deltas),
-            ) / len(deltas)
-        entrance_origin = _entrance_origin(first.y, state, self.policy)
+        signed = last.y - first.y
+        net_progress = abs(signed)
+        observed_direction = -1 if signed < 0.0 else (1 if signed > 0.0 else 0)
+        directional = max(
+            sum(delta <= 0.0 for delta in deltas),
+            sum(delta >= 0.0 for delta in deltas),
+        ) / len(deltas)
         motion_witness = (
             motion_support >= self.policy.confirmation_min_motion_support
             and motion_coverage >= self.policy.confirmation_min_motion_coverage
@@ -1010,17 +1003,7 @@ class DirectedInterfaceTrackletBuilder:
         )
 
         profile = TrackletConfirmationProfile.NONE
-        if state_direction != 0:
-            if (
-                entrance_origin
-                and net_progress >= self.policy.confirmation_min_progress_px
-                and directional
-                >= self.policy.confirmation_min_directional_agreement
-                and (motion_witness or anchor_witness)
-                and physical_proposal
-            ):
-                profile = TrackletConfirmationProfile.ENTRANCE_MOTION
-        elif anchor_witness:
+        if anchor_witness:
             profile = TrackletConfirmationProfile.ANCHOR_CORRIDOR
         elif (
             net_progress >= self.policy.confirmation_min_progress_px
@@ -1068,7 +1051,6 @@ class DirectedInterfaceTrackletBuilder:
             motion_coverage=motion_coverage,
             material_conflict=material_conflict,
             anchor_frames=anchor_frames,
-            entrance_origin=entrance_origin,
             profile=profile,
             confirmation_support=support,
         )
@@ -1079,13 +1061,6 @@ class DirectedInterfaceTrackletBuilder:
     ) -> str:
         if any(item.incompatible for item in observations):
             return "INCOMPATIBLE_BRANCH"
-        state = self.policy.initial_state
-        direction = _initial_direction(state)
-        if direction != 0 and not any(
-            _entrance_origin(item.hypothesis.y, state, self.policy)
-            for item in observations
-        ):
-            return "ENTRANCE_ORIGIN_MISSING"
         maximum_progress = 0.0
         maximum_directional = 0.0
         maximum_motion = 0.0
@@ -1114,6 +1089,27 @@ class DirectedInterfaceTrackletBuilder:
         ) and maximum_anchors < self.policy.confirmation_min_anchor_frames:
             return "INSUFFICIENT_MOTION_OR_ANCHOR_EVIDENCE"
         return "PROVISIONAL_TRACKLET"
+
+    def _best_failure_evidence(
+        self,
+        observations: list[_TrackObservation],
+    ) -> _WindowEvidence:
+        evidence = tuple(
+            self._confirmation_evidence(observations, offset)
+            for offset in range(len(observations))
+        )
+        return max(
+            evidence,
+            key=lambda item: (
+                item.observation_count,
+                item.net_progress_px,
+                item.directional_agreement,
+                item.anchor_frames,
+                item.motion_support,
+                item.motion_coverage,
+            ),
+            default=_empty_window(0, 0),
+        )
 
 
 def _phase_class(ref: OilCandidateRef) -> str:
@@ -1197,31 +1193,6 @@ def _material_conflict(observations) -> float:
     return 0.0 if not values else sum(values) / len(values)
 
 
-def _initial_direction(state: InitialObservationState | None) -> int:
-    if state is InitialObservationState.EMPTY_NO_INTERFACE:
-        return -1
-    if state is InitialObservationState.FULL_NO_INTERFACE:
-        return 1
-    return 0
-
-
-def _entrance_origin(
-    y: float,
-    state: InitialObservationState | None,
-    policy: DirectedTrackletPolicy,
-) -> bool:
-    top = policy.geometry_top_y
-    height = policy.geometry_height
-    if not math.isfinite(float(height)):
-        return False
-    relative = (float(y) - float(top)) / max(1.0, float(height))
-    if state is InitialObservationState.EMPTY_NO_INTERFACE:
-        return relative >= 1.0 - policy.entrance_band_ratio
-    if state is InitialObservationState.FULL_NO_INTERFACE:
-        return relative <= policy.entrance_band_ratio
-    return True
-
-
 def _empty_window(start: int, count: int) -> _WindowEvidence:
     return _WindowEvidence(
         start_observation=start,
@@ -1234,7 +1205,6 @@ def _empty_window(start: int, count: int) -> _WindowEvidence:
         motion_coverage=0.0,
         material_conflict=0.0,
         anchor_frames=0,
-        entrance_origin=False,
         profile=TrackletConfirmationProfile.NONE,
         confirmation_support=0.0,
     )

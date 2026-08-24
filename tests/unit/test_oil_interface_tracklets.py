@@ -33,13 +33,10 @@ from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 from oil_tracker.domain.enums import (
     BoundaryKind,
     FillState,
-    InitialObservationState,
 )
 
 
-def _policy(
-    initial_state: InitialObservationState | None = None,
-) -> DirectedTrackletPolicy:
+def _policy() -> DirectedTrackletPolicy:
     return DirectedTrackletPolicy(
         geometry_top_y=0.0,
         geometry_height=200.0,
@@ -56,8 +53,6 @@ def _policy(
         continuation_grace_frames=2,
         continuation_min_motion_energy=0.08,
         continuation_min_motion_coverage=0.12,
-        entrance_band_ratio=0.27,
-        initial_state=initial_state,
     )
 
 
@@ -527,7 +522,7 @@ def test_composed_confirmation_and_onset_lag_uses_end_to_end_commit_horizon() ->
     assert committed_phase.owner_chains[target] == suffix_phase.owner_chains[target]
 
 
-def test_bottom_motion_tracklet_confirms_without_borrowing_false_upper_anchor() -> None:
+def test_physical_tracklets_confirm_without_borrowing_between_rows() -> None:
     upper = (82.0, 80.0, 79.0, 78.0, 77.0, 76.0)
     lower = (192.0, 180.0, 166.0, 151.0, 138.0, 126.0)
     frames = tuple(
@@ -552,24 +547,23 @@ def test_bottom_motion_tracklet_confirms_without_borrowing_false_upper_anchor() 
         for frame in range(len(lower))
     )
 
-    result = DirectedInterfaceTrackletBuilder(
-        _policy(InitialObservationState.EMPTY_NO_INTERFACE)
-    ).resolve(frames)
+    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
     upper_refs = _by_source(result, "false-upper-anchor")
     lower_refs = _by_source(result, "bottom-rising-continuation")
 
     assert {item.tracklet_id for item in upper_refs}.isdisjoint(
         {item.tracklet_id for item in lower_refs}
     )
-    assert not any(item.tracklet_admitted for item in upper_refs)
+    assert all(item.tracklet_admitted for item in upper_refs)
     assert all(item.tracklet_admitted for item in lower_refs)
     assert all(
         item.tracklet_confirmation_profile
-        is TrackletConfirmationProfile.ENTRANCE_MOTION
+        is TrackletConfirmationProfile.MOTION_TRAJECTORY
         for item in lower_refs
     )
     assert all(
-        item.tracklet_failure_reason == "ENTRANCE_ORIGIN_MISSING"
+        item.tracklet_confirmation_profile
+        is TrackletConfirmationProfile.ANCHOR_CORRIDOR
         for item in upper_refs
     )
 
@@ -589,9 +583,7 @@ def test_stationary_lower_structure_stays_provisional_without_motion() -> None:
         for frame, y in enumerate(ys)
     )
 
-    result = DirectedInterfaceTrackletBuilder(
-        _policy(InitialObservationState.EMPTY_NO_INTERFACE)
-    ).resolve(frames)
+    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
     refs = _by_source(result, "static-lower")
 
     assert not any(item.tracklet_admitted for item in refs)
@@ -603,6 +595,33 @@ def test_stationary_lower_structure_stays_provisional_without_motion() -> None:
         item.tracklet_failure_reason == "INSUFFICIENT_NET_PROGRESS"
         for item in refs
     )
+
+
+def test_provisional_tracklet_reports_measured_failure_evidence() -> None:
+    frames = tuple(
+        (
+            _ref(
+                frame,
+                0,
+                y,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                source="slow-row",
+                motion=0.20,
+                coverage=0.40,
+            ),
+        )
+        for frame, y in enumerate((120.0, 119.0, 117.0))
+    )
+
+    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
+    refs = _by_source(result, "slow-row")
+
+    assert not any(item.tracklet_admitted for item in refs)
+    assert all(item.tracklet_failure_reason == "INSUFFICIENT_NET_PROGRESS" for item in refs)
+    assert all(item.tracklet_net_progress_px == 3.0 for item in refs)
+    assert all(item.tracklet_direction == -1 for item in refs)
+    assert all(abs(item.tracklet_motion_support - 0.20) < 1e-9 for item in refs)
+    assert all(abs(item.tracklet_motion_coverage - 0.40) < 1e-9 for item in refs)
 
 
 def test_anchor_trajectory_does_not_yield_to_weak_continuation_drift() -> None:

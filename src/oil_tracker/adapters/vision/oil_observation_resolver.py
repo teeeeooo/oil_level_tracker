@@ -56,7 +56,7 @@ from .oil_phase_identity import (
 )
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r16-directed-interface-tracklets-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r17-physical-observation-ownership-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -81,6 +81,14 @@ _OIL_REPLACED_FLAGS = {
     "R16_TRACKLET_CONFIRMED",
     "R16_TRACKLET_CONTINUING",
     "R16_TRACKLET_WITNESS",
+    "R17_IMAGE_SUPPORTED_STATE",
+    "R17_INITIAL_STATE_CONTEXT_ONLY",
+    "R17_MATERIAL_PHASE_BARRIER",
+    "R17_OBSERVATION_UNAVAILABLE",
+    "R17_RESOLVED_OIL",
+    "R17_TRACKLET_CONFIRMED",
+    "R17_TRACKLET_CONTINUING",
+    "R17_TRACKLET_WITNESS",
     "SEQUENCE_INITIAL_STATE_PRIOR",
     "SEQUENCE_RESOLVED_OIL",
     "SEQUENCE_RESOLVED_STATE",
@@ -470,7 +478,6 @@ class OilTrackletOppositionOwner:
         self,
         refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
         glass: GlassInspectionConfig,
-        confirmed_initial_state: InitialObservationState | None,
     ) -> tuple[DirectedTrackletResult, int, float]:
         opposed, track_count, maximum = self._apply_track_opposition(
             refs_by_frame,
@@ -481,7 +488,6 @@ class OilTrackletOppositionOwner:
                 opposed,
                 glass,
                 self.config,
-                confirmed_initial_state,
             )
         ).resolve(opposed)
         return tracklets, track_count, maximum
@@ -1263,16 +1269,16 @@ class OilResolutionProjectionOwner:
             state = _visible_state(path, frame_offset)
             flags.extend(
                 (
-                    "R16_RESOLVED_OIL",
+                    "R17_RESOLVED_OIL",
                     (
-                        "R16_TRACKLET_CONFIRMED"
+                        "R17_TRACKLET_CONFIRMED"
                         if node.candidate_ref.tracklet_lifecycle.value
                         == "confirmed"
                         else (
-                            "R16_TRACKLET_CONTINUING"
+                            "R17_TRACKLET_CONTINUING"
                             if node.candidate_ref.tracklet_lifecycle.value
                             == "continuing"
-                            else "R16_TRACKLET_WITNESS"
+                            else "R17_TRACKLET_WITNESS"
                         )
                     ),
                     "SEQUENCE_RESOLVED_OIL",
@@ -1299,7 +1305,7 @@ class OilResolutionProjectionOwner:
                 if node.kind == "full"
                 else FillState.EMPTY_NO_INTERFACE
             )
-            flags.extend(("R16_IMAGE_SUPPORTED_STATE", "SEQUENCE_RESOLVED_STATE"))
+            flags.extend(("R17_IMAGE_SUPPORTED_STATE", "SEQUENCE_RESOLVED_STATE"))
             confidence = min(0.95, 0.46 + 0.46 * node.state_evidence)
             return replace(
                 detection,
@@ -1315,11 +1321,11 @@ class OilResolutionProjectionOwner:
                 flags=sorted(set(flags)),
                 debug_metrics=metrics,
             )
-        flags.extend(("R16_OBSERVATION_UNAVAILABLE", "SEQUENCE_UNAVAILABLE"))
+        flags.extend(("R17_OBSERVATION_UNAVAILABLE", "SEQUENCE_UNAVAILABLE"))
         if material_ownership_barrier:
-            flags.append("R16_MATERIAL_PHASE_BARRIER")
+            flags.append("R17_MATERIAL_PHASE_BARRIER")
         if confirmed_initial_state is not None:
-            flags.append("R16_INITIAL_STATE_CONTEXT_ONLY")
+            flags.append("R17_INITIAL_STATE_CONTEXT_ONLY")
         return replace(
             detection,
             fill_state=FillState.UNKNOWN_REVIEW,
@@ -1386,7 +1392,6 @@ class OilObservationResolver:
             self.tracklet_opposition.resolve(
                 refs_by_frame,
                 glass,
-                confirmed_initial_state,
             )
         )
         refs_by_frame = tracklets.refs_by_frame
@@ -1914,7 +1919,6 @@ def _tracklet_policy(
     refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
     glass: GlassInspectionConfig,
     config: OilObservationResolverConfig,
-    confirmed_initial_state: InitialObservationState | None,
 ) -> DirectedTrackletPolicy:
     ellipse = glass.geometry.ellipse
     top = float(ellipse.center_y - ellipse.radius_y)
@@ -1977,8 +1981,6 @@ def _tracklet_policy(
         continuation_min_motion_coverage=(
             config.tracklet_continuation_min_motion_coverage
         ),
-        entrance_band_ratio=config.entrance_band_ratio,
-        initial_state=confirmed_initial_state,
         ambiguity_margin=config.tracklet_ambiguity_margin,
     )
 

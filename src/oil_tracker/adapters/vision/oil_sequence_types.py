@@ -22,7 +22,6 @@ class TrackletConfirmationProfile(str, Enum):
     NONE = "none"
     ANCHOR_CORRIDOR = "anchor_corridor"
     ANCHOR_TRAJECTORY = "anchor_trajectory"
-    ENTRANCE_MOTION = "entrance_motion"
     MOTION_TRAJECTORY = "motion_trajectory"
 
 

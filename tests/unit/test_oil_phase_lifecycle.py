@@ -800,7 +800,7 @@ def test_confirmed_empty_lower_entrance_motion_activates_fill() -> None:
         progress=18.0,
         motion_support=0.95,
         motion_coverage=0.90,
-        confirmation_profile=TrackletConfirmationProfile.ENTRANCE_MOTION,
+        confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
     )
 
     result = _resolve(
@@ -812,6 +812,133 @@ def test_confirmed_empty_lower_entrance_motion_activates_fill() -> None:
     assert result.allowed_tracklet_ids == (
         frozenset({"empty-entrance"}),
     )
+
+
+def test_established_slow_empty_fill_reenters_with_distinct_physical_id() -> None:
+    layers = (
+        (
+            _node(
+                0,
+                "fill-a",
+                180.0,
+                direction=-1,
+                progress=30.0,
+                motion_support=0.90,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _unknown(0),
+        ),
+        (
+            _node(
+                1,
+                "fill-a",
+                165.0,
+                direction=-1,
+                progress=30.0,
+                motion_support=0.90,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _unknown(1),
+        ),
+        (
+            _node(
+                2,
+                "fill-a",
+                150.0,
+                direction=-1,
+                progress=30.0,
+                motion_support=0.90,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _unknown(2),
+        ),
+        *((_unknown(frame),) for frame in range(3, 8)),
+        (
+            _node(
+                8,
+                "fill-b",
+                140.0,
+                direction=-1,
+                progress=20.0,
+                motion_support=0.85,
+                motion_coverage=0.80,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _unknown(8),
+        ),
+    )
+
+    result = _resolve(layers, empty_entrance_motion_enabled=True)
+
+    assert result.phases[8] is OilMaterialPhase.FILLING
+    assert result.reasons[8] == "FILL_PHASE_REENTRY"
+    assert result.allowed_tracklet_ids[8] == frozenset({"fill-b"})
+    assert result.owner_chains[8] == ("fill-a", "fill-b")
+
+
+def test_initial_empty_reentry_rejects_reversed_or_distant_tracklet() -> None:
+    layers = (
+        (
+            _node(
+                0,
+                "fill-a",
+                180.0,
+                direction=-1,
+                progress=25.0,
+                motion_support=0.90,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _unknown(0),
+        ),
+        (
+            _node(
+                1,
+                "fill-a",
+                155.0,
+                direction=-1,
+                progress=25.0,
+                motion_support=0.90,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _unknown(1),
+        ),
+        *((_unknown(frame),) for frame in range(2, 7)),
+        (
+            _node(
+                7,
+                "reversed",
+                170.0,
+                direction=1,
+                progress=20.0,
+                motion_support=0.90,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _node(
+                7,
+                "distant",
+                80.0,
+                direction=-1,
+                progress=20.0,
+                motion_support=0.90,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _unknown(7),
+        ),
+    )
+
+    result = _resolve(layers, empty_entrance_motion_enabled=True)
+
+    assert result.phases[7] is OilMaterialPhase.OPEN
+    assert result.allowed_tracklet_ids[7] == frozenset()
+    assert result.owner_chains[7] == ("distant",)
+    assert result.reasons[7] == "FILL_EVIDENCE_ACCUMULATING"
 
 
 def test_filled_barrier_ignores_cap_rows_and_gaps() -> None:
@@ -1370,7 +1497,7 @@ def test_unknown_motion_only_fill_cannot_arm_without_independent_anchor() -> Non
             direction=-1,
             progress=130.0,
             authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
-            confirmation_profile=TrackletConfirmationProfile.ENTRANCE_MOTION,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
             motion_support=0.90,
             motion_coverage=0.80,
         )
@@ -1394,7 +1521,7 @@ def test_initial_empty_continuation_only_bottom_rise_can_arm_fill() -> None:
             direction=-1,
             progress=130.0,
             authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
-            confirmation_profile=TrackletConfirmationProfile.ENTRANCE_MOTION,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
             motion_support=0.89,
             motion_coverage=0.80,
         )
@@ -1423,7 +1550,7 @@ def test_initial_empty_weak_motion_bottom_drift_stays_open() -> None:
             direction=-1,
             progress=130.0,
             authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
-            confirmation_profile=TrackletConfirmationProfile.ENTRANCE_MOTION,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
             motion_support=0.26,
             motion_coverage=0.80,
         )

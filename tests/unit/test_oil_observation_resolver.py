@@ -364,14 +364,15 @@ def test_initial_empty_bottom_motion_confirms_without_false_upper_anchor() -> No
         assert upper_candidate.features["sequence_final_authority_tier"] == float(
             OilCandidateAuthority.ANCHOR_ELIGIBLE
         )
-        assert upper_candidate.features["sequence_tracklet_admitted"] == 0.0
+        assert upper_candidate.features["sequence_tracklet_admitted"] == 1.0
+        assert not upper_candidate.selected
         assert lower_candidate.features["sequence_final_authority_tier"] == float(
             OilCandidateAuthority.CONTINUATION_ELIGIBLE
         )
         assert lower_candidate.features["sequence_tracklet_admitted"] == 1.0
         assert (
             lower_candidate.features["sequence_tracklet_confirmation_profile"]
-            == "entrance_motion"
+            == "motion_trajectory"
         )
         assert (
             upper_candidate.features["sequence_tracklet_id"]
@@ -1114,10 +1115,10 @@ def test_registered_oil_motion_extends_anchor_backed_material_continuation() -> 
     result = OilObservationResolver().resolve(tuple(detections), glass_config())
 
     assert _oil_y(result) == [170.0 - index * 4.0 for index in range(8)]
-    assert "R16_TRACKLET_WITNESS" in result.detections[0].flags
-    assert "R16_TRACKLET_CONFIRMED" in result.detections[3].flags
+    assert "R17_TRACKLET_WITNESS" in result.detections[0].flags
+    assert "R17_TRACKLET_CONFIRMED" in result.detections[3].flags
     assert all(
-        "R16_TRACKLET_CONTINUING" in item.flags
+        "R17_TRACKLET_CONTINUING" in item.flags
         for item in result.detections[4:6]
     )
 
@@ -1710,6 +1711,6 @@ def test_continuation_between_anchor_clusters_can_publish_same_frame_rows() -> N
 
     assert _oil_y(result) == [160.0 - index for index in range(11)]
     assert all(
-        "R16_TRACKLET_CONTINUING" in result.detections[index].flags
+        "R17_TRACKLET_CONTINUING" in result.detections[index].flags
         for index in range(3, 8)
     )
