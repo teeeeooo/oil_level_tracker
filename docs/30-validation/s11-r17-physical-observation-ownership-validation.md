@@ -11,9 +11,9 @@ review.
 
 ### Oil admission and tracklets
 
-- Candidate capacity counts distinct rows and retains bounded vertical
-  diversity; duplicate representations cannot evict a lower-ranked distinct
-  truth row.
+- Candidate admission retains the established authority-ranked bounded beam;
+  no weaker row may displace the reviewed sample3 bottom-entry owner or reopen
+  its foreign branch.
 - Physical confirmation receives no initial-state or entrance-band input.
 - Slow anchor corridors can confirm without pretending that missing motion is
   measured zero.

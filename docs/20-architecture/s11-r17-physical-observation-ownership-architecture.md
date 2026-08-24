@@ -46,15 +46,15 @@ The successor does not repeat these failed approaches:
   Foam must remain publishable without Oil. Its state-aware ownership still did
   not close the private holdout.
 - R16 proved same-frame provenance and explicit tracklet/phase ownership, but
-  mixed initial-state admission into physical-tracklet confirmation, truncated
-  proposal diversity before row formation, and grouped Foam episodes by time
-  without physical front identity.
+  mixed initial-state admission into physical-tracklet confirmation, exposed
+  unresolved proposal-recall gaps, and grouped Foam episodes by time without
+  physical front identity.
 
 ## Replacement pipeline
 
 ```text
 typed same-frame candidates
-  -> row-diverse admission beam
+  -> existing authority-ranked bounded admission beam
   -> initial-state-neutral physical tracklets
   -> state-aware material-phase admission and bounded re-entry
   -> fixed-lag interface selection
@@ -70,18 +70,14 @@ The replacement keeps proposal, physical identity, material phase, selection
 and projection as one-way owners. No downstream stage invents a coordinate or
 changes a candidate's source frame.
 
-## Row-diverse Oil admission
+## Candidate admission stability
 
-Candidate capacity is applied to same-row hypotheses, not to a prefix of raw
-candidate families. Candidates within the existing geometry-relative row
-tolerance share one admission row while retaining their original offsets and
-evidence. The bounded beam then keeps the best rows with deterministic vertical
-diversity before it restores the member candidates required for provenance.
-
-This replaces the R16 raw `top_k` plus separate high-recall prefix. It prevents
-multiple representations of one strong but wrong row from consuming the whole
-beam, while giving no recovered row anchor authority. Artifact rejection,
-typed authority and candidate-level confidence remain unchanged.
+R17 does not change the authority-ranked candidate beam. A row-diverse capacity
+replacement was evaluated during implementation, but it admitted weaker rows
+that displaced the reviewed sample3 bottom-entry owner and reopened a foreign
+branch. That implementation and its dead helper were deleted. Proposal recall
+therefore remains a separately measured input to this repair rather than an
+unverified behavior change hidden inside physical ownership.
 
 ## Physical Oil tracklets are initial-state neutral
 
