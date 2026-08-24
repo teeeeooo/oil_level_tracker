@@ -31,7 +31,7 @@ def _numeric(sample) -> bool:
     )
 
 
-def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_reentry(
+def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs(
     tmp_path,
 ) -> None:
     root = require_s11_local_corpus()
@@ -99,9 +99,10 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_reentry(
     barrier = [
         sample
         for sample in rows
-        if 37.0 <= sample.timestamp_sec < 64.0
+        if 37.0 <= sample.timestamp_sec < 81.0
     ]
     assert barrier
+    assert not any(_numeric(sample) for sample in barrier)
     assert all("R16_MATERIAL_PHASE_BARRIER" in sample.flags for sample in barrier)
     early_foam = [
         sample
@@ -118,16 +119,20 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_reentry(
         if sample.timestamp_sec >= 85.0
     )
 
-    safe_drain_points = (
-        (95.0283, 345.0),
-        (96.0293, 359.0),
-        (96.5298, 359.0),
-        (97.0303, 368.0),
-        (97.5308, 368.5),
-        (100.0333, 368.0),
-        (102.5358, 335.0),
+    # Symmetric split handling keeps the full-cap barrier closed until a clean
+    # downward interface becomes observable.  These reviewed witnesses span
+    # the release and two physical-ID handoffs; their public coordinates all
+    # come from the selected frame, never from a retained owner coordinate.
+    reviewed_drain_witnesses = (
+        (81.0143, 233.0, "R16_TRACKLET_WITNESS"),
+        (83.5168, 239.0, "R16_TRACKLET_CONFIRMED"),
+        (85.5188, 253.0, "R16_TRACKLET_CONFIRMED"),
+        (91.5248, 320.0, "R16_TRACKLET_WITNESS"),
+        (94.0273, 336.0, "R16_TRACKLET_CONFIRMED"),
+        (95.0283, 345.0, "R16_TRACKLET_CONTINUING"),
+        (96.5298, 342.0, "R16_TRACKLET_CONTINUING"),
     )
-    for timestamp, expected_y in safe_drain_points:
+    for timestamp, expected_y, lifecycle_flag in reviewed_drain_witnesses:
         representative = min(
             rows,
             key=lambda sample: abs(sample.timestamp_sec - timestamp),
@@ -138,22 +143,36 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_reentry(
             abs(float(representative.raw_oil_air_level_y) - expected_y)
             <= 0.6
         )
+        assert lifecycle_flag in representative.flags
         assert "SEQUENCE_SAME_FRAME_CANDIDATE" in representative.flags
 
-    owner_absence = [
+    reviewed_drain = [
         sample
         for sample in rows
-        if 90.0 <= sample.timestamp_sec < 95.0
+        if 81.0 <= sample.timestamp_sec < 97.0 and _numeric(sample)
     ]
-    material_conflict = [
+    assert reviewed_drain
+    assert float(reviewed_drain[-1].raw_oil_air_level_y) - float(
+        reviewed_drain[0].raw_oil_air_level_y
+    ) >= 105.0
+    assert all(
+        float(following.raw_oil_air_level_y)
+        >= float(prior.raw_oil_air_level_y) - 3.1
+        for prior, following in zip(reviewed_drain, reviewed_drain[1:])
+    )
+    assert max(
+        following.timestamp_sec - prior.timestamp_sec
+        for prior, following in zip(reviewed_drain, reviewed_drain[1:])
+    ) <= 3.51
+
+    unsafe_reentry_window = [
         sample
         for sample in rows
-        if 98.0 <= sample.timestamp_sec < 100.0
-        or 100.5 <= sample.timestamp_sec < 102.5
+        if abs(sample.timestamp_sec - 96.0293) <= 0.26
+        or sample.timestamp_sec >= 97.0
     ]
-    assert owner_absence and material_conflict
-    assert not any(_numeric(sample) for sample in owner_absence)
-    assert not any(_numeric(sample) for sample in material_conflict)
+    assert unsafe_reentry_window
+    assert not any(_numeric(sample) for sample in unsafe_reentry_window)
     lost_owner = min(
         rows,
         key=lambda sample: abs(sample.timestamp_sec - 95.5288),

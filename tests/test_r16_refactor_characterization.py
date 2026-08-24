@@ -3,14 +3,17 @@ from __future__ import annotations
 from dataclasses import asdict
 from hashlib import sha256
 import json
+from pathlib import Path
 
 import numpy as np
+import pytest
 
 from oil_tracker.adapters.vision.oil_observation_resolver import OilObservationResolver
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 from oil_tracker.domain.enums import BoundaryKind, FillState
 from oil_tracker.domain.recipe import InspectionRecipe
+from tests.diagnostics import s11_r16_performance_profile as performance_profile
 
 
 CURRENT_FRAME_FINGERPRINT = (
@@ -24,6 +27,26 @@ R16_ONSET_INTENT_COMPLETED_WINDOW_FINGERPRINT = (
     # only the phase-declared adjacent physical-owner handoff.
     "c5329baeb0c0dba257b8fe48761d54c7ca4c879427955202c7e0cf0bb9564578"
 )
+
+
+def test_performance_evidence_requires_the_exact_clean_source_head(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root = Path("/repository")
+    monkeypatch.setattr(performance_profile, "_git_head", lambda _root: "abc123")
+    monkeypatch.setattr(performance_profile, "_git_status", lambda _root: "")
+
+    assert performance_profile._exact_source_head(root, "abc123") == "abc123"
+    with pytest.raises(RuntimeError, match="source head mismatch"):
+        performance_profile._exact_source_head(root, "def456")
+
+    monkeypatch.setattr(
+        performance_profile,
+        "_git_status",
+        lambda _root: " M src/oil_tracker/example.py",
+    )
+    with pytest.raises(RuntimeError, match="clean exact source head"):
+        performance_profile._exact_source_head(root, "abc123")
 
 
 def _glass(glass_id: str = "r0-characterization"):

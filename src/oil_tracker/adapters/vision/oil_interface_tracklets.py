@@ -607,8 +607,12 @@ class DirectedInterfaceTrackletBuilder:
         pairs: list[tuple[float, str, str, _TrackState, _RowHypothesis]],
     ) -> tuple[set[_TrackState], set[str]]:
         by_hypothesis: dict[str, list[tuple[float, _TrackState, _RowHypothesis]]] = {}
+        by_track: dict[str, list[tuple[float, _TrackState, _RowHypothesis]]] = {}
         for cost, _track_id, _hypothesis_id, track, hypothesis in pairs:
             by_hypothesis.setdefault(hypothesis.identity, []).append(
+                (cost, track, hypothesis)
+            )
+            by_track.setdefault(track.identity, []).append(
                 (cost, track, hypothesis)
             )
         conflicted_track_ids: set[str] = set()
@@ -627,13 +631,61 @@ class DirectedInterfaceTrackletBuilder:
             if second[0] - first[0] <= self.policy.ambiguity_margin:
                 conflicted_track_ids.update((first[1].identity, second[1].identity))
                 conflicted_hypotheses.add(first[2].identity)
+        # Apply the same ambiguity contract in the opposite direction.  A row
+        # that has another clear predecessor is not a child of this parent;
+        # without that reciprocal check, two nearby physical tracks look like
+        # a false split and both are unnecessarily terminated.
+        for values in by_track.values():
+            track = values[0][1]
+            if not self._established(track):
+                continue
+            preferred = tuple(
+                item
+                for item in values
+                if self._clear_hypothesis_predecessor(
+                    track,
+                    by_hypothesis[item[2].identity],
+                )
+            )
+            ordered = sorted(
+                preferred,
+                key=lambda item: (item[0], item[2].identity),
+            )
+            if len(ordered) < 2:
+                continue
+            first, second = ordered[:2]
+            if second[0] - first[0] > self.policy.ambiguity_margin:
+                continue
+            conflicted_track_ids.add(track.identity)
+            conflicted_hypotheses.update(
+                hypothesis.identity
+                for cost, _track, hypothesis in ordered
+                if cost - first[0] <= self.policy.ambiguity_margin
+            )
         tracks = {
             track
-            for values in by_hypothesis.values()
+            for values in (*by_hypothesis.values(), *by_track.values())
             for _cost, track, _hypothesis in values
             if track.identity in conflicted_track_ids
         }
         return tracks, conflicted_hypotheses
+
+    def _clear_hypothesis_predecessor(
+        self,
+        track: _TrackState,
+        predecessors: list[tuple[float, _TrackState, _RowHypothesis]],
+    ) -> bool:
+        ordered = sorted(
+            predecessors,
+            key=lambda item: (item[0], item[1].identity),
+        )
+        if ordered[0][1] is not track:
+            return False
+        return bool(
+            len(ordered) == 1
+            or ordered[1][0] - ordered[0][0]
+            > self.policy.ambiguity_margin
+        )
 
     def _established(self, track: _TrackState) -> bool:
         return track.confirmed

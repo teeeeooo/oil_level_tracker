@@ -875,6 +875,7 @@ class OilMaterialPhaseLifecycleOwner:
         return bool(
             _bounded_confirmed_observation(row.ref)
             and not row.ref.tracklet_incompatible
+            and not row.current_material_veto
             and row.ref.tracklet_direction > 0
             and row.ref.tracklet_net_progress_px >= minimum_progress
             and row.ref.tracklet_directional_agreement
@@ -897,6 +898,7 @@ class OilMaterialPhaseLifecycleOwner:
             1 <= gap <= self.policy.maximum_lost_frames + 1
             and _bounded_confirmed_observation(row.ref)
             and not row.ref.tracklet_incompatible
+            and not row.current_material_veto
             and row.ref.tracklet_direction > 0
             and row.ref.tracklet_directional_agreement
             >= self.policy.drain_minimum_directional_agreement
@@ -922,6 +924,7 @@ class OilMaterialPhaseLifecycleOwner:
             1 <= gap <= self.policy.maximum_lost_frames + 1
             and _bounded_confirmed_observation(row.ref)
             and not row.ref.tracklet_incompatible
+            and not row.current_material_veto
             and row.ref.tracklet_direction > 0
             and row.ref.tracklet_directional_agreement
             >= self.policy.drain_minimum_directional_agreement
@@ -965,6 +968,7 @@ class OilMaterialPhaseLifecycleOwner:
         return bool(
             _bounded_confirmed_observation(row.ref)
             and not row.ref.tracklet_incompatible
+            and not row.current_material_veto
             and row.ref.tracklet_direction > 0
             and row.ref.tracklet_directional_agreement
             >= self.policy.drain_minimum_directional_agreement
@@ -972,6 +976,9 @@ class OilMaterialPhaseLifecycleOwner:
             < self.policy.material_conflict_limit
             and row.current_material_conflict
             < self.policy.material_conflict_limit
+            and row.y
+            >= chain.last_y
+            - self.policy.handoff_direction_reversal_tolerance_px
             and abs(row.y - chain.last_y) <= self.policy.maximum_jump_px
         )
 

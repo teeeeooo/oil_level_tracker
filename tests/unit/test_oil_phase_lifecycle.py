@@ -71,6 +71,8 @@ def _node(
     ),
     motion_support: float = 0.0,
     motion_coverage: float = 0.0,
+    material_path: bool = False,
+    candidate_offset: int = 0,
 ) -> OilSequenceNode:
     candidate = BoundaryCandidate(
         source=f"source-{tracklet}",
@@ -86,6 +88,7 @@ def _node(
             "broad_scale_consistency": 0.8,
             "polarity_confidence": 0.8,
             "material_texture_conflict": material_conflict,
+            "material_path": float(material_path),
         },
         penalties={"material_texture_conflict": material_conflict},
         feature_score=0.8,
@@ -93,7 +96,7 @@ def _node(
     )
     ref = OilCandidateRef(
         frame_offset=frame,
-        candidate_offset=0,
+        candidate_offset=candidate_offset,
         candidate=candidate,
         evidence=OilCandidateEvidence.from_candidate(candidate),
         local_quality=0.8,
@@ -119,8 +122,37 @@ def _node(
     return OilSequenceNode(
         "oil",
         emission,
-        f"oil-{frame}-{tracklet}-{y}",
+        f"oil-{frame}-{tracklet}-{candidate_offset}-{y}",
         ref,
+    )
+
+
+def _material_veto_row(
+    frame: int,
+    tracklet: str,
+    y: float,
+) -> tuple[OilSequenceNode, OilSequenceNode]:
+    return (
+        _node(
+            frame,
+            tracklet,
+            y,
+            direction=1,
+            progress=20.0,
+            material_conflict=0.10,
+            emission=0.90,
+        ),
+        _node(
+            frame,
+            tracklet,
+            y + 1.0,
+            direction=1,
+            progress=20.0,
+            material_conflict=0.80,
+            material_path=True,
+            candidate_offset=1,
+            emission=0.70,
+        ),
     )
 
 
@@ -916,6 +948,89 @@ def test_current_material_conflict_cannot_borrow_a_low_historic_average() -> Non
     assert result.reasons[-1] == "FILLED_CAP_VETO"
 
 
+def test_drain_release_rejects_conflicting_same_row_material_sibling() -> None:
+    fill = (
+        _node(0, "fill", 180.0, direction=-1, progress=50.0),
+        _node(1, "fill", 120.0, direction=-1, progress=50.0),
+        _node(2, "fill", 50.0, direction=-1, progress=50.0),
+    )
+    clean, material_path = _material_veto_row(3, "false-drain", 70.0)
+    layers = tuple(
+        (node, _unknown(frame)) for frame, node in enumerate(fill)
+    ) + ((clean, material_path, _unknown(3)),)
+
+    result = _resolve(layers)
+
+    assert result.phases[-1] is OilMaterialPhase.FILLED_BARRIER
+    assert result.path[-1].kind == "unknown"
+    assert result.reasons[-1] == "FILLED_CAP_VETO"
+
+
+def test_drain_continuation_rejects_conflicting_same_row_material_sibling() -> None:
+    fill_and_release = (
+        _node(0, "fill", 180.0, direction=-1, progress=50.0),
+        _node(1, "fill", 120.0, direction=-1, progress=50.0),
+        _node(2, "fill", 50.0, direction=-1, progress=50.0),
+        _node(3, "drain", 70.0, direction=1, progress=20.0),
+    )
+    clean, material_path = _material_veto_row(4, "drain", 90.0)
+    layers = tuple(
+        (node, _unknown(frame))
+        for frame, node in enumerate(fill_and_release)
+    ) + ((clean, material_path, _unknown(4)),)
+
+    result = _resolve(layers)
+
+    assert result.phases[-1] is OilMaterialPhase.DRAINING
+    assert result.path[-1].kind == "unknown"
+    assert result.reasons[-1] == "DRAIN_OWNER_LOST"
+
+
+def test_drain_successor_rejects_conflicting_same_row_material_sibling() -> None:
+    fill_and_release = (
+        _node(0, "fill", 180.0, direction=-1, progress=50.0),
+        _node(1, "fill", 120.0, direction=-1, progress=50.0),
+        _node(2, "fill", 50.0, direction=-1, progress=50.0),
+        _node(3, "drain-a", 70.0, direction=1, progress=20.0),
+    )
+    clean, material_path = _material_veto_row(4, "drain-b", 90.0)
+    layers = tuple(
+        (node, _unknown(frame))
+        for frame, node in enumerate(fill_and_release)
+    ) + ((clean, material_path, _unknown(4)),)
+
+    result = _resolve(layers)
+
+    assert result.phases[-1] is OilMaterialPhase.DRAINING
+    assert result.path[-1].kind == "unknown"
+    assert result.reasons[-1] == "DRAIN_OWNER_LOST"
+    assert result.owner_chains[-1] == ("drain-a",)
+
+
+def test_drain_reentry_rejects_conflicting_same_row_material_sibling() -> None:
+    fill_and_drain = (
+        _node(0, "fill", 180.0, direction=-1, progress=50.0),
+        _node(1, "fill", 120.0, direction=-1, progress=50.0),
+        _node(2, "fill", 50.0, direction=-1, progress=50.0),
+        _node(3, "drain-a", 70.0, direction=1, progress=20.0),
+        _node(4, "drain-a", 90.0, direction=1, progress=20.0),
+    )
+    clean, material_path = _material_veto_row(8, "late-drain", 105.0)
+    layers = tuple(
+        (node, _unknown(frame))
+        for frame, node in enumerate(fill_and_drain)
+    ) + tuple((_unknown(frame),) for frame in range(5, 8)) + (
+        (clean, material_path, _unknown(8)),
+    )
+
+    result = _resolve(layers)
+
+    assert result.phases[-1] is OilMaterialPhase.DRAINING
+    assert result.path[-1].kind == "unknown"
+    assert result.reasons[-1] == "DRAIN_OWNER_TERMINATED"
+    assert result.owner_chains[-1] == ("drain-a",)
+
+
 def test_unique_drain_release_constrains_selector_before_competing_row() -> None:
     fill = (
         _node(0, "fill", 180.0, direction=-1, progress=50.0),
@@ -1090,6 +1205,35 @@ def test_terminated_drain_phase_reenters_unique_lower_tracklet_before_scoring() 
     assert phase.owner_chains[-1] == ("drain-a", "late-drain")
     assert selected[-1].candidate_ref is lower.candidate_ref
     assert selected[-1].y == 105.0
+
+
+def test_upward_reversing_drain_reentry_stays_unknown_within_jump_bound() -> None:
+    fill_and_drain = (
+        _node(0, "fill", 180.0, direction=-1, progress=50.0),
+        _node(1, "fill", 120.0, direction=-1, progress=50.0),
+        _node(2, "fill", 50.0, direction=-1, progress=50.0),
+        _node(3, "drain-a", 70.0, direction=1, progress=20.0),
+        _node(4, "drain-a", 90.0, direction=1, progress=20.0),
+    )
+    reversed_reentry = _node(
+        8,
+        "reversed-reentry",
+        65.0,
+        direction=1,
+        progress=30.0,
+    )
+    layers = tuple(
+        (node, _unknown(frame))
+        for frame, node in enumerate(fill_and_drain)
+    ) + tuple((_unknown(frame),) for frame in range(5, 8)) + (
+        (reversed_reentry, _unknown(8)),
+    )
+
+    result = OilMaterialPhaseLifecycleOwner(_policy()).resolve(layers)
+
+    assert result.reasons[-1] == "DRAIN_OWNER_TERMINATED"
+    assert result.allowed_tracklet_ids[-1] == frozenset()
+    assert result.owner_chains[-1] == ("drain-a",)
 
 
 def test_same_drain_tracklet_reauthorization_keeps_owner_chain_unique() -> None:

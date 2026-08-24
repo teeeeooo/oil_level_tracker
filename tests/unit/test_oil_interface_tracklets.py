@@ -695,6 +695,163 @@ def test_crossing_branches_terminate_instead_of_hopping_or_merging() -> None:
     )
 
 
+def test_established_track_split_terminates_without_choosing_a_child() -> None:
+    frames = tuple(
+        (
+            _ref(
+                frame,
+                0,
+                y,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="established-parent",
+            ),
+        )
+        for frame, y in enumerate((120.0, 115.0, 110.0))
+    ) + (
+        (
+            _ref(
+                3,
+                0,
+                102.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="split-child-a",
+            ),
+            _ref(
+                3,
+                1,
+                108.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="split-child-b",
+            ),
+        ),
+    )
+
+    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
+    old_id = result.refs_by_frame[2][0].tracklet_id
+    children = result.refs_by_frame[3]
+
+    assert 3 in result.incompatible_frames
+    assert all(item.tracklet_incompatible for item in children)
+    assert not any(item.tracklet_admitted for item in children)
+    assert len({item.tracklet_id for item in children}) == 2
+    assert old_id not in {item.tracklet_id for item in children}
+    assert next(
+        summary
+        for summary in result.summaries
+        if summary.tracklet_id == old_id
+    ).termination_reason == "AMBIGUOUS_BRANCH"
+
+
+def test_established_track_keeps_clear_best_child_without_split_veto() -> None:
+    frames = tuple(
+        (
+            _ref(
+                frame,
+                0,
+                y,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="established-parent",
+            ),
+        )
+        for frame, y in enumerate((120.0, 115.0, 110.0))
+    ) + (
+        (
+            _ref(
+                3,
+                0,
+                105.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="clear-child",
+            ),
+            _ref(
+                3,
+                1,
+                125.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="ranked-alternative",
+            ),
+        ),
+    )
+
+    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
+    old_id = result.refs_by_frame[2][0].tracklet_id
+    clear, alternative = result.refs_by_frame[3]
+
+    assert 3 not in result.incompatible_frames
+    assert clear.tracklet_id == old_id
+    assert clear.tracklet_admitted
+    assert not clear.tracklet_incompatible
+    assert alternative.tracklet_id != old_id
+    assert not alternative.tracklet_incompatible
+
+
+def test_established_track_does_not_claim_child_with_clear_other_predecessor() -> None:
+    frames = (
+        (
+            _ref(
+                0,
+                0,
+                100.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="established-parent",
+            ),
+        ),
+        (
+            _ref(
+                1,
+                0,
+                105.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="established-parent",
+            ),
+        ),
+        (
+            _ref(
+                2,
+                0,
+                110.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="established-parent",
+            ),
+            _ref(
+                2,
+                1,
+                119.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                source="other-predecessor",
+            ),
+        ),
+        (
+            _ref(
+                3,
+                0,
+                110.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="parent-child",
+            ),
+            _ref(
+                3,
+                1,
+                119.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                source="other-child",
+            ),
+        ),
+    )
+
+    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
+    parent_id, other_id = (
+        item.tracklet_id for item in result.refs_by_frame[2]
+    )
+    parent_child, other_child = result.refs_by_frame[3]
+
+    assert 3 not in result.incompatible_frames
+    assert parent_child.tracklet_id == parent_id
+    assert other_child.tracklet_id == other_id
+    assert not parent_child.tracklet_incompatible
+    assert not other_child.tracklet_incompatible
+
+
 def test_sparse_motion_supports_continuation_without_a_per_frame_gate() -> None:
     frames = []
     for frame in range(10):

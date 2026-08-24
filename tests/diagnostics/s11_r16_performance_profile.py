@@ -278,6 +278,35 @@ def _git_head(root: Path) -> str:
     return completed.stdout.strip()
 
 
+def _git_status(root: Path) -> str:
+    completed = subprocess.run(
+        ["git", "status", "--porcelain=v1", "--untracked-files=all"],
+        cwd=root,
+        check=True,
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+    )
+    return completed.stdout.strip()
+
+
+def _exact_source_head(root: Path, expected: str | None) -> str:
+    head = _git_head(root)
+    if expected is not None and head != expected:
+        raise RuntimeError(
+            f"Performance source head mismatch: expected {expected}, got {head}"
+        )
+    dirty = _git_status(root)
+    if dirty:
+        raise RuntimeError(
+            "Performance evidence requires a clean exact source head; "
+            f"worktree changes:\n{dirty}"
+        )
+    return head
+
+
 def run_profile(
     *,
     root: Path,
@@ -288,8 +317,10 @@ def run_profile(
     behavior_owner: str = "R15",
     expected_numeric_oil_count: int | None = None,
     expected_tracking_fingerprint: str | None = None,
+    expected_source_head: str | None = None,
 ) -> dict[str, object]:
     root = root.resolve()
+    source_head = _exact_source_head(root, expected_source_head)
     output_root = output_root.resolve()
     output_root.mkdir(parents=True, exist_ok=True)
     expected_numeric = (
@@ -321,7 +352,8 @@ def run_profile(
     ]
     manifest = {
         "schema": "s11-r16-performance-profile-v1",
-        "source_head": _git_head(root),
+        "source_head": source_head,
+        "source_worktree_clean": True,
         "behavior_owner": behavior_owner,
         "behavior_contract": {
             "tracking_row_count": replay.ACCEPTED_ROW_COUNTS[sample],
@@ -386,6 +418,10 @@ def main() -> int:
     parser.add_argument("--expected-numeric-oil-count", type=int)
     parser.add_argument("--expected-tracking-fingerprint")
     parser.add_argument(
+        "--source-head",
+        help="Require this exact clean Git HEAD for attributable timing evidence.",
+    )
+    parser.add_argument(
         "--debug-trace-level",
         choices=tuple(level.value for level in DebugTraceLevel),
         default=DebugTraceLevel.NONE.value,
@@ -408,6 +444,7 @@ def main() -> int:
         behavior_owner=args.behavior_owner,
         expected_numeric_oil_count=args.expected_numeric_oil_count,
         expected_tracking_fingerprint=args.expected_tracking_fingerprint,
+        expected_source_head=args.source_head,
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False))
     return 0
