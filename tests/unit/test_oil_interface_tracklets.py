@@ -296,6 +296,50 @@ def test_dual_representation_row_bridges_a_bounded_family_transition() -> None:
     )
 
 
+def test_strong_same_family_anchor_corrects_representation_without_velocity_bypass() -> None:
+    frames = (
+        *tuple(
+            (
+                _ref(
+                    frame,
+                    0,
+                    100.0 + frame * 10.0,
+                    authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                    source="material",
+                    motion=0.8,
+                    coverage=0.8,
+                ),
+            )
+            for frame in range(3)
+        ),
+        (
+            _ref(
+                3,
+                0,
+                105.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="material",
+                motion=0.8,
+                coverage=0.8,
+                ordered_lower=True,
+            ),
+        ),
+    )
+
+    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
+
+    assert len(
+        {
+            item.tracklet_id
+            for refs in result.refs_by_frame
+            for item in refs
+        }
+    ) == 1
+    final = result.refs_by_frame[-1][0]
+    assert final.tracklet_lifecycle is TrackletLifecycle.CONTINUING
+    assert final.tracklet_admitted
+
+
 def test_abrupt_representation_change_starts_a_new_provisional_identity() -> None:
     frames = tuple(
         (

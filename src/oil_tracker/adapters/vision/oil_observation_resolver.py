@@ -56,7 +56,7 @@ from .oil_phase_identity import (
 )
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r17-physical-observation-ownership-v2"
+OIL_OBSERVATION_RESOLVER_VERSION = "r17-physical-observation-ownership-v3"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",

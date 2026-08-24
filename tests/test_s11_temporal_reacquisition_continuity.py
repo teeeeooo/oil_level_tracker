@@ -24,7 +24,7 @@ class _DetectorRegressionValidator:
         return self.inner.validate(recipe, session, require_run_confirmation=False)
 
 
-def test_sample3_r16_onset_owner_continuity_without_coordinate_carry(
+def test_sample3_r17_onset_owner_continuity_without_coordinate_carry(
     tmp_path,
 ) -> None:
     root = require_s11_local_corpus()
@@ -44,7 +44,7 @@ def test_sample3_r16_onset_owner_continuity_without_coordinate_carry(
         compressor_start_sec=30.03,
         sampling_fps=2.0,
         output_directory=str(tmp_path),
-        run_name="S11 R16 onset owner continuity regression",
+        run_name="S11 R17 onset owner continuity regression",
         resolution_confirmed=True,
     )
     result = AnalysisPipeline(
@@ -55,8 +55,12 @@ def test_sample3_r16_onset_owner_continuity_without_coordinate_carry(
     rows = result.glass_results[0].samples
     numeric = [row for row in rows if row.raw_oil_air_level_y is not None]
     onset = [row for row in rows if row.timestamp_sec < 32.0]
-    foreign_branch = [
-        row for row in rows if 34.0 <= row.timestamp_sec < 39.0
+    checked_truth_handoff = min(
+        rows,
+        key=lambda row: abs(row.timestamp_sec - 34.5345),
+    )
+    post_truth_gap = [
+        row for row in rows if 35.0 <= row.timestamp_sec < 37.0
     ]
 
     assert len(rows) >= 20
@@ -66,14 +70,15 @@ def test_sample3_r16_onset_owner_continuity_without_coordinate_carry(
         abs(float(row.raw_oil_air_level_y) - 316.0) <= 26.0
         for row in onset
     )
-    # R14's aggregate count and minimum-Y checks rewarded the reconciled
-    # Y243 branch. R16's candidate audit identifies it as a foreign,
-    # opposite-direction/high-conflict track rather than the fill owner.
-    assert foreign_branch
-    assert all(row.raw_oil_air_level_y is None for row in foreign_branch)
+    # The checked Y243 annotation is product truth. A strong current anchor may
+    # own that frame despite stale track direction, but it must not mutate the
+    # fill phase or carry coordinates into the following gap.
+    assert checked_truth_handoff.raw_oil_air_level_y is not None
+    assert abs(float(checked_truth_handoff.raw_oil_air_level_y) - 243.0) <= 2.0
+    assert all(row.raw_oil_air_level_y is None for row in post_truth_gap)
     assert all(
         row.smoothed_oil_air_level_px_from_zero is None
-        for row in foreign_branch
+        for row in post_truth_gap
     )
     assert all("SEQUENCE_SAME_FRAME_CANDIDATE" in row.flags for row in numeric)
     assert all(

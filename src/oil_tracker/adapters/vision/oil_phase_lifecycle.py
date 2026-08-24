@@ -141,6 +141,7 @@ class OilMaterialPhaseLifecycleOwner:
             reason = "OPEN"
             allowed: frozenset[str] | None = None
             fill_phase_reentered = False
+            transient_owner_chain: tuple[str, ...] = ()
             if phase in {OilMaterialPhase.OPEN, OilMaterialPhase.FILLING}:
                 chains, chain_ambiguity, chain_reason = self._advance_fill_chains(
                     chains,
@@ -291,11 +292,36 @@ class OilMaterialPhaseLifecycleOwner:
                             if fill_phase_reentered
                             else "FILL_MOTION_OWNER"
                         )
+                        dynamic_owner = next(iter(dynamic_fill_owners))
+                        if (
+                            established_fill_chain is not None
+                            and not any(
+                                row.tracklet_id == dynamic_owner
+                                for row in rows
+                            )
+                        ):
+                            current_anchor, anchor_ambiguous = (
+                                self._current_fill_anchor_choice(
+                                    established_fill_chain,
+                                    rows,
+                                    frame,
+                                )
+                            )
+                            if anchor_ambiguous:
+                                allowed = frozenset()
+                                ambiguous_frames.add(frame)
+                                reason = "FILL_CURRENT_ANCHOR_AMBIGUOUS"
+                            elif current_anchor is not None:
+                                allowed = frozenset({current_anchor})
+                                transient_owner_chain = _append_unique_owner(
+                                    established_fill_chain.owners,
+                                    current_anchor,
+                                )
+                                reason = "FILL_CURRENT_ANCHOR_HANDOFF"
                         if (
                             prior_phase is OilMaterialPhase.OPEN
                             and not fill_phase_reentered
                         ):
-                            dynamic_owner = next(iter(dynamic_fill_owners))
                             chain = chains[dynamic_owner]
                             predecessor, predecessor_ambiguous = (
                                 self._fill_onset_predecessor(
@@ -319,7 +345,7 @@ class OilMaterialPhaseLifecycleOwner:
                                 allowed_tracklet_ids=allowed_tracklet_ids,
                                 ambiguous_frames=ambiguous_frames,
                             )
-                        established_fill_chain = chains[next(iter(allowed))]
+                        established_fill_chain = chains[dynamic_owner]
                     else:
                         phase = OilMaterialPhase.FILLING
                         allowed = frozenset()
@@ -565,7 +591,10 @@ class OilMaterialPhaseLifecycleOwner:
                 else (
                     filled_chain
                     if phase is OilMaterialPhase.FILLED_BARRIER
-                    else _selected_owner_chain(chains, allowed)
+                    else (
+                        transient_owner_chain
+                        or _selected_owner_chain(chains, allowed)
+                    )
                 )
             )
             fill_confirmation_profiles.append(fill_confirmation_profile)
@@ -906,6 +935,80 @@ class OilMaterialPhaseLifecycleOwner:
             and row.y
             <= chain.last.y + self.policy.handoff_direction_reversal_tolerance_px
             and abs(row.y - chain.last.y) <= self.policy.maximum_jump_px
+        )
+
+    def _current_fill_anchor_choice(
+        self,
+        chain: _FillChain,
+        rows: tuple[_ObservedRow, ...],
+        frame: int,
+    ) -> tuple[str | None, bool]:
+        ranked = tuple(
+            sorted(
+                (
+                    abs(row.y - chain.last.y)
+                    / self.policy.maximum_jump_px,
+                    row.tracklet_id,
+                )
+                for row in rows
+                if self._is_current_fill_anchor_handoff(
+                    chain,
+                    row,
+                    frame,
+                )
+            )
+        )
+        chosen = _clear_choice(ranked, self.policy.handoff_ambiguity_margin)
+        return chosen, bool(ranked and chosen is None)
+
+    def _is_current_fill_anchor_handoff(
+        self,
+        chain: _FillChain,
+        row: _ObservedRow,
+        frame: int,
+    ) -> bool:
+        """Authorize one current observation without changing phase history.
+
+        A strong same-frame material anchor can inherit stale direction from a
+        different physical track history.  It may temporarily own the current
+        observation when it remains geometrically connected to an established
+        fill owner.  The phase chain itself is intentionally left untouched so
+        one anchor cannot reopen a completed-material barrier.
+        """
+
+        gap = frame - chain.last.frame
+        if (
+            not 1 <= gap <= self.policy.maximum_lost_frames + 1
+            or not _bounded_confirmed_observation(row.ref)
+            or row.ref.tracklet_incompatible
+            or row.ref.tracklet_confirmation_profile
+            not in {
+                TrackletConfirmationProfile.ANCHOR_CORRIDOR,
+                TrackletConfirmationProfile.ANCHOR_TRAJECTORY,
+            }
+            or row.ref.tracklet_motion_support
+            < self.policy.fill_minimum_motion_support
+            or row.ref.tracklet_motion_coverage
+            < self.policy.fill_minimum_motion_coverage
+            or row.y
+            > chain.last.y
+            + self.policy.handoff_direction_reversal_tolerance_px
+            or abs(row.y - chain.last.y)
+            > self.policy.maximum_jump_px * gap
+        ):
+            return False
+        material_refs = tuple(
+            node.candidate_ref
+            for node in row.nodes
+            if node.candidate_ref is not None
+            and node.candidate_ref.evidence.material_path
+        )
+        return bool(
+            material_refs
+            and any(
+                ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
+                for ref in material_refs
+            )
         )
 
     def _handoff_cost(

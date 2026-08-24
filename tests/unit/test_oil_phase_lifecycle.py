@@ -345,6 +345,58 @@ def test_unique_dynamic_fill_owner_ignores_weak_anchor_competitor() -> None:
     assert result.path[0].candidate_ref is strong.candidate_ref
 
 
+def test_current_material_anchor_handoff_does_not_mutate_fill_phase_owner() -> None:
+    owner0 = _node(
+        0,
+        "fill-owner",
+        130.0,
+        direction=-1,
+        progress=20.0,
+        motion_support=0.8,
+        motion_coverage=0.8,
+        confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+    )
+    owner1 = _node(
+        1,
+        "fill-owner",
+        110.0,
+        direction=-1,
+        progress=20.0,
+        motion_support=0.8,
+        motion_coverage=0.8,
+        confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+    )
+    current_anchor = _node(
+        3,
+        "current-anchor",
+        60.0,
+        direction=1,
+        progress=18.0,
+        material_conflict=1.0,
+        tracklet_material_conflict=0.65,
+        motion_support=0.9,
+        motion_coverage=0.8,
+        material_path=True,
+        confirmation_profile=TrackletConfirmationProfile.ANCHOR_CORRIDOR,
+    )
+    layers = (
+        (owner0, _unknown(0)),
+        (owner1, _unknown(1)),
+        (_unknown(2),),
+        (current_anchor, _unknown(3)),
+        (_unknown(4),),
+    )
+
+    result = _resolve(layers)
+
+    assert result.phases[3] is OilMaterialPhase.FILLING
+    assert result.reasons[3] == "FILL_CURRENT_ANCHOR_HANDOFF"
+    assert result.allowed_tracklet_ids[3] == frozenset({"current-anchor"})
+    assert result.owner_chains[3] == ("fill-owner", "current-anchor")
+    assert result.path[3].candidate_ref is current_anchor.candidate_ref
+    assert "current-anchor" not in result.owner_chains[4]
+
+
 def test_dynamic_fill_links_unique_immediate_predecessor_without_extrema() -> None:
     predecessor = (
         _node(0, "visible-interface", 89.0, direction=1, progress=2.0),

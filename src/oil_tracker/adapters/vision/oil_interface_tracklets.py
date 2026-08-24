@@ -531,10 +531,13 @@ class DirectedInterfaceTrackletBuilder:
             last.representation_classes
             & hypothesis.representation_classes
         )
-        if not representation_overlap and not self._representation_bridge(
-            track,
-            hypothesis,
-            absolute_prediction_error=absolute_prediction_error,
+        if (
+            not representation_overlap
+            and not self._representation_bridge(
+                track,
+                hypothesis,
+                absolute_prediction_error=absolute_prediction_error,
+            )
         ):
             return None
         prediction_error = absolute_prediction_error / maximum
@@ -592,7 +595,18 @@ class DirectedInterfaceTrackletBuilder:
             track.last.hypothesis.source_families
             & hypothesis.source_families
         )
-        return strict_geometry and independent_witness and shared_provenance
+        bounded_anchor_correction = bool(
+            independent_witness
+            and shared_provenance
+            and abs(hypothesis.y - track.last.hypothesis.y)
+            <= self.policy.maximum_jump_px
+            * max(1, hypothesis.frame_offset - track.last.hypothesis.frame_offset)
+        )
+        return bool(
+            (strict_geometry or bounded_anchor_correction)
+            and independent_witness
+            and shared_provenance
+        )
 
     def _ambiguities(
         self,

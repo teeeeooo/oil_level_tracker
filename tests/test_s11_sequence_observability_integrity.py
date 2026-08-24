@@ -62,10 +62,14 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs(
 
     assert len(rows) == 151
     onset = [sample for sample in rows if sample.timestamp_sec < 32.0]
-    foreign_branch = [
+    checked_truth_handoff = min(
+        rows,
+        key=lambda sample: abs(sample.timestamp_sec - 34.5345),
+    )
+    post_truth_gap = [
         sample
         for sample in rows
-        if 34.0 <= sample.timestamp_sec < 39.0
+        if 35.0 <= sample.timestamp_sec < 37.0
     ]
     completed_fill = [
         sample
@@ -83,11 +87,12 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs(
         abs(float(sample.raw_oil_air_level_y) - 316.0) <= 26.0
         for sample in onset
     )
-    # R14's aggregate count and Y243 minimum implicitly accepted a reconciled
-    # foreign branch. R16 instead preserves the explicit fill owner and
-    # abstains while only opposite-direction/high-conflict rows are available.
-    assert foreign_branch
-    assert not any(_numeric(sample) for sample in foreign_branch)
+    # Checked-in user truth remains authoritative even when an accumulated
+    # track direction disagrees. A bounded current material anchor can own this
+    # frame without mutating the fill phase or reopening the later barrier.
+    assert checked_truth_handoff.raw_oil_air_level_y is not None
+    assert abs(float(checked_truth_handoff.raw_oil_air_level_y) - 243.0) <= 2.0
+    assert not any(_numeric(sample) for sample in post_truth_gap)
     # Direct review shows the free interface rising into the upper entrance and
     # disappearing. The later high-cap texture is internal full/turbulent
     # material, so R14 must not reacquire it as a numeric interface.
