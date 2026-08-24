@@ -13,7 +13,11 @@ from oil_tracker.adapters.vision.oil_interface_selector import (
 )
 from oil_tracker.adapters.vision.oil_candidate_authority import OilCandidateAuthority
 from oil_tracker.adapters.vision.oil_phase_identity import OilPhaseIdentity
-from oil_tracker.adapters.vision.oil_sequence_types import OilCandidateRef
+from oil_tracker.adapters.vision.oil_sequence_types import (
+    OilCandidateRef,
+    TrackletConfirmationProfile,
+    TrackletLifecycle,
+)
 from oil_tracker.adapters.vision.oil_candidate_evidence import OilCandidateEvidence
 from dataclasses import replace
 
@@ -1461,6 +1465,94 @@ def test_publishable_row_member_is_selected_before_fixed_lag_scoring() -> None:
     assert reversed_oil[0].candidate_ref.candidate.source == "publishable-sibling"
     assert forward_oil[0].identity == reversed_oil[0].identity == "oil:row-0"
     assert _assert_publishable_path(forward_oil, 0.85) is forward_oil
+
+
+def test_continuing_anchor_trajectory_can_publish_a_weak_measured_frame() -> None:
+    glass = glass_config()
+    glass.detector_settings.minimum_final_confidence = 0.85
+    candidate = _candidate(
+        152.0,
+        boundary=0.30,
+        broad=0.30,
+        source="weak-current-anchor",
+    )
+    ref = replace(
+        _admitted_ref(
+            candidate,
+            candidate_offset=0,
+            evidence=OilCandidateEvidence.from_candidate(candidate),
+        ),
+        authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        initial_authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        post_track_authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        tracklet_lifecycle=TrackletLifecycle.CONTINUING,
+        tracklet_confirmation_profile=(
+            TrackletConfirmationProfile.ANCHOR_TRAJECTORY
+        ),
+    )
+    assert _oil_confidence(ref) < 0.85
+
+    _phase, publishable = build_interface_layers(
+        _detection(0, candidate, ambiguity=0.15),
+        (ref,),
+        hard_unavailable=False,
+        minimum_confidence=0.85,
+        state_min_evidence=OilObservationResolverConfig().state_min_evidence,
+    )
+
+    oil = tuple(node for node in publishable if node.kind == "oil")
+    assert len(oil) == 1
+    assert oil[0].candidate_ref is ref
+    assert _assert_publishable_path(oil, 0.85) is oil
+
+
+def test_weak_anchor_witness_requires_continuing_noncontradicted_track() -> None:
+    candidate = _candidate(
+        152.0,
+        boundary=0.30,
+        broad=0.30,
+        source="weak-current-anchor",
+    )
+    base = replace(
+        _admitted_ref(
+            candidate,
+            candidate_offset=0,
+            evidence=OilCandidateEvidence.from_candidate(candidate),
+        ),
+        authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        initial_authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        post_track_authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        tracklet_confirmation_profile=(
+            TrackletConfirmationProfile.ANCHOR_TRAJECTORY
+        ),
+    )
+    contradicted_candidate = _candidate(
+        152.0,
+        boundary=0.30,
+        broad=0.30,
+        material_texture_conflict=0.80,
+        source="contradicted-anchor",
+    )
+    contradicted = replace(
+        base,
+        candidate=contradicted_candidate,
+        evidence=OilCandidateEvidence.from_candidate(contradicted_candidate),
+        tracklet_lifecycle=TrackletLifecycle.CONTINUING,
+    )
+    confirmed_only = replace(
+        base,
+        tracklet_lifecycle=TrackletLifecycle.CONFIRMED,
+    )
+
+    for ref in (confirmed_only, contradicted):
+        _phase, publishable = build_interface_layers(
+            _detection(0, ref.candidate, ambiguity=0.15),
+            (ref,),
+            hard_unavailable=False,
+            minimum_confidence=0.85,
+            state_min_evidence=OilObservationResolverConfig().state_min_evidence,
+        )
+        assert not any(node.kind == "oil" for node in publishable)
 
 
 def test_selector_output_is_prefix_invariant_after_its_fixed_lag_commit() -> None:

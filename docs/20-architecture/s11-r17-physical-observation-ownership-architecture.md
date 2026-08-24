@@ -96,6 +96,13 @@ admission fact, not evidence that two rows are the same physical boundary.
 Unconfirmed tracklets retain their best measured bounded-window evidence in the
 trace; default zeros are never presented as the measured reason for failure.
 
+Publication still requires a measured same-frame candidate. A low-confidence
+current representation may cross the publication seam only when its physical
+tracklet is already `CONTINUING`, its confirmation profile is
+`ANCHOR_TRAJECTORY`, its trajectory support is complete and the current
+candidate has no hard material/artifact/optics contradiction. This is a typed
+track-level proof, not a reduction of the global final-confidence threshold.
+
 This replacement lets a slow, repeatedly anchored Base interface become a
 physical tracklet without weakening the initial-EMPTY guard. A stationary lower
 structure may be physically repeatable, but it cannot become the Accum fill

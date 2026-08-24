@@ -64,7 +64,7 @@ result is still reported and never omitted.
 The drain correction additionally requires:
 
 - the reviewed sample3 drain remains numeric through the clean successor
-  interval after 97 s and includes the 100 s checked-truth band;
+  interval after 97 s and includes the 100 s reviewed range;
 - the Y≈243 foreign fill branch and completed-fill cap remain non-numeric;
 - high-conflict material-only, reversed, distant and ambiguous drain successors
   remain rejected; and

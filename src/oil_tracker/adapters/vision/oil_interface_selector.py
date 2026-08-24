@@ -8,7 +8,12 @@ from oil_tracker.domain.enums import FillState, InitialObservationState
 
 from .oil_candidate_authority import OilCandidateAuthority
 from .oil_phase_identity import OilPhaseIdentity
-from .oil_sequence_types import OilCandidateRef, OilSequenceNode
+from .oil_sequence_types import (
+    OilCandidateRef,
+    OilSequenceNode,
+    TrackletConfirmationProfile,
+    TrackletLifecycle,
+)
 
 
 @dataclass(frozen=True)
@@ -434,7 +439,27 @@ def oil_candidate_is_publishable(
         and ref.tracklet_id is not None
         and ref.row_hypothesis_id is not None
         and ref.trajectory_support >= 0.99
-        and oil_candidate_confidence(ref) + 1e-9 >= minimum_confidence
+        and (
+            oil_candidate_confidence(ref) + 1e-9 >= minimum_confidence
+            or _continuing_anchor_witness(ref)
+        )
+    )
+
+
+def _continuing_anchor_witness(ref: OilCandidateRef) -> bool:
+    """Publish a measured weak frame from an established physical owner.
+
+    This does not lower the per-frame confidence gate.  The alternate proof is
+    available only after the same physical tracklet has become a continuing
+    anchor trajectory, and the current same-frame candidate must remain free of
+    a hard local contradiction.
+    """
+
+    return bool(
+        ref.tracklet_lifecycle is TrackletLifecycle.CONTINUING
+        and ref.tracklet_confirmation_profile
+        is TrackletConfirmationProfile.ANCHOR_TRAJECTORY
+        and not recurrence_hard_contradiction(ref)
     )
 
 

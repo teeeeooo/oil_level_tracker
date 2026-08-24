@@ -1113,6 +1113,33 @@ def test_drain_continuation_rejects_conflicting_same_row_material_sibling() -> N
     assert result.reasons[-1] == "DRAIN_OWNER_LOST"
 
 
+def test_drain_continuation_uses_strong_motion_not_stale_texture_average() -> None:
+    nodes = (
+        _node(0, "fill", 180.0, direction=-1, progress=50.0),
+        _node(1, "fill", 120.0, direction=-1, progress=50.0),
+        _node(2, "fill", 50.0, direction=-1, progress=50.0),
+        _node(3, "drain", 70.0, direction=1, progress=20.0),
+        _node(
+            4,
+            "drain",
+            90.0,
+            direction=1,
+            progress=20.0,
+            material_conflict=0.70,
+            tracklet_material_conflict=0.60,
+            motion_support=0.90,
+            motion_coverage=0.80,
+        ),
+    )
+
+    result = _resolve(
+        tuple((node, _unknown(frame)) for frame, node in enumerate(nodes))
+    )
+
+    assert result.path[-1].candidate_ref is nodes[-1].candidate_ref
+    assert result.reasons[-1] == "DRAIN_OWNER_CONTINUING"
+
+
 def test_drain_successor_rejects_conflicting_same_row_material_sibling() -> None:
     fill_and_release = (
         _node(0, "fill", 180.0, direction=-1, progress=50.0),
@@ -1132,6 +1159,96 @@ def test_drain_successor_rejects_conflicting_same_row_material_sibling() -> None
     assert result.path[-1].kind == "unknown"
     assert result.reasons[-1] == "DRAIN_OWNER_LOST"
     assert result.owner_chains[-1] == ("drain-a",)
+
+
+def test_drain_successor_accepts_strong_clean_material_anchor_witness() -> None:
+    fill_and_release = (
+        _node(0, "fill", 180.0, direction=-1, progress=50.0),
+        _node(1, "fill", 120.0, direction=-1, progress=50.0),
+        _node(2, "fill", 50.0, direction=-1, progress=50.0),
+        _node(3, "drain-a", 70.0, direction=1, progress=20.0),
+    )
+    clean_anchor = _node(
+        4,
+        "drain-b",
+        89.0,
+        direction=1,
+        progress=20.0,
+        material_conflict=0.10,
+        tracklet_material_conflict=0.60,
+        material_path=True,
+        motion_support=0.90,
+        motion_coverage=0.80,
+        candidate_offset=0,
+    )
+    conflicting_sibling = _node(
+        4,
+        "drain-b",
+        91.0,
+        direction=1,
+        progress=20.0,
+        material_conflict=0.80,
+        tracklet_material_conflict=0.60,
+        material_path=True,
+        motion_support=0.90,
+        motion_coverage=0.80,
+        authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        candidate_offset=1,
+    )
+    layers = tuple(
+        (node, _unknown(frame))
+        for frame, node in enumerate(fill_and_release)
+    ) + ((clean_anchor, conflicting_sibling, _unknown(4)),)
+
+    result = _resolve(layers)
+
+    assert result.reasons[-1] == "DRAIN_CHAIN_HANDOFF"
+    assert result.allowed_tracklet_ids[-1] == frozenset({"drain-b"})
+    assert result.owner_chains[-1] == ("drain-a", "drain-b")
+
+
+def test_strong_motion_override_cannot_release_filled_barrier() -> None:
+    fill = (
+        _node(0, "fill", 180.0, direction=-1, progress=50.0),
+        _node(1, "fill", 120.0, direction=-1, progress=50.0),
+        _node(2, "fill", 50.0, direction=-1, progress=50.0),
+    )
+    clean_anchor = _node(
+        3,
+        "false-release",
+        69.0,
+        direction=1,
+        progress=20.0,
+        material_conflict=0.10,
+        tracklet_material_conflict=0.60,
+        material_path=True,
+        motion_support=0.90,
+        motion_coverage=0.80,
+        candidate_offset=0,
+    )
+    conflicting_sibling = _node(
+        3,
+        "false-release",
+        71.0,
+        direction=1,
+        progress=20.0,
+        material_conflict=0.80,
+        tracklet_material_conflict=0.60,
+        material_path=True,
+        motion_support=0.90,
+        motion_coverage=0.80,
+        authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        candidate_offset=1,
+    )
+    layers = tuple(
+        (node, _unknown(frame)) for frame, node in enumerate(fill)
+    ) + ((clean_anchor, conflicting_sibling, _unknown(3)),)
+
+    result = _resolve(layers)
+
+    assert result.phases[-1] is OilMaterialPhase.FILLED_BARRIER
+    assert result.path[-1].kind == "unknown"
+    assert result.reasons[-1] == "FILLED_CAP_VETO"
 
 
 def test_drain_reentry_rejects_conflicting_same_row_material_sibling() -> None:

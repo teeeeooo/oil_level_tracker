@@ -1012,16 +1012,12 @@ class OilMaterialPhaseLifecycleOwner:
         return bool(
             _bounded_confirmed_observation(row.ref)
             and not row.ref.tracklet_incompatible
-            and not row.current_material_veto
             and row.ref.tracklet_direction > 0
             and row.ref.tracklet_net_progress_px >= minimum_progress
             and row.ref.tracklet_directional_agreement
             >= self.policy.drain_minimum_directional_agreement
             and relative <= self.policy.drain_entrance_ratio
-            and row.ref.tracklet_material_conflict
-            < self.policy.material_conflict_limit
-            and row.current_material_conflict
-            < self.policy.material_conflict_limit
+            and self._strict_material_support(row)
         )
 
     def _drain_successor(
@@ -1033,16 +1029,7 @@ class OilMaterialPhaseLifecycleOwner:
         gap = frame - chain.last_frame
         return bool(
             1 <= gap <= self.policy.maximum_lost_frames + 1
-            and _bounded_confirmed_observation(row.ref)
-            and not row.ref.tracklet_incompatible
-            and not row.current_material_veto
-            and row.ref.tracklet_direction > 0
-            and row.ref.tracklet_directional_agreement
-            >= self.policy.drain_minimum_directional_agreement
-            and row.ref.tracklet_material_conflict
-            < self.policy.material_conflict_limit
-            and row.current_material_conflict
-            < self.policy.material_conflict_limit
+            and self._drain_observation_supported(row)
             and row.y
             >= chain.last_y
             - self.policy.handoff_direction_reversal_tolerance_px
@@ -1059,16 +1046,7 @@ class OilMaterialPhaseLifecycleOwner:
         gap = frame - chain.last_frame
         return bool(
             1 <= gap <= self.policy.maximum_lost_frames + 1
-            and _bounded_confirmed_observation(row.ref)
-            and not row.ref.tracklet_incompatible
-            and not row.current_material_veto
-            and row.ref.tracklet_direction > 0
-            and row.ref.tracklet_directional_agreement
-            >= self.policy.drain_minimum_directional_agreement
-            and row.ref.tracklet_material_conflict
-            < self.policy.material_conflict_limit
-            and row.current_material_conflict
-            < self.policy.material_conflict_limit
+            and self._drain_observation_supported(row)
             and row.y
             >= chain.last_y
             - self.policy.handoff_direction_reversal_tolerance_px
@@ -1103,20 +1081,67 @@ class OilMaterialPhaseLifecycleOwner:
         """
 
         return bool(
-            _bounded_confirmed_observation(row.ref)
-            and not row.ref.tracklet_incompatible
-            and not row.current_material_veto
-            and row.ref.tracklet_direction > 0
-            and row.ref.tracklet_directional_agreement
-            >= self.policy.drain_minimum_directional_agreement
-            and row.ref.tracklet_material_conflict
-            < self.policy.material_conflict_limit
-            and row.current_material_conflict
-            < self.policy.material_conflict_limit
+            self._drain_observation_supported(row)
             and row.y
             >= chain.last_y
             - self.policy.handoff_direction_reversal_tolerance_px
             and abs(row.y - chain.last_y) <= self.policy.maximum_jump_px
+        )
+
+    def _drain_observation_supported(self, row: _ObservedRow) -> bool:
+        return bool(
+            _bounded_confirmed_observation(row.ref)
+            and not row.ref.tracklet_incompatible
+            and row.ref.tracklet_direction > 0
+            and row.ref.tracklet_directional_agreement
+            >= self.policy.drain_minimum_directional_agreement
+            and (
+                self._strict_material_support(row)
+                or self._strong_drain_motion_support(row)
+            )
+        )
+
+    def _strict_material_support(self, row: _ObservedRow) -> bool:
+        return bool(
+            not row.current_material_veto
+            and row.ref.tracklet_material_conflict
+            < self.policy.material_conflict_limit
+            and row.current_material_conflict
+            < self.policy.material_conflict_limit
+        )
+
+    def _strong_drain_motion_support(self, row: _ObservedRow) -> bool:
+        """Separate current drain motion from accumulated texture conflict.
+
+        This is deliberately unavailable to initial drain release.  Once the
+        drain phase exists, a confirmed anchor trajectory with registered
+        motion may survive a stale/high texture average.  A material-path row
+        still needs one low-conflict anchor-authoritative material witness, so
+        a clean direct candidate cannot mask a conflicting material sibling.
+        """
+
+        if (
+            row.ref.tracklet_confirmation_profile
+            is not TrackletConfirmationProfile.ANCHOR_TRAJECTORY
+            or row.ref.tracklet_motion_support
+            < self.policy.fill_minimum_motion_support
+            or row.ref.tracklet_motion_coverage
+            < self.policy.fill_minimum_motion_coverage
+        ):
+            return False
+        material_refs = tuple(
+            node.candidate_ref
+            for node in row.nodes
+            if node.candidate_ref is not None
+            and node.candidate_ref.evidence.material_path
+        )
+        if not material_refs:
+            return True
+        return any(
+            ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
+            and ref.evidence.material_texture_conflict
+            < self.policy.material_conflict_limit
+            for ref in material_refs
         )
 
     def _drain_phase_reentry_cost(

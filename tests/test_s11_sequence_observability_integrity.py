@@ -171,11 +171,42 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs(
         for prior, following in zip(reviewed_drain, reviewed_drain[1:])
     ) <= 3.51
 
+    # The established phase may transfer to the independently confirmed
+    # strong-motion drain row even when its historical texture average is
+    # stale.  This is not a coordinate carry: every value remains a selected
+    # candidate from that frame and stays on the reviewed descending branch.
+    reviewed_successor_witnesses = (
+        (97.0303, 344.0, "R17_TRACKLET_WITNESS"),
+        (98.0313, 353.0, "R17_TRACKLET_CONFIRMED"),
+        (98.5318, 359.0, "R17_TRACKLET_CONTINUING"),
+        (100.0333, 368.0, "R17_TRACKLET_CONTINUING"),
+        (100.5338, 361.0, "R17_TRACKLET_CONTINUING"),
+        (101.5348, 361.0, "R17_TRACKLET_CONTINUING"),
+    )
+    for timestamp, expected_y, lifecycle_flag in reviewed_successor_witnesses:
+        representative = min(
+            rows,
+            key=lambda sample: abs(sample.timestamp_sec - timestamp),
+        )
+        assert abs(representative.timestamp_sec - timestamp) <= 0.26
+        assert representative.raw_oil_air_level_y is not None
+        assert abs(float(representative.raw_oil_air_level_y) - expected_y) <= 0.6
+        assert lifecycle_flag in representative.flags
+        assert "SEQUENCE_SAME_FRAME_CANDIDATE" in representative.flags
+
+    late_drain = [
+        sample
+        for sample in rows
+        if sample.timestamp_sec >= 90.0 and _numeric(sample)
+    ]
+    assert len(late_drain) >= 10
+    assert all(float(sample.raw_oil_air_level_y) >= 320.0 for sample in late_drain)
+
     unsafe_reentry_window = [
         sample
         for sample in rows
         if abs(sample.timestamp_sec - 96.0293) <= 0.26
-        or sample.timestamp_sec >= 97.0
+        or sample.timestamp_sec >= 102.0
     ]
     assert unsafe_reentry_window
     assert not any(_numeric(sample) for sample in unsafe_reentry_window)
