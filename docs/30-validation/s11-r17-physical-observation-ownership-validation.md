@@ -12,8 +12,10 @@ review.
 ### Oil admission and tracklets
 
 - Candidate admission retains the established authority-ranked bounded beam;
-  no weaker row may displace the reviewed sample3 bottom-entry owner or reopen
-  its foreign branch.
+  no weaker row may displace the reviewed sample3 bottom-entry owner.
+- A same-family representation correction requires an anchor-authoritative
+  physical proposal, registered motion/coverage, the ordinary jump bound and
+  the ordinary prediction-error bound. Weak, unrelated or distant rows split.
 - Physical confirmation receives no initial-state or entrance-band input.
 - Slow anchor corridors can confirm without pretending that missing motion is
   measured zero.
@@ -32,6 +34,8 @@ review.
 - A stationary, reversed, distant, ambiguous or material-opposed successor is
   rejected.
 - Re-entry appends a distinct owner ID and never copies coordinates or extrema.
+- A transient current-anchor handoff may authorize one frame but must not
+  mutate phase history, persist into the next gap or release the later barrier.
 
 ### Foam
 
@@ -61,19 +65,22 @@ abstain from an obsolete or contradicted R14 anchor only when a newer source
 review and a named safety assertion document that exception; the raw 13-case
 result is still reported and never omitted.
 
-The accepted R17-v2 local baseline is 13 checked cases, eight numeric cases,
-9.0 px MAE and 24.5 px maximum error. The five abstentions are emitted in the
-replay manifest by sample and timestamp. This is not presented as parity with
-R14's 10/13 coverage: one R14 numeric case is the newer-reviewed sample3
-foreign branch, while the remaining missing rows are explicit unresolved or
-conflicting-evidence cases. A future change must improve those rows through
-same-frame physical evidence and may not delete or silently reclassify them.
+The accepted R17-v3 local baseline is 13 checked cases, 11 numeric cases,
+9.6364 px numeric-only MAE and 24.5 px maximum error. Because numeric-only MAE
+excludes misses, the gate also records a coverage-adjusted MAE that charges each
+miss the accepted 24.5 px maximum-error budget; it improved from 14.9615 px at
+R17-v2 to 11.9231 px. The two remaining misses are emitted in the replay
+manifest by sample, frame, timestamp and truth Y. No detector-internal branch
+classification may remove or redefine a usable checked annotation.
 
 The drain correction additionally requires:
 
+- sample2 2.0 s/Y592 remains numeric through a bounded same-family anchor
+  representation correction;
 - the reviewed sample3 drain remains numeric through the clean successor
   interval after 97 s and includes the 100 s reviewed range;
-- the Y≈243 foreign fill branch and completed-fill cap remain non-numeric;
+- sample3 frame 1035/Y243 is numeric within 2 px, while the following gap and
+  completed-fill cap remain non-numeric;
 - high-conflict material-only, reversed, distant and ambiguous drain successors
   remain rejected; and
 - the correction cannot release a filled barrier because it is available only

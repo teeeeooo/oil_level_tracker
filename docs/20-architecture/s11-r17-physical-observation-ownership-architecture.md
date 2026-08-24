@@ -7,7 +7,7 @@
 R17 is the successor to the field-failed R16 detector. It is designed from the
 complete S11 history: the initial report/observation repair, slices A--D,
 R2--R4 current-frame opposition, and every R5--R16 private-field failure. The
-implemented R17-v2 contract is the local baseline. Only a new private-Windows
+implemented R17-v3 contract is the local baseline. Only a new private-Windows
 Base/Accum replay can establish field effectiveness.
 
 One detector serves every Glass. Product control flow may not depend on a
@@ -77,6 +77,15 @@ that displaced the reviewed sample3 bottom-entry owner and reopened a foreign
 branch. That implementation and its dead helper were deleted. Proposal recall
 therefore remains a separately measured input to this repair rather than an
 unverified behavior change hidden inside physical ownership.
+
+One narrow representation seam is corrected without changing beam capacity.
+When a row stays inside the ordinary bounded jump, retains the same candidate
+source family, and supplies an independent anchor-authoritative physical
+proposal with registered motion and coverage, its physical track may survive a
+representation-class change. Prediction error is not bypassed, unrelated
+source families cannot bridge, and a weak continuation cannot use this path.
+This preserves a measured boundary when its typed representation changes
+without reviving the broad cross-family matching attempted earlier in S11.
 
 ## Physical Oil tracklets are initial-state neutral
 
@@ -157,6 +166,31 @@ This separates accumulated texture conflict from a current physical drain
 witness without lowering a threshold. A high-conflict material sibling beside
 only a clean non-material representation remains a veto, as do reversed,
 stationary, distant and ambiguous rows.
+
+### Checked truth remains product authority
+
+The R17-v2 acceptance incorrectly reclassified two checked annotations from
+detector-internal evidence. In particular, sample3 frame 1035/Y243 was called a
+foreign branch even though no user truth change existed. That interpretation is
+withdrawn. Checked-in usable `.oiltruth` annotations are authoritative until a
+new user-reviewed truth revision replaces them; a track direction, phase owner,
+provisional overlay or later implementation cannot silently redefine them.
+
+R17-v3 repairs the two demonstrated ownership seams without a video coordinate
+or timestamp rule:
+
+- a strong same-family physical anchor may correct a representation-class
+  discontinuity only inside the normal jump and prediction bounds; and
+- while an established fill owner is temporarily absent, exactly one strong
+  same-frame material anchor may own that frame when registered motion and the
+  gap-scaled phase geometry agree.
+
+The second rule is deliberately a transient observation handoff. It appends the
+current owner to that frame's provenance but does not mutate, extend or replace
+the accumulated fill phase chain. The next frame therefore returns to the
+existing owner/barrier decision. Ambiguous anchors yield UNKNOWN. This avoids
+the rejected implementation in which adopting the anchor into phase history
+reopened full-material rows through 37 s and beyond.
 
 ## Physical Foam-front episodes
 
