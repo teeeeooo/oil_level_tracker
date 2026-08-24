@@ -25,12 +25,19 @@ Automated evidence must prove all of the following:
 
 - same-frame alternatives share a row hypothesis while preserving exact
   candidate offsets and physical tracklet IDs;
-- ambiguous merge/split assignments terminate rather than exchange identity;
+- ambiguous merge/split assignments terminate rather than exchange identity,
+  including the symmetric established-parent-to-two-children case;
+- a clearly ranked child continues its established parent, and a child with a
+  different clear predecessor cannot create a false split;
 - tracklet confirmation/loss, phase intent and selection remain bounded;
 - material phase emits the only allowed physical owner set before scoring;
 - filled phase exposes no Oil candidate;
 - unique compatible drain successors or re-entry may transfer phase ownership
   without merging physical IDs;
+- drain release, continuation, successor and re-entry all reject a same-row
+  high-conflict material-path sibling even when another direct member is clean;
+- a re-entry inside the absolute jump bound still remains `UNKNOWN` when it
+  reverses above the prior drain Y beyond the ordinary handoff tolerance;
 - ambiguous successors yield `UNKNOWN` and preserve a still-valid owner chain;
 - non-publishable-only rows never enter selector scoring;
 - a non-publishable representative cannot censor a publishable same-row
@@ -55,11 +62,14 @@ an evidence-specific safety contract:
   owner/predecessor chain and remain within 26 px of reviewed Y316;
 - the reconciled foreign opposite-direction branch from 34--39 s is
   explicitly `UNKNOWN`;
-- the reviewed completed-fill cap contains zero numeric Oil;
+- the completed-fill barrier contains zero numeric Oil through the last frame
+  before the clean 81.014 s drain release;
 - every numeric row retains exact same-frame provenance;
-- the seven audited lower drain re-entry/continuation points remain numeric;
-- owner-absence, bounded-loss and material-conflict windows remain
-  `UNKNOWN`;
+- the reviewed 81--96 s drain advances from upper release to lower interface
+  through unique physical-ID handoffs, with bounded gaps and only the ordinary
+  handoff jitter tolerance;
+- the 96.029 s current-conflict row and the 97 s-to-window-end
+  conflict/reversal interval remain `UNKNOWN`;
 - sample4 reviewed-range and Foam controls do not regress; and
 - checked numeric truth error is bounded independently of coverage.
 
@@ -103,8 +113,10 @@ calls.
 ```
 
 The four-video replay and three-repeat performance runner must additionally
-enforce accepted output fingerprints. Their exact commands and results belong
-to the evidence record, not this contract.
+enforce accepted output fingerprints. The performance manifest must name the
+exact clean source/test Git head; a dirty or mismatched source is not timing
+evidence. Exact commands and results belong to the evidence record, not this
+contract.
 
 ## Private-Windows gate
 

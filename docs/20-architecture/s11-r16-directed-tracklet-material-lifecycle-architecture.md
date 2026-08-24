@@ -53,8 +53,12 @@ bounded row tolerance become one same-frame row hypothesis while retaining
 every original candidate and its offset. Tracklets then use deterministic
 one-to-one assignment against only the bounded active set.
 
-- many-to-one or one-to-many matches are incompatible branches; affected
-  physical identities terminate instead of merging or splitting;
+- many-to-one or one-to-many matches inside the assignment-cost ambiguity
+  margin are incompatible branches; an established parent owns a split child
+  only when it is also that child's clear predecessor, so a nearby child with
+  another clear physical predecessor does not cause a false split;
+- an ambiguous established parent terminates, every involved child becomes an
+  incompatible new ID and no child silently inherits the old identity;
 - a tracklet may be provisional, confirmed, continuing, lost or terminated;
 - confirmation is bounded to six sampled frames and loss to two frames;
 - confirmation profiles distinguish anchor/corridor, anchor/trajectory,
@@ -85,8 +89,15 @@ Fill and drain handoffs require a unique mutually compatible successor.
 Ambiguous successors produce `UNKNOWN` and do not destroy a still-valid prior
 owner. A drain owner that exceeded its bounded loss interval may transfer phase
 ownership to one uniquely confirmed, directionally compatible and
-material-clean re-entry within one ordinary physical jump. The owner chain
-records that transfer while preserving distinct physical IDs.
+material-clean re-entry within one ordinary physical jump. Compatibility
+requires the new row not to reverse above the prior phase Y beyond the normal
+handoff tolerance. The owner chain records that transfer while preserving
+distinct physical IDs.
+
+Drain release, direct continuation, successor handoff and phase re-entry all
+apply both track-history material conflict and the complete current-row
+material veto. A clean direct member cannot mask a same-row material-path
+sibling at or above the conflict limit.
 
 In an initially visible/unknown interface context, a central
 `MOTION_TRAJECTORY` activates `FILLING` only when it has strong registered
@@ -171,8 +182,9 @@ case-specific proposal generator.
 
 R16 adopts the explicitly authorized safety-first local contract. Aggregate
 checked-truth coverage is diagnostic, not authority to force a row. The
-replacement assertions require the reviewed initial owner, cap barrier, safe
-drain re-entry, conflict-window abstention and same-frame provenance directly.
+replacement assertions require the reviewed initial owner, cap barrier,
+directional drain release/handoffs, conflict/reversal-window abstention and
+same-frame provenance directly.
 The candidate-level reasons are preserved in the
 [R16 owner audit](../50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md).
 This choice does not lower candidate confidence, pool row evidence or waive the

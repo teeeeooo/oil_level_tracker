@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R16 independent exact-head audit before push`
+**Current gate:** `R16 repaired exact-head independent re-audit before push`
 **Source authority:** `R15 field authority; R16 replacement architecture and local evidence`
 
 ## R10 field result
@@ -136,10 +136,11 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Independently audit the exact committed R16 candidate. The semantic source/test
-commit is `ea866ba8f77f9ae49d3efa22d66f952bdd08aa3a`; the documentation commit that
-records its contract and evidence is behavior-neutral but remains part of the
-audited head. Push only if that exact-head audit passes.
+Independently re-audit the exact committed repaired R16 candidate. The semantic
+source/test commit is `6462a21c327241f9f0e91fe749ed1892abeb0776`; the
+documentation-only commit that records its contract and regenerated evidence
+is behavior-neutral but remains part of the audited head. Push only if that
+fresh exact-head audit passes.
 
 After push, begin the authorized UI/UX evidence audit. This does not waive the
 still-pending S11 external gate: replay the exact pushed R16 head on private
@@ -187,6 +188,13 @@ candidate-publishable fixed-lag selector. It preserves exact same-frame
 provenance, makes ambiguous or foreign ownership fail closed, and establishes
 an 11-sampled-frame end-to-end commitment bound while keeping each individual
 confirmation/selection stage bounded to six frames.
+
+The first independent audit found a missing symmetric one-to-many tracklet
+ambiguity check, incomplete same-row material vetoes across drain transitions
+and an absolute-jump-only backwards re-entry. The repaired candidate terminates
+genuine split parents without misclassifying clearly owned children, applies
+the complete current-row veto to every drain transition and adds the ordinary
+directional reversal tolerance to phase re-entry.
 
 The local structural, four-video safety, performance, compilation, focused and
 canonical regression gates pass. Exact counts, fingerprints, timing and the

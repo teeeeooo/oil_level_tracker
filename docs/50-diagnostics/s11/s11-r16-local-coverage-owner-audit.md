@@ -12,6 +12,31 @@ allowed to use case names, timestamps or truth coordinates. Candidate-level
 `minimum_final_confidence` remains unchanged and no sibling confidence is
 pooled.
 
+## Independent-audit repair findings
+
+Independent review of candidate head
+`178fdf951d7142c39c6a54109cbaece8b204c476` found three lifecycle seams that
+invalidated its replay and timing evidence:
+
+- tracklet ambiguity was checked only as many established tracks competing for
+  one row. One established track could still split into two near-cost child
+  hypotheses and greedily retain its old ID on one child;
+- drain release, continuation, successor and phase re-entry used the minimum
+  conflict among same-row members even when another current member carried a
+  material-path conflict at the veto threshold; and
+- phase re-entry enforced an absolute jump but did not reject a new owner that
+  reversed materially above the last drain Y.
+
+The repaired tracklet owner now checks ambiguity symmetrically. A split child
+belongs to the established parent only when that parent is also the child's
+clear predecessor; a genuine near-cost split terminates the parent and assigns
+new incompatible child IDs. All four drain transitions apply the complete
+current-row material veto, and re-entry applies the ordinary directional
+reversal tolerance in addition to the jump bound. Adversarial controls retain
+a clearly ranked child and a child with another clear predecessor. The repaired
+source/test identity is
+`6462a21c327241f9f0e91fe749ed1892abeb0776`.
+
 ## Checked-truth coverage is not an owner
 
 The final replay publishes 6 of 13 checked truth rows. Seven rows are
@@ -72,25 +97,33 @@ safety assertion, not a relaxed count target.
 
 ## Drain owner audit
 
-The final sample3 replay publishes seven evidence-safe rows in
-`90 <= t < 103` and ten rows from 90 s through the 105 s window:
+The repaired sample3 replay publishes six evidence-safe rows in
+`90 <= t < 103`; there are no further numeric rows at or after 97 s:
 
-| Timestamp | Y | Phase reason |
-|---:|---:|---|
-| 95.0283 | 345.0 | `DRAIN_PHASE_REENTRY` |
-| 96.0293 | 359.0 | `DRAIN_OWNER_CONTINUING` |
-| 96.5298 | 359.0 | `DRAIN_OWNER_CONTINUING` |
-| 97.0303 | 368.0 | `DRAIN_OWNER_CONTINUING` |
-| 97.5308 | 368.5 | `DRAIN_OWNER_CONTINUING` |
-| 100.0333 | 368.0 | `DRAIN_PHASE_REENTRY` |
-| 102.5358 | 335.0 | `DRAIN_PHASE_REENTRY` |
+| Timestamp | Public Y | Physical row | Direction / progress | Track conflict / current minimum / row veto | Publication lifecycle |
+|---:|---:|---|---|---|---|
+| 91.5248 | 320.0 | `0104 / 123:003` | `+1 / 14 px` | `0.164 / 0.188 / false` | witness |
+| 92.5258 | 320.0 | `0104 / 125:002` | `+1 / 14 px` | clean / `0.183 / false` | witness |
+| 93.0263 | 333.0 | `0104 / 126:003` | `+1 / 14 px` | clean / `0.120 / false` | confirmed |
+| 94.0273 | 336.0 | `0105 / 128:006` | `+1 / 50 px` | `0.312 / 0.156 / false` | confirmed handoff |
+| 95.0283 | 345.0 | `0105` | downward continuation | material-clean row | continuing |
+| 96.5298 | 342.0 | `0105` | `3 px` bounded jitter | material-clean row | continuing |
 
-The reviewed 97 s counterexample now keeps lower owner `0105` at Y368/368.5;
-the unrelated upper Y226 branch cannot win. Frames 90.0233--94.5278 remain
-`UNKNOWN` after the prior owner terminates. Frame 95.5288 is a bounded owner
-loss. Frames 98.0313--99.5328 and 100.5338--102.0353 remain `UNKNOWN` where
-current material compatibility or unique re-entry evidence fails. Direction,
-jump and material conflicts are not overridden to increase the count.
+This is one reviewed 81--96 s physical sequence, not six independent coverage
+exceptions. It starts at Y233 at 81.0143 s, reaches Y288 at 88.0213 s and then
+continues through the rows above. Net downward-image progress exceeds 105 px,
+numeric gaps stay within 3.51 s and the only allowed local reversal is the
+ordinary 3.1 px handoff jitter. Each public Y is one publishable member of its
+same-frame physical row.
+
+The audit also explains the censored alternatives. At 96.0293 s the owner row
+has current material conflict `0.536`; at 97.0303 s the only drain-like row has
+track conflict `0.506`. The old 100.5338 s Y315 result was a new track within
+the absolute 32 px jump from prior Y346, but it reversed upward by 31 px and is
+now rejected by the normal 2.88 px reversal tolerance. The old 102.5358 s point
+depended on that unsafe re-entry. Thus 96.0293 s and every frame from 97 s to
+the window end are `UNKNOWN`; the unrelated upper branch, current-row material
+conflicts and backwards re-entry cannot reset or inherit drain ownership.
 
 ## Commit-horizon counterexample
 
@@ -108,17 +141,20 @@ and owner chain.
 
 ## Reproducibility pointers
 
-- four-video manifest:
-  `/tmp/r16-post-lag-four-video.OMSSpf/replay_manifest.json`;
-- final sample3 FULL trace:
-  `/tmp/r16-final-s3-debug.nsi4W7/run-01/`;
+- exact-clean-head four-video manifest:
+  `/var/folders/s2/wbnr4dhn1z1bk7tcl342s8bw0000gn/T/r16-audit-repair-four-final.fdf1y2xl/replay_manifest.json`;
+- candidate-level FULL trace used during the repair:
+  `/tmp/r16-drain-veto-audit.oI75nm/oil-debug-trace-s52awykr/debug_trace.jsonl`;
 - composed-lag regression:
   `tests/unit/test_oil_interface_tracklets.py`;
 - evidence-specific corpus contracts:
   `tests/test_s11_temporal_reacquisition_continuity.py` and
   `tests/test_s11_sequence_observability_integrity.py`.
 
-The `/tmp` artifacts are local reproducibility outputs and are not repository
-truth. Counts, fingerprints and assertions are repeated in the R16 validation
-evidence record so the acceptance contract does not depend on their retention.
+The temporary artifacts are local reproducibility outputs and are not
+repository truth. The candidate trace predates the final directional re-entry
+censor and records its causal input; final public behavior is established by
+the exact-clean-head manifest and corpus regression. Counts, fingerprints and
+assertions are repeated in the R16 validation evidence record so the acceptance
+contract does not depend on temporary-file retention.
 See [R16 local evidence](../../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md).
