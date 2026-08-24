@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R17 design accepted; implementation and local validation active`
-**Source authority:** `main at integrated R16 baseline; no field-qualified detector`
+**Current gate:** `R17 local implementation accepted; private-Windows Base/Accum replay pending`
+**Source authority:** `main at locally accepted R17; no field-qualified detector`
 **Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
 **Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
 
@@ -138,18 +138,19 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Implement the accepted R17 successor from the corrected R16 Windows evidence
-and the complete S11 attempt history. Proposal recall, physical tracklet
-confirmation, material-phase reacquisition and Foam episode identity remain
-separate owners. Failed entrance logic and time-only Foam grouping are replaced,
-not retained as parallel fallbacks.
+Run the private-Windows Base/Accum replay against the locally accepted R17
+implementation. Physical Oil identity is separated from initial-state phase
+semantics, bounded fill-owner re-entry is explicit, and time-only Foam grouping
+has been replaced by physical-front evolution. Local owner, integration,
+four-video, full-suite and performance gates passed; the field detector remains
+unqualified until the Windows cohorts pass.
 
-Implementation is authorized by the
-[R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md).
-Source work must preserve Accum initial-EMPTY suppression, real
-bottom-entry admission, the 52 reviewed real Foam rows, calibrated Artifact
-rejection and exact same-frame/CSV provenance. A new private-Windows Base/Accum
-replay remains the final effectiveness gate.
+Use the [R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md),
+[validation contract](../30-validation/s11-r17-physical-observation-ownership-validation.md)
+and [local evidence](../60-evidence/s11/s11-r17-physical-observation-ownership.md).
+The Windows run must preserve Accum initial-EMPTY suppression, real bottom-entry
+admission, the 52 reviewed real Foam rows, calibrated Artifact rejection and
+exact same-frame/CSV provenance.
 
 ## R16 field disposition
 
