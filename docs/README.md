@@ -64,6 +64,8 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
 - Integrated S11-R16 baseline architecture: [`20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md`](20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md)
 - Failed S11-R16 validation contract: [`30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md`](30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md)
+- Accepted S11-R17 successor architecture: [`20-architecture/s11-r17-physical-observation-ownership-architecture.md`](20-architecture/s11-r17-physical-observation-ownership-architecture.md)
+- Active S11-R17 validation contract: [`30-validation/s11-r17-physical-observation-ownership-validation.md`](30-validation/s11-r17-physical-observation-ownership-validation.md)
 - S11-R16 local implementation evidence: [`60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md`](60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
 - S11-R16 repaired owner/coverage diagnostic: [`50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md`](50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md)
 - S11-R16 secure-Windows field result: [`60-evidence/s11/s11-r16-secure-windows-field-result.md`](60-evidence/s11/s11-r16-secure-windows-field-result.md)

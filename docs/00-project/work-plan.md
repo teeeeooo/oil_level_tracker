@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R16 Windows FAIL recorded; corrected successor design before implementation`
+**Current gate:** `R17 design accepted; implementation and local validation active`
 **Source authority:** `main at integrated R16 baseline; no field-qualified detector`
 **Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
 **Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
@@ -138,13 +138,15 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Complete the successor design from the corrected R16 Windows evidence before
-changing production code. The design must keep proposal recall, physical
-tracklet confirmation, material-phase reacquisition and Foam episode identity
-as separate owners and must reconcile the specific R11--R16 failed approaches.
+Implement the accepted R17 successor from the corrected R16 Windows evidence
+and the complete S11 attempt history. Proposal recall, physical tracklet
+confirmation, material-phase reacquisition and Foam episode identity remain
+separate owners. Failed entrance logic and time-only Foam grouping are replaced,
+not retained as parallel fallbacks.
 
-Implementation is not yet authorized by this record. After a design is
-accepted, source work must preserve Accum initial-EMPTY suppression, real
+Implementation is authorized by the
+[R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md).
+Source work must preserve Accum initial-EMPTY suppression, real
 bottom-entry admission, the 52 reviewed real Foam rows, calibrated Artifact
 rejection and exact same-frame/CSV provenance. A new private-Windows Base/Accum
 replay remains the final effectiveness gate.
