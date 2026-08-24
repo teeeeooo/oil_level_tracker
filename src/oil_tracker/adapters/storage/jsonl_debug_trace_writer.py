@@ -421,7 +421,53 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 "effective_track_opposition": features.get(
                     "sequence_effective_track_opposition"
                 ),
-                "component_id": features.get("sequence_component_id"),
+                # Retained as an explicit null compatibility field. R16 no
+                # longer exposes the old undirected connectivity component as
+                # physical identity.
+                "component_id": None,
+                "tracklet_id": features.get("sequence_tracklet_id"),
+                "row_hypothesis_id": features.get(
+                    "sequence_row_hypothesis_id"
+                ),
+                "tracklet_lifecycle": features.get(
+                    "sequence_tracklet_lifecycle"
+                ),
+                "tracklet_admitted": features.get(
+                    "sequence_tracklet_admitted"
+                ),
+                "tracklet_confirmation_profile": features.get(
+                    "sequence_tracklet_confirmation_profile"
+                ),
+                "tracklet_confirmation_support": features.get(
+                    "sequence_tracklet_confirmation_support"
+                ),
+                "tracklet_net_progress_px": features.get(
+                    "sequence_tracklet_net_progress_px"
+                ),
+                "tracklet_direction": features.get(
+                    "sequence_tracklet_direction"
+                ),
+                "tracklet_directional_agreement": features.get(
+                    "sequence_tracklet_directional_agreement"
+                ),
+                "tracklet_motion_support": features.get(
+                    "sequence_tracklet_motion_support"
+                ),
+                "tracklet_motion_coverage": features.get(
+                    "sequence_tracklet_motion_coverage"
+                ),
+                "tracklet_material_conflict": features.get(
+                    "sequence_tracklet_material_conflict"
+                ),
+                "tracklet_incompatible": features.get(
+                    "sequence_tracklet_incompatible"
+                ),
+                "tracklet_failure_reason": features.get(
+                    "sequence_tracklet_failure_reason"
+                ),
+                "material_ownership_barrier": features.get(
+                    "sequence_material_ownership_barrier"
+                ),
                 "cluster_support": features.get("sequence_cluster_support"),
                 "trajectory_support": features.get("sequence_trajectory_support"),
                 "foam_alias_penalty": features.get("sequence_foam_alias_penalty"),
@@ -501,12 +547,17 @@ def _sequence_reject_stage(
         if float(features.get("sequence_track_opposition", 0.0)) >= 0.60:
             return "TRACK_OPPOSITION"
         return "CANDIDATE_ONLY"
-    if authority == "ANCHOR_ELIGIBLE" and float(
-        features.get("sequence_cluster_support", 0.0)
-    ) < 0.99:
-        return "NO_CLUSTER_SUPPORT"
+    if float(features.get("sequence_material_ownership_barrier", 0.0)) >= 0.5:
+        return "MATERIAL_OWNERSHIP_BARRIER"
+    if float(features.get("sequence_tracklet_incompatible", 0.0)) >= 0.5:
+        return "INCOMPATIBLE_TRACKLET"
+    if float(features.get("sequence_tracklet_admitted", 0.0)) < 0.5:
+        return str(
+            features.get("sequence_tracklet_failure_reason")
+            or "PROVISIONAL_TRACKLET"
+        )
     if float(features.get("sequence_trajectory_support", 0.0)) < 0.99:
-        return "NO_TRAJECTORY_SUPPORT"
+        return "TRACKLET_NOT_ADMITTED"
     return "GLOBAL_PATH_OR_RUN_BOUND"
 
 

@@ -1,0 +1,1204 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import Enum
+import math
+from statistics import median
+
+from .oil_candidate_authority import OilCandidateAuthority
+from .oil_sequence_types import (
+    OilCandidateRef,
+    OilSequenceNode,
+    TrackletConfirmationProfile,
+    TrackletLifecycle,
+)
+
+
+class OilMaterialPhase(str, Enum):
+    OPEN = "open"
+    FILLING = "filling"
+    FILLED_BARRIER = "filled_barrier"
+    DRAINING = "draining"
+
+
+class OilFillConfirmationProfile(str, Enum):
+    NONE = "none"
+    UNKNOWN_FILL_ANCHORED = "unknown_fill_anchored"
+    EMPTY_ENTRANCE_MOTION = "empty_entrance_motion"
+
+
+@dataclass(frozen=True)
+class OilMaterialPhasePolicy:
+    geometry_top_y: float
+    geometry_height: float
+    maximum_jump_px: float
+    maximum_lost_frames: int
+    handoff_ambiguity_margin: float
+    handoff_direction_reversal_tolerance_px: float
+    fill_onset_intent_frames: int
+    fill_evidence_window_frames: int
+    entrance_band_ratio: float
+    fill_minimum_span_ratio: float
+    minimum_directional_agreement: float
+    empty_entrance_motion_enabled: bool
+    fill_minimum_motion_support: float
+    fill_minimum_motion_coverage: float
+    drain_entrance_ratio: float
+    drain_minimum_progress_ratio: float
+    drain_minimum_directional_agreement: float
+    material_conflict_limit: float
+
+
+@dataclass(frozen=True)
+class OilMaterialPhaseResult:
+    phases: tuple[OilMaterialPhase, ...]
+    reasons: tuple[str, ...]
+    owner_chains: tuple[tuple[str, ...], ...]
+    fill_confirmation_profiles: tuple[OilFillConfirmationProfile, ...]
+    allowed_tracklet_ids: tuple[frozenset[str] | None, ...]
+    ambiguous_frames: frozenset[int]
+
+
+@dataclass(frozen=True)
+class _ObservedRow:
+    tracklet_id: str
+    row_hypothesis_id: str
+    y: float
+    entrance_y: float
+    ref: OilCandidateRef
+    nodes: tuple[OilSequenceNode, ...]
+    current_material_conflict: float
+    current_material_veto: bool
+
+
+@dataclass(frozen=True)
+class _FillObservation:
+    frame: int
+    y: float
+    material_veto: bool
+    independent_anchor: bool
+    confirmation_profile: TrackletConfirmationProfile
+    motion_support: float
+    motion_coverage: float
+
+
+@dataclass(frozen=True)
+class _FillChain:
+    owner: str
+    owners: tuple[str, ...]
+    observations: tuple[_FillObservation, ...]
+
+    @property
+    def last(self) -> _FillObservation:
+        return self.observations[-1]
+
+
+@dataclass(frozen=True)
+class _DrainChain:
+    owner: str
+    owners: tuple[str, ...]
+    last_y: float
+    last_frame: int
+
+
+class OilMaterialPhaseLifecycleOwner:
+    """Own causal fill/barrier/drain state without merging track identities."""
+
+    def __init__(self, policy: OilMaterialPhasePolicy) -> None:
+        self.policy = policy
+
+    def resolve(
+        self,
+        layers: tuple[tuple[OilSequenceNode, ...], ...],
+    ) -> OilMaterialPhaseResult:
+        rows_by_frame = tuple(self._rows(layer) for layer in layers)
+        first_frame = {
+            row.tracklet_id: frame
+            for frame, rows in reversed(tuple(enumerate(rows_by_frame)))
+            for row in rows
+        }
+        phases: list[OilMaterialPhase] = []
+        reasons: list[str] = []
+        owner_chains: list[tuple[str, ...]] = []
+        fill_confirmation_profiles: list[OilFillConfirmationProfile] = []
+        allowed_tracklet_ids: list[frozenset[str] | None] = []
+        ambiguous_frames: set[int] = set()
+        phase = OilMaterialPhase.OPEN
+        chains: dict[str, _FillChain] = {}
+        filled_chain: tuple[str, ...] = ()
+        filled_frame: int | None = None
+        fill_terminal_owner: str | None = None
+        fill_owner_open = False
+        drain_chain: _DrainChain | None = None
+        fill_confirmation_profile = OilFillConfirmationProfile.NONE
+
+        for frame, rows in enumerate(rows_by_frame):
+            prior_phase = phase
+            reason = "OPEN"
+            allowed: frozenset[str] | None = None
+            if phase in {OilMaterialPhase.OPEN, OilMaterialPhase.FILLING}:
+                chains, chain_ambiguity, chain_reason = self._advance_fill_chains(
+                    chains,
+                    rows,
+                    frame,
+                )
+                if chain_ambiguity:
+                    ambiguous_frames.add(frame)
+                    reason = "FILL_CHAIN_AMBIGUOUS"
+                elif chain_reason:
+                    reason = chain_reason
+                qualified = tuple(
+                    (chain, profile)
+                    for chain in chains.values()
+                    if (
+                        profile := self._fill_confirmation_profile(chain)
+                    )
+                    is not OilFillConfirmationProfile.NONE
+                )
+                dynamic_fill_owners = frozenset(
+                    owner
+                    for owner, chain in chains.items()
+                    if self._chain_is_dynamic_fill_owner(chain)
+                )
+                established_interface_blocker = bool(
+                    not self.policy.empty_entrance_motion_enabled
+                    and any(
+                        owner not in dynamic_fill_owners
+                        and self._chain_is_strong_anchor_interface(chain)
+                        for owner, chain in chains.items()
+                    )
+                )
+                if established_interface_blocker:
+                    dynamic_fill_owners = frozenset()
+                if chain_ambiguity:
+                    phase = (
+                        OilMaterialPhase.FILLING
+                        if dynamic_fill_owners
+                        else OilMaterialPhase.OPEN
+                    )
+                    allowed = (
+                        dynamic_fill_owners
+                        if len(dynamic_fill_owners) == 1
+                        else (
+                            frozenset()
+                            if dynamic_fill_owners
+                            else None
+                        )
+                    )
+                elif len(qualified) == 1:
+                    confirmed_chain, fill_confirmation_profile = qualified[0]
+                    phase = OilMaterialPhase.FILLED_BARRIER
+                    filled_chain = confirmed_chain.owners
+                    filled_frame = frame
+                    fill_terminal_owner = confirmed_chain.owner
+                    fill_owner_open = True
+                    chains = {}
+                    if confirmed_chain.last.material_veto:
+                        fill_owner_open = False
+                        allowed = frozenset()
+                        reason = "FILL_SPAN_MATERIAL_VETO"
+                    else:
+                        allowed = frozenset({confirmed_chain.owner})
+                        reason = "FILL_SPAN_CONFIRMED"
+                elif len(qualified) > 1:
+                    chains = {}
+                    phase = OilMaterialPhase.OPEN
+                    allowed = frozenset()
+                    ambiguous_frames.add(frame)
+                    reason = "FILL_COMPLETION_AMBIGUOUS"
+                else:
+                    if not dynamic_fill_owners:
+                        phase = OilMaterialPhase.OPEN
+                        allowed = None
+                        if chains:
+                            reason = (
+                                "FILL_ESTABLISHED_INTERFACE"
+                                if established_interface_blocker
+                                else "FILL_EVIDENCE_ACCUMULATING"
+                            )
+                    elif len(dynamic_fill_owners) == 1:
+                        phase = OilMaterialPhase.FILLING
+                        allowed = dynamic_fill_owners
+                        reason = "FILL_MOTION_OWNER"
+                        if prior_phase is OilMaterialPhase.OPEN:
+                            dynamic_owner = next(iter(dynamic_fill_owners))
+                            chain = chains[dynamic_owner]
+                            predecessor, predecessor_ambiguous = (
+                                self._fill_onset_predecessor(
+                                    chain,
+                                    rows_by_frame,
+                                    frame,
+                                )
+                            )
+                            if predecessor is not None:
+                                chain = _prepend_owner(chain, predecessor)
+                                chains[dynamic_owner] = chain
+                            self._apply_fill_onset_intent(
+                                chain=chain,
+                                predecessor=predecessor,
+                                predecessor_ambiguous=predecessor_ambiguous,
+                                frame=frame,
+                                rows_by_frame=rows_by_frame,
+                                phases=phases,
+                                reasons=reasons,
+                                owner_chains=owner_chains,
+                                allowed_tracklet_ids=allowed_tracklet_ids,
+                                ambiguous_frames=ambiguous_frames,
+                            )
+                    else:
+                        phase = OilMaterialPhase.FILLING
+                        allowed = frozenset()
+                        ambiguous_frames.add(frame)
+                        reason = "FILL_OWNER_AMBIGUOUS"
+
+            elif phase is OilMaterialPhase.FILLED_BARRIER:
+                terminal = (
+                    None
+                    if fill_terminal_owner is None
+                    else next(
+                        (
+                            row
+                            for row in rows
+                            if row.tracklet_id == fill_terminal_owner
+                        ),
+                        None,
+                    )
+                )
+                if (
+                    fill_owner_open
+                    and terminal is not None
+                    and not terminal.current_material_veto
+                ):
+                    allowed = frozenset({fill_terminal_owner})
+                    reason = "FILL_OWNER_AT_ENTRANCE"
+                    phases.append(phase)
+                    reasons.append(reason)
+                    owner_chains.append(filled_chain)
+                    fill_confirmation_profiles.append(
+                        fill_confirmation_profile
+                    )
+                    allowed_tracklet_ids.append(allowed)
+                    continue
+                fill_owner_open = False
+                releases = tuple(
+                    row
+                    for row in rows
+                    if filled_frame is not None
+                    and first_frame.get(row.tracklet_id, -1) >= filled_frame
+                    and self._drain_release(row)
+                )
+                release_ids = tuple(
+                    sorted({row.tracklet_id for row in releases})
+                )
+                if len(release_ids) == 1:
+                    release = next(
+                        row
+                        for row in releases
+                        if row.tracklet_id == release_ids[0]
+                    )
+                    drain_chain = _DrainChain(
+                        owner=release.tracklet_id,
+                        owners=(release.tracklet_id,),
+                        last_y=release.y,
+                        last_frame=frame,
+                    )
+                    phase = OilMaterialPhase.DRAINING
+                    allowed = frozenset({drain_chain.owner})
+                    reason = "DRAIN_RELEASE_CONFIRMED"
+                else:
+                    allowed = frozenset()
+                    reason = (
+                        "DRAIN_RELEASE_AMBIGUOUS"
+                        if len(release_ids) > 1
+                        else "FILLED_CAP_VETO"
+                    )
+                    if len(release_ids) > 1:
+                        ambiguous_frames.add(frame)
+
+            else:
+                assert phase is OilMaterialPhase.DRAINING
+                if drain_chain is None:
+                    allowed = frozenset()
+                    reason = "DRAIN_CHAIN_RESET"
+                else:
+                    direct = next(
+                        (
+                            row
+                            for row in rows
+                            if row.tracklet_id == drain_chain.owner
+                        ),
+                        None,
+                    )
+                    if direct is not None and self._drain_continuation(
+                        drain_chain,
+                        direct,
+                        frame,
+                    ):
+                        drain_chain = _DrainChain(
+                            owner=drain_chain.owner,
+                            owners=drain_chain.owners,
+                            last_y=direct.y,
+                            last_frame=frame,
+                        )
+                        allowed = frozenset({drain_chain.owner})
+                        reason = "DRAIN_OWNER_CONTINUING"
+                    else:
+                        successors = tuple(
+                            row
+                            for row in rows
+                            if row.tracklet_id != drain_chain.owner
+                            and self._drain_successor(
+                                drain_chain,
+                                row,
+                                frame,
+                            )
+                        )
+                        if successors:
+                            maturity = max(
+                                _tracklet_maturity(row.ref)
+                                for row in successors
+                            )
+                            successors = tuple(
+                                row
+                                for row in successors
+                                if _tracklet_maturity(row.ref) == maturity
+                            )
+                        ranked = tuple(
+                            sorted(
+                                (
+                                    self._drain_handoff_cost(
+                                        drain_chain,
+                                        row,
+                                        frame,
+                                    ),
+                                    row.tracklet_id,
+                                    row,
+                                )
+                                for row in successors
+                            )
+                        )
+                        chosen_id = _clear_choice(
+                            tuple(
+                                (cost, tracklet_id)
+                                for cost, tracklet_id, _row in ranked
+                            ),
+                            self.policy.handoff_ambiguity_margin,
+                        )
+                        if chosen_id is None and ranked:
+                            allowed = frozenset()
+                            ambiguous_frames.add(frame)
+                            reason = "DRAIN_HANDOFF_AMBIGUOUS"
+                        elif chosen_id is not None:
+                            successor = next(
+                                row
+                                for _cost, tracklet_id, row in ranked
+                                if tracklet_id == chosen_id
+                            )
+                            drain_chain = _DrainChain(
+                                owner=successor.tracklet_id,
+                                owners=(
+                                    drain_chain.owners
+                                    + (successor.tracklet_id,)
+                                ),
+                                last_y=successor.y,
+                                last_frame=frame,
+                            )
+                            allowed = frozenset({drain_chain.owner})
+                            reason = "DRAIN_CHAIN_HANDOFF"
+                        else:
+                            owner_terminated = (
+                                frame - drain_chain.last_frame - 1
+                                > self.policy.maximum_lost_frames
+                            )
+                            reentries = (
+                                tuple(
+                                    row
+                                    for row in rows
+                                    if self._drain_phase_reentry(
+                                        drain_chain,
+                                        row,
+                                    )
+                                )
+                                if owner_terminated
+                                else ()
+                            )
+                            if reentries:
+                                maturity = max(
+                                    _tracklet_maturity(row.ref)
+                                    for row in reentries
+                                )
+                                reentries = tuple(
+                                    row
+                                    for row in reentries
+                                    if _tracklet_maturity(row.ref) == maturity
+                                )
+                            reentry_ranked = tuple(
+                                sorted(
+                                    (
+                                        self._drain_phase_reentry_cost(
+                                            drain_chain,
+                                            row,
+                                        ),
+                                        row.tracklet_id,
+                                        row,
+                                    )
+                                    for row in reentries
+                                )
+                            )
+                            reentry_id = _clear_choice(
+                                tuple(
+                                    (cost, tracklet_id)
+                                    for cost, tracklet_id, _row in reentry_ranked
+                                ),
+                                self.policy.handoff_ambiguity_margin,
+                            )
+                            if reentry_id is None and reentry_ranked:
+                                allowed = frozenset()
+                                ambiguous_frames.add(frame)
+                                reason = "DRAIN_REENTRY_AMBIGUOUS"
+                            elif reentry_id is not None:
+                                reentry = next(
+                                    row
+                                    for _cost, tracklet_id, row in reentry_ranked
+                                    if tracklet_id == reentry_id
+                                )
+                                drain_chain = _DrainChain(
+                                    owner=reentry.tracklet_id,
+                                    owners=_append_unique_owner(
+                                        drain_chain.owners,
+                                        reentry.tracklet_id,
+                                    ),
+                                    last_y=reentry.y,
+                                    last_frame=frame,
+                                )
+                                allowed = frozenset({drain_chain.owner})
+                                reason = "DRAIN_PHASE_REENTRY"
+                            else:
+                                allowed = frozenset()
+                                reason = (
+                                    "DRAIN_OWNER_TERMINATED"
+                                    if owner_terminated
+                                    else "DRAIN_OWNER_LOST"
+                                )
+
+            phases.append(phase)
+            reasons.append(reason)
+            owner_chains.append(
+                drain_chain.owners
+                if phase is OilMaterialPhase.DRAINING
+                and drain_chain is not None
+                else (
+                    filled_chain
+                    if phase is OilMaterialPhase.FILLED_BARRIER
+                    else _selected_owner_chain(chains, allowed)
+                )
+            )
+            fill_confirmation_profiles.append(fill_confirmation_profile)
+            allowed_tracklet_ids.append(allowed)
+
+        return OilMaterialPhaseResult(
+            phases=tuple(phases),
+            reasons=tuple(reasons),
+            owner_chains=tuple(owner_chains),
+            fill_confirmation_profiles=tuple(fill_confirmation_profiles),
+            allowed_tracklet_ids=tuple(allowed_tracklet_ids),
+            ambiguous_frames=frozenset(ambiguous_frames),
+        )
+
+    def _fill_onset_predecessor(
+        self,
+        chain: _FillChain,
+        rows_by_frame: tuple[tuple[_ObservedRow, ...], ...],
+        frame: int,
+    ) -> tuple[str | None, bool]:
+        if frame <= 0:
+            return None, False
+        origin_y = chain.observations[0].y
+        candidates = tuple(
+            row
+            for row in rows_by_frame[frame - 1]
+            if row.ref.tracklet_admitted
+            and not row.ref.tracklet_incompatible
+            and abs(row.y - origin_y) <= self.policy.maximum_jump_px
+        )
+        if not candidates:
+            return None, False
+        maturity = max(_tracklet_maturity(row.ref) for row in candidates)
+        candidates = tuple(
+            row
+            for row in candidates
+            if _tracklet_maturity(row.ref) == maturity
+        )
+        best_cost_by_tracklet: dict[str, float] = {}
+        for row in candidates:
+            cost = abs(row.y - origin_y) / self.policy.maximum_jump_px
+            best_cost_by_tracklet[row.tracklet_id] = min(
+                best_cost_by_tracklet.get(row.tracklet_id, math.inf),
+                cost,
+            )
+        ranked = tuple(
+            (cost, tracklet_id)
+            for tracklet_id, cost in best_cost_by_tracklet.items()
+        )
+        chosen = _clear_choice(
+            ranked,
+            self.policy.handoff_ambiguity_margin,
+        )
+        return chosen, chosen is None
+
+    def _apply_fill_onset_intent(
+        self,
+        *,
+        chain: _FillChain,
+        predecessor: str | None,
+        predecessor_ambiguous: bool,
+        frame: int,
+        rows_by_frame: tuple[tuple[_ObservedRow, ...], ...],
+        phases: list[OilMaterialPhase],
+        reasons: list[str],
+        owner_chains: list[tuple[str, ...]],
+        allowed_tracklet_ids: list[frozenset[str] | None],
+        ambiguous_frames: set[int],
+    ) -> None:
+        if frame <= 0:
+            return
+        first = max(0, frame - self.policy.fill_onset_intent_frames)
+        if predecessor is None:
+            target = frame - 1
+            if phases[target] is not OilMaterialPhase.OPEN:
+                return
+            allowed_tracklet_ids[target] = frozenset()
+            owner_chains[target] = chain.owners
+            reasons[target] = (
+                "FILL_ONSET_INTENT_AMBIGUOUS"
+                if predecessor_ambiguous
+                else "FILL_ONSET_INTENT_NO_PREDECESSOR"
+            )
+            if predecessor_ambiguous:
+                ambiguous_frames.add(target)
+            return
+
+        observed = tuple(
+            prior_frame
+            for prior_frame in range(first, frame)
+            if any(
+                row.tracklet_id == predecessor
+                for row in rows_by_frame[prior_frame]
+            )
+        )
+        if not observed:
+            return
+        for prior_frame in range(observed[0], frame):
+            if phases[prior_frame] is not OilMaterialPhase.OPEN:
+                continue
+            is_observed = any(
+                row.tracklet_id == predecessor
+                for row in rows_by_frame[prior_frame]
+            )
+            allowed_tracklet_ids[prior_frame] = (
+                frozenset({predecessor}) if is_observed else frozenset()
+            )
+            owner_chains[prior_frame] = chain.owners
+            reasons[prior_frame] = (
+                "FILL_ONSET_INTENT_PREDECESSOR"
+                if is_observed
+                else "FILL_ONSET_INTENT_GAP"
+            )
+
+    def _chain_is_dynamic_fill_owner(self, chain: _FillChain) -> bool:
+        origin_relative = (
+            chain.observations[0].y - self.policy.geometry_top_y
+        ) / self.policy.geometry_height
+        lower_entrance = (
+            origin_relative >= 1.0 - self.policy.entrance_band_ratio
+        )
+        central_origin = (
+            self.policy.entrance_band_ratio
+            <= origin_relative
+            <= 1.0 - self.policy.entrance_band_ratio
+        )
+        for observation in chain.observations:
+            strong_motion = bool(
+                observation.motion_support
+                >= self.policy.fill_minimum_motion_support
+                and observation.motion_coverage
+                >= self.policy.fill_minimum_motion_coverage
+            )
+            if not strong_motion:
+                continue
+            if self.policy.empty_entrance_motion_enabled:
+                if (
+                    lower_entrance
+                    and observation.confirmation_profile
+                    is TrackletConfirmationProfile.ENTRANCE_MOTION
+                ):
+                    return True
+            elif (
+                central_origin
+                and observation.confirmation_profile
+                is TrackletConfirmationProfile.MOTION_TRAJECTORY
+            ):
+                return True
+        return False
+
+    def _chain_is_strong_anchor_interface(self, chain: _FillChain) -> bool:
+        anchor_profiles = {
+            TrackletConfirmationProfile.ANCHOR_CORRIDOR,
+            TrackletConfirmationProfile.ANCHOR_TRAJECTORY,
+        }
+        return any(
+            observation.confirmation_profile in anchor_profiles
+            and observation.motion_support
+            >= self.policy.fill_minimum_motion_support
+            and observation.motion_coverage
+            >= self.policy.fill_minimum_motion_coverage
+            for observation in chain.observations
+        )
+
+    def _advance_fill_chains(
+        self,
+        prior: dict[str, _FillChain],
+        rows: tuple[_ObservedRow, ...],
+        frame: int,
+    ) -> tuple[dict[str, _FillChain], bool, str]:
+        upward = {
+            row.tracklet_id: row
+            for row in rows
+            if row.ref.tracklet_admitted
+            and not row.ref.tracklet_incompatible
+            and row.ref.tracklet_direction < 0
+            and row.ref.tracklet_directional_agreement
+            >= self.policy.minimum_directional_agreement
+        }
+        retained = {
+            owner: chain
+            for owner, chain in prior.items()
+            if frame - chain.last.frame - 1
+            <= self.policy.maximum_lost_frames
+        }
+        # Keep unmatched phase hypotheses through the same bounded loss window
+        # used for a legitimate physical-track handoff.  The identities remain
+        # separate; this is phase evidence retention, not coordinate carry.
+        current: dict[str, _FillChain] = {
+            owner: chain
+            for owner, chain in retained.items()
+            if owner not in upward
+        }
+        for owner, row in upward.items():
+            if owner not in retained:
+                continue
+            current[owner] = _extend_chain(
+                retained[owner],
+                row,
+                frame,
+                self.policy.fill_evidence_window_frames,
+            )
+
+        successors = {
+            owner: row
+            for owner, row in upward.items()
+            if owner not in current
+        }
+        predecessors: dict[str, tuple[tuple[float, _FillChain], ...]] = {}
+        for owner, row in successors.items():
+            matches = tuple(
+                (self._handoff_cost(chain, row, frame), chain)
+                for prior_owner, chain in retained.items()
+                if prior_owner not in upward
+                and self._compatible_handoff(chain, row, frame)
+            )
+            predecessors[owner] = tuple(
+                sorted(matches, key=lambda item: (item[0], item[1].owner))
+            )
+        by_predecessor: dict[str, list[tuple[float, str]]] = {}
+        for successor, matches in predecessors.items():
+            for cost, chain in matches:
+                by_predecessor.setdefault(chain.owner, []).append(
+                    (cost, successor)
+                )
+        successor_choices = {
+            owner: _clear_choice(
+                tuple((cost, chain.owner) for cost, chain in matches),
+                self.policy.handoff_ambiguity_margin,
+            )
+            for owner, matches in predecessors.items()
+            if matches
+        }
+        predecessor_choices = {
+            owner: _clear_choice(
+                tuple(sorted(options)),
+                self.policy.handoff_ambiguity_margin,
+            )
+            for owner, options in by_predecessor.items()
+        }
+        ambiguous_successors = {
+            owner for owner, choice in successor_choices.items() if choice is None
+        }
+        ambiguous_predecessors = {
+            owner for owner, choice in predecessor_choices.items() if choice is None
+        }
+        for owner, row in successors.items():
+            matches = predecessors[owner]
+            chosen_predecessor = successor_choices.get(owner)
+            if chosen_predecessor is not None and (
+                predecessor_choices.get(chosen_predecessor) == owner
+            ):
+                predecessor = next(
+                    chain
+                    for _cost, chain in matches
+                    if chain.owner == chosen_predecessor
+                )
+                current.pop(predecessor.owner, None)
+                current[owner] = _handoff_chain(
+                    predecessor,
+                    row,
+                    frame,
+                    self.policy.fill_evidence_window_frames,
+                )
+                continue
+            if not matches:
+                current[owner] = _new_chain(row, frame)
+                continue
+            if (
+                owner not in ambiguous_successors
+                and chosen_predecessor not in ambiguous_predecessors
+            ):
+                # A clear established parent selected another child.  This
+                # physical tracklet remains a separate provisional phase
+                # chain; it never inherits the parent's extrema.
+                current[owner] = _new_chain(row, frame)
+
+        ambiguous = bool(ambiguous_successors or ambiguous_predecessors)
+        if ambiguous:
+            involved = set(ambiguous_predecessors) | set(
+                ambiguous_successors
+            )
+            for successor in ambiguous_successors:
+                involved.update(
+                    chain.owner for _cost, chain in predecessors[successor]
+                )
+            for owner in involved:
+                current.pop(owner, None)
+            return current, True, "FILL_CHAIN_AMBIGUOUS"
+        if any(len(chain.owners) > 1 for chain in current.values()):
+            return current, False, "FILL_CHAIN_HANDOFF"
+        return current, False, "FILLING_TRACKLET"
+
+    def _compatible_handoff(
+        self,
+        chain: _FillChain,
+        row: _ObservedRow,
+        frame: int,
+    ) -> bool:
+        gap = frame - chain.last.frame
+        return bool(
+            1 <= gap <= self.policy.maximum_lost_frames + 1
+            and row.y <= chain.last.y + self.policy.maximum_jump_px * gap
+            and abs(row.y - chain.last.y)
+            <= self.policy.maximum_jump_px * gap
+        )
+
+    def _handoff_cost(
+        self,
+        chain: _FillChain,
+        row: _ObservedRow,
+        frame: int,
+    ) -> float:
+        gap = max(1, frame - chain.last.frame)
+        return abs(row.y - chain.last.y) / (
+            self.policy.maximum_jump_px * gap
+        )
+
+    def _fill_confirmation_profile(
+        self,
+        chain: _FillChain,
+    ) -> OilFillConfirmationProfile:
+        observations = chain.observations
+        if len(observations) < 3:
+            return OilFillConfirmationProfile.NONE
+        first = observations[0]
+        last = observations[-1]
+        relative = (
+            last.y - self.policy.geometry_top_y
+        ) / self.policy.geometry_height
+        deltas = tuple(
+            following.y - prior.y
+            for prior, following in zip(
+                observations,
+                observations[1:],
+            )
+        )
+        directional_agreement = (
+            sum(delta <= 0.0 for delta in deltas) / len(deltas)
+        )
+        geometry_confirmed = bool(
+            relative <= self.policy.entrance_band_ratio
+            and first.y - last.y
+            >= self.policy.geometry_height
+            * self.policy.fill_minimum_span_ratio
+            and directional_agreement
+            >= self.policy.minimum_directional_agreement
+        )
+        if not geometry_confirmed:
+            return OilFillConfirmationProfile.NONE
+        if any(item.independent_anchor for item in observations):
+            return OilFillConfirmationProfile.UNKNOWN_FILL_ANCHORED
+        lower_entrance = (
+            first.y - self.policy.geometry_top_y
+        ) / self.policy.geometry_height >= 1.0 - self.policy.entrance_band_ratio
+        strong_entrance_motion = any(
+            item.confirmation_profile
+            is TrackletConfirmationProfile.ENTRANCE_MOTION
+            and item.motion_support
+            >= self.policy.fill_minimum_motion_support
+            and item.motion_coverage
+            >= self.policy.fill_minimum_motion_coverage
+            for item in observations
+        )
+        if (
+            self.policy.empty_entrance_motion_enabled
+            and lower_entrance
+            and strong_entrance_motion
+        ):
+            return OilFillConfirmationProfile.EMPTY_ENTRANCE_MOTION
+        return OilFillConfirmationProfile.NONE
+
+    def _drain_release(self, row: _ObservedRow) -> bool:
+        relative = (
+            row.entrance_y - self.policy.geometry_top_y
+        ) / self.policy.geometry_height
+        minimum_progress = max(
+            4.0,
+            self.policy.geometry_height
+            * self.policy.drain_minimum_progress_ratio,
+        )
+        return bool(
+            _bounded_confirmed_observation(row.ref)
+            and not row.ref.tracklet_incompatible
+            and row.ref.tracklet_direction > 0
+            and row.ref.tracklet_net_progress_px >= minimum_progress
+            and row.ref.tracklet_directional_agreement
+            >= self.policy.drain_minimum_directional_agreement
+            and relative <= self.policy.drain_entrance_ratio
+            and row.ref.tracklet_material_conflict
+            < self.policy.material_conflict_limit
+            and row.current_material_conflict
+            < self.policy.material_conflict_limit
+        )
+
+    def _drain_successor(
+        self,
+        chain: _DrainChain,
+        row: _ObservedRow,
+        frame: int,
+    ) -> bool:
+        gap = frame - chain.last_frame
+        return bool(
+            1 <= gap <= self.policy.maximum_lost_frames + 1
+            and _bounded_confirmed_observation(row.ref)
+            and not row.ref.tracklet_incompatible
+            and row.ref.tracklet_direction > 0
+            and row.ref.tracklet_directional_agreement
+            >= self.policy.drain_minimum_directional_agreement
+            and row.ref.tracklet_material_conflict
+            < self.policy.material_conflict_limit
+            and row.current_material_conflict
+            < self.policy.material_conflict_limit
+            and row.y
+            >= chain.last_y
+            - self.policy.handoff_direction_reversal_tolerance_px
+            and abs(row.y - chain.last_y)
+            <= self.policy.maximum_jump_px * gap
+        )
+
+    def _drain_continuation(
+        self,
+        chain: _DrainChain,
+        row: _ObservedRow,
+        frame: int,
+    ) -> bool:
+        gap = frame - chain.last_frame
+        return bool(
+            1 <= gap <= self.policy.maximum_lost_frames + 1
+            and _bounded_confirmed_observation(row.ref)
+            and not row.ref.tracklet_incompatible
+            and row.ref.tracklet_direction > 0
+            and row.ref.tracklet_directional_agreement
+            >= self.policy.drain_minimum_directional_agreement
+            and row.ref.tracklet_material_conflict
+            < self.policy.material_conflict_limit
+            and row.current_material_conflict
+            < self.policy.material_conflict_limit
+            and row.y
+            >= chain.last_y
+            - self.policy.handoff_direction_reversal_tolerance_px
+            and abs(row.y - chain.last_y)
+            <= self.policy.maximum_jump_px * gap
+        )
+
+    def _drain_handoff_cost(
+        self,
+        chain: _DrainChain,
+        row: _ObservedRow,
+        frame: int,
+    ) -> float:
+        gap = max(1, frame - chain.last_frame)
+        return abs(row.y - chain.last_y) / (
+            self.policy.maximum_jump_px * gap
+        )
+
+    def _drain_phase_reentry(
+        self,
+        chain: _DrainChain,
+        row: _ObservedRow,
+    ) -> bool:
+        """Reobserve an established drain phase without joining track IDs.
+
+        A physical tracklet terminates after its bounded loss interval.  The
+        material phase does not: after a longer occlusion, a newly confirmed
+        downward row may become the phase owner only when its own evidence is
+        valid and it remains within one ordinary physical jump of the last
+        observed drain row.  This transfers phase ownership while preserving
+        both tracklet identities in the owner chain.
+        """
+
+        return bool(
+            _bounded_confirmed_observation(row.ref)
+            and not row.ref.tracklet_incompatible
+            and row.ref.tracklet_direction > 0
+            and row.ref.tracklet_directional_agreement
+            >= self.policy.drain_minimum_directional_agreement
+            and row.ref.tracklet_material_conflict
+            < self.policy.material_conflict_limit
+            and row.current_material_conflict
+            < self.policy.material_conflict_limit
+            and abs(row.y - chain.last_y) <= self.policy.maximum_jump_px
+        )
+
+    def _drain_phase_reentry_cost(
+        self,
+        chain: _DrainChain,
+        row: _ObservedRow,
+    ) -> float:
+        return abs(row.y - chain.last_y) / self.policy.maximum_jump_px
+
+    def _rows(
+        self,
+        layer: tuple[OilSequenceNode, ...],
+    ) -> tuple[_ObservedRow, ...]:
+        grouped: dict[tuple[str, str], list[OilSequenceNode]] = {}
+        for node in layer:
+            ref = node.candidate_ref
+            if node.kind != "oil" or ref is None or not ref.tracklet_id:
+                continue
+            grouped.setdefault(
+                (ref.tracklet_id, ref.row_hypothesis_id or ""),
+                [],
+            ).append(node)
+        rows = []
+        for (tracklet_id, row_id), members in grouped.items():
+            ordered = tuple(
+                sorted(
+                    members,
+                    key=lambda node: (
+                        -float(node.emission),
+                        float(node.y or math.inf),
+                        node.identity,
+                    ),
+                )
+            )
+            ys = tuple(float(node.y) for node in ordered if node.y is not None)
+            if not ys:
+                continue
+            assert ordered[0].candidate_ref is not None
+            rows.append(
+                _ObservedRow(
+                    tracklet_id=tracklet_id,
+                    row_hypothesis_id=row_id,
+                    y=float(median(ys)),
+                    entrance_y=min(ys),
+                    ref=ordered[0].candidate_ref,
+                    nodes=ordered,
+                    current_material_conflict=min(
+                        (
+                            node.candidate_ref.evidence.material_texture_conflict
+                            for node in ordered
+                            if node.candidate_ref is not None
+                            and node.candidate_ref.evidence.availability.material_texture
+                        ),
+                        default=1.0,
+                    ),
+                    current_material_veto=any(
+                        node.candidate_ref is not None
+                        and node.candidate_ref.evidence.material_path
+                        and node.candidate_ref.evidence.material_texture_conflict
+                        >= self.policy.material_conflict_limit
+                        for node in ordered
+                    ),
+                )
+            )
+        return tuple(
+            sorted(rows, key=lambda row: (row.y, row.tracklet_id, row.row_hypothesis_id))
+        )
+
+
+def _new_chain(row: _ObservedRow, frame: int) -> _FillChain:
+    return _FillChain(
+        owner=row.tracklet_id,
+        owners=(row.tracklet_id,),
+        observations=(_fill_observation(row, frame),),
+    )
+
+
+def _append_unique_owner(
+    owners: tuple[str, ...],
+    owner: str,
+) -> tuple[str, ...]:
+    if owner in owners:
+        return owners
+    return owners + (owner,)
+
+
+def _prepend_owner(chain: _FillChain, owner: str) -> _FillChain:
+    if owner in chain.owners:
+        return chain
+    return _FillChain(
+        owner=chain.owner,
+        owners=(owner,) + chain.owners,
+        observations=chain.observations,
+    )
+
+
+def _extend_chain(
+    chain: _FillChain,
+    row: _ObservedRow,
+    frame: int,
+    window_frames: int,
+) -> _FillChain:
+    return _FillChain(
+        owner=chain.owner,
+        owners=chain.owners,
+        observations=_bounded_fill_observations(
+            chain.observations + (_fill_observation(row, frame),),
+            frame,
+            window_frames,
+        ),
+    )
+
+
+def _handoff_chain(
+    chain: _FillChain,
+    row: _ObservedRow,
+    frame: int,
+    window_frames: int,
+) -> _FillChain:
+    return _FillChain(
+        owner=row.tracklet_id,
+        owners=chain.owners + (row.tracklet_id,),
+        observations=_bounded_fill_observations(
+            chain.observations + (_fill_observation(row, frame),),
+            frame,
+            window_frames,
+        ),
+    )
+
+
+def _fill_observation(
+    row: _ObservedRow,
+    frame: int,
+) -> _FillObservation:
+    return _FillObservation(
+        frame=frame,
+        y=row.y,
+        material_veto=row.current_material_veto,
+        independent_anchor=any(
+            node.candidate_ref is not None
+            and node.candidate_ref.authority
+            is OilCandidateAuthority.ANCHOR_ELIGIBLE
+            for node in row.nodes
+        ),
+        confirmation_profile=row.ref.tracklet_confirmation_profile,
+        motion_support=max(
+            (
+                node.candidate_ref.tracklet_motion_support
+                for node in row.nodes
+                if node.candidate_ref is not None
+            ),
+            default=0.0,
+        ),
+        motion_coverage=max(
+            (
+                node.candidate_ref.tracklet_motion_coverage
+                for node in row.nodes
+                if node.candidate_ref is not None
+            ),
+            default=0.0,
+        ),
+    )
+
+
+def _bounded_fill_observations(
+    observations: tuple[_FillObservation, ...],
+    frame: int,
+    window_frames: int,
+) -> tuple[_FillObservation, ...]:
+    first_frame = frame - max(3, window_frames) + 1
+    return tuple(
+        observation
+        for observation in observations
+        if observation.frame >= first_frame
+    )
+
+
+def _selected_owner_chain(
+    chains: dict[str, _FillChain],
+    allowed: frozenset[str] | None,
+) -> tuple[str, ...]:
+    if allowed is not None and len(allowed) == 1:
+        owner = next(iter(allowed))
+        if owner in chains:
+            return chains[owner].owners
+    if len(chains) == 1:
+        return next(iter(chains.values())).owners
+    return ()
+
+
+def _bounded_confirmed_observation(ref: OilCandidateRef) -> bool:
+    """Accept a witness retro-admitted by one bounded confirmed tracklet.
+
+    A witness frame remains lifecycle ``PROVISIONAL`` because confirmation
+    happens later in the bounded window.  Its non-NONE confirmation profile is
+    the explicit proof that the physical tracklet did subsequently confirm; a
+    truly provisional observation has no such profile and cannot move material
+    phase state.
+    """
+
+    return bool(
+        ref.tracklet_admitted
+        and ref.tracklet_confirmation_profile
+        is not TrackletConfirmationProfile.NONE
+    )
+
+
+def _tracklet_maturity(ref: OilCandidateRef) -> int:
+    return {
+        TrackletLifecycle.PROVISIONAL: 0,
+        TrackletLifecycle.CONFIRMED: 1,
+        TrackletLifecycle.CONTINUING: 2,
+        TrackletLifecycle.LOST: -1,
+        TrackletLifecycle.TERMINATED: -1,
+    }[ref.tracklet_lifecycle]
+
+
+def _clear_choice(
+    options: tuple[tuple[float, str], ...],
+    ambiguity_margin: float,
+) -> str | None:
+    if not options:
+        return None
+    ordered = tuple(sorted(options, key=lambda item: (item[0], item[1])))
+    if len(ordered) > 1 and (
+        ordered[1][0] - ordered[0][0] <= ambiguity_margin
+    ):
+        return None
+    return ordered[0][1]

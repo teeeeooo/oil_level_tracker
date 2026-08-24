@@ -1,0 +1,1051 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, replace
+import math
+from statistics import median
+
+from oil_tracker.domain.enums import InitialObservationState
+
+from .oil_candidate_authority import OilCandidateAuthority
+from .oil_sequence_types import (
+    OilCandidateRef,
+    TrackletConfirmationProfile,
+    TrackletLifecycle,
+)
+
+
+@dataclass(frozen=True)
+class DirectedTrackletPolicy:
+    geometry_top_y: float
+    geometry_height: float
+    maximum_jump_px: float
+    row_hypothesis_tolerance_px: float
+    maximum_lost_frames: int
+    confirmation_window_frames: int
+    confirmation_min_observations: int
+    confirmation_min_anchor_frames: int
+    confirmation_min_progress_px: float
+    confirmation_min_directional_agreement: float
+    confirmation_min_motion_support: float
+    confirmation_min_motion_coverage: float
+    continuation_grace_frames: int
+    continuation_min_motion_energy: float
+    continuation_min_motion_coverage: float
+    entrance_band_ratio: float
+    initial_state: InitialObservationState | None
+    ambiguity_margin: float = 0.08
+
+    def __post_init__(self) -> None:
+        if not math.isfinite(self.geometry_top_y):
+            raise ValueError("Tracklet geometry top must be finite.")
+        if not math.isfinite(self.geometry_height) or self.geometry_height <= 0.0:
+            raise ValueError("Tracklet geometry height must be finite and positive.")
+        if self.maximum_jump_px <= 0.0:
+            raise ValueError("Tracklet maximum jump must be positive.")
+        if self.row_hypothesis_tolerance_px <= 0.0:
+            raise ValueError("Tracklet row tolerance must be positive.")
+        if self.maximum_lost_frames < 0:
+            raise ValueError("Tracklet lost-frame bound cannot be negative.")
+        if self.confirmation_window_frames < 2:
+            raise ValueError("Tracklet confirmation window must contain two frames.")
+        if self.confirmation_min_observations < 2:
+            raise ValueError("Tracklet confirmation needs two observations.")
+        if self.confirmation_min_observations > self.confirmation_window_frames:
+            raise ValueError("Tracklet observations must fit the confirmation window.")
+        if self.confirmation_min_anchor_frames < 1:
+            raise ValueError("Tracklet confirmation needs a positive anchor count.")
+        for name, value in (
+            (
+                "directional agreement",
+                self.confirmation_min_directional_agreement,
+            ),
+            ("motion coverage", self.confirmation_min_motion_coverage),
+            ("continuation coverage", self.continuation_min_motion_coverage),
+            ("entrance band ratio", self.entrance_band_ratio),
+        ):
+            if not 0.0 <= value <= 1.0:
+                raise ValueError(f"Tracklet {name} must be in [0, 1].")
+        for name, value in (
+            ("confirmation progress", self.confirmation_min_progress_px),
+            ("confirmation motion", self.confirmation_min_motion_support),
+            ("continuation motion", self.continuation_min_motion_energy),
+            ("ambiguity margin", self.ambiguity_margin),
+        ):
+            if value < 0.0 or not math.isfinite(value):
+                raise ValueError(f"Tracklet {name} must be finite and non-negative.")
+        if self.continuation_grace_frames < 0:
+            raise ValueError("Tracklet continuation grace cannot be negative.")
+
+
+@dataclass(frozen=True)
+class TrackletSummary:
+    tracklet_id: str
+    phase_class: str
+    start_frame: int
+    last_observed_frame: int
+    observation_count: int
+    confirmed_frame: int | None
+    confirmation_profile: TrackletConfirmationProfile
+    final_lifecycle: TrackletLifecycle
+    lifecycle_history: tuple[TrackletLifecycle, ...]
+    lost_event_count: int
+    termination_reason: str
+
+
+@dataclass(frozen=True)
+class DirectedTrackletResult:
+    refs_by_frame: tuple[tuple[OilCandidateRef, ...], ...]
+    summaries: tuple[TrackletSummary, ...]
+    incompatible_frames: frozenset[int]
+    hypothesis_count: int
+    comparison_count: int
+    maximum_active_tracklets: int
+    maximum_eligible_refs_per_frame: int
+    maximum_hypotheses_per_frame: int
+    lost_event_count: int
+    terminated_tracklet_count: int
+
+    @property
+    def confirmed_tracklet_count(self) -> int:
+        return sum(item.confirmed_frame is not None for item in self.summaries)
+
+    @property
+    def provisional_tracklet_count(self) -> int:
+        return sum(item.confirmed_frame is None for item in self.summaries)
+
+
+@dataclass(frozen=True)
+class _RowHypothesis:
+    identity: str
+    frame_offset: int
+    representation_classes: frozenset[str]
+    source_families: frozenset[str]
+    y: float
+    members: tuple[OilCandidateRef, ...]
+    local_quality: float
+    anchor_signal: bool
+    has_physical_proposal: bool
+    motion_support: float
+    motion_coverage: float
+    material_conflict: float
+
+
+@dataclass
+class _TrackObservation:
+    hypothesis: _RowHypothesis
+    incompatible: bool = False
+    lifecycle: TrackletLifecycle = TrackletLifecycle.PROVISIONAL
+    admitted: bool = False
+    confirmation_profile: TrackletConfirmationProfile = (
+        TrackletConfirmationProfile.NONE
+    )
+    confirmation_support: float = 0.0
+    net_progress_px: float = 0.0
+    direction: int = 0
+    directional_agreement: float = 0.0
+    motion_support: float = 0.0
+    motion_energy: float = 0.0
+    motion_coverage: float = 0.0
+    material_conflict: float = 0.0
+    failure_reason: str = "PROVISIONAL_TRACKLET"
+
+
+@dataclass(eq=False)
+class _TrackState:
+    identity: str
+    representation_classes: frozenset[str]
+    observations: list[_TrackObservation]
+    lost_event_count: int = 0
+    confirmed: bool = False
+    terminated: bool = False
+    termination_reason: str = ""
+
+    @property
+    def last(self) -> _TrackObservation:
+        return self.observations[-1]
+
+
+@dataclass(frozen=True)
+class _WindowEvidence:
+    start_observation: int
+    observation_count: int
+    net_progress_px: float
+    direction: int
+    directional_agreement: float
+    motion_support: float
+    motion_energy: float
+    motion_coverage: float
+    material_conflict: float
+    anchor_frames: int
+    entrance_origin: bool
+    profile: TrackletConfirmationProfile
+    confirmation_support: float
+
+
+class DirectedInterfaceTrackletBuilder:
+    """Build bounded directed identities without merge/split inheritance.
+
+    Candidate connectivity is not physical identity. This owner first groups
+    same-frame alternatives that describe one row, then performs deterministic
+    one-to-one matching against only the bounded active tracklet set. Ambiguous
+    many-to-one or one-to-many matches terminate the affected identity and mark
+    the branch frame incompatible instead of silently hopping branches.
+    """
+
+    def __init__(self, policy: DirectedTrackletPolicy) -> None:
+        self.policy = policy
+
+    def resolve(
+        self,
+        refs_by_frame: tuple[tuple[OilCandidateRef, ...], ...],
+    ) -> DirectedTrackletResult:
+        tracks: list[_TrackState] = []
+        active: list[_TrackState] = []
+        incompatible_frames: set[int] = set()
+        hypothesis_count = 0
+        comparison_count = 0
+        maximum_active = 0
+        maximum_eligible_refs = 0
+        maximum_hypotheses = 0
+        next_tracklet = 0
+
+        for frame_offset, refs in enumerate(refs_by_frame):
+            hypotheses = self._row_hypotheses(frame_offset, refs)
+            hypothesis_count += len(hypotheses)
+            maximum_eligible_refs = max(
+                maximum_eligible_refs,
+                sum(
+                    ref.authority
+                    >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
+                    for ref in refs
+                ),
+            )
+            maximum_hypotheses = max(maximum_hypotheses, len(hypotheses))
+            retained = [
+                track
+                for track in active
+                if not track.terminated
+                and frame_offset
+                - track.last.hypothesis.frame_offset
+                - 1
+                <= self.policy.maximum_lost_frames
+            ]
+            for track in active:
+                if track not in retained and not track.terminated:
+                    track.terminated = True
+                    track.termination_reason = "LOST_BOUND_EXCEEDED"
+            active = retained
+            maximum_active = max(maximum_active, len(active))
+
+            pairs: list[tuple[float, str, str, _TrackState, _RowHypothesis]] = []
+            for track in active:
+                for hypothesis in hypotheses:
+                    comparison_count += 1
+                    cost = self._match_cost(track, hypothesis)
+                    if cost is None:
+                        continue
+                    pairs.append(
+                        (
+                            cost,
+                            track.identity,
+                            hypothesis.identity,
+                            track,
+                            hypothesis,
+                        )
+                    )
+
+            conflicted_tracks, conflicted_hypotheses = self._ambiguities(pairs)
+            if conflicted_tracks or conflicted_hypotheses:
+                incompatible_frames.add(frame_offset)
+            for track in conflicted_tracks:
+                track.terminated = True
+                track.termination_reason = "AMBIGUOUS_BRANCH"
+
+            assigned_tracks: set[str] = set()
+            assigned_hypotheses: set[str] = set()
+            ordered_pairs = sorted(
+                pairs,
+                key=lambda item: (
+                    -int(self._established(item[3])),
+                    item[0],
+                    item[1],
+                    item[2],
+                ),
+            )
+            for _cost, _track_id, _hypothesis_id, track, hypothesis in ordered_pairs:
+                if (
+                    track.terminated
+                    or track.identity in assigned_tracks
+                    or hypothesis.identity in assigned_hypotheses
+                    or hypothesis.identity in conflicted_hypotheses
+                ):
+                    continue
+                track.observations.append(_TrackObservation(hypothesis))
+                track.representation_classes = (
+                    track.representation_classes
+                    | hypothesis.representation_classes
+                )
+                self._refresh_confirmation(track)
+                assigned_tracks.add(track.identity)
+                assigned_hypotheses.add(hypothesis.identity)
+
+            for track in active:
+                if track.terminated or track.identity in assigned_tracks:
+                    continue
+                track.lost_event_count += 1
+
+            for hypothesis in hypotheses:
+                if hypothesis.identity in assigned_hypotheses:
+                    continue
+                identity = (
+                    f"oil-tracklet:{frame_offset:06d}:{next_tracklet:04d}"
+                )
+                next_tracklet += 1
+                track = _TrackState(
+                    identity=identity,
+                    representation_classes=(
+                        hypothesis.representation_classes
+                    ),
+                    observations=[
+                        _TrackObservation(
+                            hypothesis,
+                            incompatible=(
+                                hypothesis.identity in conflicted_hypotheses
+                            ),
+                            failure_reason=(
+                                "INCOMPATIBLE_BRANCH"
+                                if hypothesis.identity in conflicted_hypotheses
+                                else "PROVISIONAL_TRACKLET"
+                            ),
+                        )
+                    ],
+                )
+                tracks.append(track)
+                active.append(track)
+            active = [track for track in active if not track.terminated]
+            maximum_active = max(maximum_active, len(active))
+
+        for track in active:
+            if not track.terminated:
+                track.terminated = True
+                track.termination_reason = "WINDOW_END"
+        for track in tracks:
+            self._finalize_track(track)
+
+        updates: dict[tuple[int, int], OilCandidateRef] = {}
+        for track in tracks:
+            for observation in track.observations:
+                hypothesis = observation.hypothesis
+                for member in hypothesis.members:
+                    key = (member.frame_offset, member.candidate_offset)
+                    updates[key] = replace(
+                        member,
+                        cluster_support=float(
+                            observation.admitted
+                            and member.authority
+                            is OilCandidateAuthority.ANCHOR_ELIGIBLE
+                        ),
+                        trajectory_support=float(observation.admitted),
+                        tracklet_id=track.identity,
+                        row_hypothesis_id=hypothesis.identity,
+                        tracklet_lifecycle=observation.lifecycle,
+                        tracklet_admitted=observation.admitted,
+                        tracklet_confirmation_profile=(
+                            observation.confirmation_profile
+                        ),
+                        tracklet_confirmation_support=(
+                            observation.confirmation_support
+                        ),
+                        tracklet_net_progress_px=observation.net_progress_px,
+                        tracklet_direction=observation.direction,
+                        tracklet_directional_agreement=(
+                            observation.directional_agreement
+                        ),
+                        tracklet_motion_support=observation.motion_support,
+                        tracklet_motion_coverage=observation.motion_coverage,
+                        tracklet_material_conflict=(
+                            observation.material_conflict
+                        ),
+                        tracklet_incompatible=observation.incompatible,
+                        tracklet_failure_reason=observation.failure_reason,
+                    )
+
+        output = tuple(
+            tuple(
+                updates.get(
+                    (ref.frame_offset, ref.candidate_offset),
+                    replace(
+                        ref,
+                        tracklet_failure_reason="INSUFFICIENT_AUTHORITY",
+                    ),
+                )
+                for ref in refs
+            )
+            for refs in refs_by_frame
+        )
+        summaries = tuple(
+            TrackletSummary(
+                tracklet_id=track.identity,
+                phase_class="+".join(sorted(track.representation_classes)),
+                start_frame=track.observations[0].hypothesis.frame_offset,
+                last_observed_frame=track.last.hypothesis.frame_offset,
+                observation_count=len(track.observations),
+                confirmed_frame=next(
+                    (
+                        item.hypothesis.frame_offset
+                        for item in track.observations
+                        if item.lifecycle is TrackletLifecycle.CONFIRMED
+                    ),
+                    None,
+                ),
+                confirmation_profile=next(
+                    (
+                        item.confirmation_profile
+                        for item in track.observations
+                        if item.confirmation_profile
+                        is not TrackletConfirmationProfile.NONE
+                    ),
+                    TrackletConfirmationProfile.NONE,
+                ),
+                final_lifecycle=TrackletLifecycle.TERMINATED,
+                lifecycle_history=_lifecycle_history(track),
+                lost_event_count=track.lost_event_count,
+                termination_reason=track.termination_reason,
+            )
+            for track in tracks
+        )
+        return DirectedTrackletResult(
+            refs_by_frame=output,
+            summaries=summaries,
+            incompatible_frames=frozenset(incompatible_frames),
+            hypothesis_count=hypothesis_count,
+            comparison_count=comparison_count,
+            maximum_active_tracklets=maximum_active,
+            maximum_eligible_refs_per_frame=maximum_eligible_refs,
+            maximum_hypotheses_per_frame=maximum_hypotheses,
+            lost_event_count=sum(item.lost_event_count for item in tracks),
+            terminated_tracklet_count=len(tracks),
+        )
+
+    def _row_hypotheses(
+        self,
+        frame_offset: int,
+        refs: tuple[OilCandidateRef, ...],
+    ) -> tuple[_RowHypothesis, ...]:
+        eligible = sorted(
+            (
+                ref
+                for ref in refs
+                if ref.authority
+                >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
+            ),
+            key=lambda ref: (
+                float(ref.candidate.y),
+                ref.candidate.source,
+                -ref.local_quality,
+                ref.candidate_offset,
+            ),
+        )
+        groups: list[list[OilCandidateRef]] = []
+        for ref in eligible:
+            if not groups:
+                groups.append([ref])
+                continue
+            group = groups[-1]
+            rows = tuple(float(item.candidate.y) for item in group)
+            span = max(max(rows), float(ref.candidate.y)) - min(
+                min(rows),
+                float(ref.candidate.y),
+            )
+            if span <= self.policy.row_hypothesis_tolerance_px:
+                group.append(ref)
+            else:
+                groups.append([ref])
+
+        hypotheses: list[_RowHypothesis] = []
+        for ordinal, members in enumerate(groups):
+            ordered = tuple(
+                sorted(
+                    members,
+                    key=lambda ref: (
+                        -int(ref.authority),
+                        -ref.local_quality,
+                        float(ref.candidate.y),
+                        ref.candidate.source,
+                        ref.candidate_offset,
+                    ),
+                )
+            )
+            hypotheses.append(
+                _RowHypothesis(
+                    identity=f"oil-row:{frame_offset:06d}:{ordinal:03d}",
+                    frame_offset=frame_offset,
+                    representation_classes=frozenset(
+                        _phase_class(ref) for ref in ordered
+                    ),
+                    source_families=frozenset(
+                        _source_family(ref.candidate.source)
+                        for ref in ordered
+                    ),
+                    y=float(median(float(ref.candidate.y) for ref in ordered)),
+                    members=ordered,
+                    local_quality=max(ref.local_quality for ref in ordered),
+                    anchor_signal=any(
+                        ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
+                        for ref in ordered
+                    ),
+                    has_physical_proposal=any(
+                        not ref.evidence.calibrated_high_recall
+                        for ref in ordered
+                    ),
+                    motion_support=max(
+                        ref.evidence.registered_motion for ref in ordered
+                    ),
+                    motion_coverage=max(
+                        ref.evidence.registered_motion_coverage
+                        for ref in ordered
+                    ),
+                    material_conflict=min(
+                        (
+                            ref.evidence.material_texture_conflict
+                            for ref in ordered
+                            if ref.evidence.availability.material_texture
+                        ),
+                        default=0.0,
+                    ),
+                )
+            )
+        return tuple(hypotheses)
+
+    def _match_cost(
+        self,
+        track: _TrackState,
+        hypothesis: _RowHypothesis,
+    ) -> float | None:
+        last = track.last.hypothesis
+        gap = hypothesis.frame_offset - last.frame_offset
+        if gap < 1 or gap - 1 > self.policy.maximum_lost_frames:
+            return None
+        maximum = self.policy.maximum_jump_px * gap
+        position_delta = hypothesis.y - last.y
+        if abs(position_delta) > maximum:
+            return None
+        velocity = _track_velocity(track)
+        expected = last.y + velocity * gap
+        absolute_prediction_error = abs(hypothesis.y - expected)
+        if absolute_prediction_error > self.policy.maximum_jump_px:
+            return None
+        representation_overlap = bool(
+            last.representation_classes
+            & hypothesis.representation_classes
+        )
+        if not representation_overlap and not self._representation_bridge(
+            track,
+            hypothesis,
+            absolute_prediction_error=absolute_prediction_error,
+        ):
+            return None
+        prediction_error = absolute_prediction_error / maximum
+        position_error = abs(position_delta) / maximum
+        reversal = 0.0
+        if (
+            abs(velocity) >= self.policy.row_hypothesis_tolerance_px / 2.0
+            and abs(position_delta) >= self.policy.row_hypothesis_tolerance_px
+            and velocity * position_delta < 0.0
+        ):
+            reversal = 0.30
+        quality_relief = 0.04 * max(0.0, hypothesis.local_quality)
+        representation_penalty = 0.0 if representation_overlap else 0.05
+        return (
+            0.72 * prediction_error
+            + 0.28 * position_error
+            + reversal
+            + representation_penalty
+            - quality_relief
+        )
+
+    def _representation_bridge(
+        self,
+        track: _TrackState,
+        hypothesis: _RowHypothesis,
+        *,
+        absolute_prediction_error: float,
+    ) -> bool:
+        last_classes = track.last.hypothesis.representation_classes
+        current_classes = hypothesis.representation_classes
+        required = last_classes | current_classes
+        _start, recent = _bounded_observation_window(
+            track.observations,
+            len(track.observations) - 1,
+            self.policy.confirmation_window_frames,
+        )
+        if any(
+            required <= item.hypothesis.representation_classes
+            for item in recent
+        ):
+            return True
+        strict_geometry = absolute_prediction_error <= max(
+            1.0,
+            self.policy.row_hypothesis_tolerance_px / 3.0,
+        )
+        independent_witness = bool(
+            hypothesis.anchor_signal
+            and hypothesis.has_physical_proposal
+            and hypothesis.motion_support
+            >= self.policy.confirmation_min_motion_support
+            and hypothesis.motion_coverage
+            >= self.policy.confirmation_min_motion_coverage
+        )
+        shared_provenance = bool(
+            track.last.hypothesis.source_families
+            & hypothesis.source_families
+        )
+        return strict_geometry and independent_witness and shared_provenance
+
+    def _ambiguities(
+        self,
+        pairs: list[tuple[float, str, str, _TrackState, _RowHypothesis]],
+    ) -> tuple[set[_TrackState], set[str]]:
+        by_hypothesis: dict[str, list[tuple[float, _TrackState, _RowHypothesis]]] = {}
+        for cost, _track_id, _hypothesis_id, track, hypothesis in pairs:
+            by_hypothesis.setdefault(hypothesis.identity, []).append(
+                (cost, track, hypothesis)
+            )
+        conflicted_track_ids: set[str] = set()
+        conflicted_hypotheses: set[str] = set()
+        for values in by_hypothesis.values():
+            established = tuple(
+                item for item in values if self._established(item[1])
+            )
+            ordered = sorted(
+                established,
+                key=lambda item: (item[0], item[1].identity),
+            )
+            if len(ordered) < 2:
+                continue
+            first, second = ordered[:2]
+            if second[0] - first[0] <= self.policy.ambiguity_margin:
+                conflicted_track_ids.update((first[1].identity, second[1].identity))
+                conflicted_hypotheses.add(first[2].identity)
+        tracks = {
+            track
+            for values in by_hypothesis.values()
+            for _cost, track, _hypothesis in values
+            if track.identity in conflicted_track_ids
+        }
+        return tracks, conflicted_hypotheses
+
+    def _established(self, track: _TrackState) -> bool:
+        return track.confirmed
+
+    def _refresh_confirmation(self, track: _TrackState) -> None:
+        if track.confirmed:
+            return
+        evidence = self._confirmation_evidence(
+            track.observations,
+            len(track.observations) - 1,
+        )
+        track.confirmed = (
+            evidence.profile is not TrackletConfirmationProfile.NONE
+        )
+
+    def _finalize_track(self, track: _TrackState) -> None:
+        confirmation_offset: int | None = None
+        witness: _WindowEvidence | None = None
+        for offset in range(len(track.observations)):
+            evidence = self._confirmation_evidence(track.observations, offset)
+            if evidence.profile is TrackletConfirmationProfile.NONE:
+                continue
+            confirmation_offset = offset
+            witness = evidence
+            break
+
+        if confirmation_offset is None or witness is None:
+            reason = self._track_failure_reason(track.observations)
+            for observation in track.observations:
+                if not observation.incompatible:
+                    observation.failure_reason = reason
+            return
+
+        witness_offsets = range(
+            witness.start_observation,
+            confirmation_offset + 1,
+        )
+        for offset in witness_offsets:
+            observation = track.observations[offset]
+            observation.admitted = not observation.incompatible
+            observation.confirmation_profile = witness.profile
+            observation.confirmation_support = witness.confirmation_support
+            observation.net_progress_px = witness.net_progress_px
+            observation.direction = witness.direction
+            observation.directional_agreement = witness.directional_agreement
+            observation.motion_support = witness.motion_support
+            observation.motion_energy = witness.motion_energy
+            observation.motion_coverage = witness.motion_coverage
+            observation.material_conflict = witness.material_conflict
+            observation.failure_reason = (
+                "INCOMPATIBLE_BRANCH"
+                if observation.incompatible
+                else ""
+            )
+        track.observations[confirmation_offset].lifecycle = (
+            TrackletLifecycle.CONFIRMED
+        )
+
+        last_anchor_frame = max(
+            (
+                item.hypothesis.frame_offset
+                for item in track.observations[: confirmation_offset + 1]
+                if item.hypothesis.anchor_signal
+            ),
+            default=track.observations[confirmation_offset].hypothesis.frame_offset,
+        )
+        anchor_frames = tuple(
+            item.hypothesis.frame_offset
+            for item in track.observations[confirmation_offset + 1 :]
+            if item.hypothesis.anchor_signal
+        )
+        for offset in range(confirmation_offset + 1, len(track.observations)):
+            observation = track.observations[offset]
+            observation.lifecycle = TrackletLifecycle.CONTINUING
+            if observation.incompatible:
+                observation.failure_reason = "INCOMPATIBLE_BRANCH"
+                continue
+            if observation.hypothesis.anchor_signal:
+                last_anchor_frame = observation.hypothesis.frame_offset
+            _start, recent = _bounded_observation_window(
+                track.observations,
+                offset,
+                self.policy.confirmation_window_frames,
+            )
+            motion_energy = _motion_energy(recent)
+            motion_support = _motion_support(recent)
+            motion_coverage = _motion_coverage(recent)
+            within_anchor_grace = (
+                observation.hypothesis.frame_offset - last_anchor_frame
+                <= self.policy.continuation_grace_frames
+            )
+            following_anchor = next(
+                (
+                    frame
+                    for frame in anchor_frames
+                    if frame >= observation.hypothesis.frame_offset
+                ),
+                None,
+            )
+            bounded_anchor_corridor = bool(
+                following_anchor is not None
+                and observation.hypothesis.frame_offset - last_anchor_frame
+                < self.policy.confirmation_window_frames
+                and following_anchor - observation.hypothesis.frame_offset
+                < self.policy.confirmation_window_frames
+            )
+            aggregate_motion = (
+                motion_energy
+                >= self.policy.continuation_min_motion_energy
+                and motion_coverage
+                >= self.policy.continuation_min_motion_coverage
+            )
+            observation.admitted = (
+                within_anchor_grace
+                or bounded_anchor_corridor
+                or aggregate_motion
+            )
+            observation.confirmation_profile = witness.profile
+            observation.confirmation_support = witness.confirmation_support
+            observation.net_progress_px = witness.net_progress_px
+            observation.direction = witness.direction
+            observation.directional_agreement = witness.directional_agreement
+            observation.motion_support = motion_support
+            observation.motion_energy = motion_energy
+            observation.motion_coverage = motion_coverage
+            observation.material_conflict = witness.material_conflict
+            observation.failure_reason = (
+                "" if observation.admitted else "CONTINUATION_EVIDENCE_EXPIRED"
+            )
+
+    def _confirmation_evidence(
+        self,
+        observations: list[_TrackObservation],
+        end_offset: int,
+    ) -> _WindowEvidence:
+        start_offset, bounded = _bounded_observation_window(
+            observations,
+            end_offset,
+            self.policy.confirmation_window_frames,
+        )
+        valid = tuple(item for item in bounded if not item.incompatible)
+        if len(valid) < self.policy.confirmation_min_observations:
+            return _empty_window(start_offset, len(valid))
+        first = valid[0].hypothesis
+        last = valid[-1].hypothesis
+        deltas = tuple(
+            following.hypothesis.y - prior.hypothesis.y
+            for prior, following in zip(valid, valid[1:])
+        )
+        motion_energy = _motion_energy(valid)
+        motion_support = _motion_support(valid)
+        motion_coverage = _motion_coverage(valid)
+        material_conflict = _material_conflict(valid)
+        anchor_frames = sum(item.hypothesis.anchor_signal for item in valid)
+        physical_proposal = any(
+            item.hypothesis.has_physical_proposal for item in valid
+        )
+        state = self.policy.initial_state
+        state_direction = _initial_direction(state)
+        if state_direction < 0:
+            net_progress = first.y - last.y
+            observed_direction = state_direction
+            directional = sum(delta <= 0.0 for delta in deltas) / len(deltas)
+        elif state_direction > 0:
+            net_progress = last.y - first.y
+            observed_direction = state_direction
+            directional = sum(delta >= 0.0 for delta in deltas) / len(deltas)
+        else:
+            signed = last.y - first.y
+            net_progress = abs(signed)
+            observed_direction = (
+                -1 if signed < 0.0 else (1 if signed > 0.0 else 0)
+            )
+            directional = max(
+                sum(delta <= 0.0 for delta in deltas),
+                sum(delta >= 0.0 for delta in deltas),
+            ) / len(deltas)
+        entrance_origin = _entrance_origin(first.y, state, self.policy)
+        motion_witness = (
+            motion_support >= self.policy.confirmation_min_motion_support
+            and motion_coverage >= self.policy.confirmation_min_motion_coverage
+        )
+        anchor_witness = (
+            anchor_frames >= self.policy.confirmation_min_anchor_frames
+        )
+
+        profile = TrackletConfirmationProfile.NONE
+        if state_direction != 0:
+            if (
+                entrance_origin
+                and net_progress >= self.policy.confirmation_min_progress_px
+                and directional
+                >= self.policy.confirmation_min_directional_agreement
+                and (motion_witness or anchor_witness)
+                and physical_proposal
+            ):
+                profile = TrackletConfirmationProfile.ENTRANCE_MOTION
+        elif anchor_witness:
+            profile = TrackletConfirmationProfile.ANCHOR_CORRIDOR
+        elif (
+            net_progress >= self.policy.confirmation_min_progress_px
+            and directional >= self.policy.confirmation_min_directional_agreement
+            and anchor_frames >= 1
+            and physical_proposal
+        ):
+            profile = TrackletConfirmationProfile.ANCHOR_TRAJECTORY
+        elif (
+            net_progress >= self.policy.confirmation_min_progress_px
+            and directional >= self.policy.confirmation_min_directional_agreement
+            and motion_witness
+            and physical_proposal
+        ):
+            profile = TrackletConfirmationProfile.MOTION_TRAJECTORY
+
+        progress_score = min(
+            1.0,
+            net_progress / max(1e-9, self.policy.confirmation_min_progress_px),
+        )
+        motion_score = min(
+            1.0,
+            motion_support
+            / max(1e-9, self.policy.confirmation_min_motion_support),
+        )
+        anchor_score = min(
+            1.0,
+            anchor_frames / max(1, self.policy.confirmation_min_anchor_frames),
+        )
+        support = min(
+            1.0,
+            0.32 * progress_score
+            + 0.28 * directional
+            + 0.22 * motion_score
+            + 0.18 * anchor_score,
+        )
+        return _WindowEvidence(
+            start_observation=start_offset,
+            observation_count=len(valid),
+            net_progress_px=net_progress,
+            direction=observed_direction,
+            directional_agreement=directional,
+            motion_support=motion_support,
+            motion_energy=motion_energy,
+            motion_coverage=motion_coverage,
+            material_conflict=material_conflict,
+            anchor_frames=anchor_frames,
+            entrance_origin=entrance_origin,
+            profile=profile,
+            confirmation_support=support,
+        )
+
+    def _track_failure_reason(
+        self,
+        observations: list[_TrackObservation],
+    ) -> str:
+        if any(item.incompatible for item in observations):
+            return "INCOMPATIBLE_BRANCH"
+        state = self.policy.initial_state
+        direction = _initial_direction(state)
+        if direction != 0 and not any(
+            _entrance_origin(item.hypothesis.y, state, self.policy)
+            for item in observations
+        ):
+            return "ENTRANCE_ORIGIN_MISSING"
+        maximum_progress = 0.0
+        maximum_directional = 0.0
+        maximum_motion = 0.0
+        maximum_coverage = 0.0
+        maximum_anchors = 0
+        for offset in range(len(observations)):
+            evidence = self._confirmation_evidence(observations, offset)
+            maximum_progress = max(maximum_progress, evidence.net_progress_px)
+            maximum_directional = max(
+                maximum_directional,
+                evidence.directional_agreement,
+            )
+            maximum_motion = max(maximum_motion, evidence.motion_support)
+            maximum_coverage = max(maximum_coverage, evidence.motion_coverage)
+            maximum_anchors = max(maximum_anchors, evidence.anchor_frames)
+        if maximum_progress < self.policy.confirmation_min_progress_px:
+            return "INSUFFICIENT_NET_PROGRESS"
+        if (
+            maximum_directional
+            < self.policy.confirmation_min_directional_agreement
+        ):
+            return "INSUFFICIENT_DIRECTIONAL_AGREEMENT"
+        if (
+            maximum_motion < self.policy.confirmation_min_motion_support
+            or maximum_coverage < self.policy.confirmation_min_motion_coverage
+        ) and maximum_anchors < self.policy.confirmation_min_anchor_frames:
+            return "INSUFFICIENT_MOTION_OR_ANCHOR_EVIDENCE"
+        return "PROVISIONAL_TRACKLET"
+
+
+def _phase_class(ref: OilCandidateRef) -> str:
+    return "ordered_lower" if ref.ordered_lower else "direct"
+
+
+def _source_family(source: str) -> str:
+    return str(source).split(":", 1)[0]
+
+
+def _track_velocity(track: _TrackState) -> float:
+    observations = track.observations[-4:]
+    velocities = []
+    for prior, following in zip(observations, observations[1:]):
+        gap = (
+            following.hypothesis.frame_offset
+            - prior.hypothesis.frame_offset
+        )
+        if gap > 0:
+            velocities.append(
+                (following.hypothesis.y - prior.hypothesis.y) / gap
+            )
+    return 0.0 if not velocities else float(median(velocities))
+
+
+def _bounded_observation_window(
+    observations: list[_TrackObservation],
+    end_offset: int,
+    window_frames: int,
+) -> tuple[int, tuple[_TrackObservation, ...]]:
+    end_frame = observations[end_offset].hypothesis.frame_offset
+    first_frame = end_frame - max(2, window_frames) + 1
+    start_offset = end_offset
+    while (
+        start_offset > 0
+        and observations[start_offset - 1].hypothesis.frame_offset
+        >= first_frame
+    ):
+        start_offset -= 1
+    return start_offset, tuple(observations[start_offset : end_offset + 1])
+
+
+def _lifecycle_history(track: _TrackState) -> tuple[TrackletLifecycle, ...]:
+    history: list[TrackletLifecycle] = [TrackletLifecycle.PROVISIONAL]
+    if any(
+        item.lifecycle is TrackletLifecycle.CONFIRMED
+        for item in track.observations
+    ):
+        history.append(TrackletLifecycle.CONFIRMED)
+    if any(
+        item.lifecycle is TrackletLifecycle.CONTINUING
+        for item in track.observations
+    ):
+        history.append(TrackletLifecycle.CONTINUING)
+    if track.lost_event_count:
+        history.append(TrackletLifecycle.LOST)
+    history.append(TrackletLifecycle.TERMINATED)
+    return tuple(history)
+
+
+def _motion_energy(observations) -> float:
+    values = tuple(
+        item.hypothesis.motion_support * item.hypothesis.motion_coverage
+        for item in observations
+    )
+    return 0.0 if not values else sum(values) / len(values)
+
+
+def _motion_support(observations) -> float:
+    values = tuple(item.hypothesis.motion_support for item in observations)
+    return 0.0 if not values else sum(values) / len(values)
+
+
+def _motion_coverage(observations) -> float:
+    values = tuple(item.hypothesis.motion_coverage for item in observations)
+    return 0.0 if not values else sum(values) / len(values)
+
+
+def _material_conflict(observations) -> float:
+    values = tuple(item.hypothesis.material_conflict for item in observations)
+    return 0.0 if not values else sum(values) / len(values)
+
+
+def _initial_direction(state: InitialObservationState | None) -> int:
+    if state is InitialObservationState.EMPTY_NO_INTERFACE:
+        return -1
+    if state is InitialObservationState.FULL_NO_INTERFACE:
+        return 1
+    return 0
+
+
+def _entrance_origin(
+    y: float,
+    state: InitialObservationState | None,
+    policy: DirectedTrackletPolicy,
+) -> bool:
+    top = policy.geometry_top_y
+    height = policy.geometry_height
+    if not math.isfinite(float(height)):
+        return False
+    relative = (float(y) - float(top)) / max(1.0, float(height))
+    if state is InitialObservationState.EMPTY_NO_INTERFACE:
+        return relative >= 1.0 - policy.entrance_band_ratio
+    if state is InitialObservationState.FULL_NO_INTERFACE:
+        return relative <= policy.entrance_band_ratio
+    return True
+
+
+def _empty_window(start: int, count: int) -> _WindowEvidence:
+    return _WindowEvidence(
+        start_observation=start,
+        observation_count=count,
+        net_progress_px=0.0,
+        direction=0,
+        directional_agreement=0.0,
+        motion_support=0.0,
+        motion_energy=0.0,
+        motion_coverage=0.0,
+        material_conflict=0.0,
+        anchor_frames=0,
+        entrance_origin=False,
+        profile=TrackletConfirmationProfile.NONE,
+        confirmation_support=0.0,
+    )

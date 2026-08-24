@@ -1,8 +1,15 @@
 from __future__ import annotations
 
 from oil_tracker.adapters.vision.oil_observation_resolver import (
+    OilObservationResolverConfig,
     OilObservationResolver,
+    _assert_publishable_path,
     _effective_track_opposition,
+    _oil_confidence,
+    _oil_emission,
+)
+from oil_tracker.adapters.vision.oil_interface_selector import (
+    build_interface_layers,
 )
 from oil_tracker.adapters.vision.oil_candidate_authority import OilCandidateAuthority
 from oil_tracker.adapters.vision.oil_phase_identity import OilPhaseIdentity
@@ -113,6 +120,30 @@ def _detection(
 
 def _oil_y(result) -> list[float | None]:
     return [item.raw_oil_air_level_y for item in result.detections]
+
+
+def _admitted_ref(
+    candidate: BoundaryCandidate,
+    *,
+    candidate_offset: int,
+    evidence: OilCandidateEvidence,
+    row_hypothesis_id: str = "row-0",
+) -> OilCandidateRef:
+    return OilCandidateRef(
+        frame_offset=0,
+        candidate_offset=candidate_offset,
+        candidate=candidate,
+        evidence=evidence,
+        local_quality=0.8,
+        authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+        initial_authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+        post_track_authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+        cluster_support=1.0,
+        trajectory_support=1.0,
+        tracklet_id="track-0",
+        row_hypothesis_id=row_hypothesis_id,
+        tracklet_admitted=True,
+    )
 
 
 def _calibrated_candidate(
@@ -286,6 +317,98 @@ def test_high_recall_static_or_competing_paths_remain_non_numeric() -> None:
 
     assert _oil_y(static_result) == [None] * 8
     assert _oil_y(competing_result) == [None] * 8
+
+
+def test_initial_empty_bottom_motion_confirms_without_false_upper_anchor() -> None:
+    upper = (90.0, 89.0, 88.0, 87.0, 86.0, 85.0)
+    lower = (205.0, 190.0, 175.0, 160.0, 145.0, 130.0)
+    detections = []
+    for index, (upper_y, lower_y) in enumerate(zip(upper, lower, strict=True)):
+        lower_candidate = _candidate(
+            lower_y,
+            boundary=0.46,
+            broad=0.50,
+            source="r6_material_path",
+            registered_oil_motion=0.90,
+            registered_oil_motion_coverage=0.80,
+        )
+        lower_candidate.features.update(
+            {
+                "r6_material_path": 1.0,
+                "material_path_sector_fraction": 1.0,
+            }
+        )
+        detections.append(
+            _detection(
+                index,
+                _candidate(
+                    upper_y,
+                    boundary=0.82,
+                    broad=0.82,
+                    source="false-upper-anchor",
+                ),
+                lower_candidate,
+                ambiguity=0.20,
+            )
+        )
+
+    result = OilObservationResolver().resolve(
+        detections,
+        glass_config(),
+        InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert _oil_y(result) == list(lower)
+    for detection in result.detections:
+        upper_candidate, lower_candidate = detection.candidates
+        assert upper_candidate.features["sequence_final_authority_tier"] == float(
+            OilCandidateAuthority.ANCHOR_ELIGIBLE
+        )
+        assert upper_candidate.features["sequence_tracklet_admitted"] == 0.0
+        assert lower_candidate.features["sequence_final_authority_tier"] == float(
+            OilCandidateAuthority.CONTINUATION_ELIGIBLE
+        )
+        assert lower_candidate.features["sequence_tracklet_admitted"] == 1.0
+        assert (
+            lower_candidate.features["sequence_tracklet_confirmation_profile"]
+            == "entrance_motion"
+        )
+        assert (
+            upper_candidate.features["sequence_tracklet_id"]
+            != lower_candidate.features["sequence_tracklet_id"]
+        )
+
+
+def test_initial_empty_stationary_lower_structure_remains_provisional() -> None:
+    detections = []
+    for index, y in enumerate((190.0, 191.0, 190.0, 191.0, 190.0, 191.0)):
+        candidate = _candidate(
+            y,
+            boundary=0.46,
+            broad=0.50,
+            source="r6_material_path",
+        )
+        candidate.features.update(
+            {
+                "r6_material_path": 1.0,
+                "material_path_sector_fraction": 1.0,
+            }
+        )
+        detections.append(_detection(index, candidate, ambiguity=0.20))
+
+    result = OilObservationResolver().resolve(
+        detections,
+        glass_config(),
+        InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert _oil_y(result) == [None] * len(detections)
+    assert result.diagnostics.confirmed_tracklet_count == 0
+    assert all(
+        detection.candidates[0].features["sequence_tracklet_failure_reason"]
+        == "INSUFFICIENT_NET_PROGRESS"
+        for detection in result.detections
+    )
 
 
 def test_high_recall_path_does_not_compete_with_qualified_path() -> None:
@@ -991,9 +1114,11 @@ def test_registered_oil_motion_extends_anchor_backed_material_continuation() -> 
     result = OilObservationResolver().resolve(tuple(detections), glass_config())
 
     assert _oil_y(result) == [170.0 - index * 4.0 for index in range(8)]
+    assert "R16_TRACKLET_WITNESS" in result.detections[0].flags
+    assert "R16_TRACKLET_CONFIRMED" in result.detections[3].flags
     assert all(
-        "R7_OIL_CONTINUATION" in item.flags
-        for item in result.detections[:5]
+        "R16_TRACKLET_CONTINUING" in item.flags
+        for item in result.detections[4:6]
     )
 
 
@@ -1143,11 +1268,62 @@ def test_completed_fill_blocks_contiguous_lower_material_cap_until_real_gap() ->
 
     result = OilObservationResolver().resolve(tuple(detections), glass)
 
-    # The next incompatible component must be preceded by UNKNOWN; the global
-    # path may place that boundary gap on the last rising sample.
-    assert all(value is not None for value in _oil_y(result)[:5])
-    assert _oil_y(result)[5] is None
+    # The fill terminal remains an observed same-track row. The explicit
+    # material phase barrier begins when the lower cap replaces that owner;
+    # it does not move UNKNOWN backward through a global path.
+    assert all(value is not None for value in _oil_y(result)[:6])
     assert _oil_y(result)[6:] == [None] * len(cap)
+
+
+def test_completed_fill_material_owner_vetoes_confirmed_entrance_tracklet() -> None:
+    glass = glass_config()
+    ellipse = glass.geometry.ellipse
+    top = ellipse.center_y - ellipse.radius_y
+    height = ellipse.radius_y * 2.0
+    detections = [
+        _detection(
+            index,
+            _candidate(top + height * relative, boundary=0.78, broad=0.78),
+            ambiguity=0.15,
+        )
+        for index, relative in enumerate((0.58, 0.48, 0.38, 0.28))
+    ]
+    entrance_y = top + height * 0.22
+    detections.append(
+        _detection(
+            4,
+            _material_candidate(
+                entrance_y,
+                material_texture_conflict=0.50,
+            ),
+            _candidate(
+                entrance_y + 1.0,
+                boundary=0.78,
+                broad=0.78,
+                source="independent-peer",
+            ),
+            ambiguity=0.15,
+        )
+    )
+
+    result = OilObservationResolver().resolve(tuple(detections), glass)
+
+    assert _oil_y(result) == [
+        *(top + height * value for value in (0.58, 0.48, 0.38, 0.28)),
+        None,
+    ]
+    final = result.detections[-1]
+    assert final.debug_metrics["sequence_material_ownership_barrier"] == 1.0
+    assert (
+        final.debug_metrics["sequence_tracklet_failure_reason"]
+        == "MATERIAL_OWNERSHIP_BARRIER"
+    )
+    assert all(
+        candidate.features["sequence_tracklet_admitted"] == 1.0
+        and candidate.features["sequence_material_ownership_barrier"] == 1.0
+        and not candidate.selected
+        for candidate in final.candidates
+    )
 
 
 def test_incompatible_oil_components_require_unknown_handoff() -> None:
@@ -1166,12 +1342,12 @@ def test_incompatible_oil_components_require_unknown_handoff() -> None:
     assert 120.0 in ys
     assert 190.0 in ys
     assert any(value is None for value in ys[2:6])
-    component_ids = {
-        detection.debug_metrics.get("sequence_selected_component_id")
+    tracklet_ids = {
+        detection.debug_metrics.get("sequence_selected_tracklet_id")
         for detection in result.detections
         if detection.raw_oil_air_level_y is not None
     }
-    assert len(component_ids) == 2
+    assert len(tracklet_ids) == 2
 
 
 def test_completed_fill_barrier_releases_only_for_downward_drain_motion() -> None:
@@ -1225,6 +1401,117 @@ def test_selected_coordinate_is_always_a_candidate_from_the_same_frame() -> None
             continue
         assert resolved.raw_oil_air_level_y in {candidate.y for candidate in original.candidates}
         assert sum(candidate.selected for candidate in resolved.candidates) == 1
+
+
+def test_publishable_row_member_is_selected_before_fixed_lag_scoring() -> None:
+    glass = glass_config()
+    glass.detector_settings.minimum_final_confidence = 0.85
+    high_emission = _candidate(150.0, source="high-emission-nonpublishable")
+    publishable = _candidate(152.0, source="publishable-sibling")
+    base_high = OilCandidateEvidence.from_candidate(high_emission)
+    base_publishable = OilCandidateEvidence.from_candidate(publishable)
+    high_ref = _admitted_ref(
+        high_emission,
+        candidate_offset=0,
+        evidence=replace(
+            base_high,
+            material_support=0.20,
+            registered_motion=1.0,
+        ),
+    )
+    high_ref = replace(high_ref, semantic_corridor_support=0.50)
+    publishable_ref = _admitted_ref(
+        publishable,
+        candidate_offset=1,
+        evidence=replace(
+            base_publishable,
+            material_support=0.70,
+            registered_motion=0.0,
+        ),
+    )
+
+    assert _oil_emission(high_ref) > _oil_emission(publishable_ref)
+    assert _oil_confidence(high_ref) < 0.85
+    assert _oil_confidence(publishable_ref) >= 0.85
+
+    detection = _detection(0, high_emission, publishable, ambiguity=0.15)
+    _forward_phase, forward = build_interface_layers(
+        detection,
+        (high_ref, publishable_ref),
+        hard_unavailable=False,
+        minimum_confidence=0.85,
+        state_min_evidence=OilObservationResolverConfig().state_min_evidence,
+    )
+    _reversed_phase, reversed_order = build_interface_layers(
+        detection,
+        (
+            replace(publishable_ref, candidate_offset=0),
+            replace(high_ref, candidate_offset=1),
+        ),
+        hard_unavailable=False,
+        minimum_confidence=0.85,
+        state_min_evidence=OilObservationResolverConfig().state_min_evidence,
+    )
+
+    forward_oil = tuple(node for node in forward if node.kind == "oil")
+    reversed_oil = tuple(node for node in reversed_order if node.kind == "oil")
+    assert len(forward_oil) == len(reversed_oil) == 1
+    assert forward_oil[0].candidate_ref is publishable_ref
+    assert reversed_oil[0].candidate_ref.candidate.source == "publishable-sibling"
+    assert forward_oil[0].identity == reversed_oil[0].identity == "oil:row-0"
+    assert _assert_publishable_path(forward_oil, 0.85) is forward_oil
+
+
+def test_selector_output_is_prefix_invariant_after_its_fixed_lag_commit() -> None:
+    lookahead = (
+        OilObservationResolverConfig().tracklet_confirmation_window_frames
+    )
+    target = 8
+    prefix = tuple(
+        _detection(
+            index,
+            _candidate(
+                170.0 - 2.0 * index,
+                boundary=0.78,
+                broad=0.78,
+                source="prefix-owner",
+            ),
+            ambiguity=0.15,
+        )
+        for index in range(target + lookahead + 1)
+    )
+    suffix = tuple(
+        _detection(
+            index,
+            _candidate(
+                80.0 + 4.0 * (index - len(prefix)),
+                boundary=0.95,
+                broad=0.95,
+                source="hostile-suffix",
+            ),
+            ambiguity=0.05,
+        )
+        for index in range(len(prefix), len(prefix) + 10)
+    )
+
+    committed = OilObservationResolver().resolve(
+        prefix,
+        glass_config(),
+    ).detections[target]
+    extended = OilObservationResolver().resolve(
+        prefix + suffix,
+        glass_config(),
+    ).detections[target]
+
+    assert committed.raw_oil_air_level_y == extended.raw_oil_air_level_y
+    assert committed.fill_state is extended.fill_state
+    for key in (
+        "sequence_selected_tracklet_id",
+        "sequence_material_phase",
+        "sequence_material_phase_reason",
+        "sequence_tracklet_failure_reason",
+    ):
+        assert committed.debug_metrics[key] == extended.debug_metrics[key]
 
 
 def test_weak_ambiguous_selected_shadow_cannot_start_oil() -> None:
@@ -1423,6 +1710,6 @@ def test_continuation_between_anchor_clusters_can_publish_same_frame_rows() -> N
 
     assert _oil_y(result) == [160.0 - index for index in range(11)]
     assert all(
-        "R7_OIL_CONTINUATION" in result.detections[index].flags
+        "R16_TRACKLET_CONTINUING" in result.detections[index].flags
         for index in range(3, 8)
     )

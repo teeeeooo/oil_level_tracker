@@ -11,7 +11,7 @@ from .foam_episode_resolver import FoamEpisodeResolver
 from .oil_observation_resolver import OilObservationResolver
 
 
-OBSERVATION_SEQUENCE_VERSION = "r15-state-aware-material-ownership-v1"
+OBSERVATION_SEQUENCE_VERSION = "r16-directed-interface-tracklets-v1"
 
 
 @dataclass(frozen=True)
@@ -33,6 +33,17 @@ class ObservationSequenceDiagnostics:
     foam_material_seeded_frame_count: int
     foam_material_continued_frame_count: int
     foam_material_opposed_candidate_count: int
+    oil_tracklet_count: int
+    oil_confirmed_tracklet_count: int
+    oil_provisional_tracklet_count: int
+    oil_incompatible_tracklet_frame_count: int
+    oil_tracklet_lost_event_count: int
+    oil_terminated_tracklet_count: int
+    oil_tracklet_hypothesis_count: int
+    oil_tracklet_comparison_count: int
+    oil_maximum_active_tracklets: int
+    oil_maximum_tracklet_eligible_refs_per_frame: int
+    oil_maximum_tracklet_hypotheses_per_frame: int
     foam_raw_candidate_count: int
     foam_eligible_candidate_count: int
     foam_confirmed_frame_count: int
@@ -94,6 +105,37 @@ class ObservationSequenceResolver:
             ),
             foam_material_opposed_candidate_count=(
                 oil.diagnostics.foam_material_opposed_candidate_count
+            ),
+            oil_tracklet_count=oil.diagnostics.tracklet_count,
+            oil_confirmed_tracklet_count=(
+                oil.diagnostics.confirmed_tracklet_count
+            ),
+            oil_provisional_tracklet_count=(
+                oil.diagnostics.provisional_tracklet_count
+            ),
+            oil_incompatible_tracklet_frame_count=(
+                oil.diagnostics.incompatible_tracklet_frame_count
+            ),
+            oil_tracklet_lost_event_count=(
+                oil.diagnostics.tracklet_lost_event_count
+            ),
+            oil_terminated_tracklet_count=(
+                oil.diagnostics.terminated_tracklet_count
+            ),
+            oil_tracklet_hypothesis_count=(
+                oil.diagnostics.tracklet_hypothesis_count
+            ),
+            oil_tracklet_comparison_count=(
+                oil.diagnostics.tracklet_comparison_count
+            ),
+            oil_maximum_active_tracklets=(
+                oil.diagnostics.maximum_active_tracklets
+            ),
+            oil_maximum_tracklet_eligible_refs_per_frame=(
+                oil.diagnostics.maximum_tracklet_eligible_refs_per_frame
+            ),
+            oil_maximum_tracklet_hypotheses_per_frame=(
+                oil.diagnostics.maximum_tracklet_hypotheses_per_frame
             ),
             foam_raw_candidate_count=foam.raw_candidate_count,
             foam_eligible_candidate_count=foam.eligible_candidate_count,

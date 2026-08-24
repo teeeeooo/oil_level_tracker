@@ -208,7 +208,18 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
             "sequence_phase_identity_failed_gates": "",
             "sequence_track_opposition": 0.8,
             "sequence_effective_track_opposition": 0.2,
-            "sequence_component_id": "oil-component:0:0",
+            "sequence_tracklet_id": "oil-tracklet:000000:0000",
+            "sequence_row_hypothesis_id": "oil-row:000000:000",
+            "sequence_tracklet_lifecycle": "confirmed",
+            "sequence_tracklet_admitted": 1.0,
+            "sequence_tracklet_confirmation_profile": "anchor_corridor",
+            "sequence_tracklet_confirmation_support": 0.92,
+            "sequence_tracklet_net_progress_px": 12.0,
+            "sequence_tracklet_directional_agreement": 0.8,
+            "sequence_tracklet_motion_support": 0.6,
+            "sequence_tracklet_motion_coverage": 0.7,
+            "sequence_tracklet_incompatible": 0.0,
+            "sequence_tracklet_failure_reason": "",
         },
     )
     final = replace(
@@ -235,7 +246,13 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
     assert record["sequence"]["candidates"][0]["phase_identity"] == "direct_interface"
     assert record["sequence"]["candidates"][0]["track_opposition"] == 0.8
     assert record["sequence"]["candidates"][0]["effective_track_opposition"] == 0.2
-    assert record["sequence"]["candidates"][0]["component_id"] == "oil-component:0:0"
+    candidate = record["sequence"]["candidates"][0]
+    assert candidate["component_id"] is None
+    assert candidate["tracklet_id"] == "oil-tracklet:000000:0000"
+    assert candidate["row_hypothesis_id"] == "oil-row:000000:000"
+    assert candidate["tracklet_lifecycle"] == "confirmed"
+    assert candidate["tracklet_confirmation_profile"] == "anchor_corridor"
+    assert candidate["tracklet_net_progress_px"] == 12.0
     assert record["sequence"]["candidates"][0]["reject_stage"] == "ACCEPTED"
     assert index["records"][0]["fill_state"] == FillState.DRAINING_VISIBLE.value
 

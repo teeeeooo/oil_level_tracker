@@ -19,6 +19,27 @@ from .oil_candidate_evidence import (
     OilCandidateEvidenceIndex,
     candidate_is_eligible,
 )
+from .oil_interface_tracklets import (
+    DirectedInterfaceTrackletBuilder,
+    DirectedTrackletPolicy,
+    DirectedTrackletResult,
+)
+from .oil_interface_selector import (
+    BoundedOilInterfaceSelector,
+    OilInterfaceSelectorPolicy,
+    assert_publishable_path as _assert_publishable_path,
+    build_interface_layers,
+    effective_track_opposition as _effective_track_opposition,
+    oil_candidate_confidence as _oil_confidence,
+    oil_candidate_emission as _oil_emission,
+    recurrence_hard_contradiction as _recurrence_hard_contradiction,
+)
+from .oil_phase_lifecycle import (
+    OilFillConfirmationProfile,
+    OilMaterialPhase,
+    OilMaterialPhaseLifecycleOwner,
+    OilMaterialPhasePolicy,
+)
 from .foam_material_identity import (
     FoamMaterialIdentity,
     foam_material_identity_tolerance,
@@ -35,7 +56,7 @@ from .oil_phase_identity import (
 )
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r15-state-aware-material-ownership-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r16-directed-interface-tracklets-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -52,6 +73,14 @@ _OIL_REPLACED_FLAGS = {
     "R7_OIL_ANCHOR",
     "R7_OIL_CONTINUATION",
     "R7_RESOLVED_OIL",
+    "R16_IMAGE_SUPPORTED_STATE",
+    "R16_INITIAL_STATE_CONTEXT_ONLY",
+    "R16_MATERIAL_PHASE_BARRIER",
+    "R16_OBSERVATION_UNAVAILABLE",
+    "R16_RESOLVED_OIL",
+    "R16_TRACKLET_CONFIRMED",
+    "R16_TRACKLET_CONTINUING",
+    "R16_TRACKLET_WITNESS",
     "SEQUENCE_INITIAL_STATE_PRIOR",
     "SEQUENCE_RESOLVED_OIL",
     "SEQUENCE_RESOLVED_STATE",
@@ -96,20 +125,37 @@ class OilObservationResolverConfig:
     black_frame_max_dynamic_range: float = 4.0
     unknown_transition_cost: float = 0.20
     incompatible_state_transition_cost: float = 2.5
-    continuation_edge_frames: int = 2
     completed_fill_min_span_ratio: float = 0.20
     completed_fill_gap_frames: int = 6
     completed_fill_release_ratio: float = 0.40
     completed_fill_release_lookahead_frames: int = 6
     completed_fill_release_min_downward_ratio: float = 0.025
     completed_fill_release_directional_ratio: float = 0.60
+    completed_fill_material_conflict_min: float = 0.45
     trajectory_spike_min_px: float = 8.0
     trajectory_spike_tolerance_ratio: float = 0.25
     trajectory_spike_lookaround_frames: int = 3
     high_recall_candidate_ref_limit: int = 8
-    empty_entry_lookahead_frames: int = 6
-    empty_entry_min_upward_ratio: float = 0.025
-    empty_entry_directional_ratio: float = 0.60
+    tracklet_row_hypothesis_ratio: float = 0.012
+    tracklet_maximum_lost_frames: int = 2
+    tracklet_confirmation_window_frames: int = 6
+    tracklet_confirmation_min_observations: int = 3
+    tracklet_confirmation_min_progress_ratio: float = 0.05
+    tracklet_confirmation_min_directional_agreement: float = 0.60
+    tracklet_confirmation_min_motion_support: float = 0.50
+    tracklet_confirmation_min_motion_coverage: float = 0.50
+    tracklet_continuation_grace_frames: int = 2
+    tracklet_continuation_min_motion_energy: float = 0.08
+    tracklet_continuation_min_motion_coverage: float = 0.12
+    tracklet_ambiguity_margin: float = 0.08
+
+    @property
+    def end_to_end_commit_lag_frames(self) -> int:
+        """Bound suffix influence across confirmation and fixed-lag stages."""
+
+        stage_lag = max(0, int(self.tracklet_confirmation_window_frames))
+        confirmation_future = max(0, stage_lag - 1)
+        return stage_lag + confirmation_future
 
 
 @dataclass(frozen=True)
@@ -131,6 +177,17 @@ class OilObservationDiagnostics:
     foam_material_seeded_frame_count: int = 0
     foam_material_continued_frame_count: int = 0
     foam_material_opposed_candidate_count: int = 0
+    tracklet_count: int = 0
+    confirmed_tracklet_count: int = 0
+    provisional_tracklet_count: int = 0
+    incompatible_tracklet_frame_count: int = 0
+    tracklet_lost_event_count: int = 0
+    terminated_tracklet_count: int = 0
+    tracklet_hypothesis_count: int = 0
+    tracklet_comparison_count: int = 0
+    maximum_active_tracklets: int = 0
+    maximum_tracklet_eligible_refs_per_frame: int = 0
+    maximum_tracklet_hypotheses_per_frame: int = 0
 
 
 @dataclass(frozen=True)
@@ -146,6 +203,13 @@ class OilPathLifecycleResult:
     bounded_path: tuple[_Node, ...]
     spike_suppressed_path: tuple[_Node, ...]
     path: tuple[_Node, ...]
+    material_phases: tuple[OilMaterialPhase, ...]
+    material_phase_reasons: tuple[str, ...]
+    material_phase_owner_chains: tuple[tuple[str, ...], ...]
+    material_phase_fill_confirmation_profiles: tuple[
+        OilFillConfirmationProfile, ...
+    ]
+    material_phase_ambiguous_frames: frozenset[int]
 
 
 class OilAdmissionEvidenceOwner:
@@ -396,8 +460,8 @@ class OilAdmissionEvidenceOwner:
         return tuple(rows), ineligible, foam_material_identity
 
 
-class OilConnectivityTrackOppositionOwner:
-    """Apply coarse component support and comparative recurring-row opposition."""
+class OilTrackletOppositionOwner:
+    """Apply recurring-row opposition, then build directed Oil tracklets."""
 
     def __init__(self, config: OilObservationResolverConfig) -> None:
         self.config = config
@@ -406,68 +470,21 @@ class OilConnectivityTrackOppositionOwner:
         self,
         refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
         glass: GlassInspectionConfig,
-    ) -> tuple[tuple[tuple[_CandidateRef, ...], ...], int, float]:
+        confirmed_initial_state: InitialObservationState | None,
+    ) -> tuple[DirectedTrackletResult, int, float]:
         opposed, track_count, maximum = self._apply_track_opposition(
             refs_by_frame,
             glass,
         )
-        supported = self._apply_cluster_and_trajectory_support(
-            opposed,
-            glass,
-        )
-        return supported, track_count, maximum
-
-    def _apply_cluster_and_trajectory_support(
-        self,
-        refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
-        glass: GlassInspectionConfig,
-    ) -> tuple[tuple[_CandidateRef, ...], ...]:
-        anchors = tuple(
-            ref
-            for refs in refs_by_frame
-            for ref in refs
-            if ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
-        )
-        horizon = max(2, min(3, int(glass.detector_settings.oil_path_window)))
-        maximum_jump = max(
-            1.0,
-            float(glass.detector_settings.temporal_max_jump_px),
-        )
-        # Frame offsets do not encode the sampling rate, so the caller's
-        # terminal-fallback bit is the stable bounded-window signal here.
-        short_observation = bool(
-            refs_by_frame
-            and any(ref.terminal_fallback for refs in refs_by_frame for ref in refs)
-        )
-        minimum_anchor_frames = 1 if short_observation else 2
-        qualified = _qualified_anchor_keys(
-            anchors,
-            frame_count=len(refs_by_frame),
-            horizon=horizon,
-            maximum_jump=maximum_jump,
-            minimum_anchor_frames=minimum_anchor_frames,
-        )
-        trajectory, component_ids = _trajectory_supported_keys(
-            refs_by_frame,
-            qualified,
-            maximum_jump=maximum_jump,
-            minimum_anchor_frames=minimum_anchor_frames,
-        )
-        output: list[tuple[_CandidateRef, ...]] = []
-        for refs in refs_by_frame:
-            row: list[_CandidateRef] = []
-            for ref in refs:
-                key = (ref.frame_offset, ref.candidate_offset)
-                row.append(
-                    replace(
-                        ref,
-                        cluster_support=1.0 if key in qualified else 0.0,
-                        trajectory_support=1.0 if key in trajectory else 0.0,
-                        component_id=component_ids.get(key),
-                    )
-                )
-            output.append(tuple(row))
-        return tuple(output)
+        tracklets = DirectedInterfaceTrackletBuilder(
+            _tracklet_policy(
+                opposed,
+                glass,
+                self.config,
+                confirmed_initial_state,
+            )
+        ).resolve(opposed)
+        return tracklets, track_count, maximum
 
     def _apply_track_opposition(
         self,
@@ -731,247 +748,62 @@ class OilPathLifecycleOwner:
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None,
     ) -> OilPathLifecycleResult:
-        layers = tuple(
-            self._nodes_for_frame(detection, refs_by_frame[index])
+        layer_pairs = tuple(
+            build_interface_layers(
+                detection,
+                refs_by_frame[index],
+                hard_unavailable=_hard_unavailable(
+                    detection,
+                    self.config,
+                ),
+                minimum_confidence=float(
+                    glass.detector_settings.minimum_final_confidence
+                ),
+                state_min_evidence=self.config.state_min_evidence,
+            )
             for index, detection in enumerate(detections)
         )
-        layers = self._admit_initial_empty_entry(
-            layers,
-            glass,
-            confirmed_initial_state,
-        )
-        best_path = self._best_path(
+        phase_layers = tuple(pair[0] for pair in layer_pairs)
+        layers = tuple(pair[1] for pair in layer_pairs)
+        phase = OilMaterialPhaseLifecycleOwner(
+            _material_phase_policy(
+                glass,
+                self.config,
+                confirmed_initial_state,
+            )
+        ).resolve(phase_layers)
+        selection_path = BoundedOilInterfaceSelector(
+            _interface_selector_policy(glass, self.config)
+        ).resolve(
             layers,
             detections,
-            glass,
             confirmed_initial_state,
+            phase.allowed_tracklet_ids,
+            phase.owner_chains,
         )
-        bounded_path = self._bound_continuation_runs(
-            best_path,
-            layers,
-            glass,
+        bounded_path = _assert_publishable_path(
+            selection_path,
+            float(glass.detector_settings.minimum_final_confidence),
         )
         spike_suppressed_path = self._suppress_trajectory_spikes(
             bounded_path,
             layers,
             glass,
         )
-        path = self._suppress_completed_fill_reacquisition(
-            spike_suppressed_path,
-            layers,
-            glass,
-        )
         return OilPathLifecycleResult(
             layers=layers,
-            best_path=best_path,
+            best_path=selection_path,
             bounded_path=bounded_path,
             spike_suppressed_path=spike_suppressed_path,
-            path=path,
-        )
-
-    def _nodes_for_frame(
-        self,
-        detection: PhaseDetection,
-        refs: tuple[_CandidateRef, ...],
-    ) -> tuple[_Node, ...]:
-        if _hard_unavailable(detection, self.config):
-            return (_Node("unknown", 1.25, "unknown"),)
-
-        nodes: list[_Node] = [
-            _Node(
-                "oil",
-                _oil_emission(ref),
-                f"oil:{ref.candidate.source}:{ref.candidate.y:.6f}",
-                ref,
-            )
-            for ref in refs
-            if ref.authority >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
-            and (
-                not ref.evidence.calibrated_high_recall
-                or ref.trajectory_support >= 0.99
-            )
-        ]
-        full = _raw_state_evidence(detection, FillState.FULL_NO_INTERFACE)
-        empty = _raw_state_evidence(detection, FillState.EMPTY_NO_INTERFACE)
-        if full >= self.config.state_min_evidence:
-            nodes.append(
-                _Node(
-                    "full",
-                    -0.10 + 1.05 * full,
-                    "full",
-                    state_evidence=full,
-                )
-            )
-        if empty >= self.config.state_min_evidence:
-            nodes.append(
-                _Node(
-                    "empty",
-                    -0.10 + 1.05 * empty,
-                    "empty",
-                    state_evidence=empty,
-                )
-            )
-        best_quality = max((ref.local_quality for ref in refs), default=0.0)
-        ambiguity = _unit(detection.debug_metrics.get("oil_ambiguity_score", 0.0))
-        no_interface = _unit(
-            detection.debug_metrics.get("oil_no_interface_score", 0.0)
-        )
-        unknown = 0.12 + 0.34 * ambiguity + 0.08 * no_interface - 0.10 * best_quality
-        nodes.append(_Node("unknown", unknown, "unknown"))
-        return tuple(nodes)
-
-    def _best_path(
-        self,
-        layers: tuple[tuple[_Node, ...], ...],
-        detections: tuple[PhaseDetection, ...],
-        glass: GlassInspectionConfig,
-        confirmed_initial_state: InitialObservationState | None,
-    ) -> tuple[_Node, ...]:
-        scores: list[list[float]] = []
-        backpointers: list[list[int]] = []
-        first_scores = [
-            node.emission
-            + _initial_score(node, glass, confirmed_initial_state)
-            for node in layers[0]
-        ]
-        scores.append(first_scores)
-        backpointers.append([-1] * len(first_scores))
-        for frame_offset in range(1, len(layers)):
-            prior_layer = layers[frame_offset - 1]
-            current_layer = layers[frame_offset]
-            dt = max(
-                1e-6,
-                float(detections[frame_offset].time_sec)
-                - float(detections[frame_offset - 1].time_sec),
-            )
-            current_scores: list[float] = []
-            current_backpointers: list[int] = []
-            for node in current_layer:
-                choices = tuple(
-                    (
-                        scores[-1][prior_offset]
-                        + self._transition_score(prior, node, glass, dt),
-                        prior_offset,
-                    )
-                    for prior_offset, prior in enumerate(prior_layer)
-                )
-                best_score, best_offset = max(
-                    choices,
-                    key=lambda item: (
-                        item[0],
-                        -_node_order(prior_layer[item[1]]),
-                    ),
-                )
-                current_scores.append(best_score + node.emission)
-                current_backpointers.append(best_offset)
-            scores.append(current_scores)
-            backpointers.append(current_backpointers)
-
-        last_offset = max(
-            range(len(layers[-1])),
-            key=lambda index: (
-                scores[-1][index],
-                -_node_order(layers[-1][index]),
+            path=spike_suppressed_path,
+            material_phases=phase.phases,
+            material_phase_reasons=phase.reasons,
+            material_phase_owner_chains=phase.owner_chains,
+            material_phase_fill_confirmation_profiles=(
+                phase.fill_confirmation_profiles
             ),
+            material_phase_ambiguous_frames=phase.ambiguous_frames,
         )
-        offsets = [last_offset]
-        for frame_offset in range(len(layers) - 1, 0, -1):
-            offsets.append(backpointers[frame_offset][offsets[-1]])
-        offsets.reverse()
-        return tuple(
-            layers[index][offset]
-            for index, offset in enumerate(offsets)
-        )
-
-    def _admit_initial_empty_entry(
-        self,
-        layers: tuple[tuple[_Node, ...], ...],
-        glass: GlassInspectionConfig,
-        confirmed_initial_state: InitialObservationState | None,
-    ) -> tuple[tuple[_Node, ...], ...]:
-        """Keep initial EMPTY Oil provisional until a physical rise enters.
-
-        This is completed-window candidate admission, not a post-publication
-        censor.  Position only identifies the lower entrance; bounded upward
-        progress distinguishes arriving Oil from a stationary lower structure.
-        """
-
-        if confirmed_initial_state is not InitialObservationState.EMPTY_NO_INTERFACE:
-            return layers
-        entry = _initial_empty_entry_start(layers, glass, self.config)
-        output: list[tuple[_Node, ...]] = []
-        for index, layer in enumerate(layers):
-            if entry is not None and index >= entry:
-                output.append(layer)
-                continue
-            filtered = tuple(node for node in layer if node.kind != "oil")
-            output.append(filtered or (_unknown_node(layer),))
-        return tuple(output)
-
-    def _bound_continuation_runs(
-        self,
-        path: tuple[_Node, ...],
-        layers: tuple[tuple[_Node, ...], ...],
-        glass: GlassInspectionConfig,
-    ) -> tuple[_Node, ...]:
-        """Keep same-frame observations only inside an anchor-backed run.
-
-        Unlike R6's universal 2--3 frame censor, a continuous candidate path
-        may span an arbitrarily long interval *between* qualified anchors.  A
-        one-sided tail remains bounded so repetition alone cannot establish or
-        reacquire the interface.
-        """
-
-        bounded = list(path)
-        edge = max(0, int(self.config.continuation_edge_frames))
-        minimum_confidence = float(
-            glass.detector_settings.minimum_final_confidence
-        )
-        offset = 0
-        while offset < len(path):
-            if path[offset].kind != "oil":
-                offset += 1
-                continue
-            start = offset
-            component_id = _node_component_id(path[offset])
-            while (
-                offset + 1 < len(path)
-                and path[offset + 1].kind == "oil"
-                and _node_component_id(path[offset + 1]) == component_id
-            ):
-                offset += 1
-            end = offset
-            qualified = [
-                index
-                for index in range(start, end + 1)
-                if path[index].candidate_ref is not None
-                and _independent_anchor(path[index].candidate_ref)
-            ]
-            if not qualified:
-                for index in range(start, end + 1):
-                    bounded[index] = _unknown_node(layers[index])
-                offset += 1
-                continue
-            keep_start = max(start, qualified[0] - edge)
-            keep_end = min(end, qualified[-1] + edge)
-            for index in range(start, end + 1):
-                ref = path[index].candidate_ref
-                dynamic_extension = _continuous_registered_motion_extension(
-                    path,
-                    index,
-                    qualified,
-                    minimum_support=self.config.dynamic_anchor_min_support,
-                    minimum_coverage=self.config.dynamic_anchor_min_coverage,
-                )
-                if (
-                    ((index < keep_start or index > keep_end) and not dynamic_extension)
-                    or ref is None
-                    or ref.trajectory_support < 0.99
-                    or _oil_confidence(ref) + 1e-9 < minimum_confidence
-                ):
-                    bounded[index] = _unknown_node(layers[index])
-            offset += 1
-        return tuple(bounded)
 
     def _suppress_trajectory_spikes(
         self,
@@ -1033,6 +865,14 @@ class OilPathLifecycleOwner:
                 or following.candidate_ref is None
             ):
                 continue
+            if len(
+                {
+                    _node_tracklet_id(prior),
+                    _node_tracklet_id(current),
+                    _node_tracklet_id(following),
+                }
+            ) != 1:
+                continue
             if abs(following.y - prior.y) > tolerance * 1.5:
                 continue
             fraction = (index - prior_index) / (following_index - prior_index)
@@ -1058,191 +898,6 @@ class OilPathLifecycleOwner:
             output[index] = _unknown_node(layers[index])
         return tuple(output)
 
-    def _suppress_completed_fill_reacquisition(
-        self,
-        path: tuple[_Node, ...],
-        layers: tuple[tuple[_Node, ...], ...],
-        glass: GlassInspectionConfig,
-    ) -> tuple[_Node, ...]:
-        """Do not reacquire an upper internal texture after a completed fill.
-
-        A same-frame candidate is still required everywhere.  This barrier only
-        removes authority after an observed lower-to-upper trajectory reaches
-        the entrance and then disappears; it never creates a numeric value or
-        a categorical FULL observation. A later boundary well inside the Glass
-        releases the barrier and can establish a draining trajectory.
-        """
-
-        output = list(path)
-        highest_relative = -1.0
-        oil_count = 0
-        fill_armed = False
-        missing = 0
-        blocked = False
-        release_armed = False
-        for index, node in enumerate(path):
-            if node.kind == "oil" and node.y is not None:
-                relative = _relative_y(node.y, glass)
-                if blocked:
-                    if (
-                        release_armed
-                        and self._is_confirmed_downward_reacquisition(
-                            path,
-                            index,
-                            glass,
-                        )
-                    ):
-                        blocked = False
-                        highest_relative = relative
-                        oil_count = 1
-                        fill_armed = False
-                        missing = 0
-                        release_armed = False
-                    else:
-                        output[index] = _unknown_node(layers[index])
-                        if not release_armed:
-                            missing = 0
-                    continue
-                if fill_armed and relative > self.config.entrance_band_ratio:
-                    # Once the observed interface has reached the entrance, a
-                    # lower material cap is not a new free interface. Require
-                    # a real observation gap before a later drain may reopen
-                    # the phase track.
-                    blocked = True
-                    missing = 0
-                    output[index] = _unknown_node(layers[index])
-                    continue
-                highest_relative = max(highest_relative, relative)
-                oil_count += 1
-                missing = 0
-                if (
-                    oil_count >= 3
-                    and relative <= self.config.entrance_band_ratio
-                    and highest_relative - relative
-                    >= self.config.completed_fill_min_span_ratio
-                ):
-                    fill_armed = True
-                continue
-            if not fill_armed and not blocked:
-                continue
-            missing += 1
-            if missing >= self.config.completed_fill_gap_frames:
-                blocked = True
-                release_armed = True
-        return tuple(output)
-
-    def _is_confirmed_downward_reacquisition(
-        self,
-        path: tuple[_Node, ...],
-        start: int,
-        glass: GlassInspectionConfig,
-    ) -> bool:
-        """Release a completed-fill barrier only for an emerging drain path.
-
-        A turbulent cap can form a strong, moving upper boundary after the real
-        free interface has left the Glass.  Position alone cannot distinguish
-        that cap from a missed drain entrance.  A real drain must progress
-        downward (increasing image Y) within a small bounded lookahead; this
-        check neither creates coordinates nor applies before a completed fill.
-        """
-
-        first = path[start]
-        if first.y is None:
-            return False
-        if _relative_y(first.y, glass) > self.config.completed_fill_release_ratio:
-            # A drain must re-enter through the physical top of the sight
-            # glass. An internal cap that first appears deep in the vessel is
-            # not a missed entrance and cannot release the completed-fill
-            # barrier merely by wobbling downward for a few frames.
-            return False
-        stop = min(
-            len(path),
-            start + max(2, self.config.completed_fill_release_lookahead_frames) + 1,
-        )
-        observed = [
-            float(path[index].y)
-            for index in range(start, stop)
-            if path[index].kind == "oil" and path[index].y is not None
-        ]
-        if len(observed) < 3:
-            return False
-        height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
-        minimum_progress = max(
-            4.0,
-            height * self.config.completed_fill_release_min_downward_ratio,
-        )
-        deltas = [
-            following - prior
-            for prior, following in zip(observed, observed[1:])
-        ]
-        downward_ratio = sum(delta >= 0.0 for delta in deltas) / max(
-            1,
-            len(deltas),
-        )
-        return bool(
-            observed[-1] - observed[0] >= minimum_progress
-            and downward_ratio
-            >= self.config.completed_fill_release_directional_ratio
-        )
-
-    def _transition_score(
-        self,
-        prior: _Node,
-        current: _Node,
-        glass: GlassInspectionConfig,
-        dt: float,
-    ) -> float:
-        if prior.kind == current.kind:
-            if current.kind == "oil":
-                assert prior.y is not None and current.y is not None
-                if _node_component_id(prior) != _node_component_id(current):
-                    return float("-inf")
-                maximum = max(
-                    1.0,
-                    float(glass.detector_settings.temporal_max_jump_px),
-                )
-                time_scale = max(1.0, dt / 0.5)
-                normalized = abs(current.y - prior.y) / (maximum * time_scale)
-                current_ref = current.candidate_ref
-                if (
-                    normalized > 1.0
-                    and current_ref is not None
-                    and _independent_anchor(current_ref)
-                ):
-                    # A cross-represented phase anchor may reacquire after a
-                    # real rapid interface move. Motion/persistence alone never
-                    # activates this bounded jump route.
-                    return -min(0.30, 0.04 + 0.08 * normalized)
-                return 0.22 - (0.12 * normalized + 0.30 * normalized * normalized)
-            if current.kind in {"full", "empty"}:
-                return 0.10 + 0.14 * current.state_evidence
-            return 0.02
-
-        if prior.kind == "unknown" or current.kind == "unknown":
-            return -self.config.unknown_transition_cost
-        if prior.kind in {"full", "empty"} and current.kind in {"full", "empty"}:
-            return -self.config.incompatible_state_transition_cost
-        if prior.kind == "oil" and current.kind in {"full", "empty"}:
-            if current.state_evidence < self.config.state_min_evidence:
-                return -self.config.incompatible_state_transition_cost
-            return -_edge_transition_cost(prior, current.kind, glass, self.config)
-        if current.kind == "oil" and prior.kind in {"full", "empty"}:
-            assert current.candidate_ref is not None
-            edge_cost = _edge_transition_cost(
-                current,
-                prior.kind,
-                glass,
-                self.config,
-            )
-            if current.candidate_ref.cluster_support >= 0.99:
-                # A missed edge entrance must not lock a confirmed prior for the
-                # rest of the video. Independent material anchors can release it
-                # from any visible location, with edge proximity still preferred.
-                return 0.08 - min(0.45, edge_cost * 0.18)
-            return -max(0.35, edge_cost)
-        return -0.10
-
-
 class OilResolutionProjectionOwner:
     """Project resolved nodes back to same-frame public candidates and metrics."""
 
@@ -1254,6 +909,7 @@ class OilResolutionProjectionOwner:
         detections: tuple[PhaseDetection, ...],
         refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
         lifecycle: OilPathLifecycleResult,
+        tracklets: DirectedTrackletResult,
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None,
         evidence_index: OilCandidateEvidenceIndex,
@@ -1263,6 +919,7 @@ class OilResolutionProjectionOwner:
                 detection,
                 node,
                 refs_by_frame[index],
+                tracklets,
                 lifecycle.path,
                 (
                     lifecycle.best_path[index],
@@ -1270,6 +927,11 @@ class OilResolutionProjectionOwner:
                     lifecycle.spike_suppressed_path[index],
                     lifecycle.path[index],
                 ),
+                lifecycle.material_phases[index],
+                lifecycle.material_phase_reasons[index],
+                lifecycle.material_phase_owner_chains[index],
+                lifecycle.material_phase_fill_confirmation_profiles[index],
+                index in lifecycle.material_phase_ambiguous_frames,
                 index,
                 glass,
                 confirmed_initial_state,
@@ -1285,6 +947,7 @@ class OilResolutionProjectionOwner:
         resolved: tuple[PhaseDetection, ...],
         refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
         lifecycle: OilPathLifecycleResult,
+        tracklets: DirectedTrackletResult,
         *,
         ineligible_count: int,
         track_count: int,
@@ -1335,6 +998,23 @@ class OilResolutionProjectionOwner:
             foam_material_opposed_candidate_count=len(
                 foam_material_identity.opposition_by_candidate
             ),
+            tracklet_count=len(tracklets.summaries),
+            confirmed_tracklet_count=tracklets.confirmed_tracklet_count,
+            provisional_tracklet_count=tracklets.provisional_tracklet_count,
+            incompatible_tracklet_frame_count=len(
+                tracklets.incompatible_frames
+            ),
+            tracklet_lost_event_count=tracklets.lost_event_count,
+            terminated_tracklet_count=tracklets.terminated_tracklet_count,
+            tracklet_hypothesis_count=tracklets.hypothesis_count,
+            tracklet_comparison_count=tracklets.comparison_count,
+            maximum_active_tracklets=tracklets.maximum_active_tracklets,
+            maximum_tracklet_eligible_refs_per_frame=(
+                tracklets.maximum_eligible_refs_per_frame
+            ),
+            maximum_tracklet_hypotheses_per_frame=(
+                tracklets.maximum_hypotheses_per_frame
+            ),
         )
 
     def _project_detection(
@@ -1342,19 +1022,31 @@ class OilResolutionProjectionOwner:
         detection: PhaseDetection,
         node: _Node,
         refs: tuple[_CandidateRef, ...],
+        tracklets: DirectedTrackletResult,
         path: tuple[_Node, ...],
         stage_nodes: tuple[_Node, _Node, _Node, _Node],
+        material_phase: OilMaterialPhase,
+        material_phase_reason: str,
+        material_phase_owner_chain: tuple[str, ...],
+        material_phase_fill_confirmation_profile: OilFillConfirmationProfile,
+        material_phase_ambiguous: bool,
         frame_offset: int,
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None,
         evidence_index: OilCandidateEvidenceIndex,
     ) -> PhaseDetection:
         flags = [flag for flag in detection.flags if flag not in _OIL_REPLACED_FLAGS]
+        material_ownership_barrier = (
+            material_phase is OilMaterialPhase.FILLED_BARRIER
+            and material_phase_reason
+            not in {"FILL_SPAN_CONFIRMED", "FILL_OWNER_AT_ENTRANCE"}
+        )
         candidates = _project_candidates(
             detection.candidates,
             node.candidate_ref,
             refs,
             evidence_index,
+            material_ownership_barrier=material_ownership_barrier,
         )
         metrics = dict(detection.debug_metrics)
         metrics.update(
@@ -1371,6 +1063,17 @@ class OilResolutionProjectionOwner:
                 "sequence_stage_spike_suppressed_y": stage_nodes[2].y,
                 "sequence_stage_completed_fill_kind": stage_nodes[3].kind,
                 "sequence_stage_completed_fill_y": stage_nodes[3].y,
+                "sequence_material_phase": material_phase.value,
+                "sequence_material_phase_reason": material_phase_reason,
+                "sequence_material_phase_owner_chain": ";".join(
+                    material_phase_owner_chain
+                ),
+                "sequence_material_phase_fill_confirmation_profile": (
+                    material_phase_fill_confirmation_profile.value
+                ),
+                "sequence_material_phase_ambiguous": float(
+                    material_phase_ambiguous
+                ),
                 "sequence_track_opposition": (
                     0.0
                     if node.candidate_ref is None
@@ -1448,10 +1151,104 @@ class OilResolutionProjectionOwner:
                     if node.candidate_ref is None
                     else ";".join(node.candidate_ref.phase_identity_failed_gates)
                 ),
-                "sequence_selected_component_id": (
+                "sequence_selected_tracklet_id": (
                     ""
                     if node.candidate_ref is None
-                    else node.candidate_ref.component_id or ""
+                    else node.candidate_ref.tracklet_id or ""
+                ),
+                "sequence_selected_row_hypothesis_id": (
+                    ""
+                    if node.candidate_ref is None
+                    else node.candidate_ref.row_hypothesis_id or ""
+                ),
+                "sequence_selected_tracklet_lifecycle": (
+                    None
+                    if node.candidate_ref is None
+                    else node.candidate_ref.tracklet_lifecycle.value
+                ),
+                "sequence_selected_tracklet_confirmation_profile": (
+                    None
+                    if node.candidate_ref is None
+                    else node.candidate_ref.tracklet_confirmation_profile.value
+                ),
+                "sequence_selected_tracklet_admitted": float(
+                    node.candidate_ref is not None
+                    and node.candidate_ref.tracklet_admitted
+                ),
+                "sequence_selected_tracklet_confirmation_support": (
+                    0.0
+                    if node.candidate_ref is None
+                    else float(
+                        node.candidate_ref.tracklet_confirmation_support
+                    )
+                ),
+                "sequence_selected_tracklet_net_progress_px": (
+                    0.0
+                    if node.candidate_ref is None
+                    else float(node.candidate_ref.tracklet_net_progress_px)
+                ),
+                "sequence_selected_tracklet_direction": (
+                    0
+                    if node.candidate_ref is None
+                    else int(node.candidate_ref.tracklet_direction)
+                ),
+                "sequence_selected_tracklet_directional_agreement": (
+                    0.0
+                    if node.candidate_ref is None
+                    else float(
+                        node.candidate_ref.tracklet_directional_agreement
+                    )
+                ),
+                "sequence_selected_tracklet_motion_support": (
+                    0.0
+                    if node.candidate_ref is None
+                    else float(node.candidate_ref.tracklet_motion_support)
+                ),
+                "sequence_selected_tracklet_motion_coverage": (
+                    0.0
+                    if node.candidate_ref is None
+                    else float(node.candidate_ref.tracklet_motion_coverage)
+                ),
+                "sequence_selected_tracklet_material_conflict": (
+                    0.0
+                    if node.candidate_ref is None
+                    else float(
+                        node.candidate_ref.tracklet_material_conflict
+                    )
+                ),
+                "sequence_tracklet_incompatible": float(
+                    frame_offset in tracklets.incompatible_frames
+                ),
+                "sequence_tracklet_failure_reason": (
+                    node.candidate_ref.tracklet_failure_reason
+                    if node.candidate_ref is not None
+                    else (
+                        "MATERIAL_OWNERSHIP_BARRIER"
+                        if material_ownership_barrier
+                        else _frame_tracklet_failure(refs)
+                    )
+                ),
+                "sequence_material_ownership_barrier": float(
+                    material_ownership_barrier
+                ),
+                "sequence_tracklet_count": len(tracklets.summaries),
+                "sequence_confirmed_tracklet_count": (
+                    tracklets.confirmed_tracklet_count
+                ),
+                "sequence_provisional_tracklet_count": (
+                    tracklets.provisional_tracklet_count
+                ),
+                "sequence_tracklet_comparison_count": (
+                    tracklets.comparison_count
+                ),
+                "sequence_maximum_active_tracklets": (
+                    tracklets.maximum_active_tracklets
+                ),
+                "sequence_maximum_tracklet_eligible_refs_per_frame": (
+                    tracklets.maximum_eligible_refs_per_frame
+                ),
+                "sequence_maximum_tracklet_hypotheses_per_frame": (
+                    tracklets.maximum_hypotheses_per_frame
                 ),
                 "sequence_state_image_evidence": float(node.state_evidence),
             }
@@ -1466,11 +1263,17 @@ class OilResolutionProjectionOwner:
             state = _visible_state(path, frame_offset)
             flags.extend(
                 (
-                    "R7_RESOLVED_OIL",
+                    "R16_RESOLVED_OIL",
                     (
-                        "R7_OIL_ANCHOR"
-                        if node.candidate_ref.cluster_support >= 0.99
-                        else "R7_OIL_CONTINUATION"
+                        "R16_TRACKLET_CONFIRMED"
+                        if node.candidate_ref.tracklet_lifecycle.value
+                        == "confirmed"
+                        else (
+                            "R16_TRACKLET_CONTINUING"
+                            if node.candidate_ref.tracklet_lifecycle.value
+                            == "continuing"
+                            else "R16_TRACKLET_WITNESS"
+                        )
                     ),
                     "SEQUENCE_RESOLVED_OIL",
                     "SEQUENCE_SAME_FRAME_CANDIDATE",
@@ -1496,7 +1299,7 @@ class OilResolutionProjectionOwner:
                 if node.kind == "full"
                 else FillState.EMPTY_NO_INTERFACE
             )
-            flags.extend(("R7_IMAGE_SUPPORTED_STATE", "SEQUENCE_RESOLVED_STATE"))
+            flags.extend(("R16_IMAGE_SUPPORTED_STATE", "SEQUENCE_RESOLVED_STATE"))
             confidence = min(0.95, 0.46 + 0.46 * node.state_evidence)
             return replace(
                 detection,
@@ -1512,9 +1315,11 @@ class OilResolutionProjectionOwner:
                 flags=sorted(set(flags)),
                 debug_metrics=metrics,
             )
-        flags.extend(("R7_OBSERVATION_UNAVAILABLE", "SEQUENCE_UNAVAILABLE"))
+        flags.extend(("R16_OBSERVATION_UNAVAILABLE", "SEQUENCE_UNAVAILABLE"))
+        if material_ownership_barrier:
+            flags.append("R16_MATERIAL_PHASE_BARRIER")
         if confirmed_initial_state is not None:
-            flags.append("R7_INITIAL_STATE_CONTEXT_ONLY")
+            flags.append("R16_INITIAL_STATE_CONTEXT_ONLY")
         return replace(
             detection,
             fill_state=FillState.UNKNOWN_REVIEW,
@@ -1539,7 +1344,7 @@ class OilObservationResolver:
     def __init__(self, config: OilObservationResolverConfig | None = None) -> None:
         self.config = config or OilObservationResolverConfig()
         self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
-        self.connectivity_opposition = OilConnectivityTrackOppositionOwner(
+        self.tracklet_opposition = OilTrackletOppositionOwner(
             self.config
         )
         self.path_lifecycle = OilPathLifecycleOwner(self.config)
@@ -1577,9 +1382,14 @@ class OilObservationResolver:
                 evidence_index,
             )
         )
-        refs_by_frame, track_count, maximum_track_opposition = (
-            self.connectivity_opposition.resolve(refs_by_frame, glass)
+        tracklets, track_count, maximum_track_opposition = (
+            self.tracklet_opposition.resolve(
+                refs_by_frame,
+                glass,
+                confirmed_initial_state,
+            )
         )
+        refs_by_frame = tracklets.refs_by_frame
         lifecycle = self.path_lifecycle.resolve(
             source,
             refs_by_frame,
@@ -1590,6 +1400,7 @@ class OilObservationResolver:
             source,
             refs_by_frame,
             lifecycle,
+            tracklets,
             glass,
             confirmed_initial_state,
             evidence_index,
@@ -1598,6 +1409,7 @@ class OilObservationResolver:
             resolved,
             refs_by_frame,
             lifecycle,
+            tracklets,
             ineligible_count=ineligible_count,
             track_count=track_count,
             maximum_track_opposition=maximum_track_opposition,
@@ -1875,249 +1687,14 @@ def _candidate_quality(
     )
 
 
-def _recurrence_hard_contradiction(ref: _CandidateRef) -> bool:
-    """Return whether recurrence may revoke candidate authority.
-
-    Persistence is not physical contradiction: a real interface can remain at
-    one level. Hard demotion therefore needs independent candidate-local
-    evidence that the row is material, optical or structural noise.
-    """
-
-    evidence = ref.evidence
-    return bool(
-        ref.phase_identity is OilPhaseIdentity.OPPOSED_MATERIAL
-        or evidence.material_texture_conflict >= 0.60
-        or evidence.artifact_signature >= 0.44
-        or evidence.optics_opposition >= 0.46
-    )
-
-
-def _effective_track_opposition(ref: _CandidateRef) -> float:
-    """Keep recurrence comparative when no physical contradiction exists."""
-
-    if (
-        ref.phase_identity is OilPhaseIdentity.DIRECT_INTERFACE
-        and not _recurrence_hard_contradiction(ref)
-    ):
-        return 0.25 * ref.track_opposition
-    return ref.track_opposition
-
-
-def _independent_anchor(ref: _CandidateRef) -> bool:
-    """Return anchors backed by an independent same-frame identity proof.
-
-    A clustered anchor is independently supported by the bounded anchor graph.
-    A semantic anchor may also stand alone when a second representation agrees
-    strongly in the same frame.  This is deliberately narrower than accepting
-    motion or persistence as identity, and lets a real rapid interface move
-    reacquire without requiring several pre-existing anchors at its new row.
-    """
-
-    if ref.authority is not OilCandidateAuthority.ANCHOR_ELIGIBLE:
-        return False
-    if ref.cluster_support >= 0.99:
-        return True
-    evidence = ref.evidence
-    return bool(
-        evidence.availability.phase
-        and ref.representation_support >= 0.50
-        and ref.semantic_corridor_support >= 0.99
-    )
-
-
-def _oil_emission(ref: _CandidateRef) -> float:
-    candidate = ref.candidate
-    evidence = ref.evidence
-    features = candidate.features
-    availability = min(
-        _unit(features.get("evidence_availability", 1.0)),
-        _unit(features.get("visibility", 1.0)),
-    )
-    return (
-        -0.18
-        + 0.62 * evidence.material_support
-        + 0.08 * availability
-        + (
-            0.18
-            if ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
-            else 0.0
-        )
-        + 0.34 * ref.cluster_support
-        + 0.30 * ref.trajectory_support
-        + 0.14 * ref.representation_support
-        + 0.24 * ref.semantic_corridor_support
-        - 0.65 * evidence.artifact_signature
-        - 0.34 * evidence.static_contradiction
-        - 0.28 * evidence.ambiguity
-        - 0.72 * _effective_track_opposition(ref)
-        - ref.foam_alias_penalty
-        + (
-            0.22
-            * (evidence.terminal_support if evidence.material_path else 0.0)
-            if ref.terminal_fallback
-            else 0.0
-        )
-        + 0.24 * evidence.registered_motion
-    )
-
-
-def _oil_confidence(ref: _CandidateRef) -> float:
-    evidence = ref.evidence
-    return _unit(
-        0.28
-        + 0.50 * evidence.material_support
-        + 0.16 * ref.cluster_support
-        + 0.10 * ref.trajectory_support
-        + 0.08 * ref.representation_support
-        + 0.08 * ref.semantic_corridor_support
-        - 0.20 * evidence.artifact_signature
-        - 0.10 * evidence.static_contradiction
-        - 0.12 * evidence.ambiguity
-        - 0.22 * _effective_track_opposition(ref)
-        + (
-            0.08
-            * (evidence.terminal_support if evidence.material_path else 0.0)
-            if ref.terminal_fallback
-            else 0.0
-        )
-        + 0.08 * evidence.registered_motion
-    )
-
-
-def _raw_state_evidence(detection: PhaseDetection, state: FillState) -> float:
-    key = (
-        "oil_no_interface_full_likelihood"
-        if state is FillState.FULL_NO_INTERFACE
-        else "oil_no_interface_empty_likelihood"
-    )
-    return _unit(detection.debug_metrics.get(key, 0.0))
-
-
-def _initial_score(
-    node: _Node,
-    glass: GlassInspectionConfig,
-    confirmed_initial_state: InitialObservationState | None,
-) -> float:
-    if confirmed_initial_state is InitialObservationState.FULL_NO_INTERFACE:
-        if node.kind == "full":
-            return 0.55
-        if node.kind == "empty":
-            return -1.0
-        if node.kind == "oil" and node.y is not None:
-            return 0.18 if _relative_y(node.y, glass) <= 0.27 else -0.18
-    if confirmed_initial_state is InitialObservationState.EMPTY_NO_INTERFACE:
-        if node.kind == "empty":
-            return 0.55
-        if node.kind == "full":
-            return -1.0
-        if node.kind == "oil" and node.y is not None:
-            return 0.18 if _relative_y(node.y, glass) >= 0.73 else -0.18
-    return 0.06 if node.kind == "unknown" else 0.0
-
-
-def _initial_empty_entry_start(
-    layers: tuple[tuple[_Node, ...], ...],
-    glass: GlassInspectionConfig,
-    config: OilObservationResolverConfig,
-) -> int | None:
-    lookahead = max(2, int(config.empty_entry_lookahead_frames))
-    height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
-    minimum_progress = max(4.0, height * config.empty_entry_min_upward_ratio)
-    lower_entrance = 1.0 - config.entrance_band_ratio
-    for start, layer in enumerate(layers):
-        anchors = tuple(
-            node
-            for node in layer
-            if node.kind == "oil"
-            and node.y is not None
-            and node.candidate_ref is not None
-            and _independent_anchor(node.candidate_ref)
-            and _relative_y(node.y, glass) >= lower_entrance
-        )
-        for anchor in anchors:
-            component_id = _node_component_id(anchor)
-            observed: list[tuple[int, float]] = []
-            for frame in range(start, min(len(layers), start + lookahead + 1)):
-                compatible = tuple(
-                    node
-                    for node in layers[frame]
-                    if node.kind == "oil"
-                    and node.y is not None
-                    and _node_component_id(node) == component_id
-                )
-                if not compatible:
-                    continue
-                best = max(compatible, key=lambda node: node.emission)
-                observed.append((frame, float(best.y)))
-            if len(observed) < 3:
-                continue
-            deltas = [
-                following[1] - prior[1]
-                for prior, following in zip(observed, observed[1:])
-            ]
-            upward_ratio = sum(delta <= 0.0 for delta in deltas) / len(deltas)
-            if (
-                observed[0][1] - observed[-1][1] >= minimum_progress
-                and upward_ratio >= config.empty_entry_directional_ratio
-            ):
-                return start
-    return None
-
-
-def _continuous_registered_motion_extension(
-    path: tuple[_Node, ...],
-    index: int,
-    qualified: list[int],
-    *,
-    minimum_support: float,
-    minimum_coverage: float,
-) -> bool:
-    if not qualified or qualified[0] <= index <= qualified[-1]:
-        return False
-    anchor = qualified[0] if index < qualified[0] else qualified[-1]
-    start, end = sorted((anchor, index))
-    continuation = (
-        path[start:end]
-        if index < anchor
-        else path[start + 1 : end + 1]
-    )
-    for node in continuation:
-        ref = node.candidate_ref
-        if (
-            node.kind != "oil"
-            or ref is None
-            or ref.trajectory_support < 0.99
-            or ref.evidence.registered_motion < minimum_support
-            or ref.evidence.registered_motion_coverage < minimum_coverage
-        ):
-            return False
-    return True
-
-
-def _edge_transition_cost(
-    oil_node: _Node,
-    state_kind: str,
-    glass: GlassInspectionConfig,
-    config: OilObservationResolverConfig,
-) -> float:
-    assert oil_node.y is not None
-    relative = _relative_y(oil_node.y, glass)
-    band = config.entrance_band_ratio
-    if state_kind == "full":
-        overflow = max(0.0, relative - band)
-    else:
-        overflow = max(0.0, (1.0 - band) - relative)
-    if overflow <= 0.0:
-        return 0.05
-    return 0.35 + 1.8 * overflow
-
-
 def _visible_state(path: tuple[_Node, ...], index: int) -> FillState:
+    tracklet_id = _node_tracklet_id(path[index])
     prior_y = next(
         (
             path[offset].y
             for offset in range(index - 1, max(-1, index - 4), -1)
             if path[offset].kind == "oil"
+            and _node_tracklet_id(path[offset]) == tracklet_id
         ),
         None,
     )
@@ -2126,6 +1703,7 @@ def _visible_state(path: tuple[_Node, ...], index: int) -> FillState:
             path[offset].y
             for offset in range(index + 1, min(len(path), index + 4))
             if path[offset].kind == "oil"
+            and _node_tracklet_id(path[offset]) == tracklet_id
         ),
         None,
     )
@@ -2150,6 +1728,8 @@ def _project_candidates(
     selected_ref: _CandidateRef | None,
     refs: tuple[_CandidateRef, ...],
     evidence_index: OilCandidateEvidenceIndex,
+    *,
+    material_ownership_barrier: bool = False,
 ) -> list[BoundaryCandidate]:
     output: list[BoundaryCandidate] = []
     refs_by_offset = {ref.candidate_offset: ref for ref in refs}
@@ -2199,7 +1779,49 @@ def _project_candidates(
                         ref.phase_identity_failed_gates
                     ),
                     "sequence_ordered_lower": float(ref.ordered_lower),
-                    "sequence_component_id": ref.component_id or "",
+                    "sequence_tracklet_id": ref.tracklet_id or "",
+                    "sequence_row_hypothesis_id": (
+                        ref.row_hypothesis_id or ""
+                    ),
+                    "sequence_tracklet_lifecycle": (
+                        ref.tracklet_lifecycle.value
+                    ),
+                    "sequence_tracklet_admitted": float(
+                        ref.tracklet_admitted
+                    ),
+                    "sequence_tracklet_confirmation_profile": (
+                        ref.tracklet_confirmation_profile.value
+                    ),
+                    "sequence_tracklet_confirmation_support": float(
+                        ref.tracklet_confirmation_support
+                    ),
+                    "sequence_tracklet_net_progress_px": float(
+                        ref.tracklet_net_progress_px
+                    ),
+                    "sequence_tracklet_direction": int(
+                        ref.tracklet_direction
+                    ),
+                    "sequence_tracklet_directional_agreement": float(
+                        ref.tracklet_directional_agreement
+                    ),
+                    "sequence_tracklet_motion_support": float(
+                        ref.tracklet_motion_support
+                    ),
+                    "sequence_tracklet_motion_coverage": float(
+                        ref.tracklet_motion_coverage
+                    ),
+                    "sequence_tracklet_material_conflict": float(
+                        ref.tracklet_material_conflict
+                    ),
+                    "sequence_tracklet_incompatible": float(
+                        ref.tracklet_incompatible
+                    ),
+                    "sequence_tracklet_failure_reason": (
+                        ref.tracklet_failure_reason
+                    ),
+                    "sequence_material_ownership_barrier": float(
+                        material_ownership_barrier
+                    ),
                     **ref.evidence.availability.as_features(),
                 },
             )
@@ -2234,6 +1856,29 @@ def _project_candidates(
     return output
 
 
+def _frame_tracklet_failure(refs: tuple[_CandidateRef, ...]) -> str:
+    tracked = tuple(ref for ref in refs if ref.tracklet_id is not None)
+    if not tracked:
+        return "NO_ELIGIBLE_ROW_HYPOTHESIS"
+    if any(
+        ref.tracklet_admitted and not ref.tracklet_incompatible
+        for ref in tracked
+    ):
+        return "TRACKLET_NOT_SELECTED_BY_PATH"
+    if any(ref.tracklet_incompatible for ref in tracked):
+        return "INCOMPATIBLE_BRANCH"
+    owner = max(
+        tracked,
+        key=lambda ref: (
+            int(ref.authority),
+            ref.local_quality,
+            -float(ref.candidate.y),
+            ref.candidate.source,
+        ),
+    )
+    return owner.tracklet_failure_reason or "PROVISIONAL_TRACKLET"
+
+
 def _hard_unavailable(
     detection: PhaseDetection,
     config: OilObservationResolverConfig,
@@ -2263,6 +1908,160 @@ def _relative_y(y: float, glass: GlassInspectionConfig) -> float:
     top = float(ellipse.center_y - ellipse.radius_y)
     bottom = float(ellipse.center_y + ellipse.radius_y)
     return _unit((float(y) - top) / max(1.0, bottom - top))
+
+
+def _tracklet_policy(
+    refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
+    glass: GlassInspectionConfig,
+    config: OilObservationResolverConfig,
+    confirmed_initial_state: InitialObservationState | None,
+) -> DirectedTrackletPolicy:
+    ellipse = glass.geometry.ellipse
+    top = float(ellipse.center_y - ellipse.radius_y)
+    height = max(1.0, float(ellipse.radius_y) * 2.0)
+    maximum_jump = max(
+        1.0,
+        float(glass.detector_settings.temporal_max_jump_px),
+    )
+    row_tolerance = max(
+        3.0,
+        min(
+            maximum_jump * 0.50,
+            max(
+                8.0,
+                maximum_jump * 0.375,
+                height * config.tracklet_row_hypothesis_ratio,
+            ),
+        ),
+    )
+    short_observation = bool(
+        refs_by_frame
+        and any(
+            ref.terminal_fallback
+            for refs in refs_by_frame
+            for ref in refs
+        )
+    )
+    return DirectedTrackletPolicy(
+        geometry_top_y=top,
+        geometry_height=height,
+        maximum_jump_px=maximum_jump,
+        row_hypothesis_tolerance_px=row_tolerance,
+        maximum_lost_frames=config.tracklet_maximum_lost_frames,
+        confirmation_window_frames=(
+            config.tracklet_confirmation_window_frames
+        ),
+        confirmation_min_observations=(
+            config.tracklet_confirmation_min_observations
+        ),
+        confirmation_min_anchor_frames=1 if short_observation else 3,
+        confirmation_min_progress_px=max(
+            4.0,
+            height * config.tracklet_confirmation_min_progress_ratio,
+        ),
+        confirmation_min_directional_agreement=(
+            config.tracklet_confirmation_min_directional_agreement
+        ),
+        confirmation_min_motion_support=(
+            config.tracklet_confirmation_min_motion_support
+        ),
+        confirmation_min_motion_coverage=(
+            config.tracklet_confirmation_min_motion_coverage
+        ),
+        continuation_grace_frames=(
+            config.tracklet_continuation_grace_frames
+        ),
+        continuation_min_motion_energy=(
+            config.tracklet_continuation_min_motion_energy
+        ),
+        continuation_min_motion_coverage=(
+            config.tracklet_continuation_min_motion_coverage
+        ),
+        entrance_band_ratio=config.entrance_band_ratio,
+        initial_state=confirmed_initial_state,
+        ambiguity_margin=config.tracklet_ambiguity_margin,
+    )
+
+
+def _material_phase_policy(
+    glass: GlassInspectionConfig,
+    config: OilObservationResolverConfig,
+    confirmed_initial_state: InitialObservationState | None,
+) -> OilMaterialPhasePolicy:
+    ellipse = glass.geometry.ellipse
+    height = max(1.0, float(ellipse.radius_y) * 2.0)
+    return OilMaterialPhasePolicy(
+        geometry_top_y=float(ellipse.center_y - ellipse.radius_y),
+        geometry_height=height,
+        maximum_jump_px=max(
+            1.0,
+            float(glass.detector_settings.temporal_max_jump_px),
+        ),
+        maximum_lost_frames=max(
+            config.tracklet_maximum_lost_frames,
+            config.tracklet_confirmation_window_frames // 2,
+        ),
+        handoff_ambiguity_margin=config.tracklet_ambiguity_margin,
+        handoff_direction_reversal_tolerance_px=max(
+            1.0,
+            height * config.tracklet_row_hypothesis_ratio,
+        ),
+        fill_onset_intent_frames=(
+            config.tracklet_confirmation_window_frames
+        ),
+        fill_evidence_window_frames=(
+            config.tracklet_confirmation_window_frames
+            + config.completed_fill_gap_frames
+        ),
+        entrance_band_ratio=config.entrance_band_ratio,
+        fill_minimum_span_ratio=config.completed_fill_min_span_ratio,
+        minimum_directional_agreement=(
+            config.tracklet_confirmation_min_directional_agreement
+        ),
+        empty_entrance_motion_enabled=(
+            confirmed_initial_state
+            is InitialObservationState.EMPTY_NO_INTERFACE
+        ),
+        fill_minimum_motion_support=(
+            config.tracklet_confirmation_min_motion_support
+        ),
+        fill_minimum_motion_coverage=(
+            config.tracklet_confirmation_min_motion_coverage
+        ),
+        drain_entrance_ratio=config.completed_fill_release_ratio,
+        drain_minimum_progress_ratio=(
+            config.completed_fill_release_min_downward_ratio
+        ),
+        drain_minimum_directional_agreement=(
+            config.completed_fill_release_directional_ratio
+        ),
+        material_conflict_limit=(
+            config.completed_fill_material_conflict_min
+        ),
+    )
+
+
+def _interface_selector_policy(
+    glass: GlassInspectionConfig,
+    config: OilObservationResolverConfig,
+) -> OilInterfaceSelectorPolicy:
+    ellipse = glass.geometry.ellipse
+    return OilInterfaceSelectorPolicy(
+        geometry_top_y=float(ellipse.center_y - ellipse.radius_y),
+        geometry_height=max(1.0, float(ellipse.radius_y) * 2.0),
+        maximum_jump_px=max(
+            1.0,
+            float(glass.detector_settings.temporal_max_jump_px),
+        ),
+        lookahead_frames=config.tracklet_confirmation_window_frames,
+        ambiguity_margin=config.tracklet_ambiguity_margin,
+        unknown_transition_cost=config.unknown_transition_cost,
+        incompatible_state_transition_cost=(
+            config.incompatible_state_transition_cost
+        ),
+        state_min_evidence=config.state_min_evidence,
+        entrance_band_ratio=config.entrance_band_ratio,
+    )
 
 
 def _longest_consecutive(indices: tuple[int, ...]) -> int:
@@ -2677,186 +2476,10 @@ def _ordinary_semantic_rank(
     )
 
 
-def _qualified_anchor_keys(
-    anchors: tuple[_CandidateRef, ...],
-    *,
-    frame_count: int,
-    horizon: int,
-    maximum_jump: float,
-    minimum_anchor_frames: int = 2,
-) -> set[tuple[int, int]]:
-    """Return anchors that belong to a bounded multi-frame path.
-
-    Candidate order inside a frame is not temporal order.  The R5-style greedy
-    grouping treated a second candidate from the same frame as a path break, so
-    common top-k rasters fragmented every otherwise valid track.  R7 computes
-    forward/backward path support across *different* frames and never connects
-    candidates merely because they are adjacent in the flattened list.
-    """
-
-    if not anchors:
-        return set()
-    requested_minimum = max(1, int(minimum_anchor_frames))
-    minimum = (
-        1
-        if requested_minimum == 1
-        else 2
-        if frame_count <= max(6, horizon * 2)
-        else max(3, requested_minimum)
-    )
-    by_frame: dict[int, tuple[_CandidateRef, ...]] = {}
-    for frame_offset in sorted({item.frame_offset for item in anchors}):
-        by_frame[frame_offset] = tuple(
-            item for item in anchors if item.frame_offset == frame_offset
-        )
-
-    forward: dict[tuple[int, int], int] = {}
-    for anchor in sorted(
-        anchors,
-        key=lambda item: (item.frame_offset, float(item.candidate.y)),
-    ):
-        best = 0
-        first = max(0, anchor.frame_offset - horizon * 2)
-        for prior_frame in range(first, anchor.frame_offset):
-            gap = anchor.frame_offset - prior_frame
-            for prior in by_frame.get(prior_frame, ()):
-                if (
-                    _phase_component_class(anchor)
-                    == _phase_component_class(prior)
-                    and
-                    abs(float(anchor.candidate.y) - float(prior.candidate.y))
-                    <= maximum_jump * gap * 0.90
-                ):
-                    best = max(
-                        best,
-                        forward.get(
-                            (prior.frame_offset, prior.candidate_offset),
-                            1,
-                        ),
-                    )
-        forward[(anchor.frame_offset, anchor.candidate_offset)] = best + 1
-
-    backward: dict[tuple[int, int], int] = {}
-    for anchor in sorted(
-        anchors,
-        key=lambda item: (-item.frame_offset, float(item.candidate.y)),
-    ):
-        best = 0
-        last = min(frame_count - 1, anchor.frame_offset + horizon * 2)
-        for next_frame in range(anchor.frame_offset + 1, last + 1):
-            gap = next_frame - anchor.frame_offset
-            for following in by_frame.get(next_frame, ()):
-                if (
-                    _phase_component_class(anchor)
-                    == _phase_component_class(following)
-                    and
-                    abs(float(anchor.candidate.y) - float(following.candidate.y))
-                    <= maximum_jump * gap * 0.90
-                ):
-                    best = max(
-                        best,
-                        backward.get(
-                            (following.frame_offset, following.candidate_offset),
-                            1,
-                        ),
-                    )
-        backward[(anchor.frame_offset, anchor.candidate_offset)] = best + 1
-
-    return {
-        key
-        for key in forward
-        if forward[key] + backward.get(key, 1) - 1 >= minimum
-    }
-
-
-def _trajectory_supported_keys(
-    refs_by_frame: tuple[tuple[_CandidateRef, ...], ...],
-    qualified_anchors: set[tuple[int, int]],
-    *,
-    maximum_jump: float,
-    minimum_anchor_frames: int = 2,
-) -> tuple[set[tuple[int, int]], dict[tuple[int, int], str]]:
-    """Return candidate keys in a consecutive, anchor-backed graph component.
-
-    Edges cross exactly one sampled frame.  A frame with no candidate therefore
-    remains a real gap and cannot be crossed by carried or interpolated state.
-    Multiple compatible rows are retained until the global path chooses one.
-    """
-
-    eligible_by_frame = tuple(
-        tuple(
-            ref
-            for ref in refs
-            if ref.authority >= OilCandidateAuthority.CONTINUATION_ELIGIBLE
-        )
-        for refs in refs_by_frame
-    )
-    neighbors: dict[tuple[int, int], set[tuple[int, int]]] = {}
-    refs_by_key: dict[tuple[int, int], _CandidateRef] = {}
-    for refs in eligible_by_frame:
-        for ref in refs:
-            key = (ref.frame_offset, ref.candidate_offset)
-            refs_by_key[key] = ref
-            neighbors.setdefault(key, set())
-    for frame_offset in range(1, len(eligible_by_frame)):
-        prior_refs = eligible_by_frame[frame_offset - 1]
-        current_refs = eligible_by_frame[frame_offset]
-        for prior in prior_refs:
-            prior_key = (prior.frame_offset, prior.candidate_offset)
-            for current in current_refs:
-                if (
-                    abs(float(current.candidate.y) - float(prior.candidate.y))
-                    > maximum_jump
-                    or _phase_component_class(current)
-                    != _phase_component_class(prior)
-                ):
-                    continue
-                current_key = (current.frame_offset, current.candidate_offset)
-                neighbors[prior_key].add(current_key)
-                neighbors[current_key].add(prior_key)
-
-    supported: set[tuple[int, int]] = set()
-    component_ids: dict[tuple[int, int], str] = {}
-    unseen = set(refs_by_key)
-    while unseen:
-        seed = min(unseen)
-        component: set[tuple[int, int]] = set()
-        pending = [seed]
-        while pending:
-            key = pending.pop()
-            if key in component:
-                continue
-            component.add(key)
-            unseen.discard(key)
-            pending.extend(neighbors.get(key, ()))
-        anchor_frames = {
-            key[0] for key in component if key in qualified_anchors
-        }
-        if len(anchor_frames) >= max(1, int(minimum_anchor_frames)):
-            supported.update(component)
-            owner = min(component)
-            component_id = f"oil-component:{owner[0]}:{owner[1]}"
-            component_ids.update({key: component_id for key in component})
-    return supported, component_ids
-
-
-def _phase_component_class(ref: _CandidateRef) -> str:
-    """Return the physical side of the tracked phase component."""
-
-    return "ordered_lower" if ref.ordered_lower else "direct"
-
-
-def _node_component_id(node: _Node) -> str | None:
+def _node_tracklet_id(node: _Node) -> str | None:
     if node.candidate_ref is None:
         return None
-    return node.candidate_ref.component_id
-
-
-def _node_order(node: _Node) -> int:
-    base = {"oil": 0, "full": 1, "empty": 2, "unknown": 3}[node.kind]
-    if node.y is None:
-        return base * 1_000_000
-    return base * 1_000_000 + int(round(node.y * 100.0))
+    return node.candidate_ref.tracklet_id
 
 
 def _unknown_node(layer: tuple[_Node, ...]) -> _Node:

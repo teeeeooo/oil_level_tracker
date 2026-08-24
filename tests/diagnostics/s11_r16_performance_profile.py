@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""Profile the official R15 analysis and bundle path before the R16 replacement."""
+"""Profile an exact fingerprint-guarded analysis and bundle path."""
 
 import argparse
 from dataclasses import dataclass, field
@@ -152,6 +152,9 @@ def _run_once(
     sample: str,
     repeat: int,
     debug_trace_level: DebugTraceLevel,
+    behavior_owner: str,
+    expected_numeric_oil_count: int,
+    expected_tracking_fingerprint: str,
 ) -> dict[str, object]:
     start_sec, end_sec = replay.QUALIFICATION_WINDOWS[sample]
     video_path = root / "sample" / f"{sample}.mp4"
@@ -167,7 +170,7 @@ def _run_once(
         start_sec,
         end_sec,
         run_label="S11-R16 PERF",
-        run_note="R0 behavior-preserving performance baseline",
+        run_note=f"{behavior_owner} fingerprint-guarded performance profile",
     )
     session.debug_trace_level = debug_trace_level
     session_setup_sec = time.perf_counter() - setup_started
@@ -200,8 +203,8 @@ def _run_once(
     summary = replay._sample_summary(sample, result, recipe, bundle)
     expected = (
         replay.ACCEPTED_ROW_COUNTS[sample],
-        R15_NUMERIC_OIL_COUNTS[sample],
-        R15_TRACKING_FINGERPRINTS[sample],
+        expected_numeric_oil_count,
+        expected_tracking_fingerprint,
     )
     actual = (
         summary["tracking_row_count"],
@@ -282,10 +285,23 @@ def run_profile(
     sample: str = "sample4",
     repeats: int = 3,
     debug_trace_level: DebugTraceLevel = DebugTraceLevel.NONE,
+    behavior_owner: str = "R15",
+    expected_numeric_oil_count: int | None = None,
+    expected_tracking_fingerprint: str | None = None,
 ) -> dict[str, object]:
     root = root.resolve()
     output_root = output_root.resolve()
     output_root.mkdir(parents=True, exist_ok=True)
+    expected_numeric = (
+        R15_NUMERIC_OIL_COUNTS[sample]
+        if expected_numeric_oil_count is None
+        else int(expected_numeric_oil_count)
+    )
+    expected_fingerprint = (
+        R15_TRACKING_FINGERPRINTS[sample]
+        if expected_tracking_fingerprint is None
+        else str(expected_tracking_fingerprint)
+    )
     runs = [
         _run_once(
             root=root,
@@ -293,6 +309,9 @@ def run_profile(
             sample=sample,
             repeat=repeat,
             debug_trace_level=debug_trace_level,
+            behavior_owner=behavior_owner,
+            expected_numeric_oil_count=expected_numeric,
+            expected_tracking_fingerprint=expected_fingerprint,
         )
         for repeat in range(1, repeats + 1)
     ]
@@ -303,7 +322,12 @@ def run_profile(
     manifest = {
         "schema": "s11-r16-performance-profile-v1",
         "source_head": _git_head(root),
-        "behavior_owner": "R15",
+        "behavior_owner": behavior_owner,
+        "behavior_contract": {
+            "tracking_row_count": replay.ACCEPTED_ROW_COUNTS[sample],
+            "numeric_oil_count": expected_numeric,
+            "tracking_fingerprint_sha256": expected_fingerprint,
+        },
         "sample": sample,
         "repeats": repeats,
         "normal_operational_config": {
@@ -358,6 +382,9 @@ def main() -> int:
     )
     parser.add_argument("--sample", choices=tuple(replay.QUALIFICATION_WINDOWS), default="sample4")
     parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument("--behavior-owner", default="R15")
+    parser.add_argument("--expected-numeric-oil-count", type=int)
+    parser.add_argument("--expected-tracking-fingerprint")
     parser.add_argument(
         "--debug-trace-level",
         choices=tuple(level.value for level in DebugTraceLevel),
@@ -366,12 +393,21 @@ def main() -> int:
     args = parser.parse_args()
     if args.repeats < 1:
         parser.error("--repeats must be at least 1")
+    if (args.expected_numeric_oil_count is None) != (
+        args.expected_tracking_fingerprint is None
+    ):
+        parser.error(
+            "R16 override requires both expected numeric count and fingerprint"
+        )
     manifest = run_profile(
         root=repository_root() if args.root is None else args.root,
         output_root=args.output_root,
         sample=args.sample,
         repeats=args.repeats,
         debug_trace_level=DebugTraceLevel(args.debug_trace_level),
+        behavior_owner=args.behavior_owner,
+        expected_numeric_oil_count=args.expected_numeric_oil_count,
+        expected_tracking_fingerprint=args.expected_tracking_fingerprint,
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False))
     return 0
