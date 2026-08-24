@@ -265,7 +265,7 @@ def test_prior_oil_alias_does_not_suppress_later_independent_foam() -> None:
         ),
         _detection(
             5,
-            _foam_candidate(187.0, dynamic=0.20),
+            _foam_candidate(180.0, dynamic=0.20),
             state=FillState.UNKNOWN_REVIEW,
         ),
     )
@@ -286,7 +286,7 @@ def test_prior_oil_alias_does_not_suppress_later_independent_foam() -> None:
         None,
         None,
         188.0,
-        187.0,
+        180.0,
     ]
     assert all(
         "R8_FOAM_OIL_ALIAS_REJECTED" in resolved[index].flags
@@ -481,3 +481,40 @@ def test_one_registered_motion_spike_inside_static_glare_cannot_confirm_foam() -
 
     assert diagnostics.episode_count == 0
     assert all(item.raw_foam_front_y is None for item in resolved)
+
+
+def test_dynamic_constant_glare_without_front_evolution_does_not_confirm() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(185.0, score=0.82, dynamic=1.0, static=0.0),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index in range(8)
+    )
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 0
+    assert diagnostics.rejected_unconfirmed_episode_count == 1
+    assert all(item.raw_foam_front_y is None for item in resolved)
+
+
+def test_time_adjacent_but_spatially_disconnected_foam_does_not_pool() -> None:
+    detections = (
+        _detection(0, _foam_candidate(190.0, dynamic=0.30)),
+        _detection(1, _foam_candidate(184.0, dynamic=0.30)),
+        _detection(2, _foam_candidate(80.0, dynamic=0.30)),
+        _detection(3, _foam_candidate(80.0, dynamic=0.30)),
+    )
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 1
+    assert [item.raw_foam_front_y for item in resolved] == [190.0, 184.0, None, None]

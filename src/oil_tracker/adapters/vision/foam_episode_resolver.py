@@ -29,7 +29,8 @@ class _FoamEvidence:
     candidate: BoundaryCandidate
     material_support: float
     material_bottom_y: float
-    whiteness: float
+    area_ratio: float
+    width_ratio: float
     internal_motion: float
     dynamic_support: float
     static_opposition: float
@@ -70,7 +71,7 @@ class FoamEpisodeResolver:
             for index, detection in enumerate(source)
         )
         eligible = tuple(item for item in evidence if item is not None)
-        groups = _candidate_groups(eligible)
+        tracks = _foam_front_tracks(eligible, glass)
         confirmed_frames: set[int] = set()
         rejected_static_frames: set[int] = set()
         rejected_unconfirmed_frames: set[int] = set()
@@ -79,35 +80,29 @@ class FoamEpisodeResolver:
         static_count = 0
         unconfirmed_count = 0
         oil_alias_count = 0
-        for group in groups:
-            group_frames = {item.frame_offset for item in group}
-            onset_groups = _dynamic_onset_groups(group)
-            rejected_unconfirmed_frames.update(group_frames)
+        for track in tracks:
+            track_frames = {item.frame_offset for item in track}
+            segments = _foam_confirmation_segments(track)
+            rejected_unconfirmed_frames.update(track_frames)
             accepted_any = False
-            static_dominated_any = False
+            static_dominated_any = _foam_track_static_dominated(track)
             oil_alias_any = False
             alias_group_frames: set[int] = set()
-            for onset in onset_groups or (group,):
-                accepted, static_dominated = _episode_accepted(onset, glass)
-                static_dominated_any = static_dominated_any or static_dominated
-                if not accepted:
+            for segment in segments:
+                if _episode_aliases_oil(segment, source, glass):
+                    oil_alias_any = True
+                    alias_frames = {item.frame_offset for item in segment}
+                    alias_group_frames.update(alias_frames)
+                    rejected_oil_alias_frames.update(alias_frames)
                     continue
-                supported = _supported_episode(onset, glass)
-                if supported:
-                    if _episode_aliases_oil(supported, source, glass):
-                        oil_alias_any = True
-                        alias_frames = {
-                            item.frame_offset for item in supported
-                        }
-                        alias_group_frames.update(alias_frames)
-                        rejected_oil_alias_frames.update(alias_frames)
-                        continue
-                    accepted_any = True
-                    episode_count += 1
-                    confirmed_frames.update(item.frame_offset for item in supported)
-                    rejected_unconfirmed_frames.difference_update(
-                        item.frame_offset for item in supported
-                    )
+                if not _foam_segment_accepted(segment, source, glass):
+                    continue
+                accepted_any = True
+                episode_count += 1
+                confirmed_frames.update(item.frame_offset for item in segment)
+                rejected_unconfirmed_frames.difference_update(
+                    item.frame_offset for item in segment
+                )
             if accepted_any:
                 if oil_alias_any:
                     oil_alias_count += 1
@@ -118,8 +113,8 @@ class FoamEpisodeResolver:
                 continue
             if static_dominated_any:
                 static_count += 1
-                rejected_static_frames.update(group_frames)
-                rejected_unconfirmed_frames.difference_update(group_frames)
+                rejected_static_frames.update(track_frames)
+                rejected_unconfirmed_frames.difference_update(track_frames)
             else:
                 unconfirmed_count += 1
 
@@ -228,7 +223,8 @@ class FoamEpisodeResolver:
             material_bottom_y=float(
                 features.get("material_component_bottom_y", candidate.y)
             ),
-            whiteness=whiteness,
+            area_ratio=_unit(features.get("area_ratio", 0.0)),
+            width_ratio=width,
             internal_motion=internal_motion,
             dynamic_support=dynamic,
             static_opposition=static,
@@ -431,11 +427,16 @@ class FoamEpisodeResolver:
         )
 
 
-def _candidate_groups(
+def _foam_front_tracks(
     evidence: tuple[_FoamEvidence, ...],
+    glass: GlassInspectionConfig,
 ) -> tuple[tuple[_FoamEvidence, ...], ...]:
     if not evidence:
         return ()
+    maximum_jump = max(
+        1.0,
+        float(glass.detector_settings.foam_max_front_jump_px),
+    )
     groups: list[list[_FoamEvidence]] = []
     current: list[_FoamEvidence] = []
     for item in evidence:
@@ -445,7 +446,18 @@ def _candidate_groups(
         prior = current[-1]
         frame_gap = item.frame_offset - prior.frame_offset
         time_gap = item.time_sec - prior.time_sec
-        if 0 < frame_gap <= 4 and 0.0 < time_gap <= 2.0:
+        front_jump = abs(float(item.candidate.y) - float(prior.candidate.y))
+        bottom_jump = abs(item.material_bottom_y - prior.material_bottom_y)
+        extent_compatible = bool(
+            bottom_jump <= maximum_jump * max(2, frame_gap * 2)
+            or abs(item.width_ratio - prior.width_ratio) <= 0.35
+        )
+        if (
+            0 < frame_gap <= 4
+            and 0.0 < time_gap <= 2.0
+            and front_jump <= maximum_jump * frame_gap
+            and extent_compatible
+        ):
             current.append(item)
         else:
             groups.append(current)
@@ -455,12 +467,12 @@ def _candidate_groups(
     return tuple(tuple(group) for group in groups)
 
 
-def _dynamic_onset_groups(
-    group: tuple[_FoamEvidence, ...],
+def _foam_confirmation_segments(
+    track: tuple[_FoamEvidence, ...],
 ) -> tuple[tuple[_FoamEvidence, ...], ...]:
     dynamic = tuple(
         item
-        for item in group
+        for item in track
         if min(item.internal_motion, item.dynamic_support) >= 0.15
     )
     if not dynamic:
@@ -487,13 +499,13 @@ def _dynamic_onset_groups(
         last = cluster[-1].frame_offset
         selected = [
             item
-            for item in group
+            for item in track
             if first <= item.frame_offset <= last
         ]
         following = next(
             (
                 item
-                for item in group
+                for item in track
                 if item.frame_offset > last
                 and item.frame_offset - last <= 2
             ),
@@ -505,22 +517,23 @@ def _dynamic_onset_groups(
     return tuple(output)
 
 
-def _episode_accepted(
-    group: tuple[_FoamEvidence, ...],
+def _foam_segment_accepted(
+    segment: tuple[_FoamEvidence, ...],
+    detections: tuple[PhaseDetection, ...],
     glass: GlassInspectionConfig,
-) -> tuple[bool, bool]:
-    if len(group) < 2:
-        return False, bool(group and group[0].static_opposition >= 0.65)
-    material = sum(item.material_support for item in group) / len(group)
-    coherent_ratio = sum(item.coherent for item in group) / len(group)
-    static = sum(item.static_opposition for item in group) / len(group)
+) -> bool:
+    if len(segment) < 2:
+        return False
+    material = sum(item.material_support for item in segment) / len(segment)
+    coherent_ratio = sum(item.coherent for item in segment) / len(segment)
+    static = sum(item.static_opposition for item in segment) / len(segment)
     registered_evolution = tuple(
         min(item.internal_motion, item.dynamic_support)
-        for item in group
+        for item in segment
     )
     dynamic_frames = sum(value >= 0.15 for value in registered_evolution)
     dynamic = sum(registered_evolution) / len(registered_evolution)
-    dynamic_frame_ratio = dynamic_frames / len(group)
+    dynamic_frame_ratio = dynamic_frames / len(segment)
     strong_dynamic_frames = sum(value >= 0.20 for value in registered_evolution)
     static_dominated = bool(
         static >= 0.65
@@ -530,44 +543,65 @@ def _episode_accepted(
         0.30,
         float(glass.detector_settings.foam_min_evidence_score) * 0.72,
     )
-    accepted = bool(
+    front_rows = tuple(float(item.candidate.y) for item in segment)
+    front_span = max(front_rows) - min(front_rows)
+    area_span = max(item.area_ratio for item in segment) - min(
+        item.area_ratio for item in segment
+    )
+    width_span = max(item.width_ratio for item in segment) - min(
+        item.width_ratio for item in segment
+    )
+    maximum_width = max(item.width_ratio for item in segment)
+    geometry_height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
+    evolving_material = bool(
+        front_span >= max(4.0, geometry_height * 0.015)
+        or area_span >= max(
+            0.02,
+            float(glass.detector_settings.foam_min_area_ratio),
+        )
+        or width_span / max(0.01, maximum_width) >= 0.12
+        or _separated_layer_witness(segment, detections, glass)
+    )
+    return bool(
         not static_dominated
         and material >= required_material
         and coherent_ratio >= 0.60
         and dynamic >= 0.10
         and dynamic_frames >= 2
         and dynamic_frame_ratio >= 0.50
+        and evolving_material
     )
-    return accepted, static_dominated
 
 
-def _supported_episode(
-    group: tuple[_FoamEvidence, ...],
+def _foam_track_static_dominated(track: tuple[_FoamEvidence, ...]) -> bool:
+    if not track:
+        return False
+    static = sum(item.static_opposition for item in track) / len(track)
+    strong_dynamic = sum(
+        min(item.internal_motion, item.dynamic_support) >= 0.20
+        for item in track
+    )
+    return static >= 0.65 and strong_dynamic < 2
+
+
+def _separated_layer_witness(
+    segment: tuple[_FoamEvidence, ...],
+    detections: tuple[PhaseDetection, ...],
     glass: GlassInspectionConfig,
-) -> tuple[_FoamEvidence, ...]:
-    activation = [
-        index
-        for index, item in enumerate(group)
-        if min(item.internal_motion, item.dynamic_support) >= 0.15
-    ]
-    if not activation:
-        return ()
-    first = activation[0]
-    last = min(len(group) - 1, activation[-1] + 1)
-    maximum_jump = max(
-        1.0,
-        float(glass.detector_settings.foam_max_front_jump_px),
+) -> bool:
+    maximum_separation = max(
+        12.0,
+        float(glass.geometry.ellipse.radius_y) * 2.0 * 0.20,
     )
-    supported: list[_FoamEvidence] = []
-    for item in group[first : last + 1]:
-        if not supported:
-            supported.append(item)
-            continue
-        frame_gap = item.frame_offset - supported[-1].frame_offset
-        jump = abs(float(item.candidate.y) - float(supported[-1].candidate.y))
-        if jump <= maximum_jump * max(1, frame_gap):
-            supported.append(item)
-    return tuple(supported)
+    return sum(
+        (relation := _oil_foam_relation(
+            item, detections[item.frame_offset], glass
+        )).kind == "distinct_lower_oil"
+        and relation.separation is not None
+        and relation.separation <= maximum_separation
+        and item.width_ratio >= 0.55
+        for item in segment
+    ) >= 2
 
 
 def _episode_aliases_oil(

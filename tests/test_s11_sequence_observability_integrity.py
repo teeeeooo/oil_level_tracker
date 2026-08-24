@@ -103,7 +103,7 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs(
     ]
     assert barrier
     assert not any(_numeric(sample) for sample in barrier)
-    assert all("R16_MATERIAL_PHASE_BARRIER" in sample.flags for sample in barrier)
+    assert all("R17_MATERIAL_PHASE_BARRIER" in sample.flags for sample in barrier)
     early_foam = [
         sample
         for sample in rows
@@ -113,6 +113,12 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs(
     # multi-frame dynamic Foam observation during inflow.
     assert len(early_foam) >= 2
     assert min(sample.timestamp_sec for sample in early_foam) <= 30.60
+    reviewed_second_episode = [
+        sample
+        for sample in early_foam
+        if 37.0 <= sample.timestamp_sec <= 38.1
+    ]
+    assert len(reviewed_second_episode) >= 2
     assert not any(
         sample.raw_foam_front_y is not None
         for sample in rows
@@ -124,13 +130,13 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs(
     # the release and two physical-ID handoffs; their public coordinates all
     # come from the selected frame, never from a retained owner coordinate.
     reviewed_drain_witnesses = (
-        (81.0143, 233.0, "R16_TRACKLET_WITNESS"),
-        (83.5168, 239.0, "R16_TRACKLET_CONFIRMED"),
-        (85.5188, 253.0, "R16_TRACKLET_CONFIRMED"),
-        (91.5248, 320.0, "R16_TRACKLET_WITNESS"),
-        (94.0273, 336.0, "R16_TRACKLET_CONFIRMED"),
-        (95.0283, 345.0, "R16_TRACKLET_CONTINUING"),
-        (96.5298, 342.0, "R16_TRACKLET_CONTINUING"),
+        (81.0143, 233.0, "R17_TRACKLET_WITNESS"),
+        (83.5168, 239.0, "R17_TRACKLET_CONFIRMED"),
+        (85.5188, 253.0, "R17_TRACKLET_CONFIRMED"),
+        (91.5248, 320.0, "R17_TRACKLET_WITNESS"),
+        (94.0273, 336.0, "R17_TRACKLET_CONFIRMED"),
+        (95.0283, 345.0, "R17_TRACKLET_CONTINUING"),
+        (96.5298, 342.0, "R17_TRACKLET_CONTINUING"),
     )
     for timestamp, expected_y, lifecycle_flag in reviewed_drain_witnesses:
         representative = min(
