@@ -122,7 +122,7 @@ error while retaining the newer sample3 safety correction; the remaining
 sample4 misses stay explicit rather than being filled by a conflicting row.
 
 The reproducibility manifest is
-`/tmp/s11-r17-corrected-final-audit/replay_manifest.json`. It is an ignored
+`/tmp/s11-r17-v2-final-audit/replay_manifest.json`. It is an ignored
 local artifact; the durable counts, hashes and abstention set are recorded
 above and in the checked diagnostic script.
 
