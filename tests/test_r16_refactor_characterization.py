@@ -22,10 +22,10 @@ CURRENT_FRAME_FINGERPRINT = (
 R0_COMPLETED_WINDOW_FINGERPRINT = (
     "1050ca7966600d67b0cd430225c562c7ea32ae3329c3bad260bff89593b5cbe0"
 )
-R16_ONSET_INTENT_COMPLETED_WINDOW_FINGERPRINT = (
-    # Bounded fill-onset intent censors foreign predecessors while permitting
-    # only the phase-declared adjacent physical-owner handoff.
-    "c5329baeb0c0dba257b8fe48761d54c7ca4c879427955202c7e0cf0bb9564578"
+R17_PHYSICAL_OBSERVATION_COMPLETED_WINDOW_FINGERPRINT = (
+    # Physical confirmation is initial-state neutral; bounded phase ownership
+    # still censors foreign predecessors and preserves same-frame projection.
+    "33d9b6733abaca0485aaa4836a5d6a51e93bc144ad6e89af9ee2d962817b7a05"
 )
 
 
@@ -251,7 +251,7 @@ def test_r0_completed_window_stage_and_provenance_fingerprint() -> None:
     }
 
     fingerprint = _fingerprint(payload)
-    assert fingerprint == R16_ONSET_INTENT_COMPLETED_WINDOW_FINGERPRINT
+    assert fingerprint == R17_PHYSICAL_OBSERVATION_COMPLETED_WINDOW_FINGERPRINT
     assert fingerprint != R0_COMPLETED_WINDOW_FINGERPRINT
     for source, resolved in zip(detections, result.detections, strict=True):
         assert resolved.raw_oil_air_level_y in {

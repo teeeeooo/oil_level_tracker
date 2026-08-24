@@ -11,7 +11,7 @@ from .foam_episode_resolver import FoamEpisodeResolver
 from .oil_observation_resolver import OilObservationResolver
 
 
-OBSERVATION_SEQUENCE_VERSION = "r16-directed-interface-tracklets-v1"
+OBSERVATION_SEQUENCE_VERSION = "r17-physical-observation-ownership-v1"
 
 
 @dataclass(frozen=True)
