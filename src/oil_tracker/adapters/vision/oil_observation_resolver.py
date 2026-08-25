@@ -56,7 +56,7 @@ from .oil_phase_identity import (
 )
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r17-physical-observation-ownership-v3"
+OIL_OBSERVATION_RESOLVER_VERSION = "r18-lifecycle-closure-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -2020,10 +2020,7 @@ def _material_phase_policy(
         minimum_directional_agreement=(
             config.tracklet_confirmation_min_directional_agreement
         ),
-        empty_entrance_motion_enabled=(
-            confirmed_initial_state
-            is InitialObservationState.EMPTY_NO_INTERFACE
-        ),
+        confirmed_initial_state=confirmed_initial_state,
         fill_minimum_motion_support=(
             config.tracklet_confirmation_min_motion_support
         ),

@@ -25,12 +25,16 @@ from oil_tracker.adapters.vision.oil_sequence_types import (
     TrackletLifecycle,
 )
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
-from oil_tracker.domain.enums import BoundaryKind, FillState
+from oil_tracker.domain.enums import (
+    BoundaryKind,
+    FillState,
+    InitialObservationState,
+)
 
 
 def _policy(
     *,
-    empty_entrance_motion_enabled: bool = False,
+    confirmed_initial_state: InitialObservationState | None = None,
 ) -> OilMaterialPhasePolicy:
     return OilMaterialPhasePolicy(
         geometry_top_y=0.0,
@@ -44,7 +48,7 @@ def _policy(
         entrance_band_ratio=0.27,
         fill_minimum_span_ratio=0.20,
         minimum_directional_agreement=0.60,
-        empty_entrance_motion_enabled=empty_entrance_motion_enabled,
+        confirmed_initial_state=confirmed_initial_state,
         fill_minimum_motion_support=0.50,
         fill_minimum_motion_coverage=0.50,
         drain_entrance_ratio=0.40,
@@ -189,7 +193,7 @@ def _selector_policy() -> OilInterfaceSelectorPolicy:
 def _resolve(
     layers: tuple[tuple[OilSequenceNode, ...], ...],
     *,
-    empty_entrance_motion_enabled: bool = False,
+    confirmed_initial_state: InitialObservationState | None = None,
 ):
     path = tuple(
         next((node for node in layer if node.kind == "oil"), layer[-1])
@@ -197,7 +201,7 @@ def _resolve(
     )
     phase = OilMaterialPhaseLifecycleOwner(
         _policy(
-            empty_entrance_motion_enabled=empty_entrance_motion_enabled,
+            confirmed_initial_state=confirmed_initial_state,
         )
     ).resolve(layers)
     selected = tuple(
@@ -857,7 +861,7 @@ def test_confirmed_empty_lower_entrance_motion_activates_fill() -> None:
 
     result = _resolve(
         ((entrance, _unknown(0)),),
-        empty_entrance_motion_enabled=True,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
     )
 
     assert result.phases == (OilMaterialPhase.FILLING,)
@@ -923,7 +927,10 @@ def test_established_slow_empty_fill_reenters_with_distinct_physical_id() -> Non
         ),
     )
 
-    result = _resolve(layers, empty_entrance_motion_enabled=True)
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
 
     assert result.phases[8] is OilMaterialPhase.FILLING
     assert result.reasons[8] == "FILL_PHASE_REENTRY"
@@ -931,7 +938,7 @@ def test_established_slow_empty_fill_reenters_with_distinct_physical_id() -> Non
     assert result.owner_chains[8] == ("fill-a", "fill-b")
 
 
-def test_initial_empty_reentry_rejects_reversed_or_distant_tracklet() -> None:
+def test_established_partial_fill_reverses_into_unique_drain_owner() -> None:
     layers = (
         (
             _node(
@@ -985,12 +992,204 @@ def test_initial_empty_reentry_rejects_reversed_or_distant_tracklet() -> None:
         ),
     )
 
-    result = _resolve(layers, empty_entrance_motion_enabled=True)
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
 
-    assert result.phases[7] is OilMaterialPhase.OPEN
-    assert result.allowed_tracklet_ids[7] == frozenset()
-    assert result.owner_chains[7] == ("distant",)
-    assert result.reasons[7] == "FILL_EVIDENCE_ACCUMULATING"
+    assert result.phases[7] is OilMaterialPhase.DRAINING
+    assert result.allowed_tracklet_ids[7] == frozenset({"reversed"})
+    assert result.owner_chains[7] == ("fill-a", "reversed")
+    assert result.reasons[7] == "PARTIAL_FILL_DRAIN_RELEASE_CONFIRMED"
+
+
+def test_initial_empty_downward_tracklet_cannot_start_without_fill_owner() -> None:
+    downward = _node(
+        0,
+        "downward",
+        170.0,
+        direction=1,
+        progress=20.0,
+        motion_support=0.90,
+        motion_coverage=0.85,
+        confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+    )
+
+    result = _resolve(
+        ((downward, _unknown(0)),),
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert result.phases == (OilMaterialPhase.OPEN,)
+    assert result.allowed_tracklet_ids == (frozenset(),)
+    assert result.path[0].kind == "unknown"
+
+
+def test_partial_fill_drain_release_rejects_distant_or_material_opposed_rows() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=30.0,
+            motion_support=0.90,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=30.0,
+            motion_support=0.90,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    distant = _node(5, "distant", 90.0, direction=1, progress=30.0)
+    opposed = _node(
+        6,
+        "opposed",
+        165.0,
+        direction=1,
+        progress=30.0,
+        material_conflict=0.80,
+    )
+    layers = tuple(
+        (node, _unknown(frame)) for frame, node in enumerate(fill)
+    ) + tuple((_unknown(frame),) for frame in range(2, 5)) + (
+        (distant, _unknown(5)),
+        (opposed, _unknown(6)),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert result.phases[5:] == (
+        OilMaterialPhase.OPEN,
+        OilMaterialPhase.OPEN,
+    )
+    assert result.allowed_tracklet_ids[5:] == (
+        frozenset(),
+        frozenset(),
+    )
+
+
+def test_ambiguous_partial_fill_drain_release_stays_unknown() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=30.0,
+            motion_support=0.90,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=30.0,
+            motion_support=0.90,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    layers = tuple(
+        (node, _unknown(frame)) for frame, node in enumerate(fill)
+    ) + tuple((_unknown(frame),) for frame in range(2, 5)) + (
+        (
+            _node(5, "drain-a", 162.0, direction=1, progress=25.0),
+            _node(5, "drain-b", 164.0, direction=1, progress=25.0),
+            _unknown(5),
+        ),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert result.phases[-1] is OilMaterialPhase.OPEN
+    assert result.reasons[-1] == "PARTIAL_FILL_DRAIN_RELEASE_AMBIGUOUS"
+    assert result.allowed_tracklet_ids[-1] == frozenset()
+    assert result.owner_chains[-1] == ("fill",)
+
+
+def test_confirmed_full_starts_behind_fail_closed_material_barrier() -> None:
+    stationary = _node(
+        0,
+        "stationary",
+        55.0,
+        direction=1,
+        progress=2.0,
+    )
+
+    result = _resolve(
+        ((stationary, _unknown(0)),),
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases == (OilMaterialPhase.FILLED_BARRIER,)
+    assert result.reasons == ("INITIAL_FULL_BARRIER",)
+    assert result.allowed_tracklet_ids == (frozenset(),)
+    assert result.path[0].kind == "unknown"
+
+
+def test_confirmed_full_releases_unique_downward_top_origin_owner() -> None:
+    drain = _node(
+        0,
+        "drain",
+        65.0,
+        direction=1,
+        progress=20.0,
+        material_conflict=0.10,
+    )
+
+    result = _resolve(
+        ((drain, _unknown(0)),),
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases == (OilMaterialPhase.DRAINING,)
+    assert result.reasons == ("DRAIN_RELEASE_CONFIRMED",)
+    assert result.allowed_tracklet_ids == (frozenset({"drain"}),)
+    assert result.owner_chains == (("drain",),)
+    assert result.path[0].candidate_ref is drain.candidate_ref
+
+
+def test_confirmed_full_rejects_internal_or_ambiguous_drain_release() -> None:
+    internal = _node(0, "internal", 110.0, direction=1, progress=30.0)
+    ambiguous = (
+        _node(1, "drain-a", 65.0, direction=1, progress=20.0),
+        _node(1, "drain-b", 67.0, direction=1, progress=20.0),
+    )
+    layers = (
+        (internal, _unknown(0)),
+        (*ambiguous, _unknown(1)),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases == (
+        OilMaterialPhase.FILLED_BARRIER,
+        OilMaterialPhase.FILLED_BARRIER,
+    )
+    assert result.reasons == (
+        "INITIAL_FULL_BARRIER",
+        "DRAIN_RELEASE_AMBIGUOUS",
+    )
+    assert result.allowed_tracklet_ids == (frozenset(), frozenset())
 
 
 def test_filled_barrier_ignores_cap_rows_and_gaps() -> None:
@@ -1699,7 +1898,7 @@ def test_initial_empty_continuation_only_bottom_rise_can_arm_fill() -> None:
 
     result = _resolve(
         tuple((node, _unknown(frame)) for frame, node in enumerate(nodes)),
-        empty_entrance_motion_enabled=True,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
     )
 
     assert result.phases[-1] is OilMaterialPhase.FILLED_BARRIER
@@ -1728,7 +1927,7 @@ def test_initial_empty_weak_motion_bottom_drift_stays_open() -> None:
 
     result = _resolve(
         tuple((node, _unknown(frame)) for frame, node in enumerate(nodes)),
-        empty_entrance_motion_enabled=True,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
     )
 
     assert OilMaterialPhase.FILLED_BARRIER not in result.phases

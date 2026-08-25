@@ -5,6 +5,8 @@ from enum import Enum
 import math
 from statistics import median
 
+from oil_tracker.domain.enums import InitialObservationState
+
 from .oil_candidate_authority import OilCandidateAuthority
 from .oil_sequence_types import (
     OilCandidateRef,
@@ -40,13 +42,27 @@ class OilMaterialPhasePolicy:
     entrance_band_ratio: float
     fill_minimum_span_ratio: float
     minimum_directional_agreement: float
-    empty_entrance_motion_enabled: bool
+    confirmed_initial_state: InitialObservationState | None
     fill_minimum_motion_support: float
     fill_minimum_motion_coverage: float
     drain_entrance_ratio: float
     drain_minimum_progress_ratio: float
     drain_minimum_directional_agreement: float
     material_conflict_limit: float
+
+    @property
+    def initial_empty(self) -> bool:
+        return (
+            self.confirmed_initial_state
+            is InitialObservationState.EMPTY_NO_INTERFACE
+        )
+
+    @property
+    def initial_full(self) -> bool:
+        return (
+            self.confirmed_initial_state
+            is InitialObservationState.FULL_NO_INTERFACE
+        )
 
 
 @dataclass(frozen=True)
@@ -126,10 +142,14 @@ class OilMaterialPhaseLifecycleOwner:
         fill_confirmation_profiles: list[OilFillConfirmationProfile] = []
         allowed_tracklet_ids: list[frozenset[str] | None] = []
         ambiguous_frames: set[int] = set()
-        phase = OilMaterialPhase.OPEN
+        phase = (
+            OilMaterialPhase.FILLED_BARRIER
+            if self.policy.initial_full
+            else OilMaterialPhase.OPEN
+        )
         chains: dict[str, _FillChain] = {}
         filled_chain: tuple[str, ...] = ()
-        filled_frame: int | None = None
+        filled_frame: int | None = 0 if self.policy.initial_full else None
         fill_terminal_owner: str | None = None
         fill_owner_open = False
         established_fill_chain: _FillChain | None = None
@@ -222,8 +242,53 @@ class OilMaterialPhaseLifecycleOwner:
                         dynamic_fill_owners = frozenset({chosen})
                         fill_phase_reentered = True
                         reason = "FILL_PHASE_REENTRY"
+                if (
+                    self.policy.initial_empty
+                    and established_fill_chain is not None
+                    and not dynamic_fill_owners
+                ):
+                    partial_release, release_ambiguous = (
+                        self._partial_fill_drain_release_choice(
+                            established_fill_chain,
+                            rows,
+                        )
+                    )
+                    if release_ambiguous:
+                        phase = OilMaterialPhase.OPEN
+                        allowed = frozenset()
+                        ambiguous_frames.add(frame)
+                        reason = "PARTIAL_FILL_DRAIN_RELEASE_AMBIGUOUS"
+                        phases.append(phase)
+                        reasons.append(reason)
+                        owner_chains.append(established_fill_chain.owners)
+                        fill_confirmation_profiles.append(
+                            fill_confirmation_profile
+                        )
+                        allowed_tracklet_ids.append(allowed)
+                        continue
+                    if partial_release is not None:
+                        drain_chain = _DrainChain(
+                            owner=partial_release.tracklet_id,
+                            owners=_append_unique_owner(
+                                established_fill_chain.owners,
+                                partial_release.tracklet_id,
+                            ),
+                            last_y=partial_release.y,
+                            last_frame=frame,
+                        )
+                        phase = OilMaterialPhase.DRAINING
+                        allowed = frozenset({partial_release.tracklet_id})
+                        reason = "PARTIAL_FILL_DRAIN_RELEASE_CONFIRMED"
+                        phases.append(phase)
+                        reasons.append(reason)
+                        owner_chains.append(drain_chain.owners)
+                        fill_confirmation_profiles.append(
+                            fill_confirmation_profile
+                        )
+                        allowed_tracklet_ids.append(allowed)
+                        continue
                 established_interface_blocker = bool(
-                    not self.policy.empty_entrance_motion_enabled
+                    not self.policy.initial_empty
                     and any(
                         owner not in dynamic_fill_owners
                         and self._chain_is_strong_anchor_interface(chain)
@@ -273,7 +338,7 @@ class OilMaterialPhaseLifecycleOwner:
                         phase = OilMaterialPhase.OPEN
                         allowed = (
                             frozenset()
-                            if self.policy.empty_entrance_motion_enabled
+                            if self.policy.initial_empty
                             else None
                         )
                         if chains:
@@ -282,7 +347,7 @@ class OilMaterialPhaseLifecycleOwner:
                                 if established_interface_blocker
                                 else "FILL_EVIDENCE_ACCUMULATING"
                             )
-                        elif self.policy.empty_entrance_motion_enabled:
+                        elif self.policy.initial_empty:
                             reason = "INITIAL_EMPTY_ENTRY_PENDING"
                     elif len(dynamic_fill_owners) == 1:
                         phase = OilMaterialPhase.FILLING
@@ -411,7 +476,12 @@ class OilMaterialPhaseLifecycleOwner:
                     reason = (
                         "DRAIN_RELEASE_AMBIGUOUS"
                         if len(release_ids) > 1
-                        else "FILLED_CAP_VETO"
+                        else (
+                            "INITIAL_FULL_BARRIER"
+                            if self.policy.initial_full
+                            and not filled_chain
+                            else "FILLED_CAP_VETO"
+                        )
                     )
                     if len(release_ids) > 1:
                         ambiguous_frames.add(frame)
@@ -728,7 +798,7 @@ class OilMaterialPhaseLifecycleOwner:
                 and observation.motion_coverage
                 >= self.policy.fill_minimum_motion_coverage
             )
-            if self.policy.empty_entrance_motion_enabled:
+            if self.policy.initial_empty:
                 if (
                     lower_entrance
                     and observation.confirmation_profile
@@ -1048,7 +1118,7 @@ class OilMaterialPhaseLifecycleOwner:
             relative <= self.policy.entrance_band_ratio
             and (
                 chain.origin_y
-                if self.policy.empty_entrance_motion_enabled
+                if self.policy.initial_empty
                 else first.y
             )
             - last.y
@@ -1064,7 +1134,7 @@ class OilMaterialPhaseLifecycleOwner:
         lower_entrance = (
             (
                 chain.origin_y
-                if self.policy.empty_entrance_motion_enabled
+                if self.policy.initial_empty
                 else first.y
             )
             - self.policy.geometry_top_y
@@ -1096,12 +1166,73 @@ class OilMaterialPhaseLifecycleOwner:
             for item in observations
         )
         if (
-            self.policy.empty_entrance_motion_enabled
+            self.policy.initial_empty
             and lower_entrance
             and strong_entrance_motion
         ):
             return OilFillConfirmationProfile.EMPTY_ENTRANCE_MOTION
         return OilFillConfirmationProfile.NONE
+
+    def _partial_fill_drain_release_choice(
+        self,
+        established_fill: _FillChain,
+        rows: tuple[_ObservedRow, ...],
+    ) -> tuple[_ObservedRow | None, bool]:
+        releases = tuple(
+            row
+            for row in rows
+            if self._partial_fill_drain_release(established_fill, row)
+        )
+        ranked = tuple(
+            sorted(
+                (
+                    abs(row.y - established_fill.last.y)
+                    / self.policy.maximum_jump_px,
+                    row.tracklet_id,
+                    row,
+                )
+                for row in releases
+            )
+        )
+        selected_id = _clear_choice(
+            tuple((cost, tracklet_id) for cost, tracklet_id, _row in ranked),
+            self.policy.handoff_ambiguity_margin,
+        )
+        if selected_id is None:
+            return None, bool(ranked)
+        return (
+            next(
+                row
+                for _cost, tracklet_id, row in ranked
+                if tracklet_id == selected_id
+            ),
+            False,
+        )
+
+    def _partial_fill_drain_release(
+        self,
+        established_fill: _FillChain,
+        row: _ObservedRow,
+    ) -> bool:
+        minimum_progress = max(
+            4.0,
+            self.policy.geometry_height
+            * self.policy.drain_minimum_progress_ratio,
+        )
+        return bool(
+            _bounded_confirmed_observation(row.ref)
+            and not row.ref.tracklet_incompatible
+            and row.ref.tracklet_direction > 0
+            and row.ref.tracklet_net_progress_px >= minimum_progress
+            and row.ref.tracklet_directional_agreement
+            >= self.policy.drain_minimum_directional_agreement
+            and row.y
+            >= established_fill.last.y
+            - self.policy.handoff_direction_reversal_tolerance_px
+            and abs(row.y - established_fill.last.y)
+            <= self.policy.maximum_jump_px
+            and self._strict_material_support(row)
+        )
 
     def _drain_release(self, row: _ObservedRow) -> bool:
         relative = (

@@ -479,7 +479,7 @@ def test_composed_confirmation_and_onset_lag_uses_end_to_end_commit_horizon() ->
                 entrance_band_ratio=0.27,
                 fill_minimum_span_ratio=0.20,
                 minimum_directional_agreement=0.60,
-                empty_entrance_motion_enabled=False,
+                confirmed_initial_state=None,
                 fill_minimum_motion_support=0.50,
                 fill_minimum_motion_coverage=0.50,
                 drain_entrance_ratio=0.40,
