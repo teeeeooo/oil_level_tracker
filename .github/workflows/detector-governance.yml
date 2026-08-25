@@ -1,0 +1,32 @@
+name: S11 detector governance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check detector governance
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BASE: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            base_ref="$PR_BASE"
+          else
+            base_ref="$PUSH_BASE"
+          fi
+          zero_sha=0000000000000000000000000000000000000000
+          if [ -z "$base_ref" ] || [ "$base_ref" = "$zero_sha" ]; then
+            base_ref="$(git rev-list --max-parents=0 "$HEAD_SHA" | tail -n 1)"
+          fi
+          python3 scripts/check_detector_governance.py --base-ref "$base_ref" --head-ref "$HEAD_SHA"

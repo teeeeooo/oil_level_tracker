@@ -62,13 +62,17 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
 - Current target-Windows procedure: [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md)
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
+- S11 current detector logic map (implementation/control-flow owner): [`20-architecture/s11-current-detector-logic-map.md`](20-architecture/s11-current-detector-logic-map.md)
+- S11 mechanism failure registry (durable causal history): [`50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`](50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
+- S11 detector change governance (required history/evidence review): [`30-validation/s11-detector-change-governance.md`](30-validation/s11-detector-change-governance.md)
 - Integrated S11-R16 baseline architecture: [`20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md`](20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md)
 - Failed S11-R16 validation contract: [`30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md`](30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md)
 - Accepted S11-R17 baseline architecture: [`20-architecture/s11-r17-physical-observation-ownership-architecture.md`](20-architecture/s11-r17-physical-observation-ownership-architecture.md)
 - Failed S11-R17 validation contract: [`30-validation/s11-r17-physical-observation-ownership-validation.md`](30-validation/s11-r17-physical-observation-ownership-validation.md)
-- Active S11-R18 lifecycle-closure architecture: [`20-architecture/s11-r18-lifecycle-closure-architecture.md`](20-architecture/s11-r18-lifecycle-closure-architecture.md)
-- Active S11-R18 validation contract: [`30-validation/s11-r18-lifecycle-closure-validation.md`](30-validation/s11-r18-lifecycle-closure-validation.md)
+- Current S11-R18 lifecycle-closure architecture: [`20-architecture/s11-r18-lifecycle-closure-architecture.md`](20-architecture/s11-r18-lifecycle-closure-architecture.md)
+- Failed S11-R18 validation contract: [`30-validation/s11-r18-lifecycle-closure-validation.md`](30-validation/s11-r18-lifecycle-closure-validation.md)
 - S11-R18 local implementation/replay evidence: [`60-evidence/s11/s11-r18-lifecycle-closure.md`](60-evidence/s11/s11-r18-lifecycle-closure.md)
+- S11-R18 secure-Windows field result (operator-reported fail; audit pending): [`60-evidence/s11/s11-r18-secure-windows-field-result.md`](60-evidence/s11/s11-r18-secure-windows-field-result.md)
 - Canonical private-Windows field truth (`windows_sample1_heating_coldstart`): [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 - S11-R17 local implementation/replay evidence: [`60-evidence/s11/s11-r17-physical-observation-ownership.md`](60-evidence/s11/s11-r17-physical-observation-ownership.md)
 - S11-R17 secure-Windows field result: [`60-evidence/s11/s11-r17-secure-windows-field-result.md`](60-evidence/s11/s11-r17-secure-windows-field-result.md)
@@ -149,6 +153,10 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - S11 diagnostics: [`50-diagnostics/s11/`](50-diagnostics/s11/)
 - S11 historical evidence: [`60-evidence/s11/`](60-evidence/s11/)
 - Retained/deferred commitments: [`00-project/retained-commitments.md`](00-project/retained-commitments.md)
+
+### Future S11 changes
+
+Before changing the detector trigger surface or recording S11 Windows evidence, read the current logic map and failure registry, identify the relevant current architecture/validation/truth authority, and complete the matching governance block required by the [S11 detector change governance contract](30-validation/s11-detector-change-governance.md). Run the repository checker before review; do not touch an owner merely to satisfy routing—update an owner only when its contract or evidence genuinely changes.
 
 ## Archive policy
 

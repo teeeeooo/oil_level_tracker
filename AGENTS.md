@@ -1,3 +1,5 @@
-# Documentation routing
+# Repository task routing
 
 Before creating, moving, renaming, or editing anything under [`docs/`](docs/), read and follow [`docs/README.md`](docs/README.md), including its document classification, authority hierarchy, update rules, retained-commitment routing, and archive policy.
+
+For any task that touches S11 detector vision/control-flow/publication code, detector architecture or design, or S11 detector diagnostics/evidence (including Windows field records), do this before design or implementation (not as an afterthought): read [`docs/README.md`](docs/README.md), the [current detector logic map](docs/20-architecture/s11-current-detector-logic-map.md), the [mechanism failure registry](docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md), and the relevant current architecture, validation, and truth authority. Follow the [detector change governance contract](docs/30-validation/s11-detector-change-governance.md), then run `python3 scripts/check_detector_governance.py --base-ref <base-ref> --include-worktree` while editing; pre-push and CI check committed ranges automatically.
