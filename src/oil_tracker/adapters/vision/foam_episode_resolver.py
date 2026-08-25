@@ -594,7 +594,7 @@ def _foam_formation_witness(
         front_rows[0] - front_rows[-1] >= required_rise
         and directional_agreement >= 0.60
     )
-    if directed_front or len(segment) < 3:
+    if directed_front:
         return directed_front
     front_span = max(front_rows) - min(front_rows)
     area_span = max(item.area_ratio for item in segment) - min(
@@ -614,12 +614,24 @@ def _foam_formation_witness(
         front_span <= max(3.0, geometry_height * 0.015)
         and mean_relative_front > 0.12
     )
+    substantial_two_frame_layer = bool(
+        len(segment) == 2
+        and min(item.area_ratio for item in segment) >= 0.25
+        and min(item.width_ratio for item in segment) >= 0.60
+    )
+    stable_observation_support = bool(
+        len(segment) >= 3 or substantial_two_frame_layer
+    )
     extent_evolution = bool(
         area_span
         >= max(0.02, float(glass.detector_settings.foam_min_area_ratio))
         or width_span / max(0.01, maximum_width) >= 0.12
     )
-    return bounded_stable_front and extent_evolution
+    return (
+        stable_observation_support
+        and bounded_stable_front
+        and extent_evolution
+    )
 
 
 def _episode_aliases_oil(

@@ -581,6 +581,60 @@ def test_stable_non_top_material_layer_confirms_with_extent_evolution() -> None:
     assert [item.raw_foam_front_y for item in resolved] == [156.0, 158.0, 156.0]
 
 
+def test_two_frame_stable_layer_requires_substantial_material_footprint() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(y, score=0.86, dynamic=0.40),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index, y in enumerate((156.0, 158.0))
+    )
+    for index, detection in enumerate(detections):
+        candidate = next(
+            item
+            for item in detection.candidates
+            if item.kind is BoundaryKind.FOAM_FRONT
+        )
+        candidate.features["area_ratio"] = 0.32 + 0.01 * index
+        candidate.features["component_width_ratio"] = 0.68 + 0.10 * index
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 1
+    assert [item.raw_foam_front_y for item in resolved] == [156.0, 158.0]
+
+
+def test_two_frame_narrow_residue_cannot_use_stable_layer_path() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(y, score=0.86, dynamic=0.40),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index, y in enumerate((156.0, 158.0))
+    )
+    for index, detection in enumerate(detections):
+        candidate = next(
+            item
+            for item in detection.candidates
+            if item.kind is BoundaryKind.FOAM_FRONT
+        )
+        candidate.features["area_ratio"] = 0.12 + 0.01 * index
+        candidate.features["component_width_ratio"] = 0.68 + 0.10 * index
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 0
+    assert all(item.raw_foam_front_y is None for item in resolved)
+
+
 def test_stable_top_row_cannot_confirm_from_extent_evolution() -> None:
     detections = tuple(
         _detection(

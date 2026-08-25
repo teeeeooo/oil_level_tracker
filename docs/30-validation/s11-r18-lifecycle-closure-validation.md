@@ -49,6 +49,8 @@ same-row material-veto and ambiguity tests remain required.
   score, whiteness, material support, coherence, area and width are strong.
 - A stable non-top layer may confirm only with at least three dynamic,
   spatially bounded observations and area or width evolution.
+- A two-observation stable layer requires a substantial material footprint in
+  both area and width; a narrow two-frame residue remains rejected.
 - Area-only and width-only evolution do not confirm a top-row, descending or
   spatially unbounded track.
 - A separated Oil layer does not bypass directed formation.

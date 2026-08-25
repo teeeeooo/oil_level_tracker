@@ -133,9 +133,11 @@ The primary witness is directed upward front formation in source coordinates:
 - a majority of consecutive front steps must agree with upward formation,
   allowing only the existing small row jitter tolerance.
 
-The compatibility witness preserves a reviewed stable Foam layer only when at
-least three dynamic observations remain spatially bounded, remain away from
-the top entrance and show area or width evolution. Area or width evolution
+The compatibility witness preserves a reviewed stable Foam layer when at least
+three dynamic observations remain spatially bounded, remain away from the top
+entrance and show area or width evolution. A two-observation stable layer is
+accepted only when both observations have a substantial material footprint in
+area and width; narrow residue cannot use this path. Area or width evolution
 alone cannot confirm a top-row track, a descending track or an unbounded
 track. A separated Oil layer does not bypass either witness. Once a segment is
 confirmed, every published row still comes from its own selected same-frame

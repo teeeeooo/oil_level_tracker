@@ -30,7 +30,7 @@ R18_TRACKING_FINGERPRINTS = {
         "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976"
     ),
     "sample3": (
-        "6e531bd32286f0ec2149e3cbc0d1f24debb8618f06b69eeda2f3023483e28dc5"
+        "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1"
     ),
     "sample4": (
         "0f2029475506c87aac3ec46bf118b3ae9a1ead0da45eb0d214e1d23ececf9154"
