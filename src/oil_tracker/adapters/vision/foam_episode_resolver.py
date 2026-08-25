@@ -95,7 +95,7 @@ class FoamEpisodeResolver:
                     alias_group_frames.update(alias_frames)
                     rejected_oil_alias_frames.update(alias_frames)
                     continue
-                if not _foam_segment_accepted(segment, source, glass):
+                if not _foam_segment_accepted(segment, glass):
                     continue
                 accepted_any = True
                 episode_count += 1
@@ -519,7 +519,6 @@ def _foam_confirmation_segments(
 
 def _foam_segment_accepted(
     segment: tuple[_FoamEvidence, ...],
-    detections: tuple[PhaseDetection, ...],
     glass: GlassInspectionConfig,
 ) -> bool:
     if len(segment) < 2:
@@ -543,25 +542,6 @@ def _foam_segment_accepted(
         0.30,
         float(glass.detector_settings.foam_min_evidence_score) * 0.72,
     )
-    front_rows = tuple(float(item.candidate.y) for item in segment)
-    front_span = max(front_rows) - min(front_rows)
-    area_span = max(item.area_ratio for item in segment) - min(
-        item.area_ratio for item in segment
-    )
-    width_span = max(item.width_ratio for item in segment) - min(
-        item.width_ratio for item in segment
-    )
-    maximum_width = max(item.width_ratio for item in segment)
-    geometry_height = max(1.0, float(glass.geometry.ellipse.radius_y) * 2.0)
-    evolving_material = bool(
-        front_span >= max(4.0, geometry_height * 0.015)
-        or area_span >= max(
-            0.02,
-            float(glass.detector_settings.foam_min_area_ratio),
-        )
-        or width_span / max(0.01, maximum_width) >= 0.12
-        or _separated_layer_witness(segment, detections, glass)
-    )
     return bool(
         not static_dominated
         and material >= required_material
@@ -569,7 +549,7 @@ def _foam_segment_accepted(
         and dynamic >= 0.10
         and dynamic_frames >= 2
         and dynamic_frame_ratio >= 0.50
-        and evolving_material
+        and _foam_formation_witness(segment, glass)
     )
 
 
@@ -584,24 +564,62 @@ def _foam_track_static_dominated(track: tuple[_FoamEvidence, ...]) -> bool:
     return static >= 0.65 and strong_dynamic < 2
 
 
-def _separated_layer_witness(
+def _foam_formation_witness(
     segment: tuple[_FoamEvidence, ...],
-    detections: tuple[PhaseDetection, ...],
     glass: GlassInspectionConfig,
 ) -> bool:
-    maximum_separation = max(
-        12.0,
-        float(glass.geometry.ellipse.radius_y) * 2.0 * 0.20,
+    """Require directed front formation or a bounded stable material layer.
+
+    Area and width changes cannot independently turn splash, a fixed top row or
+    descending wall residue into an episode. They may support a stable layer
+    only when at least three dynamic observations remain spatially bounded away
+    from the top entrance. This preserves a reviewed stable Foam layer without
+    reopening the R17 Windows Y80 or descending-residue tracks.
+    """
+
+    front_rows = tuple(float(item.candidate.y) for item in segment)
+    if len(front_rows) < 2:
+        return False
+    geometry_height = max(
+        1.0,
+        float(glass.geometry.ellipse.radius_y) * 2.0,
     )
-    return sum(
-        (relation := _oil_foam_relation(
-            item, detections[item.frame_offset], glass
-        )).kind == "distinct_lower_oil"
-        and relation.separation is not None
-        and relation.separation <= maximum_separation
-        and item.width_ratio >= 0.55
-        for item in segment
-    ) >= 2
+    required_rise = max(4.0, geometry_height * 0.015)
+    steps = tuple(
+        prior - current
+        for prior, current in zip(front_rows, front_rows[1:])
+    )
+    directional_agreement = sum(step >= -2.0 for step in steps) / len(steps)
+    directed_front = bool(
+        front_rows[0] - front_rows[-1] >= required_rise
+        and directional_agreement >= 0.60
+    )
+    if directed_front or len(segment) < 3:
+        return directed_front
+    front_span = max(front_rows) - min(front_rows)
+    area_span = max(item.area_ratio for item in segment) - min(
+        item.area_ratio for item in segment
+    )
+    width_span = max(item.width_ratio for item in segment) - min(
+        item.width_ratio for item in segment
+    )
+    maximum_width = max(item.width_ratio for item in segment)
+    geometry_top = float(
+        glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
+    )
+    mean_relative_front = (
+        sum(front_rows) / len(front_rows) - geometry_top
+    ) / geometry_height
+    bounded_stable_front = bool(
+        front_span <= max(3.0, geometry_height * 0.015)
+        and mean_relative_front > 0.12
+    )
+    extent_evolution = bool(
+        area_span
+        >= max(0.02, float(glass.detector_settings.foam_min_area_ratio))
+        or width_span / max(0.01, maximum_width) >= 0.12
+    )
+    return bounded_stable_front and extent_evolution
 
 
 def _episode_aliases_oil(

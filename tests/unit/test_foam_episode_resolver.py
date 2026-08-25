@@ -297,7 +297,7 @@ def test_prior_oil_alias_does_not_suppress_later_independent_foam() -> None:
 def test_separated_oil_and_foam_are_both_published() -> None:
     detections = (
         _detection(0, _foam_candidate(411.0, dynamic=0.20)),
-        _detection(1, _foam_candidate(410.0, dynamic=0.20)),
+        _detection(1, _foam_candidate(405.0, dynamic=0.20)),
     )
     for detection in detections:
         next(
@@ -330,7 +330,7 @@ def test_separated_oil_and_foam_are_both_published() -> None:
     assert diagnostics.episode_count == 1
     assert diagnostics.rejected_oil_alias_episode_count == 0
     assert [item.raw_oil_air_level_y for item in resolved] == [448.0, 448.0]
-    assert [item.raw_foam_front_y for item in resolved] == [411.0, 410.0]
+    assert [item.raw_foam_front_y for item in resolved] == [411.0, 405.0]
     assert all(item.fill_state is FillState.FOAMING_VISIBLE for item in resolved)
     assert all(
         "R8_FOAM_OIL_TOPOLOGY_CONFLICT" not in item.flags
@@ -343,10 +343,10 @@ def test_thin_dynamic_foam_layer_is_not_alias_under_large_oil_jump_setting() -> 
     glass.detector_settings.temporal_max_jump_px = 64.0
     detections = (
         _detection(0, _foam_candidate(219.0, dynamic=0.20)),
-        _detection(1, _foam_candidate(218.0, dynamic=0.20)),
+        _detection(1, _foam_candidate(213.0, dynamic=0.20)),
     )
     for index, detection in enumerate(detections):
-        oil_y = 236.0 - index
+        oil_y = 236.0 - index * 6.0
         detection.raw_oil_air_level_y = oil_y
         detection.oil_air_level_y = oil_y
         detection.candidates.insert(
@@ -363,7 +363,7 @@ def test_thin_dynamic_foam_layer_is_not_alias_under_large_oil_jump_setting() -> 
             BoundaryCandidate(
                 source="unselected-foam-twin",
                 kind=BoundaryKind.OIL_AIR,
-                y=219.0 - index,
+                y=219.0 - index * 6.0,
                 features={
                     "boundary_likelihood": 0.96,
                     "artifact_likelihood": 0.02,
@@ -376,7 +376,7 @@ def test_thin_dynamic_foam_layer_is_not_alias_under_large_oil_jump_setting() -> 
     resolved, diagnostics = FoamEpisodeResolver().resolve(detections, glass)
 
     assert diagnostics.rejected_oil_alias_episode_count == 0
-    assert [item.raw_foam_front_y for item in resolved] == [219.0, 218.0]
+    assert [item.raw_foam_front_y for item in resolved] == [219.0, 213.0]
     assert all("R10_FOAM_LAYER_SEPARATED" in item.flags for item in resolved)
     assert all(
         item.debug_metrics["foam_oil_identity_tolerance_px"] <= 8.0
@@ -500,6 +500,111 @@ def test_dynamic_constant_glare_without_front_evolution_does_not_confirm() -> No
 
     assert diagnostics.episode_count == 0
     assert diagnostics.rejected_unconfirmed_episode_count == 1
+    assert all(item.raw_foam_front_y is None for item in resolved)
+
+
+def test_downward_dynamic_residue_cannot_confirm_from_area_or_width_change() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(y, score=0.90, dynamic=0.80, static=0.0),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index, y in enumerate((410.0, 424.0, 441.0))
+    )
+    for index, detection in enumerate(detections):
+        candidate = next(
+            item
+            for item in detection.candidates
+            if item.kind is BoundaryKind.FOAM_FRONT
+        )
+        candidate.features["area_ratio"] = 0.08 + 0.08 * index
+        candidate.features["component_width_ratio"] = 0.55 + 0.15 * index
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 0
+    assert diagnostics.rejected_unconfirmed_episode_count == 1
+    assert all(item.raw_foam_front_y is None for item in resolved)
+
+
+def test_directional_foam_formation_tolerates_small_row_jitter() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(y, score=0.86, dynamic=0.30),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index, y in enumerate((334.0, 321.0, 322.0, 306.0))
+    )
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 1
+    assert [item.raw_foam_front_y for item in resolved] == [
+        334.0,
+        321.0,
+        322.0,
+        306.0,
+    ]
+
+
+def test_stable_non_top_material_layer_confirms_with_extent_evolution() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(y, score=0.86, dynamic=0.30),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index, y in enumerate((156.0, 158.0, 156.0))
+    )
+    for index, detection in enumerate(detections):
+        candidate = next(
+            item
+            for item in detection.candidates
+            if item.kind is BoundaryKind.FOAM_FRONT
+        )
+        candidate.features["area_ratio"] = 0.08 + 0.04 * index
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 1
+    assert [item.raw_foam_front_y for item in resolved] == [156.0, 158.0, 156.0]
+
+
+def test_stable_top_row_cannot_confirm_from_extent_evolution() -> None:
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(22.0, score=0.90, dynamic=0.80),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index in range(3)
+    )
+    for index, detection in enumerate(detections):
+        candidate = next(
+            item
+            for item in detection.candidates
+            if item.kind is BoundaryKind.FOAM_FRONT
+        )
+        candidate.features["area_ratio"] = 0.08 + 0.05 * index
+        candidate.features["component_width_ratio"] = 0.55 + 0.15 * index
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 0
     assert all(item.raw_foam_front_y is None for item in resolved)
 
 
