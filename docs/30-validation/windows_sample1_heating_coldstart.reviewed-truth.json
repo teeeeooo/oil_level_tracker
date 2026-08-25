@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "sample_id": "windows_sample1_heating_coldstart",
+  "sample_alias_only": true,
+  "actual_source_filename_recorded": false,
+  "private_source_stored_in_repository": false,
+  "review_authority": {
+    "kind": "user_direct_source_video_review",
+    "last_reconciled_date": "2026-08-25",
+    "same_physical_video_for_windows_versions": [
+      "R14",
+      "R15",
+      "R16",
+      "R17"
+    ]
+  },
+  "source_identity": {
+    "sha256": null,
+    "byte_size": null,
+    "width": null,
+    "height": null,
+    "fps": null,
+    "duration_sec": null,
+    "status": "operator_alias_confirmed_fingerprint_pending"
+  },
+  "coordinate_contract": {
+    "space": "source_frame_y",
+    "positive_direction": "down",
+    "crop_origin_adjustment": "none",
+    "exact_y_anchors_in_this_manifest": false
+  },
+  "reviewed_interval_sec": {
+    "start": 480.0,
+    "end": 780.0
+  },
+  "transition_contract": {
+    "precision": "reviewed_approximate_unless_explicitly_frame_annotated",
+    "automatic_transition_tolerance_sec": null
+  },
+  "segments": [
+    {
+      "id": "WS1-BASE-FULL-PREFIX",
+      "glass": "BASE",
+      "start_sec": 480.0,
+      "end_sec": 550.0,
+      "end_is_approximate": true,
+      "expected": {
+        "oil_material": "present_full",
+        "oil_boundary": "absent",
+        "foam": "absent",
+        "oil_boundary_motion": "none"
+      },
+      "must_reject": [
+        "numeric_oil_boundary",
+        "numeric_foam_front"
+      ]
+    },
+    {
+      "id": "WS1-BASE-DRAIN",
+      "glass": "BASE",
+      "start_sec": 550.0,
+      "start_is_approximate": true,
+      "end_sec": 662.0,
+      "expected": {
+        "oil_material": "present_partial",
+        "oil_boundary": "visible_oil_air",
+        "foam": "absent",
+        "oil_boundary_motion": "downward_source_y_increases"
+      },
+      "must_reject": [
+        "glass_bottom_as_oil",
+        "glare_or_structure_as_oil",
+        "numeric_foam_front"
+      ]
+    },
+    {
+      "id": "WS1-BASE-RAPID-REFILL",
+      "glass": "BASE",
+      "start_sec": 662.0,
+      "end_sec": 663.6,
+      "end_is_approximate": true,
+      "expected": {
+        "oil_material": "rapidly_filling",
+        "oil_boundary": "visible_until_top_disappearance",
+        "foam": "absent",
+        "oil_boundary_motion": "upward_source_y_decreases"
+      },
+      "must_reject": [
+        "owner_transfer_to_unrelated_row",
+        "numeric_foam_front"
+      ]
+    },
+    {
+      "id": "WS1-BASE-FULL-SUFFIX",
+      "glass": "BASE",
+      "start_sec": 663.6,
+      "start_is_approximate": true,
+      "end_sec": 780.0,
+      "expected": {
+        "oil_material": "present_full",
+        "oil_boundary": "absent",
+        "foam": "absent",
+        "oil_boundary_motion": "none"
+      },
+      "must_reject": [
+        "numeric_oil_boundary",
+        "numeric_foam_front",
+        "post_full_lower_or_reflection_row"
+      ]
+    },
+    {
+      "id": "WS1-ACCUM-EMPTY",
+      "glass": "Accum",
+      "start_sec": 480.0,
+      "end_sec": 653.0,
+      "end_is_approximate": true,
+      "expected": {
+        "oil_material": "absent",
+        "oil_boundary": "absent",
+        "foam": "absent",
+        "oil_boundary_motion": "none"
+      },
+      "must_reject": [
+        "numeric_oil_boundary",
+        "numeric_foam_front"
+      ]
+    },
+    {
+      "id": "WS1-ACCUM-ENTRY-SPLASH",
+      "glass": "Accum",
+      "start_sec": 653.0,
+      "start_is_approximate": true,
+      "end_sec": 672.0,
+      "end_is_approximate": true,
+      "expected": {
+        "oil_material": "present_inflow",
+        "oil_boundary": "visible_turbulent_oil_air",
+        "foam": "absent",
+        "oil_boundary_motion": "upward_source_y_decreases"
+      },
+      "must_reject": [
+        "splash_as_oil_owner",
+        "wall_mark_as_oil_owner",
+        "splash_or_wall_mark_as_foam"
+      ]
+    },
+    {
+      "id": "WS1-ACCUM-FOAM-LAYERED",
+      "glass": "Accum",
+      "start_sec": 672.0,
+      "start_is_approximate": true,
+      "end_sec": 680.0,
+      "end_is_approximate": true,
+      "expected": {
+        "oil_material": "present_lower_layer",
+        "oil_boundary": "visible_lower_oil_foam_interface",
+        "foam": "present_upper_layer",
+        "layer_order_source_y": "foam_y_less_than_oil_y"
+      },
+      "must_reject": [
+        "foam_top_as_oil_boundary",
+        "merged_oil_and_foam_identity"
+      ]
+    },
+    {
+      "id": "WS1-ACCUM-POST-FOAM",
+      "glass": "Accum",
+      "start_sec": 680.0,
+      "start_is_approximate": true,
+      "end_sec": 700.0,
+      "end_is_approximate": true,
+      "expected": {
+        "oil_material": "present_partial",
+        "oil_boundary": "visible_oil_air",
+        "foam": "absent",
+        "oil_boundary_motion": "upward_before_reversal"
+      },
+      "must_reject": [
+        "numeric_foam_front",
+        "residue_as_oil_owner"
+      ]
+    },
+    {
+      "id": "WS1-ACCUM-DRAIN",
+      "glass": "Accum",
+      "start_sec": 700.0,
+      "start_is_approximate": true,
+      "end_sec": 780.0,
+      "expected": {
+        "oil_material": "present_partial",
+        "oil_boundary": "visible_oil_air",
+        "foam": "absent",
+        "oil_boundary_motion": "downward_source_y_increases"
+      },
+      "must_reject": [
+        "wall_residue_as_oil_owner",
+        "wall_residue_as_foam",
+        "glass_bottom_as_oil"
+      ]
+    }
+  ],
+  "superseded_interpretations": [
+    {
+      "claim": "BASE 540 s Y437 is a real Oil boundary",
+      "replacement": "WS1-BASE-FULL-PREFIX has no visible interface"
+    },
+    {
+      "claim": "BASE 674 s Y435 is a real Oil boundary",
+      "replacement": "WS1-BASE-FULL-SUFFIX has no visible interface"
+    },
+    {
+      "claim": "Accum 758-774.5 s is real Foam",
+      "replacement": "Foam is absent after approximately 680 s"
+    },
+    {
+      "claim": "52 real Foam detector rows are a future truth target",
+      "replacement": "Physical truth is owned by segment behavior, not a prior detector row count"
+    }
+  ],
+  "required_report_fields_per_segment": [
+    "sampled_time_and_frame_coverage",
+    "numeric_oil_count_and_runs",
+    "numeric_foam_count_and_runs",
+    "selected_source_y_range_and_direction",
+    "longest_missing_or_wrong_identity_run",
+    "material_phase_and_owner_transitions_when_available",
+    "pass_fail_or_not_evaluated"
+  ]
+}

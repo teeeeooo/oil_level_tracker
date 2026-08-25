@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R17-v2 checked-truth correction accepted locally; private-Windows Base/Accum replay pending`
-**Source authority:** `main at locally accepted R17-v2; no field-qualified detector`
+**Current gate:** `R17 private-Windows source review failed; completed-window trace/code diagnosis pending`
+**Source authority:** `main at locally accepted R17-v3; no field-qualified detector`
 **Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
 **Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
 
@@ -138,22 +138,21 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Run the private-Windows Base/Accum replay against the locally accepted R17-v2
-implementation. Physical Oil identity is separated from initial-state phase
-semantics, bounded drain handoff now distinguishes current strong physical
-motion from stale texture averages, and weak current frames may publish only
-from an established non-contradicted anchor trajectory. Time-only Foam grouping
-has been replaced by physical-front evolution. The explicit 13-case audit is
-8/13 with five named abstentions; local owner, four-video, full-suite and
-performance gates passed. The field detector remains unqualified until the
-Windows cohorts pass.
+Audit the failed R17 private-Windows completed-window trace against the
+canonical `windows_sample1_heating_coldstart` source review, then design the
+next replacement from the first demonstrated ownership failures. The replay
+preserved the initial Accum EMPTY interval but failed BASE no-interface
+suppression and owner continuity, confused Accum splash/Foam material identity,
+and lost the real Accum drain after about 700 s. These are source-review
+observations; exact code causes remain pending trace confirmation.
 
 Use the [R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md),
 [validation contract](../30-validation/s11-r17-physical-observation-ownership-validation.md)
-and [local evidence](../60-evidence/s11/s11-r17-physical-observation-ownership.md).
-The Windows run must preserve Accum initial-EMPTY suppression, real bottom-entry
-admission, the 52 reviewed real Foam rows, calibrated Artifact rejection and
-exact same-frame/CSV provenance.
+and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
+Every subsequent Windows report must cover all nine `WS1-*` segments. Prior
+R14/R16 detector counts and the superseded 540/674 s BASE anchors do not define
+truth. Same-frame/CSV provenance, calibrated Artifact rejection and the
+13-case local checked-truth contract remain independent non-regression gates.
 
 ## R16 field disposition
 

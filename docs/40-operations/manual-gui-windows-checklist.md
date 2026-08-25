@@ -108,6 +108,33 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Build and run the one-folder package on a general office Windows PC without CUDA or any GPU-compute runtime dependency.
 - Repeat with Unicode and long paths, active file locking, cancellation and application close; confirm video/output/debug resources are released.
 
+### Canonical private Base/Accum field truth
+
+- Identify the private source only as `windows_sample1_heating_coldstart` in
+  repository documentation. Do not record its real filename. When available,
+  record a read-only SHA-256 and media fingerprint in the companion manifest.
+- Before any R17 or successor field audit, read the canonical
+  [reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
+  and its JSON companion. Detector output and historical R14/R16 row counts are
+  not truth authority.
+- Report all nine segment IDs: `WS1-BASE-FULL-PREFIX`, `WS1-BASE-DRAIN`,
+  `WS1-BASE-RAPID-REFILL`, `WS1-BASE-FULL-SUFFIX`, `WS1-ACCUM-EMPTY`,
+  `WS1-ACCUM-ENTRY-SPLASH`, `WS1-ACCUM-FOAM-LAYERED`,
+  `WS1-ACCUM-POST-FOAM` and `WS1-ACCUM-DRAIN`. Omission of any segment makes
+  the report incomplete.
+- Keep Oil material presence separate from visible-interface truth. BASE is
+  full/no-interface before about 550 s and after about 663.6 s; numeric Oil in
+  either interval is false.
+- Treat Accum Foam as present only around 672--680 s. After about 680 s, wall
+  residue is not Foam. During the layered interval require `foam_y < oil_y` in
+  source coordinates and do not permit the Foam top to own Oil.
+- Historical R7--R10 checklist references to BASE 540/674 Oil anchors or later
+  Accum Foam are superseded by this canonical review. Retain those sections as
+  version-specific procedures only, not current physical truth.
+- Use nested completed-window sequence fields for final publication. Graph
+  bridges and top-level current-frame candidates do not count as numeric Oil or
+  Foam observations.
+
 ### S11-R7 secure Base/Accum holdout
 
 - Record the exact R7 commit, source/package identity, private video hash or

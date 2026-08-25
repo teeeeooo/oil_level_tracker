@@ -3,9 +3,10 @@
 ## Gate
 
 R17 is accepted locally only when the replacement mechanisms, checked-video
-corpus, exact provenance, performance and full repository regression pass. It
-remains `WINDOWS_PENDING` until a new private Base/Accum replay passes source
-review.
+corpus, exact provenance, performance and full repository regression pass. The
+private Base/Accum replay has now failed direct source review; R17 remains field
+unqualified while its completed-window trace is audited against the corrected
+field truth.
 
 ## Mechanism assertions
 
@@ -88,17 +89,26 @@ The drain correction additionally requires:
 
 ## Private-Windows gate
 
-The final field replay uses the same Base/Accum source timestamps and reviewed
-source-Y anchors as R14/R16 evidence.
+The field replay uses the canonical
+[`windows_sample1_heating_coldstart` reviewed truth](windows-sample1-heating-coldstart-reviewed-truth.md)
+and its machine-readable companion. That latest direct review supersedes the
+older BASE 540/674 Oil anchors and the older interpretation of Accum
+758--774.5 s as real Foam. R14/R16 outputs remain comparison evidence, not
+truth.
 
-- Base: real Oil must be recovered around the reviewed 540/634/674 s anchors;
-  reflection/bracket tracks remain rejected; public Foam is zero.
-- Accum: the 480--650 s stationary false Oil remains suppressed; real
-  bottom-entry Oil is admitted; truth-near rows are not lost to admission
-  capacity; owner loss after 702 s can recover only through the bounded phase
-  re-entry contract.
-- Foam: retain the 52 reviewed real rows and reject the 50 reviewed false rows
-  (Base 5 plus Accum 45), with each cohort reported separately.
+- Every report must enumerate all nine `WS1-*` truth segment IDs. Missing a
+  segment makes the field report incomplete.
+- Base: suppress numeric Oil in both full/no-interface segments, follow the
+  real 550--662 s drain, close the rapid 662--663.6 s refill as full material,
+  reject later lower/reflection rows and publish no Foam.
+- Accum: preserve the 480--653 s EMPTY suppression, follow the turbulent real
+  entry without adopting splash/wall marks, keep the upper Foam and lower Oil
+  identities distinct from 672--680 s, remove Foam after 680 s, and follow the
+  real drain from about 700 through 780 s without adopting residue.
+- Prior detector-row cohort counts such as “52 real Foam rows” are not an
+  acceptance target. Presence, absence, ordering and direction come from the
+  reviewed segments; exact Y accuracy is scored only at separately reviewed
+  point annotations.
 - Integrity: every public Oil/Foam value has exactly one equal-Y selected nested
   same-frame candidate and equals CSV raw Y.
 
