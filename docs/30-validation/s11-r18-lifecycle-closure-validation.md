@@ -1,6 +1,6 @@
 # S11-R18 Lifecycle Closure Validation
 
-**Status:** `LOCAL PASS / WINDOWS NOT RUN`
+**Status:** `LOCAL PASS / OPERATOR-REPORTED WINDOWS FAIL; BUNDLE AUDIT PENDING`
 
 ## Gate
 
@@ -8,6 +8,11 @@ R18 is locally acceptable only when the explicit initial-state lifecycle,
 partial-fill reversal, bounded Foam formation, checked-video replay,
 provenance, performance and full repository gates pass. The frozen R17 Windows
 bundle is historical evidence and must not be rerun or treated as R18 output.
+
+The subsequent operator check failed with zero Base Oil, lower Accum Oil
+coverage and unclear partial Foam detection. No R18 bundle/trace audit is
+checked in, so the field gate is failed while its first causal stage remains
+unknown. See the [R18 field-result record](../60-evidence/s11/s11-r18-secure-windows-field-result.md).
 
 ## Focused Oil lifecycle assertions
 

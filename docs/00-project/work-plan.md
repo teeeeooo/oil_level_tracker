@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R18 local PASS; private-Windows nine-segment replay pending`
+**Current gate:** `R18 Windows operator check FAIL; bundle/trace causal audit pending before R19 design`
 **Source authority:** `main at locally accepted R18; no field-qualified detector`
 **Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
 **Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
@@ -138,8 +138,8 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Replay the exact R18 source on Windows and review the resulting new bundle
-against all nine canonical `WS1-*` segments. The R17 bundle remains frozen
+Freeze the R18 operator-reported failure, then audit its Windows bundle and
+debug trace before authorizing R19 design. The R17 bundle remains frozen
 historical evidence and cannot prove R18 field behavior. Do not reuse old
 counts as acceptance targets or convert named unknowns into facts.
 
@@ -151,10 +151,11 @@ provenance, Artifact handling, checked-truth authority and resolver ordering.
 
 Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md),
 [R18 validation](../30-validation/s11-r18-lifecycle-closure-validation.md),
-[local evidence](../60-evidence/s11/s11-r18-lifecycle-closure.md) and
-[canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
-The field result must explicitly remain `WINDOWS NOT RUN` until a new R18
-bundle is produced and reviewed.
+[local evidence](../60-evidence/s11/s11-r18-lifecycle-closure.md),
+[operator-reported field result](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
+and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
+The field result is `FAIL`, while its code-level cause remains unaudited until
+the R18 bundle/trace is available.
 
 ## R16 field disposition
 

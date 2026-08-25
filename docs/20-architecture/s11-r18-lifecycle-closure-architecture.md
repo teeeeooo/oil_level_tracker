@@ -1,6 +1,6 @@
 # S11-R18 Lifecycle Closure Architecture
 
-**Status:** `IMPLEMENTED — LOCAL GATE PASS / WINDOWS NOT RUN`
+**Status:** `IMPLEMENTED — LOCAL GATE PASS / OPERATOR-REPORTED WINDOWS FAIL; BUNDLE AUDIT PENDING`
 
 ## Authority and scope
 
@@ -171,5 +171,33 @@ Every public Oil and Foam value must retain:
 5. existing stored Recipe and prior-bundle readability.
 
 The resolver version changes only after the implementation and focused
-contracts pass. R18 remains locally qualified and field unqualified until a
-new Windows bundle is reviewed against all nine canonical `WS1-*` segments.
+contracts pass. R18 remains locally qualified and field unqualified. The
+operator-reported Windows check failed with zero Base Oil and lower Accum Oil
+coverage, but no R18 bundle/trace audit is checked in; use the
+[R18 field-result record](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
+for that bounded disposition.
+
+## History Review
+
+- **Logic-map nodes:** `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`,
+  `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `FOAM-EPISODE`,
+  `SEQUENCE-COMPOSITION`
+- **Failure-registry entries:** `S11-F05`, `S11-F07`, `S11-F08`, `S11-F10`
+- **Prior mechanisms reviewed:** R5 edge-gated initial-state release, R6/R7
+  missed-entrance recovery, R16/R17 material-phase ownership, and the frozen
+  R17 Foam episode failure.
+- **Prior mechanisms rejected:** prior-fed numeric state, unconstrained OPEN
+  fallback, global entrance/threshold widening, copied phase coordinates or
+  track IDs, and extent-only Foam confirmation remain rejected.
+- **Preserved contracts:** initial-EMPTY false-Oil suppression, coordinate-free
+  state, bounded physical ownership, ambiguity-to-UNKNOWN, independent Foam,
+  and exact same-frame sequence/CSV provenance.
+- **Difference from prior failures:** R18 intended to replace R17's missing
+  FULL barrier and partial-fill reversal with explicit physical releases, but
+  its top-origin FULL release reintroduced the R5 missed-edge lock class. The
+  operator-reported field failure means that intended distinction did not
+  field-qualify the design; runtime causality remains unproven without trace.
+- **Logic-map impact:** `UPDATED` — the current map records the implemented R18
+  lifecycle, Foam episode and publication owners.
+- **Failure-registry impact:** `UPDATED` — the registry records the R18 field
+  failure boundary and the R5/R18 recurrence warning.
