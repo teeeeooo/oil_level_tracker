@@ -3,7 +3,7 @@
 ## Gate
 
 R18 is locally acceptable only when the explicit initial-state lifecycle,
-partial-fill reversal, directed Foam formation, checked-video replay,
+partial-fill reversal, bounded Foam formation, checked-video replay,
 provenance, performance and full repository gates pass. The frozen R17 Windows
 bundle is historical evidence and must not be rerun or treated as R18 output.
 
@@ -29,8 +29,8 @@ bundle is historical evidence and must not be rerun or treated as R18 output.
 - A unique lower-entry upward owner establishes filling exactly as in R17.
 - Without an established fill, a downward tracklet cannot start a drain.
 - After an established fill owner is lost, exactly one confirmed clean
-  downward tracklet whose entrance is physically adjacent to the last fill row
-  starts `DRAINING`.
+  downward tracklet whose current row is physically adjacent to the last fill
+  row starts `DRAINING`.
 - A reversed, distant, provisional, material-opposed or ambiguous release is
   rejected and the frame remains UNKNOWN.
 - The new drain ID is appended to the phase owner chain; track observations and
@@ -47,8 +47,10 @@ same-row material-veto and ambiguity tests remain required.
 - A constant Y80-style track does not confirm, even with strong dynamic values.
 - A downward-moving splash or wall-residue track does not confirm, even when
   score, whiteness, material support, coherence, area and width are strong.
-- Area-only and width-only evolution without directed front formation do not
-  confirm.
+- A stable non-top layer may confirm only with at least three dynamic,
+  spatially bounded observations and area or width evolution.
+- Area-only and width-only evolution do not confirm a top-row, descending or
+  spatially unbounded track.
 - A separated Oil layer does not bypass directed formation.
 - Foam remains independently publishable when Oil is unknown.
 - Final-Oil same-boundary alias rejection and inverted-topology diagnostics

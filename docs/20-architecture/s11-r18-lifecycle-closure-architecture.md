@@ -16,7 +16,7 @@ R18 changes only these owners:
 1. `OilMaterialPhaseLifecycleOwner` receives the confirmed initial state
    explicitly, starts confirmed FULL material behind a real phase barrier and
    permits a previously established partial fill to reverse into a drain;
-2. `FoamEpisodeResolver` replaces extent-only episode acceptance with directed
+2. `FoamEpisodeResolver` replaces extent-only episode acceptance with bounded
    Foam-front formation; and
 3. existing same-frame projection remains the only publication path.
 
@@ -101,8 +101,8 @@ to `DRAINING` only if exactly one row satisfies all of the following:
 - it is an independently confirmed compatible physical tracklet;
 - measured direction is downward and directional agreement meets the existing
   drain contract;
-- its own entrance observation is within the ordinary physical jump of the
-  established fill's last observed interface;
+- its current row is within the ordinary physical jump of the established
+  fill's last observed interface;
 - its current row has complete material support under the existing strict
   material contract; and
 - competing eligible releases are absent; ambiguity yields UNKNOWN.
@@ -116,7 +116,7 @@ This transition is not a global initial-state mutation and does not widen the
 entrance band. It replaces the structural R17 restriction that allowed
 `DRAINING` only after a completed-fill barrier.
 
-## Directed Foam-front formation
+## Bounded Foam-front formation
 
 R17 accepted a Foam segment when material, coherence and dynamic coverage were
 present and any one of front span, area span, width span or separated-layer
@@ -124,18 +124,22 @@ evidence evolved. The Windows false tracks satisfied that aggregate contract.
 
 R18 keeps one-to-one front tracks, dynamic-frame segmentation, static
 opposition, material support, coherence and same-frame projection. A new
-episode additionally requires directed upward front formation in source
-coordinates:
+episode additionally requires one of two bounded formation witnesses.
+
+The primary witness is directed upward front formation in source coordinates:
 
 - the segment's first-to-last front displacement must exceed the existing
   geometry-scaled front-evolution distance; and
 - a majority of consecutive front steps must agree with upward formation,
   allowing only the existing small row jitter tolerance.
 
-Area or width evolution alone no longer confirms an episode. A separated Oil
-layer does not bypass directed formation. Once a segment is confirmed, every
-published row still comes from its own selected same-frame Foam candidate.
-Foam remains publishable when Oil is unresolved.
+The compatibility witness preserves a reviewed stable Foam layer only when at
+least three dynamic observations remain spatially bounded, remain away from
+the top entrance and show area or width evolution. Area or width evolution
+alone cannot confirm a top-row track, a descending track or an unbounded
+track. A separated Oil layer does not bypass either witness. Once a segment is
+confirmed, every published row still comes from its own selected same-frame
+Foam candidate. Foam remains publishable when Oil is unresolved.
 
 The deleted extent-only alternatives are not retained as fallbacks. This is
 the minimum evidence-backed discriminator: reviewed Foam formed upward, while
