@@ -4,6 +4,37 @@
 
 **Authority:** current sequencing is in the [work plan](../00-project/work-plan.md); durable detector responsibility is in the [S11 responsibility architecture](s11-detector-responsibility-architecture.md); the current R18 behavior contract is in the [R18 architecture](s11-r18-lifecycle-closure-architecture.md) and [R18 validation contract](../30-validation/s11-r18-lifecycle-closure-validation.md). Those documents describe intent and acceptance boundaries; this file names the implementation that actually executes them.
 
+## Quick start / design index
+
+Read this index completely before opening the detailed flow. Use the stable IDs to select the smallest relevant reading set; the detail sections remain mandatory for every selected node.
+
+| Pipeline group | Route at a glance | Node IDs to scan first |
+|---|---|---|
+| Input / evidence | decoded frame → bounded ROI, preprocessing, Oil evidence and Foam evidence | `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-PROPOSAL`, `OIL-HYPOTHESIS`, `FOAM-CANDIDATE` |
+| Oil authority / identity | candidates → typed authority → directed physical owner | `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET` |
+| Lifecycle / selection | physical rows → initial/fill/drain ownership → fixed-lag selected node → same-frame projection | `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION` |
+| Foam | candidate/material identity → bounded episode formation, after Oil projection | `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION` |
+| Publication / presentation | final detections → samples/events, CSV/trace, graph/report/UI | `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`, `TRACE-PUBLICATION`, `RESULT-PRESENTATION` |
+
+### Hard-gate hotspots
+
+- Evidence availability, raster/shape/resource bounds, and typed no-interface conditions: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-HYPOTHESIS`.
+- Authority, physical identity, and phase admission: `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`.
+- Publishability, same-frame provenance, and independent Foam acceptance: `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`.
+- Composition and serializers cannot repair upstream rejection: `SEQUENCE-COMPOSITION`, `CSV-PUBLICATION`, `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.
+
+### If changing X, read these nodes
+
+| Change focus | Required node detail |
+|---|---|
+| ROI, preprocessing, candidate families, evidence availability, or thresholds | `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-PROPOSAL`, `OIL-HYPOTHESIS`, `OIL-CANDIDATE`, plus any affected `FOAM-CANDIDATE` path |
+| Oil authority, track identity, handoff, confirmation, or ambiguity | `OIL-AUTHORITY`, `OIL-TRACKLET`, and the affected lifecycle nodes (`OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`) |
+| Initial state, fill/drain transitions, owner loss, or selection | `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION` |
+| Foam material, formation, episode association, or Oil/Foam ordering | `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION` (and any Oil node explicitly touched) |
+| Samples, events, CSV, traces, graphs, reports, or UI semantics | `PUBLICATION-PROVENANCE`, the relevant publication node(s), and `RESULT-PRESENTATION` |
+
+This index routes reading; it does not add an owner, alter current behavior, or propose R19.
+
 ## 1. End-to-end control flow
 
 There are two related paths. The online path produces one current-frame `PhaseDetection` and compatibility/debug fields. The completed-window path reruns ownership over all successful detections before official samples are made. The latter is the authority for completed analysis.

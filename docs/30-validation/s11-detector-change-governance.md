@@ -17,8 +17,8 @@ It does not turn broad application/UI changes, unrelated documentation, or prese
 ## Mandatory order
 
 1. Read [`docs/README.md`](../README.md) and classify the work.
-2. Read the [current detector logic map](../20-architecture/s11-current-detector-logic-map.md) and identify every affected node and owner boundary.
-3. Read the [mechanism failure registry](../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md) and identify prior mechanisms that could recur.
+2. Read/scan the [logic-map quick start / design index](../20-architecture/s11-current-detector-logic-map.md#quick-start--design-index) and [failure quick index](../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md#quick-failure-index-f01f10) completely.
+3. Use the indexes to identify every affected logic-map node, owner boundary, and referenced prior failure ID. Then read the full detail for every affected node and referenced failure entry; do not skip relevant detail because the index summarizes it.
 4. Read the relevant current architecture/design, validation, and reviewed-truth authority. Do not use historical evidence or diagnostics as a substitute for a current owner.
 5. Record the matching block below in the changed architecture/design document or field diagnostic/evidence record. Use semantic node IDs from the map and failure IDs from the registry.
 6. Run `python3 scripts/check_detector_governance.py --base-ref <base-ref> --include-worktree` while editing and resolve every finding before review. The pre-push hook and CI invoke the same checker on committed ranges.
