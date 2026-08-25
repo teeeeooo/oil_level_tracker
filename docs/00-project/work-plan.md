@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R17 private-Windows FAIL frozen; successor design pending`
+**Current gate:** `R18 lifecycle-closure design complete; implementation pending`
 **Source authority:** `main at locally accepted R17-v3; no field-qualified detector`
 **Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
 **Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
@@ -138,12 +138,19 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Design the successor from the frozen R17 private-Windows field evidence. The
-completed-window audit is closed: the replay preserves initial Accum EMPTY and
-exact same-frame/CSV provenance, but Base never leaves OPEN, Accum never forms
-a filled barrier or drain phase, and false Foam episodes remain publishable
-outside the reviewed 672--680 s interval. Do not extend the field investigation
-or convert named unknowns into implementation assumptions.
+Implement the bounded R18 lifecycle closure from the frozen R17 private-
+Windows field evidence. The completed-window audit is closed: the replay
+preserves initial Accum EMPTY and exact same-frame/CSV provenance, but Base
+never leaves OPEN, Accum never forms a filled barrier or drain phase, and false
+Foam episodes remain publishable outside the reviewed 672--680 s interval. Do
+not extend the field investigation or convert named unknowns into implementation
+assumptions.
+
+R18 replaces the boolean initial-state phase seam with explicit confirmed-state
+ownership, starts confirmed FULL behind a barrier, admits partial-fill reversal
+only from an already established fill owner, and removes extent-only Foam
+episode confirmation in favor of directed front formation. Oil/Foam resolver
+ordering remains unchanged because its direct causal effect is not proven.
 
 Use the [R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md),
 [validation contract](../30-validation/s11-r17-physical-observation-ownership-validation.md)
@@ -154,6 +161,10 @@ Every subsequent Windows report must cover all nine `WS1-*` segments. Prior
 R14/R16 detector counts and the superseded 540/674 s BASE anchors do not define
 truth. Same-frame/CSV provenance, calibrated Artifact rejection and the
 13-case local checked-truth contract remain independent non-regression gates.
+
+The active replacement contracts are the
+[R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md)
+and [R18 validation](../30-validation/s11-r18-lifecycle-closure-validation.md).
 
 ## R16 field disposition
 
