@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R17 private-Windows source review failed; completed-window trace/code diagnosis pending`
+**Current gate:** `R17 private-Windows FAIL frozen; successor design pending`
 **Source authority:** `main at locally accepted R17-v3; no field-qualified detector`
 **Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
 **Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
@@ -138,17 +138,18 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Audit the failed R17 private-Windows completed-window trace against the
-canonical `windows_sample1_heating_coldstart` source review, then design the
-next replacement from the first demonstrated ownership failures. The replay
-preserved the initial Accum EMPTY interval but failed BASE no-interface
-suppression and owner continuity, confused Accum splash/Foam material identity,
-and lost the real Accum drain after about 700 s. These are source-review
-observations; exact code causes remain pending trace confirmation.
+Design the successor from the frozen R17 private-Windows field evidence. The
+completed-window audit is closed: the replay preserves initial Accum EMPTY and
+exact same-frame/CSV provenance, but Base never leaves OPEN, Accum never forms
+a filled barrier or drain phase, and false Foam episodes remain publishable
+outside the reviewed 672--680 s interval. Do not extend the field investigation
+or convert named unknowns into implementation assumptions.
 
 Use the [R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md),
 [validation contract](../30-validation/s11-r17-physical-observation-ownership-validation.md)
-and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
+and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md),
+with the frozen [R17 Windows result](../60-evidence/s11/s11-r17-secure-windows-field-result.md)
+and [diagnostic](../50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md).
 Every subsequent Windows report must cover all nine `WS1-*` segments. Prior
 R14/R16 detector counts and the superseded 540/674 s BASE anchors do not define
 truth. Same-frame/CSV provenance, calibrated Artifact rejection and the
@@ -160,7 +161,9 @@ The private-Windows R16 holdout failed. Base published 0/601 Oil and five false
 Foam rows. Accum suppressed the prior initial-EMPTY false Oil runs and admitted
 a real lower-entry tracklet, but published only 31/601 Oil rows, had large
 reviewed-Y errors at 684/689 s and remained non-numeric after 702 s. Accum
-published 97 Foam rows: 52 reviewed real Foam and 45 reviewed false Foam.
+published 97 Foam rows. Their former 52-real/45-false classification is
+superseded by the later canonical segment truth, which establishes Foam only
+from about 672--680 s and does not make detector-row cohorts a truth target.
 
 Completed-window integrity passed: every one of the 31 Oil rows and all 102
 Foam rows had exactly one equal-Y selected same-frame candidate and equal CSV
@@ -237,6 +240,11 @@ and [corrected diagnostic](../50-diagnostics/s11/s11-r16-windows-tracklet-and-fo
 
 ## Authority links
 
+- [R17 physical observation ownership architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md)
+- [R17 validation](../30-validation/s11-r17-physical-observation-ownership-validation.md)
+- [R17 local evidence](../60-evidence/s11/s11-r17-physical-observation-ownership.md)
+- [R17 Windows field result](../60-evidence/s11/s11-r17-secure-windows-field-result.md)
+- [R17 Windows diagnostic](../50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md)
 - [R16 directed tracklet/material lifecycle architecture](../20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md)
 - [R16 validation](../30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md)
 - [R16 local evidence](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)

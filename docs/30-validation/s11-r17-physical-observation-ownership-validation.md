@@ -4,9 +4,12 @@
 
 R17 is accepted locally only when the replacement mechanisms, checked-video
 corpus, exact provenance, performance and full repository regression pass. The
-private Base/Accum replay has now failed direct source review; R17 remains field
-unqualified while its completed-window trace is audited against the corrected
-field truth.
+private Base/Accum replay failed direct source review and its completed-window
+trace/code audit is now frozen. R17 remains field unqualified. Exact field
+counts are owned by the
+[R17 Windows result](../60-evidence/s11/s11-r17-secure-windows-field-result.md)
+and causal boundaries by the
+[corrected diagnostic](../50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md).
 
 ## Mechanism assertions
 
@@ -119,3 +122,11 @@ Artifact templates, trace/index and exact row counts.
 R17 fails if a graph looks plausible while CSV/sequence rows are absent, if a
 real value depends on interpolation, if initial EMPTY suppression regresses, or
 if any public coordinate lacks same-frame provenance.
+
+The audited R17 bundle fails this gate despite passing publication integrity.
+Base publishes 339 Oil rows, including 136 false rows in reviewed
+full/no-interface segments; Accum publishes 26 Oil and 99 Foam rows, preserves
+the 347-row initial EMPTY interval, but publishes no Oil in the 160-row real
+drain and publishes 86 false Foam rows outside the reviewed Foam interval.
+Neither Glass ever enters `FILLED_BARRIER` or `DRAINING`. All 365 Oil rows and
+99 Foam rows retain exact selected-candidate/sequence/CSV equality.

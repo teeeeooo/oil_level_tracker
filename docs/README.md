@@ -68,6 +68,8 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 - Active S11-R17 validation contract: [`30-validation/s11-r17-physical-observation-ownership-validation.md`](30-validation/s11-r17-physical-observation-ownership-validation.md)
 - Canonical private-Windows field truth (`windows_sample1_heating_coldstart`): [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 - S11-R17 local implementation/replay evidence: [`60-evidence/s11/s11-r17-physical-observation-ownership.md`](60-evidence/s11/s11-r17-physical-observation-ownership.md)
+- S11-R17 secure-Windows field result: [`60-evidence/s11/s11-r17-secure-windows-field-result.md`](60-evidence/s11/s11-r17-secure-windows-field-result.md)
+- S11-R17 corrected Windows phase/episode diagnostic: [`50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md`](50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md)
 - S11-R16 local implementation evidence: [`60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md`](60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
 - S11-R16 repaired owner/coverage diagnostic: [`50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md`](50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md)
 - S11-R16 secure-Windows field result: [`60-evidence/s11/s11-r16-secure-windows-field-result.md`](60-evidence/s11/s11-r16-secure-windows-field-result.md)

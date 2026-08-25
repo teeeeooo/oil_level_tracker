@@ -2,9 +2,11 @@
 
 ## Disposition
 
-R17 is locally accepted and remains `WINDOWS_PENDING`. The exact private
-Base/Accum field replay was not available in this checkout, so this evidence
-does not claim field accuracy or close S11.
+R17 is locally accepted, but the subsequent private Base/Accum field replay
+failed. This record owns the local implementation/replay evidence only; the
+later [Windows field result](s11-r17-secure-windows-field-result.md) and
+[corrected diagnostic](../../50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md)
+own field accuracy and root-cause boundaries. S11 remains open.
 
 The corrected detector/runtime identity is
 `opencv-phase-detector-r17-physical-observation-ownership-v3`; the sequence
@@ -165,12 +167,14 @@ This is faster than the first R17 median and is not a material performance
 regression. The manifest is
 `/tmp/s11-r17-v3-perf/performance_profile.json`.
 
-## Remaining external gate
+## Subsequent external gate result
 
-The next authority is a new private-Windows Base/Accum replay. It must report
-Base Oil recovery at the reviewed 540/634/674 s anchors, zero Base Foam, Accum
-initial-EMPTY suppression, real bottom-entry admission, truth-near continuity
-including post-702 s reacquisition, the 52 reviewed real versus 50 reviewed
-false Foam rows, and exact selected-candidate/sequence/CSV equality. Until that
-passes, R17 is a locally accepted implementation rather than a field-qualified
-detector.
+The later private-Windows replay used the canonical nine-segment
+`windows_sample1_heating_coldstart` truth and failed. Base no-interface
+suppression and material-phase ownership, Accum post-fill drain ownership and
+Foam false-positive suppression did not qualify. Initial Accum EMPTY
+suppression and exact selected-candidate/sequence/CSV equality passed.
+
+The field result supersedes the older 540/674 s Base anchors and the former
+“52 real Foam rows” cohort target. R17 remains a locally accepted
+implementation rather than a field-qualified detector.

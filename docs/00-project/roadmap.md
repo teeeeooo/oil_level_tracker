@@ -156,10 +156,10 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
-- **Major result:** R16 failed the private-Windows Base/Accum holdout. R17-v2 replaces its mixed physical/state ownership and time-only Foam grouping, then corrects the omitted checked-truth gate and two measured ownership seams. The local replay has 299 rows, 162 numeric Oil, 8/13 checked truth, 9.0 px MAE, 24.5 px maximum error, 12 late-drain rows and exact same-frame provenance. Five abstentions remain explicitly classified; R17-v2 is locally accepted, not field-qualified.
-- **Next gate:** Run the private-Windows Base/Accum gate on R17-v2. Preserve initial-EMPTY suppression, lower-entry admission, real Foam recall, Artifact safety and exact provenance while requiring reviewed Base/Accum accuracy.
+- **Major result:** R17-v3 passes its local structural, checked-video, performance and exact-provenance gates but fails the canonical nine-segment private-Windows replay. Accum initial EMPTY and all same-frame/CSV integrity pass; Base no-interface/drain ownership, Accum partial-fill reversal/drain ownership and Foam false-positive suppression fail. The field result and code-supported diagnostic are frozen with named unknowns.
+- **Next gate:** Design the successor from the frozen R17 field failures without weakening initial-EMPTY suppression, same-frame provenance, real Foam independence, Artifact safety or checked-truth authority.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md), [R17 validation](../30-validation/s11-r17-physical-observation-ownership-validation.md), [R17 local evidence](../60-evidence/s11/s11-r17-physical-observation-ownership.md), [R16 field result](../60-evidence/s11/s11-r16-secure-windows-field-result.md), [Windows field-workflow checklist](../40-operations/manual-gui-windows-checklist.md)
+- **Detail:** [current work plan](work-plan.md), [R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md), [R17 validation](../30-validation/s11-r17-physical-observation-ownership-validation.md), [R17 local evidence](../60-evidence/s11/s11-r17-physical-observation-ownership.md), [R17 field result](../60-evidence/s11/s11-r17-secure-windows-field-result.md), [R17 Windows diagnostic](../50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R16 Windows FAIL → R17-v2 local PASS → R17-v2 Windows gate)` → `S11-M/S12 implementation slices PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R17-v3 local PASS → R17 Windows FAIL → successor design)` → `S11-M/S12 implementation slices PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R16 failed private field holdouts. R17-v2 is the locally accepted `main` baseline while S11 remains active and has no field-qualified detector. The unmerged `codex/ui-ux-refresh` work is outside the current detector repair and is not part of `main`.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R17 failed private field holdouts. R17-v3 is the locally accepted `main` baseline while S11 remains active and has no field-qualified detector. The unmerged `codex/ui-ux-refresh` work is outside the current detector repair and is not part of `main`.
