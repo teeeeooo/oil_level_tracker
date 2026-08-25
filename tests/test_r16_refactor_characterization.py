@@ -22,10 +22,10 @@ CURRENT_FRAME_FINGERPRINT = (
 R0_COMPLETED_WINDOW_FINGERPRINT = (
     "1050ca7966600d67b0cd430225c562c7ea32ae3329c3bad260bff89593b5cbe0"
 )
-R17_PHYSICAL_OBSERVATION_COMPLETED_WINDOW_FINGERPRINT = (
-    # R17-v3 preserves same-frame projection while allowing only bounded,
-    # same-family anchor correction and transient current-frame ownership.
-    "40dcf6a2176fb580cca67a248ba3e9d0be521949f4eb15490f2c859a504c0bfa"
+R18_LIFECYCLE_CLOSURE_COMPLETED_WINDOW_FINGERPRINT = (
+    # R18 preserves the R17 completed-window payload byte-for-byte except for
+    # the explicit resolver-version field on diagnostics and every row.
+    "a42ab27a9bc8b0d37161bededc6859d79f4c2cac347dc171418c33c3b3fefa3b"
 )
 
 
@@ -251,7 +251,7 @@ def test_r0_completed_window_stage_and_provenance_fingerprint() -> None:
     }
 
     fingerprint = _fingerprint(payload)
-    assert fingerprint == R17_PHYSICAL_OBSERVATION_COMPLETED_WINDOW_FINGERPRINT
+    assert fingerprint == R18_LIFECYCLE_CLOSURE_COMPLETED_WINDOW_FINGERPRINT
     assert fingerprint != R0_COMPLETED_WINDOW_FINGERPRINT
     for source, resolved in zip(detections, result.detections, strict=True):
         assert resolved.raw_oil_air_level_y in {
