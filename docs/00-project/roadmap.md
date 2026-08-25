@@ -156,10 +156,10 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 - **Purpose:** Recover reliable Oil-boundary detection and tracking on field-representative sight-glass video where a human can identify usable Oil evidence, without weakening accepted glare/structure/Foam/no-interface safety contracts.
 - **Status:** `ACTIVE`
-- **Major result:** R17-v3 passes its local structural, checked-video, performance and exact-provenance gates but fails the canonical nine-segment private-Windows replay. The frozen evidence now drives the bounded R18 lifecycle-closure design: explicit confirmed-state phase ownership, established partial-fill reversal and directed Foam-front formation, with no Oil/Foam resolver reordering or field-specific policy.
-- **Next gate:** Implement and validate R18 without weakening initial-EMPTY suppression, same-frame provenance, real Foam independence, Artifact safety or checked-truth authority.
+- **Major result:** R18 implements explicit confirmed-state phase ownership, established partial-fill reversal and bounded Foam-front formation without resolver reordering or field-specific policy. It passes the 1,658-test repository gate, the deterministic 13-case checked replay, exact provenance and performance gates; private-Windows behavior has not yet been rerun.
+- **Next gate:** Produce and review a new R18 Windows bundle against all nine canonical `WS1-*` segments while preserving initial-EMPTY suppression, same-frame provenance, real Foam independence, Artifact safety and checked-truth authority.
 - **Priority:** `P0`
-- **Detail:** [current work plan](work-plan.md), [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md), [R18 validation](../30-validation/s11-r18-lifecycle-closure-validation.md), [R17 field result](../60-evidence/s11/s11-r17-secure-windows-field-result.md), [R17 Windows diagnostic](../50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md)
+- **Detail:** [current work plan](work-plan.md), [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md), [R18 validation](../30-validation/s11-r18-lifecycle-closure-validation.md), [R18 local evidence](../60-evidence/s11/s11-r18-lifecycle-closure.md), [R17 field result](../60-evidence/s11/s11-r17-secure-windows-field-result.md)
 
 ### S11-M — Post-S11 Structural Maintainability
 
@@ -181,6 +181,6 @@ Allowed values are `PLANNED`, `ACTIVE`, `BLOCKED`, `VALIDATING`, `DONE`, `DEFERR
 
 ## Current sequence
 
-`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R17-v3 local PASS → R17 Windows FAIL → R18 implementation)` → `S11-M/S12 implementation slices PLANNED`.
+`S6 DONE` → `S7 / Phase 2C-4 DONE` → `S8 DONE` → `S9 DONE` → `S10 DONE` → `S11 ACTIVE (R17 Windows FAIL → R18 local PASS → R18 Windows pending)` → `S11-M/S12 implementation slices PLANNED`.
 
-Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R17 failed private field holdouts. R17-v3 is the locally accepted `main` baseline while S11 remains active and has no field-qualified detector. The unmerged `codex/ui-ux-refresh` work is outside the current detector repair and is not part of `main`.
+Affirmatively retained but non-current work, including autosave/abnormal-exit recovery, is routed through [`retained-commitments.md`](retained-commitments.md). Slices A–D and S11-R1–R4 remain historical baselines; R5–R17 failed private field holdouts. R18 is the locally accepted `main` baseline while S11 remains active and has no field-qualified detector. The unmerged `codex/ui-ux-refresh` work is outside the current detector repair and is not part of `main`.

@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R18 lifecycle-closure design complete; implementation pending`
-**Source authority:** `main at locally accepted R17-v3; no field-qualified detector`
+**Current gate:** `R18 local PASS; private-Windows nine-segment replay pending`
+**Source authority:** `main at locally accepted R18; no field-qualified detector`
 **Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
 **Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
 
@@ -138,33 +138,23 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Implement the bounded R18 lifecycle closure from the frozen R17 private-
-Windows field evidence. The completed-window audit is closed: the replay
-preserves initial Accum EMPTY and exact same-frame/CSV provenance, but Base
-never leaves OPEN, Accum never forms a filled barrier or drain phase, and false
-Foam episodes remain publishable outside the reviewed 672--680 s interval. Do
-not extend the field investigation or convert named unknowns into implementation
-assumptions.
+Replay the exact R18 source on Windows and review the resulting new bundle
+against all nine canonical `WS1-*` segments. The R17 bundle remains frozen
+historical evidence and cannot prove R18 field behavior. Do not reuse old
+counts as acceptance targets or convert named unknowns into facts.
 
-R18 replaces the boolean initial-state phase seam with explicit confirmed-state
-ownership, starts confirmed FULL behind a barrier, admits partial-fill reversal
-only from an already established fill owner, and removes extent-only Foam
-episode confirmation in favor of directed front formation. Oil/Foam resolver
-ordering remains unchanged because its direct causal effect is not proven.
+The locally accepted R18 implementation starts confirmed FULL behind a phase
+barrier, permits an established partial fill to reverse into one bounded drain
+owner and replaces broad Foam extent confirmation with bounded front-formation
+witnesses. It retains initial-EMPTY suppression, Oil/Foam same-frame/CSV
+provenance, Artifact handling, checked-truth authority and resolver ordering.
 
-Use the [R17 architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md),
-[validation contract](../30-validation/s11-r17-physical-observation-ownership-validation.md)
-and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md),
-with the frozen [R17 Windows result](../60-evidence/s11/s11-r17-secure-windows-field-result.md)
-and [diagnostic](../50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md).
-Every subsequent Windows report must cover all nine `WS1-*` segments. Prior
-R14/R16 detector counts and the superseded 540/674 s BASE anchors do not define
-truth. Same-frame/CSV provenance, calibrated Artifact rejection and the
-13-case local checked-truth contract remain independent non-regression gates.
-
-The active replacement contracts are the
-[R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md)
-and [R18 validation](../30-validation/s11-r18-lifecycle-closure-validation.md).
+Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md),
+[R18 validation](../30-validation/s11-r18-lifecycle-closure-validation.md),
+[local evidence](../60-evidence/s11/s11-r18-lifecycle-closure.md) and
+[canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
+The field result must explicitly remain `WINDOWS NOT RUN` until a new R18
+bundle is produced and reviewed.
 
 ## R16 field disposition
 

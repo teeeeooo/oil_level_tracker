@@ -1,6 +1,6 @@
 # S11-R18 Lifecycle Closure Architecture
 
-**Status:** `DESIGNED — IMPLEMENTATION PENDING`
+**Status:** `IMPLEMENTED — LOCAL GATE PASS / WINDOWS NOT RUN`
 
 ## Authority and scope
 

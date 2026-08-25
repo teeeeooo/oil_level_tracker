@@ -1,5 +1,7 @@
 # S11-R18 Lifecycle Closure Validation
 
+**Status:** `LOCAL PASS / WINDOWS NOT RUN`
+
 ## Gate
 
 R18 is locally acceptable only when the explicit initial-state lifecycle,
@@ -53,7 +55,7 @@ same-row material-veto and ambiguity tests remain required.
   both area and width; a narrow two-frame residue remains rejected.
 - Area-only and width-only evolution do not confirm a top-row, descending or
   spatially unbounded track.
-- A separated Oil layer does not bypass directed formation.
+- A separated Oil layer does not bypass the bounded formation witnesses.
 - Foam remains independently publishable when Oil is unknown.
 - Final-Oil same-boundary alias rejection and inverted-topology diagnostics
   remain unchanged.
