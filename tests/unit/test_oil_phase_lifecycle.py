@@ -1001,6 +1001,18 @@ def test_established_partial_fill_reverses_into_unique_drain_owner() -> None:
     assert result.allowed_tracklet_ids[7] == frozenset({"reversed"})
     assert result.owner_chains[7] == ("fill-a", "reversed")
     assert result.reasons[7] == "PARTIAL_FILL_DRAIN_RELEASE_CONFIRMED"
+    diagnostic = result.diagnostics[7]
+    assert diagnostic["established_fill_present"] is True
+    assert diagnostic["established_fill_last_y"] == 155.0
+    assert diagnostic["release_stage"] == "partial_fill_drain_release"
+    assert diagnostic["release_selected_tracklet_id"] == "reversed"
+    reversed_evaluation = next(
+        item
+        for item in diagnostic["release_evaluations"]
+        if item["tracklet_id"] == "reversed"
+    )
+    assert reversed_evaluation["passed"] is True
+    assert reversed_evaluation["first_failed_predicate"] is None
 
 
 def test_initial_empty_downward_tracklet_cannot_start_without_fill_owner() -> None:
@@ -1077,6 +1089,24 @@ def test_partial_fill_drain_release_rejects_distant_or_material_opposed_rows() -
         frozenset(),
         frozenset(),
     )
+    distant_evaluation = next(
+        item
+        for item in result.diagnostics[5]["release_evaluations"]
+        if item["tracklet_id"] == "distant"
+    )
+    opposed_evaluation = next(
+        item
+        for item in result.diagnostics[6]["release_evaluations"]
+        if item["tracklet_id"] == "opposed"
+    )
+    assert (
+        distant_evaluation["first_failed_predicate"]
+        == "reversal_lower_bound"
+    )
+    assert (
+        opposed_evaluation["first_failed_predicate"]
+        == "tracklet_material_conflict"
+    )
 
 
 def test_ambiguous_partial_fill_drain_release_stays_unknown() -> None:
@@ -1121,6 +1151,11 @@ def test_ambiguous_partial_fill_drain_release_stays_unknown() -> None:
     assert result.reasons[-1] == "PARTIAL_FILL_DRAIN_RELEASE_AMBIGUOUS"
     assert result.allowed_tracklet_ids[-1] == frozenset()
     assert result.owner_chains[-1] == ("fill",)
+    assert result.diagnostics[-1]["release_ambiguous"] is True
+    assert result.diagnostics[-1]["release_qualifying_tracklet_ids"] == [
+        "drain-a",
+        "drain-b",
+    ]
 
 
 def test_confirmed_full_starts_behind_fail_closed_material_barrier() -> None:
@@ -1141,6 +1176,29 @@ def test_confirmed_full_starts_behind_fail_closed_material_barrier() -> None:
     assert result.reasons == ("INITIAL_FULL_BARRIER",)
     assert result.allowed_tracklet_ids == (frozenset(),)
     assert result.path[0].kind == "unknown"
+
+
+def test_initial_full_drain_diagnostic_records_first_failed_predicate() -> None:
+    missed_entrance = _node(
+        0,
+        "missed-entrance",
+        130.0,
+        direction=1,
+        progress=30.0,
+    )
+
+    result = _resolve(
+        ((missed_entrance, _unknown(0)),),
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    diagnostic = result.diagnostics[0]
+    evaluation = diagnostic["release_evaluations"][0]
+    assert diagnostic["release_stage"] == "initial_full_drain_release"
+    assert diagnostic["allowed_mode"] == "hard_gate"
+    assert evaluation["entrance_relative"] == 0.65
+    assert evaluation["first_failed_predicate"] == "entrance_relative"
+    assert evaluation["predicates"]["minimum_progress"] is True
 
 
 def test_confirmed_full_releases_unique_downward_top_origin_owner() -> None:

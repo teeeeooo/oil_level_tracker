@@ -472,6 +472,12 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 "trajectory_support": features.get("sequence_trajectory_support"),
                 "foam_alias_penalty": features.get("sequence_foam_alias_penalty"),
                 "sequence_foam_eligible": features.get("sequence_foam_eligible"),
+                "foam_eligibility_predicates": features.get(
+                    "sequence_foam_eligibility_predicates"
+                ),
+                "foam_eligibility_failed_gates": features.get(
+                    "sequence_foam_eligibility_failed_gates"
+                ),
                 "evidence_availability": {
                     "boundary": features.get("boundary_evidence_available"),
                     "phase": features.get("phase_evidence_available"),

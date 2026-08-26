@@ -396,16 +396,23 @@ class CurrentFrameResultProjector:
                 )
                 >= 0.15
             )
-            sequence_foam_eligible = bool(
-                foam_layer.coherent
-                and not static_foam_match.dominant
-                and float(foam.glare_overlap_ratio)
-                <= float(settings.foam_max_glare_overlap_ratio)
-                and (
+            foam_eligibility_predicates = (
+                ("layer_coherent", bool(foam_layer.coherent)),
+                ("static_artifact_clear", not static_foam_match.dominant),
+                (
+                    "glare_overlap",
+                    float(foam.glare_overlap_ratio)
+                    <= float(settings.foam_max_glare_overlap_ratio),
+                ),
+                (
+                    "supported_layer_shape",
                     wide_layer
                     or dynamic_narrow_layer
-                    or dynamic_detached_droplet
-                )
+                    or dynamic_detached_droplet,
+                ),
+            )
+            sequence_foam_eligible = all(
+                passed for _name, passed in foam_eligibility_predicates
             )
             foam_features = dict(raw_foam_candidate.features)
             foam_features.setdefault("local_y", raw_foam_candidate.y)
@@ -439,6 +446,15 @@ class CurrentFrameResultProjector:
             )
             foam_features["sequence_foam_eligible"] = float(
                 sequence_foam_eligible
+            )
+            foam_features["sequence_foam_eligibility_predicates"] = {
+                name: passed
+                for name, passed in foam_eligibility_predicates
+            }
+            foam_features["sequence_foam_eligibility_failed_gates"] = ";".join(
+                name
+                for name, passed in foam_eligibility_predicates
+                if not passed
             )
             foam_features["foam_wide_layer"] = float(wide_layer)
             foam_features["foam_dynamic_narrow_layer"] = float(

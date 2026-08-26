@@ -218,6 +218,7 @@ class OilPathLifecycleResult:
         OilFillConfirmationProfile, ...
     ]
     material_phase_ambiguous_frames: frozenset[int]
+    material_phase_diagnostics: tuple[dict[str, object], ...]
 
 
 class OilAdmissionEvidenceOwner:
@@ -809,6 +810,7 @@ class OilPathLifecycleOwner:
                 phase.fill_confirmation_profiles
             ),
             material_phase_ambiguous_frames=phase.ambiguous_frames,
+            material_phase_diagnostics=phase.diagnostics,
         )
 
     def _suppress_trajectory_spikes(
@@ -938,6 +940,7 @@ class OilResolutionProjectionOwner:
                 lifecycle.material_phase_owner_chains[index],
                 lifecycle.material_phase_fill_confirmation_profiles[index],
                 index in lifecycle.material_phase_ambiguous_frames,
+                lifecycle.material_phase_diagnostics[index],
                 index,
                 glass,
                 confirmed_initial_state,
@@ -1036,6 +1039,7 @@ class OilResolutionProjectionOwner:
         material_phase_owner_chain: tuple[str, ...],
         material_phase_fill_confirmation_profile: OilFillConfirmationProfile,
         material_phase_ambiguous: bool,
+        material_phase_diagnostics: dict[str, object],
         frame_offset: int,
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None,
@@ -1079,6 +1083,9 @@ class OilResolutionProjectionOwner:
                 ),
                 "sequence_material_phase_ambiguous": float(
                     material_phase_ambiguous
+                ),
+                "sequence_material_phase_diagnostics": (
+                    material_phase_diagnostics
                 ),
                 "sequence_track_opposition": (
                     0.0

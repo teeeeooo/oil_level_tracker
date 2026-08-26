@@ -237,11 +237,16 @@ def test_r0_completed_window_stage_and_provenance_fingerprint() -> None:
                 "oil_air_confidence": detection.oil_air_confidence,
                 "overall_confidence": detection.overall_confidence,
                 "flags": detection.flags,
-                "sequence_metrics": {
-                    key: value
-                    for key, value in detection.debug_metrics.items()
-                    if key.startswith("sequence_")
-                },
+                    "sequence_metrics": {
+                        key: value
+                        for key, value in detection.debug_metrics.items()
+                        if key.startswith("sequence_")
+                        and key
+                        not in {
+                            "sequence_material_phase_diagnostics",
+                            "sequence_foam_episode_diagnostics",
+                        }
+                    },
                 "candidates": [
                     _candidate_payload(item) for item in detection.candidates
                 ],

@@ -73,6 +73,60 @@ class OilMaterialPhaseResult:
     fill_confirmation_profiles: tuple[OilFillConfirmationProfile, ...]
     allowed_tracklet_ids: tuple[frozenset[str] | None, ...]
     ambiguous_frames: frozenset[int]
+    diagnostics: tuple[dict[str, object], ...]
+
+
+@dataclass(frozen=True)
+class OilReleasePredicateEvaluation:
+    stage: str
+    tracklet_id: str
+    row_hypothesis_id: str
+    row_y: float
+    entrance_y: float
+    entrance_relative: float | None
+    established_fill_last_y: float | None
+    minimum_progress_px: float
+    maximum_jump_px: float
+    tracklet_progress_px: float
+    directional_agreement: float
+    current_material_veto: bool
+    tracklet_material_conflict: float
+    current_material_conflict: float
+    predicates: tuple[tuple[str, bool], ...]
+
+    @property
+    def passed(self) -> bool:
+        return all(passed for _name, passed in self.predicates)
+
+    @property
+    def first_failed_predicate(self) -> str | None:
+        return next(
+            (name for name, passed in self.predicates if not passed),
+            None,
+        )
+
+    def as_debug_dict(self) -> dict[str, object]:
+        return {
+            "stage": self.stage,
+            "tracklet_id": self.tracklet_id,
+            "row_hypothesis_id": self.row_hypothesis_id,
+            "row_y": self.row_y,
+            "entrance_y": self.entrance_y,
+            "entrance_relative": self.entrance_relative,
+            "established_fill_last_y": self.established_fill_last_y,
+            "minimum_progress_px": self.minimum_progress_px,
+            "maximum_jump_px": self.maximum_jump_px,
+            "tracklet_progress_px": self.tracklet_progress_px,
+            "directional_agreement": self.directional_agreement,
+            "current_material_veto": self.current_material_veto,
+            "tracklet_material_conflict": self.tracklet_material_conflict,
+            "current_material_conflict": self.current_material_conflict,
+            "predicates": {
+                name: passed for name, passed in self.predicates
+            },
+            "passed": self.passed,
+            "first_failed_predicate": self.first_failed_predicate,
+        }
 
 
 @dataclass(frozen=True)
@@ -142,6 +196,21 @@ class OilMaterialPhaseLifecycleOwner:
         fill_confirmation_profiles: list[OilFillConfirmationProfile] = []
         allowed_tracklet_ids: list[frozenset[str] | None] = []
         ambiguous_frames: set[int] = set()
+        established_fill_snapshots: list[_FillChain | None] = [
+            None for _layer in layers
+        ]
+        dynamic_fill_owner_snapshots: list[frozenset[str]] = [
+            frozenset() for _layer in layers
+        ]
+        release_stages = ["not_evaluated" for _layer in layers]
+        release_evaluations: list[
+            tuple[OilReleasePredicateEvaluation, ...]
+        ] = [() for _layer in layers]
+        release_qualifying_ids: list[tuple[str, ...]] = [
+            () for _layer in layers
+        ]
+        release_selected_ids: list[str | None] = [None for _layer in layers]
+        release_ambiguities = [False for _layer in layers]
         phase = (
             OilMaterialPhase.FILLED_BARRIER
             if self.policy.initial_full
@@ -162,6 +231,11 @@ class OilMaterialPhaseLifecycleOwner:
             allowed: frozenset[str] | None = None
             fill_phase_reentered = False
             transient_owner_chain: tuple[str, ...] = ()
+            dynamic_fill_owners: frozenset[str] = frozenset()
+
+            def capture_runtime() -> None:
+                established_fill_snapshots[frame] = established_fill_chain
+                dynamic_fill_owner_snapshots[frame] = dynamic_fill_owners
             if phase in {OilMaterialPhase.OPEN, OilMaterialPhase.FILLING}:
                 chains, chain_ambiguity, chain_reason = self._advance_fill_chains(
                     chains,
@@ -247,6 +321,14 @@ class OilMaterialPhaseLifecycleOwner:
                     and established_fill_chain is not None
                     and not dynamic_fill_owners
                 ):
+                    release_stages[frame] = "partial_fill_drain_release"
+                    release_evaluations[frame] = tuple(
+                        self._partial_fill_drain_release_evaluation(
+                            established_fill_chain,
+                            row,
+                        )
+                        for row in rows
+                    )
                     partial_release, release_ambiguous = (
                         self._partial_fill_drain_release_choice(
                             established_fill_chain,
@@ -254,6 +336,16 @@ class OilMaterialPhaseLifecycleOwner:
                         )
                     )
                     if release_ambiguous:
+                        release_qualifying_ids[frame] = tuple(
+                            sorted(
+                                {
+                                    item.tracklet_id
+                                    for item in release_evaluations[frame]
+                                    if item.passed
+                                }
+                            )
+                        )
+                        release_ambiguities[frame] = True
                         phase = OilMaterialPhase.OPEN
                         allowed = frozenset()
                         ambiguous_frames.add(frame)
@@ -265,8 +357,21 @@ class OilMaterialPhaseLifecycleOwner:
                             fill_confirmation_profile
                         )
                         allowed_tracklet_ids.append(allowed)
+                        capture_runtime()
                         continue
                     if partial_release is not None:
+                        release_qualifying_ids[frame] = tuple(
+                            sorted(
+                                {
+                                    item.tracklet_id
+                                    for item in release_evaluations[frame]
+                                    if item.passed
+                                }
+                            )
+                        )
+                        release_selected_ids[frame] = (
+                            partial_release.tracklet_id
+                        )
                         drain_chain = _DrainChain(
                             owner=partial_release.tracklet_id,
                             owners=_append_unique_owner(
@@ -286,6 +391,7 @@ class OilMaterialPhaseLifecycleOwner:
                             fill_confirmation_profile
                         )
                         allowed_tracklet_ids.append(allowed)
+                        capture_runtime()
                         continue
                 established_interface_blocker = bool(
                     not self.policy.initial_empty
@@ -444,8 +550,13 @@ class OilMaterialPhaseLifecycleOwner:
                         fill_confirmation_profile
                     )
                     allowed_tracklet_ids.append(allowed)
+                    capture_runtime()
                     continue
                 fill_owner_open = False
+                release_stages[frame] = "initial_full_drain_release"
+                release_evaluations[frame] = tuple(
+                    self._drain_release_evaluation(row) for row in rows
+                )
                 releases = tuple(
                     row
                     for row in rows
@@ -456,6 +567,7 @@ class OilMaterialPhaseLifecycleOwner:
                 release_ids = tuple(
                     sorted({row.tracklet_id for row in releases})
                 )
+                release_qualifying_ids[frame] = release_ids
                 if len(release_ids) == 1:
                     release = next(
                         row
@@ -471,6 +583,7 @@ class OilMaterialPhaseLifecycleOwner:
                     phase = OilMaterialPhase.DRAINING
                     allowed = frozenset({drain_chain.owner})
                     reason = "DRAIN_RELEASE_CONFIRMED"
+                    release_selected_ids[frame] = release.tracklet_id
                 else:
                     allowed = frozenset()
                     reason = (
@@ -485,6 +598,7 @@ class OilMaterialPhaseLifecycleOwner:
                     )
                     if len(release_ids) > 1:
                         ambiguous_frames.add(frame)
+                        release_ambiguities[frame] = True
 
             else:
                 assert phase is OilMaterialPhase.DRAINING
@@ -669,6 +783,77 @@ class OilMaterialPhaseLifecycleOwner:
             )
             fill_confirmation_profiles.append(fill_confirmation_profile)
             allowed_tracklet_ids.append(allowed)
+            capture_runtime()
+
+        diagnostics = tuple(
+            {
+                "schema_version": "r18-field-causal-observability-v1",
+                "initial_state": (
+                    None
+                    if self.policy.confirmed_initial_state is None
+                    else self.policy.confirmed_initial_state.value
+                ),
+                "initial_empty": self.policy.initial_empty,
+                "initial_full": self.policy.initial_full,
+                "allowed_mode": (
+                    "unconstrained"
+                    if allowed is None
+                    else ("hard_gate" if not allowed else "owner_bounded")
+                ),
+                "allowed_tracklet_ids": (
+                    None if allowed is None else sorted(allowed)
+                ),
+                "dynamic_fill_owner_ids": sorted(
+                    dynamic_fill_owner_snapshots[index]
+                ),
+                "established_fill_present": established is not None,
+                "established_fill_owner": (
+                    None if established is None else established.owner
+                ),
+                "established_fill_owner_chain": (
+                    [] if established is None else list(established.owners)
+                ),
+                "established_fill_last_y": (
+                    None if established is None else established.last.y
+                ),
+                "established_fill_last_frame": (
+                    None if established is None else established.last.frame
+                ),
+                "release_stage": release_stages[index],
+                "release_evaluated": bool(release_evaluations[index]),
+                "release_qualifying_tracklet_ids": list(
+                    release_qualifying_ids[index]
+                ),
+                "release_selected_tracklet_id": release_selected_ids[index],
+                "release_ambiguous": release_ambiguities[index],
+                "release_evaluations": [
+                    item.as_debug_dict()
+                    for item in release_evaluations[index]
+                ],
+                "policy": {
+                    "geometry_top_y": self.policy.geometry_top_y,
+                    "geometry_height": self.policy.geometry_height,
+                    "maximum_jump_px": self.policy.maximum_jump_px,
+                    "drain_entrance_ratio": self.policy.drain_entrance_ratio,
+                    "drain_minimum_progress_ratio": (
+                        self.policy.drain_minimum_progress_ratio
+                    ),
+                    "drain_minimum_directional_agreement": (
+                        self.policy.drain_minimum_directional_agreement
+                    ),
+                    "material_conflict_limit": (
+                        self.policy.material_conflict_limit
+                    ),
+                },
+            }
+            for index, (allowed, established) in enumerate(
+                zip(
+                    allowed_tracklet_ids,
+                    established_fill_snapshots,
+                    strict=True,
+                )
+            )
+        )
 
         return OilMaterialPhaseResult(
             phases=tuple(phases),
@@ -677,6 +862,7 @@ class OilMaterialPhaseLifecycleOwner:
             fill_confirmation_profiles=tuple(fill_confirmation_profiles),
             allowed_tracklet_ids=tuple(allowed_tracklet_ids),
             ambiguous_frames=frozenset(ambiguous_frames),
+            diagnostics=diagnostics,
         )
 
     def _fill_onset_predecessor(
@@ -1214,27 +1400,73 @@ class OilMaterialPhaseLifecycleOwner:
         established_fill: _FillChain,
         row: _ObservedRow,
     ) -> bool:
+        return self._partial_fill_drain_release_evaluation(
+            established_fill,
+            row,
+        ).passed
+
+    def _partial_fill_drain_release_evaluation(
+        self,
+        established_fill: _FillChain,
+        row: _ObservedRow,
+    ) -> OilReleasePredicateEvaluation:
         minimum_progress = max(
             4.0,
             self.policy.geometry_height
             * self.policy.drain_minimum_progress_ratio,
         )
-        return bool(
-            _bounded_confirmed_observation(row.ref)
-            and not row.ref.tracklet_incompatible
-            and row.ref.tracklet_direction > 0
-            and row.ref.tracklet_net_progress_px >= minimum_progress
-            and row.ref.tracklet_directional_agreement
-            >= self.policy.drain_minimum_directional_agreement
-            and row.y
-            >= established_fill.last.y
-            - self.policy.handoff_direction_reversal_tolerance_px
-            and abs(row.y - established_fill.last.y)
-            <= self.policy.maximum_jump_px
-            and self._strict_material_support(row)
+        predicates = (
+            ("bounded_confirmed", _bounded_confirmed_observation(row.ref)),
+            ("compatible", not row.ref.tracklet_incompatible),
+            ("downward_direction", row.ref.tracklet_direction > 0),
+            (
+                "minimum_progress",
+                row.ref.tracklet_net_progress_px >= minimum_progress,
+            ),
+            (
+                "directional_agreement",
+                row.ref.tracklet_directional_agreement
+                >= self.policy.drain_minimum_directional_agreement,
+            ),
+            (
+                "reversal_lower_bound",
+                row.y
+                >= established_fill.last.y
+                - self.policy.handoff_direction_reversal_tolerance_px,
+            ),
+            (
+                "maximum_jump",
+                abs(row.y - established_fill.last.y)
+                <= self.policy.maximum_jump_px,
+            ),
+            ("current_material_veto_clear", not row.current_material_veto),
+            (
+                "tracklet_material_conflict",
+                row.ref.tracklet_material_conflict
+                < self.policy.material_conflict_limit,
+            ),
+            (
+                "current_material_conflict",
+                row.current_material_conflict
+                < self.policy.material_conflict_limit,
+            ),
+        )
+        return self._release_evaluation(
+            stage="partial_fill_drain_release",
+            row=row,
+            predicates=predicates,
+            minimum_progress=minimum_progress,
+            entrance_relative=None,
+            established_fill_last_y=established_fill.last.y,
         )
 
     def _drain_release(self, row: _ObservedRow) -> bool:
+        return self._drain_release_evaluation(row).passed
+
+    def _drain_release_evaluation(
+        self,
+        row: _ObservedRow,
+    ) -> OilReleasePredicateEvaluation:
         relative = (
             row.entrance_y - self.policy.geometry_top_y
         ) / self.policy.geometry_height
@@ -1243,15 +1475,67 @@ class OilMaterialPhaseLifecycleOwner:
             self.policy.geometry_height
             * self.policy.drain_minimum_progress_ratio,
         )
-        return bool(
-            _bounded_confirmed_observation(row.ref)
-            and not row.ref.tracklet_incompatible
-            and row.ref.tracklet_direction > 0
-            and row.ref.tracklet_net_progress_px >= minimum_progress
-            and row.ref.tracklet_directional_agreement
-            >= self.policy.drain_minimum_directional_agreement
-            and relative <= self.policy.drain_entrance_ratio
-            and self._strict_material_support(row)
+        predicates = (
+            ("bounded_confirmed", _bounded_confirmed_observation(row.ref)),
+            ("compatible", not row.ref.tracklet_incompatible),
+            ("downward_direction", row.ref.tracklet_direction > 0),
+            (
+                "minimum_progress",
+                row.ref.tracklet_net_progress_px >= minimum_progress,
+            ),
+            (
+                "directional_agreement",
+                row.ref.tracklet_directional_agreement
+                >= self.policy.drain_minimum_directional_agreement,
+            ),
+            ("entrance_relative", relative <= self.policy.drain_entrance_ratio),
+            ("current_material_veto_clear", not row.current_material_veto),
+            (
+                "tracklet_material_conflict",
+                row.ref.tracklet_material_conflict
+                < self.policy.material_conflict_limit,
+            ),
+            (
+                "current_material_conflict",
+                row.current_material_conflict
+                < self.policy.material_conflict_limit,
+            ),
+        )
+        return self._release_evaluation(
+            stage="initial_full_drain_release",
+            row=row,
+            predicates=predicates,
+            minimum_progress=minimum_progress,
+            entrance_relative=relative,
+            established_fill_last_y=None,
+        )
+
+    def _release_evaluation(
+        self,
+        *,
+        stage: str,
+        row: _ObservedRow,
+        predicates: tuple[tuple[str, bool], ...],
+        minimum_progress: float,
+        entrance_relative: float | None,
+        established_fill_last_y: float | None,
+    ) -> OilReleasePredicateEvaluation:
+        return OilReleasePredicateEvaluation(
+            stage=stage,
+            tracklet_id=row.tracklet_id,
+            row_hypothesis_id=row.row_hypothesis_id,
+            row_y=row.y,
+            entrance_y=row.entrance_y,
+            entrance_relative=entrance_relative,
+            established_fill_last_y=established_fill_last_y,
+            minimum_progress_px=minimum_progress,
+            maximum_jump_px=self.policy.maximum_jump_px,
+            tracklet_progress_px=row.ref.tracklet_net_progress_px,
+            directional_agreement=row.ref.tracklet_directional_agreement,
+            current_material_veto=row.current_material_veto,
+            tracklet_material_conflict=row.ref.tracklet_material_conflict,
+            current_material_conflict=row.current_material_conflict,
+            predicates=predicates,
         )
 
     def _drain_successor(

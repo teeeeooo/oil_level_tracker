@@ -119,6 +119,10 @@ def test_detector_uses_canonical_source_coordinates_and_exposes_finite_evidence(
     foam = foam_rows[0]
     assert math.isclose(foam.y, float(foam.features["local_y"]) + bundle.crop_origin[1])
     assert foam.features["sequence_foam_eligible"] == 1.0
+    assert all(
+        foam.features["sequence_foam_eligibility_predicates"].values()
+    )
+    assert foam.features["sequence_foam_eligibility_failed_gates"] == ""
     for key in (
         "foam_evidence_score",
         "foam_whiteness_ratio",
@@ -153,6 +157,15 @@ def test_static_detached_droplet_remains_sequence_ineligible() -> None:
     assert foam.features["foam_detached_droplet"] == 1.0
     assert foam.features["foam_dynamic_detached_droplet"] == 0.0
     assert foam.features["sequence_foam_eligible"] == 0.0
+    assert (
+        foam.features["sequence_foam_eligibility_predicates"][
+            "supported_layer_shape"
+        ]
+        is False
+    )
+    assert "supported_layer_shape" in foam.features[
+        "sequence_foam_eligibility_failed_gates"
+    ]
 
 
 def test_registered_dynamic_detached_droplet_becomes_sequence_eligible() -> None:

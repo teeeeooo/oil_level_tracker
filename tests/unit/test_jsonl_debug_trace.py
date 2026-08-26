@@ -157,7 +157,14 @@ def test_foam_candidate_uses_foam_episode_stage_not_oil_top_k(tmp_path):
             source="foam_evidence",
             kind=BoundaryKind.FOAM_FRONT,
             y=90.0,
-            features={"sequence_foam_eligible": 1.0},
+            features={
+                "sequence_foam_eligible": 1.0,
+                "sequence_foam_eligibility_predicates": {
+                    "layer_coherent": True,
+                    "supported_layer_shape": True,
+                },
+                "sequence_foam_eligibility_failed_gates": "",
+            },
             rejected=True,
         )
     )
@@ -182,6 +189,8 @@ def test_foam_candidate_uses_foam_episode_stage_not_oil_top_k(tmp_path):
         if item["kind"] == "foam_front"
     )
     assert foam["sequence_foam_eligible"] == 1.0
+    assert foam["foam_eligibility_predicates"]["layer_coherent"] is True
+    assert foam["foam_eligibility_failed_gates"] == ""
     assert foam["reject_stage"] == "FOAM_EPISODE_UNCONFIRMED"
 
 
@@ -228,7 +237,19 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
         fill_state=FillState.DRAINING_VISIBLE,
         candidates=[final_candidate],
         flags=["SEQUENCE_RESOLVED_OIL"],
-        debug_metrics={"sequence_resolved_kind": "oil"},
+        debug_metrics={
+            "sequence_resolved_kind": "oil",
+            "sequence_material_phase_diagnostics": {
+                "release_stage": "initial_full_drain_release",
+                "release_evaluations": [
+                    {
+                        "tracklet_id": "oil-tracklet:000000:0000",
+                        "predicates": {"entrance_relative": False},
+                        "first_failed_predicate": "entrance_relative",
+                    }
+                ],
+            },
+        },
     )
 
     writer.annotate_sequence(glass, (final,))
@@ -254,6 +275,12 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
     assert candidate["tracklet_confirmation_profile"] == "anchor_corridor"
     assert candidate["tracklet_net_progress_px"] == 12.0
     assert record["sequence"]["candidates"][0]["reject_stage"] == "ACCEPTED"
+    phase_diagnostic = record["sequence"]["state"][
+        "sequence_material_phase_diagnostics"
+    ]
+    assert phase_diagnostic["release_evaluations"][0][
+        "first_failed_predicate"
+    ] == "entrance_relative"
     assert index["records"][0]["fill_state"] == FillState.DRAINING_VISIBLE.value
 
 

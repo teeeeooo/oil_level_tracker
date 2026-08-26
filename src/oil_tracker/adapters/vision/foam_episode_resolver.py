@@ -52,6 +52,72 @@ class _OilFoamRelation:
         return self.kind == "inverted_topology"
 
 
+@dataclass(frozen=True)
+class _FoamFormationEvaluation:
+    passed: bool
+    branch: str | None
+    required_rise_px: float
+    front_rise_px: float
+    directional_agreement: float
+    front_span_px: float
+    mean_relative_front: float
+    area_span: float
+    width_span_ratio: float
+    predicates: tuple[tuple[str, bool], ...]
+
+    def as_debug_dict(self) -> dict[str, object]:
+        return {
+            "passed": self.passed,
+            "branch": self.branch,
+            "required_rise_px": self.required_rise_px,
+            "front_rise_px": self.front_rise_px,
+            "directional_agreement": self.directional_agreement,
+            "front_span_px": self.front_span_px,
+            "mean_relative_front": self.mean_relative_front,
+            "area_span": self.area_span,
+            "width_span_ratio": self.width_span_ratio,
+            "predicates": dict(self.predicates),
+            "first_failed_predicate": next(
+                (name for name, passed in self.predicates if not passed),
+                None,
+            ),
+        }
+
+
+@dataclass(frozen=True)
+class _FoamSegmentEvaluation:
+    passed: bool
+    material_support: float
+    required_material_support: float
+    coherent_ratio: float
+    static_opposition: float
+    dynamic_support: float
+    dynamic_frames: int
+    dynamic_frame_ratio: float
+    strong_dynamic_frames: int
+    predicates: tuple[tuple[str, bool], ...]
+    formation: _FoamFormationEvaluation
+
+    def as_debug_dict(self) -> dict[str, object]:
+        return {
+            "passed": self.passed,
+            "material_support": self.material_support,
+            "required_material_support": self.required_material_support,
+            "coherent_ratio": self.coherent_ratio,
+            "static_opposition": self.static_opposition,
+            "dynamic_support": self.dynamic_support,
+            "dynamic_frames": self.dynamic_frames,
+            "dynamic_frame_ratio": self.dynamic_frame_ratio,
+            "strong_dynamic_frames": self.strong_dynamic_frames,
+            "predicates": dict(self.predicates),
+            "first_failed_predicate": next(
+                (name for name, passed in self.predicates if not passed),
+                None,
+            ),
+            "formation": self.formation.as_debug_dict(),
+        }
+
+
 class FoamEpisodeResolver:
     """Publish only explicitly eligible, materially changing Foam episodes.
 
@@ -72,6 +138,17 @@ class FoamEpisodeResolver:
         )
         eligible = tuple(item for item in evidence if item is not None)
         tracks = _foam_front_tracks(eligible, glass)
+        frame_diagnostics: list[dict[str, object]] = [
+            {
+                "schema_version": "r18-field-causal-observability-v1",
+                "eligible_evidence": evidence[index] is not None,
+                "track_id": None,
+                "track_first_frame": None,
+                "track_last_frame": None,
+                "segment_evaluations": [],
+            }
+            for index in range(len(source))
+        ]
         confirmed_frames: set[int] = set()
         rejected_static_frames: set[int] = set()
         rejected_unconfirmed_frames: set[int] = set()
@@ -80,22 +157,49 @@ class FoamEpisodeResolver:
         static_count = 0
         unconfirmed_count = 0
         oil_alias_count = 0
-        for track in tracks:
+        for track_index, track in enumerate(tracks):
             track_frames = {item.frame_offset for item in track}
+            track_id = f"foam-track:{track_index:04d}"
+            for item in track:
+                frame_diagnostics[item.frame_offset].update(
+                    {
+                        "track_id": track_id,
+                        "track_first_frame": track[0].frame_offset,
+                        "track_last_frame": track[-1].frame_offset,
+                    }
+                )
             segments = _foam_confirmation_segments(track)
             rejected_unconfirmed_frames.update(track_frames)
             accepted_any = False
             static_dominated_any = _foam_track_static_dominated(track)
             oil_alias_any = False
             alias_group_frames: set[int] = set()
-            for segment in segments:
-                if _episode_aliases_oil(segment, source, glass):
+            for segment_index, segment in enumerate(segments):
+                aliases_oil = _episode_aliases_oil(segment, source, glass)
+                evaluation = _foam_segment_evaluation(segment, glass)
+                segment_diagnostic = {
+                    "track_id": track_id,
+                    "segment_id": (
+                        f"{track_id}:segment:{segment_index:03d}"
+                    ),
+                    "first_frame": segment[0].frame_offset,
+                    "last_frame": segment[-1].frame_offset,
+                    "aliases_oil": aliases_oil,
+                    **evaluation.as_debug_dict(),
+                }
+                for item in segment:
+                    evaluations = frame_diagnostics[item.frame_offset][
+                        "segment_evaluations"
+                    ]
+                    assert isinstance(evaluations, list)
+                    evaluations.append(segment_diagnostic)
+                if aliases_oil:
                     oil_alias_any = True
                     alias_frames = {item.frame_offset for item in segment}
                     alias_group_frames.update(alias_frames)
                     rejected_oil_alias_frames.update(alias_frames)
                     continue
-                if not _foam_segment_accepted(segment, glass):
+                if not evaluation.passed:
                     continue
                 accepted_any = True
                 episode_count += 1
@@ -127,6 +231,7 @@ class FoamEpisodeResolver:
                 static_rejected=index in rejected_static_frames,
                 unconfirmed_rejected=index in rejected_unconfirmed_frames,
                 oil_alias_rejected=index in rejected_oil_alias_frames,
+                diagnostics=frame_diagnostics[index],
             )
             for index, detection in enumerate(source)
         )
@@ -241,6 +346,7 @@ class FoamEpisodeResolver:
         static_rejected: bool,
         unconfirmed_rejected: bool,
         oil_alias_rejected: bool,
+        diagnostics: dict[str, object],
     ) -> PhaseDetection:
         flags = [
             flag
@@ -313,6 +419,13 @@ class FoamEpisodeResolver:
                 "foam_oil_relation": relation.kind,
                 "foam_oil_alias_match": relation.aliases,
                 "foam_oil_matched_y": relation.oil_y,
+                "sequence_foam_episode_diagnostics": {
+                    **diagnostics,
+                    "confirmed": confirmed,
+                    "static_rejected": static_rejected,
+                    "unconfirmed_rejected": unconfirmed_rejected,
+                    "oil_alias_rejected": oil_alias_rejected,
+                },
             }
         )
         base = replace(
@@ -521,8 +634,32 @@ def _foam_segment_accepted(
     segment: tuple[_FoamEvidence, ...],
     glass: GlassInspectionConfig,
 ) -> bool:
-    if len(segment) < 2:
-        return False
+    return _foam_segment_evaluation(segment, glass).passed
+
+
+def _foam_segment_evaluation(
+    segment: tuple[_FoamEvidence, ...],
+    glass: GlassInspectionConfig,
+) -> _FoamSegmentEvaluation:
+    formation = _foam_formation_evaluation(segment, glass)
+    if not segment:
+        predicates = (("minimum_observations", False),)
+        return _FoamSegmentEvaluation(
+            passed=False,
+            material_support=0.0,
+            required_material_support=max(
+                0.30,
+                float(glass.detector_settings.foam_min_evidence_score) * 0.72,
+            ),
+            coherent_ratio=0.0,
+            static_opposition=0.0,
+            dynamic_support=0.0,
+            dynamic_frames=0,
+            dynamic_frame_ratio=0.0,
+            strong_dynamic_frames=0,
+            predicates=predicates,
+            formation=formation,
+        )
     material = sum(item.material_support for item in segment) / len(segment)
     coherent_ratio = sum(item.coherent for item in segment) / len(segment)
     static = sum(item.static_opposition for item in segment) / len(segment)
@@ -542,14 +679,28 @@ def _foam_segment_accepted(
         0.30,
         float(glass.detector_settings.foam_min_evidence_score) * 0.72,
     )
-    return bool(
-        not static_dominated
-        and material >= required_material
-        and coherent_ratio >= 0.60
-        and dynamic >= 0.10
-        and dynamic_frames >= 2
-        and dynamic_frame_ratio >= 0.50
-        and _foam_formation_witness(segment, glass)
+    predicates = (
+        ("minimum_observations", len(segment) >= 2),
+        ("static_artifact_clear", not static_dominated),
+        ("material_support", material >= required_material),
+        ("coherent_ratio", coherent_ratio >= 0.60),
+        ("dynamic_support", dynamic >= 0.10),
+        ("dynamic_frames", dynamic_frames >= 2),
+        ("dynamic_frame_ratio", dynamic_frame_ratio >= 0.50),
+        ("formation_witness", formation.passed),
+    )
+    return _FoamSegmentEvaluation(
+        passed=all(passed for _name, passed in predicates),
+        material_support=material,
+        required_material_support=required_material,
+        coherent_ratio=coherent_ratio,
+        static_opposition=static,
+        dynamic_support=dynamic,
+        dynamic_frames=dynamic_frames,
+        dynamic_frame_ratio=dynamic_frame_ratio,
+        strong_dynamic_frames=strong_dynamic_frames,
+        predicates=predicates,
+        formation=formation,
     )
 
 
@@ -577,14 +728,33 @@ def _foam_formation_witness(
     reopening the R17 Windows Y80 or descending-residue tracks.
     """
 
+    return _foam_formation_evaluation(segment, glass).passed
+
+
+def _foam_formation_evaluation(
+    segment: tuple[_FoamEvidence, ...],
+    glass: GlassInspectionConfig,
+) -> _FoamFormationEvaluation:
     front_rows = tuple(float(item.candidate.y) for item in segment)
-    if len(front_rows) < 2:
-        return False
     geometry_height = max(
         1.0,
         float(glass.geometry.ellipse.radius_y) * 2.0,
     )
     required_rise = max(4.0, geometry_height * 0.015)
+    if len(front_rows) < 2:
+        predicates = (("minimum_observations", False),)
+        return _FoamFormationEvaluation(
+            passed=False,
+            branch=None,
+            required_rise_px=required_rise,
+            front_rise_px=0.0,
+            directional_agreement=0.0,
+            front_span_px=0.0,
+            mean_relative_front=0.0,
+            area_span=0.0,
+            width_span_ratio=0.0,
+            predicates=predicates,
+        )
     steps = tuple(
         prior - current
         for prior, current in zip(front_rows, front_rows[1:])
@@ -595,7 +765,23 @@ def _foam_formation_witness(
         and directional_agreement >= 0.60
     )
     if directed_front:
-        return directed_front
+        predicates = (
+            ("directed_front_rise", True),
+            ("directed_front_agreement", True),
+        )
+        return _FoamFormationEvaluation(
+            passed=True,
+            branch="directed_front",
+            required_rise_px=required_rise,
+            front_rise_px=front_rows[0] - front_rows[-1],
+            directional_agreement=directional_agreement,
+            front_span_px=max(front_rows) - min(front_rows),
+            mean_relative_front=0.0,
+            area_span=max(item.area_ratio for item in segment)
+            - min(item.area_ratio for item in segment),
+            width_span_ratio=0.0,
+            predicates=predicates,
+        )
     front_span = max(front_rows) - min(front_rows)
     area_span = max(item.area_ratio for item in segment) - min(
         item.area_ratio for item in segment
@@ -627,10 +813,28 @@ def _foam_formation_witness(
         >= max(0.02, float(glass.detector_settings.foam_min_area_ratio))
         or width_span / max(0.01, maximum_width) >= 0.12
     )
-    return (
+    width_span_ratio = width_span / max(0.01, maximum_width)
+    predicates = (
+        ("stable_observation_support", stable_observation_support),
+        ("bounded_stable_front", bounded_stable_front),
+        ("extent_evolution", extent_evolution),
+    )
+    stable_passed = bool(
         stable_observation_support
         and bounded_stable_front
         and extent_evolution
+    )
+    return _FoamFormationEvaluation(
+        passed=stable_passed,
+        branch="stable_layer" if stable_passed else None,
+        required_rise_px=required_rise,
+        front_rise_px=front_rows[0] - front_rows[-1],
+        directional_agreement=directional_agreement,
+        front_span_px=front_span,
+        mean_relative_front=mean_relative_front,
+        area_span=area_span,
+        width_span_ratio=width_span_ratio,
+        predicates=predicates,
     )
 
 

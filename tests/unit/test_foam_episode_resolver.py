@@ -529,6 +529,12 @@ def test_downward_dynamic_residue_cannot_confirm_from_area_or_width_change() -> 
     assert diagnostics.episode_count == 0
     assert diagnostics.rejected_unconfirmed_episode_count == 1
     assert all(item.raw_foam_front_y is None for item in resolved)
+    segment = resolved[0].debug_metrics[
+        "sequence_foam_episode_diagnostics"
+    ]["segment_evaluations"][0]
+    assert segment["predicates"]["formation_witness"] is False
+    assert segment["formation"]["passed"] is False
+    assert segment["formation"]["branch"] is None
 
 
 def test_directional_foam_formation_tolerates_small_row_jitter() -> None:
@@ -553,6 +559,15 @@ def test_directional_foam_formation_tolerates_small_row_jitter() -> None:
         322.0,
         306.0,
     ]
+    episode = resolved[0].debug_metrics[
+        "sequence_foam_episode_diagnostics"
+    ]
+    segment = episode["segment_evaluations"][0]
+    assert episode["track_id"] == "foam-track:0000"
+    assert episode["confirmed"] is True
+    assert segment["passed"] is True
+    assert segment["formation"]["branch"] == "directed_front"
+    assert segment["formation"]["directional_agreement"] == 1.0
 
 
 def test_stable_non_top_material_layer_confirms_with_extent_evolution() -> None:
@@ -579,6 +594,15 @@ def test_stable_non_top_material_layer_confirms_with_extent_evolution() -> None:
 
     assert diagnostics.episode_count == 1
     assert [item.raw_foam_front_y for item in resolved] == [156.0, 158.0, 156.0]
+    segment = resolved[0].debug_metrics[
+        "sequence_foam_episode_diagnostics"
+    ]["segment_evaluations"][0]
+    assert segment["formation"]["branch"] == "stable_layer"
+    assert segment["formation"]["predicates"] == {
+        "stable_observation_support": True,
+        "bounded_stable_front": True,
+        "extent_evolution": True,
+    }
 
 
 def test_two_frame_stable_layer_requires_substantial_material_footprint() -> None:
