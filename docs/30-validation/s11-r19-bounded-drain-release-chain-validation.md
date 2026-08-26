@@ -65,7 +65,9 @@ The following cases must remain UNKNOWN/no-interface and must not enter
 9. an always-slowly-progressing chain that exceeds the total
    `fill_evidence_window_frames` span before reaching the drain minimum;
 10. one predecessor with two equivalent successors, two predecessors for one
-   successor, or two simultaneously qualifying recovery chains;
+   successor, duplicate eligible seed hypotheses for one physical owner, or
+   two simultaneously qualifying recovery chains; every such recovery
+   ambiguity keeps the entire current frame UNKNOWN/no-interface;
 11. a partial-fill row outside the one-jump seed bound from the retained fill;
 12. any attempt to reuse a prior coordinate after a gap; and
 13. any attempt to mark a recovery chain as a physical tracklet or merge IDs.

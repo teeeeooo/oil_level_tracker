@@ -169,6 +169,13 @@ The chain qualifies only when all of the following are true:
 - the current row still passes common row admission; and
 - exactly one chain qualifies on the frame.
 
+Distinct eligible seed hypotheses for one physical tracklet owner are
+ambiguous; none may be selected lexicographically. Any recovery ambiguity
+(including a handoff ambiguity, duplicate seed hypotheses, or multiple
+qualifying chains) fails closed for the entire current frame: no recovery
+owner is selected or published, while only uninvolved bounded chains may be
+retained for a later frame.
+
 On confirmation, the current row's physical tracklet becomes the sole allowed
 drain owner, the distinct recovery owners are appended to the material-phase
 owner chain, and the phase becomes `DRAINING`. Only the current same-frame row
@@ -209,7 +216,8 @@ byte-compatible in meaning. Each frame additionally records:
   observation/transition counts, progress and directional agreement;
 - each chain's ordered predicates and first failed predicate;
 - qualifying and selected recovery owner IDs;
-- ambiguity and reset reason; and
+- ambiguity and reset reason, including duplicate same-owner seed hypotheses
+  when present; and
 - whether the final release source was `direct` or `recovery`.
 
 The resolver and detector versions advance to an R19 bounded-release-chain
@@ -246,5 +254,5 @@ path.
 - Prior mechanisms rejected: global threshold or entrance widening, motion-only bootstrap, prior-fed numeric state, unbounded historical path search, physical-ID merging, coordinate inheritance, unconstrained OPEN fallback and retrospective publication remain rejected.
 - Preserved contracts: independently confirmed same-frame candidates, anchor/material authority, bounded one-to-one handoff, ambiguity-to-UNKNOWN, initial-EMPTY pre-entry suppression, lower-structure entrance rejection, unchanged Foam behavior and exact selected-candidate/sequence/CSV provenance.
 - Difference from prior failures: R19 does not let a prior or one missed edge create numeric output; it accumulates only current, independently confirmed and material-supported rows through bounded clear phase handoffs, resets stationary/ambiguous chains, and publishes only the unique current owner after the existing progress and agreement contracts are satisfied.
-- Logic-map impact: UPDATED — the current implementation map now identifies the R19 resolver/version and bounded recovery owner at `OIL-PHASE-DRAIN`; R18 remains historical context.
-- Failure-registry impact: UPDATED — the registry now records R19 as locally implemented/focused-tested while retaining the field-unqualified failure boundary.
+- Logic-map impact: NONE — this follow-up tightens the already-mapped R19 lifecycle owner; no current implementation owner or node boundary changes.
+- Failure-registry impact: NONE — this follow-up closes an implementation ambiguity within the existing R19 mechanism; no causal mechanism entry changes.

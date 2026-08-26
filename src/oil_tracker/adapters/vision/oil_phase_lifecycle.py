@@ -254,6 +254,9 @@ class OilMaterialPhaseLifecycleOwner:
         ]
         recovery_selected_ids: list[str | None] = [None for _layer in layers]
         recovery_ambiguities = [False for _layer in layers]
+        recovery_ambiguous_seed_owner_ids: list[tuple[str, ...]] = [
+            () for _layer in layers
+        ]
         recovery_reset_reasons = [None for _layer in layers]
         release_sources = ["none" for _layer in layers]
         phase = (
@@ -462,6 +465,9 @@ class OilMaterialPhaseLifecycleOwner:
                     recovery_predicates[frame] = recovery_result["predicates"]
                     recovery_reset_reasons[frame] = recovery_result["reset_reason"]
                     recovery_ambiguities[frame] = recovery_result["ambiguous"]
+                    recovery_ambiguous_seed_owner_ids[frame] = recovery_result[
+                        "ambiguous_seed_owner_ids"
+                    ]
                     qualifying = tuple(
                         sorted(
                             recovery_result["qualifying"],
@@ -471,6 +477,24 @@ class OilMaterialPhaseLifecycleOwner:
                     recovery_qualifying_ids[frame] = tuple(
                         row.tracklet_id for _key, row in qualifying
                     )
+                    if recovery_result["ambiguous"]:
+                        # Recovery ambiguity is a frame-wide fail-closed
+                        # outcome.  Uninvolved bounded chains remain in the
+                        # helper result for a later unambiguous frame, but no
+                        # current row may be selected or published.
+                        phase = OilMaterialPhase.OPEN
+                        allowed = frozenset()
+                        ambiguous_frames.add(frame)
+                        reason = "PARTIAL_FILL_DRAIN_RECOVERY_AMBIGUOUS"
+                        phases.append(phase)
+                        reasons.append(reason)
+                        owner_chains.append(established_fill_chain.owners)
+                        fill_confirmation_profiles.append(
+                            fill_confirmation_profile
+                        )
+                        allowed_tracklet_ids.append(allowed)
+                        capture_runtime()
+                        continue
                     if len(qualifying) == 1:
                         _key, selected = qualifying[0]
                         recovery_owners = established_fill_chain.owners
@@ -750,6 +774,9 @@ class OilMaterialPhaseLifecycleOwner:
                     recovery_predicates[frame] = recovery_result["predicates"]
                     recovery_reset_reasons[frame] = recovery_result["reset_reason"]
                     recovery_ambiguities[frame] = recovery_result["ambiguous"]
+                    recovery_ambiguous_seed_owner_ids[frame] = recovery_result[
+                        "ambiguous_seed_owner_ids"
+                    ]
                     qualifying = tuple(
                         sorted(
                             recovery_result["qualifying"],
@@ -759,7 +786,14 @@ class OilMaterialPhaseLifecycleOwner:
                     recovery_qualifying_ids[frame] = tuple(
                         row.tracklet_id for _key, row in qualifying
                     )
-                    if len(qualifying) == 1:
+                    if recovery_result["ambiguous"]:
+                        # A handoff/seed ambiguity poisons this entire frame;
+                        # an unrelated qualifying chain cannot release until a
+                        # later frame supplies fresh unambiguous evidence.
+                        allowed = frozenset()
+                        ambiguous_frames.add(frame)
+                        reason = "DRAIN_RELEASE_RECOVERY_AMBIGUOUS"
+                    elif len(qualifying) == 1:
                         _key, selected = qualifying[0]
                         drain_chain = _DrainChain(
                             owner=selected.tracklet_id,
@@ -1021,6 +1055,9 @@ class OilMaterialPhaseLifecycleOwner:
                 ),
                 "recovery_selected_tracklet_id": recovery_selected_ids[index],
                 "recovery_ambiguous": recovery_ambiguities[index],
+                "recovery_ambiguous_seed_owner_ids": list(
+                    recovery_ambiguous_seed_owner_ids[index]
+                ),
                 "recovery_reset_reason": recovery_reset_reasons[index],
                 "release_source": release_sources[index],
                 "policy": {
@@ -1802,6 +1839,39 @@ class OilMaterialPhaseLifecycleOwner:
         reset_chain_keys: set[str] = set()
         blocked_rows: set[tuple[str, str]] = set()
 
+        # Distinct eligible hypotheses for one physical owner are ambiguous;
+        # never select one by ordering.  Block all such rows from reseeding,
+        # and also block a retained chain for that owner on this frame.
+        eligible_seed_keys_by_owner: dict[str, list[tuple[str, str]]] = {}
+        for row in seed_rows:
+            key = (row.tracklet_id, row.row_hypothesis_id)
+            if self._recovery_seed_allowed(
+                row,
+                stage=stage,
+                established_fill=established_fill,
+            ):
+                eligible_seed_keys_by_owner.setdefault(
+                    row.tracklet_id, []
+                ).append(key)
+        ambiguous_seed_owner_ids = tuple(
+            sorted(
+                owner
+                for owner, keys in eligible_seed_keys_by_owner.items()
+                if len(keys) > 1
+            )
+        )
+        if ambiguous_seed_owner_ids:
+            ambiguous = True
+            reset_reasons.append("duplicate_seed_hypotheses")
+            for owner in ambiguous_seed_owner_ids:
+                blocked_seed_owner_ids.add(owner)
+                blocked_rows.update(eligible_seed_keys_by_owner[owner])
+                ambiguous_chain_keys.update(
+                    key
+                    for key, chain in retained.items()
+                    if key == owner or chain.owner == owner
+                )
+
         def row_matches(chain: _RecoveryDrainChain, row: _ObservedRow) -> bool:
             gap = frame - chain.last_frame
             return bool(
@@ -1816,6 +1886,8 @@ class OilMaterialPhaseLifecycleOwner:
 
         # Same-owner continuation is preferred and may use continuation tier.
         for key, chain in sorted(retained.items()):
+            if chain.owner in ambiguous_seed_owner_ids:
+                continue
             candidates = tuple(
                 row
                 for row in ordered_rows
@@ -2020,6 +2092,22 @@ class OilMaterialPhaseLifecycleOwner:
             if all(passed for _name, passed in chain_predicates):
                 qualifying.append((key, row))
 
+        # Multiple qualifying chains are a concrete ambiguity.  Preserve
+        # their IDs for diagnostics, but reset every qualifying chain so the
+        # outer lifecycle can never choose one on this frame.
+        if len(qualifying) > 1:
+            ambiguous = True
+            reset_reasons.append("multiple_qualifying_chains")
+            ambiguous_chain_keys.update(key for key, _row in qualifying)
+            current = {
+                key: chain
+                for key, chain in current.items()
+                if key not in ambiguous_chain_keys
+            }
+            current_rows = {
+                key: row for key, row in current_rows.items() if key in current
+            }
+
         active = tuple(
             self._recovery_chain_summary(
                 key,
@@ -2044,6 +2132,7 @@ class OilMaterialPhaseLifecycleOwner:
             ),
             "qualifying": tuple(qualifying),
             "ambiguous": ambiguous,
+            "ambiguous_seed_owner_ids": ambiguous_seed_owner_ids,
             "reset_reason": (
                 ";".join(dict.fromkeys(reset_reasons))
                 if reset_reasons
