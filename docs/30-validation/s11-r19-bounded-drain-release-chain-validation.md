@@ -1,6 +1,6 @@
 # S11-R19 Bounded Drain-Release Chain Validation
 
-**Status:** `IMPLEMENTED — FOCUSED TESTS PASS / FULL VALIDATION PENDING`
+**Status:** `LOCAL PASS / WINDOWS REQUIRED`
 
 This contract validates the
 [R19 architecture](../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md).

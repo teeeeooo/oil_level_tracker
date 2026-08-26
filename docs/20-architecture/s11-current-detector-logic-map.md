@@ -245,8 +245,8 @@ The four frozen diagnostic unknowns are:
 3. Owner-bounded selector abstain predicate.
 4. Exact reviewed Y anchors.
 
-R19 is implemented and focused-tested locally; full repository validation and
-canonical Windows replay remain pending. Its design and acceptance contract
+R19 is locally validated at source HEAD; canonical Windows replay remains
+pending. Its design and acceptance contract
 are linked above and in the [R19 validation contract](../30-validation/s11-r19-bounded-drain-release-chain-validation.md).
 Current-frame online projection and completed-window projection can differ by
 design; the raw debug record is not proof of the final sequence result unless

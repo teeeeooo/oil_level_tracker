@@ -1,6 +1,6 @@
 # S11-R19 Bounded Drain-Release Chain Architecture
 
-**Status:** `IMPLEMENTED — FOCUSED TESTS PASS / FULL VALIDATION PENDING`
+**Status:** `LOCAL PASS / WINDOWS REQUIRED`
 
 ## Authority and scope
 
