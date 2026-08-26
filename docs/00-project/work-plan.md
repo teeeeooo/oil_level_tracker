@@ -3,7 +3,7 @@
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
 **Current gate:** `R19 local validation passed; canonical Windows replay required`
-**Source authority:** `main R18 field-failed baseline with completed causal addendum; no field-qualified detector`
+**Source authority:** `main R19 local-pass implementation over frozen R18 field-failed evidence; no field-qualified detector`
 **Task-start exact head:** `d7958e3d06293ed00f5c04c129199d9ef06c2560`
 **Task-start exact parent:** `b3f066ac0668eb73a5995d63e47e7cc50fc7199d`
 
