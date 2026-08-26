@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R19 bounded drain-release-chain design approved; implementation/local validation next, then canonical Windows replay`
+**Current gate:** `R19 bounded drain-release-chain implemented/focused-tested locally; full validation and canonical Windows replay pending`
 **Source authority:** `main R18 field-failed baseline with completed causal addendum; no field-qualified detector`
 **Task-start exact head:** `d7958e3d06293ed00f5c04c129199d9ef06c2560`
 **Task-start exact parent:** `b3f066ac0668eb73a5995d63e47e7cc50fc7199d`
@@ -138,12 +138,12 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Implement and locally validate the approved [R19 bounded drain-release-chain
-architecture](../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
-against its [validation contract](../30-validation/s11-r19-bounded-drain-release-chain-validation.md),
-then run the canonical Windows replay. R19 changes only the bounded Oil
-release chain; Foam is intentionally outside its scope. The implementation-
-current detector remains R18 and no field-qualified detector is claimed.
+Run full independent validation and the canonical Windows replay for the
+implemented [R19 bounded drain-release-chain architecture](../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
+against its [validation contract](../30-validation/s11-r19-bounded-drain-release-chain-validation.md).
+R19 changes only the bounded Oil release chain; Foam is intentionally outside
+its scope. The implementation-current detector is R19 locally and no
+field-qualified detector is claimed.
 
 The completed R18 causal rerun is frozen in the [Windows causal
 closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md). Base lower

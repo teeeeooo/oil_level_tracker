@@ -1,6 +1,6 @@
 # S11-R19 Bounded Drain-Release Chain Validation
 
-**Status:** `CONTRACT APPROVED — IMPLEMENTATION PENDING`
+**Status:** `IMPLEMENTED — FOCUSED TESTS PASS / FULL VALIDATION PENDING`
 
 This contract validates the
 [R19 architecture](../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md).
@@ -54,19 +54,25 @@ The following cases must remain UNKNOWN/no-interface and must not enter
 1. initial FULL rows whose entrance-relative position is outside the existing
    drain entrance band, including a strong moving lower structure;
 2. initial EMPTY with no established fill;
-3. provisional, incompatible, non-anchor-authoritative or material-opposed
-   seed/successor rows;
+3. provisional, incompatible, material-opposed, non-anchor-authoritative seed
+   rows, or non-anchor-authoritative cross-tracklet handoffs;
 4. upward or stationary chains that never reach positive minimum progress;
 5. a single jump larger than `maximum_jump_px * gap`;
 6. an upward reversal beyond the existing handoff tolerance;
 7. a gap beyond `maximum_lost_frames + 1`;
 8. a continuously observed but nonprogressing seed after
    `fill_evidence_window_frames`;
-9. one predecessor with two equivalent successors, two predecessors for one
+9. an always-slowly-progressing chain that exceeds the total
+   `fill_evidence_window_frames` span before reaching the drain minimum;
+10. one predecessor with two equivalent successors, two predecessors for one
    successor, or two simultaneously qualifying recovery chains;
-10. a partial-fill row outside the one-jump seed bound from the retained fill;
-11. any attempt to reuse a prior coordinate after a gap; and
-12. any attempt to mark a recovery chain as a physical tracklet or merge IDs.
+11. a partial-fill row outside the one-jump seed bound from the retained fill;
+12. any attempt to reuse a prior coordinate after a gap; and
+13. any attempt to mark a recovery chain as a physical tracklet or merge IDs.
+
+An active partial-fill chain must also reset when the retained established-fill
+owner, owner-chain, last frame/Y anchor context or release stage changes; it
+may not accumulate evidence across a changed fill snapshot.
 
 ## Existing direct-path non-regression
 

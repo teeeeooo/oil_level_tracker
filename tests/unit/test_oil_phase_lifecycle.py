@@ -1223,6 +1223,303 @@ def test_confirmed_full_releases_unique_downward_top_origin_owner() -> None:
     assert result.path[0].candidate_ref is drain.candidate_ref
 
 
+def test_initial_full_fragmented_release_chain_uses_unique_current_row() -> None:
+    rows = (
+        _node(0, "drain-a", 65.0, direction=1, progress=2.0),
+        _node(
+            1,
+            "drain-a",
+            68.0,
+            direction=1,
+            progress=2.0,
+            authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        ),
+        _node(2, "drain-b", 72.0, direction=1, progress=2.0),
+        _node(3, "drain-c", 92.0, direction=1, progress=2.0),
+    )
+    result = _resolve(
+        tuple((node, _unknown(frame)) for frame, node in enumerate(rows)),
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases[:2] == (
+        OilMaterialPhase.FILLED_BARRIER,
+        OilMaterialPhase.FILLED_BARRIER,
+    )
+    assert result.phases[2] is OilMaterialPhase.DRAINING
+    assert result.reasons[2] == "DRAIN_RELEASE_RECOVERY_CONFIRMED"
+    assert result.allowed_tracklet_ids[2] == frozenset({"drain-b"})
+    assert result.owner_chains[2] == ("drain-a", "drain-b")
+    assert result.path[2].candidate_ref is rows[2].candidate_ref
+    diagnostic = result.diagnostics[2]
+    assert diagnostic["schema_version"] == "r19-bounded-drain-release-v1"
+    assert diagnostic["release_source"] == "recovery"
+    assert diagnostic["recovery_selected_tracklet_id"] == "drain-b"
+    assert diagnostic["recovery_qualifying_tracklet_ids"] == ["drain-b"]
+    assert result.path[0].candidate_ref is None
+
+
+def test_partial_fill_fragmented_release_chain_uses_retained_fill_anchor() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    release = (
+        _node(5, "drain-a", 160.0, direction=1, progress=2.0),
+        _node(
+            6,
+            "drain-a",
+            163.0,
+            direction=1,
+            progress=2.0,
+            authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+        ),
+        _node(7, "drain-b", 190.0, direction=1, progress=2.0),
+    )
+    layers = tuple((node, _unknown(frame)) for frame, node in enumerate(fill))
+    layers += tuple((_unknown(frame),) for frame in range(2, 5))
+    layers += tuple((node, _unknown(frame)) for frame, node in enumerate(release, 5))
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert result.phases[5] is OilMaterialPhase.OPEN
+    assert result.phases[7] is OilMaterialPhase.DRAINING
+    assert result.reasons[7] == "PARTIAL_FILL_DRAIN_RECOVERY_CONFIRMED"
+    assert result.allowed_tracklet_ids[7] == frozenset({"drain-b"})
+    assert result.owner_chains[7] == ("fill", "drain-a", "drain-b")
+    assert result.path[7].candidate_ref is release[2].candidate_ref
+    diagnostic = result.diagnostics[7]
+    assert diagnostic["release_source"] == "recovery"
+    assert diagnostic["established_fill_last_y"] == 150.0
+    assert diagnostic["recovery_selected_tracklet_id"] == "drain-b"
+
+
+def test_recovery_chain_expires_at_absolute_evidence_window() -> None:
+    rows = tuple(
+        _node(
+            frame,
+            "slow-drain",
+            65.0 + frame * 0.3,
+            direction=1,
+            progress=2.0,
+            authority=(
+                OilCandidateAuthority.ANCHOR_ELIGIBLE
+                if frame == 0
+                else OilCandidateAuthority.CONTINUATION_ELIGIBLE
+            ),
+        )
+        for frame in range(12)
+    )
+    result = _resolve(
+        tuple((node, _unknown(frame)) for frame, node in enumerate(rows)),
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert OilMaterialPhase.DRAINING not in result.phases
+    assert result.phases[-1] is OilMaterialPhase.FILLED_BARRIER
+    assert result.diagnostics[11]["recovery_reset_reason"] == (
+        "evidence_window_expired"
+    )
+
+
+def test_recovery_one_to_many_handoff_resets_involved_chain() -> None:
+    layers = (
+        (_node(0, "drain-a", 65.0, direction=1, progress=2.0), _unknown(0)),
+        (
+            _node(1, "drain-b", 70.0, direction=1, progress=2.0),
+            _node(1, "drain-c", 70.0, direction=1, progress=2.0),
+            _unknown(1),
+        ),
+    )
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases[-1] is OilMaterialPhase.FILLED_BARRIER
+    assert result.allowed_tracklet_ids[-1] == frozenset()
+    assert result.path[-1].kind == "unknown"
+    assert result.diagnostics[-1]["recovery_ambiguous"] is True
+    assert result.diagnostics[-1]["recovery_reset_reason"] == (
+        "handoff_ambiguity;ambiguity"
+    )
+
+
+def test_recovery_many_to_one_handoff_resets_both_predecessors() -> None:
+    layers = (
+        (
+            _node(0, "drain-a", 65.0, direction=1, progress=2.0),
+            _node(0, "drain-c", 67.0, direction=1, progress=2.0),
+            _unknown(0),
+        ),
+        (_node(1, "drain-b", 75.0, direction=1, progress=2.0), _unknown(1)),
+    )
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases[-1] is OilMaterialPhase.FILLED_BARRIER
+    assert result.allowed_tracklet_ids[-1] == frozenset()
+    assert result.path[-1].kind == "unknown"
+    assert result.diagnostics[-1]["recovery_ambiguous"] is True
+    assert result.diagnostics[-1]["recovery_reset_reason"] == (
+        "handoff_ambiguity;ambiguity"
+    )
+
+
+def test_two_qualifying_recovery_chains_fail_closed() -> None:
+    layers = (
+        (
+            _node(0, "drain-a", 65.0, direction=1, progress=2.0),
+            _node(0, "drain-b", 70.0, direction=1, progress=2.0),
+            _unknown(0),
+        ),
+        (
+            _node(
+                1,
+                "drain-a",
+                72.0,
+                direction=1,
+                progress=2.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            ),
+            _node(
+                1,
+                "drain-b",
+                77.0,
+                direction=1,
+                progress=2.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            ),
+            _unknown(1),
+        ),
+    )
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases[-1] is OilMaterialPhase.FILLED_BARRIER
+    assert result.allowed_tracklet_ids[-1] == frozenset()
+    assert result.path[-1].kind == "unknown"
+    assert result.diagnostics[-1]["recovery_qualifying_tracklet_ids"] == [
+        "drain-a",
+        "drain-b",
+    ]
+    assert result.diagnostics[-1]["recovery_ambiguous"] is True
+
+
+def test_partial_recovery_resets_when_fill_anchor_context_changes() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    layers = tuple((node, _unknown(frame)) for frame, node in enumerate(fill))
+    layers += tuple((_unknown(frame),) for frame in range(2, 5))
+    layers += (
+        (_node(5, "old-drain", 160.0, direction=1, progress=2.0), _unknown(5)),
+        (
+            _node(
+                6,
+                "new-fill",
+                160.0,
+                direction=-1,
+                progress=20.0,
+                motion_support=0.9,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _unknown(6),
+        ),
+    )
+    layers += tuple((_unknown(frame),) for frame in range(7, 10))
+    layers += tuple(
+        (
+            _node(frame, tracklet, y, direction=1, progress=2.0),
+            _unknown(frame),
+        )
+        for frame, tracklet, y in (
+            (10, "new-drain-a", 160.0),
+            (11, "new-drain-a", 163.0),
+            (12, "new-drain-b", 190.0),
+        )
+    )
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert result.owner_chains[12] == (
+        "old-drain",
+        "new-fill",
+        "new-drain-a",
+        "new-drain-b",
+    )
+    recovery_chain = result.diagnostics[12]["recovery_active_chains"][0]
+    assert recovery_chain["owner_ids"] == ["new-drain-a", "new-drain-b"]
+    assert result.diagnostics[6]["recovery_reset_reason"] == (
+        "release_context_changed"
+    )
+
+
+def test_recovery_large_same_owner_jump_cannot_reseed_or_handoff() -> None:
+    layers = (
+        (_node(0, "drain-a", 65.0, direction=1, progress=2.0), _unknown(0)),
+        (_node(1, "drain-a", 110.0, direction=1, progress=2.0), _unknown(1)),
+        (_node(2, "drain-b", 140.0, direction=1, progress=2.0), _unknown(2)),
+    )
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert OilMaterialPhase.DRAINING not in result.phases
+    assert result.phases[-1] is OilMaterialPhase.FILLED_BARRIER
+    assert result.path[-1].kind == "unknown"
+    assert result.diagnostics[1]["recovery_reset_reason"] == "step_bound"
+    assert result.diagnostics[1]["recovery_active_chains"] == []
+
+
 def test_confirmed_full_rejects_internal_or_ambiguous_drain_release() -> None:
     internal = _node(0, "internal", 110.0, direction=1, progress=30.0)
     ambiguous = (

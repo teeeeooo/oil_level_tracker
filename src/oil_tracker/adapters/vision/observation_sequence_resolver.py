@@ -11,7 +11,7 @@ from .foam_episode_resolver import FoamEpisodeResolver
 from .oil_observation_resolver import OilObservationResolver
 
 
-OBSERVATION_SEQUENCE_VERSION = "r18-lifecycle-closure-v1"
+OBSERVATION_SEQUENCE_VERSION = "r19-bounded-drain-release-v1"
 
 
 @dataclass(frozen=True)

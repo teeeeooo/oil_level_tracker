@@ -56,7 +56,7 @@ from .oil_phase_identity import (
 )
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r18-lifecycle-closure-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r19-bounded-drain-release-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",

@@ -174,6 +174,36 @@ class _DrainChain:
     last_frame: int
 
 
+@dataclass(frozen=True)
+class _RecoveryDrainChain:
+    """Constant-size phase evidence for a fragmented drain release."""
+
+    stage: str
+    context_key: tuple[str, ...]
+    owner: str
+    owners: tuple[str, ...]
+    seed_y: float
+    current_y: float
+    first_frame: int
+    last_frame: int
+    last_forward_progress_frame: int
+    observation_count: int
+    transition_count: int
+    nonnegative_transition_count: int
+    negative_transition_count: int
+    net_progress_px: float
+
+    @property
+    def directional_agreement(self) -> float:
+        if not self.transition_count:
+            return 0.0
+        return self.nonnegative_transition_count / self.transition_count
+
+    @property
+    def owner_key(self) -> str:
+        return self.owner
+
+
 class OilMaterialPhaseLifecycleOwner:
     """Own causal fill/barrier/drain state without merging track identities."""
 
@@ -211,6 +241,21 @@ class OilMaterialPhaseLifecycleOwner:
         ]
         release_selected_ids: list[str | None] = [None for _layer in layers]
         release_ambiguities = [False for _layer in layers]
+        recovery_stages = ["not_evaluated" for _layer in layers]
+        recovery_evaluated = [False for _layer in layers]
+        recovery_active: list[tuple[dict[str, object], ...]] = [
+            () for _layer in layers
+        ]
+        recovery_predicates: list[tuple[dict[str, object], ...]] = [
+            () for _layer in layers
+        ]
+        recovery_qualifying_ids: list[tuple[str, ...]] = [
+            () for _layer in layers
+        ]
+        recovery_selected_ids: list[str | None] = [None for _layer in layers]
+        recovery_ambiguities = [False for _layer in layers]
+        recovery_reset_reasons = [None for _layer in layers]
+        release_sources = ["none" for _layer in layers]
         phase = (
             OilMaterialPhase.FILLED_BARRIER
             if self.policy.initial_full
@@ -223,6 +268,7 @@ class OilMaterialPhaseLifecycleOwner:
         fill_owner_open = False
         established_fill_chain: _FillChain | None = None
         drain_chain: _DrainChain | None = None
+        recovery_chains: dict[str, _RecoveryDrainChain] = {}
         fill_confirmation_profile = OilFillConfirmationProfile.NONE
 
         for frame, rows in enumerate(rows_by_frame):
@@ -232,6 +278,7 @@ class OilMaterialPhaseLifecycleOwner:
             fill_phase_reentered = False
             transient_owner_chain: tuple[str, ...] = ()
             dynamic_fill_owners: frozenset[str] = frozenset()
+            recovery_released = False
 
             def capture_runtime() -> None:
                 established_fill_snapshots[frame] = established_fill_chain
@@ -265,6 +312,9 @@ class OilMaterialPhaseLifecycleOwner:
                         == established_fill_chain.owners
                     )
                 )
+                if dynamic_fill_owners and recovery_chains:
+                    recovery_chains = {}
+                    recovery_reset_reasons[frame] = "release_context_changed"
                 if (
                     established_fill_chain is not None
                     and not dynamic_fill_owners
@@ -336,6 +386,8 @@ class OilMaterialPhaseLifecycleOwner:
                         )
                     )
                     if release_ambiguous:
+                        recovery_chains = {}
+                        recovery_reset_reasons[frame] = "direct_ambiguity"
                         release_qualifying_ids[frame] = tuple(
                             sorted(
                                 {
@@ -384,6 +436,69 @@ class OilMaterialPhaseLifecycleOwner:
                         phase = OilMaterialPhase.DRAINING
                         allowed = frozenset({partial_release.tracklet_id})
                         reason = "PARTIAL_FILL_DRAIN_RELEASE_CONFIRMED"
+                        release_sources[frame] = "direct"
+                        phases.append(phase)
+                        reasons.append(reason)
+                        owner_chains.append(drain_chain.owners)
+                        fill_confirmation_profiles.append(
+                            fill_confirmation_profile
+                        )
+                        allowed_tracklet_ids.append(allowed)
+                        capture_runtime()
+                        continue
+                    recovery_stages[frame] = "partial_fill"
+                    recovery_evaluated[frame] = True
+                    recovery_chains, recovery_result = (
+                        self._advance_recovery_chains(
+                            recovery_chains,
+                            rows,
+                            frame,
+                            stage="partial_fill",
+                            seed_rows=rows,
+                            established_fill=established_fill_chain,
+                        )
+                    )
+                    recovery_active[frame] = recovery_result["active"]
+                    recovery_predicates[frame] = recovery_result["predicates"]
+                    recovery_reset_reasons[frame] = recovery_result["reset_reason"]
+                    recovery_ambiguities[frame] = recovery_result["ambiguous"]
+                    qualifying = tuple(
+                        sorted(
+                            recovery_result["qualifying"],
+                            key=lambda item: (item[0], item[1].tracklet_id),
+                        )
+                    )
+                    recovery_qualifying_ids[frame] = tuple(
+                        row.tracklet_id for _key, row in qualifying
+                    )
+                    if len(qualifying) == 1:
+                        _key, selected = qualifying[0]
+                        recovery_owners = established_fill_chain.owners
+                        for recovery_owner in recovery_chains[_key].owners:
+                            recovery_owners = _append_unique_owner(
+                                recovery_owners,
+                                recovery_owner,
+                            )
+                        drain_chain = _DrainChain(
+                            owner=selected.tracklet_id,
+                            owners=recovery_owners,
+                            last_y=selected.y,
+                            last_frame=frame,
+                        )
+                        phase = OilMaterialPhase.DRAINING
+                        allowed = frozenset({selected.tracklet_id})
+                        reason = "PARTIAL_FILL_DRAIN_RECOVERY_CONFIRMED"
+                        recovery_selected_ids[frame] = selected.tracklet_id
+                        release_sources[frame] = "recovery"
+                        recovery_chains = {}
+                        recovery_released = True
+                    elif len(qualifying) > 1:
+                        recovery_chains = {}
+                        recovery_ambiguities[frame] = True
+                        ambiguous_frames.add(frame)
+                        allowed = frozenset()
+                        reason = "PARTIAL_FILL_DRAIN_RECOVERY_AMBIGUOUS"
+                    if recovery_released:
                         phases.append(phase)
                         reasons.append(reason)
                         owner_chains.append(drain_chain.owners)
@@ -541,6 +656,8 @@ class OilMaterialPhaseLifecycleOwner:
                     and terminal is not None
                     and not terminal.current_material_veto
                 ):
+                    recovery_chains = {}
+                    recovery_reset_reasons[frame] = "release_context_changed"
                     allowed = frozenset({fill_terminal_owner})
                     reason = "FILL_OWNER_AT_ENTRANCE"
                     phases.append(phase)
@@ -584,6 +701,15 @@ class OilMaterialPhaseLifecycleOwner:
                     allowed = frozenset({drain_chain.owner})
                     reason = "DRAIN_RELEASE_CONFIRMED"
                     release_selected_ids[frame] = release.tracklet_id
+                    release_sources[frame] = "direct"
+                    recovery_chains = {}
+                elif len(release_ids) > 1:
+                    recovery_chains = {}
+                    recovery_reset_reasons[frame] = "direct_ambiguity"
+                    allowed = frozenset()
+                    reason = "DRAIN_RELEASE_AMBIGUOUS"
+                    ambiguous_frames.add(frame)
+                    release_ambiguities[frame] = True
                 else:
                     allowed = frozenset()
                     reason = (
@@ -599,6 +725,60 @@ class OilMaterialPhaseLifecycleOwner:
                     if len(release_ids) > 1:
                         ambiguous_frames.add(frame)
                         release_ambiguities[frame] = True
+                    recovery_stages[frame] = (
+                        "initial_full" if self.policy.initial_full else "not_evaluated"
+                    )
+                    recovery_evaluated[frame] = self.policy.initial_full
+                    recovery_chains, recovery_result = (
+                        self._advance_recovery_chains(
+                            recovery_chains,
+                            rows if self.policy.initial_full else (),
+                            frame,
+                            stage="initial_full",
+                            seed_rows=tuple(
+                                row
+                                for row in rows
+                                if self.policy.initial_full
+                                and filled_frame is not None
+                                and first_frame.get(row.tracklet_id, -1)
+                                >= filled_frame
+                            ),
+                            established_fill=None,
+                        )
+                    )
+                    recovery_active[frame] = recovery_result["active"]
+                    recovery_predicates[frame] = recovery_result["predicates"]
+                    recovery_reset_reasons[frame] = recovery_result["reset_reason"]
+                    recovery_ambiguities[frame] = recovery_result["ambiguous"]
+                    qualifying = tuple(
+                        sorted(
+                            recovery_result["qualifying"],
+                            key=lambda item: (item[0], item[1].tracklet_id),
+                        )
+                    )
+                    recovery_qualifying_ids[frame] = tuple(
+                        row.tracklet_id for _key, row in qualifying
+                    )
+                    if len(qualifying) == 1:
+                        _key, selected = qualifying[0]
+                        drain_chain = _DrainChain(
+                            owner=selected.tracklet_id,
+                            owners=recovery_chains[_key].owners,
+                            last_y=selected.y,
+                            last_frame=frame,
+                        )
+                        phase = OilMaterialPhase.DRAINING
+                        allowed = frozenset({selected.tracklet_id})
+                        reason = "DRAIN_RELEASE_RECOVERY_CONFIRMED"
+                        recovery_selected_ids[frame] = selected.tracklet_id
+                        release_sources[frame] = "recovery"
+                        recovery_chains = {}
+                    elif len(qualifying) > 1:
+                        recovery_chains = {}
+                        recovery_ambiguities[frame] = True
+                        ambiguous_frames.add(frame)
+                        allowed = frozenset()
+                        reason = "DRAIN_RELEASE_RECOVERY_AMBIGUOUS"
 
             else:
                 assert phase is OilMaterialPhase.DRAINING
@@ -787,7 +967,7 @@ class OilMaterialPhaseLifecycleOwner:
 
         diagnostics = tuple(
             {
-                "schema_version": "r18-field-causal-observability-v1",
+                "schema_version": "r19-bounded-drain-release-v1",
                 "initial_state": (
                     None
                     if self.policy.confirmed_initial_state is None
@@ -830,6 +1010,19 @@ class OilMaterialPhaseLifecycleOwner:
                     item.as_debug_dict()
                     for item in release_evaluations[index]
                 ],
+                "recovery_stage": recovery_stages[index],
+                "recovery_evaluated": recovery_evaluated[index],
+                "recovery_active_chains": list(recovery_active[index]),
+                "recovery_ordered_predicates": list(
+                    recovery_predicates[index]
+                ),
+                "recovery_qualifying_tracklet_ids": list(
+                    recovery_qualifying_ids[index]
+                ),
+                "recovery_selected_tracklet_id": recovery_selected_ids[index],
+                "recovery_ambiguous": recovery_ambiguities[index],
+                "recovery_reset_reason": recovery_reset_reasons[index],
+                "release_source": release_sources[index],
                 "policy": {
                     "geometry_top_y": self.policy.geometry_top_y,
                     "geometry_height": self.policy.geometry_height,
@@ -1555,6 +1748,459 @@ class OilMaterialPhaseLifecycleOwner:
             <= self.policy.maximum_jump_px * gap
         )
 
+    def _advance_recovery_chains(
+        self,
+        prior: dict[str, _RecoveryDrainChain],
+        rows: tuple[_ObservedRow, ...],
+        frame: int,
+        *,
+        stage: str,
+        seed_rows: tuple[_ObservedRow, ...],
+        established_fill: _FillChain | None,
+    ) -> tuple[dict[str, _RecoveryDrainChain], dict[str, object]]:
+        """Advance bounded release evidence without changing physical rows."""
+
+        ordered_rows = tuple(
+            sorted(rows, key=lambda row: (row.tracklet_id, row.row_hypothesis_id, row.y))
+        )
+        row_keys = {
+            (row.tracklet_id, row.row_hypothesis_id): row
+            for row in ordered_rows
+        }
+        predicates = tuple(
+            self._recovery_admission_record(row, stage=stage)
+            for row in ordered_rows
+        )
+        reset_reasons: list[str] = []
+        context_key = _recovery_context_key(stage, established_fill)
+        retained: dict[str, _RecoveryDrainChain] = {}
+        for key, chain in sorted(prior.items()):
+            if chain.stage != stage or chain.context_key != context_key:
+                reset_reasons.append("release_context_changed")
+                continue
+            if frame - chain.first_frame > self.policy.fill_evidence_window_frames:
+                reset_reasons.append("evidence_window_expired")
+                continue
+            if frame - chain.last_frame > self.policy.maximum_lost_frames + 1:
+                reset_reasons.append("loss_window_expired")
+                continue
+            if (
+                frame - chain.last_forward_progress_frame
+                >= self.policy.fill_evidence_window_frames
+            ):
+                reset_reasons.append("stagnation")
+                continue
+            retained[key] = chain
+
+        current: dict[str, _RecoveryDrainChain] = {}
+        current_rows: dict[str, _ObservedRow] = {}
+        used_rows: set[tuple[str, str]] = set()
+        ambiguous = False
+        ambiguous_chain_keys: set[str] = set()
+        blocked_chain_keys: set[str] = set()
+        blocked_seed_owner_ids: set[str] = set()
+        reset_chain_keys: set[str] = set()
+        blocked_rows: set[tuple[str, str]] = set()
+
+        def row_matches(chain: _RecoveryDrainChain, row: _ObservedRow) -> bool:
+            gap = frame - chain.last_frame
+            return bool(
+                1 <= gap <= self.policy.maximum_lost_frames + 1
+                and self._recovery_common_admission(row)
+                and row.y
+                >= chain.current_y
+                - self.policy.handoff_direction_reversal_tolerance_px
+                and abs(row.y - chain.current_y)
+                <= self.policy.maximum_jump_px * gap
+            )
+
+        # Same-owner continuation is preferred and may use continuation tier.
+        for key, chain in sorted(retained.items()):
+            candidates = tuple(
+                row
+                for row in ordered_rows
+                if row.tracklet_id == chain.owner
+                and self._recovery_row_has_authority(row)
+                and row_matches(chain, row)
+            )
+            if len(candidates) > 1:
+                ranked = tuple(
+                    sorted(
+                        (
+                            self._recovery_step_cost(chain, row, frame),
+                            row.row_hypothesis_id,
+                            row,
+                        )
+                        for row in candidates
+                    )
+                )
+                chosen = _clear_choice(
+                    tuple((cost, row_id) for cost, row_id, _row in ranked),
+                    self.policy.handoff_ambiguity_margin,
+                )
+                if chosen is None:
+                    ambiguous = True
+                    reset_reasons.append("same_owner_ambiguity")
+                    ambiguous_chain_keys.add(key)
+                    blocked_seed_owner_ids.add(chain.owner)
+                    continue
+                candidates = tuple(
+                    row for _cost, row_id, row in ranked if row_id == chosen
+                )
+            if candidates:
+                row = candidates[0]
+                current[key] = _extend_recovery_chain(chain, row, frame)
+                current_rows[key] = row
+                used_rows.add((row.tracklet_id, row.row_hypothesis_id))
+            else:
+                same_owner_rows = tuple(
+                    row for row in ordered_rows if row.tracklet_id == chain.owner
+                )
+                if same_owner_rows and not any(
+                    self._recovery_common_admission(row)
+                    for row in same_owner_rows
+                ):
+                    reset_reasons.append("material_or_incompatible")
+                    blocked_chain_keys.add(key)
+                    blocked_seed_owner_ids.add(chain.owner)
+                    reset_chain_keys.add(key)
+                elif same_owner_rows:
+                    # A present owner that violates the stepwise bound cannot
+                    # be bypassed through a different ID on this frame.
+                    blocked_chain_keys.add(key)
+                    blocked_seed_owner_ids.add(chain.owner)
+                    reset_chain_keys.add(key)
+                    reset_reasons.append("step_bound")
+
+        # Cross-ID handoff is reciprocal, clear and anchor-authoritative.
+        successors = tuple(
+            row
+            for row in ordered_rows
+            if (row.tracklet_id, row.row_hypothesis_id) not in used_rows
+            and self._recovery_row_has_authority(
+                row,
+                anchor_required=True,
+            )
+            and self._recovery_common_admission(row)
+        )
+        matches_by_successor: dict[
+            tuple[str, str], tuple[tuple[float, str, _RecoveryDrainChain], ...]
+        ] = {}
+        for row in successors:
+            matches_by_successor[(row.tracklet_id, row.row_hypothesis_id)] = tuple(
+                sorted(
+                    (
+                        self._recovery_step_cost(chain, row, frame),
+                        key,
+                        chain,
+                    )
+                    for key, chain in retained.items()
+                    if (
+                        key not in current
+                        and key not in blocked_chain_keys
+                        and row_matches(chain, row)
+                    )
+                )
+            )
+        matches_by_chain: dict[str, list[tuple[float, tuple[str, str]]]] = {}
+        for successor_key, matches in matches_by_successor.items():
+            for cost, chain_key, _chain in matches:
+                matches_by_chain.setdefault(chain_key, []).append(
+                    (cost, successor_key)
+                )
+        successor_choices = {
+            successor_key: _clear_choice(
+                tuple((cost, chain_key) for cost, chain_key, _chain in matches),
+                self.policy.handoff_ambiguity_margin,
+            )
+            for successor_key, matches in matches_by_successor.items()
+            if matches
+        }
+        chain_choices = {
+            chain_key: _clear_choice(
+                tuple(sorted(options)), self.policy.handoff_ambiguity_margin
+            )
+            for chain_key, options in matches_by_chain.items()
+        }
+        for successor_key, matches in matches_by_successor.items():
+            if not matches:
+                continue
+            chosen_chain = successor_choices.get(successor_key)
+            if chosen_chain is None:
+                ambiguous = True
+                blocked_rows.add(successor_key)
+                if matches:
+                    reset_reasons.append("handoff_ambiguity")
+                    ambiguous_chain_keys.update(
+                        chain_key for _cost, chain_key, _chain in matches
+                    )
+                continue
+            if chain_choices.get(chosen_chain) != successor_key:
+                if chain_choices.get(chosen_chain) is None:
+                    ambiguous = True
+                    reset_reasons.append("handoff_ambiguity")
+                    blocked_rows.add(successor_key)
+                    ambiguous_chain_keys.add(chosen_chain)
+                    ambiguous_chain_keys.update(
+                        chain_key
+                        for _cost, chain_key, _chain in matches
+                    )
+                continue
+            if chosen_chain not in current:
+                chain = retained[chosen_chain]
+                row = row_keys[successor_key]
+                current[chosen_chain] = _extend_recovery_chain(chain, row, frame)
+                current_rows[chosen_chain] = row
+                used_rows.add(successor_key)
+
+        # Retain unmatched chains after giving every clear handoff a chance.
+        # This is phase-evidence retention only; no row or coordinate is
+        # emitted during the ordinary bounded loss window.
+        for key, chain in sorted(retained.items()):
+            if key not in current and key not in reset_chain_keys:
+                current[key] = chain
+
+        # A fresh anchor can seed a new bounded chain.  Rows involved in an
+        # ambiguous handoff cannot bypass that ambiguity by reseeding.
+        seed_keys = {
+            (row.tracklet_id, row.row_hypothesis_id)
+            for row in seed_rows
+            if self._recovery_seed_allowed(
+                row,
+                stage=stage,
+                established_fill=established_fill,
+            )
+        }
+        for key in sorted(seed_keys):
+            if key in used_rows or key in blocked_rows:
+                continue
+            row = row_keys[key]
+            chain_key = row.tracklet_id
+            if (
+                chain_key in current
+                or chain_key in blocked_seed_owner_ids
+            ):
+                continue
+            chain = _new_recovery_chain(row, frame, stage, context_key)
+            current[chain_key] = chain
+            current_rows[chain_key] = row
+            used_rows.add(key)
+
+        if ambiguous:
+            # Ambiguity fails closed for this frame and resets involved active
+            # chains.  Uninvolved chains are retained within their bounds.
+            current = {
+                key: chain
+                for key, chain in current.items()
+                if key not in ambiguous_chain_keys
+            }
+            current_rows = {
+                key: row for key, row in current_rows.items() if key in current
+            }
+
+        qualifying: list[tuple[str, _ObservedRow]] = []
+        minimum_progress = max(
+            4.0,
+            self.policy.geometry_height * self.policy.drain_minimum_progress_ratio,
+        )
+        for key, chain in sorted(current.items()):
+            row = current_rows.get(key)
+            if row is None:
+                continue
+            chain_predicates = (
+                ("positive_progress", chain.net_progress_px > 0.0),
+                ("minimum_progress", chain.net_progress_px >= minimum_progress),
+                (
+                    "directional_agreement",
+                    chain.directional_agreement
+                    >= self.policy.drain_minimum_directional_agreement,
+                ),
+                ("current_admission", self._recovery_common_admission(row)),
+            )
+            if all(passed for _name, passed in chain_predicates):
+                qualifying.append((key, row))
+
+        active = tuple(
+            self._recovery_chain_summary(
+                key,
+                chain,
+                current_rows.get(key),
+                minimum_progress=minimum_progress,
+            )
+            for key, chain in sorted(current.items())
+        )
+        if ambiguous:
+            reset_reasons.append("ambiguity")
+        return current, {
+            "active": active,
+            "predicates": predicates + tuple(
+                self._recovery_chain_summary(
+                    key,
+                    chain,
+                    current_rows.get(key),
+                    minimum_progress=minimum_progress,
+                )
+                for key, chain in sorted(current.items())
+            ),
+            "qualifying": tuple(qualifying),
+            "ambiguous": ambiguous,
+            "reset_reason": (
+                ";".join(dict.fromkeys(reset_reasons))
+                if reset_reasons
+                else None
+            ),
+        }
+
+    def _recovery_admission_record(
+        self,
+        row: _ObservedRow,
+        *,
+        stage: str,
+    ) -> dict[str, object]:
+        ordered = self._recovery_admission_predicates(row)
+        return {
+            "stage": stage,
+            "tracklet_id": row.tracklet_id,
+            "row_hypothesis_id": row.row_hypothesis_id,
+            "ordered_predicates": [
+                {"name": name, "passed": passed} for name, passed in ordered
+            ],
+            "first_failed_predicate": next(
+                (name for name, passed in ordered if not passed), None
+            ),
+        }
+
+    def _recovery_admission_predicates(
+        self,
+        row: _ObservedRow,
+    ) -> tuple[tuple[str, bool], ...]:
+        authorities = tuple(
+            node.candidate_ref.authority
+            for node in row.nodes
+            if node.kind == "oil" and node.candidate_ref is not None
+        )
+        return (
+            ("bounded_confirmed", _bounded_confirmed_observation(row.ref)),
+            ("compatible", not row.ref.tracklet_incompatible),
+            ("strict_material_support", self._strict_material_support(row)),
+            ("real_same_frame_oil_candidate", bool(authorities)),
+            (
+                "authority",
+                any(
+                    authority
+                    in {
+                        OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                        OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                    }
+                    for authority in authorities
+                ),
+            ),
+        )
+
+    def _recovery_common_admission(self, row: _ObservedRow) -> bool:
+        return all(passed for _name, passed in self._recovery_admission_predicates(row))
+
+    def _recovery_row_has_authority(
+        self,
+        row: _ObservedRow,
+        *,
+        anchor_required: bool = False,
+    ) -> bool:
+        authorities = tuple(
+            node.candidate_ref.authority
+            for node in row.nodes
+            if node.kind == "oil" and node.candidate_ref is not None
+        )
+        if anchor_required:
+            return OilCandidateAuthority.ANCHOR_ELIGIBLE in authorities
+        return any(
+            authority
+            in {
+                OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            }
+            for authority in authorities
+        )
+
+    def _recovery_seed_allowed(
+        self,
+        row: _ObservedRow,
+        *,
+        stage: str,
+        established_fill: _FillChain | None,
+    ) -> bool:
+        if (
+            not self._recovery_common_admission(row)
+            or not self._recovery_row_has_authority(row, anchor_required=True)
+        ):
+            return False
+        if stage == "initial_full":
+            relative = (
+                row.entrance_y - self.policy.geometry_top_y
+            ) / self.policy.geometry_height
+            return relative <= self.policy.drain_entrance_ratio
+        if established_fill is None:
+            return False
+        return bool(
+            row.y
+            >= established_fill.last.y
+            - self.policy.handoff_direction_reversal_tolerance_px
+            and abs(row.y - established_fill.last.y)
+            <= self.policy.maximum_jump_px
+        )
+
+    def _recovery_step_cost(
+        self,
+        chain: _RecoveryDrainChain,
+        row: _ObservedRow,
+        frame: int,
+    ) -> float:
+        gap = max(1, frame - chain.last_frame)
+        return abs(row.y - chain.current_y) / (self.policy.maximum_jump_px * gap)
+
+    def _recovery_chain_summary(
+        self,
+        key: str,
+        chain: _RecoveryDrainChain,
+        row: _ObservedRow | None,
+        *,
+        minimum_progress: float,
+    ) -> dict[str, object]:
+        predicates = (
+            ("positive_progress", chain.net_progress_px > 0.0),
+            ("minimum_progress", chain.net_progress_px >= minimum_progress),
+            (
+                "directional_agreement",
+                chain.directional_agreement
+                >= self.policy.drain_minimum_directional_agreement,
+            ),
+            ("current_admission", row is not None and self._recovery_common_admission(row)),
+        )
+        return {
+            "chain_key": key,
+            "stage": chain.stage,
+            "context_key": list(chain.context_key),
+            "current_tracklet_id": chain.owner,
+            "seed_y": chain.seed_y,
+            "current_y": chain.current_y,
+            "first_frame": chain.first_frame,
+            "last_frame": chain.last_frame,
+            "last_forward_progress_frame": chain.last_forward_progress_frame,
+            "owner_ids": list(chain.owners),
+            "observation_count": chain.observation_count,
+            "transition_count": chain.transition_count,
+            "nonnegative_transition_count": chain.nonnegative_transition_count,
+            "negative_transition_count": chain.negative_transition_count,
+            "net_progress_px": chain.net_progress_px,
+            "directional_agreement": chain.directional_agreement,
+            "ordered_predicates": [
+                {"name": name, "passed": passed} for name, passed in predicates
+            ],
+            "first_failed_predicate": next(
+                (name for name, passed in predicates if not passed), None
+            ),
+        }
+
     def _drain_continuation(
         self,
         chain: _DrainChain,
@@ -1735,6 +2381,78 @@ def _new_chain(row: _ObservedRow, frame: int) -> _FillChain:
         owners=(row.tracklet_id,),
         origin_y=row.y,
         observations=(_fill_observation(row, frame),),
+    )
+
+
+def _recovery_context_key(
+    stage: str,
+    established_fill: _FillChain | None,
+) -> tuple[str, ...]:
+    if stage == "initial_full":
+        return (stage,)
+    if established_fill is None:
+        return (stage, "no_established_fill")
+    return (
+        stage,
+        established_fill.owner,
+        ",".join(established_fill.owners),
+        str(established_fill.last.frame),
+        repr(established_fill.last.y),
+    )
+
+
+def _new_recovery_chain(
+    row: _ObservedRow,
+    frame: int,
+    stage: str,
+    context_key: tuple[str, ...],
+) -> _RecoveryDrainChain:
+    return _RecoveryDrainChain(
+        stage=stage,
+        context_key=context_key,
+        owner=row.tracklet_id,
+        owners=(row.tracklet_id,),
+        seed_y=row.y,
+        current_y=row.y,
+        first_frame=frame,
+        last_frame=frame,
+        last_forward_progress_frame=frame,
+        observation_count=1,
+        transition_count=0,
+        nonnegative_transition_count=0,
+        negative_transition_count=0,
+        net_progress_px=0.0,
+    )
+
+
+def _extend_recovery_chain(
+    chain: _RecoveryDrainChain,
+    row: _ObservedRow,
+    frame: int,
+) -> _RecoveryDrainChain:
+    delta = row.y - chain.current_y
+    owners = _append_unique_owner(chain.owners, row.tracklet_id)
+    return _RecoveryDrainChain(
+        stage=chain.stage,
+        context_key=chain.context_key,
+        owner=row.tracklet_id,
+        owners=owners,
+        seed_y=chain.seed_y,
+        current_y=row.y,
+        first_frame=chain.first_frame,
+        last_frame=frame,
+        last_forward_progress_frame=(
+            frame if delta > 0.0 else chain.last_forward_progress_frame
+        ),
+        observation_count=chain.observation_count + 1,
+        transition_count=chain.transition_count + 1,
+        nonnegative_transition_count=(
+            chain.nonnegative_transition_count + int(delta >= 0.0)
+        ),
+        negative_transition_count=(
+            chain.negative_transition_count + int(delta < 0.0)
+        ),
+        net_progress_px=row.y - chain.seed_y,
     )
 
 

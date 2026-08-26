@@ -1,6 +1,6 @@
 # S11-R19 Bounded Drain-Release Chain Architecture
 
-**Status:** `DESIGN APPROVED — IMPLEMENTATION PENDING`
+**Status:** `IMPLEMENTED — FOCUSED TESTS PASS / FULL VALIDATION PENDING`
 
 ## Authority and scope
 
@@ -65,6 +65,12 @@ Each active chain stores constant-size causal state:
 - nonnegative and negative source-Y transition counts; and
 - net source-Y progress from the seed.
 
+The chain is absolutely bounded by `fill_evidence_window_frames`: once
+`frame - first_frame > fill_evidence_window_frames`, it resets even when it is
+still making slow forward progress. The existing no-forward-progress timeout
+also remains active. Consequently, the ordered owner-ID tuple is bounded by
+the same evidence window and cannot grow for the lifetime of a video.
+
 No past coordinate is published, copied into a successor or injected into the
 selector. The tuple of owner IDs is phase provenance only.
 
@@ -74,11 +80,23 @@ Every seed and successor row must independently satisfy all of these checks:
 
 - bounded tracklet admission with a non-`NONE` confirmation profile;
 - compatible physical identity;
-- anchor authority on the current row;
 - no current material veto;
 - tracklet and current material conflict below the existing material limit;
   and
 - a real same-frame Oil candidate reference.
+
+Authority is stage-sensitive rather than uniform:
+
+- every seed and every cross-tracklet handoff row must be
+  `ANCHOR_ELIGIBLE`; and
+- a same-owner successor may be `CONTINUATION_ELIGIBLE` after an
+  anchor-authoritative seed or handoff, provided every other admission check
+  still passes.
+
+This does not create a motion-only authority path. A chain cannot start from a
+continuation-only row, and an identity transition cannot be accepted without
+fresh anchor authority. It only preserves ordinary bounded continuation of an
+already anchored physical owner.
 
 Tracklet direction, tracklet net progress and tracklet directional agreement
 are deliberately not reused as chain motion. Those values describe one
@@ -130,6 +148,15 @@ encounters incompatible/material-opposed evidence, or makes no new forward
 source-Y progress for `fill_evidence_window_frames`. The last rule reuses an
 existing bounded evidence window: a stationary structure cannot remain a
 latent release seed indefinitely.
+
+The chain is also absolutely time-bounded: once
+`frame - first_frame > fill_evidence_window_frames`, it resets even if it is
+still making slow forward progress. This existing window bounds the ordered
+distinct owner-ID provenance and prevents lifetime accumulation.
+
+An active partial-fill chain is tied to the retained established-fill owner,
+owner chain, last frame and last Y context. Any change to that anchor context,
+or a change between release stages, resets the chain before it can advance.
 
 ### Chain confirmation
 
@@ -219,5 +246,5 @@ path.
 - Prior mechanisms rejected: global threshold or entrance widening, motion-only bootstrap, prior-fed numeric state, unbounded historical path search, physical-ID merging, coordinate inheritance, unconstrained OPEN fallback and retrospective publication remain rejected.
 - Preserved contracts: independently confirmed same-frame candidates, anchor/material authority, bounded one-to-one handoff, ambiguity-to-UNKNOWN, initial-EMPTY pre-entry suppression, lower-structure entrance rejection, unchanged Foam behavior and exact selected-candidate/sequence/CSV provenance.
 - Difference from prior failures: R19 does not let a prior or one missed edge create numeric output; it accumulates only current, independently confirmed and material-supported rows through bounded clear phase handoffs, resets stationary/ambiguous chains, and publishes only the unique current owner after the existing progress and agreement contracts are satisfied.
-- Logic-map impact: NONE — this design defines pending R19 behavior; the current implementation map remains R18 until implementation passes and the map is updated in the implementation commit.
-- Failure-registry impact: NONE — the frozen R18 evidence already owns the failure boundary; implementation evidence will update the registry only after the new mechanism is exercised.
+- Logic-map impact: UPDATED — the current implementation map now identifies the R19 resolver/version and bounded recovery owner at `OIL-PHASE-DRAIN`; R18 remains historical context.
+- Failure-registry impact: UPDATED — the registry now records R19 as locally implemented/focused-tested while retaining the field-unqualified failure boundary.

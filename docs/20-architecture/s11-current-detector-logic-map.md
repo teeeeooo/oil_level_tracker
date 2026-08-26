@@ -1,8 +1,8 @@
 # S11 Current Detector Logic Map
 
-**Scope:** the detector currently on `main` (`opencv-phase-detector-r18-lifecycle-closure-v1`, completed-window resolver `r18-lifecycle-closure-v1`). This is a current control-flow map, not a design history or an R19 proposal. Claims below were checked against the implementation modules linked in each owner row.
+**Scope:** the detector currently on `main` (`opencv-phase-detector-r19-bounded-drain-release-v1`, completed-window resolver `r19-bounded-drain-release-v1`). This is a current control-flow map, not a design history. Claims below were checked against the implementation modules linked in each owner row.
 
-**Authority:** current sequencing is in the [work plan](../00-project/work-plan.md); durable detector responsibility is in the [S11 responsibility architecture](s11-detector-responsibility-architecture.md); the failed R18 behavior contract is in the [R18 architecture](s11-r18-lifecycle-closure-architecture.md), while the completed diagnostic-only source addendum is the [causal trace observability architecture](s11-r18-causal-trace-observability-architecture.md). The approved successor is the [R19 bounded drain-release-chain design](s11-r19-bounded-drain-release-chain-architecture.md), which is not implemented here. Those documents describe intent and acceptance boundaries; this file names the implementation that actually executes them.
+**Authority:** current sequencing is in the [work plan](../00-project/work-plan.md); durable detector responsibility is in the [S11 responsibility architecture](s11-detector-responsibility-architecture.md); R18 remains the failed behavior authority and R19 is the implemented local successor under its [architecture](s11-r19-bounded-drain-release-chain-architecture.md) and [validation contract](../30-validation/s11-r19-bounded-drain-release-chain-validation.md). Those documents describe intent and acceptance boundaries; this file names the implementation that actually executes them.
 
 ## Quick start / design index
 
@@ -100,7 +100,7 @@ The IDs in this table are the cross-reference surface for future designs and fai
 | `OIL-TRACKLET` | [`DirectedInterfaceTrackletBuilder.resolve`](../../src/oil_tracker/adapters/vision/oil_interface_tracklets.py), called by `OilTrackletOppositionOwner.resolve` | Per-frame admitted refs → same-frame row hypotheses, one-to-one bounded directed tracklets, confirmation/lifecycle evidence, updated refs | Hard physical identity constraints: bounded jump/prediction, representation bridge, one-to-one assignment, split/crossing ambiguity termination, bounded loss. Confirmation uses bounded windows and anchor/trajectory/motion profiles. No IDs merge across handoff. |
 | `OIL-PHASE-INITIAL` | [`OilMaterialPhaseLifecycleOwner.resolve`](../../src/oil_tracker/adapters/vision/oil_phase_lifecycle.py), policy from [`_material_phase_policy`](../../src/oil_tracker/adapters/vision/oil_observation_resolver.py) | Tracklet-backed phase rows + confirmed initial state → initial `OPEN` or R18 `FILLED_BARRIER`; per-frame allowed tracklet IDs | Hard confirmed `EMPTY_NO_INTERFACE` gate: before a unique dynamic lower-entry owner, allowed IDs are empty. Hard confirmed `FULL_NO_INTERFACE` barrier starts with no fabricated owner and no numeric Oil. `AUTO`/unconfirmed does not become a coordinate. |
 | `OIL-PHASE-FILL` | `OilMaterialPhaseLifecycleOwner._advance_fill_chains`, `_fill_confirmation_profile`, `_fill_phase_reentry` | Admitted physical rows + bounded history → `FILLING` chains, one confirmed fill owner, or ambiguity/unknown | Fill requires compatible directed ownership; initial EMPTY requires lower-entry upward evidence. Established chains can survive bounded loss and re-enter only with a unique compatible, material-clean row. Handoff appends IDs; it never copies coordinates/extrema. |
-| `OIL-PHASE-DRAIN` | `OilMaterialPhaseLifecycleOwner` barrier/release/continuation methods: `_drain_release`, `_partial_fill_drain_release`, `_drain_successor`, `_drain_phase_reentry` | Filled barrier or established partial fill + confirmed downward rows → `DRAINING` owner chain and allowed IDs | R18 confirmed FULL releases exactly one confirmed downward top-origin/material-supported row. R18 established partial fill may reverse to drain only with confirmed direction/progress, ordinary jump, complete material support, and no competing release. The typed release evaluation is also serialized with ordered predicates and first failure. Ambiguous/lost releases fail closed; drain IDs stay distinct. |
+| `OIL-PHASE-DRAIN` | `OilMaterialPhaseLifecycleOwner` direct and recovery methods: `_drain_release`, `_partial_fill_drain_release`, `_advance_recovery_chains`, `_drain_successor`, `_drain_phase_reentry` | Filled barrier or established partial fill + confirmed downward rows → `DRAINING` owner chain and allowed IDs | R18 direct FULL/partial release remains first and authoritative. R19 adds a constant-size, absolutely time-bounded Oil-only chain over independently confirmed same-frame rows; seeds and cross-ID handoffs require anchors, same-owner continuation may use continuation authority, and unique cumulative progress confirms. Ambiguous/lost/material-opposed/stagnant/expired chains fail closed; IDs stay distinct and only the current row is publishable. |
 | `OIL-SELECTOR` | [`build_interface_layers`](../../src/oil_tracker/adapters/vision/oil_interface_selector.py), [`BoundedOilInterfaceSelector.resolve`](../../src/oil_tracker/adapters/vision/oil_interface_selector.py) | Phase rows + publishable row members + state/unknown nodes + allowed IDs/owner chains → one node per sampled frame | Hard phase admission and publishability filters precede selection. Soft emission/transition scores use a six-frame lookahead; same-track or explicit adjacent owner-chain handoffs only. Competing physical owners inside ambiguity margin become `UNKNOWN`. Selector cannot select a nonpublishable member. |
 | `OIL-PROJECTION` | [`OilResolutionProjectionOwner.project/_project_detection`](../../src/oil_tracker/adapters/vision/oil_observation_resolver.py) | One selected node + original detection/candidates + lifecycle/tracklet metadata → projected `PhaseDetection` | Hard provenance: numeric Oil uses the selected candidate's own Y in that frame; state/unknown nodes carry no coordinate. Projection only rewrites fields/flags/metrics and cannot invent/carry/interpolate. |
 | `FOAM-EPISODE` | [`FoamEpisodeResolver.resolve`](../../src/oil_tracker/adapters/vision/foam_episode_resolver.py) | Oil-projected detections + eligible Foam candidates → one-to-one Foam-front tracks, dynamic segments, confirmed Foam projections | Runs after Oil/state and cannot change Oil. Hard episode acceptance needs ≥2 dynamic observations, material/coherence/static gates, and R18 bounded formation: upward front displacement/agreement or bounded stable layer away from top with required extent/footprint. Trace-only track/segment IDs and the same acceptance/formation predicate results are additive diagnostics. Repeated final-Oil same-boundary alias rejects; separated Oil does not. |
@@ -182,7 +182,7 @@ R18-specific behavior is source-backed by the lifecycle methods and policy const
 - `full`/`empty`: image-supported state is emitted with no Oil coordinate.
 - `unknown`: no Oil coordinate; barrier/initial-state/tracklet reasons are retained in flags/metrics.
 
-The projection uses the selected nested candidate, not a path-interpolated Y. The current code’s compatibility flags still use several `R17_*` names while the resolver/version is `r18-lifecycle-closure-v1`; those labels are storage/readability details, not an alternate R17 owner.
+The projection uses the selected nested candidate, not a path-interpolated Y. The current code’s compatibility flags still use several `R17_*` names while the resolver/version is `r19-bounded-drain-release-v1`; those labels are storage/readability details, not an alternate R17 owner.
 
 ## 5. Independent Foam path and composition
 
@@ -208,11 +208,11 @@ The durable invariants observable in current code are:
 7. Debug trace is evidence/provenance only: current records are written during acquisition, then captured records receive a compact final `sequence` snapshot during `annotate_sequence`; this does not alter `AnalysisResult` samples.
 8. Result presentation, CSV and bundle publication serialize or render the final `AnalysisResult`; `OutputBundleStore` writes to a temporary bundle, copies finalized debug staging, validates required files, and commits the bundle. Presentation and export code do not reread candidates.
 
-## 7. Current R18 scope boundaries and named unknowns
+## 7. Current R19 scope boundaries and named unknowns
 
 ### Current boundaries
 
-- R18 changes lifecycle initial-state ownership, established partial-fill reversal and bounded Foam-front formation. Candidate generation, authority thresholds/top-k, directed tracklet construction, selector ordering, same-frame projection, CSV mapping and graph semantics are otherwise current baseline responsibilities.
+- R19 changes only bounded Oil drain-release recovery around the unchanged R18 direct paths. R18 still owns lifecycle initial-state ownership, established partial-fill reversal and bounded Foam-front formation. Candidate generation, authority thresholds/top-k, directed tracklet construction, selector ordering, same-frame projection, CSV mapping and graph semantics are otherwise current baseline responsibilities.
 - One detector serves every Glass. No filename, Glass ID, timestamp, reviewed coordinate or truth annotation is consulted by production detector control flow.
 - The online `TemporalTracker` remains for current-frame compatibility and preview fields; completed-window Oil/Foam owners are the official analysis path.
 - Graph code may draw a lower-emphasis bridge between observed Oil runs, but the bridge is not a sample, CSV value, event, capture guide or detector history.
@@ -245,8 +245,9 @@ The four frozen diagnostic unknowns are:
 3. Owner-bounded selector abstain predicate.
 4. Exact reviewed Y anchors.
 
-R19 is pending implementation and local validation; its approved design is
-linked above and in the [R19 validation contract](../30-validation/s11-r19-bounded-drain-release-chain-validation.md).
+R19 is implemented and focused-tested locally; full repository validation and
+canonical Windows replay remain pending. Its design and acceptance contract
+are linked above and in the [R19 validation contract](../30-validation/s11-r19-bounded-drain-release-chain-validation.md).
 Current-frame online projection and completed-window projection can differ by
 design; the raw debug record is not proof of the final sequence result unless
 its `sequence` annotation is present. Proposal recall remains an input to

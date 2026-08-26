@@ -59,11 +59,11 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 
 ### Active authority and gate
 
-R18 is the implemented but Windows-field-failed detector baseline. Its
-diagnostic-only causal addendum and same-video closure are complete; the
-addendum does not change R18 behavior. R19 is an approved design only: its
-implementation and local validation are the current engineering gate, followed
-by canonical Windows replay.
+R18 is the Windows-field-failed detector baseline. Its diagnostic-only causal
+addendum and same-video closure are complete; the addendum does not change R18
+behavior. R19 is implemented and focused-tested locally, but remains
+field-unqualified: canonical Windows replay and full independent validation
+are the current engineering gate.
 
 - Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
 - Current target-Windows procedure: [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md)
@@ -83,8 +83,8 @@ by canonical Windows replay.
 - S11-R18 causal trace local evidence: [`60-evidence/s11/s11-r18-causal-trace-observability.md`](60-evidence/s11/s11-r18-causal-trace-observability.md)
 - S11-R18 local implementation/replay evidence: [`60-evidence/s11/s11-r18-lifecycle-closure.md`](60-evidence/s11/s11-r18-lifecycle-closure.md)
 - S11-R18 secure-Windows field result (operator-reported fail; transferred audit linked): [`60-evidence/s11/s11-r18-secure-windows-field-result.md`](60-evidence/s11/s11-r18-secure-windows-field-result.md)
-- Approved S11-R19 bounded drain-release-chain architecture (implementation pending): [`20-architecture/s11-r19-bounded-drain-release-chain-architecture.md`](20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
-- S11-R19 bounded drain-release-chain validation contract (implementation pending): [`30-validation/s11-r19-bounded-drain-release-chain-validation.md`](30-validation/s11-r19-bounded-drain-release-chain-validation.md)
+- Approved/implemented S11-R19 bounded drain-release-chain architecture (field validation pending): [`20-architecture/s11-r19-bounded-drain-release-chain-architecture.md`](20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
+- S11-R19 bounded drain-release-chain validation contract (focused local tests pass; full validation pending): [`30-validation/s11-r19-bounded-drain-release-chain-validation.md`](30-validation/s11-r19-bounded-drain-release-chain-validation.md)
 - Canonical private-Windows field truth (`windows_sample1_heating_coldstart`): [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 - S11-R17 local implementation/replay evidence: [`60-evidence/s11/s11-r17-physical-observation-ownership.md`](60-evidence/s11/s11-r17-physical-observation-ownership.md)
 - S11-R17 secure-Windows field result: [`60-evidence/s11/s11-r17-secure-windows-field-result.md`](60-evidence/s11/s11-r17-secure-windows-field-result.md)
