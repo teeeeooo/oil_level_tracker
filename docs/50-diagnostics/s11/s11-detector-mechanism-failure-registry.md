@@ -2,7 +2,7 @@
 
 **Status:** durable causal registry; supporting diagnostics, not current gate authority
 
-**Scope:** S11 detector and its observation/projection boundary, from the R1 report/observation repair through R18 lifecycle closure. This registry groups failures by mechanism, not by revision chronology. Version names identify the attempts that exposed or tested a mechanism; they do not define current runtime behavior.
+**Scope:** S11 detector and its observation/projection boundary, from the R1 report/observation repair through R18 lifecycle closure. This registry groups failures by mechanism, not by revision chronology. Version names identify the attempts that exposed or tested a mechanism; they do not define current runtime behavior. The approved R19 bounded release-chain design is linked from the current project routing and remains outside the implementation baseline.
 
 ## How to read this registry
 
@@ -14,7 +14,7 @@ The labels below deliberately separate evidence strength:
 
 Private Windows bundles cannot be reproduced from this checkout. Their counts and visual classifications are retained as field evidence with that limitation; they never authorize a video-, Glass-, timestamp- or coordinate-specific production rule.
 
-**R18 field update:** The final operator-transferred causal audit is frozen in [the R18 Windows causal closure](s11-r18-windows-causal-closure.md). Base stayed in `INITIAL_FULL_BARRIER` with zero Oil; the strongest lower track failed entrance-relative while other rows first failed progress. Accum did establish a fill chain, but the exact partial-release call/predicate was not serialized. Foam separated candidate eligibility, episode-unconfirmed, and seven ENTRY-SPLASH false publications, but their exact gates were not serialized. One diagnostic-only same-video rerun is now required before R19 behavior design.
+**R18 field update:** The completed operator-transferred causal audit is frozen in [the R18 Windows causal closure](s11-r18-windows-causal-closure.md). Base stayed in `INITIAL_FULL_BARRIER` with zero rapid-refill Oil; lower `Y > 800` entrance rejection is correct safety behavior, while the actual interface's earliest harmful stage is before-or-at `OIL-PHASE-DRAIN` and remains unknown. Accum DRAIN produced 264 release-evaluation rows and zero passed; retained owner `000388:0265` remained a non-updated established snapshot, while its non-update cause and actual drain candidate identity/direction remain unknown. The owner-bounded selector abstain predicate is also unknown. Foam exact eligibility/formation gates are closed, with seven known false ENTRY-SPLASH paths. Compared selected-candidate, completed-sequence and CSV fields were invariant on `1,202/1,202` common rows with zero mismatches. No further Windows diagnostic rerun is required for R19 design input. R19 bounded drain-release-chain behavior is an approved design only, not implemented or field-proven; Foam is intentionally outside R19.
 
 ## Quick failure index (F01–F10)
 
@@ -23,15 +23,15 @@ Read this index completely before opening detailed entries. Each ID is repeated 
 | ID / title | Short symptom / mechanism | No-repeat constraint | Current risk / status | Affected semantic logic-map nodes |
 |---|---|---|---|---|
 | `S11-F01` — Pre-selection authority collapse | Early winner, tracker bit, or Foam mask becomes final Oil authority. | Retain alternatives through one typed Oil owner, then compose Foam once. | Partially retired structurally; live regression class. | `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `FOAM-CANDIDATE`, `SEQUENCE-COMPOSITION` |
-| `S11-F02` — Proposal/representation recall starvation | True interface is absent or pruned before typed authority. | Measure proposal/evidence/top-k loss separately; downstream owners cannot recover it. | Open field risk; R18 shows proposals/tracklets but does not prove the real interface row survived. | `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-PROPOSAL`, `OIL-HYPOTHESIS`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET` |
+| `S11-F02` — Proposal/representation recall starvation | True interface is absent or pruned before typed authority. | Measure proposal/evidence/top-k loss separately; downstream owners cannot recover it. | Open field risk; the completed R18 rerun preserves candidates/tracklets but exact reviewed-interface identity and Y anchors remain unknown. | `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-PROPOSAL`, `OIL-HYPOTHESIS`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET` |
 | `S11-F03` — Motion/bootstrap authority overreach | Smooth, motion, or calibrated path is promoted without same-frame identity. | Motion is only a bounded witness inside an established physical owner. | Accepted path retired; active regression guard. | `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR` |
-| `S11-F04` — Component identity leakage and alias continuation | Y-adjacency, residue, source family, or stale alias merges components or blocks valid continuation. | Require explicit physical handoff; geometry or recurring Y never proves identity. | Open field risk; locally guarded; R18 audit pending. | `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `FOAM-IDENTITY` |
-| `S11-F05` — Initial-state and material-phase hard-lock asymmetry | EMPTY/FULL gates lock real owners, fail to close, or admit unsafe rows. | Transitions need evidence-backed phase ownership; state never fabricates a coordinate. | Active, highest-risk recurrence; causal trace rerun required before repair. | `OIL-HYPOTHESIS`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR` |
-| `S11-F06` — Foam/Oil/material evidence cross-coupling | Material or Oil evidence masks Oil, vetoes Foam, or changes the other series’ authority. | Keep owners independent; only final same-frame Oil may enter bounded alias comparison. | Open field risk; R18 partial/unclear Foam audit pending. | `FRAME-EVIDENCE`, `OIL-HYPOTHESIS`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION` |
-| `S11-F07` — Foam episode false dynamics and stale episode identity | Static glare/residue or one motion spike becomes an episode; stale identity persists. | Require bounded formation or stable-layer witness; no brightness/extent-only acceptance. | Active; exact eligibility/episode predicates require one instrumented rerun. | `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION` |
-| `S11-F08` — Lifecycle closure and owner-loss dead ends | FILLING/partial fill cannot close or reverse safely after owner loss. | Confirm a physical owner before transition; no reopen, copy, or ambiguous release. | Active; Accum partial-release first failure requires one instrumented rerun. | `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR` |
-| `S11-F09` — Coordinate, validity and provenance ambiguity | Current/final/ROI/source values or presentation artifacts are mistaken for observations. | Preserve exact same-frame provenance, independent validity, and no downstream repair. | Active cross-cutting guard; local contract passes. | `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`, `TRACE-PUBLICATION`, `RESULT-PRESENTATION` |
-| `S11-F10` — Global-threshold or case-specific escape hatch | Broad threshold, private branch, or interpolation hides missing evidence with apparent coverage. | Use generic bounded mechanisms and two-sided controls; no private identity or truth shortcut. | Permanent guard. | All nodes; especially `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `FOAM-CANDIDATE`, `FOAM-EPISODE` |
+| `S11-F04` — Component identity leakage and alias continuation | Y-adjacency, residue, source family, or stale alias merges components or blocks valid continuation. | Require explicit physical handoff; geometry or recurring Y never proves identity. | Open field risk; locally guarded; owner-bounded selector abstain and exact reviewed-interface identity remain unknown after the completed R18 audit. | `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `FOAM-IDENTITY` |
+| `S11-F05` — Initial-state and material-phase hard-lock asymmetry | EMPTY/FULL gates lock real owners, fail to close, or admit unsafe rows. | Transitions need evidence-backed phase ownership; state never fabricates a coordinate. | Active, highest-risk recurrence; causal rerun is complete. Base actual interface first loss and Accum partial-release identity/direction remain unknown; R19 is design-only. | `OIL-HYPOTHESIS`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR` |
+| `S11-F06` — Foam/Oil/material evidence cross-coupling | Material or Oil evidence masks Oil, vetoes Foam, or changes the other series’ authority. | Keep owners independent; only final same-frame Oil may enter bounded alias comparison. | Open field risk; completed rerun closes exact Foam gates and preserves compared-field invariance, while layered Oil identity/Y remains unknown. Foam is intentionally outside R19. | `FRAME-EVIDENCE`, `OIL-HYPOTHESIS`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION` |
+| `S11-F07` — Foam episode false dynamics and stale episode identity | Static glare/residue or one motion spike becomes an episode; stale identity persists. | Require bounded formation or stable-layer witness; no brightness/extent-only acceptance. | Active; exact gates are closed by the completed rerun and seven false ENTRY-SPLASH paths are known. Foam remains outside approved R19 scope. | `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION` |
+| `S11-F08` — Lifecycle closure and owner-loss dead ends | FILLING/partial fill cannot close or reverse safely after owner loss. | Confirm a physical owner before transition; no reopen, copy, or ambiguous release. | Active; completed rerun found 264 Accum DRAIN evaluation rows and zero passed, with retained non-updated snapshot; cause and drain candidate identity/direction remain unknown. R19 is approved design only. | `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR` |
+| `S11-F09` — Coordinate, validity and provenance ambiguity | Current/final/ROI/source values or presentation artifacts are mistaken for observations. | Preserve exact same-frame provenance, independent validity, and no downstream repair. | Active cross-cutting guard; completed causal rerun proves compared-field invariance on `1,202/1,202` rows with zero mismatches; field effectiveness remains FAIL and Y anchors are unavailable. | `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`, `TRACE-PUBLICATION`, `RESULT-PRESENTATION` |
+| `S11-F10` — Global-threshold or case-specific escape hatch | Broad threshold, private branch, or interpolation hides missing evidence with apparent coverage. | Use generic bounded mechanisms and two-sided controls; no private identity or truth shortcut. | Permanent guard; R19 is approved design only and has no implementation or field proof. | All nodes; especially `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `FOAM-CANDIDATE`, `FOAM-EPISODE` |
 
 ## Stable detector node IDs
 
@@ -106,7 +106,7 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** Treat proposal recall, evidence representation and authority as separate gates. R16’s “partial recall plus bounded confirmation-profile failure” is the correct diagnostic shape; do not compress it into a universal direction/motion or threshold problem.
 
-**Current relevance/status:** **Open field risk.** The transferred R18 audit found abundant proposals/confirmed rows, but exact reviewed-interface identity is unavailable; proposal recall cannot be declared fixed from non-truth candidates.
+**Current relevance/status:** **Open field risk.** The completed R18 causal rerun found abundant proposals/confirmed rows, but exact reviewed-interface identity and reviewed Y anchors are unavailable; proposal recall cannot be declared fixed from non-truth candidates. No further causal rerun is required for R19 design input.
 
 **Confidence:** Confirmed for the cited local/field checkpoints; named unknown for the unobservable share of the private Base prefix/suffix.
 
@@ -130,7 +130,7 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** Use motion as one typed witness among material, phase, anchor and geometry contracts. A smooth trajectory is a hypothesis, not an observation.
 
-**Current relevance/status:** **Retired as an accepted design path; active regression guard.** The operator-reported R18 BASE `0` Oil result does not establish motion/bootstrap causality; no R18 trace audit is checked in, and the runtime contribution of this mechanism is pending.
+**Current relevance/status:** **Retired as an accepted design path; active regression guard.** The completed R18 causal rerun does not establish motion/bootstrap causality; this mechanism remains a regression guard while R19 is limited to its approved bounded release-chain design.
 
 **Confidence:** Confirmed for R10/R11; high confidence in the no-motion-only-authority rule.
 
@@ -154,7 +154,7 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** Physical identity is an owner with a lifecycle, not a score bonus or graph edge. R16’s reciprocal assignment and complete-row veto are the minimum anti-leak controls; R17/R18’s explicit phase-local handoff is not a global state mutation.
 
-**Current relevance/status:** **Open field risk, locally guarded.** The transferred R18 audit assigns Base failure to release admission and narrows Accum to partial release, but does not prove that the candidates retain the reviewed physical interface identity.
+**Current relevance/status:** **Open field risk, locally guarded.** The completed R18 audit preserves same-frame identity/provenance for compared fields, but exact reviewed-interface identity remains unknown and the owner-bounded selector abstain predicate is not identified. R19 is approved design only and does not change the current map.
 
 **Confidence:** Confirmed mechanism for R10–R16; strong inference for the layered Oil counterfactual.
 
@@ -166,7 +166,7 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Intended benefit:** Make `FULL`/`EMPTY` image-state evidence explicit, preserve safe no-interface semantics, require real physical ownership for fill/drain phases, and prevent state priors from becoming numeric Oil.
 
-**Observed field failure:** **Confirmed facts:** R5 repeated confirmed initial state through every layer and exposed a boundary only through the matching edge entrance: FULL through the upper band and EMPTY through the lower band. A missed EMPTY entry left Accum `EMPTY_NO_INTERFACE` through the visible rise, high and drain, with first useful Oil only after the visual maximum and `OIL_DROP_START` about 49 s late. R6 removed prior-only numeric rows but made the retrospective state owner `NOT_APPLICABLE` in a way that also removed legitimate report context. R14’s fixed lower structure produced four false Accum Oil runs in the reviewed 480–650 s EMPTY interval, proving the hard guard must reject stationary structures while still admitting real upward entry. R16/R17 preserved that guard and confirmed the Accum 347-row EMPTY absence contract. R17 Base exposed the opposite asymmetry: Base remained OPEN for all 601 rows, with 45 false Oil rows in the FULL prefix, 201 fragmented rows in the drain, and 91 in the FULL suffix because no equivalent initial-FULL barrier existed. **Strong current warning:** R18 restores an upper-edge prerequisite for confirmed initial FULL in a stronger hard-gate form: `FILLED_BARRIER` releases only a confirmed downward top-origin owner. That is the same missed-edge lock class that R5 exposed, while the retained confirmed-EMPTY gate carries the symmetric lower-edge risk. The operator-reported R18 BASE `0` Oil result therefore makes recurrence a live warning, but does not by itself prove that the top-origin release was the failing runtime condition. **Named unknown:** R17 did not serialize `oil_no_interface_full_likelihood`, and no R18 trace is checked in; the R18 result cannot yet be divided among proposal absence, tracklet confirmation, FULL barrier release, or later selection.
+**Observed field failure:** **Confirmed facts:** R5 repeated confirmed initial state through every layer and exposed a boundary only through the matching edge entrance: FULL through the upper band and EMPTY through the lower band. A missed EMPTY entry left Accum `EMPTY_NO_INTERFACE` through the visible rise, high and drain, with first useful Oil only after the visual maximum and `OIL_DROP_START` about 49 s late. R6 removed prior-only numeric rows but made the retrospective state owner `NOT_APPLICABLE` in a way that also removed legitimate report context. R14’s fixed lower structure produced four false Accum Oil runs in the reviewed 480–650 s EMPTY interval, proving the hard guard must reject stationary structures while still admitting real upward entry. R16/R17 preserved that guard and confirmed the Accum 347-row EMPTY absence contract. R17 Base exposed the opposite asymmetry: Base remained OPEN for all 601 rows, with 45 false Oil rows in the FULL prefix, 201 fragmented rows in the drain, and 91 in the FULL suffix because no equivalent initial-FULL barrier existed. **Confirmed R18 causal facts:** Base remained behind `INITIAL_FULL_BARRIER` for all 601 rows; lower `Y > 800` entrance rejection is correct safety behavior, while the actual interface earliest harmful stage is before-or-at `OIL-PHASE-DRAIN` and remains unknown. Accum DRAIN produced 264 evaluation rows and zero passed; retained owner `000388:0265` remained a non-updated snapshot, while its non-update cause and actual drain candidate identity/direction remain unknown. The owner-bounded selector abstain predicate is also unknown. R19 bounded release-chain behavior is approved design only, not implemented or field-proven.
 
 **Attempts/versions:** R5 prior/state lattice; R6 no-prior numeric correction and retrospective repair boundary; R7–R10 typed initial-state interpretation, calibrated lanes and artifact/track safeguards; R11–R14 lower reserve, component and initial-EMPTY repairs; R15–R17 explicit phase ownership with `empty_entrance_motion_enabled`; R18 replaces that boolean with explicit `confirmed_initial_state`, starts FULL behind `FILLED_BARRIER`, and retains EMPTY’s hard allowed-set gate.
 
@@ -178,9 +178,9 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** State is a phase input, not an observation. The fix for a hard lock is a measured lifecycle transition with a bounded missed-entrance recovery, not a softer gate, a prior-fed fallback or an absolute edge prerequisite.
 
-**Current relevance/status:** **Active and highest-risk recurrence class.** The transferred R18 audit confirms Base remained in the initial-FULL barrier for all 601 frames and that its strongest lower track first failed entrance-relative; this is not proof that the reviewed real interface reached that predicate. Accum established a fill chain but selected no partial release. The new diagnostic schema must close the exact predicate path before any behavioral repair.
+**Current relevance/status:** **Active and highest-risk recurrence class.** The completed R18 audit confirms Base remained in the initial-FULL barrier for all 601 frames; lower `Y > 800` entrance rejection is correct safety behavior, while the actual interface's earliest harmful stage is before-or-at `OIL-PHASE-DRAIN` and remains unknown. Accum DRAIN produced 264 evaluation rows and zero passed; its retained non-updated snapshot's cause and actual drain candidate identity/direction remain unknown. The owner-bounded selector abstain predicate is also unknown. R19 is approved design only, not implemented or field-proven.
 
-**Confidence:** Confirmed R5/R17 asymmetry and R18 source contract; strong current warning for recurrence at the initial-FULL upper edge and symmetric EMPTY lower edge; named unknown for R17 Base’s first proposal-versus-phase cause and R18 runtime causality.
+**Confidence:** Confirmed R5/R17 asymmetry and R18 source contract; completed causal rerun confirms the compared behavior and named release boundaries; named unknowns remain for the actual Base interface first loss, Accum snapshot/candidate cause and exact reviewed Y anchors.
 
 ### S11-F06 — Foam/Oil/material evidence cross-coupling
 
@@ -202,7 +202,7 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** Material is evidence with typed ownership. Contradiction is local and phase-aware, not a global mask. R18’s bounded Foam formation must remain independent of Oil and must not restore extent-only or separated-layer authority.
 
-**Current relevance/status:** **Open field risk.** The transferred R18 audit separates Foam eligibility, episode confirmation, and false episode publication, but exact gate-level causes remain pending one instrumented rerun.
+**Current relevance/status:** **Open field risk.** The completed R18 rerun closes the exact Foam eligibility and formation gates and records seven false ENTRY-SPLASH paths. Compared fields remain invariant, but field accuracy remains FAIL; Foam is intentionally outside approved R19 scope.
 
 **Confidence:** Confirmed cross-coupling in R5/R7/R8/R11/R14; confirmed R17 false episode publication; strong inference for layered Oil causality.
 
@@ -214,7 +214,7 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Intended benefit:** Confirm physical Foam fronts with bounded material, topology, dynamic and spatial evidence; preserve real narrow onset and stable layers without publishing residue or static glare.
 
-**Observed field failure:** **Confirmed facts:** R3’s static map and row-coherent controls removed local false episodes but did not prove the private Base component was covered; R4 required two compatible samples. R6/R7 showed static Foam-like terms resembled real Foam, while one dynamic sample was insufficient. R10 false Base/Accum groups satisfied the aggregate R16 episode contract; the bundle did not separate 52 reviewed real rows from 50 false rows. R11 the real Accum Foam front (Y465→218) was admitted only 44 raw/22 eligible/9 public rows, with fixed width causing losses, then all nine were invalidated by composition. R14 had 113 raw/80 eligible/23 public and still rejected a real dynamic trajectory through alias logic. R17 published 16 entry-splash, eight post-Foam Y80 and 62 drain false Foam rows; all had exact same-frame projection, so the first harmful stage was episode association/confirmation. **Strong inference:** front-Y formation is a promising discriminator because reviewed true Foam rose while Y80/wall residue was stationary or opposite, but it was not field-proven in R18.
+**Observed field failure:** **Confirmed facts:** R3’s static map and row-coherent controls removed local false episodes but did not prove the private Base component was covered; R4 required two compatible samples. R6/R7 showed static Foam-like terms resembled real Foam, while one dynamic sample was insufficient. R10 false Base/Accum groups satisfied the aggregate R16 episode contract; the bundle did not separate 52 reviewed real rows from 50 false rows. R11 the real Accum Foam front (Y465→218) was admitted only 44 raw/22 eligible/9 public rows, with fixed width causing losses, then all nine were invalidated by composition. R14 had 113 raw/80 eligible/23 public and still rejected a real dynamic trajectory through alias logic. R17 published 16 entry-splash, eight post-Foam Y80 and 62 drain false Foam rows; all had exact same-frame projection, so the first harmful stage was episode association/confirmation. **Strong inference:** front-Y formation is a promising discriminator because reviewed true Foam rose while Y80/wall residue was stationary or opposite. The completed R18 rerun closes the exact eligibility/formation gates and identifies seven false ENTRY-SPLASH paths, but R18 remains field-unqualified.
 
 **Attempts/versions:** R3 learned static opposition and row topology; R4 pending→accepted confirmation; R6 one-motion-sample episode; R7 independent Foam; R8/R9 alias continuation and graph visibility; R10/R11 material tracks and width admission; R12–R17 bounded episode/track owners; R18 deletes extent-only and separated-layer shortcuts and requires bounded upward formation or a bounded stable layer.
 
@@ -226,7 +226,7 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** Episode identity is physical and bounded. R18’s local formation witnesses are the minimum replacement; field replay must measure both real-episode recall and false-track rejection, not just Foam row count.
 
-**Current relevance/status:** **Active.** R18 published seven false ENTRY-SPLASH Foam rows, zero POST-FOAM/DRAIN rows, and 11 rows in the Foam-present segment. Exact eligibility and segment/formation gates are now exposed for one same-video rerun.
+**Current relevance/status:** **Active.** The completed R18 rerun records seven false ENTRY-SPLASH paths, zero confirmed POST-FOAM/DRAIN Foam, and the exact eligibility/formation gates. Foam behavior is intentionally outside approved R19 scope; any future Foam change needs its own design and field gate.
 
 **Confidence:** Confirmed false episode stage and local historical mechanisms; strong inference for front formation as field discriminator.
 
@@ -250,9 +250,9 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** Lifecycle state must close both directions: safe barrier entry and safe owner reacquisition. R18 is a replacement of missing transitions, not a relaxation of material ownership.
 
-**Current relevance/status:** **Active field gate.** Base release admission and Accum partial release are the narrowed owners. The exact Accum first-failed predicate and ambiguity are intentionally held for the instrumented rerun; behavior design remains blocked until then.
+**Current relevance/status:** **Active field gate.** Base release admission and Accum partial release remain the narrowed owners. The completed causal rerun freezes the remaining unknowns without authorizing an R18 behavior change; R19 bounded release-chain work is the approved design successor and remains unimplemented/unproven.
 
-**Confidence:** Confirmed R17 lifecycle observations and R18 local closure contract; operator-reported R18 field outcome is low-to-medium confidence until bundle/trace audit.
+**Confidence:** Confirmed R17 lifecycle observations, R18 local closure contract and completed transferred causal rerun; field effectiveness remains FAIL and exact reviewed Y anchors are unavailable.
 
 ### S11-F09 — Coordinate, validity and provenance ambiguity
 
@@ -262,7 +262,7 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Intended benefit:** Make every published value auditable from source frame through selected candidate, sequence, CSV and report while keeping presentation helpful without manufacturing observations.
 
-**Observed field failure:** **Confirmed facts:** R1 found the report exposed raw event/debug volume, used indistinguishable solid bridges and lacked physical landmark context; the repair preserved detector fingerprints and added report-only solid/dashed semantics. R3/R7/R11/R17 repeatedly corrected current-frame versus final-sequence interpretation. R11 extraction initially mixed ROI-local and source Y; R12/R17 corrected Foam validity and the 733/754 s intervals: they were unselected Oil proposals plus false Foam, not final Oil. R17 published exact selected-candidate and sequence/CSV equality despite incorrect field effectiveness, proving provenance integrity is necessary but not sufficient for accuracy. **Named unknown:** where a final field failure starts, missing trace metrics (for example full no-interface likelihood and exact fill-chain subcondition) prevent unique attribution.
+**Observed field failure:** **Confirmed facts:** R1 found the report exposed raw event/debug volume, used indistinguishable solid bridges and lacked physical landmark context; the repair preserved detector fingerprints and added report-only solid/dashed semantics. R3/R7/R11/R17 repeatedly corrected current-frame versus final-sequence interpretation. R11 extraction initially mixed ROI-local and source Y; R12/R17 corrected Foam validity and the 733/754 s intervals: they were unselected Oil proposals plus false Foam, not final Oil. R17 published exact selected-candidate and sequence/CSV equality despite incorrect field effectiveness, proving provenance integrity is necessary but not sufficient for accuracy. **Confirmed R18 causal result:** compared selected-candidate, completed-sequence and CSV fields remain invariant on `1,202/1,202` common rows with zero mismatches. **Named unknowns:** Base actual interface first loss, Accum snapshot non-update cause and drain candidate identity/direction, owner-bounded selector abstain predicate and exact reviewed Y anchors remain unresolved; this does not qualify R18 in the field.
 
 **Attempts/versions:** R1 report presentation; R3 trace/sequence contract; R5–R7 raw versus final authority; R8–R12 final-sequence trace additions and graph validity; R13 per-stage path observability; R14–R18 exact same-frame and CSV contracts.
 
@@ -274,9 +274,9 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** Provenance is an acceptance contract and a diagnostic instrument, not a detector repair. R1 improves comprehension downstream; it cannot repair missing/wrong observations.
 
-**Current relevance/status:** **Active cross-cutting guard; local contract passes, field accuracy remains separate.**
+**Current relevance/status:** **Active cross-cutting guard; local contract passes, field accuracy remains separate.** The completed causal rerun confirms selected-candidate, completed-sequence and CSV invariance on `1,202/1,202` common rows with zero mismatches; this does not qualify R18 in the field.
 
-**Confidence:** Confirmed provenance/report defects and repairs; named unknowns where traces are incomplete.
+**Confidence:** Confirmed provenance/report defects and repairs; completed causal rerun confirms compared-field invariance, with reviewed Y anchors and upstream physical identity still unknown.
 
 ### S11-F10 — Global-threshold or case-specific escape hatch
 
@@ -298,7 +298,7 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** When coverage and physical agreement diverge, stop and locate the earliest evidence/authority seam. Never turn the holdout into a tuning fixture.
 
-**Current relevance/status:** **Permanent guard.** Every future S11 detector change must pass this rule. The operator-reported R18 field FAIL/observations must not trigger threshold or case-specific escape hatches before an auditable bundle is available.
+**Current relevance/status:** **Permanent guard.** Every future S11 detector change must pass this rule. The completed R18 causal audit and field FAIL do not authorize threshold or case-specific escape hatches; R19 remains a generic bounded design only, with implementation and field proof still required.
 
 **Confidence:** Confirmed rejected changes and recurring field outcomes; high confidence in the guard.
 
@@ -325,11 +325,11 @@ The map is a navigation index, not a second chronology. Each revision is represe
 | R15 | `F04`, `F05`, `F06`, `F07` | final-Oil-only symmetric alias; state-aware ownership; field replay still required |
 | R16 | `F02`, `F04`, `F06`, `F07`, `F08`, `F09` | directed tracklets, reciprocal assignment, full-row material veto and owner-loss boundary |
 | R17 | `F02`, `F04`, `F05`, `F06`, `F07`, `F08`, `F09` | frozen field failure: Base open/full/drain, Accum partial-fill lock, false Foam; provenance passes |
-| R18 | `F05`, `F07`, `F08`, `F09`, `F10` | explicit FULL barrier, partial-fill reversal, bounded Foam formation; Windows failed; transferred audit narrowed owners but lacked decisive predicate fields; diagnostic-only causal schema added for one same-video rerun before R19 behavior |
+| R18 | `F05`, `F07`, `F08`, `F09`, `F10` | explicit FULL barrier, partial-fill reversal, bounded Foam formation; Windows field FAIL; completed causal rerun freezes release/foam boundaries and named unknowns; compared-field invariance passes; R19 bounded release-chain design approved only |
 
 ## Current non-regression contract
 
-The registry does not replace the current architecture or gate. For current ownership, use the [S11 detector responsibility architecture](../../20-architecture/s11-detector-responsibility-architecture.md), [R18 validation contract](../../30-validation/s11-r18-lifecycle-closure-validation.md), and [R18 evidence](../../60-evidence/s11/s11-r18-lifecycle-closure.md). The durable lessons are:
+The registry does not replace the current architecture or gate. For current ownership, use the [S11 detector responsibility architecture](../../20-architecture/s11-detector-responsibility-architecture.md), [R18 validation contract](../../30-validation/s11-r18-lifecycle-closure-validation.md), [R18 causal closure](s11-r18-windows-causal-closure.md), [R19 architecture](../../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md), and [R19 validation contract](../../30-validation/s11-r19-bounded-drain-release-chain-validation.md). The durable lessons are:
 
 - one generic detector serves every Glass; no private identity or truth coordinate enters control flow;
 - current-frame proposals, physical identity, material phase, completed-window selection, composition and projection remain separate owners;

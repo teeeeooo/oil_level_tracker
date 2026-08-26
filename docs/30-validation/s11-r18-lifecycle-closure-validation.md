@@ -1,6 +1,6 @@
 # S11-R18 Lifecycle Closure Validation
 
-**Status:** `LOCAL PASS / OPERATOR-REPORTED WINDOWS FAIL; BUNDLE AUDIT PENDING`
+**Status:** `LOCAL PASS / WINDOWS FIELD FAIL; CAUSAL RERUN COMPLETE`
 
 ## Gate
 
@@ -9,10 +9,13 @@ partial-fill reversal, bounded Foam formation, checked-video replay,
 provenance, performance and full repository gates pass. The frozen R17 Windows
 bundle is historical evidence and must not be rerun or treated as R18 output.
 
-The subsequent operator check failed with zero Base Oil, lower Accum Oil
-coverage and unclear partial Foam detection. No R18 bundle/trace audit is
-checked in, so the field gate is failed while its first causal stage remains
-unknown. See the [R18 field-result record](../60-evidence/s11/s11-r18-secure-windows-field-result.md).
+The Windows check failed with zero Base Oil, lower Accum Oil coverage and
+unclear partial Foam detection. The completed transferred causal rerun closes
+the serialized release and Foam predicates, confirms compared-field
+invariance, and leaves the field gate failed because exact reviewed Y anchors
+and the actual interface first loss remain unknown. See the [R18 field-result
+record](../60-evidence/s11/s11-r18-secure-windows-field-result.md) and [Windows
+causal closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md).
 
 ## Focused Oil lifecycle assertions
 
@@ -95,20 +98,18 @@ numeric-only and coverage-adjusted MAE, maximum error, sample3 completed-fill
 suppression, sample3 late-drain coverage, sample4 reviewed-range matches and
 same-frame provenance. Fingerprints are never regenerated automatically.
 
-## Private-Windows acceptance
+## Private-Windows disposition
 
-A later Windows replay must use the canonical
+The completed Windows causal rerun used the canonical
 [`windows_sample1_heating_coldstart` truth](windows-sample1-heating-coldstart-reviewed-truth.md)
-and enumerate all nine `WS1-*` segments. R18 passes the field gate only if it:
-
-- preserves the 347-row ACCUM EMPTY absence contract;
-- suppresses numeric BASE Oil in both FULL/no-interface segments;
-- follows the BASE drain and closes safely after the rapid refill;
-- creates a real ACCUM drain owner and follows the 700--780 s downward
-  interface without adopting wall residue;
-- publishes Foam only in the reviewed 672--680 s Foam-present segment, subject
-  to separately reviewed point accuracy; and
-- preserves exact selected-candidate/sequence/CSV equality for both series.
-
-The existing R17 bundle cannot prove these outcomes. Until a new bundle is
-reviewed, the final status is `LOCAL PASS / WINDOWS NOT RUN`, never field PASS.
+and all nine `WS1-*` segments. It confirms the 347-row Accum EMPTY absence,
+Base rapid-refill Oil presence `0` (`FAIL`), correct lower `Y > 800` entrance
+rejection, 264 Accum DRAIN evaluation rows with zero passed, exact Foam gates
+and seven false ENTRY-SPLASH paths, and selected-candidate/completed-sequence/
+CSV equality on `1,202/1,202` common rows with zero mismatches. The actual Base
+interface earliest loss, Accum snapshot non-update cause and drain candidate
+identity/direction, owner-bounded selector abstain predicate and exact
+reviewed Y anchors remain unknown. R18 therefore remains field FAIL despite
+the completed causal closure. No further Windows diagnostic rerun is required
+for R19 design input; the approved [R19 validation contract](s11-r19-bounded-drain-release-chain-validation.md)
+is the successor gate, and R19 remains unimplemented and field-unproven.

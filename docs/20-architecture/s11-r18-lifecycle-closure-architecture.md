@@ -1,6 +1,6 @@
 # S11-R18 Lifecycle Closure Architecture
 
-**Status:** `IMPLEMENTED — LOCAL GATE PASS / OPERATOR-REPORTED WINDOWS FAIL; BUNDLE AUDIT PENDING`
+**Status:** `IMPLEMENTED — LOCAL GATE PASS / WINDOWS FIELD FAIL; CAUSAL RERUN COMPLETE`
 
 ## Authority and scope
 
@@ -172,10 +172,14 @@ Every public Oil and Foam value must retain:
 
 The resolver version changes only after the implementation and focused
 contracts pass. R18 remains locally qualified and field unqualified. The
-operator-reported Windows check failed with zero Base Oil and lower Accum Oil
-coverage, but no R18 bundle/trace audit is checked in; use the
-[R18 field-result record](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
-for that bounded disposition.
+Windows field check failed with zero Base Oil and lower Accum Oil coverage;
+the completed transferred causal rerun confirms the release/episode boundaries
+and compared-field invariance while leaving the four named diagnostic unknowns
+unresolved. Use the [R18 field-result record](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
+and [Windows causal closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md)
+for the frozen disposition. The approved successor is the [R19 bounded
+drain-release-chain architecture](s11-r19-bounded-drain-release-chain-architecture.md),
+which is not implemented or field-proven.
 
 ## History Review
 
@@ -195,9 +199,13 @@ for that bounded disposition.
 - **Difference from prior failures:** R18 intended to replace R17's missing
   FULL barrier and partial-fill reversal with explicit physical releases, but
   its top-origin FULL release reintroduced the R5 missed-edge lock class. The
-  operator-reported field failure means that intended distinction did not
-  field-qualify the design; runtime causality remains unproven without trace.
-- **Logic-map impact:** `UPDATED` — the current map records the implemented R18
-  lifecycle, Foam episode and publication owners.
-- **Failure-registry impact:** `UPDATED` — the registry records the R18 field
-  failure boundary and the R5/R18 recurrence warning.
+  completed causal rerun confirms the compared behavior and freezes the
+  before-or-at-drain, partial-release and Foam gate boundaries without field-
+  qualifying R18; the approved R19 design addresses the bounded Oil release
+  chain only.
+- **Logic-map impact:** `UPDATED` — the current map now records the frozen R18
+  causal result and four unknowns while remaining implementation-current R18,
+  with the pending R19 design routed separately.
+- **Failure-registry impact:** `UPDATED` — the registry now records completed
+  causal evidence, exact Foam gate closure, release unknowns and the R19
+  design-only disposition.

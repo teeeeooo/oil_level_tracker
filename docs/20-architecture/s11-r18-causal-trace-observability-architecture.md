@@ -1,13 +1,15 @@
 # S11-R18 Causal Trace Observability Architecture
 
-**Status:** current diagnostic-only addendum to the failed R18 baseline
+**Status:** `COMPLETED — DIAGNOSTIC-ONLY WINDOWS CAUSAL CLOSURE` for the failed R18 baseline
 
 ## Purpose
 
 The transferred R18 Windows audit reached the implementation boundary but
 could not distinguish several predicates because the completed trace stored
-only the lifecycle result. This addendum exposes the already-computed causal
-decisions needed for one bounded same-video rerun. It does not alter candidate
+only the lifecycle result. This addendum exposed the already-computed causal
+decisions for one bounded same-video rerun, whose closure is frozen in the
+[R18 Windows causal closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md).
+It did not alter candidate
 generation, authority, tracklets, lifecycle transitions, selection, Foam
 publication, Recipe settings, thresholds, or CSV values.
 
@@ -63,8 +65,8 @@ CSV, events, graphs, or bundle validity.
   change;
 - no private-video, Glass, timestamp, coordinate, or truth branch;
 - no UI or graph change; and
-- no claim that the instrumented source is field-qualified before Windows
-  rerun evidence.
+- no claim that the instrumented source is field-qualified; R18 remains
+  Windows-field FAIL after the completed causal rerun.
 
 ## History Review
 
@@ -82,9 +84,13 @@ CSV, events, graphs, or bundle validity.
 - Preserved contracts: same-frame Oil/Foam provenance, independent validity,
   fail-closed ambiguity, bounded owners, immutable Recipe/output semantics,
   and canonical reviewed truth.
-- Difference from prior failures: this is additive observation of the active
-  predicates, not another detector mechanism or a coverage repair.
-- Logic-map impact: UPDATED — current owners now name the additive causal trace
-  surface.
-- Failure-registry impact: UPDATED — R18 audit conclusions and the no-repeat
-  diagnostic gate are recorded.
+- Difference from prior failures: this was additive observation of the active
+  predicates, not another detector mechanism or a coverage repair. The
+  completed rerun closes compared-field invariance and names the remaining
+  release/Y unknowns without changing R18 behavior.
+- Logic-map impact: UPDATED — the current map now records the completed
+  diagnostic-only causal surface and frozen R18 result while routing the
+  implementation-current map separately from approved R19 design.
+- Failure-registry impact: UPDATED — the registry now records completed causal
+  evidence, exact Foam gate closure, release unknowns and the approved R19
+  design-only successor.

@@ -2,7 +2,7 @@
 
 **Scope:** the detector currently on `main` (`opencv-phase-detector-r18-lifecycle-closure-v1`, completed-window resolver `r18-lifecycle-closure-v1`). This is a current control-flow map, not a design history or an R19 proposal. Claims below were checked against the implementation modules linked in each owner row.
 
-**Authority:** current sequencing is in the [work plan](../00-project/work-plan.md); durable detector responsibility is in the [S11 responsibility architecture](s11-detector-responsibility-architecture.md); the failed R18 behavior contract is in the [R18 architecture](s11-r18-lifecycle-closure-architecture.md), while the current diagnostic-only source addendum is the [causal trace observability architecture](s11-r18-causal-trace-observability-architecture.md). Those documents describe intent and acceptance boundaries; this file names the implementation that actually executes them.
+**Authority:** current sequencing is in the [work plan](../00-project/work-plan.md); durable detector responsibility is in the [S11 responsibility architecture](s11-detector-responsibility-architecture.md); the failed R18 behavior contract is in the [R18 architecture](s11-r18-lifecycle-closure-architecture.md), while the completed diagnostic-only source addendum is the [causal trace observability architecture](s11-r18-causal-trace-observability-architecture.md). The approved successor is the [R19 bounded drain-release-chain design](s11-r19-bounded-drain-release-chain-architecture.md), which is not implemented here. Those documents describe intent and acceptance boundaries; this file names the implementation that actually executes them.
 
 ## Quick start / design index
 
@@ -217,13 +217,43 @@ The durable invariants observable in current code are:
 - The online `TemporalTracker` remains for current-frame compatibility and preview fields; completed-window Oil/Foam owners are the official analysis path.
 - Graph code may draw a lower-emphasis bridge between observed Oil runs, but the bridge is not a sample, CSV value, event, capture guide or detector history.
 
-### Named unknowns (not converted into claims)
+### Frozen R18 causal result and named unknowns
 
-- Operator-reported R18 Windows result is `FAIL`: BASE Oil detection was 0; ACCUM's prior false positives appear gone but its Oil detection rate is lower; Foam is partially detected but unclear. No R18 bundle/trace audit is checked into this repository, so the bundle-level cause is not yet audited.
-- The frozen R17 evidence did not establish the direct causal effect of Oil/Foam execution order on layered Oil accuracy, and exact layered Oil Y was not reviewed. R18 leaves that boundary unchanged.
-- Current-frame online projection and completed-window projection can differ by design; the raw debug record is not proof of the final sequence result unless its `sequence` annotation is present.
-- Proposal recall remains an input to downstream ownership. A missing candidate cannot be recovered by phase, selector, projection, report, graph or CSV logic.
-- Compatibility flag names and some historical metric keys remain in stored output; this map treats owner calls and current resolver versions as authority, not a flag prefix alone.
+The completed transferred causal rerun confirms the implementation-current R18
+result while leaving the detector field disposition unchanged:
+
+- Base remained in `INITIAL_FULL_BARRIER`; rapid-refill Oil presence was `0`
+  (`FAIL`). The operational `Y <= 800` cohort had 245 release-evaluation rows
+  and zero passed. Lower `Y > 800` entrance rejection is correct safety
+  behavior, while the actual interface's earliest harmful stage is
+  before-or-at `OIL-PHASE-DRAIN` and remains `NOT_PROVEN`.
+- Accum DRAIN produced 264 release-evaluation rows and zero passed. Retained
+  owner `000388:0265` remained a non-updated established snapshot; its
+  non-update cause and actual drain candidate identity/direction remain
+  unknown. The owner-bounded selector abstain predicate is also unknown.
+- Foam exact eligibility and formation gates are closed by the rerun, with
+  seven known false ENTRY-SPLASH paths. Foam remains intentionally outside the
+  approved R19 design.
+- Compared selected-candidate, completed-sequence and CSV fields were
+  invariant on `1,202/1,202` common rows with zero mismatches. No further
+  Windows diagnostic rerun is required for R19 design input.
+
+The four frozen diagnostic unknowns are:
+
+1. Base actual interface first loss.
+2. Accum snapshot non-update cause and actual drain candidate identity/direction.
+3. Owner-bounded selector abstain predicate.
+4. Exact reviewed Y anchors.
+
+R19 is pending implementation and local validation; its approved design is
+linked above and in the [R19 validation contract](../30-validation/s11-r19-bounded-drain-release-chain-validation.md).
+Current-frame online projection and completed-window projection can differ by
+design; the raw debug record is not proof of the final sequence result unless
+its `sequence` annotation is present. Proposal recall remains an input to
+downstream ownership, and a missing candidate cannot be recovered downstream.
+Compatibility flag names and some historical metric keys remain in stored
+output; this map treats owner calls and current resolver versions as
+authority, not a flag prefix alone.
 
 ## 8. Update rules
 

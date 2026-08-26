@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R18 Windows FAIL narrowed; diagnostic-only rerun build ready for one same-video causal trace before R19 behavior design`
-**Source authority:** `main diagnostic addendum over failed R18; no field-qualified detector`
+**Current gate:** `R19 bounded drain-release-chain design approved; implementation/local validation next, then canonical Windows replay`
+**Source authority:** `main R18 field-failed baseline with completed causal addendum; no field-qualified detector`
 **Task-start exact head:** `d7958e3d06293ed00f5c04c129199d9ef06c2560`
 **Task-start exact parent:** `b3f066ac0668eb73a5995d63e47e7cc50fc7199d`
 
@@ -138,12 +138,24 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Run the diagnostic-only causal trace build once on Windows against
-`windows_sample1_heating_coldstart`, then audit the serialized Oil release and
-Foam eligibility/episode predicates before authorizing R19 behavior design.
-The R18 bundle remains frozen historical evidence and cannot prove the
-instrumented source behavior. Do not reuse old counts as acceptance targets or
-convert named unknowns into facts.
+Implement and locally validate the approved [R19 bounded drain-release-chain
+architecture](../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
+against its [validation contract](../30-validation/s11-r19-bounded-drain-release-chain-validation.md),
+then run the canonical Windows replay. R19 changes only the bounded Oil
+release chain; Foam is intentionally outside its scope. The implementation-
+current detector remains R18 and no field-qualified detector is claimed.
+
+The completed R18 causal rerun is frozen in the [Windows causal
+closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md). Base lower
+`Y > 800` entrance rejection is correct safety behavior, while the actual
+interface earliest loss is before-or-at drain and unknown. Accum DRAIN had 264
+evaluation rows and zero passed; retained snapshot non-update cause and drain
+candidate identity/direction remain unknown, as does the owner-bounded selector
+abstain predicate. Foam exact gates and seven false ENTRY-SPLASH paths are
+known. Compared selected-candidate, completed-sequence and CSV fields were
+invariant on `1,202/1,202` common rows with zero mismatches. These facts do not
+authorize threshold changes or convert named unknowns into implementation
+claims.
 
 The locally accepted R18 implementation starts confirmed FULL behind a phase
 barrier, permits an established partial fill to reverse into one bounded drain
@@ -152,14 +164,15 @@ witnesses. It retains initial-EMPTY suppression, Oil/Foam same-frame/CSV
 provenance, Artifact handling, checked-truth authority and resolver ordering.
 
 Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md),
-[causal observability addendum](../20-architecture/s11-r18-causal-trace-observability-architecture.md),
-[causal trace validation](../30-validation/s11-r18-causal-trace-observability-validation.md),
+[completed causal observability addendum](../20-architecture/s11-r18-causal-trace-observability-architecture.md),
+[completed causal trace validation](../30-validation/s11-r18-causal-trace-observability-validation.md),
 [Windows causal closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md),
-[causal trace local evidence](../60-evidence/s11/s11-r18-causal-trace-observability.md),
+[R19 architecture](../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md),
+[R19 validation](../30-validation/s11-r19-bounded-drain-release-chain-validation.md),
 [operator-reported field result](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
 and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
-The R18 field result remains `FAIL`. The next run exists only to close named
-diagnostic unknowns; it is not an R19 detector repair.
+R18 remains field `FAIL`; its causal rerun is complete and no further
+diagnostic rerun is required for R19 design input.
 
 ## R16 field disposition
 
