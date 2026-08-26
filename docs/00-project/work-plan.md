@@ -2,10 +2,10 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R18 Windows operator check FAIL; bundle/trace causal audit pending before R19 design`
-**Source authority:** `main at locally accepted R18; no field-qualified detector`
-**Task-start exact head:** `8d43d7510eccdea7a0da95a490c4c42785a80d8e`
-**Task-start exact parent:** `12b4820b1c5bcc0f4c1d3a0074b36039acdb4d03`
+**Current gate:** `R18 Windows FAIL narrowed; diagnostic-only rerun build ready for one same-video causal trace before R19 behavior design`
+**Source authority:** `main diagnostic addendum over failed R18; no field-qualified detector`
+**Task-start exact head:** `d7958e3d06293ed00f5c04c129199d9ef06c2560`
+**Task-start exact parent:** `b3f066ac0668eb73a5995d63e47e7cc50fc7199d`
 
 ## R10 field result
 
@@ -138,10 +138,12 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Freeze the R18 operator-reported failure, then audit its Windows bundle and
-debug trace before authorizing R19 design. The R17 bundle remains frozen
-historical evidence and cannot prove R18 field behavior. Do not reuse old
-counts as acceptance targets or convert named unknowns into facts.
+Run the diagnostic-only causal trace build once on Windows against
+`windows_sample1_heating_coldstart`, then audit the serialized Oil release and
+Foam eligibility/episode predicates before authorizing R19 behavior design.
+The R18 bundle remains frozen historical evidence and cannot prove the
+instrumented source behavior. Do not reuse old counts as acceptance targets or
+convert named unknowns into facts.
 
 The locally accepted R18 implementation starts confirmed FULL behind a phase
 barrier, permits an established partial fill to reverse into one bounded drain
@@ -150,12 +152,14 @@ witnesses. It retains initial-EMPTY suppression, Oil/Foam same-frame/CSV
 provenance, Artifact handling, checked-truth authority and resolver ordering.
 
 Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md),
-[R18 validation](../30-validation/s11-r18-lifecycle-closure-validation.md),
-[local evidence](../60-evidence/s11/s11-r18-lifecycle-closure.md),
+[causal observability addendum](../20-architecture/s11-r18-causal-trace-observability-architecture.md),
+[causal trace validation](../30-validation/s11-r18-causal-trace-observability-validation.md),
+[Windows causal closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md),
+[causal trace local evidence](../60-evidence/s11/s11-r18-causal-trace-observability.md),
 [operator-reported field result](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
 and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
-The field result is `FAIL`, while its code-level cause remains unaudited until
-the R18 bundle/trace is available.
+The R18 field result remains `FAIL`. The next run exists only to close named
+diagnostic unknowns; it is not an R19 detector repair.
 
 ## R16 field disposition
 

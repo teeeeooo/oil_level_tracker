@@ -1,6 +1,13 @@
 # S11-R18 Secure-Windows Field Result
 
-**Status:** `OPERATOR-REPORTED FIELD FAIL — BUNDLE/TRACE AUDIT PENDING`
+**Status:** `OPERATOR-REPORTED FIELD FAIL — TRANSFERRED CAUSAL AUDIT FROZEN`
+
+The later operator-transferred bundle/trace audit is frozen in
+[S11-R18 Windows Causal Closure](../../50-diagnostics/s11/s11-r18-windows-causal-closure.md).
+That audit narrows the owners but preserves explicit named unknowns requiring
+one diagnostic-only rerun. This original field-result record remains the
+authority for the initial visual report and is not rewritten as if the private
+bundle were locally reproducible.
 
 ## Result
 
@@ -58,9 +65,11 @@ Base zero-Oil result establish a recurrence warning, not runtime causality.
   672–680 s Foam interval; and
 - same-frame selected-candidate, sequence and CSV equality.
 
-These unknowns remain frozen until an R18 bundle/trace audit is supplied. They
-do not authorize an R19 implementation, threshold change, Recipe adjustment,
-private coordinate/timestamp exception or detector-specific branch.
+The linked transferred audit closes or narrows these original unknowns and
+defines the smaller remaining set. Neither record authorizes an R19 behavior
+implementation, threshold change, Recipe adjustment, private
+coordinate/timestamp exception or detector-specific branch before the
+instrumented same-video rerun.
 
 ## Detector Governance
 
