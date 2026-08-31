@@ -2,6 +2,14 @@
 
 This document owns manual GUI, real-video, Windows and packaging obligations. It does not own milestone status; use the [roadmap](../00-project/roadmap.md) and [current work plan](../00-project/work-plan.md).
 
+## Current proportional revalidation status
+
+The Workbench, shared transport, Result Review and Debug layout checks added
+below have not been executed on Windows in the current UX change environment.
+Source-tree/offscreen regression does not satisfy them. Keep these items pending
+until the changed build is exercised at Windows 100%, 125% and 150% display
+scaling and the result is recorded in the owning evidence/closeout.
+
 ## Workbench and video
 - Launch the packaged app on a 100%, 125%, and 150% Windows display scale.
 - At 1280 px window width, verify all five Workbench progress steps remain identifiable on one line without overlap or clipping.
@@ -11,6 +19,14 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Verify play/pause, step, seek and 0.5×/1×/1.5×/2×/4× behavior.
 - Verify start/end/compressor markers numerically through session fields and report.
 - Verify Korean labels do not clip or wrap awkwardly at 100%, 125%, and 150% display scale.
+- Confirm the source-video summary shows a concise filename without stealing
+  width from the center canvas and exposes the full path as secondary detail.
+- Confirm long initial-state/settings rows wrap vertically without clipping,
+  hiding their controls or forcing an unreadably narrow video area.
+- On Workbench and Result Review, use previous/next frame, ±5/±10 seconds,
+  direct-time input and empty-slider click/drag. Confirm short seeks land near
+  the intended time, the full-width slider is easy to acquire, drag remains
+  responsive and release lands on the final pointer position.
 
 ## Glass and analysis region editor
 - Add three Glass items and alternate selection.
@@ -69,6 +85,13 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Explicitly confirm `UNKNOWN_REVIEW` for a genuinely indeterminate initial scene; confirm final-analysis readiness may proceed while no retrospective FULL/EMPTY interpretation is granted from that prior.
 - Confirming an unchanged selected initial state must not by itself dirty the reusable Profile.
 - Replace the video, prepare a same-Profile new video, change analysis start, change the selected initial-state value, enable an unconfirmed Glass, and establish a new analysis session; each material context change must invalidate only the affected current-run confirmation authority as specified by the product contract.
+- After reconfirming, change analysis end, compressor-start time, sampling FPS,
+  detector settings and other display/execution options without changing video,
+  analysis start, selected initial state or enabled Glasses; confirm the
+  existing initial-state confirmation remains valid.
+- Confirm the visible confirmation question uses the same Korean state label as
+  the settings field and never displays `FULL_NO_INTERFACE` or another
+  serialized enum identifier.
 - Run preflight with unresolved confirmation and verify it can inspect the setup without silently establishing user confirmation.
 - Exercise both GUI and available programmatic/headless final-analysis paths and confirm they enforce equivalent confirmation authority.
 - Review a result with accepted retrospective FULL/EMPTY and confirm the original observed state, including observed `UNKNOWN_REVIEW`, remains separately visible.
@@ -418,7 +441,26 @@ This document owns manual GUI, real-video, Windows and packaging obligations. It
 - Open Result Review from a Foam/review case and use **사용자 정답으로 확인**; confirm Glass, frame and timestamp context are retained and the official result bundle is unchanged.
 
 ## Result visualization
-- Open Result Review on Windows with Malgun Gothic available and verify Korean title, axes, legend, annotations and empty-state text.
+- Open Result Review on Windows with Malgun Gothic available and verify Korean
+  title, axes, external graph controls, annotations and empty-state text.
+- At the 1180×680 minimum window size and each supported display scale, confirm
+  the left navigation, center video/graph/transport and right details remain
+  usable without clipped tab labels, setting text or horizontal toolbar sprawl.
+- Confirm the graph has no persistent legend or per-event text. Verify the
+  compact Oil/Foam/event/review toggles, low-emphasis zero/analysis guides,
+  compressor/event ticks and selected-event-only vertical emphasis.
+- Confirm `주요 이벤트` is the default list/graph scope, then switch to
+  `모든 이벤트` and verify administrative/quality history returns without
+  changing the bundle or `events.csv`.
+- Enter `검토 필요` and verify review intervals can be shown without turning
+  every event into a graph label. Return to events and confirm seeking and
+  selection remain synchronized.
+- Confirm general mode shows only event/review navigation and user-facing
+  observed/retrospective state and position details. Enter Debug mode and
+  confirm only the debug-scene navigation is shown.
+- In Debug mode, confirm `판정 요약`, `후보 비교`, `진단 이미지` remain readable;
+  the candidate table uses five columns, raw trace is collapsed by default,
+  and image choices are grouped as 기본/영역/경계/거품.
 - Open the partial re-detection comparison and verify Korean graph labels and table headers: 공식/재검출 유면 and 공식/재검출 거품 경계.
 - Open the offline HTML report and verify every combined/detail graph renders Korean text without repeated missing-glyph warnings.
 - Verify negative y-axis tick labels and minus signs remain readable.

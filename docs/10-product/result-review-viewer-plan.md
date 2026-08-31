@@ -108,7 +108,7 @@ Workbench는 먼저 `ANALYZED` 상태와 결과 bundle 경로를 확정한다. �
 
 - 관찰창 선택
 - 관찰창별 판정 상태
-- 이벤트 목록
+- 기본 `주요 이벤트` 목록과 명시적으로 전환 가능한 `모든 이벤트` 목록
 - 낮은 신뢰도·검토 필요 구간 목록
 - 검토 사유 category filter
 - 현재 filter 결과 개수
@@ -117,6 +117,10 @@ Workbench는 먼저 `ANALYZED` 상태와 결과 bundle 경로를 확정한다. �
 - event capture 존재 여부와 열기
 
 한 번에 하나의 관찰창 overlay와 graph를 표시한다.
+일반 검토에서는 이벤트와 검토 필요 탭만 표시하고, 디버그 장면 탭은
+숨긴다. 디버그 mode에서는 반대로 디버그 장면만 표시하여 서로 다른
+탐색 목적을 한 목록에 섞지 않는다. 주요 이벤트 기본값은 표시 밀도만
+줄이며 저장된 전체 event history나 `events.csv`를 변경하지 않는다.
 
 ### 6.2 중앙 영상 영역
 
@@ -154,6 +158,18 @@ Viewer canvas는 read-only다.
 - 현재 actual decoded timestamp cursor
 - graph 클릭 seek
 
+현재 일반 검토의 표시 계층은 다음과 같다.
+
+- graph 내부의 상시 legend와 event text label은 표시하지 않는다;
+- 유면, 거품, 이벤트, 검토 구간은 graph 밖의 compact toggle로 제어한다;
+- 검토 구간은 기본적으로 꺼져 있고 검토 필요 탭 진입 시 바로 확인할
+  수 있다;
+- 기준점과 분석 위·아래 경계는 낮은 강조도의 무문자 guide로 유지한다;
+- 압축기 기동과 주요 이벤트는 plot 하단의 작은 marker로 표시한다;
+- 선택한 이벤트만 세로 강조선을 사용한다; 그리고
+- confirmed initial-state hold는 plot 밖의 사용자 문구와 restrained band로
+  공개하되 numeric Oil point나 line을 만들지 않는다.
+
 단위 정책:
 
 - `mm_per_pixel`과 usable mm 값이 있으면 mm
@@ -172,33 +188,40 @@ Playback 중에는 전체 series를 재생성하지 않고 cursor만 갱신한�
 
 ### 6.4 우측 정보 패널
 
-현재 video timestamp와 선택된 tracking sample 기준:
+일반 mode는 현재 video timestamp와 선택된 tracking sample에서 사용자가
+판단에 필요한 정보만 표시한다.
 
-- 영상 timestamp와 decoded frame index
-- tracking sample timestamp
-- 선택 관찰창
-- fill state
-- 유면 위치
-- 기준점 대비 px와 mm
-- foam front 위치
-- overall confidence
-- valid 여부
-- flags
-- 활성 event
-- 검토 필요 사유
-- boundary가 ROI 밖이어서 표시되지 않은 경우의 상태
+- 영상 시각과 선택 Glass;
+- observed fill state;
+- retrospective interpretation과 그 사용자-facing 상태를 observed state와
+  분리한 필드;
+- 유면과 거품 위치를 각각 한 행의 px/optional mm 문구로 통합;
+- 활성 event와 검토 필요 사유의 사용자-facing label; 그리고
+- boundary가 분석 영역 밖이거나 표시되지 않은 경우의 간단한 상태.
+
+decoded frame 번호, 별도 tracking 시각, confidence decimal, validity, raw
+flags와 enum/provenance code는 일반 panel의 상시 본문에서 제외한다. 필요한
+provenance는 secondary tooltip 또는 Debug mode에서 확인할 수 있으며 observed
+state를 retrospective state로 교체하지 않는다.
 
 ### 6.5 하단 timeline
 
 - 재생과 일시정지
 - 이전/다음 frame
+- 5초·10초 이전/다음 이동
+- 직접 영상 시각 입력
 - 0.5×, 1×, 1.5×, 2×, 4× 배속
-- seek
+- 별도 full-width seek bar
 - 분석 시작·종료 marker
 - 압축기 기동 marker
 - event marker와 duration
 - low-confidence interval
 - 현재 timestamp cursor
+
+재생 control과 seek bar는 두 행으로 분리한다. Slider 빈 영역 click은 해당
+비율로 즉시 이동하고, drag 중 요청은 bounded interval로 throttle한 뒤 release
+위치를 반드시 반영한다. Workbench, Result Review와 preview consumer는 같은
+precision transport interaction을 사용한다.
 
 ## 7. Phase 2B 구현 계약
 
@@ -442,11 +465,18 @@ Bundle asset resolver는 다음을 거부한다.
 - 선택 관찰창의 ROI, 기준점, 유면 위치와 confidence가 표시된다.
 - event와 낮은 신뢰도 항목을 클릭하면 해당 시점으로 이동한다.
 - interactive graph와 영상이 양방향 동기화된다.
+- graph는 persistent event text/legend 없이 compact marker와 외부 toggle을
+  사용하고, 선택 이벤트만 세로 강조한다.
+- 주요 이벤트가 기본이며 모든 저장 이벤트를 명시적으로 다시 표시할 수 있다.
+- shared transport에서 frame, ±5/±10초, 직접 시각 입력과 full-width seek를
+  사용해 짧은 이동을 정밀하게 수행할 수 있다.
 - 검토 필요 항목을 machine category로 필터할 수 있다.
 - report, 결과 폴더와 event capture를 안전하게 열 수 있다.
 - 분석 완료 dialog에서 Viewer와 후속 작업으로 이동할 수 있다.
 - 같은 profile로 새 영상을 준비하되 기존 상태를 원자적으로 보호한다.
 - 일반 모드에는 최종 결과만 표시된다.
+- 일반 detail에는 user-facing state/position/action만 상시 표시되고 raw
+  candidate, score, flags와 enum code는 표시되지 않는다.
 - overlay 포함 현재 장면을 원본 해상도 PNG로 저장할 수 있다.
 - 잘못되거나 불완전한 bundle은 원인을 포함한 오류 메시지를 제공한다.
 - 기존 결과 파일과 `report.html` 생성을 유지한다.
@@ -454,7 +484,9 @@ Bundle asset resolver는 다음을 거부한다.
 
 수동/플랫폼 확인 항목(관련 owner가 materially invalidated 되었을 때 비례 재검증):
 
-- Windows DPI scaling과 graph 문구·legend 잘림
+- Windows 100%/125%/150% DPI에서 Workbench/Result Review의 setting 문구,
+  graph 외부 toggle, 초기 상태 문구와 debug table이 잘리거나 어색하게
+  줄바꿈되지 않는지 확인
 - 실제 분석 결과 bundle
 - 많은 sample의 장시간 영상 성능
 - variable/keyframe-dependent 영상 seek
@@ -476,7 +508,20 @@ Bundle asset resolver는 다음을 거부한다.
 
 일반 Viewer와 timeline, graph 기반은 공유하되 mode와 데이터 책임을 분리한다.
 
-표시 항목:
+Debug 우측 panel은 다음 세 탭으로 분리한다.
+
+1. `판정 요약`: 이전/제안/최종 상태, 핵심 위치와 confidence를 그룹화하고
+   raw trace dictionary는 접힌 `원시 진단값 보기`에서만 노출;
+2. `후보 비교`: `순위`, `종류`, `위치 Y`, `최종 점수`, `결과`의 5열 table과
+   선택 후보의 feature/penalty breakdown 및 탈락 사유; 그리고
+3. `진단 이미지`: 기본/영역/경계/거품 group prefix가 있는 artifact chooser와
+   맞춤/100%/zoom control.
+
+좌측 debug 장면은 시간과 한국어 capture reason만 본문에 표시한다. frame,
+confidence, fill-state code, artifact 유무와 record ID는 상시 list text에서
+제외하고 필요할 때 tooltip/detail에서 확인한다.
+
+표시 가능한 기술 항목:
 
 - 전체 유면 후보선
 - 후보별 총점과 순위

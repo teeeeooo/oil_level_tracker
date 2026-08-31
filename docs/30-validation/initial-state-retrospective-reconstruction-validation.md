@@ -14,7 +14,12 @@ Acceptance must prove that final analysis:
 - accepts an explicitly user-confirmed `UNKNOWN_REVIEW` for readiness while granting it no retrospective FULL/EMPTY authority;
 - treats current-run confirmation as run/session provenance separate from Recipe persistence;
 - invalidates confirmation after video replacement, same-Profile new-video preparation, analysis-start change, initial-state value change, a newly enabled/unconfirmed Glass, or establishment of a new analysis session;
+- preserves confirmation across analysis-end, compressor-start, sampling-FPS,
+  detector-setting and presentation-only changes that leave the current video,
+  analysis start, selected initial state and enabled-Glass set unchanged;
 - does not dirty the reusable Profile merely because an unchanged selected initial state is freshly confirmed;
+- asks for confirmation with the user-facing Korean state label and does not
+  expose serialized enum identifiers as the visible choice;
 - permits preflight while confirmation is unresolved but proves that preflight cannot silently establish confirmation;
 - enforces the same final-analysis confirmation authority through GUI and programmatic/headless entry paths.
 

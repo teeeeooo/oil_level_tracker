@@ -89,6 +89,17 @@ Confirmation becomes stale when the material observation context changes, includ
 - a new or newly enabled Glass that lacks confirmation;
 - establishment of a new analysis session.
 
+Confirmation remains valid when the user changes analysis end, compressor-start
+time, sampling FPS, detector settings or other presentation/execution options
+that do not replace the video, move analysis start, change the selected initial
+state, or introduce an unconfirmed enabled Glass. These changes may invalidate
+preflight or analysis output independently; they must not force the user to
+repeat the same initial-scene assessment.
+
+The confirmation dialog and settings surface use the same user-facing Korean
+state labels. Serialized enum names such as `FULL_NO_INTERFACE` are never the
+visible confirmation question.
+
 Freshly confirming an unchanged selected initial state does not by itself dirty the reusable Profile. Preflight may run while initial state remains unresolved, but it must not silently establish confirmation. GUI and programmatic/headless final-analysis entry paths must enforce the same confirmation authority.
 
 ### Glass readiness
@@ -101,11 +112,15 @@ The user can jump to the first error, otherwise the first warning. Selection, ca
 
 The general UI shows only the final current-scene interpretation:
 
-- fill state;
-- confidence;
-- oil level relative to the reference line;
-- optional mm value;
-- normal, review-required or failed state.
+- normal, review-required or failed status;
+- observed fill state;
+- Oil level relative to the reference line, with optional mm value; and
+- at most one plain-language action when user input is actually required.
+
+Generic two-line narratives such as `핵심 내용` / `다음 행동` are not shown.
+When no Oil boundary is observed, the action must identify a concrete user
+decision or control to use; it must not merely tell the user to inspect Foam
+without explaining what that inspection changes.
 
 Candidate internals and scoring remain in debug surfaces.
 
@@ -131,10 +146,20 @@ After analysis, the user can open the source video and official bundle together,
 
 General review hides candidate and score internals. Debug mode, partial re-detection, user truth and regression export follow the detailed [Result Review Viewer plan](result-review-viewer-plan.md).
 
+The shared video transport uses a two-row precision layout: primary playback,
+frame-step, ±5/±10-second, direct-time and speed controls remain compact while a
+full-width slider occupies its own row. Empty slider clicks seek immediately;
+drag seeking is bounded/throttled and flushes the final release position.
+
 ## Real-use Workbench stabilization contract
 
 - Progress-step text remains single-line and unclipped at supported Windows DPI settings.
 - The center video remains the primary Workbench area; transport controls never overlap it.
+- Long metadata and setting rows may wrap vertically instead of clipping or
+  forcing the center video narrower. The visible source-video identity uses a
+  concise filename while the full path remains available as secondary detail.
+- Initial-state controls and confirmation text remain fully readable at the
+  minimum supported window size and Windows 100%, 125% and 150% scaling.
 - User-facing `ROI` becomes `분석 영역`; `관찰창` becomes `Glass`; `oil-air` becomes `유면` or `유면 경계`; general UI uses `거품` for Foam.
 - The current-scene card and Glass list share the left area without shrinking the video unnecessarily.
 - Basic settings avoid awkward wrapped coordinate summaries.
@@ -143,7 +168,7 @@ General review hides candidate and score internals. Debug mode, partial re-detec
 - Foam guidance separates detector interpretation from recommended user action and never mutates initial state automatically. A future S12 candidate may make the post-confirmation action guidance more explicit when the current recommendation stops at confirming whether Foam is real; this remains a copy/actionability refinement candidate, not an authorized implementation slice.
 - Multi-frame preflight is a modeless resizable window rather than a central-area-shrinking dock.
 
-These requirements are verified through automated geometry/import tests where practical and the manual Windows checklist where platform interaction matters.
+These requirements are verified through automated geometry/import tests where practical and the manual Windows checklist where platform interaction matters. Source-tree/offscreen regression does not establish a Windows DPI result; the changed Workbench and Result Review layouts remain pending until the proportional Windows checklist is executed.
 
 ## Phase 2C feature contract
 

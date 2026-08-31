@@ -36,6 +36,28 @@ This contract owns acceptance for the user-facing observation report defined by 
 - Static and interactive graphs show isolated finite Foam points without
   connecting across a missing row.
 - Repeated Result Review cursor updates still do not rebuild series or collapse layout.
+- Interactive Result Review has no persistent in-plot legend or per-event text;
+  Oil, Foam, event and review-interval visibility are controlled outside the
+  plot, with review intervals off by default.
+- Major physical events are the default graph/list scope, the complete stored
+  event history remains selectable, and only the selected event receives a
+  vertical emphasis line.
+- Confirmed initial-state hold text is user-facing and outside the plot; its
+  restrained band still creates no numeric Oil point.
+
+### Result Review interaction hierarchy
+
+- General mode and Debug mode expose separate navigation tabs; candidate/trace
+  rows do not appear in the general navigation or detail panel.
+- General detail preserves observed and retrospective state as separate fields,
+  combines px/optional mm positions, and keeps raw enum, flag, confidence and
+  provenance text out of the persistent body.
+- Debug detail defaults to `판정 요약`; `후보 비교` contains only five primary
+  columns plus the selected score breakdown, and raw trace dictionaries are
+  collapsed by default.
+- Shared transport regression covers previous/next frame, ±5/±10 seconds,
+  direct-time input, immediate empty-slider click seek, bounded drag updates and
+  the final release position.
 
 ### Captures and HTML
 
@@ -75,3 +97,7 @@ Generated replay bundles and screenshots are evidence artifacts, not golden trut
 ## Claim boundary
 
 Passing this contract establishes that the available four-video results are communicated more clearly. It does not claim general-field detector accuracy, validate every Foam classification, or authorize numeric trajectory interpolation. Final target-Windows workflow validation remains required after source acceptance.
+
+Offscreen GUI regression establishes widget/state behavior only. It does not
+establish text fit or interaction quality at Windows 100%, 125% or 150% display
+scaling; those checks remain pending until the manual Windows procedure is run.

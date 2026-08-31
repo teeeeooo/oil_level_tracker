@@ -107,6 +107,14 @@ The feature and base comparison must use identical dataset bytes, benchmark cata
 - User-facing terminology follows `Glass`, `분석 영역`, `유면/유면 경계`, `거품` and optional real-length conversion.
 - Settings-panel wheel events do not change values.
 - Foam guidance provides interpretation and action without mutating Recipe state.
+- Current-scene guidance contains status, observed state, position and at most
+  one concrete action; generic `핵심 내용` / `다음 행동` narration is absent.
+- Initial-state confirmation survives analysis-end, compressor, sampling,
+  detector-setting and presentation changes that do not alter the video,
+  analysis start, selected initial state or enabled-Glass set; its visible
+  question uses user-facing labels rather than serialized enum names.
+- Shared transport keeps playback controls separate from a full-width seek bar
+  and supports frame, ±5/±10-second and direct-time movement.
 - Modeless preflight remains usable beside the Workbench, marks stale results and cleans up on close.
 
 ## Analysis lifecycle acceptance
@@ -124,7 +132,7 @@ Frame processing completion is not overall 100%. Completion is emitted only afte
 
 ## Result visualization acceptance
 
-- Korean titles, axes, legends, annotations and empty-state text render with an installed system font.
+- Korean titles, axes, external graph controls, annotations and empty-state text render with an installed system font.
 - User-facing series names use `유면` and `거품 경계`.
 - Each Glass detail graph covers the full inner-ellipse analysis range and shows reference zero plus upper/lower analysis boundaries.
 - Combined graphs cover the union of included Glass ranges.
@@ -133,6 +141,10 @@ Frame processing completion is not overall 100%. Completion is emitted only afte
 - Foam rendering preserves intermittent gaps and does not connect across absent Foam observations.
 - Static reports label observed highest/lowest Oil and bounded physical landmarks, embed Glass-focused source captures and keep raw debug/event volume outside the main narrative.
 - Result Review, re-detection comparison and HTML report use the same range and font policy.
+- Result Review defaults to major physical events, preserves access to every
+  stored event, and uses compact markers without persistent per-event text.
+- General and Debug navigation/detail surfaces remain separate; raw trace data
+  is collapsed and candidate comparison uses the bounded five-column summary.
 - Repeated open/close cycles release Matplotlib callbacks, figures and file handles.
 
 ## CPU and memory gate
