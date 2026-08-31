@@ -160,7 +160,7 @@ def _state_snapshot(window):
         "glass": window.selected_glass_id,
         "state": window.state,
         "save_enabled": window.save_png_action.isEnabled(),
-        "detail": window.details.values["sample_time"].text(),
+        "detail": window.details.values["video_time"].text(),
         "cursor": tuple(window.graph.cursor_artist.get_xdata()),
     }
 
@@ -176,7 +176,7 @@ def _assert_state_preserved(window, before):
     assert window.selected_glass_id == before["glass"]
     assert window.state == before["state"]
     assert window.save_png_action.isEnabled() == before["save_enabled"]
-    assert window.details.values["sample_time"].text() == before["detail"]
+    assert window.details.values["video_time"].text() == before["detail"]
     assert tuple(window.graph.cursor_artist.get_xdata()) == before["cursor"]
 
 
@@ -256,6 +256,31 @@ def test_review_filter_updates_count_highlights_and_preserves_events_and_glass_c
     assert window.navigation.event_list.count() == 1
     window.navigation.glass_combo.setCurrentIndex(1)
     assert window.navigation.current_filter().value == "detection_lost"
+    window.close()
+
+
+def test_event_navigation_defaults_to_major_events_and_can_show_complete_history(qtbot, tmp_path):
+    bundle = _bundle(tmp_path)
+    glass_id = bundle.glasses[0].id
+    bundle.events = (
+        ReviewEvent("run", glass_id, EventType.ANALYSIS_START, 1.0),
+        ReviewEvent("run", glass_id, EventType.FOAM_START, 2.0),
+        ReviewEvent("run", glass_id, EventType.LOW_CONFIDENCE_START, 3.0),
+    )
+    window = _window(bundle)
+    qtbot.addWidget(window)
+
+    assert window.load_bundle(bundle.root)
+    assert window.navigation.event_scope.currentData() == "major"
+    assert window.navigation.event_list.count() == 1
+    assert len(window.graph.model.event_markers) == 1
+
+    window.navigation.event_scope.setCurrentIndex(
+        window.navigation.event_scope.findData("all")
+    )
+
+    assert window.navigation.event_list.count() == 3
+    assert len(window.graph.model.event_markers) == 3
     window.close()
 
 

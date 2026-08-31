@@ -5,7 +5,7 @@ import math
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QToolButton, QVBoxLayout, QWidget
 
 from oil_tracker.application.services.graph_series import observed_trajectory
 from oil_tracker.domain.review import ReviewGraphModel
@@ -22,14 +22,32 @@ class ResultReviewGraph(QWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setObjectName("resultReviewGraph")
-        self.setMinimumHeight(190)
+        self.setMinimumHeight(220)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self._font_selection = configure_matplotlib_korean_font()
         self.figure = Figure(figsize=(8.0, 2.8), tight_layout=True)
         self.canvas = FigureCanvasQTAgg(self.figure)
         self.axes = self.figure.add_subplot(111)
+        self.oil_toggle = self._toggle("유면", True)
+        self.foam_toggle = self._toggle("거품", True)
+        self.event_toggle = self._toggle("이벤트", True)
+        self.review_toggle = self._toggle("검토 구간", False)
+        self.state_note = QLabel()
+        self.state_note.setObjectName("reviewGraphStateNote")
+        self.state_note.setVisible(False)
+        controls = QHBoxLayout()
+        controls.setContentsMargins(2, 0, 2, 0)
+        controls.setSpacing(4)
+        controls.addWidget(QLabel("표시"))
+        for toggle in (self.oil_toggle, self.foam_toggle, self.event_toggle, self.review_toggle):
+            controls.addWidget(toggle)
+            toggle.toggled.connect(self._redraw_current_model)
+        controls.addStretch(1)
+        controls.addWidget(self.state_note)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(2)
+        layout.addLayout(controls)
         layout.addWidget(self.canvas)
         self.model: ReviewGraphModel | None = None
         self.cursor_artist = None
@@ -44,6 +62,8 @@ class ResultReviewGraph(QWidget):
     def set_model(self, model: ReviewGraphModel) -> None:
         self.model = model
         self.series_rebuild_count += 1
+        self.foam_toggle.setVisible(model.foam_front.has_values)
+        self._set_state_note(model.assumed_initial_state)
         self.axes.clear()
         self.axes.set_title(f"{model.glass_name} 유면 추적")
         self.axes.set_xlabel("시간 (초)")
@@ -51,25 +71,21 @@ class ResultReviewGraph(QWidget):
         self.axes.set_xlim(model.analysis_start_sec, model.analysis_end_sec)
         if model.axis_lower is not None and model.axis_upper is not None:
             self.axes.set_ylim(model.axis_lower, model.axis_upper)
-        self.axes.axhline(0.0, linestyle=":", linewidth=1.2, label="기준선")
+        self.axes.axhline(0.0, linestyle=":", linewidth=1.2, alpha=0.7)
         if model.analysis_top_boundary_value is not None:
             self.axes.axhline(
                 model.analysis_top_boundary_value,
                 linestyle="--",
                 linewidth=0.9,
-                alpha=0.65,
-                label="분석 영역 위쪽 경계",
+                alpha=0.35,
             )
         if model.analysis_bottom_boundary_value is not None:
             self.axes.axhline(
                 model.analysis_bottom_boundary_value,
                 linestyle="--",
                 linewidth=0.9,
-                alpha=0.65,
-                label="분석 영역 아래쪽 경계",
+                alpha=0.35,
             )
-        self.axes.axvline(model.analysis_start_sec, linewidth=0.8, alpha=0.45, label="분석 범위")
-        self.axes.axvline(model.analysis_end_sec, linewidth=0.8, alpha=0.45)
         if (
             model.assumed_initial_state
             and model.assumed_state_start_sec is not None
@@ -84,41 +100,56 @@ class ResultReviewGraph(QWidget):
                 model.assumed_state_end_sec,
                 alpha=0.09,
                 color="#3b82f6" if full else "#f59e0b",
-                label=(
-                    "확정 초기 상태 유지 가정 (FULL)"
-                    if full
-                    else "확정 초기 상태 유지 가정 (EMPTY)"
-                ),
             )
         if model.compressor_start_sec is not None:
-            self.axes.axvline(model.compressor_start_sec, linestyle="--", linewidth=1.0, label="압축기 기동")
-        for highlight in model.highlights:
-            end = max(highlight.start_time_sec, highlight.end_time_sec)
-            self.axes.axvspan(highlight.start_time_sec, end, alpha=0.12, hatch="//")
-        for marker in model.event_markers:
-            self.axes.axvline(marker.timestamp_sec, linewidth=0.6, alpha=0.18)
-        for index, marker in enumerate(model.debug_markers):
-            artist = self.axes.axvline(
-                marker.timestamp_sec,
-                linestyle="-.",
-                linewidth=2.2 if marker.selected else 0.9,
-                alpha=0.95 if marker.selected else 0.35,
-                label="선택 디버그 장면" if marker.selected else "디버그 기록" if index == 0 else None,
+            self.axes.scatter(
+                [model.compressor_start_sec],
+                [0.02],
+                transform=self.axes.get_xaxis_transform(),
+                marker="^",
+                s=24,
+                color="#f97316",
+                zorder=5,
             )
-            artist.set_gid("debug:" + "|".join(marker.reasons))
-        for index, marker in enumerate(model.truth_markers):
+        if self.review_toggle.isChecked():
+            for highlight in model.highlights:
+                end = max(highlight.start_time_sec, highlight.end_time_sec)
+                self.axes.axvspan(highlight.start_time_sec, end, alpha=0.1, color="#dc2626")
+        if self.event_toggle.isChecked() and model.event_markers:
+            self.axes.scatter(
+                [marker.timestamp_sec for marker in model.event_markers],
+                [0.025] * len(model.event_markers),
+                transform=self.axes.get_xaxis_transform(),
+                marker="|",
+                s=70,
+                linewidths=1.1,
+                color="#7c3aed",
+                zorder=5,
+            )
+        if model.selected_event_timestamp_sec is not None:
+            self.axes.axvline(
+                model.selected_event_timestamp_sec,
+                linewidth=1.5,
+                color="#7c3aed",
+                alpha=0.9,
+            )
+        if model.debug_markers:
+            self.axes.scatter(
+                [marker.timestamp_sec for marker in model.debug_markers],
+                [0.075] * len(model.debug_markers),
+                transform=self.axes.get_xaxis_transform(),
+                marker="s",
+                s=[36 if marker.selected else 14 for marker in model.debug_markers],
+                facecolors=["#0891b2" if marker.selected else "none" for marker in model.debug_markers],
+                edgecolors="#0891b2",
+                zorder=6,
+            )
+        for marker in model.truth_markers:
             artist = self.axes.axvline(
                 marker.timestamp_sec,
                 linestyle=(0, (1.0, 1.4)),
                 linewidth=2.8 if marker.selected else 1.1,
                 alpha=1.0 if marker.selected else 0.55,
-                label=(
-                    "선택 사용자 정답"
-                    if marker.selected
-                    else "사용자 정답"
-                    if index == 0
-                    else None
-                ),
             )
             artist.set_gid(
                 "truth:"
@@ -128,36 +159,45 @@ class ResultReviewGraph(QWidget):
                 + ":"
                 + "|".join(marker.error_types)
             )
-        self._plot_series(
-            model.oil_air.points,
-            model.oil_air.name,
-            "-",
-            connect_observed_anchors=True,
-        )
-        if model.foam_front.has_values:
+        if self.oil_toggle.isChecked():
+            self._plot_series(
+                model.oil_air.points,
+                model.oil_air.name,
+                "-",
+                connect_observed_anchors=True,
+            )
+        if self.foam_toggle.isChecked() and model.foam_front.has_values:
             self._plot_series(model.foam_front.points, model.foam_front.name, "--")
         self.cursor_artist = self.axes.axvline(
             model.cursor_timestamp_sec,
             linewidth=1.4,
-            label="현재 영상 시각",
+            color="#111827",
         )
         self.axes.grid(True, alpha=0.2)
-        handles, labels = self.axes.get_legend_handles_labels()
-        if handles:
-            unique = dict(zip(labels, handles))
-            self.axes.legend(
-                unique.values(),
-                unique.keys(),
-                loc="best",
-                fontsize="small",
-                prop=self._font_selection.properties,
-                # Keep the legend shorter than the minimum-height plotting area.
-                # A tall single-column legend makes tight_layout progressively
-                # squeeze the axes during cursor-only playback redraws.
-                ncols=3,
-            )
         apply_font_to_axes(self.axes, self._font_selection)
         self.canvas.draw_idle()
+
+    @staticmethod
+    def _toggle(text: str, checked: bool) -> QToolButton:
+        button = QToolButton()
+        button.setText(text)
+        button.setCheckable(True)
+        button.setChecked(checked)
+        button.setAutoRaise(True)
+        return button
+
+    def _redraw_current_model(self, _checked: bool = False) -> None:
+        if self.model is not None:
+            self.set_model(self.model)
+
+    def _set_state_note(self, state: str) -> None:
+        labels = {
+            "FULL_NO_INTERFACE": "초기 상태: 오일이 가득 참으로 확인됨",
+            "FULL_WITH_FOAM": "초기 상태: 거품이 있는 가득 찬 상태로 확인됨",
+            "EMPTY_NO_INTERFACE": "초기 상태: 오일이 비어 있음으로 확인됨",
+        }
+        self.state_note.setText(labels.get(state, ""))
+        self.state_note.setVisible(state in labels)
 
     def _plot_series(
         self,
@@ -234,6 +274,7 @@ class ResultReviewGraph(QWidget):
     def clear_model(self) -> None:
         self.model = None
         self.cursor_artist = None
+        self.state_note.setVisible(False)
         self.axes.clear()
         self.axes.set_title("유면 추적 graph")
         self.axes.text(0.5, 0.5, "결과 bundle을 열어 주세요.", ha="center", va="center", transform=self.axes.transAxes)

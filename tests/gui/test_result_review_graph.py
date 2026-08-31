@@ -57,9 +57,14 @@ def test_graph_renders_selected_glass_unit_boundaries_and_optional_foam(qtbot):
     labels = graph.axes.get_legend_handles_labels()[1]
     assert "유면" in labels
     assert "거품 경계" in labels
-    assert "기준선" in labels
-    assert "분석 영역 위쪽 경계" in labels
-    assert "분석 영역 아래쪽 경계" in labels
+    assert "기준선" not in labels
+    assert "분석 영역 위쪽 경계" not in labels
+    assert "분석 영역 아래쪽 경계" not in labels
+    assert graph.axes.get_legend() is None
+    assert graph.oil_toggle.isChecked()
+    assert graph.foam_toggle.isChecked()
+    assert graph.event_toggle.isChecked()
+    assert not graph.review_toggle.isChecked()
     foam_line = next(line for line in graph.axes.lines if line.get_label() == "거품 경계")
     assert foam_line.get_marker() == "o"
     assert tuple(foam_line.get_xdata()) == (0.0, 1.0)
@@ -121,9 +126,30 @@ def test_graph_renders_confirmed_initial_state_hold_as_disclosed_band(qtbot):
 
     graph.set_model(model)
 
-    labels = graph.axes.get_legend_handles_labels()[1]
-    assert "확정 초기 상태 유지 가정 (FULL)" in labels
-    assert "유면" not in labels
+    assert graph.axes.get_legend() is None
+    assert graph.state_note.text() == "초기 상태: 오일이 가득 참으로 확인됨"
+    assert not graph.state_note.isHidden()
+    assert "유면" not in graph.axes.get_legend_handles_labels()[1]
+
+
+def test_graph_uses_compact_event_ticks_and_only_selected_event_gets_vertical_line(qtbot):
+    graph = ResultReviewGraph()
+    qtbot.addWidget(graph)
+    model = replace(_model(), selected_event_timestamp_sec=1.5)
+
+    graph.set_model(model)
+
+    assert not graph.axes.texts
+    selected_lines = [
+        line
+        for line in graph.axes.lines
+        if tuple(line.get_xdata()) == (1.5, 1.5)
+    ]
+    assert len(selected_lines) == 1
+    collection_count = len(graph.axes.collections)
+    graph.event_toggle.setChecked(False)
+    assert len(graph.axes.collections) == collection_count - 1
+    assert any(tuple(line.get_xdata()) == (1.5, 1.5) for line in graph.axes.lines)
 
 
 def test_sustained_cursor_updates_keep_minimum_height_layout_stable_and_allow_model_replace(qtbot):

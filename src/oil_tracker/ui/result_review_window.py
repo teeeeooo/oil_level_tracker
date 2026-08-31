@@ -12,12 +12,14 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QLabel,
     QMainWindow,
+    QMenu,
     QMessageBox,
     QProgressDialog,
     QSplitter,
     QStackedWidget,
     QStyle,
     QToolBar,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
@@ -97,7 +99,7 @@ class ResultReviewWindow(QMainWindow):
         self.mode = "general"
         self.state = "bundle 없음"
         self.setWindowTitle("Rotary Oil Level Tracker — 결과 검토")
-        self.setMinimumSize(1280, 760)
+        self.setMinimumSize(1180, 680)
         self.resize(1540, 900)
         self._build_ui()
         self._connect()
@@ -117,15 +119,25 @@ class ResultReviewWindow(QMainWindow):
         self.export_mp4_action = QAction("주석 MP4 내보내기", self)
         self.export_mp4_action.setToolTip("선택한 Glass의 저장된 분석 결과를 분석 구간 전체 MP4에 렌더링합니다.")
         toolbar.addAction(self.open_action)
-        toolbar.addAction(self.reassign_action)
-        toolbar.addSeparator()
         toolbar.addAction(self.report_action)
-        toolbar.addAction(self.folder_action)
-        toolbar.addAction(self.capture_action)
         toolbar.addAction(self.same_profile_action)
-        toolbar.addSeparator()
-        toolbar.addAction(self.save_png_action)
-        toolbar.addAction(self.export_mp4_action)
+        self.export_button = QToolButton()
+        self.export_button.setText("내보내기")
+        self.export_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        export_menu = QMenu(self.export_button)
+        export_menu.addAction(self.save_png_action)
+        export_menu.addAction(self.export_mp4_action)
+        self.export_button.setMenu(export_menu)
+        toolbar.addWidget(self.export_button)
+        self.more_button = QToolButton()
+        self.more_button.setText("더보기")
+        self.more_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        more_menu = QMenu(self.more_button)
+        more_menu.addAction(self.reassign_action)
+        more_menu.addAction(self.folder_action)
+        more_menu.addAction(self.capture_action)
+        self.more_button.setMenu(more_menu)
+        toolbar.addWidget(self.more_button)
         toolbar.addSeparator()
         toolbar.addWidget(QLabel("보기"))
         self.mode_combo = QComboBox()
@@ -148,7 +160,7 @@ class ResultReviewWindow(QMainWindow):
         self.detail_stack.addWidget(self.debug_details)
         self.transport = TransportBar()
         self.video_path_label = QLabel("원본 영상 정보 없음")
-        self.video_path_label.setWordWrap(True)
+        self.video_path_label.setWordWrap(False)
         self.video_path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         visual_splitter = QSplitter(Qt.Orientation.Vertical)
         visual_splitter.setChildrenCollapsible(False)
@@ -188,11 +200,13 @@ class ResultReviewWindow(QMainWindow):
         self.mode_combo.currentIndexChanged.connect(self._mode_changed)
         self.navigation.glassChanged.connect(self._glass_changed)
         self.navigation.filterChanged.connect(self._review_filter_changed)
+        self.navigation.eventScopeChanged.connect(self._event_scope_changed)
         self.navigation.debugFilterChanged.connect(self._debug_filter_changed)
         self.navigation.eventSelected.connect(self._event_selected)
         self.navigation.eventActivated.connect(self._jump_to)
         self.navigation.reviewActivated.connect(self._jump_to)
         self.navigation.debugActivated.connect(self._debug_record_activated)
+        self.navigation.tabs.currentChanged.connect(self._navigation_tab_changed)
         self.navigation.previousRequested.connect(lambda: self._navigate_item(-1))
         self.navigation.nextRequested.connect(lambda: self._navigate_item(1))
         self.graph.timestampClicked.connect(self._graph_clicked)
@@ -293,6 +307,7 @@ class ResultReviewWindow(QMainWindow):
         self.mode_combo.blockSignals(False)
         self.detail_stack.setCurrentWidget(self.details)
         self.navigation.set_bundle(bundle, query, selected_glass_id)
+        self.navigation.set_mode("general")
         self.details.clear()
         self.debug_details.clear()
         if debug_repository is not None:
@@ -311,7 +326,8 @@ class ResultReviewWindow(QMainWindow):
                 self.statusBar().showMessage(f"일반 결과는 열었습니다. 디버그 기록 경고: {bundle.debug_warning}", 15000)
             return True
         try:
-            self.video_path_label.setText(str(validation.path))
+            self.video_path_label.setText(f"원본 영상: {Path(validation.path).name}")
+            self.video_path_label.setToolTip(str(validation.path))
             self.active_video_path = Path(validation.path)
             self.playback.activate_prepared(prepared)
         finally:
@@ -360,7 +376,8 @@ class ResultReviewWindow(QMainWindow):
             prepared.close()
         self.video_override = None if auto else validation.path
         self.active_video_path = Path(validation.path)
-        self.video_path_label.setText(str(validation.path))
+        self.video_path_label.setText(f"원본 영상: {Path(validation.path).name}")
+        self.video_path_label.setToolTip(str(validation.path))
         if validation.warnings:
             self.statusBar().showMessage("원본 영상 확인 필요: " + " / ".join(validation.warnings), 12000)
         self._set_state("영상 로드됨 · 일시정지")
@@ -370,7 +387,8 @@ class ResultReviewWindow(QMainWindow):
         if self.bundle is None:
             return
         original = self.bundle.source_video_path or "기록된 경로 없음"
-        self.video_path_label.setText(f"분석 당시 경로: {original}")
+        self.video_path_label.setText("원본 영상 연결 필요")
+        self.video_path_label.setToolTip(f"분석 당시 경로: {original}")
         self.current_source_image = QImage()
         self.current_render_image = QImage()
         self.canvas.set_message("원본 영상을 찾을 수 없음\n저장된 debug artifact는 디버그 panel에서 확인할 수 있습니다.")
@@ -489,6 +507,16 @@ class ResultReviewWindow(QMainWindow):
         self._refresh_markers()
         self._rebuild_graph()
 
+    def _navigation_tab_changed(self, _index: int) -> None:
+        if self.mode == "general" and not self.navigation.active_tab_is_events():
+            self.graph.review_toggle.setChecked(True)
+
+    def _event_scope_changed(self, _value: str) -> None:
+        if self.bundle is None or self.query is None:
+            return
+        self.navigation.refresh_items(self.bundle, self.query, self.selected_glass_id)
+        self._rebuild_graph()
+
     def _debug_filter_changed(self, _value: str) -> None:
         self._refresh_markers()
         self._rebuild_graph()
@@ -496,6 +524,7 @@ class ResultReviewWindow(QMainWindow):
     def _event_selected(self, event) -> None:
         self.selected_event = event
         self.capture_action.setEnabled(bool(self.bundle is not None and event is not None and event.capture_path))
+        self._rebuild_graph()
 
     def _mode_changed(self, _index: int) -> None:
         requested = str(self.mode_combo.currentData() or "general")
@@ -507,6 +536,7 @@ class ResultReviewWindow(QMainWindow):
             self.mode_combo.blockSignals(False)
             requested = "general"
         self.mode = requested
+        self.navigation.set_mode(self.mode)
         self.highlighted_candidate = None
         self.detail_stack.setCurrentWidget(self.debug_details if self.mode == "debug" else self.details)
         self._render_current_scene()
@@ -565,8 +595,12 @@ class ResultReviewWindow(QMainWindow):
             self.navigation.current_filter(),
             self.current_time,
             self.query,
-            self._filtered_debug_summaries(),
+            self._filtered_debug_summaries() if self.mode == "debug" else (),
             self.selected_debug_summary.record_id if self.selected_debug_summary is not None else "",
+            include_all_events=self.navigation.current_event_scope() == "all",
+            selected_event_timestamp_sec=(
+                self.selected_event.start_time_sec if self.selected_event is not None else None
+            ),
         )
         self.graph.set_model(model)
 

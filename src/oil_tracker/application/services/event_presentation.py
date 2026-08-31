@@ -31,6 +31,31 @@ EVENT_TYPE_LABELS: dict[EventType, str] = {
     EventType.JUDGMENT_FAIL: "판정 불합격",
 }
 
+MAJOR_EVENT_TYPES = frozenset(
+    {
+        EventType.COMPRESSOR_START,
+        EventType.OIL_BOUNDARY_APPEARED_FROM_TOP,
+        EventType.OIL_BOUNDARY_APPEARED_FROM_BOTTOM,
+        EventType.OIL_DROP_START,
+        EventType.MAXIMUM_OIL_LEVEL,
+        EventType.MINIMUM_OIL_LEVEL,
+        EventType.ZERO_CROSS_UP,
+        EventType.ZERO_CROSS_DOWN,
+        EventType.ZERO_STABLE_RECOVERY,
+        EventType.FULL_NO_INTERFACE_START,
+        EventType.EMPTY_NO_INTERFACE_START,
+        EventType.FOAM_START,
+        EventType.FOAM_FRONT_RISING,
+        EventType.FOAM_REACH_ZERO,
+        EventType.FOAM_REACH_TOP,
+        EventType.FOAM_END,
+    }
+)
+
 
 def event_type_label(event_type: EventType) -> str:
     return EVENT_TYPE_LABELS.get(event_type, event_type.value)
+
+
+def is_major_event(event_type: EventType) -> bool:
+    return event_type in MAJOR_EVENT_TYPES

@@ -148,7 +148,7 @@ def test_viewer_loads_bundle_video_navigation_and_details(qtbot, tmp_path):
     assert not window.current_render_image.isNull()
     assert window.navigation.event_list.count() == 1
     assert window.navigation.review_list.count() == 1
-    assert window.details.values["sample_time"].text() != "-"
+    assert window.details.values["video_time"].text() != "-"
     assert (window.canvas.source_image_size.width(), window.canvas.source_image_size.height()) == (320, 240)
     window.close()
 
@@ -187,7 +187,8 @@ def test_missing_video_keeps_bundle_and_event_information_available(qtbot, tmp_p
     qtbot.addWidget(window)
     assert window.load_bundle(bundle.root) is True
     assert window.state == "bundle 준비됨 · 영상 없음"
-    assert "분석 당시 경로" in window.video_path_label.text()
+    assert window.video_path_label.text() == "원본 영상 연결 필요"
+    assert str(bundle.source_video_path) in window.video_path_label.toolTip()
     assert window.navigation.event_list.count() == 1
     assert window.playback.reader is None
     assert window.current_source_image.isNull()
@@ -320,6 +321,7 @@ def test_result_review_keeps_observed_state_and_retrospective_interpretation_sep
     assert window.details.values["fill_state"].text() == fill_state_label(FillState.PARTIAL_VISIBLE)
     assert fill_state_label(FillState.FULL_NO_INTERFACE) in window.details.values["retrospective_state"].text()
     assert "현재 시각에 적용" in window.details.values["retrospective_state"].text()
-    assert "ACCEPTED" in window.details.values["retrospective_status"].text()
-    assert "initial_state_retrospective_v1" in window.details.values["retrospective_status"].text()
+    assert window.details.values["retrospective_status"].text() == "확정됨"
+    assert "ACCEPTED" in window.details.values["retrospective_status"].toolTip()
+    assert "initial_state_retrospective_v1" in window.details.values["retrospective_status"].toolTip()
     window.close()

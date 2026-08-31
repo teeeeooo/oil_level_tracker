@@ -168,6 +168,26 @@ def test_event_compressor_analysis_range_and_cursor_are_present():
     assert model.event_markers[0].label == "거품 발생"
 
 
+def test_graph_defaults_to_major_events_but_can_restore_complete_event_history():
+    bundle, glass = _bundle([])
+    bundle.samples = (_sample(glass.id, 1.0, 10),)
+    bundle.events = (
+        ReviewEvent("run", glass.id, EventType.ANALYSIS_START, 1.0),
+        ReviewEvent("run", glass.id, EventType.FOAM_START, 2.0),
+        ReviewEvent("run", glass.id, EventType.LOW_CONFIDENCE_START, 3.0),
+    )
+
+    major = build_review_graph_model(bundle, glass.id)
+    complete = build_review_graph_model(bundle, glass.id, include_all_events=True)
+
+    assert [marker.label for marker in major.event_markers] == ["거품 발생"]
+    assert [marker.label for marker in complete.event_markers] == [
+        "분석 시작",
+        "거품 발생",
+        "낮은 신뢰도 시작",
+    ]
+
+
 def test_filter_controls_graph_highlights_without_hiding_events():
     bundle, glass = _bundle([])
     bundle.samples = (

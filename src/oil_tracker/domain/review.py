@@ -200,6 +200,7 @@ class ReviewGraphModel:
     assumed_initial_state: str = ""
     assumed_state_start_sec: float | None = None
     assumed_state_end_sec: float | None = None
+    selected_event_timestamp_sec: float | None = None
 
 
 @dataclass

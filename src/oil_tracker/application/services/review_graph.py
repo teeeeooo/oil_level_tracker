@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from oil_tracker.application.services.event_presentation import event_type_label
+from oil_tracker.application.services.event_presentation import event_type_label, is_major_event
 from oil_tracker.application.services.graph_axis import graph_axis_range_for_glass
 from oil_tracker.application.services.review_query import ReviewQueryModel
 from oil_tracker.domain.review import (
@@ -24,6 +24,8 @@ def build_review_graph_model(
     query: ReviewQueryModel | None = None,
     debug_summaries=(),
     selected_debug_record_id: str = "",
+    include_all_events: bool = False,
+    selected_event_timestamp_sec: float | None = None,
 ) -> ReviewGraphModel:
     query = query or ReviewQueryModel(bundle)
     glass = bundle.glass_config(glass_id)
@@ -87,6 +89,7 @@ def build_review_graph_model(
         )
         for event in query.events_for_glass(glass_id)
         if bundle.analysis_start_sec <= event.start_time_sec <= bundle.analysis_end_sec
+        and (include_all_events or is_major_event(event.event_type))
     )
     highlights = tuple(
         ReviewGraphHighlight(
@@ -142,6 +145,11 @@ def build_review_graph_model(
         ),
         assumed_state_end_sec=(
             retrospective.end_time_sec if initial_hold else None
+        ),
+        selected_event_timestamp_sec=(
+            _clamp(selected_event_timestamp_sec, bundle.analysis_start_sec, bundle.analysis_end_sec)
+            if selected_event_timestamp_sec is not None
+            else None
         ),
     )
 

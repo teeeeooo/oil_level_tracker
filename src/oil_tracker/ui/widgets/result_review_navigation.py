@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from oil_tracker.application.services.event_presentation import event_type_label
+from oil_tracker.application.services.event_presentation import event_type_label, is_major_event
 from oil_tracker.domain.review import ReviewFilter
 from oil_tracker.ui.presentation_labels import result_state_label
 
@@ -53,12 +53,13 @@ class ResultReviewNavigation(QWidget):
     eventSelected = Signal(object)
     filterChanged = Signal(str)
     debugFilterChanged = Signal(str)
+    eventScopeChanged = Signal(str)
     previousRequested = Signal()
     nextRequested = Signal()
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setMinimumWidth(300)
+        self.setMinimumWidth(260)
         self.glass_combo = QComboBox()
         self.result_label = QLabel("결과 bundle 없음")
         self.result_label.setWordWrap(True)
@@ -66,7 +67,19 @@ class ResultReviewNavigation(QWidget):
         self.event_list = QListWidget()
         self.review_list = QListWidget()
         self.debug_list = QListWidget()
-        self.tabs.addTab(self.event_list, "이벤트")
+        event_page = QWidget()
+        event_layout = QVBoxLayout(event_page)
+        event_layout.setContentsMargins(0, 0, 0, 0)
+        event_filter_row = QHBoxLayout()
+        event_filter_row.addWidget(QLabel("표시"))
+        self.event_scope = QComboBox()
+        self.event_scope.addItem("주요 이벤트", "major")
+        self.event_scope.addItem("모든 이벤트", "all")
+        event_filter_row.addWidget(self.event_scope, 1)
+        event_layout.addLayout(event_filter_row)
+        event_layout.addWidget(self.event_list, 1)
+        self.event_page = event_page
+        self.event_tab_index = self.tabs.addTab(event_page, "이벤트")
 
         review_page = QWidget()
         review_layout = QVBoxLayout(review_page)
@@ -82,7 +95,7 @@ class ResultReviewNavigation(QWidget):
         filter_row.addWidget(self.filter_count)
         review_layout.addLayout(filter_row)
         review_layout.addWidget(self.review_list, 1)
-        self.tabs.addTab(review_page, "검토 필요")
+        self.review_tab_index = self.tabs.addTab(review_page, "검토 필요")
 
         debug_page = QWidget()
         debug_layout = QVBoxLayout(debug_page)
@@ -115,6 +128,9 @@ class ResultReviewNavigation(QWidget):
         self.glass_combo.currentIndexChanged.connect(self._glass_changed)
         self.filter_combo.currentIndexChanged.connect(self._filter_changed)
         self.debug_filter_combo.currentIndexChanged.connect(self._debug_filter_changed)
+        self.event_scope.currentIndexChanged.connect(
+            lambda _index: self.eventScopeChanged.emit(self.current_event_scope())
+        )
         self.event_list.currentItemChanged.connect(self._event_selected)
         self.event_list.itemActivated.connect(self._event_activated)
         self.review_list.itemActivated.connect(self._review_activated)
@@ -122,6 +138,7 @@ class ResultReviewNavigation(QWidget):
         self.previous_button.clicked.connect(self.previousRequested)
         self.next_button.clicked.connect(self.nextRequested)
         self.set_debug_records((), enabled=False)
+        self.set_mode("general")
 
     def set_bundle(self, bundle, query, selected_glass_id: str | None = None) -> None:
         self.glass_combo.blockSignals(True)
@@ -150,6 +167,9 @@ class ResultReviewNavigation(QWidget):
     def current_filter(self) -> ReviewFilter:
         return ReviewFilter(str(self.filter_combo.currentData() or ReviewFilter.ALL.value))
 
+    def current_event_scope(self) -> str:
+        return str(self.event_scope.currentData() or "major")
+
     def current_debug_filter(self) -> tuple[str, set[str]]:
         value = self.debug_filter_combo.currentData() or ("all", ())
         return str(value[0]), set(value[1])
@@ -175,6 +195,8 @@ class ResultReviewNavigation(QWidget):
         )
         self.event_list.clear()
         for event in query.events_for_glass(glass_id):
+            if self.current_event_scope() != "all" and not is_major_event(event.event_type):
+                continue
             duration = f"–{event.end_time_sec:.3f}s" if event.end_time_sec is not None else ""
             capture = " · 캡처 기록됨" if event.capture_path else ""
             item = QListWidgetItem(
@@ -209,10 +231,17 @@ class ResultReviewNavigation(QWidget):
         self.eventSelected.emit(None)
 
     def active_tab_is_events(self) -> bool:
-        return self.tabs.currentWidget() is self.event_list
+        return self.tabs.currentWidget() is self.event_page
 
     def active_tab_is_debug(self) -> bool:
         return self.tabs.currentWidget() is self.tabs.widget(self.debug_tab_index)
+
+    def set_mode(self, mode: str) -> None:
+        debug = mode == "debug"
+        self.tabs.setTabVisible(self.event_tab_index, not debug)
+        self.tabs.setTabVisible(self.review_tab_index, not debug)
+        self.tabs.setTabVisible(self.debug_tab_index, debug)
+        self.tabs.setCurrentIndex(self.debug_tab_index if debug else self.event_tab_index)
 
     def _refresh_debug_list(self) -> None:
         self.debug_list.clear()
