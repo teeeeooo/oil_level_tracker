@@ -201,7 +201,9 @@ class ResultReviewWindow(QMainWindow):
         self.debug_details.exportRequested.connect(self.export_debug_case)
         self.transport.playToggled.connect(self._play_toggled)
         self.transport.stepRequested.connect(self.playback.step)
+        self.transport.skipRequested.connect(self._skip_seconds)
         self.transport.seekRequested.connect(self._seek_fraction)
+        self.transport.timeRequested.connect(self._seek_timestamp)
         self.transport.speedChanged.connect(self.playback.set_speed)
         self.playback.frameReady.connect(self._frame_ready)
         self.playback.metadataChanged.connect(self._metadata_changed)
@@ -601,6 +603,16 @@ class ResultReviewWindow(QMainWindow):
         metadata = self.playback.metadata
         if metadata is not None:
             self.playback.seek(metadata.duration_sec * float(fraction))
+
+    def _skip_seconds(self, delta_sec: float) -> None:
+        self._seek_timestamp(self.current_time + float(delta_sec))
+
+    def _seek_timestamp(self, timestamp_sec: float) -> None:
+        metadata = self.playback.metadata
+        if metadata is not None:
+            self.playback.seek(
+                min(metadata.duration_sec, max(0.0, float(timestamp_sec)))
+            )
 
     def _jump_to(self, timestamp: float) -> None:
         if self.bundle is None:

@@ -50,8 +50,10 @@ class WorkbenchPlaybackController(QObject):
     def _connect(self) -> None:
         self.transport.playToggled.connect(self.toggle_play)
         self.transport.stepRequested.connect(self.step_frame)
+        self.transport.skipRequested.connect(self.skip_seconds)
         self.transport.seekRequested.connect(self.seek_fraction)
         self.transport.seekReleased.connect(self.schedule_preview)
+        self.transport.timeRequested.connect(self.seek_timestamp)
         self.transport.speedChanged.connect(self.set_playback_speed)
         self.play_timer.timeout.connect(self.play_tick)
         self.preview_timer.timeout.connect(self.request_preview)
@@ -102,6 +104,16 @@ class WorkbenchPlaybackController(QObject):
             return
         self.load_frame(metadata.duration_sec * fraction)
         self.preview_timer.start()
+
+    def skip_seconds(self, delta_sec: float) -> None:
+        self.seek_timestamp(self.current_time + float(delta_sec))
+
+    def seek_timestamp(self, timestamp_sec: float) -> None:
+        metadata = self.workbench.session.video_metadata
+        if metadata is None:
+            return
+        self.load_frame(min(metadata.duration_sec, max(0.0, float(timestamp_sec))))
+        self.schedule_preview()
 
     def load_frame(self, timestamp: float, *, reset_view: bool = False) -> None:
         try:

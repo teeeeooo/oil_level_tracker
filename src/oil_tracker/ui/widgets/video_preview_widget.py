@@ -43,7 +43,9 @@ class VideoPreviewWidget(QWidget):
         self.play_timer.timeout.connect(self._play_tick)
         self.transport.playToggled.connect(self.toggle_play)
         self.transport.stepRequested.connect(self.step_frame)
+        self.transport.skipRequested.connect(self.skip_seconds)
         self.transport.seekRequested.connect(self.seek_fraction)
+        self.transport.timeRequested.connect(self.load_frame)
         self.transport.speedChanged.connect(self._set_speed)
         self.transport.setEnabled(False)
 
@@ -126,6 +128,9 @@ class VideoPreviewWidget(QWidget):
     def seek_fraction(self, fraction: float) -> None:
         if self.reader is not None:
             self.load_frame(self.reader.metadata.duration_sec * fraction)
+
+    def skip_seconds(self, delta_sec: float) -> None:
+        self.load_frame(self.current_time + float(delta_sec))
 
     def _set_speed(self, value: float) -> None:
         self.playback_speed = value
