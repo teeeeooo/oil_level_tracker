@@ -35,10 +35,9 @@ Basic mode shows only frequent user decisions:
 - initial observation state;
 - judgment mode;
 - analysis-area editing and reference-line guidance;
-- exclusion regions;
-- optional real-length conversion.
+- exclusion regions.
 
-Advanced mode retains geometry coordinates, mm/pixel details, margin and detector settings. Existing `.oilrecipe` compatibility is required.
+Advanced mode retains geometry coordinates, margin and detector settings. Workbench no longer exposes real-length/mm-per-pixel configuration. Existing `.oilrecipe` values remain readable for compatibility and historical result interpretation, but are not a current editing surface.
 
 ### Focused analysis-area editing
 
@@ -135,7 +134,7 @@ Selecting a row seeks the Workbench to that Glass/timestamp. Recipe, video, anal
 - One source and multiple targets are supported.
 - Identity, name, inclusion, center, reference line and exclusions remain target-owned.
 - Judgment, detector, margin and initial state are copied by default.
-- mm/pixel and ellipse size are explicit options.
+- ellipse size is an explicit option.
 - Mutable settings are deep-copied.
 - Geometry compatibility is checked before any target changes.
 - The full multi-target change is atomic and undoable.
@@ -164,7 +163,8 @@ drag seeking is bounded/throttled and flushes the final release position.
 - The current-scene card and Glass list share the left area without shrinking the video unnecessarily.
 - Basic settings avoid awkward wrapped coordinate summaries.
 - Wheel events scroll the settings panel instead of changing spin/combo values; keyboard/direct controls still edit values.
-- Real-length conversion is visibly optional and does not warn when disabled.
+- Real-length conversion is absent from Workbench and settings-copy UI; new
+  setup remains px-based while legacy `.oilrecipe` values stay readable.
 - Foam guidance separates detector interpretation from recommended user action and never mutates initial state automatically. A future S12 candidate may make the post-confirmation action guidance more explicit when the current recommendation stops at confirming whether Foam is real; this remains a copy/actionability refinement candidate, not an authorized implementation slice.
 - Multi-frame preflight is a modeless resizable window rather than a central-area-shrinking dock.
 

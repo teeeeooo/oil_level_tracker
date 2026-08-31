@@ -164,7 +164,6 @@ def test_dialog_shows_source_excludes_it_from_targets_and_uses_safe_defaults(qtb
     target = InspectionRecipe.default_glass(640, 480, 2)
     excluded = InspectionRecipe.default_glass(640, 480, 3)
     excluded.enabled = False
-    source.mm_per_pixel = None
     recipe.glasses = [source, target, excluded]
     dialog = GlassSettingsCopyDialog(recipe, source.id)
     qtbot.addWidget(dialog)
@@ -177,9 +176,8 @@ def test_dialog_shows_source_excludes_it_from_targets_and_uses_safe_defaults(qtb
     assert [dialog.option_checks[key].isChecked() for key in (
         "judgment_rule", "detector_settings", "margin_ratio", "initial_state"
     )] == [True, True, True, True]
-    assert not dialog.option_checks["mm_per_pixel"].isChecked()
     assert not dialog.option_checks["ellipse_size"].isChecked()
-    assert "미설정 값 복사" in dialog.option_checks["mm_per_pixel"].text()
+    assert "mm_per_pixel" not in dialog.option_checks
     assert "중심 위치와 기준점" in dialog.option_checks["ellipse_size"].toolTip()
 
     dialog.select_all_button.click()

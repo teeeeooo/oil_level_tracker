@@ -39,7 +39,9 @@ scaling and the result is recorded in the owning evidence/closeout.
 - Verify stored `.oilrecipe` coordinates match source pixels after window resizing.
 - Scroll the settings panel while the pointer is over spin boxes and combo boxes; confirm values do not change and the panel continues scrolling.
 - Verify keyboard arrows, direct entry and arrow buttons still edit wheel-safe controls.
-- Toggle **실제 길이 환산 — 선택 사항** off/on and confirm px-only operation, valid mm display and saved `None` behavior.
+- Confirm Workbench basic/advanced settings and the settings-copy dialog do not
+  expose actual-length or `mm_per_pixel` controls. New setup remains px-based;
+  opening a legacy Profile that contains the field must not fail.
 - Confirm Foam guidance separates detection interpretation and recommended action.
 - Use **초기 상태 설정으로 이동** and confirm the selected Glass remains selected, the initial-state field receives focus and the Recipe is not changed automatically.
 

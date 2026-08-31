@@ -93,12 +93,6 @@ class GlassSettingsCopyDialog(QDialog):
 
         option_group = QGroupBox("복사할 설정")
         option_layout = QVBoxLayout(option_group)
-        source_mm = source.mm_per_pixel if source is not None else None
-        mm_text = (
-            "길이 환산값 (원본: 미설정 — 선택 시 미설정 값 복사)"
-            if source_mm is None
-            else f"길이 환산값 (원본: {source_mm:g} mm/pixel)"
-        )
         option_specs = (
             (
                 "judgment_rule",
@@ -109,7 +103,6 @@ class GlassSettingsCopyDialog(QDialog):
             ("detector_settings", "검출기 설정", "현재 검출기 설정 전체를 독립된 값으로 복사합니다.", True),
             ("margin_ratio", "테두리 제외 범위", "타원 내부의 테두리 제외 비율을 복사합니다.", True),
             ("initial_state", "분석 시작 시 상태", "분석 시작 시 유면 상태 가정을 복사합니다.", True),
-            ("mm_per_pixel", mm_text, "미설정 값도 선택한 경우 정확히 복사합니다.", False),
             ("ellipse_size", "타원 크기", "가로·세로 반지름만 복사합니다. 중심 위치와 기준점은 복사되지 않습니다.", False),
         )
         for key, text, tooltip, checked in option_specs:
@@ -157,7 +150,7 @@ class GlassSettingsCopyDialog(QDialog):
             detector_settings=self.option_checks["detector_settings"].isChecked(),
             margin_ratio=self.option_checks["margin_ratio"].isChecked(),
             initial_state=self.option_checks["initial_state"].isChecked(),
-            mm_per_pixel=self.option_checks["mm_per_pixel"].isChecked(),
+            mm_per_pixel=False,
             ellipse_size=self.option_checks["ellipse_size"].isChecked(),
         )
         return GlassSettingsCopyRequest(self.source_glass_id, target_ids, options)

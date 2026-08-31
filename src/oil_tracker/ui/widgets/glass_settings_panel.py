@@ -48,7 +48,6 @@ class GlassSettingsPanel(QWidget):
         self._validation_messages: dict[str, QLabel] = {}
         self._last_focused_field: str | None = None
         self._selected_glass_id: str | None = None
-        self._scale_cache: dict[str, float] = {}
         self._interaction_target: str | None = None
         self._interaction_zone_id: str | None = None
         self._interaction_update = False
@@ -101,25 +100,6 @@ class GlassSettingsPanel(QWidget):
         area_buttons.addWidget(self.edit_roi, 1)
         area_buttons.addWidget(self.reset_glass)
 
-        self.has_scale = QCheckBox("mm 단위 함께 표시")
-        self.has_scale.setToolTip(
-            "선택 사항입니다. 사용하지 않아도 분석과 px 단위 결과 생성에는 영향이 없습니다."
-        )
-        self.scale = _double(0.000001, 1000, decimals=6)
-        self.scale.setSuffix(" mm")
-        self.scale.setToolTip("1 px에 해당하는 실제 길이를 mm 단위로 입력합니다.")
-        self.scale_container = QWidget()
-        scale_row = QVBoxLayout(self.scale_container)
-        scale_row.setContentsMargins(0, 0, 0, 0)
-        scale_row.setSpacing(6)
-        scale_row.addWidget(self.has_scale)
-        scale_value_row = QHBoxLayout()
-        scale_value_row.setContentsMargins(0, 0, 0, 0)
-        scale_value_row.setSpacing(6)
-        scale_value_row.addWidget(QLabel("1 px ="))
-        scale_value_row.addWidget(self.scale, 1)
-        scale_row.addLayout(scale_value_row)
-
         basic = QGroupBox("기본 설정")
         self.form = QFormLayout(basic)
         self.form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
@@ -133,8 +113,6 @@ class GlassSettingsPanel(QWidget):
         self.form.addRow(self._message_label("zero_line_y"))
         self.form.addRow("분석 시작 상태", self.initial_state_container)
         self.form.addRow("판정 방식", self.judgment)
-        self.form.addRow("실제 길이 환산 (선택)", self.scale_container)
-        self.form.addRow(self._message_label("mm_per_pixel"))
         container_layout.addWidget(basic)
 
         self.exclusion_group = QGroupBox("검출 제외 영역")
@@ -230,7 +208,6 @@ class GlassSettingsPanel(QWidget):
             "initial_state": [self.initial, self.confirm_initial],
             "initial_state_confirmation": [self.confirm_initial],
             "exclusions": [self.exclusions, self.add_ex, self.del_ex],
-            "mm_per_pixel": [self.has_scale, self.scale],
             "margin": [self.margin],
             "glasses": [self.enabled],
         }
@@ -277,8 +254,6 @@ class GlassSettingsPanel(QWidget):
             lambda _index: self._emit("initial_state", self.initial.currentData())
         )
         self.confirm_initial.clicked.connect(self.initialStateConfirmRequested)
-        self.has_scale.toggled.connect(self._scale_changed)
-        self.scale.editingFinished.connect(self._scale_changed)
         self.judgment.currentIndexChanged.connect(
             lambda _index: self._emit("judgment_mode", self.judgment.currentData())
         )
@@ -339,12 +314,6 @@ class GlassSettingsPanel(QWidget):
         initial = initial_state_for_ui(glass.initial_state)
         index = self.initial.findData(initial.value)
         self.initial.setCurrentIndex(max(0, index))
-        if glass.mm_per_pixel is not None and glass.mm_per_pixel > 0:
-            self._scale_cache[glass.id] = float(glass.mm_per_pixel)
-        cached_scale = self._scale_cache.get(glass.id, 1.0)
-        self.has_scale.setChecked(glass.mm_per_pixel is not None)
-        self.scale.setValue(float(glass.mm_per_pixel or cached_scale))
-        self.scale.setEnabled(glass.mm_per_pixel is not None)
         judgment_index = self.judgment.findData(glass.judgment_rule.mode.value)
         self.judgment.setCurrentIndex(max(0, judgment_index))
         self.margin.setValue(glass.geometry.margin_ratio)
@@ -526,13 +495,6 @@ class GlassSettingsPanel(QWidget):
     def _emit(self, key: str, value) -> None:
         if not self._updating:
             self.fieldChanged.emit(key, value)
-
-    def _scale_changed(self, *_args) -> None:
-        enabled = self.has_scale.isChecked()
-        self.scale.setEnabled(enabled)
-        if enabled and self._selected_glass_id is not None:
-            self._scale_cache[self._selected_glass_id] = float(self.scale.value())
-        self._emit("mm_per_pixel", float(self.scale.value()) if enabled else None)
 
     def _delete_exclusion(self) -> None:
         item = self.exclusions.currentItem()

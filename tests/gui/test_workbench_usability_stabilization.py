@@ -250,7 +250,7 @@ def test_video_context_reset_and_same_context_frame_preserve_view_semantics(qtbo
     assert workbench.profile_has_unsaved_changes is False
 
 
-def test_settings_basic_area_has_no_coordinate_summary_and_scale_is_optional(qtbot):
+def test_settings_basic_area_has_no_coordinate_summary_or_length_conversion(qtbot):
     panel = GlassSettingsPanel()
     qtbot.addWidget(panel)
     panel.resize(420, 620)
@@ -262,24 +262,11 @@ def test_settings_basic_area_has_no_coordinate_summary_and_scale_is_optional(qtb
     assert panel.findChild(QLabel, "roiSummaryCard") is None
     assert panel.edit_roi.text() == "분석 영역 편집"
     assert panel.reset_glass.text() == "Glass 초기화"
-    assert panel.has_scale.text() == "mm 단위 함께 표시"
-    assert panel.has_scale.toolTip()
-    assert panel.has_scale.parentWidget() is not panel.advanced_container
-    assert not panel.has_scale.isChecked()
-    assert not panel.scale.isEnabled()
-
-    emitted = []
-    panel.fieldChanged.connect(lambda key, value: emitted.append((key, value)))
-    panel.has_scale.setChecked(True)
-    assert panel.scale.isEnabled()
-    assert emitted[-1][0] == "mm_per_pixel"
-    assert emitted[-1][1] > 0
-    panel.scale.setValue(0.25)
-    panel.scale.editingFinished.emit()
-    panel.has_scale.setChecked(False)
-    assert emitted[-1] == ("mm_per_pixel", None)
-    panel.has_scale.setChecked(True)
-    assert panel.scale.value() == 0.25
+    visible_text = " ".join(widget.text() for widget in panel.findChildren(QLabel))
+    assert "실제 길이" not in visible_text
+    assert "mm 단위" not in visible_text
+    assert not hasattr(panel, "has_scale")
+    assert not hasattr(panel, "scale")
 
     panel.focus_field("initial_state")
     QApplication.processEvents()
@@ -302,18 +289,12 @@ def test_basic_settings_rows_do_not_overlap_or_clip_with_larger_font(qtbot):
     initial = _rect_in(panel.initial, panel)
     confirmation = _rect_in(panel.initial_confirmation, panel)
     confirm_button = _rect_in(panel.confirm_initial, panel)
-    scale_toggle = _rect_in(panel.has_scale, panel)
-    scale_input = _rect_in(panel.scale, panel)
-
     assert panel.confirm_initial.text() == "다시 확인"
     assert initial.bottom() < confirmation.top()
     assert not initial.intersects(confirm_button)
     assert not confirmation.intersects(confirm_button)
-    assert scale_toggle.bottom() < scale_input.top()
     assert panel.initial.width() >= panel.initial.minimumSizeHint().width()
     assert panel.confirm_initial.width() >= panel.confirm_initial.sizeHint().width()
-    assert panel.has_scale.width() >= panel.has_scale.sizeHint().width()
-    assert panel.scale.width() >= panel.scale.minimumSizeHint().width()
 
 
 def test_wheel_safe_controls_do_not_change_values_and_keep_keyboard_editing(qtbot):
@@ -325,7 +306,7 @@ def test_wheel_safe_controls_do_not_change_values_and_keep_keyboard_editing(qtbo
     panel.show()
     QApplication.processEvents()
 
-    for control in (panel.zero, panel.scale, panel.canny_low, panel.initial, panel.judgment):
+    for control in (panel.zero, panel.canny_low, panel.initial, panel.judgment):
         before = control.currentIndex() if hasattr(control, "currentIndex") else control.value()
         QApplication.sendEvent(control, _wheel_event())
         after = control.currentIndex() if hasattr(control, "currentIndex") else control.value()

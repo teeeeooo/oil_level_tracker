@@ -104,7 +104,9 @@ The feature and base comparison must use identical dataset bytes, benchmark cata
 
 - Five progress steps remain readable at 1280 px and Windows 100%, 125% and 150% scale.
 - Video canvas remains usable on a small laptop layout; transport controls have a distinct non-overlapping row.
-- User-facing terminology follows `Glass`, `분석 영역`, `유면/유면 경계`, `거품` and optional real-length conversion.
+- User-facing terminology follows `Glass`, `분석 영역`, `유면/유면 경계` and
+  `거품`. Workbench provides no real-length conversion editor; legacy
+  `mm_per_pixel` data remains read-compatible only.
 - Settings-panel wheel events do not change values.
 - Foam guidance provides interpretation and action without mutating Recipe state.
 - Current-scene guidance contains status, observed state, position and at most
