@@ -54,7 +54,7 @@ class GlassSettingsPanel(QWidget):
         self._interaction_update = False
 
         container = QWidget()
-        container.setMinimumWidth(300)
+        container.setMinimumWidth(270)
         container.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Maximum)
         container_layout = QVBoxLayout(container)
         container_layout.setContentsMargins(4, 4, 8, 8)
@@ -77,12 +77,14 @@ class GlassSettingsPanel(QWidget):
         self.confirm_initial.setObjectName("secondaryActionButton")
         self.initial_confirmation = QLabel("확인 필요")
         self.initial_confirmation.setObjectName("ownershipHint")
-        initial_row = QVBoxLayout()
-        initial_controls = QHBoxLayout()
-        initial_controls.setSpacing(6)
-        initial_controls.addWidget(self.initial, 1)
-        initial_row.addLayout(initial_controls)
+        self.initial_confirmation.setWordWrap(True)
+        self.initial_state_container = QWidget()
+        initial_row = QVBoxLayout(self.initial_state_container)
+        initial_row.setContentsMargins(0, 0, 0, 0)
+        initial_row.setSpacing(6)
+        initial_row.addWidget(self.initial)
         initial_confirmation_row = QHBoxLayout()
+        initial_confirmation_row.setContentsMargins(0, 0, 0, 0)
         initial_confirmation_row.setSpacing(6)
         initial_confirmation_row.addWidget(self.initial_confirmation, 1)
         initial_confirmation_row.addWidget(self.confirm_initial)
@@ -99,18 +101,24 @@ class GlassSettingsPanel(QWidget):
         area_buttons.addWidget(self.edit_roi, 1)
         area_buttons.addWidget(self.reset_glass)
 
-        self.has_scale = QCheckBox("mm 단위도 함께 표시")
+        self.has_scale = QCheckBox("mm 단위 함께 표시")
         self.has_scale.setToolTip(
             "선택 사항입니다. 사용하지 않아도 분석과 px 단위 결과 생성에는 영향이 없습니다."
         )
         self.scale = _double(0.000001, 1000, decimals=6)
         self.scale.setSuffix(" mm")
         self.scale.setToolTip("1 px에 해당하는 실제 길이를 mm 단위로 입력합니다.")
-        scale_row = QHBoxLayout()
+        self.scale_container = QWidget()
+        scale_row = QVBoxLayout(self.scale_container)
+        scale_row.setContentsMargins(0, 0, 0, 0)
         scale_row.setSpacing(6)
         scale_row.addWidget(self.has_scale)
-        scale_row.addWidget(QLabel("1 px ="))
-        scale_row.addWidget(self.scale, 1)
+        scale_value_row = QHBoxLayout()
+        scale_value_row.setContentsMargins(0, 0, 0, 0)
+        scale_value_row.setSpacing(6)
+        scale_value_row.addWidget(QLabel("1 px ="))
+        scale_value_row.addWidget(self.scale, 1)
+        scale_row.addLayout(scale_value_row)
 
         basic = QGroupBox("기본 설정")
         self.form = QFormLayout(basic)
@@ -123,9 +131,9 @@ class GlassSettingsPanel(QWidget):
         self.form.addRow(self._message_label("geometry"))
         self.form.addRow("기준선 Y", self.zero)
         self.form.addRow(self._message_label("zero_line_y"))
-        self.form.addRow("분석 시작 상태", initial_row)
+        self.form.addRow("분석 시작 상태", self.initial_state_container)
         self.form.addRow("판정 방식", self.judgment)
-        self.form.addRow("실제 길이 환산 — 선택 사항", scale_row)
+        self.form.addRow("실제 길이 환산 (선택)", self.scale_container)
         self.form.addRow(self._message_label("mm_per_pixel"))
         container_layout.addWidget(basic)
 
@@ -370,7 +378,7 @@ class GlassSettingsPanel(QWidget):
 
     def set_initial_state_confirmation(self, confirmed: bool, message: str) -> None:
         self.initial_confirmation.setText(message)
-        self.confirm_initial.setText("확인됨" if confirmed else "시작 상태 확인")
+        self.confirm_initial.setText("다시 확인" if confirmed else "시작 상태 확인")
 
     def set_validation_issues(self, issues, glass_id: str | None) -> None:
         for widgets in self._field_widgets.values():

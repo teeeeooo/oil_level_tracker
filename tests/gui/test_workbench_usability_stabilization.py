@@ -262,7 +262,7 @@ def test_settings_basic_area_has_no_coordinate_summary_and_scale_is_optional(qtb
     assert panel.findChild(QLabel, "roiSummaryCard") is None
     assert panel.edit_roi.text() == "분석 영역 편집"
     assert panel.reset_glass.text() == "Glass 초기화"
-    assert panel.has_scale.text() == "mm 단위도 함께 표시"
+    assert panel.has_scale.text() == "mm 단위 함께 표시"
     assert panel.has_scale.toolTip()
     assert panel.has_scale.parentWidget() is not panel.advanced_container
     assert not panel.has_scale.isChecked()
@@ -285,6 +285,35 @@ def test_settings_basic_area_has_no_coordinate_summary_and_scale_is_optional(qtb
     QApplication.processEvents()
     assert panel._last_focused_field == "initial_state"
     assert panel.initial.hasFocus()
+
+
+def test_basic_settings_rows_do_not_overlap_or_clip_with_larger_font(qtbot):
+    panel = GlassSettingsPanel()
+    qtbot.addWidget(panel)
+    font = panel.font()
+    font.setPointSizeF(font.pointSizeF() + 3.0)
+    panel.setFont(font)
+    panel.resize(320, 720)
+    panel.set_glass(InspectionRecipe.default_glass(640, 480))
+    panel.set_initial_state_confirmation(True, "확인됨")
+    panel.show()
+    QApplication.processEvents()
+
+    initial = _rect_in(panel.initial, panel)
+    confirmation = _rect_in(panel.initial_confirmation, panel)
+    confirm_button = _rect_in(panel.confirm_initial, panel)
+    scale_toggle = _rect_in(panel.has_scale, panel)
+    scale_input = _rect_in(panel.scale, panel)
+
+    assert panel.confirm_initial.text() == "다시 확인"
+    assert initial.bottom() < confirmation.top()
+    assert not initial.intersects(confirm_button)
+    assert not confirmation.intersects(confirm_button)
+    assert scale_toggle.bottom() < scale_input.top()
+    assert panel.initial.width() >= panel.initial.minimumSizeHint().width()
+    assert panel.confirm_initial.width() >= panel.confirm_initial.sizeHint().width()
+    assert panel.has_scale.width() >= panel.has_scale.sizeHint().width()
+    assert panel.scale.width() >= panel.scale.minimumSizeHint().width()
 
 
 def test_wheel_safe_controls_do_not_change_values_and_keep_keyboard_editing(qtbot):
