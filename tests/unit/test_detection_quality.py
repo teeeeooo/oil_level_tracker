@@ -39,7 +39,10 @@ def test_shared_quality_helper_matches_current_frame_preview_card_semantics():
         assert preview.quality == PreviewQuality(expected.value)
         if detection.fill_state == FillState.FOAMING_VISIBLE:
             assert preview.interpretation == "거품 가능성이 감지됨"
-            assert preview.recommendation == "영상에서 실제 거품인지 확인하세요."
+            assert preview.recommendation == (
+                "분석 시작 장면의 거품이라면 시작 상태를 ‘거품이 보임’으로 "
+                "설정하고 확인하세요."
+            )
             assert preview.action_key == "initial_state"
         else:
             assert preview.interpretation == assessment.reason

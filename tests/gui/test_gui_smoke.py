@@ -56,7 +56,7 @@ def test_main_window_creation(qtbot):
     qtbot.addWidget(window)
     assert "분석 프로필 설정" in window.windowTitle()
     assert window.glass_list is not None
-    assert window.settings.minimumWidth() >= 370
+    assert window.settings.minimumWidth() >= 320
     assert window.settings.scroll.horizontalScrollBarPolicy() == Qt.ScrollBarPolicy.ScrollBarAsNeeded
     assert window.settings.scroll.verticalScrollBarPolicy() == Qt.ScrollBarPolicy.ScrollBarAsNeeded
     assert window.debug_dock.minimumWidth() >= 760

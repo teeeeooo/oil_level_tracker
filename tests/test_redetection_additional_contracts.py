@@ -164,6 +164,8 @@ def test_candidate_comparison_shows_feature_penalty_and_position_delta(qtbot):
         _record("official", 100.0, 0.7, 0.1),
         _record("rerun", 103.0, 0.8, 0.2),
     )
+    assert widget.official.tabs.currentIndex() == 1
+    assert widget.official.tabs.tabText(1) == "후보 비교"
     rows = {
         widget.delta_table.item(row, 0).text(): widget.delta_table.item(row, 3).text()
         for row in range(widget.delta_table.rowCount())

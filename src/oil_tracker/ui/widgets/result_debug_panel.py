@@ -362,13 +362,13 @@ def _state_summary_text(record) -> str:
 
 def _raw_state_text(record) -> str:
     payload = {
-        "positions": record.positions,
-        "confidence": record.confidence,
-        "state": record.state,
-        "flags": record.flags,
-        "capture_reasons": record.capture_reasons,
-        "profiles": record.profiles,
-        "warnings": record.warnings,
+        "positions": getattr(record, "positions", {}),
+        "confidence": getattr(record, "confidence", {}),
+        "state": getattr(record, "state", {}),
+        "flags": getattr(record, "flags", ()),
+        "capture_reasons": getattr(record, "capture_reasons", ()),
+        "profiles": getattr(record, "profiles", {}),
+        "warnings": getattr(record, "warnings", ()),
     }
     return json.dumps(payload, ensure_ascii=False, indent=2, default=str)
 

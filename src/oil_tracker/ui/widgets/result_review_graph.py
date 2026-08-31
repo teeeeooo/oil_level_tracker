@@ -144,12 +144,19 @@ class ResultReviewGraph(QWidget):
                 edgecolors="#0891b2",
                 zorder=6,
             )
-        for marker in model.truth_markers:
+        for index, marker in enumerate(model.truth_markers):
             artist = self.axes.axvline(
                 marker.timestamp_sec,
                 linestyle=(0, (1.0, 1.4)),
                 linewidth=2.8 if marker.selected else 1.1,
                 alpha=1.0 if marker.selected else 0.55,
+                label=(
+                    "선택 사용자 정답"
+                    if marker.selected
+                    else "사용자 정답"
+                    if index == 0
+                    else None
+                ),
             )
             artist.set_gid(
                 "truth:"

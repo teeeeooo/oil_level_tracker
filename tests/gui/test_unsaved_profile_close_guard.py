@@ -383,7 +383,8 @@ def test_session_only_edit_keeps_profile_clean_and_s8_c2_separation(qtbot, tmp_p
     assert controller.recipe.to_dict() == recipe_before
     assert controller.profile_has_unsaved_changes is False
     assert window.profile_name_label.text() == controller.recipe.name
-    assert "Profile에는 저장되지 않음" in window.session_bar.title()
+    assert window.session_bar.title() == "현재 분석"
+    assert "프로필에는 저장되지 않습니다" in window.session_bar.toolTip()
 
 
 def test_save_as_on_close_keeps_extension_normalization(qtbot, tmp_path, monkeypatch):
