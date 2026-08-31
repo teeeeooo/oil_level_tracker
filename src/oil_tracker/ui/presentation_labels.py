@@ -68,6 +68,25 @@ RESULT_STATE_LABELS = {
     ResultState.NOT_APPLICABLE: "판정 대상 아님",
 }
 
+DEBUG_CAPTURE_REASON_LABELS = {
+    "first_sample": "첫 분석 장면",
+    "last_sample": "마지막 분석 장면",
+    "compressor_nearest": "압축기 기동 인접",
+    "invalid": "유효하지 않은 검출",
+    "low_confidence": "낮은 신뢰도",
+    "unknown_review": "사용자 확인 필요",
+    "detection_lost": "검출 유실",
+    "glare_or_fog": "흐림·반사광",
+    "foam": "거품 영향",
+    "oil_position_jump": "유면 위치 급변",
+    "foam_position_jump": "거품 위치 급변",
+    "state_transition": "상태 전환",
+    "candidate_ambiguity": "후보 판정 근접",
+    "no_selected_candidate": "선택 후보 없음",
+    "rejected_only": "모든 후보 탈락",
+    "full_trace": "전체 추적 기록",
+}
+
 VALIDATION_MESSAGE_BY_CODE = {
     "STRUCT_SCHEMA": "지원하지 않는 프로필 형식입니다.",
     "STRUCT_FRAME": "기준 영상 크기가 올바르지 않습니다.",
@@ -135,6 +154,10 @@ def fill_state_label(value: FillState) -> str:
 
 def result_state_label(value: ResultState) -> str:
     return enum_label(value, RESULT_STATE_LABELS)
+
+
+def debug_capture_reason_label(value: str) -> str:
+    return DEBUG_CAPTURE_REASON_LABELS.get(str(value), str(value))
 
 
 def initial_state_for_ui(value: InitialObservationState) -> InitialObservationState:

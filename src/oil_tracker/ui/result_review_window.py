@@ -183,7 +183,7 @@ class ResultReviewWindow(QMainWindow):
         splitter.setStretchFactor(0, 0)
         splitter.setStretchFactor(1, 1)
         splitter.setStretchFactor(2, 0)
-        splitter.setSizes([310, 820, 410])
+        splitter.setSizes([280, 900, 360])
         self.setCentralWidget(splitter)
         self.statusBar().showMessage("결과 bundle을 열어 주세요.")
         self._set_debug_mode_available(False, "이 결과에는 디버그 기록이 없습니다.")

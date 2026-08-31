@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 
 from oil_tracker.application.services.event_presentation import event_type_label, is_major_event
 from oil_tracker.domain.review import ReviewFilter
-from oil_tracker.ui.presentation_labels import result_state_label
+from oil_tracker.ui.presentation_labels import debug_capture_reason_label, result_state_label
 
 
 _FILTER_LABELS = (
@@ -30,15 +30,15 @@ _FILTER_LABELS = (
 
 _DEBUG_FILTERS = (
     ("all", "전체", set()),
-    ("low_confidence", "low confidence", {"low_confidence"}),
-    ("invalid_review", "invalid / review", {"invalid", "unknown_review"}),
-    ("detection_lost", "detection lost", {"detection_lost", "no_selected_candidate", "rejected_only"}),
-    ("glare_fog", "glare / fog", {"glare_or_fog"}),
-    ("foam", "foam", {"foam"}),
-    ("position_jump", "position jump", {"oil_position_jump", "foam_position_jump"}),
-    ("candidate_ambiguity", "candidate ambiguity", {"candidate_ambiguity"}),
-    ("state_transition", "state transition", {"state_transition"}),
-    ("markers", "start / end / compressor", {"first_sample", "last_sample", "compressor_nearest"}),
+    ("low_confidence", "낮은 신뢰도", {"low_confidence"}),
+    ("invalid_review", "유효하지 않음·확인 필요", {"invalid", "unknown_review"}),
+    ("detection_lost", "검출 유실·후보 없음", {"detection_lost", "no_selected_candidate", "rejected_only"}),
+    ("glare_fog", "흐림·반사광", {"glare_or_fog"}),
+    ("foam", "거품 영향", {"foam"}),
+    ("position_jump", "위치 급변", {"oil_position_jump", "foam_position_jump"}),
+    ("candidate_ambiguity", "후보 판정 근접", {"candidate_ambiguity"}),
+    ("state_transition", "상태 전환", {"state_transition"}),
+    ("markers", "시작·종료·압축기", {"first_sample", "last_sample", "compressor_nearest"}),
 )
 
 _EVENT_ROLE = int(Qt.ItemDataRole.UserRole) + 1
@@ -257,17 +257,17 @@ class ResultReviewNavigation(QWidget):
             self.debug_list.addItem(empty)
             return
         for summary in values:
-            reasons_text = ", ".join(summary.capture_reasons)
-            artifact = "artifact 있음" if summary.artifact_availability else "artifact 없음"
+            reasons_text = ", ".join(
+                debug_capture_reason_label(reason) for reason in summary.capture_reasons
+            )
             item = QListWidgetItem(
-                f"{summary.timestamp_sec:.3f}s · 장면 {summary.frame_index}\n"
-                f"{summary.fill_state} · confidence {summary.confidence:.3f}\n{reasons_text} · {artifact}"
+                f"{summary.timestamp_sec:.3f}초 · {reasons_text or '정기 기록'}"
             )
             item.setData(Qt.ItemDataRole.UserRole, summary.timestamp_sec)
             item.setData(_DEBUG_ROLE, summary)
             item.setToolTip(
-                f"glass: {summary.glass_id}\nrecord: {summary.record_id}\n"
-                f"reasons: {reasons_text}\nartifacts: {', '.join(summary.artifact_availability) or '-'}"
+                f"Glass: {summary.glass_id}\n기록 ID: {summary.record_id}\n"
+                f"기록 이유: {reasons_text}\n진단 이미지: {', '.join(summary.artifact_availability) or '-'}"
             )
             self.debug_list.addItem(item)
 

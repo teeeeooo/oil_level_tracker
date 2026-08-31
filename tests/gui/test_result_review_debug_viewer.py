@@ -265,6 +265,11 @@ def test_debug_record_activation_pauses_seeks_and_lazy_loads_once(qtbot, tmp_pat
     assert window.playback.is_playing is False
     assert repository.record_load_count == 1
     assert window.mode == "debug"
+    assert not window.navigation.tabs.isTabVisible(window.navigation.event_tab_index)
+    assert not window.navigation.tabs.isTabVisible(window.navigation.review_tab_index)
+    assert window.navigation.tabs.isTabVisible(window.navigation.debug_tab_index)
+    assert "낮은 신뢰도" in window.navigation.debug_list.item(0).text()
+    assert "confidence" not in window.navigation.debug_list.item(0).text()
     assert window.current_time == 2.012
     assert window.selected_debug_record.record_id == "record-1"
     assert "decoded 차이 +0.012초" in window.debug_details.summary.text()
@@ -295,6 +300,9 @@ def test_switching_back_to_general_hides_candidate_layer_and_preserves_time(qtbo
     assert window.current_time == timestamp
     assert window.selected_glass_id == glass_id
     assert window.detail_stack.currentWidget() is window.details
+    assert window.navigation.tabs.isTabVisible(window.navigation.event_tab_index)
+    assert window.navigation.tabs.isTabVisible(window.navigation.review_tab_index)
+    assert not window.navigation.tabs.isTabVisible(window.navigation.debug_tab_index)
     assert window.current_render_image != debug_image
     window.close()
 
@@ -309,14 +317,28 @@ def test_candidate_table_dynamic_details_and_highlight_rerenders_without_mutatin
     window._debug_record_activated(repository.summary)
     panel = window.debug_details
     assert panel.candidates.rowCount() == 2
+    assert panel.candidates.columnCount() == 5
+    assert [panel.tabs.tabText(index) for index in range(panel.tabs.count())] == [
+        "판정 요약",
+        "후보 비교",
+        "진단 이미지",
+    ]
+    assert "최종: 확인 필요" in panel.state_summary.toPlainText()
+    assert "LOW_CONFIDENCE" not in panel.state_summary.toPlainText()
+    assert panel.state_detail.isHidden()
     assert "new_dynamic_feature" in panel.candidate_detail.toPlainText()
+    assert "source:" not in panel.candidate_detail.toPlainText()
+    assert "canonical Y" not in panel.candidate_detail.toPlainText()
     record_before = repository.record
     normal = window.current_render_image.copy()
     panel.candidates.selectRow(1)
     assert window.highlighted_candidate == 1
     assert panel.candidates.currentRow() == 1
     assert "geometry" in panel.candidate_detail.toPlainText()
-    assert "raw oil Y" in panel.state_detail.toPlainText()
+    assert panel.candidates.item(1, 4).text() == "탈락"
+    panel.raw_toggle.setChecked(True)
+    assert not panel.state_detail.isHidden()
+    assert '"raw_oil_y"' in panel.state_detail.toPlainText()
     assert window.current_render_image != normal
     assert repository.record is record_before
     window.close()

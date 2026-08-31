@@ -6,6 +6,7 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import (
     QComboBox,
+    QHeaderView,
     QHBoxLayout,
     QLabel,
     QPushButton,
@@ -15,47 +16,52 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QTextEdit,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
 
+from oil_tracker.ui.presentation_labels import debug_capture_reason_label, fill_state_label
 
-_ARTIFACT_LABELS = {
-    "overlay": "검출 overlay",
-    "original_roi": "원본 ROI",
-    "ellipse_mask": "ellipse mask",
-    "effective_mask": "effective mask",
-    "exclusion_mask": "exclusion mask",
-    "grayscale": "grayscale",
-    "normalized": "normalized",
-    "blurred": "blurred",
-    "sobel": "Sobel",
-    "canny": "Canny",
-    "horizontal_mask": "horizontal mask",
-    "glare_mask": "glare mask",
-    "foam_mask": "Foam spatial component mask",
-    "foam_variance": "Foam variance map",
-    "foam_edge_density": "Foam edge-density map",
-    "foam_whiteness": "Foam whiteness map",
-    "foam_texture_evidence": "Foam texture evidence",
-    "foam_glare_excluded_mask": "Foam glare-excluded mask",
-    "foam_combined_evidence": "Foam combined evidence",
-    "foam_accepted_component": "Accepted Foam component",
-    "static_artifact_map": "static artifact map",
-}
+
+_ARTIFACTS = (
+    ("기본", "overlay", "검출 표시"),
+    ("기본", "original_roi", "원본 ROI"),
+    ("영역", "ellipse_mask", "타원 마스크"),
+    ("영역", "effective_mask", "유효 영역 마스크"),
+    ("영역", "exclusion_mask", "제외 영역 마스크"),
+    ("영역", "static_artifact_map", "고정 장애물 지도"),
+    ("경계", "grayscale", "회색조"),
+    ("경계", "normalized", "명암 정규화"),
+    ("경계", "blurred", "노이즈 완화"),
+    ("경계", "sobel", "Sobel 경계"),
+    ("경계", "canny", "Canny 경계"),
+    ("경계", "horizontal_mask", "수평 경계 마스크"),
+    ("경계", "glare_mask", "반사광 마스크"),
+    ("거품", "foam_mask", "공간 성분 마스크"),
+    ("거품", "foam_variance", "분산 지도"),
+    ("거품", "foam_edge_density", "경계 밀도 지도"),
+    ("거품", "foam_whiteness", "백색도 지도"),
+    ("거품", "foam_texture_evidence", "질감 근거"),
+    ("거품", "foam_glare_excluded_mask", "반사광 제외 마스크"),
+    ("거품", "foam_combined_evidence", "통합 근거"),
+    ("거품", "foam_accepted_component", "채택 성분"),
+)
+_ARTIFACT_LABELS = {key: label for _group, key, label in _ARTIFACTS}
+_ARTIFACT_GROUPS = {key: group for group, key, _label in _ARTIFACTS}
 
 _COLUMNS = (
     ("rank", "순위"),
     ("kind", "종류"),
-    ("source", "출처"),
-    ("canonical_y", "Y"),
-    ("feature_score", "feature"),
-    ("total_penalty", "penalty"),
-    ("final_score", "final"),
-    ("selected", "선택"),
-    ("rejected", "탈락"),
-    ("reject_reason", "탈락 사유"),
+    ("canonical_y", "위치 Y"),
+    ("final_score", "최종 점수"),
+    ("result", "결과"),
 )
+
+_CANDIDATE_KIND_LABELS = {
+    "oil_air": "유면",
+    "foam_front": "거품 경계",
+}
 
 
 class ResultDebugPanel(QWidget):
@@ -65,13 +71,30 @@ class ResultDebugPanel(QWidget):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setMinimumWidth(420)
+        self.setMinimumWidth(340)
         self._record = None
         self._pixmap = QPixmap()
         self._scale = 1.0
         self.summary = QLabel("디버그 장면을 선택해 주세요.")
         self.summary.setWordWrap(True)
+        self.summary.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.tabs = QTabWidget()
+
+        summary_page = QWidget()
+        summary_layout = QVBoxLayout(summary_page)
+        self.state_summary = QTextEdit()
+        self.state_summary.setReadOnly(True)
+        self.raw_toggle = QToolButton()
+        self.raw_toggle.setText("원시 진단값 보기")
+        self.raw_toggle.setCheckable(True)
+        self.raw_toggle.setArrowType(Qt.ArrowType.RightArrow)
+        self.state_detail = QTextEdit()
+        self.state_detail.setReadOnly(True)
+        self.state_detail.setVisible(False)
+        summary_layout.addWidget(self.state_summary, 1)
+        summary_layout.addWidget(self.raw_toggle)
+        summary_layout.addWidget(self.state_detail, 1)
+        self.tabs.addTab(summary_page, "판정 요약")
 
         candidate_page = QWidget()
         candidate_layout = QVBoxLayout(candidate_page)
@@ -80,39 +103,42 @@ class ResultDebugPanel(QWidget):
         self.candidates.setHorizontalHeaderLabels([title for _key, title in _COLUMNS])
         self.candidates.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.candidates.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
+        self.candidates.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        header = self.candidates.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        for column in (2, 3, 4):
+            header.setSectionResizeMode(column, QHeaderView.ResizeMode.ResizeToContents)
         self.candidate_detail = QTextEdit()
         self.candidate_detail.setReadOnly(True)
         candidate_split = QSplitter(Qt.Orientation.Vertical)
         candidate_split.addWidget(self.candidates)
         candidate_split.addWidget(self.candidate_detail)
-        candidate_split.setSizes([360, 240])
+        candidate_split.setSizes([320, 220])
         candidate_layout.addWidget(candidate_split)
-        self.tabs.addTab(candidate_page, "후보와 점수")
-
-        self.state_detail = QTextEdit()
-        self.state_detail.setReadOnly(True)
-        self.tabs.addTab(self.state_detail, "상태와 smoothing")
+        self.tabs.addTab(candidate_page, "후보 비교")
 
         artifact_page = QWidget()
         artifact_layout = QVBoxLayout(artifact_page)
-        controls = QHBoxLayout()
         self.artifact_combo = QComboBox()
-        for key, label in _ARTIFACT_LABELS.items():
-            self.artifact_combo.addItem(label, key)
-        self.fit_button = QPushButton("화면 맞춤")
-        self.actual_button = QPushButton("원본 크기")
+        for group, key, label in _ARTIFACTS:
+            self.artifact_combo.addItem(f"{group} · {label}", key)
+        artifact_layout.addWidget(self.artifact_combo)
+        controls = QHBoxLayout()
+        self.fit_button = QPushButton("맞춤")
+        self.actual_button = QPushButton("100%")
         self.zoom_out = QPushButton("−")
         self.zoom_in = QPushButton("+")
-        controls.addWidget(self.artifact_combo, 1)
         controls.addWidget(self.fit_button)
         controls.addWidget(self.actual_button)
+        controls.addStretch(1)
         controls.addWidget(self.zoom_out)
         controls.addWidget(self.zoom_in)
-        self.artifact_status = QLabel("artifact 없음")
+        self.artifact_status = QLabel("진단 이미지 없음")
         self.artifact_status.setWordWrap(True)
-        self.image_label = QLabel("artifact를 선택해 주세요.")
+        self.image_label = QLabel("진단 이미지를 선택해 주세요.")
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.image_label.setMinimumSize(360, 260)
+        self.image_label.setMinimumSize(280, 220)
         self.image_scroll = QScrollArea()
         self.image_scroll.setWidgetResizable(False)
         self.image_scroll.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -120,9 +146,9 @@ class ResultDebugPanel(QWidget):
         artifact_layout.addLayout(controls)
         artifact_layout.addWidget(self.artifact_status)
         artifact_layout.addWidget(self.image_scroll, 1)
-        self.tabs.addTab(artifact_page, "검출 artifact")
+        self.tabs.addTab(artifact_page, "진단 이미지")
 
-        self.export_button = QPushButton("선택 장면 디버그 재현 패키지 내보내기")
+        self.export_button = QPushButton("재현 패키지 내보내기")
         layout = QVBoxLayout(self)
         layout.addWidget(self.summary)
         layout.addWidget(self.tabs, 1)
@@ -130,6 +156,7 @@ class ResultDebugPanel(QWidget):
 
         self.candidates.currentCellChanged.connect(self._candidate_changed)
         self.artifact_combo.currentIndexChanged.connect(self._artifact_changed)
+        self.raw_toggle.toggled.connect(self._raw_visibility_changed)
         self.fit_button.clicked.connect(self.fit_image)
         self.actual_button.clicked.connect(lambda: self._set_scale(1.0))
         self.zoom_out.clicked.connect(lambda: self._set_scale(self._scale / 1.25))
@@ -143,10 +170,12 @@ class ResultDebugPanel(QWidget):
         self.summary.setText(message)
         self.candidates.setRowCount(0)
         self.candidate_detail.clear()
+        self.state_summary.clear()
         self.state_detail.clear()
+        self.raw_toggle.setChecked(False)
         self.image_label.setPixmap(QPixmap())
-        self.image_label.setText("artifact를 선택해 주세요.")
-        self.artifact_status.setText("artifact 없음")
+        self.image_label.setText("진단 이미지를 선택해 주세요.")
+        self.artifact_status.setText("진단 이미지 없음")
         self.export_button.setEnabled(False)
 
     def set_record(self, record, actual_timestamp: float | None = None) -> None:
@@ -156,28 +185,32 @@ class ResultDebugPanel(QWidget):
         if actual_timestamp is not None:
             delta = float(actual_timestamp) - float(record.timestamp_sec)
             delta_text = f" · decoded 차이 {delta:+.3f}초"
+        reasons = ", ".join(
+            debug_capture_reason_label(reason) for reason in record.capture_reasons
+        )
         self.summary.setText(
-            f"{record.glass_name or record.glass_id} · trace {record.timestamp_sec:.3f}초 · 장면 {record.frame_index}{delta_text}\n"
-            f"저장 사유: {', '.join(record.capture_reasons) or '-'}"
+            f"{record.glass_name or record.glass_id} · {record.timestamp_sec:.3f}초 · "
+            f"장면 {record.frame_index}{delta_text}\n기록 이유: {reasons or '정기 기록'}"
         )
         target_row = -1
         previous_blocked = self.candidates.blockSignals(True)
         try:
             self.candidates.setRowCount(len(record.candidates))
             for row, candidate in enumerate(record.candidates):
+                values = {
+                    "rank": candidate.get("rank"),
+                    "kind": _candidate_kind(candidate.get("kind")),
+                    "canonical_y": candidate.get("canonical_y"),
+                    "final_score": candidate.get("final_score"),
+                    "result": _candidate_result(candidate),
+                }
                 for column, (key, _title) in enumerate(_COLUMNS):
-                    value = candidate.get(key)
-                    if isinstance(value, float):
-                        text = f"{value:.4f}"
-                    elif key in {"selected", "rejected"}:
-                        text = "예" if value else "아니오"
-                    else:
-                        text = "-" if value in (None, "") else str(value)
+                    value = values[key]
+                    text = f"{value:.4f}" if isinstance(value, float) else _display(value)
                     item = QTableWidgetItem(text)
                     if key == "rank":
                         item.setData(Qt.ItemDataRole.UserRole, row)
                     self.candidates.setItem(row, column, item)
-            self.candidates.resizeColumnsToContents()
             if record.candidates:
                 target_row = previous_row if 0 <= previous_row < len(record.candidates) else 0
                 self.candidates.selectRow(target_row)
@@ -188,47 +221,8 @@ class ResultDebugPanel(QWidget):
         else:
             self.candidate_detail.clear()
 
-        state_lines = [
-            f"previous state: {_display(record.state.get('previous_state'))}",
-            f"proposed state: {_display(record.state.get('proposed_state'))}",
-            f"stabilized/final fill state: {_display(record.fill_state)}",
-            f"raw oil Y: {_display(record.positions.get('raw_oil_y'))}",
-            f"smoothed oil Y: {_display(record.positions.get('smoothed_oil_y'))}",
-            f"raw foam Y: {_display(record.positions.get('raw_foam_y'))}",
-            f"smoothed foam Y: {_display(record.positions.get('smoothed_foam_y'))}",
-            f"oil confidence: {_display(record.confidence.get('oil'))}",
-            f"foam confidence: {_display(record.confidence.get('foam'))}",
-            f"visibility confidence: {_display(record.confidence.get('visibility'))}",
-            f"overall confidence: {_display(record.confidence.get('overall'))}",
-            f"glare ratio: {_display(record.state.get('glare_ratio'))}",
-            f"foam bottom-connected ratio: {_display(record.state.get('foam_bottom_connected_area_ratio'))}",
-            f"Foam evidence score: {_display(record.state.get('foam_evidence_score'))}",
-            f"Foam decision: {_display(record.state.get('foam_decision_status'))}",
-            f"Foam whiteness ratio: {_display(record.state.get('foam_whiteness_ratio'))}",
-            f"Foam texture support: {_display(record.state.get('foam_texture_support_ratio'))}",
-            f"Foam glare overlap: {_display(record.state.get('foam_glare_overlap_ratio'))}",
-            f"Foam persistence: {_display(record.state.get('foam_temporal_pending_count'))}/{_display(record.state.get('foam_temporal_required_count'))}",
-            f"effective area: {_display(record.state.get('effective_area'))}",
-            f"flags: {', '.join(record.flags) or '-'}",
-            f"capture reasons: {', '.join(record.capture_reasons) or '-'}",
-        ]
-        extra = {
-            key: value
-            for key, value in record.state.items()
-            if key not in {
-                "previous_state", "proposed_state", "fill_state", "glare_ratio",
-                "foam_bottom_connected_area_ratio", "foam_evidence_score",
-                "foam_decision_status", "foam_whiteness_ratio",
-                "foam_texture_support_ratio", "foam_glare_overlap_ratio",
-                "foam_temporal_pending_count", "foam_temporal_required_count",
-                "effective_area",
-            }
-        }
-        if extra:
-            state_lines.append("\n추가 debug metrics:\n" + json.dumps(extra, ensure_ascii=False, indent=2))
-        if record.warnings:
-            state_lines.append("\ntrace warnings:\n" + "\n".join(record.warnings))
-        self.state_detail.setPlainText("\n".join(state_lines))
+        self.state_summary.setPlainText(_state_summary_text(record))
+        self.state_detail.setPlainText(_raw_state_text(record))
         self.export_button.setEnabled(True)
         self._refresh_artifact_availability()
         self._artifact_changed(self.artifact_combo.currentIndex())
@@ -237,8 +231,8 @@ class ResultDebugPanel(QWidget):
         self._pixmap = QPixmap()
         if image is None or image.isNull():
             self.image_label.setPixmap(QPixmap())
-            self.image_label.setText(error or "이 장면에는 선택한 artifact가 저장되지 않았습니다.")
-            self.artifact_status.setText(error or "artifact 없음")
+            self.image_label.setText(error or "이 장면에는 선택한 진단 이미지가 저장되지 않았습니다.")
+            self.artifact_status.setText(error or "진단 이미지 없음")
             return
         detached = QImage(image).copy()
         self._pixmap = QPixmap.fromImage(detached)
@@ -271,10 +265,20 @@ class ResultDebugPanel(QWidget):
         size = self._pixmap.size() * self._scale
         self.image_label.resize(size)
         self.image_label.setPixmap(
-            self._pixmap.scaled(size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            self._pixmap.scaled(
+                size,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
         )
 
-    def _candidate_changed(self, row: int, _column: int, _previous_row: int, _previous_column: int) -> None:
+    def _candidate_changed(
+        self,
+        row: int,
+        _column: int,
+        _previous_row: int,
+        _previous_column: int,
+    ) -> None:
         self._show_candidate(row, emit_selection=True)
 
     def _show_candidate(self, row: int, *, emit_selection: bool) -> None:
@@ -283,19 +287,22 @@ class ResultDebugPanel(QWidget):
             return
         candidate = self._record.candidates[row]
         lines = [
-            f"rank: {_display(candidate.get('rank'))}",
-            f"kind: {_display(candidate.get('kind'))}",
-            f"source: {_display(candidate.get('source'))}",
-            f"canonical Y: {_display(candidate.get('canonical_y'))}",
-            f"local Y: {_display(candidate.get('local_y'))}",
-            f"selected: {'예' if candidate.get('selected') else '아니오'}",
-            f"rejected: {'예' if candidate.get('rejected') else '아니오'}",
-            f"reject reason: {_display(candidate.get('reject_reason'))}",
-            "\nfeatures:",
+            f"최종 점수: {_display(candidate.get('final_score'))}",
+            f"결과: {_candidate_result(candidate)}",
+            f"탈락 사유: {_display(candidate.get('reject_reason'))}",
+            "",
+            f"특징 점수 합계: {_display(candidate.get('feature_score'))}",
         ]
-        lines.extend(f"  {key}: {_display(value)}" for key, value in sorted((candidate.get("features") or {}).items()))
-        lines.append("\npenalties:")
-        lines.extend(f"  {key}: {_display(value)}" for key, value in sorted((candidate.get("penalties") or {}).items()))
+        lines.extend(
+            f"  {key}: {_display(value)}"
+            for key, value in sorted((candidate.get("features") or {}).items())
+        )
+        lines.append("")
+        lines.append(f"감점 합계: {_display(candidate.get('total_penalty'))}")
+        lines.extend(
+            f"  {key}: {_display(value)}"
+            for key, value in sorted((candidate.get("penalties") or {}).items())
+        )
         self.candidate_detail.setPlainText("\n".join(lines))
         if emit_selection:
             self.candidateSelected.emit(row)
@@ -304,12 +311,88 @@ class ResultDebugPanel(QWidget):
         if self._record is not None:
             self.artifactRequested.emit(self.current_artifact_key())
 
+    def _raw_visibility_changed(self, checked: bool) -> None:
+        self.raw_toggle.setArrowType(
+            Qt.ArrowType.DownArrow if checked else Qt.ArrowType.RightArrow
+        )
+        self.state_detail.setVisible(checked)
+
     def _refresh_artifact_availability(self) -> None:
         available = set(self._record.images) if self._record is not None else set()
         for index in range(self.artifact_combo.count()):
             key = str(self.artifact_combo.itemData(index))
-            label = _ARTIFACT_LABELS.get(key, key)
-            self.artifact_combo.setItemText(index, label if key in available else f"{label} — 없음")
+            label = f"{_ARTIFACT_GROUPS.get(key, '기타')} · {_ARTIFACT_LABELS.get(key, key)}"
+            self.artifact_combo.setItemText(
+                index,
+                label if key in available else f"{label} — 없음",
+            )
+
+
+def _state_summary_text(record) -> str:
+    previous = fill_state_label(record.state.get("previous_state"))
+    proposed = fill_state_label(record.state.get("proposed_state"))
+    final = fill_state_label(record.fill_state)
+    oil_position = _position_transition(
+        record.positions.get("raw_oil_y"),
+        record.positions.get("smoothed_oil_y"),
+    )
+    foam_position = _position_transition(
+        record.positions.get("raw_foam_y"),
+        record.positions.get("smoothed_foam_y"),
+    )
+    confidence = record.confidence
+    lines = [
+        "상태 판정",
+        f"  이전: {previous}",
+        f"  제안: {proposed}",
+        f"  최종: {final}",
+        "",
+        "관측 위치",
+        f"  유면: {oil_position}",
+        f"  거품: {foam_position}",
+        "",
+        "신뢰도",
+        f"  유면 {_display(confidence.get('oil'))} · 거품 {_display(confidence.get('foam'))}",
+        f"  가시성 {_display(confidence.get('visibility'))} · 전체 {_display(confidence.get('overall'))}",
+    ]
+    if record.warnings:
+        lines.extend(("", f"기록 경고 {len(record.warnings)}개", "  원시 진단값에서 확인"))
+    return "\n".join(lines)
+
+
+def _raw_state_text(record) -> str:
+    payload = {
+        "positions": record.positions,
+        "confidence": record.confidence,
+        "state": record.state,
+        "flags": record.flags,
+        "capture_reasons": record.capture_reasons,
+        "profiles": record.profiles,
+        "warnings": record.warnings,
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2, default=str)
+
+
+def _candidate_kind(value) -> str:
+    return _CANDIDATE_KIND_LABELS.get(str(value), _display(value))
+
+
+def _position_transition(raw, smoothed) -> str:
+    if raw is None and smoothed is None:
+        return "관측값 없음"
+    if raw is None:
+        return f"{_display(smoothed)} px"
+    if smoothed is None or smoothed == raw:
+        return f"{_display(raw)} px"
+    return f"{_display(raw)} → {_display(smoothed)} px"
+
+
+def _candidate_result(candidate) -> str:
+    if candidate.get("selected"):
+        return "선택됨"
+    if candidate.get("rejected"):
+        return "탈락"
+    return "후보"
 
 
 def _display(value) -> str:
