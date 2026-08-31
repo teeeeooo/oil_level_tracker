@@ -31,6 +31,7 @@ from oil_tracker.domain.geometry import EllipseGeometry
 from oil_tracker.domain.recipe import DetectorSettings, InspectionRecipe
 from oil_tracker.ui.controllers.workbench_playback_controller import WorkbenchPlaybackController
 from oil_tracker.ui.presentation_labels import (
+    initial_state_label,
     result_state_label,
     validation_issue_message,
     workbench_state_label,
@@ -88,7 +89,7 @@ class MainWindow(QMainWindow):
         self._interaction_target: str | None = None
         self._interaction_zone_id: str | None = None
         self.setWindowTitle("Rotary Oil Level Tracker — 분석 프로필 설정")
-        self.setMinimumSize(1280, 760)
+        self.setMinimumSize(1180, 680)
         self._resize_to_available_screen()
         self._build_ui()
         self.playback_controller = WorkbenchPlaybackController(
@@ -345,8 +346,9 @@ class MainWindow(QMainWindow):
         self.actions["debug"].blockSignals(False)
 
     def _build_profile_context(self) -> QWidget:
-        group = QGroupBox("Profile — 재사용 설정 · 아래 Glass/검출/판정 설정이 저장됩니다")
+        group = QGroupBox("프로필")
         group.setObjectName("profileOwnershipGroup")
+        group.setToolTip("Glass와 검출·판정 설정은 프로필에 저장되어 다시 사용할 수 있습니다.")
         layout = QGridLayout(group)
         self.profile_name_label = QLabel()
         self.profile_name_label.setObjectName("profileIdentityName")
@@ -362,8 +364,9 @@ class MainWindow(QMainWindow):
         return group
 
     def _build_session_bar(self) -> QWidget:
-        group = QGroupBox("현재 시험 — 이번 분석에만 적용 · Profile에는 저장되지 않음")
+        group = QGroupBox("현재 분석")
         group.setObjectName("currentTestOwnershipGroup")
+        group.setToolTip("영상과 시간·분석 빈도는 이번 분석에만 적용되며 프로필에는 저장되지 않습니다.")
         layout = QGridLayout(group)
         self.open_video_button = QPushButton("시험 영상 열기")
         self.open_video_button.setObjectName("secondaryActionButton")
@@ -784,7 +787,7 @@ class MainWindow(QMainWindow):
             self.schedule_preview()
         self.settings.focus_field("initial_state")
         self.statusBar().showMessage(
-            f"{glass.name}의 분석 시작 장면과 선택 상태를 비교한 뒤 '현재 Run 상태 확인'을 누르세요."
+            f"{glass.name}의 분석 시작 장면과 선택 상태를 비교한 뒤 '시작 상태 확인'을 누르세요."
         )
 
     def _confirm_initial_state(self) -> None:
@@ -795,18 +798,18 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(
                 self,
                 "초기 상태 확인 불가",
-                "AUTO는 최종 분석의 현재 Run 확인 값이 될 수 없습니다. 먼저 상태를 명시적으로 선택해 주세요.",
+                "‘자동으로 판단’은 최종 분석의 확인 값으로 사용할 수 없습니다. 시작 상태를 직접 선택해 주세요.",
             )
             return
         if self.workbench.session.video_metadata is None:
-            QMessageBox.warning(self, "초기 상태 확인 불가", "먼저 현재 Run의 시험 영상을 선택해 주세요.")
+            QMessageBox.warning(self, "초기 상태 확인 불가", "먼저 이번 분석에 사용할 영상을 선택해 주세요.")
             return
         self._load_frame(self.workbench.session.analysis_start_sec)
         answer = QMessageBox.question(
             self,
-            "현재 Run 초기 상태 확인",
-            f"분석 시작 장면({self.workbench.session.analysis_start_sec:.3f}초)을 직접 확인했고 "
-            f"{glass.name}의 시작 상태가 {glass.initial_state.value}임을 현재 Run에 대해 확인합니까?",
+            "분석 시작 상태 확인",
+            f"분석 시작 장면({self.workbench.session.analysis_start_sec:.3f}초)에서 "
+            f"{glass.name}의 상태가 ‘{initial_state_label(glass.initial_state)}’이 맞습니까?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
@@ -815,7 +818,7 @@ class MainWindow(QMainWindow):
         self.workbench.confirm_initial_state(glass.id)
         self._refresh_panels()
         self._refresh_inline_validation()
-        self.statusBar().showMessage(f"{glass.name} 현재 Run 초기 상태 확인을 기록했습니다.")
+        self.statusBar().showMessage(f"{glass.name}의 분석 시작 상태를 확인했습니다.")
 
     def set_recent_profile_history(self, history) -> None:
         self.profile_lifecycle.set_recent_profile_history(history)
@@ -1005,7 +1008,7 @@ class MainWindow(QMainWindow):
             )
             self.settings.set_initial_state_confirmation(
                 confirmed,
-                "현재 Run 확인됨" if confirmed else "현재 Run 확인 필요",
+                "확인됨" if confirmed else "확인 필요",
             )
         else:
             self.settings.set_initial_state_confirmation(False, "선택한 Glass 없음")

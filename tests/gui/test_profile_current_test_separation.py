@@ -13,6 +13,7 @@ from oil_tracker.application.services.recipe_validation_service import RecipeVal
 from oil_tracker.application.use_cases.load_recipe import LoadRecipeUseCase
 from oil_tracker.application.use_cases.save_recipe import SaveRecipeUseCase
 from oil_tracker.application.use_cases.validate_workbench import ValidateWorkbenchUseCase
+from oil_tracker.domain.enums import InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.session import VideoMetadata
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
@@ -65,12 +66,12 @@ def _window(qtbot):
 
 def test_workbench_visibly_separates_profile_and_current_test_ownership(qtbot):
     window, controller = _window(qtbot)
-    assert "Profile — 재사용 설정" in window.profile_context.title()
-    assert "Profile에는 저장되지 않음" in window.session_bar.title()
-    assert "Profile 설정" in window.glass_list.ownership_label.text()
-    assert "Profile 설정" in window.settings.ownership_label.text()
-    assert "Profile" in window.glass_list.ownership_hint.text()
-    assert "현재 시험" in window.session_bar.title()
+    assert window.profile_context.title() == "프로필"
+    assert "프로필에 저장" in window.profile_context.toolTip()
+    assert window.session_bar.title() == "현재 분석"
+    assert "프로필에는 저장되지 않습니다" in window.session_bar.toolTip()
+    assert window.glass_list.ownership_label.text() == "Glass 목록"
+    assert window.settings.ownership_label.text() == "Glass 설정"
     assert window.profile_name_label.text() == controller.recipe.name
     assert window.profile_path_label.text() == "아직 저장되지 않음"
 
@@ -127,6 +128,27 @@ def test_current_test_area_tracks_session_without_changing_profile(qtbot, monkey
     assert window.run_name_edit.text() == ""
     assert window.profile_name_label.text() == "Reusable Profile"
     assert controller.recipe.to_dict() == profile_before
+
+
+def test_initial_state_confirmation_uses_user_wording_without_internal_enum(qtbot, monkeypatch):
+    window, controller = _window(qtbot)
+    glass = controller.add_glass()
+    glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    controller.open_video("current.mp4")
+    window._refresh_all()
+    captured = {}
+
+    def answer(_parent, title, message, *_args, **_kwargs):
+        captured["title"] = title
+        captured["message"] = message
+        return QMessageBox.StandardButton.No
+
+    monkeypatch.setattr(QMessageBox, "question", answer)
+    window._confirm_initial_state()
+
+    assert captured["title"] == "분석 시작 상태 확인"
+    assert "시작 시 오일이 가득 차 있음" in captured["message"]
+    assert "FULL_NO_INTERFACE" not in captured["message"]
 
 
 def test_same_profile_replacement_shows_snapshot_profile_and_fresh_current_test(qtbot, monkeypatch):

@@ -36,6 +36,8 @@ INITIAL_STATE_CHOICES = (
     ("시작 상태를 확인하기 어려움", InitialObservationState.UNKNOWN_REVIEW),
 )
 
+INITIAL_STATE_LABELS = {value: label for label, value in INITIAL_STATE_CHOICES}
+
 _INITIAL_STATE_UI_FALLBACK = {
     InitialObservationState.FILLING_VISIBLE: InitialObservationState.PARTIAL_VISIBLE,
     InitialObservationState.DRAINING_VISIBLE: InitialObservationState.PARTIAL_VISIBLE,
@@ -137,6 +139,10 @@ def result_state_label(value: ResultState) -> str:
 
 def initial_state_for_ui(value: InitialObservationState) -> InitialObservationState:
     return _INITIAL_STATE_UI_FALLBACK.get(value, value)
+
+
+def initial_state_label(value: InitialObservationState) -> str:
+    return enum_label(initial_state_for_ui(value), INITIAL_STATE_LABELS)
 
 
 def validation_issue_message(issue) -> str:

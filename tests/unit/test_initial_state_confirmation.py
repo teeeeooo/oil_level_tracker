@@ -127,10 +127,33 @@ def test_application_confirmation_policy_validates_and_snapshots_current_run_con
             session,
             InitialObservationState.EMPTY_NO_INTERFACE,
         )
-
     glass.initial_state = InitialObservationState.AUTO
     with pytest.raises(ValueError, match="AUTO cannot be confirmed"):
         confirm_initial_state(glass, session)
+
+
+def test_unrelated_session_and_glass_edits_keep_current_run_confirmation():
+    recipe, glass = _recipe()
+    session = _session()
+    controller = WorkbenchController(
+        SaveRecipeUseCase(JsonRecipeRepository(), RecipeValidationService()),
+        LoadRecipeUseCase(JsonRecipeRepository()),
+        ValidateWorkbenchUseCase(RecipeValidationService()),
+        reader_factory=lambda _path: None,
+    )
+    controller.recipe = recipe
+    controller.session = session
+    confirmation = controller.confirm_initial_state(glass.id)
+
+    session.analysis_end_sec = 4.0
+    session.compressor_start_sec = 2.0
+    session.sampling_fps = 1.0
+    before = recipe.to_dict()
+    glass.detector_settings.minimum_final_confidence = 0.7
+    after = recipe.to_dict()
+    controller.invalidate_initial_state_confirmations_for_recipe_transition(before, after)
+
+    assert controller.initial_state_confirmation(glass.id) == confirmation
 
 
 def test_preflight_context_does_not_require_or_establish_confirmation():

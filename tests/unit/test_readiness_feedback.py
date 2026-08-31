@@ -98,7 +98,7 @@ def test_foam_detection_summary_separates_interpretation_recommendation_and_acti
     summary = build_detection_summary(foam, glass)
     assert summary.quality == PreviewQuality.REVIEW
     assert summary.interpretation == "거품 가능성이 감지됨"
-    assert summary.recommendation == "영상에서 실제 거품인지 확인하세요."
+    assert summary.recommendation == "분석 시작 장면의 거품이라면 시작 상태를 ‘거품이 보임’으로 설정하고 확인하세요."
     assert summary.action_key == "initial_state"
 
 

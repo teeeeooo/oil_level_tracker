@@ -263,7 +263,7 @@ def build_detection_summary(detection, glass) -> PreviewSummary:
     } or any("FOAM" in flag for flag in flags)
     if foam_possible:
         interpretation = "거품 가능성이 감지됨"
-        recommendation = "영상에서 실제 거품인지 확인하세요."
+        recommendation = "분석 시작 장면의 거품이라면 시작 상태를 ‘거품이 보임’으로 설정하고 확인하세요."
         action_key = "initial_state"
     elif quality == PreviewQuality.FAILURE:
         interpretation = assessment.reason

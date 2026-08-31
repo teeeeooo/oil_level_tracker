@@ -125,6 +125,7 @@ def test_detection_card_loading_failure_and_result(qtbot):
     card.set_detection(detection, glass)
     assert card.property("quality") == "normal"
     assert "위" in card.values["reference"].text()
+    assert not card.message.isVisible()
 
 
 def test_navigation_selects_first_error_glass_focuses_field_and_canvas(qtbot):

@@ -335,8 +335,7 @@ def test_foam_action_navigates_without_mutating_recipe(qtbot):
         overall_confidence=0.8,
     )
     window.detection_summary.set_detection(foam, glass, allow_initial_state_action=True)
-    assert window.detection_summary.values["interpretation"].text() == "거품 가능성이 감지됨"
-    assert window.detection_summary.values["recommendation"].text() == "영상에서 실제 거품인지 확인하세요."
+    assert window.detection_summary.message.text() == "분석 시작 상태를 직접 확인해 주세요."
     assert window.detection_summary.action_button.isVisible()
     window.detection_summary.action_button.click()
     assert window.settings._last_focused_field == "initial_state"
@@ -353,6 +352,7 @@ def test_foam_action_navigates_without_mutating_recipe(qtbot):
     )
     window.detection_summary.set_detection(normal, glass, allow_initial_state_action=True)
     assert not window.detection_summary.action_button.isVisible()
+    assert not window.detection_summary.message.isVisible()
 
 
 def test_preflight_uses_one_modeless_window_without_compressing_workbench(qtbot):

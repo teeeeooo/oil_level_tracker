@@ -54,19 +54,18 @@ class GlassSettingsPanel(QWidget):
         self._interaction_update = False
 
         container = QWidget()
-        container.setMinimumWidth(350)
+        container.setMinimumWidth(300)
         container.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Maximum)
         container_layout = QVBoxLayout(container)
         container_layout.setContentsMargins(4, 4, 8, 8)
         container_layout.setSpacing(8)
 
-        self.ownership_label = QLabel("Profile 설정 · 선택한 Glass")
+        self.ownership_label = QLabel("Glass 설정")
         self.ownership_label.setObjectName("profileAreaHeading")
-        self.ownership_hint = QLabel("아래 Glass 설정은 .oilrecipe Profile에 저장되어 다음 시험에서도 재사용됩니다.")
+        self.ownership_hint = QLabel("프로필에 저장")
         self.ownership_hint.setObjectName("ownershipHint")
-        self.ownership_hint.setWordWrap(True)
+        self.ownership_hint.setToolTip("Glass 설정은 프로필에 저장되어 다음 분석에서도 사용됩니다.")
         container_layout.addWidget(self.ownership_label)
-        container_layout.addWidget(self.ownership_hint)
 
         self.name = QLineEdit()
         self.enabled = QCheckBox("이 Glass를 분석에 포함")
@@ -74,17 +73,20 @@ class GlassSettingsPanel(QWidget):
         self.initial = WheelSafeComboBox()
         for label, value in INITIAL_STATE_CHOICES:
             self.initial.addItem(label, value.value)
-        self.confirm_initial = QPushButton("현재 Run 상태 확인")
+        self.confirm_initial = QPushButton("시작 상태 확인")
         self.confirm_initial.setObjectName("secondaryActionButton")
-        self.initial_confirmation = QLabel("현재 Run 확인 필요")
+        self.initial_confirmation = QLabel("확인 필요")
         self.initial_confirmation.setObjectName("ownershipHint")
         initial_row = QVBoxLayout()
         initial_controls = QHBoxLayout()
         initial_controls.setSpacing(6)
         initial_controls.addWidget(self.initial, 1)
-        initial_controls.addWidget(self.confirm_initial)
         initial_row.addLayout(initial_controls)
-        initial_row.addWidget(self.initial_confirmation)
+        initial_confirmation_row = QHBoxLayout()
+        initial_confirmation_row.setSpacing(6)
+        initial_confirmation_row.addWidget(self.initial_confirmation, 1)
+        initial_confirmation_row.addWidget(self.confirm_initial)
+        initial_row.addLayout(initial_confirmation_row)
         self.judgment = WheelSafeComboBox()
         for value in JudgmentMode:
             self.judgment.addItem(JUDGMENT_MODE_LABELS[value], value.value)
@@ -113,7 +115,7 @@ class GlassSettingsPanel(QWidget):
         basic = QGroupBox("기본 설정")
         self.form = QFormLayout(basic)
         self.form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
-        self.form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.DontWrapRows)
+        self.form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapLongRows)
         self.form.setLabelAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.form.addRow("Glass 이름", self.name)
         self.form.addRow(self.enabled)
@@ -165,7 +167,7 @@ class GlassSettingsPanel(QWidget):
         self.geometry_group = QGroupBox("좌표와 분석 범위")
         geometry_form = QFormLayout(self.geometry_group)
         geometry_form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
-        geometry_form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.DontWrapRows)
+        geometry_form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapLongRows)
         geometry_form.addRow("중심 X", self.cx)
         geometry_form.addRow("중심 Y", self.cy)
         geometry_form.addRow("너비", self.width)
@@ -176,7 +178,7 @@ class GlassSettingsPanel(QWidget):
 
         detector_group = QGroupBox("고급 검출 설정")
         detector_form = QFormLayout(detector_group)
-        detector_form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.DontWrapRows)
+        detector_form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapLongRows)
         self.min_conf = _double(0, 1, decimals=3)
         self.canny_low = WheelSafeSpinBox()
         self.canny_low.setRange(0, 255)
@@ -210,7 +212,7 @@ class GlassSettingsPanel(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(4, 4, 4, 4)
         layout.addWidget(self.scroll)
-        self.setMinimumWidth(370)
+        self.setMinimumWidth(320)
         self.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         self.setObjectName("settingsPanel")
 
@@ -368,7 +370,7 @@ class GlassSettingsPanel(QWidget):
 
     def set_initial_state_confirmation(self, confirmed: bool, message: str) -> None:
         self.initial_confirmation.setText(message)
-        self.confirm_initial.setText("현재 Run 확인됨" if confirmed else "현재 Run 상태 확인")
+        self.confirm_initial.setText("확인됨" if confirmed else "시작 상태 확인")
 
     def set_validation_issues(self, issues, glass_id: str | None) -> None:
         for widgets in self._field_widgets.values():
