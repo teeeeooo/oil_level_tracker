@@ -4,7 +4,8 @@ This directory contains bounded investigations, probes and their machine-readabl
 
 - Current sequencing: [`../../00-project/work-plan.md`](../../00-project/work-plan.md)
 - Durable S11 responsibilities: [`../../20-architecture/s11-detector-responsibility-architecture.md`](../../20-architecture/s11-detector-responsibility-architecture.md)
-- Current S11 validation contract: [`../../30-validation/s11-real-field-detector-effectiveness.md`](../../30-validation/s11-real-field-detector-effectiveness.md)
+- Current S11 validation contract (`LOCAL PASS / WINDOWS REQUIRED`): [`../../30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](../../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
+- Durable cross-revision S11 field-effectiveness umbrella (historical R12 clauses are superseded as current ownership): [`../../30-validation/s11-real-field-detector-effectiveness.md`](../../30-validation/s11-real-field-detector-effectiveness.md)
 - Current R9 root-cause input: [`s11-r8-windows-calibrated-observation-diagnostic.md`](s11-r8-windows-calibrated-observation-diagnostic.md)
 - Completed implementation/audit evidence: [`../../60-evidence/s11/`](../../60-evidence/s11/)
 

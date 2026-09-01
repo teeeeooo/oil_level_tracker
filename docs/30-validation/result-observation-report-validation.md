@@ -2,7 +2,7 @@
 
 ## Scope
 
-This contract owns acceptance for the user-facing observation report defined by the [result observation report architecture](../20-architecture/result-observation-report-architecture.md). Detector effectiveness remains owned by the [S11 detector validation contract](s11-real-field-detector-effectiveness.md).
+This contract owns acceptance for the user-facing observation report defined by the [result observation report architecture](../20-architecture/result-observation-report-architecture.md). Current detector effectiveness remains owned by the [R20 delayed drain reacquisition validation contract](s11-r20-delayed-drain-reacquisition-validation.md); the [cross-revision S11 field-effectiveness umbrella](s11-real-field-detector-effectiveness.md) is historical reference for preserved obligations and R12 results.
 
 ## Automated acceptance
 

@@ -1,14 +1,24 @@
 # S11 Real-Field Detector Effectiveness Validation Contract
 
-**Status:** `ACTIVE R12 CONTRACT`
+**Status:** `DURABLE CROSS-REVISION UMBRELLA — R12 CLAUSES SUPERSEDED`
+
+This document preserves the durable S11 field-effectiveness oracle, safety
+obligations and cross-revision non-regression boundary. It is not the current
+implementation or acceptance owner. Current R20 acceptance is owned by the
+[R20 delayed drain reacquisition validation contract](s11-r20-delayed-drain-reacquisition-validation.md),
+with the required post-push [manual Windows procedure](../40-operations/manual-gui-windows-checklist.md)
+and [canonical reviewed truth](windows-sample1-heating-coldstart-reviewed-truth.md).
+R20 is implementation-current at `LOCAL PASS / WINDOWS REQUIRED`; the
+canonical Windows replay remains required and no Windows PASS is claimed.
+R12 architecture, head and owner references below are retained as historical
+context and are superseded as current ownership by R20.
 
 ## Scope and oracle
 
-This document owns the durable detector-effectiveness acceptance boundary for
-S11. The active replacement design is R12, defined by the
-[durable detector architecture](../20-architecture/s11-detector-responsibility-architecture.md)
-and the dedicated
-[R12 architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md).
+This document owns the durable cross-revision detector-effectiveness boundary
+for S11. The current implementation-specific acceptance contract is R20,
+defined by the [R20 delayed drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
+and [R20 validation contract](s11-r20-delayed-drain-reacquisition-validation.md).
 The exact current action remains in the [work plan](../00-project/work-plan.md),
 while completed measurements belong in
 [`../60-evidence/s11/`](../60-evidence/s11/).
@@ -18,13 +28,18 @@ ROI. Checked `.oiltruth`, blind provisional annotations and controlled fixtures
 support that review. Historical fingerprints, aggregate publication counts and
 prior validation outputs cannot override the images.
 
-## Required production ownership
+## Historical R12 ownership baseline (preserved)
 
-Validation must prove the following current responsibilities:
+The following R12-specific ownership and safety baseline is preserved for
+historical comparison. It is not the current implementation contract; current
+R20 ownership and acceptance are defined by the linked R20 architecture and
+validation contract above.
+
+The historical R12 baseline required:
 
 1. current-frame processing preserves bounded Oil candidates, typed
    no-interface evidence, optics opposition and raw Foam material independently;
-2. final Oil/FULL/EMPTY selection is owned only by the R12
+2. final Oil/FULL/EMPTY selection was owned only by the R12
    `OilObservationResolver`;
 3. every candidate has one explicit final authority tier, and old current-frame
    temporal selection has no final anchor authority;
@@ -87,7 +102,11 @@ R2–R4 remain preservation obligations. Their historical owner topology and exa
 output streams are not preservation obligations when R6/R7 explicitly replaced
 them.
 
-## Checked-in video gate
+## Cross-revision checked-in video obligations
+
+These obligations remain part of the durable field-effectiveness boundary.
+The current execution route is the R20 validation contract and its required
+post-push canonical Windows procedure, not an R12-head replay.
 
 Replay all established qualification windows using each matching MP4, Recipe,
 truth/provisional annotation, static-artifact preparation, production detector,
@@ -112,9 +131,13 @@ row into the trajectory. Retained sample2 stationary Oil and genuine
 sample3/sample4 Foam are mandatory non-regressions. Visually unclear or
 overlay-dominated spans may remain unavailable.
 
-## Secure-Windows holdout
+## Historical R12 secure-Windows holdout (preserved)
 
-The exact committed R12 head must be replayed on the private Base/Accum video,
+The R12-head holdout wording below records the historical R12 gate and result
+boundary. It is not the current execution route or an assertion of Windows
+PASS; the current post-push gate is R20 as linked above.
+
+The exact committed R12 head was required to be replayed on the private Base/Accum video,
 both without calibration and with operator-selected detector artifact proposals,
 before S11 closure.
 
@@ -128,8 +151,9 @@ before S11 closure.
   bounded turbulent Foam episode, and follow the high/fall trajectory.
 - Both Glasses must preserve same-frame numeric provenance and derive lifecycle
   timestamps/captures only from accepted observations.
-- Final authority and first reject stage must be read from the R12 `sequence`
-  trace annotation, not reverse-calculated from the pre-resolver record.
+- Historical R12 final authority and first reject stage were read from the R12
+  `sequence` trace annotation, not reverse-calculated from the pre-resolver
+  record.
 - A distinct Accum Oil/Foam pair must remain independently publishable; stale
   alias history without current same-frame coincidence cannot reject Foam.
 - Base's former Y724–873 reflection/bracket path must not gain authority from
@@ -141,9 +165,10 @@ before S11 closure.
 Any Base false Foam episode, Accum prior lock-in through visible Oil, or long
 fixed-optics Oil path is a field failure regardless of aggregate coverage.
 
-## Downstream and report boundary
+## Historical R12 downstream and report boundary
 
-R12 detector samples remain immutable, but their leading unresolved prefix is
+R12 detector samples remain immutable historical records, but their leading
+unresolved prefix was
 eligible for the separately persisted
 [Initial-State Retrospective Reconstruction](../20-architecture/initial-state-retrospective-reconstruction-architecture.md)
 when current-run confirmation and anchor-grade direction evidence satisfy its
@@ -164,8 +189,10 @@ failure records. None is an alternate current acceptance owner.
 
 Passing local tests establishes only checked-in-corpus suitability for the
 secure holdout. It does not establish general-field detector accuracy, authorize
-numeric trajectory estimation or satisfy the private Windows gate. The local R12
-disposition is recorded in the
+numeric trajectory estimation or satisfy the private Windows gate. The historical
+local R12 disposition is recorded in the
 [R12 evidence](../60-evidence/s11/s11-r12-phase-composition-replacement.md); the
 [R6 evidence](../60-evidence/s11/s11-r6-optics-aware-observation.md) remains
-historical comparison only.
+historical comparison only. Current R20 local acceptance and its remaining
+Windows requirement are recorded in the
+[R20 evidence](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.md).

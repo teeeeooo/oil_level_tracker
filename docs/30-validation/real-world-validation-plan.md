@@ -7,7 +7,7 @@ This document owns real-video, detector, Workbench, lifecycle, graph, CPU, memor
 - Long-term milestone state: [project roadmap](../00-project/roadmap.md)
 - Active gate and next action: [current work plan](../00-project/work-plan.md)
 - S5-B design: [oil-boundary hypothesis architecture](../20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
-- S11 current detector gate: [S11 real-field detector effectiveness contract](s11-real-field-detector-effectiveness.md)
+- S11 current detector gate (`LOCAL PASS / WINDOWS REQUIRED`): [R20 delayed drain reacquisition validation contract](s11-r20-delayed-drain-reacquisition-validation.md)
 - Manual platform procedure: [manual GUI and Windows checklist](../40-operations/manual-gui-windows-checklist.md)
 - Benchmark execution: [golden video regression](golden-video-regression.md)
 
