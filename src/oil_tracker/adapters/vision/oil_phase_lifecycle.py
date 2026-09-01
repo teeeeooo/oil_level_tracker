@@ -313,6 +313,9 @@ class OilMaterialPhaseLifecycleOwner:
         delayed_reacquisition_snapshot_distances: list[float | None] = [
             None for _layer in layers
         ]
+        delayed_reacquisition_seed_frames: list[int | None] = [
+            None for _layer in layers
+        ]
         phase = (
             OilMaterialPhase.FILLED_BARRIER
             if self.policy.initial_full
@@ -745,6 +748,7 @@ class OilMaterialPhaseLifecycleOwner:
                                 seed_frame=frame,
                                 consumed=True,
                             )
+                            delayed_reacquisition_seed_frames[frame] = frame
                             if len(delayed_seed_rows) > 1:
                                 delayed_reacquisition_ambiguities[frame] = True
                                 delayed_reacquisition_reset_reasons[frame] = (
@@ -771,6 +775,13 @@ class OilMaterialPhaseLifecycleOwner:
                     delayed_reacquisition_active[frame] = tuple(
                         delayed_result.get("active", ())
                     )
+                    active_delayed = delayed_reacquisition_active[frame]
+                    if active_delayed:
+                        current_y = active_delayed[0].get("current_y")
+                        if current_y is not None:
+                            delayed_reacquisition_snapshot_distances[frame] = (
+                                abs(float(current_y) - established_fill_chain.last.y)
+                            )
                     delayed_reacquisition_qualifying_ids[frame] = tuple(
                         row.tracklet_id
                         for _key, row in delayed_result.get("qualifying", ())
@@ -1411,6 +1422,9 @@ class OilMaterialPhaseLifecycleOwner:
                 ),
                 "delayed_reacquisition_snapshot_distance_used_for_identity": (
                     False
+                ),
+                "delayed_reacquisition_seed_frame": (
+                    delayed_reacquisition_seed_frames[index]
                 ),
                 "policy": {
                     "geometry_top_y": self.policy.geometry_top_y,
