@@ -146,8 +146,9 @@ lifecycle diagnostics.
   per established-fill episode and applies the existing bounded chain only to
   current evidence. It does not use elapsed loss age or snapshot distance as
   physical identity.
-- Logic-map impact: `NONE — the current map remains R19 until the implementation
-  and local evidence gate updates it to the R20 lifecycle behavior`.
+- Logic-map impact: `UPDATED — the design gate intentionally left the current
+  map on R19 pending implementation; the implementation and local-evidence
+  gate now records R20 lifecycle behavior in the current map`.
 - Failure-registry impact: `NONE — R20 is a bounded closure of existing F04,
   F05, F08, F09 and F10 guards, with F02 preserved as the proposal/authority
   funnel guard`.
