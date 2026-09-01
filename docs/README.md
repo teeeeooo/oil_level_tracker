@@ -61,7 +61,7 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 
 R18 is the Windows-field-failed detector baseline. Its diagnostic-only causal
 addendum and same-video closure are complete; the addendum does not change R18
-behavior. R19 is locally validated at the implementation head, but remains
+behavior. R20 is locally validated at the implementation head, but remains
 field-unqualified: canonical Windows replay is the remaining engineering gate.
 
 - Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
@@ -85,6 +85,9 @@ field-unqualified: canonical Windows replay is the remaining engineering gate.
 - Approved/implemented S11-R19 bounded drain-release-chain architecture (local pass; Windows required): [`20-architecture/s11-r19-bounded-drain-release-chain-architecture.md`](20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
 - S11-R19 bounded drain-release-chain validation contract (local pass; Windows required): [`30-validation/s11-r19-bounded-drain-release-chain-validation.md`](30-validation/s11-r19-bounded-drain-release-chain-validation.md)
 - S11-R19 local validation evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r19-bounded-drain-release-chain.md`](60-evidence/s11/s11-r19-bounded-drain-release-chain.md)
+- Current S11-R20 delayed drain-reacquisition architecture (`LOCAL PASS / WINDOWS REQUIRED`): [`20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md`](20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
+- Current S11-R20 delayed drain-reacquisition validation contract: [`30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
+- S11-R20 local implementation/validation evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r20-delayed-drain-reacquisition.md`](60-evidence/s11/s11-r20-delayed-drain-reacquisition.md)
 - Canonical private-Windows field truth (`windows_sample1_heating_coldstart`): [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 - S11-R17 local implementation/replay evidence: [`60-evidence/s11/s11-r17-physical-observation-ownership.md`](60-evidence/s11/s11-r17-physical-observation-ownership.md)
 - S11-R17 secure-Windows field result: [`60-evidence/s11/s11-r17-secure-windows-field-result.md`](60-evidence/s11/s11-r17-secure-windows-field-result.md)

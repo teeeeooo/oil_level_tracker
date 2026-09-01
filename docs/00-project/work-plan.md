@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R20 design accepted; lifecycle implementation in progress`
-**Source authority:** `main R19 local-pass implementation over frozen R18 field-failed evidence; no field-qualified detector`
+**Current gate:** `R20 lifecycle implemented; local validation complete / WINDOWS REQUIRED`
+**Source authority:** `main R20 local-pass implementation over frozen R18 field-failed evidence; no field-qualified detector`
 **Task-start exact head:** `e3a014f7542654b5e63353a173b8b038be34e2bf`
 **Task-start exact parent:** `e3a014f7542654b5e63353a173b8b038be34e2bf`
 
@@ -142,8 +142,9 @@ Implement the approved [R20 delayed drain reacquisition architecture](../20-arch
 against its [validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md).
 R20 adapts only the existing Oil lifecycle owner; Foam, candidate generation,
 tracklets, selector, projection and publication remain outside scope. The
-implementation-current detector remains R19 until the R20 lifecycle and local
-validation gates pass.
+implementation-current detector is now R20 after focused, replay,
+provenance, performance, governance, compile and full-suite local gates pass;
+canonical Windows replay remains required.
 
 The completed R18 causal rerun is frozen in the [Windows causal
 closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md). Base lower
@@ -171,11 +172,13 @@ Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architec
 [R19 validation](../30-validation/s11-r19-bounded-drain-release-chain-validation.md),
 [R20 architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md),
 [R20 validation](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md),
+[R20 local evidence](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.md),
 [operator-reported field result](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
 and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
 R18 remains field `FAIL`; its causal rerun is complete and no further
-diagnostic rerun is required for R19 design input. Independent local validation
-is recorded in the [R19 evidence record](../60-evidence/s11/s11-r19-bounded-drain-release-chain.md)
+diagnostic rerun is required for R20 design input. R19 remains the historical
+near-snapshot baseline. Independent R20 local validation is recorded in the
+[R20 evidence record](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.md)
 with status `LOCAL PASS / WINDOWS REQUIRED`; no field PASS is claimed.
 
 ## R16 field disposition

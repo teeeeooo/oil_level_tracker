@@ -1,6 +1,6 @@
 # S11 Detector Responsibility Architecture
 
-**Status:** `R12 IMPLEMENTED — SECURE-WINDOWS VALIDATION PENDING`
+**Status:** `R20 IMPLEMENTED — LOCAL PASS / WINDOWS REQUIRED`
 
 ## Purpose and authority
 
@@ -8,11 +8,11 @@ This document is the durable responsibility owner for the production S11
 detector. The exact current gate remains in the [work plan](../00-project/work-plan.md),
 and completed measurements remain in [`../60-evidence/s11/`](../60-evidence/s11/).
 
-R12 is the checked-in production runtime. R5–R11 failed secure-Windows holdouts
-and have no acceptance authority. Their documents preserve causes, controls and
-failed alternatives; they do not define runtime routing when they conflict with
-this document or the
-[R12 architecture](s11-r12-phase-composition-replacement-architecture.md).
+R20 is the checked-in production runtime at the local implementation head;
+canonical secure-Windows validation remains required. R5–R19 preserve failed
+holdouts, accepted local contracts and causal history as applicable, but have no
+current runtime routing when they conflict with this document or the
+[R20 architecture](s11-r20-delayed-drain-reacquisition-architecture.md).
 
 ## Production observation path
 
@@ -39,7 +39,7 @@ not proof that physical Oil is absent.
 |---|---|---|
 | ROI preprocessing and optics opposition | vision preprocessing | produces evidence; cannot publish Oil, Foam or state |
 | current-frame Oil proposals and semantics | S5-B observation pipeline | produces bounded eligible hypotheses and typed evidence |
-| completed-window Oil/FULL/EMPTY selection | `OilObservationResolver` | sole final Oil/state selection owner |
+| completed-window Oil/FULL/EMPTY selection | `OilObservationResolver` / `OilMaterialPhaseLifecycleOwner` | sole final Oil/state selection owner; R20 owns the coordinate-free partial-fill ownerless barrier and one delayed reacquisition attempt |
 | completed-window Foam confirmation | `FoamEpisodeResolver` | sole final Foam episode owner; runs after Oil/state |
 | per-frame composition and identity checks | `ObservationSequenceResolver` | sole final composition point |
 | acquisition-time continuity | serialized online Oil reducer | preview/current-frame evidence only; no completed-analysis override |
@@ -123,6 +123,28 @@ The resolver never interpolates, carries forward or invents an Oil coordinate.
 Every numeric result must retain same-frame candidate provenance. A frame with no
 defensible candidate remains image-supported FULL/EMPTY or `UNKNOWN_REVIEW`.
 
+### R20 partial-fill ownerless context and delayed reacquisition
+
+`OilMaterialPhaseLifecycleOwner` is the sole owner of the R20 adaptation inside
+the existing lifecycle boundary. After confirmed initial `EMPTY` establishes a
+genuine fill chain and that dynamic owner is lost before `DRAINING`, its
+`PartialFillOwnerlessBarrier` retains only constant-size episode provenance and
+ordinary loss grace. It does not accumulate rows, coordinates, motion, scores or
+lookahead; the retained fill snapshot Y/frame is diagnostic context only.
+
+After `maximum_lost_frames + 1` grace frames, one unique same-frame
+`ANCHOR_ELIGIBLE` row may start the episode's single delayed R19-shaped attempt
+when its existing phase identity is `DIRECT_INTERFACE` or
+`ORDERED_LOWER_INTERFACE`, its tracklet is confirmed/continuing and compatible,
+and strict material support passes. Direct partial-fill release remains first;
+R19 near-snapshot recovery remains second; delayed reacquisition is third. A
+qualifying anchor set consumes the attempt even when ambiguous or unable to
+confirm, and it cannot reseed until a new fill episode is established. Existing
+R19 step, loss, stagnation, handoff, material and evidence-window bounds apply
+after seeding. The current row on confirmation is the only row that can be
+selected and published. Snapshot distance and loss age are diagnostics, never
+identity or authority inputs.
+
 ## Foam episode authority and composition
 
 `FoamEpisodeResolver` receives only eligible coherent raw Foam material after the
@@ -165,7 +187,10 @@ already supported by their own frames. Missing intervals stay missing. A
 user-confirmed initial FULL/EMPTY state affects the initial distribution and
 report context only; it cannot create a valid detector sample or a numeric
 coordinate. FULL/EMPTY counts as valid only with explicit current-image state
-provenance.
+provenance. R20's ownerless barrier is phase context, not physical identity;
+it cannot publish a snapshot coordinate or authorize a delayed row without the
+current row's independent authority, phase identity, tracklet and material
+evidence.
 
 [Initial-State Retrospective Reconstruction](initial-state-retrospective-reconstruction-architecture.md)
 remains a separate downstream interpretation. R12 permits it to interpret only
@@ -198,6 +223,31 @@ observed samples only. Detailed presentation ownership belongs to the
   restored as alternate owners.
 - Historical exact counts and fingerprints are evidence provenance, not current
   acceptance targets.
+
+R18 and R19 remain preserved as the historical direct/near-snapshot lifecycle
+contracts. R20 is the current bounded delayed-reacquisition adaptation; its
+implementation and local evidence are routed through the [R20 architecture](s11-r20-delayed-drain-reacquisition-architecture.md),
+[R20 validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
+and [R20 local evidence](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.md).
+
+## History Review
+
+- Logic-map nodes: `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `TRACE-PUBLICATION`
+- Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`
+- Prior mechanisms reviewed: R16 reciprocal physical ownership, R17 owner-loss dead end, R18 lifecycle closure and causal rerun, and R19 bounded direct/near recovery with their current architecture, validation and evidence records.
+- Prior mechanisms rejected: motion-only bootstrap, stale-coordinate or stale-ID transfer, global threshold widening, selector/projection repair, unbounded lookahead, interpolation/carry, private field identity and Foam-to-Oil coupling.
+- Preserved contracts: one generic detector, initial EMPTY safety, coordinate-free FULL, same-frame authority/material identity, distinct physical IDs, bounded handoff and evidence, ambiguity/material fail-closed behavior, exact selected-candidate/sequence/CSV provenance and independent Foam.
+- Difference from prior failures: R20 retains only constant-size ownerless phase context, waits through ordinary grace, starts one fresh-anchor attempt per established-fill episode and applies existing R19 bounds only to current evidence; snapshot distance and loss age are not identity.
+- Logic-map impact: UPDATED — the current lifecycle and diagnostic owner now includes R20's bounded ownerless barrier and delayed route, while all downstream owner boundaries remain unchanged.
+- Failure-registry impact: NONE — R20 closes existing F04/F05/F08/F09/F10 guards without establishing a new durable causal mechanism; F02 remains the authority-funnel guard.
+
+## Detector Governance
+
+- Logic-map nodes: `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `TRACE-PUBLICATION`
+- Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`
+- First harmful stage: Accum's established partial-fill owner loss at `OIL-PHASE-FILL` remains the R20 adaptation seam; canonical Windows effectiveness and reviewed-Y outcome are still unknown pending the required field replay.
+- Logic-map impact: UPDATED — the current map records the R20 lifecycle route and additive diagnostics.
+- Failure-registry impact: NONE — the implementation preserves the existing guarded mechanisms and does not add a new registry entry.
 
 The current preservation and holdout gates are defined by the
 [R12 validation contract](../30-validation/s11-r12-phase-composition-replacement-validation.md)
