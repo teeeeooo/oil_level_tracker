@@ -2,10 +2,10 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R19 local validation passed; canonical Windows replay required`
+**Current gate:** `R20 design accepted; lifecycle implementation in progress`
 **Source authority:** `main R19 local-pass implementation over frozen R18 field-failed evidence; no field-qualified detector`
-**Task-start exact head:** `d7958e3d06293ed00f5c04c129199d9ef06c2560`
-**Task-start exact parent:** `b3f066ac0668eb73a5995d63e47e7cc50fc7199d`
+**Task-start exact head:** `e3a014f7542654b5e63353a173b8b038be34e2bf`
+**Task-start exact parent:** `e3a014f7542654b5e63353a173b8b038be34e2bf`
 
 ## R10 field result
 
@@ -138,11 +138,12 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Run the canonical Windows replay for the implemented [R19 bounded drain-release-chain architecture](../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
-against its [validation contract](../30-validation/s11-r19-bounded-drain-release-chain-validation.md).
-R19 changes only the bounded Oil release chain; Foam is intentionally outside
-its scope. The implementation-current detector is R19 locally and no
-field-qualified detector is claimed.
+Implement the approved [R20 delayed drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
+against its [validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md).
+R20 adapts only the existing Oil lifecycle owner; Foam, candidate generation,
+tracklets, selector, projection and publication remain outside scope. The
+implementation-current detector remains R19 until the R20 lifecycle and local
+validation gates pass.
 
 The completed R18 causal rerun is frozen in the [Windows causal
 closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md). Base lower
@@ -168,6 +169,8 @@ Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architec
 [Windows causal closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md),
 [R19 architecture](../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md),
 [R19 validation](../30-validation/s11-r19-bounded-drain-release-chain-validation.md),
+[R20 architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md),
+[R20 validation](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md),
 [operator-reported field result](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
 and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
 R18 remains field `FAIL`; its causal rerun is complete and no further
