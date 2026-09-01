@@ -59,10 +59,11 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 
 ### Active authority and gate
 
-R18 is the Windows-field-failed detector baseline. Its diagnostic-only causal
-addendum and same-video closure are complete; the addendum does not change R18
-behavior. R20 is locally validated at the implementation head, but remains
-field-unqualified: canonical Windows replay is the remaining engineering gate.
+R18 is the historical Windows-field-failed detector baseline. Its
+diagnostic-only causal addendum and same-video closure are complete; the
+addendum does not change R18 behavior. R20 is locally validated at the
+implementation head, but remains field-unqualified: the post-push canonical
+Windows replay is the remaining engineering gate.
 
 - Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
 - Current target-Windows procedure: [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md)
@@ -74,17 +75,17 @@ field-unqualified: canonical Windows replay is the remaining engineering gate.
 - Failed S11-R16 validation contract: [`30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md`](30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md)
 - Accepted S11-R17 baseline architecture: [`20-architecture/s11-r17-physical-observation-ownership-architecture.md`](20-architecture/s11-r17-physical-observation-ownership-architecture.md)
 - Failed S11-R17 validation contract: [`30-validation/s11-r17-physical-observation-ownership-validation.md`](30-validation/s11-r17-physical-observation-ownership-validation.md)
-- Current S11-R18 lifecycle-closure architecture: [`20-architecture/s11-r18-lifecycle-closure-architecture.md`](20-architecture/s11-r18-lifecycle-closure-architecture.md)
-- Failed S11-R18 validation contract: [`30-validation/s11-r18-lifecycle-closure-validation.md`](30-validation/s11-r18-lifecycle-closure-validation.md)
+- Historical S11-R18 lifecycle-closure architecture (field-failed): [`20-architecture/s11-r18-lifecycle-closure-architecture.md`](20-architecture/s11-r18-lifecycle-closure-architecture.md)
+- Historical/failed S11-R18 validation contract: [`30-validation/s11-r18-lifecycle-closure-validation.md`](30-validation/s11-r18-lifecycle-closure-validation.md)
 - Completed S11-R18 causal trace observability addendum: [`20-architecture/s11-r18-causal-trace-observability-architecture.md`](20-architecture/s11-r18-causal-trace-observability-architecture.md)
 - Completed S11-R18 causal trace validation: [`30-validation/s11-r18-causal-trace-observability-validation.md`](30-validation/s11-r18-causal-trace-observability-validation.md)
 - S11-R18 transferred Windows causal closure: [`50-diagnostics/s11/s11-r18-windows-causal-closure.md`](50-diagnostics/s11/s11-r18-windows-causal-closure.md)
 - S11-R18 causal trace local evidence: [`60-evidence/s11/s11-r18-causal-trace-observability.md`](60-evidence/s11/s11-r18-causal-trace-observability.md)
 - S11-R18 local implementation/replay evidence: [`60-evidence/s11/s11-r18-lifecycle-closure.md`](60-evidence/s11/s11-r18-lifecycle-closure.md)
 - S11-R18 secure-Windows field result (operator-reported fail; transferred audit linked): [`60-evidence/s11/s11-r18-secure-windows-field-result.md`](60-evidence/s11/s11-r18-secure-windows-field-result.md)
-- Approved/implemented S11-R19 bounded drain-release-chain architecture (local pass; Windows required): [`20-architecture/s11-r19-bounded-drain-release-chain-architecture.md`](20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
-- S11-R19 bounded drain-release-chain validation contract (local pass; Windows required): [`30-validation/s11-r19-bounded-drain-release-chain-validation.md`](30-validation/s11-r19-bounded-drain-release-chain-validation.md)
-- S11-R19 local validation evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r19-bounded-drain-release-chain.md`](60-evidence/s11/s11-r19-bounded-drain-release-chain.md)
+- Historical S11-R19 bounded drain-release-chain architecture (local pass; Windows required): [`20-architecture/s11-r19-bounded-drain-release-chain-architecture.md`](20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
+- Historical S11-R19 bounded drain-release-chain validation contract (local pass; Windows required): [`30-validation/s11-r19-bounded-drain-release-chain-validation.md`](30-validation/s11-r19-bounded-drain-release-chain-validation.md)
+- Historical S11-R19 local validation evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r19-bounded-drain-release-chain.md`](60-evidence/s11/s11-r19-bounded-drain-release-chain.md)
 - Current S11-R20 delayed drain-reacquisition architecture (`LOCAL PASS / WINDOWS REQUIRED`): [`20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md`](20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
 - Current S11-R20 delayed drain-reacquisition validation contract: [`30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
 - S11-R20 local implementation/validation evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r20-delayed-drain-reacquisition.md`](60-evidence/s11/s11-r20-delayed-drain-reacquisition.md)

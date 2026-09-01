@@ -2344,6 +2344,312 @@ def test_delayed_attempt_cannot_reseed_after_unconfirmed_fill_reentry() -> None:
     assert result.phases[-1] is OilMaterialPhase.OPEN
 
 
+def test_delayed_barrier_remains_bounded_across_long_evidence_free_interval() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    evidence_free_through = 121
+    layers = tuple((node, _unknown(frame)) for frame, node in enumerate(fill))
+    layers += tuple(
+        (_unknown(frame),) for frame in range(2, evidence_free_through + 1)
+    )
+    layers += (
+        (
+            _node(
+                evidence_free_through + 1,
+                "delayed-long",
+                90.0,
+                direction=1,
+                progress=2.0,
+                phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+            ),
+            _unknown(evidence_free_through + 1),
+        ),
+        (
+            _node(
+                evidence_free_through + 2,
+                "delayed-long",
+                110.0,
+                direction=1,
+                progress=2.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            ),
+            _unknown(evidence_free_through + 2),
+        ),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    ownerless = result.diagnostics[5 : evidence_free_through + 1]
+    assert len(ownerless) == evidence_free_through - 4
+    assert all(
+        diagnostic["ownerless_barrier_loss_epoch"] == 5
+        for diagnostic in ownerless
+    )
+    assert all(
+        diagnostic["established_fill_owner_chain"] == ["fill"]
+        for diagnostic in ownerless
+    )
+    assert all(
+        diagnostic["delayed_reacquisition_active_chains"] == []
+        and diagnostic["delayed_reacquisition_seed_frame"] is None
+        for diagnostic in ownerless
+    )
+    assert ownerless[0]["ownerless_barrier_state"] == "grace"
+    assert ownerless[-1]["ownerless_barrier_state"] == "available"
+    assert (
+        result.diagnostics[evidence_free_through + 1][
+            "ownerless_barrier_state"
+        ]
+        == "attempt_active"
+    )
+    assert result.phases[-2] is OilMaterialPhase.OPEN
+    assert result.phases[-1] is OilMaterialPhase.DRAINING
+    assert result.diagnostics[-1]["release_source"] == "delayed_reacquisition"
+
+
+def test_delayed_path_rejects_moving_residue_glare_material_and_phase_controls() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    layers = tuple((node, _unknown(frame)) for frame, node in enumerate(fill))
+    layers += tuple((_unknown(frame),) for frame in range(2, 8))
+    layers += (
+        (
+            _node(
+                8,
+                "moving-residue",
+                160.0,
+                direction=1,
+                progress=2.0,
+                material_conflict=0.90,
+                phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+            ),
+            _unknown(8),
+        ),
+        (
+            _node(
+                9,
+                "moving-residue",
+                180.0,
+                direction=1,
+                progress=2.0,
+                material_conflict=0.90,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            ),
+            _unknown(9),
+        ),
+        (
+            _node(
+                10,
+                "phase-invalid-glare",
+                90.0,
+                direction=1,
+                progress=2.0,
+                phase_identity=OilPhaseIdentity.CONTINUATION_ONLY,
+            ),
+            _unknown(10),
+        ),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    for frame in (8, 9, 10):
+        assert result.phases[frame] is OilMaterialPhase.OPEN
+        assert result.diagnostics[frame][
+            "ownerless_barrier_attempt_consumed"
+        ] is False
+        assert result.diagnostics[frame][
+            "delayed_reacquisition_active_chains"
+        ] == []
+    assert result.diagnostics[8]["recovery_ordered_predicates"][0][
+        "first_failed_predicate"
+    ] == "strict_material_support"
+    assert result.diagnostics[8]["delayed_reacquisition_seed_predicates"][0][
+        "ordered_predicates"
+    ][0] == {"name": "common_admission", "passed": False}
+    assert result.diagnostics[10][
+        "delayed_reacquisition_seed_predicates"
+    ][0]["first_failed_predicate"] == "phase_identity"
+
+
+def test_release_precedence_is_direct_then_near_then_delayed() -> None:
+    def partial_fill_base() -> list[tuple[OilSequenceNode, ...]]:
+        fill = (
+            _node(
+                0,
+                "fill",
+                180.0,
+                direction=-1,
+                progress=25.0,
+                motion_support=0.9,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _node(
+                1,
+                "fill",
+                150.0,
+                direction=-1,
+                progress=25.0,
+                motion_support=0.9,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+        )
+        layers = [
+            (node, _unknown(frame)) for frame, node in enumerate(fill)
+        ]
+        layers.extend((_unknown(frame),) for frame in range(2, 8))
+        return layers
+
+    direct_layers = partial_fill_base()
+    direct_layers.append(
+        (
+            _node(8, "direct", 160.0, direction=1, progress=20.0),
+            _unknown(8),
+        )
+    )
+    direct = _resolve(
+        tuple(direct_layers),
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+    assert direct.phases[-1] is OilMaterialPhase.DRAINING
+    assert direct.diagnostics[-1]["release_source"] == "direct"
+    assert direct.diagnostics[-1]["delayed_reacquisition_evaluated"] is False
+
+    near_layers = partial_fill_base()
+    near_layers.extend(
+        (
+            _node(
+                frame,
+                "near",
+                y,
+                direction=1,
+                progress=2.0,
+                authority=(
+                    OilCandidateAuthority.ANCHOR_ELIGIBLE
+                    if frame == 8
+                    else OilCandidateAuthority.CONTINUATION_ELIGIBLE
+                ),
+            ),
+            _unknown(frame),
+        )
+        for frame, y in ((8, 160.0), (9, 170.0))
+    )
+    near = _resolve(
+        tuple(near_layers),
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+    assert near.phases[8] is OilMaterialPhase.OPEN
+    assert near.diagnostics[8]["recovery_active_chains"]
+    assert near.diagnostics[8]["delayed_reacquisition_evaluated"] is False
+    assert near.phases[9] is OilMaterialPhase.DRAINING
+    assert near.diagnostics[9]["release_source"] == "recovery"
+    assert near.diagnostics[9]["release_source_detail"] == (
+        "recovery_near_snapshot"
+    )
+
+    ambiguous_layers = partial_fill_base()
+    ambiguous_layers += [
+        (
+            _node(
+                8,
+                "near-a",
+                160.0,
+                direction=1,
+                progress=2.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+            ),
+            _node(
+                8,
+                "near-b",
+                161.0,
+                direction=1,
+                progress=2.0,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+            ),
+            _unknown(8),
+        ),
+        (
+            _node(
+                9,
+                "near-a",
+                170.0,
+                direction=1,
+                progress=2.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            ),
+            _node(
+                9,
+                "near-b",
+                171.0,
+                direction=1,
+                progress=2.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            ),
+            _unknown(9),
+        ),
+    ]
+    ambiguous = _resolve(
+        tuple(ambiguous_layers),
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+    assert ambiguous.phases[8] is OilMaterialPhase.OPEN
+    assert ambiguous.diagnostics[8]["recovery_active_chains"]
+    assert ambiguous.diagnostics[8]["delayed_reacquisition_evaluated"] is False
+    assert ambiguous.phases[9] is OilMaterialPhase.OPEN
+    assert ambiguous.diagnostics[9]["recovery_ambiguous"] is True
+    assert ambiguous.diagnostics[9]["delayed_reacquisition_evaluated"] is False
+    assert ambiguous.diagnostics[9][
+        "ownerless_barrier_attempt_consumed"
+    ] is False
+
+
 def test_confirmed_full_rejects_internal_or_ambiguous_drain_release() -> None:
     internal = _node(0, "internal", 110.0, direction=1, progress=30.0)
     ambiguous = (

@@ -138,13 +138,15 @@ dynamic-onset Foam publication remained internally consistent.
 
 ## Current executable action
 
-Implement the approved [R20 delayed drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
-against its [validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md).
+Run the post-push canonical Windows replay for the implemented [R20 delayed
+drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
+against its [validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
+and the [manual Windows procedure](../40-operations/manual-gui-windows-checklist.md).
 R20 adapts only the existing Oil lifecycle owner; Foam, candidate generation,
 tracklets, selector, projection and publication remain outside scope. The
-implementation-current detector is now R20 after focused, replay,
-provenance, performance, governance, compile and full-suite local gates pass;
-canonical Windows replay remains required.
+implementation-current detector is R20 after focused, replay, provenance,
+performance, governance, compile and full-suite local gates pass. No local
+implementation remains in this gate; canonical Windows replay is required.
 
 The completed R18 causal rerun is frozen in the [Windows causal
 closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md). Base lower
@@ -158,11 +160,12 @@ invariant on `1,202/1,202` common rows with zero mismatches. These facts do not
 authorize threshold changes or convert named unknowns into implementation
 claims.
 
-The locally accepted R18 implementation starts confirmed FULL behind a phase
-barrier, permits an established partial fill to reverse into one bounded drain
-owner and replaces broad Foam extent confirmation with bounded front-formation
-witnesses. It retains initial-EMPTY suppression, Oil/Foam same-frame/CSV
-provenance, Artifact handling, checked-truth authority and resolver ordering.
+The historical locally accepted R18 implementation starts confirmed FULL behind
+a phase barrier, permits an established partial fill to reverse into one
+bounded drain owner and replaces broad Foam extent confirmation with bounded
+front-formation witnesses. It retains initial-EMPTY suppression, Oil/Foam
+same-frame/CSV provenance, Artifact handling, checked-truth authority and
+resolver ordering; it is not the current R20 runtime owner.
 
 Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md),
 [completed causal observability addendum](../20-architecture/s11-r18-causal-trace-observability-architecture.md),

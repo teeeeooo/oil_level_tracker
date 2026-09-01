@@ -221,14 +221,15 @@ The durable invariants observable in current code are:
 
 ### Frozen R18 causal result and named unknowns
 
-The completed transferred causal rerun confirms the implementation-current R18
-result while leaving the detector field disposition unchanged:
+The completed transferred causal rerun confirms the historical R18 result while
+leaving the detector field disposition unchanged:
 
 - Base remained in `INITIAL_FULL_BARRIER`; rapid-refill Oil presence was `0`
   (`FAIL`). The operational `Y <= 800` cohort had 245 release-evaluation rows
   and zero passed. Lower `Y > 800` entrance rejection is correct safety
   behavior, while the actual interface's earliest harmful stage is
-  before-or-at `OIL-PHASE-DRAIN` and remains `NOT_PROVEN`.
+  before-or-at `OIL-PHASE-DRAIN` and remains `NOT_PROVEN`; R18 is historical
+  field-failed context, not the current runtime owner.
 - Accum DRAIN produced 264 release-evaluation rows and zero passed. Retained
   owner `000388:0265` remained a non-updated established snapshot; its
   non-update cause and actual drain candidate identity/direction remain
@@ -264,7 +265,7 @@ authority, not a flag prefix alone.
 
 ## 8. Update rules
 
-- Update this map only when the current `main` control flow, owner, invariant, version, or publication boundary changes. Verify the changed claim against source first, then update the corresponding [architecture](s11-r18-lifecycle-closure-architecture.md) and/or [validation contract](../30-validation/s11-r18-lifecycle-closure-validation.md) if the durable contract changed.
+- Update this map only when the current `main` control flow, owner, invariant, version, or publication boundary changes. Verify the changed claim against source first, then update the current [R20 architecture](s11-r20-delayed-drain-reacquisition-architecture.md) and/or [R20 validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md) if the durable contract changed; retain R18/R19 documents as historical records.
 - Keep project status and field-run disposition in the project authority documents, not here.
 - Keep completed replay measurements and audit findings in `docs/60-evidence/`; keep investigations in `docs/50-diagnostics/`. Do not copy historical counts or failed-design chronology into this current map.
 - Preserve the stable node IDs above. If an owner is split or renamed, retain the old ID as a compatibility alias in the replacement section and link the source owner; do not silently reuse an ID for a different responsibility.

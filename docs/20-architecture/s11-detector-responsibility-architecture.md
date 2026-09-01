@@ -249,11 +249,14 @@ and [R20 local evidence](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.
 - Logic-map impact: UPDATED — the current map records the R20 lifecycle route and additive diagnostics.
 - Failure-registry impact: NONE — the implementation preserves the existing guarded mechanisms and does not add a new registry entry.
 
-The current preservation and holdout gates are defined by the
-[R12 validation contract](../30-validation/s11-r12-phase-composition-replacement-validation.md)
-and the [S11 real-field validation contract](../30-validation/s11-real-field-detector-effectiveness.md).
-The completed local implementation evidence is
-[S11-R12 Phase/Composition Replacement](../60-evidence/s11/s11-r12-phase-composition-replacement.md).
+The current R20 preservation and canonical Windows holdout gates are defined by
+the [R20 validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
+and the [manual Windows procedure](../40-operations/manual-gui-windows-checklist.md),
+with reviewed field truth in
+[windows-sample1-heating-coldstart-reviewed-truth.md](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
+The R12/R18 contracts and local evidence remain historical failed-holdout
+context; R19 remains the historical near-snapshot baseline and none is a
+current runtime owner.
 
 ## Non-authorities
 

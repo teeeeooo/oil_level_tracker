@@ -27,7 +27,8 @@ All commands below ran from the repository root with the repository `.venv`.
 
 | Gate | Command | Result |
 |---|---|---|
-| R20 lifecycle, resolver, tracklet, trace, coordinator, integration, benchmark and publication-focused suite | `.venv/bin/python -m pytest -q tests/unit/test_oil_phase_lifecycle.py tests/unit/test_oil_observation_resolver.py tests/unit/test_oil_interface_tracklets.py tests/unit/test_jsonl_debug_trace.py tests/test_detection_run_coordinator.py tests/test_foam_phase_detector_integration.py tests/test_oil_detector_integration.py tests/test_detector_benchmark_integration.py tests/test_oil_controlled_benchmark.py tests/test_foam_controlled_benchmark.py tests/test_oil_production_cutover.py` | `515 passed in 42.20s` |
+| R20 delayed-seam lifecycle unit slice | `.venv/bin/python -m pytest -q tests/unit/test_oil_phase_lifecycle.py` | `83 passed in 0.09s` |
+| R20 lifecycle, resolver, tracklet, trace, coordinator, integration, benchmark and publication-focused suite | `.venv/bin/python -m pytest -q tests/unit/test_oil_phase_lifecycle.py tests/unit/test_oil_observation_resolver.py tests/unit/test_oil_interface_tracklets.py tests/unit/test_jsonl_debug_trace.py tests/test_detection_run_coordinator.py tests/test_foam_phase_detector_integration.py tests/test_oil_detector_integration.py tests/test_detector_benchmark_integration.py tests/test_oil_controlled_benchmark.py tests/test_foam_controlled_benchmark.py tests/test_oil_production_cutover.py` | `518 passed in 41.73s` |
 | R20 characterization/version fingerprint | `.venv/bin/python -m pytest -q tests/unit/test_oil_phase_lifecycle.py tests/test_r16_refactor_characterization.py::test_r0_completed_window_stage_and_provenance_fingerprint` | `80 passed in 0.45s` |
 | Full repository suite | `.venv/bin/python -m pytest -q` | `1706 passed in 152.48s` |
 | Qt partition | `.venv/bin/python -m pytest -q -m qt_app -x` | `252 passed, 1453 deselected in 9.26s` |
@@ -35,13 +36,15 @@ All commands below ran from the repository root with the repository `.venv`.
 | Governance over the R20 range and worktree | `python3 scripts/check_detector_governance.py --base-ref e3a014f7542654b5e63353a173b8b038be34e2bf --include-worktree` | passed before and after implementation/documentation edits |
 | Whitespace | `git diff --check` | passed |
 
-The focused lifecycle tests cover: grace frames, constant-size ownerless
-barriers, unique fresh anchors outside the stale snapshot jump, delayed success,
-sparse continuation and cross-ID anchor handoff, consumed ambiguity, expiry
-without reseed, phase identity, provisional/tracklet admission, strict
-material, direct/near priority, same-frame provenance, and initial-FULL/EMPTY
-and Foam controls. Existing R19 tests continue to cover step, jump, gap,
-direction, stagnation, material, handoff, ambiguity and evidence-window bounds.
+The focused lifecycle tests cover: grace frames, a 117-frame evidence-free
+ownerless interval with constant-size diagnostic state, unique fresh anchors
+outside the stale snapshot jump, delayed success, sparse continuation and
+cross-ID anchor handoff, consumed ambiguity, expiry without reseed, phase
+identity, provisional/tracklet admission, strict material rejection of moving
+residue/glare, direct-before-near-before-delayed priority, near active-chain and
+ambiguity gating, same-frame provenance, and initial-FULL/EMPTY and Foam
+controls. Existing R19 tests continue to cover step, jump, gap, direction,
+stagnation, material, handoff, ambiguity and evidence-window bounds.
 
 ## Four-video replay and provenance
 
