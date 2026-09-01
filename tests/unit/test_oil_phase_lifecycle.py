@@ -2265,6 +2265,85 @@ def test_delayed_seed_requires_phase_identity_and_non_provisional_tracklet() -> 
     assert result.diagnostics[10]["ownerless_barrier_state"] == "attempt_active"
 
 
+def test_delayed_attempt_cannot_reseed_after_unconfirmed_fill_reentry() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    layers = tuple((node, _unknown(frame)) for frame, node in enumerate(fill))
+    layers += tuple((_unknown(frame),) for frame in range(2, 8))
+    layers += (
+        (
+            _node(
+                8,
+                "delayed-a",
+                90.0,
+                direction=1,
+                progress=2.0,
+                phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+            ),
+            _unknown(8),
+        ),
+        (
+            _node(
+                9,
+                "reentered-fill",
+                148.0,
+                direction=-1,
+                progress=20.0,
+                motion_support=0.9,
+                motion_coverage=0.85,
+                confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+            ),
+            _unknown(9),
+        ),
+    )
+    layers += tuple((_unknown(frame),) for frame in range(10, 14))
+    layers += (
+        (
+            _node(
+                14,
+                "late-anchor",
+                100.0,
+                direction=1,
+                progress=2.0,
+                phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+            ),
+            _unknown(14),
+        ),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert result.diagnostics[8]["ownerless_barrier_attempt_consumed"] is True
+    assert result.diagnostics[9]["ownerless_barrier_state"] == "reset"
+    assert result.diagnostics[13]["ownerless_barrier_state"] == "reset"
+    assert result.diagnostics[14]["ownerless_barrier_attempt_consumed"] is False
+    assert result.diagnostics[14]["delayed_reacquisition_active_chains"] == []
+    assert result.phases[-1] is OilMaterialPhase.OPEN
+
+
 def test_confirmed_full_rejects_internal_or_ambiguous_drain_release() -> None:
     internal = _node(0, "internal", 110.0, direction=1, progress=30.0)
     ambiguous = (

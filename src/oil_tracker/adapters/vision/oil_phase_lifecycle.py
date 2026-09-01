@@ -332,6 +332,7 @@ class OilMaterialPhaseLifecycleOwner:
         delayed_recovery_chains: dict[str, _RecoveryDrainChain] = {}
         ownerless_barrier: _PartialFillOwnerlessBarrier | None = None
         delayed_attempt: _DelayedDrainReacquisitionAttempt | None = None
+        delayed_episode_blocked = False
         fill_confirmation_profile = OilFillConfirmationProfile.NONE
 
         for frame, rows in enumerate(rows_by_frame):
@@ -466,13 +467,22 @@ class OilMaterialPhaseLifecycleOwner:
                         dynamic_fill_owners = frozenset({chosen})
                         fill_phase_reentered = True
                         reason = "FILL_PHASE_REENTRY"
-                if dynamic_fill_owners:
-                    if ownerless_barrier is not None:
+                if dynamic_fill_owners or fill_phase_reentered:
+                    if (
+                        ownerless_barrier is not None
+                        or delayed_attempt is not None
+                        or delayed_recovery_chains
+                    ):
+                        delayed_episode_blocked = True
                         ownerless_barrier = None
                         delayed_attempt = None
                         delayed_recovery_chains = {}
                         barrier_state_override = "reset"
-                elif self.policy.initial_empty and established_fill_chain is not None:
+                elif (
+                    self.policy.initial_empty
+                    and established_fill_chain is not None
+                    and not delayed_episode_blocked
+                ):
                     ownerless_context = _recovery_context_key(
                         "partial_fill",
                         established_fill_chain,
@@ -493,6 +503,12 @@ class OilMaterialPhaseLifecycleOwner:
                         )
                         delayed_attempt = None
                         delayed_recovery_chains = {}
+                elif (
+                    self.policy.initial_empty
+                    and established_fill_chain is not None
+                    and delayed_episode_blocked
+                ):
+                    barrier_state_override = "reset"
                 if (
                     self.policy.initial_empty
                     and established_fill_chain is not None
@@ -870,6 +886,7 @@ class OilMaterialPhaseLifecycleOwner:
                     )
                 elif len(qualified) == 1:
                     confirmed_chain, fill_confirmation_profile = qualified[0]
+                    delayed_episode_blocked = False
                     if ownerless_barrier is not None:
                         barrier_state_override = "reset"
                     phase = OilMaterialPhase.FILLED_BARRIER
