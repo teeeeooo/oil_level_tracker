@@ -141,7 +141,7 @@ reviewed, S11 remains `LOCAL PASS / WINDOWS REQUIRED`, never field PASS.
 - Preserved contracts: one generic detector, initial EMPTY safety, coordinate-free FULL, current-row authority/material identity, distinct physical IDs, bounded chain/handoff, ambiguity/material fail-closed behavior, exact selected-candidate/sequence/CSV provenance and independent Foam.
 - Difference from prior failures: R20 retains only constant-size ownerless phase context, waits through ordinary grace, permits one fresh-anchor attempt per established-fill episode and applies existing R19 bounds only to current evidence; snapshot distance and loss age remain diagnostic.
 - Logic-map impact: UPDATED — the current map now records the R20 lifecycle route and additive diagnostics while retaining all prior node IDs.
-- Failure-registry impact: NONE — R20 closes existing F04/F05/F08/F09/F10 guards without adding a durable causal mechanism; F02 remains the authority-funnel guard.
+- Failure-registry impact: UPDATED — current registry metadata now routes the existing F04/F05/F08/F09/F10 guards through the R20 local evidence while preserving historical R18/R19 mechanism records; F02 remains the authority-funnel guard.
 
 ## Detector Governance
 
@@ -149,4 +149,4 @@ reviewed, S11 remains `LOCAL PASS / WINDOWS REQUIRED`, never field PASS.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`
 - First harmful stage: the transferred Accum established-fill owner loss at `OIL-PHASE-FILL` is the R20 seam; local replay is invariant and canonical Windows effectiveness/reviewed-Y outcome remain unknown.
 - Logic-map impact: UPDATED — the current map records R20 as the implementation-current lifecycle and diagnostic behavior.
-- Failure-registry impact: NONE — the current causal guard classes remain authoritative and no new durable mechanism is claimed.
+- Failure-registry impact: UPDATED — this evidence records the registry's R20 current routing; historical F01-F10 mechanism details remain unchanged and the canonical Windows gate remains required.

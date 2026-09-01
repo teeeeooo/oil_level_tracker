@@ -149,6 +149,7 @@ lifecycle diagnostics.
 - Logic-map impact: `UPDATED — the design gate intentionally left the current
   map on R19 pending implementation; the implementation and local-evidence
   gate now records R20 lifecycle behavior in the current map`.
-- Failure-registry impact: `NONE — R20 is a bounded closure of existing F04,
-  F05, F08, F09 and F10 guards, with F02 preserved as the proposal/authority
+- Failure-registry impact: `UPDATED — current registry metadata now routes the
+  existing F04, F05, F08, F09 and F10 guards through R20 while preserving their
+  historical R18/R19 mechanism records; F02 remains the proposal/authority
   funnel guard`.
