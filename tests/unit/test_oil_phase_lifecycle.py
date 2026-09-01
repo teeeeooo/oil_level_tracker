@@ -18,6 +18,7 @@ from oil_tracker.adapters.vision.oil_phase_lifecycle import (
     OilMaterialPhaseLifecycleOwner,
     OilMaterialPhasePolicy,
 )
+from oil_tracker.adapters.vision.oil_phase_identity import OilPhaseIdentity
 from oil_tracker.adapters.vision.oil_sequence_types import (
     OilCandidateRef,
     OilSequenceNode,
@@ -79,6 +80,7 @@ def _node(
     candidate_offset: int = 0,
     row_hypothesis_id: str | None = None,
     tracklet_incompatible: bool = False,
+    phase_identity: OilPhaseIdentity = OilPhaseIdentity.CONTINUATION_ONLY,
 ) -> OilSequenceNode:
     candidate = BoundaryCandidate(
         source=f"source-{tracklet}",
@@ -129,6 +131,7 @@ def _node(
             else tracklet_material_conflict
         ),
         tracklet_incompatible=tracklet_incompatible,
+        phase_identity=phase_identity,
     )
     return OilSequenceNode(
         "oil",
@@ -1259,7 +1262,7 @@ def test_initial_full_fragmented_release_chain_uses_unique_current_row() -> None
     assert result.owner_chains[2] == ("drain-a", "drain-b")
     assert result.path[2].candidate_ref is rows[2].candidate_ref
     diagnostic = result.diagnostics[2]
-    assert diagnostic["schema_version"] == "r19-bounded-drain-release-v1"
+    assert diagnostic["schema_version"] == "r20-delayed-drain-reacquisition-v1"
     assert diagnostic["release_source"] == "recovery"
     assert diagnostic["recovery_selected_tracklet_id"] == "drain-b"
     assert diagnostic["recovery_qualifying_tracklet_ids"] == ["drain-b"]
@@ -1861,6 +1864,251 @@ def test_recovery_large_same_owner_jump_cannot_reseed_or_handoff() -> None:
     assert result.path[-1].kind == "unknown"
     assert result.diagnostics[1]["recovery_reset_reason"] == "step_bound"
     assert result.diagnostics[1]["recovery_active_chains"] == []
+
+
+def test_delayed_partial_fill_reacquisition_waits_for_grace_and_uses_fresh_anchor() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    layers = tuple((node, _unknown(frame)) for frame, node in enumerate(fill))
+    layers += tuple((_unknown(frame),) for frame in range(2, 8))
+    delayed_anchor = _node(
+        8,
+        "delayed-a",
+        90.0,
+        direction=1,
+        progress=2.0,
+        phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+    )
+    delayed_success = _node(
+        9,
+        "delayed-a",
+        110.0,
+        direction=1,
+        progress=2.0,
+        authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+    )
+    layers += (
+        (delayed_anchor, _unknown(8)),
+        (delayed_success, _unknown(9)),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert result.phases[5:8] == (
+        OilMaterialPhase.OPEN,
+        OilMaterialPhase.OPEN,
+        OilMaterialPhase.OPEN,
+    )
+    assert result.allowed_tracklet_ids[5:8] == (
+        frozenset(),
+        frozenset(),
+        frozenset(),
+    )
+    assert result.phases[8] is OilMaterialPhase.OPEN
+    assert result.diagnostics[5]["ownerless_barrier_state"] == "grace"
+    assert result.diagnostics[7]["ownerless_barrier_state"] == "grace"
+    assert result.diagnostics[8]["ownerless_barrier_state"] == "attempt_active"
+    assert result.diagnostics[8]["delayed_reacquisition_snapshot_distance_px"] == 60.0
+    assert result.diagnostics[8][
+        "delayed_reacquisition_snapshot_distance_used_for_identity"
+    ] is False
+    assert result.diagnostics[8]["delayed_reacquisition_active_chains"][0][
+        "seed_y"
+    ] == 90.0
+    assert result.phases[9] is OilMaterialPhase.DRAINING
+    assert result.reasons[9] == (
+        "PARTIAL_FILL_DRAIN_DELAYED_REACQUISITION_CONFIRMED"
+    )
+    assert result.allowed_tracklet_ids[9] == frozenset({"delayed-a"})
+    assert result.owner_chains[9] == ("fill", "delayed-a")
+    assert result.path[9].candidate_ref is delayed_success.candidate_ref
+    assert result.diagnostics[9]["release_source"] == "delayed_reacquisition"
+    assert result.diagnostics[9]["ownerless_barrier_state"] == "released"
+
+
+def test_delayed_attempt_is_consumed_by_ambiguous_first_anchor_set() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    layers = tuple((node, _unknown(frame)) for frame, node in enumerate(fill))
+    layers += tuple((_unknown(frame),) for frame in range(2, 8))
+    layers += (
+        (
+            _node(
+                8,
+                "delayed-a",
+                90.0,
+                direction=1,
+                progress=2.0,
+                phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+            ),
+            _node(
+                8,
+                "delayed-b",
+                140.0,
+                direction=1,
+                progress=2.0,
+                phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+            ),
+            _unknown(8),
+        ),
+        (
+            _node(
+                9,
+                "delayed-a",
+                110.0,
+                direction=1,
+                progress=2.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            ),
+            _unknown(9),
+        ),
+        (
+            _node(
+                10,
+                "delayed-b",
+                160.0,
+                direction=1,
+                progress=2.0,
+                authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+            ),
+            _unknown(10),
+        ),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert all(phase is OilMaterialPhase.OPEN for phase in result.phases[8:])
+    assert result.diagnostics[8]["ownerless_barrier_state"] == "attempt_consumed"
+    assert result.diagnostics[8]["ownerless_barrier_attempt_consumed"] is True
+    assert result.diagnostics[8]["delayed_reacquisition_ambiguous"] is True
+    assert result.diagnostics[8]["delayed_reacquisition_reset_reason"] == (
+        "duplicate_delayed_seed_anchors"
+    )
+    assert result.diagnostics[9]["delayed_reacquisition_active_chains"] == []
+    assert result.diagnostics[9]["ownerless_barrier_state"] == "attempt_consumed"
+    assert result.diagnostics[10]["delayed_reacquisition_active_chains"] == []
+
+
+def test_delayed_seed_requires_phase_identity_and_non_provisional_tracklet() -> None:
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    layers = tuple((node, _unknown(frame)) for frame, node in enumerate(fill))
+    layers += tuple((_unknown(frame),) for frame in range(2, 8))
+    invalid_phase = _node(
+        8,
+        "invalid-phase",
+        90.0,
+        direction=1,
+        progress=2.0,
+        phase_identity=OilPhaseIdentity.CONTINUATION_ONLY,
+    )
+    invalid_lifecycle = _node(
+        9,
+        "invalid-lifecycle",
+        90.0,
+        direction=1,
+        progress=2.0,
+        lifecycle=TrackletLifecycle.PROVISIONAL,
+        phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+    )
+    valid = _node(
+        10,
+        "valid-delayed",
+        90.0,
+        direction=1,
+        progress=2.0,
+        phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+    )
+    layers += (
+        (invalid_phase, _unknown(8)),
+        (invalid_lifecycle, _unknown(9)),
+        (valid, _unknown(10)),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert result.phases[8] is OilMaterialPhase.OPEN
+    assert result.phases[9] is OilMaterialPhase.OPEN
+    assert result.phases[10] is OilMaterialPhase.OPEN
+    assert result.diagnostics[8]["delayed_reacquisition_seed_predicates"][0][
+        "first_failed_predicate"
+    ] == "phase_identity"
+    assert result.diagnostics[9]["delayed_reacquisition_seed_predicates"][0][
+        "first_failed_predicate"
+    ] == "bounded_confirmed_tracklet"
+    assert result.diagnostics[10]["delayed_reacquisition_seed_predicates"][0][
+        "first_failed_predicate"
+    ] is None
+    assert result.diagnostics[10]["ownerless_barrier_state"] == "attempt_active"
 
 
 def test_confirmed_full_rejects_internal_or_ambiguous_drain_release() -> None:

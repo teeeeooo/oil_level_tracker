@@ -8,6 +8,7 @@ from statistics import median
 from oil_tracker.domain.enums import InitialObservationState
 
 from .oil_candidate_authority import OilCandidateAuthority
+from .oil_phase_identity import OilPhaseIdentity
 from .oil_sequence_types import (
     OilCandidateRef,
     OilSequenceNode,
@@ -204,6 +205,27 @@ class _RecoveryDrainChain:
         return self.owner
 
 
+@dataclass(frozen=True)
+class _PartialFillOwnerlessBarrier:
+    """Coordinate-free context for an established fill owner that was lost."""
+
+    context_key: tuple[str, ...]
+    owner_chain: tuple[str, ...]
+    snapshot_frame: int
+    snapshot_y: float
+    loss_frame: int
+    grace_limit: int
+
+
+@dataclass(frozen=True)
+class _DelayedDrainReacquisitionAttempt:
+    """One fresh-anchor attempt owned by one established-fill episode."""
+
+    context_key: tuple[str, ...]
+    seed_frame: int | None = None
+    consumed: bool = False
+
+
 class OilMaterialPhaseLifecycleOwner:
     """Own causal fill/barrier/drain state without merging track identities."""
 
@@ -259,6 +281,38 @@ class OilMaterialPhaseLifecycleOwner:
         ]
         recovery_reset_reasons = [None for _layer in layers]
         release_sources = ["none" for _layer in layers]
+        release_source_details = ["none" for _layer in layers]
+        ownerless_barrier_states = ["inactive" for _layer in layers]
+        ownerless_barrier_loss_epochs: list[int | None] = [
+            None for _layer in layers
+        ]
+        ownerless_barrier_loss_ages: list[int | None] = [
+            None for _layer in layers
+        ]
+        ownerless_barrier_grace_limits = [
+            self.policy.maximum_lost_frames + 1 for _layer in layers
+        ]
+        ownerless_barrier_attempt_consumed = [
+            False for _layer in layers
+        ]
+        delayed_reacquisition_evaluated = [False for _layer in layers]
+        delayed_reacquisition_seed_predicates: list[
+            tuple[dict[str, object], ...]
+        ] = [() for _layer in layers]
+        delayed_reacquisition_active: list[tuple[dict[str, object], ...]] = [
+            () for _layer in layers
+        ]
+        delayed_reacquisition_qualifying_ids: list[tuple[str, ...]] = [
+            () for _layer in layers
+        ]
+        delayed_reacquisition_selected_ids: list[str | None] = [
+            None for _layer in layers
+        ]
+        delayed_reacquisition_ambiguities = [False for _layer in layers]
+        delayed_reacquisition_reset_reasons = [None for _layer in layers]
+        delayed_reacquisition_snapshot_distances: list[float | None] = [
+            None for _layer in layers
+        ]
         phase = (
             OilMaterialPhase.FILLED_BARRIER
             if self.policy.initial_full
@@ -272,6 +326,9 @@ class OilMaterialPhaseLifecycleOwner:
         established_fill_chain: _FillChain | None = None
         drain_chain: _DrainChain | None = None
         recovery_chains: dict[str, _RecoveryDrainChain] = {}
+        delayed_recovery_chains: dict[str, _RecoveryDrainChain] = {}
+        ownerless_barrier: _PartialFillOwnerlessBarrier | None = None
+        delayed_attempt: _DelayedDrainReacquisitionAttempt | None = None
         fill_confirmation_profile = OilFillConfirmationProfile.NONE
 
         for frame, rows in enumerate(rows_by_frame):
@@ -282,10 +339,47 @@ class OilMaterialPhaseLifecycleOwner:
             transient_owner_chain: tuple[str, ...] = ()
             dynamic_fill_owners: frozenset[str] = frozenset()
             recovery_released = False
+            barrier_state_override: str | None = None
 
             def capture_runtime() -> None:
                 established_fill_snapshots[frame] = established_fill_chain
                 dynamic_fill_owner_snapshots[frame] = dynamic_fill_owners
+                if ownerless_barrier is None:
+                    ownerless_barrier_states[frame] = (
+                        barrier_state_override or "inactive"
+                    )
+                    ownerless_barrier_loss_epochs[frame] = None
+                    ownerless_barrier_loss_ages[frame] = None
+                    ownerless_barrier_attempt_consumed[frame] = bool(
+                        delayed_attempt is not None
+                        and delayed_attempt.consumed
+                    )
+                else:
+                    ownerless_barrier_loss_epochs[frame] = (
+                        ownerless_barrier.loss_frame
+                    )
+                    ownerless_barrier_loss_ages[frame] = (
+                        frame - ownerless_barrier.loss_frame
+                    )
+                    ownerless_barrier_attempt_consumed[frame] = bool(
+                        delayed_attempt is not None
+                        and delayed_attempt.consumed
+                    )
+                    if barrier_state_override is not None:
+                        ownerless_barrier_states[frame] = barrier_state_override
+                    elif delayed_attempt is not None and delayed_attempt.consumed:
+                        ownerless_barrier_states[frame] = (
+                            "attempt_active"
+                            if delayed_recovery_chains
+                            else "attempt_consumed"
+                        )
+                    elif (
+                        frame - ownerless_barrier.loss_frame
+                        < ownerless_barrier.grace_limit
+                    ):
+                        ownerless_barrier_states[frame] = "grace"
+                    else:
+                        ownerless_barrier_states[frame] = "available"
             if phase in {OilMaterialPhase.OPEN, OilMaterialPhase.FILLING}:
                 chains, chain_ambiguity, chain_reason = self._advance_fill_chains(
                     chains,
@@ -369,6 +463,33 @@ class OilMaterialPhaseLifecycleOwner:
                         dynamic_fill_owners = frozenset({chosen})
                         fill_phase_reentered = True
                         reason = "FILL_PHASE_REENTRY"
+                if dynamic_fill_owners:
+                    if ownerless_barrier is not None:
+                        ownerless_barrier = None
+                        delayed_attempt = None
+                        delayed_recovery_chains = {}
+                        barrier_state_override = "reset"
+                elif self.policy.initial_empty and established_fill_chain is not None:
+                    ownerless_context = _recovery_context_key(
+                        "partial_fill",
+                        established_fill_chain,
+                    )
+                    if (
+                        ownerless_barrier is None
+                        or ownerless_barrier.context_key != ownerless_context
+                    ):
+                        if ownerless_barrier is not None:
+                            barrier_state_override = "reset"
+                        ownerless_barrier = _PartialFillOwnerlessBarrier(
+                            context_key=ownerless_context,
+                            owner_chain=established_fill_chain.owners,
+                            snapshot_frame=established_fill_chain.last.frame,
+                            snapshot_y=established_fill_chain.last.y,
+                            loss_frame=frame,
+                            grace_limit=self.policy.maximum_lost_frames + 1,
+                        )
+                        delayed_attempt = None
+                        delayed_recovery_chains = {}
                 if (
                     self.policy.initial_empty
                     and established_fill_chain is not None
@@ -440,6 +561,11 @@ class OilMaterialPhaseLifecycleOwner:
                         allowed = frozenset({partial_release.tracklet_id})
                         reason = "PARTIAL_FILL_DRAIN_RELEASE_CONFIRMED"
                         release_sources[frame] = "direct"
+                        release_source_details[frame] = "direct"
+                        ownerless_barrier = None
+                        delayed_attempt = None
+                        delayed_recovery_chains = {}
+                        barrier_state_override = "released"
                         phases.append(phase)
                         reasons.append(reason)
                         owner_chains.append(drain_chain.owners)
@@ -514,7 +640,12 @@ class OilMaterialPhaseLifecycleOwner:
                         reason = "PARTIAL_FILL_DRAIN_RECOVERY_CONFIRMED"
                         recovery_selected_ids[frame] = selected.tracklet_id
                         release_sources[frame] = "recovery"
+                        release_source_details[frame] = "recovery_near_snapshot"
                         recovery_chains = {}
+                        ownerless_barrier = None
+                        delayed_attempt = None
+                        delayed_recovery_chains = {}
+                        barrier_state_override = "released"
                         recovery_released = True
                     elif len(qualifying) > 1:
                         recovery_chains = {}
@@ -523,6 +654,175 @@ class OilMaterialPhaseLifecycleOwner:
                         allowed = frozenset()
                         reason = "PARTIAL_FILL_DRAIN_RECOVERY_AMBIGUOUS"
                     if recovery_released:
+                        phases.append(phase)
+                        reasons.append(reason)
+                        owner_chains.append(drain_chain.owners)
+                        fill_confirmation_profiles.append(
+                            fill_confirmation_profile
+                        )
+                        allowed_tracklet_ids.append(allowed)
+                        capture_runtime()
+                        continue
+                    # R20's delayed route is deliberately evaluated only
+                    # after direct release and the unchanged R19
+                    # near-snapshot chain have had an unambiguous opportunity.
+                    # A near chain remains authoritative until it expires.
+                    delayed_reacquisition_snapshot_distances[frame] = abs(
+                        rows[0].y - established_fill_chain.last.y
+                    ) if rows else None
+                    near_chain_active = bool(recovery_chains)
+                    grace_elapsed = bool(
+                        ownerless_barrier is not None
+                        and frame - ownerless_barrier.loss_frame
+                        >= ownerless_barrier.grace_limit
+                    )
+                    attempt_available = bool(
+                        ownerless_barrier is not None
+                        and (
+                            delayed_attempt is None
+                            or not delayed_attempt.consumed
+                        )
+                    )
+                    delayed_reacquisition_evaluated[frame] = bool(
+                        ownerless_barrier is not None
+                        and not near_chain_active
+                    )
+                    delayed_reacquisition_seed_predicates[frame] = tuple(
+                        self._delayed_seed_admission_record(
+                            row,
+                            grace_elapsed=grace_elapsed,
+                            attempt_available=attempt_available,
+                            snapshot_y=established_fill_chain.last.y,
+                        )
+                        for row in rows
+                    )
+                    delayed_released = False
+                    delayed_result: dict[str, object] = {
+                        "active": (),
+                        "predicates": (),
+                        "qualifying": (),
+                        "ambiguous": False,
+                        "reset_reason": None,
+                    }
+                    if (
+                        ownerless_barrier is not None
+                        and not near_chain_active
+                        and delayed_attempt is not None
+                        and delayed_attempt.consumed
+                        and delayed_recovery_chains
+                    ):
+                        delayed_recovery_chains, delayed_result = (
+                            self._advance_recovery_chains(
+                                delayed_recovery_chains,
+                                rows,
+                                frame,
+                                stage="delayed_reacquisition",
+                                seed_rows=(),
+                                established_fill=established_fill_chain,
+                                allow_seeding=False,
+                            )
+                        )
+                    elif (
+                        ownerless_barrier is not None
+                        and not near_chain_active
+                        and grace_elapsed
+                        and attempt_available
+                    ):
+                        delayed_seed_rows = tuple(
+                            row
+                            for row in rows
+                            if self._delayed_seed_allowed(
+                                row,
+                                established_fill=established_fill_chain,
+                            )
+                        )
+                        if delayed_seed_rows:
+                            # The first qualifying set consumes the only
+                            # attempt.  Multiple qualifying anchors are
+                            # ambiguity and do not start a chain.
+                            delayed_attempt = _DelayedDrainReacquisitionAttempt(
+                                context_key=ownerless_barrier.context_key,
+                                seed_frame=frame,
+                                consumed=True,
+                            )
+                            if len(delayed_seed_rows) > 1:
+                                delayed_reacquisition_ambiguities[frame] = True
+                                delayed_reacquisition_reset_reasons[frame] = (
+                                    "duplicate_delayed_seed_anchors"
+                                )
+                                delayed_result = {
+                                    "active": (),
+                                    "predicates": (),
+                                    "qualifying": (),
+                                    "ambiguous": True,
+                                    "reset_reason": "duplicate_delayed_seed_anchors",
+                                }
+                            else:
+                                delayed_recovery_chains, delayed_result = (
+                                    self._advance_recovery_chains(
+                                        delayed_recovery_chains,
+                                        rows,
+                                        frame,
+                                        stage="delayed_reacquisition",
+                                        seed_rows=delayed_seed_rows,
+                                        established_fill=established_fill_chain,
+                                    )
+                                )
+                    delayed_reacquisition_active[frame] = tuple(
+                        delayed_result.get("active", ())
+                    )
+                    delayed_reacquisition_qualifying_ids[frame] = tuple(
+                        row.tracklet_id
+                        for _key, row in delayed_result.get("qualifying", ())
+                    )
+                    delayed_reacquisition_ambiguities[frame] = bool(
+                        delayed_result.get("ambiguous", False)
+                    )
+                    delayed_reacquisition_reset_reasons[frame] = (
+                        delayed_result.get("reset_reason")
+                    )
+                    delayed_qualifying = tuple(
+                        sorted(
+                            delayed_result.get("qualifying", ()),
+                            key=lambda item: (item[0], item[1].tracklet_id),
+                        )
+                    )
+                    if delayed_result.get("ambiguous"):
+                        phase = OilMaterialPhase.OPEN
+                        allowed = frozenset()
+                        ambiguous_frames.add(frame)
+                        reason = (
+                            "PARTIAL_FILL_DRAIN_DELAYED_REACQUISITION_AMBIGUOUS"
+                        )
+                    elif len(delayed_qualifying) == 1:
+                        _key, selected = delayed_qualifying[0]
+                        recovery_owners = established_fill_chain.owners
+                        for recovery_owner in delayed_recovery_chains[_key].owners:
+                            recovery_owners = _append_unique_owner(
+                                recovery_owners,
+                                recovery_owner,
+                            )
+                        drain_chain = _DrainChain(
+                            owner=selected.tracklet_id,
+                            owners=recovery_owners,
+                            last_y=selected.y,
+                            last_frame=frame,
+                        )
+                        phase = OilMaterialPhase.DRAINING
+                        allowed = frozenset({selected.tracklet_id})
+                        reason = (
+                            "PARTIAL_FILL_DRAIN_DELAYED_REACQUISITION_CONFIRMED"
+                        )
+                        delayed_reacquisition_selected_ids[frame] = (
+                            selected.tracklet_id
+                        )
+                        release_sources[frame] = "delayed_reacquisition"
+                        release_source_details[frame] = "delayed_reacquisition"
+                        delayed_recovery_chains = {}
+                        ownerless_barrier = None
+                        barrier_state_override = "released"
+                        delayed_released = True
+                    if delayed_released:
                         phases.append(phase)
                         reasons.append(reason)
                         owner_chains.append(drain_chain.owners)
@@ -559,12 +859,17 @@ class OilMaterialPhaseLifecycleOwner:
                     )
                 elif len(qualified) == 1:
                     confirmed_chain, fill_confirmation_profile = qualified[0]
+                    if ownerless_barrier is not None:
+                        barrier_state_override = "reset"
                     phase = OilMaterialPhase.FILLED_BARRIER
                     filled_chain = confirmed_chain.owners
                     filled_frame = frame
                     fill_terminal_owner = confirmed_chain.owner
                     fill_owner_open = True
                     chains = {}
+                    ownerless_barrier = None
+                    delayed_attempt = None
+                    delayed_recovery_chains = {}
                     if confirmed_chain.last.material_veto:
                         fill_owner_open = False
                         allowed = frozenset()
@@ -726,6 +1031,7 @@ class OilMaterialPhaseLifecycleOwner:
                     reason = "DRAIN_RELEASE_CONFIRMED"
                     release_selected_ids[frame] = release.tracklet_id
                     release_sources[frame] = "direct"
+                    release_source_details[frame] = "direct"
                     recovery_chains = {}
                 elif len(release_ids) > 1:
                     recovery_chains = {}
@@ -806,6 +1112,7 @@ class OilMaterialPhaseLifecycleOwner:
                         reason = "DRAIN_RELEASE_RECOVERY_CONFIRMED"
                         recovery_selected_ids[frame] = selected.tracklet_id
                         release_sources[frame] = "recovery"
+                        release_source_details[frame] = "recovery_near_snapshot"
                         recovery_chains = {}
                     elif len(qualifying) > 1:
                         recovery_chains = {}
@@ -1001,7 +1308,8 @@ class OilMaterialPhaseLifecycleOwner:
 
         diagnostics = tuple(
             {
-                "schema_version": "r19-bounded-drain-release-v1",
+                "schema_version": "r20-delayed-drain-reacquisition-v1",
+                "legacy_schema_version": "r19-bounded-drain-release-v1",
                 "initial_state": (
                     None
                     if self.policy.confirmed_initial_state is None
@@ -1060,6 +1368,50 @@ class OilMaterialPhaseLifecycleOwner:
                 ),
                 "recovery_reset_reason": recovery_reset_reasons[index],
                 "release_source": release_sources[index],
+                "release_source_detail": release_source_details[index],
+                "release_evaluation_order": [
+                    "direct",
+                    "recovery_near_snapshot",
+                    "delayed_reacquisition",
+                ],
+                "ownerless_barrier_state": ownerless_barrier_states[index],
+                "ownerless_barrier_loss_epoch": ownerless_barrier_loss_epochs[
+                    index
+                ],
+                "ownerless_barrier_loss_age": ownerless_barrier_loss_ages[index],
+                "ownerless_barrier_grace_limit": ownerless_barrier_grace_limits[
+                    index
+                ],
+                "ownerless_barrier_attempt_consumed": (
+                    ownerless_barrier_attempt_consumed[index]
+                ),
+                "delayed_reacquisition_evaluated": (
+                    delayed_reacquisition_evaluated[index]
+                ),
+                "delayed_reacquisition_seed_predicates": list(
+                    delayed_reacquisition_seed_predicates[index]
+                ),
+                "delayed_reacquisition_active_chains": list(
+                    delayed_reacquisition_active[index]
+                ),
+                "delayed_reacquisition_qualifying_tracklet_ids": list(
+                    delayed_reacquisition_qualifying_ids[index]
+                ),
+                "delayed_reacquisition_selected_tracklet_id": (
+                    delayed_reacquisition_selected_ids[index]
+                ),
+                "delayed_reacquisition_ambiguous": (
+                    delayed_reacquisition_ambiguities[index]
+                ),
+                "delayed_reacquisition_reset_reason": (
+                    delayed_reacquisition_reset_reasons[index]
+                ),
+                "delayed_reacquisition_snapshot_distance_px": (
+                    delayed_reacquisition_snapshot_distances[index]
+                ),
+                "delayed_reacquisition_snapshot_distance_used_for_identity": (
+                    False
+                ),
                 "policy": {
                     "geometry_top_y": self.policy.geometry_top_y,
                     "geometry_height": self.policy.geometry_height,
@@ -1794,6 +2146,7 @@ class OilMaterialPhaseLifecycleOwner:
         stage: str,
         seed_rows: tuple[_ObservedRow, ...],
         established_fill: _FillChain | None,
+        allow_seeding: bool = True,
     ) -> tuple[dict[str, _RecoveryDrainChain], dict[str, object]]:
         """Advance bounded release evidence without changing physical rows."""
 
@@ -1953,6 +2306,10 @@ class OilMaterialPhaseLifecycleOwner:
                 row,
                 anchor_required=True,
             )
+            and (
+                stage != "delayed_reacquisition"
+                or self._delayed_phase_identity_valid(row)
+            )
             and self._recovery_common_admission(row)
         )
         matches_by_successor: dict[
@@ -2034,15 +2391,19 @@ class OilMaterialPhaseLifecycleOwner:
 
         # A fresh anchor can seed a new bounded chain.  Rows involved in an
         # ambiguous handoff cannot bypass that ambiguity by reseeding.
-        seed_keys = {
-            (row.tracklet_id, row.row_hypothesis_id)
-            for row in seed_rows
-            if self._recovery_seed_allowed(
-                row,
-                stage=stage,
-                established_fill=established_fill,
-            )
-        }
+        seed_keys = (
+            {
+                (row.tracklet_id, row.row_hypothesis_id)
+                for row in seed_rows
+                if self._recovery_seed_allowed(
+                    row,
+                    stage=stage,
+                    established_fill=established_fill,
+                )
+            }
+            if allow_seeding
+            else set()
+        )
         for key in sorted(seed_keys):
             if key in used_rows or key in blocked_rows:
                 continue
@@ -2223,6 +2584,8 @@ class OilMaterialPhaseLifecycleOwner:
             or not self._recovery_row_has_authority(row, anchor_required=True)
         ):
             return False
+        if stage == "delayed_reacquisition":
+            return self._delayed_phase_identity_valid(row)
         if stage == "initial_full":
             relative = (
                 row.entrance_y - self.policy.geometry_top_y
@@ -2237,6 +2600,93 @@ class OilMaterialPhaseLifecycleOwner:
             and abs(row.y - established_fill.last.y)
             <= self.policy.maximum_jump_px
         )
+
+    def _delayed_phase_identity_valid(self, row: _ObservedRow) -> bool:
+        """Require the existing independent phase identity for delayed seeds.
+
+        This gate is intentionally local to R20 delayed reacquisition.  R19
+        near-snapshot recovery keeps its established contract, while a fresh
+        delayed owner must prove that it is a direct or ordered-lower
+        interface before it can bootstrap a new phase-evidence chain.
+        """
+
+        return any(
+            node.candidate_ref is not None
+            and node.candidate_ref.phase_identity
+            in {
+                OilPhaseIdentity.DIRECT_INTERFACE,
+                OilPhaseIdentity.ORDERED_LOWER_INTERFACE,
+            }
+            for node in row.nodes
+        )
+
+    def _delayed_seed_allowed(
+        self,
+        row: _ObservedRow,
+        *,
+        established_fill: _FillChain | None,
+    ) -> bool:
+        return bool(
+            established_fill is not None
+            and self._recovery_common_admission(row)
+            and self._recovery_row_has_authority(row, anchor_required=True)
+            and self._delayed_phase_identity_valid(row)
+            and row.ref.tracklet_lifecycle
+            in {
+                TrackletLifecycle.CONFIRMED,
+                TrackletLifecycle.CONTINUING,
+            }
+            and _bounded_confirmed_observation(row.ref)
+            and self._strict_material_support(row)
+        )
+
+    def _delayed_seed_admission_record(
+        self,
+        row: _ObservedRow,
+        *,
+        grace_elapsed: bool,
+        attempt_available: bool,
+        snapshot_y: float,
+    ) -> dict[str, object]:
+        common_admission = self._recovery_common_admission(row)
+        phase_identity = self._delayed_phase_identity_valid(row)
+        seed_authority = self._recovery_row_has_authority(
+            row,
+            anchor_required=True,
+        )
+        bounded_tracklet = bool(
+            row.ref.tracklet_lifecycle
+            in {
+                TrackletLifecycle.CONFIRMED,
+                TrackletLifecycle.CONTINUING,
+            }
+            and _bounded_confirmed_observation(row.ref)
+        )
+        predicates = (
+            ("common_admission", common_admission),
+            ("phase_identity", phase_identity),
+            ("seed_authority", seed_authority),
+            ("bounded_confirmed_tracklet", bounded_tracklet),
+            ("strict_material_support", self._strict_material_support(row)),
+            ("ordinary_loss_grace_elapsed", grace_elapsed),
+            ("attempt_available", attempt_available),
+        )
+        return {
+            "stage": "delayed_reacquisition",
+            "tracklet_id": row.tracklet_id,
+            "row_hypothesis_id": row.row_hypothesis_id,
+            "snapshot_distance_px": abs(row.y - snapshot_y),
+            "snapshot_distance_used_for_identity": False,
+            "ordered_predicates": [
+                {"name": name, "passed": passed}
+                for name, passed in predicates
+            ],
+            "first_failed_predicate": next(
+                (name for name, passed in predicates if not passed),
+                None,
+            ),
+            "eligible": all(passed for _name, passed in predicates),
+        }
 
     def _recovery_step_cost(
         self,

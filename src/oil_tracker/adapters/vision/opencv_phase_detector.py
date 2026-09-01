@@ -38,7 +38,7 @@ from .temporal_tracker import TemporalTracker
 
 
 class OpenCvPhaseDetector:
-    version = "opencv-phase-detector-r19-bounded-drain-release-v1"
+    version = "opencv-phase-detector-r20-delayed-drain-reacquisition-v1"
 
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
