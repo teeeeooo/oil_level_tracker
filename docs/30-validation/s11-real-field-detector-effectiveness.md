@@ -4,21 +4,22 @@
 
 This document preserves the durable S11 field-effectiveness oracle, safety
 obligations and cross-revision non-regression boundary. It is not the current
-implementation or acceptance owner. Current R20 acceptance is owned by the
-[R20 delayed drain reacquisition validation contract](s11-r20-delayed-drain-reacquisition-validation.md),
+implementation or acceptance owner. Current acceptance is owned by the
+[S11 behavioral lifecycle and Foam witness validation](s11-behavioral-lifecycle-and-foam-witness-validation.md),
 with the required post-push [manual Windows procedure](../40-operations/manual-gui-windows-checklist.md)
 and [canonical reviewed truth](windows-sample1-heating-coldstart-reviewed-truth.md).
-R20 is implementation-current at `LOCAL PASS / WINDOWS REQUIRED`; the
-canonical Windows replay remains required and no Windows PASS is claimed.
-R12 architecture, head and owner references below are retained as historical
-context and are superseded as current ownership by R20.
+The active behavior remains local and field-unqualified; the canonical Windows
+replay remains required and no Windows PASS is claimed. R12/R18/R19/R20
+architecture, head and owner references below are retained as historical or
+predecessor context and are superseded as current ownership by the active
+behavior contract.
 
 ## Scope and oracle
 
 This document owns the durable cross-revision detector-effectiveness boundary
-for S11. The current implementation-specific acceptance contract is R20,
-defined by the [R20 delayed drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
-and [R20 validation contract](s11-r20-delayed-drain-reacquisition-validation.md).
+for S11. The current implementation-specific acceptance contract is the [S11
+behavioral lifecycle and Foam witness architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
+and [validation/work specification](s11-behavioral-lifecycle-and-foam-witness-validation.md).
 The exact current action remains in the [work plan](../00-project/work-plan.md),
 while completed measurements belong in
 [`../60-evidence/s11/`](../60-evidence/s11/).

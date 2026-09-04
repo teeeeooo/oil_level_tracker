@@ -1,6 +1,11 @@
 # S11-R20 Delayed Drain Reacquisition Validation
 
-**Status:** `LOCAL PASS / WINDOWS REQUIRED`
+**Status:** `HISTORICAL PREDECESSOR — LOCAL PASS / WINDOWS REQUIRED`
+
+The active acceptance/work specification is the [S11 behavioral lifecycle and
+Foam witness validation](s11-behavioral-lifecycle-and-foam-witness-validation.md).
+This contract remains preserved for the earlier delayed-reacquisition route;
+its field requirements were not waived or completed.
 
 This contract validates the
 [R20 delayed drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md).

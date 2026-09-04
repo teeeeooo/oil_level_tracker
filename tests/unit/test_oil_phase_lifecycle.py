@@ -1950,6 +1950,94 @@ def test_delayed_partial_fill_reacquisition_waits_for_grace_and_uses_fresh_ancho
     assert result.diagnostics[9]["ownerless_barrier_state"] == "released"
 
 
+def test_delayed_non_draining_anchor_does_not_consume_attempt() -> None:
+    """A directionally upward anchor leaves the later delayed attempt unused."""
+
+    fill = (
+        _node(
+            0,
+            "fill",
+            180.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+        _node(
+            1,
+            "fill",
+            150.0,
+            direction=-1,
+            progress=25.0,
+            motion_support=0.9,
+            motion_coverage=0.85,
+            confirmation_profile=TrackletConfirmationProfile.MOTION_TRAJECTORY,
+        ),
+    )
+    layers = tuple((node, _unknown(frame)) for frame, node in enumerate(fill))
+    layers += tuple((_unknown(frame),) for frame in range(2, 8))
+    non_draining = _node(
+        8,
+        "upward-anchor",
+        90.0,
+        direction=-1,
+        progress=12.0,
+        phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+    )
+    non_draining_continuation = _node(
+        9,
+        "upward-anchor",
+        110.0,
+        direction=-1,
+        progress=12.0,
+        authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+    )
+    ready = _node(
+        10,
+        "ready-anchor",
+        90.0,
+        direction=1,
+        progress=2.0,
+        phase_identity=OilPhaseIdentity.DIRECT_INTERFACE,
+    )
+    ready_continuation = _node(
+        11,
+        "ready-anchor",
+        110.0,
+        direction=1,
+        progress=2.0,
+        authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+    )
+    layers += tuple(
+        (node, _unknown(frame))
+        for frame, node in (
+            (8, non_draining),
+            (9, non_draining_continuation),
+            (10, ready),
+            (11, ready_continuation),
+        )
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.EMPTY_NO_INTERFACE,
+    )
+
+    assert result.phases[8:10] == (
+        OilMaterialPhase.OPEN,
+        OilMaterialPhase.OPEN,
+    )
+    assert result.diagnostics[8]["ownerless_barrier_attempt_consumed"] is False
+    assert result.diagnostics[8]["ownerless_barrier_state"] == "available"
+    assert result.diagnostics[8]["delayed_reacquisition_seed_predicates"][0][
+        "first_failed_predicate"
+    ] == "drain_direction_ready"
+    assert result.diagnostics[10]["ownerless_barrier_attempt_consumed"] is True
+    assert result.phases[11] is OilMaterialPhase.DRAINING
+    assert result.path[11].candidate_ref is ready_continuation.candidate_ref
+
+
 def test_delayed_attempt_is_consumed_by_ambiguous_first_anchor_set() -> None:
     fill = (
         _node(

@@ -114,10 +114,16 @@ def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs(
         for sample in rows
         if sample.timestamp_sec < 39.0 and sample.raw_foam_front_y is not None
     ]
-    # Strong onset confirmation removes isolated positives while retaining a
+    # Bounded witness authority leaves the constant-front prelude unconfirmed
+    # instead of borrowing the later rise; the local rising suffix remains a
     # multi-frame dynamic Foam observation during inflow.
     assert len(early_foam) >= 2
-    assert min(sample.timestamp_sec for sample in early_foam) <= 30.60
+    assert 37.0 <= min(sample.timestamp_sec for sample in early_foam) <= 37.6
+    assert not any(
+        sample.raw_foam_front_y is not None
+        for sample in rows
+        if sample.timestamp_sec < 37.0
+    )
     reviewed_second_episode = [
         sample
         for sample in early_foam

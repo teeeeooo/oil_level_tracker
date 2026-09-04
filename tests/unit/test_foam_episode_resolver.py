@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from oil_tracker.adapters.vision.foam_episode_resolver import (
     FoamEpisodeResolver,
+    _foam_witness_windows,
 )
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 from oil_tracker.domain.enums import BoundaryKind, FillState
@@ -501,6 +502,154 @@ def test_dynamic_constant_glare_without_front_evolution_does_not_confirm() -> No
     assert diagnostics.episode_count == 0
     assert diagnostics.rejected_unconfirmed_episode_count == 1
     assert all(item.raw_foam_front_y is None for item in resolved)
+
+
+def test_long_dynamic_prelude_cannot_borrow_distant_rise() -> None:
+    """Formation authority is local to the four-frame/two-second suffix."""
+
+    rows = [190.0] * 8 + [190.0, 184.0, 178.0, 172.0, 166.0]
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(y, score=0.86, dynamic=0.30),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index, y in enumerate(rows)
+    )
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 1
+    assert [item.raw_foam_front_y for item in resolved[:5]] == [
+        None,
+        None,
+        None,
+        None,
+        None,
+    ]
+    assert [item.raw_foam_front_y for item in resolved[5:]] == rows[5:]
+    windows = resolved[5].debug_metrics[
+        "sequence_foam_episode_diagnostics"
+    ]["segment_evaluations"]
+    assert windows
+    assert all(
+        item["window_span_frame_offsets"] <= 4
+        and item["window_span_seconds"] <= 2.0
+        for item in windows
+    )
+
+    # Evidence appended beyond the local witness horizon cannot rewrite an
+    # earlier confirmation or its selected same-frame coordinate.
+    extended = tuple(
+        _detection(
+            index,
+            _foam_candidate(y, score=0.86, dynamic=0.30),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index, y in enumerate(rows + [160.0, 154.0, 148.0, 142.0])
+    )
+    extended_resolved, _ = FoamEpisodeResolver().resolve(
+        extended,
+        glass_config(),
+    )
+    assert [
+        item.raw_foam_front_y for item in extended_resolved[: len(rows)]
+    ] == [item.raw_foam_front_y for item in resolved]
+
+
+def test_witness_windows_scan_only_bounded_suffix_without_prefix_slices() -> None:
+    """Every endpoint reads only its bounded suffix, never a full prefix copy."""
+
+    from types import SimpleNamespace
+
+    class NoSliceSegment:
+        def __init__(self, items):
+            self.items = tuple(items)
+            self.index_reads = 0
+
+        def __iter__(self):
+            return iter(self.items)
+
+        def __len__(self):
+            return len(self.items)
+
+        def __getitem__(self, index):
+            if isinstance(index, slice):
+                raise AssertionError("witness helper must not copy a prefix")
+            self.index_reads += 1
+            return self.items[index]
+
+    segment = NoSliceSegment(
+        SimpleNamespace(frame_offset=index, time_sec=index * 0.49)
+        for index in range(1200)
+    )
+
+    windows = _foam_witness_windows(segment)
+
+    assert len(windows) == len(segment)
+    # Five members can be accepted, plus one indexed boundary probe that
+    # discovers the sixth frame is outside the inclusive horizon.
+    assert segment.index_reads == len(segment) * 6 - 15
+    assert tuple(item.frame_offset for item in windows[-1]) == (
+        1195,
+        1196,
+        1197,
+        1198,
+        1199,
+    )
+    assert all(
+        window[-1].frame_offset - window[0].frame_offset <= 4
+        for window in windows
+    )
+    assert all(
+        window[-1].time_sec - window[0].time_sec <= 2.0
+        for window in windows
+    )
+
+
+def test_stable_layer_needs_three_dynamic_rows_not_three_total_rows() -> None:
+    """A static extent-changing tail cannot complete a stable-layer witness."""
+
+    detections = tuple(
+        _detection(
+            index,
+            _foam_candidate(y, score=0.86, dynamic=0.40 if index < 2 else 0.0),
+            state=FillState.UNKNOWN_REVIEW,
+        )
+        for index, y in enumerate((156.0, 158.0, 156.0))
+    )
+    for index, detection in enumerate(detections):
+        candidate = next(
+            item
+            for item in detection.candidates
+            if item.kind is BoundaryKind.FOAM_FRONT
+        )
+        candidate.features["area_ratio"] = 0.12 + 0.20 * index
+        candidate.features["component_width_ratio"] = 0.50 + 0.20 * index
+
+    resolved, diagnostics = FoamEpisodeResolver().resolve(
+        detections,
+        glass_config(),
+    )
+
+    assert diagnostics.episode_count == 0
+    assert all(item.raw_foam_front_y is None for item in resolved)
+    evaluations = resolved[0].debug_metrics[
+        "sequence_foam_episode_diagnostics"
+    ]["segment_evaluations"]
+    assert evaluations
+    assert all(
+        item["formation"]["dynamic_observation_count"] == 2
+        for item in evaluations
+        if item["window_span_frame_offsets"] >= 1
+    )
+    assert evaluations[0]["window_span_frame_offsets"] == 2
+    assert evaluations[0]["formation"]["predicates"][
+        "stable_observation_support"
+    ] is False
 
 
 def test_downward_dynamic_residue_cannot_confirm_from_area_or_width_change() -> None:

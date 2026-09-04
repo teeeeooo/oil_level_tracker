@@ -15,6 +15,22 @@ This file owns **affirmatively retained work that is not the current executable 
 
 Repeated replay of the private Windows field video during every S11 source iteration is **SUPERSEDED as a normal development dependency**. The private video may remain diagnostic corroboration when deliberately available, but iterative S11 source work must not depend on repeated private-field replay. This superseded practice is not a retained commitment.
 
+## Unresolved S11 field behavior surfaces
+
+- **Responsibility:** preserve individually deferred Base/Accum behavior gaps
+  that are not supported by the current source and reviewed truth.
+- **Classification:** `RETAINED / EVIDENCE-GATED`
+- **Deferred surfaces:** Base release admission; Base drain-to-fill reversal
+  and top closure; Accum initial entry; Accum fill continuity/layered/post-Foam
+  ownership; and strict Accum drain continuation/re-entry.
+- **Activation condition:** a separately approved behavior design with reviewed
+  physical candidate identity, source coordinates/phase evidence, bounded
+  transitions and two-sided local controls, followed by required Windows
+  replay. No global threshold, private timestamp/coordinate, interpolation or
+  telemetry-only substitution qualifies.
+- **Current-gate boundary:** these surfaces remain deferred while the active
+  delayed-readiness and bounded-Foam-witness implementation is validated.
+
 ## R20 decision-witness observability packages
 
 - **Responsibility:** add bounded, additive observations of existing R20 owner
@@ -35,7 +51,7 @@ Repeated replay of the private Windows field video during every S11 source itera
   executed. Any deliberate qualification requires separate owner/user
   authorization; it is non-current and must not reopen this closed Windows
   investigation or become an automatic replay dependency.
-- **Current-gate boundary:** keep this commitment non-current while the
-  documentation-only D0–D4 closeout is reviewed and committed; preserve field
-  `FAIL`, publication provenance distinction, unfulfilled historical
+- **Current-gate boundary:** keep this commitment non-current while the active
+  behavioral lifecycle/Foam witness implementation is validated; preserve
+  field `FAIL`, publication provenance distinction, unfulfilled historical
   qualification/comparison requirements, unknowns and original evidence.

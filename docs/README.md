@@ -64,10 +64,11 @@ diagnostic-only causal addendum and same-video closure are complete; the
 addendum does not change R18 behavior. The user-reported R20 Windows field
 report is received and closed as `FIELD FAIL`; R20's local implementation
 evidence remains a separate historical `LOCAL PASS / WINDOWS REQUIRED` record.
-The current action is documentation-only D0–D4 review, final approval and the
-authorized scoped documentation commit. The old field qualification and
-comparison requirements remain unfulfilled, not waived or executed here; no
-automatic Windows replay or reopened investigation is current.
+The approved generic behavior repairs, local validation, independent audit and
+final Sol review are complete; their completed local evidence is recorded in
+the active S11 evidence card below. The old field qualification and comparison
+requirements remain unfulfilled, not waived or executed here; no automatic
+Windows replay or reopened investigation is current.
 
 - Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
 - Future deliberate target-Windows procedure (non-current): [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md)
@@ -92,6 +93,9 @@ automatic Windows replay or reopened investigation is current.
 - Historical S11-R19 local validation evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r19-bounded-drain-release-chain.md`](60-evidence/s11/s11-r19-bounded-drain-release-chain.md)
 - S11-R20 delayed drain-reacquisition architecture (implemented local baseline; field report closed `FAIL`): [`20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md`](20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
 - S11-R20 delayed drain-reacquisition validation contract (field requirements unfulfilled; future deliberate qualification only): [`30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
+- S11 active behavioral lifecycle and Foam witness architecture (current implementation owner): [`20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md`](20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
+- S11 active behavioral lifecycle and Foam witness validation/work specification: [`30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md`](30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md)
+- S11 completed behavioral lifecycle and Foam witness local evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md`](60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md)
 - S11-R20 decision-witness observability architecture (`DESIGN ONLY — NOT IMPLEMENTED`): [`20-architecture/s11-r20-decision-witness-observability-architecture.md`](20-architecture/s11-r20-decision-witness-observability-architecture.md)
 - S11-R20 decision-witness observability validation/work specification (`DESIGN ONLY — NOT_IMPLEMENTED / VALIDATION NOT RUN`): [`30-validation/s11-r20-decision-witness-observability-validation.md`](30-validation/s11-r20-decision-witness-observability-validation.md)
 - S11-R20 local implementation/validation evidence (historical `LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r20-delayed-drain-reacquisition.md`](60-evidence/s11/s11-r20-delayed-drain-reacquisition.md)

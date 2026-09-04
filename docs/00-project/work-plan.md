@@ -2,10 +2,10 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R20 user-reported Windows field FAIL received/closed; docs-only D0–D4 closeout review/final/scoped commit remaining`
-**Source authority:** `main R20 local-pass implementation plus closed user-report field FAIL over frozen R18 evidence; no field-qualified detector; prior field qualification/comparison requirements remain unfulfilled`
-**Task-start exact head:** `e3a014f7542654b5e63353a173b8b038be34e2bf`
-**Task-start exact parent:** `e3a014f7542654b5e63353a173b8b038be34e2bf`
+**Current gate:** `R20 behavioral implementation, local validation, independent audit, final Sol review and documentation closeout complete; future Windows field qualification remains required`
+**Source authority:** `approved committed behavioral implementation against baseline 119f218f2cf232e90f8e591e28feaab54f6fb42f; no field-qualified detector; prior field qualification/comparison requirements remain unfulfilled`
+**Task-start exact head:** `119f218f2cf232e90f8e591e28feaab54f6fb42f`
+**Task-start exact parent:** `119f218f2cf232e90f8e591e28feaab54f6fb42f`
 
 ## R10 field result
 
@@ -136,26 +136,33 @@ dynamic Foam group was rejected because signed inverted Oil topology and
 pre-publication Oil proposals were treated as same-material authority. Later
 dynamic-onset Foam publication remained internally consistent.
 
-## Current documentation closeout action
+## Completed behavioral implementation and validation
 
-The user-reported R20 Windows field report is received and closed as `FIELD
-FAIL`; the private bundle remains unavailable and no new Windows inquiry is
-opened. R20's local implementation/evidence remains a separate historical
-`LOCAL PASS / WINDOWS REQUIRED` record. Its canonical qualification and R19
-comparison requirements remain unfulfilled, not waived or executed by accepting
-the report. The current action is independent Luna routing review, fresh Sol
-final approval, and the already authorized scoped documentation commit; after
-that commit this D0–D4 documentation task is complete. This action does not
-run an automatic Windows replay, change detector behavior, or authorize R21.
+The user-reported R20 Windows field report remains closed as `FIELD FAIL`; the
+private bundle remains unavailable and no new Windows inquiry is opened. The
+approved two generic behavior repairs are implemented and locally accepted in
+the active [behavioral lifecycle and Foam witness
+architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
+and [validation/work specification](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md):
+delayed drain readiness before consuming the one ownerless attempt, and
+bounded local Foam confirmation windows with actual dynamic stable support.
+The completed commands, results and limitations are recorded in the
+[behavioral lifecycle and Foam witness evidence](../60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md).
+The old field qualification/comparison requirements remain unfulfilled, not
+waived or executed by accepting the report. No automatic Windows replay,
+unrelated detector owner change or new revision is authorized by this record.
 
 The [R20 delayed drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
 and its [validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
-remain the historical/local implementation authorities for any separately
-authorized future field qualification. The [R20 Windows evidence
+remain historical predecessor authorities for the direct/near/delayed route.
+The active behavioral contract is the [behavioral architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
+and [validation/work specification](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md).
+The [R20 Windows evidence
 consolidation](../60-evidence/s11/s11-r20-windows-evidence-consolidation.md)
 records the closed report and its provenance boundaries. Foam, candidate
 generation, tracklets, selector, projection and publication remain outside the
-approved design-only observability scope.
+two behavioral repair seams; optional decision-witness observability remains
+separate retained design-only work.
 
 The completed R18 causal rerun is frozen in the [Windows causal
 closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md). Base lower
@@ -169,12 +176,11 @@ invariant on `1,202/1,202` common rows with zero mismatches. These facts do not
 authorize threshold changes or convert named unknowns into implementation
 claims.
 
-The historical locally accepted R18 implementation starts confirmed FULL behind
-a phase barrier, permits an established partial fill to reverse into one
-bounded drain owner and replaces broad Foam extent confirmation with bounded
-front-formation witnesses. It retains initial-EMPTY suppression, Oil/Foam
-same-frame/CSV provenance, Artifact handling, checked-truth authority and
-resolver ordering; it is not the current R20 runtime owner.
+The active behavior implementation retains the historical R18/R19 direct and
+near-snapshot safety contracts while adapting delayed seed readiness and Foam
+formation authority at their existing owners. It retains initial-EMPTY
+suppression, Oil/Foam same-frame/CSV provenance, Artifact handling,
+checked-truth authority and resolver ordering; it does not claim field repair.
 
 Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md),
 [completed causal observability addendum](../20-architecture/s11-r18-causal-trace-observability-architecture.md),
@@ -184,14 +190,17 @@ Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architec
 [R19 validation](../30-validation/s11-r19-bounded-drain-release-chain-validation.md),
 [R20 architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md),
 [R20 validation](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md),
+[active behavioral architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md),
+[active behavioral validation](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md),
+[completed behavioral evidence](../60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md),
 [R20 local evidence](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.md),
 [operator-reported field result](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
 and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
 R18 remains field `FAIL`; its causal rerun is complete and no further
-diagnostic rerun is required for R20 design input. R19 remains the historical
-near-snapshot baseline. Independent R20 local validation is recorded in the
-[R20 evidence record](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.md)
-with status `LOCAL PASS / WINDOWS REQUIRED`; no field PASS is claimed.
+diagnostic rerun is required for this implementation. R19 and the earlier R20
+document remain historical predecessor context. The active behavior tests and
+four-video replay are recorded in the completed evidence card; no field PASS
+is claimed.
 
 ## R16 field disposition
 

@@ -63,6 +63,7 @@ class _FoamFormationEvaluation:
     mean_relative_front: float
     area_span: float
     width_span_ratio: float
+    dynamic_observation_count: int
     predicates: tuple[tuple[str, bool], ...]
 
     def as_debug_dict(self) -> dict[str, object]:
@@ -76,6 +77,7 @@ class _FoamFormationEvaluation:
             "mean_relative_front": self.mean_relative_front,
             "area_span": self.area_span,
             "width_span_ratio": self.width_span_ratio,
+            "dynamic_observation_count": self.dynamic_observation_count,
             "predicates": dict(self.predicates),
             "first_failed_predicate": next(
                 (name for name, passed in self.predicates if not passed),
@@ -174,39 +176,60 @@ class FoamEpisodeResolver:
             static_dominated_any = _foam_track_static_dominated(track)
             oil_alias_any = False
             alias_group_frames: set[int] = set()
+            accepted_support_frames: set[int] = set()
             for segment_index, segment in enumerate(segments):
-                aliases_oil = _episode_aliases_oil(segment, source, glass)
-                evaluation = _foam_segment_evaluation(segment, glass)
-                segment_diagnostic = {
-                    "track_id": track_id,
-                    "segment_id": (
-                        f"{track_id}:segment:{segment_index:03d}"
-                    ),
-                    "first_frame": segment[0].frame_offset,
-                    "last_frame": segment[-1].frame_offset,
-                    "aliases_oil": aliases_oil,
-                    **evaluation.as_debug_dict(),
-                }
-                for item in segment:
-                    evaluations = frame_diagnostics[item.frame_offset][
-                        "segment_evaluations"
-                    ]
-                    assert isinstance(evaluations, list)
-                    evaluations.append(segment_diagnostic)
-                if aliases_oil:
-                    oil_alias_any = True
-                    alias_frames = {item.frame_offset for item in segment}
-                    alias_group_frames.update(alias_frames)
-                    rejected_oil_alias_frames.update(alias_frames)
-                    continue
-                if not evaluation.passed:
-                    continue
-                accepted_any = True
-                episode_count += 1
-                confirmed_frames.update(item.frame_offset for item in segment)
-                rejected_unconfirmed_frames.difference_update(
-                    item.frame_offset for item in segment
-                )
+                for window_index, window in enumerate(
+                    reversed(_foam_witness_windows(segment))
+                ):
+                    aliases_oil = _episode_aliases_oil(window, source, glass)
+                    evaluation = _foam_segment_evaluation(window, glass)
+                    window_diagnostic = {
+                        "track_id": track_id,
+                        "segment_id": (
+                            f"{track_id}:segment:{segment_index:03d}:"
+                            f"window:{window_index:03d}"
+                        ),
+                        "parent_segment_first_frame": segment[0].frame_offset,
+                        "parent_segment_last_frame": segment[-1].frame_offset,
+                        "first_frame": window[0].frame_offset,
+                        "last_frame": window[-1].frame_offset,
+                        "window_span_frame_offsets": (
+                            window[-1].frame_offset - window[0].frame_offset
+                        ),
+                        "window_span_seconds": (
+                            window[-1].time_sec - window[0].time_sec
+                        ),
+                        "aliases_oil": aliases_oil,
+                        **evaluation.as_debug_dict(),
+                    }
+                    for item in window:
+                        evaluations = frame_diagnostics[item.frame_offset][
+                            "segment_evaluations"
+                        ]
+                        assert isinstance(evaluations, list)
+                        evaluations.append(window_diagnostic)
+                    if aliases_oil:
+                        oil_alias_any = True
+                        alias_frames = {
+                            item.frame_offset for item in window
+                        }
+                        alias_group_frames.update(alias_frames)
+                        rejected_oil_alias_frames.update(alias_frames)
+                        continue
+                    if not evaluation.passed:
+                        continue
+                    accepted_any = True
+                    accepted_support_frames.update(
+                        item.frame_offset for item in window
+                    )
+                    rejected_unconfirmed_frames.difference_update(
+                        item.frame_offset for item in window
+                    )
+            confirmed_frames.update(accepted_support_frames)
+            episode_count += _accepted_support_episode_count(
+                track,
+                accepted_support_frames,
+            )
             if accepted_any:
                 if oil_alias_any:
                     oil_alias_count += 1
@@ -630,6 +653,52 @@ def _foam_confirmation_segments(
     return tuple(output)
 
 
+def _foam_witness_windows(
+    segment: tuple[_FoamEvidence, ...],
+) -> tuple[tuple[_FoamEvidence, ...], ...]:
+    """Return one bounded suffix witness for each evidence endpoint.
+
+    Association can keep a physical track together across sparse samples, but
+    no whole track (or dynamic segment) may confer formation authority.  Each
+    endpoint sees only its maximal suffix inside the existing four-frame and
+    two-second horizons.  The segment is ordered by frame/time, so scanning
+    backwards stops as soon as either inclusive bound is exceeded.  At most
+    five one-per-frame samples can participate in a witness under the frame
+    bound, keeping this local work bounded even for long tracks.
+    """
+
+    windows: list[tuple[_FoamEvidence, ...]] = []
+    for endpoint_index, endpoint in enumerate(segment):
+        suffix: list[_FoamEvidence] = []
+        for item_index in range(endpoint_index, -1, -1):
+            item = segment[item_index]
+            frame_span = endpoint.frame_offset - item.frame_offset
+            time_span = endpoint.time_sec - item.time_sec
+            if frame_span < 0 or time_span < 0.0:
+                continue
+            if frame_span > 4 or time_span > 2.0:
+                break
+            suffix.append(item)
+        windows.append(tuple(reversed(suffix)))
+    return tuple(windows)
+
+
+def _accepted_support_episode_count(
+    track: tuple[_FoamEvidence, ...],
+    accepted_frames: set[int],
+) -> int:
+    """Count maximal connected accepted-support runs within one track."""
+
+    count = 0
+    previous_accepted = False
+    for item in track:
+        accepted = item.frame_offset in accepted_frames
+        if accepted and not previous_accepted:
+            count += 1
+        previous_accepted = accepted
+    return count
+
+
 def _foam_segment_accepted(
     segment: tuple[_FoamEvidence, ...],
     glass: GlassInspectionConfig,
@@ -753,6 +822,7 @@ def _foam_formation_evaluation(
             mean_relative_front=0.0,
             area_span=0.0,
             width_span_ratio=0.0,
+            dynamic_observation_count=0,
             predicates=predicates,
         )
     steps = tuple(
@@ -765,6 +835,10 @@ def _foam_formation_evaluation(
         and directional_agreement >= 0.60
     )
     if directed_front:
+        dynamic_observation_count = sum(
+            min(item.internal_motion, item.dynamic_support) >= 0.15
+            for item in segment
+        )
         predicates = (
             ("directed_front_rise", True),
             ("directed_front_agreement", True),
@@ -780,6 +854,7 @@ def _foam_formation_evaluation(
             area_span=max(item.area_ratio for item in segment)
             - min(item.area_ratio for item in segment),
             width_span_ratio=0.0,
+            dynamic_observation_count=dynamic_observation_count,
             predicates=predicates,
         )
     front_span = max(front_rows) - min(front_rows)
@@ -788,6 +863,10 @@ def _foam_formation_evaluation(
     )
     width_span = max(item.width_ratio for item in segment) - min(
         item.width_ratio for item in segment
+    )
+    dynamic_observation_count = sum(
+        min(item.internal_motion, item.dynamic_support) >= 0.15
+        for item in segment
     )
     maximum_width = max(item.width_ratio for item in segment)
     geometry_top = float(
@@ -802,11 +881,12 @@ def _foam_formation_evaluation(
     )
     substantial_two_frame_layer = bool(
         len(segment) == 2
+        and dynamic_observation_count == 2
         and min(item.area_ratio for item in segment) >= 0.25
         and min(item.width_ratio for item in segment) >= 0.60
     )
     stable_observation_support = bool(
-        len(segment) >= 3 or substantial_two_frame_layer
+        dynamic_observation_count >= 3 or substantial_two_frame_layer
     )
     extent_evolution = bool(
         area_span
@@ -834,6 +914,7 @@ def _foam_formation_evaluation(
         mean_relative_front=mean_relative_front,
         area_span=area_span,
         width_span_ratio=width_span_ratio,
+        dynamic_observation_count=dynamic_observation_count,
         predicates=predicates,
     )
 

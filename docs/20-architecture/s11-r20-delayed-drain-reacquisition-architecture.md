@@ -1,6 +1,12 @@
 # S11-R20 Delayed Drain Reacquisition Architecture
 
-**Status:** `IMPLEMENTED — LOCAL PASS / WINDOWS REQUIRED`
+**Status:** `HISTORICAL PREDECESSOR — PRESERVED LOCAL PASS / WINDOWS REQUIRED`
+
+The active behavior owner is now the [S11 behavioral lifecycle and Foam
+witness architecture](s11-behavioral-lifecycle-and-foam-witness-architecture.md).
+This document preserves the earlier delayed-reacquisition contract and its
+local evidence boundary; it is not the current authority for the adapted seed
+readiness predicate or bounded Foam behavior.
 
 ## Purpose and authority
 

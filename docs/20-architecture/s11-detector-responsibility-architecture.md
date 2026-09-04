@@ -1,18 +1,21 @@
 # S11 Detector Responsibility Architecture
 
-**Status:** `R20 IMPLEMENTED — LOCAL PASS / WINDOWS REQUIRED`
+**Status:** `R20 BEHAVIOR REPAIRS — LOCAL ACCEPTANCE COMPLETE / WINDOWS REQUIRED`
 
 ## Purpose and authority
 
 This document is the durable responsibility owner for the production S11
 detector. The exact current gate remains in the [work plan](../00-project/work-plan.md),
 and completed measurements remain in [`../60-evidence/s11/`](../60-evidence/s11/).
+The completed local behavior record is the [S11 behavioral lifecycle and Foam
+witness evidence](../60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md).
 
-R20 is the checked-in production runtime at the local implementation head;
-canonical secure-Windows validation remains required. R5–R19 preserve failed
+The checked-in production runtime includes the active behavioral adaptations
+owned by the [S11 behavioral lifecycle and Foam witness architecture](s11-behavioral-lifecycle-and-foam-witness-architecture.md);
+canonical secure-Windows validation remains required. R5–R20 preserve failed
 holdouts, accepted local contracts and causal history as applicable, but have no
-current runtime routing when they conflict with this document or the
-[R20 architecture](s11-r20-delayed-drain-reacquisition-architecture.md).
+current runtime routing when they conflict with this document or the active
+behavior contract.
 
 ## Production observation path
 
@@ -136,22 +139,38 @@ After `maximum_lost_frames + 1` grace frames, one unique same-frame
 `ANCHOR_ELIGIBLE` row may start the episode's single delayed R19-shaped attempt
 when its existing phase identity is `DIRECT_INTERFACE` or
 `ORDERED_LOWER_INTERFACE`, its tracklet is confirmed/continuing and compatible,
-and strict material support passes. Direct partial-fill release remains first;
-R19 near-snapshot recovery remains second; delayed reacquisition is third. A
-qualifying anchor set consumes the attempt even when ambiguous or unable to
-confirm, and it cannot reseed until a new fill episode is established. Existing
-R19 step, loss, stagnation, handoff, material and evidence-window bounds apply
-after seeding. The current row on confirmation is the only row that can be
-selected and published. Snapshot distance and loss age are diagnostics, never
-identity or authority inputs.
+strict material support passes, and the existing tracklet direction is positive
+with positive net progress and at least
+`drain_minimum_directional_agreement` agreement. The direction/progress test is
+shared by lifecycle admission and its diagnostic record. Direct partial-fill
+release remains first; R19 near-snapshot recovery remains second; delayed
+reacquisition is third. Unready rows leave the attempt available; the first
+ready qualifying set consumes it even when ambiguous or unable to confirm, and
+it cannot reseed until a new fill episode is established. Existing R19 step,
+loss, stagnation, handoff, material and evidence-window bounds apply after
+seeding. The current row on confirmation is the only row that can be selected
+and published. Snapshot distance and loss age are diagnostics, never identity
+or authority inputs.
 
 ## Foam episode authority and composition
 
 `FoamEpisodeResolver` receives only eligible coherent raw Foam material after the
-Oil/state path is fixed. Confirmation requires layer topology plus registered,
-exposure-compensated material evolution or another independent dynamic cue.
-Brightness, a single bubble, component-mask jitter, global exposure change or a
-static glare prelude is insufficient.
+Oil/state path is fixed. It retains the existing associated track but evaluates
+formation through overlapping maximal suffix witnesses bounded to four frame
+offsets and 2.0 source seconds. Each window independently applies layer
+topology, registered exposure-compensated material evolution, dynamic/static,
+stable-layer and final-Oil-alias predicates. Only same-frame members of a
+passing window are confirmed; overlapping windows are deduplicated and counted
+as maximal connected accepted-support runs. Brightness, a single bubble,
+component-mask jitter, global exposure change or a static glare prelude is
+insufficient.
+
+The stable-layer branch counts actual dynamic rows using
+`min(internal_motion, dynamic_support) >= 0.15`: at least three are required,
+or exactly two dynamic rows may use the existing substantial area/width
+exception. A static extent-changing third row cannot satisfy the three-row
+rule. Missing frames remain missing, and no window may confer authority on a
+distant or aliased window through track identity.
 
 Foam/residue identity is bounded by age, missing duration and cumulative drift.
 It may oppose a matching row from any candidate family but cannot persist
@@ -225,29 +244,29 @@ observed samples only. Detailed presentation ownership belongs to the
   acceptance targets.
 
 R18 and R19 remain preserved as the historical direct/near-snapshot lifecycle
-contracts. R20 is the current bounded delayed-reacquisition adaptation; its
-implementation and local evidence are routed through the [R20 architecture](s11-r20-delayed-drain-reacquisition-architecture.md),
-[R20 validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
-and [R20 local evidence](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.md).
+contracts. The R20 delayed-reacquisition document remains the historical
+baseline for that route; current behavior is routed through the [active
+behavioral architecture](s11-behavioral-lifecycle-and-foam-witness-architecture.md)
+and its [validation/work specification](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md).
 
 ## History Review
 
-- Logic-map nodes: `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `TRACE-PUBLICATION`
-- Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`
-- Prior mechanisms reviewed: R16 reciprocal physical ownership, R17 owner-loss dead end, R18 lifecycle closure and causal rerun, and R19 bounded direct/near recovery with their current architecture, validation and evidence records.
+- Logic-map nodes: `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `PUBLICATION-PROVENANCE`, `TRACE-PUBLICATION`
+- Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`
+- Prior mechanisms reviewed: R16 reciprocal physical ownership, R17 owner-loss dead end and false Foam episodes, R18 lifecycle closure and causal rerun, R19 bounded direct/near recovery, R20 delayed-reacquisition baseline, and their current architecture, validation and evidence records.
 - Prior mechanisms rejected: motion-only bootstrap, stale-coordinate or stale-ID transfer, global threshold widening, selector/projection repair, unbounded lookahead, interpolation/carry, private field identity and Foam-to-Oil coupling.
 - Preserved contracts: one generic detector, initial EMPTY safety, coordinate-free FULL, same-frame authority/material identity, distinct physical IDs, bounded handoff and evidence, ambiguity/material fail-closed behavior, exact selected-candidate/sequence/CSV provenance and independent Foam.
-- Difference from prior failures: R20 retains only constant-size ownerless phase context, waits through ordinary grace, starts one fresh-anchor attempt per established-fill episode and applies existing R19 bounds only to current evidence; snapshot distance and loss age are not identity.
-- Logic-map impact: UPDATED — the current lifecycle and diagnostic owner now includes R20's bounded ownerless barrier and delayed route, while all downstream owner boundaries remain unchanged.
-- Failure-registry impact: NONE — R20 closes existing F04/F05/F08/F09/F10 guards without establishing a new durable causal mechanism; F02 remains the authority-funnel guard.
+- Difference from prior failures: the delayed route now requires existing drain-ready direction/agreement/progress before consuming its one attempt, while the Foam owner evaluates only bounded suffix witnesses and actual dynamic support; no stale context or whole-track future evidence is promoted.
+- Logic-map impact: UPDATED — current lifecycle and Foam episode details now match the two adapted owners; downstream owner boundaries remain unchanged.
+- Failure-registry impact: UPDATED — existing F07/F08 guards record these constrained adaptations without establishing a new durable causal mechanism.
 
 ## Detector Governance
 
-- Logic-map nodes: `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `TRACE-PUBLICATION`
-- Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`
-- First harmful stage: Accum's established partial-fill owner loss at `OIL-PHASE-FILL` remains the R20 adaptation seam; canonical Windows effectiveness and reviewed-Y outcome are still unknown pending the required field replay.
+- Logic-map nodes: `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
+- Failure-registry entries: `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`
+- First harmful stage: delayed attempt admission after Accum established partial-fill owner loss (`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN`) and bounded local Foam episode confirmation (`FOAM-EPISODE`); canonical Windows effectiveness and reviewed-Y outcome are still unknown pending required field replay.
 - Logic-map impact: UPDATED — the current map records the R20 lifecycle route and additive diagnostics.
-- Failure-registry impact: NONE — the implementation preserves the existing guarded mechanisms and does not add a new registry entry.
+- Failure-registry impact: UPDATED — existing F07/F08 guards are clarified for local witness authority and delayed readiness; no new registry entry is added.
 
 The current R20 preservation and canonical Windows holdout gates are defined by
 the [R20 validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)

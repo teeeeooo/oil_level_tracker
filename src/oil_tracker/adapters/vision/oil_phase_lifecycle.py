@@ -2616,7 +2616,15 @@ class OilMaterialPhaseLifecycleOwner:
         ):
             return False
         if stage == "delayed_reacquisition":
-            return self._delayed_phase_identity_valid(row)
+            return bool(
+                self._delayed_phase_identity_valid(row)
+                and all(
+                    passed
+                    for _name, passed in self._delayed_seed_direction_predicates(
+                        row
+                    )
+                )
+            )
         if stage == "initial_full":
             relative = (
                 row.entrance_y - self.policy.geometry_top_y
@@ -2651,6 +2659,30 @@ class OilMaterialPhaseLifecycleOwner:
             for node in row.nodes
         )
 
+    def _delayed_seed_direction_predicates(
+        self,
+        row: _ObservedRow,
+    ) -> tuple[tuple[str, bool], ...]:
+        """Return the shared drain-readiness test for a delayed seed.
+
+        Delayed admission is the only release path that must decide whether
+        to consume the episode's one fresh-anchor attempt.  The existing
+        tracklet's direction, agreement and positive progress are therefore
+        required before that irreversible decision.  The same predicate is
+        used by the admission record below so diagnostics cannot describe a
+        different eligibility rule than the lifecycle.
+        """
+
+        return (
+            ("drain_direction_ready", row.ref.tracklet_direction > 0),
+            (
+                "drain_directional_agreement",
+                row.ref.tracklet_directional_agreement
+                >= self.policy.drain_minimum_directional_agreement,
+            ),
+            ("drain_positive_progress", row.ref.tracklet_net_progress_px > 0.0),
+        )
+
     def _delayed_seed_allowed(
         self,
         row: _ObservedRow,
@@ -2669,6 +2701,10 @@ class OilMaterialPhaseLifecycleOwner:
             }
             and _bounded_confirmed_observation(row.ref)
             and self._strict_material_support(row)
+            and all(
+                passed
+                for _name, passed in self._delayed_seed_direction_predicates(row)
+            )
         )
 
     def _delayed_seed_admission_record(
@@ -2699,6 +2735,7 @@ class OilMaterialPhaseLifecycleOwner:
             ("seed_authority", seed_authority),
             ("bounded_confirmed_tracklet", bounded_tracklet),
             ("strict_material_support", self._strict_material_support(row)),
+            *self._delayed_seed_direction_predicates(row),
             ("ordinary_loss_grace_elapsed", grace_elapsed),
             ("attempt_available", attempt_available),
         )
@@ -2708,6 +2745,10 @@ class OilMaterialPhaseLifecycleOwner:
             "row_hypothesis_id": row.row_hypothesis_id,
             "snapshot_distance_px": abs(row.y - snapshot_y),
             "snapshot_distance_used_for_identity": False,
+            "drain_direction_ready": all(
+                passed
+                for _name, passed in self._delayed_seed_direction_predicates(row)
+            ),
             "ordered_predicates": [
                 {"name": name, "passed": passed}
                 for name, passed in predicates
