@@ -2,8 +2,8 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R20 lifecycle implemented; local validation complete / WINDOWS REQUIRED`
-**Source authority:** `main R20 local-pass implementation over frozen R18 field-failed evidence; no field-qualified detector`
+**Current gate:** `R20 user-reported Windows field FAIL received/closed; docs-only D0–D4 closeout review/final/scoped commit remaining`
+**Source authority:** `main R20 local-pass implementation plus closed user-report field FAIL over frozen R18 evidence; no field-qualified detector; prior field qualification/comparison requirements remain unfulfilled`
 **Task-start exact head:** `e3a014f7542654b5e63353a173b8b038be34e2bf`
 **Task-start exact parent:** `e3a014f7542654b5e63353a173b8b038be34e2bf`
 
@@ -136,17 +136,26 @@ dynamic Foam group was rejected because signed inverted Oil topology and
 pre-publication Oil proposals were treated as same-material authority. Later
 dynamic-onset Foam publication remained internally consistent.
 
-## Current executable action
+## Current documentation closeout action
 
-Run the post-push canonical Windows replay for the implemented [R20 delayed
-drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
-against its [validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
-and the [manual Windows procedure](../40-operations/manual-gui-windows-checklist.md).
-R20 adapts only the existing Oil lifecycle owner; Foam, candidate generation,
-tracklets, selector, projection and publication remain outside scope. The
-implementation-current detector is R20 after focused, replay, provenance,
-performance, governance, compile and full-suite local gates pass. No local
-implementation remains in this gate; canonical Windows replay is required.
+The user-reported R20 Windows field report is received and closed as `FIELD
+FAIL`; the private bundle remains unavailable and no new Windows inquiry is
+opened. R20's local implementation/evidence remains a separate historical
+`LOCAL PASS / WINDOWS REQUIRED` record. Its canonical qualification and R19
+comparison requirements remain unfulfilled, not waived or executed by accepting
+the report. The current action is independent Luna routing review, fresh Sol
+final approval, and the already authorized scoped documentation commit; after
+that commit this D0–D4 documentation task is complete. This action does not
+run an automatic Windows replay, change detector behavior, or authorize R21.
+
+The [R20 delayed drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
+and its [validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
+remain the historical/local implementation authorities for any separately
+authorized future field qualification. The [R20 Windows evidence
+consolidation](../60-evidence/s11/s11-r20-windows-evidence-consolidation.md)
+records the closed report and its provenance boundaries. Foam, candidate
+generation, tracklets, selector, projection and publication remain outside the
+approved design-only observability scope.
 
 The completed R18 causal rerun is frozen in the [Windows causal
 closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md). Base lower

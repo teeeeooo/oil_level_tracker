@@ -14,3 +14,28 @@ This file owns **affirmatively retained work that is not the current executable 
 ## Explicitly superseded recurring dependency
 
 Repeated replay of the private Windows field video during every S11 source iteration is **SUPERSEDED as a normal development dependency**. The private video may remain diagnostic corroboration when deliberately available, but iterative S11 source work must not depend on repeated private-field replay. This superseded practice is not a retained commitment.
+
+## R20 decision-witness observability packages
+
+- **Responsibility:** add bounded, additive observations of existing R20 owner
+  decisions so lifecycle, join, publishability, Foam and provenance outcomes can
+  be audited without changing detector authority.
+- **Classification:** `RETAINED / DESIGN-ONLY`
+- **Authoritative design:** [R20 decision-witness observability architecture](../20-architecture/s11-r20-decision-witness-observability-architecture.md)
+  and [validation/work specification](../30-validation/s11-r20-decision-witness-observability-validation.md).
+- **Activation condition:** explicit user/owner approval for I1 implementation,
+  followed by independent I2 validation; any behavior change or R21 discussion
+  additionally requires a fresh design gate with physical identity and two-sided
+  evidence.
+- **Routing:** I1 implementation → I2 synthetic/equivalence/resource validation
+  → separate B behavior design gate. These are not the current documentation
+  closeout action, and I2 success does not authorize policy changes.
+- **Future deliberate field qualification:** the existing R20 validation
+  contract and Windows procedure remain unfulfilled requirements, not waived or
+  executed. Any deliberate qualification requires separate owner/user
+  authorization; it is non-current and must not reopen this closed Windows
+  investigation or become an automatic replay dependency.
+- **Current-gate boundary:** keep this commitment non-current while the
+  documentation-only D0–D4 closeout is reviewed and committed; preserve field
+  `FAIL`, publication provenance distinction, unfulfilled historical
+  qualification/comparison requirements, unknowns and original evidence.

@@ -7,7 +7,7 @@ This file is the **documentation-routing SSOT**. Before creating, moving, renami
 Follow this path unless a task names a more specific authoritative owner:
 
 1. [`00-project/roadmap.md`](00-project/roadmap.md) — milestone status and durable project sequence.
-2. [`00-project/work-plan.md`](00-project/work-plan.md) — exact current gate, accepted baseline and next executable engineering action.
+2. [`00-project/work-plan.md`](00-project/work-plan.md) — exact current gate, accepted baseline and next authorized action.
 3. the relevant product or architecture owner under [`10-product/`](10-product/) or [`20-architecture/`](20-architecture/).
 4. the applicable validation contract under [`30-validation/`](30-validation/).
 5. only then use [`50-diagnostics/`](50-diagnostics/) and [`60-evidence/`](60-evidence/) for causal detail and historical proof.
@@ -61,12 +61,16 @@ A historical Worker/Auditor “next gate”, old frame count or old milestone la
 
 R18 is the historical Windows-field-failed detector baseline. Its
 diagnostic-only causal addendum and same-video closure are complete; the
-addendum does not change R18 behavior. R20 is locally validated at the
-implementation head, but remains field-unqualified: the post-push canonical
-Windows replay is the remaining engineering gate.
+addendum does not change R18 behavior. The user-reported R20 Windows field
+report is received and closed as `FIELD FAIL`; R20's local implementation
+evidence remains a separate historical `LOCAL PASS / WINDOWS REQUIRED` record.
+The current action is documentation-only D0–D4 review, final approval and the
+authorized scoped documentation commit. The old field qualification and
+comparison requirements remain unfulfilled, not waived or executed here; no
+automatic Windows replay or reopened investigation is current.
 
 - Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
-- Current target-Windows procedure: [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md)
+- Future deliberate target-Windows procedure (non-current): [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md)
 - S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
 - S11 current detector logic map (implementation/control-flow owner): [`20-architecture/s11-current-detector-logic-map.md`](20-architecture/s11-current-detector-logic-map.md)
 - S11 mechanism failure registry (durable causal history): [`50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`](50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
@@ -86,9 +90,12 @@ Windows replay is the remaining engineering gate.
 - Historical S11-R19 bounded drain-release-chain architecture (local pass; Windows required): [`20-architecture/s11-r19-bounded-drain-release-chain-architecture.md`](20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
 - Historical S11-R19 bounded drain-release-chain validation contract (local pass; Windows required): [`30-validation/s11-r19-bounded-drain-release-chain-validation.md`](30-validation/s11-r19-bounded-drain-release-chain-validation.md)
 - Historical S11-R19 local validation evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r19-bounded-drain-release-chain.md`](60-evidence/s11/s11-r19-bounded-drain-release-chain.md)
-- Current S11-R20 delayed drain-reacquisition architecture (`LOCAL PASS / WINDOWS REQUIRED`): [`20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md`](20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
-- Current S11-R20 delayed drain-reacquisition validation contract: [`30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
-- S11-R20 local implementation/validation evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r20-delayed-drain-reacquisition.md`](60-evidence/s11/s11-r20-delayed-drain-reacquisition.md)
+- S11-R20 delayed drain-reacquisition architecture (implemented local baseline; field report closed `FAIL`): [`20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md`](20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
+- S11-R20 delayed drain-reacquisition validation contract (field requirements unfulfilled; future deliberate qualification only): [`30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
+- S11-R20 decision-witness observability architecture (`DESIGN ONLY — NOT IMPLEMENTED`): [`20-architecture/s11-r20-decision-witness-observability-architecture.md`](20-architecture/s11-r20-decision-witness-observability-architecture.md)
+- S11-R20 decision-witness observability validation/work specification (`DESIGN ONLY — NOT_IMPLEMENTED / VALIDATION NOT RUN`): [`30-validation/s11-r20-decision-witness-observability-validation.md`](30-validation/s11-r20-decision-witness-observability-validation.md)
+- S11-R20 local implementation/validation evidence (historical `LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r20-delayed-drain-reacquisition.md`](60-evidence/s11/s11-r20-delayed-drain-reacquisition.md)
+- S11-R20 Windows evidence consolidation and reuse inventory (user-report provenance; field `FAIL`, publication provenance `PASS`): [`60-evidence/s11/s11-r20-windows-evidence-consolidation.md`](60-evidence/s11/s11-r20-windows-evidence-consolidation.md)
 - Canonical private-Windows field truth (`windows_sample1_heating_coldstart`): [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 - S11-R17 local implementation/replay evidence: [`60-evidence/s11/s11-r17-physical-observation-ownership.md`](60-evidence/s11/s11-r17-physical-observation-ownership.md)
 - S11-R17 secure-Windows field result: [`60-evidence/s11/s11-r17-secure-windows-field-result.md`](60-evidence/s11/s11-r17-secure-windows-field-result.md)
@@ -128,7 +135,7 @@ Windows replay is the remaining engineering gate.
 - S11-R7 secure-Windows root cause: [`50-diagnostics/s11/s11-r7-windows-observation-recovery-diagnostic.md`](50-diagnostics/s11/s11-r7-windows-observation-recovery-diagnostic.md)
 - S11-R7 checked-video direct-image reconciliation: [`50-diagnostics/s11/s11-r7-checked-video-direct-image-reconciliation.md`](50-diagnostics/s11/s11-r7-checked-video-direct-image-reconciliation.md)
 - S11-R7 local implementation/replay evidence: [`60-evidence/s11/s11-r7-evidence-tiered-trajectory.md`](60-evidence/s11/s11-r7-evidence-tiered-trajectory.md)
-- Current R20 detector validation contract (`LOCAL PASS / WINDOWS REQUIRED`): [`30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
+- S11-R20 detector validation contract (field requirements unfulfilled; future deliberate qualification only): [`30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
 - Durable cross-revision S11 field-effectiveness umbrella (historical R12 clauses are superseded as current ownership): [`30-validation/s11-real-field-detector-effectiveness.md`](30-validation/s11-real-field-detector-effectiveness.md)
 - S11-R6 secure-Windows field failure: [`50-diagnostics/s11/s11-r6-secure-windows-field-failure.md`](50-diagnostics/s11/s11-r6-secure-windows-field-failure.md)
 - Active user observation report architecture: [`20-architecture/result-observation-report-architecture.md`](20-architecture/result-observation-report-architecture.md)
