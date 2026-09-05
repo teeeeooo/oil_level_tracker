@@ -2,40 +2,43 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** active behavioral lifecycle/Foam-witness implementation and local acceptance are complete; field qualification remains outstanding
+**Current gate:** R21 truth-preserving detector repair implementation and local acceptance are complete; deliberate Windows field qualification remains outstanding
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
 
-## Accepted baseline
+## Accepted local candidate
 
-The current implementation preserves the established S11 safety and publication contracts while applying two locally accepted behavioral repairs:
+R21 is the current locally accepted candidate on top of the established S11 safety and publication contracts. Its bounded changes are:
 
-1. delayed drain reacquisition does not consume its one ownerless attempt until the existing positive drain direction/agreement/progress readiness evidence is present; and
-2. Foam confirmation is bounded to local four-frame / 2.0-second witness windows with actual dynamic stable support.
+1. initial-`FULL` slow-drain release may use bounded recent physical trajectory evidence without weakening the existing release threshold or the R19 absolute recovery expiry;
+2. an established drain may close a rapid refill through the same physical owner or one unique independently confirmed fresh topward owner only after the old drain owner is absent, with physical tracklet IDs remaining distinct;
+3. Foam stable-layer confirmation restores the reviewed bounded three-observation witness while retaining at least two dynamic observations, the four-frame / 2.0-second horizon and all material/static/opposition gates;
+4. initial-`EMPTY` continuity remains on the existing lifecycle path and is covered by controlled current-frame evidence without an Accum-specific relaxation; and
+5. additive Oil/Foam decision witnesses serialize already-computed decisions without becoming detector, selector or publication authority.
 
-Local implementation, targeted/canonical validation, independent review, and documentation closeout for that behavioral slice are complete. The authoritative contract/evidence is:
+The R21 runtime identity is `opencv-phase-detector-r21-truth-preserving-detector-repair-v1`. Local implementation, canonical/focused validation, four-video replay, provenance checks and repeated performance comparison are complete. The current contract/evidence is:
 
-- [active behavioral architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
-- [active behavioral validation/work specification](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md)
-- [completed local evidence](../60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md)
+- [R21 architecture](../20-architecture/s11-r21-truth-preserving-detector-repair-architecture.md)
+- [R21 validation/work specification](../30-validation/s11-r21-truth-preserving-detector-repair-validation.md)
+- [R21 completed local evidence](../60-evidence/s11/s11-r21-truth-preserving-detector-repair.md)
 
-The predecessor R18/R19/R20 records remain historical inputs, not alternate current owners.
+R18–R20 remain predecessor evidence and accepted-baseline history, not alternate current owners.
 
 ## Current authorization boundary
 
-Currently authorized repository maintenance may preserve or clarify the accepted baseline and its documentation without changing detector behavior.
+Ordinary repository maintenance may preserve or clarify the accepted R21 local candidate and its documentation without changing detector behavior.
 
 Not automatically authorized by the current gate:
 
-- a new detector revision or threshold/authority change;
-- automatic replay of private Windows media;
-- reopening the closed Windows investigation;
-- case-specific video/Glass/timestamp/coordinate behavior;
-- interpolation, carry, or report-side repair of missing detector observations;
-- activation of retained Base/Accum behavior surfaces or the decision-witness package without a separate approval/design gate.
+- another detector revision, threshold/authority change or widening of candidate generation;
+- weakening or removal of the R19 absolute recovery expiry without new physical evidence and a deliberate contract change;
+- regeneration or silent replacement of a checked tracking fingerprint/golden merely to fit the current environment;
+- automatic replay of private Windows media or reinterpretation of local controls as field proof;
+- case-specific video/Glass/timestamp/coordinate behavior, interpolation, carry or report-side repair; or
+- speculative Accum-specific behavior changes without reviewed physical identity and two-sided controls.
 
-Future deliberate Windows field qualification remains a valid but non-current transition. It must use the current validation/truth/procedure authorities and must not reinterpret local acceptance as field proof.
+The local Sample4 replay currently produces `e447626b...` rather than the historical checked `0f202947...`. A clean detached `d50c143` baseline produces the same current `e447626b...`, and its tracking rows are identical to R21 apart from run identity. The historical golden was not changed. Exact historical media/environment drift remains a local provenance limitation, not evidence of an R21 behavior regression.
 
 ## Preserved contracts
 
@@ -43,23 +46,21 @@ Future deliberate Windows field qualification remains a valid but non-current tr
 - numeric Oil/Foam values remain selected same-frame candidates with exact provenance;
 - Oil and Foam validity/ownership remain independent through their defined composition point;
 - confirmed FULL/EMPTY state constrains lifecycle but never fabricates a coordinate;
-- ambiguous, unavailable, lost, or hard-invalid evidence fails closed rather than being repaired downstream;
-- current detector changes remain governed by the logic-map/failure-registry history review contract.
+- physical tracklet identities are not copied across a rapid-refill phase handoff;
+- ambiguous, unavailable, lost, or hard-invalid evidence fails closed rather than being repaired downstream; and
+- detector changes remain governed by the current logic-map/failure-registry history-review contract.
 
 ## Open field risks and named unknowns
 
-The current baseline is not field-qualified. Retained uncertainty includes Base release/closure behavior, Accum entry/continuity/re-entry surfaces, and historical R18 causal unknowns where reviewed physical identity or exact Y anchors were unavailable. These facts are constraints on claims, not automatic implementation tasks.
+R21 is not field-qualified. The controlled Base cycle proves generic local behavior for bounded slow drain and rapid refill, but it does not prove that the private Windows Base failure had the same cause or is repaired. Accum initial entry, continuity/layered/post-Foam ownership and drain re-entry remain field uncertainties. Historical R18 causal unknowns remain constraints where reviewed physical identity or exact Y anchors were unavailable.
 
 Retained but non-current work is owned by [`retained-commitments.md`](retained-commitments.md).
 
 ## Next transition
 
-The current repository has no automatically executable next detector revision. The next material S11 transition requires explicit authorization for one of:
+There is no automatically executable R22 detector revision. The next material S11 transition is deliberate target-Windows qualification of the R21 local candidate using the canonical reviewed truth and Windows procedure. If that replay remains `FIELD FAIL`, any subsequent behavior change must begin from the newly observed failing stage rather than from synthetic success alone.
 
-1. deliberate target-Windows field qualification of the accepted behavioral baseline; or
-2. activation of a separately designed/evidence-backed retained behavior or observability slice.
-
-Until then, preserve the accepted local behavioral contract and the existing field `FAIL` boundary.
+Until a deliberate Windows replay is executed and reviewed, preserve the existing field `FAIL` boundary.
 
 ## Current authority links
 
@@ -67,6 +68,9 @@ Until then, preserve the accepted local behavioral contract and the existing fie
 - [Repository execution policy](execution-policy.md)
 - [S11 detector change governance](../30-validation/s11-detector-change-governance.md)
 - [Current detector logic map](../20-architecture/s11-current-detector-logic-map.md)
+- [R21 architecture](../20-architecture/s11-r21-truth-preserving-detector-repair-architecture.md)
+- [R21 validation](../30-validation/s11-r21-truth-preserving-detector-repair-validation.md)
+- [R21 local evidence](../60-evidence/s11/s11-r21-truth-preserving-detector-repair.md)
 - [Detector mechanism failure registry](../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
 - [Canonical Windows reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 - [Future Windows procedure](../40-operations/manual-gui-windows-checklist.md)

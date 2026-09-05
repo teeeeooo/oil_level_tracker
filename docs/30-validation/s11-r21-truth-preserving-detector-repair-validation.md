@@ -1,6 +1,6 @@
 # S11-R21 Truth-Preserving Detector Repair Validation
 
-**Status:** `LOCAL VALIDATION IN PROGRESS / WINDOWS REQUIRED`
+**Status:** `LOCAL VALIDATION COMPLETE / WINDOWS REQUIRED`
 
 This specification validates the
 [R21 architecture](../20-architecture/s11-r21-truth-preserving-detector-repair-architecture.md)
