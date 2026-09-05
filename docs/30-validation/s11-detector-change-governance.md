@@ -2,7 +2,7 @@
 
 **Status:** current validation/process contract for S11 detector design, implementation, and field evidence.
 
-This contract prevents a new detector mechanism or field result from silently bypassing the current implementation map and durable failure history. It is a review gate, not a reason to create meaningless documentation edits.
+This contract is the single task-specific routing owner for S11 detector design, implementation, and field evidence. It prevents a new mechanism or field result from silently bypassing the current implementation map and durable failure history. Repository entry documents should point here rather than duplicate this reading sequence.
 
 ## Scope
 

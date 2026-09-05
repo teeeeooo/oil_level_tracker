@@ -1,12 +1,15 @@
 # S11 Diagnostics
 
-This directory contains bounded investigations, probes and their machine-readable manifests. These artifacts support causal attribution and reproducibility; they do **not** own current milestone status, the active engineering gate or durable production architecture.
+This directory contains bounded investigations, probes, and machine-readable manifests. These artifacts support causal attribution and reproducibility; they do **not** own current milestone status, the active engineering gate, or durable production architecture.
 
-- Current sequencing: [`../../00-project/work-plan.md`](../../00-project/work-plan.md)
-- Durable S11 responsibilities: [`../../20-architecture/s11-detector-responsibility-architecture.md`](../../20-architecture/s11-detector-responsibility-architecture.md)
-- Current S11 validation contract (`LOCAL PASS / WINDOWS REQUIRED`): [`../../30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](../../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
-- Durable cross-revision S11 field-effectiveness umbrella (historical R12 clauses are superseded as current ownership): [`../../30-validation/s11-real-field-detector-effectiveness.md`](../../30-validation/s11-real-field-detector-effectiveness.md)
-- Current R9 root-cause input: [`s11-r8-windows-calibrated-observation-diagnostic.md`](s11-r8-windows-calibrated-observation-diagnostic.md)
-- Completed implementation/audit evidence: [`../../60-evidence/s11/`](../../60-evidence/s11/)
+Current routing:
 
-Machine manifests in this directory are relocated evidence artifacts. Their semantic payloads and recorded fingerprints must not be rewritten merely because the documentation taxonomy changes.
+- current sequencing/gate — [`../../00-project/work-plan.md`](../../00-project/work-plan.md)
+- durable S11 responsibilities — [`../../20-architecture/s11-detector-responsibility-architecture.md`](../../20-architecture/s11-detector-responsibility-architecture.md)
+- current detector control-flow map — [`../../20-architecture/s11-current-detector-logic-map.md`](../../20-architecture/s11-current-detector-logic-map.md)
+- active behavioral architecture — [`../../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md`](../../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
+- active behavioral validation/work specification — [`../../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md`](../../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md)
+- durable mechanism failure history — [`s11-detector-mechanism-failure-registry.md`](s11-detector-mechanism-failure-registry.md)
+- completed implementation/audit/validation evidence — [`../../60-evidence/s11/`](../../60-evidence/s11/)
+
+Machine manifests are relocated evidence artifacts. Their semantic payloads and recorded fingerprints must not be rewritten merely because documentation taxonomy or current routing changes.

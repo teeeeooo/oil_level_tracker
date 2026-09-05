@@ -202,6 +202,7 @@ Documentation entry points:
 - [Documentation guide](docs/README.md)
 - [Project roadmap](docs/00-project/roadmap.md)
 - [Current work plan](docs/00-project/work-plan.md)
+- [Repository execution policy](docs/00-project/execution-policy.md)
 - [Architecture documents](docs/20-architecture/)
 - [Validation contracts](docs/30-validation/)
 - [Windows/package/manual procedures](docs/40-operations/)
@@ -210,4 +211,4 @@ Documentation entry points:
 
 ## Current implementation scope and limitations
 
-The application is not yet generally qualified for operational detector PASS/FAIL use because the R20 S11 detector remains `LOCAL PASS / WINDOWS REQUIRED`; the post-push canonical Windows replay and reviewed field truth are still outstanding. Windows canonical/manual/one-folder packaging acceptance is already preserved in [S10 evidence](docs/60-evidence/s10/), and the accepted exact-workload one-hour source-tree stability result is preserved in [S6-F evidence](docs/60-evidence/s6/s6-f-one-hour-long-duration-stability.md). The current engineering gate is owned by the [roadmap](docs/00-project/roadmap.md), [current work plan](docs/00-project/work-plan.md), [R20 validation contract](docs/30-validation/s11-r20-delayed-drain-reacquisition-validation.md), [manual Windows procedure](docs/40-operations/manual-gui-windows-checklist.md) and [canonical reviewed truth](docs/30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
+The application is not yet generally qualified for operational detector PASS/FAIL use. The active S11 behavioral lifecycle/Foam-witness implementation is locally accepted, but the latest user-reported Windows disposition remains `FIELD FAIL` and no field-qualified detector is claimed. Windows canonical/manual/one-folder packaging acceptance is preserved in [S10 evidence](docs/60-evidence/s10/), and the accepted exact-workload one-hour source-tree stability result is preserved in [S6-F evidence](docs/60-evidence/s6/s6-f-one-hour-long-duration-stability.md). Current authorization and next transition are owned by the [current work plan](docs/00-project/work-plan.md); detector changes route through the [S11 governance contract](docs/30-validation/s11-detector-change-governance.md), the [active behavioral validation/work specification](docs/30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md), the [manual Windows procedure](docs/40-operations/manual-gui-windows-checklist.md), and the [canonical reviewed truth](docs/30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).

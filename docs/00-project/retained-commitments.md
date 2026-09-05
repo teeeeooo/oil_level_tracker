@@ -28,8 +28,7 @@ Repeated replay of the private Windows field video during every S11 source itera
   transitions and two-sided local controls, followed by required Windows
   replay. No global threshold, private timestamp/coordinate, interpolation or
   telemetry-only substitution qualifies.
-- **Current-gate boundary:** these surfaces remain deferred while the active
-  delayed-readiness and bounded-Foam-witness implementation is validated.
+- **Current-gate boundary:** these surfaces remain deferred after local acceptance of the active delayed-readiness and bounded-Foam-witness implementation; they are not activated by the outstanding field-qualification requirement.
 
 ## R20 decision-witness observability packages
 
@@ -51,7 +50,4 @@ Repeated replay of the private Windows field video during every S11 source itera
   executed. Any deliberate qualification requires separate owner/user
   authorization; it is non-current and must not reopen this closed Windows
   investigation or become an automatic replay dependency.
-- **Current-gate boundary:** keep this commitment non-current while the active
-  behavioral lifecycle/Foam witness implementation is validated; preserve
-  field `FAIL`, publication provenance distinction, unfulfilled historical
-  qualification/comparison requirements, unknowns and original evidence.
+- **Current-gate boundary:** keep this commitment non-current after local acceptance of the active behavioral lifecycle/Foam-witness implementation; preserve field `FAIL`, publication-provenance distinctions, unfulfilled field qualification/comparison requirements, named unknowns, and original evidence.

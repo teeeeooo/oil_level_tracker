@@ -1,191 +1,91 @@
 # Documentation Map and Authority
 
-This file is the **documentation-routing SSOT**. Before creating, moving, renaming or editing anything under `docs/`, classify the document by responsibility and follow the authority/update rules below.
+This file is the **documentation-routing SSOT**. It classifies documents and points to current owners; it does not duplicate project history or task execution policy.
 
-## Reading path for a fresh agent
+Before creating, moving, renaming, or editing anything under `docs/`, classify the change here first.
 
-Follow this path unless a task names a more specific authoritative owner:
+## Fresh reading path
 
-1. [`00-project/roadmap.md`](00-project/roadmap.md) — milestone status and durable project sequence.
-2. [`00-project/work-plan.md`](00-project/work-plan.md) — exact current gate, accepted baseline and next authorized action.
-3. the relevant product or architecture owner under [`10-product/`](10-product/) or [`20-architecture/`](20-architecture/).
-4. the applicable validation contract under [`30-validation/`](30-validation/).
-5. only then use [`50-diagnostics/`](50-diagnostics/) and [`60-evidence/`](60-evidence/) for causal detail and historical proof.
+Read only the smallest set needed for the task:
 
-The stable product specification is [`rotary_oil_level_tracker_ssot_spec.md`](rotary_oil_level_tracker_ssot_spec.md). It owns durable product requirements, not current milestone sequencing.
+1. [`00-project/work-plan.md`](00-project/work-plan.md) — current gate, accepted baseline, authorized/non-authorized work, blockers and next transition.
+2. [`00-project/roadmap.md`](00-project/roadmap.md) — milestone order and formal state when broader sequence matters.
+3. the relevant durable owner under [`10-product/`](10-product/) or [`20-architecture/`](20-architecture/).
+4. the applicable acceptance contract under [`30-validation/`](30-validation/).
+5. use [`40-operations/`](40-operations/), [`50-diagnostics/`](50-diagnostics/), [`60-evidence/`](60-evidence/), and [`70-reference/`](70-reference/) only when the task needs procedure, causal detail, completed proof, or external provenance.
+
+The stable product specification is [`rotary_oil_level_tracker_ssot_spec.md`](rotary_oil_level_tracker_ssot_spec.md). Repository execution state and verification semantics are owned by [`00-project/execution-policy.md`](00-project/execution-policy.md).
 
 ## Directory taxonomy
 
 | Directory | Responsibility | Authority boundary |
 |---|---|---|
-| `00-project/` | roadmap, current work, lifecycle policy, retained/deferred routing | owns project sequencing; `retained-commitments.md` owns only non-current retained/deferred/evidence-gated work |
-| `10-product/` | user-facing/product contracts | durable behavior and UX intent, not milestone status |
-| `20-architecture/` | durable responsibility/design contracts | accepted ownership and invariants; no Worker/Auditor chronology |
-| `30-validation/` | validation, benchmark and test-acceptance contracts | what must be demonstrated for acceptance; not execution history |
-| `40-operations/` | executable Windows/package/manual procedures | how to perform operational checks; not proof that they passed |
-| `50-diagnostics/` | investigations, probes and machine manifests | causal/reproducibility support; never current gate or architecture authority |
-| `60-evidence/` | completed implementation/audit/validation records by milestone | historical proof; contemporaneous status prose is provenance, not current authority |
-| `70-reference/` | external/reference and implementation-reference provenance | supporting provenance only |
-| `90-archive/` | superseded historical context | not current authority; preserve for history/navigation |
+| `00-project/` | roadmap, current work, execution policy, retained/deferred routing | project sequence/current gate; not feature design history |
+| `10-product/` | user-facing/product contracts | durable behavior and UX intent |
+| `20-architecture/` | durable responsibility/design contracts | accepted ownership/invariants; not execution chronology |
+| `30-validation/` | validation, benchmark and test-acceptance contracts | what must be demonstrated for acceptance |
+| `40-operations/` | executable Windows/package/manual procedures | how to perform operational checks; not proof they passed |
+| `50-diagnostics/` | investigations, probes and machine manifests | causal/reproducibility support; never current gate authority |
+| `60-evidence/` | completed implementation/audit/validation records | historical proof; contemporaneous status does not become current authority |
+| `70-reference/` | external/reference provenance | supporting provenance only |
+| `90-archive/` | superseded historical context | not current authority |
 
 ## Authority hierarchy
 
-When documents disagree, use this routing order for the responsibility in question:
+When documents disagree, use the owner for the responsibility in question:
 
-1. stable product requirements: [`rotary_oil_level_tracker_ssot_spec.md`](rotary_oil_level_tracker_ssot_spec.md);
-2. milestone status/sequence: [`00-project/roadmap.md`](00-project/roadmap.md);
-3. exact active gate: [`00-project/work-plan.md`](00-project/work-plan.md);
-4. retained but non-current commitments: [`00-project/retained-commitments.md`](00-project/retained-commitments.md);
-5. durable product/architecture owner under `10-product/` or `20-architecture/`;
-6. current acceptance contract under `30-validation/`;
-7. operational procedure under `40-operations/`;
-8. diagnostics/evidence/reference as supporting provenance;
-9. archive only for historical context.
+1. stable product requirements — [`rotary_oil_level_tracker_ssot_spec.md`](rotary_oil_level_tracker_ssot_spec.md);
+2. milestone order/state — [`00-project/roadmap.md`](00-project/roadmap.md);
+3. exact active gate — [`00-project/work-plan.md`](00-project/work-plan.md);
+4. repository execution/verification/publication semantics — [`00-project/execution-policy.md`](00-project/execution-policy.md);
+5. retained non-current commitments — [`00-project/retained-commitments.md`](00-project/retained-commitments.md);
+6. relevant durable product/architecture owner;
+7. current validation contract;
+8. operational procedure;
+9. diagnostics/evidence/reference as supporting provenance;
+10. archive only for historical context.
 
-A historical Worker/Auditor “next gate”, old frame count or old milestone label never overrides the current roadmap/work plan.
+Historical status, old next-action prose, prior branch results, and old milestone labels never override current owners.
 
 ## Update rules
 
-- **Current status or next engineering action:** update `roadmap.md` and/or `work-plan.md`; do not duplicate the status into product/architecture/evidence files.
-- **Retained, deferred or evidence-gated work that is not executable now:** route it to `retained-commitments.md`. Do not leave it as a pseudo-current backlog in architecture or product plans.
-- **Durable product/architecture change:** update the owning `10-product/` or `20-architecture/` contract and its relevant validation owner.
-- **Validation expectation:** update `30-validation/`; completed run/audit numbers belong in `60-evidence/`.
-- **Operational procedure:** update `40-operations/`; the evidence that it passed belongs in `60-evidence/`.
-- **Investigation/probe:** use `50-diagnostics/`; machine manifests are semantic evidence artifacts and must not be rewritten merely for taxonomy changes.
-- **Completed evidence:** preserve contemporaneous facts. Link/classification repairs are allowed; do not rewrite history to sound current.
-- **Superseded material:** move to `90-archive/` only after proving any still-current contract has another active owner.
+- Current status, gate, blockers, or next transition → `00-project/work-plan.md`.
+- Milestone order, formal state, or milestone scope → `00-project/roadmap.md`.
+- Retained/deferred/evidence-gated but non-current work → `00-project/retained-commitments.md`.
+- Execution, verification, freeze, publication, or closeout semantics → `00-project/execution-policy.md`.
+- Durable product/architecture behavior → owning `10-product/` or `20-architecture/` contract.
+- Acceptance obligation → `30-validation/`; completed measurements/results → `60-evidence/`.
+- Operational procedure → `40-operations/`; investigation/probe → `50-diagnostics/`.
+- Superseded material → `90-archive/` only after proving every still-current contract has another active owner.
 
-## Current project routing
+Do not copy current status into architecture, diagnostics, or evidence merely for convenience. Do not rewrite historical evidence to sound current.
 
-### Active authority and gate
+## Current S11 routing
 
-R18 is the historical Windows-field-failed detector baseline. Its
-diagnostic-only causal addendum and same-video closure are complete; the
-addendum does not change R18 behavior. The user-reported R20 Windows field
-report is received and closed as `FIELD FAIL`; R20's local implementation
-evidence remains a separate historical `LOCAL PASS / WINDOWS REQUIRED` record.
-The approved generic behavior repairs, local validation, independent audit and
-final Sol review are complete; their completed local evidence is recorded in
-the active S11 evidence card below. The old field qualification and comparison
-requirements remain unfulfilled, not waived or executed here; no automatic
-Windows replay or reopened investigation is current.
+S11 remains the active detector-effectiveness milestone. Current state and authorization are owned only by the [Work Plan](00-project/work-plan.md).
 
-- Current milestone/gate: [`00-project/work-plan.md`](00-project/work-plan.md)
-- Future deliberate target-Windows procedure (non-current): [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md)
-- S11 durable detector responsibilities: [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md)
-- S11 current detector logic map (implementation/control-flow owner): [`20-architecture/s11-current-detector-logic-map.md`](20-architecture/s11-current-detector-logic-map.md)
-- S11 mechanism failure registry (durable causal history): [`50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`](50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
-- S11 detector change governance (required history/evidence review): [`30-validation/s11-detector-change-governance.md`](30-validation/s11-detector-change-governance.md)
-- Integrated S11-R16 baseline architecture: [`20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md`](20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md)
-- Failed S11-R16 validation contract: [`30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md`](30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md)
-- Accepted S11-R17 baseline architecture: [`20-architecture/s11-r17-physical-observation-ownership-architecture.md`](20-architecture/s11-r17-physical-observation-ownership-architecture.md)
-- Failed S11-R17 validation contract: [`30-validation/s11-r17-physical-observation-ownership-validation.md`](30-validation/s11-r17-physical-observation-ownership-validation.md)
-- Historical S11-R18 lifecycle-closure architecture (field-failed): [`20-architecture/s11-r18-lifecycle-closure-architecture.md`](20-architecture/s11-r18-lifecycle-closure-architecture.md)
-- Historical/failed S11-R18 validation contract: [`30-validation/s11-r18-lifecycle-closure-validation.md`](30-validation/s11-r18-lifecycle-closure-validation.md)
-- Completed S11-R18 causal trace observability addendum: [`20-architecture/s11-r18-causal-trace-observability-architecture.md`](20-architecture/s11-r18-causal-trace-observability-architecture.md)
-- Completed S11-R18 causal trace validation: [`30-validation/s11-r18-causal-trace-observability-validation.md`](30-validation/s11-r18-causal-trace-observability-validation.md)
-- S11-R18 transferred Windows causal closure: [`50-diagnostics/s11/s11-r18-windows-causal-closure.md`](50-diagnostics/s11/s11-r18-windows-causal-closure.md)
-- S11-R18 causal trace local evidence: [`60-evidence/s11/s11-r18-causal-trace-observability.md`](60-evidence/s11/s11-r18-causal-trace-observability.md)
-- S11-R18 local implementation/replay evidence: [`60-evidence/s11/s11-r18-lifecycle-closure.md`](60-evidence/s11/s11-r18-lifecycle-closure.md)
-- S11-R18 secure-Windows field result (operator-reported fail; transferred audit linked): [`60-evidence/s11/s11-r18-secure-windows-field-result.md`](60-evidence/s11/s11-r18-secure-windows-field-result.md)
-- Historical S11-R19 bounded drain-release-chain architecture (local pass; Windows required): [`20-architecture/s11-r19-bounded-drain-release-chain-architecture.md`](20-architecture/s11-r19-bounded-drain-release-chain-architecture.md)
-- Historical S11-R19 bounded drain-release-chain validation contract (local pass; Windows required): [`30-validation/s11-r19-bounded-drain-release-chain-validation.md`](30-validation/s11-r19-bounded-drain-release-chain-validation.md)
-- Historical S11-R19 local validation evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r19-bounded-drain-release-chain.md`](60-evidence/s11/s11-r19-bounded-drain-release-chain.md)
-- S11-R20 delayed drain-reacquisition architecture (implemented local baseline; field report closed `FAIL`): [`20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md`](20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
-- S11-R20 delayed drain-reacquisition validation contract (field requirements unfulfilled; future deliberate qualification only): [`30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
-- S11 active behavioral lifecycle and Foam witness architecture (current implementation owner): [`20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md`](20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
-- S11 active behavioral lifecycle and Foam witness validation/work specification: [`30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md`](30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md)
-- S11 completed behavioral lifecycle and Foam witness local evidence (`LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md`](60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md)
-- S11-R20 decision-witness observability architecture (`DESIGN ONLY — NOT IMPLEMENTED`): [`20-architecture/s11-r20-decision-witness-observability-architecture.md`](20-architecture/s11-r20-decision-witness-observability-architecture.md)
-- S11-R20 decision-witness observability validation/work specification (`DESIGN ONLY — NOT_IMPLEMENTED / VALIDATION NOT RUN`): [`30-validation/s11-r20-decision-witness-observability-validation.md`](30-validation/s11-r20-decision-witness-observability-validation.md)
-- S11-R20 local implementation/validation evidence (historical `LOCAL PASS / WINDOWS REQUIRED`): [`60-evidence/s11/s11-r20-delayed-drain-reacquisition.md`](60-evidence/s11/s11-r20-delayed-drain-reacquisition.md)
-- S11-R20 Windows evidence consolidation and reuse inventory (user-report provenance; field `FAIL`, publication provenance `PASS`): [`60-evidence/s11/s11-r20-windows-evidence-consolidation.md`](60-evidence/s11/s11-r20-windows-evidence-consolidation.md)
-- Canonical private-Windows field truth (`windows_sample1_heating_coldstart`): [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
-- S11-R17 local implementation/replay evidence: [`60-evidence/s11/s11-r17-physical-observation-ownership.md`](60-evidence/s11/s11-r17-physical-observation-ownership.md)
-- S11-R17 secure-Windows field result: [`60-evidence/s11/s11-r17-secure-windows-field-result.md`](60-evidence/s11/s11-r17-secure-windows-field-result.md)
-- S11-R17 corrected Windows phase/episode diagnostic: [`50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md`](50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md)
-- S11-R16 local implementation evidence: [`60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md`](60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
-- S11-R16 repaired owner/coverage diagnostic: [`50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md`](50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md)
-- S11-R16 secure-Windows field result: [`60-evidence/s11/s11-r16-secure-windows-field-result.md`](60-evidence/s11/s11-r16-secure-windows-field-result.md)
-- S11-R16 corrected Windows root cause: [`50-diagnostics/s11/s11-r16-windows-tracklet-and-foam-diagnostic.md`](50-diagnostics/s11/s11-r16-windows-tracklet-and-foam-diagnostic.md)
-- Historical S11-R15 architecture: [`20-architecture/s11-r15-state-aware-material-ownership-architecture.md`](20-architecture/s11-r15-state-aware-material-ownership-architecture.md)
-- Failed S11-R15 validation contract: [`30-validation/s11-r15-state-aware-material-ownership-validation.md`](30-validation/s11-r15-state-aware-material-ownership-validation.md)
-- S11-R15 local implementation/replay evidence: [`60-evidence/s11/s11-r15-state-aware-material-ownership.md`](60-evidence/s11/s11-r15-state-aware-material-ownership.md)
-- S11-R14 secure-Windows field result: [`60-evidence/s11/s11-r14-secure-windows-field-result.md`](60-evidence/s11/s11-r14-secure-windows-field-result.md)
-- S11-R14 secure-Windows root cause: [`50-diagnostics/s11/s11-r14-windows-state-and-foam-ownership-diagnostic.md`](50-diagnostics/s11/s11-r14-windows-state-and-foam-ownership-diagnostic.md)
-- Historical S11-R14 replacement architecture: [`20-architecture/s11-r14-phase-component-replacement-architecture.md`](20-architecture/s11-r14-phase-component-replacement-architecture.md)
-- Failed S11-R14 validation contract: [`30-validation/s11-r14-phase-component-replacement-validation.md`](30-validation/s11-r14-phase-component-replacement-validation.md)
-- S11-R14 local implementation/replay evidence: [`60-evidence/s11/s11-r14-phase-component-replacement.md`](60-evidence/s11/s11-r14-phase-component-replacement.md)
-- S11-R13 secure-Windows field result: [`60-evidence/s11/s11-r13-secure-windows-field-result.md`](60-evidence/s11/s11-r13-secure-windows-field-result.md)
-- S11-R13 secure-Windows root cause: [`50-diagnostics/s11/s11-r13-windows-identity-component-diagnostic.md`](50-diagnostics/s11/s11-r13-windows-identity-component-diagnostic.md)
-- Historical S11-R13 replacement architecture: [`20-architecture/s11-r13-phase-identity-recovery-architecture.md`](20-architecture/s11-r13-phase-identity-recovery-architecture.md)
-- Failed S11-R13 validation contract: [`30-validation/s11-r13-phase-identity-recovery-validation.md`](30-validation/s11-r13-phase-identity-recovery-validation.md)
-- S11-R13 local implementation/replay evidence: [`60-evidence/s11/s11-r13-phase-identity-recovery.md`](60-evidence/s11/s11-r13-phase-identity-recovery.md)
-- Historical S11-R12 replacement architecture: [`20-architecture/s11-r12-phase-composition-replacement-architecture.md`](20-architecture/s11-r12-phase-composition-replacement-architecture.md)
-- Failed S11-R12 validation contract: [`30-validation/s11-r12-phase-composition-replacement-validation.md`](30-validation/s11-r12-phase-composition-replacement-validation.md)
-- S11-R12 local implementation/replay evidence: [`60-evidence/s11/s11-r12-phase-composition-replacement.md`](60-evidence/s11/s11-r12-phase-composition-replacement.md)
-- S11-R12 secure-Windows field result: [`60-evidence/s11/s11-r12-secure-windows-field-result.md`](60-evidence/s11/s11-r12-secure-windows-field-result.md)
-- S11-R12 secure-Windows root cause: [`50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md`](50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md)
-- Historical S11-R11 detector reset architecture: [`20-architecture/s11-r11-detector-architecture-reset.md`](20-architecture/s11-r11-detector-architecture-reset.md)
-- Failed S11-R11 validation contract: [`30-validation/s11-r11-detector-architecture-reset-validation.md`](30-validation/s11-r11-detector-architecture-reset-validation.md)
-- S11-R11 local implementation/replay evidence: [`60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md`](60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md)
-- S11-R11 secure-Windows field result: [`60-evidence/s11/s11-r11-secure-windows-field-result.md`](60-evidence/s11/s11-r11-secure-windows-field-result.md)
-- S11-R11 secure-Windows root cause: [`50-diagnostics/s11/s11-r11-windows-bootstrap-composition-diagnostic.md`](50-diagnostics/s11/s11-r11-windows-bootstrap-composition-diagnostic.md)
-- S11-R10 secure-Windows root cause: [`50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md`](50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md)
-- S11-R10 historical local implementation/replay evidence: [`60-evidence/s11/s11-r10-calibrated-path-and-layer.md`](60-evidence/s11/s11-r10-calibrated-path-and-layer.md)
-- S11-R9 secure-Windows root cause: [`50-diagnostics/s11/s11-r9-windows-calibrated-observation-diagnostic.md`](50-diagnostics/s11/s11-r9-windows-calibrated-observation-diagnostic.md)
-- S11-R9 historical local baseline: [`60-evidence/s11/s11-r9-calibrated-observation.md`](60-evidence/s11/s11-r9-calibrated-observation.md)
-- S11-R8 secure-Windows root cause: [`50-diagnostics/s11/s11-r8-windows-calibrated-observation-diagnostic.md`](50-diagnostics/s11/s11-r8-windows-calibrated-observation-diagnostic.md)
-- S11-R7 secure-Windows root cause: [`50-diagnostics/s11/s11-r7-windows-observation-recovery-diagnostic.md`](50-diagnostics/s11/s11-r7-windows-observation-recovery-diagnostic.md)
-- S11-R7 checked-video direct-image reconciliation: [`50-diagnostics/s11/s11-r7-checked-video-direct-image-reconciliation.md`](50-diagnostics/s11/s11-r7-checked-video-direct-image-reconciliation.md)
-- S11-R7 local implementation/replay evidence: [`60-evidence/s11/s11-r7-evidence-tiered-trajectory.md`](60-evidence/s11/s11-r7-evidence-tiered-trajectory.md)
-- S11-R20 detector validation contract (field requirements unfulfilled; future deliberate qualification only): [`30-validation/s11-r20-delayed-drain-reacquisition-validation.md`](30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
-- Durable cross-revision S11 field-effectiveness umbrella (historical R12 clauses are superseded as current ownership): [`30-validation/s11-real-field-detector-effectiveness.md`](30-validation/s11-real-field-detector-effectiveness.md)
-- S11-R6 secure-Windows field failure: [`50-diagnostics/s11/s11-r6-secure-windows-field-failure.md`](50-diagnostics/s11/s11-r6-secure-windows-field-failure.md)
-- Active user observation report architecture: [`20-architecture/result-observation-report-architecture.md`](20-architecture/result-observation-report-architecture.md)
-- Active user observation report validation: [`30-validation/result-observation-report-validation.md`](30-validation/result-observation-report-validation.md)
-- S11 legacy/current-frame retrospective sequence responsibility: [`20-architecture/initial-state-retrospective-reconstruction-architecture.md`](20-architecture/initial-state-retrospective-reconstruction-architecture.md)
-- Legacy/current-frame retrospective implementation validation: [`30-validation/initial-state-retrospective-reconstruction-validation.md`](30-validation/initial-state-retrospective-reconstruction-validation.md)
-- S5-B base observability architecture: [`20-architecture/s5b-oil-boundary-hypothesis-architecture.md`](20-architecture/s5b-oil-boundary-hypothesis-architecture.md)
+For an S11 detector change, start with the [detector change governance contract](30-validation/s11-detector-change-governance.md). It routes the required implementation map, failure history, current architecture, validation, and reviewed truth.
 
-### Historical detector provenance
+Current durable S11 owners:
 
-- Accepted S11-R1 report evidence: [`60-evidence/s11/s11-user-observation-report-repair.md`](60-evidence/s11/s11-user-observation-report-repair.md)
-- Historical pre-R6 subtractive detector design/evidence provenance: [`20-architecture/s11-subtractive-detector-simplification-architecture.md`](20-architecture/s11-subtractive-detector-simplification-architecture.md)
-- Historical pre-R6 S11-R2 Foam/Spatial repair: [`20-architecture/s11-foam-spatial-authority-repair-architecture.md`](20-architecture/s11-foam-spatial-authority-repair-architecture.md)
-- Historical pre-R6 S11-R2 detector validation: [`30-validation/s11-foam-spatial-authority-repair-validation.md`](30-validation/s11-foam-spatial-authority-repair-validation.md)
-- Accepted S11-R2 implementation/replay evidence: [`60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](60-evidence/s11/s11-r2-foam-spatial-authority-repair.md)
-- Accepted post-R2 baseline repair review: [`60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md`](60-evidence/s11/s11-post-r2-baseline-validation-repair-review.md)
-- Historical pre-R6 S11-R3 sequence/static-observability architecture: [`20-architecture/s11-sequence-observability-integrity-architecture.md`](20-architecture/s11-sequence-observability-integrity-architecture.md)
-- Historical pre-R6 S11-R3 contract: [`30-validation/s11-sequence-observability-integrity-validation.md`](30-validation/s11-sequence-observability-integrity-validation.md)
-- S11-R3 root-cause diagnostic: [`50-diagnostics/s11/s11-r3-sequence-observability-root-cause.md`](50-diagnostics/s11/s11-r3-sequence-observability-root-cause.md)
-- S11-R3 local implementation/replay evidence: [`60-evidence/s11/s11-r3-sequence-observability-integrity.md`](60-evidence/s11/s11-r3-sequence-observability-integrity.md)
-- Historical pre-R6 S11-R4 field-residual architecture: [`20-architecture/s11-r4-field-residual-authority-architecture.md`](20-architecture/s11-r4-field-residual-authority-architecture.md)
-- Historical pre-R6 S11-R4 contract: [`30-validation/s11-r4-field-residual-authority-validation.md`](30-validation/s11-r4-field-residual-authority-validation.md)
-- S11-R4 secure-Windows residual diagnostic: [`50-diagnostics/s11/s11-r4-windows-residual-authority-diagnostic.md`](50-diagnostics/s11/s11-r4-windows-residual-authority-diagnostic.md)
-- S11-R4 local implementation/replay evidence: [`60-evidence/s11/s11-r4-field-residual-authority.md`](60-evidence/s11/s11-r4-field-residual-authority.md)
-- Superseded S11-R5 sequence-first observation architecture: [`20-architecture/s11-r5-sequence-first-trajectory-architecture.md`](20-architecture/s11-r5-sequence-first-trajectory-architecture.md)
-- Failed S11-R5 validation contract: [`30-validation/s11-r5-sequence-first-trajectory-validation.md`](30-validation/s11-r5-sequence-first-trajectory-validation.md)
-- S11-R5 current-frame authority root cause: [`50-diagnostics/s11/s11-r5-current-frame-authority-root-cause.md`](50-diagnostics/s11/s11-r5-current-frame-authority-root-cause.md)
-- S11-R5 secure-Windows field failure: [`50-diagnostics/s11/s11-r5-secure-windows-field-failure.md`](50-diagnostics/s11/s11-r5-secure-windows-field-failure.md)
-- S11-R5 local implementation/replay evidence: [`60-evidence/s11/s11-r5-sequence-first-observation.md`](60-evidence/s11/s11-r5-sequence-first-observation.md)
-- Superseded S11-R6 optics-aware observation architecture: [`20-architecture/s11-r6-optics-aware-observation-architecture.md`](20-architecture/s11-r6-optics-aware-observation-architecture.md)
-- Failed S11-R6 validation contract: [`30-validation/s11-r6-optics-aware-observation-validation.md`](30-validation/s11-r6-optics-aware-observation-validation.md)
-- S11-R6 checked-video diagnostic: [`50-diagnostics/s11/s11-r6-checked-video-reconciliation.md`](50-diagnostics/s11/s11-r6-checked-video-reconciliation.md)
-- S11-R6 local implementation/replay evidence: [`60-evidence/s11/s11-r6-optics-aware-observation.md`](60-evidence/s11/s11-r6-optics-aware-observation.md)
-- S11-R7 historical local baseline before its failed field gate: [`60-evidence/s11/s11-r7-evidence-tiered-trajectory.md`](60-evidence/s11/s11-r7-evidence-tiered-trajectory.md)
-- S11-R8 historical local baseline before its failed field gate: [`60-evidence/s11/s11-r8-observation-recovery.md`](60-evidence/s11/s11-r8-observation-recovery.md)
+- detector responsibilities — [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md);
+- current executing control-flow map — [`20-architecture/s11-current-detector-logic-map.md`](20-architecture/s11-current-detector-logic-map.md);
+- active behavioral lifecycle/Foam-witness architecture — [`20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md`](20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md);
+- active behavioral validation/work specification — [`30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md`](30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md);
+- durable causal failure history — [`50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`](50-diagnostics/s11/s11-detector-mechanism-failure-registry.md);
+- canonical private-Windows reviewed truth — [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md);
+- future deliberate target-Windows procedure — [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md);
+- completed S11 evidence collection — [`60-evidence/s11/`](60-evidence/s11/).
 
-### Supporting collections
+R18–R20 predecessor architecture/validation and earlier diagnostics remain historical provenance. They are reachable through the current logic map, failure registry, evidence collection, and Git history; this router does not enumerate them.
 
-- S11 diagnostics: [`50-diagnostics/s11/`](50-diagnostics/s11/)
-- S11 historical evidence: [`60-evidence/s11/`](60-evidence/s11/)
-- Retained/deferred commitments: [`00-project/retained-commitments.md`](00-project/retained-commitments.md)
+## Supporting collection indexes
 
-### Future S11 changes
-
-Before changing the detector trigger surface or recording S11 Windows evidence, read the current logic map and failure registry, identify the relevant current architecture/validation/truth authority, and complete the matching governance block required by the [S11 detector change governance contract](30-validation/s11-detector-change-governance.md). Run the repository checker before review; do not touch an owner merely to satisfy routing—update an owner only when its contract or evidence genuinely changes.
+- S11 diagnostics — [`50-diagnostics/s11/`](50-diagnostics/s11/)
+- completed evidence — [`60-evidence/README.md`](60-evidence/README.md)
+- retained/deferred commitments — [`00-project/retained-commitments.md`](00-project/retained-commitments.md)
+- implementation/reference provenance — [`70-reference/implementation-reference-log.md`](70-reference/implementation-reference-log.md)
 
 ## Archive policy
 
-`90-archive/` preserves superseded context and decision history. Archived documents may keep their original language. Repair inbound/outbound links when needed for navigation, but do not promote archived statements back into current authority without an explicit current owner update.
+`90-archive/` preserves superseded context and decision history. Archived documents may retain their original language. Repair links when needed for navigation, but never promote an archived statement back into current authority without updating a current owner.

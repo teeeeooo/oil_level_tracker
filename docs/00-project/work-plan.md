@@ -2,326 +2,71 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** `R20 behavioral implementation, local validation, independent audit, final Sol review and documentation closeout complete; future Windows field qualification remains required`
-**Source authority:** `approved committed behavioral implementation against baseline 119f218f2cf232e90f8e591e28feaab54f6fb42f; no field-qualified detector; prior field qualification/comparison requirements remain unfulfilled`
-**Task-start exact head:** `119f218f2cf232e90f8e591e28feaab54f6fb42f`
-**Task-start exact parent:** `119f218f2cf232e90f8e591e28feaab54f6fb42f`
+**Current gate:** active behavioral lifecycle/Foam-witness implementation and local acceptance are complete; field qualification remains outstanding
+**Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
-## R10 field result
+This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
 
-R10 increased private-Windows coverage but failed interface accuracy.
+## Accepted baseline
 
-- Base published one incorrect 583-frame run from 480–777.5 s. A calibrated
-  lower-rim/texture path had 567 promoted members but only two motion keyframes
-  at 750 and 774 s; those future keyframes retroactively anchored the complete
-  path. No selected row matched reviewed Oil.
-- Accum selected an ordinary `r6_material_path` at Y191–297 that overlays prove
-  was Foam/residue. Actual Oil was near Y450. The wrong path retained high
-  registered motion after public Foam disappeared, while actual-Oil-near rows
-  were usually top-k-pruned.
-- Candidate-local material texture conflict was high on several wrong Accum
-  anchors but was absent from authority. Current-frame-only conflict is still
-  insufficient because a representative residue row had zero conflict after
-  the Foam raster disappeared.
-- Frame-level `R8_CALIBRATED_ARTIFACT_REJECTED` did not describe the selected
-  row; selected Base rows had zero Artifact match.
+The current implementation preserves the established S11 safety and publication contracts while applying two locally accepted behavioral repairs:
 
-## Activated structural reset
+1. delayed drain reacquisition does not consume its one ownerless attempt until the existing positive drain direction/agreement/progress readiness evidence is present; and
+2. Foam confirmation is bounded to local four-frame / 2.0-second witness windows with actual dynamic stable support.
 
-The prior post-S11 detector-maintainability slice is pulled forward because
-architecture debt now blocks correctness work. UI/MainWindow/Result Review
-maintainability remains post-S11.
+Local implementation, targeted/canonical validation, independent review, and documentation closeout for that behavioral slice are complete. The authoritative contract/evidence is:
 
-R11 first performs behavior-preserving structural work:
+- [active behavioral architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
+- [active behavioral validation/work specification](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md)
+- [completed local evidence](../60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md)
 
-1. retire production-unreachable legacy selectors;
-2. introduce typed candidate evidence and explicit authority reasons;
-3. separate current-frame evidence, candidate assembly, Artifact filtering and
-   debug projection;
-4. split admission, authority, track opposition, bootstrap, trajectory, global
-   path and final projection responsibilities; and
-5. introduce an observation-only Foam material track before applying R11
-   behavior.
+The predecessor R18/R19/R20 records remain historical inputs, not alternate current owners.
 
-Structural commits preserve R10 four-video and Artifact replay fingerprints.
-They do not claim the known R10 Windows path is correct.
+## Current authorization boundary
 
-## R11 behavior repair
+Currently authorized repository maintenance may preserve or clarify the accepted baseline and its documentation without changing detector behavior.
 
-After structural preservation passes:
+Not automatically authorized by the current gate:
 
-- calibrated bootstrap is bounded to locally distributed motion keyframes and
-  cannot promote an unbounded prefix/suffix;
-- registered dynamic material paths with high texture conflict are demoted,
-  with no silent semantic/terminal bypass;
-- Foam/residue material identity may oppose reuse of the same upper track as
-  Oil without publishing Foam or blocking unrelated Oil; and
-- a bounded vertically separated lower candidate is retained so actual Oil is
-  not removed before authority evaluation.
+- a new detector revision or threshold/authority change;
+- automatic replay of private Windows media;
+- reopening the closed Windows investigation;
+- case-specific video/Glass/timestamp/coordinate behavior;
+- interpolation, carry, or report-side repair of missing detector observations;
+- activation of retained Base/Accum behavior surfaces or the decision-witness package without a separate approval/design gate.
 
-Every numeric Oil remains an exact same-frame candidate. No state, Foam,
-bootstrap or graph projection may create/interpolate/carry a coordinate.
+Future deliberate Windows field qualification remains a valid but non-current transition. It must use the current validation/truth/procedure authorities and must not reinterpret local acceptance as field proof.
 
-## Local R11 result
+## Preserved contracts
 
-The structural reset, bounded bootstrap and Foam-material identity repair are
-implemented and locally validated. The behavior-preserving midpoint retained
-all R10 fingerprints. Final R11 replay produced 129/299 numeric Oil with 10/13
-checked truth, 5.95 px MAE, 11 px maximum error and complete same-frame
-provenance. User-like Artifact replay produced 92/113 sample4 numeric Oil and
-3/5 checked truth. Full regression is 1,524 passed; direct detector timing is
-43.0 ms/frame off and 44.0 ms/frame on.
+- one generic detector serves every Glass; no private identity or reviewed coordinate enters production control flow;
+- numeric Oil/Foam values remain selected same-frame candidates with exact provenance;
+- Oil and Foam validity/ownership remain independent through their defined composition point;
+- confirmed FULL/EMPTY state constrains lifecycle but never fabricates a coordinate;
+- ambiguous, unavailable, lost, or hard-invalid evidence fails closed rather than being repaired downstream;
+- current detector changes remain governed by the logic-map/failure-registry history review contract.
 
-## R11 field disposition
+## Open field risks and named unknowns
 
-The exact pushed R11 head failed secure-Windows Base/Accum effectiveness. R11
-removed the R10 unbounded prefix but a later motion-only path still changed
-identity between reflection, actual liquid and bracket reflection. Accum's
-distinct-lower reserve became generic anchor authority while actual lower Oil
-was pruned. Real dynamic Foam was halved by fixed width admission, fragmented
-by sequence bounds and then made invalid by a broad material-bottom topology
-veto plus shared Oil/Foam graph validity.
+The current baseline is not field-qualified. Retained uncertainty includes Base release/closure behavior, Accum entry/continuity/re-entry surfaces, and historical R18 causal unknowns where reviewed physical identity or exact Y anchors were unavailable. These facts are constraints on claims, not automatic implementation tasks.
 
-Final sequence and CSV ownership remain sound: Base 39 and Accum 418 numeric Oil
-rows agree exactly and every numeric row owns one equal-Y same-frame candidate.
+Retained but non-current work is owned by [`retained-commitments.md`](retained-commitments.md).
 
-## R12 field disposition
+## Next transition
 
-The secure-Windows R12 bundle reports the expected sequence resolver version
-but no Git SHA or detector version. It fails the field gate. Base publishes no
-Oil and has no qualified anchor; at 540 and 674 s the reviewed row is absent
-from even the bounded proposal neighborhood. Accum publishes 92 wrong residue
-rows at Y190–297. Twenty-five weak ordinary rows bypass material conflict
-through `semantic_sequence_anchor`, eight more use corroborated-material
-authority, and those 33 anchors support the complete wrong trajectory.
+The current repository has no automatically executable next detector revision. The next material S11 transition requires explicit authorization for one of:
 
-R12's independent Foam validity is retained: confirmed Foam rows at 670.5 and
-673 s have `foam_is_valid=True` while Oil and legacy state validity are false.
-The Result Review renderer nevertheless plots finite points without applying
-their per-series valid bit and must be corrected.
+1. deliberate target-Windows field qualification of the accepted behavioral baseline; or
+2. activation of a separately designed/evidence-backed retained behavior or observability slice.
 
-## R13 local result
+Until then, preserve the accepted local behavioral contract and the existing field `FAIL` boundary.
 
-R13 replaced the remaining R12 authority leak with one phase-identity decision
-shared by authority and trajectory. Stale semantic-direct, terminal-fallback,
-track-promotion, duplicate dynamic-material and no-reader diagnostic paths were
-removed. Bounded calibrated phase proposals do not receive proposal or motion
-authority. Per-series graph validity is enforced.
+## Current authority links
 
-Local replay processed 299 rows with 121 numeric Oil, 9/13 checked truth,
-5.28 px MAE, 11 px maximum error and complete same-frame provenance. The
-sample3 completed-fill internal-material interval remains non-numeric.
-User-like Artifact replay produced 97/113 sample4 numeric Oil, zero Foam and
-complete provenance. Full regression is 1,537 passed. Direct total timing is
-69.5 ms/frame versus the documented R12 72.6 ms/frame.
-
-## R13 field disposition
-
-The secure-Windows replay failed. Final publication integrity was exact
-(Base 345, Accum 102), but reviewed truth was 0/3 and 0/5. R13 converted local
-phase appearance and broad-mask ordering into identity, permitted high-conflict
-ordered-lower anchors, and connected unrelated rows through a component-free
-trajectory/run. Artifact templates were active, but their count also enabled
-and enlarged proposal generators. Complete pipeline counterfactuals showed that
-texture/corroboration gates reduce some wrong rows without recovering truth,
-the distance-split prototype over-suppresses, and disabling generators removes
-Base Oil entirely.
-
-## R14 field disposition
-
-The exact pushed R14 head failed private-Windows acceptance. Base recovered
-real Oil for the first time but lost anchor-free same-component tails. Accum
-published four stationary lower-structure runs during confirmed EMPTY. A real
-dynamic Foam group was rejected because signed inverted Oil topology and
-pre-publication Oil proposals were treated as same-material authority. Later
-dynamic-onset Foam publication remained internally consistent.
-
-## Completed behavioral implementation and validation
-
-The user-reported R20 Windows field report remains closed as `FIELD FAIL`; the
-private bundle remains unavailable and no new Windows inquiry is opened. The
-approved two generic behavior repairs are implemented and locally accepted in
-the active [behavioral lifecycle and Foam witness
-architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
-and [validation/work specification](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md):
-delayed drain readiness before consuming the one ownerless attempt, and
-bounded local Foam confirmation windows with actual dynamic stable support.
-The completed commands, results and limitations are recorded in the
-[behavioral lifecycle and Foam witness evidence](../60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md).
-The old field qualification/comparison requirements remain unfulfilled, not
-waived or executed by accepting the report. No automatic Windows replay,
-unrelated detector owner change or new revision is authorized by this record.
-
-The [R20 delayed drain reacquisition architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md)
-and its [validation contract](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md)
-remain historical predecessor authorities for the direct/near/delayed route.
-The active behavioral contract is the [behavioral architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
-and [validation/work specification](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md).
-The [R20 Windows evidence
-consolidation](../60-evidence/s11/s11-r20-windows-evidence-consolidation.md)
-records the closed report and its provenance boundaries. Foam, candidate
-generation, tracklets, selector, projection and publication remain outside the
-two behavioral repair seams; optional decision-witness observability remains
-separate retained design-only work.
-
-The completed R18 causal rerun is frozen in the [Windows causal
-closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md). Base lower
-`Y > 800` entrance rejection is correct safety behavior, while the actual
-interface earliest loss is before-or-at drain and unknown. Accum DRAIN had 264
-evaluation rows and zero passed; retained snapshot non-update cause and drain
-candidate identity/direction remain unknown, as does the owner-bounded selector
-abstain predicate. Foam exact gates and seven false ENTRY-SPLASH paths are
-known. Compared selected-candidate, completed-sequence and CSV fields were
-invariant on `1,202/1,202` common rows with zero mismatches. These facts do not
-authorize threshold changes or convert named unknowns into implementation
-claims.
-
-The active behavior implementation retains the historical R18/R19 direct and
-near-snapshot safety contracts while adapting delayed seed readiness and Foam
-formation authority at their existing owners. It retains initial-EMPTY
-suppression, Oil/Foam same-frame/CSV provenance, Artifact handling,
-checked-truth authority and resolver ordering; it does not claim field repair.
-
-Use the [R18 architecture](../20-architecture/s11-r18-lifecycle-closure-architecture.md),
-[completed causal observability addendum](../20-architecture/s11-r18-causal-trace-observability-architecture.md),
-[completed causal trace validation](../30-validation/s11-r18-causal-trace-observability-validation.md),
-[Windows causal closure](../50-diagnostics/s11/s11-r18-windows-causal-closure.md),
-[R19 architecture](../20-architecture/s11-r19-bounded-drain-release-chain-architecture.md),
-[R19 validation](../30-validation/s11-r19-bounded-drain-release-chain-validation.md),
-[R20 architecture](../20-architecture/s11-r20-delayed-drain-reacquisition-architecture.md),
-[R20 validation](../30-validation/s11-r20-delayed-drain-reacquisition-validation.md),
-[active behavioral architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md),
-[active behavioral validation](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md),
-[completed behavioral evidence](../60-evidence/s11/s11-behavioral-lifecycle-and-foam-witness.md),
-[R20 local evidence](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.md),
-[operator-reported field result](../60-evidence/s11/s11-r18-secure-windows-field-result.md)
-and [canonical private-Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
-R18 remains field `FAIL`; its causal rerun is complete and no further
-diagnostic rerun is required for this implementation. R19 and the earlier R20
-document remain historical predecessor context. The active behavior tests and
-four-video replay are recorded in the completed evidence card; no field PASS
-is claimed.
-
-## R16 field disposition
-
-The private-Windows R16 holdout failed. Base published 0/601 Oil and five false
-Foam rows. Accum suppressed the prior initial-EMPTY false Oil runs and admitted
-a real lower-entry tracklet, but published only 31/601 Oil rows, had large
-reviewed-Y errors at 684/689 s and remained non-numeric after 702 s. Accum
-published 97 Foam rows. Their former 52-real/45-false classification is
-superseded by the later canonical segment truth, which establishes Foam only
-from about 672--680 s and does not make detector-row cohorts a truth target.
-
-Completed-window integrity passed: every one of the 31 Oil rows and all 102
-Foam rows had exactly one equal-Y selected same-frame candidate and equal CSV
-raw Y. Preliminary contrary findings came from reading top-level current-frame
-trace fields instead of nested completed-window fields.
-
-The corrected diagnostic narrows Base to mixed proposal/confirmation failure,
-Accum to upstream truth-row loss plus absent safe mid-glass filling-owner
-reacquisition, and Foam to episode-level discrimination. It explicitly does
-not treat unconfirmed tracklet default-zero metrics as measured witness values,
-does not infer that the static map was absent, and preserves Foam publication
-independence from Oil.
-
-## Local R14 result
-
-R14 decouples Artifact templates from fixed proposal budgets, replaces local
-phase promotion with recent-Foam composition and explicit component ownership,
-and bounds completed-fill reopening to upper-entry directional drain evidence.
-Confirmed Artifact templates now support Shift/Ctrl/Cmd multi-selection,
-select-all, clear-selection, simultaneous overlay highlight and bulk deletion.
-
-The exact four-video replay processed 299 rows with 187 numeric Oil and complete
-same-frame provenance. Checked truth is 10/13, MAE 8.5 px and maximum error
-26 px. The sample3 completed-fill internal cap has zero numeric Oil, late drain
-has 18 numeric rows, and sample4 has eight strict reviewed-range matches. Direct
-runtime is 96.8 ms/frame against the 104.25 ms/frame ceiling. Private-Windows
-Base/Accum effectiveness remains unproven.
-
-## Local R15 result
-
-R15 removes candidate-only and prior-track Foam alias vetoes, admits initial
-EMPTY Oil only through bounded lower-entry upward progress, replaces the fixed
-continuation horizon with continuous registered same-component motion and
-classifies detached layer/droplet Foam through one material phenotype owner.
-Shared Oil optics remain unchanged; bright-droplet recovery is confined to the
-Foam detector and still requires registered dynamics for sequence eligibility.
-
-The exact four-video replay processed 299 rows with 187 numeric Oil and complete
-same-frame provenance. Checked truth is 10/13, MAE 8.1 px and maximum error
-24.5 px. Sample3 completed fill remains non-numeric, late drain has 18 numeric
-rows and sample4 has eight strict reviewed-range matches. Fixed fingerprints
-passed. Full regression is 1,549 passed; compile and diff checks passed.
-
-## Local R16 candidate
-
-R16 replaces overlapping component, phase and final-selection responsibility
-with directed physical tracklets, a forward material lifecycle and a separate
-candidate-publishable fixed-lag selector. It preserves exact same-frame
-provenance, makes ambiguous or foreign ownership fail closed, and establishes
-an 11-sampled-frame end-to-end commitment bound while keeping each individual
-confirmation/selection stage bounded to six frames.
-
-The first independent audit found a missing symmetric one-to-many tracklet
-ambiguity check, incomplete same-row material vetoes across drain transitions
-and an absolute-jump-only backwards re-entry. The repaired candidate terminates
-genuine split parents without misclassifying clearly owned children, applies
-the complete current-row veto to every drain transition and adds the ordinary
-directional reversal tolerance to phase re-entry.
-
-The final follow-up repair removes a separate established/provisional ID
-exchange. It corrects only an actual baseline two-edge crossing with two
-independently clear physical child proposals. A lone provisional edge or
-calibrated-high-recall-only residual cannot redirect the established owner, so
-the accepted material barrier and 81--96 s drain witnesses remain unchanged.
-
-The local structural, four-video safety, performance, compilation, focused and
-canonical regression gates pass. Exact counts, fingerprints, timing and the
-candidate-level explanation for intentional abstentions are owned by the
-[R16 evidence record](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
-and [owner audit](../50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md).
-The later private-Windows result failed and is owned by the
-[R16 Windows field result](../60-evidence/s11/s11-r16-secure-windows-field-result.md)
-and [corrected diagnostic](../50-diagnostics/s11/s11-r16-windows-tracklet-and-foam-diagnostic.md).
-
-## Authority links
-
-- [R17 physical observation ownership architecture](../20-architecture/s11-r17-physical-observation-ownership-architecture.md)
-- [R17 validation](../30-validation/s11-r17-physical-observation-ownership-validation.md)
-- [R17 local evidence](../60-evidence/s11/s11-r17-physical-observation-ownership.md)
-- [R17 Windows field result](../60-evidence/s11/s11-r17-secure-windows-field-result.md)
-- [R17 Windows diagnostic](../50-diagnostics/s11/s11-r17-windows-phase-and-episode-diagnostic.md)
-- [R16 directed tracklet/material lifecycle architecture](../20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md)
-- [R16 validation](../30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md)
-- [R16 local evidence](../60-evidence/s11/s11-r16-directed-tracklet-material-lifecycle.md)
-- [R16 owner audit](../50-diagnostics/s11/s11-r16-local-coverage-owner-audit.md)
-- [R16 Windows field result](../60-evidence/s11/s11-r16-secure-windows-field-result.md)
-- [R16 Windows diagnostic](../50-diagnostics/s11/s11-r16-windows-tracklet-and-foam-diagnostic.md)
-- [R15 state-aware material ownership architecture](../20-architecture/s11-r15-state-aware-material-ownership-architecture.md)
-- [R15 validation](../30-validation/s11-r15-state-aware-material-ownership-validation.md)
-- [R15 local evidence](../60-evidence/s11/s11-r15-state-aware-material-ownership.md)
-- [R14 Windows field result](../60-evidence/s11/s11-r14-secure-windows-field-result.md)
-- [R14 Windows diagnostic](../50-diagnostics/s11/s11-r14-windows-state-and-foam-ownership-diagnostic.md)
-- [R14 phase-component architecture](../20-architecture/s11-r14-phase-component-replacement-architecture.md)
-- [R14 validation](../30-validation/s11-r14-phase-component-replacement-validation.md)
-- [R14 local evidence](../60-evidence/s11/s11-r14-phase-component-replacement.md)
-- [R13 Windows result](../60-evidence/s11/s11-r13-secure-windows-field-result.md)
-- [R13 Windows diagnostic](../50-diagnostics/s11/s11-r13-windows-identity-component-diagnostic.md)
-- [R13 phase-identity architecture](../20-architecture/s11-r13-phase-identity-recovery-architecture.md)
-- [R13 validation](../30-validation/s11-r13-phase-identity-recovery-validation.md)
-- [R13 local evidence](../60-evidence/s11/s11-r13-phase-identity-recovery.md)
-- [R11 architecture](../20-architecture/s11-r11-detector-architecture-reset.md)
-- [R11 validation](../30-validation/s11-r11-detector-architecture-reset-validation.md)
-- [R10 Windows diagnostic](../50-diagnostics/s11/s11-r10-windows-path-and-residue-diagnostic.md)
-- [R11 local evidence](../60-evidence/s11/s11-r11-bounded-bootstrap-and-material-identity.md)
-- [R11 Windows result](../60-evidence/s11/s11-r11-secure-windows-field-result.md)
-- [R11 Windows diagnostic](../50-diagnostics/s11/s11-r11-windows-bootstrap-composition-diagnostic.md)
-- [R12 replacement architecture](../20-architecture/s11-r12-phase-composition-replacement-architecture.md)
-- [R12 validation](../30-validation/s11-r12-phase-composition-replacement-validation.md)
-- [R12 local evidence](../60-evidence/s11/s11-r12-phase-composition-replacement.md)
-- [R12 Windows result](../60-evidence/s11/s11-r12-secure-windows-field-result.md)
-- [R12 Windows diagnostic](../50-diagnostics/s11/s11-r12-windows-phase-authority-diagnostic.md)
-- [Durable detector responsibilities](../20-architecture/s11-detector-responsibility-architecture.md)
-- [Structural maintainability assessment](../50-diagnostics/post-s11-structural-maintainability-assessment.md)
-- [Windows checklist](../40-operations/manual-gui-windows-checklist.md)
+- [Project roadmap](roadmap.md)
+- [Repository execution policy](execution-policy.md)
+- [S11 detector change governance](../30-validation/s11-detector-change-governance.md)
+- [Current detector logic map](../20-architecture/s11-current-detector-logic-map.md)
+- [Detector mechanism failure registry](../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
+- [Canonical Windows reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
+- [Future Windows procedure](../40-operations/manual-gui-windows-checklist.md)
