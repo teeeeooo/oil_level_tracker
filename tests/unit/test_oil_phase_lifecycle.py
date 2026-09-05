@@ -66,6 +66,9 @@ def _node(
     *,
     direction: int,
     progress: float,
+    recent_direction: int | None = None,
+    recent_progress: float | None = None,
+    recent_directional_agreement: float = 1.0,
     material_conflict: float = 0.0,
     tracklet_material_conflict: float | None = None,
     lifecycle: TrackletLifecycle = TrackletLifecycle.CONTINUING,
@@ -123,6 +126,15 @@ def _node(
         tracklet_net_progress_px=progress,
         tracklet_direction=direction,
         tracklet_directional_agreement=1.0,
+        tracklet_recent_net_progress_px=(
+            progress if recent_progress is None else recent_progress
+        ),
+        tracklet_recent_direction=(
+            direction if recent_direction is None else recent_direction
+        ),
+        tracklet_recent_directional_agreement=(
+            recent_directional_agreement
+        ),
         tracklet_motion_support=motion_support,
         tracklet_motion_coverage=motion_coverage,
         tracklet_material_conflict=(
@@ -1262,11 +1274,65 @@ def test_initial_full_fragmented_release_chain_uses_unique_current_row() -> None
     assert result.owner_chains[2] == ("drain-a", "drain-b")
     assert result.path[2].candidate_ref is rows[2].candidate_ref
     diagnostic = result.diagnostics[2]
-    assert diagnostic["schema_version"] == "r20-delayed-drain-reacquisition-v1"
+    assert diagnostic["schema_version"] == "r21-truth-preserving-detector-repair-v1"
     assert diagnostic["release_source"] == "recovery"
     assert diagnostic["recovery_selected_tracklet_id"] == "drain-b"
     assert diagnostic["recovery_qualifying_tracklet_ids"] == ["drain-b"]
     assert result.path[0].candidate_ref is None
+
+
+def test_r20_scale_slow_drain_earns_release_through_bounded_recovery() -> None:
+    geometry_height = 772.2137404580153
+    rows = tuple(
+        _node(
+            frame,
+            "slow-drain",
+            100.0 + 2.0 * frame,
+            direction=1,
+            progress=10.0,
+            authority=(
+                OilCandidateAuthority.ANCHOR_ELIGIBLE
+                if frame == 0
+                else OilCandidateAuthority.CONTINUATION_ELIGIBLE
+            ),
+        )
+        for frame in range(11)
+    )
+    policy = OilMaterialPhasePolicy(
+        geometry_top_y=0.0,
+        geometry_height=geometry_height,
+        maximum_jump_px=32.0,
+        maximum_lost_frames=3,
+        handoff_ambiguity_margin=0.08,
+        handoff_direction_reversal_tolerance_px=geometry_height * 0.012,
+        fill_onset_intent_frames=6,
+        fill_evidence_window_frames=12,
+        entrance_band_ratio=0.27,
+        fill_minimum_span_ratio=0.20,
+        minimum_directional_agreement=0.60,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+        fill_minimum_motion_support=0.50,
+        fill_minimum_motion_coverage=0.50,
+        drain_entrance_ratio=0.40,
+        drain_minimum_progress_ratio=0.025,
+        drain_minimum_directional_agreement=0.60,
+        material_conflict_limit=0.45,
+    )
+
+    result = OilMaterialPhaseLifecycleOwner(policy).resolve(
+        tuple((node, _unknown(frame)) for frame, node in enumerate(rows))
+    )
+
+    minimum_progress = geometry_height * 0.025
+    assert minimum_progress == 19.305343511450385
+    assert all(
+        row.candidate_ref.tracklet_net_progress_px < minimum_progress
+        for row in rows
+    )
+    assert OilMaterialPhase.DRAINING not in result.phases[:10]
+    assert result.phases[10] is OilMaterialPhase.DRAINING
+    assert result.reasons[10] == "DRAIN_RELEASE_RECOVERY_CONFIRMED"
+    assert result.diagnostics[10]["release_source"] == "recovery"
 
 
 def test_partial_fill_fragmented_release_chain_uses_retained_fill_anchor() -> None:
@@ -2915,6 +2981,160 @@ def test_drain_release_rejects_conflicting_same_row_material_sibling() -> None:
     assert result.phases[-1] is OilMaterialPhase.FILLED_BARRIER
     assert result.path[-1].kind == "unknown"
     assert result.reasons[-1] == "FILLED_CAP_VETO"
+
+
+def test_lost_drain_accepts_unique_independent_refill_owner_at_top() -> None:
+    drain = (
+        _node(0, "drain-a", 50.0, direction=1, progress=20.0),
+        _node(1, "drain-a", 70.0, direction=1, progress=20.0),
+        _node(2, "drain-a", 90.0, direction=1, progress=20.0),
+    )
+    refill = _node(
+        5,
+        "refill-b",
+        35.0,
+        direction=-1,
+        progress=60.0,
+        recent_direction=-1,
+        recent_progress=60.0,
+        motion_support=0.90,
+        motion_coverage=0.90,
+    )
+    layers = tuple(
+        (node, _unknown(frame)) for frame, node in enumerate(drain)
+    ) + ((_unknown(3),), (_unknown(4),), (refill, _unknown(5)))
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases[2] is OilMaterialPhase.DRAINING
+    assert result.phases[5] is OilMaterialPhase.FILLED_BARRIER
+    assert result.reasons[5] == "DRAIN_REFILL_HANDOFF_CONFIRMED"
+    assert result.allowed_tracklet_ids[5] == frozenset({"refill-b"})
+    assert result.owner_chains[5] == ("drain-a", "refill-b")
+    assert result.path[5].candidate_ref is refill.candidate_ref
+
+
+def test_fresh_refill_owner_cannot_replace_present_drain_owner() -> None:
+    drain = (
+        _node(0, "drain-a", 50.0, direction=1, progress=20.0),
+        _node(1, "drain-a", 70.0, direction=1, progress=20.0),
+        _node(2, "drain-a", 90.0, direction=1, progress=20.0),
+    )
+    present_old_owner = _node(
+        3,
+        "drain-a",
+        85.0,
+        direction=-1,
+        progress=5.0,
+        recent_direction=-1,
+        recent_progress=5.0,
+    )
+    fresh_refill = _node(
+        3,
+        "refill-b",
+        35.0,
+        direction=-1,
+        progress=60.0,
+        recent_direction=-1,
+        recent_progress=60.0,
+        motion_support=0.90,
+        motion_coverage=0.90,
+    )
+    layers = tuple(
+        (node, _unknown(frame)) for frame, node in enumerate(drain)
+    ) + ((present_old_owner, fresh_refill, _unknown(3)),)
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases[3] is OilMaterialPhase.DRAINING
+    assert result.reasons[3] == "DRAIN_OWNER_LOST"
+    assert result.allowed_tracklet_ids[3] == frozenset()
+    assert result.path[3].candidate_ref is None
+
+
+def test_lost_drain_refill_handoff_is_ambiguous_for_two_fresh_owners() -> None:
+    drain = (
+        _node(0, "drain-a", 50.0, direction=1, progress=20.0),
+        _node(1, "drain-a", 70.0, direction=1, progress=20.0),
+        _node(2, "drain-a", 90.0, direction=1, progress=20.0),
+    )
+    refill_b = _node(
+        5, "refill-b", 35.0, direction=-1, progress=60.0,
+        recent_direction=-1, recent_progress=60.0,
+        motion_support=0.90, motion_coverage=0.90,
+    )
+    refill_c = _node(
+        5, "refill-c", 37.0, direction=-1, progress=60.0,
+        recent_direction=-1, recent_progress=60.0,
+        motion_support=0.90, motion_coverage=0.90,
+    )
+    layers = tuple(
+        (node, _unknown(frame)) for frame, node in enumerate(drain)
+    ) + (
+        (_unknown(3),), (_unknown(4),),
+        (refill_b, refill_c, _unknown(5)),
+    )
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases[5] is OilMaterialPhase.DRAINING
+    assert result.reasons[5] == "DRAIN_REFILL_HANDOFF_AMBIGUOUS"
+    assert result.allowed_tracklet_ids[5] == frozenset()
+    assert 5 in result.ambiguous_frames
+
+
+def test_drain_reversal_closes_refill_only_after_topward_span_is_confirmed() -> None:
+    rows = (
+        _node(0, "drain", 65.0, direction=1, progress=20.0),
+        _node(1, "drain", 95.0, direction=1, progress=30.0),
+        _node(
+            2,
+            "drain",
+            80.0,
+            direction=1,
+            progress=30.0,
+            recent_direction=-1,
+            recent_progress=15.0,
+        ),
+        _node(
+            3,
+            "drain",
+            50.0,
+            direction=1,
+            progress=30.0,
+            recent_direction=-1,
+            recent_progress=45.0,
+            motion_support=0.90,
+            motion_coverage=0.90,
+        ),
+    )
+    layers = tuple(
+        (node, _unknown(frame)) for frame, node in enumerate(rows)
+    ) + ((_unknown(4),),)
+
+    result = _resolve(
+        layers,
+        confirmed_initial_state=InitialObservationState.FULL_NO_INTERFACE,
+    )
+
+    assert result.phases[0] is OilMaterialPhase.DRAINING
+    assert result.phases[2] is OilMaterialPhase.DRAINING
+    assert result.path[2].kind == "unknown"
+    assert result.phases[3] is OilMaterialPhase.FILLED_BARRIER
+    assert result.reasons[3] == "DRAIN_REFILL_CLOSURE_CONFIRMED"
+    assert result.allowed_tracklet_ids[3] == frozenset({"drain"})
+    assert result.path[3].candidate_ref is rows[3].candidate_ref
+    assert result.phases[4] is OilMaterialPhase.FILLED_BARRIER
+    assert result.path[4].kind == "unknown"
 
 
 def test_drain_continuation_rejects_conflicting_same_row_material_sibling() -> None:

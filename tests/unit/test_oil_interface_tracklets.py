@@ -150,6 +150,7 @@ def test_same_frame_row_hypothesis_retains_every_candidate_provenance() -> None:
     assert result.hypothesis_count == 3
 
 
+
 def test_same_physical_row_aggregates_cross_representation_members() -> None:
     frames = tuple(
         (
@@ -610,6 +611,34 @@ def test_physical_tracklets_confirm_without_borrowing_between_rows() -> None:
         is TrackletConfirmationProfile.ANCHOR_CORRIDOR
         for item in upper_refs
     )
+
+
+def test_continuing_tracklet_reports_recent_direction_after_physical_reversal() -> None:
+    frames = tuple(
+        (
+            _ref(
+                frame,
+                0,
+                y,
+                authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                source="reversing-interface",
+                motion=0.90,
+                coverage=0.90,
+            ),
+        )
+        for frame, y in enumerate((70.0, 75.0, 80.0, 65.0))
+    )
+
+    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
+    refs = _by_source(result, "reversing-interface")
+
+    assert refs[-1].tracklet_lifecycle is TrackletLifecycle.CONTINUING
+    assert refs[-1].tracklet_admitted
+    assert refs[-1].tracklet_direction == 1
+    assert refs[-1].tracklet_net_progress_px > 0.0
+    assert refs[-1].tracklet_recent_direction == -1
+    assert refs[-1].tracklet_recent_net_progress_px == 5.0
+    assert refs[-1].tracklet_recent_directional_agreement >= 0.60
 
 
 def test_stationary_lower_structure_stays_provisional_without_motion() -> None:

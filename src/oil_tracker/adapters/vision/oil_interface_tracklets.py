@@ -326,8 +326,16 @@ class DirectedInterfaceTrackletBuilder:
 
         updates: dict[tuple[int, int], OilCandidateRef] = {}
         for track in tracks:
-            for observation in track.observations:
+            for observation_offset, observation in enumerate(track.observations):
                 hypothesis = observation.hypothesis
+                recent_evidence = self._confirmation_evidence(
+                    track.observations,
+                    observation_offset,
+                )
+                recent_window_ready = (
+                    recent_evidence.observation_count
+                    >= self.policy.confirmation_min_observations
+                )
                 for member in hypothesis.members:
                     key = (member.frame_offset, member.candidate_offset)
                     updates[key] = replace(
@@ -352,6 +360,21 @@ class DirectedInterfaceTrackletBuilder:
                         tracklet_direction=observation.direction,
                         tracklet_directional_agreement=(
                             observation.directional_agreement
+                        ),
+                        tracklet_recent_net_progress_px=(
+                            recent_evidence.net_progress_px
+                            if recent_window_ready
+                            else observation.net_progress_px
+                        ),
+                        tracklet_recent_direction=(
+                            recent_evidence.direction
+                            if recent_window_ready
+                            else observation.direction
+                        ),
+                        tracklet_recent_directional_agreement=(
+                            recent_evidence.directional_agreement
+                            if recent_window_ready
+                            else observation.directional_agreement
                         ),
                         tracklet_motion_support=observation.motion_support,
                         tracklet_motion_coverage=observation.motion_coverage,

@@ -224,7 +224,11 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
             "sequence_tracklet_confirmation_profile": "anchor_corridor",
             "sequence_tracklet_confirmation_support": 0.92,
             "sequence_tracklet_net_progress_px": 12.0,
+            "sequence_tracklet_direction": 1,
             "sequence_tracklet_directional_agreement": 0.8,
+            "sequence_tracklet_recent_net_progress_px": 7.0,
+            "sequence_tracklet_recent_direction": -1,
+            "sequence_tracklet_recent_directional_agreement": 0.75,
             "sequence_tracklet_motion_support": 0.6,
             "sequence_tracklet_motion_coverage": 0.7,
             "sequence_tracklet_incompatible": 0.0,
@@ -248,6 +252,24 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
                         "first_failed_predicate": "entrance_relative",
                     }
                 ],
+            },
+            "sequence_decision_witness": {
+                "schema_version": "r21-decision-witness-v1",
+                "routes": {
+                    "direct": {
+                        "status": "EVALUATED",
+                        "evaluations": [
+                            {
+                                "predicates": [
+                                    {
+                                        "name": "entrance_relative",
+                                        "status": "false",
+                                    }
+                                ]
+                            }
+                        ],
+                    }
+                },
             },
         },
     )
@@ -274,6 +296,10 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
     assert candidate["tracklet_lifecycle"] == "confirmed"
     assert candidate["tracklet_confirmation_profile"] == "anchor_corridor"
     assert candidate["tracklet_net_progress_px"] == 12.0
+    assert candidate["tracklet_direction"] == 1
+    assert candidate["tracklet_recent_net_progress_px"] == 7.0
+    assert candidate["tracklet_recent_direction"] == -1
+    assert candidate["tracklet_recent_directional_agreement"] == 0.75
     assert record["sequence"]["candidates"][0]["reject_stage"] == "ACCEPTED"
     phase_diagnostic = record["sequence"]["state"][
         "sequence_material_phase_diagnostics"
@@ -281,6 +307,13 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
     assert phase_diagnostic["release_evaluations"][0][
         "first_failed_predicate"
     ] == "entrance_relative"
+    witness = record["sequence"]["state"]["sequence_decision_witness"]
+    assert witness["schema_version"] == "r21-decision-witness-v1"
+    assert witness["routes"]["direct"]["status"] == "EVALUATED"
+    assert witness["routes"]["direct"]["evaluations"][0]["predicates"][0] == {
+        "name": "entrance_relative",
+        "status": "false",
+    }
     assert index["records"][0]["fill_state"] == FillState.DRAINING_VISIBLE.value
 
 

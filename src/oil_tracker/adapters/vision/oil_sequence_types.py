@@ -59,6 +59,9 @@ class OilCandidateRef:
     tracklet_net_progress_px: float = 0.0
     tracklet_direction: int = 0
     tracklet_directional_agreement: float = 0.0
+    tracklet_recent_net_progress_px: float = 0.0
+    tracklet_recent_direction: int = 0
+    tracklet_recent_directional_agreement: float = 0.0
     tracklet_motion_support: float = 0.0
     tracklet_motion_coverage: float = 0.0
     tracklet_material_conflict: float = 0.0

@@ -17,37 +17,25 @@ Repeated replay of the private Windows field video during every S11 source itera
 
 ## Unresolved S11 field behavior surfaces
 
-- **Responsibility:** preserve individually deferred Base/Accum behavior gaps
-  that are not supported by the current source and reviewed truth.
+- **Responsibility:** preserve field-only uncertainty that the current generic
+  local detector controls cannot prove without a deliberate Windows replay.
 - **Classification:** `RETAINED / EVIDENCE-GATED`
-- **Deferred surfaces:** Base release admission; Base drain-to-fill reversal
-  and top closure; Accum initial entry; Accum fill continuity/layered/post-Foam
-  ownership; and strict Accum drain continuation/re-entry.
-- **Activation condition:** a separately approved behavior design with reviewed
-  physical candidate identity, source coordinates/phase evidence, bounded
-  transitions and two-sided local controls, followed by required Windows
-  replay. No global threshold, private timestamp/coordinate, interpolation or
-  telemetry-only substitution qualifies.
-- **Current-gate boundary:** these surfaces remain deferred after local acceptance of the active delayed-readiness and bounded-Foam-witness implementation; they are not activated by the outstanding field-qualification requirement.
-
-## R20 decision-witness observability packages
-
-- **Responsibility:** add bounded, additive observations of existing R20 owner
-  decisions so lifecycle, join, publishability, Foam and provenance outcomes can
-  be audited without changing detector authority.
-- **Classification:** `RETAINED / DESIGN-ONLY`
-- **Authoritative design:** [R20 decision-witness observability architecture](../20-architecture/s11-r20-decision-witness-observability-architecture.md)
-  and [validation/work specification](../30-validation/s11-r20-decision-witness-observability-validation.md).
-- **Activation condition:** explicit user/owner approval for I1 implementation,
-  followed by independent I2 validation; any behavior change or R21 discussion
-  additionally requires a fresh design gate with physical identity and two-sided
-  evidence.
-- **Routing:** I1 implementation → I2 synthetic/equivalence/resource validation
-  → separate B behavior design gate. These are not the current documentation
-  closeout action, and I2 success does not authorize policy changes.
-- **Future deliberate field qualification:** the existing R20 validation
-  contract and Windows procedure remain unfulfilled requirements, not waived or
-  executed. Any deliberate qualification requires separate owner/user
-  authorization; it is non-current and must not reopen this closed Windows
-  investigation or become an automatic replay dependency.
-- **Current-gate boundary:** keep this commitment non-current after local acceptance of the active behavioral lifecycle/Foam-witness implementation; preserve field `FAIL`, publication-provenance distinctions, unfulfilled field qualification/comparison requirements, named unknowns, and original evidence.
+- **Retained surfaces:** canonical Windows verification of Base release and
+  rapid-refill/full closure; Accum initial entry; Accum fill
+  continuity/layered/post-Foam ownership; and strict Accum drain
+  continuation/re-entry.
+- **Current local disposition:** R21 supplies bounded generic Base controls for
+  R20-scale slow drain and rapid-refill phase closure, plus behavior-neutral
+  decision witnesses. Those controls retire the former *unimplemented Base*
+  commitment but do not establish that the private Windows failure had the same
+  cause or is repaired. Accum field gaps remain evidence-gated rather than
+  guessed from synthetic rows.
+- **Activation condition:** deliberate Windows qualification or a separately
+  approved behavior design backed by reviewed physical candidate identity,
+  source coordinates/phase evidence, bounded transitions and two-sided local
+  controls. No global threshold, private timestamp/coordinate, interpolation,
+  identity conflation or telemetry-only substitution qualifies.
+- **Current-gate boundary:** R21 decision-witness implementation is no longer a
+  retained/design-only package; it is part of the current local candidate.
+  Field `FAIL` remains authoritative until the canonical Windows procedure is
+  deliberately rerun and passes.

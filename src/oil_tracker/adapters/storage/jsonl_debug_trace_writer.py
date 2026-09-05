@@ -450,6 +450,15 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 "tracklet_directional_agreement": features.get(
                     "sequence_tracklet_directional_agreement"
                 ),
+                "tracklet_recent_net_progress_px": features.get(
+                    "sequence_tracklet_recent_net_progress_px"
+                ),
+                "tracklet_recent_direction": features.get(
+                    "sequence_tracklet_recent_direction"
+                ),
+                "tracklet_recent_directional_agreement": features.get(
+                    "sequence_tracklet_recent_directional_agreement"
+                ),
                 "tracklet_motion_support": features.get(
                     "sequence_tracklet_motion_support"
                 ),

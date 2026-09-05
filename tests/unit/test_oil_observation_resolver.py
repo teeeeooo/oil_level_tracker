@@ -700,6 +700,15 @@ def test_confirmed_full_is_context_only_until_image_state_or_oil_evidence() -> N
     assert _oil_y(result)[:2] == [None, None]
     assert _oil_y(result)[2:] == [top + 5.0, top + 15.0, top + 27.0]
     assert result.detections[-1].fill_state is FillState.DRAINING_VISIBLE
+    witness = result.detections[2].debug_metrics["sequence_decision_witness"]
+    assert witness["schema_version"] == "r21-decision-witness-v1"
+    assert witness["routes"]["direct"]["status"] == "EVALUATED"
+    assert witness["selection"]["selected_candidate"]["y"] == top + 5.0
+    selected_row = next(
+        row for row in witness["rows"] if row["publishable"]
+    )
+    assert selected_row["phase_admitted"] is True
+    assert any(member["selected"] for member in selected_row["members"])
 
 
 def test_confirmed_empty_does_not_lock_out_a_sustained_late_visible_path() -> None:

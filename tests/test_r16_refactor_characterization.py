@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import asdict
 from hashlib import sha256
 import json
@@ -26,6 +27,10 @@ R20_DELAYED_DRAIN_REACQUISITION_COMPLETED_WINDOW_FINGERPRINT = (
     # R20 adds delayed lifecycle diagnostics while preserving same-frame
     # candidate/projection provenance and the existing Foam contracts.
     "a89a711f331e516b9be80c5a5d9960c47cb5ea1e734a73e21e1b54f9234e8b14"
+)
+R21_TRUTH_PRESERVING_COMPLETED_WINDOW_FINGERPRINT = (
+    # R21 adds versioned decision-witness and recent-trajectory telemetry.
+    "34775284c746f77dc18d249b0a8fa18daba1a7ad7a7b0d1b2c762faed01a1f8c"
 )
 
 
@@ -103,6 +108,23 @@ def _fingerprint(payload: object) -> str:
         separators=(",", ":"),
     )
     return sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def _r20_behavioral_view(payload: dict[str, object]) -> dict[str, object]:
+    """Remove only R21 additive telemetry/version fields for equivalence."""
+
+    normalized = deepcopy(payload)
+    normalized["diagnostics"]["version"] = "r20-delayed-drain-reacquisition-v1"
+    for detection in normalized["detections"]:
+        metrics = detection["sequence_metrics"]
+        metrics.pop("sequence_decision_witness", None)
+        metrics["sequence_resolver_version"] = "r20-delayed-drain-reacquisition-v1"
+        for candidate in detection["candidates"]:
+            features = candidate["features"]
+            for key in tuple(features):
+                if key.startswith("sequence_tracklet_recent_"):
+                    features.pop(key)
+    return normalized
 
 
 def _sequence_candidate(
@@ -256,8 +278,12 @@ def test_r0_completed_window_stage_and_provenance_fingerprint() -> None:
     }
 
     fingerprint = _fingerprint(payload)
-    assert fingerprint == R20_DELAYED_DRAIN_REACQUISITION_COMPLETED_WINDOW_FINGERPRINT
+    assert fingerprint == R21_TRUTH_PRESERVING_COMPLETED_WINDOW_FINGERPRINT
+    assert fingerprint != R20_DELAYED_DRAIN_REACQUISITION_COMPLETED_WINDOW_FINGERPRINT
     assert fingerprint != R0_COMPLETED_WINDOW_FINGERPRINT
+    assert _fingerprint(_r20_behavioral_view(payload)) == (
+        R20_DELAYED_DRAIN_REACQUISITION_COMPLETED_WINDOW_FINGERPRINT
+    )
     for source, resolved in zip(detections, result.detections, strict=True):
         assert resolved.raw_oil_air_level_y in {
             candidate.y for candidate in source.candidates

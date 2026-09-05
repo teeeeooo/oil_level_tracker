@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import csv
 
+import numpy as np
+
 from oil_tracker.adapters.reporting.csv_exporter import CsvExporter
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.application.services.detection_processing import (
@@ -14,8 +16,224 @@ from oil_tracker.domain.enums import (
     InitialObservationState,
     ResultState,
 )
+from oil_tracker.domain.geometry import EllipseGeometry, GlassGeometry
+from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.results import AnalysisResult, GlassAnalysisResult
 from tests.fixtures.synthetic import glass_config
+
+
+def _base_control_glass():
+    glass = InspectionRecipe.default_glass(320, 240)
+    glass.id = "base-cycle-control"
+    glass.geometry.zero_line_y = 150.0
+    glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    glass.detector_settings.minimum_final_confidence = 0.35
+    return glass
+
+
+def _base_step_frame(y: int | None) -> np.ndarray:
+    if y is None:
+        return np.full((240, 320, 3), 70, dtype=np.uint8)
+    frame = np.full((240, 320, 3), 110, dtype=np.uint8)
+    frame[y:] = 80
+    return frame
+
+
+def test_initial_full_slow_drain_then_rapid_refill_closes_without_carry() -> None:
+    glass = _base_control_glass()
+    detector = OpenCvPhaseDetector()
+    truth_y = (
+        None,
+        None,
+        *range(65, 97, 2),
+        80,
+        65,
+        None,
+        None,
+        None,
+    )
+    raw = tuple(
+        detector.detect(
+            _base_step_frame(y), glass, frame, frame * 0.5, debug=False
+        )[0]
+        for frame, y in enumerate(truth_y)
+    )
+
+    resolved = detector.resolve_sequence(
+        raw,
+        glass,
+        InitialObservationState.FULL_NO_INTERFACE,
+    ).detections
+    refill_index = len(truth_y) - 4
+
+    assert all(resolved[index].raw_oil_air_level_y is None for index in (0, 1))
+    assert sum(item.raw_oil_air_level_y is not None for item in resolved[2:18]) >= 12
+    assert resolved[refill_index - 1].raw_oil_air_level_y is None
+    assert resolved[refill_index].raw_oil_air_level_y is not None
+    assert abs(resolved[refill_index].raw_oil_air_level_y - 65.0) <= 4.0
+    assert (
+        resolved[refill_index].debug_metrics["sequence_material_phase_reason"]
+        == "DRAIN_REFILL_CLOSURE_CONFIRMED"
+    )
+    assert all(
+        item.raw_oil_air_level_y is None for item in resolved[refill_index + 1 :]
+    )
+    assert all(
+        item.debug_metrics["sequence_material_phase"] == "filled_barrier"
+        for item in resolved[refill_index:]
+    )
+
+
+_R20_SCALE_HEIGHT = 772.2137404580153
+
+
+def _r20_scale_base_control_glass():
+    glass = InspectionRecipe.default_glass(400, 1000)
+    glass.id = "r20-scale-base-cycle-control"
+    glass.geometry = GlassGeometry(
+        EllipseGeometry(200.0, 500.0, 100.0, _R20_SCALE_HEIGHT / 2.0),
+        zero_line_y=700.0,
+        margin_ratio=0.06,
+    )
+    glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+    glass.detector_settings.minimum_final_confidence = 0.35
+    return glass
+
+
+def _r20_scale_step_frame(y: int | None) -> np.ndarray:
+    if y is None:
+        return np.full((1000, 400, 3), 70, dtype=np.uint8)
+    frame = np.full((1000, 400, 3), 110, dtype=np.uint8)
+    frame[y:] = 80
+    return frame
+
+
+def test_r20_scale_rapid_refill_handoffs_to_fresh_confirmed_owner() -> None:
+    glass = _r20_scale_base_control_glass()
+    detector = OpenCvPhaseDetector()
+    truth_y = (
+        None,
+        None,
+        *range(200, 321, 10),
+        250,
+        220,
+        190,
+        160,
+        130,
+        None,
+        None,
+    )
+    raw = tuple(
+        detector.detect(
+            _r20_scale_step_frame(y), glass, frame, frame * 0.5, debug=False
+        )[0]
+        for frame, y in enumerate(truth_y)
+    )
+    resolved = detector.resolve_sequence(
+        raw,
+        glass,
+        InitialObservationState.FULL_NO_INTERFACE,
+    ).detections
+
+    closure_index = truth_y.index(160)
+    prior_drain = resolved[truth_y.index(320)]
+    closure = resolved[closure_index]
+    assert prior_drain.raw_oil_air_level_y is not None
+    assert closure.raw_oil_air_level_y is not None
+    assert abs(float(closure.raw_oil_air_level_y) - 160.0) <= 4.0
+    assert (
+        closure.debug_metrics["sequence_material_phase_reason"]
+        == "DRAIN_REFILL_HANDOFF_CONFIRMED"
+    )
+    selected_prior = next(c for c in prior_drain.candidates if c.selected)
+    selected_closure = next(c for c in closure.candidates if c.selected)
+    assert selected_prior.features["sequence_tracklet_id"] != (
+        selected_closure.features["sequence_tracklet_id"]
+    )
+    assert closure.raw_oil_air_level_y == selected_closure.y
+    assert all(
+        item.raw_oil_air_level_y is None
+        for item in resolved[closure_index + 1 :]
+    )
+    assert all(
+        item.debug_metrics["sequence_material_phase"] == "filled_barrier"
+        for item in resolved[closure_index:]
+    )
+
+
+def _accum_control_glass():
+    glass = InspectionRecipe.default_glass(320, 240)
+    glass.id = "accum-cycle-control"
+    glass.geometry.zero_line_y = 150.0
+    glass.initial_state = InitialObservationState.EMPTY_NO_INTERFACE
+    glass.detector_settings.minimum_final_confidence = 0.35
+    return glass
+
+
+def _accum_step_frame(y: int | None) -> np.ndarray:
+    frame = np.full((240, 320, 3), 110, dtype=np.uint8)
+    if y is not None:
+        frame[y:] = 80
+    return frame
+
+
+def test_initial_empty_slow_fill_recovers_after_gap_without_backfill() -> None:
+    glass = _accum_control_glass()
+    detector = OpenCvPhaseDetector()
+    truth_y = (
+        None,
+        None,
+        175,
+        170,
+        165,
+        160,
+        None,
+        150,
+        145,
+        140,
+        135,
+        130,
+        125,
+        120,
+        115,
+        110,
+        105,
+        100,
+        95,
+        90,
+        85,
+        80,
+        75,
+        70,
+        65,
+    )
+    raw = tuple(
+        detector.detect(
+            _accum_step_frame(y), glass, frame, frame * 0.5, debug=False
+        )[0]
+        for frame, y in enumerate(truth_y)
+    )
+    resolved = detector.resolve_sequence(
+        raw,
+        glass,
+        InitialObservationState.EMPTY_NO_INTERFACE,
+    ).detections
+
+    assert resolved[6].raw_oil_air_level_y is None
+    assert resolved[5].raw_oil_air_level_y is not None
+    assert resolved[7].raw_oil_air_level_y is not None
+    assert all(
+        item.raw_oil_air_level_y is not None
+        for index, item in enumerate(resolved)
+        if truth_y[index] is not None
+    )
+    assert resolved[-1].debug_metrics["sequence_material_phase"] == "filled_barrier"
+    assert all(
+        item.raw_oil_air_level_y
+        == next(candidate.y for candidate in item.candidates if candidate.selected)
+        for item in resolved
+        if item.raw_oil_air_level_y is not None
+    )
 
 
 def _oil_candidate(y: float) -> BoundaryCandidate:

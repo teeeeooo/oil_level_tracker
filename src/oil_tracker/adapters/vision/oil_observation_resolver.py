@@ -24,6 +24,7 @@ from .oil_interface_tracklets import (
     DirectedTrackletPolicy,
     DirectedTrackletResult,
 )
+from .oil_decision_witness import build_oil_decision_witness
 from .oil_interface_selector import (
     BoundedOilInterfaceSelector,
     OilInterfaceSelectorPolicy,
@@ -56,7 +57,7 @@ from .oil_phase_identity import (
 )
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r20-delayed-drain-reacquisition-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r21-truth-preserving-detector-repair-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -219,6 +220,8 @@ class OilPathLifecycleResult:
     ]
     material_phase_ambiguous_frames: frozenset[int]
     material_phase_diagnostics: tuple[dict[str, object], ...]
+    phase_admitted_row_hypothesis_ids: tuple[frozenset[str], ...]
+    publishable_row_hypothesis_ids: tuple[frozenset[str], ...]
 
 
 class OilAdmissionEvidenceOwner:
@@ -811,6 +814,26 @@ class OilPathLifecycleOwner:
             ),
             material_phase_ambiguous_frames=phase.ambiguous_frames,
             material_phase_diagnostics=phase.diagnostics,
+            phase_admitted_row_hypothesis_ids=tuple(
+                frozenset(
+                    node.candidate_ref.row_hypothesis_id
+                    for node in layer
+                    if node.kind == "oil"
+                    and node.candidate_ref is not None
+                    and node.candidate_ref.row_hypothesis_id is not None
+                )
+                for layer in phase_layers
+            ),
+            publishable_row_hypothesis_ids=tuple(
+                frozenset(
+                    node.candidate_ref.row_hypothesis_id
+                    for node in layer
+                    if node.kind == "oil"
+                    and node.candidate_ref is not None
+                    and node.candidate_ref.row_hypothesis_id is not None
+                )
+                for layer in layers
+            ),
         )
 
     def _suppress_trajectory_spikes(
@@ -941,6 +964,8 @@ class OilResolutionProjectionOwner:
                 lifecycle.material_phase_fill_confirmation_profiles[index],
                 index in lifecycle.material_phase_ambiguous_frames,
                 lifecycle.material_phase_diagnostics[index],
+                lifecycle.phase_admitted_row_hypothesis_ids[index],
+                lifecycle.publishable_row_hypothesis_ids[index],
                 index,
                 glass,
                 confirmed_initial_state,
@@ -1040,6 +1065,8 @@ class OilResolutionProjectionOwner:
         material_phase_fill_confirmation_profile: OilFillConfirmationProfile,
         material_phase_ambiguous: bool,
         material_phase_diagnostics: dict[str, object],
+        phase_admitted_row_hypothesis_ids: frozenset[str],
+        publishable_row_hypothesis_ids: frozenset[str],
         frame_offset: int,
         glass: GlassInspectionConfig,
         confirmed_initial_state: InitialObservationState | None,
@@ -1086,6 +1113,21 @@ class OilResolutionProjectionOwner:
                 ),
                 "sequence_material_phase_diagnostics": (
                     material_phase_diagnostics
+                ),
+                "sequence_decision_witness": build_oil_decision_witness(
+                    detection,
+                    node,
+                    refs,
+                    material_phase=material_phase,
+                    material_phase_reason=material_phase_reason,
+                    material_phase_owner_chain=material_phase_owner_chain,
+                    material_phase_diagnostics=material_phase_diagnostics,
+                    phase_admitted_row_hypothesis_ids=(
+                        phase_admitted_row_hypothesis_ids
+                    ),
+                    publishable_row_hypothesis_ids=(
+                        publishable_row_hypothesis_ids
+                    ),
                 ),
                 "sequence_track_opposition": (
                     0.0
@@ -1815,6 +1857,15 @@ def _project_candidates(
                     ),
                     "sequence_tracklet_directional_agreement": float(
                         ref.tracklet_directional_agreement
+                    ),
+                    "sequence_tracklet_recent_net_progress_px": float(
+                        ref.tracklet_recent_net_progress_px
+                    ),
+                    "sequence_tracklet_recent_direction": int(
+                        ref.tracklet_recent_direction
+                    ),
+                    "sequence_tracklet_recent_directional_agreement": float(
+                        ref.tracklet_recent_directional_agreement
                     ),
                     "sequence_tracklet_motion_support": float(
                         ref.tracklet_motion_support

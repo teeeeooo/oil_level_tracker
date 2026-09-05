@@ -2,7 +2,7 @@
 
 **Status:** durable causal registry; supporting diagnostics, not current gate authority
 
-**Scope:** S11 detector and its observation/projection boundary, from the R1 report/observation repair through the active behavioral lifecycle/Foam-witness implementation. This registry groups failures by mechanism, not by revision chronology. Version names identify the attempts that exposed or tested a mechanism; they do not define current runtime behavior. R18–R20 are retained as historical or predecessor evidence; the active behavior remains locally validated and field-unqualified pending the required canonical Windows replay.
+**Scope:** S11 detector and its observation/projection boundary, from the R1 report/observation repair through the R21 truth-preserving local candidate. This registry groups failures by mechanism, not by revision chronology. Version names identify the attempts that exposed or tested a mechanism; they do not define field truth. R18–R20 are retained as historical/predecessor or accepted-baseline evidence; R21 is a locally validated candidate only and remains field-unqualified pending the required canonical Windows replay.
 
 ## How to read this registry
 
@@ -327,7 +327,8 @@ The map is a navigation index, not a second chronology. Each revision is represe
 | R17 | `F02`, `F04`, `F05`, `F06`, `F07`, `F08`, `F09` | frozen field failure: Base open/full/drain, Accum partial-fill lock, false Foam; provenance passes |
 | R18 | `F05`, `F07`, `F08`, `F09`, `F10` | explicit FULL barrier, partial-fill reversal, bounded Foam formation; Windows field FAIL; completed causal rerun freezes release/foam boundaries and named unknowns; compared-field invariance passes; R19 bounded release-chain implementation and local validation follow |
 | R19 | `F04`, `F05`, `F08`, `F09`, `F10` | historical bounded direct/near drain-release chain; independent local validation passed, canonical Windows validation remained required; the active behavioral slice is its constrained successor |
-| R20 | `F04`, `F05`, `F07`, `F08`, `F09`, `F10` | current coordinate-free ownerless barrier with pre-consumption drain readiness, bounded local Foam witness windows and actual dynamic stable support; local behavior validation remains separate from required Windows field qualification |
+| R20 | `F04`, `F05`, `F07`, `F08`, `F09`, `F10` | accepted coordinate-free ownerless barrier with pre-consumption drain readiness, bounded local Foam witness windows and actual dynamic stable support; local behavior validation remains separate from required Windows field qualification |
+| R21 | `F02`, `F03`, `F04`, `F05`, `F06`, `F07`, `F08`, `F09`, `F10` | local truth-preserving candidate: additive recent trajectory for explicit initial-FULL/reversal decisions, explicit drain-to-refill closure, restored bounded three-observation Foam stable support and behavior-neutral decision witnesses; R20-scale controls and Sample3 truth guard identity leakage; canonical Windows qualification remains outstanding |
 
 ## Current non-regression contract
 

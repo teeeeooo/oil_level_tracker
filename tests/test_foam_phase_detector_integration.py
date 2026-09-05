@@ -93,7 +93,7 @@ def test_detector_identity_input_immutability_and_debug_false_fast_path():
         frame,
         debug=False,
     )
-    assert OpenCvPhaseDetector.version == "opencv-phase-detector-r20-delayed-drain-reacquisition-v1"
+    assert OpenCvPhaseDetector.version == "opencv-phase-detector-r21-truth-preserving-detector-repair-v1"
     assert artifacts is None
     assert np.array_equal(frame, before)
     assert any(

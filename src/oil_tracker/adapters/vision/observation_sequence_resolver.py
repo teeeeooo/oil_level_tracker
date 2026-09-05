@@ -11,7 +11,7 @@ from .foam_episode_resolver import FoamEpisodeResolver
 from .oil_observation_resolver import OilObservationResolver
 
 
-OBSERVATION_SEQUENCE_VERSION = "r20-delayed-drain-reacquisition-v1"
+OBSERVATION_SEQUENCE_VERSION = "r21-truth-preserving-detector-repair-v1"
 
 
 @dataclass(frozen=True)

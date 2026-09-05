@@ -120,6 +120,105 @@ class _FoamSegmentEvaluation:
         }
 
 
+def _foam_predicate_witness(predicates: object) -> list[dict[str, object]]:
+    if not isinstance(predicates, dict):
+        return []
+    return [
+        {"name": str(name), "status": "true" if bool(passed) else "false"}
+        for name, passed in predicates.items()
+    ]
+
+
+def _foam_decision_witness(
+    detection: PhaseDetection,
+    evidence: _FoamEvidence | None,
+    diagnostics: dict[str, object],
+    *,
+    confirmed: bool,
+    static_rejected: bool,
+    unconfirmed_rejected: bool,
+    oil_alias_rejected: bool,
+) -> dict[str, object]:
+    raw_evaluations = diagnostics.get("segment_evaluations", [])
+    if not isinstance(raw_evaluations, list):
+        raw_evaluations = []
+    bounded = raw_evaluations[:8]
+    evaluations: list[dict[str, object]] = []
+    for item in bounded:
+        if not isinstance(item, dict):
+            continue
+        formation = item.get("formation")
+        if not isinstance(formation, dict):
+            formation = {}
+        evaluations.append(
+            {
+                "segment_id": item.get("segment_id"),
+                "first_frame": item.get("first_frame"),
+                "last_frame": item.get("last_frame"),
+                "window_span_frame_offsets": item.get(
+                    "window_span_frame_offsets"
+                ),
+                "window_span_seconds": item.get("window_span_seconds"),
+                "aliases_oil": item.get("aliases_oil"),
+                "passed": item.get("passed"),
+                "first_failed_predicate": item.get(
+                    "first_failed_predicate"
+                ),
+                "predicates": _foam_predicate_witness(
+                    item.get("predicates")
+                ),
+                "formation": {
+                    "passed": formation.get("passed"),
+                    "branch": formation.get("branch"),
+                    "dynamic_observation_count": formation.get(
+                        "dynamic_observation_count"
+                    ),
+                    "first_failed_predicate": formation.get(
+                        "first_failed_predicate"
+                    ),
+                    "predicates": _foam_predicate_witness(
+                        formation.get("predicates")
+                    ),
+                },
+            }
+        )
+    return {
+        "schema_version": "r21-decision-witness-v1",
+        "identity": {
+            "glass_id": detection.glass_id,
+            "frame_index": detection.frame_index,
+            "time_sec": float(detection.time_sec),
+            "layer": "sequence_foam",
+        },
+        "candidate": (
+            None
+            if evidence is None
+            else {
+                "candidate_offset": evidence.candidate_offset,
+                "source": evidence.candidate.source,
+                "y": float(evidence.candidate.y),
+            }
+        ),
+        "track": {
+            "eligible_evidence": bool(diagnostics.get("eligible_evidence")),
+            "track_id": diagnostics.get("track_id"),
+            "track_first_frame": diagnostics.get("track_first_frame"),
+            "track_last_frame": diagnostics.get("track_last_frame"),
+        },
+        "windows": {
+            "evaluation_count": len(raw_evaluations),
+            "truncated": len(raw_evaluations) > len(bounded),
+            "evaluations": evaluations,
+        },
+        "outcome": {
+            "confirmed": confirmed,
+            "static_rejected": static_rejected,
+            "unconfirmed_rejected": unconfirmed_rejected,
+            "oil_alias_rejected": oil_alias_rejected,
+        },
+    }
+
+
 class FoamEpisodeResolver:
     """Publish only explicitly eligible, materially changing Foam episodes.
 
@@ -449,6 +548,15 @@ class FoamEpisodeResolver:
                     "unconfirmed_rejected": unconfirmed_rejected,
                     "oil_alias_rejected": oil_alias_rejected,
                 },
+                "sequence_foam_decision_witness": _foam_decision_witness(
+                    detection,
+                    evidence,
+                    diagnostics,
+                    confirmed=confirmed,
+                    static_rejected=static_rejected,
+                    unconfirmed_rejected=unconfirmed_rejected,
+                    oil_alias_rejected=oil_alias_rejected,
+                ),
             }
         )
         base = replace(
@@ -792,9 +900,10 @@ def _foam_formation_witness(
 
     Area and width changes cannot independently turn splash, a fixed top row or
     descending wall residue into an episode. They may support a stable layer
-    only when at least three dynamic observations remain spatially bounded away
-    from the top entrance. This preserves a reviewed stable Foam layer without
-    reopening the R17 Windows Y80 or descending-residue tracks.
+    only when the bounded segment retains at least two dynamic observations and
+    enough same-layer observations to show local extent evolution away from the
+    top entrance. This preserves reviewed stable Foam without borrowing stale
+    history or reopening the R17 Windows Y80/descending-residue tracks.
     """
 
     return _foam_formation_evaluation(segment, glass).passed
@@ -886,7 +995,7 @@ def _foam_formation_evaluation(
         and min(item.width_ratio for item in segment) >= 0.60
     )
     stable_observation_support = bool(
-        dynamic_observation_count >= 3 or substantial_two_frame_layer
+        len(segment) >= 3 or substantial_two_frame_layer
     )
     extent_evolution = bool(
         area_span

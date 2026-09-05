@@ -71,7 +71,7 @@ def test_feature_detector_meets_controlled_foam_and_shimmer_acceptance(tmp_path)
     shimmer = payload["category_summaries"]["transparent_oil_shimmer"]
     white = payload["category_summaries"]["white_foam"]
     assert payload["benchmark_schema_version"] == 1
-    assert payload["detector"]["version"] == "opencv-phase-detector-r20-delayed-drain-reacquisition-v1"
+    assert payload["detector"]["version"] == "opencv-phase-detector-r21-truth-preserving-detector-repair-v1"
     assert _metric(shimmer, "shimmer_foam_false_positive_rate") == 0.0
     assert _metric(micro, "foam_precision") == 1.0
     # The v1 fixture mixes three independent snapshots with one three-frame

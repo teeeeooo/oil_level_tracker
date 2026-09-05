@@ -610,8 +610,8 @@ def test_witness_windows_scan_only_bounded_suffix_without_prefix_slices() -> Non
     )
 
 
-def test_stable_layer_needs_three_dynamic_rows_not_three_total_rows() -> None:
-    """A static extent-changing tail cannot complete a stable-layer witness."""
+def test_stable_layer_accepts_two_dynamic_rows_plus_same_layer_extent_tail() -> None:
+    """A bounded static tail may complete a stable layer after two dynamic rows."""
 
     detections = tuple(
         _detection(
@@ -635,8 +635,8 @@ def test_stable_layer_needs_three_dynamic_rows_not_three_total_rows() -> None:
         glass_config(),
     )
 
-    assert diagnostics.episode_count == 0
-    assert all(item.raw_foam_front_y is None for item in resolved)
+    assert diagnostics.episode_count == 1
+    assert [item.raw_foam_front_y for item in resolved] == [156.0, 158.0, 156.0]
     evaluations = resolved[0].debug_metrics[
         "sequence_foam_episode_diagnostics"
     ]["segment_evaluations"]
@@ -649,7 +649,19 @@ def test_stable_layer_needs_three_dynamic_rows_not_three_total_rows() -> None:
     assert evaluations[0]["window_span_frame_offsets"] == 2
     assert evaluations[0]["formation"]["predicates"][
         "stable_observation_support"
-    ] is False
+    ] is True
+    witness = resolved[0].debug_metrics["sequence_foam_decision_witness"]
+    assert witness["schema_version"] == "r21-decision-witness-v1"
+    assert witness["track"]["eligible_evidence"] is True
+    assert witness["outcome"]["confirmed"] is True
+    assert witness["windows"]["evaluation_count"] >= 1
+    first = witness["windows"]["evaluations"][0]
+    assert first["formation"]["dynamic_observation_count"] == 2
+    assert any(
+        item["name"] == "stable_observation_support"
+        and item["status"] == "true"
+        for item in first["formation"]["predicates"]
+    )
 
 
 def test_downward_dynamic_residue_cannot_confirm_from_area_or_width_change() -> None:

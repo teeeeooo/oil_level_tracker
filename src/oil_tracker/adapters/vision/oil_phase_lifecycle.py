@@ -1163,7 +1163,20 @@ class OilMaterialPhaseLifecycleOwner:
                         ),
                         None,
                     )
-                    if direct is not None and self._drain_continuation(
+                    if direct is not None and self._drain_refill_closure(
+                        drain_chain,
+                        direct,
+                    ):
+                        filled_chain = drain_chain.owners
+                        filled_frame = frame
+                        fill_terminal_owner = direct.tracklet_id
+                        fill_owner_open = True
+                        phase = OilMaterialPhase.FILLED_BARRIER
+                        allowed = frozenset({direct.tracklet_id})
+                        reason = "DRAIN_REFILL_CLOSURE_CONFIRMED"
+                        drain_chain = None
+                        recovery_chains = {}
+                    elif direct is not None and self._drain_continuation(
                         drain_chain,
                         direct,
                         frame,
@@ -1244,19 +1257,64 @@ class OilMaterialPhaseLifecycleOwner:
                                 frame - drain_chain.last_frame - 1
                                 > self.policy.maximum_lost_frames
                             )
-                            reentries = (
+                            refill_reentries = (
                                 tuple(
                                     row
                                     for row in rows
-                                    if self._drain_phase_reentry(
+                                    if row.tracklet_id != drain_chain.owner
+                                    and self._drain_refill_handoff(
                                         drain_chain,
                                         row,
                                     )
                                 )
-                                if owner_terminated
+                                if direct is None
                                 else ()
                             )
-                            if reentries:
+                            refill_ids = tuple(
+                                sorted({row.tracklet_id for row in refill_reentries})
+                            )
+                            if len(refill_ids) == 1:
+                                refill = next(
+                                    row
+                                    for row in refill_reentries
+                                    if row.tracklet_id == refill_ids[0]
+                                )
+                                filled_chain = _append_unique_owner(
+                                    drain_chain.owners,
+                                    refill.tracklet_id,
+                                )
+                                filled_frame = frame
+                                fill_terminal_owner = refill.tracklet_id
+                                fill_owner_open = True
+                                phase = OilMaterialPhase.FILLED_BARRIER
+                                allowed = frozenset({refill.tracklet_id})
+                                reason = "DRAIN_REFILL_HANDOFF_CONFIRMED"
+                                drain_chain = None
+                                recovery_chains = {}
+                                reentries = ()
+                            elif len(refill_ids) > 1:
+                                allowed = frozenset()
+                                ambiguous_frames.add(frame)
+                                reason = "DRAIN_REFILL_HANDOFF_AMBIGUOUS"
+                                reentries = ()
+                            else:
+                                reentries = (
+                                    tuple(
+                                        row
+                                        for row in rows
+                                        if self._drain_phase_reentry(
+                                            drain_chain,
+                                            row,
+                                        )
+                                    )
+                                    if owner_terminated
+                                    else ()
+                                )
+                            if phase is OilMaterialPhase.FILLED_BARRIER:
+                                pass
+                            elif len(refill_ids) > 1:
+                                pass
+                            elif reentries:
                                 maturity = max(
                                     _tracklet_maturity(row.ref)
                                     for row in reentries
@@ -1286,7 +1344,11 @@ class OilMaterialPhaseLifecycleOwner:
                                 ),
                                 self.policy.handoff_ambiguity_margin,
                             )
-                            if reentry_id is None and reentry_ranked:
+                            if phase is OilMaterialPhase.FILLED_BARRIER:
+                                pass
+                            elif len(refill_ids) > 1:
+                                pass
+                            elif reentry_id is None and reentry_ranked:
                                 allowed = frozenset()
                                 ambiguous_frames.add(frame)
                                 reason = "DRAIN_REENTRY_AMBIGUOUS"
@@ -1336,8 +1398,8 @@ class OilMaterialPhaseLifecycleOwner:
 
         diagnostics = tuple(
             {
-                "schema_version": "r20-delayed-drain-reacquisition-v1",
-                "legacy_schema_version": "r19-bounded-drain-release-v1",
+                "schema_version": "r21-truth-preserving-detector-repair-v1",
+                "legacy_schema_version": "r20-delayed-drain-reacquisition-v1",
                 "initial_state": (
                     None
                     if self.policy.confirmed_initial_state is None
@@ -2088,17 +2150,27 @@ class OilMaterialPhaseLifecycleOwner:
             self.policy.geometry_height
             * self.policy.drain_minimum_progress_ratio,
         )
+        if self.policy.initial_full:
+            direction = row.ref.tracklet_recent_direction
+            progress = row.ref.tracklet_recent_net_progress_px
+            directional_agreement = (
+                row.ref.tracklet_recent_directional_agreement
+            )
+        else:
+            direction = row.ref.tracklet_direction
+            progress = row.ref.tracklet_net_progress_px
+            directional_agreement = row.ref.tracklet_directional_agreement
         predicates = (
             ("bounded_confirmed", _bounded_confirmed_observation(row.ref)),
             ("compatible", not row.ref.tracklet_incompatible),
-            ("downward_direction", row.ref.tracklet_direction > 0),
+            ("downward_direction", direction > 0),
             (
                 "minimum_progress",
-                row.ref.tracklet_net_progress_px >= minimum_progress,
+                progress >= minimum_progress,
             ),
             (
                 "directional_agreement",
-                row.ref.tracklet_directional_agreement
+                directional_agreement
                 >= self.policy.drain_minimum_directional_agreement,
             ),
             ("entrance_relative", relative <= self.policy.drain_entrance_ratio),
@@ -2121,6 +2193,8 @@ class OilMaterialPhaseLifecycleOwner:
             minimum_progress=minimum_progress,
             entrance_relative=relative,
             established_fill_last_y=None,
+            tracklet_progress_px=progress,
+            directional_agreement=directional_agreement,
         )
 
     def _release_evaluation(
@@ -2132,6 +2206,8 @@ class OilMaterialPhaseLifecycleOwner:
         minimum_progress: float,
         entrance_relative: float | None,
         established_fill_last_y: float | None,
+        tracklet_progress_px: float | None = None,
+        directional_agreement: float | None = None,
     ) -> OilReleasePredicateEvaluation:
         return OilReleasePredicateEvaluation(
             stage=stage,
@@ -2143,8 +2219,16 @@ class OilMaterialPhaseLifecycleOwner:
             established_fill_last_y=established_fill_last_y,
             minimum_progress_px=minimum_progress,
             maximum_jump_px=self.policy.maximum_jump_px,
-            tracklet_progress_px=row.ref.tracklet_net_progress_px,
-            directional_agreement=row.ref.tracklet_directional_agreement,
+            tracklet_progress_px=(
+                row.ref.tracklet_net_progress_px
+                if tracklet_progress_px is None
+                else tracklet_progress_px
+            ),
+            directional_agreement=(
+                row.ref.tracklet_directional_agreement
+                if directional_agreement is None
+                else directional_agreement
+            ),
             current_material_veto=row.current_material_veto,
             tracklet_material_conflict=row.ref.tracklet_material_conflict,
             current_material_conflict=row.current_material_conflict,
@@ -2811,6 +2895,95 @@ class OilMaterialPhaseLifecycleOwner:
                 (name for name, passed in predicates if not passed), None
             ),
         }
+
+    def _drain_refill_closure(
+        self,
+        chain: _DrainChain,
+        row: _ObservedRow,
+    ) -> bool:
+        relative = (
+            row.y - self.policy.geometry_top_y
+        ) / self.policy.geometry_height
+        minimum_refill_span = max(
+            4.0,
+            self.policy.geometry_height * self.policy.fill_minimum_span_ratio,
+        )
+        minimum_recent_progress = max(
+            4.0,
+            self.policy.geometry_height
+            * self.policy.drain_minimum_progress_ratio,
+        )
+        bounded_refill_witness = bool(
+            row.ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
+            or (
+                row.ref.tracklet_motion_support
+                >= self.policy.fill_minimum_motion_support
+                and row.ref.tracklet_motion_coverage
+                >= self.policy.fill_minimum_motion_coverage
+            )
+        )
+        return bool(
+            row.tracklet_id == chain.owner
+            and _bounded_confirmed_observation(row.ref)
+            and not row.ref.tracklet_incompatible
+            and row.ref.tracklet_recent_direction < 0
+            and row.ref.tracklet_recent_directional_agreement
+            >= self.policy.minimum_directional_agreement
+            and row.ref.tracklet_recent_net_progress_px
+            >= minimum_recent_progress
+            and chain.last_y - row.y >= minimum_refill_span
+            and relative <= self.policy.entrance_band_ratio
+            and bounded_refill_witness
+            and self._strict_material_support(row)
+        )
+
+    def _drain_refill_handoff(
+        self,
+        chain: _DrainChain,
+        row: _ObservedRow,
+    ) -> bool:
+        """Close a rapid refill through a fresh independently proven owner.
+
+        This is phase ownership transfer, not tracklet continuation.  The old
+        drain identity may be inside bounded loss or already terminated after
+        a high-speed reversal; a distinct confirmed upward owner may close only
+        after proving its own bounded trajectory, top entrance, span and
+        material support.  No prior row or coordinate is copied into the new
+        owner.
+        """
+
+        relative = (
+            row.y - self.policy.geometry_top_y
+        ) / self.policy.geometry_height
+        minimum_refill_span = max(
+            4.0,
+            self.policy.geometry_height * self.policy.fill_minimum_span_ratio,
+        )
+        minimum_recent_progress = max(
+            4.0,
+            self.policy.geometry_height
+            * self.policy.drain_minimum_progress_ratio,
+        )
+        bounded_refill_witness = bool(
+            row.ref.authority is OilCandidateAuthority.ANCHOR_ELIGIBLE
+            and row.ref.tracklet_motion_support
+            >= self.policy.fill_minimum_motion_support
+            and row.ref.tracklet_motion_coverage
+            >= self.policy.fill_minimum_motion_coverage
+        )
+        return bool(
+            _bounded_confirmed_observation(row.ref)
+            and not row.ref.tracklet_incompatible
+            and row.ref.tracklet_recent_direction < 0
+            and row.ref.tracklet_recent_directional_agreement
+            >= self.policy.minimum_directional_agreement
+            and row.ref.tracklet_recent_net_progress_px
+            >= minimum_recent_progress
+            and chain.last_y - row.y >= minimum_refill_span
+            and relative <= self.policy.entrance_band_ratio
+            and bounded_refill_witness
+            and self._strict_material_support(row)
+        )
 
     def _drain_continuation(
         self,

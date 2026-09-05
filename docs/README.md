@@ -70,8 +70,8 @@ Current durable S11 owners:
 
 - detector responsibilities — [`20-architecture/s11-detector-responsibility-architecture.md`](20-architecture/s11-detector-responsibility-architecture.md);
 - current executing control-flow map — [`20-architecture/s11-current-detector-logic-map.md`](20-architecture/s11-current-detector-logic-map.md);
-- active behavioral lifecycle/Foam-witness architecture — [`20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md`](20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md);
-- active behavioral validation/work specification — [`30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md`](30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md);
+- current R21 truth-preserving detector repair architecture — [`20-architecture/s11-r21-truth-preserving-detector-repair-architecture.md`](20-architecture/s11-r21-truth-preserving-detector-repair-architecture.md);
+- current R21 validation/work specification — [`30-validation/s11-r21-truth-preserving-detector-repair-validation.md`](30-validation/s11-r21-truth-preserving-detector-repair-validation.md);
 - durable causal failure history — [`50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`](50-diagnostics/s11/s11-detector-mechanism-failure-registry.md);
 - canonical private-Windows reviewed truth — [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md);
 - future deliberate target-Windows procedure — [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md);
