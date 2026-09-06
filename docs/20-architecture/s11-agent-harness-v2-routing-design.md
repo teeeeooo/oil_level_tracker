@@ -34,6 +34,8 @@ Five representative exact-symbol investigations compared `graphify affected --de
 
 Graphify's hook installer was also tested in a temporary repository configured with `core.hooksPath=.githooks`: it preserved an existing `pre-push` byte-for-byte and added only `post-commit` / `post-checkout` plus its merge driver. Those hooks remain **not installed** in this Oil checkout during the bounded pilot. Promote them only after repeated real S11 tasks show that automatic background freshness is worth the extra local hook surface.
 
+Local tool maintenance is manual and non-blocking: Graphify is installed as the `graphifyy` uv tool with the optional `watchdog` dependency. Do not auto-upgrade it from Git hooks, Skills, or CI. When intentionally upgrading (`uv tool upgrade graphifyy`), record the new version, run `scripts/update_graphify_s11.sh`, confirm `graphify hook status` still leaves repository hooks uninstalled unless explicitly promoted, and repeat a small exact-symbol topology smoke against current source. No separate stale-marker hook is needed during the pilot because task-start refresh plus optional agent-managed watch already owns freshness.
+
 ## History Review
 
 - Logic-map nodes: `PUBLICATION-PROVENANCE`, `TRACE-PUBLICATION`, `OIL-PHASE-DRAIN`, `FOAM-EPISODE`
