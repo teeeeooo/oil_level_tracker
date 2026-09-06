@@ -38,7 +38,7 @@ Not automatically authorized by the current gate:
 - case-specific video/Glass/timestamp/coordinate behavior, interpolation, carry or report-side repair; or
 - speculative Accum-specific behavior changes without reviewed physical identity and two-sided controls.
 
-The local Sample4 replay currently produces `e447626b...` rather than the historical checked `0f202947...`. A clean detached `d50c143` baseline produces the same current `e447626b...`, and its tracking rows are identical to R21 apart from run identity. The historical golden was not changed. Exact historical media/environment drift remains a local provenance limitation, not evidence of an R21 behavior regression.
+The local Sample4 replay currently produces `e447626b...` rather than the historical checked `0f202947...`. A clean detached `d50c143` baseline produces the same current `e447626b...`, and its tracking rows are identical to R21 apart from run identity. The R20-era sample authority records the same Sample4 media SHA-256 (`ee971b...`) as the current file, so the evidence does not support media replacement as the cause. The historical golden was not changed; the unresolved provenance gap is the exact historical Python/OpenCV/video-decoder runtime, now guarded for future runs by the [R21 replay runtime provenance diagnostic](../50-diagnostics/s11/s11-r21-replay-runtime-provenance-diagnostic.md).
 
 ## Preserved contracts
 

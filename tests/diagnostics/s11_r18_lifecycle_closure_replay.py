@@ -39,7 +39,12 @@ R18_TRACKING_FINGERPRINTS = {
 
 
 def _run_worker(
-    *, root: Path, output_root: Path, sample: str, verify_fingerprints: bool
+    *,
+    root: Path,
+    output_root: Path,
+    sample: str,
+    verify_fingerprints: bool,
+    expected_runtime_fingerprint: str | None = None,
 ) -> dict[str, object]:
     replay.QUALIFICATION_WINDOWS = {
         sample: replay.QUALIFICATION_WINDOWS[sample]
@@ -54,6 +59,7 @@ def _run_worker(
         expected_tracking_fingerprints=(
             R18_TRACKING_FINGERPRINTS if verify_fingerprints else None
         ),
+        expected_runtime_fingerprint=expected_runtime_fingerprint,
         run_label="S11-R18",
         run_note=(
             "Explicit initial-state lifecycle, established partial-fill "
@@ -68,6 +74,7 @@ def run_r18_replay(
     root: Path | None = None,
     output_root: Path | None = None,
     verify_fingerprints: bool = True,
+    expected_runtime_fingerprint: str | None = None,
 ) -> dict[str, object]:
     root = repository_root() if root is None else Path(root)
     destination = (
@@ -85,6 +92,7 @@ def run_r18_replay(
         contract_key="r18_contract",
         secure_windows_status="PENDING_R18_PRIVATE_VIDEO_REPLAY",
         assert_contract=_assert_r17_contract,
+        expected_runtime_fingerprint=expected_runtime_fingerprint,
     )
 
 
@@ -98,6 +106,13 @@ def main() -> int:
     )
     parser.add_argument("--skip-fingerprint-check", action="store_true")
     parser.add_argument(
+        "--expected-runtime-fingerprint",
+        help=(
+            "Compare exact tracking only within this replay runtime fingerprint; "
+            "a mismatch is classified as ENVIRONMENT_DRIFT."
+        ),
+    )
+    parser.add_argument(
         "--worker-sample", choices=tuple(replay.QUALIFICATION_WINDOWS)
     )
     args = parser.parse_args()
@@ -108,12 +123,14 @@ def main() -> int:
             output_root=args.output_root,
             sample=args.worker_sample,
             verify_fingerprints=not args.skip_fingerprint_check,
+            expected_runtime_fingerprint=args.expected_runtime_fingerprint,
         )
         return 0
     manifest = run_r18_replay(
         root=root,
         output_root=args.output_root,
         verify_fingerprints=not args.skip_fingerprint_check,
+        expected_runtime_fingerprint=args.expected_runtime_fingerprint,
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False))
     return 0

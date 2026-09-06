@@ -30,6 +30,7 @@ def spawn_worker(
     output_root: Path,
     sample: str,
     verify_fingerprints: bool,
+    expected_runtime_fingerprint: str | None = None,
 ) -> Path:
     sample_output = (output_root / sample).resolve()
     command = [
@@ -45,6 +46,10 @@ def spawn_worker(
     ]
     if not verify_fingerprints:
         command.append("--skip-fingerprint-check")
+    if expected_runtime_fingerprint is not None:
+        command.extend(
+            ["--expected-runtime-fingerprint", expected_runtime_fingerprint]
+        )
     subprocess.run(command, cwd=root, check=True)
     return sample_output / "replay_manifest.json"
 
@@ -60,6 +65,7 @@ def run_isolated_replay(
     contract_key: str,
     secure_windows_status: str,
     assert_contract: ReplayContract,
+    expected_runtime_fingerprint: str | None = None,
 ) -> dict[str, object]:
     output_root = output_root.resolve()
     output_root.mkdir(parents=True, exist_ok=True)
@@ -70,6 +76,7 @@ def run_isolated_replay(
             output_root=output_root,
             sample=sample,
             verify_fingerprints=verify_fingerprints,
+            expected_runtime_fingerprint=expected_runtime_fingerprint,
         )
         for sample in replay.QUALIFICATION_WINDOWS
     ]
@@ -88,6 +95,19 @@ def run_isolated_replay(
         }
 
     contract = assert_contract(audits, rows_by_sample)
+    runtime_fingerprints = {
+        str(worker["runtime_provenance"]["runtime_fingerprint_sha256"])
+        for worker in workers
+    }
+    runtime_provenance: dict[str, object]
+    if len(runtime_fingerprints) == 1:
+        runtime_provenance = dict(workers[0]["runtime_provenance"])
+    else:
+        runtime_provenance = {
+            "schema": "s11-replay-runtime-provenance-v1",
+            "status": "MIXED_WORKER_RUNTIME",
+            "runtime_fingerprints_sha256": sorted(runtime_fingerprints),
+        }
     manifest = {
         "schema": manifest_schema,
         "sampling_fps": replay.SAMPLING_FPS,
@@ -95,6 +115,8 @@ def run_isolated_replay(
         "accepted_count_check_enabled": verify_fingerprints,
         "worker_isolation": "one_video_per_process",
         "worker_manifests": [str(path) for path in worker_manifests],
+        "runtime_provenance": runtime_provenance,
+        "expected_runtime_fingerprint_sha256": expected_runtime_fingerprint,
         "samples": summaries,
         "total_tracking_rows": sum(int(item["tracking_row_count"]) for item in summaries),
         "total_numeric_oil": sum(int(item["numeric_oil_count"]) for item in summaries),

@@ -126,6 +126,19 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def authoritative_input_hashes(root: Path) -> dict[str, dict[str, str]]:
+    manifest_path = Path(root) / CORPUS_MANIFEST_RELATIVE_PATH
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    inputs = manifest["inputs"]
+    return {
+        sample: {
+            suffix: str(inputs[sample][suffix])
+            for suffix in ("mp4", "oilrecipe", "oiltruth")
+        }
+        for sample in CORPUS_STEMS
+    }
+
+
 def authoritative_mp4_hashes(root: Path) -> dict[str, str]:
     manifest_path = Path(root) / CORPUS_MANIFEST_RELATIVE_PATH
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

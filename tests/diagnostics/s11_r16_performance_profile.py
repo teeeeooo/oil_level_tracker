@@ -27,7 +27,14 @@ from oil_tracker.application.services.recipe_validation_service import (
 )
 from oil_tracker.domain.session import DebugTraceLevel
 from tests.diagnostics import s11_report_observability_replay as replay
-from tests.diagnostics.s11_evidence_probe import repository_root
+from tests.diagnostics.s11_evidence_probe import (
+    authoritative_input_hashes,
+    repository_root,
+)
+from tests.diagnostics.s11_replay_provenance import (
+    capture_runtime_provenance,
+    validate_frozen_inputs,
+)
 from tests.diagnostics.s11_r15_material_ownership_replay import (
     R15_NUMERIC_OIL_COUNTS,
     R15_TRACKING_FINGERPRINTS,
@@ -307,6 +314,14 @@ def _exact_source_head(root: Path, expected: str | None) -> str:
     return head
 
 
+def _require_runtime_match(actual: str, expected: str | None) -> None:
+    if expected is not None and actual != expected:
+        raise RuntimeError(
+            "Performance runtime environment drift: "
+            f"expected {expected}, got {actual}"
+        )
+
+
 def run_profile(
     *,
     root: Path,
@@ -318,9 +333,22 @@ def run_profile(
     expected_numeric_oil_count: int | None = None,
     expected_tracking_fingerprint: str | None = None,
     expected_source_head: str | None = None,
+    expected_runtime_fingerprint: str | None = None,
 ) -> dict[str, object]:
     root = root.resolve()
     source_head = _exact_source_head(root, expected_source_head)
+    inputs = validate_frozen_inputs(
+        root=root,
+        expected_inputs=authoritative_input_hashes(root),
+        samples=(sample,),
+    )
+    runtime_provenance = capture_runtime_provenance(
+        root / "sample" / f"{sample}.mp4"
+    )
+    actual_runtime_fingerprint = str(
+        runtime_provenance["runtime_fingerprint_sha256"]
+    )
+    _require_runtime_match(actual_runtime_fingerprint, expected_runtime_fingerprint)
     output_root = output_root.resolve()
     output_root.mkdir(parents=True, exist_ok=True)
     expected_numeric = (
@@ -355,6 +383,9 @@ def run_profile(
         "source_head": source_head,
         "source_worktree_clean": True,
         "behavior_owner": behavior_owner,
+        "inputs": inputs,
+        "runtime_provenance": runtime_provenance,
+        "expected_runtime_fingerprint_sha256": expected_runtime_fingerprint,
         "behavior_contract": {
             "tracking_row_count": replay.ACCEPTED_ROW_COUNTS[sample],
             "numeric_oil_count": expected_numeric,
@@ -422,6 +453,13 @@ def main() -> int:
         help="Require this exact clean Git HEAD for attributable timing evidence.",
     )
     parser.add_argument(
+        "--expected-runtime-fingerprint",
+        help=(
+            "Require this exact replay runtime fingerprint before timing; "
+            "environment drift invalidates comparative performance evidence."
+        ),
+    )
+    parser.add_argument(
         "--debug-trace-level",
         choices=tuple(level.value for level in DebugTraceLevel),
         default=DebugTraceLevel.NONE.value,
@@ -445,6 +483,7 @@ def main() -> int:
         expected_numeric_oil_count=args.expected_numeric_oil_count,
         expected_tracking_fingerprint=args.expected_tracking_fingerprint,
         expected_source_head=args.source_head,
+        expected_runtime_fingerprint=args.expected_runtime_fingerprint,
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False))
     return 0

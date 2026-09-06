@@ -20,7 +20,16 @@ from oil_tracker.domain.session import (
     DebugTraceLevel,
     InitialStateConfirmation,
 )
-from tests.diagnostics.s11_evidence_probe import file_sha256, repository_root
+from tests.diagnostics.s11_evidence_probe import (
+    authoritative_input_hashes,
+    repository_root,
+)
+from tests.diagnostics.s11_replay_provenance import (
+    capture_runtime_provenance,
+    classify_exact_reproducibility,
+    enforce_exact_tracking_contract,
+    validate_frozen_inputs,
+)
 
 
 SAMPLING_FPS = 2.0
@@ -186,8 +195,9 @@ def run_replay(
     output_root: Path | None = None,
     *,
     verify_accepted_counts: bool = True,
-    expected_numeric_oil_counts: dict[str, int] = ACCEPTED_NUMERIC_OIL_COUNTS,
-    expected_tracking_fingerprints: dict[str, str] = ACCEPTED_TRACKING_FINGERPRINTS,
+    expected_numeric_oil_counts: dict[str, int] | None = ACCEPTED_NUMERIC_OIL_COUNTS,
+    expected_tracking_fingerprints: dict[str, str] | None = ACCEPTED_TRACKING_FINGERPRINTS,
+    expected_runtime_fingerprint: str | None = None,
     run_label: str = "S11-R1",
     run_note: str = "User observation report qualification replay",
     manifest_schema: str = "s11-user-observation-report-replay-v1",
@@ -197,6 +207,18 @@ def run_replay(
         root / "sample" / "output" / "s11-report-r1"
         if output_root is None
         else Path(output_root)
+    )
+    samples = tuple(QUALIFICATION_WINDOWS)
+    inputs = validate_frozen_inputs(
+        root=root,
+        expected_inputs=authoritative_input_hashes(root),
+        samples=samples,
+    )
+    runtime_provenance = capture_runtime_provenance(
+        root / "sample" / f"{samples[0]}.mp4"
+    )
+    actual_runtime_fingerprint = str(
+        runtime_provenance["runtime_fingerprint_sha256"]
     )
     output_root.mkdir(parents=True, exist_ok=True)
     summaries = []
@@ -224,7 +246,23 @@ def run_replay(
             output_root,
         )
         summary = _sample_summary(sample, result, recipe, bundle)
+        expected_tracking = (
+            None
+            if expected_tracking_fingerprints is None
+            else expected_tracking_fingerprints[sample]
+        )
+        fingerprint = str(summary["tracking_fingerprint_sha256"])
+        summary["exact_reproducibility"] = classify_exact_reproducibility(
+            actual_tracking_fingerprint=fingerprint,
+            expected_tracking_fingerprint=expected_tracking,
+            actual_runtime_fingerprint=actual_runtime_fingerprint,
+            expected_runtime_fingerprint=expected_runtime_fingerprint,
+        )
         if verify_accepted_counts:
+            if expected_numeric_oil_counts is None or expected_tracking is None:
+                raise ValueError(
+                    "verified replay requires numeric and tracking expectations"
+                )
             expected = (
                 ACCEPTED_ROW_COUNTS[sample],
                 expected_numeric_oil_counts[sample],
@@ -237,11 +275,12 @@ def run_replay(
                 raise AssertionError(
                     f"{sample} detector/tracking baseline changed: expected {expected}, got {actual}"
                 )
-            fingerprint = str(summary["tracking_fingerprint_sha256"])
-            if fingerprint != expected_tracking_fingerprints[sample]:
-                raise AssertionError(
-                    f"{sample} tracking fingerprint changed: {fingerprint}"
-                )
+            summary["exact_reproducibility"] = enforce_exact_tracking_contract(
+                actual_tracking_fingerprint=fingerprint,
+                expected_tracking_fingerprint=expected_tracking,
+                actual_runtime_fingerprint=actual_runtime_fingerprint,
+                expected_runtime_fingerprint=expected_runtime_fingerprint,
+            )
         print(
             f"[{sample}] rows={summary['tracking_row_count']} "
             f"numeric={summary['numeric_oil_count']} "
@@ -251,19 +290,14 @@ def run_replay(
         )
         summaries.append(summary)
 
-    inputs = {
-        sample: {
-            suffix: file_sha256(root / "sample" / f"{sample}.{suffix}")
-            for suffix in ("mp4", "oilrecipe", "oiltruth")
-        }
-        for sample in QUALIFICATION_WINDOWS
-    }
     manifest = {
         "schema": manifest_schema,
         "sampling_fps": SAMPLING_FPS,
         "qualification_windows": QUALIFICATION_WINDOWS,
         "accepted_count_check_enabled": verify_accepted_counts,
         "inputs": inputs,
+        "runtime_provenance": runtime_provenance,
+        "expected_runtime_fingerprint_sha256": expected_runtime_fingerprint,
         "samples": summaries,
         "total_tracking_rows": sum(
             int(summary["tracking_row_count"]) for summary in summaries
@@ -290,10 +324,18 @@ def main() -> int:
     )
     parser.add_argument("--output-root", type=Path)
     parser.add_argument("--skip-accepted-count-check", action="store_true")
+    parser.add_argument(
+        "--expected-runtime-fingerprint",
+        help=(
+            "Compare exact tracking only within this replay runtime fingerprint; "
+            "a mismatch is classified as ENVIRONMENT_DRIFT."
+        ),
+    )
     args = parser.parse_args()
     manifest = run_replay(
         output_root=args.output_root,
         verify_accepted_counts=not args.skip_accepted_count_check,
+        expected_runtime_fingerprint=args.expected_runtime_fingerprint,
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False))
     return 0
