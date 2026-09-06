@@ -5,8 +5,8 @@
 This document preserves the durable S11 field-effectiveness oracle, safety
 obligations and cross-revision non-regression boundary. It is not the current
 implementation or acceptance owner. Current acceptance is owned by the
-[S11 behavioral lifecycle and Foam witness validation](s11-behavioral-lifecycle-and-foam-witness-validation.md),
-with the required post-push [manual Windows procedure](../40-operations/manual-gui-windows-checklist.md)
+[R21 truth-preserving detector repair validation](s11-r21-truth-preserving-detector-repair-validation.md),
+with the required post-push [current-candidate Windows field procedure](../40-operations/s11-current-windows-field-qualification.md)
 and [canonical reviewed truth](windows-sample1-heating-coldstart-reviewed-truth.md).
 The active behavior remains local and field-unqualified; the canonical Windows
 replay remains required and no Windows PASS is claimed. R12/R18/R19/R20
@@ -17,9 +17,9 @@ behavior contract.
 ## Scope and oracle
 
 This document owns the durable cross-revision detector-effectiveness boundary
-for S11. The current implementation-specific acceptance contract is the [S11
-behavioral lifecycle and Foam witness architecture](../20-architecture/s11-behavioral-lifecycle-and-foam-witness-architecture.md)
-and [validation/work specification](s11-behavioral-lifecycle-and-foam-witness-validation.md).
+for S11. The current implementation-specific acceptance contract is the [R21
+truth-preserving detector repair architecture](../20-architecture/s11-r21-truth-preserving-detector-repair-architecture.md)
+and [validation/work specification](s11-r21-truth-preserving-detector-repair-validation.md).
 The exact current action remains in the [work plan](../00-project/work-plan.md),
 while completed measurements belong in
 [`../60-evidence/s11/`](../60-evidence/s11/).
@@ -33,7 +33,7 @@ prior validation outputs cannot override the images.
 
 The following R12-specific ownership and safety baseline is preserved for
 historical comparison. It is not the current implementation contract; current
-R20 ownership and acceptance are defined by the linked R20 architecture and
+R21 ownership and acceptance are defined by the linked R21 architecture and
 validation contract above.
 
 The historical R12 baseline required:
@@ -106,8 +106,8 @@ them.
 ## Cross-revision checked-in video obligations
 
 These obligations remain part of the durable field-effectiveness boundary.
-The current execution route is the R20 validation contract and its required
-post-push canonical Windows procedure, not an R12-head replay.
+The current execution route is the active candidate validation contract plus the
+current-candidate Windows field procedure, not an R12-head replay.
 
 Replay all established qualification windows using each matching MP4, Recipe,
 truth/provisional annotation, static-artifact preparation, production detector,
@@ -136,7 +136,7 @@ overlay-dominated spans may remain unavailable.
 
 The R12-head holdout wording below records the historical R12 gate and result
 boundary. It is not the current execution route or an assertion of Windows
-PASS; the current post-push gate is R20 as linked above.
+PASS; the current post-push gate is R21 as linked above.
 
 The exact committed R12 head was required to be replayed on the private Base/Accum video,
 both without calibration and with operator-selected detector artifact proposals,
@@ -194,6 +194,6 @@ numeric trajectory estimation or satisfy the private Windows gate. The historica
 local R12 disposition is recorded in the
 [R12 evidence](../60-evidence/s11/s11-r12-phase-composition-replacement.md); the
 [R6 evidence](../60-evidence/s11/s11-r6-optics-aware-observation.md) remains
-historical comparison only. Current R20 local acceptance and its remaining
+historical comparison only. Current R21 local acceptance and its remaining
 Windows requirement are recorded in the
-[R20 evidence](../60-evidence/s11/s11-r20-delayed-drain-reacquisition.md).
+[R21 evidence](../60-evidence/s11/s11-r21-truth-preserving-detector-repair.md).

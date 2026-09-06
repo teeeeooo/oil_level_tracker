@@ -66,11 +66,11 @@ Until a deliberate Windows replay is executed and reviewed, preserve the existin
 
 - [Project roadmap](roadmap.md)
 - [Repository execution policy](execution-policy.md)
-- [S11 detector change governance](../30-validation/s11-detector-change-governance.md)
+- [S11 detector-change Skill](../../.agents/skills/s11-detector-change/SKILL.md) and [mechanical governance contract](../30-validation/s11-detector-change-governance.md)
 - [Current detector logic map](../20-architecture/s11-current-detector-logic-map.md)
 - [R21 architecture](../20-architecture/s11-r21-truth-preserving-detector-repair-architecture.md)
 - [R21 validation](../30-validation/s11-r21-truth-preserving-detector-repair-validation.md)
 - [R21 local evidence](../60-evidence/s11/s11-r21-truth-preserving-detector-repair.md)
 - [Detector mechanism failure registry](../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
 - [Canonical Windows reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
-- [Future Windows procedure](../40-operations/manual-gui-windows-checklist.md)
+- [Current-candidate Windows field procedure](../40-operations/s11-current-windows-field-qualification.md)

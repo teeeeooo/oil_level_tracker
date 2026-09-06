@@ -2,17 +2,17 @@
 
 This file is the **documentation-routing SSOT**. It classifies documents and points to current owners; it does not duplicate project history or task execution policy.
 
-Before creating, moving, renaming, or editing anything under `docs/`, classify the change here first.
+Read this router when creating, moving, renaming, archiving, or changing document ownership, or when the correct owner/location is unclear. Editing an already-known owner does not require rereading this file merely because the path is under `docs/`.
 
 ## Fresh reading path
 
 Read only the smallest set needed for the task:
 
-1. [`00-project/work-plan.md`](00-project/work-plan.md) — current gate, accepted baseline, authorized/non-authorized work, blockers and next transition.
-2. [`00-project/roadmap.md`](00-project/roadmap.md) — milestone order and formal state when broader sequence matters.
-3. the relevant durable owner under [`10-product/`](10-product/) or [`20-architecture/`](20-architecture/).
-4. the applicable acceptance contract under [`30-validation/`](30-validation/).
-5. use [`40-operations/`](40-operations/), [`50-diagnostics/`](50-diagnostics/), [`60-evidence/`](60-evidence/), and [`70-reference/`](70-reference/) only when the task needs procedure, causal detail, completed proof, or external provenance.
+1. If current state/authorization matters, read [`00-project/work-plan.md`](00-project/work-plan.md).
+2. If broader milestone order matters, read [`00-project/roadmap.md`](00-project/roadmap.md).
+3. Read the relevant durable owner under [`10-product/`](10-product/) or [`20-architecture/`](20-architecture/) and the applicable acceptance contract under [`30-validation/`](30-validation/).
+4. Use [`00-project/recall-index.md`](00-project/recall-index.md) only for past-dependent work or unclear prior rationale.
+5. Use [`40-operations/`](40-operations/), [`50-diagnostics/`](50-diagnostics/), [`60-evidence/`](60-evidence/), and [`70-reference/`](70-reference/) only when the task needs procedure, causal detail, completed proof, or external provenance.
 
 The stable product specification is [`rotary_oil_level_tracker_ssot_spec.md`](rotary_oil_level_tracker_ssot_spec.md). Repository execution state and verification semantics are owned by [`00-project/execution-policy.md`](00-project/execution-policy.md).
 
@@ -20,7 +20,7 @@ The stable product specification is [`rotary_oil_level_tracker_ssot_spec.md`](ro
 
 | Directory | Responsibility | Authority boundary |
 |---|---|---|
-| `00-project/` | roadmap, current work, execution policy, retained/deferred routing | project sequence/current gate; not feature design history |
+| `00-project/` | roadmap, current work, execution policy, compact recall routing, retained/deferred routing | project sequence/current gate; not feature design history |
 | `10-product/` | user-facing/product contracts | durable behavior and UX intent |
 | `20-architecture/` | durable responsibility/design contracts | accepted ownership/invariants; not execution chronology |
 | `30-validation/` | validation, benchmark and test-acceptance contracts | what must be demonstrated for acceptance |
@@ -64,7 +64,7 @@ Do not copy current status into architecture, diagnostics, or evidence merely fo
 
 S11 remains the active detector-effectiveness milestone. Current state and authorization are owned only by the [Work Plan](00-project/work-plan.md).
 
-For an S11 detector change, start with the [detector change governance contract](30-validation/s11-detector-change-governance.md). It routes the required implementation map, failure history, current architecture, validation, and reviewed truth.
+For an S11 detector change, use the repository-local `s11-detector-change` Skill. It performs bounded routing through the current implementation map, relevant failure history, current architecture/validation, and the mechanical governance contract.
 
 Current durable S11 owners:
 
@@ -74,7 +74,8 @@ Current durable S11 owners:
 - current R21 validation/work specification — [`30-validation/s11-r21-truth-preserving-detector-repair-validation.md`](30-validation/s11-r21-truth-preserving-detector-repair-validation.md);
 - durable causal failure history — [`50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`](50-diagnostics/s11/s11-detector-mechanism-failure-registry.md);
 - canonical private-Windows reviewed truth — [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md);
-- future deliberate target-Windows procedure — [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md);
+- current-candidate target-Windows field procedure — [`40-operations/s11-current-windows-field-qualification.md`](40-operations/s11-current-windows-field-qualification.md);
+- general Windows GUI/package checklist — [`40-operations/manual-gui-windows-checklist.md`](40-operations/manual-gui-windows-checklist.md);
 - completed S11 evidence collection — [`60-evidence/s11/`](60-evidence/s11/).
 
 R18–R20 predecessor architecture/validation and earlier diagnostics remain historical provenance. They are reachable through the current logic map, failure registry, evidence collection, and Git history; this router does not enumerate them.

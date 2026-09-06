@@ -1,0 +1,6 @@
+interface:
+  display_name: "S11 Detector Change"
+  short_description: "Route S11 detector changes through current owners and failure history"
+  default_prompt: "Use $s11-detector-change for this S11 detector task and keep recall bounded to affected owners and failures."
+policy:
+  allow_implicit_invocation: true

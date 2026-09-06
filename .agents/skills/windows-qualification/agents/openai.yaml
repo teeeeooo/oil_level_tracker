@@ -1,0 +1,6 @@
+interface:
+  display_name: "Windows Qualification"
+  short_description: "Qualify the current detector candidate against Windows field truth"
+  default_prompt: "Use $windows-qualification to prepare or execute the current target-Windows field qualification without reviving historical revision procedures."
+policy:
+  allow_implicit_invocation: true
