@@ -2,6 +2,8 @@
 
 This is the repository quality contract for tests that must run on supported macOS and Windows Python environments. Apply the narrowest rule that matches the contract under test; do not normalize away a real serialized or public format requirement.
 
+Generic Python portability guidance (filesystem identity, explicit UTF-8 text I/O, non-interactive subprocess behavior, cwd/repo-root independence, and logical-artifact identity) comes from the user-level `python-test-portability` Skill. This document owns Oil-specific refinements, especially Qt/pytest-qt/QPA lifecycle and the repository guard boundary below.
+
 ## Filesystem and text
 
 - Compare platform-native filesystem paths as `Path` values or equivalent normalized filesystem identity, not raw `/` versus `\\` spelling.
