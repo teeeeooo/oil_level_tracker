@@ -40,3 +40,6 @@ graphs/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local derived code-topology cache (Graphify pilot)
+graphify-out/

@@ -1,0 +1,38 @@
+# Oil S11 bounded Graphify pilot: code topology only.
+*
+
+# Production detector code.
+!src/
+!src/oil_tracker/
+!src/oil_tracker/__init__.py
+!src/oil_tracker/adapters/
+!src/oil_tracker/adapters/__init__.py
+!src/oil_tracker/adapters/vision/
+!src/oil_tracker/adapters/vision/**
+!src/oil_tracker/adapters/reporting/
+!src/oil_tracker/adapters/reporting/**
+!src/oil_tracker/adapters/storage/
+!src/oil_tracker/adapters/storage/__init__.py
+!src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py
+!src/oil_tracker/adapters/storage/output_bundle_store.py
+!src/oil_tracker/application/
+!src/oil_tracker/application/__init__.py
+!src/oil_tracker/application/services/
+!src/oil_tracker/application/services/**
+!src/oil_tracker/domain/
+!src/oil_tracker/domain/**
+
+# Focused detector/S11 tests and diagnostics.
+!tests/
+!tests/diagnostics/
+!tests/diagnostics/**
+!tests/unit/
+!tests/unit/test_*oil*.py
+!tests/unit/test_*foam*.py
+!tests/unit/test_*phase*.py
+!tests/unit/test_jsonl_debug_trace.py
+!tests/test_*oil*.py
+!tests/test_*foam*.py
+!tests/test_*detector*.py
+!tests/test_s11*.py
+!tests/test_r16*.py

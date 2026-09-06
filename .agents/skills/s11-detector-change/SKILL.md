@@ -15,6 +15,16 @@ Use this skill for S11 detector behavior, detector ownership, detector validatio
 4. For Windows field work, also read the canonical reviewed truth and use the `windows-qualification` Skill.
 5. Stop recall once the current owner, relevant prior failure, and required acceptance are known. Do not walk revision history R1→R20 unless a focused pointer requires it.
 
+## Optional Graphify topology aid
+
+Use Graphify only when the task benefits from code-topology, caller, dependency, or blast-radius discovery. It is a derived local cache, never an architecture/current-state/failure authority.
+
+- If `graphify` is installed, run `scripts/update_graphify_s11.sh` before the first graph query in a source-changing or topology-dependent task. If it is unavailable or refresh fails, fall back to the logic map plus source search; Graphify must not block the task.
+- The bounded pilot scope is owned by `.graphifyignore`; generated `graphify-out/` state is local and ignored by Git.
+- Prefer `graphify explain`, `path`, and `affected` for precise topology questions. Treat broad natural-language `query` output as discovery only.
+- Verify `INFERRED` edges and any surprising relationship against current source before using it in a design or acceptance claim. When Graphify and the current logic map disagree, inspect source and correct the stale/incorrect derived surface rather than overriding the owner document.
+- Do not run or install Graphify Git hooks as a prerequisite. For a long source-editing task, Main may start `graphify watch .` in a background process and must stop it when the task ends; ordinary tasks use the one-shot refresh above.
+
 ## Change contract
 
 - Preserve one generic detector across Glass identities; no private timestamp, Glass identity, reviewed coordinate, or case-specific branch enters production control flow.

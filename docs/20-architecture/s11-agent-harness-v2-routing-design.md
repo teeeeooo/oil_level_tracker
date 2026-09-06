@@ -20,6 +20,18 @@ This change does not alter detector source, thresholds, candidate authority, lif
 - governance record/checker contract: `docs/30-validation/s11-detector-change-governance.md` + `scripts/check_detector_governance.py`;
 - current detector/failure truth: existing logic map and failure registry.
 
+## Optional derived code-topology pilot
+
+Oil uses Graphify only as a local, disposable topology aid for `where`, callers, dependencies, and blast-radius discovery. `.graphifyignore` bounds the pilot to detector/application/publication owners, domain types needed to resolve those edges, and focused detector/S11 tests. `graphify-out/` is ignored and is not a repository artifact or SSOT.
+
+The task-start freshness action is `scripts/update_graphify_s11.sh`, which performs an AST-only full build when no graph exists and an incremental AST update otherwise. Current Graphify 0.9.55 does not provide a Git-head authority field in `graph.json`; freshness therefore comes from the tool manifest/content hashes plus a task-start refresh, not from trusting a remembered commit label. `graphify watch .` is optional for long source-editing sessions and is never a required gate.
+
+Initial smoke comparison against the current logic map found the expected relationships for `OilObservationResolver` → lifecycle owner, `ObservationSequenceResolver` → Oil/Foam resolvers, `tracking_sample_from_detection` → `TrackingSample`, and `CsvExporter` → `AnalysisResult`. The first bounded scope omitted the domain type owner for `TrackingSample`; that miss was detected and corrected by adding `src/oil_tracker/domain/**`. This is pilot evidence, not a claim that all Graphify edges are complete or authoritative.
+
+The corrected local graphifyy 0.9.55 baseline contains 173 scoped code files, 2,721 nodes and 11,489 links with zero semantic/LLM extraction. A background `graphify watch .` probe detected a temporary one-file source edit and rebuilt automatically; the source was then restored and a one-shot refresh returned the graph to the clean tree. `watchdog` is an optional local Graphify dependency needed only for watch mode.
+
+Graphify's hook installer was also tested in a temporary repository configured with `core.hooksPath=.githooks`: it preserved an existing `pre-push` byte-for-byte and added only `post-commit` / `post-checkout` plus its merge driver. Those hooks remain **not installed** in this Oil checkout during the bounded pilot. Promote them only after repeated real S11 tasks show that automatic background freshness is worth the extra local hook surface.
+
 ## History Review
 
 - Logic-map nodes: `PUBLICATION-PROVENANCE`, `TRACE-PUBLICATION`, `OIL-PHASE-DRAIN`, `FOAM-EPISODE`
