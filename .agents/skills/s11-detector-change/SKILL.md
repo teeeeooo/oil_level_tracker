@@ -21,7 +21,7 @@ Use Graphify only when the task benefits from code-topology, caller, dependency,
 
 - If `graphify` is installed, run `scripts/update_graphify_s11.sh` before the first graph query in a source-changing or topology-dependent task. If it is unavailable or refresh fails, fall back to the logic map plus source search; Graphify must not block the task.
 - The bounded pilot scope is owned by `.graphifyignore`; generated `graphify-out/` state is local and ignored by Git.
-- Prefer `graphify explain`, `path`, and `affected` for precise topology questions. Treat broad natural-language `query` output as discovery only.
+- Use `rg`/source search for exact symbol or literal lookup; it is materially faster. Use `graphify explain`, `path`, and `affected` when the question is relational or transitive. Treat broad natural-language `query` output as discovery only.
 - Verify `INFERRED` edges and any surprising relationship against current source before using it in a design or acceptance claim. When Graphify and the current logic map disagree, inspect source and correct the stale/incorrect derived surface rather than overriding the owner document.
 - Do not run or install Graphify Git hooks as a prerequisite. For a long source-editing task, Main may start `graphify watch .` in a background process and must stop it when the task ends; ordinary tasks use the one-shot refresh above.
 

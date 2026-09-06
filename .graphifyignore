@@ -12,9 +12,7 @@
 !src/oil_tracker/adapters/reporting/
 !src/oil_tracker/adapters/reporting/**
 !src/oil_tracker/adapters/storage/
-!src/oil_tracker/adapters/storage/__init__.py
-!src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py
-!src/oil_tracker/adapters/storage/output_bundle_store.py
+!src/oil_tracker/adapters/storage/**
 !src/oil_tracker/application/
 !src/oil_tracker/application/__init__.py
 !src/oil_tracker/application/services/
