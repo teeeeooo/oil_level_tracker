@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import importlib.util
+import subprocess
 from pathlib import Path
+
+import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,3 +131,111 @@ def test_windows_field_evidence_without_governance_fails() -> None:
 def test_valid_field_evidence_with_none_reason_passes() -> None:
     path = "docs/60-evidence/s11/new-field-result.md"
     assert run({path}, {path: field()}) == []
+
+
+SOURCE = "src/oil_tracker/adapters/vision/example.py"
+
+
+def git(root: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", "-c", f"core.hooksPath={root / 'disabled-test-hooks'}", "-c", "user.name=Test",
+         "-c", "user.email=test@example.invalid", "-c", "commit.gpgsign=false", *args],
+        cwd=root, check=True, capture_output=True, text=True, encoding="utf-8",
+        stdin=subprocess.DEVNULL,
+    ).stdout.strip()
+
+
+@pytest.fixture
+def repo(tmp_path: Path) -> Path:
+    git(tmp_path, "init", "-q")
+    target = tmp_path / SOURCE
+    target.parent.mkdir(parents=True)
+    target.write_text('"""Owner contract."""\nvalue = 1\n', encoding="utf-8")
+    git(tmp_path, "add", SOURCE)
+    git(tmp_path, "commit", "-qm", "baseline")
+    git(tmp_path, "tag", "baseline")
+    return tmp_path
+
+
+def test_cosmetic_worktree_and_committed_change_pass_without_design(repo: Path) -> None:
+    (repo / SOURCE).write_text('"""Owner contract."""\n# Explanation only\nvalue = (\n    1\n)\n', encoding="utf-8")
+    assert governance.check_refs("baseline", root=repo, include_worktree=True) == []
+    git(repo, "add", SOURCE)
+    git(repo, "commit", "-qm", "format")
+    assert governance.check_refs("baseline", root=repo) == []
+
+
+@pytest.mark.parametrize("source", [
+    '"""Owner contract."""\nvalue = 2\n',
+    '"""Changed contract."""\nvalue = 1\n',
+    'value = (\n',
+    '# coding: latin-1\n"""Owner contract."""\nvalue = 1\n',
+    '#!/usr/bin/python3\n"""Owner contract."""\nvalue = 1\n',
+])
+def test_non_cosmetic_changes_still_require_design(repo: Path, source: str) -> None:
+    (repo / SOURCE).write_text(source, encoding="utf-8")
+    assert governance.check_refs("baseline", root=repo, include_worktree=True)
+
+
+@pytest.mark.parametrize("operation", ["add", "delete", "rename"])
+def test_path_changes_are_not_exempt(repo: Path, operation: str) -> None:
+    target = repo / SOURCE
+    other = target.with_name("other.py")
+    if operation == "add":
+        other.write_bytes(target.read_bytes())
+    elif operation == "delete":
+        target.unlink()
+    else:
+        target.rename(other)
+    assert governance.check_refs("baseline", root=repo, include_worktree=True)
+
+
+def test_missing_baseline_does_not_fall_back_to_worktree(repo: Path) -> None:
+    added = (repo / SOURCE).with_name("new.py")
+    added.write_text("value = 1\n", encoding="utf-8")
+    git(repo, "add", ".")
+    git(repo, "commit", "-qm", "add owner")
+    assert governance.check_refs("baseline", root=repo)
+
+
+def test_worktree_cannot_hide_committed_behavior_change(repo: Path) -> None:
+    target = repo / SOURCE
+    original = target.read_bytes()
+    target.write_text("value = 2\n", encoding="utf-8")
+    git(repo, "add", SOURCE)
+    git(repo, "commit", "-qm", "behavior")
+    target.write_bytes(original)
+    assert governance.check_refs("baseline", root=repo)
+    assert governance.check_refs("baseline", root=repo, include_worktree=True) == []
+
+
+def test_modes_and_type_comments_remain_significant() -> None:
+    assert not governance._same_python_ast(("100644", "x = 1\n"), ("100755", "x = 1\n"))
+    assert not governance._same_python_ast(("100644", "x = 1\n"), ("100644", "x = 1  # type: int\n"))
+
+
+def test_comparison_uses_merge_base_not_diverged_base_tip(repo: Path) -> None:
+    target = repo / SOURCE
+    original = target.read_text(encoding="utf-8")
+    target.write_text("value = 2\n", encoding="utf-8")
+    git(repo, "add", SOURCE)
+    git(repo, "commit", "-qm", "base side behavior")
+    git(repo, "tag", "base-tip")
+    git(repo, "checkout", "-qb", "topic", "baseline")
+    target.write_text(original + "# Cosmetic change on topic\n", encoding="utf-8")
+    git(repo, "add", SOURCE)
+    git(repo, "commit", "-qm", "topic comment")
+    assert governance.check_refs("base-tip", root=repo) == []
+
+
+def test_deleted_worktree_design_cannot_satisfy_gate(repo: Path) -> None:
+    design = "docs/20-architecture/s11-example.md"
+    target = repo / design
+    target.parent.mkdir(parents=True)
+    target.write_text(history(), encoding="utf-8")
+    git(repo, "add", design)
+    git(repo, "commit", "-qm", "design")
+    target.unlink()
+    (repo / SOURCE).write_text("value = 2\n", encoding="utf-8")
+    errors = governance.check_refs("baseline", root=repo, include_worktree=True)
+    assert any("without a changed S11 architecture/design" in error for error in errors)

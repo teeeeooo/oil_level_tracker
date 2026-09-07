@@ -10,6 +10,14 @@ Apply this contract when changing S11 detector vision/control-flow/publication c
 
 Current implementation truth is owned by `docs/20-architecture/s11-current-detector-logic-map.md`; durable failed-mechanism history is owned by `docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`. Current architecture/validation/reviewed-truth owners retain their own authority.
 
+### Source-only cosmetic exception
+
+For ref-based checks, an existing detector Python file at the same path does not require a companion design update when its before/after AST and regular-file mode are identical. This covers ordinary comments and formatting without changing executable nodes, docstrings, constants, or type comments. Comparison uses the actual Git merge base and the checked head (or requested worktree content), never a worktree substitute for missing baseline evidence.
+
+New/deleted/renamed files, mode/encoding/shebang changes, syntax failures, unavailable baseline text, and changed ASTs retain the existing gate. The path-only checker API has no exemption without before/after evidence. This is a narrow companion-document exemption, not proof of runtime/field acceptance or permission to change other contracts.
+
+Validation/design/evidence Markdown still follows its existing contract: arbitrary typo, link, or acceptance prose changes cannot safely be classified by AST equality. No self-declared editorial bypass is supported.
+
 ## Architecture/design History Review
 
 A changed S11 architecture/design document must contain one completed block:

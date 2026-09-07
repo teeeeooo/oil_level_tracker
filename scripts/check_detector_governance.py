@@ -8,9 +8,13 @@ ranges and invoke this module; they do not duplicate any of these rules.
 from __future__ import annotations
 
 import argparse
+import ast
+import io
 import re
 import subprocess
 import sys
+import stat
+import tokenize
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
@@ -140,6 +144,43 @@ def _read_at_ref(path: str, ref: str, *, cwd: Path) -> str | None:
         if worktree_path.is_file():
             return worktree_path.read_text(encoding="utf-8")
         return None
+
+
+def _python_snapshot(path: str, ref: str | None, *, root: Path) -> tuple[str, str] | None:
+    """Read a regular file's mode/text; never substitute worktree text for a ref."""
+    try:
+        if ref is None:
+            file = root / path
+            mode = file.lstat().st_mode
+            if not stat.S_ISREG(mode):
+                return None
+            return ("100755" if mode & stat.S_IXUSR else "100644", file.read_text(encoding="utf-8"))
+        entry = _git("ls-tree", ref, "--", path, cwd=root)
+        if not entry:
+            return None
+        mode = entry.split()[0]
+        if mode not in {"100644", "100755"}:
+            return None
+        return mode, _git("show", f"{ref}:{path}", cwd=root)
+    except (OSError, UnicodeError, subprocess.CalledProcessError):
+        return None
+
+
+def _same_python_ast(before: tuple[str, str] | None, after: tuple[str, str] | None) -> bool:
+    if before is None or after is None or before[0] != after[0]:
+        return False
+    try:
+        encodings = [tokenize.detect_encoding(io.BytesIO(item[1].encode("utf-8")).readline)[0] for item in (before, after)]
+        shebangs = [item[1].splitlines()[0] if item[1].startswith("#!") else None for item in (before, after)]
+        if encodings[0] != encodings[1] or shebangs[0] != shebangs[1]:
+            return False
+        trees = [ast.parse(item[1], type_comments=True) for item in (before, after)]
+        for tree in trees:
+            compile(tree, "<detector-governance>", "exec")
+    except (SyntaxError, ValueError, RecursionError):
+        return False
+    # Keep docstrings, type comments, constants, and every executable AST node.
+    return ast.dump(trees[0], include_attributes=False) == ast.dump(trees[1], include_attributes=False)
 
 
 def _owner_ids(text: str) -> tuple[set[str], set[str]]:
@@ -334,7 +375,7 @@ def check_changed_files(
     *,
     root: Path = ROOT,
     head_ref: str = "HEAD",
-    contents: Mapping[str, str] | None = None,
+    contents: Mapping[str, str | None] | None = None,
     logic_map_text: str | None = None,
     registry_text: str | None = None,
 ) -> list[str]:
@@ -419,15 +460,29 @@ def check_refs(
     include_worktree: bool = False,
 ) -> list[str]:
     try:
+        comparison_base = _git("merge-base", base_ref, head_ref, cwd=root).strip()
         changed = discover_changed_files(base_ref, head_ref, cwd=root)
         worktree_changed = discover_worktree_files(cwd=root) if include_worktree else set()
     except (OSError, subprocess.CalledProcessError) as exc:
         return [f"unable to discover changes for {base_ref}...{head_ref}: {exc}"]
     changed.update(worktree_changed)
-    contents: dict[str, str] = {}
+    # Only exact before/after evidence can exempt a source path. The path-only
+    # check_changed_files API remains conservative when no baseline is supplied.
+    changed = {
+        path for path in changed
+        if not (
+            is_detector_code_path(path) and path.endswith(".py")
+            and _same_python_ast(
+                _python_snapshot(path, comparison_base, root=root),
+                _python_snapshot(path, None if path in worktree_changed else head_ref, root=root),
+            )
+        )
+    }
+    contents: dict[str, str | None] = {}
     for path in worktree_changed:
         worktree_path = root / path
         if not worktree_path.is_file():
+            contents[path] = None
             continue
         try:
             contents[path] = worktree_path.read_text(encoding="utf-8")
