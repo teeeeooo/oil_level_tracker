@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 import math
 from statistics import median
 
@@ -143,6 +143,9 @@ class _TrackObservation:
     motion_coverage: float = 0.0
     material_conflict: float = 0.0
     failure_reason: str = "PROVISIONAL_TRACKLET"
+    confirmation_start_frame: int | None = None
+    confirmation_end_frame: int | None = None
+    confirmation_observation_count: int = 0
 
 
 @dataclass(eq=False)
@@ -154,6 +157,13 @@ class _TrackState:
     confirmed: bool = False
     terminated: bool = False
     termination_reason: str = ""
+    # Each bounded end offset is evaluated once after the track observations
+    # for that offset are known.  The cache keeps confirmation/recent witness
+    # consumers from replaying the same window during finalization,
+    # diagnostics and projection.
+    window_evidence_cache: dict[int, _WindowEvidence] = field(
+        default_factory=dict
+    )
 
     @property
     def last(self) -> _TrackObservation:
@@ -163,6 +173,7 @@ class _TrackState:
 @dataclass(frozen=True)
 class _WindowEvidence:
     start_observation: int
+    end_observation: int
     observation_count: int
     net_progress_px: float
     direction: int
@@ -328,8 +339,8 @@ class DirectedInterfaceTrackletBuilder:
         for track in tracks:
             for observation_offset, observation in enumerate(track.observations):
                 hypothesis = observation.hypothesis
-                recent_evidence = self._confirmation_evidence(
-                    track.observations,
+                recent_evidence = self._cached_confirmation_evidence(
+                    track,
                     observation_offset,
                 )
                 recent_window_ready = (
@@ -376,6 +387,16 @@ class DirectedInterfaceTrackletBuilder:
                             if recent_window_ready
                             else observation.directional_agreement
                         ),
+                        tracklet_confirmation_start_frame=(
+                            observation.confirmation_start_frame
+                        ),
+                        tracklet_confirmation_end_frame=(
+                            observation.confirmation_end_frame
+                        ),
+                        tracklet_confirmation_observation_count=(
+                            observation.confirmation_observation_count
+                        ),
+                        tracklet_recent_window_end_frame=hypothesis.frame_offset,
                         tracklet_motion_support=observation.motion_support,
                         tracklet_motion_coverage=observation.motion_coverage,
                         tracklet_material_conflict=(
@@ -861,8 +882,8 @@ class DirectedInterfaceTrackletBuilder:
     def _refresh_confirmation(self, track: _TrackState) -> None:
         if track.confirmed:
             return
-        evidence = self._confirmation_evidence(
-            track.observations,
+        evidence = self._cached_confirmation_evidence(
+            track,
             len(track.observations) - 1,
         )
         track.confirmed = (
@@ -873,7 +894,7 @@ class DirectedInterfaceTrackletBuilder:
         confirmation_offset: int | None = None
         witness: _WindowEvidence | None = None
         for offset in range(len(track.observations)):
-            evidence = self._confirmation_evidence(track.observations, offset)
+            evidence = self._cached_confirmation_evidence(track, offset)
             if evidence.profile is TrackletConfirmationProfile.NONE:
                 continue
             confirmation_offset = offset
@@ -881,8 +902,8 @@ class DirectedInterfaceTrackletBuilder:
             break
 
         if confirmation_offset is None or witness is None:
-            reason = self._track_failure_reason(track.observations)
-            measured = self._best_failure_evidence(track.observations)
+            reason = self._track_failure_reason(track)
+            measured = self._best_failure_evidence(track)
             for observation in track.observations:
                 if not observation.incompatible:
                     observation.failure_reason = reason
@@ -916,6 +937,15 @@ class DirectedInterfaceTrackletBuilder:
             observation.motion_energy = witness.motion_energy
             observation.motion_coverage = witness.motion_coverage
             observation.material_conflict = witness.material_conflict
+            observation.confirmation_start_frame = (
+                track.observations[witness.start_observation]
+                .hypothesis.frame_offset
+            )
+            observation.confirmation_end_frame = (
+                track.observations[confirmation_offset]
+                .hypothesis.frame_offset
+            )
+            observation.confirmation_observation_count = witness.observation_count
             observation.failure_reason = (
                 "INCOMPATIBLE_BRANCH"
                 if observation.incompatible
@@ -946,10 +976,11 @@ class DirectedInterfaceTrackletBuilder:
                 continue
             if observation.hypothesis.anchor_signal:
                 last_anchor_frame = observation.hypothesis.frame_offset
+            # Continuation aggregates the entire bounded window; confirmation
+            # excludes incompatible observations and may have fewer than its
+            # minimum count. Reusing its filtered motion values changes admission.
             _start, recent = _bounded_observation_window(
-                track.observations,
-                offset,
-                self.policy.confirmation_window_frames,
+                track.observations, offset, self.policy.confirmation_window_frames
             )
             motion_energy = _motion_energy(recent)
             motion_support = _motion_support(recent)
@@ -993,6 +1024,15 @@ class DirectedInterfaceTrackletBuilder:
             observation.motion_energy = motion_energy
             observation.motion_coverage = motion_coverage
             observation.material_conflict = witness.material_conflict
+            observation.confirmation_start_frame = (
+                track.observations[witness.start_observation]
+                .hypothesis.frame_offset
+            )
+            observation.confirmation_end_frame = (
+                track.observations[confirmation_offset]
+                .hypothesis.frame_offset
+            )
+            observation.confirmation_observation_count = witness.observation_count
             observation.failure_reason = (
                 "" if observation.admitted else "CONTINUATION_EVIDENCE_EXPIRED"
             )
@@ -1009,7 +1049,7 @@ class DirectedInterfaceTrackletBuilder:
         )
         valid = tuple(item for item in bounded if not item.incompatible)
         if len(valid) < self.policy.confirmation_min_observations:
-            return _empty_window(start_offset, len(valid))
+            return _empty_window(start_offset, len(valid), end_offset)
         first = valid[0].hypothesis
         last = valid[-1].hypothesis
         deltas = tuple(
@@ -1079,6 +1119,7 @@ class DirectedInterfaceTrackletBuilder:
         )
         return _WindowEvidence(
             start_observation=start_offset,
+            end_observation=end_offset,
             observation_count=len(valid),
             net_progress_px=net_progress,
             direction=observed_direction,
@@ -1092,10 +1133,24 @@ class DirectedInterfaceTrackletBuilder:
             confirmation_support=support,
         )
 
+    def _cached_confirmation_evidence(
+        self,
+        track: _TrackState,
+        end_offset: int,
+    ) -> _WindowEvidence:
+        """Return the bounded witness for one observation endpoint once."""
+
+        cached = track.window_evidence_cache.get(end_offset)
+        if cached is None:
+            cached = self._confirmation_evidence(track.observations, end_offset)
+            track.window_evidence_cache[end_offset] = cached
+        return cached
+
     def _track_failure_reason(
         self,
-        observations: list[_TrackObservation],
+        track: _TrackState,
     ) -> str:
+        observations = track.observations
         if any(item.incompatible for item in observations):
             return "INCOMPATIBLE_BRANCH"
         maximum_progress = 0.0
@@ -1104,7 +1159,7 @@ class DirectedInterfaceTrackletBuilder:
         maximum_coverage = 0.0
         maximum_anchors = 0
         for offset in range(len(observations)):
-            evidence = self._confirmation_evidence(observations, offset)
+            evidence = self._cached_confirmation_evidence(track, offset)
             maximum_progress = max(maximum_progress, evidence.net_progress_px)
             maximum_directional = max(
                 maximum_directional,
@@ -1129,10 +1184,11 @@ class DirectedInterfaceTrackletBuilder:
 
     def _best_failure_evidence(
         self,
-        observations: list[_TrackObservation],
+        track: _TrackState,
     ) -> _WindowEvidence:
+        observations = track.observations
         evidence = tuple(
-            self._confirmation_evidence(observations, offset)
+            self._cached_confirmation_evidence(track, offset)
             for offset in range(len(observations))
         )
         return max(
@@ -1230,9 +1286,16 @@ def _material_conflict(observations) -> float:
     return 0.0 if not values else sum(values) / len(values)
 
 
-def _empty_window(start: int, count: int) -> _WindowEvidence:
+def _empty_window(
+    start: int,
+    count: int,
+    end: int | None = None,
+) -> _WindowEvidence:
     return _WindowEvidence(
         start_observation=start,
+        end_observation=(
+            start + max(0, count - 1) if end is None else end
+        ),
         observation_count=count,
         net_progress_px=0.0,
         direction=0,

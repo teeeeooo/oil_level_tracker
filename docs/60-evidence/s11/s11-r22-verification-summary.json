@@ -1,0 +1,254 @@
+{
+  "schema": "s11-r22-verification-summary-v1",
+  "date": "2026-09-10",
+  "local_status": "ACCEPTED",
+  "field_status": "FIELD FAIL unchanged; R22 qualification pending",
+  "source": {
+    "git_head": "0ad13ea645ca97c7f416e0c30bb3f8375e6b3927",
+    "content_sha256": "4874a1e6eea82052fb82df053593c46bb6f5ee78dcfa8affa0dd0eec2b38b2fa",
+    "content_scope": "src/**/*.py and tests/diagnostics/*.py",
+    "worktree": "modified candidate"
+  },
+  "tests": {
+    "canonical_passed": 1763,
+    "canonical_seconds": 162.29,
+    "qt_passed": 252,
+    "qt_deselected": 1511,
+    "qt_seconds": 9.71,
+    "new_evidence_controls": 15
+  },
+  "casewise_replay": {
+    "schema": "s11-resolver-casewise-comparison-v1",
+    "case_count": 13,
+    "regressions": [],
+    "status": "PASS",
+    "cases": [
+      {
+        "sample": "base_sample_1",
+        "frame_index": 144,
+        "truth_y": 386.0,
+        "baseline_y": 373.0,
+        "candidate_y": 373.0,
+        "baseline_error_px": 13.0,
+        "candidate_error_px": 13.0,
+        "regressed": false
+      },
+      {
+        "sample": "base_sample_1",
+        "frame_index": 156,
+        "truth_y": 386.0,
+        "baseline_y": 373.0,
+        "candidate_y": 373.0,
+        "baseline_error_px": 13.0,
+        "candidate_error_px": 13.0,
+        "regressed": false
+      },
+      {
+        "sample": "base_sample_1",
+        "frame_index": 240,
+        "truth_y": 386.0,
+        "baseline_y": 375.0,
+        "candidate_y": 375.0,
+        "baseline_error_px": 11.0,
+        "candidate_error_px": 11.0,
+        "regressed": false
+      },
+      {
+        "sample": "sample2",
+        "frame_index": 0,
+        "truth_y": 592.0,
+        "baseline_y": null,
+        "candidate_y": null,
+        "baseline_error_px": null,
+        "candidate_error_px": null,
+        "regressed": false
+      },
+      {
+        "sample": "sample2",
+        "frame_index": 30,
+        "truth_y": 592.0,
+        "baseline_y": 590.0,
+        "candidate_y": 590.0,
+        "baseline_error_px": 2.0,
+        "candidate_error_px": 2.0,
+        "regressed": false
+      },
+      {
+        "sample": "sample2",
+        "frame_index": 60,
+        "truth_y": 592.0,
+        "baseline_y": 603.0,
+        "candidate_y": 603.0,
+        "baseline_error_px": 11.0,
+        "candidate_error_px": 11.0,
+        "regressed": false
+      },
+      {
+        "sample": "sample3",
+        "frame_index": 900,
+        "truth_y": 316.0,
+        "baseline_y": 291.5,
+        "candidate_y": 291.5,
+        "baseline_error_px": 24.5,
+        "candidate_error_px": 24.5,
+        "regressed": false
+      },
+      {
+        "sample": "sample3",
+        "frame_index": 1035,
+        "truth_y": 243.0,
+        "baseline_y": 244.0,
+        "candidate_y": 244.0,
+        "baseline_error_px": 1.0,
+        "candidate_error_px": 1.0,
+        "regressed": false
+      },
+      {
+        "sample": "sample4",
+        "frame_index": 0,
+        "truth_y": 860.5,
+        "baseline_y": null,
+        "candidate_y": null,
+        "baseline_error_px": null,
+        "candidate_error_px": null,
+        "regressed": false
+      },
+      {
+        "sample": "sample4",
+        "frame_index": 450,
+        "truth_y": 852.5,
+        "baseline_y": 853.0,
+        "candidate_y": 853.0,
+        "baseline_error_px": 0.5,
+        "candidate_error_px": 0.5,
+        "regressed": false
+      },
+      {
+        "sample": "sample4",
+        "frame_index": 900,
+        "truth_y": 848.5,
+        "baseline_y": 848.0,
+        "candidate_y": 848.0,
+        "baseline_error_px": 0.5,
+        "candidate_error_px": 0.5,
+        "regressed": false
+      },
+      {
+        "sample": "sample4",
+        "frame_index": 1470,
+        "truth_y": 855.0,
+        "baseline_y": 833.0,
+        "candidate_y": 833.0,
+        "baseline_error_px": 22.0,
+        "candidate_error_px": 22.0,
+        "regressed": false
+      },
+      {
+        "sample": "sample4",
+        "frame_index": 1680,
+        "truth_y": 858.5,
+        "baseline_y": 851.0,
+        "candidate_y": 851.0,
+        "baseline_error_px": 7.5,
+        "candidate_error_px": 7.5,
+        "regressed": false
+      }
+    ],
+    "identical_tracking_fingerprints": {
+      "base_sample_1": true,
+      "sample2": true,
+      "sample3": true,
+      "sample4": true
+    },
+    "note": "Casewise truth comparison complements, not replaces, safety/temporal tests."
+  },
+  "performance": {
+    "sample": "sample4",
+    "repeats_per_source": 3,
+    "scheduling": "serial alternating baseline/candidate, one fresh process per run",
+    "runtime_fingerprint_sha256": "7b14134e3f811d06e45ea2cd44686b5ffedd22dc7e2848fd2e04bd838f8aa20d",
+    "debug_level": "none",
+    "input_hashes": {
+      "base_sample_1": {
+        "mp4": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+        "oilrecipe": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+        "oiltruth": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a"
+      },
+      "sample2": {
+        "mp4": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+        "oilrecipe": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+        "oiltruth": "f45479f7bb5f4216cb9c6920ac994d2d690942f2ed432d5d8a8647af030c731f"
+      },
+      "sample3": {
+        "mp4": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+        "oilrecipe": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+        "oiltruth": "8cb2b917eede7708894fa90f59f96f1d9eac272813af6d457dcbc292496dd8ab"
+      },
+      "sample4": {
+        "mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+        "oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+        "oiltruth": "f02575ac2379b4d135567f1835aa772803af13a20413b8aa58175d890f5241bd"
+      }
+    },
+    "sources": {
+      "baseline": {
+        "git_head": "0ad13ea645ca97c7f416e0c30bb3f8375e6b3927",
+        "sha256": "ee8a0b8b74ccd008067eecda647e145dbb7448f2b6c5f5a26aa09bc40c343dbc"
+      },
+      "candidate": {
+        "git_head": "0ad13ea645ca97c7f416e0c30bb3f8375e6b3927",
+        "sha256": "4874a1e6eea82052fb82df053593c46bb6f5ee78dcfa8affa0dd0eec2b38b2fa"
+      }
+    },
+    "metrics": {
+      "baseline": {
+        "end_to_end_sec": 11.963722500018775,
+        "stage_seconds": {
+          "reader_open": 0.009001833037473261,
+          "reader_read": 3.855386336275842,
+          "reader_close": 0.0003748750314116478,
+          "static_learning": 0.029916875006165355,
+          "detect": 7.324045833025593,
+          "completed_window_resolve": 0.20766283298144117,
+          "application_outcome_assembly": 0.026873874536249787,
+          "bundle_output": 0.511834834003821
+        },
+        "peak_rss_bytes": 253100032,
+        "raw_end_to_end_sec": [
+          12.097517166985199,
+          11.926700500014704,
+          11.963722500018775
+        ],
+        "raw_peak_rss_bytes": [
+          254132224,
+          253100032,
+          253083648
+        ]
+      },
+      "candidate": {
+        "end_to_end_sec": 12.007164040987846,
+        "stage_seconds": {
+          "reader_open": 0.009013290982693434,
+          "reader_read": 3.84724354284117,
+          "reader_close": 0.0003885410260409117,
+          "static_learning": 0.030019416997674853,
+          "detect": 7.352191208803561,
+          "completed_window_resolve": 0.2188495839945972,
+          "application_outcome_assembly": 0.027060462220106274,
+          "bundle_output": 0.5112913330085576
+        },
+        "peak_rss_bytes": 258965504,
+        "raw_end_to_end_sec": [
+          11.982774999982212,
+          12.041098374989815,
+          12.007164040987846
+        ],
+        "raw_peak_rss_bytes": [
+          260571136,
+          258490368,
+          258965504
+        ]
+      }
+    }
+  }
+}

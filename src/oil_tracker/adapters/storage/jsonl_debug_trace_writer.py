@@ -411,6 +411,7 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                     "sequence_phase_identity_failed_gates"
                 ),
                 "ordered_lower": features.get("sequence_ordered_lower"),
+                "identity_contradiction": features.get("sequence_identity_contradiction"),
                 "cross_representation_support": features.get(
                     "sequence_cross_representation_support"
                 ),
@@ -437,6 +438,18 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
                 ),
                 "tracklet_confirmation_profile": features.get(
                     "sequence_tracklet_confirmation_profile"
+                ),
+                "tracklet_confirmation_start_frame": features.get(
+                    "sequence_tracklet_confirmation_start_frame"
+                ),
+                "tracklet_confirmation_end_frame": features.get(
+                    "sequence_tracklet_confirmation_end_frame"
+                ),
+                "tracklet_confirmation_observation_count": features.get(
+                    "sequence_tracklet_confirmation_observation_count"
+                ),
+                "tracklet_recent_window_end_frame": features.get(
+                    "sequence_tracklet_recent_window_end_frame"
                 ),
                 "tracklet_confirmation_support": features.get(
                     "sequence_tracklet_confirmation_support"

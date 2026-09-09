@@ -51,13 +51,14 @@ from .oil_sequence_types import (
     OilSequenceNode as _Node,
 )
 from .oil_phase_identity import (
+    OilIdentityContradiction,
     OilPhaseIdentity,
     PhaseIdentityContext,
     evaluate_phase_identity,
 )
 
 
-OIL_OBSERVATION_RESOLVER_VERSION = "r21-truth-preserving-detector-repair-v1"
+OIL_OBSERVATION_RESOLVER_VERSION = "r22-oil-ownership-evidence-replacement-v1"
 
 _OIL_REPLACED_FLAGS = {
     "LOW_CONFIDENCE",
@@ -468,6 +469,21 @@ class OilAdmissionEvidenceOwner:
             )
             if lower_reserve is not None:
                 selected_refs.append(lower_reserve)
+            contradiction_refs = tuple(
+                ref
+                for ref in refs
+                if ref.identity_contradiction
+                is OilIdentityContradiction.NON_NEAREST_ORDERED_LOWER
+                and ref not in selected_refs
+            )
+            # Keep every typed competing-identity observation available to the
+            # ownership seam even when candidate_top_k would otherwise hide
+            # it. These refs remain continuation-only; they cannot bootstrap
+            # delayed ownership. The detector's per-frame candidate
+            # assembler bounds the source pool; dropping the tail here would
+            # make the reset boundary depend on score ordering and could hide
+            # a second contradicted owner.
+            selected_refs.extend(contradiction_refs)
             rows.append(tuple(selected_refs))
         return tuple(rows), ineligible, foam_material_identity
 
@@ -781,7 +797,19 @@ class OilPathLifecycleOwner:
                 self.config,
                 confirmed_initial_state,
             )
-        ).resolve(phase_layers)
+        ).resolve(
+            phase_layers,
+            identity_contradictions=tuple(
+                frozenset(
+                    ref.tracklet_id
+                    for ref in refs
+                    if ref.tracklet_id is not None
+                    and ref.identity_contradiction
+                    is OilIdentityContradiction.NON_NEAREST_ORDERED_LOWER
+                )
+                for refs in refs_by_frame
+            ),
+        )
         selection_path = BoundedOilInterfaceSelector(
             _interface_selector_policy(glass, self.config)
         ).resolve(
@@ -1254,6 +1282,31 @@ class OilResolutionProjectionOwner:
                         node.candidate_ref.tracklet_directional_agreement
                     )
                 ),
+                "sequence_selected_tracklet_confirmation_start_frame": (
+                    None
+                    if node.candidate_ref is None
+                    else node.candidate_ref.tracklet_confirmation_start_frame
+                ),
+                "sequence_selected_tracklet_confirmation_end_frame": (
+                    None
+                    if node.candidate_ref is None
+                    else node.candidate_ref.tracklet_confirmation_end_frame
+                ),
+                "sequence_selected_tracklet_confirmation_observation_count": (
+                    0
+                    if node.candidate_ref is None
+                    else node.candidate_ref.tracklet_confirmation_observation_count
+                ),
+                "sequence_selected_tracklet_recent_window_end_frame": (
+                    None
+                    if node.candidate_ref is None
+                    else node.candidate_ref.tracklet_recent_window_end_frame
+                ),
+                "sequence_selected_identity_contradiction": (
+                    OilIdentityContradiction.NONE.value
+                    if node.candidate_ref is None
+                    else node.candidate_ref.identity_contradiction.value
+                ),
                 "sequence_selected_tracklet_motion_support": (
                     0.0
                     if node.candidate_ref is None
@@ -1669,6 +1722,9 @@ def _demote_non_nearest_ordered_lower_anchors(
                     authority_failed_gates=("nearest_ordered_lower_interface",),
                     phase_identity=OilPhaseIdentity.CONTINUATION_ONLY,
                     phase_identity_failed_gates=("nearest_ordered_lower_interface",),
+                    identity_contradiction=(
+                        OilIdentityContradiction.NON_NEAREST_ORDERED_LOWER
+                    ),
                 )
             )
         else:
@@ -1833,6 +1889,9 @@ def _project_candidates(
                         ref.phase_identity_failed_gates
                     ),
                     "sequence_ordered_lower": float(ref.ordered_lower),
+                    "sequence_identity_contradiction": (
+                        ref.identity_contradiction.value
+                    ),
                     "sequence_tracklet_id": ref.tracklet_id or "",
                     "sequence_row_hypothesis_id": (
                         ref.row_hypothesis_id or ""
@@ -1866,6 +1925,18 @@ def _project_candidates(
                     ),
                     "sequence_tracklet_recent_directional_agreement": float(
                         ref.tracklet_recent_directional_agreement
+                    ),
+                    "sequence_tracklet_confirmation_start_frame": (
+                        ref.tracklet_confirmation_start_frame
+                    ),
+                    "sequence_tracklet_confirmation_end_frame": (
+                        ref.tracklet_confirmation_end_frame
+                    ),
+                    "sequence_tracklet_confirmation_observation_count": (
+                        ref.tracklet_confirmation_observation_count
+                    ),
+                    "sequence_tracklet_recent_window_end_frame": (
+                        ref.tracklet_recent_window_end_frame
                     ),
                     "sequence_tracklet_motion_support": float(
                         ref.tracklet_motion_support

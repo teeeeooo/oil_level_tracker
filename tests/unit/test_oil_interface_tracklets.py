@@ -11,6 +11,8 @@ from oil_tracker.adapters.vision.oil_candidate_evidence import (
 from oil_tracker.adapters.vision.oil_interface_tracklets import (
     DirectedInterfaceTrackletBuilder,
     DirectedTrackletPolicy,
+    _TrackState,
+    _WindowEvidence,
 )
 from oil_tracker.adapters.vision.oil_observation_resolver import (
     OilObservationResolverConfig,
@@ -611,6 +613,47 @@ def test_physical_tracklets_confirm_without_borrowing_between_rows() -> None:
         is TrackletConfirmationProfile.ANCHOR_CORRIDOR
         for item in upper_refs
     )
+    assert lower_refs[0].tracklet_confirmation_start_frame == 0
+    assert lower_refs[0].tracklet_confirmation_end_frame == 2
+    assert lower_refs[0].tracklet_recent_window_end_frame == 0
+    assert lower_refs[-1].tracklet_recent_window_end_frame == 5
+
+
+def test_confirmation_window_evidence_is_cached_per_track_endpoint() -> None:
+    builder = DirectedInterfaceTrackletBuilder(_policy())
+    track = _TrackState(
+        identity="cache-test",
+        representation_classes=frozenset(),
+        observations=[],
+    )
+    witness = _WindowEvidence(
+        start_observation=0,
+        end_observation=2,
+        observation_count=3,
+        net_progress_px=8.0,
+        direction=-1,
+        directional_agreement=1.0,
+        motion_support=0.8,
+        motion_energy=0.8,
+        motion_coverage=0.8,
+        material_conflict=0.0,
+        anchor_frames=2,
+        profile=TrackletConfirmationProfile.ANCHOR_CORRIDOR,
+        confirmation_support=1.0,
+    )
+    calls = 0
+
+    def counted(_observations, _end_offset):
+        nonlocal calls
+        calls += 1
+        return witness
+
+    builder._confirmation_evidence = counted
+
+    assert builder._cached_confirmation_evidence(track, 2) is witness
+    assert builder._cached_confirmation_evidence(track, 2) is witness
+    assert calls == 1
+    assert track.window_evidence_cache == {2: witness}
 
 
 def test_continuing_tracklet_reports_recent_direction_after_physical_reversal() -> None:

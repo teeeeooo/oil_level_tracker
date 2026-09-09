@@ -16,6 +16,20 @@ class OilPhaseIdentity(str, Enum):
     OPPOSED_MATERIAL = "opposed_material"
 
 
+class OilIdentityContradiction(str, Enum):
+    """A typed current-frame identity contradiction.
+
+    This is kept separate from ``OilPhaseIdentity`` because a row can remain
+    usable as weak continuation evidence while being forbidden from starting
+    or renewing a phase-evidence chain.  In particular, a non-nearest
+    ordered-lower row is a real competing identity observation, not an absent
+    sample and not merely a diagnostic string.
+    """
+
+    NONE = "none"
+    NON_NEAREST_ORDERED_LOWER = "non_nearest_ordered_lower"
+
+
 @dataclass(frozen=True)
 class PhaseIdentityContext:
     representation_support: float = 0.0

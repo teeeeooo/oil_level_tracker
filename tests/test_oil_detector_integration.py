@@ -7,7 +7,7 @@ from oil_tracker.domain.enums import FillState, InitialObservationState
 from oil_tracker.domain.recipe import InspectionRecipe
 
 
-DETECTOR_VERSION = "opencv-phase-detector-r21-truth-preserving-detector-repair-v1"
+DETECTOR_VERSION = "opencv-phase-detector-r22-oil-ownership-evidence-replacement-v1"
 
 
 def glass(initial=InitialObservationState.AUTO, glass_id="glass-oil"):

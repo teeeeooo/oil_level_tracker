@@ -7,7 +7,7 @@ from oil_tracker.domain.detection import BoundaryCandidate
 
 from .oil_candidate_authority import AuthorityReason, OilCandidateAuthority
 from .oil_candidate_evidence import OilCandidateEvidence
-from .oil_phase_identity import OilPhaseIdentity
+from .oil_phase_identity import OilIdentityContradiction, OilPhaseIdentity
 
 
 class TrackletLifecycle(str, Enum):
@@ -48,6 +48,9 @@ class OilCandidateRef:
     phase_identity: OilPhaseIdentity = OilPhaseIdentity.CONTINUATION_ONLY
     phase_identity_failed_gates: tuple[str, ...] = ()
     ordered_lower: bool = False
+    identity_contradiction: OilIdentityContradiction = (
+        OilIdentityContradiction.NONE
+    )
     tracklet_id: str | None = None
     row_hypothesis_id: str | None = None
     tracklet_lifecycle: TrackletLifecycle = TrackletLifecycle.PROVISIONAL
@@ -62,6 +65,10 @@ class OilCandidateRef:
     tracklet_recent_net_progress_px: float = 0.0
     tracklet_recent_direction: int = 0
     tracklet_recent_directional_agreement: float = 0.0
+    tracklet_confirmation_start_frame: int | None = None
+    tracklet_confirmation_end_frame: int | None = None
+    tracklet_confirmation_observation_count: int = 0
+    tracklet_recent_window_end_frame: int | None = None
     tracklet_motion_support: float = 0.0
     tracklet_motion_coverage: float = 0.0
     tracklet_material_conflict: float = 0.0

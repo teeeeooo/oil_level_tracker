@@ -2,37 +2,49 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** R21 truth-preserving detector repair implementation and local acceptance are complete; deliberate Windows field qualification remains outstanding
+**Current gate:** R22 Oil ownership/evidence replacement is locally accepted; target-Windows accuracy and throughput qualification is next
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
 
 ## Accepted local candidate
 
-R21 is the current locally accepted candidate on top of the established S11 safety and publication contracts. Its bounded changes are:
+R22 is the current locally accepted candidate. It replaces Oil phase/evidence
+orchestration with explicit state and a bounded release engine, carries typed
+identity contradictions through admission, adds one strictly bounded same-owner
+initial-FULL evidence renewal, and caches confirmation witnesses. Replaced
+execution paths have been removed; candidate generation and Foam are preserved.
 
-1. initial-`FULL` slow-drain release may use bounded recent physical trajectory evidence without weakening the existing release threshold or the R19 absolute recovery expiry;
-2. an established drain may close a rapid refill through the same physical owner or one unique independently confirmed fresh topward owner only after the old drain owner is absent, with physical tracklet IDs remaining distinct;
-3. Foam stable-layer confirmation restores the reviewed bounded three-observation witness while retaining at least two dynamic observations, the four-frame / 2.0-second horizon and all material/static/opposition gates;
-4. initial-`EMPTY` continuity remains on the existing lifecycle path and is covered by controlled current-frame evidence without an Accum-specific relaxation; and
-5. additive Oil/Foam decision witnesses serialize already-computed decisions without becoming detector, selector or publication authority.
+Runtime identity: `opencv-phase-detector-r22-oil-ownership-evidence-replacement-v1`.
+Main completed direct review, 1763 canonical tests, 252 Qt tests, all four video
+replays and a three-pair serial performance comparison. All 13 protected truth
+cases and four complete tracking fingerprints match R21. Total timing was
+11.964 s versus 12.007 s on the measured macOS sample; no speedup is claimed.
 
-The R21 runtime identity is `opencv-phase-detector-r21-truth-preserving-detector-repair-v1`. Local implementation, canonical/focused validation, four-video replay, provenance checks and repeated performance comparison are complete. The current contract/evidence is:
+- [R22 architecture](../20-architecture/s11-r22-oil-ownership-evidence-replacement-architecture.md)
+- [R22 validation](../30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md)
+- [R22 completed local evidence](../60-evidence/s11/s11-r22-ownership-evidence-replacement.md)
 
-- [R21 architecture](../20-architecture/s11-r21-truth-preserving-detector-repair-architecture.md)
-- [R21 validation/work specification](../30-validation/s11-r21-truth-preserving-detector-repair-validation.md)
-- [R21 completed local evidence](../60-evidence/s11/s11-r21-truth-preserving-detector-repair.md)
-
-R18–R20 remain predecessor evidence and accepted-baseline history, not alternate current owners.
+R21 is the protected comparison predecessor. R18–R21 remain historical evidence,
+not alternate current owners. Existing truth misses remain and field repair is
+not established by these checks.
 
 ## Current authorization boundary
 
-Ordinary repository maintenance may preserve or clarify the accepted R21 local candidate and its documentation without changing detector behavior.
+On 2026-09-09 the user authorized replacement of the Oil temporal identity and
+phase/evidence core, relevant tests and diagnostics, measured performance
+comparison, and cleanup of replaced execution paths. Main owns design and final
+acceptance. The user subsequently requested no further sub-agent work; Main
+now completes implementation, cleanup, verification and review directly.
+This supersedes the prior pause on another detector revision for this bounded
+replacement. R21 local acceptance is historical baseline evidence, not evidence
+that its transferred Windows failures are fixed.
 
-Not automatically authorized by the current gate:
+Outside this replacement's authority:
 
-- another detector revision, threshold/authority change or widening of candidate generation;
-- weakening or removal of the R19 absolute recovery expiry without new physical evidence and a deliberate contract change;
+- unrelated candidate-generation, Foam or UI changes;
+- unbounded evidence retention, unconditional recovery expiry removal or relaxed
+  truth/safety criteria to manufacture a pass;
 - regeneration or silent replacement of a checked tracking fingerprint/golden merely to fit the current environment;
 - automatic replay of private Windows media or reinterpretation of local controls as field proof;
 - case-specific video/Glass/timestamp/coordinate behavior, interpolation, carry or report-side repair; or
@@ -52,15 +64,18 @@ The local Sample4 replay currently produces `e447626b...` rather than the histor
 
 ## Open field risks and named unknowns
 
-R21 is not field-qualified. The controlled Base cycle proves generic local behavior for bounded slow drain and rapid refill, but it does not prove that the private Windows Base failure had the same cause or is repaired. Accum initial entry, continuity/layered/post-Foam ownership and drain re-entry remain field uncertainties. Historical R18 causal unknowns remain constraints where reviewed physical identity or exact Y anchors were unavailable.
+R22 is not field-qualified. The controlled Base cycle proves generic local behavior for bounded slow drain and rapid refill, but it does not prove that the private Windows Base failure had the same cause or is repaired. Accum initial entry, continuity/layered/post-Foam ownership and drain re-entry remain field uncertainties. Historical R18 causal unknowns remain constraints where reviewed physical identity or exact Y anchors were unavailable.
 
 Retained but non-current work is owned by [`retained-commitments.md`](retained-commitments.md).
 
 ## Next transition
 
-There is no automatically executable R22 detector revision. The next material S11 transition is deliberate target-Windows qualification of the R21 local candidate using the canonical reviewed truth and Windows procedure. If that replay remains `FIELD FAIL`, any subsequent behavior change must begin from the newly observed failing stage rather than from synthetic success alone.
-
-Until a deliberate Windows replay is executed and reviewed, preserve the existing field `FAIL` boundary.
+The authorized core replacement, cleanup and local verification are complete.
+Next, qualify R22 accuracy and throughput on target Windows with the existing
+reviewed evidence. Preserve FIELD FAIL until that acceptance owner is satisfied.
+Candidate-generation recall and the dominant reader/detect performance costs
+remain separate measured follow-ups; local controls and macOS timings do not
+establish Windows success.
 
 ## Current authority links
 
@@ -68,9 +83,9 @@ Until a deliberate Windows replay is executed and reviewed, preserve the existin
 - [Repository execution policy](execution-policy.md)
 - [S11 detector-change Skill](../../.agents/skills/s11-detector-change/SKILL.md) and [mechanical governance contract](../30-validation/s11-detector-change-governance.md)
 - [Current detector logic map](../20-architecture/s11-current-detector-logic-map.md)
-- [R21 architecture](../20-architecture/s11-r21-truth-preserving-detector-repair-architecture.md)
-- [R21 validation](../30-validation/s11-r21-truth-preserving-detector-repair-validation.md)
-- [R21 local evidence](../60-evidence/s11/s11-r21-truth-preserving-detector-repair.md)
+- [R22 architecture](../20-architecture/s11-r22-oil-ownership-evidence-replacement-architecture.md)
+- [R22 validation](../30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md)
+- [R22 local evidence](../60-evidence/s11/s11-r22-ownership-evidence-replacement.md)
 - [Detector mechanism failure registry](../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
 - [Canonical Windows reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 - [Current-candidate Windows field procedure](../40-operations/s11-current-windows-field-qualification.md)

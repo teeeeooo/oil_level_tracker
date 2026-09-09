@@ -127,6 +127,40 @@ def _r20_behavioral_view(payload: dict[str, object]) -> dict[str, object]:
     return normalized
 
 
+def _r21_behavioral_view(payload: dict[str, object]) -> dict[str, object]:
+    """Preserve the R21 golden, stripping only enumerated R22 telemetry.
+
+    No coordinate, admission, authority, direction, score, phase or selected
+    member is normalized. Separate replacement controls validate the new
+    evidence fields; this protects the complete predecessor behavioral view.
+    """
+    normalized = deepcopy(payload)
+    normalized["diagnostics"]["version"] = "r21-truth-preserving-detector-repair-v1"
+    selected_fields = {
+        "sequence_selected_tracklet_confirmation_start_frame",
+        "sequence_selected_tracklet_confirmation_end_frame",
+        "sequence_selected_tracklet_confirmation_observation_count",
+        "sequence_selected_tracklet_recent_window_end_frame",
+        "sequence_selected_identity_contradiction",
+    }
+    candidate_fields = {
+        "sequence_tracklet_confirmation_start_frame",
+        "sequence_tracklet_confirmation_end_frame",
+        "sequence_tracklet_confirmation_observation_count",
+        "sequence_tracklet_recent_window_end_frame",
+        "sequence_identity_contradiction",
+    }
+    for detection in normalized["detections"]:
+        metrics = detection["sequence_metrics"]
+        metrics["sequence_resolver_version"] = "r21-truth-preserving-detector-repair-v1"
+        for key in selected_fields:
+            metrics.pop(key, None)
+        for candidate in detection["candidates"]:
+            for key in candidate_fields:
+                candidate["features"].pop(key, None)
+    return normalized
+
+
 def _sequence_candidate(
     y: float,
     *,
@@ -277,11 +311,13 @@ def test_r0_completed_window_stage_and_provenance_fingerprint() -> None:
         ],
     }
 
-    fingerprint = _fingerprint(payload)
+    assert payload["diagnostics"]["version"] == "r22-oil-ownership-evidence-replacement-v1"
+    predecessor = _r21_behavioral_view(payload)
+    fingerprint = _fingerprint(predecessor)
     assert fingerprint == R21_TRUTH_PRESERVING_COMPLETED_WINDOW_FINGERPRINT
     assert fingerprint != R20_DELAYED_DRAIN_REACQUISITION_COMPLETED_WINDOW_FINGERPRINT
     assert fingerprint != R0_COMPLETED_WINDOW_FINGERPRINT
-    assert _fingerprint(_r20_behavioral_view(payload)) == (
+    assert _fingerprint(_r20_behavioral_view(predecessor)) == (
         R20_DELAYED_DRAIN_REACQUISITION_COMPLETED_WINDOW_FINGERPRINT
     )
     for source, resolved in zip(detections, result.detections, strict=True):
