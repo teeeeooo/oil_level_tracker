@@ -76,6 +76,35 @@ def test_workbench_visibly_separates_profile_and_current_test_ownership(qtbot):
     assert window.profile_path_label.text() == "아직 저장되지 않음"
 
 
+def test_debug_trace_selector_is_visible_and_updates_session_only(qtbot, monkeypatch):
+    from PySide6.QtWidgets import QMessageBox
+    from oil_tracker.domain.enums import WorkbenchState
+    from oil_tracker.domain.session import DebugTraceLevel
+
+    window, controller = _window(qtbot)
+    window.show()
+    combo = window.debug_trace_selector
+    assert combo.isVisible()
+    assert combo.parentWidget() is window.session_bar
+    assert combo.currentData() == DebugTraceLevel.BASIC.value
+    before = controller.recipe.to_dict()
+    messages = []
+    monkeypatch.setattr(QMessageBox, "information", lambda *_args: messages.append(_args))
+    combo.setCurrentIndex(combo.findData(DebugTraceLevel.FULL.value))
+    assert controller.session.debug_trace_level is DebugTraceLevel.FULL
+    assert controller.recipe.to_dict() == before
+    assert len(messages) == 1
+    controller.state = WorkbenchState.ANALYZING
+    window._update_state()
+    assert not combo.isEnabled()
+    controller.state = WorkbenchState.DRAFT
+    controller.session.debug_trace_level = DebugTraceLevel.BASIC
+    window._refresh_all()
+    assert combo.isEnabled()
+    assert combo.currentData() == DebugTraceLevel.BASIC.value
+    assert len(messages) == 1
+
+
 def test_profile_identity_refreshes_after_save_and_load(qtbot, tmp_path, monkeypatch):
     window, controller = _window(qtbot)
     controller.recipe.name = "Profile A"

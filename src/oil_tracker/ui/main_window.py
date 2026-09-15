@@ -30,6 +30,10 @@ from oil_tracker.domain.enums import InitialObservationState, JudgmentMode, Work
 from oil_tracker.domain.geometry import EllipseGeometry
 from oil_tracker.domain.recipe import DetectorSettings, InspectionRecipe
 from oil_tracker.ui.controllers.workbench_playback_controller import WorkbenchPlaybackController
+from oil_tracker.ui.debug_trace_settings import (
+    install_debug_trace_selector,
+    sync_debug_trace_selector,
+)
 from oil_tracker.ui.presentation_labels import (
     initial_state_label,
     result_state_label,
@@ -269,6 +273,7 @@ class MainWindow(QMainWindow):
         self.transport = TransportBar()
         self.profile_context = self._build_profile_context()
         self.session_bar = self._build_session_bar()
+        install_debug_trace_selector(self)
         self.progress = WorkbenchProgressWidget()
         self.detection_summary = DetectionSummaryCard()
         self.playback_panel = VideoPlaybackPanel(self.canvas, self.transport)
@@ -985,6 +990,7 @@ class MainWindow(QMainWindow):
     def _refresh_all(self) -> None:
         self._refresh_panels()
         self._sync_session_fields()
+        sync_debug_trace_selector(self)
         self._update_state()
 
     def _refresh_panels(self) -> None:
@@ -1059,6 +1065,7 @@ class MainWindow(QMainWindow):
 
     def _update_state(self) -> None:
         self._sync_profile_context()
+        self.debug_trace_selector.setEnabled(self.workbench.state != WorkbenchState.ANALYZING)
         self.state_label.setText(f"상태: {workbench_state_label(self.workbench.state)}")
         self.state_label.setProperty("workbenchState", self.workbench.state.value)
         self.state_label.style().unpolish(self.state_label)

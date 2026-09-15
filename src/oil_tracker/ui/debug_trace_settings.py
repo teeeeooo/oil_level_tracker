@@ -65,7 +65,6 @@ def install_debug_trace_selector(window) -> QComboBox:
         window.statusBar().showMessage("분석 기록 옵션이 변경되었습니다. 분석 전에 설정 점검을 다시 실행해 주세요.", 10000)
 
     combo.currentIndexChanged.connect(changed)
-    window.actions["new"].triggered.connect(lambda _checked=False: sync_debug_trace_selector(window))
     return combo
 
 
