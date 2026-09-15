@@ -146,13 +146,14 @@ class JsonlDebugTraceWriter:
             availability.append(image_key)
 
         candidates = []
-        for rank, candidate in enumerate(
-            sorted(detection.candidates, key=lambda item: item.final_score, reverse=True),
+        for rank, (candidate_index, candidate) in enumerate(
+            sorted(enumerate(detection.candidates), key=lambda item: item[1].final_score, reverse=True),
             1,
         ):
             candidates.append(
                 {
                     "rank": rank,
+                    "candidate_input_index": candidate_index,
                     "kind": candidate.kind.value,
                     "source": candidate.source,
                     "canonical_y": candidate.y,

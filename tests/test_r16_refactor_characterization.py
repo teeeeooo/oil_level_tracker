@@ -257,7 +257,12 @@ def test_r0_current_frame_candidate_and_debug_projection_fingerprint() -> None:
         "artifacts": {
             "profiles": artifacts.profiles,
             "candidate_rows": artifacts.candidate_rows,
-            "state": artifacts.state,
+            # R22-1 adds one trace-only namespace. Keep the original golden:
+            # every prior field, candidate, image and metric must still match.
+            "state": {
+                key: value for key, value in artifacts.state.items()
+                if key != "oil_interface_diagnostics"
+            },
             "images": _image_signatures(artifacts.images),
         },
     }

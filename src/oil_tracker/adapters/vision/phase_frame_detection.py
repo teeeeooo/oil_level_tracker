@@ -44,6 +44,7 @@ from .oil_shadow_types import (
     SmoothingAction,
 )
 from .phase_candidate_assembler import assemble_phase_candidates
+from .oil_interface_diagnostics import measure_oil_interfaces
 from .preprocessing import PreprocessResult, preprocess
 from .temporal_raster_evidence import (
     RegisteredFoamMotionTracker,
@@ -793,6 +794,16 @@ class PhaseDebugProjector:
                 "flags": detection.flags,
                 "oil_hypothesis": projection.oil_detail or {},
                 **detection.debug_metrics,
+                "oil_interface_diagnostics": measure_oil_interfaces(
+                    detection.candidates,
+                    gray=pre.gray,
+                    effective_mask=bundle.effective_mask,
+                    glare_mask=pre.glare_mask,
+                    material_map=foam.combined_evidence_map,
+                    static_map=evidence.static_map,
+                    crop_origin=bundle.crop_origin,
+                    frame_index=detection.frame_index,
+                ),
             },
         )
 
