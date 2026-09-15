@@ -29,4 +29,13 @@ jobs:
           if [ -z "$base_ref" ] || [ "$base_ref" = "$zero_sha" ]; then
             base_ref="$(git rev-list --max-parents=0 "$HEAD_SHA" | tail -n 1)"
           fi
+          # A rewritten push can leave github.event.before outside all current
+          # branches, even with fetch-depth: 0. Fetch that exact comparison
+          # commit instead of substituting a different base or skipping checks.
+          for comparison_ref in "$base_ref" "$HEAD_SHA"; do
+            if ! git cat-file -e "${comparison_ref}^{commit}" 2>/dev/null; then
+              git fetch --no-tags origin "$comparison_ref"
+            fi
+            git cat-file -e "${comparison_ref}^{commit}"
+          done
           python3 scripts/check_detector_governance.py --base-ref "$base_ref" --head-ref "$HEAD_SHA"
