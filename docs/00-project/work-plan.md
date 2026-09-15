@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** R22 Oil ownership/evidence replacement is locally accepted; target-Windows accuracy and throughput qualification is next
+**Current gate:** R22-1 diagnostic implementation is locally verified; collect its raster evidence on Windows before behavioral repair
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -29,6 +29,13 @@ R21 is the protected comparison predecessor. R18–R21 remain historical evidenc
 not alternate current owners. Existing truth misses remain and field repair is
 not established by these checks.
 
+R22-1 is the current diagnostic runtime over the accepted R22 behavior:
+`opencv-phase-detector-r22-1-interface-diagnostics-v1`. The completed resolver
+identity remains R22 intentionally. Its [architecture](../20-architecture/s11-r22-1-interface-diagnostics-architecture.md)
+and [local evidence](../60-evidence/s11/s11-r22-1-interface-diagnostics.md)
+record debug-only raster measurements and unchanged tracking/event rows in all
+four public comparisons. This is not a new behavior or field acceptance.
+
 ## Current authorization boundary
 
 On 2026-09-09 the user authorized replacement of the Oil temporal identity and
@@ -39,6 +46,10 @@ now completes implementation, cleanup, verification and review directly.
 This supersedes the prior pause on another detector revision for this bounded
 replacement. R21 local acceptance is historical baseline evidence, not evidence
 that its transferred Windows failures are fixed.
+
+The user subsequently authorized R22-1 measurement extraction and trace output
+with unchanged R22 decisions, followed by sequential Windows evidence collection.
+Future R23 behavioral changes remain outside this diagnostic implementation.
 
 Outside this replacement's authority:
 
@@ -66,16 +77,35 @@ The local Sample4 replay currently produces `e447626b...` rather than the histor
 
 R22 is not field-qualified. The controlled Base cycle proves generic local behavior for bounded slow drain and rapid refill, but it does not prove that the private Windows Base failure had the same cause or is repaired. Accum initial entry, continuity/layered/post-Foam ownership and drain re-entry remain field uncertainties. Historical R18 causal unknowns remain constraints where reviewed physical identity or exact Y anchors were unavailable.
 
+## Active follow-up design
+
+The user requested a combined repair design after sequential Windows checks
+and direct guide-image review. The [corrected checkpoint investigation](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md)
+records BASE false-to-real tracklet association and Accum actual-boundary owner
+exclusion with a separate cross-representation texture gate. These bounded
+findings do not establish the cause of every missed interval.
+
+The [physical-interface evidence proposal](../20-architecture/s11-physical-interface-evidence-repair-design.md)
+and its [acceptance gates](../30-validation/s11-physical-interface-evidence-repair-validation.md)
+define local interface witnesses, verified physical association, committed fill
+handoff and a separately gated direction-neutral observation phase. These
+behavioral changes remain proposals. R22-1 implements trace-only raster
+measurements, not the proposed classifier or ownership changes. Real-video
+discrimination, operating points and stationary-interface versus reflection
+acceptance remain unvalidated.
+
 Retained but non-current work is owned by [`retained-commitments.md`](retained-commitments.md).
 
 ## Next transition
 
-The authorized core replacement, cleanup and local verification are complete.
-Next, qualify R22 accuracy and throughput on target Windows with the existing
-reviewed evidence. Preserve FIELD FAIL until that acceptance owner is satisfied.
-Candidate-generation recall and the dominant reader/detect performance costs
-remain separate measured follow-ups; local controls and macOS timings do not
-establish Windows success.
+Next transfer the identified R22-1 source and follow the
+[one-frame Windows measurement procedure](../40-operations/s11-r22-1-windows-interface-measurement.md).
+Compare reviewed true and false boundaries before using measurements as
+authority. Association, fill handoff and initial-FULL direction-neutral
+observation remain later behavioral work with separate acceptance gates.
+Preserve FIELD FAIL until target-Windows accuracy/throughput qualification is
+actually satisfied; diagnostic equality and local controls do not establish
+Windows effectiveness.
 
 ## Current authority links
 

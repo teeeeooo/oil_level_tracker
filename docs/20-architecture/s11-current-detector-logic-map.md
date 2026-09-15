@@ -1,6 +1,6 @@
 # S11 Current Detector Logic Map
 
-**Scope:** the current R22 local candidate (`opencv-phase-detector-r22-oil-ownership-evidence-replacement-v1`, completed-window resolver `r22-oil-ownership-evidence-replacement-v1`). This is a current control-flow map, not a design history. R21 remains the accepted predecessor/Windows evidence input; R22 still requires canonical Windows qualification before field promotion. Claims below were checked against the implementation modules linked in each owner row.
+**Scope:** R22 behavior with the R22-1 diagnostic runtime (`opencv-phase-detector-r22-1-interface-diagnostics-v1`, unchanged completed-window resolver `r22-oil-ownership-evidence-replacement-v1`). This is a current control-flow map, not a design history. R21 remains the protected predecessor; field effectiveness remains unqualified. Claims below were checked against the implementation modules linked in each owner row.
 
 **Authority:** current sequencing is in the [work plan](../00-project/work-plan.md); durable detector responsibility is in the [S11 responsibility architecture](s11-detector-responsibility-architecture.md). R18/R19/R20 remain predecessor/history and Windows design input. The replacement is owned by the [R22 architecture](s11-r22-oil-ownership-evidence-replacement-architecture.md) and [R22 validation](../30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md). R21 architecture/validation preserve the protected predecessor contract. Those documents describe intent and acceptance boundaries; this file names the implementation that actually executes them.
 
@@ -111,6 +111,15 @@ The IDs in this table are the cross-reference surface for future designs and fai
 | `TRACE-PUBLICATION` | [`JsonlDebugTraceWriter.write/annotate_sequence/finalize`](../../src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py) | Current-frame detection/artifacts → JSONL raw records/images; completed sequence → compact `sequence` annotations including bounded Oil/Foam decision witnesses; finalize → indexed trace | Debug is non-authoritative. R21 lifecycle schema `r21-truth-preserving-detector-repair-v1` retains readable R20 legacy identity and adds `r21-decision-witness-v1`: actual phase/publishable row membership, existing route predicates, selected member, Foam window/formation decisions and recent trajectory. No predicate or detector branch is rerun for telemetry, and trace cannot publish or alter official samples. |
 
 ## 3. Current frame: evidence acquisition and provisional projection
+
+R22-1 adds a debug-only route after detection projection:
+`PhaseDebugProjector` → `measure_oil_interfaces` →
+`artifacts.state.oil_interface_diagnostics` → captured JSONL state. It records
+five-sector near/far raster measurements without modifying candidate features,
+scores or resolver inputs. Top-level trace candidates expose their original
+`candidate_input_index` before score sorting. See the
+[R22-1 measurement contract](s11-r22-1-interface-diagnostics-architecture.md).
+All decision owners and lifecycle transitions below retain R22 behavior.
 
 `FRAME-EVIDENCE` is deliberately broader than the completed-window owner. [`CurrentFrameEvidenceOwner.observe`](../../src/oil_tracker/adapters/vision/phase_frame_detection.py) executes, in order:
 
