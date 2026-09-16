@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QGridLayout,
     QGroupBox,
     QLabel,
+    QLayout,
     QLineEdit,
     QMainWindow,
     QMenu,
@@ -96,6 +97,9 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1180, 680)
         self._resize_to_available_screen()
         self._build_ui()
+        # Include session controls in the minimum height so the canvas and
+        # transport cannot overlap when the window is resized smaller.
+        self.layout().setVerticalSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.playback_controller = WorkbenchPlaybackController(
             self.workbench,
             self.preview_controller,

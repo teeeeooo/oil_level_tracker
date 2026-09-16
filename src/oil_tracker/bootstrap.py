@@ -44,7 +44,6 @@ from oil_tracker.ui.controllers.preview_controller import PreviewController
 from oil_tracker.ui.controllers.result_review_controller import ResultReviewController
 from oil_tracker.ui.controllers.review_mp4_export_controller import ReviewMp4ExportController
 from oil_tracker.ui.controllers.workbench_controller import WorkbenchController
-from oil_tracker.ui.debug_trace_settings import install_debug_trace_selector
 from oil_tracker.ui.main_window import MainWindow
 from oil_tracker.ui.observation_settings_copy_coordinator import ObservationSettingsCopyCoordinator
 from oil_tracker.ui.preflight_coordinator import PreflightCoordinator
@@ -87,7 +86,6 @@ def build_main_window() -> MainWindow:
     )
     analysis_controller.setParent(window)
     window.destroyed.connect(lambda: analysis_controller.shutdown())
-    install_debug_trace_selector(window)
     window.settings_copy_coordinator = ObservationSettingsCopyCoordinator(window)
     preflight_use_case = PreflightCheckUseCase(
         lambda path: OpenCvVideoReader(path),
