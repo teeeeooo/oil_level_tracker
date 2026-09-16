@@ -17,6 +17,14 @@ The deployed user-level Codex `AGENTS.md` owns generic execution behavior. This 
 
 Do not duplicate their reading sequences here. Repository history is evidence, not current authority.
 
+## Implementation discovery routes
+
+These are starting points, not exhaustive search boundaries. Follow current imports, callers, and registrations for the affected responsibility.
+
+- Application entry points: `[project.scripts]` in `pyproject.toml`, `src/oil_tracker/__main__.py`, `src/oil_tracker/cli.py`, and `src/oil_tracker/bootstrap.py`.
+- Existing implementation: relevant modules under `src/oil_tracker/`, operational helpers under `scripts/`, and their callers and tests.
+- Detector ownership and control flow: use the S11 skill and current logic map already routed above.
+
 ## Repository boundaries
 
 - Current source/owner documents outrank historical revision prose.
