@@ -118,6 +118,8 @@ class CurrentFrameEvidenceOwner:
         self,
         frame: np.ndarray,
         glass: GlassInspectionConfig,
+        *,
+        capture_diagnostics: bool = False,
     ) -> CurrentFrameEvidence:
         settings = glass.detector_settings
         bundle = build_mask_bundle(frame, glass)
@@ -188,6 +190,7 @@ class CurrentFrameEvidenceOwner:
             material_layer_topology=material_layer_topology,
             white_material_layer_topology=white_material_layer_topology,
             white_material_texture_present=white_material_texture_present,
+            capture_diagnostics=capture_diagnostics,
         )
         static_foam_map = self.static_foam_maps.get(glass.id)
         static_foam_match = foam_static_match(foam.mask, static_foam_map)
@@ -803,6 +806,7 @@ class PhaseDebugProjector:
                     static_map=evidence.static_map,
                     crop_origin=bundle.crop_origin,
                     frame_index=detection.frame_index,
+                    material_paths=evidence.candidate_assembly.diagnostic_material_paths,
                 ),
             },
         )

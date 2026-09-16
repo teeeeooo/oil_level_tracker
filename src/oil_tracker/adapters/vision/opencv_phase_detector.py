@@ -38,7 +38,7 @@ from .temporal_tracker import TemporalTracker
 
 
 class OpenCvPhaseDetector:
-    version = "opencv-phase-detector-r22-1-interface-diagnostics-v1"
+    version = "opencv-phase-detector-r22-2-interface-path-diagnostics-v1"
 
     def __init__(self) -> None:
         self._trackers: dict[str, TemporalTracker] = {}
@@ -149,7 +149,7 @@ class OpenCvPhaseDetector:
         debug: bool = False,
     ) -> tuple[PhaseDetection, PhaseDetectionDebugArtifacts | None]:
         tracker = self._tracker_for(glass)
-        evidence = self._frame_evidence_owner.observe(frame, glass)
+        evidence = self._frame_evidence_owner.observe(frame, glass, capture_diagnostics=debug)
         projection = self._frame_result_projector.project(
             evidence,
             tracker,

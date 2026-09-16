@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from typing import Sequence
 
 import numpy as np
@@ -12,6 +12,8 @@ from oil_tracker.domain.recipe import DetectorSettings
 from .foam_front_detector import FoamDetectionResult
 from .geometry_masks import MaskBundle
 from .oil_material_path import (
+    MaterialPathDiagnostic,
+    MaterialPathEvidence,
     generate_material_path_candidates,
     material_layer_context_features,
 )
@@ -37,6 +39,7 @@ class PhaseCandidateAssembly:
     distributed_sobel_count: int
     calibrated_high_recall_count: int
     phase_transition_count: int
+    diagnostic_material_paths: dict[int, MaterialPathDiagnostic] = field(default_factory=dict)
 
 
 def assemble_phase_candidates(
@@ -51,10 +54,13 @@ def assemble_phase_candidates(
     material_layer_topology: bool,
     white_material_layer_topology: bool,
     white_material_texture_present: bool,
+    capture_diagnostics: bool = False,
 ) -> PhaseCandidateAssembly:
     """Generate and enrich all Oil proposal families without selecting one."""
 
     origin_y = float(bundle.crop_origin[1])
+    generated_paths: dict[int, MaterialPathEvidence] | None = {} if capture_diagnostics else None
+    retained_paths: dict[int, MaterialPathEvidence] = {}
     material_path_candidates: list[BoundaryCandidate] = []
     for candidate in generate_material_path_candidates(
         pre,
@@ -65,6 +71,7 @@ def assemble_phase_candidates(
         # Generic material texture corroborates a lower phase boundary. It is
         # not accepted/public Foam authority.
         material_evidence_map=foam.combined_evidence_map,
+        diagnostic_paths=generated_paths,
     ):
         material_context = material_layer_context_features(
             foam.combined_evidence_map,
@@ -99,6 +106,8 @@ def assemble_phase_candidates(
                 },
             )
         )
+        if generated_paths is not None:
+            retained_paths[id(material_path_candidates[-1])] = generated_paths.pop(id(candidate))
 
     # This bounded raster path is independent of raw Foam-like texture. It is
     # additive and begins without direct anchor authority.
@@ -110,6 +119,7 @@ def assemble_phase_candidates(
         crop_origin_y=origin_y,
         top_k=bounded_candidate_top_k(settings.candidate_top_k, cap=4),
         material_evidence_map=None,
+        diagnostic_paths=generated_paths,
     ):
         if any(
             abs(float(candidate.y) - float(existing.y)) <= 6.0
@@ -145,6 +155,8 @@ def assemble_phase_candidates(
                 },
             )
         )
+        if generated_paths is not None:
+            retained_paths[id(raster_material_path_candidates[-1])] = generated_paths.pop(id(candidate))
 
     distributed_sobel_candidates = tuple(
         _enrich_generated_candidate(
@@ -231,6 +243,11 @@ def assemble_phase_candidates(
             + len(phase_transition_candidates)
         ),
         phase_transition_count=len(phase_transition_candidates),
+        diagnostic_material_paths={
+            index: MaterialPathDiagnostic(candidate.source, float(candidate.y), retained_paths[id(candidate)])
+            for index, candidate in enumerate(all_candidates)
+            if id(candidate) in retained_paths
+        },
     )
 
 

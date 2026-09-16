@@ -1,6 +1,6 @@
 # S11 Current Detector Logic Map
 
-**Scope:** R22 behavior with the R22-1 diagnostic runtime (`opencv-phase-detector-r22-1-interface-diagnostics-v1`, unchanged completed-window resolver `r22-oil-ownership-evidence-replacement-v1`). This is a current control-flow map, not a design history. R21 remains the protected predecessor; field effectiveness remains unqualified. Claims below were checked against the implementation modules linked in each owner row.
+**Scope:** R22 behavior with the R22-2 diagnostic runtime (`opencv-phase-detector-r22-2-interface-path-diagnostics-v1`, unchanged completed-window resolver `r22-oil-ownership-evidence-replacement-v1`). This is a current control-flow map, not a design history. R21 remains the protected predecessor; field effectiveness remains unqualified. Claims below were checked against the implementation modules linked in each owner row.
 
 **Authority:** current sequencing is in the [work plan](../00-project/work-plan.md); durable detector responsibility is in the [S11 responsibility architecture](s11-detector-responsibility-architecture.md). R18/R19/R20 remain predecessor/history and Windows design input. The replacement is owned by the [R22 architecture](s11-r22-oil-ownership-evidence-replacement-architecture.md) and [R22 validation](../30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md). R21 architecture/validation preserve the protected predecessor contract. Those documents describe intent and acceptance boundaries; this file names the implementation that actually executes them.
 
@@ -112,13 +112,19 @@ The IDs in this table are the cross-reference surface for future designs and fai
 
 ## 3. Current frame: evidence acquisition and provisional projection
 
-R22-1 adds a debug-only route after detection projection:
+R22-2 extends the debug-only route after detection projection:
 `PhaseDebugProjector` → `measure_oil_interfaces` →
 `artifacts.state.oil_interface_diagnostics` → captured JSONL state. It records
-five-sector near/far raster measurements without modifying candidate features,
-scores or resolver inputs. Top-level trace candidates expose their original
-`candidate_input_index` before score sorting. See the
-[R22-1 measurement contract](s11-r22-1-interface-diagnostics-architecture.md).
+the existing five-sector near/far raster measurements plus native material-path
+measurements without modifying candidate features, scores or resolver inputs.
+With debug requested, `CurrentFrameEvidenceOwner.observe` asks the existing
+material/raster-material generator to capture its selected per-sector geometry
+and contrast provenance. Candidate assembly retains this only in a frame-local
+sidecar. The debug projector measures native path Y and original candidate Y on
+identical native X extents; it never relocates either using diagnostic peaks.
+Top-level trace candidates expose their original `candidate_input_index` before
+score sorting. See the [R22-2 contract](s11-r22-2-interface-path-diagnostics-architecture.md)
+and preserved [R22-1 fields](s11-r22-1-interface-diagnostics-architecture.md).
 All decision owners and lifecycle transitions below retain R22 behavior.
 
 `FRAME-EVIDENCE` is deliberately broader than the completed-window owner. [`CurrentFrameEvidenceOwner.observe`](../../src/oil_tracker/adapters/vision/phase_frame_detection.py) executes, in order:
@@ -304,19 +310,23 @@ bounded expiry and one-attempt semantics.
 ## History Review
 
 - Logic-map nodes: `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`,
-  `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`.
+  `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`,
+  `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F08`, `S11-F09`,
   `S11-F10`.
 - Prior mechanisms reviewed: R16/R18 ownership and lifecycle closure, R19
   absolute recovery expiry, R20 delayed reacquisition, and R21 recent
-  trajectory evidence.
+  trajectory evidence; R22-1 raster diagnostics and the existing native material
+  and spatial-fallback paths were reviewed for the R22-2 diagnostic extension.
 - Prior mechanisms rejected: unbounded renewal, cross-ID identity reuse,
-  diagnostic-text authority, coordinate carry, and threshold/case tuning.
+  diagnostic-text authority, coordinate carry, threshold/case tuning, duplicate
+  path finding and diagnostic-peak recentering.
 - Preserved contracts: bounded identity, fail-closed ambiguity, coordinate-free
   barriers, exact same-frame provenance, and independent Foam ownership.
 - Difference from prior failures: typed competing-identity contradiction is
   propagated before member selection, and only one independently reaffirmed
-  same-owner initial-FULL lease may extend within a fixed total horizon.
+  same-owner initial-FULL lease may extend within a fixed total horizon. R22-2
+  additionally retains native path geometry solely for non-authoritative trace.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
-  transition/evidence boundaries.
+  transition/evidence boundaries plus the R22-2 debug-only capture/measurement route.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.

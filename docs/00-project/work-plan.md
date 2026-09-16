@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** R22-1 diagnostic implementation is locally verified; collect its raster evidence on Windows before behavioral repair
+**Current gate:** R22-2 native path diagnostics locally verified; collect one Windows native-path candidate before behavioral repair
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -29,12 +29,16 @@ R21 is the protected comparison predecessor. R18–R21 remain historical evidenc
 not alternate current owners. Existing truth misses remain and field repair is
 not established by these checks.
 
-R22-1 is the current diagnostic runtime over the accepted R22 behavior:
-`opencv-phase-detector-r22-1-interface-diagnostics-v1`. The completed resolver
-identity remains R22 intentionally. Its [architecture](../20-architecture/s11-r22-1-interface-diagnostics-architecture.md)
-and [local evidence](../60-evidence/s11/s11-r22-1-interface-diagnostics.md)
-record debug-only raster measurements and unchanged tracking/event rows in all
-four public comparisons. This is not a new behavior or field acceptance.
+R22-2 is the current diagnostic runtime over the accepted R22 behavior:
+`opencv-phase-detector-r22-2-interface-path-diagnostics-v1`. The completed resolver
+identity remains R22 intentionally. Its [architecture](../20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md)
+retains R22-1 candidate-centered measurements and adds the existing generators'
+native path geometry, provenance and same-X band comparisons. This is not a new
+behavior or field acceptance. R22-1 remains the diagnostic comparison predecessor;
+its [local evidence](../60-evidence/s11/s11-r22-1-interface-diagnostics.md) is retained.
+The [R22-2 local evidence](../60-evidence/s11/s11-r22-2-interface-path-diagnostics.md)
+records 1,781 passing tests, unchanged tracking/event rows and preserved old
+diagnostics in all four public comparisons.
 
 ## Current authorization boundary
 
@@ -49,6 +53,9 @@ that its transferred Windows failures are fixed.
 
 The user subsequently authorized R22-1 measurement extraction and trace output
 with unchanged R22 decisions, followed by sequential Windows evidence collection.
+On 2026-09-16 the user authorized consolidation and diagnostic improvements as
+R22-2, implementation, verification, commit and push. This extends diagnostic
+collection with native path evidence.
 Future R23 behavioral changes remain outside this diagnostic implementation.
 
 Outside this replacement's authority:
@@ -89,19 +96,22 @@ The [physical-interface evidence proposal](../20-architecture/s11-physical-inter
 and its [acceptance gates](../30-validation/s11-physical-interface-evidence-repair-validation.md)
 define local interface witnesses, verified physical association, committed fill
 handoff and a separately gated direction-neutral observation phase. These
-behavioral changes remain proposals. R22-1 implements trace-only raster
-measurements, not the proposed classifier or ownership changes. Real-video
-discrimination, operating points and stationary-interface versus reflection
+behavioral changes remain proposals. R22-1 Windows measurements exposed sampling
+center sensitivity, including opposite near-band signs on nearby Accum candidates
+sharing diagnostic peaks. R22-2 captures native path geometry to examine that
+uncertainty. Both are trace-only measurements, not the proposed classifier or
+ownership changes. Real-video discrimination, operating points and stationary-interface versus reflection
 acceptance remain unvalidated.
 
 Retained but non-current work is owned by [`retained-commitments.md`](retained-commitments.md).
 
 ## Next transition
 
-Next transfer the identified R22-1 source and follow the
-[one-frame Windows measurement procedure](../40-operations/s11-r22-1-windows-interface-measurement.md).
-Compare reviewed true and false boundaries before using measurements as
-authority. Association, fill handoff and initial-FULL direction-neutral
+Transfer the committed R22-2 source and follow the
+[single-candidate Windows procedure](../40-operations/s11-r22-2-windows-interface-measurement.md):
+Accum frame 16280 material_path Y=217 first, then separate BASE true/false
+comparisons. Human-reviewed identity remains authoritative; native path and peak
+measurements do not certify it. Association, fill handoff and initial-FULL direction-neutral
 observation remain later behavioral work with separate acceptance gates.
 Preserve FIELD FAIL until target-Windows accuracy/throughput qualification is
 actually satisfied; diagnostic equality and local controls do not establish

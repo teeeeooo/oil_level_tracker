@@ -4,6 +4,12 @@
 runtime architecture. Revision naming and runtime promotion are not assigned
 by this document. The [work plan](../00-project/work-plan.md) owns execution state.
 
+[R22-2 native path diagnostics](s11-r22-2-interface-path-diagnostics-architecture.md)
+extends R22-1 measurement extraction only. It does not implement the proposed
+`OilInterfaceWitness` classifier, independent-support promotion, physical
+association, handoff or direction-neutral observation described below. A
+captured path is generator evidence, not a certified physical interface.
+
 ## Problem and chosen direction
 
 The [reviewed R22 investigation](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md)

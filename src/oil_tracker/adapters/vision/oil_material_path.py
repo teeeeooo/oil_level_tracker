@@ -14,6 +14,18 @@ from .oil_phase_topology import dark_border_cap_conflict
 
 
 @dataclass(frozen=True)
+class MaterialPathSample:
+    sector_index: int
+    start_x: int
+    stop_x: int
+    local_y: int
+    strength: float
+    signed_contrast: float
+    contrast_channel: str
+    contrast_scale_px: int
+
+
+@dataclass(frozen=True)
 class MaterialPathEvidence:
     local_y: float
     rows: tuple[int, ...]
@@ -25,6 +37,16 @@ class MaterialPathEvidence:
     maximum_jump_px: int
     static_overlap: float
     optics_overlap: float
+    diagnostic_samples: tuple[MaterialPathSample, ...] = ()
+
+
+@dataclass(frozen=True)
+class MaterialPathDiagnostic:
+    """Frame-local sidecar; never stored in resolver-facing candidates."""
+
+    candidate_source: str
+    candidate_y: float
+    evidence: MaterialPathEvidence
 
 
 def material_layer_context_features(
@@ -73,6 +95,7 @@ def generate_material_path_candidates(
     crop_origin_y: float,
     top_k: int = 4,
     material_evidence_map: np.ndarray | None = None,
+    diagnostic_paths: dict[int, MaterialPathEvidence] | None = None,
 ) -> tuple[BoundaryCandidate, ...]:
     """Generate low-contrast cross-column phase paths independently of Foam.
 
@@ -116,6 +139,8 @@ def generate_material_path_candidates(
             start,
             stop,
             material_evidence_map=material_evidence_map,
+            sector_index=sector,
+            capture_diagnostics=diagnostic_paths is not None,
         )
         if profile is not None:
             sector_profiles.append(profile)
@@ -138,6 +163,7 @@ def generate_material_path_candidates(
             static_artifact_map,
             material_row_profile=material_row_profile,
             maximum_jump=maximum_jump,
+            capture_diagnostics=diagnostic_paths is not None,
         )
         if evidence is None:
             continue
@@ -164,6 +190,8 @@ def generate_material_path_candidates(
         )
         for item in paths
     )
+    if diagnostic_paths is not None:
+        diagnostic_paths.update((id(candidate), path) for candidate, path in zip(candidates, paths))
     return tuple(
         sorted(
             candidates,
@@ -179,6 +207,9 @@ class _SectorProfile:
     score: np.ndarray
     signed: np.ndarray
     support: np.ndarray
+    sector_index: int = 0
+    contrast_channel: np.ndarray | None = None
+    contrast_scale: np.ndarray | None = None
 
 
 def _sector_profile(
@@ -188,6 +219,8 @@ def _sector_profile(
     stop_x: int,
     *,
     material_evidence_map: np.ndarray | None,
+    sector_index: int = 0,
+    capture_diagnostics: bool = False,
 ) -> _SectorProfile | None:
     sector_gray = gray[:, start_x:stop_x].astype(np.float32, copy=False)
     sector_mask = visible[:, start_x:stop_x]
@@ -209,6 +242,8 @@ def _sector_profile(
     height = row_mean.size
     combined = np.zeros(height, dtype=np.float32)
     signed_best = np.zeros(height, dtype=np.float32)
+    channel = np.zeros(height, dtype=np.uint8) if capture_diagnostics else None
+    chosen_scale = np.zeros(height, dtype=np.uint8) if capture_diagnostics else None
     for scale in (3, 6, 10):
         upper = _window_mean(row_mean, support, scale, before=True)
         lower = _window_mean(row_mean, support, scale, before=False)
@@ -219,6 +254,9 @@ def _sector_profile(
         replace_rows = score > combined
         combined[replace_rows] = score[replace_rows]
         signed_best[replace_rows] = signed[replace_rows]
+        if channel is not None:
+            channel[replace_rows] = 1
+            chosen_scale[replace_rows] = scale
 
     if material_evidence_map is not None:
         material = np.clip(
@@ -242,6 +280,9 @@ def _sector_profile(
             replace_rows = score > combined
             combined[replace_rows] = score[replace_rows]
             signed_best[replace_rows] = signed[replace_rows]
+            if channel is not None:
+                channel[replace_rows] = 2
+                chosen_scale[replace_rows] = scale
 
     sobel = np.abs(
         np.divide(
@@ -262,7 +303,8 @@ def _sector_profile(
     margin = max(4, int(round(height * 0.05)))
     combined[:margin] = 0.0
     combined[-margin:] = 0.0
-    return _SectorProfile(start_x, stop_x, combined, signed_best, support)
+    return _SectorProfile(start_x, stop_x, combined, signed_best, support,
+                          sector_index, channel, chosen_scale)
 
 
 def _window_mean(
@@ -340,6 +382,7 @@ def _path_for_seed(
     *,
     material_row_profile: np.ndarray | None,
     maximum_jump: int,
+    capture_diagnostics: bool = False,
 ) -> MaterialPathEvidence | None:
     alternatives = tuple(
         _polarity_path_for_seed(
@@ -347,6 +390,7 @@ def _path_for_seed(
             profiles,
             polarity=polarity,
             maximum_jump=maximum_jump,
+            capture_diagnostics=capture_diagnostics,
         )
         for polarity in (-1, 1)
     )
@@ -367,7 +411,7 @@ def _path_for_seed(
     )
     if path is None:
         return None
-    ordered, strengths, signed = path
+    ordered, strengths, signed, profile_indices = path
     jumps = tuple(
         abs(current - prior)
         for prior, current in zip(ordered, ordered[1:])
@@ -408,6 +452,21 @@ def _path_for_seed(
         maximum_jump_px=max_jump,
         static_overlap=static,
         optics_overlap=optics,
+        diagnostic_samples=tuple(
+            MaterialPathSample(
+                sector_index=profiles[index].sector_index,
+                start_x=profiles[index].start_x,
+                stop_x=profiles[index].stop_x,
+                local_y=y,
+                strength=strength,
+                signed_contrast=contrast,
+                contrast_channel={0: "unavailable", 1: "blurred_gray_dynamic_range", 2: "raw_combined_material"}[
+                    int(profiles[index].contrast_channel[y])
+                ],
+                contrast_scale_px=int(profiles[index].contrast_scale[y]),
+            )
+            for index, y, strength, contrast in zip(profile_indices, ordered, strengths, signed)
+        ),
     )
 
 
@@ -450,24 +509,25 @@ def _terminal_material_partition(
     return _unit(float(np.median(np.asarray(values, dtype=np.float32))) / 0.16)
 
 
+_PathState = tuple[float, tuple[int, ...], tuple[float, ...], tuple[float, ...], tuple[int, ...]]
+
+
 def _polarity_path_for_seed(
     seed: int,
     profiles: list[_SectorProfile],
     *,
     polarity: int,
     maximum_jump: int,
-) -> tuple[tuple[int, ...], tuple[float, ...], tuple[float, ...]] | None:
+    capture_diagnostics: bool = False,
+) -> tuple[tuple[int, ...], tuple[float, ...], tuple[float, ...], tuple[int, ...]] | None:
     """Find a contiguous cross-sector path without mixing phase polarity."""
 
-    prior: dict[int, tuple[float, tuple[int, ...], tuple[float, ...], tuple[float, ...]]] = {}
-    best: tuple[float, tuple[int, ...], tuple[float, ...], tuple[float, ...]] | None = None
-    for profile in profiles:
+    prior: dict[int, _PathState] = {}
+    best: _PathState | None = None
+    for profile_index, profile in enumerate(profiles):
         start = max(0, seed - maximum_jump)
         stop = min(profile.score.size, seed + maximum_jump + 1)
-        current: dict[
-            int,
-            tuple[float, tuple[int, ...], tuple[float, ...], tuple[float, ...]],
-        ] = {}
+        current: dict[int, _PathState] = {}
         for row in range(start, stop):
             strength = float(profile.score[row])
             signed = float(profile.signed[row])
@@ -493,13 +553,15 @@ def _polarity_path_for_seed(
                 default=None,
             )
             if previous is None:
-                value = (local_value, (row,), (strength,), (signed,))
+                value = (local_value, (row,), (strength,), (signed,),
+                         (profile_index,) if capture_diagnostics else ())
             else:
                 value = (
                     previous[0] + local_value,
                     (*previous[1], row),
                     (*previous[2], strength),
                     (*previous[3], signed),
+                    (*previous[4], profile_index) if capture_diagnostics else (),
                 )
             current[row] = value
             if len(value[1]) >= 3 and (
@@ -510,7 +572,7 @@ def _polarity_path_for_seed(
         prior = current
     if best is None:
         return None
-    return best[1], best[2], best[3]
+    return best[1], best[2], best[3], best[4]
 
 
 def _candidate_from_path(

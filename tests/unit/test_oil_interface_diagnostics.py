@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict
+from dataclasses import asdict, replace
 import json
 from pathlib import Path
 
@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 
 from oil_tracker.adapters.vision.oil_interface_diagnostics import measure_oil_interfaces
+from oil_tracker.adapters.vision.oil_material_path import MaterialPathDiagnostic, MaterialPathEvidence, MaterialPathSample
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriter
 from oil_tracker.domain.debug_trace import DebugCaptureDecision, DebugCaptureReason
@@ -17,7 +18,7 @@ from oil_tracker.domain.session import DebugTraceLevel
 from tests.test_oil_detector_integration import glass, oil_frame, uniform_frame
 
 
-def _measure(gray, candidates=None, *, origin=(0, 0), mask=None, glare=None, material=None):
+def _measure(gray, candidates=None, *, origin=(0, 0), mask=None, glare=None, material=None, paths=None):
     return measure_oil_interfaces(
         candidates or [BoundaryCandidate("test", BoundaryKind.OIL_AIR, 100 + origin[1])],
         gray=gray,
@@ -27,6 +28,7 @@ def _measure(gray, candidates=None, *, origin=(0, 0), mask=None, glare=None, mat
         static_map=None,
         crop_origin=origin,
         frame_index=27,
+        material_paths=paths,
     )
 
 
@@ -117,6 +119,10 @@ def test_debug_measurements_cannot_change_candidates_or_completed_sequence():
             if j:
                 assert "oil_interface_diagnostics" in artifacts.state
                 assert "oil_interface_diagnostics" not in detection.debug_metrics
+                paths = [r["path_aligned"] for r in artifacts.state["oil_interface_diagnostics"]["candidates"]]
+                assert any(p["status"] == "measured" for p in paths) or not any(
+                    c.source in {"material_path", "raster_material_path"} for c in detection.candidates
+                )
     for run_a, run_b in (runs, [d.resolve_sequence(r, config).detections for d, r in zip(detectors, runs)]):
         for a, b in zip(run_a, run_b):
             a, b = asdict(a), asdict(b)
@@ -142,4 +148,74 @@ def test_trace_keeps_raw_index_join_after_score_sort_and_sequence_annotation(tmp
     for row in diagnostic["candidates"]:
         original = by_index[row["candidate_input_index"]]
         assert (row["source"], row["canonical_y"]) == (original["source"], original["canonical_y"])
+        if original["source"] in {"material_path", "raster_material_path"}:
+            assert row["path_aligned"]["reason"] == "native_generator_path"
+            assert row["path_aligned"]["classification"] == "not_evaluated"
     assert record["sequence"]["state"]["sequence_resolver_version"] == "r22-oil-ownership-evidence-replacement-v1"
+
+
+def _native_path(source_y=173):
+    samples = tuple(
+        MaterialPathSample(i, x, x + 31, y, 0.4, -0.3, "blurred_gray_dynamic_range", 6)
+        for i, x, y in [(1, 41, 92), (2, 72, 100), (3, 103, 108)]
+    )
+    evidence = MaterialPathEvidence(100, (92, 100, 108), 3, 0.6, 0.4, -0.3, 0, 8, 0, 0, samples)
+    return MaterialPathDiagnostic("material_path", source_y, evidence)
+
+
+def test_native_path_reuses_exact_sector_geometry_and_keeps_candidate_measurements():
+    gray = np.full((200, 200), 180, dtype=np.uint8)
+    path = _native_path()
+    for sample in path.evidence.diagnostic_samples:
+        gray[sample.local_y:, sample.start_x:sample.stop_x] = 80
+    candidate = BoundaryCandidate("material_path", BoundaryKind.OIL_AIR, 173, rejected=True)
+    without = _measure(gray, [candidate], origin=(11, 73))
+    result = _measure(gray, [candidate], origin=(11, 73), paths={0: path})
+    row = result["candidates"][0]
+    assert row["sectors"] == without["candidates"][0]["sectors"]
+    aligned = row["path_aligned"]
+    assert aligned["status"] == "measured"
+    assert aligned["independent_support"] == "not_evaluated"
+    assert [s["sector"] for s in aligned["sectors"]] == [1, 2, 3]
+    assert [s["path_source_y"] for s in aligned["sectors"]] == [165, 173, 181]
+    for sample, measured in zip(path.evidence.diagnostic_samples, aligned["sectors"]):
+        assert measured["source_x_range"] == [sample.start_x + 11, sample.stop_x + 11]
+        assert measured["near_signed_contrast"] == pytest.approx(-100 / 255)
+        assert measured["bands"]["near_above"]["local_y_range"] == [sample.local_y - 4, sample.local_y - 1]
+        assert "peak_offset_from_candidate_px" not in measured
+        same_grid = measured["candidate_center_on_same_sector"]
+        assert same_grid["source_x_range"] == measured["source_x_range"]
+        assert same_grid["bands"]["near_above"]["local_y_range"] == [96, 99]
+    assert aligned["sectors"][0]["candidate_center_on_same_sector"]["near_signed_contrast"] == 0
+    assert candidate.y == 173 and candidate.rejected is True
+    json.dumps(result, allow_nan=False)
+
+
+def test_native_path_never_borrows_a_peer_path_and_checks_provenance():
+    gray = np.full((200, 200), 120, dtype=np.uint8)
+    candidates = [BoundaryCandidate("material_path", BoundaryKind.OIL_AIR, 173) for _ in range(2)]
+    result = _measure(gray, candidates, origin=(11, 73), paths={0: _native_path()})
+    assert result["candidates"][1]["path_aligned"]["reason"] == "no_captured_native_path"
+    candidates[0].source = "calibrated_high_recall"
+    result = _measure(gray, candidates, origin=(11, 73), paths={0: _native_path()})
+    assert result["candidates"][0]["path_aligned"]["reason"] == "candidate_provenance_mismatch"
+
+
+def test_native_path_unavailable_bands_stay_null_and_peak_does_not_recenter():
+    gray = np.full((200, 200), 180, dtype=np.uint8)
+    gray[102:] = 80
+    path = _native_path()
+    sample = replace(path.evidence.diagnostic_samples[1], local_y=100)
+    path = replace(path, evidence=replace(path.evidence, diagnostic_samples=(sample,)))
+    candidate = BoundaryCandidate("material_path", BoundaryKind.OIL_AIR, 173)
+    result = _measure(gray, [candidate], origin=(0, 73), paths={0: path})
+    measured = result["candidates"][0]["path_aligned"]["sectors"][0]
+    assert measured["peak_source_y"] == 174
+    assert measured["path_source_y"] == 173
+    assert measured["bands"]["near_above"]["local_y_range"] == [96, 99]
+    mask = np.ones_like(gray)
+    mask[96:99] = 0
+    result = _measure(gray, [candidate], origin=(0, 73), paths={0: path}, mask=mask)
+    aligned = result["candidates"][0]["path_aligned"]
+    assert aligned["status"] == "insufficient_visible_pixels"
+    assert aligned["sectors"][0]["near_signed_contrast"] is None
