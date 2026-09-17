@@ -1,0 +1,669 @@
+{
+  "schema_version": "s11-o2-evaluator-control-evidence-v1",
+  "base_commit": "4840d79f93502055b7c7ca18373003a8cf9b2391",
+  "scope": "Synthetic evaluator arithmetic/provenance controls; NOT classifier accuracy",
+  "tool_sha256": "b13d09c12cb2d333b132da956b0569981deda95ff929dcb8b0b6280aa445977d",
+  "test_sha256": "dd56a36641aafa375f3bfc3158c0fb4964dfc8c970a9dbd7c34a4a8f5fe1e2d6",
+  "reports": {
+    "readiness": {
+      "schema_version": "s11-o2-shadow-report-v1",
+      "frozen_labels_sha256": "5aa8f2b3fbede3860e72b221cee865aabb0eee793b28444c01db13b4e631e1ae",
+      "prediction_sha256": null,
+      "status": "NOT_EVALUATED",
+      "field_disposition": "FIELD FAIL",
+      "auto_acceptance": false,
+      "partitions": {
+        "development": {
+          "frame_count": 0,
+          "candidate_count": 0,
+          "frames_by_label_basis": {},
+          "unreviewed_candidate_count": 0,
+          "abstention_count": 0,
+          "abstention_rate": null,
+          "missing_prediction_count": 0,
+          "confusion": {
+            "interface": {},
+            "localization_mismatch": {},
+            "reflection": {},
+            "residue": {},
+            "structure": {},
+            "unresolved": {},
+            "unobservable": {},
+            "unreviewed": {}
+          },
+          "by_human_visibility": {},
+          "by_measurement_status": {},
+          "supported_count": 0,
+          "wrong_structure_support_count": 0,
+          "unverified_support_count": 0,
+          "verified_identity_precision": null,
+          "conservative_supported_precision": null,
+          "identity_recall": null,
+          "negative_families": {
+            "reflection": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "residue": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "structure": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            }
+          },
+          "visible_frame_count": 0,
+          "visible_frames_with_interface_proposal": 0,
+          "visible_frames_with_localized_support": 0,
+          "visible_frame_support_recall": null,
+          "localization": {
+            "matched_sector_count": 0,
+            "unmatched_positive_candidates": 0,
+            "sector_results": [],
+            "mean_distance_to_review_interval_px": null,
+            "p95_distance_px": null,
+            "reported_interval_count": 0,
+            "full_review_interval_coverage": null,
+            "mean_reported_interval_width_px": null
+          },
+          "paired_entity_groups": 0,
+          "fully_evaluated_pair_groups": 0,
+          "paired_decision_consistency": null,
+          "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"
+        },
+        "calibration": {
+          "frame_count": 0,
+          "candidate_count": 0,
+          "frames_by_label_basis": {},
+          "unreviewed_candidate_count": 0,
+          "abstention_count": 0,
+          "abstention_rate": null,
+          "missing_prediction_count": 0,
+          "confusion": {
+            "interface": {},
+            "localization_mismatch": {},
+            "reflection": {},
+            "residue": {},
+            "structure": {},
+            "unresolved": {},
+            "unobservable": {},
+            "unreviewed": {}
+          },
+          "by_human_visibility": {},
+          "by_measurement_status": {},
+          "supported_count": 0,
+          "wrong_structure_support_count": 0,
+          "unverified_support_count": 0,
+          "verified_identity_precision": null,
+          "conservative_supported_precision": null,
+          "identity_recall": null,
+          "negative_families": {
+            "reflection": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "residue": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "structure": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            }
+          },
+          "visible_frame_count": 0,
+          "visible_frames_with_interface_proposal": 0,
+          "visible_frames_with_localized_support": 0,
+          "visible_frame_support_recall": null,
+          "localization": {
+            "matched_sector_count": 0,
+            "unmatched_positive_candidates": 0,
+            "sector_results": [],
+            "mean_distance_to_review_interval_px": null,
+            "p95_distance_px": null,
+            "reported_interval_count": 0,
+            "full_review_interval_coverage": null,
+            "mean_reported_interval_width_px": null
+          },
+          "paired_entity_groups": 0,
+          "fully_evaluated_pair_groups": 0,
+          "paired_decision_consistency": null,
+          "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"
+        },
+        "holdout": {
+          "frame_count": 0,
+          "candidate_count": 0,
+          "frames_by_label_basis": {},
+          "unreviewed_candidate_count": 0,
+          "abstention_count": 0,
+          "abstention_rate": null,
+          "missing_prediction_count": 0,
+          "confusion": {
+            "interface": {},
+            "localization_mismatch": {},
+            "reflection": {},
+            "residue": {},
+            "structure": {},
+            "unresolved": {},
+            "unobservable": {},
+            "unreviewed": {}
+          },
+          "by_human_visibility": {},
+          "by_measurement_status": {},
+          "supported_count": 0,
+          "wrong_structure_support_count": 0,
+          "unverified_support_count": 0,
+          "verified_identity_precision": null,
+          "conservative_supported_precision": null,
+          "identity_recall": null,
+          "negative_families": {
+            "reflection": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "residue": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "structure": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            }
+          },
+          "visible_frame_count": 0,
+          "visible_frames_with_interface_proposal": 0,
+          "visible_frames_with_localized_support": 0,
+          "visible_frame_support_recall": null,
+          "localization": {
+            "matched_sector_count": 0,
+            "unmatched_positive_candidates": 0,
+            "sector_results": [],
+            "mean_distance_to_review_interval_px": null,
+            "p95_distance_px": null,
+            "reported_interval_count": 0,
+            "full_review_interval_coverage": null,
+            "mean_reported_interval_width_px": null
+          },
+          "paired_entity_groups": 0,
+          "fully_evaluated_pair_groups": 0,
+          "paired_decision_consistency": null,
+          "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"
+        },
+        "regression": {
+          "frame_count": 2,
+          "candidate_count": 3,
+          "frames_by_label_basis": {
+            "synthetic_construction": 2
+          },
+          "unreviewed_candidate_count": 0,
+          "abstention_count": 0,
+          "abstention_rate": 0.0,
+          "missing_prediction_count": 3,
+          "confusion": {
+            "interface": {
+              "NOT_EVALUATED": 1
+            },
+            "localization_mismatch": {
+              "NOT_EVALUATED": 1
+            },
+            "reflection": {
+              "NOT_EVALUATED": 1
+            },
+            "residue": {},
+            "structure": {},
+            "unresolved": {},
+            "unobservable": {},
+            "unreviewed": {}
+          },
+          "by_human_visibility": {
+            "visible": {
+              "NOT_EVALUATED": 3
+            }
+          },
+          "by_measurement_status": {
+            "measured": {
+              "NOT_EVALUATED": 3
+            }
+          },
+          "supported_count": 0,
+          "wrong_structure_support_count": 0,
+          "unverified_support_count": 0,
+          "verified_identity_precision": null,
+          "conservative_supported_precision": null,
+          "identity_recall": 0.0,
+          "negative_families": {
+            "reflection": {
+              "total": 1,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": 0.0
+            },
+            "residue": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "structure": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            }
+          },
+          "visible_frame_count": 2,
+          "visible_frames_with_interface_proposal": 1,
+          "visible_frames_with_localized_support": 0,
+          "visible_frame_support_recall": 0.0,
+          "localization": {
+            "matched_sector_count": 2,
+            "unmatched_positive_candidates": 0,
+            "sector_results": [
+              {
+                "case_id": "a",
+                "candidate_input_index": 0,
+                "source_x_range": [
+                  80,
+                  120
+                ],
+                "candidate_path_source_y": 100.0,
+                "reviewed_source_y_interval": [
+                  99,
+                  101
+                ],
+                "distance_px": 0,
+                "reported_source_y_interval": null,
+                "interval_covers_review": null
+              },
+              {
+                "case_id": "a",
+                "candidate_input_index": 1,
+                "source_x_range": [
+                  80,
+                  120
+                ],
+                "candidate_path_source_y": 108.0,
+                "reviewed_source_y_interval": [
+                  99,
+                  101
+                ],
+                "distance_px": 7.0,
+                "reported_source_y_interval": null,
+                "interval_covers_review": null
+              }
+            ],
+            "mean_distance_to_review_interval_px": 3.5,
+            "p95_distance_px": 6.6499999999999995,
+            "reported_interval_count": 0,
+            "full_review_interval_coverage": null,
+            "mean_reported_interval_width_px": null
+          },
+          "paired_entity_groups": 0,
+          "fully_evaluated_pair_groups": 0,
+          "paired_decision_consistency": null,
+          "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"
+        }
+      },
+      "limitations": [
+        "Human labels and recording-group independence are attestations, not machine-certified physical truth.",
+        "No classifier, operating point or production authority is supplied by this evaluator.",
+        "Unreviewed/unresolved support is reported separately; visible frames with no candidates remain misses.",
+        "Localization compares exact X extents only; no scalar-to-curve or interpolated truth substitution.",
+        "A content hash detects drift but cannot prove an untouched holdout or annotation chronology."
+      ]
+    },
+    "scripted_predictions": {
+      "schema_version": "s11-o2-shadow-report-v1",
+      "frozen_labels_sha256": "5aa8f2b3fbede3860e72b221cee865aabb0eee793b28444c01db13b4e631e1ae",
+      "prediction_sha256": "4e4754b054cc7760b9298413b325acfc4789a88066ddc6f9bf6eb0cb64da66a1",
+      "status": "EVALUATED_NOT_QUALIFIED",
+      "field_disposition": "FIELD FAIL",
+      "auto_acceptance": false,
+      "partitions": {
+        "development": {
+          "frame_count": 0,
+          "candidate_count": 0,
+          "frames_by_label_basis": {},
+          "unreviewed_candidate_count": 0,
+          "abstention_count": 0,
+          "abstention_rate": null,
+          "missing_prediction_count": 0,
+          "confusion": {
+            "interface": {},
+            "localization_mismatch": {},
+            "reflection": {},
+            "residue": {},
+            "structure": {},
+            "unresolved": {},
+            "unobservable": {},
+            "unreviewed": {}
+          },
+          "by_human_visibility": {},
+          "by_measurement_status": {},
+          "supported_count": 0,
+          "wrong_structure_support_count": 0,
+          "unverified_support_count": 0,
+          "verified_identity_precision": null,
+          "conservative_supported_precision": null,
+          "identity_recall": null,
+          "negative_families": {
+            "reflection": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "residue": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "structure": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            }
+          },
+          "visible_frame_count": 0,
+          "visible_frames_with_interface_proposal": 0,
+          "visible_frames_with_localized_support": 0,
+          "visible_frame_support_recall": null,
+          "localization": {
+            "matched_sector_count": 0,
+            "unmatched_positive_candidates": 0,
+            "sector_results": [],
+            "mean_distance_to_review_interval_px": null,
+            "p95_distance_px": null,
+            "reported_interval_count": 0,
+            "full_review_interval_coverage": null,
+            "mean_reported_interval_width_px": null
+          },
+          "paired_entity_groups": 0,
+          "fully_evaluated_pair_groups": 0,
+          "paired_decision_consistency": null,
+          "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"
+        },
+        "calibration": {
+          "frame_count": 0,
+          "candidate_count": 0,
+          "frames_by_label_basis": {},
+          "unreviewed_candidate_count": 0,
+          "abstention_count": 0,
+          "abstention_rate": null,
+          "missing_prediction_count": 0,
+          "confusion": {
+            "interface": {},
+            "localization_mismatch": {},
+            "reflection": {},
+            "residue": {},
+            "structure": {},
+            "unresolved": {},
+            "unobservable": {},
+            "unreviewed": {}
+          },
+          "by_human_visibility": {},
+          "by_measurement_status": {},
+          "supported_count": 0,
+          "wrong_structure_support_count": 0,
+          "unverified_support_count": 0,
+          "verified_identity_precision": null,
+          "conservative_supported_precision": null,
+          "identity_recall": null,
+          "negative_families": {
+            "reflection": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "residue": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "structure": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            }
+          },
+          "visible_frame_count": 0,
+          "visible_frames_with_interface_proposal": 0,
+          "visible_frames_with_localized_support": 0,
+          "visible_frame_support_recall": null,
+          "localization": {
+            "matched_sector_count": 0,
+            "unmatched_positive_candidates": 0,
+            "sector_results": [],
+            "mean_distance_to_review_interval_px": null,
+            "p95_distance_px": null,
+            "reported_interval_count": 0,
+            "full_review_interval_coverage": null,
+            "mean_reported_interval_width_px": null
+          },
+          "paired_entity_groups": 0,
+          "fully_evaluated_pair_groups": 0,
+          "paired_decision_consistency": null,
+          "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"
+        },
+        "holdout": {
+          "frame_count": 0,
+          "candidate_count": 0,
+          "frames_by_label_basis": {},
+          "unreviewed_candidate_count": 0,
+          "abstention_count": 0,
+          "abstention_rate": null,
+          "missing_prediction_count": 0,
+          "confusion": {
+            "interface": {},
+            "localization_mismatch": {},
+            "reflection": {},
+            "residue": {},
+            "structure": {},
+            "unresolved": {},
+            "unobservable": {},
+            "unreviewed": {}
+          },
+          "by_human_visibility": {},
+          "by_measurement_status": {},
+          "supported_count": 0,
+          "wrong_structure_support_count": 0,
+          "unverified_support_count": 0,
+          "verified_identity_precision": null,
+          "conservative_supported_precision": null,
+          "identity_recall": null,
+          "negative_families": {
+            "reflection": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "residue": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "structure": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            }
+          },
+          "visible_frame_count": 0,
+          "visible_frames_with_interface_proposal": 0,
+          "visible_frames_with_localized_support": 0,
+          "visible_frame_support_recall": null,
+          "localization": {
+            "matched_sector_count": 0,
+            "unmatched_positive_candidates": 0,
+            "sector_results": [],
+            "mean_distance_to_review_interval_px": null,
+            "p95_distance_px": null,
+            "reported_interval_count": 0,
+            "full_review_interval_coverage": null,
+            "mean_reported_interval_width_px": null
+          },
+          "paired_entity_groups": 0,
+          "fully_evaluated_pair_groups": 0,
+          "paired_decision_consistency": null,
+          "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"
+        },
+        "regression": {
+          "frame_count": 2,
+          "candidate_count": 3,
+          "frames_by_label_basis": {
+            "synthetic_construction": 2
+          },
+          "unreviewed_candidate_count": 0,
+          "abstention_count": 1,
+          "abstention_rate": 0.3333333333333333,
+          "missing_prediction_count": 0,
+          "confusion": {
+            "interface": {
+              "INTERFACE_SUPPORTED": 1
+            },
+            "localization_mismatch": {
+              "UNRESOLVED": 1
+            },
+            "reflection": {
+              "INTERFACE_SUPPORTED": 1
+            },
+            "residue": {},
+            "structure": {},
+            "unresolved": {},
+            "unobservable": {},
+            "unreviewed": {}
+          },
+          "by_human_visibility": {
+            "visible": {
+              "INTERFACE_SUPPORTED": 2,
+              "UNRESOLVED": 1
+            }
+          },
+          "by_measurement_status": {
+            "measured": {
+              "INTERFACE_SUPPORTED": 2,
+              "UNRESOLVED": 1
+            }
+          },
+          "supported_count": 2,
+          "wrong_structure_support_count": 1,
+          "unverified_support_count": 0,
+          "verified_identity_precision": 0.5,
+          "conservative_supported_precision": 0.5,
+          "identity_recall": 0.5,
+          "negative_families": {
+            "reflection": {
+              "total": 1,
+              "rejected": 0,
+              "wrong_support": 1,
+              "rejection_rate": 0.0
+            },
+            "residue": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            },
+            "structure": {
+              "total": 0,
+              "rejected": 0,
+              "wrong_support": 0,
+              "rejection_rate": null
+            }
+          },
+          "visible_frame_count": 2,
+          "visible_frames_with_interface_proposal": 1,
+          "visible_frames_with_localized_support": 1,
+          "visible_frame_support_recall": 0.5,
+          "localization": {
+            "matched_sector_count": 2,
+            "unmatched_positive_candidates": 0,
+            "sector_results": [
+              {
+                "case_id": "a",
+                "candidate_input_index": 0,
+                "source_x_range": [
+                  80,
+                  120
+                ],
+                "candidate_path_source_y": 100.0,
+                "reviewed_source_y_interval": [
+                  99,
+                  101
+                ],
+                "distance_px": 0,
+                "reported_source_y_interval": [
+                  99,
+                  101
+                ],
+                "interval_covers_review": true
+              },
+              {
+                "case_id": "a",
+                "candidate_input_index": 1,
+                "source_x_range": [
+                  80,
+                  120
+                ],
+                "candidate_path_source_y": 108.0,
+                "reviewed_source_y_interval": [
+                  99,
+                  101
+                ],
+                "distance_px": 7.0,
+                "reported_source_y_interval": [
+                  99,
+                  101
+                ],
+                "interval_covers_review": true
+              }
+            ],
+            "mean_distance_to_review_interval_px": 3.5,
+            "p95_distance_px": 6.6499999999999995,
+            "reported_interval_count": 2,
+            "full_review_interval_coverage": 1.0,
+            "mean_reported_interval_width_px": 2.0
+          },
+          "paired_entity_groups": 0,
+          "fully_evaluated_pair_groups": 0,
+          "paired_decision_consistency": null,
+          "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"
+        }
+      },
+      "limitations": [
+        "Human labels and recording-group independence are attestations, not machine-certified physical truth.",
+        "No classifier, operating point or production authority is supplied by this evaluator.",
+        "Unreviewed/unresolved support is reported separately; visible frames with no candidates remain misses.",
+        "Localization compares exact X extents only; no scalar-to-curve or interpolated truth substitution.",
+        "A content hash detects drift but cannot prove an untouched holdout or annotation chronology."
+      ]
+    }
+  }
+}

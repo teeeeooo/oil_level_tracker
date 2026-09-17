@@ -228,6 +228,38 @@ No universal numeric acceptance threshold is invented by this document. The
 first implementation proposal must present measured distributions and a bounded
 operating point for review before O3 behavior work.
 
+### O2 evaluation-tool acceptance
+
+The offline foundation uses `s11-o2-review-packet-v1`, `s11-o2-labels-v1`,
+`s11-o2-frozen-labels-v1` and `s11-o2-shadow-predictions-v1`. The
+[operational procedure](../40-operations/s11-o2-local-shadow-evaluation.md)
+defines fields and invocation. Required controls for this foundation are:
+
+- real bundle → indexed exact-frame lookup → complete raw/witness candidate join;
+- source/frame/Glass mismatch, duplicate IDs and absent witness rejection;
+- no candidate filtering by score, selected/rejected status or authority;
+- refusal of pending visibility, altered packet/candidate/label hashes, missing
+  frames/candidate labels and nonfinite values;
+- recording-group partition locking, same-run alias prevention and regression-only
+  handling of already reviewed cases; no random adjacent-frame partition;
+- visible empty-candidate frames, missing predictions, unknown labels and
+  abstentions retained in their proper denominators;
+- physical identity versus localization-mismatch labels and family-specific wrong
+  support counts; exact-X localization and explicit unmatched measurements;
+- imported prediction identity, frozen-label targeting and operating-point
+  declaration checks, without claiming verification of model internals;
+- no-prediction readiness emits NOT_EVALUATED, never PASS;
+- deterministic results, no-overwrite output and execution from a non-repo cwd
+  with UTF-8/non-ASCII paths.
+
+Synthetic scripted predictions test metric arithmetic and guards only. They are
+not an image classifier, V2 discrimination evidence or an untouched holdout.
+Every report remains non-qualifying. For tooling-only changes with no detector
+imports used for execution and no runtime wiring, focused controls plus the
+canonical suites establish this boundary; repeating all four detector replays
+is required only if extraction/production execution changes or evidence is
+otherwise invalidated. Existing O1 equality evidence remains authoritative.
+
 ## V4 — public-video equality and resources
 
 Run all four authoritative public videos under the current qualification windows

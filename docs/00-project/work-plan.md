@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 local extraction/equality accepted; O2 labels/partition and shadow discrimination next; no behavioral candidate promoted
+**Current gate:** O1 accepted locally; O2 label/freeze/evaluation tooling implemented; human label collection and shadow discrimination remain open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -60,7 +60,8 @@ On 2026-09-17 the user authorized the next behavioral implementation, verificati
 commit and push. The first R23 native-polarity association prototype failed
 protected public observations and was removed from production. This is an
 acceptance failure, not a requirement for another permission request. R22-2
-remains the current runtime; no R23 version has been promoted.
+remained the diagnostic baseline at that decision; no R23 behavior was promoted.
+The current diagnostic runtime is R22-3 as recorded below.
 
 Outside this replacement's authority:
 
@@ -142,8 +143,14 @@ is retained as supporting rationale after integration into current owners.
 
 [O1 local evidence](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md)
 records passing extraction, canonical suites and 12 public-window mode comparisons.
-Debug trace size increases about fourfold; use bounded captures. Freeze O2 positive,
-negative, localization-only and unresolved controls and episode partitions.
+Debug trace size increases about fourfold; use bounded captures. The
+[O2 local preparation/evaluation tool](../40-operations/s11-o2-local-shadow-evaluation.md)
+now prepares exact-frame packets, combines local labels, freezes recording-group
+partitions and evaluates imported predictions without changing the detector.
+Its [local evidence](../60-evidence/s11/s11-o2-evaluation-foundation.md) covers
+provenance/partition guards and metric arithmetic, not classifier accuracy.
+Next label a small regression packet locally, then declare separate original
+recordings for development/calibration/holdout before choosing a shadow model.
 Reviewed private checkpoints are regression cases, not untouched holdout.
 Windows work next verifies the new witness on existing reviewed frames and
 builds labels locally; no private export or immediate behavioral rerun is

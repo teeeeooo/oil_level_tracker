@@ -341,6 +341,36 @@ threshold targets. Any broader private field calibration requires a predeclared
 work-PC-only episode-level development/calibration/holdout partition with an
 untouched holdout.
 
+### O2 implemented evaluation foundation
+
+`tests/diagnostics/s11_interface_shadow_evaluation.py` is an offline diagnostic
+owner, not a production classifier. It reuses `ResultBundleReader`, the indexed
+`DebugTraceRepository`, file hashing from truth identity, and benchmark canonical
+JSON/percentile helpers. Existing `.oiltruth` remains the product's scalar/state
+truth format. O2 separately needs candidate identity/localization labels, exact
+sector extents, frozen partitions and abstention denominators; changing the
+product truth schema or creating a new GUI is unnecessary for this boundary.
+
+The four commands prepare, combine, freeze and evaluate retain every selected
+frame and Oil candidate. Packet preparation never infers labels. Frozen labels
+bind to packet and witness content hashes; prediction joins use the same candidate
+input identity. The initial split rule keeps entire original-recording groups in
+one partition, including transforms, Glasses and reruns. This is intentionally
+stricter than episode-only splitting. Previously reviewed data is regression.
+Original-recording equivalence across different runs remains a human attestation.
+
+The evaluator measures imported shadow predictions but supplies no model or
+operating point. Missing predictions become NOT_EVALUATED; visible empty-candidate
+frames remain in the frame denominator. Localization mismatch is positive physical
+identity with a separate localization error, never a structure negative. Unknown
+physical labels cannot silently become verified positives or negatives. No automatic
+O2 acceptance is emitted. Exact-X localization and declared interval width/coverage
+are reported independently from identity decisions. Internal classifier independence
+and untouched-holdout history cannot be certified by the interchange format.
+
+See the [local procedure](../40-operations/s11-o2-local-shadow-evaluation.md).
+This tooling does not complete O2 discrimination acceptance or alter R22-3 runtime.
+
 ### Stage O3 — Independent support and association
 
 Only after O2 passes may the typed result feed the parent design's independent
@@ -459,5 +489,5 @@ new witness has no production authority.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: UPDATED — records the R22-3 debug-only sidecar; R22 behavior remains authoritative.
+- Logic-map impact: NONE — the O2 offline evaluation foundation does not change the mapped R22-3 execution path or grant production authority.
 - Failure-registry impact: NONE — this architecture refines the response to existing failures without claiming field repair.

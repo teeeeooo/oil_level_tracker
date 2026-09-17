@@ -77,6 +77,7 @@ Current durable S11 owners:
 - diagnostic-only native path contract over R22 behavior — [`20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md`](20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md);
 - transparent-interface redesign decision and public baseline probe — [`50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md`](50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md);
 - O1 trace-only observation-layer contract — [`20-architecture/s11-interface-observability-witness-architecture.md`](20-architecture/s11-interface-observability-witness-architecture.md);
+- O2 local label/freeze/evaluation procedure — [`40-operations/s11-o2-local-shadow-evaluation.md`](40-operations/s11-o2-local-shadow-evaluation.md);
 - trace/shadow acceptance contract — [`30-validation/s11-interface-observability-witness-validation.md`](30-validation/s11-interface-observability-witness-validation.md);
 - broader proposed physical-interface behavior repair — [`20-architecture/s11-physical-interface-evidence-repair-design.md`](20-architecture/s11-physical-interface-evidence-repair-design.md);
 - proposed behavior acceptance contract — [`30-validation/s11-physical-interface-evidence-repair-validation.md`](30-validation/s11-physical-interface-evidence-repair-validation.md);
