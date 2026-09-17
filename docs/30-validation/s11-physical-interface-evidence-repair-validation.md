@@ -43,6 +43,17 @@ The cases below are required future checks, not completed PASS results.
 
 ## Acceptance gates and operating points
 
+The [rejected R23 experiment](../50-diagnostics/s11/s11-r23-native-polarity-rejection.md)
+adds four raster-to-tracklet positive controls in
+`test_real_curve_can_move_and_reverse_photometric_polarity_before_confirmation`.
+A true curved interface may translate while contrast polarity and exposure
+change; both movement directions and initial polarities must remain supported.
+Three common sectors with opposite signs are not enough for an identity veto.
+Keep positional uncertainty separate from a confirmed different-structure
+label, and preserve assignment ambiguity when testing negative evidence.
+The BASE f14362 sector 2 human review is a localization-mismatch label only;
+it must not be used as a certified material/structure negative.
+
 **A — Evidence:** choose and document normalized partition, similarity and
 registration operating points using labeled public/synthetic rasters with
 held-out negatives. Record which cases were used to select values and which
@@ -113,6 +124,6 @@ focused tests before the broader candidate suite.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: the transferred checkpoints support BASE false-to-real tracklet association and Accum independently supported owner admission as distinct targets; extraction discrimination and new-phase effectiveness are unproven until these controls run.
+- First harmful stage: BASE association across a reviewed location mismatch and Accum boundary-owner exclusion are distinct targets; private physical-identity continuity remains unresolved. The local polarity-only association prototype failed protected truth and photometric positive controls.
 - Logic-map impact: NONE — this is acceptance for proposed changes, not a change to the executing R22 map.
-- Failure-registry impact: NONE — controls enforce the existing failure lessons and explicitly test the proposed initial-FULL observation extension without rewriting historical results.
+- Failure-registry impact: UPDATED — F04 records the failed polarity-only association attempt; these controls prevent repetition without weakening protected truth or enabling the initial-FULL extension.

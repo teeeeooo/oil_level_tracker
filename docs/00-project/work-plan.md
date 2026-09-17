@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** R22-2 native path diagnostics locally verified; collect one Windows native-path candidate before behavioral repair
+**Current gate:** R23 polarity-only association prototype rejected locally; develop and validate a contour/context witness before another behavioral candidate
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -56,7 +56,11 @@ with unchanged R22 decisions, followed by sequential Windows evidence collection
 On 2026-09-16 the user authorized consolidation and diagnostic improvements as
 R22-2, implementation, verification, commit and push. This extends diagnostic
 collection with native path evidence.
-Future R23 behavioral changes remain outside this diagnostic implementation.
+On 2026-09-17 the user authorized the next behavioral implementation, verification,
+commit and push. The first R23 native-polarity association prototype failed
+protected public observations and was removed from production. This is an
+acceptance failure, not a requirement for another permission request. R22-2
+remains the current runtime; no R23 version has been promoted.
 
 Outside this replacement's authority:
 
@@ -88,9 +92,12 @@ R22 is not field-qualified. The controlled Base cycle proves generic local behav
 
 The user requested a combined repair design after sequential Windows checks
 and direct guide-image review. The [corrected checkpoint investigation](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md)
-records BASE false-to-real tracklet association and Accum actual-boundary owner
-exclusion with a separate cross-representation texture gate. These bounded
-findings do not establish the cause of every missed interval.
+records BASE association across a reviewed localization mismatch and Accum
+actual-boundary owner exclusion with a separate cross-representation texture
+gate. Later human review identifies BASE f14362 sector 2 as near the interface
+but offset; a different physical structure is not established. BASE f14386
+sector 1 Y382 and sector 4 Y417 are separately reviewed near-interface points.
+These bounded findings do not establish the cause of every missed interval.
 
 The [physical-interface evidence proposal](../20-architecture/s11-physical-interface-evidence-repair-design.md)
 and its [acceptance gates](../30-validation/s11-physical-interface-evidence-repair-validation.md)
@@ -107,12 +114,17 @@ Retained but non-current work is owned by [`retained-commitments.md`](retained-c
 
 ## Next transition
 
-Transfer the committed R22-2 source and follow the
-[single-candidate Windows procedure](../40-operations/s11-r22-2-windows-interface-measurement.md):
-Accum frame 16280 material_path Y=217 first, then separate BASE true/false
-comparisons. Human-reviewed identity remains authoritative; native path and peak
-measurements do not certify it. Association, fill handoff and initial-FULL direction-neutral
-observation remain later behavioral work with separate acceptance gates.
+Windows native-path collection for the current bounded question is complete.
+The [rejected R23 experiment](../50-diagnostics/s11/s11-r23-native-polarity-rejection.md)
+records why common-sector contrast inversion alone cannot veto association.
+Do not ask for another private rerun of this removed prototype. Next, develop
+the local contour/context and localization-uncertainty witness under the
+[existing acceptance gates](../30-validation/s11-physical-interface-evidence-repair-validation.md),
+including real translation with photometric inversion and competing structures,
+before changing temporal association again. Do not bypass those gates with
+polarity, source-family votes or diagnostic peaks. Accum independent support,
+committed fill handoff and initial-FULL direction-neutral observation remain
+separate behavioral work; none was enabled by this experiment.
 Preserve FIELD FAIL until target-Windows accuracy/throughput qualification is
 actually satisfied; diagnostic equality and local controls do not establish
 Windows effectiveness.

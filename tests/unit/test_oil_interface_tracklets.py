@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+import numpy as np
+import pytest
+
 from oil_tracker.adapters.vision.oil_candidate_authority import (
     OilCandidateAuthority,
 )
@@ -13,6 +16,9 @@ from oil_tracker.adapters.vision.oil_interface_tracklets import (
     DirectedTrackletPolicy,
     _TrackState,
     _WindowEvidence,
+)
+from oil_tracker.adapters.vision.oil_material_path import (
+    generate_material_path_candidates,
 )
 from oil_tracker.adapters.vision.oil_observation_resolver import (
     OilObservationResolverConfig,
@@ -31,11 +37,13 @@ from oil_tracker.adapters.vision.oil_sequence_types import (
     TrackletConfirmationProfile,
     TrackletLifecycle,
 )
+from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 from oil_tracker.domain.enums import (
     BoundaryKind,
     FillState,
 )
+from oil_tracker.domain.recipe import DetectorSettings
 
 
 def _policy() -> DirectedTrackletPolicy:
@@ -1297,3 +1305,64 @@ def test_tracklet_assignment_is_permutation_stable_and_incrementally_bounded() -
     assert forward_ids == reverse_ids
     assert forward.maximum_active_tracklets <= 3
     assert forward.comparison_count <= 100 * 3 * 3
+
+
+@pytest.mark.parametrize("initial_polarity", [-1, 1])
+@pytest.mark.parametrize("translation", [-24, 24])
+def test_real_curve_can_move_and_reverse_photometric_polarity_before_confirmation(
+    initial_polarity: int, translation: int,
+) -> None:
+    """Known single contour: contrast inversion is not a component replacement.
+
+    Exercise native raster extraction and the real tracklet owner, not a list
+    of hand-authored Y coordinates. The first inversion precedes confirmation.
+    This is a counterexample to the rejected R23 polarity-only association veto.
+    """
+    frames = []
+    path_signs = []
+    for frame_index in range(5):
+        moved = frame_index >= 2
+        y = 65 + (translation if moved else 0)
+        polarity = initial_polarity * (-1 if moved else 1)
+        gain = 0.9 if moved else 1.0
+        raster = np.empty((140, 150, 3), dtype=np.uint8)
+        for x in range(150):
+            edge = y + round(4 * np.sin(x / 149 * np.pi))
+            raster[:edge, x] = round((80 if polarity > 0 else 165) * gain)
+            raster[edge:, x] = round((165 if polarity > 0 else 80) * gain)
+        mask = np.full((140, 150), 255, dtype=np.uint8)
+        paths = {}
+        candidates = generate_material_path_candidates(
+            preprocess(raster, mask, DetectorSettings()), mask, None,
+            crop_origin_y=0, diagnostic_paths=paths,
+        )
+        assert candidates
+        candidate = candidates[0]
+        assert abs(candidate.y - y) < 8
+        samples = paths[id(candidate)].diagnostic_samples
+        assert len(samples) >= 3
+        assert all(s.contrast_channel == "blurred_gray_dynamic_range" for s in samples)
+        assert all(s.signed_contrast * polarity > 0 for s in samples)
+        path_signs.append(polarity)
+        ref = _ref(
+            frame_index, 0, candidate.y,
+            authority=OilCandidateAuthority.ANCHOR_ELIGIBLE,
+            source=candidate.source,
+        )
+        frames.append((
+            replace(
+                ref, candidate=candidate,
+                evidence=OilCandidateEvidence.from_candidate(candidate),
+            ),
+        ))
+
+    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(tuple(frames))
+    assert path_signs[1] == -path_signs[2]
+    assert len({row[0].tracklet_id for row in result.refs_by_frame}) == 1
+    assert result.refs_by_frame[2][0].tracklet_admitted
+    progress = result.refs_by_frame[2][0].tracklet_net_progress_px
+    assert abs(progress - abs(translation)) < 2
+    assert all(
+        row[0].candidate is original[0].candidate
+        for row, original in zip(result.refs_by_frame, frames)
+    )

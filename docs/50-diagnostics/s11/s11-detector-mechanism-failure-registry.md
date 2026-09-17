@@ -154,6 +154,16 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Replacement/lesson:** Physical identity is an owner with a lifecycle, not a score bonus or graph edge. R16’s reciprocal assignment and complete-row veto are the minimum anti-leak controls; R17/R18’s explicit phase-local handoff is not a global state mutation.
 
+**2026-09-17 local counterexample:** the [rejected R23 native-polarity experiment](s11-r23-native-polarity-rejection.md)
+showed that even coherent gray-contrast inversion across three matching native
+sectors is insufficient to break identity. A known moving curved interface can
+reverse photometric polarity before confirmation. The final unconfirmed-only
+prototype also lost two protected Base truth cases. Earlier pruning of
+opposed edges before ambiguity resolution changed assignment competition.
+Do not infer physical replacement from polarity alone, or grant positive
+authority by removing a competing edge. All prototype production changes were
+removed; the paired raster controls and rejected patch preserve the lesson.
+
 **Current relevance/status:** **Open field risk, locally guarded.** The completed R18 audit preserves same-frame identity/provenance for compared fields, but exact reviewed-interface identity remains unknown and the owner-bounded selector abstain predicate is not identified. R19 is historical near-snapshot predecessor evidence; the active R20 behavior owner adds only the approved bounded delayed-readiness repair, and canonical Windows replay remains required.
 
 **Confidence:** Confirmed mechanism for R10–R16; strong inference for the layered Oil counterfactual.

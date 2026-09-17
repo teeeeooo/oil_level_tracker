@@ -16,19 +16,30 @@ All Y values below are source-frame coordinates, positive downward. Pixel
 coordinates supplied by guide-image review remain approximate physical anchors,
 even when a candidate has an exact fractional coordinate.
 
+The 2026-09-17 [review correction and rejected R23 experiment](s11-r23-native-polarity-rejection.md)
+supersede the stronger physical-identity interpretation of the BASE jump:
+sector 2 Y437 at f14362 is near the real interface but offset. It is a reviewed
+localization mismatch, not proof of a different internal structure. At f14386,
+the user separately confirmed native sector 1 Y382 and sector 4 Y417 near the
+actual curved interface; scalar Y411.5 is not an exact all-X truth line.
+
 ## Confirmed transferred observations
 
 | Checkpoint | User-reviewed physical boundary | Trace observation | Supported failure boundary |
 |---|---|---|---|
 | Accum source frame 16280 | Near Y=213 | Y=213 calibrated candidate belongs to tracklet `000388:0186`, admitted, continuation-only; allowed owner remains `000381:0181` | Actual-boundary candidate exists; phase allowed-set excludes its tracklet before selector scoring |
 | BASE source frame 14362 | Near Y=412.5 | Tracklet `000234:0207` observes material-path Y=438 | This member is not the reviewed Oil boundary |
-| BASE source frame 14374 | Near Y=412.5 | The same tracklet observes material-path Y=412.5 | False-to-real association creates an apparent 25.5 px upward movement |
+| BASE source frame 14374 | Near Y=412.5 | The same tracklet observes material-path Y=412.5 | Association across a reviewed location mismatch creates an apparent 25.5 px upward movement; physical continuity is unresolved |
 | BASE source frame 14386 | Near Y=411.5 | Same tracklet, material-path Y=411.5, anchor-eligible, admitted, direct interface | Direct initial-FULL release fails only `downward_direction`; progress 26.5 exceeds minimum 19.305 |
 
 BASE frames use the trace crop origin `(0, 211)`, size `578 x 773`, without
 resize. Accum frame 16280 was re-extracted using its exact zero-based source
 index; its reviewed crop origin Y is 32. Internal resolver frame offsets must
 not be substituted for source indices.
+
+The Accum review crop above is distinct from the R22-1/R22-2 diagnostic crop
+origin `[1199,56]`, size `[462,584]`. Both use source-frame Y; do not transfer
+the review crop's local offset into diagnostic band coordinates.
 
 ### Accum authority and independent support
 
@@ -94,11 +105,12 @@ Current track matching allows compatible representation classes within the
 jump/prediction bounds without invoking its representation bridge. The class
 is only direct versus ordered-lower. A shared class is therefore insufficient
 to demonstrate that two image structures are one physical interface. The
-transferred false-to-real association and the local control support reviewing
+transferred localization-mismatch association and the local control support reviewing
 this seam; they do not prove that every bounded jump is wrong.
 
-Splitting the false BASE predecessor removes the fabricated upward progress.
-It does not create downward evidence: the reviewed real boundary is nearly
+Splitting that predecessor would remove its contribution to upward progress.
+Whether a split is physically justified needs additional identity evidence.
+It would not create downward evidence: the reviewed real boundary is nearly
 stationary across these frames. Association repair alone cannot be claimed to
 satisfy the existing initial-FULL release contract.
 
@@ -128,6 +140,6 @@ uses these findings without encoding private timestamps, Y values or Glass IDs.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: BASE reviewed false-to-real association is at OIL-TRACKLET; Accum actual-boundary owner exclusion is observed at phase-to-selector admission, with a separately supported upstream cross-representation peer exclusion. Exact private-run branch causality beyond these facts is not established.
+- First harmful stage: BASE associates reviewed mismatched and aligned candidate positions at OIL-TRACKLET; physical identity continuity remains unresolved after the later near-boundary correction. Accum actual-boundary owner exclusion is observed at phase-to-selector admission, with a separate upstream cross-representation peer exclusion.
 - Logic-map impact: NONE — this records evidence and current-source checks without changing executing behavior.
-- Failure-registry impact: NONE — these are bounded instances of the existing identity, material, initial-state and provenance failure classes, not a rewrite of historical field results.
+- Failure-registry impact: UPDATED — F04 records the rejected local polarity-only association shortcut; this clarification does not relabel entire private intervals or claim a field repair.

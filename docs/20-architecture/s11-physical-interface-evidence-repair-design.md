@@ -10,14 +10,28 @@ extends R22-1 measurement extraction only. It does not implement the proposed
 association, handoff or direction-neutral observation described below. A
 captured path is generator evidence, not a certified physical interface.
 
+The [2026-09-17 R23 experiment](../50-diagnostics/s11/s11-r23-native-polarity-rejection.md)
+was rejected and removed from production after protected public regressions.
+Native gray-polarity inversion alone cannot classify replacement or break
+association, even across three common sectors or only before confirmation.
+The full witness and its paired acceptance controls below remain required.
+
 ## Problem and chosen direction
 
 The [reviewed R22 investigation](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md)
 identifies two different failures. A visible Accum boundary has an admitted
 tracklet but cannot replace the allowed fill owner, while its independent
-representation support is blocked by broad texture conflict. In BASE, an
-off-boundary candidate and a real boundary share one tracklet, creating an
-upward trajectory which correctly fails the existing downward release test.
+representation support is blocked by broad texture conflict. In BASE, a
+candidate with reviewed location error and a boundary-aligned candidate share
+one tracklet, creating an upward trajectory that fails the existing downward
+release test. That association does not establish actual upward Oil motion.
+
+The later human review narrows the BASE label: f14362 sector 2 Y437 is near
+the interface but offset, so physical identity of that point is unresolved;
+it is not a certified internal-structure negative. At f14386, sector 1 Y382
+and sector 4 Y417 were separately confirmed near the interface. Scalar
+candidate Y411.5 must not be imposed as exact truth across that curved path.
+Future labels must separate localization mismatch from material/structure identity.
 
 The design gives current-frame interface evidence an explicit, shared contract.
 That evidence supports independent corroboration, physical association and
@@ -285,8 +299,8 @@ as the serialized array index. Diagnostic detail must not change output.
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
 - Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples.
-- Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, and private video/Glass/coordinate conditions.
+- Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
 - Difference from prior failures: new local raster witnesses must establish spatial interface identity before support, association and ownership; direction-neutral observation is a separately gated proposed phase. It explicitly changes the old assumption that initial-FULL numeric admission requires drain evidence, without calling a stationary row a drain release. F05/F08 negative controls remain mandatory and this extension is not enabled or accepted by this document.
 - Logic-map impact: NONE — the map describes executing R22; this proposal names future changes without representing them as implemented.
-- Failure-registry impact: NONE — existing failures constrain the proposal; the proposed stationary-interface extension requires its own acceptance evidence before any current contract is revised.
+- Failure-registry impact: UPDATED — F04 now records the rejected polarity-only association veto and paired raster counterexamples; the stationary-interface extension remains separately gated.

@@ -1,0 +1,454 @@
+{
+  "schema": "s11-rejected-r23-polarity-experiment-v1",
+  "baseline_commit": "0963e384e1604b5439e017e5ada2deec5c12b009",
+  "runtime_fingerprint_sha256": "7b14134e3f811d06e45ea2cd44686b5ffedd22dc7e2848fd2e04bd838f8aa20d",
+  "final_patch_sha256": "e59730535f6eb646edac80c810e50eb9566f04d37d134552e8e100fad7d6b002",
+  "disposition": "REJECTED_NOT_IN_RUNTIME",
+  "variants": [
+    {
+      "name": "A-row-and-edge-pruning",
+      "comparisons": [
+        {
+          "sample": "base_sample_1",
+          "baseline_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+          "prototype_fingerprint": "3863578f975deb206c406853f0f84fa5a250b01066931f1c4f7804645c227164",
+          "baseline_row_count": 30,
+          "prototype_row_count": 30,
+          "events_equal": false,
+          "cases": [
+            {
+              "frame_index": 144,
+              "sample_timestamp_sec": 5.005,
+              "truth_y": 386.0,
+              "baseline_y": 373.0,
+              "prototype_y": 363.5,
+              "baseline_error_px": 13.0,
+              "prototype_error_px": 22.5,
+              "regressed": true
+            },
+            {
+              "frame_index": 156,
+              "sample_timestamp_sec": 5.005,
+              "truth_y": 386.0,
+              "baseline_y": 373.0,
+              "prototype_y": 363.5,
+              "baseline_error_px": 13.0,
+              "prototype_error_px": 22.5,
+              "regressed": true
+            },
+            {
+              "frame_index": 240,
+              "sample_timestamp_sec": 7.974633333333334,
+              "truth_y": 386.0,
+              "baseline_y": 375.0,
+              "prototype_y": 375.0,
+              "baseline_error_px": 11.0,
+              "prototype_error_px": 11.0,
+              "regressed": false
+            }
+          ]
+        },
+        {
+          "sample": "sample2",
+          "baseline_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+          "prototype_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+          "baseline_row_count": 5,
+          "prototype_row_count": 5,
+          "events_equal": true,
+          "cases": [
+            {
+              "frame_index": 0,
+              "sample_timestamp_sec": 0.0,
+              "truth_y": 592.0,
+              "baseline_y": null,
+              "prototype_y": null,
+              "baseline_error_px": null,
+              "prototype_error_px": null,
+              "regressed": false
+            },
+            {
+              "frame_index": 30,
+              "sample_timestamp_sec": 1.0,
+              "truth_y": 592.0,
+              "baseline_y": 590.0,
+              "prototype_y": 590.0,
+              "baseline_error_px": 2.0,
+              "prototype_error_px": 2.0,
+              "regressed": false
+            },
+            {
+              "frame_index": 60,
+              "sample_timestamp_sec": 2.0,
+              "truth_y": 592.0,
+              "baseline_y": 603.0,
+              "prototype_y": 603.0,
+              "baseline_error_px": 11.0,
+              "prototype_error_px": 11.0,
+              "regressed": false
+            }
+          ]
+        },
+        {
+          "sample": "sample3",
+          "baseline_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+          "prototype_fingerprint": "84dca59c18287f6ed90cfe27b15099a61c06d481f944a87be1f138705e88d057",
+          "baseline_row_count": 151,
+          "prototype_row_count": 151,
+          "events_equal": false,
+          "cases": [
+            {
+              "frame_index": 900,
+              "sample_timestamp_sec": 30.03,
+              "truth_y": 316.0,
+              "baseline_y": 291.5,
+              "prototype_y": 291.5,
+              "baseline_error_px": 24.5,
+              "prototype_error_px": 24.5,
+              "regressed": false
+            },
+            {
+              "frame_index": 1035,
+              "sample_timestamp_sec": 34.5345,
+              "truth_y": 243.0,
+              "baseline_y": 244.0,
+              "prototype_y": 274.0,
+              "baseline_error_px": 1.0,
+              "prototype_error_px": 31.0,
+              "regressed": true
+            }
+          ]
+        },
+        {
+          "sample": "sample4",
+          "baseline_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+          "prototype_fingerprint": "113b9c3cd0efe729ec1ab097ae895dbf0eae760e0720523be34616fc300ccec2",
+          "baseline_row_count": 113,
+          "prototype_row_count": 113,
+          "events_equal": false,
+          "cases": [
+            {
+              "frame_index": 0,
+              "sample_timestamp_sec": 0.0,
+              "truth_y": 860.5,
+              "baseline_y": null,
+              "prototype_y": null,
+              "baseline_error_px": null,
+              "prototype_error_px": null,
+              "regressed": false
+            },
+            {
+              "frame_index": 450,
+              "sample_timestamp_sec": 15.0,
+              "truth_y": 852.5,
+              "baseline_y": 853.0,
+              "prototype_y": 853.0,
+              "baseline_error_px": 0.5,
+              "prototype_error_px": 0.5,
+              "regressed": false
+            },
+            {
+              "frame_index": 900,
+              "sample_timestamp_sec": 30.0,
+              "truth_y": 848.5,
+              "baseline_y": 848.0,
+              "prototype_y": 848.0,
+              "baseline_error_px": 0.5,
+              "prototype_error_px": 0.5,
+              "regressed": false
+            },
+            {
+              "frame_index": 1470,
+              "sample_timestamp_sec": 49.0,
+              "truth_y": 855.0,
+              "baseline_y": 833.0,
+              "prototype_y": 833.0,
+              "baseline_error_px": 22.0,
+              "prototype_error_px": 22.0,
+              "regressed": false
+            },
+            {
+              "frame_index": 1680,
+              "sample_timestamp_sec": 56.0,
+              "truth_y": 858.5,
+              "baseline_y": 851.0,
+              "prototype_y": 851.0,
+              "baseline_error_px": 7.5,
+              "prototype_error_px": 7.5,
+              "regressed": false
+            }
+          ]
+        }
+      ],
+      "case_count": 13,
+      "regressions": [
+        "base_sample_1:144",
+        "base_sample_1:156",
+        "sample3:1035"
+      ]
+    },
+    {
+      "name": "B-displacement-guard",
+      "comparisons": [
+        {
+          "sample": "base_sample_1",
+          "baseline_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+          "prototype_fingerprint": "63eba21d756886aeda89742f74a4e8e5bfed8b8ad80c61d976bd6e30679a3cab",
+          "baseline_row_count": 30,
+          "prototype_row_count": 30,
+          "events_equal": false,
+          "cases": [
+            {
+              "frame_index": 144,
+              "sample_timestamp_sec": 5.005,
+              "truth_y": 386.0,
+              "baseline_y": 373.0,
+              "prototype_y": null,
+              "baseline_error_px": 13.0,
+              "prototype_error_px": null,
+              "regressed": true
+            },
+            {
+              "frame_index": 156,
+              "sample_timestamp_sec": 5.005,
+              "truth_y": 386.0,
+              "baseline_y": 373.0,
+              "prototype_y": null,
+              "baseline_error_px": 13.0,
+              "prototype_error_px": null,
+              "regressed": true
+            },
+            {
+              "frame_index": 240,
+              "sample_timestamp_sec": 7.974633333333334,
+              "truth_y": 386.0,
+              "baseline_y": 375.0,
+              "prototype_y": 375.0,
+              "baseline_error_px": 11.0,
+              "prototype_error_px": 11.0,
+              "regressed": false
+            }
+          ]
+        },
+        {
+          "sample": "sample3",
+          "baseline_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+          "prototype_fingerprint": "707bfc0c641931efeba4312e350b6e619c517c10a024e8a2ec133d9ce9024a2c",
+          "baseline_row_count": 151,
+          "prototype_row_count": 151,
+          "events_equal": false,
+          "cases": [
+            {
+              "frame_index": 900,
+              "sample_timestamp_sec": 30.03,
+              "truth_y": 316.0,
+              "baseline_y": 291.5,
+              "prototype_y": null,
+              "baseline_error_px": 24.5,
+              "prototype_error_px": null,
+              "regressed": true
+            },
+            {
+              "frame_index": 1035,
+              "sample_timestamp_sec": 34.5345,
+              "truth_y": 243.0,
+              "baseline_y": 244.0,
+              "prototype_y": 274.0,
+              "baseline_error_px": 1.0,
+              "prototype_error_px": 31.0,
+              "regressed": true
+            }
+          ]
+        }
+      ],
+      "case_count": 5,
+      "regressions": [
+        "base_sample_1:144",
+        "base_sample_1:156",
+        "sample3:900",
+        "sample3:1035"
+      ]
+    },
+    {
+      "name": "C-post-assignment-guard",
+      "comparisons": [
+        {
+          "sample": "base_sample_1",
+          "baseline_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+          "prototype_fingerprint": "cc3e68f06f951ff6ef5d1efd26d1e12b5e7f29851128729122c34269d9744c6a",
+          "baseline_row_count": 30,
+          "prototype_row_count": 30,
+          "events_equal": false,
+          "cases": [
+            {
+              "frame_index": 144,
+              "sample_timestamp_sec": 5.005,
+              "truth_y": 386.0,
+              "baseline_y": 373.0,
+              "prototype_y": null,
+              "baseline_error_px": 13.0,
+              "prototype_error_px": null,
+              "regressed": true
+            },
+            {
+              "frame_index": 156,
+              "sample_timestamp_sec": 5.005,
+              "truth_y": 386.0,
+              "baseline_y": 373.0,
+              "prototype_y": null,
+              "baseline_error_px": 13.0,
+              "prototype_error_px": null,
+              "regressed": true
+            },
+            {
+              "frame_index": 240,
+              "sample_timestamp_sec": 7.974633333333334,
+              "truth_y": 386.0,
+              "baseline_y": 375.0,
+              "prototype_y": 375.0,
+              "baseline_error_px": 11.0,
+              "prototype_error_px": 11.0,
+              "regressed": false
+            }
+          ]
+        },
+        {
+          "sample": "sample3",
+          "baseline_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+          "prototype_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+          "baseline_row_count": 151,
+          "prototype_row_count": 151,
+          "events_equal": true,
+          "cases": [
+            {
+              "frame_index": 900,
+              "sample_timestamp_sec": 30.03,
+              "truth_y": 316.0,
+              "baseline_y": 291.5,
+              "prototype_y": 291.5,
+              "baseline_error_px": 24.5,
+              "prototype_error_px": 24.5,
+              "regressed": false
+            },
+            {
+              "frame_index": 1035,
+              "sample_timestamp_sec": 34.5345,
+              "truth_y": 243.0,
+              "baseline_y": 244.0,
+              "prototype_y": 244.0,
+              "baseline_error_px": 1.0,
+              "prototype_error_px": 1.0,
+              "regressed": false
+            }
+          ]
+        }
+      ],
+      "case_count": 5,
+      "regressions": [
+        "base_sample_1:144",
+        "base_sample_1:156"
+      ]
+    },
+    {
+      "name": "D-unconfirmed-only-final-patch",
+      "comparisons": [
+        {
+          "sample": "base_sample_1",
+          "baseline_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+          "prototype_fingerprint": "14fc5b1e28e8658d21408a8b966d139c3741b57e99607c91d2043632613a781a",
+          "baseline_row_count": 30,
+          "prototype_row_count": 30,
+          "events_equal": false,
+          "cases": [
+            {
+              "frame_index": 144,
+              "sample_timestamp_sec": 5.005,
+              "truth_y": 386.0,
+              "baseline_y": 373.0,
+              "prototype_y": null,
+              "baseline_error_px": 13.0,
+              "prototype_error_px": null,
+              "regressed": true
+            },
+            {
+              "frame_index": 156,
+              "sample_timestamp_sec": 5.005,
+              "truth_y": 386.0,
+              "baseline_y": 373.0,
+              "prototype_y": null,
+              "baseline_error_px": 13.0,
+              "prototype_error_px": null,
+              "regressed": true
+            },
+            {
+              "frame_index": 240,
+              "sample_timestamp_sec": 7.974633333333334,
+              "truth_y": 386.0,
+              "baseline_y": 375.0,
+              "prototype_y": 375.0,
+              "baseline_error_px": 11.0,
+              "prototype_error_px": 11.0,
+              "regressed": false
+            }
+          ]
+        },
+        {
+          "sample": "sample3",
+          "baseline_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+          "prototype_fingerprint": "4807f999b49f3443632e013cf8a70da3fe2c406fbfc45f60a760623485f44a8f",
+          "baseline_row_count": 151,
+          "prototype_row_count": 151,
+          "events_equal": false,
+          "cases": [
+            {
+              "frame_index": 900,
+              "sample_timestamp_sec": 30.03,
+              "truth_y": 316.0,
+              "baseline_y": 291.5,
+              "prototype_y": 291.5,
+              "baseline_error_px": 24.5,
+              "prototype_error_px": 24.5,
+              "regressed": false
+            },
+            {
+              "frame_index": 1035,
+              "sample_timestamp_sec": 34.5345,
+              "truth_y": 243.0,
+              "baseline_y": 244.0,
+              "prototype_y": 244.0,
+              "baseline_error_px": 1.0,
+              "prototype_error_px": 1.0,
+              "regressed": false
+            }
+          ]
+        }
+      ],
+      "case_count": 5,
+      "regressions": [
+        "base_sample_1:144",
+        "base_sample_1:156"
+      ]
+    }
+  ],
+  "frozen_inputs": {
+    "base_sample_1": {
+      "mp4": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+      "oilrecipe": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+      "oiltruth": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a"
+    },
+    "sample2": {
+      "mp4": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+      "oilrecipe": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+      "oiltruth": "f45479f7bb5f4216cb9c6920ac994d2d690942f2ed432d5d8a8647af030c731f"
+    },
+    "sample3": {
+      "mp4": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+      "oilrecipe": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+      "oiltruth": "8cb2b917eede7708894fa90f59f96f1d9eac272813af6d457dcbc292496dd8ab"
+    },
+    "sample4": {
+      "mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+      "oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+      "oiltruth": "f02575ac2379b4d135567f1835aa772803af13a20413b8aa58175d890f5241bd"
+    }
+  }
+}

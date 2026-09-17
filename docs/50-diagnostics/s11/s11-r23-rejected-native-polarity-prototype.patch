@@ -1,0 +1,179 @@
+diff --git a/src/oil_tracker/__init__.py b/src/oil_tracker/__init__.py
+index e3c9863..3b446b7 100644
+--- a/src/oil_tracker/__init__.py
++++ b/src/oil_tracker/__init__.py
+@@ -4 +4 @@ __version__ = "0.1.0"
+-DETECTOR_VERSION = "opencv-phase-detector-r22-2-interface-path-diagnostics-v1"
++DETECTOR_VERSION = "opencv-phase-detector-r23-native-path-continuity-v1"
+diff --git a/src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py b/src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py
+index d89177d..7f22c6d 100644
+--- a/src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py
++++ b/src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py
+@@ -490,0 +491,4 @@ def _sequence_snapshot(detection) -> dict[str, Any]:
++                **({
++                    "tracklet_association_reason": features["sequence_tracklet_association_reason"],
++                    "tracklet_blocked_predecessors": features["sequence_tracklet_blocked_predecessors"],
++                } if "sequence_tracklet_association_reason" in features else {}),
+diff --git a/src/oil_tracker/adapters/vision/observation_sequence_resolver.py b/src/oil_tracker/adapters/vision/observation_sequence_resolver.py
+index 941102d..8eeb4ed 100644
+--- a/src/oil_tracker/adapters/vision/observation_sequence_resolver.py
++++ b/src/oil_tracker/adapters/vision/observation_sequence_resolver.py
+@@ -14 +14 @@ from .oil_observation_resolver import OilObservationResolver
+-OBSERVATION_SEQUENCE_VERSION = "r22-oil-ownership-evidence-replacement-v1"
++OBSERVATION_SEQUENCE_VERSION = "r23-native-path-continuity-v1"
+diff --git a/src/oil_tracker/adapters/vision/oil_candidate_evidence.py b/src/oil_tracker/adapters/vision/oil_candidate_evidence.py
+index 19944f6..334ff0e 100644
+--- a/src/oil_tracker/adapters/vision/oil_candidate_evidence.py
++++ b/src/oil_tracker/adapters/vision/oil_candidate_evidence.py
+@@ -3,0 +4 @@ from dataclasses import dataclass
++import math
+@@ -31,0 +33,29 @@ class EvidenceAvailability:
++@dataclass(frozen=True)
++class NativePathPolarity:
++    """Comparable generator gray contrasts, not independent Oil evidence."""
++
++    start_x: int
++    stop_x: int
++    signed_contrast: float
++
++
++def _native_path_polarities(candidate: BoundaryCandidate) -> tuple[NativePathPolarity, ...]:
++    if not any(f"native_path_{sector}_start_x" in candidate.features for sector in range(5)):
++        return ()
++    samples = []
++    for sector in range(5):
++        if candidate.features.get(f"native_path_{sector}_contrast_channel") != 1.0:
++            continue
++        values = tuple(candidate.features.get(f"native_path_{sector}_{name}")
++                       for name in ("start_x", "stop_x", "signed_contrast"))
++        if any(not isinstance(v, (float, int)) or not math.isfinite(v) for v in values):
++            continue
++        start, stop, contrast = values
++        # The generator already requires >= .025 signed support per path point.
++        # Material-channel winners and missing/invalid samples are unavailable.
++        if start < 0 or stop <= start or int(start) != start or int(stop) != stop or abs(contrast) < 0.025:
++            continue
++        samples.append(NativePathPolarity(int(start), int(stop), float(contrast)))
++    return tuple(samples)
++
++
+@@ -60,0 +91 @@ class OilCandidateEvidence:
++    native_path_polarities: tuple[NativePathPolarity, ...] = ()
+@@ -222,0 +254 @@ class OilCandidateEvidence:
++            native_path_polarities=_native_path_polarities(candidate),
+diff --git a/src/oil_tracker/adapters/vision/oil_interface_tracklets.py b/src/oil_tracker/adapters/vision/oil_interface_tracklets.py
+index 7a01a6a..51398dc 100644
+--- a/src/oil_tracker/adapters/vision/oil_interface_tracklets.py
++++ b/src/oil_tracker/adapters/vision/oil_interface_tracklets.py
+@@ -192,0 +193,16 @@ _AssignmentPair = tuple[float, str, str, _TrackState, _RowHypothesis]
++def _opposed_native_paths(first: OilCandidateRef, second: OilCandidateRef) -> bool:
++    """Negative association evidence only; agreement never grants authority.
++
++    Match exact native X extents in the same ROI, not sector ordinals, candidate
++    medians or diagnostic peaks. Three distinct sectors is the generator's
++    existing cross-column support floor. Contrast scale may differ: a coherent
++    inversion is unresolved continuity, not proof of a different material.
++    """
++    first_samples = {(s.start_x, s.stop_x): s.signed_contrast
++                     for s in first.evidence.native_path_polarities}
++    second_samples = {(s.start_x, s.stop_x): s.signed_contrast
++                      for s in second.evidence.native_path_polarities}
++    common = first_samples.keys() & second_samples.keys()
++    return len(common) >= 3 and all(first_samples[x] * second_samples[x] < 0 for x in common)
++
++
+@@ -218,0 +235 @@ class DirectedInterfaceTrackletBuilder:
++        blocked_predecessors: dict[str, list[str]] = {}
+@@ -273,0 +291 @@ class DirectedInterfaceTrackletBuilder:
++            blocked_tracks: set[str] = set()
+@@ -283,0 +302,2 @@ class DirectedInterfaceTrackletBuilder:
++                    or hypothesis.identity in blocked_predecessors
++                    or track.identity in blocked_tracks
+@@ -285,0 +306,7 @@ class DirectedInterfaceTrackletBuilder:
++                # Preserve the complete ambiguity graph. Removing a contrary
++                # edge earlier could manufacture a unique winner for a rival.
++                # A rejected chosen link starts fresh; no runner-up inherits it.
++                if self._native_path_opposition(track, hypothesis):
++                    blocked_predecessors[hypothesis.identity] = [track.identity]
++                    blocked_tracks.add(track.identity)
++                    continue
+@@ -406,0 +434 @@ class DirectedInterfaceTrackletBuilder:
++                        tracklet_blocked_predecessors=tuple(blocked_predecessors.get(hypothesis.identity, ())),
+@@ -555,0 +584,28 @@ class DirectedInterfaceTrackletBuilder:
++    def _native_path_opposition(
++        self, track: _TrackState, hypothesis: _RowHypothesis,
++    ) -> bool:
++        # This first R23 guard protects confirmation construction only. An
++        # already confirmed contour may change appearance (foam, lighting,
++        # visible sectors); polarity alone cannot revoke established identity.
++        if self._established(track):
++            return False
++        # A descriptor-free alias must not erase a recent contradictory path.
++        # Retention is bounded by the existing confirmation frame window.
++        if not any(m.evidence.native_path_polarities for m in hypothesis.members):
++            return False
++        earliest = hypothesis.frame_offset - self.policy.confirmation_window_frames + 1
++        for observation in reversed(track.observations):
++            prior = observation.hypothesis
++            if prior.frame_offset < earliest:
++                break
++            if not any(m.evidence.native_path_polarities for m in prior.members):
++                continue
++            # Polarity alone cannot distinguish adjacent edges of a bright
++            # boundary band. Only veto a positional reassociation outside the
++            # existing same-row tolerance, not a stationary contrast change.
++            if abs(hypothesis.y - prior.y) <= self.policy.row_hypothesis_tolerance_px:
++                return False
++            return any(_opposed_native_paths(current, previous)
++                       for current in hypothesis.members for previous in prior.members)
++        return False
++
+diff --git a/src/oil_tracker/adapters/vision/oil_material_path.py b/src/oil_tracker/adapters/vision/oil_material_path.py
+index 7656856..ca26dca 100644
+--- a/src/oil_tracker/adapters/vision/oil_material_path.py
++++ b/src/oil_tracker/adapters/vision/oil_material_path.py
+@@ -143 +143 @@ def generate_material_path_candidates(
+-            capture_diagnostics=diagnostic_paths is not None,
++            capture_diagnostics=True,
+@@ -166 +166 @@ def generate_material_path_candidates(
+-            capture_diagnostics=diagnostic_paths is not None,
++            capture_diagnostics=True,
+@@ -603,0 +604,13 @@ def _candidate_from_path(
++            # Bounded native provenance is needed with tracing OFF as well.
++            # Reuse the generator's samples; do not re-find diagnostic peaks.
++            **{
++                f"native_path_{sample.sector_index}_{name}": float(value)
++                for sample in evidence.diagnostic_samples
++                for name, value in (
++                    ("start_x", sample.start_x),
++                    ("stop_x", sample.stop_x),
++                    ("contrast_channel", {"blurred_gray_dynamic_range": 1,
++                                          "raw_combined_material": 2}.get(sample.contrast_channel, 0)),
++                    ("signed_contrast", sample.signed_contrast),
++                )
++            },
+diff --git a/src/oil_tracker/adapters/vision/oil_observation_resolver.py b/src/oil_tracker/adapters/vision/oil_observation_resolver.py
+index 8bf284d..974aa56 100644
+--- a/src/oil_tracker/adapters/vision/oil_observation_resolver.py
++++ b/src/oil_tracker/adapters/vision/oil_observation_resolver.py
+@@ -61 +61 @@ from .oil_phase_identity import (
+-OIL_OBSERVATION_RESOLVER_VERSION = "r22-oil-ownership-evidence-replacement-v1"
++OIL_OBSERVATION_RESOLVER_VERSION = "r23-native-path-continuity-v1"
+@@ -1955,0 +1956,4 @@ def _project_candidates(
++                    **({
++                        "sequence_tracklet_association_reason": "NATIVE_PATH_POLARITY_OPPOSITION",
++                        "sequence_tracklet_blocked_predecessors": ";".join(ref.tracklet_blocked_predecessors),
++                    } if ref.tracklet_blocked_predecessors else {}),
+diff --git a/src/oil_tracker/adapters/vision/oil_sequence_types.py b/src/oil_tracker/adapters/vision/oil_sequence_types.py
+index e1696d2..815c0e3 100644
+--- a/src/oil_tracker/adapters/vision/oil_sequence_types.py
++++ b/src/oil_tracker/adapters/vision/oil_sequence_types.py
+@@ -76,0 +77 @@ class OilCandidateRef:
++    tracklet_blocked_predecessors: tuple[str, ...] = ()
+diff --git a/src/oil_tracker/adapters/vision/opencv_phase_detector.py b/src/oil_tracker/adapters/vision/opencv_phase_detector.py
+index 771f188..b0fe534 100644
+--- a/src/oil_tracker/adapters/vision/opencv_phase_detector.py
++++ b/src/oil_tracker/adapters/vision/opencv_phase_detector.py
+@@ -41 +41 @@ class OpenCvPhaseDetector:
+-    version = "opencv-phase-detector-r22-2-interface-path-diagnostics-v1"
++    version = "opencv-phase-detector-r23-native-path-continuity-v1"
