@@ -76,7 +76,7 @@ Current durable S11 owners:
 - current R22 acceptance contract — [`30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md`](30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md);
 - diagnostic-only native path contract over R22 behavior — [`20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md`](20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md);
 - transparent-interface redesign decision and public baseline probe — [`50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md`](50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md);
-- next trace-only observation-layer contract — [`20-architecture/s11-interface-observability-witness-architecture.md`](20-architecture/s11-interface-observability-witness-architecture.md);
+- O1 trace-only observation-layer contract — [`20-architecture/s11-interface-observability-witness-architecture.md`](20-architecture/s11-interface-observability-witness-architecture.md);
 - trace/shadow acceptance contract — [`30-validation/s11-interface-observability-witness-validation.md`](30-validation/s11-interface-observability-witness-validation.md);
 - broader proposed physical-interface behavior repair — [`20-architecture/s11-physical-interface-evidence-repair-design.md`](20-architecture/s11-physical-interface-evidence-repair-design.md);
 - proposed behavior acceptance contract — [`30-validation/s11-physical-interface-evidence-repair-validation.md`](30-validation/s11-physical-interface-evidence-repair-validation.md);
@@ -99,3 +99,5 @@ R18–R20 predecessor architecture/validation and earlier diagnostics remain his
 ## Archive policy
 
 `90-archive/` preserves superseded context and decision history. Archived documents may retain their original language. Repair links when needed for navigation, but never promote an archived statement back into current authority without updating a current owner.
+
+- Supplemental observation redesign execution review — [50-diagnostics/s11/s11-observation-redesign-execution-review.md](50-diagnostics/s11/s11-observation-redesign-execution-review.md); supporting proposal, implemented definitions belong to the Witness Architecture.

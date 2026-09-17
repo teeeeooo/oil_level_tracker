@@ -1,5 +1,10 @@
 # S11 투명 계면 검출 재검토 및 실행 명세서
 
+> 보관 위치: 근거 재검토와 실행 제안을 담은 진단 문서. 구현의 단일 기준은
+> [Witness Architecture](../../20-architecture/s11-interface-observability-witness-architecture.md),
+> 수용 기준은 [Witness Validation](../../30-validation/s11-interface-observability-witness-validation.md)이다.
+> 아래의 `577f98a` 기준 검토·실행 기록은 역사적 사실로 보존한다.
+
 - 작성일: 2026-09-17
 - 검토 저장소: `teeeeooo/oil_level_tracker`
 - 검토 기준 커밋: `577f98af116e7f59b07bc8a8356606c4dd7f9bea`

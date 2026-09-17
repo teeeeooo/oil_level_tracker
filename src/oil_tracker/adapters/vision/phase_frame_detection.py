@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field, replace
+from dataclasses import asdict, dataclass, field, replace
 from typing import Any
 
 import cv2
@@ -784,6 +784,21 @@ class PhaseDebugProjector:
                     "reject_reason": candidate.reject_reason,
                 }
             )
+        witnesses = []
+        interface_diagnostics = measure_oil_interfaces(
+            detection.candidates,
+            gray=pre.gray,
+            effective_mask=bundle.effective_mask,
+            glare_mask=pre.glare_mask,
+            material_map=foam.combined_evidence_map,
+            static_map=evidence.static_map,
+            crop_origin=bundle.crop_origin,
+            frame_index=detection.frame_index,
+            material_paths=evidence.candidate_assembly.diagnostic_material_paths,
+            witness_sink=witnesses,
+            glass_id=glass.id,
+            canny=pre.canny,
+        )
         return PhaseDetectionDebugArtifacts(
             images=images,
             profiles=projection.debug_profiles,
@@ -797,17 +812,8 @@ class PhaseDebugProjector:
                 "flags": detection.flags,
                 "oil_hypothesis": projection.oil_detail or {},
                 **detection.debug_metrics,
-                "oil_interface_diagnostics": measure_oil_interfaces(
-                    detection.candidates,
-                    gray=pre.gray,
-                    effective_mask=bundle.effective_mask,
-                    glare_mask=pre.glare_mask,
-                    material_map=foam.combined_evidence_map,
-                    static_map=evidence.static_map,
-                    crop_origin=bundle.crop_origin,
-                    frame_index=detection.frame_index,
-                    material_paths=evidence.candidate_assembly.diagnostic_material_paths,
-                ),
+                "oil_interface_diagnostics": interface_diagnostics,
+                "oil_interface_witness": asdict(witnesses[0]),
             },
         )
 

@@ -1,6 +1,6 @@
 # S11 Current Detector Logic Map
 
-**Scope:** R22 behavior with the R22-2 diagnostic runtime (`opencv-phase-detector-r22-2-interface-path-diagnostics-v1`, unchanged completed-window resolver `r22-oil-ownership-evidence-replacement-v1`). This is a current control-flow map, not a design history. R21 remains the protected predecessor; field effectiveness remains unqualified. Claims below were checked against the implementation modules linked in each owner row.
+**Scope:** R22 behavior with the R22-3 diagnostic runtime (`opencv-phase-detector-r22-3-interface-witness-diagnostics-v1`, unchanged completed-window resolver `r22-oil-ownership-evidence-replacement-v1`). This is a current control-flow map, not a design history. R21 remains the protected predecessor; field effectiveness remains unqualified. Claims below were checked against the implementation modules linked in each owner row.
 
 **Authority:** current sequencing is in the [work plan](../00-project/work-plan.md); durable detector responsibility is in the [S11 responsibility architecture](s11-detector-responsibility-architecture.md). R18/R19/R20 remain predecessor/history and Windows design input. The replacement is owned by the [R22 architecture](s11-r22-oil-ownership-evidence-replacement-architecture.md) and [R22 validation](../30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md). R21 architecture/validation preserve the protected predecessor contract. Those documents describe intent and acceptance boundaries; this file names the implementation that actually executes them.
 
@@ -330,3 +330,15 @@ bounded expiry and one-attempt semantics.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
   transition/evidence boundaries plus the R22-2 debug-only capture/measurement route.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.
+
+## O1 trace-only observation witness
+
+`PhaseDebugProjector.project` calls the existing `measure_oil_interfaces` with an
+optional witness sink. It reuses the same profile/geometry cache and serializes
+immutable records from `oil_interface_witness.py` into the sibling
+`artifacts.state.oil_interface_witness` namespace. R22-2 diagnostics are unchanged.
+This debug-only branch is downstream of current-frame detection; NONE bypasses
+it. No resolver-facing fields, candidate scores, physical IDs, lifecycle or
+publication decisions consume it. Measurement ownership remains FRAME-EVIDENCE /
+OIL-CANDIDATE, with serialization at TRACE-PUBLICATION. See the
+[measurement contract](s11-interface-observability-witness-architecture.md).

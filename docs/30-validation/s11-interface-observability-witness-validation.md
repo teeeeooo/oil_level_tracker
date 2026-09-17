@@ -102,6 +102,26 @@ A score-sorted trace array index, resolver offset and source-frame index are
 separate identities. Tests must exercise sorting, duplicates and completed
 sequence annotation without breaking the join.
 
+### O1 concrete extraction controls
+
+Use the measurement definitions in the architecture's O1 contract. In addition
+verify an exact step/stripe pair, translated curved paths with polarity reversal,
+flat/competing signed plateaus, truncation, fractional coordinate joins, missing
+channels, and rejected duplicate/permuted candidates. Hulls are descriptive, not
+calibrated confidence intervals. Local shape variation must not widen them.
+
+All existing R22-2 diagnostics must remain equal without removing any old field;
+only the sibling `oil_interface_witness` namespace is new. Baseline is source
+commit `8842bf1` (same production as R22-2). Snapshot current-frame candidates,
+completed decisions, CSV/events and old diagnostics on all four public windows
+for NONE/BASIC/FULL, using the same decoder/runtime and serial scheduling.
+A changed diagnostic version is expected; detector scores/coordinates are not.
+
+Human-visible frames remain in the evaluation denominator regardless of model
+UNOBSERVABLE/UNRESOLVED output. Previously reviewed private checkpoints are
+regression controls, never untouched holdout. Acquisition metadata absence alone
+cannot invalidate passive RGB evidence.
+
 ## V2 — raster controls before shadow classification
 
 ### Positive controls

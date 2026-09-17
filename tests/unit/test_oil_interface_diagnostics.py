@@ -118,6 +118,8 @@ def test_debug_measurements_cannot_change_candidates_or_completed_sequence():
             runs[j].append(detection)
             if j:
                 assert "oil_interface_diagnostics" in artifacts.state
+                assert "oil_interface_witness" in artifacts.state
+                assert "oil_interface_witness" not in detection.debug_metrics
                 assert "oil_interface_diagnostics" not in detection.debug_metrics
                 paths = [r["path_aligned"] for r in artifacts.state["oil_interface_diagnostics"]["candidates"]]
                 assert any(p["status"] == "measured" for p in paths) or not any(
@@ -141,12 +143,20 @@ def test_trace_keeps_raw_index_join_after_score_sort_and_sequence_annotation(tmp
     writer.annotate_sequence(config, detector.resolve_sequence([detection], config).detections)
     completion = writer.finalize()
     record = json.loads((Path(completion.staging_directory) / "debug_trace.jsonl").read_text(encoding="utf-8"))
+    witness = record["state"]["oil_interface_witness"]
+    assert witness["source_frame_index"] == 42
+    assert witness["glass_id"] == config.id
+    assert witness["observability"]["status"] == "NOT_EVALUATED"
+    witness_by_index = {c["candidate_input_index"]: c for c in witness["candidates"]}
     diagnostic = record["state"]["oil_interface_diagnostics"]
     assert diagnostic["source_frame_index"] == record["frame_index"] == 42
     by_index = {c["candidate_input_index"]: c for c in record["candidates"]}
     assert diagnostic["oil_candidate_count"] > 0
     for row in diagnostic["candidates"]:
         original = by_index[row["candidate_input_index"]]
+        w = witness_by_index[row["candidate_input_index"]]
+        assert (w["source"], w["canonical_y"], w["kind"]) == (original["source"], original["canonical_y"], original["kind"])
+        assert w["decision"] == "NOT_EVALUATED"
         assert (row["source"], row["canonical_y"]) == (original["source"], original["canonical_y"])
         if original["source"] in {"material_path", "raster_material_path"}:
             assert row["path_aligned"]["reason"] == "native_generator_path"

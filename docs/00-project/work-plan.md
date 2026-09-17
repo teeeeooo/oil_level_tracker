@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** detector direction assessment complete; implement the trace-only contour/context observability witness (O1) before another behavioral candidate
+**Current gate:** O1 local extraction/equality accepted; O2 labels/partition and shadow discrimination next; no behavioral candidate promoted
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -29,7 +29,7 @@ R21 is the protected comparison predecessor. R18–R21 remain historical evidenc
 not alternate current owners. Existing truth misses remain and field repair is
 not established by these checks.
 
-R22-2 is the current diagnostic runtime over the accepted R22 behavior:
+R22-2 is the protected diagnostic baseline over the accepted R22 behavior:
 `opencv-phase-detector-r22-2-interface-path-diagnostics-v1`. The completed resolver
 identity remains R22 intentionally. Its [architecture](../20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md)
 retains R22-1 candidate-centered measurements and adds the existing generators'
@@ -132,20 +132,29 @@ The [rejected R23 experiment](../50-diagnostics/s11/s11-r23-native-polarity-reje
 records why common-sector contrast inversion alone cannot veto association. Do
 not ask for another private rerun of that removed prototype.
 
-Next implement Stage O1 from the
-[Interface Observability Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md):
-typed frame observability, per-sector contour/localization uncertainty, multi-cue
-two-sided measurements and derivation lineage in trace-only mode. Preserve exact
-R22-2 behavior with debug on/off. Then build declared positive, negative and
-unresolved raster controls before selecting any operating point. Include real
-curve translation with photometric inversion, competing structures, reflections,
-glare and localization mismatch. Do not bypass these gates with polarity,
-source-family votes, persistence, motion or diagnostic peaks.
+Stage O1 is implemented as diagnostic runtime
+`opencv-phase-detector-r22-3-interface-witness-diagnostics-v1`, preserving the R22
+resolver. The [measurement contract](../20-architecture/s11-interface-observability-witness-architecture.md)
+defines fixed scales, descriptive peak/plateau hulls, geometry-vs-localization
+separation, exact raw candidate joins and shared-raster lineage. The
+[supplemental review](../50-diagnostics/s11/s11-observation-redesign-execution-review.md)
+is retained as supporting rationale after integration into current owners.
+
+[O1 local evidence](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md)
+records passing extraction, canonical suites and 12 public-window mode comparisons.
+Debug trace size increases about fourfold; use bounded captures. Freeze O2 positive,
+negative, localization-only and unresolved controls and episode partitions.
+Reviewed private checkpoints are regression cases, not untouched holdout.
+Windows work next verifies the new witness on existing reviewed frames and
+builds labels locally; no private export or immediate behavioral rerun is
+required. A real-image shadow classifier and its operating point remain unbuilt.
+Do not add further descriptors without a named discrimination hypothesis.
 
 Independent support/association, committed fill handoff and initial-FULL
 direction-neutral observation remain later separate behavioral gates. In
 parallel, evaluate fixed/controlled acquisition and structured-background options
-because a transparent interface may be optically unobservable in passive RGB.
+where fixture access permits. Failure of current descriptors alone does not
+prove physical unobservability; human-visible misses remain evaluation failures.
 Preserve FIELD FAIL until target-Windows accuracy/throughput qualification is
 actually satisfied; diagnostic equality and local controls do not establish
 Windows effectiveness.

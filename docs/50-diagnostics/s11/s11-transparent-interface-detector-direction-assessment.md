@@ -1,9 +1,9 @@
 # S11 Transparent-Interface Detector Direction Assessment
 
-**Assessment date:** 2026-09-17  
+**Assessment date:** 2026-09-17
 **Assessment status:** completed design decision; no production behavior or field
-acceptance is changed by this document.  
-**Current runtime:** `opencv-phase-detector-r22-2-interface-path-diagnostics-v1`.  
+acceptance is changed by this document.
+**Current runtime:** `opencv-phase-detector-r22-2-interface-path-diagnostics-v1`.
 **Field disposition:** `FIELD FAIL` remains in force.
 
 ## Decision
@@ -30,7 +30,8 @@ Proceed with a **bounded redesign of the observation layer** from
 Retain the existing bounded candidate beam, exact same-frame provenance,
 Oil/Foam independence, fail-closed publication, tracklet/lifecycle ownership,
 selector/projection contracts and report pipeline. Those layers contain useful
-safety constraints and are not the first harmful stage identified here.
+safety constraints, but reviewed phase/owner exclusion remains a separate
+failure mechanism. The public frame-local probe cannot exclude downstream causes.
 
 The implementation contract for the observation redesign is the
 [Interface Observability Witness Architecture](../../20-architecture/s11-interface-observability-witness-architecture.md)

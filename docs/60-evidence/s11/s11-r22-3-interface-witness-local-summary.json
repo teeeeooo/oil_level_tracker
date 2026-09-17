@@ -1,0 +1,1330 @@
+{
+  "schema": "s11-r22-3-o1-local-acceptance-v1",
+  "base_commit": "8842bf11ee33623670fac6381c5448524ae5b080",
+  "detector": "opencv-phase-detector-r22-3-interface-witness-diagnostics-v1",
+  "resolver": "r22-oil-ownership-evidence-replacement-v1",
+  "witness_schema": "interface-observability-witness-trace-v1",
+  "source_sha256": "792304d1049ffa2d807935d0c761c2ef956e6f17c2a96492960907f66462d55f",
+  "source_files": {
+    "src/oil_tracker/__init__.py": "b68611ce5bc1601c18598799cfefbc632e74924ee1bb4f315ffbc799d0132830",
+    "src/oil_tracker/__main__.py": "6deec222cff062b35381cd5c9a463b15229d66a902415352ce9ecc2ce867cfc1",
+    "src/oil_tracker/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/presentation/__init__.py": "1dda7e7a20d0730a8ceb7445639154087c1267942bc2db244373ba5a6792fc88",
+    "src/oil_tracker/adapters/presentation/qt_debug_artifact_presenter.py": "88e4e8c8b7b300beaadaa1318429ff12f89d94c64873cdcd25888354a47dfd73",
+    "src/oil_tracker/adapters/presentation/qt_frame_image_converter.py": "25392dd50933fa1342b65e2660dca555ce3de88d9bf554333a6320c02c9468fe",
+    "src/oil_tracker/adapters/presentation/review_frame_presenter.py": "7e5ca4017661a54a6e5126e574de8e457843a3378cfc47f6549063c840d68ec6",
+    "src/oil_tracker/adapters/reporting/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/reporting/csv_exporter.py": "a0a0b0f79729945e6e5f90374dc01555b4cfabdf3a994f7a437f56669ad9d7d7",
+    "src/oil_tracker/adapters/reporting/graph_renderer.py": "c925f153025558af4e0acfff89933952ef43ec659790c97e5a396762fcefece7",
+    "src/oil_tracker/adapters/reporting/html_reporter.py": "67859b134b52706ae3d3b4d4cd09636a2454fcee0efe203b906d3fcde67fc7dc",
+    "src/oil_tracker/adapters/reporting/templates/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/storage/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/storage/benchmark_result_writer.py": "04990b0fe5f5081bb7d4c12a0587e60e962489d7da75a37414193f5f2daaa0eb",
+    "src/oil_tracker/adapters/storage/bundle_asset_resolver.py": "83a92189f9715bbf58196584a19558dec3b854e127c291e762266c2fb02f0e36",
+    "src/oil_tracker/adapters/storage/debug_case_exporter.py": "3e69e81d25b428a3619afe34fe403184f35bd14d62258d050d2d2f08a73dc9e6",
+    "src/oil_tracker/adapters/storage/debug_trace_repository.py": "fb0e380e050458f90860e6765f984fa3b12507c3a72a7d2881c05098cb5a0134",
+    "src/oil_tracker/adapters/storage/image_capture_store.py": "fd2882efcb1dc84903d435b89b1e8a063cbedfec6fd1705f6b9f1c575afb99f0",
+    "src/oil_tracker/adapters/storage/json_recipe_repository.py": "241694afbbe6d8f26b6234f1e3ec6de3c3deb2c77f0ab2e574a399cacb1f5ddb",
+    "src/oil_tracker/adapters/storage/json_truth_repository.py": "16846e76fd41637d34ebe93a462049e952d082d5ddee6b6c938ce4d08c571f2d",
+    "src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py": "6f0be859724a4d8d152b79925500b721295a792f06cdfdf14375f9f4e929b90c",
+    "src/oil_tracker/adapters/storage/output_bundle_store.py": "b88180080d0b17a01afa41dd096051515ecef32e1d6fd94b7dfa6ee9ae3a9d6f",
+    "src/oil_tracker/adapters/storage/recent_profile_history.py": "10d96021f2b49d6e66e6a4e57caf1cb059d6350e6576ebfba3a17cb403d6c244",
+    "src/oil_tracker/adapters/storage/recent_result_history.py": "eab60b6b67c3655b88ebf23abd8a84b515700f2925e38019b398653f0de92fe7",
+    "src/oil_tracker/adapters/storage/redetection_workspace.py": "085e25e1d49cd3beb1af02935be60d4b6395e9d1d0ff2f7873bc8dd4938e921f",
+    "src/oil_tracker/adapters/storage/regression_dataset_reader.py": "7abf2935c95c86ca7cb742a99a11769a8f627c1223a7155ada4db74fc19a709c",
+    "src/oil_tracker/adapters/storage/regression_fixture_exporter.py": "bf55b130ccdbcc9bb99b49d687b1440f48d3f70d0afbe444c46687b15dd760a4",
+    "src/oil_tracker/adapters/storage/result_bundle_reader.py": "2d2a8e4f254b96ead60ed6535ae35617776063a0a7aaedbf384a8a676242e882",
+    "src/oil_tracker/adapters/storage/review_mp4_exporter.py": "599d339844f726e8f79b38190357487169b1994616e0922c4fe8d286e788ed8b",
+    "src/oil_tracker/adapters/storage/review_png_exporter.py": "2dcfd0acf1dfcd7d9314920e79853beec95bc85a1f0f38ed4841374a7112a878",
+    "src/oil_tracker/adapters/system/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/system/app_paths.py": "510f608932538e0a488faf0dd295e5fa89b092085db924da9e8ef0076b273bf2",
+    "src/oil_tracker/adapters/system/logging_config.py": "299c2fff523e02fdc44b493a80b522fa40a66d07eb9fb6001caa2f5be93981f1",
+    "src/oil_tracker/adapters/vision/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/vision/artifact_calibration.py": "6f0bf8b47fc0368b152f3fb227e99f623cc2772604a56ccbf23b2f93bbddfc8a",
+    "src/oil_tracker/adapters/vision/artifact_proposal.py": "ba0057c2bf777699c73bb6607d661190ae28cd461a49b6afd84dcdbbda1400a1",
+    "src/oil_tracker/adapters/vision/debug_renderer.py": "e5ca9442d86d210f7adb6e1714f336781570d318b301381e048a0aff73e4eba0",
+    "src/oil_tracker/adapters/vision/fill_state_classifier.py": "fe6aff8964e660ed91141c4a1f0ab4f9b83b9da7bc7cd102134535f78eaf1a4c",
+    "src/oil_tracker/adapters/vision/foam_episode_resolver.py": "d1e4ee1da0c9801c08a317e4f4255a0f37b8f53b50c45cf537da79f41c5faefb",
+    "src/oil_tracker/adapters/vision/foam_front_detector.py": "9bfae92524ba43f2c9ad657900a9399f1be0cd9f902ac15ecf6cab08cd68cd51",
+    "src/oil_tracker/adapters/vision/foam_material_identity.py": "e65fd5f574e1910b86815e663ac59f1edaad7c706d17fd3073fb24e6475570d9",
+    "src/oil_tracker/adapters/vision/foam_temporal_gate.py": "f251a930c069fd816b89f70ac49d776bd7445a19e4b3e7d8e0965a5a96948d22",
+    "src/oil_tracker/adapters/vision/geometry_masks.py": "8c9bbbed8e3a9c3abb5f1c97832fc1ab8d34d5cc4b7b07f706626d4653244820",
+    "src/oil_tracker/adapters/vision/observation_sequence_resolver.py": "6221224771d72f3ee670ee6e5ba93e05460e9bbd16471222d6c5feabe56d278a",
+    "src/oil_tracker/adapters/vision/oil_candidate_authority.py": "588274ee686220a611c27e41c7bbeec5f2b7841799b2617e602fc15b92a121ac",
+    "src/oil_tracker/adapters/vision/oil_candidate_evidence.py": "4c7253d5e11e781c696e2090fcdec9ff93aee5acecbb3989fc8f7b2038eaa51b",
+    "src/oil_tracker/adapters/vision/oil_decision_witness.py": "929590eac209d5b34ac97bac0d051e6c982ceaae2c959301064fb584431e7c3c",
+    "src/oil_tracker/adapters/vision/oil_hypothesis_projection.py": "bc24baebf7c57969d3671f7ae97eaabff8a8e00b7a2f48d53181fb6c2ab1bd1e",
+    "src/oil_tracker/adapters/vision/oil_interface_diagnostics.py": "c49abb50e21bf19b90d8fe4d5159e1d19c2c24468bfb57cd61634e166a043fad",
+    "src/oil_tracker/adapters/vision/oil_interface_selector.py": "ffad1560a57c5467b1e5ef287ff92f1e1836d467fbdd421757b155b6eedc3477",
+    "src/oil_tracker/adapters/vision/oil_interface_tracklets.py": "62a5d8fb6ff888b5cbf1de11eb167697c863fd30ec7715b9da9b0061ab0f428c",
+    "src/oil_tracker/adapters/vision/oil_interface_witness.py": "e8eea2c249ca7b0940c9d5fd006e281c2e9030746436fd8c6343c74103eda042",
+    "src/oil_tracker/adapters/vision/oil_material_path.py": "3612e1fc4d01c85b4537dd2b0862a9827e544aeae611011bd705077e00e7c088",
+    "src/oil_tracker/adapters/vision/oil_observation_resolver.py": "21efc55c87faef192ff9e3a7c033b7f9c18c196b9426fd0a61403ac85598d45a",
+    "src/oil_tracker/adapters/vision/oil_phase_identity.py": "12bcb34c64d01fba8429633e0d19b0cc48a6d84a17673b17746c42cd1d2a4293",
+    "src/oil_tracker/adapters/vision/oil_phase_lifecycle.py": "9b833ee492981fc930a9af305b9e11425c420e27054c74bac603ff6977e87e3f",
+    "src/oil_tracker/adapters/vision/oil_phase_topology.py": "c676461426c003f51df8506837fa59da08a72198a5a22cbad34fc744e483c988",
+    "src/oil_tracker/adapters/vision/oil_pipeline_diagnostics.py": "4a9452547a51cba74a2783e09f7f17a8364d7c3d028f4add491f58195e21bd8c",
+    "src/oil_tracker/adapters/vision/oil_pipeline_validation.py": "5f1bc660fc72f1aee0cc62c2454d221b6683d4f40a83af24e7e545a66bdd8557",
+    "src/oil_tracker/adapters/vision/oil_sequence_types.py": "56ef0536957888b3b42dbe7eadf87ff0e367df11f0fd6173a5c08c29a8e3b2f0",
+    "src/oil_tracker/adapters/vision/oil_shadow_observations.py": "88fa1525374b5a680da609617b9840d7339b1019a5eb8ee86dc3a1c6be4bfa1e",
+    "src/oil_tracker/adapters/vision/oil_shadow_pipeline.py": "0eade9f714044cc7b9f54f71ee5351c714ad38a533edd8cfa02a9daa846826b5",
+    "src/oil_tracker/adapters/vision/oil_shadow_temporal.py": "9ada30051d2270938005c4638c0aa5a4d3aa2c59603c3e959488d9449a8f0078",
+    "src/oil_tracker/adapters/vision/oil_shadow_types.py": "f79de7ecdf5ea36f01f05194e6cb0f2829079a77ba44def48631921d2848568c",
+    "src/oil_tracker/adapters/vision/oil_spatial_fallback.py": "e981339463b18722755912331c28f8621c7187ce6ac592b3af2029c6cf4075ae",
+    "src/oil_tracker/adapters/vision/oil_supplemental_path.py": "442015aa9f37faef7b9fbd054a0c362ec0aa22d0f80423367f9d8ac87f6b3f4a",
+    "src/oil_tracker/adapters/vision/opencv_phase_detector.py": "b10e87ac27a7de377d4933502716c1ea38367f9af4b4c07502b5bcb0c9c73c78",
+    "src/oil_tracker/adapters/vision/opencv_video_reader.py": "b4d3304d37890570b57101418e69546133b9a8317ce18766d52b7ab221b34686",
+    "src/oil_tracker/adapters/vision/phase_candidate_assembler.py": "da76ac512875a739121f4c8a220fdc206a70abfd2f531c4bc67d211cc671e66b",
+    "src/oil_tracker/adapters/vision/phase_frame_detection.py": "f0321631275b15774d7ae8f63b8a0121142c66f9bf82a1b87f46ea66340124e4",
+    "src/oil_tracker/adapters/vision/preprocessing.py": "55e33486cf34e709ccaf1930720f41978f74c3448baa69eceac8bb570233236e",
+    "src/oil_tracker/adapters/vision/review_debug_overlay_renderer.py": "f6bbc99132cf8d98c56f33d6b3543683852b5804e8fb17d767834d46803ae913",
+    "src/oil_tracker/adapters/vision/review_overlay_renderer.py": "966c77a9177b913dd2ab6098b9a93366d467aed228c6f131f0c2f96aceaf8a4d",
+    "src/oil_tracker/adapters/vision/row_features.py": "31536ade50d4cb151a7f756981da229d0655812a8a7d8c95582724613d771b1b",
+    "src/oil_tracker/adapters/vision/source_video_resolver.py": "edc1bc089d9eb512d2fff57be84b4cf52a271435ba37f5a31bd18869c0fe68c2",
+    "src/oil_tracker/adapters/vision/temporal_raster_evidence.py": "3ce8c8214765eb080454223bbfa4a1f1f70edd13ccce229bbbad454fd596c306",
+    "src/oil_tracker/adapters/vision/temporal_tracker.py": "7fa6b8304b80c257e1d17fc4a5f0e18573bd2c8675480d52b7314f183494171c",
+    "src/oil_tracker/application/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/detection_quality.py": "ad4e4f88b6426c6634bf3bb5303bd149428f014095fdbf8a0311222e55dac5e8",
+    "src/oil_tracker/application/observation_settings_copy.py": "9316283a4508ea482be787beaa76bc6c4aedd218499419325a6bfabcb0e3ad45",
+    "src/oil_tracker/application/ports/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/ports/benchmark_result_writer.py": "91c077b018bfe3cb7ebd1a66e967cc351826e6e086eb070b1e86266e1c3b2ff9",
+    "src/oil_tracker/application/ports/debug_trace_sink.py": "311ab910cd1a4344e9f9be6628525961b65f52175786d00feffe1268c7c03a76",
+    "src/oil_tracker/application/ports/phase_detector.py": "1707b82aa7e2f780e7b44253897ba3f5633ada5913f5d381d77d27607bb4bfe6",
+    "src/oil_tracker/application/ports/progress.py": "b17cf72e759ca02a0f98c5eea1cb516a4906761f563419f24f26d60d3e98a57f",
+    "src/oil_tracker/application/ports/recipe_repository.py": "42ecb412577c4e533770ceee5510fbc96cfc6dd3f5e1fe82a07a186db6902aee",
+    "src/oil_tracker/application/ports/regression_dataset_reader.py": "32f1e4a161694d74179fa1b7f604cf04bf1516679decb953c2fcb6cf2f1d30a6",
+    "src/oil_tracker/application/ports/result_store.py": "b3f1209192374712b0bf08e3305d8acfc79e4839cc45de6afc01696ab76fe8d4",
+    "src/oil_tracker/application/ports/review_io.py": "40938084414569290f74f71be392c93d92e7fce018a9102e37eaef842b35c9eb",
+    "src/oil_tracker/application/ports/video_reader.py": "3e9167379379e064912df6915e67bd790750c2dd10948b009b358c766341d3f4",
+    "src/oil_tracker/application/preflight.py": "b98fa507fa6eb0c6b163f8dd8ca00d436fd38c79d799f7488d27fda5df666d77",
+    "src/oil_tracker/application/services/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/services/analysis_outcome.py": "256aea5435e5a83c8f07ad1ae84db7de7ceb660f0f584f55be010092dd4ec77d",
+    "src/oil_tracker/application/services/analysis_pipeline.py": "e1e3631be2ec562fa05ac69d9ff1dbd684bcd7d9f655987491df99e2444e921c",
+    "src/oil_tracker/application/services/debug_capture_policy.py": "9d62e20b5a9e5c89a9a33d4f1b84df373b955601ad45e6d3d056164d4d45839a",
+    "src/oil_tracker/application/services/detection_processing.py": "9dc74b2ae485a350f6043efc27a21e581f2b00c561df6874644f410b46956e9b",
+    "src/oil_tracker/application/services/detection_run.py": "80dd947bfcb9e3b00c22f5bd277137fb9a4940a7e2589d73b17177d8c153ee56",
+    "src/oil_tracker/application/services/detector_benchmark_service.py": "9c896132cd42aec516b268e25f407930c1957d64a61db985c25067cacdc4c36d",
+    "src/oil_tracker/application/services/detector_settings.py": "ca7bdcc572bf3ac1648aabd7300cb486387d4849f1a0dc2a9e5851eb36c8fd74",
+    "src/oil_tracker/application/services/event_detection_service.py": "29c4d9bffc0a7ed03b318c51393b6ab12a55daaf108c30fa9add4cbf5ebfb439",
+    "src/oil_tracker/application/services/event_presentation.py": "5877609d112f55266599554e29f0b9c75aaca2bd0fc1cd89991de744b55252f9",
+    "src/oil_tracker/application/services/graph_axis.py": "a7faa25b2f7f8faf8ecb604bb903c25fa504a45f87580cdb3e23f6c85072f3cc",
+    "src/oil_tracker/application/services/graph_series.py": "72051d289915e1a7692f09987a12928789cb995459d45ad7702012e726f9a1ef",
+    "src/oil_tracker/application/services/initial_state_confirmation.py": "988cd04e20af6b16be57f2c5f5355d5e69bcc2ebca688c9b808e3089fdf18f71",
+    "src/oil_tracker/application/services/initial_state_reconstruction.py": "e6986d1ff32f5b5397ab908238d2f2a5677b15268e0f5faa36d58a61b6e70f3f",
+    "src/oil_tracker/application/services/judgment_service.py": "de7ed35fa825155ab229e9178b40a8ca18fc7426f5c82f4b1c1c94b50bbb7df8",
+    "src/oil_tracker/application/services/recipe_validation_service.py": "ee624d60c767ac981742151caa139d1352a724ec1a37487f9a1d5e223b42802d",
+    "src/oil_tracker/application/services/redetection_apply.py": "00e2f63835b7b24b39328a48b771eb8192ea0e6b2445535f81ebff486d858f14",
+    "src/oil_tracker/application/services/redetection_comparison.py": "dc1ae775ab30b6512859ac455a839c00f1fa1be3a060d5c59e4991804f74958b",
+    "src/oil_tracker/application/services/redetection_request.py": "f52e523e9bbf859f0979730fb9d4ff460851a769100f0c748e5e9a1775f0949b",
+    "src/oil_tracker/application/services/redetection_service.py": "302ab4a38b3a558b66043021e6b9c0f9c2269e3091c03682cee7c5ef6dec3880",
+    "src/oil_tracker/application/services/report_presentation.py": "420f39b30e27519a4f1e3505d3082e4efc4795f315c447ce18d417938e6a9b07",
+    "src/oil_tracker/application/services/review_graph.py": "5a4e19a92bfd943f9ff1735fef5d743f47343c7ef41a198d86e47e0fae1d210b",
+    "src/oil_tracker/application/services/review_query.py": "3a886fce8b534a0096426cdc317ae02694a68805efacaa6fbfc9cd4dd89d6905",
+    "src/oil_tracker/application/services/truth_identity.py": "5835e2ab1ebf490a80d852819ad1d522a8f1451fb0e454cfef6723817e433556",
+    "src/oil_tracker/application/services/user_truth.py": "c12a4eb1d901c38883f2ebc9a5c29453b6555ecd30bfe6e9da0c37c0a01f5bfa",
+    "src/oil_tracker/application/use_cases/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/use_cases/analyze_video.py": "47fb35c40d7cc81c7b081a7ee7a3d9f256e8145e005741f43142b487e59360c6",
+    "src/oil_tracker/application/use_cases/load_recipe.py": "fe8978d95c1e47ee9a6a16f105471f5fc169d42bc01fd4a12d4f364149e4d644",
+    "src/oil_tracker/application/use_cases/preflight_check.py": "257e4a56262786ac3de7d9e23c9dbc837b5297652036484d2256cba50dbe37d5",
+    "src/oil_tracker/application/use_cases/preview_detection.py": "87c528fa1d2567e42c39d0fa7f6f58fefd5a2d09ec938c5da1d5feef0f60f221",
+    "src/oil_tracker/application/use_cases/save_recipe.py": "4c70116d99013c42fc342b8274aedc408d150f4ab3780155f4869363fee74fb1",
+    "src/oil_tracker/application/use_cases/validate_workbench.py": "6d8f61f6d8bcc0b1a06b995e64edc25b92401ebd67c1cacab301bc2b9220a676",
+    "src/oil_tracker/bootstrap.py": "a927ca340c6c906098b7d4a82fe9995f5fd6e0b294cd19132043a672d3d83f24",
+    "src/oil_tracker/cli.py": "10d9e3f7754ff4e19dd11db8001fbde54a5bab4399aa4b5f8eccf073bf10eee9",
+    "src/oil_tracker/config/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/config/defaults.py": "b3a0ce3f31f2d6dbabe768b692e94dd9af31552f4997731679f854cc3b5ed92e",
+    "src/oil_tracker/config/schemas.py": "06953c09b910c3561554597dec804335edcd83c2f8d0ac1be3b90e605a11fa52",
+    "src/oil_tracker/domain/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/domain/debug_trace.py": "840cd2a88081127e9fb2d21bb825f52d4256eb27a8213db80082d08c44154d2d",
+    "src/oil_tracker/domain/detection.py": "5fa5f13462ae5a2f11fede751e6c2df10f2d1cde10b156224ecd8595ef999123",
+    "src/oil_tracker/domain/detector_benchmark.py": "e520b82eaa820ec83397fab33cc56e44f48110523a9c77f798451ac73360382d",
+    "src/oil_tracker/domain/enums.py": "2ba9f4ec3d2feea7a85fea541cc08464a442702c5f54a5b0413b181a1b24962f",
+    "src/oil_tracker/domain/events.py": "c4cb0c1470d972657276c3f6a31be610b1ce4d023c4bb9fcb6a358e0871274cc",
+    "src/oil_tracker/domain/geometry.py": "a146ee41a2dc2fa829ce91b0d42066a1be89d55e621fb878e7c8d258a053d84d",
+    "src/oil_tracker/domain/judgment.py": "c52622d9f25c5aa64bc2d583e189838d63567c3ce1ad53112d10d4dbcd8f3f01",
+    "src/oil_tracker/domain/oil_boundary_topology.py": "b7b7b36ea408a7f51240b63805dbcaf5acbea34146d023674a0bf0ebfdaa61f0",
+    "src/oil_tracker/domain/recipe.py": "c645dabf05b70d06f18c93f7dacec738211c52bc821dc00dffd5769cca7fbd81",
+    "src/oil_tracker/domain/redetection.py": "d9b58ba98e7555f0e99d0dd3506faef06d3f0ad348c3cc41468502f88dcaeda7",
+    "src/oil_tracker/domain/results.py": "0219100e954aafe8d217b3b01863cfdbd695aed6f620e9c499ca6c8576ca9566",
+    "src/oil_tracker/domain/retrospective.py": "91878c81391d6a9f04bd65f7c1f962613b012517785c8ed6e81a43b1cd8f395c",
+    "src/oil_tracker/domain/review.py": "04fffd0797671cdf39736bbcde0272fa0bf1f1678ee25ac60bb78fad0d61de92",
+    "src/oil_tracker/domain/session.py": "4914e31a16aaf7810d2724d82736e4a98d739a437da4bbc686e87485b1315b27",
+    "src/oil_tracker/domain/user_truth.py": "dbe963d3737c0444a39b7f8d1b986e37086cbe7b5b906948f2d8d47f3ddfacc7",
+    "src/oil_tracker/domain/validation.py": "2e3dd9de23241275918adce8c451f19e885e3e5a53593c75366fa4267311bec4",
+    "src/oil_tracker/resources/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/resources/icons/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/resources/styles/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/analysis_completion_coordinator.py": "37046a892be12aeba8aec3a9dc51a1783103a07978a1f3b8ea87f5272c281685",
+    "src/oil_tracker/ui/analysis_completion_summary.py": "d7caa92abca6c2a18b41d8b1943b68e11e0eb18fef086ced2f0f44977fd48361",
+    "src/oil_tracker/ui/controllers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/controllers/analysis_controller.py": "a973d09e4b853b9c4199276773cece65abf81934a63757d9af8d0d2b5f62c569",
+    "src/oil_tracker/ui/controllers/preflight_controller.py": "6a7470958710a83dc4d4cebd0f775b3a5153ecc0b75855b18fa2ebb585a735bf",
+    "src/oil_tracker/ui/controllers/preview_controller.py": "d18993e7552112fbe633fffb1248e548c25b782ddd6e81528902d2b5edb5dc4a",
+    "src/oil_tracker/ui/controllers/redetection_controller.py": "ae959abfe3e4225763b5553f4a65e768f557ec02393b114660f63c8a3d3cc428",
+    "src/oil_tracker/ui/controllers/result_review_controller.py": "02ccecdd7d0ae1308f120cdc2482ee215088fcc89886291011ad780fd4240c69",
+    "src/oil_tracker/ui/controllers/review_mp4_export_controller.py": "e50769edecf6585f6368e40c35978fbe61541490a846214cfb7055a495178fca",
+    "src/oil_tracker/ui/controllers/truth_export_controller.py": "9081b240d08afab64d9c21700d6d6629572fcc04e7b8689a8616ccbcfbd6394c",
+    "src/oil_tracker/ui/controllers/workbench_controller.py": "4c7992339c2b500cf0cd3de7808098a8982f04b751df414222f431ade691d8d7",
+    "src/oil_tracker/ui/controllers/workbench_playback_controller.py": "1d832f7e9a2ea9a7151b8d24252c07a4dc46fe090bbcb9214b68fac2590697a5",
+    "src/oil_tracker/ui/debug_trace_settings.py": "92e943c5f475f8f5adf382a13e0d0957e6f32109f6678686826921a72192eadb",
+    "src/oil_tracker/ui/main_window.py": "5ab51318276e5d3960d455c55934377c0671d33522f3ad98b0520398f69b6ea8",
+    "src/oil_tracker/ui/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/observation_settings_copy_coordinator.py": "04e0edc4d6c1a1df35cd6c69b8c319a111dbb749c703fe002118963b53d3e171",
+    "src/oil_tracker/ui/preflight_coordinator.py": "3e29a12d82e4b20cb049e6aacb13e7ebfad23f357dd0d14e26c7462c84493a53",
+    "src/oil_tracker/ui/presentation_labels.py": "c35313fbe8c93599739623dd80a4554b1783efd273dbf81840fa43f2492eb06c",
+    "src/oil_tracker/ui/profile_lifecycle_coordinator.py": "4e7a1f5c773d630b20d0f928aa537d6f5fd4fb051a7a6f1527bf1255daff7733",
+    "src/oil_tracker/ui/readiness.py": "bd320842517dffcf928e009b51036ecb571ebb7e5aa7dfde8971e5893ba24dcf",
+    "src/oil_tracker/ui/redetection_comparison_coordinator.py": "431bc4dd2aee20ce939ad2fdb1bc75d402db3d8a0631e298ceab1eac20d1f34d",
+    "src/oil_tracker/ui/redetection_comparison_window.py": "59776a61e9e91eb1c6c2e4c51db649605223a83c972a16602788f88be406a505",
+    "src/oil_tracker/ui/redetection_result_review_window.py": "a868c03b18679ab98baa3fe01297fb27225c4383f537141e6fe6213531113208",
+    "src/oil_tracker/ui/result_actions.py": "9207197750a8a606c4a6a48a91dbacc1b340a6a41ccfa7746521a2c83782c3c1",
+    "src/oil_tracker/ui/result_review_coordinator.py": "419919928b16571b0f4268236d7e3ca417a70919910edb1d3478d5a42920d3fe",
+    "src/oil_tracker/ui/result_review_window.py": "bb7cb532211308eebad123a647ef315ea169fe37cd8b6e22e0670fea2377e3ca",
+    "src/oil_tracker/ui/same_profile_analysis_coordinator.py": "705cea2e24be46165838b53c7e7365e1a14cdfd1159e4bbd5ab3343e04949d80",
+    "src/oil_tracker/ui/style.py": "3af33283ce2e8b6ee6a061c94ee19a59b8bd0ab83c082a6da974fc29e6c2c304",
+    "src/oil_tracker/ui/truth_annotation_coordinator.py": "5c4b333b15833a62dbec482d0015aa1d4c5081fd1728ec07d0caa335a0bba6d2",
+    "src/oil_tracker/ui/truth_annotation_window.py": "26a8a7b4e8df6ca544c32872642dd6b10973987e62b8eb3a50c6b4dbc1bfa4ec",
+    "src/oil_tracker/ui/undo.py": "7e12aca6754bb8543049e041a9c076c28d3eabc3b005809a27d1318e83e93125",
+    "src/oil_tracker/ui/widgets/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/widgets/analysis_complete_dialog.py": "99e95513ef51558e455b15944d4bcce88623a622544efd0e1d04886b466d48a1",
+    "src/oil_tracker/ui/widgets/analysis_progress_dialog.py": "7cd2c75de4dfcd97f9d9db7d50d517c1e3f8238ebfe588d69bec63069a7cc484",
+    "src/oil_tracker/ui/widgets/bottom_action_bar.py": "d07832987ba49be4ed94ec5fabfcd45ba87eeb982495cde4609173045234a12a",
+    "src/oil_tracker/ui/widgets/debug_panel.py": "e2f527063f0059b71718ee251bdc9495cb04eb2a20b283d1cdcd3e5ad287b2ee",
+    "src/oil_tracker/ui/widgets/detection_summary_card.py": "8f246e2b66171728c7ea84e2ced6533f85096117b18d43e57135cf0115712614",
+    "src/oil_tracker/ui/widgets/detector_settings_editor.py": "1dc0ebe926e24097558f6da9291f44f1b27ffd8903a408801383bdb04c806cc2",
+    "src/oil_tracker/ui/widgets/glass_list_panel.py": "7f7883a0a8e9d11db83b42d9299b6820f59d113c08e510add687bf0560fabc37",
+    "src/oil_tracker/ui/widgets/glass_settings_copy_dialog.py": "08931d8e6336d9c060fcacfc5d31291665989494e64a0ce52215c6f661417bb3",
+    "src/oil_tracker/ui/widgets/glass_settings_panel.py": "a323a375acccc8aab1a76d3c5b12da203bd46f2ea046f1d2f8f23331aa220999",
+    "src/oil_tracker/ui/widgets/preflight_panel.py": "e7b18dc54e9bf6ef517ae700d3f0c74612f6e8f93d01647376605699048bbf14",
+    "src/oil_tracker/ui/widgets/preflight_window.py": "3d05ac12dfbc19955e815ee5add994dad3fb8ccb03f1242e83c88b5b78999d7e",
+    "src/oil_tracker/ui/widgets/redetection_comparison_graph.py": "7e90945c3a37a9325ad340d654318d963bd4cf2cdd928f27d848458c43303bca",
+    "src/oil_tracker/ui/widgets/redetection_debug_comparison.py": "73cd3fef96a9ee4ee9dd4440e69681af6aec26c797fcb20645a1ca7e94078951",
+    "src/oil_tracker/ui/widgets/result_debug_panel.py": "886892860099ac73945d5f8c1faec3c74268288251023ed8618ce93746a57a27",
+    "src/oil_tracker/ui/widgets/result_review_canvas.py": "ecb12786d43d476f4ef4e0eb4dace064040e41a3290cedf9fc271154cd681c0c",
+    "src/oil_tracker/ui/widgets/result_review_details.py": "f08368f613e099b08f68db34ebb2f07e5fbe7d4e8848014a0b826e378baed035",
+    "src/oil_tracker/ui/widgets/result_review_graph.py": "864096a00cf52085195c64504da7f3b679ec57364fe2c75e6c206f68272a9ead",
+    "src/oil_tracker/ui/widgets/result_review_navigation.py": "46f374c6db5ce3f57a603c91a4553e2e6cc97ce8bc46ff766b20977d7ab6cca9",
+    "src/oil_tracker/ui/widgets/result_review_view.py": "a7e70710a018512024753ea8e039e0c28ad4d302dca5ffcb559689b69f527148",
+    "src/oil_tracker/ui/widgets/roi_editor_dialog.py": "ddd0aea3d969a922d137dc55a886d2290bbc976982e5caa041f53a2e9c241ac0",
+    "src/oil_tracker/ui/widgets/transport_bar.py": "c2d57b602dbb387adda0f9227502b99f175308d072aa5c09d4a3418a5b67430a",
+    "src/oil_tracker/ui/widgets/truth_annotation_canvas.py": "06656d62552ccda184ea3b96971998fa1f8e895495e9d4db5ac7ac4600b9a1d9",
+    "src/oil_tracker/ui/widgets/validation_panel.py": "5a7dab3c22e791811f78de49ab61830fdb25a418dccdda6cfb8d048119bbcb58",
+    "src/oil_tracker/ui/widgets/video_overlay_canvas.py": "68700be85f717b0444766e86785d317448eadf1569848418e2a7b312aa8e3992",
+    "src/oil_tracker/ui/widgets/video_playback_panel.py": "afbb15d28b3471cad136203913f03f12d97f48e2549725888ef4bd786be1032f",
+    "src/oil_tracker/ui/widgets/video_preview_widget.py": "9990ceef6ef333df96d45278242d88cafc146e6addc790f96960bbe642792592",
+    "src/oil_tracker/ui/widgets/wheel_safe_controls.py": "bfbdfceb7f7e0a4435af8e835a5cb413bb457d8407a313481bf3d9b12fe6093f",
+    "src/oil_tracker/ui/widgets/workbench_progress.py": "01df69617f66cc132e47fa3c2fa285248b36ac71b9814b79ebfff2ee93f2a495",
+    "src/oil_tracker/ui/wizard/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/wizard/new_recipe_wizard.py": "c64f12901403f373d3ee4f695e7772026d7631536750e94441cb40b4c6de19fe",
+    "src/oil_tracker/visualization/__init__.py": "63e96083bed6be3dc58be44988fc221421ef4192ac5c3a2a1b1b210299e3d5e2",
+    "src/oil_tracker/visualization/matplotlib_font.py": "d215a30ed3c49a68ccc2661a2d8befde15bb4208dd7321bf18b8c3d0eb68d920"
+  },
+  "baseline_source_sha256": "939e853adf5d9b412a2d860919195ffb2fc5a3c63dcb2c4a32e54ad129655d3c",
+  "baseline_bootstrap_harness_sha256": "60794fe8c58e63fb917490fbc8072a88b6def9eb958cf3d63c48a50b95ef6064",
+  "candidate_harness_sha256": [
+    "28d47e3b1da8b55407387f48e2e33bf9f3a01dfbb18ee4acdd448f4f2db38c62",
+    "a85c49b684ad7f1b2cd236a31a2b29840da04c71d84855d2faa371ec28a6a64f"
+  ],
+  "runtime": {
+    "schema": "s11-replay-runtime-provenance-v1",
+    "runtime_fingerprint_sha256": "7b14134e3f811d06e45ea2cd44686b5ffedd22dc7e2848fd2e04bd838f8aa20d",
+    "python_implementation": "CPython",
+    "python_version": "3.14.4",
+    "platform_system": "Darwin",
+    "platform_release": "25.6.0",
+    "platform_machine": "arm64",
+    "opencv_version": "4.14.0",
+    "numpy_version": "2.5.1",
+    "opencv_build_sha256": "c201b5ba726b7370afc3cb0d338454e2964afe1aa907849908b27850ecc043cf",
+    "opencv_videoio": {
+      "FFMPEG": "YES",
+      "avcodec": "YES (61.19.101)",
+      "avformat": "YES (61.7.100)",
+      "avutil": "YES (59.39.100)",
+      "swscale": "YES (8.3.100)",
+      "GStreamer": "NO"
+    },
+    "video_backend": "FFMPEG",
+    "packages": {
+      "opencv-python-headless": "4.14.0.94",
+      "numpy": "2.5.1",
+      "PySide6": "6.11.1",
+      "Jinja2": "3.1.6",
+      "matplotlib": "3.11.1"
+    }
+  },
+  "input_hashes": {
+    "base_sample_1": {
+      "mp4": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+      "oilrecipe": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+      "oiltruth": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a"
+    },
+    "sample2": {
+      "mp4": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+      "oilrecipe": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+      "oiltruth": "f45479f7bb5f4216cb9c6920ac994d2d690942f2ed432d5d8a8647af030c731f"
+    },
+    "sample3": {
+      "mp4": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+      "oilrecipe": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+      "oiltruth": "8cb2b917eede7708894fa90f59f96f1d9eac272813af6d457dcbc292496dd8ab"
+    },
+    "sample4": {
+      "mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+      "oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+      "oiltruth": "f02575ac2379b4d135567f1835aa772803af13a20413b8aa58175d890f5241bd"
+    }
+  },
+  "replay_rows": [
+    {
+      "sample": "base_sample_1",
+      "debug_level": "none",
+      "frame_count": 30,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "eec927da15fd922d92d3558d680e94a89bdb10c93ebec4964120d2060bc993c4",
+        "completed": "15eaa359eed4d6be1796d66bce09b39260d2996ba31cbb5e1357d578967256dd",
+        "old_diagnostics": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint": "fa67eaa9c682fa4c110335176ce348fa1896bf76d6117c769ca5627ce3c1ff6d",
+        "tracking_data.csv": "86b0220bd71f591eec5d71a79648ae8097742df9d87eb88e4bb814539f1dcd61",
+        "events.csv": "5657abc957719935355c1f6d5e33049166274d6407375a42b18df9fbaa7dcb4b"
+      },
+      "tracking_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "baseline_seconds": 7.919800833973568,
+      "candidate_seconds": 7.52740962500684,
+      "baseline_peak_rss_bytes": 222904320,
+      "candidate_peak_rss_bytes": 224018432,
+      "baseline_trace_bytes": 0,
+      "candidate_trace_bytes": 0,
+      "candidate_witness_bytes": 0,
+      "witness_record_count": 0,
+      "candidate_debug_copy_mode": "copy",
+      "candidate_harness_sha256": "a85c49b684ad7f1b2cd236a31a2b29840da04c71d84855d2faa371ec28a6a64f"
+    },
+    {
+      "sample": "sample2",
+      "debug_level": "none",
+      "frame_count": 5,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "b395b6bd90f1947e2901045a5b8b4c904866947f748a3c52a098a3757a710105",
+        "completed": "435a9f10d2c16f985682960bb0fcb96147acd993b6cfe6dc43dd25acbc157e5d",
+        "old_diagnostics": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint": "419960ddb9d78cd1dcaa9b9ce019c0aaa61e98fcb48417e7fcfd22372558b9a2",
+        "tracking_data.csv": "eaebdb88ce0c58067e8ffeb25f3efcaf5ebf1e9a9fb861882860588e4f58629e",
+        "events.csv": "a360da0a14bc5d2da13836f31b456ad032b859032b22eb7ffffaeb0e5af47a24"
+      },
+      "tracking_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "baseline_seconds": 1.6076934579759836,
+      "candidate_seconds": 1.6170977920410223,
+      "baseline_peak_rss_bytes": 223690752,
+      "candidate_peak_rss_bytes": 226115584,
+      "baseline_trace_bytes": 0,
+      "candidate_trace_bytes": 0,
+      "candidate_witness_bytes": 0,
+      "witness_record_count": 0,
+      "candidate_debug_copy_mode": "copy",
+      "candidate_harness_sha256": "a85c49b684ad7f1b2cd236a31a2b29840da04c71d84855d2faa371ec28a6a64f"
+    },
+    {
+      "sample": "sample3",
+      "debug_level": "none",
+      "frame_count": 151,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "734c65a86cfde92672b9a73f97c136665f8154108e4209a4213737866d65c828",
+        "completed": "32782544ff3bf7d1243e20b8317a534d35504a56623a7f4178490ad775ea79ee",
+        "old_diagnostics": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint": "de4e7cc1398b31863ac265d3428b1d057611ba1ac6370d7ad8a94e0845948dd7",
+        "tracking_data.csv": "692efb21580d8430cc5cb3f63c556e8c514780668e6e14c7a55c22749d70db13",
+        "events.csv": "a9715e9ad261cb3a134d35f7bde5bf0ceba6fb3fb0201f81f72e15a8f94283ae"
+      },
+      "tracking_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "baseline_seconds": 21.43005870800698,
+      "candidate_seconds": 22.591842584020924,
+      "baseline_peak_rss_bytes": 252067840,
+      "candidate_peak_rss_bytes": 254672896,
+      "baseline_trace_bytes": 0,
+      "candidate_trace_bytes": 0,
+      "candidate_witness_bytes": 0,
+      "witness_record_count": 0,
+      "candidate_debug_copy_mode": "copy",
+      "candidate_harness_sha256": "a85c49b684ad7f1b2cd236a31a2b29840da04c71d84855d2faa371ec28a6a64f"
+    },
+    {
+      "sample": "sample4",
+      "debug_level": "none",
+      "frame_count": 113,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "68953ec77239f19a1fea878724ffe8f8c192321ee7aca5bb71446fd95b8cc135",
+        "completed": "9bbf8c1d5d37877a4dd87303818baf5512ed5a9902321131746bf68086230128",
+        "old_diagnostics": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint": "3d6f211b4c6ba92ce845a1d12102878429a6d3171e2641397ee2918fa46f822b",
+        "tracking_data.csv": "7cdd4a63cc439aa0a90acd389325b270cf251280f6b1c869754e80ce05727888",
+        "events.csv": "a9086da200e2b686360d02880c43daf8a294c27ba7945bccde9c4dd6bc86dd41"
+      },
+      "tracking_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "baseline_seconds": 12.162116541992873,
+      "candidate_seconds": 12.391330874990672,
+      "baseline_peak_rss_bytes": 253771776,
+      "candidate_peak_rss_bytes": 259997696,
+      "baseline_trace_bytes": 0,
+      "candidate_trace_bytes": 0,
+      "candidate_witness_bytes": 0,
+      "witness_record_count": 0,
+      "candidate_debug_copy_mode": "copy",
+      "candidate_harness_sha256": "a85c49b684ad7f1b2cd236a31a2b29840da04c71d84855d2faa371ec28a6a64f"
+    },
+    {
+      "sample": "base_sample_1",
+      "debug_level": "basic",
+      "frame_count": 30,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "eec927da15fd922d92d3558d680e94a89bdb10c93ebec4964120d2060bc993c4",
+        "completed": "15eaa359eed4d6be1796d66bce09b39260d2996ba31cbb5e1357d578967256dd",
+        "old_diagnostics": "c37addcaa158faa998737ea73e321671582921d54ae52095b1b8911a8f7e5120",
+        "fingerprint": "fa67eaa9c682fa4c110335176ce348fa1896bf76d6117c769ca5627ce3c1ff6d",
+        "tracking_data.csv": "86b0220bd71f591eec5d71a79648ae8097742df9d87eb88e4bb814539f1dcd61",
+        "events.csv": "5657abc957719935355c1f6d5e33049166274d6407375a42b18df9fbaa7dcb4b"
+      },
+      "tracking_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "baseline_seconds": 9.274005750019569,
+      "candidate_seconds": 13.53238341701217,
+      "baseline_peak_rss_bytes": 227803136,
+      "candidate_peak_rss_bytes": 238419968,
+      "baseline_trace_bytes": 12063197,
+      "candidate_trace_bytes": 47441332,
+      "candidate_witness_bytes": 38084186,
+      "witness_record_count": 30,
+      "candidate_debug_copy_mode": "copy",
+      "candidate_harness_sha256": "a85c49b684ad7f1b2cd236a31a2b29840da04c71d84855d2faa371ec28a6a64f"
+    },
+    {
+      "sample": "sample2",
+      "debug_level": "basic",
+      "frame_count": 5,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "b395b6bd90f1947e2901045a5b8b4c904866947f748a3c52a098a3757a710105",
+        "completed": "435a9f10d2c16f985682960bb0fcb96147acd993b6cfe6dc43dd25acbc157e5d",
+        "old_diagnostics": "808179c27455e890489de9130e00cc73c9fa550f21cb5cc86c62c96d41d67218",
+        "fingerprint": "419960ddb9d78cd1dcaa9b9ce019c0aaa61e98fcb48417e7fcfd22372558b9a2",
+        "tracking_data.csv": "eaebdb88ce0c58067e8ffeb25f3efcaf5ebf1e9a9fb861882860588e4f58629e",
+        "events.csv": "a360da0a14bc5d2da13836f31b456ad032b859032b22eb7ffffaeb0e5af47a24"
+      },
+      "tracking_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "baseline_seconds": 1.9769177919952199,
+      "candidate_seconds": 3.0340252090245485,
+      "baseline_peak_rss_bytes": 227590144,
+      "candidate_peak_rss_bytes": 242647040,
+      "baseline_trace_bytes": 2350708,
+      "candidate_trace_bytes": 9607236,
+      "candidate_witness_bytes": 7794781,
+      "witness_record_count": 5,
+      "candidate_debug_copy_mode": "copy",
+      "candidate_harness_sha256": "a85c49b684ad7f1b2cd236a31a2b29840da04c71d84855d2faa371ec28a6a64f"
+    },
+    {
+      "sample": "sample3",
+      "debug_level": "basic",
+      "frame_count": 151,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "734c65a86cfde92672b9a73f97c136665f8154108e4209a4213737866d65c828",
+        "completed": "32782544ff3bf7d1243e20b8317a534d35504a56623a7f4178490ad775ea79ee",
+        "old_diagnostics": "8d05e825370d0e3cb3b224051ab0d2af5a23c72e685de3a5f175509be1a1bf1b",
+        "fingerprint": "de4e7cc1398b31863ac265d3428b1d057611ba1ac6370d7ad8a94e0845948dd7",
+        "tracking_data.csv": "692efb21580d8430cc5cb3f63c556e8c514780668e6e14c7a55c22749d70db13",
+        "events.csv": "a9715e9ad261cb3a134d35f7bde5bf0ceba6fb3fb0201f81f72e15a8f94283ae"
+      },
+      "tracking_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "baseline_seconds": 29.13581308396533,
+      "candidate_seconds": 45.7158333749976,
+      "baseline_peak_rss_bytes": 262504448,
+      "candidate_peak_rss_bytes": 272990208,
+      "baseline_trace_bytes": 55341248,
+      "candidate_trace_bytes": 219394562,
+      "candidate_witness_bytes": 176497014,
+      "witness_record_count": 151,
+      "candidate_debug_copy_mode": "copy",
+      "candidate_harness_sha256": "a85c49b684ad7f1b2cd236a31a2b29840da04c71d84855d2faa371ec28a6a64f"
+    },
+    {
+      "sample": "sample4",
+      "debug_level": "basic",
+      "frame_count": 113,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "68953ec77239f19a1fea878724ffe8f8c192321ee7aca5bb71446fd95b8cc135",
+        "completed": "9bbf8c1d5d37877a4dd87303818baf5512ed5a9902321131746bf68086230128",
+        "old_diagnostics": "c86703f65262f0f5d9a690361d58367fadf33c0a8f41c69677e1bf93e7d00be0",
+        "fingerprint": "3d6f211b4c6ba92ce845a1d12102878429a6d3171e2641397ee2918fa46f822b",
+        "tracking_data.csv": "7cdd4a63cc439aa0a90acd389325b270cf251280f6b1c869754e80ce05727888",
+        "events.csv": "a9086da200e2b686360d02880c43daf8a294c27ba7945bccde9c4dd6bc86dd41"
+      },
+      "tracking_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "baseline_seconds": 20.052966625022236,
+      "candidate_seconds": 34.637664791953284,
+      "baseline_peak_rss_bytes": 261439488,
+      "candidate_peak_rss_bytes": 272318464,
+      "baseline_trace_bytes": 42640635,
+      "candidate_trace_bytes": 170737855,
+      "candidate_witness_bytes": 137739120,
+      "witness_record_count": 113,
+      "candidate_debug_copy_mode": "hardlink",
+      "candidate_harness_sha256": "28d47e3b1da8b55407387f48e2e33bf9f3a01dfbb18ee4acdd448f4f2db38c62"
+    },
+    {
+      "sample": "base_sample_1",
+      "debug_level": "full",
+      "frame_count": 30,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "eec927da15fd922d92d3558d680e94a89bdb10c93ebec4964120d2060bc993c4",
+        "completed": "15eaa359eed4d6be1796d66bce09b39260d2996ba31cbb5e1357d578967256dd",
+        "old_diagnostics": "c37addcaa158faa998737ea73e321671582921d54ae52095b1b8911a8f7e5120",
+        "fingerprint": "fa67eaa9c682fa4c110335176ce348fa1896bf76d6117c769ca5627ce3c1ff6d",
+        "tracking_data.csv": "86b0220bd71f591eec5d71a79648ae8097742df9d87eb88e4bb814539f1dcd61",
+        "events.csv": "5657abc957719935355c1f6d5e33049166274d6407375a42b18df9fbaa7dcb4b"
+      },
+      "tracking_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "baseline_seconds": 9.348702624964062,
+      "candidate_seconds": 13.366165874991566,
+      "baseline_peak_rss_bytes": 227377152,
+      "candidate_peak_rss_bytes": 241696768,
+      "baseline_trace_bytes": 12105167,
+      "candidate_trace_bytes": 47483302,
+      "candidate_witness_bytes": 38084186,
+      "witness_record_count": 30,
+      "candidate_debug_copy_mode": "hardlink",
+      "candidate_harness_sha256": "28d47e3b1da8b55407387f48e2e33bf9f3a01dfbb18ee4acdd448f4f2db38c62"
+    },
+    {
+      "sample": "sample2",
+      "debug_level": "full",
+      "frame_count": 5,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "b395b6bd90f1947e2901045a5b8b4c904866947f748a3c52a098a3757a710105",
+        "completed": "435a9f10d2c16f985682960bb0fcb96147acd993b6cfe6dc43dd25acbc157e5d",
+        "old_diagnostics": "808179c27455e890489de9130e00cc73c9fa550f21cb5cc86c62c96d41d67218",
+        "fingerprint": "419960ddb9d78cd1dcaa9b9ce019c0aaa61e98fcb48417e7fcfd22372558b9a2",
+        "tracking_data.csv": "eaebdb88ce0c58067e8ffeb25f3efcaf5ebf1e9a9fb861882860588e4f58629e",
+        "events.csv": "a360da0a14bc5d2da13836f31b456ad032b859032b22eb7ffffaeb0e5af47a24"
+      },
+      "tracking_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "baseline_seconds": 1.9812315829913132,
+      "candidate_seconds": 2.655588458990678,
+      "baseline_peak_rss_bytes": 226000896,
+      "candidate_peak_rss_bytes": 232636416,
+      "baseline_trace_bytes": 2357703,
+      "candidate_trace_bytes": 9614231,
+      "candidate_witness_bytes": 7794781,
+      "witness_record_count": 5,
+      "candidate_debug_copy_mode": "hardlink",
+      "candidate_harness_sha256": "28d47e3b1da8b55407387f48e2e33bf9f3a01dfbb18ee4acdd448f4f2db38c62"
+    },
+    {
+      "sample": "sample3",
+      "debug_level": "full",
+      "frame_count": 151,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "734c65a86cfde92672b9a73f97c136665f8154108e4209a4213737866d65c828",
+        "completed": "32782544ff3bf7d1243e20b8317a534d35504a56623a7f4178490ad775ea79ee",
+        "old_diagnostics": "8d05e825370d0e3cb3b224051ab0d2af5a23c72e685de3a5f175509be1a1bf1b",
+        "fingerprint": "de4e7cc1398b31863ac265d3428b1d057611ba1ac6370d7ad8a94e0845948dd7",
+        "tracking_data.csv": "692efb21580d8430cc5cb3f63c556e8c514780668e6e14c7a55c22749d70db13",
+        "events.csv": "a9715e9ad261cb3a134d35f7bde5bf0ceba6fb3fb0201f81f72e15a8f94283ae"
+      },
+      "tracking_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "baseline_seconds": 29.334113707998767,
+      "candidate_seconds": 45.197792042046785,
+      "baseline_peak_rss_bytes": 261160960,
+      "candidate_peak_rss_bytes": 275841024,
+      "baseline_trace_bytes": 55552497,
+      "candidate_trace_bytes": 219605811,
+      "candidate_witness_bytes": 176497014,
+      "witness_record_count": 151,
+      "candidate_debug_copy_mode": "hardlink",
+      "candidate_harness_sha256": "28d47e3b1da8b55407387f48e2e33bf9f3a01dfbb18ee4acdd448f4f2db38c62"
+    },
+    {
+      "sample": "sample4",
+      "debug_level": "full",
+      "frame_count": 113,
+      "baseline_equal": {
+        "raw": true,
+        "completed": true,
+        "old_diagnostics": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true,
+        "runtime": true,
+        "inputs": true
+      },
+      "candidate_debug_equal": {
+        "raw": true,
+        "completed": true,
+        "fingerprint": true,
+        "tracking_data.csv": true,
+        "events.csv": true
+      },
+      "equal_payload_sha256": {
+        "raw": "68953ec77239f19a1fea878724ffe8f8c192321ee7aca5bb71446fd95b8cc135",
+        "completed": "9bbf8c1d5d37877a4dd87303818baf5512ed5a9902321131746bf68086230128",
+        "old_diagnostics": "c86703f65262f0f5d9a690361d58367fadf33c0a8f41c69677e1bf93e7d00be0",
+        "fingerprint": "3d6f211b4c6ba92ce845a1d12102878429a6d3171e2641397ee2918fa46f822b",
+        "tracking_data.csv": "7cdd4a63cc439aa0a90acd389325b270cf251280f6b1c869754e80ce05727888",
+        "events.csv": "a9086da200e2b686360d02880c43daf8a294c27ba7945bccde9c4dd6bc86dd41"
+      },
+      "tracking_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "baseline_seconds": 20.409871832991485,
+      "candidate_seconds": 31.96189629199216,
+      "baseline_peak_rss_bytes": 259801088,
+      "candidate_peak_rss_bytes": 269582336,
+      "baseline_trace_bytes": 42798722,
+      "candidate_trace_bytes": 170895942,
+      "candidate_witness_bytes": 137739120,
+      "witness_record_count": 113,
+      "candidate_debug_copy_mode": "hardlink",
+      "candidate_harness_sha256": "28d47e3b1da8b55407387f48e2e33bf9f3a01dfbb18ee4acdd448f4f2db38c62"
+    }
+  ],
+  "probe_v2": {
+    "full_result_sha256": "a09a3771df517e751f755e2580e6715f2f66a7d6b6ea206ffe8ebe3e6b2ea911",
+    "summary": {
+      "case_count": 13,
+      "measurement_count": 91,
+      "transforms": {
+        "brightness_0.80": {
+          "annotation_count": 13,
+          "candidate_recall_within_8px_count": 13,
+          "nearest_candidate_error_px": {
+            "count": 13,
+            "minimum": 0.0,
+            "median": 1.0,
+            "maximum": 7.0
+          },
+          "oil_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 21.0,
+            "median": 24.0,
+            "maximum": 28.0
+          },
+          "near_truth_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 1.0,
+            "median": 4.0,
+            "maximum": 8.0
+          },
+          "near_truth_geometry": {
+            "candidate_count": 54,
+            "median_near_abs_contrast": {
+              "count": 54,
+              "minimum": 0.0035877281947249984,
+              "median": 0.04688132094943249,
+              "maximum": 0.22664176781823886
+            },
+            "median_far_abs_contrast": {
+              "count": 54,
+              "minimum": 0.0018405256285194682,
+              "median": 0.08249528569597583,
+              "maximum": 0.2283006535947706
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 54,
+              "minimum": -0.09712418300653664,
+              "median": -0.030873981471144077,
+              "maximum": 0.08197945845004613
+            },
+            "median_peak_abs_offset_px": {
+              "count": 54,
+              "minimum": 0.0,
+              "median": 2.0,
+              "maximum": 3.0
+            }
+          },
+          "remote_geometry_not_proven_negative": {
+            "candidate_count": 207,
+            "median_near_abs_contrast": {
+              "count": 168,
+              "minimum": 0.0010765090349877937,
+              "median": 0.025814195737072946,
+              "maximum": 0.27258014316837953
+            },
+            "median_far_abs_contrast": {
+              "count": 168,
+              "minimum": 0.003631082062454813,
+              "median": 0.03784547793677143,
+              "maximum": 0.40837619896443456
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 168,
+              "minimum": -0.17340401479686698,
+              "median": -0.01970382950032093,
+              "maximum": 0.08429165605636185
+            },
+            "median_peak_abs_offset_px": {
+              "count": 168,
+              "minimum": 0.0,
+              "median": 1.0,
+              "maximum": 3.0
+            }
+          }
+        },
+        "brightness_1.20": {
+          "annotation_count": 13,
+          "candidate_recall_within_8px_count": 13,
+          "nearest_candidate_error_px": {
+            "count": 13,
+            "minimum": 0.0,
+            "median": 1.0,
+            "maximum": 8.0
+          },
+          "oil_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 21.0,
+            "median": 24.0,
+            "maximum": 27.0
+          },
+          "near_truth_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 1.0,
+            "median": 4.0,
+            "maximum": 7.0
+          },
+          "near_truth_geometry": {
+            "candidate_count": 53,
+            "median_near_abs_contrast": {
+              "count": 53,
+              "minimum": 0.004322158971111406,
+              "median": 0.06996078431372543,
+              "maximum": 0.33962029256146875
+            },
+            "median_far_abs_contrast": {
+              "count": 53,
+              "minimum": 0.004626001444321515,
+              "median": 0.12959850606909418,
+              "maximum": 0.3300342359165892
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 53,
+              "minimum": -0.11592707258341856,
+              "median": -0.03305481736854213,
+              "maximum": 0.11160908807967762
+            },
+            "median_peak_abs_offset_px": {
+              "count": 53,
+              "minimum": 0.0,
+              "median": 2.0,
+              "maximum": 3.0
+            }
+          },
+          "remote_geometry_not_proven_negative": {
+            "candidate_count": 197,
+            "median_near_abs_contrast": {
+              "count": 159,
+              "minimum": 0.0006535947712396489,
+              "median": 0.03358323721645645,
+              "maximum": 0.47164643635232106
+            },
+            "median_far_abs_contrast": {
+              "count": 159,
+              "minimum": 0.0025242280820372415,
+              "median": 0.05079063883618107,
+              "maximum": 0.6155934697111151
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 159,
+              "minimum": -0.32201897268834123,
+              "median": -0.026778162245288173,
+              "maximum": 0.1274775768893417
+            },
+            "median_peak_abs_offset_px": {
+              "count": 159,
+              "minimum": 0.0,
+              "median": 1.0,
+              "maximum": 3.0
+            }
+          }
+        },
+        "contrast_0.80": {
+          "annotation_count": 13,
+          "candidate_recall_within_8px_count": 13,
+          "nearest_candidate_error_px": {
+            "count": 13,
+            "minimum": 0.0,
+            "median": 1.0,
+            "maximum": 6.0
+          },
+          "oil_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 21.0,
+            "median": 24.0,
+            "maximum": 27.0
+          },
+          "near_truth_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 2.0,
+            "median": 4.0,
+            "maximum": 7.0
+          },
+          "near_truth_geometry": {
+            "candidate_count": 59,
+            "median_near_abs_contrast": {
+              "count": 59,
+              "minimum": 0.006936538056081243,
+              "median": 0.04592363261093921,
+              "maximum": 0.22695300342359095
+            },
+            "median_far_abs_contrast": {
+              "count": 59,
+              "minimum": 0.0038191762008115693,
+              "median": 0.08219915417147802,
+              "maximum": 0.2322875816993459
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 59,
+              "minimum": -0.08745720510426358,
+              "median": -0.02821232881174049,
+              "maximum": 0.08257080610021812
+            },
+            "median_peak_abs_offset_px": {
+              "count": 59,
+              "minimum": 0.0,
+              "median": 2.0,
+              "maximum": 3.0
+            }
+          },
+          "remote_geometry_not_proven_negative": {
+            "candidate_count": 199,
+            "median_near_abs_contrast": {
+              "count": 167,
+              "minimum": 0.0008442265795214898,
+              "median": 0.025386099519899924,
+              "maximum": 0.3027077497665722
+            },
+            "median_far_abs_contrast": {
+              "count": 167,
+              "minimum": 0.0008338967771008982,
+              "median": 0.03680926916220961,
+              "maximum": 0.35133633251280505
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 167,
+              "minimum": -0.2148564755055549,
+              "median": -0.018089196462899138,
+              "maximum": 0.08403021814786504
+            },
+            "median_peak_abs_offset_px": {
+              "count": 167,
+              "minimum": 0.0,
+              "median": 1.0,
+              "maximum": 3.0
+            }
+          }
+        },
+        "contrast_1.20": {
+          "annotation_count": 13,
+          "candidate_recall_within_8px_count": 13,
+          "nearest_candidate_error_px": {
+            "count": 13,
+            "minimum": 0.0,
+            "median": 1.0,
+            "maximum": 8.0
+          },
+          "oil_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 21.0,
+            "median": 24.0,
+            "maximum": 28.0
+          },
+          "near_truth_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 1.0,
+            "median": 4.0,
+            "maximum": 8.0
+          },
+          "near_truth_geometry": {
+            "candidate_count": 58,
+            "median_near_abs_contrast": {
+              "count": 58,
+              "minimum": 0.007505798018134939,
+              "median": 0.06266557734204799,
+              "maximum": 0.33955804544039814
+            },
+            "median_far_abs_contrast": {
+              "count": 58,
+              "minimum": 0.004625085443500002,
+              "median": 0.11640211640211598,
+              "maximum": 0.3490196078431377
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 58,
+              "minimum": -0.09721261053440614,
+              "median": -0.01952478735214813,
+              "maximum": 0.11142234671646462
+            },
+            "median_peak_abs_offset_px": {
+              "count": 58,
+              "minimum": 0.0,
+              "median": 2.0,
+              "maximum": 3.0
+            }
+          },
+          "remote_geometry_not_proven_negative": {
+            "candidate_count": 196,
+            "median_near_abs_contrast": {
+              "count": 156,
+              "minimum": 0.0,
+              "median": 0.03304318496212333,
+              "maximum": 0.45975723622782405
+            },
+            "median_far_abs_contrast": {
+              "count": 156,
+              "minimum": 0.0,
+              "median": 0.055094194540560804,
+              "maximum": 0.6031033019268324
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 156,
+              "minimum": -0.4095147553971086,
+              "median": -0.02327726133491774,
+              "maximum": 0.12683247036188192
+            },
+            "median_peak_abs_offset_px": {
+              "count": 156,
+              "minimum": 0.0,
+              "median": 2.0,
+              "maximum": 3.0
+            }
+          }
+        },
+        "gamma_0.80": {
+          "annotation_count": 13,
+          "candidate_recall_within_8px_count": 13,
+          "nearest_candidate_error_px": {
+            "count": 13,
+            "minimum": 0.0,
+            "median": 1.5,
+            "maximum": 8.0
+          },
+          "oil_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 21.0,
+            "median": 23.0,
+            "maximum": 28.0
+          },
+          "near_truth_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 1.0,
+            "median": 4.0,
+            "maximum": 7.0
+          },
+          "near_truth_geometry": {
+            "candidate_count": 49,
+            "median_near_abs_contrast": {
+              "count": 49,
+              "minimum": 0.011406282943289159,
+              "median": 0.08169934640522869,
+              "maximum": 0.2888266417678181
+            },
+            "median_far_abs_contrast": {
+              "count": 49,
+              "minimum": 0.013632119514474489,
+              "median": 0.12504805843905514,
+              "maximum": 0.29686274509803967
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 49,
+              "minimum": -0.10070986070257734,
+              "median": -0.03476690487755034,
+              "maximum": 0.09175225645813745
+            },
+            "median_peak_abs_offset_px": {
+              "count": 49,
+              "minimum": 0.0,
+              "median": 2.0,
+              "maximum": 3.0
+            }
+          },
+          "remote_geometry_not_proven_negative": {
+            "candidate_count": 207,
+            "median_near_abs_contrast": {
+              "count": 171,
+              "minimum": 0.0013071895424847657,
+              "median": 0.02800717672690045,
+              "maximum": 0.3985060690943047
+            },
+            "median_far_abs_contrast": {
+              "count": 171,
+              "minimum": 0.0023269077746040506,
+              "median": 0.04794920307304204,
+              "maximum": 0.460987465693349
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 171,
+              "minimum": -0.2969754338517006,
+              "median": -0.02645761476664512,
+              "maximum": 0.118060153354271
+            },
+            "median_peak_abs_offset_px": {
+              "count": 171,
+              "minimum": 0.0,
+              "median": 1.0,
+              "maximum": 3.0
+            }
+          }
+        },
+        "gamma_1.25": {
+          "annotation_count": 13,
+          "candidate_recall_within_8px_count": 13,
+          "nearest_candidate_error_px": {
+            "count": 13,
+            "minimum": 0.0,
+            "median": 1.0,
+            "maximum": 6.0
+          },
+          "oil_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 20.0,
+            "median": 24.0,
+            "maximum": 27.0
+          },
+          "near_truth_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 1.0,
+            "median": 3.0,
+            "maximum": 7.0
+          },
+          "near_truth_geometry": {
+            "candidate_count": 42,
+            "median_near_abs_contrast": {
+              "count": 42,
+              "minimum": 0.005439595192913371,
+              "median": 0.05807343278157863,
+              "maximum": 0.26230936819172124
+            },
+            "median_far_abs_contrast": {
+              "count": 42,
+              "minimum": 0.0011981709679918795,
+              "median": 0.09220799881819057,
+              "maximum": 0.2692810457516344
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 42,
+              "minimum": -0.08882008943928449,
+              "median": -0.030947549270605564,
+              "maximum": 0.09875505757858781
+            },
+            "median_peak_abs_offset_px": {
+              "count": 42,
+              "minimum": 0.0,
+              "median": 1.75,
+              "maximum": 3.0
+            }
+          },
+          "remote_geometry_not_proven_negative": {
+            "candidate_count": 206,
+            "median_near_abs_contrast": {
+              "count": 171,
+              "minimum": 0.0010388368038477674,
+              "median": 0.024901212964209423,
+              "maximum": 0.3525054466230925
+            },
+            "median_far_abs_contrast": {
+              "count": 171,
+              "minimum": 0.00046136101499377746,
+              "median": 0.039329882279710265,
+              "maximum": 0.41991724794492935
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 171,
+              "minimum": -0.25403050108932496,
+              "median": -0.018954248366011506,
+              "maximum": 0.08674758792405861
+            },
+            "median_peak_abs_offset_px": {
+              "count": 171,
+              "minimum": 0.0,
+              "median": 1.0,
+              "maximum": 3.0
+            }
+          }
+        },
+        "original": {
+          "annotation_count": 13,
+          "candidate_recall_within_8px_count": 13,
+          "nearest_candidate_error_px": {
+            "count": 13,
+            "minimum": 0.0,
+            "median": 1.0,
+            "maximum": 8.0
+          },
+          "oil_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 20.0,
+            "median": 24.0,
+            "maximum": 28.0
+          },
+          "near_truth_candidate_count_per_frame": {
+            "count": 13,
+            "minimum": 1.0,
+            "median": 4.0,
+            "maximum": 7.0
+          },
+          "near_truth_geometry": {
+            "candidate_count": 53,
+            "median_near_abs_contrast": {
+              "count": 53,
+              "minimum": 0.009023824583598461,
+              "median": 0.0731124633761552,
+              "maximum": 0.283722377840024
+            },
+            "median_far_abs_contrast": {
+              "count": 53,
+              "minimum": 5.0634219432521554e-05,
+              "median": 0.10731403672580217,
+              "maximum": 0.2922222222222217
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 53,
+              "minimum": -0.12130718954248418,
+              "median": -0.02248206700366094,
+              "maximum": 0.09436663554310559
+            },
+            "median_peak_abs_offset_px": {
+              "count": 53,
+              "minimum": 0.0,
+              "median": 2.0,
+              "maximum": 3.0
+            }
+          },
+          "remote_geometry_not_proven_negative": {
+            "candidate_count": 200,
+            "median_near_abs_contrast": {
+              "count": 164,
+              "minimum": 0.0016339869281030844,
+              "median": 0.032576265186980154,
+              "maximum": 0.3924680983504516
+            },
+            "median_far_abs_contrast": {
+              "count": 164,
+              "minimum": 0.000585981519044522,
+              "median": 0.0480382421091575,
+              "maximum": 0.5014188682008733
+            },
+            "median_near_minus_far_abs_contrast": {
+              "count": 164,
+              "minimum": -0.26905935623988575,
+              "median": -0.021774317570165014,
+              "maximum": 0.10571485159720476
+            },
+            "median_peak_abs_offset_px": {
+              "count": 164,
+              "minimum": 0.0,
+              "median": 1.0,
+              "maximum": 3.0
+            }
+          }
+        }
+      }
+    },
+    "source_identity_sha256": "3e17d24e49d3d148f5cc775f02423453b05a0999d28a6de81d5f8f3d6fcce3da",
+    "runtime_record_count": 4,
+    "summary_equal_to_v1": true
+  },
+  "tests": {
+    "focused": 30,
+    "canonical_non_qt": 1544,
+    "canonical_qt": 254
+  },
+  "limitations": [
+    "FIELD FAIL unchanged; no Windows qualification or shadow classifier acceptance",
+    "Public probe has 13 source frames and 7 transformations, not 91 independent scenes",
+    "Copy-mode basic sample4 ran out of disk; retry and FULL used audit-only hardlinks for immutable staging",
+    "Hardlink bundle I/O times cannot be compared directly with copy-mode baseline; production storage unchanged",
+    "One fresh process per sample; serial replay, not a controlled throughput benchmark",
+    "Historical sample4 runtime golden discrepancy remains separate; no golden replacement"
+  ]
+}

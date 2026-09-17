@@ -15,6 +15,9 @@ import numpy as np
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.storage.json_truth_repository import JsonTruthRepository
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+from oil_tracker.adapters.vision.oil_interface_diagnostics import INTERFACE_DIAGNOSTICS_SCHEMA
+from tests.diagnostics.s11_replay_provenance import capture_runtime_provenance
+from tests.diagnostics.s11_resolver_replacement_profile import source_identity
 from tests.diagnostics.s11_evidence_probe import (
     CORPUS_STEMS,
     authoritative_input_hashes,
@@ -23,7 +26,7 @@ from tests.diagnostics.s11_evidence_probe import (
 )
 
 
-SCHEMA_VERSION = "s11-interface-witness-public-probe-v1"
+SCHEMA_VERSION = "s11-interface-witness-public-probe-v2"
 NEAR_TRUTH_TOLERANCE_PX = 8.0
 REMOTE_DISTANCE_PX = 24.0
 
@@ -233,6 +236,8 @@ def _candidate_measurement(
                 gray_stds.append(_finite(band.get("gray_std")))
     features = candidate.features
     penalties = candidate.penalties
+    conflicts = [_finite(mapping.get("material_texture_conflict")) for mapping in (features, penalties)]
+    measured_conflicts = [value for value in conflicts if value is not None]
     distance = abs(canonical_y - truth_y)
     return CandidateMeasurement(
         candidate_input_index=int(diagnostic["candidate_input_index"]),
@@ -265,12 +270,7 @@ def _candidate_measurement(
         material_terminal_partition_support=_finite(
             features.get("material_terminal_partition_support")
         ),
-        material_texture_conflict=_finite(
-            max(
-                float(features.get("material_texture_conflict", 0.0)),
-                float(penalties.get("material_texture_conflict", 0.0)),
-            )
-        ),
+        material_texture_conflict=max(measured_conflicts) if measured_conflicts else None,
         narrow_horizontal_coverage=_finite(
             features.get("narrow_horizontal_coverage", features.get("horizontal_coverage"))
         ),
@@ -301,6 +301,9 @@ def _probe(
         index = int(diagnostic["candidate_input_index"])
         if not 0 <= index < len(detection.candidates):
             raise RuntimeError(f"Candidate join failed for {case.case_id}:{index}")
+        candidate = detection.candidates[index]
+        if (candidate.source != diagnostic["source"] or candidate.y != diagnostic["canonical_y"]):
+            raise RuntimeError(f"Candidate provenance mismatch for {case.case_id}:{index}")
         measured = _candidate_measurement(
             diagnostic,
             detection.candidates[index],
@@ -442,7 +445,9 @@ def run(root: Path, transform_names: tuple[str, ...]) -> dict[str, object]:
     return {
         "schema_version": SCHEMA_VERSION,
         "detector_runtime": OpenCvPhaseDetector.version,
-        "diagnostic_schema": "r22-2-interface-path-diagnostics-v1",
+        "diagnostic_schema": INTERFACE_DIAGNOSTICS_SCHEMA,
+        "source_identity": source_identity(root),
+        "runtime_provenance": {sample: capture_runtime_provenance(root / "sample" / f"{sample}.mp4") for sample in CORPUS_STEMS},
         "measurement_scope": {
             "frame_local": True,
             "fresh_detector_per_truth_frame": True,

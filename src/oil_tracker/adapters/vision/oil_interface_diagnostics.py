@@ -7,6 +7,7 @@ independence. No Oil/interface classification or temporal state is produced.
 from __future__ import annotations
 
 import math
+from typing import TYPE_CHECKING
 from collections.abc import Mapping, Sequence
 
 import numpy as np
@@ -15,6 +16,10 @@ from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import BoundaryKind
 
 from .oil_material_path import MaterialPathDiagnostic
+
+
+if TYPE_CHECKING:
+    from .oil_interface_witness import FrameInterfaceWitness
 
 
 INTERFACE_DIAGNOSTICS_SCHEMA = "r22-2-interface-path-diagnostics-v1"
@@ -31,6 +36,9 @@ def measure_oil_interfaces(
     crop_origin: tuple[int, int],
     frame_index: int,
     material_paths: Mapping[int, MaterialPathDiagnostic] | None = None,
+    witness_sink: list[FrameInterfaceWitness] | None = None,
+    glass_id: str = "",
+    canny: np.ndarray | None = None,
 ) -> dict[str, object]:
     """Measure every Oil candidate, including rejected ones, without mutation.
 
@@ -98,7 +106,7 @@ def measure_oil_interfaces(
         if not contrasts:
             row["measurement_status"] = "insufficient_visible_pixels"
         rows.append(row)
-    return {
+    result = {
         "schema_version": INTERFACE_DIAGNOSTICS_SCHEMA,
         "diagnostic_only": True,
         "classification": "not_evaluated",
@@ -122,6 +130,18 @@ def measure_oil_interfaces(
         "oil_candidate_count": len(rows),
         "candidates": rows,
     }
+
+    if witness_sink is not None:
+        from .oil_interface_witness import build_interface_witness
+
+        if canny is None:
+            raise ValueError("Witness capture requires the current Canny raster.")
+        witness_sink.append(build_interface_witness(
+            result, profile_cache, gray=gray, visible=visible,
+            effective_mask=effective_mask, glare_mask=glare_mask,
+            canny=canny, glass_id=glass_id,
+        ))
+    return result
 
 
 def _band(prefix, start: int, stop: int, height: int, width: int) -> dict[str, object]:

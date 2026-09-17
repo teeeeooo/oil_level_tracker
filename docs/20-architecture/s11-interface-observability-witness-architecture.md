@@ -1,12 +1,11 @@
 # S11 Interface Observability Witness Architecture
 
-**Status:** proposed next implementation contract; trace-only stage is authorized
-by the current S11 direction, but no runtime behavior is accepted by this
-document.  
-**Parent design:** [Physical Interface Evidence Repair](s11-physical-interface-evidence-repair-design.md).  
-**Validation:** [Interface Observability Witness Validation](../30-validation/s11-interface-observability-witness-validation.md).  
-**Assessment:** [Transparent-Interface Detector Direction](../50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md).  
-**Current runtime:** R22-2 remains unchanged until a later acceptance decision.
+**Status:** O1 extraction implementation contract; later O2–O5 remain proposed.
+This document grants no new production authority.
+**Parent design:** [Physical Interface Evidence Repair](s11-physical-interface-evidence-repair-design.md).
+**Validation:** [Interface Observability Witness Validation](../30-validation/s11-interface-observability-witness-validation.md).
+**Assessment:** [Transparent-Interface Detector Direction](../50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md).
+**Behavior baseline:** R22-2; O1 adds diagnostic runtime R22-3 only.
 
 ## Purpose
 
@@ -199,8 +198,11 @@ Uncertainty increases when:
 - peak center changes materially with scale or sampling center;
 - valid support is clipped by masks/glare;
 - only one or two sectors support a curve;
-- a scalar median is far from one or more native sector rows; or
 - registration/reference correlation is weak.
+
+Differences between native sector heights and the scalar median describe contour
+shape, not localization uncertainty. Preserve that range separately; only local
+measurement ambiguity belongs in a sector interval.
 
 Uncertainty is not a score penalty that can be averaged away. Later association
 must compare contour intervals/common sectors and may abstain.
@@ -305,7 +307,11 @@ boundary decision, not a software fallback coordinate.
 The public probe records current proposal recall and descriptor overlap under
 bounded photometric transforms. It changes no behavior and selects no threshold.
 
-### Stage O1 — Typed extraction (`NEXT`)
+### Stage O1 — Typed extraction (`LOCAL ACCEPTANCE RECORDED`)
+
+[Completed O1 evidence](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md)
+records extraction/equality and resource results; Windows effectiveness and O2
+discrimination remain unqualified.
 
 Implement the data types and trace-only measurements. Required checks:
 
@@ -365,26 +371,70 @@ No media export is required by the design. The work-PC runner can produce the
 same bounded numeric/decision schema; any export remains subject to local data
 policy. Human review on the work PC remains the authority for physical labels.
 
-## Proposed code seams
+## O1 implemented measurement contract
 
-The implementation should prefer these ownership boundaries:
+Runtime `opencv-phase-detector-r22-3-interface-witness-diagnostics-v1` adds only
+`artifacts.state.oil_interface_witness`. Resolver identity remains R22. The
+existing `oil_interface_diagnostics` schema and every old field remain unchanged.
+The [supplemental execution review](../50-diagnostics/s11/s11-observation-redesign-execution-review.md)
+is supporting rationale, not a competing implementation owner.
 
-- new `oil_interface_witness.py`: immutable semantic types and trace-only raw
-  aggregation;
-- existing `oil_material_path.py`: optional native contour samples only, without
-  classification or ranking changes;
-- existing/new frame-local measurement module: shared profile caches and sector
-  descriptors;
-- `phase_candidate_assembler.py`: preserve exact candidate identity while
-  attaching a debug sidecar;
-- `phase_frame_detection.py` / debug projector: serialize the sidecar after the
-  production decision; and
-- `oil_candidate_evidence.py`: do not consume the new witness until O3 is
-  separately accepted.
+- `oil_interface_diagnostics.measure_oil_interfaces` retains its original return
+  value and accepts an optional typed witness sink. It shares its existing
+  native/candidate geometry and frame-local gray/material/static prefix cache
+  with `oil_interface_witness`; no second band, path generator or gray-profile
+  implementation is introduced.
+- `PhaseDebugProjector` requests the sidecar only in the existing debug path,
+  serializes frozen records containing only scalar values and tuples, and never
+  adds them to detection metrics or candidate dictionaries. Debug NONE does no
+  new work. No changes to authority, association, phase or selector are made.
+- Existing native sectors are preserved even when their bands are unavailable.
+  With no valid captured native path, measure candidate-centered geometry with
+  `candidate_center_only` and the original path-unavailable reason. Never borrow
+  another candidate's path. Common X comparisons use the native sector extent.
+- Base width `b=max(3,min(12,round(crop_height*0.01)))`; new widths are exactly
+  `b,2b,3b`. Each uses the existing four-band offset/exclusion contract at that
+  width. Record intended and clipped half-open pixel intervals. Existing
+  candidate source Y is never rounded away; sampling uses `floor(local_y+0.5)`.
+- Gray is raw uint8/255. Delta is below mean minus above mean. Normalization is
+  `delta/sqrt(std_above**2+std_below**2+(1/255)**2)` with raw delta and denominator
+  retained. The floor is numerical regularization, not calibrated sensor noise
+  or a confidence estimate. No universal gain invariance is claimed.
+- Edge density uses the existing current Canny raster, valid-mask pixel count
+  as denominator. Raw-gray central differences in X/Y supply gradient magnitude
+  and absolute vertical-normal alignment `sum(abs(gy))/sum(hypot(gx,gy))`.
+  All four neighbors must be visible. A zero denominator is null, not perfect
+  alignment. Vertical normal is explicitly an approximation.
+- Band saturation counts exact raw endpoints 0/255 inside the effective mask;
+  mask exclusion is the fraction outside the effective mask. Their denominator
+  is the clipped rectangle area, unlike the old valid_fraction denominator
+  (intended area). Missing vessel/fitting geometry stays unavailable; no ellipse
+  curvature classifier or acquisition-specific algorithm is introduced.
+- At each width `s`, search `[center-s,center+s+1)` on the existing central
+  difference of masked row means. Keep signed-gradient plateaus within 1e-12;
+  opposite signs are separate peaks, even at equal magnitude. Flat profiles
+  have none. Rank by absolute magnitude then lowest source Y; retain at most
+  three, with pre-truncation count and boundary-contact flags. The retained
+  plateau hull is half-open, uncalibrated, and explicitly incomplete on
+  truncation. A single peak is not a physical-interface decision. The same
+  gradient profile is searched at three radii, not three independent channels.
+- No scalar aggregate uncertainty estimate is invented: it remains null with
+  `no_calibrated_uncertainty_estimator`. Contour height range is geometry only.
+  O2 must evaluate hull width/coverage and miss/abstention rates together.
+- Frame visibility/glare/saturation use effective-mask pixels as denominator;
+  empty masks yield null. Exposure/reference metadata is unavailable. Frame
+  status and candidate decision remain `NOT_EVALUATED`, even with strong edges.
+- Raw gray, its derivatives, Canny and raw material map share current-RGB ancestry.
+  Static reference availability is separate. Complementary features are allowed,
+  but never counted as independent sensor votes.
+- Bound storage by existing candidate count, at most five sectors, two centers,
+  three scales and three peaks per scale. Only frame-local raster/profile caches
+  exist. Identical native/candidate centers are measured once. No curve fitting,
+  registration, polarization/BOS or temporal history is part of O1.
 
-Do not spread raw witness dictionary keys directly across authority, identity,
-tracklet, lifecycle and selector modules. Later behavior must consume one typed
-compatibility/association result.
+The public probe v2 preserves missing material-conflict as null, verifies joins,
+and reuses existing source/runtime provenance helpers. The v1 baseline summary
+remains historical evidence; a changed schema/runtime must not overwrite its hash.
 
 ## Rollback and promotion
 
@@ -409,5 +459,5 @@ new witness has no production authority.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: NONE — O1/O2 leave current R22-2 execution authoritative; a future O3 promotion must update the map.
+- Logic-map impact: UPDATED — records the R22-3 debug-only sidecar; R22 behavior remains authoritative.
 - Failure-registry impact: NONE — this architecture refines the response to existing failures without claiming field repair.
