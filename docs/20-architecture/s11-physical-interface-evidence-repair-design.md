@@ -16,6 +16,13 @@ Native gray-polarity inversion alone cannot classify replacement or break
 association, even across three common sectors or only before confirmation.
 The full witness and its paired acceptance controls below remain required.
 
+The subsequent [detector direction assessment](../50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md)
+confirms a bounded observation-layer redesign rather than a whole-detector
+rewrite or more scalar-threshold tuning. The subordinate
+[Interface Observability Witness Architecture](s11-interface-observability-witness-architecture.md)
+owns the next trace-only extraction stage for item 1 below. It does not activate
+independent support, association, handoff or direction-neutral phase behavior.
+
 ## Problem and chosen direction
 
 The [reviewed R22 investigation](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md)
@@ -303,4 +310,4 @@ as the serialized array index. Diagnostic detail must not change output.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
 - Difference from prior failures: new local raster witnesses must establish spatial interface identity before support, association and ownership; direction-neutral observation is a separately gated proposed phase. It explicitly changes the old assumption that initial-FULL numeric admission requires drain evidence, without calling a stationary row a drain release. F05/F08 negative controls remain mandatory and this extension is not enabled or accepted by this document.
 - Logic-map impact: NONE — the map describes executing R22; this proposal names future changes without representing them as implemented.
-- Failure-registry impact: UPDATED — F04 now records the rejected polarity-only association veto and paired raster counterexamples; the stationary-interface extension remains separately gated.
+- Failure-registry impact: NONE — the registry already records the rejected R23 polarity-only association veto and paired raster counterexamples; this added routing link does not change that mechanism history.

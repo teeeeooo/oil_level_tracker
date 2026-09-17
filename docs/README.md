@@ -75,6 +75,11 @@ Current durable S11 owners:
 - current R22 Oil ownership/evidence replacement design — [`20-architecture/s11-r22-oil-ownership-evidence-replacement-architecture.md`](20-architecture/s11-r22-oil-ownership-evidence-replacement-architecture.md);
 - current R22 acceptance contract — [`30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md`](30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md);
 - diagnostic-only native path contract over R22 behavior — [`20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md`](20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md);
+- transparent-interface redesign decision and public baseline probe — [`50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md`](50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md);
+- next trace-only observation-layer contract — [`20-architecture/s11-interface-observability-witness-architecture.md`](20-architecture/s11-interface-observability-witness-architecture.md);
+- trace/shadow acceptance contract — [`30-validation/s11-interface-observability-witness-validation.md`](30-validation/s11-interface-observability-witness-validation.md);
+- broader proposed physical-interface behavior repair — [`20-architecture/s11-physical-interface-evidence-repair-design.md`](20-architecture/s11-physical-interface-evidence-repair-design.md);
+- proposed behavior acceptance contract — [`30-validation/s11-physical-interface-evidence-repair-validation.md`](30-validation/s11-physical-interface-evidence-repair-validation.md);
 - sequential native path measurement procedure — [`40-operations/s11-r22-2-windows-interface-measurement.md`](40-operations/s11-r22-2-windows-interface-measurement.md);
 - durable causal failure history — [`50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`](50-diagnostics/s11/s11-detector-mechanism-failure-registry.md);
 - canonical private-Windows reviewed truth — [`30-validation/windows-sample1-heating-coldstart-reviewed-truth.md`](30-validation/windows-sample1-heating-coldstart-reviewed-truth.md);

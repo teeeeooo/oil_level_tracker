@@ -4,6 +4,15 @@
 [physical-interface design](../20-architecture/s11-physical-interface-evidence-repair-design.md).
 The cases below are required future checks, not completed PASS results.
 
+The next implementation stage is the trace-only
+[Interface Observability Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md).
+Its [public baseline probe](../50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md)
+completed only candidate/descriptor characterization: every one of 13 usable
+truth frames retained a candidate within 8 px under seven photometric variants,
+while a median 23–24 Oil candidates and 3–4 near-truth candidates remained per
+frame. This does not satisfy Evidence gate A, label remote candidates as false,
+or justify a classifier threshold.
+
 ## Validation layers
 
 1. Exercise raster-derived witnesses before authority. Tests which directly

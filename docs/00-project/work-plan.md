@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** R23 polarity-only association prototype rejected locally; develop and validate a contour/context witness before another behavioral candidate
+**Current gate:** detector direction assessment complete; implement the trace-only contour/context observability witness (O1) before another behavioral candidate
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -110,21 +110,42 @@ uncertainty. Both are trace-only measurements, not the proposed classifier or
 ownership changes. Real-video discrimination, operating points and stationary-interface versus reflection
 acceptance remain unvalidated.
 
+The [2026-09-17 detector direction assessment](../50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md)
+reviewed the repository history, public truth, private checkpoint findings and
+external liquid-interface/sensing references. It rejects both a whole-detector
+rewrite and continued scalar-threshold tuning. The chosen boundary is a bounded
+observation-layer redesign that preserves the downstream R22 safety/provenance
+contracts. The subordinate [Interface Observability Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md)
+and [validation contract](../30-validation/s11-interface-observability-witness-validation.md)
+own the next trace-only implementation stage. Its public baseline probe found a
+candidate within 8 px on all 13 usable truth frames across the original and six
+photometric variants, but retained a median 23–24 Oil candidates and 3–4
+near-truth candidates per frame. This supports a discrimination/observability
+problem on the public set, not a field-success claim or an operating threshold.
+
 Retained but non-current work is owned by [`retained-commitments.md`](retained-commitments.md).
 
 ## Next transition
 
-Windows native-path collection for the current bounded question is complete.
+Windows native-path collection for the previous bounded question is complete.
 The [rejected R23 experiment](../50-diagnostics/s11/s11-r23-native-polarity-rejection.md)
-records why common-sector contrast inversion alone cannot veto association.
-Do not ask for another private rerun of this removed prototype. Next, develop
-the local contour/context and localization-uncertainty witness under the
-[existing acceptance gates](../30-validation/s11-physical-interface-evidence-repair-validation.md),
-including real translation with photometric inversion and competing structures,
-before changing temporal association again. Do not bypass those gates with
-polarity, source-family votes or diagnostic peaks. Accum independent support,
-committed fill handoff and initial-FULL direction-neutral observation remain
-separate behavioral work; none was enabled by this experiment.
+records why common-sector contrast inversion alone cannot veto association. Do
+not ask for another private rerun of that removed prototype.
+
+Next implement Stage O1 from the
+[Interface Observability Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md):
+typed frame observability, per-sector contour/localization uncertainty, multi-cue
+two-sided measurements and derivation lineage in trace-only mode. Preserve exact
+R22-2 behavior with debug on/off. Then build declared positive, negative and
+unresolved raster controls before selecting any operating point. Include real
+curve translation with photometric inversion, competing structures, reflections,
+glare and localization mismatch. Do not bypass these gates with polarity,
+source-family votes, persistence, motion or diagnostic peaks.
+
+Independent support/association, committed fill handoff and initial-FULL
+direction-neutral observation remain later separate behavioral gates. In
+parallel, evaluate fixed/controlled acquisition and structured-background options
+because a transparent interface may be optically unobservable in passive RGB.
 Preserve FIELD FAIL until target-Windows accuracy/throughput qualification is
 actually satisfied; diagnostic equality and local controls do not establish
 Windows effectiveness.
@@ -139,5 +160,8 @@ Windows effectiveness.
 - [R22 validation](../30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md)
 - [R22 local evidence](../60-evidence/s11/s11-r22-ownership-evidence-replacement.md)
 - [Detector mechanism failure registry](../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
+- [Detector direction assessment](../50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md)
+- [Interface observability witness architecture](../20-architecture/s11-interface-observability-witness-architecture.md)
+- [Interface observability witness validation](../30-validation/s11-interface-observability-witness-validation.md)
 - [Canonical Windows reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 - [Current-candidate Windows field procedure](../40-operations/s11-current-windows-field-qualification.md)
