@@ -26,14 +26,6 @@ def _now():
     return datetime.now(timezone.utc).isoformat()
 
 
-def _relative(target, parent):
-    # relpath raises on different Windows drives. Absolute locators remain usable;
-    # content identities never include either form of the locator.
-    try:
-        return Path(os.path.relpath(Path(target).resolve(), Path(parent).resolve())).as_posix()
-    except ValueError:
-        return str(Path(target).resolve())
-
 
 def _load_labels(path):
     path = Path(path)
@@ -133,7 +125,7 @@ def link_bundle(labels_path, bundle_path, video_path, reviewer, note, output):
                        'reviewer': reviewer, 'note': note},
             'scenes': scenes}
     link['identity_sha256'] = o2.fingerprint_json(link)
-    link['locators'] = {'bundle': _relative(bundle.root, output.parent), 'video': _relative(video_path, output.parent)}
+    link['locators'] = {'bundle': o2.relative_path(bundle.root, output.parent), 'video': o2.relative_path(video_path, output.parent)}
     link['history'] = [{'action': 'register', 'at': _now(), 'reviewer': reviewer, 'note': note}]
     o2.write_new(output, link)
     return {'link': str(output), 'identity_sha256': link['identity_sha256'], 'scene_count': len(scenes)}
@@ -156,7 +148,7 @@ def relink(link_path, bundle_path, video_path, reviewer, note):
         o2.require(_bundle_identity(bundle) == link['bundle_identity'], 'different bundle or changed bundle content')
         o2.require(o2.sha256_file(video_path) == link['source']['sha256'], 'different source video bytes')
         updated = copy.deepcopy(link)
-        updated['locators'] = {'bundle': _relative(bundle.root, path.parent), 'video': _relative(video_path, path.parent)}
+        updated['locators'] = {'bundle': o2.relative_path(bundle.root, path.parent), 'video': o2.relative_path(video_path, path.parent)}
         updated['history'].append({'action': 'relink', 'at': _now(), 'reviewer': reviewer, 'note': note,
                                    'previous_locators': link['locators']})
         _replace_with_history(path, link, updated)
@@ -164,14 +156,21 @@ def relink(link_path, bundle_path, video_path, reviewer, note):
 
 
 def status(labels_path, link_path=None):
-    labels, _ = _load_labels(labels_path)
+    labels, packets = _load_labels(labels_path)
     rows = []
     for c in labels['cases']:
+        witnesses = o2.unique(packets[c['packet_sha256']][c['case_id']]['witness']['candidates'], 'candidate_input_index', 'witnesses')
         rows.append({'case_id': c['case_id'], 'visibility': c['visibility'],
                      'reviewer': c['reviewer'],
-                     'unreviewed_candidate_ids': [a['candidate_input_index'] for a in c['candidates'] if a['label'] == 'unreviewed'],
-                     'unresolved_candidate_ids': [a['candidate_input_index'] for a in c['candidates'] if a['label'] == 'unresolved']})
-    report = {'labels_sha256': o2.fingerprint_json(labels),
+                     'unreviewed_candidate_ids': [a['candidate_input_index'] for a in c['candidates'] if o2.identity(a) == 'unreviewed'],
+                     'unresolved_candidate_ids': [a['candidate_input_index'] for a in c['candidates'] if o2.identity(a) == 'uncertain'],
+                     'candidate_reviews': [{'candidate_input_index': a['candidate_input_index'],
+                         'witness_sha256': a['witness_sha256'], 'identity': o2.identity(a),
+                         'artifact_tags': o2.artifact_tags(a),
+                         'reviewable_geometry': o2.review_geometry(witnesses[a['candidate_input_index']]),
+                         'path_review': o2.path_summary(a, witnesses[a['candidate_input_index']])}
+                         for a in c['candidates']]})
+    report = {'schema_version': labels['schema_version'], 'labels_sha256': o2.fingerprint_json(labels),
               'revision_count': len(labels.get('review_history', [])),
               'missing_owners': [k for k in ('label_owner', 'split_owner', 'split_rationale') if not labels[k].strip()],
               'cases': rows, 'bundle_link': 'not_checked', 'classifier_status': 'NOT_EVALUATED'}
@@ -185,15 +184,82 @@ def status(labels_path, link_path=None):
     return report
 
 
+def migrate(labels_path, output, expected_sha256, reviewer, note):
+    """Explicit v1 -> v2 copy. Keep source, history, packet and bundle receipt intact."""
+    path, output = Path(labels_path), Path(output)
+    o2.text(reviewer, 'migration reviewer'); o2.text(note, 'migration note')
+    o2.require(path.resolve() != output.resolve(), 'migration requires a new destination')
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with _lock(path), _lock(output):
+        before, packets = _load_labels(path)
+        o2.require(before['schema_version'] == o2.LEGACY_LABEL_SCHEMA, 'migrate requires v1 labels; v2 is already current')
+        digest = o2.fingerprint_json(before)
+        o2.require(digest == expected_sha256, 'stale labels revision; run status again')
+        o2.require(not output.exists(), 'migration output already exists')
+        after = copy.deepcopy(before)
+        after['schema_version'] = o2.LABEL_SCHEMA
+        for case in after['cases']:
+            old_scene = copy.deepcopy(case.get('scene_review', {
+                'reviewer': case['reviewer'], 'note': case['review_note'], 'at': None, 'basis': 'legacy_v1_case'}))
+            for scope in ('visibility', 'contour'):
+                case[scope + '_review'] = {**old_scene, 'basis': 'legacy_v1_scene_metadata'}
+            for a in case['candidates']:
+                original = copy.deepcopy(a)
+                a.update(identity=o2.identity(original), artifact_tags=o2.artifact_tags(original),
+                         artifact_note='', path_reviews=[], legacy_annotation=original)
+                a.pop('label')
+                # Preserve old attribution as old attribution, not a fresh review.
+                a['identity_review'] = {'reviewer': original.get('reviewer', case['reviewer']),
+                    'note': original.get('review_note', case['review_note']), 'at': None,
+                    'basis': 'legacy_v1_annotation' if 'reviewer' in original else 'legacy_v1_case'}
+        for p in after['packets']:
+            p['path'] = o2.relative_path(path.parent / p['path'], output.parent)
+        archive = output.parent / (output.name + '.history') / (digest + '.json')
+        after['migration'] = {'from_schema': o2.LEGACY_LABEL_SCHEMA, 'source_labels_sha256': digest,
+            'source_file_sha256': o2.sha256_file(path), 'source_path': o2.relative_path(path, output.parent),
+            'snapshot_path': o2.relative_path(archive, output.parent), 'at': _now(), 'reviewer': reviewer, 'note': note}
+        o2.validate_labels(after, packets, allow_pending=True)
+        # Uses the same archive-before-atomic-replace boundary as record. The
+        # output lock and existence guard prevent overwriting an existing review.
+        _replace_with_history(output, before, after)
+    return status(output)
+
+
+def _record_candidate_v2(a, change, review):
+    allowed = {'candidate_input_index', 'witness_sha256', 'identity', 'entity_id',
+               'artifact_tags', 'artifact_note', 'path_reviews'}
+    o2.require(set(change) <= allowed, 'unsupported v2 candidate update; use identity, not label')
+    o2.require(bool(set(change) - {'candidate_input_index', 'witness_sha256'}), 'empty candidate update')
+    for field, attribution in (('identity', 'identity_review'), ('entity_id', 'entity_review'),
+                               ('artifact_tags', 'artifact_review'), ('artifact_note', 'artifact_review')):
+        if field in change:
+            a[field] = copy.deepcopy(change[field])
+            a[attribution] = copy.deepcopy(review)
+    paths = {o2.geometry_key(p): p for p in a['path_reviews']}
+    seen = set()
+    for p in change.get('path_reviews', []):
+        o2.require(set(p) == {'geometry_basis', 'source_x_range', 'source_y', 'judgment'}, 'unsupported path reply fields')
+        o2.interval(p['source_x_range'], 'path review X', strict=True)
+        o2.number(p['source_y'], 'path review Y')
+        key = o2.geometry_key(p)
+        o2.require(key not in seen, 'duplicate path reply')
+        seen.add(key)
+        paths[key] = {**copy.deepcopy(p), 'review': copy.deepcopy(review)}
+    a['path_reviews'] = list(paths.values())
+
+
 def record(labels_path, update, expected_sha256):
     """One human reply per transaction; frozen files are never edited."""
     path = Path(labels_path)
     with _lock(path):
         before, packets = _load_labels(path)
         o2.require(o2.fingerprint_json(before) == expected_sha256, 'stale labels revision; run status again')
-        allowed = {'reviewer', 'note', 'owners', 'case_id', 'visibility', 'contour', 'candidates'}
+        allowed = {'reviewer', 'note', 'review_basis', 'owners', 'case_id', 'visibility', 'contour', 'candidates'}
         o2.require(set(update) <= allowed, 'unsupported update fields')
         reviewer, note = o2.text(update['reviewer'], 'reviewer'), o2.text(update['note'], 'note')
+        review = {'reviewer': reviewer, 'note': note, 'at': _now(),
+                  'basis': o2.text(update.get('review_basis', 'direct_human_review'), 'review_basis')}
+        legacy = before['schema_version'] == o2.LEGACY_LABEL_SCHEMA
         after = copy.deepcopy(before)
         owners = update.get('owners', {})
         o2.require(isinstance(owners, dict) and set(owners) <= {'label_owner', 'split_owner', 'split_rationale'}, 'unsupported owner fields')
@@ -208,24 +274,30 @@ def record(labels_path, update, expected_sha256):
                 # Preserve existing v1 scene attribution before a candidate-only
                 # reply changes the legacy case-wide reviewer/note fields.
                 case['scene_review'] = {'reviewer': case['reviewer'], 'note': case['review_note'],
-                                        'at': None, 'basis': 'legacy_v1_case'}
-            case.update(reviewer=reviewer, review_note=note)
+                                        'at': None, 'basis': 'legacy_v1_case' if legacy else 'existing_case_metadata'}
+            if legacy or {'visibility', 'contour'} & set(update):
+                case.update(reviewer=reviewer, review_note=note)
             for k in ('visibility', 'contour'):
                 if k in update:
                     case[k] = copy.deepcopy(update[k])
+                    if not legacy:
+                        case[k + '_review'] = copy.deepcopy(review)
             if {'visibility', 'contour'} & set(update):
                 case['scene_review'] = {'reviewer': reviewer, 'note': note, 'at': _now()}
             candidates = o2.unique(case['candidates'], 'candidate_input_index', 'candidates')
             changes = o2.unique(update.get('candidates', []), 'candidate_input_index', 'candidate updates')
             for i, change in changes.items():
                 o2.integer(i, 'candidate_input_index')
-                o2.require(set(change) <= {'candidate_input_index', 'witness_sha256', 'label', 'entity_id'}, 'unsupported candidate update')
                 a = candidates[i]
                 o2.require(change['witness_sha256'] == a['witness_sha256'], 'candidate witness mismatch')
-                a['label'] = change['label']
-                if 'entity_id' in change:
-                    a['entity_id'] = change['entity_id']
-                a.update(reviewer=reviewer, review_note=note)
+                if legacy:
+                    o2.require(set(change) <= {'candidate_input_index', 'witness_sha256', 'label', 'entity_id'}, 'v2 fields require explicit migration')
+                    a['label'] = change['label']
+                    if 'entity_id' in change:
+                        a['entity_id'] = change['entity_id']
+                    a.update(reviewer=reviewer, review_note=note)
+                else:
+                    _record_candidate_v2(a, change, review)
         o2.validate_labels(after, packets, allow_pending=True)
         after.setdefault('review_history', []).append({'at': _now(), 'previous_sha256': expected_sha256,
                                                        'update': copy.deepcopy(update)})
@@ -234,6 +306,11 @@ def record(labels_path, update, expected_sha256):
 
 
 def add_commands(commands):
+    p = commands.add_parser('migrate', help='copy v1 labels to a new v2 file, preserving original judgments and history')
+    p.add_argument('--labels', type=Path, required=True)
+    p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--expected-sha256', required=True)
+    p.add_argument('--reviewer', required=True); p.add_argument('--note', required=True)
     p = commands.add_parser('link-bundle', help='register exact bundle and human-attested source video for a review')
     p.add_argument('--labels', type=Path, required=True)
     p.add_argument('--bundle', type=Path, required=True)
@@ -255,6 +332,8 @@ def add_commands(commands):
 
 
 def dispatch(args):
+    if args.command == 'migrate':
+        return migrate(args.labels, args.output, args.expected_sha256, args.reviewer, args.note)
     if args.command == 'link-bundle':
         return link_bundle(args.labels, args.bundle, args.video, args.reviewer, args.note, args.output)
     if args.command == 'relink':

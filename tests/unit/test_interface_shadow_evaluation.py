@@ -47,7 +47,7 @@ def _dataset(tmp_path):
             'candidates': [{'candidate_input_index': c['candidate_input_index'], 'witness_sha256': o2.fingerprint_json(c),
                 'label': ('interface', 'localization_mismatch', 'reflection')[c['candidate_input_index']], 'entity_id': f"e{c['candidate_input_index']}"}
                 for c in frame['witness']['candidates']]})
-    labels = {'schema_version': o2.LABEL_SCHEMA, 'dataset_id': 'controls', 'label_owner': 'fixture-construction',
+    labels = {'schema_version': o2.LEGACY_LABEL_SCHEMA, 'dataset_id': 'controls', 'label_owner': 'fixture-construction',
         'split_owner': 'fixture-construction', 'split_rationale': 'Regression only; no independent holdout claim.',
         'packets': [{'path': 'packet.json', 'sha256': sha}], 'cases': cases}
     return labels, {sha: {f['case_id']: f for f in packet['frames']}}
@@ -55,7 +55,7 @@ def _dataset(tmp_path):
 
 def _frozen(labels):
     content = {k: v for k, v in labels.items() if k != 'packets'}
-    return {'schema_version': o2.FREEZE_SCHEMA, 'content': content, 'content_sha256': o2.fingerprint_json(content), 'packets': labels['packets']}
+    return {'schema_version': o2.LEGACY_FREEZE_SCHEMA if labels['schema_version'] == o2.LEGACY_LABEL_SCHEMA else o2.FREEZE_SCHEMA, 'content': content, 'content_sha256': o2.fingerprint_json(content), 'packets': labels['packets']}
 
 
 def _predictions(frozen, decisions=('INTERFACE_SUPPORTED', 'UNRESOLVED', 'INTERFACE_SUPPORTED')):
@@ -114,15 +114,15 @@ def test_metrics_count_visible_empty_frame_and_wrong_support(tmp_path):
     stats = report['partitions']['regression']
     assert stats['visible_frame_count'] == 2
     assert stats['visible_frames_with_interface_proposal'] == 1
-    assert stats['visible_frame_support_recall'] == .5
-    assert stats['wrong_structure_support_count'] == 1
+    assert stats['visible_frame_identity_support_recall'] == .5
+    assert stats['wrong_non_interface_support_count'] == 1
     assert stats['identity_recall'] == .5
     assert stats['verified_identity_precision'] == .5
     assert stats['abstention_rate'] == pytest.approx(1/3)
-    assert stats['localization']['matched_sector_count'] == 2
-    assert stats['localization']['mean_distance_to_review_interval_px'] == 3.5
-    assert stats['localization']['full_review_interval_coverage'] == 1
-    assert [r['distance_px'] for r in stats['localization']['sector_results']] == [0, 7]
+    assert stats['localization']['all_interface_proposals']['matched_sector_count'] == 2
+    assert stats['localization']['all_interface_proposals']['mean_distance_to_review_interval_px'] == 3.5
+    assert stats['localization']['all_interface_proposals']['full_review_interval_coverage'] == 1
+    assert [r['distance_px'] for r in stats['localization']['all_interface_proposals']['sector_results']] == [0, 7]
     assert stats['by_measurement_status']['measured']['INTERFACE_SUPPORTED'] == 2
     assert not report['auto_acceptance']
 
@@ -133,7 +133,7 @@ def test_no_predictions_never_passes_and_keeps_visible_denominator(tmp_path):
     s = report['partitions']['regression']
     assert report['status'] == 'NOT_EVALUATED'
     assert s['missing_prediction_count'] == 3
-    assert s['visible_frame_support_recall'] == 0
+    assert s['visible_frame_identity_support_recall'] == 0
     assert s['verified_identity_precision'] is None
     assert report['partitions']['holdout']['identity_recall'] is None
 
@@ -144,8 +144,8 @@ def test_localization_mismatch_is_not_a_structure_negative(tmp_path):
     report = o2.evaluate(frozen, packets, _predictions(frozen, ('UNOBSERVABLE', 'INTERFACE_SUPPORTED', 'INTERNAL_OR_ARTIFACT')))
     s = report['partitions']['regression']
     assert s['verified_identity_precision'] == 1
-    assert s['wrong_structure_support_count'] == 0
-    assert s['visible_frame_support_recall'] == 0
+    assert s['wrong_non_interface_support_count'] == 0
+    assert s['visible_frame_identity_support_recall'] == .5
     assert s['negative_families']['reflection']['rejected'] == 1
 
 
@@ -249,7 +249,7 @@ def prepared_o2_review(tmp_path):
 def test_real_bundle_prepare_reuses_indexed_reader_and_preserves_empty_labels(tmp_path, prepared_o2_review):
     bundle, selection, draft, original_hash = prepared_o2_review
     assert draft['cases'][0]['visibility'] == 'pending'
-    assert all(a['label']=='unreviewed' for a in draft['cases'][0]['candidates'])
+    assert all(a['identity']=='unreviewed' for a in draft['cases'][0]['candidates'])
     assert o2.sha256_file(bundle/'debug'/'debug_trace.jsonl') == original_hash
     with pytest.raises(ValueError):o2.freeze(tmp_path/'review'/'labels.json', tmp_path/'unreviewed.json')
     selection['cases'][0]['frame_index'] = 1

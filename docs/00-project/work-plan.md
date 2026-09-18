@@ -166,17 +166,21 @@ reports BASE f14386 revision 4: material_path input IDs 8/9/10/12 are interface,
 visibility is visible, contour is empty, and 19 candidates remain unreviewed.
 The user explicitly accepts candidates 12/10 holistically despite off-interface
 path portions. These labels do not certify every sector or localization accuracy.
-The [review-semantics revision](../20-architecture/s11-interface-observability-witness-architecture.md#o2-review-semantics-revision--specified-not-implemented)
-and [acceptance controls](../30-validation/s11-interface-observability-witness-validation.md#candidate-identity-versus-partial-path-review--next-implementation-gate)
-now specify candidate identity, qualitative per-path agreement, optional numeric
-contour truth and nonexclusive artifact descriptions as distinct scopes. Next
-implement explicit versioned migration and extend existing record/status/evaluate
-owners; preserve original v1 judgments/packets and do not infer segment truth from
-notes or reference-Y differences. The current localized-support indicator still
-uses the interface label without requiring contour; no code/schema change is made
-by this design update. Resume bounded annotation after that semantic seam is
-verified, then declare separate original
-recordings for development/calibration/holdout before choosing a shadow model.
+The [review-semantics revision](../20-architecture/s11-interface-observability-witness-architecture.md#o2-review-semantics-revision--implemented-locally)
+and [acceptance controls](../30-validation/s11-interface-observability-witness-validation.md#candidate-identity-versus-partial-path-review--implementation-acceptance)
+now separate candidate identity, qualitative per-path agreement, optional numeric
+contour truth and overlapping artifact tags. Existing O2 tools implement v2 labels,
+explicit v1-to-v2 migration to a new file, scoped record/status, versioned freeze and
+separate identity/path/localization metrics. Original judgments, packets, history,
+receipts and frozen files remain intact; no segment truth is inferred from notes
+or reference-Y differences. [Local compatibility evidence](../60-evidence/s11/s11-o2-scoped-review-semantics.md)
+covers this semantic boundary, not a detector or classifier improvement.
+Next, Windows uses the updated tool on the existing R22-3 bundle, migrates each
+review once and checks the saved judgments before resuming bounded annotation.
+Already explicit path judgments may be recorded after exact geometry correspondence;
+no new human answer is needed for an already answered question. Then declare
+separate original recordings for development/calibration/holdout before choosing
+a shadow model.
 Reviewed private checkpoints are regression cases, not untouched holdout.
 Windows work next verifies the new witness on existing reviewed frames and
 builds labels locally; no private export or immediate behavioral rerun is

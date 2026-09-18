@@ -189,7 +189,7 @@ def test_relative_locator_falls_back_for_different_windows_drives(tmp_path, monk
     def different_drives(*args):raise ValueError('path is on another drive')
     monkeypatch.setattr(records.os.path, 'relpath', different_drives)
     target = tmp_path/'source.mp4'
-    assert Path(records._relative(target, tmp_path)) == target.resolve()
+    assert Path(o2.relative_path(target, tmp_path)) == target.resolve()
 
 
 def test_link_and_relink_cli_use_real_bundle_from_foreign_cwd(prepared_o2_review, tmp_path):

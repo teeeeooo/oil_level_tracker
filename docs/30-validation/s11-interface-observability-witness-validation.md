@@ -187,11 +187,12 @@ A point near the interface but offset cannot be reused as a certified material
 negative. Scalar candidate Y is evaluated against contour-sector labels only
 where that mapping is meaningful.
 
-### Candidate identity versus partial-path review — next implementation gate
+### Candidate identity versus partial-path review — implementation acceptance
 
-This supplements the localization distinctions above. It is a proposed test
-contract, not a claim that current v1 persistence/evaluation supports the fields.
-See the [review semantics revision](../20-architecture/s11-interface-observability-witness-architecture.md#o2-review-semantics-revision--specified-not-implemented).
+This supplements the localization distinctions above. The v2 offline persistence
+and evaluator implement this contract; it does not qualify a classifier or field
+behavior. Legacy v1 inputs use explicit compatibility paths.
+See the [review semantics revision](../20-architecture/s11-interface-observability-witness-architecture.md#o2-review-semantics-revision--implemented-locally).
 Required controls before resuming large-scale annotation:
 
 - an interface candidate with some reviewed off-interface sectors retains its
@@ -266,8 +267,10 @@ operating point for review before O3 behavior work.
 
 ### O2 evaluation-tool acceptance
 
-The offline foundation uses `s11-o2-review-packet-v1`, `s11-o2-labels-v1`,
-`s11-o2-frozen-labels-v1` and `s11-o2-shadow-predictions-v1`. The
+The offline foundation uses `s11-o2-review-packet-v1`, `s11-o2-labels-v2`,
+`s11-o2-frozen-labels-v2`, `s11-o2-shadow-report-v2` and
+`s11-o2-shadow-predictions-v1`. Label/frozen v1 reads remain supported; migration
+is explicit and old report files are preserved. The
 [operational procedure](../40-operations/s11-o2-local-shadow-evaluation.md)
 defines fields and invocation. Required controls for this foundation are:
 

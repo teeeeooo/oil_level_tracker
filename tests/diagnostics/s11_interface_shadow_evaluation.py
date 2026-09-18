@@ -23,8 +23,10 @@ from oil_tracker.application.services.truth_identity import sha256_file
 from oil_tracker.domain.detector_benchmark import fingerprint_json, deterministic_percentile
 
 PACKET_SCHEMA = "s11-o2-review-packet-v1"
-LABEL_SCHEMA = "s11-o2-labels-v1"
-FREEZE_SCHEMA = "s11-o2-frozen-labels-v1"
+LEGACY_LABEL_SCHEMA = "s11-o2-labels-v1"
+LABEL_SCHEMA = "s11-o2-labels-v2"
+LEGACY_FREEZE_SCHEMA = "s11-o2-frozen-labels-v1"
+FREEZE_SCHEMA = "s11-o2-frozen-labels-v2"
 PREDICTION_SCHEMA = "s11-o2-shadow-predictions-v1"
 WITNESS_SCHEMA = "interface-observability-witness-trace-v1"
 PARTITIONS = ("development", "calibration", "holdout", "regression")
@@ -32,6 +34,9 @@ LABELS = ("interface", "localization_mismatch", "reflection", "residue", "struct
 DECISIONS = ("INTERFACE_SUPPORTED", "INTERNAL_OR_ARTIFACT", "UNRESOLVED", "UNOBSERVABLE", "NOT_EVALUATED")
 NEGATIVES = {"reflection", "residue", "structure"}
 POSITIVES = {"interface", "localization_mismatch"}
+IDENTITIES = ("interface", "non_interface", "uncertain", "unreviewed")
+PATH_JUDGMENTS = ("near_interface", "off_interface", "uncertain", "unreviewed")
+ARTIFACT_TAGS = ("reflection", "structure", "residue", "other")
 MAX_CASES = 256
 
 
@@ -92,6 +97,80 @@ def write_new(path, payload):
         handle.write(encoded)
 
 
+def relative_path(target, parent):
+    # relpath raises on different Windows drives. Absolute locators remain usable;
+    # content identities never include either form of the locator.
+    try:
+        return Path(os.path.relpath(Path(target).resolve(), Path(parent).resolve())).as_posix()
+    except ValueError:
+        return str(Path(target).resolve())
+
+
+def identity(annotation):
+    """Explicit v1 read compatibility; never edits a stored legacy judgment."""
+    if "identity" in annotation:
+        return annotation["identity"]
+    label = annotation["label"]
+    return ("interface" if label in POSITIVES else "non_interface" if label in NEGATIVES
+            else "unreviewed" if label == "unreviewed" else "uncertain")
+
+
+def artifact_tags(annotation):
+    if "artifact_tags" in annotation:
+        return annotation["artifact_tags"]
+    return [annotation["label"]] if annotation["label"] in NEGATIVES else []
+
+
+def review_geometry(candidate):
+    """Only geometries present in the bound witness; no inferred native path."""
+    rows = []
+    for s in candidate["sectors"]:
+        for basis, y in (("native_path", s["path_source_y"]),
+                         ("candidate_center", s["candidate_source_y"])):
+            if y is not None:
+                rows.append({"geometry_basis": basis, "source_x_range": s["source_x_range"], "source_y": y})
+    return rows
+
+
+def geometry_key(row):
+    return row["geometry_basis"], tuple(row["source_x_range"]), row["source_y"]
+
+
+def validate_annotation_v2(annotation, candidate):
+    require("label" not in annotation, "v2 uses identity; legacy label belongs in legacy_annotation")
+    require(annotation["identity"] in IDENTITIES, "invalid candidate identity")
+    tags = annotation["artifact_tags"]
+    require(isinstance(tags, list) and all(t in ARTIFACT_TAGS for t in tags) and len(set(tags)) == len(tags), "invalid artifact tags")
+    require(isinstance(annotation["artifact_note"], str), "artifact_note must be text")
+    geometries = {geometry_key(g) for g in review_geometry(candidate)}
+    seen = set()
+    for row in annotation["path_reviews"]:
+        require(set(row) == {"geometry_basis", "source_x_range", "source_y", "judgment", "review"}, "unsupported path review fields")
+        interval(row["source_x_range"], "path review X", strict=True)
+        number(row["source_y"], "path review Y")
+        key = geometry_key(row)
+        require(key in geometries, "path review must match exact witness X/Y/basis")
+        require(key not in seen, "duplicate path review geometry")
+        seen.add(key)
+        require(row["judgment"] in PATH_JUDGMENTS, "invalid path judgment")
+        for field in ("reviewer", "note", "basis"):
+            text(row["review"][field], f"path review {field}")
+
+
+def path_summary(annotation, candidate):
+    reviews = {geometry_key(p): p["judgment"] for p in annotation.get("path_reviews", [])}
+    out = {}
+    for basis in ("native_path", "candidate_center"):
+        counts = Counter(reviews.get(geometry_key(g), "unreviewed")
+                         for g in review_geometry(candidate) if g["geometry_basis"] == basis)
+        total = sum(counts.values())
+        reviewed = total - counts["unreviewed"]
+        out[basis] = {"available_point_count": total, **{k: counts[k] for k in PATH_JUDGMENTS},
+                      "reviewed_point_count": reviewed, "review_coverage": ratio(reviewed, total),
+                      "full_path_localization_pass": None}
+    return out
+
+
 def extract_frame(record, case_id):
     """Preserve every Oil witness, including rejected/unadmitted candidates."""
     w = record.state.get("oil_interface_witness")
@@ -133,7 +212,8 @@ def prepare(bundle_path, selection, output):
             labels.append({**{k: case[k] for k in ("case_id", "recording_group", "episode_id", "physical_case_id", "transform_id", "partition", "previously_reviewed")},
                 "visibility": "pending", "label_basis": "human_review", "reviewer": "", "review_note": "", "contour": [],
                 "candidates": [{"candidate_input_index": c["candidate_input_index"],
-                    "witness_sha256": fingerprint_json(c), "label": "unreviewed", "entity_id": None}
+                    "witness_sha256": fingerprint_json(c), "identity": "unreviewed", "entity_id": None,
+                    "artifact_tags": [], "artifact_note": "", "path_reviews": []}
                     for c in frame["witness"]["candidates"]]})
     finally:
         repository.close()
@@ -166,7 +246,8 @@ def load_packets(document, directory):
 
 
 def validate_labels(labels, packets, *, allow_pending=False):
-    require(labels.get("schema_version") == LABEL_SCHEMA, "unsupported label schema")
+    require(labels.get("schema_version") in (LEGACY_LABEL_SCHEMA, LABEL_SCHEMA), "unsupported label schema")
+    legacy = labels["schema_version"] == LEGACY_LABEL_SCHEMA
     for k in ("dataset_id", "label_owner", "split_owner", "split_rationale"):
         require(isinstance(labels[k], str), f"{k}: string required")
         if not allow_pending:
@@ -209,8 +290,13 @@ def validate_labels(labels, packets, *, allow_pending=False):
         for i, annotation in annotated.items():
             integer(i, "candidate_input_index")
             require(annotation["witness_sha256"] == fingerprint_json(refs[i]), "candidate hash mismatch")
-            require(annotation["label"] in LABELS, "invalid physical label")
-            require(annotation["label"] not in POSITIVES or case["visibility"] == "visible", "interface labels require a visible frame")
+            if legacy:
+                require(not {"identity", "path_reviews", "artifact_tags"} & set(annotation), "v2 fields require explicit migration")
+                require(annotation["label"] in LABELS, "invalid physical label")
+            else:
+                validate_annotation_v2(annotation, refs[i])
+            require(identity(annotation) != "interface" or case["visibility"] == "visible", "interface labels require a visible frame")
+            require(not any(p["judgment"] == "near_interface" for p in annotation.get("path_reviews", [])) or case["visibility"] == "visible", "near-interface paths require a visible frame")
             require(annotation["entity_id"] is None or isinstance(annotation["entity_id"], str) and bool(annotation["entity_id"].strip()), "invalid entity_id")
         xs = set()
         for point in case["contour"]:
@@ -231,9 +317,9 @@ def freeze(labels_path, output):
     validate_labels(labels, packets)
     # Paths are transport metadata, excluded from the immutable logical label hash.
     content = {k: v for k, v in labels.items() if k != "packets"}
-    frozen = {"schema_version": FREEZE_SCHEMA, "content": content,
+    frozen = {"schema_version": LEGACY_FREEZE_SCHEMA if labels["schema_version"] == LEGACY_LABEL_SCHEMA else FREEZE_SCHEMA, "content": content,
               "content_sha256": fingerprint_json(content),
-              "packets": [{"sha256": p["sha256"], "path": Path(os.path.relpath((labels_path.parent / p["path"]).resolve(), output.parent.resolve())).as_posix()}
+              "packets": [{"sha256": p["sha256"], "path": relative_path(labels_path.parent / p["path"], output.parent)}
                           for p in labels["packets"]]}
     write_new(output, frozen)
     return frozen
@@ -241,21 +327,25 @@ def freeze(labels_path, output):
 
 def combine(paths, dataset_id, output):
     """Assemble locally reviewed packets without inventing or changing splits."""
-    merged = {"schema_version": LABEL_SCHEMA, "dataset_id": text(dataset_id, "dataset_id"),
-              "packets": [], "cases": []}
+    merged = {"dataset_id": text(dataset_id, "dataset_id"),
+              "packets": [], "cases": [], "combined_sources": []}
     owners = {k: set() for k in ("label_owner", "split_owner", "split_rationale")}
     seen = set()
     for path in map(Path, paths):
         draft = read_json(path)
-        require(draft.get("schema_version") == LABEL_SCHEMA, "unsupported label schema")
+        require(draft.get("schema_version") in (LEGACY_LABEL_SCHEMA, LABEL_SCHEMA), "unsupported label schema")
+        require(merged.setdefault("schema_version", draft["schema_version"]) == draft["schema_version"], "mixed label schemas; migrate v1 inputs explicitly before combine")
         load_packets(draft, path.parent)
+        merged["combined_sources"].append({"labels_sha256": fingerprint_json(draft),
+            "path": relative_path(path, Path(output).parent),
+            "schema_version": draft["schema_version"]})
         for k in owners:
             if draft[k]:
                 owners[k].add(draft[k])
         for p in draft["packets"]:
             if p["sha256"] not in seen:
                 seen.add(p["sha256"])
-                merged["packets"].append({"sha256": p["sha256"], "path": Path(os.path.relpath((path.parent / p["path"]).resolve(), Path(output).parent.resolve())).as_posix()})
+                merged["packets"].append({"sha256": p["sha256"], "path": relative_path(path.parent / p["path"], Path(output).parent)})
         merged["cases"].extend(draft["cases"])
     unique(merged["cases"], "case_id", "combined cases")
     require(len(merged["cases"]) <= MAX_CASES, "combined dataset exceeds case bound")
@@ -268,7 +358,9 @@ def combine(paths, dataset_id, output):
 
 def load_frozen(path):
     frozen = read_json(path)
-    require(frozen.get("schema_version") == FREEZE_SCHEMA, "unsupported freeze schema")
+    require(frozen.get("schema_version") in (LEGACY_FREEZE_SCHEMA, FREEZE_SCHEMA), "unsupported freeze schema")
+    expected = LEGACY_LABEL_SCHEMA if frozen["schema_version"] == LEGACY_FREEZE_SCHEMA else LABEL_SCHEMA
+    require(frozen["content"]["schema_version"] == expected, "freeze/label schema mismatch")
     require(fingerprint_json(frozen["content"]) == frozen["content_sha256"], "frozen label hash mismatch")
     packets = load_packets(frozen, Path(path).parent)
     validate_labels({**frozen["content"], "packets": frozen["packets"]}, packets)
@@ -279,12 +371,39 @@ def ratio(n, d):
     return n / d if d else None
 
 
+def localization_summary(rows, total):
+    errors = [r["distance_px"] for r in rows]
+    bounded = [r for r in rows if r["reported_source_y_interval"] is not None]
+    widths = [r["reported_source_y_interval"][1] - r["reported_source_y_interval"][0] for r in bounded]
+    return {"status": "measured" if rows else "not_measured", "eligible_sector_count": total,
+            "matched_sector_count": len(rows), "unmatched_sector_count": total - len(rows),
+            "reviewed_contour_coverage": ratio(len(rows), total), "sector_results": rows,
+            "mean_distance_to_review_interval_px": ratio(sum(errors), len(errors)),
+            "p95_distance_px": deterministic_percentile(errors, .95),
+            "reported_interval_count": len(bounded),
+            "full_review_interval_coverage": ratio(sum(r["interval_covers_review"] for r in bounded), len(bounded)),
+            "mean_reported_interval_width_px": ratio(sum(widths), len(widths))}
+
+
+def path_totals(rows):
+    totals = {}
+    for basis in ("native_path", "candidate_center"):
+        counts = {k: sum(r["by_geometry_basis"][basis][k] for r in rows) for k in PATH_JUDGMENTS}
+        total = sum(counts.values())
+        reviewed = total - counts["unreviewed"]
+        totals[basis] = {**counts, "available_point_count": total, "reviewed_point_count": reviewed,
+                         "review_coverage": ratio(reviewed, total), "full_path_localization_pass": None}
+    return {"candidate_count": len(rows), "by_geometry_basis": totals}
+
+
 def summarize(cases, packets, predictions):
-    confusion = {label: Counter() for label in LABELS}
+    confusion = {label: Counter() for label in IDENTITIES}
+    tag_confusion = {tag: Counter() for tag in ARTIFACT_TAGS}
+    path_rows = []
     visibility = defaultdict(Counter)
     availability = defaultdict(Counter)
     missing = supported = tp = fp = unverified = visible_frames = recalled = proposals = 0
-    localization_errors, widths, covered = [], [], []
+    positive_sectors = supported_positive_sectors = 0
     localization_rows = []
     localization_missing = 0
     consistency = defaultdict(list)
@@ -294,28 +413,36 @@ def summarize(cases, packets, predictions):
         frame_recalled = False
         if case["visibility"] == "visible":
             visible_frames += 1
-            proposals += any(a["label"] in POSITIVES for a in case["candidates"])
+            proposals += any(identity(a) == "interface" for a in case["candidates"])
         truth = {tuple(p["source_x_range"]): p["source_y_interval"] for p in case["contour"]}
         for annotation in case["candidates"]:
             key = (case["case_id"], annotation["candidate_input_index"])
             p = predictions.get(key)
             decision = p["decision"] if p else "NOT_EVALUATED"
             missing += p is None
-            label = annotation["label"]
+            label = identity(annotation)
+            if label == "non_interface":
+                for tag in artifact_tags(annotation):
+                    tag_confusion[tag][decision] += 1
             confusion[label][decision] += 1
             visibility[case["visibility"]][decision] += 1
             if decision == "INTERFACE_SUPPORTED":
                 supported += 1
-                tp += label in POSITIVES
-                fp += label in NEGATIVES
-                unverified += label not in POSITIVES | NEGATIVES
+                tp += label == "interface"
+                fp += label == "non_interface"
+                unverified += label in ("uncertain", "unreviewed")
                 frame_recalled |= label == "interface"
             if annotation["entity_id"]:
                 consistency[(case["recording_group"], case["physical_case_id"], annotation["entity_id"])].append((case["case_id"], decision))
             candidate = candidates[annotation["candidate_input_index"]]
             availability[candidate["measurement_status"]][decision] += 1
             intervals = {tuple(q["source_x_range"]): q["source_y_interval"] for q in p.get("intervals", [])} if p else {}
-            if label in POSITIVES:
+            path_rows.append({"case_id": case["case_id"], "candidate_input_index": annotation["candidate_input_index"],
+                              "identity": label, "decision": decision, "by_geometry_basis": path_summary(annotation, candidate)})
+            if label == "interface":
+                positive_sectors += len(candidate["sectors"])
+                if decision == "INTERFACE_SUPPORTED":
+                    supported_positive_sectors += len(candidate["sectors"])
                 matched = 0
                 for sector in candidate["sectors"]:
                     x = tuple(sector["source_x_range"])
@@ -325,26 +452,23 @@ def summarize(cases, packets, predictions):
                     lo, hi = truth[x]
                     y = sector["path_source_y"] if sector["path_source_y"] is not None else candidate["canonical_y"]
                     error = max(lo - y, 0, y - hi)
-                    localization_errors.append(error)
                     bounds = intervals.get(x)
                     localization_rows.append({"case_id": case["case_id"],
                         "candidate_input_index": annotation["candidate_input_index"],
                         "source_x_range": list(x), "candidate_path_source_y": y,
+                        "geometry_basis": "native_path" if sector["path_source_y"] is not None else "candidate_center",
+                        "decision": decision,
                         "reviewed_source_y_interval": [lo, hi], "distance_px": error,
                         "reported_source_y_interval": bounds,
                         "interval_covers_review": bounds[0] <= lo and bounds[1] >= hi if bounds else None})
-                    if x in intervals:
-                        a, b = intervals[x]
-                        widths.append(b - a)
-                        covered.append(a <= lo and b >= hi)
                 localization_missing += matched == 0
         recalled += case["visibility"] == "visible" and frame_recalled
     pairs = [values for values in consistency.values() if len({v[0] for v in values}) > 1]
     evaluated_pairs = [v for v in pairs if all(d != "NOT_EVALUATED" for _, d in v)]
-    positive_count = sum(sum(confusion[label].values()) for label in POSITIVES)
+    positive_count = sum(confusion["interface"].values())
     count = sum(sum(c.values()) for c in confusion.values())
     abstained = sum(c[d] for c in confusion.values() for d in ("UNRESOLVED", "UNOBSERVABLE"))
-    negative_counts = {label: {"total": sum(confusion[label].values()), "rejected": confusion[label]["INTERNAL_OR_ARTIFACT"], "wrong_support": confusion[label]["INTERFACE_SUPPORTED"]} for label in sorted(NEGATIVES)}
+    negative_counts = {tag: {"total": sum(c.values()), "rejected": c["INTERNAL_OR_ARTIFACT"], "wrong_support": c["INTERFACE_SUPPORTED"]} for tag, c in tag_confusion.items()}
     for values in negative_counts.values():
         values["rejection_rate"] = ratio(values["rejected"], values["total"])
     return {"frame_count": len(cases), "candidate_count": count,
@@ -354,17 +478,21 @@ def summarize(cases, packets, predictions):
             "missing_prediction_count": missing, "confusion": {l: dict(c) for l, c in confusion.items()},
             "by_human_visibility": {l: dict(c) for l, c in visibility.items()},
             "by_measurement_status": {l: dict(c) for l, c in availability.items()},
-            "supported_count": supported, "wrong_structure_support_count": fp, "unverified_support_count": unverified,
+            "supported_count": supported, "wrong_non_interface_support_count": fp, "unverified_support_count": unverified,
             "verified_identity_precision": ratio(tp, tp + fp), "conservative_supported_precision": ratio(tp, supported),
             "identity_recall": ratio(tp, positive_count), "negative_families": negative_counts,
             "visible_frame_count": visible_frames, "visible_frames_with_interface_proposal": proposals,
-            "visible_frames_with_localized_support": recalled, "visible_frame_support_recall": ratio(recalled, visible_frames),
-            "localization": {"matched_sector_count": len(localization_errors), "unmatched_positive_candidates": localization_missing,
-                "sector_results": localization_rows,
-                "mean_distance_to_review_interval_px": ratio(sum(localization_errors), len(localization_errors)),
-                "p95_distance_px": deterministic_percentile(localization_errors, .95),
-                "reported_interval_count": len(covered), "full_review_interval_coverage": ratio(sum(covered), len(covered)),
-                "mean_reported_interval_width_px": ratio(sum(widths), len(widths))},
+            "visible_frames_with_identity_support": recalled, "visible_frame_identity_support_recall": ratio(recalled, visible_frames),
+            "qualitative_path_review": {"candidate_results": path_rows,
+                "all_proposals": path_totals(path_rows),
+                "supported_proposals": path_totals([r for r in path_rows if r["decision"] == "INTERFACE_SUPPORTED"]),
+                "full_path_localization_pass": None},
+            "localization": {
+                "all_interface_proposals": localization_summary(localization_rows, positive_sectors),
+                "supported_interface_proposals": localization_summary(
+                    [r for r in localization_rows if r["decision"] == "INTERFACE_SUPPORTED"], supported_positive_sectors),
+                "unmatched_positive_candidates": localization_missing,
+                "full_path_localization_pass": None},
             "paired_entity_groups": len(pairs), "fully_evaluated_pair_groups": len(evaluated_pairs),
             "paired_decision_consistency": ratio(sum(len({d for _, d in v}) == 1 for v in evaluated_pairs), len(evaluated_pairs)),
             "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"}
@@ -399,7 +527,8 @@ def evaluate(frozen, packets, prediction_document=None):
             predictions[key] = row
         fingerprint_json(p)
     cases = frozen["content"]["cases"]
-    return {"schema_version": "s11-o2-shadow-report-v1", "frozen_labels_sha256": frozen["content_sha256"],
+    return {"schema_version": "s11-o2-shadow-report-v2", "source_label_schema": frozen["content"]["schema_version"],
+            "metric_semantics": "identity_support_separate_from_path_agreement_and_numeric_localization", "frozen_labels_sha256": frozen["content_sha256"],
             "prediction_sha256": fingerprint_json(prediction_document) if prediction_document else None,
             "status": "EVALUATED_NOT_QUALIFIED" if predictions else "NOT_EVALUATED",
             "field_disposition": "FIELD FAIL", "auto_acceptance": False,
@@ -408,6 +537,9 @@ def evaluate(frozen, packets, prediction_document=None):
                 "No classifier, operating point or production authority is supplied by this evaluator.",
                 "Unreviewed/unresolved support is reported separately; visible frames with no candidates remain misses.",
                 "Localization compares exact X extents only; no scalar-to-curve or interpolated truth substitution.",
+                "Qualitative near_interface is not a numeric tolerance; no full-path PASS policy is supplied.",
+                "Artifact tags may overlap; family counts are not mutually exclusive votes.",
+                "Legacy v1 labels are read explicitly as identity only; no path truth is inferred.",
                 "A content hash detects drift but cannot prove an untouched holdout or annotation chronology."]}
 
 

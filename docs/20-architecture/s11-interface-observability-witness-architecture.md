@@ -396,7 +396,7 @@ media encodings/geometry require explicit future correspondence review. The rece
 is retained beside each original review even after combine/freeze; it is not an
 automatic video authenticity or holdout certificate.
 
-`status` validates old v1 drafts and lists pending/unreviewed/held judgments without
+`status` validates v1 and v2 drafts and lists pending/unreviewed/held judgments without
 rehashing large live files. `record` applies one sparse human reply to a specified
 label-content hash under an exclusive writer lock, validates all packet/candidate
 references, archives the entire old draft and atomically replaces the live JSON.
@@ -408,18 +408,19 @@ and original-video association remain explicit trust boundaries. An interrupted
 writer may leave a stale lock; it must never be automatically broken without
 checking for an active writer. Code ZIP replacement never owns the data directory.
 
-### O2 review semantics revision — specified, not implemented
+### O2 review semantics revision — implemented locally
 
 The transferred [review-002](../60-evidence/s11/s11-o2-windows-review-002.md)
 exposes a scope mismatch: a human may recognize an interface proposal holistically
 while some of its generated path points lie off the interface. Preserve that
 judgment; do not reinterpret it as a guarantee for every point or silently relabel
-it as reflection/structure. The following contract is the next bounded diagnostic
-implementation. Current v1 commands do not yet accept these new fields.
+it as reflection/structure. The following contract is implemented in the existing offline evaluator and record
+companion. It changes no detector behavior or witness data. Labels/frozen/report
+use v2; packets/witnesses/predictions retain their existing v1 contracts.
 
 #### Separate review questions
 
-| Scope | Question | Proposed representation |
+| Scope | Question | Stored representation |
 |---|---|---|
 | Scene | Is the Oil interface visible? | Existing visibility and optional reviewed contour |
 | Candidate identity | Does this proposal represent the interface, another object, or remain uncertain? | `identity`: interface / non_interface / uncertain / unreviewed |
@@ -487,12 +488,46 @@ New candidate-identity and scene labels stay distinct from per-execution path
 reviews; this does not implement automatic new-run candidate matching.
 
 Extend the current O2 evaluator/record companion, not a parallel label system.
-The next implementation comprises explicit migration, scoped reply validation and
+The implementation comprises explicit migration, scoped reply validation and
 storage, status coverage, separated metrics, focused compatibility/semantic controls
 and the agent procedure. It does not add a GUI, detector revision, classifier,
 production authority, or owner handoff. Prior image-display/Y-axis requests remain
 operational review requirements; a new rendering subsystem is not part of this
-contract. Do not ask for all remaining 19 labels before fixing this semantic seam.
+contract. Existing Windows reviews can migrate and resume bounded annotation;
+local semantic tests do not certify Windows labels or a shadow classifier.
+
+`prepare` now creates `s11-o2-labels-v2`. Old v1 labels remain readable/editable
+using their original fields; new fields require explicit `migrate`. The new command
+requires an expected source label hash, locks source/destination, creates a new file,
+archives the original logical JSON and retains original reply history. The original
+file and all old history/receipts/frozen results remain untouched. Migration itself
+does not increment the human-reply revision count. Its operator/time describe
+conversion, not a new physical review. Legacy candidate objects are preserved in
+`legacy_annotation`; unresolved/unobservable map to uncertain identity with their
+original distinctions retained there. No free-text parsing creates path labels.
+
+`record` v2 accepts sparse identity/tag/entity changes and per-geometry path upserts.
+A path reply contains `geometry_basis`, `source_x_range`, `source_y`, `judgment`;
+the enclosing candidate ID and witness hash bind it to one frame/proposal. Exact
+witness X/Y/basis matching is required. Absent path reviews remain unreviewed;
+an explicit unreviewed judgment resets only that geometry and retains history.
+Scoped review metadata records reviewer/note/time/basis. Candidate-only changes
+preserve scene attribution; path-only changes preserve identity attribution.
+Native and candidate-center geometries have separate coverage denominators.
+
+`freeze` preserves the input label version in the corresponding frozen version.
+`combine` requires uniform versions (explicitly migrate mixed inputs first) and
+retains source-label hashes/locators; source histories stay in their review folders.
+`evaluate` accepts frozen v1/v2 and always writes a new `s11-o2-shadow-report-v2`,
+explicitly naming the source label schema. Old reports are never edited or emitted
+under a v1 name with new semantics. `visible_frame_identity_support_recall` replaces
+the old localization-sounding frame metric. Qualitative path rows/totals distinguish
+all proposals from model-supported proposals. Numeric localization separately
+reports all interface proposals and supported interface proposals, matched/eligible
+sector coverage, per-sector errors, interval width/coverage and not_measured/null.
+No missing contour is replaced with candidate geometry; full-path PASS stays null.
+Artifact family counts apply only to non-interface identities and may overlap;
+identity totals count each candidate once. Packet and source data remain local.
 
 ### Stage O3 — Independent support and association
 
