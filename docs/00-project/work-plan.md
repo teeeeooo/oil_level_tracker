@@ -162,12 +162,16 @@ with other judgments unchanged and classifier status NOT_EVALUATED. This closes
 the bounded first-frame record, not O2 discrimination acceptance. Execution ZIP
 commits d7c1ebe/e3fac4b are user-attested, not independently hash-verified.
 The transferred [Windows review-002](../60-evidence/s11/s11-o2-windows-review-002.md)
-reports BASE f14386 revision 1: material_path input index 9 is interface after
-four sector reviews, visibility is visible, contour is empty, and 22 candidates
-remain unreviewed. Quantitative localization and classifier performance remain
-unmeasured. Next resume 2–3 distinct potentially confusable proposals in that
-same frame, preserving the complete inventory and prior judgments. After limited
-regression review, declare separate original
+reports BASE f14386 revision 4: material_path input IDs 8/9/10/12 are interface,
+visibility is visible, contour is empty, and 19 candidates remain unreviewed.
+The user explicitly accepts candidates 12/10 holistically despite off-interface
+path portions. These labels do not certify every sector or localization accuracy.
+Before scaling annotation or claiming localization acceptance, distinguish candidate
+identity from partial-path correctness: the evaluator's localized-support indicator
+currently uses the interface label without requiring contour or reading note
+qualifications. Preserve user judgments and correct only report arithmetic with
+same-X checks; no schema/runtime change is made yet. After this contract review
+and limited regression annotation, declare separate original
 recordings for development/calibration/holdout before choosing a shadow model.
 Reviewed private checkpoints are regression cases, not untouched holdout.
 Windows work next verifies the new witness on existing reviewed frames and
