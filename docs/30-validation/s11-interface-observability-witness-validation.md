@@ -238,7 +238,7 @@ defines fields and invocation. Required controls for this foundation are:
 - real bundle → indexed exact-frame lookup → complete raw/witness candidate join;
 - source/frame/Glass mismatch, duplicate IDs and absent witness rejection;
 - no candidate filtering by score, selected/rejected status or authority;
-- refusal of pending visibility, altered packet/candidate/label hashes, missing
+- freeze refusal of pending visibility, altered packet/candidate/label hashes, missing
   frames/candidate labels and nonfinite values;
 - recording-group partition locking, same-run alias prevention and regression-only
   handling of already reviewed cases; no random adjacent-frame partition;
@@ -251,6 +251,25 @@ defines fields and invocation. Required controls for this foundation are:
 - no-prediction readiness emits NOT_EVALUATED, never PASS;
 - deterministic results, no-overwrite output and execution from a non-repo cwd
   with UTF-8/non-ASCII paths.
+
+Durable review controls additionally require:
+
+- loading and editing existing v1 drafts without regenerating packets or labels;
+- archive-before-atomic-replace, stale-revision/overlapping-writer rejection and
+  failed-save preservation with a successful retry;
+- scene review provenance unchanged by a candidate-only correction; omitted
+  candidates/frames unchanged and all inventories still checked;
+- a moved data tree remains readable without the old code path; existing frozen
+  labels remain unchanged after later draft corrections;
+- real indexed bundle linkage, including rejection of a modified packet even if
+  its local hash was recomputed, and exact bundle/video checks on relink;
+- unverified initial video association explicitly recorded as human attestation,
+  different source bytes and changed trace rejection, non-ASCII paths and CLI
+  dispatch from a foreign cwd;
+- absent live paths reported without losing the archived judgments, and Windows
+  cross-drive locator handling without placing paths in content identity;
+- no candidate-label transfer across executions and no physical inference from a
+  source hash, filename, candidate index, static Y or geometry proximity.
 
 Synthetic scripted predictions test metric arithmetic and guards only. They are
 not an image classifier, V2 discrimination evidence or an untouched holdout.

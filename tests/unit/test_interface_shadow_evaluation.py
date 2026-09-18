@@ -223,7 +223,8 @@ def test_combine_preserves_splits_and_does_not_erase_conflicting_owners(tmp_path
         o2.combine([tmp_path/'labels.json', tmp_path/'other.json'], 'conflict', tmp_path/'conflict.json')
 
 
-def test_real_bundle_prepare_reuses_indexed_reader_and_preserves_empty_labels(tmp_path):
+@pytest.fixture
+def prepared_o2_review(tmp_path):
     from tests.integration.test_debug_trace_bundle_output import _inputs, _store
     from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
     from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriter
@@ -242,6 +243,11 @@ def test_real_bundle_prepare_reuses_indexed_reader_and_preserves_empty_labels(tm
         'partition':'regression', 'previously_reviewed':True}]}
     original_hash = o2.sha256_file(bundle/'debug'/'debug_trace.jsonl')
     draft = o2.prepare(bundle, selection, tmp_path/'review')
+    return bundle, selection, draft, original_hash
+
+
+def test_real_bundle_prepare_reuses_indexed_reader_and_preserves_empty_labels(tmp_path, prepared_o2_review):
+    bundle, selection, draft, original_hash = prepared_o2_review
     assert draft['cases'][0]['visibility'] == 'pending'
     assert all(a['label']=='unreviewed' for a in draft['cases'][0]['candidates'])
     assert o2.sha256_file(bundle/'debug'/'debug_trace.jsonl') == original_hash

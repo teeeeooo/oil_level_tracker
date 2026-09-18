@@ -165,17 +165,23 @@ def load_packets(document, directory):
     return packets
 
 
-def validate_labels(labels, packets):
+def validate_labels(labels, packets, *, allow_pending=False):
     require(labels.get("schema_version") == LABEL_SCHEMA, "unsupported label schema")
     for k in ("dataset_id", "label_owner", "split_owner", "split_rationale"):
-        text(labels[k], k)
+        require(isinstance(labels[k], str), f"{k}: string required")
+        if not allow_pending:
+            text(labels[k], k)
     cases = labels["cases"]
     require(0 < len(cases) <= MAX_CASES, "dataset requires 1–256 cases")
     unique(cases, "case_id", "label cases")
     groups, physical, runs, records, used = {}, {}, {}, set(), set()
     for case in cases:
-        for k in ("case_id", "recording_group", "episode_id", "physical_case_id", "transform_id", "reviewer", "review_note"):
+        for k in ("case_id", "recording_group", "episode_id", "physical_case_id", "transform_id"):
             text(case[k], k)
+        for k in ("reviewer", "review_note"):
+            require(isinstance(case[k], str), f"{k}: string required")
+            if not allow_pending or case["visibility"] != "pending":
+                text(case[k], k)
         partition = case["partition"]
         require(partition in PARTITIONS, "invalid partition")
         require(type(case["previously_reviewed"]) is bool, "previously_reviewed must be boolean")
@@ -185,7 +191,8 @@ def validate_labels(labels, packets):
         require(groups.setdefault(group, partition) == partition, "recording/episode leakage across partitions")
         pair = (group, case["physical_case_id"])
         require(physical.setdefault(pair, (case["episode_id"], partition)) == (case["episode_id"], partition), "physical-case leakage")
-        require(case["visibility"] in ("visible", "not_visible", "uncertain"), "human visibility review required")
+        require(case["visibility"] in (("visible", "not_visible", "uncertain", "pending") if allow_pending
+                                      else ("visible", "not_visible", "uncertain")), "human visibility review required")
         require(case["label_basis"] in ("human_review", "synthetic_construction"), "invalid label basis")
         frame = packets[case["packet_sha256"]][case["case_id"]]
         require(runs.setdefault(frame["run_id"], group) == group, "one bundle run cannot be renamed into multiple recording groups")
@@ -212,6 +219,7 @@ def validate_labels(labels, packets):
             xs.add(x)
             interval(point["source_y_interval"], "reviewed contour Y")
         require(case["visibility"] != "not_visible" or not case["contour"], "not-visible frame cannot carry a reviewed contour")
+        require(case["visibility"] != "pending" or not case["contour"], "pending frame cannot carry a reviewed contour")
     require(used == {(h, key) for h, frames in packets.items() for key in frames}, "packet frames cannot silently disappear from labels")
     fingerprint_json(labels)  # Strict finite JSON, including user metadata.
 
@@ -421,6 +429,8 @@ def main():
     audit_parser.add_argument("--frozen", type=Path, required=True)
     audit_parser.add_argument("--predictions", type=Path)
     audit_parser.add_argument("--output", type=Path, required=True)
+    from tests.diagnostics import s11_review_records as records
+    records.add_commands(commands)
     args = parser.parse_args()
     try:
         if args.command == "prepare":
@@ -429,13 +439,16 @@ def main():
             freeze(args.labels, args.output)
         elif args.command == "combine":
             combine(args.labels, args.dataset_id, args.output)
-        else:
+        elif args.command == "evaluate":
             frozen, packets = load_frozen(args.frozen)
             predictions = read_json(args.predictions) if args.predictions else None
             write_new(args.output, evaluate(frozen, packets, predictions))
+        else:
+            result = records.dispatch(args)
+            print(json.dumps(result, ensure_ascii=True, indent=2, allow_nan=False))
     except (ValueError, KeyError, TypeError, OSError) as exc:
         parser.exit(2, f"O2 input rejected: {exc}\n")
-    print(f"{args.command} complete; no detector behavior changed")
+    print(f"{args.command} complete; no detector behavior changed", file=sys.stderr)
 
 
 if __name__ == "__main__":

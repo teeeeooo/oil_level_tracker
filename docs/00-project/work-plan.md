@@ -149,7 +149,14 @@ now prepares exact-frame packets, combines local labels, freezes recording-group
 partitions and evaluates imported predictions without changing the detector.
 Its [local evidence](../60-evidence/s11/s11-o2-evaluation-foundation.md) covers
 provenance/partition guards and metric arithmetic, not classifier accuracy.
-Next label a small regression packet locally, then declare separate original
+The offline tool also registers relocatable bundle/source receipts and records
+human replies with revision checks, snapshots and resume status. Keep these files
+outside the replaceable ZIP checkout. Existing R22-3 bundles and v1 labels remain
+usable; no detector rerun or R22-4 revision is required. The
+[durable-record evidence](../60-evidence/s11/s11-o2-durable-review-records.md)
+records local persistence controls, not Windows qualification or a new classifier.
+Next prepare/link one existing regression frame, then complete human questions,
+record replies and check status on the work PC. After that, declare separate original
 recordings for development/calibration/holdout before choosing a shadow model.
 Reviewed private checkpoints are regression cases, not untouched holdout.
 Windows work next verifies the new witness on existing reviewed frames and

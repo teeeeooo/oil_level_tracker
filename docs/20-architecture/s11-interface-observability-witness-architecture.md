@@ -371,6 +371,43 @@ and untouched-holdout history cannot be certified by the interchange format.
 See the [local procedure](../40-operations/s11-o2-local-shadow-evaluation.md).
 This tooling does not complete O2 discrimination acceptance or alter R22-3 runtime.
 
+### O2 durable local review records
+
+The same CLI delegates bundle receipts and human edits to
+`tests/diagnostics/s11_review_records.py`. It reuses the existing bundle/index
+readers, truth identity/file hashes and `json_recipe_repository.atomic_write_text`.
+This companion is an offline persistence boundary, not a second evaluator, truth
+GUI or detector. No production imports call it.
+
+`link-bundle` compares every packet frame/witness with the indexed trace and records
+manifest/recipe/session/trace/index hashes, run identity and source-video SHA-256.
+The initial claim that a selected video produced an older bundle remains an explicit
+human attestation; a newly computed hash cannot prove it retroactively. `relink`
+requires the same registered bytes and metadata before updating locators. Paths
+are relative where possible and absolute across Windows drives. Identity does not
+include transport paths. No source images or full trace are copied into labels.
+
+The receipt binds packet hashes and stores a conservative scene key from exact
+video bytes, source frame, coordinate dimensions and Glass geometry. Case visibility,
+contour and scene-review provenance are separated from execution-specific candidate
+labels and witness hashes. This preserves the inputs for later reviewed reuse; no
+command transfers a label to a new execution or guesses correspondence. Different
+media encodings/geometry require explicit future correspondence review. The receipt
+is retained beside each original review even after combine/freeze; it is not an
+automatic video authenticity or holdout certificate.
+
+`status` validates old v1 drafts and lists pending/unreviewed/held judgments without
+rehashing large live files. `record` applies one sparse human reply to a specified
+label-content hash under an exclusive writer lock, validates all packet/candidate
+references, archives the entire old draft and atomically replaces the live JSON.
+Scene review provenance survives candidate-only corrections. Unmentioned cases and
+candidates remain untouched. Drafts may be pending; freeze still rejects pending
+visibility or missing review owners. Frozen snapshots are immutable separate files.
+History is a local audit trail, not authenticated or signed; external/manual edits
+and original-video association remain explicit trust boundaries. An interrupted
+writer may leave a stale lock; it must never be automatically broken without
+checking for an active writer. Code ZIP replacement never owns the data directory.
+
 ### Stage O3 — Independent support and association
 
 Only after O2 passes may the typed result feed the parent design's independent
