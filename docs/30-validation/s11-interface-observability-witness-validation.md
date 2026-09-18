@@ -187,6 +187,42 @@ A point near the interface but offset cannot be reused as a certified material
 negative. Scalar candidate Y is evaluated against contour-sector labels only
 where that mapping is meaningful.
 
+### Candidate identity versus partial-path review — next implementation gate
+
+This supplements the localization distinctions above. It is a proposed test
+contract, not a claim that current v1 persistence/evaluation supports the fields.
+See the [review semantics revision](../20-architecture/s11-interface-observability-witness-architecture.md#o2-review-semantics-revision--specified-not-implemented).
+Required controls before resuming large-scale annotation:
+
+- an interface candidate with some reviewed off-interface sectors retains its
+  identity, reports partial path agreement and cannot pass full-path localization;
+- all paths qualitatively near-interface but no contour still gives no numeric
+  position-error/tolerance certificate;
+- scalar candidate Y, nearest-reference distance and same-number/different-X
+  sectors cannot create path truth or localization matches;
+- an unreviewed path portion does not inherit a reviewed neighbor or candidate's
+  identity; missing native geometry is not synthesized;
+- a reviewed non-interface scratch/reflection overlap retains multiple user tags
+  and original notes; missing subtype does not force an uncertain identity;
+- legacy interface/localization_mismatch/negative/uncertain/unreviewed judgments
+  migrate explicitly with original labels and hashes, without invented per-sector
+  judgments, intervals, reviewer chronology or altered packet data;
+- old frozen labels/reports remain intact and readable; changed report semantics
+  have a distinct version and no silent reuse of the old localization name;
+- no prediction remains NOT_EVALUATED; visible empty-candidate frames, missing
+  predictions, unreviewed support and localization coverage remain visible;
+- stage-separated identity metrics, qualitative path counts, geometry errors and
+  missing contour are verified on constructed controls. Full-path binary success
+  remains unavailable without a declared coverage/tolerance policy;
+- record/status/freeze and migration use the existing archive/atomic-write/revision
+  guards, with source/witness checks and foreign-cwd/non-ASCII path tests.
+
+Transferred review-002 IDs 8/9/10/12 retain the user's holistic interface labels.
+Its report statements do not substitute for independently reviewed per-X contour
+intervals. Coordinate arithmetic corrections must not become physical relabeling.
+These reviewed cases remain regression, not classifier-fitting or untouched-holdout
+proof. No field acceptance follows from passing the schema/evaluator controls.
+
 ## V3 — operating-point discipline
 
 Before a shadow classifier is allowed to emit

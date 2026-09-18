@@ -166,12 +166,16 @@ reports BASE f14386 revision 4: material_path input IDs 8/9/10/12 are interface,
 visibility is visible, contour is empty, and 19 candidates remain unreviewed.
 The user explicitly accepts candidates 12/10 holistically despite off-interface
 path portions. These labels do not certify every sector or localization accuracy.
-Before scaling annotation or claiming localization acceptance, distinguish candidate
-identity from partial-path correctness: the evaluator's localized-support indicator
-currently uses the interface label without requiring contour or reading note
-qualifications. Preserve user judgments and correct only report arithmetic with
-same-X checks; no schema/runtime change is made yet. After this contract review
-and limited regression annotation, declare separate original
+The [review-semantics revision](../20-architecture/s11-interface-observability-witness-architecture.md#o2-review-semantics-revision--specified-not-implemented)
+and [acceptance controls](../30-validation/s11-interface-observability-witness-validation.md#candidate-identity-versus-partial-path-review--next-implementation-gate)
+now specify candidate identity, qualitative per-path agreement, optional numeric
+contour truth and nonexclusive artifact descriptions as distinct scopes. Next
+implement explicit versioned migration and extend existing record/status/evaluate
+owners; preserve original v1 judgments/packets and do not infer segment truth from
+notes or reference-Y differences. The current localized-support indicator still
+uses the interface label without requiring contour; no code/schema change is made
+by this design update. Resume bounded annotation after that semantic seam is
+verified, then declare separate original
 recordings for development/calibration/holdout before choosing a shadow model.
 Reviewed private checkpoints are regression cases, not untouched holdout.
 Windows work next verifies the new witness on existing reviewed frames and

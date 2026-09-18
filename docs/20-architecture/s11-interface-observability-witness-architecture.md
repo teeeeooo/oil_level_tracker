@@ -408,6 +408,92 @@ and original-video association remain explicit trust boundaries. An interrupted
 writer may leave a stale lock; it must never be automatically broken without
 checking for an active writer. Code ZIP replacement never owns the data directory.
 
+### O2 review semantics revision — specified, not implemented
+
+The transferred [review-002](../60-evidence/s11/s11-o2-windows-review-002.md)
+exposes a scope mismatch: a human may recognize an interface proposal holistically
+while some of its generated path points lie off the interface. Preserve that
+judgment; do not reinterpret it as a guarantee for every point or silently relabel
+it as reflection/structure. The following contract is the next bounded diagnostic
+implementation. Current v1 commands do not yet accept these new fields.
+
+#### Separate review questions
+
+| Scope | Question | Proposed representation |
+|---|---|---|
+| Scene | Is the Oil interface visible? | Existing visibility and optional reviewed contour |
+| Candidate identity | Does this proposal represent the interface, another object, or remain uncertain? | `identity`: interface / non_interface / uncertain / unreviewed |
+| Reviewed geometry | Does this specific displayed segment/point lie near the interface? | `path_reviews[]`: near_interface / off_interface / uncertain / unreviewed |
+| Measured localization | What independently reviewed Y interval is acceptable at this X extent? | Existing scene contour; optional, never synthesized from a proposal |
+
+`near_interface` is a qualitative human judgment, not a calibrated px tolerance.
+An interface identity and off-interface path parts are a valid combination.
+`non_interface` describes physical identity; optional `artifact_tags` may contain
+multiple values (reflection, structure, residue, other), with free-text detail.
+An empty tag set means no cause was specified, not that identity is uncertain.
+A scratch can retain structure plus the user's scratch note, and reflected light
+at a scratch may retain both structure/reflection when explicitly reviewed.
+Tags are descriptions, not independent evidence votes or mutually exclusive truth.
+Legacy `localization_mismatch` remains recorded as reviewed interface identity
+with a legacy localization qualification, without inventing sector errors.
+
+Each path review binds the candidate input ID/witness hash, exact source X extent,
+reviewed source Y, and geometry basis (native_path or candidate_center). A sector
+number alone is insufficient. The displayed geometry must exactly match the bound
+witness; a reference candidate at another X cannot certify it. A candidate with
+no native path can still be reviewed using its actual candidate-centered geometry;
+no synthetic native path is created. Only reviewed geometry gets a judgment;
+unreviewed or unavailable portions never inherit a neighbor's label.
+
+Preserve reviewer, original explanation and provenance for each scope. Reviewing a
+candidate does not auto-fill path reviews. Record a reviewed overall partial-path
+qualification in the note even if exact segment attribution is not yet available.
+Do not derive per-sector truth by parsing free text or computing proximity to a
+reference. Previously reported direct judgments may be explicitly imported after
+exact source/frame/geometry correspondence checks, with their original basis.
+A new human question is needed only for information not already established.
+
+#### Evaluation semantics
+
+1. Candidate identity precision/recall uses identity alone; no source family or
+   tag count gives extra votes. Unreviewed/uncertain support stays separate and
+   visible frames without candidates stay in the denominator.
+2. Rename the current label-only frame-support measure to an explicitly
+   **identity-support** measure. It cannot assert localization success. Legacy
+   interface/localization_mismatch both count as positive identity when mapped.
+3. Qualitative path agreement reports supported proposals' reviewed near/off/
+   uncertain counts and unreviewed coverage separately. Partial agreement is not
+   full-path acceptance. No majority vote or implicit minimum fraction is chosen
+   from these few regression examples.
+4. Quantitative localization uses only independently reviewed source-X/Y intervals,
+   with exact comparable X and geometry. Missing contour yields not_measured/null,
+   not zero error. Report the measured extent and missing coverage relative to
+   the available/reviewed cases so a small measured subset cannot masquerade as
+   complete success. Proposal geometry quality and model-supported geometry quality
+   must be distinguishable; wrong/off-interface parts cannot disappear from totals.
+5. Do not publish a binary localized-frame PASS until the target geometry coverage
+   and tolerance policy is explicitly defined and validated. No currently labeled
+   candidate, including a fully near-interface reviewed path, supplies that policy.
+
+#### Versioning, migration and implementation boundary
+
+Use a versioned label/frozen/report contract for the changed meaning, with explicit
+v1 compatibility. `migrate` must write a new destination, retain the original label
+value/notes and origin hash, and reuse unchanged packet/witness evidence. Preserve
+old labels, frozen sets, replies, receipts and history. Never overwrite a frozen
+v1 result or silently reinterpret its localized-support metric as a v2 result.
+No existing R22-3 bundle or source video needs rerunning, rewriting or re-exporting.
+New candidate-identity and scene labels stay distinct from per-execution path
+reviews; this does not implement automatic new-run candidate matching.
+
+Extend the current O2 evaluator/record companion, not a parallel label system.
+The next implementation comprises explicit migration, scoped reply validation and
+storage, status coverage, separated metrics, focused compatibility/semantic controls
+and the agent procedure. It does not add a GUI, detector revision, classifier,
+production authority, or owner handoff. Prior image-display/Y-axis requests remain
+operational review requirements; a new rendering subsystem is not part of this
+contract. Do not ask for all remaining 19 labels before fixing this semantic seam.
+
 ### Stage O3 — Independent support and association
 
 Only after O2 passes may the typed result feed the parent design's independent
