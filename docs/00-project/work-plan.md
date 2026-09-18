@@ -161,9 +161,13 @@ save/resume. The user confirms revision 3 corrected visibility to not_visible,
 with other judgments unchanged and classifier status NOT_EVALUATED. This closes
 the bounded first-frame record, not O2 discrimination acceptance. Execution ZIP
 commits d7c1ebe/e3fac4b are user-attested, not independently hash-verified.
-Next prepare an interface-visible example
-(BASE f14386 if present) using the same bundle and existing judgments where exact
-correspondence is verified. After limited regression review, declare separate original
+The transferred [Windows review-002](../60-evidence/s11/s11-o2-windows-review-002.md)
+reports BASE f14386 revision 1: material_path input index 9 is interface after
+four sector reviews, visibility is visible, contour is empty, and 22 candidates
+remain unreviewed. Quantitative localization and classifier performance remain
+unmeasured. Next resume 2–3 distinct potentially confusable proposals in that
+same frame, preserving the complete inventory and prior judgments. After limited
+regression review, declare separate original
 recordings for development/calibration/holdout before choosing a shadow model.
 Reviewed private checkpoints are regression cases, not untouched holdout.
 Windows work next verifies the new witness on existing reviewed frames and
