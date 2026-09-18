@@ -155,8 +155,15 @@ outside the replaceable ZIP checkout. Existing R22-3 bundles and v1 labels remai
 usable; no detector rerun or R22-4 revision is required. The
 [durable-record evidence](../60-evidence/s11/s11-o2-durable-review-records.md)
 records local persistence controls, not Windows qualification or a new classifier.
-Next prepare/link one existing regression frame, then complete human questions,
-record replies and check status on the work PC. After that, declare separate original
+The user-transferred [Windows review-001](../60-evidence/s11/s11-o2-windows-review-001.md)
+reports completed human review of all 23 BASE f11508 candidates and successful
+save/resume. The user confirms revision 3 corrected visibility to not_visible,
+with other judgments unchanged and classifier status NOT_EVALUATED. This closes
+the bounded first-frame record, not O2 discrimination acceptance. Execution ZIP
+commits d7c1ebe/e3fac4b are user-attested, not independently hash-verified.
+Next prepare an interface-visible example
+(BASE f14386 if present) using the same bundle and existing judgments where exact
+correspondence is verified. After limited regression review, declare separate original
 recordings for development/calibration/holdout before choosing a shadow model.
 Reviewed private checkpoints are regression cases, not untouched holdout.
 Windows work next verifies the new witness on existing reviewed frames and
