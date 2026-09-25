@@ -10,8 +10,8 @@ Use this skill for S11 detector behavior, detector ownership, detector validatio
 ## Bounded recall and routing
 
 1. Read `docs/00-project/work-plan.md` for the current gate and candidate status.
-2. Read the quick-start/design index in `docs/20-architecture/s11-current-detector-logic-map.md` and the quick failure index in `docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`.
-3. Identify the affected semantic node IDs and failure IDs, then read only their full entries plus the current architecture/validation owner needed for the task.
+2. Locate headings first, then read only `## Quick start / design index` in `docs/20-architecture/s11-current-detector-logic-map.md` and `## Quick failure index (F01–F10)` in `docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`, each up to the next level-2 heading. Do not load either whole document before selecting relevant detail.
+3. Identify the affected semantic node IDs and failure IDs, then read only their full entries plus the current architecture/validation owner needed for the task. For a general ownership/validation question without a concrete change, use the relevant overview and acceptance owner rather than expanding every node or failure entry.
 4. For Windows field work, also read the canonical reviewed truth and use the `windows-qualification` Skill.
 5. Stop recall once the current owner, relevant prior failure, and required acceptance are known. Do not walk revision history R1→R20 unless a focused pointer requires it.
 
