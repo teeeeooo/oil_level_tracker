@@ -324,6 +324,56 @@ No additional annotation, detector rerun, threshold selection or classifier clai
 is needed to answer this measurement question. The earlier preparation checks
 need not be repeated unless inputs or extraction change.
 
+## Follow-up: transferred near/off location comparison, 2026-09-28
+
+The follow-up correctly separates A (interface/near: 10 sectors), B
+(interface/off: four sectors), and C (non-interface/off: three sectors).
+Human labels, current revisions and the earlier reported v2 input validation
+remain unchanged. However, its detailed tables and summaries contradict one
+another. These are findings about the transferred report, not independent
+verification of private packets or proof that the Windows comparator is wrong.
+
+Examples recomputed from the displayed rounded values:
+
+- C, width 8, near_above normal_alignment: 0.8075, 0.7915, 0.7624 have
+  median **0.7915**, whereas the summary says 0.8075.
+- A, width 16, near_below normal_alignment: the ten displayed values have
+  median **0.80955** and minimum **0.7305**, whereas the summary says
+  0.7375 and 0.5193. Rounding does not explain this discrepancy.
+- A's displayed signed_delta rows contain **19 negative / 11 positive**
+  values. Its negative-row list also has 19 entries, but prose says both
+  22 and 20. Candidate 10 sectors 1 and 3 are not identical in all displayed
+  fields: width-8 signed_delta is -0.0235 versus -0.0225.
+- Candidate 9, sector 2, width 16 lists signed_delta=-0.0395,
+  normalized_delta=-0.9495, and near_above/near_below gray_std=0.0882/0.0656.
+  The current local witness owner computes the denominator as
+  sqrt(std_above^2 + std_below^2 + SIGMA_FLOOR^2), SIGMA_FLOOR=1/255.
+  Even with a zero floor, these displayed standard deviations bound the
+  normalized magnitude to approximately **0.35935**, not 0.9495.
+  Verify the actual bundle-generation implementation and identical
+  center/scale/band provenance before attributing this to an extractor or
+  detector error. Current source inspection alone does not establish that
+  historical runtime's formula.
+
+Do not use the reported alignment separation to choose an operating point yet.
+The immediate next step is a read-only Windows check of only two targets:
+
+1. Candidate 9 / sector 2 / native_path / width 16: trace exact X/Y and
+   field paths from packet to table_b to report for signed_delta,
+   normalization_denominator, normalized_delta, and the two near gray_std
+   fields; recompute using the runtime's verified formula.
+2. C / width 8 / near_above normal_alignment: extract the three sector
+   values from table_b, calculate the median using the existing percentile
+   owner, and compare to the report. Record full values locally and return
+   only the permitted compact result and discrepancy location.
+
+This distinguishes OCR/transcription or report assembly errors from source
+extraction errors without reopening all preparation checks. No source export,
+new annotation, detector rerun, threshold change or label modification is needed.
+Preserve current outputs while diagnosing. If only report transcription is
+wrong, regenerate that report from the existing rows; if packet-to-table values
+differ, repair and test that specific mapping before further interpretation.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

@@ -211,10 +211,16 @@ locally: 0.5 denotes median; private script/data execution remains on Windows.
 BASE near/off signed_delta ranges overlap at every width; Accum's unreviewed
 points cannot supply negative labels. All 110 larger-width native measurements
 report truncated peak lists, not absent band measurements or certified false paths.
-Next, keep human questions paused and use existing v2 rows to compare normalized
-multiscale contrast and band alignment for BASE interface proposals' 10 near versus
-four off points. Keep the three non-interface structural points separate. This
-isolates localization from identity; show Accum positives separately if useful.
+The next transferred comparison separates BASE interface proposals' 10 near
+versus four off points and keeps three non-interface structural points separate.
+Its detailed rows and summaries disagree on medians, sign counts, and one
+normalization calculation; these are report inconsistencies, not established
+private-data or detector defects. Keep human questions paused. Next, Windows
+should trace only candidate 9 / sector 2 / native_path / width 16 normalization
+from packet through table_b to report, and recompute the three C-group width-8
+near_above alignment values' median. Resolve transcription versus extraction
+before interpreting feature separation. Earlier reported input validation and
+human labels remain accepted within their existing scope.
 No new descriptor, detector rerun or universal sign/threshold rule is authorized
 by these observations. Classifier/operating-point acceptance remains open; new-run
 hashes do not prove old-run immutability retroactively.
