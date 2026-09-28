@@ -374,6 +374,56 @@ Preserve current outputs while diagnosing. If only report transcription is
 wrong, regenerate that report from the existing rows; if packet-to-table values
 differ, repair and test that specific mapping before further interpretation.
 
+## Targeted Windows reconciliation returned, 2026-09-28
+
+The user returned the two requested read-only checks. These remain transferred
+Windows evidence; the private files were not independently accessed here.
+
+For review-002 candidate 9 / sector 2 / native_path / width 16, Windows reports
+exact packet -> table_b -> near/off JSON agreement for four extracted fields:
+
+| Field | Reported full value |
+|---|---|
+| signed_delta | -0.03953866593366334 |
+| normalized_delta | -0.43024128331146505 |
+| near_above.gray_std | 0.08824661526951427 |
+| near_below.gray_std | 0.025348553697232056 |
+
+X=[236,343], path/center source Y=406 and native geometry match. The packet's
+normalization_denominator is 0.09189881926100539; it is **not extracted** into
+table_b. Division of the stored signed delta by that denominator reproduces the
+stored normalized delta. Thus the report's phrase "five values all match" should
+be read as four extracted values matching plus one packet-only denominator.
+The recipe snapshot contains no normalization implementation: this arithmetic
+check does not identify the historical source formula or execution commit.
+
+The prior transferred Markdown row contained normalized_delta=-0.9495 and
+near_below.gray_std=0.0656, which differ from the now-confirmed values above.
+Therefore "no transcription error / MD all matches" cannot describe that prior
+transferred row. The location of that particular discrepancy (local Markdown,
+report version, or subsequent transfer) is not established. There is no demonstrated
+packet-to-JSON error for this checked row and no reason to repair detector code.
+
+For C / width 8 / near_above normal_alignment, packet sector values are
+0.8075052294838504, 0.7914838634767172, 0.7624087257857327.
+The recalculated median is **0.7914838634767172**, and the near/off JSON summary
+correctly reports 0.791484. Windows identifies the Markdown line's 0.8075 median
+as the rounded maximum copied into the median column. This resolves the second
+target as a Markdown reporting error, not a human-label error.
+
+Next, preserve existing artifacts and generate a corrected Markdown report from
+the existing near/off JSON, using machine-derived rows, summaries, sign counts,
+pairwise differences and range comparisons with one display-rounding policy.
+Do not patch only the one median: other transferred sections contradicted their
+own details. Check generated displayed values against their JSON field/group keys
+and recompute summaries from the same detail rows. If JSON details and summaries
+disagree, report those exact keys before changing the numeric data. Record input
+hashes and report-generator identity locally. Return a compact corrected summary
+and any remaining mismatch, not another manually transcribed full table.
+Adding the packet-only denominator to the comparator is not required for this
+report repair. No new labeling, detector rerun, classifier threshold, or private
+source export is needed; feature-separation conclusions await consistent output.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

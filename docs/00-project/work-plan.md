@@ -215,12 +215,19 @@ The next transferred comparison separates BASE interface proposals' 10 near
 versus four off points and keeps three non-interface structural points separate.
 Its detailed rows and summaries disagree on medians, sign counts, and one
 normalization calculation; these are report inconsistencies, not established
-private-data or detector defects. Keep human questions paused. Next, Windows
-should trace only candidate 9 / sector 2 / native_path / width 16 normalization
-from packet through table_b to report, and recompute the three C-group width-8
-near_above alignment values' median. Resolve transcription versus extraction
-before interpreting feature separation. Earlier reported input validation and
-human labels remain accepted within their existing scope.
+private-data or detector defects. The two targeted Windows checks now report
+packet-to-JSON agreement for candidate 9 / sector 2 / width 16 and identify
+the C-group width-8 median discrepancy as a Markdown maximum-to-median copy
+error. Correct normalized_delta=-0.43024128331146505 and near_below
+gray_std=0.025348553697232056 also differ from the earlier transferred row;
+the stage of that transfer discrepancy remains unspecified. The denominator
+exists only in the packet, and arithmetic agreement does not identify the
+historical runtime formula. Keep human questions paused. Next, generate a new
+corrected Markdown report directly from existing near/off JSON, checking detail
+rows against summaries and generating counts/differences mechanically. Preserve
+old artifacts; report exact keys for any JSON-level mismatch before modifying
+numeric data. Earlier reported input validation and human labels remain accepted
+within their existing scope; feature-separation conclusions await consistent output.
 No new descriptor, detector rerun or universal sign/threshold rule is authorized
 by these observations. Classifier/operating-point acceptance remains open; new-run
 hashes do not prove old-run immutability retroactively.
