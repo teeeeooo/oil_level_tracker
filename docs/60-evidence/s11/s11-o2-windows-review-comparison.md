@@ -96,16 +96,33 @@ faults in this downstream comparison.
 | fingerprint_json | Locally redefined, not imported from the existing evaluator. Matching serialization is duplication, not the reported function reuse. |
 | load_review | Selects cases[0] and frames[0], opens a hardcoded packet path and builds dictionaries without duplicate checks. Does not call load_packets/validate_labels or verify case/packet/candidate hashes against references. Calculating digests later does not validate these joins. |
 | build_table_b/build_table_c | Keys path_reviews by X range alone, dropping geometry_basis and source_y. Candidate-center and native reviews can collide; differing Y can be mislabeled. Existing geometry_key includes all three components. No silent dict overwrite is acceptable as a join check. |
-| build_table_b reviewer | Reads pr["reviewer"], while persisted v2 requires pr["review"]["reviewer"]. Against the supplied schema, a reviewed point raises KeyError. |
-| build_table_c/group_summary | As pasted, band_summary and bw_summary assignment are outside the bandwidth loop, retaining only the final width. The return using group and bw_summary is outside the nested function and before entries.append; those names are not defined in that scope. It cannot generate the claimed three-entry table unchanged. |
+| build_table_b reviewer | **Withdrawn for the photographed code.** The OCR/pasted text omitted a nesting level. Image 55082, displayed line 227, reads pr["review"]["reviewer"], matching v2. |
+| build_table_c/group_summary | **Withdrawn for the photographed code.** The pasted indentation was not faithful. Images 55084–55085 show band aggregation and bw_summary assignment inside the bandwidth loop, with return inside group_summary and entries.append outside it. |
 | uncertain handling | scale_stats omits uncertain; encountering it would index a missing key. The counter also conflates uncertain with unreviewed. Current reports have no uncertain labels, so this is a latent defect, not proof of altered current counts. |
 | extract_* / outputs | .get collapses missing keys and null; requested static_overlap, glare_fraction and lineage are omitted. Table A contains labels/metadata, not identity feature summaries. Table C code uses means, while the report claims medians/ranges from an unidentified calculation. |
 | build_manifest/main | glob iteration selects whichever frozen/readiness file is visited last, without explicit pairing or content-hash validation. labels_sha256 here is a file-byte hash, not the status logical hash. No source pre/post comparison is made. Output files are opened with w, so a rerun overwrites prior artifacts. |
 
-These findings require actual executed file/version identification before treating
-pasted code as a reproducible generator. They do not establish whether the pasted
-indentation was corrupted, another version ran, or extra analysis produced the
-report. No choice among those explanations is made without evidence.
+The two withdrawn findings describe defects in the transferred text, not the code
+shown in the subsequent photos. The claim that the photographed generator cannot
+run because of those defects is withdrawn. Photos do not independently bind source
+bytes to an earlier execution or explain the report's median calculation.
+
+### Ten-photo verification and correction
+
+The user explained that the pasted text was extracted from images and provided
+ten photos (55077–55086). Review of the displayed code confirms the two corrections
+above. No Windows source file export is required or requested; file execution and
+private-data checks remain on Windows. The full code was not reconstructed into a
+repository implementation from photographs.
+
+The photographed code still shows locally redefined fingerprint_json, first-case/
+first-frame selection without existing validators, X-only path joins, no uncertain
+scale group, .get missing/null conflation, means rather than medians, glob-based
+last-file selection and output overwriting. These are the remaining review issues.
+They do not prove that the current labels were misjoined: for example, no reviewed
+candidate-center points or uncertain judgments were reported in this dataset.
+Controls are needed to establish correctness rather than assume either corruption
+or successful validation from matching aggregate counts.
 
 ### Report arithmetic, scope and interpretation findings
 
@@ -145,9 +162,11 @@ report. No choice among those explanations is made without evidence.
 
 ### Required next evidence, without more human labeling
 
-Identify the actual executed script and any report-generating code using file
-hashes; preserve old outputs before changing them. First reconcile the scope and
-schema findings above. A corrected comparison should reuse existing load_packets,
+Keep the script and private inputs on Windows. Record current code hashes and
+identify any separate median/report computation; if the old execution is not
+recoverable, state that limit without manufacturing evidence. Preserve old outputs
+and reconcile the remaining scope/schema findings, excluding the two withdrawn
+OCR findings. A corrected comparison should reuse existing load_packets,
 validate_labels, geometry_key and fingerprint_json rather than reimplementing
 provenance, handle every judgment/missing state, and group actual metric rows by
 review/identity-or-path-judgment/geometry/scale with explicit counts. Store outputs
@@ -155,7 +174,11 @@ under a new run directory and hash source files before and after that new run.
 Keep original-run immutability unverified if no original pre-run hashes exist.
 Use constructed controls for geometry collisions, duplicate/missing joins,
 multiple bandwidths, uncertain labels and missing values before rerunning on
-private inputs. The classifier remains unbuilt and field disposition unchanged.
+private inputs. Generate the replacement numeric report from the same validated
+metric rows as its tables, so denominators, null lists and direction descriptions
+can be reconciled. Return only permitted verification/measurement summaries; no
+additional image labeling or private source export is required. The classifier
+remains unbuilt and field disposition unchanged.
 
 ## Detector Governance
 

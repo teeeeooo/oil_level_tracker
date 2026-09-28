@@ -193,16 +193,19 @@ and existing review-002 artifacts preserved. The reported contour wording
 extraction; do not reinterpret it as a JSON value or alter the human judgments.
 The [transferred comparison report](../60-evidence/s11/s11-o2-windows-review-comparison.md)
 records reported Windows outputs covering 73 proposals and 55 native points.
-The subsequent pasted-code/report audit found unvalidated case/witness joins,
-X-only path matching, a v2 reviewer-field mismatch and aggregation scope errors.
-The pasted generator cannot reproduce the stated outputs unchanged; actual executed
-script/report-generator identity remains unknown. The report also miscounts the
+Subsequent inspection of ten code photographs withdrew two OCR-based findings:
+the actual reviewer nesting and aggregation indentation are correct. The prior
+claim that those errors prevent the photographed code from running is withdrawn.
+Unvalidated case/witness joins, X-only path matching and an unidentified median
+report calculation remain. The report also miscounts the
 interface sector subset, gives an incomplete null tally and contradicts its own
 near_below comparisons. These downstream comparison findings do not overturn human
 labels. Comparison-derived discrimination conclusions are on hold.
-Next, keep human questions paused, identify the actual executed files and preserve
-existing outputs, then repair and verify the bounded extraction/aggregation path
-using existing validators and exact geometry keys before a new local comparison.
+Next, keep human questions paused. Windows keeps source/private inputs locally,
+records available script/report provenance and preserves existing outputs, then
+repairs and verifies the bounded extraction/aggregation path using existing
+validators and exact geometry keys before a new comparison in a new output folder.
+Do not require source export or repeat checks of the two photograph-resolved items.
 Resolve the human case-level contour field (not witness contour metadata), label
 hash payloads and explicit input/output revisions. No detector rerun or label
 reinterpretation is required. Historical frozen equality is not pre/post run
