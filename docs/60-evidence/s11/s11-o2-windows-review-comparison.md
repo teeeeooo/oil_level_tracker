@@ -424,6 +424,66 @@ Adding the packet-only denominator to the comparator is not required for this
 report repair. No new labeling, detector rerun, classifier threshold, or private
 source export is needed; feature-separation conclusions await consistent output.
 
+## Regenerated near/off report and bounded result, 2026-09-28
+
+Windows reports `scripts/regenerate_near_off_report.js` regenerated the Markdown
+from `comparison_v2/near_off_position_comparison.json` scale_rows, without manual
+numeric transcription. Its appendix reports zero differences between recomputed
+detail statistics and group_summary over 72 group/width/field combinations, each
+checking present/null/median/min/max. Input pre/post SHA-256 is reported identical:
+`7d61594b34e23ce74831939a558058785ffcd52142283a43a9a3170ae10bd38a`.
+This is a transferred execution result, not local execution of that script.
+
+The corrected detailed row now contains candidate 9 / sector 2 / width 16
+normalized_delta=-0.4302 and near_below.gray_std=0.0253. C's width-8 above-band
+alignment median is 0.7915. A's negative signed_delta count is consistently 19
+out of 30 scales. Earlier contradictory transferred rows are superseded by this
+report for numeric interpretation; labels remain unchanged.
+
+Local arithmetic on the displayed rounded above-band alignment values confirms:
+
+| Width | A interface/near range | B interface/off range | min(A)-max(B) | C structure/off range |
+|---|---|---|---|---|
+| 8 | 0.6804–0.9227 | 0.6554–0.6881 | -0.0077 | 0.7624–0.8075 |
+| 16 | 0.7165–0.8990 | 0.6037–0.6947 | 0.0218 | 0.7568–0.7881 |
+| 24 | 0.6826–0.8979 | 0.5545–0.6727 | 0.0099 | 0.7587–0.8166 |
+
+At widths 16 and 24, this feature descriptively separates the ten reviewed near
+points from four off points **conditional on the human interface identity**.
+Every displayed C alignment value lies inside A's range at its width: the same
+feature is not an identity discriminator for these controls. Signed contrast and
+below-band alignment ranges still overlap. No operating threshold is selected.
+There are 14 interface path points in one frame, not 42 independent samples;
+overlapping candidates and three scales are correlated. This is an exploratory
+localization hypothesis, not cross-frame generalization or a production gate.
+
+Two presentation limitations remain nonblocking for this range comparison:
+candidate 10's same-candidate pair table omits its off sector 3 (present in the
+full detail tables), and alignment differences use two decimals despite the
+four-decimal report preamble. Complete those views when regenerating, without
+requiring another full report or restarting source/label validation.
+
+The next missing comparison is Accum localization: review-003 currently has only
+five native near judgments on candidate 10, with no native off controls. Select
+at most one of its existing unreviewed native candidates for direct review, using
+geometry before examining the proposed alignment feature: first maximize the
+number of exact common X ranges with candidate 10, then minimize median absolute
+Y difference on those common ranges, breaking ties by candidate_input_index.
+Exclude an exactly duplicate full geometry and report no comparable candidate
+if none has common X ranges. This is review triage, not a production rule.
+
+Display/open plain and annotated images with source-coordinate ticks, highlighted
+candidate segments and a distinct reference. Ask whole-candidate identity and
+each existing native segment's near/off/uncertain judgment separately; proximity
+must not imply identity or force an off label. Preserve existing labels, use the
+current hash/revision guard and append history through the existing record owner.
+If all points are near, report that the missing off comparison remains missing;
+do not keep selecting candidates without a new bounded decision. Any new review
+remains regression, not untouched holdout. Compare features only after recording
+human answers, at Accum's own widths; do not equate its pixel widths with BASE's.
+No detector rerun, production change, numeric contour inference or source export
+is required. Report correction is complete enough to advance to this question.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

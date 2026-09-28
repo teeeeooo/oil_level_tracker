@@ -222,12 +222,21 @@ error. Correct normalized_delta=-0.43024128331146505 and near_below
 gray_std=0.025348553697232056 also differ from the earlier transferred row;
 the stage of that transfer discrepancy remains unspecified. The denominator
 exists only in the packet, and arithmetic agreement does not identify the
-historical runtime formula. Keep human questions paused. Next, generate a new
-corrected Markdown report directly from existing near/off JSON, checking detail
-rows against summaries and generating counts/differences mechanically. Preserve
-old artifacts; report exact keys for any JSON-level mismatch before modifying
-numeric data. Earlier reported input validation and human labels remain accepted
-within their existing scope; feature-separation conclusions await consistent output.
+historical runtime formula. Windows has now regenerated the report from JSON,
+reports zero detail-to-summary differences and matching input pre/post hashes.
+The corrected numbers support a bounded observation: above-band normal alignment
+separates BASE's ten interface/near from four interface/off points at widths
+16/24, but all three structural controls lie inside the near range. This is a
+conditional localization hypothesis from one frame, not an identity classifier
+or accepted threshold. Numeric report repair is no longer the next blocker.
+Next, review at most one existing comparable unreviewed native-path candidate in
+review-003 to address its missing Accum off controls. Select by shared X geometry
+and Y proximity before examining alignment, show annotated images, and record
+candidate identity separately from segment location. Do not force negative labels
+or extend review automatically if all points are near. Preserve existing labels
+and frozen snapshots; new answers remain regression. Earlier reported validation
+remains accepted within its scope. Small pair-table omissions/display precision
+can be corrected without another full reconciliation cycle.
 No new descriptor, detector rerun or universal sign/threshold rule is authorized
 by these observations. Classifier/operating-point acceptance remains open; new-run
 hashes do not prove old-run immutability retroactively.
