@@ -180,6 +180,64 @@ can be reconciled. Return only permitted verification/measurement summaries; no
 additional image labeling or private source export is required. The classifier
 remains unbuilt and field disposition unchanged.
 
+## Windows v2 remediation — transferred completion
+
+The user reports a new `s11_review_comparison_v2.py` (582 lines), a separate
+synthetic test file (335 lines), and five new outputs in a separate comparison_v2
+directory. Original comparison code, existing evaluator and five old comparison
+outputs were preserved. Neither the v2 source nor new numeric tables are present
+in this checkout; the following implementation/test claims are Windows-reported.
+No private source export is requested.
+
+### Reported controls and corrected inventory
+
+- Imports existing fingerprint_json, deterministic_percentile, sha256_file,
+  load_packets, validate_labels, geometry_key and review_geometry instead of
+  redefining them. The local production percentile implementation uses the rank
+  `(n - 1) * percentile` with percentile in [0,1]; **0.5 is a median** for both
+  odd and even input sizes. That API meaning was inspected here, not the private
+  script's actual invocation or outputs.
+- Packet hashes, witness hashes, candidate inventories and exact geometry are
+  validated by the existing loaders/validators. Path joins now use basis + X + Y.
+  All four path judgments are tracked separately. Field status distinguishes
+  missing keys, null and present values, including false/zero.
+- Null signed_delta counts now reconcile to **9 = 5 + 3 + 1** across reviews
+  001/002/003. The previously omitted two rows are review-001 candidate 10,
+  sectors 1 and 3 at width 24. The three widths for candidate 11 sector 3 account
+  for its remaining three. This reconciles the earlier incomplete cause list;
+  it does not imply that the original total of nine was necessarily wrong.
+- Total scale status: **165 = present 156 + null 9 + missing 0**.
+- Review-002 native identity inventory is corrected to **14 interface points
+  (10 near / 4 off) + 3 non-interface points (3 off)**.
+- Claims of a strongest/most promising discriminator were removed. Actual
+  corrected feature distributions have not yet been transferred.
+
+### Reported verification and preservation
+
+Windows reports **26 tests passed in 0.29 s**: field status 5, geometry key 3,
+statistics/median 7, scale extraction 2, Table B 4, Table C 3, overwrite protection
+2. The listed scope covers state distinctions, geometry separation, medians,
+identity preservation and separate judgment groups. The summary does not provide
+individual negative integration cases for loader rejection or a complete entry-path
+log; passing this list is not claimed to verify every adjacent workflow.
+
+All label/packet file hashes reportedly match before and after the new execution.
+The five old comparison outputs are unchanged; original script SHA prefix
+`5c6e0ba78fba80d4...` is preserved. This is preservation evidence for the new v2
+run only, not retroactive proof for the old run. No new label judgment follows.
+
+### Next input needed for discrimination review
+
+Keep the human-review work paused. Receive the corrected v2 numeric report or
+permitted aggregates, including review/identity-or-path-judgment/geometry/scale,
+valid and missing counts and median/min/max, with source label revisions/hashes.
+Check whether candidate-center identity measurements are included or explicitly
+out of scope, and keep review-003's five reviewed points separate from its 24
+unreviewed points. Obtain the exact human case-level contour key/value/type and
+the loader/join failure/duplicate/exclusion summary. These were not included in
+the remediation summary and remain open. Do not repeat completed labeling or
+request another detector run solely to supply this summary.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

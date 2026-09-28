@@ -196,20 +196,21 @@ records reported Windows outputs covering 73 proposals and 55 native points.
 Subsequent inspection of ten code photographs withdrew two OCR-based findings:
 the actual reviewer nesting and aggregation indentation are correct. The prior
 claim that those errors prevent the photographed code from running is withdrawn.
-Unvalidated case/witness joins, X-only path matching and an unidentified median
-report calculation remain. The report also miscounts the
-interface sector subset, gives an incomplete null tally and contradicts its own
-near_below comparisons. These downstream comparison findings do not overturn human
-labels. Comparison-derived discrimination conclusions are on hold.
-Next, keep human questions paused. Windows keeps source/private inputs locally,
-records available script/report provenance and preserves existing outputs, then
-repairs and verifies the bounded extraction/aggregation path using existing
-validators and exact geometry keys before a new comparison in a new output folder.
-Do not require source export or repeat checks of the two photograph-resolved items.
-Resolve the human case-level contour field (not witness contour metadata), label
-hash payloads and explicit input/output revisions. No detector rerun or label
-reinterpretation is required. Historical frozen equality is not pre/post run
-immutability; never fabricate missing original-run baseline hashes.
+Windows now reports a separate v2 comparator using existing validators and exact
+geometry keys, separate judgment/missing states, production median computation,
+26 passing synthetic tests, new outputs and matching input pre/post file hashes.
+Null counts reconcile to 9/165 and review-002 interface geometry to 14 points;
+old code/results remain preserved. These are transferred checks, not local source
+or private-data verification. No human labels are invalidated by old report errors.
+Next, keep human questions paused and inspect the corrected v2 measurement
+distributions and actual input revision/join summaries. Confirm candidate-center
+identity scope and the exact human case-level contour field, and distinguish
+reviewed Accum points from unreviewed ones. Those details were absent from the
+remediation summary. No source export, repeated label review or detector rerun is
+needed. The production percentile API was inspected locally: 0.5 denotes median;
+the Windows script and its numeric results remain outside this checkout.
+Comparison-derived classifier/threshold conclusions remain on hold pending these
+results. New-run pre/post hashes do not prove old-run immutability retroactively.
 Keep these already reviewed
 checkpoints in regression, not untouched holdout. Link human labels to witness
 measurements locally on Windows for a named discrimination hypothesis before
