@@ -70,7 +70,7 @@ records the user's confirmation; it did not modify the local Windows labels.
 The user requested that these issues be understood without immediate code changes.
 No labeling schema, image generator or production behavior is changed by this record.
 
-## Next bounded review
+## Next bounded review at the original checkpoint
 
 Next review an interface-visible positive example:
 BASE f14386 in the same R22-3 bundle, if the exact record exists. Earlier human
@@ -84,6 +84,31 @@ Only new or changed targets need further human questions. Preserve all candidate
 and unreviewed entries, and report a concise batch summary instead of another full
 numerical trace report. No classifier accuracy or field repair follows from this
 single no-interface review.
+
+## Follow-up recorded 2026-09-28 — reported v2 migration
+
+The user subsequently reported successful `status → migrate → status` on Windows.
+This addition records that transferred result, not a local inspection of private
+files. The migration execution commit was not included in the report; the initial
+label-tool ZIP identity above must not be attributed to the later migration.
+
+- `labels-v2.json`: schema `s11-o2-labels-v2`, revision **3** unchanged by migration,
+  visibility **not_visible**, 23 **non_interface** candidates, artifact tags
+  reflection 6 / structure 17. Original candidate IDs and notes were preserved.
+- All 23 `legacy_annotation` entries and three review-history entries were
+  reported preserved. `path_reviews` remain empty; no path truth was inferred.
+- Original `labels.json` and its three history snapshots remain unchanged.
+  New v2 history contains one migration source snapshot; bundle-link is unchanged
+  with human-attested association and reported bundle/video presence.
+- Migration source file SHA prefix `fbe7d551...`, source logical label SHA prefix
+  `6f4176fb...`; these are incomplete reported digests, not locally verified hashes.
+- Migration reviewer is `reviewer-001`; note: “판정 변경 없이 v2 형식으로 변환”.
+  Owners were reported populated; classifier remains **NOT_EVALUATED**.
+
+The bounded no-interface review and its migration are complete by user report.
+No new freeze/evaluation for review-001 was reported. Subsequent BASE work is
+recorded in [review-002](s11-o2-windows-review-002.md); this historical next-review
+instruction does not request repeating that work.
 
 ## Detector Governance
 

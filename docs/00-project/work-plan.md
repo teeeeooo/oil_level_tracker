@@ -156,36 +156,43 @@ usable; no detector rerun or R22-4 revision is required. The
 [durable-record evidence](../60-evidence/s11/s11-o2-durable-review-records.md)
 records local persistence controls, not Windows qualification or a new classifier.
 The user-transferred [Windows review-001](../60-evidence/s11/s11-o2-windows-review-001.md)
-reports completed human review of all 23 BASE f11508 candidates and successful
-save/resume. The user confirms revision 3 corrected visibility to not_visible,
-with other judgments unchanged and classifier status NOT_EVALUATED. This closes
-the bounded first-frame record, not O2 discrimination acceptance. Execution ZIP
-commits d7c1ebe/e3fac4b are user-attested, not independently hash-verified.
-The transferred [Windows review-002](../60-evidence/s11/s11-o2-windows-review-002.md)
-reports BASE f14386 revision 4: material_path input IDs 8/9/10/12 are interface,
-visibility is visible, contour is empty, and 19 candidates remain unreviewed.
-The user explicitly accepts candidates 12/10 holistically despite off-interface
-path portions. These labels do not certify every sector or localization accuracy.
-The [review-semantics revision](../20-architecture/s11-interface-observability-witness-architecture.md#o2-review-semantics-revision--implemented-locally)
-and [acceptance controls](../30-validation/s11-interface-observability-witness-validation.md#candidate-identity-versus-partial-path-review--implementation-acceptance)
-now separate candidate identity, qualitative per-path agreement, optional numeric
-contour truth and overlapping artifact tags. Existing O2 tools implement v2 labels,
-explicit v1-to-v2 migration to a new file, scoped record/status, versioned freeze and
-separate identity/path/localization metrics. Original judgments, packets, history,
-receipts and frozen files remain intact; no segment truth is inferred from notes
-or reference-Y differences. [Local compatibility evidence](../60-evidence/s11/s11-o2-scoped-review-semantics.md)
-covers this semantic boundary, not a detector or classifier improvement.
-Next, Windows uses the updated tool on the existing R22-3 bundle, migrates each
-review once and checks the saved judgments before resuming bounded annotation.
-Already explicit path judgments may be recorded after exact geometry correspondence;
-no new human answer is needed for an already answered question. Then declare
-separate original recordings for development/calibration/holdout before choosing
-a shadow model.
-Reviewed private checkpoints are regression cases, not untouched holdout.
-Windows work next verifies the new witness on existing reviewed frames and
-builds labels locally; no private export or immediate behavioral rerun is
-required. A real-image shadow classifier and its operating point remain unbuilt.
-Do not add further descriptors without a named discrimination hypothesis.
+now records successful v2 migration at revision 3: BASE f11508 has no visible
+interface and 23 non-interface candidates. The bounded record remains closed by
+user report. The [Windows review-002](../60-evidence/s11/s11-o2-windows-review-002.md)
+follow-up records migration plus revisions 7–14: BASE f14386 has six interface,
+two non-interface and 15 intentionally unreviewed candidate identities. All five
+native paths have explicit reviews (10 near / 7 off); candidate-center geometry
+remains unreviewed and contour is empty. Whole-candidate identity does not certify
+all path points. The revision-10 frozen/readiness files remain unchanged snapshots,
+not evaluations of revision 14; no predictions were supplied (NOT_EVALUATED).
+These are transferred Windows reports, not locally inspected private artifacts.
+Bundle/initial label-tool ZIP commits d7c1ebe/e3fac4b are user-attested; the later
+migration/continuation execution commit was not reported.
+
+The [v2 review-semantics implementation](../60-evidence/s11/s11-o2-scoped-review-semantics.md)
+separates identity, path agreement, contour truth and overlapping artifact tags.
+Windows migration and bounded record/freeze/readiness use are now reported; do not
+ask the user to repeat them. Source labels/history and bundle links stay on Windows
+outside the replaceable code checkout. New transferred results and corrections
+belong in the existing per-review evidence records when received; update this
+current owner when the gate or next transition changes, without duplicating the
+full revision history here.
+
+The transferred [Windows review-003](../60-evidence/s11/s11-o2-windows-review-003.md)
+now records Accum f16280 revision 1: calibrated_high_recall Y213 (current input
+ID 19) is interface through scoped prior direct-review reuse. Visibility is visible;
+26 identities remain unreviewed, with no path reviews or contour created. It shares
+recording-A with review-002 and remains regression. The bounded identity task is
+complete by report; the whole frame and classifier are not accepted.
+Next, keep the remaining BASE identities paused and review the same-frame
+material_path Y217 proposal after discovering its current packet binding. Its
+identity and path judgments must not be inherited from Y213 or proximity. Keep these already reviewed
+checkpoints in regression, not untouched holdout. Link human labels to witness
+measurements locally on Windows for a named discrimination hypothesis before
+choosing a shadow model; declare separate original recordings for development,
+calibration and holdout. A real-image classifier and operating point remain unbuilt.
+No private export, further descriptor expansion without a named hypothesis, or
+immediate behavioral detector rerun is required.
 
 Independent support/association, committed fill handoff and initial-FULL
 direction-neutral observation remain later separate behavioral gates. In
