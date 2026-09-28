@@ -179,16 +179,18 @@ current owner when the gate or next transition changes, without duplicating the
 full revision history here.
 
 The transferred [Windows review-003](../60-evidence/s11/s11-o2-windows-review-003.md)
-now records Accum f16280 revision 2: calibrated_high_recall Y213 (input ID 19)
+now records Accum f16280 revision 3: calibrated_high_recall Y213 (input ID 19)
 is interface through prior direct-review reuse, and material_path Y217 (input ID
-10) is interface through a new direct human judgment. There are 25 unreviewed
-identities and no path reviews or contour. Visibility was reported visible at
-revision 1. It shares recording-A with review-002 and remains regression. Both
-bounded identity tasks are complete by report; the whole frame and classifier
-are not accepted. Next, keep the remaining BASE identities paused and review
-only candidate 10's five native-path sectors for qualitative location agreement,
-without re-asking its identity. Per-sector judgments must not be inherited from
-Y213 or whole-candidate identity. Keep these already reviewed
+10) is interface through a new direct human judgment. All five candidate 10
+native-path positions were then directly reviewed near_interface. There are 25
+unreviewed identities, no candidate-center reviews and no contour; visibility is
+visible. It shares recording-A with review-002 and remains regression. These
+bounded identity/path tasks are complete by report; numeric localization and
+classifier effectiveness remain unmeasured. Next, pause additional candidate
+questions and create a new review-003 revision-3 frozen snapshot and no-prediction
+readiness report, verifying unchanged source labels. These outputs have not yet
+been reported; preserve existing review-002 snapshots and do not combine here.
+Keep these already reviewed
 checkpoints in regression, not untouched holdout. Link human labels to witness
 measurements locally on Windows for a named discrimination hypothesis before
 choosing a shadow model; declare separate original recordings for development,

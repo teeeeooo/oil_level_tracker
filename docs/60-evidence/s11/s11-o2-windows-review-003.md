@@ -89,15 +89,45 @@ The reference line is not certified contour truth across all X positions.
   hashes or freeze/evaluation checks. The earlier reported state is retained as
   historical evidence, without claiming a new verification of those fields.
 
-## Next bounded task after revision 2
+## Revision 3 — five native-path positions reviewed directly
 
-Review only candidate 10's five native-path sectors using the current bound
-witness. Display plain and annotated images, source Y ticks and exact per-sector
-X/Y geometry before asking for qualitative near_interface/off_interface/uncertain
-judgments. Keep the already answered whole-candidate identity unchanged. Do not
-transfer reference Y213 or candidate identity to per-sector truth, infer numeric
-contour intervals, or repeat other candidate reviews. Store only explicit human
-answers through the existing revision-checked record workflow.
+The user reports a slightly inclined interface and directly confirms all five
+candidate 10 native-path positions as **near_interface**. S1–S5 below are the
+review display labels, not assumed array indices. Source X extents are half-open
+under the existing geometry contract; Y is source-frame Y.
+
+| Display segment | Source X | Native source Y | Judgment |
+|---|---|---|---|
+| S1 | [1218, 1303) | 209 | near_interface |
+| S2 | [1303, 1388) | 210 | near_interface |
+| S3 | [1388, 1473) | 217 | near_interface |
+| S4 | [1473, 1558) | 219 | near_interface |
+| S5 | [1558, 1643) | 220 | near_interface |
+
+- Revision **2 → 3**; logical label SHA prefix **de4ac088... → da8bbb92...**.
+- Candidate 10 native-path summary: near 5, off 0, uncertain 0, unreviewed 0;
+  reviewed point count 5, qualitative review coverage 1.0.
+- Identities 10 and 19 remain interface; visibility remains visible. There are
+  still 25 unreviewed identities out of 27 proposals.
+- No candidate-center reviews or contour were generated. Full qualitative
+  review coverage does not establish numeric error, an accepted tolerance,
+  independent support, or classifier performance.
+- Review-002 revision 14 / SHA prefix `102919b6...`, its frozen r10 snapshot
+  (`ce9c4373...`) and NOT_EVALUATED readiness report were reported unchanged.
+- No code change, detector rerun, freeze or evaluate was performed in this step.
+  Stored reviewer/basis fields were not restated in this transferred summary;
+  the user explicitly reports direct confirmation of the five positions.
+
+## Next bounded task after revision 3
+
+Pause additional candidate questions and freeze the review-003 revision-3 labels
+to a new immutable snapshot, followed by no-prediction readiness evaluation using
+the existing procedure. Verify the unchanged source labels and retain unreviewed
+proposals explicitly. Neither file exists by the evidence reported here yet.
+Keep review-002's r10 artifacts intact; do not combine reviews in this step.
+The next analysis can bind stored labels to witness measurements to examine
+identity discrimination separately from path localization. This small regression
+set does not select an operating threshold or qualify a classifier.
 
 ## Detector Governance
 
