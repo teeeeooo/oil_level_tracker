@@ -79,6 +79,84 @@ No additional image judgments are needed for this audit. No model, operating
 point, new independent support or field PASS is established. Classifier status
 remains NOT_EVALUATED; private originals remain the annotation authority.
 
+## Pasted script and measurement-report audit — 2026-09-28
+
+The user subsequently supplied script text and a measurement summary. This is a
+static audit of that pasted text against the repository's v2 schema and evaluator;
+no Windows source file, private dataset or generating-script byte hash was received.
+The original artifact-creation report above is retained as historical evidence.
+**The comparison is not accepted as input to classifier/threshold decisions yet.**
+Human labels and previously reported review snapshots are not invalidated by
+faults in this downstream comparison.
+
+### Script findings
+
+| Location in pasted script | Finding and consequence |
+|---|---|
+| fingerprint_json | Locally redefined, not imported from the existing evaluator. Matching serialization is duplication, not the reported function reuse. |
+| load_review | Selects cases[0] and frames[0], opens a hardcoded packet path and builds dictionaries without duplicate checks. Does not call load_packets/validate_labels or verify case/packet/candidate hashes against references. Calculating digests later does not validate these joins. |
+| build_table_b/build_table_c | Keys path_reviews by X range alone, dropping geometry_basis and source_y. Candidate-center and native reviews can collide; differing Y can be mislabeled. Existing geometry_key includes all three components. No silent dict overwrite is acceptable as a join check. |
+| build_table_b reviewer | Reads pr["reviewer"], while persisted v2 requires pr["review"]["reviewer"]. Against the supplied schema, a reviewed point raises KeyError. |
+| build_table_c/group_summary | As pasted, band_summary and bw_summary assignment are outside the bandwidth loop, retaining only the final width. The return using group and bw_summary is outside the nested function and before entries.append; those names are not defined in that scope. It cannot generate the claimed three-entry table unchanged. |
+| uncertain handling | scale_stats omits uncertain; encountering it would index a missing key. The counter also conflates uncertain with unreviewed. Current reports have no uncertain labels, so this is a latent defect, not proof of altered current counts. |
+| extract_* / outputs | .get collapses missing keys and null; requested static_overlap, glare_fraction and lineage are omitted. Table A contains labels/metadata, not identity feature summaries. Table C code uses means, while the report claims medians/ranges from an unidentified calculation. |
+| build_manifest/main | glob iteration selects whichever frozen/readiness file is visited last, without explicit pairing or content-hash validation. labels_sha256 here is a file-byte hash, not the status logical hash. No source pre/post comparison is made. Output files are opened with w, so a rerun overwrites prior artifacts. |
+
+These findings require actual executed file/version identification before treating
+pasted code as a reproducible generator. They do not establish whether the pasted
+indentation was corrupted, another version ran, or extra analysis produced the
+report. No choice among those explanations is made without evidence.
+
+### Report arithmetic, scope and interpretation findings
+
+- Review-002's four native-path interface candidates have **14 sectors = 10 near
+  + 4 off**, not 17 = 10 near + 7 off. Adding the three non-interface candidate-11
+  sectors gives the overall 17 = 10 near + 7 off. Table n=14 is consistent with
+  the former inventory, but does not validate its measurement values.
+- The listed null-delta causes account for **3 + 3 + 1 = 7** scale rows, not the
+  asserted nine. Reconcile actual keys before claiming a 9/165 missing rate.
+- Section 7 inspected witness/contour metadata instead of human label
+  `labels["cases"][...]["contour"]`. Thus the previous contour serialization
+  question remains unresolved. Candidate witness contour metadata is not human
+  numeric truth. Existing witness models also represent center-only candidates'
+  contour metadata; native-only existence must not be assumed.
+- Near_below normal_alignment medians in the report are near/off **0.762280 /
+  0.737322**, **0.737457 / 0.756310**, **0.745364 / 0.758691** across widths 8/16/24.
+  The latter two are lower for near, contradicting the blanket higher-near claim.
+- Near_below gradient_magnitude near/off is **0.004045 / 0.004618**,
+  **0.003421 / 0.004209**, **0.003202 / 0.004131**: lower for near at every shown
+  width, contrary to its description as slightly higher. The claim that
+  near_below alignment is always highest/far_above always lowest also has table
+  counterexamples, including review-001 width 8 near_above alignment 0.822615
+  exceeding near_below 0.814661.
+- A candidate having both near and off points does not prove a sector-level
+  feature cannot discriminate them. Overlapping displayed marginal ranges also
+  do not establish a multivariate classifier's impossibility. Conversely, one
+  negative candidate's disjoint ranges cannot select a general operating point.
+- The displayed band tables largely give medians and n, not ranges; claims of
+  heavy overlap or a strongest discriminator are not demonstrated by those
+  tables alone. Table B covers native paths only; center-only labeled candidates
+  are omitted from feature comparisons despite being present in Table A.
+- Review-003 cross-review rows have up to 24 values, while the explicitly reviewed
+  native positive has only five points. Clarify whether these rows describe the
+  unreviewed group or another filter; they cannot stand in for reviewed interface
+  measurements. Differences in material_mean do not establish physical material
+  composition. Feature-missingness can be expected yet still affect comparisons.
+
+### Required next evidence, without more human labeling
+
+Identify the actual executed script and any report-generating code using file
+hashes; preserve old outputs before changing them. First reconcile the scope and
+schema findings above. A corrected comparison should reuse existing load_packets,
+validate_labels, geometry_key and fingerprint_json rather than reimplementing
+provenance, handle every judgment/missing state, and group actual metric rows by
+review/identity-or-path-judgment/geometry/scale with explicit counts. Store outputs
+under a new run directory and hash source files before and after that new run.
+Keep original-run immutability unverified if no original pre-run hashes exist.
+Use constructed controls for geometry collisions, duplicate/missing joins,
+multiple bandwidths, uncertain labels and missing values before rerunning on
+private inputs. The classifier remains unbuilt and field disposition unchanged.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

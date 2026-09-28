@@ -192,16 +192,21 @@ and existing review-002 artifacts preserved. The reported contour wording
 “undefined” needs an exact case-level key/value check during the next read-only
 extraction; do not reinterpret it as a JSON value or alter the human judgments.
 The [transferred comparison report](../60-evidence/s11/s11-o2-windows-review-comparison.md)
-now reports a Windows script and four output files covering 73 proposals and
-55 native points. Inventory counts agree with prior reports, but the script and
-metric distributions have not been inspected here. Its labels_unchanged field
-compares historical frozen content, not execution pre/post hashes; review-002's
-expected r10 mismatch is not a corruption finding. Next, keep human questions
-paused and inspect the bounded extraction/join/aggregation code plus actual
-per-review/geometry/scale distributions and missing counts. Resolve exact contour
-key/value and hash-payload definitions in that audit. Do not recreate a missing
-pre-run hash or claim original-run preservation from a later rerun. Track each
-input revision/hash; reuse existing validators and keep shared derivation explicit.
+records reported Windows outputs covering 73 proposals and 55 native points.
+The subsequent pasted-code/report audit found unvalidated case/witness joins,
+X-only path matching, a v2 reviewer-field mismatch and aggregation scope errors.
+The pasted generator cannot reproduce the stated outputs unchanged; actual executed
+script/report-generator identity remains unknown. The report also miscounts the
+interface sector subset, gives an incomplete null tally and contradicts its own
+near_below comparisons. These downstream comparison findings do not overturn human
+labels. Comparison-derived discrimination conclusions are on hold.
+Next, keep human questions paused, identify the actual executed files and preserve
+existing outputs, then repair and verify the bounded extraction/aggregation path
+using existing validators and exact geometry keys before a new local comparison.
+Resolve the human case-level contour field (not witness contour metadata), label
+hash payloads and explicit input/output revisions. No detector rerun or label
+reinterpretation is required. Historical frozen equality is not pre/post run
+immutability; never fabricate missing original-run baseline hashes.
 Keep these already reviewed
 checkpoints in regression, not untouched holdout. Link human labels to witness
 measurements locally on Windows for a named discrimination hypothesis before
