@@ -188,9 +188,9 @@ visible. It shares recording-A with review-002 and remains regression. These
 bounded identity/path tasks are complete by report; numeric localization and
 classifier effectiveness remain unmeasured. Its revision-3 freeze and no-prediction
 readiness now succeeded by Windows report: NOT_EVALUATED, unchanged source labels,
-and existing review-002 artifacts preserved. The reported contour wording
-“undefined” needs an exact case-level key/value check during the next read-only
-extraction; do not reinterpret it as a JSON value or alter the human judgments.
+and existing review-002 artifacts preserved. The later direct field report resolves
+the contour wording: labels.cases[].contour exists and is [] in every review;
+review-003 lacks contour_review attribution, not the human contour array.
 The [transferred comparison report](../60-evidence/s11/s11-o2-windows-review-comparison.md)
 records reported Windows outputs covering 73 proposals and 55 native points.
 Subsequent inspection of ten code photographs withdrew two OCR-based findings:
@@ -202,15 +202,22 @@ geometry keys, separate judgment/missing states, production median computation,
 Null counts reconcile to 9/165 and review-002 interface geometry to 14 points;
 old code/results remain preserved. These are transferred checks, not local source
 or private-data verification. No human labels are invalidated by old report errors.
-Next, keep human questions paused and inspect the corrected v2 measurement
-distributions and actual input revision/join summaries. Confirm candidate-center
-identity scope and the exact human case-level contour field, and distinguish
-reviewed Accum points from unreviewed ones. Those details were absent from the
-remediation summary. No source export, repeated label review or detector rerun is
-needed. The production percentile API was inspected locally: 0.5 denotes median;
-the Windows script and its numeric results remain outside this checkout.
-Comparison-derived classifier/threshold conclusions remain on hold pending these
-results. New-run pre/post hashes do not prove old-run immutability retroactively.
+The corrected follow-up now confirms revisions 3/14/3, zero reported failed or
+duplicate native joins, new-run pre/post file preservation and explicit native-only
+measurement scope. Candidate-center identities are counted, but their features
+are not compared. These preparation checks are complete by Windows report; do not
+repeat them without changed inputs. The production percentile API was inspected
+locally: 0.5 denotes median; private script/data execution remains on Windows.
+BASE near/off signed_delta ranges overlap at every width; Accum's unreviewed
+points cannot supply negative labels. All 110 larger-width native measurements
+report truncated peak lists, not absent band measurements or certified false paths.
+Next, keep human questions paused and use existing v2 rows to compare normalized
+multiscale contrast and band alignment for BASE interface proposals' 10 near versus
+four off points. Keep the three non-interface structural points separate. This
+isolates localization from identity; show Accum positives separately if useful.
+No new descriptor, detector rerun or universal sign/threshold rule is authorized
+by these observations. Classifier/operating-point acceptance remains open; new-run
+hashes do not prove old-run immutability retroactively.
 Keep these already reviewed
 checkpoints in regression, not untouched holdout. Link human labels to witness
 measurements locally on Windows for a named discrimination hypothesis before

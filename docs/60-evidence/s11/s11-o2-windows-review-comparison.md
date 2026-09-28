@@ -238,6 +238,92 @@ the loader/join failure/duplicate/exclusion summary. These were not included in
 the remediation summary and remain open. Do not repeat completed labeling or
 request another detector run solely to supply this summary.
 
+## Corrected v2 measurements and join report — transferred follow-up
+
+The user supplied the corrected numeric report and explicit input/geometry checks.
+This closes the requested preparation questions **by Windows report**, without
+claiming that the private script, tests or source data were executed here.
+
+### Input, hash and contour scope now resolved
+
+- Input revisions are review-001 **3**, review-002 **14**, review-003 **3**.
+  Loader/validator success was reported for all three reviews. Native path joins:
+  review-001 matched 0 / unreviewed 9; review-002 matched 17 / unreviewed 0;
+  review-003 matched 5 / unreviewed 24. Failed, duplicate and excluded native
+  joins were reported zero. The three-review validation totals are not candidate
+  or witness counts, and do not expand the measurement scope below.
+- Pre/post file SHA prefixes match for labels and packets: review-001 labels
+  `ac7630bedcf38abe`, packet `7e026be028f639d4`; review-002 labels
+  `6b511a0a9c0f7f6b`, packet `8379b4e5edaab438`; review-003 labels
+  `af137434daffed92`, packet `49c3aef5f59ee211`.
+  Packet logical hash prefixes are separately reported as `d6ba31d9957322b3`,
+  `efc1f63c1865ffac`, `e5e13a758731997d`. Byte and canonical JSON digests are not
+  interchangeable; the different prefixes do not themselves indicate corruption.
+- **labels.cases[].contour exists and equals [] in all three reviews**.
+  The earlier “undefined” uncertainty is resolved by this direct field report.
+  Review-003 lacks contour_review attribution, not the contour array. No numeric
+  human contour exists. Candidate witness contour metadata is a different object;
+  both center-only and native-path geometry sources are present as expected.
+- Identity inventory includes all 73 proposals. **Numeric comparison is restricted
+  to 55 native-path sectors**; candidate-center-only measurements are excluded.
+  This is now an explicit scope limitation, not proof of absent measurements or
+  a completed all-candidate identity comparison. Native identity/path counts are
+  review-001 non-interface/unreviewed 9; review-002 interface/near 10,
+  interface/off 4, non-interface/off 3; review-003 interface/near 5 and
+  unreviewed/unreviewed 24. All scale counts reconcile to 165, with 9 null deltas.
+
+### Reported signed_delta distributions
+
+Values are rounded as transferred; they are not additional recomputations from
+private packets. Each n is available sector measurements at that scale, not an
+independent frame count. All listed missing counts are zero.
+
+| Review / path judgment | Width | Valid / null | Median | Min | Max |
+|---|---|---|---|---|---|
+| 001 / unreviewed | 8 | 8 / 1 | -0.0115 | -0.0524 | 0.0373 |
+| 001 / unreviewed | 16 | 8 / 1 | -0.0168 | -0.0689 | 0.0562 |
+| 001 / unreviewed | 24 | 6 / 3 | -0.0267 | -0.0777 | 0.0699 |
+| 002 / near | 8 | 10 / 0 | -0.0270 | -0.0899 | 0.1215 |
+| 002 / near | 16 | 10 / 0 | -0.0063 | -0.0395 | 0.0658 |
+| 002 / near | 24 | 10 / 0 | 0.0012 | -0.0264 | 0.0449 |
+| 002 / off (both identities) | 8 | 6 / 1 | -0.0238 | -0.0550 | 0.0295 |
+| 002 / off (both identities) | 16 | 6 / 1 | -0.0204 | -0.0856 | 0.0297 |
+| 002 / off (both identities) | 24 | 6 / 1 | -0.0107 | -0.1064 | 0.0304 |
+| 003 / near | 6 | 5 / 0 | -0.0944 | -0.1975 | -0.0660 |
+| 003 / near | 12 | 5 / 0 | -0.0843 | -0.1267 | -0.0522 |
+| 003 / near | 18 | 5 / 0 | -0.0881 | -0.1463 | -0.0209 |
+| 003 / unreviewed | 6 | 24 / 0 | 0.0202 | -0.0465 | 0.0957 |
+| 003 / unreviewed | 12 | 24 / 0 | 0.0279 | -0.0723 | 0.0810 |
+| 003 / unreviewed | 18 | 23 / 1 | 0.0275 | -0.0847 | 0.0682 |
+
+### Bounded interpretation and next comparison
+
+BASE near/off signed_delta ranges overlap at all three widths. A single monotonic
+signed-delta threshold cannot perfectly separate the reported samples; this says
+nothing about impossibility for combined features. BASE near points include both
+signs, so Accum's five negative near points do not justify a universal negative-sign
+interface rule. Accum's remaining 24 points are unreviewed, not negative controls.
+
+All native sectors at the two larger widths have localization_status=truncated:
+**110 of 110** (55 sectors times two widths). At these widths that status alone
+does not separate the reviewed classes. In the local witness implementation,
+truncated means detected peak count exceeds MAX_PEAKS; it is not unavailable band
+measurement or an instruction to reject a reviewed physical interface. Changing
+the cap or other production thresholds is not warranted by this observation.
+
+The next bounded question uses the existing reviewed **BASE interface candidates
+only**: can normalized multiscale contrast and band alignment distinguish their
+10 near points from their four off points? Keep the three non-interface structural
+points as a separate comparator, not merged into the four localization negatives.
+Use current v2 rows to extract candidate/sector/scale metrics and missing status,
+plus per-group descriptive summaries. Preserve the source lineage; normalized
+contrast and alignment are not automatically independent evidence. Accum's five
+near points can be displayed separately as a positive comparison, without treating
+its unreviewed points as negatives or the different pixel widths as equal scales.
+No additional annotation, detector rerun, threshold selection or classifier claim
+is needed to answer this measurement question. The earlier preparation checks
+need not be repeated unless inputs or extraction change.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.
