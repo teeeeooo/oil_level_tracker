@@ -1,4 +1,4 @@
-# S11 O2 Windows review-003 — Accum reviewed identity reuse
+# S11 O2 Windows review-003 — Accum candidate identity reviews
 
 Recorded: 2026-09-28. Source: user-transferred Windows completion report.
 Private media, packet, labels and bundle receipt were not opened or rehashed on
@@ -64,21 +64,45 @@ frame remains partially reviewed. Alongside the BASE records it supplies another
 regression example; it does not establish independent-recording diversity or
 holdout performance.
 
-## Next bounded task
+## Revision 2 — material_path identity reviewed directly
 
-Review the same-frame material_path candidate near canonical Y217, if uniquely
-present in the current packet. Discover its current input ID and witness geometry;
-do not inherit identity or per-sector labels from candidate 19 or Y proximity.
-Use an existing explicit judgment only within its verified scope. For new review,
-open or provide the exact plain/annotated image paths first, with source Y ticks
-and clearly named target geometry. Preserve candidate identity and any explicitly
-reviewed path points separately. No synthetic contour, detector rerun, or review
-of all remaining candidates is required for that bounded step.
+The subsequent user-transferred report identifies the current packet's
+`candidate_input_index=10`, `source=material_path`, `kind=oil_air`, canonical
+source Y217. Witness SHA:
+`315e0aee4d41f428b166106519c5af0bb140b74a1b7f3ad6f60a36bb58d74fd4`.
+Its native path has five sectors with source Ys spanning 209–220. Individual
+current sector coordinates were not included in this report.
+
+The guide displayed the native path in cyan and reference Y213 in white. The user
+was asked whether the path, considered as a whole, represents the actual liquid
+interface and answered **interface**. Earlier evidence explicitly deferred this
+candidate's physical judgment, so a new direct question was appropriate; no label
+was inferred from Y213 proximity. The stored basis is **direct_human_review**.
+The reference line is not certified contour truth across all X positions.
+
+- Revision **1 → 2**; logical label SHA prefix **373594f7... → de4ac088...**.
+- Inventory: **27 = 2 interface (IDs 10 and 19) + 25 unreviewed**.
+- No path_reviews or contour were generated. Candidate 10's identity does not
+  certify any of its five sector positions or establish independent support for
+  candidate 19; shared feature derivation remains a separate question.
+- This report does not restate owner values, visibility status, other-review
+  hashes or freeze/evaluation checks. The earlier reported state is retained as
+  historical evidence, without claiming a new verification of those fields.
+
+## Next bounded task after revision 2
+
+Review only candidate 10's five native-path sectors using the current bound
+witness. Display plain and annotated images, source Y ticks and exact per-sector
+X/Y geometry before asking for qualitative near_interface/off_interface/uncertain
+judgments. Keep the already answered whole-candidate identity unchanged. Do not
+transfer reference Y213 or candidate identity to per-sector truth, infer numeric
+contour intervals, or repeat other candidate reviews. Store only explicit human
+answers through the existing revision-checked record workflow.
 
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F09`.
-- First harmful stage: no new detector failure inferred; this records scoped reuse of an earlier human identity judgment and reported persistence, without promoting scalar Y to full-path truth.
+- First harmful stage: no new detector failure inferred; this records scoped reuse and a subsequent direct candidate identity judgment, without promoting scalar Y or whole-candidate identity to full-path truth.
 - Logic-map impact: NONE — transferred annotation evidence changes no detector, trace writer, evaluator or UI execution.
 - Failure-registry impact: NONE — no new causal mechanism or field repair is established by a single stored identity label.
