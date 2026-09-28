@@ -186,10 +186,17 @@ native-path positions were then directly reviewed near_interface. There are 25
 unreviewed identities, no candidate-center reviews and no contour; visibility is
 visible. It shares recording-A with review-002 and remains regression. These
 bounded identity/path tasks are complete by report; numeric localization and
-classifier effectiveness remain unmeasured. Next, pause additional candidate
-questions and create a new review-003 revision-3 frozen snapshot and no-prediction
-readiness report, verifying unchanged source labels. These outputs have not yet
-been reported; preserve existing review-002 snapshots and do not combine here.
+classifier effectiveness remain unmeasured. Its revision-3 freeze and no-prediction
+readiness now succeeded by Windows report: NOT_EVALUATED, unchanged source labels,
+and existing review-002 artifacts preserved. The reported contour wording
+“undefined” needs an exact case-level key/value check during the next read-only
+extraction; do not reinterpret it as a JSON value or alter the human judgments.
+Next, pause additional candidate questions and prepare a read-only comparison of
+stored identity/path labels with existing witness measurements. Track each input's
+actual revision/hash; review-002 r10 is not its later revision-14 negative set.
+Reuse existing extraction helpers and keep unavailable values and shared evidence
+derivation explicit. No additional freeze or combine is required just to repeat
+the completed readiness check.
 Keep these already reviewed
 checkpoints in regression, not untouched holdout. Link human labels to witness
 measurements locally on Windows for a named discrimination hypothesis before

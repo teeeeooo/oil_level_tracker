@@ -118,16 +118,74 @@ under the existing geometry contract; Y is source-frame Y.
   Stored reviewer/basis fields were not restated in this transferred summary;
   the user explicitly reports direct confirmation of the five positions.
 
-## Next bounded task after revision 3
+## Revision-3 freeze and no-prediction readiness — transferred completion
 
-Pause additional candidate questions and freeze the review-003 revision-3 labels
-to a new immutable snapshot, followed by no-prediction readiness evaluation using
-the existing procedure. Verify the unchanged source labels and retain unreviewed
-proposals explicitly. Neither file exists by the evidence reported here yet.
-Keep review-002's r10 artifacts intact; do not combine reviews in this step.
-The next analysis can bind stored labels to witness measurements to examine
-identity discrimination separately from path localization. This small regression
-set does not select an operating threshold or qualify a classifier.
+Windows reports successful pre-status, freeze, evaluate and post-status with no
+validation errors. Label revision 3 and logical SHA prefix `da8bbb92...` remained
+unchanged. Owners are reported as `reviewer-001` for label_owner and split_owner;
+dataset_id is `o2-regression-review`. Packet/witness and bundle-link correspondence
+were reported valid; this machine has not independently checked the private files.
+
+| Artifact / field | Reported value |
+|---|---|
+| New frozen file | frozen-review-003-r3.json |
+| Frozen schema | s11-o2-frozen-labels-v2 |
+| Frozen content SHA-256 | 85951f3044f0c53958663cc3be5f0a8d6128f9fe63cf5a4791d16fa0cfe1a929 |
+| New readiness file | readiness-review-003-r3.json |
+| Report schema | s11-o2-shadow-report-v2 |
+| Status / auto_acceptance | NOT_EVALUATED / false |
+| prediction_sha256 | null |
+| frozen_labels_sha256 | Reported equal to the frozen content hash |
+| Field disposition | FIELD FAIL |
+
+Candidate 10 retains five near-interface native points, no off/uncertain/unreviewed
+points and qualitative review coverage 1.0. Identity counts remain two interface
+and 25 unreviewed, visibility visible. Candidate 19 has no native geometry; its
+identity does not create a native path.
+
+Across all 27 proposals, native-path totals are near 5, off 0, unreviewed 24,
+reviewed 5, coverage approximately **5/29 = 0.1724**. Candidate-center totals are
+near 0, off 0, unreviewed 129, reviewed 0, coverage 0. These counts do not mean
+that each proposal has native geometry. Candidate 10's five candidate-center
+points are available for review but all unreviewed: **available witness geometry
+and a derived status inventory are not automatically generated human labels**.
+No candidate-center path_reviews were reported saved.
+
+Localization was reported not_measured: matched sectors 0, unmatched 10,
+reviewed contour coverage 0, unmatched positive candidates 2 (IDs 10 and 19).
+The existing evaluator places these sector metrics under
+`localization.all_interface_proposals`; the two positives contribute five native
+points and five candidate-center fallback points respectively. This is absence of
+reviewed numeric contour matches, not model misclassification. Supported-proposal
+count 0 is expected without predictions and does not mean the model rejected them.
+
+### Report wording and named serialization uncertainty
+
+The report calls contour “absent (undefined)”. `undefined` is not a JSON value,
+and current evaluator validation reads each `case["contour"]` directly. Earlier
+reports said no contour was created; that does not prove whether the serialized
+case field is an empty list, missing, or was inspected at a different level.
+Successful validation and this wording must not be used to silently equate those
+states. At the next read-only extraction, report the exact case-level JSON path,
+key presence and value/type, without editing labels to fit an expectation.
+The report's shorthand `localization.status` likewise is not a verified full
+JSON path. Physical judgments remain unchanged by these reporting questions.
+
+Review-002 revision 14 / SHA prefix `102919b6...`, its r10 frozen hash
+`ce9c4373...` and NOT_EVALUATED readiness were reported preserved. No combine,
+code change, detector rerun or new human labels occurred in this step.
+
+## Next bounded task after readiness
+
+Pause additional human questions. Prepare a read-only label-to-witness comparison
+from the existing reviewed examples, keeping identity and qualitative path labels
+separate. Resolve the exact contour/metric paths during extraction, and record
+the source label revision and hash for each input. In particular review-002's r10
+snapshot lacks its later negative labels and must not stand in for revision 14.
+Inspect existing extraction helpers before adding code. Use only existing
+measurements, preserve missing values and shared derivation, and assess a named
+discrimination hypothesis rather than treating source names as independent votes.
+This regression set cannot establish thresholds, holdout performance or field PASS.
 
 ## Detector Governance
 
