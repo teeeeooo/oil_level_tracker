@@ -191,12 +191,17 @@ readiness now succeeded by Windows report: NOT_EVALUATED, unchanged source label
 and existing review-002 artifacts preserved. The reported contour wording
 “undefined” needs an exact case-level key/value check during the next read-only
 extraction; do not reinterpret it as a JSON value or alter the human judgments.
-Next, pause additional candidate questions and prepare a read-only comparison of
-stored identity/path labels with existing witness measurements. Track each input's
-actual revision/hash; review-002 r10 is not its later revision-14 negative set.
-Reuse existing extraction helpers and keep unavailable values and shared evidence
-derivation explicit. No additional freeze or combine is required just to repeat
-the completed readiness check.
+The [transferred comparison report](../60-evidence/s11/s11-o2-windows-review-comparison.md)
+now reports a Windows script and four output files covering 73 proposals and
+55 native points. Inventory counts agree with prior reports, but the script and
+metric distributions have not been inspected here. Its labels_unchanged field
+compares historical frozen content, not execution pre/post hashes; review-002's
+expected r10 mismatch is not a corruption finding. Next, keep human questions
+paused and inspect the bounded extraction/join/aggregation code plus actual
+per-review/geometry/scale distributions and missing counts. Resolve exact contour
+key/value and hash-payload definitions in that audit. Do not recreate a missing
+pre-run hash or claim original-run preservation from a later rerun. Track each
+input revision/hash; reuse existing validators and keep shared derivation explicit.
 Keep these already reviewed
 checkpoints in regression, not untouched holdout. Link human labels to witness
 measurements locally on Windows for a named discrimination hypothesis before
