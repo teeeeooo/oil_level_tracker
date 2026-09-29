@@ -91,6 +91,25 @@ experiment contract is concrete, a bounded review of the user-approved post-780 
 region can establish episode boundaries; it should not become an unrestricted
 whole-video labeling request. SPL#2/3 remain deferred and FIELD FAIL remains.
 
+## User clarification and sequencing correction, 2026-09-29
+
+The user clarified that "sufficient material after 780 s" means more episodes of
+the interface rising and falling, not evidence of a new phenomenon. Unexamined
+scenes within 480–780 s may serve the same purpose. The earlier suggestion to
+implement an episode-partition exception first is superseded as a next action,
+not implemented or promoted into an authoritative split rule.
+
+The agreed priority is the first concrete shadow discrimination experiment using
+existing evidence: define inputs, separate identity/location outputs, a combined
+feature hypothesis and automatic error evaluation, then implement it locally
+before another Windows run. Do not substitute additional dataset inventories or
+manual tables for that experiment. Additional scene selection should answer a
+named evidence gap rather than follow an arbitrary 780 s boundary. Existing V3
+calibration requirements and strict partition checks are unchanged; exploratory
+scores do not constitute calibrated classifier decisions or holdout success.
+The [work plan](../../00-project/work-plan.md) records the initial implementation
+brief and the scoring/model choices that still need to be made explicitly.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

@@ -243,33 +243,63 @@ per-candidate descriptive reports on these frames; keep r3 snapshots historical.
 The [Windows video inventory](../60-evidence/s11/s11-o2-video-inventory.md) now
 confirms separately recorded SPL#2/3 exist, but the user defers both until after
 SPL#1 improvement; they are not current O2 inputs or assigned holdout. SPL#1's
-post-780 s region contains user-confirmed expansion opportunities; episode
-boundaries and physical conditions remain unknown. The current validator locks
-all episodes of one recording to a single partition, so later SPL#1 frames cannot
-simply be assigned development/calibration alongside its regression checkpoints.
-Next, specify and implement a bounded within-recording exploratory split contract
-with explicit provenance/leakage guards and distinct acceptance limits, keeping
-the strict recording-level policy as default. No partitions are assigned yet;
-reviews 001/002/003 stay regression. Do not rename recordings to bypass validation
-or treat within-recording reserved episodes as independent-video qualification.
+post-780 s region contains more rising/falling-interface scenes, not confirmed
+novel phenomena. The user clarified that unexamined scenes inside 480–780 s may
+be equally useful. Do not prioritize post-780 s exploration or partition-tool
+changes as prerequisites. Reviews 001/002/003 remain regression; current partition
+guards are unchanged. Independent-recording qualification remains a later gate.
+
+**Immediate task: specify the first offline shadow discrimination experiment,
+then implement its predictor/evaluation connection using existing packets and
+reviewed labels.** The question is whether combined two-sided/multiscale evidence
+reduces the known wrong-identity and wrong-location cases compared with single
+contrast/alignment cues. This is not another manually transcribed measurement
+report or a production selector change. The implementation brief must cover:
+
+- Input: immutable current witness packets; labels used separately as targets,
+  not predictor features. Preserve exact candidate, geometry, scale, null and
+  shared-lineage provenance. Include center-only identity cases; do not infer
+  their path truth or mix center measurements with native-path labels.
+- Separate outputs: candidate identity evidence and geometry-specific location
+  evidence. Human interface identity does not make every sector near; sector
+  majority is not an automatic candidate identity rule. Missing numeric contour
+  remains unavailable for pixel-error evaluation.
+- Evaluation: existing known positives and negatives plus unreviewed coverage,
+  with named failures and per-case results, not independent sample counts for
+  correlated scales/sectors. Compare a stated combined-evidence hypothesis with
+  contrast-only and alignment-only baselines.
+- Reuse: existing packet/label validators and imported-prediction evaluator;
+  define a separate qualitative path-prediction contract if required. Do not
+  duplicate the Windows reporting scripts as a second validation owner.
+- Before execution, specify the actual scoring/model form, parameters and their
+  provenance. Current evidence does not select them. Prototype evidence scores
+  and retrospective diagnostics are not calibrated probabilities or supported
+  production decisions. V3 operating-point requirements remain in force; no
+  regression-fitted artifact is to be relabeled as calibrated or held-out.
+
+Local design/implementation precedes the next Windows execution request. The
+Windows step should run an executable experiment against preserved local inputs
+and return a compact machine-generated error summary. Request new scenes only
+for a named missing control exposed by that experiment, without preferring one
+time window by default. No additional human labeling or detector run is needed
+to settle the initial implementation brief. Actual classifier behavior and
+effectiveness have not been implemented or accepted by this planning update.
 The canonical source companion's fingerprint remains pending despite a reported
 O2 bundle-link source hash. Reconcile that metadata using verified full local
 identity and operator provenance; this gap alone does not invalidate linked O2
 labels or require another detector run.
 The existing evaluator can score imported candidate decisions but has no separate
 predicted near/off contract: candidate identity and path localization need
-distinct outputs/evaluation in the eventual shadow implementation. No additional
-human labels or detector runs are requested for the inventory. Earlier reported
-validation remains accepted within its scope.
+distinct outputs/evaluation in the eventual shadow implementation. Earlier
+reported validation remains accepted within its scope.
 No new descriptor, detector rerun or universal sign/threshold rule is authorized
 by these observations. Classifier/operating-point acceptance remains open; new-run
 hashes do not prove old-run immutability retroactively.
 Keep these already reviewed checkpoints in regression, not untouched holdout.
 Link human labels to witness measurements locally on Windows for a named
-discrimination hypothesis before choosing a shadow model. The single-recording
-exploration requires the new explicit contract above; independent-recording
-validation remains a later gate. A real-image classifier and operating point
-remain unbuilt.
+discrimination hypothesis before choosing a shadow model. Changing partition
+contracts is deferred unless the concrete experiment requires it. A real-image
+classifier and operating point remain unbuilt.
 No private export, further descriptor expansion without a named hypothesis, or
 immediate behavioral detector rerun is required.
 
