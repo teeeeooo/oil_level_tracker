@@ -277,14 +277,21 @@ here. Combined scores have mixed results: BASE identity correct=5/12 versus
 contrast=6/12, and same-X location correct=5/7 versus alignment=7/7; Accum's
 reviewed identity pairs are correct=2/2. This does not support promotion.
 
-Next: inspect stored per-scale terms and common support for the BASE idx8/idx10
-same-X reversal and idx0/idx11 identity failure, plus unique unscorable points.
-Use existing experiment JSON to distinguish local-context effects from median
-aggregation before changing the hypothesis. No new labels, video exploration,
-partition changes or detector rerun are required. Unknown top-ranked candidates
-remain unknown. Do not sum nested task improvements as independent successes;
-partial candidate counts refer to points, not merely scales. Additional scene
-requests must follow a named gap, without preference for post-780 s.
+The [reversal follow-up](../60-evidence/s11/s11-o2-fixed-score-reversal-followup.md)
+reports BW16 locality-induced reversal for BASE idx8/idx10, retained by separate
+score medians despite two other scales ordering correctly. Idx0/idx11 still fails
+all methods with different geometry and partial support. This is not proof that
+the true interface has weaker physical information. The ten unscorable location
+pairs trace to one off point lacking far-above evidence, so locality also limits
+matched-support coverage. Confirm the report's null-versus-zero wording and
+idx11 negative-control pair attribution from stored rows; inspect raw C/A
+availability for the far-band-missing point. These are small output checks, not
+new labels or detector runs. Next hypothesis should isolate far-band locality
+from aggregation; do not adopt a different median or threshold from one pair.
+Unknown top-ranked candidates remain unknown. Do not sum nested task improvements
+as independent successes; partial candidate counts refer to points, not merely
+scales. Additional scene requests must follow a named gap, without preference
+for post-780 s.
 
 Local focused validation remains 115 tests passed (28 new experiment controls
 plus existing label/evaluator suites), including synthetic O1 packet CLI and
