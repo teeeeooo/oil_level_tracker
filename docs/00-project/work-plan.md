@@ -233,15 +233,21 @@ Review-003 now reports revision 4 / SHA prefix 5cbebd88: candidate 15 is
 non_interface with five off native points, and candidates 10/19 remain interface.
 The new negative is 76–118 px below candidate 10 at common X intervals. This
 supplies an identity-negative/off comparator, not the still-missing interface/off
-localization control. No additional human reviews are requested. Next, compare
-candidate 10's five near points with candidate 15's five off points using current
-r4 labels and existing witness metrics, at Accum's own widths 6/12/18. Keep both
-identity and path judgment visible and test whether the above-band alignment cue
-also responds to the known negative. Use a new output with input revision/hash;
-preserve r3 frozen/readiness artifacts, which lack the new labels. Candidate 19
-has no native rows. This is descriptive regression evidence from one frame, not
-a threshold or generalization test. Earlier reported validation remains accepted
-within its scope; small report presentation omissions need not restart it.
+localization control. The r4 comparison is now reported complete with unchanged
+inputs: signed/normalized delta ranges are disjoint for candidates 10 and 15 at
+all three Accum widths, while above/below alignment each overlaps at two widths.
+Candidate 15 does have slightly negative delta at width 18; do not infer a
+zero-sign rule or count signed/normalized delta as independent votes. Combined
+with BASE, no universal sign or alignment gate is justified. Stop repeated
+per-candidate descriptive reports on these frames; keep r3 snapshots historical.
+Next, establish the O2 experiment's available original recording groups and
+prior-exposure inventory before development/calibration/holdout allocation.
+Reviews 001/002/003 remain regression and cannot select an operating point.
+The existing evaluator can score imported candidate decisions but has no separate
+predicted near/off contract: candidate identity and path localization need
+distinct outputs/evaluation in the eventual shadow implementation. No additional
+human labels or detector runs are requested for the inventory. Earlier reported
+validation remains accepted within its scope.
 No new descriptor, detector rerun or universal sign/threshold rule is authorized
 by these observations. Classifier/operating-point acceptance remains open; new-run
 hashes do not prove old-run immutability retroactively.

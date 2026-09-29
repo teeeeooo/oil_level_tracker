@@ -260,6 +260,79 @@ identity-only positive and contributes no native rows. Record current input
 revision/hash and report preservation before/after; no additional freeze or
 detector rerun is needed for this descriptive comparison.
 
+## Revision-4 native comparison returned, 2026-09-29
+
+Windows reports a new `idx10_idx15_native_path_comparison.json`, containing 30
+scale rows (two candidates times five sectors times three widths), summaries and
+input hashes. Current label logical SHA remains `5cbebd88...089e`, revision 4;
+the r3 frozen snapshot was preserved and not used as current truth. All five
+exact X intervals matched; only native_path geometry was measured. Input packet
+file SHA `49c3aef5...affd` and label byte SHA `b9ec72be...d3e4` were reported
+unchanged before/after. Partial byte and logical hashes are distinct evidence.
+No new annotation, contour, detector run or operating point was produced.
+
+Reported medians and ranges, rounded as transferred:
+
+| Width | Field | idx10 interface/near median [min, max] | idx15 non-interface/off median [min, max] | Range overlap |
+|---|---|---|---|---|
+| 6 | above alignment | 0.8693 [0.6766, 0.9786] | 0.6068 [0.3663, 0.6805] | yes |
+| 6 | below alignment | 0.8814 [0.7813, 0.8880] | 0.5735 [0.3272, 0.6942] | no |
+| 6 | signed delta | -0.0944 [-0.1975, -0.0660] | 0.0182 [0.0044, 0.0222] | no |
+| 6 | normalized delta | -0.9777 [-2.3984, -0.8997] | 0.2220 [0.0892, 0.6477] | no |
+| 12 | above alignment | 0.7704 [0.6423, 0.9426] | 0.6002 [0.3317, 0.6157] | no |
+| 12 | below alignment | 0.8271 [0.7173, 0.8640] | 0.6004 [0.3071, 0.7220] | yes |
+| 12 | signed delta | -0.0843 [-0.1267, -0.0522] | 0.0177 [0.0054, 0.0291] | no |
+| 12 | normalized delta | -1.1327 [-2.6186, -0.4211] | 0.3163 [0.1476, 0.7094] | no |
+| 18 | above alignment | 0.7229 [0.6314, 0.9220] | 0.5867 [0.3323, 0.6362] | yes |
+| 18 | below alignment | 0.8206 [0.7261, 0.8437] | 0.5957 [0.3240, 0.7322] | yes |
+| 18 | signed delta | -0.0881 [-0.1463, -0.0209] | 0.0226 [-0.0007, 0.0325] | no |
+| 18 | normalized delta | -1.2073 [-2.7689, -0.1824] | 0.4227 [-0.0177, 0.7370] | no |
+
+Each candidate/width/field reports five present values and zero null or missing.
+Local arithmetic confirms the twelve overlap flags from the supplied extrema;
+private raw values and medians were not independently recomputed here.
+
+The prose claim that candidate 15 has delta >= 0 throughout is incorrect:
+width 18 minima are -0.0007 signed and -0.0177 normalized. The valid conclusion
+is disjoint ranges for these two candidates, not perfect separation by sign.
+Nor is "strongest discriminator" established generally: one positive and one
+negative candidate in one frame provide no calibrated classifier ranking.
+Normalized delta derives from signed delta and a local denominator, so their
+joint separation is not two independent corroborating votes.
+
+Together with BASE, this closes the requested descriptive comparison: contrast
+separates this Accum pair, but BASE near points have both polarities and overlap
+its off controls; above-band alignment separates BASE's interface-location groups
+at two widths, but structural controls also score inside the near range. Neither
+a universal polarity rule nor a universal alignment rule is justified. Do not
+equate Accum 6/12/18 px widths with BASE 8/16/24 px widths. No rule is fitted from
+these regression checkpoints, and their identity/localization labels remain
+separate.
+
+### Transition from repeated comparisons to an O2 experiment
+
+Stop additional per-candidate comparison requests on these reviewed frames.
+Current code inspection confirms the existing shadow evaluator accepts imported
+candidate decisions with frozen-label/witness hashes and classifier artifact
+identity. It does not implement the classifier; its path summaries report human
+judgments and candidate support, not a separate predicted near/off confusion
+matrix. A future localization predictor must therefore have an explicit separate
+prediction/evaluation contract rather than masquerade as candidate identity or
+invent numeric contour truth.
+
+The next decision is the experiment's data split, before choosing a model or an
+operating point. The existing V3 validation owner and prediction loader require
+development/calibration provenance; regression cannot select the operating point.
+Keep reviews 001/002/003 as regression. A bounded Windows inventory should report
+available original recording groups and truly unused episodes using anonymous
+IDs, including copied/trimmed/transformed descendants and prior review exposure.
+Do not relabel current reviews, create splits automatically, or pretend adjacent
+frames are independent recordings. With the current recording-group partition
+guard, episode-only separation within one recording requires an explicit leakage
+assessment and contract change, not a filename workaround. If the necessary data
+are unavailable, record that limitation before promising calibrated shadow
+decisions; read-only contract/design work can still proceed locally.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.
