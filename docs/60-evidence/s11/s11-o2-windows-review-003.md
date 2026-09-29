@@ -187,6 +187,79 @@ measurements, preserve missing values and shared derivation, and assess a named
 discrimination hypothesis rather than treating source names as independent votes.
 This regression set cannot establish thresholds, holdout performance or field PASS.
 
+## Revision 4 — one native-path negative reviewed, 2026-09-29
+
+The user reports completion of the single additional review requested after the
+[corrected BASE comparison](s11-o2-windows-review-comparison.md). No further
+candidates were reviewed and no detector rerun or threshold change occurred.
+This is transferred Windows evidence; private inputs were not checked locally.
+
+Selection used shared exact X intervals and median absolute Y distance from
+candidate 10, without alignment/contrast filtering. The supplied ranking lists
+candidate 15 (five common intervals, 96 px), 13 (five, 172 px), 11 (five, 198 px),
+12 (three, 96 px), and 16 (three, 96 px). Candidate 15 was selected; no duplicate
+full path was reported. Candidate 14, previously listed among unreviewed native
+candidates, is absent from this ranking; its exclusion reason was not supplied,
+so exhaustive ranking is not independently established. This does not invalidate
+the explicit human judgments on the selected geometry.
+
+Candidate 15 is `material_path`, identity **non_interface**, with artifact_tags
+**[]** (no tag specified). Its witness SHA is supplied only as
+`d9fd8e43...71009`. Descriptive prose about reflection/structures inside the oil
+region must not silently become a stored artifact tag. Canonical Y, kind and
+stored reviewer/basis fields were not restated in this summary.
+
+| Reported sector | Source X | Native source Y | Human judgment | Absolute Y distance from candidate 10 at same X |
+|---|---|---|---|---|
+| 0 | [1218, 1303) | 317 | off_interface | 108 |
+| 1 | [1303, 1388) | 328 | off_interface | 118 |
+| 2 | [1388, 1473) | 313 | off_interface | 96 |
+| 3 | [1473, 1558) | 295 | off_interface | 76 |
+| 4 | [1558, 1643) | 296 | off_interface | 76 |
+
+The distances above are local arithmetic from supplied geometry: median 96 px,
+range 76–118 px. They are proposal-to-proposal distances, not measured errors
+against human contour. Sector 0–4 are retained as reported; earlier candidate 10
+S1–S5 were display labels, so cross-candidate matching uses X geometry rather
+than assuming identical sector numbers. Native qualitative coverage is 5/5.
+
+- Revision **3 -> 4**; logical label SHA **da8bbb92...bf9e0 -> 5cbebd88...089e**.
+  Digests are partial and are not reconstructed here.
+- Candidate 10 retains interface identity and five near native judgments;
+  candidate 19 retains interface identity. Candidate-center judgments and numeric
+  contour were not generated. Prior visible status is not newly restated.
+- Derived current identity inventory, assuming the reported single-candidate
+  change: **27 = 2 interface + 1 non_interface + 24 unreviewed**.
+- Derived native inventory: **29 = 5 near + 5 off + 19 unreviewed**, with no
+  uncertain judgments reported. This is arithmetic from earlier inventory and
+  the new review, not a newly executed status result on this machine.
+- Four history snapshots are reported with the previous SHA retained. The
+  summary names `labels.json.history`; do not infer a switch away from the
+  established v2 active label file without checking the actual current path.
+- Packet, bundle-link and `frozen-review-003-r3.json` were reported unchanged.
+  The r3 frozen/readiness artifacts do **not** include candidate 15's new labels
+  and must not be used as the current comparison input. No new classifier result
+  or field qualification is reported.
+
+This adds an **identity-negative/off** control, not an **interface/off** control.
+Accum still has no reviewed misplaced segment belonging to an interface-labeled
+candidate. Consequently a candidate 10 versus 15 feature comparison cannot
+isolate localization independently of identity. Nor does one relatively distant
+negative certify difficult near-boundary reflection discrimination.
+
+Next, stop human questions and compare those two candidates' existing native
+measurements on Windows using current revision-4 labels and exact geometry joins.
+Reuse extraction/validation helpers and write a new output; preserve old reports
+and frozen files. Keep Accum widths 6/12/18 separate from BASE widths 8/16/24.
+Return compact per-width distributions for above/below alignment and signed/
+normalized contrast, plus common-X point comparisons where useful. Compute all
+summaries from the same rows and retain missing/null counts. This tests whether
+the proposed alignment cue also responds to the known negative; it does not
+select a threshold or demonstrate generalization. Candidate 19 remains an
+identity-only positive and contributes no native rows. Record current input
+revision/hash and report preservation before/after; no additional freeze or
+detector rerun is needed for this descriptive comparison.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

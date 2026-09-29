@@ -229,14 +229,19 @@ separates BASE's ten interface/near from four interface/off points at widths
 16/24, but all three structural controls lie inside the near range. This is a
 conditional localization hypothesis from one frame, not an identity classifier
 or accepted threshold. Numeric report repair is no longer the next blocker.
-Next, review at most one existing comparable unreviewed native-path candidate in
-review-003 to address its missing Accum off controls. Select by shared X geometry
-and Y proximity before examining alignment, show annotated images, and record
-candidate identity separately from segment location. Do not force negative labels
-or extend review automatically if all points are near. Preserve existing labels
-and frozen snapshots; new answers remain regression. Earlier reported validation
-remains accepted within its scope. Small pair-table omissions/display precision
-can be corrected without another full reconciliation cycle.
+Review-003 now reports revision 4 / SHA prefix 5cbebd88: candidate 15 is
+non_interface with five off native points, and candidates 10/19 remain interface.
+The new negative is 76–118 px below candidate 10 at common X intervals. This
+supplies an identity-negative/off comparator, not the still-missing interface/off
+localization control. No additional human reviews are requested. Next, compare
+candidate 10's five near points with candidate 15's five off points using current
+r4 labels and existing witness metrics, at Accum's own widths 6/12/18. Keep both
+identity and path judgment visible and test whether the above-band alignment cue
+also responds to the known negative. Use a new output with input revision/hash;
+preserve r3 frozen/readiness artifacts, which lack the new labels. Candidate 19
+has no native rows. This is descriptive regression evidence from one frame, not
+a threshold or generalization test. Earlier reported validation remains accepted
+within its scope; small report presentation omissions need not restart it.
 No new descriptor, detector rerun or universal sign/threshold rule is authorized
 by these observations. Classifier/operating-point acceptance remains open; new-run
 hashes do not prove old-run immutability retroactively.
