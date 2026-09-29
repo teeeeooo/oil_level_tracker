@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; bounded failure attribution next; calibrated shadow discrimination remains open
+**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; failure attribution recorded, controlled locality ablation next; calibrated shadow discrimination remains open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -283,11 +283,23 @@ score medians despite two other scales ordering correctly. Idx0/idx11 still fail
 all methods with different geometry and partial support. This is not proof that
 the true interface has weaker physical information. The ten unscorable location
 pairs trace to one off point lacking far-above evidence, so locality also limits
-matched-support coverage. Confirm the report's null-versus-zero wording and
-idx11 negative-control pair attribution from stored rows; inspect raw C/A
-availability for the far-band-missing point. These are small output checks, not
-new labels or detector runs. Next hypothesis should isolate far-band locality
-from aggregation; do not adopt a different median or threshold from one pair.
+matched-support coverage. The subsequent Windows confirmation resolves the
+output checks: idx8 Y405 has raw C/A scores .4896/.6598 on all three scales but
+null combined and all matched scores; idx11 Y922 causes exactly two unscorable
+identity-negative controls. There is no remaining original-data request for this
+run. Null score and zero available-scale count remain distinct.
+
+Next implementation: a controlled locality ablation with the existing exponent,
+scale/point medians and geometry policy held fixed: compare `(C*A)^(1/3)` against
+`(C*A*L)^(1/3)`. The unchanged exponent prevents conflating locality removal with
+an aggregation-sensitive nonlinear rescaling. First compare on exactly v1's
+common scale/point support, then separately report C/A-supported coverage gained
+without far-band dependency; do not count newly scorable pairs as matched-support
+improvements. Keep v1 artifacts immutable, candidate identity and location tasks
+separate, no fitting/thresholds and no production decisions. This next experiment
+is specified but not implemented or Windows-tested yet. In particular, the BASE
+identity failures are not assumed solved by removing locality. No new labels,
+video exploration or detector rerun is required for this ablation.
 Unknown top-ranked candidates remain unknown. Do not sum nested task improvements
 as independent successes; partial candidate counts refer to points, not merely
 scales. Additional scene requests must follow a named gap, without preference

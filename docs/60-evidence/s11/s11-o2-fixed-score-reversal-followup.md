@@ -71,6 +71,38 @@ a winning aggregator on this one pair, or promoting alignment to an identity
 classifier. Keep the first experiment immutable and require an explicit next
 hypothesis before modifying executable scoring. FIELD FAIL remains unchanged.
 
+## Subsequent Windows confirmation — outstanding checks resolved
+
+The user subsequently supplied direct stored-output checks, resolving the open
+questions above. Private JSON is still not present on this checkout.
+
+Idx8 native X=[449,555], Y405:
+
+- Raw point scores: contrast=.4896, alignment=.6598, combined=null.
+- All three matched point scores are null; common_scale_count=0.
+- Available scales: contrast=3, alignment=3, combined=0, total=3.
+- Each scale's combined is None/null, not numeric zero. The count zero must not
+  be substituted for the score. Far-above gray mean is null at each scale.
+
+| Native task | Total / common / unscorable pairs | Missing point attribution |
+|---|---|---|
+| interface_location | 40 / 30 / 10 | idx8 X=[449,555] Y405 |
+| interface_location_same_x | 8 / 7 / 1 | same idx8 point versus idx9 Y417 |
+| identity_negative_control_same_x | 9 / 7 / 2 | idx11 X=[343,449] Y922 versus near idx8 Y397 and idx9 Y419 |
+
+The prior claim that idx11 produced no unscorable controls is withdrawn: it
+counted only interface_location, which excludes non_interface identities. Its
+three scales lack signed/normalized delta, near-below alignment and far-below
+gray mean. This is separate from idx8's locality-only evidence gap.
+
+The user's sign correction is accepted as an ordering correction. Precisely,
+locality is nonnegative when defined and can equal zero when signed_delta=0;
+it is not strictly positive for every valid measurement.
+
+These checks close this run's requested data follow-up. No more original-data
+request is needed before specifying a controlled locality ablation. The evidence
+does not yet establish that removing locality improves all cases or fixes identity.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.
