@@ -301,3 +301,187 @@ def test_existing_label_writer_lock_is_respected(inputs,tmp_path):
     with pytest.raises(ValueError,match='writer lock'):
         experiment.run([inputs],tmp_path/'out')
     assert not (tmp_path/'out').exists()
+
+
+def ablation_case(scored, identities=('interface', 'interface')):
+    return {'case_id':'synthetic', 'partition':'regression', 'visibility':'visible',
+            'candidates':[{'candidate_input_index': c['candidate_input_index'], 'identity': identity,
+                           'path_reviews':[{'geometry_basis':'native_path', 'source_x_range':[0,20],
+                                            'source_y':10, 'judgment': 'near_interface' if i == 0 else 'off_interface'}]}
+                          for i,(c,identity) in enumerate(zip(scored,identities))]}
+
+
+def scored_terms(index, contrasts, localities):
+    """Controlled scorer outputs; independent median oracle for aggregation tests."""
+    from statistics import median
+    c = experiment.score_candidate(candidate(equal=True))
+    c['candidate_input_index'] = index
+    for p in c['points']:
+        p['scales'] = [{'band_width_px': i+1, 'scores':dict(zip(experiment.METHODS, (v, 1, (v*l)**(1/3))))}
+                       for i,(v,l) in enumerate(zip(contrasts,localities))]
+        p['matched_scores'] = {m:median(s['scores'][m] for s in p['scales']) for m in experiment.METHODS}
+        p['common_scale_count'] = len(contrasts)
+    c['matched_scores'] = c['points'][0]['matched_scores'].copy()
+    return c
+
+
+def test_locality_control_holds_exponent_and_median_not_scale_majority():
+    near = scored_terms(1, [.8,.5,.2], [.9,.01,.9])
+    off = scored_terms(2, [.7,.4,.1], [.7,.7,.7])
+    original = copy.deepcopy([near,off])
+    r = experiment.evaluate_locality_ablation(ablation_case(original), original)
+    task = r['common_support']['evaluation']['path_ordering']['native_path']['interface_location_same_x']
+    assert task['counts']['combined'] == {'reversed':1}
+    assert task['counts']['without_locality'] == {'correct':1}
+    assert task['without_locality_vs_baseline_on_common_pairs']['combined'] == {'improved':1,'regressed':0}
+    p = r['common_support']['scores'][0]['points'][0]
+    assert p['matched_scores']['without_locality'] == pytest.approx(.5**(1/3))
+    assert p['matched_scores']['without_locality'] != pytest.approx(.5**.5)
+    assert original == [near,off]
+    assert r['support_transition']['native_path/interface_location']['counts'] == {'retained_same_order':1}
+
+
+def test_locality_removal_can_regress_and_is_reported():
+    near = scored_terms(1, [.3], [.9])
+    off = scored_terms(2, [.9], [.1])
+    r = experiment.evaluate_locality_ablation(ablation_case([near,off]), [near,off])
+    task = r['common_support']['evaluation']['path_ordering']['native_path']['interface_location']
+    assert task['without_locality_vs_baseline_on_common_pairs']['combined'] == {'improved':0,'regressed':1}
+
+
+def test_missing_far_band_expands_coverage_without_common_support_success():
+    a = candidate(equal=True)
+    b = copy.deepcopy(a); b['candidate_input_index'] = 10
+    b['sectors'][0]['centers'][0]['scales'][0]['bands'][2]['gray_mean'] = None
+    scored = [experiment.score_candidate(c) for c in (a,b)]
+    r = experiment.evaluate_locality_ablation(ablation_case(scored), scored)
+    common = r['common_support']['scores'][1]
+    expanded = r['ca_supported']['scores'][1]
+    assert common['matched_scores']['without_locality'] is None
+    assert common['points'][0]['common_scale_count'] == 0
+    assert expanded['points'][0]['common_scale_count'] == 1
+    assert expanded['matched_scores']['without_locality'] is not None
+    task = r['common_support']['evaluation']['path_ordering']['native_path']['interface_location']
+    assert task['without_locality_vs_baseline_on_common_pairs']['combined'] == {'improved':0,'regressed':0}
+    change = r['support_transition']['native_path/interface_location']
+    assert change['counts'] == {'newly_scorable':1}
+    assert change['newly_scorable_outcomes'] == {'tie':1}  # new coverage is not a win
+    assert 'combined' not in r['ca_supported']['evaluation']['candidate_ranking']
+
+
+def test_ca_support_still_needs_both_near_features_and_preserves_zero():
+    for state in ('missing_alignment', 'zero_contrast'):
+        c = candidate(equal=True)
+        s = c['sectors'][0]['centers'][0]['scales'][0]
+        if state == 'missing_alignment': s['bands'][1]['normal_alignment'] = None
+        else: s['normalized_delta'] = 0
+        scored = experiment.score_candidate(c)
+        r = experiment.ablation_scores([scored],common_support=False)[0]
+        assert r['matched_scores']['without_locality'] == (None if state == 'missing_alignment' else 0)
+        assert r['points'][0]['common_scale_count'] == (0 if state == 'missing_alignment' else 1)
+
+
+def test_extra_scales_can_change_retained_pair_order_without_new_pair():
+    a = candidate(equal=True)
+    good = a['sectors'][0]['centers'][0]['scales'][0]
+    good['normalized_delta'] = 20
+    for width in (16,24):
+        extra = scale(norm=.01,width=width)
+        extra['bands'][2]['available'] = False
+        a['sectors'][0]['centers'][0]['scales'].append(extra)
+    b = candidate(equal=True);b['candidate_input_index'] = 10
+    scored = [experiment.score_candidate(c) for c in (a,b)]
+    r = experiment.evaluate_locality_ablation(ablation_case(scored),scored)
+    change = r['support_transition']['native_path/interface_location']
+    assert change['counts'] == {'retained_changed_order':1}
+    assert change['pairs'][0]['common_outcome'] == 'correct'
+    assert change['pairs'][0]['ca_supported_outcome'] == 'reversed'
+    assert change['newly_scorable_outcomes'] == {}
+
+
+def test_ablation_alias_and_identity_control_remain_separate():
+    a,b = scored_terms(1,[.8],[.9]), scored_terms(2,[.2],[.9])
+    r = experiment.evaluate_locality_ablation(ablation_case([a,b],('interface','non_interface')),[a,b])
+    for view in ('common_support','ca_supported'):
+        paths = r[view]['evaluation']['path_ordering']
+        assert paths['native_path']['interface_location']['pair_count'] == 0
+        assert paths['native_path']['identity_negative_control_same_x']['pair_count'] == 1
+        assert paths['candidate_center']['identity_judgment_counts'] == {'interface/unreviewed':1,'non_interface/unreviewed':1}
+
+
+def test_ablation_real_cli_reference_match_receipt_and_immutable_inputs(inputs,tmp_path):
+    old = tmp_path/'v1 preserved'
+    prior = experiment.run([inputs],old)
+    reference = old/'experiment.json'
+    before = {p:p.read_bytes() for root in (inputs.parent,old) for p in root.iterdir() if p.is_file()}
+    output = tmp_path/'새 대조 결과'
+    cwd = tmp_path/'다른 cwd';cwd.mkdir()
+    cmd = [sys.executable,str(Path(experiment.__file__).resolve()),'--labels',str(inputs),
+           '--output',str(output),'--locality-ablation','--reference',str(reference)]
+    proc = subprocess.run(cmd,cwd=cwd,stdin=subprocess.DEVNULL,capture_output=True,text=True,encoding='utf-8')
+    assert proc.returncode == 0, proc.stderr
+    r = o2.read_json(output/'experiment.json')
+    assert r['schema_version'] == experiment.ABLATION_SCHEMA
+    assert r['scores'] == prior['scores'] and r['evaluation'] == prior['evaluation']
+    assert r['reference']['inputs_scores_evaluation_equal']
+    assert r['artifact']['sha256'] != prior['artifact']['sha256']
+    assert len(r['input_preservation']) == len(prior['input_preservation'])+1
+    receipt = o2.read_json(output/'complete.json')
+    assert receipt['schema_version'] == experiment.ABLATION_SCHEMA
+    assert all(o2.sha256_file(output/n) == h for n,h in receipt['outputs'].items())
+    assert all(p.read_bytes() == data for p,data in before.items())
+    summary = (output/'summary.md').read_text(encoding='utf-8')
+    assert 'View: common_support' in summary and 'View: ca_supported' in summary
+    assert 'without_locality' in summary and 'newly scorable' in summary
+    with pytest.raises(ValueError,match='already exists'):
+        experiment.run([inputs],output,locality_ablation=True,reference=reference)
+
+
+@pytest.mark.parametrize('field',['scores','evaluation','inputs','artifact'])
+def test_ablation_rejects_reference_drift_before_creating_output(inputs,tmp_path,field):
+    old = tmp_path/'old';experiment.run([inputs],old)
+    reference = old/'experiment.json';data=o2.read_json(reference)
+    if field == 'artifact': data[field]['sha256']='0'*64
+    else: data[field]=[]
+    reference.write_text(json.dumps(data),encoding='utf-8')
+    out = tmp_path/'new'
+    with pytest.raises(ValueError,match='reference'):
+        experiment.run([inputs],out,locality_ablation=True,reference=reference)
+    assert not out.exists()
+
+
+def test_ablation_requires_reference_and_keeps_mode_explicit(inputs,tmp_path):
+    with pytest.raises(ValueError,match='supplied together'):
+        experiment.run([inputs],tmp_path/'out',locality_ablation=True)
+    with pytest.raises(ValueError,match='supplied together'):
+        experiment.run([inputs],tmp_path/'out',reference=tmp_path/'fake')
+
+
+def test_ablation_partial_native_never_falls_back_and_zero_pairs_are_not_success():
+    c = candidate()
+    c['sectors'][0]['centers'][0]['scales'][0]['bands'][0]['normal_alignment'] = None
+    scored = experiment.score_candidate(c)
+    result = experiment.evaluate_locality_ablation(ablation_case([scored],('non_interface',)),[scored])
+    for name in ('common_support','ca_supported'):
+        s = result[name]['scores'][0]
+        assert s['identity_geometry_basis'] == 'native_path'
+        assert s['matched_scores']['without_locality'] is None
+        assert s['points'][1]['matched_scores']['without_locality'] is not None
+        assert result[name]['evaluation']['identity_ordering']['pair_count'] == 0
+
+
+def test_ca_support_expands_preferred_points_and_changes_candidate_median():
+    c = candidate(equal=True)
+    extra = copy.deepcopy(c['sectors'][0])
+    extra['sector'] = 1; extra['source_x_range'] = [20,40]
+    extra['centers'][0]['scales'][0]['normalized_delta'] = .01
+    extra['centers'][0]['scales'][0]['bands'][2]['available'] = False
+    c['sectors'].append(extra)
+    original = experiment.score_candidate(c)
+    common = experiment.ablation_scores([original],common_support=True)[0]
+    expanded = experiment.ablation_scores([original],common_support=False)[0]
+    assert common['point_count'] == expanded['point_count'] == 2
+    assert common['common_point_count'] == 1 and expanded['common_point_count'] == 2
+    a=(2/3*.8)**(1/3);b=(.01/1.01*.8)**(1/3)
+    assert common['matched_scores']['without_locality'] == pytest.approx(a)
+    assert expanded['matched_scores']['without_locality'] == pytest.approx((a+b)/2)

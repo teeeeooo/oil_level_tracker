@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; failure attribution recorded, controlled locality ablation next; calibrated shadow discrimination remains open
+**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; controlled locality ablation implemented locally, Windows run pending; calibrated shadow discrimination remains open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -289,27 +289,40 @@ null combined and all matched scores; idx11 Y922 causes exactly two unscorable
 identity-negative controls. There is no remaining original-data request for this
 run. Null score and zero available-scale count remain distinct.
 
-Next implementation: a controlled locality ablation with the existing exponent,
-scale/point medians and geometry policy held fixed: compare `(C*A)^(1/3)` against
-`(C*A*L)^(1/3)`. The unchanged exponent prevents conflating locality removal with
-an aggregation-sensitive nonlinear rescaling. First compare on exactly v1's
-common scale/point support, then separately report C/A-supported coverage gained
-without far-band dependency; do not count newly scorable pairs as matched-support
-improvements. Keep v1 artifacts immutable, candidate identity and location tasks
-separate, no fitting/thresholds and no production decisions. This next experiment
-is specified but not implemented or Windows-tested yet. In particular, the BASE
-identity failures are not assumed solved by removing locality. No new labels,
-video exploration or detector rerun is required for this ablation.
+Controlled locality ablation is now implemented in the same experiment owner
+with `--locality-ablation --reference <v1 experiment.json>`. The
+[Windows ablation procedure](../40-operations/s11-o2-local-shadow-evaluation.md#locality-제거-대조-실험--첫-실행-결과-보존)
+is ready. Compare `(C*A)^(1/3)` against `(C*A*L)^(1/3)`, holding exponent,
+scale/point medians and geometry policy fixed. The required old reference must
+match current input identities/hashes and recomputed v1 scores/evaluation exactly
+before new outputs are published; old files are preserved.
+
+`common_support` compares four methods on exactly the old support.
+`ca_supported` separately compares C/A/without_locality on expanded C/A-available
+support. Newly scorable pair outcomes are not common-support improvements;
+retained pair ordering can also change when added scales/points change medians,
+and is reported explicitly. Automatic summaries name improvements, regressions
+and persistent failures; no manually transcribed metric table is needed.
+Root/receipt schema `s11-o2-locality-ablation-v1` and a separate ablation spec
+fingerprint distinguish the new run. No fitting, thresholds or production
+classification are added. BASE identity failures are not assumed solved.
+
+Next: Windows executes this mode using unchanged current reviews and the saved
+first experiment, checks the new receipt, and returns per-task outcomes for both
+views, support transitions and the two existing BASE controls. No new labels,
+video exploration or detector rerun is required. Local validation is 129 focused
+tests passed, including 14 added ablation controls and the prior 115 tests. The
+actual 29ec2f9 scorer was also compared on a synthetic O1 packet; original scores
+and evaluation matched. Native Windows ablation execution/effectiveness remains
+pending. These local results do not establish field discrimination or acceptance.
 Unknown top-ranked candidates remain unknown. Do not sum nested task improvements
 as independent successes; partial candidate counts refer to points, not merely
 scales. Additional scene requests must follow a named gap, without preference
 for post-780 s.
 
-Local focused validation remains 115 tests passed (28 new experiment controls
-plus existing label/evaluator suites), including synthetic O1 packet CLI and
-Korean/spaced paths. Windows execution is now user-reported complete, but private
-field effectiveness and calibrated classification remain unaccepted. Detector,
-selector, production witness code and labels are unchanged by this evidence update.
+The first three-method Windows experiment is user-reported complete; calibrated
+classification and private-field effectiveness remain unaccepted. Detector,
+selector, production witness code and labels are unchanged by the ablation tool.
 The canonical source companion's fingerprint remains pending despite a reported
 O2 bundle-link source hash. Reconcile that metadata using verified full local
 identity and operator provenance; this gap alone does not invalidate linked O2

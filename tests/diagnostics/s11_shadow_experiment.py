@@ -142,7 +142,7 @@ def order(a, b):
     return "tie" if math.isclose(a, b, abs_tol=1e-12, rel_tol=0) else "correct" if a > b else "reversed"
 
 
-def pair_results(positives, negatives, *, same_x=False):
+def pair_results(positives, negatives, *, same_x=False, methods=METHODS, target="combined"):
     """Within-case only; pairing counts are correlated diagnostics, not iid trials."""
     o2.require(len(positives) * len(negatives) <= 10000, "too many comparison pairs; use a smaller review set")
     rows = []
@@ -151,19 +151,23 @@ def pair_results(positives, negatives, *, same_x=False):
             if same_x and a["source_x_range"] != b["source_x_range"]:
                 continue
             rows.append({"positive": a["key"], "negative": b["key"],
-                         "outcomes": {m: order(a["scores"][m], b["scores"][m]) for m in METHODS}})
+                         "outcomes": {m: order(a["scores"][m], b["scores"][m]) for m in methods}})
     common = [r for r in rows if all(v != "unscorable" for v in r["outcomes"].values())]
-    counts = {m: dict(Counter(r["outcomes"][m] for r in rows)) for m in METHODS}
+    counts = {m: dict(Counter(r["outcomes"][m] for r in rows)) for m in methods}
     changes = {}
-    for base in METHODS[:2]:
-        improved = [r for r in common if r["outcomes"][base] != "correct" and r["outcomes"]["combined"] == "correct"]
-        regressed = [r for r in common if r["outcomes"][base] == "correct" and r["outcomes"]["combined"] != "correct"]
+    for base in methods:
+        if base == target:
+            continue
+        improved = [r for r in common if r["outcomes"][base] != "correct" and r["outcomes"][target] == "correct"]
+        regressed = [r for r in common if r["outcomes"][base] == "correct" and r["outcomes"][target] != "correct"]
         changes[base] = {"improved": len(improved), "regressed": len(regressed)}
     return {"pair_count": len(rows), "common_scorable_pair_count": len(common),
-            "counts": counts, "combined_vs_baseline_on_common_pairs": changes, "pairs": rows}
+            "counts": counts, f"{target}_vs_baseline_on_common_pairs": changes, "pairs": rows}
 
 
-def evaluate_case(case, scored):
+def evaluate_case(case, scored, *, methods=METHODS, target="combined"):
+    def compare(positive, negative, **kwargs):
+        return pair_results(positive, negative, methods=methods, target=target, **kwargs)
     annotations = {a["candidate_input_index"]: a for a in case["candidates"]}
     identity_rows, location_rows = [], []
     for c in scored:
@@ -178,7 +182,7 @@ def evaluate_case(case, scored):
     positives = [r for r in identity_rows if r["identity"] == "interface"]
     negatives = [r for r in identity_rows if r["identity"] == "non_interface"]
     ranks = {}
-    for m in METHODS:
+    for m in methods:
         eligible = [r for r in identity_rows if r["scores"][m] is not None]
         best = max((r["scores"][m] for r in eligible), default=None)
         ranks[m] = {"scored_candidate_count": len(eligible), "unscored_candidate_count": len(scored) - len(eligible),
@@ -192,27 +196,163 @@ def evaluate_case(case, scored):
         near = [r for r in subset if r["identity"] == "interface" and r["judgment"] == "near_interface"]
         off = [r for r in subset if r["identity"] == "interface" and r["judgment"] == "off_interface"]
         path[basis] = {"identity_judgment_counts": dict(Counter(f"{r['identity']}/{r['judgment']}" for r in subset)),
-                       "interface_location": pair_results(near, off),
-                       "interface_location_same_x": pair_results(near, off, same_x=True),
-                       "identity_negative_control_same_x": pair_results(near, [r for r in subset if r["identity"] == "non_interface" and r["judgment"] == "off_interface"], same_x=True),
+                       "interface_location": compare(near, off),
+                       "interface_location_same_x": compare(near, off, same_x=True),
+                       "identity_negative_control_same_x": compare(near, [r for r in subset if r["identity"] == "non_interface" and r["judgment"] == "off_interface"], same_x=True),
                        "rows": subset}
     return {"case_id": case["case_id"], "partition": case["partition"], "visibility": case["visibility"],
             "identity_counts": dict(Counter(r["identity"] for r in identity_rows)),
-            "candidate_ranking": ranks, "identity_ordering": pair_results(positives, negatives), "path_ordering": path}
+            "candidate_ranking": ranks, "identity_ordering": compare(positives, negatives), "path_ordering": path}
 
 
-def artifact():
+ABLATION_SCHEMA = "s11-o2-locality-ablation-v1"
+ABLATION_METHOD = "without_locality"
+COMMON_METHODS = (*METHODS, ABLATION_METHOD)
+CA_METHODS = (*METHODS[:2], ABLATION_METHOD)
+ABLATION_SPEC = {
+    "id": "fixed-exponent-locality-ablation-v1",
+    "score": "(contrast*alignment)**(1/3)",
+    "fixed": "v1 exponent, scale/point medians, geometry preference, labels and pair definitions",
+    "common_support": "exact v1 all-three-method-available scales and preferred points",
+    "ca_supported": "scales with contrast and alignment available; no locality imputation",
+    "coverage_comparison": "newly scorable pairs reported separately, never counted as common-support improvements",
+    "fitted": False, "threshold": None,
+}
+
+
+def ablation_scores(scored, *, common_support):
+    """Derive both views from v1 scores, with no annotation or measurement changes."""
+    methods = COMMON_METHODS if common_support else CA_METHODS
+    candidates = []
+    for candidate in scored:
+        points = []
+        for point in candidate["points"]:
+            scales = []
+            for scale in point["scales"]:
+                raw = scale["scores"]
+                c, a = raw["contrast_only"], raw["alignment_only"]
+                without = (c * a) ** (1 / 3) if c is not None and a is not None else None
+                values = {**raw, ABLATION_METHOD: without}
+                scales.append({"band_width_px": scale["band_width_px"], "scores": values})
+            usable = [s for s in scales if all(s["scores"][m] is not None for m in methods)]
+            matched = {m: median([s["scores"][m] for s in usable]) for m in methods}
+            if common_support:
+                o2.require(all(matched[m] == point["matched_scores"][m] for m in METHODS),
+                           "v1 point support/score changed during ablation")
+            points.append({**{k: point[k] for k in ("geometry_basis", "source_x_range", "source_y")},
+                           "scales": scales, "matched_scores": matched,
+                           "common_scale_count": len(usable), "scale_count": len(scales),
+                           "usable_band_widths": [s["band_width_px"] for s in usable]})
+        preferred = [p for p in points if p["geometry_basis"] == candidate["identity_geometry_basis"]]
+        matched = {m: median([p["matched_scores"][m] for p in preferred]) for m in methods}
+        if common_support:
+            o2.require(all(matched[m] == candidate["matched_scores"][m] for m in METHODS),
+                       "v1 candidate support/score changed during ablation")
+        candidates.append({"candidate_input_index": candidate["candidate_input_index"],
+                           "witness_sha256": candidate["witness_sha256"],
+                           "identity_geometry_basis": candidate["identity_geometry_basis"],
+                           "matched_scores": matched, "points": points, "point_count": len(preferred),
+                           "common_point_count": sum(p["common_scale_count"] > 0 for p in preferred)})
+    return candidates
+
+
+def evaluation_tasks(case):
+    tasks = {"identity": case["identity_ordering"]}
+    for basis, path in case["path_ordering"].items():
+        for task in ("interface_location", "interface_location_same_x", "identity_negative_control_same_x"):
+            tasks[f"{basis}/{task}"] = path[task]
+    return tasks
+
+
+def support_transition(common, expanded):
+    """Support changes can also change medians of already-scorable items."""
+    output = {}
+    expanded_tasks = evaluation_tasks(expanded)
+    for task, previous in evaluation_tasks(common).items():
+        def index(result):
+            return {o2.fingerprint_json([r["positive"], r["negative"]]): r for r in result["pairs"]}
+        old, new = index(previous), index(expanded_tasks[task])
+        o2.require(old.keys() == new.keys(), "support views changed pair inventory")
+        rows = []
+        for key, before in old.items():
+            after = new[key]
+            a, b = before["outcomes"][ABLATION_METHOD], after["outcomes"][ABLATION_METHOD]
+            o2.require(not (a != "unscorable" and b == "unscorable"), "C/A support lost a scorable pair")
+            category = ("still_unscorable" if b == "unscorable" else "newly_scorable" if a == "unscorable"
+                        else "retained_changed_order" if a != b else "retained_same_order")
+            rows.append({"positive": before["positive"], "negative": before["negative"],
+                         "category": category, "common_outcome": a, "ca_supported_outcome": b})
+        output[task] = {"counts": dict(Counter(r["category"] for r in rows)),
+                        "newly_scorable_outcomes": dict(Counter(r["ca_supported_outcome"] for r in rows if r["category"] == "newly_scorable")),
+                        "pairs": rows}
+    return output
+
+
+def evaluate_locality_ablation(case, scored):
+    common = ablation_scores(scored, common_support=True)
+    expanded = ablation_scores(scored, common_support=False)
+    common_evaluation = evaluate_case(case, common, methods=COMMON_METHODS, target=ABLATION_METHOD)
+    expanded_evaluation = evaluate_case(case, expanded, methods=CA_METHODS, target=ABLATION_METHOD)
+    return {"case_id": case["case_id"], "v1_common_scores_preserved": True,
+            "common_support": {"scores": common, "evaluation": common_evaluation},
+            "ca_supported": {"scores": expanded, "evaluation": expanded_evaluation},
+            "support_transition": support_transition(common_evaluation, expanded_evaluation)}
+
+
+def render_ablation_summary(report):
+    lines = ["# S11 O2 controlled locality ablation", "",
+             "No fit, thresholds, production decisions or new labels. Exponent and medians are unchanged.",
+             "Common support isolates locality removal; C/A-supported results change support and are a separate experiment view.",
+             "Newly scorable is not necessarily correct. Retained pair order can change when extra scales/points enter medians.",
+             "No pooled task totals: same-X pairs overlap all-X pairs. See experiment.json for exact scale/point support.",
+             f"Reference verified: input hashes, v1 scores and evaluation exactly equal. Reference file SHA256: {report['reference']['file_sha256']}", ""]
+    for name, methods in (("common_support", COMMON_METHODS), ("ca_supported", CA_METHODS)):
+        lines.extend([f"## View: {name}", "", render_summary(
+            {"artifact": report["artifact"], "evaluation": [c[name]["evaluation"] for c in report["locality_ablation"]]},
+            methods=methods, target=ABLATION_METHOD)])
+    lines.extend(["## Support transitions and named controls", ""])
+    for case in report["locality_ablation"]:
+        lines.extend([f"Case: {case['case_id']}", ""])
+        for task, result in case["support_transition"].items():
+            if result["pairs"]:
+                lines.append(f"- {task}: {result['counts']}; newly scorable outcomes={result['newly_scorable_outcomes']}")
+        for task, result in evaluation_tasks(case["common_support"]["evaluation"]).items():
+            for label, predicate in (
+                ("improved vs combined", lambda r: r["outcomes"]["combined"] in ("reversed", "tie") and r["outcomes"][ABLATION_METHOD] == "correct"),
+                ("regressed vs combined", lambda r: r["outcomes"]["combined"] == "correct" and r["outcomes"][ABLATION_METHOD] in ("reversed", "tie")),
+                ("still reversed", lambda r: r["outcomes"][ABLATION_METHOD] == "reversed")):
+                examples = [r for r in result["pairs"] if predicate(r)]
+                for row in examples[:3]:
+                    lines.append(f"- {task}, {label} (up to 3 of {len(examples)}): positive={row['positive']}, negative={row['negative']}; {row['outcomes']}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def artifact(*, locality_ablation=False):
     files = [Path(__file__), Path(o2.__file__), Path(inspect.getfile(o2.fingerprint_json)), Path(inspect.getfile(o2.sha256_file))]
     payload = {"spec": SPEC, "code": {p.name: o2.sha256_file(p) for p in files}}
+    if locality_ablation:
+        payload["ablation_spec"] = ABLATION_SPEC
     return {**payload, "sha256": o2.fingerprint_json(payload)}
 
 
-def run(label_paths, output):
+def run(label_paths, output, *, locality_ablation=False, reference=None):
     output = Path(output).resolve()
     o2.require(not output.exists(), "output directory already exists; choose a new name")
+    o2.require(locality_ablation == (reference is not None),
+               "--locality-ablation and --reference must be supplied together")
     paths = [Path(p).resolve() for p in label_paths]
     o2.require(paths and len(set(paths)) == len(paths), "labels paths must be nonempty and unique")
     snapshots, documents, all_packets, inputs = {}, [], {}, []
+    prior = None
+    if reference is not None:
+        reference = Path(reference).resolve()
+        snapshots[reference] = o2.sha256_file(reference)
+        prior = o2.read_json(reference)
+        o2.require(prior.get("schema_version") == SCHEMA, "reference must be a v1 score experiment")
+        o2.require(prior.get("artifact", {}).get("spec") == SPEC, "reference score specification differs")
+        fingerprint = {k: v for k, v in prior["artifact"].items() if k != "sha256"}
+        o2.require(o2.fingerprint_json(fingerprint) == prior["artifact"].get("sha256"), "reference artifact hash mismatch")
     for path in paths:
         o2.require(not path.with_name(path.name + ".lock").exists(), "labels writer lock present")
         source_sha = o2.sha256_file(path)
@@ -240,7 +380,7 @@ def run(label_paths, output):
     merged["cases"] = [c for d in documents for c in d["cases"]]
     merged["packets"] = [{"sha256": h} for h in all_packets]
     o2.validate_labels(merged, all_packets)
-    cases, evaluation = [], []
+    cases, evaluation, ablations = [], [], []
     o2.require(len(merged["cases"]) <= 64, "experiment supports at most 64 cases")
     for case in merged["cases"]:
         frame = all_packets[case["packet_sha256"]][case["case_id"]]
@@ -249,27 +389,38 @@ def run(label_paths, output):
         cases.append({"case_id": case["case_id"], "packet_sha256": case["packet_sha256"],
                       "frame_index": frame["frame_index"], "glass_id": frame["glass_id"], "candidates": scored})
         evaluation.append(evaluate_case(case, scored))
+        if locality_ablation:
+            ablations.append(evaluate_locality_ablation(case, scored))
+    if prior is not None:
+        for key, actual in (("inputs", inputs), ("scores", cases), ("evaluation", evaluation)):
+            o2.require(prior.get(key) == actual, f"reference {key} differs; preserve inputs and investigate drift")
     for path, digest in snapshots.items():
         o2.require(o2.sha256_file(path) == digest, "input changed during experiment; discard run")
     report = {"schema_version": SCHEMA, "status": "EXPLORATORY_UNCALIBRATED", "auto_acceptance": False,
               "production_decisions_emitted": False, "field_disposition": "FIELD FAIL", "numeric_localization": "NOT_MEASURED",
-              "artifact": artifact(), "runtime": {"python": platform.python_version(), "platform": platform.platform()},
+              "artifact": artifact(locality_ablation=locality_ablation), "runtime": {"python": platform.python_version(), "platform": platform.platform()},
               "inputs": inputs, "input_preservation": [{"file_index": i, "before_sha256": h, "after_sha256": o2.sha256_file(p)} for i, (p, h) in enumerate(snapshots.items())],
               "scores": cases, "evaluation": evaluation}
+    if locality_ablation:
+        report["schema_version"] = ABLATION_SCHEMA
+        report["locality_ablation"] = ablations
+        report["reference"] = {"file_sha256": snapshots[reference],
+                               "artifact_sha256": prior["artifact"]["sha256"],
+                               "inputs_scores_evaluation_equal": True}
     output.mkdir(parents=True, exist_ok=False)
     o2.write_new(output / "experiment.json", report)
     with (output / "summary.md").open("x", encoding="utf-8") as handle:
-        handle.write(render_summary(report))
+        handle.write(render_ablation_summary(report) if locality_ablation else render_summary(report))
     # Failure after publication leaves artifacts without the success receipt.
     for path, digest in snapshots.items():
         o2.require(o2.sha256_file(path) == digest, "input changed during publication; discard run")
-    o2.write_new(output / "complete.json", {"schema_version": SCHEMA, "status": "COMPLETE",
+    o2.write_new(output / "complete.json", {"schema_version": report["schema_version"], "status": "COMPLETE",
         "artifact_sha256": report["artifact"]["sha256"],
         "outputs": {n: o2.sha256_file(output / n) for n in ("experiment.json", "summary.md")}})
     return report
 
 
-def render_summary(report):
+def render_summary(report, *, methods=METHODS, target="combined"):
     lines = ["# S11 O2 fixed-score experiment", "", "EXPLORATORY_UNCALIBRATED — no production decisions, no fit, no numeric localization.",
              "Higher ranks are hypotheses, not interface acceptance. Partial evidence and ties remain visible.",
              "Rankings/pairs compare all methods on identical usable scales and points; raw baseline-only scores stay in experiment.json.",
@@ -280,24 +431,21 @@ def render_summary(report):
         lines.extend([f"## Case {key}", "", f"Identity counts: `{case['identity_counts']}`.", "",
                       "| Task | Method | Correct | Reversed | Tie | Unscorable | Common pairs |",
                       "|---|---|---|---|---|---|---|"])
-        tasks = {"identity": case["identity_ordering"]}
-        for basis, p in case["path_ordering"].items():
-            for task in ("interface_location", "interface_location_same_x", "identity_negative_control_same_x"):
-                tasks[f"{basis}/{task}"] = p[task]
+        tasks = evaluation_tasks(case)
         notes = []
         for task, result in tasks.items():
-            for m in METHODS:
+            for m in methods:
                 c = result["counts"][m]
                 lines.append(f"| {task} | {m} | {c.get('correct', 0)} | {c.get('reversed', 0)} | {c.get('tie', 0)} | {c.get('unscorable', 0)} | {result['common_scorable_pair_count']} |")
             if result["pair_count"]:
-                for baseline, change in result["combined_vs_baseline_on_common_pairs"].items():
-                    notes.append(f"- {task}: combined vs {baseline}, improved={change['improved']}, regressed={change['regressed']}.")
+                for baseline, change in result[f"{target}_vs_baseline_on_common_pairs"].items():
+                    notes.append(f"- {task}: {target} vs {baseline}, improved={change['improved']}, regressed={change['regressed']}.")
         lines.extend(["", *notes, ""])
-        for m in METHODS:
+        for m in methods:
             r = case["candidate_ranking"][m]
             lines.append(f"- {m}: scored={r['scored_candidate_count']}, unscored={r['unscored_candidate_count']}, partial={r['partially_scored_candidate_count']}; top ranks={r['top_ranked']}")
         for basis, result in case["path_ordering"].items():
-            available = sum(all(r["scores"][m] is not None for m in METHODS) for r in result["rows"])
+            available = sum(all(r["scores"][m] is not None for m in methods) for r in result["rows"])
             lines.append(f"- {basis}: common scored points={available}/{len(result['rows'])}; identity/judgment counts: {result['identity_judgment_counts']}")
         lines.append("")
     lines.extend(["Review full scores/coverage and pair failures in experiment.json. Zero pairs is not success.",
@@ -310,9 +458,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--labels", type=Path, nargs="+", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--locality-ablation", action="store_true",
+                        help="Compare removing locality on v1 common support; separately report C/A-supported coverage.")
+    parser.add_argument("--reference", type=Path, help="Existing v1 experiment.json; required with --locality-ablation.")
     args = parser.parse_args()
     try:
-        run(args.labels, args.output)
+        run(args.labels, args.output, locality_ablation=args.locality_ablation, reference=args.reference)
     except (ValueError, KeyError, OSError, TypeError) as exc:
         parser.exit(2, f"Experiment failed: {exc}\n")
     print("Experiment complete. Read summary.md and complete.json in the output directory.")

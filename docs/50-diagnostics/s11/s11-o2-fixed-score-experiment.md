@@ -154,6 +154,71 @@ missing evidence a successful classifier rejection. No additional annotations,
 new video windows, split changes, freeze, detector rerun or threshold fitting are
 needed to execute this first experiment.
 
+## Controlled locality ablation mode
+
+The same executable now accepts `--locality-ablation --reference <v1 experiment.json>`.
+It reuses the v1 measurement, input validation, geometry, pair and publication
+owners. No parallel reporting script or production scorer is introduced.
+The default invocation retains the original v1 formulas and evaluation semantics;
+existing saved v1 artifacts are never rewritten. Code hashes change with this
+implementation; the old artifact hash is recorded separately in the new output.
+
+Hypothesis: mandatory far-band locality may both reverse useful C/A orderings
+and exclude points that have usable near-band evidence. Test this dependency
+before changing aggregation. New method `without_locality = (C*A)^(1/3)` keeps
+the old exponent and both median stages. Using sqrt(C*A) would also change the
+nonlinear scale, potentially changing medians across an even number of values;
+that would not isolate locality. The new score remains an uncalibrated ordering
+hypothesis, not a probability or an imputed locality measurement.
+
+Two explicitly separate views are emitted in `locality_ablation[]` per case:
+
+1. `common_support`: exactly v1's usable scales and preferred points. Compare
+   contrast_only, alignment_only, combined and without_locality. Existing three
+   method scores are checked for exact point/candidate equality. Only this view's
+   without_locality-versus-combined changes isolate removal of the locality term.
+2. `ca_supported`: use scales with both C and A available, including those without
+   L. Compare contrast_only, alignment_only and without_locality on identical
+   support within this view. Combined is intentionally absent from its ranking
+   and pair outcome tables. Original scale scores, including combined nulls, are
+   retained for inspection. Near-feature gaps stay null; zero is valid evidence.
+
+`support_transition` keeps identical pair inventories across views and records
+newly_scorable, still_unscorable, retained_same_order and retained_changed_order.
+New pair outcomes are counted separately; newly scorable is not automatically
+correct. Even already-scorable pairs can change order when extra scales/points
+change medians. Do not call these changes pure locality-score improvements.
+All native/center identity/location distinctions and exact-center measurement
+aliases retain the v1 semantics. No source family, absolute coordinate, private
+candidate ID or label is used by the score.
+
+The reference input is mandatory in ablation mode. Its spec and artifact digest
+are checked, then current label input identities/hashes, recomputed v1 scores and
+v1 evaluation must exactly equal the saved reference. Mismatch fails before
+creating output: preserve files and investigate drift instead of regenerating a
+reference to force agreement. Supply reviews in the same order as the old run.
+The reference is included in input before/after hashing. This is a reproducibility
+check against the supplied local reference, not independent proof of its historic
+origin. Prior receipt verification remains the operational source of that claim.
+
+Root/receipt schema is `s11-o2-locality-ablation-v1`; artifact includes
+`fixed-exponent-locality-ablation-v1`. Original v1 scores/evaluation remain at
+`scores`/`evaluation` as reference data. Read new results under `locality_ablation`.
+`summary.md` renders both views, support changes and up to three named examples
+per task/category (improved, regressed, still reversed); JSON retains all pairs.
+No pooled all-task success count is generated. Output publication, immutable
+inputs, no overwrite, no fit, no production decisions and FIELD FAIL are unchanged.
+The reference JSON remains subject to the existing 128 MiB input limit.
+
+Focused synthetic controls cover score improvement and regression, unchanged
+exponent/medians, zero versus missing evidence, expansion of scales and points,
+retained-pair reversal when support expands, native preference, separate identity
+controls, aliases without label inheritance, reference mismatch, and the actual
+CLI outside the repository with Korean/spaced paths. Existing default-mode tests
+remain in the suite. A one-time local integration also compared recomputed scores
+and evaluation with the actual scorer source from commit `29ec2f9` on a synthetic
+O1 packet; both matched. This is not private Windows efficacy evidence.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

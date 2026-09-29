@@ -85,6 +85,66 @@ Get-Content -LiteralPath "$experimentOutput\summary.md" -Raw -Encoding UTF8
 
 새 라벨 생성, 780초 이후 탐색, partition 변경, detector 재실행, 임계값 조정은 요청하지 않는다.
 
+## Locality 제거 대조 실험 — 첫 실행 결과 보존
+
+고정 점수 첫 실행이 끝난 뒤 사용하는 절차다. 새 코드 ZIP은 코드 폴더에만 적용한다.
+기존 review-001/002/003의 활성 v2 라벨(revision 3/14/4)과 packet, 첫 실행의
+`experiment.json`·`summary.md`·`complete.json`은 그대로 보존한다.
+
+1. 첫 실행 결과 폴더의 `complete.json`에 기록된 출력 해시를 위 절차대로 확인한다.
+2. 위의 `$labelsOne`, `$labelsTwo`, `$labelsThree`, `$pythonExe`를 실제 경로로 설정한다.
+   라벨은 첫 실행과 같은 순서로 지정한다. 새 prepare/freeze나 라벨 변경은 하지 않는다.
+3. `$referenceExperiment`를 **첫 실행의 v1 experiment.json**으로 지정한다.
+   이전에 만든 비교표나 `analysis-review-002-reversals.json`이 아니다.
+4. 존재하지 않는 새 출력 폴더에 다음 명령을 실행한다.
+
+```powershell
+$referenceExperiment = "D:\OilTracker\data\experiments\fixed-score-current-labels-001\experiment.json"
+$ablationOutput = "D:\OilTracker\data\experiments\locality-ablation-001"
+& $pythonExe tests/diagnostics/s11_shadow_experiment.py --labels $labelsOne $labelsTwo $labelsThree --locality-ablation --reference $referenceExperiment --output $ablationOutput
+if ($LASTEXITCODE -ne 0) { throw "Locality ablation failed; preserve inputs and report the error." }
+$receipt = Get-Content -LiteralPath "$ablationOutput\complete.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($receipt.schema_version -ne "s11-o2-locality-ablation-v1" -or $receipt.status -ne "COMPLETE") { throw "Unexpected ablation receipt" }
+foreach ($entry in $receipt.outputs.PSObject.Properties) {
+    $actualHash = (Get-FileHash -LiteralPath (Join-Path $ablationOutput $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($actualHash -ne $entry.Value) { throw "Output hash mismatch: $($entry.Name)" }
+}
+Get-Content -LiteralPath "$ablationOutput\summary.md" -Raw -Encoding UTF8
+```
+
+도구가 기존 입력·v1 점수·평가의 정확한 재현을 먼저 검증한다. `reference ... differs`
+오류가 나면 기존 라벨·결과를 수정하거나 새 기준 파일을 만들어 통과시키지 말고 오류를
+보고한다. 이전 코드로 영상 detector를 다시 실행할 필요는 없다. Python/코드·스크립트
+경로가 달라졌으면 기존 프로젝트 환경을 지정하며 새 의존성 설치는 필요 없다.
+
+출력 파일명은 기존과 동일하지만 **새 폴더**에 생성한다. 새 JSON의
+`locality_ablation[].common_support`와 `ca_supported`가 이번 결과다.
+최상위 `scores`/`evaluation`은 재현 검증한 기존 방식 결과이므로 새 결과로 혼동하지 않는다.
+`reference.inputs_scores_evaluation_equal=true`와 전체 입력 전후 해시도 확인한다.
+원래 라벨 3+packet 3에 기준 experiment.json이 더해져 보통 입력 7개가 보존 검증된다.
+
+이번 방법은 `without_locality=(C*A)^(1/3)`이다. 지수와 중앙값 집계를 유지한다.
+
+- **common_support**: 기존과 동일 구간에서 without_locality가 combined 및 두 기준
+  방식 대비 개선/악화하는지 확인한다. 이것이 locality 제거 자체의 대조다.
+- **ca_supported**: far band가 없어도 C/A가 있으면 계산한다. 새 계산 가능 pair의
+  correct/reversed/tie 수와 여전히 계산 불가인 수를 따로 본다. 기존에 계산 가능했던
+  pair도 scale/point 추가로 중앙값 순서가 달라질 수 있으며 `retained_changed_order`로 표시한다.
+- 두 부분을 합쳐 개선 건수를 만들지 않는다. identity와 위치, all-X와 same-X도 합산하지 않는다.
+
+전달할 내용은 자동 생성된 요약에 근거한 아래 항목이다. 원본 자료는 로컬에 남긴다.
+
+1. 코드/새 artifact 및 기준 artifact 식별값, revision, 재현·완료·해시 보존 여부.
+2. 리뷰/task별 common_support의 without_locality correct/reversed/tie/unscorable,
+   combined·contrast·alignment 대비 improved/regressed.
+3. ca_supported의 newly_scorable 결과, still_unscorable, retained_changed_order.
+4. 기존 BASE idx8 near Y397 vs idx10 off Y378의 같은 X 비교와 idx0 vs idx11
+   identity 비교가 어떻게 바뀌었는지, 새 악화 사례가 있는지. 이 후보 번호는 보고용이며
+   점수식의 조건으로 사용하지 않는다.
+
+새 판독, 영상 탐색, 임계값 조정, detector 실행, production 판정 반영은 하지 않는다.
+첫 실험과 마찬가지로 `EXPLORATORY_UNCALIBRATED`, `auto_acceptance=false`, FIELD FAIL이다.
+
 ## 영구 보관 위치 — ZIP 교체 전에 분리
 
 코드와 업무 데이터를 분리한다. 아래 경로는 예시이며 에이전트가 실제 경로를 확인한다.
