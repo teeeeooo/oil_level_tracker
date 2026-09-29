@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; controlled locality ablation implemented locally, Windows run pending; calibrated shadow discrimination remains open
+**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; locality ablation reported complete without promotion; candidate identity evidence is the next design focus; calibrated shadow discrimination remains open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -292,7 +292,8 @@ run. Null score and zero available-scale count remain distinct.
 Controlled locality ablation is now implemented in the same experiment owner
 with `--locality-ablation --reference <v1 experiment.json>`. The
 [Windows ablation procedure](../40-operations/s11-o2-local-shadow-evaluation.md#locality-제거-대조-실험--첫-실행-결과-보존)
-is ready. Compare `(C*A)^(1/3)` against `(C*A*L)^(1/3)`, holding exponent,
+was executed in the reported Windows run. It compares `(C*A)^(1/3)` against
+`(C*A*L)^(1/3)`, holding exponent,
 scale/point medians and geometry policy fixed. The required old reference must
 match current input identities/hashes and recomputed v1 scores/evaluation exactly
 before new outputs are published; old files are preserved.
@@ -307,14 +308,30 @@ Root/receipt schema `s11-o2-locality-ablation-v1` and a separate ablation spec
 fingerprint distinguish the new run. No fitting, thresholds or production
 classification are added. BASE identity failures are not assumed solved.
 
-Next: Windows executes this mode using unchanged current reviews and the saved
-first experiment, checks the new receipt, and returns per-task outcomes for both
-views, support transitions and the two existing BASE controls. No new labels,
-video exploration or detector rerun is required. Local validation is 129 focused
-tests passed, including 14 added ablation controls and the prior 115 tests. The
-actual 29ec2f9 scorer was also compared on a synthetic O1 packet; original scores
-and evaluation matched. Native Windows ablation execution/effectiveness remains
-pending. These local results do not establish field discrimination or acceptance.
+The [first ablation result](../60-evidence/s11/s11-o2-locality-ablation-windows-run-001.md)
+reports exact v1 reproduction and seven unchanged inputs. On BASE common support,
+WL fixes two same-X location orders with no regression there, but candidate
+identity and same-X negative controls each regress twice with no improvement.
+C/A-supported coverage adds ten all-X location comparisons, only three correct;
+the newly scorable same-X pair is reversed. Accum's reviewed identity/control
+orders are unchanged. Do not promote locality removal or infer an additive
+weighting fix from this result. Do not sum nested task gains/losses.
+
+The immediate Windows investigation is complete at this scope. Next engineering
+work is a mechanism-based candidate identity hypothesis, assessed separately from
+path localization: inspect existing measurement/representation owners for what
+would distinguish genuine interfaces from strong structural edges. Scalar edge
+strength/locality combinations have not demonstrated that distinction; this is
+not evidence that the raw image or all captured features lack information. No
+further weighting/threshold sweep, new labels, video exploration, partition
+change or detector rerun is required to accept the current outcome. Request
+specific support details only if the next hypothesis depends on them.
+
+Local validation remains 129 focused tests passed (14 ablation controls plus the
+prior 115), and comparison against actual 29ec2f9 scorer output on a synthetic
+packet. Native Windows execution is now user-reported complete; private outputs
+were not independently read here. The partial reported artifact hash matches the
+local fingerprint's supplied portions. Field efficacy remains unaccepted.
 Unknown top-ranked candidates remain unknown. Do not sum nested task improvements
 as independent successes; partial candidate counts refer to points, not merely
 scales. Additional scene requests must follow a named gap, without preference
