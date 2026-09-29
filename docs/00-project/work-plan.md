@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; O2 label/freeze/evaluation tooling implemented; human label collection and shadow discrimination remain open
+**Current gate:** O1 accepted locally; O2 fixed-score experiment implemented locally, Windows execution pending; calibrated shadow discrimination remains open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -249,41 +249,38 @@ be equally useful. Do not prioritize post-780 s exploration or partition-tool
 changes as prerequisites. Reviews 001/002/003 remain regression; current partition
 guards are unchanged. Independent-recording qualification remains a later gate.
 
-**Immediate task: specify the first offline shadow discrimination experiment,
-then implement its predictor/evaluation connection using existing packets and
-reviewed labels.** The question is whether combined two-sided/multiscale evidence
-reduces the known wrong-identity and wrong-location cases compared with single
-contrast/alignment cues. This is not another manually transcribed measurement
-report or a production selector change. The implementation brief must cover:
+**First executable experiment is now implemented locally:**
+[`s11_shadow_experiment.py`](../../tests/diagnostics/s11_shadow_experiment.py)
+reads current v2 labels/packets and compares fixed contrast-only, alignment-only
+and combined contrast/alignment/local-context scores. The
+[experiment contract](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md)
+fixes its formulas and limits; the [Windows procedure](../40-operations/s11-o2-local-shadow-evaluation.md#고정-점수-shadow-실험--기존-라벨로-실행)
+is ready for the next local work-PC run. No partition change or new labels are
+required. Existing validators, hashes and percentile owner are reused.
 
-- Input: immutable current witness packets; labels used separately as targets,
-  not predictor features. Preserve exact candidate, geometry, scale, null and
-  shared-lineage provenance. Include center-only identity cases; do not infer
-  their path truth or mix center measurements with native-path labels.
-- Separate outputs: candidate identity evidence and geometry-specific location
-  evidence. Human interface identity does not make every sector near; sector
-  majority is not an automatic candidate identity rule. Missing numeric contour
-  remains unavailable for pixel-error evaluation.
-- Evaluation: existing known positives and negatives plus unreviewed coverage,
-  with named failures and per-case results, not independent sample counts for
-  correlated scales/sectors. Compare a stated combined-evidence hypothesis with
-  contrast-only and alignment-only baselines.
-- Reuse: existing packet/label validators and imported-prediction evaluator;
-  define a separate qualitative path-prediction contract if required. Do not
-  duplicate the Windows reporting scripts as a second validation owner.
-- Before execution, specify the actual scoring/model form, parameters and their
-  provenance. Current evidence does not select them. Prototype evidence scores
-  and retrospective diagnostics are not calibrated probabilities or supported
-  production decisions. V3 operating-point requirements remain in force; no
-  regression-fitted artifact is to be relabeled as calibrated or held-out.
+Scores are label-blind; automatic evaluation keeps candidate identity ordering,
+interface-only near/off ordering, and identity-negative controls separate.
+Native and candidate-center geometry remain distinct, including exact-center
+measurement reuse without copying human labels. Matched-scale/point support is
+used for fair ablations; missing support, all-negative frames, unknown winners,
+ties and reversed pairs remain visible. Inputs are immutable, outputs are new,
+and a final hash receipt marks successful publication.
 
-Local design/implementation precedes the next Windows execution request. The
-Windows step should run an executable experiment against preserved local inputs
-and return a compact machine-generated error summary. Request new scenes only
-for a named missing control exposed by that experiment, without preferring one
-time window by default. No additional human labeling or detector run is needed
-to settle the initial implementation brief. Actual classifier behavior and
-effectiveness have not been implemented or accepted by this planning update.
+This is an **EXPLORATORY_UNCALIBRATED ranking experiment**, not a trained or
+calibrated identity/location classifier. It emits no production decisions,
+chooses no operating threshold, computes no numeric localization without contour,
+and cannot be imported as calibrated shadow predictions. V3 and all partition
+rules remain unchanged. Its fixed hypothesis can fail; the next step is Windows
+execution on current reviews 001/002/003, revisions 3/14/4 unless legitimately
+updated, followed by the machine-generated error/coverage summary. Do not demand
+another manually transcribed feature table. Additional scene requests must follow
+a named limitation found in this run, without default preference for post-780 s.
+
+Local focused validation: 115 tests passed, including 28 new experiment controls
+and existing label/evaluator suites. Synthetic O1 packet tests cover non-repo cwd,
+Korean/spaced paths, persistence, multi-review input and CLI execution. This does
+not establish native Windows execution or private-field discrimination; those
+remain pending. Detector, selector, production witness code and labels are unchanged.
 The canonical source companion's fingerprint remains pending despite a reported
 O2 bundle-link source hash. Reconcile that metadata using verified full local
 identity and operator provenance; this gap alone does not invalidate linked O2

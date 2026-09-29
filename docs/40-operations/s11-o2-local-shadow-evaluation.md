@@ -18,6 +18,73 @@
 
 도구: `tests/diagnostics/s11_interface_shadow_evaluation.py`
 
+## 고정 점수 shadow 실험 — 기존 라벨로 실행
+
+첫 실행은 **새 판독 없이** 기존 review-001/002/003의 현재 v2 labels와 packet을 사용한다.
+목적은 후보/구간의 점수 순서를 정답과 자동 비교하는 것이며, calibrated classifier나
+production detector를 실행하는 것이 아니다. [점수식·평가 계약](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md)을 먼저 확인한다.
+
+1. 새 코드 ZIP을 코드 폴더에만 풀고 기존 영구 데이터 폴더를 유지한다.
+2. 실제 활성 v2 라벨 경로를 확인한다. review-001/002는 보통 `labels-v2.json`,
+   review-003은 저장 당시 이름에 따라 `labels.json` 또는 `labels-v2.json`이다.
+   파일명이 아니라 `schema_version=s11-o2-labels-v2`로 확인한다.
+   최신 보고 기준 revision은 각각 **3 / 14 / 4**이며, 이후 정당한 새 기록이 있으면
+   그 차이를 보고한다. 맞추려고 labels/history를 수정하지 않는다.
+3. 각 파일의 기존 `status`로 revision, 연결, 소유자, 논리 해시를 확인한다.
+   중복 case ID나 검증 오류가 있으면 원본을 고치거나 후보를 빼지 말고 오류를 보고한다.
+4. 새 출력 폴더를 지정해 아래 명령을 실행한다. `--labels`는 파일 경로 세 개를 받는다.
+   frozen r10/r3, comparison JSON, 원본 영상은 입력으로 넣지 않는다.
+
+```powershell
+# 아래 네 경로를 실제 로컬 경로로 바꾼다. review-003 파일명은 직접 확인한다.
+$labelsOne = "D:\OilTracker\data\reviews\review-001\labels-v2.json"
+$labelsTwo = "D:\OilTracker\data\reviews\review-002\labels-v2.json"
+$labelsThree = "D:\OilTracker\data\reviews\review-003\labels.json"
+$experimentOutput = "D:\OilTracker\data\experiments\fixed-score-001"
+$pythonExe = ".\.venv\Scripts\python.exe"
+& $pythonExe tests/diagnostics/s11_shadow_experiment.py --labels $labelsOne $labelsTwo $labelsThree --output $experimentOutput
+if ($LASTEXITCODE -ne 0) { throw "Shadow experiment failed; do not treat partial output as complete." }
+$receipt = Get-Content -LiteralPath "$experimentOutput\complete.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+foreach ($entry in $receipt.outputs.PSObject.Properties) {
+    $actualHash = (Get-FileHash -LiteralPath (Join-Path $experimentOutput $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($actualHash -ne $entry.Value) { throw "Output hash mismatch: $($entry.Name)" }
+}
+Get-Content -LiteralPath "$experimentOutput\summary.md" -Raw -Encoding UTF8
+```
+
+다른 cwd에서는 Python과 스크립트도 절대 경로로 지정한다. 새 pip 의존성은 없고
+프로젝트의 기존 환경을 사용한다. 실행 중 라벨을 편집하지 않는다. 결과 폴더가 이미
+있으면 재실행을 위해 원본을 삭제하지 말고 새 이름을 쓴다.
+
+출력은 `experiment.json`, `summary.md`, `complete.json`이다. 완료 receipt가 없거나
+해시가 맞지 않으면 부분 실패다. 도구는 입력의 전후 바이트 해시를 검사하며 원본
+라벨·packet·history·bundle-link·frozen 파일을 수정하지 않는다. `status`는
+`EXPLORATORY_UNCALIBRATED`, `auto_acceptance=false`, `FIELD FAIL`을 유지한다.
+공식 `evaluate --predictions` 입력으로 이 결과를 넘기지 않는다.
+
+세 방법은 `contrast_only`, `alignment_only`, `combined`다. 결과 해석:
+
+- `identity_ordering`: 실제 계면 후보가 비계면 후보보다 높은 점수를 받는지.
+- `interface_location`: interface 후보 안에서 near가 off보다 높은지. 같은 X만 비교한
+  별도 집계도 확인한다. native_path와 candidate_center는 합치지 않는다.
+- `identity_negative_control_same_x`: 실제 계면/near와 비계면/off의 대조다.
+  Accum idx10/15의 비교는 여기에 해당하며 순수한 위치 오차 평가가 아니다.
+- `improved/regressed`: 같은 유효 scale·구간을 사용하는 pair에서 combined가 기준
+  방식의 오순서/동률을 올바른 순서로 바꿨는지, 또는 올바른 순서를 잃었는지.
+- `unscorable`, 공통 scale/point 수, 미검토 수를 함께 본다. 계산 불가나 pair=0은 성공이
+  아니다. 실제 계면 없는 review-001에서 높은 순위가 나와도 계면이라고 판정한 것은
+  아니며, 이 실험에는 무계면을 기각하는 합격 임계값이 없다.
+
+외부 전달용은 허용되는 범위에서 다음만 요약한다. 전체 JSON·영상·이미지·실제 경로는
+로컬에 남기고, summary.md의 case ID가 업무 식별정보라면 익명 ID로 바꿔 요약한다.
+
+- 사용 코드 ZIP/commit(알면), artifact SHA, 라벨 revision/논리 해시, 실행 성공 여부
+- 리뷰별 identity와 native_path 위치 평가의 correct/reversed/tie/unscorable 수
+- combined의 기준 방식 대비 improved/regressed 수와 가장 중요한 실패 1~3건
+- 공통 유효 구간 부족·미검토 상위 후보 등 평가 한계, 입력 해시 보존 여부
+
+새 라벨 생성, 780초 이후 탐색, partition 변경, detector 재실행, 임계값 조정은 요청하지 않는다.
+
 ## 영구 보관 위치 — ZIP 교체 전에 분리
 
 코드와 업무 데이터를 분리한다. 아래 경로는 예시이며 에이전트가 실제 경로를 확인한다.
