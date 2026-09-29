@@ -240,9 +240,22 @@ Candidate 15 does have slightly negative delta at width 18; do not infer a
 zero-sign rule or count signed/normalized delta as independent votes. Combined
 with BASE, no universal sign or alignment gate is justified. Stop repeated
 per-candidate descriptive reports on these frames; keep r3 snapshots historical.
-Next, establish the O2 experiment's available original recording groups and
-prior-exposure inventory before development/calibration/holdout allocation.
-Reviews 001/002/003 remain regression and cannot select an operating point.
+The [Windows video inventory](../60-evidence/s11/s11-o2-video-inventory.md) now
+confirms separately recorded SPL#2/3 exist, but the user defers both until after
+SPL#1 improvement; they are not current O2 inputs or assigned holdout. SPL#1's
+post-780 s region contains user-confirmed expansion opportunities; episode
+boundaries and physical conditions remain unknown. The current validator locks
+all episodes of one recording to a single partition, so later SPL#1 frames cannot
+simply be assigned development/calibration alongside its regression checkpoints.
+Next, specify and implement a bounded within-recording exploratory split contract
+with explicit provenance/leakage guards and distinct acceptance limits, keeping
+the strict recording-level policy as default. No partitions are assigned yet;
+reviews 001/002/003 stay regression. Do not rename recordings to bypass validation
+or treat within-recording reserved episodes as independent-video qualification.
+The canonical source companion's fingerprint remains pending despite a reported
+O2 bundle-link source hash. Reconcile that metadata using verified full local
+identity and operator provenance; this gap alone does not invalidate linked O2
+labels or require another detector run.
 The existing evaluator can score imported candidate decisions but has no separate
 predicted near/off contract: candidate identity and path localization need
 distinct outputs/evaluation in the eventual shadow implementation. No additional
@@ -251,11 +264,12 @@ validation remains accepted within its scope.
 No new descriptor, detector rerun or universal sign/threshold rule is authorized
 by these observations. Classifier/operating-point acceptance remains open; new-run
 hashes do not prove old-run immutability retroactively.
-Keep these already reviewed
-checkpoints in regression, not untouched holdout. Link human labels to witness
-measurements locally on Windows for a named discrimination hypothesis before
-choosing a shadow model; declare separate original recordings for development,
-calibration and holdout. A real-image classifier and operating point remain unbuilt.
+Keep these already reviewed checkpoints in regression, not untouched holdout.
+Link human labels to witness measurements locally on Windows for a named
+discrimination hypothesis before choosing a shadow model. The single-recording
+exploration requires the new explicit contract above; independent-recording
+validation remains a later gate. A real-image classifier and operating point
+remain unbuilt.
 No private export, further descriptor expansion without a named hypothesis, or
 immediate behavioral detector rerun is required.
 
