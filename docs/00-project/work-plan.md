@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; O2 fixed-score experiment implemented locally, Windows execution pending; calibrated shadow discrimination remains open
+**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; bounded failure attribution next; calibrated shadow discrimination remains open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -255,8 +255,8 @@ reads current v2 labels/packets and compares fixed contrast-only, alignment-only
 and combined contrast/alignment/local-context scores. The
 [experiment contract](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md)
 fixes its formulas and limits; the [Windows procedure](../40-operations/s11-o2-local-shadow-evaluation.md#고정-점수-shadow-실험--기존-라벨로-실행)
-is ready for the next local work-PC run. No partition change or new labels are
-required. Existing validators, hashes and percentile owner are reused.
+was used for the first reported Windows run. No partition change or new labels
+were required. Existing validators, hashes and percentile owner are reused.
 
 Scores are label-blind; automatic evaluation keeps candidate identity ordering,
 interface-only near/off ordering, and identity-negative controls separate.
@@ -270,17 +270,27 @@ This is an **EXPLORATORY_UNCALIBRATED ranking experiment**, not a trained or
 calibrated identity/location classifier. It emits no production decisions,
 chooses no operating threshold, computes no numeric localization without contour,
 and cannot be imported as calibrated shadow predictions. V3 and all partition
-rules remain unchanged. Its fixed hypothesis can fail; the next step is Windows
-execution on current reviews 001/002/003, revisions 3/14/4 unless legitimately
-updated, followed by the machine-generated error/coverage summary. Do not demand
-another manually transcribed feature table. Additional scene requests must follow
-a named limitation found in this run, without default preference for post-780 s.
+rules remain unchanged. The [first Windows result](../60-evidence/s11/s11-o2-fixed-score-windows-run-001.md)
+reports successful execution on revisions 3/14/4 with unchanged inputs. Its artifact
+fingerprint matches local commit `29ec2f9`; private output files were not inspected
+here. Combined scores have mixed results: BASE identity correct=5/12 versus
+contrast=6/12, and same-X location correct=5/7 versus alignment=7/7; Accum's
+reviewed identity pairs are correct=2/2. This does not support promotion.
 
-Local focused validation: 115 tests passed, including 28 new experiment controls
-and existing label/evaluator suites. Synthetic O1 packet tests cover non-repo cwd,
-Korean/spaced paths, persistence, multi-review input and CLI execution. This does
-not establish native Windows execution or private-field discrimination; those
-remain pending. Detector, selector, production witness code and labels are unchanged.
+Next: inspect stored per-scale terms and common support for the BASE idx8/idx10
+same-X reversal and idx0/idx11 identity failure, plus unique unscorable points.
+Use existing experiment JSON to distinguish local-context effects from median
+aggregation before changing the hypothesis. No new labels, video exploration,
+partition changes or detector rerun are required. Unknown top-ranked candidates
+remain unknown. Do not sum nested task improvements as independent successes;
+partial candidate counts refer to points, not merely scales. Additional scene
+requests must follow a named gap, without preference for post-780 s.
+
+Local focused validation remains 115 tests passed (28 new experiment controls
+plus existing label/evaluator suites), including synthetic O1 packet CLI and
+Korean/spaced paths. Windows execution is now user-reported complete, but private
+field effectiveness and calibrated classification remain unaccepted. Detector,
+selector, production witness code and labels are unchanged by this evidence update.
 The canonical source companion's fingerprint remains pending despite a reported
 O2 bundle-link source hash. Reconcile that metadata using verified full local
 identity and operator provenance; this gap alone does not invalidate linked O2
