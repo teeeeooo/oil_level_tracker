@@ -145,6 +145,68 @@ Get-Content -LiteralPath "$ablationOutput\summary.md" -Raw -Encoding UTF8
 새 판독, 영상 탐색, 임계값 조정, detector 실행, production 판정 반영은 하지 않는다.
 첫 실험과 마찬가지로 `EXPLORATORY_UNCALIBRATED`, `auto_acceptance=false`, FIELD FAIL이다.
 
+## 후보 identity profile 실험 — 두 영역과 띠·기울기 비교
+
+Locality 제거 대조 이후의 별도 가설 실험이다. 같은 review-001/002/003의 활성
+v2 라벨(revision **3/14/4**)과 packet을 사용한다. 목적은 후보 주변의 네 밝기
+band가 두 영역의 경계에 가까운지, 띠나 밝기 기울기에 가까운지를 비교하는 것이다.
+새 점수 이름은 `two_region_profile`이다. 구조물도 같은 밝기 형태를 만들 수 있어
+점수가 높다는 이유만으로 실제 계면을 확정하지 않는다.
+
+새 코드 ZIP을 코드 폴더에 적용하고 기존 프로젝트 Python을 사용한다.
+아래 경로는 예시이며 Windows의 영구 데이터 위치로 바꾼다. review-003은 파일명이
+`labels.json`이어도 schema가 v2이면 정상이다. **기준 파일은 최초 고정 점수 실행의
+v1 experiment.json**이며 locality-ablation 결과가 아니다. 먼저 해당 폴더의
+complete.json에 기록된 출력 해시를 위 절차대로 확인한다.
+
+```powershell
+$pythonExe = ".\.venv\Scripts\python.exe"
+$labelsOne = "D:\OilTracker\data\reviews\review-001\labels-v2.json"
+$labelsTwo = "D:\OilTracker\data\reviews\review-002\labels-v2.json"
+$labelsThree = "D:\OilTracker\data\reviews\review-003\labels.json"
+$referenceExperiment = "D:\OilTracker\data\experiments\fixed-score-current-labels-001\experiment.json"
+$profileOutput = "D:\OilTracker\data\experiments\identity-profile-001"
+& $pythonExe tests/diagnostics/s11_shadow_experiment.py --labels $labelsOne $labelsTwo $labelsThree --identity-profile --reference $referenceExperiment --output $profileOutput
+if ($LASTEXITCODE -ne 0) { throw "Identity profile failed; preserve inputs and report the error." }
+$receipt = Get-Content -LiteralPath "$profileOutput\complete.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($receipt.schema_version -ne "s11-o2-identity-profile-v1" -or $receipt.status -ne "COMPLETE") { throw "Unexpected profile receipt" }
+foreach ($entry in $receipt.outputs.PSObject.Properties) {
+    $actualHash = (Get-FileHash -LiteralPath (Join-Path $profileOutput $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($actualHash -ne $entry.Value) { throw "Output hash mismatch: $($entry.Name)" }
+}
+Get-Content -LiteralPath "$profileOutput\summary.md" -Raw -Encoding UTF8
+```
+
+출력은 새 폴더의 `experiment.json`, `summary.md`, `complete.json` 세 파일이다.
+기존 reference 입력·점수·평가가 정확히 재현되지 않으면 출력 전에 실패한다.
+오류가 나면 원본을 수정하거나 reference를 새로 만들어 통과시키지 않는다.
+`reference.inputs_scores_evaluation_equal=true`, 입력 7개 전후 해시 보존도 확인한다.
+
+새 결과 위치는 `identity_profile[].common_support`와 `profile_supported`다.
+최상위 `scores`/`evaluation`은 기존 v1 재현 자료다.
+
+- **common_support**: 다섯 방법 모두 계산 가능한 동일 scale/point에서 후보 identity를
+  비교한다. 새 필수 입력 때문에 v1보다 범위가 줄어들 수 있다.
+- **profile_supported**: 네 band profile만으로 계산 가능한 범위에서 새 점수를 평가한다.
+  newly_scorable의 correct/reversed/tie와 retained_changed_order를 별도 보고한다.
+- 위치 near/off 평가는 이번 모드에서 수행하지 않는다. native_path는 후보 점수를
+  측정하는 좌표로 사용하며, 그 점들의 near/off 판정을 identity로 바꾸지 않는다.
+
+Windows 에이전트가 전달할 요약:
+
+1. 코드 commit/새 artifact 및 기준 artifact 식별값, revision, 재현·완료·해시 보존 여부.
+2. 리뷰별 common_support의 다섯 방법 correct/reversed/tie/unscorable,
+   새 방법의 각 기준 대비 improved/regressed 및 계산 가능 후보·scale 범위.
+3. profile_supported의 support 변화, 새 계산 가능 pair 결과, 결측 사유.
+4. review-002 idx0 vs idx11의 identity 순서와 점수, 새 악화 사례 최대 3개.
+   review-001의 top 후보와 review-002/003의 미검토 top 후보는 자동 판정하지 않는다.
+
+자동 `summary.md`와 JSON에 있는 값을 사용하고 수치를 수동 재계산하거나 별도
+비교 스크립트를 만들지 않는다. 허용된 범위의 요약만 전달하고 원본은 업무 PC에 둔다.
+추가 영상·라벨링·freeze·detector 실행·임계값 조정은 필요 없다.
+상태는 `EXPLORATORY_UNCALIBRATED`, `auto_acceptance=false`, FIELD FAIL을 유지한다.
+
+
 ## 영구 보관 위치 — ZIP 교체 전에 분리
 
 코드와 업무 데이터를 분리한다. 아래 경로는 예시이며 에이전트가 실제 경로를 확인한다.

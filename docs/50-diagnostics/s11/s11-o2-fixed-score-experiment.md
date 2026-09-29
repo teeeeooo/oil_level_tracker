@@ -219,6 +219,90 @@ remain in the suite. A one-time local integration also compared recomputed score
 and evaluation with the actual scorer source from commit `29ec2f9` on a synthetic
 O1 packet; both matched. This is not private Windows efficacy evidence.
 
+## Candidate identity profile mode
+
+`--identity-profile --reference <original v1 experiment.json>` tests a separate
+candidate-identity hypothesis after the locality ablation. It extends the same
+input, geometry, aggregation, evaluation and publication owner. Production
+measurement and decision code are unchanged. This is not another locality weight
+or a near/off localization score.
+
+Hypothesis: four raw-gray band means can distinguish a sustained two-region
+boundary from a thin excursion or gradual brightness ramp. Existing O1
+`BandWitness.gray_mean` and `clipped_local_y_range` provide these inputs. In order
+far_above, near_above, near_below, far_below, fixed templates are:
+
+| Shape | Template |
+|---|---|
+| Two-region step | -1, -1, +1, +1 |
+| Near-above excursion | 0, 1, 0, 0 |
+| Near-below excursion | 0, 0, 1, 0 |
+| Central band | 0, 1, 1, 0 |
+| Ramp | Midpoint of each clipped half-open pixel range |
+
+For each template, analytically project the four observations onto its offset
+and amplitude, then compute squared residual error (SSE). All models have the
+same two nuisance parameters and equal band weight. This within-profile
+projection uses no labels or learned coefficients. Contrast polarity may reverse.
+
+```
+energy = sum((gray_mean - mean(four gray means))**2)
+competitor = min(SSE_ramp, SSE_near_above_excursion,
+                 SSE_near_below_excursion, SSE_central_band)
+two_region_profile = (competitor - SSE_step) / (energy + 4*(1/255)**2)
+```
+
+Positive values favor the step shape over these alternatives; negative values
+favor an alternative. Zero is valid evidence, not a negative classification or
+abstention. The fixed floor dampens weak contrast; it is not an operating point.
+Four available means and nonempty, ordered band ranges are required; missing
+inputs remain null with field status and reasons. Far-band gaps are not solved
+by this model. Clipped-range midpoints approximate sampling positions: they are
+not the centroid of visible pixels under a partial mask. Preserve `valid_fraction`
+and do not infer full coverage from a computable profile.
+
+The hypothesis is deliberately incomplete: a structural step with identical
+four-band means is indistinguishable. Its synthetic identity pair must tie.
+Neither shape preference nor high alignment certifies Oil identity (F09/F10).
+A persistent structural step, glare, partial visibility or a real meniscus that
+does not match a template can defeat this model. No missing template is assumed
+absent in the field. Failure would constrain this representation, not prove raw
+images physically unobservable. Existing regression labels evaluate this fixed
+hypothesis; they do not certify generalization or set thresholds.
+
+New results are under `identity_profile[]`, with two views:
+
+- `common_support`: intersection of profile, contrast_only, alignment_only,
+  combined and without_locality availability. Every method uses identical scales
+  and preferred points. This may be narrower than original v1 support because
+  the new score also requires near-band gray means and band ranges. Compare
+  identity orderings only on this intersection.
+- `profile_supported`: all computable profiles irrespective of C/A/L availability;
+  only the new score is ranked. Report newly scorable outcomes and retained-pair
+  changes separately. More available pairs are not automatically more correct.
+
+Scale-then-point medians and native_path preference (otherwise candidate_center)
+remain unchanged; unavailable native paths do not fall back to centers. The new
+mode does not evaluate path judgments. Both views contain `path_ordering={}`;
+original top-level `scores`/`evaluation` retain the v1 reproduction, including its
+old path results. Do not present these old results as the new mode's evaluation.
+All-negative cases expose top false-positive risks but cannot assess abstention
+without an operating point; unreviewed top candidates remain unknown.
+
+The schema is `s11-o2-identity-profile-v1`, artifact spec is
+`two-region-versus-ramp-excursion-v1`. Reference equality, before/after input
+hashes, new-directory publication and COMPLETE receipt reuse existing guards.
+`summary.md` automatically includes identity comparisons, support transitions,
+preferred-geometry scale availability/reasons and bounded failure examples.
+`experiment.json` retains all profiles, model residuals, geometry and pair results.
+Use the existing operations document's identity-profile section on Windows.
+
+Local controls cover actual O1 synthetic step/stripe rasters, inverted polarity,
+flat/weak profiles, brightness/coordinate offsets, structural ambiguity,
+missing/invalid inputs, support differences, native preference, label blindness,
+reference drift and CLI execution outside the checkout using Korean paths.
+These controls validate implementation and known limitations, not field efficacy.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

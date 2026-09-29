@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; locality ablation reported complete without promotion; candidate identity evidence is the next design focus; calibrated shadow discrimination remains open
+**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; locality ablation reported complete without promotion; candidate identity profile experiment is locally implemented and awaiting Windows execution; calibrated shadow discrimination remains open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -317,19 +317,23 @@ the newly scorable same-X pair is reversed. Accum's reviewed identity/control
 orders are unchanged. Do not promote locality removal or infer an additive
 weighting fix from this result. Do not sum nested task gains/losses.
 
-The immediate Windows investigation is complete at this scope. Next engineering
-work is a mechanism-based candidate identity hypothesis, assessed separately from
-path localization: inspect existing measurement/representation owners for what
-would distinguish genuine interfaces from strong structural edges. Scalar edge
-strength/locality combinations have not demonstrated that distinction; this is
-not evidence that the raw image or all captured features lack information. No
-further weighting/threshold sweep, new labels, video exploration, partition
-change or detector rerun is required to accept the current outcome. Request
-specific support details only if the next hypothesis depends on them.
+The locality Windows investigation is complete at this scope. The next bounded
+experiment is now implemented as `--identity-profile` in the existing score tool:
+compare four-band two-region shape against ramp/local-excursion templates,
+evaluating candidate identity separately from path localization. The
+[fixed-score diagnostic](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md)
+owns the hypothesis and known structural-step ambiguity. This is a fixed offline
+profile comparison, not a physical-interface classifier or production change.
+The [operations identity-profile procedure](../40-operations/s11-o2-local-shadow-evaluation.md)
+uses the same active revisions 3/14/4 and original v1 reference, with a new output
+folder. [Local identity-profile evidence](../60-evidence/s11/s11-o2-identity-profile-local.md)
+records 164 focused passing tests, including 22 new controls. Native Windows
+execution is pending. No new labels, video exploration,
+partition change, weighting/threshold sweep or detector rerun is needed.
 
-Local validation remains 129 focused tests passed (14 ablation controls plus the
-prior 115), and comparison against actual 29ec2f9 scorer output on a synthetic
-packet. Native Windows execution is now user-reported complete; private outputs
+Prior ablation validation recorded 129 focused tests passed (14 ablation controls
+plus the prior 115), and comparison against actual 29ec2f9 scorer output on a
+synthetic packet. Native Windows ablation execution is user-reported complete; private outputs
 were not independently read here. The partial reported artifact hash matches the
 local fingerprint's supplied portions. Field efficacy remains unaccepted.
 Unknown top-ranked candidates remain unknown. Do not sum nested task improvements

@@ -165,7 +165,7 @@ def pair_results(positives, negatives, *, same_x=False, methods=METHODS, target=
             "counts": counts, f"{target}_vs_baseline_on_common_pairs": changes, "pairs": rows}
 
 
-def evaluate_case(case, scored, *, methods=METHODS, target="combined"):
+def evaluate_case(case, scored, *, methods=METHODS, target="combined", include_path=True):
     def compare(positive, negative, **kwargs):
         return pair_results(positive, negative, methods=methods, target=target, **kwargs)
     annotations = {a["candidate_input_index"]: a for a in case["candidates"]}
@@ -173,6 +173,8 @@ def evaluate_case(case, scored, *, methods=METHODS, target="combined"):
     for c in scored:
         a = annotations[c["candidate_input_index"]]
         identity_rows.append({"key": c["candidate_input_index"], "identity": a["identity"], "scores": c["matched_scores"]})
+        if not include_path:
+            continue
         reviews = {o2.geometry_key(p): p["judgment"] for p in a["path_reviews"]}
         for point in c["points"]:
             location_rows.append({"key": {"candidate_input_index": c["candidate_input_index"],
@@ -190,7 +192,7 @@ def evaluate_case(case, scored, *, methods=METHODS, target="combined"):
                     "top_ranked": [{"candidate_input_index": r["key"], "identity": r["identity"], "score": r["scores"][m]}
                                    for r in eligible if order(r["scores"][m], best) == "tie"]}
     path = {}
-    for basis in ("native_path", "candidate_center"):
+    for basis in (("native_path", "candidate_center") if include_path else ()):
         subset = [r for r in location_rows if r["geometry_basis"] == basis]
         # Only interface identity here: do not conflate structure rejection with localization.
         near = [r for r in subset if r["identity"] == "interface" and r["judgment"] == "near_interface"]
@@ -264,7 +266,7 @@ def evaluation_tasks(case):
     return tasks
 
 
-def support_transition(common, expanded):
+def support_transition(common, expanded, *, method=ABLATION_METHOD):
     """Support changes can also change medians of already-scorable items."""
     output = {}
     expanded_tasks = evaluation_tasks(expanded)
@@ -276,8 +278,8 @@ def support_transition(common, expanded):
         rows = []
         for key, before in old.items():
             after = new[key]
-            a, b = before["outcomes"][ABLATION_METHOD], after["outcomes"][ABLATION_METHOD]
-            o2.require(not (a != "unscorable" and b == "unscorable"), "C/A support lost a scorable pair")
+            a, b = before["outcomes"][method], after["outcomes"][method]
+            o2.require(not (a != "unscorable" and b == "unscorable"), "expanded support lost a scorable pair")
             category = ("still_unscorable" if b == "unscorable" else "newly_scorable" if a == "unscorable"
                         else "retained_changed_order" if a != b else "retained_same_order")
             rows.append({"positive": before["positive"], "negative": before["negative"],
@@ -328,19 +330,163 @@ def render_ablation_summary(report):
     return "\n".join(lines)
 
 
-def artifact(*, locality_ablation=False):
+PROFILE_SCHEMA = "s11-o2-identity-profile-v1"
+PROFILE_METHOD = "two_region_profile"
+PROFILE_METHODS = (*COMMON_METHODS, PROFILE_METHOD)
+PROFILE_BANDS = ("far_above", "near_above", "near_below", "far_below")
+PROFILE_SPEC = {
+    "id": "two-region-versus-ramp-excursion-v1",
+    "observations": "four available raw-gray band means, equal band weight",
+    "templates": {"step": [-1, -1, 1, 1], "near_above_excursion": [0, 1, 0, 0],
+                  "near_below_excursion": [0, 0, 1, 0], "central_band": [0, 1, 1, 0]},
+    "ramp_coordinates": "clipped_local_y_range half-open pixel midpoint; not visible-pixel centroid",
+    "residual": "sum squared errors after within-profile offset/amplitude projection; not label training",
+    "score": "(min(ramp,near_above_excursion,near_below_excursion,central_band) SSE - step SSE)/(centered_energy+4*(1/255)**2)",
+    "aggregation": "unchanged median of available scales then preferred-geometry points",
+    "common_support": "intersection of profile and original contrast/alignment/combined availability",
+    "profile_supported": "all valid four-band profiles; no C/A/L imputation",
+    "evaluation": "candidate identity only; no path judgment used or emitted",
+    "limitation": "a structural step with the same profile is indistinguishable; not physical identity certification",
+    "trained_on_labels": False, "threshold": None,
+}
+
+
+def profile_scale(scale):
+    """Compare shapes of a four-band profile, not edge strength or signed polarity."""
+    bands = o2.unique(scale.get("bands", []), "name", "profile bands")
+    observations, reasons = [], []
+    for name in PROFILE_BANDS:
+        band = bands.get(name, {})
+        gray, status = value(band, "gray_mean", bounded=True)
+        available = band.get("available")
+        o2.require(available is None or type(available) is bool, "invalid profile availability")
+        extent = band.get("clipped_local_y_range")
+        range_status = "missing" if "clipped_local_y_range" not in band else "null" if extent is None else "present"
+        if extent is not None:
+            o2.require(isinstance(extent, (list, tuple)) and len(extent) == 2
+                       and all(type(v) is int and v >= 0 for v in extent) and extent[0] <= extent[1],
+                       "invalid profile band range")
+        midpoint = (extent[0] + extent[1] - 1) / 2 if extent is not None and extent[0] < extent[1] else None
+        observations.append({"name": name, "gray_mean": gray, "gray_mean_status": status,
+                             "available": available, "available_status": "missing" if "available" not in band else "null" if available is None else "present",
+                             "clipped_local_y_range": extent, "range_status": range_status,
+                             "reason": band.get("reason"), "valid_fraction": band.get("valid_fraction"),
+                             "midpoint": midpoint})
+        if available is not True or gray is None or midpoint is None:
+            reasons.append(name + ":unavailable_profile_input")
+    result = {"band_width_px": scale["band_width_px"], "observations": observations,
+              "unavailable_reasons": reasons, "residuals": None, "centered_energy": None,
+              "best_competing_models": [], "score": None}
+    if reasons:
+        return result
+    y = [b["gray_mean"] for b in observations]
+    x = [b["midpoint"] for b in observations]
+    o2.require(all(a < b for a, b in zip(x, x[1:])), "profile band order must increase")
+    centered = [v - sum(y)/4 for v in y]
+    energy = sum(v*v for v in centered)
+    def residual(template):
+        h = [v - sum(template)/4 for v in template]
+        amplitude = sum(a*b for a,b in zip(h,centered)) / sum(v*v for v in h)
+        return sum((v-amplitude*t)**2 for v,t in zip(centered,h))
+    residuals = {name: residual(template) for name, template in PROFILE_SPEC["templates"].items()}
+    residuals["ramp"] = residual(x)
+    rivals = {k:v for k,v in residuals.items() if k != "step"}
+    best = min(rivals.values())
+    result.update(residuals={"constant": energy, **residuals}, centered_energy=energy,
+                  best_competing_models=[k for k,v in rivals.items() if math.isclose(v,best,rel_tol=0,abs_tol=1e-12)],
+                  score=(best-residuals["step"])/(energy+4*(1/255)**2))
+    return result
+
+
+def identity_profile_views(raw_candidates, scored):
+    """Use existing geometry joins and v1 scores; never feed labels to projection."""
+    raw = {c["candidate_input_index"]: c for c in raw_candidates}
+    derived = ablation_scores(scored, common_support=True)
+    for source, target in zip(scored, derived):
+        sectors = {tuple(s["source_x_range"]): s for s in raw[source["candidate_input_index"]]["sectors"]}
+        for old_point, point in zip(source["points"], target["points"]):
+            sector = sectors[tuple(point["source_x_range"])]
+            centers = {c["role"]: c for c in sector.get("centers", [])}
+            center = centers.get(old_point["measurement_role"])
+            raw_scales = {s["band_width_px"]: s for s in center["scales"]} if center else {}
+            for scale in point["scales"]:
+                detail = profile_scale(raw_scales[scale["band_width_px"]])
+                scale["profile"] = detail
+                scale["scores"][PROFILE_METHOD] = detail["score"]
+    views = {}
+    for name, methods in (("common_support", PROFILE_METHODS), ("profile_supported", (PROFILE_METHOD,))):
+        candidates = copy.deepcopy(derived)
+        for candidate in candidates:
+            for point in candidate["points"]:
+                usable = [s for s in point["scales"] if all(s["scores"][m] is not None for m in methods)]
+                point["matched_scores"] = {m: median([s["scores"][m] for s in usable]) for m in methods}
+                point["common_scale_count"] = len(usable)
+                point["usable_band_widths"] = [s["band_width_px"] for s in usable]
+            preferred = [p for p in candidate["points"] if p["geometry_basis"] == candidate["identity_geometry_basis"]]
+            candidate["matched_scores"] = {m: median([p["matched_scores"][m] for p in preferred]) for m in methods}
+            candidate["common_point_count"] = sum(p["common_scale_count"] > 0 for p in preferred)
+        views[name] = candidates
+    return views
+
+
+def evaluate_identity_profile(case, raw_candidates, scored):
+    scores = identity_profile_views(raw_candidates, scored)
+    views = {name: {"scores": scores[name], "evaluation": evaluate_case(
+        case, scores[name], methods=methods, target=PROFILE_METHOD, include_path=False)}
+        for name,methods in (("common_support", PROFILE_METHODS), ("profile_supported", (PROFILE_METHOD,)))}
+    return {"case_id": case["case_id"], **views,
+            "support_transition": support_transition(views["common_support"]["evaluation"],
+                views["profile_supported"]["evaluation"], method=PROFILE_METHOD)}
+
+
+def render_profile_summary(report):
+    lines = ["# S11 O2 candidate identity profile experiment", "",
+             "A two-region shape is a hypothesis, not physical identity. A structural step may be indistinguishable.",
+             "Equal-weight four-band profiles compare persistent steps with ramps and local excursions; no label training or threshold.",
+             "Negative scores favor a competing shape; zero is not a certified negative or abstention decision.",
+             "Candidate identity only. No near/off truth or numeric localization is evaluated in this mode.",
+             f"Reference v1 inputs/scores/evaluation reproduced. Reference SHA256: {report['reference']['file_sha256']}", ""]
+    for name, methods in (("common_support", PROFILE_METHODS), ("profile_supported", (PROFILE_METHOD,))):
+        lines.extend([f"## View: {name}", "", render_summary(
+            {"artifact": report["artifact"], "evaluation": [c[name]["evaluation"] for c in report["identity_profile"]]},
+            methods=methods,target=PROFILE_METHOD)])
+    lines.extend(["## Availability changes and failure examples", ""])
+    for case in report["identity_profile"]:
+        lines.extend([f"Case: {case['case_id']}", ""])
+        preferred_scales = [s for c in case["profile_supported"]["scores"] for p in c["points"]
+                            if p["geometry_basis"] == c["identity_geometry_basis"] for s in p["scales"]]
+        reasons = Counter(reason for s in preferred_scales for reason in s["profile"]["unavailable_reasons"])
+        lines.append(f"- Preferred-geometry scales: total={len(preferred_scales)}, profile available={sum(s['profile']['score'] is not None for s in preferred_scales)}; missing-input reasons (may overlap): {dict(reasons)}")
+        transition = case["support_transition"]["identity"]
+        lines.append(f"- Support changes: {transition['counts']}; newly scorable outcomes: {transition['newly_scorable_outcomes']}")
+        for name in ("common_support", "profile_supported"):
+            candidate_scores = {c["candidate_input_index"]: c["matched_scores"] for c in case[name]["scores"]}
+            rows = case[name]["evaluation"]["identity_ordering"]["pairs"]
+            for outcome in ("reversed", "tie", "unscorable"):
+                examples = [r for r in rows if r["outcomes"][PROFILE_METHOD] == outcome]
+                for row in examples[:3]:
+                    lines.append(f"- {name}/{outcome} (up to 3 of {len(examples)}): positive={row['positive']}, negative={row['negative']}; {row['outcomes']}")
+                    lines.append(f"  Scores: positive={candidate_scores[row['positive']]}; negative={candidate_scores[row['negative']]}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def artifact(*, locality_ablation=False, identity_profile=False):
     files = [Path(__file__), Path(o2.__file__), Path(inspect.getfile(o2.fingerprint_json)), Path(inspect.getfile(o2.sha256_file))]
     payload = {"spec": SPEC, "code": {p.name: o2.sha256_file(p) for p in files}}
     if locality_ablation:
         payload["ablation_spec"] = ABLATION_SPEC
+    if identity_profile:
+        payload["profile_spec"] = PROFILE_SPEC
     return {**payload, "sha256": o2.fingerprint_json(payload)}
 
 
-def run(label_paths, output, *, locality_ablation=False, reference=None):
+def run(label_paths, output, *, locality_ablation=False, identity_profile=False, reference=None):
     output = Path(output).resolve()
     o2.require(not output.exists(), "output directory already exists; choose a new name")
-    o2.require(locality_ablation == (reference is not None),
-               "--locality-ablation and --reference must be supplied together")
+    o2.require(not (locality_ablation and identity_profile), "experiment modes are mutually exclusive")
+    o2.require((locality_ablation or identity_profile) == (reference is not None),
+               "an experiment mode (--locality-ablation or --identity-profile) and --reference must be supplied together")
     paths = [Path(p).resolve() for p in label_paths]
     o2.require(paths and len(set(paths)) == len(paths), "labels paths must be nonempty and unique")
     snapshots, documents, all_packets, inputs = {}, [], {}, []
@@ -380,7 +526,7 @@ def run(label_paths, output, *, locality_ablation=False, reference=None):
     merged["cases"] = [c for d in documents for c in d["cases"]]
     merged["packets"] = [{"sha256": h} for h in all_packets]
     o2.validate_labels(merged, all_packets)
-    cases, evaluation, ablations = [], [], []
+    cases, evaluation, ablations, profiles = [], [], [], []
     o2.require(len(merged["cases"]) <= 64, "experiment supports at most 64 cases")
     for case in merged["cases"]:
         frame = all_packets[case["packet_sha256"]][case["case_id"]]
@@ -391,6 +537,8 @@ def run(label_paths, output, *, locality_ablation=False, reference=None):
         evaluation.append(evaluate_case(case, scored))
         if locality_ablation:
             ablations.append(evaluate_locality_ablation(case, scored))
+        if identity_profile:
+            profiles.append(evaluate_identity_profile(case, frame["witness"]["candidates"], scored))
     if prior is not None:
         for key, actual in (("inputs", inputs), ("scores", cases), ("evaluation", evaluation)):
             o2.require(prior.get(key) == actual, f"reference {key} differs; preserve inputs and investigate drift")
@@ -398,19 +546,24 @@ def run(label_paths, output, *, locality_ablation=False, reference=None):
         o2.require(o2.sha256_file(path) == digest, "input changed during experiment; discard run")
     report = {"schema_version": SCHEMA, "status": "EXPLORATORY_UNCALIBRATED", "auto_acceptance": False,
               "production_decisions_emitted": False, "field_disposition": "FIELD FAIL", "numeric_localization": "NOT_MEASURED",
-              "artifact": artifact(locality_ablation=locality_ablation), "runtime": {"python": platform.python_version(), "platform": platform.platform()},
+              "artifact": artifact(locality_ablation=locality_ablation, identity_profile=identity_profile), "runtime": {"python": platform.python_version(), "platform": platform.platform()},
               "inputs": inputs, "input_preservation": [{"file_index": i, "before_sha256": h, "after_sha256": o2.sha256_file(p)} for i, (p, h) in enumerate(snapshots.items())],
               "scores": cases, "evaluation": evaluation}
     if locality_ablation:
         report["schema_version"] = ABLATION_SCHEMA
         report["locality_ablation"] = ablations
+    if identity_profile:
+        report["schema_version"] = PROFILE_SCHEMA
+        report["identity_profile"] = profiles
+    if prior is not None:
         report["reference"] = {"file_sha256": snapshots[reference],
                                "artifact_sha256": prior["artifact"]["sha256"],
                                "inputs_scores_evaluation_equal": True}
     output.mkdir(parents=True, exist_ok=False)
     o2.write_new(output / "experiment.json", report)
     with (output / "summary.md").open("x", encoding="utf-8") as handle:
-        handle.write(render_ablation_summary(report) if locality_ablation else render_summary(report))
+        handle.write(render_profile_summary(report) if identity_profile else
+                     render_ablation_summary(report) if locality_ablation else render_summary(report))
     # Failure after publication leaves artifacts without the success receipt.
     for path, digest in snapshots.items():
         o2.require(o2.sha256_file(path) == digest, "input changed during publication; discard run")
@@ -458,12 +611,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--labels", type=Path, nargs="+", required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--locality-ablation", action="store_true",
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--locality-ablation", action="store_true",
                         help="Compare removing locality on v1 common support; separately report C/A-supported coverage.")
-    parser.add_argument("--reference", type=Path, help="Existing v1 experiment.json; required with --locality-ablation.")
+    modes.add_argument("--identity-profile", action="store_true", help="Compare two-region versus ramp/excursion profile shape for candidate identity only.")
+    parser.add_argument("--reference", type=Path, help="Existing original v1 experiment.json; required with either experiment mode.")
     args = parser.parse_args()
     try:
-        run(args.labels, args.output, locality_ablation=args.locality_ablation, reference=args.reference)
+        run(args.labels, args.output, locality_ablation=args.locality_ablation,
+            identity_profile=args.identity_profile, reference=args.reference)
     except (ValueError, KeyError, OSError, TypeError) as exc:
         parser.exit(2, f"Experiment failed: {exc}\n")
     print("Experiment complete. Read summary.md and complete.json in the output directory.")
