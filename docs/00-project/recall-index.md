@@ -25,6 +25,7 @@ Do not scan revision history or all S11 diagnostics by default.
 | Code topology / caller / blast radius | current logic map + source | optional local Graphify cache after `scripts/update_graphify_s11.sh` |
 | Known detector mechanism failures / no-repeat rules | `../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md` | one referenced diagnostic/evidence record |
 | Rejected R23 polarity-only association / latest BASE label correction | `../50-diagnostics/s11/s11-r23-native-polarity-rejection.md` | F04; physical-interface design and acceptance gates |
+| O2 partial-path pooling versus holistic identity; proposed W0–W7 follow-up | `../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md` §A01 / W1 | current work plan; witness review semantics; existing score/evaluation owners |
 | Canonical private-Windows truth | `../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md` | JSON companion + current field procedure |
 | Target-Windows qualification | `../../.agents/skills/windows-qualification/SKILL.md` | `../40-operations/s11-current-windows-field-qualification.md` |
 | Retained but non-current work | `retained-commitments.md` | linked design/validation owner |

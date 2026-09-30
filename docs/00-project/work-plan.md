@@ -331,6 +331,20 @@ records 164 focused passing tests, including 22 new controls. Native Windows
 execution is pending. No new labels, video exploration,
 partition change, weighting/threshold sweep or detector rerun is needed.
 
+The user-supplied [2026-10-01 audit and proposed work specification](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md)
+is retained unchanged against `85a01cd`. The user confirms that the Windows
+identity-profile request has not yet been sent; W0 remains the immediate action
+under the existing operations procedure. Complete that fixed experiment once,
+then interpret its result alongside W1's candidate identity / local support /
+scalar eligibility distinction. Review-002 candidate 10 is holistic interface
+with off/near/off path judgments; a median candidate score can therefore disagree
+with holistic identity even when local evidence is useful. This is an evaluation
+risk, not an established cause of private detector failures. Do not relabel truth,
+switch to max pooling, or add features solely to repair that ranking. W1–W7 are
+proposals requiring their owning contracts and evidence; filing this audit does
+not implement or accept them. Its reported test/oracle runs remain attributed to
+the supplied audit, not new verification performed during document integration.
+
 Prior ablation validation recorded 129 focused tests passed (14 ablation controls
 plus the prior 115), and comparison against actual 29ec2f9 scorer output on a
 synthetic packet. Native Windows ablation execution is user-reported complete; private outputs
