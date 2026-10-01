@@ -1036,3 +1036,65 @@ before attributing differences to full-height sampling; it is not detector failu
 or a reason to relabel. No automatic brightness threshold or physical conclusion
 is generated, even when the run is COMPLETE. No additional human image judgment
 is requested by this execution step.
+
+## Ordered spatial context — stored-output inspection
+
+The `spatial-context-001` run has reported COMPLETE/MATCH; receipt photograph,
+count correction and supplied summary reconcile intake. Do not rerun the command
+above. No new checkout/runtime is required for this inspection. Use only the
+existing output folder: `experiment.json`, receipt, SVGs and source/crop/gray/mask
+PNGs. Check consumed output hashes against the receipt locally; no repeated
+human transcription of hashes/UUIDs is requested. Detailed JSON/images stay local.
+
+Read profile arrays, points and `baseline_witness` directly from JSON. Figures
+show shape, but numeric X/Y/intensity/counts must come from JSON, never OCR or
+visual coordinate estimates. This is a qualitative correspondence inspection,
+not a peak-selection/threshold fitting experiment. Do not invent transitions
+when glare, crop clipping, sparse support or gradual appearance prevent a clear
+observation. Do not equate zero glare with absence of reflection.
+
+Bounded targets (confirm case/profile mappings from JSON before inspection):
+
+| Case | Profiles | Markers / purpose |
+|---|---|---|
+| BASE review-002 | 5,6,7 | Native idx8/idx9 and structure-negative idx11 on three exact common X intervals |
+| Accum review-003 | 5,6,7,8,9 | Native idx10 and idx15 on five exact common X intervals |
+| BASE review-002 | 0,1,2,3,4 | Candidate-center idx0/idx20; unresolved human control, no required separation |
+
+Each profile is shared by all candidates with the same X. Inspect appearance
+around each candidate's distinct Y marker on that profile, not a comparison of
+identical full-height arrays pretending they are candidate-specific scores.
+Native-path and candidate-center remain separate. Positive identity does not
+certify every native sector; preserve existing near/off qualifiers if used.
+
+For each of the eight primary X strips, return a compact row containing:
+
+1. case/profile/exact X, candidate IDs and JSON Y markers;
+2. the original O1 band coverage for each examined marker, obtained from its exact
+   candidate/X/center role/source Y/scales in `baseline_witness`; convert local Y
+   ranges using crop origin; retain gaps rather than replacing a disjoint union
+   with its bounding interval. If the matching center/band is absent, say so;
+3. visible appearance beyond those sampled bands: sustained change, a further
+   transition/return, no clear additional change, or not assessable. These are
+   descriptive observations, not class labels. Link the source crop region and
+   profile region; if citing row values/positions, extract them programmatically;
+4. visible/effective/glare-excluded support at any cited rows and intervening null
+   gaps. Never interpolate a missing interval to assert persistence or a return;
+5. whether the added context appears different around the compared markers,
+   shared/ambiguous, or censored. A structure can make a sustained step and a real
+   interface can coexist with a return/reflection. No physical inference follows
+   from shape alone.
+
+Summarize the idx0/idx20 unresolved control separately across its five X strips;
+do not force a 24px difference or stronger reflection into a decision. The
+user's +/-5s observation already failed to establish physical identity confidently.
+No additional clip or human relabeling is requested.
+
+Return the bounded table and a short account of what extra appearance is actually
+visible versus absent/ambiguous/censored. If the agent cannot open the plots/raw
+images, report that limitation rather than claiming visual inspection. Optional
+analysis notes must go to a separate new folder, outside the immutable experiment
+output; preserve all original hashes. Do not add scores/descriptors, choose
+thresholds, register templates, regenerate profiles, or run the detector. Report
+FIELD FAIL/NOT_EVALUATED unchanged. This is the already-defined image/profile
+correspondence step, not a new filming or qualification phase.

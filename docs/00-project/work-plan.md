@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit reported complete; W4 paired-scale Windows comparison verified by transferred report: primary +1/0, no negative-control regression; retained without promotion; remaining-pair inspection complete; local-position experiment concluded without promotion; candidate-identity source/context review and local raster controls complete; existing two-frame context inspection and source/coordinate reconciliation received; human reports idx0/idx20 ambiguity despite approximately +/-5 s of context; reference-uncertainty/evaluation review verified locally without runtime changes; recorded structure-context Windows completion reported and code/artifact hashes matched locally; numeric context follow-up reviewed without a justified new discriminator; schema transcription resolved by reported True/111; structure-context investigation closed without promotion; ordered full-height spatial-context hypothesis defined and measurement prototype verified locally; source-frame adapter and Windows procedure verified locally; existing two-frame Windows spatial probe reported COMPLETE and baseline MATCH; schema/artifact transcription resolved by explicit user confirmation; output inventory and generated summary pending; candidate-identity challenger and calibrated O2 acceptance remain open
+**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit reported complete; W4 paired-scale Windows comparison verified by transferred report: primary +1/0, no negative-control regression; retained without promotion; remaining-pair inspection complete; local-position experiment concluded without promotion; candidate-identity source/context review and local raster controls complete; existing two-frame context inspection and source/coordinate reconciliation received; human reports idx0/idx20 ambiguity despite approximately +/-5 s of context; reference-uncertainty/evaluation review verified locally without runtime changes; recorded structure-context Windows completion reported and code/artifact hashes matched locally; numeric context follow-up reviewed without a justified new discriminator; schema transcription resolved by reported True/111; structure-context investigation closed without promotion; ordered full-height spatial-context hypothesis defined and measurement prototype verified locally; source-frame adapter and Windows procedure verified locally; existing two-frame Windows spatial probe reported COMPLETE and baseline MATCH; schema/artifact/output-count transcription resolved, generated summary received; stored profile/image correspondence inspection pending; candidate-identity challenger and calibrated O2 acceptance remain open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -34,7 +34,7 @@ These states do not change the execution policy's formal completion requirements
 | W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Handoff and phase observation are separate changes with separate positive/negative controls; do not relax gates based on elapsed time or polarity alone | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior), [parent validation](../30-validation/s11-physical-interface-evidence-repair-validation.md); no behavior acceptance |
 | W7 / O5 field qualification | PENDING integrated behavior candidate | Exact runtime, all canonical segments and required accuracy/coverage/resource evidence; no earlier local/shadow PASS substitutes | [Field acceptance](../30-validation/s11-interface-observability-witness-validation.md#field-qualification), [Windows procedure](../40-operations/s11-current-windows-field-qualification.md); FIELD FAIL retained |
 
-**Current handoff — spatial Windows completion reported; reconcile generated artifacts:**
+**Current handoff — spatial Windows intake reconciled; inspect stored profile/image correspondence:**
 The [structure-context investigation](../60-evidence/s11/s11-o2-structure-context-audit-windows-run-001.md)
 is closed without promotion; schema True/111 resolved transcription. Existing
 raw-context values do not justify another veto and the typed evidence already
@@ -57,12 +57,17 @@ read-only input receipts and failure guards. The [transferred Windows result](..
 reports COMPLETE, 12 inputs preserved and both baselines MATCH with zero mismatches.
 Runner code hash matches locally; the user explicitly corrected schema to `o2`
 and artifact to `4d08cb`, matching the locally reconstructed Windows artifact.
-Those issues are resolved. Output count, per-case band denominators and generated
-point/profile mappings still need original-file confirmation.
-Next action: obtain original generated `summary.md` and `complete.json`, without
-another manually copied table or rerun. Private profile content has not yet been
-assessed; no identity gain is claimed. Preserve human idx0/idx20 ambiguity and
-existing labels. W2 remains conditional; W5/O3 remains behind O2 acceptance.
+Receipt photograph, explicit count correction and generated summary now resolve
+intake: 31 hashed outputs/32 total files; BASE 124 points/9 profiles, 0/1416 bands;
+Accum 158 points/10 profiles, 0/1012 bands. Both decode indices/timestamps match.
+No receipt/schema/count rerun or further confirmation is requested.
+Next action: [inspect saved profiles/crops on Windows](../40-operations/s11-o2-local-shadow-evaluation.md#ordered-spatial-context--stored-output-inspection)
+to assess wider spatial appearance outside original bands. Summary min/max and
+coverage do not retain the needed shape; shared-X profiles are intentional and
+candidate Y markers remain distinct. Inspect BASE native profiles 5–7 and Accum
+native profiles 5–9, retaining BASE idx0/idx20 as an unresolved control. No private
+profile efficacy is yet established; labels, scores and production stay unchanged.
+W2 remains conditional; W5/O3 remains behind O2 acceptance.
 
 W4 paired-scale work remains concluded with a bounded +1/0 local gain and no
 promotion. Candidate-identity discrimination, scalar truth, calibration and O2
