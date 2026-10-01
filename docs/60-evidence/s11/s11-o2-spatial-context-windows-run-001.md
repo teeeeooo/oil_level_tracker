@@ -106,3 +106,56 @@ identity classifier is field qualified. Human idx0/idx20 ambiguity is retained.
 - First harmful stage: receipt transcription is resolved on supplied evidence; finite-band information loss is only established synthetically, and private wider-context physical efficacy remains unassessed.
 - Logic-map impact: NONE — evidence intake only, no implementation change.
 - Failure-registry impact: NONE — no new field cause or repair established.
+
+## Stored-output inspection report received — interpretation pending
+
+A subsequent Windows report describes native BASE idx8/9/11, Accum idx10/15,
+and the BASE idx0/idx20 ambiguous control. It reports local spikes, gradual
+changes and censored bands without changing original files or classifier outputs.
+The Windows agent reads files directly; text reaches this conversation through
+the user's OCR/transcription. Do not attribute a numeric discrepancy to the
+Windows reader without tracing the original values. Existing reported
+COMPLETE/baseline MATCH is not invalidated by prose discrepancies.
+
+The requested extent question is not yet answered by this report:
+
+1. Most appearance examples span only candidate Y +/-10 px. The report calls
+   these outside O1 bands but does not provide the original disjoint band ranges.
+   A local spike can lie inside already sampled bands; extra extent is unproven.
+   Row-level appearance differing from a band mean also does not prove that a
+   *remote* transition was newly observed. Keep resolution and extent distinct.
+2. Accum profile 5, X=[1218,1303], is reported to have global minimum 94.1017
+   (previous generated summary), yet idx15's Y=307–327 example says 89 to 83.5.
+   Those cannot both be values of the same non-null raw `gray_mean` array. The
+   cause (transfer typo, wrong profile, indexing/channel or other error) is unknown.
+3. The report says all unavailable reasons are None and therefore geometric.
+   Source inspection shows `baseline_check.rows[].original` contains only
+   available/count/gray_mean/gray_std/glare_fraction, **not reason**. The full
+   `baseline_witness.candidates[].sectors[].centers[].scales[].bands[].reason`
+   retains the string emitted by `_band`: available, outside_crop, or
+   insufficient_visible_pixels. Reading a missing projection key cannot establish
+   which path the Windows agent used or the original unavailability cause.
+4. Band unavailable is not equivalent to all its profile rows being null. The
+   original band also requires complete crop bounds, at least eight visible pixels
+   and visible fraction >=0.5. Non-null rows with insufficient band coverage can
+   remain inspectable, with uncertainty. Global glare totals likewise do not locate
+   glare at a particular candidate without row-specific support.
+5. Shape/polarity differences across X do not establish different physical objects;
+   neighboring spikes do not establish the same object. BASE idx9 S1 is itself
+   described as decreasing, so a blanket Oil-increases/structure-decreases account
+   is not supported even by the report. Rejected flags are production history,
+   not independent physical identity truth. Candidate/source-Y separation is not
+   a classifier. Human idx0/idx20 uncertainty remains unchanged.
+6. The report does not give a specific remote source-crop feature/region matched
+   to a profile outside the original bands. Image-to-profile correspondence is
+   therefore still unverified here, not replaced by the local numeric descriptions.
+
+Next: use the same immutable JSON and images, with no rerun. First return the
+exact Accum P5 gray_mean min/max and source Y=307..327 rows (`index=Y-56`), with
+counts and nulls, to settle the contradiction. Read unavailable reasons from the
+full baseline witness rather than the comparison projection. Then complete the
+original eight-strip table with exact disjoint source band ranges, genuinely
+outside-band observations, intervening missing support and crop correspondence;
+absence/ambiguity/censoring is an acceptable result. Do not force a return or add
+an identity threshold. No new scene or expanded experiment is authorized by this
+incomplete descriptive inspection.
