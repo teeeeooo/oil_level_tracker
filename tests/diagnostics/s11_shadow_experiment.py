@@ -471,13 +471,119 @@ def render_profile_summary(report):
     return "\n".join(lines)
 
 
-def artifact(*, locality_ablation=False, identity_profile=False, target_audit=False):
+PAIRED_SCHEMA = "s11-o2-paired-scale-v1"
+PAIRED_SPEC = {
+    "id": "same-x-paired-scale-difference-v1",
+    "hypothesis": "pair equal-width local measurements before median reduction",
+    "primary_endpoint": "native_path/interface_location_same_x",
+    "negative_control": "native_path/identity_negative_control_same_x",
+    "score": "unchanged combined=(contrast*alignment*locality)**(1/3)",
+    "support": "intersection of band widths where both points have all v1 methods available",
+    "baseline": "median(left combined)-median(right combined) on that same intersection",
+    "challenger": "median(left combined-right combined) on that same intersection",
+    "tie_tolerance": 1e-12,
+    "fixed": "original geometry, measurements, locality, candidate scores and identity/scalar outputs",
+    "expanded_support": "none; lost legacy support reported separately",
+    "limitation": "pairwise local order can cycle; not a candidate rank or physical identity decision",
+    "rejection": "no primary net improvement or any native negative-control regression rejects replacement; no pooled task totals",
+    "fit_partitions": [], "fitted": False, "threshold": None,
+}
+
+
+def paired_scale_order(left, right):
+    """Label-blind comparator; never infer near/off or identity from its sign."""
+    o2.require(left['geometry_basis'] == right['geometry_basis'] and
+               left['source_x_range'] == right['source_x_range'], 'paired scales require same basis and exact X')
+    inventories = [o2.unique(p['scales'], 'band_width_px', 'paired scales') for p in (left, right)]
+    rows, excluded = [], []
+    for width in sorted(set(inventories[0]) | set(inventories[1])):
+        a, b = [inv.get(width) for inv in inventories]
+        if a is None or b is None:
+            excluded.append({'band_width_px': width, 'reason': 'width_absent', 'side': 'left' if a is None else 'right'})
+            continue
+        missing = [f'{side}.{m}' for side, s in (('left', a), ('right', b))
+                   for m in METHODS if s['scores'][m] is None]
+        if missing:
+            excluded.append({'band_width_px': width, 'reason': 'v1_method_unavailable', 'fields': missing})
+            continue
+        av, bv = a['scores']['combined'], b['scores']['combined']
+        rows.append({'band_width_px': width, 'left': av, 'right': bv, 'difference': av-bv})
+    a, b = median([r['left'] for r in rows]), median([r['right'] for r in rows])
+    delta = median([r['difference'] for r in rows])
+    return {'common_band_widths': [r['band_width_px'] for r in rows], 'common_scale_count': len(rows),
+            'left_scale_count': len(left['scales']), 'right_scale_count': len(right['scales']),
+            'scales': rows, 'excluded_scales': excluded,
+            'legacy_outcome': order(left['matched_scores']['combined'], right['matched_scores']['combined']),
+            'joint_baseline_difference': a-b if a is not None else None,
+            'paired_difference': delta,
+            'joint_baseline_outcome': order(a, b), 'paired_outcome': order(delta, 0)}
+
+
+def evaluate_paired_scales(evaluation, scored):
+    # Reuse the existing exact-geometry task inventories; labels only choose
+    # evaluation pairs, never scales, measurements or inference-time weights.
+    points = {(c['candidate_input_index'], o2.geometry_key(p)): p for c in scored for p in c['points']}
+    tasks = {}
+    for basis, path in evaluation['path_ordering'].items():
+        for task in ('interface_location_same_x', 'identity_negative_control_same_x'):
+            rows = []
+            for pair in path[task]['pairs']:
+                a, b = [points[(pair[k]['candidate_input_index'], o2.geometry_key(pair[k]))] for k in ('positive','negative')]
+                rows.append({'positive': pair['positive'], 'negative': pair['negative'], **paired_scale_order(a,b)})
+            comparable = [r for r in rows if r['common_scale_count']]
+            tasks[f'{basis}/{task}'] = {
+                'pair_count': len(rows), 'common_scorable_pair_count': len(comparable),
+                'common_scale_count_histogram': dict(Counter(r['common_scale_count'] for r in rows)),
+                'counts': {k: dict(Counter(r[k] for r in rows)) for k in
+                           ('legacy_outcome', 'joint_baseline_outcome', 'paired_outcome')},
+                'improved': sum(r['joint_baseline_outcome'] != 'correct' and r['paired_outcome'] == 'correct' for r in comparable),
+                'regressed': sum(r['joint_baseline_outcome'] == 'correct' and r['paired_outcome'] != 'correct' for r in comparable),
+                'legacy_to_joint_support_changes': sum(r['legacy_outcome'] != r['joint_baseline_outcome'] for r in rows),
+                'lost_legacy_scorable': sum(r['legacy_outcome'] != 'unscorable' and not r['common_scale_count'] for r in rows),
+                'pairs': rows}
+    return {'case_id': evaluation['case_id'], 'tasks': tasks,
+            'candidate_identity_and_scalar': 'UNCHANGED; no new predictions',
+            'point_inventory': {b: p['identity_judgment_counts'] for b,p in evaluation['path_ordering'].items()}}
+
+
+def render_paired_summary(report):
+    lines = ['# S11 W4 paired-scale local comparison', '',
+             'EXPLORATORY_UNCALIBRATED; no classifier decisions or field qualification.',
+             'Primary: native_path/interface_location_same_x. Negative-control task is separate.',
+             'Only aggregation changes on joint widths. Legacy-to-joint support changes are not method gains.',
+             'No expanded support, candidate identity repair, scalar truth, or total ranking is claimed.',
+             'Reject replacement if primary has no net improvement or native negative controls regress; no task pooling.',
+             f"Artifact: `{report['artifact']['sha256']}`", '']
+    for case in report['paired_scale']:
+        case_id = str(case['case_id']).replace('|', '\\|').replace('\n',' ')
+        lines += [f'## Case {case_id}', f"Point inventory: {case['point_inventory']}", '']
+        for task, result in case['tasks'].items():
+            lines += [f'### {task}', '', '| Task | View | Correct | Reversed | Tie | Unscorable |',
+                      '|---|---|---|---|---|---|']
+            for view, counts in result['counts'].items():
+                lines.append(f"| {task} | {view} | {counts.get('correct',0)} | {counts.get('reversed',0)} | {counts.get('tie',0)} | {counts.get('unscorable',0)} |")
+            lines += [f"\n{task}: common={result['common_scorable_pair_count']}/{result['pair_count']}; improved={result['improved']}; regressed={result['regressed']}; support_changed_orders={result['legacy_to_joint_support_changes']}; lost_legacy_scorable={result['lost_legacy_scorable']}"]
+            lines.append(f"Shared scale counts (including zero): {result['common_scale_count_histogram']}")
+            lines.append('')
+            # Small supplied reviews: return every change, not hand-picked wins.
+            for row in result['pairs']:
+                if row['paired_outcome'] != row['joint_baseline_outcome'] or row['legacy_outcome'] != row['joint_baseline_outcome']:
+                    lines.append(f"- {row['positive']} vs {row['negative']}: legacy={row['legacy_outcome']}; joint={row['joint_baseline_outcome']}; paired={row['paired_outcome']}; widths={row['common_band_widths']}; scales={row['scales']}")
+        lines.append('')
+    lines += ['Reference inputs/scores/evaluation reproduced exactly; verify COMPLETE and output/input hashes.',
+              'Zero pairs is not success. Correlated pairs/scales are not independent samples.', '']
+    return '\n'.join(lines)
+
+
+def artifact(*, locality_ablation=False, identity_profile=False, target_audit=False, paired_scale=False):
     files = [Path(__file__), Path(o2.__file__), Path(inspect.getfile(o2.fingerprint_json)), Path(inspect.getfile(o2.sha256_file))]
     payload = {"spec": SPEC, "code": {p.name: o2.sha256_file(p) for p in files}}
     if locality_ablation:
         payload["ablation_spec"] = ABLATION_SPEC
     if identity_profile:
         payload["profile_spec"] = PROFILE_SPEC
+    if paired_scale:
+        payload["paired_scale_spec"] = PAIRED_SPEC
     if target_audit:
         from tests.diagnostics import s11_shadow_target_audit as targets
         payload["target_spec"] = targets.SPEC
@@ -487,11 +593,11 @@ def artifact(*, locality_ablation=False, identity_profile=False, target_audit=Fa
     return {**payload, "sha256": o2.fingerprint_json(payload)}
 
 
-def run(label_paths, output, *, locality_ablation=False, identity_profile=False, target_audit=False, reference=None, bundle=None):
+def run(label_paths, output, *, locality_ablation=False, identity_profile=False, target_audit=False, paired_scale=False, reference=None, bundle=None):
     output = Path(output).resolve()
     o2.require(not output.exists(), "output directory already exists; choose a new name")
-    o2.require(sum((locality_ablation, identity_profile, target_audit)) <= 1, "experiment modes are mutually exclusive")
-    o2.require((locality_ablation or identity_profile or target_audit) == (reference is not None),
+    o2.require(sum((locality_ablation, identity_profile, target_audit, paired_scale)) <= 1, "experiment modes are mutually exclusive")
+    o2.require((locality_ablation or identity_profile or target_audit or paired_scale) == (reference is not None),
                "an experiment mode and --reference must be supplied together")
     o2.require(bundle is None or target_audit, "--bundle requires --target-audit")
     paths = [Path(p).resolve() for p in label_paths]
@@ -539,7 +645,7 @@ def run(label_paths, output, *, locality_ablation=False, identity_profile=False,
         if bundle is not None:
             funnels = targets.load_recorded_sequences(bundle, paths, snapshots)
     cases, evaluation, ablations, profiles = [], [], [], []
-    target_reports = []
+    target_reports, paired_reports = [], []
     o2.require(len(merged["cases"]) <= 64, "experiment supports at most 64 cases")
     for case in merged["cases"]:
         frame = all_packets[case["packet_sha256"]][case["case_id"]]
@@ -548,6 +654,8 @@ def run(label_paths, output, *, locality_ablation=False, identity_profile=False,
         cases.append({"case_id": case["case_id"], "packet_sha256": case["packet_sha256"],
                       "frame_index": frame["frame_index"], "glass_id": frame["glass_id"], "candidates": scored})
         evaluation.append(evaluate_case(case, scored))
+        if paired_scale:
+            paired_reports.append(evaluate_paired_scales(evaluation[-1], scored))
         if locality_ablation:
             ablations.append(evaluate_locality_ablation(case, scored))
         if identity_profile:
@@ -561,7 +669,7 @@ def run(label_paths, output, *, locality_ablation=False, identity_profile=False,
         o2.require(o2.sha256_file(path) == digest, "input changed during experiment; discard run")
     report = {"schema_version": SCHEMA, "status": "EXPLORATORY_UNCALIBRATED", "auto_acceptance": False,
               "production_decisions_emitted": False, "field_disposition": "FIELD FAIL", "numeric_localization": "NOT_MEASURED",
-              "artifact": artifact(locality_ablation=locality_ablation, identity_profile=identity_profile, target_audit=target_audit), "runtime": {"python": platform.python_version(), "platform": platform.platform()},
+              "artifact": artifact(locality_ablation=locality_ablation, identity_profile=identity_profile, target_audit=target_audit, paired_scale=paired_scale), "runtime": {"python": platform.python_version(), "platform": platform.platform()},
               "inputs": inputs, "input_preservation": [{"file_index": i, "before_sha256": h, "after_sha256": o2.sha256_file(p)} for i, (p, h) in enumerate(snapshots.items())],
               "scores": cases, "evaluation": evaluation}
     if locality_ablation:
@@ -573,6 +681,9 @@ def run(label_paths, output, *, locality_ablation=False, identity_profile=False,
     if target_audit:
         report["schema_version"] = targets.SCHEMA
         report["target_audit"] = target_reports
+    if paired_scale:
+        report["schema_version"] = PAIRED_SCHEMA
+        report["paired_scale"] = paired_reports
     if prior is not None:
         report["reference"] = {"file_sha256": snapshots[reference],
                                "artifact_sha256": prior["artifact"]["sha256"],
@@ -580,7 +691,7 @@ def run(label_paths, output, *, locality_ablation=False, identity_profile=False,
     output.mkdir(parents=True, exist_ok=False)
     o2.write_new(output / "experiment.json", report)
     with (output / "summary.md").open("x", encoding="utf-8") as handle:
-        handle.write(targets.render_summary(report) if target_audit else render_profile_summary(report) if identity_profile else
+        handle.write(render_paired_summary(report) if paired_scale else targets.render_summary(report) if target_audit else render_profile_summary(report) if identity_profile else
                      render_ablation_summary(report) if locality_ablation else render_summary(report))
     # Failure after publication leaves artifacts without the success receipt.
     for path, digest in snapshots.items():
@@ -634,12 +745,13 @@ def main():
                         help="Compare removing locality on v1 common support; separately report C/A-supported coverage.")
     modes.add_argument("--identity-profile", action="store_true", help="Compare two-region versus ramp/excursion profile shape for candidate identity only.")
     modes.add_argument("--target-audit", action="store_true", help="Audit separate targets, existing packet context and optional recorded decision funnel; no new predictions.")
+    modes.add_argument("--paired-scale", action="store_true", help="Compare median paired scale differences at exact same-X local points; no identity decisions.")
     parser.add_argument("--bundle", type=Path, help="Original indexed R22-3 bundle for exact recorded-funnel joins, with --target-audit only.")
     parser.add_argument("--reference", type=Path, help="Existing original v1 experiment.json; required with an experiment mode.")
     args = parser.parse_args()
     try:
         run(args.labels, args.output, locality_ablation=args.locality_ablation,
-            identity_profile=args.identity_profile, target_audit=args.target_audit, reference=args.reference, bundle=args.bundle)
+            identity_profile=args.identity_profile, target_audit=args.target_audit, paired_scale=args.paired_scale, reference=args.reference, bundle=args.bundle)
     except (ValueError, KeyError, OSError, TypeError) as exc:
         parser.exit(2, f"Experiment failed: {exc}\n")
     print("Experiment complete. Read summary.md and complete.json in the output directory.")

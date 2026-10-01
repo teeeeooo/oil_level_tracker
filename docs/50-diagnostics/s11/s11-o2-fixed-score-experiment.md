@@ -308,6 +308,67 @@ missing/invalid inputs, support differences, native preference, label blindness,
 reference drift and CLI execution outside the checkout using Korean paths.
 These controls validate implementation and known limitations, not field efficacy.
 
+## W4 paired-scale local comparison
+
+One bounded W4 sub-experiment uses the existing runner's `--paired-scale` mode,
+schema `s11-o2-paired-scale-v1`, spec `same-x-paired-scale-difference-v1`.
+This is a **local-position aggregation comparator**, not the W1 candidate-identity
+challenger. Identity pooling and calibrated O2 acceptance remain open.
+
+The [W3 audit](../../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md)
+did not establish a context feature that certifies identity. Static/glare absence
+is shared by true and false candidates; material direction changes across cases.
+Do not invent an identity pooling rule from those summaries. There is, however,
+an observed narrower loss: the fixed-score BASE comparison had two correctly
+ordered scales and one reversed scale, yet separate point medians selected the
+reversed scale. The experiment tests whether pairing measurements before reducing
+scales helps that local-order task. The known pair motivates the generic mechanism;
+its index, coordinates, truth and private values never enter the implementation.
+
+For two points at exactly the same X range and geometry basis, preserve their
+original Y and v1 per-scale C/A/L/combined scores. Let J be the intersection of
+band widths where **both** points have all three v1 methods available:
+
+```
+legacy: original v1 point matched_scores (each point's own usable widths)
+baseline on J: median(combined_left[J]) - median(combined_right[J])
+challenger on J: median(combined_left[J] - combined_right[J])
+```
+
+Only the last two views compare aggregation methods on identical support. Report
+legacy-to-J order changes and lost scorable pairs separately. No far-band
+imputation, C/A fallback, additional support, weight fit, bandwidth search or
+threshold search is allowed. Empty J stays null/unscorable. Zero and ties retain
+the existing 1e-12 arithmetic tolerance, which is not an acceptance operating point.
+Band width identity, not list position, defines joins. Labels select evaluation
+pairs using the existing exact-geometry inventory; they never select scales.
+
+Primary endpoint: per-review `native_path/interface_location_same_x` within
+identity=interface. Negative control: per-review
+`native_path/identity_negative_control_same_x`. Keep candidate-center comparisons
+separate and exploratory; unreviewed paths do not become reviewed through aliases.
+Report common-scale counts, all ties/unscorable pairs, improvements and regressions,
+all changed pair identities and per-scale deltas. Never sum overlapping task
+counts or treat correlated pairs as independent trials. Review-003 has no reviewed
+interface/off points, so its negative control cannot stand in for the primary task.
+
+Predeclared interpretation: no primary net improvement (improved <= regressed),
+or any new native negative-control regression, rejects replacement on these
+controls. Read the per-review tasks separately; one case cannot cancel another's
+regression. Zero pairs is not success. Even favorable results justify only further
+local-comparison investigation. Pairwise median differences may cycle, so they
+must not become a total candidate rank, identity certificate or scalar prediction.
+No new classifier output is emitted; W3 prediction v2 is for a future classifier,
+not fabricated from this diagnostic sign.
+
+Reference inputs/scores/evaluation must exactly reproduce the original fixed-score
+v1 experiment. Existing label revisions 3/14/4, packets, original audit documents
+and frozen files remain unchanged. The Windows run reads only those labels,
+packets and the reference; the W3 bundle audit and detector are not repeated.
+[Operations](../../40-operations/s11-o2-local-shadow-evaluation.md#w4-paired-scale--기존-라벨-실행)
+owns the executable handoff. Failed results close this mechanism without promotion;
+they do not automatically authorize another formula or new labeling.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.

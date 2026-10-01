@@ -13,6 +13,78 @@
 새 작업은 해당 W의 선행 조건과 입력 범위를 확인한다. 단계 완료 여부는 실행 성공
 코드만으로 판단하지 않고 검증 결과를 근거로 work-plan에 반영한다.
 
+## W4 paired-scale — 기존 라벨 실행
+
+**이번 요청은 이 절차 한 번이다.** W3 audit은 완료되었으며 다시 실행하지 않는다.
+같은 X의 두 경로점에서 동일 band width의 점수 차이를 먼저 구한 뒤 중앙값을
+계산하는 방법을 시험한다. 기존 C/A/L 점수식과 locality는 유지한다.
+후보 identity 분류기 구현이나 detector 개선 완료를 뜻하지 않는다.
+[고정 가설·기각 기준](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md#w4-paired-scale-local-comparison)을
+따르며, 효과가 없으면 이 결과도 보존한다.
+
+1. 새 코드 ZIP을 코드 폴더에 적용하고 기존 영구 데이터 폴더를 유지한다.
+   실행 소스 commit/ZIP 식별값과 `s11_shadow_experiment.py` SHA-256을 기록한다.
+2. 기존 status 도구로 review-001 `labels-v2.json` rev3, review-002
+   `labels-v2.json` rev14, review-003 `labels.json` rev4를 확인한다.
+   모두 schema `s11-o2-labels-v2`여야 한다. 파일명이나 revision을 맞추려고
+   라벨을 변경하지 않는다. 차이가 있으면 실행 대신 보고한다.
+3. 최초 `fixed-score-current-labels-001/experiment.json`을 사용한다.
+   reference artifact SHA는
+   `655689e19d6fa3231bf4667b3af38b4ffa285f94b27aa9df30684a02867f9cf9`다.
+   W3/profile/ablation 출력 또는 frozen 파일로 대체하지 않는다.
+4. 아래 `$dataRoot`, `$pythonExe`만 실제 환경에 맞춘다. 출력 폴더가 이미
+   존재하면 삭제·덮어쓰기 없이 `paired-scale-002`처럼 새 이름을 사용한다.
+   원래 packet 상대 경로를 유지한다. 번들·원본 영상은 필요하지 않다.
+
+```powershell
+$dataRoot = "D:\OilTracker\data"
+$pythonExe = ".\.venv\Scripts\python.exe"
+$pairOutput = Join-Path $dataRoot "experiments\paired-scale-001"
+$labelsOne = Join-Path $dataRoot "reviews\review-001\labels-v2.json"
+$labelsTwo = Join-Path $dataRoot "reviews\review-002\labels-v2.json"
+$labelsThree = Join-Path $dataRoot "reviews\review-003\labels.json"
+$reference = Join-Path $dataRoot "experiments\fixed-score-current-labels-001\experiment.json"
+$expectedReference = "655689e19d6fa3231bf4667b3af38b4ffa285f94b27aa9df30684a02867f9cf9"
+$prior = Get-Content -LiteralPath $reference -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($prior.artifact.sha256 -ne $expectedReference) { throw "Unexpected reference artifact" }
+& $pythonExe tests/diagnostics/s11_shadow_experiment.py `
+  --labels $labelsOne $labelsTwo $labelsThree `
+  --paired-scale --reference $reference --output $pairOutput
+if ($LASTEXITCODE -ne 0) { throw "Paired-scale run failed; preserve inputs and report the error." }
+$receipt = Get-Content -LiteralPath (Join-Path $pairOutput "complete.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($receipt.status -ne "COMPLETE" -or $receipt.schema_version -ne "s11-o2-paired-scale-v1") {
+    throw "Invalid completion receipt"
+}
+foreach ($entry in $receipt.outputs.PSObject.Properties) {
+    $actualHash = (Get-FileHash -LiteralPath (Join-Path $pairOutput $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($actualHash -ne $entry.Value) { throw "Output hash mismatch: $($entry.Name)" }
+}
+$report = Get-Content -LiteralPath (Join-Path $pairOutput "experiment.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($receipt.artifact_sha256 -ne $report.artifact.sha256) { throw "Artifact mismatch" }
+if ($report.reference.inputs_scores_evaluation_equal -ne $true) { throw "Reference mismatch" }
+if ($report.reference.artifact_sha256 -ne $expectedReference) { throw "Unexpected reference" }
+foreach ($entry in $report.input_preservation) {
+    if ($entry.before_sha256 -ne $entry.after_sha256) { throw "Input changed during run" }
+}
+Get-Content -LiteralPath (Join-Path $pairOutput "summary.md") -Raw -Encoding UTF8
+```
+
+자동 생성 `summary.md` 전문과 다음 검증 결과를 반환한다.
+
+- 코드 식별값·artifact SHA, 라벨 revision/schema, reference 일치.
+- COMPLETE, 출력 해시 2개, 입력 해시 보존(통상 7개: 라벨3＋packet3＋reference1).
+- `EXPLORATORY_UNCALIBRATED` / `auto_acceptance=false` / `FIELD FAIL` /
+  `numeric_localization=NOT_MEASURED` 유지.
+
+summary의 `paired_scale` 결과가 이번 실험이다. 최상위 `scores`/`evaluation`은
+기존 v1 재현값이므로 새 방식의 결과로 혼동하지 않는다. native_path 위치 비교와
+non_interface 대조를 분리하고 candidate_center는 별도로 읽는다. 양쪽 공통
+scale 위에서의 개선·악화와 legacy→공통 support 변화도 구분한다. pair=0은
+성공이 아니며 모든 task 수를 합산하지 않는다. 상세 JSON은 Windows에 보존한다.
+
+새 라벨, contour, freeze, detector 실행, 점수·임계값 조정, partition 변경은
+수행하지 않는다. 수치를 수동 전사하거나 결과가 유리하도록 공식을 수정하지 않는다.
+
 ## W3 target/context audit — 기존 자료로 실행
 
 **첫 실행은 [Windows 보고](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md)로 완료되었다.**

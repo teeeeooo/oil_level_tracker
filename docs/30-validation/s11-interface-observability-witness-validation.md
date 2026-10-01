@@ -488,6 +488,30 @@ cause. Select W4 only after naming the distinguishing observable and counter-con
 scalar calibration and O2 acceptance remain separate. Production code is unchanged,
 so this offline extension does not require another detector replay or field run.
 
+## W4 paired-scale controls
+
+The [local comparator](../20-architecture/s11-interface-observability-witness-architecture.md#w4-paired-scale-comparator-boundary)
+must show both a synthetic repaired reversal and the inverse new regression;
+claiming that pairing always improves order is prohibited. Controls also cover
+one/two-scale equality, ties/zero, null support, disjoint widths, width permutations,
+wrong basis/X and duplicate-width rejection, antisymmetry, metadata blindness,
+and a three-point cycle demonstrating that no total ordering is justified.
+
+Existing task inventories retain interface/off separately from non-interface/off,
+and native paths separately from centers. Unknown paths remain in denominators.
+The reference CLI must preserve original inputs/scores/evaluation, verify receipt
+hashes, reject drift/overwrites/mode conflicts and work outside repo cwd with
+Korean/spaced paths. Production decisions and numeric localization remain absent.
+
+Windows must report primary `native_path/interface_location_same_x` and separate
+`native_path/identity_negative_control_same_x` on identical joint support for both
+reducers. Legacy-to-joint support changes are reported separately, including lost
+pairs and shared-scale count histograms. No primary net improvement or any native
+negative-control regression rejects replacement on the supplied controls. No task
+pooling, no success from zero pairs, no holdout or field claim follows from these
+correlated regression comparisons. W1 identity/scalar controls and O2 calibration
+requirements remain unsatisfied by a favorable local-position result.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
