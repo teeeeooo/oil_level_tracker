@@ -710,6 +710,74 @@ while leaving R22-2 decisions byte-equivalent. Promotion requires:
 Until all applicable gates pass, work-plan status remains `FIELD FAIL` and the
 new witness has no production authority.
 
+## W3 separated shadow targets
+
+The existing `s11_interface_shadow_evaluation.py` owns prediction validation and
+evaluation. Prediction v1 and no-prediction readiness retain report v2 semantics.
+`s11-o2-shadow-predictions-v2` adds `target_spec_id` =
+`identity-local-support-original-scalar-v1`, an `operating_point_id` and explicit
+`evaluation_regime`. Report v3 adds `targets` by partition while preserving the
+existing identity/contour metrics in `partitions`.
+
+Each prediction retains case/candidate/witness identity, `decision` and `reason`.
+Its required target fields are:
+
+- `local_support`: a possibly empty list keyed by exact `geometry_basis`,
+  `source_x_range`, `source_y` from `review_geometry`. Decisions are
+  `NEAR_INTERFACE`, `OFF_INTERFACE`, `UNRESOLVED`, `UNOBSERVABLE`, `NOT_EVALUATED`.
+  Each has `availability` and `reason`. An optional `source_y_interval` is
+  validated and retained in the prediction fingerprint; it is not scalar truth
+  or a new interval-calibration metric.
+- `scalar`: `decision` (`USABLE`, `UNUSABLE`, `UNRESOLVED`, `UNOBSERVABLE`,
+  `NOT_EVALUATED`), `availability`, `reason`, `policy_id=original_candidate_y_v1`
+  and the unchanged original candidate `source_y`. USABLE requires supported
+  candidate identity and finite original Y. No average/median of near points or
+  inferred contour is substituted for the generator's Y.
+
+Availability is `unavailable` for UNOBSERVABLE, `not_evaluated` for NOT_EVALUATED,
+and `available` for other explicit local/scalar decisions. Missing predictions
+are counted separately as `MISSING_PREDICTION`. Local counts preserve candidate
+identity, basis, qualitative truth, abstention and all available geometry points;
+unreviewed or uncertain truth cannot turn a decisive prediction into a verified
+success. Empty visible frames remain in frame coverage denominators. Supported
+identity need not imply a fully near path or a usable scalar. Scalar results are
+always `not_measured` under this contract: labels have no independent scalar
+truth or accepted contour-to-scalar policy. USABLE is a prediction, not proof.
+
+CALIBRATED imports retain the nonempty development/calibration fit declaration
+and existing frozen/partition checks. EXPLORATORY_UNCALIBRATED requires explicit
+`evaluate --exploratory`, empty fit partitions and regression-only cases.
+Neither regime grants auto acceptance or verifies training chronology. Existing
+rank-experiment output is not a prediction document and is never converted by
+thresholding or using labels as inference inputs.
+
+### Existing context and recorded funnel audit
+
+`s11_shadow_experiment.py --target-audit` reuses existing label/packet validators,
+original v1 reference equality and immutable-input receipts. A small
+`s11_shadow_target_audit.py` helper owns only context projection and joining
+recorded decision witnesses. It does not score, write trace, rerun authority or
+introduce a second label system. Context preserves all actual center/scale/band
+rows with missing/null/present, native/center basis and availability; aliases do
+not become independent measurements. Descriptive summaries are not a fit dataset
+or evidence of general discrimination.
+
+With `--bundle`, reuse `ResultBundleReader`, `DebugTraceRepository` and existing
+review-record packet verification. The public debug record model omits the raw
+top-level `sequence` snapshot, so the audit reads that one indexed record with a
+16 MiB bound and validates its identity. Join R21 decision-witness member
+`candidate_offset`, source and Y against the original O1 candidate inventory;
+never join score-sorted sequence candidate positions. Expose recorded tracklet,
+phase, publishable and selected facts. A missing retained ref cannot distinguish
+pre-retention authority rejection from top-k or another earlier loss. An absent
+witness stays UNAVAILABLE. Sequence facts do not certify final CSV publication.
+
+This audit supplies the private availability/recorded-loss evidence needed to
+select a W4 mechanism. It creates no predictions, human labels or production
+changes. [Operations](../40-operations/s11-o2-local-shadow-evaluation.md#w3-targetcontext-audit--기존-자료로-실행)
+own the executable handoff and [local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md)
+records the verified boundary.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.

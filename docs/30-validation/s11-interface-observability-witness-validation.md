@@ -249,8 +249,8 @@ separately; do not pool correlated pairs into an independent success rate. Human
 path labels evaluate predictions and must not select inference-time sectors.
 Without independent scalar truth or a predeclared contour-to-scalar target,
 scalar accuracy stays not_measured. No averaging of support points may silently
-replace production candidate Y. A future output schema for these targets belongs
-to W3 and must preserve compatibility; this contract adds no prediction enum.
+replace production candidate Y. The W3 output schema below implements these separate targets and preserves
+v1 compatibility; the W1 controls themselves add no prediction enum.
 
 W1 completion requires reproducible partial-positive and glare counter-controls,
 a stated aggregation/identity rationale, and explicit handling of indistinguishable
@@ -457,6 +457,36 @@ Each accepted stage must create a completed evidence document containing:
 - target-Windows report identity and reviewed conclusions;
 - known failures, exclusions and rollback route; and
 - explicit statement of what was **not** accepted.
+
+## W3 separated target and audit controls
+
+The [W3 contract](../20-architecture/s11-interface-observability-witness-architecture.md#w3-separated-shadow-targets)
+is exercised by `tests/unit/test_s11_shadow_targets.py` through the existing
+scorer/evaluator and real CLI paths. Required controls:
+
+- v1 report compatibility and original fixed-score inputs/scores/evaluation
+  equality; exploratory opt-in must not weaken calibrated or recording-group gates;
+- exact candidate/witness/geometry matching, no duplicate local points or implicit
+  native/center substitution, original scalar Y and explicit operating-point ID;
+- identity-positive/off-path coexistence, missing versus explicit abstention,
+  unverified predictions on unknown truth, empty visible frames and zero useful
+  coverage for all-abstain outputs;
+- no scalar accuracy/verified observation claim without independent truth, even
+  when scripted predictions declare USABLE;
+- context missing/null/zero and availability distinctions, including meaningful
+  glare/exclusion fractions on unavailable optical bands;
+- exact indexed bundle/packet/recorded sequence joins; rejection of wrong or
+  ambiguous member identity; unknown earlier losses remain unknown;
+- outside-repository cwd and Korean/spaced paths, no-overwrite outputs, immutable
+  inputs and COMPLETE receipts only after successful verification.
+
+These are contract and integration tests with scripted predictions, not classifier
+acceptance. The Windows existing-data audit must reproduce the original reference,
+preserve all input hashes and return recorded-context/funnel availability. An
+UNAVAILABLE funnel is a reported evidence gap, not permission to infer a rejection
+cause. Select W4 only after naming the distinguishing observable and counter-control;
+scalar calibration and O2 acceptance remain separate. Production code is unchanged,
+so this offline extension does not require another detector replay or field run.
 
 ## Detector Governance
 

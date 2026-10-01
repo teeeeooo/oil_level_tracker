@@ -13,6 +13,84 @@
 새 작업은 해당 W의 선행 조건과 입력 범위를 확인한다. 단계 완료 여부는 실행 성공
 코드만으로 판단하지 않고 검증 결과를 근거로 work-plan에 반영한다.
 
+## W3 target/context audit — 기존 자료로 실행
+
+**현재 Windows에서 실행할 작업은 이 절차 하나다.** 기존 라벨 후보에 어떤 문맥
+측정값과 결정 과정이 기록되어 있는지 확인한다. 다음 W4 개선안을 선택하기 위한
+점검이며, 새 점수식·분류기·라벨을 만들거나 detector를 다시 실행하지 않는다.
+
+1. 최신 소스 ZIP을 코드 폴더에 풀고 영구 데이터 폴더는 그대로 둔다.
+2. 기존 `status`로 활성 라벨을 확인한다: review-001 `labels-v2.json` revision 3,
+   review-002 `labels-v2.json` revision 14, review-003 `labels.json` revision 4.
+   세 파일 모두 schema `s11-o2-labels-v2`여야 한다. 각 packet 연결을 유지한다.
+   다르면 맞추려고 수정하지 말고 차이를 보고한다.
+3. **최초 fixed-score v1**의 `experiment.json`을 reference로 지정한다.
+   알려진 폴더명은 `fixed-score-current-labels-001`, artifact SHA는
+   `655689e19d6fa3231bf4667b3af38b4ffa285f94b27aa9df30684a02867f9cf9`다.
+   locality/profile 결과나 예전 frozen r10/r3로 대체하지 않는다.
+4. 해당 packet을 추출했던 **원래 R22-3 번들 폴더**를 `--bundle`로 지정한다.
+   manifest, recipe_snapshot, session 및 indexed debug trace가 있어야 한다.
+   이번 절차에서는 bundle을 생략하지 않는다. 원본 영상은 읽지 않는다.
+5. 아래 세 경로만 실제 경로로 바꿔 저장소 루트에서 실행한다. 출력 폴더가 이미
+   있으면 삭제하지 말고 `target-context-audit-002`처럼 새 이름을 쓴다.
+
+```powershell
+$dataRoot = "D:\OilTracker\data"                 # 기존 영구 데이터 폴더
+$bundleRoot = "D:\OilTracker\bundles\R22-3"      # 원래 번들 폴더
+$auditOutput = Join-Path $dataRoot "experiments\target-context-audit-001"
+$pythonExe = ".\.venv\Scripts\python.exe"
+$labelsOne = Join-Path $dataRoot "reviews\review-001\labels-v2.json"
+$labelsTwo = Join-Path $dataRoot "reviews\review-002\labels-v2.json"
+$labelsThree = Join-Path $dataRoot "reviews\review-003\labels.json"
+$reference = Join-Path $dataRoot "experiments\fixed-score-current-labels-001\experiment.json"
+& $pythonExe tests/diagnostics/s11_shadow_experiment.py `
+  --labels $labelsOne $labelsTwo $labelsThree `
+  --target-audit --reference $reference --bundle $bundleRoot --output $auditOutput
+if ($LASTEXITCODE -ne 0) { throw "Target audit failed; preserve inputs and report the error." }
+$receipt = Get-Content -LiteralPath (Join-Path $auditOutput "complete.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($receipt.status -ne "COMPLETE" -or $receipt.schema_version -ne "s11-o2-target-audit-v1") {
+    throw "Invalid completion receipt"
+}
+foreach ($entry in $receipt.outputs.PSObject.Properties) {
+    $actualHash = (Get-FileHash -LiteralPath (Join-Path $auditOutput $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($actualHash -ne $entry.Value) { throw "Output hash mismatch: $($entry.Name)" }
+}
+$report = Get-Content -LiteralPath (Join-Path $auditOutput "experiment.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($report.reference.inputs_scores_evaluation_equal -ne $true) { throw "Reference mismatch" }
+foreach ($entry in $report.input_preservation) {
+    if ($entry.before_sha256 -ne $entry.after_sha256) { throw "Input changed during run" }
+}
+Get-Content -LiteralPath (Join-Path $auditOutput "summary.md") -Raw -Encoding UTF8
+```
+
+검증 오류나 reference 차이가 있으면 자동으로 라벨/packet을 고치거나 후보를 빼지
+않는다. 부분 출력은 성공 결과로 취급하지 않는다. 오류 메시지와 어떤 입력이 다른지
+보고하고 멈춘다. 새 detector 실행으로 대체하지 않는다.
+
+출력은 `experiment.json`, 자동 생성 `summary.md`, `complete.json`이다.
+`EXPLORATORY_UNCALIBRATED`, `auto_acceptance=false`, `FIELD FAIL`이 유지된다.
+기존 점수는 재현 검사일 뿐 예측으로 변환하지 않는다. 따라서 target 집계의
+`MISSING_PREDICTION`과 scalar `not_measured`는 예상된 상태다.
+
+- 문맥 표: 후보/basis별 static overlap, material mean, glare의 가용 band 수와
+  median/min/max. 서로 상관된 scale/band의 기술 통계이며 임계값 근거가 아니다.
+  상세 JSON에는 전체 band의 missing/null/present와 나머지 문맥 필드가 남는다.
+- 결정 과정 표: 원래 candidate offset·source·Y가 일치하는 **기록된** tracklet,
+  phase, publishable, selected 상태. `UNKNOWN_BEFORE_RETAINED_REFS`는 더 앞의
+  authority/top-k 원인을 구분할 기록이 없다는 뜻이다. `UNAVAILABLE`도 그대로
+  보고한다. 기록된 sequence 선택이 최종 CSV 발행을 증명하는 것은 아니다.
+- 라벨, history, packet, bundle-link와 기존 frozen/실험 파일은 보존한다.
+  추가 질문, contour 생성, freeze/combine/evaluate, 영상 편집·재실행은 필요 없다.
+
+**전달할 결과**: 코드 commit/ZIP 식별값, 라벨 revision과 논리 해시, artifact SHA,
+COMPLETE·출력 해시·reference 재현·입력 전후 해시 검사 결과(검사 파일 수 포함),
+그리고 **생성된 summary.md 내용**. case ID가 업무 식별정보이면 익명화한다.
+수치를 직접 다시 작성하지 않는다. 전체 JSON·원본 영상·이미지·trace·실제 경로는
+Windows 로컬에 보존한다. 오류/연결 불가 항목도 함께 전달한다.
+
+이 결과를 받은 뒤 W4의 한 가지 가설과 필요한 대조를 결정한다. 기존 자료에 없는
+정보를 확인하기 위한 추가 실행은 그때 구체적인 공백을 근거로 요청한다.
+
 ## 준비물과 실행 위치
 
 - `interface-observability-witness-trace-v1`이 들어 있는 R22-3 결과 번들.
@@ -512,10 +590,18 @@ frozen.json은 그 시점의 판정 스냅샷이며 이후 record로 바꿔도 �
 출처 기록이므로 frozen과 함께 원래 검토 폴더를 보존한다.
 
 예측을 넣지 않은 결과는 **NOT_EVALUATED**이다. visible인데 후보가 없는 프레임도
-분모에 남는다. classifier 성능 PASS로 해석하지 않는다. 지금 단계에서 Windows가
-수행할 작업은 이 준비 상태와 라벨 누락을 확인하는 것까지다.
+분모에 남는다. classifier 성능 PASS로 해석하지 않는다. 이 준비 절차에서는 라벨 누락과 준비 상태만 확인한다. 현재 실행할 절차는
+문서 상단과 work-plan을 따른다.
 
 ## 5. 이후 shadow classifier가 준비되면
+
+새 W3 모델 연결은 [prediction v2 계약](../20-architecture/s11-interface-observability-witness-architecture.md#w3-separated-shadow-targets)을
+사용한다. 아래 v1 설명은 호환성용이다. v2에는 target/operating-point 식별값,
+명시적 evaluation_regime와 각 후보의 local_support/scalar가 필요하다.
+탐색용 v2 예측만 `evaluate --exploratory`로 평가한다(regression 전용, fit_partitions=[]).
+CALIBRATED의 기존 분할 검증은 유지한다. 현재 target/context audit에서는 예측을
+작성하거나 이 명령을 실행하지 않는다. 사람이 라벨을 복사하여 예측을 만들지 않는다.
+
 
 예측 파일은 `schema_version=s11-o2-shadow-predictions-v1`, `frozen_labels_sha256`,
 `classifier_id`, classifier 파일의 `artifact_sha256`, `operating_point_description`,
@@ -534,8 +620,9 @@ scripted predictions는 실제 알고리즘이 아니다. shadow 모델은 라�
 별도 구현한다. holdout/regression으로 operating point를 선택하는 선언은 거부된다.
 모델 내부 학습 이력이나 증거 중복 가중치를 이 JSON 계약만으로 검증할 수는 없다.
 
-출력은 `s11-o2-shadow-report-v2`이며 입력 라벨 버전도 명시한다. v1 frozen도 읽지만
-새 보고서는 v2로만 쓴다. 기존 v1 보고서는 수정하지 않는다.
+예측 v1 또는 예측 없는 실행은 `s11-o2-shadow-report-v2`로 출력한다.
+예측 v2는 `s11-o2-shadow-report-v3`로 분리된 target 집계를 추가한다.
+입력 라벨 버전도 명시하며 v1 frozen도 계속 읽는다. 기존 보고서는 수정하지 않는다.
 
 - 후보 정체 precision/recall, non_interface 오지지, uncertain/unreviewed 지지를 분리한다.
   태그별 집계는 겹칠 수 있지만 후보 정체는 후보당 한 번만 센다.

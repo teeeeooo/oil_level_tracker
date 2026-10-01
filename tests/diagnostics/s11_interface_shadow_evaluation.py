@@ -28,6 +28,10 @@ LABEL_SCHEMA = "s11-o2-labels-v2"
 LEGACY_FREEZE_SCHEMA = "s11-o2-frozen-labels-v1"
 FREEZE_SCHEMA = "s11-o2-frozen-labels-v2"
 PREDICTION_SCHEMA = "s11-o2-shadow-predictions-v1"
+TARGET_PREDICTION_SCHEMA = "s11-o2-shadow-predictions-v2"
+TARGET_SPEC = "identity-local-support-original-scalar-v1"
+LOCAL_DECISIONS = ("NEAR_INTERFACE", "OFF_INTERFACE", "UNRESOLVED", "UNOBSERVABLE", "NOT_EVALUATED")
+SCALAR_DECISIONS = ("USABLE", "UNUSABLE", "UNRESOLVED", "UNOBSERVABLE", "NOT_EVALUATED")
 WITNESS_SCHEMA = "interface-observability-witness-trace-v1"
 PARTITIONS = ("development", "calibration", "holdout", "regression")
 LABELS = ("interface", "localization_mismatch", "reflection", "residue", "structure", "unresolved", "unobservable", "unreviewed")
@@ -498,17 +502,133 @@ def summarize(cases, packets, predictions):
             "independent_evidence_vote_audit": "NOT_EVALUATED: prediction interface cannot certify internal classifier weighting"}
 
 
-def evaluate(frozen, packets, prediction_document=None):
+def validate_target_prediction(row, candidate):
+    """V2 adds distinct local/scalar targets without manufacturing scalar truth."""
+    def outcome(record, choices):
+        require(record["decision"] in choices, "invalid target decision")
+        require(record["availability"] in ("available", "unavailable", "not_evaluated"), "invalid target availability")
+        text(record["reason"], "target reason")
+        expected = ("unavailable" if record["decision"] == "UNOBSERVABLE" else
+                    "not_evaluated" if record["decision"] == "NOT_EVALUATED" else "available")
+        require(record["availability"] == expected, "target decision/availability mismatch")
+
+    geometries = {geometry_key(g) for g in review_geometry(candidate)}
+    seen = set()
+    require(isinstance(row["local_support"], list), "local_support must be a list")
+    for point in row["local_support"]:
+        interval(point["source_x_range"], "local prediction X", strict=True)
+        number(point["source_y"], "local prediction Y")
+        key = geometry_key(point)
+        require(key in geometries and key not in seen, "local prediction needs unique exact witness geometry")
+        seen.add(key)
+        outcome(point, LOCAL_DECISIONS)
+        if "source_y_interval" in point:
+            interval(point["source_y_interval"], "local prediction interval")
+    scalar = row["scalar"]
+    outcome(scalar, SCALAR_DECISIONS)
+    require(scalar["policy_id"] == "original_candidate_y_v1", "unsupported scalar policy; no contour-to-scalar inference")
+    require(scalar["source_y"] == candidate["canonical_y"], "scalar must preserve original candidate Y")
+    if scalar["source_y"] is not None:
+        number(scalar["source_y"], "scalar Y")
+    if scalar["decision"] == "USABLE":
+        require(row["decision"] == "INTERFACE_SUPPORTED" and scalar["source_y"] is not None,
+                "usable scalar requires supported identity and finite original Y")
+
+
+def summarize_targets(cases, packets, predictions):
+    """All points/candidates stay in denominators, including missing predictions.
+
+    Near/off evaluates only exact qualitative path truth. Human contour intervals
+    remain the existing local-geometry target, never scalar truth by implication.
+    """
+    point_rows, scalar_rows, frames = [], [], []
+    identity_confusion = {k: Counter() for k in IDENTITIES}
+    for case in cases:
+        raw = {c["candidate_input_index"]: c for c in packets[case["packet_sha256"]][case["case_id"]]["witness"]["candidates"]}
+        outcomes = Counter()
+        verified_support = False
+        usable = 0
+        for a in case["candidates"]:
+            idx = a["candidate_input_index"]
+            p = predictions.get((case["case_id"], idx))
+            decision = p["decision"] if p is not None else "MISSING_PREDICTION"
+            label = identity(a)
+            identity_confusion[label][decision] += 1
+            outcomes[decision] += 1
+            verified_support |= decision == "INTERFACE_SUPPORTED" and label == "interface"
+            predicted = {geometry_key(q): q for q in p.get("local_support", [])} if p else {}
+            reviewed = {geometry_key(q): q["judgment"] for q in a.get("path_reviews", [])}
+            for g in review_geometry(raw[idx]):
+                q = predicted.get(geometry_key(g))
+                point_rows.append({"case_id": case["case_id"], "candidate_input_index": idx,
+                    "identity": label, **g, "truth": reviewed.get(geometry_key(g), "unreviewed"),
+                    "decision": q["decision"] if q else "MISSING_PREDICTION",
+                    "prediction_availability": q["availability"] if q else None,
+                    "prediction_reason": q["reason"] if q else None,
+                    "predicted_source_y_interval": q.get("source_y_interval") if q else None})
+            scalar = p.get("scalar") if p else None
+            scalar_decision = scalar["decision"] if scalar else "MISSING_PREDICTION"
+            usable += scalar_decision == "USABLE"
+            scalar_rows.append({"case_id": case["case_id"], "candidate_input_index": idx,
+                "identity": label, "decision": scalar_decision, "truth_status": "not_measured",
+                "source_y": raw[idx]["canonical_y"], "truth_reason": "independent_scalar_truth_or_contour_policy_absent",
+                "prediction_availability": scalar["availability"] if scalar else None,
+                "prediction_reason": scalar["reason"] if scalar else None})
+        frames.append({"case_id": case["case_id"], "visibility": case["visibility"],
+            "candidate_count": len(case["candidates"]), "identity_outcomes": dict(outcomes),
+            "verified_identity_support": verified_support, "predicted_usable_scalar_count": usable,
+            "verified_scalar_observation": None})
+    local = {}
+    for basis in ("native_path", "candidate_center"):
+        rows = [r for r in point_rows if r["geometry_basis"] == basis]
+        confusion = {k: dict(Counter(r["decision"] for r in rows if r["truth"] == k)) for k in PATH_JUDGMENTS}
+        decisive = [r for r in rows if r["decision"] in ("NEAR_INTERFACE", "OFF_INTERFACE")]
+        verified = [r for r in decisive if r["truth"] in ("near_interface", "off_interface")]
+        correct = sum(r["decision"].lower() == r["truth"] for r in verified)
+        local[basis] = {"point_count": len(rows), "confusion": confusion,
+            "by_identity": {label: {truth: dict(Counter(r["decision"] for r in rows
+                if r["identity"] == label and r["truth"] == truth)) for truth in PATH_JUDGMENTS} for label in IDENTITIES},
+            "decisive_prediction_count": len(decisive), "reviewed_decisive_count": len(verified),
+            "unverified_decisive_count": len(decisive)-len(verified),
+            "correct_count": correct, "conditional_accuracy": ratio(correct, len(verified)),
+            "verified_success_over_all_points": ratio(correct, len(rows)),
+            "missing_prediction_count": sum(r["decision"] == "MISSING_PREDICTION" for r in rows)}
+    visible = [r for r in frames if r["visibility"] == "visible"]
+    return {"candidate_identity_confusion": {k: dict(v) for k, v in identity_confusion.items()},
+        "local_support": local, "local_rows": point_rows, "scalar_rows": scalar_rows,
+        "scalar": {"candidate_count": len(scalar_rows),
+            "decision_counts": dict(Counter(r["decision"] for r in scalar_rows)),
+            "status": "not_measured", "verified_usable_count": None, "mean_error_px": None,
+            "unverified_usable_count": sum(r["decision"] == "USABLE" for r in scalar_rows),
+            "usable_by_identity": dict(Counter(r["identity"] for r in scalar_rows if r["decision"] == "USABLE"))},
+        "frames": frames, "visible_frame_count": len(visible),
+        "visible_frame_verified_identity_coverage": ratio(sum(r["verified_identity_support"] for r in visible), len(visible)),
+        "visible_frame_verified_scalar_coverage": None}
+
+
+def evaluate(frozen, packets, prediction_document=None, *, allow_exploratory=False):
     predictions = {}
     known = {(c["case_id"], a["candidate_input_index"]): (c, a) for c in frozen["content"]["cases"] for a in c["candidates"]}
     if prediction_document is not None:
         p = prediction_document
-        require(p.get("schema_version") == PREDICTION_SCHEMA, "unsupported prediction schema")
+        v2 = p.get("schema_version") == TARGET_PREDICTION_SCHEMA
+        require(p.get("schema_version") in (PREDICTION_SCHEMA, TARGET_PREDICTION_SCHEMA), "unsupported prediction schema")
+        if v2:
+            require(p["target_spec_id"] == TARGET_SPEC, "unsupported target specification")
+            text(p["operating_point_id"], "operating point identity")
         require(p["frozen_labels_sha256"] == frozen["content_sha256"], "predictions target different labels")
         for k in ("classifier_id", "artifact_sha256", "operating_point_description"):
             text(p[k], k)
         require(len(p["artifact_sha256"]) == 64 and all(c in "0123456789abcdef" for c in p["artifact_sha256"]), "classifier artifact SHA-256 required")
-        require(p["fit_partitions"] and set(p["fit_partitions"]) <= {"development", "calibration"}, "holdout/regression cannot select an operating point")
+        regime = p.get("evaluation_regime") if v2 else "CALIBRATED"
+        require(regime in ("CALIBRATED", "EXPLORATORY_UNCALIBRATED"), "explicit evaluation regime required")
+        if regime == "EXPLORATORY_UNCALIBRATED":
+            require(allow_exploratory, "exploratory evaluation requires explicit opt-in")
+            require(p["fit_partitions"] == [], "exploratory predictions must not claim fitted partitions")
+            require(all(c["partition"] == "regression" for c in frozen["content"]["cases"]), "exploratory targets require regression only")
+        else:
+            require(not allow_exploratory, "exploratory flag requires exploratory v2 predictions")
+            require(p["fit_partitions"] and set(p["fit_partitions"]) <= {"development", "calibration"}, "holdout/regression cannot select an operating point")
         for row in p["predictions"]:
             key = (row["case_id"], integer(row["candidate_input_index"], "candidate_input_index"))
             require(key in known and key not in predictions, "unknown or duplicate prediction key")
@@ -517,6 +637,10 @@ def evaluate(frozen, packets, prediction_document=None):
             require(row["decision"] in DECISIONS, "invalid shadow decision")
             text(row["reason"], "prediction reason")
             candidate = next(c for c in packets[case["packet_sha256"]][case["case_id"]]["witness"]["candidates"] if c["candidate_input_index"] == key[1])
+            if v2:
+                validate_target_prediction(row, candidate)
+            else:
+                require(not {"local_support", "scalar"} & set(row), "target fields require prediction v2")
             extents = {tuple(s["source_x_range"]) for s in candidate["sectors"]}
             seen = set()
             for q in row.get("intervals", []):
@@ -527,7 +651,8 @@ def evaluate(frozen, packets, prediction_document=None):
             predictions[key] = row
         fingerprint_json(p)
     cases = frozen["content"]["cases"]
-    return {"schema_version": "s11-o2-shadow-report-v2", "source_label_schema": frozen["content"]["schema_version"],
+    require(not allow_exploratory or prediction_document is not None, "exploratory evaluation requires predictions")
+    report = {"schema_version": "s11-o2-shadow-report-v2", "source_label_schema": frozen["content"]["schema_version"],
             "metric_semantics": "identity_support_separate_from_path_agreement_and_numeric_localization", "frozen_labels_sha256": frozen["content_sha256"],
             "prediction_sha256": fingerprint_json(prediction_document) if prediction_document else None,
             "status": "EVALUATED_NOT_QUALIFIED" if predictions else "NOT_EVALUATED",
@@ -541,6 +666,15 @@ def evaluate(frozen, packets, prediction_document=None):
                 "Artifact tags may overlap; family counts are not mutually exclusive votes.",
                 "Legacy v1 labels are read explicitly as identity only; no path truth is inferred.",
                 "A content hash detects drift but cannot prove an untouched holdout or annotation chronology."]}
+    if prediction_document and prediction_document["schema_version"] == TARGET_PREDICTION_SCHEMA:
+        report["schema_version"] = "s11-o2-shadow-report-v3"
+        report["evaluation_regime"] = regime
+        report["prediction_identity"] = {k: prediction_document[k] for k in
+            ("target_spec_id", "operating_point_id", "classifier_id", "artifact_sha256", "fit_partitions", "operating_point_description")}
+        if regime == "EXPLORATORY_UNCALIBRATED":
+            report["status"] = regime
+        report["targets"] = {s: summarize_targets([c for c in cases if c["partition"] == s], packets, predictions) for s in PARTITIONS}
+    return report
 
 
 def main():
@@ -560,6 +694,7 @@ def main():
     audit_parser = commands.add_parser("evaluate")
     audit_parser.add_argument("--frozen", type=Path, required=True)
     audit_parser.add_argument("--predictions", type=Path)
+    audit_parser.add_argument("--exploratory", action="store_true", help="Explicit v2 regression-only evaluation; never calibrated acceptance.")
     audit_parser.add_argument("--output", type=Path, required=True)
     from tests.diagnostics import s11_review_records as records
     records.add_commands(commands)
@@ -574,7 +709,7 @@ def main():
         elif args.command == "evaluate":
             frozen, packets = load_frozen(args.frozen)
             predictions = read_json(args.predictions) if args.predictions else None
-            write_new(args.output, evaluate(frozen, packets, predictions))
+            write_new(args.output, evaluate(frozen, packets, predictions, allow_exploratory=args.exploratory))
         else:
             result = records.dispatch(args)
             print(json.dumps(result, ensure_ascii=True, indent=2, allow_nan=False))
