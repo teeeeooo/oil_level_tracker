@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; locality ablation reported complete without promotion; candidate identity profile experiment is locally implemented and awaiting Windows execution; calibrated shadow discrimination remains open
+**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; locality ablation reported complete without promotion; identity-profile Windows W0 is reported complete without promotion; W1 target semantics specified, aggregation challenger and calibrated shadow discrimination remain open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -327,23 +327,30 @@ profile comparison, not a physical-interface classifier or production change.
 The [operations identity-profile procedure](../40-operations/s11-o2-local-shadow-evaluation.md)
 uses the same active revisions 3/14/4 and original v1 reference, with a new output
 folder. [Local identity-profile evidence](../60-evidence/s11/s11-o2-identity-profile-local.md)
-records 164 focused passing tests, including 22 new controls. Native Windows
-execution is pending. No new labels, video exploration,
-partition change, weighting/threshold sweep or detector rerun is needed.
+records 164 focused passing tests, including 22 new controls. The
+[first Windows identity-profile result](../60-evidence/s11/s11-o2-identity-profile-windows-run-001.md)
+now reports exact v1 reproduction, COMPLETE and seven preserved inputs at
+`2bce8ea`. BASE identity is 2 correct / 10 reversed versus combined 5/7; Accum is
+1/1 versus combined 2/0. Profile adds no correct transitions versus combined and
+regresses three BASE pairs plus one Accum pair. Expanded profile support adds
+no scorable identity pairs or changed outcomes. W0 closes without promotion;
+no additional Windows report is needed to accept that bounded outcome.
 
-The user-supplied [2026-10-01 audit and proposed work specification](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md)
-is retained unchanged against `85a01cd`. The user confirms that the Windows
-identity-profile request has not yet been sent; W0 remains the immediate action
-under the existing operations procedure. Complete that fixed experiment once,
-then interpret its result alongside W1's candidate identity / local support /
-scalar eligibility distinction. Review-002 candidate 10 is holistic interface
-with off/near/off path judgments; a median candidate score can therefore disagree
-with holistic identity even when local evidence is useful. This is an evaluation
-risk, not an established cause of private detector failures. Do not relabel truth,
-switch to max pooling, or add features solely to repair that ranking. W1–W7 are
-proposals requiring their owning contracts and evidence; filing this audit does
-not implement or accept them. Its reported test/oracle runs remain attributed to
-the supplied audit, not new verification performed during document integration.
+The user-supplied [October audit](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md)
+remains unchanged. W1's target distinctions and two-sided control expectations
+are now specified in the existing witness architecture/validation owners, without
+scorer or schema changes. Candidate identity, local path support and scalar
+eligibility must be evaluated separately. Partial interface truth cannot be
+rewritten to fit median pooling, and max pooling cannot certify isolated glare.
+A higher negative profile score does not establish a smaller step residual or a
+physical shape collision; the first causal loss remains unresolved.
+
+Next engineering action is a bounded synthetic/source review of partial-positive
+versus glare-negative aggregation and existing identity context before selecting
+one challenger. W1 aggregation acceptance remains open. No current request for
+new Windows labels, video exploration, splits, thresholds or detector replay is
+needed. W2/W3 and later behavior integration remain separately gated. The audit's
+reported oracle/test runs are attributed to that audit, not repeated evidence.
 
 Prior ablation validation recorded 129 focused tests passed (14 ablation controls
 plus the prior 115), and comparison against actual 29ec2f9 scorer output on a

@@ -221,6 +221,11 @@ O1 packet; both matched. This is not private Windows efficacy evidence.
 
 ## Candidate identity profile mode
 
+The [first Windows result](../../60-evidence/s11/s11-o2-identity-profile-windows-run-001.md)
+closes this fixed W0 experiment without promotion. Keep the specification and
+outputs reproducible; follow the current work plan for the next W1 target review,
+not a new template/weight sweep on the same three frames.
+
 `--identity-profile --reference <original v1 experiment.json>` tests a separate
 candidate-identity hypothesis after the locality ablation. It extends the same
 input, geometry, aggregation, evaluation and publication owner. Production

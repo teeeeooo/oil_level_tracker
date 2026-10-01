@@ -476,6 +476,45 @@ A new human question is needed only for information not already established.
    and tolerance policy is explicitly defined and validated. No currently labeled
    candidate, including a fully near-interface reviewed path, supplies that policy.
 
+#### W1 target and aggregation contract — design boundary
+
+Following the [W0 profile result](../60-evidence/s11/s11-o2-identity-profile-windows-run-001.md),
+keep three inference targets separate. This section specifies requirements for
+the next challenger; it implements no new score, schema field or runtime decision.
+
+| Target | Evaluation truth | Aggregation must not imply |
+|---|---|---|
+| Candidate identity | Existing holistic `identity` | A majority of near path points, or valid final scalar Y |
+| Local path support | Exact geometry-keyed near/off/uncertain judgments | Identity from one strong edge; a px error from qualitative truth |
+| Scalar eligibility | Independent scalar truth or a declared contour-to-scalar policy | A native point median may replace the original candidate's Y |
+
+Scene visibility remains an independent denominator, and association/phase is a
+later temporal target. Missing scalar truth means eligibility is unverified,
+not a measured failure or zero error. Identity may be supported while scalar use
+is unknown or contradicted. These are semantic distinctions, not new wire enums.
+
+A candidate with local scores [0,1,0] can be a holistic interface positive with
+an off/near/off path. Median pooling can rank it below a negative [0.1,0.1,0.1]
+even if the local localization signal is ideal. Conversely, an isolated glare
+negative can also have a high central local score: max/top-quantile pooling is
+not a general identity repair. Local edge strength is not the same target as
+local physical interface support. If the supplied evidence is indistinguishable
+for a partial interface and a glare negative, require unresolved model identity;
+do not change either human label or claim the aggregator has separated them.
+
+The next candidate-level challenger must retain contributing geometry, measured
+extent, missing/contradictory evidence and any independently justified identity
+context. It may use existing spatial/region/static evidence only with explicit
+semantics and positive/negative controls. Never use human near/off labels to pick
+inference sectors. State why its output answers holistic identity before choosing
+pooling or a threshold. Do not infer that spatial continuity alone provides identity.
+
+Score-only profile outcomes cannot identify whether the first loss is sampling,
+missingness, aggregation or a shape collision. Inspect existing owner definitions
+and use bounded synthetic counterexamples first. W1's target distinction is now
+specified; a validated aggregation rule remains open. Preserve existing v2
+labels, original v1 experiments and current production scalar provenance.
+
 #### Versioning, migration and implementation boundary
 
 Use a versioned label/frozen/report contract for the changed meaning, with explicit
@@ -643,7 +682,7 @@ new witness has no production authority.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
+- Prior mechanisms reviewed: W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.

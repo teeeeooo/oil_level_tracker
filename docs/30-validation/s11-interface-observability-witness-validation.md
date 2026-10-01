@@ -224,6 +224,38 @@ intervals. Coordinate arithmetic corrections must not become physical relabeling
 These reviewed cases remain regression, not classifier-fitting or untouched-holdout
 proof. No field acceptance follows from passing the schema/evaluator controls.
 
+### W1 aggregation challenger controls — not yet acceptance evidence
+
+Use the architecture's W1 target contract. Existing v2 persistence tests do not
+prove these new model controls pass. Keep labels fixed and specify the model's
+primary identity endpoint plus protected local/scalar outcomes before comparison.
+
+| Control | Required interpretation / protected outcome |
+|---|---|
+| Full reviewed interface path | Identity target positive; local truth near; scalar still unverified without its own truth |
+| Partial interface, off/near/off | Preserve positive identity and two local off judgments; do not equate median failure with feature failure |
+| Isolated high glare in a negative | Preserve negative identity; max score alone cannot accept it |
+| Same observable vector for partial positive and glare negative | Model ambiguity remains unresolved; opposite truth labels do not supply inference-time context |
+| Stationary interface / same-shape structural step | No motion requirement; no shape-only identity certificate |
+| True interface crossing structure | Preserve contributing and contradictory regions; clean sibling evidence cannot erase a contradiction |
+| Unavailable native path / usable center | Existing native preference and missingness remain explicit; no silent fallback |
+| Clipped mask and partial scales | Report support extent/availability; conditional score gains cannot hide coverage loss |
+
+For any tested pooling change, compare on fixed inputs/geometry and equal support,
+then report expanded support separately. Count candidates, points and scales
+separately; do not pool correlated pairs into an independent success rate. Human
+path labels evaluate predictions and must not select inference-time sectors.
+Without independent scalar truth or a predeclared contour-to-scalar target,
+scalar accuracy stays not_measured. No averaging of support points may silently
+replace production candidate Y. A future output schema for these targets belongs
+to W3 and must preserve compatibility; this contract adds no prediction enum.
+
+W1 completion requires reproducible partial-positive and glare counter-controls,
+a stated aggregation/identity rationale, and explicit handling of indistinguishable
+inputs. The target distinctions alone do not satisfy model or calibrated O2
+acceptance. Source inspection/synthetic work is the next step; no new Windows
+annotation is required until a specific missing distinction is named.
+
 ## V3 — operating-point discipline
 
 Before a shadow classifier is allowed to emit
