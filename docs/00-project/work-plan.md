@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit reported complete; W4 paired-scale Windows comparison verified by transferred report: primary +1/0, no negative-control regression; retained without promotion; remaining-pair inspection complete; local-position experiment concluded without promotion; candidate-identity source/context review and local raster controls complete; existing two-frame context inspection and source/coordinate reconciliation received; human reports idx0/idx20 ambiguity despite approximately +/-5 s of context; reference-uncertainty/evaluation review verified locally without runtime changes; recorded structure-context Windows completion reported and code/artifact hashes matched locally; numeric context follow-up reviewed without a justified new discriminator; schema transcription resolved by reported True/111; structure-context investigation closed without promotion; ordered full-height spatial-context hypothesis defined and measurement prototype verified locally; source-frame adapter and Windows procedure verified locally; existing two-frame Windows spatial probe reported COMPLETE and baseline MATCH; schema/artifact/output-count transcription resolved, generated summary received; stored profile inspection received; P5 values and reason source corrected; native/center coordinate attribution needs three-point reconciliation; no identity gain established; candidate-identity challenger and calibrated O2 acceptance remain open
+**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit reported complete; W4 paired-scale Windows comparison verified by transferred report: primary +1/0, no negative-control regression; retained without promotion; remaining-pair inspection complete; local-position experiment concluded without promotion; candidate-identity source/context review and local raster controls complete; existing two-frame context inspection and source/coordinate reconciliation received; human reports idx0/idx20 ambiguity despite approximately +/-5 s of context; reference-uncertainty/evaluation review verified locally without runtime changes; recorded structure-context Windows completion reported and code/artifact hashes matched locally; numeric context follow-up reviewed without a justified new discriminator; schema transcription resolved by reported True/111; structure-context investigation closed without promotion; ordered full-height spatial-context hypothesis defined and measurement prototype verified locally; source-frame adapter and Windows procedure verified locally; existing two-frame Windows spatial probe reported COMPLETE and baseline MATCH; schema/artifact/output-count transcription resolved, generated summary received; stored profile inspection received; three native centers reconciled; bounded spatial inspection closed with per-candidate outside-band appearance retained, no identity gain established; candidate-identity challenger and calibrated O2 acceptance remain open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -34,7 +34,7 @@ These states do not change the execution policy's formal completion requirements
 | W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Handoff and phase observation are separate changes with separate positive/negative controls; do not relax gates based on elapsed time or polarity alone | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior), [parent validation](../30-validation/s11-physical-interface-evidence-repair-validation.md); no behavior acceptance |
 | W7 / O5 field qualification | PENDING integrated behavior candidate | Exact runtime, all canonical segments and required accuracy/coverage/resource evidence; no earlier local/shadow PASS substitutes | [Field acceptance](../30-validation/s11-interface-observability-witness-validation.md#field-qualification), [Windows procedure](../40-operations/s11-current-windows-field-qualification.md); FIELD FAIL retained |
 
-**Current handoff — reconcile stored-profile interpretation before any extent claim:**
+**Current handoff — local candidate-relative context feasibility decision:**
 The [structure-context investigation](../60-evidence/s11/s11-o2-structure-context-audit-windows-run-001.md)
 is closed without promotion; schema True/111 resolved transcription. Existing
 raw-context values do not justify another veto and the typed evidence already
@@ -62,19 +62,21 @@ intake: 31 hashed outputs/32 total files; BASE 124 points/9 profiles, 0/1416 ban
 Accum 158 points/10 profiles, 0/1012 bands. Both decode indices/timestamps match.
 No receipt/schema/count rerun or further confirmation is requested.
 The [stored-output inspection](../40-operations/s11-o2-local-shadow-evaluation.md#ordered-spatial-context--stored-output-inspection)
-report and direct-value follow-up are received. Accum P5's contradiction is
-resolved by reported rows 101.0488–104.5238; the missing reason came from the
-comparison projection, now confirmed. The follow-up still mixes candidate-center
-and native band ranges, adds origin to already-source coordinates, and reverses
-above/below. [Geometry audit](../60-evidence/s11/s11-o2-spatial-context-windows-run-001.md#direct-value-follow-up--resolved-values-and-remaining-geometry-mix)
-records source-verified corrections. Reported remote transitions can supply extra
-appearance relative to some local bands, but no identity gain is established.
-Next action: same saved JSON only; return exact native centers and original band
-lists for BASE idx11/P6 and Accum idx10/P8, idx15/P8. Classify the already reported
-row intervals against exact disjoint source ranges; do not rewrite the full report
-or invent transition thresholds. No rerun, new scene, relabeling or receipt check.
-Human idx0/idx20 ambiguity remains. W2 is conditional and W5/O3 remains behind O2
-acceptance.
+report and native-center follow-up are received. The [final reconciliation](../60-evidence/s11/s11-o2-spatial-context-windows-run-001.md#three-native-centers-reconciled--bounded-inspection-closed)
+closes P5 values, reason source and the three selected centers' geometry on
+transferred evidence. Exact interval union arithmetic corrects the remaining
+prose: Accum idx10 covers spike rows 213–217 and 221, but not 218–220;
+idx15 excludes the whole spike, as BASE idx11 excludes its own P6 Y396–407
+transition. Cross-case Y comparisons have no physical meaning. The bounded
+inspection is closed; no further Windows extraction or rerun is requested.
+Full-height profiles retain reported appearance outside individual candidate
+bands, not necessarily information absent from the entire O1 packet. Physical
+identity utility and raw-crop interpretation are not independently verified here.
+Next action is local: assess whether a candidate-relative context challenger has
+a distinct observable beyond existing O1 and survives known collision controls;
+otherwise retain the probe as diagnostic only. No threshold, strongest-peak rule,
+new scene or relabeling is justified by these examples. Human idx0/idx20 ambiguity
+remains. W2 is conditional and W5/O3 remains behind O2 acceptance.
 
 W4 paired-scale work remains concluded with a bounded +1/0 local gain and no
 promotion. Candidate-identity discrimination, scalar truth, calibration and O2

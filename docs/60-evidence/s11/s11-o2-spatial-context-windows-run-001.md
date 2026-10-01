@@ -238,3 +238,59 @@ by the first center or canonical_y. No new transition detector, whole-report
 rewrite, video decode, labels, thresholds or source-probe rerun is needed.
 Specific raw-crop correspondence remains unverified locally. Existing execution
 receipts/baseline MATCH and human idx0/idx20 ambiguity remain unchanged.
+
+
+## Three native centers reconciled — bounded inspection closed
+
+The final transferred extraction supplies exact native_path centers:
+BASE idx11 X=[236,343] source925/local714; Accum idx10 X=[1473,1558]
+source219/local163; Accum idx15 at the same X source295/local239. Each
+reported local/source band pair agrees with the recorded origin (211 or 56)
+and implemented band offsets. Reported availability is respectively 10/12,
+12/12 and 12/12. BASE idx11's far_below BW16 is insufficient_visible_pixels;
+BW24 is outside_crop with local [764,788) clipped to [764,773).
+This resolves the selected centers' geometry and missing-band attribution on
+transferred evidence, without locally opening private files.
+
+The final prose still labels the bounding envelope as a union. Merging the
+supplied half-open intervals yields the following actual unions, calculated
+locally without any further Windows request:
+
+| Native point | Union of all requested source band intervals |
+|---|---|
+| BASE idx11 / P6 | [852,892), [900,924), [927,951), [959,999) |
+| Accum idx10 / P8 | [164,194), [200,218), [221,239), [245,275) |
+| Accum idx15 / P8 | [240,270), [276,294), [297,315), [321,351) |
+
+Requested coverage is distinct from available coverage: BASE's final
+[959,999) component has no available band in this extraction. Both Accum
+points have all bands available, but their unions still have unsampled gaps.
+For Accum idx10, source rows 213–217 and 221 are within band coverage;
+218–220 are outside every band. Thus the Y213–221 interval overlaps six
+bands but is **partially**, not fully, covered. This statement concerns band
+intervals, not every O1 diagnostic: existing localization/gradient fields are
+not proved to contain no information about those central rows.
+
+Only compare events in their own case and exact X strip. BASE P6's Y396–407
+transition is outside BASE idx11's bands. Accum P8's Y213–221 spike partly
+overlaps idx10's bands and lies wholly outside idx15's bands. Applying BASE
+row numbers to Accum or vice versa does not establish shared features, distances
+between physical objects or a nearest candidate across scenes.
+
+Decision: close the bounded source-value/range reconciliation and stored-profile
+inspection with no classifier promotion. The supplied data supports that ordered
+full-height profiles retain reported appearance outside an individual candidate's
+local bands in these examples. It does not establish a physical identity rule,
+a visible return for every strip, independently verified raw-crop interpretation,
+or new information absent from the entire multi-candidate O1 packet (another
+candidate's bands can already sample that remote region). Shared-X profiles are
+common scene context, not candidate-specific identity scores. Human idx0/idx20
+ambiguity, historical labels and FIELD FAIL are unchanged.
+
+No further Windows extraction, rerun, receipt confirmation or full-report rewrite
+is needed to settle these three examples. The next local design decision is whether
+a candidate-relative use of ordered context can be justified against existing
+O1 fields and the identical-image/mask/horizontal-averaging counter-controls.
+Do not choose a strongest-peak, distance-to-reviewed-boundary or threshold rule
+from these examples. If no distinct observable is justified, retain the probe as
+diagnostic only rather than extending this descriptive audit indefinitely.
