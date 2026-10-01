@@ -159,3 +159,82 @@ outside-band observations, intervening missing support and crop correspondence;
 absence/ambiguity/censoring is an acceptable result. Do not force a return or add
 an identity threshold. No new scene or expanded experiment is authorized by this
 incomplete descriptive inspection.
+
+
+## Direct-value follow-up — resolved values and remaining geometry mix
+
+The next transferred report resolves the earlier P5 numeric contradiction:
+Accum P5's minimum is reported as 94.10 at source Y221 (index165), while
+Y307–327 (indices251–271) contains 101.0488–104.5238, peaking at Y321 and
+then decreasing to 102.2143. All these rows are observed, effective=visible
+82–84 and glare excluded=0. Supersede the previous 89-to-83.5 description;
+its error source remains unproven. No source-file mutation is reported.
+
+The Windows follow-up explicitly identifies the prior None reason as a read
+from the baseline_check projection. Full witness reasons include
+insufficient_visible_pixels and outside_crop. That field-source question is
+closed. However, the newly listed per-sector reasons cannot yet be attached to
+native points: the report omits center.role and uses ranges consistent with
+candidate_center in several native-labelled tables.
+
+Source verification (`_center`, `_measure_sector`, and baseline reconstruction)
+establishes the following corrections without needing private outputs:
+
+- canonical_y and center.source_y are already source coordinates. Do not add the
+  crop origin again: BASE 397 does not become 608; 922 does not become 1133;
+  Accum 217 does not become 273. Only local_y_range receives origin Y.
+- Y increases downward: smaller Y is above, larger Y is below. The report's
+  ABOVE/BELOW descriptions are reversed.
+- A candidate's center and its sector's native path are distinct. For example,
+  Accum idx10 has center217 but P8 native219; idx15 has center313 but P8
+  native295; BASE idx11 has center922 but P6 native925. Uniform ranges across
+  all sectors are not the native ranges when path_source_y varies.
+- The listed Accum idx10 local envelope [106,217) is exactly centered at
+  local161/source217 for maximum BW18. BASE idx8 [113,260) is centered at
+  local186/source397 for BW24. These match candidate-center envelopes, not
+  every sector's native geometry. The idx11 near_below [713,721) likewise
+  corresponds to source922, not native S1/source901. Do not replace earlier
+  native missing counts with these unqualified center rows.
+- A min-to-max envelope is not the union of the disjoint four bands. Preserve
+  every band's half-open bounds, availability and reason before classifying
+  individual rows as inside/outside sampled or usable support.
+
+Illustrative envelopes recomputed from the implemented offsets and previously
+supplied integer native Y/BW values follow. These are local source arithmetic,
+not a claim to have read the private witness band objects:
+
+| Case / candidate / profile | Native source Y | Maximum BW | Source envelope, stop exclusive |
+|---|---|---|---|
+| BASE idx11 / P6 | 925 | 24 | [852,999) |
+| Accum idx10 / P8 | 219 | 18 | [164,275) |
+| Accum idx15 / P8 | 295 | 18 | [240,351) |
+
+Consequently, the reported Accum P8 spike at Y213–221 lies inside idx10's
+native envelope (and overlaps existing near bands), but above/outside idx15's
+native envelope. It is not outside both. Calling it immediately below a missing
+far_above band also mixes source and local coordinates and does not establish
+its relation to the native center's unavailable bands. The report's P8 values
+must not be compared against P5's global minimum; they are different X strips.
+
+The BASE P6 transition at Y396–407 is above/outside idx11's native envelope.
+The Accum P6 bump at Y415–425 is below/outside both native idx10 Y210 and
+idx15 Y328 envelopes (max BW18). These reported full-height observations
+support a bounded possibility of extra appearance context relative to those
+candidates' local bands, not proof of identity or a candidate-specific feature:
+each shared-X curve includes the same remote feature regardless of marker.
+The sweeping claim that all larger-Y outside observations are crop-edge effects
+is contradicted by the reported interior Y415–425 bump. Sparse edge rows need
+coverage qualification, but boundary causation itself is not demonstrated by
+low counts. Counts of 12/19 'transitions' lack an extraction definition and are
+not accepted metrics or a new threshold.
+
+Next action is narrowed to three existing witness centers only: BASE idx11
+X=[236,343] native925, Accum idx10 X=[1473,1558] native219 and idx15 at the
+same X native295. Read exact candidate/X/role/source_y/sampling_center_local_y;
+return each scale's four original band names, local/source half-open ranges,
+availability and reason, and classify the already reported remote row intervals
+against their exact union. Missing exact match must be reported, never replaced
+by the first center or canonical_y. No new transition detector, whole-report
+rewrite, video decode, labels, thresholds or source-probe rerun is needed.
+Specific raw-crop correspondence remains unverified locally. Existing execution
+receipts/baseline MATCH and human idx0/idx20 ambiguity remain unchanged.

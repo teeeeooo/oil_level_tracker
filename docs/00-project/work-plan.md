@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit reported complete; W4 paired-scale Windows comparison verified by transferred report: primary +1/0, no negative-control regression; retained without promotion; remaining-pair inspection complete; local-position experiment concluded without promotion; candidate-identity source/context review and local raster controls complete; existing two-frame context inspection and source/coordinate reconciliation received; human reports idx0/idx20 ambiguity despite approximately +/-5 s of context; reference-uncertainty/evaluation review verified locally without runtime changes; recorded structure-context Windows completion reported and code/artifact hashes matched locally; numeric context follow-up reviewed without a justified new discriminator; schema transcription resolved by reported True/111; structure-context investigation closed without promotion; ordered full-height spatial-context hypothesis defined and measurement prototype verified locally; source-frame adapter and Windows procedure verified locally; existing two-frame Windows spatial probe reported COMPLETE and baseline MATCH; schema/artifact/output-count transcription resolved, generated summary received; stored profile inspection received; numeric/range interpretation needs bounded correction; no wider-context gain established; candidate-identity challenger and calibrated O2 acceptance remain open
+**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit reported complete; W4 paired-scale Windows comparison verified by transferred report: primary +1/0, no negative-control regression; retained without promotion; remaining-pair inspection complete; local-position experiment concluded without promotion; candidate-identity source/context review and local raster controls complete; existing two-frame context inspection and source/coordinate reconciliation received; human reports idx0/idx20 ambiguity despite approximately +/-5 s of context; reference-uncertainty/evaluation review verified locally without runtime changes; recorded structure-context Windows completion reported and code/artifact hashes matched locally; numeric context follow-up reviewed without a justified new discriminator; schema transcription resolved by reported True/111; structure-context investigation closed without promotion; ordered full-height spatial-context hypothesis defined and measurement prototype verified locally; source-frame adapter and Windows procedure verified locally; existing two-frame Windows spatial probe reported COMPLETE and baseline MATCH; schema/artifact/output-count transcription resolved, generated summary received; stored profile inspection received; P5 values and reason source corrected; native/center coordinate attribution needs three-point reconciliation; no identity gain established; candidate-identity challenger and calibrated O2 acceptance remain open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -62,18 +62,19 @@ intake: 31 hashed outputs/32 total files; BASE 124 points/9 profiles, 0/1416 ban
 Accum 158 points/10 profiles, 0/1012 bands. Both decode indices/timestamps match.
 No receipt/schema/count rerun or further confirmation is requested.
 The [stored-output inspection](../40-operations/s11-o2-local-shadow-evaluation.md#ordered-spatial-context--stored-output-inspection)
-report is received but mainly describes candidate +/-10px neighborhoods, without
-original disjoint band ranges or specific remote image/profile correspondence.
-Its Accum P5 local values fall below its stated global minimum, and None reasons
-cannot establish geometric loss because the comparison projection omits reason.
-[Evidence](../60-evidence/s11/s11-o2-spatial-context-windows-run-001.md#stored-output-inspection-report-received--interpretation-pending)
-separates these report issues from the unchanged reported baseline MATCH.
-Next action: same saved files only; directly extract P5 Y307–327/min/max, full
-witness unavailable reasons, then complete the existing eight-strip outside-band
-correspondence table. Transmission OCR versus analytical source error is unknown;
-do not blame the Windows reader or reopen source hash/receipt checks. No new
-mechanism, threshold, label, video or detector run. Human idx0/idx20 ambiguity
-remains. W2 is conditional and W5/O3 remains behind O2 acceptance.
+report and direct-value follow-up are received. Accum P5's contradiction is
+resolved by reported rows 101.0488–104.5238; the missing reason came from the
+comparison projection, now confirmed. The follow-up still mixes candidate-center
+and native band ranges, adds origin to already-source coordinates, and reverses
+above/below. [Geometry audit](../60-evidence/s11/s11-o2-spatial-context-windows-run-001.md#direct-value-follow-up--resolved-values-and-remaining-geometry-mix)
+records source-verified corrections. Reported remote transitions can supply extra
+appearance relative to some local bands, but no identity gain is established.
+Next action: same saved JSON only; return exact native centers and original band
+lists for BASE idx11/P6 and Accum idx10/P8, idx15/P8. Classify the already reported
+row intervals against exact disjoint source ranges; do not rewrite the full report
+or invent transition thresholds. No rerun, new scene, relabeling or receipt check.
+Human idx0/idx20 ambiguity remains. W2 is conditional and W5/O3 remains behind O2
+acceptance.
 
 W4 paired-scale work remains concluded with a bounded +1/0 local gain and no
 promotion. Candidate-identity discrimination, scalar truth, calibration and O2
