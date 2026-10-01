@@ -610,6 +610,27 @@ The Windows run uses only review-002 rev14 and review-003 rev4. Report baseline
 A mismatch requires inspecting reconstruction before comparing representations;
 do not fit a tolerance to make private data pass. Identity remains NOT_EVALUATED.
 
+## Ordered column-side context controls
+
+`tests/unit/test_s11_lateral_context_probe.py` validates the local array function
+in the [column-side contract](../20-architecture/s11-interface-observability-witness-architecture.md#w4-ordered-column-side-context--local-prototype).
+Require equal complete O1 witnesses and full-height row context but distinct
+ordered column sides on the sector-mirrored fixture, under both polarities.
+Keep masks, source geometry and auxiliary channels fixed; do not infer physical
+labels from synthetic shapes. Hidden differences must remain indistinguishable.
+
+Verify half-up centers, nonzero source origins, separate geometry bases, exact
+half-open ranges, clipping, sparse/zero/null states, no wraparound, inventory/width
+bounds, empty inputs, serialization and input preservation. Explicitly retain
+both within-band vertical-order loss and a joint row/column marginal collision.
+Neither this function nor a passing distinction test asserts connected regions,
+Oil identity, sufficient classifier support or numeric localization.
+
+[Local evidence](../60-evidence/s11/s11-o2-lateral-context-prototype-local.md)
+includes the existing source-runner entry/receipt regressions because the shared
+module changed. No Windows lateral CLI, physical efficacy or O2 acceptance is
+claimed by these local controls.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.

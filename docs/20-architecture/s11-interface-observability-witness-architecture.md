@@ -998,11 +998,39 @@ physical candidates, close the hypothesis without promotion; do not keep adding
 descriptors to fit the same failures. Identity classification and independent
 acceptance remain separate work after this information question is answered.
 
+## W4 ordered column-side context — local prototype
+
+The same diagnostic module exposes `measure_lateral_context` to investigate
+horizontal arrangement at fixed supplied candidate/native geometry. It reuses
+`measure_context` validation/row observations and masked_row_mean on transposed
+patches; no path generator, gradient operator or connected-region owner is copied.
+The caller supplies one integer band width b (1–128); O1 half-up center c selects
+near_above [c-b-1,c-1) and near_below [c+2,c+b+2). The function retains ascending
+source-X columns with each side's means/counts and below-minus-above differences,
+plus exact requested/clipped local/source ranges and crop-completeness flags.
+It does not interpolate the native sector points into a per-pixel contour.
+
+Raw means use 0..255 units. Missing means/deltas are null; observed black is zero.
+Partial crop windows and one-pixel counts remain explicit, not declared sufficient.
+The original raster/point bounds apply plus 65,536 total point-columns. The spec
+`ordered-column-side-context-v1` is local and NOT_EVALUATED with no score or
+threshold. The old source CLI remains a row-context runner and does not invoke
+this function. Historical outputs are preserved even though current code hashes
+change. No private rerun is required for this array-level contract.
+
+This retains some horizontal side appearance, not full two-dimensional topology:
+within-band vertical order is lost, and different images can have identical row
+and side-column marginals together. No physical class or connected region is
+inferred. [Local evidence](../60-evidence/s11/s11-o2-lateral-context-prototype-local.md)
+records actual O1 collision controls and the remaining joint-marginal collision.
+A future joint pixel/edge relation must be distinguished from existing paths and
+aggregate measurements before a classifier or private rollout is proposed.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: candidate-relative reindexing, whole-inventory O1 novelty and central-gap peak controls; full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
+- Prior mechanisms reviewed: ordered column-side preservation and joint-marginal collisions; candidate-relative reindexing, whole-inventory O1 novelty and central-gap peak controls; full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
