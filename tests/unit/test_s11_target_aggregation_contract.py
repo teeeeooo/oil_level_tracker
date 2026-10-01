@@ -142,6 +142,29 @@ def test_scripted_unresolved_collision_preserves_truth_and_visible_frame_denomin
     assert labels[0]["identity"] == "interface"  # ambiguity is not relabeling
 
 
+@pytest.mark.parametrize('unknown_identity', ['uncertain', 'unreviewed'])
+def test_truth_change_removes_rank_pairs_without_changing_measurements_or_scores(unknown_identity):
+    """Constructed alternate truth is a denominator change, not a method gain."""
+    raw = [proposal([0, 9, 0]), proposal([1/9]*3, 1)]
+    case = case_for([annotation(raw[0], 'interface', ['near_interface']*3),
+                     annotation(raw[1], 'non_interface', ['off_interface']*3)])
+    scored = [experiment.score_candidate(c) for c in raw]
+    before = copy.deepcopy((case, raw, scored))
+    baseline = experiment.evaluate_case(case, scored)
+    assert baseline['identity_ordering']['counts']['combined'] == {'reversed': 1}
+    alternate = copy.deepcopy(case)
+    alternate['candidates'][1]['identity'] = unknown_identity
+    result = experiment.evaluate_case(alternate, scored)
+    assert result['identity_counts'] == {'interface': 1, unknown_identity: 1}
+    assert result['identity_ordering']['pairs'] == []
+    for method in experiment.METHODS:
+        assert result['candidate_ranking'][method]['scored_candidate_count'] == 2
+    assert result['path_ordering']['native_path']['identity_judgment_counts'] == {
+        'interface/near_interface': 3, f'{unknown_identity}/off_interface': 3}
+    assert (case, raw, scored) == before
+    assert experiment.evaluate_case(case, scored) == baseline
+
+
 def test_spatial_permutation_is_lost_in_scalar_but_retained_in_point_evidence():
     a = experiment.score_candidate(proposal([0, 9, 9]))
     b = experiment.score_candidate(proposal([9, 0, 9]))

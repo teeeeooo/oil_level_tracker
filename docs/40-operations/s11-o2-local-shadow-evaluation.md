@@ -13,7 +13,98 @@
 새 작업은 해당 W의 선행 조건과 입력 범위를 확인한다. 단계 완료 여부는 실행 성공
 코드만으로 판단하지 않고 검증 결과를 근거로 work-plan에 반영한다.
 
+## Recorded structure-context audit — 원래 번들만
+
+목적: 별도 구조물 음성 후보(idx11 등)의 실패를 조사하기 위해, O1 band 표에는
+빠져 있는 **원래 후보의 artifact/static/texture 관련 필드와 등록된 artifact
+template 목록**이 R22-3 번들에 실제로 존재하는지 확인한다. 새로운 판별식의
+성능 실험이 아니다. idx0/idx20의 모호함을 강제로 해소하거나 라벨을 바꾸지 않는다.
+
+1. 새 `--structure-context` 옵션이 포함된 GitHub 소스 revision을 다운로드한다.
+   별도의 변경 파일 ZIP은 필요 없다. 기존 `89acfb0` ZIP만으로는 실행할 수 없다. `--help`에서 옵션을 확인하고 실제
+   commit(알 수 있으면), 변경 파일 SHA-256, Python 버전을 보고한다. 수정된
+   소스의 실행을 이전 commit 단독 실행으로 표기하지 않는다.
+2. 기존 W3와 같은 labels rev3/14/4, packet 3개, 원래 indexed R22-3 번들,
+   최초 `fixed-score-current-labels-001/experiment.json`을 사용한다. 라벨 파일은
+   모두 schema `s11-o2-labels-v2`; reference artifact는
+   `655689e19d6fa3231bf4667b3af38b4ffa285f94b27aa9df30684a02867f9cf9`.
+   경로만 실제 Windows 위치로 바꾼다. 원본 영상은 필요 없다.
+3. 이미 존재하는 출력 폴더는 보존하고 새 이름으로 실행한다.
+
+```powershell
+$dataRoot = "D:\OilTracker\data"
+$bundleRoot = "D:\OilTracker\bundles\R22-3"
+$auditOutput = Join-Path $dataRoot "experiments\structure-context-audit-001"
+$pythonExe = ".\.venv\Scripts\python.exe"
+$labelsOne = Join-Path $dataRoot "reviews\review-001\labels-v2.json"
+$labelsTwo = Join-Path $dataRoot "reviews\review-002\labels-v2.json"
+$labelsThree = Join-Path $dataRoot "reviews\review-003\labels.json"
+$reference = Join-Path $dataRoot "experiments\fixed-score-current-labels-001\experiment.json"
+& $pythonExe tests/diagnostics/s11_shadow_experiment.py `
+  --labels $labelsOne $labelsTwo $labelsThree `
+  --target-audit --structure-context --bundle $bundleRoot `
+  --reference $reference --output $auditOutput
+if ($LASTEXITCODE -ne 0) { throw "Structure context audit failed; preserve inputs and report the error." }
+$receipt = Get-Content -LiteralPath (Join-Path $auditOutput "complete.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+$report = Get-Content -LiteralPath (Join-Path $auditOutput "experiment.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($receipt.status -ne "COMPLETE" -or $receipt.schema_version -ne "s11-o2-structure-context-audit-v1") {
+    throw "Invalid completion receipt"
+}
+if ($report.schema_version -ne $receipt.schema_version -or $report.artifact.sha256 -ne $receipt.artifact_sha256) {
+    throw "Artifact/receipt mismatch"
+}
+foreach ($entry in $receipt.outputs.PSObject.Properties) {
+    $actualHash = (Get-FileHash -LiteralPath (Join-Path $auditOutput $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($actualHash -ne $entry.Value) { throw "Output hash mismatch: $($entry.Name)" }
+}
+if ($report.reference.inputs_scores_evaluation_equal -ne $true -or
+    $report.reference.artifact_sha256 -ne "655689e19d6fa3231bf4667b3af38b4ffa285f94b27aa9df30684a02867f9cf9") {
+    throw "Reference mismatch"
+}
+if ($report.input_preservation.Count -ne 12) { throw "Unexpected input inventory; investigate without modifying sources" }
+foreach ($entry in $report.input_preservation) {
+    if ($entry.before_sha256 -ne $entry.after_sha256) { throw "Input changed during run" }
+}
+if ($report.auto_acceptance -ne $false -or $report.production_decisions_emitted -ne $false -or
+    $report.field_disposition -ne "FIELD FAIL" -or $report.numeric_localization -ne "NOT_MEASURED") {
+    throw "Unexpected decision status"
+}
+Get-FileHash -Algorithm SHA256 tests/diagnostics/s11_shadow_experiment.py, tests/diagnostics/s11_shadow_target_audit.py
+Get-Content -LiteralPath (Join-Path $auditOutput "summary.md") -Raw -Encoding UTF8
+```
+
+반환할 것: **자동 생성 summary.md 전문**, 실제 코드 식별값, 라벨 revision,
+COMPLETE·출력 해시·입력 12개 보존·reference 일치 결과. 상세 JSON은 로컬에
+보존한다. 원래 W3의 band/sequence 내용도 JSON에 남으며, 새 요약에는 후보별
+features/penalties의 present 값(0 포함), missing/null 개수, template 목록을
+출력한다. template note/geometry와 각 필드의 상태는 JSON에서 확인 가능하다.
+
+해석 규칙:
+
+- `vessel_fitting_geometry_unavailable`은 template 미등록을 증명하지 않는다.
+  이번에는 raw recipe의 등록 상태를 직접 확인한다. 빈 목록은 물리적 구조물
+  부재가 아니다. 일치 점수나 `rejected`도 사람 identity 정답이 아니다.
+- static은 지속성, texture는 기존 계산값이다. 독립된 물리적 근거로 격상하거나
+  label별 수치를 보고 threshold/가중치를 선정하지 않는다.
+- raw field 미기록, null, 0은 구분해서 보고한다. sequence witness가 UNAVAILABLE여도
+  `recorded_funnel.structure_context`는 별도로 존재할 수 있다.
+- 실패 시 라벨/packet/trace를 고치거나 새로 추출하지 않는다. 기존 입력·출력을
+  보존하고 오류를 반환한다. 새 영상, 재라벨링, detector 재실행, template 등록,
+  calibration/freeze 및 production 변경은 이 절차에 포함되지 않는다.
+
 ## Candidate identity 문맥 확인 — 기존 두 프레임만
+
+기존 두 프레임의 확인과 출처·좌표 대조 결과는
+[Windows 근거](../60-evidence/s11/s11-o2-identity-context-windows-review-001.md)에
+기록했다. 아래 절차는 재현용으로 보존하며 현재 추가 실행 요청은 없다.
+사용자는 경계의 오르내림과 유면 형성 모습을 앞뒤 약 5초씩 확인했지만, idx0/idx20이
+실제 두 층인지 잔류액의 반사인지 확정하지 못했다고 설명했다. idx20의 더 강한 반사는
+당시 선택 근거였으나 실제 유면도 강하게 반사할 수 있어 모호했다. 이 설명을 라벨
+변경으로 간주하지 않는다. 같은 영상을 다시 요청하지 않고 평가 해석에 불확실성을
+반영한다. [기존 평가 체계의 불확실성 처리 점검](../60-evidence/s11/s11-o2-reference-uncertainty-evaluation-audit.md)은
+로컬 대조 테스트로 완료했으며 이를 위한 Windows 실행은 필요하지 않다. 과거 reply와
+현행 판정을 섞거나 guide 숫자를 이미지 판독으로 재추정하지 않는다. 수치 연결은
+packet/labels를 사용하고, 생성 코드의 hardcode나 guide는 그 권위를 대체하지 않는다.
 
 이번 작업은 기존 사람이 판독한 근거가 현재 witness에 표현되어 있는지 확인한다.
 새 점수 계산·라벨링·영상 구간 확장이 아니다.
@@ -46,10 +137,33 @@
 자료 부족 시 없는 항목만 보고한다. W3/W4 실험 재실행, contour/freeze, 점수식·
 임계값 변경, SPL#2/3 또는 새로운 시간 구간 검토는 이 요청에 포함되지 않는다.
 
+## 사람 판정의 불확실성과 기존 평가 해석
+
+이 항목은 실행 명령이 아닌 결과 해석 기준이다.
+[계약](../20-architecture/s11-interface-observability-witness-architecture.md#human-reference-uncertainty-and-model-abstention)에
+따라 다음을 구분한다.
+
+- labels의 `uncertain`은 사람이 검토했으나 미확정인 상태, `unreviewed`는
+  미검토 상태다. 모델의 `UNRESOLVED`/`UNOBSERVABLE`과 별개다.
+- 후속 설명에서 모호성이 드러나더라도 기존 라벨을 자동 변경하지 않는다.
+  원래 결과의 correct/reversed는 고정된 라벨과의 일치/불일치이며, 보고서
+  해석에는 해당 근거 문서의 불확실성 설명을 함께 제시한다.
+- 불확실한 정답에 대한 모델의 지지는 검증된 성공이 아니다. conditional
+  precision/accuracy만 떼어 보고하지 않고 unverified support, abstention,
+  missing과 전체 후보·point·frame 분모를 함께 읽는다. 판단 보류가 많다는
+  사실만으로 안전성이나 성공을 주장하지 않는다.
+- 정식 라벨 수정이 별도로 요청되면 기존 revision/history 절차로 기록하고,
+  새 freeze/hash에 대응하는 평가를 별도로 보존한다. 과거 frozen/output을
+  덮어쓰거나, pair가 줄어든 것을 점수식 개선으로 합산하지 않는다.
+- 이 기록은 모델 예측값을 만들거나 임계값을 고르는 근거가 아니다. 기존
+  score 실험의 tie/null을 임의로 `UNRESOLVED` 예측으로 변환하지 않는다.
+
+현재 idx0/idx20에 대한 정식 라벨 수정, 재평가 또는 추가 영상 요청은 없다.
+
 ## W4 paired-scale — 기존 라벨 실행
 
 **첫 실행은 [Windows 결과](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md)로 완료되었다.**
-아래는 재현 절차이며 현재 재실행 요청은 없다. W3 audit도 다시 실행하지 않는다.
+아래는 재현 절차이며 현재 재실행 요청은 없다. 기존 기본 W3 audit도 반복하지 않는다. 별도 structure-context 확장은 위의 해당 절차를 따른다.
 같은 X의 두 경로점에서 동일 band width의 점수 차이를 먼저 구한 뒤 중앙값을
 계산하는 방법을 시험한다. 기존 C/A/L 점수식과 locality는 유지한다.
 후보 identity 분류기 구현이나 detector 개선 완료를 뜻하지 않는다.

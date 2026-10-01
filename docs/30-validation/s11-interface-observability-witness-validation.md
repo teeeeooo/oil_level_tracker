@@ -480,6 +480,14 @@ scorer/evaluator and real CLI paths. Required controls:
   coverage for all-abstain outputs;
 - no scalar accuracy/verified observation claim without independent truth, even
   when scripted predictions declare USABLE;
+- human uncertain identity/local truth crossed with supported/rejected, abstained,
+  unobservable, not-evaluated and missing model outcomes: no verified success from
+  unknown truth, no disappearance from inventory or full coverage denominators;
+- rationale-only text changes never reclassify structured truth; changed label
+  content needs matching prediction provenance. A constructed alternate uncertain
+  or unreviewed identity may remove rank pairs while scores remain identical;
+  that is changed truth support, not classifier improvement. Original evaluation
+  remains reproducible and no private labels are altered by these controls;
 - context missing/null/zero and availability distinctions, including meaningful
   glare/exclusion fractions on unavailable optical bands;
 - exact indexed bundle/packet/recorded sequence joins; rejection of wrong or
@@ -494,6 +502,31 @@ UNAVAILABLE funnel is a reported evidence gap, not permission to infer a rejecti
 cause. Select W4 only after naming the distinguishing observable and counter-control;
 scalar calibration and O2 acceptance remain separate. Production code is unchanged,
 so this offline extension does not require another detector replay or field run.
+
+### Recorded structure-context controls
+
+`tests/unit/test_s11_structure_context.py` must cover the optional bundle-only
+projection through the real CLI as well as constructed counter-controls:
+
+- require target-audit + original bundle; retain unchanged v1 inputs, scores and
+  evaluation and use a distinct audit artifact/receipt schema;
+- original indices despite score-sorted raw rows; reject duplicate/missing/raw
+  identity mismatches and wrong/duplicate recipe Glass IDs;
+- preserve features versus penalties, container missing/null, numeric zero versus
+  null/missing; reject booleans, strings and nonfinite numeric values;
+- raw template missing/null/empty/nonempty inventory and duplicate template IDs;
+  never turn empty registration or match magnitude into physical identity;
+- actual indexed bundle/packet/recipe join, non-repository cwd, Unicode/spaced
+  output path, preserved inputs, matching output hashes, no overwrite and no
+  COMPLETE after input mutation.
+
+Windows must report all existing reviews with pinned revisions 3/14/4, original
+reference equality and all 12 input hashes preserved. It must not infer a new
+identity, score, gate or abstention rule from this audit. If recorded fields or
+registrations are absent, report the gap; do not fill them by rerunning detection
+or registering templates. Reading a historical recipe cannot establish when or
+independently of which evaluations its templates were annotated. BASE idx0/idx20
+uncertainty remains qualified; no labels/denominators change.
 
 ## W4 paired-scale controls
 

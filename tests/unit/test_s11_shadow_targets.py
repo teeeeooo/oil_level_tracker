@@ -148,6 +148,73 @@ def test_unobservable_is_distinct_from_missing_and_not_evaluated(targets):
     assert result['visible_frame_verified_identity_coverage'] == 0
 
 
+@pytest.mark.parametrize('decision', [*o2.DECISIONS, 'MISSING_PREDICTION'])
+def test_uncertain_truth_never_certifies_identity_or_local_success(targets, decision):
+    """Human uncertainty and scripted model outcomes are independent axes."""
+    frozen, packets, predictions = targets
+    annotation = frozen['content']['cases'][0]['candidates'][0]
+    row = predictions['predictions'][0]
+    annotation['identity'] = 'uncertain'  # constructed fixture, not a private relabel
+    point = row['local_support'][0]
+    annotation['path_reviews'] = [
+        {k: point[k] for k in ('geometry_basis', 'source_x_range', 'source_y')} |
+        {'judgment': 'uncertain', 'review': {
+            'reviewer': 'fixture', 'note': 'Constructed ambiguous truth.', 'basis': 'synthetic'}}]
+    frozen['content_sha256'] = o2.fingerprint_json(frozen['content'])
+    predictions['frozen_labels_sha256'] = frozen['content_sha256']
+    if decision == 'MISSING_PREDICTION':
+        del predictions['predictions'][0]
+    else:
+        row['decision'] = decision
+        local_decision = {'INTERFACE_SUPPORTED': 'NEAR_INTERFACE',
+                          'INTERNAL_OR_ARTIFACT': 'OFF_INTERFACE'}.get(decision, decision)
+        point.update(decision=local_decision, availability=(
+            'unavailable' if decision == 'UNOBSERVABLE' else
+            'not_evaluated' if decision == 'NOT_EVALUATED' else 'available'))
+    before = copy.deepcopy((frozen, packets, predictions))
+    report = o2.evaluate(frozen, packets, predictions, allow_exploratory=True)
+    metrics = report['partitions']['regression']
+    targets_report = report['targets']['regression']
+    assert metrics['candidate_count'] == 3 and metrics['visible_frame_count'] == 2
+    assert metrics['supported_count'] == int(decision == 'INTERFACE_SUPPORTED')
+    assert metrics['unverified_support_count'] == metrics['supported_count']
+    assert metrics['wrong_non_interface_support_count'] == 0
+    assert metrics['verified_identity_precision'] is None
+    assert metrics['identity_recall'] == 0  # the remaining known positive abstains
+    assert metrics['abstention_count'] == 2 + int(decision in ('UNRESOLVED', 'UNOBSERVABLE'))
+    assert metrics['missing_prediction_count'] == int(decision == 'MISSING_PREDICTION')
+    assert targets_report['candidate_identity_confusion']['uncertain'] == {decision: 1}
+    assert targets_report['visible_frame_verified_identity_coverage'] == 0
+    local = targets_report['local_support']['candidate_center']
+    assert local['point_count'] == 15
+    assert local['reviewed_decisive_count'] == local['correct_count'] == 0
+    assert local['unverified_decisive_count'] == int(
+        decision in ('INTERFACE_SUPPORTED', 'INTERNAL_OR_ARTIFACT'))
+    assert local['conditional_accuracy'] is None
+    assert local['verified_success_over_all_points'] == 0
+    assert targets_report['scalar']['verified_usable_count'] is None
+    assert (frozen, packets, predictions) == before
+
+
+def test_rationale_note_does_not_relabel_and_new_content_requires_matching_predictions(targets):
+    frozen, packets, predictions = targets
+    baseline = o2.evaluate(frozen, packets, predictions, allow_exploratory=True)
+    revised = copy.deepcopy(frozen)
+    revised['content']['cases'][0]['candidates'][0]['identity_review']['note'] = (
+        'Human rationale is ambiguous even with surrounding frames; no identity edit.')
+    revised['content_sha256'] = o2.fingerprint_json(revised['content'])
+    with pytest.raises(ValueError, match='predictions target different labels'):
+        o2.evaluate(revised, packets, predictions, allow_exploratory=True)
+    matching = copy.deepcopy(predictions)
+    matching['frozen_labels_sha256'] = revised['content_sha256']
+    result = o2.evaluate(revised, packets, matching, allow_exploratory=True)
+    assert result['frozen_labels_sha256'] != baseline['frozen_labels_sha256']
+    assert result['partitions'] == baseline['partitions']
+    assert result['targets'] == baseline['targets']
+    assert frozen['content']['cases'][0]['candidates'][0]['identity'] == 'interface'
+    assert o2.evaluate(frozen, packets, predictions, allow_exploratory=True) == baseline
+
+
 def test_context_missing_null_zero_and_availability_are_distinct(targets):
     frozen, packets, _ = targets
     case = frozen['content']['cases'][0]

@@ -23,6 +23,81 @@ FIELDS = ('gray_mean', 'gray_std', 'material_mean', 'static_overlap', 'glare_fra
           'saturation_fraction', 'mask_excluded_fraction', 'valid_fraction', 'normal_alignment')
 
 
+STRUCTURE_SCHEMA = 's11-o2-structure-context-audit-v1'
+STRUCTURE_FIELDS = (
+    'artifact_likelihood', 'static_prior_contribution', 'static_artifact_penalty',
+    'optics_conflict', 'glare_conflict', 'glare_penalty', 'border_penalty',
+    'exclusion_conflict', 'exclusion_penalty', 'material_texture_conflict',
+    'ambiguity_likelihood', 'boundary_likelihood', 'broad_strength', 'region_contrast',
+    'narrow_peak_strength', 'edge_strength', 'narrow_horizontal_coverage',
+    'horizontal_coverage', 'broad_scale_consistency', 'polarity_confidence',
+    'material_terminal_partition_support', 'calibrated_artifact_match',
+    'artifact_center_x_norm', 'artifact_center_y_norm', 'artifact_width_norm',
+    'artifact_height_norm', 'artifact_angle_deg',
+)
+STRUCTURE_SPEC = {
+    'id': 'recorded-structure-context-v1',
+    'fields': list(STRUCTURE_FIELDS),
+    'source': 'raw indexed candidate features/penalties and raw recipe glass geometry',
+    'join': 'original candidate_input_index plus source/kind/canonical_y/local_y/rejected',
+    'missing': 'missing/null/present; never default missing numeric evidence to zero',
+    'interpretation': 'recorded signals and registered templates, not physical identity',
+    'fit_partitions': [], 'threshold': None,
+}
+
+
+def recorded_field(mapping, key, *, numeric=False):
+    value = mapping.get(key)
+    state = 'missing' if key not in mapping else 'null' if value is None else 'present'
+    if numeric and state == 'present':
+        o2.number(value, key)
+    return {'state': state, 'value': copy.deepcopy(value)}
+
+
+def recorded_structure_context(frame, payload, recipe):
+    """Project serialized evidence only; never rebuild typed evidence or match templates."""
+    raw = o2.unique(payload['candidates'], 'candidate_input_index', 'raw candidates')
+    expected = o2.unique(frame['witness']['candidates'], 'candidate_input_index', 'witness candidates')
+    for idx in raw:
+        o2.integer(idx, 'raw candidate index')
+    o2.require(set(expected) == {idx for idx, c in raw.items() if c['kind'] == 'oil_air'},
+               'structure candidate inventory mismatch')
+    candidates = []
+    for idx, witness in expected.items():
+        c = raw[idx]
+        for key in ('source', 'kind', 'canonical_y', 'local_y', 'rejected'):
+            o2.require(c[key] == witness[key], 'structure candidate provenance mismatch')
+        o2.require(type(c['rejected']) is bool, 'recorded rejected must be boolean')
+        row = {k: copy.deepcopy(c[k]) for k in ('candidate_input_index', 'source', 'kind', 'canonical_y', 'local_y', 'rejected')}
+        row['reject_reason'] = recorded_field(c, 'reject_reason')
+        row['feature_score'] = recorded_field(c, 'feature_score', numeric=True)
+        for container in ('features', 'penalties'):
+            field = recorded_field(c, container)
+            value = field.pop('value')
+            o2.require(field['state'] != 'present' or isinstance(value, dict), 'context container must be an object')
+            field['fields'] = {k: recorded_field(value or {}, k, numeric=True) for k in STRUCTURE_FIELDS}
+            row[container] = field
+        candidates.append(row)
+    glasses = [g for g in recipe['glasses'] if g['id'] == frame['glass_id']]
+    o2.require(len(glasses) == 1, 'structure recipe glass must match exactly once')
+    geometry = glasses[0]['geometry']
+    inventory = recorded_field(geometry, 'artifact_templates')
+    if inventory['state'] == 'present':
+        o2.require(isinstance(inventory['value'], list), 'artifact templates must be a list')
+        o2.unique(inventory['value'], 'id', 'artifact templates')
+        for template in inventory['value']:
+            for key in ('center_x', 'center_y', 'width', 'height', 'angle_deg'):
+                if key in template:
+                    o2.number(template[key], key)
+    inventory['count'] = len(inventory['value']) if inventory['state'] == 'present' else None
+    return {'record_id': frame['record_id'], 'glass_id': frame['glass_id'],
+            'frame_index': frame['frame_index'], 'candidates': candidates,
+            'recipe_geometry': {k: recorded_field(geometry, k) for k in ('ellipse', 'exclusions')},
+            'artifact_templates': inventory,
+            'limitation': 'An empty registry is not absence of structure; a recorded match is not ground truth. '
+                          'Same-frame derived features are correlated. No template matching or classifier was rerun.'}
+
+
 def context_rows(case, frame):
     annotations = {a['candidate_input_index']: a for a in case['candidates']}
     rows = []
@@ -125,7 +200,7 @@ def recorded_funnel(frame, sequence):
             'limitation': 'Absent refs do not identify authority versus top-k loss; sequence facts are not CSV publication proof.'}
 
 
-def load_recorded_sequences(bundle_path, label_paths, snapshots):
+def load_recorded_sequences(bundle_path, label_paths, snapshots, *, structure_context=False):
     from oil_tracker.adapters.storage.result_bundle_reader import ResultBundleReader
     from oil_tracker.adapters.storage.debug_trace_repository import DebugTraceRepository
     from tests.diagnostics import s11_review_records as records
@@ -138,6 +213,7 @@ def load_recorded_sequences(bundle_path, label_paths, snapshots):
         digest = o2.sha256_file(path)
         o2.require(path not in snapshots or snapshots[path] == digest, 'bundle changed while loading')
         snapshots[path] = digest
+    recipe = o2.read_json(bundle.files['recipe_snapshot']) if structure_context else None
     frames = []
     for path in label_paths:
         frames.extend(records._verify_packets(bundle, o2.read_json(path), Path(path).parent))
@@ -157,6 +233,8 @@ def load_recorded_sequences(bundle_path, label_paths, snapshots):
                        and payload['glass_id'] == frame['glass_id'] and payload['frame_index'] == frame['frame_index'],
                        'sequence raw record mismatch')
             results[frame['case_id']] = recorded_funnel(frame, payload.get('sequence'))
+            if structure_context:
+                results[frame['case_id']]['structure_context'] = recorded_structure_context(frame, payload, recipe)
         return results
     finally:
         repo.close()
@@ -198,4 +276,44 @@ def render_summary(report):
         lines += ['', 'Missing retained refs cannot identify an earlier gate; do not infer top-k/authority causes.', '']
     lines += ['Return this generated summary plus COMPLETE/output-hash/input-preservation verification.',
               'Keep detailed JSON local. No new labels, freeze, detector run or threshold selection is needed.', '']
+    return '\n'.join(lines)
+
+
+def render_structure_summary(report):
+    def cell(value):
+        return str(value).replace('|', r'\|').replace('\n', ' ').replace('\r', ' ')
+
+    def field_value(field):
+        return cell(field['value']) if field['state'] == 'present' else field['state']
+
+    lines = ['# S11 recorded structure/context audit', '',
+             'EXPLORATORY_UNCALIBRATED; FIELD FAIL; no new predictions or detector run.',
+             'Historical labels are pinned; human uncertainty qualifications remain separate from recorded measurements.',
+             'Missing/null are not zero. Registered templates and recorded signals are not identity truth.',
+             f"Artifact: `{report['artifact']['sha256']}`", '']
+    for case in report['target_audit']:
+        context = case['recorded_funnel']['structure_context']
+        inventory = context['artifact_templates']
+        lines += [f"## Case {cell(case['case_id'])}",
+                  f"Templates: state={inventory['state']}; count={inventory['count']}",
+                  'Template metadata/geometry retained in JSON; provenance of registration is not independently verified.',
+                  '| Candidate | Source | Historical identity | Rejected | Reject reason |', '|---|---|---|---|---|']
+        identities = {r['candidate_input_index']: r['identity'] for r in case['context_summary']}
+        for c in context['candidates']:
+            lines.append(f"| {c['candidate_input_index']} | {cell(c['source'])} | {identities.get(c['candidate_input_index'], 'unavailable')} | {c['rejected']} | {field_value(c['reject_reason'])} |")
+        lines += ['', 'All present context values (including zero); missing/null counts cover the fixed field inventory.',
+                  '| Candidate | Container | Container state | Missing | Null | Present fields |', '|---|---|---|---|---|---|']
+        for c in context['candidates']:
+            for key in ('features', 'penalties'):
+                container = c[key]
+                counts = Counter(f['state'] for f in container['fields'].values())
+                values = '; '.join(f"{k}={field_value(f)}" for k, f in container['fields'].items() if f['state'] == 'present')
+                lines.append(f"| {c['candidate_input_index']} | {key} | {container['state']} | {counts['missing']} | {counts['null']} | {values or 'none'} |")
+        lines += ['', '| Template ID | Kind | Center X/Y | Width/height | Angle |', '|---|---|---|---|---|']
+        for template in inventory['value'] or []:
+            values = [field_value(recorded_field(template, k)) for k in ('id', 'kind', 'center_x', 'center_y', 'width', 'height', 'angle_deg')]
+            lines.append(f"| {values[0]} | {values[1]} | {values[2]} / {values[3]} | {values[4]} / {values[5]} | {values[6]} |")
+        lines += ['', context['limitation'], '']
+    lines += ['Return this generated summary and COMPLETE/output/input hash checks. Keep detailed JSON local.',
+              'No label edit, threshold choice, template registration or video review is requested.', '']
     return '\n'.join(lines)

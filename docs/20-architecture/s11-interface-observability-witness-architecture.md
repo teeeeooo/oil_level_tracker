@@ -761,6 +761,37 @@ Neither regime grants auto acceptance or verifies training chronology. Existing
 rank-experiment output is not a prediction document and is never converted by
 thresholding or using labels as inference inputs.
 
+### Human reference uncertainty and model abstention
+
+The existing label and prediction schemas already represent different axes:
+
+| Source | Value | Meaning |
+|---|---|---|
+| Human candidate identity / local path review | `uncertain` | Reviewed but not resolved for that target |
+| Human candidate identity / local path review | `unreviewed` | No completed judgment for that target |
+| Model prediction | `UNRESOLVED` | Explicit model abstention; not a human label or verified correct answer |
+| Model prediction | `UNOBSERVABLE` | Explicit unavailable-observation outcome; not equivalent to no prediction |
+| Model prediction | `NOT_EVALUATED` / absent record | Explicit non-evaluation / missing prediction, accounted separately in v3 targets |
+
+Unknown human truth remains in confusion/inventory and coverage accounting. A
+supported identity on uncertain/unreviewed truth is unverified, not a true or false
+positive under verified identity precision. Likewise decisive local predictions
+on unknown local truth are not reviewed successes. Conditional precision/accuracy
+must be read with unverified support, abstention, missing predictions and full
+coverage denominators; undefined metrics remain null. A model abstention on a
+known positive does not earn recall. Numeric scalar truth remains separate.
+
+A later human explanation can qualify a historical binary judgment without
+silently mutating it. The evaluator consumes the pinned structured labels; it
+does not parse notes, chat text, glare magnitude or known candidate IDs to replace
+truth. Such qualifications belong in linked evidence accompanying interpretation.
+Any authorized formal label change must use the existing attributed revision /
+freeze / prediction-hash workflow, preserving the original outputs. A different
+truth denominator is not a method improvement and must not be pooled with gains
+on unchanged truth/support. Rank ties and unavailable scores are not predictions
+of UNRESOLVED. This boundary adds no classifier, confidence threshold, new schema
+or second labeling system.
+
 ### Existing context and recorded funnel audit
 
 `s11_shadow_experiment.py --target-audit` reuses existing label/packet validators,
@@ -788,6 +819,48 @@ changes. [Operations](../40-operations/s11-o2-local-shadow-evaluation.md#w3-targ
 own the executable handoff and [local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md)
 records the verified boundary.
 
+### Recorded structure-context projection
+
+The optional `--structure-context` extension requires `--target-audit` and the
+original indexed `--bundle`. The existing audit helper/experiment runner remain
+the owners. Its artifact declares `recorded-structure-context-v1`; the report and
+receipt use `s11-o2-structure-context-audit-v1`. Without the flag, the existing
+W3 report contract remains unchanged. All original inputs/scores/evaluation must
+still reproduce the fixed-score v1 reference before publication.
+
+The projection joins raw trace candidates by original `candidate_input_index`
+plus source/kind/canonical Y/local Y/rejected against verified O1 candidates.
+Score-sorted positions are not identities. It retains a fixed numeric field list
+from **each** of `features` and `penalties`: artifact/static, optics/glare,
+border/exclusion, texture conflict, boundary/broad/narrow/polarity context, material
+terminal support and registered-artifact match/geometry. Do not merge the two
+containers or run `OilCandidateEvidence.from_candidate`: defaults and derived
+composites would erase missing-input provenance. Container and field
+missing/null/present states are separate; zero is present, booleans/nonfinite
+numbers are invalid numeric evidence. Reject reason and feature score are recorded
+provenance, not independently validated physical truth.
+
+Read the exact Glass's raw recipe `geometry.artifact_templates`, ellipse and
+exclusions, preserving missing/null/empty and registration metadata. The standard
+recipe model supplies defaults and is insufficient to prove raw field presence.
+An empty template registry does not prove that a physical structure is absent;
+a match does not establish non-interface identity. O1's constant
+`vessel_fitting_geometry_unavailable` does not describe whether recipe artifact
+templates were registered. Existing `artifact_calibration.apply_artifact_templates`
+and `OilCandidateEvidence` remain production owners; neither is rerun by this
+projection. No new templates, matching thresholds, gates or derived scorer enter
+production or shadow decisions. Raw same-frame feature families are correlated,
+not independent witnesses. Historical template registration notes do not prove
+independent annotation provenance.
+
+The structure payload resides at
+`target_audit[].recorded_funnel.structure_context`; it is available independently
+of whether a sequence decision witness exists (`recorded_funnel.status` may be
+UNAVAILABLE). A summary is generated from these exact projected records. Original
+input preservation, bounded indexed reads, exclusive output creation and COMPLETE
+receipts apply. This projection closes an input-discovery gap; it is not a W4
+identity challenger or an accuracy result.
+
 ## W4 paired-scale comparator boundary
 
 The [fixed-score diagnostic specification](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md#w4-paired-scale-local-comparison)
@@ -809,7 +882,7 @@ bounded W4 sub-experiment does not complete W4 identity work or open W5/O3.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
+- Prior mechanisms reviewed: recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.

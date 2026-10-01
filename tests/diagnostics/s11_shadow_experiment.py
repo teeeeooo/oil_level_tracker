@@ -575,7 +575,7 @@ def render_paired_summary(report):
     return '\n'.join(lines)
 
 
-def artifact(*, locality_ablation=False, identity_profile=False, target_audit=False, paired_scale=False):
+def artifact(*, locality_ablation=False, identity_profile=False, target_audit=False, paired_scale=False, structure_context=False):
     files = [Path(__file__), Path(o2.__file__), Path(inspect.getfile(o2.fingerprint_json)), Path(inspect.getfile(o2.sha256_file))]
     payload = {"spec": SPEC, "code": {p.name: o2.sha256_file(p) for p in files}}
     if locality_ablation:
@@ -587,19 +587,23 @@ def artifact(*, locality_ablation=False, identity_profile=False, target_audit=Fa
     if target_audit:
         from tests.diagnostics import s11_shadow_target_audit as targets
         payload["target_spec"] = targets.SPEC
+        if structure_context:
+            payload["structure_spec"] = targets.STRUCTURE_SPEC
         payload["code"][Path(targets.__file__).name] = o2.sha256_file(targets.__file__)
         from tests.diagnostics import s11_review_records as records
         payload["code"][Path(records.__file__).name] = o2.sha256_file(records.__file__)
     return {**payload, "sha256": o2.fingerprint_json(payload)}
 
 
-def run(label_paths, output, *, locality_ablation=False, identity_profile=False, target_audit=False, paired_scale=False, reference=None, bundle=None):
+def run(label_paths, output, *, locality_ablation=False, identity_profile=False, target_audit=False, paired_scale=False, reference=None, bundle=None, structure_context=False):
     output = Path(output).resolve()
     o2.require(not output.exists(), "output directory already exists; choose a new name")
     o2.require(sum((locality_ablation, identity_profile, target_audit, paired_scale)) <= 1, "experiment modes are mutually exclusive")
     o2.require((locality_ablation or identity_profile or target_audit or paired_scale) == (reference is not None),
                "an experiment mode and --reference must be supplied together")
     o2.require(bundle is None or target_audit, "--bundle requires --target-audit")
+    o2.require(not structure_context or (target_audit and bundle is not None),
+               "--structure-context requires --target-audit and --bundle")
     paths = [Path(p).resolve() for p in label_paths]
     o2.require(paths and len(set(paths)) == len(paths), "labels paths must be nonempty and unique")
     snapshots, documents, all_packets, inputs = {}, [], {}, []
@@ -643,7 +647,7 @@ def run(label_paths, output, *, locality_ablation=False, identity_profile=False,
     if target_audit:
         from tests.diagnostics import s11_shadow_target_audit as targets
         if bundle is not None:
-            funnels = targets.load_recorded_sequences(bundle, paths, snapshots)
+            funnels = targets.load_recorded_sequences(bundle, paths, snapshots, structure_context=structure_context)
     cases, evaluation, ablations, profiles = [], [], [], []
     target_reports, paired_reports = [], []
     o2.require(len(merged["cases"]) <= 64, "experiment supports at most 64 cases")
@@ -669,7 +673,7 @@ def run(label_paths, output, *, locality_ablation=False, identity_profile=False,
         o2.require(o2.sha256_file(path) == digest, "input changed during experiment; discard run")
     report = {"schema_version": SCHEMA, "status": "EXPLORATORY_UNCALIBRATED", "auto_acceptance": False,
               "production_decisions_emitted": False, "field_disposition": "FIELD FAIL", "numeric_localization": "NOT_MEASURED",
-              "artifact": artifact(locality_ablation=locality_ablation, identity_profile=identity_profile, target_audit=target_audit, paired_scale=paired_scale), "runtime": {"python": platform.python_version(), "platform": platform.platform()},
+              "artifact": artifact(locality_ablation=locality_ablation, identity_profile=identity_profile, target_audit=target_audit, paired_scale=paired_scale, structure_context=structure_context), "runtime": {"python": platform.python_version(), "platform": platform.platform()},
               "inputs": inputs, "input_preservation": [{"file_index": i, "before_sha256": h, "after_sha256": o2.sha256_file(p)} for i, (p, h) in enumerate(snapshots.items())],
               "scores": cases, "evaluation": evaluation}
     if locality_ablation:
@@ -679,7 +683,7 @@ def run(label_paths, output, *, locality_ablation=False, identity_profile=False,
         report["schema_version"] = PROFILE_SCHEMA
         report["identity_profile"] = profiles
     if target_audit:
-        report["schema_version"] = targets.SCHEMA
+        report["schema_version"] = targets.STRUCTURE_SCHEMA if structure_context else targets.SCHEMA
         report["target_audit"] = target_reports
     if paired_scale:
         report["schema_version"] = PAIRED_SCHEMA
@@ -691,7 +695,7 @@ def run(label_paths, output, *, locality_ablation=False, identity_profile=False,
     output.mkdir(parents=True, exist_ok=False)
     o2.write_new(output / "experiment.json", report)
     with (output / "summary.md").open("x", encoding="utf-8") as handle:
-        handle.write(render_paired_summary(report) if paired_scale else targets.render_summary(report) if target_audit else render_profile_summary(report) if identity_profile else
+        handle.write(targets.render_structure_summary(report) if structure_context else render_paired_summary(report) if paired_scale else targets.render_summary(report) if target_audit else render_profile_summary(report) if identity_profile else
                      render_ablation_summary(report) if locality_ablation else render_summary(report))
     # Failure after publication leaves artifacts without the success receipt.
     for path, digest in snapshots.items():
@@ -746,12 +750,13 @@ def main():
     modes.add_argument("--identity-profile", action="store_true", help="Compare two-region versus ramp/excursion profile shape for candidate identity only.")
     modes.add_argument("--target-audit", action="store_true", help="Audit separate targets, existing packet context and optional recorded decision funnel; no new predictions.")
     modes.add_argument("--paired-scale", action="store_true", help="Compare median paired scale differences at exact same-X local points; no identity decisions.")
+    parser.add_argument("--structure-context", action="store_true", help="With --target-audit and --bundle, inspect recorded raw context and recipe artifact templates; no new scoring.")
     parser.add_argument("--bundle", type=Path, help="Original indexed R22-3 bundle for exact recorded-funnel joins, with --target-audit only.")
     parser.add_argument("--reference", type=Path, help="Existing original v1 experiment.json; required with an experiment mode.")
     args = parser.parse_args()
     try:
         run(args.labels, args.output, locality_ablation=args.locality_ablation,
-            identity_profile=args.identity_profile, target_audit=args.target_audit, paired_scale=args.paired_scale, reference=args.reference, bundle=args.bundle)
+            identity_profile=args.identity_profile, target_audit=args.target_audit, paired_scale=args.paired_scale, reference=args.reference, bundle=args.bundle, structure_context=args.structure_context)
     except (ValueError, KeyError, OSError, TypeError) as exc:
         parser.exit(2, f"Experiment failed: {exc}\n")
     print("Experiment complete. Read summary.md and complete.json in the output directory.")
