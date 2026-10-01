@@ -255,8 +255,16 @@ to W3 and must preserve compatibility; this contract adds no prediction enum.
 W1 completion requires reproducible partial-positive and glare counter-controls,
 a stated aggregation/identity rationale, and explicit handling of indistinguishable
 inputs. The target distinctions alone do not satisfy model or calibrated O2
-acceptance. Source inspection/synthetic work is the next step; no new Windows
-annotation is required until a specific missing distinction is named.
+acceptance. [Local W1 evidence](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md)
+maps the controls to `tests/unit/test_s11_target_aggregation_contract.py` and
+records the source boundary. Those tests reproduce limitations of the existing
+ranker and exercise scripted evaluator outcomes; they are not a passing identity
+challenger. The identical-observable counterexample has opposite constructed
+truth labels and requires unresolved inference, not relabeling or a tie-breaking
+candidate index. A scripted unresolved output must preserve the visible-frame
+denominator and report zero support recall, rather than treating abstention as
+successful observation. No new Windows annotation is required until a specific
+missing distinction is named.
 
 ## V3 — operating-point discipline
 

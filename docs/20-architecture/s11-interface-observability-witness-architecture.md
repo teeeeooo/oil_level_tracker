@@ -516,9 +516,36 @@ pooling or a threshold. Do not infer that spatial continuity alone provides iden
 
 Score-only profile outcomes cannot identify whether the first loss is sampling,
 missingness, aggregation or a shape collision. Inspect existing owner definitions
-and use bounded synthetic counterexamples first. W1's target distinction is now
-specified; a validated aggregation rule remains open. Preserve existing v2
-labels, original v1 experiments and current production scalar provenance.
+and use bounded synthetic counterexamples first. The
+[W1 source review and counter-controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md)
+exercise the current owners without installing a replacement aggregation rule.
+Preserve existing v2 labels, original v1 experiments and current production
+scalar provenance.
+
+The aggregation design boundary is **geometry-indexed evidence before an identity
+decision**, not a new scalar pooling formula. Retain all measured support and
+opposition with their X/Y/basis, availability and derivation lineage. A median or
+maximum may describe that evidence but cannot by itself supply holistic identity.
+Even an ideal local-position signal can disagree with the holistic target.
+Spatial arrangement is necessary to retain but is not sufficient to distinguish
+two physically different scenes with identical supplied observables.
+
+`BandWitness` already retains static/material/glare/visibility context. The current
+fixed-score consumer intentionally reads only its specified C/A/L inputs, and the
+profile consumer reads four gray means and sampling ranges. Static overlap is not
+a non-interface truth label: a real stationary interface or crossing structure
+can share it. Production phase/authority context has separate availability and
+ownership contracts and is not automatically present in an O2 packet. Any future
+use requires exact provenance and positive/negative controls; reusing a production
+decision as ground truth would be circular.
+
+For indistinguishable inputs, the required future identity outcome is unresolved,
+while both human identities remain intact. The current scorer emits rankings,
+not that decision; existing `UNRESOLVED` evaluator controls demonstrate accounting
+only. W3 must expose the identity/local/scalar distinctions and coverage together;
+W4 must justify one discriminating mechanism before any promotion. No high local
+score, majority vote, complete abstention or missing contour can stand in for
+successful scalar observation.
 
 #### Versioning, migration and implementation boundary
 

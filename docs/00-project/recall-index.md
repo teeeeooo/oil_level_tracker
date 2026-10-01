@@ -26,7 +26,7 @@ Do not scan revision history or all S11 diagnostics by default.
 | Known detector mechanism failures / no-repeat rules | `../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md` | one referenced diagnostic/evidence record |
 | Rejected R23 polarity-only association / latest BASE label correction | `../50-diagnostics/s11/s11-r23-native-polarity-rejection.md` | F04; physical-interface design and acceptance gates |
 | Relationship of the September/October specifications, O/W mapping and live stage status | [document routing](../README.md#s11-audit-specifications-and-execution-routing) | [work-item ledger](work-plan.md#s11-work-item-ledger); do not infer live status from dated audits |
-| O2 partial-path pooling versus holistic identity; proposed W0–W7 follow-up | `../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md` §A01 / W1 | current work plan; witness review semantics; existing score/evaluation owners |
+| O2 partial-path pooling versus holistic identity; proposed W0–W7 follow-up | [W1 source review and executable counter-controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md) | October audit §A01 / W1; current work plan; witness review semantics; existing score/evaluation owners |
 | Canonical private-Windows truth | `../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md` | JSON companion + current field procedure |
 | Target-Windows qualification | `../../.agents/skills/windows-qualification/SKILL.md` | `../40-operations/s11-current-windows-field-qualification.md` |
 | Retained but non-current work | `retained-commitments.md` | linked design/validation owner |

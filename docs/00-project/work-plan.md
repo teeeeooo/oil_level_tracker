@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; first O2 fixed-score Windows run reported complete with mixed results; locality ablation reported complete without promotion; identity-profile Windows W0 is reported complete without promotion; W1 target semantics specified, aggregation challenger and calibrated shadow discrimination remain open
+**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implementation is next; aggregation challenger and calibrated O2 acceptance remain open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -25,8 +25,8 @@ These states do not change the execution policy's formal completion requirements
 |---|---|---|---|
 | O1 extraction (pre-W baseline) | IMPLEMENTED; locally ACCEPTED | Preserve trace-only production equality and exact provenance; no identity authority | [O1 contract](../20-architecture/s11-interface-observability-witness-architecture.md#o1-implemented-measurement-contract), [local evidence](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md) |
 | W0 / O2 fixed profile experiment | VERIFIED by transferred Windows report; CLOSED WITHOUT PROMOTION | Reproduction, receipt and input preservation reported; candidate identity worsens against combined; no rerun requested | [Specification](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md#candidate-identity-profile-mode), [local checks](../60-evidence/s11/s11-o2-identity-profile-local.md), [Windows result](../60-evidence/s11/s11-o2-identity-profile-windows-run-001.md) |
-| W1 / O2 targets and aggregation | CONTRACT DEFINED; new aggregation implementation/verification OPEN | Define and reproduce partial-interface/glare counter-controls, state identity rationale and unresolved handling; do not equate local scores or scalar validity with holistic identity | [W1 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#w1-target-and-aggregation-contract--design-boundary), [W1 controls](../30-validation/s11-interface-observability-witness-validation.md#w1-aggregation-challenger-controls--not-yet-acceptance-evidence); no W1 completion evidence yet |
-| W2 / O2 bounded scene expansion | PROPOSED; not started | Only a named W1/result gap justifies new scene review; reuse adequate existing evidence, preserve recording groups and record any justified omission | [October W2 proposal](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md), [review operations](../40-operations/s11-o2-local-shadow-evaluation.md); no W2 completion evidence |
+| W1 / O2 targets and aggregation | VERIFIED locally for source review, target contract and counter-controls; no identity rule promoted | Partial-positive/glare expectations, identity rationale and unresolved accounting reproduced; a validated aggregation challenger remains OPEN under W4 | [W1 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#w1-target-and-aggregation-contract--design-boundary), [W1 controls](../30-validation/s11-interface-observability-witness-validation.md#w1-aggregation-challenger-controls--not-yet-acceptance-evidence), [local evidence](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md) |
+| W2 / O2 bounded scene expansion | CONDITIONAL; collection deferred, not completed | Current fixtures and existing labels suffice for target/evaluator work; no new scene can resolve identical supplied observables by labeling alone. Name a discriminating context/geometry gap and its positive/negative controls before collecting | [October W2 proposal](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md), [review operations](../40-operations/s11-o2-local-shadow-evaluation.md), [deferral rationale](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md#decision-and-remaining-gap) |
 | W3 / O2 shadow outputs and evaluation | PROPOSED extension; existing evaluation foundation implemented only | W1 target meanings precede distinct prediction/evaluation contracts; demonstrate compatibility and controlled behavior; exploratory output is not calibrated acceptance | [Existing foundation](../20-architecture/s11-interface-observability-witness-architecture.md#o2-implemented-evaluation-foundation), [V3 discipline](../30-validation/s11-interface-observability-witness-validation.md#v3--operating-point-discipline), [foundation evidence](../60-evidence/s11/s11-o2-evaluation-foundation.md) does not complete W3 |
 | W4 / O2 one challenger | PROPOSED; not selected | Name the bottleneck from W1 and any necessary W2 evidence; fix one hypothesis/endpoint and use the W3 evaluation target; record benefit, regression or rejection | [October W4 proposal](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md), [V2 controls](../30-validation/s11-interface-observability-witness-validation.md#v2--raster-controls-before-shadow-classification); no W4 completion evidence |
 | O2 acceptance (between W4 and W5) | OPEN; not satisfied | Valid development/calibration/holdout roles, fixed operating point and required Windows shadow acceptance; regression rank gains cannot substitute | [O2 acceptance](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance); independent data/operating-point requirements unresolved |
@@ -34,13 +34,14 @@ These states do not change the execution policy's formal completion requirements
 | W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Handoff and phase observation are separate changes with separate positive/negative controls; do not relax gates based on elapsed time or polarity alone | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior), [parent validation](../30-validation/s11-physical-interface-evidence-repair-validation.md); no behavior acceptance |
 | W7 / O5 field qualification | PENDING integrated behavior candidate | Exact runtime, all canonical segments and required accuracy/coverage/resource evidence; no earlier local/shadow PASS substitutes | [Field acceptance](../30-validation/s11-interface-observability-witness-validation.md#field-qualification), [Windows procedure](../40-operations/s11-current-windows-field-qualification.md); FIELD FAIL retained |
 
-**Immediate action — W1:** perform bounded source review and synthetic
-partial-positive/glare-negative controls, using existing identity-context owners,
-before selecting an aggregation challenger. Target definitions are already
-written; a validated rule is not. No new Windows execution, labels, video windows,
-partition changes or thresholds are currently requested. W2 collection is
-conditional, and W3 contract preparation need not wait for unnecessary new data;
-W4 efficacy and O2 acceptance still require their stated evidence.
+**Immediate action — W3:** extend the existing offline shadow-output/evaluation
+owner so candidate identity, geometry-keyed local support, scalar eligibility
+and abstention/visible-frame coverage have explicit separate meanings. Use W1's
+scripted positive/negative/unresolved controls before connecting a W4 challenger.
+Preserve existing v2 labels and calibrated import guards; exploratory rankings
+are not calibrated predictions. W2 collection remains conditional. No additional
+Windows execution, labels, video windows, partition changes or thresholds are
+requested by the completed W1 work. W4 efficacy and O2 acceptance remain open.
 
 At each W transition, update the affected row and immediate action here, linking
 (1) the implemented/rejected decision, (2) exact checked code/input and scoped
@@ -380,15 +381,16 @@ no scorable identity pairs or changed outcomes. W0 closes without promotion;
 no additional Windows report is needed to accept that bounded outcome.
 
 The user-supplied [October audit](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md)
-remains unchanged. W1's target distinctions and two-sided control expectations
-are now specified in the existing witness architecture/validation owners, without
-scorer or schema changes. Candidate identity, local path support and scalar
+remains unchanged. W1's target distinctions and two-sided controls are specified
+in the existing witness architecture/validation owners and
+[verified locally](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md),
+without scorer or schema changes. Candidate identity, local path support and scalar
 eligibility must be evaluated separately. Partial interface truth cannot be
 rewritten to fit median pooling, and max pooling cannot certify isolated glare.
 A higher negative profile score does not establish a smaller step residual or a
 physical shape collision; the first causal loss remains unresolved.
 
-The [work-item ledger](#s11-work-item-ledger) owns the immediate W1 action and
+The [work-item ledger](#s11-work-item-ledger) owns the immediate action and
 remaining W-stage dependencies. The audit's reported oracle/test runs remain
 attributed to that audit, not repeated evidence.
 
