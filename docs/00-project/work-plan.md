@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit reported complete; W4 paired-scale Windows comparison verified by transferred report: primary +1/0, no negative-control regression; retained without promotion; remaining local reversal inspection is next; candidate-identity challenger and calibrated O2 acceptance remain open
+**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit reported complete; W4 paired-scale Windows comparison verified by transferred report: primary +1/0, no negative-control regression; retained without promotion; remaining-pair inspection complete; local-position experiment concluded without promotion; candidate-identity mechanism review is next; candidate-identity challenger and calibrated O2 acceptance remain open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -28,29 +28,28 @@ These states do not change the execution policy's formal completion requirements
 | W1 / O2 targets and aggregation | VERIFIED locally for source review, target contract and counter-controls; no identity rule promoted | Partial-positive/glare expectations, identity rationale and unresolved accounting reproduced; a validated aggregation challenger remains OPEN under W4 | [W1 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#w1-target-and-aggregation-contract--design-boundary), [W1 controls](../30-validation/s11-interface-observability-witness-validation.md#w1-aggregation-challenger-controls--not-yet-acceptance-evidence), [local evidence](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md) |
 | W2 / O2 bounded scene expansion | CONDITIONAL; collection deferred, not completed | Current fixtures and existing labels suffice for target/evaluator work; no new scene can resolve identical supplied observables by labeling alone. Name a discriminating context/geometry gap and its positive/negative controls before collecting | [October W2 proposal](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md), [review operations](../40-operations/s11-o2-local-shadow-evaluation.md), [deferral rationale](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md#decision-and-remaining-gap) |
 | W3 / O2 shadow outputs and evaluation | IMPLEMENTED and VERIFIED locally for v2 prediction import, separated targets and scripted controls; existing-data Windows audit VERIFIED by transferred report | Preserve v1 compatibility and calibrated guards; scalar eligibility remains unverified without its own truth; no classifier efficacy claimed | [W3 contract](../20-architecture/s11-interface-observability-witness-architecture.md#w3-separated-shadow-targets), [validation](../30-validation/s11-interface-observability-witness-validation.md#w3-separated-target-and-audit-controls), [local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [Windows audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) |
-| W4 / O2 one challenger | Local-position Windows run VERIFIED by transferred report; not rejected on supplied controls, retained WITHOUT PROMOTION; candidate-identity mechanism OPEN | Primary improved=1/regressed=0; negative controls unchanged on joint support; two support-only changes excluded from gains; one primary reversal and one unscorable pair remain; no identity/scalar promotion | [Specification](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md#w4-paired-scale-local-comparison), [controls](../30-validation/s11-interface-observability-witness-validation.md#w4-paired-scale-controls), [local evidence](../60-evidence/s11/s11-o2-w4-paired-scale-local.md), [Windows result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md) |
+| W4 / O2 one challenger | Local-position Windows run VERIFIED by transferred report; not rejected on supplied controls, retained WITHOUT PROMOTION; candidate-identity mechanism OPEN | Primary improved=1/regressed=0; negative controls unchanged on joint support; two support-only changes excluded from gains; remaining reversal is present in every scale; remaining unscorable pair has no joint support; bounded experiment concluded, no identity/scalar promotion | [Specification](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md#w4-paired-scale-local-comparison), [controls](../30-validation/s11-interface-observability-witness-validation.md#w4-paired-scale-controls), [local evidence](../60-evidence/s11/s11-o2-w4-paired-scale-local.md), [Windows result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md) |
 | O2 acceptance (between W4 and W5) | OPEN; not satisfied | Valid development/calibration/holdout roles, fixed operating point and required Windows shadow acceptance; regression rank gains cannot substitute | [O2 acceptance](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance); independent data/operating-point requirements unresolved |
 | W5 / O3 support and association | PROPOSED; entry pending O2 acceptance | Separate behavior plan plus typed support/physical association controls; exact same-frame provenance and ambiguity protection | [O3 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o3--independent-support-and-association), [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry); no behavior acceptance |
 | W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Handoff and phase observation are separate changes with separate positive/negative controls; do not relax gates based on elapsed time or polarity alone | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior), [parent validation](../30-validation/s11-physical-interface-evidence-repair-validation.md); no behavior acceptance |
 | W7 / O5 field qualification | PENDING integrated behavior candidate | Exact runtime, all canonical segments and required accuracy/coverage/resource evidence; no earlier local/shadow PASS substitutes | [Field acceptance](../30-validation/s11-interface-observability-witness-validation.md#field-qualification), [Windows procedure](../40-operations/s11-current-windows-field-qualification.md); FIELD FAIL retained |
 
-**Immediate action — inspect the remaining W4 local-order failure:** the
-[Windows result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md)
-reports one primary improvement, zero regressions and preserved inputs/reference.
-Retain the comparator as a bounded diagnostic result without promotion. Read the
-existing private JSON's one reversed and one unscorable primary pair as specified
-in the [follow-up procedure](../40-operations/s11-o2-local-shadow-evaluation.md#w4-결과-후속--기존-json의-잔여-pair-확인).
-No experiment, W3 audit, detector, video or label rerun is requested.
+**Immediate action — return to candidate-identity mechanism review:** the
+[W4 follow-up](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md#follow-up-remaining-pair-inspection)
+completes the requested inspection. The persistent idx9/idx10 reversal is already
+present in all three combined-score scales; changing this median reduction cannot
+repair it. The other pair has zero shared support, with idx8 unavailable at every
+width and idx9 additionally unavailable at BW16/24. Do not tune another reducer
+or impute missing scores to these examples. No further Windows execution or
+JSON extraction is requested now.
 
-The improvement repairs the known motivating pair. Review-002's seven usable
-negative-control pairs each have one shared scale, so unchanged outcomes there
-cannot test a different reduction method. Review-003 has three negative pairs
-with three shared scales; one/two-scale pairs do not distinguish these reducers.
-Do not count two legacy-to-joint support changes as aggregation improvements or
-turn pairwise order into a total candidate ranking. W4 candidate identity,
-independent scalar truth and calibrated O2 acceptance remain open; W2 collection
-remains conditional on a named missing discriminating observable. No new formula
-is selected merely to fit the remaining local failure.
+Retain the observed +1/0 local gain without promotion. Its one-scale negative
+controls, retrospective motivating example and possible pairwise cycles preclude
+identity/generalization claims. The next local task is to review existing geometry
+and context against W1 partial-positive, glare/structure and identical-observable
+controls before selecting a candidate-identity mechanism. No new formula is yet
+selected. W4 identity, independent scalar truth and calibrated O2 acceptance remain
+open; W2 collection stays conditional on a named discriminating evidence gap.
 
 At each W transition, update the affected row and immediate action here, linking
 (1) the implemented/rejected decision, (2) exact checked code/input and scoped

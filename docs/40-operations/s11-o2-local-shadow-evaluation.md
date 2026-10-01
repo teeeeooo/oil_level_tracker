@@ -88,6 +88,9 @@ scale 위에서의 개선·악화와 legacy→공통 support 변화도 구분한
 
 ## W4 결과 후속 — 기존 JSON의 잔여 pair 확인
 
+**추출과 대조가 완료되었다.** [결과 기록](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md#follow-up-remaining-pair-inspection)을 참고한다.
+아래는 당시 요청을 보존한 것이며 현재 추가 추출·재실행 요청은 없다.
+
 추가 실험 없이 `experiments/paired-scale-001/experiment.json`만 읽는다.
 `paired_scale`에서 `case_id=review-002`, `tasks`의
 `native_path/interface_location_same_x`를 선택한다. `pairs` 중

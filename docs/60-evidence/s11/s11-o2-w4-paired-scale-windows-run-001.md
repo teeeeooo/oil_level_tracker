@@ -101,7 +101,7 @@ calibrated O2 acceptance remain unresolved. Pairwise cycles remain possible, so
 there is no valid automatic total-rank/selected-candidate inference. No follow-on
 formula, threshold tuning or W5/O3 entry is authorized by this observation alone.
 
-## Next bounded inspection
+## Bounded inspection request (completed by follow-up below)
 
 Read the existing private `experiment.json`; do not rerun the experiment. Within
 `paired_scale`, select case_id=review-002 and task
@@ -116,10 +116,74 @@ support before selecting further implementation work. Do not optimize a new
 formula for the remaining pair. Candidate-identity work still needs its own
 observable and controls; this local comparison is not its substitute.
 
+## Follow-up: remaining pair inspection
+
+The user returned the two requested raw pair objects from the existing experiment.
+No rerun, code/label/score change was reported. The accompanying seven preserved
+input entries are consistent with the original experiment's preservation record;
+they do not supply a separate before/after hash of experiment.json for this read.
+Do not claim that additional byte-level verification was performed here.
+
+### Persistent reversed pair: score-order limitation
+
+Both candidates are interface identities. Positive idx9 is near_interface at
+native_path X=[130,236], Y=382; negative idx10 is off_interface at the same X,
+Y=378. There are three shared widths and no excluded scales.
+
+| BW | Positive combined | Negative combined | Difference |
+|---|---:|---:|---:|
+| 8 | 0.4787061461567078 | 0.4825010373793375 | -0.003794891222629715 |
+| 16 | 0.4468563212258939 | 0.45981481109266327 | -0.012958489866769351 |
+| 24 | 0.2088245679507642 | 0.2346619666585796 | -0.0258373987078154 |
+
+Legacy, joint baseline and paired outcomes are all reversed. Both differences
+are -0.012958489866769351. Unlike the repaired idx8/idx10 pair, every available
+scale already favors the off point. Pairing before taking the median therefore
+cannot repair this ordering. Any common nonnegative weighting of these supplied
+negative differences also remains negative (unless all weights are zero).
+This is a limitation of the supplied combined scores, not evidence that an
+alternative descriptor is impossible or that the human labels are wrong. The
+component-level physical cause is not established by these combined values.
+The 4 px Y separation is descriptive, not a label tolerance or a new rule.
+
+### Persistent unscorable pair: missing joint support
+
+Positive idx9 near Y417 versus negative idx8 off Y405, native_path X=[449,555].
+Both have three scale records; common_scale_count=0, common_band_widths=[],
+scales=[], and both differences are null. All three views remain unscorable.
+
+| BW | Excluded fields |
+|---|---|
+| 8 | right.combined |
+| 16 | left.combined, right.combined |
+| 24 | left.combined, right.combined |
+
+The earlier idx8 far_above.gray_mean gap explains right.combined at all widths.
+The returned object additionally shows left.combined unavailable at BW16/24;
+its underlying missing measurement is not identified by these exclusions. Do
+not attribute it to the same far band without source evidence. The known right
+side alone is already sufficient to eliminate all joint support. Missing scores
+stay null rather than zero; no fallback or extra extraction is needed to close
+this bounded aggregation experiment.
+
+### Disposition and next work
+
+The follow-up is complete. Retain the +1/0 retrospective local gain without
+promotion; the remaining reversal is upstream of this reducer, and the remaining
+unscorable pair has no joint support. Stop this aggregation experiment rather
+than adjust a formula to the remaining pair. No additional Windows run or JSON
+extraction is requested now.
+
+Return to the open W1/W4 candidate-identity question: review available geometric
+and contextual evidence against partial-positive, glare/structure and identical-
+observable controls before selecting a new mechanism. No new identity formula,
+collection request, threshold, phase change or O2 acceptance follows from this
+local-position result. FIELD FAIL remains unchanged.
+
 ## Detector Governance
 
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F09`, `S11-F10`.
-- First harmful stage: the known local comparison reverses during independent scale reduction; paired reduction repairs it on this sample. The cause of the remaining reversal and physical identity failures is not established by this summary.
+- First harmful stage: the known local comparison reverses during independent scale reduction; paired reduction repairs it on this sample. The follow-up shows the remaining pair already reversed at all three combined-score scales; the underlying component-level physical cause and candidate-identity failures remain unresolved.
 - Logic-map impact: NONE — transferred offline evidence and live status only; detector selection, scoring, geometry and publication behavior are unchanged.
 - Failure-registry impact: NONE — narrow in-sample improvement is retained without identity or field acceptance, preserving existing provenance and no-private-rule constraints.
