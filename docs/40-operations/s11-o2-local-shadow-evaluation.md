@@ -1098,3 +1098,67 @@ output; preserve all original hashes. Do not add scores/descriptors, choose
 thresholds, register templates, regenerate profiles, or run the detector. Report
 FIELD FAIL/NOT_EVALUATED unchanged. This is the already-defined image/profile
 correspondence step, not a new filming or qualification phase.
+
+
+## Unpooled O1 spatial context — existing saved outputs
+
+Use the current GitHub source and existing Python environment from the successful
+spatial run. This is the next executable handoff, not a repeat of the original
+video probe. Input is the intact `spatial-context-001` output folder (receipt,
+JSON, PNGs and SVGs); no original video, bundle, labels or new human judgment is
+needed. The tool checks the old receipt and saved pixels directly.
+
+From the repository root in PowerShell, replace only the two directory paths:
+
+```powershell
+python tests/diagnostics/s11_joint_context_run.py `
+  --source "D:\...\experiments\spatial-context-001" `
+  --expected-source-artifact "6aaf5f3ff6c4e1314d08cb7effb745ff5b721c03940c57002214b039ef544910" `
+  --output "D:\...\experiments\joint-context-001"
+```
+
+Choose a new output folder outside the old one. The source artifact is the
+already-reconciled value; do not request another manual hash transcription. A
+failure should be returned with its error; do not change the source files,
+relax a baseline check or rerun the video detector to get past it.
+
+Open `joint-context-001/viewer.html` in a browser. Select each target point by
+exact case, candidate index, geometry basis, X and Y. Select existing band widths
+to see separate recorded intervals. Turn overlays off for image inspection, and
+uncheck Selected X strip to view the full crop. A coincident candidate/native
+center can share O1 bands; `band_binding` and `recorded_role` expose that alias.
+The four aligned panels show original crop, raw gray, O1 gradient magnitude and
+absolute vertical derivative. Source Y increases downward. Magenta means an
+invalid five-pixel stencil; black means valid zero. Preview scales are fixed
+analytically (no per-image normalization); the NPZ arrays own exact values.
+
+Use the same bounded comparisons, not the full candidate inventory:
+
+| Case / basis | Exact X | Candidate markers | Purpose |
+|---|---|---|---|
+| review-002 / native_path | [130,236], [236,343], [343,449] | idx8 / idx9 / idx11 at their stored Y | Compare joint transition arrangement versus remote structure region |
+| review-003 / native_path | [1218,1303], [1303,1388], [1388,1473], [1473,1558], [1558,1643] | idx10 / idx15 at their stored Y | Compare transition shape without row/column pooling |
+| review-002 / candidate_center | [0,115], [115,231], [231,346], [346,462], [462,578] | idx0 Y382 / idx20 Y406 | Human-unresolved control; no required distinction |
+
+Return one compact row per X comparison with exact geometry, a concrete
+pixel/gradient appearance observation, mask/glare/border limitation, and one of
+`different appearance`, `shared/ambiguous`, or `not assessable`. Describe whether
+a transition extends across X, splits, terminates, or remains too weak to inspect.
+Do not call an apparent extension a computed connected component or physical
+Oil/structure boundary. Do not use the brightest edge, distance from a known
+boundary, pixel polarity, or rejected flag as identity. A different appearance
+is not a correct classification. Keep native and candidate-center views separate.
+The human idx0/idx20 uncertainty stays unresolved even if image patterns differ.
+
+Return generated `summary.md`, COMPLETE/output-hash/input-preservation checks and
+that compact inspection together. Read coordinates/values from JSON/NPZ, not
+image text. For two cases the tool emits 13 hashed outputs plus complete.json;
+count programmatically. It rehashes the 31 original outputs plus their receipt,
+not the earlier 12 video/bundle/label inputs. Preserve all original outputs and
+keep detailed NPZ/JSON/images local. A separate new note may hold observations.
+If the viewer/images cannot be inspected, report that boundary explicitly.
+
+There is no new score, detector run, label change, threshold or image acquisition.
+After this bounded inspection, decide from the evidence whether a specific joint
+appearance hypothesis merits further work or should close without promotion.
+Do not automatically request more metadata extractions or user relabeling.

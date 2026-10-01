@@ -631,6 +631,32 @@ includes the existing source-runner entry/receipt regressions because the shared
 module changed. No Windows lateral CLI, physical efficacy or O2 acceptance is
 claimed by these local controls.
 
+## Unpooled O1 spatial-context controls
+
+The [joint-context contract](../20-architecture/s11-interface-observability-witness-architecture.md#w4-unpooled-o1-spatial-context--stored-output-adapter)
+is diagnostic only. Require the known joint row/column collision to differ in
+unpooled gradients under both polarities, while mask/glare-hidden changes remain
+indistinguishable. Verify stencil neighbours, crop borders, observed zeros,
+orientation, nonzero origins, unchanged inputs, and retained identical-pixel and
+central-difference checkerboard aliases. No synthetic shape is physical truth.
+
+Exercise the saved-output CLI from a non-repository Unicode directory with UTF-8
+and closed stdin. Use actual O1 extraction, PNG bytes/raw raster identities, source
+artifact and COMPLETE receipt format. Verify every new output hash, exact bands,
+NPZ array hashes and old-file preservation, including two frame/Glass cases.
+Native and candidate-center roles stay distinct; exactly coincident deduplicated
+centers have an explicit alias, and absent noncoincident centers must fail.
+Reject mismatched byte/raster/artifact/schema/point/frame/baseline information,
+path traversal, oversized PNG dimensions, existing/nested output, and changes
+during measurement or publication without a COMPLETE receipt. Check viewer
+initial rendering and point/scale/overlay switching on synthetic output.
+
+Windows execution remains required on the private saved outputs. Return the
+machine summary plus the bounded appearance inspection; flag unreadable images
+rather than inventing interpretation. Stop on provenance/baseline failures. A
+successful local adapter or Windows receipt does not resolve Oil identity, the
+human ambiguity control, numeric localization or O2 acceptance.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.

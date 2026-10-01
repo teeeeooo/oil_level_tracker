@@ -1026,11 +1026,68 @@ records actual O1 collision controls and the remaining joint-marginal collision.
 A future joint pixel/edge relation must be distinguished from existing paths and
 aggregate measurements before a classifier or private rollout is proposed.
 
+## W4 unpooled O1 spatial context — stored-output adapter
+
+The next bounded hypothesis is that a candidate's transition arrangement across
+X may be inspectable before marginal pooling: a laterally extending transition,
+a broken highlight and a terminal structure can differ in two-dimensional shape.
+These are appearance hypotheses, not class definitions. Structure/reflection can
+also produce coherent boundaries, and the human idx0/idx20 ambiguity is retained.
+
+`measure_joint_context` in the existing spatial probe reuses O1
+`oil_interface_witness._extra_channels` without changing it. It preserves the
+existing gradient magnitude and absolute vertical derivative at every crop pixel,
+plus the existing five-pixel visible-stencil validity mask. It does not run Canny,
+select a path, threshold an edge, connect components or infer region ownership.
+The unused Canny channel is supplied zeros and discarded. Gradients use gray/255;
+central differences have magnitude at most sqrt(0.5) and vertical magnitude at
+most 0.5. Stencils can cross a supplied X-strip boundary, exactly as in O1, but
+never cross crop/mask/glare invalidity. Invalid storage zeros require the separate
+validity array; valid zero is a different state. Raw pixels remain the comparison
+owner because derivative polarity and central-difference aliases remain lost.
+
+This is an unpooled view of existing pixels and O1 arithmetic, not an independent
+sensor or proof of packet-wide novelty. The known joint row/column marginal
+collision is distinguished, but identical pixels and checkerboard/polarity aliases
+are explicit counter-controls. No numeric localization or identity score follows.
+
+`tests/diagnostics/s11_joint_context_run.py` is a separate stored-artifact adapter:
+the original source runner owns video decoding, bundle/recipe reconstruction and
+label binding; this adapter consumes its immutable output without reopening those
+inputs. It verifies the original COMPLETE schema, every listed output hash, the
+caller-pinned source artifact and its fingerprint, PNG byte/raw-raster identities,
+frame/Glass/crop/point bindings, exact recomputed row context and baseline bands.
+A baseline other than MATCH stops this comparison. It uses no case-specific
+selection, source family rule or historical label to choose pixels. One or two
+cases, existing 4096-axis/512-point bounds, 128 files and 512 MiB total source
+outputs bound the read. It never substitutes a nearby frame or inferred path.
+
+New outputs are a numeric NPZ per case, fixed-scale PNG previews, experiment JSON,
+a compact automatic summary and an offline HTML viewer. Exact witness bands are
+linked by candidate index + basis + X + source Y; each requested/clipped interval,
+reason and availability remains separate. When O1 deduplicates an exactly coincident
+candidate/native center, candidate-center references explicitly name the recorded
+native role and `coincident_recorded_native_center` binding. Different Y values
+and missing native roles never use this alias. The viewer overlays those bands and the
+supplied point, not an inferred contour. NPZ float arrays own numbers, previews
+are quantized. Source files are checked again before a new COMPLETE receipt is
+written last; overwrites and output nested in the source experiment are rejected.
+The input receipt covers stored outputs only, not fresh hashes of the original
+video/bundle/labels. No historical decoded-pixel equality is asserted.
+
+Windows may run this adapter on the existing two-frame spatial-context output
+and inspect the bounded targets in the [procedure](../40-operations/s11-o2-local-shadow-evaluation.md#unpooled-o1-spatial-context--existing-saved-outputs).
+The next decision is whether unpooled arrangement offers a specific observable
+worth testing as a future hypothesis, remains shared/ambiguous, or is censored.
+No automatic transition to classifier fitting, new collection, relabeling or
+production change is authorized by a COMPLETE result. [Local evidence](../60-evidence/s11/s11-o2-joint-context-local.md)
+records this adapter's verified scope.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: ordered column-side preservation and joint-marginal collisions; candidate-relative reindexing, whole-inventory O1 novelty and central-gap peak controls; full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
+- Prior mechanisms reviewed: unpooled O1 gradient stencils, central-difference aliases and stored-output binding; ordered column-side preservation and joint-marginal collisions; candidate-relative reindexing, whole-inventory O1 novelty and central-gap peak controls; full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.

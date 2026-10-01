@@ -11,6 +11,7 @@ import math
 import numpy as np
 
 from oil_tracker.adapters.vision.row_features import masked_row_mean
+from oil_tracker.adapters.vision import oil_interface_witness
 from tests.diagnostics import s11_interface_shadow_evaluation as o2
 
 SPEC = {
@@ -30,6 +31,44 @@ LATERAL_SPEC = {
     'decision': 'NOT_EVALUATED', 'threshold': None,
     'max_band_width': 128, 'max_point_columns': 65536,
 }
+
+JOINT_SPEC = {
+    'id': 'unpooled-o1-gradient-context-v1',
+    'operator': 'existing O1 raw-gray central differences, center plus four visible neighbours',
+    'extent': 'whole crop, retaining joint source X/Y; no candidate selection',
+    'purpose': 'inspect lateral arrangement lost by marginal pooling, not physical identity',
+    'decision': 'NOT_EVALUATED', 'threshold': None,
+    'invalid_encoding': 'zero storage plus explicit gradient_valid mask; never observed zero',
+}
+
+
+def measure_joint_context(gray, effective_mask, glare_mask, points, *, origin=(0, 0)):
+    """Expose the existing O1 spatial stencil before pooling, with validity.
+
+    This is not a new independent signal: both channels are deterministic functions
+    of the saved pixels. No edge threshold, connected component or path is selected.
+    Magnitudes intentionally lose polarity; even identical complete pixels can
+    describe different physical causes. Return JSON metadata and numeric arrays.
+    """
+    rows = measure_context(gray, effective_mask, glare_mask, points, origin=origin)
+    effective = effective_mask > 0
+    visible = effective & ~(glare_mask > 0)
+    channels = oil_interface_witness._extra_channels(gray, visible, effective, np.zeros_like(gray))
+    arrays = {'gradient_valid': channels['gradient_count'].astype(np.uint8),
+              'gradient_magnitude': channels['gradient'],
+              'vertical_magnitude': channels['normal']}
+    ox, _ = rows['origin']
+    strips = []
+    for profile in rows['profiles']:
+        a, b = profile['source_x_range']
+        strips.append({'profile_id': profile['profile_id'], 'source_x_range': [a, b],
+                       'pixel_count': gray.shape[0]*(b-a),
+                       'visible_pixel_count': int(visible[:, a-ox:b-ox].sum()),
+                       'gradient_valid_count': int(arrays['gradient_valid'][:, a-ox:b-ox].sum())})
+    return {'spec': copy.deepcopy(JOINT_SPEC), 'decision': 'NOT_EVALUATED',
+            'origin': rows['origin'], 'shape': rows['shape'], 'points': rows['points'], 'strips': strips,
+            'limitation': 'Spatial gradients retain local arrangement, not region ownership or physical '
+                          'connectivity. Mask gaps cannot support continuity. Same pixels remain ambiguous.'}, arrays
 
 
 def measure_context(gray, effective_mask, glare_mask, points, *, origin=(0, 0)):
