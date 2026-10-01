@@ -28,7 +28,7 @@ These states do not change the execution policy's formal completion requirements
 | W1 / O2 targets and aggregation | VERIFIED locally for source review, target contract and counter-controls; no identity rule promoted | Partial-positive/glare expectations, identity rationale and unresolved accounting reproduced; a validated aggregation challenger remains OPEN under W4 | [W1 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#w1-target-and-aggregation-contract--design-boundary), [W1 controls](../30-validation/s11-interface-observability-witness-validation.md#w1-aggregation-challenger-controls--not-yet-acceptance-evidence), [local evidence](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md) |
 | W2 / O2 bounded scene expansion | CONDITIONAL; collection deferred, not completed | Current fixtures and existing labels suffice for target/evaluator work; no new scene can resolve identical supplied observables by labeling alone. Name a discriminating context/geometry gap and its positive/negative controls before collecting | [October W2 proposal](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md), [review operations](../40-operations/s11-o2-local-shadow-evaluation.md), [deferral rationale](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md#decision-and-remaining-gap) |
 | W3 / O2 shadow outputs and evaluation | IMPLEMENTED and VERIFIED locally for v2 prediction import, separated targets and scripted controls; existing-data Windows audit VERIFIED by transferred report; optional raw structure-context Windows completion reported with matching local code/artifact hashes; numeric follow-up reviewed and schema transcription resolved by reported True/111; no promotion | Preserve v1 compatibility and calibrated guards; scalar eligibility remains unverified without its own truth; no classifier efficacy claimed | [W3 contract](../20-architecture/s11-interface-observability-witness-architecture.md#w3-separated-shadow-targets), [validation](../30-validation/s11-interface-observability-witness-validation.md#w3-separated-target-and-audit-controls), [local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [Windows audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) |
-| W4 / O2 one challenger | Local-position Windows run VERIFIED by transferred report; not rejected on supplied controls, retained WITHOUT PROMOTION; candidate-identity source review and bounded Windows context reconciliation complete; human rationale and idx0/idx20 ambiguity despite temporal context recorded; uncertainty interpretation VERIFIED locally; ordered full-height spatial-context measurement prototype VERIFIED locally, no private efficacy or identity rule promoted | Primary improved=1/regressed=0; negative controls unchanged on joint support; two support-only changes excluded from gains; remaining reversal is present in every scale; remaining unscorable pair has no joint support; bounded experiment concluded, no identity/scalar promotion | [Specification](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md#w4-paired-scale-local-comparison), [controls](../30-validation/s11-interface-observability-witness-validation.md#w4-paired-scale-controls), [local evidence](../60-evidence/s11/s11-o2-w4-paired-scale-local.md), [Windows result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md) |
+| W4 / O2 one challenger | Local-position Windows run VERIFIED by transferred report; not rejected on supplied controls, retained WITHOUT PROMOTION; candidate-identity source review and bounded Windows context reconciliation complete; human rationale and idx0/idx20 ambiguity despite temporal context recorded; uncertainty interpretation VERIFIED locally; full-height/column-side/joint measurement controls VERIFIED locally; joint Windows execution received; W4-R0 report reconciliation PENDING, candidate-identity challenger OPEN; no identity rule promoted | Primary improved=1/regressed=0; negative controls unchanged on joint support; two support-only changes excluded from gains; remaining reversal is present in every scale; remaining unscorable pair has no joint support; bounded experiment concluded, no identity/scalar promotion | [Specification](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md#w4-paired-scale-local-comparison), [controls](../30-validation/s11-interface-observability-witness-validation.md#w4-paired-scale-controls), [local evidence](../60-evidence/s11/s11-o2-w4-paired-scale-local.md), [Windows result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md) |
 | O2 acceptance (between W4 and W5) | OPEN; not satisfied | Valid development/calibration/holdout roles, fixed operating point and required Windows shadow acceptance; regression rank gains cannot substitute | [O2 acceptance](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance); independent data/operating-point requirements unresolved |
 | W5 / O3 support and association | PROPOSED; entry pending O2 acceptance | Separate behavior plan plus typed support/physical association controls; exact same-frame provenance and ambiguity protection | [O3 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o3--independent-support-and-association), [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry); no behavior acceptance |
 | W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Handoff and phase observation are separate changes with separate positive/negative controls; do not relax gates based on elapsed time or polarity alone | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior), [parent validation](../30-validation/s11-physical-interface-evidence-repair-validation.md); no behavior acceptance |
@@ -105,7 +105,7 @@ MATCH counts. Its artifact exactly matches local reconstruction. Private hashes
 and appearance are reported evidence, not independently read here. The transferred
 source-hash spelling does not reopen the already reconciled source identity.
 
-**Next action requires only the existing Windows analysis:** follow the
+**W4-R0 — next action requires only the existing Windows analysis:** follow the
 [bounded report reconciliation](../40-operations/s11-o2-local-shadow-evaluation.md#unpooled-o1-spatial-context--report-reconciliation).
 The custom mean/max and columns-over-0.05 statistics have unclear domains; the
 BASE native table compares different X intervals. Reconcile one contradictory
@@ -113,9 +113,22 @@ Accum statistic with its extraction definition, and complete the three original
 same-X BASE rows. Do not rerun joint/spatial extraction, request new labels or
 force human identity. Black previews and invalid ends do not establish absence
 or an unbroken physical contour. No new descriptor/threshold implementation is
-justified by this report. If corrected appearance remains shared/censored, close
-without promotion. Human idx0/idx20 ambiguity, FIELD FAIL, conditional W2 and
+justified by this report. Use W4-R1 below to distinguish shared appearance from
+insufficient support and close the inspection explicitly. Human idx0/idx20
+ambiguity, FIELD FAIL, conditional W2 and
 W5/O3 behind O2 acceptance remain unchanged.
+
+The [W4 progress audit](../50-diagnostics/s11/s11-w4-progress-audit-and-continuation-plan-2026-10-01-ba1bd6a.md)
+is a preserved addendum to the September/October specifications. Windows R0
+follow-up has not yet been performed. After its one corrected note, W4-R1 closes
+the joint inspection with CONTINUE_REUSE_ONLY, CLOSED_WITHOUT_PROMOTION or
+NOT_ASSESSABLE. Missing original analysis definitions remain unresolved rather
+than triggering repeated extraction. Only CONTINUE_REUSE_ONLY with input-based
+positive/negative expectations permits W4-R2 to preregister one bounded challenger
+using the existing representation. W4-R3 activates W2 only for a named evidence
+gap; W4-R4 reuses the implemented W3 evaluator; W4-R5 retains O2 acceptance before
+W5. These are conditional continuation steps, not completed work or automatic
+authorization for new collection.
 
 W4 paired-scale work remains concluded with a bounded +1/0 local gain and no
 promotion. Candidate-identity discrimination, scalar truth, calibration and O2
@@ -490,10 +503,10 @@ The canonical source companion's fingerprint remains pending despite a reported
 O2 bundle-link source hash. Reconcile that metadata using verified full local
 identity and operator provenance; this gap alone does not invalidate linked O2
 labels or require another detector run.
-The existing evaluator can score imported candidate decisions but has no separate
-predicted near/off contract: candidate identity and path localization need
-distinct outputs/evaluation in the eventual shadow implementation. Earlier
-reported validation remains accepted within its scope.
+W3 now implements separate candidate-identity, path-localization and scalar
+eligibility prediction/evaluation contracts. Reuse that evaluator for a later
+challenger; its implementation does not establish classifier efficacy or scalar
+truth. Earlier reported validation remains accepted within its scope.
 No new descriptor, detector rerun or universal sign/threshold rule is authorized
 by these observations. Classifier/operating-point acceptance remains open; new-run
 hashes do not prove old-run immutability retroactively.

@@ -72,6 +72,18 @@ strength: the table itself gives different means/maxima. The correct retained
 statement is that the reported visual inspection did not resolve human ambiguity.
 No relabeling or forced distinction is requested.
 
+## Preview interpretation erratum — W4 audit intake
+
+The [W4 progress audit, F09](../../50-diagnostics/s11/s11-w4-progress-audit-and-continuation-plan-2026-10-01-ba1bd6a.md)
+corrects item 3 above. Under the current uint8 central-difference operator, the
+smallest nonzero derivative is 1/510. With vertical scale 0.5 and magnitude scale
+sqrt(0.5), it rounds to a nonzero display byte in both previews. Thus valid
+nonzero gradients do not round to PNG byte zero in this domain. Visually dark
+nonzero bytes, exact valid zero derivatives and invalid magenta must be separated.
+A zero derivative still does not establish uniform pixels or physical absence
+(central-difference aliases remain). The original intake wording above is retained
+with this explicit correction; no runtime change or Windows rerun is implied.
+
 ## Bounded next action
 
 Use the existing outputs and existing analysis note/code. No checkout update,

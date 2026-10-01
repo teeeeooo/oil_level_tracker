@@ -92,13 +92,18 @@ R18–R20 predecessor architecture/validation and earlier diagnostics remain his
 
 ## S11 audit specifications and execution routing
 
-The two supplemental specifications form a sequence of design rationale and
-follow-up audit, not competing current authorities:
+The supplemental specifications form a sequence of design rationale and
+follow-up audits, not competing current authorities:
 
 | Document | Role | How to use it |
 |---|---|---|
 | [2026-09-17 execution review](50-diagnostics/s11/s11-observation-redesign-execution-review.md) | Grounds the bounded observation redesign and O1–O5 sequence against `577f98a` | Preserve design rationale and constraints; use the current architecture/validation for actual implementation |
 | [2026-10-01 audit/work specification](50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md) | Audits progress at `85a01cd`, identifies target/pooling risks and proposes W0–W7 | Use its named work items through the current work-plan ledger; do not treat its dated pending/completion prose as live status |
+| [2026-10-01 W4 progress audit](50-diagnostics/s11/s11-w4-progress-audit-and-continuation-plan-2026-10-01-ba1bd6a.md) | Audits `ba1bd6a` and proposes W4-R0–R5 continuation within W4 | Addendum to the prior specifications; preserve the original audit and use the live ledger for the active substep |
+
+The W4 attachment is preserved byte-for-byte under the filename above; only the
+transfer prefix and trailing `-1` were removed. W4-R0–R5 are internal continuation
+steps, not a new milestone or a replacement acceptance contract.
 
 The September attachment named
 `s11-detector-redesign-review-and-execution-spec-2026-09-17-1.md`

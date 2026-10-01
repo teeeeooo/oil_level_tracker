@@ -1189,8 +1189,11 @@ source artifact by requesting another manual hash transcription.
    [236,343] Y396/406/925; [343,449] Y397/419/922. Compare the three markers within
    each X, not one candidate from each of three different X strips. Give concrete
    appearance and mask limitations; mark censored comparisons not assessable.
-3. Qualify assertions of no transition or an unbroken contour: quantized black
-   and invalid endpoints are not proof of either. Equal thresholded column counts
+3. Qualify assertions of no transition or an unbroken contour: for the current
+   uint8 central difference and fixed display scales, an exact valid PNG zero
+   denotes zero derivative, while a visually dark nonzero byte may be weak signal.
+   A zero central difference does not prove uniform raw pixels; invalid endpoints
+   do not establish physical termination or continuity. Equal thresholded column counts
    are not equal intensity distributions. Preserve idx0/idx20 ambiguity without
    another human review. Keep corrected notes outside the original output.
 
