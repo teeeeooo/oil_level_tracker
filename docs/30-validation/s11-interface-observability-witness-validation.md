@@ -266,6 +266,13 @@ denominator and report zero support recall, rather than treating abstention as
 successful observation. No new Windows annotation is required until a specific
 missing distinction is named.
 
+The [identity context source audit](../60-evidence/s11/s11-o2-identity-context-source-audit.md)
+adds actual-raster sampling controls: a remote intensity return outside all candidate
+bands must leave that local witness unchanged, whereas a return within measured
+support must be observed. Cover both polarities. Neither result supplies physical
+truth or justifies automatic band expansion; test any proposed contextual cue
+against a stationary same-shape structure and partial real interface separately.
+
 ## V3 — operating-point discipline
 
 Before a shadow classifier is allowed to emit

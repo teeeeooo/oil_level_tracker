@@ -547,6 +547,16 @@ W4 must justify one discriminating mechanism before any promotion. No high local
 score, majority vote, complete abstention or missing contour can stand in for
 successful scalar observation.
 
+The [identity context source audit](../60-evidence/s11/s11-o2-identity-context-source-audit.md)
+verifies an additional representation boundary: a candidate's finite bands can
+be identical in two different wider rasters. Preserving geometry and all current
+context fields does not preserve image evidence outside that support. Material
+means describe raw appearance and static overlap describes reference persistence;
+neither is an Oil probability. A future context mechanism must identify the
+specific additional observable and counterexample, reuse existing extraction and
+evaluation owners, and preserve missing/unknown rationale. This does not authorize
+automatic band expansion or changing candidate identity from scene proximity.
+
 #### Versioning, migration and implementation boundary
 
 Use a versioned label/frozen/report contract for the changed meaning, with explicit
@@ -799,7 +809,7 @@ bounded W4 sub-experiment does not complete W4 identity work or open W5/O3.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
+- Prior mechanisms reviewed: finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.

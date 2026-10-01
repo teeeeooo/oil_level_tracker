@@ -13,6 +13,39 @@
 새 작업은 해당 W의 선행 조건과 입력 범위를 확인한다. 단계 완료 여부는 실행 성공
 코드만으로 판단하지 않고 검증 결과를 근거로 work-plan에 반영한다.
 
+## Candidate identity 문맥 확인 — 기존 두 프레임만
+
+이번 작업은 기존 사람이 판독한 근거가 현재 witness에 표현되어 있는지 확인한다.
+새 점수 계산·라벨링·영상 구간 확장이 아니다.
+[로컬 근거](../60-evidence/s11/s11-o2-identity-context-source-audit.md)를 먼저 읽는다.
+
+1. 현재 라벨 revision 3/14/4와 기존 packet/bundle-link 연결을 유지한다.
+   review-002와 review-003의 frame/Glass/source identity를 packet에서 확인한다.
+2. 범위는 review-002 idx0, idx10, idx11, idx20 / review-003 idx10, idx15다.
+   이 여섯 후보는 기존 두 프레임에 한정된다. idx는 해당 packet의 번호다.
+3. 먼저 기존 replies, review_note, artifact_note 및 연결된 과거 직접 판독 기록을
+   읽는다. 사람의 실제 문구와 출처를 인용한다. 추론을 사용자 판정으로 저장하지 않는다.
+4. 이미 저장된 주석 없는 원본 crop/전체 프레임을 보고, 이어서 기존 guide와 대조한다.
+   없으면 원래 bundle의 original_roi 자산을 exact frame/Glass로 찾는다. 자산이
+   없거나 연결을 입증할 수 없으면 그 사실을 보고하고 임의의 인접 프레임을 쓰지 않는다.
+   detector 실행이나 새 영상 탐색은 필요하지 않다.
+5. 다음 열로 표를 반환한다: review/idx, 기존 identity, 직접 판독 인용·출처,
+   실제 확인한 원본 이미지·frame/Glass, 관찰 근거와 이미지 범위,
+   witness의 대응 필드 또는 누락 정보, 같은 근거를 가질 반례, 남은 불확실성.
+   직접 판독과 에이전트의 새 관찰을 명확히 분리한다.
+
+미리 정한 답을 찾지 않는다. 주변 영역의 연결·띠의 끝·구조물 모양·시간 문맥은
+실제로 확인된 경우만 적는다. 단일 이미지에서 정지/움직임을 추측하지 않는다.
+정답 Y와의 거리, 높은 점수, source 알고리즘, phase/선택 결과만으로 새 identity
+근거를 만들지 않는다. 기록이 단순히 interface/non_interface만 말하면 그 이상의
+인간 판독 근거는 미기록으로 남긴다. 기존 라벨을 재질문·변경하지 않는다.
+
+라벨·packet 및 읽은 기존 자산은 수정하지 않고, 원본 JSON/영상은 Windows에
+보존한다. 새 표를 파일로 저장한다면 기존 파일을 덮어쓰지 않는 새 분석 문서로
+만든다. 읽은 파일의 실행 전후 해시와 연결 확인 결과를 함께 반환한다.
+자료 부족 시 없는 항목만 보고한다. W3/W4 실험 재실행, contour/freeze, 점수식·
+임계값 변경, SPL#2/3 또는 새로운 시간 구간 검토는 이 요청에 포함되지 않는다.
+
 ## W4 paired-scale — 기존 라벨 실행
 
 **첫 실행은 [Windows 결과](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md)로 완료되었다.**

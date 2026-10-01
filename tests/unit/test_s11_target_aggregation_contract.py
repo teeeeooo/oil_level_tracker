@@ -227,3 +227,42 @@ def test_raster_occlusion_retains_extent_and_unavailable_evidence(occlusion):
     assert not band.available and band.gray_mean is None and band.valid_pixel_count == 0
     assert (band.mask_excluded_fraction if occlusion == "mask" else band.glare_fraction) == 1
     assert witness.candidates[0].sectors[-1].centers[0].scales[0].bands[1].available
+
+
+@pytest.mark.parametrize('return_row', [155, 175])
+@pytest.mark.parametrize('invert', [False, True])
+def test_wide_returning_region_is_outside_local_witness_support(return_row, invert):
+    """A different full crop can have exactly the same candidate witness.
+
+    Scene names describe constructed geometry, not machine-known physical truth.
+    Wider context is potentially informative, never an automatic identity rule.
+    """
+    step = np.full((200, 200), 180, dtype=np.uint8)
+    step[100:] = 80
+    returning = step.copy()
+    returning[return_row:] = 180
+    if invert:
+        step, returning = 255-step, 255-returning
+    assert not np.array_equal(step, returning)
+    a, b = measure(step), measure(returning)
+    ca, cb = asdict(a.candidates[0]), asdict(b.candidates[0])
+    sampled_stop = max(band.clipped_local_y_range[1]
+                       for sector in a.candidates[0].sectors
+                       for center in sector.centers for scale in center.scales
+                       for band in scale.bands)
+    assert sampled_stop + 2 < return_row  # outside bands and their gradient stencil
+    assert ca == cb  # includes all geometry, scales, peaks and band context
+    assert experiment.score_candidate(ca) == experiment.score_candidate(cb)
+    for sa, sb in zip(ca['sectors'], cb['sectors']):
+        for aa, bb in zip(sa['centers'][0]['scales'], sb['centers'][0]['scales']):
+            assert experiment.profile_scale(aa) == experiment.profile_scale(bb)
+    assert a.candidates[0].decision == b.candidates[0].decision == 'NOT_EVALUATED'
+
+
+def test_return_inside_sampled_context_is_observed_without_identity_decision():
+    step = np.full((200, 200), 180, dtype=np.uint8)
+    step[100:] = 80
+    returning = step.copy(); returning[106:] = 180
+    a, b = measure(step), measure(returning)
+    assert a.candidates[0] != b.candidates[0]
+    assert a.candidates[0].decision == b.candidates[0].decision == 'NOT_EVALUATED'
