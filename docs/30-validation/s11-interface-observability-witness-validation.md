@@ -552,6 +552,53 @@ pooling, no success from zero pairs, no holdout or field claim follows from thes
 correlated regression comparisons. W1 identity/scalar controls and O2 calibration
 requirements remain unsatisfied by a favorable local-position result.
 
+## Ordered spatial-context prototype controls
+
+The [measurement contract](../20-architecture/s11-interface-observability-witness-architecture.md#w4-ordered-spatial-context--measurement-prototype)
+is exercised by `tests/unit/test_s11_spatial_context_probe.py`. Its primary endpoint
+is information retention at fixed raster/geometry/masks, not classifier accuracy:
+
+- Constructed step/remote-return pairs at two return extents and both polarities
+  have identical complete original O1 candidate witnesses and fixed scores, while
+  the full-height observation distinguishes the remote rows.
+- Hidden returns under mask or glare remain indistinguishable; unavailable rows
+  stay null with exact support counts, never become zero/continuous evidence.
+- Identical physical aliases, stationary steps, and Oil-with-return appearances
+  remain NOT_EVALUATED. No truth labels are inputs to the probe.
+- Equal global histograms with different vertical row order remain distinguishable;
+  horizontal permutations with equal strip means remain a documented collision.
+- Exact nonzero crop origin and candidate/basis/source geometry survive; shared
+  intervals reuse one profile without treating candidate aliases as independent.
+- Observed black pixels differ from missing rows; one-pixel support stays visible
+  as such; empty inventory creates no candidate or successful prediction.
+- Reject duplicate/invalid geometry, boolean indices/origins, nonintegral X,
+  wrong shape/type and resource-bound violations. Input arrays/points stay intact.
+
+Real-data acceptance requires a separately verified source-frame adapter and
+image/profile correspondence on the existing two frames. The synthetic passing
+endpoint is insufficient to infer private stripe shape, classifier separation,
+scalar truth or Windows qualification. Fail the identity hypothesis if opposing
+classes remain observationally identical; report mask/crop censoring. Any classifier
+proposal needs separate positive/negative/unresolved controls and an operating
+point before O2 acceptance. The source adapter and Windows procedure now implement
+this entry; private results remain pending.
+
+Source-adapter controls use a real synthetic indexed bundle, generated video and
+existing bundle-link owner. A real CLI subprocess must run from a non-repository
+Unicode directory with explicit UTF-8 and closed stdin. Verify exact point inventory,
+original witness preservation, decoded frame/crop/mask identities, every output
+hash and every input hash; exercise two different frames in one original bundle.
+Wrong video/bundle/packet/link/scene/revision, writer locks, decoder overshoot,
+wrong dimensions/crop and input mutations during measurement/publication must
+leave no COMPLETE receipt. Existing output cannot be overwritten. Baseline-band
+controls must show both identical gray/support and explicit reconstruction drift.
+No detector efficacy assertion follows from these constructed entry controls.
+
+The Windows run uses only review-002 rev14 and review-003 rev4. Report baseline
+`MATCH`/`DIFFERENT` and mismatched-band counts independently of execution COMPLETE.
+A mismatch requires inspecting reconstruction before comparing representations;
+do not fit a tolerance to make private data pass. Identity remains NOT_EVALUATED.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.

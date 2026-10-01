@@ -878,11 +878,120 @@ used as a candidate ranking, identity classification, scalar Y, tracklet admissi
 or phase decision. Existing prediction/evaluator ownership is unchanged. This
 bounded W4 sub-experiment does not complete W4 identity work or open W5/O3.
 
+## W4 ordered spatial context — measurement prototype
+
+### Hypothesis and selected scope
+
+Test **ordered full-height appearance within each exact source-X strip** as one
+new observable. A finite four-band witness can miss a second remote transition;
+pooling or rescoring its existing values cannot recover that missing information.
+This is a measurement hypothesis, not a claim that private idx11/idx15 has such a
+return, or that a bounded stripe is always a reflection. A wide structural step
+and a stationary Oil boundary can be identical; Oil plus a lower reflection can
+also have the same profile as a bounded artifact. Neither sustained appearance
+nor a return grants identity or NON_INTERFACE authority.
+
+Only spatial sampling extent/order changes. Original candidate geometry, raw-gray
+units, masks, labels, O1 packets and v1 scores remain fixed. No temporal bootstrap,
+new template, inferred layer identity, source/Y prior, score fusion or fitted
+threshold is introduced. W5 association remains behind O2 acceptance.
+
+### Ownership and representation
+
+`tests/diagnostics/s11_spatial_context_probe.py::measure_context` is an isolated,
+label-free raster measurement prototype. It reuses `row_features.masked_row_mean`
+for arithmetic. A separate diagnostic module is justified because the existing
+target audit projects serialized packet/trace fields and owns no image inputs;
+adding a wider profile there cannot manufacture absent pixels. Production
+`oil_phase_topology.dark_border_cap_conflict`, material-row context, template
+matching and `temporal_raster_evidence` remain unchanged. Their boolean caps,
+material profiles or motion residuals are not substitutes for this ordered
+candidate-strip observation.
+
+Input is uint8 raw gray, explicitly supplied effective/glare masks, integer source
+crop origin and exact candidate index/basis/X interval/source Y points. No supplied
+point is clipped or replaced by another basis. Reuse one profile for a shared X
+interval while retaining every candidate reference. Record every source row's
+visible/effective/glare-excluded counts, mean in 0..255 units and row state. A zero
+mean with visible support is distinct from missing. Restore empty-row means to
+null rather than the arithmetic helper's numeric zero. Do not interpolate across
+mask/glare gaps or infer continuation beyond crop/mask support. Counts of one are
+measured support, not a declaration of sufficient classifier coverage.
+
+Keep source-row order; do not collapse to another scalar median/histogram. The
+prototype still averages horizontally within a strip and is therefore **not** a
+full 2-D region-adjacency representation. Horizontal permutation can collide.
+`extent_censored=true` explicitly limits observed persistence to the supplied
+crop, never the vessel or an unobserved region. Cap inputs at 4096 pixels per axis
+and 512 supplied points; these are diagnostic resource limits, not semantic
+thresholds. Oversized/invalid inventories fail, never silently drop points.
+
+Output spec `ordered-full-height-strip-context-v1` always has decision
+`NOT_EVALUATED`. This is not shadow prediction v2, a total candidate score,
+UNRESOLVED classifier output, numeric localization or a production integration.
+No artifact is accepted simply because its arrays serialize or synthetic fixtures
+differ. The array measurement is used by the read-only source adapter below.
+
+### Real-data entry before any efficacy claim
+
+`tests/diagnostics/s11_spatial_context_run.py` uses the original two source frames already reviewed,
+not screenshots/guide annotations or a new video interval. Reuse existing bundle
+link verification, indexed packet verification, video reader, recipe mask builder
+and preprocessing; expose the exact image/geometry/mask provenance and preserve
+all input hashes. Bound to the original reviewed candidate inventory, keep each
+basis separate, and use no class labels to choose pixels or profile extent.
+Record source video hash, frame/Glass identity, crop origin, decoded raster/mask
+hashes, source recipe/settings and code/spec fingerprints. No detector proposal
+or resolver rerun is needed. If the decode/mask association cannot be established,
+stop that image comparison rather than treating a manually drawn guide as data.
+
+The CLI takes one or two v2 regression label files (one frame each), expected
+revisions, the original bundle and original video. Each review's existing sibling
+`bundle-link.json` is mandatory. Verify its fingerprint, all five original bundle
+file hashes, packet hashes, indexed witness equality, exact scene/frame/Glass and
+recipe geometry, and original source-video bytes. Explicit paths relocate reads
+without editing links. No fallback to filenames, PNG guides or nearby frames exists.
+The existing video reader may advance at most 120 frames from an earlier seek;
+only the exact backend-reported frame index is accepted. Overshoot/nonsequential
+advance fails. This is source-byte/index association, not a historical decoded
+pixel equality proof; source PNG and actual timestamp/raster hashes are retained.
+
+Reuse `build_mask_bundle` and `preprocess` with snapshot Glass settings. Verify
+witness crop origin and size. These are reconstructed masks under the recorded
+recipe/current code; no stored mask is silently assumed identical. Retain every
+existing candidate's candidate-center/native-path point without identity-based
+selection, bounded to 512 points (increased from the 128-point array prototype to
+cover both bases in the supplied inventories). No proposal/resolver is rerun.
+
+The adapter also reuses the original diagnostic band arithmetic for an explicit
+baseline check of available/count/gray mean/gray std/glare fraction. It preserves
+original bands and flags mismatches; 1e-10 absolute tolerance applies only to float
+arithmetic in 0..1 gray units. `MATCH` is limited to these measured fields. A
+`DIFFERENT` baseline forbids attributing changes to sampling extent alone and
+requires reconstruction investigation before any information-gain conclusion.
+
+A new output directory contains JSON, automatic summary, raw source/crop/gray and
+mask PNGs, and per-X SVG plots with exact candidate markers and unconnected null
+gaps. Plots are inspection aids; JSON owns numbers. Input before/after checks cover
+labels, packets, links, bundle files and video. `complete.json` is written last,
+with hashes of every output and an artifact hash of the spec/direct code owners.
+Existing output directories and outputs within bundle/review directories fail.
+Execution completion does not assert identity success, O2 acceptance or field PASS.
+
+Inspect whether remote transitions visible in raw images are actually retained
+by the profiles, using the unchanged local witness as the representation baseline.
+Keep mask/crop censoring and the human-ambiguous idx0/idx20 pair explicit. Do not
+report a near/off ranking gain, relabel unknown physics or select thresholds from
+this inspection. If the added context is absent, masked, or shared by opposing
+physical candidates, close the hypothesis without promotion; do not keep adding
+descriptors to fit the same failures. Identity classification and independent
+acceptance remain separate work after this information question is answered.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
+- Prior mechanisms reviewed: full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.

@@ -13,7 +13,76 @@
 새 작업은 해당 W의 선행 조건과 입력 범위를 확인한다. 단계 완료 여부는 실행 성공
 코드만으로 판단하지 않고 검증 결과를 근거로 work-plan에 반영한다.
 
+## Structure-context schema 문자 검증
+
+사용자가 True/111을 확인했다. 실제 schema는 소문자 o의 `o2`이며 전달 표기만
+잘못된 것으로 정리했다. 아래 검사는 재현용으로 보존하며 현재 반복 요청은 없다.
+
+숫자 문맥 추가 반환은 완료되었다. 같은 후보 값이나 영상을 다시 요청하지 않는다.
+두 번 반환된 schema의 `02`가 코드의 `o2`와 달라, 기존 출력에 아래 읽기 전용
+검사만 실행한다. `$auditOutput`은 기존 structure-context-audit-001 폴더,
+`$pythonExe`는 기존 Python 경로로 지정한다. JSON 내용을 수정하지 않는다.
+
+```powershell
+@'
+import hashlib, json, pathlib, sys
+root = pathlib.Path(sys.argv[1])
+expected = "s11-" + chr(111) + "2-structure-context-audit-v1"
+h = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+paths = [root / n for n in ("complete.json", "experiment.json", "summary.md")]
+before = {p.name: h(p) for p in paths}
+receipt = json.loads(paths[0].read_text(encoding="utf-8-sig"))
+report = json.loads(paths[1].read_text(encoding="utf-8-sig"))
+for name, obj in (("complete", receipt), ("experiment", report)):
+    value = obj.get("schema_version")
+    print(name, "is_string=", isinstance(value, str), "matches_expected=", value == expected,
+          "codepoint_at_4=", ord(value[4]) if isinstance(value, str) and len(value) > 4 else None)
+print("artifact_receipt_equal=", receipt.get("artifact_sha256") == report.get("artifact", {}).get("sha256"))
+for name in ("experiment.json", "summary.md"):
+    print(name, "matches_receipt_hash=", before[name] == receipt.get("outputs", {}).get(name))
+print("read_preserved=", before == {p.name: h(p) for p in paths})
+'@ | & $pythonExe - $auditOutput
+```
+
+표준 출력을 그대로 반환한다. 기대값은 두 schema 모두 matches_expected=True,
+codepoint_at_4=111(소문자 o); 숫자 0은 48이다. 결과가 다르면 오타로 단정하거나
+자동 수정하지 말고 그대로 보고한다. receipt/artifact/hash/read-preserved도
+모두 True가 기대값이다. 이 검사는 classifier 성능 평가가 아니다.
+
+## Structure-context 결과의 제한된 추가 반환
+
+추가 반환 완료. 아래는 당시 요청을 보존한 것이며 현재 반복 요청은 없다.
+
+실행 완료 보고와 코드/artifact 대조 결과는
+[Windows 근거](../60-evidence/s11/s11-o2-structure-context-audit-windows-run-001.md)에
+기록했다. 아래는 **이미 생성된 `structure-context-audit-001` 출력만 읽는 요청**이다.
+새 소스 다운로드나 실험 재실행은 필요 없다. 숫자와 ID는 이미지/기억으로 옮기지
+말고 JSON 파서로 추출한다.
+
+- complete.json과 experiment.json의 `schema_version` 원문. 기대값은
+  `s11-o2-structure-context-audit-v1` (소문자 o)이다. 다르면 수정하지 말고 그대로 보고.
+- `target_audit[]`에서 세 case의 `case_id`와
+  `recorded_funnel.structure_context`의 `record_id`, `glass_id`, `frame_index` 원문.
+- 같은 structure_context의 candidates를 **candidate_input_index로 검색**하여:
+  review-001 idx10; review-002 idx0/8/10/11/20; review-003 idx10/15.
+  각 후보의 source, canonical_y, rejected, reject_reason과 아래 필드들을 반환.
+- features와 penalties **각각**의 container state 및 fields 내
+  `artifact_likelihood`, `static_prior_contribution`, `static_artifact_penalty`,
+  `material_texture_conflict`, `optics_conflict`, `glare_conflict`,
+  `calibrated_artifact_match`, `material_terminal_partition_support`,
+  `boundary_likelihood`의 **state/value 원문**. missing/null/0을 합치지 않는다.
+- 파일 전체나 과거 summary를 다시 작성하지 않고 선택한 JSON만 반환한다.
+  읽기 전후 experiment.json/complete.json 해시가 같은지도 보고한다.
+
+review-001 idx10은 기록상 template 제거 사례, 나머지는 identity 실패/양성 대조와
+모호한 쌍의 문맥을 확인하는 제한된 집합이다. 정확도 평가 분모나 threshold 선정
+집합으로 사용하지 않는다. template 존재만으로 identity를 판정하거나, 이 조회를
+위해 labels/packet을 고치지 않는다. 이전 s1/s2 판정 충돌은 review-002 **idx10**,
+Y=213/RefY=212 출처 문제는 review-003 **idx10 reference guide**라는 점도 유지한다.
+
 ## Recorded structure-context audit — 원래 번들만
+
+실행 완료가 보고된 절차이며 아래 명령은 재현용이다. schema 문자 확인까지 완료되었으며 현재 추가 실행 요청은 없다.
 
 목적: 별도 구조물 음성 후보(idx11 등)의 실패를 조사하기 위해, O1 band 표에는
 빠져 있는 **원래 후보의 artifact/static/texture 관련 필드와 등록된 artifact
@@ -882,3 +951,88 @@ entity 쌍의 consistency는 사람의 동일대상 라벨이 있어야 계산�
 
 평가는 자동 합격을 내지 않는다. O2의 실영상 구분력, 독립된 holdout 성능, 내부
 증거 중복 사용 검토와 operating point 수용이 끝나야 O3로 넘어간다.
+
+## Ordered spatial context — existing two source frames
+
+Purpose: retain the vertical order of raw-gray appearance outside existing O1
+bands, using only the two previously reviewed source frames. This is a measurement
+probe, not a new identity score, detector run, video interval or labeling request.
+The [architecture](../20-architecture/s11-interface-observability-witness-architecture.md#w4-ordered-spatial-context--measurement-prototype)
+and [local adapter evidence](../60-evidence/s11/s11-o2-spatial-context-source-adapter-local.md)
+define provenance, baseline checks and limitations. FIELD FAIL remains unchanged.
+
+Use the newly published source containing
+`tests/diagnostics/s11_spatial_context_run.py`. A GitHub ZIP is sufficient; `.git`
+is not required. Record the download commit and generated artifact/code hashes.
+Use the existing Windows Python environment with this checkout's dependencies.
+Resolve the existing local paths; do not create new review records or relink files:
+
+- review-002 `labels-v2.json`, v2 schema, revision **14**, sibling `bundle-link.json`;
+- review-003 `labels.json`, v2 schema, revision **4**, sibling `bundle-link.json`;
+- original R22-3 bundle used for the preceding audits;
+- original `SPL#1_Heating_coldstart.mp4` whose bytes match both existing bundle links.
+
+Expected targets are review-002 frame **14386** (BASE), review-003 frame **16280**
+(Accum). Use exact Glass IDs from validated records, not manually copied report
+UUIDs. The program retains all existing candidates and both geometries within
+these two frames, without filtering by labels. Review-001 is excluded from this
+bounded source-image question; no SPL#2/SPL#3 or new time interval is requested.
+
+PowerShell, from the new source root (replace paths with actual local locations):
+
+```powershell
+$labels002 = 'C:\actual\review-002\labels-v2.json'
+$labels003 = 'C:\actual\review-003\labels.json'
+$originalBundle = 'C:\actual\oil_level_analysis_R22-3개선_add_artifact_20260918_091507'
+$originalVideo = 'C:\actual\SPL#1_Heating_coldstart.mp4'
+$probeOutput = 'C:\actual\experiments\spatial-context-001'
+python tests/diagnostics/s11_spatial_context_run.py `
+  --labels "$labels002" "$labels003" --expected-revisions 14 4 `
+  --bundle "$originalBundle" --video "$originalVideo" --output "$probeOutput"
+```
+
+The output must be new and outside both review directories and the bundle.
+The CLI verifies existing video bytes, bundle identity, packet-to-indexed-trace,
+scene/frame/Glass, crop geometry and revision before measuring. Stale link locators
+are harmless because bundle/video paths are explicit; their identity hashes must
+still match. If any identity/revision/crop/frame check fails, stop and return the
+exact error. Do not edit the inputs, retry at another frame, or weaken checks.
+This command does not use the earlier score `--reference`: it makes no scores and
+retains the original O1 witness plus an explicit gray/support reconstruction check.
+
+Verify COMPLETE and every output hash, including all generated images/plots:
+
+```powershell
+$receipt = Get-Content -LiteralPath (Join-Path $probeOutput 'complete.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$report = Get-Content -LiteralPath (Join-Path $probeOutput 'experiment.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($receipt.schema_version -cne 's11-o2-spatial-context-v1' -or $receipt.status -cne 'COMPLETE') { throw 'Invalid receipt' }
+if ($report.schema_version -cne $receipt.schema_version -or $report.artifact.sha256 -cne $receipt.artifact_sha256) { throw 'Artifact mismatch' }
+foreach ($entry in $receipt.outputs.PSObject.Properties) {
+  $actual = (Get-FileHash -LiteralPath (Join-Path $probeOutput $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
+  if ($actual -cne $entry.Value) { throw "Output hash mismatch: $($entry.Name)" }
+}
+foreach ($entry in $report.input_preservation) {
+  if ($entry.before_sha256 -cne $entry.after_sha256) { throw "Input changed: $($entry.file_index)" }
+  $actual = (Get-FileHash -LiteralPath $entry.path -Algorithm SHA256).Hash.ToLowerInvariant()
+  if ($actual -cne $entry.after_sha256) { throw "Input changed after run: $($entry.file_index)" }
+}
+$report.cases | Select-Object case_id,frame_index,glass_id,revision,@{Name='baseline';Expression={$_.baseline_check.status}},@{Name='mismatched_bands';Expression={$_.baseline_check.mismatched_band_count}}
+```
+
+Expected flags: `EXPLORATORY_UNCALIBRATED`, `decision=NOT_EVALUATED`,
+`auto_acceptance=false`, `production_decisions_emitted=false`,
+`field_disposition=FIELD FAIL`, `numeric_localization=NOT_MEASURED`.
+Input preservation normally covers **12 unique files**: five bundle files, two
+labels, two packets, two links and one video. If actual count differs, report the
+inventory; do not assume the count alone proves preservation.
+
+Return the **program-generated summary.md**, source commit, artifact/code hashes,
+COMPLETE/output/input-hash results and each case's baseline status/counts. Keep
+full JSON and images local. Summary contains exact candidate-to-profile mappings;
+use those numbers rather than OCR. PNGs are unannotated decoded source/crop/gray
+and masks; SVGs plot raw gray versus source Y, with gaps and original candidate
+markers. A difference in baseline bands is a reconstruction issue to inspect
+before attributing differences to full-height sampling; it is not detector failure
+or a reason to relabel. No automatic brightness threshold or physical conclusion
+is generated, even when the run is COMPLETE. No additional human image judgment
+is requested by this execution step.
