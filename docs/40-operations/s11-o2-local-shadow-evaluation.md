@@ -1162,3 +1162,37 @@ There is no new score, detector run, label change, threshold or image acquisitio
 After this bounded inspection, decide from the evidence whether a specific joint
 appearance hypothesis merits further work or should close without promotion.
 Do not automatically request more metadata extractions or user relabeling.
+
+
+## Unpooled O1 spatial context — report reconciliation
+
+The joint run has been reported COMPLETE with artifact matching local source.
+Use the existing `joint-context-001` outputs and separate analysis notes/code;
+no new checkout, experiment rerun, video/labels or human verdict is needed.
+[Evidence intake](../60-evidence/s11/s11-o2-joint-context-windows-run-001.md)
+records the accepted scope and unresolved interpretation. Do not reopen the
+source artifact by requesting another manual hash transcription.
+
+1. Reconcile the custom statistic for review-003 / native idx10 /
+   X[1388,1473] / sourceY217. The transfer lists vertical max 0.008 and 83/85
+   columns with vm>0.05, which cannot both refer to raw valid pixels in the same
+   window. Return the original extraction definition/code: NPZ key, units,
+   source/local ranges, validity mask and reduction axes. For an explicit
+   +/-60 inclusive-row check, origin[1199,56] gives local Y[101,222), X[189,274)
+   and source Y[157,278). Return raw maximum and the count of columns containing
+   any valid value>0.05 over that identical slice. This only checks the existing
+   claim; it does not establish a classifier threshold. If the original max is
+   a maximum of averages or uses another window, distinguish that quantity.
+   Correct any other affected rows programmatically using the identified cause.
+2. Complete the three originally requested BASE same-X comparisons, with one
+   observation row per X: [130,236] idx8/9/11 Y397/382/901;
+   [236,343] Y396/406/925; [343,449] Y397/419/922. Compare the three markers within
+   each X, not one candidate from each of three different X strips. Give concrete
+   appearance and mask limitations; mark censored comparisons not assessable.
+3. Qualify assertions of no transition or an unbroken contour: quantized black
+   and invalid endpoints are not proof of either. Equal thresholded column counts
+   are not equal intensity distributions. Preserve idx0/idx20 ambiguity without
+   another human review. Keep corrected notes outside the original output.
+
+Return the narrow correction and any remaining limitation together. Do not
+replace immutable JSON/NPZ/receipts or change detector, labels or thresholds.
