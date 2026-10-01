@@ -932,6 +932,17 @@ UNRESOLVED classifier output, numeric localization or a production integration.
 No artifact is accepted simply because its arrays serialize or synthetic fixtures
 differ. The array measurement is used by the read-only source adapter below.
 
+Candidate-relative context is a view of this same shared profile using offsets
+from the retained source Y, not a new independent observation or identity owner.
+Assess novelty against the entire O1 candidate inventory, including local peak
+fields: another candidate can sample a remote feature, and a row outside all
+bands can still affect O1's gradient search. A classifier must justify physical
+meaning separately from new array detail or sampling extent. Nearest/strongest
+peak, brightness return or sustained appearance alone does not grant identity.
+The [local feasibility evidence](../60-evidence/s11/s11-o2-spatial-context-feasibility-local.md)
+records controls for these boundaries. No profile identity score or production
+integration is defined by this measurement contract.
+
 ### Real-data entry before any efficacy claim
 
 `tests/diagnostics/s11_spatial_context_run.py` uses the original two source frames already reviewed,
@@ -991,7 +1002,7 @@ acceptance remain separate work after this information question is answered.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
+- Prior mechanisms reviewed: candidate-relative reindexing, whole-inventory O1 novelty and central-gap peak controls; full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.

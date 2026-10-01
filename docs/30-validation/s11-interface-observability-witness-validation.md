@@ -574,6 +574,15 @@ is information retention at fixed raster/geometry/masks, not classifier accuracy
 - Reject duplicate/invalid geometry, boolean indices/origins, nonintegral X,
   wrong shape/type and resource-bound violations. Input arrays/points stay intact.
 
+Candidate-relative feasibility additionally requires checking the whole O1
+inventory, not only one candidate. The spatial control suite now includes both
+an identical complete two-candidate witness with a distinguishable remote return,
+and a return already detected by another candidate. A central band-gap spike
+also demonstrates that O1 peak fields can contain information missing from band
+means. Both polarities are exercised. These are information-boundary controls,
+not synthetic physical identity labels; [feasibility evidence](../60-evidence/s11/s11-o2-spatial-context-feasibility-local.md)
+records the no-promotion decision and the next proposed representation boundary.
+
 Real-data acceptance requires a separately verified source-frame adapter and
 image/profile correspondence on the existing two frames. The synthetic passing
 endpoint is insufficient to infer private stripe shape, classifier separation,
@@ -581,7 +590,9 @@ scalar truth or Windows qualification. Fail the identity hypothesis if opposing
 classes remain observationally identical; report mask/crop censoring. Any classifier
 proposal needs separate positive/negative/unresolved controls and an operating
 point before O2 acceptance. The source adapter and Windows procedure now implement
-this entry; private results remain pending.
+this entry; the transferred spatial run and bounded inspection are recorded in
+[Windows evidence](../60-evidence/s11/s11-o2-spatial-context-windows-run-001.md).
+Physical efficacy and independent local raw-crop verification remain unestablished.
 
 Source-adapter controls use a real synthetic indexed bundle, generated video and
 existing bundle-link owner. A real CLI subprocess must run from a non-repository
