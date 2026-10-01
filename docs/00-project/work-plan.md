@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit is next; aggregation challenger and calibrated O2 acceptance remain open
+**Current gate:** O1 accepted locally; fixed-score/locality/profile Windows experiments closed without promotion; W1 source review and target counter-controls verified locally; W3 separated shadow-output/evaluation implemented and verified locally; existing-data Windows target/context audit reported complete; W4 hypothesis/control selection is next; aggregation challenger and calibrated O2 acceptance remain open
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed
 
 This document owns only the current engineering state and next transition. Revision-by-revision history belongs in diagnostics, evidence, historical architecture/validation records, and Git history.
@@ -27,24 +27,28 @@ These states do not change the execution policy's formal completion requirements
 | W0 / O2 fixed profile experiment | VERIFIED by transferred Windows report; CLOSED WITHOUT PROMOTION | Reproduction, receipt and input preservation reported; candidate identity worsens against combined; no rerun requested | [Specification](../50-diagnostics/s11/s11-o2-fixed-score-experiment.md#candidate-identity-profile-mode), [local checks](../60-evidence/s11/s11-o2-identity-profile-local.md), [Windows result](../60-evidence/s11/s11-o2-identity-profile-windows-run-001.md) |
 | W1 / O2 targets and aggregation | VERIFIED locally for source review, target contract and counter-controls; no identity rule promoted | Partial-positive/glare expectations, identity rationale and unresolved accounting reproduced; a validated aggregation challenger remains OPEN under W4 | [W1 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#w1-target-and-aggregation-contract--design-boundary), [W1 controls](../30-validation/s11-interface-observability-witness-validation.md#w1-aggregation-challenger-controls--not-yet-acceptance-evidence), [local evidence](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md) |
 | W2 / O2 bounded scene expansion | CONDITIONAL; collection deferred, not completed | Current fixtures and existing labels suffice for target/evaluator work; no new scene can resolve identical supplied observables by labeling alone. Name a discriminating context/geometry gap and its positive/negative controls before collecting | [October W2 proposal](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md), [review operations](../40-operations/s11-o2-local-shadow-evaluation.md), [deferral rationale](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md#decision-and-remaining-gap) |
-| W3 / O2 shadow outputs and evaluation | IMPLEMENTED and VERIFIED locally for v2 prediction import, separated targets and scripted controls; Windows audit pending | Preserve v1 compatibility and calibrated guards; scalar eligibility remains unverified without its own truth; no classifier efficacy claimed | [W3 contract](../20-architecture/s11-interface-observability-witness-architecture.md#w3-separated-shadow-targets), [validation](../30-validation/s11-interface-observability-witness-validation.md#w3-separated-target-and-audit-controls), [local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md) |
-| W4 / O2 one challenger | PROPOSED; not selected; existing private context/funnel evidence pending | Audit actual packet context availability and exact recorded candidate losses before selecting a mechanism; fix one hypothesis/endpoint and use the W3 evaluation target; record benefit, regression or rejection | [October W4 proposal](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md), [V2 controls](../30-validation/s11-interface-observability-witness-validation.md#v2--raster-controls-before-shadow-classification); no W4 completion evidence |
+| W3 / O2 shadow outputs and evaluation | IMPLEMENTED and VERIFIED locally for v2 prediction import, separated targets and scripted controls; existing-data Windows audit VERIFIED by transferred report | Preserve v1 compatibility and calibrated guards; scalar eligibility remains unverified without its own truth; no classifier efficacy claimed | [W3 contract](../20-architecture/s11-interface-observability-witness-architecture.md#w3-separated-shadow-targets), [validation](../30-validation/s11-interface-observability-witness-validation.md#w3-separated-target-and-audit-controls), [local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [Windows audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) |
+| W4 / O2 one challenger | PROPOSED; mechanism not selected; context availability checked, physical discrimination unproven | Use W1 controls and the W3 audit to select one mechanism; static/glare absence and global material magnitude are not identity certificates; fix one hypothesis/endpoint and use the W3 evaluation target; record benefit, regression or rejection | [October W4 proposal](../50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md), [V2 controls](../30-validation/s11-interface-observability-witness-validation.md#v2--raster-controls-before-shadow-classification); no W4 completion evidence |
 | O2 acceptance (between W4 and W5) | OPEN; not satisfied | Valid development/calibration/holdout roles, fixed operating point and required Windows shadow acceptance; regression rank gains cannot substitute | [O2 acceptance](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance); independent data/operating-point requirements unresolved |
 | W5 / O3 support and association | PROPOSED; entry pending O2 acceptance | Separate behavior plan plus typed support/physical association controls; exact same-frame provenance and ambiguity protection | [O3 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o3--independent-support-and-association), [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry); no behavior acceptance |
 | W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Handoff and phase observation are separate changes with separate positive/negative controls; do not relax gates based on elapsed time or polarity alone | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior), [parent validation](../30-validation/s11-physical-interface-evidence-repair-validation.md); no behavior acceptance |
 | W7 / O5 field qualification | PENDING integrated behavior candidate | Exact runtime, all canonical segments and required accuracy/coverage/resource evidence; no earlier local/shadow PASS substitutes | [Field acceptance](../30-validation/s11-interface-observability-witness-validation.md#field-qualification), [Windows procedure](../40-operations/s11-current-windows-field-qualification.md); FIELD FAIL retained |
 
-**Immediate action — Windows existing-data audit:** run the [W3 target/context
-procedure](../40-operations/s11-o2-local-shadow-evaluation.md#w3-targetcontext-audit--기존-자료로-실행)
-with active label revisions **3 / 14 / 4**, their packets, the original fixed-score
-v1 experiment and original indexed R22-3 bundle. The new mode reproduces the
-reference and audits stored context/decision witnesses; it emits no classifier
-predictions. Return its generated summary and completion/hash checks. Additional
-labels, video windows, detector reruns, thresholds and partition changes are not
-needed for this step. W2 remains conditional. Use the audit to name one W4
-hypothesis or the specific missing evidence; do not infer an unrecorded gate or
-promote a context threshold from descriptive statistics. W4 efficacy and calibrated
-O2 acceptance remain open. FIELD FAIL is unchanged.
+**Immediate action — local W4 hypothesis/control selection:** the [Windows W3
+audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) reports exact
+reference reproduction, COMPLETE and 12 preserved inputs at `038a303`. Context
+and recorded funnel facts are available. BASE 8/9 have admitted row flags but no
+final selection; Accum 10 is absent from retained refs. Neither result isolates
+the causal rejecting gate. Material magnitude changes direction across reviews,
+and static/glare absence is shared by true and false candidates.
+
+Review one geometry-preserving partial-support/opposition mechanism against W1's
+partial-positive, isolated-glare/structure and identical-observable controls before
+fixing a W4 formula/primary endpoint. No threshold, new descriptor, production
+gate relaxation or challenger adoption follows from this audit alone. No further
+Windows run, labels or video collection is requested now; W2 remains conditional.
+The detailed private JSON stays available for a named follow-up question. W4
+efficacy, independent scalar truth and calibrated O2 acceptance remain open.
 
 At each W transition, update the affected row and immediate action here, linking
 (1) the implemented/rejected decision, (2) exact checked code/input and scoped
