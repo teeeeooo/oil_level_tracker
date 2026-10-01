@@ -15,7 +15,8 @@
 
 ## W4 paired-scale — 기존 라벨 실행
 
-**이번 요청은 이 절차 한 번이다.** W3 audit은 완료되었으며 다시 실행하지 않는다.
+**첫 실행은 [Windows 결과](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md)로 완료되었다.**
+아래는 재현 절차이며 현재 재실행 요청은 없다. W3 audit도 다시 실행하지 않는다.
 같은 X의 두 경로점에서 동일 band width의 점수 차이를 먼저 구한 뒤 중앙값을
 계산하는 방법을 시험한다. 기존 C/A/L 점수식과 locality는 유지한다.
 후보 identity 분류기 구현이나 detector 개선 완료를 뜻하지 않는다.
@@ -84,6 +85,22 @@ scale 위에서의 개선·악화와 legacy→공통 support 변화도 구분한
 
 새 라벨, contour, freeze, detector 실행, 점수·임계값 조정, partition 변경은
 수행하지 않는다. 수치를 수동 전사하거나 결과가 유리하도록 공식을 수정하지 않는다.
+
+## W4 결과 후속 — 기존 JSON의 잔여 pair 확인
+
+추가 실험 없이 `experiments/paired-scale-001/experiment.json`만 읽는다.
+`paired_scale`에서 `case_id=review-002`, `tasks`의
+`native_path/interface_location_same_x`를 선택한다. `pairs` 중
+`paired_outcome`이 `reversed` 또는 `unscorable`인 원본 객체를 그대로 반환한다.
+현재 보고 기준 각각 1개다. 다르면 맞추지 말고 차이를 보고한다.
+
+원본 객체에는 positive/negative 후보·basis·X·Y, legacy/joint/paired outcome,
+두 difference, common_band_widths/common_scale_count, scales, excluded_scales가
+포함되어야 한다. 수동 숫자 전사 없이 JSON으로 추출하고 입력 SHA-256 전후를
+확인한다. 나머지 pair나 전체 private JSON 반출은 필요하지 않다.
+
+목적은 남은 역전과 결측 원인을 구분하는 것이다. 이 확인으로 새 공식·임계값을
+선택하지 않는다. detector·실험 재실행, 라벨 수정, freeze는 수행하지 않는다.
 
 ## W3 target/context audit — 기존 자료로 실행
 
