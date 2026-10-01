@@ -90,6 +90,42 @@ Current durable S11 owners:
 
 R18–R20 predecessor architecture/validation and earlier diagnostics remain historical provenance. They are reachable through the current logic map, failure registry, evidence collection, and Git history; this router does not enumerate them.
 
+## S11 audit specifications and execution routing
+
+The two supplemental specifications form a sequence of design rationale and
+follow-up audit, not competing current authorities:
+
+| Document | Role | How to use it |
+|---|---|---|
+| [2026-09-17 execution review](50-diagnostics/s11/s11-observation-redesign-execution-review.md) | Grounds the bounded observation redesign and O1–O5 sequence against `577f98a` | Preserve design rationale and constraints; use the current architecture/validation for actual implementation |
+| [2026-10-01 audit/work specification](50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md) | Audits progress at `85a01cd`, identifies target/pooling risks and proposes W0–W7 | Use its named work items through the current work-plan ledger; do not treat its dated pending/completion prose as live status |
+
+The September attachment named
+`s11-detector-redesign-review-and-execution-spec-2026-09-17-1.md`
+was retained under `s11-observation-redesign-execution-review.md`.
+The October filename is retained. Neither source audit is rewritten as work
+progresses. October supplements September's direction; it does not restart O1
+or supersede preserved runtime/provenance/acceptance contracts.
+
+Use this route for subsequent work:
+
+1. [S11 work-item ledger](00-project/work-plan.md#s11-work-item-ledger) — O/W mapping,
+   live state, dependencies, next action and completion evidence.
+2. [Witness Architecture](20-architecture/s11-interface-observability-witness-architecture.md)
+   — target meanings and implementation responsibilities, including W1.
+3. [Witness Validation](30-validation/s11-interface-observability-witness-validation.md)
+   — controls and acceptance gates. A defined contract is not a passing result.
+4. [O2 operations](40-operations/s11-o2-local-shadow-evaluation.md) — execute only
+   the procedure selected by the ledger/current request; retained commands do not
+   mean a closed experiment must be rerun.
+5. [Evidence](60-evidence/s11/) — completed local checks and transferred Windows
+   results, including rejected hypotheses and their limits.
+
+The ledger is the only live W-status list. This router owns the relationship
+between documents, not another copy of progress. W0–W4 refine work within O2;
+W5/W6/W7 map to O3/O4/O5. O2 acceptance remains a separate gate before W5, not
+an automatic consequence of finishing an experiment.
+
 ## Supporting collection indexes
 
 - S11 diagnostics — [`50-diagnostics/s11/`](50-diagnostics/s11/)

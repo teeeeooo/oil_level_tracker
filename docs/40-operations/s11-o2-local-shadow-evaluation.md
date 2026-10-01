@@ -5,6 +5,14 @@
 현재 실행 상태는 [work-plan](../00-project/work-plan.md), 판단 기준은
 [Witness Validation](../30-validation/s11-interface-observability-witness-validation.md)이 소유한다.
 
+## 실행할 절차 선택
+
+먼저 [W별 진행 상태와 다음 행동](../00-project/work-plan.md#s11-work-item-ledger)을
+확인하고 현재 요청에 해당하는 절차만 실행한다. 아래 명령은 재현·재개용으로 보존한
+것이며, 문서에 남아 있다는 이유로 완료된 실험이나 migration을 반복하지 않는다.
+새 작업은 해당 W의 선행 조건과 입력 범위를 확인한다. 단계 완료 여부는 실행 성공
+코드만으로 판단하지 않고 검증 결과를 근거로 work-plan에 반영한다.
+
 ## 준비물과 실행 위치
 
 - `interface-observability-witness-trace-v1`이 들어 있는 R22-3 결과 번들.

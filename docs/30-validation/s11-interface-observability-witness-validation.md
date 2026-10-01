@@ -226,7 +226,9 @@ proof. No field acceptance follows from passing the schema/evaluator controls.
 
 ### W1 aggregation challenger controls — not yet acceptance evidence
 
-Use the architecture's W1 target contract. Existing v2 persistence tests do not
+Use the architecture's [W1 target contract](../20-architecture/s11-interface-observability-witness-architecture.md#w1-target-and-aggregation-contract--design-boundary).
+The [work-item ledger](../00-project/work-plan.md#s11-work-item-ledger) owns live
+status and completion-evidence links. Existing v2 persistence tests do not
 prove these new model controls pass. Keep labels fixed and specify the model's
 primary identity endpoint plus protected local/scalar outcomes before comparison.
 

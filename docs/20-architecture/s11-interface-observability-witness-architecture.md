@@ -478,6 +478,11 @@ A new human question is needed only for information not already established.
 
 #### W1 target and aggregation contract — design boundary
 
+Live progress, O/W mapping and the next action belong to the
+[work-item ledger](../00-project/work-plan.md#s11-work-item-ledger).
+[W1 acceptance controls](../30-validation/s11-interface-observability-witness-validation.md#w1-aggregation-challenger-controls--not-yet-acceptance-evidence)
+own verification; this design text alone does not complete W1.
+
 Following the [W0 profile result](../60-evidence/s11/s11-o2-identity-profile-windows-run-001.md),
 keep three inference targets separate. This section specifies requirements for
 the next challenger; it implements no new score, schema field or runtime decision.
