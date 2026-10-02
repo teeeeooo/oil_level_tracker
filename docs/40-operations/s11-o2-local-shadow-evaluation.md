@@ -1267,3 +1267,44 @@ index 기반 읽기만 수행하고, 전체 재해시를 안 했다면 그 한�
 새 packet/label, detector/extractor 실행, classifier/threshold 구현 또는 사용자 판정
 요청은 하지 않는다. 기존 자료가 없다고 원영상 decode나 추가 capture로 자동 전환하지
 않는다. 동일 SPL#1 자료는 독립 holdout이 아니며 FIELD FAIL / NOT_EVALUATED를 유지한다.
+
+
+## W2 — one saved frame review preparation
+
+**상태: PROPOSED / 미실행.** W4-R3 기존 자료 조사는 완료됐다.
+
+목적: 기존 기록에 없는 물리적 판독 근거를 얻을 수 있는지 **다른 저장 프레임 1장**으로
+확인한다. [R3 결과와 한계](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md#windows-inventory-received--2026-10-02)를
+따르며, 현재 두 프레임의 반복 분석이나 새 challenger 구현으로 전환하지 않는다.
+이 절차는 다음 작업으로 준비된 제안이며 아직 실행·판독하지 않았다.
+
+- 대상은 같은 SPL#1의 BASE drain이다. 선택 범위는 **source 615–625초**, 목표
+  620초로 미리 고정한다. 기존 약 600초 판독 및 ±5초 문맥과 떨어진 drain 내부의
+  한 장을 얻기 위한 업무 범위이며, 이 시점이 더 잘 구분된다는 가정은 아니다.
+  780초 이후나 SPL#2/3로 범위를 넓히지 않는다.
+- 기존 R22-3 index에서 이 범위의 BASE record 중 `abs(source_time-620), frame_index,
+  record_id` 순으로 첫 record 한 개를 선택한다. 점수·path 형상·이미지 선명도·예상
+  정답으로 고르지 않는다. confidence/selected/rejected는 사람 정답이 아니다.
+- 해당 record의 원본 무주석 이미지 참조와 실제 파일, run/Glass/source frame/time,
+  crop origin/resize 여부를 직접 연결한다. 이미 저장된 원본만 표시한다. 최근 전달
+  표의 시간값으로 추측하거나 FPS로 임의 재지정하지 않는다. source time 연결이
+  불명확하거나 대상 record/원본이 없으면 그 한계를 반환하고 종료한다. 자동으로
+  다른 프레임을 고르거나 원영상 decode·새 capture·mask 변경을 하지 않는다.
+- 최초 표시에는 후보 선·점수·정답을 겹치지 않는다. 기존 이미지 파일을 열어
+  사용자에게 보여주고 아래 질문 하나를 한다. 원본 파일을 수정하지 않는다.
+
+> 이 이미지에서 실제 유면으로 확실하게 보이는 경계와, 유면이 아닌 구조물이나
+> 반사로 확실하게 보이는 부분을 각각 짚어주실 수 있나요? 그렇게 구분한 보이는
+> 특징도 알려주세요. 한쪽만 확실하거나 이 한 장으로 판단하기 어렵다면 그대로
+> 말씀해주세요.
+
+이것은 scene-level 판독이다. 별개 구조물/반사 여부를 강제하거나 정확한 px 정답을
+요구하지 않는다. 움직임 확인이 필요하다는 답이면 필요한 문맥을 먼저 기록하고
+멈춘다. 같은 장면을 임의로 확대 수집하거나 기존 idx0/idx20 clip으로 돌아가지 않는다.
+
+사용자 답을 받기 전에는 identity/path 라벨을 작성하지 않는다. 답을 얻은 이후에도
+기존 frame/candidate와 정확히 연결하고 현재 review-record 절차로 attribution,
+uncertainty, revision을 보존하는 별도 단계가 필요하다. 새 candidate가 없으면 scene
+truth와 candidate 부재를 구분하고 contour/Y를 만들어 채우지 않는다. 구별 근거가
+없으면 uncertain/not-assessable 결과 자체를 보존한다. 한 장의 결과만으로 전역 규칙,
+가중치·threshold·학습·성능 향상을 주장하지 않는다. FIELD FAIL은 유지한다.

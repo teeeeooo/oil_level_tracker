@@ -103,6 +103,81 @@ links, governance and diff whitespace. Previous passing suites are not rerun or
 represented as new evidence. W2 collection, R2/R4 execution and O2 acceptance are
 not completed by this note.
 
+## Windows inventory received — 2026-10-02
+
+The user transferred completion of the bounded inventory. No private inventory
+file or images were read on this host. Executing source SHA was not supplied in
+this return; the referenced procedure was published at `6c5425d`. Do not convert
+that procedure provenance into a verified Windows checkout identity.
+
+Reported searched roots: reviews 001/002/003 (labels, packets, links, frozen,
+readiness, replies, history), joint-context notes, selections, comparison and
+comparison_v2; original R22-3 manifest, review index, debug index and frames assets.
+601 records with 21 artifact types per record are reported, not independently
+counted here. All three review bundle links reportedly reference the same run
+(abbreviated `a24c8fe9...`). Additional existing human-reviewed frame references:
+**0 found in the searched scope**, against an upper limit of three detail checks.
+This is not zero saved frames or proof that no unreviewed image could be useful.
+
+| Frame / Glass | Transferred inventory | Interpretation retained |
+|---|---|---|
+| f11508 / BASE | linked_saved_evidence; review-001 all-negative | Existing negative-scene control, not a new positive/structural pair |
+| f14386 / BASE | linked_saved_evidence; review-002 labels and notes | Existing identity qualifications and censored R0 comparison still apply |
+| f16280 / Accum | linked_saved_evidence; review-003 idx10/19 interface and idx15 non-interface | Existing control, no newly demonstrated separating rationale |
+| f14362 / BASE | linked_saved_evidence; saved images; historical localization mismatch | Summary also says direct review note absent; direct attribution/link remains unresolved, not a fresh structural negative |
+| f14374 / BASE | trace_only, despite saved artifact images; indirect causal-findings citation only | Interpret as no linked direct rationale, not literal absence of image files; physical continuity unresolved |
+
+Output reported: `joint-context-001-notes/w4-r3-existing-material-inventory.md`,
+211 lines / 16,135 bytes. No video decode, detector/extractor run, label edit,
+new appearance analysis or user re-review was performed according to the return.
+The transferred summary does not supply before/after hashes, so no new local or
+reported complete hash verification is claimed here. No checksum-only return is
+needed to close this qualitative availability task.
+
+### Preserve existing facts when reading the inventory
+
+- New transferred times f14386=599.43 s and f16280=679.30 s differ from the prior
+  exact source-probe decode metadata (600.0160833333332 and 679.0116666666667 s).
+  Its f14386 time also precedes f14374=599.52 s despite the increasing frame index.
+  Time basis/transfer origin is unresolved; do not replace source-probe metadata,
+  relabel a segment, or assert source mutation. A future chosen record must bind
+  its own source-frame/time/run metadata directly before display, not use this table.
+- `support_not_measured` for all negative candidates is an inventory limitation,
+  not a cancellation of existing O1 availability and R0 `gradient_valid` results.
+  R0 reports partial idx11 support (approximately 35%, 28%, 52% invalid in its
+  three windows), and earlier reports include idx15 map/band support. These are
+  window/operator-specific measurements, not certified physical observability.
+- Different Glass/frame/depth does not inherently forbid a negative control;
+  matching conditions and the hypothesis determine comparability. The present
+  report supplies no *new* justified opposing control, rather than disproving all
+  use of existing negatives. Existing formal labels and regression results stay.
+
+### Closure and minimum next decision
+
+**W4-R3 existing-material inventory: COMPLETE on transferred evidence.** Its
+purpose was availability discovery; source timestamps, old direct-note linkage
+and broad support shorthand remain qualified unknowns, not a reason to repeat
+R0 or this inventory. No new verified physical contrast was recovered. R1 remains
+CLOSED_WITHOUT_PROMOTION and R2 entry remains unmet.
+
+The next proposed W2 step is **one human scene review using one already saved
+original BASE drain frame**, not new recording or another representation. The
+specific missing information is whether that different scene permits a human to
+identify a real boundary and a non-interface feature with an explicit visible
+reason (or to say that the image cannot settle it). Existing interval review is
+search context only. A positive-only, uncertain or censored answer is valid and
+must not be turned into a fabricated opposing pair.
+
+[One-frame preparation proposal](../../40-operations/s11-o2-local-shadow-evaluation.md#w2--one-saved-frame-review-preparation)
+fixes a small selection window before viewing the image, retains the original
+unannotated view, and stops at user review. It has not run and no human decision
+has been obtained. If the selected original is absent or insufficient, return
+that condition rather than automatically choosing easier frames, opening source
+video or demanding a binary answer. The human's scene answer is not an automatic
+candidate label; subsequent exact candidate binding uses the existing review
+record workflow. This is exploratory development within the same SPL#1 recording,
+not holdout validation or O2 acceptance. FIELD FAIL is preserved.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.
