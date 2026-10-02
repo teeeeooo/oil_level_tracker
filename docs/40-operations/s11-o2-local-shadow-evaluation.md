@@ -1417,8 +1417,8 @@ endpoint로 바꾸지 않는다. 경로가 정말 없으면 “captured geometry
 **완료(2026-10-02, Windows 전달 보고):** 후보 표시 후 Accum idx10/idx15의 위아래
 미세한 색상·외관 차이와 경계의 존재/부재에 대한 직접 답변을 받았다.
 [근거 접수와 소스 검토](../60-evidence/s11/s11-o2-identity-context-windows-review-001.md#candidate-guided-human-rationale-received--2026-10-02)
-참조. 아래는 수행한 절차이며 같은 판독을 다시 요청하지 않는다. 다음 색상 측정은
-로컬 계약·검증을 먼저 준비하며, 이 절차가 새 측정/실행 지시가 되지 않는다.
+참조. 아래는 수행한 절차이며 같은 판독을 다시 요청하지 않는다. 색상 측정은
+아래 별도 color-side 절차를 따르며, 이 완료된 표시 절차를 반복하지 않는다.
 
 **목적:** 이미 판정된 유면·비계면 사례에서 사용자가 detector의 실제 후보와 측정
 영역을 보며 구별 근거를 설명할 수 있게 한다. 새 사례 선정이나 기존 identity
@@ -1496,3 +1496,106 @@ notes 폴더에 `existing-controls-candidate-guided-rationale.md`를 만든다. 
 변경·새 frame 수집은 하지 않는다. 기존 출력은 보존하고 메모만 외부 notes에 저장한다.
 단서가 없거나 mask로 확인 불가면 그 사실로 종료한다. 새 classifier나 R2를 자동
 시작하지 않는다. FIELD FAIL / NOT_EVALUATED와 기존 모호성은 유지한다.
+
+## Color-side measurement — existing saved outputs
+
+**목적:** 사용자가 Accum idx10/idx15를 구별한 위아래 미세 색상 단서가 기존 gray
+투영 밖에 남아 있는지 고정된 채널·band·support로 측정한다. 투명도 측정이나
+identity 판정이 아니다. [계약](../20-architecture/s11-interface-observability-witness-architecture.md#w4-recorded-band-color-sides--saved-output-measurement),
+[로컬 검증](../60-evidence/s11/s11-o2-color-side-local.md)을 따른다.
+사용자 판독은 이미 접수됐으므로 같은 질문이나 새 사례 선정을 반복하지 않는다.
+
+### 입력과 실행
+
+GitHub ZIP을 옮긴 소스 폴더에서 기존 Python 환경으로 실행한다. `.git`이 없어도
+된다. 사용자가 전달한 소스 commit과 실행기/측정 모듈의 SHA-256을 기록한다.
+ZIP 폴더명으로 commit을 추정하지 않는다. 기존 `spatial-context-001` 출력 전체
+32개 파일(31 hashed outputs + complete.json)을 입력으로 사용한다.
+`joint-context-001`, review guide PNG, 영상·번들·labels로 대체하지 않는다.
+
+아래 두 경로를 실제 data 폴더에 맞춘다. 출력은 입력 밖의 **새 폴더**여야 한다.
+이미 존재하면 덮어쓰거나 삭제하지 않고 다른 신규 폴더를 사용한다.
+
+```powershell
+$spatialSource = "..\data\experiments\spatial-context-001"
+$colorOutput = "..\data\experiments\color-side-001"
+python tests/diagnostics/s11_joint_context_run.py --color-side --source "$spatialSource" --expected-source-artifact 6aaf5f3ff6c4e1314d08cb7effb745ff5b721c03940c57002214b039ef544910 --output "$colorOutput"
+```
+
+실행기는 기존 receipt/output hash, artifact, raw raster, frame/Glass/geometry,
+원래 row context와 O1 baseline을 확인하고 BGR→gray가 저장 gray와 정확히 같은지
+검증한다. 불일치하면 원인과 오류만 보고하고 새 COMPLETE를 성공으로 취급하지
+않는다. 원본을 수정하거나 허용 오차를 조정해 통과시키지 않는다.
+
+계산은 전체 point에 적용된다. 후보·sector·BW를 새로 고르거나 측정 창을 넓히지
+않는다. 모든 band의 effective/non-glare 픽셀에서 B/G/R/gray를 같은 support로
+측정하고, 같은 X 열의 below-minus-above를 계산한다. near/far는 별도이며 각
+열의 차이를 동일 가중치로 평균한다. 숫자는 uint8 code value 단위(0..255)로,
+기존 O1의 0..1 gray 평균과 직접 같은 단위로 비교하지 않는다. `B-G`, `R-G`
+차이는 색상 단서이며 반사·조명에서도 나타날 수 있다.
+
+### 결과 검증과 제한된 반환
+
+1. `complete.json`과 `experiment.json` schema는 `s11-o2-color-side-v1`, receipt
+   status는 COMPLETE. artifact SHA는 양쪽 일치해야 한다. expected source artifact는
+   위 입력 pin이며 **새 color artifact와 다른 값**이다.
+2. 출력은 `experiment.json`, `summary.md`, `color-side.csv` **3 hashed outputs**와
+   `complete.json`, 총 **4개**. receipt의 세 파일 hash를 실제 bytes로 재계산한다.
+   input_preservation은 원래 32파일 before=after=현재 실제 hash를 대조한다.
+   영상·번들·labels의 새 해시 검사는 필요 없다.
+3. 두 case를 구분한다: review-002 f14386, BASE
+   `8f94fb85-d98e-4c71-9c97-3085168be1b2`, rev14, origin=[0,211], shape=[773,578],
+   points=124, baseline MATCH/1416; review-003 f16280, Accum
+   `8fb6ebc7-7c56-401e-86c3-05514bf6380b`, rev4, origin=[1199,56], shape=[584,462],
+   points=158, baseline MATCH/1012. 원래 geometry/label provenance를 그대로 인용한다.
+4. `EXPLORATORY_UNCALIBRATED`, `NOT_EVALUATED`, `auto_acceptance=false`,
+   `production_decisions_emitted=false`, `FIELD FAIL`, `numeric_localization=NOT_MEASURED`
+   유지. summary의 observed/unavailable/no-paired 수는 **상관된 측정 pair 수**이며
+   성공/실패 후보 수나 독립 표본 수가 아니다.
+5. 생성 summary와 위 검증을 반환한다. CSV는 코드로 읽고 아래 고정 비교를
+   `case/idx/basis/X/Y/BW/near-or-far/status/paired_columns/total_columns`로 연결한다.
+   모든 행의 B/G/R/gray 및 B-G/R-G 차이를 유지하며 가장 큰 값·유리한 sector만
+   뽑지 않는다. 사람이 이미지 숫자를 읽거나 새로운 inline 측정식을 만들지 않는다.
+
+반환 비교는 다음 세 묶음으로 분리한다. 계산 자체는 모든 point를 이미 포함한다.
+
+- **주 비교:** review-003 idx10/idx15 `native_path`, 다섯 exact X, BW6/12/18,
+  near/far 모두(60행). 두 후보 같은 X/BW/region의 status/support와 벡터를 대조한다.
+- **보조:** review-002 idx11 `native_path`, 세 exact X, BW8/16/24, near/far(18행).
+  unavailable을 비계면 단서나 zero로 해석하지 않는다. Accum과 표본을 합치지 않는다.
+- **미해결 대조:** review-002 idx0/idx20 `candidate_center`, 다섯 exact X,
+  BW8/16/24, near/far(60행). 기존 human ambiguity를 유지한다.
+
+표 전사는 생성 CSV 행을 재사용한다. 상세 열별 배열은 로컬 JSON에 보존하고
+상태/비교 벡터가 포함된 위 행만 전달한다. 반환이 길면 각 묶음을 별도 표/파일로
+보존하고 경로와 행 수를 보고한다. 다음 코드는 **측정 없이** 해당 CSV 행을
+표준 출력으로 고른다. 저장하려면 실험 폴더 밖 notes를 사용한다.
+
+```python
+import csv
+import sys
+from pathlib import Path
+
+output = Path(r"..\data\experiments\color-side-001")  # 실제 실행 출력 경로
+with (output / "color-side.csv").open(encoding="utf-8", newline="") as stream:
+    reader = csv.DictReader(stream)
+    writer = csv.DictWriter(sys.stdout, fieldnames=reader.fieldnames, lineterminator="\n")
+    writer.writeheader()
+    for row in reader:
+        key = (row["case_id"], int(row["candidate_input_index"]), row["geometry_basis"])
+        if key in {
+            ("review-003", 10, "native_path"), ("review-003", 15, "native_path"),
+            ("review-002", 11, "native_path"),
+            ("review-002", 0, "candidate_center"), ("review-002", 20, "candidate_center"),
+        }:
+            writer.writerow(row)
+```
+
+### 종료 조건
+
+측정·해시·지정 비교 반환 후 멈춘다. CSV empty/JSON null은 zero가 아니다.
+색상 차이의 유무만으로 유면/비계면, 투명도, 연결성, identity 개선, 임계값 또는
+W4-R2 진입을 선언하지 않는다. 신규 gradient/NPZ/overlay, 영상 decode, detector
+재실행, 새 frame/label/사용자 재판정은 필요 없다. 기존 출력과 라벨은 보존한다.
+원본 컬러는 정보가 더 있다는 가설의 근거이며, 이번 단계는 고정된 측정의
+정보 보존을 확인한다. 실제 구별력과 반례 여부는 반환 후 별도로 검토한다.

@@ -1,8 +1,9 @@
-"""Inspect unpooled O1 gradients from an immutable spatial-context output directory."""
+"""Inspect saved spatial gradients or recorded-band color sides; no identity decision."""
 from __future__ import annotations
 
 import argparse
 import copy
+import csv
 import hashlib
 import json
 from pathlib import Path
@@ -22,6 +23,7 @@ from tests.diagnostics import s11_spatial_context_probe as probe
 from tests.diagnostics import s11_spatial_context_run as source_run
 
 SCHEMA = 's11-o2-joint-context-v1'
+COLOR_SCHEMA = 's11-o2-color-side-v1'
 
 
 def _display(values, valid, maximum):
@@ -66,7 +68,8 @@ cases.forEach((c,i)=>option(byId('case'),c.case_id,i));byId('case').onchange=set
 </script></html>'''.replace('DATA;', data+';')
 
 
-def run(source, output, *, expected_source_artifact):
+def run(source, output, *, expected_source_artifact, color_side=False):
+    schema = COLOR_SCHEMA if color_side else SCHEMA
     source, output = Path(source).resolve(), Path(output).resolve()
     o2.require(source.is_dir(), 'source output directory missing')
     o2.require(not output.exists(), 'output already exists; choose a new directory')
@@ -132,7 +135,10 @@ def run(source, output, *, expected_source_artifact):
         baseline = source_run.baseline_check(gray, effective, glare, witness)
         o2.require(baseline['status'] == case['baseline_check']['status'] == 'MATCH' and
                    baseline == case['baseline_check'], 'baseline reconstruction mismatch; inspect original reconstruction first')
-        context, arrays = probe.measure_joint_context(gray, effective, glare, points, origin=origin)
+        if color_side:
+            context = {'origin': origin, 'shape': list(gray.shape), 'points': copy.deepcopy(points)}
+        else:
+            context, arrays = probe.measure_joint_context(gray, effective, glare, points, origin=origin)
         centers = {}
         for c in witness['candidates']:
             for sector in c['sectors']:
@@ -156,17 +162,24 @@ def run(source, output, *, expected_source_artifact):
             p['band_center_role'] = matched[1]
             p['band_binding'] = 'exact_role' if matched == key else 'coincident_recorded_native_center'
             p['scales'] = centers[matched]
-        prefix = f'case-{number}'
-        numeric[prefix+'-gradients.npz'] = arrays
-        images[prefix+'-crop.png'] = rasters['crop']
-        images[prefix+'-gray.png'] = gray
-        images[prefix+'-magnitude.png'] = _display(arrays['gradient_magnitude'], arrays['gradient_valid'], np.sqrt(.5))
-        images[prefix+'-vertical.png'] = _display(arrays['vertical_magnitude'], arrays['gradient_valid'], .5)
-        cases.append({k:case[k] for k in ('case_id','frame_index','glass_id','revision','labels_sha256','scene_sha256')} | context | {
-            'baseline_band_count': baseline['band_count'], 'baseline_status': 'MATCH',
-            'numeric_file': prefix+'-gradients.npz',
-            'arrays': {k:source_run.raster_identity(a) for k,a in arrays.items()},
-            'images': {k:prefix+'-'+v+'.png' for k,v in [('Original crop','crop'),('Raw gray','gray'),('Gradient magnitude','magnitude'),('Vertical magnitude','vertical')]}})
+        if color_side:
+            color = probe.measure_color_side(rasters['crop'], gray, effective, glare, context['points'], origin=origin)
+            cases.append({k:case[k] for k in ('case_id','frame_index','glass_id','revision','labels_sha256','scene_sha256')} | {
+                'origin': origin, 'shape': list(gray.shape),
+                'baseline_band_count': baseline['band_count'], 'baseline_status': 'MATCH',
+                'color_side': color})
+        else:
+            prefix = f'case-{number}'
+            numeric[prefix+'-gradients.npz'] = arrays
+            images[prefix+'-crop.png'] = rasters['crop']
+            images[prefix+'-gray.png'] = gray
+            images[prefix+'-magnitude.png'] = _display(arrays['gradient_magnitude'], arrays['gradient_valid'], np.sqrt(.5))
+            images[prefix+'-vertical.png'] = _display(arrays['vertical_magnitude'], arrays['gradient_valid'], .5)
+            cases.append({k:case[k] for k in ('case_id','frame_index','glass_id','revision','labels_sha256','scene_sha256')} | context | {
+                'baseline_band_count': baseline['band_count'], 'baseline_status': 'MATCH',
+                'numeric_file': prefix+'-gradients.npz',
+                'arrays': {k:source_run.raster_identity(a) for k,a in arrays.items()},
+                'images': {k:prefix+'-'+v+'.png' for k,v in [('Original crop','crop'),('Raw gray','gray'),('Gradient magnitude','magnitude'),('Vertical magnitude','vertical')]}})
     def preservation():
         result = []
         for name, digest in list(snapshots.items()):
@@ -175,9 +188,9 @@ def run(source, output, *, expected_source_artifact):
         return result
     code = {Path(p).resolve().relative_to(ROOT).as_posix():o2.sha256_file(p) for p in
             (__file__, probe.__file__, source_run.__file__, o2.__file__, oil_interface_witness.__file__, oil_interface_diagnostics.__file__, row_features.__file__)}
-    artifact = {'schema_version':SCHEMA, 'spec':probe.JOINT_SPEC, 'code':code}
+    artifact = {'schema_version':schema, 'spec':probe.COLOR_SIDE_SPEC if color_side else probe.JOINT_SPEC, 'code':code}
     artifact['sha256'] = o2.fingerprint_json(artifact)
-    report = {'schema_version':SCHEMA, 'artifact':artifact, 'source_artifact_sha256':expected_source_artifact,
+    report = {'schema_version':schema, 'artifact':artifact, 'source_artifact_sha256':expected_source_artifact,
               'source_receipt_sha256':snapshots['complete.json'], 'source_experiment_sha256':snapshots['experiment.json'],
               'status':'EXPLORATORY_UNCALIBRATED', 'decision':'NOT_EVALUATED', 'auto_acceptance':False,
               'production_decisions_emitted':False, 'field_disposition':'FIELD FAIL', 'numeric_localization':'NOT_MEASURED',
@@ -191,28 +204,70 @@ def run(source, output, *, expected_source_artifact):
         ok, encoded = cv2.imencode('.png', image)
         o2.require(ok, 'PNG encoding failed')
         (output/name).write_bytes(encoded.tobytes())
-    (output/'viewer.html').write_text(_viewer(cases), encoding='utf-8')
-    lines = ['# S11 unpooled O1 spatial context', '',
-             'EXPLORATORY_UNCALIBRATED; FIELD FAIL; NOT_EVALUATED. No classifier or detector run.',
-             f'Artifact: `{artifact["sha256"]}`', f'Source artifact: `{expected_source_artifact}`',
-             '[Open local viewer](viewer.html). Fixed-scale previews are quantized; NPZ arrays own numbers.',
-             'Validity requires the center and its four neighbours. Invalid zeros are storage only.',
-             'This exposes existing pixel information lost by pooling. No identity, connectivity or ranking gain is claimed.', '',
-             '| Case | Frame | Glass | Revision | Origin | Shape | Points | Baseline bands |', '|---|---|---|---|---|---|---|---|']
-    for c in cases:
-        lines.append(f'| {c["case_id"]} | {c["frame_index"]} | {c["glass_id"]} | {c["revision"]} | {c["origin"]} | {c["shape"]} | {len(c["points"])} | MATCH / {c["baseline_band_count"]} |')
-    lines += ['', '| Case | Profile | Source X | Visible pixels | Valid gradient stencils | Total pixels |', '|---|---|---|---|---|---|']
-    for c in cases:
-        for s in c['strips']:
-            lines.append(f'| {c["case_id"]} | {s["profile_id"]} | {s["source_x_range"]} | {s["visible_pixel_count"]} | {s["gradient_valid_count"]} | {s["pixel_count"]} |')
-    lines += ['', f'Stored inputs preserved: {len(snapshots)}/{len(snapshots)}. Original video/bundle/labels not reopened.',
-              'Human idx0/idx20 ambiguity remains unresolved. COMPLETE verifies measurement execution only.', '']
-    o2.write_new(output/'experiment.json', report)
-    (output/'summary.md').write_text('\n'.join(lines), encoding='utf-8')
+    if color_side:
+        _write_color_outputs(output, report, len(snapshots))
+    else:
+        (output/'viewer.html').write_text(_viewer(cases), encoding='utf-8')
+        lines = ['# S11 unpooled O1 spatial context', '',
+                 'EXPLORATORY_UNCALIBRATED; FIELD FAIL; NOT_EVALUATED. No classifier or detector run.',
+                 f'Artifact: `{artifact["sha256"]}`', f'Source artifact: `{expected_source_artifact}`',
+                 '[Open local viewer](viewer.html). Fixed-scale previews are quantized; NPZ arrays own numbers.',
+                 'Validity requires the center and its four neighbours. Invalid zeros are storage only.',
+                 'This exposes existing pixel information lost by pooling. No identity, connectivity or ranking gain is claimed.', '',
+                 '| Case | Frame | Glass | Revision | Origin | Shape | Points | Baseline bands |', '|---|---|---|---|---|---|---|---|']
+        for c in cases:
+            lines.append(f'| {c["case_id"]} | {c["frame_index"]} | {c["glass_id"]} | {c["revision"]} | {c["origin"]} | {c["shape"]} | {len(c["points"])} | MATCH / {c["baseline_band_count"]} |')
+        lines += ['', '| Case | Profile | Source X | Visible pixels | Valid gradient stencils | Total pixels |', '|---|---|---|---|---|---|']
+        for c in cases:
+            for s in c['strips']:
+                lines.append(f'| {c["case_id"]} | {s["profile_id"]} | {s["source_x_range"]} | {s["visible_pixel_count"]} | {s["gradient_valid_count"]} | {s["pixel_count"]} |')
+        lines += ['', f'Stored inputs preserved: {len(snapshots)}/{len(snapshots)}. Original video/bundle/labels not reopened.',
+                  'Human idx0/idx20 ambiguity remains unresolved. COMPLETE verifies measurement execution only.', '']
+        o2.write_new(output/'experiment.json', report)
+        (output/'summary.md').write_text('\n'.join(lines), encoding='utf-8')
     preservation()
-    o2.write_new(output/'complete.json', {'schema_version':SCHEMA, 'status':'COMPLETE', 'artifact_sha256':artifact['sha256'],
+    o2.write_new(output/'complete.json', {'schema_version':schema, 'status':'COMPLETE', 'artifact_sha256':artifact['sha256'],
                  'outputs':{p.name:o2.sha256_file(p) for p in sorted(output.iterdir())}})
     return report
+
+
+def _write_color_outputs(output, report, input_count):
+    """Machine-owned numbers for all points; no identity-based selection or ranking."""
+    header = ['case_id', 'frame_index', 'candidate_input_index', 'geometry_basis',
+              'source_x_start', 'source_x_stop', 'source_y', 'band_width_px', 'region',
+              'status', 'paired_columns', 'total_columns', 'delta_B', 'delta_G', 'delta_R',
+              'delta_gray', 'delta_B_minus_G', 'delta_R_minus_G']
+    lines = ['# S11 recorded-band color-side measurement', '',
+             'EXPLORATORY_UNCALIBRATED; FIELD FAIL; NOT_EVALUATED. No identity score or transparency estimate.',
+             'Same visible pixels for B/G/R and gray. Deltas are below minus above, equal-weight over paired X columns.',
+             'O1 unavailable stays unavailable. JSON null / empty CSV cells are not zero.',
+             'All points/roles/widths are in color-side.csv; per-column deltas/support remain in experiment.json.',
+             'Chromatic appearance may also be caused by reflections, illumination or structures.',
+             f"Artifact: `{report['artifact']['sha256']}`",
+             f"Source artifact: `{report['source_artifact_sha256']}`", '',
+             '| Case | Frame | Glass | Revision | Points | Baseline bands | Observed / unavailable / no paired columns |',
+             '|---|---|---|---|---|---|---|']
+    with (output/'color-side.csv').open('x', encoding='utf-8', newline='') as handle:
+        writer = csv.writer(handle); writer.writerow(header)
+        for case in report['cases']:
+            states = {'observed': 0, 'o1_unavailable': 0, 'no_paired_columns': 0}
+            points = case['color_side']['points']
+            for p in points:
+                for scale in p['scales']:
+                    for region, pair in scale['pairs'].items():
+                        states[pair['status']] += 1
+                        delta = pair['mean_column_delta_bgr_gray']
+                        opponent = pair['mean_column_delta_opponents']
+                        writer.writerow([case['case_id'], case['frame_index'], p['candidate_input_index'],
+                            p['geometry_basis'], *p['source_x_range'], p['source_y'], scale['band_width_px'],
+                            region, pair['status'], pair['observed_paired_columns'], pair['total_columns'],
+                            *(delta if delta is not None else [None]*4),
+                            *(opponent if opponent is not None else [None]*2)])
+            lines.append(f"| {case['case_id']} | {case['frame_index']} | {case['glass_id']} | {case['revision']} | {len(points)} | MATCH / {case['baseline_band_count']} | {states['observed']} / {states['o1_unavailable']} / {states['no_paired_columns']} |")
+    lines += ['', f'Stored inputs preserved: {input_count}/{input_count}. Original video/bundle/labels not reopened.',
+              'COMPLETE verifies measurement execution only. Existing labels and human ambiguity remain unchanged.', '']
+    o2.write_new(output/'experiment.json', report)
+    (output/'summary.md').write_text('\n'.join(lines), encoding='utf-8')
 
 
 def main():
@@ -220,9 +275,10 @@ def main():
     parser.add_argument('--source', required=True, help='existing spatial-context output directory')
     parser.add_argument('--expected-source-artifact', required=True)
     parser.add_argument('--output', required=True, help='new directory outside the source output')
+    parser.add_argument('--color-side', action='store_true', help='measure recorded-band BGR/gray sides; no new gradient map or identity score')
     args = parser.parse_args()
-    run(args.source, args.output, expected_source_artifact=args.expected_source_artifact)
-    print('Measurement complete. Read summary.md and viewer.html. No identity decision was made.')
+    run(args.source, args.output, expected_source_artifact=args.expected_source_artifact, color_side=args.color_side)
+    print('Measurement complete. Read summary.md and ' + ('color-side.csv' if args.color_side else 'viewer.html') + '. No identity decision was made.')
 
 
 if __name__ == '__main__':

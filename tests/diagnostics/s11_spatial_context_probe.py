@@ -181,3 +181,112 @@ def measure_lateral_context(gray, effective_mask, glare_mask, points, *, band_wi
             'decision': 'NOT_EVALUATED', 'row_context': row_context, 'points': result,
             'limitation': 'Column side averages retain X order but lose vertical order within each band. '
                           'No connectivity, contour, physical identity or sufficient support is inferred.'}
+
+
+COLOR_SIDE_SPEC = {
+    'id': 'recorded-band-color-side-v1',
+    'channels': ['B', 'G', 'R', 'gray'],
+    'units': 'uint8 code values 0..255, float64 means; not calibrated radiometry',
+    'support': 'effective and not glare; same pixels for all four channels',
+    'pairing': 'below-minus-above per exact X column; equal-weight mean over paired columns',
+    'eligibility': 'both recorded O1 bands available; a paired column needs visible pixels on both sides',
+    'opponents': ['B-G', 'R-G'],
+    'purpose': 'chromatic appearance retained beyond gray projection; not transparency or identity',
+    'decision': 'NOT_EVALUATED', 'threshold': None,
+    'max_band_columns': 1000000, 'max_sample_pixels': 100000000,
+}
+
+
+def measure_color_side(crop, gray, effective_mask, glare_mask, points, *, origin=(0, 0)):
+    """Measure exact recorded bands without searching/recentering or filling gaps.
+
+    Input points already carry the runner's exact witness-center binding. Column
+    order is retained, but vertical order within each band is still averaged.
+    Recorded unavailable bands retain diagnostic observations, not pair deltas.
+    """
+    import cv2
+
+    o2.require(isinstance(crop, np.ndarray) and crop.dtype == np.uint8 and
+               crop.ndim == 3 and crop.shape[2] == 3, 'uint8 BGR crop required')
+    o2.require(isinstance(gray, np.ndarray) and gray.dtype == np.uint8 and
+               gray.ndim == 2 and crop.shape[:2] == gray.shape, 'color/gray shape or type mismatch')
+    h, w = gray.shape
+    o2.require(0 < h <= SPEC['max_dimension'] and 0 < w <= SPEC['max_dimension'], 'color raster exceeds bounds')
+    o2.require(np.array_equal(cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY), gray), 'BGR-to-gray mismatch')
+    for mask in (effective_mask, glare_mask):
+        o2.require(isinstance(mask, np.ndarray) and mask.shape == gray.shape and
+                   mask.dtype in (np.dtype('uint8'), np.dtype('bool')), 'invalid color mask')
+    o2.require(len(origin) == 2 and isinstance(points, list) and len(points) <= SPEC['max_points'],
+               'invalid color origin or point count')
+    ox, oy = (o2.integer(v, 'origin') for v in origin)
+    visible = (effective_mask > 0) & (glare_mask == 0)
+    result, seen, columns_used, pixels_used = [], set(), 0, 0
+    names = ('near_above', 'near_below', 'far_above', 'far_below')
+    for p in points:
+        key = (p['candidate_input_index'], *o2.geometry_key(p))
+        o2.require(key not in seen and p['geometry_basis'] in ('native_path', 'candidate_center'), 'duplicate/invalid color point')
+        seen.add(key)
+        x0, x1 = (o2.integer(v, 'source X') - ox for v in p['source_x_range'])
+        o2.require(0 <= x0 < x1 <= w and oy <= p['source_y'] < oy+h, 'color point outside crop')
+        point_result = {k: copy.deepcopy(p[k]) for k in
+                        ('candidate_input_index', 'geometry_basis', 'source_x_range', 'source_y',
+                         'band_binding', 'band_center_role')}
+        point_result['scales'] = []
+        widths = set()
+        o2.require(1 <= len(p['scales']) <= 3, 'invalid color scale count')
+        for scale in p['scales']:
+            width = o2.integer(scale['band_width_px'], 'band width')
+            o2.require(0 < width <= 128 and width not in widths, 'invalid/duplicate color width')
+            widths.add(width)
+            bands = {b['name']: b for b in scale['bands']}
+            o2.require(len(scale['bands']) == 4 and set(bands) == set(names), 'four unique O1 bands required')
+            measured, by_band = [], {}
+            for name in names:
+                band = bands[name]
+                lo, hi = (o2.integer(v, 'band Y') for v in band['clipped_local_y_range'])
+                start, stop = band['local_y_range']
+                o2.require(type(start) is int and type(stop) is int and start < stop and (lo, hi) == (max(0, min(h, start)), max(0, min(h, stop)))
+                           and type(band['available']) is bool, 'invalid color band range/state')
+                columns_used += x1-x0
+                pixels_used += (hi-lo)*(x1-x0)
+                o2.require(columns_used <= COLOR_SIDE_SPEC['max_band_columns'] and
+                           pixels_used <= COLOR_SIDE_SPEC['max_sample_pixels'], 'color sampling resource bound exceeded')
+                valid = visible[lo:hi, x0:x1]
+                counts = valid.sum(axis=0)
+                # Identical spatial support; gray is the saved uint8 conversion,
+                # not a conversion of already-averaged BGR values.
+                values = np.concatenate((crop[lo:hi, x0:x1], gray[lo:hi, x0:x1, None]), axis=2)
+                sums = np.where(valid[..., None], values, 0).sum(axis=0, dtype=np.float64)
+                means = np.divide(sums, counts[:, None], out=np.zeros_like(sums), where=counts[:, None] > 0)
+                count = int(counts.sum())
+                o2.require(count == band['valid_pixel_count'], 'color support differs from recorded O1 band')
+                by_band[name] = (counts, means)
+                measured.append({
+                    'name': name, 'local_y_range': band['local_y_range'],
+                    'clipped_local_y_range': [lo, hi], 'clipped_source_y_range': [lo+oy, hi+oy],
+                    'o1_available': band['available'], 'o1_reason': band['reason'],
+                    'visible_pixel_count': count, 'column_visible_counts': counts.tolist(),
+                    'observed_mean_bgr_gray': (sums.sum(axis=0)/count).tolist() if count else None,
+                })
+            pairs = {}
+            for region in ('near', 'far'):
+                above, below = region+'_above', region+'_below'
+                ac, av = by_band[above]; bc, bv = by_band[below]
+                joint = (ac > 0) & (bc > 0)
+                available = bands[above]['available'] and bands[below]['available']
+                status = ('o1_unavailable' if not available else
+                          'no_paired_columns' if not joint.any() else 'observed')
+                delta = bv-av
+                mean = delta[joint].mean(axis=0) if status == 'observed' else None
+                pairs[region] = {
+                    'status': status, 'observed_paired_columns': int(joint.sum()),
+                    'total_columns': x1-x0,
+                    'mean_column_delta_bgr_gray': mean.tolist() if mean is not None else None,
+                    'mean_column_delta_opponents': [float(mean[0]-mean[1]), float(mean[2]-mean[1])] if mean is not None else None,
+                    'column_delta_bgr_gray': [row.tolist() if status == 'observed' and ok else None
+                                             for row, ok in zip(delta, joint, strict=True)],
+                }
+            point_result['scales'].append({'band_width_px': width, 'bands': measured, 'pairs': pairs})
+        result.append(point_result)
+    return {'spec': copy.deepcopy(COLOR_SIDE_SPEC), 'decision': 'NOT_EVALUATED', 'points': result,
+            'band_columns_measured': columns_used, 'sample_pixels_measured': pixels_used}

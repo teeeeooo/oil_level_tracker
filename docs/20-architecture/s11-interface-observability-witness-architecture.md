@@ -1083,11 +1083,70 @@ No automatic transition to classifier fitting, new collection, relabeling or
 production change is authorized by a COMPLETE result. [Local evidence](../60-evidence/s11/s11-o2-joint-context-local.md)
 records this adapter's verified scope.
 
+## W4 recorded-band color sides — saved-output measurement
+
+The candidate-guided human rationale motivates one question: do visible side
+color differences exist in the retained RGB crop that the numeric gray projection
+does not retain? Apparent transparency in the human account is not calibrated
+transmission. This diagnostic measures code-value color differences, not Oil
+identity, physical transparency, region ownership or contour continuity.
+
+Extend the existing `s11_joint_context_run.py` adapter with `--color-side` and
+`measure_color_side` in `s11_spatial_context_probe.py`. Reuse its spatial-source
+receipt/hash, raw PNG identity, exact point/center binding, baseline reconstruction
+and input-preservation gates. The source is the original spatial-context output,
+which retains BGR crop, raw gray, effective and glare masks. Joint output or
+annotated guide PNGs cannot substitute for that source. No new decoder, detector,
+label reader, gradient map or viewer is introduced. Existing default joint mode
+retains its contract. Production runtime and O1 trace schema are unchanged.
+
+`recorded-band-color-side-v1` fixes these semantics before private execution:
+
+- Use all saved candidate/geometry/X/Y points and every recorded width; no
+  identity label, source family, reviewed coordinate or magnitude chooses samples.
+  Preserve candidate-center/native roles and exact coincident aliases separately.
+- Require uint8 BGR crop and exact OpenCV BGR-to-gray equality with saved gray.
+  Use B/G/R and saved gray code values in 0..255, float64 arithmetic. This differs
+  from O1 normalized gray units; no gamma, white-balance or radiometric calibration
+  is claimed. The source masks already have their recorded color-dependent bias.
+- Use each recorded band's half-open requested/clipped local interval and exact
+  source X. Validate clipping, preserve clipped source Y and existing availability
+  and reason. Every channel uses the same `effective & ~glare` pixels; count must
+  equal the recorded O1 visible count. This is pixel validity, not gradient-stencil
+  validity. Never bridge gaps or fill an unavailable band.
+- Within each band, retain visible counts per ordered X column and an observed
+  all-visible-pixel B/G/R/gray mean (null if empty). Partial observations of an
+  O1-unavailable band remain diagnostic and cannot enable a pair delta.
+- For near and far independently, subtract above from below per X column. Require
+  both O1 bands available and at least one visible pixel on each side of that
+  column. Retain every column delta or null, paired-column count and full width.
+  Average deltas with equal column weight over those paired columns only. This
+  is deliberately different from subtracting pixel-weighted band averages.
+- Report `delta_B`, `delta_G`, `delta_R`, `delta_gray`, and fixed opponent changes
+  `delta_B-delta_G`, `delta_R-delta_G`. These are descriptive vectors, not a score,
+  norm, ranking or threshold. An achromatic step has zero opponent change, but
+  color illumination/reflection can also change these values. Identical pixels
+  cannot establish different physical identities. Zero is observed zero; null
+  is unavailable. Status is `observed`, `o1_unavailable` or `no_paired_columns`.
+- Retain existing raster/point/input limits and additionally cap measured band
+  columns at 1,000,000 and sampled pixels at 100,000,000 per case. Ordered columns
+  still average vertical structure within bands; no independence across widths,
+  overlapping points or candidate-center/native aliases is asserted.
+
+The mode emits `s11-o2-color-side-v1`: experiment JSON (full column support and
+numbers), machine-generated CSV (one row per point/width/near-or-far pair), summary
+and COMPLETE receipt. Three outputs are hashed; COMPLETE is written last after
+input-preservation recheck. No existing output is overwritten. All flags remain
+EXPLORATORY_UNCALIBRATED / NOT_EVALUATED / FIELD FAIL / NOT_MEASURED with no
+production decision or auto-acceptance. A successful run establishes measurement
+execution only. The [Windows procedure](../40-operations/s11-o2-local-shadow-evaluation.md#color-side-measurement--existing-saved-outputs)
+uses the retained controls; it does not reopen R1 or grant W4-R2 entry.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: unpooled O1 gradient stencils, central-difference aliases and stored-output binding; ordered column-side preservation and joint-marginal collisions; candidate-relative reindexing, whole-inventory O1 novelty and central-gap peak controls; full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
+- Prior mechanisms reviewed: saved BGR versus O1 gray projection, same-support column-side color differences and apparent-transparency limits; unpooled O1 gradient stencils, central-difference aliases and stored-output binding; ordered column-side preservation and joint-marginal collisions; candidate-relative reindexing, whole-inventory O1 novelty and central-gap peak controls; full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.

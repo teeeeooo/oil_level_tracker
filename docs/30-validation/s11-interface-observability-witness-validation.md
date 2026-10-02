@@ -657,6 +657,38 @@ rather than inventing interpretation. Stop on provenance/baseline failures. A
 successful local adapter or Windows receipt does not resolve Oil identity, the
 human ambiguity control, numeric localization or O2 acceptance.
 
+## Recorded-band color-side controls
+
+The [fixed color-side contract](../20-architecture/s11-interface-observability-witness-architecture.md#w4-recorded-band-color-sides--saved-output-measurement)
+requires an equal-gray, different-BGR step to retain signed channel differences;
+achromatic steps must have zero opponent change, including observed zero.
+Assert BGR order, polarity, float subtraction without uint8 wraparound, ordered
+columns and equal-column weighting under unequal pixel counts. Identical pixels
+remain unclassified regardless of their possible physical cause. Synthetic color
+separation is information retention, not private identity discrimination.
+
+Masks/glare must prevent hidden colors from changing output. Empty bands and
+nonoverlapping column support cannot manufacture deltas. Unavailable/clipped O1
+bands may report partial observed means, but must not become eligible pairs.
+Validate clipping, count agreement, raster/gray/channel equality, duplicate
+points and resource bounds. Every input stays unchanged.
+
+Reuse the actual O1 producer fixture and saved-output receipt for the color CLI,
+including non-repository Unicode paths, UTF-8, closed stdin, two frame/Glass cases,
+all roles and coincident-center aliases. A non-gray BGR fixture must produce the
+expected vectors without calling the joint-map builder. Verify CSV numbers,
+three hashed outputs plus receipt, unchanged source files and all no-decision
+flags. Run shared input-failure guards in both modes; color/gray mismatch and
+input mutation during measurement/publication must leave no COMPLETE receipt.
+Retain existing spatial-source and default joint regressions.
+
+Windows measurement is pending until the bounded source procedure actually runs.
+Report all predeclared primary sectors/widths/near-far pairs and unavailable
+states, without choosing a favorable channel or aggregating labels into a score.
+Review-003 idx10/15 is the main descriptive contrast; BASE idx11 is censored
+supporting evidence and idx0/20 remains a human-unresolved control. No measured
+separation alone grants physical identity, W4-R2, O2 acceptance or field PASS.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
