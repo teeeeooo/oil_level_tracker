@@ -156,6 +156,120 @@ test code changed and no detector experiments repeated. Documentation links,
 S11 governance and whitespace checks cover this evidence/status update.
 Private file preservation and image claims remain user-reported as stated above.
 
+## Candidate-guided human rationale received — 2026-10-02
+
+Reported procedure checkout: `d8efbb0`. Existing Accum f16280 idx10/idx15 and BASE
+f14386 idx11 images and joint viewer were displayed on Windows. No private image
+was inspected on this host. Existing labels (review-003 rev4, review-002 rev14)
+and FIELD FAIL / NOT_EVALUATED remain unchanged. This return completes the
+candidate-guided presentation, not a classifier experiment or relabeling.
+
+### Direct human answer
+
+The user identified the displayed idx10/idx15 comparison guide and said:
+
+> idx10은 경계면 위쪽과 아래쪽의 투명도/미세한 색상/상단,하단을 나누는 경계면의
+> 존재 (경계면의 빛반사와 면을 가로지르는 특성)을 보고 경계면이라고 확정했고
+>
+> idx15는 경계면이 보이지도 않아 그 선을 기준으로 위 아래의 투명도/색상 차이도
+> 없고
+
+Retain this as qualitative, candidate-bound rationale: differences in apparent
+transparency/color above and below idx10 plus a reflective boundary traversing
+the visible area, versus no comparable visible boundary/side difference at idx15.
+It does not assign exact regional polygons, prove each of five sectors separately,
+measure transmission or establish a general “color difference means Oil” rule.
+BASE idx11 retains its prior structure judgment; no new detailed fitting-shape
+answer is supplied. idx15's artifact tags are not changed from the prior record.
+
+### Source-grounded mapping, superseding overstatements in the return
+
+| Human cue | Existing representation | Remaining question |
+|---|---|---|
+| Subtle side color difference | Original BGR crop is saved; O1 gray bands and joint gray gradients do not store full chromatic side measurements | Is the reported cue present in retained pixels and the existing sampled bands, beyond their gray projection? |
+| Apparent transparency | Gray/texture/material appearance may contain correlated cues; no calibrated transmission/background reference is supplied | Cannot infer physical transparency from a still or name an unmeasured “transparency value” |
+| Reflective boundary traversing the scene | Gray edges, gradient alignment, band glare, native sector geometry and unpooled gradients retain parts of this appearance | The rationale does not yet define physical region adjacency or a discriminator independent of reflections/structures |
+| No visible boundary at idx15 | Existing measurements can be nonzero despite the human's negative identity judgment | Visual absence is not a measured zero edge/contrast, nor automatic proof of material homogeneity |
+| BASE fitting/structure | Existing human structure tag and recorded recipe/context exist; parts of sampling are censored | Exact visible fitting cue remains unspecified; masked absence is not structure identity |
+
+A missing field named after the human description does not prove the information
+is wholly unmeasured or absent from the input. The return's “not measured” and
+“lost information” claims are therefore qualified, not adopted wholesale.
+Known label Y or distance from a labeled interface cannot lower counterexample
+risk: that would reuse the answer as an input. Reflection and illumination can
+also produce color/region differences, while true interfaces may have little
+color contrast. Normal alignment alone does not certify a physical boundary or
+its connection across all sectors.
+
+The supplied selected-X table, X=[1388,1473), has near-band alignment ranges
+0.821–0.979 for idx10 and 0.574–0.680 for idx15 across BW6/12/18. Its prose ranges
+0.88–0.98 and 0.52–0.68 mix or omit rows. This descriptive single-strip contrast
+is already represented in O1 and is not a new all-sector efficacy result. No
+additional Windows numeric correction is requested.
+
+### Bounded source audit and local information-loss example
+
+Read current sources at `d8efbb0`:
+
+- [Preprocessing](../../../src/oil_tracker/adapters/vision/preprocessing.py)
+  converts BGR to uint8 gray for edge/gradient channels; glare/HUD masking also
+  uses chromatic span. Do not claim production is wholly color-blind.
+- [O1 witness](../../../src/oil_tracker/adapters/vision/oil_interface_witness.py)
+  measures gray statistics/gradients plus material/static/glare fields; no raw
+  per-side BGR or chromatic vector is serialized in its bands.
+- [Foam owner](../../../src/oil_tracker/adapters/vision/foam_front_detector.py)
+  uses Lab lightness/chroma for its own task. Its classifier/thresholds do not
+  become an Oil identity mechanism and should not be copied into this probe.
+- [Saved spatial adapter](../../../tests/diagnostics/s11_spatial_context_run.py)
+  preserves the original crop alongside gray/effective/glare rasters.
+  [Joint adapter](../../../tests/diagnostics/s11_joint_context_run.py) validates
+  and copies that crop, while numeric joint gradients consume gray. Thus color
+  is retained in saved inputs, not an extra source acquisition requirement.
+
+A local OpenCV/Numpy calculation used BGR [0,0,100] and [0,51,0]; both convert to
+raw gray 30. Two 16x16 crops, one uniform and one split between these colors,
+have identical raw gray and identical O1 `_extra_channels` gradient/normal arrays,
+but the split crop's below-minus-above BGR vector is [0,51,-100]. This establishes
+possible loss in the gray projection, **not** a complete O1 packet collision,
+physical class separation, or evidence that the private scene has such a signal.
+Other color-derived channels/masks are not covered by that equality claim.
+No permanent implementation or production test was added for this small example.
+
+### Decision and bounded next step
+
+The presentation and rationale intake are complete; do not ask the same question
+again. Existing positive/negative labels are available. The next local work is
+**color-side measurement feasibility and a fixed measurement contract**, reusing
+saved crop/masks and exact candidate bands before any Windows handoff:
+
+- Preserve native/center roles, every sector and original widths. Do not relocate
+  samples to the human's Y or select only the clearest strip. The Accum pair is
+  the explanatory focus, with existing BASE negative/ambiguous cases retained as
+  separate checks rather than pooled success counts.
+- Compare raw BGR side values/differences with the existing gray projection on
+  the same valid support. Any channel-order, normalization and support rule must
+  be fixed and checked locally before measuring private data. No physical
+  transparency estimate, color-space sweep or identity score is authorized by
+  the rationale alone.
+- Reuse the existing spatial diagnostic owner where suitable. Check equal-gray
+  color differences, purely achromatic changes, masked/clipped support and
+  identical-color appearances with conflicting physical explanations. Color
+  measurements can preserve a cue while still failing to distinguish identity.
+- If the cue is absent from the sampled support, do not silently expand windows
+  or request more scenes. Record the limitation and decide explicitly whether
+  the human's broader context warrants a separate measurement scope.
+
+This is a distinct chromatic measurement question, not reopening the closed
+joint-gray identity proposal. W4-R2 classifier entry is still unmet; no decision
+rule, operating point, threshold or production behavior is promoted. Original
+inputs, labels, human idx0/idx20 ambiguity, SPL#2/3 deferral and O2 acceptance
+requirements remain unchanged. No new Windows run or human review is requested
+by this source audit; an executable handoff needs local implementation/verification.
+
+Local checks: source ownership, the stated gray-projection example, documentation
+links, governance and whitespace. Windows presentation and preservation remain
+reported evidence; source RGB fidelity and physical observations are not reverified.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `TRACE-PUBLICATION`.

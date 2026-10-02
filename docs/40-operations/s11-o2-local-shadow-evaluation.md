@@ -1414,6 +1414,12 @@ endpoint로 바꾸지 않는다. 경로가 정말 없으면 “captured geometry
 
 ## Existing controls — candidate-guided rationale presentation
 
+**완료(2026-10-02, Windows 전달 보고):** 후보 표시 후 Accum idx10/idx15의 위아래
+미세한 색상·외관 차이와 경계의 존재/부재에 대한 직접 답변을 받았다.
+[근거 접수와 소스 검토](../60-evidence/s11/s11-o2-identity-context-windows-review-001.md#candidate-guided-human-rationale-received--2026-10-02)
+참조. 아래는 수행한 절차이며 같은 판독을 다시 요청하지 않는다. 다음 색상 측정은
+로컬 계약·검증을 먼저 준비하며, 이 절차가 새 측정/실행 지시가 되지 않는다.
+
 **목적:** 이미 판정된 유면·비계면 사례에서 사용자가 detector의 실제 후보와 측정
 영역을 보며 구별 근거를 설명할 수 있게 한다. 새 사례 선정이나 기존 identity
 재판정이 아니다. [재사용 결정](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md#existing-labeled-controls-retained--candidate-guided-presentation-decision)
