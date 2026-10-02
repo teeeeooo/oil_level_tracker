@@ -1271,12 +1271,13 @@ index 기반 읽기만 수행하고, 전체 재해시를 안 했다면 그 한�
 
 ## W2 — one saved frame review preparation
 
-**상태: PROPOSED / 미실행.** W4-R3 기존 자료 조사는 완료됐다.
+**상태: 전달 보고로 완료.** [f14865 판독 결과](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md)를
+보존한다. 아래는 실행 당시 절차이며 프레임 선택·사용자 판독을 반복하지 않는다.
 
 목적: 기존 기록에 없는 물리적 판독 근거를 얻을 수 있는지 **다른 저장 프레임 1장**으로
 확인한다. [R3 결과와 한계](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md#windows-inventory-received--2026-10-02)를
 따르며, 현재 두 프레임의 반복 분석이나 새 challenger 구현으로 전환하지 않는다.
-이 절차는 다음 작업으로 준비된 제안이며 아직 실행·판독하지 않았다.
+선택된 frame 14865의 두 경계는 사람 판독에서도 모호했다. 다음 절차만 수행한다.
 
 - 대상은 같은 SPL#1의 BASE drain이다. 선택 범위는 **source 615–625초**, 목표
   620초로 미리 고정한다. 기존 약 600초 판독 및 ±5초 문맥과 떨어진 drain 내부의
@@ -1308,3 +1309,44 @@ uncertainty, revision을 보존하는 별도 단계가 필요하다. 새 candida
 truth와 candidate 부재를 구분하고 contour/Y를 만들어 채우지 않는다. 구별 근거가
 없으면 uncertain/not-assessable 결과 자체를 보존한다. 한 장의 결과만으로 전역 규칙,
 가중치·threshold·학습·성능 향상을 주장하지 않는다. FIELD FAIL은 유지한다.
+
+
+## W2 — frame14865 scene-to-candidate correspondence
+
+**목적:** 새 판독 메모의 두 대안 경계가 같은 frame의 어떤 저장 후보/경로와 공간적으로
+대응하는지 확인한다. 정답 선택, 후보 identity 부여, 새 점수 계산 작업이 아니다.
+[판독 결과와 한계](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md)를 먼저 읽는다.
+
+입력은 기존 R22-3 번들과 `w2-f14865-scene-review-reply-001.json`, 이미 표시한 원본
+ROI다. record `f000014865_0c5e1375725c`, source frame14865, BASE, run
+`a24c8fe9-3166-4c17-b69f-d9b4458711bd`를 직접 확인한다. source timestamp
+619.994375와 origin(0,211)은 저장 메타데이터로 읽고 반올림 FPS에서 재생성하지 않는다.
+
+1. `ResultBundleReader`, `DebugTraceRepository.load_record()` 및 기존
+   `s11_interface_shadow_evaluation.extract_frame(record, case_id)`의 검증을 재사용한다.
+   `extract_frame`은 메모리상 읽기 전용 projection으로 사용할 수 있다. `prepare`,
+   `record`, 새 packet/label 생성, 영상 decode 또는 detector는 실행하지 않는다.
+   witness 부재·index/provenance 불일치면 대체 trace를 추정하지 말고 종료한다.
+2. 해당 frame의 **모든 Oil 후보**에 대해 원래 candidate_input_index, source,
+   canonical_y, native path 유무, sector별 exact source X/Y를 표로 만든다.
+   score 순서로 index를 바꾸거나 rejected/unadmitted 후보를 누락하지 않는다.
+   native_path와 candidate_center는 분리한다. 다른 frame의 idx를 가져오지 않는다.
+3. 사람 메모의 A(X 약178–483, Y 약385)와 B(X 약140–467, Y 약419–429)를
+   정확한 contour/interval 정답으로 쓰지 않는다. 각 geometry와 기록된 X 범위의
+   수치상 겹침 여부 및 Y/offset을 나란히 표시하되, 거리 cutoff나 nearest-winner를
+   새로 만들지 않는다. 기울어진 B를 임의로 보간하지 않는다. 후보가 두 범위를
+   지나거나 일부만 겹치는 경우도 그대로 남긴다. 이 표만으로 near/off/identity를
+   결정하지 않는다. 좌표로 대응을 확정할 수 없으면 `ambiguous_correspondence`로 둔다.
+4. 반사/잔류/눈금자 등 비계면 관찰에는 **기존 답변에 좌표가 실제 있는 경우에만**
+   그 출처와 함께 공간 대응을 기록한다. 좌표가 없으면 `unbound_scene_observation`.
+   화면상의 위치를 임의 추정해서 candidate negative나 artifact_tag를 만들지 않는다.
+   상부 흰 점의 foam/이물질 언급은 미확정 가설이며 Foam 정답이 아니다.
+5. 이미 있으면 band availability와 reason을 같은 geometry/scale 기준으로 인용한다.
+   band availability를 새로운 gradient-valid 측정이나 물리적 식별 가능성으로
+   바꾸지 않는다. 이번에는 NPZ 생성·mask 계산·추가 appearance 비교를 하지 않는다.
+
+원본과 scene reply는 보존한다. notes 폴더의
+`w2-f14865-scene-candidate-correspondence.md` 한 개에 위 표, 직접 읽은 출처,
+읽은 소형 파일의 hash 연결/전후 보존과 검증 범위 한계, 남은 모호성을 기록하고 반환한다.
+다른 프레임 탐색·사용자 재판정·라벨 이관으로 자동 진행하지 않는다. R2 진입이나
+identity 개선을 주장하지 말고 FIELD FAIL / NOT_EVALUATED를 유지한다.
