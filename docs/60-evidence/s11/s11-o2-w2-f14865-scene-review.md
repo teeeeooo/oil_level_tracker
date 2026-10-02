@@ -187,6 +187,107 @@ The last hash identifies the prior document, not this appended revision. These
 hashes are transferred references, not locally rehashed private files or an
 independently verified before/after preservation receipt.
 
+## Geometry reconciliation received and bounded W2 closed — 2026-10-02
+
+Source: transferred Appendix A including the 23 candidate JSON projections.
+These projections are inspectable here; private bundle bytes, images and output
+files have not been independently read. The original Windows note is reported
+preserved byte-for-byte with an appended correction. Scene reply/index hashes
+are reported unchanged. No new measurement, decode, detector, label or human
+review was performed.
+
+**Geometry conflict resolved on transferred structured evidence:** 19 candidates
+(idx0–8 and idx13–22) have `candidate_center_only`, five default crop sectors and
+null path Y. Four candidates, idx9–12, have `native_generator_path`:
+
+| idx | Canonical source Y | Exact source X sectors, in order | Native source Y, in order | Stored center objects per sector |
+|---|---|---|---|---|
+| 9 | 418.5 | [130,236), [236,343), [343,449), [449,555) | 420, 416, 417, 421 | 2, 2, 2, 2 |
+| 10 | 399 | [130,236), [236,343), [343,449) | 399, 399, 399 | 1, 1, 1 |
+| 11 | 925 | [130,236), [236,343), [343,449) | 906, 926, 925 | 2, 2, 1 |
+| 12 | 376 | [130,236), [236,343), [343,449) | 394, 376, 370 | 2, 1, 2 |
+
+Coincident native/center Y is stored once as a native center; it is not a missing
+candidate-center geometry. idx10 is a captured flat path, whereas idx9/11/12
+have X-varying path Y. Absence of native capture for the other 19 candidates is
+not proof of missed proposals or a generator defect. Null `curve_summary` and
+`localization_uncertainty_px` remain unavailable derived fields, not contradictions.
+
+### Local reconciliation of the supplied appendix
+
+No additional Windows request is needed for the following corrections:
+
+- idx9's path Y420 and Y421 fall within B's approximate Y419–429 span over
+  X intersections 96 and 18 pixels. Y416/417 are 3/2 pixels **above** its smaller
+  Y bound, because source Y increases downward. This is numerical overlap with
+  a rough region, not an exact contour intersection or first acquisition of a
+  path: the path already existed and the report has now recovered it.
+- idx12's Y394 and Y376 are equally distant (9 px) on opposite sides of A's
+  approximate Y385; Y370 is 15 px above. The sequence moves upward as X increases,
+  not downward. Y394 is not closer than canonical Y376. No nearest winner or
+  proposal miss follows from these offsets.
+- idx9 alone reaches X555; idx10–12 stop at X449. Do not give all native candidates
+  the same coverage. Approximate A/B endpoints do not become exact truth.
+- Native-only and all-stored-center band inventories are different scopes.
+  idx9's 16/16 native-only and 32/32 all-center counts can both be valid. The
+  latter is not additional independent support or a replacement native score.
+
+Counting `true` values in the supplied A10 bw8 arrays gives:
+
+| idx | Native stored centers | Additional candidate-center objects | All stored centers |
+|---|---|---|---|
+| 9 | 16/16 | 16/16 | 32/32 |
+| 10 | 12/12 | none (coincident) | 12/12 |
+| 11 | 8/12 | 6/8 | **14/20** |
+| 12 | 12/12 | 8/8 | 20/20 |
+
+idx11 native sectors have 2,4,2 available bands; its two additional center
+objects have 2,4. Thus A5's 15/20 and the prior 9/12 do not match A10. Other
+A5/A10 discrepancies are idx6 and idx16 (**4/20**, not 6/20), and idx19 and idx22
+(**6/20**, not 10/20). Counts were recomputed locally from a compact transcription
+of the supplied boolean arrays; this does not verify the private output file.
+The supplied structured arrays are the basis of these arithmetic corrections;
+no measured band or label is altered. These count differences do not reopen
+geometry reconciliation or establish identity/support quality.
+
+### Evidence-document hash difference resolved locally
+
+Git file bytes give:
+
+| Repository revision | SHA-256 of this evidence document at that revision |
+|---|---|
+| `5fffb2e` | `0bdc3320a660081f78daaed636cdbd9d06e42b34bfa3d88f682defcb9de9511a` |
+| `8c4d918` | `702f4b6772bb0b0cd33383c94db49387221cdb196268a92c75f8cc7fe5d057fb` |
+
+These match the two reported hashes. Commit `8c4d918` appended the earlier
+correspondence intake and changed its historical heading. This is an identified
+document-version change, not an unresolved input-record conflict. The current
+appendix changes the document again; neither historical hash describes this
+new revision. No private source-file hash conclusion is implied.
+
+### Disposition and next-entry condition
+
+**Bounded W2 scene review and stored-geometry correspondence COMPLETE on
+transferred evidence; no identity promotion.** The original all-center-only
+claim is withdrawn. Both scene alternatives remain unresolved, negative/context
+observations remain unbound, and detector ambiguous/NO_UPDATE output is preserved.
+There is no new independently justified positive/negative identity contrast.
+
+Close this Windows handoff. No further extraction, recount request, image,
+relabeling or forced human choice is scheduled. W4-R2 entry remains unmet:
+a conditional challenger needs a distinct input-based discriminator and justified
+opposing controls, as specified in the
+[continuation plan](../../50-diagnostics/s11/s11-w4-progress-audit-and-continuation-plan-2026-10-01-ba1bd6a.md#w4-r2--재사용형-conditional-identity-challenger의-사전-명세).
+This scene supplies geometry and an unresolved case, not those controls. Reopen
+implementation/collection only with a concrete mechanism/control or acquisition
+decision addressing that gap; do not automatically review another nearby frame.
+R1 remains closed without promotion; O2 open, W5/O3 gated, SPL#2/3 deferred,
+FIELD FAIL / NOT_EVALUATED unchanged. This is not a general impossibility claim.
+
+Local verification: current-source geometry semantics, supplied-boolean arithmetic,
+Git historical file hashes, documentation links, governance and diff checks.
+Private file preservation and human observations remain attributed evidence.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.

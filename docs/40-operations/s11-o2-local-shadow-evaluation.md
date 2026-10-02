@@ -1354,6 +1354,12 @@ identity 개선을 주장하지 말고 FIELD FAIL / NOT_EVALUATED를 유지한�
 
 ## W2 — frame14865 geometry report reconciliation
 
+**완료(2026-10-02, 전달된 JSON 근거):** idx9–12의 native path와 19개 center-only
+후보가 확인되어 이 확인 단계를 닫았다. [접수·정정 결과](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02)
+참조. 아래는 수행 이력이며 재실행 지시가 아니다. 문서 해시 차이는 Git revision
+차이로 해소됐고, 남은 집계·방향 설명은 전달된 JSON으로 로컬 정정했다.
+새 Windows 작업이나 사용자 판정 요청은 없다.
+
 대응 보고는 접수했다. 이번 확인은 그 보고의 “전 후보 5개 sector/native 없음”과
 bw8 총 band 수(일부 후보 12/16, 나머지 20)의 불일치만 해소한다.
 새 실험이나 사람 재판정 단계가 아니다. 기존 f14865 record를 같은 reader로 읽고
