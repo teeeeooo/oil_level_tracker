@@ -1410,3 +1410,83 @@ endpoint로 바꾸지 않는다. 경로가 정말 없으면 “captured geometry
 보존하고 읽은 소형 입력의 hash 확인은 기존 절차를 따른다. 영상 decode, detector,
 추가 이미지, NPZ/gradient, 사용자 재판정, packet/label 생성은 필요하지 않다.
 이번 확인 후 멈춘다. FIELD FAIL / NOT_EVALUATED와 사람의 모호성은 유지한다.
+
+
+## Existing controls — candidate-guided rationale presentation
+
+**목적:** 이미 판정된 유면·비계면 사례에서 사용자가 detector의 실제 후보와 측정
+영역을 보며 구별 근거를 설명할 수 있게 한다. 새 사례 선정이나 기존 identity
+재판정이 아니다. [재사용 결정](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md#existing-labeled-controls-retained--candidate-guided-presentation-decision)
+참조. 현재 데이터로 물리적 구별 규칙이 입증됐다는 뜻은 아니다.
+
+### 대상과 기존 자료
+
+- 주 사례: review-003 / Accum / f16280 / revision 4.
+  idx10 native Y=[209,210,217,219,220] (interface),
+  idx15 native Y=[317,328,313,295,296] (non_interface).
+  같은 X=[1218,1303), [1303,1388), [1388,1473), [1473,1558), [1558,1643).
+- 보조 사례: review-002 / BASE / f14386 / revision 14.
+  idx11 native Y=[901,925,922], X=[130,236), [236,343), [343,449)
+  (non_interface / structure). 필요하면 기존 idx8/idx9 경로를 위치 참조로 함께
+  표시하되 새 정답 경로나 시간적 연결로 취급하지 않는다.
+- 기존 `joint-context-001/viewer.html`, 같은 폴더의 crop/gray/gradient 파일과
+  experiment.json, review별 기존 plain/guide 이미지·packet·labels·reply를 재사용한다.
+  Accum에는 기존 `idx15_f16280_crop_A_plain.png`,
+  `idx15_f16280_crop_B_guide.png`와 path plain/guide가 보고돼 있다.
+  BASE에는 `idx11_crop_A_plain.png`, `idx11_crop_B_guide.png`가 보고돼 있다.
+  실제 경로는 기존 review 폴더에서 찾고 다른 이미지로 대체하지 않는다.
+
+### 표시 순서
+
+1. case/frame/Glass/revision과 후보 index/geometry를 기존 JSON에서 확인한다.
+   숫자는 이미지 글자 판독으로 복원하지 않는다. 기존 guide를 쓰려면 원본·생성
+   메타데이터/코드의 경로 연결과 좌표가 맞는지 확인한다. 확인되지 않은 guide는
+   권위 좌표 표시로 쓰지 않고, 기존 viewer의 JSON 기반 표시를 사용한다.
+   완료된 receipt·전체 bundle hash 감사나 detector 재실행을 반복하지 않는다.
+2. **Accum 전체 원본 crop과 두 후보가 표시된 기존 guide를 사용자에게 실제로
+   보여준다.** 파일명만 보고하지 않는다. idx10=기존 유면 판정,
+   idx15=기존 비계면 판정이라는 범례와 frame/index를 설명한다. 그림은 detector가
+   생성한 경계 후보이며, 최종 채택 위치나 사람의 정확한 contour 정답이 아니다.
+3. 기존 viewer에서 `Selected X strip`을 해제해 전체 crop을 유지한다.
+   `Overlays` off/on으로 원본과 측정 위치를 번갈아 보여준다. point는 반드시
+   해당 idx의 `native_path`와 exact X를 선택한다. viewer는 한 번에 한 sector
+   point만 표시하므로 전체 경로라고 설명하지 않는다. 같은 X에서 idx10/idx15를
+   순서대로 보여준다. 시작 X=[1388,1473), 필요하면 나머지 기존 4개 sector를
+   사용한다. 이는 설명용 위치 선택이며 평가 subset이나 가장 강한 신호 선택이 아니다.
+4. 실제 측정 범위 설명이 필요하면 기존 BW6/12/18 중 동일 BW를 양쪽에 표시한다.
+   초록 선은 source Y, 파랑/빨강 사각형은 available/unavailable band의 외곽이다.
+   파랑 band도 모든 픽셀이 유효하다는 뜻은 아니다. magenta는 gradient view에서
+   stencil이 무효라는 뜻이며, 물리 구조가 없다는 뜻이 아니다. 원본 RGB를 주
+   판독 화면으로 유지한다. gradient 색상·강도만으로 사람의 identity를 유도하지 않는다.
+5. BASE idx11은 기존 원본/guide로 glass 하단의 어떤 후보였는지 보여준다.
+   viewer가 필요하면 native_path, 위의 실제 X/Y 및 BW8/16/24를 사용한다.
+   이전 window invalid 비율은 그 window의 기록으로만 설명하고 전체 후보에
+   적용하지 않는다. 가려진 경계를 새로운 비계면 근거로 삼지 않는다.
+
+### 표시 후 한 번의 근거 질문
+
+기존 reply에 정확히 같은 후보/영역의 구체적인 설명이 있으면 출처와 함께 재사용한다.
+추가 설명이 필요한 경우, **사용자가 위 화면을 본 뒤** 다음처럼 묻고 답을 기다린다.
+
+> 표시된 idx10과 idx15의 기존 판정은 그대로 두겠습니다. 두 후보를 구분할 때
+> 어느 부분의 형상이나 주변 영역 관계를 보셨나요? 그림에서 후보 번호와 구간을
+> 가리켜 설명해주시면 됩니다. 정확한 픽셀 범위는 필요 없습니다. 별도 단서를
+> 특정하기 어렵거나 영상 움직임을 보고 판단했던 경우에도 그대로 말씀해주세요.
+
+BASE는 사용자가 하단 구조물 사례를 설명할 때 보조로 사용한다. 두 장면의 답을
+강제하거나 idx0/idx20의 기존 ±5초 모호성 판독을 다시 요청하지 않는다. 사용자가
+새 판정을 제안해도 이번 단계에서 기존 labels에 쓰지 않고 제안과 불확실성을 기록한다.
+
+### 반환과 종료
+
+notes 폴더에 `existing-controls-candidate-guided-rationale.md`를 만든다. 실제 표시한
+파일/point/role/BW, 기존 사람 기록의 인용, 새로운 사용자 답(있으면)과 에이전트
+관찰을 구분한다. 각 근거에 대해 (a) 어느 후보/영역인지, (b) 기존 측정에서 이미
+표현되는지/요약으로 소실되는지/측정되지 않는지/아직 모르는지, (c) 같은 근거를
+가질 반례 가능성을 적는다. b/c는 확인된 출처가 없으면 unknown으로 둔다.
+화면 표시 후 답을 기다리는 상태면 그렇게 보고하고 답을 만들어 채우지 않는다.
+
+별도 점수·threshold·gradient/NPZ·새 overlay 생성·영상 decode·detector 실행·라벨
+변경·새 frame 수집은 하지 않는다. 기존 출력은 보존하고 메모만 외부 notes에 저장한다.
+단서가 없거나 mask로 확인 불가면 그 사실로 종료한다. 새 classifier나 R2를 자동
+시작하지 않는다. FIELD FAIL / NOT_EVALUATED와 기존 모호성은 유지한다.

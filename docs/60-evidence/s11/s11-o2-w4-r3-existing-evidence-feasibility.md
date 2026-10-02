@@ -178,6 +178,57 @@ candidate label; subsequent exact candidate binding uses the existing review
 record workflow. This is exploratory development within the same SPL#1 recording,
 not holdout validation or O2 acceptance. FIELD FAIL is preserved.
 
+## Existing labeled controls retained — candidate-guided presentation decision
+
+Date: 2026-10-02, after the bounded f14865 geometry reconciliation. The user
+correctly recalled the previously reviewed BASE glass-bottom negative, idx11,
+and explained that a plain image alone does not show what the detector sensed
+or what spatial extent they should describe. A fresh clear-control collection is
+not the immediate requirement. Earlier “no new opposing control” conclusions
+must not be paraphrased as absence of existing positive/negative labels.
+
+Existing review-003 idx10/idx15 and review-002 idx11 remain valid attributed
+review records. The missing connection is a concrete visual rationale tied to
+candidate geometry and actual measured support, with a plausible counterexample;
+it is not another binary label or another nearby frame. R1 remains closed without
+promotion: this presentation does not repeat the failed appearance statistics or
+retroactively establish a discriminator.
+
+| Existing evidence | Retained human judgment | What remains unknown |
+|---|---|---|
+| Accum f16280 idx10, native Y209–220 | Interface; five near-interface path sectors | Which concrete visible regional/shape cue establishes its distinction from idx15, beyond known truth Y |
+| Accum f16280 idx15, native Y317,328,313,295,296 | Non-interface; five off-interface sectors; reflection/structure description, artifact tags empty | Specific distinguishing shape/context; reflection versus structure is not further resolved |
+| BASE f14386 idx11, native Y901,925,922 | Non-interface / structure | The fitting/structure cue and whether its pixels are in the measured support; mask-limited windows cannot establish absence |
+
+Do not erase these labels because the current representation failed to distinguish
+them. Conversely, their existence does not prove a general identity rule.
+Existing whole-frame/band glare, static/template/material signals and prior
+profile/joint probes have already been inspected; no field is declared missing
+solely because the narrative lacked a dedicated rationale field.
+
+Local owner discovery found the existing
+[joint viewer](../../../tests/diagnostics/s11_joint_context_run.py): it presents
+crop/gray/gradient views, an exact point/role selector, full-crop or X-strip view,
+and separately drawn recorded bands with availability. Overlay off preserves
+unannotated inspection. It displays one point at a time, not simultaneous complete
+paths. Reuse the existing idx15 comparison guide for the whole Accum pair when
+its binding is verified; then use the viewer for exact per-sector measurements.
+No viewer/extractor implementation, image generation or new scoring is needed.
+
+The [candidate-guided presentation procedure](../../40-operations/s11-o2-local-shadow-evaluation.md#existing-controls--candidate-guided-rationale-presentation)
+shows the two existing scenes and offers one localized rationale question after
+the user can see what the detector sampled. Primary is Accum idx10/idx15; BASE
+idx11 is supplementary, with its mask limitation explicit. Preserve formal
+labels; any clarification is attributed as rationale/uncertainty, not a label
+transaction. If the user cannot name an additional cue, record that and stop.
+No automatic new scene/clip, forced judgment, independent-holdout claim or R2
+entry follows. FIELD FAIL / NOT_EVALUATED remains.
+
+Verification: bounded source inspection of the actual viewer controls and point/
+band binding owner; prior human notes and corrected support evidence reviewed.
+Private images were not inspected here. Documentation links/governance/whitespace
+are the applicable local checks; no runtime behavior changed.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.
