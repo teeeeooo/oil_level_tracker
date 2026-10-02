@@ -54,7 +54,7 @@ The existing [review-record owner](../../../tests/diagnostics/s11_review_records
 requires exact case/packet/witness bindings and revision checks for formal labels.
 No label transaction or new packet is reported here.
 
-## Result and bounded next action
+## Initial result and handoff (before correspondence return)
 
 **One-frame W2 preparation and human scene review COMPLETE on transferred evidence.**
 The requested new frame was actually reviewed; its main boundary identity remains
@@ -90,6 +90,102 @@ Document links, governance and diff whitespace are the relevant checks.
 Acceptance remains [O2 shadow acceptance](../../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance);
 FIELD FAIL / NOT_EVALUATED, existing labels and independent-recording constraints
 are preserved. This same-SPL#1 scene is development evidence, not holdout success.
+
+## Correspondence return received — 2026-10-02
+
+Source: user-transferred Windows scene-to-candidate report. The private record
+and reply JSON remain unread on this host. The reported `extract_frame()` pass
+checks frame/Glass, index space, Oil inventory and scalar candidate provenance;
+it does **not** validate the report's sector tables or contour interpretation.
+
+The return supplies full Glass ID `8f94fb85-d98e-4c71-9c97-3085168be1b2` and the
+same record/run/frame/time as above. It reports 23 raw Oil candidates = 23 witness
+candidates, `fill_state=UNKNOWN_REVIEW`, `oil_decision_status=ambiguous`, reason
+`competing_boundary_artifact_or_no_interface_evidence`, selected hypothesis=null,
+`oil_tracker_action=NO_UPDATE`, and raw/smoothed Oil Y=null. These are recorded
+outputs, not proof that abstention was physically correct.
+
+Reported scalar inventory, in candidate-input order (no score/range filtering):
+
+| idx | Source family | Source canonical Y | Rejected |
+|---|---|---|---|
+| 0 | oil_hypothesis | 400 | yes |
+| 1 | oil_hypothesis | 417 | yes |
+| 2 | oil_hypothesis | 425 | yes |
+| 3 | oil_hypothesis | 670 | yes |
+| 4 | oil_hypothesis | 675 | yes |
+| 5 | oil_hypothesis | 701 | yes |
+| 6 | oil_hypothesis | 925 | yes |
+| 7 | oil_hypothesis | 949 | yes |
+| 8 | oil_hypothesis | 953 | yes |
+| 9 | material_path | 418.5 | no |
+| 10 | material_path | 399 | no |
+| 11 | material_path | 925 | no |
+| 12 | material_path | 376 | no |
+| 13 | distributed_sobel_path | 863 | no |
+| 14 | calibrated_high_recall | 418 | no |
+| 15 | calibrated_high_recall | 399 | no |
+| 16 | calibrated_high_recall | 926 | no |
+| 17 | calibrated_high_recall | 425 | no |
+| 18 | calibrated_high_recall | 672 | yes |
+| 19 | calibrated_high_recall | 904 | yes |
+| 20 | phase_transition_scan | 419 | no |
+| 21 | phase_transition_scan | 534 | no |
+| 22 | phase_transition_scan | 907 | no |
+
+The five negative/context observations remain unlocated and unbound. No formal
+label, new image, decode, detector, score or R2 entry is reported.
+
+### Geometry conclusions not established by this return
+
+The report says every candidate has five identical sectors, constant Y and no
+native path. Its bw8 table instead gives total band counts 16 for idx9 and 12 for
+idx10/11/12, versus 20 for other candidates. With four bands per scale/center,
+these do not substantiate the claimed uniform five-sector geometry. A different
+counting scope could also explain the table; neither geometry claim is accepted
+from these counts alone.
+
+Local source at `5fffb2e2d4bf47776f2e251adf8fe19f2b2a78e1`:
+[build_interface_witness](../../../src/oil_tracker/adapters/vision/oil_interface_witness.py)
+uses `path_aligned.sectors` when present, sets `native_generator_path` and
+`path_source_y`, and otherwise uses candidate-center sectors. The
+[diagnostic owner](../../../src/oil_tracker/adapters/vision/oil_interface_diagnostics.py)
+builds five default crop strips separately from captured native samples. Thus a
+candidate family's name or default strip table cannot replace reading its actual
+nested contour/sectors. This source inspection does not establish what is in the
+private f14865 record or which code produced it.
+
+Other limits requiring correction in the correspondence note:
+
+- The added ±50/±10 px listing cutoffs were not part of the procedure. Retain all
+  candidates and actual geometry; do not introduce an eligibility threshold.
+- Human Y approximately 385 is not an exact anchor. No scalar candidate exactly
+  at 385 does not prove proposal starvation. Even confirmed absence of a captured
+  path would establish a stored-geometry limitation, not absence in the generator.
+- B's approximate Y span and “slightly inclined” description do not establish
+  endpoint assignments or a left-to-right 419→429 contour. Do not interpolate it.
+- For the *reported default* five-strip partition, A and B each intersect sector1
+  and sector4 partially, sector2 and sector3 fully, and not sector0. The report's
+  “partial 0/4” shorthand is incorrect. Native candidates may use other strips;
+  their overlap must be computed from their own stored X ranges.
+
+**Disposition:** scalar inventory and unbound scene observations received;
+exact geometry correspondence remains unresolved. One machine-generated nested
+witness projection is the bounded next action in
+[operations](../../40-operations/s11-o2-local-shadow-evaluation.md#w2--frame14865-geometry-report-reconciliation).
+No repeated human judgment or new image/measurement is needed. Preserve the
+original note and append corrections with field paths, then stop. Do not promote
+this report to a proposal-coverage failure or identity improvement.
+
+### Reported source hashes
+
+- Scene reply: `1c5c31ae2d15039d996fd2fe8da14a39e205cf0be77844dbbbdfc519cf24f87`.
+- Bundle debug index: `90270bac3ea98596d8c52b6594cb767e030a1d5f64e23588558d9a6cc2740861`.
+- Prior version of this evidence file: `0bdc3320a660081f78daaed636cdbd9d06e42b34bfa3d88f682defcb9de9511a`.
+
+The last hash identifies the prior document, not this appended revision. These
+hashes are transferred references, not locally rehashed private files or an
+independently verified before/after preservation receipt.
 
 ## Detector Governance
 

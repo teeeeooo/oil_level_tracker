@@ -1350,3 +1350,57 @@ ROI다. record `f000014865_0c5e1375725c`, source frame14865, BASE, run
 읽은 소형 파일의 hash 연결/전후 보존과 검증 범위 한계, 남은 모호성을 기록하고 반환한다.
 다른 프레임 탐색·사용자 재판정·라벨 이관으로 자동 진행하지 않는다. R2 진입이나
 identity 개선을 주장하지 말고 FIELD FAIL / NOT_EVALUATED를 유지한다.
+
+
+## W2 — frame14865 geometry report reconciliation
+
+대응 보고는 접수했다. 이번 확인은 그 보고의 “전 후보 5개 sector/native 없음”과
+bw8 총 band 수(일부 후보 12/16, 나머지 20)의 불일치만 해소한다.
+새 실험이나 사람 재판정 단계가 아니다. 기존 f14865 record를 같은 reader로 읽고
+`frame = extract_frame(record, "w2-f14865")` 검증 결과에서 아래 projection을 만든다.
+코드가 native 경로를 새로 생성하게 하지 않는다.
+
+```python
+import json
+
+for candidate in sorted(frame["witness"]["candidates"],
+                        key=lambda c: c["candidate_input_index"]):
+    sectors = []
+    for sector in candidate["sectors"]:
+        sectors.append({
+            key: sector[key] for key in (
+                "sector", "source_x_range", "path_source_y", "candidate_source_y")
+        })
+        sectors[-1]["centers"] = [{
+            "role": center["role"], "source_y": center["source_y"],
+            "bw8": [{
+                "band_width_px": scale["band_width_px"],
+                "band_available": [band["available"] for band in scale["bands"]]
+            } for scale in center["scales"] if scale["band_width_px"] == 8]
+        } for center in sector["centers"]]
+    print(json.dumps({
+        "candidate_input_index": candidate["candidate_input_index"],
+        "source": candidate["source"], "canonical_y": candidate["canonical_y"],
+        "contour": candidate["contour"], "sector_count": len(sectors),
+        "sectors": sectors
+    }, ensure_ascii=False))
+```
+
+모든 23개 후보를 원래 index 순서로 출력한다. 필드가 없으면 실패한 JSON 경로를
+기록하고 멈춘다. `get(..., None)`/기본값으로 missing을 null이나 “경로 없음”으로
+바꾸지 않는다. `bw8=[]`도 scale 부재이며 0개 available과 다르다. coincident
+native/center 위치에서는 center 객체가 한 번만 저장될 수 있으므로 저장된 role과
+sector의 두 Y 필드를 함께 읽는다. band 합계는 candidate/role/width별로 구분한다.
+
+이 출력으로 원래 note의 geometry/sector 수·X 범위와 band 집계 범위만 정정한다.
+실제 X/Y 대응은 기존 `review_geometry(candidate)`를 재사용할 수 있다. 모든 후보를
+포함하고 ±50/±10 등의 cutoff를 제거한다. A/B는 근사 관찰이므로 정확한 contour나
+endpoint로 바꾸지 않는다. 경로가 정말 없으면 “captured geometry unavailable”로
+기록하며 후보 생성 실패로 단정하지 않는다. 불일치가 남으면 어느 원본 필드끼리
+충돌하는지만 남긴다. 별도 원인 조사나 재측정으로 자동 확장하지 않는다.
+
+기존 `w2-f14865-scene-candidate-correspondence.md`의 원문을 보존하고 정정 부록에
+위 JSON 출력과 변경된 결론을 붙여 반환한다. 원본 record/reply/이미지·labels는
+보존하고 읽은 소형 입력의 hash 확인은 기존 절차를 따른다. 영상 decode, detector,
+추가 이미지, NPZ/gradient, 사용자 재판정, packet/label 생성은 필요하지 않다.
+이번 확인 후 멈춘다. FIELD FAIL / NOT_EVALUATED와 사람의 모호성은 유지한다.
