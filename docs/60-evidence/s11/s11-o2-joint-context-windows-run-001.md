@@ -112,6 +112,83 @@ contains the narrow handoff. If corrected appearance remains shared or censored,
 close this appearance-to-identity proposal without promotion rather than treating
 another descriptor or collection round as automatic. O2 acceptance remains open.
 
+## W4-R0 correction received and W4-R1 disposition — 2026-10-02
+
+Source of this update: user-transferred Windows completion report. Analysis source
+reported as ZIP `14a707b`, no Git metadata; the original joint extraction artifact
+above is unchanged. Private corrected note, arrays and images were not read here.
+The earlier intake and handoff are retained as history; this section closes that
+handoff and does not request another reconciliation run.
+
+### Reported R0 result
+
+Accum review-003/frame16280, native idx10, source X[1388,1473), Y217:
+`vertical_magnitude`, units abs(uint8 neighbour difference)/510,
+`gradient_valid`, local Y[101,222), X[189,274), shape 121x85.
+
+| Quantity | Transferred correction |
+|---|---|
+| Raw valid-pixel maximum | 0.192157, replacing the prior approximately 0.008 |
+| Columns with any valid value >0.05 | 83/85, unchanged |
+| Invalid pixels in the slice | 0; implies 10,285 valid pixels and 85 supported columns |
+| Same-domain invariant | True reported; the supplied corrected values are arithmetically compatible |
+| Valid-pixel mean | 0.008787 reported; resemblance to the old maximum is not proof of a transcription/reduction cause |
+| Origin of old discrepancy | unresolved |
+
+The transfer initially attributes `vm[valid].max()` and unmasked
+`vm.max(axis=0)>0.05` to previous inline code, but subsequently states that the
+original code was not saved and its exact definition cannot be confirmed. Treat
+those historic formula attributions as unverified; the new, specified calculation
+is not a demonstrated reproduction of the old calculation. With zero invalid
+pixels in this slice, mask omission does not explain the reported discrepancy.
+Other old table maxima are not retroactively certified by this one correction.
+
+| BASE source X | idx8 / idx9 / idx11 native Y | Reported appearance | Support limitation |
+|---|---|---|---|
+| [130,236) | 397 / 382 / 901 | shared_or_ambiguous | idx11 approximately 35% invalid; reported absence of transition applies only to inspected valid support |
+| [236,343) | 396 / 406 / 925 | shared_or_ambiguous | idx8/9 share reported 41/107 exceedance count; idx11 approximately 28% invalid with weak transition |
+| [343,449) | 397 / 419 / 922 | not_assessable | idx8/9 reported 5/106 versus 1/106; idx11 approximately 52% invalid |
+
+These are transferred bounded observations, not equality of raw arrays, identical
+physical objects, verified continuity, or evidence that an invalid endpoint is a
+physical termination. The supplied summary does not expose every BASE window and
+reduction definition; retain the detail in the private note, without extending
+these counts into quantitative cross-candidate efficacy. No automatic metadata
+follow-up is required under the R0 completion rule.
+
+Windows reports receipt/report/expected artifact agreement, all 13 output hashes
+matching disk and unchanged hashes after rereading the consumed files. This is
+reported preservation, not a new independent local hash check. Corrected note:
+`joint-context-001-notes/corrected-note-w4-r0.md` (266 lines, 13,722 bytes reported),
+with nine comparison PNGs and seven earlier notes images outside the immutable
+experiment directory. No detector, source output or label change is reported.
+
+### R1 decision and next entry condition
+
+- Work item: unpooled joint-appearance inspection as a basis for an identity challenger.
+- R0: COMPLETE on transferred evidence; historic statistic origin remains unresolved.
+- R1 decision: **CLOSED_WITHOUT_PROMOTION** for the present appearance-to-identity
+  proposal. The two assessable BASE comparisons are reported shared/ambiguous;
+  the third is **NOT_ASSESSABLE**, not a negative classification result. The
+  earlier Accum shared-appearance report and corrected positive-point maximum
+  do not establish a reproducible positive/structural-negative arrangement rule.
+- Not established: identity support gain, a usable opposing control, scalar truth,
+  general impossibility of spatial classification, or calibrated O2 acceptance.
+  Human idx0/idx20 ambiguity is retained and is not the sole rejection reason.
+- R2: entry condition CONTINUE_REUSE_ONLY is not met; do not implement another
+  descriptor, tune the 0.05 analysis cutoff or start a classifier from these counts.
+- Next action: W4-R3 evidence-gap feasibility, before any W2 collection. Name a
+  physically verified positive/structural-negative comparison with adequate valid
+  support and explicit input-based expectations. Check availability in existing
+  SPL#1 saved material first; current summary does not establish such a control.
+  Record unavailable if none is supported. Collection, new labels, source reruns
+  and SPL#2/3 activation are not automatic consequences of this closure. Do not
+  repeat the same censored arrays or the unresolved idx0/idx20 +/-5 s judgment.
+- Production/source/labels changed: no; evidence and current routing only.
+- Acceptance owner: [O2 shadow acceptance](../../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance).
+  FIELD FAIL / NOT_EVALUATED preserved; W4 overall and O2 acceptance remain open,
+  W5/O3 still gated. This closes one investigation, not the detector project.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `TRACE-PUBLICATION`.
