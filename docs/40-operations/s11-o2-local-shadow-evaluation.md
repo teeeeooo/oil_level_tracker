@@ -1199,3 +1199,71 @@ source artifact by requesting another manual hash transcription.
 
 Return the narrow correction and any remaining limitation together. Do not
 replace immutable JSON/NPZ/receipts or change detector, labels or thresholds.
+
+
+## W4-R3 — existing saved material inventory
+
+목적: 새 분석을 시작하기 전에 **SPL#1 480–780초의 기존 저장 자료 중 실제 유면과
+구조물을 대조할 근거가 남아 있는지** 확인한다. [로컬 검토](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md)가
+알려진 사례와 재사용 owner를 정리한다. W4-R0/R1은 종료됐으며 이번 작업은 자료
+존재·연결·기존 판독 근거의 inventory다. 새 판독이나 challenger 실험이 아니다.
+
+### Windows 에이전트 전달 지시
+
+GitHub ZIP으로 옮긴 현재 소스에서 work-plan의 W4-R3 handoff와 이 절차를 읽는다.
+`.git`이 없어도 정상이다. 사용자 제공 ZIP 식별과 실제 파일 경로를 기록하되 검증하지
+못한 commit을 검증했다고 쓰지 않는다. 새 패키지 설치나 전용 script 구현은 필요 없다.
+
+**입력 범위:** 기존 `data/reviews` 또는 bundle-link가 가리키는 review 폴더,
+`data/joint-context-001-notes` 등 기존 S11 판독 메모 폴더, 원래 R22-3 번들의
+manifest/review_index/debug_index 및 그 인덱스로 지정한 소수 record와 저장 이미지.
+실제 경로는 기존 작업 기록에서 확인한다. 원본 영상 파일을 열거나 decode하지 않는다.
+SPL#2/3, 480–780초 밖의 자료, 디스크 전체 탐색, 모든 과거 번들 조사는 이번 범위가 아니다.
+
+1. 기존 review-001/002/003은 labels/packet/link와 판독 메모의 연결 상태를 요약한다.
+   완료된 idx0/idx20 재판독, R0 통계 재계산, 동일 이미지를 이용한 추가 appearance
+   비교를 하지 않는다. 저장 경로·기존 판정 출처·알려진 한계만 재사용한다.
+2. BASE source frame **14362와 14374**의 기존 이미지 및 직접 판독 메모가 남아
+   있는지 확인한다. source frame, Glass, run, crop origin을 기존 기록으로 연결한다.
+   정확한 frame이 없으면 nearest frame으로 대체하지 않는다. 다른 과거 번들에
+   연결돼 있다면 그 출처를 기록하고 R22-3과 동일한 것으로 합치지 않는다.
+   f14362 Y437은 기존 정정상 **위치 불일치**이며 구조물 음성 정답으로 쓰지 않는다.
+3. 지정된 기존 reviews/notes 안에 **다른 frame의 기존 사람 판독 기록**이 있는지
+   메타데이터·텍스트로만 확인한다. SPL#1 480–780초에 속하는 연결 가능한 기록을
+   목록화한다. 추가 상세 확인은 알려진 다섯 frame 이외 **최대 3개 frame**으로
+   제한하며 `(timestamp, glass_id, frame_index, record_id)` 순으로 선택한다.
+   점수·밝기·모델 성패로 선택하지 않는다. 발견 수와 상한 때문에 읽지 않은 수를
+   구분하고, 이 상한을 새 capture/라벨 수 또는 통계 표본 수로 해석하지 않는다.
+4. 기존 manifest/index를 먼저 사용하고 필요할 때만 indexed record의 `images`
+   참조를 확인한다. `ResultBundleReader`와 `DebugTraceRepository.summaries()` /
+   `load_record()`를 재사용할 수 있다. 이미지 키 존재, 디스크 파일 존재, 저장된
+   원본/주석 여부와 판독-이미지 연결을 구분한다. `artifact_availability`만 보고
+   이미지가 존재하거나 판독 가능하다고 단정하지 않는다. 이미지 해석·새 mask
+   계산은 하지 않는다. 기존 support 기록이 없으면 `support_not_measured`로 남긴다.
+5. 구간별 행동 정답은 검색 문맥일 뿐 후보 identity 또는 정확한 Y 정답으로 쓰지
+   않는다. 특히 approximate transition 근처에서는 순간 phase를 추정하지 않는다.
+   기존 문서가 철회한 BASE 540s/Y437, 674s/Y435 또는 미확정 634s/Y360을
+   검증된 유면 anchor로 복원하지 않는다.
+
+**출력:** 원본 밖 기존 notes 폴더에 `w4-r3-existing-material-inventory.md` 한 개.
+동일 메모가 있으면 먼저 읽고 완료 항목을 반복하지 않는다. 다음 표를 포함한다.
+
+| source/run, Glass, frame/time | 기존 asset 경로 및 source/crop 연결 | 기존 사람 판독 인용·출처·불확실성 | identity / localization / no-interface 중 근거 범위 | 기존 valid support 정보 또는 미측정 | availability 및 다음에 필요한 조건 |
+|---|---|---|---|---|---|
+
+Availability는 `linked_saved_evidence`, `image_only_or_unlinked`, `trace_only`,
+`not_found_in_searched_scope`, `not_checked`로 구분한다. 서로 다른 계면/구조물 사례가
+있어도 동일 조건의 opposing control이라고 자동 선언하지 않는다. 실제 유면 positive,
+명확한 structure negative, all-negative scene, unresolved control을 섞지 않는다.
+특히 idx15의 artifact_tags가 비어 있다는 이유로 structure 분류를 새로 채우지 않는다.
+
+실제로 읽은 작은 JSON/메모 파일은 전후 hash 보존을 기록한다. 기존 대용량 trace는
+index 기반 읽기만 수행하고, 전체 재해시를 안 했다면 그 한계를 명시한다. 기존 receipt가
+포괄하는 파일을 읽을 때는 해당 hash를 대조하되 이미 해결된 schema/artifact 수동
+전사 검증을 다시 요구하지 않는다. 파일 없음·연결 불명·지원 미측정도 유효한 결과다.
+
+**종료:** 검색 범위, 발견/미확인 수, 위 표, 가장 작은 남은 자료 공백을 함께 반환하고
+멈춘다. 기존 원본/labels/history/frozen/recipe/mask는 수정하지 않는다. `prepare`,
+새 packet/label, detector/extractor 실행, classifier/threshold 구현 또는 사용자 판정
+요청은 하지 않는다. 기존 자료가 없다고 원영상 decode나 추가 capture로 자동 전환하지
+않는다. 동일 SPL#1 자료는 독립 holdout이 아니며 FIELD FAIL / NOT_EVALUATED를 유지한다.
