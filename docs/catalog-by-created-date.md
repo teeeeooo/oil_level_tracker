@@ -16,6 +16,7 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 기존 246개: 기준 `aa0d1964bf493732fbe33bbdda33f4449f817b47`에서 `git log --follow --diff-filter=A`의
 최초 추가 커밋 author 시각을 Asia/Seoul로 변환한 첨부 감사 자료를 사용했습니다.
 이동 상세 날짜·추가 커밋은 [manifest](90-archive/00-project/2026/2026-10-03-docs-migration.json)에 있습니다.
+이번 정리에서 추가한 색인·이동 manifest·정리 기록 3개는 `a5ae21cf18f0b50ba930e4f34cda3fc07148d69c`의 author 날짜(KST)로 최초 추가일을 확정했습니다.
 새 파일을 Git에 등록하면 해당 미등록 행의 최초 추가일을 확정합니다. 파일 생성·이동 시 이 색인도 갱신합니다.
 
 ## 폴더별 목록
@@ -29,7 +30,7 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 |---|---|---|
 | 2026-07-20 | [rotary_oil_level_tracker_ssot_spec.md](rotary_oil_level_tracker_ssot_spec.md) | 현 위치 유지 |
 | 2026-07-29 | [README.md](README.md) | 현 위치 유지 |
-| 미등록 · 작성 2026-10-03 | [catalog-by-created-date.md](catalog-by-created-date.md) | 파생 색인 |
+| 2026-10-03 | [catalog-by-created-date.md](catalog-by-created-date.md) | 파생 색인 |
 
 ### `docs/00-project/` — 5개
 
@@ -351,8 +352,8 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 미등록 · 작성 2026-10-03 | [2026-10-03-docs-migration.json](90-archive/00-project/2026/2026-10-03-docs-migration.json) | 아카이브 |
-| 미등록 · 작성 2026-10-03 | [2026-10-03-docs-reorganization.md](90-archive/00-project/2026/2026-10-03-docs-reorganization.md) | 아카이브 |
+| 2026-10-03 | [2026-10-03-docs-migration.json](90-archive/00-project/2026/2026-10-03-docs-migration.json) | 아카이브 |
+| 2026-10-03 | [2026-10-03-docs-reorganization.md](90-archive/00-project/2026/2026-10-03-docs-reorganization.md) | 아카이브 |
 
 ### `docs/90-archive/20-architecture/2026/` — 4개
 
