@@ -1,0 +1,6 @@
+interface:
+  display_name: "Oil Documentation Maintenance"
+  short_description: "Apply Oil document owners and S11 maintenance checks"
+  default_prompt: "Use $oil-docs-maintenance to organize Oil Level Tracker documentation using its current owners and applicable S11 checks."
+policy:
+  allow_implicit_invocation: true

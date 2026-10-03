@@ -4,14 +4,14 @@
 
 > This document preserves the contemporaneous R2 design and its regression
 > intent. R6 supersedes its D5/Foam-to-Oil routing and final owner topology. Use
-> the [durable detector architecture](s11-detector-responsibility-architecture.md)
+> the [durable detector architecture](../../../20-architecture/s11-detector-responsibility-architecture.md)
 > for current production authority.
 
 ## Purpose
 
 This document owns the bounded S11-R2 detector change that lets stronger existing Spatial proof challenge a weak accepted Oil boundary under authoritative Foam topology. It is a responsibility repair, not a new detector family or a general threshold-loosening pass.
 
-The causal record is [`../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md`](../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md). Acceptance is owned by [`../30-validation/s11-foam-spatial-authority-repair-validation.md`](../30-validation/s11-foam-spatial-authority-repair-validation.md) and recorded in [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
+The causal record is [`../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md`](../../../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md). Acceptance is owned by [`../30-validation/s11-foam-spatial-authority-repair-validation.md`](../../30-validation/2026/s11-foam-spatial-authority-repair-validation.md) and recorded in [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../../../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
 
 ## Existing ownership preserved
 

@@ -4,12 +4,12 @@
 
 > This is the contemporaneous R4 acceptance contract, not the current executable
 > gate. Its controlled cases remain preservation evidence under the
-> [active R6 validation contract](s11-r6-optics-aware-observation-validation.md);
+> [active R6 validation contract](../../../30-validation/s11-r6-optics-aware-observation-validation.md);
 > R4 Foam/Oil authority must not be reactivated.
 
 ## Scope
 
-This contract validates the bounded [R4 architecture](../20-architecture/s11-r4-field-residual-authority-architecture.md). Aggregate publication percentage is supporting evidence only; acceptance requires preserved physical meaning and the secure-Windows residual replay.
+This contract validates the bounded [R4 architecture](../../20-architecture/2026/s11-r4-field-residual-authority-architecture.md). Aggregate publication percentage is supporting evidence only; acceptance requires preserved physical meaning and the secure-Windows residual replay.
 
 ## Gate 1 — registered static-Foam controls
 

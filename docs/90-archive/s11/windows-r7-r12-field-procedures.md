@@ -9,7 +9,7 @@ These sections were moved from the active Windows checklist during Agent Harness
 - Record the exact R7 commit, source/package identity, private video hash or
   approved internal identity, matching Recipe identity, sampling window/cadence
   and initial-state confirmations before comparison. The tested source must match
-  the exact pushed head named by the [current work plan](../00-project/work-plan.md).
+  the exact pushed head named by the [current work plan](../../00-project/work-plan.md).
 - Review original source frames, configured-ROI overlays, tracking CSV, events and
   `report.html` together. Aggregate valid coverage or state distribution alone is
   not an oracle.

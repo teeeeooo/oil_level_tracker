@@ -1,0 +1,492 @@
+{
+  "schema": "oil-docs-migration-v1",
+  "date_kst": "2026-10-03",
+  "base_head": "aa0d1964bf493732fbe33bbdda33f4449f817b47",
+  "source_attachment": "oil-level-tracker-docs-audit-2026-10-03.zip",
+  "attachment_files": [
+    {
+      "name": "audit-verification-2026-10-03.json",
+      "bytes": 1668,
+      "sha256": "91cf046d739a0f62ad6527c90b4b31857d1c3423d774a01bd83ffd9e3aa2e8d0"
+    },
+    {
+      "name": "docs-audit-and-reorganization-plan-2026-10-03.md",
+      "bytes": 23699,
+      "sha256": "ed702f6fe8333d6a7f70b68c32789378f52ab02b9b4f484512a72c6422e64bb7"
+    },
+    {
+      "name": "docs-inventory-2026-10-03.json",
+      "bytes": 92460,
+      "sha256": "468557e1f1cbc2a0929c598d2d2ac3a11cbe485380a0ecaa820db22f20661a15"
+    },
+    {
+      "name": "docs-inventory-by-created-date-2026-10-03.md",
+      "bytes": 47668,
+      "sha256": "6725ee74a2057dea19201cc3660d3381a17f07e8f4f2399217ebc05444094139"
+    },
+    {
+      "name": "docs-maintenance-rules.md",
+      "bytes": 14349,
+      "sha256": "b14e9b6725f0478443eeb563f8fb3db18c155266d098b3c01f135431e8979258"
+    }
+  ],
+  "baseline": {
+    "files": 246,
+    "docs_hash_map_digest": "9547e15c97ae65f25be9e42f7984e6215a8f8da19de365f47505123f2452c492",
+    "head_and_hash_map_match": true
+  },
+  "moves": [
+    {
+      "old_path": "docs/20-architecture/s11-subtractive-detector-simplification-architecture.md",
+      "new_path": "docs/90-archive/20-architecture/2026/s11-subtractive-detector-simplification-architecture.md",
+      "original_sha256": "a9e60d0bb0a6db66885e024ee1a1a4c480e85e91f61d668f277a273747e5d69a",
+      "result_sha256": "4f6de0d8fc487abb1916159dcfb2a5b5ec4dd2ede50a430e87ee3f46f365c5bc",
+      "first_git_added_at": "2026-08-08",
+      "first_git_commit": "6b4c335f6e39a543481b896f1b8f451e1914fea8",
+      "archived_at": "2026-10-03",
+      "reason": "Explicit HISTORICAL PRE-R6 declaration; successor explicitly retains A–D/R2–R4 safety and negative families without historical owner topology or exact output obligations.",
+      "successor_sections": [
+        "docs/20-architecture/s11-detector-responsibility-architecture.md#historical-preservation-boundary",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#controlled-preservation-surface",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#cross-revision-checked-in-video-obligations"
+      ],
+      "remaining_obligations": "Physical negative families, same-frame provenance, independent Foam and report/retrospective semantics remain with successors; no fixture or behavior removed.",
+      "inbound_sources": [],
+      "outbound_link_edits": [
+        {
+          "from": "s11-r6-optics-aware-observation-architecture.md",
+          "to": "../../../20-architecture/s11-r6-optics-aware-observation-architecture.md"
+        },
+        {
+          "from": "../00-project/work-plan.md",
+          "to": "../../../00-project/work-plan.md"
+        }
+      ],
+      "body_change": "Markdown link destinations only",
+      "restore_from": "aa0d1964bf493732fbe33bbdda33f4449f817b47:docs/20-architecture/s11-subtractive-detector-simplification-architecture.md"
+    },
+    {
+      "old_path": "docs/20-architecture/s11-foam-spatial-authority-repair-architecture.md",
+      "new_path": "docs/90-archive/20-architecture/2026/s11-foam-spatial-authority-repair-architecture.md",
+      "original_sha256": "7b7474345b159fa2cbce27c360ec9cd47be650aeb4a706f2a8e299c4a0fb3324",
+      "result_sha256": "1c9e5ff3aa7c5a24f0bb2069b27101bf67121b4aa3142ef94c97e4dec5c8eb8e",
+      "first_git_added_at": "2026-08-09",
+      "first_git_commit": "16ea0cd1e63b929db469946ccddd75a8762042fb",
+      "archived_at": "2026-10-03",
+      "reason": "Explicit HISTORICAL PRE-R6 declaration; successor explicitly retains A–D/R2–R4 safety and negative families without historical owner topology or exact output obligations.",
+      "successor_sections": [
+        "docs/20-architecture/s11-detector-responsibility-architecture.md#historical-preservation-boundary",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#controlled-preservation-surface",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#cross-revision-checked-in-video-obligations"
+      ],
+      "remaining_obligations": "Physical negative families, same-frame provenance, independent Foam and report/retrospective semantics remain with successors; no fixture or behavior removed.",
+      "inbound_sources": [
+        "docs/20-architecture/s11-subtractive-detector-simplification-architecture.md",
+        "docs/30-validation/s11-foam-spatial-authority-repair-validation.md"
+      ],
+      "outbound_link_edits": [
+        {
+          "from": "s11-detector-responsibility-architecture.md",
+          "to": "../../../20-architecture/s11-detector-responsibility-architecture.md"
+        },
+        {
+          "from": "../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md",
+          "to": "../../../50-diagnostics/s11/s11-r2-foam-spatial-authority-diagnostic.md"
+        },
+        {
+          "from": "../30-validation/s11-foam-spatial-authority-repair-validation.md",
+          "to": "../../30-validation/2026/s11-foam-spatial-authority-repair-validation.md"
+        },
+        {
+          "from": "../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md",
+          "to": "../../../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md"
+        }
+      ],
+      "body_change": "Markdown link destinations only",
+      "restore_from": "aa0d1964bf493732fbe33bbdda33f4449f817b47:docs/20-architecture/s11-foam-spatial-authority-repair-architecture.md"
+    },
+    {
+      "old_path": "docs/20-architecture/s11-r4-field-residual-authority-architecture.md",
+      "new_path": "docs/90-archive/20-architecture/2026/s11-r4-field-residual-authority-architecture.md",
+      "original_sha256": "e27c5b526311a291c4baf4498f33950917973f8033d1b3dd27347b728cedc850",
+      "result_sha256": "b21e6aa11b2c46e6b915aa7b90a089832f61c1b586b024f116c2b6739cbc3b00",
+      "first_git_added_at": "2026-08-10",
+      "first_git_commit": "745c6c923bb7e640ae0895f88c6bdf300198914a",
+      "archived_at": "2026-10-03",
+      "reason": "Explicit HISTORICAL PRE-R6 declaration; successor explicitly retains A–D/R2–R4 safety and negative families without historical owner topology or exact output obligations.",
+      "successor_sections": [
+        "docs/20-architecture/s11-detector-responsibility-architecture.md#historical-preservation-boundary",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#controlled-preservation-surface",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#cross-revision-checked-in-video-obligations",
+        "docs/20-architecture/initial-state-retrospective-reconstruction-architecture.md#placement-and-immutable-observation-boundary",
+        "docs/20-architecture/result-observation-report-architecture.md#foam-presentation-episodes",
+        "docs/30-validation/result-observation-report-validation.md#static-and-interactive-graph"
+      ],
+      "remaining_obligations": "Physical negative families, same-frame provenance, independent Foam and report/retrospective semantics remain with successors; no fixture or behavior removed.",
+      "inbound_sources": [
+        "docs/30-validation/s11-r4-field-residual-authority-validation.md"
+      ],
+      "outbound_link_edits": [
+        {
+          "from": "s11-detector-responsibility-architecture.md",
+          "to": "../../../20-architecture/s11-detector-responsibility-architecture.md"
+        },
+        {
+          "from": "s11-r6-optics-aware-observation-architecture.md",
+          "to": "../../../20-architecture/s11-r6-optics-aware-observation-architecture.md"
+        },
+        {
+          "from": "../50-diagnostics/s11/s11-r4-windows-residual-authority-diagnostic.md",
+          "to": "../../../50-diagnostics/s11/s11-r4-windows-residual-authority-diagnostic.md"
+        },
+        {
+          "from": "../70-reference/implementation-reference-log.md",
+          "to": "../../../70-reference/implementation-reference-log.md"
+        }
+      ],
+      "body_change": "Markdown link destinations only",
+      "restore_from": "aa0d1964bf493732fbe33bbdda33f4449f817b47:docs/20-architecture/s11-r4-field-residual-authority-architecture.md"
+    },
+    {
+      "old_path": "docs/20-architecture/s11-sequence-observability-integrity-architecture.md",
+      "new_path": "docs/90-archive/20-architecture/2026/s11-sequence-observability-integrity-architecture.md",
+      "original_sha256": "e4be1dddd41b36390e9590fc871f6ddd966f11c0a029fa2b80ab4f2b28230b7c",
+      "result_sha256": "6621fbeb608436121150d5b49eb36d36b028367cdd4afb8cb2e8d1a5b80dfc4c",
+      "first_git_added_at": "2026-08-10",
+      "first_git_commit": "f8742d0789fc4bcab93224f8866731209031f2f9",
+      "archived_at": "2026-10-03",
+      "reason": "Explicit HISTORICAL PRE-R6 declaration; successor explicitly retains A–D/R2–R4 safety and negative families without historical owner topology or exact output obligations.",
+      "successor_sections": [
+        "docs/20-architecture/s11-detector-responsibility-architecture.md#historical-preservation-boundary",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#controlled-preservation-surface",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#cross-revision-checked-in-video-obligations"
+      ],
+      "remaining_obligations": "Physical negative families, same-frame provenance, independent Foam and report/retrospective semantics remain with successors; no fixture or behavior removed.",
+      "inbound_sources": [
+        "docs/20-architecture/s11-subtractive-detector-simplification-architecture.md",
+        "docs/30-validation/s11-sequence-observability-integrity-validation.md"
+      ],
+      "outbound_link_edits": [
+        {
+          "from": "s11-detector-responsibility-architecture.md",
+          "to": "../../../20-architecture/s11-detector-responsibility-architecture.md"
+        },
+        {
+          "from": "../60-evidence/s11/s11-r3-sequence-observability-integrity.md",
+          "to": "../../../60-evidence/s11/s11-r3-sequence-observability-integrity.md"
+        },
+        {
+          "from": "../00-project/work-plan.md",
+          "to": "../../../00-project/work-plan.md"
+        }
+      ],
+      "body_change": "Markdown link destinations only",
+      "restore_from": "aa0d1964bf493732fbe33bbdda33f4449f817b47:docs/20-architecture/s11-sequence-observability-integrity-architecture.md"
+    },
+    {
+      "old_path": "docs/30-validation/s11-foam-spatial-authority-repair-validation.md",
+      "new_path": "docs/90-archive/30-validation/2026/s11-foam-spatial-authority-repair-validation.md",
+      "original_sha256": "4167b8882e42fc0ebecf87e96121616d04711640dae364a16169f498e50fa1cc",
+      "result_sha256": "7f96e431b95e61a732f445b327908a7eb01136a4054e96152baac2e87eb8dfc3",
+      "first_git_added_at": "2026-08-09",
+      "first_git_commit": "16ea0cd1e63b929db469946ccddd75a8762042fb",
+      "archived_at": "2026-10-03",
+      "reason": "Explicit HISTORICAL PRE-R6 declaration; successor explicitly retains A–D/R2–R4 safety and negative families without historical owner topology or exact output obligations.",
+      "successor_sections": [
+        "docs/20-architecture/s11-detector-responsibility-architecture.md#historical-preservation-boundary",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#controlled-preservation-surface",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#cross-revision-checked-in-video-obligations"
+      ],
+      "remaining_obligations": "Physical negative families, same-frame provenance, independent Foam and report/retrospective semantics remain with successors; no fixture or behavior removed.",
+      "inbound_sources": [
+        "docs/20-architecture/s11-foam-spatial-authority-repair-architecture.md"
+      ],
+      "outbound_link_edits": [
+        {
+          "from": "s11-r6-optics-aware-observation-validation.md",
+          "to": "../../../30-validation/s11-r6-optics-aware-observation-validation.md"
+        },
+        {
+          "from": "../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md",
+          "to": "../../../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md"
+        },
+        {
+          "from": "../20-architecture/s11-foam-spatial-authority-repair-architecture.md",
+          "to": "../../20-architecture/2026/s11-foam-spatial-authority-repair-architecture.md"
+        }
+      ],
+      "body_change": "Markdown link destinations only",
+      "restore_from": "aa0d1964bf493732fbe33bbdda33f4449f817b47:docs/30-validation/s11-foam-spatial-authority-repair-validation.md"
+    },
+    {
+      "old_path": "docs/30-validation/s11-r4-field-residual-authority-validation.md",
+      "new_path": "docs/90-archive/30-validation/2026/s11-r4-field-residual-authority-validation.md",
+      "original_sha256": "276f28065eea4161c51eee1c588301d4b2073e51b903b190078f4188dc386ad0",
+      "result_sha256": "80bf85b01317dd4292bad7044e13ce6e66a1dac98c3dbd994716739a6066bc5c",
+      "first_git_added_at": "2026-08-10",
+      "first_git_commit": "745c6c923bb7e640ae0895f88c6bdf300198914a",
+      "archived_at": "2026-10-03",
+      "reason": "Explicit HISTORICAL PRE-R6 declaration; successor explicitly retains A–D/R2–R4 safety and negative families without historical owner topology or exact output obligations.",
+      "successor_sections": [
+        "docs/20-architecture/s11-detector-responsibility-architecture.md#historical-preservation-boundary",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#controlled-preservation-surface",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#cross-revision-checked-in-video-obligations",
+        "docs/20-architecture/initial-state-retrospective-reconstruction-architecture.md#placement-and-immutable-observation-boundary",
+        "docs/20-architecture/result-observation-report-architecture.md#foam-presentation-episodes",
+        "docs/30-validation/result-observation-report-validation.md#static-and-interactive-graph"
+      ],
+      "remaining_obligations": "Physical negative families, same-frame provenance, independent Foam and report/retrospective semantics remain with successors; no fixture or behavior removed.",
+      "inbound_sources": [],
+      "outbound_link_edits": [
+        {
+          "from": "s11-r6-optics-aware-observation-validation.md",
+          "to": "../../../30-validation/s11-r6-optics-aware-observation-validation.md"
+        },
+        {
+          "from": "../20-architecture/s11-r4-field-residual-authority-architecture.md",
+          "to": "../../20-architecture/2026/s11-r4-field-residual-authority-architecture.md"
+        }
+      ],
+      "body_change": "Markdown link destinations only",
+      "restore_from": "aa0d1964bf493732fbe33bbdda33f4449f817b47:docs/30-validation/s11-r4-field-residual-authority-validation.md"
+    },
+    {
+      "old_path": "docs/30-validation/s11-sequence-observability-integrity-validation.md",
+      "new_path": "docs/90-archive/30-validation/2026/s11-sequence-observability-integrity-validation.md",
+      "original_sha256": "fdcd05ae0ecf156f1a03d0881eb6c4cca51e3362e76e24d4b33ab4da8b1b5149",
+      "result_sha256": "0d9a8ba826e6c629c5ffb5903dda3ae8e2c35452f83272dd18bae0ffdbfb99d5",
+      "first_git_added_at": "2026-08-10",
+      "first_git_commit": "f8742d0789fc4bcab93224f8866731209031f2f9",
+      "archived_at": "2026-10-03",
+      "reason": "Explicit HISTORICAL PRE-R6 declaration; successor explicitly retains A–D/R2–R4 safety and negative families without historical owner topology or exact output obligations.",
+      "successor_sections": [
+        "docs/20-architecture/s11-detector-responsibility-architecture.md#historical-preservation-boundary",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#controlled-preservation-surface",
+        "docs/30-validation/s11-real-field-detector-effectiveness.md#cross-revision-checked-in-video-obligations"
+      ],
+      "remaining_obligations": "Physical negative families, same-frame provenance, independent Foam and report/retrospective semantics remain with successors; no fixture or behavior removed.",
+      "inbound_sources": [],
+      "outbound_link_edits": [
+        {
+          "from": "s11-r6-optics-aware-observation-validation.md",
+          "to": "../../../30-validation/s11-r6-optics-aware-observation-validation.md"
+        },
+        {
+          "from": "../20-architecture/s11-sequence-observability-integrity-architecture.md",
+          "to": "../../20-architecture/2026/s11-sequence-observability-integrity-architecture.md"
+        },
+        {
+          "from": "../60-evidence/s11/s11-r3-sequence-observability-integrity.md",
+          "to": "../../../60-evidence/s11/s11-r3-sequence-observability-integrity.md"
+        }
+      ],
+      "body_change": "Markdown link destinations only",
+      "restore_from": "aa0d1964bf493732fbe33bbdda33f4449f817b47:docs/30-validation/s11-sequence-observability-integrity-validation.md"
+    }
+  ],
+  "retained_candidates": [
+    {
+      "path": "docs/20-architecture/s11-r9-calibrated-observation-architecture.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "1d0b4ee0b80d570552277cca57d34d929ccc3a908f4f8c4c9c9e341416873643",
+      "reason": "Artifact editing/bulk apply, calibration-only proposal and initial-state presentation responsibilities remain mixed with obsolete bootstrap behavior.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/20-architecture/s11-r10-calibrated-path-and-layer-architecture.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "8211bc7d46e73e5dd3b7cfa3b2932cede8ca252eb37004ce495327abd6a9bac0",
+      "reason": "Artifact splitter/editor and graph marker contracts remain mixed with historical calibrated-path rules.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/20-architecture/s11-r11-detector-architecture-reset.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "644e04898dca93b00d138403bce67dd7931cd16089e9f3264b14f9243caabe4c",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/20-architecture/s11-r12-phase-composition-replacement-architecture.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "d39149e96c10358026defcc751d38456594284dc93bae9e9d003b612764170ea",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/20-architecture/s11-r13-phase-identity-recovery-architecture.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "df390260cf5365cc7ba0e8958aa1733749033a911faebb87656dc92020f598db",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/20-architecture/s11-r14-phase-component-replacement-architecture.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "8ea0a5294cc34e0cc56826b2eb07295229136be7f41eb4ec78d77479b17cbc3f",
+      "reason": "Artifact multi-selection/bulk deletion and private-copy Apply semantics remain mixed with superseded component/phase policies.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/20-architecture/s11-r15-state-aware-material-ownership-architecture.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "7205a59621a47440f26fc7da8ad4d7c6460e1aa43ec64769bd6dae14b4287bbc",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/20-architecture/s11-r16-directed-tracklet-material-lifecycle-architecture.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "4d366077605e1865092950440453b2b67d6d53a8805484faaed2c77dfd0e4930",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/20-architecture/s11-r18-causal-trace-observability-architecture.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "1c51846524ac107a594228d47826753bd68d7471c912877037b9b0c854d6cab3",
+      "reason": "Completed R18 diagnostic run does not prove all typed predicate/field and nested serialization obligations are covered by a successor.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/20-architecture/s11-r20-decision-witness-observability-architecture.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "8c0ccd0f77a08d1e91fbed94deea06f69ae153fe228fe9fb4d771ee07a161122",
+      "reason": "R21 implements the decision-witness concept, but full equivalence of R20 fields, acceptance matrix and nine-segment obligations has not been established.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r9-calibrated-observation-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "be9658acc7ef3cd12e92564bd2e91121cb5543f4408f83be913a6aec4be74f35",
+      "reason": "Artifact editing/bulk apply, calibration-only proposal and initial-state presentation responsibilities remain mixed with obsolete bootstrap behavior.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r10-calibrated-path-and-layer-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "58c926ead5e79c696d06e59271d0397584a9bcd14cdd5a8e7a1e19ddfe8a0361",
+      "reason": "Artifact splitter/editor and graph marker contracts remain mixed with historical calibrated-path rules.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r11-detector-architecture-reset-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "becf5bdfc4de20f5ec329a9b4e60e5e5a4516356ac5dbac70099e418a0ee8dbe",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r12-phase-composition-replacement-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "dafded9f8860e1cd9bcd9e7c243f40ae0ad1d3f754c5e00a889ddc9e087c4076",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r13-phase-identity-recovery-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "058313f2f977a3012bee170cd2f943df512e67fbffd40e2f72e892e4bf87f217",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r14-phase-component-replacement-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "5338f9d9009c7b19aa9d324258f6db6fd7af23496e86c994f3d5ee8debbc8109",
+      "reason": "Artifact multi-selection/bulk deletion and private-copy Apply semantics remain mixed with superseded component/phase policies.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r15-state-aware-material-ownership-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "190301bfed9ef96ce530d29b17b1ed1dbf8d658125879e492fb43e91facac191",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r16-directed-tracklet-material-lifecycle-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "4b9bee771cc786be8decec44fc72488090d664c3e0b07ab79aac8d5fdccbfb0c",
+      "reason": "Typed evidence, proposal/material/tracklet ownership, compatibility, bounded runtime and acceptance clauses have not all been mapped to successor sections; a newer revision alone is insufficient.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r18-causal-trace-observability-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "3f28a832d39983d4cbdbe7bdda3f686892b6f9f27ea68da4544384cce47c2b1c",
+      "reason": "Completed R18 diagnostic run does not prove all typed predicate/field and nested serialization obligations are covered by a successor.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    },
+    {
+      "path": "docs/30-validation/s11-r20-decision-witness-observability-validation.md",
+      "decision": "KEEP_IN_PLACE",
+      "sha256": "b3a3cfa04ccf878db7075c32ffd73d6bf92f7d8bdd2f80e09fb0174ee178950c",
+      "reason": "R21 implements the decision-witness concept, but full equivalence of R20 fields, acceptance matrix and nine-segment obligations has not been established.",
+      "revisit_when": "An owner replacement task establishes clause-level succession; age or link count alone must not trigger a move."
+    }
+  ],
+  "authorized_existing_edits": [
+    {
+      "path": "docs/README.md",
+      "reason": "Install lifecycle rules and navigation under the existing documentation owner.",
+      "original_sha256": "764febaa88065ffd32cd70babfc350bc08826f80db5a786dd7586a1b72185b1a",
+      "result_sha256": "84b491f41dcac848d3c724794da9c85c39afd548b1ca947224294414db8e060e"
+    },
+    {
+      "path": "docs/00-project/work-plan.md",
+      "reason": "User-authorized compaction preserving gate, baseline, authorization, unknowns and existing level-2 anchors; original Git blob retained.",
+      "original_sha256": "da58d8d4ecf7958ce59a6775fe8abdf6bc743a2f64df441c8c902d795f5274b6",
+      "result_sha256": "0aee1737642b617c3ec2ddf4e1400d205c651d6f98403615ee4c50f529f29a49"
+    },
+    {
+      "path": "docs/00-project/roadmap.md",
+      "reason": "Remove obsolete optional R20 decision-witness example; milestone table unchanged.",
+      "original_sha256": "dc2339bd00042460231771f1d983a42ca6553fc721a10fe5a049ab86e1881a10",
+      "result_sha256": "ac48e226e703439bb5688104925dd4549aa66de3388e31244343769aa66a3477"
+    },
+    {
+      "path": "docs/00-project/recall-index.md",
+      "reason": "Replace long experimental chronology with bounded causal routes.",
+      "original_sha256": "325722b66f2e92c0c069653d056931d4cd384e3b3426629444e3558c58aebd85",
+      "result_sha256": "7dc7597720d5b5f331192051f0918d360f90cf2dd3fccdcff6ed27474c384695"
+    },
+    {
+      "path": "docs/20-architecture/s11-agent-harness-v2-routing-design.md",
+      "reason": "Extend existing repository routing design and History Review for archived historical contracts; required companion to validation moves.",
+      "original_sha256": "e2218ff1ac74ab96239983cc7c2354c143006b3c50ad1c9fde7f9726e61a45a9",
+      "result_sha256": "34b771e2953e45ff78bec1ec7bc3436b2b48b6226de26286877de2e517d1d701"
+    },
+    {
+      "path": "docs/90-archive/s11/windows-r7-r12-field-procedures.md",
+      "reason": "Repair the preexisting relative Work Plan link only.",
+      "original_sha256": "42b0c30034590aae0e12e60d1a814ea84d253775b915bfcd3d498a38a90f2d0c",
+      "result_sha256": "3c0d2476923182febe12b5dd100eefa8d657e0e84a57fadec7a8bba350ee2777"
+    }
+  ],
+  "protected_audit_paths": 158,
+  "protected_paths_outside_authorized_edits": 152,
+  "verification": {
+    "status": "PASS",
+    "scope": "Documentation only; no production or Windows qualification executed.",
+    "docs_files": 249,
+    "catalog_entries": 249,
+    "local_markdown_targets_checked": 1109,
+    "heading_anchors_checked": 99,
+    "archived_files_with_link_only_edits": 7,
+    "unchanged_original_docs": 233,
+    "unchanged_protected_paths": 152,
+    "unchanged_non_docs_tracked_files": 482,
+    "original_machine_artifacts_preserved": 11,
+    "errors": [],
+    "first_git_dates_rechecked": 246,
+    "attached_markdown_json_inventory_match": true,
+    "manually_excluded_coordinate_reference_false_positives": 3,
+    "preexisting_broken_link_repaired": true,
+    "detector_governance": "PASS",
+    "git_diff_check": "PASS",
+    "commits_created": 0,
+    "pushes": 0
+  },
+  "recovery": "Restore only listed original paths from base_head Git blobs; remove only this migration's destination/new files, preserving unrelated user changes."
+}

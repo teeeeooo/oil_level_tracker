@@ -36,13 +36,28 @@ Graphify's hook installer was also tested in a temporary repository configured w
 
 Local tool maintenance is manual and non-blocking: Graphify is installed as the `graphifyy` uv tool with the optional `watchdog` dependency. Do not auto-upgrade it from Git hooks, Skills, or CI. When intentionally upgrading (`uv tool upgrade graphifyy`), record the new version, run `scripts/update_graphify_s11.sh`, confirm `graphify hook status` still leaves repository hooks uninstalled unless explicitly promoted, and repeat a small exact-symbol topology smoke against current source. No separate stale-marker hook is needed during the pilot because task-start refresh plus optional agent-managed watch already owns freshness.
 
+## Documentation lifecycle routing
+
+The [documentation router](../README.md#document-maintenance-lifecycle) owns
+creation, closeout and archival rules. The [date catalog](../catalog-by-created-date.md)
+is derived navigation, not a live status list or a source of active dependencies.
+The Work Plan remains the single current gate; the recall index keeps short
+causal routes rather than reproducing experimental chronology.
+
+The [2026-10-03 migration record](../90-archive/00-project/2026/2026-10-03-docs-reorganization.md)
+records the relocation of seven explicitly historical A–D/R2–R4 contracts.
+Their safety/negative-family obligations remain in the current responsibility
+architecture and cross-revision validation, while source and fixtures are unchanged.
+The twenty other audit candidates remain in place where clause-level succession
+is unresolved. Current operational anchors and source audit attachments are preserved.
+
 ## History Review
 
 - Logic-map nodes: `PUBLICATION-PROVENANCE`, `TRACE-PUBLICATION`, `OIL-PHASE-DRAIN`, `FOAM-EPISODE`
 - Failure-registry entries: `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`
-- Prior mechanisms reviewed: current logic-map quick index and affected publication/lifecycle/Foam nodes; failure-registry no-repeat rules for false Foam dynamics, lifecycle dead ends, provenance ambiguity, and case-specific escape hatches; canonical reviewed Windows truth; current cross-revision detector-effectiveness validation; historical R7–R12 Windows procedure sections.
+- Prior mechanisms reviewed: the 2026-10-03 docs audit, historical A–D/R2–R4 contracts, current responsibility architecture §Historical preservation boundary and cross-revision validation §Controlled preservation surface; current logic-map quick index and affected publication/lifecycle/Foam nodes; failure-registry no-repeat rules for false Foam dynamics, lifecycle dead ends, provenance ambiguity, and case-specific escape hatches; canonical reviewed Windows truth; current cross-revision detector-effectiveness validation; historical R7–R12 Windows procedure sections.
 - Prior mechanisms rejected: revision-specific R7–R12 execution routing is rejected as current procedure because it can apply obsolete detector identities and acceptance assumptions; broad historical scanning is rejected because current logic-map/failure indexes provide bounded routing.
 - Preserved contracts: exact same-frame Oil/Foam provenance, independent validity/ownership, fail-closed ambiguity, reviewed physical truth as the field oracle, field FAIL until current acceptance is satisfied, and no private/case-specific detector control flow.
-- Difference from prior failures: this migration changes only instruction/procedure routing; it does not add detector authority, alter lifecycle/Foam predicates, reinterpret field evidence, or make historical output an oracle.
+- Difference from prior failures: the documentation closeout preserves current authorization, field disposition and immutable evidence; historical contracts move with link-only rebasing and recorded successor obligations. This migration changes only instruction/procedure routing; it does not add detector authority, alter lifecycle/Foam predicates, reinterpret field evidence, or make historical output an oracle.
 - Logic-map impact: NONE — detector implementation ownership and executing control flow are unchanged by the harness/procedure migration.
 - Failure-registry impact: NONE — no causal mechanism, no-repeat rule, or field-risk status changes; the migration only routes agents to the existing registry more directly.

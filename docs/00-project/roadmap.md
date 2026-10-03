@@ -40,7 +40,7 @@ Do not append branch chronology, review logs, test counts, or resolved findings 
 
 S11 does not currently authorize another detector revision automatically. Its exact accepted baseline, non-authorized work, field-risk boundary, and next transition are owned by the [Current Work Plan](work-plan.md).
 
-Affirmatively retained but non-current work is owned by [`retained-commitments.md`](retained-commitments.md). This includes autosave/abnormal-exit recovery, unresolved evidence-gated S11 behavior surfaces, and optional R20 decision-witness observability.
+Affirmatively retained but non-current work is owned by [`retained-commitments.md`](retained-commitments.md). This includes autosave/abnormal-exit recovery and unresolved evidence-gated S11 behavior surfaces.
 
 ## Detail routers
 

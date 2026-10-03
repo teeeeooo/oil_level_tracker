@@ -8,7 +8,7 @@ This document preserves the completed S11 A–D design for improving current-fra
 Oil-boundary effectiveness by **removing redundant authority before adding new
 detector mechanisms**. Its runtime routing and final-analysis publication
 boundary are historical and are superseded by the active
-[`S11-R6 Optics-Aware Observation Architecture`](s11-r6-optics-aware-observation-architecture.md).
+[`S11-R6 Optics-Aware Observation Architecture`](../../../20-architecture/s11-r6-optics-aware-observation-architecture.md).
 Its proposal simplification, negative families and fail-closed lessons remain
 validation provenance; they do not restore a pre-R6 owner.
 
@@ -109,4 +109,4 @@ repairs remain accepted as historical evidence/fixture surfaces, not as active
 owner topology. R6 owns current Oil/state, independent Foam and final composition
 responsibility. All other detector mechanisms still require new evidence and are
 not pre-authorized by this architecture. The exact current gate belongs to the
-[work plan](../00-project/work-plan.md).
+[work plan](../../../00-project/work-plan.md).

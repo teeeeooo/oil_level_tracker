@@ -12,6 +12,7 @@ The deployed user-level Codex `AGENTS.md` owns generic execution behavior. This 
 
 ## Task Skills
 
+- Documentation structure/lifecycle, audit/archive and current-state compaction: `.agents/skills/oil-docs-maintenance/SKILL.md`; common mechanics use the available `docs-management` Skill.
 - S11 detector behavior/design/validation/diagnostics/evidence: `.agents/skills/s11-detector-change/SKILL.md`.
 - Deliberate target-Windows field qualification: `.agents/skills/windows-qualification/SKILL.md`.
 

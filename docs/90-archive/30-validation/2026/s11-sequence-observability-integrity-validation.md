@@ -4,12 +4,12 @@
 
 > This is the contemporaneous R3 acceptance contract, not the current executable
 > gate. Retain its physical negative families under the
-> [active R6 validation contract](s11-r6-optics-aware-observation-validation.md)
+> [active R6 validation contract](../../../30-validation/s11-r6-optics-aware-observation-validation.md)
 > without restoring the R3 owner topology.
 
 ## Scope
 
-This contract accepts or rejects the bounded design in [`../20-architecture/s11-sequence-observability-integrity-architecture.md`](../20-architecture/s11-sequence-observability-integrity-architecture.md). It supplements the accepted S11 detector baseline; it does not replace canonical Oil/Foam ownership, the serialized reducer or report provenance rules.
+This contract accepts or rejects the bounded design in [`../20-architecture/s11-sequence-observability-integrity-architecture.md`](../../20-architecture/2026/s11-sequence-observability-integrity-architecture.md). It supplements the accepted S11 detector baseline; it does not replace canonical Oil/Foam ownership, the serialized reducer or report provenance rules.
 
 Acceptance is based on physical observation meaning. An unchanged four-video fingerprint or a larger numeric count is not a success criterion.
 
@@ -116,7 +116,7 @@ If the persistent false components do not overlap the learned prior, stop and di
 
 ## Local gate outcome
 
-Gates 1–5 are accepted on the source tree and available four-video corpus. The exact implementation, replay deltas, visual report inspection and complete-suite result are recorded in the [S11-R3 evidence](../60-evidence/s11/s11-r3-sequence-observability-integrity.md). This validation contract remains `VALIDATING` until the secure-Windows residual gate is executed; local acceptance cannot stand in for the unavailable Base/Accum video evidence.
+Gates 1–5 are accepted on the source tree and available four-video corpus. The exact implementation, replay deltas, visual report inspection and complete-suite result are recorded in the [S11-R3 evidence](../../../60-evidence/s11/s11-r3-sequence-observability-integrity.md). This validation contract remains `VALIDATING` until the secure-Windows residual gate is executed; local acceptance cannot stand in for the unavailable Base/Accum video evidence.
 
 ## Acceptance and stop rules
 

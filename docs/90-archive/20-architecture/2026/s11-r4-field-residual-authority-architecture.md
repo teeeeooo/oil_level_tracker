@@ -5,18 +5,18 @@
 > This document preserves the contemporaneous R4 residual repair and fixture
 > intent. Its Foam/Oil authority and sequence behavior are not current runtime
 > contracts. Use the
-> [durable detector architecture](s11-detector-responsibility-architecture.md)
-> and [R6 architecture](s11-r6-optics-aware-observation-architecture.md).
+> [durable detector architecture](../../../20-architecture/s11-detector-responsibility-architecture.md)
+> and [R6 architecture](../../../20-architecture/s11-r6-optics-aware-observation-architecture.md).
 
 ## Purpose
 
 R4 owns the bounded residual repair supported by the first secure-Windows R3 replay. Its objective is to prevent fixed or one-frame Foam-like appearance from controlling fill state, Oil routing and initial-state interpretation while preserving real Foam and independently accepted Oil evidence.
 
-The causal record is the [R4 Windows residual diagnostic](../50-diagnostics/s11/s11-r4-windows-residual-authority-diagnostic.md). R3 dark-cap and row-coherence responsibilities remain intact. Source video identity, frame identity, truth and private timestamps remain prohibited production inputs.
+The causal record is the [R4 Windows residual diagnostic](../../../50-diagnostics/s11/s11-r4-windows-residual-authority-diagnostic.md). R3 dark-cap and row-coherence responsibilities remain intact. Source video identity, frame identity, truth and private timestamps remain prohibited production inputs.
 
 ## Prior design and external-reference review
 
-R4 reuses, rather than replaces, the accepted S11 evidence model. The review trail is recorded in the [implementation reference log](../70-reference/implementation-reference-log.md): transparent-vessel work supports relative/multi-line/path evidence, while the controlled-illumination study makes fixed optics and refraction explicit competing causes. The commercial sight-glass material supports confidence and application-specific uncertainty but supplies no transferable Foam discriminator. This evidence favors registered fixed-appearance opposition and bounded temporal confirmation; it does not justify global Canny/Hough/score loosening, a new ML owner or forced numeric publication.
+R4 reuses, rather than replaces, the accepted S11 evidence model. The review trail is recorded in the [implementation reference log](../../../70-reference/implementation-reference-log.md): transparent-vessel work supports relative/multi-line/path evidence, while the controlled-illumination study makes fixed optics and refraction explicit competing causes. The commercial sight-glass material supports confidence and application-specific uncertainty but supplies no transferable Foam discriminator. This evidence favors registered fixed-appearance opposition and bounded temporal confirmation; it does not justify global Canny/Hough/score loosening, a new ML owner or forced numeric publication.
 
 ## Repair A — registered static-Foam opposition
 

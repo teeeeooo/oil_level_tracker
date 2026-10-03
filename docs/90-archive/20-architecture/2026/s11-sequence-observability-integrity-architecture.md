@@ -5,12 +5,12 @@
 > This document preserves the contemporaneous R3 causal model and controlled
 > negative families. It is not a current runtime or validation owner. R6 owns
 > current Oil/state, Foam and sequence composition in the
-> [durable detector architecture](s11-detector-responsibility-architecture.md).
+> [durable detector architecture](../../../20-architecture/s11-detector-responsibility-architecture.md).
 
 The source-tree and available-corpus implementation was recorded in the
-[R3 evidence record](../60-evidence/s11/s11-r3-sequence-observability-integrity.md).
+[R3 evidence record](../../../60-evidence/s11/s11-r3-sequence-observability-integrity.md).
 Its former secure-Windows gate was superseded after later field evidence; the
-[current work plan](../00-project/work-plan.md) owns the active gate.
+[current work plan](../../../00-project/work-plan.md) owns the active gate.
 
 ## Purpose
 

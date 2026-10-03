@@ -4,13 +4,13 @@
 
 > This contract records how R2 was accepted at the time. Its fixtures remain
 > useful preservation evidence, but its D5/Foam-to-Oil ownership is superseded by
-> the [active R6 validation contract](s11-r6-optics-aware-observation-validation.md).
+> the [active R6 validation contract](../../../30-validation/s11-r6-optics-aware-observation-validation.md).
 
-Acceptance evidence is [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
+Acceptance evidence is [`../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md`](../../../60-evidence/s11/s11-r2-foam-spatial-authority-repair.md).
 
 ## Scope
 
-This contract accepts or rejects the bounded R2 design in [`../20-architecture/s11-foam-spatial-authority-repair-architecture.md`](../20-architecture/s11-foam-spatial-authority-repair-architecture.md). The objective is a more faithful observed Oil trajectory, not a fixed publication percentage.
+This contract accepts or rejects the bounded R2 design in [`../20-architecture/s11-foam-spatial-authority-repair-architecture.md`](../../20-architecture/2026/s11-foam-spatial-authority-repair-architecture.md). The objective is a more faithful observed Oil trajectory, not a fixed publication percentage.
 
 The comparison baseline is exact head `86937d4f3dd55396b3ecf39efaa4e9a6ec4fb8ab`: `109/299` qualification numerics and `8/13` user-confirmed truth numerics with `5.4375 px` MAE.
 
