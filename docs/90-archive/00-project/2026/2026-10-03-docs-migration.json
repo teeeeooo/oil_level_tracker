@@ -431,7 +431,7 @@
       "path": "docs/README.md",
       "reason": "Install lifecycle rules and navigation under the existing documentation owner.",
       "original_sha256": "764febaa88065ffd32cd70babfc350bc08826f80db5a786dd7586a1b72185b1a",
-      "result_sha256": "84b491f41dcac848d3c724794da9c85c39afd548b1ca947224294414db8e060e"
+      "result_sha256": "3777debfe08404075aca4ee142b5a8b005033480134366bd150b6cf4aabfd0d8"
     },
     {
       "path": "docs/00-project/work-plan.md",
@@ -468,25 +468,60 @@
   "protected_paths_outside_authorized_edits": 152,
   "verification": {
     "status": "PASS",
-    "scope": "Documentation only; no production or Windows qualification executed.",
+    "scope": "Documentation and agent documentation-routing changes; production, tests and Windows qualification unchanged.",
     "docs_files": 249,
     "catalog_entries": 249,
-    "local_markdown_targets_checked": 1109,
+    "local_markdown_targets_checked": 1110,
     "heading_anchors_checked": 99,
     "archived_files_with_link_only_edits": 7,
     "unchanged_original_docs": 233,
     "unchanged_protected_paths": 152,
-    "unchanged_non_docs_tracked_files": 482,
+    "unchanged_non_docs_tracked_files": 481,
     "original_machine_artifacts_preserved": 11,
     "errors": [],
-    "first_git_dates_rechecked": 246,
+    "first_git_dates_rechecked": 249,
     "attached_markdown_json_inventory_match": true,
     "manually_excluded_coordinate_reference_false_positives": 3,
     "preexisting_broken_link_repaired": true,
     "detector_governance": "PASS",
     "git_diff_check": "PASS",
-    "commits_created": 0,
-    "pushes": 0
+    "baseline_non_docs_tracked_files": 482,
+    "current_non_docs_tracked_files": 484,
+    "modified_non_docs_tracked_files": 1,
+    "added_non_docs_tracked_files": 2
   },
-  "recovery": "Restore only listed original paths from base_head Git blobs; remove only this migration's destination/new files, preserving unrelated user changes."
+  "recovery": "Restore only listed original paths from base_head Git blobs; remove only this migration's destination/new files, preserving unrelated user changes.",
+  "non_docs_changes": [
+    {
+      "path": "AGENTS.md",
+      "change": "modified",
+      "reason": "Add routing to the repository documentation-maintenance skill.",
+      "original_sha256": "81fe7e9ee4e9a4f59d23d357db78a9a1da0d898b87351387e105b022601ef3d3",
+      "result_sha256": "adbce63069948e3c7597b9cdecb3991964f64cae78977380ff7fe9e30a567da9"
+    },
+    {
+      "path": ".agents/skills/oil-docs-maintenance/SKILL.md",
+      "change": "added",
+      "reason": "Add repository-specific documentation owners, preservation boundaries and checks.",
+      "original_sha256": null,
+      "result_sha256": "ce0a0b98cb4a55eac3abe909ec0ab7c001896e5182afaa6ea2f5b6832ab3620e"
+    },
+    {
+      "path": ".agents/skills/oil-docs-maintenance/agents/openai.yaml",
+      "change": "added",
+      "reason": "Add skill discovery metadata.",
+      "original_sha256": null,
+      "result_sha256": "611bfae7e8295b5e9d76755ea815b45572f6b8ef924c49256ee09b5c11a144b5"
+    }
+  ],
+  "correction": {
+    "date_kst": "2026-10-03",
+    "reviewed_head": "243e1577bbcd5f4ef5baa7143b8407c5523f0847",
+    "reason": "Reconcile the final README result hash and omitted AGENTS/skill scope after the documentation audit; supersede pre-publication scope/count statements.",
+    "existing_commits": [
+      "a5ae21cf18f0b50ba930e4f34cda3fc07148d69c",
+      "243e1577bbcd5f4ef5baa7143b8407c5523f0847"
+    ],
+    "windows_color_side_run": "NOT_RUN"
+  }
 }

@@ -77,20 +77,28 @@ optional R20 유보 작업이라는 낡은 예시만 제거했다. 근거는
 recall-index는 긴 실험 경과를 주제별 짧은 경로로 교체했다.
 기존 archive의 Work Plan 상대경로 오류 1건을 수정했다.
 기존 S11 routing design에는 이번 문서 수명·archive routing과 History Review 근거를 추가했다.
-AGENTS/Skills 및 governance checker 자체는 변경하지 않았다.
+AGENTS.md에 문서 관리 Skill 라우팅을 추가하고,
+`.agents/skills/oil-docs-maintenance/SKILL.md`와 `agents/openai.yaml`을 새로 추가했다.
+이는 문서 관리 경로 변경이며 production·tests·governance checker는 변경하지 않았다.
+manifest의 `non_docs_changes`에 세 파일의 변경 종류와 전후 해시를 기록한다.
 
 ## 검증과 복구
 
-검증 결과는 같은 배치의 manifest에 기록했다.
+검증 결과는 같은 배치의 manifest에 기록했다. 2026-10-03 후속 감사에서
+`243e157` 기준 최종 파일을 대조하여 README 결과 해시와 AGENTS/Skill 변경 누락을
+정정했다. 아래 수치는 이 정정을 반영한 재검증 결과다.
 
 - 색인 249개: 실제 파일과 일치하며 중복·누락 없이 폴더/날짜순이다.
-- 기존 246개 최초 Git 추가일: KST로 재확인했고 첨부 Markdown/JSON 목록과 모두 일치한다.
-- 로컬 Markdown 대상 1,109건, 제목 앵커 99건: 오류 없음. 기존 좌표 표기 세 줄은 링크 정의가 아니므로 원문 확인 후 제외했다.
+- 전체 249개 최초 Git 추가일: KST로 재확인했다. 기존 246개는 첨부 목록과 일치하고, 신규 3개는 `a5ae21c`의 최초 추가일과 일치한다.
+- 로컬 Markdown 대상 1,110건, 제목 앵커 99건: 오류 없음. 기존 좌표 표기 세 줄은 링크 정의가 아니므로 원문 확인 후 제외했다.
 - 이동 7개: 상대 링크 목적지 외 원문 바이트 동일. 기존 문서 233개 및 허용 편집 외 보호 문서 152개는 경로·내용 그대로다.
-- 기존 machine artifact 11개와 문서 외 추적 파일 482개: 내용 동일.
+- 기존 machine artifact 11개: 내용 동일. 기준 문서 외 추적 파일 482개 중 481개는 동일하고 AGENTS.md 1개가 변경됐다. Skill 파일 2개 추가로 현재 문서 외 추적 파일은 484개다.
 - 기존 detector governance 및 `git diff --check`: 통과.
 
-이는 detector 정확도나 Windows 현장 검증이 아니다. commit/push는 수행하지 않았다.
+문서 정리 및 Skill 추가는 `a5ae21c`, 색인 날짜 확정은 `243e157`에 커밋됐다.
+이 기록의 이전 “commit/push 미수행” 문구는 정리 도중의 상태였으며 최종 상태를
+나타내지 않는다. 이번 정정도 문서 증거만 다룬다. Windows color-side 작업은 아직
+미실행이며 detector 정확도나 Windows 현장 검증을 완료했다는 뜻이 아니다.
 
 복구 시 manifest의 원본 경로와 기준 Git blob을 사용하여 해당 파일만 복원하고,
 이번 배치가 만든 목적지와 산출물만 제거한다. 다른 사용자의 변경은 건드리지 않는다.
