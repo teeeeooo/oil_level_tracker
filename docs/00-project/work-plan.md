@@ -198,13 +198,19 @@ Foam selector or scalar. It retains all competing peaks and unavailable support;
 sample2 mixed support, sample4 central-feature uncertainty and base missing support
 remain unresolved. No threshold adjustment or structure-veto removal is justified.
 
-Next checkpoint is human motion review on Mac: sample4 frames 390–510 (13–17 s),
-fixed original ROI, with frame 450 pixel-equal to the prior reviewed image. The
-prepared local viewer asks whether the central arch-like feature moves/deforms
-with surrounding Foam, stays fixed while Foam changes, or remains indeterminate.
-No detector/tracker rerun or automatic identity transfer accompanies this bounded
-sequence. Record the reply before choosing a boundary mechanism; a fixed appearance
-alone is not structure truth. Windows execution is not requested at this checkpoint.
+The [human motion reply](../60-evidence/s11/2026-10-06-foam-front-alternatives.md#human-motion-reply--stationary-central-feature)
+closes the Mac 13–17 s checkpoint: the central round/arched feature stays in place
+and does not deform while surrounding Foam changes. This is qualitative fixed
+appearance evidence within mixed support, not a hardware/reflection label or a
+pixel mask for all C2. All 124 prepared review outputs remain unchanged.
+
+Next local verification: reuse the existing camera/exposure registration owner
+(`temporal_raster_evidence.py`) where suitable to inspect local boundary-alternative
+change on the saved sequence, instead of treating whole-mask motion as front truth.
+Do not propagate the anchor C2 mask as per-frame physical truth, hardcode a central
+exclusion, bridge uncertain intervals or adopt motion-only identity. This experiment
+is not yet run; exact affected extent and true Foam contour remain unknown.
+No repeated motion question or Windows execution is needed to record this reply.
 Runtime behavior, formal O2 truth, FIELD FAIL and W5/O3 entry remain unchanged.
 
 The forthcoming independent video's recording/session lineage and prior exposure
