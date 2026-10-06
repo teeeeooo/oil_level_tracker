@@ -259,6 +259,72 @@ Next: execute the [Windows target-binding handoff](../../40-operations/s11-o2-lo
 against the existing prepared labels and packet. No new scene judgment, detector
 run, prediction generation, training or field qualification is requested.
 
+## Windows target binding returned — closed without prediction evaluation
+
+The user returned the Windows execution of the target-binding handoff. The
+preceding Windows-pending statement is superseded by this return. Verification
+below is attributed to the Windows report, not an independent read of its private
+snapshot or packet. No further binding run or scene judgment is requested.
+
+The three pinned source/mapping hashes were reported matching. The ZIP contained
+no Git metadata, as permitted; a Git commit cannot be independently established
+from that alone. The transferred `docs/S0-diagnostics/...` spelling refers to the
+mapping whose repository path is `docs/50-diagnostics/s11/s11-passive-001-target-role-mapping.json`;
+the reported mapping digest agrees with the pin. No input-path defect is inferred
+from that transfer spelling.
+
+| Item | Returned value |
+|---|---|
+| Binding status | `BOUND_NOT_EVALUATED` |
+| Source logical labels hash | `55672fe9182129a3baef8ba8df57f12fdcd252d9296f2bb1ad4903d855ae02a8` |
+| Source revision_count | 12 |
+| Target artifact hash | `fe3e95af6666cd047e7148df69147213057f9b68acf883b7399ffc677f2b64fc` |
+| Evaluation-content hash | `cf4ccc077ef5587fce7eaf0c227daef04f641c1483810a9a46e08e8542d86e38` |
+| Input bytes preserved | 3/3: labels, mapping, packet |
+| Physical labels | 13 interface / 62 non_interface |
+| Target roles | 10 target / 3 internal_interface / 62 other_non_target |
+| Evaluation identities | 10 target-positive / 65 target-negative |
+| Cases / candidates / partition | 3 / 75 / regression only; case counts 26 / 21 / 28 |
+| Readiness schema / status | `s11-o2-target-shadow-report-v1` / `NOT_EVALUATED` |
+| Local/scalar/entity truth | `NOT_TRANSFERRED`; artifact subtypes also not transferred |
+| Disposition / auto_acceptance | `FIELD FAIL` / false |
+
+Reported hash links:
+
+- Console artifact hash = snapshot artifact hash = readiness target-truth artifact hash.
+- Console evaluation-truth hash = snapshot content hash = readiness frozen-labels hash.
+- Source status logical hash = mapping source-labels pin. The raw labels-file hash
+  differs by design; it is not substituted for the logical fingerprint.
+
+| File | Reported bytes | Reported raw SHA-256 (abbreviated where supplied) |
+|---|---|---|
+| Input labels.json | 98,669 | `b11cd67e...5d35e2a`, before = after |
+| Input mapping.json | 3,706 | `3443a2cc...707bea1e3`, before = after |
+| Input packet.json | 9,780,717 | `a9c58afe...4cbd7d`, before = after |
+| Output target-truth.json | 212,204 | `82f05b9f...4831950a` |
+| Output readiness.json | 97,399 | `256b5dbb...2de8f8c3` |
+
+Outputs remain under `data/w4-passive-review-001/target-truth-001/` on Windows.
+Full byte hashes were not supplied for the abbreviated entries; they are not
+reconstructed here. No COMPLETE receipt was created or expected. No predictions,
+exploratory evaluation, detector, model, training or performance comparison ran.
+The no-prediction report's coverage/recall values are not performance evidence.
+
+**Disposition:** target binding is complete on transferred Windows evidence.
+The batch now has an explicit uppermost-target evaluation artifact with preserved
+physical review provenance. This resolves target semantics and transport/binding
+readiness; it does not resolve learned discrimination or O2 acceptance. The three
+internal-boundary candidates describe one additional boundary in one scene, not
+three independent controls. Group-reviewed distant negatives and a FULL scene
+also do not automatically establish cue-sharing optical opposition.
+
+Next obtain metadata/prior-exposure history for the other existing recordings
+the user said could be reviewed, then assign recording roles before viewing
+potential holdout pixels or fitting a challenger. Reuse the existing metadata
+procedure; do not search SPL#1 again or reopen this batch. Current source data
+remain regression, and the absence of other files in the previously searched
+Windows folder is not proof that no other recordings are available.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`.
