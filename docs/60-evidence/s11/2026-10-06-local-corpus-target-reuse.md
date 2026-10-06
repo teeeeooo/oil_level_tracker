@@ -214,6 +214,40 @@ pink idx11) to clarify the actual Oil versus Foam feature and its target role.
 Do not reuse the sample2 colors or index meanings across cases. A new review of
 all 76 proposals is not required. Runtime behavior and `FIELD FAIL` remain unchanged.
 
+## Sample4 human correspondence received
+
+User reply to the case-specific cyan/pink guide:
+
+> 청록 : 실제 유면 경계
+> 분홍 : foam과 air의 경계
+
+| Candidate | Human observation | Output meaning |
+|---|---|---|
+| idx10, cyan, native path Y=[850,853,854,855,847] | Actual Oil surface boundary | Oil tracking target |
+| idx11, pink, native path Y=[838,844,846,846] | Foam–air boundary | Separate Foam boundary; not the Oil tracking target |
+
+The pink path identifies a real boundary of another output series. It is not
+reclassified as reflection, a meaningless artifact or a Foam-internal gap. The
+sample2 cyan Foam gap and sample4 pink Foam–air boundary are distinct human
+observations. This is a concrete control against promoting every higher visible
+edge to the Oil target, while preserving meaningful Foam output.
+
+The whole-candidate interpretation is bound to the exact guide and witnesses in
+`sample/output/s11-local-candidate-review-001-notes/reply-002-sample4.json`,
+SHA-256 `a01a8fe0f6827e98235486081184f5ea82579d6a1b6c8268cc2c80f97da1edb2`.
+Native idx10 covers five sectors; idx11 covers four, ending at source X=625.
+Neither path is extended beyond stored support. No per-sector near/off labels,
+precise contour intervals, numeric error certificate, bottom-connectivity result
+or temporal validity is inferred from the whole-candidate reply. This records a
+human-identified Foam boundary without claiming the production Foam owner now
+meets all front-validity conditions or publishes it correctly.
+
+Four of 76 candidates now have supplemental correspondence; 72 remain unreviewed.
+The original 87 capture outputs retain their receipt hashes. No detector/decode,
+formal O2 label migration, prediction evaluation or runtime behavior change took
+place. Next clarify the already-prepared base_sample_1/156 cyan idx9 and pink
+idx10; no additional frame or independent video is needed for this bounded batch.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-PROJECTION`
