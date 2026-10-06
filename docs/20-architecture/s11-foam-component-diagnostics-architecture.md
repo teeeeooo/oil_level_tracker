@@ -140,13 +140,55 @@ mutation and real runner receipt/no-overwrite checks. These validate representat
 and abstention, not Foam classification. The saved three-frame regression results
 are recorded in [local boundary alternatives](../60-evidence/s11/2026-10-06-foam-front-alternatives.md).
 
+## Offline registered boundary residuals
+
+`tests/diagnostics/s11_boundary_temporal_probe.py` reuses `_translation` and
+`_exposure_fit` from `temporal_raster_evidence.py`; it has no production caller.
+The existing translation helper accepts an optional diagnostics dictionary that
+records raw finite estimates and the existing acceptance/fallback reason. All
+legacy tuples and gates remain unchanged. A rejected estimate returning zero
+shift must not become observed stationarity, even with a high response.
+
+The probe takes two same-shape uint8 gray images and a geometric effective mask,
+bounded to 4,194,304 pixels. Both registration directions must pass the owner's
+existing gates. Reciprocal translation error is reported, not thresholded or
+interpreted as camera-motion truth. Warp pixels and the mask with identical linear
+interpolation; common support requires every contributing donor pixel and the
+anchor pixel to be geometrically valid. Fewer than 32 geometric/common pixels or
+failed registration yield unavailable residuals, not zeros. This diagnostic
+support bound is not a runtime detector threshold.
+
+Four absolute gray residual arrays use the same common support: direct,
+exposure-only, registered, and registered-plus-exposure. Exposure fitting uses
+that same domain. No anchor glare or Foam mask is transferred to another frame;
+glare validity remains NOT_MEASURED. A fixed source-coordinate query is not a
+material track. At most 4,096 integer query points and radii 0–16 produce square
+window means with explicit valid/requested counts; incomplete support stays
+separate. No flow, candidate winner, motion threshold or physical front is fitted.
+
+The bounded local experiment reads only verified saved captures, includes every
+retained component top column and every stored native Oil path column, and keeps
+radii 2 and 4 as inspection scales. Source hashes, input preservation and unchanged
+legacy helper tuples are recorded with results. Large residual can arise around
+a stationary structure due to Foam/illumination/occlusion; small residual is not
+structure identity. The ROI translation can absorb material movement and is not
+independently verified camera motion. Correlated windows and frames are not
+independent samples. Use attributed path correspondence to investigate overlap;
+do not infer a circular exclusion mask from a scene-level structure statement.
+
+Validation covers unchanged helper returns, rejected high-response fallback,
+OpenCV/nonfinite failures, flat/textured images, translation plus exposure,
+localized appearance changes and fully supported interpolation around mask holes.
+The [local measurement](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md)
+records the bounded saved-sequence result and remaining human checkpoint.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
-- Failure-registry entries: `S11-F04`, `S11-F06`, `S11-F09`, `S11-F10`
-- Prior mechanisms reviewed: component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; the local audit finds spatially rejected components absent from the saved trace.
+- Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
+- Prior mechanisms reviewed: motion-only identity and episode confirmation, component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; the local audit finds spatially rejected components absent from the saved trace.
 - Prior mechanisms rejected: no restoration of rejected Foam authority, geometry-as-identity, blanket material veto, lowering thresholds or using human coordinates in runtime.
 - Preserved contracts: independent Oil/Foam owners, same-frame source provenance, fail-closed publication and unchanged temporal/sequence decisions.
 - Difference from prior failures: capture computed rejected evidence in a bounded non-authoritative sidecar; no decision owner consumes it.
-- Logic-map impact: NONE — the offline saved-raster probe has no production caller; previously documented component capture and decision ownership remain unchanged.
+- Logic-map impact: NONE — offline probes have no production caller; optional registration reasons do not change tuples, thresholds or decision ownership.
 - Failure-registry impact: NONE — existing failure classes and guards apply; no new behavior mechanism or efficacy claim.

@@ -449,7 +449,13 @@ def _translation(
     prior_gray: np.ndarray,
     current_gray: np.ndarray,
     common: np.ndarray,
+    *,
+    diagnostics: dict[str, object] | None = None,
 ) -> tuple[float, float, float]:
+    # Optional observation only: preserve the existing tuple and all gates.
+    # A fallback (0, 0) is not a successful zero-motion estimate.
+    if diagnostics is not None:
+        diagnostics.update(status="not_computed", raw_dx=None, raw_dy=None, raw_response=None)
     prior_values = prior_gray[common]
     current_values = current_gray[common]
     prior_centered = np.where(
@@ -467,12 +473,26 @@ def _translation(
     try:
         (dx, dy), response = cv2.phaseCorrelate(prior_centered, current_centered)
     except cv2.error:
+        if diagnostics is not None:
+            diagnostics["status"] = "opencv_error"
         return 0.0, 0.0, 0.0
+    if diagnostics is not None:
+        diagnostics.update({name: float(value) if math.isfinite(value) else None
+                            for name, value in (("raw_dx", dx), ("raw_dy", dy), ("raw_response", response))})
     if not all(math.isfinite(value) for value in (dx, dy, response)):
+        if diagnostics is not None:
+            diagnostics["status"] = "nonfinite"
         return 0.0, 0.0, 0.0
     maximum = max(2.0, min(prior_gray.shape) * 0.035)
+    if diagnostics is not None:
+        diagnostics.update(maximum_shift_px=maximum, minimum_response=0.02)
     if abs(dx) > maximum or abs(dy) > maximum or response < 0.02:
+        if diagnostics is not None:
+            diagnostics["status"] = ("shift_exceeds_bound" if abs(dx) > maximum or abs(dy) > maximum
+                                     else "low_response")
         return 0.0, 0.0, max(0.0, float(response))
+    if diagnostics is not None:
+        diagnostics["status"] = "accepted"
     return float(dx), float(dy), _unit(response)
 
 

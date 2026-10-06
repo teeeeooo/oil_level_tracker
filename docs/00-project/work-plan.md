@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 top review returned suspected central structure involvement; the static-image reread is complete and pure-front truth remains unresolved; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 circular structures are human-confirmed; registered residual comparison is complete without identity promotion and A–D path correspondence awaits human review; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -207,15 +207,20 @@ exact per-segment overlap and circle geometry remain unmeasured. This is not a
 structure label for all C2 pixels. The prior reply and all 124 review outputs are
 preserved; no repeated identity question is needed.
 
-Next local verification: reuse the existing camera/exposure registration owner
-(`temporal_raster_evidence.py`) where suitable to inspect local boundary-alternative
-change and overlap with these known circular structures on the saved sequence,
-instead of treating whole-mask motion as front truth.
-Do not propagate the anchor C2 mask as per-frame physical truth, hardcode a central
-exclusion, bridge uncertain intervals or adopt motion-only identity. This experiment
-is not yet run; exact affected extent and true Foam contour remain unknown.
-No repeated motion question or Windows execution is needed to record this reply.
-Runtime behavior, formal O2 truth, FIELD FAIL and W5/O3 entry remain unchanged.
+The [registered boundary residual experiment](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md)
+is complete on 120 saved comparisons around sample4 frame450. All 213 input files
+are preserved and 240 legacy registration tuples are unchanged. C2's mixed
+boundary neighbourhood changes more than the lower rim, but this does not
+separate stationary structures from surrounding changing Foam. No motion-based
+identity, structure exclusion or runtime promotion follows.
+
+Next checkpoint: the user identifies what the existing yellow C2 top follows in
+four equal source-X segments A–D (Foam–air boundary, structure edge, mixed or
+unclear). This asks for path-location correspondence, not another judgment of
+whether the already identified circular features are structures. The original
+RGB and independently toggleable stored path are displayed together; exact circle
+geometry and formal front truth remain unassigned. No Windows execution is needed
+at this checkpoint. Runtime behavior, O2 truth, FIELD FAIL and W5/O3 remain unchanged.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential
