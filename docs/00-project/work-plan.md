@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac corpus reuse is verified and bounded local candidate preparation is next; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); candidate-guided clarification starts with sample2/30; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -108,17 +108,20 @@ two focus-rejected observations stay unusable. These previously exposed sources
 remain regression material available for local development; independent-video
 arrival is not a blocker for preparation or implementation investigation.
 
-Next prepare current candidate correspondence for three preselected local frames:
-base_sample_1/156 (Oil/overlay), sample2/30 (Oil/reflection), sample4/450 (Oil/Foam).
-Reuse existing extraction/review owners and the linked plain/comparison images;
-old D1 agent guides are not current detector native paths. Keep all 13 usable
-annotations in scalar regression. Do not automatically convert their Y positions
-into candidate identity, per-sector path or uppermost-target labels. Ask for
-candidate-guided human clarification only where the concrete correspondence is
-unresolved. A bounded local diagnostic capture, if needed for these three frames,
-is preparation evidence with new provenance, not a replay of the old D1 record.
-No full-video replay, classifier fitting or operating-point selection is part of
-this preparation. No Windows execution is needed at this step.
+The [three-frame local capture](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md#three-frame-current-candidate-capture--completed)
+is complete for base_sample_1/156, sample2/30 and sample4/450: 76 Oil proposals,
+20 native paths, all unreviewed. Exact frame/time, raw/witness joins and 12 input
+hashes pass. This is isolated current-frame extraction with fresh detector state,
+not a temporal replay or efficacy evaluation. Paired original/path SVGs and an
+interactive local viewer are ready; full browser visual QA was unavailable.
+
+Next receive the user's candidate-guided explanation for sample2/30 cyan idx10
+and pink idx12, including partial/uncertain correspondence and uppermost target
+role. That concrete question is pending; do not infer the answer from legacy
+Y=592 or assign labels merely by proximity. The other two cases remain prepared;
+do not demand review of all 76 proposals or recapture the same frames. Preserve
+all 13 usable historical scalar observations and the separate Foam truth. No
+Windows execution or independent-video delivery is needed for this review.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential

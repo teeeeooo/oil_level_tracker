@@ -109,6 +109,69 @@ Metadata joins, corpus/asset hashes and before/after preservation passed. No
 detector efficacy, calibration, independent holdout, W4-R2 entry or FIELD PASS
 is established. `FIELD FAIL` and `NOT_EVALUATED` remain unchanged.
 
+## Three-frame current candidate capture — completed
+
+Subsequent user authorization: continue on Mac through candidate extraction and
+plain/path guide preparation. Capture source is clean
+`c0ebfe9c2b4f71dd72e26e26c82ae191e02f0540`; no production files changed.
+
+Reused `_load_cases`/corpus identity checks from the public witness probe,
+`OpenCvPhaseDetector.detect(debug=True)`, the production `JsonlDebugTraceWriter`
+and O2 `extract_frame` inventory/provenance validation. Each frame uses a fresh
+R22-3 detector and a new run ID. No static-map learning, adjacent-frame processing
+or sequence resolution occurs. These are **isolated current-frame proposals**,
+not completed tracking outputs or reproductions of the original D1 runs.
+
+| Case / exact frame | Decoded time | Oil candidates | Native path / center-only | Source ROI origin / size |
+|---|---:|---:|---:|---|
+| base_sample_1 / 156 | 5.2052000000000005 | 24 | 6 / 18 | (551,218) / 290×296 |
+| sample2 / 30 | 1.0 | 28 | 8 / 20 | (185,320) / 340×340 |
+| sample4 / 450 | 15.0 | 24 | 6 / 18 | (543,798) / 104×104 |
+
+All three decoded frame indices and timestamps match the historical requested
+review frames. Source bytes are pinned; backend-reported index/time and current
+pixel hashes are recorded, without asserting historical pixel equality. Each
+saved `original_roi` is pixel-equal to the corresponding new source-frame slice.
+All 76 Oil proposals, including rejected ones, pass `extract_frame` raw/witness
+joins. No physical identity, target role, near/off judgment or score was assigned.
+Original media/recipes/truth remain byte-preserved (12/12), as do production sources.
+
+Local output: `sample/output/s11-local-candidate-review-001/`:
+
+- `capture.py`, `capture.json`, per-case `frame.json` and production trace/index
+  directories with raw candidates, witness, diagnostic images and runtime/source
+  provenance;
+- `candidate-inventory.csv`: all 76 proposals, identity/target role `unreviewed`;
+- `build_viewer.py`, self-contained `viewer.html`, and three `*-pair.svg` guides;
+- `receipt.json`: `CAPTURE_COMPLETE_NOT_EVALUATED`, 87 hashed files, 12 preserved
+  inputs and no assigned labels. This is a local capture receipt, not an O2
+  evaluation or Windows qualification receipt.
+
+`capture.json` SHA-256:
+`1a0606de2722ea46fa707882036548e9e0f782a00eafa8747610230861fac0d5`.
+
+The viewer retains all candidate choices, displays actual sector path segments
+without interpolation, differentiates center-only lines and can toggle stored
+sampling bands or historical scalar references. Historical references default off.
+The plain RGB remains beside the guide. Native-path subsets initially shown are
+base idx9/10, sample2 idx10/12 and sample4 idx10/11; these are display choices, not
+identity winners. Candidate indices belong to these new cases, not Windows cases.
+
+First human clarification requested: **sample2/30**, cyan idx10 path
+`[432,425,420,414,407]` versus pink idx12 path `[589,604,601,582,590]`, both on X
+`[199,262), [262,324), [324,387), [387,449), [449,512)`. Ask what each line follows
+and whether a real boundary is the uppermost target; accept partial or uncertain
+answers. The legacy scalar Y=592 is context and does not label idx12 automatically.
+No answer is recorded yet; the other two frames remain prepared for later review.
+
+Verification: all candidate joins and ROI bounds, CSV counts/unreviewed states,
+SVG XML, source/input preservation, JavaScript syntax and three-case render/control
+logic passed. Browser automation was unavailable, so render/control checks used
+DOM stubs and **do not claim browser visual QA**. Static paired SVGs and standalone
+HTML are supplied for user inspection. No image generation or pixel retouching
+was used; guides place vector lines over unchanged source pixels. No efficacy,
+independent holdout, R2 entry or field acceptance follows from this capture.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-PROJECTION`
