@@ -191,13 +191,21 @@ exact contaminated interval. C2 remains a Foam-region observation, not pure
 pixel/front truth. Its separation from lower rim C1 does not exclude a different
 feature within C2; removing that veto alone is not a validated repair.
 
-Next local design: separate material support from observable boundary support,
-including internal optical/structural features, before any scalar proposal.
-Keep sample2 mixed support, sample4 mixed-front uncertainty and both rim negatives;
-do not bridge the center or promote a mask minimum into physical truth. The
-requested image reread is complete; no repeated material question or Windows run
-is needed for it. Runtime behavior, formal O2 truth, FIELD FAIL and W5/O3 entry
-remain unchanged.
+The [offline front-alternative prototype](../60-evidence/s11/2026-10-06-foam-front-alternatives.md)
+is implemented and checked on all 14 saved components. Single local image edges
+also occur on confirmed rim negatives, so this prototype is not promoted into a
+Foam selector or scalar. It retains all competing peaks and unavailable support;
+sample2 mixed support, sample4 central-feature uncertainty and base missing support
+remain unresolved. No threshold adjustment or structure-veto removal is justified.
+
+Next checkpoint is human motion review on Mac: sample4 frames 390–510 (13–17 s),
+fixed original ROI, with frame 450 pixel-equal to the prior reviewed image. The
+prepared local viewer asks whether the central arch-like feature moves/deforms
+with surrounding Foam, stays fixed while Foam changes, or remains indeterminate.
+No detector/tracker rerun or automatic identity transfer accompanies this bounded
+sequence. Record the reply before choosing a boundary mechanism; a fixed appearance
+alone is not structure truth. Windows execution is not requested at this checkpoint.
+Runtime behavior, formal O2 truth, FIELD FAIL and W5/O3 entry remain unchanged.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential

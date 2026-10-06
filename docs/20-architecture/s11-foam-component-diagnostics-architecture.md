@@ -100,6 +100,46 @@ inputs. These are geometry controls, not synthetic physical identity labels.
 The three saved Mac frames provide attributed regression context, not holdout
 validation or a behavior promotion.
 
+## Offline boundary-alternative prototype
+
+`tests/diagnostics/s11_foam_front_alternatives.py` separates a retained material
+support's upper extent from potential image edges near it. It reuses the O1
+raw-gray central-difference owner, with center plus four visible neighbours,
+where visible means effective and not glare. It has no production caller.
+
+For every retained component and every occupied column, inspect fixed ±4 and
+±8 saved-pixel windows around the first support pixel. Preserve every positive,
+fully bracketed vertical-gradient local maximum and its half-open plateau range.
+Recover exact byte-difference numerators by rounding the owner's magnitude times
+510; use those integers for equality/order, avoiding floating subtraction splitting
+an equal-slope plateau. Report magnitude in the existing normalized units. There
+is no amplitude cutoff, tolerance, smoothing, winner, cross-column interpolation,
+component ranking or scalar. The inspection radii are not acceptance thresholds
+or calibrated physical scales. Weak texture/noise maxima remain in the inventory.
+
+Each column/window records valid samples (null for unavailable), all maxima and
+an appearance state: censored, no bracketed peak, single peak or multiple peaks.
+A plateau touching the window/validity boundary is not fully bracketed. A complete
+window with no bracketed peak does not mean no boundary outside it. Even a single
+peak is not unique physical identity. Every component keeps physical identity
+UNRESOLVED and a null Foam front; no unobserved or ambiguous interval is bridged.
+Missing retained support cannot be recovered by this support-conditioned probe.
+
+The dedicated saved-capture runner verifies a pinned receipt and every registered
+output, validates raw-gray/original RGB equality and component IDs/counts/boxes,
+rejects truncated captures, and checks preservation after reading. It only writes
+a new directory outside the capture. Report/summary/local viewer have their own
+receipt; exact code hashes and runtime versions are recorded. Inputs are bounded
+by the existing 4,194,304-pixel probe limit and 256 retained components. The viewer
+keeps original pixels next to independently toggleable support/edge marks.
+
+Validation includes step plateaus, competing ribbon edges, equal byte slopes,
+slanted/translated boundaries, masked stencils, crop/window censoring, missing
+support, identical-image material/reflection counterexamples, uint16 IDs, input
+mutation and real runner receipt/no-overwrite checks. These validate representation
+and abstention, not Foam classification. The saved three-frame regression results
+are recorded in [local boundary alternatives](../60-evidence/s11/2026-10-06-foam-front-alternatives.md).
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
