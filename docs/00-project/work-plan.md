@@ -57,14 +57,22 @@ improves smooth for both main identities; model ordering varies with X/BW/suppor
 gray/BGR differences and changed observation domains do not establish incremental
 identity benefit. This closes this experiment, not all spatial classifiers or W4.
 
-Next is a local W4 design assessment against the existing physical-interface
-proposal and acceptance owners: identify an observable that distinguishes the
-physical hypotheses, the required material/static/optical counter-control, and
-what current saved evidence actually supports before requesting another Windows
-step. Reuse the known controls and unresolved human observations; do not repeat
-inventory or acquire new cases by default. No new descriptor, tuning sweep,
-private rerun or human rejudgment is currently requested. Physical opposition
-remains not_measured; no classifier/threshold is selected from these model minima.
+The [post-region design assessment](../50-diagnostics/s11/s11-w4-post-region-design-assessment.md)
+is complete. Existing material/static/template/motion owners provide correlated
+context or reference geometry, not a new physical measurement by name. Existing
+reviewed controls are retained; the missing validation is a cue-sharing optical
+counter-control and adequate episode-separated identity evaluation.
+
+Next obtain the user's feasible input scope, already asked: additional review of
+existing SPL#1 material, controlled reference/comparison acquisition as well, or
+only current fixed evidence. Prefer a bounded passive candidate-conditioned
+RGB/context study if suitable review/evaluation data are feasible; alternatively
+assess the existing reference-acquisition design. Neither route is implemented or
+selected before that answer. No new hardware is presumed necessary. Prepare one
+concrete control/verification plan after resolving this input constraint; do not
+repeat inventory, fit weights to the two returned frames or issue a Windows run
+on assumed data. With only current fixed evidence, retain the closeout and its
+calibration/identity limit. Physical opposition remains not_measured.
 
 Full private CSVs have not been independently read or rehashed here. W4-R1 remains
 closed, R2 entry unmet, O2 open and W5/O3 gated. Existing labels, idx0/idx20 human
