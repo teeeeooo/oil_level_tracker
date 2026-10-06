@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 support-top localization is awaiting human review; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 top review returned suspected central structure involvement; the static-image reread is complete and pure-front truth remains unresolved; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -182,15 +182,22 @@ shortcut. Seventeen geometry tests pass; all 87 capture outputs remain intact.
 Sample2 mixed support and base missing support remain distinct; no classifier,
 new threshold, production selector or scalar changed.
 
-Current checkpoint: inspect the yellow per-column top pixels in
-`sample/output/s11-local-foam-support-geometry-001/sample4-top-review.svg`.
-Confirm whether they follow the actual Foam–air boundary or include internal
-texture/reflection/rim, allowing mixed or uncertain feedback. C2 being Foam does
-not certify its computed upper edge or the scalar derived from it. Existing
-cyan/pink identities are preserved and are not asked again. This is a localization
-check before choosing a behavior repair, not a new whole-component material label.
-No Windows execution is needed. Formal O2 truth, FIELD FAIL and W5/O3 entry are
-unchanged.
+The [sample4 top reply and agent reread](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md#sample4-top-review--central-feature-qualification)
+close the static-image checkpoint. The user sees upper-boundary following with
+possible central round-structure involvement. The unannotated/overlay enlargement
+shows two yellow-top lobes aligned with central bright arch-like features; the
+104×104 ROI cannot distinguish physical structure from reflection or supply an
+exact contaminated interval. C2 remains a Foam-region observation, not pure
+pixel/front truth. Its separation from lower rim C1 does not exclude a different
+feature within C2; removing that veto alone is not a validated repair.
+
+Next local design: separate material support from observable boundary support,
+including internal optical/structural features, before any scalar proposal.
+Keep sample2 mixed support, sample4 mixed-front uncertainty and both rim negatives;
+do not bridge the center or promote a mask minimum into physical truth. The
+requested image reread is complete; no repeated material question or Windows run
+is needed for it. Runtime behavior, formal O2 truth, FIELD FAIL and W5/O3 entry
+remain unchanged.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential

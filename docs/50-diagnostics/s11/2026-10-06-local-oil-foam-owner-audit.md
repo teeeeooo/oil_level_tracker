@@ -351,7 +351,7 @@ material question is needed. They establish the following different control role
 
 | Control | Human basis | Existing failure/guard | Required interpretation in a future experiment |
 |---|---|---|---|
-| sample4 C2 | Foam material | Structural bounding-box relation erases detached phenotype | Positive material-support regression; exact front and temporal publication remain unproven |
+| sample4 C2 | Foam region; later edge review suspects central structure involvement | Structural bounding-box relation erases detached phenotype | Material-region regression, not a pure-support/front positive; central feature remains unresolved |
 | sample4 C1 | Glass rim structure | Structural predicate rejects it | Retain negative; no broad removal of the structure guard |
 | sample2 C1 | Rim structure | Small/weak region remains ambiguous with no candidate | Retain non-authority; high-priority diagnostic selection is not a correct material selection |
 | sample2 C2 | Inside Foam; suspected reflected feature in lower portion | Layer concentration fails; broad support has mixed interpretation | Mixed/unknown support challenge, not a pure positive or pure negative training label |
@@ -446,10 +446,60 @@ truth from a whole-guide response. This is the next user-dependent step; Windows
 is not needed. Runtime substrate/shape gates, current Foam-front selection,
 Oil authority, temporal composition and all formal truth remain unchanged.
 
+## Sample4 top review — central feature qualification
+
+The user answered the yellow-top guide:
+
+> 윗 경계를 따라가는데, glass의 정 중앙에 원형 구조물 같은게 있음 거기를 함께 따라가는듯. 그 부분을 한번 너가 다시 판독해봐
+
+This supports qualitative boundary-following while explicitly qualifying the
+central feature. It is not an all-column localization approval. The user asked
+for an agent reread, not another user judgment or detector execution.
+
+The agent compared the saved unannotated RGB with the saved yellow top points,
+including a pixel-preserving display crop of source X [565,619), Y [814,862).
+**Visual observation:** central arch/ring-like bright features and dark recesses
+are visible. The yellow top has two upward lobes beside a central dark recess,
+aligned with bright features in the unannotated image. Saved top pixels reach
+source Y=839 at X=578,579,590,591; these are measured support positions, not
+physical structure coordinates or localization ground truth.
+
+**Interpretation:** the user's concern is visually plausible. C2's computed top
+may combine Foam boundary appearance with a central structure or reflected
+feature. The original ROI is only 104×104 pixels; enlargement adds no detail.
+This still image cannot establish whether the central feature is physical
+hardware, a reflection, or how the true Foam–air contour passes behind/around it.
+No exact contaminated interval or repaired contour is assigned.
+
+**Effect on the earlier causal result:** the 22–29 px distances to the separate
+lower rim C1 remain correct. They only address that C1/C2 relation; they do not
+exclude a different optical/structural feature within C2. The prior C2 material
+answer must therefore remain a Foam-region observation, not a certified pure
+support mask or a correct minimum-Y Foam scalar. Removing the lower-rim veto
+alone is not a validated repair. Preserve this mixed-front challenge alongside
+the sample2 reflection qualification and the known rim negatives.
+
+The exact user reply and separately attributed agent observation/inference are
+saved as `sample/output/s11-local-foam-support-geometry-001-notes/reply-003-sample4-top-and-central-feature.json`.
+SHA-256 `6eccc6c3c6330eaf878ecd4a641311af8ebdbc5142636067c394a4c1556f653d`.
+The enlarged comparison is `sample4-center-audit.svg` in the same notes directory,
+SHA-256 `2f5f61b71b73a78e7d1cafe0e4741b619c9d7ac8930b691c54946e6357625a5f`;
+its complete three-panel rendering was visually inspected. Original 87 capture
+outputs and all four geometry-probe outputs remain hash-identical. Production
+code, thresholds, formal labels and all prior quotes are unchanged.
+
+This closes the requested static-image reread, not physical disambiguation.
+The next local design must separate material-region support from observable
+boundary support and account for internal optical/structural features before
+publishing a scalar. No static mask-edge promotion, blind interpolation across
+the center, or lowering the shape threshold follows from this review. Further
+geometry-only evidence cannot resolve material identity by itself. No Windows
+execution or repeat of the same material question is requested by this reread.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F04`, `S11-F06`, `S11-F09`, `S11-F10`
-- First harmful stage: sample4 human-positive C2 loses its detached phenotype through the bounding-box structural-substrate veto, then fails spatial shape qualification before temporal confirmation. C1 is a human-confirmed rim negative. Sample2 C2 fails one-sided layer occupancy but has suspected reflection within a Foam region, so pure-Foam failure is unestablished there. Completed-window Oil first loss remains unmeasured.
+- First harmful stage: sample4 C2 in the human-attributed Foam region loses its detached phenotype through the bounding-box structural-substrate veto, then fails spatial shape qualification before temporal confirmation; the later top review suspects a central structure/reflection, so accepting this support or its scalar is not established as correct. C1 is a human-confirmed rim negative. Sample2 C2 fails one-sided layer occupancy but has suspected reflection within a Foam region, so pure-Foam failure is unestablished there. Completed-window Oil first loss remains unmeasured.
 - Logic-map impact: NONE — this follow-up attributes saved components and identifies an existing predicate; the previously documented diagnostic seam and runtime decision owners are unchanged.
 - Failure-registry impact: NONE — existing identity, independent-series and current-versus-final guards apply; no new failed mechanism or threshold repair is asserted.
