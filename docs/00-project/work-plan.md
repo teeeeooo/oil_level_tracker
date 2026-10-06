@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; the first bounded Windows review handoff is ready, with no comparative filming.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; the first of three bounded Windows cases has returned with two distinct human-reported boundary roles; target Oil mapping is pending and the remaining two cases may continue, with no comparative filming.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -66,11 +66,19 @@ counter-control and adequate episode-separated identity evaluation.
 The user confirmed additional review of existing intervals/regions and other
 videos is feasible; comparative filming is not. Select the passive-video route.
 The [first bounded review handoff](../40-operations/s11-o2-local-shadow-evaluation.md#passive-control-review--first-bounded-batch)
-is ready: select up to three saved SPL#1 records without score/image-based
-selection, preserve all candidates, display plain plus exact-geometry guides, and
-obtain at most two candidate judgments per case. Existing judgments are reused;
-uncertain and missing-proposal outcomes remain valid. Other-video work in this
-batch is metadata/prior-exposure only, preserving potential evaluation recordings.
+has returned its [first case](../60-evidence/s11/s11-o2-passive-control-review-001.md):
+Accum f17383, two answers out of six. The reviewer identified idx10 as a
+fluid1/fluid2 boundary and idx13 as a fluid2/air boundary; both are recorded as
+interface. Fluid composition and mapping to the target Oil boundary remain
+pending before training or target-specific evaluation using this case. Preserve
+the answers and notes without automatic relabeling or counting both as Oil positives.
+
+Continue the already prepared BASE f17383 and Accum f16543 cases, at most two
+answers each, with plain RGB and exact candidate guides. Do not reopen the
+completed first-case review or replace selected frames. Unknown, uncertain and
+missing-proposal outcomes remain valid. Other-video work is metadata/prior-exposure
+only; only SPL#1 was found in the reported searched scope, not proof that no
+other recordings exist.
 
 SPL#1 stays in its existing `recording_group` and `regression` partition. The
 implemented evaluator locks an entire recording group/run to one partition;
