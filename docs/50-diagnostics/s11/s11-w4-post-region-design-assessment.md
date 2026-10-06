@@ -11,8 +11,9 @@ material/static penalties, choosing a residual threshold, or counting model mini
 Keep the existing reviewed positive/negative cases: they are useful development
 controls, not missing merely because physical opposition is unmeasured.
 
-The present evidence supports **two conditional development routes**, not an
-already validated next mechanism:
+The initial assessment identified **two conditional development routes**, not an
+already validated next mechanism. The subsequent input decision below selects
+the passive route:
 
 - If additional review of existing passive SPL#1 material is feasible, first
   define a bounded candidate-conditioned RGB/context discrimination study with
@@ -28,9 +29,37 @@ Prefer reusing passive inputs if suitable additional review is available; do not
 require hardware changes on the strength of these two frames. If neither new
 review nor reference acquisition is feasible, retain this experiment's closeout
 and name the evidence limit instead of launching another descriptor sweep.
-The current input capability needs the user's answer before selecting a route.
-This is an acquisition/review constraint, not a request for another identity
-judgment on the already reviewed candidates.
+The input capability was unresolved at the initial assessment; the following
+user decision closes it without another identity judgment on the reviewed cases.
+
+## Input feasibility resolved — user decision
+
+The user subsequently confirmed that additional review of other intervals/regions
+of the same video and of other existing videos is feasible. Comparative filming
+is unavailable because the environment cannot be reconstructed. This resolves
+the conditional choice above: proceed with passive existing-video evidence;
+controlled-reference acquisition is outside the current plan. No repeat feasibility
+question is needed.
+
+Other recordings are now eligible for a planned review/partition process, including
+SPL#2/#3 if actually available. This supersedes the old blanket deferral for this
+scope, but does not assign any recording as holdout or authorize a whole-video
+replay. First obtain metadata and prior-exposure history, without inspecting a
+potential holdout's pixels or candidate losses.
+
+Source inspection of `s11_interface_shadow_evaluation.validate_labels` adds a
+concrete constraint: `previously_reviewed` cases must remain `regression`, and one
+`recording_group` (also one bundle run) cannot span partitions. This is stricter
+than merely separating episodes in the conceptual design above. Keep all SPL#1
+cases in their existing recording group and `regression` partition, even when
+new frames/regions are reviewed. They can refine failure understanding and provide
+regression checks; they do not supply new calibration or untouched test evidence.
+Do not rename groups or change existing labels to bypass this lock.
+
+The first bounded handoff is [passive control review preparation](../../40-operations/s11-o2-local-shadow-evaluation.md#passive-control-review--first-bounded-batch):
+three exact saved SPL#1 records selected from predeclared intervals, complete
+candidate inventories, candidate-guided review with uncertainty, and a metadata-only
+list of other recordings. No classifier fitting or production change is involved.
 
 ## What the completed evidence does and does not resolve
 
@@ -118,9 +147,10 @@ This would be statistical discrimination, not a transparency estimator.
    until the known pair separates. If usable episode-separated controls cannot be
    assembled, implementation has no justified evaluation endpoint yet.
 5. Reuse the O2 acceptance owner for calibration/holdout and exact behavior equality.
-   SPL#2/#3 remain deferred. Existing SPL#1 checkpoints are development/regression;
-   new partitions need an explicit concrete plan, not retrospective relabeling of
-   already-inspected examples as untouched holdout.
+   The later input decision above permits planning use of other recordings.
+   Existing SPL#1 cases remain regression under the implemented recording-level
+   lock; new partitions need an explicit concrete plan, not retrospective
+   relabeling of already-inspected examples as untouched holdout.
 
 This route could use the same camera; it does not assume that new reference
 hardware is logically necessary. Its immediate dependency is feasible additional
@@ -150,19 +180,17 @@ must remain unavailable. No new acquisition or sensor purchase is requested here
 
 ## Next action and stopping boundary
 
-The local design assessment is complete. The user has been asked which input
-scope is feasible: additional review of existing SPL#1, controlled reference
-acquisition as well, or only the current fixed material. Until answered, do not
-choose a route implicitly, implement a classifier with an assumed dataset, or
-send another Windows execution prompt. This dependency concerns data access and
-review capacity; no skill demands a new approval ceremony.
+The local assessment and input-scope decision are complete. Execute the linked
+bounded review-preparation handoff on Windows, where private material resides.
+Stop at a displayed candidate-guided question awaiting the human answer, or at a
+named missing-input/presentation limit. Existing uncertainty is not an instruction
+to repeat a judgment until it becomes definite.
 
-After that answer, prepare one concrete manifest/measurement and verification
-plan for the selected route before execution. If only fixed current inputs are
-available, report that calibration/generalization remains unestablished and do
-not make another experimental pass merely to keep W4 busy. The current evidence
-cannot settle every remaining software hypothesis, and no universal physical
-impossibility is asserted.
+Other-video metadata supports a subsequent recording-level development/calibration/
+holdout allocation. It does not establish enough independent recordings exist;
+previous use or shared-session lineage may prevent the desired split. Preserve
+that gap explicitly before training. A network architecture, loss, threshold and
+sample-count sufficiency remain unselected. No controlled acquisition is requested.
 
 ## Detector Governance
 

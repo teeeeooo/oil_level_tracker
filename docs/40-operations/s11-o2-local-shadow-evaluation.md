@@ -1793,3 +1793,126 @@ Region 실행과 두 전사 항목 확인은 완료됐다. 이번 단계는 새 
 새 model fit/descriptor/threshold/띠 폭 변경, source decode, label 변경,
 identity/연결성/투명도 판정, W4-R2 진입 또는 사용자 재판정은 수행하지 않는다.
 FIELD FAIL / NOT_EVALUATED와 idx0/idx20 ambiguity는 유지한다.
+
+## Passive control review — first bounded batch
+
+사용자 입력 범위 결정: 동일 영상의 추가 구간/영역과 다른 기존 영상의 추가 판독은
+가능하다. 동일 환경을 재구성할 수 없어 비교 촬영은 불가하다. 이번 단계는 기존
+영상 기반 판독 준비이며, 완료된 region 실험이나 W2/R3 감사를 반복하지 않는다.
+[설계 판단](../50-diagnostics/s11/s11-w4-post-region-design-assessment.md#input-feasibility-resolved--user-decision)을
+따른다. 새 모델·측정값·threshold를 만들지 않고 후보와 사람 답의 연결을 확보한다.
+
+### 범위와 사전 고정 선택
+
+원본 R22-3 번들의 index를 재사용한다. 첫 묶음은 아래 **최대 3개 record**다.
+시간은 source-video seconds이며, 아래 값은 표본 선택 규칙일 뿐 identity 입력이 아니다.
+[기존 구간 판독](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#reviewed-timeline)이
+선택 이유이며 candidate-level 정답을 자동 생성하지 않는다.
+
+| 순서 / case_id | Glass | source 시간 범위 / 목표 | 채우려는 판독 공백 |
+|---|---|---|---|
+| 1 / w4-passive-001-accum-drain | Accum | [720,730] / 725 s | 잔류 흔적과 실제 유면이 함께 있을 수 있는 장면에서 혼동 후보의 정체 |
+| 2 / w4-passive-001-base-full | BASE | [720,730] / 725 s | 유면이 없는 구간의 구조/반사 중 유면처럼 보이는 후보 |
+| 3 / w4-passive-001-accum-postfoam | Accum | [685,695] / 690 s | Foam 소멸 후 남은 경계와 주변 흔적, 주 사례 밖의 긍정/모호성 대조 |
+
+각 슬롯에서 정확한 Glass의 저장 record를
+`abs(record.timestamp_sec-target), frame_index, record_id` 순으로 정렬해 첫 항목을
+선택한다. 점수·MSE·예상 라벨·선명도·특정 Y로 고르지 않는다. 실제 record/frame/time,
+Glass UUID, run_id는 index에서 읽으며 FPS 계산이나 이전 전사값으로 채우지 않는다.
+서로 다른 Glass의 record가 같은 frame일 수 있으며, 이를 독립 표본으로 세지 않는다.
+
+정확한 기존 판독이 이미 있으면 그 출처를 재사용한다. 기존 판독이 있다는 이유로
+다음 프레임을 찾아 이동하지 않는다. 슬롯에 record/원본이 없거나 연결이 불명확하면
+그 슬롯을 unavailable로 기록하고 추가 범위를 탐색하지 않는다. 대상이 모두 모호하거나
+원하는 반례가 없더라도 성공 사례가 나올 때까지 교체하지 않는다. 3개는 작업량 상한이며
+통계적 충분성이나 3개 독립 episode를 뜻하지 않는다.
+
+### 준비물과 분할 규칙
+
+1. 원본 실험·review-001/002/003은 수정하지 않는다. 새 외부 notes 폴더
+   `data/w4-passive-review-001/`에 `selection-manifest.json`을 먼저 저장한다.
+   위 선택 규칙/목적, 선택 record, 기존 판독 출처, 원본 이미지 경로·해시,
+   crop origin/shape/resize, 실제 입력 경로 및 읽은 코드 기준을 기록한다.
+2. 기존 `s11_interface_shadow_evaluation.py prepare/status/record`를 재사용한다.
+   각 선택에 대응하는 새 `selection.json` 및 별도 packet/labels를 생성할 수 있다.
+   `prepare`는 indexed trace를 읽는 작업이며 detector 실행이 아니다. dataset_id는
+   `w4-passive-review-001`, case_id는 위 표를 사용한다. 나머지 필드는 실제 저장
+   metadata와 기존 owner를 사용하고, 미확인 값/판독자/owner를 임의로 만들지 않는다.
+3. **partition은 regression**, recording_group은 기존 SPL#1의 실제 그룹을 그대로
+   사용한다. 같은 run/recording을 다른 이름으로 나누지 않는다. episode_id는 기존
+   구간 매핑을 보존하며, 명확하지 않으면 같은 recording에 묶인 보수적 그룹으로
+   기록한다. previously_reviewed는 실제 이전 판독 유무다. 새 프레임이어도 이
+   녹화를 개발/보정/holdout으로 재분류하지 않는다. 기존 평가기는 recording-level
+   lock을 적용하며 이를 우회하거나 label 문서를 수동 변경하지 않는다.
+4. packet의 전체 Oil candidate를 보존한다. 후보 key는 candidate_input_index이고,
+   source/kind/canonical_y와 모든 sector의 geometry_source/path_source_y/center
+   role/X를 대조한다. native path가 없는 후보는 center-only로 표시한다. 서로 다른
+   center role, score rank와 input index를 혼동하지 않는다. 선택/거절 후보도 누락하지
+   않는다. 기존 bundle 연결을 출처로 참조하되 다른 packet에 bundle-link를 무작정
+   복사하지 않는다. 새 연결이 필요하면 기존 link-bundle 절차를 적용한다.
+
+### 화면과 사용자 질문
+
+저장된 무주석 원본을 우선 사용한다. 이번 첫 묶음에서는 새 영상 decode나 detector
+실행을 하지 않는다. 필요한 장면에 저장 raster가 없으면 그 공백을 보고한다. 사용자가
+움직임 문맥을 요청하면 필요한 범위를 기록하고 별도 재생 단계로 남긴다. 정지영상 판독과
+시간 문맥 판독을 섞어 쓰지 않는다.
+
+- **plain RGB와 후보 가이드 둘 다 실제로 표시**한다. 사용자가 plain에서 detector가
+  센싱한 대상을 추측하게 하지 않는다. 전체 crop을 유지하고 선택한 구간 확대를
+  병행할 수 있다. 새 guide는 원본을 보존한 파생 표시물로 별도 저장한다.
+- Windows의 기존 guide 생성 코드를 우선 재사용하며, 이번 packet geometry를 읽도록
+  한다. 코드/원본/좌표 연결을 확인할 수 없는 오래된 guide는 쓰지 않는다. repo의
+  `ReviewDebugOverlayRenderer`는 rank·score·selected/rejected와 canonical line을
+  표시하므로 native-path 정답 가이드로 그대로 쓰지 않는다. 표시 준비가 안 되면
+  사용자에게 숫자만 물어보지 말고 presentation_not_ready로 보고한다.
+- 가이드의 후보 번호는 실제 input index, native는 저장된 sector 경로, center-only는
+  경로가 아닌 수평 위치 가설로 구분한다. 끊긴 sector를 보간해 연결하지 않는다.
+  판정색·점수·selected/rejected·기존 기대 라벨을 판독 화면에 넣지 않는다.
+  겹치는 후보는 번호 목록을 유지하고 한 후보씩 토글/별도 표시한다.
+- 전체 후보 목록을 유지한 채 사용자에게 혼동되는 표시 후보 또는 관찰 영역을
+  지정하게 한다. 프레임당 **최대 2개 후보**, 총 최대 6개 추가 identity 답변이 첫
+  묶음의 상한이다. 이는 목적 표집이므로 후보 전체 정확도나 유병률을 추정하지 않는다.
+  반례는 기대한 판정으로 채우지 않는다. 가리킨 영역에 저장 후보가 없으면
+  `unbound_scene_observation` 또는 proposal gap으로 보존한다.
+
+한 번에 표시한 후보 하나에 대해 묻는다:
+
+> 이 표시 후보는 전체적으로 실제 유면인가요, 다른 대상인가요, 아니면 판단하기
+> 어려운가요? 그렇게 구분한 경계나 주변 특징도 짧게 설명해주세요. 후보 선의 일부가
+> 유면에서 벗어나더라도 전체 정체와 구간별 위치는 따로 기록하겠습니다.
+
+사용자의 실제 답만 기존 record 절차로 새 labels/replies/history에 보존한다. 매 답변은
+직전 status의 expected SHA와 witness hash로 연결한다. artifact 종류는 사용자가 확실히
+말한 경우만 기록하고, 단지 아래쪽에 있다는 이유로 structure/reflection을 지정하지
+않는다. identity와 near/off, scalar 위치를 서로 전사하지 않는다. 이 묶음에서 정밀
+contour/Y 정답을 별도 요구하지 않는다. `uncertain`은 완료된 유효 답변이며 자동 재질문
+대상이 아니다. 기존 idx0/idx20·f14865 모호성 및 과거 labels는 유지한다.
+
+### 다른 영상: 이번에는 metadata와 노출 이력만
+
+알려진 작업 폴더의 기존 영상/번들 목록과 사용자가 이미 제공한 정보만 확인한다.
+전체 PC를 검색하지 않는다. 다른 영상 경로가 알려져 있지 않으면 그 경로만 사용자에게
+물어볼 수 있으며 SPL#1 준비는 계속한다. 각 파일에 basename/path, 기존 식별 해시가
+있으면 그 값, 알려진 녹화 session/분할·파생 관계, 이전 사람 판독/모델개발 사용 이력,
+기존 bundle/candidate 존재 여부를 `other-recordings-metadata.json`에 기록한다.
+없는 metadata는 unknown이며 파일명만으로 독립 녹화라고 단정하지 않는다.
+
+다른 영상의 이미지/clip/score를 이번에 열어 보거나 자동 decoder/detector를 실행하지
+않는다. candidate 라벨이 이미 존재하면 그 존재와 partition metadata만 기록한다.
+개발·보정·최종평가 역할은 이 이력과 독립성 검토 후 별도로 고정한다. 이미 개발에
+노출된 자료를 untouched holdout으로 재명명하지 않는다. 다른 영상이 존재한다는
+사실만으로 세 분할을 구성할 수 있다고 주장하지 않는다.
+
+### 반환과 종료
+
+반환물은 실제 선택 manifest, 전체 후보 inventory/packet 경로, 표시한 plain/guide
+경로, 받은 사용자 답과 연결된 revision/출처, unavailable/proposal gap/uncertain 목록,
+다른 영상 metadata 목록 및 읽은 원본 보존 확인이다. 새 작업 폴더에만 산출하며 원본
+bytes의 before/after 확인 범위를 명시한다. 이전 receipt·전사 정정을 다시 감사하지 않는다.
+
+첫 case를 실제 표시하고 사용자 답을 기다린다. 답을 받으면 위 상한 안에서 계속하고,
+답이 없으면 판독 대기라고 보고한다. 최대 3 case/6 답변을 마치면 반환 후 멈춘다.
+이 결과로 학습·threshold 선정·새 region fit·W4-R2 진입·field PASS를 선언하지 않는다.
+새 모델은 다음 recording-role/control 검토 이후의 별도 단계다. FIELD FAIL /
+NOT_EVALUATED는 유지된다.

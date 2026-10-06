@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; the first bounded Windows review handoff is ready, with no comparative filming.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -63,16 +63,22 @@ context or reference geometry, not a new physical measurement by name. Existing
 reviewed controls are retained; the missing validation is a cue-sharing optical
 counter-control and adequate episode-separated identity evaluation.
 
-Next obtain the user's feasible input scope, already asked: additional review of
-existing SPL#1 material, controlled reference/comparison acquisition as well, or
-only current fixed evidence. Prefer a bounded passive candidate-conditioned
-RGB/context study if suitable review/evaluation data are feasible; alternatively
-assess the existing reference-acquisition design. Neither route is implemented or
-selected before that answer. No new hardware is presumed necessary. Prepare one
-concrete control/verification plan after resolving this input constraint; do not
-repeat inventory, fit weights to the two returned frames or issue a Windows run
-on assumed data. With only current fixed evidence, retain the closeout and its
-calibration/identity limit. Physical opposition remains not_measured.
+The user confirmed additional review of existing intervals/regions and other
+videos is feasible; comparative filming is not. Select the passive-video route.
+The [first bounded review handoff](../40-operations/s11-o2-local-shadow-evaluation.md#passive-control-review--first-bounded-batch)
+is ready: select up to three saved SPL#1 records without score/image-based
+selection, preserve all candidates, display plain plus exact-geometry guides, and
+obtain at most two candidate judgments per case. Existing judgments are reused;
+uncertain and missing-proposal outcomes remain valid. Other-video work in this
+batch is metadata/prior-exposure only, preserving potential evaluation recordings.
+
+SPL#1 stays in its existing `recording_group` and `regression` partition. The
+implemented evaluator locks an entire recording group/run to one partition;
+new frames, Glasses or regions from that recording are not independent holdout.
+After the return, allocate genuinely distinct available recordings before
+model fitting or operating-point selection. No detector rerun, comparative
+capture, new classifier or W4-R2 entry follows from this review preparation.
+Physical opposition remains not_measured until the relevant evidence is obtained.
 
 Full private CSVs have not been independently read or rehashed here. W4-R1 remains
 closed, R2 entry unmet, O2 open and W5/O3 gated. Existing labels, idx0/idx20 human
@@ -105,8 +111,10 @@ and was removed; its rejection is not a reason to request the same authorization
 again. These historical grants do not authorize unrelated changes or publication.
 The fixed color-side measurement is complete. The current user request authorizes
 implementation and preparation up to the Windows execution point. The user has returned that Windows
-saved-output run. Current follow-up is cross-X/BW interpretation of existing results; no automatic private rerun or broader field qualification
-is authorized.
+saved-output run. The subsequent input-scope decision permits additional human
+review within existing videos and planning other-recording use. Current Windows
+scope is the bounded review handoff, including separate new review records; it
+does not authorize detector replay, training or broader field qualification.
 
 Outside the detector replacement scope remain unrelated candidate-generation,
 Foam or UI changes; unbounded retention/recovery; relaxed truth/safety criteria;
@@ -144,9 +152,13 @@ owns the details. The canonical source companion's fingerprint also remains
 pending despite an O2 bundle-link source hash; reconcile full identity/operator
 provenance without invalidating linked labels or demanding another detector run.
 
-SPL#2/#3 are deferred until SPL#1 improvement, not current inputs or assigned
-holdout. Scene expansion requires a named gap, without preference for post-780 s.
-Partition changes are deferred unless a concrete experiment requires them.
+The user now permits additional review of other existing videos; the earlier
+SPL#2/#3 blanket deferral is superseded for planning/review. No other recording
+is assigned development, calibration or holdout merely by filename. First record
+prior exposure and recording/session lineage, then freeze roles before pixel
+inspection/model selection. Scene expansion addresses the named optical
+counter-control gap, without preference for post-780 s. Existing recording-group
+locks and historical label partitions remain unchanged.
 Windows reports are attributed evidence; private inputs were not read locally.
 
 ## Active follow-up design
@@ -156,8 +168,8 @@ and [witness architecture](../20-architecture/s11-interface-observability-witnes
 own bounded observation redesign; [witness validation](../30-validation/s11-interface-observability-witness-validation.md)
 owns acceptance. Independent support/association, committed fill handoff and
 initial-FULL direction-neutral observation remain separate later behavior gates.
-Controlled acquisition/structured-background options may be evaluated where
-fixture access permits. A whole-detector rewrite or scalar threshold tuning is
+Comparative filming/reference acquisition is unavailable under the user-confirmed
+fixture constraint; the current route uses existing passive videos. A whole-detector rewrite or scalar threshold tuning is
 not authorized by the [direction assessment](../50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md).
 
 Fixed-score, locality, profile, structure-context, row-profile and paired-scale
