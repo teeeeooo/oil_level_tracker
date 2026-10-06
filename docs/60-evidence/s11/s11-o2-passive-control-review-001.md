@@ -1,6 +1,8 @@
 # S11 passive control review — first batch intake
 
-Date: 2026-10-06. Basis: user-transferred Windows report, first case only.
+Date: 2026-10-06. Basis: user-transferred Windows reports; first-case intake
+followed by the final batch return below. Earlier continuation instructions are
+historical and are superseded by the final-return disposition.
 Procedure: [first bounded batch](../../40-operations/s11-o2-local-shadow-evaluation.md#passive-control-review--first-bounded-batch).
 Current gate and next action remain owned by the [work plan](../../00-project/work-plan.md#next-transition).
 
@@ -68,7 +70,7 @@ reported unchanged. No detector rerun, model training or comparative filming
 was reported. These private artifacts/images were not independently opened or
 rehashed in this repository intake.
 
-## Continuation within the existing batch
+## First-case continuation (historical)
 
 | Case | Reported state | Remaining allowance |
 |---|---|---|
@@ -93,6 +95,66 @@ follows from this return. FIELD FAIL / NOT_EVALUATED remain unchanged under the
 [O2 acceptance owner](../../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance).
 The [reviewed timeline](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#reviewed-timeline)
 is not rewritten from this single-frame interpretation.
+
+## Final batch return — all 75 candidates reported labeled
+
+The user subsequently reported the following complete label inventory:
+
+| Case | Visibility | Candidates | interface | non_interface | uncertain | unreviewed |
+|---|---|---|---|---|---|---|
+| accum-drain / f17383 | visible | 26 | 7 | 19 | 0 | 0 |
+| base-full | not_visible | 21 | 0 | 21 | 0 | 0 |
+| accum-postfoam / f16543 | visible | 28 | 6 | 22 | 0 | 0 |
+| Total | | 75 | 13 | 62 | 0 | 0 |
+
+The final return omits the BASE frame number; f17383 is retained from the
+earlier batch report, not a fresh verification of the final labels file.
+Reported `revision_count`: **12**. Reported final labels SHA-256:
+`55672fe9182129a3baef8ba8df57f12fdcd252d9296f2bb1ad4903d855ae02a8`.
+This is a later labels revision, not a conflicting checksum for the first-case
+revision. Neither private labels version has been independently rehashed here.
+
+| Case / reported boundary role | Reported interface candidate indices | Approximate canonical Y |
+|---|---|---|
+| accum-drain: upper fluid2/air | 4, 13, 17, 24 | 290–292 |
+| accum-drain: lower fluid1/fluid2 | 5, 10, 18 | 302–304 |
+| accum-postfoam: one reported surface band | 5, 6, 10, 19, 20, 25 | 186–198 |
+
+The supplied sums and positive-index counts are internally consistent: 26+21+28
+=75, 7+6=13 and 19+21+22=62. Multiple proposals at one boundary are not independent
+physical controls. Approximate canonical Y groupings do not establish native-path
+agreement, interval truth, material identity or continuity across frames.
+
+### Attribution and scope reconciliation pending
+
+The original handoff allowed at most two candidate answers per case (six total),
+whereas this return reports 75 labeled candidates and twelve revisions. Those
+counts alone cannot distinguish explicit human review of candidate groups from
+agent propagation of a boundary/scene judgment. Revision count is not a count
+of separately judged candidates. The supplied summary does not include the
+intervening replies or explain the expansion of review scope.
+
+Ask the user once whether they directly reviewed all candidates individually or
+as explicitly identified groups, whether labels were extended by the agent, or
+whether both occurred. Do not infer misconduct or discard genuine judgments
+from the scope difference alone. Explicit user-directed expanded review, if
+confirmed, takes precedence over the original workload cap. Conversely, nearby
+Y, shared source, or scene visibility is not by itself a direct candidate review;
+`not_visible` must not silently supply 21 individual human explanations.
+
+Preserve the reported files and history without bulk relabeling. Until attribution
+is clarified, record the batch as **reported labeling complete; review provenance
+pending**, not 75 independently verified human judgments or accepted evaluation
+truth. First-case target Oil mapping also remains unresolved. No repeat image
+review, new candidate collection or model fitting is requested by this intake.
+Final-run original-input preservation was not restated in this summary; the
+earlier preservation claim applies to the earlier stage only.
+
+The next action is attribution clarification and target-boundary mapping before
+using these labels in target-specific evaluation. BASE negatives and post-Foam
+positives may supply further development controls if their attribution is
+established; they do not independently establish matched optical opposition,
+holdout success or O2 acceptance. FIELD FAIL / NOT_EVALUATED remain unchanged.
 
 ## Detector Governance
 
