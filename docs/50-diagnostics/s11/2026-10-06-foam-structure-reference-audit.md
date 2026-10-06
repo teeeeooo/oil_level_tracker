@@ -494,14 +494,98 @@ preserves unobstructed inspection. Ask only what physical feature yellow821
 represents; retain uncertainty if the user cannot distinguish it. No Windows
 execution is needed for this checkpoint.
 
+## Direct inspection of the admitted Y821 candidate — 2026-10-06
+
+The user answered: **“내 육안으로는 확인 불가임 실제 물리적인 구조물은
+아님 영상의 노이즈 같기도 하고”**, then requested direct agent inspection.
+The preceding human checkpoint is closed with unresolved physical identity,
+human rejection of a physical-structure explanation, and an unconfirmed noise
+hypothesis. This does not create a noise label or candidate negative.
+
+### Original pixels and time comparison
+
+The agent directly viewed saved RGB frames410,419,420,421,430,480, then inspected
+all six enlarged in Safari, with reference lines off. Each card shows the
+original104×104 crop and the source X566–623/Y811–832 inset. Original PNG bytes
+are embedded without brightness processing; pixelated display adds no detail.
+Y821 has a faint, blurred brightness pattern that remains visually similar
+across these frames. An independently identifiable fluid boundary, comparable
+to the lower human-confirmed Oil–Foam boundary at420/Y854, is not resolved.
+This is the agent's visual assessment, not a new human judgment. The pixels do
+not establish whether the pattern comes from reflection, illumination,
+compression or noise; its persistence alone does not establish a structure.
+
+All121 saved RGB frames390–510 were also compared at fixed source coordinates.
+For X570–620 and Y±3, mean absolute consecutive grayscale change is0.774 at821
+and5.857 at854 (uint8 code units). This is an unregistered descriptive comparison:
+scene motion, lighting and compression remain mixed. It is neither a noise
+estimator nor a physical-identity test.
+
+### Reproduced measurement and the authority mismatch
+
+The existing `_phase_transition_profile` on the recorded normalized raster and
+visible mask reproduces Y821 strength0.7571904063, coverage0.8000000119 and
+scale consistency0.6666666865 to1e-7 against the prior trace. No detector rerun
+or new threshold was used. Its radius3 bands give these below-minus-above means:
+
+| Source X | Original gray delta | CLAHE-normalized delta | Production availability |
+|---|---|---|---|
+|[556,571)|+19.54|+36.20|unavailable; excluded|
+|[571,586)|+6.18|+7.29|available|
+|[586,602)|−14.02|−43.31|available|
+|[602,617)|−13.64|−29.38|available|
+|[617,633)|−25.86|−52.86|available|
+
+`preprocessing.py` applies CLAHE before this generator. In
+`oil_supplemental_path.py`, coverage counts sectors with enough visible pixels,
+not sectors with a verified boundary or consistent polarity. The median of
+absolute normalized differences divided by48 supplies strength. Thus0.8 means
+four measurable sectors, including one with the opposite sign. The generator
+copies that strength into both `broad_strength` and `narrow_peak_strength`, and
+copies measurable-sector coverage into `narrow_horizontal_coverage`. These are
+correlated summaries, not independent narrow-edge or connectivity measurements.
+The evidence/phase/authority owners consume them as boundary support and admit
+the candidate through `distributed_phase_interface`.
+
+For comparison only, confirmedY854 has five available sectors at all three
+radii3/6/10, with negative original-gray deltas throughout; radius3 spans
+−68.36 to−45.99. This contrast does not license a polarity, magnitude or
+location cutoff. Y821 artifact_likelihood0 comes from the recorded optics/static
+terms; no static learning occurred in this bounded run. Zero here does not
+independently rule out an optical artifact.
+
+The supported diagnosis is an appearance-to-authority semantic gap: pooled,
+contrast-enhanced brightness evidence gains physical boundary authority without
+an independently resolved interface at821, while confirmed854 remains
+candidate-only. The cause of the image pattern itself remains unknown.
+Next local work should audit generator feature semantics at their evidence and
+authority consumers, retaining854 as the confirmed correspondence and821 as
+unresolved. No Y-specific rejection, blanket polarity gate or global authority
+relaxation follows from this inspection. The existing mixed Foam-front issue
+also remains open; no repeat human question or Windows run is needed here.
+
+### Saved inspection evidence
+
+Local directory: `sample/output/s11-local-y821-inspection-001/`.
+All130 captured input hashes and four output hashes were verified after visual
+inspection. Production source, recipes, labels and previous outputs are unchanged.
+
+| Artifact | SHA-256 |
+|---|---|
+|`analysis.json`|`e1f89f3f17c0b07442ca3a21aba7f6e9e15d8319f596647fd3712b8747a58466`|
+|`review.html`|`59561e2aa78a6632bb42222ff1c3518601aeb65975a55b730946900b5cfa755a`|
+|`human-reply.json`|`98a89df07430575d42bb79b08002a52ba78a89f7aef9102612932f467702d01c`|
+|`run_inspection.py`|`74367fb198cd2e8c84ed3851846713e8c6a33db77e07d1c38e6f8ee94ea3e75e`|
+|`receipt.json`|`896a2b026a7c63c9e076fac4fb89973f5463aa83eee559a325001a9093612e21`|
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: original ROI admits rim. After human ROI correction, confirmed Oil854 is retained but loses completed-window eligibility at authority; physical identity of the admitted821 alternative is pending. Foam mixed-component upper-extent selection precedes temporal confirmation and remains unresolved; episode acceptance does not repair front identity.
+- First harmful stage: original ROI admits rim. After human ROI correction, confirmed Oil854 is retained but loses completed-window eligibility at authority; direct inspection leaves admitted821 physically unresolved and traces its coverage/strength to pooled appearance summaries. Foam mixed-component upper-extent selection precedes temporal confirmation and remains unresolved; episode acceptance does not repair front identity.
 - Logic-map impact: NONE — bounded same-code ROI/frame/sequence comparison and local review viewers do not change production owners or acceptance authority.
 - Failure-registry impact: NONE — geometry-as-identity, blanket masks, global cutoffs, private Y branches and cross-material authority remain prohibited; no replacement mechanism is promoted.
 
 FIELD FAIL / NOT_EVALUATED, O2 open and W5/O3 gated remain. No Windows work is
 needed at this checkpoint. The [work plan](../../00-project/work-plan.md) owns
-current state and the subsequent transition after the new admitted-candidate review.
+current state and the subsequent local feature-semantics/authority investigation.
