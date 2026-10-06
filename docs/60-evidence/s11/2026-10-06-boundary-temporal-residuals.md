@@ -77,6 +77,50 @@ Plain/path panels, toggle and browser rendering were checked. Enlargement adds n
 information beyond the original104×104 pixels. Separate residual plots are
 measurement illustrations, not the primary human identity display.
 
+## Human A–D correspondence received
+
+The user replied to the displayed original/path review:
+
+> A,C,D는 foam 경계를 따라감
+> B 위쪽 ^ 모양(B의 우측)은 가운데 구조물을 따라감, 아래쪽(B의 좌측)은 foam의 경계를 따라감
+
+| Display segment | Source X [start, stop) | Human path correspondence |
+|---|---|---|
+| A | [571,583) | Follows Foam boundary |
+| B | [583,595) | Mixed: left/lower part follows Foam; right/upper `^` follows central structure |
+| C | [595,607) | Follows Foam boundary |
+| D | [607,619) | Follows Foam boundary |
+
+These are direct human observations of the existing yellow C2 path at frame450.
+The four X ranges come from the pinned display manifest, not newly estimated
+human endpoints. The user did not give an exact split X within B; preserve the
+left/lower versus right/upper description without inventing a pixel cutoff.
+No per-pixel structure mask, replacement contour through B, subpixel accuracy or
+per-frame truth for the other120 frames is assigned. The whole B segment must not
+be treated as structure, and the whole C2 top must not be accepted as pure Foam.
+
+This closes the A–D location question. It supports a local representation failure:
+one retained support-top path follows different physical features along X. The
+existing whole-component residual cannot adjudicate that mixed path. A also has
+an arched appearance in the saved path, yet is attributed to Foam; an arch-shaped
+veto would therefore discard a human-attributed Foam segment. This is an agent
+inference from the displayed geometry plus this reply, not a new human rule.
+
+The next bounded local task is to inspect the already saved per-column edge
+alternatives around B against this correspondence, preserving A/C/D as positive
+path context and B as mixed context. Establish whether an alternative Foam edge
+is represented before designing selection. Do not lower thresholds, hardcode
+these coordinates, flatten/interpolate B, transfer identity through time, or
+remove the C1 veto as a sufficient repair. No repeated structure/segment question
+or Windows execution is needed merely to record this answer.
+
+The original measurement and review manifest remain unchanged. The separate
+local reply is
+`sample/output/s11-local-boundary-temporal-001-notes/reply-001-path-correspondence.json`,
+SHA-256 `cbdabc2e65d83ce61b17404e6c750745dfdd39590f27f40f8f53c68ff94e8ad1`.
+Its verbatim text, frame/component identity and manifest hash preserve attribution;
+formal labels, Windows target truth and runtime behavior are unchanged.
+
 ## Verification and provenance
 
 Focused tests: 22 passed across `tests/unit/test_s11_boundary_temporal_probe.py`
