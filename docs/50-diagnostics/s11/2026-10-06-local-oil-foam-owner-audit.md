@@ -278,7 +278,8 @@ the right rim (source box [495,452,504,465)); purple C2 covers a large interior
 region (source box [199,340,464,543)). C1 is ambiguous; C2 is weak-rejected by
 shape qualification. Neither material identity is assigned here.
 
-Ask what each displayed component contains, allowing mixed or uncertain regions.
+At that checkpoint the requested review was what each displayed component
+contains, allowing mixed or uncertain regions; the reply is recorded below.
 The previous sample2 pink Oil-surface and cyan internal-Foam-gap answers remain
 valid and are not requested again. This distinct component attribution determines
 whether the large-region rejection supplies another physical Foam control before
@@ -287,10 +288,107 @@ acceptance test. After the answer, trace that component's existing predicate and
 prepare two-sided local mechanism controls. No Windows execution is needed for
 this checkpoint. O2 remains open and W5/O3 entry remains gated.
 
+## Sample2 component reply with reflection qualification
+
+The user provided three statements in order on 2026-10-06:
+
+> 주황 : 테두리 구조물
+> 보라 : foam 영역의 일부
+
+> 보라의 하단 일부는 glass표면 반사 영역인듯
+
+> 전부 foam 영역에 포함되는데 glass 반사를 가리키고있는듯
+
+C1 is attributed to the glass rim. C2 lies inside the Foam region, but the user
+suspects that the detected feature includes glass-surface reflection, especially
+in some lower portion. **Being inside Foam is not proof that the detector's
+support identifies Foam.** Preserve that distinction and the tentative wording;
+do not label all C2 pixels pure Foam, all C2 reflection, or an exact lower strip
+as a reflection mask. No subregion coordinates or exact Foam–air front were given.
+The prior pink Oil-surface / cyan internal-Foam-gap correspondence is unchanged.
+
+The ordered statements and complete captured C1/C2 rows are saved outside the
+capture as `sample/output/s11-local-foam-component-capture-001-notes/reply-002-sample2-components.json`.
+SHA-256: `ec3bec91aeeee3518d8f3846ba558d64c20b5f672834e07bd01d9ffeb400b884`.
+They bind frame 30, record `f000000030_b788d0b7ca16`, run
+`d4647dff-7845-4966-af50-432edf87d994`, Glass
+`0aff9b80-002e-54e1-b1a3-fff1ec97a183`, and the capture, trace, guide and exact
+component-raster hashes. Formal labels and pixel/scalar truth are not created.
+
+### Existing sample2 predicate replay
+
+Read-only geometry replay on source `592d1cb` identifies a different route from
+sample4. C2 is not structural and has no structural substrate. The layer-size
+requirements pass (area 0.48580, height 0.59706, width 0.77941), but
+`_has_one_sided_layer_occupancy` fails. With the helper's unchanged bounding-box
+normalization and float32 arithmetic, the top and bottom 68-row thirds have
+occupancies 0.6032186747 and 0.5704218149. Their concentration ratio is
+**1.0574958020**, below the existing 1.30 requirement; the dominant-occupancy
+minimum 0.20 passes. The fallback droplet route also fails height and width limits.
+Thus phenotype remains `none`, bottom-connected support is false, shape fails,
+and the recorded score 0.79014 still yields `weak_rejected`.
+
+C1 is `ambiguous`, not algorithmically `structural=true`; its small area/height
+and absent strong appearance fail qualification. The component ordering gives
+ambiguous C1 priority over weak C2, but C2 already lacks a qualified phenotype
+before ordering. Changing selection order alone would not create valid evidence.
+The result publishes no Foam candidate from either region.
+
+This establishes the code reason, **not a certified pure-Foam false negative for
+C2**. Lowering the concentration threshold would accept a different family of
+shapes without resolving the suspected optical contamination. Its current support
+minimum Y=340 also cannot be promoted to a Foam–air front from the material reply.
+
+Replay output: `sample/output/s11-local-foam-component-capture-001-notes/sample2-causal-replay.json`.
+SHA-256: `83334780a03470eba9d3770b863dc49e48a6cc77c2d0c9f5d7524e0d1c1913f8`.
+Seven read inputs and all 87 capture outputs retain their hashes. No detector,
+video decode, gradient, threshold ablation or prediction run was performed.
+
+## Local repair controls prepared from the component reviews
+
+The two component reviews are complete at their stated scope; no repeated
+material question is needed. They establish the following different control roles:
+
+| Control | Human basis | Existing failure/guard | Required interpretation in a future experiment |
+|---|---|---|---|
+| sample4 C2 | Foam material | Structural bounding-box relation erases detached phenotype | Positive material-support regression; exact front and temporal publication remain unproven |
+| sample4 C1 | Glass rim structure | Structural predicate rejects it | Retain negative; no broad removal of the structure guard |
+| sample2 C1 | Rim structure | Small/weak region remains ambiguous with no candidate | Retain non-authority; high-priority diagnostic selection is not a correct material selection |
+| sample2 C2 | Inside Foam; suspected reflected feature in lower portion | Layer concentration fails; broad support has mixed interpretation | Mixed/unknown support challenge, not a pure positive or pure negative training label |
+| base_sample_1 marked Foam path | Human Foam–air path observation | No captured support in that path range | Missing-support case; accepting other components cannot repair it |
+
+The next local mechanism investigation is bounded to **structure association and
+separate material/front eligibility**, reusing the current Foam owner. Compare
+actual per-column support placement with the existing bounding-box substrate
+association, and expose contact/overlap/unobserved support as geometry facts, not
+physical labels. This is a testable hypothesis to investigate, not an adopted
+rule that negative box gaps are harmless. The mixed sample2 component must remain
+an explicit challenge rather than a target to force through the shape gate.
+No scalar may be synthesized from a component top/bottom just because some of
+its material is Foam.
+
+Existing controls to retain before any behavior candidate: detached white Foam,
+warm tapered layers, white/warm layers over a structural substrate, hollow rims,
+filled regions, vertical/horizontal/grid/random warm structures and textured
+panels in `tests/test_foam_evidence.py`. Add generic geometric arrangements for
+box overlap without justified substrate association and for real structure-adjacent
+artifact support, across translations/scales, before selecting a replacement.
+Those controls test a proposed mechanism; their synthetic appearance is not new
+real-image physical truth. Keep Oil admission/selection, temporal gates and final
+publication unchanged during this investigation. Inspect the named real controls
+at the material-support level before any scalar or effectiveness claim.
+
+No runtime repair is selected or promoted by these two replies. A behavior
+proposal must show how it distinguishes the mixed/reflective case and preserves
+the known structural negatives, then satisfy its owned validation scope. This
+follow-up closes component attribution and prepares the two-sided comparison;
+Windows execution and additional human review are not currently needed for the
+local geometry investigation. `FIELD FAIL`, O2 open and W5/O3 gated remain.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F04`, `S11-F06`, `S11-F09`, `S11-F10`
-- First harmful stage: sample4 human-positive C2 loses its detached phenotype through the bounding-box structural-substrate veto, then fails spatial shape qualification before temporal confirmation. C1 is a human-confirmed rim negative. Other component identities and completed-window Oil first loss remain unmeasured.
+- First harmful stage: sample4 human-positive C2 loses its detached phenotype through the bounding-box structural-substrate veto, then fails spatial shape qualification before temporal confirmation. C1 is a human-confirmed rim negative. Sample2 C2 fails one-sided layer occupancy but has suspected reflection within a Foam region, so pure-Foam failure is unestablished there. Completed-window Oil first loss remains unmeasured.
 - Logic-map impact: NONE — this follow-up attributes saved components and identifies an existing predicate; the previously documented diagnostic seam and runtime decision owners are unchanged.
 - Failure-registry impact: NONE — existing identity, independent-series and current-versus-final guards apply; no new failed mechanism or threshold repair is asserted.

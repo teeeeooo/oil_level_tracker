@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 component attribution is the next human checkpoint; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; two-sided local structure-association controls are prepared; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -165,16 +165,24 @@ gate. The saved-mask/helper replay preserves all 87 capture outputs. This ground
 a spatial failure; it does not validate disabling the structure guard or an
 exact Foam-front coordinate.
 
-Current checkpoint: user attribution of sample2/30 orange C1 (small right-rim
-support) and purple C2 (large interior support) in the prepared four-panel
-`sample/output/s11-local-foam-component-capture-001-notes/sample2-components.svg`.
-Accept mixed/uncertain answers. Preserve the previous pink Oil / cyan Foam-gap
-path judgments. The new component attribution determines whether the large-region
-shape rejection is another physical Foam failure to cover in a generic repair.
-Then prepare two-sided controls retaining sample4's rim rejection and independent
-Oil/Foam authority; do not insert private component/coordinate exceptions. No
-Windows execution is needed now. Runtime behavior, formal O2 truth, FIELD FAIL
-and W5/O3 entry are unchanged.
+The [sample2 component reply and geometry replay](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md#sample2-component-reply-with-reflection-qualification)
+close this human checkpoint: C1 is rim structure; C2 is inside the Foam region,
+but the user suspects reflected glass features, especially in its lower portion.
+Do not collapse scene material into detected-feature identity or create a pure
+Foam mask. C2 passes layer size but fails one-sided occupancy (ratio 1.05750
+versus existing 1.30); the droplet fallback also fails. This is a code cause,
+not proof that the entire mixed component should be accepted. Original replies,
+Oil/Foam path judgments and all 87 capture outputs remain preserved.
+
+Next local action: the [prepared two-sided control matrix](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md#local-repair-controls-prepared-from-the-component-reviews)
+owns the bounded structure-association investigation. Compare actual support
+geometry against the bounding-box substrate rule; keep sample4 Foam material,
+both rim negatives, sample2 mixed support and base missing support distinct.
+Material identity does not establish an observable Foam front. Reuse the existing
+Foam owner and structural negative tests; no blanket concentration relaxation,
+private-coordinate exception or mask-edge scalar is selected. No repeated human
+material question or Windows execution is required for this investigation.
+Runtime behavior, formal O2 truth, FIELD FAIL and W5/O3 entry are unchanged.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential
