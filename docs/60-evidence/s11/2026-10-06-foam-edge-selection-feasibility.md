@@ -139,3 +139,123 @@ is claimed. FIELD FAIL and the independent-recording requirement remain unchange
 - First harmful stage: a mixed component top precedes any reliable physical-front selection; the sampled B alternative is retained, but appearance-only choices lack identity and cannot establish a repaired front.
 - Logic-map impact: NONE — saved-JSON rule audits and original-image review have no production caller or decision authority.
 - Failure-registry impact: NONE — no motion-only identity, geometry-as-identity or private-coordinate shortcut is promoted; existing recurrence guards apply.
+
+## Two-time human clicks preserved and same-frame capture — 2026-10-06
+
+The user placed points in the existing Safari viewer and explicitly asked to
+continue. Safari's selected page text exposed the complete JSON; it was parsed
+without OCR and compared to the saved arrays in original order. Both comparisons
+passed (22 clicks at420 and38 at480). The original viewer was not reloaded or
+cleared. Capture is a supplemental human correspondence record, not formal O2
+truth or a complete contour.
+
+| Frame | Raw clicks | Unique XY | Unique X | Marked source Y range |
+|---|---|---|---|---|
+| 420 /14s | 22 | 22 | 22 | 844–846 |
+| 480 /16s | 38 | 35 | 34 | 835–844 |
+
+At480, (575,838), (593,840) and (595,842) each occur twice. X577 has both
+Y837 and838. All clicks, duplicates, order and alternatives remain in the raw
+reply. No averaging, nearest winner, interpolation or click tolerance was added.
+The14 exact common X locations have source-coordinate differences Y480−Y420
+from−8 to−1px. Within B, the only common X values are583 (−6px) and587 (−5px).
+These are sparse human-marked location differences, not material flow, velocity,
+calibrated localization errors or camera-corrected motion. Existing whole-ROI
+registration estimates are retained as context and not applied to human labels.
+Frame450's tentative screenshot mapping remains a separately attributed record.
+
+The correspondence audit preserves132 input files, including original review
+inputs and the saved temporal report. The click record closes the two-time
+Foam-location question; do not ask the user to draw these points again.
+
+### Bounded current-frame diagnosis
+
+Executed source: `7fa7e343c48d4dbbbb6159f9cd52dad96931a6f1`, unchanged production
+files. The local harness and source-file hashes are pinned in the new capture.
+
+Saved review PNGs did not contain current-frame detector candidates at420/480.
+Reuse the existing local capture harness's production entry path:
+`_load_cases` for the unchanged sample4 recipe, `OpenCvPhaseDetector.detect`,
+`JsonlDebugTraceWriter` FULL output, and `extract_frame`. The new local harness
+reads exactly these two full source frames with fresh detector state per frame;
+there is no sequence replay, learning, completed-window resolution or human-point
+input to detection. This step **does include two source-frame decodes and detector
+calls**; it is distinct from the preceding saved-data-only correspondence audit.
+
+Both decoder indices/timestamps match420/14s and480/16s. Each decoded ROI and
+actual detector `original_roi` is pixel-equal to the already reviewed saved PNG.
+Source origin[543,798] and104×104 shape match. All139 inputs and the captured source
+file hashes are unchanged. There are56 hashed capture outputs plus the receipt.
+The existing front-alternative runner then measures every retained component
+with unchanged radii4/8, preserving57 capture files; all9 components are retained.
+No runtime code, threshold, label or selected behavior was edited.
+
+| Frame | Component | Spatial status | Selected spatially | Source box | Score |
+|---|---|---|---|---|---|
+| 420 | C1 | weak_rejected; structural=true | yes, best rejected component | [552,845,631,889) | 0.908777 |
+| 420 | C2 | weak_rejected; substrate=true, shape_ok=false | no | [570,840,620,853) | 0.732141 |
+| 480 | C1 | accepted_strong; structural=false | yes | [585,862,631,889) | 0.840447 |
+| 480 | C2 | accepted_strong; detached_droplet, substrate=false | no | [570,833,611,850) | 0.742296 |
+
+Component IDs are local to each frame, not tracked physical IDs. At480, both C1
+and C2 pass spatial admission and the existing ordering chooses C1. Its first
+support pixel at the23 unique human XY points with matching X is31–39px below
+the marked boundary. At420, C1's corresponding difference is26–35px below at
+all22 points. Its scalar top alone is misleading:420 C1's global Y845 happens
+to equal much of the marked boundary while its actual same-X top is far below.
+Do not use a component's global minimum Y as proof of path correspondence.
+
+At420 C2 has same-X support for22/22 unique clicked points; its top exactly
+matches4 and its radius8 alternatives contain12. At480 C2 has same-X support
+for29/35 unique clicked points, top matches3 and radius8 alternatives contain8.
+The other six points have no C2 support column; all other components remain in
+the report. These are exact integer membership descriptions of approximate human
+points, **not** calibrated recall/accuracy or a reason to tune the window radius.
+Lack of exact peak membership does not mean the person selected a wrong boundary.
+
+Both frame records have null raw/smoothed Oil and Foam positions. At480 the
+current-frame Foam owner is `persistence_pending`, with one pending observation
+and two required. Thus this is a spatial selection discrepancy, not evidence of
+a published false Foam value or a completed-window failure. At420 the state is
+`weak_rejected`. Fresh-state static context is empty, so no claim is made about
+how a historically accumulated static model would behave.
+
+### Next bounded human check
+
+The new16s view keeps plain RGB beside actual C1/C2 support pixels and the user's
+red points. Orange C1 covers the lower curved rim-like region; this is an agent
+visual description. Its precise physical attribution at480 is not silently
+inherited from the previously reviewed frame450 C1. Ask whether this selected
+orange region is glass structure, Foam, mixed, or unclear. Do not request a new
+Foam contour or classify all cyan C2 pixels as pure Foam. This check distinguishes
+an admitted structural competitor from a differently located material region
+before designing a replacement for the spatial structure/selection mechanism.
+
+The first Safari-open attempt returned a locked-Mac tool error; the user reported
+the Mac was not locked. Reconnecting succeeded and the new tab was opened and
+visually verified, while the original point-review tab remained intact. A static
+side-by-side PNG was also generated and visually inspected. The local HTML
+viewer provides independent overlay toggles. The earlier click data is
+already saved, so browser state is no longer its only copy. Windows execution is
+not needed at this checkpoint. No broader field replay or R2/O3 entry follows.
+
+### New local artifact pins
+
+All private pixels and detailed JSON remain under `sample/output/`.
+
+| Artifact | SHA-256 |
+|---|---|
+| `s11-local-foam-two-time-review-001-notes/clicked-points.json` | `b1a9006f9649d07409a492ce610d26cb800935d419777ce30cf4307be032e4e9` |
+| `s11-local-foam-two-time-review-001-notes/reply-001-boundary-correspondence.json` | `1386d7326f5e6c77a1e7eb4bd59f83db9505005808b36d5a8818e26966a9421e` |
+| `s11-local-foam-two-time-review-001-notes/correspondence-audit.json` | `661e734185bbcb026c8ce0cca777c3d14b1b7da5fb377a909502f8f44414a478` |
+| `s11-local-foam-two-time-capture-001/receipt.json` | `364250b530ded1120137a9d3d280ff480329cfa6fa5be4d9c91fa78a965e3b00` |
+| `s11-local-foam-two-time-capture-001-notes/report.json` | `5128a650c92fab0ac04bd09e2830d3706c17fd1ac4641263ba47fff93527bb4d` |
+| `s11-local-foam-two-time-capture-001-notes/receipt.json` | `729bb115240689203e7d62365b8ab8a086bf4c8b5007fe6f40cf5684cceaba36` |
+
+The new capture's scope/source/code hashes are in `capture.json` and `capture.py`;
+the comparison report pins66 files. `render-receipt.json` separately pins the
+static preview and rendering script. Original captures/reviews and Windows
+75-candidate target truth remain unchanged. The Detector Governance block above
+applies: actual same-X support and admission precede spatial selection; this new
+capture exposes a discrepancy without assigning physical identity or changing a
+runtime owner. FIELD FAIL / NOT_EVALUATED remains unchanged.

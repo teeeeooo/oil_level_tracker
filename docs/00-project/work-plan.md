@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 circular structures are human-confirmed; registered residual comparison is complete without identity promotion; A/C/D follow Foam, while B mixes a left/lower Foam edge and right/upper central structure; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 circular structures are human-confirmed; registered residual comparison is complete without identity promotion; A/C/D follow Foam, while B mixes a left/lower Foam edge and right/upper central structure; the14s/16s human clicks are saved; two exact current-frame captures reveal a lower C1 spatial-selection discrepancy at16s, pending candidate-bound attribution; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -239,13 +239,24 @@ positions. Minimum-variation membership contains all11, but diverges from prior
 Foam-path context in A/C/D and also exists on confirmed rim negatives. No
 appearance-only rule, new weight or larger-window acceptance is promoted.
 
-Next human checkpoint: identify the actual Foam upper boundary near the central
-structure on exactly two already saved original frames,420/14s and480/16s.
-Anchor450's tentative annotation is displayed only on450. This supplies missing
-temporal front correspondence, not another structure-identity question; occluded
-or unclear replies remain valid. The viewer is prepared with source coordinates
-and optional temporary click points. No additional decode or Windows execution
-is needed. Runtime behavior, formal O2 truth, FIELD FAIL and W5/O3 remain unchanged.
+The [two-time human reply and same-frame diagnosis](../60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md#two-time-human-clicks-preserved-and-same-frame-capture--2026-10-06)
+close the14s/16s location checkpoint: 22/38 browser clicks are preserved without
+OCR, interpolation or removal of duplicates. At14 shared X positions the16s
+marks are1–8px higher; these are approximate location differences, not flow truth.
+Two bounded fresh-state detector captures reproduce the reviewed ROI pixels
+exactly and preserve139 inputs. At16s both C1 and C2 pass spatial admission, but
+lower C1 wins the score ordering; its same-X support is31–39px below the human
+marks. Current-frame state is persistence_pending and public Foam remains null.
+At14s C1 is structural/weak_rejected and C2 fails the substrate/shape gate.
+Component IDs do not establish physical continuity across these frames.
+
+Next human checkpoint: identify the16s selected orange C1 in the prepared
+original/support/marked-point comparison as structure, Foam, mixed or unclear.
+The prior15s rim attribution is not automatically transferred. The new HTML is open and visually verified in Safari, with a static PNG backup.
+Do not repeat the completed two-time boundary clicks or infer pure C2 material.
+No Windows execution is needed. Runtime, formal O2 truth, FIELD FAIL and W5/O3
+remain unchanged; spatial admission/competition needs candidate-bound physical
+opposition before any repair is promoted.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential
