@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); candidate-guided clarification starts with sample2/30; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); sample2/30 Oil target versus Foam-gap correspondence is recorded; sample4/450 is next; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -110,18 +110,26 @@ arrival is not a blocker for preparation or implementation investigation.
 
 The [three-frame local capture](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md#three-frame-current-candidate-capture--completed)
 is complete for base_sample_1/156, sample2/30 and sample4/450: 76 Oil proposals,
-20 native paths, all unreviewed. Exact frame/time, raw/witness joins and 12 input
+20 native paths; two now have supplemental human correspondence, 74 remain
+unreviewed. Exact frame/time, raw/witness joins and 12 input
 hashes pass. This is isolated current-frame extraction with fresh detector state,
 not a temporal replay or efficacy evaluation. Paired original/path SVGs and an
 interactive local viewer are ready; full browser visual QA was unavailable.
 
-Next receive the user's candidate-guided explanation for sample2/30 cyan idx10
-and pink idx12, including partial/uncertain correspondence and uppermost target
-role. That concrete question is pending; do not infer the answer from legacy
-Y=592 or assign labels merely by proximity. The other two cases remain prepared;
-do not demand review of all 76 proposals or recapture the same frames. Preserve
-all 13 usable historical scalar observations and the separate Foam truth. No
-Windows execution or independent-video delivery is needed for this review.
+The [sample2 reply](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md#sample2-human-correspondence-received)
+is recorded: pink idx12 is the actual Oil surface and tracking target; cyan idx10
+follows a gap within Foam, not a reflection or the Oil target. This is an Oil/Foam-gap
+contrast; the hypothesized optical-reflection counter-control is not established.
+The user requires Oil and Foam to be displayed separately in final results.
+No Foam-front coordinate or per-sector path judgment was assigned. Exact reply /
+frame / witness / guide linkage is preserved outside the immutable capture;
+formal O2 labels/target binding for this raw capture has not been created.
+
+Next obtain the already-prepared sample4/450 cyan idx10 versus pink idx11
+correspondence and target role. Colors and indices are case-specific. Preserve
+all 13 historical scalar observations, independent Foam truth and the remaining
+unreviewed candidates; no repeat capture, all-candidate review, Windows execution
+or independent-video delivery is needed for this bounded clarification.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential

@@ -1158,6 +1158,11 @@ UNKNOWN_REVIEW
 최상단 목표가 가려졌거나 불명확할 때 보이는 하단 경계로 대신하지 않는다.
 FULL/EMPTY의 no-interface 상태와 UNKNOWN, same-frame provenance 계약은 유지한다.
 Foam front는 아래의 별도 정의·출력을 유지하며 Oil 출력과 합치지 않는다.
+사용자 추가 명확화(2026-10-06): Oil과 Foam이 함께 보일 때 실제 Oil 유면과
+Foam을 구분하고, 최종 결과에도 두 출력을 별도로 표시한다. Foam 내부의 틈이나
+기포 사이 경계가 더 높은 위치에 있다는 이유로 Oil의 최상단 목표로 선택하지 않는다.
+Foam 내부 특징을 Oil 비대상으로 판독했다고 해서 그 특징이 Foam front 정답이
+되는 것은 아니다. Foam front의 위치·유효성은 11.7의 별도 정의를 따른다.
 이 명확화 자체는 기존 detector가 이 선택을 구현·검증했다는 의미가 아니다.
 
 ## 11.7 Foam Front 정의

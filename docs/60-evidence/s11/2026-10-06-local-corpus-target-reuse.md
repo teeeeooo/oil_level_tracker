@@ -172,6 +172,48 @@ HTML are supplied for user inspection. No image generation or pixel retouching
 was used; guides place vector lines over unchanged source pixels. No efficacy,
 independent holdout, R2 entry or field acceptance follows from this capture.
 
+## Sample2 human correspondence received
+
+The user directly reviewed `sample2/30` with the supplied pair guide:
+
+> 분홍색 : 실제 유면 경계
+> 청록색 : foam 사이의 약간의 간격
+>
+> 오일<->foam은 구분 되어야함
+> 여기서 추척할건 분홍색 라인, 단 최종 결과에는 foam도 구분되어서 표시되어야함
+
+| Candidate | Whole-candidate human interpretation | Oil target role |
+|---|---|---|
+| idx12, pink, native path Y=[589,604,601,582,590] | Actual Oil surface boundary (`interface`) | `target` |
+| idx10, cyan, native path Y=[432,425,420,414,407] | Small gap within Foam; not the Oil interface (`non_interface` in this review scope) | `other_non_target` |
+
+This supersedes the preparation hypothesis that the cyan path might be the
+reflection mentioned in historical notes. The old note is preserved, but it does
+not label this candidate. The selected pair is now a human-reviewed Oil-surface /
+Foam-gap contrast, **not an established reflection counter-control**. It does not
+satisfy every missing optical-counter-control or independent acceptance condition.
+
+The target is specifically the pink Oil line. Oil and Foam must remain distinct
+and appear separately in final results, consistent with the clarified product
+contract. A gap inside Foam is neither an Oil target nor automatically a confirmed
+Foam-front candidate. No new Foam front coordinate, per-sector near/off judgment,
+contour, scalar tolerance, entity ID or all-candidate label is inferred.
+
+Attribution is saved outside the immutable capture in
+`sample/output/s11-local-candidate-review-001-notes/reply-001-sample2.json`,
+SHA-256 `e052cac54584b23ff03deafd863f781c7f064efa623c09846ba228d60cb9ea26`.
+It binds the exact user text and interpretations to capture/guide byte hashes,
+new run/record/frame/Glass identity and each full candidate witness hash. This is
+an attributed local reply, not a newly minted standard O2 labels/target snapshot.
+The original 87 capture outputs were rehashed unchanged; original scalar truth
+and Windows labels are untouched. No detector, model or image extraction reran.
+
+Two of the 76 candidates now have this supplemental human correspondence;
+74 remain unreviewed. Next use the already-prepared `sample4/450` guide (cyan idx10,
+pink idx11) to clarify the actual Oil versus Foam feature and its target role.
+Do not reuse the sample2 colors or index meanings across cases. A new review of
+all 76 proposals is not required. Runtime behavior and `FIELD FAIL` remain unchanged.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-PROJECTION`
