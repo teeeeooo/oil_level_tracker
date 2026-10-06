@@ -385,6 +385,67 @@ follow-up closes component attribution and prepares the two-sided comparison;
 Windows execution and additional human review are not currently needed for the
 local geometry investigation. `FIELD FAIL`, O2 open and W5/O3 gated remain.
 
+## Actual column support versus bounding-box relation
+
+The [offline column probe](../../20-architecture/s11-foam-component-diagnostics-architecture.md#offline-retained-support-column-probe)
+is implemented separately from production decisions. Repository-wide source
+search found the production box helper but no retained-mask column relation owner;
+the new test/diagnostic module owns only the comparison. It measures exact source
+pixel geometry and visibility without a classifier or new gap cutoff. Seventeen
+focused tests pass, including two references with identical bounding boxes but
+distant versus close actual support, translations/scales, masked gaps, missing and
+lateral support, interleaving, crop boundaries and saved uint16 PNG loading.
+
+Read-only output: `sample/output/s11-local-foam-support-geometry-001/`.
+`report.json` SHA-256:
+`92b9f1ae34afd644a94b32672a2369a56b80ed4fa0f82c9d823b45bb26b8a894`.
+The custom receipt is `MEASUREMENT_COMPLETE_NOT_EVALUATED`, with four hashed
+outputs plus receipt (runner, report, summary, review SVG). Source base is
+`be26fca`, with the uncommitted probe's exact SHA retained in the report; this
+is not an exact-head detector replay. Twelve read inputs and all 87 original
+capture outputs are hash-preserved. No video, detector or segmentation was run.
+
+| Case, C2 relative to C1 | Shared columns | Signed box gap | Fully visible below-support columns | Actual below gap | Within existing ROI gap bound |
+|---|---:|---:|---:|---|---:|
+| base_sample_1:156 | 0 | 26 | 0 | null | 0 |
+| sample2:30 | 0 | −91 | 0 | null | 0 |
+| sample4:450 | 48 | −4 | 48 | 22–29 px | 0 |
+
+The current sample4 ROI-derived bound is 12 pixels. All 48 C2 columns contain
+C1 pixels below them, but the actual gaps exceed that bound. No C1 pixels occupy
+C2's per-column Y extents. The old box relation sees C1's higher side geometry
+and declares a substrate; its negative box gap is not the measured vertical
+pixel gap. This is direct geometric evidence of an overly broad association in
+this human-positive Foam example, not evidence of physical contact or an already
+validated replacement. The synthetic close-arm control shows why simply dropping
+all negative-box-gap cases would be unsound: the same boxes can contain nearby
+reference support. Neither proximity nor separation determines material identity.
+
+The other two pairs have no common support columns. That supplies no distance
+measurement and does not settle their material identities. In particular,
+sample2 C2 remains a Foam-region support with suspected glass reflection; the
+probe does not split it into a pure Foam mask or force it through the failed
+concentration gate. Base's support absence near the reviewed front is unchanged.
+
+### Next human checkpoint: support edge versus Foam–air boundary
+
+A three-panel guide, `sample4-top-review.svg` in that output directory, shows
+unchanged RGB, the previously reviewed cyan Oil / pink Foam–air paths, and C2
+with **yellow first-support pixels per column**. Only retained C2 columns are
+shown; no interpolation, center adjustment or scalar winner is added. Guide
+SHA-256: `faf15a299a8cb33ef0c19ab29645267239f7dae36f6c0ecc1dbb36517cf0af9e`.
+The complete three-panel Quick Look rendering was inspected; its preview is
+stored separately in `s11-local-foam-support-geometry-001-notes/`.
+
+The remaining question is whether these yellow pixels follow the physical
+Foam–air top, or parts follow internal Foam texture, reflection or rim instead.
+The prior statement that C2 is Foam does not answer this localization question.
+Allow approximate/mixed/uncertain feedback rather than forcing an exact contour.
+Do not ask the user to reconfirm cyan/pink identities or derive pixel-accurate
+truth from a whole-guide response. This is the next user-dependent step; Windows
+is not needed. Runtime substrate/shape gates, current Foam-front selection,
+Oil authority, temporal composition and all formal truth remain unchanged.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `TRACE-PUBLICATION`

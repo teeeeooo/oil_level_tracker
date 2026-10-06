@@ -60,6 +60,46 @@ explain what the detector computed, not which component is actual Foam. Human
 correspondence can remain unresolved, and a changed classifier requires its own
 plan and acceptance.
 
+## Offline retained-support column probe
+
+`tests/diagnostics/s11_foam_support_geometry.py` adds an offline read-only probe
+of two retained raster IDs and the same ROI's effective mask. It is not imported
+by production code. Existing detector helpers still own substrate decisions; this
+probe records actual pixel geometry rather than implementing a replacement gate.
+It validates a nonempty uint16 label raster, same-shape boolean visible mask,
+distinct nonzero IDs and an integer source origin, and rejects support outside
+the supplied mask. The input bound is 4,194,304 pixels; state is frame-local.
+
+For every target-bearing column it records target/reference extents, reference
+pixels within the target Y extent, nearest reference below the target's final
+pixel and above its first pixel, strict intervening-row counts, and corridor
+visibility. Interleaving is retained separately; a same-column outer gap is not
+proof of no inner support. Source boxes are half-open; pixel coordinates and
+gaps remain exact. Translation changes source coordinates only; nearest-neighbour
+raster scaling scales geometric gaps, without creating an invariant classifier.
+
+Missing reference/target IDs and missing same-column endpoints remain explicit;
+null gaps are never zero. Geometric gaps across masked corridors are retained
+but excluded from fully-visible summaries. No support in a retained column is
+not proof of physical absence; a complete effective-mask corridor is not proof
+of optical transparency. Truncation/provenance remain the saved-capture loader's
+responsibility. The bounded local runner rejects truncated captures and validates
+raster IDs, boxes, pixel counts and before/after input hashes.
+
+All outputs carry NOT_EVALUATED, UNRESOLVED physical identity and unassigned
+substrate/front. No winner, threshold, physical association, material segment or
+scalar is produced. Optional display of each column's first support pixel is a
+human-review aid, not a contour fitted between columns. No raster-top or bottom
+becomes a Foam front by appearing in the diagnostic. Reuse this probe only with
+explicit capture provenance; it does not decode media or reopen the detector.
+
+Validation: same-box U-shaped references with distant versus close internal arms;
+translated/scaled placements; masked corridors; lateral/missing references;
+interleaving and zero gaps; crop-edge support; uint16 PNG round-trip and malformed
+inputs. These are geometry controls, not synthetic physical identity labels.
+The three saved Mac frames provide attributed regression context, not holdout
+validation or a behavior promotion.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
@@ -68,5 +108,5 @@ plan and acceptance.
 - Prior mechanisms rejected: no restoration of rejected Foam authority, geometry-as-identity, blanket material veto, lowering thresholds or using human coordinates in runtime.
 - Preserved contracts: independent Oil/Foam owners, same-frame source provenance, fail-closed publication and unchanged temporal/sequence decisions.
 - Difference from prior failures: capture computed rejected evidence in a bounded non-authoritative sidecar; no decision owner consumes it.
-- Logic-map impact: UPDATED — documents the optional component sidecar and lossless debug raster route.
+- Logic-map impact: NONE — the offline saved-raster probe has no production caller; previously documented component capture and decision ownership remain unchanged.
 - Failure-registry impact: NONE — existing failure classes and guards apply; no new behavior mechanism or efficacy claim.
