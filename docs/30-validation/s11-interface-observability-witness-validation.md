@@ -682,12 +682,68 @@ flags. Run shared input-failure guards in both modes; color/gray mismatch and
 input mutation during measurement/publication must leave no COMPLETE receipt.
 Retain existing spatial-source and default joint regressions.
 
-Windows measurement is pending until the bounded source procedure actually runs.
+The color-side Windows run and saved-value corrections were received as attributed
+evidence; see the [completed assessment](../60-evidence/s11/s11-o2-color-side-local.md#added-information-assessment-and-measurement-disposition--2026-10-06).
+This measurement is CLOSED WITHOUT PROMOTION, not a pending repeat run.
 Report all predeclared primary sectors/widths/near-far pairs and unavailable
 states, without choosing a favorable channel or aggregating labels into a score.
 Review-003 idx10/15 is the main descriptive contrast; BASE idx11 is censored
 supporting evidence and idx0/20 remains a human-unresolved control. No measured
 separation alone grants physical identity, W4-R2, O2 acceptance or field PASS.
+
+## Candidate-conditioned region competition controls
+
+The [frozen prototype](../20-architecture/s11-interface-observability-witness-architecture.md#w4-candidate-conditioned-region-competition--prototype-contract)
+implements fixed raw-pixel appearance models. Synthetic appearance controls and
+future physical-identity controls must be reported separately.
+
+| Control | Required result / falsification |
+|---|---|
+| Equal-gray chromatic arrangement with identical full color-side output | Demonstrate the band/column reduction collision; a future raw 2-D model must expose the changed arrangement rather than reread identical summaries |
+| Achromatic two-sided boundary, both polarities | Color must not become a mandatory interface cue; adding channels must not rescale the gray decision by channel count |
+| Smooth illumination ramp vs two-sided region vs returning ribbon | Same support and declared model capacity; report appearance explanations, not synthetic appearance names as physical truth |
+| Coherent reflected/structural step vs Oil with identical supplied pixels/context | Unresolved physical identity; no geometry/brightness/color certificate |
+| Partial true path and isolated artifact with equally strong local evidence | Preserve support and opposition geometry; no max, majority or center-line identity shortcut |
+| Glare/mask gap through an apparent boundary; return beyond crop | No region bridge or inferred termination; censored evidence stays censored |
+| Artifact template crossing a real boundary; stationary interface | Neither static overlap nor template match becomes a blanket negative label |
+| Original bands vs enlarged envelope; gray vs BGR | Attribute any benefit to the correct support/model/color change, using the full factorial comparison |
+| Unequal edge support, alias centers and overlapping widths | Same valid pixels per ablation; no sample multiplication or independent-vote claim |
+
+Executable controls now reside in `tests/unit/test_s11_region_competition.py`:
+
+- Held-out residual distinguishes affine ramp, signed partition and both fixed
+  ribbon widths on noiseless synthetic fixtures in both intensity polarities.
+- Achromatic BGR and gray have equivalent losses within floating-point tolerance;
+  equal-gray chromatic steps are representable only by the BGR comparator.
+- The full-color-side-output collision has different raw within-side horizontal
+  adjacency. This is a representation/appearance distinction, not Oil accuracy.
+- Hidden pixels cannot affect errors or adjacency; band gaps are not bridged;
+  changing only center-gap pixels changes envelope views but not band-only views.
+- Held-out pixels do not fit coefficients. Low split support, deficient rank,
+  O1 unavailable and crop clipping remain explicit with null model fits.
+- Opposite physical interpretations, static/template metadata and selected/
+  rejected hints cannot alter fits. Actual optical opposition is not measured;
+  this control preserves uncertainty, not detection of real structures.
+- Exact roles, separate points, aliases, all widths and factorial views survive
+  the real CLI. Receipt validation, source mutation failure, resources and
+  Unicode/non-repository cwd/closed stdin are exercised. No candidate pooling.
+
+The full physical matrix is **not** certified by these tests: real partial paths,
+weak/overlapped true boundaries, structure attribution and independent physical
+identity discrimination remain unvalidated. The synthetic model capacity is a
+shared affine plane plus a fixed offset, not a general segmentation algorithm.
+A ribbon outside the two frozen widths, curved illumination or crossing texture
+can fit poorly under every model. Do not tune widths or choose new thresholds
+from the first private report.
+
+Windows entry is only the [frozen saved-output evaluation](../40-operations/s11-o2-local-shadow-evaluation.md#region-competition--existing-saved-outputs).
+Return all model errors with support/censoring and all four ablations. If only
+gray changes explain the difference, credit spatial/support information, not
+color. If competing appearances remain shared or censored, report that result
+and close the bounded run. No smallest-error-to-identity rule follows.
+Actual identity evaluation must use W3 truth/abstention/coverage semantics and
+independent partitions required by O2 acceptance. The existing two frames supply
+no new holdout evidence; W4-R2 entry remains unmet.
 
 ## Detector Governance
 

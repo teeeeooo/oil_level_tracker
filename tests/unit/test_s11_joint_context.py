@@ -153,9 +153,9 @@ def test_saved_cli_unicode_nonrepo_cwd_all_hashes_and_npz(stored,tmp_path):
     with pytest.raises(ValueError,match='already exists'): run.run(root,out,expected_source_artifact=digest)
 
 
-@pytest.mark.parametrize('color_side', [False, True])
+@pytest.mark.parametrize('mode', [{}, {'color_side': True}, {'region_competition': True}])
 @pytest.mark.parametrize('fault',['hash','raw_identity','artifact','expected','schema','inventory','geometry','baseline','traversal','png_dimensions','inside','missing_center'])
-def test_saved_input_failure_guards(stored,tmp_path,fault,color_side):
+def test_saved_input_failure_guards(stored,tmp_path,fault,mode):
     root,digest=stored;out=tmp_path/'failure';path=root/'experiment.json';report=o2.read_json(path)
     if fault=='hash': (root/'gray.png').write_bytes(b'changed')
     elif fault=='expected': digest='0'*64
@@ -177,7 +177,7 @@ def test_saved_input_failure_guards(stored,tmp_path,fault,color_side):
         if fault=='traversal':
             r=o2.read_json(root/'complete.json');r['outputs']['../escape']='0'*64
             (root/'complete.json').write_text(json.dumps(r),encoding='utf-8')
-    with pytest.raises(ValueError): run.run(root,out,expected_source_artifact=digest,color_side=color_side)
+    with pytest.raises(ValueError): run.run(root,out,expected_source_artifact=digest,**mode)
     assert not (out/'complete.json').exists()
 
 
@@ -204,8 +204,8 @@ def test_viewer_data_cannot_break_script_context():
     assert '</script><script>bad' not in page and '\\u003c/script>' in page
 
 
-@pytest.mark.parametrize('color_side', [False, True])
-def test_two_cases_and_every_center_use_their_own_geometry(stored,tmp_path,color_side):
+@pytest.mark.parametrize('mode', [{}, {'color_side': True}, {'region_competition': True}])
+def test_two_cases_and_every_center_use_their_own_geometry(stored,tmp_path,mode):
     root,digest=stored;report=o2.read_json(root/'experiment.json')
     second=copy.deepcopy(report['cases'][0])
     second.update(case_id='second',glass_id='second-glass',frame_index=28)
@@ -214,10 +214,12 @@ def test_two_cases_and_every_center_use_their_own_geometry(stored,tmp_path,color
     second['baseline_witness']['observability'].update(glass_id='second-glass',frame_index=28)
     report['cases'].append(second)
     (root/'experiment.json').write_text(json.dumps(report),encoding='utf-8');reseal(root)
-    result=run.run(root,tmp_path/'two',expected_source_artifact=digest,color_side=color_side)
+    result=run.run(root,tmp_path/'two',expected_source_artifact=digest,**mode)
     assert len(result['cases'])==2
     assert [c['frame_index'] for c in result['cases']]==[27,28]
-    if color_side:
+    if mode.get('region_competition'):
+        assert [len(c['region_competition']['points']) for c in result['cases']] == [6, 6]
+    elif mode.get('color_side'):
         assert [len(c['color_side']['points']) for c in result['cases']] == [6, 6]
     else:
         assert [c['numeric_file'] for c in result['cases']]==['case-0-gradients.npz','case-1-gradients.npz']

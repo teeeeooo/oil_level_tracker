@@ -100,14 +100,395 @@ NOT_EVALUATED unchanged. [Validation owner](../../30-validation/s11-interface-ob
 and [canonical reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 continue to own acceptance and field interpretation.
 
+## Windows measurement report received — 2026-10-06
+
+The user returned the bounded `color-side-001` execution report and all three
+fixed CSV subsets (60 / 18 / 60 rows). Receipt/output/input checks below are
+**attributed Windows results**, not independent local rehashes: private files
+were not opened here. The user previously explained that chat transfers may
+use OCR; the Windows agent reads files directly. Do not attribute a transfer
+discrepancy to the underlying calculation without checking its saved values.
+
+### Execution and provenance as reported
+
+- Receipt and report schema: `s11-o2-color-side-v1`; receipt COMPLETE.
+- Color artifact: `3425f2db6f176ed52db382b4c2b4db4e94a6cccbf516e6270005ad8806815bcf`,
+  equal in receipt/report and equal to the local code/spec handoff fingerprint.
+- Source artifact: `6aaf5f3ff6c4e1314d08cb7effb745ff5b721c03940c57002214b039ef544910`.
+- Source receipt SHA: `8cd5458850df83c132ce1434d0025f34dc449ca8a0528042251676269a2724cb`.
+- Source experiment SHA: `08d05685f123fe526090121ead27655c62f1fa7eee59068bd3a65ec5608857d3`.
+- Three hashed outputs plus receipt (four files); all three output rehashes
+  reported equal to receipt, and all 32 inputs before=after=current bytes.
+- Reported output hashes: experiment
+  `d41602872696760457518e097d79016f0cff8fe32a44c4b35225a4559bc25788`,
+  summary `fc23ba60cb68f6dbfc9784eb06a63db3f89402b18244d2880bdc61baded7d76c`,
+  CSV `e1a0e3e6fadf83457b3301dba32fb8c13bf09f2a6dd300fbd3a74f742d29a277`.
+- No video/bundle/labels reopened; no detector, decode, label change or new
+  human judgment. FIELD FAIL / NOT_EVALUATED, auto_acceptance=false,
+  production_decisions_emitted=false and numeric_localization=NOT_MEASURED.
+- The return does not separately name the executed ZIP commit or individual
+  runner/probe hashes. Matching artifact identity is recorded above; no exact
+  executed commit is inferred from it.
+
+The report preserves review-002 f14386 / BASE / rev14 / 124 points and
+review-003 f16280 / Accum / rev4 / 158 points. Reported pair-state counts are
+479 observed + 265 unavailable + 0 no-paired = 744 for BASE, and
+701 + 247 + 0 = 948 for Accum. These equal points × 3 widths × 2 regions;
+they are correlated measurements, not independent samples or correct decisions.
+
+Detailed arrays and CSV subsets remain in Windows `color-side-001-notes/`:
+`color-side-detail.json`, `bundle-1-main-review-003-idx10-15-native.csv`,
+`bundle-2-aux-review-002-idx11-native.csv`, and
+`bundle-3-unresolved-review-002-idx0-20-center.csv`.
+
+### Bounded interpretation of the transferred rows
+
+- **Accum main comparison:** idx10 has 27 observed / 3 O1-unavailable pairs;
+  idx15 has 30 observed / 0 unavailable. All 15 idx10 near gray deltas are
+  negative (−50.351 to −5.340); idx15 near gray deltas range −0.105 to +8.286
+  (14 positive, one slightly negative). This is a descriptive difference on
+  these recorded supports, not calibrated transparency or an operating rule.
+  Far results vary with X/width: idx10 X=[1388,1473), BW6 far has gray +10.610
+  while its near is −30.935. Preserve both regions and all widths.
+- **Color contribution:** nonzero B−G/R−G side changes occur in both identities.
+  They show recorded chromatic variation; they do not establish added identity
+  discrimination over gray. No matched-gray physical counterexample, classifier
+  ablation or independent validation is supplied by these aggregate rows.
+- **BASE auxiliary negative:** idx11 has 8 observed / 10 unavailable pairs.
+  Its six observed near gray deltas are also negative (−38.405 to −8.646),
+  overlapping the Accum positive's near range. X=[130,236), BW8 far is −68.847.
+  Thus negative/large gray contrast is not specific to an interface. This is
+  a counterexample to a universal sign/magnitude claim, not a pooled task or a
+  same-Glass matched experiment. Unavailable values remain null.
+- **Unresolved BASE control:** idx0 and idx20 each have 18 observed / 12
+  unavailable pairs. Their vectors vary across X/width/region; numerical
+  differences do not resolve the user's physical ambiguity. Historical labels
+  are not promoted to certain opposite truth to fit those differences.
+- Per-candidate paired-column counts can differ even at the same X/BW. Each
+  row uses identical pixels across its channels; that does not imply identical
+  support between idx10 and idx15. Aggregate differences cannot establish
+  columnwise persistence, connectivity, or a physical boundary.
+
+### Initial transfer discrepancies (resolved below)
+
+1. The transferred summary says Accum baseline MATCH / **1812**; earlier
+   transferred prose and the handoff specified **1012**. The private source
+   bytes were not locally inspected to establish that earlier number. Read the existing color report's
+   `baseline_band_count` and source report's baseline count; do not silently
+   replace either value. Baseline counts differ from the 948 color-pair count.
+2. Accum idx10 / native_path / X=[1558,1643) / Y=220 / BW12 / near is transferred
+   as delta_B=−24.398, delta_G=−21.033, delta_B_minus_G=−3.357. Subtracting the
+   displayed B/G gives −3.365, a discrepancy of 0.008, beyond three-decimal
+   rounding. Return those three exact saved CSV values (and the corresponding
+   JSON pair only if needed); no new calculation window or measurement.
+3. The pasted summary omits the `Frame` header although each row includes it;
+   current `_write_color_outputs` emits the seven-column header including Frame.
+   Its status literal is `o1_unavailable`, not `01_unavailable`. Treat these as
+   transfer-format differences pending source text, not reasons to edit outputs
+   or modify the runner.
+
+### Saved-value confirmation received — 2026-10-06
+
+User attachment `56077.jpg` shows the Windows saved-file confirmation. Attachment
+SHA-256: `a12a4f403ed3d981b6479e775fbae7ee37431e2e3a7d67bd2d7db35d8f865f57`.
+This is an image of the Windows report, not direct local access to its CSV/JSON.
+
+- Review-003 `experiment.json`: `baseline_band_count=1812`,
+  `baseline_status=MATCH`; BASE remains 1416. The operational handoff's 1012 is
+  corrected to 1812. The runner requires reconstructed baseline equality with
+  the source report's entire `baseline_check` before publication, then copies
+  its count into the color report. Thus the reported successful run supports
+  source/count consistency; no new measurement or private rehash was performed
+  here. Earlier 1012/2428 prose is superseded for this source; the corrected
+  combined inventory is 3228 bands, not independent samples.
+- Exact saved CSV values for the specified Accum idx10 BW12 near row:
+
+  | Field | Reported saved value |
+  |---|---|
+  | delta_B | -24.389599193909543 |
+  | delta_G | -21.0327026421854 |
+  | delta_B_minus_G | -3.3568965517241445 |
+
+  Local arithmetic on these reported numbers gives exactly the reported B−G
+  (float difference 0.0). Three-decimal B is **−24.390**, not the originally
+  transferred −24.398. G=−21.033 and B−G=−3.357 were correctly rounded. No CSV
+  calculation inconsistency remains supported by this check.
+
+Both substantive intake questions are closed on attributed Windows evidence.
+The omitted Frame header and O1/01 lettering in chat remain presentation-only;
+the source generator owns those literals, with no output repair requested.
+Measurement execution/receipt review is complete on the transferred evidence,
+without identity promotion. Preserve all original outputs. No additional private
+media, user rejudgment, detector run or threshold selection is needed to close
+this intake. W4-R2 entry remains unmet.
+
+## Added-information assessment and measurement disposition — 2026-10-06
+
+Scope: the reconciled transferred rows, existing synthetic controls, measurement
+implementation and current candidate-identity acceptance contract. No private
+arrays were accessed, no score fitted, and no new Windows work was performed.
+
+### What was established
+
+The measurement retains chromatic degrees of freedom that a gray projection
+does not retain. The local equal-gray/different-BGR control demonstrates that
+representation difference. The Windows report establishes nonzero chromatic
+side differences in this private scene on the reported visible support.
+These are different claims: a nonzero opponent delta is not, by itself, a
+private equal-gray/opposite-identity control or proof that color repairs a
+detector failure. Production already has some color-derived masks/features;
+this finding applies to the specified gray side projection, not an assertion
+that the whole detector is color-blind.
+
+The following arithmetic covers **all 15 near rows per main candidate**
+(five X strips × three widths), using the transferred three-decimal values.
+Far rows remain separately retained and are not discarded from the evidence.
+Ranges describe correlated measurements; no threshold or candidate score is
+derived from their extrema.
+
+| Channel delta | idx10 range; positive/negative rows | idx15 range; positive/negative rows |
+|---|---|---|
+| gray | −50.351 to −5.340; 0/15 | −0.105 to +8.286; 14/1 |
+| B−G | −5.604 to +1.800; 6/9 | −1.103 to +2.029; 11/4 |
+| R−G | −0.651 to +5.292; 12/3 | −1.766 to +0.488; 3/12 |
+
+The main candidates differ already in the same-support gray component of this
+measurement. Thus showing their color difference cannot isolate an incremental
+color benefit. Both identities have positive and negative opponent deltas, and
+their one-dimensional ranges overlap. This rules out treating mere nonzero color
+or a universal opponent sign as physical identity; it does **not** prove that a
+multivariate color/geometry mechanism cannot work. Choosing a favorable X,
+width, sign count or vector norm after this result would create a new hypothesis
+requiring its own controls, not complete the present experiment.
+
+The color runner also changes the reduction relative to pixel-weighted O1 band
+means: it averages same-column differences with equal column weights. Any future
+gray-versus-color comparison must use this runner's gray channel with identical
+support, not attribute a changed weighting/denominator to color information.
+
+### Existing controls remain useful, with distinct roles
+
+| Control | What it supplies | What it cannot establish |
+|---|---|---|
+| Accum idx10/idx15 | Same-frame, same-Glass, same-X reviewed positive/negative comparison; central strips have full paired-column support | Added value of color over already-different gray evidence, independent generalization, or physical transparency |
+| BASE idx11 | Reviewed structural negative, including observed large negative gray contrasts; useful counterexample to generic brightness-sign reasoning | A same-Glass matched alternative to Accum, a negative label for missing pixels, or a negative with the same full color vector |
+| BASE idx0/idx20 | Human-unresolved competing boundaries; useful ambiguity/abstention control | Certain opposing identity truth or a supervised success for whichever candidate a new rule favors |
+
+Candidate identity remains the target; these row signs are neither sector
+near/off judgments nor scalar truth. Human absence of a visible interface at
+idx15 does not require every optical measurement there to be zero. Full band
+availability does not add physical identity, and unavailable bands cannot be
+used as a structural-negative feature. No matched-support claim is made for
+the edge strips with different paired-column counts.
+
+### Decision and next design gate
+
+**Fixed color-side measurement: COMPLETE, CLOSED WITHOUT PROMOTION.**
+Information retention is supported. Incremental candidate-identity benefit is
+**NOT ESTABLISHED**, rather than measured to be absent. W4's challenger remains
+open; W4-R1 is not reopened and W4-R2/O2 acceptance is not satisfied.
+
+No additional Windows extraction is required to reach this disposition.
+Inspecting more columns could answer cancellation or spatial-distribution
+questions, but would not alone supply independent physical truth or isolate
+added identity benefit. Do not request another general-purpose inspection of
+the same two frames merely because the classifier is still missing.
+
+The next local design must specify one candidate-level mechanism before further
+private execution, using the existing witness architecture's support/opposition
+contract. Its reviewable entry requirements are:
+
+1. Name the observable and explain how geometry-indexed color/gray evidence
+   supports a two-sided region interpretation while retaining reflection or
+   internal-structure opposition. State how it differs from prior gray-profile,
+   alignment, spatial-continuity and polarity-only attempts. A new scalar color
+   magnitude or majority sign is not that explanation.
+2. Define a gray-only comparator and gray-plus-color challenger with identical
+   points, masks, paired columns, reduction, missingness and evaluation target.
+   Include achromatic interfaces and chromatic artifacts so that adding color
+   is not equivalent to requiring color. Preserve an unresolved output and
+   measure coverage as well as errors under the existing W3 evaluator.
+3. Identify independent, physically reviewed controls capable of exposing a
+   gray-only error or ambiguity and testing whether color corrects it without
+   creating new false positives. Exact equality of gray numbers is not required;
+   nor may controls be selected to suit the observed opponent signs. Current
+   Accum controls remain development evidence, BASE idx11 stays auxiliary, and
+   idx0/idx20 stays unresolved. The current return supplies no new independent
+   calibration/holdout evidence.
+4. If that mechanism or its counter-controls cannot be justified, record the
+   specific gap before requesting any new frame, human review or acquisition.
+   Do not repeat the closed saved-material inventory or prescribe SPL#2/#3 as
+   inputs. No new descriptor, threshold sweep, detector change or private run
+   is implied by these design requirements.
+
+This gate is a concrete design obligation, not a claim that every interface must
+be optically distinguishable or that controlled acquisition is already required.
+The existing [architecture](../../20-architecture/s11-interface-observability-witness-architecture.md)
+and [O2 acceptance owner](../../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance)
+continue to own implementation and promotion requirements.
+
+## Candidate mechanism contract and local falsification — 2026-10-06
+
+The [candidate-conditioned region competition contract](../../20-architecture/s11-interface-observability-witness-architecture.md#w4-candidate-conditioned-region-competition--prototype-contract)
+now specifies the proposed observable, reuse owners, exact support/geometry
+boundary, competing appearance explanations, opposition and candidate-level
+evidence. This is a concrete **design contract**, not an implemented classifier.
+The [validation matrix](../../30-validation/s11-interface-observability-witness-validation.md#candidate-conditioned-region-competition-controls)
+distinguishes executed representation checks from future prototype requirements.
+
+Source review found that four-band step/ramp/ribbon fitting already exists in
+`profile_scale`; raw material partition context already exists in
+`oil_material_path`; ordered color-side columns and unpooled gray also already
+exist. Recoloring the profile or pooling the color rows would not add the proposed
+joint chromatic arrangement. The existing source adapter and probe remain the
+future reuse points; no competing loader, measurement implementation or private
+data run was introduced.
+
+Added a polarity-reversed pair of synthetic controls in
+`tests/unit/test_s11_color_side.py`. Alternating equal-gray BGR colors form
+horizontal runs in one raster and a staggered pattern in the other. Every band
+contains the same two colors per ordered column with identical support. Results:
+
+- Full saved-gray arrays are identical (gray30 everywhere).
+- Full color-side result objects are identical, including bands, ordered
+  column deltas, counts, means, eligibility and no-decision flags.
+- Horizontal RGB adjacency differs in every row. This verifies a loss of joint
+  arrangement in the current representation, without assigning either image
+  an Oil or structure identity.
+
+Executed locally:
+
+```text
+.venv/bin/python -m pytest -q tests/unit/test_s11_color_side.py tests/unit/test_s11_lateral_context_probe.py tests/unit/test_s11_joint_context.py
+77 passed in 2.15s
+```
+
+No production or diagnostic-runner/probe bytes changed. The reported color
+artifact and existing Windows outputs remain valid; a new private run is not
+needed to verify this test. No region model was exercised by the 77 passing tests.
+
+**Disposition:** a region hypothesis built only from the existing reduced
+color-side output is ruled out as a reconstruction of full 2-D adjacency.
+The raw-RGB region-competition hypothesis is PROPOSED, with implementation and
+identity benefit unverified. The contract requires a support/color factorial
+ablation because an envelope adds pixels between old bands; it explicitly
+retains structural/reflection ambiguity and unresolved returns. It cannot enter
+Windows or W4-R2 merely by passing this representation test. Next local work
+must choose and falsify a concrete bounded region model under that matrix,
+including achromatic positives and chromatic/structural counterexamples.
+
+## Region prototype implementation and Windows handoff — 2026-10-06
+
+This section supersedes the preceding design-stage next action. The frozen
+[prototype contract](../../20-architecture/s11-interface-observability-witness-architecture.md#w4-candidate-conditioned-region-competition--prototype-contract)
+is now implemented as an offline appearance fit, with a
+[bounded Windows handoff](../../40-operations/s11-o2-local-shadow-evaluation.md#region-competition--existing-saved-outputs).
+It is not an implemented/accepted physical identity classifier. The completed
+color-side experiment remains CLOSED WITHOUT PROMOTION.
+
+### Implementation and reuse
+
+- `s11_region_competition.py` owns four fixed linear raw-pixel models (smooth
+  plane, recorded-side offset and two centered ribbons), held-out column loss
+  and same-side immediate RGB/gray adjacency. A dedicated model module avoids
+  placing model fitting in the extraction probe; acquisition is not duplicated.
+- `s11_joint_context_run.py --region-competition` reuses receipt/raster/point/
+  baseline verification, exact role/alias binding, file bounds and preservation.
+  Modes are mutually exclusive. It reads only the original saved spatial output.
+- `measure_color_side` supplies the existing BGR/gray/mask/band support validation;
+  its code and the spatial producer remain unchanged. The new model then uses
+  raw pixels, not the color means, on four fixed support/channel ablations.
+- All point/width/view/model rows remain present, including unavailable/rank-
+  deficient fits. CSV exposes losses and adjacency, JSON also owns coefficients,
+  original/added support, recorded band reasons and observed indicator-edge pairs.
+  No model winner, identity score, threshold, scalar or temporal result exists.
+- O1 unavailable is not rescued by envelope support. Structural/material/static
+  opposition is `not_measured`; reflected and physical steps with identical
+  supplied pixels remain physically unresolved. BGR loss versus gray loss alone
+  does not quantify identity gain.
+
+Frozen source identity (no private run):
+
+| Item | SHA-256 |
+|---|---|
+| Joint saved-output runner | `63b54b9f94e9274071aff561c1466c6944df2fb15741b4712740c5e5c20103a1` |
+| Region model module | `3627e7c2ad6e218fa797b68500d70e7c8be1e038354bbad32c0ebcd68fb60b17` |
+| New region artifact: schema/spec + eight source files | `e6d17b0d54a909f226d265b9202151d017a76f6ed427009095c19b11bb04b3e8` |
+| Required original spatial artifact | `6aaf5f3ff6c4e1314d08cb7effb745ff5b721c03940c57002214b039ef544910` |
+
+Schema is `s11-o2-region-competition-v1`. Three hashed outputs are
+`experiment.json`, `summary.md`, `region-competition.csv`; `complete.json`
+is published last after a second source-preservation check. Future code changes
+produce a different artifact and must not be silently substituted for this run.
+
+### Local verification
+
+```text
+.venv/bin/python -m pytest -q \
+  tests/unit/test_s11_region_competition.py \
+  tests/unit/test_s11_color_side.py \
+  tests/unit/test_s11_joint_context.py \
+  tests/unit/test_s11_lateral_context_probe.py \
+  tests/unit/test_s11_spatial_context_probe.py \
+  tests/unit/test_s11_spatial_context_run.py
+157 passed in 4.19s
+```
+
+Changed-document local paths/anchors (131 links), S11 detector governance and
+`git diff --check` also pass. Production detector source is unchanged.
+
+New model controls include both polarities of affine ramp/partition/two ribbon
+fixtures, equal-gray color boundary, the complete-color-output adjacency
+collision, achromatic channel normalization, support-only perturbation, held-out
+pixel exclusion from fitting, mask/glare exclusion with no adjacency bridge,
+crop/O1 unavailability, split/rank failure, metadata non-authority and separate
+partial-path pieces. These controls establish calculational and synthetic
+appearance behavior, not real Oil accuracy, visibility or structure attribution.
+A first normalization assertion used an overly strict absolute tolerance at
+nonzero loss (~5e-18 float summation difference); it was corrected to relative
+1e-12 with a 1e-25 near-zero absolute tolerance. No model rule was tuned to
+private values.
+
+The real CLI test uses the actual spatial producer/extractor fixture, a Unicode
+path, non-repository cwd, closed stdin and UTF-8 output. It verifies all views,
+exact coincident role aliases, three receipt hashes and unchanged saved inputs.
+Shared malformed-source guards now cover the new mode as well as old joint/color
+modes. Mutation during calculation or publication produces no COMPLETE receipt.
+Local tests do not certify native Windows execution.
+
+A local synthetic workload used an 800×600 achromatic raster, 282 points of
+100 columns each, three widths (6/12/18), 3,384 factorial views and 13,536 model
+fits. It covered 6,345,000 envelope sample pixels and took **8.10 seconds**;
+whole-process peak RSS was **154.2 MiB** and JSON serialization 9,359,642 bytes.
+This is a size-oriented local smoke measurement, not private-scene timing or a
+Windows throughput guarantee. The caps (262,144 per envelope, 50,000,000 summed
+per case) fail before fitting; masks and exact widths can change actual work.
+
+### Entry decision and remaining limits
+
+READY FOR BOUNDED WINDOWS SAVED-OUTPUT EXECUTION. The three existing comparison
+roles remain unchanged: Accum idx10/idx15 development pair; censored BASE idx11
+auxiliary negative; BASE idx0/idx20 unresolved human control. Run all inventory
+and retain all four ablations, then return the predeclared same-X slices plus
+complete comparison CSV paths. No additional human judgment or source media is
+needed for this step. The Windows result itself is still pending.
+
+The prototype assumes shared affine within-patch variation plus a fixed offset;
+it does not model arbitrary surfaces, curved illumination, arbitrary ribbon
+widths, physical topology or material ownership. Actual partial positives,
+optical counterexamples and independent recordings remain unvalidated. Full-rank
+fit and lower held-out error do not establish identity. No candidate-wise
+prediction/abstention efficacy is claimed from an all-UNRESOLVED appearance ledger.
+W4-R2 remains unmet, O2 OPEN, FIELD FAIL and NOT_EVALUATED unchanged.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F04`, `S11-F09`, `S11-F10`.
-- First harmful stage: private identity failure remains unknown; source review establishes that gray side projections omit chromatic values, but no supplied same-support private color result establishes this as the cause of detector failure.
-- Prior mechanisms reviewed: O1 gray/support bands, saved BGR crops, color-dependent glare/Foam owners, row/column pooling and joint-gradient aliases, existing candidate-guided human rationale and unresolved BASE control.
+- First harmful stage: private identity failure remains unknown; source review establishes that gray side projections omit chromatic values. The transferred Windows rows report color variation and the two intake discrepancies are reconciled, but this does not establish omitted chromatic information as the cause of detector failure.
+- Prior mechanisms reviewed: O1 gray/support bands, saved BGR crops, color-dependent glare/Foam owners, existing four-band profile and material partition owners, row/column pooling and joint-gradient aliases, full color-side adjacency collision, raw 2-D fixed plane/partition/ribbon models and support/channel ablations, existing candidate-guided human rationale and unresolved BASE control.
 - Prior mechanisms rejected: gray alignment or color magnitude as identity, truth-Y distance, shared reflected appearance as physical continuity, missing-as-zero, label-conditioned pixel selection and private-coordinate thresholds.
 - Preserved contracts: generic bounded diagnostic, exact saved geometry/provenance, independent Oil/Foam, unchanged labels, fail-closed unavailable support and separate Windows field acceptance.
-- Difference from prior failures: fixed same-pixel channel measurement tests information retention and counterexamples before any classifier; it grants no selection or production authority.
+- Difference from prior failures: fixed same-pixel color and raw-pixel region models test information retention/appearance with separate support ablations before any physical classifier; it grants no selection or production authority.
 - Logic-map impact: NONE — the saved-output diagnostic does not alter the executing detector path or production publication.
-- Failure-registry impact: NONE — no private causal failure or field repair is established by the synthetic color controls.
+- Failure-registry impact: NONE — neither synthetic controls nor the attributed Windows color rows establish a private causal failure or field repair.

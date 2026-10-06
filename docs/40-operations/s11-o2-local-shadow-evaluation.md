@@ -1547,7 +1547,9 @@ python tests/diagnostics/s11_joint_context_run.py --color-side --source "$spatia
    `8f94fb85-d98e-4c71-9c97-3085168be1b2`, rev14, origin=[0,211], shape=[773,578],
    points=124, baseline MATCH/1416; review-003 f16280, Accum
    `8fb6ebc7-7c56-401e-86c3-05514bf6380b`, rev4, origin=[1199,56], shape=[584,462],
-   points=158, baseline MATCH/1012. 원래 geometry/label provenance를 그대로 인용한다.
+   points=158, baseline MATCH/1812. 이전 문서의 1012는
+   [저장값 확인](../60-evidence/s11/s11-o2-color-side-local.md#saved-value-confirmation-received--2026-10-06)으로
+   정정됐다. 원래 geometry/label provenance를 그대로 인용한다.
 4. `EXPLORATORY_UNCALIBRATED`, `NOT_EVALUATED`, `auto_acceptance=false`,
    `production_decisions_emitted=false`, `FIELD FAIL`, `numeric_localization=NOT_MEASURED`
    유지. summary의 observed/unavailable/no-paired 수는 **상관된 측정 pair 수**이며
@@ -1599,3 +1601,118 @@ W4-R2 진입을 선언하지 않는다. 신규 gradient/NPZ/overlay, 영상 deco
 재실행, 새 frame/label/사용자 재판정은 필요 없다. 기존 출력과 라벨은 보존한다.
 원본 컬러는 정보가 더 있다는 가설의 근거이며, 이번 단계는 고정된 측정의
 정보 보존을 확인한다. 실제 구별력과 반례 여부는 반환 후 별도로 검토한다.
+
+## Region competition — existing saved outputs
+
+2026-10-06 준비. [work-plan](../00-project/work-plan.md#next-transition)의 다음 실행은
+고정된 후보 조건부 영역 **외관 모델** 평가다. 기존 color-side 실행은 완료 상태이며
+반복하지 않는다. 이것은 W4-R2 진입이나 Windows detector field qualification이 아니다.
+[모델·정규화·한계](../20-architecture/s11-interface-observability-witness-architecture.md#w4-candidate-conditioned-region-competition--prototype-contract)와
+[로컬 검증](../60-evidence/s11/s11-o2-color-side-local.md#region-prototype-implementation-and-windows-handoff--2026-10-06)을 먼저 확인한다.
+
+### 소스 및 실행
+
+사용자가 전달한 새 GitHub ZIP을 사용한다. `.git`이 없으면 사용자 제공 commit을
+기록하고 아래 **파일 bytes SHA-256**으로 실행 소스를 대조한다. commit을 추정하거나
+이전 ZIP에 새 파일 일부만 복사하지 않는다. 이 값은 이전 color-side 실행 코드와 다르다.
+
+| 파일 / artifact | 고정 SHA-256 |
+|---|---|
+| `tests/diagnostics/s11_joint_context_run.py` | `63b54b9f94e9274071aff561c1466c6944df2fb15741b4712740c5e5c20103a1` |
+| `tests/diagnostics/s11_region_competition.py` | `3627e7c2ad6e218fa797b68500d70e7c8be1e038354bbad32c0ebcd68fb60b17` |
+| 신규 region artifact (8개 source 파일 + frozen spec) | `e6d17b0d54a909f226d265b9202151d017a76f6ed427009095c19b11bb04b3e8` |
+| 입력 spatial artifact | `6aaf5f3ff6c4e1314d08cb7effb745ff5b721c03940c57002214b039ef544910` |
+
+기존 Python/NumPy/OpenCV 환경, repo 루트에서 실행한다. 원본 영상·bundle·labels는
+재오픈하지 않는다. 입력은 **spatial-context-001**이며 color-side/joint-context 출력이 아니다.
+출력 디렉터리는 입력 밖의 새 경로여야 한다. 이미 있으면 덮어쓰지 말고 새 suffix를 쓴다.
+
+```powershell
+python tests/diagnostics/s11_joint_context_run.py `
+  --source "..\data\experiments\spatial-context-001" `
+  --expected-source-artifact "6aaf5f3ff6c4e1314d08cb7effb745ff5b721c03940c57002214b039ef544910" `
+  --region-competition `
+  --output "..\data\experiments\region-competition-001"
+```
+
+기존 로더가 32개 저장 입력의 receipt/raster/geometry/기존 band 재현을 검증하고,
+모든 point/basis/width에 네 support/channel ablation과 네 고정 모델을 적용한다.
+같은 후보 좌표를 사용하며 경계 위치/띠 폭을 재탐색하지 않는다. 계산은
+`recorded_bands`/`candidate_envelope` × `gray`/`BGR`이다. `candidate_envelope`만
+기존 band 사이와 중심 gap의 픽셀을 추가한다. 이 차이를 색상 효과로 돌리지 않는다.
+
+### COMPLETE와 입력 보존
+
+생성 후 다음을 **JSON/CSV/bytes에서 직접** 확인한다. 이미지 숫자를 판독하거나
+보고용 통계를 별도 inline 측정식으로 다시 만들지 않는다.
+
+1. receipt/report schema는 `s11-o2-region-competition-v1`, receipt는 COMPLETE.
+   두 artifact SHA가 위 신규 region pin과 일치해야 한다. source artifact는 위 spatial pin.
+2. `experiment.json`, `summary.md`, `region-competition.csv` **3 hashed outputs**,
+   `complete.json` 포함 **4개**. receipt output 해시 전부 실제 파일 bytes와 대조한다.
+3. `input_preservation` 32파일 각각 before=after=현재 input bytes SHA. 원본
+   영상/bundle/labels를 다시 해시하지 않는다. receipt는 파일 검증 증거이지 identity 증거가 아니다.
+4. review-002 f14386, BASE `8f94fb85-d98e-4c71-9c97-3085168be1b2`, rev14,
+   origin=[0,211], shape=[773,578], points124, baseline MATCH/1416.
+   review-003 f16280, Accum `8fb6ebc7-7c56-401e-86c3-05514bf6380b`, rev4,
+   origin=[1199,56], shape=[584,462], points158, baseline MATCH/1812.
+5. 각 point 3 widths × 4 views × 4 models. 전체 CSV는 **13,536 data rows**
+   (BASE 5,952 + Accum 7,584). 모델 실패/null 행도 남아야 한다. 동일 native/center
+   alias와 중첩 widths를 독립 표본으로 세지 않는다.
+6. `EXPLORATORY_UNCALIBRATED`, `NOT_EVALUATED`, `auto_acceptance=false`,
+   `production_decisions_emitted=false`, `FIELD FAIL`, `numeric_localization=NOT_MEASURED`
+   유지. view의 physical identity는 UNRESOLVED, opposition은 not_measured.
+7. 실행 경과 시간, Python/NumPy/OpenCV 버전과 소스 식별을 기록한다. 실패하면
+   COMPLETE를 수동 생성하거나 모델/지원 조건을 바꾸지 말고 원래 오류를 보고한다.
+
+### 고정 비교 반환
+
+모델은 후보 선택 없이 전 inventory를 계산한다. 반환 비교는 기존 세 묶음이며
+같은 X/BW에서 모든 모델과 네 ablation을 함께 유지한다.
+
+- 주 비교: review-003 idx10/idx15 `native_path`, 5 X × 3 BW × 4 views × 4 models × 2 후보 = **480행**.
+- 보조: review-002 idx11 `native_path`, 3 X × 3 BW × 4 views × 4 models = **144행**.
+- 미해결: review-002 idx0/idx20 `candidate_center`, 5 X × 3 BW × 4 views × 4 models × 2 후보 = **480행**.
+
+실험 폴더 밖 새 notes에 CSV를 보존한다. 아래는 행 선택만 하는 코드이며 새 측정이 아니다.
+출력 경로만 실제 환경에 맞춘다. 주/보조/미해결 사례를 합산하거나 유리한 행만 고르지 않는다.
+
+```python
+import csv
+from pathlib import Path
+
+output = Path(r"..\data\experiments\region-competition-001")
+notes = Path(r"..\data\region-competition-001-notes")
+notes.mkdir(parents=True, exist_ok=False)
+with (output / "region-competition.csv").open(encoding="utf-8", newline="") as stream:
+    reader = csv.DictReader(stream)
+    fields, rows = reader.fieldnames, list(reader)
+groups = {
+    "main": {("review-003", "10", "native_path"), ("review-003", "15", "native_path")},
+    "auxiliary": {("review-002", "11", "native_path")},
+    "unresolved": {("review-002", "0", "candidate_center"), ("review-002", "20", "candidate_center")},
+}
+for name, keys in groups.items():
+    selected = [r for r in rows if (r["case_id"], r["candidate_input_index"], r["geometry_basis"]) in keys]
+    with (notes / (name + ".csv")).open("x", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(selected)
+    print(name, len(selected), notes / (name + ".csv"))
+```
+
+반환은 생성 summary 전문, 위 검증 결과, 세 CSV의 경로/행 수를 포함한다. 수치 대조는
+다음 **사전 지정 발췌**를 CSV에서 그대로 뽑는다: main X=[1388,1473), BW6 (32행),
+auxiliary X=[236,343), BW8 (16행), unresolved X=[231,346), BW8 (32행).
+`idx/basis/X/Y/BW/support/channels/model/status/train_pixels/test_pixels/heldout_mse`
+및 horizontal/vertical pair count·MSE를 보존한다. 다른 sector/width는 삭제하지 않고
+전체 비교 CSV/JSON에 유지한다. 출력이 길면 별도 파일로 보존해 경로를 반환한다.
+
+MSE가 작다는 사실은 해당 고정 외관 모델의 적합도만 의미한다. gray와 BGR의 서로 다른
+channel-space loss 차이를 직접 색상의 identity 개선량으로 해석하지 않는다.
+원래 band/확장 영역 효과와 색상 효과를 분리하고, 모델이 관측하지 않은 return,
+마스크 너머 연결성, 투명도 또는 구조물 identity를 추론하지 않는다. O1 unavailable을
+확장 영역으로 복구하지 않는다. 모든 모델이 부적합하거나 반례가 공유되면 그대로 보고한다.
+
+이 반환에서 멈춘다. 새 threshold/띠 폭/중심 재선택, winner-to-identity 변환, W4-R2
+진입, 라벨 변경, detector/영상 decode, 새 gradient/overlay 및 사용자 재판정은 수행하지 않는다.

@@ -1142,7 +1142,173 @@ production decision or auto-acceptance. A successful run establishes measurement
 execution only. The [Windows procedure](../40-operations/s11-o2-local-shadow-evaluation.md#color-side-measurement--existing-saved-outputs)
 uses the retained controls; it does not reopen R1 or grant W4-R2 entry.
 
+## W4 candidate-conditioned region competition — prototype contract
+
+Status: **IMPLEMENTED as a frozen offline appearance prototype; NOT ACCEPTED as an identity challenger**. The completed
+[color-side assessment](../60-evidence/s11/s11-o2-color-side-local.md#added-information-assessment-and-measurement-disposition--2026-10-06)
+does not justify a chromatic magnitude/sign rule. This proposal names one
+testable alternative: a candidate's stored geometry should explain a persistent
+two-sided region arrangement better than a smooth field or a bounded internal
+ribbon, while retaining structural/optical competing explanations. This is a
+hypothesis about candidate-conditioned appearance, not a sufficient physical
+identity law. A reflected or structural step can remain indistinguishable.
+
+### Distinct observable and reuse boundary
+
+The observable is **joint X/Y chromatic arrangement relative to the
+stored candidate path**, including within-side adjacency and alternative region
+boundaries. It is not a new sensor or an independent vote. Existing owners:
+
+| Existing owner | Reuse / limitation |
+|---|---|
+| `s11_shadow_experiment.profile_scale` | Existing four-mean step/ramp/excursion comparison; do not rename or recolor this scalar model and call it region reasoning |
+| `s11_spatial_context_probe.measure_context`, `measure_lateral_context`, `measure_color_side` | Reuse geometry/availability semantics; row/column/band means lose some joint pixel arrangement, including vertical order inside color bands |
+| `measure_joint_context` | Reuse the prior spatial-information boundary; its unpooled gray gradients are not unpooled RGB or physical region identity |
+| `oil_material_path.material_layer_context` / `_terminal_material_partition` | Existing raw material opposition/row-profile partition support; neither a structure label nor an independent color reference |
+| `s11_joint_context_run` | Existing receipt/raster/geometry loader and exact aliases; any eventual saved-output entry extends this owner, never reopens video or introduces another loader |
+| W3 `s11_interface_shadow_evaluation` | Existing identity/local/scalar targets and abstention/coverage accounting; use only after a real frozen prediction contract exists |
+
+The color-side full-output collision control shows that coherent horizontal
+chromatic runs and a staggered arrangement can share every emitted band mean,
+ordered column delta and support value, even with identical full gray pixels.
+Therefore neither `color-side.csv` nor even its complete numeric JSON suffices
+to reconstruct this observable. Saved unannotated BGR crop and masks are the
+potential input; no additional source image acquisition is inferred to be needed.
+The test proves a representation limit, not that either synthetic raster is Oil.
+
+### Candidate-conditioned evidence contract
+
+1. **Inputs:** original saved crop/gray/effective/glare arrays, recorded candidate
+   index and exact geometry, all widths and availability. No identity/path label,
+   Glass name, frame number, truth coordinate or production selected/rejected
+   bit enters inference. Candidate/frame identity remains provenance only.
+2. **Support:** separate each `(candidate, basis, exact X, source Y, BW)` view.
+   The patch is the clipped envelope of its four recorded
+   bands, with the same effective/non-glare mask. This deliberately exposes
+   unsampled rows between those bands, including the center gap; it is new
+   diagnostic support within saved pixels and must be declared as such.
+   It does not revise O1 availability. Mark original-band pixels versus added
+   envelope pixels, and compare envelope support against original-band-only
+   support in a separate ablation. Do not credit support expansion to color.
+3. **Geometry:** use recorded native sector Y, never the strongest new edge or
+   a human line. A center-only candidate is a horizontal hypothesis with that
+   limitation. Sector pieces are not an interpolated contour. No adjacency is
+   asserted across missing pixels, non-touching patches or discontinuous sector
+   endpoints; retain disconnected evidence and censored extent explicitly.
+4. **Competing explanations:** retain three appearance hypotheses: smooth field
+   without a candidate boundary; two sides separated at the recorded geometry;
+   a bounded stripe/ribbon whose return lies inside visible support. Compare
+   within-side variation/adjacency and cross-boundary changes on exactly the
+   same pixels. A coherent two-sided appearance is only partition evidence.
+   A missing return outside the envelope is censored, not a persistent-region
+   success. Neither a ribbon nor a smooth field automatically proves non-Oil:
+   a true interface can be overlapped by glare or weakly visible.
+5. **Opposition:** preserve recorded material/static/template/glare facts with
+   exact provenance as possible explanations when available. This prototype reads the spatial saved-output contract only; material/static/template opposition is explicitly `not_measured`, not absent or favorable. Template match, static overlap,
+   low support and distance from another candidate are not automatic negative
+   truth. `not_measured`, contradicted and observed-clear must remain distinct.
+   A structural step or reflection that explains the same pixels leaves physical
+   identity unresolved unless independently justified evidence separates it.
+6. **Candidate aggregation:** return a geometry-indexed explanation ledger of
+   support, opposition, censoring and unresolved alternatives, preserving every
+   sector/width and overlap lineage. Do not choose max/median/majority support as
+   holistic identity, count overlapping scales as independent confirmations, or
+   demand that every point of a holistic positive be near-interface. No scalar
+   Y or temporal association is produced by this proposal.
+
+### Frozen v1 model and implementation boundary
+
+`tests/diagnostics/s11_region_competition.py` owns the bounded raw-pixel model;
+`s11_joint_context_run.py --region-competition` extends the existing loader,
+receipt, exact geometry/band aliases and input-preservation owner. The separate
+module isolates least-squares/adjacency logic from raster extraction; it does
+not introduce another acquisition path. Existing O1, color-side and production
+code remain the input/behavior owners.
+
+For each exact point/width/support view, fit these fixed models per channel:
+
+- `smooth`: intercept plus normalized X and normalized Y (3 coefficients).
+- `partition`: the same plane plus `1[Y >= recorded source_y]` (4 coefficients).
+- `ribbon_bw`: the same plane plus `1[abs(Y-source_y) < BW]` (4 coefficients).
+- `ribbon_2bw`: the same plane plus `1[abs(Y-source_y) < 2*BW]` (4 coefficients).
+
+X is `(local_x - envelope_x_min) / max(1, envelope_x_max-envelope_x_min)`;
+Y is `(local_y - source_y + origin_y) / max(1, envelope_y_max-envelope_y_min)`.
+These denominators use geometric pixel extrema, never observed intensity.
+Pixel channels are divided by 255. Least squares uses float64, `rcond=1e-10`,
+no regularization, no clipping of fitted values and no fitted ribbon width or
+center search. Fit columns whose **crop-local X modulo 4 is nonzero**; evaluate
+on columns with modulo 4 zero. Held-out here means a spatial computation split,
+**not independent calibration/holdout recordings**. Report coefficients, rank,
+training and held-out mean squared residuals averaged over pixels **and**
+channels. Smooth has lower capacity; no penalized score or winning model is
+selected. Errors across gray/BGR are different channel-space losses and are not
+by themselves a color-benefit statistic.
+
+Horizontal and vertical squared color differences use only immediate visible
+neighbours on the same side of the recorded candidate. Keep pair counts;
+missing pairs yield null. Original-band gaps, masks, glare and sector edges are
+never bridged by adjacency. A plane fit over separated samples asserts no
+physical connectivity. Also report observed vertical indicator-edge pair counts
+for each partition/ribbon; a small ribbon residual without both visible return
+edges is not an observed return. Within-side adjacency exposes the equal-gray,
+full-color-output collision that the older four-mean model cannot represent.
+
+All four O1 bands must be available for a width's model fits. Envelope pixels
+cannot rescue an unavailable O1 view. Preserve its support/adjacency diagnostics,
+but null all model errors/coefficients with `o1_unavailable`. Fewer than 8 train
+or 4 test pixels yields `insufficient_split_support`; deficient design rank
+nulls that model and marks the view `incomplete_model_support`. Do not recast
+these states as negative identity. Identical native/center aliases are retained
+with binding provenance, never counted as independent evidence.
+
+Limits: reuse raster <=4096 per dimension, <=512 points and <=3 widths <=128;
+preflight <=262,144 pixels per clipped envelope and <=50,000,000 summed envelope
+pixels per case before any fit. No retained per-pixel model arrays, learned
+parameters, candidate aggregation, identity threshold or temporal output.
+Every view records `physical_identity=UNRESOLVED`; this is an explicit limit of
+an appearance model, not successful physical abstention/coverage performance.
+Finite windows remain censored regardless of which residual is smallest.
+
+### Comparator, falsification and entry decision
+
+Use a factorial comparison to keep two changes separate:
+
+| Support / representation | Gray-only | Gray plus chromatic channels |
+|---|---|---|
+| Recorded bands only | Same-pixel, same-weight gray baseline | Same bands/weights with BGR retained |
+| Declared candidate envelope | Raw 2-D gray region model | Identical model/support with joint BGR arrangement |
+
+The color ablation must have identical preprocessing, pixel weights, candidate
+geometry and model-complexity policy. It cannot gain merely by adding more
+summed channels. Achromatic data must not get an artificial advantage or penalty
+from triplicating gray. Model choices/parameters are fixed on development
+controls, never selected from the returned private signs. A two-dimensional
+model that only distinguishes these scenes through gray is spatial-model
+evidence, not added color efficacy.
+
+Before Windows entry, apply the [region-competition controls](../30-validation/s11-interface-observability-witness-validation.md#candidate-conditioned-region-competition-controls).
+Reject a proposed implementation if its distinction collapses to the old profile,
+depends on hidden pixels/truth/source family, mistakes a mask edge for physical
+termination, or certifies identical supplied observables with opposite identities.
+Failure to find one frozen model that passes the paired controls is a reason to
+stop this proposal locally, not run another private descriptor sweep.
+
+The current reviewed Accum pair, censored BASE negative and unresolved BASE pair
+remain development/regression controls; they have not become new independent
+calibration/holdout examples. The bounded Windows saved-output procedure is now ready after local controls.
+No human labeling, detector rerun or acceptance transition is requested.
+
 ## History Review
+
+2026-10-06 implementation: candidate-conditioned region competition is an offline
+appearance prototype with fixed planar/partition/ribbon fits, held-out columns
+and within-side RGB adjacency. Source discovery reuses the existing four-mean profile, material row
+partition, spatial/color probe and saved-output adapter. The equal-gray/full
+color-output adjacency collision rejects reconstructing joint RGB arrangement
+from reduced summaries. The raw-2D prototype separately tests added
+support versus added color and retain optically equivalent structural-step
+ambiguity; this is not a new executing detector node or identity acceptance.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.

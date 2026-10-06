@@ -7,6 +7,12 @@ transferred execution checks from unresolved post-run inspection semantics.
 
 ## Execution evidence
 
+**2026-10-06 count correction:** the transferred Accum 1012-band count below
+is superseded by [saved-value confirmation](s11-o2-color-side-local.md#saved-value-confirmation-received--2026-10-06)
+of 1812 for the same pinned spatial source; BASE remains 1416. The historical
+table is preserved. This does not imply a new joint run or an independent local
+rehash of its private output.
+
 | Item | Transferred result / local check |
 |---|---|
 | Schema / receipt | `s11-o2-joint-context-v1`, COMPLETE, RC=0 reported |

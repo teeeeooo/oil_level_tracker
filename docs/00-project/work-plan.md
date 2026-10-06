@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Color-side measurement is implemented and verified locally; the bounded Windows saved-output run is next.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The bounded Windows saved-output run is ready; physical identity classification remains unaccepted.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -23,7 +23,7 @@ CLOSED WITHOUT PROMOTION ends an experiment without satisfying O2 acceptance.
 | W1 / O2 targets and aggregation | Source review, target contract and counter-controls VERIFIED locally | Candidate identity, local path support and scalar eligibility stay separate; challenger remains open under W4 | [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md) |
 | W2 / O2 bounded scene expansion | Frame14865 scene and geometry review COMPLETE on transferred evidence; bounded handoff CLOSED without identity promotion | Two unresolved boundary alternatives; four native paths and nineteen center-only candidates; no formal relabeling | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 shadow outputs and evaluation | IMPLEMENTED and VERIFIED locally; existing-data Windows target/context audit VERIFIED by transferred report | Preserve v1 compatibility and calibration guards; scalar truth remains absent; no efficacy claim | [Local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [Windows audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) |
-| W4 / O2 one challenger | Local-position experiment concluded WITHOUT PROMOTION; color-side measurement VERIFIED locally, Windows handoff pending; candidate-identity challenger OPEN | Paired-scale primary +1/0 with no negative-control regression is a bounded ranking result, not identity acceptance | [Paired-scale result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md), [color-side evidence](../60-evidence/s11/s11-o2-color-side-local.md) |
+| W4 / O2 one challenger | Local-position and fixed color-side experiments CLOSED WITHOUT PROMOTION; candidate-identity challenger OPEN | Color information retained; incremental identity benefit NOT ESTABLISHED; R2 entry unmet | [Paired-scale result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md), [color-side assessment](../60-evidence/s11/s11-o2-color-side-local.md#added-information-assessment-and-measurement-disposition--2026-10-06) |
 | O2 acceptance | OPEN; not satisfied | Independent development/calibration/holdout roles, fixed operating point and required Windows shadow acceptance remain unresolved | [O2 acceptance](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; entry pending O2 acceptance | Separate behavior plan, typed support/physical association controls and exact same-frame provenance | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Separate handoff and phase changes with positive/negative controls; no time/polarity shortcut | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -44,22 +44,24 @@ scores remain pinned. This is not a general impossibility finding for spatial cl
 
 ## Next transition
 
-Run Windows `--color-side` against original saved `spatial-context-001`, following
-[the bounded handoff](../40-operations/s11-o2-local-shadow-evaluation.md#color-side-measurement--existing-saved-outputs).
-Return the machine summary, receipt/hash/input-preservation evidence and fixed
-Accum idx10/15, BASE idx11 and unresolved idx0/20 CSV subsets.
+Run the frozen `--region-competition` prototype on the existing
+`spatial-context-001` saved outputs using the
+[Windows handoff](../40-operations/s11-o2-local-shadow-evaluation.md#region-competition--existing-saved-outputs).
+Local raw-pixel smooth/partition/ribbon fits, within-side adjacency and four
+support/color ablations are implemented under the
+[prototype contract](../20-architecture/s11-interface-observability-witness-architecture.md#w4-candidate-conditioned-region-competition--prototype-contract)
+and [control matrix](../30-validation/s11-interface-observability-witness-validation.md#candidate-conditioned-region-competition-controls).
+[Local verification](../60-evidence/s11/s11-o2-color-side-local.md#region-prototype-implementation-and-windows-handoff--2026-10-06)
+permits this measurement, not classifier/identity acceptance.
 
-This measures fixed B/G/R and gray side differences on identical visible pixels
-in exact recorded bands. Ordered paired columns, availability and near/far remain
-separate. Local controls and the unchanged default joint CLI entry are recorded
-in [color-side evidence](../60-evidence/s11/s11-o2-color-side-local.md).
-Private color separation remains unmeasured here; no identity rule, threshold or
-classifier is accepted. W4-R1 stays closed, O2 stays open and W5/O3 stays gated.
-
-No new frame, repeated human judgment, video/bundle decoding, color-space sweep
-or private export is required. Preserve inputs and publish new outputs. Record
-received results in the owning evidence file, then replace the affected status
-and next action here. Do not infer completion from a document, commit or exit code.
+Use the original two frames, all points/roles/widths and pinned source artifact.
+The reviewed Accum pair remains development evidence, BASE idx11 an auxiliary
+negative, and idx0/idx20 an uncertainty control. No new source capture, detector
+run, label, human rejudgment or repeat of completed color-side checks is needed.
+Do not refit model capacity or thresholds from the returned rows. Examine support
+and channel ablations separately; real shared/censored explanations may close
+this hypothesis without promotion. W4-R1 remains closed, R2 entry unmet, O2 open
+and W5/O3 gated. No private Windows execution has been performed locally.
 
 ## Accepted local candidate
 
@@ -86,7 +88,10 @@ and 2026-09-17 behavioral requests included implementation, verification, commit
 and push for those scopes. The R23 polarity prototype failed protected observations
 and was removed; its rejection is not a reason to request the same authorization
 again. These historical grants do not authorize unrelated changes or publication.
-The current executable follow-up is the bounded saved-output measurement above.
+The fixed color-side measurement is complete. The current user request authorizes
+implementation and preparation up to the Windows execution point. The new
+saved-output handoff is ready for the user’s Windows agent; no automatic private
+run or broader field qualification is authorized.
 
 Outside the detector replacement scope remain unrelated candidate-generation,
 Foam or UI changes; unbounded retention/recovery; relaxed truth/safety criteria;

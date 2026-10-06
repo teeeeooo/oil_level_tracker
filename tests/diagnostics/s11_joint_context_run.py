@@ -21,9 +21,11 @@ from oil_tracker.adapters.vision import oil_interface_witness, oil_interface_dia
 from tests.diagnostics import s11_interface_shadow_evaluation as o2
 from tests.diagnostics import s11_spatial_context_probe as probe
 from tests.diagnostics import s11_spatial_context_run as source_run
+from tests.diagnostics import s11_region_competition as region
 
 SCHEMA = 's11-o2-joint-context-v1'
 COLOR_SCHEMA = 's11-o2-color-side-v1'
+REGION_SCHEMA = 's11-o2-region-competition-v1'
 
 
 def _display(values, valid, maximum):
@@ -68,8 +70,9 @@ cases.forEach((c,i)=>option(byId('case'),c.case_id,i));byId('case').onchange=set
 </script></html>'''.replace('DATA;', data+';')
 
 
-def run(source, output, *, expected_source_artifact, color_side=False):
-    schema = COLOR_SCHEMA if color_side else SCHEMA
+def run(source, output, *, expected_source_artifact, color_side=False, region_competition=False):
+    o2.require(not (color_side and region_competition), 'choose one measurement mode')
+    schema = REGION_SCHEMA if region_competition else COLOR_SCHEMA if color_side else SCHEMA
     source, output = Path(source).resolve(), Path(output).resolve()
     o2.require(source.is_dir(), 'source output directory missing')
     o2.require(not output.exists(), 'output already exists; choose a new directory')
@@ -135,7 +138,7 @@ def run(source, output, *, expected_source_artifact, color_side=False):
         baseline = source_run.baseline_check(gray, effective, glare, witness)
         o2.require(baseline['status'] == case['baseline_check']['status'] == 'MATCH' and
                    baseline == case['baseline_check'], 'baseline reconstruction mismatch; inspect original reconstruction first')
-        if color_side:
+        if color_side or region_competition:
             context = {'origin': origin, 'shape': list(gray.shape), 'points': copy.deepcopy(points)}
         else:
             context, arrays = probe.measure_joint_context(gray, effective, glare, points, origin=origin)
@@ -162,7 +165,13 @@ def run(source, output, *, expected_source_artifact, color_side=False):
             p['band_center_role'] = matched[1]
             p['band_binding'] = 'exact_role' if matched == key else 'coincident_recorded_native_center'
             p['scales'] = centers[matched]
-        if color_side:
+        if region_competition:
+            ledger = region.measure(rasters['crop'], gray, effective, glare, context['points'], origin=origin)
+            cases.append({k:case[k] for k in ('case_id','frame_index','glass_id','revision','labels_sha256','scene_sha256')} | {
+                'origin': origin, 'shape': list(gray.shape),
+                'baseline_band_count': baseline['band_count'], 'baseline_status': 'MATCH',
+                'region_competition': ledger})
+        elif color_side:
             color = probe.measure_color_side(rasters['crop'], gray, effective, glare, context['points'], origin=origin)
             cases.append({k:case[k] for k in ('case_id','frame_index','glass_id','revision','labels_sha256','scene_sha256')} | {
                 'origin': origin, 'shape': list(gray.shape),
@@ -186,9 +195,12 @@ def run(source, output, *, expected_source_artifact, color_side=False):
             read(name)
             result.append({'file':name, 'before_sha256':digest, 'after_sha256':snapshots[name]})
         return result
-    code = {Path(p).resolve().relative_to(ROOT).as_posix():o2.sha256_file(p) for p in
-            (__file__, probe.__file__, source_run.__file__, o2.__file__, oil_interface_witness.__file__, oil_interface_diagnostics.__file__, row_features.__file__)}
-    artifact = {'schema_version':schema, 'spec':probe.COLOR_SIDE_SPEC if color_side else probe.JOINT_SPEC, 'code':code}
+    code_paths = [__file__, probe.__file__, source_run.__file__, o2.__file__, oil_interface_witness.__file__, oil_interface_diagnostics.__file__, row_features.__file__]
+    if region_competition:
+        code_paths.append(region.__file__)
+    code = {Path(p).resolve().relative_to(ROOT).as_posix():o2.sha256_file(p) for p in code_paths}
+    spec = region.SPEC if region_competition else probe.COLOR_SIDE_SPEC if color_side else probe.JOINT_SPEC
+    artifact = {'schema_version':schema, 'spec':spec, 'code':code}
     artifact['sha256'] = o2.fingerprint_json(artifact)
     report = {'schema_version':schema, 'artifact':artifact, 'source_artifact_sha256':expected_source_artifact,
               'source_receipt_sha256':snapshots['complete.json'], 'source_experiment_sha256':snapshots['experiment.json'],
@@ -204,7 +216,9 @@ def run(source, output, *, expected_source_artifact, color_side=False):
         ok, encoded = cv2.imencode('.png', image)
         o2.require(ok, 'PNG encoding failed')
         (output/name).write_bytes(encoded.tobytes())
-    if color_side:
+    if region_competition:
+        _write_region_outputs(output, report, len(snapshots))
+    elif color_side:
         _write_color_outputs(output, report, len(snapshots))
     else:
         (output/'viewer.html').write_text(_viewer(cases), encoding='utf-8')
@@ -270,15 +284,66 @@ def _write_color_outputs(output, report, input_count):
     (output/'summary.md').write_text('\n'.join(lines), encoding='utf-8')
 
 
+def _write_region_outputs(output, report, input_count):
+    """One row per fixed model/view, including missing fits; no selected winner."""
+    header = ['case_id', 'frame_index', 'candidate_input_index', 'geometry_basis',
+              'source_x_start', 'source_x_stop', 'source_y', 'band_width_px',
+              'support', 'channels', 'view_status', 'model', 'model_status',
+              'train_pixels', 'test_pixels', 'parameters_per_channel', 'rank',
+              'train_mse', 'heldout_mse', 'horizontal_pairs', 'horizontal_mse',
+              'vertical_pairs', 'vertical_mse', 'added_envelope_visible_pixels',
+              'crop_clipped', 'physical_identity']
+    lines = ['# S11 candidate-conditioned region competition', '',
+             'EXPLORATORY_UNCALIBRATED; FIELD FAIL; NOT_EVALUATED. Appearance fits only.',
+             'Fixed smooth/partition/two ribbon models; held-out columns; no identity or selected winner.',
+             'Four support/channel ablations. Errors average pixels AND channels on the same support.',
+             'O1 unavailable is not rescued. Null/empty CSV cells are not zero. All views remain correlated.',
+             'Finite windows and masks censor extent; a missing return does not prove persistence.',
+             'Material/static/template opposition is not measured; human idx0/idx20 ambiguity remains unresolved.',
+             f"Artifact: `{report['artifact']['sha256']}`",
+             f"Source artifact: `{report['source_artifact_sha256']}`", '',
+             '| Case | Frame | Glass | Revision | Points | Baseline bands | Views | Observed views |',
+             '|---|---|---|---|---|---|---|---|']
+    with (output/'region-competition.csv').open('x', encoding='utf-8', newline='') as handle:
+        writer = csv.writer(handle); writer.writerow(header)
+        for case in report['cases']:
+            points = case['region_competition']['points']
+            count = observed = 0
+            for p in points:
+                for scale in p['scales']:
+                    for view in scale['views']:
+                        count += 1
+                        observed += view['status'] == 'observed'
+                        adj = view['within_side_adjacency']
+                        for name, fit in view['models'].items():
+                            writer.writerow([case['case_id'], case['frame_index'], p['candidate_input_index'],
+                                p['geometry_basis'], *p['source_x_range'], p['source_y'], scale['band_width_px'],
+                                view['support'], view['channels'], view['status'], name, fit['status'],
+                                view['train_pixels'], view['test_pixels'], fit['parameters_per_channel'], fit['rank'],
+                                fit['train_mse'], fit['heldout_mse'],
+                                adj['horizontal']['pair_count'], adj['horizontal']['mean_squared_difference'],
+                                adj['vertical']['pair_count'], adj['vertical']['mean_squared_difference'],
+                                scale['added_envelope_visible_pixels'], scale['crop_clipped'], view['physical_identity']])
+            lines.append(f"| {case['case_id']} | {case['frame_index']} | {case['glass_id']} | {case['revision']} | {len(points)} | MATCH / {case['baseline_band_count']} | {count} | {observed} |")
+    lines += ['', f'Stored inputs preserved: {input_count}/{input_count}. Original video/bundle/labels not reopened.',
+              'COMPLETE verifies execution only. No W4-R2 entry, physical identity, localization or acceptance gain.', '']
+    o2.write_new(output/'experiment.json', report)
+    (output/'summary.md').write_text('\n'.join(lines), encoding='utf-8')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', required=True, help='existing spatial-context output directory')
     parser.add_argument('--expected-source-artifact', required=True)
     parser.add_argument('--output', required=True, help='new directory outside the source output')
-    parser.add_argument('--color-side', action='store_true', help='measure recorded-band BGR/gray sides; no new gradient map or identity score')
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument('--color-side', action='store_true', help='measure recorded-band BGR/gray sides; no new gradient map or identity score')
+    modes.add_argument('--region-competition', action='store_true', help='fit fixed raw-pixel appearance models; no identity classifier')
     args = parser.parse_args()
-    run(args.source, args.output, expected_source_artifact=args.expected_source_artifact, color_side=args.color_side)
-    print('Measurement complete. Read summary.md and ' + ('color-side.csv' if args.color_side else 'viewer.html') + '. No identity decision was made.')
+    run(args.source, args.output, expected_source_artifact=args.expected_source_artifact,
+        color_side=args.color_side, region_competition=args.region_competition)
+    detail = 'region-competition.csv' if args.region_competition else 'color-side.csv' if args.color_side else 'viewer.html'
+    print('Measurement complete. Read summary.md and ' + detail + '. No identity decision was made.')
 
 
 if __name__ == '__main__':

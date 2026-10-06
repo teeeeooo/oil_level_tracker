@@ -11,6 +11,13 @@ No rerun, score change, label change or detector improvement is established.
 
 ## Reported result
 
+**2026-10-06 count correction:** the original transferred 1012/2428 counts
+below are superseded by [saved-value confirmation](s11-o2-color-side-local.md#saved-value-confirmation-received--2026-10-06):
+Accum baseline is 1812, BASE 1416 (combined inventory 3228). The successful
+color runner checks exact equality with this pinned spatial source's baseline.
+This correction is attributed Windows evidence, not a local private-file rehash;
+the historical intake wording remains below.
+
 - Original review-002 frame 14386, revision 14; review-003 frame 16280, revision 4.
 - Both baseline checks reported MATCH, zero mismatched bands. This supports
   gray/support-band reconstruction on the reported fields, not historical pixel

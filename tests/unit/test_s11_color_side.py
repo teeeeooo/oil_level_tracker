@@ -57,6 +57,40 @@ def test_equal_gray_color_step_channel_order_polarity_and_no_identity():
     json.dumps(result, allow_nan=False)
 
 
+@pytest.mark.parametrize('reverse', [False, True])
+def test_full_color_side_output_cannot_reconstruct_two_dimensional_adjacency(reverse):
+    """Same complete output, different RGB adjacency; neither image is Oil truth.
+
+    This extends the gray lateral collision to equal-gray chromatic rasters:
+    even ordered column deltas and all band support/means cannot recover the
+    within-band arrangement needed by a candidate-level region hypothesis.
+    """
+    crop, mask, glare, points = sample()
+    colors = np.array([[0, 0, 100], [0, 51, 0]], dtype=np.uint8)
+    if reverse:
+        colors = colors[::-1]
+    crop[:] = colors[np.arange(8) % 2, None, :]
+    rearranged = crop.copy()
+    rearranged[:, 1] = colors[(np.arange(8) + 1) % 2]
+
+    # Each two-row band has the same color multiset in each ordered X column.
+    for band in points[0]['scales'][0]['bands']:
+        lo, hi = band['clipped_local_y_range']
+        np.testing.assert_array_equal(crop[lo:hi].sum(axis=0),
+                                      rearranged[lo:hi].sum(axis=0))
+    # Horizontal chromatic runs exist only in the first raster. No classifier
+    # threshold or connected-region/Oil label is manufactured by this oracle.
+    assert np.all(crop[:, 0] == crop[:, 1])
+    assert np.all(np.any(rearranged[:, 0] != rearranged[:, 1], axis=1))
+    np.testing.assert_array_equal(cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY),
+                                  cv2.cvtColor(rearranged, cv2.COLOR_BGR2GRAY))
+    assert np.unique(cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)).tolist() == [30]
+    first = measure(crop, mask, glare, points)
+    second = measure(rearranged, mask, glare, points)
+    assert first == second  # includes every reported band, column, mean and status
+    assert first['decision'] == 'NOT_EVALUATED'
+
+
 @pytest.mark.parametrize('below', [30, 100])
 def test_achromatic_step_and_observed_zero_are_not_missing(below):
     result = measure(*sample((30,)*3, (below,)*3))
