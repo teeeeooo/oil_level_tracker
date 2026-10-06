@@ -248,6 +248,45 @@ formal O2 label migration, prediction evaluation or runtime behavior change took
 place. Next clarify the already-prepared base_sample_1/156 cyan idx9 and pink
 idx10; no additional frame or independent video is needed for this bounded batch.
 
+## Base sample human correspondence received
+
+User reply to the pending `base_sample_1/156` pair guide:
+
+> 청록 : 유면에 가까우나 약간 위쪽
+> 분홍 : foam과 air의 경계
+
+| Candidate | Human observation | Preserved interpretation |
+|---|---|---|
+| idx9, cyan, native path Y=[393,387,387,387,387] | Close to the Oil surface, but slightly above it | Qualitative Oil-relative position; exact Oil identity/target correspondence remains unresolved |
+| idx10, pink, native path Y=[361,375,375,377,377] | Foam–air boundary | Separate Foam boundary, not the Oil tracking target |
+
+“약간 위쪽” is not an exact offset, contour correction or per-sector near/off
+label. Neither canonical Y nor the historical scalar reference overrides this
+new observation; no automatic shift or promotion of idx9 to exact target truth
+is made. The whole-candidate Foam observation does not certify bottom connectivity
+or temporal validity. Color meanings remain specific to each displayed case.
+
+The exact user text, case/run/record/frame/Glass, guide/capture hashes and candidate
+witness hashes are preserved in
+`sample/output/s11-local-candidate-review-001-notes/reply-003-base-sample-1.json`,
+SHA-256 `a983cd34a838b882bc514b60b0a18b16d027c2b9890ee15967ac35bb8c719bc7`.
+All 87 original capture outputs retain their receipt hashes. No detector, decode,
+label transfer or runtime change occurred.
+
+The bounded three-frame clarification is complete: six candidates now have
+supplemental human observations; 70 remain unreviewed. This is not six confirmed
+Oil identities. The distinctions are actual Oil surface, Oil-relative path offset,
+Foam-internal gap and Foam–air boundary. The earlier scalar review's no-Foam
+annotation for base remains historical; the new Foam–air observation is retained
+separately without rewriting that scalar truth or claiming the discrepancy resolved.
+
+Next inspect the existing Oil candidate selection and independent Foam-front
+owners against these candidate-bound observations, using the saved traces and
+current source. Identify where these meanings are lost or conflated before
+proposing a generic mechanism. No new frame review, Windows run or independent
+video is needed for that bounded source investigation. Do not infer a color,
+height, coordinate or case-specific decision rule from this small batch.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-PROJECTION`
