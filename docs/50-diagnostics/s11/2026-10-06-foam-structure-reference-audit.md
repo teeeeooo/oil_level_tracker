@@ -386,26 +386,122 @@ Local output: `sample/output/s11-local-human-roi-comparison-001/` (ignored).
 The run receipt pins203 outputs and32 preserved inputs. The analysis receipt
 pins its three outputs and saved inputs. Source files remain unchanged.
 
-### Next human checkpoint
+### Oil-position checkpoint — subsequently answered
 
 Safari **수정 ROI — Oil 위치 확인** displays the same original RGB crops with a
 switch to hide overlays. Magenta is the current-frame Oil scalar, drawn only
 across effective-mask support; it is not a measured contour. Cyan shows the
 selected spatial Foam support and its column-wise upper pixels, not confirmed
 Foam publication. The native browser page and image rendering are verified.
-The specific open question is whether **frame420/14s Oil Y854** is the actual
+The question presented was whether **frame420/14s Oil Y854** is the actual
 Oil–Foam boundary, near but offset, or another/uncertain feature. Existing Foam,
 rim and central-structure judgments are retained without asking them again.
 No Windows run or formal truth/label transfer is requested.
 
+## Oil confirmation and bounded sequence diagnosis — 2026-10-06
+
+The user answered **“응 실제 oil-foam 경계 맞음”** for the displayed frame420
+magenta Y854. The attributed reply binds the exact prior run/record/recipe/HTML
+and `oil_hypothesis:b348a3b4404fd3c8dad94743` (input index5). This confirms the
+physical correspondence at this frame; no pixel tolerance, precise contour,
+other-frame label, formal O2 truth or independent holdout is created.
+
+### Existing owners exercised on the already reviewed interval
+
+Source `d62c78037ac4d4a0d9d1791c9df5f110372dab34`; production source hashes match
+the previous ROI comparison. The existing `OpenCvPhaseDetector.detect` and
+`resolve_sequence(..., confirmed_initial_state=None)` run with both original and
+human-corrected recipes on all121 frames390–510 (13–17s,30fps). Each variant
+starts fresh at390 and continues through510; there is no earlier warmup or
+static learning. Exact decoder positions/timestamps and all121 previously
+reviewed RGB crops match. This direct diagnostic invocation does not qualify
+application/session/export behavior or authorize W5/O3 behavior changes.
+
+All130 captured inputs remain byte-identical; five outputs are receipt-pinned.
+Every non-null completed Oil/Foam result joins its exact same-frame candidate
+and source Y; this verifies provenance, not physical correctness.
+
+| Recipe | Current detection Oil / Foam non-null frames | Completed Oil / Foam non-null frames |
+|---|---|---|
+| Original agent ROI |21 /55|86 /0|
+| Human-corrected ROI |77 /114|30 /104|
+
+These are output counts, not accuracy/coverage success. Cropping changes
+preprocessing, geometry and temporal inputs; neither count difference isolates
+a single predicate or proves identity improvement.
+
+| Human ROI frame | Raw Oil Y | Completed Oil Y | Raw / completed Foam Y | Completed phase reason |
+|---|---|---|---|---|
+|390|856|821|null /null|FILL_ONSET_INTENT_PREDECESSOR|
+|420|854|821|841 /841|FILL_OWNER_AT_ENTRANCE|
+|450|854|null|839 /839|FILLED_CAP_VETO|
+|480|null|null|833 /833|FILLED_CAP_VETO|
+|510|null|null|833 /833|FILLED_CAP_VETO|
+
+### First supported loss and remaining physical unknown
+
+At420 the newly human-confirmed current-frame candidate is still present in
+the completed candidate list, with the same source token and Y854. Its initial,
+post-track and final authority tiers are all `CANDIDATE_ONLY`, reason
+`insufficient_authority`; phase identity is `continuation_only`, no row/tracklet
+is admitted. This establishes an authority-stage loss, not missing generation,
+pruning by score, smoothing or export corruption. The recorded failed-gate list
+is empty; that does not mean every predicate passed or establish one unique
+causal threshold to change.
+
+The competing same-frame candidate offset20, `phase_transition_scan`, Y821 is
+`ANCHOR_ELIGIBLE` via `distributed_phase_interface`, `direct_interface`, in
+`oil-tracklet:000023:0009`. Best-path, continuation-bound, spike-suppressed and
+completed-fill stages all already select821. Source inspection of
+`oil_candidate_authority.py` confirms candidate-only rows cannot enter physical
+ownership while this distributed-phase route grants anchor authority. The
+physical object at821 remains unreviewed; do not infer a structure subtype from
+its position or trace category. The trace narrows the next review to this
+specific admitted counter-candidate. It does not justify weakening authority
+for every candidate resembling854.
+
+Foam episode confirmation does not repair spatial-front identity. At450/480,
+completed Foam839/833 retains the selected spatial component's upper front,
+which the previous same-frame support analysis shows still includes the
+central-structure rise. `foam_front_detector.py` derives this detached-layer
+front from the upper component extent when `front_from_lower_edge=false`;
+`foam_episode_resolver.py` confirms existing candidate evidence rather than
+re-localizing that physical edge. At420, a passing window uses offsets29–33
+(source419–423), `directed_front`, rise7px and dynamic support1.0; temporal
+support alone does not prove that the component's extreme belongs to Foam.
+The known mixed-support issue remains; no repeat Foam/rim judgment is needed.
+
+### Artifacts and new bounded human checkpoint
+
+Local run: `sample/output/s11-local-human-roi-sequence-001/`; separate saved-result
+analysis and viewer: `sample/output/s11-local-human-roi-sequence-001-notes/`.
+
+| Artifact | SHA-256 |
+|---|---|
+|Prior comparison notes `reply-001-oil420.json`|`ac64bd084119f254e9b2184283d8dc0a56aca74b69d9d2492f582f053a7c4349`|
+|Sequence `report.json`|`27470906eb8de24b09d14c8dfdeabc4a558cb341a2823e8cf410a86ff4182f06`|
+|Sequence `receipt.json`|`50867322344166b3dab4bb9af07472a908d2c88326f7816b14bbba4ead19c583`|
+|Notes `analysis.json`|`a0695296f4e1b3988156cabf3dd56ecb1b48ad419909048a2f2b739f29d002c1`|
+|Notes `review.html`|`7656e7a087f7ee424c0499023271ec3ae7f3ade3a88dfe52d2a4cf45e6ed1df1`|
+|Notes `receipt.json`|`f2f83cc0a69a6325d88a32952201ab14e627f96b05882d818ebc2eb31292f6ee`|
+
+Safari **14초 — 시간 처리에서 선택된 Oil 후보** is opened and visually verified,
+including completion of its local-file Open dialog. It displays the same RGB
+plain and guided side by side: yellow821 is the unreviewed completed Oil
+selection; magenta854 is the confirmed Oil–Foam location. Lines indicate scalar
+heights across the effective-mask row, not native contours. An overlay toggle
+preserves unobstructed inspection. Ask only what physical feature yellow821
+represents; retain uncertainty if the user cannot distinguish it. No Windows
+execution is needed for this checkpoint.
+
 ## Detector Governance
 
-- Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: the agent-prepared detection ROI includes the rim. Under that input, spatial structure admission misses the confirmed narrow rim and broad-box substrate association also opposes separated material. Correct the existing ROI before attributing remaining behavior to a detector deficiency under human-set geometry; removing gates cannot establish front identity.
-- Logic-map impact: NONE — bounded same-code current-frame ROI comparison and local review viewers do not change production owners or acceptance authority.
+- First harmful stage: original ROI admits rim. After human ROI correction, confirmed Oil854 is retained but loses completed-window eligibility at authority; physical identity of the admitted821 alternative is pending. Foam mixed-component upper-extent selection precedes temporal confirmation and remains unresolved; episode acceptance does not repair front identity.
+- Logic-map impact: NONE — bounded same-code ROI/frame/sequence comparison and local review viewers do not change production owners or acceptance authority.
 - Failure-registry impact: NONE — geometry-as-identity, blanket masks, global cutoffs, private Y branches and cross-material authority remain prohibited; no replacement mechanism is promoted.
 
 FIELD FAIL / NOT_EVALUATED, O2 open and W5/O3 gated remain. No Windows work is
 needed at this checkpoint. The [work plan](../../00-project/work-plan.md) owns
-current state and the subsequent transition after the new Oil-position review.
+current state and the subsequent transition after the new admitted-candidate review.

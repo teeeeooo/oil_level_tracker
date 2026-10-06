@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 circular structures are human-confirmed; registered residual comparison is complete without identity promotion; A/C/D follow Foam, while B mixes a left/lower Foam edge and right/upper central structure; the14s/16s human clicks are saved; two exact current-frame captures reveal a lower C1 spatial-selection discrepancy at16s; the user confirms that C1 is glass rim and saved-raster replay identifies the missed structural gate; the five-frame structure-context audit is complete;18 outer and21 inner double-rim points are bound with unquantified mouse-click uncertainty; the location review is complete; the user clarifies Mac ROIs were agent-created; existing ellipse/margin masks replay exactly; the human ROI correction is applied in a separate local recipe and three-frame comparison is complete; the new14s Oil position awaits review while central-structure/Foam mixing remains unresolved; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 circular structures are human-confirmed; registered residual comparison is complete without identity promotion; A/C/D follow Foam, while B mixes a left/lower Foam edge and right/upper central structure; the14s/16s human clicks are saved; two exact current-frame captures reveal a lower C1 spatial-selection discrepancy at16s; the user confirms that C1 is glass rim and saved-raster replay identifies the missed structural gate; the five-frame structure-context audit is complete;18 outer and21 inner double-rim points are bound with unquantified mouse-click uncertainty; the location review is complete; the user clarifies Mac ROIs were agent-created; existing ellipse/margin masks replay exactly; the human ROI correction is applied in a separate local recipe and three-frame comparison is complete; the14s Oil854 is human-confirmed; the bounded13–17s existing-resolver comparison finds authority loss of854 and completed Oil821, whose physical target awaits review; temporal Foam confirmation retains the mixed front; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -297,15 +297,24 @@ frames420/450/480 retain all old C2 support in the mask; C1 retention is25/560,
 but temporal status remains persistence_pending. The mixed central-structure
 front remains unresolved. Original recipes, truth and Windows records stay pinned.
 
-Current human checkpoint: Safari **수정 ROI — Oil 위치 확인** shows the saved RGB
-and current-frame selections. Confirm whether the **14s frame420 magenta Oil
-line at source Y854** corresponds to the actual Oil–Foam boundary. This newly
-selected position has not received that frame's human Oil judgment; the15s
-Oil record near853 cannot be transferred to it. Cyan is spatial component support,
-not a confirmed Foam output. Do not repeat the completed ROI/rim/Foam reviews.
-After the answer, preserve its attribution and continue the bounded local
-investigation of remaining central-structure/front identity. No Windows run,
-threshold change, formal O2 promotion or W5/O3 entry is requested now.
+The [Oil reply and bounded sequence diagnosis](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#oil-confirmation-and-bounded-sequence-diagnosis--2026-10-06)
+close the14s Oil-position question: Y854 is the actual Oil–Foam boundary according
+to the user. The existing resolver was exercised on all121 already reviewed
+frames390–510, with original/corrected recipes and fresh state at390. Inputs130/130
+and same-frame numeric provenance pass. With corrected ROI, frame420's confirmed
+854 survives generation but remains candidate-only; completed Oil selects the
+anchor-eligible phase-transition candidate821 instead. At450/480 Oil is withheld
+by the material ownership barrier. Completed Foam839/833 retains the known
+mixed spatial front. Counts and temporal confirmation do not establish accuracy;
+source, thresholds, original recipes and formal truth remain unchanged.
+
+Current human checkpoint: Safari **14초 — 시간 처리에서 선택된 Oil 후보** shows
+plain RGB and yellow821 / confirmed magenta854. Identify the physical feature
+at yellow821 (or keep uncertain), so the admitted opposing candidate can be
+bound to human evidence before choosing an authority repair. Do not repeat the
+confirmed854, ROI, rim or central-structure/Foam reviews. No Windows execution,
+formal O2 promotion or W5/O3 behavior entry is requested. This is the existing
+resolver on a bounded diagnostic interval, not application/export qualification.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential
