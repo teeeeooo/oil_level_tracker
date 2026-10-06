@@ -1,8 +1,9 @@
 # S11 passive control review — first batch intake
 
 Date: 2026-10-06. Basis: user-transferred Windows reports; first-case intake
-followed by the final batch return below. Earlier continuation instructions are
-historical and are superseded by the final-return disposition.
+followed by the final batch return and user clarifications below. Earlier
+continuation and pending-target statements are historical; the final target
+clarification supersedes them.
 Procedure: [first bounded batch](../../40-operations/s11-o2-local-shadow-evaluation.md#passive-control-review--first-bounded-batch).
 Current gate and next action remain owned by the [work plan](../../00-project/work-plan.md#next-transition).
 
@@ -167,10 +168,57 @@ opposition, independent holdout success or O2 acceptance. In particular, remote
 negatives cannot alone test rejection of artifacts sharing the surface's local
 appearance. FIELD FAIL / NOT_EVALUATED remain unchanged.
 
+## Target resolved — uppermost actual fluid boundary
+
+The user clarified that fluid1 is liquefied refrigerant and fluid2 is Oil, and
+that material-species classification is optional rather than required. The
+requested tracked boundary is the **uppermost actual fluid boundary**: upper
+of two, uppermost of three, and similarly for further layers. This is a
+user-specified product target, not an agent inference from canonical Y.
+
+The [product specification](../../rotary_oil_level_tracker_ssot_spec.md#다층-유체의-추적-대상)
+owns this definition. The chemical interpretation is attributed to the user;
+no new chemical measurement was performed. Target clarification is closed and
+no repeat image judgment or further fluid-classification answer is needed.
+
+Applied to the previously supplied candidate groups:
+
+| Case / group | Candidate indices | Physical review retained | Target role |
+|---|---|---|---|
+| accum-drain upper Oil/air | 4, 13, 17, 24 | interface | Target positive (4) |
+| accum-drain lower refrigerant/Oil | 5, 10, 18 | interface | Real internal boundary, non-target (3) |
+| accum-postfoam single reported surface | 5, 6, 10, 19, 20, 25 | interface | Target positive (6) |
+| Remaining candidates across all three cases | As supplied in the final inventory | non_interface (62) | Reported non-target; retain individual/group review attribution |
+
+This is a semantic mapping from user-provided groups and the clarified target,
+not a private-file projection or a new labels revision. The physical inventory
+remains **13 interface / 62 non_interface**. Its target interpretation is
+**10 target / 3 real internal non-target / 62 other non-target**; the latter
+62 do not receive invented artifact subclasses. These are candidate counts,
+not independent boundary samples, model predictions, or accuracy measurements.
+
+The original labels SHA and revision_count remain those in the final return;
+no private labels/replies were edited. The current evaluator cannot consume this
+mapping automatically. Before a target-specific run, bind an explicit versioned
+target-truth snapshot to case/input-index/witness and original label provenance,
+retaining physical identity and the user's target instruction separately. Do not
+silently feed all 13 broad-interface positives into a target evaluation or erase
+the three genuine lower-interface observations. Formal mapping is the next
+preparation step, not a request for another scene review or detector replay.
+
+Identifying the uppermost real boundary still requires rejecting reflections,
+structures and residue and recognizing unavailable/ambiguous targets. Minimum Y
+over raw proposals is not that discrimination. A lower visible interface must not
+stand in for an occluded target. Independent Foam ownership, same-frame numeric
+provenance, FULL no-interface and UNKNOWN behavior are retained. The new internal
+boundary group provides a relevant target distinction but does not by itself
+establish a classifier, matched optical counter-control, independent holdout or
+O2 acceptance. FIELD FAIL / NOT_EVALUATED remain unchanged.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`.
 - Failure-registry entries: `S11-F04`, `S11-F09`, `S11-F10`.
-- First harmful stage: no new detector failure is established; the identified evidence-use risk is conflating a reported material boundary with target Oil identity before evaluation.
+- First harmful stage: no new detector failure is established; the evidence-use risk is conflating a real internal boundary with the now-clarified uppermost target when evaluating historical broad-interface labels.
 - Logic-map impact: NONE — attributed review intake and procedural target-mapping hold only; candidate generation, authority and evaluator code are unchanged.
 - Failure-registry impact: NONE — retain physical-role/provenance distinctions without geometry-based identity transfer or a private-case rule.

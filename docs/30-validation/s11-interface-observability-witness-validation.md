@@ -9,7 +9,7 @@ owner handoff or direction-neutral phase behavior. The
 ## Acceptance boundary
 
 The first implementation exists to measure whether current images contain a
-defensible Oil/refrigerant interface cue and to describe candidate contour
+defensible target-fluid-boundary cue and to describe candidate contour
 geometry without changing R22-2 decisions.
 
 A passing O1/O2 implementation must demonstrate all of the following:
@@ -225,6 +225,23 @@ These reviewed cases remain regression, not classifier-fitting or untouched-hold
 proof. No field acceptance follows from passing the schema/evaluator controls.
 
 ### W1 aggregation challenger controls — not yet acceptance evidence
+
+The [product target](../rotary_oil_level_tracker_ssot_spec.md#다층-유체의-추적-대상)
+is the uppermost actual fluid boundary, not every physical liquid/liquid
+interface. Target-specific evaluation additionally needs controls for two and
+three actual boundaries, a reflection/structure above the target, an occluded
+upper target with a visible lower interface, and FULL with no visible target.
+Unknown material names must not force failure when target identity is otherwise
+supported. Conversely, geometric height alone must not grant identity or replace
+a missing target with a lower boundary. Foam remains independently evaluated.
+These are acceptance obligations, not newly passed tests.
+
+Preserve broad physical-interface labels and their original review basis. Before
+feeding them to the current v2 identity evaluator, require explicit, versioned
+target-truth attribution; notes alone do not change its positive-label counting.
+A real internal boundary can be target-negative without being a reflection or
+structure. Do not invent artifact tags, near/off labels or scalar truth during
+that mapping. Candidate and boundary counts remain separate denominators.
 
 Use the architecture's [W1 target contract](../20-architecture/s11-interface-observability-witness-architecture.md#w1-target-and-aggregation-contract--design-boundary).
 The [work-item ledger](../00-project/work-plan.md#s11-work-item-ledger) owns live

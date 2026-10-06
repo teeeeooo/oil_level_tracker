@@ -154,7 +154,7 @@ MVP는 다음 기능을 포함한다.
 | **Crop ROI** | ellipse 외접 사각형에서 자동 파생되는 영상 crop 영역 |
 | **Effective Detection Mask** | ellipse 내부에서 margin과 exclusion zone을 제외한 실제 검지 영역 |
 | **Zero line** | 유면 높이의 기준선. 위쪽이 양수, 아래쪽이 음수 |
-| **Oil-air boundary** | 공기와 clear oil 사이의 유면 경계 |
+| **Oil-air boundary** | 추적 대상 유면: 여러 실제 유체층 경계가 있으면 그중 최상단 경계. 유체 종류 분류는 필수가 아님 |
 | **Foam front** | 하단과 연결된 foam/bubbly oil 영역의 최상단 경계 |
 | **Candidate** | oil-air boundary 또는 foam front의 후보 위치 |
 | **FillState** | 현재 glass 내부 관측 상태 |
@@ -1145,6 +1145,20 @@ UNKNOWN_REVIEW
 - glare/fogged
 - candidate 충돌
 - confidence 미달
+
+### 다층 유체의 추적 대상
+
+사용자 목표 명확화(2026-10-06): 액화 냉매와 Oil 등 여러 유체층의 경계가
+보이더라도 Oil 높이 출력은 **실제 유체 경계 중 최상단 경계 하나**를 추적한다.
+경계가 두 개면 상단, 세 개면 최상단이며, 내부 유체/유체 경계는 실제 경계라도
+이 출력의 추적 대상이 아니다. 유체별 화학적 종류를 분류하는 것은 필수 요구가 아니다.
+
+이는 물리적 목표 정의이며 모든 검출 후보 중 최소 source Y를 고르는 알고리즘이
+아니다. 상부 반사·잔류·구조물은 유체 경계로 확인되지 않으면 목표가 될 수 없다.
+최상단 목표가 가려졌거나 불명확할 때 보이는 하단 경계로 대신하지 않는다.
+FULL/EMPTY의 no-interface 상태와 UNKNOWN, same-frame provenance 계약은 유지한다.
+Foam front는 아래의 별도 정의·출력을 유지하며 Oil 출력과 합치지 않는다.
+이 명확화 자체는 기존 detector가 이 선택을 구현·검증했다는 의미가 아니다.
 
 ## 11.7 Foam Front 정의
 

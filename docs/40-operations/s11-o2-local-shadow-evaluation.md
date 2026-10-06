@@ -1897,6 +1897,12 @@ contour/Y 정답을 별도 요구하지 않는다. `uncertain`은 완료된 유�
 note를 읽어 자동 제외하지 않으므로 이는 운영상 사용 보류이며 새 schema 기능이 아니다.
 이 구분을 위해 상한을 넘어 추가 판독하거나 다른 case에 같은 층 구조를 유도하지 않는다.
 
+목표는 이후 [사용자가 확정한 최상단 실제 유체 경계](../rotary_oil_level_tracker_ssot_spec.md#다층-유체의-추적-대상)다.
+유체 종류 분류는 필수가 아니며 실제 내부 경계는 물리적 interface 기록을 유지하되
+추적 목표와 구분한다. 이번 묶음의 [확정된 대응](../60-evidence/s11/s11-o2-passive-control-review-001.md#target-resolved--uppermost-actual-fluid-boundary)은
+별도 근거에 보존되어 있다. 같은 질문을 재요청하지 않는다. 원본 labels를 덮어쓰거나
+기존 평가기가 note의 target 구분을 자동 적용한다고 가정하지 않는다.
+
 ### 다른 영상: 이번에는 metadata와 노출 이력만
 
 알려진 작업 폴더의 기존 영상/번들 목록과 사용자가 이미 제공한 정보만 확인한다.

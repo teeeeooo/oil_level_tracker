@@ -12,10 +12,11 @@ This document grants no new production authority.
 Define the smallest observation-layer redesign that can answer three questions
 before another temporal repair is attempted:
 
-1. Is the current frame capable of exposing an Oil/refrigerant interface under
+1. Is the current frame capable of exposing the target uppermost fluid boundary under
    the active optical conditions?
-2. Which spatial contour is supported as a material interface rather than a
-   vessel reflection, fitting/wall edge, residue stripe or unresolved structure?
+2. Which spatial contour is supported as that target, distinguishing internal
+   material interfaces as well as vessel reflections, fitting/wall edges,
+   residue stripes or unresolved structures?
 3. How uncertain is the contour localization in each part of the sight-glass?
 
 The first implementation is diagnostic-only. It may measure and serialize raw
@@ -455,6 +456,22 @@ exact source/frame/geometry correspondence checks, with their original basis.
 A new human question is needed only for information not already established.
 
 #### Evaluation semantics
+
+The [product target](../rotary_oil_level_tracker_ssot_spec.md#다층-유체의-추적-대상)
+is the uppermost actual fluid boundary; material-species classification is not
+required. Physical interface existence and membership in this target are distinct.
+A real lower liquid/liquid boundary is not an artifact, but is not the target
+Oil-height boundary. Do not implement this definition as minimum canonical Y
+over raw proposals, source-family preference, or a lower-boundary fallback when
+the target is occluded. Foam retains its separate owner/output.
+
+The existing v2 evaluator consumes `identity=interface` without a target-role
+field. Its mechanics below are unchanged. Historical broad physical-interface
+labels must not silently acquire target-specific meaning: preserve original
+labels/history and explicitly version/bind target truth before using such a
+case for target metrics. A note or target mapping in evidence is not an
+implemented evaluator exclusion. No schema migration or runtime change follows
+from this target clarification alone.
 
 1. Candidate identity precision/recall uses identity alone; no source family or
    tag count gives extra votes. Unreviewed/uncertain support stays separate and
@@ -1300,6 +1317,12 @@ calibration/holdout examples. The bounded Windows saved-output procedure is now 
 No human labeling, detector rerun or acceptance transition is requested.
 
 ## History Review
+
+2026-10-06 target clarification: the user requires the uppermost actual fluid
+boundary without mandatory material-species classification. Preserve physical
+lower-interface evidence separately from target membership. F04's geometry/alias
+identity leakage and F10's private-coordinate shortcut remain prohibited; no
+minimum-Y selector or automatic legacy relabeling is introduced.
 
 2026-10-06 implementation: candidate-conditioned region competition is an offline
 appearance prototype with fixed planar/partition/ribbon fits, held-out columns
