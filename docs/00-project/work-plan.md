@@ -195,18 +195,22 @@ The [offline front-alternative prototype](../60-evidence/s11/2026-10-06-foam-fro
 is implemented and checked on all 14 saved components. Single local image edges
 also occur on confirmed rim negatives, so this prototype is not promoted into a
 Foam selector or scalar. It retains all competing peaks and unavailable support;
-sample2 mixed support, sample4 central-feature uncertainty and base missing support
-remain unresolved. No threshold adjustment or structure-veto removal is justified.
+sample2 mixed support, sample4 structure-contaminated boundary localization and
+base missing support remain unresolved. No threshold adjustment or structure-veto removal is justified.
 
-The [human motion reply](../60-evidence/s11/2026-10-06-foam-front-alternatives.md#human-motion-reply--stationary-central-feature)
-closes the Mac 13–17 s checkpoint: the central round/arched feature stays in place
-and does not deform while surrounding Foam changes. This is qualitative fixed
-appearance evidence within mixed support, not a hardware/reflection label or a
-pixel mask for all C2. All 124 prepared review outputs remain unchanged.
+The [human structure clarification](../60-evidence/s11/2026-10-06-foam-front-alternatives.md#human-clarification--regularly-spaced-circular-structures)
+identifies the central circle and the regularly spaced circular features as
+structures. The preceding motion reply confirms that these features stay in place
+and do not deform while surrounding Foam changes. Structure-versus-reflection
+uncertainty for these described features is closed by explicit human attribution;
+exact per-segment overlap and circle geometry remain unmeasured. This is not a
+structure label for all C2 pixels. The prior reply and all 124 review outputs are
+preserved; no repeated identity question is needed.
 
 Next local verification: reuse the existing camera/exposure registration owner
 (`temporal_raster_evidence.py`) where suitable to inspect local boundary-alternative
-change on the saved sequence, instead of treating whole-mask motion as front truth.
+change and overlap with these known circular structures on the saved sequence,
+instead of treating whole-mask motion as front truth.
 Do not propagate the anchor C2 mask as per-frame physical truth, hardcode a central
 exclusion, bridge uncertain intervals or adopt motion-only identity. This experiment
 is not yet run; exact affected extent and true Foam contour remain unknown.

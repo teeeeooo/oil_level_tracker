@@ -121,9 +121,10 @@ provide an exact affected region, point trajectory, numerical displacement or
 stationarity tolerance, and does not label the whole C2 component as structure.
 
 The observation strengthens the mixed-support concern: the saved support top
-cannot be accepted wholesale as the moving Foam front. Whether the fixed feature
-is hardware or reflection, the true boundary through/around it and generalization
-beyond this recording remain unresolved. A stationary Foam layer is possible in
+cannot be accepted wholesale as the moving Foam front. At this reply, hardware
+versus reflection, the true boundary through/around it and generalization remained
+unresolved. The subsequent structure clarification below resolves the feature
+identity question through explicit human attribution. A stationary Foam layer is possible in
 other contexts; motion or its absence must not become material identity by itself.
 The original Foam-region observation remains intact, as do the prior Oil/Foam
 path judgments. No formal labels, masks, scalar or episode decision changed.
@@ -134,6 +135,30 @@ SHA-256 `af23ed2442a8eaf8f158918cecf1f57b8f0f18ba8447d0317e5ea016125767e0`.
 All **124 registered review outputs** were rehashed before/after and remain
 unchanged; the original preparation receipt remains PREPARED_FOR_HUMAN_REVIEW.
 Its status is not retroactively edited into physical acceptance.
+
+## Human clarification — regularly spaced circular structures
+
+The user's subsequent clarification is:
+
+> 일단 구조물임 가운데 원형부터 일정 간격으로 원형 구조물이 있음
+
+The central circle and the circular features at regular intervals are now
+**human-confirmed structures**. This supersedes the earlier structure-versus-
+reflection uncertainty for the features described. The attribution comes from
+this explicit human clarification, not from treating stationarity as an identity
+rule. Their fixed appearance while Foam changes remains the preceding observation.
+
+This gives a qualitative structure control inside the mixed Foam-region context.
+It does not label the entire C2 component as structure, supply exact circle centers,
+radii or pixel spacing, or determine the true Foam boundary behind/around them.
+Do not synthesize equally spaced circle masks or delete an entire central strip.
+Prior Foam-region attribution and Oil/Foam judgments remain preserved.
+
+Append-only local reply:
+`sample/output/s11-local-foam-motion-review-001-notes/reply-002-circular-structures.json`,
+SHA-256 `d47e8142a19bd6d5d60963b4e96af19dd45ed42648cfe553cfc7b2073bdd0733`.
+The prior reply remains byte-identical and all 124 registered review outputs are
+preserved. Formal candidate labels, pixel masks and runtime decisions are unchanged.
 
 ### Next bounded verification and existing owner
 
@@ -147,8 +172,9 @@ by copying the frame-450 C2 mask through the sequence.
 The next local experiment should reuse existing registration/exposure operations
 where suitable and preserve local raster evidence at boundary alternatives on
 these saved frames. Inspect registration validity and available support before
-interpreting relative change. Compare the fixed-feature context with changing
-surrounding appearance; retain rim negatives, mixed support and missing-support
+interpreting relative change. Compare the human-confirmed circular structures
+with changing surrounding Foam appearance and verify their overlap with stored
+boundary alternatives; retain rim negatives, mixed support and missing-support
 cases as distinct limitations. Human context is attributed regression evidence,
 not a hardcoded central exclusion or a physical pixel mask. No interpolation
 through the feature, motion-only winner, new threshold or runtime promotion is
@@ -159,6 +185,6 @@ no additional video decode or Windows execution was performed while recording it
 
 - Logic-map nodes: `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: support-to-boundary promotion remains unvalidated; sample4's known box-based substrate veto is not repaired by selecting a local image peak. The human now observes a stationary central feature while Foam changes; its structure/reflection identity and exact affected boundary interval remain unknown.
+- First harmful stage: support-to-boundary promotion remains unvalidated; sample4's known box-based substrate veto is not repaired by selecting a local image peak. The human identifies the stationary, regularly spaced circular features as structures. Their exact overlap with saved boundary alternatives and the true Foam contour around them remain unmeasured.
 - Logic-map impact: NONE — offline diagnostics and review preparation have no production caller, accepted scalar, temporal decision or publication effect.
 - Failure-registry impact: NONE — existing identity leakage, correlated appearance and threshold-shortcut guards cover the rejected promotion; no new runtime mechanism or field efficacy claim.
