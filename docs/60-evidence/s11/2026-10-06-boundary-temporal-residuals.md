@@ -200,6 +200,59 @@ without script errors. No source implementation or formal labels changed.
 At this publication checkpoint the boundary-visibility answer is pending.
 No Windows run is required; FIELD FAIL, O2 and Windows target truth remain unchanged.
 
+## Annotated B boundary reply received
+
+The user supplied `56114.jpg` with red strokes on the review display and said:
+
+> 내가 빨간색으로 표시한 구간이 foam의 윗경계로 생각됨
+
+Preserve **tentative** attribution ("생각됨"), not a confirmed exact contour.
+The following mapping is the agent's visual correspondence between red marks and
+the displayed coordinate cells. Coordinates are approximate; stroke thickness,
+screenshot scaling and the original104×104 resolution do not support subpixel
+truth. Stored peak coordinates in the comparison come directly from JSON.
+
+| Approximate marked source X | Approximate source Y | Marked columns | Matched stored peaks at radius4 | Matched stored peaks at radius8 |
+|---|---|---|---|---|
+| 584–585 inclusive | 844 | 2 | 2 | 2 |
+| 586–588 inclusive | 845 | 3 | 3 | 3 |
+| 589–594 inclusive | 846 | 6 | 0 | 6 |
+| Total | — | 11 | 5 | 11 |
+
+X583 is unmarked and remains unbound by this image. Do not fill it by adjacency.
+At X589–594, the marked lower alternative is approximately5–7 pixels below the
+existing structure-following top (positive source Y is down). Every mapped mark
+coincides with a retained radius8 peak. This closes the bounded representation
+question for the marked cells: a potential human-indicated Foam edge is present
+among saved alternatives. It does not establish calibrated recall, an optimal
+radius, which alternative to select generically, or a valid public Foam scalar.
+Other peaks remain present; increasing radius alone is not a detector repair.
+
+The human image refines the earlier qualitative B-left/Foam, B-right/structure
+reply. It neither rescinds A/C/D nor assigns every pixel between the marked edge
+and the structure. No exact structural mask, interpolated path, time propagation,
+formal label revision or Windows truth transfer is created.
+
+Original annotation bytes are copied unchanged to
+`sample/output/s11-local-b-alternative-review-001-notes/reply-001-annotated.jpg`:
+SHA-256 `2b4591a66bfe41db3dc1cb84e9a64875004f0d5aa9f8271caccfc9a4650914cc`.
+The attributed reply and per-column stored-peak matches are recorded separately in
+`reply-001-boundary-correspondence.json` in the same notes directory:
+SHA-256 `9116a14ff259b1eaef28693b5a09e4cd7b5f808b61786555cf92d3ebc0bb2532`.
+The reply pins the review manifest and annotation hashes, preserves the user's
+verbatim qualification and leaves the formal Foam front null. The94 original
+inputs and three review outputs were rehashed unchanged. No new extraction,
+measurement, decoding, detector run or runtime code change occurred.
+
+Next work is a bounded design/validation step for selecting among local boundary
+alternatives while distinguishing retained material support from its physical
+front. This case supplies mixed-path development context, not a coordinate-based
+runtime rule. Preserve the other saved positive/mixed/rim controls and unavailable
+support; do not pick the lowest/strongest peak, tune a threshold to this image,
+or bridge unobserved columns. Independent identity/acceptance evidence is still
+required before any behavior promotion. No further coordinate confirmation or
+Windows execution is needed merely to record this tentative reply.
+
 ## Verification and provenance
 
 Focused tests: 22 passed across `tests/unit/test_s11_boundary_temporal_probe.py`

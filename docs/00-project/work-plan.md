@@ -216,8 +216,8 @@ identity, structure exclusion or runtime promotion follows.
 
 The [A–D human correspondence](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md#human-ad-correspondence-received)
 closes that review checkpoint: A/C/D follow Foam; B's left/lower part follows
-Foam, while its right/upper `^` follows the central structure. B's exact pixel split
-and replacement Foam contour are not supplied. Preserve B as mixed; do not label
+Foam, while its right/upper `^` follows the central structure. B's exact structure split remains unassigned; the later red-mark reply below
+provides approximate, tentative alternative Foam-edge correspondence. Preserve B as mixed; do not label
 all C2 or all B as structure and do not turn this one-frame reply into temporal truth.
 
 The [saved B-alternative inventory](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md#saved-b-alternatives--representation-check-and-next-review)
@@ -225,13 +225,20 @@ is complete without new measurement. Radius8 retains lower appearance peaks unde
 the right-hand lobe as well as competing upper peaks; their physical boundary
 identity remains unknown. More retained peaks do not establish a successful repair.
 
-Next human checkpoint: the original-RGB/peak viewer asks whether B's actual Foam
-upper boundary is visible where the stored top follows structure, and whether it
-matches a retained alternative. Occluded/unclear/no match are valid answers. A/C/D
-and the qualitative B attribution remain closed; do not fabricate B's exact split
-or interpolate a front through the structure. The viewer uses all twelve B columns
-and both original radii without strength ranking. No Windows execution is needed.
-Runtime behavior, O2 truth, FIELD FAIL and W5/O3 remain unchanged.
+The [red-marked B reply](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md#annotated-b-boundary-reply-received)
+closes the current human checkpoint with tentative Foam-upper-boundary attribution.
+The agent's approximate screen mapping is X584–585/Y844, X586–588/Y845 and
+X589–594/Y846; all eleven mapped columns coincide with saved radius8 alternatives,
+versus five at radius4. X583 is unmarked. This establishes retained alternatives
+for the indicated cells, not exact contour truth, calibrated recall or a selector.
+
+Next local task: design and validate a bounded alternative-selection mechanism
+that separates material support from front identity, using the saved positive,
+mixed and rim controls. Preserve competing alternatives, unavailable support and
+this reply's uncertainty; no lower/stronger-peak shortcut, hardcoded coordinates,
+threshold tuning to B or interpolation is justified. No repeated user confirmation
+or Windows execution is needed to record this reply. Runtime behavior, formal O2
+truth, FIELD FAIL and W5/O3 remain unchanged.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential
