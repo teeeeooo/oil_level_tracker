@@ -377,3 +377,9 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
 | 2026-09-07 | [windows-r7-r12-field-procedures.md](90-archive/s11/windows-r7-r12-field-procedures.md) | 아카이브 |
+
+## 2026-10-06 추가 기록
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-06 | [Local corpus target reuse](60-evidence/s11/2026-10-06-local-corpus-target-reuse.md) | 로컬 truth·이미지 연결 검증; 작성일 2026-10-06 |

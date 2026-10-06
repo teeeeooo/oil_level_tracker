@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; other-recording role allocation is next.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac corpus reuse is verified and bounded local candidate preparation is next; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -100,24 +100,34 @@ predictions or detector run occurred. Do not repeat binding, hash reconciliation
 or human review for this batch. The snapshot's evaluation truth is available for
 a later explicitly scoped prediction run; no efficacy is established yet.
 
-Next obtain file/session identity and prior review/development exposure for the
-other existing videos the user said are available. Reuse the
-[metadata-only procedure](../40-operations/s11-o2-local-shadow-evaluation.md#다른-영상-이번에는-metadata와-노출-이력만)
-and assign development/calibration/holdout roles before inspecting potential
-holdout pixels or selecting a model/operating point. Only SPL#1 was found in the
-previously searched folder; do not repeat that search or equate it to no other
-recordings. Unknown recording relationships/exposure remain unknown. The user is checking
-availability and will return that information; wait for that reply without
-starting additional-video work or repeating the question. No new replay, fitting
-or classifier implementation is authorized by this return alone.
+The user authorized continuing with the existing Mac corpus and will prepare
+independent video separately. The [local reuse audit](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md)
+verified four videos, all 12 media/recipe/truth pins, 15 exact historical review
+joins and 30 saved-image hashes. Thirteen scalar Oil observations are usable;
+two focus-rejected observations stay unusable. These previously exposed sources
+remain regression material available for local development; independent-video
+arrival is not a blocker for preparation or implementation investigation.
 
-SPL#1 stays in its existing `recording_group` and `regression` partition. The
-implemented evaluator locks an entire recording group/run to one partition;
-new frames, Glasses or regions from that recording are not independent holdout.
-Allocate genuinely distinct available recordings before
-model fitting or operating-point selection. No detector rerun, comparative
-capture, new classifier or W4-R2 entry follows from this review preparation.
-Physical opposition remains not_measured until the relevant evidence is obtained.
+Next prepare current candidate correspondence for three preselected local frames:
+base_sample_1/156 (Oil/overlay), sample2/30 (Oil/reflection), sample4/450 (Oil/Foam).
+Reuse existing extraction/review owners and the linked plain/comparison images;
+old D1 agent guides are not current detector native paths. Keep all 13 usable
+annotations in scalar regression. Do not automatically convert their Y positions
+into candidate identity, per-sector path or uppermost-target labels. Ask for
+candidate-guided human clarification only where the concrete correspondence is
+unresolved. A bounded local diagnostic capture, if needed for these three frames,
+is preparation evidence with new provenance, not a replay of the old D1 record.
+No full-video replay, classifier fitting or operating-point selection is part of
+this preparation. No Windows execution is needed at this step.
+
+The forthcoming independent video's recording/session lineage and prior exposure
+must be recorded and its evaluation role frozen before inspecting potential
+holdout pixels. Do not repeat the availability question while the user prepares
+it. Existing Mac sources and SPL#1 retain regression roles; new frames, Glasses
+or regions of an exposed recording are not independent holdout. Independent
+calibration/holdout and O2 acceptance remain future gates, not prerequisites to
+local corpus reuse. Physical opposition remains not_measured until established
+by the relevant candidate-bound evidence.
 
 Full private CSVs have not been independently read or rehashed here. W4-R1 remains
 closed, R2 entry unmet, O2 open and W5/O3 gated. Existing labels, idx0/idx20 human
@@ -151,9 +161,10 @@ again. These historical grants do not authorize unrelated changes or publication
 The fixed color-side measurement is complete. The current user request authorizes
 implementation and preparation up to the Windows execution point. The user has returned that Windows
 saved-output run. The subsequent input-scope decision permits additional human
-review within existing videos and planning other-recording use. Current Windows
-scope is the bounded review handoff, including separate new review records; it
-does not authorize detector replay, training or broader field qualification.
+review within existing videos and planning other-recording use. The latest request additionally authorizes Mac corpus reuse and bounded local
+candidate preparation while the user supplies independent video. Windows scope
+remains the completed bounded review/binding handoff; broader field qualification
+and training are not implied.
 
 Outside the detector replacement scope remain unrelated candidate-generation,
 Foam or UI changes; unbounded retention/recovery; relaxed truth/safety criteria;
