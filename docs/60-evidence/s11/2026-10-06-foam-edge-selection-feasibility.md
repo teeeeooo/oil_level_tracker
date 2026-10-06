@@ -136,7 +136,7 @@ is claimed. FIELD FAIL and the independent-recording requirement remain unchange
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: a mixed component top precedes any reliable physical-front selection; the sampled B alternative is retained, but appearance-only choices lack identity and cannot establish a repaired front.
+- First harmful stage: frame480 confirmed rim C1 escapes spatial structural rejection and passes material admission before score ordering; mixed component tops and the earlier substrate false rejection remain opposing failures. No repaired front is established.
 - Logic-map impact: NONE — saved-JSON rule audits and original-image review have no production caller or decision authority.
 - Failure-registry impact: NONE — no motion-only identity, geometry-as-identity or private-coordinate shortcut is promoted; existing recurrence guards apply.
 
@@ -259,3 +259,72 @@ static preview and rendering script. Original captures/reviews and Windows
 applies: actual same-X support and admission precede spatial selection; this new
 capture exposes a discrepancy without assigning physical identity or changing a
 runtime owner. FIELD FAIL / NOT_EVALUATED remains unchanged.
+
+
+## Frame480 orange C1 confirmed glass rim — 2026-10-06
+
+The user's exact reply is **“주황색은 글래스 테두리야”**. It binds to the
+prepared sample4/frame480 (16s) orange C1: diagnostic_id1, original component
+label5, source box `[585,862,631,889)`, 313 support pixels. The local reply pins
+the exact viewer, capture receipt, run and record IDs. This is a candidate-bound
+structure attribution; it does not label all C2 pixels, transfer another frame's
+identity, alter formal labels, or change the Windows75 target truth.
+
+The user also reported that Safari had previously stopped at the file-open
+screen. The earlier claim of uninterrupted successful display is therefore
+qualified: its past cause is not established. On this turn a fresh Safari AX
+read and screenshot show the actual original/support comparison, orange C1,
+cyan C2 and red points, with no file-open dialog. No reload or alteration of the
+original point tab was needed. The pending question in the immutable historical
+viewer is closed by this reply, not an outstanding request.
+
+### Stored-raster causal check
+
+`record-rim-reply.py` reads the saved component-label raster and invokes the
+existing `_wide_hollow_component_metrics` helper for all5 frame480 components.
+Structural predicates and recorded wide-row/compactness values reproduce; a
+separate decomposition of the current score expression matches all5 scores
+(abs tolerance1e-12 for arithmetic verification only). All62 pinned inputs are
+unchanged. No video decode, detector run or parameter change occurred.
+
+| C1 structural conjunct | Measured value | Predicate result |
+|---|---|---|
+| width ratio >=0.70 | 0.4423076923 | false |
+| fill ratio <0.30 | 0.2520128824 | true |
+| wide-row fraction >=0.25 | 0.2962962963 | true |
+| row compactness median <0.65 | 1.0 | false |
+
+The conjunction is false. A partial curved rim can have compact individual rows
+without being Foam; the present broad/hollow rule does not reject this observed
+fragment. C1 then passes `bottom_connected and white_ok`, area/height, texture
+and score gates, resulting in `accepted_strong`. Its phenotype is `none`;
+the bottom-connected branch does not require a detached material phenotype.
+
+C1's score0.8404473715 exceeds C2's0.7422964852. Both have the same accepted
+status priority, so `_component_sort_key` uses score before front Y. C1 receives
+0.09 from bottom connection and0.10199 from height (C2:0 and0.06422). Appearance
+and texture contributions are similar; C2 has the larger fill contribution.
+This explains the observed ordering without claiming that removing a single
+term would yield a validated repair. First address the admitted structure,
+rather than treating score order alone as the root cause.
+
+The fresh-state owner remains `persistence_pending`, with all public Oil/Foam
+positions null. A spatial false admission is established; a temporal/field false
+publication is not. No sequence replay or accumulated static model was tested.
+
+### Retained reply and audit
+
+Local directory: `sample/output/s11-local-foam-two-time-capture-001-notes/`.
+
+| File | SHA-256 |
+|---|---|
+| `reply-002-frame480-rim.json` | `c1d93492ec3fe2746b8a42344e5e8ef14397c60ba94a7d7a3130996581259ffb` |
+| `rim-admission-audit.json` | `a8de647bdd5c183d6ea400eb388d083f11f6e83d5089c4f9bf2860e157d6a9af` |
+| `record-rim-reply.py` | `b3a01e1468db368f4a2178ed85eeb8a794b4d7f15254247fb9a4a258474cf61b` |
+
+`rim-reply-receipt.json` records all62 input hashes and these outputs. Prior
+capture/comparison/viewer artifacts remain unchanged. The next local design
+must confront this narrow rim false admission together with the earlier broad
+rim and substrate false rejection, while retaining the mixed C2 boundary. No
+threshold fit, pure-material assumption, identity promotion or W5/O3 entry
+follows. FIELD FAIL / NOT_EVALUATED remains unchanged.
