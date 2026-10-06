@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; existing Oil/Foam owner investigation is next; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation is complete; rejected Foam component diagnostics are next; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -139,12 +139,22 @@ qualitative offset into an exact target, pixel correction or per-sector near/off
 label. Preserve the historical no-Foam scalar annotation separately from this
 new Foam observation; their discrepancy is not resolved by overwriting either.
 
-Next inspect the existing Oil selection and independent Foam-front owners against
-the saved candidate-bound observations, locating where Oil surface, Foam gap,
-Foam–air boundary or path offset are lost or conflated before proposing a generic
-mechanism. Colors/indices are case-specific. No repeat capture, all-candidate
-review, Windows execution or independent-video delivery is required for this
-bounded source investigation. Formal O2 truth and runtime changes remain separate.
+The [local Oil/Foam owner audit](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md)
+is complete. All six reviewed material paths survive as unselected Oil proposals;
+the current Oil ambiguity decision precedes their assembly, and no completed-window
+selection was run. Foam spatial statuses are weak_rejected / ambiguous /
+weak_rejected; the result clears candidate/mask before temporal confirmation, so
+all three traces lack a Foam-front candidate. Exact rejected-component geometry
+and predicates are absent from the saved trace; human-component correspondence
+and completed-window Oil first loss remain unknown.
+
+Next extend the existing Foam diagnostic projection/trace seam to retain bounded
+rejected-component geometry and actual spatial predicate outcomes, with detector
+behavior equality and serialization checks. Then capture only these same three
+approved frames into a new output, preserving the original capture and replies.
+This is trace-only local work, not a Foam acceptance bypass, new threshold or Oil
+identity mechanism. No Windows run, additional human review or independent-video
+arrival is needed for this step; O2/R2/W5 gates remain unchanged.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential
