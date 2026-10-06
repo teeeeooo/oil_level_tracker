@@ -317,14 +317,95 @@ ellipse handles, inward green margin and Apply/Cancel controls are visible.
 `roi-editor-handoff.json` pins the launcher, original recipe/image and existing
 UI owners. No ellipse edit or Apply was performed by the agent.
 
+## Human ROI applied and bounded comparison — 2026-10-06
+
+The user completed Apply in the existing editor and confirmed “수정해서 적용했어”.
+The exported source-frame ellipse is center(594.4975845410628,839.6167471819646),
+radii(38.267310789049915,33.913043478260875). Only that ellipse changes in a
+separate `sample4-human-roi.oilrecipe`; original recipe bytes, margin0.08,
+zero line, settings, labels and reviewed points remain unchanged. This is an
+input correction using the app's existing contract, not a detector-code change.
+
+At source `ce55d48605a3d28fd07a07672a16ec4690aacf7b`, eight independent
+current-frame calls compare original and corrected ROI at sample4 frames420,
+450 and480, plus original-ROI BASE156 and sample2/30 controls. Each call starts
+with a fresh detector; no temporal/completed-window acceptance is claimed.
+Saved full-frame RGB is reused where available; frames420/480 are decoded at
+exact frame indices, with exact equality to the previously saved review crop.
+All five original-ROI component diagnostics and positions reproduce the saved
+baseline. The older three-frame capture predates the optional diagnostics in
+`temporal_raster_evidence.py` (`1d4343a`); the source difference is explicitly
+recorded, and baseline equality is asserted rather than assuming identical code.
+
+Corrected crop origin is[556,805], shape[69,77], effective support3515 pixels.
+The table uses original diagnostic component IDs, not new rank IDs:
+
+| Frame | Original C1 pixels remaining inside new mask | Original C2 pixels remaining | Original C2 overlap with newly selected support | New Foam spatial status / source Y | Current-frame Oil Y |
+|---|---|---|---|---|---|
+|420|25/560|320/320|297/320|accepted_strong /841|854|
+|450|0/514|335/335|289/335|accepted_strong /839|854|
+|480|0/313|337/337|319/337|accepted_strong /833|null (ambiguous)|
+
+The retained C1 pixels at420 do not overlap the new selected support. All22 raw
+Foam clicks at420 and38 at480 remain in the corrected effective mask. Pixel
+retention is not proof of front accuracy: C2 was already reviewed as containing
+both Foam and central structure. The newly selected upper support still shows
+that central rise; the crop correction does not resolve it. Component shapes and
+scores also change because cropping alters preprocessing support and normalized
+geometry, so this is not simply deleting the old C1 from an otherwise fixed list.
+
+All three corrected spatial candidates have no structural-substrate predicate;
+all remain `persistence_pending`, with null current-frame Foam output. Fresh
+single-frame state cannot establish a Foam episode. Current-frame Oil becomes
+854 at420/450, while480 stays ambiguous. The earlier450 human Oil-path record
+near853 is relevant context but does not label the new420 output or certify
+localization. BASE156/sample2/30 preserve their previous diagnostics and null
+Oil/Foam outputs; this does not qualify their agent-prepared ROIs as human truth.
+
+### Analysis correction and artifacts
+
+The initial local helper mistakenly indexed the saved rank raster with its
+original generator `label`. `foam_component_labels` contains `diagnostic_id`.
+`support-analysis.json` explicitly supersedes **only** the initial report's
+`historical_support_retention` fields, joining by diagnostic ID and asserting
+each pixel count against the saved component. Detector outputs, input hashes,
+positions and baseline equality are unaffected. Both reports/receipts remain
+preserved; the table above uses the corrected support analysis.
+
+Local output: `sample/output/s11-local-human-roi-comparison-001/` (ignored).
+
+| Artifact | SHA-256 |
+|---|---|
+|Separate recipe|`8f67b4120f20c4222645ffb3b5d25b971de9c3dacdea506238902d98e439543b`|
+|`report.json` (support-count fields superseded as above)|`b43f4156794f04b1cd56d75c6b6eed3a0fb6d29794db3edf132968cac4fa51ff`|
+|`receipt.json`|`75d1a9e658401a808e278295eb7edb6cac88444d97130d067c7593ee3e1a7afe`|
+|`support-analysis.json`|`a4b16d8d8c80743e83b837e73373a39c8e94556088a2def63e1fc541b26e6a5b`|
+|`analysis-receipt.json`|`4b1534c3a8aae2e7dac0fcd51c481f48d88dfa253754177d5069e75b202f7d90`|
+|`review.html`|`0be9d0f1f022b0934d4a2951eb3b6d46227bc4eccbd290fc9a6725cf1857f3ee`|
+
+The run receipt pins203 outputs and32 preserved inputs. The analysis receipt
+pins its three outputs and saved inputs. Source files remain unchanged.
+
+### Next human checkpoint
+
+Safari **수정 ROI — Oil 위치 확인** displays the same original RGB crops with a
+switch to hide overlays. Magenta is the current-frame Oil scalar, drawn only
+across effective-mask support; it is not a measured contour. Cyan shows the
+selected spatial Foam support and its column-wise upper pixels, not confirmed
+Foam publication. The native browser page and image rendering are verified.
+The specific open question is whether **frame420/14s Oil Y854** is the actual
+Oil–Foam boundary, near but offset, or another/uncertain feature. Existing Foam,
+rim and central-structure judgments are retained without asking them again.
+No Windows run or formal truth/label transfer is requested.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
 - First harmful stage: the agent-prepared detection ROI includes the rim. Under that input, spatial structure admission misses the confirmed narrow rim and broad-box substrate association also opposes separated material. Correct the existing ROI before attributing remaining behavior to a detector deficiency under human-set geometry; removing gates cannot establish front identity.
-- Logic-map impact: NONE — read-only saved-component/helper comparison and a local reference-point viewer have no production caller, authority or prediction output.
+- Logic-map impact: NONE — bounded same-code current-frame ROI comparison and local review viewers do not change production owners or acceptance authority.
 - Failure-registry impact: NONE — geometry-as-identity, blanket masks, global cutoffs, private Y branches and cross-material authority remain prohibited; no replacement mechanism is promoted.
 
 FIELD FAIL / NOT_EVALUATED, O2 open and W5/O3 gated remain. No Windows work is
 needed at this checkpoint. The [work plan](../../00-project/work-plan.md) owns
-current state and the subsequent transition after the human ROI proposal.
+current state and the subsequent transition after the new Oil-position review.
