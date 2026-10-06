@@ -481,6 +481,142 @@ fit and lower held-out error do not establish identity. No candidate-wise
 prediction/abstention efficacy is claimed from an all-UNRESOLVED appearance ledger.
 W4-R2 remains unmet, O2 OPEN, FIELD FAIL and NOT_EVALUATED unchanged.
 
+## Region Windows return and bounded interpretation — 2026-10-06
+
+The user returned `region-competition-001` results for the frozen prototype.
+This section supersedes the preceding pending-run status. These are **attributed
+Windows results**, not locally rehashed private artifacts. The Windows agent
+reads saved files directly; transfer to this chat may involve OCR. A malformed
+chat field does not by itself establish a calculation or file-integrity failure.
+
+### Execution receipt and provenance
+
+- Reported schema: `s11-o2-region-competition-v1`; receipt COMPLETE; report and
+  receipt artifact equal `e6d17b0d54a909f226d265b9202151d017a76f6ed427009095c19b11bb04b3e8`.
+- Source artifact equals the original spatial pin
+  `6aaf5f3ff6c4e1314d08cb7effb745ff5b721c03940c57002214b039ef544910`.
+- Three output hashes reportedly match disk (experiment, summary, CSV), plus
+  complete.json: four files. Actual three output digest strings were not supplied.
+- All 32 saved inputs reportedly preserve before/after/current SHA. Original
+  video/bundle/labels were not reopened. No new label, detector or decode occurred.
+- Runtime reported: Python 3.14.3 / NumPy 2.5.2 / OpenCV 4.13.0. Elapsed run time
+  was not supplied; do not infer Windows throughput from the local benchmark.
+- The intended ZIP source was c2102c1. The runner digest matches its pin. The
+  transferred model-file digest conflicts with its pin; see the intake items.
+- All decision/acceptance/field flags remain NOT_EVALUATED / false / FIELD FAIL /
+  NOT_MEASURED. Physical identity remains UNRESOLVED, opposition not_measured.
+
+| Case | Frame | Revision | Origin / shape | Points | Baseline | Views / observed views | CSV rows |
+|---|---|---|---|---|---|---|---|
+| review-002 BASE | 14386 | 14 | [0,211] / [773,578] | 124 | MATCH/1416 | 1488 / 888 | 5952 |
+| review-003 Accum | 16280 | 4 | [1199,56] / [584,462] | 158 | MATCH/1812 | 1896 / 1304 | 7584 |
+
+Glass IDs match the handoff: BASE `8f94fb85-d98e-4c71-9c97-3085168be1b2`,
+Accum `8fb6ebc7-7c56-401e-86c3-05514bf6380b`. Totals are 3,384 views, 2,192
+observed views and 13,536 model rows. The remaining 1,192 views are not classified
+as a particular missing/rank state from this summary alone. None of these counts
+is candidate accuracy, physical coverage or independent sample size.
+
+Local Windows notes reportedly contain all fixed comparisons: `main.csv` 480,
+`auxiliary.csv` 144, `unresolved.csv` 480 rows. Fixed excerpts have 32/16/32 rows.
+Paths are under `data/region-competition-001-notes/`; original results under
+`data/experiments/region-competition-001/`. Those files are not present locally.
+
+### Exact transferred loss excerpts
+
+These are the rounded `heldout_mse` values as supplied, not a new fit. B=recorded
+bands; E=candidate envelope. Same X/BW/representation is required for comparison.
+There is **one missing loss cell**; it is not interpolated or set to zero.
+
+| Case / idx / basis / X / Y / BW | Support | Channels | smooth | partition | ribbon_bw | ribbon_2bw |
+|---|---|---|---|---|---|---|
+| r003 / 10 / native / [1388,1473) / 217 / 6 | B | gray | 0.0067251683 | 0.0041084013 | 0.0061413202 | 0.0063929794 |
+| same | B | BGR | 0.0067538470 | 0.0040948949 | **not transferred** | 0.0063899493 |
+| same | E | gray | 0.0054596701 | 0.0038924241 | 0.0049699842 | 0.0053469482 |
+| same | E | BGR | 0.0054858414 | 0.0038910790 | 0.0049573061 | 0.0053582010 |
+| r003 / 15 / native / [1388,1473) / 313 / 6 | B | gray | 0.0006410291 | 0.0006269626 | 0.0006405006 | 0.0006409431 |
+| same | B | BGR | 0.0006537169 | 0.0006408335 | 0.0006530197 | 0.0006533139 |
+| same | E | gray | 0.0005727846 | 0.0005628317 | 0.0005720674 | 0.0005727864 |
+| same | E | BGR | 0.0005820570 | 0.0005729585 | 0.0005813221 | 0.0005818153 |
+| r002 / 11 / native / [236,343) / 925 / 8 | B | gray | 0.0055946723 | 0.0055589071 | 0.0051523520 | 0.0048927346 |
+| same | B | BGR | 0.0054805115 | 0.0054465033 | 0.0050497103 | 0.0047954546 |
+| same | E | gray | 0.0055693106 | 0.0055465429 | 0.0053617699 | 0.0051228918 |
+| same | E | BGR | 0.0054257704 | 0.0054038032 | 0.0052204422 | 0.0049884573 |
+| r002 / 0 / center / [231,346) / 382 / 8 | B | gray | 0.0033467506 | 0.0029877116 | 0.0030637101 | 0.0027016671 |
+| same | B | BGR | 0.0031350944 | 0.0027935731 | 0.0028801336 | 0.0025461833 |
+| same | E | gray | 0.0028347237 | 0.0025919422 | 0.0027626874 | 0.0022969185 |
+| same | E | BGR | 0.0026658369 | 0.0024373963 | 0.0026029125 | 0.0021728735 |
+| r002 / 20 / center / [231,346) / 406 / 8 | B | gray | 0.0020757712 | 0.0019162930 | 0.0022346742 | 0.0022893094 |
+| same | B | BGR | 0.0026421357 | 0.0017694755 | 0.0020758003 | 0.0021279037 |
+| same | E | gray | 0.0023945746 | 0.0019433487 | 0.0017442930 | 0.0021579484 |
+| same | E | BGR | 0.0022133522 | 0.0018026977 | 0.0016342486 | 0.0020086264 |
+
+### Supported interpretation, with limits
+
+For the main excerpt alone, the following arithmetic uses the transferred
+rounded values: `100 * (smooth - partition) / smooth`. This is a descriptive
+within-view residual reduction, **not a new score, threshold, prediction or
+predeclared efficacy endpoint**. Channel spaces are not directly commensurate.
+
+| Support | Channels | idx10 reduction | idx15 reduction |
+|---|---|---|---|
+| recorded bands | gray | 38.91% | 2.19% |
+| recorded bands | BGR | 39.37% | 1.97% |
+| envelope | gray | 28.71% | 1.74% |
+| envelope | BGR | 29.07% | 1.56% |
+
+1. At the stated Accum X/BW, a fixed side offset explains substantially more
+   residual variation for idx10 than idx15. The difference already exists in
+   gray; the excerpt does not establish incremental chromatic identity benefit.
+   Partition also improves idx15 slightly, so merely improving smooth is not an
+   interface certificate. Absolute partition error is smaller for idx15, so
+   minimum raw error across candidates is not an identity selector either.
+2. Partition is the lowest of the four supplied losses for idx10's three
+   complete views and for idx15's four views. The idx10 recorded-BGR quartet is
+   incomplete; do not claim its four-model ordering until the missing cell is
+   read. Model ordering here describes the table, not a generated identity winner.
+3. At the stated BASE idx11 X/BW, ribbon_2bw has the lowest supplied error in all
+   four views. This is consistent with a different local appearance explanation,
+   but does not prove a visible return or structural identity. Indicator-edge
+   support was not returned; other sectors/widths remain unavailable locally.
+4. Human-unresolved idx0 favors ribbon_2bw in these four views, while idx20
+   favors partition on recorded bands and ribbon_bw on envelope support (both
+   gray/BGR). Support changes the ordering for the *same* candidate. The original
+   human ambiguity is not resolved; idx20 is not a clean negative control.
+5. Added envelope pixels change both fitted and tested domains. Smaller MSE
+   across supports is not an error reduction on identical observations. All
+   models share adjacency numbers within a view; these repetitions are not
+   four independent corroborations. Fixed-width fit, neighbor differences and
+   coherent brightness patterns do not establish physical connectivity.
+
+This supports a **bounded appearance distinction** at the returned main slice,
+not a whole-candidate or cross-sector result. Do not tune a partition-gain cutoff,
+count model minima as votes, promote W4-R2 or declare the whole hypothesis failed
+from the unresolved control. Full 480/144/480 CSV contents have not been reviewed
+here; cross-X/BW robustness and optical/material opposition remain open.
+
+### Two substantive transfer items; no rerun
+
+1. Model-file digest in the message:
+   `3627e7c2ad6e218fa797b68500d70e7c8be1e038354bbad32c0abcd68fb60b17`.
+   Frozen pin and locally rehashed c2102c1 file:
+   `3627e7c2ad6e218fa797b68500d70e7c8be1e038354bbad32c0ebcd68fb60b17`.
+   The `...32c0a...` versus `...32c0e...` difference conflicts with the reported
+   pin check and matching artifact. Cause unconfirmed, plausibly transfer.
+   Read the existing `experiment.json.artifact.code` entry for
+   `tests/diagnostics/s11_region_competition.py` and compare it with the source
+   file's byte SHA. Do not replace the saved artifact or recalculate measurements.
+2. The message row for review-003 idx10/native/X=[1388,1473)/Y=217/BW6/
+   recorded_bands/BGR/ribbon_bw omits **train_pixels, test_pixels, heldout_mse**.
+   Read that exact row from the original `region-competition.csv`; return all
+   three fields. Do not copy numbers from neighboring models or an image.
+
+Elapsed time may be supplied only if already recorded; otherwise retain
+not_reported without rerunning for timing. No repeat 32-file confirmation or
+source-media replay is needed to repair these transfer items. Execution is
+reported COMPLETE; transfer reconciliation remains OPEN. There is no new
+Windows measurement request or classifier/field acceptance.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.

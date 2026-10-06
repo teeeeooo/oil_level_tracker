@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The bounded Windows saved-output run is ready; physical identity classification remains unaccepted.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE; two transferred fields need reconciliation. A bounded appearance distinction is visible, but whole-candidate and chromatic identity benefit remain unestablished.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -44,24 +44,25 @@ scores remain pinned. This is not a general impossibility finding for spatial cl
 
 ## Next transition
 
-Run the frozen `--region-competition` prototype on the existing
-`spatial-context-001` saved outputs using the
-[Windows handoff](../40-operations/s11-o2-local-shadow-evaluation.md#region-competition--existing-saved-outputs).
-Local raw-pixel smooth/partition/ribbon fits, within-side adjacency and four
-support/color ablations are implemented under the
-[prototype contract](../20-architecture/s11-interface-observability-witness-architecture.md#w4-candidate-conditioned-region-competition--prototype-contract)
-and [control matrix](../30-validation/s11-interface-observability-witness-validation.md#candidate-conditioned-region-competition-controls).
-[Local verification](../60-evidence/s11/s11-o2-color-side-local.md#region-prototype-implementation-and-windows-handoff--2026-10-06)
-permits this measurement, not classifier/identity acceptance.
+Reconcile the two transfer items in the
+[region Windows return](../60-evidence/s11/s11-o2-color-side-local.md#region-windows-return-and-bounded-interpretation--2026-10-06):
+the model-file hash differs by one character from the pinned source, and one
+recorded-BGR ribbon row lost train/test/error cells in the message. Read the
+existing source/artifact entry and original CSV row; no rerun or human judgment.
+Execution/receipts/input preservation are reported COMPLETE, not independently
+rehashed here. Do not turn a possible OCR transfer error into a detector failure.
 
-Use the original two frames, all points/roles/widths and pinned source artifact.
-The reviewed Accum pair remains development evidence, BASE idx11 an auxiliary
-negative, and idx0/idx20 an uncertainty control. No new source capture, detector
-run, label, human rejudgment or repeat of completed color-side checks is needed.
-Do not refit model capacity or thresholds from the returned rows. Examine support
-and channel ablations separately; real shared/censored explanations may close
-this hypothesis without promotion. W4-R1 remains closed, R2 entry unmet, O2 open
-and W5/O3 gated. No private Windows execution has been performed locally.
+At the prescribed Accum slice, partition improves on smooth much more for idx10
+than idx15, already in gray. The auxiliary slice favors a ribbon explanation;
+the unresolved idx20 changes model ordering with support. These are bounded
+appearance observations, not whole-candidate identity. After the two items are
+resolved, examine the already-saved complete 480/144/480 comparison rows across
+X/BW before choosing a continuation or closing the hypothesis. Do not request
+another descriptor run, fit new widths/cutoffs, or treat lower MSE as identity.
+No full-CSV stability or incremental color benefit is established from excerpts.
+
+W4-R1 remains closed, R2 entry unmet, O2 open and W5/O3 gated. Existing labels,
+idx0/idx20 human ambiguity, original outputs and FIELD FAIL remain unchanged.
 
 ## Accepted local candidate
 
@@ -89,9 +90,10 @@ and push for those scopes. The R23 polarity prototype failed protected observati
 and was removed; its rejection is not a reason to request the same authorization
 again. These historical grants do not authorize unrelated changes or publication.
 The fixed color-side measurement is complete. The current user request authorizes
-implementation and preparation up to the Windows execution point. The new
-saved-output handoff is ready for the user’s Windows agent; no automatic private
-run or broader field qualification is authorized.
+implementation and preparation up to the Windows execution point. The user has returned that Windows
+saved-output run. Current follow-up is transfer reconciliation and interpretation
+of existing results; no automatic private rerun or broader field qualification
+is authorized.
 
 Outside the detector replacement scope remain unrelated candidate-generation,
 Foam or UI changes; unbounded retention/recovery; relaxed truth/safety criteria;
