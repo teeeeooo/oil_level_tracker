@@ -232,13 +232,20 @@ X589–594/Y846; all eleven mapped columns coincide with saved radius8 alternati
 versus five at radius4. X583 is unmarked. This establishes retained alternatives
 for the indicated cells, not exact contour truth, calibrated recall or a selector.
 
-Next local task: design and validate a bounded alternative-selection mechanism
-that separates material support from front identity, using the saved positive,
-mixed and rim controls. Preserve competing alternatives, unavailable support and
-this reply's uncertainty; no lower/stronger-peak shortcut, hardcoded coordinates,
-threshold tuning to B or interpolation is justified. No repeated user confirmation
-or Windows execution is needed to record this reply. Runtime behavior, formal O2
-truth, FIELD FAIL and W5/O3 remain unchanged.
+The [edge-selection feasibility audit](../60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md)
+is complete over all14 saved components and both existing radii. At radius8,
+strongest/lowest/nearest choices contain only1/7/5 of the11 tentative marked B
+positions. Minimum-variation membership contains all11, but diverges from prior
+Foam-path context in A/C/D and also exists on confirmed rim negatives. No
+appearance-only rule, new weight or larger-window acceptance is promoted.
+
+Next human checkpoint: identify the actual Foam upper boundary near the central
+structure on exactly two already saved original frames,420/14s and480/16s.
+Anchor450's tentative annotation is displayed only on450. This supplies missing
+temporal front correspondence, not another structure-identity question; occluded
+or unclear replies remain valid. The viewer is prepared with source coordinates
+and optional temporary click points. No additional decode or Windows execution
+is needed. Runtime behavior, formal O2 truth, FIELD FAIL and W5/O3 remain unchanged.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential
