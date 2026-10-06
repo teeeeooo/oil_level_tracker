@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 circular structures are human-confirmed; registered residual comparison is complete without identity promotion; A/C/D follow Foam, while B mixes a left/lower Foam edge and right/upper central structure; the14s/16s human clicks are saved; two exact current-frame captures reveal a lower C1 spatial-selection discrepancy at16s; the user confirms that C1 is glass rim and saved-raster replay identifies the missed structural gate; the five-frame structure-context audit is complete and a physical inner-rim location checkpoint is prepared; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 circular structures are human-confirmed; registered residual comparison is complete without identity promotion; A/C/D follow Foam, while B mixes a left/lower Foam edge and right/upper central structure; the14s/16s human clicks are saved; two exact current-frame captures reveal a lower C1 spatial-selection discrepancy at16s; the user confirms that C1 is glass rim and saved-raster replay identifies the missed structural gate; the five-frame structure-context audit is complete;18 human points are bound as the outer boundary of a double rim, superseding the viewer default; a separate inner-boundary location checkpoint is prepared; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -266,18 +266,24 @@ box gaps. Configured ellipse radii do not align with the known physical rims;
 none of the three recipes contains a registered artifact template. A peripheral
 cutoff or blanket substrate-veto removal is not a validated behavior repair.
 
-Current human checkpoint: in the new Safari **테두리 위치 확인 — 16초** page,
-mark approximately6–10 visible points on the glass rim's inside edge (left,
-bottom,right); skip obscured portions or report not assessable. C1's rim identity
-and the earlier Foam points are already recorded and must not be asked again.
-This closes a physical-reference location gap for testing structural opposition;
-it is not a production mask/recipe calibration or a complete contour target.
-The actual page and point/undo operation were verified after completing Safari's
-file-open dialog; it is left with zero test points. Preserve the old review tabs.
-After the reply, bind exact points to the frame/report, assess reference support
-and opposing material cases, and continue locally until another decision-bearing
-human or Windows dependency. Runtime, formal O2 truth, FIELD FAIL and W5/O3 remain
-unchanged. No Windows run is requested now.
+The [double-rim reply and point correspondence](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#double-rim-outer-points-received--2026-10-06)
+are recorded:18 points mark the **outer boundary of the double rim**, per the
+user's correction. Preserve the downloaded JSON unchanged and use the attributed
+reply to supersede its hardcoded inner-edge role. At9 same-X marks, nearest C1
+support is1–5px below; this supplies no inner boundary or rim thickness.
+
+Current human checkpoint: Safari **이중 테두리 — 안쪽 경계 확인** preserves those
+outer points in white. Mark approximately6–10 visible points on the double rim's
+inner boundary, nearer the observation area, in blue; skip obscured portions or
+report not assessable. This distinguishes the physical references before testing
+structure opposition against the interior observation area. C1 rim identity and
+existing Foam points are already recorded. No complete contour, fitted ellipse,
+exclusion mask or production calibration is implied. The actual rendered page
+and zero new points were verified after completing Safari's file-open dialog;
+old tabs are preserved. After the reply, bind it to the outer-reference hash and
+continue local comparison until the next material human or Windows dependency.
+Runtime, formal O2 truth, FIELD FAIL and W5/O3 remain unchanged. No Windows run is
+requested now.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential

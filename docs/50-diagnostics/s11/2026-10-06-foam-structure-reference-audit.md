@@ -57,7 +57,7 @@ This observation rejects treating the current ellipse or a fitted radius cutoff
 as physical truth; it does not prove that calibrated structure context cannot
 help. It also does not label all sample2 C2 pixels as true Foam at the wall.
 
-## Next bounded human input
+## Prepared checkpoint before the double-rim clarification
 
 Physical C1 identity is already known. The missing input is the location of the
 **inside edge of the glass rim**, distinct from the configured crop ellipse and
@@ -104,6 +104,74 @@ Directory: `sample/output/s11-local-foam-structure-context-001/` (private, ignor
 The measurement receipt pins four outputs including the runner and all152 input
 files. The separate review receipt pins two inputs and the HTML/builder. Complete
 per-column arrays remain local. No measured output was overwritten.
+
+## Double-rim outer points received — 2026-10-06
+
+The user completed the Safari input and clarified:
+
+> 완료
+> 근데 한가지 알려주고 싶은게 있음. 테두리가 2중임 내가 지금 찍은건 테두리 중 바깥 경계임.
+
+The downloaded JSON contains18 points (18 distinct XY;17 distinct X) for the
+exact frame480/Glass/run/record already pinned above. All points are inside the
+saved crop. The raw1443-byte download is retained byte-for-byte. Its hardcoded
+`role=glass_rim_inner_edge` is **superseded by the human clarification** in a
+separate attributed reply: `user_marked_outer_boundary_of_double_rim`.
+Likewise, `visibility=not_submitted` was a page default; completion is attributed
+to the chat reply, not inferred from autosave. Raw JSON remains unchanged.
+The user's wording does not specify a full physical annulus or its thickness.
+
+At each marked point's exact X, compare only saved support pixels. Signed
+differences below are `nearest_support_source_y - marked_source_y`, positive
+down. No line is interpolated between marks; no tolerance is introduced.
+
+| Saved component | Marks with same-X support | Exact marked-pixel hits | Nearest signed Y difference |
+|---|---:|---:|---|
+| C1 (human-confirmed rim) |9|0|+1 to +5px|
+| C2 (reviewed Foam/structure mixed support) |6|0|−28 to −23px|
+| C3 |4|0|−61 to −41px|
+| C4 |2|0|−16 to −12px|
+| C5 |1|0|−27px|
+
+All five retained components are reported; missing common-X support is null,
+not evidence that a physical feature is absent. Approximate human points need
+not coincide with support pixels. These distances neither contradict the user's
+C1 rim attribution nor establish an inner boundary. Existing frame480 Foam
+clicks are retained and joined only where X matches; they are not rim points.
+
+This closes the outer-reference recording step. The two physical boundaries
+must remain distinct before testing how a structure reference relates to the
+interior observation area. The current saved support/recipe ellipse cannot
+provide the missing inner boundary or a rim thickness. A separate page therefore
+keeps the18 outer points fixed in white and requests approximately6–10 blue
+points on the visible inner boundary of the double rim, nearer the observation
+area. Obscured portions can be skipped, and not-assessable is an explicit answer.
+This is a location question, not another C1 identity or Foam-edge judgment.
+
+The page reuses the earlier viewer and source image with a distinct storage key
+and download name. Outer-reference hash is embedded in its new reply. C1 and
+recipe overlays default off. The Safari file chooser was explicitly completed;
+AX and screenshot verify the rendered image, white outer marks and zero new
+inner points. Old tabs and inputs remain intact. No automated test clicks were
+added in this page.
+
+Local directory: `sample/output/s11-local-foam-rim-reference-001/` (ignored).
+
+| File | SHA-256 |
+|---|---|
+| `browser-reply-raw.json` | `47762c97782412416965bdb7508d58277067ff6a14315b99eafde960fe12b822` |
+| `reply-attribution.json` | `d40fc173e5ff4e03fe05dc7dfe620790148da016a2ff4a06f649e79ad7560b45` |
+| `correspondence.json` | `f5ecfe2b7cca04c0c5f57d6c0a59d0116ba2e483f229f37dabb6b028e64a2ba8` |
+| `record_reply.py` | `a0843dee75e7b3f6927608c26f1230012b9121c9dffc2147e1a9e559ce54701f` |
+| `receipt.json` | `69e04ff3ad41cad0aa6d8f61ef681b035b8396c6bd0af8923f58a13853aa8434` |
+| `inner-rim-review.html` | `7802c8751d2bf941be5abd7bd5c143544ec9fe325e31a7358ee0bc2e719846e0` |
+| `review-receipt.json` | `f31a9c3065ec105b09558ec95ed8ba8217b825dd77afda5bf6217287a9895c52` |
+
+Eleven direct input files, including both earlier receipts and their pinned
+outputs, are verified unchanged. The new receipt pins four outputs; the separate
+review receipt pins the reused inputs and two viewer outputs. This is not a new
+152-input audit, decoder run, detector run or geometry-test run. Runtime, recipes,
+formal labels, Windows target truth and all acceptance gates remain unchanged.
 
 ## Detector Governance
 
