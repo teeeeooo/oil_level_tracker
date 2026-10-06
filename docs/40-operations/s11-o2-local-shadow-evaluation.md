@@ -1716,3 +1716,80 @@ channel-space loss 차이를 직접 색상의 identity 개선량으로 해석하
 
 이 반환에서 멈춘다. 새 threshold/띠 폭/중심 재선택, winner-to-identity 변환, W4-R2
 진입, 라벨 변경, detector/영상 decode, 새 gradient/overlay 및 사용자 재판정은 수행하지 않는다.
+
+## Region cross-X/BW review — saved CSV only
+
+Region 실행과 두 전사 항목 확인은 완료됐다. 이번 단계는 새 측정이 아닌 기존
+`region-competition-001/region-competition.csv`의 전 구간 읽기 전용 검토다.
+새 ZIP, 모델 실행, 영상/bundle/labels, source 재해시, 반복 receipt 확인은 필요 없다.
+실행 당시 c2102c1 출력과 기존 notes를 사용한다. 원본 artifact는
+`e6d17b0d54a909f226d265b9202151d017a76f6ed427009095c19b11bb04b3e8`이다.
+
+### 입력과 전수성
+
+1. CSV를 프로그램으로 읽는다. 주 비교는 review-003 idx10/idx15 native_path
+   480행, 보조는 review-002 idx11 native_path 144행, 미해결은 review-002
+   idx0/idx20 candidate_center 480행이다. notes의 main/auxiliary/unresolved.csv를
+   사용한다면 원본 CSV의 동일 key 행과 일치하는지 대조한다. 불일치 시 원본 값을
+   임의 복구하지 않고 key와 충돌만 보고한다.
+2. 원래 행의 고유 key는 case/frame/idx/basis/X start-stop/Y/BW/support/channels/model.
+   네 모델(smooth, partition, ribbon_bw, ribbon_2bw)을 같은 view의 네 열로 펼친다.
+   모든 Y, band 역할, view_status/model_status, train/test 픽셀, heldout MSE,
+   horizontal/vertical pair count와 MSE를 보존한다. 중복/missing model은 오류로
+   보고하며 첫 행 선택으로 숨기지 않는다. null/빈 셀은 0으로 바꾸지 않는다.
+3. 펼친 결과는 주 120 views, 보조 36 views, 미해결 120 views, 총 276 views다.
+   observed와 unavailable/rank/split 실패를 따로 보존한다. 4개의 모델행에 반복된
+   adjacency/support 값은 중복 측정이나 독립 증거가 아니다.
+4. 비교 후보 연결은 같은 case/frame/basis/exact X/BW/support/channels로 한다.
+   후보마다 source Y가 다르므로 두 Y를 나란히 유지한다. candidate_center와
+   native_path를 혼합하거나 서로 다른 X/BW를 억지로 짝짓지 않는다.
+   주 비교는 5 X × 3 BW × 4 views = 60쌍, 미해결도 60쌍이다.
+   한쪽이라도 비교 불가인 pair는 불가 사유와 양쪽 상태를 남긴다.
+
+### 확인할 질문
+
+다음은 사전 지정 발췌에서 생긴 질문을 전 구간에 확인하는 **기술적 검토**다.
+새 평가 점수/threshold/학습이나 독립 holdout 검정이 아니다.
+
+- **주 비교:** 각 X/BW에서 idx10의 partition이 smooth보다 작은가, idx15에도
+  같은 관계가 나타나는가? 네 모델의 오차 순서는 gray/BGR 및 bands/envelope에서
+  어떻게 달라지는가? 반대 관계, 실제 수치 동률, 비교 불가 구간을 모두 기록한다.
+  원한다면 기존 보고의 `100*(smooth-partition)/smooth`를 같은 view 안에서만
+  함께 표시하되, smooth=0이면 undefined로 둔다. 이 비율을 판정식이나 cutoff로
+  쓰거나 전체 후보 점수로 평균내지 않는다. 작은 부호 차이도 원값으로 남기며
+  '의미 있는 차이'를 정하는 새 허용오차를 만들지 않는다.
+- **보조:** idx11의 해당 발췌에서 ribbon_2bw 오차가 가장 작았다는 관계가 다른
+  X/BW에서도 나타나는지, 변경/비교 불가 위치를 구분한다. 마스크 부족을 구조물
+  근거로 쓰지 않는다. visible return이나 구조 identity는 MSE로 확정하지 않는다.
+- **미해결:** idx0/idx20의 bands/envelope 모델 순서 변화가 어디에서 나타나는지
+  기록한다. 기존 identity 라벨을 이 비교의 확정 양성/음성 정답으로 사용하지 않는다.
+- **색상/관찰 범위 분리:** 같은 support에서 gray/BGR 비교, 같은 채널에서
+  bands/envelope 비교를 분리한다. 다른 channel-space MSE나 다른 관측 픽셀 집합의
+  MSE를 직접 비교해 성능 개선량으로 해석하지 않는다. BGR에서 순서가 달라져도
+  실제 Oil 구별력이 개선됐다고 결론 내리지 않는다.
+
+소수점 반올림 전 값으로 수치 비교하고, 출력에는 원값을 보존한다. 작은 차이의
+안정성/통계적 유의성은 검증되지 않았다. 순서/빈도/다수결을 candidate identity로
+환산하지 않는다. 어떤 구간에서 같은 설명이 공유되거나 차이가 사라지면 그대로 보고한다.
+
+### 저장과 반환
+
+기존 실험/notes 파일은 덮어쓰지 않는다. 새
+`region-competition-001-notes/cross-x-bw-review-001/`에 다음을 저장한다.
+
+- 전수 pivot CSV 세 파일: main 120, auxiliary 36, unresolved 120행.
+- same-X pair 검토 표: main 60쌍, unresolved 60쌍. 한쪽 불가도 포함한다.
+- `review.md`: 세 묶음별 관찰과 모든 반대/변경/동률/비교 불가 key 목록.
+  근거 key에는 X/Y/BW/support/channels/idx를 포함하고 해당 네 MSE를 연결한다.
+
+반환은 (a) 읽은 파일·출력 경로·행 수, (b) 세 묶음의 검토 결과,
+(c) gray/BGR 변화와 bands/envelope 변화의 분리된 설명,
+(d) 예외 key 전체와 대응 오차·상태를 포함한다. 내용이 길면 묶음을 나누어 반환하되
+전체 표를 로컬에 보존하고 일부 예외만 유리하게 선택하지 않는다. 모든 구간이
+동일하다는 주장도 실제 전수 key 대조 결과에 한정한다.
+
+읽은 원본 파일 bytes는 작업 전후 불변인지 확인하되, 이미 닫힌 소스 해시/누락 행을
+사용자에게 다시 확인 요청하지 않는다. **실제 검토 결과를 기록한 뒤 멈춘다.**
+새 model fit/descriptor/threshold/띠 폭 변경, source decode, label 변경,
+identity/연결성/투명도 판정, W4-R2 진입 또는 사용자 재판정은 수행하지 않는다.
+FIELD FAIL / NOT_EVALUATED와 idx0/idx20 ambiguity는 유지한다.

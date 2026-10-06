@@ -46,7 +46,10 @@ scores remain pinned. This is not a general impossibility finding for spatial cl
 
 Review the already-saved complete main/auxiliary/unresolved comparisons
 (480/144/480 rows) across X and BW before choosing a continuation or closing the
-region hypothesis. The [region return and reconciliation](../60-evidence/s11/s11-o2-color-side-local.md#transfer-reconciliation-closed--user-confirmation)
+region hypothesis using the [saved-CSV review handoff](../40-operations/s11-o2-local-shadow-evaluation.md#region-cross-xbw-review--saved-csv-only).
+The full CSVs are available on Windows, not in this checkout/attachments; local
+preparation is complete but the full review has not run. No new ZIP or model run
+is required. The [region return and reconciliation](../60-evidence/s11/s11-o2-color-side-local.md#transfer-reconciliation-closed--user-confirmation)
 closes both transfer items: the source/receipt code hash matches its pin, and the
 missing ribbon row is 1536 train pixels, 504 test pixels and heldout MSE
 0.006130124755688663. Do not request those confirmations again or rerun the model.
