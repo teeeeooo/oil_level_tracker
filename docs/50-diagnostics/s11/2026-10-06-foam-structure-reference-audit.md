@@ -173,14 +173,158 @@ review receipt pins the reused inputs and two viewer outputs. This is not a new
 152-input audit, decoder run, detector run or geometry-test run. Runtime, recipes,
 formal labels, Windows target truth and all acceptance gates remain unchanged.
 
+## Inner points received with click uncertainty — 2026-10-06
+
+The second Safari reply contains21 inner-boundary points (21 distinct XY,
+20 distinct X), bound to the same frame480 identity, source-report hash and the
+outer attributed-reply hash. The user submitted the reply with this qualification:
+
+> 완료했어, 마우스로 클릭하다보니 픽셀이 약간 오차가 있을수있음
+
+The raw1679-byte download is preserved. Completion is recorded from the chat;
+the page's `not_submitted` default is not human uncertainty or a missing reply.
+`localization_uncertainty_px=null` means no numeric error bound was supplied.
+Do not turn “약간” into an invented ±1/2/3px tolerance, snap clicks to image edges,
+or require the user to repeat the completed annotation to obtain pixel truth.
+The point-location checkpoint is complete at this approximate evidence level.
+
+All five saved components were compared at the marked source X only. Values are
+nearest support Y minus inner mark Y, positive down; these are recorded coordinate
+differences, not calibrated physical distances or certified inside/outside labels.
+
+| Component | Inner marks with same-X support | Nearest signed Y difference |
+|---|---:|---|
+| C1 (rim, previously human-confirmed) |13|+8 to +15px|
+| C2 (Foam/structure mixed support) |9|−22 to −17px|
+| C3 |7|−58 to −31px|
+| C4 |3|−7 to −1px|
+| C5 |1|−19px|
+
+No inner mark coincides exactly with a component pixel. C4's1px difference is
+particularly unsuitable as a robust side/identity claim under unknown click
+error. At the five exactly shared X coordinates of the two rim replies, outer
+minus inner Y is6–9px. This is sparse vertical separation of two approximate
+mark sets, **not rim thickness**. Missing X is not interpolated; repeated X with
+different Y is preserved. Existing Foam points remain a separate reference.
+
+The evidence supports retaining distinct rim and material spatial references for
+development; it does not establish a general detector. In particular, C1 must
+not be automatically relabeled as occupying the entire strip between the marks:
+its saved support also extends below the outer marks, and the two named physical
+boundaries do not define a complete exclusion region. Inner/outer clicks are not
+propagated to frame420/450, sample2, BASE, or the Windows truth snapshot.
+
+### Existing-owner reuse assessment and implementation choice
+
+Source inspection follows the existing caller rather than adding a new rim
+classifier. `GlassGeometry` stores a crop ellipse, rectangular exclusions and
+point/line/region `ArtifactTemplate` entries. `roi_editor_dialog.py` owns template
+registration; `artifact_calibration.py` owns matching. These templates do not
+store two sampled rim curves or click uncertainty. They are not a lossless
+representation of this reply.
+
+In `CurrentFrameEvidenceOwner.observe`, the Foam path calls
+`attach_spatial_signature` and `apply_artifact_templates` **after** spatial
+component selection and the temporal gate have yielded a Foam candidate. A
+matching template clears that candidate; this path does not rerank the retained
+components to restore C2. Registering the clicked lower rim as an existing
+template therefore cannot by itself repair both C1 false admission and the
+earlier C2 substrate veto. No such registration or runtime replay was performed.
+
+The initial follow-up mistakenly asked whether to add one-time rim registration
+or automatic inference. The user corrected that premise: the existing app already
+lets the human specify the detection ellipse, intended to bound the interior.
+The user also clarified that the Mac video regions were **agent-created through
+image analysis when the recipes were prepared**, not personally set by the user.
+This resolves the question; no additional input contract is needed. The prior
+source search identified the fields but missed their existing operational purpose.
+The lower-rim admission must first be assessed against the agent-prepared ROI,
+not treated as proof that a new rim classifier or registration UI is required.
+
+Local directory: `sample/output/s11-local-foam-inner-rim-reference-001/` (ignored).
+
+| File | SHA-256 |
+|---|---|
+| `browser-reply-raw.json` | `547835d9902c349d7c1effacd921f6cc036be9afbb51d75bd3e5ab914b5c85e7` |
+| `reply-attribution.json` | `93ea9608f364d18d9f25e04c2bce85ea2edcda8119a6212f36c03ce6ed46da1a` |
+| `correspondence.json` | `e474806681b620b0302df296d0e824b652d40159494fac92dd33041d496f1443` |
+| `record_reply.py` | `17001a23c63fec56fbee5bec36e70d1e6357e022814133cb291461d6cfbc6be3` |
+| `receipt.json` | `63dc2193fb12fd22ba8c63e845f3cd5b4881e790e578149d605fcb7a81969177` |
+
+Sixteen direct input files are verified unchanged; the receipt pins four outputs.
+Point counts, ordered coordinates, crop bounds, exact identity/hash joins and
+all saved-component comparisons are asserted. Full arrays and user raw downloads
+remain local. This does not rerun the earlier17 geometry tests or any detector.
+
+
+## Existing ellipse/margin contract and saved-mask replay
+
+The product specification §6.3 explicitly says Detection Margin exists to prevent
+locking onto the glass rim/gasket. `RoiEditorDialog._ellipse_changed` updates the
+working Glass ellipse; `VideoOverlayCanvas._add_selected_overlays` shows the
+inward margin. `build_mask_bundle` derives the bounding crop, rasterizes the
+ellipse, shrinks its axes by `1-margin_ratio`, and removes exclusions. The same
+`effective_mask` is passed to preprocessing and `detect_bottom_connected_foam`
+by `CurrentFrameEvidenceOwner.observe`. Thus the ellipse is **both** the source
+of crop bounds and the user-controlled detection-domain geometry. Calling it
+merely crop geometry was incomplete. It still is not automatically verified
+physical truth when an agent selected it.
+
+A bounded replay calls this existing mask builder on a blank full-size canvas
+(the RGB values do not affect geometry; no video is decoded), using each pinned
+recipe. Across all five saved frames, effective-mask pixels match the captured
+mask exactly (0 mismatches), and all23 retained components have zero pixels
+outside that effective mask. The original capture/recipe files remain unchanged.
+
+For sample4, the saved supporting recipe specifies center(595,850), radii(52,52),
+margin0.08 and no exclusions. Runtime raster axes after margin are(48,48), with
+source mask bounding box[547,802,644,899). Frame480 C1 has313/313 pixels inside
+this mask; all21 approximate inner-rim marks are also inside. The selected ROI
+therefore includes the human-confirmed rim: this is not evidence of mask leakage
+or an ignored ellipse. Its description explicitly identifies a deterministic
+supporting-evidence recipe, not canonical detector truth. User attribution owns
+who set it; Git history is not used to infer a human review that never occurred.
+
+The earlier score/gate diagnoses remain descriptions of behavior **under that
+broad saved input**. They do not establish failure under a human-corrected ROI.
+Changing the recipe is a distinct input intervention, not a detector improvement;
+keep the old run intact and compare both inputs explicitly. A corrected ROI will
+not by itself settle central structures or mixed Foam edges that remain inside.
+
+Mask artifacts in the inner-reference directory:
+
+- `mask-audit.json`: `9e827708c9e508348b39d96d373f159852bfb04d2929491ea00d8f39417ab818`
+- `mask-audit-receipt.json`: `90338da4625727e242dc0aa003a8028a19f6a8b21e9013be9221930a714e40fc`
+
+The receipt pins the runner/report and26 direct inputs. It covers geometry-mask
+replay only; it emits no Oil/Foam predictions. Two existing mask controls pass.
+
+### Existing ROI editor handoff
+
+A local launcher `review_roi.py` reuses the product's `RoiEditorDialog`, without
+adding a new registration workflow. It displays the saved frame480 RGB crop at
+its native104×104 pixels, translates the existing ellipse into crop coordinates
+for editing, and restores source coordinates in the output. No video decode is
+needed. The original recipe is never written: Apply exports only
+`sample4-roi-proposal.json` with the old/new ellipse, origin and recipe/image hashes;
+Cancel saves no proposal. Other recipe fields, including margin, are preserved.
+Only the ellipse proposal is collected in this bounded handoff. A subsequent
+local run must use a separately identified recipe and recheck the material
+controls; these point annotations are not fitted into a replacement ellipse.
+
+The native window's accessibility state and screenshot verify the saved RGB,
+ellipse handles, inward green margin and Apply/Cancel controls are visible.
+`roi-editor-handoff.json` pins the launcher, original recipe/image and existing
+UI owners. No ellipse edit or Apply was performed by the agent.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: spatial structure admission misses the confirmed narrow rim; broad-box substrate association also opposes separated material. A physical rim-reference contour is absent; removing either gate or using crop geometry alone cannot establish front identity.
+- First harmful stage: the agent-prepared detection ROI includes the rim. Under that input, spatial structure admission misses the confirmed narrow rim and broad-box substrate association also opposes separated material. Correct the existing ROI before attributing remaining behavior to a detector deficiency under human-set geometry; removing gates cannot establish front identity.
 - Logic-map impact: NONE — read-only saved-component/helper comparison and a local reference-point viewer have no production caller, authority or prediction output.
 - Failure-registry impact: NONE — geometry-as-identity, blanket masks, global cutoffs, private Y branches and cross-material authority remain prohibited; no replacement mechanism is promoted.
 
 FIELD FAIL / NOT_EVALUATED, O2 open and W5/O3 gated remain. No Windows work is
 needed at this checkpoint. The [work plan](../../00-project/work-plan.md) owns
-current state and the subsequent transition after the human reference reply.
+current state and the subsequent transition after the human ROI proposal.
