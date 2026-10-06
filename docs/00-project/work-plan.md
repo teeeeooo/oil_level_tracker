@@ -220,12 +220,18 @@ Foam, while its right/upper `^` follows the central structure. B's exact pixel s
 and replacement Foam contour are not supplied. Preserve B as mixed; do not label
 all C2 or all B as structure and do not turn this one-frame reply into temporal truth.
 
-Next local task: inspect the existing per-column edge alternatives around B to
-establish whether a separate Foam edge is represented, with A/C/D retained as
-human-attributed Foam context. This is a representation check before selection,
-not a new threshold, coordinate-specific exclusion, interpolation across B or
-runtime promotion. No repeated A–D question or Windows execution is needed to
-record the answer. Runtime behavior, O2 truth, FIELD FAIL and W5/O3 are unchanged.
+The [saved B-alternative inventory](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md#saved-b-alternatives--representation-check-and-next-review)
+is complete without new measurement. Radius8 retains lower appearance peaks under
+the right-hand lobe as well as competing upper peaks; their physical boundary
+identity remains unknown. More retained peaks do not establish a successful repair.
+
+Next human checkpoint: the original-RGB/peak viewer asks whether B's actual Foam
+upper boundary is visible where the stored top follows structure, and whether it
+matches a retained alternative. Occluded/unclear/no match are valid answers. A/C/D
+and the qualitative B attribution remain closed; do not fabricate B's exact split
+or interpolate a front through the structure. The viewer uses all twelve B columns
+and both original radii without strength ranking. No Windows execution is needed.
+Runtime behavior, O2 truth, FIELD FAIL and W5/O3 remain unchanged.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential

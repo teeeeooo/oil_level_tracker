@@ -121,6 +121,85 @@ SHA-256 `cbdabc2e65d83ce61b17404e6c750745dfdd39590f27f40f8f53c68ff94e8ad1`.
 Its verbatim text, frame/component identity and manifest hash preserve attribution;
 formal labels, Windows target truth and runtime behavior are unchanged.
 
+## Saved B alternatives — representation check and next review
+
+Following the A–D reply, the existing front-alternative report was read without
+rerunning extraction, registration, video decode or detection. Its report hash is
+`877ca4ec045149f0905eac3bf1e2ba6243a18287a95946fbb2796a084ccaafcb`.
+All twelve B columns and both original ±4/±8 inspection radii are retained;
+there is no strength cutoff, nearest winner, tuned radius or interpolated path.
+The split between the human's left/lower and right/upper descriptions stays
+qualitative. The existing A/C/D attributions are not reopened.
+
+| Segment | Radius | Single / multiple / no bracketed peak / censored columns | Peak intervals |
+|---|---|---|---|
+| A | 4 | 4 / 4 / 4 / 0 | 12 |
+| A | 8 | 0 / 12 / 0 / 0 | 33 |
+| B | 4 | 6 / 6 / 0 / 0 | 20 |
+| B | 8 | 0 / 12 / 0 / 0 | 43 |
+| C | 4 | 11 / 1 / 0 / 0 | 13 |
+| C | 8 | 0 / 12 / 0 / 0 | 32 |
+| D | 4 | 8 / 4 / 0 / 0 | 16 |
+| D | 8 | 0 / 12 / 0 / 0 | 34 |
+
+All48 C2 column windows are fully observed at both existing radii. Multiple image
+peaks persist in all48 columns at radius8, including human-attributed Foam and
+mixed parts. At radius4, A has four columns without a bracketed peak despite its
+Foam-boundary attribution. Neither a unique peak nor peak absence establishes
+physical identity or physical absence.
+
+The full B inventory below lists exact half-open source-Y plateau ranges.
+A one-pixel range [846,847) means the saved peak pixel Y846. These are grayscale
+appearance measurements, not candidate-specific physical interface labels.
+
+| Source X | Existing C2 top Y | Radius4 peak ranges | Radius8 peak ranges |
+|---|---|---|---|
+| 583 | 844 | [841,842), [843,844), [846,847) | [841,842), [843,844), [846,847), [851,852) |
+| 584 | 845 | [844,845) | [844,845), [851,852) |
+| 585 | 845 | [844,845) | [839,840), [844,845), [851,852) |
+| 586 | 845 | [845,846) | [839,840), [845,846), [851,852) |
+| 587 | 844 | [845,846) | [839,840), [845,846), [851,852) |
+| 588 | 844 | [841,842), [845,846) | [838,839), [841,842), [845,846) |
+| 589 | 840 | [837,838), [842,843) | [833,834), [837,838), [842,843), [846,847) |
+| 590 | 839 | [837,838) | [833,834), [837,838), [842,844), [846,847) |
+| 591 | 839 | [837,838) | [833,834), [837,838), [843,844), [846,847) |
+| 592 | 840 | [838,839), [843,844) | [833,834), [838,839), [843,844), [846,847) |
+| 593 | 840 | [838,839), [843,844) | [833,834), [838,839), [843,844), [846,847) |
+| 594 | 841 | [838,839), [841,842), [843,844) | [835,836), [838,839), [841,842), [843,844), [846,847) |
+
+In the displayed upper-right lobe, X589–594 each has a saved Y846 appearance peak
+at radius8, while radius4 excludes that lower alternative. These coordinates
+identify existing measurements; they do not define the human's exact structure
+interval. Radius8 also retains other peaks (including X590's [842,844) plateau).
+The representation therefore contains lower alternatives, but the current
+attribution does not establish which, if any, is the actual Foam–air boundary.
+It could instead be a lower Oil–Foam boundary, structure, optical texture or an
+occluded boundary. More alternatives are not demonstrated recall/identity gain.
+
+A new local review shows original RGB beside B with its neighbouring columns,
+source X/Y axes, optional yellow original top and cyan outlined peak pixels.
+All stored peaks are displayed equally; none is connected, ranked or selected.
+Radius4/8 controls only choose which saved view to display. The user is asked
+whether the actual Foam upper boundary is visible in B's structure-following
+part and whether it coincides with an existing alternative. Occluded/unclear/no
+matching alternative are valid outcomes; no contour through the structure is
+fabricated. This is a new missing boundary correspondence, not a repeat of the
+closed structure or A–D question.
+
+Local review directory: `sample/output/s11-local-b-alternative-review-001/`.
+Manifest SHA-256:
+`b336dc63a2b886b2578d0d79c78a9b6d62667d79ad0094fc2150e9ab83b34111`.
+The manifest retains full original identity, B column projections, input hashes,
+selection rule and unset physical identity/front. Its receipt pins the preparation
+script, manifest and self-contained viewer. All94 inputs were verified before and
+after: 88 capture files, four front-alternative outputs/receipt, review manifest and
+human reply. Display coordinates equal the earlier pinned A–D top exactly.
+Browser rendering, both radii, both toggles and all12 table rows were checked
+without script errors. No source implementation or formal labels changed.
+
+At this publication checkpoint the boundary-visibility answer is pending.
+No Windows run is required; FIELD FAIL, O2 and Windows target truth remain unchanged.
+
 ## Verification and provenance
 
 Focused tests: 22 passed across `tests/unit/test_s11_boundary_temporal_probe.py`
