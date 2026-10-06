@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation is complete; rejected Foam component diagnostics are next; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 component attribution is awaiting the user; the user will separately supply independent video.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -148,13 +148,22 @@ all three traces lack a Foam-front candidate. Exact rejected-component geometry
 and predicates are absent from the saved trace; human-component correspondence
 and completed-window Oil first loss remain unknown.
 
-Next extend the existing Foam diagnostic projection/trace seam to retain bounded
-rejected-component geometry and actual spatial predicate outcomes, with detector
-behavior equality and serialization checks. Then capture only these same three
-approved frames into a new output, preserving the original capture and replies.
-This is trace-only local work, not a Foam acceptance bypass, new threshold or Oil
-identity mechanism. No Windows run, additional human review or independent-video
-arrival is needed for this step; O2/R2/W5 gates remain unchanged.
+The [trace extension and same-frame capture](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md#trace-extension-implemented-and-same-frame-capture-verified)
+are complete on Mac: 100 focused tests pass; 76 candidates and prior output/state
+fields match; all 63 old trace images, 12 inputs and original 87 outputs are
+preserved. Fourteen Foam support components are now visible, with no truncation.
+Base has only small supports below the marked boundary; sample2's large C2 fails
+shape qualification; sample4's chosen C1 is structurally rejected while a distinct
+C2 near the marked boundaries also fails shape qualification. These algorithmic
+flags do not assign physical truth.
+
+Current checkpoint: user attribution of sample4/450 orange C1 (lower curved
+support) and purple C2 (boundary-adjacent support) using the prepared four-panel
+`sample/output/s11-local-foam-component-capture-001-notes/sample4-components.svg`.
+Accept mixed/uncertain answers. Do not repeat the previous cyan/pink path question
+or infer Foam from coordinate overlap. No Windows execution is needed at this
+point. Runtime decisions/thresholds, formal O2 truth and W5/O3 entry are unchanged;
+further behavior changes need a mechanism grounded in the component review.
 
 The forthcoming independent video's recording/session lineage and prior exposure
 must be recorded and its evaluation role frozen before inspecting potential

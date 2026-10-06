@@ -134,10 +134,86 @@ unchanged; all 213 production Python source files match the capture's source pin
 No measurements were regenerated. Focused document links, diff and detector
 governance checks cover this source investigation; no runtime behavior changed.
 
+## Trace extension implemented and same-frame capture verified
+
+Implementation source: `b559a11`. The [diagnostic contract](../../20-architecture/s11-foam-component-diagnostics-architecture.md)
+is implemented through the existing component evaluator, debug projector and
+JSONL writer. Selected/rejected status and actual gate inputs are preserved,
+with a 256-component cap and an exact uint16 component-ID image. A writer
+round-trip test caught normalization of IDs by the old display-image serializer;
+the new explicit label-image path preserves IDs, including 256. Other images
+retain their existing serialization behavior.
+
+Focused validation: **100 tests passed** across Foam evidence, temporal gate,
+phase integration, new component capture, JSONL serialization and bundle output.
+Tests cover debug-on/off full detection equality on controlled scenes, rejected
+candidate/mask behavior, truncation/selected retention, empty support and real
+BASIC/FULL round-trip. No full-video or Windows effectiveness is claimed.
+
+New output: `sample/output/s11-local-foam-component-capture-001/` (87 hashed
+outputs plus `receipt.json`), status `CAPTURE_COMPLETE_NOT_EVALUATED`.
+`capture.json` SHA-256:
+`eff6fba700f55e6e339710bf5c95fd73e698626cb68892a04f3bd18971ffd1d2`.
+`comparison.json` SHA-256:
+`39755e3360e4f0288cde60ef06e925460861fb1004964e9ffc967fe10c52a750`.
+
+Only the same approved three frames were decoded. All 76 Oil candidates,
+positions, confidence, flags, fill state and all pre-existing trace state are
+exactly equal to the prior capture. All 63 existing trace image arrays are equal.
+The 12 input hashes and original 87-output receipt are unchanged. New source,
+run and output identity are separate; no reply or original output was rewritten.
+
+| Case | Components / retained | Selected component in source coordinates | Recorded rejection evidence |
+|---|---|---|---|
+| base_sample_1:156 | 5 / 5 | C1 box [620,476,624,480), front 476, 10 pixels | area_ok=false, height_ok=false; shape_ok=false |
+| sample2:30 | 4 / 4 | C1 box [495,452,504,465), front 452, 87 pixels | shape_ok=false; strong appearance false, texture true; ambiguous branch true |
+| sample4:450 | 5 / 5 | C1 box [553,848,631,889), front 848, 514 pixels | structural=true; wide-row fraction 0.5122, compactness 0.2241, fill 0.1607; weak rejection |
+
+The new data narrows the earlier unknowns:
+
+- Base has only five small support components, all below the user-marked Foam
+  path's Y range (361–377); none geometrically supports that marked boundary.
+  This does not override the user's observation or settle historical no-Foam truth.
+- Sample2 also has unselected C2, box [199,340,464,543), 37,300 pixels, score
+  0.7901. It passes area/height/white/texture predicates, but is neither bottom
+  connected nor assigned an accepted detached phenotype, so shape_ok is false.
+  Component status priority places the tiny ambiguous C1 ahead of weak C2 despite
+  C2's higher score. No claim is made that C2 is physically all Foam.
+- Sample4 has unselected C2, box [571,839,619,852), 335 pixels, score 0.7174,
+  intersecting the previously marked boundary region. It passes area/height/white/
+  texture predicates, but bottom_connected=false, material_phenotype=none and
+  shape_ok=false; structural_substrate_present=true. This is an alternative
+  support region, not an automatically correct Foam mask. C1's structural flag
+  is the recorded algorithmic judgment, not newly established physical truth.
+
+All 14 components are retained without truncation. Component masks are now
+available to distinguish support/shape loss from selection ordering. Exact
+physical attribution still requires the human review described next; no threshold
+or material-identity repair follows from these flags alone.
+
+## Human checkpoint after implementation
+
+Component-guided views are stored outside the immutable capture in
+`sample/output/s11-local-foam-component-capture-001-notes/`:
+`base_sample_1-components.svg`, `sample2-components.svg`, `sample4-components.svg`
+and their generator. Each juxtaposes unchanged RGB, the already-reviewed native
+paths, selected component C1 and alternative C2. Colored support pixels are exact
+row runs from the saved uint16 label raster; no contour interpolation or physical
+classification is performed. The sample4 four-panel guide was rendered with
+Quick Look and visually checked; the final view shows all four panels. This is
+static guide QA, not browser UI validation.
+
+The next requested reply is **sample4/450 C1 versus C2 material attribution**:
+what the orange lower curved support and purple boundary-adjacent support contain,
+including mixed regions or uncertainty. Existing cyan Oil / pink Foam–air path
+judgments are not requested again. C1/C2 are diagnostic region IDs, not Oil
+candidate indices. This step is awaiting the user; no answer is invented. Windows
+execution is not currently needed. `FIELD FAIL`, O2 open and W5 gated remain.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F04`, `S11-F06`, `S11-F09`, `S11-F10`
 - First harmful stage: selected Foam spatial result becomes unavailable before temporal confirmation; exact human-component correspondence and first failed spatial predicate remain unknown. Oil proposals survive; completed-window first loss is not measured by this capture.
-- Logic-map impact: NONE — existing owner/control flow verified; no runtime responsibility or behavior changed.
+- Logic-map impact: UPDATED — optional non-authoritative Foam component diagnostics are documented; decision ownership and behavior remain unchanged.
 - Failure-registry impact: NONE — existing identity, independent-series and current-versus-final guards apply; no new failed mechanism or threshold repair is asserted.
