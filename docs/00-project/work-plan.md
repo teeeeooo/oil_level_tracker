@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. Whole-candidate and chromatic identity benefit remain unestablished; the unresolved-pair mismatch denominator needs reconciliation.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -23,7 +23,7 @@ CLOSED WITHOUT PROMOTION ends an experiment without satisfying O2 acceptance.
 | W1 / O2 targets and aggregation | Source review, target contract and counter-controls VERIFIED locally | Candidate identity, local path support and scalar eligibility stay separate; challenger remains open under W4 | [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md) |
 | W2 / O2 bounded scene expansion | Frame14865 scene and geometry review COMPLETE on transferred evidence; bounded handoff CLOSED without identity promotion | Two unresolved boundary alternatives; four native paths and nineteen center-only candidates; no formal relabeling | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 shadow outputs and evaluation | IMPLEMENTED and VERIFIED locally; existing-data Windows target/context audit VERIFIED by transferred report | Preserve v1 compatibility and calibration guards; scalar truth remains absent; no efficacy claim | [Local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [Windows audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) |
-| W4 / O2 one challenger | Local-position and fixed color-side experiments CLOSED WITHOUT PROMOTION; candidate-identity challenger OPEN | Color information retained; incremental identity benefit NOT ESTABLISHED; R2 entry unmet | [Paired-scale result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md), [color-side assessment](../60-evidence/s11/s11-o2-color-side-local.md#added-information-assessment-and-measurement-disposition--2026-10-06) |
+| W4 / O2 one challenger | Local-position, fixed color-side and bounded region appearance experiments CLOSED WITHOUT PROMOTION; candidate-identity challenger OPEN | Color information retained; incremental identity benefit NOT ESTABLISHED; R2 entry unmet | [Paired-scale result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md), [color-side assessment](../60-evidence/s11/s11-o2-color-side-local.md#added-information-assessment-and-measurement-disposition--2026-10-06) |
 | O2 acceptance | OPEN; not satisfied | Independent development/calibration/holdout roles, fixed operating point and required Windows shadow acceptance remain unresolved | [O2 acceptance](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; entry pending O2 acceptance | Separate behavior plan, typed support/physical association controls and exact same-frame provenance | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Separate handoff and phase changes with positive/negative controls; no time/polarity shortcut | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -44,30 +44,30 @@ scores remain pinned. This is not a general impossibility finding for spatial cl
 
 ## Next transition
 
-The [saved-CSV cross-X/BW review return](../60-evidence/s11/s11-o2-color-side-local.md#region-cross-xbw-return-and-denominator-audit--2026-10-06)
-is received on attributed Windows evidence. Do not repeat the full review or
-rerun the model. All 108 finite main views reportedly have partition < smooth,
-including both identities; this relation alone does not discriminate them.
-Model ordering changes with X/BW/support. Gray/BGR differences have mixed signs;
-smaller envelope errors compare different observation domains. These results do
-not establish identity benefit or incremental color benefit.
+The [denominator reconciliation and region disposition](../60-evidence/s11/s11-o2-color-side-local.md#denominator-reconciliation-closed-and-bounded-region-disposition)
+close the saved-output measurement/review loop on attributed Windows evidence.
+There are 36 eligible unresolved pairs: 6 share a unique minimum-error model,
+30 differ, and none tie; 24 other pairs are unavailable on both sides. The
+correct mismatch fraction is 30/36 (83.3%), not an identity accuracy or error rate.
+Partition loss ordering splits 18/18 across the same 36 eligible pairs.
+Do not repeat the review, denominator check, source/receipt reconciliation or fit.
 
-Next reconcile only the denominator in existing `unresolved-pairs.csv`: 60 is the
-nominal pair inventory, while the report calls all 60 comparable and gives 30
-minimum-error-model mismatches (50%). Return counts for both candidates having
-four observed finite model errors, only one eligible, and neither eligible;
-within the eligible pairs, return same minimum / different minimum / tied
-minimum counts. State the domains of the reported 30 and partition 18/18 counts.
-Keep the mismatch percentage unconfirmed until these sets are explicit. No new
-ZIP, fit, measurement, receipt check or human rejudgment is needed. The exact
-pair files and exception keys have not been received locally.
+The bounded region appearance experiment is CLOSED WITHOUT PROMOTION. Partition
+improves smooth for both main identities; model ordering varies with X/BW/support;
+gray/BGR differences and changed observation domains do not establish incremental
+identity benefit. This closes this experiment, not all spatial classifiers or W4.
 
-The source/receipt hash correction and missing ribbon-row values are already
-[closed](../60-evidence/s11/s11-o2-color-side-local.md#transfer-reconciliation-closed--user-confirmation).
-Execution and preservation remain reported COMPLETE, not independently rehashed
-here. Do not fit new widths/cutoffs, count minima as identity votes or infer
-physical continuity from these correlated appearance fits. W4-R1 remains closed,
-R2 entry unmet, O2 open and W5/O3 gated. Existing labels, idx0/idx20 human
+Next is a local W4 design assessment against the existing physical-interface
+proposal and acceptance owners: identify an observable that distinguishes the
+physical hypotheses, the required material/static/optical counter-control, and
+what current saved evidence actually supports before requesting another Windows
+step. Reuse the known controls and unresolved human observations; do not repeat
+inventory or acquire new cases by default. No new descriptor, tuning sweep,
+private rerun or human rejudgment is currently requested. Physical opposition
+remains not_measured; no classifier/threshold is selected from these model minima.
+
+Full private CSVs have not been independently read or rehashed here. W4-R1 remains
+closed, R2 entry unmet, O2 open and W5/O3 gated. Existing labels, idx0/idx20 human
 ambiguity, original outputs and FIELD FAIL remain unchanged.
 
 ## Accepted local candidate

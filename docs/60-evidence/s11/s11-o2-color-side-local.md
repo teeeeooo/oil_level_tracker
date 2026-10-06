@@ -724,6 +724,66 @@ experiment. The already-closed receipt/code pin and missing ribbon cell are not
 reopened. FIELD FAIL / NOT_EVALUATED, original labels and human uncertainty remain
 unchanged while this arithmetic clarification is pending.
 
+### Denominator reconciliation closed and bounded region disposition
+
+The user returned the requested Windows read-only reconciliation. This supersedes
+the preceding pending denominator audit and its unconfirmed 50% interpretation.
+The agent read `unresolved-wide.csv` (120 rows) and `unresolved-pairs.csv` (60 rows);
+they already contained model states and heldout MSE. The original region CSV was
+not reopened. The reported note is
+`region-competition-001-consistency/denominator-reconciliation.md` (182 lines).
+These are attributed file-reading results, not a local rehash or CSV recomputation.
+
+| Eligibility category | Pairs |
+|---|---:|
+| Both candidates: all four models observed and finite | 36 |
+| Only idx0 eligible | 0 |
+| Only idx20 eligible | 0 |
+| Neither eligible: both have four o1_unavailable models | 24 |
+| Total inventory | 60 |
+
+| Minimum-error-model comparison within the 36 eligible pairs | Pairs |
+|---|---:|
+| Unique minimum on both sides, same model | 6 |
+| Unique minimum on both sides, different models | 30 |
+| Tied minimum on either side | 0 |
+
+The reported numerator 30 was correct and contained no null/unavailable
+comparisons. Its denominator is 36, giving **30/36 = 83.3%**, not 30/60 = 50%
+as a comparable-pair rate. The latter divides by the full inventory including
+24 ineligible pairs. Exact unrounded stored values were used; no tolerance or
+null-to-zero conversion was introduced.
+
+The 24 unavailable pairs occupy only X=[0,115) and X=[462,578): each strip has
+3 widths (8/16/24) × 4 support/channel views = 12 pairs. Both candidates are
+unavailable in every such pair; there is no one-sided eligibility. This is a
+support restriction, not a physical absence or structure judgment.
+
+“Partition 18/18” compares the sign of
+`heldout_mse(idx0, partition) - heldout_mse(idx20, partition)`:
+18 eligible pairs are positive and 18 negative, using the same 36-pair domain;
+the other 24 pairs are excluded. It is not a count of partition being the
+minimum-error model and does not imply equal errors or a tie.
+
+This **closes the denominator reconciliation**. The reported equality checks
+are internally consistent: 36+0+0+24=60; 6+30+0=36; 18+18=36; 2×3×4=24.
+The 83.3% is model-order disagreement across correlated views of two
+human-unresolved candidates. It is neither identity accuracy nor proof that the
+two candidates have different physical identities. No further transfer check or
+Windows rerun is required for this bounded measurement/review loop.
+
+**Disposition: bounded region appearance experiment CLOSED WITHOUT PROMOTION.**
+The experiment records differing appearance fits but does not establish a physical
+identity rule, incremental chromatic identity gain, calibrated operating point
+or required material/static/optical opposition. This is a sufficiency conclusion
+for the completed experiment, not a rejection of every magnitude-based or spatial
+classifier. Repeated model minima cannot substitute for a physical discriminator
+and appropriate counter-controls. Preserve outputs as development evidence.
+A next challenger needs a local design assessment of that missing evidence before
+another Windows request. No new measurement, threshold, identity label, decode or
+user judgment is authorized by this closeout. W4 remains open, R2 entry unmet,
+O2 unaccepted, FIELD FAIL / NOT_EVALUATED and idx0/idx20 ambiguity unchanged.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.
