@@ -207,13 +207,90 @@ The next requested reply is **sample4/450 C1 versus C2 material attribution**:
 what the orange lower curved support and purple boundary-adjacent support contain,
 including mixed regions or uncertainty. Existing cyan Oil / pink Foam–air path
 judgments are not requested again. C1/C2 are diagnostic region IDs, not Oil
-candidate indices. This step is awaiting the user; no answer is invented. Windows
-execution is not currently needed. `FIELD FAIL`, O2 open and W5 gated remain.
+candidate indices. At that checkpoint the step awaited the user; the received answer is recorded
+below. Windows execution is not currently needed. `FIELD FAIL`, O2 open and W5 gated remain.
+
+## Sample4 component reply and first failing predicate established
+
+The user answered the component guide on 2026-10-06:
+
+> 주황 : 글래스 테두리 구조물
+> 보라 : foam
+
+This binds **orange C1 to glass rim structure** and **purple C2 to Foam**, at
+sample4 frame 450, record `f000000450_fb759bff9e59`, run
+`26b0eaed-5cdf-4eb8-a416-18b30936902d`, Glass
+`ecb6e1ec-0259-5982-a35f-7cb1f7075af2`. Diagnostic IDs are not Oil candidate
+indices. The previous cyan Oil / pink Foam–air path reply is unchanged. This is
+whole-component material attribution, not exact segmentation, front Y, bottom
+connectivity, temporal validity or formal O2 target truth.
+
+The attributed reply is outside the immutable capture:
+`sample/output/s11-local-foam-component-capture-001-notes/reply-001-sample4-components.json`.
+SHA-256: `3d77a1fc09962170c52baf55288741342e9505aa9adc3c93ad9bb8694e0a7492`.
+It retains the exact quote, complete captured C1/C2 records and hashes of the
+capture, receipt, trace, label raster, displayed guide, source and prior reply.
+
+Read-only replay of existing geometry helpers, using the saved uint16 raster and
+captured statistics, confirms the following chain on source `d94054d`:
+
+1. C1 is independently `structural=true` and weak-rejected. The human answer
+   supports excluding this rim from Foam; C1 is a negative regression control.
+2. C2 is **not** structurally classified: `structural=false`. Its source box is
+   [571,839,619,852), while C1 is [553,848,631,889). The substrate helper uses
+   bounding boxes. Their X overlap covers all 48 C2 columns; its signed vertical
+   gap is **−4 pixels**. This satisfies `gap <= max_gap` (12), so the helper
+   returns `structural_substrate_present=true`, `front_from_lower_edge=false`.
+   Overlapping boxes do not establish physical contact or substrate identity.
+3. `_detached_material_phenotype` returns provisional `detached_droplet` for C2.
+   Its area 0.04536, height 0.125, width 0.46154 and fill 0.53686 meet that
+   existing geometric route. This is an internal phenotype name, not a human
+   claim that the region is a droplet. The detached-layer route fails its area
+   and width requirements.
+4. In `_component_evidence`, the droplet-retention texture (1.0) and whiteness
+   (0.82090) tests pass; **only `not structural_substrate_present` fails**.
+   Phenotype becomes `none`. With no bottom-connected route, `shape_ok=false`,
+   so score 0.71740 (above the 0.68 strong-score threshold) still yields
+   `weak_rejected`. The rejected result supplies no Foam candidate to temporal
+   confirmation. The loss is spatial qualification, not the temporal gate or UI.
+
+The replay calls the current structural-box, substrate-relation and detached
+phenotype helpers only. It does not rerun segmentation, detector, video decode,
+new gradients or a counterfactual production decision. Output:
+`sample/output/s11-local-foam-component-capture-001-notes/sample4-causal-replay.json`,
+SHA-256 `2b022efbd17e42c6265af992da4285bb9b2686cd60009c0e796fa3ccfe1acded`.
+All seven read inputs and all 87 capture outputs retain their hashes. Runtime
+code, thresholds and formal labels are unchanged.
+
+This establishes a human-positive Foam region lost through the structural
+substrate veto. It does **not** establish that removing the veto, changing the
+sign of its gap condition, or accepting every detached region is safe. A future
+mechanism must preserve the rim negative, actual structure-associated artifacts,
+small/noisy supports and independent Oil/Foam authority (F06/F10). No sample ID,
+coordinate or human-selected component may become a runtime exception.
+
+## Next bounded human checkpoint — sample2 components
+
+The already saved sample2/30 guide is ready in the same notes directory:
+`sample2-components.svg`. Its four panels were rendered and visually checked;
+no new detector run or video decode was needed. Orange C1 is a small support on
+the right rim (source box [495,452,504,465)); purple C2 covers a large interior
+region (source box [199,340,464,543)). C1 is ambiguous; C2 is weak-rejected by
+shape qualification. Neither material identity is assigned here.
+
+Ask what each displayed component contains, allowing mixed or uncertain regions.
+The previous sample2 pink Oil-surface and cyan internal-Foam-gap answers remain
+valid and are not requested again. This distinct component attribution determines
+whether the large-region rejection supplies another physical Foam control before
+choosing a general shape/substrate repair. It is not a new-frame search or an
+acceptance test. After the answer, trace that component's existing predicate and
+prepare two-sided local mechanism controls. No Windows execution is needed for
+this checkpoint. O2 remains open and W5/O3 entry remains gated.
 
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F04`, `S11-F06`, `S11-F09`, `S11-F10`
-- First harmful stage: selected Foam spatial result becomes unavailable before temporal confirmation; exact human-component correspondence and first failed spatial predicate remain unknown. Oil proposals survive; completed-window first loss is not measured by this capture.
-- Logic-map impact: UPDATED — optional non-authoritative Foam component diagnostics are documented; decision ownership and behavior remain unchanged.
+- First harmful stage: sample4 human-positive C2 loses its detached phenotype through the bounding-box structural-substrate veto, then fails spatial shape qualification before temporal confirmation. C1 is a human-confirmed rim negative. Other component identities and completed-window Oil first loss remain unmeasured.
+- Logic-map impact: NONE — this follow-up attributes saved components and identifies an existing predicate; the previously documented diagnostic seam and runtime decision owners are unchanged.
 - Failure-registry impact: NONE — existing identity, independent-series and current-versus-final guards apply; no new failed mechanism or threshold repair is asserted.
