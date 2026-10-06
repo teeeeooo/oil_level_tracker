@@ -125,36 +125,47 @@ The supplied sums and positive-index counts are internally consistent: 26+21+28
 physical controls. Approximate canonical Y groupings do not establish native-path
 agreement, interval truth, material identity or continuity across frames.
 
-### Attribution and scope reconciliation pending
+### Attribution and scope reconciled — user clarification
 
-The original handoff allowed at most two candidate answers per case (six total),
-whereas this return reports 75 labeled candidates and twelve revisions. Those
-counts alone cannot distinguish explicit human review of candidate groups from
-agent propagation of a boundary/scene judgment. Revision count is not a count
-of separately judged candidates. The supplied summary does not include the
-intervening replies or explain the expansion of review scope.
+The original handoff allowed six candidate answers; the final inventory contains
+75 labels and twelve revisions. The user subsequently clarified the actual review:
 
-Ask the user once whether they directly reviewed all candidates individually or
-as explicitly identified groups, whether labels were extended by the agent, or
-whether both occurred. Do not infer misconduct or discard genuine judgments
-from the scope difference alone. Explicit user-directed expanded review, if
-confirmed, takes precedence over the original workload cap. Conversely, nearby
-Y, shared source, or scene visibility is not by itself a direct candidate review;
-`not_visible` must not silently supply 21 individual human explanations.
+> native path가 있는 후보를 먼저 확인하고, 그 중 실제 경계면에 근접한 몇개의 후보를 추가 판독함.
+> 경계면에서 먼 후보들은 일괄 non_interface 판정함.
+> case2의 경우 oil이 가득 찬 상태라 모두 non_interface였음.
 
-Preserve the reported files and history without bulk relabeling. Until attribution
-is clarified, record the batch as **reported labeling complete; review provenance
-pending**, not 75 independently verified human judgments or accepted evaluation
-truth. First-case target Oil mapping also remains unresolved. No repeat image
-review, new candidate collection or model fitting is requested by this intake.
-Final-run original-input preservation was not restated in this summary; the
+This confirms user-directed expanded review, including group judgments; the
+original workload cap does not invalidate those answers. The attribution/scope
+question is closed. No repeat review or automatic relabeling is requested.
+
+| Review basis | User-confirmed action | Interpretation limit |
+|---|---|---|
+| Candidate-guided review | Native-path candidates first, then additional candidates close to the actual boundary | The clarification does not enumerate which individual indices received separate inspection |
+| Group negative judgment | Candidates far from the boundary were assigned non_interface together by the user | Preserve as a human group judgment, not individually inspected artifact types or a reusable Y-distance cutoff |
+| Full-scene group negative judgment | BASE case2 was Oil-full and the user judged all candidates non_interface | Preserve the explicit 21-candidate group judgment and not_visible scene state; no inference that Oil is absent |
+
+The inventory remains 75 labeled candidates, not 75 separately inspected physical
+objects or independent observations. Keep the actual replies/history and each
+candidate's recorded attribution. Do not invent an index-to-review-basis mapping
+from Y or source family when the summary does not provide it. This clarification
+establishes the review method, not a byte-level audit of Windows records.
+
+**Disposition: reported labeling complete; user/group attribution clarified.**
+The reported labels remain unchanged. First-case target Oil mapping is still
+unresolved; candidate kind and relative height do not settle which of the two
+reported boundaries is the application's target. No model fitting or target
+Oil evaluation using those unresolved positives follows from this clarification.
+Final-run original-input preservation was not restated in the summary; the
 earlier preservation claim applies to the earlier stage only.
 
-The next action is attribution clarification and target-boundary mapping before
-using these labels in target-specific evaluation. BASE negatives and post-Foam
-positives may supply further development controls if their attribution is
-established; they do not independently establish matched optical opposition,
-holdout success or O2 acceptance. FIELD FAIL / NOT_EVALUATED remain unchanged.
+The next question is the material identity of fluid1/fluid2, if known, and which
+boundary should represent the product's Oil height. Unknown is a valid answer.
+This is target clarification, not a request to repeat candidate review. BASE
+negatives and post-Foam positives provide additional user-reviewed development
+labels with the stated review bases; they do not establish matched optical
+opposition, independent holdout success or O2 acceptance. In particular, remote
+negatives cannot alone test rejection of artifacts sharing the surface's local
+appearance. FIELD FAIL / NOT_EVALUATED remain unchanged.
 
 ## Detector Governance
 

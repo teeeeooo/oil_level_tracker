@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); expanded-review attribution and target Oil mapping remain pending, with no comparative filming.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review is confirmed, while target Oil mapping remains pending, with no comparative filming.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -68,26 +68,26 @@ videos is feasible; comparative filming is not. Select the passive-video route.
 The [first bounded review handoff](../40-operations/s11-o2-local-shadow-evaluation.md#passive-control-review--first-bounded-batch)
 has returned a [final 75-candidate inventory](../60-evidence/s11/s11-o2-passive-control-review-001.md#final-batch-return--all-75-candidates-reported-labeled):
 13 interface and 62 non_interface, no unreviewed/uncertain entries, revision_count
-12. The counts are internally consistent; private labels/replies have not been
-independently inspected here. This exceeds the original six-candidate workload
-cap. Clarify whether the user explicitly reviewed all candidates individually
-or in named groups, or whether an agent extended scene/boundary judgments.
-Do not infer either direct review or unauthorized propagation from counts alone.
-An explicitly user-directed expansion supersedes the earlier cap.
+12. The user confirmed the expanded review: native-path candidates first,
+additional near-boundary candidates, group non_interface judgments for distant
+candidates, and all 21 BASE candidates judged non_interface because the scene
+was Oil-full. Attribution/scope reconciliation is closed; this is not 75
+separately inspected objects. Preserve individual versus group review bases
+without inventing per-index attribution or distance rules. Private labels/replies
+have not been independently inspected here.
 
-The batch is reported labeling complete; do not continue or restart the two cases
-previously pending. Preserve replies/history and reconcile attribution before
-using the expanded labels as evaluation truth. Accum drain has seven positives
-assigned to two reported boundary roles (fluid1/fluid2 and fluid2/air); material
-identity and mapping to the target Oil boundary remain pending. Do not silently
-relabel or count both roles as Oil positives. Other-video work remains metadata/
-prior-exposure only; only SPL#1 was found in the reported searched scope, not
-proof that no other recordings exist.
+The batch is complete on the transferred report and user clarification; do not
+restart review. Accum drain has seven positives assigned to two reported boundary
+roles (fluid1/fluid2 and fluid2/air). Clarify the materials if known and which
+boundary represents the product's Oil height before target-specific evaluation
+of those positives. Preserve existing answers without automatic relabeling.
+Other-video work remains metadata/prior-exposure only; only SPL#1 was found in
+the reported searched scope, not proof that no other recordings exist.
 
 SPL#1 stays in its existing `recording_group` and `regression` partition. The
 implemented evaluator locks an entire recording group/run to one partition;
 new frames, Glasses or regions from that recording are not independent holdout.
-After attribution/target reconciliation, allocate genuinely distinct available recordings before
+After target reconciliation, allocate genuinely distinct available recordings before
 model fitting or operating-point selection. No detector rerun, comparative
 capture, new classifier or W4-R2 entry follows from this review preparation.
 Physical opposition remains not_measured until the relevant evidence is obtained.
