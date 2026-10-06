@@ -362,6 +362,9 @@ def combine(paths, dataset_id, output):
 
 def load_frozen(path):
     frozen = read_json(path)
+    from tests.diagnostics import s11_target_truth
+    if frozen.get("schema_version") == s11_target_truth.SCHEMA:
+        return s11_target_truth.load(path, frozen)
     require(frozen.get("schema_version") in (LEGACY_FREEZE_SCHEMA, FREEZE_SCHEMA), "unsupported freeze schema")
     expected = LEGACY_LABEL_SCHEMA if frozen["schema_version"] == LEGACY_FREEZE_SCHEMA else LABEL_SCHEMA
     require(frozen["content"]["schema_version"] == expected, "freeze/label schema mismatch")
@@ -674,6 +677,12 @@ def evaluate(frozen, packets, prediction_document=None, *, allow_exploratory=Fal
         if regime == "EXPLORATORY_UNCALIBRATED":
             report["status"] = regime
         report["targets"] = {s: summarize_targets([c for c in cases if c["partition"] == s], packets, predictions) for s in PARTITIONS}
+    if "target_truth" in frozen:
+        report["schema_version"] = "s11-o2-target-shadow-report-v1"
+        report["source_label_schema"] = frozen["target_truth"]["schema_version"]
+        report["metric_semantics"] = "uppermost_fluid_target_identity_no_transferred_local_scalar_or_entity_truth"
+        report["target_truth"] = copy.deepcopy(frozen["target_truth"])
+        report["limitations"].append("Physical-interface history is preserved separately; internal interfaces are target negatives, not invented artifacts. Local/scalar/entity and artifact-subtype truth are not transferred.")
     return report
 
 
@@ -687,6 +696,10 @@ def main():
     freeze_parser = commands.add_parser("freeze")
     freeze_parser.add_argument("--labels", type=Path, required=True)
     freeze_parser.add_argument("--output", type=Path, required=True)
+    target_parser = commands.add_parser("bind-target", help="Bind explicit target roles without editing physical labels.")
+    target_parser.add_argument("--labels", type=Path, required=True)
+    target_parser.add_argument("--mapping", type=Path, required=True)
+    target_parser.add_argument("--output", type=Path, required=True)
     combine_parser = commands.add_parser("combine")
     combine_parser.add_argument("--labels", type=Path, nargs="+", required=True)
     combine_parser.add_argument("--dataset-id", required=True)
@@ -704,6 +717,9 @@ def main():
             prepare(args.bundle, read_json(args.selection), args.output)
         elif args.command == "freeze":
             freeze(args.labels, args.output)
+        elif args.command == "bind-target":
+            from tests.diagnostics import s11_target_truth
+            print(json.dumps(s11_target_truth.bind(args.labels, args.mapping, args.output), indent=2))
         elif args.command == "combine":
             combine(args.labels, args.dataset_id, args.output)
         elif args.command == "evaluate":

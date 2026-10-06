@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; explicit target-truth binding remains to be prepared, with no comparative filming.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; explicit target-truth binding is implemented and verified locally; Windows binding is pending, with no comparative filming.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -86,14 +86,19 @@ positives. Retain the 13/62 physical-label inventory and distinguish its 10 targ
 3 internal non-target and 62 other non-target interpretation. No new image review
 or material-identification question is needed.
 
-Next prepare explicit, versioned target-truth binding with case/input-index/
-witness and original review provenance, preserving individual/group review bases
-and broad physical identity. The existing evaluator does not read target roles
-from notes; do not score the original 13 interface labels as 13 target positives
-or overwrite their physical meaning. This preparation does not implement a
-minimum-Y selector, new classifier or detector rerun. Other-video work remains
-metadata/prior-exposure only; only SPL#1 was found in the reported searched scope,
-not proof that no other recordings exist.
+Explicit [target-truth binding](../60-evidence/s11/s11-o2-passive-control-review-001.md#target-binding-implementation-and-windows-handoff)
+is implemented and verified locally (169 focused controls). It preserves physical
+labels/history in a separate immutable snapshot, binds every target role to the
+case/packet/witness, and reuses W3 identity metrics without transferring path,
+contour, scalar, entity or artifact-subtype truth. Legacy prediction hashes cannot
+be reused against the new target snapshot. No runtime selector changed.
+
+Next execute the [Windows binding handoff](../40-operations/s11-o2-local-shadow-evaluation.md#passive-control-review--bind-uppermost-target-truth)
+on existing prepared labels/packet using the pinned mapping. Return the bound
+counts and no-prediction readiness report. No detector, video decode, new label
+judgment, classifier, score or fit is requested. Other-video work remains metadata/
+prior-exposure only; only SPL#1 was found in the reported searched scope, not proof
+that no other recordings exist.
 
 SPL#1 stays in its existing `recording_group` and `regression` partition. The
 implemented evaluator locks an entire recording group/run to one partition;

@@ -473,6 +473,7 @@ case for target metrics. A note or target mapping in evidence is not an
 implemented evaluator exclusion. No schema migration or runtime change follows
 from this target clarification alone.
 
+
 1. Candidate identity precision/recall uses identity alone; no source family or
    tag count gives extra votes. Unreviewed/uncertain support stays separate and
    visible frames without candidates stay in the denominator.
@@ -492,6 +493,43 @@ from this target clarification alone.
 5. Do not publish a binary localized-frame PASS until the target geometry coverage
    and tolerance policy is explicitly defined and validated. No currently labeled
    candidate, including a fully near-interface reviewed path, supplies that policy.
+
+#### Explicit uppermost-target binding — implemented offline
+
+`s11_interface_shadow_evaluation.py bind-target` delegates to
+`s11_target_truth.py` for the separate `s11-o2-target-truth-v1` snapshot.
+This companion owns immutable physical-to-target binding; `s11_review_records`
+continues to own mutable human review and the existing evaluator owns metrics.
+No product/runtime branch imports the private-case mapping.
+
+- Require v2 physical labels, their exact logical status hash, validated packets,
+  exact case/frame/Glass inventory, and an explicit versioned mapping. Bind every
+  candidate once with packet/witness and physical-annotation hashes. Retain original
+  labels/history in the snapshot, not a rewritten physical labels document.
+- Mapping groups explicitly list target/internal-interface indices; only an
+  expressly authorized source `non_interface` group may be inherited. Counts,
+  source identity, missing/duplicate IDs and target visibility are checked. No
+  rank, Y cutoff, material name classifier or nearest-boundary selector is used.
+- Target roles are target, internal_interface, other_non_target, uncertain and
+  unreviewed. Internal and other non-target map to evaluation non_interface while
+  their physical identities remain separate. Empty-case and no-target visibility
+  are explicit, not inferred from the proposal list.
+- Snapshot hash covers original physical labels, mapping, bindings and derived
+  evaluation content; packet locators remain relocatable. Raw file hashes are
+  distinct from logical label hashes. Input bytes are checked before/after binding.
+- `load_frozen` recognizes this schema, revalidates packets, recomputes projection
+  and compares hashes. It returns an in-memory v2 view to existing metric owners.
+  Target reports use `s11-o2-target-shadow-report-v1`, explicit target semantics,
+  original physical counts and role counts. Predictions must bind the new
+  evaluation-content hash; predictions for old physical truth are rejected.
+- Do not transfer source contour/path/entity or artifact-subtype truth to the new
+  target view. It remains in the preserved physical snapshot. This initial binding
+  implements target identity only; target localization/association truth needs
+  its own explicit review and must not be manufactured from role membership.
+- New destination only; no source labels/history mutation, training, inference,
+  threshold selection or production acceptance. A no-prediction report remains
+  NOT_EVALUATED with FIELD FAIL and auto_acceptance=false.
+
 
 #### W1 target and aggregation contract — design boundary
 
@@ -1317,6 +1355,11 @@ calibration/holdout examples. The bounded Windows saved-output procedure is now 
 No human labeling, detector rerun or acceptance transition is requested.
 
 ## History Review
+
+2026-10-06 target binding implementation reuses existing packet/label validation,
+relocatable locators and W3 metrics. A separate immutable snapshot preserves
+physical review while deriving explicitly authorized target roles. It rejects
+legacy-prediction reuse and does not infer target path/entity/contour truth.
 
 2026-10-06 target clarification: the user requires the uppermost actual fluid
 boundary without mandatory material-species classification. Preserve physical

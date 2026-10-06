@@ -243,6 +243,19 @@ A real internal boundary can be target-negative without being a reflection or
 structure. Do not invent artifact tags, near/off labels or scalar truth during
 that mapping. Candidate and boundary counts remain separate denominators.
 
+The offline binding implementation is covered by
+`tests/unit/test_s11_target_truth.py`: retained source/history bytes, exhaustive
+role assignment, genuine internal-interface negatives, three-boundary explicit
+mapping without material names, no fallback for an unavailable upper target,
+wrong physical/target prediction hashes, no transferred path/scalar/entity truth,
+packet/frame/Glass conflicts, incomplete/duplicate mappings, source drift,
+partition leakage, snapshot projection tampering and new-output-only behavior.
+The actual CLI is exercised from a foreign cwd with non-ASCII paths and relocated
+packet files. These constructed controls verify binding/evaluation mechanics;
+they do not prove real-image uppermost-interface discrimination. Target reports
+must state both physical and target-role counts and remain NOT_EVALUATED without
+predictions. Runtime and Windows field acceptance remain separate.
+
 Use the architecture's [W1 target contract](../20-architecture/s11-interface-observability-witness-architecture.md#w1-target-and-aggregation-contract--design-boundary).
 The [work-item ledger](../00-project/work-plan.md#s11-work-item-ledger) owns live
 status and completion-evidence links. Existing v2 persistence tests do not

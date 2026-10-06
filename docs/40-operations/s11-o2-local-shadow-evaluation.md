@@ -1930,3 +1930,94 @@ bytes의 before/after 확인 범위를 명시한다. 이전 receipt·전사 정�
 이 결과로 학습·threshold 선정·새 region fit·W4-R2 진입·field PASS를 선언하지 않는다.
 새 모델은 다음 recording-role/control 검토 이후의 별도 단계다. FIELD FAIL /
 NOT_EVALUATED는 유지된다.
+
+## Passive control review — bind uppermost target truth
+
+사용자 판독과 최상단 실제 유체 경계 목표는 확정됐다. 이번에는 기존
+`data/w4-passive-review-001/prepared/labels.json`과 연결 packet만 읽어
+평가용 목표 대응을 별도 snapshot으로 만든다. 원본 labels/replies/history를 수정하지
+않는다. 재판독·새 이미지·decode·detector·prediction·학습·threshold 실행은 없다.
+[구현 근거](../60-evidence/s11/s11-o2-passive-control-review-001.md#target-binding-implementation-and-windows-handoff)를 따른다.
+
+### 입력과 식별
+
+GitHub ZIP 소스도 허용한다. `.git` 부재는 실행 실패가 아니다. 다음 파일의 SHA-256을
+대조하며 다른 값이면 실행하지 않고 실제 값을 반환한다.
+
+| 파일 | SHA-256 |
+|---|---|
+| `tests/diagnostics/s11_interface_shadow_evaluation.py` | `5909c468871ed3c5cd2095c7c4a4a88df4d08569b10985c22e999aff0f42c808` |
+| `tests/diagnostics/s11_target_truth.py` | `f50fd9039ef4fee608d4c518557aa6b69d8abaab2d380945a69b0e109d74cc61` |
+| `docs/50-diagnostics/s11/s11-passive-001-target-role-mapping.json` | `3443a2cce1b011cf2db409dafd9e9a137ccc74aa50461eef80df38a707bea1e3` |
+
+mapping의 `source_labels_sha256`은 **status의 논리 해시**
+`55672fe9182129a3baef8ba8df57f12fdcd252d9296f2bb1ad4903d855ae02a8`다.
+`Get-FileHash labels.json`의 파일 bytes 해시와는 다른 값일 수 있다. 자동 pin 교체,
+경로 문자열 수정이나 source labels 재저장을 하지 않는다. 불일치하면 status의
+논리 해시와 실제 bytes 해시를 구분해 반환하고 멈춘다.
+
+mapping은 정확한 세 case/frame/Glass 및 후보 수 26/21/28을 대조하고, 다음 사용자
+확정 대응을 적용한다. 점수·Y 거리로 후보를 다시 고르지 않는다.
+
+- Accum drain: idx4/13/17/24 → target; idx5/10/18 → internal_interface.
+- Accum post-Foam: idx5/6/10/19/20/25 → target.
+- 각 case의 기존 `non_interface`만 명시적으로 계승: 19/21/22개.
+- 원본 `interface` 13개를 보존하고, 목표상 10개와 내부 비대상 3개로 나눈다.
+  내부 경계에 reflection/structure 등의 태그를 새로 부여하지 않는다.
+
+### PowerShell 실행
+
+소스 repo 루트에서 실행한다. `$DataRoot`만 실제 기존 데이터 위치에 맞춘다.
+출력은 새 폴더 `target-truth-001`이며 기존 출력이 있으면 덮어쓰지 말고 반환한다.
+
+```powershell
+$DataRoot = 'C:\0.Coding\2.Reference\Oil level tracker\0.windows_diagnostic\data'
+$Labels = Join-Path $DataRoot 'w4-passive-review-001\prepared\labels.json'
+$Mapping = '.\docs\50-diagnostics\s11\s11-passive-001-target-role-mapping.json'
+$Output = Join-Path $DataRoot 'w4-passive-review-001\target-truth-001'
+if (Test-Path $Output) { throw 'Target output already exists; do not overwrite.' }
+
+python tests/diagnostics/s11_interface_shadow_evaluation.py status --labels $Labels
+if ($LASTEXITCODE -ne 0) { throw 'Source status failed.' }
+
+python tests/diagnostics/s11_interface_shadow_evaluation.py bind-target `
+  --labels $Labels --mapping $Mapping --output "$Output\target-truth.json"
+if ($LASTEXITCODE -ne 0) { throw 'Target binding failed; do not change source or pins.' }
+
+python tests/diagnostics/s11_interface_shadow_evaluation.py evaluate `
+  --frozen "$Output\target-truth.json" --output "$Output\readiness.json"
+if ($LASTEXITCODE -ne 0) { throw 'Target snapshot validation failed.' }
+```
+
+`bind-target`의 console 결과는 `BOUND_NOT_EVALUATED`다. 원본 labels·mapping·연결
+packet의 bytes를 시작/종료에 확인한 뒤 새 파일을 생성한다. packet이 하나면 입력 수는
+3개다. 저장된 전체 물리 labels/history, mapping, 후보별 physical annotation/packet/
+witness 해시와 target role을 snapshot에 포함한다. source paths는 원래 판독의 일부로
+보존하고, 현재 packet locator는 출력 위치 기준으로 별도 연결한다.
+
+`evaluate`는 새 snapshot을 다시 읽고 packet 해시와 projection을 재검증한다. 이 실행에
+`--predictions`나 `--exploratory`를 넣지 않는다. 원본 영상/번들 또는 region 실험은
+열지 않는다. 기존 `freeze`를 원본 labels에 다시 실행할 필요가 없다.
+
+### 확인·반환 후 종료
+
+- snapshot schema `s11-o2-target-truth-v1`; report schema `s11-o2-target-shadow-report-v1`.
+- console `artifact_sha256` = snapshot 값 = readiness `target_truth.artifact_sha256`.
+  console `evaluation_truth_sha256` = snapshot `content_sha256` = readiness
+  `frozen_labels_sha256`. artifact·evaluation-content·파일 bytes 해시는 서로 다른 역할이다.
+- 물리 identity 수 `interface=13`, `non_interface=62`; target role 수 `target=10`,
+  `internal_interface=3`, `other_non_target=62`. 목표 평가 identity 수는 10/65다.
+- 원본 partition/recording group 유지, 총 3 case/75 candidate, regression만 존재.
+  후보별 대응은 snapshot `payload.bindings`에 전수 보존한다.
+- readiness `status=NOT_EVALUATED`, `auto_acceptance=false`, `field_disposition=FIELD FAIL`.
+  `target_truth.local_scalar_entity_truth=NOT_TRANSFERRED`; path/contour/scalar/entity 및
+  artifact subtype을 목표 정답으로 자동 이관하지 않았다. 예측 없는 coverage/recall
+  수치는 detector 성능으로 해석하지 않는다.
+- 원본 labels/읽은 packet의 전후 bytes 해시와 status 논리 해시 불변을 확인한다.
+  새 snapshot/readiness의 `Get-FileHash -Algorithm SHA256`도 각각 기록한다.
+  이 단계는 COMPLETE receipt를 생성하지 않으며, 그런 영수증이 있다고 보고하지 않는다.
+
+반환: 사용 소스/세 파일 해시, 실제 입력·출력 경로, binding console 결과, 위 schema/
+연결 해시/계수/보존 결과와 오류가 있으면 해당 오류. 상세 JSON은 업무 PC에 보존한다.
+여기서 멈춘다. 새 모델 실행, 예측 파일 생성, 성능 비교, R2 진입이나 field PASS는
+이 절차의 결과가 아니다.

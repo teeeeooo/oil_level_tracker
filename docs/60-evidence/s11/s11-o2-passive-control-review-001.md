@@ -215,10 +215,54 @@ boundary group provides a relevant target distinction but does not by itself
 establish a classifier, matched optical counter-control, independent holdout or
 O2 acceptance. FIELD FAIL / NOT_EVALUATED remain unchanged.
 
+## Target-binding implementation and Windows handoff
+
+The explicit binding is now implemented locally; the preceding target-mapping
+preparation statement is superseded by this implementation result. Private Windows
+binding has **not** run here. The user-reported physical labels/hash remain intact.
+
+`s11_interface_shadow_evaluation.py bind-target` uses the new bounded
+`s11_target_truth.py` companion because target membership needs a separate
+immutable artifact, not a mutation through the human-review recorder. It reuses
+packet validation, logical fingerprints, relocatable paths and existing metric
+owners. The stored original v2 labels include original review history; an explicit
+mapping generates a target-only in-memory identity view for evaluation.
+
+The [passive batch mapping](../../50-diagnostics/s11/s11-passive-001-target-role-mapping.json)
+pins the reported logical `labels_sha256`, all three case/frame/Glass identities,
+candidate counts, the ten target and three internal-boundary indices, and explicit
+inheritance of the 62 existing human non_interface labels. It does not invent
+individual versus group review attribution for each candidate; the source retains
+that detail. This diagnostic manifest is not imported into production behavior.
+
+The source `labels_sha256` pin is the logical fingerprint used by `status`, not
+the raw `Get-FileHash` digest. Both logical and byte provenance are retained and
+must not be substituted for one another. A mismatch stops binding; the script
+does not update pins, relabel a source or choose whichever hash matches.
+
+Snapshots use `s11-o2-target-truth-v1`; the loader revalidates the full projection
+and packets before evaluation. Target reports use `s11-o2-target-shadow-report-v1`
+and contain explicit physical/target counts. Old physical-label predictions cannot
+target the new content hash. Source path/contour/entity/artifact-subtype truth is
+retained only in the physical snapshot and is not automatically transferred into
+target metrics. Empty/missing/uncertain targets remain explicit.
+
+Local validation: **169 tests passed** across target-truth, existing evaluator,
+review records, review semantics, W3 targets and aggregation contract controls.
+This includes 20 target-binding controls and the actual bind/evaluate CLI under
+foreign cwd, non-ASCII paths and directory relocation. Input mutation, bad/missing/
+duplicate roles, wrong frame/Glass/packet/label binding, partition leakage and
+tampered projection fail closed. These are synthetic semantics/IO tests, not
+Windows/private-media execution or an uppermost-boundary detector acceptance.
+
+Next: execute the [Windows target-binding handoff](../../40-operations/s11-o2-local-shadow-evaluation.md#passive-control-review--bind-uppermost-target-truth)
+against the existing prepared labels and packet. No new scene judgment, detector
+run, prediction generation, training or field qualification is requested.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`.
 - Failure-registry entries: `S11-F04`, `S11-F09`, `S11-F10`.
 - First harmful stage: no new detector failure is established; the evidence-use risk is conflating a real internal boundary with the now-clarified uppermost target when evaluating historical broad-interface labels.
-- Logic-map impact: NONE — attributed review intake and procedural target-mapping hold only; candidate generation, authority and evaluator code are unchanged.
+- Logic-map impact: NONE — offline target binding and metric reuse add no runtime candidate generation, physical authority or detector control-flow change.
 - Failure-registry impact: NONE — retain physical-role/provenance distinctions without geometry-based identity transfer or a private-case rule.

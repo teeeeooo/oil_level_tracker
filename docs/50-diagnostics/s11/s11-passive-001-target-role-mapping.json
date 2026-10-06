@@ -1,0 +1,96 @@
+{
+  "schema_version": "s11-o2-target-role-mapping-v1",
+  "target_spec_id": "uppermost-actual-fluid-boundary-v1",
+  "source_labels_sha256": "55672fe9182129a3baef8ba8df57f12fdcd252d9296f2bb1ad4903d855ae02a8",
+  "attribution": "User confirmed individual/group review and uppermost actual fluid boundary target in the project conversation on 2026-10-06. Material classification is optional. This mapping does not claim 75 individual inspections.",
+  "cases": [
+    {
+      "case_id": "w4-passive-001-accum-drain",
+      "frame_index": 17383,
+      "glass_id": "8fb6ebc7-7c56-401e-86c3-05514bf6380b",
+      "candidate_count": 26,
+      "target_visibility": "visible",
+      "note": "Target is upper boundary; preserve lower physical-interface labels in source.",
+      "groups": [
+        {
+          "role": "target",
+          "candidate_indices": [
+            4,
+            13,
+            17,
+            24
+          ],
+          "expected_count": 4,
+          "review_basis": "existing_review_plus_user_target_clarification",
+          "note": "User-reported upper Oil/air boundary; requested uppermost actual fluid boundary."
+        },
+        {
+          "role": "internal_interface",
+          "candidate_indices": [
+            5,
+            10,
+            18
+          ],
+          "expected_count": 3,
+          "review_basis": "existing_review_plus_user_target_clarification",
+          "note": "User-reported lower liquefied-refrigerant/Oil boundary: real interface, not the tracking target."
+        },
+        {
+          "role": "other_non_target",
+          "source_identity": "non_interface",
+          "expected_count": 19,
+          "review_basis": "user_confirmed_individual_or_group_review_preserved_in_source",
+          "note": "Retain source non_interface judgments. User described additional near-boundary inspection and grouped distant negatives; no per-index review-method assignment is invented."
+        }
+      ]
+    },
+    {
+      "case_id": "w4-passive-001-base-full",
+      "frame_index": 17383,
+      "glass_id": "8f94fb85-d98e-4c71-9c97-3085168be1b2",
+      "candidate_count": 21,
+      "target_visibility": "not_visible",
+      "note": "User-confirmed Oil-full scene, no visible target.",
+      "groups": [
+        {
+          "role": "other_non_target",
+          "source_identity": "non_interface",
+          "expected_count": 21,
+          "review_basis": "user_confirmed_individual_or_group_review_preserved_in_source",
+          "note": "User explicitly judged all candidates non_interface because the scene was Oil-full; no visible target, not Oil absence."
+        }
+      ]
+    },
+    {
+      "case_id": "w4-passive-001-accum-postfoam",
+      "frame_index": 16543,
+      "glass_id": "8fb6ebc7-7c56-401e-86c3-05514bf6380b",
+      "candidate_count": 28,
+      "target_visibility": "visible",
+      "note": "Single reported surface boundary is the target.",
+      "groups": [
+        {
+          "role": "target",
+          "candidate_indices": [
+            5,
+            6,
+            10,
+            19,
+            20,
+            25
+          ],
+          "expected_count": 6,
+          "review_basis": "existing_review_plus_user_target_clarification",
+          "note": "Single user-reported surface band; target mapping does not create contour/path truth."
+        },
+        {
+          "role": "other_non_target",
+          "source_identity": "non_interface",
+          "expected_count": 22,
+          "review_basis": "user_confirmed_individual_or_group_review_preserved_in_source",
+          "note": "Retain source non_interface judgments and their original individual/group attribution; no distance threshold inferred."
+        }
+      ]
+    }
+  ]
+}
