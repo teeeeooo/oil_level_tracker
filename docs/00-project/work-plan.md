@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE; two transferred fields need reconciliation. A bounded appearance distinction is visible, but whole-candidate and chromatic identity benefit remain unestablished.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. A bounded appearance distinction is visible, but whole-candidate and chromatic identity benefit remain unestablished.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -44,20 +44,21 @@ scores remain pinned. This is not a general impossibility finding for spatial cl
 
 ## Next transition
 
-Reconcile the two transfer items in the
-[region Windows return](../60-evidence/s11/s11-o2-color-side-local.md#region-windows-return-and-bounded-interpretation--2026-10-06):
-the model-file hash differs by one character from the pinned source, and one
-recorded-BGR ribbon row lost train/test/error cells in the message. Read the
-existing source/artifact entry and original CSV row; no rerun or human judgment.
+Review the already-saved complete main/auxiliary/unresolved comparisons
+(480/144/480 rows) across X and BW before choosing a continuation or closing the
+region hypothesis. The [region return and reconciliation](../60-evidence/s11/s11-o2-color-side-local.md#transfer-reconciliation-closed--user-confirmation)
+closes both transfer items: the source/receipt code hash matches its pin, and the
+missing ribbon row is 1536 train pixels, 504 test pixels and heldout MSE
+0.006130124755688663. Do not request those confirmations again or rerun the model.
 Execution/receipts/input preservation are reported COMPLETE, not independently
-rehashed here. Do not turn a possible OCR transfer error into a detector failure.
+rehashed here. Full comparison CSV contents have not been received locally.
 
 At the prescribed Accum slice, partition improves on smooth much more for idx10
 than idx15, already in gray. The auxiliary slice favors a ribbon explanation;
 the unresolved idx20 changes model ordering with support. These are bounded
-appearance observations, not whole-candidate identity. After the two items are
-resolved, examine the already-saved complete 480/144/480 comparison rows across
-X/BW before choosing a continuation or closing the hypothesis. Do not request
+appearance observations, not whole-candidate identity. Partition has the lowest
+error for both main candidates in all four excerpt views, so ordering alone
+does not distinguish them. Do not request
 another descriptor run, fit new widths/cutoffs, or treat lower MSE as identity.
 No full-CSV stability or incremental color benefit is established from excerpts.
 
@@ -91,8 +92,7 @@ and was removed; its rejection is not a reason to request the same authorization
 again. These historical grants do not authorize unrelated changes or publication.
 The fixed color-side measurement is complete. The current user request authorizes
 implementation and preparation up to the Windows execution point. The user has returned that Windows
-saved-output run. Current follow-up is transfer reconciliation and interpretation
-of existing results; no automatic private rerun or broader field qualification
+saved-output run. Current follow-up is cross-X/BW interpretation of existing results; no automatic private rerun or broader field qualification
 is authorized.
 
 Outside the detector replacement scope remain unrelated candidate-generation,

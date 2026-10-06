@@ -502,7 +502,8 @@ chat field does not by itself establish a calculation or file-integrity failure.
 - Runtime reported: Python 3.14.3 / NumPy 2.5.2 / OpenCV 4.13.0. Elapsed run time
   was not supplied; do not infer Windows throughput from the local benchmark.
 - The intended ZIP source was c2102c1. The runner digest matches its pin. The
-  transferred model-file digest conflicts with its pin; see the intake items.
+  initially transferred model-file digest was wrong; the user confirms the
+  source pin and receipt code entry match. The transfer items below are closed.
 - All decision/acceptance/field flags remain NOT_EVALUATED / false / FIELD FAIL /
   NOT_MEASURED. Physical identity remains UNRESOLVED, opposition not_measured.
 
@@ -526,12 +527,13 @@ Paths are under `data/region-competition-001-notes/`; original results under
 
 These are the rounded `heldout_mse` values as supplied, not a new fit. B=recorded
 bands; E=candidate envelope. Same X/BW/representation is required for comparison.
-There is **one missing loss cell**; it is not interpolated or set to zero.
+The initially missing loss cell is filled from the user’s subsequent saved-row
+confirmation below, without interpolation. All 80 excerpt losses are now present.
 
 | Case / idx / basis / X / Y / BW | Support | Channels | smooth | partition | ribbon_bw | ribbon_2bw |
 |---|---|---|---|---|---|---|
 | r003 / 10 / native / [1388,1473) / 217 / 6 | B | gray | 0.0067251683 | 0.0041084013 | 0.0061413202 | 0.0063929794 |
-| same | B | BGR | 0.0067538470 | 0.0040948949 | **not transferred** | 0.0063899493 |
+| same | B | BGR | 0.0067538470 | 0.0040948949 | 0.006130124755688663 | 0.0063899493 |
 | same | E | gray | 0.0054596701 | 0.0038924241 | 0.0049699842 | 0.0053469482 |
 | same | E | BGR | 0.0054858414 | 0.0038910790 | 0.0049573061 | 0.0053582010 |
 | r003 / 15 / native / [1388,1473) / 313 / 6 | B | gray | 0.0006410291 | 0.0006269626 | 0.0006405006 | 0.0006409431 |
@@ -571,10 +573,10 @@ predeclared efficacy endpoint**. Channel spaces are not directly commensurate.
    Partition also improves idx15 slightly, so merely improving smooth is not an
    interface certificate. Absolute partition error is smaller for idx15, so
    minimum raw error across candidates is not an identity selector either.
-2. Partition is the lowest of the four supplied losses for idx10's three
-   complete views and for idx15's four views. The idx10 recorded-BGR quartet is
-   incomplete; do not claim its four-model ordering until the missing cell is
-   read. Model ordering here describes the table, not a generated identity winner.
+2. After saved-row confirmation, partition is the lowest of the four supplied
+   losses in all four views for both idx10 and idx15 at this X/BW. Thus the
+   ordering alone does not distinguish the positive and negative candidate.
+   Model ordering describes the table, not a generated identity winner.
 3. At the stated BASE idx11 X/BW, ribbon_2bw has the lowest supplied error in all
    four views. This is consistent with a different local appearance explanation,
    but does not prove a visible return or structural identity. Indicator-edge
@@ -595,27 +597,37 @@ count model minima as votes, promote W4-R2 or declare the whole hypothesis faile
 from the unresolved control. Full 480/144/480 CSV contents have not been reviewed
 here; cross-X/BW robustness and optical/material opposition remain open.
 
-### Two substantive transfer items; no rerun
+### Transfer reconciliation closed — user confirmation
 
-1. Model-file digest in the message:
-   `3627e7c2ad6e218fa797b68500d70e7c8be1e038354bbad32c0abcd68fb60b17`.
-   Frozen pin and locally rehashed c2102c1 file:
+The user explicitly confirmed both items after the initial report:
+
+1. The model-file hash in the transferred message was wrong. The source pin and
+   receipt code entry both use the correct digest
    `3627e7c2ad6e218fa797b68500d70e7c8be1e038354bbad32c0ebcd68fb60b17`.
-   The `...32c0a...` versus `...32c0e...` difference conflicts with the reported
-   pin check and matching artifact. Cause unconfirmed, plausibly transfer.
-   Read the existing `experiment.json.artifact.code` entry for
-   `tests/diagnostics/s11_region_competition.py` and compare it with the source
-   file's byte SHA. Do not replace the saved artifact or recalculate measurements.
-2. The message row for review-003 idx10/native/X=[1388,1473)/Y=217/BW6/
-   recorded_bands/BGR/ribbon_bw omits **train_pixels, test_pixels, heldout_mse**.
-   Read that exact row from the original `region-competition.csv`; return all
-   three fields. Do not copy numbers from neighboring models or an image.
+   The earlier `...32c0abcd...` spelling was a transfer error, not a demonstrated
+   source or execution mismatch. No further hash confirmation is pending.
+2. Exact saved row: review-003 / idx10 / native_path / X=[1388,1473) / Y=217 /
+   BW6 / recorded_bands / BGR / ribbon_bw:
+   - `train_pixels = 1536`
+   - `test_pixels = 504`
+   - `heldout_mse = 0.006130124755688663`
 
-Elapsed time may be supplied only if already recorded; otherwise retain
-not_reported without rerunning for timing. No repeat 32-file confirmation or
-source-media replay is needed to repair these transfer items. Execution is
-reported COMPLETE; transfer reconciliation remains OPEN. There is no new
-Windows measurement request or classifier/field acceptance.
+The completed quartet is partition (0.0040948949), ribbon_bw
+(0.006130124755688663), ribbon_2bw (0.0063899493), smooth (0.0067538470), in
+ascending error order. This closes the missing cell and confirms the local
+ordering; it does not change the prior within-view partition-versus-smooth
+reduction or establish incremental color/physical identity benefit.
+
+Execution is reported COMPLETE; both substantive transfer items are **CLOSED on
+user-confirmed saved values**. This remains attributed evidence; private files
+were not rehashed locally. No code, original output, model or label changed.
+Elapsed time remains not_reported and is not grounds for a timing rerun.
+
+Next examine the already-saved full main/auxiliary/unresolved comparisons
+(480/144/480 rows) across X and BW, retaining model errors, support, missing
+states and the four ablations. Their contents have not been received locally.
+No additional measurement, repeated receipt check or human rejudgment is needed.
+W4-R2 remains unmet and FIELD FAIL / NOT_EVALUATED unchanged.
 
 ## Detector Governance
 
