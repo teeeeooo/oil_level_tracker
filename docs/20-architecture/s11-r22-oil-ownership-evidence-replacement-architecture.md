@@ -73,6 +73,27 @@ Partial-fill and delayed reacquisition contexts retain their existing absolute
 bounded behavior. Renewal never bypasses a missing current row, creates a
 coordinate, or changes the delayed one-attempt contract.
 
+## Phase-identity diagnostic contract
+
+`evaluate_phase_identity` owns both direct-quality predicates and their failure
+names. A failed direct predicate must be represented in `failed_gates`, including
+boundary advantage, artifact signature and optics opposition; passing scalar
+floors do not justify an empty list when one of these comparisons fails.
+
+The explanation follows the branch used by the decision. Ordered-lower checks
+its existing representation floor0.12 and recent direct Foam context. Ordinary
+direct identity checks material texture and, for calibrated proposals,
+representation support0.20. Unused branch predicates are not reported as causes.
+An accepted identity has no failed predicates. Explicit Foam opposition retains
+its existing early decision and reason.
+
+This is a diagnostic contract, not an authority policy change. Thresholds,
+identity enum, ordered-lower flag, authority, candidate retention and selected
+coordinates remain unchanged. Consumers may serialize failure strings, but may
+not turn them into control-flow predicates. The [counter-control record](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#authority-counter-controls-and-phase-reason-repair--2026-10-07)
+documents the missing-reason example, rejected pulse alternative and bounded
+before/after equality verification. No W4 identity or Windows field gain follows.
+
 ## Preserved contracts and field boundary
 
 - One generic detector serves every Glass; no private identity, coordinate,
@@ -94,7 +115,8 @@ coordinate, or changes the delayed one-attempt contract.
   `S11-F10`.
 - Prior mechanisms reviewed: R16 directed identity and bounded loss, R18
   lifecycle closure, R19 absolute recovery expiry, R20 delayed readiness and
-  direct/near/delayed precedence, and R21 recent trajectory evidence.
+  direct/near/delayed precedence, and R21 recent trajectory evidence;
+  October direct-quality predicates and their incomplete failure explanations.
 - Prior mechanisms rejected: unbounded origin reset, unconditional expiry
   extension, cross-ID renewal, diagnostic-text checks, coordinate/snapshot
   carry, candidate-family privilege and private field branches.
@@ -104,8 +126,10 @@ coordinate, or changes the delayed one-attempt contract.
 - Difference from prior failures: one same-owner reaffirmation is a bounded
   initial-FULL lease transition with an immutable origin and explicit witness;
   contradiction is typed before row-member selection and delayed evidence is
-  reset on the involved owner.
+  reset on the involved owner. The diagnostic repair shares predicate definitions
+  with the existing decision and explains only its actual branch; it does not
+  weaken identity gates to recover a reviewed coordinate.
 - Logic-map impact: UPDATED — R22 now owns the Oil phase/evidence seam and
-  cached witness fields.
+  cached witness fields, including complete branch-specific phase failure reasons.
 - Failure-registry impact: NONE — existing mechanisms remain the failure
   history; R22 is the bounded replacement and does not rewrite observations.

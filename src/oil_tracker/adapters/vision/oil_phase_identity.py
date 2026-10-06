@@ -92,17 +92,23 @@ def evaluate_phase_identity(
             and float(candidate.features.get("broad_strength", 0.0)) >= 0.42
         )
     )
-    direct_quality = bool(
-        evidence.availability.phase
-        and evidence.material_support >= config.anchor_min_material
-        and evidence.boundary >= config.anchor_min_boundary
-        and evidence.boundary - evidence.artifact_likelihood
-        >= config.anchor_min_boundary_advantage
-        and evidence.artifact_signature <= config.anchor_max_artifact
-        and evidence.ambiguity <= config.anchor_max_ambiguity
-        and evidence.optics_opposition <= 0.38
-        and localized_boundary
+    # Keep the diagnostic reasons attached to the predicates actually used.
+    # In particular, boundary advantage can fail while every scalar floor passes.
+    direct_gates = (
+        ("phase_evidence_available", evidence.availability.phase),
+        ("material_support", evidence.material_support >= config.anchor_min_material),
+        ("boundary", evidence.boundary >= config.anchor_min_boundary),
+        (
+            "boundary_advantage",
+            evidence.boundary - evidence.artifact_likelihood
+            >= config.anchor_min_boundary_advantage,
+        ),
+        ("artifact_signature", evidence.artifact_signature <= config.anchor_max_artifact),
+        ("ambiguity", evidence.ambiguity <= config.anchor_max_ambiguity),
+        ("optics_opposition", evidence.optics_opposition <= 0.38),
+        ("localized_boundary", localized_boundary),
     )
+    direct_quality = all(passed for _, passed in direct_gates)
     texture_clean = bool(
         evidence.availability.material_texture
         and evidence.material_texture_conflict < 0.60
@@ -137,25 +143,17 @@ def evaluate_phase_identity(
     ):
         return PhaseIdentityDecision(OilPhaseIdentity.DIRECT_INTERFACE)
 
-    failed: list[str] = []
-    if not evidence.availability.phase:
-        failed.append("phase_evidence_available")
-    if evidence.material_support < config.anchor_min_material:
-        failed.append("material_support")
-    if evidence.boundary < config.anchor_min_boundary:
-        failed.append("boundary")
-    if evidence.ambiguity > config.anchor_max_ambiguity:
-        failed.append("ambiguity")
-    if not localized_boundary:
-        failed.append("localized_boundary")
-    if not texture_clean:
-        failed.append("material_texture_conflict<0.60")
-    if calibrated_proposal and context.representation_support < 0.20:
-        failed.append("calibrated_independent_representation")
-    if ordered_lower and context.representation_support < 0.20:
-        failed.append("ordered_lower_cross_representation")
-    if ordered_lower and not recent_direct_foam:
-        failed.append("ordered_lower_recent_direct_foam")
+    failed = [name for name, passed in direct_gates if not passed]
+    if ordered_lower:
+        if context.representation_support < 0.12:
+            failed.append("ordered_lower_cross_representation")
+        if not recent_direct_foam:
+            failed.append("ordered_lower_recent_direct_foam")
+    else:
+        if not texture_clean:
+            failed.append("material_texture_conflict<0.60")
+        if not independently_corroborated:
+            failed.append("calibrated_independent_representation")
     return PhaseIdentityDecision(
         OilPhaseIdentity.CONTINUATION_ONLY,
         ordered_lower=ordered_lower,

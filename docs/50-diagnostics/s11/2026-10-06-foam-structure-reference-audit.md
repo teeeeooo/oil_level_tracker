@@ -578,12 +578,111 @@ inspection. Production source, recipes, labels and previous outputs are unchange
 |`run_inspection.py`|`74367fb198cd2e8c84ed3851846713e8c6a33db77e07d1c38e6f8ee94ea3e75e`|
 |`receipt.json`|`896a2b026a7c63c9e076fac4fb89973f5463aa83eee559a325001a9093612e21`|
 
+## Authority counter-controls and phase-reason repair — 2026-10-07
+
+Base: `68d6913b3d38cd021df37d0c1cb013a9570f5dae`. This iteration tests the
+appearance/authority diagnosis before changing detector behavior.
+
+### Two simple repairs do not establish an identity improvement
+
+1. Reusing existing Sobel/Canny measures instead of the phase generator's
+   copied narrow features is insufficient on frame420: on the visible raster,
+   Y821 has normalized Sobel strength0.40445 and horizontal coverage0.61404.
+   Y854 has strength0.83560 but coverage0 at the exact row. These are direct
+   raster rows, not the main hypothesis's aggregated proposal evidence; the
+   latter records narrow strength1 and coverage0.58462 for854. A new exact-row
+   edge requirement can therefore reject the confirmed boundary. No such
+   requirement was installed.
+2. `_narrow_summary` currently chooses a nearby strong absolute-gradient row
+   as a paired edge without requiring opposite signs. At the confirmed lower
+   boundary, source851 and853 are both negative signed lobes, yet produce
+   paired strength0.74754. A bounded prototype required
+   `signed[row] * signed[center] < 0` for pair membership. This changes only
+   same-frame pulse measurement; it does not compare historical polarity or
+   infer a physical identity from a sign reversal.
+
+The second prototype ran the existing shadow-evidence, observability-margin,
+supplemental-path and authority tests: **75 passed, 5 failed**. Failures were:
+
+- `test_exact_83_243_one_sided_route_limit_is_invariant`;
+- `test_real_frame_route_transition_has_no_upward_margin_jump`;
+- `test_intensity_sweep_uses_one_continuous_margin`;
+- `test_broad_evidence_neighborhood_has_no_independent_point_four_switch`;
+- `test_unresolved_texture_collisions_remain_ambiguous`.
+
+The last control includes `alternating-below-latent-cause-collision`, which
+became a boundary observation. This is a material safety regression, not just
+an expected-number mismatch. **The prototype was rejected and production
+`oil_shadow_observations.py` restored byte-for-byte to the base.** No oracle,
+truth, threshold, polarity rule or golden was relaxed. There is no candidate
+for a Windows replay from this experiment. Removing one artifact cue changes
+multiple coupled semantic scores; it cannot by itself repair identity.
+
+The rejected patch remains local at
+`sample/output/s11-local-lobe-countercontrol-001/rejected.patch`, SHA-256
+`949abce71255e7e64df8e94119b87786676f4bf84614ad3f5f7e15baa71c12e8`.
+It adds only an opposite-sign requirement after the existing separation gate
+in `_narrow_summary`; all failed tests above remain unchanged.
+
+### Accepted diagnostic repair: report the predicates that actually fail
+
+The earlier empty failure list for854 hid `boundary_advantage`. Direct-quality
+predicates and their names now share one definition in `oil_phase_identity.py`.
+Boundary advantage, artifact signature and optics opposition are all reported
+when they fail. Branch diagnostics also use the actual ordered-lower
+representation floor0.12, rather than reporting the ordinary direct floor0.20;
+texture/calibrated corroboration reasons no longer leak into the ordered-lower
+branch that does not require them. Decisions, thresholds and authority are
+unchanged. Consumers store/serialize these strings; no decision reads them.
+
+Replaying the saved original/corrected ROI detections through the existing
+completed resolver with the base function and repaired function proves equality
+of all returned fields **except keys containing `failed_gates`**:
+
+| Recipe | Frames | Phase decisions compared | Reason lists corrected | Other returned fields |
+|---|---|---|---|---|
+|Original|121|2821|1119|identical|
+|Human ROI|121|2511|733|identical|
+
+At corrected frame420/Y854, identity stays `continuation_only`, ordered_lower
+stays true, and the reason changes from `[]` to `[boundary_advantage]`. Its
+boundary0.431542576 minus artifact0.545942197 is−0.114399621, below the actual
+resolver requirement+0.08. Representation0.921277, recent Foam841 at age0 and
+separation7 are present; their absence is not the reason this candidate fails.
+The exact context was captured at the real resolver call, not reconstructed
+from assumed defaults. This closes one causal unknown without changing the
+selected821 output or declaring821 a negative.
+
+Validation: **173 tests passed**, including ten new diagnostic controls,
+authority/resolver/decomposition, shadow-evidence and margin collision controls,
+supplemental proposals and detector/behavioral integration. The five tests
+that rejected the prototype pass again after its removal. The242-frame replay
+uses saved detections without a new decode or source measurement. It does not
+cover every video/application/export path or establish field effectiveness.
+
+Local replay: `sample/output/s11-local-phase-reasons-001/`. Four input files
+(two saved sequences and two recipes) are hash-preserved. Outputs:
+
+| Artifact | SHA-256 |
+|---|---|
+|`result.json`|`89f669ad2d99824573c25826f5b90e58270c74e02d52f830565354f000092a67`|
+|`run.py`|`93d3060951f70642faedb271c4a95dbda5939c8e3b969e8530eea4a29e246033`|
+|`receipt.json`|`59768f667b1d47763edfb4c5ca4fa4a92b018f5f0738090b1a3a9a9619f7c4ae`|
+
+Next design constraint: retain unresolved optical/texture opposition when
+separating paired-pulse measurement from actual boundary support. Merely
+subtracting artifact evidence or adding exact-row edge gates is insufficient.
+Keep proposal retention, identity admission and final selection distinct; test
+any replacement against the existing collision controls before a broad video
+run. This iteration does not promote a detector behavior or require new human
+judgment. Oil854 correspondence and unknown821 remain as previously recorded.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
 - First harmful stage: original ROI admits rim. After human ROI correction, confirmed Oil854 is retained but loses completed-window eligibility at authority; direct inspection leaves admitted821 physically unresolved and traces its coverage/strength to pooled appearance summaries. Foam mixed-component upper-extent selection precedes temporal confirmation and remains unresolved; episode acceptance does not repair front identity.
-- Logic-map impact: NONE — bounded same-code ROI/frame/sequence comparison and local review viewers do not change production owners or acceptance authority.
+- Logic-map impact: UPDATED — phase-identity failure reasons now match actual predicates and branch thresholds; the bounded resolver comparison preserves all non-reason fields. Rejected pulse changes are absent from production.
 - Failure-registry impact: NONE — geometry-as-identity, blanket masks, global cutoffs, private Y branches and cross-material authority remain prohibited; no replacement mechanism is promoted.
 
 FIELD FAIL / NOT_EVALUATED, O2 open and W5/O3 gated remain. No Windows work is

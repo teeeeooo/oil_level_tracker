@@ -144,6 +144,15 @@ The tracker’s `raw_*`/`smoothed_*` fields and the current `fill_state` are not
 
 `OilObservationResolver.resolve` first builds one `OilCandidateEvidenceIndex`, then `OilAdmissionEvidenceOwner.prepare` normalizes every finite `OIL_AIR` candidate. It computes bounded Foam material identity, ordinary semantic anchor/corridor support, cross-representation support and phase identity before calling `evaluate_candidate_authority`.
 
+Phase-identity failure diagnostics use the same named predicates as direct
+quality evaluation, including boundary-minus-artifact advantage, artifact
+signature and optics opposition. Failure reasons follow the evaluated branch:
+ordered-lower uses its0.12 representation floor and recent Foam context;
+ordinary direct identity uses texture and calibrated-proposal corroboration.
+These strings describe the unchanged decision predicates and do not grant
+authority. The [local counter-control investigation](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#authority-counter-controls-and-phase-reason-repair--2026-10-07)
+records the correction and bounded behavior-equality check.
+
 The authority tiers have these meanings in the current code:
 
 - `HARD_INVALID`: fails `candidate_is_eligible` (explicit sequence eligibility, visibility/evidence availability, Artifact match, optics/exclusion/border conflict); the ref is discarded.
@@ -327,8 +336,11 @@ bounded expiry and one-attempt semantics.
   propagated before member selection, and only one independently reaffirmed
   same-owner initial-FULL lease may extend within a fixed total horizon. R22-2
   additionally retains native path geometry solely for non-authoritative trace.
+  The October phase-reason repair makes diagnostic predicates match actual
+  branch decisions without changing their thresholds or identity/authority.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
-  transition/evidence boundaries plus the R22-2 debug-only capture/measurement route.
+  transition/evidence boundaries plus the R22-2 debug-only capture/measurement route
+  and complete branch-specific phase failure reasons.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.
 
 ## O1 trace-only observation witness
