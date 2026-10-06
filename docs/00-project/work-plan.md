@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. A bounded appearance distinction is visible, but whole-candidate and chromatic identity benefit remain unestablished.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. Whole-candidate and chromatic identity benefit remain unestablished; the unresolved-pair mismatch denominator needs reconciliation.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -44,29 +44,31 @@ scores remain pinned. This is not a general impossibility finding for spatial cl
 
 ## Next transition
 
-Review the already-saved complete main/auxiliary/unresolved comparisons
-(480/144/480 rows) across X and BW before choosing a continuation or closing the
-region hypothesis using the [saved-CSV review handoff](../40-operations/s11-o2-local-shadow-evaluation.md#region-cross-xbw-review--saved-csv-only).
-The full CSVs are available on Windows, not in this checkout/attachments; local
-preparation is complete but the full review has not run. No new ZIP or model run
-is required. The [region return and reconciliation](../60-evidence/s11/s11-o2-color-side-local.md#transfer-reconciliation-closed--user-confirmation)
-closes both transfer items: the source/receipt code hash matches its pin, and the
-missing ribbon row is 1536 train pixels, 504 test pixels and heldout MSE
-0.006130124755688663. Do not request those confirmations again or rerun the model.
-Execution/receipts/input preservation are reported COMPLETE, not independently
-rehashed here. Full comparison CSV contents have not been received locally.
+The [saved-CSV cross-X/BW review return](../60-evidence/s11/s11-o2-color-side-local.md#region-cross-xbw-return-and-denominator-audit--2026-10-06)
+is received on attributed Windows evidence. Do not repeat the full review or
+rerun the model. All 108 finite main views reportedly have partition < smooth,
+including both identities; this relation alone does not discriminate them.
+Model ordering changes with X/BW/support. Gray/BGR differences have mixed signs;
+smaller envelope errors compare different observation domains. These results do
+not establish identity benefit or incremental color benefit.
 
-At the prescribed Accum slice, partition improves on smooth much more for idx10
-than idx15, already in gray. The auxiliary slice favors a ribbon explanation;
-the unresolved idx20 changes model ordering with support. These are bounded
-appearance observations, not whole-candidate identity. Partition has the lowest
-error for both main candidates in all four excerpt views, so ordering alone
-does not distinguish them. Do not request
-another descriptor run, fit new widths/cutoffs, or treat lower MSE as identity.
-No full-CSV stability or incremental color benefit is established from excerpts.
+Next reconcile only the denominator in existing `unresolved-pairs.csv`: 60 is the
+nominal pair inventory, while the report calls all 60 comparable and gives 30
+minimum-error-model mismatches (50%). Return counts for both candidates having
+four observed finite model errors, only one eligible, and neither eligible;
+within the eligible pairs, return same minimum / different minimum / tied
+minimum counts. State the domains of the reported 30 and partition 18/18 counts.
+Keep the mismatch percentage unconfirmed until these sets are explicit. No new
+ZIP, fit, measurement, receipt check or human rejudgment is needed. The exact
+pair files and exception keys have not been received locally.
 
-W4-R1 remains closed, R2 entry unmet, O2 open and W5/O3 gated. Existing labels,
-idx0/idx20 human ambiguity, original outputs and FIELD FAIL remain unchanged.
+The source/receipt hash correction and missing ribbon-row values are already
+[closed](../60-evidence/s11/s11-o2-color-side-local.md#transfer-reconciliation-closed--user-confirmation).
+Execution and preservation remain reported COMPLETE, not independently rehashed
+here. Do not fit new widths/cutoffs, count minima as identity votes or infer
+physical continuity from these correlated appearance fits. W4-R1 remains closed,
+R2 entry unmet, O2 open and W5/O3 gated. Existing labels, idx0/idx20 human
+ambiguity, original outputs and FIELD FAIL remain unchanged.
 
 ## Accepted local candidate
 

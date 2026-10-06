@@ -629,6 +629,101 @@ states and the four ablations. Their contents have not been received locally.
 No additional measurement, repeated receipt check or human rejudgment is needed.
 W4-R2 remains unmet and FIELD FAIL / NOT_EVALUATED unchanged.
 
+## Region cross-X/BW return and denominator audit — 2026-10-06
+
+The user returned a summary of the saved-CSV review requested after the region
+run. This supersedes the preceding pending-full-review next action. The Windows
+agent read saved CSVs directly; only the summary was transferred here, not the
+complete pivot/pair tables, exception keys or `review.md`. Counts below are
+attributed Windows findings, not independent local recomputation.
+
+### Reported outputs and preservation
+
+Outputs are under `region-competition-001-consistency/`, outside the original
+experiment directory:
+
+| File | Reported inventory |
+|---|---|
+| main-wide.csv | 120 views from 480 model rows |
+| auxiliary-wide.csv | 36 views from 144 model rows |
+| unresolved-wide.csv | 120 views from 480 model rows |
+| main-pairs.csv | 60 nominal candidate pairs |
+| unresolved-pairs.csv | 60 nominal candidate pairs |
+| main-exceptions.json | 49 exception views |
+| auxiliary-exceptions.json | 36 exception views |
+| unresolved-exceptions.json | 86 exception views |
+| review.md | Full Windows analysis, not transferred here |
+
+The report states no missing/duplicate model during pivot, no null-to-zero
+conversion, and no ties. Exception categories/keys were not supplied; these
+counts must not become an independent sample size, error rate or identity vote.
+The original region CSV reportedly retained its SHA before/after; the transferred
+abbreviation is `41a1c138..766538e`, not a complete digest. No digest is reconstructed
+from that abbreviation. No measurement, model/threshold change, video decode,
+label edit or user rejudgment was performed.
+
+### Findings supported at the reported scope
+
+1. **Main:** all 108 finite views reportedly have partition < smooth, with zero
+   smooth-better views. Both idx10 and idx15 contribute, so this relation alone
+   cannot distinguish their existing identities. This does not rule out every
+   possible magnitude-based or combined classifier. The mean partition/smooth
+   ratio reportedly grows from 0.86 to 0.91 with BW; an aggregate trend does not
+   establish monotonic behavior at every exact X/support/channel key.
+2. **Model ordering:** the report gives idx15 ribbon_2bw versus partition counts
+   of 28 versus 24 and describes minimum-error-model changes with X/BW. These
+   are reported ordering counts, not an identity decision or a magnitude of
+   improvement; their exact key sets are not locally available.
+3. **Auxiliary idx11:** ribbon_2bw reportedly has the lowest error at BW8 in both
+   X=[130,236) and [236,343). Partition/ribbon_bw ordering changes between the
+   strips. BW>=16 is reported o1_unavailable throughout this comparison; it
+   supplies no evidence of a stable ordering at larger widths.
+4. **Unresolved idx0/idx20:** idx20 candidate_envelope ribbon_bw versus partition
+   is reported as 10 versus 6, with ordering differences concentrated in envelope
+   support. The report's 30/60 mismatch rate requires the denominator audit below.
+   Neither a different minimum-error model nor a shared one resolves the human
+   ambiguity, and idx20 is not converted into clean negative truth.
+5. **Ablations:** gray/BGR differences reportedly have mixed signs. Main envelope
+   versus recorded-band comparisons give 44 ce<rb and 10 ce>rb, with exception
+   keys saved on Windows. Different supports change fit and test observations;
+   these are loss comparisons across domains, not 44 improvements on identical
+   observations. No incremental chromatic identity benefit is established.
+
+The full-review return extends the excerpt interpretation: shared partition
+improvement and changing model ordering do not provide an identity rule. It does
+not prove that all spatial classifiers are impossible, nor does it satisfy R2.
+No additional descriptor, width search, cutoff or model-to-identity conversion
+is justified solely by these counts.
+
+### Unresolved-pair denominator audit
+
+The report says “30 mismatches among 60 comparable pairs (50%)” and separately
+reports partition comparisons as 18/18. The handoff's 60 pairs are the nominal
+inventory (5 X strips × 3 widths × 4 support/channel views), including unavailable
+entries. Inventory count is not automatically the number of comparable pairs.
+Prior availability reports suggest excluded pairs, but do not substitute for the
+actual pair-table state counts. The 50% interpretation is therefore **unconfirmed**;
+no replacement percentage is asserted here.
+
+One bounded read of existing `unresolved-pairs.csv` should return:
+
+- total pairs; both candidates eligible (each has four observed, finite model
+  errors); only one eligible; neither eligible, with these categories summing
+  to the total;
+- within both-eligible pairs: same minimum-error model, different minimum-error
+  model, and any tied minimum (either side), retaining exact stored equality;
+- whether the reported 30 mismatches exclude one-sided/unavailable/null pairs,
+  and what the reported partition 18/18 compares and uses as its denominator;
+- the unavailable pair keys (X/BW/support/channels) sufficient to explain the
+  denominator, without new appearance analysis or refitting.
+
+Do not silently count null-versus-model as a model mismatch. If partition-only
+comparison uses a different eligible set, name that set separately. Existing
+files remain unchanged; a short reconciliation note may be saved outside the
+experiment. The already-closed receipt/code pin and missing ribbon cell are not
+reopened. FIELD FAIL / NOT_EVALUATED, original labels and human uncertainty remain
+unchanged while this arithmetic clarification is pending.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.
