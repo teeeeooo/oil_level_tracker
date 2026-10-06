@@ -384,3 +384,4 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 |---|---|---|
 | 2026-10-06 | [Local corpus target reuse](60-evidence/s11/2026-10-06-local-corpus-target-reuse.md) | 로컬 truth·이미지 연결 검증; 작성일 2026-10-06 |
 | 2026-10-06 | [Local Oil/Foam owner audit](50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md) | 세 프레임 저장 trace와 Oil/Foam 코드 대조 |
+| 2026-10-06 | [Foam component diagnostics](20-architecture/s11-foam-component-diagnostics-architecture.md) | 탈락 영역·실제 predicate의 비권위 진단 기록 |

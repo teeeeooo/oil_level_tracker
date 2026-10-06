@@ -57,6 +57,8 @@ _FULL_IMAGE_KEYS = (
     "foam_combined_evidence",
     "foam_accepted_component",
     "static_artifact_map",
+    "foam_material_support_mask",
+    "foam_component_labels",
 )
 
 
@@ -137,7 +139,10 @@ class JsonlDebugTraceWriter:
             relative = Path("frames") / _safe_component(glass.id) / record_id / f"{_safe_component(image_key)}.png"
             destination = self.staging_directory / relative
             try:
-                _write_png(destination, image)
+                if image_key == "foam_component_labels":
+                    _write_png(destination, image, preserve_uint16=True)
+                else:
+                    _write_png(destination, image)
             except Exception as exc:
                 destination.unlink(missing_ok=True)
                 warnings.append(f"image_encode_failed:{image_key}:{type(exc).__name__}")
@@ -344,10 +349,12 @@ def cleanup_debug_staging(completion: DebugTraceCompletion | None) -> None:
         shutil.rmtree(Path(completion.staging_directory), ignore_errors=True)
 
 
-def _write_png(path: Path, image: np.ndarray) -> None:
+def _write_png(path: Path, image: np.ndarray, *, preserve_uint16: bool = False) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     array = np.asarray(image)
-    if array.dtype != np.uint8:
+    if preserve_uint16 and (array.dtype != np.uint16 or array.ndim != 2):
+        raise ValueError("Component labels require a 2D uint16 raster.")
+    if array.dtype != np.uint8 and not preserve_uint16:
         finite = np.nan_to_num(array, nan=0.0, posinf=255.0, neginf=0.0)
         minimum, maximum = float(finite.min()), float(finite.max())
         if maximum > minimum:

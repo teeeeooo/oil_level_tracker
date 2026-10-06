@@ -151,6 +151,7 @@ class CurrentFrameEvidenceOwner:
             pre.glare_mask,
             bundle.effective_mask,
             settings,
+            capture_diagnostics=capture_diagnostics,
         )
         foam_layer = evaluate_foam_layer_coherence(foam)
         material_layer_topology = bool(
@@ -754,6 +755,23 @@ class PhaseDebugProjector:
                 else np.zeros_like(bundle.effective_mask)
             ),
         }
+        if foam.diagnostic_labels is not None:
+            images["foam_component_labels"] = foam.diagnostic_labels
+        foam_diagnostics = None
+        if foam.diagnostics is not None:
+            ox, oy = bundle.crop_origin
+            foam_diagnostics = {
+                **foam.diagnostics, "crop_origin": [int(ox), int(oy)],
+                "frame_index": int(detection.frame_index), "glass_id": str(glass.id),
+                "components": [
+                    {**row, "source_front_y": row["local_front_y"] + oy,
+                     "source_bbox_xyxy": [row["local_bbox_xyxy"][0] + ox,
+                                          row["local_bbox_xyxy"][1] + oy,
+                                          row["local_bbox_xyxy"][2] + ox,
+                                          row["local_bbox_xyxy"][3] + oy]}
+                    for row in foam.diagnostics["components"]
+                ],
+            }
         rows = []
         for rank, candidate in enumerate(
             sorted(
@@ -812,6 +830,7 @@ class PhaseDebugProjector:
                 "flags": detection.flags,
                 "oil_hypothesis": projection.oil_detail or {},
                 **detection.debug_metrics,
+                "foam_component_diagnostics": foam_diagnostics,
                 "oil_interface_diagnostics": interface_diagnostics,
                 "oil_interface_witness": asdict(witnesses[0]),
             },

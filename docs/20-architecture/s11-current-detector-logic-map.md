@@ -342,3 +342,12 @@ it. No resolver-facing fields, candidate scores, physical IDs, lifecycle or
 publication decisions consume it. Measurement ownership remains FRAME-EVIDENCE /
 OIL-CANDIDATE, with serialization at TRACE-PUBLICATION. See the
 [measurement contract](s11-interface-observability-witness-architecture.md).
+
+## Rejected Foam component diagnostics
+
+With debug capture, `detect_bottom_connected_foam` records actual component
+predicates/geometry in an optional bounded sidecar. `PhaseDebugProjector` adds
+source coordinates under `state.foam_component_diagnostics`; FULL trace preserves
+uint16 component IDs and the existing material-support mask. Rejected candidate
+and publication-mask clearing is unchanged. This metadata is not a resolver input.
+See the [component diagnostic contract](s11-foam-component-diagnostics-architecture.md).

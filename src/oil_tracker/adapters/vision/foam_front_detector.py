@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import Enum
 import math
 
@@ -76,6 +76,8 @@ class FoamDetectionResult:
     component_width_ratio: float
     bounding_box_fill_ratio: float
     front_y: float | None
+    diagnostics: dict | None = None
+    diagnostic_labels: np.ndarray | None = None
 
     def __post_init__(self) -> None:
         if self.decision_status in {
@@ -85,6 +87,9 @@ class FoamDetectionResult:
         }:
             object.__setattr__(self, "candidate", None)
             object.__setattr__(self, "mask", np.zeros_like(self.mask, dtype=np.uint8))
+
+
+_DIAGNOSTIC_COMPONENT_LIMIT = 256
 
 
 _OIL_CONTEXT_WIDE_COMPONENT_RATIO = 0.70
@@ -243,6 +248,8 @@ def detect_bottom_connected_foam(
     glare_mask: np.ndarray,
     effective_mask: np.ndarray,
     settings: DetectorSettings,
+    *,
+    capture_diagnostics: bool = False,
 ) -> FoamDetectionResult:
     """Evaluate generalized Foam evidence without mutating any input array."""
 
@@ -250,7 +257,11 @@ def detect_bottom_connected_foam(
     valid = effective_mask > 0
     effective_area = max(1, int(np.count_nonzero(valid)))
     if not np.any(valid):
-        return _empty_result(gray.shape)
+        empty = _empty_result(gray.shape)
+        if capture_diagnostics:
+            info, raster = _component_diagnostics([], np.zeros(gray.shape, dtype=np.int32), 0)
+            return replace(empty, diagnostics=info, diagnostic_labels=raster)
+        return empty
 
     lightness, chroma, warm_chroma = _lightness_and_chroma(crop, gray)
     raw_whiteness = _whiteness_score(lightness, chroma, settings)
@@ -323,6 +334,7 @@ def detect_bottom_connected_foam(
     structural_boxes = _structural_support_boxes(labels, stats, valid)
     component_rows: list[FoamComponentEvidence] = []
     component_masks: dict[int, np.ndarray] = {}
+    diagnostic_rows: list[tuple[tuple, dict]] = []
     for label in range(1, count):
         component = labels == label
         structural_substrate_present, front_from_lower_edge = _structural_substrate_relation(
@@ -331,6 +343,7 @@ def detect_bottom_connected_foam(
             structural_boxes,
             h,
         )
+        diagnostic_row = {} if capture_diagnostics else None
         evidence = _component_evidence(
             label,
             component,
@@ -345,12 +358,21 @@ def detect_bottom_connected_foam(
             settings,
             structural_substrate_present=structural_substrate_present,
             front_from_lower_edge=front_from_lower_edge,
+            diagnostic_row=diagnostic_row,
         )
+        if diagnostic_row is not None:
+            diagnostic_rows.append((_component_sort_key(evidence), diagnostic_row))
+            diagnostic_rows.sort(key=lambda row: row[0])
+            del diagnostic_rows[_DIAGNOSTIC_COMPONENT_LIMIT:]
         component_rows.append(evidence)
         component_masks[label] = component
 
     component_rows.sort(key=_component_sort_key)
     selected = component_rows[0] if component_rows else None
+    diagnostics, diagnostic_labels = (
+        _component_diagnostics(diagnostic_rows, labels, len(component_rows))
+        if capture_diagnostics else (None, None)
+    )
     if selected is None:
         return FoamDetectionResult(
             mask=np.zeros_like(gray, dtype=np.uint8),
@@ -376,6 +398,8 @@ def detect_bottom_connected_foam(
             component_width_ratio=0.0,
             bounding_box_fill_ratio=0.0,
             front_y=None,
+            diagnostics=diagnostics,
+            diagnostic_labels=diagnostic_labels,
         )
 
     selected_mask = component_masks[selected.label] & material_visible
@@ -437,6 +461,8 @@ def detect_bottom_connected_foam(
         component_width_ratio=float(selected.width_ratio),
         bounding_box_fill_ratio=float(selected.bounding_box_fill_ratio),
         front_y=float(selected.front_y),
+        diagnostics=diagnostics,
+        diagnostic_labels=diagnostic_labels,
     )
 
 
@@ -812,6 +838,7 @@ def _component_evidence(
     *,
     structural_substrate_present: bool,
     front_from_lower_edge: bool,
+    diagnostic_row: dict | None = None,
 ) -> FoamComponentEvidence:
     h, w = valid.shape
     area = int(stats[cv2.CC_STAT_AREA])
@@ -923,18 +950,52 @@ def _component_evidence(
             and texture_ratio >= _DROPLET_MIN_TEXTURE_RATIO
         )
     )
-    if glare_ratio > float(settings.foam_max_glare_overlap_ratio):
+    glare_exceeded = glare_ratio > float(settings.foam_max_glare_overlap_ratio)
+    strong_pass = score >= strong and shape_ok and strong_appearance_ok and texture_ok
+    moderate_pass = score >= minimum and shape_ok and moderate_appearance_ok and texture_ratio >= 0.22
+    ambiguous_pass = score >= minimum * 0.80 and (strong_appearance_ok != texture_ok or shape_ok)
+    if glare_exceeded:
         status = FoamDecisionStatus.GLARE_REJECTED
     elif structural:
         status = FoamDecisionStatus.WEAK_REJECTED
-    elif score >= strong and shape_ok and strong_appearance_ok and texture_ok:
+    elif strong_pass:
         status = FoamDecisionStatus.ACCEPTED_STRONG
-    elif score >= minimum and shape_ok and moderate_appearance_ok and texture_ratio >= 0.22:
+    elif moderate_pass:
         status = FoamDecisionStatus.MODERATE_EVIDENCE
-    elif score >= minimum * 0.80 and (strong_appearance_ok != texture_ok or shape_ok):
+    elif ambiguous_pass:
         status = FoamDecisionStatus.AMBIGUOUS
     else:
         status = FoamDecisionStatus.WEAK_REJECTED
+
+    if diagnostic_row is not None:
+        x, y = int(stats[cv2.CC_STAT_LEFT]), int(stats[cv2.CC_STAT_TOP])
+        diagnostic_row.update(
+            label=int(label), local_bbox_xyxy=[x, y, x + width, y + height],
+            pixel_count=area, local_front_y=float(front_y),
+            decision_status=status.value, score=float(score),
+            material_phenotype=material_phenotype,
+            predicates={
+                "glare_exceeded": bool(glare_exceeded), "structural": bool(structural),
+                "shape_ok": bool(shape_ok), "strong_appearance_ok": bool(strong_appearance_ok),
+                "moderate_appearance_ok": bool(moderate_appearance_ok), "texture_ok": bool(texture_ok),
+                "strong_pass": bool(strong_pass), "moderate_pass": bool(moderate_pass),
+                "ambiguous_pass": bool(ambiguous_pass),
+                "bottom_connected": bool(bottom_connected), "white_ok": bool(white_ok),
+                "chromatic_ok": bool(chromatic_ok), "bottom_chromatic_layer": bool(bottom_chromatic_layer),
+                "area_ok": bool(area_ratio >= min_area), "height_ok": bool(height_ratio >= 0.075),
+                "thin_horizontal": bool(thin_horizontal),
+                "structural_substrate_present": bool(structural_substrate_present),
+                "front_from_lower_edge": bool(front_from_lower_edge),
+            },
+            values={"area_ratio": float(area_ratio), "height_ratio": float(height_ratio),
+                    "width_ratio": float(width_ratio), "fill_ratio": float(fill_ratio),
+                    "whiteness_ratio": float(whiteness_ratio), "chromatic_ratio": float(chromatic_ratio),
+                    "texture_ratio": float(texture_ratio), "glare_ratio": float(glare_ratio),
+                    "wide_row_fraction": float(_wide_rows), "row_compactness_median": float(_compactness)},
+            thresholds={"min_area": min_area, "min_whiteness": min_whiteness,
+                        "minimum_score": minimum, "strong_score": strong,
+                        "max_glare": float(settings.foam_max_glare_overlap_ratio)},
+        )
 
     return FoamComponentEvidence(
         label=int(label),
@@ -996,3 +1057,22 @@ def _unit(value: float) -> float:
     if not math.isfinite(float(value)):
         return 0.0
     return max(0.0, min(1.0, float(value)))
+
+
+def _component_diagnostics(rows: list[tuple[tuple, dict]], labels: np.ndarray, total: int):
+    """Bounded debug-only projection; labels are ranks, zero is outside retained support."""
+    raster = np.zeros(labels.shape, dtype=np.uint16)
+    components = []
+    for rank, (_key, row) in enumerate(rows, 1):
+        raster[labels == row["label"]] = rank
+        components.append({**row, "diagnostic_id": rank, "selected_component": rank == 1})
+    return {
+        "schema_version": "s11-foam-components-v1", "coordinate_space": "roi_local",
+        "bbox_convention": "xyxy_half_open", "positive_y_direction": "down",
+        "component_count": total, "retained_count": len(components),
+        "component_limit": _DIAGNOSTIC_COMPONENT_LIMIT, "truncated": total > len(components),
+        "selected_label": components[0]["label"] if components else None,
+        "selection_order": "status_priority, descending_score, front_y, label",
+        "label_image_zero": "outside_retained_support; includes omitted components if truncated",
+        "decision": "NOT_EVALUATED", "components": components,
+    }, raster
