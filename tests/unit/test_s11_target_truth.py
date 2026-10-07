@@ -173,7 +173,7 @@ def test_explicit_wrong_target_preserves_unknown_physical_identity_through_cli(t
     result = subprocess.run([sys.executable, str(Path(o2.__file__).resolve()), 'bind-target',
         '--labels', str(tmp_path/'labels.json'), '--mapping', str(tmp_path/'mapping.json'),
         '--output', str(tmp_path/'snapshot.json')], cwd=tmp_path,
-        capture_output=True, text=True, encoding='utf-8', check=False)
+        stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding='utf-8', check=False)
     assert result.returncode == 0, result.stderr
     assert all((tmp_path/name).read_bytes() == value for name, value in before.items())
     stored = o2.read_json(tmp_path/'snapshot.json')

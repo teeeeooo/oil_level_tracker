@@ -96,7 +96,7 @@ def test_real_png_and_provenance_without_result_mutation(tmp_path):
     assert info["status"] == "AVAILABLE"
     assert info["available_count"] == info["column_count"] == 5
     assert (tmp_path / "source_context_01.png").read_bytes().startswith(b"\x89PNG")
-    meta = json.loads((tmp_path / "source_context_01.json").read_text())
+    meta = json.loads((tmp_path / "source_context_01.json").read_text(encoding="utf-8"))
     assert [c["frame_index"] for c in meta["columns"]] == [0, 5, 10, 15, 20]
     assert not meta["numeric_measurement"]
     assert "oil" not in meta and "foam" not in meta
