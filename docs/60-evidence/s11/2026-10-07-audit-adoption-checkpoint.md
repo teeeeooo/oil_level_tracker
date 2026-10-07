@@ -6,6 +6,9 @@ owner. Scope: import the supplied audits, adopt their A0B test repair, validate,
 and prepare the user-authorized commit/push checkpoint. A1–A4 implementation and
 A0Q repair are subsequent work; no detector improvement is claimed here.
 
+Latest handoff in this record: [A2 closure checkpoint](#a2-closure-handoff--2026-10-07),
+recorded against `e66eb5e`. Earlier sections retain their original audit-time scope.
+
 ## Identity and adopted change
 
 - Starting branch: clean `main`; local HEAD and remote main both
@@ -247,6 +250,130 @@ preservation scope does not require another canonical detector replay.
 Authored changes pass whitespace checks. The byte-preserved third-audit Markdown
 retains six original two-space hard breaks reported by unrestricted Git
 whitespace checking; its original hash remains unchanged.
+
+## A2 closure handoff — 2026-10-07
+
+This is a handoff snapshot requested after the region-exchange experiment;
+[Work Plan](../../00-project/work-plan.md#next-transition) remains the live owner.
+No new detector investigation, model tuning, cleanup or field run is part of
+this checkpoint. The documentation commit containing this section follows the
+verified implementation/evidence baseline below.
+
+### Checkout identity and preservation
+
+- Working directory: `/Users/sunjaekim/Developer/oil_level_tracker`.
+- Verified starting `main` and fetched `origin/main`:
+  `e66eb5e3cac9f2490ad7db6889265af42b875310`; primary checkout clean.
+- Latest source/contract freeze: `f42c937ca2a805e8fb46fb6ac578260a758ba13b`.
+  `e66eb5e` records the completed result without changing that readout.
+- Sibling worktree `/Users/sunjaekim/Developer/oil_level_tracker-s11-audit-20261007`
+  remains detached at `9f41d2f`, with seven modified and three untracked source/
+  test/design files. These are preserved, unadopted experiment changes.
+- Managed worktree `/Users/sunjaekim/Library/Application Support/predictor-local-mcp/runtime/worktrees/validation-60a5b641bc01a37b31e60420`
+  remains detached at `9f41d2f`, with three modified source files and untracked
+  `continuation-results/`, two documents and one test. Preserve managed ownership.
+- Both worktree HEADs and binary tracked patches match the
+  [preservation receipt](../../70-reference/s11-audit-2026-10-07/third-audit-preservation-receipt.json).
+  Each worktree's three untracked recovery source/document files also match its
+  committed recovery ZIP. This checkpoint does not re-audit every generated file
+  in `continuation-results/` or adopt either experiment into main.
+
+All 17 audit/reference payload hashes were rechecked. The latest A2 receipt's
+356 input/source pins, full result artifacts, original run receipt and summary
+script also match. Local artifact directories below exist. No files or worktrees
+were removed in this checkpoint.
+
+### Read first and resume here
+
+1. Read [Work Plan](../../00-project/work-plan.md), especially Next transition,
+   Accepted local candidate and Current authorization boundary. S11 remains
+   ACTIVE, W4/O2 open, `FIELD FAIL`; A0Q Qt stability is unresolved.
+2. Read [latest A2 result](2026-10-07-a2-region-exchange.md) and its
+   [compact machine receipt](2026-10-07-a2-region-exchange.json). All 153 predictions
+   abstain, including seven confirmed targets. Forty-two focused tests passed;
+   this verifies implementation, not efficacy. The fixed model is closed without
+   promotion. Do not rerun or relax its sector policy to recover these examples.
+3. Use the [S11 skill](../../../.agents/skills/s11-detector-change/SKILL.md) and
+   [recall index](../../00-project/recall-index.md) for bounded source discovery.
+   The next authorized investigation is whether existing spatial/texture owners
+   retain a distinct candidate-specific bubble/texture arrangement measurement
+   with optical counter-controls. No next model has been chosen or implemented.
+4. Before adding another mechanism, inspect existing implementations and callers.
+   Reuse the existing W3 evaluation/target-binding owner. State a distinct
+   observable, missingness and aggregation policy; freeze its contract and
+   positive/negative controls before comparing results. Preserve exact candidate
+   provenance and separate identity, target role, local support and scalar.
+5. Continue logical commits/push under the user's existing authorization until
+   actual human judgment is needed. No question is pending from the closed A/B
+   review. No sub-agent work or new Windows qualification is authorized here.
+
+Production changes already adopted are the bounded report/event compatibility
+repairs and A1 diagnostic lineage, alongside the earlier accepted local baseline;
+see [report evidence](2026-10-07-report-context-adoption.md),
+[event compatibility](2026-10-07-event-compatibility.md) and
+[A1 evidence](2026-10-07-a1-measurement-lineage.md). Full audit prototypes were
+not adopted wholesale. The latest A2 models have no production integration.
+
+### Human judgments that must not be asked again
+
+- Preserve the seven target / three wrong-target bindings in
+  [W3 preparation](2026-10-07-a2-target-binding.md). Confirmed completed Oil is
+  f1140/38 s, f1275/42.5 s, f1485/49.5 s and f1560/52 s. At f1200/40 s,
+  f1260/42 s and f1320/44 s, the alternative candidates are actual Oil; completed
+  selections are wrong. Physical artifact subtype is unresolved at 40 s,
+  tentatively lower rim at 42 s and tentatively image noise at 44 s.
+- Both static scene structure and temporal change are needed. The same Oil
+  boundary continues with rapid rises/falls; no slow-motion bound follows.
+- The short central orange forward 30 fps path seeded at f1275 follows Oil.
+  Other seeds/directions fail: [patch result](2026-10-07-a2-patch-correspondence.md).
+  This local witness does not grant whole-track identity or scalar truth.
+- [A/B reply](../../50-diagnostics/s11/2026-10-07-sample4-region-context-preflight.json):
+  A is fluid containing foam/bubbles; B is less-bubbly liquid in the two displayed
+  f1275/f1320 scenes. No chemistry, exact masks, additional-sector labels or
+  numeric scalar tolerance was supplied.
+
+Do not reopen the closed paired scorer, static appearance fits, patch matcher
+or region-exchange model as a repair without a genuinely distinct observable.
+Whole-family/track/authority grants, private coordinates, changed truth,
+interpolation and report repair cannot substitute for detector discrimination.
+
+### What transfers with Git and what needs a local copy
+
+Git contains source/tests, owners, compact receipts, attributed human replies,
+the supplied audits/ZIPs and worktree source recovery ZIPs under
+`docs/70-reference/s11-audit-2026-10-07/`. Full decoded images, videos, generated
+curves and native bundles under `sample/` are ignored local evidence. **A fresh
+clone alone cannot reproduce the saved-video experiments.**
+
+Keep these local paths relative to the primary repository:
+
+| Needed material | Preserved path |
+|---|---|
+| Latest raw measurements, predictions, W3 report, run/summary scripts | `sample/output/s11-a2-region-exchange-20261007-001/` |
+| 21 adjacent-frame rasters, masks, receipt and A/B review | `sample/output/s11-a2-region-context-20261007-001/` |
+| Immutable 153-candidate packet, labels, mapping, snapshot and baseline | `sample/output/s11-a2-target-binding-20261007-001/` |
+| Ordered-patch curves, review and seed counter-controls | `sample/output/s11-a2-patch-correspondence-20261007-001/` |
+| Original exact-frame candidate/state capture | `sample/output/s11-a1-lineage-20261007-001/` |
+| Worktree snapshots | `sample/output/s11-preservation-20261007-002/` |
+
+For another machine, copy the required evidence directories **and all files
+referenced by the receipts**, including original media/recipes and earlier
+captures; preserve repository-relative paths and verify hashes before use.
+The table is a reading route, not a complete media-transfer manifest. Earlier
+audit/continued-experiment recovery remains documented in the preservation
+sections above. Do not treat unique ignored evidence as temporary cleanup.
+
+Use the existing `.venv/bin/python` for OpenCV experiments; system `python3`
+lacks `cv2`. Browser URLs on `127.0.0.1:8767` are local conveniences, not durable
+handoff links; the saved HTML/files are the evidence. The last `run.py` deliberately
+requires frozen HEAD `f42c937` and is not a current-HEAD rerun command. Read stored
+results first; any necessary reproduction must honor its pinned source/runtime
+and input identities, without overwriting the original run. No rerun is needed
+merely to resume this handoff.
+
+This documentation-only checkpoint uses hash, Git/worktree, local link/anchor,
+whitespace and detector-governance checks. It does not repeat passing detector
+tests or assert new efficacy, Qt stability, independent holdout or Windows PASS.
 
 ## Detector Governance
 

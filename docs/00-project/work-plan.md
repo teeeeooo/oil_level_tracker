@@ -44,8 +44,9 @@ scores remain pinned. This is not a general impossibility finding for spatial cl
 
 ## Next transition
 
-Resume from the [preservation checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md#third-audit-and-worktree-preservation--2026-10-07),
-then read §7 of the [third audit](../70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md)
+Resume from the [A2 closure handoff](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md#a2-closure-handoff--2026-10-07),
+which pins the checkout, preserved worktrees, local-only evidence and closed human
+judgments. For the underlying audit obligations, read §7 of the [third audit](../70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md)
 and §8 A1 of the [second audit](../70-reference/s11-audit-2026-10-07/s11-second-audit-and-detector-work-spec-2026-10-07.md).
 The current request authorizes sequential implementation of this plan, appropriate
 verification, logical commits and push until a decision requires user judgment.
