@@ -65,6 +65,49 @@ def _write_png(path: Path, image: np.ndarray):
     path.write_bytes(encoded.tobytes())
 
 
+MAX_SEQUENTIAL_ADVANCE = 32
+
+
+class _SequenceSampler:
+    """Seek once per bounded review, then decode nearby frames in source order.
+
+    This adapter is report-only. Every returned frame still undergoes the normal
+    identity/timestamp checks. Missing or non-monotonic decoder output is never
+    replaced by the last valid source frame.
+    """
+    def __init__(self, reader, fps, cancellation=None):
+        self.reader, self.fps, self.cancellation = reader, fps, cancellation
+        self.last = None
+        self.seek_count = self.sequential_read_count = 0
+
+    def read_at(self, requested):
+        previous = self.last
+        try:
+            if (previous is None or requested <= previous[2]
+                    or (requested-previous[2])*self.fps > MAX_SEQUENTIAL_ADVANCE
+                    or not callable(getattr(self.reader, "read_next", None))):
+                self.seek_count += 1
+                self.last = self.reader.read_at(requested)
+            else:
+                steps = 0
+                while self.last[2] < requested - .5/self.fps:
+                    _check_cancelled(self.cancellation)
+                    if steps >= MAX_SEQUENTIAL_ADVANCE:
+                        raise ValueError("sequential_decode_budget_exceeded")
+                    before = self.last
+                    self.sequential_read_count += 1
+                    current = self.reader.read_next()
+                    steps += 1
+                    if (not math.isfinite(float(current[2])) or current[2] <= before[2]
+                            or current[1] <= before[1]):
+                        raise ValueError("nonmonotonic_sequential_frame")
+                    self.last = current
+            return self.last
+        except (EOFError, OSError, ValueError, cv2.error):
+            self.last = None
+            raise
+
+
 class SourceSequenceRenderer:
     def __init__(self, reader_factory=None):
         self.reader_factory = reader_factory or OpenCvVideoReader
@@ -117,6 +160,7 @@ class SourceSequenceRenderer:
         except (ValueError, TypeError):
             return {"status": "UNAVAILABLE", "source_error": "unknown_native_cadence"}
         tolerance = max(.05, 1.5/fps)
+        sampler = _SequenceSampler(reader, fps, cancellation)
         frames, seen = [], set()
         geometry, preview_path, last_actual = None, "", None
         page = None
@@ -129,7 +173,7 @@ class SourceSequenceRenderer:
             tile_x, tile_y = (slot % PAGE_COLUMNS)*TILE_SIZE, (slot // PAGE_COLUMNS)*TILE_SIZE
             entry = {"requested_time_sec": float(requested), "status": "UNAVAILABLE"}
             try:
-                frame, frame_id, actual = reader.read_at(float(requested))
+                frame, frame_id, actual = sampler.read_at(float(requested))
                 if not math.isfinite(float(actual)) or abs(actual-requested) > tolerance:
                     raise ValueError("decoded_timestamp_outside_tolerance")
                 if not isinstance(frame_id, (int, np.integer)) or frame_id < 0:
@@ -148,6 +192,7 @@ class SourceSequenceRenderer:
                 page[tile_y:tile_y+TILE_SIZE, tile_x:tile_x+TILE_SIZE] = tile
                 entry.update(status="AVAILABLE", page_path=f"assets/{page_name}", tile_xy=[tile_x, tile_y])
             except (EOFError, OSError, ValueError, cv2.error) as error:
+                sampler.last = None
                 entry["reason"] = type(error).__name__+": "+str(error)
             _check_cancelled(cancellation)
             if entry["status"] == "AVAILABLE" and not preview_path:
@@ -162,4 +207,7 @@ class SourceSequenceRenderer:
                 "source_error": None, "frames": frames, "geometry": geometry,
                 "preview_path": preview_path, "nominal_source_fps": fps,
                 "requested_spacing_sec": spacing, "subsampled": spacing is not None and spacing > 1/fps + 1e-6,
-                "seek_tolerance_sec": tolerance, "timestamp_basis": "OpenCV decoded frame/time; best-effort seek"}
+                "seek_tolerance_sec": tolerance, "timestamp_basis": "OpenCV actual decoded frame/time; bounded sequential reads or best-effort seek",
+                "decode_strategy": {"maximum_sequential_advance": MAX_SEQUENTIAL_ADVANCE,
+                                    "seek_count": sampler.seek_count,
+                                    "sequential_read_count": sampler.sequential_read_count}}

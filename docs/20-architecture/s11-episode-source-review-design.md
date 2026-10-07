@@ -34,6 +34,22 @@ A static preview and metadata remain usable without JavaScript. Jinja HTML
 escaping is explicit because the actual template filenames end in `.j2`. Mark extrema as
 detector observations needing source comparison, never certified physical extrema.
 
+## Native decode performance repair
+
+The first full four-report replay passed numerical contracts but repeated random
+seeks made sample3 impractically slow. A native process sample placed the hot path
+in `VideoCapture.set`/FFmpeg seeking. Keep the detector reader unchanged.
+The report-only sampler now seeks at a window entrance or large/backward jump,
+then uses `read_next` for nearby monotonic requested times. Each request advances
+at most 32 decoded frames; unusually slow/non-monotonic decoded timestamps become
+unavailable rather than creating an unbounded loop or a carried image. Readers
+without sequential support use the existing seek API. Failed slots clear sampler
+state and permit a fresh seek at the next request. Record actual source identity,
+seek count and sequential-read count. This is scheduling, never interpolation.
+The isolated 46.48-second sample3 gap probe retained 240/240 frames using one seek
+and 1,393 sequential reads in 11.89 seconds under the then-current local load.
+Do not report a speed-up ratio against unrelated whole-run timing.
+
 ## Separate detector experiment: side-texture persistence
 
 Inspect existing variance/edge-density owners first. Unlike the closed raw-BGR

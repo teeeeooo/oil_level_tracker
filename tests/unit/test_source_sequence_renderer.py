@@ -181,3 +181,73 @@ def test_html_fragments_escape_labels_and_keep_json_inert():
     assert "&lt;b&gt;unsafe&lt;/b&gt;" in html
     assert "<b>unsafe</b>" not in html and "<script>bad()" not in html
     assert "noscript" in html and 'type="application/json"' in html
+
+
+class SequentialReader(Reader):
+    def __init__(self, path):
+        super().__init__(path)
+        self.index = -1
+        self.seeks = 0
+
+    def read_at(self, time):
+        self.seeks += 1
+        self.index = int(round(time*10))
+        return super().read_at(self.index/10)
+
+    def read_next(self):
+        self.index += 1
+        return super().read_at(self.index/10)
+
+
+def test_native_frame_sequence_seeks_once_and_keeps_every_identity(tmp_path):
+    reader = SequentialReader("source")
+    payload = SourceSequenceRenderer()._collect(reader, inputs()[1].glasses[0],
+        SourceReviewWindow(0, 2, ("test",)), tmp_path, "test")
+    assert payload["status"] == "AVAILABLE"
+    assert [f["frame_index"] for f in payload["frames"]] == list(range(21))
+    assert reader.seeks == 1
+    assert payload["decode_strategy"]["sequential_read_count"] == 20
+
+
+def test_large_source_jump_uses_seek_instead_of_unbounded_decode():
+    from oil_tracker.adapters.reporting.source_sequence_renderer import _SequenceSampler
+    reader = SequentialReader("source")
+    sampler = _SequenceSampler(reader, 10)
+    assert sampler.read_at(0)[1] == 0
+    assert sampler.read_at(20)[1] == 200
+    assert sampler.seek_count == 2 and sampler.sequential_read_count == 0
+
+
+def test_nonmonotonic_sequential_frame_is_missing_then_recovers(tmp_path):
+    reader = SequentialReader("source")
+    original = reader.read_next
+    broken = False
+    def read_next():
+        nonlocal broken
+        if not broken:
+            broken = True
+            return Reader.read_at(reader, 0)
+        return original()
+    reader.read_next = read_next
+    payload = SourceSequenceRenderer()._collect(reader, inputs()[1].glasses[0],
+        SourceReviewWindow(0, 2, ("test",)), tmp_path, "test")
+    assert payload["status"] == "PARTIAL"
+    assert payload["frames"][1]["status"] == "UNAVAILABLE"
+    assert payload["frames"][2]["status"] == "AVAILABLE"
+    assert payload["frames"][2]["frame_index"] == 2
+
+
+def test_slow_reported_timestamps_cannot_create_unbounded_sequential_loop():
+    from oil_tracker.adapters.reporting.source_sequence_renderer import MAX_SEQUENTIAL_ADVANCE, _SequenceSampler
+    reader = SequentialReader("source")
+    sampler = _SequenceSampler(reader, 10)
+    sampler.read_at(0)
+    def too_slow():
+        reader.index += 1
+        frame, _, _ = Reader.read_at(reader, 0)
+        return frame, reader.index, reader.index*.0001
+    reader.read_next = too_slow
+    with pytest.raises(ValueError, match="budget_exceeded"):
+        sampler.read_at(1)
+    assert sampler.sequential_read_count == MAX_SEQUENTIAL_ADVANCE
+    assert sampler.last is None
