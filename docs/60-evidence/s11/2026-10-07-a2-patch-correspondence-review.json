@@ -1,0 +1,446 @@
+{
+  "source_head": "f2068de9fdf9e44f348a712ca961163d8c10c587",
+  "source_matches_sha256": "2a6ca3008aeb80a1d387115edf52c8f2c60e1189d1d87a3c18359c55b1cd8c62",
+  "human_reply_sha256": "c0f4bbdc9fc91bb48f9674e9d12be88efeb883a7178a5e5384acb1dd76f34526",
+  "scope": "Read-only comparison of the already frozen 156 chains; no rerun, new fit, width/cadence/cutoff change or intermediate coordinate truth.",
+  "central_native_chains": [
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "target",
+      "direction": -1,
+      "initial_sampling_y": 841,
+      "checkpoints": []
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "target",
+      "direction": 1,
+      "initial_sampling_y": 841,
+      "checkpoints": [
+        {
+          "frame": 1260,
+          "matched_source_y": [
+            839
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1275,
+          "matched_source_y": [
+            839
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1290,
+          "matched_source_y": [
+            888
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1305,
+          "matched_source_y": [
+            888
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1320,
+          "matched_source_y": [
+            888
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "geometry_role": "native_path",
+      "review_role_for_evaluation_only": "wrong_target",
+      "direction": -1,
+      "initial_sampling_y": 867,
+      "checkpoints": []
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "wrong_target",
+      "direction": -1,
+      "initial_sampling_y": 866,
+      "checkpoints": []
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "geometry_role": "native_path",
+      "review_role_for_evaluation_only": "wrong_target",
+      "direction": 1,
+      "initial_sampling_y": 867,
+      "checkpoints": [
+        {
+          "frame": 1260,
+          "matched_source_y": [
+            867
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1275,
+          "matched_source_y": [
+            867
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1290,
+          "matched_source_y": [
+            867
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1305,
+          "matched_source_y": [
+            867
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1320,
+          "matched_source_y": [
+            867
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "wrong_target",
+      "direction": 1,
+      "initial_sampling_y": 866,
+      "checkpoints": [
+        {
+          "frame": 1260,
+          "matched_source_y": [
+            866
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1275,
+          "matched_source_y": [
+            866
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1290,
+          "matched_source_y": [
+            866
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1305,
+          "matched_source_y": [
+            866
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1320,
+          "matched_source_y": [
+            866
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "target",
+      "direction": -1,
+      "initial_sampling_y": 839,
+      "checkpoints": [
+        {
+          "frame": 1200,
+          "matched_source_y": [
+            842
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "target",
+      "direction": 1,
+      "initial_sampling_y": 839,
+      "checkpoints": [
+        {
+          "frame": 1275,
+          "matched_source_y": [
+            839
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1290,
+          "matched_source_y": [
+            888
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1305,
+          "matched_source_y": [
+            888
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1320,
+          "matched_source_y": [
+            888
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "wrong_target",
+      "direction": -1,
+      "initial_sampling_y": 868,
+      "checkpoints": [
+        {
+          "frame": 1200,
+          "matched_source_y": [
+            868
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "wrong_target",
+      "direction": 1,
+      "initial_sampling_y": 868,
+      "checkpoints": [
+        {
+          "frame": 1275,
+          "matched_source_y": [
+            868
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1290,
+          "matched_source_y": [
+            868
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1305,
+          "matched_source_y": [
+            868
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1320,
+          "matched_source_y": [
+            868
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "target",
+      "direction": -1,
+      "initial_sampling_y": 835,
+      "checkpoints": [
+        {
+          "frame": 1260,
+          "matched_source_y": [
+            885
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1200,
+          "matched_source_y": [
+            885
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "target",
+      "direction": 1,
+      "initial_sampling_y": 835,
+      "checkpoints": [
+        {
+          "frame": 1290,
+          "matched_source_y": [
+            829
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1305,
+          "matched_source_y": [
+            830
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1320,
+          "matched_source_y": [
+            839
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "geometry_role": "native_path",
+      "review_role_for_evaluation_only": "target",
+      "direction": -1,
+      "initial_sampling_y": 844,
+      "checkpoints": [
+        {
+          "frame": 1305,
+          "matched_source_y": [
+            836
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1290,
+          "matched_source_y": [
+            837
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1275,
+          "matched_source_y": [
+            848
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1260,
+          "matched_source_y": [
+            851
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1200,
+          "matched_source_y": [
+            857
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "geometry_role": "native_path",
+      "review_role_for_evaluation_only": "target",
+      "direction": 1,
+      "initial_sampling_y": 844,
+      "checkpoints": []
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "wrong_target",
+      "direction": -1,
+      "initial_sampling_y": 822,
+      "checkpoints": [
+        {
+          "frame": 1305,
+          "matched_source_y": [
+            822
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1290,
+          "matched_source_y": [
+            821
+          ],
+          "reciprocal": false
+        },
+        {
+          "frame": 1275,
+          "matched_source_y": [
+            820
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1260,
+          "matched_source_y": [
+            820
+          ],
+          "reciprocal": true
+        },
+        {
+          "frame": 1200,
+          "matched_source_y": [
+            820
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "geometry_role": "candidate_center",
+      "review_role_for_evaluation_only": "wrong_target",
+      "direction": 1,
+      "initial_sampling_y": 822,
+      "checkpoints": []
+    }
+  ],
+  "conclusion": "Retain only the reviewed 42.5-to-44 central appearance correspondence as a local positive witness. Other confirmed starting candidates at 40 and 42 drift to Y888; 42.5 backward drifts to Y885. The same algorithm is not seed- or direction-robust. No automatic identity authority or scalar promotion.",
+  "source_receipt_sha256": "dd8824b15adf049600bc5e62690024203eb287f63a52bc8552be6b5374fd3df8",
+  "review_html_sha256": "97e8e7c203c81bc900a4fa57f34afcd3739e9131988aa745e6d7187da3446b66"
+}

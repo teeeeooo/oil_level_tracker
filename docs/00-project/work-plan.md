@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event/initial-state Oil compatibility is locally verified and adopted. The three captured alternatives are human-confirmed Oil, and their first selection-eligibility loss is traced to Oil authority. [A1 lineage](../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) is implemented and locally verified with unchanged production output. The pink-observation review is closed: 40 s unresolved, 42 s tentatively lower rim, 44 s tentatively noise. A2 control preflight binds seven confirmed Oil correspondences and three rejected targets while preserving subtype uncertainty. The uncertainty-preserving W3 binding and recorded-selection baseline are now verified locally. The user requires both static and temporal context; the endpoint continuity review is closed with confirmed rapid rise/fall of one actual Oil boundary. The frozen ordered-patch cadence diagnostic is measured; sparse matching aliases to a lower structure, and native-frame intermediate agreement is awaiting human review. Family, authority-tier and whole-track shortcuts are contradicted by the controls. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event/initial-state Oil compatibility is locally verified and adopted. The three captured alternatives are human-confirmed Oil, and their first selection-eligibility loss is traced to Oil authority. [A1 lineage](../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) is implemented and locally verified with unchanged production output. The pink-observation review is closed: 40 s unresolved, 42 s tentatively lower rim, 44 s tentatively noise. A2 control preflight binds seven confirmed Oil correspondences and three rejected targets while preserving subtype uncertainty. The uncertainty-preserving W3 binding and recorded-selection baseline are now verified locally. The user requires both static and temporal context; the endpoint continuity review is closed with confirmed rapid rise/fall of one actual Oil boundary. The displayed short central native-frame correspondence is human-confirmed. The same matcher fails other confirmed seeds/directions, so its standalone tracking promotion is rejected; A2 joint identity remains open. Family, authority-tier and whole-track shortcuts are contradicted by the controls. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -121,12 +121,20 @@ Y labels or numeric speed bound follows; do not borrow existing tracklet IDs as
 entity truth or assume smooth/slow motion. The [ordered-patch cadence diagnostic](../60-evidence/s11/2026-10-07-a2-patch-correspondence.md)
 is now implemented and measured under a frozen contract: 156 appearance chains /
 6,240 links, with 26 focused tests passing. The 2 fps central chain jumps to the
-lower glass; 30 fps avoids that particular jump but is not yet physically verified.
-Wrong-target seeds also match reciprocally, so correspondence cannot create Oil
-authority. The next human checkpoint asks whether the displayed orange native-
-frame hypothesis follows actual Oil through the interval or another layer/pattern.
-After that answer, close or retain this bounded correspondence hypothesis before
-designing an identity decision; no W3 efficacy prediction is justified yet.
+lower glass. The user confirms that the displayed central 30 fps forward chain
+from 42.5 to 44 s follows actual Oil; this human review is closed. Existing frozen
+counter-controls show that confirmed Oil seeds at 40/42 s still drift to Y888 at
+native cadence, and the 42.5 s backward chain drifts to Y885. Retain the reviewed
+local temporal witness but close this matcher as a standalone continuation or
+identity repair. Do not repeat the review or tune this matcher on the same cases.
+
+Next A2 work must provide a distinct same-frame physical/target identity mechanism
+with joint spatial context and opposition; optional temporal correspondence can
+corroborate within a verified owner but cannot choose that owner, transfer labels
+or manufacture candidate/scalar coordinates. Preserve the ten bound controls,
+explicit missingness and latent-cause collisions, and freeze one readout and
+operating-point policy before evaluating it through W3. The completed temporal
+probe does not satisfy that identity prediction contract or close A2/A4.
 Local corpus exploration remains authorized; new video is not a prerequisite to
 this local step. Independent acceptance gates stay open.
 

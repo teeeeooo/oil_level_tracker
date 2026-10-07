@@ -199,5 +199,31 @@
     "verbatim_reply": "연속해서 이어짐. 단, 유면의 오르내림이 급격하게 이뤄짐",
     "source": "direct user reply in current conversation",
     "interpretation": "The actual Oil boundary is visibly continuous between the reviewed endpoints while its height rises and falls rapidly. No intermediate frame coordinates, displacement bounds, scalar tolerance or other candidate identities are inferred."
+  },
+  "appearance_correspondence_review": {
+    "status": "HUMAN_CONFIRMED_QUALITATIVE_LOCAL_CORRESPONDENCE",
+    "question": "새로 연 비교 영상의 주황색 짧은 선(원본 30fps 패턴 대응)이 42.5–44초 사이에서 실제 Oil 경계를 대체로 따라가나요, 아니면 다른 층·무늬로 벗어나나요?",
+    "verbatim_reply": "주황색 짧은 선이 실제 유면을 따라감",
+    "source": "direct user reply in current conversation",
+    "binding": {
+      "anchor_frame": 1275,
+      "anchor_candidate_input_index": 12,
+      "geometry_role": "candidate_center",
+      "sector": 2,
+      "source_x_range": [
+        584,
+        605
+      ],
+      "direction": 1,
+      "stride": 1,
+      "displayed_frames": [
+        1275,
+        1320
+      ],
+      "review_html_sha256": "97e8e7c203c81bc900a4fa57f34afcd3739e9131988aa745e6d7187da3446b66",
+      "review_manifest_sha256": "8a38a8879298b8d3f84cf506b296796ea53c39a6b0e3822176c4e765bbec1602",
+      "matches_sha256": "2a6ca3008aeb80a1d387115edf52c8f2c60e1189d1d87a3c18359c55b1cd8c62"
+    },
+    "scope": "Qualitative actual Oil correspondence of the displayed central orange appearance chain only. No scalar tolerance, full-width contour, unshown frame/sector, other seed/direction or automatic initialization correctness is inferred."
   }
 }

@@ -1,8 +1,9 @@
 # A2 ordered spatial patch correspondence — cadence diagnostic
 
 Date: 2026-10-07. Frozen probe `0f5eed7`; recorded-geometry clarification and
-completed-run head `d0f40c8`. Status: bounded measurement complete; intermediate
-physical agreement awaiting human review. No production adoption; `FIELD FAIL`.
+completed-run head `d0f40c8`. Status: bounded measurement and central forward
+correspondence review complete; general tracking promotion rejected after frozen
+seed counter-controls. No production adoption; `FIELD FAIL`.
 
 ## Human constraint and hypothesis
 
@@ -71,7 +72,8 @@ Wrong-target seeds can have excellent reciprocal appearance correspondence.
 Neither a low matching loss nor reciprocal consistency is a sufficient Oil
 identity rule. No threshold sweep, score fit, identity prediction or W3 efficacy
 score is produced from this measurement. The sparse central chain is unsuitable
-for adoption; native cadence's intermediate physical agreement is still unknown.
+for adoption; the later human review below confirms only the displayed native-cadence central
+forward chain, not arbitrary initializations.
 
 ## Verification, review and preservation
 
@@ -99,11 +101,47 @@ frames; no intermediate line is interpolated. Optional cyan guides show only
 the already reviewed endpoints. Browser checks verified playback, frame jumps,
 and hiding the sparse hypothesis on intervening frames.
 
-The pending question is whether orange follows actual Oil through 42.5–44 s or
-drifts onto another layer/pattern. This judges the computed correspondence,
-not the already established physical continuity. Until resolved, there is no
-basis to turn the appearance chain into identity, transplant it into W3 as a
-positive prediction, or change authority/selection.
+## Human correspondence reply and seed counter-controls
+
+The user answered **“주황색 짧은 선이 실제 유면을 따라감”**. The
+[attributed reply](../../50-diagnostics/s11/2026-10-07-sample4-temporal-context-human-reply.json)
+pins the reviewed HTML, full matches and exact displayed view: seed f1275/idx12,
+central sector 2, X=[584,605), forward stride 1, displayed f1275–1320 inclusive.
+This is qualitative actual-Oil correspondence of that short central line, without
+numeric pixel tolerance, unreviewed width/sector truth, automatic seed correctness
+or general tracking acceptance. This human checkpoint is **closed**; do not ask
+again whether the same displayed orange chain follows Oil.
+
+Read-only inspection of the already frozen results supplies counter-controls;
+no matcher rerun or parameters were changed:
+
+| Native-frame central chain | At 42.5 s | At 43 s | At 44 s |
+|---|---:|---:|---:|
+| Confirmed Oil seed f1200/idx4, forward | 839 | 888 | 888 |
+| Confirmed Oil seed f1260/idx4, forward | 839 | 888 | 888 |
+| Human-confirmed displayed seed f1275/idx12, forward | 835 (seed) | 829 | 839 |
+| Confirmed Oil seed f1320/idx9, backward | 848 | 837 | 844 (seed) |
+
+The same f1275/idx12 seed tracked backward reaches Y885 at 42 s and 40 s,
+where the prior confirmed Oil candidates are Y839 and Y841. Wrong-target seeds
+also persist at their lower or upper artifact appearances. These are appearance
+coordinates, not newly annotated scalar truth. The lower endpoint aliases differ
+from previously confirmed target candidates; no tolerance tuning is needed to
+establish that general seed/direction robustness has not been demonstrated.
+
+**Disposition:** retain the reviewed short central forward chain as a positive
+spatiotemporal witness. Close this fixed ordered-patch matcher as a standalone
+identity/continuation repair; it fails confirmed-seed counter-controls even at
+native cadence. Do not try to rescue it by selecting only the successful seed,
+tuning radius/cadence/cutoffs, granting reciprocal matches identity, or using its
+Y values as new production candidates. A2's broader joint identity readout remains
+open; this conclusion is not a failure of all temporal information.
+
+The follow-up [seed-control receipt](2026-10-07-a2-patch-correspondence-review.json)
+contains all central-chain checkpoint comparisons and binds the new human reply
+to the original frozen artifact. The original execution receipt and its pending
+review wording remain historical evidence. Production source and prior W3
+physical/target/scalar labels are unchanged; no new efficacy score is warranted.
 
 ## Detector Governance
 
