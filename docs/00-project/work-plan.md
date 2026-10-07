@@ -6,7 +6,7 @@
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 **Current bounded delivery:** report source context is locally verified and adopted into main from `0a60b11` on 2026-10-07 with user authorization. This adopts the report adjunct only; detector identity, independent user comprehension and Windows acceptance remain unresolved. [Execution evidence](../60-evidence/s11/2026-10-07-report-source-context-validation.md#main-adoption-and-worktree-cleanup--2026-10-07) records the adoption review and worktree cleanup.
 
-**Current experimental continuation (2026-10-08):** bounded source-frame review is implemented and locally verified on `work/s11-episode-texture-20261008` at code `52003aa`; this new branch is not yet adopted into main. The fixed side-texture challenger is CLOSED WITHOUT PROMOTION. The sample3 episode audit identifies repeated filled-cap publication constraints, without proving that their rejected candidates are true Oil. [Episode-source evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) owns execution detail. Detector efficacy, independent comprehension, O2/Windows acceptance and A0Q stability remain unresolved.
+**Latest bounded adoption (2026-10-08):** source-frame review is locally verified at code `52003aa` and ADOPTED into main through delivery `ae47d5c` after the user-authorized merge review. The remaining worktree is removed; original media and local evidence are preserved. The fixed side-texture challenger is CLOSED WITHOUT PROMOTION. The sample3 episode audit identifies repeated filled-cap publication constraints, without proving that their rejected candidates are true Oil. [Adoption evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md#main-adoption-review--2026-10-08) owns the review and cleanup. Detector efficacy, independent comprehension, O2/Windows acceptance and A0Q stability remain unresolved.
 
 This document owns current state, authorization, unknowns and the next transition.
 Completed execution detail belongs in linked evidence. Historical pending wording
@@ -28,7 +28,7 @@ CLOSED WITHOUT PROMOTION ends an experiment without satisfying O2 acceptance.
 | W3 / O2 shadow outputs and evaluation | IMPLEMENTED and VERIFIED locally; existing-data Windows target/context audit VERIFIED by transferred report | Preserve v1 compatibility and calibration guards; scalar truth remains absent; no efficacy claim | [Local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [Windows audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) |
 | W4 / O2 one challenger | Local-position, fixed color-side and bounded region appearance experiments CLOSED WITHOUT PROMOTION; candidate-identity challenger OPEN | Color information retained; incremental identity benefit NOT ESTABLISHED; R2 entry unmet | [Paired-scale result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md), [color-side assessment](../60-evidence/s11/s11-o2-color-side-local.md#added-information-assessment-and-measurement-disposition--2026-10-06) |
 | Report-context adjunct | IMPLEMENTED; locally VERIFIED; ADOPTED into main from `0a60b11` | Supporting source comparison; independent comprehension unmeasured, source appearance does not grant identity and wrong extrema remain unresolved | [Source-context evidence](../60-evidence/s11/2026-10-07-report-source-context-validation.md) |
-| Episode-source review | IMPLEMENTED; locally VERIFIED at `52003aa`; separate branch, not main-adopted | Original-frame comparison around extrema, Oil gaps and Foam; no numeric repair or independent comprehension claim | [Episode-source evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
+| Episode-source review | IMPLEMENTED; locally VERIFIED at `52003aa`; ADOPTED into main through `ae47d5c` | Original-frame comparison around extrema, Oil gaps and Foam; no numeric repair or independent comprehension claim | [Episode-source evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
 | O2 acceptance | OPEN; not satisfied | Independent development/calibration/holdout roles, fixed operating point and required Windows shadow acceptance remain unresolved | [O2 acceptance](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; entry pending O2 acceptance | Separate behavior plan, typed support/physical association controls and exact same-frame provenance | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Separate handoff and phase changes with positive/negative controls; no time/polarity shortcut | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -513,7 +513,11 @@ required for the current measurement.
 
 ## Current authorization boundary
 
-The latest 2026-10-07 request authorizes sequential Work Plan implementation,
+The 2026-10-08 request authorizes handoff review, main adoption when the review
+passes, remaining-worktree cleanup, commit and push. This bounded adoption is
+recorded in the episode-source evidence; no detector or field gate is closed.
+
+The earlier 2026-10-07 request authorizes sequential Work Plan implementation,
 proportional verification, logical commits and push until user judgment is needed.
 Audit/worktree preservation and verified temporary cleanup are complete.
 The [adoption record](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md)

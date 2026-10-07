@@ -12,7 +12,8 @@ Base main: `a5cbf65f44cb2f6c3ff2c2de610bf89eb92467b7`.
 Frozen final code: `52003aaa2f9e66e2a85dd8c485fdcf4ba5713b22`.
 Branch: `work/s11-episode-texture-20261008`.
 Native evidence: `sample/output/s11-episode-texture-20261008-001/`.
-Main has not adopted this branch. Production detector behavior is unchanged.
+At handoff, main had not adopted this branch; the later adoption review below
+records its integration. Production detector behavior is unchanged.
 Report implementation is locally verified at the scopes below; independent user
 comprehension is NOT_EVALUATED. Windows remains FIELD FAIL, and O2/W4 remain OPEN.
 The side-texture diagnostic is CLOSED WITHOUT PROMOTION.
@@ -162,6 +163,44 @@ source measurements, W3 output, test inventories, traces and browser screenshots
 remain under the evidence root. No raw video or browser profile is committed.
 The three implementation commits separate the feature, decode scheduling and
 actual-zero timestamp repair; the final documentation commit changes no code.
+
+## Main adoption review — 2026-10-08
+
+The user authorized review of the attached handoff, main merge if acceptable,
+remaining-worktree cleanup, commit and push. The reviewed repository is
+`teeeeooo/oil_level_tracker`, base `a5cbf65f44cb2f6c3ff2c2de610bf89eb92467b7`,
+delivery head `ae47d5c5c81938ebbe9c43b61ca80d6c1ac9aeb5`, covering all 16 changed
+files. Both fetched remote heads matched the handoff and both worktrees were clean.
+The exact delivery head remained frozen throughout review.
+
+Decision: adopt the bounded report feature. No blocking defect was found in the
+source, template, bundle integration, test and documentation review. The rejected
+texture experiment remains diagnostic-only under tests. Source and test trees
+match the fully tested `52003aa`; production vision and domain trees match base.
+
+Fresh verification ran these six modules with `PYTHONPATH=src` and the main
+checkout's `.venv/bin/python -m pytest -q`: `test_source_sequence_renderer`,
+`test_source_context_renderer`, `test_report_presentation`,
+`test_s11_side_texture_probe`, `test_output_bundle_naming` (all under `tests/unit`),
+and `tests/integration/test_analysis_and_reporting.py`. Result: **105 passed in
+3.59 seconds**. Detector governance and `git diff --check` passed.
+
+The reviewer independently reconciled the retained canonical node logs against
+the inventory: **2,488 passed**, no failed, skipped, missing or duplicate calls.
+All 25 evidence-manifest hashes and five delivery artifact hashes match. All 12
+media/recipe/truth hashes remain unchanged. The four saved report HTML hashes
+match; all 299 saved result rows and events equal the baseline, and tracking/event
+CSVs match except run_id. Existing browser and 27 source-pixel checks are retained
+evidence, not newly rerun browser or Windows qualification.
+
+Main advanced by fast-forward from the reviewed base to `ae47d5c`. The sole
+remaining linked worktree, `../oil_level_tracker-s11-episode-texture-20261008`, was
+removed without force after confirming its ignored content consisted only of
+generated caches and four symlinks to main's source videos. Main's original media,
+report archive, patch and complete native evidence remain under the existing
+`sample/output/s11-episode-texture-20261008-001/` root. The task branch remains as
+a recovery reference. The following adoption-record commit changes documentation
+only; FIELD FAIL, W4/O2 OPEN, independent comprehension and A0Q remain unchanged.
 
 ## Detector Governance
 
