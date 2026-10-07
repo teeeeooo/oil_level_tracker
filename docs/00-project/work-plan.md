@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. Source/report interval review is prepared and awaiting the user’s sample4 40–44-second physical interpretation. A1 lossless support/pair/score-lineage integration remains the next bounded detector task before A2. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event compatibility is next. A1 lossless support/pair/score-lineage integration remains the next bounded detector task before A2. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -64,15 +64,13 @@ The next implementation sequence is:
    guides or events; Result Review retains its existing connectivity.
    [Verification](../60-evidence/s11/2026-10-07-report-context-adoption.md#static-gap-and-source-scene-adoption)
    covers 79 focused cases, 13 bundle lifecycle cases and four fresh video runs.
-3. IN PROGRESS — [review package](../60-evidence/s11/2026-10-07-source-report-interval-review.md)
-   prepared; waiting for user interpretation of sample4 40–44-second Oil movement
-   versus boundary substitution/indeterminate visibility. No detector hypothesis
-   is selected yet. Compare source and reports over major intervals: prioritize sample4's late
-   Oil/Foam transition and sample3's long gap/reobserved descent. Record direction,
-   transition order, observability and sustained misleading interpretations;
-   numeric counts and conditional MAE remain secondary. Select one consequential
-   distortion before choosing a detector challenger. Human ROI is an unadopted
-   input experiment, not established improvement.
+3. COMPLETE for first target selection — [sample4 reply](../60-evidence/s11/2026-10-07-source-report-interval-review.md#human-reply-received--2026-10-07)
+   confirms only f1275/42.5 s correctly tracks Oil within 40–44 s, plus correct
+   f1140/38 s, f1485/49.5 s and f1560/52 s. Select incorrect Oil tracking across
+   that transition as the consequential distortion; preserve the four positives.
+   No replacement coordinates, Foam labels, unshown-frame labels or causal
+   mechanism are inferred. sample3 remains supporting comparison, not new truth.
+   Human ROI is still an unadopted input experiment.
 4. Repair domain-event legacy Oil compatibility as a separate bounded change
    when undertaken. Check initial-state reconstruction and downstream event,
    judgment and Review consumers; a report-only PASS does not cover changed

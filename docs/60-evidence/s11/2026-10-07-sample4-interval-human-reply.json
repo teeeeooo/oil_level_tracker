@@ -1,0 +1,270 @@
+{
+  "date": "2026-10-07",
+  "authority": "direct user reply in this task",
+  "reply_verbatim": "40에서 44초 구간 사이에서 실제 Oil을 제대로 따라가는 구간은\n42.5초 f1275하나뿐이야. 그 밖의 38초 f1140, 49.5초 f1485, 52초 f1560는 실제 유면을 잘 따라감",
+  "review_manifest_sha256": "7d9b4e53c1531d1f09ee3ab36eccc27061fe5d97c765f4cb717916321247cbfd",
+  "scope": "Qualitative correctness of displayed stored Oil observations; no exact coordinate truth, Foam classification, per-sector label or unshown-frame expansion.",
+  "interval_statement": "Within 40–44 seconds only 42.5 seconds / f1275 tracks the actual Oil correctly, per user.",
+  "frames": [
+    {
+      "frame": 1140,
+      "time_sec": 38.0,
+      "crop_xyxy": [
+        519,
+        774,
+        671,
+        926
+      ],
+      "source_only": false,
+      "stored_row": {
+        "frame": 1140,
+        "t": 38.0,
+        "oil_y": 844.0,
+        "oil_h": 6.0,
+        "foam_y": null,
+        "foam_h": null,
+        "oil_valid": true,
+        "foam_valid": false,
+        "state": "PARTIAL_VISIBLE",
+        "flags": [
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_CONTINUING",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "image": "sample4-f1140-pair.png",
+      "sha256": "76747692b3e574a8b4becd61dd365ff4f2badabaede7a86547eba14aa0242b9f",
+      "oil_observation_assessment": "correct",
+      "assessment_basis": "explicit named positive"
+    },
+    {
+      "frame": 1275,
+      "time_sec": 42.5,
+      "crop_xyxy": [
+        519,
+        774,
+        671,
+        926
+      ],
+      "source_only": false,
+      "stored_row": {
+        "frame": 1275,
+        "t": 42.5,
+        "oil_y": 835.0,
+        "oil_h": 15.0,
+        "foam_y": 818.0,
+        "foam_h": 32.0,
+        "oil_valid": true,
+        "foam_valid": true,
+        "state": "FOAMING_VISIBLE",
+        "flags": [
+          "FOAM_STRONG_EVIDENCE",
+          "R10_FOAM_LAYER_SEPARATED",
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_WITNESS",
+          "R7_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EVIDENCE_PRESERVED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "image": "sample4-f1275-pair.png",
+      "sha256": "7c31bc79067a7bf88c46b8d47442b6c24c56043dcd791d1a40f5a5f8015406cd",
+      "oil_observation_assessment": "correct",
+      "assessment_basis": "explicit named positive"
+    },
+    {
+      "frame": 1485,
+      "time_sec": 49.5,
+      "crop_xyxy": [
+        519,
+        774,
+        671,
+        926
+      ],
+      "source_only": false,
+      "stored_row": {
+        "frame": 1485,
+        "t": 49.5,
+        "oil_y": 836.0,
+        "oil_h": 14.0,
+        "foam_y": 814.0,
+        "foam_h": 36.0,
+        "oil_valid": true,
+        "foam_valid": true,
+        "state": "FOAMING_VISIBLE",
+        "flags": [
+          "FOAM_STRONG_EVIDENCE",
+          "R10_FOAM_LAYER_SEPARATED",
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_CONTINUING",
+          "R7_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EVIDENCE_PRESERVED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "image": "sample4-f1485-pair.png",
+      "sha256": "9ef86e3f87693f2741a10e433288e9e0a0bf31c8208a8412e6f01f770e4eb92b",
+      "oil_observation_assessment": "correct",
+      "assessment_basis": "explicit named positive"
+    },
+    {
+      "frame": 1560,
+      "time_sec": 52.0,
+      "crop_xyxy": [
+        519,
+        774,
+        671,
+        926
+      ],
+      "source_only": false,
+      "stored_row": {
+        "frame": 1560,
+        "t": 52.0,
+        "oil_y": 833.0,
+        "oil_h": 17.0,
+        "foam_y": 813.0,
+        "foam_h": 37.0,
+        "oil_valid": true,
+        "foam_valid": true,
+        "state": "FOAMING_VISIBLE",
+        "flags": [
+          "FOAM_STRONG_EVIDENCE",
+          "R10_FOAM_LAYER_SEPARATED",
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_WITNESS",
+          "R7_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EVIDENCE_PRESERVED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "image": "sample4-f1560-pair.png",
+      "sha256": "f9585108362c71b04fc1d113f81c0b3302d2aacb162d09b4248e75c51cdbcce1",
+      "oil_observation_assessment": "correct",
+      "assessment_basis": "explicit named positive"
+    },
+    {
+      "frame": 1200,
+      "time_sec": 40.0,
+      "crop_xyxy": [
+        519,
+        774,
+        671,
+        926
+      ],
+      "source_only": false,
+      "stored_row": {
+        "frame": 1200,
+        "t": 40.0,
+        "oil_y": 865.5,
+        "oil_h": -15.5,
+        "foam_y": 840.0,
+        "foam_h": 10.0,
+        "oil_valid": true,
+        "foam_valid": true,
+        "state": "FOAMING_VISIBLE",
+        "flags": [
+          "FOAM_STRONG_EVIDENCE",
+          "R10_FOAM_LAYER_SEPARATED",
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_WITNESS",
+          "R7_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EVIDENCE_PRESERVED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "image": "sample4-f1200-pair.png",
+      "sha256": "9a409804baeedb45a47563450a5ba5284ae72ba3fc25a0b55ddd59a7d8030544",
+      "oil_observation_assessment": "incorrect",
+      "assessment_basis": "displayed frame within user interval exclusion"
+    },
+    {
+      "frame": 1260,
+      "time_sec": 42.0,
+      "crop_xyxy": [
+        519,
+        774,
+        671,
+        926
+      ],
+      "source_only": false,
+      "stored_row": {
+        "frame": 1260,
+        "t": 42.0,
+        "oil_y": 868.0,
+        "oil_h": -18.0,
+        "foam_y": 819.0,
+        "foam_h": 31.0,
+        "oil_valid": true,
+        "foam_valid": true,
+        "state": "FOAMING_VISIBLE",
+        "flags": [
+          "FOAM_STRONG_EVIDENCE",
+          "R10_FOAM_LAYER_SEPARATED",
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_CONTINUING",
+          "R7_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EVIDENCE_PRESERVED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "image": "sample4-f1260-pair.png",
+      "sha256": "795d617f46fee3c4fbca61f145e1e0e6ecbd8cf7cd4281c063ed2e0e6dcd8940",
+      "oil_observation_assessment": "incorrect",
+      "assessment_basis": "displayed frame within user interval exclusion"
+    },
+    {
+      "frame": 1320,
+      "time_sec": 44.0,
+      "crop_xyxy": [
+        519,
+        774,
+        671,
+        926
+      ],
+      "source_only": false,
+      "stored_row": {
+        "frame": 1320,
+        "t": 44.0,
+        "oil_y": 822.0,
+        "oil_h": 28.0,
+        "foam_y": 812.0,
+        "foam_h": 38.0,
+        "oil_valid": true,
+        "foam_valid": true,
+        "state": "FOAMING_VISIBLE",
+        "flags": [
+          "FOAM_STRONG_EVIDENCE",
+          "R10_FOAM_LAYER_SEPARATED",
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_CONFIRMED",
+          "R7_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EVIDENCE_PRESERVED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "image": "sample4-f1320-pair.png",
+      "sha256": "51c6ba4240825562d48195c53175e83b8ea562f18605fa9f5267a21fda25f75f",
+      "oil_observation_assessment": "incorrect",
+      "assessment_basis": "displayed frame within user interval exclusion"
+    }
+  ],
+  "unreviewed_displayed_frames": [
+    1185,
+    1605,
+    1680
+  ],
+  "sample3": "No human reply yet; comparison remains supporting reviewer observation."
+}
