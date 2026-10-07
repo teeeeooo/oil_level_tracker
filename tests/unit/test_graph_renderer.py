@@ -72,6 +72,13 @@ def test_static_detail_connects_oil_anchors_but_preserves_foam_gaps(
 
     calls.clear()
     scatter_calls.clear()
+    result.samples[-1].timestamp_sec = 10.0
+    GraphRenderer()._render_glass(result, glass, tmp_path / "long-gap.png")
+    assert scatter_calls["관측 유면"] == ((0.0, 10.0), (1.0, 3.0))
+    assert "관측 공백 연결" not in calls
+
+    calls.clear()
+    scatter_calls.clear()
     result.samples = [
         _sample(glass.id, 0.0, None, None),
         _sample(glass.id, 1.0, None, 4.0),

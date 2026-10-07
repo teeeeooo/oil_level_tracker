@@ -112,9 +112,9 @@ the first; A0B/A0Q/A1–A4 are bounded work within W4, not new milestones. The
 [third audit](70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md)
 supplies the original report prototype and prioritizes source/report movement
 context. The [report adoption record](60-evidence/s11/2026-10-07-report-context-adoption.md)
-identifies the subset subsequently implemented. Its two-second display cap is
-still a proposal; current report and
-detector acceptance owners remain authoritative. Recovery ZIPs preserve all
+identifies the subset subsequently implemented, including the static report
+two-second display cap and bounded gap scenes. Result Review retains its existing
+connectivity; current report and detector acceptance owners remain authoritative. Recovery ZIPs preserve all
 three inspected worktrees' unadopted source changes; full local snapshots and
 native evidence are located by the checkpoint and its preservation receipt. Their
 historical “main unchanged” statements remain true of the audit, while the Work

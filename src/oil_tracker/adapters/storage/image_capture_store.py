@@ -10,6 +10,7 @@ from oil_tracker.application.ports.progress import AnalysisCancelled
 from oil_tracker.application.services.report_presentation import (
     ReportLandmark,
     ReportPresentation,
+    ReportSceneCapture,
     build_report_presentation,
 )
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
@@ -38,20 +39,21 @@ class ImageCaptureStore:
         landmarks = tuple(
             (glass.glass_id, glass.glass_name, landmark)
             for glass in presentation.glasses
-            for landmark in glass.landmarks
+            for landmark in (*glass.landmarks, *glass.scene_captures)
         )
         reader = OpenCvVideoReader(video_path)
         completed = 0
-        captured_at: dict[tuple[str, float], str] = {}
+        captured_at: dict[tuple[str, float, bool], str] = {}
         try:
             for index, (glass_id, glass_name, landmark) in enumerate(landmarks, start=1):
                 _check_cancelled(cancellation)
-                capture_key = (glass_id, round(landmark.timestamp_sec, 6))
+                source_event = landmark.source_event if isinstance(landmark, ReportLandmark) else None
+                capture_key = (glass_id, round(landmark.timestamp_sec, 6), landmark.sample is None)
                 reused = captured_at.get(capture_key)
                 if reused is not None:
                     landmark.capture_path = reused
-                    if landmark.source_event is not None:
-                        landmark.source_event.capture_path = reused
+                    if source_event is not None:
+                        source_event.capture_path = reused
                     completed += 1
                     _emit_progress(progress, completed, len(landmarks))
                     continue
@@ -68,8 +70,9 @@ class ImageCaptureStore:
                     actual_time,
                 )
                 safe_name = _safe_component(glass_name) or "glass"
+                kind = landmark.event_type.value if isinstance(landmark, ReportLandmark) else "SCENE_CONTEXT"
                 filename = (
-                    f"{safe_name}_{index:02d}_{landmark.event_type.value}_"
+                    f"{safe_name}_{index:02d}_{kind}_"
                     f"{landmark.timestamp_sec:.2f}.png"
                 )
                 path = directory / filename
@@ -77,8 +80,8 @@ class ImageCaptureStore:
                     relative = f"captures/{filename}"
                     captured_at[capture_key] = relative
                     landmark.capture_path = relative
-                    if landmark.source_event is not None:
-                        landmark.source_event.capture_path = relative
+                    if source_event is not None:
+                        source_event.capture_path = relative
                 completed += 1
                 _emit_progress(progress, completed, len(landmarks))
         finally:
@@ -88,7 +91,7 @@ class ImageCaptureStore:
 def _render_landmark_capture(
     frame: np.ndarray,
     config: GlassInspectionConfig | None,
-    landmark: ReportLandmark,
+    landmark: ReportLandmark | ReportSceneCapture,
     actual_time: float,
 ) -> np.ndarray:
     image = _copy_bgr(frame)

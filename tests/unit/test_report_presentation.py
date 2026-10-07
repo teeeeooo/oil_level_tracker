@@ -442,3 +442,33 @@ def test_foam_episode_labels_describe_observations_not_physical_birth_or_death(s
         assert "경계 관측" not in start.label
         assert "경계 위치가 관측되지" not in end.description
     assert glass == before
+
+
+def test_longest_gap_gets_only_three_scene_requests_without_synthetic_samples_or_events():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    samples = [_sample(config.id, t, oil=oil, foam=foam) for t, oil, foam in [
+        (0, 1, None), (1, None, 4), (5, 2, None), (6, None, 5), (20, 3, 6), (25, 4, None),
+    ]]
+    glass = GlassAnalysisResult(config.id, config.name, ResultState.REVIEW_REQUIRED, samples=samples)
+    before = deepcopy(glass)
+
+    report = build_glass_report_presentation(glass, config)
+
+    assert [scene.timestamp_sec for scene in report.scene_captures] == [5, 12.5, 20]
+    assert report.scene_captures[0].sample is samples[2]
+    assert report.scene_captures[1].sample is None
+    assert report.scene_captures[2].sample is samples[4]
+    assert "거품 경계 위치값은 없습니다" in report.scene_captures[0].description
+    assert "거품 경계 위치도 관측" in report.scene_captures[2].description
+    assert "2초를 초과하면 선을 연결하지 않습니다" in report.observation_note
+    assert glass == before
+
+
+def test_timestamp_jump_alone_is_disclosed_without_claiming_observed_mixed_movement():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = GlassAnalysisResult(config.id, config.name, ResultState.REVIEW_REQUIRED,
+        samples=[_sample(config.id, t, oil=v) for t, v in [(0, 0), (10, 40), (20, 0)]])
+    report = build_glass_report_presentation(glass, config)
+    assert "상승과 하강이 모두 관측" not in report.movement_summary
+    assert "2초를 초과하면" in report.observation_note
+    assert [scene.timestamp_sec for scene in report.scene_captures] == [0, 5, 10]

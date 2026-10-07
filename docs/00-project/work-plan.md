@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. Display-gap/scene-capture work and source/report interval review are next. A1 lossless support/pair/score-lineage integration remains the next bounded detector task before A2. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. Source/report interval review is next. A1 lossless support/pair/score-lineage integration remains the next bounded detector task before A2. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -58,10 +58,12 @@ The next implementation sequence is:
    repair adopted. [Verification](../60-evidence/s11/2026-10-07-report-context-adoption.md)
    covers 31 focused cases and four fresh fixed-window application/report runs;
    stored values, validity, flags and event meanings match the pinned baseline.
-2. Decide the display-gap and bounded scene-capture contracts in the existing
-   report architecture/validation owners. Two seconds remains a proposed display
-   cap, not a detector threshold. Scene-only captures cannot fabricate Oil guides
-   or events. Record static-report versus Result Review differences explicitly.
+2. COMPLETE — static report uses a two-second display cap and at most three
+   source-scene requests for the longest internal gap per Glass. The cap is a
+   display policy, not a detector threshold. Scene-only captures add no Oil/Foam
+   guides or events; Result Review retains its existing connectivity.
+   [Verification](../60-evidence/s11/2026-10-07-report-context-adoption.md#static-gap-and-source-scene-adoption)
+   covers 79 focused cases, 13 bundle lifecycle cases and four fresh video runs.
 3. Compare source and reports over major intervals: prioritize sample4's late
    Oil/Foam transition and sample3's long gap/reobserved descent. Record direction,
    transition order, observability and sustained misleading interpretations;

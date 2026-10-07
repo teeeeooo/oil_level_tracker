@@ -59,6 +59,48 @@ integration and required four-video checks passed. A0Q, O2 and FIELD FAIL remain
 unchanged. Source–report physical context and user understanding are not yet
 validated.
 
+## Static gap and source-scene adoption
+
+Base: `6f7c309` (namespace/wording unit already pushed). The second logical unit
+adopts the audit's proposed two-source-second cap for static report Oil lines.
+Every stored point remains visible, but neither direct lines nor dashed bridges
+span a larger interval, including missing timestamps without explicit empty rows.
+Result Review keeps the helper's existing uncapped default. Adjacent rise/fall
+wording likewise excludes jumps across this cap; endpoint comparisons stay explicit.
+
+Each Glass requests at most three additional scenes around its longest internal
+Oil gap: exact prior observation, midpoint source image, exact following observation.
+The midpoint has no synthetic sample and no Oil/Foam guide; source time, ROI and
+zero reference remain visible. Captures reuse the existing bounded/cancellable
+bundle path, without adding domain events. Annotated and scene-only captures at
+the same time cannot share an image. Endpoint descriptions distinguish a numeric
+Foam boundary, Foam state only, and absent boundary evidence.
+
+- 79 focused graph/report/capture/Review/reader/application cases passed.
+- 13 bundle lifecycle cases passed, including cancellation after entering the new
+  context-capture work: reader closed, no partial published bundle or staging residue.
+- Four final official pipeline/bundle replays passed. All 299 tracking rows and
+  event meanings, series, truth comparisons, recipes and provenance match the
+  same pinned baseline as the first unit. Source `.py`/`.j2` hashes and all twelve
+  inputs remained unchanged during execution.
+- Capture files after the first unit → this unit: Base 3→3, sample2 3→3,
+  sample3 7→9, sample4 5→8. sample3 reuses its maximum landmark at the gap end.
+- sample3's longest pair is 34.5345–81.0143 seconds (midpoint request 57.7744);
+  sample4's is 49.5–52 seconds (midpoint 50.75). These are observation gaps,
+  not declarations of physical absence.
+
+The final HTML was inspected in the local browser; its context cards, qualified
+Foam wording and source-only midpoint are visible. Detail graphs/source captures
+were inspected locally. Existing crowded early Foam annotations remain; this is
+not target-Windows visual or A0Q stability qualification.
+
+The [second-unit receipt](2026-10-07-report-gap-verification.json) pins source,
+inputs, replay commands/results and JUnit evidence. Full final logs/bundles are
+in ignored `sample/output/s11-report-gap-adoption-20261007-002`; the earlier
+`...-001` is an intermediate run, not the final evidence. The next step is source
+versus report interval interpretation. Domain-event compatibility and detector
+A1–A4 have not been adopted by these report changes.
+
 ## Detector Governance
 
 - Logic-map nodes: `RESULT-PRESENTATION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`.

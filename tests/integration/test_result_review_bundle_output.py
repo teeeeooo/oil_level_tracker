@@ -136,6 +136,55 @@ def test_write_failure_cleans_temporary_directory(tmp_path):
     assert not list(tmp_path.glob("oil_level_analysis_*"))
 
 
+def test_cancellation_during_gap_context_captures_closes_reader_and_discards_bundle(tmp_path, monkeypatch):
+    from dataclasses import replace
+    from types import SimpleNamespace
+
+    import numpy as np
+
+    from oil_tracker.adapters.storage import image_capture_store
+    from oil_tracker.application.ports.progress import AnalysisCancelled, AnalysisStage
+
+    result, recipe, session, _glass = _inputs(tmp_path)
+    samples = result.glass_results[0].samples
+    samples.append(replace(samples[0], frame_index=120, timestamp_sec=4.0,
+                           smoothed_oil_air_level_px_from_zero=20.0))
+    reads = []
+    closed = []
+
+    class Reader:
+        def __init__(self, _path):
+            pass
+
+        def read_at(self, timestamp):
+            reads.append(timestamp)
+            return np.zeros((240, 320, 3), dtype=np.uint8), round(timestamp * 30), timestamp
+
+        def close(self):
+            closed.append(True)
+
+    monkeypatch.setattr(image_capture_store, "OpenCvVideoReader", Reader)
+    token = SimpleNamespace(cancelled=False)
+    updates = []
+
+    def progress(update):
+        updates.append(update)
+        # Two extrema, then the first (reused) context endpoint: cancel before midpoint.
+        if update.stage_key is AnalysisStage.RESULT_IMAGES and update.completed == 3:
+            token.cancelled = True
+
+    store = _store()
+    store.captures = image_capture_store.ImageCaptureStore()
+    with pytest.raises(AnalysisCancelled):
+        store.write_bundle(result, recipe, session, tmp_path, cancellation=token, progress=progress)
+    assert token.cancelled
+    assert len(reads) == 2 and sorted(reads) == [1.0, 4.0]
+    assert closed == [True]
+    assert updates[-1].total == 5
+    assert not list(tmp_path.glob(".*.tmp-*"))
+    assert not list(tmp_path.glob("oil_level_analysis_*"))
+
+
 def test_run_name_drives_safe_folder_and_persisted_review_metadata(tmp_path):
     result, recipe, session, _glass = _inputs(tmp_path)
     session.run_name = "반복 시험 / 03"

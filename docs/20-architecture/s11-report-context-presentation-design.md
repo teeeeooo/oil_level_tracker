@@ -21,10 +21,30 @@ give last-observed and next non-Foam timestamps, and do not certify physical
 formation/disappearance. Existing state-only Foam evidence remains state evidence;
 wording does not manufacture a front coordinate. Episode formation is unchanged.
 
-Unlike the supplied full prototype, this first change does not introduce a gap
-cap, alter graph connectivity, or modify domain events/Review. The next display
-policy and scene-capture decision is separate. Tracking samples, detector source,
+The first change is limited to namespace/wording. The second bounded unit below
+adds static gap display and scene context. Tracking samples, detector source,
 Recipe/truth, event meanings, judgment and field disposition are unchanged.
+
+## Static gap display and scene context
+
+The report adopts the prototype's two-source-second Oil connection cap as an
+explicit display policy. It applies both to missing-row bridges and timestamp
+jumps, preserving all anchors. The shared series helper remains uncapped by
+default so Result Review keeps its existing behavior. The report trend sentence
+does not infer mixed observed motion from pairs across a longer gap.
+
+The existing presentation builder selects the longest internal gap per Glass,
+with earliest tie-breaking, and emits at most three `ReportSceneCapture` requests.
+Endpoints use their stored samples; the midpoint has no sample and no Oil/Foam
+guides. These are presentation requests, not synthetic events or samples. The
+existing capture store, cancellation/progress and staged bundle path serve them.
+Scene-only requests have a distinct cache identity from annotated landmarks.
+The report template exposes them separately with observation-qualified captions.
+
+This extends the supplied prototype with bounded scene context in the existing
+owners. It does not claim the two-second value is calibrated, certify physical
+identity or make static/interactive presentation identical. Source/report interval
+review remains the next decision-bearing step; current field gates remain intact.
 
 ## History Review
 
@@ -33,6 +53,6 @@ Recipe/truth, event meanings, judgment and field disposition are unchanged.
 - Prior mechanisms reviewed: R1 observed-run/display-bridge distinction; R7 anchor-only extrema; current independent Oil/Foam validity; the three supplied 2026-10-07 audits and report-context prototype.
 - Prior mechanisms rejected: Foam flags granting Oil authority, unrestricted fallback from legacy anchor eligibility, numeric interpolation/carry, treating missing Foam as physical disappearance, and promoting local report checks into field success.
 - Preserved contracts: immutable stored observations, same-frame provenance, independent series, actual legacy anchor protection, bounded existing episode/landmark selection, unchanged event history and separate field qualification.
-- Difference from prior failures: repair report interpretation inside its existing owner without changing upstream identity, numeric publication, thresholds or candidate selection; summary and landmarks share the same extrema eligibility.
+- Difference from prior failures: repair report interpretation inside its existing owner without changing upstream identity, numeric publication, detector thresholds or candidate selection; summary and landmarks share extrema eligibility, long display connections are bounded and context-only captures cannot create measurements.
 - Logic-map impact: NONE — existing runtime owners and pipeline edges remain unchanged.
 - Failure-registry impact: NONE — existing F09/F10 guards apply; no failed detector mechanism is retired or promoted.

@@ -14,6 +14,7 @@ from oil_tracker.domain.results import (
 )
 
 from .event_presentation import event_type_label
+from .graph_series import REPORT_MAX_CONTEXT_GAP_SEC
 
 
 MAX_REPORT_LANDMARKS = 12
@@ -65,6 +66,15 @@ class ReportUnavailableInterval:
         return f"{self.start_time_sec:.1f}–{self.end_time_sec:.1f}초"
 
 
+@dataclass
+class ReportSceneCapture:
+    timestamp_sec: float
+    label: str
+    description: str
+    sample: TrackingSample | None
+    capture_path: str = ""
+
+
 @dataclass(frozen=True)
 class ReportGlassPresentation:
     glass_id: str
@@ -78,6 +88,7 @@ class ReportGlassPresentation:
     unavailable_intervals: tuple[ReportUnavailableInterval, ...]
     finite_oil_count: int
     foam_episode_count: int
+    scene_captures: tuple[ReportSceneCapture, ...] = ()
 
     @property
     def has_oil(self) -> bool:
@@ -148,6 +159,7 @@ def build_glass_report_presentation(
     selected = _bounded_landmarks((*extrema, *foam_landmarks, *physical))
     has_missing_oil = len(numeric) < len(samples)
     has_internal_gap, has_edge_missing = _oil_gap_shape(samples)
+    scenes = _gap_scene_captures(numeric)
     initial_state_hold = bool(
         glass.retrospective is not None
         and glass.retrospective.accepted
@@ -167,6 +179,7 @@ def build_glass_report_presentation(
         has_edge_missing,
         bool(numeric),
         initial_state_hold=initial_state_hold,
+        has_long_gap=bool(scenes),
     )
     return ReportGlassPresentation(
         glass_id=glass.glass_id,
@@ -180,7 +193,47 @@ def build_glass_report_presentation(
         unavailable_intervals=unavailable,
         finite_oil_count=len(numeric),
         foam_episode_count=len(foam_episodes),
+        scene_captures=scenes,
     )
+
+
+def _gap_scene_captures(
+    numeric: tuple[tuple[TrackingSample, float | None], ...],
+) -> tuple[ReportSceneCapture, ...]:
+    pairs = [
+        (left[0], right[0])
+        for left, right in zip(numeric, numeric[1:])
+        if right[0].timestamp_sec - left[0].timestamp_sec > REPORT_MAX_CONTEXT_GAP_SEC
+    ]
+    if not pairs:
+        return ()
+    # One longest internal gap per Glass; ties retain the earliest gap.
+    left, right = max(pairs, key=lambda pair: pair[1].timestamp_sec - pair[0].timestamp_sec)
+    return (
+        ReportSceneCapture(
+            left.timestamp_sec, "공백 전 관측", _scene_observation_note(left), left,
+        ),
+        ReportSceneCapture(
+            (left.timestamp_sec + right.timestamp_sec) / 2.0,
+            "공백 중 원본 장면",
+            "관측점 사이의 원본 장면입니다. 유면·거품 위치 선을 추가하지 않았습니다. "
+            "이 장면만으로 공백 전체의 움직임을 판단할 수 없습니다.",
+            None,
+        ),
+        ReportSceneCapture(
+            right.timestamp_sec, "공백 후 관측", _scene_observation_note(right), right,
+        ),
+    )
+
+
+def _scene_observation_note(sample: TrackingSample) -> str:
+    if _foam_px(sample) is not None or _finite_first(sample.raw_foam_front_y) is not None:
+        foam = "거품 경계 위치도 관측되었습니다."
+    elif sample.fill_state in {FillState.FULL_WITH_FOAM, FillState.FOAMING_VISIBLE}:
+        foam = "거품 상태는 기록되어 있으나 경계 위치값은 없습니다."
+    else:
+        foam = "거품 경계 위치값은 없습니다. 실제 거품 부재를 뜻하지 않습니다."
+    return f"저장된 유면 관측 위치를 표시합니다. {foam}"
 
 
 def format_landmark_level(
@@ -479,6 +532,7 @@ def _movement_summary(
             finite[1:],
         )
         if abs(current_value - previous_value) > tolerance
+        and 0 < _current_sample.timestamp_sec - _previous_sample.timestamp_sec <= REPORT_MAX_CONTEXT_GAP_SEC
     ]
     if any(change > 0 for change in meaningful_deltas) and any(
         change < 0 for change in meaningful_deltas
@@ -511,8 +565,13 @@ def _observation_note(
     has_oil: bool,
     *,
     initial_state_hold: bool = False,
+    has_long_gap: bool = False,
 ) -> str:
-    if not has_missing_oil:
+    gap_policy = (
+        f"이 보고서는 유면 관측점 사이가 {REPORT_MAX_CONTEXT_GAP_SEC:g}초를 초과하면 선을 연결하지 않습니다. "
+        "이는 표시 기준이며 계면이 실제로 사라졌다는 뜻은 아닙니다."
+    )
+    if not has_missing_oil and not has_long_gap:
         return "그래프의 실선은 연속된 직접 관측 구간입니다."
     if not has_oil:
         if initial_state_hold:
@@ -533,6 +592,8 @@ def _observation_note(
             f"{gap_name}을 건너는 점선은 앞뒤 관측점을 연결한 것이며 "
             "중간 측정값을 뜻하지 않습니다."
         )
+    if has_internal_gap or has_long_gap:
+        parts.append(gap_policy)
     if has_edge_missing:
         parts.append("첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.")
     return " ".join(parts)

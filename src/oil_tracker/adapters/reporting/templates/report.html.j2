@@ -14,7 +14,7 @@
   <div>
     <div class="eyebrow">Sight-glass observation report</div>
     <h1>유면 관찰 보고서</h1>
-    <p class="hero-copy">이 보고서는 영상에서 관측된 유면 위치를 시간순으로 보여주고, 최고·최저 유면과 거품 발생·소멸 등 주요 순간을 원본 장면과 함께 정리합니다. 점선은 직접 위치값이 없는 구간의 앞뒤 관측점을 연결한 것으로, 중간 측정값을 뜻하지 않습니다.</p>
+    <p class="hero-copy">이 보고서는 영상에서 관측된 유면 위치를 시간순으로 보여주고, 최고·최저 유면과 거품 관측 시작·중단 등 주요 순간을 원본 장면과 함께 정리합니다. 점선은 직접 위치값이 없는 구간의 앞뒤 관측점을 연결한 것으로, 중간 측정값을 뜻하지 않습니다.</p>
   </div>
   <div class="summary-grid">
     <div class="metric"><div class="metric-label">전체 판정</div><div class="metric-value state {{ result.overall_state.value }}">{{ presentation.overall_state_label }}</div></div>
@@ -62,6 +62,24 @@
   </div>
   {% else %}<p class="muted">표시할 수 있는 물리적 landmark가 없습니다.</p>{% endif %}
 
+  {% if report_glass.scene_captures %}
+  <h3 style="margin-top:24px">가장 긴 유면 관측 공백의 원본 장면</h3>
+  <p class="muted">앞뒤 관측점 사이의 장면 확인용입니다. 중간 장면에는 측정되지 않은 위치 선을 표시하지 않습니다.</p>
+  <div class="landmark-grid">
+  {% for scene in report_glass.scene_captures %}
+    <article class="landmark">
+      <div class="capture-wrap">
+      {% if scene.capture_path %}<img class="capture" src="{{ scene.capture_path }}" alt="{{ scene.label }}">
+      {% else %}<div class="capture-missing">원본 영상 장면을 불러오지 못했습니다.</div>{% endif %}
+      </div>
+      <div class="landmark-body">
+        <div class="landmark-title"><h3>{{ scene.label }}</h3><span class="landmark-time">{{ '%.2f'|format(scene.timestamp_sec) }}초</span></div>
+        <p class="landmark-desc">{{ scene.description }}</p>
+      </div>
+    </article>
+  {% endfor %}
+  </div>
+  {% endif %}
   <div class="judgment"><h3>판정 안내</h3><p>{{ report_glass.judgment_summary }}</p></div>
 </section>
 {% endfor %}

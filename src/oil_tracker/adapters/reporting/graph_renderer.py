@@ -12,7 +12,10 @@ from oil_tracker.application.services.graph_axis import (
     combined_graph_axis_range,
     graph_axis_range_for_glass,
 )
-from oil_tracker.application.services.graph_series import observed_trajectory
+from oil_tracker.application.services.graph_series import (
+    REPORT_MAX_CONTEXT_GAP_SEC,
+    observed_trajectory,
+)
 from oil_tracker.application.services.initial_state_reconstruction import (
     project_state_aware_samples,
 )
@@ -270,7 +273,7 @@ def _plot_oil_trajectory(
     linewidth: float = 1.8,
     show_bridge_label: bool,
 ) -> None:
-    trajectory = observed_trajectory(timestamps, values)
+    trajectory = observed_trajectory(timestamps, values, max_gap_sec=REPORT_MAX_CONTEXT_GAP_SEC)
     anchors = trajectory.anchors
     if not anchors:
         return

@@ -5,6 +5,9 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 
+REPORT_MAX_CONTEXT_GAP_SEC = 2.0
+
+
 @dataclass(frozen=True)
 class ObservedTrajectorySegment:
     timestamps: tuple[float, ...]
@@ -28,11 +31,17 @@ class ObservedTrajectory:
 def observed_trajectory(
     timestamps: Sequence[float],
     values: Sequence[float | None],
+    *,
+    max_gap_sec: float | None = None,
 ) -> ObservedTrajectory:
     """Split stored Oil anchors into direct runs and graph-only gap bridges."""
 
     if len(timestamps) != len(values):
         raise ValueError("Graph timestamps and values must have the same length.")
+    if max_gap_sec is not None and (
+        isinstance(max_gap_sec, bool) or not math.isfinite(max_gap_sec) or max_gap_sec < 0
+    ):
+        raise ValueError("max_gap_sec must be finite and non-negative.")
 
     runs: list[ObservedTrajectorySegment] = []
     current_times: list[float] = []
@@ -47,6 +56,10 @@ def observed_trajectory(
                 current_times = []
                 current_values = []
             continue
+        if current_times and max_gap_sec is not None and point[0] - current_times[-1] > max_gap_sec:
+            runs.append(ObservedTrajectorySegment(tuple(current_times), tuple(current_values)))
+            current_times = []
+            current_values = []
         current_times.append(point[0])
         current_values.append(point[1])
     if current_times:
@@ -58,6 +71,7 @@ def observed_trajectory(
             (previous.values[-1], current.values[0]),
         )
         for previous, current in zip(runs, runs[1:])
+        if max_gap_sec is None or 0 < current.timestamps[0] - previous.timestamps[-1] <= max_gap_sec
     )
     return ObservedTrajectory(tuple(runs), bridges)
 

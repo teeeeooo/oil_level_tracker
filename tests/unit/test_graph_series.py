@@ -45,3 +45,27 @@ def test_observed_trajectory_separates_direct_runs_from_missing_run_bridges() ->
         (3.0, 13.0),
         (4.0, 14.0),
     )
+
+
+@pytest.mark.parametrize("cap", [0, 1, 2, 5, None])
+def test_display_gap_cap_preserves_all_anchors(cap):
+    trajectory = observed_trajectory(
+        (0.0, 0.5, 1.0, 10.0, 10.5), (1.0, None, 2.0, None, 3.0), max_gap_sec=cap,
+    )
+    assert trajectory.anchors == ((0.0, 1.0), (1.0, 2.0), (10.5, 3.0))
+    if cap is not None:
+        assert all(bridge.timestamps[-1] - bridge.timestamps[0] <= cap
+                   for bridge in trajectory.gap_bridges)
+
+
+def test_display_gap_cap_applies_to_elapsed_time_even_without_a_missing_row():
+    trajectory = observed_trajectory((0, 2, 10), (1, 2, 3), max_gap_sec=2)
+    assert [run.timestamps for run in trajectory.observed_runs] == [(0.0, 2.0), (10.0,)]
+    assert trajectory.gap_bridges == ()
+    assert trajectory.anchors == ((0.0, 1.0), (2.0, 2.0), (10.0, 3.0))
+
+
+@pytest.mark.parametrize("cap", [-1, True, float("inf"), float("nan")])
+def test_display_gap_cap_rejects_invalid_limits(cap):
+    with pytest.raises(ValueError, match="finite and non-negative"):
+        observed_trajectory((0,), (1,), max_gap_sec=cap)

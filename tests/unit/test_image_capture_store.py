@@ -10,6 +10,7 @@ from oil_tracker.application.services.report_presentation import (
     ReportGlassPresentation,
     ReportLandmark,
     ReportPresentation,
+    ReportSceneCapture,
 )
 from oil_tracker.domain.enums import EventType, FillState, ResultState
 from oil_tracker.domain.recipe import InspectionRecipe
@@ -91,3 +92,37 @@ def test_capture_store_writes_only_selected_glass_focused_landmarks(tmp_path):
     assert max(image.shape[:2]) >= 320
     assert landmark.capture_path.startswith("captures/")
     assert source_event.capture_path == landmark.capture_path
+
+
+def test_scene_only_capture_never_reuses_an_annotated_landmark_at_the_same_time(tmp_path, monkeypatch):
+    from oil_tracker.adapters.storage import image_capture_store as capture_module
+
+    video = tmp_path / "source.avi"
+    _video(video)
+    recipe = InspectionRecipe.empty(320, 240, "context")
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    recipe.glasses.append(config)
+    sample = TrackingSample("run", config.id, 0, 0.0, FillState.PARTIAL_VISIBLE,
+        smoothed_oil_air_level_px_from_zero=10, smoothed_foam_front_px_from_zero=20)
+    landmark = ReportLandmark(EventType.MAXIMUM_OIL_LEVEL, 0.0, "maximum", "fixture", sample, "maximum")
+    scene = ReportSceneCapture(0.0, "공백 중 원본 장면", "scene only", None)
+    glass = ReportGlassPresentation(config.id, config.name, ResultState.PASS, "합격",
+        "summary", "note", "judgment", (landmark,), (), 1, 0, (scene,))
+    result = AnalysisResult("run", ResultState.PASS,
+        [GlassAnalysisResult(config.id, config.name, ResultState.PASS, [sample], [])], "start", "end")
+    drawn_colors = []
+    original = capture_module._horizontal_line
+
+    def record_line(image, ellipse, y, color, width):
+        drawn_colors.append(color)
+        return original(image, ellipse, y, color, width)
+
+    monkeypatch.setattr(capture_module, "_horizontal_line", record_line)
+    ImageCaptureStore().create_event_captures(result, str(video), tmp_path / "captures",
+        recipe=recipe, presentation=ReportPresentation(ResultState.PASS, "합격", (glass,)))
+
+    assert landmark.capture_path and scene.capture_path
+    assert scene.capture_path != landmark.capture_path
+    assert len(list((tmp_path / "captures").glob("*.png"))) == 2
+    assert drawn_colors == [(0, 220, 255), (40, 220, 60), (255, 120, 40), (0, 220, 255)]
+    assert result.glass_results[0].events == []

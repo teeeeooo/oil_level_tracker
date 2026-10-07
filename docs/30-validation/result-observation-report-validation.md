@@ -29,8 +29,8 @@ This contract owns acceptance for the user-facing observation report defined by 
 
 ### Static and interactive graph
 
-- Consecutive observed Oil anchors render as solid segments.
-- Oil edges crossing missing samples render as dashed bridges while remaining visually connected.
+- In the static report, consecutive observed Oil anchors at most two source seconds apart render as solid segments; larger timestamp jumps do not connect.
+- Static Oil edges crossing missing samples render as dashed bridges only when their endpoints are at most two source seconds apart. Every anchor remains visible; no point is added. Result Review retains its existing unlimited display bridges and unchanged helper default pending a separate cross-surface decision.
 - Highest/lowest and selected physical landmarks are labeled in the static detail graph.
 - Unavailable/review indication remains visible without replacing the Oil line.
 - Static and interactive graphs show isolated finite Foam points without
@@ -61,8 +61,9 @@ This contract owns acceptance for the user-facing observation report defined by 
 
 ### Captures and HTML
 
-- Only selected report landmarks create captures.
+- Selected report landmarks and up to three scene-context requests for one longest internal Oil gap per Glass create captures. Equal longest gaps choose the earliest; no eligible gap creates no scene requests.
 - Captures are cropped around the configured Glass, include ellipse/zero and available Oil/Foam guides, and exclude detector-debug content.
+- Long-gap endpoint captures use exact stored samples. The midpoint is source-scene-only, with no Oil/Foam guides or synthetic sample/event. Annotated landmark images must not be reused for scene-only requests at the same time. Source decoding time remains visible on the image.
 - `report.html` embeds capture images with Korean labels, timestamps and plain-language descriptions.
 - The main report does not expose a raw confidence/event-debug table, confidence-percentage judgment string or raw metadata dictionary.
 - Full CSV and optional debug assets remain present and readable.
@@ -86,9 +87,9 @@ Acceptance requires:
 
 1. tracking row identities, accepted numeric Oil counts and fingerprints match the current accepted detector evidence, with every intentional detector delta explicitly reconciled;
 2. every Glass with finite Oil has visible highest/lowest graph markers and corresponding inline source captures;
-3. capture volume is bounded by the landmark contract rather than domain-event count;
+3. capture volume is bounded by twelve landmarks plus three longest-gap scene requests per Glass rather than domain-event count;
 4. repeated Foam flicker is represented as bounded episodes, not dozens of equal-weight report cards;
-5. graph inspection confirms direct observed runs, dashed missing-run bridges, readable state indication and no line outside observed endpoints;
+5. graph inspection confirms the static two-second bound for solid/dashed spans, readable state indication, preserved anchors and no line outside observed endpoints;
 6. source capture inspection confirms the configured Glass is the visual focus and guide lines align with the saved sample;
 7. the report can be understood without opening debug trace or CSV, while those files remain available for engineering verification.
 

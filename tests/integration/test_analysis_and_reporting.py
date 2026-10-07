@@ -80,6 +80,8 @@ def test_recipe_video_to_analysis_and_bundle(tmp_path):
     assert report_bytes.startswith(b"\xef\xbb\xbf")
     html = report_bytes.decode("utf-8-sig")
     assert "유면 관찰 보고서" in html
+    assert "거품 관측 시작·중단" in html
+    assert "거품 발생·소멸" not in html
     assert "분석 프로필" in html
     assert "영상에서 확인할 주요 순간" in html
     assert "관측 최고 유면" in html

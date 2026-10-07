@@ -59,10 +59,17 @@ The Oil graph uses the existing preferred-value rule: smoothed value first and s
 
 Finite stored Oil anchors remain the only graph vertices. Presentation distinguishes two edge types:
 
-- **direct observed span:** consecutive finite samples, rendered as a solid Oil segment;
-- **observation-gap bridge:** the last finite anchor before one or more missing samples joined directly to the next finite anchor, rendered as a dashed, lower-emphasis segment.
+- **direct observed span:** consecutive finite samples no more than two source seconds apart, rendered as a solid Oil segment;
+- **observation-gap bridge:** the last finite anchor before one or more missing samples joined directly to the next finite anchor only when their source timestamps are no more than two seconds apart, rendered as a dashed, lower-emphasis segment.
 
 A bridge contains only its two existing endpoint anchors. It creates no intermediate value, sample, cursor/overlay position, CSV cell, event evidence or detector-history input. There is no line before the first finite anchor or after the last finite anchor. An all-missing Oil series remains empty.
+
+The two-second bound is a static-report display policy, not a physical timescale,
+detector acceptance threshold or permissible loss duration. It also breaks solid
+lines across larger timestamp jumps without explicit missing rows. Every finite
+anchor remains visible. Result Review currently retains its existing unlimited
+bridge policy; the common series helper's default stays unchanged until a separate
+cross-surface decision. Report notes disclose the static cap.
 
 Unknown/no-interface information remains visible using restrained state or unavailable highlights. It must not visually overwhelm the trajectory. Foam retains gap-preserving rendering because Foam absence is meaningful. Every finite stored Foam observation has a visible point marker even when it is isolated or the composed sample is invalid; lines may connect only consecutive finite Foam observations.
 
@@ -73,6 +80,8 @@ The highest and lowest Oil landmarks are selected from the finite preferred Oil 
 Extrema are observations, not claims about an unobserved interval. Wording must use forms such as “관측된 최고 유면” and “관측된 최저 유면.” If no finite Oil exists, no extrema or movement direction is claimed.
 
 The overall movement sentence explicitly compares the first and last observed anchors with a bounded scale-aware tolerance. Similar endpoints do not establish steadiness throughout the interval; a larger intermediate range is disclosed. A single observation cannot establish movement. The sentence must say that it is based on observable anchors whenever missing intervals exist.
+Adjacent-point claims of observed rise/fall use only pairs within the same
+two-second display bound; endpoint comparison remains explicitly an endpoint fact.
 
 ## Foam presentation episodes
 
@@ -121,6 +130,23 @@ For each selected landmark, the capture adapter:
 7. stores the image inside the bundle and exposes it inline in the report.
 
 Candidate lines, scores, rejection reasons, confidence decimals and debug-trace details are forbidden in these user captures. Dedicated debug assets remain separate.
+
+### Long-gap scene context
+
+In addition to at most twelve landmarks, the report may request at most three
+scene captures for the longest internal Oil-anchor gap exceeding two seconds per
+Glass (earliest gap wins equal-duration ties). The endpoints use their exact
+stored samples and independent Oil/Foam observation descriptions. The midpoint
+requests a source frame with no sample binding and therefore no Oil/Foam guides;
+ellipse/zero geometry and the actual decoded-time badge remain visible. This
+adds no sample, event, numeric point or physical-state inference.
+
+The existing capture store renders these requests and may reuse an endpoint
+landmark image, but a scene-only request cannot reuse an annotated image at the
+same timestamp. Scene captures have no domain event binding and appear in their
+own report section. Missing frames remain visibly unavailable; cancellation,
+bounded work and atomic bundle completion use the existing owners. Full missing
+series and leading/trailing gaps do not invent endpoints for this feature.
 
 ## HTML information hierarchy
 
