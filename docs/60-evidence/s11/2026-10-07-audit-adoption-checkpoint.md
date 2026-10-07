@@ -115,8 +115,48 @@ production scorer, or field qualification was performed. Previous passive
 review/binding and appearance experiments stay closed at their recorded scopes.
 
 For test-only rollback, revert `fa2d6d5`; do not reset the checkout, erase audit
-artifacts, regenerate goldens or modify original recipes/truth. Existing detached
-audit worktrees are retained; their cleanup is not required for this checkpoint.
+artifacts, regenerate goldens or modify original recipes/truth. The adopted second-audit worktree was subsequently removed after its three
+changed test files were verified identical to main. See the preservation record
+below for the separately archived continued-experiment worktrees.
+
+## Temporary-source preservation and cleanup — 2026-10-07
+
+The user authorized preserving needed temporary material before cleanup. Local
+preservation destinations are relative to the repository root:
+
+| Original temporary source | Durable local destination | Verified scope |
+|---|---|---|
+| `/tmp/s11-audit-20261007-vaUpfB` | `sample/output/s11-first-audit-20261007-001` | 169 files, including full first-audit results omitted from its transfer ZIP |
+| `/tmp/s11-second-audit-20261007-jtt0irop` | `sample/output/s11-second-audit-20261007-001` | Existing 203 files unchanged; five packaging/transfer files additionally preserved, 208 total |
+| `/tmp/s11-continued-20261007-q8i5j175` | `sample/output/s11-continued-20261007-001` | 2,552 files/links, including three unadopted experiment snapshots |
+
+All 2,929 entries were compared with SHA-256 or exact symlink targets before
+removal and verified again afterward. Four loose support scripts/path records
+were separately copied and hash-checked. Regenerable `__pycache__` entries and
+obsolete worktree `.git` pointers are excluded from the experiment snapshots.
+Original evidence contents and embedded execution paths are unchanged; translate
+source prefixes using the preservation receipt instead of rewriting originals.
+
+The local [preservation receipt](../../../sample/output/s11-temp-cleanup-20261007-001/preservation.json)
+has SHA-256 `8a349564648c1aeb6b0a34d7e788568d1ed7a448bc7b8c802d90f38c4218ca5c`.
+Its [recovery guide](../../../sample/output/s11-temp-cleanup-20261007-001/README.md)
+and `recovery/<worktree-name>/` records retain each base HEAD, binary tracked
+patch, status and untracked file list. Each patch was applied to its base in an
+isolated Git index; every modified blob and untracked file matched its snapshot.
+The snapshots are not live worktrees, and none of these experiments is adopted
+into main. These preserved files are ignored local evidence, not included by
+Git push; a fresh clone must obtain them separately.
+
+The three continued worktrees were removed through Git after verification, then
+the three temporary audit/experiment roots were deleted. Stale `/tmp` pytest
+outputs, preserved loose support files and the five hash-matched original chat
+attachments were also removed. Remaining tool references were read-only file
+descriptors, with no writable handles or working directories under the removed
+roots; existing POSIX descriptor reads remain valid. No process was stopped.
+
+The separate sibling audit worktree and predictor-managed validation worktree
+remain in place with their unadopted changes. Detector code, input videos,
+recipes, truth, accepted results and field disposition are unchanged.
 
 ## Detector Governance
 
