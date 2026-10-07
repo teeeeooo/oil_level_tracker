@@ -1,0 +1,120 @@
+{
+  "tested_head": "fa2d6d536140fdb08c8b8c68ef369ce89dd49e35",
+  "runs": [
+    {
+      "name": "nonqt",
+      "command": [
+        "/Users/sunjaekim/Developer/oil_level_tracker/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-m",
+        "not qt_app",
+        "-vv",
+        "-o",
+        "faulthandler_timeout=30",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-a0b-adoption-20261007-001/nonqt.xml"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 170.66,
+      "timeout_seconds": 2400
+    },
+    {
+      "name": "qt",
+      "command": [
+        "/Users/sunjaekim/Developer/oil_level_tracker/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-m",
+        "qt_app",
+        "-vv",
+        "-o",
+        "faulthandler_timeout=30",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-a0b-adoption-20261007-001/qt.xml"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 9.82,
+      "timeout_seconds": 240
+    }
+  ],
+  "schema": "s11-a0b-adoption-verification-v1",
+  "base_head": "9f41d2f8a517da21f570f57ed1b4e2009a9d48db",
+  "focused": {
+    "passed": 58,
+    "seconds": 3.5
+  },
+  "canonical": {
+    "nonqt": 2072,
+    "qt": 254,
+    "unique_union": 2326,
+    "overlap": 0,
+    "removed_prior_nodes": 0,
+    "added_guards": [
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_preserves_every_other_leaf_and_input"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[candidate_count]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[frame_count]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[frame_order]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[missing_reason]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location0-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location0-4]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location1-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location1-4]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location2-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location2-4]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location3-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location3-4]"
+      ]
+    ]
+  },
+  "source_tree": "61742c83d62dc34a29ba183a746a0f4e16a1123c",
+  "tests_tree": "b2323dd868bbf6b4c3576e486b4cfaf39d814bf1",
+  "artifact_sha256": {
+    "nonqt.log": "3c7cf15702982c52262e9df71c976a4abaebb9e9847cf3c1bd17552ccad73757",
+    "nonqt.xml": "5208f326e3b1420b5e60fed4d5749a68c8bec05b32aeb7f6dbe87b64182eac4c",
+    "qt.log": "c9055ef68988c7671f70b0cc86471095de81a8f8a8384559190184d336874df9",
+    "qt.xml": "e5b31d0bfb6cff71a90e728a5499554a98a5fba1400eff2db317b02df555bd37",
+    "run-summary.json": "e0fd68416b0d67b3f010f4644fe2c8feeda928a5f8e835c8da47c40f4f95d90e"
+  },
+  "limits": "Local adoption verification only; Qt intermittent stall remains OPEN; no field promotion."
+}

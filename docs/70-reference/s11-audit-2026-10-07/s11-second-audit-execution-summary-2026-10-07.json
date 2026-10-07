@@ -1,0 +1,401 @@
+{
+  "schema": "s11-second-audit-execution-summary-v1",
+  "head": "9f41d2f8a517da21f570f57ed1b4e2009a9d48db",
+  "closed_at": "2026-10-07T11:43:43.582440+09:00",
+  "repository": "/Users/sunjaekim/Developer/oil_level_tracker",
+  "main_status": "",
+  "production_changed": false,
+  "isolated_test_patch": {
+    "files": 3,
+    "insertions": 102,
+    "deletions": 9,
+    "applied_to_main": false
+  },
+  "canonical": {
+    "nonqt": {
+      "tests": 2072,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "qt_completed_retry": {
+      "tests": 254,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "unique_union": 2326,
+    "overlap": 0,
+    "removed_prior_nodes": 0,
+    "new_nodes": [
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_preserves_every_other_leaf_and_input"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[candidate_count]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[frame_count]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[frame_order]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[missing_reason]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location0-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location0-4]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location1-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location1-4]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location2-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location2-4]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location3-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location3-4]"
+      ]
+    ],
+    "nonqt_seconds": 1240.69,
+    "qt_retry_seconds": 72.33,
+    "initial_qt_run": "STALLED, sampled and terminated; not counted as PASS",
+    "qt_stability": "OPEN: main Qt mutex wait and worker GIL wait observed; full retry passed without source changes",
+    "focused_preflight_repeats": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "timed_out": false
+        },
+        {
+          "attempt": 2,
+          "exit_code": 0,
+          "timed_out": false
+        },
+        {
+          "attempt": 3,
+          "exit_code": 0,
+          "timed_out": false
+        }
+      ],
+      "limits": "Three fresh-process focused reruns; cannot prove full-suite or application deadlock is repaired. No source changed."
+    }
+  },
+  "protected_inputs": {
+    "main_tracked_hashes_preserved": 756,
+    "corpus_pins": {
+      "base_sample_1": {
+        "mp4": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+        "oilrecipe": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+        "oiltruth": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a"
+      },
+      "sample2": {
+        "mp4": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+        "oilrecipe": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+        "oiltruth": "f45479f7bb5f4216cb9c6920ac994d2d690942f2ed432d5d8a8647af030c731f"
+      },
+      "sample3": {
+        "mp4": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+        "oilrecipe": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+        "oiltruth": "8cb2b917eede7708894fa90f59f96f1d9eac272813af6d457dcbc292496dd8ab"
+      },
+      "sample4": {
+        "mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+        "oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+        "oiltruth": "f02575ac2379b4d135567f1835aa772803af13a20413b8aa58175d890f5241bd"
+      }
+    },
+    "prior_artifacts_verified": 10
+  },
+  "vision_inventory": {
+    "modules": 44,
+    "lines": 24399,
+    "functions": 667
+  },
+  "measurements": {
+    "synthetic_inputs": 12,
+    "prototype_tests": 18,
+    "frame_recipe_conditions": 16,
+    "unique_source_frames": 15,
+    "oil_candidates": 377,
+    "nonmutation_pass": 16
+  },
+  "score_lineage": {
+    "source_y": 854,
+    "candidate_input_index": 5,
+    "exact_hypothesis_candidate_join": true,
+    "candidate_boundary": 0.4315425760090007,
+    "candidate_artifact": 0.5459421970331827,
+    "advantage": -0.114399621024182,
+    "required_advantage": 0.08,
+    "boundary_terms": {
+      "broad": 0.19413915119201405,
+      "narrow": 0.21884615570306779,
+      "polarity": 0.010628101693368426,
+      "visibility": 0.07969333299001058,
+      "pulse_subtraction": -0.07176416556946018,
+      "static_subtraction": -0.0
+    },
+    "artifact_terms": {
+      "structural_after_broad_relief": 0.1943704605243636,
+      "static_contribution": 0.0,
+      "plateau_collision": 0.3515717365088191
+    },
+    "narrow_center_source_y": 853,
+    "narrow_partner_source_y": 851,
+    "signed_center": -0.9145097732543945,
+    "signed_partner": -0.6706467866897583,
+    "sign_relation": "same",
+    "legacy_paired_strength": 0.7475433913485435,
+    "detection_equal": true
+  },
+  "collision_controls": {
+    "pairs": 8,
+    "scenes": 16,
+    "frames_per_scene": 6,
+    "all_candidate_universes_equal": true,
+    "new_numeric_total": 0
+  },
+  "challenger_decision": "CLOSED_WITHOUT_PROMOTION: target failure persists; sample3 gains 7 and withdraws 9 numeric rows (net -2); sparse truths unchanged; efficacy unproven",
+  "disposition": {
+    "S11": "ACTIVE",
+    "W4": "OPEN",
+    "O2": "NOT_PROMOTED",
+    "field": "FIELD FAIL retained"
+  },
+  "durable_root": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-second-audit-20261007-001",
+  "kind": "Curated delivery summary, not a byte-for-byte copy of the full local execution-summary.json.",
+  "public_comparison": {
+    "base_sample_1": {
+      "rows": 30,
+      "baseline_oil": 28,
+      "challenger_oil": 28,
+      "baseline_foam": 0,
+      "challenger_foam": 0,
+      "truth_equal": true,
+      "baseline_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "challenger_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "missing_provenance_baseline": 0,
+      "missing_provenance_challenger": 0,
+      "new_numeric_rows": 0,
+      "lost_numeric_rows": 0
+    },
+    "sample2": {
+      "rows": 5,
+      "baseline_oil": 4,
+      "challenger_oil": 4,
+      "baseline_foam": 0,
+      "challenger_foam": 0,
+      "truth_equal": true,
+      "baseline_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "challenger_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "missing_provenance_baseline": 0,
+      "missing_provenance_challenger": 0,
+      "new_numeric_rows": 0,
+      "lost_numeric_rows": 0
+    },
+    "sample3": {
+      "rows": 151,
+      "baseline_oil": 29,
+      "challenger_oil": 27,
+      "baseline_foam": 5,
+      "challenger_foam": 5,
+      "truth_equal": true,
+      "baseline_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "challenger_fingerprint": "094badca884828aa49176cfc7feadf0b7248c7a1aefde6b62ca83017b37c77d3",
+      "missing_provenance_baseline": 0,
+      "missing_provenance_challenger": 0,
+      "new_numeric_rows": 7,
+      "lost_numeric_rows": 9
+    },
+    "sample4": {
+      "rows": 113,
+      "baseline_oil": 101,
+      "challenger_oil": 101,
+      "baseline_foam": 26,
+      "challenger_foam": 26,
+      "truth_equal": true,
+      "baseline_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "challenger_fingerprint": "fec8479d30a99fde718c799cd2a4739e3846cbca096c9991d15d0216d03986cb",
+      "missing_provenance_baseline": 0,
+      "missing_provenance_challenger": 0,
+      "new_numeric_rows": 0,
+      "lost_numeric_rows": 0
+    }
+  },
+  "human_roi_sequence": {
+    "baseline": {
+      "oil_count": 30,
+      "foam_count": 104,
+      "checkpoints": [
+        {
+          "frame": 400,
+          "oil": 821.0,
+          "foam": null,
+          "state": "PARTIAL_VISIBLE",
+          "sources": [
+            "phase_transition_scan"
+          ]
+        },
+        {
+          "frame": 401,
+          "oil": 821.0,
+          "foam": 839.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": [
+            "phase_transition_scan"
+          ]
+        },
+        {
+          "frame": 402,
+          "oil": 821.0,
+          "foam": 840.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": [
+            "phase_transition_scan"
+          ]
+        },
+        {
+          "frame": 403,
+          "oil": 821.0,
+          "foam": 841.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": [
+            "phase_transition_scan"
+          ]
+        },
+        {
+          "frame": 404,
+          "oil": 821.0,
+          "foam": 841.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": [
+            "phase_transition_scan"
+          ]
+        },
+        {
+          "frame": 420,
+          "oil": 821.0,
+          "foam": 841.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": [
+            "phase_transition_scan"
+          ]
+        },
+        {
+          "frame": 450,
+          "oil": null,
+          "foam": 839.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": []
+        },
+        {
+          "frame": 480,
+          "oil": null,
+          "foam": 833.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": []
+        }
+      ]
+    },
+    "challenger": {
+      "oil_count": 29,
+      "foam_count": 104,
+      "checkpoints": [
+        {
+          "frame": 400,
+          "oil": 851.0,
+          "foam": null,
+          "state": "PARTIAL_VISIBLE",
+          "sources": [
+            "phase_transition_scan"
+          ]
+        },
+        {
+          "frame": 401,
+          "oil": 849.0,
+          "foam": 839.0,
+          "state": "FOAMING_VISIBLE",
+          "sources": [
+            "calibrated_high_recall"
+          ]
+        },
+        {
+          "frame": 402,
+          "oil": 850.0,
+          "foam": 840.0,
+          "state": "FOAMING_VISIBLE",
+          "sources": [
+            "calibrated_high_recall"
+          ]
+        },
+        {
+          "frame": 403,
+          "oil": 852.0,
+          "foam": 841.0,
+          "state": "FOAMING_VISIBLE",
+          "sources": [
+            "phase_transition_scan"
+          ]
+        },
+        {
+          "frame": 404,
+          "oil": null,
+          "foam": 841.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": []
+        },
+        {
+          "frame": 420,
+          "oil": 821.0,
+          "foam": 841.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": [
+            "phase_transition_scan"
+          ]
+        },
+        {
+          "frame": 450,
+          "oil": null,
+          "foam": 839.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": []
+        },
+        {
+          "frame": 480,
+          "oil": null,
+          "foam": 833.0,
+          "state": "UNKNOWN_REVIEW",
+          "sources": []
+        }
+      ]
+    }
+  },
+  "full_evidence_receipt_sha256": "cdd32762ea2771d72edd9f99de4bc87b840c6ff1291a93766de06dfc94c89104",
+  "test_patch_sha256": "615a94a61cef04242f7bda785e3d702c0480d2053179cc9ce67b1f7352950db5"
+}

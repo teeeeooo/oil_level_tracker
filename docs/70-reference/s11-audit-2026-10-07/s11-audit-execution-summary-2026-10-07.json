@@ -1,0 +1,462 @@
+{
+  "schema": "s11-audit-chat-execution-summary-v1",
+  "kind": "Curated handoff summary assembled from executed local audit results; not a byte-for-byte copy of local audit_summary.json.",
+  "audit_date_kst": "2026-10-07",
+  "repository": {
+    "name": "teeeeooo/oil_level_tracker",
+    "path": "/Users/sunjaekim/Developer/oil_level_tracker",
+    "head": "9f41d2f8a517da21f570f57ed1b4e2009a9d48db",
+    "branch": "main",
+    "tracked_files": 756,
+    "all_tracked_hashes_preserved": true,
+    "final_status": "clean",
+    "verified_at": "2026-10-07T00:44:41.878369+09:00"
+  },
+  "runtime": {
+    "python": "3.14.4",
+    "opencv": "4.14.0",
+    "numpy": "2.5.1",
+    "pytest": "9.1.1",
+    "pyside6": "6.11.1",
+    "platform": "macOS 26.6.2 arm64",
+    "video_backend": "FFMPEG",
+    "replay_runtime_fingerprint": "7b14134e3f811d06e45ea2cd44686b5ffedd22dc7e2848fd2e04bd838f8aa20d"
+  },
+  "canonical_tests": {
+    "not_qt_app": {
+      "passed": 2056,
+      "failed": 3,
+      "selected": 2059,
+      "pytest_seconds": 1259.95
+    },
+    "qt_app": {
+      "passed": 254,
+      "failed": 0,
+      "selected": 254,
+      "pytest_seconds": 57.44
+    },
+    "unique_union": 2313,
+    "overlap": 0,
+    "passed_total": 2310,
+    "failed_total": 3,
+    "standalone_failure_files_rerun": {
+      "passed": 4,
+      "failed": 3,
+      "pytest_seconds": 10.35
+    },
+    "failures_fixed": false
+  },
+  "canonical_failure_diagnosis": [
+    {
+      "test": "test_r0_current_frame_candidate_and_debug_projection_fingerprint",
+      "finding": "Removing exactly two trace-only additions, foam_component_diagnostics and foam_component_labels, from the comparison payload reproduces the existing expected fingerprint. No detector code or golden changed."
+    },
+    {
+      "test": "test_r0_completed_window_stage_and_provenance_fingerprint",
+      "finding": "Prior evaluate_phase_identity function in child process passes existing full test. Current-vs-prior protected payload differs only in20 failed-gates reason leaves at5 frames; boundary_advantage added."
+    },
+    {
+      "test": "test_repository_test_text_io_declares_encoding",
+      "finding": "5 text I/O calls in2 tests omit encoding. Existing suite still fails; no policy waived."
+    }
+  ],
+  "public_replay": {
+    "input_pins_verified": 12,
+    "fps": 2,
+    "rows": 299,
+    "numeric_oil_rows": 162,
+    "numeric_foam_rows": 31,
+    "numeric_missing_same_frame_provenance": 0,
+    "legacy_truth_units": 13,
+    "numeric_truth_units": 11,
+    "historical_fingerprint_acceptance": "NOT_RUN; current-head characterization only",
+    "samples": [
+      {
+        "sample": "base_sample_1",
+        "window_seconds": [
+          0,
+          14.4
+        ],
+        "rows": 30,
+        "numeric_oil": 28,
+        "numeric_foam": 0,
+        "numeric_truth": 3,
+        "truth_total": 3,
+        "conditional_legacy_truth_mae_px": 12.333333333333334
+      },
+      {
+        "sample": "sample2",
+        "window_seconds": [
+          0,
+          2
+        ],
+        "rows": 5,
+        "numeric_oil": 4,
+        "numeric_foam": 0,
+        "numeric_truth": 2,
+        "truth_total": 3,
+        "conditional_legacy_truth_mae_px": 6.5
+      },
+      {
+        "sample": "sample3",
+        "window_seconds": [
+          30.03,
+          105
+        ],
+        "rows": 151,
+        "numeric_oil": 29,
+        "numeric_foam": 5,
+        "numeric_truth": 2,
+        "truth_total": 2,
+        "conditional_legacy_truth_mae_px": 12.75
+      },
+      {
+        "sample": "sample4",
+        "window_seconds": [
+          0,
+          56
+        ],
+        "rows": 113,
+        "numeric_oil": 101,
+        "numeric_foam": 26,
+        "numeric_truth": 4,
+        "truth_total": 5,
+        "conditional_legacy_truth_mae_px": 7.625
+      }
+    ],
+    "limits": "Exposed regression windows; nearest-time truth evaluator and censored Base overlay anchors. Not independent field accuracy."
+  },
+  "new_probes": {
+    "appearance_controls": 12,
+    "lobe_controls": 4,
+    "fresh_annotated_frames": 13,
+    "debug_false_true_equal_frames": 13,
+    "constructed_authority_context": {
+      "material_texture_conflict": 0.0,
+      "representation_support": 0.24,
+      "not_observed_full_pipeline_context": true
+    },
+    "linear_ramp_result": "3 phase-scan candidates in each polarity; all3 are anchors in constructed context. Not a full-pipeline false-positive-rate estimate.",
+    "lobe_result": "Same-sign shoulder and opposite-sign return produce equal legacy summaries at matched energy/support; paired strength0.8. Shadow sign measurements distinguish them without changing legacy arrays/returns."
+  },
+  "human_roi_sequence": {
+    "frame420_human_correspondence_y": 854,
+    "baseline_30fps": {
+      "rows": 121,
+      "oil_numeric": 30,
+      "foam_numeric": 104,
+      "frame420_oil_y": 821
+    },
+    "anchor_demotion": {
+      "rows": 121,
+      "oil_numeric": 62,
+      "foam_numeric": 99,
+      "frame420_oil_y": 852,
+      "demoted_authority_calls": 180,
+      "selected_source": "calibrated_high_recall"
+    },
+    "sampling": [
+      {
+        "condition": "clip30fps",
+        "frames": 121,
+        "raw_oil": 77,
+        "raw_foam": 114,
+        "final_oil": 30,
+        "final_foam": 104,
+        "frame420_oil_y": 821
+      },
+      {
+        "condition": "clip2fps",
+        "frames": 9,
+        "raw_oil": 6,
+        "raw_foam": 8,
+        "final_oil": 7,
+        "final_foam": 8,
+        "frame420_oil_y": 852
+      },
+      {
+        "condition": "prefix2fps",
+        "frames": 35,
+        "raw_oil": 22,
+        "raw_foam": 21,
+        "final_oil": 34,
+        "final_foam": 22,
+        "frame420_oil_y": 852
+      }
+    ],
+    "limits": "Different workloads/state history; no new identity labels or localization tolerance. Y852 does not inherit Y854 correspondence."
+  },
+  "public_anchor_demotion": {
+    "decision": "REJECT_FOR_PROMOTION",
+    "baseline_total_oil": 162,
+    "ablation_total_oil": 162,
+    "baseline_numeric_truth": 11,
+    "ablation_numeric_truth": 10,
+    "baseline_oil_by_sample": [
+      28,
+      4,
+      29,
+      101
+    ],
+    "ablation_oil_by_sample": [
+      29,
+      3,
+      29,
+      101
+    ],
+    "sample2_frame60": {
+      "baseline_y": 603,
+      "ablation_y": null,
+      "legacy_truth_y": 592
+    },
+    "sample2_conditional_mae_px": {
+      "baseline": 6.5,
+      "ablation": 2.0
+    },
+    "explanation": "Aggregate count and conditional error conceal a formerly numeric case becoming unavailable. Existing baseline value was11px from truth; no claim that it was a correct interface."
+  },
+  "disposition": {
+    "S11": "ACTIVE",
+    "W4": "OPEN",
+    "O2": "NOT_PROMOTED",
+    "field_status": "prior FIELD FAIL retained",
+    "production_changed": false,
+    "private_windows_video_replayed": false,
+    "independent_holdout_evaluated": false
+  },
+  "local_artifacts_root": "/tmp/s11-audit-20261007-vaUpfB",
+  "local_artifact_sha256": {
+    "final_receipt.json": "01c1dd064af477483d0ff139986f1d01a25516d8a8daec08eb48959897af76a7",
+    "audit_summary.json": "e31cdb59e8ef73161915d09bb68b58057ffb1c06f7609f42a148a0f0a9f3f952",
+    "semantic_probes.json": "19d87a64e5e379c5970ad73b870b77d6ddbe528c5183669430d1e0b537c78dcc",
+    "sequence_probes.json": "d09c183577c7ad172e2a2089d4572b872d34ca470334627e9d2ad9f81934f73a",
+    "public_summary.json": "de9a450102bee1f87f7127d272ea2eb44f35f12e93cf89478ef9946046cf6bde",
+    "public_ablation_summary.json": "6fba4148c2c8e64261de41eac6b66d79584564584347019966a994068d40a73e",
+    "canonical_failure_diagnosis.json": "1d1484c6e5013235ef103384a3e525e8a142bd416fce435bd35f0d5ad3401a2b",
+    "nonqt.xml": "483dc94411aa53239a1170e80f4ccd16a6292dabc0a7acfd86bb533b41c582ce",
+    "qt.xml": "0c306a9048e8d046f8e36715f9e312c2e4ad1a1f1411323bf7b0b8921e6db4ba",
+    "s11-audit-evidence.zip": "67d3dc64cfda459be1762e34ec15f00fd88111d66e84908684b537eba456bec6"
+  },
+  "vision_inventory": [
+    {
+      "file": "__init__.py",
+      "lines": 0,
+      "functions": 0
+    },
+    {
+      "file": "artifact_calibration.py",
+      "lines": 222,
+      "functions": 7
+    },
+    {
+      "file": "artifact_proposal.py",
+      "lines": 109,
+      "functions": 3
+    },
+    {
+      "file": "debug_renderer.py",
+      "lines": 42,
+      "functions": 1
+    },
+    {
+      "file": "fill_state_classifier.py",
+      "lines": 133,
+      "functions": 3
+    },
+    {
+      "file": "foam_episode_resolver.py",
+      "lines": 1105,
+      "functions": 24
+    },
+    {
+      "file": "foam_front_detector.py",
+      "lines": 1078,
+      "functions": 26
+    },
+    {
+      "file": "foam_material_identity.py",
+      "lines": 202,
+      "functions": 8
+    },
+    {
+      "file": "foam_temporal_gate.py",
+      "lines": 262,
+      "functions": 7
+    },
+    {
+      "file": "geometry_masks.py",
+      "lines": 55,
+      "functions": 1
+    },
+    {
+      "file": "observation_sequence_resolver.py",
+      "lines": 152,
+      "functions": 2
+    },
+    {
+      "file": "oil_candidate_authority.py",
+      "lines": 300,
+      "functions": 1
+    },
+    {
+      "file": "oil_candidate_evidence.py",
+      "lines": 277,
+      "functions": 7
+    },
+    {
+      "file": "oil_decision_witness.py",
+      "lines": 178,
+      "functions": 5
+    },
+    {
+      "file": "oil_hypothesis_projection.py",
+      "lines": 258,
+      "functions": 8
+    },
+    {
+      "file": "oil_interface_diagnostics.py",
+      "lines": 296,
+      "functions": 6
+    },
+    {
+      "file": "oil_interface_selector.py",
+      "lines": 596,
+      "functions": 26
+    },
+    {
+      "file": "oil_interface_tracklets.py",
+      "lines": 1310,
+      "functions": 33
+    },
+    {
+      "file": "oil_interface_witness.py",
+      "lines": 305,
+      "functions": 7
+    },
+    {
+      "file": "oil_material_path.py",
+      "lines": 651,
+      "functions": 12
+    },
+    {
+      "file": "oil_observation_resolver.py",
+      "lines": 2641,
+      "functions": 55
+    },
+    {
+      "file": "oil_phase_identity.py",
+      "lines": 161,
+      "functions": 2
+    },
+    {
+      "file": "oil_phase_lifecycle.py",
+      "lines": 3310,
+      "functions": 73
+    },
+    {
+      "file": "oil_phase_topology.py",
+      "lines": 63,
+      "functions": 1
+    },
+    {
+      "file": "oil_pipeline_diagnostics.py",
+      "lines": 241,
+      "functions": 9
+    },
+    {
+      "file": "oil_pipeline_validation.py",
+      "lines": 1143,
+      "functions": 29
+    },
+    {
+      "file": "oil_sequence_types.py",
+      "lines": 91,
+      "functions": 1
+    },
+    {
+      "file": "oil_shadow_observations.py",
+      "lines": 2234,
+      "functions": 55
+    },
+    {
+      "file": "oil_shadow_pipeline.py",
+      "lines": 1237,
+      "functions": 61
+    },
+    {
+      "file": "oil_shadow_temporal.py",
+      "lines": 165,
+      "functions": 6
+    },
+    {
+      "file": "oil_shadow_types.py",
+      "lines": 1123,
+      "functions": 83
+    },
+    {
+      "file": "oil_spatial_fallback.py",
+      "lines": 813,
+      "functions": 13
+    },
+    {
+      "file": "oil_supplemental_path.py",
+      "lines": 602,
+      "functions": 9
+    },
+    {
+      "file": "opencv_phase_detector.py",
+      "lines": 272,
+      "functions": 13
+    },
+    {
+      "file": "opencv_video_reader.py",
+      "lines": 67,
+      "functions": 7
+    },
+    {
+      "file": "phase_candidate_assembler.py",
+      "lines": 352,
+      "functions": 5
+    },
+    {
+      "file": "phase_frame_detection.py",
+      "lines": 944,
+      "functions": 10
+    },
+    {
+      "file": "preprocessing.py",
+      "lines": 182,
+      "functions": 4
+    },
+    {
+      "file": "review_debug_overlay_renderer.py",
+      "lines": 166,
+      "functions": 5
+    },
+    {
+      "file": "review_overlay_renderer.py",
+      "lines": 105,
+      "functions": 4
+    },
+    {
+      "file": "row_features.py",
+      "lines": 140,
+      "functions": 5
+    },
+    {
+      "file": "source_video_resolver.py",
+      "lines": 104,
+      "functions": 4
+    },
+    {
+      "file": "temporal_raster_evidence.py",
+      "lines": 542,
+      "functions": 17
+    },
+    {
+      "file": "temporal_tracker.py",
+      "lines": 170,
+      "functions": 9
+    }
+  ]
+}

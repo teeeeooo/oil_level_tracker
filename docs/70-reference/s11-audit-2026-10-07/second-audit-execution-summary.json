@@ -1,0 +1,2536 @@
+{
+  "schema": "s11-second-audit-execution-summary-v1",
+  "head": "9f41d2f8a517da21f570f57ed1b4e2009a9d48db",
+  "closed_at": "2026-10-07T11:43:43.582440+09:00",
+  "repository": "/Users/sunjaekim/Developer/oil_level_tracker",
+  "main_status": "",
+  "production_changed": false,
+  "isolated_test_patch": {
+    "files": 3,
+    "insertions": 102,
+    "deletions": 9,
+    "applied_to_main": false
+  },
+  "canonical": {
+    "nonqt": {
+      "tests": 2072,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "qt_completed_retry": {
+      "tests": 254,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "unique_union": 2326,
+    "overlap": 0,
+    "removed_prior_nodes": 0,
+    "new_nodes": [
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_preserves_every_other_leaf_and_input"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[candidate_count]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[frame_count]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[frame_order]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_different_fixture_structure[missing_reason]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location0-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location0-4]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location1-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location1-4]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location2-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location2-4]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location3-0]"
+      ],
+      [
+        "tests.test_r16_refactor_characterization",
+        "test_phase_reason_view_rejects_unexpected_current_reason[location3-4]"
+      ]
+    ],
+    "nonqt_seconds": 1240.69,
+    "qt_retry_seconds": 72.33,
+    "initial_qt_run": "STALLED, sampled and terminated; not counted as PASS",
+    "qt_stability": "OPEN: main Qt mutex wait and worker GIL wait observed; full retry passed without source changes",
+    "focused_preflight_repeats": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "timed_out": false
+        },
+        {
+          "attempt": 2,
+          "exit_code": 0,
+          "timed_out": false
+        },
+        {
+          "attempt": 3,
+          "exit_code": 0,
+          "timed_out": false
+        }
+      ],
+      "limits": "Three fresh-process focused reruns; cannot prove full-suite or application deadlock is repaired. No source changed."
+    }
+  },
+  "protected_inputs": {
+    "main_tracked_hashes_preserved": 756,
+    "corpus_pins": {
+      "base_sample_1": {
+        "mp4": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+        "oilrecipe": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+        "oiltruth": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a"
+      },
+      "sample2": {
+        "mp4": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+        "oilrecipe": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+        "oiltruth": "f45479f7bb5f4216cb9c6920ac994d2d690942f2ed432d5d8a8647af030c731f"
+      },
+      "sample3": {
+        "mp4": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+        "oilrecipe": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+        "oiltruth": "8cb2b917eede7708894fa90f59f96f1d9eac272813af6d457dcbc292496dd8ab"
+      },
+      "sample4": {
+        "mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+        "oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+        "oiltruth": "f02575ac2379b4d135567f1835aa772803af13a20413b8aa58175d890f5241bd"
+      }
+    },
+    "prior_artifacts_verified": 10
+  },
+  "vision_inventory": {
+    "modules": 44,
+    "lines": 24399,
+    "functions": 667
+  },
+  "measurements": {
+    "synthetic_inputs": 12,
+    "prototype_tests": 18,
+    "frame_recipe_conditions": 16,
+    "unique_source_frames": 15,
+    "oil_candidates": 377,
+    "nonmutation_pass": 16
+  },
+  "score_lineage": {
+    "source_y": 854,
+    "candidate_input_index": 5,
+    "exact_hypothesis_candidate_join": true,
+    "candidate_boundary": 0.4315425760090007,
+    "candidate_artifact": 0.5459421970331827,
+    "advantage": -0.114399621024182,
+    "required_advantage": 0.08,
+    "boundary_terms": {
+      "broad": 0.19413915119201405,
+      "narrow": 0.21884615570306779,
+      "polarity": 0.010628101693368426,
+      "visibility": 0.07969333299001058,
+      "pulse_subtraction": -0.07176416556946018,
+      "static_subtraction": -0.0
+    },
+    "artifact_terms": {
+      "structural_after_broad_relief": 0.1943704605243636,
+      "static_contribution": 0.0,
+      "plateau_collision": 0.3515717365088191
+    },
+    "narrow_center_source_y": 853,
+    "narrow_partner_source_y": 851,
+    "signed_center": -0.9145097732543945,
+    "signed_partner": -0.6706467866897583,
+    "sign_relation": "same",
+    "legacy_paired_strength": 0.7475433913485435,
+    "detection_equal": true
+  },
+  "human_roi_sequence": {
+    "schema": "s11-paired-sequence-experiment-v1",
+    "inputs": {
+      "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-local-human-roi-sequence-001/human_roi.json": "d1d3acf7c4385e63bd29b815acfbff985d3bc82b2bcd9a21401edf1e0108a2aa",
+      "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-local-human-roi-comparison-001/sample4-human-roi.oilrecipe": "8f67b4120f20c4222645ffb3b5d25b971de9c3dacdea506238902d98e439543b",
+      "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample4.mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+    },
+    "counts": {
+      "candidates": 363,
+      "available": 363,
+      "unavailable": 0
+    },
+    "results": {
+      "baseline": {
+        "oil_count": 30,
+        "foam_count": 104,
+        "rows": [
+          {
+            "frame": 390,
+            "oil": 821.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 391,
+            "oil": 846.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "raster_material_path"
+            ]
+          },
+          {
+            "frame": 392,
+            "oil": 847.0,
+            "foam": 843.0,
+            "state": "FOAMING_VISIBLE",
+            "sources": [
+              "calibrated_high_recall"
+            ]
+          },
+          {
+            "frame": 393,
+            "oil": 837.0,
+            "foam": 844.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "calibrated_high_recall"
+            ]
+          },
+          {
+            "frame": 394,
+            "oil": 845.0,
+            "foam": 840.0,
+            "state": "FOAMING_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 395,
+            "oil": 852.0,
+            "foam": 840.0,
+            "state": "FOAMING_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 396,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 397,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 398,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 399,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 400,
+            "oil": 821.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 401,
+            "oil": 821.0,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 402,
+            "oil": 821.0,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 403,
+            "oil": 821.0,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 404,
+            "oil": 821.0,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 405,
+            "oil": 821.0,
+            "foam": 842.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 406,
+            "oil": 820.0,
+            "foam": 842.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 407,
+            "oil": 821.0,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 408,
+            "oil": 821.0,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 409,
+            "oil": 821.0,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 410,
+            "oil": 821.0,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 411,
+            "oil": 821.0,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 412,
+            "oil": 821.0,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 413,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 414,
+            "oil": 821.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 415,
+            "oil": 821.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 416,
+            "oil": 821.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 417,
+            "oil": 821.0,
+            "foam": 844.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 418,
+            "oil": 821.0,
+            "foam": 845.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 419,
+            "oil": 821.0,
+            "foam": 845.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 420,
+            "oil": 821.0,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 421,
+            "oil": 821.0,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 422,
+            "oil": 821.0,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 423,
+            "oil": 821.0,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 424,
+            "oil": 821.0,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 425,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 426,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 427,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 428,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 429,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 430,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 431,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 432,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 433,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 434,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 435,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 436,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 437,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 438,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 439,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 440,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 441,
+            "oil": null,
+            "foam": 842.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 442,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 443,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 444,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 445,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 446,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 447,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 448,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 449,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 450,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 451,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 452,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 453,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 454,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 455,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 456,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 457,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 458,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 459,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 460,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 461,
+            "oil": null,
+            "foam": 829.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 462,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 463,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 464,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 465,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 466,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 467,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 468,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 469,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 470,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 471,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 472,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 473,
+            "oil": null,
+            "foam": 843.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 474,
+            "oil": null,
+            "foam": 836.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 475,
+            "oil": null,
+            "foam": 836.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 476,
+            "oil": null,
+            "foam": 836.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 477,
+            "oil": null,
+            "foam": 836.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 478,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 479,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 480,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 481,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 482,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 483,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 484,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 485,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 486,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 487,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 488,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 489,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 490,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 491,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 492,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 493,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 494,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 495,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 496,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 497,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 498,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 499,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 500,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 501,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 502,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 503,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 504,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 505,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 506,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 507,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 508,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 509,
+            "oil": null,
+            "foam": 837.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 510,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          }
+        ]
+      },
+      "challenger": {
+        "oil_count": 29,
+        "foam_count": 104,
+        "rows": [
+          {
+            "frame": 390,
+            "oil": 821.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 391,
+            "oil": 846.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "raster_material_path"
+            ]
+          },
+          {
+            "frame": 392,
+            "oil": 847.0,
+            "foam": 843.0,
+            "state": "FOAMING_VISIBLE",
+            "sources": [
+              "calibrated_high_recall"
+            ]
+          },
+          {
+            "frame": 393,
+            "oil": 837.0,
+            "foam": 844.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "calibrated_high_recall"
+            ]
+          },
+          {
+            "frame": 394,
+            "oil": 845.0,
+            "foam": 840.0,
+            "state": "FOAMING_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 395,
+            "oil": 852.0,
+            "foam": 840.0,
+            "state": "FOAMING_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 396,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 397,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 398,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 399,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 400,
+            "oil": 851.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 401,
+            "oil": 849.0,
+            "foam": 839.0,
+            "state": "FOAMING_VISIBLE",
+            "sources": [
+              "calibrated_high_recall"
+            ]
+          },
+          {
+            "frame": 402,
+            "oil": 850.0,
+            "foam": 840.0,
+            "state": "FOAMING_VISIBLE",
+            "sources": [
+              "calibrated_high_recall"
+            ]
+          },
+          {
+            "frame": 403,
+            "oil": 852.0,
+            "foam": 841.0,
+            "state": "FOAMING_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 404,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 405,
+            "oil": 821.0,
+            "foam": 842.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 406,
+            "oil": 820.0,
+            "foam": 842.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 407,
+            "oil": 821.0,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 408,
+            "oil": 821.0,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 409,
+            "oil": 821.0,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 410,
+            "oil": 821.0,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 411,
+            "oil": 821.0,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 412,
+            "oil": 821.0,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 413,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 414,
+            "oil": 821.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 415,
+            "oil": 821.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 416,
+            "oil": 821.0,
+            "foam": null,
+            "state": "PARTIAL_VISIBLE",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 417,
+            "oil": 821.0,
+            "foam": 844.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 418,
+            "oil": 821.0,
+            "foam": 845.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 419,
+            "oil": 821.0,
+            "foam": 845.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 420,
+            "oil": 821.0,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 421,
+            "oil": 821.0,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 422,
+            "oil": 821.0,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 423,
+            "oil": 821.0,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 424,
+            "oil": 821.0,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": [
+              "phase_transition_scan"
+            ]
+          },
+          {
+            "frame": 425,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 426,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 427,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 428,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 429,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 430,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 431,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 432,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 433,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 434,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 435,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 436,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 437,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 438,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 439,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 440,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 441,
+            "oil": null,
+            "foam": 842.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 442,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 443,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 444,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 445,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 446,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 447,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 448,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 449,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 450,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 451,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 452,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 453,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 454,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 455,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 456,
+            "oil": null,
+            "foam": 838.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 457,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 458,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 459,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 460,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 461,
+            "oil": null,
+            "foam": 829.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 462,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 463,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 464,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 465,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 466,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 467,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 468,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 469,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 470,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 471,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 472,
+            "oil": null,
+            "foam": 841.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 473,
+            "oil": null,
+            "foam": 843.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 474,
+            "oil": null,
+            "foam": 836.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 475,
+            "oil": null,
+            "foam": 836.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 476,
+            "oil": null,
+            "foam": 836.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 477,
+            "oil": null,
+            "foam": 836.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 478,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 479,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 480,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 481,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 482,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 483,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 484,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 485,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 486,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 487,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 488,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 489,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 490,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 491,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 492,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 493,
+            "oil": null,
+            "foam": 839.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 494,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 495,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 496,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 497,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 498,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 499,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 500,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 501,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 502,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 503,
+            "oil": null,
+            "foam": 834.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 504,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 505,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 506,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 507,
+            "oil": null,
+            "foam": null,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 508,
+            "oil": null,
+            "foam": 840.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 509,
+            "oil": null,
+            "foam": 837.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          },
+          {
+            "frame": 510,
+            "oil": null,
+            "foam": 833.0,
+            "state": "UNKNOWN_REVIEW",
+            "sources": []
+          }
+        ]
+      }
+    },
+    "limits": "Saved exposed 30fps human-ROI diagnostic, fixed original candidate identities. No independent physical labels or efficacy acceptance."
+  },
+  "collision_controls": {
+    "pairs": 8,
+    "scenes": 16,
+    "frames_per_scene": 6,
+    "all_candidate_universes_equal": true,
+    "new_numeric_total": 0
+  },
+  "public_comparison": {
+    "base_sample_1": {
+      "rows": 30,
+      "baseline_oil": 28,
+      "challenger_oil": 28,
+      "baseline_foam": 0,
+      "challenger_foam": 0,
+      "truth_equal": true,
+      "truth": {
+        "case_count": 3,
+        "numeric_count": 3,
+        "mean_absolute_error_px": 12.333333333333334,
+        "maximum_absolute_error_px": 13.0,
+        "cases": [
+          {
+            "frame_index": 144,
+            "truth_timestamp_sec": 4.8048,
+            "sample_timestamp_sec": 5.005,
+            "truth_oil_y": 386.0,
+            "resolved_oil_y": 373.0,
+            "absolute_error_px": 13.0
+          },
+          {
+            "frame_index": 156,
+            "truth_timestamp_sec": 5.2052000000000005,
+            "sample_timestamp_sec": 5.005,
+            "truth_oil_y": 386.0,
+            "resolved_oil_y": 373.0,
+            "absolute_error_px": 13.0
+          },
+          {
+            "frame_index": 240,
+            "truth_timestamp_sec": 7.974633333333334,
+            "sample_timestamp_sec": 7.974633333333334,
+            "truth_oil_y": 386.0,
+            "resolved_oil_y": 375.0,
+            "absolute_error_px": 11.0
+          }
+        ],
+        "authority_note": "Checked-in user truth is regression evidence. Direct-image conflicts, including the explanatory-overlay Base anchors, remain visually censored."
+      },
+      "baseline_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "challenger_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "missing_provenance_baseline": 0,
+      "missing_provenance_challenger": 0,
+      "public_scalar_or_state_deltas": [],
+      "new_numeric_rows": 0,
+      "lost_numeric_rows": 0
+    },
+    "sample2": {
+      "rows": 5,
+      "baseline_oil": 4,
+      "challenger_oil": 4,
+      "baseline_foam": 0,
+      "challenger_foam": 0,
+      "truth_equal": true,
+      "truth": {
+        "case_count": 3,
+        "numeric_count": 2,
+        "mean_absolute_error_px": 6.5,
+        "maximum_absolute_error_px": 11.0,
+        "cases": [
+          {
+            "frame_index": 0,
+            "truth_timestamp_sec": 0.0,
+            "sample_timestamp_sec": 0.0,
+            "truth_oil_y": 592.0,
+            "resolved_oil_y": null,
+            "absolute_error_px": null
+          },
+          {
+            "frame_index": 30,
+            "truth_timestamp_sec": 1.0,
+            "sample_timestamp_sec": 1.0,
+            "truth_oil_y": 592.0,
+            "resolved_oil_y": 590.0,
+            "absolute_error_px": 2.0
+          },
+          {
+            "frame_index": 60,
+            "truth_timestamp_sec": 2.0,
+            "sample_timestamp_sec": 2.0,
+            "truth_oil_y": 592.0,
+            "resolved_oil_y": 603.0,
+            "absolute_error_px": 11.0
+          }
+        ],
+        "authority_note": "Checked-in user truth is regression evidence. Direct-image conflicts, including the explanatory-overlay Base anchors, remain visually censored."
+      },
+      "baseline_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "challenger_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "missing_provenance_baseline": 0,
+      "missing_provenance_challenger": 0,
+      "public_scalar_or_state_deltas": [],
+      "new_numeric_rows": 0,
+      "lost_numeric_rows": 0
+    },
+    "sample3": {
+      "rows": 151,
+      "baseline_oil": 29,
+      "challenger_oil": 27,
+      "baseline_foam": 5,
+      "challenger_foam": 5,
+      "truth_equal": true,
+      "truth": {
+        "case_count": 2,
+        "numeric_count": 2,
+        "mean_absolute_error_px": 12.75,
+        "maximum_absolute_error_px": 24.5,
+        "cases": [
+          {
+            "frame_index": 900,
+            "truth_timestamp_sec": 30.03,
+            "sample_timestamp_sec": 30.03,
+            "truth_oil_y": 316.0,
+            "resolved_oil_y": 291.5,
+            "absolute_error_px": 24.5
+          },
+          {
+            "frame_index": 1035,
+            "truth_timestamp_sec": 34.5345,
+            "sample_timestamp_sec": 34.5345,
+            "truth_oil_y": 243.0,
+            "resolved_oil_y": 244.0,
+            "absolute_error_px": 1.0
+          }
+        ],
+        "authority_note": "Checked-in user truth is regression evidence. Direct-image conflicts, including the explanatory-overlay Base anchors, remain visually censored."
+      },
+      "baseline_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "challenger_fingerprint": "094badca884828aa49176cfc7feadf0b7248c7a1aefde6b62ca83017b37c77d3",
+      "missing_provenance_baseline": 0,
+      "missing_provenance_challenger": 0,
+      "public_scalar_or_state_deltas": [
+        {
+          "frame": 2249,
+          "timestamp_sec": 75.04163333333334,
+          "baseline": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          },
+          "challenger": {
+            "oil_y": 237.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          }
+        },
+        {
+          "frame": 2264,
+          "timestamp_sec": 75.54213333333334,
+          "baseline": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          },
+          "challenger": {
+            "oil_y": 237.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          }
+        },
+        {
+          "frame": 2354,
+          "timestamp_sec": 78.54513333333334,
+          "baseline": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          },
+          "challenger": {
+            "oil_y": 236.0,
+            "foam_y": null,
+            "fill_state": "DRAINING_VISIBLE"
+          }
+        },
+        {
+          "frame": 2369,
+          "timestamp_sec": 79.04563333333334,
+          "baseline": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          },
+          "challenger": {
+            "oil_y": 242.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          }
+        },
+        {
+          "frame": 2413,
+          "timestamp_sec": 80.51376666666667,
+          "baseline": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          },
+          "challenger": {
+            "oil_y": 237.0,
+            "foam_y": null,
+            "fill_state": "FILLING_VISIBLE"
+          }
+        },
+        {
+          "frame": 2428,
+          "timestamp_sec": 81.01426666666667,
+          "baseline": {
+            "oil_y": 233.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": 233.0,
+            "foam_y": null,
+            "fill_state": "FILLING_VISIBLE"
+          }
+        },
+        {
+          "frame": 2488,
+          "timestamp_sec": 83.01626666666667,
+          "baseline": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          },
+          "challenger": {
+            "oil_y": 259.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          }
+        },
+        {
+          "frame": 2503,
+          "timestamp_sec": 83.51676666666667,
+          "baseline": {
+            "oil_y": 239.0,
+            "foam_y": null,
+            "fill_state": "DRAINING_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          }
+        },
+        {
+          "frame": 2518,
+          "timestamp_sec": 84.01726666666667,
+          "baseline": {
+            "oil_y": 255.0,
+            "foam_y": null,
+            "fill_state": "DRAINING_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          }
+        },
+        {
+          "frame": 2893,
+          "timestamp_sec": 96.52976666666667,
+          "baseline": {
+            "oil_y": 342.0,
+            "foam_y": null,
+            "fill_state": "FILLING_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          }
+        },
+        {
+          "frame": 2908,
+          "timestamp_sec": 97.03026666666668,
+          "baseline": {
+            "oil_y": 344.0,
+            "foam_y": null,
+            "fill_state": "DRAINING_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          }
+        },
+        {
+          "frame": 2923,
+          "timestamp_sec": 97.53076666666666,
+          "baseline": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          },
+          "challenger": {
+            "oil_y": 226.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          }
+        },
+        {
+          "frame": 2938,
+          "timestamp_sec": 98.03126666666667,
+          "baseline": {
+            "oil_y": 353.0,
+            "foam_y": null,
+            "fill_state": "DRAINING_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          }
+        },
+        {
+          "frame": 2953,
+          "timestamp_sec": 98.53176666666667,
+          "baseline": {
+            "oil_y": 359.0,
+            "foam_y": null,
+            "fill_state": "DRAINING_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          }
+        },
+        {
+          "frame": 2998,
+          "timestamp_sec": 100.03326666666668,
+          "baseline": {
+            "oil_y": 368.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          }
+        },
+        {
+          "frame": 3013,
+          "timestamp_sec": 100.53376666666666,
+          "baseline": {
+            "oil_y": 361.0,
+            "foam_y": null,
+            "fill_state": "FILLING_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          }
+        },
+        {
+          "frame": 3043,
+          "timestamp_sec": 101.53476666666667,
+          "baseline": {
+            "oil_y": 361.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": null,
+            "foam_y": null,
+            "fill_state": "UNKNOWN_REVIEW"
+          }
+        }
+      ],
+      "new_numeric_rows": 7,
+      "lost_numeric_rows": 9
+    },
+    "sample4": {
+      "rows": 113,
+      "baseline_oil": 101,
+      "challenger_oil": 101,
+      "baseline_foam": 26,
+      "challenger_foam": 26,
+      "truth_equal": true,
+      "truth": {
+        "case_count": 5,
+        "numeric_count": 4,
+        "mean_absolute_error_px": 7.625,
+        "maximum_absolute_error_px": 22.0,
+        "cases": [
+          {
+            "frame_index": 0,
+            "truth_timestamp_sec": 0.0,
+            "sample_timestamp_sec": 0.0,
+            "truth_oil_y": 860.5,
+            "resolved_oil_y": null,
+            "absolute_error_px": null
+          },
+          {
+            "frame_index": 450,
+            "truth_timestamp_sec": 15.0,
+            "sample_timestamp_sec": 15.0,
+            "truth_oil_y": 852.5,
+            "resolved_oil_y": 853.0,
+            "absolute_error_px": 0.5
+          },
+          {
+            "frame_index": 900,
+            "truth_timestamp_sec": 30.0,
+            "sample_timestamp_sec": 30.0,
+            "truth_oil_y": 848.5,
+            "resolved_oil_y": 848.0,
+            "absolute_error_px": 0.5
+          },
+          {
+            "frame_index": 1470,
+            "truth_timestamp_sec": 49.0,
+            "sample_timestamp_sec": 49.0,
+            "truth_oil_y": 855.0,
+            "resolved_oil_y": 833.0,
+            "absolute_error_px": 22.0
+          },
+          {
+            "frame_index": 1680,
+            "truth_timestamp_sec": 56.0,
+            "sample_timestamp_sec": 56.0,
+            "truth_oil_y": 858.5,
+            "resolved_oil_y": 851.0,
+            "absolute_error_px": 7.5
+          }
+        ],
+        "authority_note": "Checked-in user truth is regression evidence. Direct-image conflicts, including the explanatory-overlay Base anchors, remain visually censored."
+      },
+      "baseline_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "challenger_fingerprint": "fec8479d30a99fde718c799cd2a4739e3846cbca096c9991d15d0216d03986cb",
+      "missing_provenance_baseline": 0,
+      "missing_provenance_challenger": 0,
+      "public_scalar_or_state_deltas": [
+        {
+          "frame": 315,
+          "timestamp_sec": 10.5,
+          "baseline": {
+            "oil_y": 856.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": 856.0,
+            "foam_y": null,
+            "fill_state": "DRAINING_VISIBLE"
+          }
+        },
+        {
+          "frame": 330,
+          "timestamp_sec": 11.0,
+          "baseline": {
+            "oil_y": 849.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": 851.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          }
+        },
+        {
+          "frame": 345,
+          "timestamp_sec": 11.5,
+          "baseline": {
+            "oil_y": 854.0,
+            "foam_y": null,
+            "fill_state": "PARTIAL_VISIBLE"
+          },
+          "challenger": {
+            "oil_y": 854.0,
+            "foam_y": null,
+            "fill_state": "FILLING_VISIBLE"
+          }
+        }
+      ],
+      "new_numeric_rows": 0,
+      "lost_numeric_rows": 0
+    }
+  },
+  "challenger_decision": "CLOSED_WITHOUT_PROMOTION: target failure persists; sample3 gains 7 and withdraws 9 numeric rows (net -2); sparse truths unchanged; efficacy unproven",
+  "disposition": {
+    "S11": "ACTIVE",
+    "W4": "OPEN",
+    "O2": "NOT_PROMOTED",
+    "field": "FIELD FAIL retained"
+  },
+  "new_artifact_root": "/private/tmp/s11-second-audit-20261007-jtt0irop",
+  "durable_root": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-second-audit-20261007-001",
+  "artifact_sha256": {
+    "a0b-guards.xml": "6b7827999f3e699c6160deaf95bef7a20a07a2a57563aaea486a417b6ac13bcd",
+    "paired_support.py": "62c1511865f72990164af5272c52720c8234b97bb4d0e68ad363fdefb60f1e64",
+    "paired-controls.xml": "886456bdb4de428b4f774b5cf70b5cfa1ae2e203b71e4adc72f70cd64a011e19",
+    "a0b-targeted.xml": "805e73a4e81fea13450b77cff8e7b5723e8d3979c47a3b986ae3f8bac9ab0f79",
+    "run_paired_public.py": "f2ede2cb491a09eb3b1e624921d07a2531d02b80b9249215dba59e1924150481",
+    "a0b-qt-retry.xml": "cf3e54f719808448911f6023ee59a162eeae223297e142631a522bd66f0e6284",
+    "a0b-nonqt.xml": "6f54ba474566236dec5719092c8049f2fc148c6974e4f20c7b8a002f001769ac",
+    "run_new_probes.py": "219cf6b5a19e6b3a0ac9481c660c9515eb81efc9c3faf325ae47296d12077cdd",
+    "a0b-test-contract.patch": "615a94a61cef04242f7bda785e3d702c0480d2053179cc9ce67b1f7352950db5",
+    "paired_challenger.py": "dc6df5e6c4bad22f3f005b5f10f43db663626361431c723994f40eae87d9f330",
+    "inspect_score_lineage.py": "7dbefc91c02a75e699f67e4331d0d4e7970d527a84ec33042a452aaaacf08d26",
+    "qt-preflight-repeat-1.xml": "7314409716a0f26e20b56578e19c4026cf45af6fbfc3e8adbdb09c87daaf23ce",
+    "run_collision_challenger.py": "15cc8c23e2c53d91bc1f98ef0b8ead8a3d6ddbc1c1102648f010802a2bfdbfbf",
+    "test_paired_support.py": "6d3c8fd7e498a321e07fc7d6a4fe008ffad14e50e67ea3dac3dd58759f55bb84",
+    "qt-preflight-repeat-2.xml": "504616d9ee317e2f1998fc73bc6908b7544c2b8f6a6fe53df0030777357b1bf6",
+    "qt-preflight-repeat-3.xml": "3b72139a402054a69ca4e7e217faa168d01bfd2495b573c4ba94ed0b91b01512",
+    "run_paired_sequence.py": "789c3c6c92161e893f110ae891d0d96393bed7bb47c528394608823c8f5120c7"
+  }
+}

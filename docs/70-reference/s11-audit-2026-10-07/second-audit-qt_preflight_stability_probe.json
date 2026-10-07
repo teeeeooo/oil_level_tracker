@@ -1,0 +1,20 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "exit_code": 0,
+      "timed_out": false
+    },
+    {
+      "attempt": 2,
+      "exit_code": 0,
+      "timed_out": false
+    },
+    {
+      "attempt": 3,
+      "exit_code": 0,
+      "timed_out": false
+    }
+  ],
+  "limits": "Three fresh-process focused reruns; cannot prove full-suite or application deadlock is repaired. No source changed."
+}

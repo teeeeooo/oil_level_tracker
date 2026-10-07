@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. Candidate-conditioned region competition is implemented and verified locally as an offline appearance prototype. The Windows region run is reported COMPLETE and both transfer items are closed on user-confirmed saved values. The saved-CSV cross-X/BW review has returned: partition improves smooth for both main identities, and model ordering varies with X/BW/support. The denominator correction is closed: 30/36 eligible pairs differ in minimum-error model. The bounded region appearance experiment is CLOSED WITHOUT PROMOTION; whole-candidate and chromatic identity benefit remain unestablished. Passive existing-video review is selected; all three Windows cases are reported labeled (75 candidates); user-directed individual/group review and the uppermost-fluid-boundary target are confirmed; target-truth binding is complete on transferred Windows evidence (10 target / 65 non-target), with no predictions or comparative filming; Mac three-frame candidate preparation is complete (76 proposals); all three paired guides have human observations; base_sample_1/156 Oil-path offset remains qualitative; Oil/Foam owner investigation and trace-only component capture are complete; sample4 C1 rim / C2 Foam attribution is recorded and C2's structural-substrate veto is confirmed; sample2 rim / Foam-region-with-suspected-reflection attribution is recorded; saved-support column diagnostics and 17 geometry controls pass; sample4 circular structures are human-confirmed; registered residual comparison is complete without identity promotion; A/C/D follow Foam, while B mixes a left/lower Foam edge and right/upper central structure; the14s/16s human clicks are saved; two exact current-frame captures reveal a lower C1 spatial-selection discrepancy at16s; the user confirms that C1 is glass rim and saved-raster replay identifies the missed structural gate; the five-frame structure-context audit is complete;18 outer and21 inner double-rim points are bound with unquantified mouse-click uncertainty; the location review is complete; the user clarifies Mac ROIs were agent-created; existing ellipse/margin masks replay exactly; the human ROI correction is applied in a separate local recipe and three-frame comparison is complete; the14s Oil854 is human-confirmed; the bounded13–17s existing-resolver comparison finds authority loss of854 and completed Oil821; direct RGB/time inspection leaves821 physically unresolved and reproduces its pooled brightness support, with measurable-sector coverage consumed as boundary evidence; an opposite-lobe pulse prototype failed five safety controls and was removed; phase-reason diagnostics now expose the unchanged854 boundary-advantage failure with bounded behavior equality; temporal Foam confirmation retains the mixed front; the user will separately supply independent video.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. The two 2026-10-07 audits are imported with their original bytes. A0B test-contract repair is adopted at `fa2d6d5`; verification is recorded in the [adoption checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md). A1 lossless support/pair/score-lineage integration is the next bounded detector task. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -43,6 +43,29 @@ own their detailed returns. Human idx0/idx20 ambiguity, formal labels and prior
 scores remain pinned. This is not a general impossibility finding for spatial classifiers.
 
 ## Next transition
+
+Resume from the [audit adoption checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md),
+then read §8 A1 of the [second audit](../70-reference/s11-audit-2026-10-07/s11-second-audit-and-detector-work-spec-2026-10-07.md).
+The current request authorizes synchronizing this checkout, preserving the audit
+inputs, adopting A0B, verifying it, and committing/pushing the handoff checkpoint.
+This checkpoint does not implement A1–A4 or close the S11 milestone.
+
+Next bounded implementation is A1: connect actual upper/lower support, signed
+center/partner pair measurements, and score-to-scalar coordinate dependencies
+through the existing frame-local sidecar/witness. Keep authority, scores,
+candidates, completed outputs, Foam and existing diagnostics unchanged. Apply
+existing O1 malformed-input, binding, alias, output-safety and resource guards;
+prove four-video equality before considering A2. No duplicate resolver or new
+round of the same descriptor/extraction investigation is implied.
+
+A0Q remains a separate UI lifecycle issue: the audit observed a native Qt stall;
+subsequent passing runs do not establish a repair. Preserve the initial stack and
+retries, and investigate with a bounded external timeout before claiming stability.
+It does not block A1 read-only investigation. A2 requires A0B adoption and A1
+lossless verification; A3 Foam local-front work is separate; A4 uses W3 evaluation
+and existing target binding. O2/Windows gates and independent-video needs remain.
+
+### Preserved completed context
 
 The [denominator reconciliation and region disposition](../60-evidence/s11/s11-o2-color-side-local.md#denominator-reconciliation-closed-and-bounded-region-disposition)
 close the saved-output measurement/review loop on attributed Windows evidence.
@@ -357,6 +380,12 @@ required for the current measurement.
 
 ## Current authorization boundary
 
+The 2026-10-07 checkpoint request authorizes audit adoption, proportional
+verification, commit and push on the current checkout. The [adoption record](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md)
+bounds what this checkpoint implements. A1–A4 are the documented continuation;
+this handoff does not claim their implementation or reopen Windows field runs.
+The earlier grants below describe the retained detector-development context.
+
 The user authorized replacement of the Oil temporal identity and phase/evidence
 core, relevant tests/diagnostics, measured comparison and replaced-path cleanup
 on 2026-09-09. Main owns implementation and final review; the subsequent request
@@ -367,10 +396,10 @@ and 2026-09-17 behavioral requests included implementation, verification, commit
 and push for those scopes. The R23 polarity prototype failed protected observations
 and was removed; its rejection is not a reason to request the same authorization
 again. These historical grants do not authorize unrelated changes or publication.
-The fixed color-side measurement is complete. The current user request authorizes
+The fixed color-side measurement is complete. That earlier request authorized
 implementation and preparation up to the Windows execution point. The user has returned that Windows
 saved-output run. The subsequent input-scope decision permits additional human
-review within existing videos and planning other-recording use. The latest request additionally authorizes Mac corpus reuse and bounded local
+review within existing videos and planning other-recording use. The subsequent development request additionally authorized Mac corpus reuse and bounded local
 candidate preparation while the user supplies independent video. Windows scope
 remains the completed bounded review/binding handoff; broader field qualification
 and training are not implied.
