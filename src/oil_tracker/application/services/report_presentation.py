@@ -11,6 +11,8 @@ from oil_tracker.domain.results import (
     EventMarker,
     GlassAnalysisResult,
     TrackingSample,
+    has_legacy_oil_anchor,
+    has_legacy_oil_flags,
 )
 
 from .event_presentation import event_type_label
@@ -734,20 +736,11 @@ def _foam_confirmation_pending(sample: TrackingSample) -> bool:
 
 
 def _is_r7_stream(samples) -> bool:
-    return any(
-        any(
-            str(flag).strip().upper()
-            in {"R7_RESOLVED_OIL", "R7_OIL_ANCHOR", "R7_OIL_CONTINUATION"}
-            for flag in sample.flags
-        )
-        for sample in samples
-    )
+    return any(has_legacy_oil_flags(sample.flags) for sample in samples)
 
 
 def _r7_anchor(sample: TrackingSample) -> bool:
-    return "R7_OIL_ANCHOR" in {
-        str(flag).strip().upper() for flag in sample.flags
-    }
+    return has_legacy_oil_anchor(sample.flags)
 
 
 def _finite_first(*values: float | None) -> float | None:

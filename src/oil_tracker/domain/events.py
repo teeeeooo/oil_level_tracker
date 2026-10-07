@@ -5,7 +5,7 @@ import math
 from typing import Callable, Iterable
 
 from .enums import EventType, FillState
-from .results import EventMarker, TrackingSample
+from .results import EventMarker, TrackingSample, has_legacy_oil_anchor, has_legacy_oil_flags
 
 
 @dataclass(frozen=True)
@@ -390,16 +390,11 @@ def _is_r7_stream(samples: Iterable[TrackingSample]) -> bool:
 
 
 def _is_r7_sample(sample: TrackingSample) -> bool:
-    return any(
-        str(flag).strip().upper().startswith("R7_")
-        for flag in sample.flags
-    )
+    return has_legacy_oil_flags(sample.flags)
 
 
 def _r7_anchor(sample: TrackingSample) -> bool:
-    return "R7_OIL_ANCHOR" in {
-        str(flag).strip().upper() for flag in sample.flags
-    }
+    return has_legacy_oil_anchor(sample.flags)
 
 
 def _continuous_condition_end(

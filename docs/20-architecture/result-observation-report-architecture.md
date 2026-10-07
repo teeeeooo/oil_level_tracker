@@ -75,7 +75,7 @@ Unknown/no-interface information remains visible using restrained state or unava
 
 ## Extrema and trend summary
 
-The highest and lowest Oil landmarks are selected from the finite preferred Oil anchors drawn by the graph. Legacy Oil streams identified by `R7_RESOLVED_OIL`, `R7_OIL_ANCHOR` or `R7_OIL_CONTINUATION` retain anchor-only eligibility. Unrelated `R7_FOAM_*` flags do not select that legacy Oil regime. Narrative and landmarks use the same eligible set; without an eligible anchor neither claims extrema. Positive height means above the configured zero line; maximum numeric height is the highest observed Oil and minimum numeric height is the lowest observed Oil.
+The highest and lowest Oil landmarks are selected from the finite preferred Oil anchors drawn by the graph. Legacy Oil streams identified by `R7_RESOLVED_OIL`, `R7_OIL_ANCHOR` or `R7_OIL_CONTINUATION` retain anchor-only eligibility. Unrelated `R7_FOAM_*` flags do not select that legacy Oil regime. The exact flag/anchor predicate is shared with events and initial-state reconstruction through `domain/results.py`; [compatibility design](s11-oil-compatibility-design.md) owns that bounded repair. Narrative and landmarks use the same eligible set; without an eligible anchor neither claims extrema. Positive height means above the configured zero line; maximum numeric height is the highest observed Oil and minimum numeric height is the lowest observed Oil.
 
 Extrema are observations, not claims about an unobserved interval. Wording must use forms such as “관측된 최고 유면” and “관측된 최저 유면.” If no finite Oil exists, no extrema or movement direction is claimed.
 

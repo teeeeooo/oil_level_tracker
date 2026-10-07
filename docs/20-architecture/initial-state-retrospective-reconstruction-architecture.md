@@ -35,6 +35,12 @@ observation provenance therefore does not make this owner globally
 - no retrospective interpretation can manufacture a numeric Oil boundary, alter detector history, or become hidden state in the online temporal reducer;
 - when downstream official semantics use retrospective interpretation, that use must remain explicitly attributable to retrospective provenance.
 
+Legacy Oil compatibility uses the shared exact flag predicate in `domain/results.py`.
+`R7_RESOLVED_OIL`, `R7_OIL_ANCHOR` or `R7_OIL_CONTINUATION` select the historical
+anchor regime. Foam-only R7 flags do not. Modern streams keep canonical entrance
+and hard-barrier checks, while actual legacy Oil retains its existing prefix
+handling. [Compatibility design](s11-oil-compatibility-design.md) records scope.
+
 ## Initial authority and eligibility
 
 A retrospective interval is eligible only when the current analysis run contains an explicit run/session-scoped user confirmation for the affected enabled Glass and that confirmed prior is `FULL_NO_INTERFACE` or `EMPTY_NO_INTERFACE`.

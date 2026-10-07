@@ -141,3 +141,44 @@ def test_r7_continuation_only_motion_cannot_create_drop_or_crossing() -> None:
 
     assert EventType.OIL_DROP_START not in types
     assert EventType.ZERO_CROSS_DOWN not in types
+
+
+def test_foam_only_legacy_flags_do_not_change_modern_oil_events():
+    from copy import deepcopy
+
+    levels = [8, 8, 8, 8, 4, -2, -3, 1, 2, 2]
+    samples = [s(index * .5, level=level, flags=("R17_RESOLVED_OIL",))
+               for index, level in enumerate(levels)]
+    baseline = detect_events_for_glass("r", "g", samples)
+    for marker in ("R7_FOAM_UNCONFIRMED", " r7_foam_episode_confirmed ", "R7_OBSERVATION_UNAVAILABLE"):
+        variant = deepcopy(samples)
+        for sample in variant:
+            sample.flags.append(marker)
+        original = deepcopy(variant)
+        assert detect_events_for_glass("r", "g", variant) == baseline
+        assert variant == original
+    assert {EventType.OIL_DROP_START, EventType.ZERO_CROSS_DOWN,
+            EventType.ZERO_STABLE_RECOVERY, EventType.MAXIMUM_OIL_LEVEL,
+            EventType.MINIMUM_OIL_LEVEL} <= {event.event_type for event in baseline}
+
+
+def test_foam_flag_does_not_suppress_modern_oil_appearance():
+    for initial, visible, expected in (
+        (FillState.FULL_NO_INTERFACE, FillState.DRAINING_VISIBLE, EventType.OIL_BOUNDARY_APPEARED_FROM_TOP),
+        (FillState.EMPTY_NO_INTERFACE, FillState.FILLING_VISIBLE, EventType.OIL_BOUNDARY_APPEARED_FROM_BOTTOM),
+    ):
+        samples = [s(0, state=initial, level=None),
+                   s(1, state=visible, flags=("R17_RESOLVED_OIL", "R7_FOAM_UNCONFIRMED"))]
+        assert expected in {event.event_type for event in detect_events_for_glass("r", "g", samples)}
+        samples[-1].flags += [" r7_oil_continuation "]
+        assert expected not in {event.event_type for event in detect_events_for_glass("r", "g", samples)}
+        samples[-1].flags += [" r7_oil_anchor "]
+        assert expected in {event.event_type for event in detect_events_for_glass("r", "g", samples)}
+
+
+def test_each_actual_legacy_oil_marker_keeps_anchor_only_extrema():
+    for marker in ("R7_RESOLVED_OIL", "R7_OIL_CONTINUATION", " r7_oil_anchor "):
+        samples = [s(0, level=5, flags=(marker,)), s(1, level=100)]
+        extrema = [event for event in detect_events_for_glass("r", "g", samples)
+                   if event.event_type in {EventType.MAXIMUM_OIL_LEVEL, EventType.MINIMUM_OIL_LEVEL}]
+        assert [event.oil_level_px for event in extrema] == ([5, 5] if 'anchor' in marker else [])

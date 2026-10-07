@@ -10,7 +10,7 @@ from oil_tracker.domain.oil_boundary_topology import (
 )
 from oil_tracker.domain.enums import FillState, InitialObservationState, JudgmentMode, ResultState
 from oil_tracker.domain.retrospective import RetrospectiveInterpretation, RetrospectiveStatus
-from oil_tracker.domain.results import TrackingSample
+from oil_tracker.domain.results import TrackingSample, has_legacy_oil_anchor, has_legacy_oil_flags
 
 
 _BARRIER_FLAGS = {
@@ -35,10 +35,7 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
         )
     if not samples:
         return _unresolved(glass.id, prior, "No observed samples are available.")
-    r7_stream = any(
-        any(str(flag).strip().upper().startswith("R7_") for flag in sample.flags)
-        for sample in samples
-    )
+    r7_stream = any(has_legacy_oil_flags(sample.flags) for sample in samples)
     if any(
         flag in samples[0].flags
         for flag in (
@@ -363,8 +360,8 @@ def _accepted_boundary_y(sample: TrackingSample) -> float | None:
     if not sample.is_valid or value is None:
         return None
     flags = {str(flag).strip().upper() for flag in sample.flags}
-    if any(flag.startswith("R7_") for flag in flags):
-        if "R7_OIL_ANCHOR" not in flags:
+    if has_legacy_oil_flags(flags):
+        if not has_legacy_oil_anchor(flags):
             return None
         if any(
             flag in _BARRIER_FLAGS

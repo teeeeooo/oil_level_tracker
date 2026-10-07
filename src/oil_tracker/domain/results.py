@@ -1,10 +1,24 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import Any
 
 from .enums import EventType, FillState, ResultState
 from .retrospective import RetrospectiveInterpretation
+
+
+def has_legacy_oil_flags(flags: Iterable[str]) -> bool:
+    """Identify legacy Oil authority without treating unrelated R7 flags as Oil."""
+    return any(
+        str(flag).strip().upper()
+        in {"R7_RESOLVED_OIL", "R7_OIL_ANCHOR", "R7_OIL_CONTINUATION"}
+        for flag in flags
+    )
+
+
+def has_legacy_oil_anchor(flags: Iterable[str]) -> bool:
+    return any(str(flag).strip().upper() == "R7_OIL_ANCHOR" for flag in flags)
 
 
 @dataclass

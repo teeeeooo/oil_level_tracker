@@ -558,3 +558,40 @@ def test_conflict_forces_review_and_hold_judgment_keeps_retrospective_provenance
     recovery = annotate_judgment_provenance(base, accepted, JudgmentMode.RECOVERY)
     assert "provenance=retrospective_initial_state" in hold.note
     assert recovery.note == "base"
+
+
+@pytest.mark.parametrize('prior', [InitialObservationState.FULL_NO_INTERFACE, InitialObservationState.EMPTY_NO_INTERFACE])
+@pytest.mark.parametrize('barrier', [False, True])
+def test_foam_only_r7_flag_preserves_modern_reconstruction_and_hard_barriers(prior, barrier):
+    glass, samples = _accepted_sequence(prior)
+    if barrier:
+        samples[1].flags.append('FOGGED_OR_GLARE')
+    baseline = reconstruct_initial_state(glass, samples, _confirmation(prior))
+    for sample in samples:
+        sample.flags += ['R17_RESOLVED_OIL', 'R7_FOAM_UNCONFIRMED']
+    before = deepcopy(samples)
+    result = reconstruct_initial_state(glass, samples, _confirmation(prior))
+    assert result == baseline
+    assert samples == before
+    assert result.status is (RetrospectiveStatus.UNRESOLVED if barrier else RetrospectiveStatus.ACCEPTED)
+
+
+@pytest.mark.parametrize('prior', [InitialObservationState.FULL_NO_INTERFACE, InitialObservationState.EMPTY_NO_INTERFACE])
+@pytest.mark.parametrize('mode', ['official_analysis', 'full_redetection', 'interval_redetection'])
+def test_shared_outcome_assembly_preserves_modern_oil_meaning_with_foam_legacy_flags(prior, mode):
+    from oil_tracker.application.services.analysis_outcome import StateAwareOutcomeAssembler, StateAwareOutcomeMode
+
+    glass, samples = _accepted_sequence(prior)
+    for sample in samples:
+        if sample.raw_oil_air_level_y is not None:
+            sample.smoothed_oil_air_level_px_from_zero = glass.geometry.zero_line_y - sample.raw_oil_air_level_y
+    assembler = StateAwareOutcomeAssembler()
+    kwargs = dict(run_id='run', glass=glass, confirmation=_confirmation(prior),
+                  compressor_start_sec=0.0, mode=StateAwareOutcomeMode(mode))
+    baseline = assembler.assemble(samples=samples, **kwargs)
+    variant = deepcopy(samples)
+    for sample in variant:
+        sample.flags.extend(['R17_RESOLVED_OIL', 'R7_FOAM_UNCONFIRMED'])
+    before = deepcopy(variant)
+    assert assembler.assemble(samples=variant, **kwargs) == baseline
+    assert variant == before

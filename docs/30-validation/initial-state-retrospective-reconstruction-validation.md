@@ -49,6 +49,15 @@ Focused tests must cover symmetric `FULL_NO_INTERFACE` and `EMPTY_NO_INTERFACE` 
 - observed detector state and observed validity are immutable;
 - no numeric Oil value is fabricated for retrospective FULL/EMPTY.
 
+## Oil compatibility controls
+
+- Modern FULL/EMPTY reconstruction with unrelated R7 Foam flags equals the same
+  observed sequence without them, including canonical hard-barrier rejection.
+- Actual legacy Oil anchor/continuation behavior and malformed-input guards remain.
+- Official analysis, full redetection and interval redetection use the same
+  compatibility semantics through the existing outcome assembler; observed
+  samples remain immutable and RECOVERY receives only observed values.
+
 ## Official semantics and persistence acceptance
 
 Acceptance must demonstrate that:
