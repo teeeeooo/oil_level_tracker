@@ -1,6 +1,6 @@
 {
   "source_head": "a7109a963a4366bd771b7e9300d4a83833501073",
-  "status": "INPUT_PREPARATION_COMPLETE_REGION_INTERPRETATION_PENDING",
+  "status": "HUMAN_REGION_INTERPRETATION_RECEIVED",
   "hypothesis_status": "DRAFT_NOT_FROZEN_NO_PREDICTOR",
   "field_disposition": "FIELD FAIL",
   "review": {
@@ -52,7 +52,14 @@
   },
   "question": "유면 바로 위 A(밝은 쪽)와 아래 B(어두운 쪽)는 각각 무엇으로 보이나요? 거품·기포가 섞인 유체 / 기포가 적은 액체 / 공기·기체 공간 / 반사·조명 / 혼합·판단 불가 중 알 수 있는 범위로 설명해 주세요.",
   "reason": "Prior user replies identify Oil correspondence/continuity but do not attribute adjacent-region appearance to material or optics. This affects whether a temporal two-region exchange interpretation is appropriate. No chemical-species classification is required.",
-  "user_reply": null,
+  "user_reply": {
+    "verbatim": "A:거품·기포가 섞인 유체 , B : 기포가 적은 액체",
+    "source": "direct user reply in current conversation",
+    "applies_to": "Both displayed f1275/42.5s and f1320/44s A/B queries; user did not distinguish the two scenes.",
+    "A": "fluid mixed with foam/bubbles",
+    "B": "liquid with fewer bubbles",
+    "scope": "Qualitative region interpretation only, not material masks, exact pixel labels, chemical species, all-frame labels or scalar tolerance."
+  },
   "local_artifact_root": "sample/output/s11-a2-region-context-20261007-001",
   "input_receipt_sha256": "7986d15dce6f624da7aec64efbd38b9528373e784f2059906d5ea41091ad3474",
   "input_preparation": {

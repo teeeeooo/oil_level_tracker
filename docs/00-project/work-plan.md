@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event/initial-state Oil compatibility is locally verified and adopted. The three captured alternatives are human-confirmed Oil, and their first selection-eligibility loss is traced to Oil authority. [A1 lineage](../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) is implemented and locally verified with unchanged production output. The pink-observation review is closed: 40 s unresolved, 42 s tentatively lower rim, 44 s tentatively noise. A2 control preflight binds seven confirmed Oil correspondences and three rejected targets while preserving subtype uncertainty. The uncertainty-preserving W3 binding and recorded-selection baseline are now verified locally. The user requires both static and temporal context; the endpoint continuity review is closed with confirmed rapid rise/fall of one actual Oil boundary. The displayed short central native-frame correspondence is human-confirmed. The same matcher fails other confirmed seeds/directions, so its standalone tracking promotion is rejected. A2 temporal-region model preflight has prepared exact adjacent-frame inputs; the next human judgment is the physical interpretation of the bright/dark regions adjoining the confirmed Oil boundary. Family, authority-tier and whole-track shortcuts are contradicted by the controls. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event/initial-state Oil compatibility is locally verified and adopted. The three captured alternatives are human-confirmed Oil, and their first selection-eligibility loss is traced to Oil authority. [A1 lineage](../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) is implemented and locally verified with unchanged production output. The pink-observation review is closed: 40 s unresolved, 42 s tentatively lower rim, 44 s tentatively noise. A2 control preflight binds seven confirmed Oil correspondences and three rejected targets while preserving subtype uncertainty. The uncertainty-preserving W3 binding and recorded-selection baseline are now verified locally. The user requires both static and temporal context; the endpoint continuity review is closed with confirmed rapid rise/fall of one actual Oil boundary. The displayed short central native-frame correspondence is human-confirmed. The same matcher fails other confirmed seeds/directions, so its standalone tracking promotion is rejected. A2 temporal-region model preflight has prepared exact adjacent-frame inputs; the A/B reply identifies bubbly fluid above and less-bubbly liquid below. One joint region-exchange readout is frozen for W3 regression comparison. Family, authority-tier and whole-track shortcuts are contradicted by the controls. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -137,18 +137,15 @@ operating-point policy before evaluating it through W3. The completed temporal
 probe does not satisfy that identity prediction contract or close A2/A4.
 
 The [temporal region-exchange design preflight](../20-architecture/s11-interface-observability-witness-architecture.md#a2-temporal-region-exchange--design-preflight)
-is a concrete draft, not yet a frozen predictor. Exact adjacent-frame inputs are
-prepared: 21 frames, all seven anchors pixel-identical to their prior captures,
-and 10,296 O1 band checks with no mismatch. The next human checkpoint asks what
-creates the small A/B regions immediately above/below the confirmed Oil boundary
-at 42.5/44 s: bubbly material, less-bubbly liquid, gas, optics, mixed or unknown.
-The [review receipt](../50-diagnostics/s11/2026-10-07-sample4-region-context-preflight.json)
-pins the display. This new physical-context question does not reopen Oil position,
-continuity or the orange-path review, and does not require chemical species.
-After the answer, reject the physical model if unsupported or freeze one joint
-readout before comparison; no classifier result or adoption is claimed yet.
-Local corpus exploration remains authorized; new video is not a prerequisite to
-this local step. Independent acceptance gates stay open.
+now has the user's A/B interpretation: A is fluid containing foam/bubbles and
+B is less-bubbly liquid in the two displayed scenes. The review question is closed;
+no exact mask, chemistry, new position or tolerance is inferred. The
+[reply receipt](../50-diagnostics/s11/2026-10-07-sample4-region-context-preflight.json)
+preserves attribution. One offline joint readout and operating point are frozen
+before real inference, using the 21 exact prepared inputs. Next run all 153
+candidates through W3 and compare the seven true targets and three wrong targets;
+report abstention and protected-positive losses, then close or advance this fixed
+proposal without tuning on the same cases. Independent acceptance gates stay open.
 
 A0Q remains a separate UI lifecycle issue: the audit observed a native Qt stall;
 subsequent passing runs do not establish a repair. Preserve the initial stack and

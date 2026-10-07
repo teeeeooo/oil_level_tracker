@@ -841,3 +841,21 @@ residual results must remain unchanged. Real runs retain source/geometry/spec
 hashes, all forward/reverse alternatives and both native/0.5-second cadences.
 Endpoint and intermediate physical agreement remain separate. No W3 identity or
 field claim follows from correspondence alone.
+
+## A2 temporal region-exchange controls
+
+Freeze the architecture contract and source before real inference. Synthetic
+controls cover large positive/negative displacement, both contrast polarities,
+stationary structure, moving ribbons, additive exposure, masked unavailability,
+invalid inputs, input immutability, finite serialization, full least-squares
+numerical equivalence and incomplete/duplicate-sector aggregation. The existing
+region-competition regression suite must remain passing.
+
+Run the real saved-input adapter over all 153 candidates and verify source,
+packet, raster, masks and immutable target-snapshot hashes. Keep every competitor
+and searched cut, exact ties, support and abstention reasons. W3 is the sole
+identity/target evaluator; no hand-written success metric replaces it. Compare
+all seven reviewed positives and three reviewed wrong targets to the unchanged
+selection baseline. Report unreviewed supports separately without creating truth.
+Any protected-positive loss prevents adoption even if all wrong targets abstain.
+Scalar/contour, independent recording generalization and field remain unevaluated.

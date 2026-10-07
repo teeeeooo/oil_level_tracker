@@ -192,10 +192,14 @@ selection was performed. Full raw/gray/normalized/effective/glare rasters and
 decoder receipts remain under
 `sample/output/s11-a2-region-context-20261007-001/inputs/`.
 
-The local `review.html` in the parent directory uses original pixels with
-toggleable SVG guides. Both guide states were checked in the browser. The next
-step depends on the user's physical interpretation; an unknown answer will not
-be coerced into a two-fluid label or trigger another request for the same review.
+The local `review.html` uses original pixels with toggleable SVG guides. Both
+guide states were checked. **Human reply received:** “A:거품·기포가 섞인 유체 ,
+B : 기포가 적은 액체”. Apply this qualitative interpretation to the two displayed
+scenes, without extending it to whole-region masks, chemical species, other
+frames/sectors or scalar tolerances. The physical-context question is closed.
+The [frozen joint readout](../../20-architecture/s11-interface-observability-witness-architecture.md#a2-temporal-region-exchange--design-preflight)
+will now test region replacement against static/illumination/ribbon explanations;
+the reply itself establishes neither a classifier nor production adoption.
 
 ## Reproducibility and limits
 
