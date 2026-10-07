@@ -1,0 +1,915 @@
+{
+  "kind": "selected-delivery-summary-not-full-execution-evidence",
+  "base_head": "a48124c9e9479864c988f6054935d48f8cc4897d",
+  "report_source_files": 3,
+  "new_test_cases": 17,
+  "comparisons": {
+    "base_sample_1": {
+      "rows": 30,
+      "oil": 28,
+      "foam": 0,
+      "all_tracking_columns_equal_except_run_id": true,
+      "events_semantics_equal": true,
+      "truth_equal": true,
+      "fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "extrema_before_after": [
+        2,
+        2
+      ],
+      "captures_before_after": [
+        3,
+        3
+      ],
+      "longest_internal_gap_sec": 0,
+      "removed_long_bridges": [],
+      "baseline_report": {
+        "glass_id": "1a188c16-6295-56a7-bd61-61a78b7ef058",
+        "movement": "관측 가능한 지점을 기준으로 1.0초 -15.0 px에서 시작해 14.4초 -9.0 px로 비슷한 높이로 유지되었습니다. 관측 최고는 4.0초 -1.0 px, 관측 최저는 2.0초 -23.0 px입니다.",
+        "note": "첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.",
+        "extrema_count": 2,
+        "landmarks": [
+          {
+            "type": "COMPRESSOR_START",
+            "time": 0.0,
+            "label": "압축기 기동",
+            "description": "시험에서 기록한 압축기 기동 시점입니다."
+          },
+          {
+            "type": "MINIMUM_OIL_LEVEL",
+            "time": 2.0020000000000002,
+            "label": "관측 최저 유면",
+            "description": "관측된 유면이 가장 낮았던 시점입니다."
+          },
+          {
+            "type": "MAXIMUM_OIL_LEVEL",
+            "time": 4.0040000000000004,
+            "label": "관측 최고 유면",
+            "description": "관측된 유면이 가장 높았던 시점입니다."
+          },
+          {
+            "type": "OIL_DROP_START",
+            "time": 4.0040000000000004,
+            "label": "유면 하강 최초 관찰",
+            "description": "저장된 관측에서 유면의 지속 하강이 처음 확인된 시점입니다. 관측 공백이 있으면 실제 물리적 시작은 더 이를 수 있습니다."
+          }
+        ]
+      },
+      "prototype_report": {
+        "glass_id": "1a188c16-6295-56a7-bd61-61a78b7ef058",
+        "movement": "관측 가능한 지점을 기준으로 첫 관측은 1.0초 -15.0 px, 마지막 관측은 14.4초 -9.0 px입니다. 양 끝 관측 높이를 비교하면 비슷합니다. 중간 관측 높이가 달라 전 구간이 정체했다는 뜻은 아닙니다. 관측 최고는 4.0초 -1.0 px, 관측 최저는 2.0초 -23.0 px입니다.",
+        "note": "첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.",
+        "extrema_count": 2,
+        "landmarks": [
+          {
+            "type": "COMPRESSOR_START",
+            "time": 0.0,
+            "label": "압축기 기동",
+            "description": "시험에서 기록한 압축기 기동 시점입니다."
+          },
+          {
+            "type": "MINIMUM_OIL_LEVEL",
+            "time": 2.0020000000000002,
+            "label": "관측 최저 유면",
+            "description": "관측된 유면이 가장 낮았던 시점입니다."
+          },
+          {
+            "type": "MAXIMUM_OIL_LEVEL",
+            "time": 4.0040000000000004,
+            "label": "관측 최고 유면",
+            "description": "관측된 유면이 가장 높았던 시점입니다."
+          },
+          {
+            "type": "OIL_DROP_START",
+            "time": 4.0040000000000004,
+            "label": "유면 하강 최초 관찰",
+            "description": "저장된 관측에서 유면의 지속 하강이 처음 확인된 시점입니다. 관측 공백이 있으면 실제 물리적 시작은 더 이를 수 있습니다."
+          }
+        ]
+      }
+    },
+    "sample2": {
+      "rows": 5,
+      "oil": 4,
+      "foam": 0,
+      "all_tracking_columns_equal_except_run_id": true,
+      "events_semantics_equal": true,
+      "truth_equal": true,
+      "fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "extrema_before_after": [
+        0,
+        2
+      ],
+      "captures_before_after": [
+        1,
+        3
+      ],
+      "longest_internal_gap_sec": 0,
+      "removed_long_bridges": [],
+      "baseline_report": {
+        "glass_id": "0aff9b80-002e-54e1-b1a3-fff1ec97a183",
+        "movement": "관측 가능한 지점을 기준으로 0.5초 -104.0 px에서 시작해 2.0초 -113.0 px로 비슷한 높이로 유지되었습니다. 관측 최고는 1.0초 -100.0 px, 관측 최저는 1.5초 -119.5 px입니다.",
+        "note": "첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.",
+        "extrema_count": 0,
+        "landmarks": [
+          {
+            "type": "COMPRESSOR_START",
+            "time": 0.0,
+            "label": "압축기 기동",
+            "description": "시험에서 기록한 압축기 기동 시점입니다."
+          }
+        ]
+      },
+      "prototype_report": {
+        "glass_id": "0aff9b80-002e-54e1-b1a3-fff1ec97a183",
+        "movement": "관측 가능한 지점을 기준으로 첫 관측은 0.5초 -104.0 px, 마지막 관측은 2.0초 -113.0 px입니다. 양 끝 관측 높이를 비교하면 비슷합니다. 중간 관측 높이가 달라 전 구간이 정체했다는 뜻은 아닙니다. 관측 최고는 1.0초 -100.0 px, 관측 최저는 1.5초 -119.5 px입니다.",
+        "note": "첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.",
+        "extrema_count": 2,
+        "landmarks": [
+          {
+            "type": "COMPRESSOR_START",
+            "time": 0.0,
+            "label": "압축기 기동",
+            "description": "시험에서 기록한 압축기 기동 시점입니다."
+          },
+          {
+            "type": "MAXIMUM_OIL_LEVEL",
+            "time": 1.0,
+            "label": "관측 최고 유면",
+            "description": "관측된 유면이 가장 높았던 시점입니다."
+          },
+          {
+            "type": "MINIMUM_OIL_LEVEL",
+            "time": 1.5,
+            "label": "관측 최저 유면",
+            "description": "관측된 유면이 가장 낮았던 시점입니다."
+          }
+        ]
+      }
+    },
+    "sample3": {
+      "rows": 151,
+      "oil": 29,
+      "foam": 5,
+      "all_tracking_columns_equal_except_run_id": true,
+      "events_semantics_equal": true,
+      "truth_equal": true,
+      "fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "extrema_before_after": [
+        0,
+        2
+      ],
+      "captures_before_after": [
+        5,
+        7
+      ],
+      "longest_internal_gap_sec": 46.47976666666667,
+      "removed_long_bridges": [
+        {
+          "start": 34.5345,
+          "end": 81.01426666666667,
+          "span_sec": 46.47976666666667
+        },
+        {
+          "start": 81.01426666666667,
+          "end": 83.51676666666667,
+          "span_sec": 2.5024999999999977
+        },
+        {
+          "start": 88.02126666666668,
+          "end": 91.52476666666666,
+          "span_sec": 3.5034999999999883
+        }
+      ],
+      "baseline_report": {
+        "glass_id": "c21a62cd-e0e0-545c-8f7f-ee2384f036a9",
+        "movement": "관측 가능한 지점을 기준으로 30.0초 +23.5 px에서 시작해 101.5초 -46.0 px로 낮아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 81.0초 +82.0 px, 관측 최저는 100.0초 -53.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 2회입니다.",
+        "note": "직접 유면 위치가 없는 주요 구간은 35.0–80.5초, 81.5–83.0초, 88.5–91.0초 외 1개 구간입니다. 직접 관측 공백을 건너는 점선은 앞뒤 관측점을 연결한 것이며 중간 측정값을 뜻하지 않습니다. 첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.",
+        "extrema_count": 0,
+        "landmarks": [
+          {
+            "type": "COMPRESSOR_START",
+            "time": 30.03,
+            "label": "압축기 기동",
+            "description": "시험에서 기록한 압축기 기동 시점입니다."
+          },
+          {
+            "type": "FOAM_START",
+            "time": 30.5305,
+            "label": "거품 발생 1",
+            "description": "확인된 거품 관측 구간 1이 시작된 시점입니다."
+          },
+          {
+            "type": "FOAM_END",
+            "time": 32.5325,
+            "label": "거품 소멸 1",
+            "description": "거품 관측 구간 1 이후 처음으로 거품이 보이지 않은 시점입니다."
+          },
+          {
+            "type": "FOAM_START",
+            "time": 37.037,
+            "label": "거품 발생 2",
+            "description": "확인된 거품 관측 구간 2이 시작된 시점입니다."
+          },
+          {
+            "type": "FOAM_END",
+            "time": 38.038000000000004,
+            "label": "거품 소멸 2",
+            "description": "거품 관측 구간 2 이후 처음으로 거품이 보이지 않은 시점입니다."
+          }
+        ]
+      },
+      "prototype_report": {
+        "glass_id": "c21a62cd-e0e0-545c-8f7f-ee2384f036a9",
+        "movement": "관측 가능한 지점을 기준으로 첫 관측은 30.0초 +23.5 px, 마지막 관측은 101.5초 -46.0 px입니다. 양 끝 관측 높이를 비교하면 낮아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 81.0초 +82.0 px, 관측 최저는 100.0초 -53.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 2회입니다.",
+        "note": "직접 유면 위치가 없는 주요 구간은 35.0–80.5초, 81.5–83.0초, 88.5–91.0초 외 1개 구간입니다. 직접 관측 공백을 건너는 점선은 앞뒤 관측점을 연결한 것이며 중간 측정값을 뜻하지 않습니다. 2초를 초과하는 관측점 사이 공백은 연결하지 않습니다. 첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.",
+        "extrema_count": 2,
+        "landmarks": [
+          {
+            "type": "COMPRESSOR_START",
+            "time": 30.03,
+            "label": "압축기 기동",
+            "description": "시험에서 기록한 압축기 기동 시점입니다."
+          },
+          {
+            "type": "FOAM_START",
+            "time": 30.5305,
+            "label": "거품 경계 관측 시작 1",
+            "description": "거품 경계 관측 구간 1의 첫 관측입니다. 실제 발생 시점은 더 이를 수 있습니다."
+          },
+          {
+            "type": "FOAM_END",
+            "time": 32.5325,
+            "label": "거품 경계 관측 중단 1",
+            "description": "마지막 거품 경계 관측은 32.03초이며, 32.53초에는 경계 위치가 관측되지 않았습니다. 이는 실제 거품 소멸 여부나 시점을 확정하지 않습니다."
+          },
+          {
+            "type": "FOAM_START",
+            "time": 37.037,
+            "label": "거품 경계 관측 시작 2",
+            "description": "거품 경계 관측 구간 2의 첫 관측입니다. 실제 발생 시점은 더 이를 수 있습니다."
+          },
+          {
+            "type": "FOAM_END",
+            "time": 38.038000000000004,
+            "label": "거품 경계 관측 중단 2",
+            "description": "마지막 거품 경계 관측은 37.54초이며, 38.04초에는 경계 위치가 관측되지 않았습니다. 이는 실제 거품 소멸 여부나 시점을 확정하지 않습니다."
+          },
+          {
+            "type": "MAXIMUM_OIL_LEVEL",
+            "time": 81.01426666666667,
+            "label": "관측 최고 유면",
+            "description": "관측된 유면이 가장 높았던 시점입니다."
+          },
+          {
+            "type": "MINIMUM_OIL_LEVEL",
+            "time": 100.03326666666668,
+            "label": "관측 최저 유면",
+            "description": "관측된 유면이 가장 낮았던 시점입니다."
+          }
+        ]
+      }
+    },
+    "sample4": {
+      "rows": 113,
+      "oil": 101,
+      "foam": 26,
+      "all_tracking_columns_equal_except_run_id": true,
+      "events_semantics_equal": true,
+      "truth_equal": true,
+      "fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "extrema_before_after": [
+        0,
+        2
+      ],
+      "captures_before_after": [
+        3,
+        5
+      ],
+      "longest_internal_gap_sec": 2.5,
+      "removed_long_bridges": [
+        {
+          "start": 49.5,
+          "end": 52.0,
+          "span_sec": 2.5
+        }
+      ],
+      "baseline_report": {
+        "glass_id": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2",
+        "movement": "관측 가능한 지점을 기준으로 1.5초 -7.0 px에서 시작해 56.0초 -1.0 px로 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+        "note": "직접 유면 위치가 없는 주요 구간은 0.0–1.0초, 50.0–51.5초입니다. 직접 관측 공백을 건너는 점선은 앞뒤 관측점을 연결한 것이며 중간 측정값을 뜻하지 않습니다. 첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.",
+        "extrema_count": 0,
+        "landmarks": [
+          {
+            "type": "COMPRESSOR_START",
+            "time": 0.0,
+            "label": "압축기 기동",
+            "description": "시험에서 기록한 압축기 기동 시점입니다."
+          },
+          {
+            "type": "FOAM_START",
+            "time": 39.5,
+            "label": "거품 발생 1",
+            "description": "확인된 거품 관측 구간 1이 시작된 시점입니다."
+          },
+          {
+            "type": "FOAM_END",
+            "time": 53.5,
+            "label": "거품 소멸 1",
+            "description": "거품 관측 구간 1 이후 처음으로 거품이 보이지 않은 시점입니다."
+          }
+        ]
+      },
+      "prototype_report": {
+        "glass_id": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2",
+        "movement": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+        "note": "직접 유면 위치가 없는 주요 구간은 0.0–1.0초, 50.0–51.5초입니다. 직접 관측 공백을 건너는 점선은 앞뒤 관측점을 연결한 것이며 중간 측정값을 뜻하지 않습니다. 2초를 초과하는 관측점 사이 공백은 연결하지 않습니다. 첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.",
+        "extrema_count": 2,
+        "landmarks": [
+          {
+            "type": "COMPRESSOR_START",
+            "time": 0.0,
+            "label": "압축기 기동",
+            "description": "시험에서 기록한 압축기 기동 시점입니다."
+          },
+          {
+            "type": "FOAM_START",
+            "time": 39.5,
+            "label": "거품 경계 관측 시작 1",
+            "description": "거품 경계 관측 구간 1의 첫 관측입니다. 실제 발생 시점은 더 이를 수 있습니다."
+          },
+          {
+            "type": "MINIMUM_OIL_LEVEL",
+            "time": 42.0,
+            "label": "관측 최저 유면",
+            "description": "관측된 유면이 가장 낮았던 시점입니다."
+          },
+          {
+            "type": "MAXIMUM_OIL_LEVEL",
+            "time": 44.0,
+            "label": "관측 최고 유면",
+            "description": "관측된 유면이 가장 높았던 시점입니다."
+          },
+          {
+            "type": "FOAM_END",
+            "time": 53.5,
+            "label": "거품 경계 관측 중단 1",
+            "description": "마지막 거품 경계 관측은 53.00초이며, 53.50초에는 경계 위치가 관측되지 않았습니다. 이는 실제 거품 소멸 여부나 시점을 확정하지 않습니다."
+          }
+        ]
+      }
+    }
+  },
+  "prior_pair_context": {
+    "base_sample_1": {
+      "baseline": {
+        "oil": 28,
+        "foam": 0,
+        "longest_internal_gap_sec": 0
+      },
+      "challenger": {
+        "oil": 28,
+        "foam": 0,
+        "longest_internal_gap_sec": 0
+      }
+    },
+    "sample2": {
+      "baseline": {
+        "oil": 4,
+        "foam": 0,
+        "longest_internal_gap_sec": 0
+      },
+      "challenger": {
+        "oil": 4,
+        "foam": 0,
+        "longest_internal_gap_sec": 0
+      }
+    },
+    "sample3": {
+      "baseline": {
+        "oil": 29,
+        "foam": 5,
+        "longest_internal_gap_sec": 46.47976666666667
+      },
+      "challenger": {
+        "oil": 27,
+        "foam": 5,
+        "longest_internal_gap_sec": 40.507133333333336
+      }
+    },
+    "sample4": {
+      "baseline": {
+        "oil": 101,
+        "foam": 26,
+        "longest_internal_gap_sec": 2.5
+      },
+      "challenger": {
+        "oil": 101,
+        "foam": 26,
+        "longest_internal_gap_sec": 2.5
+      }
+    }
+  },
+  "fresh_application_runs": 9,
+  "fresh_application_rows": 711,
+  "source_frames_reviewed": 40,
+  "human_roi": {
+    "sample": "sample4",
+    "rows": 113,
+    "oil": 59,
+    "foam": 79,
+    "recipe_changes": [
+      {
+        "path": "/glasses/0/geometry/ellipse/center_x",
+        "before": 595.0,
+        "after": 594.4975845410628
+      },
+      {
+        "path": "/glasses/0/geometry/ellipse/center_y",
+        "before": 850.0,
+        "after": 839.6167471819646
+      },
+      {
+        "path": "/glasses/0/geometry/ellipse/radius_x",
+        "before": 52.0,
+        "after": 38.267310789049915
+      },
+      {
+        "path": "/glasses/0/geometry/ellipse/radius_y",
+        "before": 52.0,
+        "after": 33.913043478260875
+      }
+    ],
+    "recipe_sha256": "8f67b4120f20c4222645ffb3b5d25b971de9c3dacdea506238902d98e439543b",
+    "tracking_fingerprint": "8df05de8ee614d3f1add62bd0373d387b8d524e98ab9df3fddaafe3014897078",
+    "truth_original": {
+      "case_count": 5,
+      "numeric_count": 4,
+      "mean_absolute_error_px": 7.625,
+      "maximum_absolute_error_px": 22.0,
+      "cases": [
+        {
+          "frame_index": 0,
+          "truth_timestamp_sec": 0.0,
+          "sample_timestamp_sec": 0.0,
+          "truth_oil_y": 860.5,
+          "resolved_oil_y": null,
+          "absolute_error_px": null
+        },
+        {
+          "frame_index": 450,
+          "truth_timestamp_sec": 15.0,
+          "sample_timestamp_sec": 15.0,
+          "truth_oil_y": 852.5,
+          "resolved_oil_y": 853.0,
+          "absolute_error_px": 0.5
+        },
+        {
+          "frame_index": 900,
+          "truth_timestamp_sec": 30.0,
+          "sample_timestamp_sec": 30.0,
+          "truth_oil_y": 848.5,
+          "resolved_oil_y": 848.0,
+          "absolute_error_px": 0.5
+        },
+        {
+          "frame_index": 1470,
+          "truth_timestamp_sec": 49.0,
+          "sample_timestamp_sec": 49.0,
+          "truth_oil_y": 855.0,
+          "resolved_oil_y": 833.0,
+          "absolute_error_px": 22.0
+        },
+        {
+          "frame_index": 1680,
+          "truth_timestamp_sec": 56.0,
+          "sample_timestamp_sec": 56.0,
+          "truth_oil_y": 858.5,
+          "resolved_oil_y": 851.0,
+          "absolute_error_px": 7.5
+        }
+      ],
+      "authority_note": "Checked-in user truth is regression evidence. Direct-image conflicts, including the explanatory-overlay Base anchors, remain visually censored."
+    },
+    "truth_human_roi": {
+      "case_count": 5,
+      "numeric_count": 2,
+      "mean_absolute_error_px": 2.0,
+      "maximum_absolute_error_px": 2.5,
+      "cases": [
+        {
+          "frame_index": 0,
+          "truth_timestamp_sec": 0.0,
+          "sample_timestamp_sec": 0.0,
+          "truth_oil_y": 860.5,
+          "resolved_oil_y": null,
+          "absolute_error_px": null
+        },
+        {
+          "frame_index": 450,
+          "truth_timestamp_sec": 15.0,
+          "sample_timestamp_sec": 15.0,
+          "truth_oil_y": 852.5,
+          "resolved_oil_y": 851.0,
+          "absolute_error_px": 1.5
+        },
+        {
+          "frame_index": 900,
+          "truth_timestamp_sec": 30.0,
+          "sample_timestamp_sec": 30.0,
+          "truth_oil_y": 848.5,
+          "resolved_oil_y": 851.0,
+          "absolute_error_px": 2.5
+        },
+        {
+          "frame_index": 1470,
+          "truth_timestamp_sec": 49.0,
+          "sample_timestamp_sec": 49.0,
+          "truth_oil_y": 855.0,
+          "resolved_oil_y": null,
+          "absolute_error_px": null
+        },
+        {
+          "frame_index": 1680,
+          "truth_timestamp_sec": 56.0,
+          "sample_timestamp_sec": 56.0,
+          "truth_oil_y": 858.5,
+          "resolved_oil_y": null,
+          "absolute_error_px": null
+        }
+      ],
+      "authority_note": "Checked-in user truth is regression evidence. Direct-image conflicts, including the explanatory-overlay Base anchors, remain visually censored."
+    },
+    "report": {
+      "glass_id": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2",
+      "movement": "관측 가능한 지점을 기준으로 첫 관측은 0.5초 -8.0 px, 마지막 관측은 32.0초 +14.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 26.5초 +14.0 px, 관측 최저는 1.0초 -9.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 3회입니다.",
+      "note": "직접 유면 위치가 없는 주요 구간은 32.5–56.0초입니다. 직접 관측 공백을 건너는 점선은 앞뒤 관측점을 연결한 것이며 중간 측정값을 뜻하지 않습니다. 2초를 초과하는 관측점 사이 공백은 연결하지 않습니다. 첫 관측 전이나 마지막 관측 후의 공백에는 유면 선을 임의로 연장하지 않습니다.",
+      "extrema_count": 2,
+      "landmarks": [
+        {
+          "type": "COMPRESSOR_START",
+          "time": 0.0,
+          "label": "압축기 기동",
+          "description": "시험에서 기록한 압축기 기동 시점입니다."
+        },
+        {
+          "type": "MINIMUM_OIL_LEVEL",
+          "time": 1.0,
+          "label": "관측 최저 유면",
+          "description": "관측된 유면이 가장 낮았던 시점입니다."
+        },
+        {
+          "type": "FOAM_START",
+          "time": 8.5,
+          "label": "거품 경계 관측 시작 1",
+          "description": "거품 경계 관측 구간 1의 첫 관측입니다. 실제 발생 시점은 더 이를 수 있습니다."
+        },
+        {
+          "type": "MAXIMUM_OIL_LEVEL",
+          "time": 26.5,
+          "label": "관측 최고 유면",
+          "description": "관측된 유면이 가장 높았던 시점입니다."
+        },
+        {
+          "type": "FOAM_END",
+          "time": 29.5,
+          "label": "거품 경계 관측 중단 1",
+          "description": "마지막 거품 경계 관측은 29.00초이며, 29.50초에는 경계 위치가 관측되지 않았습니다. 이는 실제 거품 소멸 여부나 시점을 확정하지 않습니다."
+        },
+        {
+          "type": "FOAM_START",
+          "time": 30.5,
+          "label": "거품 경계 관측 시작 2",
+          "description": "거품 경계 관측 구간 2의 첫 관측입니다. 실제 발생 시점은 더 이를 수 있습니다."
+        },
+        {
+          "type": "FOAM_END",
+          "time": 34.0,
+          "label": "거품 경계 관측 중단 2",
+          "description": "마지막 거품 경계 관측은 33.50초이며, 34.00초에는 경계 위치가 관측되지 않았습니다. 이는 실제 거품 소멸 여부나 시점을 확정하지 않습니다."
+        },
+        {
+          "type": "FOAM_START",
+          "time": 35.5,
+          "label": "거품 경계 관측 시작 3",
+          "description": "거품 경계 관측 구간 3의 첫 관측입니다. 실제 발생 시점은 더 이를 수 있습니다."
+        },
+        {
+          "type": "FOAM_END",
+          "time": 51.5,
+          "label": "거품 경계 관측 중단 3",
+          "description": "마지막 거품 경계 관측은 51.00초이며, 51.50초에는 경계 위치가 관측되지 않았습니다. 이는 실제 거품 소멸 여부나 시점을 확정하지 않습니다."
+        }
+      ]
+    },
+    "last_oil_time": 32.0
+  },
+  "event_probe": {
+    "sample2": {
+      "rows": 5,
+      "added": [
+        [
+          "MAXIMUM_OIL_LEVEL",
+          1.0,
+          null,
+          30
+        ],
+        [
+          "MINIMUM_OIL_LEVEL",
+          1.5,
+          null,
+          45
+        ]
+      ],
+      "removed": [],
+      "samples_unchanged": true,
+      "foam_events_unchanged": true
+    },
+    "sample3": {
+      "rows": 151,
+      "added": [
+        [
+          "MAXIMUM_OIL_LEVEL",
+          81.01426666666667,
+          null,
+          2428
+        ],
+        [
+          "MINIMUM_OIL_LEVEL",
+          100.03326666666668,
+          null,
+          2998
+        ]
+      ],
+      "removed": [],
+      "samples_unchanged": true,
+      "foam_events_unchanged": true
+    },
+    "sample4": {
+      "rows": 113,
+      "added": [
+        [
+          "MAXIMUM_OIL_LEVEL",
+          44.0,
+          null,
+          1320
+        ],
+        [
+          "MINIMUM_OIL_LEVEL",
+          42.0,
+          null,
+          1260
+        ],
+        [
+          "ZERO_CROSS_DOWN",
+          7.0,
+          null,
+          210
+        ],
+        [
+          "ZERO_CROSS_DOWN",
+          13.0,
+          null,
+          390
+        ],
+        [
+          "ZERO_CROSS_DOWN",
+          15.0,
+          null,
+          450
+        ],
+        [
+          "ZERO_CROSS_UP",
+          12.0,
+          null,
+          360
+        ],
+        [
+          "ZERO_CROSS_UP",
+          18.0,
+          null,
+          540
+        ],
+        [
+          "ZERO_CROSS_UP",
+          20.5,
+          null,
+          615
+        ],
+        [
+          "ZERO_CROSS_UP",
+          23.0,
+          null,
+          690
+        ],
+        [
+          "ZERO_STABLE_RECOVERY",
+          18.0,
+          19.5,
+          540
+        ],
+        [
+          "ZERO_STABLE_RECOVERY",
+          20.5,
+          22.0,
+          615
+        ],
+        [
+          "ZERO_STABLE_RECOVERY",
+          23.0,
+          39.0,
+          690
+        ]
+      ],
+      "removed": [],
+      "samples_unchanged": true,
+      "foam_events_unchanged": true
+    },
+    "base_sample_1": {
+      "rows": 30,
+      "added": [],
+      "removed": [],
+      "samples_unchanged": true,
+      "foam_events_unchanged": true
+    }
+  },
+  "input_pins": {
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/base_sample_1.mp4": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/base_sample_1.oilrecipe": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/base_sample_1.oiltruth": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample2.mp4": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample2.oilrecipe": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample2.oiltruth": "f45479f7bb5f4216cb9c6920ac994d2d690942f2ed432d5d8a8647af030c731f",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample3.mp4": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample3.oilrecipe": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample3.oiltruth": "8cb2b917eede7708894fa90f59f96f1d9eac272813af6d457dcbc292496dd8ab",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample4.mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample4.oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+    "/Users/sunjaekim/Developer/oil_level_tracker/sample/sample4.oiltruth": "f02575ac2379b4d135567f1835aa772803af13a20413b8aa58175d890f5241bd"
+  },
+  "full_evidence_root": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-third-audit-context-20261007-001",
+  "validation": {
+    "canonical_unique_passed": 2343,
+    "predecessor_cases_retained": 2326,
+    "new_unique_cases": 17,
+    "new_case_ids": [
+      [
+        "tests.unit.test_report_context_contract",
+        "test_equal_endpoints_are_not_reported_as_entire_window_steady[values0]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_equal_endpoints_are_not_reported_as_entire_window_steady[values1]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_equal_endpoints_are_not_reported_as_entire_window_steady[values2]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_foam_namespace_does_not_select_legacy_oil_extrema_regime[R7_FOAM_OIL_TOPOLOGY_CONFLICT]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_foam_namespace_does_not_select_legacy_oil_extrema_regime[R7_FOAM_REJECTED]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_foam_namespace_does_not_select_legacy_oil_extrema_regime[R7_FOAM_UNCONFIRMED]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_foam_unknown_does_not_claim_physical_disappearance"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_gap_policy_never_adds_or_changes_anchors[0]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_gap_policy_never_adds_or_changes_anchors[1]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_gap_policy_never_adds_or_changes_anchors[2]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_gap_policy_never_adds_or_changes_anchors[5]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_gap_policy_never_adds_or_changes_anchors[None]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_legacy_r7_continuation_still_cannot_be_extremum"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_missing_singleton_and_flat_inputs_preserve_samples[values0]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_missing_singleton_and_flat_inputs_preserve_samples[values1]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_missing_singleton_and_flat_inputs_preserve_samples[values2]"
+      ],
+      [
+        "tests.unit.test_report_context_contract",
+        "test_missing_singleton_and_flat_inputs_preserve_samples[values3]"
+      ]
+    ],
+    "first_nonqt_passed": 2077,
+    "first_nonqt_skipped": 12,
+    "first_nonqt_skip_ids": [
+      [
+        "tests.test_s11_evidence_architecture_probe",
+        "test_production_p2_returns_known_low_exposure_false_no_interface_cases_to_ambiguity"
+      ],
+      [
+        "tests.test_s11_offline_temporal_trajectory_probe",
+        "test_four_video_held_out_reconstruction_is_insufficient_for_integration"
+      ],
+      [
+        "tests.test_s11_p2_spatial_interaction_probe",
+        "test_low_light_sample4_boundary_keeps_spatial_rejection_or_direct_same_interface_recovery"
+      ],
+      [
+        "tests.test_s11_sequence_observability_integrity",
+        "test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs"
+      ],
+      [
+        "tests.test_s11_spatial_path_probe",
+        "test_historical_spatial_probe_remains_bounded_diagnostic_evidence"
+      ],
+      [
+        "tests.test_s11_spatial_path_probe",
+        "test_low_light_p1_warning_is_rejected_for_missing_symmetric_path_window"
+      ],
+      [
+        "tests.test_s11_spatial_path_probe",
+        "test_native_spatial_recoveries_use_nondegenerate_cross_roi_paths"
+      ],
+      [
+        "tests.test_s11_spatial_path_probe",
+        "test_spatial_manifest_declares_bounded_current_frame_resources"
+      ],
+      [
+        "tests.test_s11_spatial_production_fallback",
+        "test_low_exposure_known_false_boundary_warning_stays_fail_closed"
+      ],
+      [
+        "tests.test_s11_spatial_production_fallback",
+        "test_p2_semantic_rescues_do_not_gain_spatial_numeric_oil"
+      ],
+      [
+        "tests.test_s11_spatial_production_fallback",
+        "test_slice_a_removes_distributed_supplemental_authority_without_forced_promotion"
+      ],
+      [
+        "tests.test_s11_temporal_reacquisition_continuity",
+        "test_sample3_r17_onset_owner_continuity_without_coordinate_carry"
+      ]
+    ],
+    "qt_passed": 254,
+    "corpus_recovery_passed": 12,
+    "remaining_unexecuted": 0,
+    "canonical_failures": 0,
+    "focused_passed": 36,
+    "baseline_new_contract_failed": 13,
+    "baseline_new_contract_passed": 4,
+    "qualification_note": "Union of completed selections after missing-MP4 recovery; not one uninterrupted all-green canonical run. Qt historical stability issue remains OPEN."
+  },
+  "preservation": {
+    "completed_at": "2026-10-07T13:31:27.150882+09:00",
+    "base_head": "a48124c9e9479864c988f6054935d48f8cc4897d",
+    "remote_main": "a48124c9e9479864c988f6054935d48f8cc4897d",
+    "main_status": "clean",
+    "tracked_files_verified": 768,
+    "tracked_files_changed": [],
+    "corpus_pins_verified": 12,
+    "human_roi_pin_verified": true,
+    "worktree": "/private/tmp/s11-third-context-a48124c",
+    "worktree_changes": "M docs/catalog-by-created-date.md\n M src/oil_tracker/adapters/reporting/graph_renderer.py\n M src/oil_tracker/application/services/graph_series.py\n M src/oil_tracker/application/services/report_presentation.py\n?? docs/20-architecture/s11-report-context-presentation-design.md\n?? tests/unit/test_report_context_contract.py",
+    "patch_sha256": "a4b4682755c30255e40216f053ead9eac20d75f90a8c350a1590e9e9f34c8235",
+    "patch_bytes": 17814,
+    "environment": {
+      "python": "3.14.4 (v3.14.4:23116f998f6, Apr  7 2026, 09:45:22) [Clang 17.0.0 (clang-1700.6.4.2)]",
+      "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+      "opencv": "4.14.0",
+      "numpy": "2.5.1",
+      "matplotlib": "3.11.1",
+      "PySide6": "6.11.1",
+      "pytest": "9.1.1"
+    },
+    "commit_push_merge": false,
+    "detector_source_changed": false,
+    "field_disposition": "unchanged FAIL",
+    "validation_summary_sha256": "bbcbeb673210a8c2f8cd7c5e4d698c4a8a638464877eed20091171ee444ab558",
+    "full_evidence_root": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-third-audit-context-20261007-001",
+    "governance": "S11 detector governance passed.",
+    "patch_apply_check_on_main": "passed (dry-run only)"
+  }
+}

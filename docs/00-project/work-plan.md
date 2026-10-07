@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. The two 2026-10-07 audits are imported with their original bytes. A0B test-contract repair is adopted at `fa2d6d5`; verification is recorded in the [adoption checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md). A1 lossless support/pair/score-lineage integration is the next bounded detector task. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B test-contract repair is adopted at `fa2d6d5`; verification and subsequent preservation are recorded in the [adoption checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md). The third-audit report prototype is preserved but NOT ADOPTED. Next work starts with report-contract repair and source/report interval review; A1 lossless support/pair/score-lineage integration remains the next bounded detector task before A2. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -44,13 +44,38 @@ scores remain pinned. This is not a general impossibility finding for spatial cl
 
 ## Next transition
 
-Resume from the [audit adoption checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md),
-then read §8 A1 of the [second audit](../70-reference/s11-audit-2026-10-07/s11-second-audit-and-detector-work-spec-2026-10-07.md).
-The current request authorizes synchronizing this checkout, preserving the audit
-inputs, adopting A0B, verifying it, and committing/pushing the handoff checkpoint.
-This checkpoint does not implement A1–A4 or close the S11 milestone.
+Resume from the [preservation checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md#third-audit-and-worktree-preservation--2026-10-07),
+then read §7 of the [third audit](../70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md)
+and §8 A1 of the [second audit](../70-reference/s11-audit-2026-10-07/s11-second-audit-and-detector-work-spec-2026-10-07.md).
+The current preservation request authorizes audit/worktree recovery, plan and
+navigation updates, verified temporary cleanup, commit and push. It does not
+adopt the report prototype, change detector behavior or complete A1–A4.
 
-Next bounded implementation is A1: connect actual upper/lower support, signed
+The next implementation sequence is:
+
+1. Review and adopt the bounded report Oil-flag namespace and endpoint/Foam
+   observation wording repair. Preserve stored values, validity, flags and event
+   meanings; verify the actual adopted source on the four fixed video windows.
+2. Decide the display-gap and bounded scene-capture contracts in the existing
+   report architecture/validation owners. Two seconds remains a proposed display
+   cap, not a detector threshold. Scene-only captures cannot fabricate Oil guides
+   or events. Record static-report versus Result Review differences explicitly.
+3. Compare source and reports over major intervals: prioritize sample4's late
+   Oil/Foam transition and sample3's long gap/reobserved descent. Record direction,
+   transition order, observability and sustained misleading interpretations;
+   numeric counts and conditional MAE remain secondary. Select one consequential
+   distortion before choosing a detector challenger. Human ROI is an unadopted
+   input experiment, not established improvement.
+4. Repair domain-event legacy Oil compatibility as a separate bounded change
+   when undertaken. Check initial-state reconstruction and downstream event,
+   judgment and Review consumers; a report-only PASS does not cover changed
+   `events.csv` semantics. Preserve actual legacy Oil anchor protection.
+5. Complete A1's three finite lineage gaps, then evaluate one A2 Oil or separate
+   A3 Foam hypothesis against the chosen interval and two-sided controls. Reuse
+   W3 for A4 and add the interval assessment; exposed clips remain regression
+   material. Context improvement supplements, not replaces, O2/O3/field gates.
+
+Next bounded detector implementation is A1: connect actual upper/lower support, signed
 center/partner pair measurements, and score-to-scalar coordinate dependencies
 through the existing frame-local sidecar/witness. Keep authority, scores,
 candidates, completed outputs, Foam and existing diagnostics unchanged. Apply
@@ -380,10 +405,13 @@ required for the current measurement.
 
 ## Current authorization boundary
 
-The 2026-10-07 checkpoint request authorizes audit adoption, proportional
-verification, commit and push on the current checkout. The [adoption record](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md)
-bounds what this checkpoint implements. A1–A4 are the documented continuation;
-this handoff does not claim their implementation or reopen Windows field runs.
+The latest 2026-10-07 request authorizes preserving audit inputs and worktree
+changes, reconciling Git/checkout state, safely cleaning verified temporary
+material, updating this plan and committing/pushing the preservation checkpoint.
+The [adoption record](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md)
+distinguishes adopted A0B from unadopted report/detector experiments. The next
+transition above is the implementation plan; this preservation handoff does not
+claim those changes are implemented or reopen Windows field runs.
 The earlier grants below describe the retained detector-development context.
 
 The user authorized replacement of the Oil temporal identity and phase/evidence

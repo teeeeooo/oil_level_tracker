@@ -393,3 +393,4 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 2026-10-07 | [Audit adoption checkpoint](60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md) | 실제 체크아웃 A0B 반영·검증 및 인계 |
 | 2026-10-07 | [First supplied audit](70-reference/s11-audit-2026-10-07/s11-audit-and-detector-work-spec-2026-10-07.md) | 원문 bytes 보존, 현재 상태 owner 아님 |
 | 2026-10-07 | [Second supplied audit](70-reference/s11-audit-2026-10-07/s11-second-audit-and-detector-work-spec-2026-10-07.md) | 원문 bytes 보존; [JSON/ZIP/native evidence manifest](70-reference/s11-audit-2026-10-07/import-manifest.json) |
+| 2026-10-07 | [Third supplied audit](70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md) | 원문 bytes 보존; 보고서 prototype 미채택, ZIP·JSON·worktree 복구 자료는 같은 manifest 참조 |

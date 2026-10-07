@@ -1,7 +1,7 @@
 {
   "schema": "s11-audit-import-manifest-v1",
   "audit_base": "9f41d2f8a517da21f570f57ed1b4e2009a9d48db",
-  "description": "Byte-preserved supplied audits and selected native evidence. Full native artifacts remain in ignored sample/output/s11-second-audit-20261007-001; 75 receipt artifacts and 12 corpus pins verified during adoption.",
+  "description": "Byte-preserved supplied first, second and third audits, selected native evidence and recoverable unadopted worktree changes. Full native artifacts and worktree snapshots remain in ignored sample/output paths documented by the preservation receipt.",
   "files": {
     "s11-audit-and-detector-work-spec-2026-10-07.md": "817e333663696fd81a3a3b9fef3fb6fa95c7eebcb9dd31550140b9040ea3cc81",
     "s11-audit-execution-summary-2026-10-07.json": "3f614b3bc062232accbfa03e73cc5b66fff070c4d154556355557f6070509889",
@@ -11,6 +11,18 @@
     "second-audit-execution-summary.json": "ac96335704b821221ee299d5b3c00fda92363ec982e9be7c1a1783c0efa602d2",
     "second-audit-final_receipt.json": "cdd32762ea2771d72edd9f99de4bc87b840c6ff1291a93766de06dfc94c89104",
     "second-audit-qt-initial-stall-native.txt": "8ba5e11d50221ade03721f03668b06f59f0b024904c3538d4c54ee25dbad3df8",
-    "second-audit-qt_preflight_stability_probe.json": "02de4fca525d47beac6120c9bdb51f8b90ba638302fe6900c8c9f0842ced0065"
+    "second-audit-qt_preflight_stability_probe.json": "02de4fca525d47beac6120c9bdb51f8b90ba638302fe6900c8c9f0842ced0065",
+    "s11-third-audit-code-and-evidence-2026-10-07.zip": "bfa96bf51e7bb993501060a158e8480802358f7f3b34f2465921b2c0edc44901",
+    "s11-third-audit-execution-summary-2026-10-07.json": "fe29b0bdac6f5396fb5dbc365424659084e81240d4774b7fa7b5f227aa191f90",
+    "s11-third-audit-report-context-work-spec-2026-10-07.md": "9954d6bda5ba0fbb2e67da12311f16156f0456c936a6979ebad9bbbfa8b7c308",
+    "managed-validation-worktree-recovery.zip": "80f4252c1affcdbbe0d272a4ec092dfaa3711d9e0f8b7abbdca51814c8e2db54",
+    "sibling-audit-worktree-recovery.zip": "12157518110077834fceb1ff06fb8a48b17b1d53df2e55b904eb6d5158ed0ba8",
+    "third-audit-native-evidence-manifest.json": "d6318c29bf4af1968027db7bc52adb78c5225b1b63e6b8c456e09df345051af8",
+    "third-audit-preservation-receipt.json": "fe567156ae9121e17101f9cc3568b298b7e8f969ae5c7fcf2d3ffdea2168d9eb",
+    "third-report-worktree-recovery.zip": "0f23b9159864e4055212c835fc75956c78ea58763f324816e71d2023ba02dc1f"
+  },
+  "audit_bases": {
+    "first_second": "9f41d2f8a517da21f570f57ed1b4e2009a9d48db",
+    "third": "a48124c9e9479864c988f6054935d48f8cc4897d"
   }
 }

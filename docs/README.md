@@ -104,11 +104,17 @@ follow-up audits, not competing current authorities:
 | [2026-10-01 audit/work specification](50-diagnostics/s11/s11-detector-improvement-audit-and-work-spec-2026-10-01.md) | Audits progress at `85a01cd`, identifies target/pooling risks and proposes W0–W7 | Use its named work items through the current work-plan ledger; do not treat its dated pending/completion prose as live status |
 | [2026-10-01 W4 progress audit](50-diagnostics/s11/s11-w4-progress-audit-and-continuation-plan-2026-10-01-ba1bd6a.md) | Audits `ba1bd6a` and proposes W4-R0–R5 continuation within W4 | Addendum to the prior specifications; preserve the original audit and use the live ledger for the active substep |
 
-The two 2026-10-07 supplied audits and their machine summaries are preserved
+The three 2026-10-07 supplied audits and their machine summaries are preserved
 byte-for-byte as [external source material](70-reference/s11-audit-2026-10-07/import-manifest.json).
 The [adoption checkpoint](60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md)
 records the actual checkout integration and validation. The second audit refines
-the first; A0B/A0Q/A1–A4 are bounded work within W4, not new milestones. Their
+the first; A0B/A0Q/A1–A4 are bounded work within W4, not new milestones. The
+[third audit](70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md)
+adds a tested but unadopted report prototype and prioritizes source/report
+movement context. Its two-second display cap is a proposal; current report and
+detector acceptance owners remain authoritative. Recovery ZIPs preserve all
+three inspected worktrees' unadopted source changes; full local snapshots and
+native evidence are located by the checkpoint and its preservation receipt. Their
 historical “main unchanged” statements remain true of the audit, while the Work
 Plan owns current adoption and next work. Rejected experimental scripts stay in
 the preserved ZIP, outside production and test discovery.

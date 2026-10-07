@@ -1,0 +1,196 @@
+{
+  "base_head": "a48124c9e9479864c988f6054935d48f8cc4897d",
+  "worktrees": {
+    "third-report": {
+      "source": "/private/tmp/s11-third-context-a48124c",
+      "base_head": "a48124c9e9479864c988f6054935d48f8cc4897d",
+      "snapshot": "sample/output/s11-preservation-20261007-002/third-report/snapshot",
+      "entries": 774,
+      "untracked": [
+        "docs/20-architecture/s11-report-context-presentation-design.md",
+        "tests/unit/test_report_context_contract.py"
+      ],
+      "tracked_patch_sha256": "da13fc64fc7a6530fc9a2e2ca4ed8dd885b428b2f069e3d8f590bf0773274367",
+      "inventory_sha256": "7e217ab5c5cd3b6df0647115705d41c13d8f12ba9634f6dc1633130836f964d9",
+      "reconstruction": "verified with isolated Git index against HEAD; every tracked blob and untracked snapshot verified",
+      "recovery_zip": "docs/70-reference/s11-audit-2026-10-07/third-report-worktree-recovery.zip",
+      "recovery_zip_sha256": "0f23b9159864e4055212c835fc75956c78ea58763f324816e71d2023ba02dc1f"
+    },
+    "sibling-audit": {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-audit-20261007",
+      "base_head": "9f41d2f8a517da21f570f57ed1b4e2009a9d48db",
+      "snapshot": "sample/output/s11-preservation-20261007-002/sibling-audit/snapshot",
+      "entries": 763,
+      "untracked": [
+        "docs/20-architecture/s11-finite-candidate-evidence-admission.md",
+        "tests/unit/test_characterization_telemetry_bridge.py",
+        "tests/unit/test_oil_nonfinite_evidence.py"
+      ],
+      "tracked_patch_sha256": "f0382dbdade98f34abd91a852206084cbd5f3926ca95b6093d80ab31f06ece54",
+      "inventory_sha256": "f4ad4051b4d4866042cb757fdf9a339241128b9c14b33334081de1a85bcb90ca",
+      "reconstruction": "verified with isolated Git index against HEAD; every tracked blob and untracked snapshot verified",
+      "recovery_zip": "docs/70-reference/s11-audit-2026-10-07/sibling-audit-worktree-recovery.zip",
+      "recovery_zip_sha256": "12157518110077834fceb1ff06fb8a48b17b1d53df2e55b904eb6d5158ed0ba8"
+    },
+    "managed-validation": {
+      "source": "/Users/sunjaekim/Library/Application Support/predictor-local-mcp/runtime/worktrees/validation-60a5b641bc01a37b31e60420",
+      "base_head": "9f41d2f8a517da21f570f57ed1b4e2009a9d48db",
+      "snapshot": "sample/output/s11-preservation-20261007-002/managed-validation/snapshot",
+      "entries": 1306,
+      "untracked": [
+        "continuation-results/P1-separated-pulse-rejected.patch",
+        "continuation-results/P2-domain-pulse-rejected.patch",
+        "continuation-results/P3-focused.xml",
+        "continuation-results/P3-frame1290-raw-and-proposed.png",
+        "continuation-results/P3-nonqt-canonical.xml",
+        "continuation-results/P3-qt.xml",
+        "continuation-results/P3-recent-anchor-broad-rejected.patch",
+        "continuation-results/P3-resolver-baseline.json",
+        "continuation-results/P3-resolver-candidate.json",
+        "continuation-results/P3-skipped-nodeids.json",
+        "continuation-results/P3C-cached-results.json",
+        "continuation-results/P3C-nonqt-canonical.xml",
+        "continuation-results/P3C-qt-collection.txt",
+        "continuation-results/P3C-qt-process-sample.txt",
+        "continuation-results/P3C-qt-rerun.xml",
+        "continuation-results/P3C-resolver-baseline.json",
+        "continuation-results/P3C-resolver-candidate.json",
+        "continuation-results/P3C-source-freeze.json",
+        "continuation-results/application-P3-recent-anchor/comparison-summary.json",
+        "continuation-results/application-P3C-repeated-anchor/comparison-summary.json",
+        "continuation-results/application-P4-localized/comparison-summary.json",
+        "continuation-results/application-baseline/comparison-summary.json",
+        "continuation-results/application-candidate/comparison-summary.json",
+        "continuation-results/application-differences.json",
+        "continuation-results/build_execution_receipt.py",
+        "continuation-results/cadence-P3C-raw-fixed.json",
+        "continuation-results/cadence-raw-fixed.json",
+        "continuation-results/cadence_probe.py",
+        "continuation-results/capture-P3-sample4.json",
+        "continuation-results/capture-P4-localized-sample3.json",
+        "continuation-results/capture-baseline-sample3.json",
+        "continuation-results/capture-candidate-sample3.json",
+        "continuation-results/capture_application.py",
+        "continuation-results/compact-transfer.b64",
+        "continuation-results/decodable-extent.json",
+        "continuation-results/decoder-tail-probe.json",
+        "continuation-results/decoder_tail_probe.py",
+        "continuation-results/execution-receipt.json",
+        "continuation-results/freeze_candidate.py",
+        "continuation-results/full-video-P3C/comparison-summary.json",
+        "continuation-results/full-video-baseline/comparison-summary.json",
+        "continuation-results/full-video-differences.json",
+        "continuation-results/full-video-verified-P3C/comparison-summary.json",
+        "continuation-results/full-video-verified-baseline/comparison-summary.json",
+        "continuation-results/full_video_replay.py",
+        "continuation-results/handoff-probe.json",
+        "continuation-results/handoff_probe.py",
+        "continuation-results/human-candidate-stride1.json",
+        "continuation-results/human-candidate-stride15.json",
+        "continuation-results/make_transport.py",
+        "continuation-results/margin-baseline.json",
+        "continuation-results/margin-candidate.json",
+        "continuation-results/margin_probe.py",
+        "continuation-results/package-manifest.json",
+        "continuation-results/package-transfer.b64",
+        "continuation-results/package_continuation.py",
+        "continuation-results/phase-scale-probe.json",
+        "continuation-results/phase-state-differences.json",
+        "continuation-results/phase_scale_measurement.py",
+        "continuation-results/phase_scale_probe.py",
+        "continuation-results/phase_scale_variant.py",
+        "continuation-results/pulse-domain-broad.xml",
+        "continuation-results/pulse-domain-focused.xml",
+        "continuation-results/pulse-separated-focused.xml",
+        "continuation-results/recent-profile-sample3-candidate.json",
+        "continuation-results/recent-profile-sample4-P3.json",
+        "continuation-results/recent_profile_probe.py",
+        "continuation-results/resolve_cached.py",
+        "continuation-results/review-P4-localized-1.png",
+        "continuation-results/review-P4-localized-2.png",
+        "continuation-results/review-candidate-1.png",
+        "continuation-results/review-candidate-2.png",
+        "continuation-results/review_added_rows.py",
+        "continuation-results/run_variant.py",
+        "continuation-results/s11-continuation-evidence-2026-10-07.zip",
+        "continuation-results/s11-continuation-transfer.tar.xz",
+        "continuation-results/s11-p3c-bounded-anchor-reconfirmation.patch",
+        "continuation-results/scan_decodable_extent.py",
+        "continuation-results/sequence_variant.py",
+        "continuation-results/strict_recent_probe.py",
+        "continuation-results/summarize_experiments.py",
+        "continuation-results/visual-review-selection.json",
+        "docs/20-architecture/s11-bounded-anchor-reconfirmation-2026-10-07.md",
+        "docs/60-evidence/s11/s11-bounded-anchor-reconfirmation-2026-10-07.md",
+        "tests/unit/test_oil_recent_anchor_witness.py"
+      ],
+      "tracked_patch_sha256": "4826f030cdbb7684bce29e16e37044aef859c1c0eaf294482c93a23c26efc235",
+      "inventory_sha256": "52095493373fd602e37174d4f60eec14b35c6eea9a98972361553d9366789205",
+      "reconstruction": "verified with isolated Git index against HEAD; every tracked blob and untracked snapshot verified",
+      "recovery_zip": "docs/70-reference/s11-audit-2026-10-07/managed-validation-worktree-recovery.zip",
+      "recovery_zip_sha256": "80f4252c1affcdbbe0d272a4ec092dfaa3711d9e0f8b7abbdca51814c8e2db54"
+    }
+  },
+  "exclusions": [
+    "regenerable __pycache__ and .pytest_cache",
+    "obsolete worktree .git pointer"
+  ],
+  "third_native_evidence": {
+    "root": "sample/output/s11-third-audit-context-20261007-001",
+    "entries": 239,
+    "inventory_sha256": "d6318c29bf4af1968027db7bc52adb78c5225b1b63e6b8c456e09df345051af8"
+  },
+  "cleanup": {
+    "removed_worktrees": [
+      "/private/tmp/s11-third-context-a48124c"
+    ],
+    "removed_verified_attachment_copies": [
+      {
+        "source": "/tmp/codex-remote-attachments/01a114e1-2a85-7632-b75b-3b97c64f9fc0/883d57a5-6671-422f-a2c6-fe15d3e0ca08/1-s11-third-audit-report-context-work-spec-2026-10-07.md",
+        "preserved": "docs/70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md",
+        "sha256": "9954d6bda5ba0fbb2e67da12311f16156f0456c936a6979ebad9bbbfa8b7c308"
+      },
+      {
+        "source": "/tmp/codex-remote-attachments/01a114e1-2a85-7632-b75b-3b97c64f9fc0/883d57a5-6671-422f-a2c6-fe15d3e0ca08/2-s11-third-audit-code-and-evidence-2026-10-07.zip",
+        "preserved": "docs/70-reference/s11-audit-2026-10-07/s11-third-audit-code-and-evidence-2026-10-07.zip",
+        "sha256": "bfa96bf51e7bb993501060a158e8480802358f7f3b34f2465921b2c0edc44901"
+      },
+      {
+        "source": "/tmp/codex-remote-attachments/01a114e1-2a85-7632-b75b-3b97c64f9fc0/883d57a5-6671-422f-a2c6-fe15d3e0ca08/3-s11-third-audit-execution-summary-2026-10-07.json",
+        "preserved": "docs/70-reference/s11-audit-2026-10-07/s11-third-audit-execution-summary-2026-10-07.json",
+        "sha256": "fe29b0bdac6f5396fb5dbc365424659084e81240d4774b7fa7b5f227aa191f90"
+      },
+      {
+        "source": "/tmp/codex-remote-attachments/01a114e1-2a85-7632-b75b-3b97c64f9fc0/490f9ea3-0411-482a-a0eb-e6823936f5a2/2-s11-second-audit-and-detector-work-spec-2026-10-07.md",
+        "preserved": "docs/70-reference/s11-audit-2026-10-07/s11-second-audit-and-detector-work-spec-2026-10-07.md",
+        "sha256": "a35101f082ed0014ec825dbff4c35de1bd962543b23f07ea9dd2b0fc1c0e3f6a"
+      },
+      {
+        "source": "/tmp/codex-remote-attachments/01a114e1-2a85-7632-b75b-3b97c64f9fc0/490f9ea3-0411-482a-a0eb-e6823936f5a2/1-s11-second-audit-code-and-evidence-2026-10-07.zip",
+        "preserved": "docs/70-reference/s11-audit-2026-10-07/s11-second-audit-code-and-evidence-2026-10-07.zip",
+        "sha256": "1e8be03b59dae0291070ca0623b2f4e49a5542838b40b677f1149297bde18f3f"
+      },
+      {
+        "source": "/tmp/codex-remote-attachments/01a114e1-2a85-7632-b75b-3b97c64f9fc0/490f9ea3-0411-482a-a0eb-e6823936f5a2/5-s11-second-audit-execution-summary-2026-10-07.json",
+        "preserved": "docs/70-reference/s11-audit-2026-10-07/s11-second-audit-execution-summary-2026-10-07.json",
+        "sha256": "37d6ff27db4ea4ae8b4eef332e775d1190f4dade1db4c3c04579f80a88d3b22e"
+      },
+      {
+        "source": "/tmp/codex-remote-attachments/01a114e1-2a85-7632-b75b-3b97c64f9fc0/490f9ea3-0411-482a-a0eb-e6823936f5a2/3-s11-audit-and-detector-work-spec-2026-10-07.md",
+        "preserved": "docs/70-reference/s11-audit-2026-10-07/s11-audit-and-detector-work-spec-2026-10-07.md",
+        "sha256": "817e333663696fd81a3a3b9fef3fb6fa95c7eebcb9dd31550140b9040ea3cc81"
+      },
+      {
+        "source": "/tmp/codex-remote-attachments/01a114e1-2a85-7632-b75b-3b97c64f9fc0/490f9ea3-0411-482a-a0eb-e6823936f5a2/4-s11-audit-execution-summary-2026-10-07.json",
+        "preserved": "docs/70-reference/s11-audit-2026-10-07/s11-audit-execution-summary-2026-10-07.json",
+        "sha256": "3f614b3bc062232accbfa03e73cc5b66fff070c4d154556355557f6070509889"
+      }
+    ],
+    "retained_worktrees": {
+      "sibling-audit": "Separate unadopted detector work; preserved, not reset or removed.",
+      "managed-validation": "Separate runtime-managed unadopted detector work; preserved, not reset or removed."
+    },
+    "open_handle_check": "lsof +D found no open files under the removed temporary worktree",
+    "main_runtime_changed": false
+  }
+}

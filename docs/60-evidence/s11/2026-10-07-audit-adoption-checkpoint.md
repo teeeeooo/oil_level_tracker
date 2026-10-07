@@ -158,10 +158,100 @@ The separate sibling audit worktree and predictor-managed validation worktree
 remain in place with their unadopted changes. Detector code, input videos,
 recipes, truth, accepted results and field disposition are unchanged.
 
+## Third audit and worktree preservation — 2026-10-07
+
+The subsequent user request authorizes preserving worktrees and audit material,
+reconciling the checkout with Git, verified temporary cleanup, commit and push.
+This checkpoint starts at clean `main@a48124c9e9479864c988f6054935d48f8cc4897d`;
+an origin fetch confirmed the same remote main before edits. It preserves the
+third prototype without adopting its source into main.
+
+### Supplied and native evidence
+
+The [third audit](../../70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md),
+[delivery JSON](../../70-reference/s11-audit-2026-10-07/s11-third-audit-execution-summary-2026-10-07.json)
+and [code/evidence ZIP](../../70-reference/s11-audit-2026-10-07/s11-third-audit-code-and-evidence-2026-10-07.zip)
+are byte-preserved in Git. The five reattached first/second audit files exactly
+matched the previously imported originals. The updated
+[import manifest](../../70-reference/s11-audit-2026-10-07/import-manifest.json)
+pins all supplied files, recovery ZIPs and preservation records.
+
+The third ZIP's fourteen payload hashes and twelve original corpus pins match.
+The saved four-video baseline/prototype tracking CSVs match in every column
+except `run_id`, across 299 rows per mode. Parsing the saved JUnit selections
+confirms 2,343 distinct passing cases: 2,077 initial non-Qt, 254 Qt and twelve
+recovered corpus cases, with no remaining skipped cases or failures. These are
+checks of stored execution evidence, not newly executed tests or detector runs.
+They do not close the historical Qt stall or establish field acceptance.
+
+Full native third-audit evidence remains at
+`sample/output/s11-third-audit-context-20261007-001`: 239 files, including nine
+application/report bundles, raw crops, logs and receipts. Its
+[file manifest](../../70-reference/s11-audit-2026-10-07/third-audit-native-evidence-manifest.json)
+pins the files without changing original execution paths. Full bundles/media
+remain ignored local evidence and are not distributed by Git push.
+
+### Worktree recovery and cleanup
+
+The [preservation receipt](../../70-reference/s11-audit-2026-10-07/third-audit-preservation-receipt.json)
+locates complete local snapshots under
+`sample/output/s11-preservation-20261007-002`. All non-cache files and symlink
+targets were compared with their source; regenerable `__pycache__`,
+`.pytest_cache` and obsolete worktree `.git` pointers were excluded.
+
+| Worktree | Base | Preserved entries | Disposition |
+|---|---|---:|---|
+| `/private/tmp/s11-third-context-a48124c` | `a48124c` | 774 | Removed through Git after preservation and no-open-file check |
+| sibling `oil_level_tracker-s11-audit-20261007` | `9f41d2f` | 763 | Preserved; live checkout retained as separate unadopted work |
+| runtime-managed `validation-60a5b641bc01a37b31e60420` | `9f41d2f` | 1,306 | Preserved; managed checkout retained as separate unadopted work |
+
+Each recovery ZIP contains its base HEAD, binary tracked patch, status, full
+snapshot inventory, and untracked source/test/design files:
+
+- [Third report recovery](../../70-reference/s11-audit-2026-10-07/third-report-worktree-recovery.zip)
+- [Sibling audit recovery](../../70-reference/s11-audit-2026-10-07/sibling-audit-worktree-recovery.zip)
+- [Managed validation recovery](../../70-reference/s11-audit-2026-10-07/managed-validation-worktree-recovery.zip)
+
+For recovery, create a new detached worktree at the recorded base HEAD, unpack
+the selected ZIP separately, apply `tracked.patch` there, then copy the contents
+of `untracked/` into the same relative paths. Never apply a different experiment's
+patch to current main as an implicit adoption. Original videos and full generated
+outputs must be obtained from the local snapshot/evidence paths when required;
+the source recovery ZIPs are not copies of all native artifacts.
+
+Every tracked blob reconstructed through an isolated Git index matched its
+snapshot, and all untracked files matched the original snapshot inventory.
+The supplied report patch additionally reconstructed all six modified/new files
+in the temporary third worktree exactly. The three recovered experiments remain
+unadopted. No existing worktree was reset or rebased onto main.
+
+Eight hash-matched attachment copies and their two empty temporary directories
+were removed after repository preservation. The third native evidence and all
+earlier preserved evidence were retained. The two other live worktrees retain
+their original changes and HEADs; their older bases are intentional experiment
+identities, not a reason to overwrite them.
+
+The Work Plan now routes report repair and interval context review before the
+bounded detector continuation. Two-second display gaps, scene captures,
+domain-event compatibility and Review consistency still require their own
+implementation/acceptance. A0B stays adopted, A0Q stays open, O2 stays unpromoted
+and FIELD FAIL is unchanged.
+
+Post-cleanup verification passed for all seventeen reference payload hashes,
+2,843 snapshot entries, 239 native evidence files and twelve original corpus
+pins. The retained worktree HEADs, tracked patches and status match their
+preservation records. All 435 local links/anchors in the five updated navigation
+and checkpoint documents resolve. Detector governance passes against `a48124c`;
+runtime source, tests, recipes and truth are unchanged. This documentation and
+preservation scope does not require another canonical detector replay.
+Authored changes pass whitespace checks. The byte-preserved third-audit Markdown
+retains six original two-space hard breaks reported by unrestricted Git
+whitespace checking; its original hash remains unchanged.
+
 ## Detector Governance
 
-- Logic-map nodes: `OIL-AUTHORITY`, `TRACE-PUBLICATION`, `OIL-PROJECTION`.
+- Logic-map nodes: `OIL-AUTHORITY`, `TRACE-PUBLICATION`, `OIL-PROJECTION`, `RESULT-PRESENTATION`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F09`, `S11-F10`.
-- First harmful stage: this adoption repairs the test comparison contract, not a runtime stage. The supplied audit locates Y854 loss at authority/boundary advantage; Y821 physical identity and private-Windows first loss remain unresolved.
+- First harmful stage: A0B repairs the test comparison contract, not a runtime stage. The supplied third audit identifies report namespace/wording/gap defects at RESULT-PRESENTATION; this preservation checkpoint does not adopt their repair. The earlier audit locates Y854 loss at authority/boundary advantage; Y821 physical identity and private-Windows first loss remain unresolved.
 - Logic-map impact: NONE — only tests, external reference preservation and handoff routing change; runtime owners are unchanged.
 - Failure-registry impact: NONE — existing provenance and no-shortcut guards remain; rejected experiments and field failure are not promoted.
