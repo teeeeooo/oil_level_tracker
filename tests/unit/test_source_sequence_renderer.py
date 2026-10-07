@@ -251,3 +251,17 @@ def test_slow_reported_timestamps_cannot_create_unbounded_sequential_loop():
         sampler.read_at(1)
     assert sampler.sequential_read_count == MAX_SEQUENTIAL_ADVANCE
     assert sampler.last is None
+
+
+@pytest.mark.parametrize("reported_ms", [0.0, 1234.0])
+def test_report_reader_preserves_backend_timestamp_including_zero(monkeypatch, reported_ms):
+    from oil_tracker.adapters.reporting.source_sequence_renderer import _ReviewSourceReader
+    from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+    frame = np.zeros((40, 40, 3), np.uint8)
+    monkeypatch.setattr(OpenCvVideoReader, "read_at", lambda self, time: (frame, 0, time))
+    reader = object.__new__(_ReviewSourceReader)
+    reader._capture = NS(get=lambda prop: reported_ms)
+    returned, frame_index, actual = reader.read_at(.002)
+    assert returned is frame and frame_index == 0
+    assert actual == reported_ms / 1000
+    assert SourceSequenceRenderer().reader_factory is _ReviewSourceReader

@@ -108,9 +108,21 @@ class _SequenceSampler:
             raise
 
 
+class _ReviewSourceReader(OpenCvVideoReader):
+    """Keep a backend-reported zero timestamp; never replace it with a request.
+
+    The shared detector reader remains unchanged. Its compatibility fallback
+    treats 0 ms as falsy, which is unsuitable for source-pixel review metadata.
+    """
+    def read_at(self, timestamp_sec):
+        frame, frame_index, _ = super().read_at(timestamp_sec)
+        actual_msec = float(self._capture.get(cv2.CAP_PROP_POS_MSEC))
+        return frame, frame_index, actual_msec / 1000.0
+
+
 class SourceSequenceRenderer:
     def __init__(self, reader_factory=None):
-        self.reader_factory = reader_factory or OpenCvVideoReader
+        self.reader_factory = reader_factory or _ReviewSourceReader
 
     def render(self, result, recipe, session, directory: Path, *, presentation,
                cancellation=None, progress=None) -> dict[str, list[dict]]:

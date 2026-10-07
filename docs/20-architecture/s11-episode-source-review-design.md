@@ -50,6 +50,14 @@ The isolated 46.48-second sample3 gap probe retained 240/240 frames using one se
 and 1,393 sequential reads in 11.89 seconds under the then-current local load.
 Do not report a speed-up ratio against unrelated whole-run timing.
 
+An independent sequential-from-frame-zero pixel audit also exposed an inherited
+reader timestamp fallback: a valid backend 0 ms was replaced by requested 2 ms.
+A report-only reader specialization now reads the unchanged capture's raw reported
+time after seeking, preserving zero. No detector reader, scalar, event or tracking
+timestamp behavior is altered. NaN/Inf/mistimed source values remain unavailable.
+The byte-for-byte image audit uses independently decoded source-frame ordinals,
+not a second timestamp seek that can land one frame later at NTSC boundaries.
+
 ## Separate detector experiment: side-texture persistence
 
 Inspect existing variance/edge-density owners first. Unlike the closed raw-BGR
