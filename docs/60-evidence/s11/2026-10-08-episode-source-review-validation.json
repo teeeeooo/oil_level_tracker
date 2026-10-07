@@ -1,0 +1,804 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-08T01:16:37.899640+09:00",
+  "base_head": "a5cbf65f44cb2f6c3ff2c2de610bf89eb92467b7",
+  "code_head": "52003aaa2f9e66e2a85dd8c485fdcf4ba5713b22",
+  "branch": "work/s11-episode-texture-20261008",
+  "local_evidence_root": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-episode-texture-20261008-001",
+  "main_adopted": false,
+  "field_disposition": "FIELD FAIL",
+  "production_detector_changed": false,
+  "media_recipe_truth_unchanged": true,
+  "report_disposition": "IMPLEMENTED; LOCALLY VERIFIED; independent comprehension NOT_EVALUATED",
+  "detector_experiment_disposition": "CLOSED WITHOUT PROMOTION",
+  "final_test_coverage": {
+    "expected": 2488,
+    "passed": 2488,
+    "failed": [],
+    "skipped": [],
+    "not_run": [],
+    "unexpected": [],
+    "duplicate_calls": {},
+    "qt_count": 254
+  },
+  "earlier_test_coverage": [
+    {
+      "expected": 2482,
+      "passed": 2482,
+      "failed": [],
+      "skipped": [],
+      "not_run": [],
+      "unexpected": [],
+      "duplicate_calls": {},
+      "qt_count": 254
+    },
+    {
+      "expected": 2486,
+      "passed": 2486,
+      "failed": [],
+      "skipped": [],
+      "not_run": [],
+      "unexpected": [],
+      "duplicate_calls": {},
+      "qt_count": 254
+    }
+  ],
+  "focused_timestamp_repair": {
+    "passed": 105,
+    "seconds": 26.92
+  },
+  "report_verification": {
+    "source_head": "52003aaa2f9e66e2a85dd8c485fdcf4ba5713b22",
+    "samples": {
+      "base_sample_1": {
+        "numeric_rows": 30,
+        "numeric_oil_count": 28,
+        "numeric_foam_count": 0,
+        "baseline_series_and_events_equal": true,
+        "baseline_csv_equal_except_run_id": true,
+        "runtime_seconds": 68.39137629201286,
+        "first_runtime_seconds": 87.19843499999843,
+        "provenance": {
+          "state_counts": {
+            "UNKNOWN_REVIEW": 2,
+            "DRAINING_VISIBLE": 5,
+            "FILLING_VISIBLE": 4,
+            "PARTIAL_VISIBLE": 19
+          },
+          "numeric_count": 28,
+          "numeric_without_same_frame_provenance": 0,
+          "foam_numeric_count": 0,
+          "sequence_unavailable_count": 2
+        },
+        "bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-episode-texture-20261008-001/release/base_sample_1/oil_level_analysis_S11_context_prototype_base_sample_1_20261008_010426",
+        "sequences": [
+          {
+            "start_sec": 0.002000000000000224,
+            "end_sec": 6.0040000000000004,
+            "reasons": [
+              "검출 최저값 주변",
+              "검출 최고값 주변"
+            ],
+            "status": "AVAILABLE",
+            "frame_count": 181,
+            "available_count": 181,
+            "subsampled": true,
+            "requested_spacing_sec": 0.03334444444444445,
+            "decode_strategy": {
+              "maximum_sequential_advance": 32,
+              "seek_count": 1,
+              "sequential_read_count": 180
+            },
+            "independently_sequentially_verified_frames": [
+              0,
+              90,
+              180
+            ]
+          }
+        ],
+        "production_bundle_bytes": 8269578,
+        "resolved_asset_links": 14,
+        "report_sha256": "08ccea0da19c0140b254e42d2ae984a997dea5296478094de6f9793f84f991a6"
+      },
+      "sample2": {
+        "numeric_rows": 5,
+        "numeric_oil_count": 4,
+        "numeric_foam_count": 0,
+        "baseline_series_and_events_equal": true,
+        "baseline_csv_equal_except_run_id": true,
+        "runtime_seconds": 22.615660125011345,
+        "first_runtime_seconds": 32.94548616599059,
+        "provenance": {
+          "state_counts": {
+            "UNKNOWN_REVIEW": 1,
+            "FILLING_VISIBLE": 2,
+            "DRAINING_VISIBLE": 2
+          },
+          "numeric_count": 4,
+          "numeric_without_same_frame_provenance": 0,
+          "foam_numeric_count": 0,
+          "sequence_unavailable_count": 1
+        },
+        "bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-episode-texture-20261008-001/release/sample2/oil_level_analysis_S11_context_prototype_sample2_20261008_010510",
+        "sequences": [
+          {
+            "start_sec": 0.0,
+            "end_sec": 2.0,
+            "reasons": [
+              "검출 최고값 주변",
+              "검출 최저값 주변"
+            ],
+            "status": "AVAILABLE",
+            "frame_count": 61,
+            "available_count": 61,
+            "subsampled": false,
+            "requested_spacing_sec": 0.03333333333333333,
+            "decode_strategy": {
+              "maximum_sequential_advance": 32,
+              "seek_count": 1,
+              "sequential_read_count": 60
+            },
+            "independently_sequentially_verified_frames": [
+              0,
+              30,
+              60
+            ]
+          }
+        ],
+        "production_bundle_bytes": 5500757,
+        "resolved_asset_links": 11,
+        "report_sha256": "fb636ceedcccf788d3e5835e051fecfb3abb47d6865b9cca9d27feaf89556978"
+      },
+      "sample3": {
+        "numeric_rows": 151,
+        "numeric_oil_count": 29,
+        "numeric_foam_count": 5,
+        "baseline_series_and_events_equal": true,
+        "baseline_csv_equal_except_run_id": true,
+        "runtime_seconds": 350.289871667017,
+        "first_runtime_seconds": 561.152166874992,
+        "provenance": {
+          "state_counts": {
+            "DRAINING_VISIBLE": 15,
+            "FOAMING_VISIBLE": 3,
+            "FILLING_VISIBLE": 4,
+            "UNKNOWN_REVIEW": 122,
+            "PARTIAL_VISIBLE": 7
+          },
+          "numeric_count": 29,
+          "numeric_without_same_frame_provenance": 0,
+          "foam_numeric_count": 5,
+          "sequence_unavailable_count": 122
+        },
+        "bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-episode-texture-20261008-001/release/sample3/oil_level_analysis_S11_context_prototype_sample3_20261008_010945",
+        "sequences": [
+          {
+            "start_sec": 30.03,
+            "end_sec": 34.032000000000004,
+            "reasons": [
+              "주요 Foam 관측 구간"
+            ],
+            "status": "AVAILABLE",
+            "frame_count": 120,
+            "available_count": 120,
+            "subsampled": true,
+            "requested_spacing_sec": 0.03363025210084203,
+            "decode_strategy": {
+              "maximum_sequential_advance": 32,
+              "seek_count": 1,
+              "sequential_read_count": 120
+            },
+            "independently_sequentially_verified_frames": [
+              900,
+              960,
+              1020
+            ]
+          },
+          {
+            "start_sec": 34.5345,
+            "end_sec": 81.01426666666667,
+            "reasons": [
+              "가장 긴 Oil 관측 공백"
+            ],
+            "status": "AVAILABLE",
+            "frame_count": 240,
+            "available_count": 240,
+            "subsampled": true,
+            "requested_spacing_sec": 0.1944760111576045,
+            "decode_strategy": {
+              "maximum_sequential_advance": 32,
+              "seek_count": 1,
+              "sequential_read_count": 1393
+            },
+            "independently_sequentially_verified_frames": [
+              1035,
+              1734,
+              2428
+            ]
+          },
+          {
+            "start_sec": 79.01426666666667,
+            "end_sec": 83.01426666666667,
+            "reasons": [
+              "검출 최고값 주변"
+            ],
+            "status": "AVAILABLE",
+            "frame_count": 120,
+            "available_count": 120,
+            "subsampled": true,
+            "requested_spacing_sec": 0.03361344537815114,
+            "decode_strategy": {
+              "maximum_sequential_advance": 32,
+              "seek_count": 1,
+              "sequential_read_count": 120
+            },
+            "independently_sequentially_verified_frames": [
+              2368,
+              2429,
+              2488
+            ]
+          },
+          {
+            "start_sec": 98.03326666666668,
+            "end_sec": 102.03326666666668,
+            "reasons": [
+              "검출 최저값 주변"
+            ],
+            "status": "AVAILABLE",
+            "frame_count": 120,
+            "available_count": 120,
+            "subsampled": true,
+            "requested_spacing_sec": 0.03361344537815114,
+            "decode_strategy": {
+              "maximum_sequential_advance": 32,
+              "seek_count": 1,
+              "sequential_read_count": 120
+            },
+            "independently_sequentially_verified_frames": [
+              2938,
+              2999,
+              3058
+            ]
+          }
+        ],
+        "production_bundle_bytes": 18267702,
+        "resolved_asset_links": 36,
+        "report_sha256": "2a937c323e12d5dc04e741eb9fcefd7f5355290984bc48bd785704ff703a7dcf"
+      },
+      "sample4": {
+        "numeric_rows": 113,
+        "numeric_oil_count": 101,
+        "numeric_foam_count": 26,
+        "baseline_series_and_events_equal": true,
+        "baseline_csv_equal_except_run_id": true,
+        "runtime_seconds": 158.85326562501723,
+        "first_runtime_seconds": 251.1073795419943,
+        "provenance": {
+          "state_counts": {
+            "UNKNOWN_REVIEW": 12,
+            "PARTIAL_VISIBLE": 47,
+            "FILLING_VISIBLE": 18,
+            "DRAINING_VISIBLE": 17,
+            "FOAMING_VISIBLE": 19
+          },
+          "numeric_count": 101,
+          "numeric_without_same_frame_provenance": 0,
+          "foam_numeric_count": 26,
+          "sequence_unavailable_count": 12
+        },
+        "bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-episode-texture-20261008-001/release/sample4/oil_level_analysis_S11_context_prototype_sample4_20261008_011325",
+        "sequences": [
+          {
+            "start_sec": 37.5,
+            "end_sec": 55.0,
+            "reasons": [
+              "주요 Foam 관측 구간"
+            ],
+            "status": "AVAILABLE",
+            "frame_count": 240,
+            "available_count": 240,
+            "subsampled": true,
+            "requested_spacing_sec": 0.07322175732217318,
+            "decode_strategy": {
+              "maximum_sequential_advance": 32,
+              "seek_count": 1,
+              "sequential_read_count": 525
+            },
+            "independently_sequentially_verified_frames": [
+              1125,
+              1389,
+              1650
+            ]
+          },
+          {
+            "start_sec": 40.0,
+            "end_sec": 46.0,
+            "reasons": [
+              "검출 최저값 주변",
+              "검출 최고값 주변"
+            ],
+            "status": "AVAILABLE",
+            "frame_count": 181,
+            "available_count": 181,
+            "subsampled": false,
+            "requested_spacing_sec": 0.03333333333333144,
+            "decode_strategy": {
+              "maximum_sequential_advance": 32,
+              "seek_count": 1,
+              "sequential_read_count": 180
+            },
+            "independently_sequentially_verified_frames": [
+              1200,
+              1290,
+              1380
+            ]
+          },
+          {
+            "start_sec": 49.5,
+            "end_sec": 52.0,
+            "reasons": [
+              "가장 긴 Oil 관측 공백"
+            ],
+            "status": "AVAILABLE",
+            "frame_count": 76,
+            "available_count": 76,
+            "subsampled": false,
+            "requested_spacing_sec": 0.03333333333333144,
+            "decode_strategy": {
+              "maximum_sequential_advance": 32,
+              "seek_count": 1,
+              "sequential_read_count": 75
+            },
+            "independently_sequentially_verified_frames": [
+              1485,
+              1523,
+              1560
+            ]
+          }
+        ],
+        "production_bundle_bytes": 11355346,
+        "resolved_asset_links": 34,
+        "report_sha256": "5b4381bc86f96d2b1f19bb2194b9f016401f5a245faaf8eafc11b3a332b9062a"
+      }
+    },
+    "numeric_rows": 299,
+    "source_frames": 1339,
+    "independent_pixel_checks": 27,
+    "all_link_count": 95,
+    "source_and_inputs_preserved": true,
+    "sample3_observer_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+    "sample3_observer_exact_match": true,
+    "seconds": 26.097602333000395,
+    "artifacts": {
+      "verify_release_reports.py": "88eaf9d64f364eb5c887b9a60a87703802b5eae775733d85dd7d7e483c221569",
+      "release-report-receipt.json": "b8e715efdb52580edc48ae2fe3c99e1f14fb51df2c5df0e8310a9c8693977a49"
+    }
+  },
+  "browser_verification": {
+    "checks": [
+      {
+        "sample": "base_sample_1",
+        "counts": [
+          181
+        ],
+        "checked": [
+          {
+            "equal": true,
+            "label": "181/181 · 요청 6.004초 · 실제 6.006초 · f180",
+            "frame": 180
+          }
+        ],
+        "layout": {
+          "width": 390,
+          "scrollWidth": 390
+        },
+        "protocol": "file:"
+      },
+      {
+        "sample": "sample2",
+        "counts": [
+          61
+        ],
+        "checked": [
+          {
+            "equal": true,
+            "label": "61/61 · 요청 2.000초 · 실제 2.000초 · f60",
+            "frame": 60
+          }
+        ],
+        "layout": {
+          "width": 390,
+          "scrollWidth": 390
+        },
+        "protocol": "file:"
+      },
+      {
+        "sample": "sample3",
+        "counts": [
+          120,
+          240,
+          120,
+          120
+        ],
+        "checked": [
+          {
+            "equal": true,
+            "label": "120/120 · 요청 34.032초 · 실제 34.034초 · f1020",
+            "frame": 1020
+          },
+          {
+            "equal": true,
+            "label": "240/240 · 요청 81.014초 · 실제 81.014초 · f2428",
+            "frame": 2428
+          },
+          {
+            "equal": true,
+            "label": "120/120 · 요청 83.014초 · 실제 83.016초 · f2488",
+            "frame": 2488
+          },
+          {
+            "equal": true,
+            "label": "120/120 · 요청 102.033초 · 실제 102.035초 · f3058",
+            "frame": 3058
+          }
+        ],
+        "layout": {
+          "width": 390,
+          "scrollWidth": 390
+        },
+        "protocol": "file:"
+      },
+      {
+        "sample": "sample4",
+        "counts": [
+          240,
+          181,
+          76
+        ],
+        "checked": [
+          {
+            "equal": true,
+            "label": "240/240 · 요청 55.000초 · 실제 55.000초 · f1650",
+            "frame": 1650
+          },
+          {
+            "equal": true,
+            "label": "181/181 · 요청 46.000초 · 실제 46.000초 · f1380",
+            "frame": 1380
+          },
+          {
+            "equal": true,
+            "label": "76/76 · 요청 52.000초 · 실제 52.000초 · f1560",
+            "frame": 1560
+          }
+        ],
+        "layout": {
+          "width": 390,
+          "scrollWidth": 390
+        },
+        "protocol": "file:"
+      }
+    ],
+    "browserErrors": [],
+    "noJavaScript": {
+      "preview": true,
+      "canvasHidden": true,
+      "controlsHidden": true
+    },
+    "missingFrame": {
+      "blank": true,
+      "label": "2/240 · 요청 37.573초 · 원본 프레임 사용 불가 (앞 장면을 연장하지 않음)"
+    },
+    "keyboardNavigation": true,
+    "asyncMissingFrameGuard": true,
+    "externalRequests": []
+  },
+  "texture": {
+    "head": "2c74ac8d321dfe6c1a9aa40c096376a8fb89813f",
+    "candidate_count": 153,
+    "unique_sector_measurements": 675,
+    "decision_counts": {
+      "UNRESOLVED": 150,
+      "INTERFACE_SUPPORTED": 3
+    },
+    "controls": [
+      {
+        "frame": 1140,
+        "candidate_input_index": 9,
+        "role": "target",
+        "protected_correct": true,
+        "decision": "UNRESOLVED",
+        "margins": [
+          -0.1091886148629595,
+          -0.010735164891394894,
+          0.16747780735286,
+          0.05376069464673777,
+          -0.0330807698484441
+        ]
+      },
+      {
+        "frame": 1200,
+        "candidate_input_index": 4,
+        "role": "target",
+        "protected_correct": false,
+        "decision": "UNRESOLVED",
+        "margins": [
+          -0.09344298533632855,
+          -0.09492331855808545,
+          -0.18231553633554257,
+          -0.10618018237962684,
+          -0.11874517862303585
+        ]
+      },
+      {
+        "frame": 1260,
+        "candidate_input_index": 4,
+        "role": "target",
+        "protected_correct": false,
+        "decision": "UNRESOLVED",
+        "margins": [
+          -0.12629344228059408,
+          -0.03788864717180407,
+          -0.12612963593331472,
+          -0.12229897466101491,
+          -0.03298584997644277
+        ]
+      },
+      {
+        "frame": 1275,
+        "candidate_input_index": 12,
+        "role": "target",
+        "protected_correct": true,
+        "decision": "UNRESOLVED",
+        "margins": [
+          null,
+          -0.03270260750284679,
+          -0.18994606758425503,
+          0.07550155968641958,
+          -0.06647142098883085
+        ]
+      },
+      {
+        "frame": 1320,
+        "candidate_input_index": 9,
+        "role": "target",
+        "protected_correct": false,
+        "decision": "UNRESOLVED",
+        "margins": [
+          -0.053670401415025326,
+          0.00972064957866825,
+          -0.11523256669683879,
+          -0.08108814982001364,
+          0.0221599516415589
+        ]
+      },
+      {
+        "frame": 1485,
+        "candidate_input_index": 19,
+        "role": "target",
+        "protected_correct": true,
+        "decision": "UNRESOLVED",
+        "margins": [
+          null,
+          0.02748496863456168,
+          -0.10312067541628339,
+          0.09617411281523336,
+          -0.08993367605154423
+        ]
+      },
+      {
+        "frame": 1560,
+        "candidate_input_index": 20,
+        "role": "target",
+        "protected_correct": true,
+        "decision": "UNRESOLVED",
+        "margins": [
+          null,
+          -0.04146948082874441,
+          -0.11494247698047144,
+          -0.050909756213545515,
+          -0.06407928328187767
+        ]
+      },
+      {
+        "frame": 1200,
+        "candidate_input_index": 10,
+        "role": "wrong_target",
+        "protected_correct": false,
+        "decision": "UNRESOLVED",
+        "margins": [
+          0.14198815079612379,
+          -0.021257214933988966,
+          0.07789281763048181,
+          -0.015066249667807341
+        ]
+      },
+      {
+        "frame": 1260,
+        "candidate_input_index": 15,
+        "role": "wrong_target",
+        "protected_correct": false,
+        "decision": "UNRESOLVED",
+        "margins": [
+          null,
+          -0.23530429460899482,
+          0.0015591595469919839,
+          -0.06882015635241881,
+          -0.10599183871936382
+        ]
+      },
+      {
+        "frame": 1320,
+        "candidate_input_index": 21,
+        "role": "wrong_target",
+        "protected_correct": false,
+        "decision": "UNRESOLVED",
+        "margins": [
+          null,
+          -0.043954306995141385,
+          -0.024794284707444797,
+          0.011504728298745964,
+          null
+        ]
+      }
+    ],
+    "seconds": 3.14863220899133,
+    "source_and_inputs_preserved": true,
+    "production_detector_changed": false,
+    "field_disposition": "FIELD FAIL"
+  },
+  "texture_ordering": [
+    {
+      "frame": 1200,
+      "true_candidate": 4,
+      "wrong_candidate": 10,
+      "true_third_margin": -0.10618018237962684,
+      "wrong_third_margin": -0.015066249667807341,
+      "global_margin_threshold_can_separate_pair": false
+    },
+    {
+      "frame": 1260,
+      "true_candidate": 4,
+      "wrong_candidate": 15,
+      "true_third_margin": -0.12229897466101491,
+      "wrong_third_margin": -0.10599183871936382,
+      "global_margin_threshold_can_separate_pair": false
+    },
+    {
+      "frame": 1320,
+      "true_candidate": 9,
+      "wrong_candidate": 21,
+      "true_third_margin": -0.053670401415025326,
+      "wrong_third_margin": -0.043954306995141385,
+      "global_margin_threshold_can_separate_pair": false
+    }
+  ],
+  "sample3_episode_audit": {
+    "diagnostics": {
+      "version": "r22-oil-ownership-evidence-replacement-v1",
+      "frame_count": 151,
+      "oil_frame_count": 29,
+      "full_frame_count": 0,
+      "empty_frame_count": 0,
+      "unknown_frame_count": 122,
+      "eligible_oil_candidate_count": 2437,
+      "ineligible_oil_candidate_count": 194,
+      "recurring_track_count": 48,
+      "maximum_track_opposition": 0.24813493403665712,
+      "oil_candidate_only_count": 390,
+      "oil_continuation_eligible_count": 1735,
+      "oil_anchor_eligible_count": 312,
+      "oil_qualified_anchor_count": 265,
+      "foam_material_seeded_frame_count": 11,
+      "foam_material_continued_frame_count": 29,
+      "foam_material_opposed_candidate_count": 92,
+      "oil_tracklet_count": 119,
+      "oil_confirmed_tracklet_count": 62,
+      "oil_provisional_tracklet_count": 57,
+      "oil_incompatible_tracklet_frame_count": 26,
+      "oil_tracklet_lost_event_count": 392,
+      "oil_terminated_tracklet_count": 119,
+      "oil_tracklet_hypothesis_count": 875,
+      "oil_tracklet_comparison_count": 7032,
+      "oil_maximum_active_tracklets": 16,
+      "oil_maximum_tracklet_eligible_refs_per_frame": 18,
+      "oil_maximum_tracklet_hypotheses_per_frame": 9,
+      "foam_raw_candidate_count": 35,
+      "foam_eligible_candidate_count": 11,
+      "foam_confirmed_frame_count": 5,
+      "foam_episode_count": 2,
+      "foam_rejected_static_episode_count": 0,
+      "foam_rejected_unconfirmed_episode_count": 0,
+      "foam_rejected_oil_alias_episode_count": 0
+    },
+    "largest_gap": {
+      "left_sec": 34.5345,
+      "right_sec": 81.01426666666667,
+      "duration_sec": 46.47976666666667,
+      "missing_rows": 92,
+      "stage_counts": {
+        "OWNER_BOUNDED_EXCLUSION": 3,
+        "OTHER_FINAL_ABSTENTION": 86,
+        "NO_PUBLISHABLE_ROW": 3
+      },
+      "phase_reason_counts": {
+        "FILL_MOTION_OWNER": 4,
+        "FILL_SPAN_MATERIAL_VETO": 1,
+        "FILLED_CAP_VETO": 87
+      }
+    },
+    "scope": "Machine publication funnel, not physical candidate accuracy. Ownership exclusions are not proof that their rejected rows are true Oil.",
+    "texture_pair_ordering": [
+      {
+        "frame": 1200,
+        "true_candidate": 4,
+        "wrong_candidate": 10,
+        "true_third_margin": -0.10618018237962684,
+        "wrong_third_margin": -0.015066249667807341,
+        "global_margin_threshold_can_separate_pair": false
+      },
+      {
+        "frame": 1260,
+        "true_candidate": 4,
+        "wrong_candidate": 15,
+        "true_third_margin": -0.12229897466101491,
+        "wrong_third_margin": -0.10599183871936382,
+        "global_margin_threshold_can_separate_pair": false
+      },
+      {
+        "frame": 1320,
+        "true_candidate": 9,
+        "wrong_candidate": 21,
+        "true_third_margin": -0.053670401415025326,
+        "wrong_third_margin": -0.043954306995141385,
+        "global_margin_threshold_can_separate_pair": false
+      }
+    ],
+    "texture_threshold_interpretation": "With the frozen three-sector rule, a threshold admitting a true candidate with score <= its wrong counterpart must admit the wrong one too. This is a diagnostic ordering test, not an operating-point change."
+  },
+  "unchanged_git_trees": {
+    "src/oil_tracker/adapters/vision": "511cbb56ba21910181e2426fc5028b90d46f7a34",
+    "src/oil_tracker/domain": "8fe0c4f8c3c8b1018e7d08539e45215bdcf37177",
+    "sample": "c099d0bae0f56ffb7b7561ab5b5388927889b723"
+  },
+  "source_tree": "8a92272d996c61763e17c9ce0c41a6ad7da89017",
+  "failed_attempts_preserved": [
+    "pre-freeze.log",
+    "browser-first.log",
+    "final-report-verification-first.log",
+    "final-report-verification.log"
+  ],
+  "boundaries": [
+    "No numerical repair or detector promotion",
+    "No private Windows run",
+    "Exposed corpus, not independent efficacy holdout",
+    "A0Q stability not resolved"
+  ],
+  "artifact_hashes": {
+    "freeze.json": "231ba43cd8806e38dcedad6905553531d07e6710184fe83b2dcd6d0304f2f5cd",
+    "release-report-receipt.json": "b8e715efdb52580edc48ae2fe3c99e1f14fb51df2c5df0e8310a9c8693977a49",
+    "release-report-verification.json": "d19340642646d61f579c8aff475ad90234740d4a6b41030322b43dfc861322b1",
+    "texture-freeze.json": "2d804c4780a91d5e123361f1c46670ddfe8af048ce9b49c3b8ed0a0c12e0a014",
+    "texture-measurements.json": "b1031f3c57c9dbf61eadd8a23a9875de7979124f461148d35dea1de3b0e771f8",
+    "texture-predictions.json": "b599a9a210ce11020be07b75e1910008acd78632b0d5aa67bc771932ae282d32",
+    "texture-report.json": "f6fd1ed764800aa13d2008a19fc83dacc6b728abe72ad0affbf2ea61af13bfa0",
+    "texture-receipt.json": "e82bbf6b9fc7fdcc1aef3a00dd1a078c4d4a1dc86c44f56d159bf765ba802da4",
+    "episode-audit-summary.json": "a0be11f969afd470bf95616e3756589a12faf578995dae14c7f8c72f291857c3",
+    "sample3-observer-receipt.json": "4edb0a605afe7db6607511959b0bf6d7e3e9aa6a6707df64698920f5e4d692b7",
+    "sample3-current-detections.json": "7804a6cd902126dee587b0ea37d0675d7ed42429b0c7e6c21b16e1f7f41af3f2",
+    "sample3-final-resolution.json": "8712f3d4240117cdadaf9efc12a2bb53bbac2c61b3036826fbf798120e02e255",
+    "browser-release-receipt.json": "fa63ea6b64e6a12c65fe9de574b5e645a98090e9ee49beec467e956d3ad06f7b",
+    "release-validation/inventory.json": "f4e86df85c48ccfe6a2ae5ad530db9ead47939351ea895809487299a9f70181c",
+    "release-validation/validation-receipt.json": "7ee893ad9b1778614fb5c33860765e4acb29466382c2c6f2ce1f4a61e5a8766a",
+    "release-validation/validation-coverage.json": "52d03f6e081dddab7471ce19bacc02fa80696a317d592e20be8981c36b7cdb93",
+    "run_release_reports.py": "46a59f4dd0dca3619ded6fdc3f856e89f63a9f14e928ab2d0996797ccaf27754",
+    "verify_release_reports.py": "88eaf9d64f364eb5c887b9a60a87703802b5eae775733d85dd7d7e483c221569",
+    "run_texture_probe.py": "82e15ce31ad9f2d13bc1e2ab7bd15f1e134f8a08378998c08b19d56193420fc0",
+    "audit_sample3_sequence.py": "bd1c0e492f672523c84efc7db8f8e1edee4785284469b084fc1c29f19a34384b",
+    "browser_check_release.mjs": "75865a4edcc54d1cc19e809e731cd13460d781c697fb41654683cff6822eb708",
+    "compare_browser_canvas.py": "9e68c87042ea254a63633f0278e74997243ceef78b6d467501399efaaf955f9a",
+    "coverage_audit.py": "8513bc1709844515ef2dc60247a01482e02da217fc61897386318a46a598805e",
+    "release-validation/run_validation.py": "64db2f279131a136b671d40f59394f9373afaa2dfc93175875fdd24a1c8b7256",
+    "finalize_evidence.py": "a630c400ca9ace969ec344e7144c32ff3c51e1d2047143913a15b0378a340ecd"
+  }
+}

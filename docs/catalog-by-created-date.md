@@ -22,7 +22,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 
 ## 폴더별 목록
 
-현재 색인 수록 268개 파일. 이후 추가된 모든 repo 문서의 전수 목록을 보증하는 수치는 아닙니다.
+현재 색인 수록 270개 파일. 이후 추가된 모든 repo 문서의 전수 목록을 보증하는 수치는 아닙니다.
 `검토 후 유지`는 승계가 확인되지 않아 현 위치를 보존한다는 뜻이며,
 그 문서의 과거 실행 지시 전체가 현행이라는 의미가 아닙니다.
 
@@ -88,7 +88,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-09-16 | [s11-r22-2-interface-path-diagnostics-architecture.md](20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md) | 현 위치 유지 |
 | 2026-09-17 | [s11-interface-observability-witness-architecture.md](20-architecture/s11-interface-observability-witness-architecture.md) | 현 위치 유지 |
 | 2026-10-07 | [s11-report-source-context-design.md](20-architecture/s11-report-source-context-design.md) | 로컬 report 후보 설계 |
-| Git 미등록 · 작성 2026-10-08 | [s11-episode-source-review-design.md](20-architecture/s11-episode-source-review-design.md) | 원본 프레임 맥락 및 별도 텍스처 실험 계약 |
+| 2026-10-08 | [s11-episode-source-review-design.md](20-architecture/s11-episode-source-review-design.md) | 원본 프레임 맥락 및 별도 텍스처 실험 계약 |
 
 ### `docs/30-validation/` — 32개
 
@@ -209,7 +209,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-08-04 | [post-s10-windows-qt-platform-bootstrap-repair.md](60-evidence/s10/post-s10-windows-qt-platform-bootstrap-repair.md) | 완료 증거 |
 | 2026-08-04 | [s10-windows-canonical-portability-qt-teardown-repair-evidence.md](60-evidence/s10/s10-windows-canonical-portability-qt-teardown-repair-evidence.md) | 완료 증거 |
 
-### `docs/60-evidence/s11/` — 85개
+### `docs/60-evidence/s11/` — 87개
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
@@ -298,6 +298,9 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-10-02 | [s11-o2-w2-f14865-scene-review.md](60-evidence/s11/s11-o2-w2-f14865-scene-review.md) | 완료 증거 |
 | 2026-10-02 | [s11-o2-w4-r3-existing-evidence-feasibility.md](60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md) | 완료 증거 |
 | 2026-10-07 | [2026-10-07-report-source-context-validation.md](60-evidence/s11/2026-10-07-report-source-context-validation.md) | 로컬 후보 실행 증거 |
+
+| 2026-10-08 | [2026-10-08-episode-source-review-validation.json](60-evidence/s11/2026-10-08-episode-source-review-validation.json) | 원본 프레임 검토 및 독립 텍스처 실험 실행 증거 |
+| 2026-10-08 | [2026-10-08-episode-source-review-validation.md](60-evidence/s11/2026-10-08-episode-source-review-validation.md) | 원본 프레임 검토 및 독립 텍스처 실험 실행 증거 |
 
 ### `docs/60-evidence/s6/` — 10개
 
