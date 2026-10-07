@@ -1,0 +1,173 @@
+{
+  "source_head": "2d63a2e6a858c882f1da2a4968c599c034cbc9f5",
+  "source_files": {
+    "tests/diagnostics/s11_interface_shadow_evaluation.py": "5909c468871ed3c5cd2095c7c4a4a88df4d08569b10985c22e999aff0f42c808",
+    "tests/diagnostics/s11_target_truth.py": "c1159e4a75160027b30cc7728647d5d24652e17697f9c08ef9e22480aa1bd079",
+    "tests/diagnostics/s11_review_records.py": "72e9de5b490cfc7a937959f78849ab319e0eec4682087d5f67f1a3b0ea284415"
+  },
+  "input_files": {
+    "docs/50-diagnostics/s11/2026-10-07-sample4-a2-control-preflight.json": "5e3d00edcc9bd571a261bbeb2647593f3563a327f4706d0bd13d1dcd712674b4",
+    "sample/output/s11-a1-lineage-20261007-001/negative-review-manifest.json": "8619c70c283747e17632f54726e155ca1361bbb33341cc32bb7ef3f10e7f77ea",
+    "sample/output/s11-a1-lineage-20261007-001/negative-review.html": "cd00ac63981baf365214c48581436a3568cb73e2154e99a6188952c9fcbee07d",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/capture-manifest.json": "fca7623eddf3b8b199a2090a257ebab73fb4a620f2f8c50a6605ab0129045b45",
+    "docs/50-diagnostics/s11/2026-10-07-sample4-pink-human-reply.json": "32c7055416065b8ef909ef82b914bb262317a3d519eeee782f374eced4120991",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140.json": "44ef26c2675a1bc3612e0dec6dfe204c0071ef36261536e2f601f00f311142ad",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200.json": "2302974b18ddad2776134e7718a081e162a710f13d4a89a36e228fec7b794e0a",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260.json": "2f1baac170542bacb918a05a4e862a766750f3eba52d25d25e1daa5a3152bfff",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275.json": "40eea7e489ba09bd881f5b212db1996f4ee431f9b1b61f43110a7f5b7dc7bb55",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320.json": "a1b2a9ae3ad6b6764ba5d9b97f4553ba5ec258171ca8dc6327b343fc90b9d933",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485.json": "ae2fa571fabb9bdb237fabdfe7991b5f05a36a2510780858b0024348cd4fa1c0",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560.json": "25802b8815ce7bf58b844808835b858de79a52afede8ad40f1c78d79753eeb99"
+  },
+  "binding": {
+    "status": "BOUND_NOT_EVALUATED",
+    "target_spec_id": "uppermost-actual-fluid-boundary-v1",
+    "artifact_sha256": "91227aaada7f87ab026c54250096c63d1bca0a081d763c3ccb2dbabe161f5a0c",
+    "evaluation_truth_sha256": "01b2e6de67053c55197c7823830817bb1f921b65037dce4161bb6cecdc37272f",
+    "target_role_counts": {
+      "unreviewed": 143,
+      "target": 7,
+      "other_non_target": 3
+    },
+    "preserved_input_count": 3,
+    "field_disposition": "FIELD FAIL",
+    "auto_acceptance": false
+  },
+  "record_id_basis": "Lossless projection of saved final-code candidate capture via extract_frame; derived record/run IDs identify this import, not an original indexed bundle. No decoder/detector rerun or bundle-link assertion.",
+  "local_artifact_root": "sample/output/s11-a2-target-binding-20261007-001",
+  "files": {
+    "baseline-predictions.json": "dec1c07a7e723e48bac00538ad212b88263cd7a0010ffe376a4caaa2b1995b4d",
+    "baseline-report.json": "a90f5dbf78a6c19fbe6e06f200648089fc3f070950c188e5148eeee0f3a57a4b",
+    "bind.log": "c8517a492f1943ddc60575def9aeb83935d6ab52cf11efee899ee5554b18877d",
+    "bind_controls.py": "5e39d64ea4d10efdf28ac10053320381f0c4b4411cabd14e30a881036936bf39",
+    "labels.json": "6c4d2b0a1dbee57cf294ebd0d894d141ba3a9b8667be8355dbd18296fb9fdbcc",
+    "labels.json.history/037919e6f0729c6915d93f751064bb74049fb6709893e549f874b3c18fa93cd3.json": "1ad85e8c9dc2bdc80fabbb6c513ea515aae7102fe0f68dd316887926bb0b8d90",
+    "labels.json.history/08c99df600e8fccc22f91085ad1e3cc44ba1ec7394289634a43cee74ef7b13ce.json": "34eab459d8511ff79625a90403b24bd186954b0ecab41864ddc166415c164e06",
+    "labels.json.history/2c222ee042402b82454cb74e4d35308a51e41a0bf1805a5ff83c685eb387395a.json": "72024d95f098cfae3c2762c99dc599ca0f5b58ede09c3ee41c9ff89e75503022",
+    "labels.json.history/9b77fc6cc46b6c623424ba6cb02ca7064704cfb76254e42247700b9f4d7409e4.json": "509a5e4f2f8bd799ed66fd828eb217dc68422880969b981dc87e79c07f00321b",
+    "labels.json.history/bb2656104377368ce56535fab841cb874738b6e86ff72c6a683fa6e8d4b36d51.json": "12787b061331073d5544d841e2f36110ba9fed144749043690da593f9eabca6d",
+    "labels.json.history/bf07aa6b001348bbf0533857f7e82ca0fc5483c545b21d3bdf27ee89e3cf7cb0.json": "efe9e3d8cace6e0855aa0f0943f7708101fbedb3e23de81257bdb31e9449d6ef",
+    "labels.json.history/f4b17e3b53d2b18473fc43c052395cb68c770b626bf66d65bf6990bb4eb32e9f.json": "37edcca754df604173bf25ed6ed4d66bf2c1b2357f0f78b76876f90abbc82d9f",
+    "mapping.json": "bf575a44224e53c03aa73f24c1dc059654111bc3ee7fa357417a91e0a294a8db",
+    "packet.json": "be57465f80235a65edbf16f338e45ecd5590a43238bb718762052a965d0f24c4",
+    "receipt.json": "c53ec7546ea86bb77aeee5b18ac962ddc24da86abb8b1bbb901e2bb7e56759e0",
+    "related-tests.log": "65930565861ca531240c0bc117e03bf0130c1a3f24700248ce327d7940c0abad",
+    "related-tests.xml": "2d980e66b74daf2679b9683855e7dc77fbb1609914a32f58f838e34d203dd3f1",
+    "snapshot.json": "5ae726cfef8ae9b4c14fdb23bd5f3489218b9716c4b597b74fe07170f7667485"
+  },
+  "report_summary": {
+    "schema_version": "s11-o2-target-shadow-report-v1",
+    "source_label_schema": "s11-o2-target-truth-v1",
+    "metric_semantics": "uppermost_fluid_target_identity_no_transferred_local_scalar_or_entity_truth",
+    "frozen_labels_sha256": "01b2e6de67053c55197c7823830817bb1f921b65037dce4161bb6cecdc37272f",
+    "prediction_sha256": "81876b1aa7279a3f0c4171ff6820961e28626b0e3e1fe6d97173b86a661bec3f",
+    "status": "EXPLORATORY_UNCALIBRATED",
+    "field_disposition": "FIELD FAIL",
+    "auto_acceptance": false,
+    "limitations": [
+      "Human labels and recording-group independence are attestations, not machine-certified physical truth.",
+      "No classifier, operating point or production authority is supplied by this evaluator.",
+      "Unreviewed/unresolved support is reported separately; visible frames with no candidates remain misses.",
+      "Localization compares exact X extents only; no scalar-to-curve or interpolated truth substitution.",
+      "Qualitative near_interface is not a numeric tolerance; no full-path PASS policy is supplied.",
+      "Artifact tags may overlap; family counts are not mutually exclusive votes.",
+      "Legacy v1 labels are read explicitly as identity only; no path truth is inferred.",
+      "A content hash detects drift but cannot prove an untouched holdout or annotation chronology.",
+      "Physical-interface history is preserved separately; internal interfaces are target negatives, not invented artifacts. Local/scalar/entity and artifact-subtype truth are not transferred."
+    ],
+    "evaluation_regime": "EXPLORATORY_UNCALIBRATED",
+    "prediction_identity": {
+      "target_spec_id": "identity-local-support-original-scalar-v1",
+      "operating_point_id": "unchanged-r22-completed-selection",
+      "classifier_id": "recorded-completed-selection-baseline-v1",
+      "artifact_sha256": "fca7623eddf3b8b199a2090a257ebab73fb4a620f2f8c50a6605ab0129045b45",
+      "fit_partitions": [],
+      "operating_point_description": "Recorded selected Oil member supports the target; every other member is UNRESOLVED, never a negative. No new classifier/fit."
+    },
+    "target_truth": {
+      "schema_version": "s11-o2-target-truth-v1",
+      "target_spec_id": "uppermost-actual-fluid-boundary-v1",
+      "artifact_sha256": "91227aaada7f87ab026c54250096c63d1bca0a081d763c3ccb2dbabe161f5a0c",
+      "source_labels_sha256": "0a07f57bc511cc290e3d9b35126225e6529033f0cbd4a020f3c0dec263c773b2",
+      "physical_identity_counts": {
+        "unreviewed": 143,
+        "interface": 7,
+        "uncertain": 3
+      },
+      "target_role_counts": {
+        "unreviewed": 143,
+        "target": 7,
+        "other_non_target": 3
+      },
+      "local_scalar_entity_truth": "NOT_TRANSFERRED"
+    },
+    "regression": {
+      "frame_count": 7,
+      "candidate_count": 153,
+      "unreviewed_candidate_count": 143,
+      "abstention_count": 146,
+      "confusion": {
+        "interface": {
+          "INTERFACE_SUPPORTED": 4,
+          "UNRESOLVED": 3
+        },
+        "non_interface": {
+          "INTERFACE_SUPPORTED": 3
+        },
+        "uncertain": {},
+        "unreviewed": {
+          "UNRESOLVED": 143
+        }
+      },
+      "supported_count": 7,
+      "wrong_non_interface_support_count": 3,
+      "verified_identity_precision": 0.5714285714285714,
+      "identity_recall": 0.5714285714285714
+    },
+    "target_regression": {
+      "candidate_identity_confusion": {
+        "interface": {
+          "INTERFACE_SUPPORTED": 4,
+          "UNRESOLVED": 3
+        },
+        "non_interface": {
+          "INTERFACE_SUPPORTED": 3
+        },
+        "uncertain": {},
+        "unreviewed": {
+          "UNRESOLVED": 143
+        }
+      },
+      "scalar": {
+        "candidate_count": 153,
+        "decision_counts": {
+          "NOT_EVALUATED": 153
+        },
+        "status": "not_measured",
+        "verified_usable_count": null,
+        "mean_error_px": null,
+        "unverified_usable_count": 0,
+        "usable_by_identity": {}
+      },
+      "visible_frame_count": 7,
+      "visible_frame_verified_identity_coverage": 0.5714285714285714,
+      "visible_frame_verified_scalar_coverage": null
+    }
+  },
+  "verification": {
+    "focused_tests": 58,
+    "related_contract_tests": 115,
+    "total": 173,
+    "focused_evidence": "pytest terminal result, 58 passed in 3.72s; no saved XML for this invocation",
+    "related_evidence": [
+      "related-tests.log",
+      "related-tests.xml"
+    ],
+    "production_change": false,
+    "pin_check": "all source/input/capture/binding pins verified; final bind.log bytes pinned separately from in-flight original receipt"
+  },
+  "temporal_context_reply": {
+    "path": "docs/50-diagnostics/s11/2026-10-07-sample4-temporal-context-human-reply.json",
+    "sha256": "8308ca43c63c0e2c63218142d593ffceb805a4b97f832980d8f3f28c1948d479"
+  }
+}
