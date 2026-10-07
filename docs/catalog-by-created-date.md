@@ -397,3 +397,4 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 2026-10-07 | [Report context design](20-architecture/s11-report-context-presentation-design.md) | 보고서 수리의 범위와 과거 실패 검토 |
 | 2026-10-07 | [Report context adoption](60-evidence/s11/2026-10-07-report-context-adoption.md) | 실제 반영 범위와 검증; 현재 단계는 Work Plan 참조 |
 | 2026-10-07 | [sample4 interval candidate lineage](50-diagnostics/s11/2026-10-07-sample4-interval-candidate-lineage.md) | 일곱 프레임 후보와 사용자 확인용 대안; 같은 폴더 JSON manifest 참조 |
+| 2026-10-07 | [A1 measurement lineage](60-evidence/s11/2026-10-07-a1-measurement-lineage.md) | 세 계측 공백 통합·무손실 검증; 같은 폴더 JSON receipt 및 후보 탈락 경로 |

@@ -31,8 +31,8 @@ The capture preserves 153 Oil candidates. At 40 and 42 seconds, the current and
 completed choices differ. This alone does not prove the current choice is Oil.
 Nor does it justify bypassing sequence processing: the confirmed correct 42.5
 and 49.5-second completed observations have no current-frame scalar observation.
-The first physically harmful stage remains unknown until candidate correspondence
-is established and its admission/selection lineage is traced.
+At capture preparation, the first physically harmful stage was unknown pending
+correspondence and admission tracing. The returned judgment and trace follow below.
 
 ## Candidate-bound human checkpoint
 
@@ -46,8 +46,8 @@ The default cyan alternatives are:
 | 1260 | 4 | `oil_hypothesis:ab9efea5ca32565368ef129b` | 839 | Current-frame selected candidate |
 | 1320 | 9 | `material_path` | 844 | Agent-proposed visible-boundary alternative; not selected current Oil |
 
-These alternatives are **unreviewed**, not inferred labels. The narrow question
-is whether each cyan line follows actual Oil. This distinguishes represented-but-
+At preparation these alternatives were **unreviewed**, not inferred labels. The
+question asked whether each cyan line follows actual Oil. This distinguishes represented-but-
 displaced Oil from missing/incorrect candidate support without asking the user to
 repeat their judgment of the completed observations. No exact pixel annotation,
 Foam attribution or judgment of the four confirmed positives is requested.
@@ -63,8 +63,39 @@ all three default cyan alternatives at 40/42/44 seconds. The [bound reply](2026-
 therefore confirms their Oil correspondence without assigning exact pixel truth
 or extending it to nearby candidate indices. The original review manifest is
 unchanged. Correct Oil is represented at each of these frames but displaced in
-completed output. The earliest admission/selection loss still requires tracing.
+completed output. The admission trace below establishes their first eligibility loss.
 This closes the candidate-correspondence checkpoint; no repeated review is needed.
+
+## Admission lineage after A1
+
+[A1 verification](../../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) preserves
+final-code equality at all seven observations. The read-only admission helper
+wraps the real `OilAdmissionEvidenceOwner.prepare`/`evaluate_candidate_authority`
+calls, checks all 2,549 finite Oil candidates in exact ordered input identity, and
+returns each original result unchanged. The full official 113-frame tracking
+fingerprint remains equal. The receipt retains exact contexts and evidence.
+
+| Confirmed candidate | Earliest observed eligibility loss | Executed reason / failed gate |
+|---|---|---|
+| f1200 idx4, Y841 | `OIL-AUTHORITY`, CANDIDATE_ONLY | `foam_material_identity`; `independent_from_foam_material_track` |
+| f1260 idx4, Y839 | `OIL-AUTHORITY`, CANDIDATE_ONLY | `insufficient_authority`; `boundary_advantage`, `ordered_lower_cross_representation` |
+| f1320 idx9, Y844 | `OIL-AUTHORITY`, CANDIDATE_ONLY | `material_layer_terminal` |
+
+At 40 s the inferred Foam/material row is Y840 and identity support is 0.8;
+phase identity is OPPOSED_MATERIAL despite representation support 0.9313.
+At 42 s boundary/artifact values are 0.4493/0.6930 and representation support is
+zero. At 44 s the material path has boundary 0.976 but terminal/topology values
+are 1 and phase identity is CONTINUATION_ONLY. These are executed model values,
+not human-confirmed Foam/material labels. Later retention/selection cannot grant
+these candidates independent authority. No new threshold or family bypass follows.
+
+Correct Oil is represented, but these rules prevent its completed selection.
+The optical cause of the misleading evidence remains unresolved. The separate
+pink-line review asks only the physical nature of the already rejected completed
+observations (Y865.5/868/822). Their wrong-target status does not establish
+`non_interface`; cyan correspondence and the four positives need no repeat review.
+The review HTML, source-pixel pins and pending question are retained in the A1
+receipt/local artifacts. No formal scalar, contour or Foam truth is inferred.
 
 ## Reproducibility and limits
 
@@ -84,8 +115,8 @@ qualification follows from this capture.
 
 ## Detector Governance
 
-- Logic-map nodes: `OIL-CANDIDATE`, `OIL-SELECTOR`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
+- Logic-map nodes: `OIL-AUTHORITY`, `OIL-CANDIDATE`, `OIL-SELECTOR`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F09`, `S11-F10`.
-- First harmful stage: UNKNOWN — current/completed disagreement is observed, the three alternative candidates are now human-confirmed Oil, but their earliest admission/selection loss is not yet established.
-- Logic-map impact: NONE — existing diagnostic and sequence owners are observed without changing their control flow or authority.
-- Failure-registry impact: NONE — exact candidate/source coordinates and unreviewed status are preserved; no coordinate-specific rule or failed mechanism is promoted or retired.
+- First harmful stage: `OIL-AUTHORITY` — all three confirmed candidates lose selection eligibility at executed authority rules; optical root cause and a safe discriminating correction remain unresolved.
+- Logic-map impact: UPDATED — adds the A1 diagnostic route used by this investigation; authority/sequence decision flow remains unchanged.
+- Failure-registry impact: NONE — exact candidate/source coordinates and attributed review status are preserved; no coordinate-specific rule or failed mechanism is promoted or retired.

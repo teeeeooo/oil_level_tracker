@@ -1387,8 +1387,9 @@ The three finite additions are:
   five sectors. Retain upper/lower counts, actual mean X, exact common-X runs,
   pooled difference and complete-column paired mean/median difference. Common X
   requires visible support on both sides; paired X requires all radius samples
-  on both sides. The stronger paired availability requirement is diagnostic,
-  never substituted into production. Crop clipping and insufficient/no-common
+  on both sides. Paired availability means at least one complete column; it
+  does not apply the production pooling minimum floor. This measurable support
+  is diagnostic, not production usability, and is never substituted into production. Crop clipping and insufficient/no-common
   support have separate reasons and null measurements. X runs are half-open
   source-coordinate sets; storage is bounded by crop width, not a fitted span.
 - Narrow pair: retain the selected center/partner source Y, signed masked Sobel
@@ -1405,6 +1406,12 @@ The three finite additions are:
   while its feature score remains boundary likelihood. Non-hypothesis/non-phase
   families retain existing diagnostics and explicitly report different-family
   applicability rather than borrowing another candidate's measurements.
+
+Channel lineage is explicit: `canonical_absolute_broad` reads `pre.blurred`
+with canonical /255 scaling, while `spatial_relative_broad` uses its existing
+relative normalization. Plateau terms read `pre.gray`; narrow values are masked
+Sobel /255, and phase support reads `pre.normalized` as float32. These channels
+are not interchangeable measures of physical identity.
 
 Storage remains frame-local: at most the existing 12 proposals per spatial route,
 10 retained semantic hypotheses per route, 8 raw members per proposal, and existing
@@ -1446,5 +1453,5 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: NONE — the O2 offline evaluation foundation does not change the mapped R22-3 execution path or grant production authority.
+- Logic-map impact: UPDATED — adds A1 frame-local pure spatial diagnostic reproduction to the existing mapped measurement/publication owners; no decision authority changes.
 - Failure-registry impact: NONE — this architecture refines the response to existing failures without claiming field repair.

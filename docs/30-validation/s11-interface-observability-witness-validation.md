@@ -811,5 +811,5 @@ checks remain required. A0Q is not repaired by a passing Qt run.
 - Prior mechanisms rejected: threshold widening, polarity/source/motion identity, unpartitioned calibration, private-coordinate tuning, missing-as-zero, stale identity/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded resources and separate Windows field acceptance.
 - Difference from prior failures: extraction, discrimination, behavior and field qualification are independent gates with explicit positive/negative/unresolved labels and leakage controls.
-- Logic-map impact: NONE — this validation contract does not change the executing R22-2 control flow.
+- Logic-map impact: UPDATED — records the A1 diagnostic reproduction route covered by these lossless controls; production decision flow remains unchanged.
 - Failure-registry impact: NONE — it adds acceptance obligations for existing named mechanisms without claiming a new cause or repair.

@@ -108,7 +108,7 @@ The IDs in this table are the cross-reference surface for future designs and fai
 | `PUBLICATION-PROVENANCE` | [`tracking_sample_from_detection`](../../src/oil_tracker/application/services/detection_processing.py), [`StateAwareOutcomeAssembler.assemble`](../../src/oil_tracker/application/services/analysis_outcome.py) | Final detections → `TrackingSample`, events, judgment, coverage | Hard sample validity requires confidence plus explicit state/visible observation semantics. `oil_is_valid` and `foam_is_valid` are independent; events/judgment consume observed samples and cannot repair detector output. |
 | `RESULT-PRESENTATION` | [`GraphRenderer.render`](../../src/oil_tracker/adapters/reporting/graph_renderer.py), [`build_report_presentation`](../../src/oil_tracker/application/services/report_presentation.py), [`build_review_graph_model`](../../src/oil_tracker/application/services/review_graph.py), [`ResultReviewGraph`](../../src/oil_tracker/ui/widgets/result_review_graph.py) | Final result/review samples + events → graph trajectories, report landmarks/notes, and Result Review graph model/UI | Presentation-only. It reads stored observed values and per-series validity; graph gap bridges and labels do not create samples, CSV values, events, or detector history. |
 | `CSV-PUBLICATION` | [`CsvExporter.export`](../../src/oil_tracker/adapters/reporting/csv_exporter.py), invoked by [`OutputBundleStore.write_bundle`](../../src/oil_tracker/adapters/storage/output_bundle_store.py) | `AnalysisResult` samples/events → `tracking_data.csv` and `events.csv` in temporary then committed bundle | Serialization only. CSV raw Y/px/mm and flags come from final `TrackingSample`; no candidate reread or coordinate repair. Bundle validation/atomic publication happens downstream. |
-| `TRACE-PUBLICATION` | [`JsonlDebugTraceWriter.write/annotate_sequence/finalize`](../../src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py) | Current-frame detection/artifacts → JSONL raw records/images; completed sequence → compact `sequence` annotations including bounded Oil/Foam decision witnesses; finalize → indexed trace | Debug is non-authoritative. R21 lifecycle schema `r21-truth-preserving-detector-repair-v1` retains readable R20 legacy identity and adds `r21-decision-witness-v1`: actual phase/publishable row membership, existing route predicates, selected member, Foam window/formation decisions and recent trajectory. No predicate or detector branch is rerun for telemetry, and trace cannot publish or alter official samples. |
+| `TRACE-PUBLICATION` | [`JsonlDebugTraceWriter.write/annotate_sequence/finalize`](../../src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py) | Current-frame detection/artifacts → JSONL raw records/images; completed sequence → compact `sequence` annotations including bounded Oil/Foam decision witnesses; finalize → indexed trace | Debug is non-authoritative. R21 lifecycle schema `r21-truth-preserving-detector-repair-v1` retains readable R20 legacy identity and adds `r21-decision-witness-v1`: actual phase/publishable row membership, existing route predicates, selected member, Foam window/formation decisions and recent trajectory. Sequence witnesses do not rerun decision predicates or detector branches. A1 additionally reproduces bounded pure spatial measurements for an exact candidate join; no temporal/authority/resolver branch is rerun. Trace cannot publish or alter official samples. |
 
 ## 3. Current frame: evidence acquisition and provisional projection
 
@@ -340,7 +340,8 @@ bounded expiry and one-attempt semantics.
   branch decisions without changing their thresholds or identity/authority.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
   transition/evidence boundaries plus the R22-2 debug-only capture/measurement route
-  and complete branch-specific phase failure reasons.
+  and complete branch-specific phase failure reasons, plus A1 pure spatial
+  diagnostic reproduction with exact candidate binding.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.
 
 ## O1 trace-only observation witness
@@ -354,6 +355,20 @@ it. No resolver-facing fields, candidate scores, physical IDs, lifecycle or
 publication decisions consume it. Measurement ownership remains FRAME-EVIDENCE /
 OIL-CANDIDATE, with serialization at TRACE-PUBLICATION. See the
 [measurement contract](s11-interface-observability-witness-architecture.md).
+
+## A1 lossless measurement lineage
+
+The existing `phase_candidate_assembler` frame-local sidecar captures immutable
+index/source/Y-bound JSON from `oil_pipeline_diagnostics.capture_measurement_lineage`.
+It reproduces existing pure spatial extraction/semantic functions with diagnostic
+sinks at their actual operations, joining hypothesis ID/Y and three semantic
+scores exactly. Unmatched or mismatched hypotheses remain unavailable. No Oil
+temporal, authority, Foam or resolver owner is rerun. `PhaseDebugProjector` checks
+the binding after calibration and publishes the sibling
+`artifacts.state.oil_measurement_lineage`; NONE bypasses it. Signed center/partner
+values, actual phase-band X support, score dependencies and distinct coordinates
+are non-authoritative. Existing witness bytes, candidate features and metrics are
+unchanged. See the [A1 contract](s11-interface-observability-witness-architecture.md#a1-support-signed-pair-and-score-coordinate-lineage).
 
 ## Rejected Foam component diagnostics
 
