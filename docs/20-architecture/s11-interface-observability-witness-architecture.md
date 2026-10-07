@@ -1447,7 +1447,9 @@ polarity gate, source-family preference or motion-to-identity conversion exists.
 Freeze the sample4 experiment before inspecting results:
 
 - Use the saved raw 40–45 s context PNGs and the prior recorded five sector X
-  intervals. Restrict the search to the original 104×104 detector ROI.
+  intervals. Keep every recorded center/native-path view separately, including
+  coincident-center deduplication already performed by the witness; never invent
+  missing sectors. Restrict the search to the original 104×104 detector ROI.
 - Use the base recorded BW=3 and radius `3*BW+1` (21-row envelope), including
   the previously unsampled center gap. This is expanded raw appearance support,
   not unchanged O1 band support. Glare/material/camera validity is unmeasured;
