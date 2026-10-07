@@ -18,6 +18,7 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 이동 상세 날짜·추가 커밋은 [manifest](90-archive/00-project/2026/2026-10-03-docs-migration.json)에 있습니다.
 이번 정리에서 추가한 색인·이동 manifest·정리 기록 3개는 `a5ae21cf18f0b50ba930e4f34cda3fc07148d69c`의 author 날짜(KST)로 최초 추가일을 확정했습니다.
 새 파일을 Git에 등록하면 해당 미등록 행의 최초 추가일을 확정합니다. 파일 생성·이동 시 이 색인도 갱신합니다.
+Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 추가 author 날짜(KST)로 확정했습니다.
 
 ## 폴더별 목록
 
@@ -295,7 +296,7 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 2026-10-02 | [s11-o2-color-side-local.md](60-evidence/s11/s11-o2-color-side-local.md) | 완료 증거 |
 | 2026-10-02 | [s11-o2-w2-f14865-scene-review.md](60-evidence/s11/s11-o2-w2-f14865-scene-review.md) | 완료 증거 |
 | 2026-10-02 | [s11-o2-w4-r3-existing-evidence-feasibility.md](60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md) | 완료 증거 |
-| Git 미등록 (작성 2026-10-07) | [2026-10-07-report-source-context-validation.md](60-evidence/s11/2026-10-07-report-source-context-validation.md) | 로컬 후보 실행 증거 |
+| 2026-10-07 | [2026-10-07-report-source-context-validation.md](60-evidence/s11/2026-10-07-report-source-context-validation.md) | 로컬 후보 실행 증거 |
 
 ### `docs/60-evidence/s6/` — 10개
 
