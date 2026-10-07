@@ -1,0 +1,1756 @@
+{
+  "source_head": "f42c937ca2a805e8fb46fb6ac578260a758ba13b",
+  "spec": {
+    "id": "joint-temporal-region-exchange-v1",
+    "input": "current and immediate native-frame neighbours, raw BGR, effective AND nonglare masks",
+    "support": "full-height recorded sector X strip; common pixels across each pair",
+    "base": "1, normalized X, normalized Y, neighbour indicator",
+    "models": [
+      "smooth",
+      "illumination_plane",
+      "static_step",
+      "moving_step",
+      "moving_ribbon_bw",
+      "moving_ribbon_2bw"
+    ],
+    "extra_terms": "step Y>=cut; ribbon abs(Y-cut)<width; illumination adds T*X and T*Y",
+    "search": "all integer neighbour cuts 1..height-1; current candidate cut fixed",
+    "fit": "float64 ordinary least squares; full rank; BGR/255; rcond=1e-10",
+    "spatial_split": "crop-local X modulo 4 == 0 validates; others fit all models on identical pixels",
+    "operating_point": "both temporal pairs: unique uncensored moving-step training minimum, validation MSE strictly lower than every competitor by 1e-12; all five recorded sectors must pass for candidate support; otherwise UNRESOLVED",
+    "geometry": "native views if any native view exists; otherwise candidate-center views; no invented sectors",
+    "base_bw": 3,
+    "tie_atol": 1e-12,
+    "rank_rcond": 1e-10,
+    "min_train_pixels_per_frame": 8,
+    "min_test_pixels_per_frame": 4,
+    "max_height": 256,
+    "max_width": 256,
+    "fit_partitions": [],
+    "evaluation_regime": "EXPLORATORY_UNCALIBRATED",
+    "limitations": "Region interpretation is a tested hypothesis, not physical proof. Reflections or unmodelled texture can collide; no motion-only authority, new scalar, calibrated confidence or chemical-species output."
+  },
+  "input_and_source_files": {
+    "sample/output/s11-a2-region-context-20261007-001/inputs/receipt.json": "7986d15dce6f624da7aec64efbd38b9528373e784f2059906d5ea41091ad3474",
+    "src/oil_tracker/bootstrap.py": "a927ca340c6c906098b7d4a82fe9995f5fd6e0b294cd19132043a672d3d83f24",
+    "src/oil_tracker/__init__.py": "b68611ce5bc1601c18598799cfefbc632e74924ee1bb4f315ffbc799d0132830",
+    "src/oil_tracker/cli.py": "10d9e3f7754ff4e19dd11db8001fbde54a5bab4399aa4b5f8eccf073bf10eee9",
+    "src/oil_tracker/__main__.py": "6deec222cff062b35381cd5c9a463b15229d66a902415352ce9ecc2ce867cfc1",
+    "src/oil_tracker/visualization/__init__.py": "63e96083bed6be3dc58be44988fc221421ef4192ac5c3a2a1b1b210299e3d5e2",
+    "src/oil_tracker/visualization/matplotlib_font.py": "d215a30ed3c49a68ccc2661a2d8befde15bb4208dd7321bf18b8c3d0eb68d920",
+    "src/oil_tracker/ui/main_window.py": "5ab51318276e5d3960d455c55934377c0671d33522f3ad98b0520398f69b6ea8",
+    "src/oil_tracker/ui/presentation_labels.py": "c35313fbe8c93599739623dd80a4554b1783efd273dbf81840fa43f2492eb06c",
+    "src/oil_tracker/ui/truth_annotation_window.py": "26a8a7b4e8df6ca544c32872642dd6b10973987e62b8eb3a50c6b4dbc1bfa4ec",
+    "src/oil_tracker/ui/analysis_completion_summary.py": "d7caa92abca6c2a18b41d8b1943b68e11e0eb18fef086ced2f0f44977fd48361",
+    "src/oil_tracker/ui/style.py": "3af33283ce2e8b6ee6a061c94ee19a59b8bd0ab83c082a6da974fc29e6c2c304",
+    "src/oil_tracker/ui/truth_annotation_coordinator.py": "5c4b333b15833a62dbec482d0015aa1d4c5081fd1728ec07d0caa335a0bba6d2",
+    "src/oil_tracker/ui/redetection_comparison_coordinator.py": "431bc4dd2aee20ce939ad2fdb1bc75d402db3d8a0631e298ceab1eac20d1f34d",
+    "src/oil_tracker/ui/result_review_window.py": "bb7cb532211308eebad123a647ef315ea169fe37cd8b6e22e0670fea2377e3ca",
+    "src/oil_tracker/ui/redetection_comparison_window.py": "59776a61e9e91eb1c6c2e4c51db649605223a83c972a16602788f88be406a505",
+    "src/oil_tracker/ui/observation_settings_copy_coordinator.py": "04e0edc4d6c1a1df35cd6c69b8c319a111dbb749c703fe002118963b53d3e171",
+    "src/oil_tracker/ui/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/result_review_coordinator.py": "419919928b16571b0f4268236d7e3ca417a70919910edb1d3478d5a42920d3fe",
+    "src/oil_tracker/ui/result_actions.py": "9207197750a8a606c4a6a48a91dbacc1b340a6a41ccfa7746521a2c83782c3c1",
+    "src/oil_tracker/ui/same_profile_analysis_coordinator.py": "705cea2e24be46165838b53c7e7365e1a14cdfd1159e4bbd5ab3343e04949d80",
+    "src/oil_tracker/ui/undo.py": "7e12aca6754bb8543049e041a9c076c28d3eabc3b005809a27d1318e83e93125",
+    "src/oil_tracker/ui/debug_trace_settings.py": "92e943c5f475f8f5adf382a13e0d0957e6f32109f6678686826921a72192eadb",
+    "src/oil_tracker/ui/readiness.py": "bd320842517dffcf928e009b51036ecb571ebb7e5aa7dfde8971e5893ba24dcf",
+    "src/oil_tracker/ui/profile_lifecycle_coordinator.py": "4e7a1f5c773d630b20d0f928aa537d6f5fd4fb051a7a6f1527bf1255daff7733",
+    "src/oil_tracker/ui/redetection_result_review_window.py": "a868c03b18679ab98baa3fe01297fb27225c4383f537141e6fe6213531113208",
+    "src/oil_tracker/ui/analysis_completion_coordinator.py": "37046a892be12aeba8aec3a9dc51a1783103a07978a1f3b8ea87f5272c281685",
+    "src/oil_tracker/ui/preflight_coordinator.py": "3e29a12d82e4b20cb049e6aacb13e7ebfad23f357dd0d14e26c7462c84493a53",
+    "src/oil_tracker/config/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/config/schemas.py": "06953c09b910c3561554597dec804335edcd83c2f8d0ac1be3b90e605a11fa52",
+    "src/oil_tracker/config/defaults.py": "b3a0ce3f31f2d6dbabe768b692e94dd9af31552f4997731679f854cc3b5ed92e",
+    "src/oil_tracker/resources/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/observation_settings_copy.py": "9316283a4508ea482be787beaa76bc6c4aedd218499419325a6bfabcb0e3ad45",
+    "src/oil_tracker/application/detection_quality.py": "ad4e4f88b6426c6634bf3bb5303bd149428f014095fdbf8a0311222e55dac5e8",
+    "src/oil_tracker/application/preflight.py": "b98fa507fa6eb0c6b163f8dd8ca00d436fd38c79d799f7488d27fda5df666d77",
+    "src/oil_tracker/domain/detection.py": "5fa5f13462ae5a2f11fede751e6c2df10f2d1cde10b156224ecd8595ef999123",
+    "src/oil_tracker/domain/enums.py": "2ba9f4ec3d2feea7a85fea541cc08464a442702c5f54a5b0413b181a1b24962f",
+    "src/oil_tracker/domain/user_truth.py": "dbe963d3737c0444a39b7f8d1b986e37086cbe7b5b906948f2d8d47f3ddfacc7",
+    "src/oil_tracker/domain/results.py": "f84a7b82139f10e71497c995655bf0cb6c414ca3d894ac546b313f38cf8b4289",
+    "src/oil_tracker/domain/retrospective.py": "91878c81391d6a9f04bd65f7c1f962613b012517785c8ed6e81a43b1cd8f395c",
+    "src/oil_tracker/domain/events.py": "8c128d6fdb20dded70901ca6211c64ae09562a9b07b679fbdab422436111b2e3",
+    "src/oil_tracker/domain/judgment.py": "c52622d9f25c5aa64bc2d583e189838d63567c3ce1ad53112d10d4dbcd8f3f01",
+    "src/oil_tracker/domain/redetection.py": "d9b58ba98e7555f0e99d0dd3506faef06d3f0ad348c3cc41468502f88dcaeda7",
+    "src/oil_tracker/domain/session.py": "4914e31a16aaf7810d2724d82736e4a98d739a437da4bbc686e87485b1315b27",
+    "src/oil_tracker/domain/detector_benchmark.py": "e520b82eaa820ec83397fab33cc56e44f48110523a9c77f798451ac73360382d",
+    "src/oil_tracker/domain/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/domain/debug_trace.py": "840cd2a88081127e9fb2d21bb825f52d4256eb27a8213db80082d08c44154d2d",
+    "src/oil_tracker/domain/review.py": "04fffd0797671cdf39736bbcde0272fa0bf1f1678ee25ac60bb78fad0d61de92",
+    "src/oil_tracker/domain/geometry.py": "a146ee41a2dc2fa829ce91b0d42066a1be89d55e621fb878e7c8d258a053d84d",
+    "src/oil_tracker/domain/recipe.py": "c645dabf05b70d06f18c93f7dacec738211c52bc821dc00dffd5769cca7fbd81",
+    "src/oil_tracker/domain/oil_boundary_topology.py": "b7b7b36ea408a7f51240b63805dbcaf5acbea34146d023674a0bf0ebfdaa61f0",
+    "src/oil_tracker/domain/validation.py": "2e3dd9de23241275918adce8c451f19e885e3e5a53593c75366fa4267311bec4",
+    "src/oil_tracker/application/use_cases/save_recipe.py": "4c70116d99013c42fc342b8274aedc408d150f4ab3780155f4869363fee74fb1",
+    "src/oil_tracker/application/use_cases/load_recipe.py": "fe8978d95c1e47ee9a6a16f105471f5fc169d42bc01fd4a12d4f364149e4d644",
+    "src/oil_tracker/application/use_cases/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/use_cases/preview_detection.py": "87c528fa1d2567e42c39d0fa7f6f58fefd5a2d09ec938c5da1d5feef0f60f221",
+    "src/oil_tracker/application/use_cases/preflight_check.py": "257e4a56262786ac3de7d9e23c9dbc837b5297652036484d2256cba50dbe37d5",
+    "src/oil_tracker/application/use_cases/validate_workbench.py": "6d8f61f6d8bcc0b1a06b995e64edc25b92401ebd67c1cacab301bc2b9220a676",
+    "src/oil_tracker/application/use_cases/analyze_video.py": "47fb35c40d7cc81c7b081a7ee7a3d9f256e8145e005741f43142b487e59360c6",
+    "src/oil_tracker/application/ports/regression_dataset_reader.py": "32f1e4a161694d74179fa1b7f604cf04bf1516679decb953c2fcb6cf2f1d30a6",
+    "src/oil_tracker/application/ports/video_reader.py": "3e9167379379e064912df6915e67bd790750c2dd10948b009b358c766341d3f4",
+    "src/oil_tracker/application/ports/recipe_repository.py": "42ecb412577c4e533770ceee5510fbc96cfc6dd3f5e1fe82a07a186db6902aee",
+    "src/oil_tracker/application/ports/benchmark_result_writer.py": "91c077b018bfe3cb7ebd1a66e967cc351826e6e086eb070b1e86266e1c3b2ff9",
+    "src/oil_tracker/application/ports/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/ports/result_store.py": "b3f1209192374712b0bf08e3305d8acfc79e4839cc45de6afc01696ab76fe8d4",
+    "src/oil_tracker/application/ports/review_io.py": "40938084414569290f74f71be392c93d92e7fce018a9102e37eaef842b35c9eb",
+    "src/oil_tracker/application/ports/progress.py": "b17cf72e759ca02a0f98c5eea1cb516a4906761f563419f24f26d60d3e98a57f",
+    "src/oil_tracker/application/ports/phase_detector.py": "1707b82aa7e2f780e7b44253897ba3f5633ada5913f5d381d77d27607bb4bfe6",
+    "src/oil_tracker/application/ports/debug_trace_sink.py": "311ab910cd1a4344e9f9be6628525961b65f52175786d00feffe1268c7c03a76",
+    "src/oil_tracker/application/services/truth_identity.py": "5835e2ab1ebf490a80d852819ad1d522a8f1451fb0e454cfef6723817e433556",
+    "src/oil_tracker/application/services/detection_processing.py": "9dc74b2ae485a350f6043efc27a21e581f2b00c561df6874644f410b46956e9b",
+    "src/oil_tracker/application/services/judgment_service.py": "de7ed35fa825155ab229e9178b40a8ca18fc7426f5c82f4b1c1c94b50bbb7df8",
+    "src/oil_tracker/application/services/redetection_request.py": "f52e523e9bbf859f0979730fb9d4ff460851a769100f0c748e5e9a1775f0949b",
+    "src/oil_tracker/application/services/redetection_apply.py": "00e2f63835b7b24b39328a48b771eb8192ea0e6b2445535f81ebff486d858f14",
+    "src/oil_tracker/application/services/initial_state_reconstruction.py": "85311654270d8b41c7e8a43e9f40da2dbebefeb8191a5415d7659de9b2fa4168",
+    "src/oil_tracker/application/services/debug_capture_policy.py": "9d62e20b5a9e5c89a9a33d4f1b84df373b955601ad45e6d3d056164d4d45839a",
+    "src/oil_tracker/application/services/detection_run.py": "80dd947bfcb9e3b00c22f5bd277137fb9a4940a7e2589d73b17177d8c153ee56",
+    "src/oil_tracker/application/services/review_query.py": "3a886fce8b534a0096426cdc317ae02694a68805efacaa6fbfc9cd4dd89d6905",
+    "src/oil_tracker/application/services/user_truth.py": "c12a4eb1d901c38883f2ebc9a5c29453b6555ecd30bfe6e9da0c37c0a01f5bfa",
+    "src/oil_tracker/application/services/redetection_comparison.py": "dc1ae775ab30b6512859ac455a839c00f1fa1be3a060d5c59e4991804f74958b",
+    "src/oil_tracker/application/services/detector_settings.py": "ca7bdcc572bf3ac1648aabd7300cb486387d4849f1a0dc2a9e5851eb36c8fd74",
+    "src/oil_tracker/application/services/review_graph.py": "5a4e19a92bfd943f9ff1735fef5d743f47343c7ef41a198d86e47e0fae1d210b",
+    "src/oil_tracker/application/services/report_presentation.py": "ee4c6fc68ebd33651394c3ef8267f3906542eb47cb2308b3c779645353116f36",
+    "src/oil_tracker/application/services/recipe_validation_service.py": "ee624d60c767ac981742151caa139d1352a724ec1a37487f9a1d5e223b42802d",
+    "src/oil_tracker/application/services/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/services/initial_state_confirmation.py": "988cd04e20af6b16be57f2c5f5355d5e69bcc2ebca688c9b808e3089fdf18f71",
+    "src/oil_tracker/application/services/redetection_service.py": "302ab4a38b3a558b66043021e6b9c0f9c2269e3091c03682cee7c5ef6dec3880",
+    "src/oil_tracker/application/services/event_detection_service.py": "29c4d9bffc0a7ed03b318c51393b6ab12a55daaf108c30fa9add4cbf5ebfb439",
+    "src/oil_tracker/application/services/analysis_outcome.py": "256aea5435e5a83c8f07ad1ae84db7de7ceb660f0f584f55be010092dd4ec77d",
+    "src/oil_tracker/application/services/graph_series.py": "298637bb466882c849b4e49e2871cd79e633202e8bb406af4b7570657340b8e9",
+    "src/oil_tracker/application/services/event_presentation.py": "5877609d112f55266599554e29f0b9c75aaca2bd0fc1cd89991de744b55252f9",
+    "src/oil_tracker/application/services/analysis_pipeline.py": "e1e3631be2ec562fa05ac69d9ff1dbd684bcd7d9f655987491df99e2444e921c",
+    "src/oil_tracker/application/services/detector_benchmark_service.py": "9c896132cd42aec516b268e25f407930c1957d64a61db985c25067cacdc4c36d",
+    "src/oil_tracker/application/services/graph_axis.py": "a7faa25b2f7f8faf8ecb604bb903c25fa504a45f87580cdb3e23f6c85072f3cc",
+    "src/oil_tracker/adapters/reporting/html_reporter.py": "67859b134b52706ae3d3b4d4cd09636a2454fcee0efe203b906d3fcde67fc7dc",
+    "src/oil_tracker/adapters/reporting/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/reporting/csv_exporter.py": "a0a0b0f79729945e6e5f90374dc01555b4cfabdf3a994f7a437f56669ad9d7d7",
+    "src/oil_tracker/adapters/reporting/graph_renderer.py": "78e16d2507452691c5eb48b041afa32ebc8f504ec7f4553cad0503baf9146adc",
+    "src/oil_tracker/adapters/vision/fill_state_classifier.py": "fe6aff8964e660ed91141c4a1f0ab4f9b83b9da7bc7cd102134535f78eaf1a4c",
+    "src/oil_tracker/adapters/vision/oil_observation_resolver.py": "21efc55c87faef192ff9e3a7c033b7f9c18c196b9426fd0a61403ac85598d45a",
+    "src/oil_tracker/adapters/vision/observation_sequence_resolver.py": "6221224771d72f3ee670ee6e5ba93e05460e9bbd16471222d6c5feabe56d278a",
+    "src/oil_tracker/adapters/vision/source_video_resolver.py": "edc1bc089d9eb512d2fff57be84b4cf52a271435ba37f5a31bd18869c0fe68c2",
+    "src/oil_tracker/adapters/vision/artifact_calibration.py": "6f0bf8b47fc0368b152f3fb227e99f623cc2772604a56ccbf23b2f93bbddfc8a",
+    "src/oil_tracker/adapters/vision/oil_shadow_temporal.py": "9ada30051d2270938005c4638c0aa5a4d3aa2c59603c3e959488d9449a8f0078",
+    "src/oil_tracker/adapters/vision/review_overlay_renderer.py": "966c77a9177b913dd2ab6098b9a93366d467aed228c6f131f0c2f96aceaf8a4d",
+    "src/oil_tracker/adapters/vision/oil_interface_tracklets.py": "62a5d8fb6ff888b5cbf1de11eb167697c863fd30ec7715b9da9b0061ab0f428c",
+    "src/oil_tracker/adapters/vision/oil_sequence_types.py": "56ef0536957888b3b42dbe7eadf87ff0e367df11f0fd6173a5c08c29a8e3b2f0",
+    "src/oil_tracker/adapters/vision/debug_renderer.py": "e5ca9442d86d210f7adb6e1714f336781570d318b301381e048a0aff73e4eba0",
+    "src/oil_tracker/adapters/vision/oil_pipeline_validation.py": "5f1bc660fc72f1aee0cc62c2454d221b6683d4f40a83af24e7e545a66bdd8557",
+    "src/oil_tracker/adapters/vision/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/vision/geometry_masks.py": "8c9bbbed8e3a9c3abb5f1c97832fc1ab8d34d5cc4b7b07f706626d4653244820",
+    "src/oil_tracker/adapters/vision/oil_interface_diagnostics.py": "c49abb50e21bf19b90d8fe4d5159e1d19c2c24468bfb57cd61634e166a043fad",
+    "src/oil_tracker/adapters/vision/foam_material_identity.py": "e65fd5f574e1910b86815e663ac59f1edaad7c706d17fd3073fb24e6475570d9",
+    "src/oil_tracker/adapters/vision/foam_episode_resolver.py": "d1e4ee1da0c9801c08a317e4f4255a0f37b8f53b50c45cf537da79f41c5faefb",
+    "src/oil_tracker/adapters/vision/opencv_video_reader.py": "b4d3304d37890570b57101418e69546133b9a8317ce18766d52b7ab221b34686",
+    "src/oil_tracker/adapters/vision/oil_candidate_evidence.py": "4c7253d5e11e781c696e2090fcdec9ff93aee5acecbb3989fc8f7b2038eaa51b",
+    "src/oil_tracker/adapters/vision/oil_shadow_types.py": "f79de7ecdf5ea36f01f05194e6cb0f2829079a77ba44def48631921d2848568c",
+    "src/oil_tracker/adapters/vision/oil_material_path.py": "3612e1fc4d01c85b4537dd2b0862a9827e544aeae611011bd705077e00e7c088",
+    "src/oil_tracker/adapters/vision/oil_phase_identity.py": "75d6b8d6830acbe988eb569cc59656bfcffe19119a163bfac179c73d6f9561a5",
+    "src/oil_tracker/adapters/vision/foam_front_detector.py": "b1b19e3384925c44344ebaa8010ff75569885448f314f8531fec94294cfde947",
+    "src/oil_tracker/adapters/vision/oil_interface_witness.py": "e8eea2c249ca7b0940c9d5fd006e281c2e9030746436fd8c6343c74103eda042",
+    "src/oil_tracker/adapters/vision/foam_temporal_gate.py": "f251a930c069fd816b89f70ac49d776bd7445a19e4b3e7d8e0965a5a96948d22",
+    "src/oil_tracker/adapters/vision/oil_shadow_pipeline.py": "0eade9f714044cc7b9f54f71ee5351c714ad38a533edd8cfa02a9daa846826b5",
+    "src/oil_tracker/adapters/vision/phase_frame_detection.py": "40aaa56aa5f20b5b1fc23d7e6f98e50ef22850ac6573870a26dfeafe3899f3f0",
+    "src/oil_tracker/adapters/vision/oil_hypothesis_projection.py": "bc24baebf7c57969d3671f7ae97eaabff8a8e00b7a2f48d53181fb6c2ab1bd1e",
+    "src/oil_tracker/adapters/vision/review_debug_overlay_renderer.py": "f6bbc99132cf8d98c56f33d6b3543683852b5804e8fb17d767834d46803ae913",
+    "src/oil_tracker/adapters/vision/preprocessing.py": "55e33486cf34e709ccaf1930720f41978f74c3448baa69eceac8bb570233236e",
+    "src/oil_tracker/adapters/vision/opencv_phase_detector.py": "b10e87ac27a7de377d4933502716c1ea38367f9af4b4c07502b5bcb0c9c73c78",
+    "src/oil_tracker/adapters/vision/oil_interface_selector.py": "ffad1560a57c5467b1e5ef287ff92f1e1836d467fbdd421757b155b6eedc3477",
+    "src/oil_tracker/adapters/vision/oil_spatial_fallback.py": "7823b34c1c8cfcfb4bc9d1a506646ef0cb3e887a1f129ee5c36298cc5b2a6b3f",
+    "src/oil_tracker/adapters/vision/temporal_tracker.py": "7fa6b8304b80c257e1d17fc4a5f0e18573bd2c8675480d52b7314f183494171c",
+    "src/oil_tracker/adapters/vision/oil_phase_lifecycle.py": "9b833ee492981fc930a9af305b9e11425c420e27054c74bac603ff6977e87e3f",
+    "src/oil_tracker/adapters/vision/oil_decision_witness.py": "929590eac209d5b34ac97bac0d051e6c982ceaae2c959301064fb584431e7c3c",
+    "src/oil_tracker/adapters/vision/oil_phase_topology.py": "c676461426c003f51df8506837fa59da08a72198a5a22cbad34fc744e483c988",
+    "src/oil_tracker/adapters/vision/oil_supplemental_path.py": "e9c504ba31816435e9bfadf61d99513686b4f8ab71dc57a0a49a16943d6259d3",
+    "src/oil_tracker/adapters/vision/oil_shadow_observations.py": "56dc2fb2e18b2f6bd3fb3e0ff7454a920c14ec1f0046cc189e20b1f23933a0e5",
+    "src/oil_tracker/adapters/vision/artifact_proposal.py": "ba0057c2bf777699c73bb6607d661190ae28cd461a49b6afd84dcdbbda1400a1",
+    "src/oil_tracker/adapters/vision/temporal_raster_evidence.py": "c2d6a4222e06cbffb3c32b8bc6b13f6142d810b9febabfa86afd6542107b9f15",
+    "src/oil_tracker/adapters/vision/row_features.py": "31536ade50d4cb151a7f756981da229d0655812a8a7d8c95582724613d771b1b",
+    "src/oil_tracker/adapters/vision/oil_pipeline_diagnostics.py": "de4958700f84ffc3dd5fd0c2470ea225542f1ee54478467ecf863b47d03e7dfb",
+    "src/oil_tracker/adapters/vision/oil_candidate_authority.py": "588274ee686220a611c27e41c7bbeec5f2b7841799b2617e602fc15b92a121ac",
+    "src/oil_tracker/adapters/vision/phase_candidate_assembler.py": "dc8d2b7b45c3d0d4a6264ab2c3a4bdc2eb263afd13ac2cbc6fecc8427ad1a8f1",
+    "src/oil_tracker/adapters/storage/regression_fixture_exporter.py": "bf55b130ccdbcc9bb99b49d687b1440f48d3f70d0afbe444c46687b15dd760a4",
+    "src/oil_tracker/adapters/storage/json_truth_repository.py": "16846e76fd41637d34ebe93a462049e952d082d5ddee6b6c938ce4d08c571f2d",
+    "src/oil_tracker/adapters/storage/debug_trace_repository.py": "fb0e380e050458f90860e6765f984fa3b12507c3a72a7d2881c05098cb5a0134",
+    "src/oil_tracker/adapters/storage/regression_dataset_reader.py": "7abf2935c95c86ca7cb742a99a11769a8f627c1223a7155ada4db74fc19a709c",
+    "src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py": "62fd82a030af9492f07935299a4ac003992e9cd5cffdc82335b88c5b318a0d33",
+    "src/oil_tracker/adapters/storage/output_bundle_store.py": "b88180080d0b17a01afa41dd096051515ecef32e1d6fd94b7dfa6ee9ae3a9d6f",
+    "src/oil_tracker/adapters/storage/benchmark_result_writer.py": "04990b0fe5f5081bb7d4c12a0587e60e962489d7da75a37414193f5f2daaa0eb",
+    "src/oil_tracker/adapters/storage/debug_case_exporter.py": "3e69e81d25b428a3619afe34fe403184f35bd14d62258d050d2d2f08a73dc9e6",
+    "src/oil_tracker/adapters/storage/recent_result_history.py": "eab60b6b67c3655b88ebf23abd8a84b515700f2925e38019b398653f0de92fe7",
+    "src/oil_tracker/adapters/storage/image_capture_store.py": "3bb99cd7d7ceed9b01074a43ef5e89cda52f4e498809f268c62917b30d8dfad1",
+    "src/oil_tracker/adapters/storage/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/storage/review_mp4_exporter.py": "599d339844f726e8f79b38190357487169b1994616e0922c4fe8d286e788ed8b",
+    "src/oil_tracker/adapters/storage/result_bundle_reader.py": "2d2a8e4f254b96ead60ed6535ae35617776063a0a7aaedbf384a8a676242e882",
+    "src/oil_tracker/adapters/storage/review_png_exporter.py": "2dcfd0acf1dfcd7d9314920e79853beec95bc85a1f0f38ed4841374a7112a878",
+    "src/oil_tracker/adapters/storage/bundle_asset_resolver.py": "83a92189f9715bbf58196584a19558dec3b854e127c291e762266c2fb02f0e36",
+    "src/oil_tracker/adapters/storage/redetection_workspace.py": "085e25e1d49cd3beb1af02935be60d4b6395e9d1d0ff2f7873bc8dd4938e921f",
+    "src/oil_tracker/adapters/storage/recent_profile_history.py": "10d96021f2b49d6e66e6a4e57caf1cb059d6350e6576ebfba3a17cb403d6c244",
+    "src/oil_tracker/adapters/storage/json_recipe_repository.py": "241694afbbe6d8f26b6234f1e3ec6de3c3deb2c77f0ab2e574a399cacb1f5ddb",
+    "src/oil_tracker/adapters/system/app_paths.py": "510f608932538e0a488faf0dd295e5fa89b092085db924da9e8ef0076b273bf2",
+    "src/oil_tracker/adapters/system/logging_config.py": "299c2fff523e02fdc44b493a80b522fa40a66d07eb9fb6001caa2f5be93981f1",
+    "src/oil_tracker/adapters/system/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/presentation/__init__.py": "1dda7e7a20d0730a8ceb7445639154087c1267942bc2db244373ba5a6792fc88",
+    "src/oil_tracker/adapters/presentation/qt_frame_image_converter.py": "25392dd50933fa1342b65e2660dca555ce3de88d9bf554333a6320c02c9468fe",
+    "src/oil_tracker/adapters/presentation/qt_debug_artifact_presenter.py": "88e4e8c8b7b300beaadaa1318429ff12f89d94c64873cdcd25888354a47dfd73",
+    "src/oil_tracker/adapters/presentation/review_frame_presenter.py": "7e5ca4017661a54a6e5126e574de8e457843a3378cfc47f6549063c840d68ec6",
+    "src/oil_tracker/adapters/reporting/templates/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/resources/styles/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/resources/icons/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/wizard/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/wizard/new_recipe_wizard.py": "c64f12901403f373d3ee4f695e7772026d7631536750e94441cb40b4c6de19fe",
+    "src/oil_tracker/ui/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/controllers/preflight_controller.py": "6a7470958710a83dc4d4cebd0f775b3a5153ecc0b75855b18fa2ebb585a735bf",
+    "src/oil_tracker/ui/controllers/truth_export_controller.py": "9081b240d08afab64d9c21700d6d6629572fcc04e7b8689a8616ccbcfbd6394c",
+    "src/oil_tracker/ui/controllers/workbench_controller.py": "4c7992339c2b500cf0cd3de7808098a8982f04b751df414222f431ade691d8d7",
+    "src/oil_tracker/ui/controllers/review_mp4_export_controller.py": "e50769edecf6585f6368e40c35978fbe61541490a846214cfb7055a495178fca",
+    "src/oil_tracker/ui/controllers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/controllers/preview_controller.py": "d18993e7552112fbe633fffb1248e548c25b782ddd6e81528902d2b5edb5dc4a",
+    "src/oil_tracker/ui/controllers/redetection_controller.py": "ae959abfe3e4225763b5553f4a65e768f557ec02393b114660f63c8a3d3cc428",
+    "src/oil_tracker/ui/controllers/workbench_playback_controller.py": "1d832f7e9a2ea9a7151b8d24252c07a4dc46fe090bbcb9214b68fac2590697a5",
+    "src/oil_tracker/ui/controllers/analysis_controller.py": "a973d09e4b853b9c4199276773cece65abf81934a63757d9af8d0d2b5f62c569",
+    "src/oil_tracker/ui/controllers/result_review_controller.py": "02ccecdd7d0ae1308f120cdc2482ee215088fcc89886291011ad780fd4240c69",
+    "src/oil_tracker/ui/widgets/glass_list_panel.py": "7f7883a0a8e9d11db83b42d9299b6820f59d113c08e510add687bf0560fabc37",
+    "src/oil_tracker/ui/widgets/result_review_navigation.py": "46f374c6db5ce3f57a603c91a4553e2e6cc97ce8bc46ff766b20977d7ab6cca9",
+    "src/oil_tracker/ui/widgets/wheel_safe_controls.py": "bfbdfceb7f7e0a4435af8e835a5cb413bb457d8407a313481bf3d9b12fe6093f",
+    "src/oil_tracker/ui/widgets/analysis_progress_dialog.py": "7cd2c75de4dfcd97f9d9db7d50d517c1e3f8238ebfe588d69bec63069a7cc484",
+    "src/oil_tracker/ui/widgets/video_playback_panel.py": "afbb15d28b3471cad136203913f03f12d97f48e2549725888ef4bd786be1032f",
+    "src/oil_tracker/ui/widgets/transport_bar.py": "c2d57b602dbb387adda0f9227502b99f175308d072aa5c09d4a3418a5b67430a",
+    "src/oil_tracker/ui/widgets/result_review_details.py": "f08368f613e099b08f68db34ebb2f07e5fbe7d4e8848014a0b826e378baed035",
+    "src/oil_tracker/ui/widgets/glass_settings_copy_dialog.py": "08931d8e6336d9c060fcacfc5d31291665989494e64a0ce52215c6f661417bb3",
+    "src/oil_tracker/ui/widgets/glass_settings_panel.py": "a323a375acccc8aab1a76d3c5b12da203bd46f2ea046f1d2f8f23331aa220999",
+    "src/oil_tracker/ui/widgets/roi_editor_dialog.py": "ddd0aea3d969a922d137dc55a886d2290bbc976982e5caa041f53a2e9c241ac0",
+    "src/oil_tracker/ui/widgets/result_debug_panel.py": "886892860099ac73945d5f8c1faec3c74268288251023ed8618ce93746a57a27",
+    "src/oil_tracker/ui/widgets/preflight_window.py": "3d05ac12dfbc19955e815ee5add994dad3fb8ccb03f1242e83c88b5b78999d7e",
+    "src/oil_tracker/ui/widgets/redetection_comparison_graph.py": "7e90945c3a37a9325ad340d654318d963bd4cf2cdd928f27d848458c43303bca",
+    "src/oil_tracker/ui/widgets/preflight_panel.py": "e7b18dc54e9bf6ef517ae700d3f0c74612f6e8f93d01647376605699048bbf14",
+    "src/oil_tracker/ui/widgets/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/widgets/video_overlay_canvas.py": "68700be85f717b0444766e86785d317448eadf1569848418e2a7b312aa8e3992",
+    "src/oil_tracker/ui/widgets/result_review_canvas.py": "ecb12786d43d476f4ef4e0eb4dace064040e41a3290cedf9fc271154cd681c0c",
+    "src/oil_tracker/ui/widgets/detector_settings_editor.py": "1dc0ebe926e24097558f6da9291f44f1b27ffd8903a408801383bdb04c806cc2",
+    "src/oil_tracker/ui/widgets/workbench_progress.py": "01df69617f66cc132e47fa3c2fa285248b36ac71b9814b79ebfff2ee93f2a495",
+    "src/oil_tracker/ui/widgets/video_preview_widget.py": "9990ceef6ef333df96d45278242d88cafc146e6addc790f96960bbe642792592",
+    "src/oil_tracker/ui/widgets/debug_panel.py": "e2f527063f0059b71718ee251bdc9495cb04eb2a20b283d1cdcd3e5ad287b2ee",
+    "src/oil_tracker/ui/widgets/validation_panel.py": "5a7dab3c22e791811f78de49ab61830fdb25a418dccdda6cfb8d048119bbcb58",
+    "src/oil_tracker/ui/widgets/redetection_debug_comparison.py": "73cd3fef96a9ee4ee9dd4440e69681af6aec26c797fcb20645a1ca7e94078951",
+    "src/oil_tracker/ui/widgets/analysis_complete_dialog.py": "99e95513ef51558e455b15944d4bcce88623a622544efd0e1d04886b466d48a1",
+    "src/oil_tracker/ui/widgets/result_review_graph.py": "864096a00cf52085195c64504da7f3b679ec57364fe2c75e6c206f68272a9ead",
+    "src/oil_tracker/ui/widgets/bottom_action_bar.py": "d07832987ba49be4ed94ec5fabfcd45ba87eeb982495cde4609173045234a12a",
+    "src/oil_tracker/ui/widgets/truth_annotation_canvas.py": "06656d62552ccda184ea3b96971998fa1f8e895495e9d4db5ac7ac4600b9a1d9",
+    "src/oil_tracker/ui/widgets/result_review_view.py": "a7e70710a018512024753ea8e039e0c28ad4d302dca5ffcb559689b69f527148",
+    "src/oil_tracker/ui/widgets/detection_summary_card.py": "8f246e2b66171728c7ea84e2ced6533f85096117b18d43e57135cf0115712614",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/capture-manifest.json": "fca7623eddf3b8b199a2090a257ebab73fb4a620f2f8c50a6605ab0129045b45",
+    "sample/output/s11-a2-target-binding-20261007-001/packet.json": "be57465f80235a65edbf16f338e45ecd5590a43238bb718762052a965d0f24c4",
+    "sample/sample4.mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-original_roi.png": "eea14d8eb7f39dee1c8b8748e8031f5638321612d1a9fa2d9ff27e0b43a74525",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-normalized.png": "a17f09fe227a783c57ec6f56fb5d176c374a4ec6e0493767f3dd684eba53e9b7",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200-original_roi.png": "1c03062d3b2274f8aee2793ba70a7f0065634528ea0f4960b517adc9073023cd",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200-normalized.png": "725589ec296379667a7405f34219d95b1a80ee4756607b0089959da852e10ea5",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-original_roi.png": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-normalized.png": "46646ee5b1fa21da44f4db9911f249c5c880e6aadd218d6910de3be27bb1937c",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-normalized.png": "22c34bf394f1f27f9bab8d9062e37c4d58bfba54c87d16c84b91275165c014fb",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-original_roi.png": "3083e2a46604986053edf61df6ac605d959861332010421542e2c8a33a022020",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-normalized.png": "c5fa72adba8f8a37c845ebc648853496346269a3a4e23cbdb1cd1d28b7653cb4",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-original_roi.png": "f0f2394eeabc08734d548ee91ab8d73723abc205eecbea17f0dbdcdbe3da67ee",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-normalized.png": "44b6e6a5281003dd677a1077016f670ce6059b0e8cf9f15d7644fa049939a367",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560-original_roi.png": "e04d7119d7445c147651ba43158890a046e533dfb325bc63c0c2dcd804450faa",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560-normalized.png": "4d6d5b163f6c83b2f46588eafdc2a4b6b4b36b818977edb3b3dffae0d77aea32",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1139-bgr.png": "d66a390699a3740a2d212c9f7f89903e2b85d3195eb360782ae241b3a3a3ed76",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1139-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1139-gray.png": "f6107df489c887c20e55e1bd62a0531bf23d698906de6c09cb1a57fafe5a76a7",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1139-normalized.png": "37fd4d599cfa1fc8266db2249866bcc93fb7c9edcf7569d70aa45c68f6ee5bab",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1139-glare.png": "062e902fe118eeff41c9a699222de5d609daa1863fa2cd9638e7e8801109ee31",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1140-bgr.png": "eea14d8eb7f39dee1c8b8748e8031f5638321612d1a9fa2d9ff27e0b43a74525",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1140-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1140-gray.png": "d8d9f8ed117acc2aae80353428780673dc1e48c0e09da7c50db02499f78fcec5",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1140-normalized.png": "a17f09fe227a783c57ec6f56fb5d176c374a4ec6e0493767f3dd684eba53e9b7",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1140-glare.png": "8406cd1b65f12069d36b763e9f3a21be23a0f30597387b951cc0587378aea955",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1141-bgr.png": "755b7153912f77dd19e82a67a1bd9718cf38c82328f5a5acab73fffd892e2603",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1141-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1141-gray.png": "d082c8cff5899d0dc75e0a58a4e9bae4761d15e91d65611a7ceb500ccaf6f661",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1141-normalized.png": "03095baeeb0ccaf92bf9a088c0c9f4f78123dba37273da6b2906a5a91550743b",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1141-glare.png": "6ed43f5eb1aa2aff11e4e388b11a2359b4a95b1b15aad5960f84181deafb4f7c",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1199-bgr.png": "7a7fba4205c1470519e0fb401d712f57c1e09278871d78647da77f7b1377b28c",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1199-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1199-gray.png": "75d91f11a96563f98f6ad55d6d6da864ddf2812a7cf54eb79c0c8e4f342504a9",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1199-normalized.png": "350e403482c8f425d591683426029880c3091444f2bc1df22b7ec6a689ea5591",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1199-glare.png": "77a49d99c121955039faff18d27f0f29d927d17adb1f33b283fa4a0d967139e5",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1200-bgr.png": "1c03062d3b2274f8aee2793ba70a7f0065634528ea0f4960b517adc9073023cd",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1200-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1200-gray.png": "460590bb52900bef9814e539c78b70bd87192d8afbe34df178fa59e505982812",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1200-normalized.png": "725589ec296379667a7405f34219d95b1a80ee4756607b0089959da852e10ea5",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1200-glare.png": "bf7c637c828ee0bd3faa8088257f186b63d9865b159742211cf50b481595d683",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1201-bgr.png": "496d7e975ebf7e6d48fdd869ced2c033e784a1da21140e2520a573e35d2b5805",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1201-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1201-gray.png": "fe8c9e11cf413e15f14c40426b654dbcf41367a74d5be624c8ae451c4e75176f",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1201-normalized.png": "8e475c940d25d9064e71ed2a997f2f5a04d1ebb584d5f9510e987a16ca0f6b98",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1201-glare.png": "2f001dd118d24e1282534eed041ab9d039febfa0d8f489aaa15c32d2a0b235a7",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1259-bgr.png": "370214488557051a83976a3314faa99d22f86346f619816eed3d80f6d5d4b7d9",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1259-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1259-gray.png": "b7410cfdc04bd0534eefd84b61283f173eba68bed4ac211f1061fb536df1fc03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1259-normalized.png": "cabcdff695eb536c745c7033b53f012e306e79b4a4811b4c8acdd09787b27f22",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1259-glare.png": "d21758370860bfe77f8041d16e105e19ed905bd10627eb04a72696614c0fdb7a",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1260-bgr.png": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1260-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1260-gray.png": "8f311f2965a45f71d4977576c2c813196736460c4698715be20214833f8d032d",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1260-normalized.png": "46646ee5b1fa21da44f4db9911f249c5c880e6aadd218d6910de3be27bb1937c",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1260-glare.png": "90a783afbb56c519b940112aa09f5d466bd335c7e10af5ae14e2305da2a4993d",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1261-bgr.png": "71a7c550ae813478063cefb8daa6b01d007d61660455dde2d87eca35c669accb",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1261-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1261-gray.png": "a1180052718e402008396eb96fc407ce5dd52caf51f245d11a8e4b600dfbeb4d",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1261-normalized.png": "a2b2638aac54b22d2bd5e8132a2f0a5602c50d7cec23b2802047aeb3e81a8ddd",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1261-glare.png": "eb64ad9d47ddee6343c31edff0111021c90a56d951945222a341feeaa9e76a19",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1274-bgr.png": "9e3d0b1b50ee461a49120017982a08bae012d2b4f96d555b83379e764d0a8935",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1274-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1274-gray.png": "b7ef44c143c7056b220996bbc5bb9c7ef4f397df4e65f98bbe53766ad6463395",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1274-normalized.png": "ab2fa8d05f5cf30234b960360ab0d36a217756480d6232aeaf0b5851a1da2da9",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1274-glare.png": "d282535edb66394805bc39b5280f4a5481b35fccf70f552f93ba842db502d9e3",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1275-bgr.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1275-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1275-gray.png": "2c5f2c420ea4263e4029a2c8dce95d88a1122e0ae4326ca5749a9e18cc899b0b",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1275-normalized.png": "22c34bf394f1f27f9bab8d9062e37c4d58bfba54c87d16c84b91275165c014fb",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1275-glare.png": "25b3825d5dcda796e10004195c892f031f239adfaf2e9c89675ba3cd55b312b1",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1276-bgr.png": "d830e6fa74335725b355bae64a0e578e94b2de1f7387738a36d4908b98ba9ee2",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1276-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1276-gray.png": "769177d21df83124354f9ebab498721b69857f94b79b9ab1230ac2d0ff0a5cb3",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1276-normalized.png": "89195aa176fbc6e5a28d206ed7736a92952e2423ed0e1b8d24b90e9d116e611c",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1276-glare.png": "57605b39ab04993fd9883dc13cbce7dac44c8a7ad26450e148cfa9272251b107",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1319-bgr.png": "f041a96cb521e96d2972b8c53357197e3eed21fa4e80af70f256aa63598beaa0",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1319-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1319-gray.png": "8321366a2bbd9cc8c9b7bfc7846045bfd44414e1006051cdbbc29f0993fd3f5e",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1319-normalized.png": "db9ccfb4807b01ca627f8d34da1c9fc8a044b72c9596e96849540a7144a9fd25",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1319-glare.png": "1c958166334a280b8a58fc6156094aef0c7da48db4c9dad1938be4d9003e0637",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1320-bgr.png": "3083e2a46604986053edf61df6ac605d959861332010421542e2c8a33a022020",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1320-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1320-gray.png": "b3db1dae2b1bbb3c75fb4424091c1146b73fa49bd474f04d37898a15c6315ec6",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1320-normalized.png": "c5fa72adba8f8a37c845ebc648853496346269a3a4e23cbdb1cd1d28b7653cb4",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1320-glare.png": "6aa5977cf01c8e8157b1ceae20da11ba02e6c70eac1ff107d7469cb0800230ad",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1321-bgr.png": "b99aca4a78fa2362c4ab016337bd5f5807cf8e3a6b4c4f9ad98b20efb4d34950",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1321-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1321-gray.png": "9b1b3744824639f0f9c2eb2aa2a7a25c2379b2635cccaec78c6d7894d2014cd4",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1321-normalized.png": "a85909159e10f4f7f4eee4bb825be04a769781683937e191ed12994125ad2bf9",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1321-glare.png": "057657da20d4c24a16cca443ffce87e07f27c1180f3764a88e41673e6fc1aa3c",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1484-bgr.png": "38d7074ff0c1c545209a92fe919f9f861672d7986613177d9b9d0fd743bed90b",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1484-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1484-gray.png": "16d016c9a856492508e2ba7249406ba6f73eae3bb12929a425bed02d7c9e218c",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1484-normalized.png": "636ceba6087c886c1dc495e339e32b27e5e1a034915073e9c183cc79eeafd368",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1484-glare.png": "0879de7956ddd12762778e9cb38e19173fa5fcd98a4ff16cdff717f63e1a06e6",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1485-bgr.png": "f0f2394eeabc08734d548ee91ab8d73723abc205eecbea17f0dbdcdbe3da67ee",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1485-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1485-gray.png": "a6daf77b8cc571e8abfe48fbd974263e074fa650dfa615f5d1d04b2b30da2617",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1485-normalized.png": "44b6e6a5281003dd677a1077016f670ce6059b0e8cf9f15d7644fa049939a367",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1485-glare.png": "42234a8290711cc876b418dd5b37046d1c02e949198a7b95ebc7962de17f9f14",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1486-bgr.png": "aad2d6a5fc9aa5f13ce5b6a7ff787692d0d04f5e6370b263256604c0f6cccd6d",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1486-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1486-gray.png": "14742283e4ec64bc1f21255253afab67a249ecf4d77b1331a4b46660fa468277",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1486-normalized.png": "59738bb3be9e580c4a032054aad3359fad5dc755e64d40c16bbc0bb7fbe45e3e",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1486-glare.png": "0879de7956ddd12762778e9cb38e19173fa5fcd98a4ff16cdff717f63e1a06e6",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1559-bgr.png": "45ff61267b7d1368eba277a795ecc399ba56e43bccf48c235160e4d9f76928b9",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1559-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1559-gray.png": "c350e280c0a6d5e47ec685631a1e2ac5e1ce008d6f3c3d33c1aa3c3163049236",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1559-normalized.png": "652b87202fd912ed9c81fdc3c76761e21d75390ad4ce9990c11c1737c00cc6a6",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1559-glare.png": "bd02f566928d23e8ee4e6ea4afa655eb521a7aef05219272c35ebfb2c6caa058",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1560-bgr.png": "e04d7119d7445c147651ba43158890a046e533dfb325bc63c0c2dcd804450faa",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1560-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1560-gray.png": "9b04eb7860041a4c7e89b780e541630fbe4b21c165205db811d234344a32b29e",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1560-normalized.png": "4d6d5b163f6c83b2f46588eafdc2a4b6b4b36b818977edb3b3dffae0d77aea32",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1560-glare.png": "05fa69d1e5176fbdba68dff755f69f825e35b9de712e07582df56e983fc4a281",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1561-bgr.png": "f0a719ffb67ac5e5e99988ca4bd297c4618964ebf349eb27e9d4a99ea85a0713",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1561-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1561-gray.png": "91d16c35b8cb1de188906d73e3f827d790bf2d256928d4978b56f733d4bc1868",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1561-normalized.png": "d488eccbab569273f8a04f213c45ea1158c068935230d623a953b172d93e9fa4",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1561-glare.png": "3969d55648ab63df04316184c8b8e05cebf040761a3763573bc3a1c326bbf550",
+    "sample/output/s11-a2-target-binding-20261007-001/snapshot.json": "5ae726cfef8ae9b4c14fdb23bd5f3489218b9716c4b597b74fe07170f7667485",
+    "sample/output/s11-a2-target-binding-20261007-001/labels.json": "6c4d2b0a1dbee57cf294ebd0d894d141ba3a9b8667be8355dbd18296fb9fdbcc",
+    "sample/output/s11-a2-target-binding-20261007-001/mapping.json": "bf575a44224e53c03aa73f24c1dc059654111bc3ee7fa357417a91e0a294a8db",
+    "sample/output/s11-a2-target-binding-20261007-001/baseline-predictions.json": "dec1c07a7e723e48bac00538ad212b88263cd7a0010ffe376a4caaa2b1995b4d",
+    "sample/output/s11-a2-target-binding-20261007-001/baseline-report.json": "a90f5dbf78a6c19fbe6e06f200648089fc3f070950c188e5148eeee0f3a57a4b",
+    "tests/diagnostics/s11_temporal_region_readout.py": "6f6e660264b747666cb9f81bd214035b9dc7d888c4a538ab8c68e8b7ad0c81ad",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140.json": "44ef26c2675a1bc3612e0dec6dfe204c0071ef36261536e2f601f00f311142ad",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200.json": "2302974b18ddad2776134e7718a081e162a710f13d4a89a36e228fec7b794e0a",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260.json": "2f1baac170542bacb918a05a4e862a766750f3eba52d25d25e1daa5a3152bfff",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275.json": "40eea7e489ba09bd881f5b212db1996f4ee431f9b1b61f43110a7f5b7dc7bb55",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320.json": "a1b2a9ae3ad6b6764ba5d9b97f4553ba5ec258171ca8dc6327b343fc90b9d933",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485.json": "ae2fa571fabb9bdb237fabdfe7991b5f05a36a2510780858b0024348cd4fa1c0",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560.json": "25802b8815ce7bf58b844808835b858de79a52afede8ad40f1c78d79753eeb99"
+  },
+  "field_disposition": "FIELD FAIL",
+  "candidate_count": 153,
+  "unique_pair_measurements": 1350,
+  "elapsed_seconds": 32.61142087500775,
+  "decision_counts": {
+    "UNRESOLVED": 153
+  },
+  "pair_reason_counts": {
+    "incomplete_competitor_support": 118,
+    "masked_ribbon_return": 258,
+    "competing_explanation": 751,
+    "moving_partition_dominates": 362,
+    "ambiguous_moving_step": 13
+  },
+  "production_unchanged": true,
+  "local_artifact_root": "sample/output/s11-a2-region-exchange-20261007-001",
+  "artifacts": {
+    "run.py": "de36356346600f4d632da2fc15580a196de35875703031d258af24cdcdb35bdb",
+    "measurements.json": "c01f68e1e57abd0b92a5470fd3a897c57addabfd8d5b75d12806e81617b82a4c",
+    "predictions.json": "bf6c2e3fd6cb2ae78929bf9c80d98c5e1d85d1f8ce25799347ede2da20a315bf",
+    "report.json": "d39c420def6f7af4db32e5cc586e7b6fd3669e306fce91b6d01217360361dbb4"
+  },
+  "disposition": "CLOSED WITHOUT PROMOTION",
+  "reviewed_controls": [
+    {
+      "case_id": "sample4:f1140",
+      "frame": 1140,
+      "candidate_input_index": 9,
+      "geometry_role": "native_path",
+      "decision": "UNRESOLVED",
+      "reason": "joint_spatial_temporal_support_not_established",
+      "review_role_evaluation_only": "target",
+      "views": [
+        {
+          "sector": 0,
+          "source_y": 843,
+          "source_x_range": [
+            547,
+            566
+          ],
+          "pair_support": [
+            false,
+            true
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 1,
+          "source_y": 844,
+          "source_x_range": [
+            566,
+            586
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 845,
+          "source_x_range": [
+            586,
+            605
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 845,
+          "source_x_range": [
+            605,
+            625
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 843,
+          "source_x_range": [
+            625,
+            644
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1200",
+      "frame": 1200,
+      "candidate_input_index": 4,
+      "geometry_role": "candidate_center",
+      "decision": "UNRESOLVED",
+      "reason": "joint_spatial_temporal_support_not_established",
+      "review_role_evaluation_only": "target",
+      "views": [
+        {
+          "sector": 0,
+          "source_y": 841.0,
+          "source_x_range": [
+            543,
+            563
+          ],
+          "pair_support": [
+            false,
+            true
+          ],
+          "pair_reasons": [
+            "masked_ribbon_return",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 1,
+          "source_y": 841.0,
+          "source_x_range": [
+            563,
+            584
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 841.0,
+          "source_x_range": [
+            584,
+            605
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 841.0,
+          "source_x_range": [
+            605,
+            626
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 841.0,
+          "source_x_range": [
+            626,
+            647
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1260",
+      "frame": 1260,
+      "candidate_input_index": 4,
+      "geometry_role": "candidate_center",
+      "decision": "UNRESOLVED",
+      "reason": "joint_spatial_temporal_support_not_established",
+      "review_role_evaluation_only": "target",
+      "views": [
+        {
+          "sector": 0,
+          "source_y": 839.0,
+          "source_x_range": [
+            543,
+            563
+          ],
+          "pair_support": [
+            false,
+            true
+          ],
+          "pair_reasons": [
+            "masked_ribbon_return",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "static_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 1,
+          "source_y": 839.0,
+          "source_x_range": [
+            563,
+            584
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 839.0,
+          "source_x_range": [
+            584,
+            605
+          ],
+          "pair_support": [
+            false,
+            true
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "static_step",
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 839.0,
+          "source_x_range": [
+            605,
+            626
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 839.0,
+          "source_x_range": [
+            626,
+            647
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1275",
+      "frame": 1275,
+      "candidate_input_index": 12,
+      "geometry_role": "candidate_center",
+      "decision": "UNRESOLVED",
+      "reason": "joint_spatial_temporal_support_not_established",
+      "review_role_evaluation_only": "target",
+      "views": [
+        {
+          "sector": 0,
+          "source_y": 835.0,
+          "source_x_range": [
+            543,
+            563
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "masked_ribbon_return",
+            "masked_ribbon_return"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_bw"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 1,
+          "source_y": 835.0,
+          "source_x_range": [
+            563,
+            584
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 835.0,
+          "source_x_range": [
+            584,
+            605
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 835.0,
+          "source_x_range": [
+            605,
+            626
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 835.0,
+          "source_x_range": [
+            626,
+            647
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1320",
+      "frame": 1320,
+      "candidate_input_index": 9,
+      "geometry_role": "native_path",
+      "decision": "UNRESOLVED",
+      "reason": "joint_spatial_temporal_support_not_established",
+      "review_role_evaluation_only": "target",
+      "views": [
+        {
+          "sector": 0,
+          "source_y": 842,
+          "source_x_range": [
+            547,
+            566
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 1,
+          "source_y": 844,
+          "source_x_range": [
+            566,
+            586
+          ],
+          "pair_support": [
+            true,
+            false
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "static_step",
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 844,
+          "source_x_range": [
+            586,
+            605
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 844,
+          "source_x_range": [
+            605,
+            625
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 844,
+          "source_x_range": [
+            625,
+            644
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1485",
+      "frame": 1485,
+      "candidate_input_index": 19,
+      "geometry_role": "candidate_center",
+      "decision": "UNRESOLVED",
+      "reason": "joint_spatial_temporal_support_not_established",
+      "review_role_evaluation_only": "target",
+      "views": [
+        {
+          "sector": 0,
+          "source_y": 836.0,
+          "source_x_range": [
+            543,
+            563
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 1,
+          "source_y": 836.0,
+          "source_x_range": [
+            563,
+            584
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 836.0,
+          "source_x_range": [
+            584,
+            605
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 836.0,
+          "source_x_range": [
+            605,
+            626
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 836.0,
+          "source_x_range": [
+            626,
+            647
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1560",
+      "frame": 1560,
+      "candidate_input_index": 20,
+      "geometry_role": "candidate_center",
+      "decision": "UNRESOLVED",
+      "reason": "joint_spatial_temporal_support_not_established",
+      "review_role_evaluation_only": "target",
+      "views": [
+        {
+          "sector": 0,
+          "source_y": 833.0,
+          "source_x_range": [
+            543,
+            563
+          ],
+          "pair_support": [
+            false,
+            true
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "static_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 1,
+          "source_y": 833.0,
+          "source_x_range": [
+            563,
+            584
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 833.0,
+          "source_x_range": [
+            584,
+            605
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 833.0,
+          "source_x_range": [
+            605,
+            626
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 833.0,
+          "source_x_range": [
+            626,
+            647
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1200",
+      "frame": 1200,
+      "candidate_input_index": 10,
+      "geometry_role": "native_path",
+      "decision": "UNRESOLVED",
+      "reason": "incomplete_recorded_sector_geometry",
+      "review_role_evaluation_only": "wrong_target",
+      "views": [
+        {
+          "sector": 1,
+          "source_y": 866,
+          "source_x_range": [
+            566,
+            586
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 867,
+          "source_x_range": [
+            586,
+            605
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "masked_ribbon_return",
+            "masked_ribbon_return"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 865,
+          "source_x_range": [
+            605,
+            625
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 860,
+          "source_x_range": [
+            625,
+            644
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1260",
+      "frame": 1260,
+      "candidate_input_index": 15,
+      "geometry_role": "candidate_center",
+      "decision": "UNRESOLVED",
+      "reason": "joint_spatial_temporal_support_not_established",
+      "review_role_evaluation_only": "wrong_target",
+      "views": [
+        {
+          "sector": 0,
+          "source_y": 868.0,
+          "source_x_range": [
+            543,
+            563
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "masked_ribbon_return",
+            "masked_ribbon_return"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_bw"
+            ],
+            [
+              "moving_ribbon_bw"
+            ]
+          ]
+        },
+        {
+          "sector": 1,
+          "source_y": 868.0,
+          "source_x_range": [
+            563,
+            584
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 868.0,
+          "source_x_range": [
+            584,
+            605
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 868.0,
+          "source_x_range": [
+            605,
+            626
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 868.0,
+          "source_x_range": [
+            626,
+            647
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1320",
+      "frame": 1320,
+      "candidate_input_index": 21,
+      "geometry_role": "candidate_center",
+      "decision": "UNRESOLVED",
+      "reason": "joint_spatial_temporal_support_not_established",
+      "review_role_evaluation_only": "wrong_target",
+      "views": [
+        {
+          "sector": 0,
+          "source_y": 822.0,
+          "source_x_range": [
+            543,
+            563
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "static_step",
+              "moving_step"
+            ],
+            [
+              "static_step",
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 1,
+          "source_y": 822.0,
+          "source_x_range": [
+            563,
+            584
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "static_step",
+              "moving_step"
+            ],
+            [
+              "static_step",
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 2,
+          "source_y": 822.0,
+          "source_x_range": [
+            584,
+            605
+          ],
+          "pair_support": [
+            true,
+            true
+          ],
+          "pair_reasons": [
+            "moving_partition_dominates",
+            "moving_partition_dominates"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_step"
+            ],
+            [
+              "moving_step"
+            ]
+          ]
+        },
+        {
+          "sector": 3,
+          "source_y": 822.0,
+          "source_x_range": [
+            605,
+            626
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        },
+        {
+          "sector": 4,
+          "source_y": 822.0,
+          "source_x_range": [
+            626,
+            647
+          ],
+          "pair_support": [
+            false,
+            false
+          ],
+          "pair_reasons": [
+            "competing_explanation",
+            "competing_explanation"
+          ],
+          "competing_validation_winners": [
+            [
+              "moving_ribbon_2bw"
+            ],
+            [
+              "moving_ribbon_2bw"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "w3_regression": {
+    "candidate_count": 153,
+    "abstention_count": 153,
+    "abstention_rate": 1.0,
+    "confusion": {
+      "interface": {
+        "UNRESOLVED": 7
+      },
+      "non_interface": {
+        "UNRESOLVED": 3
+      },
+      "uncertain": {},
+      "unreviewed": {
+        "UNRESOLVED": 143
+      }
+    },
+    "supported_count": 0,
+    "wrong_non_interface_support_count": 0,
+    "unverified_support_count": 0,
+    "identity_recall": 0.0,
+    "verified_identity_precision": null
+  },
+  "baseline_regression": {
+    "candidate_count": 153,
+    "abstention_count": 146,
+    "abstention_rate": 0.954248366013072,
+    "confusion": {
+      "interface": {
+        "INTERFACE_SUPPORTED": 4,
+        "UNRESOLVED": 3
+      },
+      "non_interface": {
+        "INTERFACE_SUPPORTED": 3
+      },
+      "uncertain": {},
+      "unreviewed": {
+        "UNRESOLVED": 143
+      }
+    },
+    "supported_count": 7,
+    "wrong_non_interface_support_count": 3,
+    "unverified_support_count": 0,
+    "identity_recall": 0.5714285714285714,
+    "verified_identity_precision": 0.5714285714285714
+  },
+  "interpretation": "All candidates abstain. Zero wrong support is not a repair: all seven reviewed targets are lost. Sector-pair support overlaps positives and wrong targets. No operating-point tuning or production adoption.",
+  "artifact_receipt_sha256": "119fc85fa529d1a08d2b933e7058ec96521067f1c8bbcb84f377eecd1845ce7a",
+  "summarizer_sha256": "c10d57abe34c31042a1226b99c89abc2840a97f642e523827d8cf6aa7493d06f"
+}
