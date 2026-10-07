@@ -159,6 +159,44 @@ series of cutoffs against these ten reviewed Y values. Existing W3 owns later
 prediction evaluation; this manifest is a binding/preflight inventory, not a
 parallel evaluator, A2 predictor or efficacy result.
 
+## A2 adjacent-region interpretation preflight
+
+The user has confirmed the short central orange correspondence from 42.5 to
+44 s; its seed/direction counter-controls and rejection as a general tracker are
+owned by the [completed temporal evidence](../../60-evidence/s11/2026-10-07-a2-patch-correspondence.md#human-correspondence-reply-and-seed-counter-controls).
+Those judgments identify where Oil appears and how it moves; they do not label
+the adjoining bright/dark regions as Foam, liquid, gas or optical effects.
+Earlier 15 s Foam correspondence does not assign later region material labels.
+
+The next proposed model compares temporal region replacement against static
+boundary, illumination and ribbon explanations. Its physical interpretation is
+not frozen while the adjoining-region cause remains unknown. The new review
+keeps the already confirmed f1275/Y835 and f1320/Y844 positions and shows small
+display-only A/B rectangles above/below in central X=[584,605). They are not
+uniform-material masks, new Oil coordinates or a changed input ROI.
+
+The [preflight receipt](2026-10-07-sample4-region-context-preflight.json) binds the
+question, original raw PNGs, display ranges and pending answer. The question is
+what creates A/B appearance (bubbly fluid, less-bubbly liquid, gas, optical effect,
+mixed or unknown), not another Oil-position or continuity review. No material
+species classification is required by the product contract.
+
+Independent input preparation is complete: all seven prior candidate frames and
+their immediate neighbours, **21 exact decoded frames**, use existing reader,
+mask and preprocessing owners. At all seven anchor frames the BGR, effective
+mask and normalized arrays exactly match the previous capture. Existing O1 band
+gray/support/glare reconstruction checks **10,296 bands with zero mismatches**.
+Production sources, original video, recipe and input evidence hashes are unchanged.
+No detector replay, new proposals, label fit, W3 prediction or operating-point
+selection was performed. Full raw/gray/normalized/effective/glare rasters and
+decoder receipts remain under
+`sample/output/s11-a2-region-context-20261007-001/inputs/`.
+
+The local `review.html` in the parent directory uses original pixels with
+toggleable SVG guides. Both guide states were checked in the browser. The next
+step depends on the user's physical interpretation; an unknown answer will not
+be coerced into a two-fluid label or trigger another request for the same review.
+
 ## Reproducibility and limits
 
 The [manifest](2026-10-07-sample4-interval-candidate-manifest.json) preserves the

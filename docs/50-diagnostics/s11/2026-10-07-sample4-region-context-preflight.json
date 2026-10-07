@@ -1,0 +1,708 @@
+{
+  "source_head": "a7109a963a4366bd771b7e9300d4a83833501073",
+  "status": "INPUT_PREPARATION_COMPLETE_REGION_INTERPRETATION_PENDING",
+  "hypothesis_status": "DRAFT_NOT_FROZEN_NO_PREDICTOR",
+  "field_disposition": "FIELD FAIL",
+  "review": {
+    "source_head": "a7109a963a4366bd771b7e9300d4a83833501073",
+    "source_context_manifest_sha256": "249149310ccae2a3e015565d2d9f9f030584670d87e65b1ae4013baf66998981",
+    "source_context_root": "sample/output/s11-a2-temporal-context-20261007-001",
+    "review_html_sha256": "c59e0a235fc0ed0a0599f3e46dd1473a7109d9d4208b715db8402ed2b71a2dea",
+    "builder_sha256": "6a01a6aa8ec4ae3cd8f604ead6d93c8b6dd28d46c57557c37add3d0441e33f04",
+    "queries": [
+      {
+        "frame": 1275,
+        "source_png_sha256": "3191678d203ffd2f453635b8579a12a33fa439b3a37bfb0470a68cb129a44e4b",
+        "confirmed_candidate_source_y": 835,
+        "source_x_range": [
+          584,
+          605
+        ],
+        "A_source_y_range": [
+          823,
+          831
+        ],
+        "B_source_y_range": [
+          839,
+          847
+        ],
+        "role": "display-only rectangular queries, not masks or physical annotations"
+      },
+      {
+        "frame": 1320,
+        "source_png_sha256": "ef03bbba1562a0225dddebddce6f4b225efb3948a1e9adf1bb8af7f0ade41c8b",
+        "confirmed_candidate_source_y": 844,
+        "source_x_range": [
+          584,
+          605
+        ],
+        "A_source_y_range": [
+          832,
+          840
+        ],
+        "B_source_y_range": [
+          848,
+          856
+        ],
+        "role": "display-only rectangular queries, not masks or physical annotations"
+      }
+    ],
+    "scope": "New physical-region interpretation only; prior Oil correspondence/continuity and orange-chain judgment stay closed. No scalar tolerance, chemical species, ROI change or material mask inferred.",
+    "status": "AWAITING_HUMAN_REGION_INTERPRETATION"
+  },
+  "question": "유면 바로 위 A(밝은 쪽)와 아래 B(어두운 쪽)는 각각 무엇으로 보이나요? 거품·기포가 섞인 유체 / 기포가 적은 액체 / 공기·기체 공간 / 반사·조명 / 혼합·판단 불가 중 알 수 있는 범위로 설명해 주세요.",
+  "reason": "Prior user replies identify Oil correspondence/continuity but do not attribute adjacent-region appearance to material or optics. This affects whether a temporal two-region exchange interpretation is appropriate. No chemical-species classification is required.",
+  "user_reply": null,
+  "local_artifact_root": "sample/output/s11-a2-region-context-20261007-001",
+  "input_receipt_sha256": "7986d15dce6f624da7aec64efbd38b9528373e784f2059906d5ea41091ad3474",
+  "input_preparation": {
+    "anchors": [
+      1140,
+      1200,
+      1260,
+      1275,
+      1320,
+      1485,
+      1560
+    ],
+    "temporal_offsets_frames": [
+      -1,
+      0,
+      1
+    ],
+    "fps": 30,
+    "scope": "Prepared adjacent-frame rasters only. No detector rerun, new proposal, classifier fit, scalar truth, physical-region label or operating point. Current-frame BGR/effective/normalized pixels reproduce all seven previous captures; existing O1 baseline checker also executed.",
+    "production_sources_unchanged": true,
+    "inputs": {
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/capture-manifest.json": "fca7623eddf3b8b199a2090a257ebab73fb4a620f2f8c50a6605ab0129045b45",
+      "sample/output/s11-a2-target-binding-20261007-001/packet.json": "be57465f80235a65edbf16f338e45ecd5590a43238bb718762052a965d0f24c4",
+      "sample/sample4.mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-original_roi.png": "eea14d8eb7f39dee1c8b8748e8031f5638321612d1a9fa2d9ff27e0b43a74525",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-normalized.png": "a17f09fe227a783c57ec6f56fb5d176c374a4ec6e0493767f3dd684eba53e9b7",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200-original_roi.png": "1c03062d3b2274f8aee2793ba70a7f0065634528ea0f4960b517adc9073023cd",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200-normalized.png": "725589ec296379667a7405f34219d95b1a80ee4756607b0089959da852e10ea5",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-original_roi.png": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-normalized.png": "46646ee5b1fa21da44f4db9911f249c5c880e6aadd218d6910de3be27bb1937c",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-normalized.png": "22c34bf394f1f27f9bab8d9062e37c4d58bfba54c87d16c84b91275165c014fb",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-original_roi.png": "3083e2a46604986053edf61df6ac605d959861332010421542e2c8a33a022020",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-normalized.png": "c5fa72adba8f8a37c845ebc648853496346269a3a4e23cbdb1cd1d28b7653cb4",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-original_roi.png": "f0f2394eeabc08734d548ee91ab8d73723abc205eecbea17f0dbdcdbe3da67ee",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-normalized.png": "44b6e6a5281003dd677a1077016f670ce6059b0e8cf9f15d7644fa049939a367",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560-original_roi.png": "e04d7119d7445c147651ba43158890a046e533dfb325bc63c0c2dcd804450faa",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560-normalized.png": "4d6d5b163f6c83b2f46588eafdc2a4b6b4b36b818977edb3b3dffae0d77aea32"
+    }
+  },
+  "case_checks": [
+    {
+      "frame": 1139,
+      "decode": {
+        "requested_frame_index": 1139,
+        "decoded_frame_index": 1139,
+        "requested_timestamp_sec": 37.96666666666667,
+        "decoded_timestamp_sec": 37.96666666666667,
+        "initial_frame_index": 1139,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1139-bgr.png": "d66a390699a3740a2d212c9f7f89903e2b85d3195eb360782ae241b3a3a3ed76",
+        "f1139-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1139-gray.png": "f6107df489c887c20e55e1bd62a0531bf23d698906de6c09cb1a57fafe5a76a7",
+        "f1139-normalized.png": "37fd4d599cfa1fc8266db2249866bcc93fb7c9edcf7569d70aa45c68f6ee5bab",
+        "f1139-glare.png": "062e902fe118eeff41c9a699222de5d609daa1863fa2cd9638e7e8801109ee31"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1140,
+      "decode": {
+        "requested_frame_index": 1140,
+        "decoded_frame_index": 1140,
+        "requested_timestamp_sec": 38.0,
+        "decoded_timestamp_sec": 38.0,
+        "initial_frame_index": 1140,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1140-bgr.png": "eea14d8eb7f39dee1c8b8748e8031f5638321612d1a9fa2d9ff27e0b43a74525",
+        "f1140-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1140-gray.png": "d8d9f8ed117acc2aae80353428780673dc1e48c0e09da7c50db02499f78fcec5",
+        "f1140-normalized.png": "a17f09fe227a783c57ec6f56fb5d176c374a4ec6e0493767f3dd684eba53e9b7",
+        "f1140-glare.png": "8406cd1b65f12069d36b763e9f3a21be23a0f30597387b951cc0587378aea955"
+      },
+      "prior_anchor_pixel_equality": {
+        "bgr": true,
+        "effective": true,
+        "normalized": true
+      },
+      "witness_check": {
+        "band_count": 1572,
+        "mismatched_band_count": 0,
+        "status": "MATCH",
+        "float_absolute_tolerance": 1e-10,
+        "scope": "Only gray/support band fields; not historical pixel equality or classifier efficacy."
+      }
+    },
+    {
+      "frame": 1141,
+      "decode": {
+        "requested_frame_index": 1141,
+        "decoded_frame_index": 1141,
+        "requested_timestamp_sec": 38.03333333333333,
+        "decoded_timestamp_sec": 38.03333333333333,
+        "initial_frame_index": 1141,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1141-bgr.png": "755b7153912f77dd19e82a67a1bd9718cf38c82328f5a5acab73fffd892e2603",
+        "f1141-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1141-gray.png": "d082c8cff5899d0dc75e0a58a4e9bae4761d15e91d65611a7ceb500ccaf6f661",
+        "f1141-normalized.png": "03095baeeb0ccaf92bf9a088c0c9f4f78123dba37273da6b2906a5a91550743b",
+        "f1141-glare.png": "6ed43f5eb1aa2aff11e4e388b11a2359b4a95b1b15aad5960f84181deafb4f7c"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1199,
+      "decode": {
+        "requested_frame_index": 1199,
+        "decoded_frame_index": 1199,
+        "requested_timestamp_sec": 39.96666666666667,
+        "decoded_timestamp_sec": 39.96666666666667,
+        "initial_frame_index": 1199,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1199-bgr.png": "7a7fba4205c1470519e0fb401d712f57c1e09278871d78647da77f7b1377b28c",
+        "f1199-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1199-gray.png": "75d91f11a96563f98f6ad55d6d6da864ddf2812a7cf54eb79c0c8e4f342504a9",
+        "f1199-normalized.png": "350e403482c8f425d591683426029880c3091444f2bc1df22b7ec6a689ea5591",
+        "f1199-glare.png": "77a49d99c121955039faff18d27f0f29d927d17adb1f33b283fa4a0d967139e5"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1200,
+      "decode": {
+        "requested_frame_index": 1200,
+        "decoded_frame_index": 1200,
+        "requested_timestamp_sec": 40.0,
+        "decoded_timestamp_sec": 40.0,
+        "initial_frame_index": 1200,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1200-bgr.png": "1c03062d3b2274f8aee2793ba70a7f0065634528ea0f4960b517adc9073023cd",
+        "f1200-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1200-gray.png": "460590bb52900bef9814e539c78b70bd87192d8afbe34df178fa59e505982812",
+        "f1200-normalized.png": "725589ec296379667a7405f34219d95b1a80ee4756607b0089959da852e10ea5",
+        "f1200-glare.png": "bf7c637c828ee0bd3faa8088257f186b63d9865b159742211cf50b481595d683"
+      },
+      "prior_anchor_pixel_equality": {
+        "bgr": true,
+        "effective": true,
+        "normalized": true
+      },
+      "witness_check": {
+        "band_count": 1404,
+        "mismatched_band_count": 0,
+        "status": "MATCH",
+        "float_absolute_tolerance": 1e-10,
+        "scope": "Only gray/support band fields; not historical pixel equality or classifier efficacy."
+      }
+    },
+    {
+      "frame": 1201,
+      "decode": {
+        "requested_frame_index": 1201,
+        "decoded_frame_index": 1201,
+        "requested_timestamp_sec": 40.03333333333333,
+        "decoded_timestamp_sec": 40.03333333333333,
+        "initial_frame_index": 1201,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1201-bgr.png": "496d7e975ebf7e6d48fdd869ced2c033e784a1da21140e2520a573e35d2b5805",
+        "f1201-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1201-gray.png": "fe8c9e11cf413e15f14c40426b654dbcf41367a74d5be624c8ae451c4e75176f",
+        "f1201-normalized.png": "8e475c940d25d9064e71ed2a997f2f5a04d1ebb584d5f9510e987a16ca0f6b98",
+        "f1201-glare.png": "2f001dd118d24e1282534eed041ab9d039febfa0d8f489aaa15c32d2a0b235a7"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1259,
+      "decode": {
+        "requested_frame_index": 1259,
+        "decoded_frame_index": 1259,
+        "requested_timestamp_sec": 41.96666666666667,
+        "decoded_timestamp_sec": 41.96666666666667,
+        "initial_frame_index": 1259,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1259-bgr.png": "370214488557051a83976a3314faa99d22f86346f619816eed3d80f6d5d4b7d9",
+        "f1259-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1259-gray.png": "b7410cfdc04bd0534eefd84b61283f173eba68bed4ac211f1061fb536df1fc03",
+        "f1259-normalized.png": "cabcdff695eb536c745c7033b53f012e306e79b4a4811b4c8acdd09787b27f22",
+        "f1259-glare.png": "d21758370860bfe77f8041d16e105e19ed905bd10627eb04a72696614c0fdb7a"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1260,
+      "decode": {
+        "requested_frame_index": 1260,
+        "decoded_frame_index": 1260,
+        "requested_timestamp_sec": 42.0,
+        "decoded_timestamp_sec": 42.0,
+        "initial_frame_index": 1260,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1260-bgr.png": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+        "f1260-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1260-gray.png": "8f311f2965a45f71d4977576c2c813196736460c4698715be20214833f8d032d",
+        "f1260-normalized.png": "46646ee5b1fa21da44f4db9911f249c5c880e6aadd218d6910de3be27bb1937c",
+        "f1260-glare.png": "90a783afbb56c519b940112aa09f5d466bd335c7e10af5ae14e2305da2a4993d"
+      },
+      "prior_anchor_pixel_equality": {
+        "bgr": true,
+        "effective": true,
+        "normalized": true
+      },
+      "witness_check": {
+        "band_count": 1488,
+        "mismatched_band_count": 0,
+        "status": "MATCH",
+        "float_absolute_tolerance": 1e-10,
+        "scope": "Only gray/support band fields; not historical pixel equality or classifier efficacy."
+      }
+    },
+    {
+      "frame": 1261,
+      "decode": {
+        "requested_frame_index": 1261,
+        "decoded_frame_index": 1261,
+        "requested_timestamp_sec": 42.03333333333333,
+        "decoded_timestamp_sec": 42.03333333333333,
+        "initial_frame_index": 1261,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1261-bgr.png": "71a7c550ae813478063cefb8daa6b01d007d61660455dde2d87eca35c669accb",
+        "f1261-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1261-gray.png": "a1180052718e402008396eb96fc407ce5dd52caf51f245d11a8e4b600dfbeb4d",
+        "f1261-normalized.png": "a2b2638aac54b22d2bd5e8132a2f0a5602c50d7cec23b2802047aeb3e81a8ddd",
+        "f1261-glare.png": "eb64ad9d47ddee6343c31edff0111021c90a56d951945222a341feeaa9e76a19"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1274,
+      "decode": {
+        "requested_frame_index": 1274,
+        "decoded_frame_index": 1274,
+        "requested_timestamp_sec": 42.46666666666667,
+        "decoded_timestamp_sec": 42.46666666666667,
+        "initial_frame_index": 1274,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1274-bgr.png": "9e3d0b1b50ee461a49120017982a08bae012d2b4f96d555b83379e764d0a8935",
+        "f1274-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1274-gray.png": "b7ef44c143c7056b220996bbc5bb9c7ef4f397df4e65f98bbe53766ad6463395",
+        "f1274-normalized.png": "ab2fa8d05f5cf30234b960360ab0d36a217756480d6232aeaf0b5851a1da2da9",
+        "f1274-glare.png": "d282535edb66394805bc39b5280f4a5481b35fccf70f552f93ba842db502d9e3"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1275,
+      "decode": {
+        "requested_frame_index": 1275,
+        "decoded_frame_index": 1275,
+        "requested_timestamp_sec": 42.5,
+        "decoded_timestamp_sec": 42.5,
+        "initial_frame_index": 1275,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1275-bgr.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+        "f1275-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1275-gray.png": "2c5f2c420ea4263e4029a2c8dce95d88a1122e0ae4326ca5749a9e18cc899b0b",
+        "f1275-normalized.png": "22c34bf394f1f27f9bab8d9062e37c4d58bfba54c87d16c84b91275165c014fb",
+        "f1275-glare.png": "25b3825d5dcda796e10004195c892f031f239adfaf2e9c89675ba3cd55b312b1"
+      },
+      "prior_anchor_pixel_equality": {
+        "bgr": true,
+        "effective": true,
+        "normalized": true
+      },
+      "witness_check": {
+        "band_count": 1356,
+        "mismatched_band_count": 0,
+        "status": "MATCH",
+        "float_absolute_tolerance": 1e-10,
+        "scope": "Only gray/support band fields; not historical pixel equality or classifier efficacy."
+      }
+    },
+    {
+      "frame": 1276,
+      "decode": {
+        "requested_frame_index": 1276,
+        "decoded_frame_index": 1276,
+        "requested_timestamp_sec": 42.53333333333333,
+        "decoded_timestamp_sec": 42.53333333333333,
+        "initial_frame_index": 1276,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1276-bgr.png": "d830e6fa74335725b355bae64a0e578e94b2de1f7387738a36d4908b98ba9ee2",
+        "f1276-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1276-gray.png": "769177d21df83124354f9ebab498721b69857f94b79b9ab1230ac2d0ff0a5cb3",
+        "f1276-normalized.png": "89195aa176fbc6e5a28d206ed7736a92952e2423ed0e1b8d24b90e9d116e611c",
+        "f1276-glare.png": "57605b39ab04993fd9883dc13cbce7dac44c8a7ad26450e148cfa9272251b107"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1319,
+      "decode": {
+        "requested_frame_index": 1319,
+        "decoded_frame_index": 1319,
+        "requested_timestamp_sec": 43.96666666666667,
+        "decoded_timestamp_sec": 43.96666666666667,
+        "initial_frame_index": 1319,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1319-bgr.png": "f041a96cb521e96d2972b8c53357197e3eed21fa4e80af70f256aa63598beaa0",
+        "f1319-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1319-gray.png": "8321366a2bbd9cc8c9b7bfc7846045bfd44414e1006051cdbbc29f0993fd3f5e",
+        "f1319-normalized.png": "db9ccfb4807b01ca627f8d34da1c9fc8a044b72c9596e96849540a7144a9fd25",
+        "f1319-glare.png": "1c958166334a280b8a58fc6156094aef0c7da48db4c9dad1938be4d9003e0637"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1320,
+      "decode": {
+        "requested_frame_index": 1320,
+        "decoded_frame_index": 1320,
+        "requested_timestamp_sec": 44.0,
+        "decoded_timestamp_sec": 44.0,
+        "initial_frame_index": 1320,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1320-bgr.png": "3083e2a46604986053edf61df6ac605d959861332010421542e2c8a33a022020",
+        "f1320-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1320-gray.png": "b3db1dae2b1bbb3c75fb4424091c1146b73fa49bd474f04d37898a15c6315ec6",
+        "f1320-normalized.png": "c5fa72adba8f8a37c845ebc648853496346269a3a4e23cbdb1cd1d28b7653cb4",
+        "f1320-glare.png": "6aa5977cf01c8e8157b1ceae20da11ba02e6c70eac1ff107d7469cb0800230ad"
+      },
+      "prior_anchor_pixel_equality": {
+        "bgr": true,
+        "effective": true,
+        "normalized": true
+      },
+      "witness_check": {
+        "band_count": 1572,
+        "mismatched_band_count": 0,
+        "status": "MATCH",
+        "float_absolute_tolerance": 1e-10,
+        "scope": "Only gray/support band fields; not historical pixel equality or classifier efficacy."
+      }
+    },
+    {
+      "frame": 1321,
+      "decode": {
+        "requested_frame_index": 1321,
+        "decoded_frame_index": 1321,
+        "requested_timestamp_sec": 44.03333333333333,
+        "decoded_timestamp_sec": 44.03333333333333,
+        "initial_frame_index": 1321,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1321-bgr.png": "b99aca4a78fa2362c4ab016337bd5f5807cf8e3a6b4c4f9ad98b20efb4d34950",
+        "f1321-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1321-gray.png": "9b1b3744824639f0f9c2eb2aa2a7a25c2379b2635cccaec78c6d7894d2014cd4",
+        "f1321-normalized.png": "a85909159e10f4f7f4eee4bb825be04a769781683937e191ed12994125ad2bf9",
+        "f1321-glare.png": "057657da20d4c24a16cca443ffce87e07f27c1180f3764a88e41673e6fc1aa3c"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1484,
+      "decode": {
+        "requested_frame_index": 1484,
+        "decoded_frame_index": 1484,
+        "requested_timestamp_sec": 49.46666666666667,
+        "decoded_timestamp_sec": 49.46666666666667,
+        "initial_frame_index": 1484,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1484-bgr.png": "38d7074ff0c1c545209a92fe919f9f861672d7986613177d9b9d0fd743bed90b",
+        "f1484-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1484-gray.png": "16d016c9a856492508e2ba7249406ba6f73eae3bb12929a425bed02d7c9e218c",
+        "f1484-normalized.png": "636ceba6087c886c1dc495e339e32b27e5e1a034915073e9c183cc79eeafd368",
+        "f1484-glare.png": "0879de7956ddd12762778e9cb38e19173fa5fcd98a4ff16cdff717f63e1a06e6"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1485,
+      "decode": {
+        "requested_frame_index": 1485,
+        "decoded_frame_index": 1485,
+        "requested_timestamp_sec": 49.5,
+        "decoded_timestamp_sec": 49.5,
+        "initial_frame_index": 1485,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1485-bgr.png": "f0f2394eeabc08734d548ee91ab8d73723abc205eecbea17f0dbdcdbe3da67ee",
+        "f1485-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1485-gray.png": "a6daf77b8cc571e8abfe48fbd974263e074fa650dfa615f5d1d04b2b30da2617",
+        "f1485-normalized.png": "44b6e6a5281003dd677a1077016f670ce6059b0e8cf9f15d7644fa049939a367",
+        "f1485-glare.png": "42234a8290711cc876b418dd5b37046d1c02e949198a7b95ebc7962de17f9f14"
+      },
+      "prior_anchor_pixel_equality": {
+        "bgr": true,
+        "effective": true,
+        "normalized": true
+      },
+      "witness_check": {
+        "band_count": 1416,
+        "mismatched_band_count": 0,
+        "status": "MATCH",
+        "float_absolute_tolerance": 1e-10,
+        "scope": "Only gray/support band fields; not historical pixel equality or classifier efficacy."
+      }
+    },
+    {
+      "frame": 1486,
+      "decode": {
+        "requested_frame_index": 1486,
+        "decoded_frame_index": 1486,
+        "requested_timestamp_sec": 49.53333333333333,
+        "decoded_timestamp_sec": 49.53333333333333,
+        "initial_frame_index": 1486,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1486-bgr.png": "aad2d6a5fc9aa5f13ce5b6a7ff787692d0d04f5e6370b263256604c0f6cccd6d",
+        "f1486-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1486-gray.png": "14742283e4ec64bc1f21255253afab67a249ecf4d77b1331a4b46660fa468277",
+        "f1486-normalized.png": "59738bb3be9e580c4a032054aad3359fad5dc755e64d40c16bbc0bb7fbe45e3e",
+        "f1486-glare.png": "0879de7956ddd12762778e9cb38e19173fa5fcd98a4ff16cdff717f63e1a06e6"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1559,
+      "decode": {
+        "requested_frame_index": 1559,
+        "decoded_frame_index": 1559,
+        "requested_timestamp_sec": 51.96666666666667,
+        "decoded_timestamp_sec": 51.96666666666667,
+        "initial_frame_index": 1559,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1559-bgr.png": "45ff61267b7d1368eba277a795ecc399ba56e43bccf48c235160e4d9f76928b9",
+        "f1559-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1559-gray.png": "c350e280c0a6d5e47ec685631a1e2ac5e1ce008d6f3c3d33c1aa3c3163049236",
+        "f1559-normalized.png": "652b87202fd912ed9c81fdc3c76761e21d75390ad4ce9990c11c1737c00cc6a6",
+        "f1559-glare.png": "bd02f566928d23e8ee4e6ea4afa655eb521a7aef05219272c35ebfb2c6caa058"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    },
+    {
+      "frame": 1560,
+      "decode": {
+        "requested_frame_index": 1560,
+        "decoded_frame_index": 1560,
+        "requested_timestamp_sec": 52.0,
+        "decoded_timestamp_sec": 52.0,
+        "initial_frame_index": 1560,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1560-bgr.png": "e04d7119d7445c147651ba43158890a046e533dfb325bc63c0c2dcd804450faa",
+        "f1560-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1560-gray.png": "9b04eb7860041a4c7e89b780e541630fbe4b21c165205db811d234344a32b29e",
+        "f1560-normalized.png": "4d6d5b163f6c83b2f46588eafdc2a4b6b4b36b818977edb3b3dffae0d77aea32",
+        "f1560-glare.png": "05fa69d1e5176fbdba68dff755f69f825e35b9de712e07582df56e983fc4a281"
+      },
+      "prior_anchor_pixel_equality": {
+        "bgr": true,
+        "effective": true,
+        "normalized": true
+      },
+      "witness_check": {
+        "band_count": 1488,
+        "mismatched_band_count": 0,
+        "status": "MATCH",
+        "float_absolute_tolerance": 1e-10,
+        "scope": "Only gray/support band fields; not historical pixel equality or classifier efficacy."
+      }
+    },
+    {
+      "frame": 1561,
+      "decode": {
+        "requested_frame_index": 1561,
+        "decoded_frame_index": 1561,
+        "requested_timestamp_sec": 52.03333333333333,
+        "decoded_timestamp_sec": 52.03333333333333,
+        "initial_frame_index": 1561,
+        "forward_decodes": 0,
+        "identity_basis": "source bytes + backend-reported frame index; no historical pixel hash exists"
+      },
+      "origin": [
+        543,
+        798
+      ],
+      "files": {
+        "f1561-bgr.png": "f0a719ffb67ac5e5e99988ca4bd297c4618964ebf349eb27e9d4a99ea85a0713",
+        "f1561-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+        "f1561-gray.png": "91d16c35b8cb1de188906d73e3f827d790bf2d256928d4978b56f733d4bc1868",
+        "f1561-normalized.png": "d488eccbab569273f8a04f213c45ea1158c068935230d623a953b172d93e9fa4",
+        "f1561-glare.png": "3969d55648ab63df04316184c8b8e05cebf040761a3763573bc3a1c326bbf550"
+      },
+      "prior_anchor_pixel_equality": null,
+      "witness_check": null
+    }
+  ],
+  "artifact_files": {
+    "review.html": "c59e0a235fc0ed0a0599f3e46dd1473a7109d9d4208b715db8402ed2b71a2dea",
+    "review-preview.png": "49e390fc7a73d4d592265caf4871b518d185a3841b1a14de92d0a6746d624588",
+    "capture_inputs.py": "2136d13b985204c228e6fe51968ec3d7d3092ace44d72601175fb1603f35799e",
+    "manifest.json": "f431f761b359fad431aa52438638c1d9fdc254ebf945a75d6502677e30058048",
+    "build_review.py": "6a01a6aa8ec4ae3cd8f604ead6d93c8b6dd28d46c57557c37add3d0441e33f04"
+  },
+  "production_source_fingerprint": "7569b872ed23afa313f4a6088261edcc58553c3da5aec4560a58f55ec6bb8e0f"
+}
