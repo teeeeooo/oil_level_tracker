@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from copy import deepcopy
+
+import pytest
+
 from oil_tracker.application.services.report_presentation import (
     MAX_REPORT_LANDMARKS,
     build_glass_report_presentation,
@@ -335,3 +339,106 @@ def test_oil_drop_landmark_states_observed_onset_without_backdating_timestamp():
     assert landmark.timestamp_sec == 1.0
     assert landmark.label == "유면 하강 최초 관찰"
     assert "실제 물리적 시작은 더 이를 수" in landmark.description
+
+
+@pytest.mark.parametrize("foam_flag", [
+    "R7_FOAM_UNCONFIRMED", "R7_FOAM_REJECTED", "R7_FOAM_OIL_TOPOLOGY_CONFLICT",
+])
+def test_modern_oil_extrema_ignore_unrelated_foam_flags(foam_flag):
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    samples = [
+        _sample(config.id, i * 0.5, oil=value, flags=(
+            "R17_RESOLVED_OIL", "SEQUENCE_SAME_FRAME_CANDIDATE", foam_flag,
+        ))
+        for i, value in enumerate([1.0, 9.0, 3.0])
+    ]
+    glass = GlassAnalysisResult(config.id, config.name, ResultState.REVIEW_REQUIRED,
+                                samples=samples)
+    before = deepcopy(glass)
+
+    report = build_glass_report_presentation(glass, config)
+
+    extrema = {item.event_type: item for item in report.landmarks}
+    assert extrema[EventType.MAXIMUM_OIL_LEVEL].sample is samples[1]
+    assert extrema[EventType.MINIMUM_OIL_LEVEL].sample is samples[0]
+    assert "관측 최고는 0.5초 +9.0 px" in report.movement_summary
+    assert "관측 최저는 0.0초 +1.0 px" in report.movement_summary
+    assert glass == before
+
+
+@pytest.mark.parametrize("flags", [
+    ("R7_RESOLVED_OIL",), ("R7_OIL_CONTINUATION",),
+    (" r7_oil_continuation ", "R7_FOAM_UNCONFIRMED"),
+])
+def test_legacy_oil_without_anchors_has_no_extrema_in_summary_or_landmarks(flags):
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = GlassAnalysisResult(config.id, config.name, ResultState.REVIEW_REQUIRED,
+        samples=[_sample(config.id, 0.0, oil=1, flags=flags),
+                 _sample(config.id, 0.5, oil=9, flags=flags)])
+
+    report = build_glass_report_presentation(glass, config)
+
+    assert report.finite_oil_count == 2
+    assert not any(item.event_type in {EventType.MAXIMUM_OIL_LEVEL, EventType.MINIMUM_OIL_LEVEL}
+                   for item in report.landmarks)
+    assert "관측 최고" not in report.movement_summary
+    assert "관측 최저" not in report.movement_summary
+
+
+@pytest.mark.parametrize("values", [
+    [0, -5, -10, -5, 0], [0, 5, 10, 5, 0],
+    list(range(0, -22, -2)) + list(range(-18, 2, 2)),
+])
+def test_similar_endpoints_do_not_describe_the_whole_interval_as_steady(values):
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = GlassAnalysisResult(config.id, config.name, ResultState.REVIEW_REQUIRED,
+        samples=[_sample(config.id, i * 0.5, oil=value) for i, value in enumerate(values)])
+    before = deepcopy(glass)
+
+    report = build_glass_report_presentation(glass, config)
+
+    assert "양 끝 관측 높이를 비교하면 비슷합니다" in report.movement_summary
+    assert "전 구간이 정체했다는 뜻은 아닙니다" in report.movement_summary
+    assert "유지되었습니다" not in report.movement_summary
+    assert glass == before
+
+
+def test_single_oil_observation_cannot_establish_movement():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = GlassAnalysisResult(config.id, config.name, ResultState.REVIEW_REQUIRED,
+        samples=[_sample(config.id, 0.0, oil=None), _sample(config.id, 0.5, oil=3)])
+
+    report = build_glass_report_presentation(glass, config)
+
+    assert "단일 관측만 있어 움직임은 판단할 수 없습니다" in report.movement_summary
+    assert "양 끝" not in report.movement_summary
+
+
+@pytest.mark.parametrize("state_only", [False, True])
+def test_foam_episode_labels_describe_observations_not_physical_birth_or_death(state_only):
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    samples = [
+        _sample(config.id, 0.0, oil=None, foam=None if state_only else 5,
+                state=FillState.FOAMING_VISIBLE if state_only else FillState.PARTIAL_VISIBLE),
+        _sample(config.id, 0.5, oil=None, foam=None if state_only else 6,
+                state=FillState.FOAMING_VISIBLE if state_only else FillState.PARTIAL_VISIBLE),
+        _sample(config.id, 1.0, oil=None, state=FillState.UNKNOWN_REVIEW),
+    ]
+    events = [EventMarker("run", config.id, EventType.FOAM_START, 0.0),
+              EventMarker("run", config.id, EventType.FOAM_END, 1.0)]
+    glass = GlassAnalysisResult(config.id, config.name, ResultState.REVIEW_REQUIRED,
+                                samples=samples, events=events)
+    before = deepcopy(glass)
+
+    report = build_glass_report_presentation(glass, config)
+
+    start, end = report.landmarks
+    assert start.timestamp_sec == 0.0 and start.source_event is events[0]
+    assert end.timestamp_sec == 1.0 and end.source_event is events[1]
+    assert "관측 시작" in start.label and "실제 발생 시점은 더 이를 수" in start.description
+    assert "관측 중단" in end.label and "소멸 여부나 시점을 확정하지 않습니다" in end.description
+    assert "0.50초" in end.description and "1.00초" in end.description
+    if state_only:
+        assert "경계 관측" not in start.label
+        assert "경계 위치가 관측되지" not in end.description
+    assert glass == before

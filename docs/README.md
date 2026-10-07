@@ -110,8 +110,10 @@ The [adoption checkpoint](60-evidence/s11/2026-10-07-audit-adoption-checkpoint.m
 records the actual checkout integration and validation. The second audit refines
 the first; A0B/A0Q/A1–A4 are bounded work within W4, not new milestones. The
 [third audit](70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md)
-adds a tested but unadopted report prototype and prioritizes source/report
-movement context. Its two-second display cap is a proposal; current report and
+supplies the original report prototype and prioritizes source/report movement
+context. The [report adoption record](60-evidence/s11/2026-10-07-report-context-adoption.md)
+identifies the subset subsequently implemented. Its two-second display cap is
+still a proposal; current report and
 detector acceptance owners remain authoritative. Recovery ZIPs preserve all
 three inspected worktrees' unadopted source changes; full local snapshots and
 native evidence are located by the checkpoint and its preservation receipt. Their

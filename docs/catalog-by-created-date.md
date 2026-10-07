@@ -394,3 +394,5 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 2026-10-07 | [First supplied audit](70-reference/s11-audit-2026-10-07/s11-audit-and-detector-work-spec-2026-10-07.md) | 원문 bytes 보존, 현재 상태 owner 아님 |
 | 2026-10-07 | [Second supplied audit](70-reference/s11-audit-2026-10-07/s11-second-audit-and-detector-work-spec-2026-10-07.md) | 원문 bytes 보존; [JSON/ZIP/native evidence manifest](70-reference/s11-audit-2026-10-07/import-manifest.json) |
 | 2026-10-07 | [Third supplied audit](70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md) | 원문 bytes 보존; 보고서 prototype 미채택, ZIP·JSON·worktree 복구 자료는 같은 manifest 참조 |
+| 2026-10-07 | [Report context design](20-architecture/s11-report-context-presentation-design.md) | 보고서 수리의 범위와 과거 실패 검토 |
+| 2026-10-07 | [Report context adoption](60-evidence/s11/2026-10-07-report-context-adoption.md) | 실제 반영 범위와 검증; 현재 단계는 Work Plan 참조 |

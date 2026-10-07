@@ -18,12 +18,12 @@ This contract owns acceptance for the user-facing observation report defined by 
 
 ### Presentation model
 
-- Finite Oil input produces deterministic highest and lowest observed landmarks; all-missing input produces neither.
+- Finite modern Oil input produces deterministic highest and lowest observed landmarks even when Foam-only R7 flags coexist; all-missing input produces neither. Actual legacy R7 Oil still requires anchors. A continuation-only legacy stream produces no extrema in either landmarks or narrative.
 - Preferred smoothed/raw and px/mm policies match static and Result Review graph values.
-- The trend sentence is deterministic and uses observation-qualified wording when gaps exist.
+- The trend sentence is deterministic and uses observation-qualified wording when gaps exist. Endpoint similarity must not imply steadiness over U-shaped, inverted-U or gradual-return observations; singleton input cannot establish movement.
 - Unconfirmed one-sample Foam flicker produces no report episode; a single stored temporal-confirmed strong/moderate Foam publication remains eligible without a second presentation gate. Pending flags may connect/defer disappearance within the bounded dropout rule but cannot create or backdate an episode or Foam coordinate.
 - A bounded short Foam dropout may remain one episode; a longer absence creates separate episodes.
-- Foam disappearance is marked only when a subsequent non-Foam sample exists.
+- Foam observation interruption is marked only when a subsequent non-Foam sample exists. The report gives last-observed and subsequent non-Foam times without certifying physical disappearance. State-only Foam support must not be described as an observed front coordinate. Event types, timestamps and source-event bindings remain unchanged by this wording repair.
 - Landmark selection is deterministic and never exceeds twelve per Glass or three Foam episodes.
 - Debug/quality events are not selected into the main report capture gallery.
 

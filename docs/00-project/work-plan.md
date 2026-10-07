@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B test-contract repair is adopted at `fa2d6d5`; verification and subsequent preservation are recorded in the [adoption checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md). The third-audit report prototype is preserved but NOT ADOPTED. Next work starts with report-contract repair and source/report interval review; A1 lossless support/pair/score-lineage integration remains the next bounded detector task before A2. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. Display-gap/scene-capture work and source/report interval review are next. A1 lossless support/pair/score-lineage integration remains the next bounded detector task before A2. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -47,15 +47,17 @@ scores remain pinned. This is not a general impossibility finding for spatial cl
 Resume from the [preservation checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md#third-audit-and-worktree-preservation--2026-10-07),
 then read §7 of the [third audit](../70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md)
 and §8 A1 of the [second audit](../70-reference/s11-audit-2026-10-07/s11-second-audit-and-detector-work-spec-2026-10-07.md).
-The current preservation request authorizes audit/worktree recovery, plan and
-navigation updates, verified temporary cleanup, commit and push. It does not
-adopt the report prototype, change detector behavior or complete A1–A4.
+The current request authorizes sequential implementation of this plan, appropriate
+verification, logical commits and push until a decision requires user judgment.
+Completed preservation remains closed. Report namespace/wording adoption does
+not adopt the full prototype, change detector behavior or complete A1–A4.
 
 The next implementation sequence is:
 
-1. Review and adopt the bounded report Oil-flag namespace and endpoint/Foam
-   observation wording repair. Preserve stored values, validity, flags and event
-   meanings; verify the actual adopted source on the four fixed video windows.
+1. COMPLETE — report Oil-flag namespace and endpoint/Foam observation wording
+   repair adopted. [Verification](../60-evidence/s11/2026-10-07-report-context-adoption.md)
+   covers 31 focused cases and four fresh fixed-window application/report runs;
+   stored values, validity, flags and event meanings match the pinned baseline.
 2. Decide the display-gap and bounded scene-capture contracts in the existing
    report architecture/validation owners. Two seconds remains a proposed display
    cap, not a detector threshold. Scene-only captures cannot fabricate Oil guides
@@ -405,13 +407,13 @@ required for the current measurement.
 
 ## Current authorization boundary
 
-The latest 2026-10-07 request authorizes preserving audit inputs and worktree
-changes, reconciling Git/checkout state, safely cleaning verified temporary
-material, updating this plan and committing/pushing the preservation checkpoint.
+The latest 2026-10-07 request authorizes sequential Work Plan implementation,
+proportional verification, logical commits and push until user judgment is needed.
+Audit/worktree preservation and verified temporary cleanup are complete.
 The [adoption record](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md)
-distinguishes adopted A0B from unadopted report/detector experiments. The next
-transition above is the implementation plan; this preservation handoff does not
-claim those changes are implemented or reopen Windows field runs.
+distinguishes adopted A0B from preserved experiments; the report adoption evidence
+owns the newly implemented subset. The next transition above records completion
+per unit and does not reopen Windows field runs.
 The earlier grants below describe the retained detector-development context.
 
 The user authorized replacement of the Oil temporal identity and phase/evidence

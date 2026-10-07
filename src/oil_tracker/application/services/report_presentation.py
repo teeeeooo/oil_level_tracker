@@ -210,14 +210,7 @@ def _extrema_landmarks(
     glass: GlassAnalysisResult,
     numeric: tuple[tuple[TrackingSample, float | None], ...],
 ) -> tuple[ReportLandmark, ...]:
-    if not numeric:
-        return ()
-    finite = tuple((sample, float(value)) for sample, value in numeric if value is not None)
-    trusted = (
-        tuple(item for item in finite if _r7_anchor(item[0]))
-        if _is_r7_stream(sample for sample, _value in finite)
-        else finite
-    )
+    trusted = _extrema_samples(numeric)
     if not trusted:
         return ()
     maximum = max(trusted, key=lambda item: (item[1], -item[0].timestamp_sec))[0]
@@ -240,6 +233,15 @@ def _extrema_landmarks(
             priority=0,
         ),
     )
+
+
+def _extrema_samples(
+    numeric: tuple[tuple[TrackingSample, float | None], ...],
+) -> tuple[tuple[TrackingSample, float], ...]:
+    finite = tuple((sample, float(value)) for sample, value in numeric if value is not None)
+    if _is_r7_stream(sample for sample, _value in finite):
+        return tuple(item for item in finite if _r7_anchor(item[0]))
+    return finite
 
 
 def _foam_episodes(
@@ -306,29 +308,41 @@ def _foam_landmarks(
 ) -> tuple[ReportLandmark, ...]:
     output: list[ReportLandmark] = []
     for number, episode in enumerate(episodes, start=1):
+        start_kind = _foam_observation_name(episode.start)
         start = _landmark_from_sample(
             glass,
             EventType.FOAM_START,
             episode.start,
-            f"확인된 거품 관측 구간 {number}이 시작된 시점입니다.",
+            f"{start_kind} 관측 구간 {number}의 첫 관측입니다. 실제 발생 시점은 더 이를 수 있습니다.",
             "foam",
             priority=10,
             end_time_sec=episode.last_present.timestamp_sec,
         )
-        start.label = f"거품 발생 {number}"
+        start.label = f"{start_kind} 관측 시작 {number}"
         output.append(start)
         if episode.disappearance is not None:
+            last_kind = _foam_observation_name(episode.last_present)
             end = _landmark_from_sample(
                 glass,
                 EventType.FOAM_END,
                 episode.disappearance,
-                f"거품 관측 구간 {number} 이후 처음으로 거품이 보이지 않은 시점입니다.",
+                (
+                    f"마지막 {last_kind} 관측은 {episode.last_present.timestamp_sec:.2f}초이며, "
+                    f"{episode.disappearance.timestamp_sec:.2f}초에는 거품 관측이 이어지지 않았습니다. "
+                    "이는 실제 거품 소멸 여부나 시점을 확정하지 않습니다."
+                ),
                 "foam",
                 priority=10,
             )
-            end.label = f"거품 소멸 {number}"
+            end.label = f"{last_kind} 관측 중단 {number}"
             output.append(end)
     return tuple(output)
+
+
+def _foam_observation_name(sample: TrackingSample) -> str:
+    if _foam_px(sample) is not None or _finite_first(sample.raw_foam_front_y) is not None:
+        return "거품 경계"
+    return "거품 상태"
 
 
 def _physical_event_landmarks(
@@ -439,14 +453,25 @@ def _movement_summary(
     elif delta < -tolerance:
         direction = "낮아졌습니다"
     else:
-        direction = "비슷한 높이로 유지되었습니다"
+        direction = "비슷합니다"
     first_text = _sample_level_text(first_sample, config)
     last_text = _sample_level_text(last_sample, config)
     qualifier = "관측 가능한 지점을 기준으로 " if has_unavailable else ""
     summary = (
-        f"{qualifier}{first_sample.timestamp_sec:.1f}초 {first_text}에서 시작해 "
-        f"{last_sample.timestamp_sec:.1f}초 {last_text}로 {direction}."
+        f"{qualifier}첫 관측은 {first_sample.timestamp_sec:.1f}초 {first_text}, "
+        f"마지막 관측은 {last_sample.timestamp_sec:.1f}초 {last_text}입니다. "
+        f"양 끝 관측 높이를 비교하면 {direction}."
     )
+    if len(finite) == 1:
+        summary = (
+            f"{first_sample.timestamp_sec:.1f}초 {first_text}의 "
+            "단일 관측만 있어 움직임은 판단할 수 없습니다."
+        )
+    elif (
+        abs(delta) <= tolerance
+        and max(value for _, value in finite) - min(value for _, value in finite) > tolerance
+    ):
+        summary += " 중간 관측 높이가 달라 전 구간이 정체했다는 뜻은 아닙니다."
     meaningful_deltas = [
         current_value - previous_value
         for (_previous_sample, previous_value), (_current_sample, current_value) in zip(
@@ -459,24 +484,20 @@ def _movement_summary(
         change < 0 for change in meaningful_deltas
     ):
         summary += " 분석 구간 중 상승과 하강이 모두 관측되었습니다."
-    trusted = (
-        tuple(item for item in finite if _r7_anchor(item[0]))
-        if _is_r7_stream(sample for sample, _value in finite)
-        else finite
-    )
-    extrema_source = trusted or finite
-    maximum_sample, _ = max(
-        extrema_source,
-        key=lambda item: (item[1], -item[0].timestamp_sec),
-    )
-    minimum_sample, _ = min(
-        extrema_source,
-        key=lambda item: (item[1], item[0].timestamp_sec),
-    )
-    summary += (
-        f" 관측 최고는 {maximum_sample.timestamp_sec:.1f}초 {_sample_level_text(maximum_sample, config)},"
-        f" 관측 최저는 {minimum_sample.timestamp_sec:.1f}초 {_sample_level_text(minimum_sample, config)}입니다."
-    )
+    extrema_source = _extrema_samples(numeric)
+    if extrema_source:
+        maximum_sample, _ = max(
+            extrema_source,
+            key=lambda item: (item[1], -item[0].timestamp_sec),
+        )
+        minimum_sample, _ = min(
+            extrema_source,
+            key=lambda item: (item[1], item[0].timestamp_sec),
+        )
+        summary += (
+            f" 관측 최고는 {maximum_sample.timestamp_sec:.1f}초 {_sample_level_text(maximum_sample, config)},"
+            f" 관측 최저는 {minimum_sample.timestamp_sec:.1f}초 {_sample_level_text(minimum_sample, config)}입니다."
+        )
     if foam_episode_count:
         summary += f" 보고서에 표시한 주요 거품 관측 구간은 {foam_episode_count}회입니다."
     return summary
@@ -653,7 +674,11 @@ def _foam_confirmation_pending(sample: TrackingSample) -> bool:
 
 def _is_r7_stream(samples) -> bool:
     return any(
-        any(str(flag).strip().upper().startswith("R7_") for flag in sample.flags)
+        any(
+            str(flag).strip().upper()
+            in {"R7_RESOLVED_OIL", "R7_OIL_ANCHOR", "R7_OIL_CONTINUATION"}
+            for flag in sample.flags
+        )
         for sample in samples
     )
 

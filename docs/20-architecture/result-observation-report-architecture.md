@@ -68,11 +68,11 @@ Unknown/no-interface information remains visible using restrained state or unava
 
 ## Extrema and trend summary
 
-The highest and lowest Oil landmarks are selected from the same finite preferred Oil anchors drawn by the graph. Positive height means above the configured zero line; maximum numeric height is the highest observed Oil and minimum numeric height is the lowest observed Oil.
+The highest and lowest Oil landmarks are selected from the finite preferred Oil anchors drawn by the graph. Legacy Oil streams identified by `R7_RESOLVED_OIL`, `R7_OIL_ANCHOR` or `R7_OIL_CONTINUATION` retain anchor-only eligibility. Unrelated `R7_FOAM_*` flags do not select that legacy Oil regime. Narrative and landmarks use the same eligible set; without an eligible anchor neither claims extrema. Positive height means above the configured zero line; maximum numeric height is the highest observed Oil and minimum numeric height is the lowest observed Oil.
 
 Extrema are observations, not claims about an unobserved interval. Wording must use forms such as “관측된 최고 유면” and “관측된 최저 유면.” If no finite Oil exists, no extrema or movement direction is claimed.
 
-The overall movement sentence compares observed start/end anchors with a bounded scale-aware hold tolerance and reports rise, fall, approximate hold or mixed movement. It must say that the statement is based on observable anchors whenever missing intervals exist.
+The overall movement sentence explicitly compares the first and last observed anchors with a bounded scale-aware tolerance. Similar endpoints do not establish steadiness throughout the interval; a larger intermediate range is disclosed. A single observation cannot establish movement. The sentence must say that it is based on observable anchors whenever missing intervals exist.
 
 ## Foam presentation episodes
 
@@ -88,9 +88,13 @@ result.
 - The report exposes at most three most material episodes per Glass, ordered by time after selection.
 - Episode start uses the first accepted Foam sample.
 - Episode time is never backdated to a detector-pending sample hidden before publication.
-- Episode end uses the first subsequent non-Foam sample when disappearance is observed. If Foam persists through analysis end, the report does not claim a disappearance time.
+- Episode end uses the first subsequent non-Foam sample as an observation interruption. Labels describe observation start/interruption; they do not establish physical formation or disappearance. End descriptions give both the last observation and the subsequent non-Foam time. A stored Foam state without a numeric front is called a state observation, not a boundary-coordinate observation. If Foam observations persist through analysis end, the report does not claim an interruption time.
 
 The complete ungrouped domain event history remains available in `events.csv` and Result Review. Presentation grouping must not rewrite it.
+
+These report labels are distinct from the current domain-event/Result Review
+labels. Changing report wording does not rename stored event types or repair
+their extraction predicates; that compatibility work has separate acceptance.
 
 ## Landmark selection
 
