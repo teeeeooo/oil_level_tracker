@@ -1,0 +1,97 @@
+{
+  "reply_verbatim": "40초 :영상으로 판별 불가\n42초:하단 테두리를 따라가는듯\n44초: 영상의 노이즈 선으로 보임",
+  "reply_date": "2026-10-07",
+  "review_html_sha256": "cd00ac63981baf365214c48581436a3568cb73e2154e99a6188952c9fcbee07d",
+  "review_manifest_sha256": "8619c70c283747e17632f54726e155ca1361bbb33341cc32bb7ef3f10e7f77ea",
+  "binding": "Pink completed observations in source/pink/confirmed-cyan comparison. Existing wrong-Oil-target judgments are unchanged; artifact subtype is separate and uncertain.",
+  "observations": [
+    {
+      "frame": 1200,
+      "time_sec": 40,
+      "pink_source_y": 865.5,
+      "confirmed_oil_source_y": 841,
+      "reply_verbatim": "영상으로 판별 불가",
+      "physical_subtype_status": "UNRESOLVED",
+      "physical_subtype": null,
+      "target_role": "HUMAN_REJECTED_OIL_TARGET",
+      "same_y_candidates": [
+        {
+          "candidate_input_index": 10,
+          "source": "material_path",
+          "source_y": 865.5
+        }
+      ],
+      "same_y_binding_limit": "Coordinate alternatives listed for audit; selected source is bound separately by executed publication witness, not inferred from Y equality.",
+      "selected_candidate": {
+        "candidate_offset": 10,
+        "source": "material_path",
+        "y": 865.5,
+        "tracklet_id": "oil-tracklet:000079:0014",
+        "row_hypothesis_id": "oil-row:000080:002"
+      },
+      "selected_binding_basis": "Executed sequence_decision_witness selection, checked against original input index/source/Y and completed raw Y."
+    },
+    {
+      "frame": 1260,
+      "time_sec": 42,
+      "pink_source_y": 868,
+      "confirmed_oil_source_y": 839,
+      "reply_verbatim": "하단 테두리를 따라가는듯",
+      "physical_subtype_status": "TENTATIVE",
+      "physical_subtype": "lower_rim",
+      "target_role": "HUMAN_REJECTED_OIL_TARGET",
+      "same_y_candidates": [
+        {
+          "candidate_input_index": 15,
+          "source": "calibrated_high_recall",
+          "source_y": 868.0
+        }
+      ],
+      "same_y_binding_limit": "Coordinate alternatives listed for audit; selected source is bound separately by executed publication witness, not inferred from Y equality.",
+      "selected_candidate": {
+        "candidate_offset": 15,
+        "source": "calibrated_high_recall",
+        "y": 868.0,
+        "tracklet_id": "oil-tracklet:000079:0014",
+        "row_hypothesis_id": "oil-row:000084:003"
+      },
+      "selected_binding_basis": "Executed sequence_decision_witness selection, checked against original input index/source/Y and completed raw Y."
+    },
+    {
+      "frame": 1320,
+      "time_sec": 44,
+      "pink_source_y": 822,
+      "confirmed_oil_source_y": 844,
+      "reply_verbatim": "영상의 노이즈 선으로 보임",
+      "physical_subtype_status": "TENTATIVE",
+      "physical_subtype": "image_noise_line",
+      "target_role": "HUMAN_REJECTED_OIL_TARGET",
+      "same_y_candidates": [
+        {
+          "candidate_input_index": 2,
+          "source": "oil_hypothesis:d108cfdbaf14a7075a8dcbdf",
+          "source_y": 822.0
+        },
+        {
+          "candidate_input_index": 21,
+          "source": "phase_transition_scan",
+          "source_y": 822.0
+        }
+      ],
+      "same_y_binding_limit": "Coordinate alternatives listed for audit; selected source is bound separately by executed publication witness, not inferred from Y equality.",
+      "selected_candidate": {
+        "candidate_offset": 21,
+        "source": "phase_transition_scan",
+        "y": 822.0,
+        "tracklet_id": "oil-tracklet:000084:0017",
+        "row_hypothesis_id": "oil-row:000088:001"
+      },
+      "selected_binding_basis": "Executed sequence_decision_witness selection, checked against original input index/source/Y and completed raw Y."
+    }
+  ],
+  "limits": [
+    "No confirmed non_interface labels created from tentative wording",
+    "No subtype label for nearby candidates, other frames or whole tracklets",
+    "No scalar/contour tolerance, temporal identity or Foam attribution inferred"
+  ]
+}

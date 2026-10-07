@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event/initial-state Oil compatibility is locally verified and adopted. The three captured alternatives are human-confirmed Oil, and their first selection-eligibility loss is traced to Oil authority. [A1 lineage](../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) is implemented and locally verified with unchanged production output. Next is one A2 hypothesis; physical classification of the three rejected pink observations is awaiting user judgment so wrong-target status is not converted into non-interface truth. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event/initial-state Oil compatibility is locally verified and adopted. The three captured alternatives are human-confirmed Oil, and their first selection-eligibility loss is traced to Oil authority. [A1 lineage](../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) is implemented and locally verified with unchanged production output. The pink-observation review is closed: 40 s unresolved, 42 s tentatively lower rim, 44 s tentatively noise. A2 control preflight binds seven confirmed Oil correspondences and three rejected targets while preserving subtype uncertainty. Next is one candidate-specific joint readout; family, authority-tier and whole-track shortcuts are contradicted by the controls. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -89,14 +89,23 @@ reject it for Foam/material identity, insufficient authority and material-layer
 terminal status respectively. All four previously correct observations remain
 unchanged. A1 is diagnostic-only; no selector/threshold repair is adopted.
 
-The next user judgment concerns the physical nature of the already rejected pink
-completed observations: structure/reflection, Foam, another fluid boundary or
-uncertain. A source/pink/confirmed-cyan comparison is prepared; no repeat Oil
-correspondence review or exact scalar annotation is requested. Preserve unknowns
-if classification is uncertain. Then define one A2 discriminating hypothesis and
-its two-sided controls before behavior changes; do not infer non-interface from
-wrong-target status or simply bypass authority. Existing exposed clips remain
-regression material, and independent identity/field acceptance remains required.
+The [pink-observation reply and control preflight](../50-diagnostics/s11/2026-10-07-sample4-interval-candidate-lineage.md#pink-observation-reply-and-a2-control-preflight)
+close the human checkpoint: 40 s is visually unresolved; 42 s is tentatively the
+lower rim; 44 s is tentatively a noise line. All three remain wrong Oil targets,
+without promotion to definite physical non-interface labels. No repeated subtype
+question is needed. Seven confirmed Oil correspondences and three rejected
+targets are exactly bound to candidates in the existing exposed recording.
+
+A2 must evaluate a candidate-specific joint readout using actual measurement
+footprints and shared dependencies, with separate physical identity, target role
+and scalar/contour usability. Freeze one readout and operating-point policy before
+comparison. The correct 42.5/49.5 s and incorrect 44 s share one tracklet; each
+selected family occurs on both target-positive and target-negative observations.
+Do not grant/veto a whole track, source family or authority tier. Retain optical/
+texture opposition, missingness, same-frame binding and latent-cause collisions.
+These controls constrain a challenger; they do not yet establish one. Reuse W3
+for prediction evaluation; no production A2 behavior or efficacy is claimed.
+Independent identity/field acceptance remains required.
 
 A0Q remains a separate UI lifecycle issue: the audit observed a native Qt stall;
 subsequent passing runs do not establish a repair. Preserve the initial stack and
