@@ -45,6 +45,7 @@ from .oil_shadow_types import (
 )
 from .phase_candidate_assembler import assemble_phase_candidates
 from .oil_interface_diagnostics import measure_oil_interfaces
+from .oil_pipeline_diagnostics import project_measurement_lineage
 from .preprocessing import PreprocessResult, preprocess
 from .temporal_raster_evidence import (
     RegisteredFoamMotionTracker,
@@ -833,6 +834,10 @@ class PhaseDebugProjector:
                 "foam_component_diagnostics": foam_diagnostics,
                 "oil_interface_diagnostics": interface_diagnostics,
                 "oil_interface_witness": asdict(witnesses[0]),
+                "oil_measurement_lineage": project_measurement_lineage(
+                    evidence.candidate_assembly.diagnostic_measurement_lineage, detection.candidates,
+                    frame_index=detection.frame_index, glass_id=glass.id, crop_origin=bundle.crop_origin,
+                ),
             },
         )
 

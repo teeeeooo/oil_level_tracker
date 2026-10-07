@@ -23,6 +23,7 @@ from .oil_supplemental_path import (
     generate_phase_transition_candidates,
 )
 from .preprocessing import PreprocessResult
+from .oil_pipeline_diagnostics import OilMeasurementLineage, capture_measurement_lineage
 from .temporal_raster_evidence import (
     RegisteredOilRasterEvidence,
     registered_oil_candidate_features,
@@ -40,6 +41,7 @@ class PhaseCandidateAssembly:
     calibrated_high_recall_count: int
     phase_transition_count: int
     diagnostic_material_paths: dict[int, MaterialPathDiagnostic] = field(default_factory=dict)
+    diagnostic_measurement_lineage: tuple[OilMeasurementLineage, ...] = ()
 
 
 def assemble_phase_candidates(
@@ -243,6 +245,9 @@ def assemble_phase_candidates(
             + len(phase_transition_candidates)
         ),
         phase_transition_count=len(phase_transition_candidates),
+        diagnostic_measurement_lineage=(capture_measurement_lineage(
+            all_candidates, pre=pre, bundle=bundle, static_map=static_map,
+        ) if capture_diagnostics else ()),
         diagnostic_material_paths={
             index: MaterialPathDiagnostic(candidate.source, float(candidate.y), retained_paths[id(candidate)])
             for index, candidate in enumerate(all_candidates)

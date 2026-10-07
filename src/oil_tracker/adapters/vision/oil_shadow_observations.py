@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import asdict, dataclass, replace
 import math
 from statistics import median
 
@@ -239,6 +239,7 @@ def evaluate_semantic_hypotheses(
     *,
     crop_origin_y: float,
     bounds: OilShadowBounds,
+    diagnostic_sink: dict | None = None,
 ) -> tuple[SemanticHypothesis, ...]:
     _validate_same_shape(
         pre.gray,
@@ -265,8 +266,9 @@ def evaluate_semantic_hypotheses(
     hypotheses: list[SemanticHypothesis] = []
     for proposal in proposals:
         members = tuple(observation_by_id[item] for item in proposal.member_ids)
-        broad = _broad_summary(proposal, broad_profiles, bounds)
-        narrow = _narrow_summary(proposal, narrow_context, bounds)
+        detail = {} if diagnostic_sink is not None else None
+        broad = _broad_summary(proposal, broad_profiles, bounds, diagnostic_sink=detail)
+        narrow = _narrow_summary(proposal, narrow_context, bounds, diagnostic_sink=detail)
         static_prior = _static_prior(narrow, broad, static_artifact_map, bounds)
         bright_plateau_artifact = _plateau_artifact_from_context(
             plateau_context,
@@ -280,17 +282,36 @@ def evaluate_semantic_hypotheses(
             static_prior,
             bright_plateau_artifact,
             crop_origin_y,
+            diagnostic_sink=detail,
         )
         hypotheses.append(hypothesis)
-    return semantic_deduplicate(tuple(hypotheses), bounds)
+        if diagnostic_sink is not None:
+            diagnostic_sink[hypothesis.identity] = detail
+    return semantic_deduplicate(tuple(hypotheses), bounds, diagnostic_sink=diagnostic_sink)
 
 
 def semantic_deduplicate(
     hypotheses: tuple[SemanticHypothesis, ...] | list[SemanticHypothesis],
     bounds: OilShadowBounds,
+    diagnostic_sink: dict | None = None,
 ) -> tuple[SemanticHypothesis, ...]:
     groups = _semantic_groups(hypotheses, bounds)
     merged = [_merge_hypothesis_group(group) for group in groups]
+    if diagnostic_sink is not None:
+        for group, result in zip(groups, merged, strict=True):
+            details = tuple(diagnostic_sink[item.identity] for item in group)
+            diagnostic_sink[result.identity] = {
+                "source_y": result.representative_source_y,
+                "proposal_ids": result.proposal_ids,
+                "primary_hypothesis_id": sorted(group, key=_hypothesis_order)[0].identity,
+                "members": details,
+                "merge_count": len(group),
+                "boundary_likelihood": result.boundary_likelihood,
+                "artifact_likelihood": result.artifact_likelihood,
+                "ambiguity_likelihood": result.ambiguity_likelihood,
+                "scalar_rule": "median_broad_transition_or_member_center_clipped_to_proposal_union" if len(group) > 1 else "single_hypothesis",
+                "score_rule": "mean_boundary_mean_artifact_max_ambiguity" if len(group) > 1 else "single_hypothesis",
+            }
     merged.sort(key=_hypothesis_order)
     return tuple(merged[: bounds.semantic_hypotheses])
 
@@ -1449,6 +1470,7 @@ def _broad_summary(
     proposal: BoundedYProposal,
     profiles_by_scale: dict[int, tuple[object, np.ndarray, np.ndarray, np.ndarray]],
     bounds: OilShadowBounds,
+    *, diagnostic_sink: dict | None = None,
 ) -> BroadEvidenceSummary:
     rows: list[BroadScaleEvidence] = []
     height = next(iter(profiles_by_scale.values()))[1].size
@@ -1472,6 +1494,11 @@ def _broad_summary(
                 )
             )
         _negative, row, available, signed, visible, glare_value, exclusion_value = min(candidates)
+        if diagnostic_sink is not None:
+            diagnostic_sink.setdefault("broad_samples", []).append({
+                "scale": scale, "sampling_local_y": row, "available": available,
+                "signed_contrast": signed if available else None,
+            })
         strength = abs(signed) if available else 0.0
         transition_y = min(
             proposal.maximum_local_y,
@@ -1574,6 +1601,7 @@ def _narrow_summary(
     proposal: BoundedYProposal,
     context: dict[str, np.ndarray],
     bounds: OilShadowBounds,
+    *, diagnostic_sink: dict | None = None,
 ) -> NarrowEvidenceSummary:
     energy = context["energy"]
     coverage = context["coverage"]
@@ -1622,6 +1650,24 @@ def _narrow_summary(
             / len(available_scales)
         )
     )
+    if diagnostic_sink is not None:
+        partner = int(paired_row) if paired_candidates else None
+        center_valid = bool(context["valid"][center]) and math.isfinite(float(signed[center]))
+        partner_valid = partner is not None and bool(context["valid"][partner]) and math.isfinite(float(signed[partner]))
+        c = float(signed[center]) if center_valid else None
+        p = float(signed[partner]) if partner_valid else None
+        relation = "unknown" if c is None or p is None else "zero" if c == 0 or p == 0 else "same" if c * p > 0 else "opposite"
+        diagnostic_sink["narrow_pair"] = {
+            "center_local_y": center, "partner_local_y": partner,
+            "center_valid": center_valid, "partner_valid": partner_valid,
+            "center_signed": c, "partner_signed": p, "sign_relation": relation,
+            "legacy_pair_strength": paired_strength, "legacy_pulse_symmetry": symmetry,
+            "legacy_center_energy": center_peak,
+            "legacy_partner_energy": None if partner is None else _unit(energy[partner]),
+            "legacy_signed_lobe_order": lobe_order,
+            "selection_rule": "maximum_absolute_energy_then_separation_then_row_without_sign_or_validity_filter",
+            "channel": "masked_effective_sobel_y_signed_div_255_clipped",
+        }
     return NarrowEvidenceSummary(
         scales=tuple(scale_rows),
         available=bool(available_scales),
@@ -1896,6 +1942,7 @@ def _semantic_hypothesis(
     static_prior: StaticPriorEvidence,
     bright_plateau_artifact: float,
     crop_origin_y: float,
+    *, diagnostic_sink: dict | None = None,
 ) -> SemanticHypothesis:
     polarity_values = [item.polarity for item in members if item.polarity_available]
     if broad.available_scale_count and abs(broad.signed_contrast) >= 0.015:
@@ -1973,6 +2020,31 @@ def _semantic_hypothesis(
             ("polarity", polarity),
         ),
     )
+    if diagnostic_sink is not None:
+        diagnostic_sink.update({
+            "hypothesis_id": identity, "proposal_id": proposal.identity,
+            "proposal_center_source_y": proposal.representative_local_y + crop_origin_y,
+            "raw_members": tuple(asdict(item) for item in members),
+            "broad_transition_source_y": broad.transition_local_y + crop_origin_y,
+            "scalar_source_y": representative + crop_origin_y,
+            "broad": asdict(broad), "narrow": asdict(narrow),
+            "static_prior": asdict(static_prior),
+            "score_nodes": {
+                "narrow_boundary": narrow_boundary, "pulse_artifact": pulse_artifact,
+                "bright_plateau_artifact": bright_plateau_artifact,
+                "structural_artifact": structural_artifact,
+                "plateau_collision_artifact": plateau_collision_artifact,
+                "polarity_confidence": polarity_confidence, "visibility": visibility,
+                "availability": availability, "boundary": boundary,
+                "artifact": artifact, "ambiguity": ambiguity,
+            },
+        })
+        for row in diagnostic_sink.get("broad_samples", ()):
+            row["sampling_source_y"] = row["sampling_local_y"] + crop_origin_y
+        pair = diagnostic_sink.get("narrow_pair")
+        if pair is not None:
+            pair["center_source_y"] = pair["center_local_y"] + crop_origin_y
+            pair["partner_source_y"] = None if pair["partner_local_y"] is None else pair["partner_local_y"] + crop_origin_y
     observation_ids = tuple(sorted(item.identity for item in members))
     return SemanticHypothesis(
         identity=identity,

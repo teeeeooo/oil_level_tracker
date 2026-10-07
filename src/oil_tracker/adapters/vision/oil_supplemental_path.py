@@ -324,6 +324,83 @@ def generate_phase_transition_candidates(
     return tuple(output)
 
 
+def _phase_band_means(upper, lower, upper_visible, lower_visible, radius, width):
+    """The production pooling operation, shared with its diagnostic observation."""
+    minimum = max(2, int(radius * max(1, width) * 0.25))
+    if np.count_nonzero(upper_visible) < minimum or np.count_nonzero(lower_visible) < minimum:
+        return None
+    return float(np.mean(upper[upper_visible])), float(np.mean(lower[lower_visible]))
+
+
+def phase_transition_support(gray, visible, *, local_y, crop_origin=(0, 0)):
+    """Expose the actual scanner's 3 radii × 5 sectors; no identity or score repair.
+
+    Common-X uses any valid pixel on both sides. Paired-X additionally requires
+    all radius pixels on both sides, matching the audit's complete-column probe.
+    X runs are exact half-open source-coordinate sets, not bounding boxes.
+    """
+    if gray.ndim != 2 or gray.shape != visible.shape:
+        raise ValueError("Phase support rasters must share one 2D shape.")
+    if isinstance(local_y, (bool, np.bool_)) or not isinstance(local_y, (int, np.integer)):
+        raise ValueError("Phase support sampling row must be an integer, not bool.")
+    if len(crop_origin) != 2 or any(type(v) is not int for v in crop_origin):
+        raise ValueError("Crop origin must contain two integers.")
+    h, w = gray.shape
+    values = gray.astype(np.float32, copy=False)
+    valid = (visible > 0) & np.isfinite(values)
+    edges = np.linspace(0, w, 6, dtype=int)
+    rows = []
+    for radius in (3, 6, 10):
+        for sector, (first, last) in enumerate(zip(edges[:-1], edges[1:], strict=True)):
+            first, last = int(first), int(last)
+            complete = 0 <= local_y - radius and local_y + radius < h and last > first
+            lo, hi = max(0, local_y-radius), min(h, local_y+radius+1)
+            # Never allow Python negative slices to wrap to a different band.
+            upper = values[max(0, min(h, lo)):max(0, min(h, local_y)), first:last]
+            lower = values[max(0, min(h, local_y+1)):max(0, min(h, hi)), first:last]
+            uv = valid[max(0, min(h, lo)):max(0, min(h, local_y)), first:last]
+            lv = valid[max(0, min(h, local_y+1)):max(0, min(h, hi)), first:last]
+            uc, lc = uv.sum(axis=0), lv.sum(axis=0)
+            common = (uc > 0) & (lc > 0)
+            paired = (uc == radius) & (lc == radius) if complete else np.zeros(last-first, bool)
+            means = _phase_band_means(upper, lower, uv, lv, radius, last-first) if complete else None
+            deltas = lower[:, paired].mean(axis=0) - upper[:, paired].mean(axis=0) if paired.any() else None
+            upper_x = np.nonzero(uv)[1] + first + crop_origin[0]
+            lower_x = np.nonzero(lv)[1] + first + crop_origin[0]
+            rows.append({
+                "radius": radius, "sector": sector,
+                "source_x_range": (first+crop_origin[0], last+crop_origin[0]),
+                "upper_source_y_range": (local_y-radius+crop_origin[1], local_y+crop_origin[1]),
+                "lower_source_y_range": (local_y+1+crop_origin[1], local_y+radius+1+crop_origin[1]),
+                "upper_count": int(uc.sum()), "lower_count": int(lc.sum()),
+                "upper_mean_source_x": float(upper_x.mean()) if upper_x.size else None,
+                "lower_mean_source_x": float(lower_x.mean()) if lower_x.size else None,
+                "common_x_runs": _column_runs(common, first+crop_origin[0]),
+                "paired_x_runs": _column_runs(paired, first+crop_origin[0]),
+                "common_x_count": int(common.sum()), "paired_x_count": int(paired.sum()),
+                "pooled_available": means is not None,
+                "pooled_reason": "available" if means is not None else "outside_crop" if not complete else "insufficient_visible_pixels",
+                "pooled_delta": None if means is None else means[1]-means[0],
+                "paired_available": deltas is not None,
+                "paired_reason": "available" if deltas is not None else "outside_crop" if not complete else "no_complete_common_columns",
+                "paired_mean_delta": None if deltas is None else float(deltas.mean()),
+                "paired_median_delta": None if deltas is None else float(np.median(deltas)),
+            })
+    return tuple(rows)
+
+
+def _column_runs(mask, offset):
+    indices = np.flatnonzero(mask)
+    runs = []
+    for x in indices:
+        x = int(x) + offset
+        if runs and runs[-1][1] == x:
+            runs[-1] = (runs[-1][0], x+1)
+        else:
+            runs.append((x, x+1))
+    return tuple(runs)
+
+
 def _phase_transition_profile(
     gray: np.ndarray,
     visible: np.ndarray,
@@ -344,18 +421,14 @@ def _phase_transition_profile(
             for first, last in zip(sector_edges[:-1], sector_edges[1:], strict=True):
                 upper_visible = visible[row - radius : row, first:last]
                 lower_visible = visible[row + 1 : row + radius + 1, first:last]
-                minimum_pixels = max(2, int(radius * max(1, last - first) * 0.25))
-                if (
-                    np.count_nonzero(upper_visible) < minimum_pixels
-                    or np.count_nonzero(lower_visible) < minimum_pixels
-                ):
+                means = _phase_band_means(
+                    values[row - radius : row, first:last],
+                    values[row + 1 : row + radius + 1, first:last],
+                    upper_visible, lower_visible, radius, int(last - first),
+                )
+                if means is None:
                     continue
-                upper = float(
-                    np.mean(values[row - radius : row, first:last][upper_visible])
-                )
-                lower = float(
-                    np.mean(values[row + 1 : row + radius + 1, first:last][lower_visible])
-                )
+                upper, lower = means
                 difference = lower - upper
                 sector_values.append(abs(difference) / 48.0)
                 sector_signs.append(difference / 48.0)

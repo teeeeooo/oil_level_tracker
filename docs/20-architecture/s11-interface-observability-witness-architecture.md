@@ -1354,7 +1354,71 @@ remain development/regression controls; they have not become new independent
 calibration/holdout examples. The bounded Windows saved-output procedure is now ready after local controls.
 No human labeling, detector rerun or acceptance transition is requested.
 
+## A1 support, signed pair and score-coordinate lineage
+
+The additive `artifacts.state.oil_measurement_lineage` namespace uses schema
+`oil-measurement-lineage-v1`. Existing witness/diagnostic schemas and detector/
+resolver identities remain unchanged. It is diagnostic-only and NOT_EVALUATED.
+The second audit's paired scorer remains rejected; no new field supplies an
+Oil score, authority, physical identity, scalar, or resolver input.
+
+`phase_candidate_assembler` captures immutable per-index/source/Y JSON bindings
+on its existing frame-local diagnostic sidecar. `PhaseDebugProjector` checks the
+exact join after calibration and serializes it. Duplicate source/Y candidates
+remain separate by input index; stale source/Y and bool/nonintegral indices fail.
+No ndarray, mutable input alias, new temporal state or new output writer is added.
+NONE bypasses this work. Existing Basic/Full trace and atomic bundle owners persist it.
+
+The measurement owner is extended in place: `oil_pipeline_diagnostics` invokes
+existing pure spatial extraction/semantic functions, with optional diagnostic
+sinks at the actual broad, narrow and semantic operations. It does **not** rerun
+an Oil temporal owner, Foam, authority or resolver. The primary or relative
+spatial-fallback hypothesis is joined by exact ID/Y and all three semantic
+scores before attaching the reproduced lineage; an unmatched ID or differing
+coordinate/score is explicitly unavailable. This bounded spatial reproduction
+keeps diagnostic data outside the sealed canonical outcome/temporal command
+contract. It costs extra debug work and must be measured. It is not an alternative
+classifier or a new implementation of the production score equations.
+
+The three finite additions are:
+
+- Phase scan support: reuse the production pooling operation in
+  `oil_supplemental_path` at the selected normalized-raster row, radii 3/6/10 and
+  five sectors. Retain upper/lower counts, actual mean X, exact common-X runs,
+  pooled difference and complete-column paired mean/median difference. Common X
+  requires visible support on both sides; paired X requires all radius samples
+  on both sides. The stronger paired availability requirement is diagnostic,
+  never substituted into production. Crop clipping and insufficient/no-common
+  support have separate reasons and null measurements. X runs are half-open
+  source-coordinate sets; storage is bounded by crop width, not a fitted span.
+- Narrow pair: retain the selected center/partner source Y, signed masked Sobel
+  values, validity, same/opposite/zero/unknown relationship, absolute energy,
+  legacy pair strength/symmetry and lobe order. Production selects by absolute
+  strength/separation/row, without a sign/validity filter. Preserve that result,
+  including cases where its selected partner is diagnostically unavailable.
+- Score/scalar lineage: retain raw member coordinates/polarity, proposal center,
+  sampled broad rows before clipping, broad transition, narrow center/partner,
+  scalar Y and actual computed score nodes. Preserve all merged members, primary
+  feature owner and mean/max/median merge rules. The dependency graph explicitly
+  shares pulse between boundary, structural and plateau terms; these are not
+  independent votes. The selected candidate final score may be temporal confidence
+  while its feature score remains boundary likelihood. Non-hypothesis/non-phase
+  families retain existing diagnostics and explicitly report different-family
+  applicability rather than borrowing another candidate's measurements.
+
+Storage remains frame-local: at most the existing 12 proposals per spatial route,
+10 retained semantic hypotheses per route, 8 raw members per proposal, and existing
+candidate budgets. Phase bands add 15 records per retained phase-scan candidate;
+exact X support has at most crop-width runs per record. No history or new search
+radius is retained. Resource measurements and full equality precede adoption.
+
 ## History Review
+
+2026-10-07 A1 reuses the existing spatial measurement and frame-local sidecar
+owners. Reviewed the second audit's disjoint-X pooling collision, same-sign
+Y854 pair, score/scalar coordinate distinction and rejected paired scorer.
+Signed opposition and support are retained without changing legacy authority.
+
 
 2026-10-06 target binding implementation reuses existing packet/label validation,
 relocatable locators and W3 metrics. A separate immutable snapshot preserves

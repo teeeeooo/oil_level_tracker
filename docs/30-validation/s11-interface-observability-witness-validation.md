@@ -775,6 +775,33 @@ Actual identity evaluation must use W3 truth/abstention/coverage semantics and
 independent partitions required by O2 acceptance. The existing two frames supply
 no new holdout evidence; W4-R2 entry remains unmet.
 
+## A1 lossless lineage acceptance
+
+For `oil-measurement-lineage-v1`, remove **only** its sibling namespace when
+comparing existing diagnostic state. Keep all old golden fingerprints. Test
+independent-X false pooled contrast, complete common-X controls, empty/clipped
+rasters, nonfinite/censored support, bool/nonintegral indices, duplicate identity,
+source/Y mismatch, same/opposite/zero/unknown signed pairs, and unchanged legacy
+pair values. Preserve raw profile dtypes in real fixtures; float32 conversion is
+not lossless for a float64 energy profile.
+
+A retained human-ROI sample4/f420 fixture binds the known Y854 hypothesis to
+center Y853 and partner Y851 with same-sign gradients. It is regression data,
+not an adopted input recipe or calibrated scalar truth. Also verify exact
+current/completed/old-debug equality at the seven reviewed interval observations,
+including the three newly confirmed Oil alternatives.
+
+Exercise the real debug NONE/Basic/Full entry and existing writer/output safety,
+foreign-CWD/Unicode and bundle lifecycle controls. The new namespace must remain
+absent from detection metrics, candidate features and resolver-facing evidence.
+Run all four official windows serially in fresh baseline/candidate processes,
+with identical runtime, inputs and copy mode. Compare raw/completed detections,
+all old state, CSV/events and report presentation; record time, RSS, trace bytes,
+per-frame candidate/sector/scale bounds and exact reproduction failures. Resource
+cost remains explicit; passing extraction never establishes physical efficacy.
+Canonical non-Qt and externally bounded Qt runs, governance and whitespace/link
+checks remain required. A0Q is not repaired by a passing Qt run.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.

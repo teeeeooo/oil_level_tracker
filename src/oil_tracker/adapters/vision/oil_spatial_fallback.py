@@ -302,6 +302,7 @@ def _relative_hypotheses(
     *,
     crop_origin_y: float,
     bounds: OilShadowBounds,
+    diagnostic_sink: dict | None = None,
 ) -> tuple[SemanticHypothesis, ...]:
     observation_by_id = {item.identity: item for item in raw}
     broad_profiles = observations._broad_profiles(
@@ -326,8 +327,9 @@ def _relative_hypotheses(
     hypotheses: list[SemanticHypothesis] = []
     for proposal in proposals:
         members = tuple(observation_by_id[item] for item in proposal.member_ids)
-        broad = _relative_broad_summary(proposal, broad_profiles, bounds)
-        narrow = observations._narrow_summary(proposal, narrow_context, bounds)
+        detail = {} if diagnostic_sink is not None else None
+        broad = _relative_broad_summary(proposal, broad_profiles, bounds, diagnostic_sink=detail)
+        narrow = observations._narrow_summary(proposal, narrow_context, bounds, diagnostic_sink=detail)
         static_prior = observations._static_prior(
             narrow,
             broad,
@@ -347,15 +349,19 @@ def _relative_hypotheses(
                 static_prior,
                 plateau,
                 crop_origin_y,
+                diagnostic_sink=detail,
             )
         )
-    return observations.semantic_deduplicate(tuple(hypotheses), bounds)
+        if diagnostic_sink is not None:
+            diagnostic_sink[hypotheses[-1].identity] = detail
+    return observations.semantic_deduplicate(tuple(hypotheses), bounds, diagnostic_sink=diagnostic_sink)
 
 
 def _relative_broad_summary(
     proposal: BoundedYProposal,
     profiles_by_scale: dict[int, tuple[object, np.ndarray, np.ndarray, np.ndarray]],
     bounds: OilShadowBounds,
+    *, diagnostic_sink: dict | None = None,
 ) -> BroadEvidenceSummary:
     rows: list[BroadScaleEvidence] = []
     height = next(iter(profiles_by_scale.values()))[1].size
@@ -388,6 +394,11 @@ def _relative_broad_summary(
             glare_value,
             exclusion_value,
         ) = min(candidates)
+        if diagnostic_sink is not None:
+            diagnostic_sink.setdefault("broad_samples", []).append({
+                "scale": scale, "sampling_local_y": row, "available": available,
+                "signed_contrast": signed if available else None,
+            })
         transition_y = min(
             proposal.maximum_local_y,
             max(proposal.minimum_local_y, float(row)),
