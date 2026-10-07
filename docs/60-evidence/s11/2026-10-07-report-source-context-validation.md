@@ -114,6 +114,60 @@ Do not reopen the closed all-abstention region-exchange scorer, privilege entire
 tracks/families, interpolate observations or convert a smooth source-image ridge
 into physical identity. Source context supplements existing acceptance owners.
 
+## Main adoption and worktree cleanup — 2026-10-07
+
+The user authorized main merge, unused-worktree cleanup, commit and push after
+reviewing the feature's limited role as an analyst's source-comparison aid.
+Independent user comprehension remains unmeasured; this authorization does not
+accept detector identity or Windows field effectiveness.
+
+The adoption review covered all 14 changed files from `a17d987` to `0a60b11`.
+Both the tested `c688b3e` and reviewed `0a60b11` have production `src` tree
+`3f047360dfac6e8e91c40c792a0db208f416ed4e`. Before merge, a fresh origin fetch
+confirmed main at `a17d987`; main was then fast-forwarded to `0a60b11`.
+
+- Fresh focused tests on the reviewed candidate: **100 passed in 6.17 s**,
+  including source context, graph/report presentation, three bundle integration
+  modules, test-authoring policy and target-truth tests.
+- Read-only revalidation of saved baseline/final artifacts confirmed 299 tracking
+  rows, series/events/CSV equality, 297 available source columns and 44 internal
+  HTML references. All 215 recorded source hashes and 12 input hashes matched;
+  report ZIP and candidate patch hashes matched the handoff.
+- Governance and whitespace checks passed. No new full-suite or Windows run is
+  claimed. Production source was not changed during adoption.
+
+The merged `work/s11-context-validation-20261007` checkout was removed through
+Git; its branch and native evidence under
+`sample/output/s11-context-validation-20261007-001/` remain. Its ignored media
+entries were links to the main checkout's retained videos.
+
+The unused runtime checkout `validation-60a5b641bc01a37b31e60420` was also removed
+through Git. Before removal, all 1,306 non-cache files/symlinks matched its full
+local snapshot; the binary tracked patch and committed recovery ZIP matched the
+[preservation receipt](../../70-reference/s11-audit-2026-10-07/third-audit-preservation-receipt.json).
+Full local artifacts remain at
+`sample/output/s11-preservation-20261007-002/managed-validation/snapshot/`;
+[recovery instructions](2026-10-07-audit-adoption-checkpoint.md#worktree-recovery-and-cleanup)
+and the committed recovery ZIP preserve the unadopted experiment. Only existing
+read-only desktop-commander file handles were found there, with no running job
+or process working directory in that checkout.
+
+The sibling `oil_level_tracker-s11-audit-20261007` checkout was removed after
+resolving a leftover tool session. Desktop Commander's local tool-call log
+records `python -i` launched there at 07:43:13 KST and the last code input at
+08:10:29 KST on 2026-10-07. PID 30236 was a child of that MCP tool, and a native
+stack sample showed it waiting in `PyOS_Readline`, not executing an analysis.
+After the user asked why the session remained, this unused audit session was
+terminated with SIGTERM and its exit verified; the shared MCP server was retained.
+
+All 763 preserved non-cache entries matched the sibling snapshot, with only three
+additional Finder `.DS_Store` files. Its tracked patch/recovery ZIP also matched,
+and file equality was rechecked immediately before Git removed the checkout.
+The unadopted experiment and native evidence remain in the existing
+`sample/output/s11-preservation-20261007-002/sibling-audit/snapshot/` and committed
+recovery ZIP. Only main remains registered as a live worktree; no experimental
+detector changes were adopted as part of cleanup.
+
 ## Detector Governance
 
 - Logic-map nodes: `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
