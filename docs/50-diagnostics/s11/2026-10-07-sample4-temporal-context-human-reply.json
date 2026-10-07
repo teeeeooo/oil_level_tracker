@@ -5,7 +5,7 @@
   "verbatim_reply": "두 가지를 함께 봐야 구분 가능",
   "scope": "Static boundary/layer context and temporal video changes are jointly needed for this human distinction. This is not a new candidate, scalar, contour or cross-frame entity label.",
   "continuity_review": {
-    "status": "AWAITING_HUMAN_JUDGMENT",
+    "status": "HUMAN_CONFIRMED_CONTINUITY_WITH_RAPID_LEVEL_CHANGE",
     "question": "42.5초의 실제 Oil 경계가 44초의 실제 Oil 경계까지 눈으로 연속해서 이어지나요? 가림·교체가 보이면 대략적인 시각도 알려주세요.",
     "local_artifact_root": "sample/output/s11-a2-temporal-context-20261007-001",
     "manifest_sha256": "249149310ccae2a3e015565d2d9f9f030584670d87e65b1ae4013baf66998981",
@@ -195,6 +195,9 @@
       },
       "html_sha256": "7eb860444846ccedd94f5b88de6f37994d605da9795129d0f14415cd10bd8aac",
       "builder_sha256": "0d613a2e5b231a096440a2e93f1767dd87e68ef733893f982b17bfda363b5517"
-    }
+    },
+    "verbatim_reply": "연속해서 이어짐. 단, 유면의 오르내림이 급격하게 이뤄짐",
+    "source": "direct user reply in current conversation",
+    "interpretation": "The actual Oil boundary is visibly continuous between the reviewed endpoints while its height rises and falls rapidly. No intermediate frame coordinates, displacement bounds, scalar tolerance or other candidate identities are inferred."
   }
 }
