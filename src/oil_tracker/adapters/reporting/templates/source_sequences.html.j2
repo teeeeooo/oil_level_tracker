@@ -1,0 +1,21 @@
+{% if source_context and source_context.sequences %}
+<h3>움직임을 확인할 원본 프레임 순서</h3>
+<p class="observation-note">극값은 검출 결과의 최고·최저이며 실제 계면의 최고·최저를 보증하지 않습니다. 아래 원본을 앞뒤로 넘겨 Oil 계면과 Foam의 움직임을 각각 대조하세요. 표시선·보간·자동 재생 없이 원본 장면만 보여줍니다. 반사와 구조물도 남아 있습니다. 긴 구간은 프레임 생략 표본이므로 표본 사이의 빠른 움직임은 확정할 수 없습니다.</p>
+{% for sequence in source_context.sequences %}
+<article class="source-sequence observation-note">
+  <h3>{{ sequence.reasons|join(' · ') }}</h3>
+  <p>{{ '%.2f'|format(sequence.start_sec) }}–{{ '%.2f'|format(sequence.end_sec) }}초 · 원본 프레임 {{ sequence.available_count }}/{{ sequence.frame_count }}개{% if sequence.requested_spacing_sec is defined and sequence.requested_spacing_sec is not none %} · 표본 간격 {{ '%.3f'|format(sequence.requested_spacing_sec) }}초{% endif %}{% if sequence.subsampled %} · <strong>프레임 생략 표본</strong>{% endif %}</p>
+  {% if sequence.preview_path %}<img class="sequence-preview" src="{{ sequence.preview_path }}" alt="이 구간에서 처음 읽을 수 있는 원본 프레임 미리보기" style="width:100%;max-width:360px">{% endif %}
+  <canvas width="192" height="192" hidden aria-label="현재 선택한 원본 프레임" style="width:100%;max-width:360px;background:#111"></canvas>
+  <div class="sequence-controls" hidden>
+    <p><button type="button" data-step="-1" aria-label="이전 원본 프레임">◀ 이전</button> <button type="button" data-step="1" aria-label="다음 원본 프레임">다음 ▶</button></p>
+    <input type="range" min="0" max="{{ [0, sequence.frame_count-1]|max }}" value="0" step="1" aria-label="원본 프레임 선택" style="width:100%;max-width:540px">
+    <p class="sequence-time" role="status" aria-live="polite"></p>
+  </div>
+  {% if not sequence.available_count %}<p>원본 프레임을 읽지 못했습니다. 수치값으로 장면을 대신하지 않습니다.</p>{% endif %}
+  <noscript><p>JavaScript가 꺼져 있어 정적 미리보기만 표시합니다. 아래 기록에서 실제 프레임·시각을 확인하세요.</p></noscript>
+  <p class="muted">타원 바깥 사각 경계까지 잘라 원본 색상을 유지했습니다. 큰 장면만 최대 192 px로 축소하며 화면 표시는 확대될 수 있습니다. <a href="{{ sequence.metadata_path }}">실제 프레임·시각·잘라낸 범위 기록</a></p>
+  <script type="application/json" class="sequence-data">{{ sequence|tojson }}</script>
+</article>
+{% endfor %}
+{% endif %}

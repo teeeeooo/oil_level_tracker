@@ -13,6 +13,7 @@ from oil_tracker.adapters.reporting.csv_exporter import CsvExporter
 from oil_tracker.adapters.reporting.graph_renderer import GraphRenderer
 from oil_tracker.adapters.reporting.html_reporter import HtmlReporter
 from oil_tracker.adapters.reporting.source_context_renderer import SourceContextRenderer
+from oil_tracker.adapters.reporting.source_sequence_renderer import SourceSequenceRenderer
 from oil_tracker.adapters.storage.image_capture_store import ImageCaptureStore
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository, atomic_write_text
 from oil_tracker.adapters.storage.jsonl_debug_trace_writer import cleanup_debug_staging
@@ -40,6 +41,7 @@ class OutputBundleStore:
         self.recipes = JsonRecipeRepository()
         self.captures = ImageCaptureStore()
         self.source_context = SourceContextRenderer()
+        self.source_sequences = SourceSequenceRenderer()
 
     def write_bundle(
         self,
@@ -174,11 +176,24 @@ class OutputBundleStore:
                 cancellation=cancellation,
                 progress=lambda completed, total: _emit(
                     progress, AnalysisStage.GRAPHS_AND_REPORT,
-                    0.55 + 0.35 * completed / max(1, total),
+                    0.55 + 0.20 * completed / max(1, total),
                     message="원본 영상 맥락 이미지를 생성하고 있습니다.",
                     completed=completed, total=total,
                 ),
             )
+            _check_cancelled(cancellation, AnalysisStage.GRAPHS_AND_REPORT)
+            sequences = self.source_sequences.render(
+                result, recipe, session, temporary / "assets",
+                presentation=report_presentation, cancellation=cancellation,
+                progress=lambda completed, total: _emit(
+                    progress, AnalysisStage.GRAPHS_AND_REPORT,
+                    0.75 + 0.15 * completed / max(1, total),
+                    message="주요 구간의 원본 프레임을 준비하고 있습니다.",
+                    completed=completed, total=total,
+                ),
+            )
+            for glass_id, items in sequences.items():
+                source_contexts.setdefault(glass_id, {})["sequences"] = items
             _check_cancelled(cancellation, AnalysisStage.GRAPHS_AND_REPORT)
             self.html.render(
                 result,

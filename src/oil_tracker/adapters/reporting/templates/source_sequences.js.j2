@@ -1,0 +1,52 @@
+<script>
+(function () {
+  "use strict";
+  document.querySelectorAll(".source-sequence").forEach(function (card) {
+    const data = JSON.parse(card.querySelector(".sequence-data").textContent);
+    if (!data.frames.length) return;
+    const canvas = card.querySelector("canvas"), ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const slider = card.querySelector('input[type="range"]');
+    const status = card.querySelector(".sequence-time");
+    const controls = card.querySelector(".sequence-controls");
+    let generation = 0, loadedPath = "", loadedImage = null;
+    const preview = card.querySelector(".sequence-preview");
+    if (preview) preview.hidden = true;
+    canvas.hidden = false; controls.hidden = false;
+    function display() {
+      const ticket = ++generation, index = Number(slider.value), frame = data.frames[index];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      card.querySelector('[data-step="-1"]').disabled = index === 0;
+      card.querySelector('[data-step="1"]').disabled = index === data.frames.length - 1;
+      const lead = (index+1)+"/"+data.frames.length+" · 요청 "+frame.requested_time_sec.toFixed(3)+"초";
+      if (frame.status !== "AVAILABLE") {
+        status.textContent = lead+" · 원본 프레임 사용 불가 (앞 장면을 연장하지 않음)"; return;
+      }
+      status.textContent = lead+" · 실제 "+frame.actual_time_sec.toFixed(3)+"초 · f"+frame.frame_index;
+      function draw(image) {
+        if (ticket !== generation) return;
+        ctx.drawImage(image, frame.tile_xy[0], frame.tile_xy[1], data.tile_size, data.tile_size,
+                      0, 0, canvas.width, canvas.height);
+      }
+      if (loadedImage && loadedPath === frame.page_path) { draw(loadedImage); return; }
+      const image = new Image();
+      image.onload = function () {
+        if (ticket !== generation) return;
+        loadedPath = frame.page_path; loadedImage = image; draw(image);
+      };
+      image.onerror = function () {
+        if (ticket === generation) status.textContent = lead+" · 원본 이미지 파일 사용 불가";
+      };
+      image.src = frame.page_path;
+    }
+    slider.addEventListener("input", display);
+    card.querySelectorAll("button[data-step]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        slider.value = String(Math.max(0, Math.min(data.frames.length-1,
+                            Number(slider.value)+Number(button.dataset.step)))); display();
+      });
+    });
+    display();
+  });
+}());
+</script>

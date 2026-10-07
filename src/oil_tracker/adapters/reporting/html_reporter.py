@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader
 
 from oil_tracker import DETECTOR_VERSION, __version__
 from oil_tracker.application.services.report_presentation import (
@@ -20,7 +20,7 @@ class HtmlReporter:
         template_dir = Path(__file__).resolve().parent / "templates"
         self.environment = Environment(
             loader=FileSystemLoader(str(template_dir)),
-            autoescape=select_autoescape(["html", "xml"]),
+            autoescape=True,  # Templates end in .j2; suffix-based HTML detection misses them.
         )
 
     def render(
