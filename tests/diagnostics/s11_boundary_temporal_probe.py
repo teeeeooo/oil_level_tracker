@@ -12,6 +12,59 @@ from oil_tracker.adapters.vision import temporal_raster_evidence as temporal
 CHANNELS = ('direct', 'exposure_only', 'registered', 'registered_exposure')
 MAX_PIXELS = 4_194_304
 
+# Appearance correspondence only. No displacement, speed, polarity or identity gate.
+PATCH_SPEC = {
+    'id': 'ordered-bgr-patch-correspondence-v1',
+    'support': 'full rectangular ordered BGR patch; no resize, pooling or interpolation',
+    'search': 'every fully contained integer Y in the same X interval',
+    'loss': 'per-channel mean-centered squared pixel error divided by 255^2',
+    'tie_atol': 1e-12,
+    'max_compared_pixels': 50_000_000,
+    'physical_identity': 'UNRESOLVED',
+    'decision': 'NOT_EVALUATED',
+    'limits': 'Raw appearance; no glare/material/camera validity is established. '
+              'Unique appearance match and reciprocal agreement do not establish physical identity.',
+}
+
+
+def match_ordered_patch(anchor, current, *, x_range, anchor_y, radius):
+    """Keep all vertical alternatives for a recorded spatial patch, not an Oil track."""
+    if (not isinstance(anchor, np.ndarray) or anchor.ndim != 3 or anchor.shape[2] != 3
+            or anchor.dtype != np.uint8 or not anchor.size or anchor.size > MAX_PIXELS):
+        raise ValueError('bounded nonempty uint8 BGR anchor required')
+    if not isinstance(current, np.ndarray) or current.shape != anchor.shape or current.dtype != np.uint8:
+        raise ValueError('current must be same-shape uint8 BGR')
+    if (len(x_range) != 2 or any(type(x) is not int for x in x_range)
+            or type(anchor_y) is not int or type(radius) is not int or radius < 1):
+        raise ValueError('integer patch geometry required')
+    h, w = anchor.shape[:2]
+    x0, x1 = x_range
+    if not 0 <= x0 < x1 <= w or not 0 <= anchor_y < h:
+        raise ValueError('patch query outside raster')
+    result = dict(status='unavailable_patch', physical_identity='UNRESOLVED',
+                  decision='NOT_EVALUATED', anchor_y=anchor_y, x_range=list(x_range),
+                  radius=radius, best_y=[], best_loss=None, runner_up_margin=None,
+                  centers=[], losses=[], validity='raw_unmasked_appearance_only')
+    if anchor_y-radius < 0 or anchor_y+radius >= h:
+        return result
+    centers = list(range(radius, h-radius))
+    if len(centers)*(2*radius+1)*(x1-x0) > PATCH_SPEC['max_compared_pixels']:
+        raise ValueError('patch comparison resource bound exceeded')
+    a = anchor[anchor_y-radius:anchor_y+radius+1, x0:x1].astype(np.float64)
+    a -= a.mean(axis=(0, 1), keepdims=True)
+    losses = []
+    for y in centers:
+        b = current[y-radius:y+radius+1, x0:x1].astype(np.float64)
+        b -= b.mean(axis=(0, 1), keepdims=True)
+        losses.append(float(np.mean((a-b)**2)/255**2))
+    minimum = min(losses)
+    best = [y for y, loss in zip(centers, losses, strict=True)
+            if abs(loss-minimum) <= PATCH_SPEC['tie_atol']]
+    ordered = sorted(losses)
+    return dict(result, status='measured', centers=centers, losses=losses,
+                best_y=best, best_loss=minimum,
+                runner_up_margin=ordered[1]-ordered[0] if len(ordered) > 1 else None)
+
 
 def measure_pair(anchor, current, geometry_mask):
     if (not isinstance(anchor, np.ndarray) or anchor.ndim != 2 or anchor.dtype != np.uint8

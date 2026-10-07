@@ -828,3 +828,16 @@ checks remain required. A0Q is not repaired by a passing Qt run.
 - Difference from prior failures: extraction, discrimination, behavior and field qualification are independent gates with explicit positive/negative/unresolved labels and leakage controls.
 - Logic-map impact: NONE — these offline target-binding controls do not change production decision flow or the previously mapped A1 diagnostic route.
 - Failure-registry impact: NONE — it adds acceptance obligations for existing named mechanisms without claiming a new cause or repair.
+
+
+## A2 temporal correspondence diagnostic controls
+
+The frozen [ordered-patch contract](../20-architecture/s11-interface-observability-witness-architecture.md#a2-ordered-patch-temporal-correspondence--bounded-diagnostic)
+requires synthetic controls for a large displacement with additive exposure,
+reciprocal recovery, duplicate-pattern ambiguity, constant-pattern ambiguity,
+perfect stationary-structure match without identity, ordered-pixel differences
+hidden by pooling, unavailable border support and invalid inputs. Existing gray
+residual results must remain unchanged. Real runs retain source/geometry/spec
+hashes, all forward/reverse alternatives and both native/0.5-second cadences.
+Endpoint and intermediate physical agreement remain separate. No W3 identity or
+field claim follows from correspondence alone.

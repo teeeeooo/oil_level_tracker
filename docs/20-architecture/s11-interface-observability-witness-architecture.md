@@ -1428,7 +1428,62 @@ candidate budgets. Phase bands add 15 records per retained phase-scan candidate;
 exact X support has at most crop-width runs per record. No history or new search
 radius is retained. Resource measurements and full equality precede adoption.
 
+## A2 ordered-patch temporal correspondence — bounded diagnostic
+
+Status: frozen diagnostic hypothesis, not an Oil identity classifier. The human
+review confirms one actual Oil boundary from 42.5 to 44 s with rapid height
+changes; it supplies no intermediate coordinates or speed bound.
+
+Reuse `s11_boundary_temporal_probe` as the offline temporal measurement owner.
+Its prior `measure_pair` measures fixed-coordinate registered gray residuals and
+cannot recover displaced candidate patterns. `match_ordered_patch` adds exactly
+one different observable: the full ordered BGR pattern across both sides of a
+recorded candidate, compared at every fully contained integer Y in the same X
+strip. Per-channel patch-mean centering removes additive exposure offsets;
+normalized squared error retains pixel order. Every loss and all exact ties
+(absolute tolerance 1e-12) are retained. No speed penalty, Y-distance cutoff,
+polarity gate, source-family preference or motion-to-identity conversion exists.
+
+Freeze the sample4 experiment before inspecting results:
+
+- Use the saved raw 40–45 s context PNGs and the prior recorded five sector X
+  intervals. Restrict the search to the original 104×104 detector ROI.
+- Use the base recorded BW=3 and radius `3*BW+1` (21-row envelope), including
+  the previously unsampled center gap. This is expanded raw appearance support,
+  not unchanged O1 band support. Glare/material/camera validity is unmeasured;
+  no old mask is propagated to a new frame or used as identity evidence.
+- Starting templates are the previously reviewed candidates at 40/42/42.5/44 s,
+  including the three wrong selections. Y is only the diagnostic anchor query,
+  never an intermediate truth or a production input. Retain each sector rather
+  than pooling a strongest/median sector into a physical contour.
+- Compare sequential next-frame and 15-frame (0.5 s) correspondence over the
+  same bounded interval and endpoints. Update a patch only at a unique minimum;
+  exact ties or unavailable full support end that sector chain. Compute the
+  reverse match for every link and retain the entire reverse alternatives.
+  Reciprocal mismatch is reported; it is not silently removed or rescued.
+- The chain is an appearance hypothesis, including when seeded at a reviewed
+  Oil candidate. It never publishes a coordinate, transfers physical labels,
+  creates a same-frame detector candidate or bypasses authority.
+- Compare endpoint behavior, reciprocal disagreement, exact ties and divergence
+  between cadences. A correct endpoint alone cannot validate intermediate rows.
+  Wrong-target controls can remain excellent appearance matches.
+
+The operating policy is measurement-only: `NOT_EVALUATED` identity decisions and
+`UNRESOLVED` physical identity for all matches. W3 is reused only after there is a
+justified frozen identity prediction contract; this diagnostic does not fabricate
+one to obtain an efficacy score. Do not tune widths, weights, thresholds or
+cadences after looking at these exposed controls. A failed match closes this
+specific correspondence hypothesis; it does not reopen the residual experiment.
+
 ## History Review
+
+2026-10-07 ordered-patch diagnostic: reviewed F03/F04 motion and appearance
+identity leakage, F09 provenance and F10 private-coordinate/threshold escapes.
+The prior Foam residual probe measures change at fixed coordinates, while this
+extension searches ordered candidate-side appearance without a displacement
+prior. Neither establishes identity. Rapid real motion motivates the cadence
+comparison; repeated structures and drift remain explicit counter-controls.
+
 
 2026-10-07 A2 preparation: explicit wrong-target review can coexist with unknown
 physical identity. The target-binding companion now accepts that explicit negative
