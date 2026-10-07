@@ -775,6 +775,21 @@ Actual identity evaluation must use W3 truth/abstention/coverage semantics and
 independent partitions required by O2 acceptance. The existing two frames supply
 no new holdout evidence; W4-R2 entry remains unmet.
 
+## A2 preparation: uncertain physical identity, definite wrong target
+
+Exercise `bind-target` through the actual CLI with an explicitly indexed
+`other_non_target` judgment whose original physical identity is `uncertain`.
+The saved source labels/history must remain byte-identical; the frozen snapshot
+must retain physical uncertainty, while W3 counts support as a wrong target.
+Tentative artifact notes must not become physical artifact tags or local/scalar
+truth. Loading/re-evaluating the snapshot must preserve these distinctions.
+
+Reject uncertain-to-target-positive, unreviewed-to-negative and implicit bulk
+inheritance of uncertain identities. Keep all existing immutable snapshot, exact
+packet/witness binding, wrong-label prediction, relocation, drift and recording
+partition protections. This additive accepted mapping leaves old valid snapshots
+unchanged. No calibrated classifier or operating-point claim follows from binding.
+
 ## A1 lossless lineage acceptance
 
 For `oil-measurement-lineage-v1`, remove **only** its sibling namespace when
@@ -811,5 +826,5 @@ checks remain required. A0Q is not repaired by a passing Qt run.
 - Prior mechanisms rejected: threshold widening, polarity/source/motion identity, unpartitioned calibration, private-coordinate tuning, missing-as-zero, stale identity/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded resources and separate Windows field acceptance.
 - Difference from prior failures: extraction, discrimination, behavior and field qualification are independent gates with explicit positive/negative/unresolved labels and leakage controls.
-- Logic-map impact: UPDATED — records the A1 diagnostic reproduction route covered by these lossless controls; production decision flow remains unchanged.
+- Logic-map impact: NONE — these offline target-binding controls do not change production decision flow or the previously mapped A1 diagnostic route.
 - Failure-registry impact: NONE — it adds acceptance obligations for existing named mechanisms without claiming a new cause or repair.

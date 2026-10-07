@@ -17,7 +17,7 @@ SPEC = "uppermost-actual-fluid-boundary-v1"
 ROLES = {"target": "interface", "internal_interface": "non_interface",
          "other_non_target": "non_interface", "uncertain": "uncertain", "unreviewed": "unreviewed"}
 SOURCE_IDENTITIES = {"target": {"interface"}, "internal_interface": {"interface"},
-                     "other_non_target": {"non_interface"}, "uncertain": {"interface", "uncertain"},
+                     "other_non_target": {"non_interface", "uncertain"}, "uncertain": {"interface", "uncertain"},
                      "unreviewed": {"unreviewed"}}
 
 

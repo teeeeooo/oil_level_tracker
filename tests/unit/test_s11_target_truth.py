@@ -158,6 +158,55 @@ def test_packet_drift_and_partition_leakage_still_rejected(tmp_path):
         o2.load_frozen(tmp_path/'snapshot.json')
 
 
+def test_explicit_wrong_target_preserves_unknown_physical_identity_through_cli(tmp_path):
+    physical, mapping = _inputs(tmp_path)
+    annotation = physical['cases'][0]['candidates'][2]
+    annotation.update(identity='uncertain', artifact_tags=[],
+                      artifact_note='Possibly a rim; physical identity is unresolved.')
+    mapping['cases'][0]['groups'][2] = dict(
+        role='other_non_target', candidate_indices=[2], expected_count=1,
+        review_basis='individual', note='Human rejected this Oil target; physical type unknown.')
+    mapping['source_labels_sha256'] = o2.fingerprint_json(physical)
+    for name, value in [('labels', physical), ('mapping', mapping)]:
+        (tmp_path/f'{name}.json').write_text(json.dumps(value), encoding='utf-8')
+    before = {p.name: p.read_bytes() for p in tmp_path.iterdir()}
+    result = subprocess.run([sys.executable, str(Path(o2.__file__).resolve()), 'bind-target',
+        '--labels', str(tmp_path/'labels.json'), '--mapping', str(tmp_path/'mapping.json'),
+        '--output', str(tmp_path/'snapshot.json')], cwd=tmp_path,
+        capture_output=True, text=True, encoding='utf-8', check=False)
+    assert result.returncode == 0, result.stderr
+    assert all((tmp_path/name).read_bytes() == value for name, value in before.items())
+    stored = o2.read_json(tmp_path/'snapshot.json')
+    assert stored['payload']['physical_labels'] == physical
+    bound = stored['payload']['bindings'][2]
+    assert bound['physical_identity'] == 'uncertain'
+    assert bound['target_role'] == 'other_non_target'
+    frozen, packets = o2.load_frozen(tmp_path/'snapshot.json')
+    report = o2.evaluate(frozen, packets, _predictions(frozen, ('INTERFACE_SUPPORTED',)*3))
+    assert report['partitions']['regression']['wrong_non_interface_support_count'] == 2
+    assert report['target_truth']['physical_identity_counts'] == dict(interface=2, uncertain=1)
+    assert stored['payload']['evaluation_content']['cases'][0]['candidates'][2]['artifact_tags'] == []
+
+
+@pytest.mark.parametrize('fault', ['uncertain_positive', 'unreviewed_negative', 'implicit_uncertain_group'])
+def test_uncertain_target_binding_requires_explicit_negative_review(tmp_path, fault):
+    physical, mapping = _inputs(tmp_path)
+    physical['cases'][0]['candidates'][2].update(identity='uncertain', artifact_tags=[])
+    group = mapping['cases'][0]['groups'][2]
+    group.pop('source_identity')
+    group['candidate_indices'] = [2]
+    if fault == 'uncertain_positive':
+        group['role'] = 'target'
+    elif fault == 'unreviewed_negative':
+        physical['cases'][0]['candidates'][2]['identity'] = 'unreviewed'
+    else:
+        group.pop('candidate_indices')
+        group['source_identity'] = 'uncertain'
+    mapping['source_labels_sha256'] = o2.fingerprint_json(physical)
+    with pytest.raises(ValueError):
+        target.project(physical, o2.load_packets(physical, tmp_path), mapping)
+
+
 def test_source_change_during_binding_does_not_emit_snapshot(tmp_path, monkeypatch):
     _inputs(tmp_path)
     original = target.project

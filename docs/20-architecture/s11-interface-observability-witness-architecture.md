@@ -514,6 +514,15 @@ No product/runtime branch imports the private-case mapping.
   unreviewed. Internal and other non-target map to evaluation non_interface while
   their physical identities remain separate. Empty-case and no-target visibility
   are explicit, not inferred from the proposal list.
+- An individually identified wrong Oil target may explicitly map physical
+  `uncertain` to target `other_non_target`. The original uncertainty, tentative
+  subtype note and review history remain unchanged. This is a negative for the
+  target task only; it is not evidence of physical non-interface identity.
+  The mapping must list exact candidate indices with attribution; bulk inheritance
+  remains restricted to already reviewed source `non_interface`. Unreviewed
+  candidates cannot become negatives, and uncertain candidates cannot become
+  target-positive or internal-interface truth by this route. Existing snapshots
+  keep their projection and hashes; no physical/target schema fields change.
 - Snapshot hash covers original physical labels, mapping, bindings and derived
   evaluation content; packet locators remain relocatable. Raw file hashes are
   distinct from logical label hashes. Input bytes are checked before/after binding.
@@ -1421,6 +1430,12 @@ radius is retained. Resource measurements and full equality precede adoption.
 
 ## History Review
 
+2026-10-07 A2 preparation: explicit wrong-target review can coexist with unknown
+physical identity. The target-binding companion now accepts that explicit negative
+without rewriting physical truth or inheriting an uncertain group. This corrects
+an evaluation representation gap; no classifier, operating point or detector
+authority is added. F09 provenance and F10 truth/threshold shortcuts remain guards.
+
 2026-10-07 A1 reuses the existing spatial measurement and frame-local sidecar
 owners. Reviewed the second audit's disjoint-X pooling collision, same-sign
 Y854 pair, score/scalar coordinate distinction and rejected paired scorer.
@@ -1453,5 +1468,5 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: UPDATED — adds A1 frame-local pure spatial diagnostic reproduction to the existing mapped measurement/publication owners; no decision authority changes.
+- Logic-map impact: NONE — this update changes offline target-truth binding only; the previously mapped A1 diagnostic and production decision owners remain unchanged.
 - Failure-registry impact: NONE — this architecture refines the response to existing failures without claiming field repair.
