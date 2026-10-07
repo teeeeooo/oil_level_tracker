@@ -21,7 +21,8 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 
 ## 폴더별 목록
 
-전체 249개 파일. `검토 후 유지`는 승계가 확인되지 않아 현 위치를 보존한다는 뜻이며,
+현재 색인 수록 267개 파일. 이후 추가된 모든 repo 문서의 전수 목록을 보증하는 수치는 아닙니다.
+`검토 후 유지`는 승계가 확인되지 않아 현 위치를 보존한다는 뜻이며,
 그 문서의 과거 실행 지시 전체가 현행이라는 의미가 아닙니다.
 
 ### `docs/` — 3개
@@ -49,7 +50,7 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 2026-07-20 | [result-review-viewer-plan.md](10-product/result-review-viewer-plan.md) | 현 위치 유지 |
 | 2026-07-29 | [ux-improvement-plan.md](10-product/ux-improvement-plan.md) | 현 위치 유지 |
 
-### `docs/20-architecture/` — 32개
+### `docs/20-architecture/` — 33개
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
@@ -85,6 +86,7 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 2026-09-15 | [s11-r22-1-interface-diagnostics-architecture.md](20-architecture/s11-r22-1-interface-diagnostics-architecture.md) | 현 위치 유지 |
 | 2026-09-16 | [s11-r22-2-interface-path-diagnostics-architecture.md](20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md) | 현 위치 유지 |
 | 2026-09-17 | [s11-interface-observability-witness-architecture.md](20-architecture/s11-interface-observability-witness-architecture.md) | 현 위치 유지 |
+| 2026-10-07 | [s11-report-source-context-design.md](20-architecture/s11-report-source-context-design.md) | 로컬 report 후보 설계 |
 
 ### `docs/30-validation/` — 32개
 
@@ -205,7 +207,7 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 2026-08-04 | [post-s10-windows-qt-platform-bootstrap-repair.md](60-evidence/s10/post-s10-windows-qt-platform-bootstrap-repair.md) | 완료 증거 |
 | 2026-08-04 | [s10-windows-canonical-portability-qt-teardown-repair-evidence.md](60-evidence/s10/s10-windows-canonical-portability-qt-teardown-repair-evidence.md) | 완료 증거 |
 
-### `docs/60-evidence/s11/` — 84개
+### `docs/60-evidence/s11/` — 85개
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
@@ -293,6 +295,7 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 2026-10-02 | [s11-o2-color-side-local.md](60-evidence/s11/s11-o2-color-side-local.md) | 완료 증거 |
 | 2026-10-02 | [s11-o2-w2-f14865-scene-review.md](60-evidence/s11/s11-o2-w2-f14865-scene-review.md) | 완료 증거 |
 | 2026-10-02 | [s11-o2-w4-r3-existing-evidence-feasibility.md](60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md) | 완료 증거 |
+| Git 미등록 (작성 2026-10-07) | [2026-10-07-report-source-context-validation.md](60-evidence/s11/2026-10-07-report-source-context-validation.md) | 로컬 후보 실행 증거 |
 
 ### `docs/60-evidence/s6/` — 10개
 

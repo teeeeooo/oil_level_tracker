@@ -121,6 +121,8 @@ historical “main unchanged” statements remain true of the audit, while the W
 Plan owns current adoption and next work. Rejected experimental scripts stay in
 the preserved ZIP, outside production and test discovery.
 
+The separate [source-context report candidate](20-architecture/s11-report-source-context-design.md) adds a bounded raw-pixel time–height asset, not another detector. Its [execution record](60-evidence/s11/2026-10-07-report-source-context-validation.md) preserves numerical invariance and remaining identity/field limitations; current adoption state remains in Work Plan.
+
 The W4 attachment is preserved byte-for-byte under the filename above; only the
 transfer prefix and trailing `-1` were removed. W4-R0–R5 are internal continuation
 steps, not a new milestone or a replacement acceptance contract.
