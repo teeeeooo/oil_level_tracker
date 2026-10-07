@@ -2,7 +2,7 @@
 
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
 **Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event/initial-state Oil compatibility is locally verified and adopted; A1 preliminary capture now awaits human correspondence of three alternative candidates; the first harmful stage is not established. A1 lossless support/pair/score-lineage integration remains the next bounded detector task before A2. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
+**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event/initial-state Oil compatibility is locally verified and adopted; The three captured alternatives are now human-confirmed Oil; their earliest admission/selection loss remains to be traced. A1 lossless support/pair/score-lineage integration remains the next bounded detector task before A2. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
 
 This document owns current state, authorization, unknowns and the next transition.
@@ -83,10 +83,10 @@ The next implementation sequence is:
    material. Context improvement supplements, not replaces, O2/O3/field gates.
 
 The [read-only interval capture](../50-diagnostics/s11/2026-10-07-sample4-interval-candidate-lineage.md)
-reproduces completed output and preserves all seven reviewed frames. Before
-choosing a causal repair, obtain physical correspondence of the alternative
-candidates at 40/42/44 seconds; the four confirmed positives remain protected.
-This checkpoint does not complete A1 or change its three integration obligations.
+reproduces completed output and preserves all seven reviewed frames. The user
+confirmed the three cyan alternatives at 40/42/44 seconds as actual Oil. Trace
+their earliest admission/selection loss while preserving the four completed-output
+positives. This closes correspondence review, not A1 integration or A2 acceptance.
 
 Next bounded detector implementation is A1: connect actual upper/lower support, signed
 center/partner pair measurements, and score-to-scalar coordinate dependencies

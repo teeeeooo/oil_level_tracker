@@ -56,6 +56,16 @@ This capture does not implement A1's three support/pair/score-lineage gaps and
 does not authorize an A2 behavior change before A1 lossless verification. Candidate
 correspondence, scalar eligibility and physical identity remain separate.
 
+## Human correspondence received — 2026-10-07
+
+The user replied: “하늘색은 실제 oil을 따라감”. The preceding question named
+all three default cyan alternatives at 40/42/44 seconds. The [bound reply](2026-10-07-sample4-candidate-human-reply.json)
+therefore confirms their Oil correspondence without assigning exact pixel truth
+or extending it to nearby candidate indices. The original review manifest is
+unchanged. Correct Oil is represented at each of these frames but displaced in
+completed output. The earliest admission/selection loss still requires tracing.
+This closes the candidate-correspondence checkpoint; no repeated review is needed.
+
 ## Reproducibility and limits
 
 The [manifest](2026-10-07-sample4-interval-candidate-manifest.json) preserves the
@@ -76,6 +86,6 @@ qualification follows from this capture.
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-SELECTOR`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F09`, `S11-F10`.
-- First harmful stage: UNKNOWN — current/completed disagreement is observed, but physical correspondence of alternative candidates and their earliest loss are not yet established.
+- First harmful stage: UNKNOWN — current/completed disagreement is observed, the three alternative candidates are now human-confirmed Oil, but their earliest admission/selection loss is not yet established.
 - Logic-map impact: NONE — existing diagnostic and sequence owners are observed without changing their control flow or authority.
 - Failure-registry impact: NONE — exact candidate/source coordinates and unreviewed status are preserved; no coordinate-specific rule or failed mechanism is promoted or retired.

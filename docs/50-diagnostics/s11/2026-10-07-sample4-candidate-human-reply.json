@@ -1,0 +1,43 @@
+{
+  "reply_verbatim": "하늘색은 실제 oil을 따라감",
+  "reply_date": "2026-10-07",
+  "review_manifest_sha256": "bd55a54c49c993aa8ba30447f315bc6fa6ac15664368a99e6c0e82d53483269b",
+  "binding": "All three default cyan alternatives explicitly asked about in the preceding assistant question; candidate correspondence only, not exact pixel truth.",
+  "candidates": [
+    {
+      "frame": 1200,
+      "candidate_input_index": 4,
+      "source": "oil_hypothesis:76bed74eaefae78df5f06c37",
+      "source_y": 841.0,
+      "current_raw_source_y": 841.0,
+      "completed_source_y": 865.5,
+      "selection_basis": "current-frame selected candidate",
+      "status": "HUMAN_CONFIRMED_OIL_CORRESPONDENCE"
+    },
+    {
+      "frame": 1260,
+      "candidate_input_index": 4,
+      "source": "oil_hypothesis:ab9efea5ca32565368ef129b",
+      "source_y": 839.0,
+      "current_raw_source_y": 839.0,
+      "completed_source_y": 868.0,
+      "selection_basis": "current-frame selected candidate",
+      "status": "HUMAN_CONFIRMED_OIL_CORRESPONDENCE"
+    },
+    {
+      "frame": 1320,
+      "candidate_input_index": 9,
+      "source": "material_path",
+      "source_y": 844.0,
+      "current_raw_source_y": null,
+      "completed_source_y": 822.0,
+      "selection_basis": "reviewer-proposed visible-boundary alternative; unreviewed",
+      "status": "HUMAN_CONFIRMED_OIL_CORRESPONDENCE"
+    }
+  ],
+  "limits": [
+    "No per-column contour or exact coordinate uncertainty assigned",
+    "No unseen frame labels or Foam judgments inferred",
+    "Existing four completed-output positives remain protected"
+  ]
+}
