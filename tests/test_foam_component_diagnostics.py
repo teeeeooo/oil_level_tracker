@@ -83,7 +83,7 @@ def test_actual_detector_writer_retains_geometry_and_uint16_labels(tmp_path, lev
     writer=JsonlDebugTraceWriter('component-test',level,staging_parent=tmp_path)
     writer.write(glass,detection,artifacts,DebugCaptureDecision(True,(DebugCaptureReason.FIRST_SAMPLE,)))
     directory=Path(writer.finalize().staging_directory)
-    record=json.loads((directory/'debug_trace.jsonl').read_text().splitlines()[0])
+    record=json.loads((directory/'debug_trace.jsonl').read_text(encoding="utf-8").splitlines()[0])
     assert record['state']['foam_component_diagnostics']==artifacts.state['foam_component_diagnostics']
     if level is DebugTraceLevel.FULL:
         saved=cv2.imread(str(directory/record['images']['foam_component_labels']),cv2.IMREAD_UNCHANGED)

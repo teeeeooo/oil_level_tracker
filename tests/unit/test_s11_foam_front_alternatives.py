@@ -129,13 +129,13 @@ def saved_capture(tmp_path):
     diag = {'truncated': False, 'crop_origin': [100, 200],
             'components': [{'diagnostic_id': 2, 'pixel_count': 90, 'local_bbox_xyxy': [3, 20, 12, 30]}]}
     (trace/'debug_trace.jsonl').write_text(json.dumps({'state': {'foam_component_diagnostics': diag},
-                                        'images': {k:k+'.png' for k in images}}))
+                                        'images': {k:k+'.png' for k in images}}), encoding="utf-8")
     (root/'capture.json').write_text(json.dumps({'cases': [dict(case_id='synthetic', frame_index=42,
-                    glass_id='glass', run_id='run', record_id='record', trace_directory='trace')]}))
+                    glass_id='glass', run_id='run', record_id='record', trace_directory='trace')]}), encoding="utf-8")
     pins = {str(p.relative_to(root)):sha(p) for p in root.rglob('*') if p.is_file()}
     receipt = root/'receipt.json'
     receipt.write_text(json.dumps({'schema_version': 's11-local-foam-component-capture-receipt-v1',
-                                  'status': 'CAPTURE_COMPLETE_NOT_EVALUATED', 'output_sha256s': pins}))
+                                  'status': 'CAPTURE_COMPLETE_NOT_EVALUATED', 'output_sha256s': pins}), encoding="utf-8")
     return root, sha(receipt)
 
 
@@ -148,7 +148,7 @@ def test_saved_capture_entrypoint_receipt_and_no_overwrite(tmp_path):
     assert report['cases'][0]['components'][0]['foam_front'] is None
     assert report['preserved_input_count'] == len(before)
     for p, digest in before.items(): assert sha(p) == digest
-    receipt = json.loads((out/'receipt.json').read_text())
+    receipt = json.loads((out/'receipt.json').read_text(encoding="utf-8"))
     for name, digest in receipt['outputs'].items(): assert sha(out/name) == digest
     with pytest.raises(FileExistsError): run(root, out, pin)
 

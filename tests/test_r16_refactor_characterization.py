@@ -161,6 +161,35 @@ def _r21_behavioral_view(payload: dict[str, object]) -> dict[str, object]:
     return normalized
 
 
+def _fixture_phase_reason_legacy_view(payload: dict[str, object]) -> dict[str, object]:
+    """Check current reasons, then translate this ONE frozen fixture to R21.
+
+    This is not a production reason normalizer. All 44 reason leaves, their
+    frame/candidate cardinality and their exact current values are checked before
+    translating the five known diagnostic deltas. Every other leaf is preserved.
+    Independent phase-identity tests protect branch-specific reason semantics.
+    """
+    normalized = deepcopy(payload)
+    detections = normalized["detections"]
+    assert len(detections) == 11
+    for index, detection in enumerate(detections):
+        assert detection["frame_index"] == index
+        assert len(detection["candidates"]) == 1
+        changed = 3 <= index <= 7
+        expected = "boundary;boundary_advantage;localized_boundary" if changed else ""
+        legacy = "boundary;localized_boundary" if changed else ""
+        locations = (
+            (detection["sequence_metrics"], "sequence_selected_authority_failed_gates"),
+            (detection["sequence_metrics"], "sequence_selected_phase_identity_failed_gates"),
+            (detection["candidates"][0]["features"], "sequence_authority_failed_gates"),
+            (detection["candidates"][0]["features"], "sequence_phase_identity_failed_gates"),
+        )
+        for owner, key in locations:
+            assert owner[key] == expected, (index, key, owner[key])
+            owner[key] = legacy
+    return normalized
+
+
 def _sequence_candidate(
     y: float,
     *,
@@ -257,13 +286,20 @@ def test_r0_current_frame_candidate_and_debug_projection_fingerprint() -> None:
         "artifacts": {
             "profiles": artifacts.profiles,
             "candidate_rows": artifacts.candidate_rows,
-            # R22-1 adds one trace-only namespace. Keep the original golden:
+            # Only enumerated trace additions are outside the legacy view.
+            # New component geometry/labels are tested independently. Keep the golden:
             # every prior field, candidate, image and metric must still match.
             "state": {
                 key: value for key, value in artifacts.state.items()
-                if key not in {"oil_interface_diagnostics", "oil_interface_witness"}
+                if key not in {
+                    "oil_interface_diagnostics", "oil_interface_witness",
+                    "foam_component_diagnostics",
+                }
             },
-            "images": _image_signatures(artifacts.images),
+            "images": _image_signatures({
+                key: image for key, image in artifacts.images.items()
+                if key != "foam_component_labels"
+            }),
         },
     }
 
@@ -317,7 +353,7 @@ def test_r0_completed_window_stage_and_provenance_fingerprint() -> None:
     }
 
     assert payload["diagnostics"]["version"] == "r22-oil-ownership-evidence-replacement-v1"
-    predecessor = _r21_behavioral_view(payload)
+    predecessor = _r21_behavioral_view(_fixture_phase_reason_legacy_view(payload))
     fingerprint = _fingerprint(predecessor)
     assert fingerprint == R21_TRUTH_PRESERVING_COMPLETED_WINDOW_FINGERPRINT
     assert fingerprint != R20_DELAYED_DRAIN_REACQUISITION_COMPLETED_WINDOW_FINGERPRINT
@@ -330,3 +366,60 @@ def test_r0_completed_window_stage_and_provenance_fingerprint() -> None:
             candidate.y for candidate in source.candidates
         }
         assert sum(candidate.selected for candidate in resolved.candidates) == 1
+
+
+_PHASE_REASON_LOCATIONS = (
+    ("metrics", "sequence_selected_authority_failed_gates"),
+    ("metrics", "sequence_selected_phase_identity_failed_gates"),
+    ("candidate", "sequence_authority_failed_gates"),
+    ("candidate", "sequence_phase_identity_failed_gates"),
+)
+
+
+def _reason_contract_fixture():
+    rows = []
+    for index in range(11):
+        reason = "boundary;boundary_advantage;localized_boundary" if 3 <= index <= 7 else ""
+        rows.append({"frame_index": index, "oil_air_level_y": 160.0-index,
+            "sequence_metrics": {key: reason for scope, key in _PHASE_REASON_LOCATIONS if scope == "metrics"},
+            "candidates": [{"selected": True, "y": 160.0-index, "features": {
+                **{key: reason for scope, key in _PHASE_REASON_LOCATIONS if scope == "candidate"},
+                "boundary_likelihood": 0.24, "other_failed_gates": "MUST_REMAIN"}}]})
+    return {"detections": rows, "diagnostics": {"unrelated": "preserved"}}
+
+
+@pytest.mark.parametrize("index", [0, 4])
+@pytest.mark.parametrize("location", _PHASE_REASON_LOCATIONS)
+def test_phase_reason_view_rejects_unexpected_current_reason(index, location):
+    payload = _reason_contract_fixture()
+    scope, key = location
+    row = payload["detections"][index]
+    owner = row["sequence_metrics"] if scope == "metrics" else row["candidates"][0]["features"]
+    owner[key] = "unexpected_reason"
+    with pytest.raises(AssertionError):
+        _fixture_phase_reason_legacy_view(payload)
+
+
+@pytest.mark.parametrize("damage", ["frame_count", "candidate_count", "frame_order", "missing_reason"])
+def test_phase_reason_view_rejects_different_fixture_structure(damage):
+    payload = _reason_contract_fixture()
+    if damage == "frame_count": payload["detections"].pop()
+    elif damage == "candidate_count": payload["detections"][0]["candidates"].clear()
+    elif damage == "frame_order": payload["detections"].reverse()
+    else: payload["detections"][0]["sequence_metrics"].pop("sequence_selected_authority_failed_gates")
+    with pytest.raises((AssertionError, KeyError)):
+        _fixture_phase_reason_legacy_view(payload)
+
+
+def test_phase_reason_view_preserves_every_other_leaf_and_input():
+    payload = _reason_contract_fixture()
+    before = deepcopy(payload)
+    expected = deepcopy(payload)
+    for row in expected["detections"][3:8]:
+        for scope, key in _PHASE_REASON_LOCATIONS:
+            owner = row["sequence_metrics"] if scope == "metrics" else row["candidates"][0]["features"]
+            owner[key] = "boundary;localized_boundary"
+    assert _fixture_phase_reason_legacy_view(payload) == expected
+    assert payload == before
+    payload["detections"][4]["candidates"][0]["features"]["boundary_likelihood"] = 0.99
+    assert _fingerprint(_fixture_phase_reason_legacy_view(payload)) != _fingerprint(expected)
