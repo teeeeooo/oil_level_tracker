@@ -1,0 +1,4067 @@
+{
+  "source_head": "d0f40c8f150b1ff077c5eb33c5ff022d0b0fb8f7",
+  "spec": {
+    "id": "ordered-bgr-patch-correspondence-v1",
+    "support": "full rectangular ordered BGR patch; no resize, pooling or interpolation",
+    "search": "every fully contained integer Y in the same X interval",
+    "loss": "per-channel mean-centered squared pixel error divided by 255^2",
+    "tie_atol": 1e-12,
+    "max_compared_pixels": 50000000,
+    "physical_identity": "UNRESOLVED",
+    "decision": "NOT_EVALUATED",
+    "limits": "Raw appearance; no glare/material/camera validity is established. Unique appearance match and reciprocal agreement do not establish physical identity."
+  },
+  "source_files": {
+    "tests/diagnostics/s11_boundary_temporal_probe.py": "af4e2ee69b3c931446645dd2bdb5487a99ffb2d682eab145925556663f253e4b"
+  },
+  "input_files": {
+    "sample/output/s11-a2-temporal-context-20261007-001/manifest.json": "249149310ccae2a3e015565d2d9f9f030584670d87e65b1ae4013baf66998981",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1200.png": "d2413bbdc3e3b4390024bbafb7fedb1e9c9be6d6738b9d7e2346e49977e43d92",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1201.png": "4e91885bbe3d6d368cb288e26ac2951b5340b7da397bcfd24872ad90db17d895",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1202.png": "d38dab5306a56f3caa2af486ec6315edb125891d484bace44228b49502cc9e59",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1203.png": "daf9226c2d5af0af8333b6a3df4353b3ce22c77625a2f80c0120f26166594cd0",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1204.png": "58057364b268454f00fb88b7878ae511c054a681c707686517ce4845b3e77706",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1205.png": "70937cfbe569dc5b45689f94b5ede5a054710326ccb8ce7de8112a0ebe9b518f",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1206.png": "5901e8f3e170df35f853bd972f5d5b938723c6d10ab55a9363573b6ebf4be6f4",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1207.png": "53f45649571cd77330d177ae9ab3e29324d1dd73f49ceb17965b3d1b0a47ee48",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1208.png": "935f046c32d1600624ee811f6f2a80adc70a1edbab3da037a6871019f2d74ca7",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1209.png": "995e78bb87089d83f9beda349bcc287f182d68eeafd64463320b80a73e2b5309",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1210.png": "57723d3a378ad39f0211af88adf78961525940b074b5ae415f15920762406bf8",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1211.png": "5badbfeaa0523d68e2d23799592dfe25fe4ab453d41665de9b0deb85fcfd5758",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1212.png": "64416110fc45c89c72116d9cb2d04cecfee9fb26ea92a93286cb585415174f31",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1213.png": "4743d7beb9ed485af1cf80936c87aa9e25ae1c4175b94d56eb68991b28a2c711",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1214.png": "247d9d77263d9cf7af060c68dcde62667960aeff2407701c006183b02276ff1c",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1215.png": "e9be9ffb8ecf98f9afcc2320ceb17e1bb1eacd5d02b30a6f5101b2bb9361fa39",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1216.png": "b74026082768280561c893ef5bb676b4cb012584e6e8a1307cd51fa222e0ba0e",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1217.png": "1c6c8ac14546cabc0b1146ef85032c14a0a5d5990e295ddaf1b86eb0d1135bc2",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1218.png": "d6a8079860a496c2b3583c3e1bc5a4d15a1c2f30298739189cdddbfc6b28bd6d",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1219.png": "e43b6069e68ee3f8851cf5f451b44bc6254b16090dd246be48ab2e04c0a32aa8",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1220.png": "4bf1f9cd5fda2c4fcdc652afe34ba4412c38346cad1f82832b91b8ef7748a046",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1221.png": "8f94b9c7883116d59e08621a1a37a5eef70a1b10accec11bbba0808a1df5fa04",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1222.png": "d857c06f80f33a6a1cb39b139502263f84760d2ca11d6bd7b37eed402357aa8b",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1223.png": "3f0348aa784ca69135c79bf078554454a95f89428836850849579c34d80402ed",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1224.png": "c68005b32b2a6c2fa86ccc056eaad8757a11aadc4c72dbe3fdddf416f2e0ead8",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1225.png": "9dcf477e187be1da1875c7ae691ee21ab00f182af07000f2880359283aa7b5d5",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1226.png": "fd57cc081e044e27a55156824add0601fa934fc09f92437edc9b8b584df6287a",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1227.png": "3e2334947abccb250f75ac3c31805ec0bb8b40cac48dd394fb3c355e65fb7faf",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1228.png": "3549277c3e02eedca158e0b7d7816186206a6a5fff1c56106edb64dbb27f4c7c",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1229.png": "383c349f11931061bbd915b38cd6daf4d7677ebac3d68cb4a1eaf48e99c1a89e",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1230.png": "5e4177f456a006edf14ce838514bf0ec5cac8ad91b5ec7ed6db65e851f308c73",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1231.png": "0f554667c5c062c1b94f79244dba015556cbd18bc7ce223938ff04c982847b71",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1232.png": "c606179d1f3d82865210848084a85a686898f87023163adb8b43121921684867",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1233.png": "985a6984b4a3997f8e55be58a4765a5682a71ccc5faf3e1c7e464929c772126f",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1234.png": "6345b88462aaa5541ed4412eb64dac28f7316d1a02fbc1b68c9172c0d70ec436",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1235.png": "b89a890cd0de9feca966bc2c54a14096f7bfaf3038b26c922dc2e171b73ba076",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1236.png": "153ab0702b7748ce8c42cd04f91cd4419246950e7aa4c83932119952e1e23976",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1237.png": "3b4631afbc7567e396a2b715a85f0c136bb85d0c3194b65d4197ff23e409294c",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1238.png": "a9a85b006c91c29944ad0ee807791629e34550b6ef1f03721a5ed2e9e51fe6b4",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1239.png": "7d8769ddf35c6d2f4b23d05864c80301c9fb2f14184bcda96ebf89acd4c38a8f",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1240.png": "2e1facf020c53a50c6dc1319acb9b590466dbdbd00060d29e6736f6638a529b4",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1241.png": "cccbcace5f7ff0f25bbdf52b10182fb424847a729e26c0d9e3b02efe91fd7ef2",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1242.png": "73fcd69b4ad6027d6c3a9d175ead797090fee51e16b82c8fb1cb28d6f018bc82",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1243.png": "eb05f26476a93393d4b0bd1254ea9ec43a177841bcffa621a10cf914b183db0c",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1244.png": "90658c002ad7fffaa37f3583276a4c72c7ef142981846d0797cfcb1d1928671b",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1245.png": "f08dbf68b051fb1a1c46e73ef5cef6e477284490697954b1f5512e92314e06d7",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1246.png": "81b663eb82ca69b89d71fed92a360017a2cca698800c71bfd3e018852a9fb5d9",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1247.png": "352d6cc0eaec509c2d637cff21d60cdae949a5fd808515858d9075e492ce0ade",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1248.png": "887802754144991a9f7cf1d862963a3ad59da8d15256efc4d17aa991162c6692",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1249.png": "e8a2963303ee4474e306f1181033048fdaceb6575189311e841aa697329f2677",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1250.png": "172d4830acabee3be68954564b762d1269516f9442f9a4f22fb2e50f19a5ce45",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1251.png": "9e29530079a17648a43d4cc0c00c25de7dd58fc83ea2eabf3667a1955df4ccfc",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1252.png": "dd54da58aa522b32e465a5806f7e7ce7a84c8d8b7ddd0a0becc5d501dc11a0da",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1253.png": "7503079333b24f156808b4769b4176ba2a1cdc417d4e788f0ec9cdbd45152a28",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1254.png": "ec57fadc0a8fe55117fa32b76a3a71ee57866917f4ce2c3a0f8210b563b7e331",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1255.png": "a1d5f9c5eafbbfa7a1eb9334ae3c578f5c120e3e6436bd3b2c5a10a0f1f62f83",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1256.png": "017bbd21dfc4afcf29d2f8d98ba8076a0673e41983e14a661867162b22d3c0b4",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1257.png": "bfcb45bfb2efc51c75ac3ce030ede477fd50cdb2679861e09f5e698896313eb6",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1258.png": "d143ddd61031be04ad94fc54a484e238222760f279ae17b1c289dd946cd724ed",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1259.png": "a7624b61a35ddc66e3c65c0ddd647a145aa7c51418e512986820ea4dfde1d9a5",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1260.png": "401a910d391882dbb632c31759de25682285e04444c3c4f72429556542df237f",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1261.png": "b1841c4f28aa0d64efba98dfb53ec90b8dfad7168af3e857b377d9b482639986",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1262.png": "a0f29ba8c9c741682c4ba3ed4e1d22c8bee31f949d2536883cd10fc55cb11296",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1263.png": "b58bc5d43f06ebce47583b6cb08fff5fe1e956594282bed27a4c0fbae99ab26d",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1264.png": "54ace141f2d806a66de7d0d4bdb16b3077e2b3eafaa3aaba103a629c6ba886d4",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1265.png": "8519e3643eb6c156a40e9e3963a9d937c986f0df77d291b4a60db10aa939d497",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1266.png": "0b09ceb3ded7ddc7ce4a0e8273212715d4f3dc68fd679a2666be82a7f224bfa2",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1267.png": "850beeec9d5c6564d5759b674574890baffb054f4d5104f0dad3383680e3f6ac",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1268.png": "f237c3c97d34c9013eb1080988807c87c106203acc3b92131c3fc4c36fa02276",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1269.png": "39ed9f6f84511b5a0b83af10ab28fbea89c5ba2d280149beb5aeffa2e5a78f26",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1270.png": "ba900ade14beb3b219c06560300441db3ae483c45dd43529a53590b3c507446f",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1271.png": "312bb4ff66e5fb297d11b708f64a5729e53ae9013319506f7eb32c3c34dfb01b",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1272.png": "06cc14e7ac8852f7c57c84ee48e0b7929b02c58416f4c6e0119b0095e5c807e3",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1273.png": "772060db9a47da89b0739ddc351ceaa8fc275ba6a506c108613accde90306582",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1274.png": "70697965365dd3d01207ff17f51c068f7531f33f39b8e28e5552a56e93272dfd",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1275.png": "3191678d203ffd2f453635b8579a12a33fa439b3a37bfb0470a68cb129a44e4b",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1276.png": "8dfa158c0c5164e4cf76a27c304b6fa2ce059faa51593758a998e49a4335bad0",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1277.png": "647913326b058d91a1ad30b09b28e1b8985f9bf10900809c2bd8596382051b8b",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1278.png": "ea5c83e5b2738a54348271cd774d45d1246de894e7d0ef5518620782f2ed138e",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1279.png": "e808f6a3ef4fba422299ca2b45fe9ea3aa22359a2ba47801ebc4f580d84ea3fa",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1280.png": "b6a478abad74daf613e23baece5fe285bee30762bc622c1db82184f966722452",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1281.png": "b80f5888b23a22c6753982a53fa579067f9904cf019b457af12497486d10c614",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1282.png": "108dc5b0903ea1ddca594419152b59cda615366785820e778672ed767baf72ab",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1283.png": "26df5c21b607e3783bb5c4ec2c022285275968bb0b73f202bc0917a7393aaf42",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1284.png": "f76eca3a3f5c9fc0e3ca42cf8562f5a9388901abd67ae5092dcae1d2e9de62f1",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1285.png": "c6da8d76f78eae9f1ca8460d02fc014a975d583a7b36131c4d3dc59a39421414",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1286.png": "e2043024c7de32044d82b91ce478102bab26ef3c1b6a145f7f206e087d34f1d0",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1287.png": "5154dfac3888a36e9d812e0d11e7153a925e0f30c35690cdbc4e4b8520ddb77a",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1288.png": "4f5d17b70cf7d2217f38151eec224025e0fba2a00fe57842a183cd2ec7f09fcd",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1289.png": "f8bbcb29e4e05790c0e4702bd4926492265e767097c62c1261d6bac863fa76c7",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1290.png": "2276b1ed5a9c2289e19e4823b7955fa31f74344a3daa46d5cbcd7c1ef17940d4",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1291.png": "b80ebb36ebafafe570b9f5b1f1dbdc4442e7ca7108f2774b6165dc959ee1ba19",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1292.png": "7590ca5f60f96abbcbef0de282ee5892525e9f14fbc294441736de4054241002",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1293.png": "ba1ce9f5f5071d2622079627ff96971f35b4f6e854af98c673b4fee2d639ee9d",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1294.png": "d30b0d7c69723821a4267852fb709ad8cda7b1b2e30bb599e0d34fe6b3bfb037",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1295.png": "cbee6a6d6a66c2a62b4b9c515dabd814b46ea5863d60d71294a303c2206c5f7a",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1296.png": "f2068f599270d8f383798cddb0ffe2d69d90fd1f700abe1d9735ba14fabbe7c4",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1297.png": "d9c1062f3d4a6e11f5827718e3771fe93d775fad023d37cf54c23309ebac140f",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1298.png": "17f9d6b6f69f5970ff4f68b4721aa02e0351c7699b7117733495c5818e956b06",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1299.png": "a8ae965f8c95e42856800c3b8ebde52cf16cf91d44f95c5a7e41ac343a41ea7f",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1300.png": "b350d1b673d42efc21859c694aee0f3c070c5e582fde752dac85669c61836b1d",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1301.png": "ef81533505ebf7e61b73cd71bee6bcc87ecfb16f509d59fdd3e2ce490376ddea",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1302.png": "ddbe9f9dfb8a5f3490b0308c24c00f686fdadef8f46f9eadce0cbf0767fb3290",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1303.png": "189d26c84b631a45d06c897e12f32d859adca0abf088fa43aca90786af8fe39b",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1304.png": "bdadc26c38e846a769b630ff1bd16c142e05108f55332a6d1b389080b18c8590",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1305.png": "6fe3fd01fa476dbff31c976c589a156fc3e350bc7cf4b9e5c9c79c56421dbc6b",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1306.png": "9b156059d53b459b591843d06ad4e7670bf7775c3f69d1535303ad521cd0d989",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1307.png": "4526ed90bd37990c00633f7537d2299b445eb4b124ad2959318ebbc9b056df1c",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1308.png": "e2b93fa0e96e396bcd72f4607020dee6944c0eec9241c1cc5a766f4eabd9b824",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1309.png": "9e7855c393344133520384b820d8bce62351be295b05aea9ad42dfa66a617da2",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1310.png": "a74d9d9ee1b6598228b0e51db6ffe5a5604cbc6614702e38910936b095360283",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1311.png": "9668ec7e58d5b8c49d8454e76dbc912958b85a8471fa67d503e73d1ddab34868",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1312.png": "28b125f0b2744edeb7ac7a9162143b0baea7186524c5ddfd3e5bd61e28f8009c",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1313.png": "1ec43ed1cf09e53ce98a6f04a3299a8d6304982ccd590723433202e1cb7b86d7",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1314.png": "0bb78cea12f4d350a74ac5aa5f018fb8a82e38f2d0d209094bfce67f63979289",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1315.png": "dc107b5237513c42302bb5fb34aafe3d0bccc45f621fcb3c490e72a4fdc56f7c",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1316.png": "30948eaea06ebfc2a1ccd1df2fc9d25e0edc40990cf3b3e0a81e625a58dbf77b",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1317.png": "55a61e4112c4b8bb97fed8cb142fdac60e9f1c0ca69c7682db15876e84bb5384",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1318.png": "7b5935fc686fb1631199171b6213d95116411fc5439385e040358505443aa389",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1319.png": "4581e131fd6643523f4ded9e839c0f1e9de68d5b557d3ad621ca7d06acc1219a",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1320.png": "ef03bbba1562a0225dddebddce6f4b225efb3948a1e9adf1bb8af7f0ade41c8b",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1321.png": "6143690be686cf957a58b3c0d173d102c7cca19b59ab908ceb5f8943ca00faf3",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1322.png": "b50b6b924f290811d1cbcf1e3f90000f2b3afb5a892f51057b038bfc111bb8a9",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1323.png": "5182c16988132007b78ae37b28a4090a085733aec303e76b7e90618c484af48f",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1324.png": "de36cdb47be966383e8cb0102075064c9fe797b36713ce195c28787a709556be",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1325.png": "e757f62caa44b69c4f3f36a35eae3b543b90d1c61c75dba7c47c507315422d92",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1326.png": "20d3f610ac76e5a6bd3da4167aa27edbd7edc3c9cf3cee6b96406a1df7e512b7",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1327.png": "1615203065fa6f65936d4796d961983f312ca121488c0a3f072c845ecc6240f8",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1328.png": "b13690e30ba9939d477b041037ffadf9829071b1ccf591cc6a27f185ec1a9b16",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1329.png": "6422224a27346802ea94ae1d17d6cfaeeccd94d6e063accf2d3a042772c70832",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1330.png": "a1e406bb426151516268d9990c3b35788726bdc7816b1bd187c0758acb8edffa",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1331.png": "3bd1cd6c3b995ce3634bccb1b64d5aa80a5470b61461f61340f9bde282fbb19c",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1332.png": "4e147346ad6ad8987b8e557ac7ba8248cab8da61fc21530b271bd6aec33bca11",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1333.png": "39e52f178ec1f6bf3a9c1370b82d5136fa5e9809ef05593847a9e2ec0ec5c17c",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1334.png": "fe8dd2ad19f6285e1927bafbb7b334fcdd8078425e71c212766052aa6ecb7a81",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1335.png": "bc13fc430cb6274b481a5eb6850560238a36805eac24c493c3b581b098ab8c48",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1336.png": "b60f03f85d3426530605ecbefe5f3ec76eeff2ff48f1c565e7652b139fe73d2e",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1337.png": "459f2e635c4cffb83e6c1e26e24bb96b4b3c8f001380d76f74bf33e964dffe4e",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1338.png": "8c11696bb41bd84655e454f8fb496a095ba5306956743311821be7e8a2539392",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1339.png": "6d4f551388bdf8bf34a281ed1c7d0f56c122ed9a1d0ce88c3cf5a426a792146f",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1340.png": "eec1060b7da913f8d9ec1160087014263384d27115ca8fcea32c6c116fb53b2d",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1341.png": "a43bc43ea41a6ed959653f60a5c206a7ff0477023bb3ff56cd75e4b719c64ff7",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1342.png": "3ebc296302141bbe7bdef25250a3ea21ab9363e5dba45f78aa5fd36ecae1935a",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1343.png": "fcca1739ebfd9f0251289d30fc70aa43263abe2e0ace1a99eb0e673946ee5875",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1344.png": "3331dce56418f950644462159bf023af2e01cfccfd3c163af85e3df8c0a6a4ba",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1345.png": "8a651e03b04e80a8fbec31c9fa078128d119821e67f131e7f3e854bb1eb2c448",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1346.png": "ad265cc6c010d160c014cd47d784bd845251c937f892eff70ef435a79d9d2c39",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1347.png": "d7c6d389d047db4b644e04c3125b48092e1e6b28538a5e50098f18a5ceb9b2e4",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1348.png": "1e42c4061249eec8c746c1ef7d0b2ce4d9268e56cce6c201f37d85195d8a76ed",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1349.png": "8412cb5fb9bf2dbd7d9a3bec2072af8d93e3c00997d5e8ccfbf9b73c26fe69b4",
+    "sample/output/s11-a2-temporal-context-20261007-001/f1350.png": "ab1522930cc804e1787a173169891cc57b9c8d455579f8035559f17cc4650e30",
+    "sample/output/s11-a2-target-binding-20261007-001/packet.json": "be57465f80235a65edbf16f338e45ecd5590a43238bb718762052a965d0f24c4"
+  },
+  "production_sources": {
+    "src/oil_tracker/bootstrap.py": "a927ca340c6c906098b7d4a82fe9995f5fd6e0b294cd19132043a672d3d83f24",
+    "src/oil_tracker/__init__.py": "b68611ce5bc1601c18598799cfefbc632e74924ee1bb4f315ffbc799d0132830",
+    "src/oil_tracker/cli.py": "10d9e3f7754ff4e19dd11db8001fbde54a5bab4399aa4b5f8eccf073bf10eee9",
+    "src/oil_tracker/__main__.py": "6deec222cff062b35381cd5c9a463b15229d66a902415352ce9ecc2ce867cfc1",
+    "src/oil_tracker/visualization/__init__.py": "63e96083bed6be3dc58be44988fc221421ef4192ac5c3a2a1b1b210299e3d5e2",
+    "src/oil_tracker/visualization/matplotlib_font.py": "d215a30ed3c49a68ccc2661a2d8befde15bb4208dd7321bf18b8c3d0eb68d920",
+    "src/oil_tracker/ui/main_window.py": "5ab51318276e5d3960d455c55934377c0671d33522f3ad98b0520398f69b6ea8",
+    "src/oil_tracker/ui/presentation_labels.py": "c35313fbe8c93599739623dd80a4554b1783efd273dbf81840fa43f2492eb06c",
+    "src/oil_tracker/ui/truth_annotation_window.py": "26a8a7b4e8df6ca544c32872642dd6b10973987e62b8eb3a50c6b4dbc1bfa4ec",
+    "src/oil_tracker/ui/analysis_completion_summary.py": "d7caa92abca6c2a18b41d8b1943b68e11e0eb18fef086ced2f0f44977fd48361",
+    "src/oil_tracker/ui/style.py": "3af33283ce2e8b6ee6a061c94ee19a59b8bd0ab83c082a6da974fc29e6c2c304",
+    "src/oil_tracker/ui/truth_annotation_coordinator.py": "5c4b333b15833a62dbec482d0015aa1d4c5081fd1728ec07d0caa335a0bba6d2",
+    "src/oil_tracker/ui/redetection_comparison_coordinator.py": "431bc4dd2aee20ce939ad2fdb1bc75d402db3d8a0631e298ceab1eac20d1f34d",
+    "src/oil_tracker/ui/result_review_window.py": "bb7cb532211308eebad123a647ef315ea169fe37cd8b6e22e0670fea2377e3ca",
+    "src/oil_tracker/ui/redetection_comparison_window.py": "59776a61e9e91eb1c6c2e4c51db649605223a83c972a16602788f88be406a505",
+    "src/oil_tracker/ui/observation_settings_copy_coordinator.py": "04e0edc4d6c1a1df35cd6c69b8c319a111dbb749c703fe002118963b53d3e171",
+    "src/oil_tracker/ui/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/result_review_coordinator.py": "419919928b16571b0f4268236d7e3ca417a70919910edb1d3478d5a42920d3fe",
+    "src/oil_tracker/ui/result_actions.py": "9207197750a8a606c4a6a48a91dbacc1b340a6a41ccfa7746521a2c83782c3c1",
+    "src/oil_tracker/ui/same_profile_analysis_coordinator.py": "705cea2e24be46165838b53c7e7365e1a14cdfd1159e4bbd5ab3343e04949d80",
+    "src/oil_tracker/ui/undo.py": "7e12aca6754bb8543049e041a9c076c28d3eabc3b005809a27d1318e83e93125",
+    "src/oil_tracker/ui/debug_trace_settings.py": "92e943c5f475f8f5adf382a13e0d0957e6f32109f6678686826921a72192eadb",
+    "src/oil_tracker/ui/readiness.py": "bd320842517dffcf928e009b51036ecb571ebb7e5aa7dfde8971e5893ba24dcf",
+    "src/oil_tracker/ui/profile_lifecycle_coordinator.py": "4e7a1f5c773d630b20d0f928aa537d6f5fd4fb051a7a6f1527bf1255daff7733",
+    "src/oil_tracker/ui/redetection_result_review_window.py": "a868c03b18679ab98baa3fe01297fb27225c4383f537141e6fe6213531113208",
+    "src/oil_tracker/ui/analysis_completion_coordinator.py": "37046a892be12aeba8aec3a9dc51a1783103a07978a1f3b8ea87f5272c281685",
+    "src/oil_tracker/ui/preflight_coordinator.py": "3e29a12d82e4b20cb049e6aacb13e7ebfad23f357dd0d14e26c7462c84493a53",
+    "src/oil_tracker/config/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/config/schemas.py": "06953c09b910c3561554597dec804335edcd83c2f8d0ac1be3b90e605a11fa52",
+    "src/oil_tracker/config/defaults.py": "b3a0ce3f31f2d6dbabe768b692e94dd9af31552f4997731679f854cc3b5ed92e",
+    "src/oil_tracker/resources/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/observation_settings_copy.py": "9316283a4508ea482be787beaa76bc6c4aedd218499419325a6bfabcb0e3ad45",
+    "src/oil_tracker/application/detection_quality.py": "ad4e4f88b6426c6634bf3bb5303bd149428f014095fdbf8a0311222e55dac5e8",
+    "src/oil_tracker/application/preflight.py": "b98fa507fa6eb0c6b163f8dd8ca00d436fd38c79d799f7488d27fda5df666d77",
+    "src/oil_tracker/domain/detection.py": "5fa5f13462ae5a2f11fede751e6c2df10f2d1cde10b156224ecd8595ef999123",
+    "src/oil_tracker/domain/enums.py": "2ba9f4ec3d2feea7a85fea541cc08464a442702c5f54a5b0413b181a1b24962f",
+    "src/oil_tracker/domain/user_truth.py": "dbe963d3737c0444a39b7f8d1b986e37086cbe7b5b906948f2d8d47f3ddfacc7",
+    "src/oil_tracker/domain/results.py": "f84a7b82139f10e71497c995655bf0cb6c414ca3d894ac546b313f38cf8b4289",
+    "src/oil_tracker/domain/retrospective.py": "91878c81391d6a9f04bd65f7c1f962613b012517785c8ed6e81a43b1cd8f395c",
+    "src/oil_tracker/domain/events.py": "8c128d6fdb20dded70901ca6211c64ae09562a9b07b679fbdab422436111b2e3",
+    "src/oil_tracker/domain/judgment.py": "c52622d9f25c5aa64bc2d583e189838d63567c3ce1ad53112d10d4dbcd8f3f01",
+    "src/oil_tracker/domain/redetection.py": "d9b58ba98e7555f0e99d0dd3506faef06d3f0ad348c3cc41468502f88dcaeda7",
+    "src/oil_tracker/domain/session.py": "4914e31a16aaf7810d2724d82736e4a98d739a437da4bbc686e87485b1315b27",
+    "src/oil_tracker/domain/detector_benchmark.py": "e520b82eaa820ec83397fab33cc56e44f48110523a9c77f798451ac73360382d",
+    "src/oil_tracker/domain/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/domain/debug_trace.py": "840cd2a88081127e9fb2d21bb825f52d4256eb27a8213db80082d08c44154d2d",
+    "src/oil_tracker/domain/review.py": "04fffd0797671cdf39736bbcde0272fa0bf1f1678ee25ac60bb78fad0d61de92",
+    "src/oil_tracker/domain/geometry.py": "a146ee41a2dc2fa829ce91b0d42066a1be89d55e621fb878e7c8d258a053d84d",
+    "src/oil_tracker/domain/recipe.py": "c645dabf05b70d06f18c93f7dacec738211c52bc821dc00dffd5769cca7fbd81",
+    "src/oil_tracker/domain/oil_boundary_topology.py": "b7b7b36ea408a7f51240b63805dbcaf5acbea34146d023674a0bf0ebfdaa61f0",
+    "src/oil_tracker/domain/validation.py": "2e3dd9de23241275918adce8c451f19e885e3e5a53593c75366fa4267311bec4",
+    "src/oil_tracker/application/use_cases/save_recipe.py": "4c70116d99013c42fc342b8274aedc408d150f4ab3780155f4869363fee74fb1",
+    "src/oil_tracker/application/use_cases/load_recipe.py": "fe8978d95c1e47ee9a6a16f105471f5fc169d42bc01fd4a12d4f364149e4d644",
+    "src/oil_tracker/application/use_cases/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/use_cases/preview_detection.py": "87c528fa1d2567e42c39d0fa7f6f58fefd5a2d09ec938c5da1d5feef0f60f221",
+    "src/oil_tracker/application/use_cases/preflight_check.py": "257e4a56262786ac3de7d9e23c9dbc837b5297652036484d2256cba50dbe37d5",
+    "src/oil_tracker/application/use_cases/validate_workbench.py": "6d8f61f6d8bcc0b1a06b995e64edc25b92401ebd67c1cacab301bc2b9220a676",
+    "src/oil_tracker/application/use_cases/analyze_video.py": "47fb35c40d7cc81c7b081a7ee7a3d9f256e8145e005741f43142b487e59360c6",
+    "src/oil_tracker/application/ports/regression_dataset_reader.py": "32f1e4a161694d74179fa1b7f604cf04bf1516679decb953c2fcb6cf2f1d30a6",
+    "src/oil_tracker/application/ports/video_reader.py": "3e9167379379e064912df6915e67bd790750c2dd10948b009b358c766341d3f4",
+    "src/oil_tracker/application/ports/recipe_repository.py": "42ecb412577c4e533770ceee5510fbc96cfc6dd3f5e1fe82a07a186db6902aee",
+    "src/oil_tracker/application/ports/benchmark_result_writer.py": "91c077b018bfe3cb7ebd1a66e967cc351826e6e086eb070b1e86266e1c3b2ff9",
+    "src/oil_tracker/application/ports/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/ports/result_store.py": "b3f1209192374712b0bf08e3305d8acfc79e4839cc45de6afc01696ab76fe8d4",
+    "src/oil_tracker/application/ports/review_io.py": "40938084414569290f74f71be392c93d92e7fce018a9102e37eaef842b35c9eb",
+    "src/oil_tracker/application/ports/progress.py": "b17cf72e759ca02a0f98c5eea1cb516a4906761f563419f24f26d60d3e98a57f",
+    "src/oil_tracker/application/ports/phase_detector.py": "1707b82aa7e2f780e7b44253897ba3f5633ada5913f5d381d77d27607bb4bfe6",
+    "src/oil_tracker/application/ports/debug_trace_sink.py": "311ab910cd1a4344e9f9be6628525961b65f52175786d00feffe1268c7c03a76",
+    "src/oil_tracker/application/services/truth_identity.py": "5835e2ab1ebf490a80d852819ad1d522a8f1451fb0e454cfef6723817e433556",
+    "src/oil_tracker/application/services/detection_processing.py": "9dc74b2ae485a350f6043efc27a21e581f2b00c561df6874644f410b46956e9b",
+    "src/oil_tracker/application/services/judgment_service.py": "de7ed35fa825155ab229e9178b40a8ca18fc7426f5c82f4b1c1c94b50bbb7df8",
+    "src/oil_tracker/application/services/redetection_request.py": "f52e523e9bbf859f0979730fb9d4ff460851a769100f0c748e5e9a1775f0949b",
+    "src/oil_tracker/application/services/redetection_apply.py": "00e2f63835b7b24b39328a48b771eb8192ea0e6b2445535f81ebff486d858f14",
+    "src/oil_tracker/application/services/initial_state_reconstruction.py": "85311654270d8b41c7e8a43e9f40da2dbebefeb8191a5415d7659de9b2fa4168",
+    "src/oil_tracker/application/services/debug_capture_policy.py": "9d62e20b5a9e5c89a9a33d4f1b84df373b955601ad45e6d3d056164d4d45839a",
+    "src/oil_tracker/application/services/detection_run.py": "80dd947bfcb9e3b00c22f5bd277137fb9a4940a7e2589d73b17177d8c153ee56",
+    "src/oil_tracker/application/services/review_query.py": "3a886fce8b534a0096426cdc317ae02694a68805efacaa6fbfc9cd4dd89d6905",
+    "src/oil_tracker/application/services/user_truth.py": "c12a4eb1d901c38883f2ebc9a5c29453b6555ecd30bfe6e9da0c37c0a01f5bfa",
+    "src/oil_tracker/application/services/redetection_comparison.py": "dc1ae775ab30b6512859ac455a839c00f1fa1be3a060d5c59e4991804f74958b",
+    "src/oil_tracker/application/services/detector_settings.py": "ca7bdcc572bf3ac1648aabd7300cb486387d4849f1a0dc2a9e5851eb36c8fd74",
+    "src/oil_tracker/application/services/review_graph.py": "5a4e19a92bfd943f9ff1735fef5d743f47343c7ef41a198d86e47e0fae1d210b",
+    "src/oil_tracker/application/services/report_presentation.py": "ee4c6fc68ebd33651394c3ef8267f3906542eb47cb2308b3c779645353116f36",
+    "src/oil_tracker/application/services/recipe_validation_service.py": "ee624d60c767ac981742151caa139d1352a724ec1a37487f9a1d5e223b42802d",
+    "src/oil_tracker/application/services/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/application/services/initial_state_confirmation.py": "988cd04e20af6b16be57f2c5f5355d5e69bcc2ebca688c9b808e3089fdf18f71",
+    "src/oil_tracker/application/services/redetection_service.py": "302ab4a38b3a558b66043021e6b9c0f9c2269e3091c03682cee7c5ef6dec3880",
+    "src/oil_tracker/application/services/event_detection_service.py": "29c4d9bffc0a7ed03b318c51393b6ab12a55daaf108c30fa9add4cbf5ebfb439",
+    "src/oil_tracker/application/services/analysis_outcome.py": "256aea5435e5a83c8f07ad1ae84db7de7ceb660f0f584f55be010092dd4ec77d",
+    "src/oil_tracker/application/services/graph_series.py": "298637bb466882c849b4e49e2871cd79e633202e8bb406af4b7570657340b8e9",
+    "src/oil_tracker/application/services/event_presentation.py": "5877609d112f55266599554e29f0b9c75aaca2bd0fc1cd89991de744b55252f9",
+    "src/oil_tracker/application/services/analysis_pipeline.py": "e1e3631be2ec562fa05ac69d9ff1dbd684bcd7d9f655987491df99e2444e921c",
+    "src/oil_tracker/application/services/detector_benchmark_service.py": "9c896132cd42aec516b268e25f407930c1957d64a61db985c25067cacdc4c36d",
+    "src/oil_tracker/application/services/graph_axis.py": "a7faa25b2f7f8faf8ecb604bb903c25fa504a45f87580cdb3e23f6c85072f3cc",
+    "src/oil_tracker/adapters/reporting/html_reporter.py": "67859b134b52706ae3d3b4d4cd09636a2454fcee0efe203b906d3fcde67fc7dc",
+    "src/oil_tracker/adapters/reporting/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/reporting/csv_exporter.py": "a0a0b0f79729945e6e5f90374dc01555b4cfabdf3a994f7a437f56669ad9d7d7",
+    "src/oil_tracker/adapters/reporting/graph_renderer.py": "78e16d2507452691c5eb48b041afa32ebc8f504ec7f4553cad0503baf9146adc",
+    "src/oil_tracker/adapters/vision/fill_state_classifier.py": "fe6aff8964e660ed91141c4a1f0ab4f9b83b9da7bc7cd102134535f78eaf1a4c",
+    "src/oil_tracker/adapters/vision/oil_observation_resolver.py": "21efc55c87faef192ff9e3a7c033b7f9c18c196b9426fd0a61403ac85598d45a",
+    "src/oil_tracker/adapters/vision/observation_sequence_resolver.py": "6221224771d72f3ee670ee6e5ba93e05460e9bbd16471222d6c5feabe56d278a",
+    "src/oil_tracker/adapters/vision/source_video_resolver.py": "edc1bc089d9eb512d2fff57be84b4cf52a271435ba37f5a31bd18869c0fe68c2",
+    "src/oil_tracker/adapters/vision/artifact_calibration.py": "6f0bf8b47fc0368b152f3fb227e99f623cc2772604a56ccbf23b2f93bbddfc8a",
+    "src/oil_tracker/adapters/vision/oil_shadow_temporal.py": "9ada30051d2270938005c4638c0aa5a4d3aa2c59603c3e959488d9449a8f0078",
+    "src/oil_tracker/adapters/vision/review_overlay_renderer.py": "966c77a9177b913dd2ab6098b9a93366d467aed228c6f131f0c2f96aceaf8a4d",
+    "src/oil_tracker/adapters/vision/oil_interface_tracklets.py": "62a5d8fb6ff888b5cbf1de11eb167697c863fd30ec7715b9da9b0061ab0f428c",
+    "src/oil_tracker/adapters/vision/oil_sequence_types.py": "56ef0536957888b3b42dbe7eadf87ff0e367df11f0fd6173a5c08c29a8e3b2f0",
+    "src/oil_tracker/adapters/vision/debug_renderer.py": "e5ca9442d86d210f7adb6e1714f336781570d318b301381e048a0aff73e4eba0",
+    "src/oil_tracker/adapters/vision/oil_pipeline_validation.py": "5f1bc660fc72f1aee0cc62c2454d221b6683d4f40a83af24e7e545a66bdd8557",
+    "src/oil_tracker/adapters/vision/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/vision/geometry_masks.py": "8c9bbbed8e3a9c3abb5f1c97832fc1ab8d34d5cc4b7b07f706626d4653244820",
+    "src/oil_tracker/adapters/vision/oil_interface_diagnostics.py": "c49abb50e21bf19b90d8fe4d5159e1d19c2c24468bfb57cd61634e166a043fad",
+    "src/oil_tracker/adapters/vision/foam_material_identity.py": "e65fd5f574e1910b86815e663ac59f1edaad7c706d17fd3073fb24e6475570d9",
+    "src/oil_tracker/adapters/vision/foam_episode_resolver.py": "d1e4ee1da0c9801c08a317e4f4255a0f37b8f53b50c45cf537da79f41c5faefb",
+    "src/oil_tracker/adapters/vision/opencv_video_reader.py": "b4d3304d37890570b57101418e69546133b9a8317ce18766d52b7ab221b34686",
+    "src/oil_tracker/adapters/vision/oil_candidate_evidence.py": "4c7253d5e11e781c696e2090fcdec9ff93aee5acecbb3989fc8f7b2038eaa51b",
+    "src/oil_tracker/adapters/vision/oil_shadow_types.py": "f79de7ecdf5ea36f01f05194e6cb0f2829079a77ba44def48631921d2848568c",
+    "src/oil_tracker/adapters/vision/oil_material_path.py": "3612e1fc4d01c85b4537dd2b0862a9827e544aeae611011bd705077e00e7c088",
+    "src/oil_tracker/adapters/vision/oil_phase_identity.py": "75d6b8d6830acbe988eb569cc59656bfcffe19119a163bfac179c73d6f9561a5",
+    "src/oil_tracker/adapters/vision/foam_front_detector.py": "b1b19e3384925c44344ebaa8010ff75569885448f314f8531fec94294cfde947",
+    "src/oil_tracker/adapters/vision/oil_interface_witness.py": "e8eea2c249ca7b0940c9d5fd006e281c2e9030746436fd8c6343c74103eda042",
+    "src/oil_tracker/adapters/vision/foam_temporal_gate.py": "f251a930c069fd816b89f70ac49d776bd7445a19e4b3e7d8e0965a5a96948d22",
+    "src/oil_tracker/adapters/vision/oil_shadow_pipeline.py": "0eade9f714044cc7b9f54f71ee5351c714ad38a533edd8cfa02a9daa846826b5",
+    "src/oil_tracker/adapters/vision/phase_frame_detection.py": "40aaa56aa5f20b5b1fc23d7e6f98e50ef22850ac6573870a26dfeafe3899f3f0",
+    "src/oil_tracker/adapters/vision/oil_hypothesis_projection.py": "bc24baebf7c57969d3671f7ae97eaabff8a8e00b7a2f48d53181fb6c2ab1bd1e",
+    "src/oil_tracker/adapters/vision/review_debug_overlay_renderer.py": "f6bbc99132cf8d98c56f33d6b3543683852b5804e8fb17d767834d46803ae913",
+    "src/oil_tracker/adapters/vision/preprocessing.py": "55e33486cf34e709ccaf1930720f41978f74c3448baa69eceac8bb570233236e",
+    "src/oil_tracker/adapters/vision/opencv_phase_detector.py": "b10e87ac27a7de377d4933502716c1ea38367f9af4b4c07502b5bcb0c9c73c78",
+    "src/oil_tracker/adapters/vision/oil_interface_selector.py": "ffad1560a57c5467b1e5ef287ff92f1e1836d467fbdd421757b155b6eedc3477",
+    "src/oil_tracker/adapters/vision/oil_spatial_fallback.py": "7823b34c1c8cfcfb4bc9d1a506646ef0cb3e887a1f129ee5c36298cc5b2a6b3f",
+    "src/oil_tracker/adapters/vision/temporal_tracker.py": "7fa6b8304b80c257e1d17fc4a5f0e18573bd2c8675480d52b7314f183494171c",
+    "src/oil_tracker/adapters/vision/oil_phase_lifecycle.py": "9b833ee492981fc930a9af305b9e11425c420e27054c74bac603ff6977e87e3f",
+    "src/oil_tracker/adapters/vision/oil_decision_witness.py": "929590eac209d5b34ac97bac0d051e6c982ceaae2c959301064fb584431e7c3c",
+    "src/oil_tracker/adapters/vision/oil_phase_topology.py": "c676461426c003f51df8506837fa59da08a72198a5a22cbad34fc744e483c988",
+    "src/oil_tracker/adapters/vision/oil_supplemental_path.py": "e9c504ba31816435e9bfadf61d99513686b4f8ab71dc57a0a49a16943d6259d3",
+    "src/oil_tracker/adapters/vision/oil_shadow_observations.py": "56dc2fb2e18b2f6bd3fb3e0ff7454a920c14ec1f0046cc189e20b1f23933a0e5",
+    "src/oil_tracker/adapters/vision/artifact_proposal.py": "ba0057c2bf777699c73bb6607d661190ae28cd461a49b6afd84dcdbbda1400a1",
+    "src/oil_tracker/adapters/vision/temporal_raster_evidence.py": "c2d6a4222e06cbffb3c32b8bc6b13f6142d810b9febabfa86afd6542107b9f15",
+    "src/oil_tracker/adapters/vision/row_features.py": "31536ade50d4cb151a7f756981da229d0655812a8a7d8c95582724613d771b1b",
+    "src/oil_tracker/adapters/vision/oil_pipeline_diagnostics.py": "de4958700f84ffc3dd5fd0c2470ea225542f1ee54478467ecf863b47d03e7dfb",
+    "src/oil_tracker/adapters/vision/oil_candidate_authority.py": "588274ee686220a611c27e41c7bbeec5f2b7841799b2617e602fc15b92a121ac",
+    "src/oil_tracker/adapters/vision/phase_candidate_assembler.py": "dc8d2b7b45c3d0d4a6264ab2c3a4bdc2eb263afd13ac2cbc6fecc8427ad1a8f1",
+    "src/oil_tracker/adapters/storage/regression_fixture_exporter.py": "bf55b130ccdbcc9bb99b49d687b1440f48d3f70d0afbe444c46687b15dd760a4",
+    "src/oil_tracker/adapters/storage/json_truth_repository.py": "16846e76fd41637d34ebe93a462049e952d082d5ddee6b6c938ce4d08c571f2d",
+    "src/oil_tracker/adapters/storage/debug_trace_repository.py": "fb0e380e050458f90860e6765f984fa3b12507c3a72a7d2881c05098cb5a0134",
+    "src/oil_tracker/adapters/storage/regression_dataset_reader.py": "7abf2935c95c86ca7cb742a99a11769a8f627c1223a7155ada4db74fc19a709c",
+    "src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py": "62fd82a030af9492f07935299a4ac003992e9cd5cffdc82335b88c5b318a0d33",
+    "src/oil_tracker/adapters/storage/output_bundle_store.py": "b88180080d0b17a01afa41dd096051515ecef32e1d6fd94b7dfa6ee9ae3a9d6f",
+    "src/oil_tracker/adapters/storage/benchmark_result_writer.py": "04990b0fe5f5081bb7d4c12a0587e60e962489d7da75a37414193f5f2daaa0eb",
+    "src/oil_tracker/adapters/storage/debug_case_exporter.py": "3e69e81d25b428a3619afe34fe403184f35bd14d62258d050d2d2f08a73dc9e6",
+    "src/oil_tracker/adapters/storage/recent_result_history.py": "eab60b6b67c3655b88ebf23abd8a84b515700f2925e38019b398653f0de92fe7",
+    "src/oil_tracker/adapters/storage/image_capture_store.py": "3bb99cd7d7ceed9b01074a43ef5e89cda52f4e498809f268c62917b30d8dfad1",
+    "src/oil_tracker/adapters/storage/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/storage/review_mp4_exporter.py": "599d339844f726e8f79b38190357487169b1994616e0922c4fe8d286e788ed8b",
+    "src/oil_tracker/adapters/storage/result_bundle_reader.py": "2d2a8e4f254b96ead60ed6535ae35617776063a0a7aaedbf384a8a676242e882",
+    "src/oil_tracker/adapters/storage/review_png_exporter.py": "2dcfd0acf1dfcd7d9314920e79853beec95bc85a1f0f38ed4841374a7112a878",
+    "src/oil_tracker/adapters/storage/bundle_asset_resolver.py": "83a92189f9715bbf58196584a19558dec3b854e127c291e762266c2fb02f0e36",
+    "src/oil_tracker/adapters/storage/redetection_workspace.py": "085e25e1d49cd3beb1af02935be60d4b6395e9d1d0ff2f7873bc8dd4938e921f",
+    "src/oil_tracker/adapters/storage/recent_profile_history.py": "10d96021f2b49d6e66e6a4e57caf1cb059d6350e6576ebfba3a17cb403d6c244",
+    "src/oil_tracker/adapters/storage/json_recipe_repository.py": "241694afbbe6d8f26b6234f1e3ec6de3c3deb2c77f0ab2e574a399cacb1f5ddb",
+    "src/oil_tracker/adapters/system/app_paths.py": "510f608932538e0a488faf0dd295e5fa89b092085db924da9e8ef0076b273bf2",
+    "src/oil_tracker/adapters/system/logging_config.py": "299c2fff523e02fdc44b493a80b522fa40a66d07eb9fb6001caa2f5be93981f1",
+    "src/oil_tracker/adapters/system/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/adapters/presentation/__init__.py": "1dda7e7a20d0730a8ceb7445639154087c1267942bc2db244373ba5a6792fc88",
+    "src/oil_tracker/adapters/presentation/qt_frame_image_converter.py": "25392dd50933fa1342b65e2660dca555ce3de88d9bf554333a6320c02c9468fe",
+    "src/oil_tracker/adapters/presentation/qt_debug_artifact_presenter.py": "88e4e8c8b7b300beaadaa1318429ff12f89d94c64873cdcd25888354a47dfd73",
+    "src/oil_tracker/adapters/presentation/review_frame_presenter.py": "7e5ca4017661a54a6e5126e574de8e457843a3378cfc47f6549063c840d68ec6",
+    "src/oil_tracker/adapters/reporting/templates/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/resources/styles/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/resources/icons/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/wizard/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/wizard/new_recipe_wizard.py": "c64f12901403f373d3ee4f695e7772026d7631536750e94441cb40b4c6de19fe",
+    "src/oil_tracker/ui/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/controllers/preflight_controller.py": "6a7470958710a83dc4d4cebd0f775b3a5153ecc0b75855b18fa2ebb585a735bf",
+    "src/oil_tracker/ui/controllers/truth_export_controller.py": "9081b240d08afab64d9c21700d6d6629572fcc04e7b8689a8616ccbcfbd6394c",
+    "src/oil_tracker/ui/controllers/workbench_controller.py": "4c7992339c2b500cf0cd3de7808098a8982f04b751df414222f431ade691d8d7",
+    "src/oil_tracker/ui/controllers/review_mp4_export_controller.py": "e50769edecf6585f6368e40c35978fbe61541490a846214cfb7055a495178fca",
+    "src/oil_tracker/ui/controllers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/controllers/preview_controller.py": "d18993e7552112fbe633fffb1248e548c25b782ddd6e81528902d2b5edb5dc4a",
+    "src/oil_tracker/ui/controllers/redetection_controller.py": "ae959abfe3e4225763b5553f4a65e768f557ec02393b114660f63c8a3d3cc428",
+    "src/oil_tracker/ui/controllers/workbench_playback_controller.py": "1d832f7e9a2ea9a7151b8d24252c07a4dc46fe090bbcb9214b68fac2590697a5",
+    "src/oil_tracker/ui/controllers/analysis_controller.py": "a973d09e4b853b9c4199276773cece65abf81934a63757d9af8d0d2b5f62c569",
+    "src/oil_tracker/ui/controllers/result_review_controller.py": "02ccecdd7d0ae1308f120cdc2482ee215088fcc89886291011ad780fd4240c69",
+    "src/oil_tracker/ui/widgets/glass_list_panel.py": "7f7883a0a8e9d11db83b42d9299b6820f59d113c08e510add687bf0560fabc37",
+    "src/oil_tracker/ui/widgets/result_review_navigation.py": "46f374c6db5ce3f57a603c91a4553e2e6cc97ce8bc46ff766b20977d7ab6cca9",
+    "src/oil_tracker/ui/widgets/wheel_safe_controls.py": "bfbdfceb7f7e0a4435af8e835a5cb413bb457d8407a313481bf3d9b12fe6093f",
+    "src/oil_tracker/ui/widgets/analysis_progress_dialog.py": "7cd2c75de4dfcd97f9d9db7d50d517c1e3f8238ebfe588d69bec63069a7cc484",
+    "src/oil_tracker/ui/widgets/video_playback_panel.py": "afbb15d28b3471cad136203913f03f12d97f48e2549725888ef4bd786be1032f",
+    "src/oil_tracker/ui/widgets/transport_bar.py": "c2d57b602dbb387adda0f9227502b99f175308d072aa5c09d4a3418a5b67430a",
+    "src/oil_tracker/ui/widgets/result_review_details.py": "f08368f613e099b08f68db34ebb2f07e5fbe7d4e8848014a0b826e378baed035",
+    "src/oil_tracker/ui/widgets/glass_settings_copy_dialog.py": "08931d8e6336d9c060fcacfc5d31291665989494e64a0ce52215c6f661417bb3",
+    "src/oil_tracker/ui/widgets/glass_settings_panel.py": "a323a375acccc8aab1a76d3c5b12da203bd46f2ea046f1d2f8f23331aa220999",
+    "src/oil_tracker/ui/widgets/roi_editor_dialog.py": "ddd0aea3d969a922d137dc55a886d2290bbc976982e5caa041f53a2e9c241ac0",
+    "src/oil_tracker/ui/widgets/result_debug_panel.py": "886892860099ac73945d5f8c1faec3c74268288251023ed8618ce93746a57a27",
+    "src/oil_tracker/ui/widgets/preflight_window.py": "3d05ac12dfbc19955e815ee5add994dad3fb8ccb03f1242e83c88b5b78999d7e",
+    "src/oil_tracker/ui/widgets/redetection_comparison_graph.py": "7e90945c3a37a9325ad340d654318d963bd4cf2cdd928f27d848458c43303bca",
+    "src/oil_tracker/ui/widgets/preflight_panel.py": "e7b18dc54e9bf6ef517ae700d3f0c74612f6e8f93d01647376605699048bbf14",
+    "src/oil_tracker/ui/widgets/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/oil_tracker/ui/widgets/video_overlay_canvas.py": "68700be85f717b0444766e86785d317448eadf1569848418e2a7b312aa8e3992",
+    "src/oil_tracker/ui/widgets/result_review_canvas.py": "ecb12786d43d476f4ef4e0eb4dace064040e41a3290cedf9fc271154cd681c0c",
+    "src/oil_tracker/ui/widgets/detector_settings_editor.py": "1dc0ebe926e24097558f6da9291f44f1b27ffd8903a408801383bdb04c806cc2",
+    "src/oil_tracker/ui/widgets/workbench_progress.py": "01df69617f66cc132e47fa3c2fa285248b36ac71b9814b79ebfff2ee93f2a495",
+    "src/oil_tracker/ui/widgets/video_preview_widget.py": "9990ceef6ef333df96d45278242d88cafc146e6addc790f96960bbe642792592",
+    "src/oil_tracker/ui/widgets/debug_panel.py": "e2f527063f0059b71718ee251bdc9495cb04eb2a20b283d1cdcd3e5ad287b2ee",
+    "src/oil_tracker/ui/widgets/validation_panel.py": "5a7dab3c22e791811f78de49ab61830fdb25a418dccdda6cfb8d048119bbcb58",
+    "src/oil_tracker/ui/widgets/redetection_debug_comparison.py": "73cd3fef96a9ee4ee9dd4440e69681af6aec26c797fcb20645a1ca7e94078951",
+    "src/oil_tracker/ui/widgets/analysis_complete_dialog.py": "99e95513ef51558e455b15944d4bcce88623a622544efd0e1d04886b466d48a1",
+    "src/oil_tracker/ui/widgets/result_review_graph.py": "864096a00cf52085195c64504da7f3b679ec57364fe2c75e6c206f68272a9ead",
+    "src/oil_tracker/ui/widgets/bottom_action_bar.py": "d07832987ba49be4ed94ec5fabfcd45ba87eeb982495cde4609173045234a12a",
+    "src/oil_tracker/ui/widgets/truth_annotation_canvas.py": "06656d62552ccda184ea3b96971998fa1f8e895495e9d4db5ac7ac4600b9a1d9",
+    "src/oil_tracker/ui/widgets/result_review_view.py": "a7e70710a018512024753ea8e039e0c28ad4d302dca5ffcb559689b69f527148",
+    "src/oil_tracker/ui/widgets/detection_summary_card.py": "8f246e2b66171728c7ea84e2ced6533f85096117b18d43e57135cf0115712614"
+  },
+  "production_unchanged": true,
+  "field_disposition": "FIELD FAIL",
+  "identity_decision": "NOT_EVALUATED",
+  "local_artifact_root": "sample/output/s11-a2-patch-correspondence-20261007-001",
+  "chain_count": 156,
+  "link_count": 6240,
+  "summary": [
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        837
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 9,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        888
+      ],
+      "nonreciprocal_links": 9,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        844
+      ],
+      "nonreciprocal_links": 13,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        835
+      ],
+      "nonreciprocal_links": 3,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        840
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        838
+      ],
+      "nonreciprocal_links": 2,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        888
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        833
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        839
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 866,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 867,
+      "initial_sampling_y": 867,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        867
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 865,
+      "initial_sampling_y": 865,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        865
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 860,
+      "initial_sampling_y": 860,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        860
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 866,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 867,
+      "initial_sampling_y": 867,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        867
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 865,
+      "initial_sampling_y": 865,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        865
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 860,
+      "initial_sampling_y": 860,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        860
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 150,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 866,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 867,
+      "initial_sampling_y": 867,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        867
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 865,
+      "initial_sampling_y": 865,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        865
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 860,
+      "initial_sampling_y": 860,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        860
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 0,
+      "last_frame": 1200,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 866,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 867,
+      "initial_sampling_y": 867,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        867
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 865,
+      "initial_sampling_y": 865,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        865
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 860,
+      "initial_sampling_y": 860,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        860
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 10,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 865.5,
+      "initial_sampling_y": 866,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 10,
+      "last_frame": 1350,
+      "last_y": [
+        866
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        843
+      ],
+      "nonreciprocal_links": 2,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        842
+      ],
+      "nonreciprocal_links": 2,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        844
+      ],
+      "nonreciprocal_links": 4,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        843
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        837
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        838
+      ],
+      "nonreciprocal_links": 9,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        888
+      ],
+      "nonreciprocal_links": 4,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        844
+      ],
+      "nonreciprocal_links": 9,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        835
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        839
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        840
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        839
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        838
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        837
+      ],
+      "nonreciprocal_links": 2,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        888
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        833
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        838
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 60,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 90,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 4,
+      "last_frame": 1200,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 15,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 868.0,
+      "initial_sampling_y": 868,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 6,
+      "last_frame": 1350,
+      "last_y": [
+        868
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 75,
+      "last_frame": 1200,
+      "last_y": [
+        837
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 75,
+      "last_frame": 1200,
+      "last_y": [
+        843
+      ],
+      "nonreciprocal_links": 3,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 75,
+      "last_frame": 1200,
+      "last_y": [
+        885
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 75,
+      "last_frame": 1200,
+      "last_y": [
+        844
+      ],
+      "nonreciprocal_links": 8,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 75,
+      "last_frame": 1200,
+      "last_y": [
+        840
+      ],
+      "nonreciprocal_links": 2,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 75,
+      "last_frame": 1350,
+      "last_y": [
+        834
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 75,
+      "last_frame": 1350,
+      "last_y": [
+        838
+      ],
+      "nonreciprocal_links": 8,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 75,
+      "last_frame": 1350,
+      "last_y": [
+        834
+      ],
+      "nonreciprocal_links": 7,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 75,
+      "last_frame": 1350,
+      "last_y": [
+        843
+      ],
+      "nonreciprocal_links": 4,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 75,
+      "last_frame": 1350,
+      "last_y": [
+        833
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 5,
+      "last_frame": 1200,
+      "last_y": [
+        835
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 5,
+      "last_frame": 1200,
+      "last_y": [
+        839
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 5,
+      "last_frame": 1200,
+      "last_y": [
+        838
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 5,
+      "last_frame": 1200,
+      "last_y": [
+        839
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 5,
+      "last_frame": 1200,
+      "last_y": [
+        836
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 5,
+      "last_frame": 1350,
+      "last_y": [
+        835
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 5,
+      "last_frame": 1350,
+      "last_y": [
+        835
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 5,
+      "last_frame": 1350,
+      "last_y": [
+        885
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 5,
+      "last_frame": 1350,
+      "last_y": [
+        832
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 5,
+      "last_frame": 1350,
+      "last_y": [
+        835
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        547,
+        566
+      ],
+      "initial_source_y": 842,
+      "initial_sampling_y": 842,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        845
+      ],
+      "nonreciprocal_links": 3,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        547,
+        566
+      ],
+      "initial_source_y": 844.0,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        846
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        845
+      ],
+      "nonreciprocal_links": 7,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        857
+      ],
+      "nonreciprocal_links": 15,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        839
+      ],
+      "nonreciprocal_links": 6,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        848
+      ],
+      "nonreciprocal_links": 3,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        547,
+        566
+      ],
+      "initial_source_y": 842,
+      "initial_sampling_y": 842,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        547,
+        566
+      ],
+      "initial_source_y": 844.0,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        843
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        837
+      ],
+      "nonreciprocal_links": 3,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        837
+      ],
+      "nonreciprocal_links": 2,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        839
+      ],
+      "nonreciprocal_links": 7,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        843
+      ],
+      "nonreciprocal_links": 3,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        547,
+        566
+      ],
+      "initial_source_y": 842,
+      "initial_sampling_y": 842,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        547,
+        566
+      ],
+      "initial_source_y": 844.0,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        844
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        840
+      ],
+      "nonreciprocal_links": 3,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        885
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        843
+      ],
+      "nonreciprocal_links": 2,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        844
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        547,
+        566
+      ],
+      "initial_source_y": 842,
+      "initial_sampling_y": 842,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        840
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        547,
+        566
+      ],
+      "initial_source_y": 844.0,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        843
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 1,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        566,
+        586
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        834
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        586,
+        605
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        835
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 3,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        605,
+        625
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        833
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 9,
+      "review_role_for_evaluation_only": "target",
+      "sector": 4,
+      "geometry_role": "native_path",
+      "source_x_range": [
+        625,
+        644
+      ],
+      "initial_source_y": 844,
+      "initial_sampling_y": 844,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        841
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        820
+      ],
+      "nonreciprocal_links": 4,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        820
+      ],
+      "nonreciprocal_links": 2,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        819
+      ],
+      "nonreciprocal_links": 4,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "links": 120,
+      "last_frame": 1200,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        821
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        891
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "links": 30,
+      "last_frame": 1350,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 2,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        877
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        831
+      ],
+      "nonreciprocal_links": 1,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": -1,
+      "links": 8,
+      "last_frame": 1200,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 0,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        543,
+        563
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 1,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        563,
+        584
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        821
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 4,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        626,
+        647
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 15,
+      "direction": 1,
+      "links": 2,
+      "last_frame": 1350,
+      "last_y": [
+        822
+      ],
+      "nonreciprocal_links": 0,
+      "ties_or_missing": 0
+    }
+  ],
+  "artifacts": {
+    "matches.json": "2a6ca3008aeb80a1d387115edf52c8f2c60e1189d1d87a3c18359c55b1cd8c62",
+    "run.py": "b4db9aea90ee11d73af27f0ac9f3cd2881bb4219a23663bfed074625229ffe09"
+  },
+  "aggregate_correspondence": [
+    {
+      "stride": 1,
+      "anchor_role": "target",
+      "links": 3150,
+      "reciprocal": 2999,
+      "nonreciprocal": 151,
+      "ambiguous_or_missing": 0
+    },
+    {
+      "stride": 1,
+      "anchor_role": "wrong_target",
+      "links": 2700,
+      "reciprocal": 2688,
+      "nonreciprocal": 12,
+      "ambiguous_or_missing": 0
+    },
+    {
+      "stride": 15,
+      "anchor_role": "target",
+      "links": 210,
+      "reciprocal": 183,
+      "nonreciprocal": 27,
+      "ambiguous_or_missing": 0
+    },
+    {
+      "stride": 15,
+      "anchor_role": "wrong_target",
+      "links": 180,
+      "reciprocal": 176,
+      "nonreciprocal": 4,
+      "ambiguous_or_missing": 0
+    }
+  ],
+  "interpretation": "Anchor role labels describe only starting candidates, not matched rows. Reciprocal appearance matches do not establish physical identity or independent samples. Native cadence intermediate agreement awaits human review.",
+  "tests": {
+    "passed": 26,
+    "files": [
+      "tests/unit/test_s11_ordered_patch_correspondence.py",
+      "tests/unit/test_s11_boundary_temporal_probe.py"
+    ],
+    "scope": "synthetic correspondence and unchanged registered residual contract; no production detector change"
+  },
+  "execution_note": "Initial runner assumed every sector had candidate_center and aborted before results were emitted. Corrected adapter to retain all recorded geometry roles, including native-only deduplicated centers and missing sectors; geometry contract committed before the completed run. No loss/width/cadence tuning.",
+  "review": {
+    "source_matches_sha256": "2a6ca3008aeb80a1d387115edf52c8f2c60e1189d1d87a3c18359c55b1cd8c62",
+    "review_html_sha256": "97e8e7c203c81bc900a4fa57f34afcd3739e9131988aa745e6d7187da3446b66",
+    "builder_sha256": "48dc608b83f205e834253e70562eadab9f55e83ccd4ae793e1bc55d0fb5c89b6",
+    "frames": [
+      1275,
+      1320
+    ],
+    "candidate_anchor": {
+      "frame": 1275,
+      "index": 12,
+      "sector": 2,
+      "source_x_range": [
+        584,
+        605
+      ],
+      "source_y": 835
+    },
+    "scope": "Appearance hypotheses, not detector candidates, scalar observations or truth. Five-sector full results retained separately.",
+    "question": "Does the native-frame orange appearance correspondence follow the actual Oil boundary through 42.5–44s, or drift onto another layer/pattern? Approximate intervals suffice.",
+    "status": "AWAITING_HUMAN_JUDGMENT"
+  },
+  "all_artifacts": {
+    "build_review.py": "48dc608b83f205e834253e70562eadab9f55e83ccd4ae793e1bc55d0fb5c89b6",
+    "matches.json": "2a6ca3008aeb80a1d387115edf52c8f2c60e1189d1d87a3c18359c55b1cd8c62",
+    "receipt.json": "dd8824b15adf049600bc5e62690024203eb287f63a52bc8552be6b5374fd3df8",
+    "review-manifest.json": "8a38a8879298b8d3f84cf506b296796ea53c39a6b0e3822176c4e765bbec1602",
+    "review-preview.png": "031a649e4ee613ea49cbb44d849d4d1cddd5d00196131343534016114c43972c",
+    "review.html": "97e8e7c203c81bc900a4fa57f34afcd3739e9131988aa745e6d7187da3446b66",
+    "run.py": "b4db9aea90ee11d73af27f0ac9f3cd2881bb4219a23663bfed074625229ffe09"
+  },
+  "human_continuity_reply": {
+    "path": "docs/50-diagnostics/s11/2026-10-07-sample4-temporal-context-human-reply.json",
+    "sha256": "f00233e931412f93c502bc61baaaacd34ed887f3066c01c5978425e1f8d89f0b",
+    "verbatim": "연속해서 이어짐. 단, 유면의 오르내림이 급격하게 이뤄짐"
+  }
+}

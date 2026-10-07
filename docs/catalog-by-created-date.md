@@ -400,3 +400,4 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 | 2026-10-07 | [A1 measurement lineage](60-evidence/s11/2026-10-07-a1-measurement-lineage.md) | 세 계측 공백 통합·무손실 검증; 같은 폴더 JSON receipt 및 후보 탈락 경로 |
 | 2026-10-07 | [Pink-observation human reply](50-diagnostics/s11/2026-10-07-sample4-pink-human-reply.json), [A2 control preflight](50-diagnostics/s11/2026-10-07-sample4-a2-control-preflight.json) | 사용자 원문·불확실성 및 열 개 후보의 정확한 결합; 기존 candidate-lineage 문서가 해석 소유 |
 | 2026-10-07 | [A2 target binding](60-evidence/s11/2026-10-07-a2-target-binding.md), [receipt](60-evidence/s11/2026-10-07-a2-target-binding.json), [temporal-context reply](50-diagnostics/s11/2026-10-07-sample4-temporal-context-human-reply.json) | 불확실한 물리 정체성과 명확한 오선택 분리; W3 기준 평가 및 원본 연속 프레임 검토 |
+| 2026-10-07 | [A2 ordered-patch correspondence](60-evidence/s11/2026-10-07-a2-patch-correspondence.md), [receipt](60-evidence/s11/2026-10-07-a2-patch-correspondence.json) | 급격한 유면 변화의 30fps/2fps 대응 비교; 외관 연결과 물리 정체성 구분 |
