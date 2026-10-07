@@ -139,3 +139,27 @@ def test_detail_graph_renders_confirmed_initial_state_hold_without_oil_line(
     GraphRenderer()._render_glass(result, config, tmp_path / "initial-hold.png")
 
     assert "확정 초기 상태 유지 가정 (FULL)" in spans
+
+
+def test_foam_long_timestamp_gap_breaks_in_combined_and_detail(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    calls = []
+    original = Axes.plot
+    def record(self, x, y, *args, **kwargs):
+        if "거품 경계" in (kwargs.get("label") or ""):
+            calls.append((list(x), list(y)))
+        return original(self, x, y, *args, **kwargs)
+    monkeypatch.setattr(Axes, "plot", record)
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = GlassAnalysisResult(config.id, config.name, ResultState.REVIEW_REQUIRED,
+        samples=[_sample(config.id, 0, None, 4), _sample(config.id, 3, None, 5)])
+    renderer = GraphRenderer()
+    renderer._render_glass(glass, config, tmp_path / "foam-detail.png")
+    result = SimpleNamespace(glass_results=[glass], overall_state=ResultState.REVIEW_REQUIRED)
+    renderer._render_combined(result, None, tmp_path / "foam-combined.png")
+    assert len(calls) == 2
+    for times, values in calls:
+        assert times == [0, 3, 3]
+        assert values[0] == 4 and values[-1] == 5
+        assert math.isnan(values[1])
+    assert [s.raw_foam_front_px_from_zero for s in glass.samples] == [4, 5]

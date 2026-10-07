@@ -235,6 +235,7 @@ The durable invariants observable in current code are:
 6. Events/judgment consume observed final samples. Retrospective state interpretation can annotate downstream outcomes but cannot rewrite detector observations.
 7. Debug trace is evidence/provenance only: current records are written during acquisition, then captured records receive a compact final `sequence` snapshot during `annotate_sequence`; this does not alter `AnalysisResult` samples.
 8. Result presentation, CSV and bundle publication serialize or render the final `AnalysisResult`; `OutputBundleStore` writes to a temporary bundle, copies finalized debug staging, validates required files, and commits the bundle. Presentation and export code do not reread candidates.
+9. `RESULT-PRESENTATION` also includes the separate [`SourceContextRenderer`](../../src/oil_tracker/adapters/reporting/source_context_renderer.py) raw-pixel asset. Its bounded time–height RGB median image and decoded-frame manifest are source-context aids, not Oil/Foam measurements, candidate authority or evidence of field acceptance. Source failure is disclosed without inventing pixels/coordinates; cancellation still aborts bundle publication. See the [source-context design](s11-report-source-context-design.md). Both static numerical plots cap direct Foam connections at the same two-second report horizon as Oil, without bridging missing Foam.
 
 ## 7. Protected predecessor boundaries and named unknowns
 

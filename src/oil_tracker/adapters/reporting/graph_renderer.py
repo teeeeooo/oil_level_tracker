@@ -99,8 +99,7 @@ class GraphRenderer:
             )
             if any(value is not None for value in foam):
                 ax.plot(
-                    times,
-                    _gaps(foam),
+                    *_foam_plot_points(times, foam),
                     linestyle="--",
                     marker="o",
                     markersize=3.5,
@@ -165,8 +164,7 @@ class GraphRenderer:
         )
         if any(value is not None for value in foam):
             ax.plot(
-                times,
-                _gaps(foam),
+                *_foam_plot_points(times, foam),
                 linestyle=(0, (5, 3)),
                 marker="o",
                 markersize=4,
@@ -433,6 +431,24 @@ def _glass_config(recipe: InspectionRecipe | None, glass_id: str):
 
 def _value(preferred, fallback):
     return preferred if preferred is not None else fallback
+
+
+def _foam_plot_points(timestamps, values):
+    """Keep stored Foam markers without connecting unsupported time spans."""
+    if len(timestamps) != len(values):
+        raise ValueError("Foam timestamps and values must have the same length.")
+    times, points = [], []
+    previous_time = None
+    for timestamp, value in zip(timestamps, values):
+        finite = value is not None and math.isfinite(float(value))
+        if (finite and previous_time is not None
+                and not 0 < float(timestamp) - previous_time <= REPORT_MAX_CONTEXT_GAP_SEC):
+            times.append(float(timestamp))
+            points.append(math.nan)
+        times.append(float(timestamp))
+        points.append(float(value) if finite else math.nan)
+        previous_time = float(timestamp) if finite else None
+    return times, points
 
 
 def _gaps(values):

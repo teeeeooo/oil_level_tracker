@@ -12,6 +12,7 @@ from uuid import uuid4
 from oil_tracker.adapters.reporting.csv_exporter import CsvExporter
 from oil_tracker.adapters.reporting.graph_renderer import GraphRenderer
 from oil_tracker.adapters.reporting.html_reporter import HtmlReporter
+from oil_tracker.adapters.reporting.source_context_renderer import SourceContextRenderer
 from oil_tracker.adapters.storage.image_capture_store import ImageCaptureStore
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository, atomic_write_text
 from oil_tracker.adapters.storage.jsonl_debug_trace_writer import cleanup_debug_staging
@@ -38,6 +39,7 @@ class OutputBundleStore:
         self.html = HtmlReporter()
         self.recipes = JsonRecipeRepository()
         self.captures = ImageCaptureStore()
+        self.source_context = SourceContextRenderer()
 
     def write_bundle(
         self,
@@ -160,10 +162,21 @@ class OutputBundleStore:
                 progress=lambda completed, total: _emit(
                     progress,
                     AnalysisStage.GRAPHS_AND_REPORT,
-                    0.85 * completed / max(1, total),
+                    0.55 * completed / max(1, total),
                     message="유면 graph를 생성하고 있습니다.",
                     completed=completed,
                     total=total,
+                ),
+            )
+            _check_cancelled(cancellation, AnalysisStage.GRAPHS_AND_REPORT)
+            source_contexts = self.source_context.render(
+                result, recipe, session, temporary / "assets",
+                cancellation=cancellation,
+                progress=lambda completed, total: _emit(
+                    progress, AnalysisStage.GRAPHS_AND_REPORT,
+                    0.55 + 0.35 * completed / max(1, total),
+                    message="원본 영상 맥락 이미지를 생성하고 있습니다.",
+                    completed=completed, total=total,
                 ),
             )
             _check_cancelled(cancellation, AnalysisStage.GRAPHS_AND_REPORT)
@@ -174,6 +187,7 @@ class OutputBundleStore:
                 graph_paths,
                 temporary / "report.html",
                 presentation=report_presentation,
+                source_contexts=source_contexts,
             )
             _emit(
                 progress,

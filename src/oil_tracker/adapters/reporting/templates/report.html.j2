@@ -14,10 +14,10 @@
   <div>
     <div class="eyebrow">Sight-glass observation report</div>
     <h1>유면 관찰 보고서</h1>
-    <p class="hero-copy">이 보고서는 영상에서 관측된 유면 위치를 시간순으로 보여주고, 최고·최저 유면과 거품 관측 시작·중단 등 주요 순간을 원본 장면과 함께 정리합니다. 점선은 직접 위치값이 없는 구간의 앞뒤 관측점을 연결한 것으로, 중간 측정값을 뜻하지 않습니다.</p>
+    <p class="hero-copy">이 보고서는 영상에서 관측된 유면 위치를 시간순으로 보여주고, 최고·최저 유면과 거품 관측 시작·중단 등 주요 순간을 원본 장면과 함께 정리합니다. 유면의 공백 연결 점선은 앞뒤 관측점을 연결한 표시이며 중간 측정값이 아닙니다. 거품 점선은 거품 계열을 구분하는 선 모양입니다. 검출점·극값·설정 기준 판정은 검출 정확성을 보증하지 않습니다.</p>
   </div>
   <div class="summary-grid">
-    <div class="metric"><div class="metric-label">전체 판정</div><div class="metric-value state {{ result.overall_state.value }}">{{ presentation.overall_state_label }}</div></div>
+    <div class="metric"><div class="metric-label">설정 기준 판정</div><div class="metric-value state {{ result.overall_state.value }}">{{ presentation.overall_state_label }}</div></div>
     <div class="metric"><div class="metric-label">시험 영상</div><div class="metric-value">{{ video_name }}</div></div>
     <div class="metric"><div class="metric-label">분석 프로필</div><div class="metric-value">{{ recipe.name }}</div></div>
     <div class="metric"><div class="metric-label">분석 구간</div><div class="metric-value">{{ '%.1f'|format(session.analysis_start_sec) }}–{{ '%.1f'|format(session.effective_end_sec() or 0) }}초</div></div>
@@ -42,6 +42,18 @@
   <img class="graph" src="{{ graph_paths[glass.glass_id] }}" alt="{{ glass.glass_name }} 유면 관찰 그래프">
   <div class="graph-note"><span class="key">직접 관측 구간</span><span class="key bridge">관측 공백 연결</span><span class="key foam">거품 경계</span></div>
   <p class="observation-note">{{ report_glass.observation_note }}</p>
+
+  {% set source_context = source_contexts.get(glass.glass_id) %}
+  {% if source_context %}
+  <h3>수치 그래프와 대조할 원본 영상 맥락</h3>
+  {% if source_context.image_path %}
+  <img class="graph" src="{{ source_context.image_path }}" alt="{{ glass.glass_name }} 원본 영상 시간-높이 색상 요약">
+  <p class="observation-note">가로는 시간, 세로는 영상 속 높이입니다. 각 열은 해당 시점의 원본 영상에서 타원 중앙 40% 폭의 행별 색상 중앙값을 표시합니다. 높이는 최대 240칸, 시간은 최대 360열로 압축하며 시간 보간은 하지 않습니다. 반사·구조물·영상에 삽입된 선도 남아 있고, 곡면·국소 거품은 압축 과정에서 약해질 수 있습니다. 이 영상 요약은 유면이나 거품의 위치 측정·분류 결과가 아닙니다. 수치 선의 변화가 영상 변화와 맞는지 대조하고, 판별이 어려우면 원본 장면을 확인하세요.</p>
+  {% else %}
+  <p class="observation-note">원본 영상 맥락 이미지를 생성하지 못했습니다. 수치 그래프만으로 관측 공백 동안의 움직임을 확정하지 마세요.</p>
+  {% endif %}
+  <p class="muted">원본 열 {{ source_context.available_count }}/{{ source_context.column_count }}개 사용 가능{% if source_context.spacing_sec is not none %} · 열 간격 약 {{ "%.2f"|format(source_context.spacing_sec) }}초{% endif %} · 실패한 열은 빈칸으로 유지 · 분석 빈도 {{ session.sampling_fps }}회/초 이하의 별도 시점 표본 · <a href="{{ source_context.metadata_path }}">실제 프레임·시각 및 압축 범위</a></p>
+  {% endif %}
 
   <h3>영상에서 확인할 주요 순간</h3>
   {% if report_glass.landmarks %}

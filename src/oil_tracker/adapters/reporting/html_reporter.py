@@ -32,6 +32,7 @@ class HtmlReporter:
         output_path: Path,
         *,
         presentation: ReportPresentation | None = None,
+        source_contexts: dict[str, dict] | None = None,
     ) -> None:
         template = self.environment.get_template("report.html.j2")
         presentation = presentation or build_report_presentation(result, recipe)
@@ -40,6 +41,7 @@ class HtmlReporter:
             recipe=recipe,
             session=session,
             graph_paths=graph_paths,
+            source_contexts=source_contexts or {},
             presentation=presentation,
             glass_configs={glass.id: glass for glass in recipe.glasses},
             format_landmark_level=format_landmark_level,
