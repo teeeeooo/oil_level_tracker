@@ -125,7 +125,7 @@ def test_duplicate_candidate_identity_is_by_index_and_rejects_wrong_binding():
 def test_saved_real_pair_preserves_distinct_proposal_measurement_and_scalar_coordinates():
     from pathlib import Path
     from oil_tracker.adapters.vision.oil_shadow_types import BoundedYProposal
-    data=json.loads((Path(__file__).parents[1]/'fixtures/s11_measurement_lineage_real_case.json').read_text())
+    data=json.loads((Path(__file__).parents[1]/'fixtures/s11_measurement_lineage_real_case.json').read_text(encoding='utf-8'))
     payload=data['proposal'];payload['member_ids']=tuple(payload['member_ids'])
     proposal=BoundedYProposal(**payload)
     context={k:np.asarray(v,dtype=data['context_dtypes'][k]) for k,v in data['context'].items()}
