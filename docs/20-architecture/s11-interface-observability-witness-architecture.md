@@ -1792,6 +1792,10 @@ Shared/censored patterns or lost positives forbid cue-only promotion; no thresho
 mask, scale or source-family rescue follows. Temporal/optical opposition and
 scalar acceptance remain separate, unmet conditions for any later classifier.
 
+The [ordered-column readout and local shape checkpoint](../60-evidence/s11/2026-10-08-d2-column-clearance.md)
+retain spatial contrast, scale-dependent overlap and the unresolved protrusion.
+No candidate classifier or physical interpretation follows from the ray ordering.
+
 ## History Review
 
 2026-10-08 ordered-column preflight: reviewed the frozen local-arm failure,
