@@ -1747,7 +1747,58 @@ The [completed saved-edge readout](../60-evidence/s11/2026-10-08-d2-saved-edge-c
 rejects this frozen exact-arm representation without promotion. This does not
 reject the human region-level relation or all conditional non-learned mechanisms.
 
+### Ordered-column clearance — fixed v1 preflight
+
+The saved-edge local-arm experiment did not represent the human region-level
+contact. The next bounded question is whether **ordered empty runs** above and
+below the unchanged candidate preserve its relation to the end of upper texture.
+This does not infer a segmented material region or relax the closed T-arm rule.
+Initial assistant image inspection sees different spatial relations at the upper
+targets and lower wrong-target bands; optical subtypes remain unresolved/tentative.
+Prior f1275/f1320 human A/B and target judgments are preserved without extension.
+
+Extend the existing pure saved-edge diagnostic owner
+`tests/diagnostics/s11_contour_contact_probe.py` with
+`saved-canny-ordered-column-clearance-v1`. The material-path terminal feature
+already pools material rows; LBP side histograms and region-fit residuals already
+compare sides. None retains the ordered first visible edge per original column.
+No new production segmentation, candidate generator or physical authority is added.
+
+For each original sector X column, retain all saved Canny pixels in the reference
+band |Y−candidate Y| ≤ b. From just outside each end, scan outward until the first
+edge, invalid mask or crop boundary. An edge hit supplies its original source Y,
+clear-pixel count and exact distance from the unchanged fractional reference.
+A mask/crop stop supplies a censored clear-run lower bound, never a finite edge
+distance. An incomplete/hidden reference band is unavailable. Do not skip masked
+pixels or connect neighbouring columns; no traced contour is asserted.
+
+Reuse effective/nonglare visibility, native geometry where present (no fallback
+for missing native sectors), otherwise center geometry, and b=3/6/9 separately.
+No edge recomputation, gap filling, Y snapping, smoothing or scale selection.
+Bound rasters to 262,144 pixels and b to 1..32. Preserve every column; summaries
+report above/below ordering and median difference only where both edges are found,
+with denominators and a separate subset having an edge in the reference band.
+Neither positive distance difference nor edge presence is an identity decision.
+An optical copy yields the same measurement; a plain true boundary with no other
+visible edges remains censored/unknown, never a physical negative.
+
+Synthetic controls precede real readout. Freeze code/tests and the local preflight
+`sample/output/s11-d2-column-clearance-20261008-001/preflight.json`, SHA-256
+`a619a609f6a11744ed622f4ab556d9c641848a418cdcae1d22bccde0e78125f7`, before numerical measurement.
+Use all 153 A2 candidates; join 7 target/3 wrong-target/143 unreviewed roles only
+after persisting measurements. Primary comparison remains f1320 X[566,625), idx9
+versus idx21. All images are already exposed regression, not blind calibration.
+Shared/censored patterns or lost positives forbid cue-only promotion; no threshold,
+mask, scale or source-family rescue follows. Temporal/optical opposition and
+scalar acceptance remain separate, unmet conditions for any later classifier.
+
 ## History Review
+
+2026-10-08 ordered-column preflight: reviewed the frozen local-arm failure,
+material-path terminal-row aggregation, side-LBP and temporal-region failures,
+and F03/F04/F09/F10. The added observable retains ordered first-edge geometry
+with mask/crop censoring, without treating edge absence as material absence.
+It does not reuse a failed operating point or change production owners.
 
 2026-10-08 saved-edge contact preflight: the user confirms a local contact relation
 and separately hypothesizes glass/low-resolution effects. Reviewed F03/F04/F09/F10,

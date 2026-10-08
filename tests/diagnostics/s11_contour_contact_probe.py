@@ -148,3 +148,84 @@ def query_reference(measurement, availability, *, x_range, source_y, half_width)
             'fully_observed_centers': int(availability[radius][y0:y1, x0:x1].sum()),
             'edge_center_count': len(nodes), 'pattern_counts': counts, 'nodes': nodes,
             'decision': 'NOT_EVALUATED'}
+
+
+CLEARANCE_SPEC = {
+    'id': 'saved-canny-ordered-column-clearance-v1',
+    'edge_owner': 'unchanged captured preprocessing.canny',
+    'reference_band': 'all integer rows within each existing witness band_width_px of original Y',
+    'ray': 'one source column outward from each band end, stopping at first edge, mask or crop',
+    'geometry': 'native_path when present, otherwise recorded candidate_center; no relocation',
+    'censoring': 'mask/crop stop is a lower bound on observed clear pixels, never an edge distance',
+    'aggregation': 'retain every column and scale; no threshold, score or chosen scale',
+    'decision': 'NOT_EVALUATED',
+    'limits': 'Edge-free space is not empty material. Optical copies yield identical geometry. '
+              'No row/column trace proves physical contact, material identity or scalar eligibility.',
+}
+
+
+def measure_edge_clearance(edges, visible, *, x_range, source_y, half_width, origin=(0, 0)):
+    """Read ordered empty runs beside an unchanged reference, with censored ends.
+
+    Unlike a T junction this does not require upper features to attach to the
+    candidate edge. A run stops before hidden pixels and never crosses a gap in
+    visibility. The reference band is recorded, not used to snap the given Y.
+    """
+    if (not isinstance(edges, np.ndarray) or edges.ndim != 2 or edges.dtype != bool
+            or not edges.size or edges.size > MAX_PIXELS):
+        raise ValueError('bounded nonempty boolean edge raster required')
+    if (not isinstance(visible, np.ndarray) or visible.shape != edges.shape
+            or visible.dtype != bool):
+        raise ValueError('same-shape boolean visible raster required')
+    if len(origin) != 2 or any(type(v) is not int for v in origin):
+        raise ValueError('integer source origin required')
+    ox, oy = origin
+    h, w = edges.shape
+    if (len(x_range) != 2 or any(type(x) is not int for x in x_range)
+            or not ox <= x_range[0] < x_range[1] <= ox+w
+            or type(half_width) is not int or not 1 <= half_width <= 32
+            or not isinstance(source_y, (int, float, np.integer, np.floating))
+            or isinstance(source_y, (bool, np.bool_)) or not np.isfinite(source_y)
+            or not oy <= source_y < oy+h):
+        raise ValueError('bounded original reference geometry required')
+    lower = int(np.ceil(source_y-half_width))-oy
+    upper = int(np.floor(source_y+half_width))-oy
+
+    def ray(x, start, step):
+        y, clear = start, 0
+        while 0 <= y < h:
+            if not visible[y, x]:
+                reason = 'masked'
+                break
+            if edges[y, x]:
+                return {'status': 'edge_found', 'stop_source_y': y+oy,
+                        'clear_pixel_count': clear,
+                        'edge_distance_from_reference': abs(y+oy-float(source_y))}
+            clear += 1
+            y += step
+        else:
+            reason = 'outside_crop'
+        return {'status': 'censored', 'reason': reason, 'stop_source_y': y+oy,
+                'clear_pixel_count': clear, 'edge_distance_from_reference': None}
+
+    columns = []
+    for sx in range(*x_range):
+        x = sx-ox
+        row = {'source_x': sx}
+        if lower < 0 or upper >= h or not np.all(visible[lower:upper+1, x]):
+            row.update(status='reference_unavailable',
+                       reason='outside_crop' if lower < 0 or upper >= h else 'masked_band',
+                       band_edge_source_y=None, above=None, below=None,
+                       below_minus_above_edge_distance=None)
+        else:
+            above, below = ray(x, lower-1, -1), ray(x, upper+1, 1)
+            da, db = above['edge_distance_from_reference'], below['edge_distance_from_reference']
+            row.update(status='measured',
+                       band_edge_source_y=(np.flatnonzero(edges[lower:upper+1, x])+lower+oy).tolist(),
+                       above=above, below=below,
+                       below_minus_above_edge_distance=None if da is None or db is None else db-da)
+        columns.append(row)
+    return {'spec_id': CLEARANCE_SPEC['id'], 'origin': list(origin), 'shape': [h, w],
+            'source_x_range': list(x_range), 'reference_source_y': float(source_y),
+            'half_width': half_width, 'reference_band_source_y': [lower+oy, upper+oy],
+            'columns': columns, 'decision': 'NOT_EVALUATED', 'physical_identity': 'UNRESOLVED'}
