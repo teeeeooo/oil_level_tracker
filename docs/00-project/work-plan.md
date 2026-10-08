@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** D1 CLOSED. D2 saved-field query CLOSED on transferred evidence; algorithm unselected. WAITING FOR WINDOWS SUPPORT REVIEW: inspect the existing bound frame on the security PC and return a concise text report. The file-transfer request is withdrawn; no query rerun is needed.
+**Next transition:** D1 and D2 bounded evidence review CLOSED. D2 model entry remains UNMET: no established observable yet separates actual target support from the local competing feature. Algorithm unselected; no further Windows review or user question is pending from this step.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -25,7 +25,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 query returned: 26 candidates, roles 4/3/19. Windows inspects saved support and returns text before mechanism selection; D3 not started | [D2 return](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-saved-field-return--query-closed), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
+| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 bounded query/support review closed; idx13 local-feature reply preserved. Model entry unmet; idx12 counter-control NOT_ESTABLISHED; D3 not started | [D2 support closeout](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-support-review-and-human-reply--bounded-review-closed), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -51,16 +51,14 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    named unknowns. No D1 rerun or additional Windows return is needed.
    Input/tool/output pins remain in the evidence owner; the rest of both
    diagnostic branches stays unadopted.
-2. D2's [saved-field query return](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-saved-field-return--query-closed)
-   closes the existing Accum drain f17383 inventory/provenance lookup: all 26
-   candidates (4 target/3 real internal/19 other). Stop for [Windows-only support review](../40-operations/s11-o2-local-shadow-evaluation.md#d2--windows-only-support-review):
-   inspect the existing JSON, ROI and guides inside the security PC; return only
-   the bounded geometry/observation report as text. Mac image access is not a
-   prerequisite. Any necessary human judgment is made against the actual support
-   displayed on Windows. Candidate target truth does not certify each native segment;
-   idx13's first recorded native Y315 differs from canonical Y291. The missing
-   design condition remains a target/non-target distinction with observable
-   support/opposition, not more labels or target-definition review. No query rerun.
+2. D2's [bounded support review](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-support-review-and-human-reply--bounded-review-closed)
+   is CLOSED after the 26-candidate lookup and Windows human reply. Idx13 native
+   sector 0 (X1218–1303/Y315) follows a local shadow/cavity-like feature in the
+   user's description, distinct from idx10; exact physical subtype remains unknown.
+   Candidate target binding stays fixed. Sectors 1–4 are not certified by their
+   proximity to canonical Y. Idx12 correspondence remains NOT_ESTABLISHED; merely
+   confirming it would not establish a clean target-support discriminator.
+   No repeat query, idx13 question, automatic idx12 display or file export request.
    Preserve existing idx0/idx20 ambiguity, the separate W3 73/passive 75 inventories,
    and all Mac regression controls. Do not select a nearest-Y/score-ranked negative.
 3. D2 must identify a distinct candidate-local observable and a concrete frozen
@@ -68,8 +66,12 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    Separate physical boundary, product role, path support and scalar usability.
    H-ROLE is a proposal name, not an implemented or proven classifier. Keep optical/
    texture opposition and distinguish paired-pulse measurement from boundary support.
-   If the distinguishing evidence is unavailable, name that one missing condition
-   before requesting Windows work or human judgment; do not add an empty classifier.
+   This entry condition remains unmet: an inference-time observation separating
+   actual target-boundary support from the local competing feature, with exact
+   positive/counter-control support. The bounded assessment ends with this named
+   gap; no classifier stub, sector deletion, four-of-five vote or polarity rule
+   follows. A subsequent mechanism proposal must supply that distinction before
+   new Windows work is requested; the current review is not an open-ended data loop.
 4. Before D3, freeze input identities, exposure/partition roles, operating-point
    policy, resource bounds and falsification. Compare wrong-target suppression
    separately from true-target recovery, through W3 and the unchanged report.
@@ -109,6 +111,7 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 | Region/texture hypotheses | A/B interpretation closed; fixed joint region exchange loses all seven targets. Fixed side texture and earlier locality/color/profile/paired-scale models closed without promotion; no threshold continuation | [Region exchange](../60-evidence/s11/2026-10-07-a2-region-exchange.md), [episode evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md), [color disposition](../60-evidence/s11/s11-o2-color-side-local.md#denominator-reconciliation-closed-and-bounded-region-disposition) |
 | Latest delivery experiments | H1/H1b fail terminal/ownership safety; LabPics, cellular and selector trials closed without promotion. Three sample4 targets fail before selector entry; no new Windows first cause is established. Both branches remain unmerged | [Windows-first closeout](https://github.com/teeeeooo/oil_level_tracker/blob/e5d4a0430ea69beab59736396a2817c09b5efd69/docs/60-evidence/s11/2026-10-08-windows-first-detector-closeout.md), [cellular closeout](https://github.com/teeeeooo/oil_level_tracker/blob/e5d4a0430ea69beab59736396a2817c09b5efd69/docs/60-evidence/s11/2026-10-08-cellular-selector-closeout.md) |
 | Windows passive controls | 75-candidate batch retains 13 interface/62 non-interface and target roles 10 target/3 real internal/62 other. Individual/group attribution preserved; binding returned, NOT_EVALUATED. W3's 73-candidate inventory is distinct; no index-only joins | [Passive review and binding](../60-evidence/s11/s11-o2-passive-control-review-001.md) |
+| D2 local support | Idx13 remains target despite sector 0 sampling a user-described shadow/cavity feature. Physical subtype and remaining sector truth are not inferred; idx12 is not an established counter-control. Bounded review closed | [Support reply and design-entry limit](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-support-review-and-human-reply--bounded-review-closed) |
 | Product target | Uppermost actual fluid boundary; optional species classification. Internal real interfaces stay non-target; Foam remains a separate series. No repeated target-definition or material question | [Product contract](../rotary_oil_level_tracker_ssot_spec.md#다층-유체의-추적-대상) |
 | Local source review | Existing corpus/joins reusable as regression. sample2 Foam-gap differs from sample4 Foam–air boundary; base qualitative Oil offset and new Foam observation do not overwrite historical scalar truth | [Local reuse and replies](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md) |
 | Foam geometry | sample4 rim C1 versus Foam-region C2 correspondence known; actual column support differs from bbox relation. Mixed central structures and sample2 reflected features remain unresolved; no blanket veto removal | [Owner audit](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md) |

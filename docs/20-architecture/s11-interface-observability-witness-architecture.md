@@ -1552,6 +1552,7 @@ mechanism after the closed appearance and temporal experiments.
 | Input / existing owner | Preserved role in D2 | What it cannot establish |
 |---|---|---|
 | Windows passive target snapshot: Accum drain f17383, target idx4/13/17/24; internal idx5/10/18; other 19 | First bounded design contrast: uppermost target versus a real lower boundary and existing non-targets in one frame | No scalar/path truth, optical subtype, per-index individual-review claim or matched optical counter-control is inferred |
+| [Reported idx13/native/sector 0 review](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-support-review-and-human-reply--bounded-review-closed): X1218–1303/Y315, user describes local shadow/cavity feature distinct from idx10 | Concrete guard against transferring candidate target status to every native measurement | Physical shadow/cavity subtype remains unresolved; no whole-candidate relabel, automatic truth for sectors 1–4, or certified idx12 counter-control |
 | Same snapshot: Accum post-Foam f16543 (6 target/22 other); BASE FULL f17383 (21 other) | Retained single-boundary and no-visible-target controls; do not repeat their review | The 75 candidates are not independent scenes or untouched holdout |
 | W3 review-003 f16280 idx10/15; review-002 f14386 idx11 | Existing physical-interface/negative rationale and mask-limited structure check | Not an index join to the passive snapshot; physical interface alone is not target/scalar truth |
 | W3 review-002 idx0/20 | Preserve the already recorded human ambiguity separately from formal labels | Do not force opposing truth, or let a new score resolve the human uncertainty |
@@ -1592,8 +1593,9 @@ candidate's canonical Y, and an empty path review leaves local truth unknown.
 Keep native and center support separate; neither substitute the center for a
 deviating segment nor relabel the whole candidate from segment geometry alone.
 
-Inspect the already bound JSON and source ROI **on the Windows security PC**, with
-existing guides as display aids. The [Windows support-review procedure](../40-operations/s11-o2-local-shadow-evaluation.md#d2--windows-only-support-review)
+For private support inspection, use the already bound JSON and source ROI **on
+the Windows security PC**, with existing guides as display aids. The [completed
+Windows support-review procedure](../40-operations/s11-o2-local-shadow-evaluation.md#d2--windows-only-support-review)
 returns bounded observations/geometry as text; private artifacts remain on Windows.
 Mac pixel access is not a design prerequisite. Preserve the same regression case
 without repeating the query or expanding recordings. Attribute visual observations
@@ -1602,6 +1604,33 @@ Local A2 controls remain useful but cannot establish this Windows input connecti
 A later judgment request must show the actual candidate support to the user on
 Windows and state precisely what is undecidable; an unavailable local viewing
 capability must not become a request to export the image.
+
+### Support-review design disposition
+
+The reported idx13 local feature is a counterexample to **candidate-to-support
+truth transfer**, not a demonstrated new identity feature. Keep candidate physical
+identity, product target role, local path association and scalar usability
+independent. A shadow-or-cavity interpretation is not automatically a formal
+`off_interface` judgment: a cavity can itself have a physical boundary. The
+reported target-path concern and unresolved physical subtype must both survive.
+The unchanged target snapshot supplies no new path/scalar truth.
+
+Reuse W1 review/evaluation owners. `review_geometry` / `geometry_key` bind actual
+native/center X/Y; `path_summary` preserves unreviewed points; target projection
+intentionally does not transfer physical path truth. No parallel annotation store
+or empty classifier is justified. Future scoring must not use the human reply to
+mask sector 0, replace it with candidate-center geometry or certify the other four
+sectors. A four-of-five rule, native-to-center displacement cutoff or gradient
+polarity rule is not a new mechanism supported by this observation.
+
+Idx13/native/sector 0 cannot serve as a clean local target-positive merely because
+idx13 is target-bound. Its similar gradient signs to idx12/native/sector 0 do not
+establish a target-versus-artifact discriminator or identical features. Retain
+idx12 as NOT_ESTABLISHED; further display of that pair alone would not settle the
+model-entry condition. The next eligible mechanism must identify an inference-time
+distinction between actual target support and its competing local feature, with
+exactly bound support/opposition controls. The bounded review may close with this
+missing condition; it does not authorize a repeated inventory/review loop.
 
 Before a model freeze, state its distinct observable, formula/model class,
 mask/censoring rules, resource bound, operating-point policy and falsification
@@ -1613,6 +1642,14 @@ optical alternative explains the same input, preserve unresolved; abstaining
 on every true target is not success. D3 and behavioral O3/O4 gates remain intact.
 
 ## History Review
+
+2026-10-08 support-review closeout: the human identifies idx13 sector 0 with a
+local shadow/cavity-like feature distinct from idx10; preserve this qualified
+interpretation and the fixed candidate role. Existing W1/target-projection source
+already separates candidate/path/scalar truth, so no new tool or truth transfer
+is needed (F04/F09). Idx12 remains unestablished; equal gradient signs do not
+justify a polarity or four-of-five mechanism (F10). D2 model entry remains unmet,
+without another automatic Windows request or field/behavior promotion.
 
 2026-10-08 security-PC correction: the user can relay text reports but cannot
 export images or ZIPs. The prior transfer prerequisite is withdrawn. Keep the

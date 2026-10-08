@@ -2,8 +2,8 @@
 
 Starting head: `9d01e23774f46f96222a18d1bab096c6e8b672ff`, clean main.
 Scope: local design/control readiness, a saved-record Windows query and assessment
-of its transferred return. No
-classifier, new prediction, production behavior, image inspection or field run.
+of its returned records and Windows support/human review. No classifier, new
+prediction, production behavior, local private-image inspection or field run.
 The user authorized staged work and commit/push, with a stop when human judgment
 or Windows work is required. [Work Plan](../../00-project/work-plan.md) owns the
 current transition; [D2 architecture](../../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry)
@@ -214,6 +214,115 @@ file-export request. The result can still be unresolved. Mac reviews the text
 evidence and design implications without claiming direct visual verification.
 This is not a promise that viewing one frame will satisfy all D2 controls.
 
+## Windows support review and human reply — bounded review closed
+
+The user returned the completed support review and a subsequent human reply from
+the Windows screen. The D2 JSON and original ROI raw hashes match the values above
+in the report; D2 JSON, original ROI and packet were reported unchanged before and
+after inspection. The five-input preservation field in the saved D2 output also
+remains true; that original query receipt is distinct from the new inspection.
+No query/binding rerun, video decode, detector, label edit, fitting or source edit
+was reported. Images remain on the security PC; Mac received text only.
+
+### Exact reported support
+
+For this same case, source coordinates use crop origin `[1199,56]`. Native and
+candidate-center geometry remain distinct even when their Y values agree.
+
+| Candidate / role | Sector | Source X range | Native Y | Center Y | Native − center |
+|---|---|---|---|---|---|
+| 10 / internal | 0 | 1218–1303 | 302 | 304 | −2 |
+| 10 / internal | 1 | 1303–1388 | 304 | 304 | 0 |
+| 10 / internal | 2 | 1388–1473 | 302 | 304 | −2 |
+| 10 / internal | 3 | 1473–1558 | 304 | 304 | 0 |
+| 10 / internal | 4 | 1558–1643 | 305 | 304 | +1 |
+| 13 / target | 0 | 1218–1303 | 315 | 291 | +24 |
+| 13 / target | 1 | 1303–1388 | 291 | 291 | 0 |
+| 13 / target | 2 | 1388–1473 | 291 | 291 | 0 |
+| 13 / target | 3 | 1473–1558 | 291 | 291 | 0 |
+| 13 / target | 4 | 1558–1643 | 293 | 291 | +2 |
+
+Thus idx13 sector 0 is local X19–104, native Y259 versus center Y235; idx10's
+native point in that sector is local Y246. The reported 315/319 points are below
+both 291 and 304, not between them. No continuous contour is reconstructed from
+these five sector samples.
+
+### Human interpretation and its limits
+
+The Windows agent first used `analyze_image` on original ROI/guide/between-guide.
+Its descriptions such as residue, film or meniscus were machine interpretations,
+not human review. The subsequent user inspection used
+`f17383_idx13_s0_reference.png` with a user-marked red ellipse. The user's reported
+description was: **“약간의 그림자 또는 oil 공동(가운데가 빈 공간)의 경계를 추적하는 것으로 보임.”**
+The reply also distinguishes the feature from idx10's internal interface.
+
+This closes the question about the deviating sample at idx13/native/sector 0:
+the human identifies a separate local shadow-or-cavity feature, not the idx10
+boundary. Preserve the qualified “appears to” and the shadow/cavity alternatives;
+the exact physical cause and whether it is an optical effect or a real cavity
+boundary are not resolved. Do not turn the reply into a definitive non-interface
+or artifact-subtype label. The annotated reference's bytes/hash were not supplied
+or verified on Mac; it is a reported review aid, not a new source-image pin.
+
+The target binding of candidate idx13 remains unchanged. Nor does closeness to
+canonical Y certify its sectors 1–4: those are geometric agreement, without new
+per-sector human truth. No `path_reviews`, artifact tags, scalar truth or stored
+target snapshot were changed by this report. A native support concern cannot
+silently replace canonical Y291 with 315, discard the whole candidate or certify
+the remaining four sectors.
+
+### Proposed counter-control — not established
+
+The reported width-6 near-band values for sector 0 were:
+
+| Candidate / geometry / Y | Gray above → below | Material above → below |
+|---|---|---|
+| 13 / native / 315 | 0.3712 → 0.4124 | 0.0535 → 0.1519 |
+| 12 / native / 319 | 0.3790 → 0.4389 | 0.0982 → 0.1800 |
+| 13 / center / 291 | 0.4433 → 0.3962 | 0.1122 → 0.0572 |
+| 10 / native / 302 | 0.3858 → 0.3675 | 0.0443 → 0.0258 |
+
+Idx12 and idx13 native sector 0 share reported X1218–1303, differ by 4 px in Y
+and have the same gradient signs. This is not equal measurement vectors, physical
+identity, independent evidence or an inference-time discriminator. Idx12 was not
+displayed in the between-guide used for the comparison, so their physical feature
+correspondence remains **NOT_ESTABLISHED**. Its existing candidate-level
+non_interface / other_non_target labels are preserved.
+
+The early proposed pair must not be treated as a clean target-positive versus
+artifact-negative support pair: idx13's sampled native location is exactly the
+location with the newly reported local feature. Its candidate-level target role
+does not certify that sample as a true target positive. Even confirming shared
+features with idx12 would not, by itself, identify an observable that separates
+actual target support from that feature. No additional idx12 display or repeated
+idx13 question is requested as an automatic continuation.
+
+### Local design-entry assessment
+
+The [existing W1 contract](../../30-validation/s11-interface-observability-witness-validation.md#candidate-identity-versus-partial-path-review--implementation-acceptance)
+already separates candidate identity, partial path review and scalar accuracy.
+Source inspection confirms `review_geometry` / `geometry_key` / `path_summary`
+retain exact native/center X/Y and leave unreviewed points unreviewed.
+`s11_target_truth.project` deliberately leaves projected target `path_reviews`
+empty; it must not silently reinterpret a physical-interface note as target-local
+truth. These are existing owners, so no new label store, extractor or classifier
+stub is needed for this return.
+
+The new evidence supplies a **candidate-to-local-support transfer counterexample**
+for the design: target-candidate status cannot validate every native measurement.
+It does not yet supply a new physical discriminator. Reject a fixed +24 px
+outlier cutoff, deletion of sector 0, four-of-five vote, polarity rule or center
+substitution as a proposed repair. None follows from this one exposed scene.
+
+**Disposition:** saved-field lookup, bounded image/support review and the idx13
+human question are CLOSED at their stated scopes. D2 model entry remains unmet.
+The single missing design condition is an inference-time observation that
+distinguishes actual target-boundary support from the local competing feature,
+with support-bound positive/counter-control evidence. The supplied specification
+permits this explicit missing-condition outcome; do not manufacture a model or
+extend the Windows review loop merely to claim a completed algorithm. No new
+Windows task or user question is pending from this review.
+
 D3 remains unstarted. O2, later behavior gates, independent calibration/holdout
 requirements and FIELD FAIL are unchanged.
 
@@ -221,6 +330,6 @@ requirements and FIELD FAIL are unchanged.
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F09`, `S11-F10`.
-- First harmful stage: no new causal claim. D1's recorded exclusions and the Mac A2 authority losses do not identify a new physical discriminator. The Windows query closes record availability; distinguishing support/opposition and unreviewed segment identity remain unresolved.
+- First harmful stage: the reported idx13 native sector samples a human-described local shadow/cavity feature. This is a support-localization concern, not a proven cause of detector failure. The review closes that local question; physical subtype, matched opposition and the inference-time discriminator remain unresolved.
 - Logic-map impact: NONE — existing read-only snapshot/geometry owners are reused; production and diagnostic Python source are unchanged.
 - Failure-registry impact: NONE — closed appearance/temporal hypotheses remain closed and no new detector mechanism or successful repair is asserted.

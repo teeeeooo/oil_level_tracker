@@ -146,7 +146,8 @@ Windows 에이전트는 기존 첫 audit `experiment.json`과 그 하위
 
 실행 반환은 [근거 문서](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-saved-field-return--query-closed)에
 기록되었다. 아래는 재현용 절차이며 현재 재실행 요청이 아니다.
-다음 작업은 [Windows 내부 support 검토](#d2--windows-only-support-review)를 사용한다.
+[Windows 내부 support 검토](#d2--windows-only-support-review)도 반환 완료되었다.
+현재 이 조회나 support 검토를 재실행하라는 요청은 없다.
 
 목적은 이미 역할 binding이 끝난 Accum drain f17383 한 case의 **26개 후보와
 기존 판독 근거·측정 geometry 연결**이다. [D2 설계 진입 계약](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry)과
@@ -253,6 +254,10 @@ if ($LASTEXITCODE -ne 0) { throw "D2 saved-field query failed; preserve files an
 <a id="d2--existing-support-file-transfer"></a>
 
 ## D2 — Windows-only support review
+
+**반환 완료 — bounded review CLOSED.** [사용자 판독과 설계 검토 결과](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-support-review-and-human-reply--bounded-review-closed)를
+기록했다. 아래 프롬프트는 당시 절차 보존용이다. idx13 질문을 다시 묻거나
+idx12 추가 표시로 자동 연장하지 않는다. 다음 전환은 Work Plan이 소유한다.
 
 이전 ZIP/PNG 전달 요청은 철회되었다. 보안 PC의 파일 반출은 요구하지 않는다.
 이미지와 원본 자료는 Windows에 두고, 사용자가 옮겨 적을 수 있는 **결과 텍스트만**
