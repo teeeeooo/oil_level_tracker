@@ -1,0 +1,509 @@
+{
+  "schema": "s11-local-xy-delivery-summary-v1",
+  "date": "2026-10-09",
+  "source_head": "167126e5f095e4011bc8f7dfd51049df87dd84f6",
+  "record_kind": "Derived delivery summary of directly observed remote experiment outputs; not a byte-for-byte copy of the raw evidence packet.",
+  "product_objective": "Report-level comprehension of interface and Foam motion; not 100-percent detector recall.",
+  "remote_evidence_root": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-local-xy-exclusion-20261009-001",
+  "preflight_sha256": "829d65d1e59f1f76494e3e5b452c2a22f0b2da2f4c7e0e2b3cb282510674766c",
+  "primary_runner_sha256": "f0a659773b0ec4390b843bd7c9ddcd4d0553fcfff8ce5daae7b6782a153ed9dd",
+  "sampling_fps": 2,
+  "confirmed_initial_state": "UNKNOWN_REVIEW",
+  "total_replayed_result_rows": 751,
+  "baseline_rows": 299,
+  "comparison_rows": 452,
+  "baseline_runs": [
+    {
+      "sample": "base_sample_1",
+      "rows": 30,
+      "numeric_oil": 28,
+      "numeric_foam": 0,
+      "fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "window_seconds": [
+        0,
+        14.4
+      ],
+      "prior_fingerprint_exact_match": true
+    },
+    {
+      "sample": "sample2",
+      "rows": 5,
+      "numeric_oil": 4,
+      "numeric_foam": 0,
+      "fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "window_seconds": [
+        0,
+        2
+      ],
+      "prior_fingerprint_exact_match": true
+    },
+    {
+      "sample": "sample3",
+      "rows": 151,
+      "numeric_oil": 29,
+      "numeric_foam": 5,
+      "fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "window_seconds": [
+        30.03,
+        105
+      ],
+      "prior_fingerprint_exact_match": true
+    },
+    {
+      "sample": "sample4",
+      "rows": 113,
+      "numeric_oil": 101,
+      "numeric_foam": 26,
+      "fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "window_seconds": [
+        0,
+        56
+      ],
+      "prior_fingerprint_exact_match": true
+    }
+  ],
+  "mask": {
+    "source_xyxy_half_open": [
+      563,
+      816,
+      598,
+      828
+    ],
+    "crop_origin": [
+      543,
+      798
+    ],
+    "crop_size_hw": [
+      104,
+      104
+    ],
+    "nominal_area_pixels": 420,
+    "effective_pixels_removed_at_f1320": 420,
+    "human_reviewed_eligible_reference_edge_pixels": 125,
+    "intent": "sampling withdrawal; the 420-pixel rectangle is not 420 physical artifact labels",
+    "raw_image_zero_filled": false,
+    "whole_x_stripe": false,
+    "whole_candidate_template_rejection": false
+  },
+  "variants": [
+    {
+      "id": "baseline",
+      "sample": "sample4",
+      "rows": 113,
+      "window_seconds": [
+        0,
+        56
+      ],
+      "numeric_oil": 101,
+      "numeric_foam": 26,
+      "public_changed_rows": 0,
+      "oil_coordinate_changed_rows": 0,
+      "current_foam_metrics_equal_rows": 113,
+      "completed_foam_coordinate_and_validity_exact_equal": true,
+      "tracking_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_seconds": 38.0,
+          "completed_raw_oil_source_y": 844
+        },
+        {
+          "frame_index": 1200,
+          "time_seconds": 40.0,
+          "completed_raw_oil_source_y": 865.5
+        },
+        {
+          "frame_index": 1260,
+          "time_seconds": 42.0,
+          "completed_raw_oil_source_y": 868
+        },
+        {
+          "frame_index": 1275,
+          "time_seconds": 42.5,
+          "completed_raw_oil_source_y": 835
+        },
+        {
+          "frame_index": 1320,
+          "time_seconds": 44.0,
+          "completed_raw_oil_source_y": 822
+        },
+        {
+          "frame_index": 1485,
+          "time_seconds": 49.5,
+          "completed_raw_oil_source_y": 836
+        },
+        {
+          "frame_index": 1560,
+          "time_seconds": 52.0,
+          "completed_raw_oil_source_y": 833
+        }
+      ],
+      "longest_non_numeric_oil_run": {
+        "first_sample_seconds": 50,
+        "last_sample_seconds": 51.5,
+        "samples": 4,
+        "endpoint_span_seconds": 1.5,
+        "sample_support_seconds": 2.0
+      }
+    },
+    {
+      "id": "local_xy_rectangle",
+      "sample": "sample4",
+      "rows": 113,
+      "window_seconds": [
+        0,
+        56
+      ],
+      "numeric_oil": 77,
+      "numeric_foam": 6,
+      "public_changed_rows": 48,
+      "oil_coordinate_changed_rows": 36,
+      "current_foam_metrics_equal_rows": 0,
+      "completed_foam_coordinate_and_validity_exact_equal": false,
+      "tracking_fingerprint": "765aa14d300279a74740f5ddfdb43b83abeab016eb4de472016190d72631fb3a",
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_seconds": 38.0,
+          "completed_raw_oil_source_y": 844
+        },
+        {
+          "frame_index": 1200,
+          "time_seconds": 40.0,
+          "completed_raw_oil_source_y": 830
+        },
+        {
+          "frame_index": 1260,
+          "time_seconds": 42.0,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1275,
+          "time_seconds": 42.5,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1320,
+          "time_seconds": 44.0,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1485,
+          "time_seconds": 49.5,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1560,
+          "time_seconds": 52.0,
+          "completed_raw_oil_source_y": null
+        }
+      ],
+      "longest_non_numeric_oil_run": {
+        "first_sample_seconds": 41,
+        "last_sample_seconds": 56,
+        "samples": 31,
+        "endpoint_span_seconds": 15,
+        "sample_support_seconds": 15.5
+      }
+    },
+    {
+      "id": "oil_measurement_only",
+      "sample": "sample4",
+      "rows": 113,
+      "window_seconds": [
+        0,
+        56
+      ],
+      "numeric_oil": 105,
+      "numeric_foam": 26,
+      "public_changed_rows": 31,
+      "oil_coordinate_changed_rows": 26,
+      "current_foam_metrics_equal_rows": 113,
+      "completed_foam_coordinate_and_validity_exact_equal": false,
+      "tracking_fingerprint": "19b03a3012c22399c23f3f12ff20c04a2d1dea3268b6fdc9fff42b61e050ad98",
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_seconds": 38.0,
+          "completed_raw_oil_source_y": 844
+        },
+        {
+          "frame_index": 1200,
+          "time_seconds": 40.0,
+          "completed_raw_oil_source_y": 830
+        },
+        {
+          "frame_index": 1260,
+          "time_seconds": 42.0,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1275,
+          "time_seconds": 42.5,
+          "completed_raw_oil_source_y": 840
+        },
+        {
+          "frame_index": 1320,
+          "time_seconds": 44.0,
+          "completed_raw_oil_source_y": 842
+        },
+        {
+          "frame_index": 1485,
+          "time_seconds": 49.5,
+          "completed_raw_oil_source_y": 835
+        },
+        {
+          "frame_index": 1560,
+          "time_seconds": 52.0,
+          "completed_raw_oil_source_y": 830
+        }
+      ],
+      "longest_non_numeric_oil_run": {
+        "first_sample_seconds": 0,
+        "last_sample_seconds": 1,
+        "samples": 3,
+        "endpoint_span_seconds": 1,
+        "sample_support_seconds": 1.5
+      }
+    },
+    {
+      "id": "oil_measurement_paired_phase",
+      "sample": "sample4",
+      "rows": 113,
+      "window_seconds": [
+        0,
+        56
+      ],
+      "numeric_oil": 79,
+      "numeric_foam": 26,
+      "public_changed_rows": 49,
+      "oil_coordinate_changed_rows": 36,
+      "current_foam_metrics_equal_rows": 113,
+      "completed_foam_coordinate_and_validity_exact_equal": false,
+      "tracking_fingerprint": "1c7dcf43623ace2e9768391ba350e5c2eace0387c76c8936f1d0f514ccf4de0d",
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_seconds": 38.0,
+          "completed_raw_oil_source_y": 844
+        },
+        {
+          "frame_index": 1200,
+          "time_seconds": 40.0,
+          "completed_raw_oil_source_y": 831
+        },
+        {
+          "frame_index": 1260,
+          "time_seconds": 42.0,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1275,
+          "time_seconds": 42.5,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1320,
+          "time_seconds": 44.0,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1485,
+          "time_seconds": 49.5,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1560,
+          "time_seconds": 52.0,
+          "completed_raw_oil_source_y": null
+        }
+      ],
+      "longest_non_numeric_oil_run": {
+        "first_sample_seconds": 41,
+        "last_sample_seconds": 56,
+        "samples": 31,
+        "endpoint_span_seconds": 15,
+        "sample_support_seconds": 15.5
+      }
+    },
+    {
+      "id": "paired_phase_no_exclusion",
+      "sample": "sample4",
+      "rows": 113,
+      "window_seconds": [
+        0,
+        56
+      ],
+      "numeric_oil": 78,
+      "numeric_foam": 26,
+      "public_changed_rows": 50,
+      "oil_coordinate_changed_rows": 35,
+      "current_foam_metrics_equal_rows": 113,
+      "completed_foam_coordinate_and_validity_exact_equal": false,
+      "tracking_fingerprint": "52cc99c11601ecb183522dd0486055b6319ba573dc61c957e556311dfcb55807",
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_seconds": 38.0,
+          "completed_raw_oil_source_y": 844
+        },
+        {
+          "frame_index": 1200,
+          "time_seconds": 40.0,
+          "completed_raw_oil_source_y": 831
+        },
+        {
+          "frame_index": 1260,
+          "time_seconds": 42.0,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1275,
+          "time_seconds": 42.5,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1320,
+          "time_seconds": 44.0,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1485,
+          "time_seconds": 49.5,
+          "completed_raw_oil_source_y": null
+        },
+        {
+          "frame_index": 1560,
+          "time_seconds": 52.0,
+          "completed_raw_oil_source_y": null
+        }
+      ],
+      "longest_non_numeric_oil_run": {
+        "first_sample_seconds": 40.5,
+        "last_sample_seconds": 56,
+        "samples": 32,
+        "endpoint_span_seconds": 15.5,
+        "sample_support_seconds": 16.0
+      }
+    }
+  ],
+  "contract_checks": [
+    {
+      "name": "changes_only_inside_xy",
+      "status": "PASS"
+    },
+    {
+      "name": "all_previously_usable_scope_pixels_excluded",
+      "status": "PASS"
+    },
+    {
+      "name": "same_x_other_y_unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "raw_crop_not_modified",
+      "status": "PASS"
+    },
+    {
+      "name": "no_template_rejection",
+      "status": "PASS"
+    },
+    {
+      "name": "all_masked_native_profile_unavailable",
+      "status": "PASS"
+    },
+    {
+      "name": "unequal_aperture_makes_false_contrast",
+      "status": "PASS"
+    },
+    {
+      "name": "paired_aperture_has_zero_false_contrast",
+      "status": "PASS"
+    },
+    {
+      "name": "paired_aperture_preserves_real_step",
+      "status": "PASS"
+    },
+    {
+      "name": "disjoint_column_support_is_unavailable",
+      "status": "PASS"
+    },
+    {
+      "name": "zero_fill_creates_nonexistent_gradient",
+      "status": "PASS"
+    },
+    {
+      "name": "upstream_dependencies_can_survive_sampling_exclusion",
+      "status": "PASS"
+    }
+  ],
+  "synthetic_measurements": {
+    "false_contrast_from_unbalanced_upper_lower_apertures": -24.0,
+    "paired_aperture_false_contrast": 0.0,
+    "paired_aperture_real_step_contrast": 40.0,
+    "outside_mask_changed_values_after_excluded_only_raw_change": {
+      "gray": 0,
+      "normalized": 0,
+      "blurred": 124,
+      "sobel_y_abs": 184,
+      "canny": 16,
+      "horizontal_mask": 14
+    }
+  },
+  "validation": {
+    "focused_pytest_passed": 72,
+    "focused_pytest_elapsed_seconds": 13.51,
+    "synthetic_and_locality_contract_checks_passed": 12,
+    "source_files_hash_checked_unchanged": 220,
+    "frozen_inputs_hash_checked_unchanged": 16,
+    "git_diff_check": "PASS",
+    "tracked_worktree": "CLEAN",
+    "head_unchanged": true,
+    "governance_command_passed": true,
+    "governance_scope": "No tracked behavior changes; this does not approve an ignored prototype or production promotion."
+  },
+  "interpretation": {
+    "shared_mask": "REJECT_FOR_ADOPTION",
+    "oil_measurement_only": "PREFERRED_NEXT_DEVELOPMENT_SEAM_NOT_ACCEPTED",
+    "global_paired_phase": "REJECT_FOR_ADOPTION",
+    "production_adoption": false,
+    "field_qualification": "NOT_RUN_EXISTING_FIELD_FAIL_UNCHANGED"
+  },
+  "limitations": [
+    "All recordings are exposed regression material, not independent holdouts.",
+    "Changed candidate family/Y/index does not automatically inherit a reviewed physical identity or scalar label.",
+    "Numeric counts include non-null records that may have invalid series flags; they are not valid-coverage or accuracy counts.",
+    "Oil-only aperture experiment touched material_path, raster_material_path and phase_transition_scan measurements, not every Oil evidence owner.",
+    "Upstream CLAHE/convolution/material/motion dependencies were not fully removed by a sampling mask.",
+    "Paired means were global in the phase scanner; their no-mask ablation is necessary for causal interpretation.",
+    "Shared-mask and baseline real HTML/report bundles were generated and their graphs inspected; other variants built report presentation data and separate comparison charts.",
+    "Remote originals, videos, complete traces and HTML assets remain at remote_evidence_root; this delivery is not their backup.",
+    "Windows material was reviewed from existing human-transferred text records; no new Windows execution or private-image inspection occurred.",
+    "Wall-clock timings overlapped with other probes and are not a qualified performance benchmark."
+  ],
+  "next_design": "Opt-in Oil measurement-scoped exclusion with explicit retained-support semantics; exact legacy behavior outside touched measurement footprints; no whole-candidate rejection, shared Foam-mask change, or global paired-average replacement.",
+  "specific_validity_regression": {
+    "variant": "oil_measurement_only",
+    "frame_index": 1200,
+    "time_seconds": 40,
+    "baseline": {
+      "oil_y": 865.5,
+      "foam_y": 840.0,
+      "oil_is_valid": true,
+      "foam_is_valid": true,
+      "relation": "distinct_lower_oil"
+    },
+    "variant_result": {
+      "oil_y": 830.0,
+      "foam_y": 840.0,
+      "oil_is_valid": false,
+      "foam_is_valid": false,
+      "relation": "inverted_topology"
+    },
+    "observed_flags": [
+      "R7_FOAM_OIL_TOPOLOGY_CONFLICT",
+      "R8_FOAM_OIL_TOPOLOGY_CONFLICT"
+    ],
+    "conclusion": "Unchanged raw Foam observations and counts do not establish unchanged final usable Foam output."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "sample": "sample4",
+  "variant": "baseline",
+  "results": 113,
+  "fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+  "numeric_oil": 101,
+  "numeric_foam": 26,
+  "elapsed_sec": 76.35913570798584,
+  "report_bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-local-xy-exclusion-20261009-001/sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409"
+}

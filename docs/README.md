@@ -179,6 +179,15 @@ Existing Witness Architecture/Validation own the adopted contracts; Work Plan
 alone owns the next action. The supplied and native scripts remain source
 material, outside production and test discovery.
 
+The [October 9 Local XY package](70-reference/s11-local-xy-2026-10-09/README.md)
+preserves the supplied specification/summary/handoff/checksums and selected native
+artifacts. Its [intake](60-evidence/s11/2026-10-09-local-xy-spec-intake.md) verifies
+the saved experiments and qualifies the proposed Oil-only measurement scope.
+WP1–WP5 are bounded D2/W4 implementation tasks; current architecture/validation
+own the adopted proposal and Work Plan owns sequencing. The manifest inventories
+all 165 local artifacts and their verified local archive; it is not a claim that
+full traces and HTML assets have been uploaded or backed up off-machine.
+
 ## Supporting collection indexes
 
 - S11 diagnostics — [`50-diagnostics/s11/`](50-diagnostics/s11/)

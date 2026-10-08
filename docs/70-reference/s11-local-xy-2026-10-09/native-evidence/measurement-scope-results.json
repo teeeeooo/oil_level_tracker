@@ -1,0 +1,26 @@
+{
+  "status": "COMPLETE_UNPROMOTED",
+  "preflight_sha256": "e5d195ea3b939a79deae240e31bad0260b93c131ef81d340be8829cdf55f614b",
+  "runs": [
+    {
+      "variant": "oil_measurement_only",
+      "results": 113,
+      "numeric_oil": 105,
+      "numeric_foam": 26,
+      "fingerprint": "19b03a3012c22399c23f3f12ff20c04a2d1dea3268b6fdc9fff42b61e050ad98",
+      "elapsed_sec": 79.72110712499125,
+      "operation_calls": 339
+    },
+    {
+      "variant": "oil_measurement_paired_phase",
+      "results": 113,
+      "numeric_oil": 79,
+      "numeric_foam": 26,
+      "fingerprint": "1c7dcf43623ace2e9768391ba350e5c2eace0387c76c8936f1d0f514ccf4de0d",
+      "elapsed_sec": 86.45153266598936,
+      "operation_calls": 339
+    }
+  ],
+  "source_and_original_inputs_unchanged": true,
+  "field_acceptance": false
+}

@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "name": "changes_only_inside_xy",
+      "status": "PASS"
+    },
+    {
+      "name": "all_previously_usable_scope_pixels_excluded",
+      "status": "PASS"
+    },
+    {
+      "name": "same_x_other_y_unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "raw_crop_not_modified",
+      "status": "PASS"
+    },
+    {
+      "name": "no_template_rejection",
+      "status": "PASS"
+    },
+    {
+      "name": "all_masked_native_profile_unavailable",
+      "status": "PASS"
+    },
+    {
+      "name": "unequal_aperture_makes_false_contrast",
+      "status": "PASS"
+    },
+    {
+      "name": "paired_aperture_has_zero_false_contrast",
+      "status": "PASS"
+    },
+    {
+      "name": "paired_aperture_preserves_real_step",
+      "status": "PASS"
+    },
+    {
+      "name": "disjoint_column_support_is_unavailable",
+      "status": "PASS"
+    },
+    {
+      "name": "zero_fill_creates_nonexistent_gradient",
+      "status": "PASS"
+    },
+    {
+      "name": "upstream_dependencies_can_survive_sampling_exclusion",
+      "status": "PASS"
+    }
+  ],
+  "check_count": 12,
+  "rect_nominal_area": 420,
+  "effective_pixels_removed_at_f1320": 420,
+  "frame_shape": [
+    1234,
+    1080,
+    3
+  ],
+  "crop_origin": [
+    543,
+    798
+  ],
+  "crop_shape": [
+    104,
+    104,
+    3
+  ],
+  "same_x_reusable_at_source_y": 844,
+  "synthetic_false_contrast": -24.0,
+  "synthetic_paired_contrast": 0.0,
+  "synthetic_true_step_contrast": 40.0,
+  "outside_mask_changed_values_when_only_excluded_pixels_change": {
+    "gray": 0,
+    "normalized": 0,
+    "blurred": 124,
+    "sobel_y_abs": 184,
+    "canny": 16,
+    "horizontal_mask": 14
+  },
+  "interpretation": "Existing exclusion is spatial sampling exclusion, not full preprocessing dependency removal. Paired aperture is a numerical guard, not physical identity."
+}

@@ -1,0 +1,680 @@
+{
+  "schema": "s11-local-xy-experiment-summary-v1",
+  "source_head": "167126e5f095e4011bc8f7dfd51049df87dd84f6",
+  "total_replayed_result_rows": 751,
+  "unique_baseline_result_rows": 299,
+  "baseline_replay_matches": [
+    {
+      "sample": "base_sample_1",
+      "rows": 30,
+      "previous_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "current_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "exact_fingerprint_match": true
+    },
+    {
+      "sample": "sample2",
+      "rows": 5,
+      "previous_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "current_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "exact_fingerprint_match": true
+    },
+    {
+      "sample": "sample3",
+      "rows": 151,
+      "previous_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "current_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "exact_fingerprint_match": true
+    },
+    {
+      "sample": "sample4",
+      "rows": 113,
+      "previous_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "current_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "exact_fingerprint_match": true
+    }
+  ],
+  "all_source_files_unchanged": true,
+  "all_frozen_inputs_unchanged": true,
+  "source_file_count": 220,
+  "input_pin_count": 16,
+  "experiments": [
+    {
+      "sample": "sample4",
+      "variant": "baseline",
+      "results": 113,
+      "fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "numeric_oil": 101,
+      "numeric_foam": 26,
+      "elapsed_sec": 76.35913570798584,
+      "report_bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-local-xy-exclusion-20261009-001/sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409",
+      "public_changed_rows": 0,
+      "oil_changed_rows": 0,
+      "foam_completed_exact_equal": true,
+      "current_foam_metrics_equal_rows": 113,
+      "oil_missing_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sample_support_sec": 1.5,
+          "endpoint_span_sec": 1.0
+        },
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 39.5,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 41.5,
+          "last_sample_sec": 41.5,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 43.0,
+          "last_sample_sec": 43.5,
+          "sample_count": 2,
+          "sample_support_sec": 1.0,
+          "endpoint_span_sec": 0.5
+        },
+        {
+          "start_sec": 50.0,
+          "last_sample_sec": 51.5,
+          "sample_count": 4,
+          "sample_support_sec": 2.0,
+          "endpoint_span_sec": 1.5
+        },
+        {
+          "start_sec": 54.0,
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        }
+      ],
+      "foam_numeric_runs": [
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 41.0,
+          "sample_count": 4,
+          "sample_support_sec": 2.0,
+          "endpoint_span_sec": 1.5
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 7,
+          "sample_support_sec": 3.5,
+          "endpoint_span_sec": 3.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 53.0,
+          "sample_count": 15,
+          "sample_support_sec": 7.5,
+          "endpoint_span_sec": 7.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_sec": 38.0,
+          "completed_oil_y": 844.0,
+          "current_oil_y": 844.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1200,
+          "time_sec": 40.0,
+          "completed_oil_y": 865.5,
+          "current_oil_y": 841.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ONSET_INTENT_PREDECESSOR"
+        },
+        {
+          "frame_index": 1260,
+          "time_sec": 42.0,
+          "completed_oil_y": 868.0,
+          "current_oil_y": 839.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ONSET_INTENT_PREDECESSOR"
+        },
+        {
+          "frame_index": 1275,
+          "time_sec": 42.5,
+          "completed_oil_y": 835.0,
+          "current_oil_y": null,
+          "material_phase": "filling",
+          "phase_reason": "FILL_MOTION_OWNER"
+        },
+        {
+          "frame_index": 1320,
+          "time_sec": 44.0,
+          "completed_oil_y": 822.0,
+          "current_oil_y": null,
+          "material_phase": "filling",
+          "phase_reason": "FILL_MOTION_OWNER"
+        },
+        {
+          "frame_index": 1485,
+          "time_sec": 49.5,
+          "completed_oil_y": 836.0,
+          "current_oil_y": null,
+          "material_phase": "filling",
+          "phase_reason": "FILL_MOTION_OWNER"
+        },
+        {
+          "frame_index": 1560,
+          "time_sec": 52.0,
+          "completed_oil_y": 833.0,
+          "current_oil_y": 832.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        }
+      ]
+    },
+    {
+      "sample": "sample4",
+      "variant": "local_xy_rectangle",
+      "results": 113,
+      "fingerprint": "765aa14d300279a74740f5ddfdb43b83abeab016eb4de472016190d72631fb3a",
+      "numeric_oil": 77,
+      "numeric_foam": 6,
+      "elapsed_sec": 76.07494504199713,
+      "report_bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-local-xy-exclusion-20261009-001/sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557",
+      "public_changed_rows": 48,
+      "oil_changed_rows": 36,
+      "foam_completed_exact_equal": false,
+      "current_foam_metrics_equal_rows": 0,
+      "oil_missing_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sample_support_sec": 1.5,
+          "endpoint_span_sec": 1.0
+        },
+        {
+          "start_sec": 9.5,
+          "last_sample_sec": 9.5,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 34.0,
+          "last_sample_sec": 34.0,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 41.0,
+          "last_sample_sec": 56.0,
+          "sample_count": 31,
+          "sample_support_sec": 15.5,
+          "endpoint_span_sec": 15.0
+        }
+      ],
+      "foam_numeric_runs": [
+        {
+          "start_sec": 40.0,
+          "last_sample_sec": 40.5,
+          "sample_count": 2,
+          "sample_support_sec": 1.0,
+          "endpoint_span_sec": 0.5
+        },
+        {
+          "start_sec": 44.0,
+          "last_sample_sec": 44.0,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 45.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 46.5,
+          "last_sample_sec": 46.5,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 47.5,
+          "last_sample_sec": 47.5,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_sec": 38.0,
+          "completed_oil_y": 844.0,
+          "current_oil_y": 844.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1200,
+          "time_sec": 40.0,
+          "completed_oil_y": 830.0,
+          "current_oil_y": 841.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1260,
+          "time_sec": 42.0,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1275,
+          "time_sec": 42.5,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1320,
+          "time_sec": 44.0,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1485,
+          "time_sec": 49.5,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1560,
+          "time_sec": 52.0,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        }
+      ]
+    },
+    {
+      "variant": "oil_measurement_only",
+      "results": 113,
+      "numeric_oil": 105,
+      "numeric_foam": 26,
+      "fingerprint": "19b03a3012c22399c23f3f12ff20c04a2d1dea3268b6fdc9fff42b61e050ad98",
+      "elapsed_sec": 79.72110712499125,
+      "operation_calls": 339,
+      "public_changed_rows": 31,
+      "oil_changed_rows": 26,
+      "foam_completed_exact_equal": false,
+      "current_foam_metrics_equal_rows": 113,
+      "oil_missing_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sample_support_sec": 1.5,
+          "endpoint_span_sec": 1.0
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 42.0,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 47.0,
+          "last_sample_sec": 47.0,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 50.0,
+          "last_sample_sec": 50.0,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 52.5,
+          "last_sample_sec": 52.5,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        },
+        {
+          "start_sec": 54.0,
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sample_support_sec": 0.5,
+          "endpoint_span_sec": 0.0
+        }
+      ],
+      "foam_numeric_runs": [
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 41.0,
+          "sample_count": 4,
+          "sample_support_sec": 2.0,
+          "endpoint_span_sec": 1.5
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 7,
+          "sample_support_sec": 3.5,
+          "endpoint_span_sec": 3.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 53.0,
+          "sample_count": 15,
+          "sample_support_sec": 7.5,
+          "endpoint_span_sec": 7.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_sec": 38.0,
+          "completed_oil_y": 844.0,
+          "current_oil_y": 844.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1200,
+          "time_sec": 40.0,
+          "completed_oil_y": 830.0,
+          "current_oil_y": 841.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1260,
+          "time_sec": 42.0,
+          "completed_oil_y": null,
+          "current_oil_y": 839.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1275,
+          "time_sec": 42.5,
+          "completed_oil_y": 840.0,
+          "current_oil_y": null,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1320,
+          "time_sec": 44.0,
+          "completed_oil_y": 842.0,
+          "current_oil_y": null,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1485,
+          "time_sec": 49.5,
+          "completed_oil_y": 835.0,
+          "current_oil_y": null,
+          "material_phase": "open",
+          "phase_reason": "FILL_EVIDENCE_ACCUMULATING"
+        },
+        {
+          "frame_index": 1560,
+          "time_sec": 52.0,
+          "completed_oil_y": 830.0,
+          "current_oil_y": 832.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        }
+      ]
+    },
+    {
+      "variant": "oil_measurement_paired_phase",
+      "results": 113,
+      "numeric_oil": 79,
+      "numeric_foam": 26,
+      "fingerprint": "1c7dcf43623ace2e9768391ba350e5c2eace0387c76c8936f1d0f514ccf4de0d",
+      "elapsed_sec": 86.45153266598936,
+      "operation_calls": 339,
+      "public_changed_rows": 49,
+      "oil_changed_rows": 36,
+      "foam_completed_exact_equal": false,
+      "current_foam_metrics_equal_rows": 113,
+      "oil_missing_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sample_support_sec": 1.5,
+          "endpoint_span_sec": 1.0
+        },
+        {
+          "start_sec": 41.0,
+          "last_sample_sec": 56.0,
+          "sample_count": 31,
+          "sample_support_sec": 15.5,
+          "endpoint_span_sec": 15.0
+        }
+      ],
+      "foam_numeric_runs": [
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 41.0,
+          "sample_count": 4,
+          "sample_support_sec": 2.0,
+          "endpoint_span_sec": 1.5
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 7,
+          "sample_support_sec": 3.5,
+          "endpoint_span_sec": 3.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 53.0,
+          "sample_count": 15,
+          "sample_support_sec": 7.5,
+          "endpoint_span_sec": 7.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_sec": 38.0,
+          "completed_oil_y": 844.0,
+          "current_oil_y": 844.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1200,
+          "time_sec": 40.0,
+          "completed_oil_y": 831.0,
+          "current_oil_y": 841.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1260,
+          "time_sec": 42.0,
+          "completed_oil_y": null,
+          "current_oil_y": 839.0,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1275,
+          "time_sec": 42.5,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1320,
+          "time_sec": 44.0,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1485,
+          "time_sec": 49.5,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1560,
+          "time_sec": 52.0,
+          "completed_oil_y": null,
+          "current_oil_y": 832.0,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        }
+      ]
+    },
+    {
+      "variant": "paired_phase_no_exclusion",
+      "results": 113,
+      "numeric_oil": 78,
+      "numeric_foam": 26,
+      "fingerprint": "52cc99c11601ecb183522dd0486055b6319ba573dc61c957e556311dfcb55807",
+      "elapsed_sec": 92.1751534169889,
+      "public_changed_rows": 50,
+      "oil_changed_rows": 35,
+      "foam_completed_exact_equal": false,
+      "current_foam_metrics_equal_rows": 113,
+      "oil_missing_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sample_support_sec": 1.5,
+          "endpoint_span_sec": 1.0
+        },
+        {
+          "start_sec": 40.5,
+          "last_sample_sec": 56.0,
+          "sample_count": 32,
+          "sample_support_sec": 16.0,
+          "endpoint_span_sec": 15.5
+        }
+      ],
+      "foam_numeric_runs": [
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 41.0,
+          "sample_count": 4,
+          "sample_support_sec": 2.0,
+          "endpoint_span_sec": 1.5
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 7,
+          "sample_support_sec": 3.5,
+          "endpoint_span_sec": 3.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 53.0,
+          "sample_count": 15,
+          "sample_support_sec": 7.5,
+          "endpoint_span_sec": 7.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "frame_index": 1140,
+          "time_sec": 38.0,
+          "completed_oil_y": 844.0,
+          "current_oil_y": 844.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1200,
+          "time_sec": 40.0,
+          "completed_oil_y": 831.0,
+          "current_oil_y": 841.0,
+          "material_phase": "open",
+          "phase_reason": "FILL_ESTABLISHED_INTERFACE"
+        },
+        {
+          "frame_index": 1260,
+          "time_sec": 42.0,
+          "completed_oil_y": null,
+          "current_oil_y": 839.0,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1275,
+          "time_sec": 42.5,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1320,
+          "time_sec": 44.0,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1485,
+          "time_sec": 49.5,
+          "completed_oil_y": null,
+          "current_oil_y": null,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        },
+        {
+          "frame_index": 1560,
+          "time_sec": 52.0,
+          "completed_oil_y": null,
+          "current_oil_y": 832.0,
+          "material_phase": "filled_barrier",
+          "phase_reason": "FILLED_CAP_VETO"
+        }
+      ]
+    }
+  ],
+  "review_labels": "Baseline original candidate identities remain bound; changes are not automatically given identity/scalar labels. Empty output on a reviewed positive is a miss.",
+  "timing_caveat": "Runs overlap with independent probes/control processes; elapsed times are not throughput acceptance.",
+  "claim_boundary": "Only shared-rectangle and existing-family sampling operations were tested, not complete masked preprocessing, all-family integration, fragment-aware contour reconstruction, or Windows efficacy."
+}

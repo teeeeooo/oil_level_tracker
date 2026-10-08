@@ -1,0 +1,9 @@
+{
+  "variant": "oil_measurement_only",
+  "results": 113,
+  "numeric_oil": 105,
+  "numeric_foam": 26,
+  "fingerprint": "19b03a3012c22399c23f3f12ff20c04a2d1dea3268b6fdc9fff42b61e050ad98",
+  "elapsed_sec": 79.72110712499125,
+  "operation_calls": 339
+}

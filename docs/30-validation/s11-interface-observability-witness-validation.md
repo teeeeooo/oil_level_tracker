@@ -889,8 +889,11 @@ without deriving masks, exact scalar tolerances or per-pixel labels. Distinguish
 these from exact machine input binding. A known safe short temporal witness does
 not certify its initialization, other sectors/directions or stationary/crossing
 controls. The [reference + temporal-context result](../60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.md)
-requires a new observable before another challenger, not further micro-labeling
-or relaxed acceptance. Episode outcomes remain relevant alongside these gates.
+does not test pixel withdrawal. A next challenger must identify a distinct
+measurement/evidence operation with controls, rather than reuse overlap or
+persistence as identity. The local XY proposal below supplies that bounded
+design entry, not efficacy proof. No further micro-labeling or relaxed
+acceptance follows. Episode outcomes remain relevant alongside these gates.
 
 The October 9 diagnostic implementation covers available contrast footprints,
 not candidate-owned edge intersections. Its [evidence and receipt](../60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md)
@@ -917,6 +920,55 @@ a better single frame cannot hide downstream harm. Engineering defects can be
 fixed and rerun; a failed mechanism does not authorize outcome-driven tuning.
 O2 Windows shadow/holdout acceptance, O3 authority/association entry, later phase
 controls and nine-segment integrated field qualification remain separate gates.
+
+## Local XY measurement exclusion controls
+
+Apply these to the [proposed Oil measurement scope](../20-architecture/s11-interface-observability-witness-architecture.md#local-xy-oil-measurement-exclusion--proposed-contract).
+The [intake evidence](../60-evidence/s11/2026-10-09-local-xy-spec-intake.md)
+records A–D as completed, unpromoted prototypes. Do not rerun those variants or
+the 72 historical tests just to restate their results. The next implementation
+needs focused evidence for its changed contract and real entry path.
+
+1. **Scope and identity:** OFF, empty union and no eligible intersection preserve
+   complete legacy output. Check source/crop clipping, half-open bounds, other
+   Glass isolation, overlapping rectangles, malformed/mismatched bindings,
+   same-X/other-Y eligibility, input immutability and explicit bounded exhaustion.
+   Scope policy/version participates in run identity. An explicit sampling
+   policy is not a new physical label.
+2. **Measurements:** freeze original support denominators and the full dependency
+   policy, including material-profile normalization, before running. Check a
+   horizontal ramp, real vertical step, asymmetric removal, no common columns,
+   complete/partial sector loss and unchanged primitive measurements. Apply a
+   numerical guard only to affected eligible samples, with unchanged floors.
+   Do not assume that primitive locality implies unchanged ranked candidates
+   elsewhere in an actively changed frame. No zero fill or global paired-mean
+   replacement; upstream influence remains a named limitation.
+3. **Executing lineage:** verify scoped measurements through the real assembler
+   and detector, with actual denominators/unavailable reasons and matching
+   A1/native geometry. NONE/BASIC/FULL yield the same physical result; sidecars
+   cannot create authority. Verify selected-candidate/completed/CSV provenance
+   and distinguish created/removed/changed proposals without transferring labels.
+4. **Frozen comparison:** baseline versus one scoped candidate across sample4
+   0–56 s and the other three existing windows; freeze any one necessary ablation
+   before results. Preserve seven target/three wrong-target bindings and inspect
+   the whole interval, especially 40/42/44/49.5/52 s and its end. OFF on other
+   samples is compatibility evidence, not cross-Glass physical efficacy.
+   Generic multi-Glass/coordinate controls test the input contract separately.
+   Use actual baseline/challenger HTML/CSV/report outputs, not raw-coordinate
+   charts alone, and evaluate both final series validity and Foam episodes.
+5. **Outcome and stop:** missing observations, false owners, major movement and
+   extrema must be reported separately from numeric count. Preserve B's 40 s
+   inverted-topology counter-control. A new nearby Y has no inherited truth.
+   Freeze resource limits, run timing comparisons serially, and do not treat
+   the concurrent prototype timings as acceptance. If protected movement is
+   lost or no useful physical improvement is established, close that fixed
+   mechanism; fix a demonstrated implementation defect separately, without
+   threshold/rectangle sweeps or gate bypasses. Ask for new human judgment only
+   where a concrete changed physical correspondence affects the conclusion.
+
+These local checks do not satisfy O2 opposing/holdout/Windows controls, authorize
+an authority/phase rewrite, or change FIELD FAIL. They also do not add a 100%
+per-frame recall or per-pixel semantic-labeling requirement to the product.
 
 ## Detector Governance
 

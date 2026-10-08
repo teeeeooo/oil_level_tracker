@@ -1,0 +1,201 @@
+{
+  "schema": "s11-local-xy-import-v1",
+  "base_head": "167126e5f095e4011bc8f7dfd51049df87dd84f6",
+  "supplied_zip": {
+    "original_name": "S11_Local_XY_Design_and_Execution_2026-10-09.zip",
+    "sha256": "562c68822e30b8994d5ff0da84ae53eef2808c2b7b382abcd9d9705a2257a883",
+    "preserved_local_path": "sample/output/s11-local-xy-intake-20261009-001/supplied-package.zip"
+  },
+  "standalone_summary_matches_zip": true,
+  "supplied_files": {
+    "S11_Local_XY_Detector_Work_Spec_2026-10-09.md": {
+      "sha256": "b2b8ed7497c0c04c3668696c5bb414c7f59109f65a387042b74510c27b549ad4",
+      "bytes": 46513
+    },
+    "S11_Local_XY_Execution_Summary_2026-10-09.json": {
+      "sha256": "1e9da7cc29db4c93374328b874fc4ff10116624ed0402916cb7c1d135215db24",
+      "bytes": 15349
+    },
+    "HANDOFF.md": {
+      "sha256": "ec8f609cba9c1bd3d4b1bc258d636994e46bb3de06dbe98b4d3e3fb345ef0836",
+      "bytes": 3276
+    },
+    "SHA256SUMS.json": {
+      "sha256": "29056ba6bb0ca71f813c4a0b136204625892f9c4c4581f26e2f79c467a4297b1",
+      "bytes": 326
+    }
+  },
+  "native_copies": {
+    "native-evidence/oil-comparison.png": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/oil-comparison.png",
+      "sha256": "fc30092443cc77501f2e006d3e2a426c9a711fca5da9a3526adfcafa4135a59e",
+      "bytes": 110802
+    },
+    "native-evidence/focused-tests.log": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/focused-tests.log",
+      "sha256": "7015a4b2bf7d1027036debc733e312ed16e14c67b51b002d343b1cbffd95aac8",
+      "bytes": 100
+    },
+    "native-evidence/detailed-summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/detailed-summary.json",
+      "sha256": "6236977f940de17926837ad2ee61d524b34a48cd0adaad7ca3bf14ef8674960a",
+      "bytes": 546114
+    },
+    "native-evidence/probe-preflight.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/probe-preflight.json",
+      "sha256": "3eecf889dc0a2344059fdf96b192ccf2b997ea166e5433438f0b89caf694f204",
+      "bytes": 1011
+    },
+    "native-evidence/probe_contracts.py": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/probe_contracts.py",
+      "sha256": "db23c31320140599c99b9aaca2bc73f1c141f6c12304fef498918047744fd7bd",
+      "bytes": 6576
+    },
+    "native-evidence/governance-check.log": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/governance-check.log",
+      "sha256": "5054252290d7f2a5f8913daf1f690a541c7a6f4f2f04082fd264770893528818",
+      "bytes": 32
+    },
+    "native-evidence/run_measurement_scope.py": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/run_measurement_scope.py",
+      "sha256": "d8d54701cb22dc8428f0b65045226bd870c06efb0c38e170d60abbae0b0b1e9b",
+      "bytes": 6367
+    },
+    "native-evidence/results.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/results.json",
+      "sha256": "e264bf234089da261b1b60cf273b294a49227bca4903b2fb01f51b82a1c1488b",
+      "bytes": 23558
+    },
+    "native-evidence/inspect_supporting_media.py": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/inspect_supporting_media.py",
+      "sha256": "167f2a8703f4e89ed1f7c1c67c296a3c35c582333e5f6dc26a6f97a0429e0e85",
+      "bytes": 1687
+    },
+    "native-evidence/measurement-scope-results.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/measurement-scope-results.json",
+      "sha256": "75c37f570619e9ab9ddf7839f3b95729b401f753f7ac1875dd84e38bfe0cb062",
+      "bytes": 800
+    },
+    "native-evidence/run_pair_control.py": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/run_pair_control.py",
+      "sha256": "af17af3356afd9863fbf970413572ae3161e2727b1527c1aee8a1484b01f4a89",
+      "bytes": 3630
+    },
+    "native-evidence/supporting-media-receipt.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/supporting-media-receipt.json",
+      "sha256": "f30ff0bbc2b1d3fd30f37dade54f812c7c5d33cf51778cf07fab56034767c2a8",
+      "bytes": 3607
+    },
+    "native-evidence/summarize_experiments.py": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/summarize_experiments.py",
+      "sha256": "7cc07512e8d494df33fdc74b287fc009c77b2511f73ac9fd01d797dfbdd0443c",
+      "bytes": 6450
+    },
+    "native-evidence/sample4-original-controls.jpg": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/sample4-original-controls.jpg",
+      "sha256": "d14b2d30fff18eb465439b74901f44b5475e60bb0aa28e5a715185ebe60e5df8",
+      "bytes": 131199
+    },
+    "native-evidence/foam-comparison.png": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/foam-comparison.png",
+      "sha256": "3c6b7394629747618bdc8319be5b407f33a0fb537bc7533c0e3f62354ac8fbec",
+      "bytes": 72753
+    },
+    "native-evidence/other-samples-original-rois.jpg": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/other-samples-original-rois.jpg",
+      "sha256": "b1fed06dc8c19fd3ffeec79fefa19abbdeefa9edb08fd1c3c57918c78b071f82",
+      "bytes": 171856
+    },
+    "native-evidence/run_xy.py": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/run_xy.py",
+      "sha256": "f0a659773b0ec4390b843bd7c9ddcd4d0553fcfff8ce5daae7b6782a153ed9dd",
+      "bytes": 5956
+    },
+    "native-evidence/real-support-readout.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/real-support-readout.json",
+      "sha256": "65c1bc21a8f5e6db15e0f2048ba8338f3a6433f66206e92448bb43f5da3a6aa9",
+      "bytes": 234321
+    },
+    "native-evidence/measurement-scope-preflight.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/measurement-scope-preflight.json",
+      "sha256": "e5d195ea3b939a79deae240e31bad0260b93c131ef81d340be8829cdf55f614b",
+      "bytes": 2113
+    },
+    "native-evidence/preflight.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/preflight.json",
+      "sha256": "829d65d1e59f1f76494e3e5b452c2a22f0b2da2f4c7e0e2b3cb282510674766c",
+      "bytes": 31830
+    },
+    "native-evidence/contract-results.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/contract-results.json",
+      "sha256": "17246f14629655c9c06eebc5fbd428310c3494461e0efeb9f2069183467ad1e3",
+      "bytes": 1831
+    },
+    "native-evidence/compact-summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/compact-summary.json",
+      "sha256": "57eebca0f0c0ef4be8de172aa4f5548cebb303ae7271a244e3524f06a5055470",
+      "bytes": 20409
+    },
+    "native-evidence/pair-control-preflight.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/pair-control-preflight.json",
+      "sha256": "31282d63b9d71bfe136e0ae37aefee5725c2fca2ca599ab1fff65c41f2c4a97c",
+      "bytes": 589
+    },
+    "native-evidence/runner-pin.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/runner-pin.json",
+      "sha256": "affe0b026d07f8d2400f193358b830790f1ea9547ccfc8a65d94d6f628ae7f66",
+      "bytes": 180
+    },
+    "native-evidence/sample4-paired_phase_no_exclusion/summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/sample4-paired_phase_no_exclusion/summary.json",
+      "sha256": "74173590ba9acae36c2d85384d28c296aee37048db7b6731066d6c741c7265dd",
+      "bytes": 226
+    },
+    "native-evidence/sample4-oil_measurement_only/summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/sample4-oil_measurement_only/summary.json",
+      "sha256": "93d01d1f3bd4f6a3cf2a35a4c3daf56fc24428d8bc42e1fcd541ae2e50b717b1",
+      "bytes": 249
+    },
+    "native-evidence/sample2-baseline/summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/sample2-baseline/summary.json",
+      "sha256": "83bcfb398f5412ab17769fd07e7bab97a23c3fd9b8a1c7ed4bf3e4c94c110f35",
+      "bytes": 229
+    },
+    "native-evidence/sample3-baseline/summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/sample3-baseline/summary.json",
+      "sha256": "da99e46c00816ca1b07457bbd2245ca1525d11f3e6c572148f7e3dc3973308ca",
+      "bytes": 233
+    },
+    "native-evidence/sample4-local_xy_rectangle/summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/sample4-local_xy_rectangle/summary.json",
+      "sha256": "0bebe4ddd90e9425d1d2fe2ece19aaa2cddd96c5056de5d1bc169857b1a29334",
+      "bytes": 452
+    },
+    "native-evidence/sample4-oil_measurement_paired_phase/summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/sample4-oil_measurement_paired_phase/summary.json",
+      "sha256": "155f15b7892f09c2821677b0747c40959796d347dcea8d81e023ace3bc10d2bb",
+      "bytes": 256
+    },
+    "native-evidence/base_sample_1-baseline/summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/base_sample_1-baseline/summary.json",
+      "sha256": "64e8a450385f073bf42f6cb0a2640eaaddeffc577a27f486b6b910d6cb0ca098",
+      "bytes": 237
+    },
+    "native-evidence/sample4-baseline/summary.json": {
+      "native_path": "sample/output/s11-local-xy-exclusion-20261009-001/sample4-baseline/summary.json",
+      "sha256": "20e324d36b65b4d2b71b0971e3619b14fc82c1abec1e42ec1b1c32ccac6671d7",
+      "bytes": 434
+    }
+  },
+  "native_root": "sample/output/s11-local-xy-exclusion-20261009-001",
+  "complete_native_inventory": "../../60-evidence/s11/2026-10-09-local-xy-spec-intake.json",
+  "complete_local_archive": {
+    "path": "sample/output/s11-local-xy-intake-20261009-001/native-evidence-165-files.zip",
+    "sha256": "7cb7ada9a70e04728b7ff61e3b3b101df8cbeb2933da6cc02d47423321196c72",
+    "bytes": 39079482,
+    "entries": 165,
+    "all_entry_hashes_verified": true,
+    "git_tracked": false
+  },
+  "storage_boundary": "Supplied originals and selected native files are tracked. All native files remain at their original path plus the local archive. Local archive is not an off-machine backup. No source artifacts deleted."
+}

@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The reference/sequence readout is closed without promotion of simple overlap rejection or appearance persistence. The user clarifies a distinct proposed mechanism: exclude only a local X/Y measurement area and detect the boundary from remaining support; the same X at another Y is usable. This partial exclusion is NOT TESTED, and 40/45 reference-containing patches during correct tracking are not errors or evidence against it. Next local work is its bounded design preflight: identify the measurement owner, precise exclusion operation, remaining-support rule and fixed controls before implementation/run. No finer pixel review or threshold continuation of the closed experiment. O2 remains OPEN / FIELD FAIL; no user or Windows action is currently required.
+**Next transition:** The Local XY specification and all native A–D results are preserved and reviewed; all 751 saved completed outputs reproduce. Shared-mask exclusion and global paired phase means are rejected for adoption. Oil-only measurement scope is the next implementation seam, not a successful detector. Next work is WP1–WP3 as one bounded opt-in change: freeze primitive/dependency locality, retained-support rules and resource bounds, then connect the existing three Oil measurement lanes and matching lineage. Only affected measurements may use a local numerical guard; this formal implementation remains untested. Follow with one frozen full-window WP4 comparison and WP5 disposition. O2 remains OPEN / FIELD FAIL; no user or Windows action is currently required.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -12,6 +12,10 @@ is a preserved proposal, with [intake and cleanup evidence](../60-evidence/s11/2
 The later [18885d2 specification package](../70-reference/s11-detector-work-spec-18885d2-2026-10-08/README.md)
 refines D2–D6; its [intake review](../60-evidence/s11/2026-10-08-spec-18885d2-intake.md)
 records adopted contracts and limitations. Both originals retain their dated scope.
+The [October 9 Local XY package](../70-reference/s11-local-xy-2026-10-09/README.md)
+adds actual local-exclusion experiments; its [intake review](../60-evidence/s11/2026-10-09-local-xy-spec-intake.md)
+separates completed prototypes from the next opt-in implementation. WP1–WP5 are
+bounded tasks inside D2/W4, not new milestones or a separate live plan.
 Historical pending prose never reopens a closed experiment or supplies current authority.
 
 ## S11 work-item ledger
@@ -28,7 +32,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; D2-A1 diagnostic verified; simple reference-overlap/appearance promotion CLOSED WITHOUT PROMOTION | Local X/Y measurement exclusion is a distinct untested proposal; freeze its design/controls before another run. Broader D2-B efficacy remains incomplete; no per-pixel semantic-classification requirement | [Sequence-context result and clarification](../60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.md#subsequent-clarification-local-exclusion-remains-untested), [comparison contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract) |
+| W4 / O2 challenger | OPEN; D2-A1 verified; overlap/appearance and Local XY A–D prototypes unpromoted | WP1–WP3 Oil-only opt-in measurement implementation with affected-only numerical handling, then frozen WP4/WP5. B is a development seam, not efficacy acceptance. | [Local XY intake](../60-evidence/s11/2026-10-09-local-xy-spec-intake.md), [proposed contract](../20-architecture/s11-interface-observability-witness-architecture.md#local-xy-oil-measurement-exclusion--proposed-contract) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -74,7 +78,7 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    is withdrawn. Keep the next investigation within conventional image processing
    and explicit geometry/temporal rules, with no currently established new
    discriminator. Before another implementation or data request, specify one
-   bounded mechanism, its additional observable, affected existing owner and
+   bounded mechanism, its additional observable or distinct measurement operation, affected existing owner and
    positive/opposing/unresolved controls; explain its difference from closed
    hypotheses. Reuse existing evidence and code first. No threshold continuation,
    renewed inventory or automatic idx12 review follows from excluding learning.
@@ -207,20 +211,29 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    Do not promote overlap, non-overlap or persistence, expand the reference,
    select only the successful seed, or tune a threshold on these results.
    No further fine-grained question about this crop is justified by this check.
-   **Next design entry:** assess the user's local X/Y measurement-exclusion
-   proposal, preserving remaining boundary support and reusing the same X when
-   the boundary moves outside the excluded Y range. This differs from whole-
-   candidate template rejection and the diagnostic-only overlap counts;
-   it remains PROPOSED / NOT TESTED, not rejected by the 40/45 count.
-   Freeze the exact exclusion operation, affected existing measurement owner,
-   remaining-support/abstention rule and positive/opposing/unresolved controls
-   before implementing or running a challenger. This is a sampling policy,
-   not a whole-box physical label or proof that unmasked pixels are fluid.
-   Explain the changed evidence use; "more time context" alone is insufficient
-   after the closed patch/region failures. The current native
-   material path genuinely consists of up to five sector rows, not a hidden
-   dense contour waiting to be exported. Do not relabel pooled measurements as
-   full contour support. This is a design entry, not an implemented new mechanism.
+   **Local XY prototypes received and verified:** the former NOT TESTED entry
+   was correct at `167126e`; [new A–D evidence](../60-evidence/s11/2026-10-09-local-xy-spec-intake.md)
+   now records actual execution and 751 saved-output reproductions. A shared
+   mask and C/D global paired means cause long late Oil loss and are not adopted.
+   B's Oil-only measurement scope preserves late numeric output but misses 42 s,
+   changes unreviewed coordinates and invalidates both Oil/Foam at 40 s. Numeric
+   counts are not successful recovery. Do not rerun these variants or revisit
+   closed labels. Formal opt-in, affected-only numerical handling remains untested.
+   **Next implementation entry (WP1–WP3):** reuse the material/raster-material
+   and phase-transition owners with a bound Oil-only execution scope, support
+   accounting and matching existing lineage. First freeze normalization/context
+   dependencies, original support denominators, the local numerical rule and
+   resource limits. Primitive locality is distinct from later candidate/phase
+   competition; OFF/empty/no-intersection preserves complete legacy behavior.
+   Keep shared preprocessing/Foam, other families and authority/phase rules.
+   Same X outside excluded Y remains eligible; the rectangle is sampling policy,
+   not a whole-box physical label. No UI/schema change, global paired replacement,
+   threshold/rectangle sweep, dense-contour rewrite or template-veto duplication.
+   **WP4/WP5:** one frozen comparison over all four Mac windows and actual reports;
+   verify final per-series validity, major movement, existing target bindings,
+   debug equality, provenance and resources, then retain or reject with named
+   unknowns. Stop for a concrete new physical judgment or necessary Windows work,
+   not a repeat microscopic question. See the [Local XY controls](../30-validation/s11-interface-observability-witness-validation.md#local-xy-measurement-exclusion-controls).
    D2-B's stationary/crossing/optical opposing efficacy remains NOT_ASSESSABLE;
    no missing gate is waived or manufactured by this qualitative reply.
    D3 additionally requires a physical decision/abstention rule, input identities,

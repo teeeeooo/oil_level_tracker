@@ -1,0 +1,991 @@
+{
+  "status": "COMPLETE_UNPROMOTED",
+  "source_head": "167126e5f095e4011bc8f7dfd51049df87dd84f6",
+  "preflight_sha256": "829d65d1e59f1f76494e3e5b452c2a22f0b2da2f4c7e0e2b3cb282510674766c",
+  "runner_sha256": "f0a659773b0ec4390b843bd7c9ddcd4d0553fcfff8ce5daae7b6782a153ed9dd",
+  "original_inputs_and_source_unchanged": true,
+  "runs": [
+    {
+      "sample": "base_sample_1",
+      "variant": "baseline",
+      "results": 30,
+      "fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+      "numeric_oil": 28,
+      "numeric_foam": 0,
+      "elapsed_sec": 39.19591729200329
+    },
+    {
+      "sample": "sample2",
+      "variant": "baseline",
+      "results": 5,
+      "fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976",
+      "numeric_oil": 4,
+      "numeric_foam": 0,
+      "elapsed_sec": 7.471709958015708
+    },
+    {
+      "sample": "sample3",
+      "variant": "baseline",
+      "results": 151,
+      "fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1",
+      "numeric_oil": 29,
+      "numeric_foam": 5,
+      "elapsed_sec": 149.81258987501496
+    },
+    {
+      "sample": "sample4",
+      "variant": "baseline",
+      "results": 113,
+      "fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+      "numeric_oil": 101,
+      "numeric_foam": 26,
+      "elapsed_sec": 76.35913570798584,
+      "report_bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-local-xy-exclusion-20261009-001/sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409"
+    },
+    {
+      "sample": "sample4",
+      "variant": "local_xy_rectangle",
+      "results": 113,
+      "fingerprint": "765aa14d300279a74740f5ddfdb43b83abeab016eb4de472016190d72631fb3a",
+      "numeric_oil": 77,
+      "numeric_foam": 6,
+      "elapsed_sec": 76.07494504199713,
+      "report_bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-local-xy-exclusion-20261009-001/sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557"
+    }
+  ],
+  "public_changes": [
+    {
+      "frame_index": 270,
+      "time_sec": 9.0,
+      "changes": {
+        "fill_state": {
+          "baseline": "PARTIAL_VISIBLE",
+          "local_xy": "FILLING_VISIBLE"
+        }
+      }
+    },
+    {
+      "frame_index": 285,
+      "time_sec": 9.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 855.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FILLING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 435,
+      "time_sec": 14.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 848.0,
+          "local_xy": 849.0
+        }
+      }
+    },
+    {
+      "frame_index": 480,
+      "time_sec": 16.0,
+      "changes": {
+        "fill_state": {
+          "baseline": "PARTIAL_VISIBLE",
+          "local_xy": "FILLING_VISIBLE"
+        }
+      }
+    },
+    {
+      "frame_index": 495,
+      "time_sec": 16.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 852.0,
+          "local_xy": 849.0
+        }
+      }
+    },
+    {
+      "frame_index": 645,
+      "time_sec": 21.5,
+      "changes": {
+        "fill_state": {
+          "baseline": "PARTIAL_VISIBLE",
+          "local_xy": "FILLING_VISIBLE"
+        }
+      }
+    },
+    {
+      "frame_index": 660,
+      "time_sec": 22.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 847.0,
+          "local_xy": 843.0
+        },
+        "fill_state": {
+          "baseline": "DRAINING_VISIBLE",
+          "local_xy": "PARTIAL_VISIBLE"
+        }
+      }
+    },
+    {
+      "frame_index": 675,
+      "time_sec": 22.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 851.0,
+          "local_xy": 848.0
+        }
+      }
+    },
+    {
+      "frame_index": 840,
+      "time_sec": 28.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 848.0,
+          "local_xy": 851.0
+        }
+      }
+    },
+    {
+      "frame_index": 870,
+      "time_sec": 29.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 842.0,
+          "local_xy": 845.0
+        }
+      }
+    },
+    {
+      "frame_index": 915,
+      "time_sec": 30.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 839.0,
+          "local_xy": 840.0
+        }
+      }
+    },
+    {
+      "frame_index": 1005,
+      "time_sec": 33.5,
+      "changes": {
+        "fill_state": {
+          "baseline": "FILLING_VISIBLE",
+          "local_xy": "PARTIAL_VISIBLE"
+        }
+      }
+    },
+    {
+      "frame_index": 1020,
+      "time_sec": 34.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 835.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "DRAINING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1095,
+      "time_sec": 36.5,
+      "changes": {
+        "fill_state": {
+          "baseline": "PARTIAL_VISIBLE",
+          "local_xy": "DRAINING_VISIBLE"
+        }
+      }
+    },
+    {
+      "frame_index": 1110,
+      "time_sec": 37.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 841.0,
+          "local_xy": 845.0
+        }
+      }
+    },
+    {
+      "frame_index": 1125,
+      "time_sec": 37.5,
+      "changes": {
+        "fill_state": {
+          "baseline": "DRAINING_VISIBLE",
+          "local_xy": "PARTIAL_VISIBLE"
+        }
+      }
+    },
+    {
+      "frame_index": 1185,
+      "time_sec": 39.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": null,
+          "local_xy": 842.0
+        },
+        "raw_foam_front_y": {
+          "baseline": 841.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": false,
+          "local_xy": true
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "UNKNOWN_REVIEW",
+          "local_xy": "FILLING_VISIBLE"
+        }
+      }
+    },
+    {
+      "frame_index": 1200,
+      "time_sec": 40.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 865.5,
+          "local_xy": 830.0
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1215,
+      "time_sec": 40.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 864.0,
+          "local_xy": 805.0
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1230,
+      "time_sec": 41.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 864.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 819.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1260,
+      "time_sec": 42.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 868.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 819.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1275,
+      "time_sec": 42.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 835.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 818.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1290,
+      "time_sec": 43.0,
+      "changes": {
+        "raw_foam_front_y": {
+          "baseline": 812.0,
+          "local_xy": null
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        }
+      }
+    },
+    {
+      "frame_index": 1305,
+      "time_sec": 43.5,
+      "changes": {
+        "raw_foam_front_y": {
+          "baseline": 812.0,
+          "local_xy": null
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        }
+      }
+    },
+    {
+      "frame_index": 1320,
+      "time_sec": 44.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 822.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 812.0,
+          "local_xy": 819.0
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1335,
+      "time_sec": 44.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 837.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 820.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1350,
+      "time_sec": 45.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 833.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1365,
+      "time_sec": 45.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 843.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "PARTIAL_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1380,
+      "time_sec": 46.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 835.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 812.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1395,
+      "time_sec": 46.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 840.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 814.0,
+          "local_xy": 820.0
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1410,
+      "time_sec": 47.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 835.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 813.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1425,
+      "time_sec": 47.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 835.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1440,
+      "time_sec": 48.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 833.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 814.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1455,
+      "time_sec": 48.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 834.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 814.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1470,
+      "time_sec": 49.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 833.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 814.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1485,
+      "time_sec": 49.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 836.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 814.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1500,
+      "time_sec": 50.0,
+      "changes": {
+        "raw_foam_front_y": {
+          "baseline": 814.0,
+          "local_xy": null
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        }
+      }
+    },
+    {
+      "frame_index": 1515,
+      "time_sec": 50.5,
+      "changes": {
+        "raw_foam_front_y": {
+          "baseline": 814.0,
+          "local_xy": null
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        }
+      }
+    },
+    {
+      "frame_index": 1530,
+      "time_sec": 51.0,
+      "changes": {
+        "raw_foam_front_y": {
+          "baseline": 814.0,
+          "local_xy": null
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        }
+      }
+    },
+    {
+      "frame_index": 1545,
+      "time_sec": 51.5,
+      "changes": {
+        "raw_foam_front_y": {
+          "baseline": 809.0,
+          "local_xy": null
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        }
+      }
+    },
+    {
+      "frame_index": 1560,
+      "time_sec": 52.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 833.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 813.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1575,
+      "time_sec": 52.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 829.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 811.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1590,
+      "time_sec": 53.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 829.0,
+          "local_xy": null
+        },
+        "raw_foam_front_y": {
+          "baseline": 808.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "foam_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "FOAMING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1605,
+      "time_sec": 53.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 833.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "DRAINING_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1635,
+      "time_sec": 54.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 851.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "PARTIAL_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1650,
+      "time_sec": 55.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 851.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "PARTIAL_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1665,
+      "time_sec": 55.5,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 852.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "PARTIAL_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    },
+    {
+      "frame_index": 1680,
+      "time_sec": 56.0,
+      "changes": {
+        "raw_oil_air_level_y": {
+          "baseline": 851.0,
+          "local_xy": null
+        },
+        "oil_is_valid": {
+          "baseline": true,
+          "local_xy": false
+        },
+        "fill_state": {
+          "baseline": "PARTIAL_VISIBLE",
+          "local_xy": "UNKNOWN_REVIEW"
+        }
+      }
+    }
+  ],
+  "reviewed_frame_readout": [
+    {
+      "frame_index": 1140,
+      "baseline_reviewed_candidate_input_index": 9,
+      "baseline_oil": 844.0,
+      "local_xy_oil": 844.0,
+      "baseline_foam": null,
+      "local_xy_foam": null,
+      "meaning": "numeric output only; changed candidate indices/coordinates do not inherit physical truth"
+    },
+    {
+      "frame_index": 1200,
+      "baseline_reviewed_candidate_input_index": 4,
+      "baseline_oil": 865.5,
+      "local_xy_oil": 830.0,
+      "baseline_foam": 840.0,
+      "local_xy_foam": 840.0,
+      "meaning": "numeric output only; changed candidate indices/coordinates do not inherit physical truth"
+    },
+    {
+      "frame_index": 1260,
+      "baseline_reviewed_candidate_input_index": 4,
+      "baseline_oil": 868.0,
+      "local_xy_oil": null,
+      "baseline_foam": 819.0,
+      "local_xy_foam": null,
+      "meaning": "numeric output only; changed candidate indices/coordinates do not inherit physical truth"
+    },
+    {
+      "frame_index": 1275,
+      "baseline_reviewed_candidate_input_index": 12,
+      "baseline_oil": 835.0,
+      "local_xy_oil": null,
+      "baseline_foam": 818.0,
+      "local_xy_foam": null,
+      "meaning": "numeric output only; changed candidate indices/coordinates do not inherit physical truth"
+    },
+    {
+      "frame_index": 1320,
+      "baseline_reviewed_candidate_input_index": 9,
+      "baseline_oil": 822.0,
+      "local_xy_oil": null,
+      "baseline_foam": 812.0,
+      "local_xy_foam": 819.0,
+      "meaning": "numeric output only; changed candidate indices/coordinates do not inherit physical truth"
+    },
+    {
+      "frame_index": 1485,
+      "baseline_reviewed_candidate_input_index": 19,
+      "baseline_oil": 836.0,
+      "local_xy_oil": null,
+      "baseline_foam": 814.0,
+      "local_xy_foam": null,
+      "meaning": "numeric output only; changed candidate indices/coordinates do not inherit physical truth"
+    },
+    {
+      "frame_index": 1560,
+      "baseline_reviewed_candidate_input_index": 20,
+      "baseline_oil": 833.0,
+      "local_xy_oil": null,
+      "baseline_foam": 813.0,
+      "local_xy_foam": null,
+      "meaning": "numeric output only; changed candidate indices/coordinates do not inherit physical truth"
+    }
+  ],
+  "source_scope": "Mac original media and existing reviewed evidence; no Windows media/run",
+  "limitations": [
+    "current pooled support rules unchanged",
+    "no mask-aware convolution or balanced upper/lower-column rule added",
+    "registered rectangle is sampling-policy counterfactual, not transferred physical label",
+    "no independent holdout",
+    "no detector or field acceptance"
+  ]
+}

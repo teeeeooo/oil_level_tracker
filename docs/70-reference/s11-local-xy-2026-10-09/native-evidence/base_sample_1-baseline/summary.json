@@ -1,0 +1,9 @@
+{
+  "sample": "base_sample_1",
+  "variant": "baseline",
+  "results": 30,
+  "fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7",
+  "numeric_oil": 28,
+  "numeric_foam": 0,
+  "elapsed_sec": 39.19591729200329
+}

@@ -1,0 +1,52 @@
+{
+  "runner_sha256": "db23c31320140599c99b9aaca2bc73f1c141f6c12304fef498918047744fd7bd",
+  "frozen_primary_preflight_sha256": "829d65d1e59f1f76494e3e5b452c2a22f0b2da2f4c7e0e2b3cb282510674766c",
+  "controls": [
+    "rectangular locality",
+    "same X below excluded Y",
+    "raw pixels unchanged",
+    "no-template-rejection",
+    "all-masked native abstention",
+    "horizontal-ramp unequal-aperture counterexample",
+    "paired common-X null contrast",
+    "true-step preservation",
+    "no common-X abstention",
+    "zero-fill artificial Sobel edge",
+    "preprocessing noninterference counterexample"
+  ],
+  "real_points": [
+    [
+      1140,
+      844
+    ],
+    [
+      1200,
+      841
+    ],
+    [
+      1260,
+      839
+    ],
+    [
+      1275,
+      835
+    ],
+    [
+      1320,
+      844
+    ],
+    [
+      1320,
+      822
+    ],
+    [
+      1485,
+      836
+    ],
+    [
+      1560,
+      833
+    ]
+  ],
+  "meaning": "sampling facts and synthetic guard requirements; no new physical or scalar labels"
+}

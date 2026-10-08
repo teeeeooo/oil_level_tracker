@@ -1,0 +1,740 @@
+{
+  "schema": "s11-local-xy-intake-verification-v1",
+  "source_head": "167126e5f095e4011bc8f7dfd51049df87dd84f6",
+  "native_root": "sample/output/s11-local-xy-exclusion-20261009-001",
+  "file_count": 165,
+  "total_bytes": 201719723,
+  "file_types": {
+    ".json": 71,
+    ".oilrecipe": 7,
+    ".png": 69,
+    ".log": 4,
+    ".py": 6,
+    ".jpg": 2,
+    ".csv": 4,
+    ".html": 2
+  },
+  "source_pins_verified": 220,
+  "input_pins_verified": 16,
+  "runs": [
+    {
+      "run": "base_sample_1-baseline",
+      "rows": 30,
+      "full_completed_reproduction": true,
+      "tracking_fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7"
+    },
+    {
+      "run": "sample2-baseline",
+      "rows": 5,
+      "full_completed_reproduction": true,
+      "tracking_fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976"
+    },
+    {
+      "run": "sample3-baseline",
+      "rows": 151,
+      "full_completed_reproduction": true,
+      "tracking_fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1"
+    },
+    {
+      "run": "sample4-baseline",
+      "rows": 113,
+      "full_completed_reproduction": true,
+      "tracking_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1"
+    },
+    {
+      "run": "sample4-local_xy_rectangle",
+      "rows": 113,
+      "full_completed_reproduction": true,
+      "tracking_fingerprint": "765aa14d300279a74740f5ddfdb43b83abeab016eb4de472016190d72631fb3a"
+    },
+    {
+      "run": "sample4-oil_measurement_only",
+      "rows": 113,
+      "full_completed_reproduction": true,
+      "tracking_fingerprint": "19b03a3012c22399c23f3f12ff20c04a2d1dea3268b6fdc9fff42b61e050ad98"
+    },
+    {
+      "run": "sample4-oil_measurement_paired_phase",
+      "rows": 113,
+      "full_completed_reproduction": true,
+      "tracking_fingerprint": "1c7dcf43623ace2e9768391ba350e5c2eace0387c76c8936f1d0f514ccf4de0d"
+    },
+    {
+      "run": "sample4-paired_phase_no_exclusion",
+      "rows": 113,
+      "full_completed_reproduction": true,
+      "tracking_fingerprint": "52cc99c11601ecb183522dd0486055b6319ba573dc61c957e556311dfcb55807"
+    }
+  ],
+  "completed_rows_reproduced": 751,
+  "delivered_statistics_match": true,
+  "html_local_links_checked": 45,
+  "inputs_and_artifacts_unchanged": true,
+  "video_decoded": false,
+  "frame_detector_rerun": false,
+  "historical_tests_rerun": false,
+  "physical_efficacy_verified": false,
+  "verification_script_sha256": "894887cffddb8986d15991ea3f4149b03fad9e2ccf84b2b6956d1cbafd9e7de0",
+  "native_files": {
+    "base_sample_1-baseline/completed.json": {
+      "bytes": 4348831,
+      "sha256": "7a44f3b7042ead3f341a918be9b8d1c3b30ff9f33119e4f80c0f15c5db6ecaa1"
+    },
+    "base_sample_1-baseline/raw.json": {
+      "bytes": 2552020,
+      "sha256": "28ecb446324ce09f9791abd887084cef95aabc8104c24759ba689b3217699766"
+    },
+    "base_sample_1-baseline/recipe.oilrecipe": {
+      "bytes": 3156,
+      "sha256": "783d1354500bf7bca7e143961b48e112722042279977db3a7f7009ae91cb6f15"
+    },
+    "base_sample_1-baseline/report.json": {
+      "bytes": 9506,
+      "sha256": "85d38b6bf7d3682cfcc6cf117009560429513803c6bde7ac47ca00f66677e695"
+    },
+    "base_sample_1-baseline/summary.json": {
+      "bytes": 237,
+      "sha256": "64e8a450385f073bf42f6cb0a2640eaaddeffc577a27f486b6b910d6cb0ca098"
+    },
+    "base_sample_1-baseline/tracking.json": {
+      "bytes": 30434,
+      "sha256": "61136249deb47cb87c69384f23ed1022340b93af2558a4507f982c9b9d28401e"
+    },
+    "compact-summary.json": {
+      "bytes": 20409,
+      "sha256": "57eebca0f0c0ef4be8de172aa4f5548cebb303ae7271a244e3524f06a5055470"
+    },
+    "contract-results.json": {
+      "bytes": 1831,
+      "sha256": "17246f14629655c9c06eebc5fbd428310c3494461e0efeb9f2069183467ad1e3"
+    },
+    "detailed-summary.json": {
+      "bytes": 546114,
+      "sha256": "6236977f940de17926837ad2ee61d524b34a48cd0adaad7ca3bf14ef8674960a"
+    },
+    "foam-comparison.png": {
+      "bytes": 72753,
+      "sha256": "3c6b7394629747618bdc8319be5b407f33a0fb537bc7533c0e3f62354ac8fbec"
+    },
+    "focused-tests.log": {
+      "bytes": 100,
+      "sha256": "7015a4b2bf7d1027036debc733e312ed16e14c67b51b002d343b1cbffd95aac8"
+    },
+    "governance-check.log": {
+      "bytes": 32,
+      "sha256": "5054252290d7f2a5f8913daf1f690a541c7a6f4f2f04082fd264770893528818"
+    },
+    "inspect_supporting_media.py": {
+      "bytes": 1687,
+      "sha256": "167f2a8703f4e89ed1f7c1c67c296a3c35c582333e5f6dc26a6f97a0429e0e85"
+    },
+    "measurement-scope-preflight.json": {
+      "bytes": 2113,
+      "sha256": "e5d195ea3b939a79deae240e31bad0260b93c131ef81d340be8829cdf55f614b"
+    },
+    "measurement-scope-results.json": {
+      "bytes": 800,
+      "sha256": "75c37f570619e9ab9ddf7839f3b95729b401f753f7ac1875dd84e38bfe0cb062"
+    },
+    "oil-comparison.png": {
+      "bytes": 110802,
+      "sha256": "fc30092443cc77501f2e006d3e2a426c9a711fca5da9a3526adfcafa4135a59e"
+    },
+    "other-samples-original-rois.jpg": {
+      "bytes": 171856,
+      "sha256": "b1fed06dc8c19fd3ffeec79fefa19abbdeefa9edb08fd1c3c57918c78b071f82"
+    },
+    "pair-control-preflight.json": {
+      "bytes": 589,
+      "sha256": "31282d63b9d71bfe136e0ae37aefee5725c2fca2ca599ab1fff65c41f2c4a97c"
+    },
+    "preflight.json": {
+      "bytes": 31830,
+      "sha256": "829d65d1e59f1f76494e3e5b452c2a22f0b2da2f4c7e0e2b3cb282510674766c"
+    },
+    "probe-preflight.json": {
+      "bytes": 1011,
+      "sha256": "3eecf889dc0a2344059fdf96b192ccf2b997ea166e5433438f0b89caf694f204"
+    },
+    "probe_contracts.py": {
+      "bytes": 6576,
+      "sha256": "db23c31320140599c99b9aaca2bc73f1c141f6c12304fef498918047744fd7bd"
+    },
+    "real-support-readout.json": {
+      "bytes": 234321,
+      "sha256": "65c1bc21a8f5e6db15e0f2048ba8338f3a6433f66206e92448bb43f5da3a6aa9"
+    },
+    "results.json": {
+      "bytes": 23558,
+      "sha256": "e264bf234089da261b1b60cf273b294a49227bca4903b2fb01f51b82a1c1488b"
+    },
+    "run_measurement_scope.py": {
+      "bytes": 6367,
+      "sha256": "d8d54701cb22dc8428f0b65045226bd870c06efb0c38e170d60abbae0b0b1e9b"
+    },
+    "run_pair_control.py": {
+      "bytes": 3630,
+      "sha256": "af17af3356afd9863fbf970413572ae3161e2727b1527c1aee8a1484b01f4a89"
+    },
+    "run_xy.py": {
+      "bytes": 5956,
+      "sha256": "f0a659773b0ec4390b843bd7c9ddcd4d0553fcfff8ce5daae7b6782a153ed9dd"
+    },
+    "runner-pin.json": {
+      "bytes": 180,
+      "sha256": "affe0b026d07f8d2400f193358b830790f1ea9547ccfc8a65d94d6f628ae7f66"
+    },
+    "sample2-baseline/completed.json": {
+      "bytes": 789824,
+      "sha256": "d9344a5c7be8288270973dd23cce73fb22537a09f5776355bd10a92156df0f2b"
+    },
+    "sample2-baseline/raw.json": {
+      "bytes": 485360,
+      "sha256": "e01e541cb315bb1b9e4f6813abe7ed9eaeb3ef658da198603f6a04a366c1897e"
+    },
+    "sample2-baseline/recipe.oilrecipe": {
+      "bytes": 3505,
+      "sha256": "3358b78a1e76333ec01541490623d7a7297eb65bcdc420186bab5d5e15928e5a"
+    },
+    "sample2-baseline/report.json": {
+      "bytes": 7298,
+      "sha256": "f75d8db5e3d7a2469d966c0c7272501556096cd958e6ef0b7944e25d84249ea1"
+    },
+    "sample2-baseline/summary.json": {
+      "bytes": 229,
+      "sha256": "83bcfb398f5412ab17769fd07e7bab97a23c3fd9b8a1c7ed4bf3e4c94c110f35"
+    },
+    "sample2-baseline/tracking.json": {
+      "bytes": 5021,
+      "sha256": "ac561594229fd9c0641cf45b2b73ff43fe4b18efd01b209b91270d9101edc94c"
+    },
+    "sample3-baseline/completed.json": {
+      "bytes": 21931568,
+      "sha256": "9ec04cbe13b6336e27efbd52116e3d0b104f3001888798a62133cf925f461807"
+    },
+    "sample3-baseline/raw.json": {
+      "bytes": 11601749,
+      "sha256": "98ab0d3c7ce520a4d3fc32341273c083f02508f1320edbd09fe642c13f19276d"
+    },
+    "sample3-baseline/recipe.oilrecipe": {
+      "bytes": 3457,
+      "sha256": "7090f3828914f038d4eb428af49415c3d187e18d2b92edefc782384989042382"
+    },
+    "sample3-baseline/report.json": {
+      "bytes": 20085,
+      "sha256": "1aaa00836d59884bdb246ab653d92d1ce5680504aaebe1d017102d4720ad3ede"
+    },
+    "sample3-baseline/summary.json": {
+      "bytes": 233,
+      "sha256": "da99e46c00816ca1b07457bbd2245ca1525d11f3e6c572148f7e3dc3973308ca"
+    },
+    "sample3-baseline/tracking.json": {
+      "bytes": 151995,
+      "sha256": "7b571dd57d8ec978ce1390f8ea5b0b7847fe00cc1ad0bdf78da10eefd02862ae"
+    },
+    "sample4-baseline/completed.json": {
+      "bytes": 16924717,
+      "sha256": "f5b403ce9a061fca3bd4933a44bfdbcf83df0c95811222981a7105aa259870ca"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/analysis_manifest.json": {
+      "bytes": 2865,
+      "sha256": "3b79bf872cfbb682f67e98c1ebe312939501623e9f382d542351907dfc16bbc0"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_context_01.json": {
+      "bytes": 16646,
+      "sha256": "b2adc58fcb8818c1547c45afea71536529334e1f2a8334e306d39394102f2240"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_context_01.png": {
+      "bytes": 70204,
+      "sha256": "b98b126fff75e60a3df3498cc1b355b6320ea688a0e6a458aee7df0f5d7e968c"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_01.json": {
+      "bytes": 66052,
+      "sha256": "ac7faf845b34119cd879f3b66bece12beb3ebb2848aa23f1298a14cc0859d1c5"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_01_page_00.png": {
+      "bytes": 750340,
+      "sha256": "c8715e1c160c586371bba07ab7b2bf1e34432d64b32cbd85a6c4fd00da0886ae"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_01_page_01.png": {
+      "bytes": 755111,
+      "sha256": "619beabe89e2f97f070965dff1e383d71b212efc67d5193301310b2e6aac84ce"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_01_page_02.png": {
+      "bytes": 750588,
+      "sha256": "cae7d5b6dee1a2f0698275d19a32728953223e74ffacaf78c5063e8daf9f3eb3"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_01_page_03.png": {
+      "bytes": 743154,
+      "sha256": "4676f992fe40b31e66d21faa99dd83ade4c01771caa39170e34ae5efdcbb5681"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_01_page_04.png": {
+      "bytes": 748343,
+      "sha256": "85a7fbdc6b8e78b98442fb838a64fd9354095875003e935b3e9abc6c5864ec55"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_01_page_05.png": {
+      "bytes": 741351,
+      "sha256": "29d20ea30e48b056e072a4fbe6851cbc0c0ce3268e3ee25bdb12b95e17a37b76"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_01_preview.png": {
+      "bytes": 19802,
+      "sha256": "c3ee14e35c2351cf5031f7d1317745b585bf0314bdcecb15ed5166f2811895f1"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_02.json": {
+      "bytes": 49348,
+      "sha256": "b67badd5fe70c2024429ff28e110453c23af6e485c1749ac9d62ea09c04bb17e"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_02_page_00.png": {
+      "bytes": 749803,
+      "sha256": "99010dd62e4d99857c3489e737dc76222f4aa4a463fb3eca9defe81de79cd4df"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_02_page_01.png": {
+      "bytes": 756179,
+      "sha256": "d95709729c7b244083bfc7e01473dff1be83e162058a9c88c5c5d1c378af79cb"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_02_page_02.png": {
+      "bytes": 753389,
+      "sha256": "5c3c6ebf0b76b31f288a5bb113369ccd4748f240ac152804f82b1dcd1a3a2395"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_02_page_03.png": {
+      "bytes": 745961,
+      "sha256": "c0971269bb70d38b8711f51469bf8f02156c4324625110b87cb9fd508580c6db"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_02_page_04.png": {
+      "bytes": 400285,
+      "sha256": "b600739300858a6d0f206f47641712d4154ca6e4751cdebb94a271013c2441dc"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_02_preview.png": {
+      "bytes": 19648,
+      "sha256": "be18d79f6ca3199f966a90506c57a500a63e919edbc43c890f40c1106ad98168"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_03.json": {
+      "bytes": 21360,
+      "sha256": "d98311c77b0db0cd987b9551ef4c8b8737ac98f4382692d11fab907c9c7435a8"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_03_page_00.png": {
+      "bytes": 746180,
+      "sha256": "9c11ef027a58121f36956d1fd2a9215f66d19cfb7d971b4ccf9c20855258cb91"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_03_page_01.png": {
+      "bytes": 673347,
+      "sha256": "99f9e571e1e10a3106300986269ff7ad797dd8b01e5011bcdb3b34e1679957ec"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/assets/source_sequence_01_03_preview.png": {
+      "bytes": 20068,
+      "sha256": "62a35c883be4f6965168c44791ddd0ce35a29938f997d72a27e787750be3363d"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_01_COMPRESSOR_START_0.00.png": {
+      "bytes": 125217,
+      "sha256": "f5f5797fe783d21b14039c4be9a302ec8b7a6092ca23352aee6587b1caf1e92c"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_02_ZERO_CROSS_DOWN_7.00.png": {
+      "bytes": 127257,
+      "sha256": "dc3e7394ef7de6c9d2b389f2732e4329d9363983a54d57c11dc7e1adf1875ceb"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_03_ZERO_CROSS_UP_12.00.png": {
+      "bytes": 123929,
+      "sha256": "2854ce44553a3816cdca9ac9ae1d948c6184a76caaf946b1e76de7fe0fcb9bd5"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_04_ZERO_STABLE_RECOVERY_18.00.png": {
+      "bytes": 122044,
+      "sha256": "dba85789da801257626949b6bd566f8c31c29edbf57553fc38c81f8d83ee79ba"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_05_FOAM_START_39.50.png": {
+      "bytes": 124997,
+      "sha256": "82cd2d4b596c0427cdcf9a9ee4e9f113aed83be0201648bab363923d9fcac8b7"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_06_MINIMUM_OIL_LEVEL_42.00.png": {
+      "bytes": 120974,
+      "sha256": "3043bd5ce8ab3363967da64907c4a8753322a2e8243c34c503e5805b779751cd"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_07_MAXIMUM_OIL_LEVEL_44.00.png": {
+      "bytes": 121620,
+      "sha256": "3e95f4504bc0e0fe9d1cf033c2a0c0473581385fc1c9d2ded322689ccc5bb664"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_08_FOAM_END_53.50.png": {
+      "bytes": 121804,
+      "sha256": "154456e6271c010baa76540d4e9fabe5ea2e20b44d47b673cce8723b224f1d72"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_09_SCENE_CONTEXT_49.50.png": {
+      "bytes": 121859,
+      "sha256": "04546f327babdf67d9188b9a68418191966be7aa9905b0cf7ec05a93570b1019"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_10_SCENE_CONTEXT_50.75.png": {
+      "bytes": 125463,
+      "sha256": "b11cffbf7583f00bdfe24240a437a1b549f99a2f691cc04427e4068ab8ad7139"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/captures/sample4_sight_glass_11_SCENE_CONTEXT_52.00.png": {
+      "bytes": 117917,
+      "sha256": "44abbc0a22fd1ca110d22c76bf11f3ceab35210d52835379db30033b801e4357"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/events.csv": {
+      "bytes": 4397,
+      "sha256": "0897770680f5d57219720dc3186502d92e38d128303240fa0fcfdcdfdc6e8234"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/graphs/combined_levels.png": {
+      "bytes": 93616,
+      "sha256": "9f219c02a9479de42d243f3ac193a02e75dd34c3bdfe9d9213ea55685ce32ccb"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/graphs/sample4_sight_glass_detail.png": {
+      "bytes": 134689,
+      "sha256": "7910511b988565ee512849d191224c5ffbc0b65f169ad0699391bfaebbd536a2"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/logs/analysis.log": {
+      "bytes": 56,
+      "sha256": "02a22cd7697858c5eefc9b5572b74d337ce52149d9910eebbdde935b2489eb21"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/recipe_snapshot.oilrecipe": {
+      "bytes": 3319,
+      "sha256": "655cfd926003589e93acc940bf0f5a8e34f15d12b834f509f9aab2d078e55d45"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/report.html": {
+      "bytes": 125915,
+      "sha256": "429c657217a0c46c702f2558efa91a33478bdb5833f9ddc9f9c5c053683c614a"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/retrospective_interpretation.json": {
+      "bytes": 1132,
+      "sha256": "33b0049d04b8c7811a84d04db1986286a24bb6d835668d2fcfde914ad2bb9e39"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/review_index.json": {
+      "bytes": 1339,
+      "sha256": "6be254dad7ef1a73a2eeee57683d15f63d9665ed2595490c65ca796545f56a0f"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/session.json": {
+      "bytes": 1108,
+      "sha256": "abd214a57cddf56373bd71f1ecd44fd1dfeaac816e9950667f68fe06b1ead1b6"
+    },
+    "sample4-baseline/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015409/tracking_data.csv": {
+      "bytes": 36625,
+      "sha256": "38c8d4f994fbce0461819cd172038f84baf5084864eff008a50d11536223ab8b"
+    },
+    "sample4-baseline/raw.json": {
+      "bytes": 9484635,
+      "sha256": "399ca8a5d19c2fa26f01c4f24fd72870acd84f22747201d8006616265cc5936f"
+    },
+    "sample4-baseline/recipe.oilrecipe": {
+      "bytes": 3320,
+      "sha256": "dfffc7e59d22d3eb862719d0d1c48b56a716be93c32f4850ff8e9bf46840434e"
+    },
+    "sample4-baseline/report.json": {
+      "bytes": 22216,
+      "sha256": "52a25494427f29f3aa2d69b66e2481d3e730d48954f14ccd45070ee2f5311af4"
+    },
+    "sample4-baseline/summary.json": {
+      "bytes": 434,
+      "sha256": "20e324d36b65b4d2b71b0971e3619b14fc82c1abec1e42ec1b1c32ccac6671d7"
+    },
+    "sample4-baseline/tracking.json": {
+      "bytes": 114613,
+      "sha256": "251995c8c26bf8d71e348c89ba28a2be90c4990ec129c23abda7446b9a40ba3a"
+    },
+    "sample4-local_xy_rectangle/completed.json": {
+      "bytes": 16536500,
+      "sha256": "3ac2373af00731f8f991e723429c4c920eca3f3c36fdd4c7dc2eac7165f45e73"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/analysis_manifest.json": {
+      "bytes": 2871,
+      "sha256": "26b8c27d0779116185633661c2a87326f822222b31e7eebc5629469fa8e2e41f"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_context_01.json": {
+      "bytes": 16646,
+      "sha256": "b2adc58fcb8818c1547c45afea71536529334e1f2a8334e306d39394102f2240"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_context_01.png": {
+      "bytes": 70204,
+      "sha256": "b98b126fff75e60a3df3498cc1b355b6320ea688a0e6a458aee7df0f5d7e968c"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_01.json": {
+      "bytes": 33138,
+      "sha256": "3319546cbebbfcfb8e5298b1a5b32bbbe75570e10f79b51b11361d3acbef446b"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_01_page_00.png": {
+      "bytes": 775016,
+      "sha256": "54d9c7d5afff2239f7e15264009fe3a673d9737f27c0720b590956959941af7c"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_01_page_01.png": {
+      "bytes": 780489,
+      "sha256": "fda4565b8770c4e2991462b453eba8f1d5d78447aacaa4ff7fb24b5e1ed5cb38"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_01_page_02.png": {
+      "bytes": 772666,
+      "sha256": "87e560dee7b466860306d0a62244c6d17a8387c262a4fb7c8923afd7e39eafdc"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_01_page_03.png": {
+      "bytes": 27348,
+      "sha256": "afb9c5fbfbb60b4fa66ed59debe2b493c412e831cd4ea94caf34f136a42d78d6"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_01_preview.png": {
+      "bytes": 19974,
+      "sha256": "2223ad83a726f735e1c405e5d76b861253057e3caeff912bfa76c6f03b7e35e1"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_02.json": {
+      "bytes": 66012,
+      "sha256": "4f525063a8f4c32d1c90d42bdeea56548ac3fbd99ad45811bde5d3daa047351b"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_02_page_00.png": {
+      "bytes": 776990,
+      "sha256": "3cd99bcf76f1312bdfab532653bb9eae6723d2b43c0d4fbdab80f7cb48c3ea9a"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_02_page_01.png": {
+      "bytes": 763386,
+      "sha256": "1ff3b6b6612c8ae34c668d7c8d7df401f0ee29e263d262260c9e46491629fb6a"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_02_page_02.png": {
+      "bytes": 758372,
+      "sha256": "031e06386aab38208232d52957c4bd42a93c411cb7097b92e0578858fdeb8a1f"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_02_page_03.png": {
+      "bytes": 754386,
+      "sha256": "4231837cf7a56510055ca5b39432008716e4d908468d5b2c90f9a8171e4ba0ab"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_02_page_04.png": {
+      "bytes": 754503,
+      "sha256": "490ee9e01d009e5b0fddc559d789284ce2fb04ba19a544e1b5216d4351aa2917"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_02_page_05.png": {
+      "bytes": 746833,
+      "sha256": "6a250e394d82da25efafa16295a542565c57a1e0a8e486e28f00cc726b0c031c"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_02_preview.png": {
+      "bytes": 19974,
+      "sha256": "2223ad83a726f735e1c405e5d76b861253057e3caeff912bfa76c6f03b7e35e1"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_03.json": {
+      "bytes": 33335,
+      "sha256": "9f6c7ece560488c66922772a60ff0d98b744b7a1fe6fd478e701837b852a4360"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_03_page_00.png": {
+      "bytes": 750942,
+      "sha256": "a758b958722c61a63c2fee8852c2b748b8d29a087a3bdf61e040e9e9b38e93aa"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_03_page_01.png": {
+      "bytes": 751044,
+      "sha256": "608b4780fa433410cb0d4b38487cec87de80a5b0b0d6c38f12a13a7d1fe34e9b"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_03_page_02.png": {
+      "bytes": 757021,
+      "sha256": "e5fcb4f51e12635c90910194b7647b06ecbdf35615818505d79b83288cfbfbde"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_03_page_03.png": {
+      "bytes": 26914,
+      "sha256": "e02f0ce837fe58aa045ec91768c2b589099b5b7040074457092a1aeefb1659b9"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_03_preview.png": {
+      "bytes": 19389,
+      "sha256": "f1d8746d0b041d287ffe435d15389fd69fd7950c75a44a1c6941666b99e153bb"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_04.json": {
+      "bytes": 41330,
+      "sha256": "0019857e472d217fcd2f05d4f6dc1172dc1dabfcaba73f799b9d5fde15a816b1"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_04_page_00.png": {
+      "bytes": 750452,
+      "sha256": "c3a687a81408c7ebf1ed865f8f4dfdb360fdffae3009eb215cdce5eb45caf5dd"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_04_page_01.png": {
+      "bytes": 750870,
+      "sha256": "1b9db630218d35af1fefab845e6943762f8a97df931cc4c5c04ed9b6254b798b"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_04_page_02.png": {
+      "bytes": 749339,
+      "sha256": "4dfb790a01eb0543bfbf56c7e7fad5964cbcdfaa619f08af0bb245ffc650fef4"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_04_page_03.png": {
+      "bytes": 576888,
+      "sha256": "ac4718c4039d19741152bf67250bbd489d07e788b6fee47426a6d66b07658a59"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/assets/source_sequence_01_04_preview.png": {
+      "bytes": 19873,
+      "sha256": "cf31de0f6de11316cfe66930ce5035ce5ed544fde92a973bebfa4a9313443a6b"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_01_COMPRESSOR_START_0.00.png": {
+      "bytes": 125217,
+      "sha256": "f5f5797fe783d21b14039c4be9a302ec8b7a6092ca23352aee6587b1caf1e92c"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_02_MINIMUM_OIL_LEVEL_2.00.png": {
+      "bytes": 128354,
+      "sha256": "897337bc330e1cf1b9a26c8a6c50b8d94b209b4afddf69c099020853f1d368d9"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_03_ZERO_CROSS_DOWN_7.00.png": {
+      "bytes": 127257,
+      "sha256": "dc3e7394ef7de6c9d2b389f2732e4329d9363983a54d57c11dc7e1adf1875ceb"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_04_ZERO_CROSS_UP_12.00.png": {
+      "bytes": 123929,
+      "sha256": "2854ce44553a3816cdca9ac9ae1d948c6184a76caaf946b1e76de7fe0fcb9bd5"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_05_ZERO_STABLE_RECOVERY_18.00.png": {
+      "bytes": 122044,
+      "sha256": "dba85789da801257626949b6bd566f8c31c29edbf57553fc38c81f8d83ee79ba"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_06_FOAM_START_40.00.png": {
+      "bytes": 118506,
+      "sha256": "4f915ed1c6672754ad4bd202a5562f48b71a638b24d62b7d491e5c31e21ba75d"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_07_MAXIMUM_OIL_LEVEL_40.50.png": {
+      "bytes": 121536,
+      "sha256": "0bd6d23fff82e3902d82c39826e53ce42be24520f1772c0916c0c7a25fbdc6b2"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_08_FOAM_END_41.00.png": {
+      "bytes": 125758,
+      "sha256": "a17c99300c6d7eb15ccbf0e9ba6b384fce804084b57d66b9e3980702a14ad26f"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_09_FOAM_START_44.00.png": {
+      "bytes": 124918,
+      "sha256": "1f0cf392779298fcddab06337d881f200e28981b2638470c2def59cf07058df0"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_10_FOAM_END_45.50.png": {
+      "bytes": 128559,
+      "sha256": "b94e451d6066da1cfa91d37fd3743435d0a1d2d58feb7780f5ee22f178c15514"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_11_FOAM_START_46.50.png": {
+      "bytes": 123342,
+      "sha256": "6e3af109211ced726abb361215c42f1cdc10247f0a9109c34e6ac39445daeb2d"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/captures/sample4_sight_glass_12_FOAM_END_48.00.png": {
+      "bytes": 121226,
+      "sha256": "8b634ed6acc432d6dddec16fec22b18c96a871c0179f76f3d8313cff49b1052f"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/events.csv": {
+      "bytes": 5131,
+      "sha256": "b0cf17902bb26f44b6e86cea2ed012eaac09e1e1684954a79e942cfdf252e82b"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/graphs/combined_levels.png": {
+      "bytes": 79935,
+      "sha256": "61bce10f2e1521d3de277d7eba9bbf611c9112d13b66893692f886c42039181a"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/graphs/sample4_sight_glass_detail.png": {
+      "bytes": 137401,
+      "sha256": "b78afb796d392eb45e3aa7c50fd771358a365053fb1d8a9c1a85f74b476c9db1"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/logs/analysis.log": {
+      "bytes": 67,
+      "sha256": "30443b42fcb579d9136eadf58447beb841ab36eff8ec53ed41049f7632d77e85"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/recipe_snapshot.oilrecipe": {
+      "bytes": 3647,
+      "sha256": "f4c0f00d8d6e8054bb92d19179c7d3f1af472e6f1bfb7e99a6e245aeccd5d881"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/report.html": {
+      "bytes": 155590,
+      "sha256": "19d4b5b68a41d12472deabeccf9df122f7bdc2d3bc2c85fc64c976d8a1430beb"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/retrospective_interpretation.json": {
+      "bytes": 1132,
+      "sha256": "330e232723fc259ed08ae87bfe34d9d65efa2a956afd70b2a4cb2cf09ec1cb70"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/review_index.json": {
+      "bytes": 1350,
+      "sha256": "c9441fcb0efdf72325bcea180b5c379ec3f53fb865af017d948b22cad6fa46b5"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/session.json": {
+      "bytes": 1128,
+      "sha256": "5fc7888f9abbc40c20486b4046ecb14f44c3fbbb991c5fea61930b86cb56b63f"
+    },
+    "sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557/tracking_data.csv": {
+      "bytes": 33835,
+      "sha256": "37a0529e05d5f9192bdbf239bbd06410517bb57bbbd0cf2f095bfde83c7b930a"
+    },
+    "sample4-local_xy_rectangle/raw.json": {
+      "bytes": 9410888,
+      "sha256": "2af8f7d9e023dcb170349b683a725653323739af229e0c6f40d4ad37db7bb64a"
+    },
+    "sample4-local_xy_rectangle/recipe.oilrecipe": {
+      "bytes": 3648,
+      "sha256": "aa6e19d53209a7831086dd74e89a47fccd6e723defa0ba67243b6fe7bacd207f"
+    },
+    "sample4-local_xy_rectangle/report.json": {
+      "bytes": 26696,
+      "sha256": "a6e4181a6db2e354b11411148594ecc79db226bb2d13ff150358445a678a325b"
+    },
+    "sample4-local_xy_rectangle/summary.json": {
+      "bytes": 452,
+      "sha256": "0bebe4ddd90e9425d1d2fe2ece19aaa2cddd96c5056de5d1bc169857b1a29334"
+    },
+    "sample4-local_xy_rectangle/tracking.json": {
+      "bytes": 111658,
+      "sha256": "cbcdd2b610bc4049488962b3b3cc29e1d0726936722d137b19d9c39e6b0d0d3a"
+    },
+    "sample4-oil_measurement_only/completed.json": {
+      "bytes": 16904861,
+      "sha256": "b804c234ec872920239ee9f53c149019d9013d7ba1b138b9e9221e47b9ab0d00"
+    },
+    "sample4-oil_measurement_only/operations.json": {
+      "bytes": 35598,
+      "sha256": "5a1e058f8e25748e93f8a9dad507bb9b63cc44c66d7ed9c59ba53303b4c3f099"
+    },
+    "sample4-oil_measurement_only/raw.json": {
+      "bytes": 9480969,
+      "sha256": "47c8129e2e8c3e4c44d45cb6ef89e16c2ef217584f6d55bf055bf6b40cd1528f"
+    },
+    "sample4-oil_measurement_only/report.json": {
+      "bytes": 18167,
+      "sha256": "2cd3c87661e9378d508b3ad581d30b3764ef35e3cc8b8e3b62db8b5cd409f6ab"
+    },
+    "sample4-oil_measurement_only/summary.json": {
+      "bytes": 249,
+      "sha256": "93d01d1f3bd4f6a3cf2a35a4c3daf56fc24428d8bc42e1fcd541ae2e50b717b1"
+    },
+    "sample4-oil_measurement_only/tracking.json": {
+      "bytes": 114718,
+      "sha256": "70f9c1b2c80e931c5bf4bd39da509b0852432fa7810907abe0755bc48911edfe"
+    },
+    "sample4-oil_measurement_paired_phase/completed.json": {
+      "bytes": 17140539,
+      "sha256": "206f2252744574ff5ffeb43991cbdea1fb0a9c2c73b5bb8338cd7d1224b63727"
+    },
+    "sample4-oil_measurement_paired_phase/operations.json": {
+      "bytes": 35598,
+      "sha256": "5a1e058f8e25748e93f8a9dad507bb9b63cc44c66d7ed9c59ba53303b4c3f099"
+    },
+    "sample4-oil_measurement_paired_phase/raw.json": {
+      "bytes": 9484071,
+      "sha256": "a80892b3345b2cb5d9bc232c656435eaee4f27d85557260b070012de6504ddfc"
+    },
+    "sample4-oil_measurement_paired_phase/report.json": {
+      "bytes": 18241,
+      "sha256": "fff0b95bcac4fb3fe6ddfd14ee44fadf52537f86cb145abbae95c66f601fb972"
+    },
+    "sample4-oil_measurement_paired_phase/summary.json": {
+      "bytes": 256,
+      "sha256": "155f15b7892f09c2821677b0747c40959796d347dcea8d81e023ace3bc10d2bb"
+    },
+    "sample4-oil_measurement_paired_phase/tracking.json": {
+      "bytes": 114910,
+      "sha256": "10e6a23c25ef13212b901a5e57bd32c2b6e5d79236826dbb719b0ca98fb92a51"
+    },
+    "sample4-original-controls.jpg": {
+      "bytes": 131199,
+      "sha256": "d14b2d30fff18eb465439b74901f44b5475e60bb0aa28e5a715185ebe60e5df8"
+    },
+    "sample4-paired_phase_no_exclusion/completed.json": {
+      "bytes": 17149638,
+      "sha256": "108c872f6cc9bc57ec2cd7f06ee0b4a84c9dc6ce4f04b1e757e8fc2a54f0e140"
+    },
+    "sample4-paired_phase_no_exclusion/raw.json": {
+      "bytes": 9487769,
+      "sha256": "f6d412c580845033acfd59a0418c9a81b65fa44fbf32281d4b38597328148db7"
+    },
+    "sample4-paired_phase_no_exclusion/report.json": {
+      "bytes": 19557,
+      "sha256": "94277534507eac65ad81565e3ba28dd90ec32c004e58e0d4eda79b968d262005"
+    },
+    "sample4-paired_phase_no_exclusion/summary.json": {
+      "bytes": 226,
+      "sha256": "74173590ba9acae36c2d85384d28c296aee37048db7b6731066d6c741c7265dd"
+    },
+    "sample4-paired_phase_no_exclusion/tracking.json": {
+      "bytes": 114932,
+      "sha256": "b107e15c775d3342a2fe2bd71b7642a795c5e6c21593c5659a4132e59c7b424a"
+    },
+    "summarize_experiments.py": {
+      "bytes": 6450,
+      "sha256": "7cc07512e8d494df33fdc74b287fc009c77b2511f73ac9fd01d797dfbdd0443c"
+    },
+    "supporting-media-receipt.json": {
+      "bytes": 3607,
+      "sha256": "f30ff0bbc2b1d3fd30f37dade54f812c7c5d33cf51778cf07fab56034767c2a8"
+    }
+  }
+}

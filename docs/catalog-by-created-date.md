@@ -496,3 +496,50 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 |---|---|---|
 | 2026-10-09 | [Reference measurement diagnostic](60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md), [receipt](60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.json) | 44초 125개 유리 윤곽의 사용자 판정과 진단 구현·출력 동일성 검증; 42.5초 겹침 여부 판정 지점 |
 | 2026-10-09 | [Reference + sequence-context feasibility](60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.md), [receipt](60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.json) | 대략적 Foam 판독 반영, 기존 156개 추적/6,240개 연결과 등록 참조 대조; 겹침·지속성의 자동 판정 승격 보류 |
+
+
+## Local XY specification intake additions
+
+| 최초 등록일 | 문서/산출물 | 역할 |
+|---|---|---|
+| 2026-10-09 | [Local XY intake](60-evidence/s11/2026-10-09-local-xy-spec-intake.md) | 명세 타당성·설계 보완·WP1–WP5 대응과 로컬 재현 한계 |
+| 2026-10-09 | [Intake verification](60-evidence/s11/2026-10-09-local-xy-spec-intake.json) | 165개 파일 목록·hash와 751개 saved completed 결과 재현 |
+| 2026-10-09 | [Package routing](70-reference/s11-local-xy-2026-10-09/README.md) | 원문/현지 원본/검증 도구와 보존 위치 |
+| 2026-10-09 | [Supplied specification](70-reference/s11-local-xy-2026-10-09/S11_Local_XY_Detector_Work_Spec_2026-10-09.md) | 원문 bytes 보존; production 미채택 |
+| 2026-10-09 | [Supplied summary](70-reference/s11-local-xy-2026-10-09/S11_Local_XY_Execution_Summary_2026-10-09.json) | ZIP 및 별도 첨부가 동일; 파생 요약 원문 |
+| 2026-10-09 | [Supplied handoff](70-reference/s11-local-xy-2026-10-09/HANDOFF.md) | 전달 시점 인계 원문; Work Plan이 현재 상태 소유 |
+| 2026-10-09 | [Supplied checksums](70-reference/s11-local-xy-2026-10-09/SHA256SUMS.json) | 원문 파일 3개 SHA-256 |
+| 2026-10-09 | [Import manifest](70-reference/s11-local-xy-2026-10-09/import-manifest.json) | 원문과 native 복사본 대응·전체 local ZIP hash |
+| 2026-10-09 | [Intake verifier](70-reference/s11-local-xy-2026-10-09/verify_saved_outputs.py) | 영상 decode 없이 saved resolver·집계·파일 무결성 확인 |
+| 2026-10-09 | [native-evidence/base_sample_1-baseline/summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/base_sample_1-baseline/summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/compact-summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/compact-summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/contract-results.json](70-reference/s11-local-xy-2026-10-09/native-evidence/contract-results.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/detailed-summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/detailed-summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/foam-comparison.png](70-reference/s11-local-xy-2026-10-09/native-evidence/foam-comparison.png) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/focused-tests.log](70-reference/s11-local-xy-2026-10-09/native-evidence/focused-tests.log) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/governance-check.log](70-reference/s11-local-xy-2026-10-09/native-evidence/governance-check.log) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/inspect_supporting_media.py](70-reference/s11-local-xy-2026-10-09/native-evidence/inspect_supporting_media.py) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/measurement-scope-preflight.json](70-reference/s11-local-xy-2026-10-09/native-evidence/measurement-scope-preflight.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/measurement-scope-results.json](70-reference/s11-local-xy-2026-10-09/native-evidence/measurement-scope-results.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/oil-comparison.png](70-reference/s11-local-xy-2026-10-09/native-evidence/oil-comparison.png) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/other-samples-original-rois.jpg](70-reference/s11-local-xy-2026-10-09/native-evidence/other-samples-original-rois.jpg) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/pair-control-preflight.json](70-reference/s11-local-xy-2026-10-09/native-evidence/pair-control-preflight.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/preflight.json](70-reference/s11-local-xy-2026-10-09/native-evidence/preflight.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/probe-preflight.json](70-reference/s11-local-xy-2026-10-09/native-evidence/probe-preflight.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/probe_contracts.py](70-reference/s11-local-xy-2026-10-09/native-evidence/probe_contracts.py) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/real-support-readout.json](70-reference/s11-local-xy-2026-10-09/native-evidence/real-support-readout.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/results.json](70-reference/s11-local-xy-2026-10-09/native-evidence/results.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/run_measurement_scope.py](70-reference/s11-local-xy-2026-10-09/native-evidence/run_measurement_scope.py) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/run_pair_control.py](70-reference/s11-local-xy-2026-10-09/native-evidence/run_pair_control.py) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/run_xy.py](70-reference/s11-local-xy-2026-10-09/native-evidence/run_xy.py) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/runner-pin.json](70-reference/s11-local-xy-2026-10-09/native-evidence/runner-pin.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/sample2-baseline/summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/sample2-baseline/summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/sample3-baseline/summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/sample3-baseline/summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/sample4-baseline/summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/sample4-baseline/summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/sample4-local_xy_rectangle/summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/sample4-local_xy_rectangle/summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/sample4-oil_measurement_only/summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/sample4-oil_measurement_only/summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/sample4-oil_measurement_paired_phase/summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/sample4-oil_measurement_paired_phase/summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/sample4-original-controls.jpg](70-reference/s11-local-xy-2026-10-09/native-evidence/sample4-original-controls.jpg) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/sample4-paired_phase_no_exclusion/summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/sample4-paired_phase_no_exclusion/summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/summarize_experiments.py](70-reference/s11-local-xy-2026-10-09/native-evidence/summarize_experiments.py) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-09 | [native-evidence/supporting-media-receipt.json](70-reference/s11-local-xy-2026-10-09/native-evidence/supporting-media-receipt.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |

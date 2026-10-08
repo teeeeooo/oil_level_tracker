@@ -1,0 +1,84 @@
+{
+  "source_head": "167126e5f095e4011bc8f7dfd51049df87dd84f6",
+  "runner_sha256": "d8d54701cb22dc8428f0b65045226bd870c06efb0c38e170d60abbae0b0b1e9b",
+  "primary_result_sha256": "e264bf234089da261b1b60cf273b294a49227bca4903b2fb01f51b82a1c1488b",
+  "primary_preflight_sha256": "829d65d1e59f1f76494e3e5b452c2a22f0b2da2f4c7e0e2b3cb282510674766c",
+  "exposure": "Designed after shared-mask failure; both new variants frozen before their results; exposed regression only",
+  "rect": [
+    563,
+    816,
+    598,
+    828
+  ],
+  "variants": [
+    "oil_measurement_only",
+    "oil_measurement_paired_phase"
+  ],
+  "measurement_owners": [
+    "phase_candidate_assembler.generate_material_path_candidates (both material/raster)",
+    "phase_candidate_assembler.generate_phase_transition_candidates"
+  ],
+  "unchanged": [
+    "Oil hypothesis acquisition",
+    "Foam pixel/material/motion/temporal owners",
+    "shared preprocess",
+    "other Oil proposal families",
+    "original enrichment and static maps",
+    "authority,tracklet,phase,selector",
+    "all thresholds and original recipes"
+  ],
+  "variant_difference": "second variant only replaces independent upper/lower phase averages with complete-common-X averages; same existing minimum-area rule, no new score or threshold",
+  "limits": "measurement-only aperture withdrawal, NOT pixel influence removal or physical classification; no template rejection; metadata/spatial signatures and unmodified context can still sample structure",
+  "window": [
+    0,
+    56
+  ],
+  "cadence_fps": 2,
+  "controls": {
+    "targets": [
+      [
+        1140,
+        9
+      ],
+      [
+        1200,
+        4
+      ],
+      [
+        1260,
+        4
+      ],
+      [
+        1275,
+        12
+      ],
+      [
+        1320,
+        9
+      ],
+      [
+        1485,
+        19
+      ],
+      [
+        1560,
+        20
+      ]
+    ],
+    "non_targets": [
+      [
+        1200,
+        10
+      ],
+      [
+        1260,
+        15
+      ],
+      [
+        1320,
+        21
+      ]
+    ],
+    "unresolved": "all other candidates; no automatic truth by proximity, source, or X/Y"
+  }
+}

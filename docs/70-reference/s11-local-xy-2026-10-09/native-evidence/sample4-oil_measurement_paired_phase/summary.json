@@ -1,0 +1,9 @@
+{
+  "variant": "oil_measurement_paired_phase",
+  "results": 113,
+  "numeric_oil": 79,
+  "numeric_foam": 26,
+  "fingerprint": "1c7dcf43623ace2e9768391ba350e5c2eace0387c76c8936f1d0f514ccf4de0d",
+  "elapsed_sec": 86.45153266598936,
+  "operation_calls": 339
+}

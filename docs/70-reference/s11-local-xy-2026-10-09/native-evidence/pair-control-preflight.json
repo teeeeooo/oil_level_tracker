@@ -1,0 +1,13 @@
+{
+  "source_head": "167126e5f095e4011bc8f7dfd51049df87dd84f6",
+  "runner_sha256": "af17af3356afd9863fbf970413572ae3161e2727b1527c1aee8a1484b01f4a89",
+  "purpose": "paired phase means also affect existing ellipse/glare support without the XY mask; this no-mask ablation is required to avoid attributing all changes to exclusion",
+  "variant": "paired_phase_no_exclusion",
+  "paired_rule": "same complete common-X and same existing 25-percent minimum area as oil_measurement_paired_phase",
+  "window": [
+    0,
+    56
+  ],
+  "role": "exposed regression, not holdout",
+  "promotion": false
+}

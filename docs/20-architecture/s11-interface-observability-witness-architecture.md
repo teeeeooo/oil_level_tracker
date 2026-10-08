@@ -2059,7 +2059,74 @@ The [sequence-context check](../60-evidence/s11/2026-10-09-d2-sequence-context-f
 closes the simple reference-overlap/appearance-persistence promotion attempt;
 it does not reject every possible combination of reference, region and motion.
 
+### Local XY Oil measurement exclusion — proposed contract
+
+The [October 9 Local XY intake](../60-evidence/s11/2026-10-09-local-xy-spec-intake.md)
+reviews completed shared-mask and measurement-only prototypes. This section
+adopts the next bounded implementation contract, not those prototypes as
+production behavior. Supplied WP1–WP5 refine D2/W4; O2 and later authority/phase
+acceptance are unchanged. No new UI or recipe schema is part of this slice.
+
+Reuse `phase_candidate_assembler` to pass an explicit, immutable, opt-in scope
+to the existing `oil_material_path` generator (material and raster-material
+lanes) and `oil_supplemental_path` phase-transition generator. Thread the
+execution context through existing detector/frame owners only as needed.
+Reuse `Rect` and coordinate conversion; no private frame/Glass/Y branch enters
+production. Bind the policy to the intended Glass, geometry and source-reference
+identity, with a version/digest included in execution provenance. Validate
+malformed or mismatched scope before detection. Bound rectangle count, union
+work, sidecar size and resource checks before implementation; do not silently
+truncate. An absent/empty scope takes the exact legacy path.
+
+Keep the original frame, shared ROI/preprocessing, `geometry.exclusions`, Foam
+owners, other Oil families and enrichment inputs unchanged. A scope withdraws
+samples inside its half-open source X/Y area only; same X at a different Y is
+not a permanently excluded column. The reviewed edge set and the sampling
+policy have different meanings. Do not automatically expand edge attribution
+to a rectangle label or apply the same new reference as both a withdrawal and
+a whole-candidate veto. Preserve unrelated existing recipe template semantics.
+
+For an affected measurement, retain original eligible support `V`, exclusion
+`E` and actually used support `M = V \ E`. Preserve original area/sector
+denominators and existing support floors. Only operations that actually lose
+eligible samples may use the proposed complete-common-X comparison; missing
+common support remains typed unavailable. Unaffected primitive measurements
+reuse their legacy numerical path. This local guard remains a hypothesis;
+the failed global paired-average prototypes are not its implementation.
+
+**Dependency boundary:** a local contrast window is not a complete dependency
+set. Material-path sector normalization, Sobel/material terms, seed selection
+and bounded candidate competition must be accounted for explicitly. Before
+coding, specify the retained normalization/context basis and which primitive
+outputs are guaranteed equal. OFF/empty/whole-scope nonintersection requires
+complete legacy equality. With active intersecting scope, changes can propagate
+to other candidate selections or completed rows; do not promise per-candidate
+identity/equality merely because its center lies outside the rectangle. Sampling
+withdrawal does not remove every upstream convolution/CLAHE/material dependency.
+
+Extend existing A1/native-path sidecars with actual original/excluded/used
+support, geometry basis, numerical rule, unavailable reason and scope identity.
+Their computations must match the executing scoped owner, not a fresh unmasked
+diagnostic approximation. Debug failure or level cannot change decisions.
+Do not copy candidate indices, truth labels, physical IDs or old authority tiers
+to changed proposals. Reevaluate them through unchanged authority, association,
+phase and selection rules, retaining stage-specific differences.
+
+Foam's measurement input stays equal, but changed final Oil can alter composition
+and public Foam validity. Compare both series through the existing report; raw
+Foam counts alone do not prove preservation. No phase/topology bypass, parameter
+sweep, ML or separate dense-contour system follows. Use the
+[Local XY controls](../30-validation/s11-interface-observability-witness-validation.md#local-xy-measurement-exclusion-controls)
+and Work Plan for execution/acceptance.
+
 ## History Review
+
+2026-10-09 Local XY intake: reviewed source-level measurement ownership and
+F02/F04/F06/F09/F10 against all eight saved runs. Whole shared-mask withdrawal
+and global paired means are unpromoted. The next proposal confines both sampling
+and any numerical guard to the affected Oil measurements, with explicit nonlocal
+normalization/selection dependencies and final per-series validity checks.
+Original experiment scripts/receipts are preserved; no executing source changes.
 
 2026-10-09 sequence-context continuation: preserved the approximate Foam-boundary
 reply without extracting dot coordinates. Joined all 156 previously frozen

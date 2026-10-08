@@ -1,0 +1,10 @@
+{
+  "sample": "sample4",
+  "variant": "local_xy_rectangle",
+  "results": 113,
+  "fingerprint": "765aa14d300279a74740f5ddfdb43b83abeab016eb4de472016190d72631fb3a",
+  "numeric_oil": 77,
+  "numeric_foam": 6,
+  "elapsed_sec": 76.07494504199713,
+  "report_bundle": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-local-xy-exclusion-20261009-001/sample4-local_xy_rectangle/oil_level_analysis_D2_local_XY_experiment_sample4_20261009_015557"
+}
