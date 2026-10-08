@@ -144,6 +144,10 @@ Windows 에이전트는 기존 첫 audit `experiment.json`과 그 하위
 
 ## D2 — existing target-bound control query
 
+실행 반환은 [근거 문서](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-saved-field-return--query-closed)에
+기록되었다. 아래는 재현용 절차이며 현재 재실행 요청이 아니다.
+다음 자료 전달은 [기존 support 파일 전달](#d2--existing-support-file-transfer)을 사용한다.
+
 목적은 이미 역할 binding이 끝난 Accum drain f17383 한 case의 **26개 후보와
 기존 판독 근거·측정 geometry 연결**이다. [D2 설계 진입 계약](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry)과
 [고정 query manifest](../50-diagnostics/s11/2026-10-08-d2-control-query.json)를 사용한다.
@@ -245,6 +249,59 @@ if ($LASTEXITCODE -ne 0) { throw "D2 saved-field query failed; preserve files an
 이 자료 자체를 cue-sharing 반례, classifier 성능 또는 새 물리 판독으로 선언하지 않는다.
 자료가 부족하면 부족한 필드/연결을 적고 종료한다. 다른 case 선택, 재라벨링, 모델 fitting,
 추가 metadata 순회로 확대하지 않는다. 고정된 26행의 반환 뒤 Mac 설계 검토가 다음 단계다.
+
+## D2 — existing support file transfer
+
+저장 기록 조회는 끝났다. Mac에는 실행 요약만 전달되어 실제 JSON의 전체 witness와
+원본 ROI 픽셀은 아직 없다. 다음 단계는 같은 regression frame의 **기존 파일 전달**이다.
+idx13의 첫 native sector Y315와 canonical Y291의 차이를 실제 support에서 해석하고,
+target/internal/other를 구별할 관측 근거가 있는지 검토하기 위한 자료다.
+새 모델·threshold·라벨이나 물리 판독을 이번 전달 작업에서 정하지 않는다.
+
+Windows 에이전트에게 아래 프롬프트를 전달한다. 소스 업데이트나 `.git`은 필요 없다.
+
+```text
+D2 saved-field query는 완료되었다. 재실행하지 말고 기존 파일만 전달해줘.
+
+목적: w4-passive-001-accum-drain / frame 17383의 저장된 전체 witness와
+원본 ROI를 Mac에서 함께 검토할 수 있도록 원본 바이트를 복사·묶어 전달한다.
+이번 작업은 파일 전달이며 이미지 해석이나 새 human review가 아니다.
+
+필수 파일 2개:
+1. C:\0.Coding\2.Reference\Oil level tracker\0.windows_diagnostic\data\w4-passive-review-001\target-truth-001\d2-accum-drain-controls-001.json
+   기대 raw SHA256:
+   91e0843e0747e18fd1ec35f0c7a87b37cf00145912f477900fdeca561a906b6b
+2. 이전에 selection-manifest.json과 연결을 확인한 원본 ROI PNG:
+   기존 bundle 아래 debug/frames/8fb6ebc7-7c56-401e-86c3-05514bf6380b_9f8aea91/f000017383_89c161ba4587/original_roi_512ed6ab.png
+   기대 raw SHA256:
+   3a4cc3265479a409acc445f1801c79a8cc3992f1acab1d7f69a287f96babd216
+   이미 확인한 locator를 사용한다. 관련 bundle 밖으로 검색을 확대하지 않는다.
+
+이미 확인한 passive 작업 폴더에 아래 파일이 있으면 함께 복사한다(최대 3개):
+- accum_drain_f17383_plain.png
+- accum_drain_f17383_guide.png
+- accum_drain_f17383_between_guide.png
+이 display 파일들은 보조 자료다. 없으면 없는 파일명만 보고하고 생성하지 않는다.
+
+새 d2-existing-support-transfer-001 폴더와 같은 이름의 ZIP을 만든다.
+같은 이름이 이미 있으면 덮어쓰지 말고 새 번호를 사용한다.
+필수 2개는 복사 전 실제 raw SHA256을 위 값과 비교한다. 불일치하거나 원본을
+찾을 수 없으면 자동 대체·재생성 없이 멈추고 어느 파일인지 보고한다.
+JSON은 deserialize/reserialize하지 않고 그대로 복사한다. PNG는 재저장하지 않는다.
+전달 목록에는 각 원본 경로, ZIP 내부 이름, raw SHA256을 기록한다.
+복사 후 원본과 복사본 hash가 같고, 원본의 전후 hash도 같은지 확인한다.
+
+완료하면 ZIP 파일과 ZIP raw SHA256을 반환한다. 텍스트 요약만으로 대체하지 않는다.
+자동 첨부가 안 되면 사용자가 첨부할 ZIP의 전체 경로를 알려준다.
+D1/D2 query/bind-target, detector, 영상 재생·decode, 새 이미지 생성, 라벨 수정,
+model fitting, source 수정, commit/push는 이 전달 작업에 포함하지 않는다.
+```
+
+Mac에서는 필수 파일 hash와 기존 identity/geometry 연결을 확인한 뒤 같은 프레임의
+unmarked ROI와 기록된 native/center support를 검토한다. guide의 선·색은 원본 특징이나
+정답이 아니다. 역할 라벨을 sector 판정으로 확장하지 않는다. 전달된 자료로도 물리적
+의미가 불명확하면 실제 이미지를 보여주고 그 구간에 대한 사용자 판단을 요청한다.
+다른 case나 새 판독으로 자동 확대하지 않는다.
 
 ## Structure-context schema 문자 검증
 

@@ -1578,19 +1578,26 @@ The missing condition is **one target/non-target contrast whose candidate-local
 distinguishing observation and opposition can be identified on the exact
 measured support**. Existing labels already answer identity/target questions;
 do not ask those again. The passive batch's role totals do not identify which
-of its other 19 drain candidates, if any, supplies this counter-control. Return
-the existing review provenance and geometry for all 26 before choosing a pair,
-so neither nearest Y nor a convenient score silently defines the negative.
+of its other 19 drain candidates, if any, supplies this counter-control. Use the
+complete existing review provenance and geometry for all 26 before choosing a
+pair, so neither nearest Y nor a convenient score silently defines the negative.
 If stored support/rationale cannot establish such a contrast, report that exact
 missing condition; do not cycle through more scenes or reopen prior rationale.
 
-This bounded Windows lookup is required because its private snapshot/packet
-fields are not present in this checkout. Local A2 controls are available and
-remain useful; they cannot establish this Windows input connection. The
-[handoff](../40-operations/s11-o2-local-shadow-evaluation.md#d2--existing-target-bound-control-query)
-reads saved records only. It neither proves that a usable new cue exists nor
-asks for a new physical judgment. A later concrete judgment request must show
-the actual candidate support and state precisely what is undecidable.
+The [saved-field return](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-saved-field-return--query-closed)
+preserves that inventory. Role labels, band availability and empty artifact tags
+do not establish the distinguishing cue. Candidate-level target truth must not
+be broadcast to every native sector: a native segment can differ from its
+candidate's canonical Y, and an empty path review leaves local truth unknown.
+Keep native and center support separate; neither substitute the center for a
+deviating segment nor relabel the whole candidate from segment geometry alone.
+
+Use the already bound JSON and source ROI for the next support inspection, with
+existing guides as display aids. The [transfer procedure](../40-operations/s11-o2-local-shadow-evaluation.md#d2--existing-support-file-transfer)
+preserves the same regression case without repeating the query or expanding
+recordings. Local A2 controls remain useful but cannot establish this Windows
+input connection. A later concrete judgment request must show the actual
+candidate support and state precisely what is undecidable.
 
 Before a model freeze, state its distinct observable, formula/model class,
 mask/censoring rules, resource bound, operating-point policy and falsification
@@ -1602,6 +1609,14 @@ optical alternative explains the same input, preserve unresolved; abstaining
 on every true target is not success. D3 and behavioral O3/O4 gates remain intact.
 
 ## History Review
+
+2026-10-08 D2 return assessment: the saved-field query establishes the reported
+26-candidate role/geometry connection, not a discriminator. Preserve mixed
+individual/group review and logical/raw hash distinctions (F09). Candidate-level
+role does not certify every native segment (F04/F09); empty artifact tags and
+distant negatives do not close optical opposition (F10). Existing source/guide
+transfer precedes local pixel inspection; no new mechanism or executing logic
+is introduced and previous failed hypotheses remain closed.
 
 2026-10-08 D2 entry: D1's phase/owner exclusions do not authorize gate relaxation.
 Reviewed the completed color/region appearance loop, failed A2 temporal region

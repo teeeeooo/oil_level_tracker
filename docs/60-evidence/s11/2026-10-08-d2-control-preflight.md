@@ -1,7 +1,8 @@
 # D2 boundary-role control preflight — 2026-10-08
 
 Starting head: `9d01e23774f46f96222a18d1bab096c6e8b672ff`, clean main.
-Scope: local design/control readiness and a saved-record Windows query. No
+Scope: local design/control readiness, a saved-record Windows query and assessment
+of its transferred return. No
 classifier, new prediction, production behavior, image inspection or field run.
 The user authorized staged work and commit/push, with a stop when human judgment
 or Windows work is required. [Work Plan](../../00-project/work-plan.md) owns the
@@ -59,8 +60,8 @@ rows, not the Windows 26-candidate scene. No source pixel file was opened.
   all returned binding rows and protected input bytes match.
 - An existing output is rejected without overwrite.
 - A wrong target-artifact pin is rejected before any output.
-- The Windows snapshot was not accessed, so its availability, geometry and
-  per-candidate review detail remain attributed or pending as explicitly stated.
+- The Windows snapshot was not accessed locally. Its availability, geometry and
+  per-candidate review detail are attributed to the subsequent Windows return below.
 
 Local scratch is `sample/output/s11-d2-control-preflight-20261008-001/`:
 `query_from_operations.py`, smoke manifest/output and `verification.json`.
@@ -69,21 +70,133 @@ The executed snippet SHA-256 is
 These are query/IO checks, not new detector tests, Windows execution or efficacy.
 Document links, governance and whitespace are checked before publication.
 
-## Windows boundary and disposition
+## Initial Windows boundary
 
 **Local D2 entry preflight complete; D2 algorithm/operating point NOT SELECTED.**
-Work stops at the user's Windows boundary. The required action is the single
+At preflight, work stopped at the user's Windows boundary. The required action was the single
 saved-record query plus existing plain/guide locator check in the operations
 procedure. No D1 recheck, `bind-target`, label review, image generation, video
 decode, scoring or detector execution is needed. No new source recording is
 requested. Already exposed Mac controls remain usable regression evidence.
 
-The returned target/internal/other annotations and measured geometry will allow
-local assessment of whether a concrete support/opposition contrast exists. They
-may instead show that no adequate counter-control is documented. In that event,
-name the precise missing observation and stop; do not automatically request
-another case, broad inventory or repeated human rationale. No evidence of a new
-cue or complete D2 design is claimed merely by preparing this query.
+The query was intended to assess whether a concrete support/opposition contrast
+was documented, without automatically extending into another case, broad inventory
+or repeated human rationale. Its execution return and design assessment follow.
+
+## Windows saved-field return — query closed
+
+The user returned execution evidence for source instruction `80b87d29`:
+`SAVED_FIELDS_ONLY`, all 26 candidates, regression partition, target/internal/other
+counts **4/3/19**, and unchanged before/after raw hashes for the manifest, snapshot,
+two readers and linked packet. The loader's artifact/content/physical-label pins
+and reader hashes were reported to match. Video read, detector rerun, prediction/
+scoring, new human review and auto acceptance were all false.
+
+This closes the **saved-record query on transferred evidence**. The JSON and image
+bytes have not been supplied to this checkout; their hashes and image connections
+are reported values, not a local rehash or visual verification. The full stored
+witness is in the Windows JSON; the pasted tables do not contain all band values,
+mask/opposition fields or exact per-sector X intervals.
+
+| Item | Returned identity |
+|---|---|
+| Output | `data/w4-passive-review-001/target-truth-001/d2-accum-drain-controls-001.json` |
+| Output raw SHA-256 | `91e0843e0747e18fd1ec35f0c7a87b37cf00145912f477900fdeca561a906b6b` |
+| Query raw SHA-256 | `7ded3fb84945100a88785c8274d5acad93c7f6ef772bffef64566b235c2493c0` — independently matches the local frozen manifest |
+| Target artifact logical SHA-256 | `fe3e95af6666cd047e7148df69147213057f9b68acf883b7399ffc677f2b64fc` |
+| Packet logical SHA-256 | `537a9c310e938fa04647778c400451a02933ce5b66e3f6503583aad4ab2b000f` |
+| Case / frame | `w4-passive-001-accum-drain` / `17383` |
+| Glass | `8fb6ebc7-7c56-401e-86c3-05514bf6380b` |
+| Record / run | `f000017383_89c161ba4587` / `a24c8fe9-3166-4c17-b69f-d9b4458711bd` |
+
+Source interpretation corrections do not require another execution:
+
+- `packet_sha256` in this query is `fingerprint_json(packet)`, as enforced by
+  `load_packets`; it is not `Get-FileHash(packet.json)`. The report also presents
+  that value as the display generator's packet-file SHA. Only the logical binding
+  is established by that value. Raw input preservation is reported separately;
+  do not overwrite the [earlier raw packet hash](s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation)
+  or declare a file mutation from this terminology difference.
+- ZIP absence of `.git` is acceptable for this query. Matching manifest/two-reader
+  pins establishes the queried inputs and bounded reader identity, not verification
+  of every file at repository commit `80b87d29`.
+- The report's final “all other candidates group-reviewed” wording is broader than
+  its own detailed notes. Preserve the mixed review attribution below. Neither
+  individual nor group non-interface review alone proves an optical subtype or a
+  cue-sharing counter-control.
+
+### Roles, geometry and review provenance
+
+All candidates retain their original bound role; no candidate was relabeled.
+Native geometry exists only for idx10–15, with candidate-center geometry retained
+separately. All 26 `artifact_tags` arrays are empty and all `path_reviews` arrays
+are empty. Empty annotations do not establish artifact-free pixels or full-path
+agreement.
+
+| idx / role | Canonical Y | Recorded native sector Y, in order | Availability reported |
+|---|---|---|---|
+| 4 / target | 291 | none | all bands available |
+| 5 / internal | 303 | none | all bands available |
+| 10 / internal | 304 | 302, 304, 302, 304, 305 | all bands available |
+| 13 / target | 291 | 315, 291, 291, 291, 293 | all bands available |
+| 17 / target | 292 | none | all bands available |
+| 18 / internal | 302 | none | all bands available |
+| 24 / target | 290 | none | sector 0 far_above unavailable: insufficient_visible_pixels; remaining bands available |
+
+These seven have five sectors and near_above/near_below/far_above/far_below bands,
+reported width 6 px. Native X span is reported as 1218–1643 for idx10/13;
+center-only candidates span 1199–1661. Exact intervals and native/center band
+association must come from the JSON; this summary does not fill them in.
+Measurement status is `measured` for 24 candidates; idx0/8 have
+`insufficient_visible_pixels`. Availability is not identity support. Target idx4
+and internal idx5 are recorded rejected, further separating role from admission.
+
+| Other indices | Reported stored review basis | Limit |
+|---|---|---|
+| 0,1,2,3,6,7,8,9,16,19,20,21,22,23,25 | Group judgment: outside the two reviewed boundaries | Preserve human judgment; no reusable Y-distance classifier |
+| 11,14,15 | Individual native-path review: upper space / upper / lower, respectively | No recorded optical counter-cue follows from the location description |
+| 12 | Individual correction from uncertain to non_interface; purple guide line unrelated to the two boundaries | Guide color is annotation, not an observed fluid/material feature |
+
+The detailed attribution is a new transferred report about existing reviews, not
+a new review performed during D2. Full notes remain in the saved JSON. The 4 target
+and 3 internal candidates represent two real boundaries in this one scene, not
+seven independent positives/negatives.
+
+### Existing image connection and design consequence
+
+The reported source ROI is
+`debug/frames/8fb6ebc7-7c56-401e-86c3-05514bf6380b_9f8aea91/f000017383_89c161ba4587/original_roi_512ed6ab.png`,
+raw SHA-256 `3a4cc3265479a409acc445f1801c79a8cc3992f1acab1d7f69a287f96babd216`.
+Its hash reportedly matches `selection-manifest.json`; origin `[1199,56]`, size
+`[462,584]` matches the stated source X extent. Existing
+`accum_drain_f17383_plain.png`, `accum_drain_f17383_guide.png` and
+`accum_drain_f17383_between_guide.png` are linked by the reported generators to the
+same record/Glass. Their image bytes, exact rendering and hashes have not been
+examined here; guides cannot substitute for the unmarked source ROI.
+
+The first reported native sector for target idx13 is Y315, below the first
+internal idx10 sector at Y302; the other four reported target sectors are above
+their internal counterparts. This is a **local geometry question**, not proof of
+a crossed physical boundary, wrong target label or scalar error. Exact X support
+and pixels must be inspected together before interpreting it. In particular,
+canonical Y291 must not replace native Y315, and the target role must not silently
+certify every native segment. Empty `path_reviews` leave segment truth unknown.
+
+The original missing design condition remains **a candidate-bound distinguishing
+observation with its actual support and opposition**. The return establishes
+locators/roles/availability but does not yet establish that observation. Internal
+idx10 is a known real non-target boundary, not a reflection/structure negative.
+The 19 other candidates are not thereby matched optical counter-controls.
+There is no basis yet for a new threshold, classifier freeze or D3 execution.
+
+The next bounded step is transfer of the **already saved JSON and source ROI**, with
+existing guides if available, for local support inspection. The
+[Windows transfer prompt](../../40-operations/s11-o2-local-shadow-evaluation.md#d2--existing-support-file-transfer)
+requests no rerun, new frames, generated guides, labels or physical judgments.
+After transfer, inspect this fixed regression frame and recorded geometry before
+choosing a mechanism. If a physical interpretation still needs user judgment,
+show the actual support and ask that concrete question then. This is not a promise
+that viewing one frame will satisfy all D2 controls.
 
 D3 remains unstarted. O2, later behavior gates, independent calibration/holdout
 requirements and FIELD FAIL are unchanged.
@@ -92,6 +205,6 @@ requirements and FIELD FAIL are unchanged.
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F09`, `S11-F10`.
-- First harmful stage: no new causal claim. D1's recorded exclusions and the Mac A2 authority losses do not identify a new physical discriminator; exact Windows target-bound support/opposition remains the named design input gap.
+- First harmful stage: no new causal claim. D1's recorded exclusions and the Mac A2 authority losses do not identify a new physical discriminator. The Windows query closes record availability; distinguishing support/opposition and unreviewed segment identity remain unresolved.
 - Logic-map impact: NONE — existing read-only snapshot/geometry owners are reused; production and diagnostic Python source are unchanged.
 - Failure-registry impact: NONE — closed appearance/temporal hypotheses remain closed and no new detector mechanism or successful repair is asserted.
