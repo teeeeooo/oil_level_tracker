@@ -1666,7 +1666,34 @@ additional distinguishing evidence and pass the existing support/identity
 controls. Same-observable opposing controls cannot become two confident labels
 by exposing truth or fixture names to inference.
 
+### Non-learned contour-contact feasibility question
+
+The [contact-cue preflight](../60-evidence/s11/2026-10-08-d2-contact-observability.md)
+asks whether surrounding bubble/texture contours visibly terminate or join at a
+candidate boundary, versus crossing its interior. This relationship is a proposed
+additional observable, not an implemented identity rule. Existing A2 candidate
+truth and qualitative A/B material interpretations do not label such contacts.
+The bounded read-only review reuses stored pixels, frozen target bindings and
+native/center geometry. Source coordinate references are not contour truth.
+
+No contact extractor or classifier is justified before the relationship can be
+attributed on actual support and its opposition stated. A later conditional
+proposal must still handle structural contacts, internal interfaces, stationary
+targets, missing support and optical superposition; motion or a junction count
+alone cannot grant identity. Human confirmation of one contact would permit
+measurement design, not candidate-wide truth transfer or O2 acceptance. If the
+relationship is shared or unclear, close this cue check without another automatic
+review loop. The Work Plan owns the current method scope and user checkpoint.
+
 ## History Review
+
+2026-10-08 contact-cue preflight: reviewed F03/F04 motion/geometry identity
+failures, F09 support attribution, F10 retuning, the closed A2 region-exchange
+and connectivity experiments, and existing W3 frozen readers. The new action is
+only to expose an unannotated local contact relationship for user interpretation
+in existing Mac regression pixels. No classifier or label change precedes the
+reply, and none of the prior physical/target judgments is reopened. Current
+logic and failure registry remain unchanged.
 
 2026-10-08 region-connectivity feasibility: reviewed F03/F04 geometry/motion
 authority, F09 missing support and F10 tuning escapes, the existing raw-region

@@ -1,0 +1,317 @@
+{
+  "schema_version": "s11-d2-contact-observability-v1",
+  "status": "AWAITING_USER_CONTACT_INTERPRETATION",
+  "preflight_sha256": "20c907ea4569d6889acf4f0c4de8107547f90d38efc3b70e2de8c8475f1d08ba",
+  "builder_sha256": "afd2097cad0be32c389ec2336baece1e2335712c3152e930e3c3ca42ec735461",
+  "input_preserved": true,
+  "source_role": "existing exposed Mac A2 regression; no Windows evidence claim",
+  "candidate_count_in_unchanged_snapshot": 153,
+  "recorded_path_review_count": 0,
+  "question": "At f1320, central source X 566–625, can the reviewed target vicinity be physically distinguished by bubble/texture contours terminating or joining the interface, versus the wrong-target reference passing through that texture? Or is this relationship shared/unclear at the stored resolution?",
+  "scope": "New qualitative contact relationship only. Prior target identity and A/B material interpretation stay closed. No whole-sector, contour, scalar or temporal-event truth follows.",
+  "detector_rerun": false,
+  "video_decode": false,
+  "new_predictions": false,
+  "label_edits": false,
+  "machine_learning": false,
+  "auto_acceptance": false,
+  "base_head": "912f3bdc0124ed30aa645146ea2555378a1f42e3",
+  "local_artifact_root": "sample/output/s11-d2-contact-observability-20261008-001",
+  "full_receipt_sha256": "0bdf61556c04fa32d1acae269b5af308f1ff2bd03b3918ea30f524e0d1edce96",
+  "input_file_count": 108,
+  "input_pin_owner": "local preflight.json and review-receipt.json",
+  "inspected_bgr_frames": [
+    1140,
+    1200,
+    1260,
+    1275,
+    1320,
+    1485,
+    1560,
+    1319,
+    1321
+  ],
+  "all_inspected_images_shape": [
+    104,
+    104,
+    3
+  ],
+  "crop_origin": [
+    543,
+    798
+  ],
+  "outputs": {
+    "f1320-contact-review.png": "f43f796ba6e994e06a5d6e7c9a4eed6adff4b832b09613a9b4de384487c929a4",
+    "f1200-contact-review.png": "f08056b209b08f85bf462d6210968b56214137ad14355c59e9c635eaa2978fb4",
+    "f1260-contact-review.png": "95b690ff23f51bc9e9027e9bc0ec4cb00457e7b593aca401cf1a5b46b43a21fb"
+  },
+  "display_cases": [
+    {
+      "case_id": "sample4:f1320",
+      "frame_index": 1320,
+      "source_png_sha256": "3083e2a46604986053edf61df6ac605d959861332010421542e2c8a33a022020",
+      "candidates": [
+        {
+          "candidate_input_index": 9,
+          "target_role": "target",
+          "physical_identity": "interface",
+          "artifact_note": "",
+          "witness_sha256": "2071fe1a62d84101a454c1b313910452028934086c5f00cc5e921dae8173dd29",
+          "geometry_basis": "native_path",
+          "canonical_y": 844.0,
+          "sector_geometry": [
+            [
+              0,
+              547,
+              566,
+              842
+            ],
+            [
+              1,
+              566,
+              586,
+              844
+            ],
+            [
+              2,
+              586,
+              605,
+              844
+            ],
+            [
+              3,
+              605,
+              625,
+              844
+            ],
+            [
+              4,
+              625,
+              644,
+              844
+            ]
+          ]
+        },
+        {
+          "candidate_input_index": 21,
+          "target_role": "other_non_target",
+          "physical_identity": "uncertain",
+          "artifact_note": "Physical subtype TENTATIVE: image_noise_line; wrong Oil target is separately confirmed.",
+          "witness_sha256": "81755c44a3f55bca4d0b0df0d599f671145a6e2b755ad78473137b1e197e3d35",
+          "geometry_basis": "candidate_center",
+          "canonical_y": 822.0,
+          "sector_geometry": [
+            [
+              0,
+              543,
+              563,
+              822.0
+            ],
+            [
+              1,
+              563,
+              584,
+              822.0
+            ],
+            [
+              2,
+              584,
+              605,
+              822.0
+            ],
+            [
+              3,
+              605,
+              626,
+              822.0
+            ],
+            [
+              4,
+              626,
+              647,
+              822.0
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1200",
+      "frame_index": 1200,
+      "source_png_sha256": "1c03062d3b2274f8aee2793ba70a7f0065634528ea0f4960b517adc9073023cd",
+      "candidates": [
+        {
+          "candidate_input_index": 4,
+          "target_role": "target",
+          "physical_identity": "interface",
+          "artifact_note": "",
+          "witness_sha256": "9c80a099ed901cf9c58ae11bb42cff0c41015b99dad2f5b74e6f7084f44e92ef",
+          "geometry_basis": "candidate_center",
+          "canonical_y": 841.0,
+          "sector_geometry": [
+            [
+              0,
+              543,
+              563,
+              841.0
+            ],
+            [
+              1,
+              563,
+              584,
+              841.0
+            ],
+            [
+              2,
+              584,
+              605,
+              841.0
+            ],
+            [
+              3,
+              605,
+              626,
+              841.0
+            ],
+            [
+              4,
+              626,
+              647,
+              841.0
+            ]
+          ]
+        },
+        {
+          "candidate_input_index": 10,
+          "target_role": "other_non_target",
+          "physical_identity": "uncertain",
+          "artifact_note": "Physical subtype UNRESOLVED: None; wrong Oil target is separately confirmed.",
+          "witness_sha256": "17ce9f6088baa2b8cc4da7f8597862084e53fb582c619616b91a88b751452b1a",
+          "geometry_basis": "native_path",
+          "canonical_y": 865.5,
+          "sector_geometry": [
+            [
+              1,
+              566,
+              586,
+              866
+            ],
+            [
+              2,
+              586,
+              605,
+              867
+            ],
+            [
+              3,
+              605,
+              625,
+              865
+            ],
+            [
+              4,
+              625,
+              644,
+              860
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "sample4:f1260",
+      "frame_index": 1260,
+      "source_png_sha256": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+      "candidates": [
+        {
+          "candidate_input_index": 4,
+          "target_role": "target",
+          "physical_identity": "interface",
+          "artifact_note": "",
+          "witness_sha256": "38de4a8b7e6f6298b591ed7f1af2998940bf1006ceacd330a723981a9647d627",
+          "geometry_basis": "candidate_center",
+          "canonical_y": 839.0,
+          "sector_geometry": [
+            [
+              0,
+              543,
+              563,
+              839.0
+            ],
+            [
+              1,
+              563,
+              584,
+              839.0
+            ],
+            [
+              2,
+              584,
+              605,
+              839.0
+            ],
+            [
+              3,
+              605,
+              626,
+              839.0
+            ],
+            [
+              4,
+              626,
+              647,
+              839.0
+            ]
+          ]
+        },
+        {
+          "candidate_input_index": 15,
+          "target_role": "other_non_target",
+          "physical_identity": "uncertain",
+          "artifact_note": "Physical subtype TENTATIVE: lower_rim; wrong Oil target is separately confirmed.",
+          "witness_sha256": "19d4e617bbfab6267748cfa938e9e82a7083f897ab9051f5b46d1ba496f3fd14",
+          "geometry_basis": "candidate_center",
+          "canonical_y": 868.0,
+          "sector_geometry": [
+            [
+              0,
+              543,
+              563,
+              868.0
+            ],
+            [
+              1,
+              563,
+              584,
+              868.0
+            ],
+            [
+              2,
+              584,
+              605,
+              868.0
+            ],
+            [
+              3,
+              605,
+              626,
+              868.0
+            ],
+            [
+              4,
+              626,
+              647,
+              868.0
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "sector_geometry_columns": [
+    "sector",
+    "source_x_start_inclusive",
+    "source_x_stop_exclusive",
+    "source_y"
+  ]
+}

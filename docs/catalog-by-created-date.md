@@ -440,3 +440,9 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 최초 등록일 | 문서 | 역할 |
 |---|---|---|
 | 2026-10-08 | [D2 region-connectivity feasibility](60-evidence/s11/2026-10-08-d2-region-connectivity-feasibility.md), [receipt](60-evidence/s11/2026-10-08-d2-region-connectivity-feasibility.json) | 이상적 영역 연결성의 정보 이득과 단독 identity 한계; 실제 영상 실행 없이 미채택 종료 |
+
+## D2 contact-observability preflight additions
+
+| 최초 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-08 | [D2 contact-observability preflight](60-evidence/s11/2026-10-08-d2-contact-observability.md), [receipt](60-evidence/s11/2026-10-08-d2-contact-observability.json) | 기존 Mac 원본·후보 결합 검증과 국소 윤곽 접촉 관계의 사용자 판단용 표시; 분류기 실행 아님 |
