@@ -1846,7 +1846,27 @@ The [workflow audit and human reference reply](../60-evidence/s11/2026-10-08-d2-
 record the current source and sample inventory. This reuse assessment grants no
 new classifier, scalar authority, O2 acceptance or field qualification.
 
+The [bounded existing-workflow comparison](../60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md)
+shows two distinct limits. A Y844 template derived from the local glass-pattern
+vicinity collides with two known targets. A correctly bound Y822 non-target
+registration retains all seven reviewed targets at eligibility, yet the complete
+sequence loses later target selections after phase/tracklet competition changes.
+The positive registration input therefore requires both local collision controls
+and downstream target preservation; local rejection counts are insufficient.
+Retain existing owners and inspect the saved sequence witnesses before a repair.
+Do not restore a known false candidate, add exclusions for each new winner or
+treat remaining candidates as physically valid merely because a competitor was
+removed. No production registration or matcher change is adopted by this readout.
+
 ## History Review
+
+2026-10-08 registered-input comparison: exercised existing setup generation,
+explicit UI selection on a copy, unchanged calibrated matching, the complete
+analysis pipeline and report presentation. Reviewed F04's changed assignment
+competition after pruning, F09's candidate-versus-public distinction and F10's
+coincident-position failure. Frozen two-sided controls expose both direct target
+veto and later selection loss. The result constrains a future repair without
+changing production owners, thresholds, label authority or field disposition.
 
 2026-10-08 recipe-workflow correction: reviewed the existing proposal UI,
 normalized artifact persistence, frame checks and completed Oil eligibility,

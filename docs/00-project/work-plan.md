@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** D2 reference correspondence is CLOSED: Foam obscures the glass semicircle at both 0/28 s. Prioritize the existing user-confirmed recipe artifact workflow before more image-only identity design. The Mac capture has no registered templates. Prepare a separate, bound registration comparison that measures wrong-target suppression and coincident true-interface loss; no production change or Windows run starts. D2/O2 entry remains unmet.
+**Next transition:** D2 existing-recipe comparison is complete, NOT PROMOTED. Y822 registration removes the reviewed false candidate but changes sequence ownership and loses later reviewed targets; Y844 position exclusion also fails crossing controls. Reuse the saved pair to locate the first harmful tracklet/phase/selection change before a bounded repair. Preserve user registration as input; no extra exclusion tuning, ML or Windows run. D2/O2 entry remains unmet.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -25,7 +25,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 correspondence closed as Foam-obscured; existing recipe artifact registration is the next reuse path, with crossing/overlap controls | [Recipe workflow audit](../60-evidence/s11/2026-10-08-d2-column-clearance.md#reference-reply-and-existing-recipe-workflow), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#user-confirmed-recipe-artifacts--reuse-before-new-inference) |
+| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | Existing recipe registration comparison complete, not promoted: local suppression succeeds, later target selection regresses. Diagnose saved sequence pair | [Registration comparison](../60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#user-confirmed-recipe-artifacts--reuse-before-new-inference) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -112,20 +112,27 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    These results therefore do not evaluate a registered-template recipe.
    The [source audit](../60-evidence/s11/2026-10-08-d2-column-clearance.md#reference-reply-and-existing-recipe-workflow)
    confirms an existing UI → recipe → generic geometry-match rejection path.
-   Next, inspect existing proposals on a frame where the structure is visible,
-   bind the confirmed feature to the exact proposal geometry, and freeze a
-   separate experimental recipe before comparison. The assistant may interpret
-   first; ask only if the structure-to-proposal correspondence is ambiguous.
-   Do not silently turn the 42 s qualitative reply into a whole-row/box veto.
-   Compare registered/unregistered inputs with other settings fixed: false
-   structures, true interfaces apart from and crossing the structure, stationary
-   true interfaces, and Foam-obscured/unresolved cases. Current templates store
-   point/line/region geometry, not the semicircle contour, and can also reject a
-   coincident real interface. Establish the usable scope of the existing workflow
-   before proposing a schema/UI/matcher extension. Preserve frozen inputs and
-   exposed-regression status; user configuration is not a hard-coded private
-   detector branch. No ML or Windows work/export is required for this local step.
-   Physical, scalar and temporal acceptance remain separate.
+   **Registered-input comparison complete, NOT PROMOTED:** real setup proposals
+   bind the previously reviewed f1320 pink non-target to list item 6/Y822.
+   A frozen recipe copy excludes that candidate and retains all seven reviewed
+   targets at matcher eligibility, while also matching 16 unreviewed candidates.
+   In the full 0–56 s paired pipeline, however, later target selections regress:
+   f1485 Y836→880 and f1560 Y833→862. The target at f1485 remains admitted and
+   publishable; phase changes from owner-bounded to unconstrained and another
+   row wins. The first phase-witness difference is at 36 s, not a proven first
+   physical error. [Comparison and sequence evidence](../60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md)
+   retain all inputs and named causal unknowns. The 42 s Y844 proposal is absent
+   from the default list and spans beyond the confirmed semicircle; its separate
+   counterfactual veto excludes two true targets. It is not registered.
+   Next, inspect the saved paired tracklet/phase/selection evidence before a
+   bounded repair in those existing owners. Do not restore a false owner, add
+   more exclusions to chase new winners, tune thresholds, or promote a surviving
+   candidate by default. Existing user configuration remains a legitimate input;
+   the current coarse position veto is insufficient. Original recipes and labels
+   stay fixed; no new human judgment is needed to reject this experimental copy.
+   Ask only for a new material ambiguity identified during further inspection.
+   No ML or Windows work/export is required. Independent stationary/crossing/
+   obscured controls and physical/scalar/temporal acceptance remain separate.
 4. Before D3, freeze input identities, exposure/partition roles, operating-point
    policy, resource bounds and falsification. Compare wrong-target suppression
    separately from true-target recovery, through W3 and the unchanged report.

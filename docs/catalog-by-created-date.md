@@ -459,3 +459,9 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 |---|---|---|
 | 2026-10-08 | [D2 column clearance](60-evidence/s11/2026-10-08-d2-column-clearance.md), [receipt](60-evidence/s11/2026-10-08-d2-column-clearance.json) | 153후보의 순서 보존 윤곽 거리 측정·시각 판독; f1260 국소 돌출 해석 질문과 출처 |
 | 2026-10-08 | [D2 optical-reference receipt](60-evidence/s11/2026-10-08-d2-optical-reference.json) | 유리 반원 사용자 판독과 기존 3장 기준 재구성; 해석은 D2 column clearance 기록에 이어서 보존 |
+
+## D2 existing recipe artifact comparison additions
+
+| 최초 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-08 | [D2 recipe artifact comparison](60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md), [receipt](60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.json) | 기존 구조물 등록의 실제 후보·UI 결합, 153후보 비교와 0–56초 전체 경로 비교; 위치 충돌·후속 유면 선택 손실로 실험 recipe 미채택 |
