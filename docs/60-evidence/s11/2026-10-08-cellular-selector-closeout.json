@@ -1,0 +1,841 @@
+{
+  "schema": "s11-cellular-closeout-v1",
+  "decision": "CLOSED WITHOUT PROMOTION",
+  "base": "c4814bdc25c4da22776d985fbb7a2d66fbc4e1e8",
+  "main": "49c6d3aebeaf90aea96cd5be4c0e91115011f5a7",
+  "samples": [
+    {
+      "rows": 30,
+      "permuted_frames": 19,
+      "oil_coordinate_changes": 4,
+      "foam_coordinate_changes": 0,
+      "state_changes": 4,
+      "phase_inputs_equal": true,
+      "lifecycle_and_allowed_owners_equal": true,
+      "raw_detections_equal": true,
+      "numeric_provenance_failures": [],
+      "baseline_diagnostics": {
+        "version": "r22-oil-ownership-evidence-replacement-v1",
+        "frame_count": 30,
+        "oil_frame_count": 28,
+        "full_frame_count": 0,
+        "empty_frame_count": 0,
+        "unknown_frame_count": 2,
+        "eligible_oil_candidate_count": 480,
+        "ineligible_oil_candidate_count": 151,
+        "recurring_track_count": 17,
+        "maximum_track_opposition": 0.8495217127815496,
+        "oil_candidate_only_count": 60,
+        "oil_continuation_eligible_count": 304,
+        "oil_anchor_eligible_count": 116,
+        "oil_qualified_anchor_count": 101,
+        "foam_material_seeded_frame_count": 0,
+        "foam_material_continued_frame_count": 0,
+        "foam_material_opposed_candidate_count": 0,
+        "oil_tracklet_count": 20,
+        "oil_confirmed_tracklet_count": 7,
+        "oil_provisional_tracklet_count": 13,
+        "oil_incompatible_tracklet_frame_count": 3,
+        "oil_tracklet_lost_event_count": 36,
+        "oil_terminated_tracklet_count": 20,
+        "oil_tracklet_hypothesis_count": 184,
+        "oil_tracklet_comparison_count": 1237,
+        "oil_maximum_active_tracklets": 9,
+        "oil_maximum_tracklet_eligible_refs_per_frame": 16,
+        "oil_maximum_tracklet_hypotheses_per_frame": 8,
+        "foam_raw_candidate_count": 8,
+        "foam_eligible_candidate_count": 0,
+        "foam_confirmed_frame_count": 0,
+        "foam_episode_count": 0,
+        "foam_rejected_static_episode_count": 0,
+        "foam_rejected_unconfirmed_episode_count": 0,
+        "foam_rejected_oil_alias_episode_count": 0
+      },
+      "experimental_diagnostics": {
+        "version": "r22-oil-ownership-evidence-replacement-v1",
+        "frame_count": 30,
+        "oil_frame_count": 27,
+        "full_frame_count": 0,
+        "empty_frame_count": 0,
+        "unknown_frame_count": 3,
+        "eligible_oil_candidate_count": 480,
+        "ineligible_oil_candidate_count": 151,
+        "recurring_track_count": 17,
+        "maximum_track_opposition": 0.8495217127815496,
+        "oil_candidate_only_count": 60,
+        "oil_continuation_eligible_count": 304,
+        "oil_anchor_eligible_count": 116,
+        "oil_qualified_anchor_count": 101,
+        "foam_material_seeded_frame_count": 0,
+        "foam_material_continued_frame_count": 0,
+        "foam_material_opposed_candidate_count": 0,
+        "oil_tracklet_count": 20,
+        "oil_confirmed_tracklet_count": 7,
+        "oil_provisional_tracklet_count": 13,
+        "oil_incompatible_tracklet_frame_count": 3,
+        "oil_tracklet_lost_event_count": 36,
+        "oil_terminated_tracklet_count": 20,
+        "oil_tracklet_hypothesis_count": 184,
+        "oil_tracklet_comparison_count": 1237,
+        "oil_maximum_active_tracklets": 9,
+        "oil_maximum_tracklet_eligible_refs_per_frame": 16,
+        "oil_maximum_tracklet_hypotheses_per_frame": 8,
+        "foam_raw_candidate_count": 8,
+        "foam_eligible_candidate_count": 0,
+        "foam_confirmed_frame_count": 0,
+        "foam_episode_count": 0,
+        "foam_rejected_static_episode_count": 0,
+        "foam_rejected_unconfirmed_episode_count": 0,
+        "foam_rejected_oil_alias_episode_count": 0
+      },
+      "field_disposition": "NOT_EVALUATED",
+      "auto_acceptance": false,
+      "sample": "base_sample_1",
+      "baseline_matches_saved_official_coordinates": true,
+      "baseline_matches_every_saved_sample_field": true,
+      "projected_counts": {
+        "baseline": {
+          "valid_numeric_oil": 27,
+          "valid_numeric_foam": 0
+        },
+        "experimental": {
+          "valid_numeric_oil": 26,
+          "valid_numeric_foam": 0
+        }
+      },
+      "changes": [
+        {
+          "frame_index": 30,
+          "time_sec": 1.0010000000000001,
+          "baseline_oil_y": 381.0,
+          "experimental_oil_y": 400.0,
+          "baseline_foam_y": null,
+          "experimental_foam_y": null,
+          "state_changed": true,
+          "changed_emissions": 2
+        },
+        {
+          "frame_index": 45,
+          "time_sec": 1.5015,
+          "baseline_oil_y": 388.0,
+          "experimental_oil_y": 391.0,
+          "baseline_foam_y": null,
+          "experimental_foam_y": null,
+          "state_changed": true,
+          "changed_emissions": 0
+        },
+        {
+          "frame_index": 60,
+          "time_sec": 2.0020000000000002,
+          "baseline_oil_y": 389.0,
+          "experimental_oil_y": 375.0,
+          "baseline_foam_y": null,
+          "experimental_foam_y": null,
+          "state_changed": false,
+          "changed_emissions": 2
+        },
+        {
+          "frame_index": 75,
+          "time_sec": 2.5025,
+          "baseline_oil_y": 382.0,
+          "experimental_oil_y": null,
+          "baseline_foam_y": null,
+          "experimental_foam_y": null,
+          "state_changed": true,
+          "changed_emissions": 3
+        },
+        {
+          "frame_index": 90,
+          "time_sec": 3.003,
+          "baseline_oil_y": 369.5,
+          "experimental_oil_y": 369.5,
+          "baseline_foam_y": null,
+          "experimental_foam_y": null,
+          "state_changed": true,
+          "changed_emissions": 4
+        }
+      ]
+    },
+    {
+      "rows": 5,
+      "permuted_frames": 0,
+      "oil_coordinate_changes": 0,
+      "foam_coordinate_changes": 0,
+      "state_changes": 0,
+      "phase_inputs_equal": true,
+      "lifecycle_and_allowed_owners_equal": true,
+      "raw_detections_equal": true,
+      "numeric_provenance_failures": [],
+      "baseline_diagnostics": {
+        "version": "r22-oil-ownership-evidence-replacement-v1",
+        "frame_count": 5,
+        "oil_frame_count": 4,
+        "full_frame_count": 0,
+        "empty_frame_count": 0,
+        "unknown_frame_count": 1,
+        "eligible_oil_candidate_count": 81,
+        "ineligible_oil_candidate_count": 10,
+        "recurring_track_count": 0,
+        "maximum_track_opposition": 0.0,
+        "oil_candidate_only_count": 72,
+        "oil_continuation_eligible_count": 7,
+        "oil_anchor_eligible_count": 2,
+        "oil_qualified_anchor_count": 2,
+        "foam_material_seeded_frame_count": 1,
+        "foam_material_continued_frame_count": 0,
+        "foam_material_opposed_candidate_count": 5,
+        "oil_tracklet_count": 2,
+        "oil_confirmed_tracklet_count": 1,
+        "oil_provisional_tracklet_count": 1,
+        "oil_incompatible_tracklet_frame_count": 0,
+        "oil_tracklet_lost_event_count": 0,
+        "oil_terminated_tracklet_count": 2,
+        "oil_tracklet_hypothesis_count": 5,
+        "oil_tracklet_comparison_count": 4,
+        "oil_maximum_active_tracklets": 2,
+        "oil_maximum_tracklet_eligible_refs_per_frame": 3,
+        "oil_maximum_tracklet_hypotheses_per_frame": 2,
+        "foam_raw_candidate_count": 1,
+        "foam_eligible_candidate_count": 1,
+        "foam_confirmed_frame_count": 0,
+        "foam_episode_count": 0,
+        "foam_rejected_static_episode_count": 0,
+        "foam_rejected_unconfirmed_episode_count": 1,
+        "foam_rejected_oil_alias_episode_count": 0
+      },
+      "experimental_diagnostics": {
+        "version": "r22-oil-ownership-evidence-replacement-v1",
+        "frame_count": 5,
+        "oil_frame_count": 4,
+        "full_frame_count": 0,
+        "empty_frame_count": 0,
+        "unknown_frame_count": 1,
+        "eligible_oil_candidate_count": 81,
+        "ineligible_oil_candidate_count": 10,
+        "recurring_track_count": 0,
+        "maximum_track_opposition": 0.0,
+        "oil_candidate_only_count": 72,
+        "oil_continuation_eligible_count": 7,
+        "oil_anchor_eligible_count": 2,
+        "oil_qualified_anchor_count": 2,
+        "foam_material_seeded_frame_count": 1,
+        "foam_material_continued_frame_count": 0,
+        "foam_material_opposed_candidate_count": 5,
+        "oil_tracklet_count": 2,
+        "oil_confirmed_tracklet_count": 1,
+        "oil_provisional_tracklet_count": 1,
+        "oil_incompatible_tracklet_frame_count": 0,
+        "oil_tracklet_lost_event_count": 0,
+        "oil_terminated_tracklet_count": 2,
+        "oil_tracklet_hypothesis_count": 5,
+        "oil_tracklet_comparison_count": 4,
+        "oil_maximum_active_tracklets": 2,
+        "oil_maximum_tracklet_eligible_refs_per_frame": 3,
+        "oil_maximum_tracklet_hypotheses_per_frame": 2,
+        "foam_raw_candidate_count": 1,
+        "foam_eligible_candidate_count": 1,
+        "foam_confirmed_frame_count": 0,
+        "foam_episode_count": 0,
+        "foam_rejected_static_episode_count": 0,
+        "foam_rejected_unconfirmed_episode_count": 1,
+        "foam_rejected_oil_alias_episode_count": 0
+      },
+      "field_disposition": "NOT_EVALUATED",
+      "auto_acceptance": false,
+      "sample": "sample2",
+      "baseline_matches_saved_official_coordinates": true,
+      "baseline_matches_every_saved_sample_field": true,
+      "projected_counts": {
+        "baseline": {
+          "valid_numeric_oil": 4,
+          "valid_numeric_foam": 0
+        },
+        "experimental": {
+          "valid_numeric_oil": 4,
+          "valid_numeric_foam": 0
+        }
+      },
+      "changes": []
+    },
+    {
+      "rows": 151,
+      "permuted_frames": 119,
+      "oil_coordinate_changes": 3,
+      "foam_coordinate_changes": 0,
+      "state_changes": 3,
+      "phase_inputs_equal": true,
+      "lifecycle_and_allowed_owners_equal": true,
+      "raw_detections_equal": true,
+      "numeric_provenance_failures": [],
+      "baseline_diagnostics": {
+        "version": "r22-oil-ownership-evidence-replacement-v1",
+        "frame_count": 151,
+        "oil_frame_count": 29,
+        "full_frame_count": 0,
+        "empty_frame_count": 0,
+        "unknown_frame_count": 122,
+        "eligible_oil_candidate_count": 2437,
+        "ineligible_oil_candidate_count": 194,
+        "recurring_track_count": 48,
+        "maximum_track_opposition": 0.24813493403665712,
+        "oil_candidate_only_count": 390,
+        "oil_continuation_eligible_count": 1735,
+        "oil_anchor_eligible_count": 312,
+        "oil_qualified_anchor_count": 265,
+        "foam_material_seeded_frame_count": 11,
+        "foam_material_continued_frame_count": 29,
+        "foam_material_opposed_candidate_count": 92,
+        "oil_tracklet_count": 119,
+        "oil_confirmed_tracklet_count": 62,
+        "oil_provisional_tracklet_count": 57,
+        "oil_incompatible_tracklet_frame_count": 26,
+        "oil_tracklet_lost_event_count": 392,
+        "oil_terminated_tracklet_count": 119,
+        "oil_tracklet_hypothesis_count": 875,
+        "oil_tracklet_comparison_count": 7032,
+        "oil_maximum_active_tracklets": 16,
+        "oil_maximum_tracklet_eligible_refs_per_frame": 18,
+        "oil_maximum_tracklet_hypotheses_per_frame": 9,
+        "foam_raw_candidate_count": 35,
+        "foam_eligible_candidate_count": 11,
+        "foam_confirmed_frame_count": 5,
+        "foam_episode_count": 2,
+        "foam_rejected_static_episode_count": 0,
+        "foam_rejected_unconfirmed_episode_count": 0,
+        "foam_rejected_oil_alias_episode_count": 0
+      },
+      "experimental_diagnostics": {
+        "version": "r22-oil-ownership-evidence-replacement-v1",
+        "frame_count": 151,
+        "oil_frame_count": 30,
+        "full_frame_count": 0,
+        "empty_frame_count": 0,
+        "unknown_frame_count": 121,
+        "eligible_oil_candidate_count": 2437,
+        "ineligible_oil_candidate_count": 194,
+        "recurring_track_count": 48,
+        "maximum_track_opposition": 0.24813493403665712,
+        "oil_candidate_only_count": 390,
+        "oil_continuation_eligible_count": 1735,
+        "oil_anchor_eligible_count": 312,
+        "oil_qualified_anchor_count": 265,
+        "foam_material_seeded_frame_count": 11,
+        "foam_material_continued_frame_count": 29,
+        "foam_material_opposed_candidate_count": 92,
+        "oil_tracklet_count": 119,
+        "oil_confirmed_tracklet_count": 62,
+        "oil_provisional_tracklet_count": 57,
+        "oil_incompatible_tracklet_frame_count": 26,
+        "oil_tracklet_lost_event_count": 392,
+        "oil_terminated_tracklet_count": 119,
+        "oil_tracklet_hypothesis_count": 875,
+        "oil_tracklet_comparison_count": 7032,
+        "oil_maximum_active_tracklets": 16,
+        "oil_maximum_tracklet_eligible_refs_per_frame": 18,
+        "oil_maximum_tracklet_hypotheses_per_frame": 9,
+        "foam_raw_candidate_count": 35,
+        "foam_eligible_candidate_count": 11,
+        "foam_confirmed_frame_count": 5,
+        "foam_episode_count": 2,
+        "foam_rejected_static_episode_count": 0,
+        "foam_rejected_unconfirmed_episode_count": 0,
+        "foam_rejected_oil_alias_episode_count": 0
+      },
+      "field_disposition": "NOT_EVALUATED",
+      "auto_acceptance": false,
+      "sample": "sample3",
+      "baseline_matches_saved_official_coordinates": true,
+      "baseline_matches_every_saved_sample_field": true,
+      "projected_counts": {
+        "baseline": {
+          "valid_numeric_oil": 29,
+          "valid_numeric_foam": 5
+        },
+        "experimental": {
+          "valid_numeric_oil": 30,
+          "valid_numeric_foam": 5
+        }
+      },
+      "changes": [
+        {
+          "frame_index": 1035,
+          "time_sec": 34.5345,
+          "baseline_oil_y": 244.0,
+          "experimental_oil_y": null,
+          "baseline_foam_y": null,
+          "experimental_foam_y": null,
+          "state_changed": true,
+          "changed_emissions": 3
+        },
+        {
+          "frame_index": 2653,
+          "time_sec": 88.52176666666666,
+          "baseline_oil_y": null,
+          "experimental_oil_y": 320.0,
+          "baseline_foam_y": null,
+          "experimental_foam_y": null,
+          "state_changed": true,
+          "changed_emissions": 4
+        },
+        {
+          "frame_index": 2713,
+          "time_sec": 90.52376666666667,
+          "baseline_oil_y": null,
+          "experimental_oil_y": 318.0,
+          "baseline_foam_y": null,
+          "experimental_foam_y": null,
+          "state_changed": true,
+          "changed_emissions": 3
+        }
+      ]
+    },
+    {
+      "rows": 113,
+      "permuted_frames": 15,
+      "oil_coordinate_changes": 0,
+      "foam_coordinate_changes": 0,
+      "state_changes": 0,
+      "phase_inputs_equal": true,
+      "lifecycle_and_allowed_owners_equal": true,
+      "raw_detections_equal": true,
+      "numeric_provenance_failures": [],
+      "baseline_diagnostics": {
+        "version": "r22-oil-ownership-evidence-replacement-v1",
+        "frame_count": 113,
+        "oil_frame_count": 101,
+        "full_frame_count": 0,
+        "empty_frame_count": 0,
+        "unknown_frame_count": 12,
+        "eligible_oil_candidate_count": 1841,
+        "ineligible_oil_candidate_count": 116,
+        "recurring_track_count": 22,
+        "maximum_track_opposition": 0.6089492057986852,
+        "oil_candidate_only_count": 1323,
+        "oil_continuation_eligible_count": 429,
+        "oil_anchor_eligible_count": 89,
+        "oil_qualified_anchor_count": 80,
+        "foam_material_seeded_frame_count": 31,
+        "foam_material_continued_frame_count": 3,
+        "foam_material_opposed_candidate_count": 104,
+        "oil_tracklet_count": 27,
+        "oil_confirmed_tracklet_count": 13,
+        "oil_provisional_tracklet_count": 14,
+        "oil_incompatible_tracklet_frame_count": 4,
+        "oil_tracklet_lost_event_count": 77,
+        "oil_terminated_tracklet_count": 27,
+        "oil_tracklet_hypothesis_count": 239,
+        "oil_tracklet_comparison_count": 816,
+        "oil_maximum_active_tracklets": 6,
+        "oil_maximum_tracklet_eligible_refs_per_frame": 13,
+        "oil_maximum_tracklet_hypotheses_per_frame": 5,
+        "foam_raw_candidate_count": 62,
+        "foam_eligible_candidate_count": 31,
+        "foam_confirmed_frame_count": 26,
+        "foam_episode_count": 1,
+        "foam_rejected_static_episode_count": 0,
+        "foam_rejected_unconfirmed_episode_count": 1,
+        "foam_rejected_oil_alias_episode_count": 0
+      },
+      "experimental_diagnostics": {
+        "version": "r22-oil-ownership-evidence-replacement-v1",
+        "frame_count": 113,
+        "oil_frame_count": 101,
+        "full_frame_count": 0,
+        "empty_frame_count": 0,
+        "unknown_frame_count": 12,
+        "eligible_oil_candidate_count": 1841,
+        "ineligible_oil_candidate_count": 116,
+        "recurring_track_count": 22,
+        "maximum_track_opposition": 0.6089492057986852,
+        "oil_candidate_only_count": 1323,
+        "oil_continuation_eligible_count": 429,
+        "oil_anchor_eligible_count": 89,
+        "oil_qualified_anchor_count": 80,
+        "foam_material_seeded_frame_count": 31,
+        "foam_material_continued_frame_count": 3,
+        "foam_material_opposed_candidate_count": 104,
+        "oil_tracklet_count": 27,
+        "oil_confirmed_tracklet_count": 13,
+        "oil_provisional_tracklet_count": 14,
+        "oil_incompatible_tracklet_frame_count": 4,
+        "oil_tracklet_lost_event_count": 77,
+        "oil_terminated_tracklet_count": 27,
+        "oil_tracklet_hypothesis_count": 239,
+        "oil_tracklet_comparison_count": 816,
+        "oil_maximum_active_tracklets": 6,
+        "oil_maximum_tracklet_eligible_refs_per_frame": 13,
+        "oil_maximum_tracklet_hypotheses_per_frame": 5,
+        "foam_raw_candidate_count": 62,
+        "foam_eligible_candidate_count": 31,
+        "foam_confirmed_frame_count": 26,
+        "foam_episode_count": 1,
+        "foam_rejected_static_episode_count": 0,
+        "foam_rejected_unconfirmed_episode_count": 1,
+        "foam_rejected_oil_alias_episode_count": 0
+      },
+      "field_disposition": "NOT_EVALUATED",
+      "auto_acceptance": false,
+      "sample": "sample4",
+      "baseline_matches_saved_official_coordinates": true,
+      "baseline_matches_every_saved_sample_field": true,
+      "projected_counts": {
+        "baseline": {
+          "valid_numeric_oil": 101,
+          "valid_numeric_foam": 26
+        },
+        "experimental": {
+          "valid_numeric_oil": 101,
+          "valid_numeric_foam": 26
+        }
+      },
+      "changes": []
+    }
+  ],
+  "field_disposition": "FIELD FAIL (unchanged; no Windows run)",
+  "sample4_reviewed_targets": [
+    {
+      "frame_index": 1140,
+      "target_index": 9,
+      "target_y": 844.0,
+      "target_source": "material_path",
+      "in_selector": true,
+      "first_recorded_boundary": "IN_SELECTOR",
+      "recorded_memberships": [
+        {
+          "row": {
+            "row_hypothesis_id": "oil-row:000076:000",
+            "tracklet_id": "oil-tracklet:000001:0000",
+            "phase_admitted": true,
+            "publishable": true
+          },
+          "member": {
+            "candidate_offset": 9,
+            "source": "material_path",
+            "y": 844.0,
+            "authority": "ANCHOR_ELIGIBLE",
+            "authority_reason": "corroborated_material_path",
+            "phase_identity": "direct_interface",
+            "tracklet_lifecycle": "continuing",
+            "tracklet_admitted": true,
+            "selected": true
+          }
+        }
+      ],
+      "global_top_indices": [
+        14
+      ],
+      "result": {
+        "frame_index": 1140,
+        "time_sec": 38.0,
+        "baseline_oil_y": 844.0,
+        "experimental_oil_y": 844.0,
+        "baseline_foam_y": null,
+        "experimental_foam_y": null,
+        "state_changed": false,
+        "changed_emissions": 0
+      }
+    },
+    {
+      "frame_index": 1200,
+      "target_index": 4,
+      "target_y": 841.0,
+      "target_source": "oil_hypothesis:76bed74eaefae78df5f06c37",
+      "in_selector": false,
+      "first_recorded_boundary": "BEFORE_RETAINED_REFS; earlier cause not established by this replay",
+      "recorded_memberships": [],
+      "global_top_indices": [
+        12
+      ],
+      "result": {
+        "frame_index": 1200,
+        "time_sec": 40.0,
+        "baseline_oil_y": 865.5,
+        "experimental_oil_y": 865.5,
+        "baseline_foam_y": 840.0,
+        "experimental_foam_y": 840.0,
+        "state_changed": false,
+        "changed_emissions": 2
+      }
+    },
+    {
+      "frame_index": 1260,
+      "target_index": 4,
+      "target_y": 839.0,
+      "target_source": "oil_hypothesis:ab9efea5ca32565368ef129b",
+      "in_selector": false,
+      "first_recorded_boundary": "TRACKLET_NOT_ADMITTED",
+      "recorded_memberships": [
+        {
+          "row": {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false
+          },
+          "member": {
+            "candidate_offset": 4,
+            "source": "oil_hypothesis:ab9efea5ca32565368ef129b",
+            "y": 839.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "insufficient_authority",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          }
+        }
+      ],
+      "global_top_indices": [
+        13
+      ],
+      "result": {
+        "frame_index": 1260,
+        "time_sec": 42.0,
+        "baseline_oil_y": 868.0,
+        "experimental_oil_y": 868.0,
+        "baseline_foam_y": 819.0,
+        "experimental_foam_y": 819.0,
+        "state_changed": false,
+        "changed_emissions": 0
+      }
+    },
+    {
+      "frame_index": 1275,
+      "target_index": 12,
+      "target_y": 835.0,
+      "target_source": "calibrated_high_recall",
+      "in_selector": true,
+      "first_recorded_boundary": "IN_SELECTOR",
+      "recorded_memberships": [
+        {
+          "row": {
+            "row_hypothesis_id": "oil-row:000085:002",
+            "tracklet_id": "oil-tracklet:000084:0017",
+            "phase_admitted": true,
+            "publishable": true
+          },
+          "member": {
+            "candidate_offset": 12,
+            "source": "calibrated_high_recall",
+            "y": 835.0,
+            "authority": "CONTINUATION_ELIGIBLE",
+            "authority_reason": "continuation",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": true,
+            "selected": true
+          }
+        }
+      ],
+      "global_top_indices": [
+        4
+      ],
+      "result": {
+        "frame_index": 1275,
+        "time_sec": 42.5,
+        "baseline_oil_y": 835.0,
+        "experimental_oil_y": 835.0,
+        "baseline_foam_y": 818.0,
+        "experimental_foam_y": 818.0,
+        "state_changed": false,
+        "changed_emissions": 2
+      }
+    },
+    {
+      "frame_index": 1320,
+      "target_index": 9,
+      "target_y": 844.0,
+      "target_source": "material_path",
+      "in_selector": false,
+      "first_recorded_boundary": "TRACKLET_NOT_ADMITTED",
+      "recorded_memberships": [
+        {
+          "row": {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false
+          },
+          "member": {
+            "candidate_offset": 9,
+            "source": "material_path",
+            "y": 844.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "material_layer_terminal",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          }
+        }
+      ],
+      "global_top_indices": [
+        15
+      ],
+      "result": {
+        "frame_index": 1320,
+        "time_sec": 44.0,
+        "baseline_oil_y": 822.0,
+        "experimental_oil_y": 822.0,
+        "baseline_foam_y": 812.0,
+        "experimental_foam_y": 812.0,
+        "state_changed": false,
+        "changed_emissions": 0
+      }
+    },
+    {
+      "frame_index": 1485,
+      "target_index": 19,
+      "target_y": 836.0,
+      "target_source": "phase_transition_scan",
+      "in_selector": true,
+      "first_recorded_boundary": "IN_SELECTOR",
+      "recorded_memberships": [
+        {
+          "row": {
+            "row_hypothesis_id": "oil-row:000099:001",
+            "tracklet_id": "oil-tracklet:000084:0017",
+            "phase_admitted": true,
+            "publishable": true
+          },
+          "member": {
+            "candidate_offset": 19,
+            "source": "phase_transition_scan",
+            "y": 836.0,
+            "authority": "ANCHOR_ELIGIBLE",
+            "authority_reason": "ordered_lower_interface",
+            "phase_identity": "ordered_lower_interface",
+            "tracklet_lifecycle": "continuing",
+            "tracklet_admitted": true,
+            "selected": true
+          }
+        }
+      ],
+      "global_top_indices": [
+        19
+      ],
+      "result": {
+        "frame_index": 1485,
+        "time_sec": 49.5,
+        "baseline_oil_y": 836.0,
+        "experimental_oil_y": 836.0,
+        "baseline_foam_y": 814.0,
+        "experimental_foam_y": 814.0,
+        "state_changed": false,
+        "changed_emissions": 0
+      }
+    },
+    {
+      "frame_index": 1560,
+      "target_index": 20,
+      "target_y": 833.0,
+      "target_source": "phase_transition_scan",
+      "in_selector": true,
+      "first_recorded_boundary": "IN_SELECTOR",
+      "recorded_memberships": [
+        {
+          "row": {
+            "row_hypothesis_id": "oil-row:000104:001",
+            "tracklet_id": "oil-tracklet:000100:0021",
+            "phase_admitted": true,
+            "publishable": true
+          },
+          "member": {
+            "candidate_offset": 20,
+            "source": "phase_transition_scan",
+            "y": 833.0,
+            "authority": "CONTINUATION_ELIGIBLE",
+            "authority_reason": "continuation",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": true,
+            "selected": true
+          }
+        }
+      ],
+      "global_top_indices": [
+        2,
+        13
+      ],
+      "result": {
+        "frame_index": 1560,
+        "time_sec": 52.0,
+        "baseline_oil_y": 833.0,
+        "experimental_oil_y": 833.0,
+        "baseline_foam_y": 813.0,
+        "experimental_foam_y": 813.0,
+        "state_changed": false,
+        "changed_emissions": 4
+      }
+    }
+  ],
+  "limitations": [
+    "Previously exposed regression sources; no independent holdout or scalar tolerance",
+    "Unreviewed nearby candidates do not inherit reviewed identity",
+    "Mac diagnostic; Windows physical identity/acceptance unresolved",
+    "Saved sequence replay is not a new application/report run"
+  ],
+  "evidence_sha256": {
+    "corpus-recheck-001.xml": "702e42acdddd747d228753761ee7dc5e3c37791dabb7b9d1b18c5df5d451b644",
+    "four-video-invariance.json": "8f69ed7fa54e84b6b770b18218f1b4134db0ea7f5cd40e83cf510810e56b3f45",
+    "full-suite.xml": "a2f466cf9573f63473b99e409dc385120e996e100cefd76a4f852daa83686edf",
+    "intake.json": "bd73d44cd21c9b6cbf8df7c44bcfef11667fb618d96a411b2837c0f9df4dfe7b",
+    "recovered/inputs/sample/output/s11-a2-target-binding-20261007-001/labels.json": "6c4d2b0a1dbee57cf294ebd0d894d141ba3a9b8667be8355dbd18296fb9fdbcc",
+    "recovered/inputs/sample/output/s11-a2-target-binding-20261007-001/mapping.json": "bf575a44224e53c03aa73f24c1dc059654111bc3ee7fa357417a91e0a294a8db",
+    "recovered/inputs/sample/output/s11-a2-target-binding-20261007-001/packet.json": "be57465f80235a65edbf16f338e45ecd5590a43238bb718762052a965d0f24c4",
+    "resume-cli-001.xml": "122c4e4718662725c10f675bd1c6a54f132dfdaf517831070330dda3d85e8c25",
+    "resume-contracts-001.xml": "86e610a9905a2e00cc8f765c67411e16fb4397de83b00fdeb3c6736ac618c373",
+    "selector-base_sample_1-001/baseline.json": "47267eadff2a8b82d9a7cb4c0515f992b7413af2627d3355469b6144afd5c45d",
+    "selector-base_sample_1-001/experimental.json": "5f7ddb65d22633f96f6d3540dc031c7372db909e63d497340b4b003c3ac155e6",
+    "selector-base_sample_1-001/freeze.json": "fd108d5d9385f593d9e988316c61cad74b4392ee6f0c3d4d7d0c67670c5c288f",
+    "selector-base_sample_1-001/layers.json": "8881c4cf83e2880499799ff75cd3925c4cc8f70fbf0c5df4799a63f4df86b034",
+    "selector-base_sample_1-001/lifecycle.json": "78322180fc3e857fb834d8942f970b278343953eb7ba0fa84b6cf2db59c14abb",
+    "selector-base_sample_1-001/receipt.json": "5481c43954d4ee9fa5991a84a9d6b57c276b24d244ac6423ef98e0828b7ec7de",
+    "selector-base_sample_1-001/rows.json": "b0bcb85b894b4a6f233ea26d493b09de8b8c59f4629741ba01b7668b7680cdf0",
+    "selector-base_sample_1-001/summary.json": "c751bf77e15cdc008f210f8dae319dda50ef8b67abc93d9d08bc03d497afebf3",
+    "selector-sample2-001/baseline.json": "1b201fc398675009f58268a69d2933af9c62af8f5f3572b60f86bd693e7e332e",
+    "selector-sample2-001/experimental.json": "1b201fc398675009f58268a69d2933af9c62af8f5f3572b60f86bd693e7e332e",
+    "selector-sample2-001/freeze.json": "eb0f4ec28ce762a4261c3f5e4afcf52c194dc324324cf43768289b66992a07fd",
+    "selector-sample2-001/layers.json": "0a4188272c0397e55f8fbab171f4f1191a1e869dad472c191253e770ec6b7243",
+    "selector-sample2-001/lifecycle.json": "a20d3dba4381e6f8ac223f5d3768232cd0b3f6325f77f60c3dad668fdbad852d",
+    "selector-sample2-001/receipt.json": "89126f55011c71b176c8e3125b0688c03cf4fcc27395315caf6f54b2df8cb748",
+    "selector-sample2-001/rows.json": "0cdf44c42e16e6b8b8d7e67f40ee59667e0fc27ab3278d8148796d1362549e05",
+    "selector-sample2-001/summary.json": "34de06f29684e9a0a6b5b285d0bacc9b35b0a11018da4394dd5dc4c920dfc730",
+    "selector-sample3-001/baseline.json": "74f787a7a67b26bacaad2832715f8d86a6f173c308e0d940303b3fc272b918f0",
+    "selector-sample3-001/experimental.json": "bfbc176cd0757a6bdd452402682cd3598aceb006005cec1901c84a0aa1393871",
+    "selector-sample3-001/freeze.json": "c2f3d8cfad6622ce9aa03217e93b3ac42b336e425e961fffefcfd7128646d117",
+    "selector-sample3-001/layers.json": "cd1b5a37813a660bb3733e8f0f7def01c52b2961b29962d8fa193a47504b71f7",
+    "selector-sample3-001/lifecycle.json": "92e076ee2cb681a530b87c2f66b1296b1f5101e80fb71bb5688b4b91c9709f9f",
+    "selector-sample3-001/receipt.json": "32517d1ce6b2b0eb2178574c6a88e9dd0d7998aaf63e3df9c90e5404a8f76630",
+    "selector-sample3-001/rows.json": "45a99f8aa35c322b9eca4520b5137feb8a4beabeb239e19a745950d51fb0627b",
+    "selector-sample3-001/summary.json": "918d402b7007904353ecbfe2d9dceb9f5137b7bf14b1d31fcfff131568111f0b",
+    "selector-sample4-001/baseline.json": "e9a537f828ad29112b827a2335c0da9e97af6b0dcfd1c5c4c6ead76fe1b1e58b",
+    "selector-sample4-001/experimental.json": "0956d6c1ca095a50e9205e49d63a9f4d9c40db2016e0dc4ef791e4687306b732",
+    "selector-sample4-001/freeze.json": "bf0a8b2b18ec6efe997b52e35756a2b9bc24fec749528f08276781cede4441c6",
+    "selector-sample4-001/layers.json": "5e98f6e39b275b6698a5bddfa4f690e751cbbbc10ea7a6df07954f685ad873c0",
+    "selector-sample4-001/lifecycle.json": "293edce0380c0c30245755acc7d9f2285abbd694eec7fbecfdfb002fbba379e2",
+    "selector-sample4-001/receipt.json": "ff33a206c5b57e989d0ebdacbbdf61c3862e684f221b7dd54c1815bbb48b515c",
+    "selector-sample4-001/rows.json": "d01190f00d8fc0ef32e660be2235b846cd9447ffa9186a77b568f1f9c6ad1230",
+    "selector-sample4-001/summary.json": "b617b0f3e031f6d4427c41848cc40c25f42a10a129d4a7e837111b77c15306f7",
+    "video-base_sample_1-probe-001/current-detections.json": "28ecb446324ce09f9791abd887084cef95aabc8104c24759ba689b3217699766",
+    "video-base_sample_1-probe-001/final-samples.json": "d2b2cf639584d837cad6ae3178b8c18ed18c500eebd05b7439e0e649e522a397",
+    "video-base_sample_1-probe-001/freeze.json": "dbb31ada7b7c29b581fb12541aa91d5e0b2f504fea0b36fddd29d28ce729acb2",
+    "video-base_sample_1-probe-001/measurements.json": "686dc10d3ee87f6c7f625cf0198f9d63b4aaf41b6b6d92ef3ffb37b1f46c4aee",
+    "video-base_sample_1-probe-001/receipt.json": "40d2e65ff13bba91f8b7f3eaef45a18d8e8252af5b2b67ab60a338fde400d8d2",
+    "video-sample2-probe-001/current-detections.json": "e01e541cb315bb1b9e4f6813abe7ed9eaeb3ef658da198603f6a04a366c1897e",
+    "video-sample2-probe-001/final-samples.json": "de0385d8f6304dfe21f75249b1431d62666fb8fbe3bb55347f330755eab35c9e",
+    "video-sample2-probe-001/freeze.json": "212e0ea0bcb1fcad46e57e200cde4c3486cee666c67946c5635042073ef3f445",
+    "video-sample2-probe-001/measurements.json": "0ea0a9fa3a4becfb8a3b090349036296b5d61981a66b1a68c2aa7a73ec86072e",
+    "video-sample2-probe-001/receipt.json": "e9e137014887ca3d4b4c40e18738eb7fb48535e0cb580e48367fb4504b82ade7",
+    "video-sample3-probe-001/current-detections.json": "98ab0d3c7ce520a4d3fc32341273c083f02508f1320edbd09fe642c13f19276d",
+    "video-sample3-probe-001/final-samples.json": "5f901b9465157b09edd84462cc4dbe68ca98c33a7cef9ed67bf385391fe30a3a",
+    "video-sample3-probe-001/freeze.json": "989df59f25ccbfbee3c24551e9accd3dbaa4773badf2f8ee6d18b0ef22e732bd",
+    "video-sample3-probe-001/measurements.json": "a91a3ff3692e650152c3098f8bbe4f52cf1b76ec2f790393acf7ab27ac1e3397",
+    "video-sample3-probe-001/receipt.json": "c7e90e6adc63a486c300feaeda7e1b0c75ba6fbd2184d2492f827138b87afc7a",
+    "video-sample4-probe-001/current-detections.json": "399ca8a5d19c2fa26f01c4f24fd72870acd84f22747201d8006616265cc5936f",
+    "video-sample4-probe-001/final-samples.json": "ca037ad24ba87bb6b71faead3c9dde79f0375b936c5acb1b5325b476f246520a",
+    "video-sample4-probe-001/freeze.json": "5aca28f3b7b638774f13c417c6d350025477bc75867bbfa3fdc729d4ae51eab2",
+    "video-sample4-probe-001/measurements.json": "7a733c39779be70d5a752cd911bdb3e846c5ebb6d60ed7a486c5001aa4a9dd44",
+    "video-sample4-probe-001/receipt.json": "04d463a32a810c3412fd2be6d6e49c6c0630fddf66b7518f3495b8c27d72ed64"
+  }
+}

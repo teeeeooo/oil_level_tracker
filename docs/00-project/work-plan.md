@@ -8,13 +8,17 @@
 
 **Latest bounded adoption (2026-10-08):** source-frame review is locally verified at code `52003aa` and ADOPTED into main through delivery `ae47d5c` after the user-authorized merge review. The remaining worktree is removed; original media and local evidence are preserved. The fixed side-texture challenger is CLOSED WITHOUT PROMOTION. The sample3 episode audit identifies repeated filled-cap publication constraints, without proving that their rejected candidates are true Oil. [Adoption evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md#main-adoption-review--2026-10-08) owns the review and cleanup. Detector efficacy, independent comprehension, O2/Windows acceptance and A0Q stability remain unresolved.
 
-**Windows-first investigation closeout (2026-10-08):** the interrupted continuation
-on `work/s11-windows-first-detector-20261008` is ready for diagnostic handoff.
-H1/H1b and the frozen LabPics ranking are CLOSED WITHOUT PROMOTION. The saved-audit
-exclusion reader and saved-detection replay helper are locally verified; production
-source remains identical to `49c6d3a`. [Closeout and next boundary](../60-evidence/s11/2026-10-08-windows-first-detector-closeout.md)
-own the evidence. The new branch is not main-adopted. Private Windows execution,
-physical candidate identity, O2 and field repair remain unresolved.
+**Latest detector investigation closeout (2026-10-08):** the interrupted
+`work/s11-spatial-identity-20261008` continuation is complete for diagnostic handoff.
+Cellular region/boundary ranking and the bounded selector permutation are CLOSED
+WITHOUT PROMOTION. The three reviewed sample4 errors remain; their confirmed
+alternatives are unavailable at the selector seam. [Cellular closeout](../60-evidence/s11/2026-10-08-cellular-selector-closeout.md)
+owns the result and next boundary. Earlier H1/H1b and LabPics closures remain
+closed under the [Windows-first evidence](../60-evidence/s11/2026-10-08-windows-first-detector-closeout.md).
+Production source remains identical to `49c6d3a`; neither investigation branch is
+main-adopted. Next detector work needs a distinct identity/admission mechanism
+with two-sided controls, not another ranking permutation or cap relaxation.
+Private Windows execution, physical identity, O2 and field repair remain unresolved.
 
 This document owns current state, authorization, unknowns and the next transition.
 Completed execution detail belongs in linked evidence. Historical pending wording

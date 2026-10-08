@@ -88,6 +88,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-09-16 | [s11-r22-2-interface-path-diagnostics-architecture.md](20-architecture/s11-r22-2-interface-path-diagnostics-architecture.md) | 현 위치 유지 |
 | 2026-09-17 | [s11-interface-observability-witness-architecture.md](20-architecture/s11-interface-observability-witness-architecture.md) | 현 위치 유지 |
 | 2026-10-07 | [s11-report-source-context-design.md](20-architecture/s11-report-source-context-design.md) | 로컬 report 후보 설계 |
+| 2026-10-08 | [s11-cellular-basin-shadow-design.md](20-architecture/s11-cellular-basin-shadow-design.md) | 셀 구조·경계 및 선택 순서 실험 계약 |
 | 2026-10-08 | [s11-episode-source-review-design.md](20-architecture/s11-episode-source-review-design.md) | 원본 프레임 맥락 및 별도 텍스처 실험 계약 |
 | 2026-10-08 | [s11-terminal-contradiction-shadow-design.md](20-architecture/s11-terminal-contradiction-shadow-design.md) | 종료된 상태 전환 가설 및 저장 결과 진단 계약 |
 
@@ -300,6 +301,8 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-10-02 | [s11-o2-w4-r3-existing-evidence-feasibility.md](60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md) | 완료 증거 |
 | 2026-10-07 | [2026-10-07-report-source-context-validation.md](60-evidence/s11/2026-10-07-report-source-context-validation.md) | 로컬 후보 실행 증거 |
 
+| 2026-10-08 | [2026-10-08-cellular-selector-closeout.json](60-evidence/s11/2026-10-08-cellular-selector-closeout.json) | 셀 구조·선택 실험 종료 측정 및 해시 |
+| 2026-10-08 | [2026-10-08-cellular-selector-closeout.md](60-evidence/s11/2026-10-08-cellular-selector-closeout.md) | 중단 실험 재개 검증·불채택 및 인수인계 |
 | 2026-10-08 | [2026-10-08-episode-source-review-validation.json](60-evidence/s11/2026-10-08-episode-source-review-validation.json) | 원본 프레임 검토 및 독립 텍스처 실험 실행 증거 |
 | 2026-10-08 | [2026-10-08-episode-source-review-validation.md](60-evidence/s11/2026-10-08-episode-source-review-validation.md) | 원본 프레임 검토 및 독립 텍스처 실험 실행 증거 |
 | 2026-10-08 | [2026-10-08-windows-first-detector-closeout.json](60-evidence/s11/2026-10-08-windows-first-detector-closeout.json) | 중단 작업 재개 검증 및 산출물 해시 |
