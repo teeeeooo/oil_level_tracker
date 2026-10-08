@@ -153,6 +153,19 @@ between documents, not another copy of progress. W0–W4 refine work within O2;
 W5/W6/W7 map to O3/O4/O5. O2 acceptance remains a separate gate before W5, not
 an automatic consequence of finishing an experiment.
 
+The [October 8 next-work specification](70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
+and its shared verification JSON are byte-preserved supplied sources under the
+[import manifest](70-reference/s11-next-work-2026-10-08/import-manifest.json).
+The [intake record](60-evidence/s11/2026-10-08-next-work-intake.md) distinguishes
+this checkout's verification/cleanup from the source audit's earlier tests.
+O1–O5 remain the design/acceptance framework: D1–D3 refine W4/O2, D4a maps to
+W5/O3, D4b to W6/O4 and D6 to W7/O5. D0 is preparation; D5 Foam has separate
+design and behavior acceptance before integration. D aliases are maintained
+only in the existing Work Plan ledger, not in a second progress document.
+Earlier dated plans retain rationale and rejected alternatives; current Witness
+Architecture/Validation and the parent physical-interface proposal retain their
+responsibilities. The new source neither restarts O1 nor promotes a detector.
+
 ## Supporting collection indexes
 
 - S11 diagnostics — [`50-diagnostics/s11/`](50-diagnostics/s11/)

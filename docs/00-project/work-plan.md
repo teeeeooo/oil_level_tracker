@@ -1,617 +1,176 @@
 # Current Work Plan
 
-**Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery`
-**Milestone status:** `ACTIVE`
-**Current gate:** O1 accepted locally; W4 candidate-identity challenger and calibrated O2 acceptance remain OPEN. All three 2026-10-07 audits are preserved with their original bytes. A0B is adopted at `fa2d6d5`. The third-audit report namespace/wording repair is now locally verified and adopted with bounded legacy/state-only corrections; [report evidence](../60-evidence/s11/2026-10-07-report-context-adoption.md) owns the result. The static two-second display cap and bounded scene captures are also locally verified and adopted. The sample4 human reply identifies incorrect Oil tracking at the displayed 40/42/44-second observations and four correct observations to preserve; domain-event/initial-state Oil compatibility is locally verified and adopted. The three captured alternatives are human-confirmed Oil, and their first selection-eligibility loss is traced to Oil authority. [A1 lineage](../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) is implemented and locally verified with unchanged production output. The pink-observation review is closed: 40 s unresolved, 42 s tentatively lower rim, 44 s tentatively noise. A2 control preflight binds seven confirmed Oil correspondences and three rejected targets while preserving subtype uncertainty. The uncertainty-preserving W3 binding and recorded-selection baseline are now verified locally. The user requires both static and temporal context; the endpoint continuity review is closed with confirmed rapid rise/fall of one actual Oil boundary. The displayed short central native-frame correspondence is human-confirmed. The same matcher fails other confirmed seeds/directions, so its standalone tracking promotion is rejected. A2 temporal-region model preflight has prepared exact adjacent-frame inputs; the A/B reply identifies bubbly fluid above and less-bubbly liquid below. The frozen joint region-exchange readout is evaluated through W3 and CLOSED WITHOUT PROMOTION: all 153 candidates abstain, including all seven confirmed targets. Family, authority-tier and whole-track shortcuts are contradicted by the controls. The paired scorer is rejected for adoption; A0Q Qt stability remains unresolved. Prior region/appearance experiments and review/binding handoffs remain closed at their recorded scopes.
-**Field disposition:** latest user-reported Windows result remains `FIELD FAIL`; no field-qualified detector is claimed.
-**Current bounded delivery:** report source context is locally verified and adopted into main from `0a60b11` on 2026-10-07 with user authorization. This adopts the report adjunct only; detector identity, independent user comprehension and Windows acceptance remain unresolved. [Execution evidence](../60-evidence/s11/2026-10-07-report-source-context-validation.md#main-adoption-and-worktree-cleanup--2026-10-07) records the adoption review and worktree cleanup.
+**Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery` / `ACTIVE`.
+**Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
+**Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
+**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
+**Next transition:** prepare D1's bounded saved-audit readout, then stop for the Windows input/execution boundary under the current user instruction. D2's concrete observable/algorithm is not selected.
 
-**Latest bounded adoption (2026-10-08):** source-frame review is locally verified at code `52003aa` and ADOPTED into main through delivery `ae47d5c` after the user-authorized merge review. The remaining worktree is removed; original media and local evidence are preserved. The fixed side-texture challenger is CLOSED WITHOUT PROMOTION. The sample3 episode audit identifies repeated filled-cap publication constraints, without proving that their rejected candidates are true Oil. [Adoption evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md#main-adoption-review--2026-10-08) owns the review and cleanup. Detector efficacy, independent comprehension, O2/Windows acceptance and A0Q stability remain unresolved.
-
-This document owns current state, authorization, unknowns and the next transition.
-Completed execution detail belongs in linked evidence. Historical pending wording
-in audits or evidence does not reopen a closed experiment.
+This is the sole current state, authorization, unknowns and next-action owner.
+The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
+is a preserved proposal, with [intake and cleanup evidence](../60-evidence/s11/2026-10-08-next-work-intake.md).
+Historical pending prose never reopens a closed experiment or supplies current authority.
 
 ## S11 work-item ledger
 
-[Document relationships](../README.md#s11-audit-specifications-and-execution-routing)
-map September O1–O5 to October W0–W7. This is the only live W-status list.
-IMPLEMENTED, VERIFIED (within the stated scope) and ACCEPTED are distinct.
-CLOSED WITHOUT PROMOTION ends an experiment without satisfying O2 acceptance.
+O1–O5 remain the staged design/acceptance framework. W0–W4 refine O2;
+W5/W6/W7 correspond to O3/O4/O5. D0–D6 are the October 8 task aliases below,
+not additional milestones or another live status list. IMPLEMENTED, VERIFIED,
+ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 
-| Work item / stage | Current status | Boundary / next condition | Evidence or owner |
+| Work item / stage | Current state | Next condition / D mapping | Owner or evidence |
 |---|---|---|---|
-| O1 extraction | IMPLEMENTED; locally ACCEPTED | Trace-only production equality; no identity authority | [O1 evidence](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md) |
-| W0 / O2 fixed profile | Windows result VERIFIED by transferred report; CLOSED WITHOUT PROMOTION | Candidate identity worsened; no rerun requested | [Profile result](../60-evidence/s11/s11-o2-identity-profile-windows-run-001.md) |
-| W1 / O2 targets and aggregation | Source review, target contract and counter-controls VERIFIED locally | Candidate identity, local path support and scalar eligibility stay separate; challenger remains open under W4 | [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md) |
-| W2 / O2 bounded scene expansion | Frame14865 scene and geometry review COMPLETE on transferred evidence; bounded handoff CLOSED without identity promotion | Two unresolved boundary alternatives; four native paths and nineteen center-only candidates; no formal relabeling | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
-| W3 / O2 shadow outputs and evaluation | IMPLEMENTED and VERIFIED locally; existing-data Windows target/context audit VERIFIED by transferred report | Preserve v1 compatibility and calibration guards; scalar truth remains absent; no efficacy claim | [Local evidence](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [Windows audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) |
-| W4 / O2 one challenger | Local-position, fixed color-side and bounded region appearance experiments CLOSED WITHOUT PROMOTION; candidate-identity challenger OPEN | Color information retained; incremental identity benefit NOT ESTABLISHED; R2 entry unmet | [Paired-scale result](../60-evidence/s11/s11-o2-w4-paired-scale-windows-run-001.md), [color-side assessment](../60-evidence/s11/s11-o2-color-side-local.md#added-information-assessment-and-measurement-disposition--2026-10-06) |
-| Report-context adjunct | IMPLEMENTED; locally VERIFIED; ADOPTED into main from `0a60b11` | Supporting source comparison; independent comprehension unmeasured, source appearance does not grant identity and wrong extrema remain unresolved | [Source-context evidence](../60-evidence/s11/2026-10-07-report-source-context-validation.md) |
-| Episode-source review | IMPLEMENTED; locally VERIFIED at `52003aa`; ADOPTED into main through `ae47d5c` | Original-frame comparison around extrema, Oil gaps and Foam; no numeric repair or independent comprehension claim | [Episode-source evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
-| O2 acceptance | OPEN; not satisfied | Independent development/calibration/holdout roles, fixed operating point and required Windows shadow acceptance remain unresolved | [O2 acceptance](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
-| W5 / O3 support and association | PROPOSED; entry pending O2 acceptance | Separate behavior plan, typed support/physical association controls and exact same-frame provenance | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
-| W6 / O4 handoff and phase | PROPOSED; entry pending W5 | Separate handoff and phase changes with positive/negative controls; no time/polarity shortcut | [O4 architecture](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
-| W7 / O5 field qualification | PENDING integrated behavior candidate | Exact runtime, canonical segments, accuracy/coverage/resources; local or shadow PASS cannot substitute | [Field qualification](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
+| O1 extraction | IMPLEMENTED; locally ACCEPTED | Reuse trace-only extraction; no identity authority | [O1 evidence](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md) |
+| W0 / O2 fixed profile | Windows result transferred; CLOSED WITHOUT PROMOTION | No rerun; candidate identity worsened | [Profile result](../60-evidence/s11/s11-o2-identity-profile-windows-run-001.md) |
+| W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
+| W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
+| W3 / O2 evaluation | Tools locally verified; Windows target/context audit transferred | D1 reuses existing records; D3 reuses evaluator. Evaluation tooling is not classifier efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [Windows audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) |
+| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D1 recorded-loss question → D2 concrete role hypothesis → D3 frozen shadow; independent roles/controls unresolved | [Supplied D1–D3](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md) |
+| O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
+| W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
+| W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
+| Foam front / episode | Separate proposed work | D5: own design and single-change comparison before integration; no automatic Oil-gate bypass | [Responsibility architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Foam investigation](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md) |
+| W7 / O5 field qualification | PENDING integrated candidate | D6: exact runtime, all nine canonical segments, existing report and target resources | [Field gate](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
+| Report adjuncts | Source context and episode-source review ADOPTED | Reuse existing report; comprehension and numerical identity remain separate unresolved outcomes | [Source context](../60-evidence/s11/2026-10-07-report-source-context-validation.md), [episode review](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
+| D0 planning intake | Source audit completed; originals and local receipts verified | Planning baseline only; no detector or field acceptance | [Intake record](../60-evidence/s11/2026-10-08-next-work-intake.md) |
 
-W4-R0–R5 are internal W4 continuation steps, not another milestone:
-
-- R0 correction is COMPLETE on transferred evidence; the old statistic's origin remains unresolved.
-- R1 appearance-to-identity proposal is CLOSED WITHOUT PROMOTION; the censored comparison remains NOT_ASSESSABLE.
-- R2 entry is unmet; color-side measurement does not establish identity gain.
-- R3 saved-material inventory is COMPLETE on transferred evidence; no additional linked human-reviewed physical control was recovered. Do not repeat inventory.
-- R4 (reuse W3 to evaluate outputs/abstention) and R5 (O2 acceptance or hypothesis closure) remain conditional, not newly authorized execution by their presence in the [dated W4 audit](../50-diagnostics/s11/s11-w4-progress-audit-and-continuation-plan-2026-10-01-ba1bd6a.md).
-
-The [joint-context disposition](../60-evidence/s11/s11-o2-joint-context-windows-run-001.md#w4-r0-correction-received-and-w4-r1-disposition--2026-10-02)
-and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md)
-own their detailed returns. Human idx0/idx20 ambiguity, formal labels and prior
-scores remain pinned. This is not a general impossibility finding for spatial classifiers.
-
-## Report-context adoption and next priority
-
-The user authorized main adoption, unused-worktree cleanup, commit and push on
-2026-10-07. Main now includes the reviewed report branch through `0a60b11`. The
-[design](../20-architecture/s11-report-source-context-design.md) adds original-pixel
-time–height context without changing any numerical observation. This is not
-adoption of a detector challenger. All three unused worktrees were removed after
-verification of recovery material; an idle Python session left by the earlier
-audit tool was identified and terminated. Recovery locations are in the
-[adoption record](../60-evidence/s11/2026-10-07-report-source-context-validation.md#main-adoption-and-worktree-cleanup--2026-10-07).
-
-Evaluate major episode direction/order, Oil/Foam separation, misleading extrema
-and long wrong paths against source context. Local misses/errors that preserve
-that interpretation are not independent blockers. Sample4 wrong extrema and the
-sample3 numerical gap remain unresolved; the new image exposes context rather
-than repairing identity. Native-frame review protects real rapid movement from
-being dismissed because broad sampled endpoints appear similar. The previously
-closed A2 scorer remains closed. O2/O3/Windows acceptance and A0Q stability are
-not satisfied by this report improvement or a single successful Qt execution.
-
-## Episode-source follow-up — 2026-10-08
-
-The latest report candidate keeps source-frame review inside the offline report, with near-native extrema zooms separate from broad gap/Foam context. All 299 stored rows/events remain unchanged. The rejected side-texture model supports none of seven confirmed Oil targets; each paired wrong target ranks above its true alternative, so do not reopen this rule through threshold tuning.
-
-The full sample3 observer run finds FILLED_CAP_VETO in 87 of the 92 missing rows in its longest numerical gap. Investigate consequential phase/ownership and interface reappearance with positive and negative controls before changing publication. This does not prove those rejected rows are true Oil, authorize removing the cap, or bypass O2/O3 entry. [Episode-source evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) records the audit and exact tests.
+W4-R0–R5 remain internal continuation labels: R0 correction and R3 inventory are
+complete; R1 is closed without promotion; its censored comparison remains
+NOT_ASSESSABLE; R2 entry is unmet. R4 evaluation and R5 disposition apply only to
+a new eligible hypothesis. [Joint-context disposition](../60-evidence/s11/s11-o2-joint-context-windows-run-001.md#w4-r0-correction-received-and-w4-r1-disposition--2026-10-02)
+and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility.md) retain detail.
 
 ## Next transition
 
-Resume from the [A2 closure handoff](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md#a2-closure-handoff--2026-10-07),
-which pins the checkout, preserved worktrees, local-only evidence and closed human
-judgments. For the underlying audit obligations, read §7 of the [third audit](../70-reference/s11-audit-2026-10-07/s11-third-audit-report-context-work-spec-2026-10-07.md)
-and §8 A1 of the [second audit](../70-reference/s11-audit-2026-10-07/s11-second-audit-and-detector-work-spec-2026-10-07.md).
-The current request authorizes sequential implementation of this plan, appropriate
-verification, logical commits and push until a decision requires user judgment.
-Completed preservation remains closed. Report namespace/wording adoption does
-not adopt the full prototype, change detector behavior or complete A1–A4.
+1. Prepare the existing stdlib-only candidate-loss reader from delivery `e5d4a04`,
+   with its matching tests and a bounded Windows handoff. Keep the remainder of
+   both diagnostic branches unadopted. The original W3 `experiment.json` raw hash
+   is `ba5fe04b28473f70387e363ef7d40077f559c80b1852755d997e1dd04171937f`.
+2. At the Windows boundary, stop and report the required input/command. D1 asks
+   which recorded retention, tracklet, phase/owner or final-selection boundary
+   excluded each existing member. Missing fields remain UNAVAILABLE; the task
+   may close with a named unknown. No video replay, relabeling or broad audit is needed.
+3. D2 must identify a distinct candidate-local observable and a concrete frozen
+   algorithm, with target-positive, cue-sharing negative and unresolved controls.
+   Separate physical boundary, product role, path support and scalar usability.
+   H-ROLE is a proposal name, not an implemented or proven classifier. Keep optical/
+   texture opposition and distinguish paired-pulse measurement from boundary support.
+4. Before D3, freeze input identities, exposure/partition roles, operating-point
+   policy, resource bounds and falsification. Compare wrong-target suppression
+   separately from true-target recovery, through W3 and the unchanged report.
+   All-abstain and raw output growth are not success. Missing Windows data does
+   not justify guessed production behavior; independent data gates remain explicit.
+5. O2 acceptance precedes D4a; phase/handoff D4b has its own gate. D5 Foam needs
+   independent design and ablation. D6 evaluates the integrated exact runtime.
 
-The next implementation sequence is:
-
-1. COMPLETE — report Oil-flag namespace and endpoint/Foam observation wording
-   repair adopted. [Verification](../60-evidence/s11/2026-10-07-report-context-adoption.md)
-   covers 31 focused cases and four fresh fixed-window application/report runs;
-   stored values, validity, flags and event meanings match the pinned baseline.
-2. COMPLETE — static report uses a two-second display cap and at most three
-   source-scene requests for the longest internal gap per Glass. The cap is a
-   display policy, not a detector threshold. Scene-only captures add no Oil/Foam
-   guides or events; Result Review retains its existing connectivity.
-   [Verification](../60-evidence/s11/2026-10-07-report-context-adoption.md#static-gap-and-source-scene-adoption)
-   covers 79 focused cases, 13 bundle lifecycle cases and four fresh video runs.
-3. COMPLETE for first target selection — [sample4 reply](../60-evidence/s11/2026-10-07-source-report-interval-review.md#human-reply-received--2026-10-07)
-   confirms only f1275/42.5 s correctly tracks Oil within 40–44 s, plus correct
-   f1140/38 s, f1485/49.5 s and f1560/52 s. Select incorrect Oil tracking across
-   that transition as the consequential distortion; preserve the four positives.
-   No replacement coordinates, Foam labels, unshown-frame labels or causal
-   mechanism are inferred. sample3 remains supporting comparison, not new truth.
-   Human ROI is still an unadopted input experiment.
-4. COMPLETE — [Oil compatibility repair](../60-evidence/s11/2026-10-07-event-compatibility.md)
-   shares the exact legacy Oil namespace across events/report/reconstruction.
-   Actual legacy anchor protection remains; 117 focused cases and four fresh
-   official replays pass. All 299 tracking rows are unchanged. Events intentionally
-   gain six extrema and ten sample4 crossing/recovery entries; these are derived
-   from stored observations, including the user-rejected extrema at 42/44 s.
-5. COMPLETE locally — A1's three finite lineage gaps are integrated and verified
-   with four-video/all-mode equality. Next evaluate one A2 Oil or separate
-   A3 Foam hypothesis against the chosen interval and two-sided controls. Reuse
-   W3 for A4 and add the interval assessment; exposed clips remain regression
-   material. Context improvement supplements, not replaces, O2/O3/field gates.
-
-The [interval capture and admission trace](../50-diagnostics/s11/2026-10-07-sample4-interval-candidate-lineage.md#admission-lineage-after-a1)
-confirm that actual Oil is represented at 40/42/44 seconds, but authority rules
-reject it for Foam/material identity, insufficient authority and material-layer
-terminal status respectively. All four previously correct observations remain
-unchanged. A1 is diagnostic-only; no selector/threshold repair is adopted.
-
-The [pink-observation reply and control preflight](../50-diagnostics/s11/2026-10-07-sample4-interval-candidate-lineage.md#pink-observation-reply-and-a2-control-preflight)
-close the human checkpoint: 40 s is visually unresolved; 42 s is tentatively the
-lower rim; 44 s is tentatively a noise line. All three remain wrong Oil targets,
-without promotion to definite physical non-interface labels. No repeated subtype
-question is needed. Seven confirmed Oil correspondences and three rejected
-targets are exactly bound to candidates in the existing exposed recording.
-
-A2 must evaluate a candidate-specific joint readout using actual measurement
-footprints and shared dependencies, with separate physical identity, target role
-and scalar/contour usability. Freeze one readout and operating-point policy before
-comparison. The correct 42.5/49.5 s and incorrect 44 s share one tracklet; each
-selected family occurs on both target-positive and target-negative observations.
-Do not grant/veto a whole track, source family or authority tier. Retain optical/
-texture opposition, missingness, same-frame binding and latent-cause collisions.
-These controls constrain a challenger; they do not yet establish one. Reuse W3
-for prediction evaluation; no production A2 behavior or efficacy is claimed.
-Independent identity/field acceptance remains required.
-
-[A2 evaluation preparation](../60-evidence/s11/2026-10-07-a2-target-binding.md)
-now binds all 153 saved candidates without turning three physically uncertain
-wrong targets into definite non-interfaces. W3 reproduces four correct selections,
-three wrong selections and three missed confirmed targets; 173 focused tests pass.
-This is an unchanged-selection baseline, not an A2 efficacy result.
-
-The [user context reply](../50-diagnostics/s11/2026-10-07-sample4-temporal-context-human-reply.json)
-requires static boundary/layer evidence and temporal video changes together.
-The user confirms that the same actual Oil boundary continues from 42.5 to 44 s,
-with rapid rises and falls. Endpoint continuity review is closed. No intermediate
-Y labels or numeric speed bound follows; do not borrow existing tracklet IDs as
-entity truth or assume smooth/slow motion. The [ordered-patch cadence diagnostic](../60-evidence/s11/2026-10-07-a2-patch-correspondence.md)
-is now implemented and measured under a frozen contract: 156 appearance chains /
-6,240 links, with 26 focused tests passing. The 2 fps central chain jumps to the
-lower glass. The user confirms that the displayed central 30 fps forward chain
-from 42.5 to 44 s follows actual Oil; this human review is closed. Existing frozen
-counter-controls show that confirmed Oil seeds at 40/42 s still drift to Y888 at
-native cadence, and the 42.5 s backward chain drifts to Y885. Retain the reviewed
-local temporal witness but close this matcher as a standalone continuation or
-identity repair. Do not repeat the review or tune this matcher on the same cases.
-
-Next A2 work must provide a distinct same-frame physical/target identity mechanism
-with joint spatial context and opposition; optional temporal correspondence can
-corroborate within a verified owner but cannot choose that owner, transfer labels
-or manufacture candidate/scalar coordinates. Preserve the ten bound controls,
-explicit missingness and latent-cause collisions, and freeze one readout and
-operating-point policy before evaluating it through W3. The completed temporal
-probe does not satisfy that identity prediction contract or close A2/A4.
-
-The [temporal region-exchange design preflight](../20-architecture/s11-interface-observability-witness-architecture.md#a2-temporal-region-exchange--design-preflight)
-now has the user's A/B interpretation: A is fluid containing foam/bubbles and
-B is less-bubbly liquid in the two displayed scenes. The review question is closed;
-no exact mask, chemistry, new position or tolerance is inferred. The
-[reply receipt](../50-diagnostics/s11/2026-10-07-sample4-region-context-preflight.json)
-preserves attribution. The [fixed region-exchange comparison](../60-evidence/s11/2026-10-07-a2-region-exchange.md)
-is complete: 42 focused tests, 153 W3 predictions, all unresolved. All seven
-confirmed targets are lost, so this model is CLOSED WITHOUT PROMOTION. Supporting
-pair counts overlap targets and wrong targets; do not relax the sector conjunction
-or retune the model on these cases. Raw curves, opposition and missingness remain
-preserved. This completes one actual A2/A4 exploratory prediction comparison,
-not O2 acceptance or a production repair.
-
-Next implementation entry requires a distinct candidate-specific measurement of
-bubble/texture arrangement with explicit optical alternatives; the present
-shared-plane residuals and closed patch tracks do not supply it. Investigate
-existing texture/spatial owners before proposing another implementation. Freeze
-a falsifiable measurement/aggregation contract and its counter-controls before
-any new comparison. Do not repeat the completed A/B, Oil-position or orange-path
-reviews. Existing local corpus investigation remains authorized; independent
-calibration/holdout and Windows gates remain open. No user decision is pending
-from this completed experiment.
-
-A0Q remains a separate UI lifecycle issue: the audit observed a native Qt stall;
-subsequent passing runs do not establish a repair. Preserve the initial stack and
-retries, and investigate with a bounded external timeout before claiming stability.
-It does not block A1 read-only investigation. A2 requires A0B adoption and A1
-lossless verification; A3 Foam local-front work is separate; A4 uses W3 evaluation
-and existing target binding. O2/Windows gates and independent-video needs remain.
-
-### Preserved completed context
-
-The [denominator reconciliation and region disposition](../60-evidence/s11/s11-o2-color-side-local.md#denominator-reconciliation-closed-and-bounded-region-disposition)
-close the saved-output measurement/review loop on attributed Windows evidence.
-There are 36 eligible unresolved pairs: 6 share a unique minimum-error model,
-30 differ, and none tie; 24 other pairs are unavailable on both sides. The
-correct mismatch fraction is 30/36 (83.3%), not an identity accuracy or error rate.
-Partition loss ordering splits 18/18 across the same 36 eligible pairs.
-Do not repeat the review, denominator check, source/receipt reconciliation or fit.
-
-The bounded region appearance experiment is CLOSED WITHOUT PROMOTION. Partition
-improves smooth for both main identities; model ordering varies with X/BW/support;
-gray/BGR differences and changed observation domains do not establish incremental
-identity benefit. This closes this experiment, not all spatial classifiers or W4.
-
-The [post-region design assessment](../50-diagnostics/s11/s11-w4-post-region-design-assessment.md)
-is complete. Existing material/static/template/motion owners provide correlated
-context or reference geometry, not a new physical measurement by name. Existing
-reviewed controls are retained; the missing validation is a cue-sharing optical
-counter-control and adequate episode-separated identity evaluation.
-
-The user confirmed additional review of existing intervals/regions and other
-videos is feasible; comparative filming is not. Select the passive-video route.
-The [first bounded review handoff](../40-operations/s11-o2-local-shadow-evaluation.md#passive-control-review--first-bounded-batch)
-has returned a [final 75-candidate inventory](../60-evidence/s11/s11-o2-passive-control-review-001.md#final-batch-return--all-75-candidates-reported-labeled):
-13 interface and 62 non_interface, no unreviewed/uncertain entries, revision_count
-12. The user confirmed the expanded review: native-path candidates first,
-additional near-boundary candidates, group non_interface judgments for distant
-candidates, and all 21 BASE candidates judged non_interface because the scene
-was Oil-full. Attribution/scope reconciliation is closed; this is not 75
-separately inspected objects. Preserve individual versus group review bases
-without inventing per-index attribution or distance rules. Private labels/replies
-have not been independently inspected here.
-
-The batch and target clarification are complete on the transferred report and
-user statements. [The product target](../rotary_oil_level_tracker_ssot_spec.md#다층-유체의-추적-대상)
-is the uppermost actual fluid boundary; fluid-species classification is optional.
-In Accum drain, fluid1 is liquefied refrigerant and fluid2 is Oil according to
-the user. Upper idx4/13/17/24 are target positives; lower idx5/10/18 remain real
-interfaces but are non-target. The six post-Foam surface candidates are target
-positives. Retain the 13/62 physical-label inventory and distinguish its 10 target,
-3 internal non-target and 62 other non-target interpretation. No new image review
-or material-identification question is needed.
-
-Explicit [target-truth binding](../60-evidence/s11/s11-o2-passive-control-review-001.md#target-binding-implementation-and-windows-handoff)
-is implemented and verified locally (169 focused controls). It preserves physical
-labels/history in a separate immutable snapshot, binds every target role to the
-case/packet/witness, and reuses W3 identity metrics without transferring path,
-contour, scalar, entity or artifact-subtype truth. Legacy prediction hashes cannot
-be reused against the new target snapshot. No runtime selector changed.
-
-The [Windows binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation)
-closes this handoff: pinned source/logical labels match, three inputs are reported
-byte-preserved, target roles are 10/3/62 and readiness is NOT_EVALUATED. No
-predictions or detector run occurred. Do not repeat binding, hash reconciliation
-or human review for this batch. The snapshot's evaluation truth is available for
-a later explicitly scoped prediction run; no efficacy is established yet.
-
-The user authorized continuing with the existing Mac corpus and will prepare
-independent video separately. The [local reuse audit](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md)
-verified four videos, all 12 media/recipe/truth pins, 15 exact historical review
-joins and 30 saved-image hashes. Thirteen scalar Oil observations are usable;
-two focus-rejected observations stay unusable. These previously exposed sources
-remain regression material available for local development; independent-video
-arrival is not a blocker for preparation or implementation investigation.
-
-The [three-frame local capture](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md#three-frame-current-candidate-capture--completed)
-is complete for base_sample_1/156, sample2/30 and sample4/450: 76 Oil proposals,
-20 native paths; six now have supplemental human observations, 70 remain
-unreviewed. Exact frame/time, raw/witness joins and 12 input
-hashes pass. This is isolated current-frame extraction with fresh detector state,
-not a temporal replay or efficacy evaluation. Paired original/path SVGs and an
-interactive local viewer are ready; full browser visual QA was unavailable.
-
-The [sample2 reply](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md#sample2-human-correspondence-received)
-is recorded: pink idx12 is the actual Oil surface and tracking target; cyan idx10
-follows a gap within Foam, not a reflection or the Oil target. This is an Oil/Foam-gap
-contrast; the hypothesized optical-reflection counter-control is not established.
-The user requires Oil and Foam to be displayed separately in final results.
-No Foam-front coordinate or per-sector path judgment was assigned. Exact reply /
-frame / witness / guide linkage is preserved outside the immutable capture;
-formal O2 labels/target binding for this raw capture has not been created.
-
-The [sample4 reply](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md#sample4-human-correspondence-received)
-is recorded: cyan idx10 is the actual Oil surface/target and pink idx11 is the
-Foam–air boundary to distinguish in the separate Foam series. Do not collapse
-that real Foam boundary into reflection or the sample2 Foam-gap category. This
-whole-candidate correspondence does not certify per-sector localization,
-bottom-connectivity, temporal validity or current production output success.
-
-The [base_sample_1 reply](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md#base-sample-human-correspondence-received)
-completes this three-frame clarification: cyan idx9 is close to the Oil surface
-but slightly above it; pink idx10 is the Foam–air boundary. Do not turn the
-qualitative offset into an exact target, pixel correction or per-sector near/off
-label. Preserve the historical no-Foam scalar annotation separately from this
-new Foam observation; their discrepancy is not resolved by overwriting either.
-
-The [local Oil/Foam owner audit](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md)
-is complete. All six reviewed material paths survive as unselected Oil proposals;
-the current Oil ambiguity decision precedes their assembly, and no completed-window
-selection was run. Foam spatial statuses are weak_rejected / ambiguous /
-weak_rejected; the result clears candidate/mask before temporal confirmation, so
-all three traces lack a Foam-front candidate. Exact rejected-component geometry
-and predicates are absent from the saved trace; human-component correspondence
-and completed-window Oil first loss remain unknown.
-
-The [trace extension and same-frame capture](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md#trace-extension-implemented-and-same-frame-capture-verified)
-are complete on Mac: 100 focused tests pass; 76 candidates and prior output/state
-fields match; all 63 old trace images, 12 inputs and original 87 outputs are
-preserved. Fourteen Foam support components are now visible, with no truncation.
-Base has only small supports below the marked boundary; sample2's large C2 fails
-shape qualification; sample4's chosen C1 is structurally rejected while a distinct
-C2 near the marked boundaries also fails shape qualification. These algorithmic
-flags do not assign physical truth.
-
-The [sample4 component reply and causal replay](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md#sample4-component-reply-and-first-failing-predicate-established)
-identify C1 as glass rim structure and C2 as Foam. C2 itself is not classified
-structural; C1/C2 bounding-box overlap causes the substrate veto to erase C2's
-provisional detached phenotype, then fail shape qualification before the temporal
-gate. The saved-mask/helper replay preserves all 87 capture outputs. This grounds
-a spatial failure; it does not validate disabling the structure guard or an
-exact Foam-front coordinate.
-
-The [sample2 component reply and geometry replay](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md#sample2-component-reply-with-reflection-qualification)
-close this human checkpoint: C1 is rim structure; C2 is inside the Foam region,
-but the user suspects reflected glass features, especially in its lower portion.
-Do not collapse scene material into detected-feature identity or create a pure
-Foam mask. C2 passes layer size but fails one-sided occupancy (ratio 1.05750
-versus existing 1.30); the droplet fallback also fails. This is a code cause,
-not proof that the entire mixed component should be accepted. Original replies,
-Oil/Foam path judgments and all 87 capture outputs remain preserved.
-
-The [actual column-support comparison](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md#actual-column-support-versus-bounding-box-relation)
-is complete: sample4 C2/C1 share 48 columns with fully visible 22–29 px gaps,
-although their bounding-box gap is −4 and the old ROI gap bound is 12. Synthetic
-same-box distant/close controls prevent replacing this with a box-gap-sign
-shortcut. Seventeen geometry tests pass; all 87 capture outputs remain intact.
-Sample2 mixed support and base missing support remain distinct; no classifier,
-new threshold, production selector or scalar changed.
-
-The [sample4 top reply and agent reread](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md#sample4-top-review--central-feature-qualification)
-close the static-image checkpoint. The user sees upper-boundary following with
-possible central round-structure involvement. The unannotated/overlay enlargement
-shows two yellow-top lobes aligned with central bright arch-like features; the
-104×104 ROI cannot distinguish physical structure from reflection or supply an
-exact contaminated interval. C2 remains a Foam-region observation, not pure
-pixel/front truth. Its separation from lower rim C1 does not exclude a different
-feature within C2; removing that veto alone is not a validated repair.
-
-The [offline front-alternative prototype](../60-evidence/s11/2026-10-06-foam-front-alternatives.md)
-is implemented and checked on all 14 saved components. Single local image edges
-also occur on confirmed rim negatives, so this prototype is not promoted into a
-Foam selector or scalar. It retains all competing peaks and unavailable support;
-sample2 mixed support, sample4 structure-contaminated boundary localization and
-base missing support remain unresolved. No threshold adjustment or structure-veto removal is justified.
-
-The [human structure clarification](../60-evidence/s11/2026-10-06-foam-front-alternatives.md#human-clarification--regularly-spaced-circular-structures)
-identifies the central circle and the regularly spaced circular features as
-structures. The preceding motion reply confirms that these features stay in place
-and do not deform while surrounding Foam changes. Structure-versus-reflection
-uncertainty for these described features is closed by explicit human attribution;
-the later A–D reply below binds coarse path correspondence, while exact circle geometry remains unmeasured. This is not a
-structure label for all C2 pixels. The prior reply and all 124 review outputs are
-preserved; no repeated identity question is needed.
-
-The [registered boundary residual experiment](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md)
-is complete on 120 saved comparisons around sample4 frame450. All 213 input files
-are preserved and 240 legacy registration tuples are unchanged. C2's mixed
-boundary neighbourhood changes more than the lower rim, but this does not
-separate stationary structures from surrounding changing Foam. No motion-based
-identity, structure exclusion or runtime promotion follows.
-
-The [A–D human correspondence](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md#human-ad-correspondence-received)
-closes that review checkpoint: A/C/D follow Foam; B's left/lower part follows
-Foam, while its right/upper `^` follows the central structure. B's exact structure split remains unassigned; the later red-mark reply below
-provides approximate, tentative alternative Foam-edge correspondence. Preserve B as mixed; do not label
-all C2 or all B as structure and do not turn this one-frame reply into temporal truth.
-
-The [saved B-alternative inventory](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md#saved-b-alternatives--representation-check-and-next-review)
-is complete without new measurement. Radius8 retains lower appearance peaks under
-the right-hand lobe as well as competing upper peaks; their physical boundary
-identity remains unknown. More retained peaks do not establish a successful repair.
-
-The [red-marked B reply](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md#annotated-b-boundary-reply-received)
-closes the current human checkpoint with tentative Foam-upper-boundary attribution.
-The agent's approximate screen mapping is X584–585/Y844, X586–588/Y845 and
-X589–594/Y846; all eleven mapped columns coincide with saved radius8 alternatives,
-versus five at radius4. X583 is unmarked. This establishes retained alternatives
-for the indicated cells, not exact contour truth, calibrated recall or a selector.
-
-The [edge-selection feasibility audit](../60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md)
-is complete over all14 saved components and both existing radii. At radius8,
-strongest/lowest/nearest choices contain only1/7/5 of the11 tentative marked B
-positions. Minimum-variation membership contains all11, but diverges from prior
-Foam-path context in A/C/D and also exists on confirmed rim negatives. No
-appearance-only rule, new weight or larger-window acceptance is promoted.
-
-The [two-time human reply and same-frame diagnosis](../60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md#two-time-human-clicks-preserved-and-same-frame-capture--2026-10-06)
-close the14s/16s location checkpoint: 22/38 browser clicks are preserved without
-OCR, interpolation or removal of duplicates. At14 shared X positions the16s
-marks are1–8px higher; these are approximate location differences, not flow truth.
-Two bounded fresh-state detector captures reproduce the reviewed ROI pixels
-exactly and preserve139 inputs. At16s both C1 and C2 pass spatial admission, but
-lower C1 wins the score ordering; its same-X support is31–39px below the human
-marks. Current-frame state is persistence_pending and public Foam remains null.
-At14s C1 is structural/weak_rejected and C2 fails the substrate/shape gate.
-Component IDs do not establish physical continuity across these frames.
-
-The user has now confirmed the16s orange C1 as glass rim. The
-[candidate-bound reply and admission audit](../60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md#frame480-orange-c1-confirmed-glass-rim--2026-10-06)
-close this attribution checkpoint. Saved-raster replay reproduces the structural
-predicate and score for all5 components: C1 fails the wide/hollow structure
-conjunction (width0.442<0.70; compactness1.0 is not <0.65), then passes the
-bottom-connected white-material shape branch and outranks C2. Public Foam remains
-null; this is a spatial false admission, not a completed-window publication claim.
-
-The [saved structure-context audit](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md)
-is complete: five frames,23 components,84 ordered pairs,152 inputs preserved;
-existing structure/substrate predicates reproduce and17 geometry controls pass.
-Across sample4:420/450/480, C2-to-C1 actual gaps are20–35px despite much smaller
-box gaps. Configured ellipse radii do not align with the known physical rims;
-none of the three recipes contains a registered artifact template. A peripheral
-cutoff or blanket substrate-veto removal is not a validated behavior repair.
-
-The [double-rim reply and point correspondence](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#double-rim-outer-points-received--2026-10-06)
-are recorded:18 points mark the **outer boundary of the double rim**, per the
-user's correction. Preserve the downloaded JSON unchanged and use the attributed
-reply to supersede its hardcoded inner-edge role. At9 same-X marks, nearest C1
-support is1–5px below; this supplies no inner boundary or rim thickness.
-
-The [inner reply and existing-owner assessment](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#inner-points-received-with-click-uncertainty--2026-10-06)
-close the physical location review:21 inner points are saved with the user's
-mouse-click error qualification; numeric uncertainty remains null. No repeated
-point annotation is requested. Same-X C1 and C2 support lie respectively8–15px
-below and17–22px above the recorded inner marks; these are approximate coordinate
-comparisons, not thresholds, a fitted contour, an exclusion mask or pure identity.
-
-The user corrected the proposed extra-registration question: the app already
-uses a human-set ellipse for the interior detection region; the Mac recipes were
-agent-prepared, not user-set. No new registration requirement is introduced.
-The [existing-mask replay](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#existing-ellipsemargin-contract-and-saved-mask-replay)
-matches all five captures with0 pixel mismatches; all23 component supports are
-inside their configured masks. The sample4 radius52/margin0.08 ROI admits all313
-frame480 C1 rim pixels. This broad input, not ignored mask application, explains
-why the rim remains available to selection. Correcting it is an input change,
-not an efficacy claim for a new detector; internal structure risks still remain.
-
-The [human ROI comparison](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#human-roi-applied-and-bounded-comparison--2026-10-06)
-is complete: the separate recipe changes only sample4's ellipse. Five original
-frames reproduce saved component diagnostics/positions. Corrected sample4
-frames420/450/480 retain all old C2 support in the mask; C1 retention is25/560,
-0/514 and0/313. Newly selected spatial Foam is accepted_strong in all three,
-but temporal status remains persistence_pending. The mixed central-structure
-front remains unresolved. Original recipes, truth and Windows records stay pinned.
-
-The [Oil reply and bounded sequence diagnosis](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#oil-confirmation-and-bounded-sequence-diagnosis--2026-10-06)
-close the14s Oil-position question: Y854 is the actual Oil–Foam boundary according
-to the user. The existing resolver was exercised on all121 already reviewed
-frames390–510, with original/corrected recipes and fresh state at390. Inputs130/130
-and same-frame numeric provenance pass. With corrected ROI, frame420's confirmed
-854 survives generation but remains candidate-only; completed Oil selects the
-anchor-eligible phase-transition candidate821 instead. At450/480 Oil is withheld
-by the material ownership barrier. Completed Foam839/833 retains the known
-mixed spatial front. Counts and temporal confirmation do not establish accuracy;
-source, thresholds, original recipes and formal truth remain unchanged.
-
-The [direct Y821 inspection](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#direct-inspection-of-the-admitted-y821-candidate--2026-10-06)
-closes the human checkpoint as unresolved: the user cannot identify it visually,
-rejects a physical-structure explanation and suggests noise without certainty.
-The agent inspected six original frames and quantified the121 saved frames;
-no resolved fluid boundary at821 was established. Recorded-raster replay
-reproduces the production profile: coverage0.8 counts measurable sectors,
-while the same pooled strength also supplies narrow-edge evidence. The
-[counter-control iteration](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md#authority-counter-controls-and-phase-reason-repair--2026-10-07)
-rejects an opposite-lobe pulse correction after five safety failures; production
-pulse behavior is restored. The accepted diagnostic repair exposes854's actual
-boundary-advantage failure and corrects branch-specific reasons. All173 controls
-pass; saved original/corrected ROI replay is equal on242 frames except failure
-reasons. This is diagnostic completeness, not a selection improvement.
-
-Next local work must preserve unresolved optical/texture opposition while
-separating paired-pulse measurement from boundary support. Test the replacement
-against the existing collision controls before expanding video replay; simply
-reducing the artifact penalty or requiring exact-row Canny is not sufficient.
-Confirmed854 remains represented;821 remains unresolved. No repeat human review,
-Windows execution, formal O2 promotion or W5/O3 entry is needed at this point.
-
-The forthcoming independent video's recording/session lineage and prior exposure
-must be recorded and its evaluation role frozen before inspecting potential
-holdout pixels. Do not repeat the availability question while the user prepares
-it. Existing Mac sources and SPL#1 retain regression roles; new frames, Glasses
-or regions of an exposed recording are not independent holdout. Independent
-calibration/holdout and O2 acceptance remain future gates, not prerequisites to
-local corpus reuse. Physical opposition remains not_measured until established
-by the relevant candidate-bound evidence.
-
-Full private CSVs have not been independently read or rehashed here. W4-R1 remains
-closed, R2 entry unmet, O2 open and W5/O3 gated. Existing labels, idx0/idx20 human
-ambiguity, original outputs and FIELD FAIL remain unchanged.
+The endpoint is whether users can understand real rise/fall/reappearance and
+Foam onset/disappearance in the existing report. Protect genuine rapid excursions;
+short misses can be reported as residual limits, while wrong owners, false extrema
+and lost major movement remain consequential. This supplements existing acceptance,
+not a new threshold or a replacement for O2/field validation.
 
 ## Accepted local candidate
 
-- **Behavior:** locally accepted R22 Oil ownership/evidence replacement; candidate generation and Foam are preserved. [Architecture](../20-architecture/s11-r22-oil-ownership-evidence-replacement-architecture.md), [validation](../30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md), [local evidence](../60-evidence/s11/s11-r22-ownership-evidence-replacement.md).
-- **Current diagnostic runtime:** `opencv-phase-detector-r22-3-interface-witness-diagnostics-v1` (O1 trace-only extraction).
+- **Behavior:** locally accepted R22 Oil ownership/evidence replacement. [Architecture](../20-architecture/s11-r22-oil-ownership-evidence-replacement-architecture.md), [validation](../30-validation/s11-r22-oil-ownership-evidence-replacement-validation.md), [evidence](../60-evidence/s11/s11-r22-ownership-evidence-replacement.md).
+- **Diagnostic runtime:** `opencv-phase-detector-r22-3-interface-witness-diagnostics-v1`.
 - **Completed-window resolver:** `r22-oil-ownership-evidence-replacement-v1`; unchanged by diagnostics.
-- **Comparisons:** R21 is the protected behavioral predecessor; R22-2 native-path diagnostics is the protected diagnostic baseline, retaining R22-1 measurements. No R23 behavior was promoted.
+- **Protected comparisons:** R21 behavior and R22-2 native-path diagnostics, retaining R22-1 measurements. No R23 behavior was promoted.
+- **Report:** source context adopted from `0a60b11`; episode-source review code `52003aa` adopted through `ae47d5c`. These do not repair detector identity or establish independent comprehension.
 
-R22 local evidence owns canonical/Qt/replay/performance measurements, protected
-truth and complete tracking fingerprints. These do not establish field repair.
-O1 trace growth is approximately fourfold; captures must remain bounded.
-Existing R22-3 bundles and v1 labels remain usable; no R22-4 or detector rerun is
-required for the current measurement.
+R22 evidence retains canonical/Qt/replay/performance results, truth and tracking
+fingerprints. O1 trace growth is about fourfold: captures remain bounded. Existing
+R22-3 bundles/v1 labels stay usable; no runtime revision or rerun is required for D1.
+
+## Closed work and preserved review obligations
+
+Completed chronology stays in the linked owners. These retained conclusions
+prevent repeated questions and unsafe reuse of previously exposed controls.
+
+| Topic | Preserved result / limitation | Detail owner |
+|---|---|---|
+| October 7 adoption | A0B, report wording/display cap and Oil event compatibility adopted; A1 diagnostic lineage complete; paired scorer rejected; A0Q unresolved | [Adoption checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md), [report adoption](../60-evidence/s11/2026-10-07-report-context-adoption.md), [event compatibility](../60-evidence/s11/2026-10-07-event-compatibility.md), [A1](../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) |
+| sample4 Oil controls | Seven exact Oil correspondences and three rejected targets bound; four correct observations protected. Wrong-target subtypes remain one unresolved/two tentative. Same Y, family or tracklet is not transferable truth | [Lineage and replies](../50-diagnostics/s11/2026-10-07-sample4-interval-candidate-lineage.md), [binding](../60-evidence/s11/2026-10-07-a2-target-binding.md) |
+| Temporal context | User requires static and temporal evidence; one actual boundary moves rapidly through 42.5–44 s. Short forward correspondence confirmed, other seeds/directions drift. No intermediate Y/speed truth; standalone matcher rejected | [Human reply](../50-diagnostics/s11/2026-10-07-sample4-temporal-context-human-reply.json), [patch comparison](../60-evidence/s11/2026-10-07-a2-patch-correspondence.md) |
+| Region/texture hypotheses | A/B interpretation closed; fixed joint region exchange loses all seven targets. Fixed side texture and earlier locality/color/profile/paired-scale models closed without promotion; no threshold continuation | [Region exchange](../60-evidence/s11/2026-10-07-a2-region-exchange.md), [episode evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md), [color disposition](../60-evidence/s11/s11-o2-color-side-local.md#denominator-reconciliation-closed-and-bounded-region-disposition) |
+| Latest delivery experiments | H1/H1b fail terminal/ownership safety; LabPics, cellular and selector trials closed without promotion. Three sample4 targets fail before selector entry; no new Windows first cause is established. Both branches remain unmerged | [Windows-first closeout](https://github.com/teeeeooo/oil_level_tracker/blob/e5d4a0430ea69beab59736396a2817c09b5efd69/docs/60-evidence/s11/2026-10-08-windows-first-detector-closeout.md), [cellular closeout](https://github.com/teeeeooo/oil_level_tracker/blob/e5d4a0430ea69beab59736396a2817c09b5efd69/docs/60-evidence/s11/2026-10-08-cellular-selector-closeout.md) |
+| Windows passive controls | 75-candidate batch retains 13 interface/62 non-interface and target roles 10 target/3 real internal/62 other. Individual/group attribution preserved; binding returned, NOT_EVALUATED. W3's 73-candidate inventory is distinct; no index-only joins | [Passive review and binding](../60-evidence/s11/s11-o2-passive-control-review-001.md) |
+| Product target | Uppermost actual fluid boundary; optional species classification. Internal real interfaces stay non-target; Foam remains a separate series. No repeated target-definition or material question | [Product contract](../rotary_oil_level_tracker_ssot_spec.md#다층-유체의-추적-대상) |
+| Local source review | Existing corpus/joins reusable as regression. sample2 Foam-gap differs from sample4 Foam–air boundary; base qualitative Oil offset and new Foam observation do not overwrite historical scalar truth | [Local reuse and replies](../60-evidence/s11/2026-10-06-local-corpus-target-reuse.md) |
+| Foam geometry | sample4 rim C1 versus Foam-region C2 correspondence known; actual column support differs from bbox relation. Mixed central structures and sample2 reflected features remain unresolved; no blanket veto removal | [Owner audit](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md) |
+| Foam front/motion | A/C/D Foam, B mixed; red marks tentative, 14/16 s clicks approximate. Central circular features are structures, but exact front/structure split remains unassigned. Appearance/motion-only selectors rejected | [Front alternatives](../60-evidence/s11/2026-10-06-foam-front-alternatives.md), [residuals](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md), [selection feasibility](../60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md) |
+| ROI / paired-pulse controls | Existing ellipse works; human-ROI recipe remains unadopted. Inner/outer clicks retain uncertainty. Oil Y854 confirmed at 14 s; selected Y821 unresolved. Pulse correction failed safety and was restored; diagnostic reason repair accepted. Collision controls and opposition remain required | [Structure/ROI/authority audit](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md) |
+| sample3 reappearance | FILLED_CAP_VETO occurs in 87/92 missing rows of the audited long gap; those candidates are not thereby true Oil. Phase repair needs identity and two-sided controls | [Episode audit](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
 
 ## Current authorization boundary
 
-The 2026-10-08 request authorizes handoff review, main adoption when the review
-passes, remaining-worktree cleanup, commit and push. This bounded adoption is
-recorded in the episode-source evidence; no detector or field gate is closed.
+The current October 8 instruction authorizes the agreed staged work, checking
+and safely disposing of the sibling results folder, and autonomous logical commits
+and push. **Stop and report when user judgment or work on Windows is required.**
+This stop instruction governs the next transition; retained commands are not
+permission to run private media or claim field acceptance.
 
-The earlier 2026-10-07 request authorizes sequential Work Plan implementation,
-proportional verification, logical commits and push until user judgment is needed.
-Audit/worktree preservation and verified temporary cleanup are complete.
-The [adoption record](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md)
-distinguishes adopted A0B from preserved experiments; the report adoption evidence
-owns the newly implemented subset. The next transition above records completion
-per unit and does not reopen Windows field runs.
-The earlier grants below describe the retained detector-development context.
+Earlier bounded report adoptions are complete. Prior detector-development grants
+permit the relevant bounded local investigation, subject to the O2/behavior gates;
+they do not authorize unrelated changes. Main owns implementation and final review;
+the user's no-further-sub-agent instruction remains in force.
 
-The user authorized replacement of the Oil temporal identity and phase/evidence
-core, relevant tests/diagnostics, measured comparison and replaced-path cleanup
-on 2026-09-09. Main owns implementation and final review; the subsequent request
-for no further sub-agent work remains in force.
-
-R22-1 authorized measurement with unchanged R22 decisions. The 2026-09-16 R22-2
-and 2026-09-17 behavioral requests included implementation, verification, commit
-and push for those scopes. The R23 polarity prototype failed protected observations
-and was removed; its rejection is not a reason to request the same authorization
-again. These historical grants do not authorize unrelated changes or publication.
-The fixed color-side measurement is complete. That earlier request authorized
-implementation and preparation up to the Windows execution point. The user has returned that Windows
-saved-output run. The subsequent input-scope decision permits additional human
-review within existing videos and planning other-recording use. The subsequent development request additionally authorized Mac corpus reuse and bounded local
-candidate preparation while the user supplies independent video. Windows scope
-remains the completed bounded review/binding handoff; broader field qualification
-and training are not implied.
-
-Outside the detector replacement scope remain unrelated candidate-generation,
-Foam or UI changes; unbounded retention/recovery; relaxed truth/safety criteria;
-silent golden regeneration; automatic private-media replay; private video/Glass/
-time/coordinate branches; interpolation/carry/report repair; and speculative
-Accum behavior without reviewed physical identity and two-sided controls.
-No new descriptor or universal sign/threshold rule follows merely from old results.
-Choose a new mechanism only with a distinct observable and justified controls.
+Excluded are unbounded retention/recovery, relaxed truth/safety, silent golden
+regeneration, private case/Glass/time/Y branches, interpolation/carry/report repair,
+a whole-detector rewrite, and speculative Accum changes without reviewed identity.
+D5 is planned separate work, not current authorization to mix Foam changes into D1.
 
 ## Preserved contracts
 
 - One generic detector serves every Glass; reviewed coordinates and private identity never control production.
-- Numeric Oil/Foam values are selected same-frame candidates with exact provenance.
-- Oil and Foam validity/ownership remain independent through their defined composition point.
-- FULL/EMPTY context never fabricates coordinates; physical IDs are not copied across rapid-refill handoff.
+- Numeric Oil/Foam values remain exact same-frame selected candidates; validity and ownership stay independent.
+- FULL/EMPTY never fabricate coordinates or copy physical IDs across rapid-refill handoff.
 - Ambiguous, unavailable, lost or hard-invalid evidence fails closed without downstream repair.
-- Candidate identity, path localization and scalar eligibility have separate truth and acceptance; partial truth cannot be rewritten to fit pooling.
-- Known checkpoints remain regression, not untouched holdout; missing support, unknown winners and model abstention are distinct from truth uncertainty.
-- New-run hashes do not prove old-run immutability; nested gains are not independent successes.
+- Physical identity, product target, path localization and scalar eligibility have separate truth and acceptance.
+- Known recordings/checkpoints are regression, not untouched holdout; missing support, model abstention and truth uncertainty differ.
+- New-run hashes do not prove old-run immutability; nested channels/gains are not independent successes.
 
 ## Open field risks and named unknowns
 
-R22 is not field-qualified. Generic local Base controls do not establish the
-cause or repair of private Windows failures. Accum initial entry, continuity,
-layered/post-Foam ownership and drain re-entry remain field uncertainties.
-Candidate identity, scalar truth, calibration and a real-image operating point
-remain unresolved; reuse W3 evaluation without interpreting its implementation
-as classifier efficacy. Failed descriptors do not prove physical unobservability.
+R22 is not field-qualified. Base release/refill/full closure and Accum initial
+entry, continuity/layered/post-Foam ownership and drain re-entry remain field
+uncertainties. Generic controls do not establish their private first cause.
+Candidate identity, cue-sharing optical counter-controls, scalar truth, calibration
+and a real-image operating point remain unresolved. A0Q Qt stability and independent
+report comprehension stay open separately from detector research.
 
-Sample4's current `e447626b...` replay differs from historical `0f202947...`.
-The detached `d50c143` comparison reproduces the current result with unchanged
-media identity; the historical Python/OpenCV/decoder environment remains unknown.
-The golden stays unchanged; [runtime provenance](../50-diagnostics/s11/s11-r21-replay-runtime-provenance-diagnostic.md)
-owns the details. The canonical source companion's fingerprint also remains
-pending despite an O2 bundle-link source hash; reconcile full identity/operator
-provenance without invalidating linked labels or demanding another detector run.
+Historical sample4 `0f202947...` differs from the current `e447626b...` replay;
+`d50c143` reproduces the current result with unchanged media, while the old decoder/
+Python/OpenCV environment remains unknown. Keep the golden unchanged and use the
+[runtime provenance diagnostic](../50-diagnostics/s11/s11-r21-replay-runtime-provenance-diagnostic.md).
+The canonical source companion fingerprint/operator provenance remains pending;
+an O2 bundle-link hash alone does not close it or invalidate linked labels.
 
-The user now permits additional review of other existing videos; the earlier
-SPL#2/#3 blanket deferral is superseded for planning/review. No other recording
-is assigned development, calibration or holdout merely by filename. First record
-prior exposure and recording/session lineage, then freeze roles before pixel
-inspection/model selection. Scene expansion addresses the named optical
-counter-control gap, without preference for post-780 s. Existing recording-group
-locks and historical label partitions remain unchanged.
-Windows reports are attributed evidence; private inputs were not read locally.
+Additional review of existing recordings is permitted; comparative filming is
+unavailable. Record session lineage/prior exposure and freeze development,
+calibration and holdout roles before new pixel inspection/model selection.
+Existing Mac recordings and SPL#1 stay regression; nearby frames/Glasses are not
+independent holdout. Do not repeat the independent-video availability question.
+Existing partition locks and idx0/idx20 ambiguity remain pinned. Windows records
+are attributed reports; full private CSV/media were not read locally.
 
 ## Active follow-up design
 
-The [physical-interface proposal](../20-architecture/s11-physical-interface-evidence-repair-design.md)
-and [witness architecture](../20-architecture/s11-interface-observability-witness-architecture.md)
-own bounded observation redesign; [witness validation](../30-validation/s11-interface-observability-witness-validation.md)
-owns acceptance. Independent support/association, committed fill handoff and
-initial-FULL direction-neutral observation remain separate later behavior gates.
-Comparative filming/reference acquisition is unavailable under the user-confirmed
-fixture constraint; the current route uses existing passive videos. A whole-detector rewrite or scalar threshold tuning is
-not authorized by the [direction assessment](../50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md).
-
-Fixed-score, locality, profile, structure-context, row-profile and paired-scale
-investigations are closed at their recorded scopes without promotion. Their
-original outputs and corrections remain in [completed evidence](../60-evidence/README.md).
-Do not reopen them or the completed W2 geometry handoff because old prose says pending.
-The [recall index](recall-index.md) routes targeted causal review.
+The [physical-interface proposal](../20-architecture/s11-physical-interface-evidence-repair-design.md),
+[Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md)
+and [Witness Validation](../30-validation/s11-interface-observability-witness-validation.md)
+remain the design/acceptance owners. Update them when D2 makes a concrete decision;
+the supplied specification does not silently replace their contracts.
+Independent support, association, committed handoff and initial-FULL observation
+remain separate later gates. Failed descriptors do not prove physical unobservability.
 
 ## Current authority links
 
 - [Roadmap](roadmap.md), [execution policy](execution-policy.md), [retained commitments](retained-commitments.md)
-- [Detector-change Skill](../../.agents/skills/s11-detector-change/SKILL.md), [governance](../30-validation/s11-detector-change-governance.md)
-- [Current logic map](../20-architecture/s11-current-detector-logic-map.md), [failure registry](../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
-- [Canonical Windows reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md), [field procedure](../40-operations/s11-current-windows-field-qualification.md)
+- [Document roles](../README.md#s11-audit-specifications-and-execution-routing), [recall index](recall-index.md)
+- [Detector Skill](../../.agents/skills/s11-detector-change/SKILL.md), [governance](../30-validation/s11-detector-change-governance.md)
+- [Logic map](../20-architecture/s11-current-detector-logic-map.md), [failure registry](../50-diagnostics/s11/s11-detector-mechanism-failure-registry.md)
+- [Canonical Windows truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md), [field procedure](../40-operations/s11-current-windows-field-qualification.md)
+- [O2 saved-output operations](../40-operations/s11-o2-local-shadow-evaluation.md)
 
-Update this document when the current state or next transition changes; replace
-resolved prose with its evidence link. Milestone changes belong in the roadmap.
+Update current state in place; detailed completed results belong in their evidence
+owners. Dated source audits and frozen machine artifacts retain their original bytes.

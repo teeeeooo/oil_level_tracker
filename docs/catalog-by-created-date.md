@@ -411,3 +411,15 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-10-07 | [A2 ordered-patch correspondence](60-evidence/s11/2026-10-07-a2-patch-correspondence.md), [receipt](60-evidence/s11/2026-10-07-a2-patch-correspondence.json), [human/seed review](60-evidence/s11/2026-10-07-a2-patch-correspondence-review.json) | 급격한 유면 변화의 30fps/2fps 대응 비교; 외관 연결과 물리 정체성 구분 |
 | 2026-10-07 | [A2 region-context preflight](50-diagnostics/s11/2026-10-07-sample4-region-context-preflight.json) | 유면 위아래 영역의 물리적 해석 질문 및 21프레임 입력 정합성; 기존 candidate-lineage 문서가 해석 소유 |
 | 2026-10-07 | [A2 joint temporal region exchange](60-evidence/s11/2026-10-07-a2-region-exchange.md), [receipt](60-evidence/s11/2026-10-07-a2-region-exchange.json) | A/B 답변 반영·고정 모델 W3 평가; 전체 보류 및 실제 유면 소실로 미채택 종료 |
+
+## 2026-10-08 next-work intake additions
+
+폴더별 파일명순이며, Git 미등록 파일의 작성일은 2026-10-08입니다.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 미등록 | [Next-work intake](60-evidence/s11/2026-10-08-next-work-intake.md) | 첨부 원본 등록, Work Plan 의무 보존, 별도 결과 폴더 압축·복구 검증 및 제거 |
+| 미등록 | [Supplied specification](70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md) | 외부 계획 원문 bytes 보존; D 작업과 기존 O/W 단계 연결 |
+| 미등록 | [Shared verification](70-reference/s11-next-work-2026-10-08/S11-next-work-verification-2026-10-08.json) | 전달받은 검증 요약 원본; 현지 receipt의 동일 복사본 아님 |
+| 미등록 | [Import manifest](70-reference/s11-next-work-2026-10-08/import-manifest.json) | 원본 hash, 고정 commit 출처, 로컬 보존 위치 |
+| 미등록 | [Results cleanup receipt](70-reference/s11-next-work-2026-10-08/results-cleanup-receipt.json) | 279개 파일의 로컬 압축 보존·복원 검증 후 sibling 결과 폴더 제거 |

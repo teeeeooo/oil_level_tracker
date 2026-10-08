@@ -21,6 +21,7 @@ Do not scan revision history or all S11 diagnostics by default.
 | Need | Start here | Then only if needed |
 |---|---|---|
 | Current S11 candidate/gate | `work-plan.md` | current architecture + validation linked there |
+| October 8 planning intake / Windows-first next step | [intake and results-folder preservation](../60-evidence/s11/2026-10-08-next-work-intake.md) | Supplied D tasks refine O/W, not new milestones. H1/H1b/LabPics/cellular/selector closures remain unadopted; preserved sources and commit-pinned closeouts are linked by the import manifest. Reuse the bounded saved-audit reader before inferring a Windows loss cause. |
 | Resume after A2 region-exchange closure | [handoff checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md#a2-closure-handoff--2026-10-07) | Verified e66eb5e baseline, preserved dirty experiment worktrees, Git versus local-only evidence, closed human judgments and next source-discovery entry. |
 | Current detector control flow | `../20-architecture/s11-current-detector-logic-map.md` | affected node detail/source |
 | Code topology / caller / blast radius | current logic map + source | optional local Graphify cache after `scripts/update_graphify_s11.sh` |

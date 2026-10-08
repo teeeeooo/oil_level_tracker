@@ -1,0 +1,55 @@
+{
+  "schema": "s11-next-work-import-v1",
+  "baseline_main": "49c6d3aebeaf90aea96cd5be4c0e91115011f5a7",
+  "source_delivery": "e5d4a0430ea69beab59736396a2817c09b5efd69",
+  "files": {
+    "S11-next-work-spec-2026-10-08.md": {
+      "sha256": "49d05c64046b4e74c2cbde208a64c89c147f642b90404c81cd70e9113f9ac00d",
+      "bytes": 57586,
+      "original_attachment": "2-S11-next-work-spec-2026-10-08.md",
+      "preservation": "byte-identical"
+    },
+    "S11-next-work-verification-2026-10-08.json": {
+      "sha256": "da17bdeeb4e57f707819da62e36f4587aed55998ad0fca9dcbdb26c7f2247359",
+      "bytes": 14014,
+      "original_attachment": "1-S11-next-work-verification-2026-10-08.json",
+      "preservation": "byte-identical"
+    },
+    "results-cleanup-receipt.json": {
+      "sha256": "78e7a9df5768842a25892ebc45e4cc87d35a79b01447ff204367f951ab895912",
+      "bytes": 1063,
+      "source": "local cleanup this intake; not a supplied audit original"
+    }
+  },
+  "local_artifacts": [
+    {
+      "path": "sample/output/s11-spatial-identity-20261008-001/s11-spatial-identity-handoff-2026-10-08.zip",
+      "sha256": "b9c08d8e9449f1f180826b1bc690a6d26162731a7e2588753e1c3240c26d046e",
+      "bytes": 115414577,
+      "verified_this_intake": true,
+      "committed": false
+    },
+    {
+      "path": "sample/output/s11-next-plan-audit-20261008-001/verification-summary-final.json",
+      "sha256": "73692f779bd422f884591d78c14bea6225cd1026a03503995e6273950ab73deb",
+      "bytes": 6766,
+      "verified_this_intake": true,
+      "committed": false
+    },
+    {
+      "path": "sample/output/s11-windows-first-detector-20261008-001/s11-windows-first-handoff-2026-10-08.zip",
+      "sha256": "f1304ef519d933b1d62f717386f5093252766657fce96efe2e59f2c85e480379",
+      "bytes": 48430710,
+      "verified_this_intake": true,
+      "committed": false
+    }
+  ],
+  "shared_verification_is_local_receipt_copy": false,
+  "historical_tests_rerun_this_intake": false,
+  "runtime_changed": false,
+  "field_disposition": "FIELD FAIL",
+  "source_links": {
+    "windows_first_closeout": "https://github.com/teeeeooo/oil_level_tracker/blob/e5d4a0430ea69beab59736396a2817c09b5efd69/docs/60-evidence/s11/2026-10-08-windows-first-detector-closeout.md",
+    "cellular_selector_closeout": "https://github.com/teeeeooo/oil_level_tracker/blob/e5d4a0430ea69beab59736396a2817c09b5efd69/docs/60-evidence/s11/2026-10-08-cellular-selector-closeout.md"
+  }
+}

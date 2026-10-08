@@ -1,0 +1,426 @@
+{
+  "schema": "s11-next-work-plan-shared-verification-v1",
+  "review_date": "2026-10-08",
+  "artifact_type": "Shareable summary compiled from connected local-repository tool results; not a byte-identical copy of the remote receipt.",
+  "status": "PLANNING_AUDIT_COMPLETED",
+  "product_goal_ko": "report 산출물에서 계면과 Foam 움직임의 맥락을 이해할 수 있는가; 검출률 100%가 목표가 아님",
+  "repository": {
+    "name": "teeeeooo/oil_level_tracker",
+    "local_path": "/Users/sunjaekim/Developer/oil_level_tracker",
+    "main": "49c6d3aebeaf90aea96cd5be4c0e91115011f5a7",
+    "delivery": "e5d4a0430ea69beab59736396a2817c09b5efd69",
+    "delivery_base": "c4814bdc25c4da22776d985fbb7a2d66fbc4e1e8",
+    "delivery_branch": "work/s11-spatial-identity-20261008",
+    "delivery_disposition": "CLOSED WITHOUT PROMOTION",
+    "tracked_status_clean_at_closeout": true,
+    "production_recipe_truth_dependency_diff_main_to_delivery": [],
+    "main_modified": false,
+    "production_code_modified": false,
+    "commit_or_push_performed": false
+  },
+  "attachment": {
+    "filename": "HANDOFF.md",
+    "sha256": "a2b47bb6dae5d709c9057fc381d9e9a1f9d56d2befd986fdda11deaaa905ea75"
+  },
+  "fresh_verification": {
+    "handoff_archive": {
+      "relative_path": "sample/output/s11-spatial-identity-20261008-001/s11-spatial-identity-handoff-2026-10-08.zip",
+      "bytes": 115414577,
+      "sha256": "b9c08d8e9449f1f180826b1bc690a6d26162731a7e2588753e1c3240c26d046e",
+      "zip_entries": 873,
+      "manifest_members_verified": 872,
+      "mismatches": []
+    },
+    "source_input_pins": [
+      {
+        "path": "sample/base_sample_1.mp4",
+        "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/sample2.mp4",
+        "sha256": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/sample3.mp4",
+        "sha256": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/base_sample_1.oilrecipe",
+        "sha256": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/sample2.oilrecipe",
+        "sha256": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/sample3.oilrecipe",
+        "sha256": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/sample4.oilrecipe",
+        "sha256": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/base_sample_1.oiltruth",
+        "sha256": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/sample2.oiltruth",
+        "sha256": "f45479f7bb5f4216cb9c6920ac994d2d690942f2ed432d5d8a8647af030c731f",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/sample3.oiltruth",
+        "sha256": "8cb2b917eede7708894fa90f59f96f1d9eac272813af6d457dcbc292496dd8ab",
+        "matches_live_bytes": true
+      },
+      {
+        "path": "sample/sample4.oiltruth",
+        "sha256": "f02575ac2379b4d135567f1835aa772803af13a20413b8aa58175d890f5241bd",
+        "matches_live_bytes": true
+      }
+    ],
+    "source_frame_review": {
+      "count": 36,
+      "frames_by_sample": {
+        "base_sample_1": [
+          0,
+          45,
+          90,
+          156,
+          270,
+          420
+        ],
+        "sample2": [
+          0,
+          15,
+          30,
+          45,
+          60
+        ],
+        "sample3": [
+          900,
+          1200,
+          1500,
+          1800,
+          1950,
+          2010,
+          2400,
+          2700,
+          3000,
+          3145
+        ],
+        "sample4": [
+          1140,
+          1200,
+          1260,
+          1275,
+          1280,
+          1285,
+          1290,
+          1295,
+          1300,
+          1305,
+          1310,
+          1315,
+          1320,
+          1485,
+          1560
+        ]
+      },
+      "full_video_review": false,
+      "new_physical_or_contour_labels": false,
+      "contact_sheet_times": "Nominal frame_index/OpenCV FPS; exact joins must use source frame and original run timestamps.",
+      "sample4_seven_crops_pixel_equal": {
+        "1140": true,
+        "1200": true,
+        "1260": true,
+        "1275": true,
+        "1320": true,
+        "1485": true,
+        "1560": true
+      }
+    },
+    "archived_observer_off_on_samples": {
+      "fresh_detector_execution": false,
+      "total_rows": 299,
+      "per_sample": [
+        {
+          "sample": "base_sample_1",
+          "rows": 30,
+          "raw_file_bytes_equal": false,
+          "differing_field_counts": {
+            "run_id": 30
+          },
+          "all_other_sample_fields_equal": true
+        },
+        {
+          "sample": "sample2",
+          "rows": 5,
+          "raw_file_bytes_equal": false,
+          "differing_field_counts": {
+            "run_id": 5
+          },
+          "all_other_sample_fields_equal": true
+        },
+        {
+          "sample": "sample3",
+          "rows": 151,
+          "raw_file_bytes_equal": false,
+          "differing_field_counts": {
+            "run_id": 151
+          },
+          "all_other_sample_fields_equal": true
+        },
+        {
+          "sample": "sample4",
+          "rows": 113,
+          "raw_file_bytes_equal": false,
+          "differing_field_counts": {
+            "run_id": 113
+          },
+          "all_other_sample_fields_equal": true
+        }
+      ],
+      "initial_check": "Raw-byte equality initially asserted and failed. Full field inspection established run_id-only differences. Original failed check retained; historical inputs were not modified."
+    },
+    "focused_contract_tests": {
+      "code_snapshot": "e5d4a0430ea69beab59736396a2817c09b5efd69",
+      "method": "git archive snapshot of delivery; archive src on PYTHONPATH; existing project venv",
+      "modules": [
+        "tests/unit/test_s11_candidate_loss_audit.py",
+        "tests/unit/test_s11_saved_detection_replay.py",
+        "tests/unit/test_s11_shadow_targets.py",
+        "tests/unit/test_s11_target_truth.py",
+        "tests/unit/test_oil_phase_identity_diagnostics.py",
+        "tests/unit/test_oil_phase_lifecycle.py",
+        "tests/unit/test_oil_observation_resolver.py",
+        "tests/unit/test_foam_episode_resolver.py"
+      ],
+      "passed": 294,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "pytest_reported_seconds": 29.52,
+      "full_suite": false,
+      "qt_suite": false,
+      "windows_run": false,
+      "counts_combined_with_historical_runs": false
+    },
+    "git_diff_check_pass": true
+  },
+  "prior_experiment_results_not_new_detector_measurements": {
+    "sample4_reviewed_control_join": [
+      {
+        "frame_index": 1140,
+        "source_time_sec": 38.0,
+        "reviewed_target_member_y": 844,
+        "baseline_and_selector_experimental_y": 844,
+        "recorded_boundary": "SELECTED_SAME_FRAME"
+      },
+      {
+        "frame_index": 1200,
+        "source_time_sec": 40.0,
+        "reviewed_target_member_y": 841,
+        "baseline_and_selector_experimental_y": 865.5,
+        "recorded_boundary": "UNKNOWN_BEFORE_RETAINED_REFS"
+      },
+      {
+        "frame_index": 1260,
+        "source_time_sec": 42.0,
+        "reviewed_target_member_y": 839,
+        "baseline_and_selector_experimental_y": 868,
+        "recorded_boundary": "INSUFFICIENT_AUTHORITY_AND_TRACKLET_NOT_ADMITTED"
+      },
+      {
+        "frame_index": 1275,
+        "source_time_sec": 42.5,
+        "reviewed_target_member_y": 835,
+        "baseline_and_selector_experimental_y": 835,
+        "recorded_boundary": "SELECTED_SAME_FRAME"
+      },
+      {
+        "frame_index": 1320,
+        "source_time_sec": 44.0,
+        "reviewed_target_member_y": 844,
+        "baseline_and_selector_experimental_y": 822,
+        "recorded_boundary": "MATERIAL_LAYER_TERMINAL_AND_TRACKLET_NOT_ADMITTED"
+      },
+      {
+        "frame_index": 1485,
+        "source_time_sec": 49.5,
+        "reviewed_target_member_y": 836,
+        "baseline_and_selector_experimental_y": 836,
+        "recorded_boundary": "SELECTED_SAME_FRAME"
+      },
+      {
+        "frame_index": 1560,
+        "source_time_sec": 52.0,
+        "reviewed_target_member_y": 833,
+        "baseline_and_selector_experimental_y": 833,
+        "recorded_boundary": "SELECTED_SAME_FRAME"
+      }
+    ],
+    "projected_valid_numeric_counts": [
+      {
+        "sample": "base_sample_1",
+        "rows": 30,
+        "baseline_valid_oil": 27,
+        "experimental_valid_oil": 26,
+        "baseline_and_experimental_valid_foam": 0
+      },
+      {
+        "sample": "sample2",
+        "rows": 5,
+        "baseline_valid_oil": 4,
+        "experimental_valid_oil": 4,
+        "baseline_and_experimental_valid_foam": 0
+      },
+      {
+        "sample": "sample3",
+        "rows": 151,
+        "baseline_valid_oil": 29,
+        "experimental_valid_oil": 30,
+        "baseline_and_experimental_valid_foam": 5
+      },
+      {
+        "sample": "sample4",
+        "rows": 113,
+        "baseline_valid_oil": 101,
+        "experimental_valid_oil": 101,
+        "baseline_and_experimental_valid_foam": 26
+      }
+    ],
+    "sample4_reviewed_errors_improved_by_closed_selector_trial": 0,
+    "sample4_previously_correct_controls_preserved": 4,
+    "interpretation": "Counts and candidate coordinate agreement are not calibrated detector accuracy or report comprehension."
+  },
+  "windows_evidence": {
+    "availability": "Repository-held transferred reports and source truth; original private media, packets, and complete W3 audit JSON not opened locally.",
+    "new_execution": false,
+    "canonical_segment_ids": [
+      "WS1-BASE-FULL-PREFIX",
+      "WS1-BASE-DRAIN",
+      "WS1-BASE-RAPID-REFILL",
+      "WS1-BASE-FULL-SUFFIX",
+      "WS1-ACCUM-EMPTY",
+      "WS1-ACCUM-ENTRY-SPLASH",
+      "WS1-ACCUM-FOAM-LAYERED",
+      "WS1-ACCUM-POST-FOAM",
+      "WS1-ACCUM-DRAIN"
+    ],
+    "w3_review_inventory": {
+      "candidate_counts": [
+        23,
+        23,
+        27
+      ],
+      "total": 73,
+      "retained": 48,
+      "absent_from_retained_refs": 25
+    },
+    "passive_target_inventory": {
+      "candidates": 75,
+      "physical_interface": 13,
+      "physical_non_interface": 62,
+      "target": 10,
+      "real_internal_interface": 3,
+      "other_non_target": 62,
+      "target_evaluation_negative_total": 65,
+      "binding_status": "BOUND_NOT_EVALUATED",
+      "partition": "regression"
+    },
+    "inventories_73_and_75_are_distinct": true,
+    "r20_scope": "Historical reported field impact, not current-main measurements.",
+    "named_readout_input_raw_sha256": "ba5fe04b28473f70387e363ef7d40077f559c80b1852755d997e1dd04171937f",
+    "field_disposition": "FIELD FAIL",
+    "numeric_localization_current_assessment": "NOT_MEASURED"
+  },
+  "next_work_packages_proposed_not_executed": [
+    {
+      "id": "D0",
+      "title": "Freeze baseline and handoff intake",
+      "status": "DONE_THIS_REVIEW"
+    },
+    {
+      "id": "D1",
+      "title": "Bounded query of existing Windows recorded loss filters",
+      "status": "NOT_EXECUTED_WINDOWS_INPUT_UNAVAILABLE_LOCALLY"
+    },
+    {
+      "id": "D2",
+      "title": "Candidate-local physical/target boundary-role hypothesis and two-sided controls",
+      "status": "DESIGN_SPECIFIED_ALGORITHM_NOT_SELECTED"
+    },
+    {
+      "id": "D3",
+      "title": "Frozen shadow evaluation and separate suppression/recovery counterfactuals",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "D4a",
+      "title": "Evidence-backed support/admission integration",
+      "status": "GATED_AFTER_O2"
+    },
+    {
+      "id": "D4b",
+      "title": "Bounded physical owner reacquisition and phase closure",
+      "status": "SEPARATE_BEHAVIOR_GATE"
+    },
+    {
+      "id": "D5",
+      "title": "Independent Foam front/episode improvement",
+      "status": "SEPARATE_DESIGN_AND_ABLATION"
+    },
+    {
+      "id": "D6",
+      "title": "Exact-runtime Windows nine-segment and existing-report assessment",
+      "status": "FIELD_QUALIFICATION_PENDING"
+    }
+  ],
+  "remote_audit_evidence": {
+    "root": "sample/output/s11-next-plan-audit-20261008-001/",
+    "final_receipt": "verification-summary-final.json",
+    "final_receipt_sha256": "73692f779bd422f884591d78c14bea6225cd1026a03503995e6273950ab73deb",
+    "source_review_receipt_sha256": "0ddc0bba9bbec61c5d29cc7cd2251a0525f2561693d4492489540bda4f8753d9",
+    "logs": [
+      "focused-contracts.log",
+      "focused-contracts.xml",
+      "observer-invariance-review.json",
+      "initial-byte-check.json"
+    ]
+  },
+  "limitations": [
+    "No new detector implementation or field efficacy result.",
+    "No independent holdout or report-comprehension acceptance.",
+    "Selected-frame review is not whole-video physical labeling.",
+    "No new source video, crop, model checkpoint, environment or cache included in shared artifacts.",
+    "H-ROLE is a proposed falsifiable hypothesis, not a validated classifier or selected operating point."
+  ],
+  "shared_specification": {
+    "filename": "S11-next-work-spec-2026-10-08.md",
+    "sha256": "49d05c64046b4e74c2cbde208a64c89c147f642b90404c81cd70e9113f9ac00d",
+    "bytes": 57586,
+    "lines": 687,
+    "checks": [
+      "UTF-8 decode",
+      "balanced code fences",
+      "source-register references resolved",
+      "no trailing whitespace",
+      "evidence counts and scope consistency"
+    ]
+  }
+}
