@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** D1 reader and local tests are ready; WAITING FOR WINDOWS saved-audit readout under the current user stop instruction. D2's concrete observable/algorithm is not selected.
+**Next transition:** D1 Windows execution reported COMPLETE; return reconciliation OPEN. Stop for a saved-record check of the conflicting review-001 inventory; no rerun. D2's concrete observable/algorithm is not selected.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -24,7 +24,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W0 / O2 fixed profile | Windows result transferred; CLOSED WITHOUT PROMOTION | No rerun; candidate identity worsened | [Profile result](../60-evidence/s11/s11-o2-identity-profile-windows-run-001.md) |
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
-| W3 / O2 evaluation | Tools locally verified; Windows target/context audit transferred | D1 reuses existing records; D3 reuses evaluator. Evaluation tooling is not classifier efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [Windows audit](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md) |
+| W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 execution reported complete; review-001 evidence reconciliation OPEN. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 return review](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-windows-return-received--reconciliation-open) |
 | W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D1 recorded-loss question → D2 concrete role hypothesis → D3 frozen shadow; independent roles/controls unresolved | [Supplied D1–D3](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
@@ -45,16 +45,20 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
 1. COMPLETE locally — selectively reuse the stdlib-only candidate-loss reader and
    matching tests from delivery `e5d4a04`; 40 contracts pass, including standalone
    CLI and W3 compatibility. The [Windows handoff](../40-operations/s11-o2-local-shadow-evaluation.md#d1-recorded-candidate-loss-readout--windows-handoff)
-   is ready. The remainder of both diagnostic branches stays unadopted.
+   was executed per the Windows report. The remainder of both diagnostic branches stays unadopted.
    The current W3 `experiment.json` execution pin is the October 8
    [user-reported Windows correction](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md#d1-raw-file-pin-correction--2026-10-08):
    `ba5fe84b28473f7e387e363ef7d40877f559c80b1852755d997e1dd04171937f`.
-   Windows must verify the unchanged file and original audit identity; the
-   suspected transcription error and D1 result are not independently confirmed.
-2. At the Windows boundary, stop and report the required input/command. D1 asks
-   which recorded retention, tracklet, phase/owner or final-selection boundary
-   excluded each existing member. Missing fields remain UNAVAILABLE; the task
-   may close with a named unknown. No video replay, relabeling or broad audit is needed.
+   Windows reports matching before/after hashes and tool identity; the original
+   outputs were not read locally and the transcription-error cause remains unproven.
+2. WAITING FOR WINDOWS saved-record reconciliation — the D1 report's counts sum
+   to 73, but review-001 has 12 absent refs/11 tracklet rejections versus the old
+   report's 9 absent/7 tracklet rejections/7 unselected. Obtain its 23 original and
+   readout rows plus generated receipts under the [bounded procedure](../40-operations/s11-o2-local-shadow-evaluation.md#d1-return-reconciliation--saved-review-001-only).
+   `None` selection means `NONE_SELECTED`, not automatically the candidate boundary
+   `FINAL_SELECTION_UNRESOLVED`. Retain reported phase/owner exclusions for named
+   review-002/003 candidates; no guard relaxation follows. No rerun, relabeling
+   or broad audit is needed. Close D1 only at its supported evidence scope.
 3. D2 must identify a distinct candidate-local observable and a concrete frozen
    algorithm, with target-positive, cue-sharing negative and unresolved controls.
    Separate physical boundary, product role, path support and scalar usability.

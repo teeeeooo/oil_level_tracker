@@ -15,6 +15,9 @@
 
 ## D1 recorded candidate-loss readout — Windows handoff
 
+실행 완료가 보고되었다. 아래 최초 실행 명령은 보존용이며, 현재 필요한 후속 작업은
+[저장된 review-001 대조](#d1-return-reconciliation--saved-review-001-only)다.
+
 2026-10-08 다음 작업의 제한된 기록 질의다. 기존 W3 audit의 후보 탈락 경계를
 읽으며, 완료된 W3 실행·75개 target binding·사람 판독을 반복하지 않는다.
 현재 인계 준비와 로컬 검증은 [intake 기록](../60-evidence/s11/2026-10-08-next-work-intake.md)이 소유한다.
@@ -87,6 +90,51 @@ target batch와 index로 결합하지 않는다. `UNKNOWN_BEFORE_RETAINED_REFS`,
 `PHASE_FILTER_UNAVAILABLE`, `FINAL_SELECTION_UNRESOLVED` 등은 확정 원인이 아니며,
 없는 필드를 추론으로 채우지 않는다. 자료/필드가 없으면 그 사실과 정확한 missing
 field를 반환하고 D1을 종료한다. 새 대규모 조사나 private-video replay로 확대하지 않는다.
+
+## D1 return reconciliation — saved review-001 only
+
+2026-10-08 반환 보고의 review-001 집계가 기존 W3 기록과 다르다. 기존 표는
+retained 14개/absent 9개(legacy `not_selected` 7개, `tracklet_not_admitted` 7개),
+이번 표는 retained 11개/absent 12개다. phase filter를 자세히 분류해도 retained
+여부는 바뀌지 않으므로, 어느 표가 원본과 일치하는지 저장된 필드로 확인한다.
+[반환 검토 기록](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-windows-return-received--reconciliation-open)이
+상충하는 두 보고와 해석 정정을 보존한다.
+
+Windows 에이전트는 기존 첫 audit `experiment.json`과 그 하위
+`d1-candidate-loss-001/{readout.json,summary.md,complete.json}`만 읽는다.
+새 소스 다운로드, D1/다른 audit 재실행, 영상 읽기나 원본 수정은 필요 없다.
+
+1. 읽기 전후 네 파일의 SHA-256을 계산한다. audit은 위 정정 pin,
+   readout은 `e4bf75c4e63c2a0a3fe169a3ff3bb72b99a3e2fbf504ca352358fe55ff923004`,
+   summary는 `921fb9fd541295cc26ad60454cf8435a46193fc2f7bdac12d4a20ad14933fe13`과
+   대조한다. receipt의 input/tool/output pins도 대조한다. 불일치는 고치지 말고 보고한다.
+2. audit의 `target_audit[]`와 readout의 `cases[]`에서 실제 review-001
+   `case_id`를 확인하여 각각 하나의 case를 선택한다. `scores[]`의 동일 case와
+   readout의 `source_identity`에서 frame 11508, Glass/packet ID를 대조하여 반환한다.
+3. 원본 case의 `recorded_funnel`과 해당 readout case의
+   `readout.source_funnel`이 같은지 확인한다. 그 funnel을
+   `json.dumps(..., sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+   allow_nan=False)`로 직렬화한 UTF-8 SHA-256이 `readout.source_funnel_sha256`과
+   같은지도 확인한다. 이는 raw 파일 hash와 구분한다.
+4. 두 후보 목록을 **candidate_input_index로 결합**하여 23행을 JSON 파서로
+   직접 추출한다. 원본 후보의 `status`, `first_known_loss`, member의
+   `tracklet_admitted`/`selected`, row의 `phase_admitted`/`publishable`과,
+   readout 후보의 `boundary`, `recorded_exclusions`, `selection_outcome`,
+   `legacy_first_known_loss`를 반환한다. 각 필드의 존재 여부를 함께 표시하여
+   missing/null/false를 구분한다. 중복·누락 index와 양쪽 index 집합 일치도 보고한다.
+5. 원본 status/legacy loss, tracklet admission의 존재·값, readout boundary별
+   집계를 직접 계산한다. 기존 7/7/9와 이번 0/11/12 중 어느 기록과 일치하는지,
+   또는 둘 다 다른지 원본 기준으로 보고한다. case 전체의 phase와 selection도
+   key 존재 여부를 보존하여 추출한다.
+6. **생성되어 있던 `summary.md`와 `complete.json` 원문**, 위 23행과 검증 결과를
+   반환한다. 새 서술형 요약으로 원문을 대체하지 않는다. 원본 파일과 전체 readout은
+   Windows에 보존한다. D2 이후 작업은 시작하지 않는다.
+
+선택 key가 존재하며 값이 null이면 `NONE_SELECTED`다. 이 도구의
+`FINAL_SELECTION_UNRESOLVED`는 기록된 exclusion이 없고 phase filter가 알려진
+미선택 후보의 boundary다. null을 누락된 선택 기록이나 이 boundary로 바꾸지 않는다.
+`NOT_IN_RETAINED_REFS`의 member 부재를 admission false로 바꾸지도 않는다.
+이 확인은 기록 대조이며 FIELD FAIL/O2 수락 상태를 변경하지 않는다.
 
 ## Structure-context schema 문자 검증
 

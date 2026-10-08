@@ -64,6 +64,13 @@ change labels/results, complete D1 or establish detector efficacy.
 
 ## Recorded funnel facts
 
+**Later reconciliation notice (2026-10-08):** the
+[D1 return review](2026-10-08-next-work-intake.md#d1-windows-return-received--reconciliation-open)
+reports a conflicting review-001 retained/admission inventory. The original
+transferred table below is preserved; neither version is adopted as a correction
+until the saved original/readout fields are reconciled on Windows. Named phase/
+owner exclusions in the later return are distinguished from null final selection.
+
 All three cases report RECORDED, with selected_candidate=None. Review-001 is
 not_visible / filled_barrier; review-002 is visible / filled_barrier; review-003
 is visible / filling. These are recorded phase states, not human scene truth.

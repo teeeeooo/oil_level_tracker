@@ -167,10 +167,102 @@ superseded by this correction; its reader is unchanged and remains usable.
 No source download or code change is needed to pass the corrected CLI argument.
 D1 completion, physical cause and O2/field acceptance are still pending.
 
+## D1 Windows return received — reconciliation open
+
+The user returned a pasted Windows final report after the corrected pin was
+supplied. This is attributed execution evidence; the original `complete.json`,
+`summary.md` and `readout.json` bytes were not supplied or read locally.
+The instructed source commit was `c9e99d2`, not an independently inspected
+Windows checkout identity. The report states Python 3.14.3 on Windows 11,
+the expected reader hash, schema `s11-o2-target-audit-v1`, the corrected raw
+input hash before/after, and 23/23/27 candidates. It reports successful output
+hash checks, `COMPLETE`, and false detector/video/auto-acceptance flags.
+
+Reported output hashes:
+
+- `readout.json`: `e4bf75c4e63c2a0a3fe169a3ff3bb72b99a3e2fbf504ca352358fe55ff923004`;
+- `summary.md`: `921fb9fd541295cc26ad60454cf8435a46193fc2f7bdac12d4a20ad14933fe13`.
+
+Output is `d1-candidate-loss-001` beneath the existing first target/context audit
+directory on Windows. No local rehash of these outputs is claimed. The returned
+report confirms the corrected input pin as Windows-measured; the cause of the
+earlier transcription mismatch remains unproven.
+
+### Consistent named-candidate statements in the return
+
+| Candidate | Reported recorded boundary | Meaning and limit |
+|---|---|---|
+| review-002 idx0 / review-003 idx10 | `UNKNOWN_BEFORE_RETAINED_REFS` | No member/row record; earlier cause unavailable, not a proven generation/top-k failure |
+| review-002 idx10/12/16 | `TRACKLET_NOT_ADMITTED` | Continuation authority; row/phase/publishability exclusions also reported. Fixed readout ordering is not proof of the first physical cause |
+| review-002 idx8/9 | `PHASE_HARD_GATE` | Admitted/publishable row under `INITIAL_FULL_BARRIER`, `hard_gate`, empty allowed IDs |
+| review-003 idx19 | `OWNER_NOT_ALLOWED` | Row owner `oil-tracklet:000388:0186` differs from allowed `oil-tracklet:000381:0181` |
+| review-002 idx20, non_interface | `PHASE_HARD_GATE` | Negative also has all three admission flags true; admission does not certify identity |
+
+These are internally consistent with the pinned reader and the earlier named
+candidate record. They remain transferred statements rather than independently
+reconstructed physical truth. They do not justify relaxing phase/owner gates.
+
+### Local consistency findings
+
+Arithmetic on the pasted identity/boundary table yields:
+
+| Case | Before-retained unknown | Tracklet not admitted | Phase hard gate | Owner not allowed | Total |
+|---|---:|---:|---:|---:|---:|
+| review-001 | 12 | 11 | 0 | 0 | 23 |
+| review-002 | 7 | 9 | 7 | 0 | 23 |
+| review-003 | 9 | 8 | 0 | 10 | 27 |
+| Total | 28 | 28 | 7 | 10 | 73 |
+
+The total inventory is arithmetically consistent, but three distinctions require
+correction or reconciliation before closing the handoff:
+
+1. `selected_candidate=None` with the key present records **no selected candidate**.
+   The reader emits `selection_outcome=NONE_SELECTED` for recorded members in
+   this situation. `FINAL_SELECTION_UNRESOLVED` is a *candidate boundary* only
+   when no recorded exclusion applies and the phase filter is available. The
+   report's named gated candidates keep `PHASE_HARD_GATE`/`OWNER_NOT_ALLOWED`;
+   the supplied aggregate has zero `FINAL_SELECTION_UNRESOLVED` entries. A null
+   selected value is not an absent selection record. `ADMITTED` is not a boundary
+   enum emitted by this reader.
+2. The earlier [W3 report](s11-o2-w3-target-audit-windows-run-001.md#recorded-funnel-facts)
+   lists review-001 as 7 `not_selected`, 7 `tracklet_not_admitted`, 9 absent refs
+   and reports seven admitted negative rows. The new report instead gives
+   11 tracklet rejections and 12 absent refs, with no admitted candidates.
+   Refining phase filters cannot change retained membership. Neither report is
+   silently substituted for the other: the first needs 14 retained members,
+   the second 11. Overall prior 48 retained/25 absent versus new 45/28 is
+   unreconciled. Differences in terminology alone cannot explain the absent count.
+3. A missing member under `NOT_IN_RETAINED_REFS` is **unavailable**, not measured
+   `tracklet_admitted=false`. The review-001 blanket wording must preserve this.
+   All 73 candidates being listed does not mean all earlier loss causes are known.
+
+The local check recomputed these sums and exercised the existing reader with
+its existing synthetic fixture under hard-gate, excluded-owner and unconstrained
+conditions. Each returned `NONE_SELECTED`, with its distinct expected boundary.
+This verifies interpretation only; no Windows or detector rerun was performed.
+The check receipt is local `d1-return-consistency-check.json` in the intake directory.
+
+### Narrow Windows return still required
+
+Read the already saved files only. Return the generated `summary.md` and
+`complete.json`, plus a machine-extracted 23-row review-001 table joined by
+`candidate_input_index` between the original audit's `recorded_funnel` and the
+saved readout. Preserve original status, legacy first-known loss, presence/value
+of member admission and row flags, and new boundary/exclusions/selection outcome.
+Check that `readout.source_funnel` equals the original case's funnel and its
+recorded logical hash; separately recheck the existing raw input/output pins.
+Keep missing, null and false distinct. Return grouped counts directly from these
+fields, without recreating an audit or rewriting the generated output.
+
+See the [bounded reconciliation procedure](../../40-operations/s11-o2-local-shadow-evaluation.md#d1-return-reconciliation--saved-review-001-only).
+The execution is **reported complete**, but evidence reconciliation remains OPEN.
+Work stops for this Windows saved-record check under the current user instruction.
+D2–D6 are not started; FIELD FAIL and O2 remain unchanged.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F02`, `S11-F09`, `S11-F10`.
-- First harmful stage: no new detector execution; prior cellular replay records loss before the selector, while the original Windows loss seam remains unknown pending recorded filter data. Document intake and archive integrity cannot establish physical identity or field repair.
+- First harmful stage: no new local detector execution. The Windows D1 return reports phase hard-gate and excluded-owner boundaries for named admitted members, while pre-retention causes and the conflicting review-001 inventory remain unresolved. Recorded exclusions do not establish the first physical cause or a successful field repair.
 - Logic-map impact: NONE — the change preserves source artifacts and current-state routing without changing executing detector ownership or control flow.
 - Failure-registry impact: NONE — rejected experiments remain closed and no new causal failure or accepted detector mechanism is asserted.
