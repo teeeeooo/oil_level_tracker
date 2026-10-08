@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** prepare D1's bounded saved-audit readout, then stop for the Windows input/execution boundary under the current user instruction. D2's concrete observable/algorithm is not selected.
+**Next transition:** D1 reader and local tests are ready; WAITING FOR WINDOWS saved-audit readout under the current user stop instruction. D2's concrete observable/algorithm is not selected.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -42,9 +42,11 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
 
 ## Next transition
 
-1. Prepare the existing stdlib-only candidate-loss reader from delivery `e5d4a04`,
-   with its matching tests and a bounded Windows handoff. Keep the remainder of
-   both diagnostic branches unadopted. The original W3 `experiment.json` raw hash
+1. COMPLETE locally — selectively reuse the stdlib-only candidate-loss reader and
+   matching tests from delivery `e5d4a04`; 40 contracts pass, including standalone
+   CLI and W3 compatibility. The [Windows handoff](../40-operations/s11-o2-local-shadow-evaluation.md#d1-recorded-candidate-loss-readout--windows-handoff)
+   is ready. The remainder of both diagnostic branches stays unadopted.
+   The original W3 `experiment.json` raw hash
    is `ba5fe04b28473f70387e363ef7d40077f559c80b1852755d997e1dd04171937f`.
 2. At the Windows boundary, stop and report the required input/command. D1 asks
    which recorded retention, tracklet, phase/owner or final-selection boundary

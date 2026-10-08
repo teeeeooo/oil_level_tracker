@@ -13,6 +13,71 @@
 새 작업은 해당 W의 선행 조건과 입력 범위를 확인한다. 단계 완료 여부는 실행 성공
 코드만으로 판단하지 않고 검증 결과를 근거로 work-plan에 반영한다.
 
+## D1 recorded candidate-loss readout — Windows handoff
+
+2026-10-08 다음 작업의 제한된 기록 질의다. 기존 W3 audit의 후보 탈락 경계를
+읽으며, 완료된 W3 실행·75개 target binding·사람 판독을 반복하지 않는다.
+현재 인계 준비와 로컬 검증은 [intake 기록](../60-evidence/s11/2026-10-08-next-work-intake.md)이 소유한다.
+
+필요한 것은 Python 3와 기존 첫 W3 `experiment.json` 한 파일이다. 도구는 stdlib만
+사용하므로 앱 환경이나 OpenCV 설치가 필요 없다. 기존 Windows 데이터 폴더의
+`experiments/target-context-audit-001/experiment.json`을 찾는다. 이 경로는 alias이며
+실제 데이터 root를 추측하지 않는다. 다른 revision이면 기존에 기록된 해당 파일의
+hash/정체성을 먼저 보고하고 멈춘다. 원본이나 기대 hash를 맞추려고 편집하지 않는다.
+
+저장소 루트 또는 별도 D1 ZIP을 푼 폴더에서 PowerShell로 실행한다. 입력 경로는
+질문에 실제 전체 경로를 입력한다. 출력 폴더가 이미 있으면 기존 결과를 보존하고
+`d1-candidate-loss-002`처럼 새 이름으로 바꾼다.
+
+```powershell
+$readerPath = ".\tests\diagnostics\s11_candidate_loss_audit.py"
+$readerHash = "c5c4b058cc7d15d25006ab739bb8e851d4f00fe6f4f271c330817536110aad60"
+if ((Get-FileHash -LiteralPath $readerPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $readerHash) {
+    throw "Reader identity mismatch; stop and report."
+}
+$auditPath = Read-Host "기존 첫 W3 experiment.json의 전체 경로"
+$expectedHash = "ba5fe04b28473f70387e363ef7d40077f559c80b1852755d997e1dd04171937f"
+$outputPath = Join-Path (Split-Path -Parent $auditPath) "d1-candidate-loss-001"
+py -3 $readerPath --audit $auditPath --expected-sha256 $expectedHash --output $outputPath
+if ($LASTEXITCODE -ne 0) { throw "D1 readout failed; preserve inputs/partial output and report the error." }
+$receipt = Get-Content -LiteralPath (Join-Path $outputPath "complete.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($receipt.status -ne "COMPLETE" -or $receipt.schema_version -ne "s11-recorded-candidate-loss-v1" -or
+    $receipt.source_before_sha256 -ne $expectedHash -or $receipt.source_after_sha256 -ne $expectedHash -or
+    $receipt.script_sha256 -ne $readerHash -or $receipt.detector_rerun -ne $false -or
+    $receipt.video_read -ne $false -or $receipt.auto_acceptance -ne $false) {
+    throw "Invalid D1 completion receipt"
+}
+foreach ($entry in $receipt.outputs.PSObject.Properties) {
+    $actualHash = (Get-FileHash -LiteralPath (Join-Path $outputPath $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($actualHash -ne $entry.Value) { throw "Output hash mismatch: $($entry.Name)" }
+}
+Get-Content -LiteralPath (Join-Path $outputPath "summary.md") -Raw -Encoding UTF8
+```
+
+`complete.json`은 읽기 작업의 완료만 뜻한다. `readout.json`과 `summary.md`는
+새 결과이며 원본 audit·packet·label을 변경하지 않는다. 원본 영상 읽기, detector
+실행, 라벨 재작성, 후보 추가, threshold 변경을 하지 않는다.
+
+Windows에서 새 `readout.json`을 확인할 질문은 다음으로 한정한다.
+
+- 세 case와 23/23/27개의 후보가 보존되는지, 누락/UNAVAILABLE가 있는지.
+- review-002 idx0 및 review-003 idx10: retained 이전 손실에 대해 추가 기록이 있는지.
+- review-002 idx10/12/16: 기록된 authority와 tracklet 미승인, 다른 exclusion의 구분.
+- review-002 idx8/9 및 review-003 idx19: admitted row 뒤 실제 allowed mode/owner ID와 최종 선택 기록.
+- review-001 admitted 음성 및 review-002 idx20: 같은 admission 조건을 음성도 통과하는지.
+
+반환은 생성된 `summary.md`, `complete.json`, 위 질문의 **기록된 필드 표와 누락 필드**다.
+표에는 case/frame, candidate index/offset/source/Y, witness/packet 연결, boundary,
+recorded exclusions, phase mode/allowed IDs, selection outcome을 유지한다. 업무 식별
+정보의 익명화가 필요하면 공유용 사본에만 적용하고 원본 hash와 구분한다.
+전체 `readout.json`, 원본 audit·영상·packet은 Windows 로컬에 보존한다.
+
+물리 label은 원본 broad interface 주석이고 `target_role=NOT_IMPORTED`다. 별도 75개
+target batch와 index로 결합하지 않는다. `UNKNOWN_BEFORE_RETAINED_REFS`,
+`PHASE_FILTER_UNAVAILABLE`, `FINAL_SELECTION_UNRESOLVED` 등은 확정 원인이 아니며,
+없는 필드를 추론으로 채우지 않는다. 자료/필드가 없으면 그 사실과 정확한 missing
+field를 반환하고 D1을 종료한다. 새 대규모 조사나 private-video replay로 확대하지 않는다.
+
 ## Structure-context schema 문자 검증
 
 사용자가 True/111을 확인했다. 실제 schema는 소문자 o의 `o2`이며 전달 표기만

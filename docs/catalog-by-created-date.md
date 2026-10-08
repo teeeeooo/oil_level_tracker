@@ -414,12 +414,12 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 
 ## 2026-10-08 next-work intake additions
 
-폴더별 파일명순이며, Git 미등록 파일의 작성일은 2026-10-08입니다.
+폴더별 파일명순이며, 최초 Git 추가일은 `df74414`의 author 날짜(KST)로 확인했습니다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 미등록 | [Next-work intake](60-evidence/s11/2026-10-08-next-work-intake.md) | 첨부 원본 등록, Work Plan 의무 보존, 별도 결과 폴더 압축·복구 검증 및 제거 |
-| 미등록 | [Supplied specification](70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md) | 외부 계획 원문 bytes 보존; D 작업과 기존 O/W 단계 연결 |
-| 미등록 | [Shared verification](70-reference/s11-next-work-2026-10-08/S11-next-work-verification-2026-10-08.json) | 전달받은 검증 요약 원본; 현지 receipt의 동일 복사본 아님 |
-| 미등록 | [Import manifest](70-reference/s11-next-work-2026-10-08/import-manifest.json) | 원본 hash, 고정 commit 출처, 로컬 보존 위치 |
-| 미등록 | [Results cleanup receipt](70-reference/s11-next-work-2026-10-08/results-cleanup-receipt.json) | 279개 파일의 로컬 압축 보존·복원 검증 후 sibling 결과 폴더 제거 |
+| 2026-10-08 | [Next-work intake](60-evidence/s11/2026-10-08-next-work-intake.md) | 첨부 원본 등록, Work Plan 의무 보존, 별도 결과 폴더 압축·복구 검증 및 제거 |
+| 2026-10-08 | [Supplied specification](70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md) | 외부 계획 원문 bytes 보존; D 작업과 기존 O/W 단계 연결 |
+| 2026-10-08 | [Shared verification](70-reference/s11-next-work-2026-10-08/S11-next-work-verification-2026-10-08.json) | 전달받은 검증 요약 원본; 현지 receipt의 동일 복사본 아님 |
+| 2026-10-08 | [Import manifest](70-reference/s11-next-work-2026-10-08/import-manifest.json) | 원본 hash, 고정 commit 출처, 로컬 보존 위치 |
+| 2026-10-08 | [Results cleanup receipt](70-reference/s11-next-work-2026-10-08/results-cleanup-receipt.json) | 279개 파일의 로컬 압축 보존·복원 검증 후 sibling 결과 폴더 제거 |

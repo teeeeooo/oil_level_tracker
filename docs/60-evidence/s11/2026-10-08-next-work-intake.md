@@ -99,7 +99,7 @@ Merged report branches were not deleted merely to shorten the branch list.
 Initial document checks pass: 451 local links/anchors across the changed Markdown,
 imported hashes, protected roadmap/retained-commitment/Windows-truth bytes,
 commit-pinned source existence, incoming Work Plan anchors and 17 named-obligation
-assertions. S11 governance and whitespace checks pass. The local `docs-check.json`
+assertions. S11 governance and whitespace checks pass. The local `docs-check-stage1.json`
 records this bounded check; full detector or Windows execution was not performed
 for the document/cleanup scope.
 
@@ -112,6 +112,46 @@ search receipt is in the intake directory. Private data are not reconstructed
 from the prose report. Prepare the existing reader and handoff, then stop at the
 Windows boundary. D2's concrete algorithm and new physical discrimination remain
 unestablished; no blank classifier or production guard relaxation is introduced.
+
+## D1 reader reuse and Windows handoff
+
+Preparation is complete on main after the documentation intake `df74414`.
+Only the following two files were reused byte-for-byte from diagnostic delivery
+`e5d4a0430ea69beab59736396a2817c09b5efd69`; no failed challenger code was adopted:
+
+| File | SHA-256 |
+|---|---|
+| `tests/diagnostics/s11_candidate_loss_audit.py` | `c5c4b058cc7d15d25006ab739bb8e851d4f00fe6f4f271c330817536110aad60` |
+| `tests/unit/test_s11_candidate_loss_audit.py` | `b03a27f1660f31d36fbe289ad1724b330741fa47bb1156fecdd2da0e5fa53db8` |
+
+Fresh verification: **40 passed in 0.34 s** using the existing project environment.
+These include phase/owner filtering, absent/contradictory records, same-frame
+selection identity, immutable inputs, fail-closed hash/schema checks, standalone
+CLI from a foreign cwd with Unicode paths, and compatibility with the existing
+W3 producer. The original 294-test audit is not added to this count.
+
+The standalone handoff ZIP contains this exact reader, README and SHA256SUMS:
+
+```text
+sample/output/s11-next-work-intake-20261008-001/
+  s11-d1-windows-readout-2026-10-08.zip
+```
+
+ZIP SHA-256: `6f5ac25f104c95ddf3f4f49ceab37e714879f9d8b27eacfad6fef2c9e9e8648c`.
+Every ZIP member was verified. A separate packaging smoke extracted it and ran
+the CLI with isolated Python (`-I`), a foreign cwd, Unicode paths and the existing
+synthetic audit fixture. Source bytes, script identity and output hashes passed.
+This is local macOS execution, not Windows or private-W3 acceptance. The logs,
+JUnit XML, reader pins, package receipt and smoke receipt remain in the local
+intake directory. No new permanent loader or evaluation framework was introduced.
+
+The [D1 operation](../../40-operations/s11-o2-local-shadow-evaluation.md#d1-recorded-candidate-loss-readout--windows-handoff)
+contains the exact PowerShell command, hash checks, named candidate questions,
+bounded return and stop conditions. The required original audit is unavailable
+here, so **D1 Windows readout is pending and work stops for the user's Windows
+handoff**. D2–D6 are not executed. The reader does not import the passive batch's
+target roles; physical annotations, candidate membership and missing fields retain
+their recorded scope. Production code/dependencies/recipes/truth remain unchanged.
 
 ## Detector Governance
 
