@@ -882,6 +882,16 @@ has three distinct acceptance levels. These do not replace V2–V5 or O2/O3:
    recovery, unavailable/unresolved and unreviewed outputs; scalar accuracy is
    independent. Newly admitted but unreviewed outputs are not successful targets.
 
+Physical controls may be reviewed at the boundary/region and short-sequence
+level appropriate to the claim; they do not require classifying every small
+contour in every frame. Preserve approximate annotations as qualitative evidence
+without deriving masks, exact scalar tolerances or per-pixel labels. Distinguish
+these from exact machine input binding. A known safe short temporal witness does
+not certify its initialization, other sectors/directions or stationary/crossing
+controls. The [reference + temporal-context result](../60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.md)
+requires a new observable before another challenger, not further micro-labeling
+or relaxed acceptance. Episode outcomes remain relevant alongside these gates.
+
 The October 9 diagnostic implementation covers available contrast footprints,
 not candidate-owned edge intersections. Its [evidence and receipt](../60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md)
 retain hand-calculated mask/count controls, explicit nulls, legacy/context
@@ -917,7 +927,7 @@ controls and nine-segment integrated field qualification remain separate gates.
 - Prior mechanisms rejected: threshold widening, polarity/source/motion identity, unpartitioned calibration, private-coordinate tuning, missing-as-zero, stale identity/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded resources and separate Windows field acceptance.
 - Difference from prior failures: extraction, discrimination, behavior and field qualification are independent gates with explicit positive/negative/unresolved labels and leakage controls.
-- Logic-map impact: UPDATED — the map records the additional D2 debug-only measurement-footprint route; target binding and production decision flow are unchanged.
+- Logic-map impact: NONE — the clarification changes no implementation or acceptance owner; the mapped diagnostic route and production flow remain unchanged.
 - Failure-registry impact: NONE — it adds acceptance obligations for existing named mechanisms without claiming a new cause or repair.
 
 

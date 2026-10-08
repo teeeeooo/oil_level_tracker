@@ -2049,7 +2049,25 @@ comparison. The [implementation evidence](../60-evidence/s11/2026-10-09-d2-refer
 records the scoped human reply, measured resources and equality verification.
 No matcher, resolver or report reads this namespace.
 
+Pixel-level input provenance does not require semantic classification of every
+pixel at runtime. The detector's unit of physical judgment may be a complete
+boundary/region hypothesis across a bounded sequence, retaining local ambiguity.
+Approximate user marks remain qualitative context unless explicitly supplied as
+numeric/contour truth. Existing frame processing already feeds temporal owners;
+adding time or persistence alone is not a new independent identity observable.
+The [sequence-context check](../60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.md)
+closes the simple reference-overlap/appearance-persistence promotion attempt;
+it does not reject every possible combination of reference, region and motion.
+
 ## History Review
+
+2026-10-09 sequence-context continuation: preserved the approximate Foam-boundary
+reply without extracting dot coordinates. Joined all 156 previously frozen
+appearance chains to the new scoped reference; the known positive chain also
+samples reference coordinates, while wrong seeds can persist outside it.
+F03/F04/F09/F10 therefore still prohibit overlap or persistence as physical
+identity. No new source path or detector behavior is introduced; complete
+boundary/region analysis does not require every small contour's subtype.
 
 2026-10-09 D2-A1: the user confirms only the 125 displayed f1320 edges as
 "모두 유리 구조·무늬". An isolated diagnostic recipe records this reply;
@@ -2221,5 +2239,5 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: UPDATED — FRAME-EVIDENCE/TRACE-PUBLICATION now document the debug-only reference-versus-measurement namespace; production decision owners and their authority are unchanged.
+- Logic-map impact: NONE — this clarification adds no executing owner or consumer; the mapped D2 diagnostic route and all production decisions remain unchanged.
 - Failure-registry impact: NONE — this architecture refines the response to existing failures without claiming field repair.

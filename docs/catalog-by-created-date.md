@@ -495,3 +495,4 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 최초 등록일 | 문서 | 역할 |
 |---|---|---|
 | 2026-10-09 | [Reference measurement diagnostic](60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md), [receipt](60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.json) | 44초 125개 유리 윤곽의 사용자 판정과 진단 구현·출력 동일성 검증; 42.5초 겹침 여부 판정 지점 |
+| 2026-10-09 | [Reference + sequence-context feasibility](60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.md), [receipt](60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.json) | 대략적 Foam 판독 반영, 기존 156개 추적/6,240개 연결과 등록 참조 대조; 겹침·지속성의 자동 판정 승격 보류 |

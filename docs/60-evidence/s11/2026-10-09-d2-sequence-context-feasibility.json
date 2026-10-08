@@ -1,0 +1,522 @@
+{
+  "schema": "s11-reference-sequence-feasibility-v1",
+  "preflight": {
+    "schema": "s11-reference-sequence-feasibility-preflight-v1",
+    "base_head": "5eba72d9424c4cb10df1b42fa0dd3072f48e9a13",
+    "inputs": {
+      "sample/output/s11-a2-patch-correspondence-20261007-001/matches.json": "2a6ca3008aeb80a1d387115edf52c8f2c60e1189d1d87a3c18359c55b1cd8c62",
+      "sample/output/s11-a2-patch-correspondence-20261007-001/receipt.json": "dd8824b15adf049600bc5e62690024203eb287f63a52bc8552be6b5374fd3df8",
+      "sample/output/s11-a2-patch-correspondence-20261007-001/seed-control-review.json": "e106310ec967eba2124db5c337003e3bb20f18152d03e0e34e6f596f5b8f5200",
+      "sample/output/s11-d2-support-comparison-20261009-001/reviewed-f1320-diagnostic-only.oilrecipe": "0d78fc0637d860ee2802281405462ef0f476e743b9ec3213931449af1c7b2748",
+      "sample/output/s11-d2-support-comparison-20261009-001/new-registered-full.json": "3247c83169cf26fd46ce22fb1c53fa1836929ea4ebde6b9797f207cb48eb059b",
+      "docs/50-diagnostics/s11/2026-10-07-sample4-temporal-context-human-reply.json": "c0f4bbdc9fc91bb48f9674e9d12be88efeb883a7178a5e5384acb1dd76f34526",
+      "docs/60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.json": "2cfc99b5b3b5969bdcd247e09bfec992c08c0bf9d499dea6f849e0b265dbb20a"
+    },
+    "annotation_sha256": "14c5be141c6baf34d068e3c1cc20a676eb1257b711725de97b6e690fe963bc7d",
+    "human_reply": "내가 점 찍은 부분들 (픽셀의 정확한 xy를 따지지마 대략적으로 찍은거니까)이 foam의 경계로 보이는데",
+    "annotation_scope": "Qualitative approximate Foam boundary at 42.5 s, no dot-coordinate extraction, scalar/path/pixel label or claim of complete obscuration.",
+    "question": "Does the confirmed registered reference add enough context to justify using the already measured temporal appearance chains as a physical discriminator?",
+    "scope": "All 156 frozen chains and 6240 links, both directions/cadences, all original sectors; reference is an input-dependency query only. No rematching, top-k subset, threshold, physical prediction or detector rerun.",
+    "basis": "ordered BGR patch sampling rectangles, not candidate-owned Canny contours",
+    "join": "Exact saved input index/frame/sector/geometry with source crop origin [543,798], actual radii and source X retained; count registered pixels sampled in each query and unique winning patch. Search-domain support recorded separately.",
+    "human_positive_chain": {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "direction": 1,
+      "stride": 1,
+      "end_frame": 1320
+    },
+    "controls": [
+      "confirmed central positive chain",
+      "all confirmed-seed/direction counter-controls",
+      "all wrong-target seed chains",
+      "stationary target and moving optical alternative remain unresolved; no synthetic input grants a real identity"
+    ],
+    "go_no_go": "No production promotion if simple overlap/outside-reference or persistence is contradicted by preserved controls, or if real stationary/crossing identity cannot be assessed. New measurement needed before another hypothesis, not more per-pixel review of this crop.",
+    "partition": "already exposed regression; none is holdout or calibration",
+    "production_change": false,
+    "new_human_question": false,
+    "windows_work": false,
+    "decision": "NOT_EVALUATED"
+  },
+  "reference_pixels": 125,
+  "all_chain_count": 156,
+  "all_link_count": 6240,
+  "aggregates": [
+    {
+      "seed_role_only": "target",
+      "stride": 1,
+      "chains": 42,
+      "links": 3150,
+      "reference_disjoint_search_chains": 22,
+      "query_touching_links": 230,
+      "winner_touching_links": 229
+    },
+    {
+      "seed_role_only": "target",
+      "stride": 15,
+      "chains": 42,
+      "links": 210,
+      "reference_disjoint_search_chains": 22,
+      "query_touching_links": 23,
+      "winner_touching_links": 23
+    },
+    {
+      "seed_role_only": "wrong_target",
+      "stride": 1,
+      "chains": 36,
+      "links": 2700,
+      "reference_disjoint_search_chains": 20,
+      "query_touching_links": 300,
+      "winner_touching_links": 300
+    },
+    {
+      "seed_role_only": "wrong_target",
+      "stride": 15,
+      "chains": 36,
+      "links": 180,
+      "reference_disjoint_search_chains": 20,
+      "query_touching_links": 15,
+      "winner_touching_links": 14
+    }
+  ],
+  "reviewed_positive_chain": {
+    "links": 45,
+    "query_touching": 41,
+    "winner_touching": 40,
+    "max_query_sampled": 36,
+    "max_winner_sampled": 36
+  },
+  "checkpoints": [
+    {
+      "anchor_frame": 1200,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 841.0,
+      "initial_sampling_y": 841,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "search_domain_reference_pixels": 44,
+      "links": 150,
+      "query_touching": 2,
+      "winner_touching": 2,
+      "checkpoints": [
+        {
+          "from_frame": 1259,
+          "to_frame": 1260,
+          "query_source_y": 838,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 839,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1274,
+          "to_frame": 1275,
+          "query_source_y": 838,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 839,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1289,
+          "to_frame": 1290,
+          "query_source_y": 888,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 888,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1304,
+          "to_frame": 1305,
+          "query_source_y": 888,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 888,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1319,
+          "to_frame": 1320,
+          "query_source_y": 888,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 888,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1260,
+      "candidate_input_index": 4,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 839.0,
+      "initial_sampling_y": 839,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "search_domain_reference_pixels": 44,
+      "links": 90,
+      "query_touching": 2,
+      "winner_touching": 2,
+      "checkpoints": [
+        {
+          "from_frame": 1274,
+          "to_frame": 1275,
+          "query_source_y": 838,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 839,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1289,
+          "to_frame": 1290,
+          "query_source_y": 888,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 888,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1304,
+          "to_frame": 1305,
+          "query_source_y": 888,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 888,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1319,
+          "to_frame": 1320,
+          "query_source_y": 888,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 888,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1275,
+      "candidate_input_index": 12,
+      "review_role_for_evaluation_only": "target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 835.0,
+      "initial_sampling_y": 835,
+      "radius": 10,
+      "stride": 1,
+      "direction": 1,
+      "search_domain_reference_pixels": 44,
+      "links": 75,
+      "query_touching": 65,
+      "winner_touching": 65,
+      "checkpoints": [
+        {
+          "from_frame": 1289,
+          "to_frame": 1290,
+          "query_source_y": 828,
+          "query_reference_pixels": 36,
+          "winner_patches": [
+            {
+              "source_y": 829,
+              "reference_pixels_sampled": 33
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1304,
+          "to_frame": 1305,
+          "query_source_y": 830,
+          "query_reference_pixels": 31,
+          "winner_patches": [
+            {
+              "source_y": 830,
+              "reference_pixels_sampled": 31
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1319,
+          "to_frame": 1320,
+          "query_source_y": 838,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 839,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 2,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        584,
+        605
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "search_domain_reference_pixels": 44,
+      "links": 120,
+      "query_touching": 120,
+      "winner_touching": 120,
+      "checkpoints": [
+        {
+          "from_frame": 1306,
+          "to_frame": 1305,
+          "query_source_y": 822,
+          "query_reference_pixels": 44,
+          "winner_patches": [
+            {
+              "source_y": 822,
+              "reference_pixels_sampled": 44
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1291,
+          "to_frame": 1290,
+          "query_source_y": 822,
+          "query_reference_pixels": 44,
+          "winner_patches": [
+            {
+              "source_y": 821,
+              "reference_pixels_sampled": 44
+            }
+          ],
+          "reciprocal": false
+        },
+        {
+          "from_frame": 1276,
+          "to_frame": 1275,
+          "query_source_y": 820,
+          "query_reference_pixels": 44,
+          "winner_patches": [
+            {
+              "source_y": 820,
+              "reference_pixels_sampled": 44
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1261,
+          "to_frame": 1260,
+          "query_source_y": 820,
+          "query_reference_pixels": 44,
+          "winner_patches": [
+            {
+              "source_y": 820,
+              "reference_pixels_sampled": 44
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1201,
+          "to_frame": 1200,
+          "query_source_y": 820,
+          "query_reference_pixels": 44,
+          "winner_patches": [
+            {
+              "source_y": 820,
+              "reference_pixels_sampled": 44
+            }
+          ],
+          "reciprocal": true
+        }
+      ]
+    },
+    {
+      "anchor_frame": 1320,
+      "candidate_input_index": 21,
+      "review_role_for_evaluation_only": "wrong_target",
+      "sector": 3,
+      "geometry_role": "candidate_center",
+      "source_x_range": [
+        605,
+        626
+      ],
+      "initial_source_y": 822.0,
+      "initial_sampling_y": 822,
+      "radius": 10,
+      "stride": 1,
+      "direction": -1,
+      "search_domain_reference_pixels": 0,
+      "links": 120,
+      "query_touching": 0,
+      "winner_touching": 0,
+      "checkpoints": [
+        {
+          "from_frame": 1306,
+          "to_frame": 1305,
+          "query_source_y": 820,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 820,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1291,
+          "to_frame": 1290,
+          "query_source_y": 820,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 820,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1276,
+          "to_frame": 1275,
+          "query_source_y": 819,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 819,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1261,
+          "to_frame": 1260,
+          "query_source_y": 819,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 819,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        },
+        {
+          "from_frame": 1201,
+          "to_frame": 1200,
+          "query_source_y": 819,
+          "query_reference_pixels": 0,
+          "winner_patches": [
+            {
+              "source_y": 819,
+              "reference_pixels_sampled": 0
+            }
+          ],
+          "reciprocal": true
+        }
+      ]
+    }
+  ],
+  "inputs_preserved": true,
+  "decision": "NOT_EVALUATED",
+  "result": "NO_GO_FOR_OVERLAP_OR_PERSISTENCE_PROMOTION",
+  "limitations": [
+    "sampling overlap is not edge identity",
+    "absence from a small reviewed patch is not absence of structure elsewhere",
+    "seed truth is not a whole-chain label",
+    "moving crossing/stationary/optical opposing efficacy remains NOT_ASSESSABLE",
+    "no new positive or scalar truth from appearance tracking"
+  ],
+  "artifacts": {
+    "preflight.py": "5c45d72b4becebedaaf3f64311be7ed3dc4b585c81abde169ef7141a74b1b521",
+    "preflight.json": "54f74222ae7fd6406bf1fbfdfeeec40fe0bcc09ccd25eb015fc8a6c2bdbbc72d",
+    "readout.py": "96ea7ef52e9e3e41a70786b96589da741911f91dae0cacef61213f109fbcf1a0",
+    "all-chain-dependencies.json": "a37d95d54a6bbe55d4dbe31c6215b8c513d91fdc446148ee7a60e9c01118b4db",
+    "user-foam-boundary-rough.jpg": "14c5be141c6baf34d068e3c1cc20a676eb1257b711725de97b6e690fe963bc7d",
+    "sequence-context.png": "a02f7018649626de2e0c1b0886a036724c6e3e00518efa175d414cfb91392969",
+    "plot.py": "fffeb74cc02c372ea66136e9fac9364418616bab86c66a07a24cf27e37136963",
+    "verify.py": "55ccea7caa5a8c96135caa575d1cdf15a6550e0b890c6ff56cfc06db6c1ba7bf",
+    "verification.json": "693313a9494838f994e5154cb7ce85c1ef92a32884e15dca857bd3403e6987b2"
+  },
+  "human_checkpoint": "CLOSED_WITH_QUALITATIVE_FOAM_BOUNDARY; no exact point extraction or full-occlusion claim",
+  "user_scope_clarification": "The question concerned detector granularity, not manual-review burden. Runtime need not semantically classify every pixel; processing frames does not require independent single-frame decisions.",
+  "local_artifact_root": "sample/output/s11-d2-sequence-context-20261009-001",
+  "preserved_jpeg_path": "sample/output/s11-d2-sequence-context-20261009-001/user-foam-boundary-rough.jpg",
+  "next_design_entry": "Before a new run, name an added observable beyond pooled five-sector geometry, ordered patch persistence and binary reference overlap. Reuse existing candidate/region owners; diagnose complete boundary/region hypotheses over a bounded sequence, with unresolved local portions. No new contour challenger is implemented by this receipt.",
+  "verification": {
+    "coordinate_set_verified_links": 6240,
+    "search_domains": 156,
+    "inputs_and_artifacts_preserved": true,
+    "verifier_sha256": "55ccea7caa5a8c96135caa575d1cdf15a6550e0b890c6ff56cfc06db6c1ba7bf"
+  }
+}

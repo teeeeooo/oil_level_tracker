@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The user confirms the 125 displayed f1320/44 s reference edges as glass structure/pattern. D2-A1's bounded measurement-footprint diagnostic is implemented and locally verified; candidate-owned raw-edge correspondence remains unavailable. Original recipes and detector behavior are unchanged. A new 42.5 s same-scope visibility preview is prepared: the assistant cannot separate the lower-edge glass contour from possible Foam overlap. Stop for this physical judgment; D2-B's opposing controls and D3 remain incomplete. O2 stays OPEN / FIELD FAIL; no ML or Windows task.
+**Next transition:** The 42.5 s annotation is received as an approximate Foam-boundary interpretation; no dot coordinates or pixel labels are inferred. The scoped reference plus existing temporal-context feasibility check is complete without promotion: support overlap/outside-reference and appearance persistence do not establish a safe physical decision. Do not extend this experiment with finer pixel review or threshold tuning. Next local work is a bounded candidate-boundary/region design preflight that identifies an additional observable beyond current five-sector measurements and closed patch matching before any new implementation/run. O2 remains OPEN / FIELD FAIL; no user or Windows action is currently required.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -28,7 +28,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; scoped reference confirmed; D2-A1 measurement-footprint slice implemented and locally verified | Receive new 42.5 s visibility judgment; raw-edge comparison and D2-B opposing controls remain incomplete; no physical classifier | [Implementation and checkpoint](../60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md), [comparison contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract) |
+| W4 / O2 challenger | OPEN; D2-A1 diagnostic verified; bounded reference + temporal-context feasibility CLOSED WITHOUT PROMOTION | New observable/design required before another run; broader D2-B efficacy controls remain incomplete; no per-pixel semantic-classification requirement | [Sequence-context result](../60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.md), [comparison contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -190,14 +190,30 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    measurements are bounded fixture evidence, not maximum-size/Windows acceptance.
    [Evidence](../60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md)
    retains the exact scope, measurements and limitations.
-   **New physical checkpoint:** in the existing f1275/42.5 s crop, can the same
-   scoped glass contours still be separated, or does Foam/bubble appearance
-   overlap them near Y824–828? The assistant sees a possible mixture and cannot
-   certify it. A pinned two-frame preview is prepared; stop for the user's
-   judgment. Do not reopen the earlier 0/28 s or 42 s semicircle questions.
-   D2-B still requires fixed isolated/away/crossing/stationary/obscured opposing
-   controls with exposure/partition roles before one real information comparison.
-   The new visibility answer alone cannot establish all of those controls.
+   **42.5 s reply CLOSED at qualitative scope:** the user marks an approximate
+   Foam boundary and explicitly rejects interpreting the dots as exact XY.
+   Preserve this as regional interpretation; no mask, scalar tolerance or claim
+   that each glass edge is obscured follows. The user clarifies that the question
+   concerned detector granularity, not annotation burden. Runtime need not label
+   every microscopic contour; frame processing already feeds a sequence resolver.
+   **Bounded sequence-context check CLOSED WITHOUT PROMOTION:** all 156 existing
+   appearance chains / 6,240 links were joined to the scoped reference without
+   rematching. The reviewed short true-fluid chain samples reference coordinates
+   in 40/45 winning patches; known wrong-target seeds can persist outside the
+   reference. [Evidence](../60-evidence/s11/2026-10-09-d2-sequence-context-feasibility.md)
+   records input dependency, not edge identity or a new physical classifier.
+   Do not promote overlap, non-overlap or persistence, expand the reference,
+   select only the successful seed, or tune a threshold on these results.
+   No further fine-grained question about this crop is justified by this check.
+   **Next design entry:** inspect whole candidate-boundary/region hypotheses
+   across a bounded sequence. Name a new observable and its existing owner
+   before implementing or running a challenger; "more time context" alone is
+   insufficient after the closed patch/region failures. The current native
+   material path genuinely consists of up to five sector rows, not a hidden
+   dense contour waiting to be exported. Do not relabel pooled measurements as
+   full contour support. This is a design entry, not an implemented new mechanism.
+   D2-B's stationary/crossing/optical opposing efficacy remains NOT_ASSESSABLE;
+   no missing gate is waived or manufactured by this qualitative reply.
    D3 additionally requires a physical decision/abstention rule, input identities,
    operating-point policy and falsification. Compare wrong-target suppression
    separately from true-target recovery through W3 and the unchanged report.

@@ -164,10 +164,20 @@ execution or export is requested. The [architecture](../../20-architecture/s11-i
 and [acceptance levels](../../30-validation/s11-interface-observability-witness-validation.md#registered-support-comparison-gates)
 retain the later gates.
 
+## Subsequent reply and sequence-level closeout
+
+The user supplied a marked crop and described the marked neighborhood as an
+approximate Foam boundary, explicitly prohibiting exact-XY interpretation.
+They also clarified that the granularity question concerned the detector, not
+human review effort. The [follow-up result](2026-10-09-d2-sequence-context-feasibility.md)
+closes this checkpoint at that qualitative scope and compares the preserved
+reference with existing temporal controls. The pending wording and machine
+receipt above describe the original checkpoint; their frozen output is preserved.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F04`, `S11-F09`, `S11-F10`.
 - First harmful stage: candidate measurement geometry does not establish which physical object produced its contrast; candidate-owned raw-edge support and current optical visibility remain missing. No new private first physical cause is established.
-- Logic-map impact: UPDATED — the existing debug projector now publishes a bounded reference-versus-measurement sibling namespace; production owners and their decisions remain unchanged.
+- Logic-map impact: NONE — this follow-up links the qualitative reply and sequence-context result; the previously mapped debug namespace and production owners are unchanged.
 - Failure-registry impact: NONE — geometry/identity, lineage and unavailable-versus-negative failure guards are preserved; no failed mechanism is promoted or new field result claimed.
