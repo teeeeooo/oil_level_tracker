@@ -850,7 +850,7 @@ do not imply Windows display/packaging or O2 field acceptance.
 
 ## Registered support comparison gates
 
-The [planned comparator](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract)
+The [comparison contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract)
 has three distinct acceptance levels. These do not replace V2–V5 or O2/O3:
 
 1. **D2-A diagnostic contracts.** First freeze a bounded reference-readiness and
@@ -882,6 +882,22 @@ has three distinct acceptance levels. These do not replace V2–V5 or O2/O3:
    recovery, unavailable/unresolved and unreviewed outputs; scalar accuracy is
    independent. Newly admitted but unreviewed outputs are not successful targets.
 
+The October 9 diagnostic implementation covers available contrast footprints,
+not candidate-owned edge intersections. Its [evidence and receipt](../60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md)
+retain hand-calculated mask/count controls, explicit nulls, legacy/context
+failure controls, duplicate/index binding, real detector entry and BASIC/FULL
+serialization. NONE must bypass comparison. Tests must keep decision/physical/
+target/path/scalar fields `NOT_EVALUATED` and visibility `NOT_ESTABLISHED` even
+for disjoint, identical or stationary synthetic inputs.
+
+Frozen implementation budgets are 16 templates, 128 Oil candidates, 512 pairs,
+8,388,608 compared crop pixels and 1 MiB record size, with all-or-none exhaustion.
+The initial resource preflight separately limits one-reference paired median
+increment to 10 ms and incremental Python allocation to 32 MiB; the latter is
+**not RSS**. Record process RSS separately and do not infer worst-case/Windows
+performance from a small one-reference local fixture. Completion of this
+measurement slice cannot close missing raw-edge or real opposing controls.
+
 Reuse the full sample4 0–56 s paired sequence and its fixed seven target/three
 negative bindings, including 40/42/44 s upstream losses and 49.5/52 s regression.
 Cover the other three samples' overlay, reflection and long-gap risks. These are
@@ -901,7 +917,7 @@ controls and nine-segment integrated field qualification remain separate gates.
 - Prior mechanisms rejected: threshold widening, polarity/source/motion identity, unpartitioned calibration, private-coordinate tuning, missing-as-zero, stale identity/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded resources and separate Windows field acceptance.
 - Difference from prior failures: extraction, discrimination, behavior and field qualification are independent gates with explicit positive/negative/unresolved labels and leakage controls.
-- Logic-map impact: NONE — these offline target-binding controls do not change production decision flow or the previously mapped A1 diagnostic route.
+- Logic-map impact: UPDATED — the map records the additional D2 debug-only measurement-footprint route; target binding and production decision flow are unchanged.
 - Failure-registry impact: NONE — it adds acceptance obligations for existing named mechanisms without claiming a new cause or repair.
 
 

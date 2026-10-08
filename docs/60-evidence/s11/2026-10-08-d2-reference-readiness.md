@@ -95,6 +95,14 @@ and [gates](../../30-validation/s11-interface-observability-witness-validation.m
 continue to own later implementation. Live sequencing is in
 [Work Plan](../../00-project/work-plan.md).
 
+## Subsequent scoped reply — 2026-10-09
+
+The user answered "모두 유리 구조·무늬" for the exact 125 displayed edge pixels
+above. This closes that attribution question only. The [D2-A1 evidence](2026-10-09-d2-reference-measurement-comparison.md)
+records the new diagnostic recipe, bounded implementation and verification;
+the original demo and this audit's machine receipt remain unchanged. The pending
+statements above describe the October 8 checkpoint, not a renewed request.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.

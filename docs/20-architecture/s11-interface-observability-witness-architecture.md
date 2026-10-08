@@ -1962,12 +1962,14 @@ and O2/O3/Windows acceptance remain their existing separate gates.
 ### Registered support diagnostic comparison — planned contract
 
 The [18885d2 specification intake](../60-evidence/s11/2026-10-08-spec-18885d2-intake.md)
-adopts the following diagnostic design, not an implemented comparator or physical
-decision. Reuse `artifact_reference`, actual candidate generation/measurement
-sidecars and the existing debug projector. First establish a family-by-family
-availability matrix: current `OilMeasurementLineage` records scalar/band evidence
-and does not generally retain candidate-owned raw edge sets. Shared Canny pixels
-inside a candidate envelope cannot substitute for that missing lineage.
+adopts the following diagnostic design. The October 9 implementation supplies
+its **measurement-footprint slice**, through `artifact_reference_diagnostics`
+and `PhaseDebugProjector`; physical decisions remain unimplemented. Reuse
+`artifact_reference` decoding, `OilMeasurementLineage` and native path sidecars.
+The family availability matrix establishes that no current family owns a raw
+Canny contour set. Shared Canny pixels inside a candidate envelope cannot
+substitute for that missing lineage. The subsection title remains stable for
+incoming references to the broader planned edge-comparison contract.
 
 The [bounded readiness audit](../60-evidence/s11/2026-10-08-d2-reference-readiness.md)
 confirms the reuse seams: `phase_transition_support` retains actual pooled band
@@ -2018,7 +2020,45 @@ it is behavior-neutral; a future accepted behavioral consumer must include its
 reviewed digest and comparator version in runtime identity. No overlap veto or
 no-match anchor is authorized by this diagnostic design.
 
+The implemented schema `s11-reference-measurement-comparison-v1` is published
+only as `artifacts.state.artifact_reference_comparison` under debug capture.
+It compares available phase pooled contrast windows (three radii × five sectors)
+and selected native material/raster-material contrast windows. Native windows
+exclude their center row and omit the separate Sobel term and nonlocal
+normalization dependencies: `complete_score_dependency_mask=false`. Other
+families remain `unavailable`; missing operations are counted. There is no
+retained cache, temporal registration or candidate mutation.
+
+The explicit review rectangle, reference effective/glare eligibility and current
+crop/effective/glare eligibility define the common sampling domain. For each
+footprint, record common sampled area, reviewed edges sampled/not sampled and
+sampling fraction; an empty edge denominator has a null fraction and a missing
+common domain has null statistics. `observed_raw_edge=unavailable` and
+`edge_overlap=null` on all current families. These counts say where an operation
+samples, not which object created its contrast. Optical visibility remains
+`NOT_ESTABLISHED`, even when every reviewed reference pixel is sampleable.
+
+Per-frame caps are 16 registered templates, 128 Oil candidates, 512 pairs,
+8,388,608 compared crop pixels and 1,048,576 serialized record bytes. Exceeding
+any cap emits an explicit unavailable result without order-dependent partial
+truncation. Input identity includes actual frame pixels/time/index, geometry,
+preprocessing, masks, candidate windows and version; comparison identity adds
+snapshot, review state and review rectangle. Corrupt/incompatible references
+remain per-reference unavailable; invalid measurement binding invalidates the
+comparison. The [implementation evidence](../60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md)
+records the scoped human reply, measured resources and equality verification.
+No matcher, resolver or report reads this namespace.
+
 ## History Review
+
+2026-10-09 D2-A1: the user confirms only the 125 displayed f1320 edges as
+"모두 유리 구조·무늬". An isolated diagnostic recipe records this reply;
+production recipes retain their bytes. Added exact contrast-footprint statistics
+through the existing debug projector. F04 geometry is not identity, F09 exact
+lineage and F10 abstention remain enforced. Unlike the failed registered-Y veto,
+this namespace cannot prune candidates or change temporal owners; current raw
+edge correspondence and real opposing-control efficacy remain unavailable.
+
 
 2026-10-08 D2-A0 readiness: joined 153 saved candidates without rerunning the
 detector and inspected the actual family generators/sidecars. No candidate-owned
@@ -2181,5 +2221,5 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: NONE — reference-support retention is implemented in setup owners; the mapped diagnostic and production decision owners remain unchanged, with no new classifier or behavior consumer.
+- Logic-map impact: UPDATED — FRAME-EVIDENCE/TRACE-PUBLICATION now document the debug-only reference-versus-measurement namespace; production decision owners and their authority are unchanged.
 - Failure-registry impact: NONE — this architecture refines the response to existing failures without claiming field repair.

@@ -15,6 +15,7 @@ from .artifact_calibration import (
     apply_artifact_templates,
     attach_spatial_signature,
 )
+from .artifact_reference_diagnostics import compare_reference_measurements
 from .fill_state_classifier import classify_fill_state
 from .foam_front_detector import (
     FoamDecisionStatus,
@@ -818,6 +819,14 @@ class PhaseDebugProjector:
             glass_id=glass.id,
             canny=pre.canny,
         )
+        lineage = project_measurement_lineage(
+            evidence.candidate_assembly.diagnostic_measurement_lineage, detection.candidates,
+            frame_index=detection.frame_index, glass_id=glass.id, crop_origin=bundle.crop_origin,
+        )
+        reference_comparison = compare_reference_measurements(
+            frame=frame, glass=glass, detection=detection, pre=pre, bundle=bundle,
+            lineage=lineage, material_paths=evidence.candidate_assembly.diagnostic_material_paths,
+        )
         return PhaseDetectionDebugArtifacts(
             images=images,
             profiles=projection.debug_profiles,
@@ -834,10 +843,8 @@ class PhaseDebugProjector:
                 "foam_component_diagnostics": foam_diagnostics,
                 "oil_interface_diagnostics": interface_diagnostics,
                 "oil_interface_witness": asdict(witnesses[0]),
-                "oil_measurement_lineage": project_measurement_lineage(
-                    evidence.candidate_assembly.diagnostic_measurement_lineage, detection.candidates,
-                    frame_index=detection.frame_index, glass_id=glass.id, crop_origin=bundle.crop_origin,
-                ),
+                "oil_measurement_lineage": lineage,
+                "artifact_reference_comparison": reference_comparison,
             },
         )
 

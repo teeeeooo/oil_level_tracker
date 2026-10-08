@@ -489,3 +489,9 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 최초 등록일 | 문서 | 역할 |
 |---|---|---|
 | 2026-10-08 | [Reference readiness](60-evidence/s11/2026-10-08-d2-reference-readiness.md), [readout](60-evidence/s11/2026-10-08-d2-reference-readiness.json) | 기존 7개 recipe·153개 후보의 참조/측정 근거 확인과 44초 윤곽 범위의 새 물리적 판정 지점; detector·라벨 불변 |
+
+## D2 reference measurement comparison additions
+
+| 최초 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-09 | [Reference measurement diagnostic](60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md), [receipt](60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.json) | 44초 125개 유리 윤곽의 사용자 판정과 진단 구현·출력 동일성 검증; 42.5초 겹침 여부 판정 지점 |

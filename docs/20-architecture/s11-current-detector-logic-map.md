@@ -112,6 +112,19 @@ The IDs in this table are the cross-reference surface for future designs and fai
 
 ## 3. Current frame: evidence acquisition and provisional projection
 
+The D2 reference diagnostic is another debug-only sibling:
+`PhaseDebugProjector.project` →
+[`compare_reference_measurements`](../../src/oil_tracker/adapters/vision/artifact_reference_diagnostics.py)
+→ `artifacts.state.artifact_reference_comparison` → existing JSONL state.
+It reuses the already projected A1 lineage and native material-path sidecar,
+validates saved scoped references using the existing reference decoder, and
+compares actual contrast sampling windows on the common reviewed domain.
+Candidate-owned observed edges remain unavailable; footprint statistics do not
+confer physical identity or rejection authority. Resource/input failures are
+explicitly unavailable. NONE capture bypasses the route. This frame-local
+namespace has no matcher, authority, sequence or report consumer; see the
+[comparison contract](s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract).
+
 R22-2 extends the debug-only route after detection projection:
 `PhaseDebugProjector` → `measure_oil_interfaces` →
 `artifacts.state.oil_interface_diagnostics` → captured JSONL state. It records
@@ -344,7 +357,7 @@ bounded expiry and one-attempt semantics.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
   transition/evidence boundaries plus the R22-2 debug-only capture/measurement route
   and complete branch-specific phase failure reasons, plus A1 pure spatial
-  diagnostic reproduction with exact candidate binding.
+  diagnostic reproduction with exact candidate binding, and D2 scoped reference/measurement-footprint comparison in the existing debug projector.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.
 
 ## O1 trace-only observation witness

@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** D2-A0 technical readout is complete: seven known recipes provide no reviewed support, and 153 saved candidates retain measurement geometry rather than candidate-owned edge masks. A concrete f1320/44 s preview with 125 displayed edge pixels is awaiting user attribution. Stop at this new physical-judgment boundary as requested; preserve the mixed/uncertain demo. Reference/control and resource freeze remain incomplete; D2-A1 comparator is not implemented. O2 remains gated; no ML or Windows task.
+**Next transition:** The user confirms the 125 displayed f1320/44 s reference edges as glass structure/pattern. D2-A1's bounded measurement-footprint diagnostic is implemented and locally verified; candidate-owned raw-edge correspondence remains unavailable. Original recipes and detector behavior are unchanged. A new 42.5 s same-scope visibility preview is prepared: the assistant cannot separate the lower-edge glass contour from possible Foam overlap. Stop for this physical judgment; D2-B's opposing controls and D3 remain incomplete. O2 stays OPEN / FIELD FAIL; no ML or Windows task.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -28,7 +28,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; D2-A0 technical readout complete; reference attribution pending; comparator not implemented | Receive concrete 44 s scope judgment, then finish reference/control/resource freeze before D2-A1; D2-B/D3 remain gated | [Readiness checkpoint](../60-evidence/s11/2026-10-08-d2-reference-readiness.md), [comparison contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract) |
+| W4 / O2 challenger | OPEN; scoped reference confirmed; D2-A1 measurement-footprint slice implemented and locally verified | Receive new 42.5 s visibility judgment; raw-edge comparison and D2-B opposing controls remain incomplete; no physical classifier | [Implementation and checkpoint](../60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md), [comparison contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -157,12 +157,13 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    focused checks and saved 44 s setup verify capture/UI, not field efficacy.
    **18885d2 specification intake complete:** all five supplied files are
    byte-preserved; native evidence and a fresh 226-output replay agree. The
-   [planned exact-coordinate diagnostic](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract)
+   [exact-coordinate diagnostic contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract)
    separates reviewed edges, actual native measurement footprints, processed
    support and centered envelopes. Its decisions remain NOT_EVALUATED. Original
-   Mac recipes have no templates and the UI demo is mixed/uncertain; this spot
-   check establishes no eligible reviewed reference. Candidate-owned observed
-   edges are also not generally retained by the current lineage sidecar.
+   Mac recipes have no templates and the original UI demo remains mixed/uncertain;
+   that intake spot check established no eligible reviewed reference. The new
+   scoped reply and separate diagnostic copy are recorded below. Candidate-owned
+   observed edges are not generally retained by the current lineage sidecar.
    No automatic registered-pixel veto or fluid proof follows.
    Do not repeat known target-admission inventory, restore a false owner, relax
    geometric association, tune thresholds, or add exclusions for new winners.
@@ -171,36 +172,41 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    or file export is required. Ask for physical judgment only on a new material
    ambiguity encountered in a concrete subsequent design. Independent
    physical/scalar/temporal acceptance remains separate.
-4. **Planned sequence within D2/W4:**
-   D2-A0's [bounded technical readout](../60-evidence/s11/2026-10-08-d2-reference-readiness.md)
-   is complete: seven known recipes, 153 exact candidate joins, 31 native-path
-   records and 315 phase-band records; no eligible reviewed reference or
-   candidate-owned observed-edge mask. Do not repeat this inventory. Current
-   source owners support native contrast/phase sampling footprints, which must
-   remain distinct from raw edge sets. A concrete question is pending on the
-   existing f1320/44 s preview: whether all 125 displayed edges in source
-   X[563,598), Y[816,828) belong to fixed glass structure/pattern. The prior pink
-   target-negative and 42 s semicircle judgments stay closed. Until the reply,
-   preserve `mixed_or_uncertain` and stop at the user's requested boundary.
-   This is not completion of all D2-A0 gates. Next freeze reviewed/common domains,
-   unavailable denominators, review-state/rectangle/preprocessing identity and
-   measured incremental resource caps. This is a bounded reuse/readiness pass,
-   not renewed scene inventory. If real reviewed support is absent, record
-   `reviewed-reference-unavailable`; synthetic/input-contract work can proceed,
-   but do not infer labels or start a real efficacy comparison.
-   D2-A1 then implements bounded diagnostic records with legacy/context/synthetic
-   controls and complete debug ON/OFF output equality. Raw overlap/no-match
-   cannot confer physical identity; tool completion is separate from efficacy.
-   D2-B performs one fixed real information comparison only when controls exist.
-   D3 additionally requires a declared physical decision/abstention rule, input
-   identities, exposure/partition roles, operating-point policy and falsification.
-   Compare wrong-target suppression separately from true-target recovery, through
-   W3 and the unchanged report. Protect all four Mac samples and the full sample4
-   sequence, including 49.5/52 s regression. All-abstain physical decisions and
-   raw output growth are not success; NOT_EVALUATED diagnostic v1 is not itself
-   a failed physical classifier. No after-result tolerance/threshold search.
-   [Comparison gates](../30-validation/s11-interface-observability-witness-validation.md#registered-support-comparison-gates)
-   own the distinction. Missing Windows data does not justify guessed behavior.
+4. **Current sequence within D2/W4:**
+   D2-A0's [technical readout](../60-evidence/s11/2026-10-08-d2-reference-readiness.md)
+   remains complete; do not repeat the seven-recipe/153-candidate inventory.
+   **44 s scope reply CLOSED:** "모두 유리 구조·무늬" attributes only the 125
+   displayed eligible Canny pixels in X[563,598), Y[816,828). A new diagnostic
+   recipe copy holds `reviewed_support`; the original mixed/uncertain demo and
+   production recipes remain unchanged. No whole-box or cross-frame truth follows.
+   **D2-A1 measurement slice implemented and locally verified:** actual phase
+   and native-path contrast windows are compared with the common reviewed domain
+   in a debug-only namespace. Candidate-owned observed edges stay unavailable,
+   so there is no edge correspondence or physical decision. Frozen work/record
+   limits, null denominators and input identity are tested. Four Mac windows
+   (299 outputs) plus the registered sample4 variant (113) preserve complete
+   baseline/current and debug ON/OFF results. The variant's known 49.5/52 s
+   behavior regression is preserved, not repaired or adopted. Local resource
+   measurements are bounded fixture evidence, not maximum-size/Windows acceptance.
+   [Evidence](../60-evidence/s11/2026-10-09-d2-reference-measurement-comparison.md)
+   retains the exact scope, measurements and limitations.
+   **New physical checkpoint:** in the existing f1275/42.5 s crop, can the same
+   scoped glass contours still be separated, or does Foam/bubble appearance
+   overlap them near Y824–828? The assistant sees a possible mixture and cannot
+   certify it. A pinned two-frame preview is prepared; stop for the user's
+   judgment. Do not reopen the earlier 0/28 s or 42 s semicircle questions.
+   D2-B still requires fixed isolated/away/crossing/stationary/obscured opposing
+   controls with exposure/partition roles before one real information comparison.
+   The new visibility answer alone cannot establish all of those controls.
+   D3 additionally requires a physical decision/abstention rule, input identities,
+   operating-point policy and falsification. Compare wrong-target suppression
+   separately from true-target recovery through W3 and the unchanged report.
+   Protect all four Mac samples and the full sample4 sequence. All-abstain
+   physical decisions and raw output growth are not success; NOT_EVALUATED
+   diagnostic v1 is not itself a failed classifier. No after-result tolerance/
+   threshold search or ML. The [comparison gates](../30-validation/s11-interface-observability-witness-validation.md#registered-support-comparison-gates)
+   retain the raw-edge/footprint and diagnostic/efficacy distinctions. No new
+   Windows query follows from missing private pixels.
 5. O2 acceptance precedes D4a; phase/handoff D4b has its own gate. D5 Foam needs
    independent design and ablation. D6 evaluates the integrated exact runtime.
 

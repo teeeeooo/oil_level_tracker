@@ -1,0 +1,601 @@
+{
+  "schema_version": "s11-d2-reference-measurement-evidence-v1",
+  "base_head": "bfb15cdf023ceed513180bc91ca18f9f0f2d31e1",
+  "implementation_source_sha256": "852aacb4fdf6035a3d48cce7bad2a1465a041aa2726d20569faa367ca2d47fa0",
+  "changed_source_files": {
+    "src/oil_tracker/adapters/vision/artifact_reference.py": "01ad89b354df99c5b23eb1f4001ed38cfc525dad3303b79940f6a9a0bfee029d",
+    "src/oil_tracker/adapters/vision/artifact_reference_diagnostics.py": "c07716340f22c1a50d71115986ffcd1175ae01cda2a5f5ceb9d8bc3dd0c5bb42",
+    "src/oil_tracker/adapters/vision/phase_frame_detection.py": "c531d32d62d92057baecf0abd36ac08330d8f6c1c26e6de462364a909a495221",
+    "src/oil_tracker/domain/artifact_reference.py": "70f4ba30e05c8bb3082837e126c47e10467cb8518837dedd016b2b32e7e656ab"
+  },
+  "preflight": {
+    "head": "bfb15cdf023ceed513180bc91ca18f9f0f2d31e1",
+    "input_pins": {
+      "sample/output/s11-d2-reference-ui-20261008-001/ui-demo-only.oilrecipe": "7ad140fd96976257301781456a57d5435c2448c694e2dba7dafb53be43c03d71",
+      "sample/output/s11-d2-recipe-artifact-20261008-001/setup-f1320/f1320-full.png": "0f9c5f9e12902edf45ee6b6fe03254eaf29ac30f2530d32da1afbbf467bc560e"
+    },
+    "human_reply": "모두 유리 구조·무늬",
+    "attribution_scope": "Only the displayed 125 raw edge pixels at f1320, source X[563,598),Y[816,828).",
+    "source_snapshot_sha256": "600c6bc47b2b8f5d6a3ac89e80760c5d432d9739434e9c4d48db78394d1abb80",
+    "review_rect": [
+      20,
+      18,
+      35,
+      12
+    ],
+    "reviewed_recipe_sha256": "0d78fc0637d860ee2802281405462ef0f476e743b9ec3213931449af1c7b2748",
+    "original_recipe_preserved": true,
+    "baseline_debug_true_ms": {
+      "median": 102.9082710010698,
+      "p95": 104.57657063525403
+    },
+    "planned_caps": {
+      "max_references": 16,
+      "max_candidates": 128,
+      "max_pairs": 512,
+      "max_compared_domain_pixels": 8388608,
+      "max_record_bytes": 1048576,
+      "incremental_peak_python_memory_bytes": 33554432,
+      "single_reference_paired_median_increment_ms": 10
+    },
+    "scope": "diagnostic sampling footprints only; observed candidate edges unavailable; no physical classification; no production matcher adoption",
+    "comparison_partition": "exposed regression; not calibration or holdout",
+    "decision": "NOT_EVALUATED",
+    "gate": "D2-A1 diagnostic correctness; D2-B physical control set still incomplete",
+    "runner_sha256": "e4994953180b366159abbf53c0377bca39cadd77f3f42c5b0f3e389f7bff5930"
+  },
+  "real_entry": {
+    "baseline_detection_equal": true,
+    "all_existing_debug_state_equal": true,
+    "confirmed_reference_edge_count": 125,
+    "current_common_edge_count": 125,
+    "physical_decision": "NOT_EVALUATED",
+    "record_bytes": 17892,
+    "compared_domain_pixel_budget_used": 144768,
+    "direct_traced_call_ms": 9.277125005610287,
+    "direct_peak_python_bytes": 143050,
+    "paired_median_increment_ms": 2.828771001077257,
+    "new_recipe_hash": "0d78fc0637d860ee2802281405462ef0f476e743b9ec3213931449af1c7b2748",
+    "runner_hash": "8d9fd6186290c9ad764b130c3e83950d43ca39c76ef32af40a8f2457ea641e3a"
+  },
+  "original_inputs_preserved": true,
+  "full_pipeline": [
+    {
+      "sample": "base_sample_1",
+      "frames": 30,
+      "baseline_current_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "old_diagnostics",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "full_none_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "seconds": {
+        "baseline_full": 15.971260499994969,
+        "new_full": 15.940512291999767,
+        "new_none": 9.722338709019823
+      },
+      "peak_rss": {
+        "baseline_full": {
+          "bytes": 274137088,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_full": {
+          "bytes": 262471680,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_none": {
+          "bytes": 255328256,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        }
+      },
+      "trace_bytes": {
+        "baseline_full": 49899140,
+        "new_full": 49919062
+      },
+      "max_new_record_bytes": 675,
+      "fingerprint": "5879657ce71ced5970c13272867f61def7d7972195b5d264a3cf63c99f1122b7"
+    },
+    {
+      "sample": "sample2",
+      "frames": 5,
+      "baseline_current_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "old_diagnostics",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "full_none_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "seconds": {
+        "baseline_full": 3.378264749975642,
+        "new_full": 3.3740642920020036,
+        "new_none": 2.116407708002953
+      },
+      "peak_rss": {
+        "baseline_full": {
+          "bytes": 281788416,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_full": {
+          "bytes": 280215552,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_none": {
+          "bytes": 264192000,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        }
+      },
+      "trace_bytes": {
+        "baseline_full": 10053058,
+        "new_full": 10056332
+      },
+      "max_new_record_bytes": 659,
+      "fingerprint": "85713bc131a808d81d073bec5bff8d035604cb4c1912ba6412c1b5c448fe4976"
+    },
+    {
+      "sample": "sample3",
+      "frames": 151,
+      "baseline_current_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "old_diagnostics",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "full_none_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "seconds": {
+        "baseline_full": 55.45406666700728,
+        "new_full": 55.57193845897564,
+        "new_none": 27.66261516700615
+      },
+      "peak_rss": {
+        "baseline_full": {
+          "bytes": 298991616,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_full": {
+          "bytes": 303202304,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_none": {
+          "bytes": 290570240,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        }
+      },
+      "trace_bytes": {
+        "baseline_full": 230041756,
+        "new_full": 230142846
+      },
+      "max_new_record_bytes": 676,
+      "fingerprint": "feb7e139269894b0aa86d692722acb4512e487dd0b71367fa88859e67745d5a1"
+    },
+    {
+      "sample": "sample4",
+      "frames": 113,
+      "baseline_current_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "old_diagnostics",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "full_none_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "seconds": {
+        "baseline_full": 40.60632770898519,
+        "new_full": 40.816418041998986,
+        "new_none": 17.89938566699857
+      },
+      "peak_rss": {
+        "baseline_full": {
+          "bytes": 306905088,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_full": {
+          "bytes": 306495488,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_none": {
+          "bytes": 302923776,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        }
+      },
+      "trace_bytes": {
+        "baseline_full": 180487094,
+        "new_full": 180561353
+      },
+      "max_new_record_bytes": 662,
+      "fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1"
+    },
+    {
+      "sample": "registered",
+      "frames": 113,
+      "baseline_current_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "old_diagnostics",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "full_none_equal": [
+        "raw",
+        "completed",
+        "fingerprint",
+        "tracking_data.csv",
+        "events.csv"
+      ],
+      "seconds": {
+        "baseline_full": 42.3809684170119,
+        "new_full": 42.67759245898924,
+        "new_none": 19.430766292003682
+      },
+      "peak_rss": {
+        "baseline_full": {
+          "bytes": 303841280,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_full": {
+          "bytes": 308559872,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        },
+        "new_none": {
+          "bytes": 303038464,
+          "status": "MEASURED",
+          "method": "process-lifetime peak RSS; one sample per fresh process"
+        }
+      },
+      "trace_bytes": {
+        "baseline_full": 180505784,
+        "new_full": 182269581
+      },
+      "max_new_record_bytes": 19078,
+      "fingerprint": "638020bd08bbabc89a13a1d7e8e910f7a018be5660da209bc8f38a4a386f541f"
+    }
+  ],
+  "report_checks": [
+    {
+      "sample": "base_sample_1",
+      "baseline_current_normalized_report_equal": true,
+      "only_removed_field": "nested run_id",
+      "baseline_current_numeric_fingerprint_equal": true
+    },
+    {
+      "sample": "sample2",
+      "baseline_current_normalized_report_equal": true,
+      "only_removed_field": "nested run_id",
+      "baseline_current_numeric_fingerprint_equal": true
+    },
+    {
+      "sample": "sample3",
+      "baseline_current_normalized_report_equal": true,
+      "only_removed_field": "nested run_id",
+      "baseline_current_numeric_fingerprint_equal": true
+    },
+    {
+      "sample": "sample4",
+      "baseline_current_normalized_report_equal": true,
+      "only_removed_field": "nested run_id",
+      "baseline_current_numeric_fingerprint_equal": true
+    },
+    {
+      "sample": "registered",
+      "baseline_current_normalized_report_equal": true,
+      "only_removed_field": "nested run_id",
+      "baseline_current_numeric_fingerprint_equal": true
+    }
+  ],
+  "registered_full_none_normalized_report_equal": true,
+  "report_harness_correction": "Initial raw report hash included random nested run_id and differed. Supplemental report runs remove only that field; originals preserved. No detector source changed.",
+  "focused_tests": {
+    "original_suite_passed": 91,
+    "new_distinct_permutation_test_passed": 1,
+    "latest_diagnostic_file_passed": 29,
+    "unique_tests_passed": 92
+  },
+  "rss": {
+    "preflight": {
+      "scope": "single reviewed f1320 reference, 12 fresh detector calls per process, three process pairs",
+      "incremental_process_peak_rss_cap_bytes": 33554432,
+      "basis": "same 32 MiB envelope as the earlier allocation preflight, separately checked as process RSS; this is a supplemental preflight, not the original allocation measurement",
+      "baseline": "bfb15cdf023ceed513180bc91ca18f9f0f2d31e1",
+      "input_recipe_sha256": "0d78fc0637d860ee2802281405462ef0f476e743b9ec3213931449af1c7b2748"
+    },
+    "pairs": [
+      {
+        "baseline": {
+          "peak_rss_bytes": 105660416,
+          "frames": 12,
+          "reference_count": 1
+        },
+        "current": {
+          "peak_rss_bytes": 106725376,
+          "frames": 12,
+          "reference_count": 1
+        },
+        "increment_bytes": 1064960
+      },
+      {
+        "baseline": {
+          "peak_rss_bytes": 105807872,
+          "frames": 12,
+          "reference_count": 1
+        },
+        "current": {
+          "peak_rss_bytes": 106659840,
+          "frames": 12,
+          "reference_count": 1
+        },
+        "increment_bytes": 851968
+      },
+      {
+        "baseline": {
+          "peak_rss_bytes": 105660416,
+          "frames": 12,
+          "reference_count": 1
+        },
+        "current": {
+          "peak_rss_bytes": 106479616,
+          "frames": 12,
+          "reference_count": 1
+        },
+        "increment_bytes": 819200
+      }
+    ],
+    "status": "PASS",
+    "scope_limit": "Neither max-size/16-reference nor Windows performance is measured."
+  },
+  "fixed_existing_controls": [
+    {
+      "frame_index": 1140,
+      "candidate_input_index": 9,
+      "existing_target_role": "target",
+      "source": "material_path",
+      "source_y": 844.0,
+      "basis": "native_measurement_footprint",
+      "statistics": {
+        "measurement_pixels_in_common": 0,
+        "reference_edges_sampled": 0,
+        "reference_edges_not_sampled": 122,
+        "reference_sampling_fraction": 0.0
+      },
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    },
+    {
+      "frame_index": 1200,
+      "candidate_input_index": 4,
+      "existing_target_role": "target",
+      "source": "oil_hypothesis:76bed74eaefae78df5f06c37",
+      "source_y": 841.0,
+      "basis": "unavailable",
+      "statistics": null,
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    },
+    {
+      "frame_index": 1200,
+      "candidate_input_index": 10,
+      "existing_target_role": "other_non_target",
+      "source": "material_path",
+      "source_y": 865.5,
+      "basis": "native_measurement_footprint",
+      "statistics": {
+        "measurement_pixels_in_common": 0,
+        "reference_edges_sampled": 0,
+        "reference_edges_not_sampled": 125,
+        "reference_sampling_fraction": 0.0
+      },
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    },
+    {
+      "frame_index": 1260,
+      "candidate_input_index": 4,
+      "existing_target_role": "target",
+      "source": "oil_hypothesis:ab9efea5ca32565368ef129b",
+      "source_y": 839.0,
+      "basis": "unavailable",
+      "statistics": null,
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    },
+    {
+      "frame_index": 1260,
+      "candidate_input_index": 15,
+      "existing_target_role": "other_non_target",
+      "source": "calibrated_high_recall",
+      "source_y": 868.0,
+      "basis": "unavailable",
+      "statistics": null,
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    },
+    {
+      "frame_index": 1275,
+      "candidate_input_index": 12,
+      "existing_target_role": "target",
+      "source": "calibrated_high_recall",
+      "source_y": 835.0,
+      "basis": "unavailable",
+      "statistics": null,
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    },
+    {
+      "frame_index": 1320,
+      "candidate_input_index": 9,
+      "existing_target_role": "target",
+      "source": "material_path",
+      "source_y": 844.0,
+      "basis": "native_measurement_footprint",
+      "statistics": {
+        "measurement_pixels_in_common": 0,
+        "reference_edges_sampled": 0,
+        "reference_edges_not_sampled": 125,
+        "reference_sampling_fraction": 0.0
+      },
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    },
+    {
+      "frame_index": 1320,
+      "candidate_input_index": 21,
+      "existing_target_role": "other_non_target",
+      "source": "phase_transition_scan",
+      "source_y": 822.0,
+      "basis": "native_measurement_footprint",
+      "statistics": {
+        "measurement_pixels_in_common": 385,
+        "reference_edges_sampled": 116,
+        "reference_edges_not_sampled": 9,
+        "reference_sampling_fraction": 0.928
+      },
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    },
+    {
+      "frame_index": 1485,
+      "candidate_input_index": 19,
+      "existing_target_role": "target",
+      "source": "phase_transition_scan",
+      "source_y": 836.0,
+      "basis": "native_measurement_footprint",
+      "statistics": {
+        "measurement_pixels_in_common": 62,
+        "reference_edges_sampled": 19,
+        "reference_edges_not_sampled": 90,
+        "reference_sampling_fraction": 0.1743119266055046
+      },
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    },
+    {
+      "frame_index": 1560,
+      "candidate_input_index": 20,
+      "existing_target_role": "target",
+      "source": "phase_transition_scan",
+      "source_y": 833.0,
+      "basis": "native_measurement_footprint",
+      "statistics": {
+        "measurement_pixels_in_common": 175,
+        "reference_edges_sampled": 51,
+        "reference_edges_not_sampled": 74,
+        "reference_sampling_fraction": 0.408
+      },
+      "role_scope": "Existing candidate role; no current native-path/scalar/pixel truth transfer"
+    }
+  ],
+  "new_physical_review": {
+    "partition": "already exposed regression, no threshold/calibration/holdout change",
+    "frames": [
+      1275,
+      1320
+    ],
+    "reference_scope_source_xywh": [
+      563,
+      816,
+      35,
+      12
+    ],
+    "question": "Whether the reviewed structure is optically separable at 42.5 s, not whether its fixed coordinates remain eligible.",
+    "input_pins": {
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-canny.png": "9b4dddaeae47e441118b65c6bd13dc6bb9f9a17541ffd48361fc910c3118961c",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-original_roi.png": "3083e2a46604986053edf61df6ac605d959861332010421542e2c8a33a022020",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-canny.png": "6031c2f7dff2e0252bf75409404de8b35142d9d23be2f97b8112c4169ae1bd92"
+    },
+    "labels_modified": false,
+    "source_preserved": true,
+    "figure_sha256": "a0a5edf2c7ab2342fdb3483f6a51e4058d3dfd48c1b1ad8cedeb097cf9d1bc7a"
+  },
+  "physical_review_status": "PENDING_USER: f1275 same-scope visibility/overlap, not re-review of f1320 attribution",
+  "local_artifacts": {
+    "sample/output/s11-d2-support-comparison-20261009-001/preflight.py": "e4994953180b366159abbf53c0377bca39cadd77f3f42c5b0f3e389f7bff5930",
+    "sample/output/s11-d2-support-comparison-20261009-001/preflight.json": "5c9fe6bf6e5f2e05b8d06764e8b0bc9ea11d13e2ec4a945c0ebf9c7d0b8e3819",
+    "sample/output/s11-d2-support-comparison-20261009-001/reviewed-f1320-diagnostic-only.oilrecipe": "0d78fc0637d860ee2802281405462ef0f476e743b9ec3213931449af1c7b2748",
+    "sample/output/s11-d2-support-comparison-20261009-001/baseline-detection.json": "3cd597d1ddf2851f59f515b5036398f4c26c6d324234797248e0b886054cb015",
+    "sample/output/s11-d2-support-comparison-20261009-001/baseline-state.json": "19abeb311dd77764fcae661184fa841b765692ad1ea39b452c4e5032fe005b14",
+    "sample/output/s11-d2-support-comparison-20261009-001/check_real_entry.py": "8d9fd6186290c9ad764b130c3e83950d43ca39c76ef32af40a8f2457ea641e3a",
+    "sample/output/s11-d2-support-comparison-20261009-001/real-entry-receipt.json": "33b746fce6a127c3f888f54ab569e247c68e23d8e68c07b4af693991d70b9e48",
+    "sample/output/s11-d2-support-comparison-20261009-001/f1320-comparison.json": "adb07f67d7667715d1d6a6cb6b4f1a174f5bed617a8276dcb4844c612bea0627",
+    "sample/output/s11-d2-support-comparison-20261009-001/replay.py": "5616e6401ca26961f30d16770fa279b93d0bdf11ac44450ac0df4299ec0863e6",
+    "sample/output/s11-d2-support-comparison-20261009-001/run_replays.py": "69953fcc61ade59c43e27a493207a89515fdbe8f163d175f6bba49c545447abd",
+    "sample/output/s11-d2-support-comparison-20261009-001/replay-comparison.json": "827cadf6f72abe14e382bb5aad9b1e5df79e43a151fe21643e54ef1985ce2a7c",
+    "sample/output/s11-d2-support-comparison-20261009-001/replay_report.py": "c703a99c10f4098c094d184f81ce7840e9751a9759b6d2dcf263f6c8664a7329",
+    "sample/output/s11-d2-support-comparison-20261009-001/run_report_checks.py": "63a4370df88779d7ed2a7b6797f714e4a3f33e4b6960a07780c87a85c90bfc4e",
+    "sample/output/s11-d2-support-comparison-20261009-001/check_rss.py": "af2dd3ce95ec94860263d977d48c7fc0686aa099faaf90fd0559086854c607c1",
+    "sample/output/s11-d2-support-comparison-20261009-001/rss-preflight.json": "b1ebbdbf7e45c592f919cebe0acdc43bba27181793ccbe2e3858d97f5ecce1a6",
+    "sample/output/s11-d2-support-comparison-20261009-001/rss-receipt.json": "d08584cb428d5b8e2f6b01a94dfa3bb780bf75f939ab42799d5dcd73a413b961",
+    "sample/output/s11-d2-support-comparison-20261009-001/review_existing_scope.py": "6b5ab866b6589ae2973fc24489cc0ef27fa3dab31f4e3233733e2843df539040",
+    "sample/output/s11-d2-support-comparison-20261009-001/visibility-review-preflight.json": "0422d76bccd8d2303839f088c4630fffeb0df44fc8a84c2ac34a9e41aa035b04",
+    "sample/output/s11-d2-support-comparison-20261009-001/visibility-review-receipt.json": "c816505261871ac7838ef8bdcd040df712ce102ebef8859215a2f69d9b99a322",
+    "sample/output/s11-d2-support-comparison-20261009-001/f1275-f1320-reference-visibility.png": "a0a5edf2c7ab2342fdb3483f6a51e4058d3dfd48c1b1ad8cedeb097cf9d1bc7a",
+    "sample/output/s11-d2-support-comparison-20261009-001/collect_receipt.py": "70efff86ef41013b9f1118d88a9c1ed6950a4184e692501365756c6dd3c03cfe",
+    "sample/output/s11-d2-support-comparison-20261009-001/base-base_sample_1-full.json": "6e91a7de9cf1a9401e6d64244271115bb01912ac12a86e03ae4f73193124d967",
+    "sample/output/s11-d2-support-comparison-20261009-001/base-registered-full.json": "f6b08f6ea1ed1ac90a73e921bba517f8c17b7aee6dedf4b1dcef6d5ee1b9468b",
+    "sample/output/s11-d2-support-comparison-20261009-001/base-sample2-full.json": "2e57aee546197bdeb18a9a329ebfb0c353b58c1a4bf1ebbffea209c368f3772c",
+    "sample/output/s11-d2-support-comparison-20261009-001/base-sample3-full.json": "102339d1473e790a2f14db2b8e3a782194c09225bd5f28f5303f28e8f30693a4",
+    "sample/output/s11-d2-support-comparison-20261009-001/base-sample4-full.json": "77a03e781e1738822200bf4788e1f149ec691388fd7e858f85b0cb35be7c3929",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-base_sample_1-full.json": "fc22fb2d3c835ca5efd4c11b0e989ad69bdee9ee89e4d31902bb06a0374ae9b1",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-base_sample_1-none.json": "e25dcb2d9a105ead84383384da830354581f2329fb2be60ecf9268aa220ac877",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-registered-full.json": "3247c83169cf26fd46ce22fb1c53fa1836929ea4ebde6b9797f207cb48eb059b",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-registered-none.json": "edef608dffbd198dd9c0f34ab5a5f8faa716cc4d2ff2d4251314a1bb3cfdc219",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-sample2-full.json": "b5637035107cb3790c9efd0d29a5350d8c81e5f03fe82af2cd9f25ce81f58279",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-sample2-none.json": "78ba90ce71ee66d759e9337e952025ed58eda735c5506f5fc32b3cf66c93b6cc",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-sample3-full.json": "30c2e3f83ba7e6c9d47aa12f6cd034de44d469c56c66baa1a2ede10641b4e50b",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-sample3-none.json": "fa930bc8c932fb840eccb58fa8bf439265af9a8ee17171b5aa4705fe60687d23",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-sample4-full.json": "a5f83494c88cac0c5dd9cd2449b6de525f8d4a3ad609cd3dc41ba095338c5aa8",
+    "sample/output/s11-d2-support-comparison-20261009-001/new-sample4-none.json": "e138c60917abca2d94d35ef467ba49def7e9f1992a75a4f5b7c8ee1928725117",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-base-report-base_sample_1-none.json": "7e6be07d225897a1d48f30c0f7450d6132ac3619e5a310f1bcb6d5c80e064a6a",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-base-report-registered-none.json": "2edce049d2ebf95e2f7fe9c9e5ab37e141036bfd2d680d5671aeedf0b8c12729",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-base-report-sample2-none.json": "01c158a4a998f1d851d2bc85cf6ca6db7601603145fbf4f4132c9e3d6e641fc7",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-base-report-sample3-none.json": "3e926bb923dc04465b13c99db4aea36582a89414260dfdff3b8fbf0e80a31d61",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-base-report-sample4-none.json": "812154f5913e032015429345fe56ecc9fa6de90861969b9b7585dac511bf8004",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-new-base_sample_1-none.json": "4e9e53380c17fd8b0bc2edd42ecca3bd5ca6ce5ad10da6ce740ba0a21ab938fd",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-new-registered-full.json": "c691837025e45018f555f1caef88e70c80315ddd04d790478742ade7877a728c",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-new-registered-none.json": "d035a7e7edc21c2b4006ab89e5d078a290633fb6dedb67eada8a92b6ce35a651",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-new-sample2-none.json": "6b5a86ad51f1d77c35ef116f989b399c5d6b40c94174cf124d3f17135409c85e",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-new-sample3-none.json": "565b2abd5cb632a161d05b2acc1a7092c3fc084427f59e502ef2bb3b76d5cab0",
+    "sample/output/s11-d2-support-comparison-20261009-001/report-new-sample4-none.json": "c3fe93e32292d009343aed3ef3458885d7fe99591d26872c536bd4d1d3bc25eb"
+  },
+  "decision": "NOT_EVALUATED",
+  "D2_B": "INCOMPLETE_REAL_OPPOSING_CONTROLS",
+  "O2": "OPEN",
+  "field_disposition": "FIELD FAIL",
+  "windows_work": false
+}

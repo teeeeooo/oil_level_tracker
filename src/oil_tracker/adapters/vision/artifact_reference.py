@@ -19,6 +19,12 @@ MAX_CROP_WIDTH, MAX_CROP_HEIGHT = 640, 160
 IMAGE_KEYS = ("original_roi", "effective_mask", "glare_mask", "canny", "horizontal_mask")
 
 
+def reference_preprocessing(glass):
+    """Shared capture/diagnostic identity, independent of review state."""
+    return {"contract": "r22-3-preprocess-v1", "opencv": cv2.__version__,
+            "settings": asdict(glass.detector_settings)}
+
+
 class OpenCvArtifactReferenceReviewer:
     """Raster boundary injected into review UI by the application bootstrap."""
 
@@ -76,7 +82,7 @@ def capture_reference(frame, glass, template, artifacts, *, candidate=None, cand
     native = next((row.get("path_aligned") for row in diagnostics.get("candidates", [])
                    if row.get("candidate_input_index") == candidate_index), None)
     settings = asdict(glass.detector_settings)
-    preprocess = {"contract": "r22-3-preprocess-v1", "opencv": cv2.__version__, "settings": settings}
+    preprocess = reference_preprocessing(glass)
     return ArtifactSupportReference.capture({
         "schema": REFERENCE_SCHEMA, "frame_size": [int(frame.shape[1]), int(frame.shape[0])],
         "frame_index": None, "time_sec": None,  # Internal detector frame zero is not source identity.
