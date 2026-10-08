@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** D1 CLOSED at the transferred recorded-readout scope; review-001 reconciliation received. Proceed to local D2 observable/control design. Its concrete algorithm remains unselected; no further D1 Windows lookup is pending.
+**Next transition:** D1 CLOSED. D2 local control preflight complete; algorithm unselected. WAITING FOR WINDOWS: one saved target-bound Accum drain case (26 candidates), using the prepared query. No D1 rerun or new human judgment is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -25,7 +25,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D1 closed → D2 concrete role hypothesis → D3 frozen shadow; independent roles/controls unresolved | [Supplied D1–D3](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md) |
+| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 control preflight complete; one Windows support/provenance query pending before mechanism selection. D3 not started | [D2 preflight](../60-evidence/s11/2026-10-08-d2-control-preflight.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -51,12 +51,13 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    named unknowns. No D1 rerun or additional Windows return is needed.
    Input/tool/output pins remain in the evidence owner; the rest of both
    diagnostic branches stays unadopted.
-2. Begin D2 with an exact-linked positive/negative/unresolved control matrix from
-   existing evidence. D1's physical interface annotations are not product-target
-   or scalar truth; the passive 75-candidate batch stays separate from W3's 73.
-   Within review-002, idx8/9 and negative idx20 share admission flags and hard-gate
-   exclusion. This defeats admission-as-identity, not the gate itself. It does not
-   alone prove a cue-sharing hard-negative pair or supersede idx0/idx20 ambiguity.
+2. D2 control/reuse design is recorded in the [preflight](../60-evidence/s11/2026-10-08-d2-control-preflight.md).
+   Stop for the [bounded Windows query](../40-operations/s11-o2-local-shadow-evaluation.md#d2--existing-target-bound-control-query):
+   existing Accum drain f17383, all 26 candidates (4 target/3 real internal/19 other).
+   The missing condition is an exact-bound target/non-target distinction with
+   observable support/opposition, not more labels or target-definition review.
+   Preserve existing idx0/idx20 ambiguity, the separate W3 73/passive 75 inventories,
+   and all Mac regression controls. Do not select a nearest-Y/score-ranked negative.
 3. D2 must identify a distinct candidate-local observable and a concrete frozen
    algorithm, with target-positive, cue-sharing negative and unresolved controls.
    Separate physical boundary, product role, path support and scalar usability.

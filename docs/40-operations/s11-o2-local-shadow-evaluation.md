@@ -142,6 +142,110 @@ Windows 에이전트는 기존 첫 audit `experiment.json`과 그 하위
 `NOT_IN_RETAINED_REFS`의 member 부재를 admission false로 바꾸지도 않는다.
 이 확인은 기록 대조이며 FIELD FAIL/O2 수락 상태를 변경하지 않는다.
 
+## D2 — existing target-bound control query
+
+목적은 이미 역할 binding이 끝난 Accum drain f17383 한 case의 **26개 후보와
+기존 판독 근거·측정 geometry 연결**이다. [D2 설계 진입 계약](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry)과
+[고정 query manifest](../50-diagnostics/s11/2026-10-08-d2-control-query.json)를 사용한다.
+새 모델을 고르기 전에 필요한 자료 반환이며 D1 재실행이나 target binding 반복이 아니다.
+
+현재 소스를 GitHub에서 받아도 된다. 새 manifest가 포함된 저장소 root와 기존
+`data/w4-passive-review-001/target-truth-001/target-truth.json`의 실제 경로를
+사용한다. ZIP의 `.git` 부재는 실패가 아니다. 아래 코드는 manifest의 두 reader
+SHA와 target artifact/content/physical-label 논리 hash를 확인하고, 기존 loader로
+snapshot/packet binding을 검증한다. 다른 파일이나 pin으로 자동 대체하지 않는다.
+Python 3.11 이상을 사용하며 앱 실행·detector·영상·새 scene 추출은 없다.
+
+PowerShell에서 `$repo`, `$snapshot`을 실제 경로로 지정한다. 이미 있는 출력은
+보존하며 새 `$output` 이름을 선택한다. 원본 JSON이나 packet locator를 수정하지 않는다.
+
+```powershell
+$repo = (Get-Location).Path
+$snapshot = Read-Host "기존 target-truth-001/target-truth.json 전체 경로"
+$query = Join-Path $repo "docs/50-diagnostics/s11/2026-10-08-d2-control-query.json"
+$output = Join-Path (Split-Path -Parent $snapshot) "d2-accum-drain-controls-001.json"
+@'
+import hashlib, json, sys
+from collections import Counter
+from pathlib import Path
+repo, query_path, source, output = [Path(p).resolve() for p in sys.argv[1:]]
+def require(ok, message):
+    if not ok:
+        raise ValueError(message)
+def sha(path):
+    with path.open('rb') as handle:
+        return hashlib.file_digest(handle, 'sha256').hexdigest()
+require(not output.exists() and output.parent.is_dir(), 'Choose a new output in an existing directory')
+query_before = sha(query_path)
+query = json.loads(query_path.read_text(encoding='utf-8'))
+require(query['schema_version'] == 's11-d2-control-query-v1', 'Wrong query schema')
+require(query['include_all_candidates_in_case'] is True, 'Complete case required')
+code_paths = [repo / p for p in query['reader_files']]
+require(all(sha(repo / p) == h for p, h in query['reader_files'].items()), 'Reader hash mismatch')
+sys.path[:0] = [str(repo / 'src'), str(repo)]
+from tests.diagnostics import s11_interface_shadow_evaluation as o2
+snapshot = o2.read_json(source)
+require(snapshot['artifact_sha256'] == query['target_artifact_sha256'], 'Target artifact mismatch')
+require(snapshot['content_sha256'] == query['evaluation_content_sha256'], 'Evaluation content mismatch')
+require(snapshot['payload']['mapping']['source_labels_sha256'] == query['source_labels_sha256'], 'Physical-label pin mismatch')
+inputs = [query_path, source, *code_paths, *[(source.parent / p['path']).resolve() for p in snapshot['packets']]]
+before = {str(p): sha(p) for p in inputs}
+require(before[str(query_path)] == query_before, 'Query changed')
+frozen, packets = o2.load_frozen(source)
+require(frozen['target_truth']['artifact_sha256'] == query['target_artifact_sha256'], 'Loaded artifact mismatch')
+spec = query['case']
+case = o2.unique(frozen['content']['cases'], 'case_id', 'cases')[spec['case_id']]
+frame = packets[case['packet_sha256']][case['case_id']]
+require(case['partition'] == spec['partition'] == 'regression', 'Partition mismatch')
+require(case['visibility'] == spec['target_visibility'], 'Visibility mismatch')
+require(all(frame[k] == spec[k] for k in ('frame_index', 'glass_id')), 'Frame/Glass mismatch')
+bindings = [b for b in snapshot['payload']['bindings'] if b['case_id'] == case['case_id']]
+by_index = o2.unique(bindings, 'candidate_input_index', 'bindings')
+require(set(by_index) == set(range(spec['candidate_count'])), 'Candidate inventory mismatch')
+require(dict(Counter(b['target_role'] for b in bindings)) == spec['role_counts'], 'Role counts mismatch')
+for role, indices in spec['fixed_role_indices'].items():
+    require({i for i, b in by_index.items() if b['target_role'] == role} == set(indices), 'Role indices mismatch')
+physical = o2.unique(snapshot['payload']['physical_labels']['cases'], 'case_id', 'physical cases')[case['case_id']]
+annotations = o2.unique(physical['candidates'], 'candidate_input_index', 'annotations')
+candidates = o2.unique(frame['witness']['candidates'], 'candidate_input_index', 'witness candidates')
+require(set(annotations) == set(candidates) == set(by_index), 'Joined inventory mismatch')
+rows = [{'binding': by_index[i], 'physical_annotation': annotations[i],
+         'geometry': o2.review_geometry(candidates[i]), 'stored_witness': candidates[i]}
+        for i in sorted(by_index)]
+after = {str(p): sha(p) for p in inputs}
+require(before == after, 'Input changed during query')
+result = {'status': 'SAVED_FIELDS_ONLY', 'query_sha256': query_before,
+          'target_artifact_sha256': snapshot['artifact_sha256'],
+          'source_identity': {k: frame[k] for k in ('case_id', 'frame_index', 'glass_id', 'record_id', 'run_id')},
+          'packet_sha256': case['packet_sha256'], 'partition': case['partition'],
+          'role_counts': spec['role_counts'], 'candidates': rows,
+          'input_before_sha256': before, 'input_after_sha256': after,
+          'video_read': False, 'detector_rerun': False, 'prediction_or_scoring': False,
+          'new_human_review': False, 'auto_acceptance': False}
+o2.write_new(output, result)
+print(json.dumps({'output': str(output), 'sha256': sha(output),
+                  'candidate_count': len(rows), 'role_counts': spec['role_counts'],
+                  'input_preserved': before == after}, ensure_ascii=True))
+'@ | py -3 - $repo $query $snapshot $output
+if ($LASTEXITCODE -ne 0) { throw "D2 saved-field query failed; preserve files and report the error." }
+```
+
+반환은 생성된 JSON과 다음의 기계 추출 표로 한정한다. 표는 원문을 수작업 전사하지 않는다.
+
+- 26개 각 후보의 index/source/canonical Y, target role, physical identity,
+  witness hash, native/center geometry 유무 및 기존 artifact tags·review note.
+- target 4개/internal 3개의 모든 실제 sector X/Y와 측정 availability를 보존한다.
+  원래 데이터의 band/scale 구분을 유지하고 material/static/glare 값의 missing/null/0을 구분한다.
+- other 19개 중 개별 판독 근거가 실제 저장된 후보가 있으면 그 index와 원문을
+  별도로 표시한다. group-reviewed 후보를 개별 검증된 광학 반례로 승격하지 않는다.
+- 동일 case에 이미 저장된 plain crop/guide의 경로와 source-frame/geometry 연결
+  근거만 찾는다. 알려진 passive 작업 폴더 밖으로 검색하지 않고 새 이미지/영상은
+  열거나 만들지 않는다. 없거나 연결을 확인할 수 없으면 그 사실을 반환한다.
+
+이 자료 자체를 cue-sharing 반례, classifier 성능 또는 새 물리 판독으로 선언하지 않는다.
+자료가 부족하면 부족한 필드/연결을 적고 종료한다. 다른 case 선택, 재라벨링, 모델 fitting,
+추가 metadata 순회로 확대하지 않는다. 고정된 26행의 반환 뒤 Mac 설계 검토가 다음 단계다.
+
 ## Structure-context schema 문자 검증
 
 사용자가 True/111을 확인했다. 실제 schema는 소문자 o의 `o2`이며 전달 표기만

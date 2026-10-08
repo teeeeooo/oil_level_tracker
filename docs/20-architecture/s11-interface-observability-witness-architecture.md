@@ -1538,7 +1538,78 @@ abstention together. A failure closes this fixed proposal without threshold or
 sector-policy tuning on these exposed cases. A pass would still leave independent
 O2 identity and Windows field acceptance open. `FIELD FAIL` is unchanged.
 
+## D2 boundary-role design entry
+
+The [D1 closeout](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed)
+locates recorded exclusions, not a new physical discriminator. H-ROLE remains a
+design question; no model, operating point or production route is selected here.
+The immediate question is whether a target-bound positive and a relevant
+non-target have candidate-local support/opposition that justifies a **distinct**
+mechanism after the closed appearance and temporal experiments.
+
+### Fixed control matrix and input separation
+
+| Input / existing owner | Preserved role in D2 | What it cannot establish |
+|---|---|---|
+| Windows passive target snapshot: Accum drain f17383, target idx4/13/17/24; internal idx5/10/18; other 19 | First bounded design contrast: uppermost target versus a real lower boundary and existing non-targets in one frame | No scalar/path truth, optical subtype, per-index individual-review claim or matched optical counter-control is inferred |
+| Same snapshot: Accum post-Foam f16543 (6 target/22 other); BASE FULL f17383 (21 other) | Retained single-boundary and no-visible-target controls; do not repeat their review | The 75 candidates are not independent scenes or untouched holdout |
+| W3 review-003 f16280 idx10/15; review-002 f14386 idx11 | Existing physical-interface/negative rationale and mask-limited structure check | Not an index join to the passive snapshot; physical interface alone is not target/scalar truth |
+| W3 review-002 idx0/20 | Preserve the already recorded human ambiguity separately from formal labels | Do not force opposing truth, or let a new score resolve the human uncertainty |
+| [Mac A2 bound controls](../60-evidence/s11/2026-10-07-a2-target-binding.md): 7 targets, 3 explicit wrong targets, 143 unreviewed | Local regression and rapid-motion challenge; wrong-target physical identity stays uncertain | No relabeling of all wrong targets as artifacts; no whole-track, source-family or slow-motion shortcut |
+
+The [fixed query manifest](../50-diagnostics/s11/2026-10-08-d2-control-query.json)
+pins the existing Windows target artifact, evaluation content, physical-label
+hash, first case and complete 26-candidate inventory. These logical pins select
+an already bound object; they are not reconstructed raw file hashes. They do not
+constitute a frozen classifier or completed D2 model-input manifest. A candidate
+key is the bound case/packet/witness/input index, never a naked index or score rank.
+Other existing recordings retain their metadata-first partition requirement;
+all already exposed Windows/Mac controls here remain regression.
+
+### Reuse and the remaining design condition
+
+Reuse `s11_target_truth.load` through `s11_interface_shadow_evaluation.load_frozen`
+for existing snapshot/packet/physical-review verification, `review_geometry` for
+exact native/center geometry, and W3 for any later frozen predictions. A narrow
+saved-field query belongs in the existing operations procedure; it does not need
+a new extractor, review GUI, label store or classifier stub.
+
+The missing condition is **one target/non-target contrast whose candidate-local
+distinguishing observation and opposition can be identified on the exact
+measured support**. Existing labels already answer identity/target questions;
+do not ask those again. The passive batch's role totals do not identify which
+of its other 19 drain candidates, if any, supplies this counter-control. Return
+the existing review provenance and geometry for all 26 before choosing a pair,
+so neither nearest Y nor a convenient score silently defines the negative.
+If stored support/rationale cannot establish such a contrast, report that exact
+missing condition; do not cycle through more scenes or reopen prior rationale.
+
+This bounded Windows lookup is required because its private snapshot/packet
+fields are not present in this checkout. Local A2 controls are available and
+remain useful; they cannot establish this Windows input connection. The
+[handoff](../40-operations/s11-o2-local-shadow-evaluation.md#d2--existing-target-bound-control-query)
+reads saved records only. It neither proves that a usable new cue exists nor
+asks for a new physical judgment. A later concrete judgment request must show
+the actual candidate support and state precisely what is undecidable.
+
+Before a model freeze, state its distinct observable, formula/model class,
+mask/censoring rules, resource bound, operating-point policy and falsification
+against this matrix. Keep physical identity, target role, partial-path support
+and scalar usability separate. Do not repeat color/region residual ordering,
+side-texture margins or standalone appearance matching under a new name.
+Expanded pixels and changed model logic require separate comparisons. If an
+optical alternative explains the same input, preserve unresolved; abstaining
+on every true target is not success. D3 and behavioral O3/O4 gates remain intact.
+
 ## History Review
+
+2026-10-08 D2 entry: D1's phase/owner exclusions do not authorize gate relaxation.
+Reviewed the completed color/region appearance loop, failed A2 temporal region
+exchange and side-texture persistence, and existing target-binding owner. The
+new decision is a bounded target-role/support connection before selecting a
+mechanism; no new identity algorithm is claimed. F03/F04 prevent motion, owner
+and geometry from becoming identity; F09 preserves exact binding and F10 prevents
+retuning exposed controls. No executing logic or failure-registry entry changes.
 
 2026-10-07 temporal region exchange: the A/B reply closes the adjacent-region
 interpretation gap. One offline two-frame model comparison is frozen before real

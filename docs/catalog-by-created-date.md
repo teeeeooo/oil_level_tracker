@@ -423,3 +423,12 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-10-08 | [Shared verification](70-reference/s11-next-work-2026-10-08/S11-next-work-verification-2026-10-08.json) | 전달받은 검증 요약 원본; 현지 receipt의 동일 복사본 아님 |
 | 2026-10-08 | [Import manifest](70-reference/s11-next-work-2026-10-08/import-manifest.json) | 원본 hash, 고정 commit 출처, 로컬 보존 위치 |
 | 2026-10-08 | [Results cleanup receipt](70-reference/s11-next-work-2026-10-08/results-cleanup-receipt.json) | 279개 파일의 로컬 압축 보존·복원 검증 후 sibling 결과 폴더 제거 |
+
+## D2 control preflight additions
+
+아래 파일의 최초 Git 등록일은 D2 preflight 추가 커밋의 author 날짜(KST) 기준이다.
+
+| 최초 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-08 | [D2 control query](50-diagnostics/s11/2026-10-08-d2-control-query.json) | 기존 Windows target snapshot 한 case의 조회 pin·범위; 모델 freeze 아님 |
+| 2026-10-08 | [D2 control preflight](60-evidence/s11/2026-10-08-d2-control-preflight.md) | 기존 대조/실패 경계, owner 재사용 검증, 필요한 Windows 반환 범위 |

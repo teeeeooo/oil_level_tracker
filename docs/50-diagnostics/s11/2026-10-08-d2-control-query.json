@@ -1,0 +1,43 @@
+{
+  "schema_version": "s11-d2-control-query-v1",
+  "purpose": "Read existing target-bound candidate geometry and physical-review provenance before selecting a D2 discriminator; no inference or new truth.",
+  "source_scope": "Existing Windows w4-passive-review-001/target-truth-001/target-truth.json and its referenced packets only",
+  "target_artifact_sha256": "fe3e95af6666cd047e7148df69147213057f9b68acf883b7399ffc677f2b64fc",
+  "evaluation_content_sha256": "cf4ccc077ef5587fce7eaf0c227daef04f641c1483810a9a46e08e8542d86e38",
+  "source_labels_sha256": "55672fe9182129a3baef8ba8df57f12fdcd252d9296f2bb1ad4903d855ae02a8",
+  "reader_files": {
+    "tests/diagnostics/s11_interface_shadow_evaluation.py": "5909c468871ed3c5cd2095c7c4a4a88df4d08569b10985c22e999aff0f42c808",
+    "tests/diagnostics/s11_target_truth.py": "c1159e4a75160027b30cc7728647d5d24652e17697f9c08ef9e22480aa1bd079"
+  },
+  "case": {
+    "case_id": "w4-passive-001-accum-drain",
+    "frame_index": 17383,
+    "glass_id": "8fb6ebc7-7c56-401e-86c3-05514bf6380b",
+    "candidate_count": 26,
+    "partition": "regression",
+    "target_visibility": "visible",
+    "role_counts": {
+      "target": 4,
+      "internal_interface": 3,
+      "other_non_target": 19
+    },
+    "fixed_role_indices": {
+      "target": [4, 13, 17, 24],
+      "internal_interface": [5, 10, 18]
+    }
+  },
+  "include_all_candidates_in_case": true,
+  "query_policy": {
+    "new_binding": false,
+    "label_edit": false,
+    "video_read": false,
+    "detector_rerun": false,
+    "prediction_or_scoring": false,
+    "human_relabeling": false,
+    "cross_inventory_index_join": false,
+    "model_selected": false,
+    "auto_acceptance": false
+  },
+  "missing_condition": "An exact-bound target versus non-target contrast with an identifiable candidate-local distinguishing cue and observed opposition; existing role labels alone do not establish a cue-sharing optical counter-control.",
+  "return_limit": "One case, 26 original rows and existing scene/guide locators. Missing evidence ends this query; do not choose another scene or create labels."
+}
