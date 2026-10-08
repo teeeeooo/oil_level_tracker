@@ -1,0 +1,215 @@
+{
+  "schema": "s11-d2-reference-readiness-v1",
+  "head": "1c01bb59a529d2b95fefbe8a4bbda4292d6ebd1a",
+  "preflight_sha256": "3991db68e14e2ec5e11159e79845bb8545aaf143aa394651098732930e476374",
+  "runner_sha256": "8f87524adc3b02c1412b1cb5660957b23384eae4f0d0f9e2d941f470f32ce90e",
+  "recipe_scope": [
+    {
+      "path": "sample/base_sample_1.oilrecipe",
+      "templates_by_state": {}
+    },
+    {
+      "path": "sample/output/s11-d2-recipe-artifact-20261008-001/baseline.oilrecipe",
+      "templates_by_state": {}
+    },
+    {
+      "path": "sample/output/s11-d2-recipe-artifact-20261008-001/registered-pink822.oilrecipe",
+      "templates_by_state": {
+        "geometry_only": 1
+      }
+    },
+    {
+      "path": "sample/output/s11-d2-reference-ui-20261008-001/ui-demo-only.oilrecipe",
+      "templates_by_state": {
+        "mixed_or_uncertain": 1
+      }
+    },
+    {
+      "path": "sample/sample2.oilrecipe",
+      "templates_by_state": {}
+    },
+    {
+      "path": "sample/sample3.oilrecipe",
+      "templates_by_state": {}
+    },
+    {
+      "path": "sample/sample4.oilrecipe",
+      "templates_by_state": {}
+    }
+  ],
+  "references": [
+    {
+      "recipe": "sample/output/s11-d2-reference-ui-20261008-001/ui-demo-only.oilrecipe",
+      "template_id": "6cc82c72-5652-4321-bddc-1a15f4fee686",
+      "snapshot_sha256": "600c6bc47b2b8f5d6a3ac89e80760c5d432d9739434e9c4d48db78394d1abb80",
+      "review_state": "mixed_or_uncertain",
+      "eligible": false,
+      "context": "bound_reference",
+      "frame_index": 1320,
+      "time_sec": 44.0,
+      "crop_origin": [
+        543,
+        798
+      ],
+      "crop_size": [
+        104,
+        58
+      ],
+      "review_rect": [
+        20,
+        18,
+        35,
+        12
+      ],
+      "scope_source_xyxy_half_open": [
+        563,
+        816,
+        598,
+        828
+      ],
+      "displayed_raw_edge_count": 125,
+      "displayed_mask_sha256": "d0238a02681fae24ca4f093290ed8dee9515609e0991201add8c171a766691e8",
+      "snapshot_bytes": 20830,
+      "decode_only_50_calls_ms": {
+        "median": 0.4080829967278987,
+        "p95": 0.4381480874144472
+      }
+    }
+  ],
+  "reviewed_reference_count": 0,
+  "cases": [
+    {
+      "frame_index": 1140,
+      "oil_candidate_count": 23,
+      "lineage_join_count": 23
+    },
+    {
+      "frame_index": 1200,
+      "oil_candidate_count": 21,
+      "lineage_join_count": 21
+    },
+    {
+      "frame_index": 1260,
+      "oil_candidate_count": 22,
+      "lineage_join_count": 22
+    },
+    {
+      "frame_index": 1275,
+      "oil_candidate_count": 20,
+      "lineage_join_count": 20
+    },
+    {
+      "frame_index": 1320,
+      "oil_candidate_count": 24,
+      "lineage_join_count": 24
+    },
+    {
+      "frame_index": 1485,
+      "oil_candidate_count": 21,
+      "lineage_join_count": 21
+    },
+    {
+      "frame_index": 1560,
+      "oil_candidate_count": 22,
+      "lineage_join_count": 22
+    }
+  ],
+  "candidate_family_readout": {
+    "oil_hypothesis": {
+      "candidate_count": 59,
+      "lineage_measured": 59,
+      "native_path_recorded": 0,
+      "phase_band_records": 0,
+      "candidate_owned_observed_edge_mask": 0
+    },
+    "material_path": {
+      "candidate_count": 30,
+      "lineage_measured": 0,
+      "native_path_recorded": 30,
+      "phase_band_records": 0,
+      "candidate_owned_observed_edge_mask": 0
+    },
+    "calibrated_high_recall": {
+      "candidate_count": 42,
+      "lineage_measured": 0,
+      "native_path_recorded": 0,
+      "phase_band_records": 0,
+      "candidate_owned_observed_edge_mask": 0
+    },
+    "phase_transition_scan": {
+      "candidate_count": 21,
+      "lineage_measured": 21,
+      "native_path_recorded": 0,
+      "phase_band_records": 315,
+      "candidate_owned_observed_edge_mask": 0
+    },
+    "raster_material_path": {
+      "candidate_count": 1,
+      "lineage_measured": 0,
+      "native_path_recorded": 1,
+      "phase_band_records": 0,
+      "candidate_owned_observed_edge_mask": 0
+    }
+  },
+  "total_candidates": 153,
+  "input_pins": {
+    "sample/base_sample_1.oilrecipe": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+    "sample/sample3.oilrecipe": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+    "sample/sample4.oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+    "sample/sample2.oilrecipe": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+    "sample/output/s11-d2-recipe-artifact-20261008-001/baseline.oilrecipe": "dfffc7e59d22d3eb862719d0d1c48b56a716be93c32f4850ff8e9bf46840434e",
+    "sample/output/s11-d2-recipe-artifact-20261008-001/registered-pink822.oilrecipe": "dd56c01f5fe1478a78e24b67c439a8f20304f57e778091047349fc78506bd1d1",
+    "sample/output/s11-d2-reference-ui-20261008-001/ui-demo-only.oilrecipe": "7ad140fd96976257301781456a57d5435c2448c694e2dba7dafb53be43c03d71",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140.json": "44ef26c2675a1bc3612e0dec6dfe204c0071ef36261536e2f601f00f311142ad",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200.json": "2302974b18ddad2776134e7718a081e162a710f13d4a89a36e228fec7b794e0a",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260.json": "2f1baac170542bacb918a05a4e862a766750f3eba52d25d25e1daa5a3152bfff",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275.json": "40eea7e489ba09bd881f5b212db1996f4ee431f9b1b61f43110a7f5b7dc7bb55",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320.json": "a1b2a9ae3ad6b6764ba5d9b97f4553ba5ec258171ca8dc6327b343fc90b9d933",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485.json": "ae2fa571fabb9bdb237fabdfe7991b5f05a36a2510780858b0024348cd4fa1c0",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560.json": "25802b8815ce7bf58b844808835b858de79a52afede8ad40f1c78d79753eeb99",
+    "src/oil_tracker/domain/artifact_reference.py": "70f4ba30e05c8bb3082837e126c47e10467cb8518837dedd016b2b32e7e656ab",
+    "src/oil_tracker/adapters/vision/artifact_reference.py": "645a23feb7f82fa693a8ad96e20a15e4ae10daa2862ae5156b54cf32f3e0cf85",
+    "src/oil_tracker/adapters/vision/oil_shadow_observations.py": "56dc2fb2e18b2f6bd3fb3e0ff7454a920c14ec1f0046cc189e20b1f23933a0e5",
+    "src/oil_tracker/adapters/vision/oil_material_path.py": "3612e1fc4d01c85b4537dd2b0862a9827e544aeae611011bd705077e00e7c088",
+    "src/oil_tracker/adapters/vision/oil_supplemental_path.py": "e9c504ba31816435e9bfadf61d99513686b4f8ab71dc57a0a49a16943d6259d3",
+    "src/oil_tracker/adapters/vision/oil_pipeline_diagnostics.py": "de4958700f84ffc3dd5fd0c2470ea225542f1ee54478467ecf863b47d03e7dfb",
+    "src/oil_tracker/adapters/vision/phase_candidate_assembler.py": "dc8d2b7b45c3d0d4a6264ab2c3a4bdc2eb263afd13ac2cbc6fecc8427ad1a8f1",
+    "src/oil_tracker/adapters/vision/phase_frame_detection.py": "40aaa56aa5f20b5b1fc23d7e6f98e50ef22850ac6573870a26dfeafe3899f3f0",
+    "sample/output/s11-d2-reference-ui-20261008-001/support-original.png": "dfd8843149d5c6c53c45583faa60b6b0e35c4c01694eca45d0b6aab8ab2f3339",
+    "sample/output/s11-d2-reference-ui-20261008-001/support-scope.png": "c1e2e7e545185630559576b6bdde35c90aa3a46b089872be73cd9325d8cad9e5"
+  },
+  "input_preserved": true,
+  "video_decode": false,
+  "detector_rerun": false,
+  "resolver_rerun": false,
+  "new_physical_review": false,
+  "labels_or_recipes_changed": false,
+  "physical_decision": "NOT_EVALUATED",
+  "field_disposition": "FIELD FAIL",
+  "readiness": "reviewed-reference-unavailable",
+  "pending": "Human attribution of displayed f1320 pixels; no conversion of demo to reviewed_support.",
+  "local_runner": "sample/output/s11-d2-reference-readiness-20261008-001/run.py",
+  "local_preflight": "sample/output/s11-d2-reference-readiness-20261008-001/preflight.json",
+  "local_readout_sha256": "0166c6e6bfdf010a500aa335411457883817261115a6c4ebcad0dcbe5b0c8c63",
+  "status": "A0_TECHNICAL_READOUT_COMPLETE_REFERENCE_ATTRIBUTION_PENDING",
+  "incremental_comparator_resource_budget": "NOT_FROZEN; decode-only baseline does not bound full comparison; freeze before A1 integration",
+  "candidate_basis_scope": {
+    "oil_hypothesis": "Broad/narrow scalar and band lineage; raw observations are pooled profiles. No candidate-owned observed-edge set.",
+    "material_path": "Native sector X/Y, chosen contrast channel/scale retained; contrast footprint can be exposed by existing generator; not a continuous contour or complete score dependency mask.",
+    "raster_material_path": "Same native-path owner and qualification as material_path.",
+    "phase_transition_scan": "Three radii x five sectors retain exact band ranges and pooled support. Eligible for separately named measurement-footprint diagnostics, not observed-edge equality.",
+    "calibrated_high_recall": "Rowwise Sobel/horizontal-support aggregate; no captured per-candidate observed-edge set or complete footprint sidecar.",
+    "distributed_sobel_path": "Source inspected; no candidate in these seven cases. Grouped row profile aggregate; not an observed contour. Runtime availability NOT_MEASURED for this family."
+  },
+  "verification": {
+    "input_hashes_rechecked": 24,
+    "all_153_candidate_index_source_y_joins": "PASS",
+    "detector_governance": "PASS",
+    "link_check_cumulative_count": 692,
+    "link_errors": [],
+    "preserved_work_plan_obligations": 17,
+    "git_diff_check": "PASS",
+    "runtime_tests_and_original_samples_unchanged": true,
+    "new_runtime_tests_run": false
+  }
+}

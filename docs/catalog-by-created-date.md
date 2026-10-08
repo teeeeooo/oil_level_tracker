@@ -483,3 +483,9 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-10-08 | [Import manifest](70-reference/s11-detector-work-spec-18885d2-2026-10-08/import-manifest.json) | ZIP/전체 파일 identity, native 텍스트 복사본과 로컬 PNG 위치 |
 | 2026-10-08 | [Native result](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/AUDIT-RESULT.md), [source runner](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/inspect_samples.py), [source receipt](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/source-review-receipt.json) | 첨부가 참조한 로컬 원본 별도 보존; 42프레임 표본 맥락 |
 | 2026-10-08 | [Native sequence runner](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/verify_saved_sequences.py), [preflight](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/sequence-verification-preflight.json), [receipt](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/sequence-verification-receipt.json) | 첨부가 참조한 감사 당시 실행·입력 pin 원본 별도 보존 |
+
+## D2-A0 reference readiness additions
+
+| 최초 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-08 | [Reference readiness](60-evidence/s11/2026-10-08-d2-reference-readiness.md), [readout](60-evidence/s11/2026-10-08-d2-reference-readiness.json) | 기존 7개 recipe·153개 후보의 참조/측정 근거 확인과 44초 윤곽 범위의 새 물리적 판정 지점; detector·라벨 불변 |

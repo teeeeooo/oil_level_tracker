@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The 18885d2 specification is incorporated with readiness and acceptance refinements. Next planned work is D2-A0: establish eligible reviewed references, actual candidate-family support bases, comparison domains and resource bounds before D2-A1 diagnostic implementation. Reference capture/review is locally verified; the comparator is not implemented. D2-B/D3 real comparison and O2 entry remain gated. No established discriminator, ML or immediate Windows task.
+**Next transition:** D2-A0 technical readout is complete: seven known recipes provide no reviewed support, and 153 saved candidates retain measurement geometry rather than candidate-owned edge masks. A concrete f1320/44 s preview with 125 displayed edge pixels is awaiting user attribution. Stop at this new physical-judgment boundary as requested; preserve the mixed/uncertain demo. Reference/control and resource freeze remain incomplete; D2-A1 comparator is not implemented. O2 remains gated; no ML or Windows task.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -28,7 +28,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; reference capture/review locally VERIFIED; comparison contract planned, not implemented | D2-A0 readiness/basis/domain/budget → D2-A1 diagnostic contracts → gated D2-B information comparison/D3 efficacy | [Intake review](../60-evidence/s11/2026-10-08-spec-18885d2-intake.md), [comparison contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract) |
+| W4 / O2 challenger | OPEN; D2-A0 technical readout complete; reference attribution pending; comparator not implemented | Receive concrete 44 s scope judgment, then finish reference/control/resource freeze before D2-A1; D2-B/D3 remain gated | [Readiness checkpoint](../60-evidence/s11/2026-10-08-d2-reference-readiness.md), [comparison contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -172,8 +172,17 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    ambiguity encountered in a concrete subsequent design. Independent
    physical/scalar/temporal acceptance remains separate.
 4. **Planned sequence within D2/W4:**
-   D2-A0 first maps existing reference readiness and candidate-family evidence
-   bases to their current owners. Freeze exact reviewed/common raster domains,
+   D2-A0's [bounded technical readout](../60-evidence/s11/2026-10-08-d2-reference-readiness.md)
+   is complete: seven known recipes, 153 exact candidate joins, 31 native-path
+   records and 315 phase-band records; no eligible reviewed reference or
+   candidate-owned observed-edge mask. Do not repeat this inventory. Current
+   source owners support native contrast/phase sampling footprints, which must
+   remain distinct from raw edge sets. A concrete question is pending on the
+   existing f1320/44 s preview: whether all 125 displayed edges in source
+   X[563,598), Y[816,828) belong to fixed glass structure/pattern. The prior pink
+   target-negative and 42 s semicircle judgments stay closed. Until the reply,
+   preserve `mixed_or_uncertain` and stop at the user's requested boundary.
+   This is not completion of all D2-A0 gates. Next freeze reviewed/common domains,
    unavailable denominators, review-state/rectangle/preprocessing identity and
    measured incremental resource caps. This is a bounded reuse/readiness pass,
    not renewed scene inventory. If real reviewed support is absent, record

@@ -1969,6 +1969,15 @@ availability matrix: current `OilMeasurementLineage` records scalar/band evidenc
 and does not generally retain candidate-owned raw edge sets. Shared Canny pixels
 inside a candidate envelope cannot substitute for that missing lineage.
 
+The [bounded readiness audit](../60-evidence/s11/2026-10-08-d2-reference-readiness.md)
+confirms the reuse seams: `phase_transition_support` retains actual pooled band
+ranges; `MaterialPathDiagnostic` retains native sector positions and chosen
+contrast channels/scales. Neither is a raw observed contour. Generic diagnostic
+near/far bands are also distinct from generator sampling windows. Primary
+hypotheses and supplemental Sobel/high-recall rows aggregate evidence rather
+than retain candidate-owned Canny masks. Expose only the basis an existing owner
+can substantiate; no source-family lookup may invent unavailable pixels.
+
 Keep `observed_raw_edge`, `native_measurement_footprint`, `processed_support`,
 `centered_envelope` and `unavailable` bases separate. Bind source frame/time,
 Glass/geometry, candidate source/kind/Y/input index and actual sampling provenance
@@ -2010,6 +2019,13 @@ reviewed digest and comparator version in runtime identity. No overlap veto or
 no-match anchor is authorized by this diagnostic design.
 
 ## History Review
+
+2026-10-08 D2-A0 readiness: joined 153 saved candidates without rerunning the
+detector and inspected the actual family generators/sidecars. No candidate-owned
+observed-edge masks or eligible reviewed reference were established. A new
+concrete 44 s support-attribution question remains pending; earlier candidate
+and semicircle judgments are preserved. No production change is inferred from
+the source audit; measurement footprints remain distinct from physical identity.
 
 2026-10-08 specification intake at 18885d2: inspected all supplied files, native
 receipts/contact sheets, current reference/measurement/registration owners and
