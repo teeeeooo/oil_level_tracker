@@ -54,26 +54,36 @@ value in the table above is retained as historical provenance.
 
 The supplied correction is the current D1 execution pin. It is **user-reported
 Windows evidence**, not an independent local hash measurement or proof of why
-the earlier value differed. Before continuing, Windows must compute the hash
-from the unchanged file and confirm this is the first target/context audit:
-schema `s11-o2-target-audit-v1`, review-001/002/003 with 23/23/27 candidates and
-the existing case/frame/Glass/packet identities. A different dataset/revision
-or another mismatch requires a report, not changing the input or another pin.
-This correction does not reverify the historical input-preservation claim,
-change labels/results, complete D1 or establish detector efficacy.
+the earlier value differed. The subsequent [D1 return and saved-record check](2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed)
+report the corrected hash, schema `s11-o2-target-audit-v1`, 23/23/27 candidates
+and preserved source identity. That bounded check is complete; no repeat is
+requested. This does not reverify the historical input-preservation claim,
+change labels/results or establish detector efficacy.
 
 ## Recorded funnel facts
 
-**Later reconciliation notice (2026-10-08):** the
-[D1 return review](2026-10-08-next-work-intake.md#d1-windows-return-received--reconciliation-open)
-reports a conflicting review-001 retained/admission inventory. The original
-transferred table below is preserved; neither version is adopted as a correction
-until the saved original/readout fields are reconciled on Windows. Named phase/
-owner exclusions in the later return are distinguished from null final selection.
+**Correction accepted from the Windows saved-record check (2026-10-08):**
+[D1 reconciliation](2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed)
+reports original/readout funnel equality and matching fingerprints/witnesses.
+For the corrected input pin, review-001 has the following inventory:
+
+| Review | not_selected | tracklet_not_admitted | UNKNOWN_BEFORE_RETAINED_REFS |
+|---|---|---|---|
+| 001 corrected | none | 1,2,6,7,11,13,14,15,17,18,21 | 0,3,4,5,8,9,10,12,16,19,20,22 |
+
+All 11 retained members have false admission/publishable flags; no admitted
+review-001 negative is supported. Review-002/003 remain as reported below.
+Corrected totals are **45 retained / 28 absent** across 73 candidates. Named phase/
+owner exclusions in D1 remain distinct from null final selection.
 
 All three cases report RECORDED, with selected_candidate=None. Review-001 is
 not_visible / filled_barrier; review-002 is visible / filled_barrier; review-003
 is visible / filling. These are recorded phase states, not human scene truth.
+
+**Original transferred table — historical:** review-001 below and its derived
+48/25 totals are superseded by the correction above. They are retained to expose
+the provenance of the earlier report and supplied specification, not as a competing
+inventory.
 
 | Review | not_selected | tracklet_not_admitted | UNKNOWN_BEFORE_RETAINED_REFS |
 |---|---|---|---|
@@ -81,9 +91,9 @@ is visible / filling. These are recorded phase states, not human scene truth.
 | 002 | 1,2,8,9,14,15,20 | 10,11,12,13,16,17,18,19,21 | 0,3,4,5,6,7,22 |
 | 003 | 2,3,7,11,18,19,20,23,24,25 | 12,13,14,15,16,17,22,26 | 0,1,4,5,6,8,9,10,21 |
 
-These disjoint sets account for all 23 / 23 / 27 candidates. Retained refs total
-48, absent refs 25. No candidate is inferred to be false merely because it was
-not selected or absent from retained refs.
+The original report's sets account for 23 / 23 / 27 candidates and implied
+48 retained / 25 absent, superseded as above. No candidate is inferred to be false
+merely because it was not selected or absent from retained refs.
 
 Reviewed positives:
 
@@ -95,8 +105,9 @@ Reviewed positives:
 | 003 / 10 | interface | absent from retained refs; earlier loss unknown |
 | 003 / 19 | interface | CONTINUATION_ELIGIBLE / continuation; all three admission flags true; not selected |
 
-Reviewed negatives also reach admitted rows: all-negative 001 has seven such
-unselected candidates; 002 / 20 is another. Conversely, 002 / 11 and 003 / 15
+Reviewed negative 002 / 20 reaches an admitted row. The earlier claim of seven
+such unselected candidates in all-negative 001 is superseded; its corrected
+inventory has none. Conversely, 002 / 11 and 003 / 15
 have false tracklet flags. Admission alone therefore does not certify identity.
 
 ### What these flags do not establish

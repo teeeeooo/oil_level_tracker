@@ -15,8 +15,10 @@
 
 ## D1 recorded candidate-loss readout — Windows handoff
 
-실행 완료가 보고되었다. 아래 최초 실행 명령은 보존용이며, 현재 필요한 후속 작업은
-[저장된 review-001 대조](#d1-return-reconciliation--saved-review-001-only)다.
+실행과 [저장된 review-001 대조](#d1-return-reconciliation--saved-review-001-only)의
+반환이 완료되었다. D1은 전달된 기록 확인 범위에서 종료했으며,
+[정정·종료 근거](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed)를
+보존한다. 아래 최초 실행 명령은 보존용으로, 현재 재실행 요청은 없다.
 
 2026-10-08 다음 작업의 제한된 기록 질의다. 기존 W3 audit의 후보 탈락 경계를
 읽으며, 완료된 W3 실행·75개 target binding·사람 판독을 반복하지 않는다.
@@ -93,10 +95,14 @@ field를 반환하고 D1을 종료한다. 새 대규모 조사나 private-video 
 
 ## D1 return reconciliation — saved review-001 only
 
+대조 반환 완료. 원본 audit과 readout의 일치가 보고되었으며 review-001은
+retained 11 / absent 12로 정정했다. [완료 기록](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed)이
+출처와 한계를 보존한다. 아래는 당시 요청이며 **추가 Windows 조회는 필요 없다**.
+
 2026-10-08 반환 보고의 review-001 집계가 기존 W3 기록과 다르다. 기존 표는
 retained 14개/absent 9개(legacy `not_selected` 7개, `tracklet_not_admitted` 7개),
 이번 표는 retained 11개/absent 12개다. phase filter를 자세히 분류해도 retained
-여부는 바뀌지 않으므로, 어느 표가 원본과 일치하는지 저장된 필드로 확인한다.
+여부는 바뀌지 않으므로, 어느 표가 원본과 일치하는지 저장된 필드 확인을 요청했다.
 [반환 검토 기록](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-windows-return-received--reconciliation-open)이
 상충하는 두 보고와 해석 정정을 보존한다.
 
