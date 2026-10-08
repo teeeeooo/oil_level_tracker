@@ -80,11 +80,16 @@ O2/D3 and FIELD FAIL are unchanged.
 
 ## Next research decision
 
-The next allocation is a method/data decision, not another version of the same
-topology rule. Two routes remain plausible; this experiment does not prove which
-will succeed:
+**Decision received, 2026-10-08:** the user excludes machine learning for now as
+excessive for the product purpose. The learned-readiness recommendation below is
+withdrawn; it is retained only as the proposal that was considered. The synthetic
+result did not establish a need for learning or its superiority. The current
+non-learned scope and next action are owned by the [Work Plan](../../00-project/work-plan.md).
 
-- **Recommend a bounded learned-challenger readiness assessment.** First define
+At experiment closeout, two method/data routes were proposed. Neither was proven
+to succeed by this experiment:
+
+- **Proposed learned-challenger readiness assessment — subsequently excluded.** First define
   what a model would predict and audit existing truth granularity, prior exposure,
   recording partitions and secure-PC execution constraints. The existing passive
   75 candidates are three scenes, not an adequate independent train/test corpus;
@@ -101,11 +106,10 @@ will succeed:
   discriminator. New filming, hardware purchases and private-file export are not
   assumed available or requested by either route.
 
-Learning is not a cure for identical observations. Its possible benefit is a
-conditional decision using richer observed patterns and explicit abstention,
-which must still demonstrate true-target retention and wrong-target suppression.
-The [Work Plan](../../00-project/work-plan.md) owns the user's direction decision.
-No additional Windows instruction is issued before that decision.
+The direction choice is closed. No learned-readiness assessment, model adoption,
+training, or new Windows instruction was started. Excluding learning does not
+establish a non-learned discriminator or reopen the rejected topology rule.
+The experimental results and frozen machine receipt are unchanged.
 
 ## Detector Governance
 

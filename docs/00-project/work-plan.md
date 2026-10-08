@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** D2 standalone region-connectivity feasibility CLOSED WITHOUT PROMOTION after synthetic counter-controls. D2/O2 model entry remains unmet. User direction decision: bounded learned-challenger readiness assessment (recommended) versus continued non-learned research. No new Windows request or training has started.
+**Next transition:** D2 standalone region-connectivity feasibility CLOSED WITHOUT PROMOTION after synthetic counter-controls. The user excludes machine learning for now as excessive for the product purpose. Continue bounded non-learned investigation; D2/O2 algorithm entry remains unmet. No direction-choice reply or new Windows work is pending.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -25,7 +25,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 support review and standalone connectivity feasibility closed; model entry unmet. Next research direction awaits user choice; D3 not started | [Connectivity result and options](../60-evidence/s11/2026-10-08-d2-region-connectivity-feasibility.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
+| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 support review and standalone connectivity feasibility closed; algorithm entry unmet. Non-learned scope confirmed; D3 not started | [Connectivity result and direction decision](../60-evidence/s11/2026-10-08-d2-region-connectivity-feasibility.md#next-research-decision), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -65,13 +65,16 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    passed 10 synthetic contract tests but rejected standalone connectivity as an
    identity certificate. Geometry gains do not resolve same-observable physical
    alternatives. No real Mac/Windows run or threshold continuation is justified
-   for that standalone proposal; conditional/learned models are not ruled out.
-   **User direction decision:** recommend a bounded learned-challenger readiness
-   assessment (target definition, existing truth/partition sufficiency and secure-PC
-   execution constraints), before any fitting or new annotation. This introduces
-   potential Windows data/environment work and human review effort. The alternative
-   is continued non-learned research requiring a distinct observable, with no
-   current discriminator established. See the [concrete options](../60-evidence/s11/2026-10-08-d2-region-connectivity-feasibility.md#next-research-decision).
+   for that standalone proposal; other conditional mechanisms are not ruled out.
+   **User direction decision received:** machine learning is excluded for now as
+   excessive for the product purpose. The learned-challenger readiness proposal
+   is withdrawn. Keep the next investigation within conventional image processing
+   and explicit geometry/temporal rules, with no currently established new
+   discriminator. Before another implementation or data request, specify one
+   bounded mechanism, its additional observable, affected existing owner and
+   positive/opposing/unresolved controls; explain its difference from closed
+   hypotheses. Reuse existing evidence and code first. No threshold continuation,
+   renewed inventory or automatic idx12 review follows from excluding learning.
    Keep D2/O2 entry unmet until input-bound positive/negative/unresolved controls
    and a reproducible decision/abstention rule exist. Preserve physical/target/
    path/scalar distinctions, optical opposition and the separate paired-pulse
@@ -131,6 +134,12 @@ and safely disposing of the sibling results folder, and autonomous logical commi
 and push. **Stop and report when user judgment or work on Windows is required.**
 This stop instruction governs the next transition; retained commands are not
 permission to run private media or claim field acceptance.
+
+**Method scope:** the user excludes machine learning for now because it is
+excessive for the purpose. Do not pursue learned-challenger readiness, training,
+or pretrained-model adoption in the current work. This is a product-scope choice,
+not a claim that learning cannot work or that a non-learned solution is proven.
+Reconsider only if the user explicitly reopens this option.
 
 **Security-PC boundary:** private videos/images and transfer ZIPs cannot be
 exported from Windows to Mac. The user can manually relay result reports/text.
