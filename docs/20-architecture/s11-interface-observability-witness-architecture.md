@@ -1592,12 +1592,16 @@ candidate's canonical Y, and an empty path review leaves local truth unknown.
 Keep native and center support separate; neither substitute the center for a
 deviating segment nor relabel the whole candidate from segment geometry alone.
 
-Use the already bound JSON and source ROI for the next support inspection, with
-existing guides as display aids. The [transfer procedure](../40-operations/s11-o2-local-shadow-evaluation.md#d2--existing-support-file-transfer)
-preserves the same regression case without repeating the query or expanding
-recordings. Local A2 controls remain useful but cannot establish this Windows
-input connection. A later concrete judgment request must show the actual
-candidate support and state precisely what is undecidable.
+Inspect the already bound JSON and source ROI **on the Windows security PC**, with
+existing guides as display aids. The [Windows support-review procedure](../40-operations/s11-o2-local-shadow-evaluation.md#d2--windows-only-support-review)
+returns bounded observations/geometry as text; private artifacts remain on Windows.
+Mac pixel access is not a design prerequisite. Preserve the same regression case
+without repeating the query or expanding recordings. Attribute visual observations
+to the Windows reviewer and keep them separate from stored truth and human replies.
+Local A2 controls remain useful but cannot establish this Windows input connection.
+A later judgment request must show the actual candidate support to the user on
+Windows and state precisely what is undecidable; an unavailable local viewing
+capability must not become a request to export the image.
 
 Before a model freeze, state its distinct observable, formula/model class,
 mask/censoring rules, resource bound, operating-point policy and falsification
@@ -1610,13 +1614,20 @@ on every true target is not success. D3 and behavioral O3/O4 gates remain intact
 
 ## History Review
 
+2026-10-08 security-PC correction: the user can relay text reports but cannot
+export images or ZIPs. The prior transfer prerequisite is withdrawn. Keep the
+completed query closed and perform support inspection on Windows with attributed
+text returns. F09 requires honest evidence provenance, not direct Mac possession
+of the pixels. No new detector mechanism, truth or execution result is claimed.
+
 2026-10-08 D2 return assessment: the saved-field query establishes the reported
 26-candidate role/geometry connection, not a discriminator. Preserve mixed
 individual/group review and logical/raw hash distinctions (F09). Candidate-level
 role does not certify every native segment (F04/F09); empty artifact tags and
-distant negatives do not close optical opposition (F10). Existing source/guide
-transfer precedes local pixel inspection; no new mechanism or executing logic
-is introduced and previous failed hypotheses remain closed.
+distant negatives do not close optical opposition (F10). The initial source/guide
+transfer proposal was withdrawn by the security-PC correction above; support
+inspection stays on Windows. No new mechanism or executing logic is introduced
+and previous failed hypotheses remain closed.
 
 2026-10-08 D2 entry: D1's phase/owner exclusions do not authorize gate relaxation.
 Reviewed the completed color/region appearance loop, failed A2 temporal region

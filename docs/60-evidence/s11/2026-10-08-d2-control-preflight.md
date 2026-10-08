@@ -189,14 +189,30 @@ idx10 is a known real non-target boundary, not a reflection/structure negative.
 The 19 other candidates are not thereby matched optical counter-controls.
 There is no basis yet for a new threshold, classifier freeze or D3 execution.
 
-The next bounded step is transfer of the **already saved JSON and source ROI**, with
-existing guides if available, for local support inspection. The
-[Windows transfer prompt](../../40-operations/s11-o2-local-shadow-evaluation.md#d2--existing-support-file-transfer)
-requests no rerun, new frames, generated guides, labels or physical judgments.
-After transfer, inspect this fixed regression frame and recorded geometry before
-choosing a mechanism. If a physical interpretation still needs user judgment,
-show the actual support and ask that concrete question then. This is not a promise
-that viewing one frame will satisfy all D2 controls.
+### Security-PC correction — file transfer withdrawn
+
+The user clarified that the Windows machine is a security PC: PNG/video/ZIP
+export is unavailable; result reports and text can be manually relayed. The
+`d85cae9` request to transfer the JSON/ROI and inspect images on Mac was therefore
+an incorrect workflow assumption and is withdrawn. No further file-export request
+or Mac pixel-access prerequisite follows. This correction does not reopen the
+completed saved-field query or invalidate its reported results.
+
+The [replacement prompt](../../40-operations/s11-o2-local-shadow-evaluation.md#d2--windows-only-support-review)
+keeps the existing JSON, ROI and guides on Windows. It requests one bounded
+support inspection of this same regression frame and a concise text return:
+exact native/center support for idx10/13, interpretation of idx13's first sector,
+and whether the already individually reviewed non-target native paths provide a
+documentable cue-sharing counter-control. Existing roles remain fixed; no model,
+new scene, video decode or repeated inventory is requested. Local Windows
+observations, stored review facts and any new user reply must remain distinct.
+
+Any necessary human judgment is requested with the actual support displayed on
+Windows. If the agent cannot inspect it through a permitted local tool, it can
+show the local image/coordinates to the user there; it must not substitute a
+file-export request. The result can still be unresolved. Mac reviews the text
+evidence and design implications without claiming direct visual verification.
+This is not a promise that viewing one frame will satisfy all D2 controls.
 
 D3 remains unstarted. O2, later behavior gates, independent calibration/holdout
 requirements and FIELD FAIL are unchanged.

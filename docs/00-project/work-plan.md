@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** D1 CLOSED. D2 saved-field query CLOSED on transferred evidence; algorithm unselected. WAITING FOR WINDOWS FILE TRANSFER: the existing D2 JSON and bound source ROI for local support inspection. No query rerun or new human judgment is requested at this step.
+**Next transition:** D1 CLOSED. D2 saved-field query CLOSED on transferred evidence; algorithm unselected. WAITING FOR WINDOWS SUPPORT REVIEW: inspect the existing bound frame on the security PC and return a concise text report. The file-transfer request is withdrawn; no query rerun is needed.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -25,7 +25,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 query returned: 26 candidates, roles 4/3/19. Existing JSON/ROI transfer precedes support inspection and mechanism selection; D3 not started | [D2 return](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-saved-field-return--query-closed), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
+| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 query returned: 26 candidates, roles 4/3/19. Windows inspects saved support and returns text before mechanism selection; D3 not started | [D2 return](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-saved-field-return--query-closed), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -53,11 +53,11 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    diagnostic branches stays unadopted.
 2. D2's [saved-field query return](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-saved-field-return--query-closed)
    closes the existing Accum drain f17383 inventory/provenance lookup: all 26
-   candidates (4 target/3 real internal/19 other). Stop for [existing file transfer](../40-operations/s11-o2-local-shadow-evaluation.md#d2--existing-support-file-transfer):
-   the saved JSON and bound source ROI, with existing guides if present. The text
-   report supplies locators and geometry but not the actual pixels/full witness.
-   Inspect that same regression support before choosing a mechanism or asking a
-   physical judgment. Candidate target truth does not certify each native segment;
+   candidates (4 target/3 real internal/19 other). Stop for [Windows-only support review](../40-operations/s11-o2-local-shadow-evaluation.md#d2--windows-only-support-review):
+   inspect the existing JSON, ROI and guides inside the security PC; return only
+   the bounded geometry/observation report as text. Mac image access is not a
+   prerequisite. Any necessary human judgment is made against the actual support
+   displayed on Windows. Candidate target truth does not certify each native segment;
    idx13's first recorded native Y315 differs from canonical Y291. The missing
    design condition remains a target/non-target distinction with observable
    support/opposition, not more labels or target-definition review. No query rerun.
@@ -123,6 +123,14 @@ and safely disposing of the sibling results folder, and autonomous logical commi
 and push. **Stop and report when user judgment or work on Windows is required.**
 This stop instruction governs the next transition; retained commands are not
 permission to run private media or claim field acceptance.
+
+**Security-PC boundary:** private videos/images and transfer ZIPs cannot be
+exported from Windows to Mac. The user can manually relay result reports/text.
+Keep private-data inspection and execution on Windows, and design/code/report
+assessment on Mac. Do not request artifact uploads or make Mac pixel access an
+entry condition. Distinguish reported Windows observations from local verification;
+show any judgment-bearing image to the user on Windows. The earlier D2 JSON/PNG
+transfer request is withdrawn, while the completed query remains closed.
 
 Earlier bounded report adoptions are complete. Prior detector-development grants
 permit the relevant bounded local investigation, subject to the O2/behavior gates;

@@ -146,7 +146,7 @@ Windows 에이전트는 기존 첫 audit `experiment.json`과 그 하위
 
 실행 반환은 [근거 문서](../60-evidence/s11/2026-10-08-d2-control-preflight.md#windows-saved-field-return--query-closed)에
 기록되었다. 아래는 재현용 절차이며 현재 재실행 요청이 아니다.
-다음 자료 전달은 [기존 support 파일 전달](#d2--existing-support-file-transfer)을 사용한다.
+다음 작업은 [Windows 내부 support 검토](#d2--windows-only-support-review)를 사용한다.
 
 목적은 이미 역할 binding이 끝난 Accum drain f17383 한 case의 **26개 후보와
 기존 판독 근거·측정 geometry 연결**이다. [D2 설계 진입 계약](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry)과
@@ -250,58 +250,84 @@ if ($LASTEXITCODE -ne 0) { throw "D2 saved-field query failed; preserve files an
 자료가 부족하면 부족한 필드/연결을 적고 종료한다. 다른 case 선택, 재라벨링, 모델 fitting,
 추가 metadata 순회로 확대하지 않는다. 고정된 26행의 반환 뒤 Mac 설계 검토가 다음 단계다.
 
-## D2 — existing support file transfer
+<a id="d2--existing-support-file-transfer"></a>
 
-저장 기록 조회는 끝났다. Mac에는 실행 요약만 전달되어 실제 JSON의 전체 witness와
-원본 ROI 픽셀은 아직 없다. 다음 단계는 같은 regression frame의 **기존 파일 전달**이다.
-idx13의 첫 native sector Y315와 canonical Y291의 차이를 실제 support에서 해석하고,
-target/internal/other를 구별할 관측 근거가 있는지 검토하기 위한 자료다.
-새 모델·threshold·라벨이나 물리 판독을 이번 전달 작업에서 정하지 않는다.
+## D2 — Windows-only support review
+
+이전 ZIP/PNG 전달 요청은 철회되었다. 보안 PC의 파일 반출은 요구하지 않는다.
+이미지와 원본 자료는 Windows에 두고, 사용자가 옮겨 적을 수 있는 **결과 텍스트만**
+반환한다. Mac에서 영상을 직접 보지 못하는 것은 이 절차의 정상적인 조건이다.
+완료된 D1/D2 조회와 target binding을 반복하지 않는다.
 
 Windows 에이전트에게 아래 프롬프트를 전달한다. 소스 업데이트나 `.git`은 필요 없다.
 
 ```text
-D2 saved-field query는 완료되었다. 재실행하지 말고 기존 파일만 전달해줘.
+보안 PC 내부에서 D2 기존 support 검토를 진행해줘. 파일을 외부로 전달할 수 없으며,
+사용자가 결과 보고서/텍스트만 Mac으로 옮겨 적을 수 있다. 이미지·ZIP 첨부나
+이미지를 인코딩한 텍스트를 요청하지 말고, 허용된 로컬 도구/뷰어만 사용해줘.
 
-목적: w4-passive-001-accum-drain / frame 17383의 저장된 전체 witness와
-원본 ROI를 Mac에서 함께 검토할 수 있도록 원본 바이트를 복사·묶어 전달한다.
-이번 작업은 파일 전달이며 이미지 해석이나 새 human review가 아니다.
+완료된 D2 saved-field query와 기존 역할 라벨은 그대로 유지한다.
+대상은 w4-passive-001-accum-drain / frame 17383 한 regression 장면이다.
+목적은 후보에 연결된 실제 측정 위치에서 구별 근거와 반대 근거를 확인하는 것이다.
+새 모델·threshold를 고르거나 26개 후보를 다시 판독하는 작업은 아니다.
 
-필수 파일 2개:
-1. C:\0.Coding\2.Reference\Oil level tracker\0.windows_diagnostic\data\w4-passive-review-001\target-truth-001\d2-accum-drain-controls-001.json
-   기대 raw SHA256:
-   91e0843e0747e18fd1ec35f0c7a87b37cf00145912f477900fdeca561a906b6b
-2. 이전에 selection-manifest.json과 연결을 확인한 원본 ROI PNG:
-   기존 bundle 아래 debug/frames/8fb6ebc7-7c56-401e-86c3-05514bf6380b_9f8aea91/f000017383_89c161ba4587/original_roi_512ed6ab.png
-   기대 raw SHA256:
-   3a4cc3265479a409acc445f1801c79a8cc3992f1acab1d7f69a287f96babd216
-   이미 확인한 locator를 사용한다. 관련 bundle 밖으로 검색을 확대하지 않는다.
+기존 입력:
+- C:\0.Coding\2.Reference\Oil level tracker\0.windows_diagnostic\data\w4-passive-review-001\target-truth-001\d2-accum-drain-controls-001.json
+  raw SHA256: 91e0843e0747e18fd1ec35f0c7a87b37cf00145912f477900fdeca561a906b6b
+- 이미 연결을 확인한 bundle의
+  debug/frames/8fb6ebc7-7c56-401e-86c3-05514bf6380b_9f8aea91/f000017383_89c161ba4587/original_roi_512ed6ab.png
+  raw SHA256: 3a4cc3265479a409acc445f1801c79a8cc3992f1acab1d7f69a287f96babd216
+- 기존 accum_drain_f17383_plain.png / guide.png / between_guide.png 표시 자료.
+  실제 파일명은 accum_drain_f17383_guide.png와
+  accum_drain_f17383_between_guide.png이다. 원본 ROI를 기준으로 대조한다.
 
-이미 확인한 passive 작업 폴더에 아래 파일이 있으면 함께 복사한다(최대 3개):
-- accum_drain_f17383_plain.png
-- accum_drain_f17383_guide.png
-- accum_drain_f17383_between_guide.png
-이 display 파일들은 보조 자료다. 없으면 없는 파일명만 보고하고 생성하지 않는다.
+1. 기존 JSON/원본 ROI의 hash와 읽기 전후 불변을 확인하되 전체 audit을 반복하지 않는다.
+   불일치 시 수정·재생성하지 말고 해당 파일만 보고하고 멈춘다.
+   idx10(internal)과 idx13(target)의 저장된 5개 sector씩, 총 10행을 기계 추출한다:
+   idx, sector 순서, source_x_range, native path_source_y, candidate_source_y.
+   native/center의 X 범위가 다르면 별도 표시한다. 없는 값은 UNAVAILABLE이다.
+   source 좌표를 ROI에 지목할 때 저장된 crop_origin=[1199,56]을 적용한다.
+   요약된 sector Y를 이어서 원래 continuous contour였다고 가정하지 않는다.
 
-새 d2-existing-support-transfer-001 폴더와 같은 이름의 ZIP을 만든다.
-같은 이름이 이미 있으면 덮어쓰지 말고 새 번호를 사용한다.
-필수 2개는 복사 전 실제 raw SHA256을 위 값과 비교한다. 불일치하거나 원본을
-찾을 수 없으면 자동 대체·재생성 없이 멈추고 어느 파일인지 보고한다.
-JSON은 deserialize/reserialize하지 않고 그대로 복사한다. PNG는 재저장하지 않는다.
-전달 목록에는 각 원본 경로, ZIP 내부 이름, raw SHA256을 기록한다.
-복사 후 원본과 복사본 hash가 같고, 원본의 전후 hash도 같은지 확인한다.
+2. 같은 장면의 원본 ROI와 기존 guide를 보안 PC 안에서 대조한다.
+   guide가 native path인지 canonical center인지 확인한 범위에서만 사용한다.
+   핵심은 idx13 첫 native sector Y315가 실제로 어느 특징에 놓이는지다.
+   같은 후보의 나머지 네 sector 및 idx10 첫 sector Y302와 정확한 X 범위를 함께 본다.
+   이 구간이 실제 target 경계를 따르는지, 다른 특징에 놓이는지, 가림/해상도 때문에
+   판단할 수 없는지를 관측 근거와 함께 기술한다. Y 차이만으로 결론 내리지 않는다.
+   이미지상 관찰과 물리적 해석을 구분하고, 기존 target 라벨은 바꾸지 않는다.
 
-완료하면 ZIP 파일과 ZIP raw SHA256을 반환한다. 텍스트 요약만으로 대체하지 않는다.
-자동 첨부가 안 되면 사용자가 첨부할 ZIP의 전체 경로를 알려준다.
-D1/D2 query/bind-target, detector, 영상 재생·decode, 새 이미지 생성, 라벨 수정,
-model fitting, source 수정, commit/push는 이 전달 작업에 포함하지 않는다.
+3. 같은 장면에서 이미 개별 판독된 non-target native 후보 idx11/12/14/15의
+   기존 근거와 측정 위치를 확인한다. 이 중 target idx13과 실제로 비슷한 local cue를
+   공유하는 반례가 관측된다면 최대 1개만 제안하고, 해당 sector X/Y, 공유하는 cue,
+   구별 근거 또는 구별 불가능한 이유를 적는다. 없거나 확인할 수 없으면
+   NOT_ESTABLISHED로 끝낸다. 단순히 가장 가까운 Y/높은 점수로 고르지 않는다.
+   idx10은 실제 내부 경계 대조이며 반사/구조 음성의 대체물이 아니다.
+   나머지 group negatives를 다시 판독하거나 다른 장면으로 확대하지 않는다.
+
+4. 에이전트의 이미지 관찰을 human_review로 기록하지 않는다.
+   물리적 판단에 사용자가 필요하면 Windows 화면에 실제 해당 구간을 보여주고,
+   무엇이 미결인지 설명한 뒤 그 구간에 대한 질문 하나로 멈춘다.
+   허용된 도구로 이미지를 확인할 수 없으면 그 제한을 적고 로컬 뷰어에서 사용자가
+   볼 위치를 안내한다. 파일 반출을 대안으로 요청하지 않는다.
+   이미 답한 target 정의나 전체 후보 identity를 다시 묻지 않는다.
+
+반환은 옮겨 적기 쉬운 짧은 텍스트 보고서:
+- INPUT: 기존 case/record, 두 입력 hash 일치와 전후 불변 PASS/FAIL.
+- GEOMETRY: 위의 10행 표.
+- OBSERVATION: idx13 첫 sector, 나머지 sector/idx10 대조의 관찰과 해석 한계.
+- COUNTER_CONTROL: 후보 하나의 정확한 support와 근거, 또는 NOT_ESTABLISHED.
+- HUMAN: 필요 없음 / 미해결 질문 하나 / 실제 사용자 답변(받은 경우만).
+- CHANGES: 원본·라벨·소스 변경 없음, detector/video 실행 없음.
+
+숫자는 JSON에서 기계 추출하고 관찰/추론/사용자 답변을 구분해줘.
+전체 JSON/이미지/ZIP은 반출하지 않는다. D1/D2 query/bind-target 재실행,
+영상 재생·decode, 새 이미지 생성, fitting, source 수정, commit/push는 하지 않는다.
 ```
 
-Mac에서는 필수 파일 hash와 기존 identity/geometry 연결을 확인한 뒤 같은 프레임의
-unmarked ROI와 기록된 native/center support를 검토한다. guide의 선·색은 원본 특징이나
-정답이 아니다. 역할 라벨을 sector 판정으로 확장하지 않는다. 전달된 자료로도 물리적
-의미가 불명확하면 실제 이미지를 보여주고 그 구간에 대한 사용자 판단을 요청한다.
-다른 case나 새 판독으로 자동 확대하지 않는다.
+이 반환은 Windows 관측에 근거한 텍스트 증거다. Mac에서 직접 이미지를 보았다고
+기록하지 않으며, 에이전트 관찰만으로 truth나 O2 acceptance를 갱신하지 않는다.
+구별 근거가 확인되지 않으면 미해결 조건을 보존하고 설계 가능 범위를 평가한다.
 
 ## Structure-context schema 문자 검증
 
