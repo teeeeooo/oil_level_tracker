@@ -1685,7 +1685,73 @@ measurement design, not candidate-wide truth transfer or O2 acceptance. If the
 relationship is shared or unclear, close this cue check without another automatic
 review loop. The Work Plan owns the current method scope and user checkpoint.
 
+### Saved-edge contact measurement — fixed v1 preflight
+
+After the [f1320 human reply](../60-evidence/s11/2026-10-08-d2-contact-observability.md#contact-interpretation-received--2026-10-08),
+test whether the **existing saved Canny raster** represents the reported contact.
+This is an offline representation experiment, not an Oil decision rule. Reuse
+captured `preprocessing.canny`, effective/glare masks, W1 native/center geometry
+and W3 frozen bindings. No edge threshold, CLAHE, blur, dilation, thinning,
+gap completion, scalar relocation, production source or truth file changes.
+
+The new pure diagnostic owner is
+`tests/diagnostics/s11_contour_contact_probe.py`: existing region/temporal owners
+do not measure local graph arms, so they are not extended into a different
+responsibility. It consumes only binary edges and visibility, with no physical
+labels, source-family privilege, chosen target or temporal track.
+
+For each observed edge pixel, take its 8-connected component inside a square
+patch. Remove the central 3×3 core; each remaining component joining the inner
+ring (Chebyshev distance 2) to the patch boundary is an arm. Retain its exact
+outer directions. Three separate arms left/right/up yield `upper_contact_shape`;
+left/right/down is the mirrored shape; four cardinal arms are a crossing.
+Short stubs, corner exits, repeated directions or joined multi-side arms stay
+explicitly complex. These names describe raster shape, not physical contact.
+
+Use all three existing witness band widths independently: reference corridor
+half-width b, patch radius 2b. A2 has b=3/6/9 and radii 6/12/18. Native geometry
+has precedence where present; missing native sectors remain absent. Query exact
+source X and distance from the saved Y; retain node coordinates, pattern counts,
+requested/in-crop/fully-observed centers at each scale. No best-scale selection,
+max/majority rule or candidate score. A patch clipped by the crop or containing
+any effective/glare-invalid pixel is unavailable. No-edge and unavailable states
+are separate and neither means non-interface. Input preprocessing itself remains
+an optical/resolution limitation. Raster bound is 262,144 pixels, at most three
+radii in 3..32 and 50 million summed patch pixels per call.
+
+Synthetic controls distinguish upper/lower contact, crossing, plain stationary
+boundary, disconnected/gapped strokes, locally reconnecting arms, clipped/masked
+support and a same-observable structural T. A clean boundary without bubbles
+must not become a physical negative; structural T equality prevents promoting
+the marker alone. Coordinate translation, original-input immutability and finite
+resource checks accompany these controls.
+
+The local preflight `sample/output/s11-d2-edge-contact-20261008-001/preflight.json`
+pins 54 inputs/source files and the runner; its SHA-256 is
+`69c2ec764c3618dd5b76bb6e538918012a0c248bdc3756693ffb8fe7318567fe`. It was written before
+reading raster measurements. The primary X interval is half-open [566,625).
+
+Freeze source/tests and input pins before the real readout. Use all 153 existing
+A2 candidates across seven frames as exposed regression; report seven target,
+three wrong-target and 143 unreviewed roles only after measurement. Primary
+representation check is the already reviewed f1320 central X566–625 contrast:
+does the saved graph retain upper-contact markers near idx9 versus idx21 at each
+fixed scale? Other reviewed controls expose missed targets and recurring false
+shapes. Counts are correlated edge centers, not independent physical contacts or
+confidence. If the graph loses the confirmed contact or yields the same markers
+on wrong targets, close this frozen representation without thresholds, geometry
+or scale tuning. A favorable representation contrast only permits further
+conditional design, not W3 identity predictions, O2 entry or Windows execution.
+
 ## History Review
+
+2026-10-08 saved-edge contact preflight: the user confirms a local contact relation
+and separately hypothesizes glass/low-resolution effects. Reviewed F03/F04/F09/F10,
+the failed residual/connectivity/patch proposals, captured Canny preprocessing and
+existing W1/W3 geometry/binding owners. This experiment measures ordered local
+edge arms, preserving optical aliases and missing support. It never derives
+identity from motion, graph contact or a reviewed coordinate. Production logic
+and the failure registry remain unchanged.
 
 2026-10-08 contact-cue preflight: reviewed F03/F04 motion/geometry identity
 failures, F09 support attribution, F10 retuning, the closed A2 region-exchange
