@@ -446,3 +446,9 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 최초 등록일 | 문서 | 역할 |
 |---|---|---|
 | 2026-10-08 | [D2 contact-observability preflight](60-evidence/s11/2026-10-08-d2-contact-observability.md), [receipt](60-evidence/s11/2026-10-08-d2-contact-observability.json) | 기존 Mac 원본·후보 결합 검증과 국소 윤곽 접촉 관계의 사용자 판단용 표시; 분류기 실행 아님 |
+
+## D2 saved-edge contact readout additions
+
+| 최초 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-08 | [D2 saved-edge contact](60-evidence/s11/2026-10-08-d2-saved-edge-contact.md), [receipt](60-evidence/s11/2026-10-08-d2-saved-edge-contact.json) | 고정된 윤곽 가지 측정의 153후보 실행; 실제 접촉 관계를 재현하지 못해 미채택 종료 |

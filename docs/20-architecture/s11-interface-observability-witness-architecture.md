@@ -1743,6 +1743,10 @@ on wrong targets, close this frozen representation without thresholds, geometry
 or scale tuning. A favorable representation contrast only permits further
 conditional design, not W3 identity predictions, O2 entry or Windows execution.
 
+The [completed saved-edge readout](../60-evidence/s11/2026-10-08-d2-saved-edge-contact.md)
+rejects this frozen exact-arm representation without promotion. This does not
+reject the human region-level relation or all conditional non-learned mechanisms.
+
 ## History Review
 
 2026-10-08 saved-edge contact preflight: the user confirms a local contact relation

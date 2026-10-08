@@ -1,0 +1,822 @@
+{
+  "source_head": "9937b332486034dbb90a2039f45c5150125120d1",
+  "preflight_sha256": "69c2ec764c3618dd5b76bb6e538918012a0c248bdc3756693ffb8fe7318567fe",
+  "spec_id": "saved-canny-local-arm-contact-v1",
+  "input_and_source_files": {
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/capture-manifest.json": "fca7623eddf3b8b199a2090a257ebab73fb4a620f2f8c50a6605ab0129045b45",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/receipt.json": "7986d15dce6f624da7aec64efbd38b9528373e784f2059906d5ea41091ad3474",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-canny.png": "408e0c285e9ae1c85d53caa21c187d0da2d7cf97793f2fe546d5e0aabf5656c9",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-original_roi.png": "eea14d8eb7f39dee1c8b8748e8031f5638321612d1a9fa2d9ff27e0b43a74525",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1140-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1140-glare.png": "8406cd1b65f12069d36b763e9f3a21be23a0f30597387b951cc0587378aea955",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1140-bgr.png": "eea14d8eb7f39dee1c8b8748e8031f5638321612d1a9fa2d9ff27e0b43a74525",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200-canny.png": "932ff76c33c344ca68fae2995423970317ae3cbccf071cb0ec1387b80fb68f8d",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200-original_roi.png": "1c03062d3b2274f8aee2793ba70a7f0065634528ea0f4960b517adc9073023cd",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1200-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1200-glare.png": "bf7c637c828ee0bd3faa8088257f186b63d9865b159742211cf50b481595d683",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1200-bgr.png": "1c03062d3b2274f8aee2793ba70a7f0065634528ea0f4960b517adc9073023cd",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-canny.png": "ed886ccdf19597af8e04fd58370e7aba63a1322f753311ba7b163b76278bef1a",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-original_roi.png": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1260-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1260-glare.png": "90a783afbb56c519b940112aa09f5d466bd335c7e10af5ae14e2305da2a4993d",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1260-bgr.png": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-canny.png": "9b4dddaeae47e441118b65c6bd13dc6bb9f9a17541ffd48361fc910c3118961c",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1275-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1275-glare.png": "25b3825d5dcda796e10004195c892f031f239adfaf2e9c89675ba3cd55b312b1",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1275-bgr.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-canny.png": "6031c2f7dff2e0252bf75409404de8b35142d9d23be2f97b8112c4169ae1bd92",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-original_roi.png": "3083e2a46604986053edf61df6ac605d959861332010421542e2c8a33a022020",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1320-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1320-glare.png": "6aa5977cf01c8e8157b1ceae20da11ba02e6c70eac1ff107d7469cb0800230ad",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1320-bgr.png": "3083e2a46604986053edf61df6ac605d959861332010421542e2c8a33a022020",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-canny.png": "8621c144af63d7668fee421e3b9d7c5d4400d07bbfccc7c411f97cc030af8302",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-original_roi.png": "f0f2394eeabc08734d548ee91ab8d73723abc205eecbea17f0dbdcdbe3da67ee",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1485-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1485-glare.png": "42234a8290711cc876b418dd5b37046d1c02e949198a7b95ebc7962de17f9f14",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1485-bgr.png": "f0f2394eeabc08734d548ee91ab8d73723abc205eecbea17f0dbdcdbe3da67ee",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560-canny.png": "bbc9377362fdbc82af9a9b257f0c09fb92720d5ab48358ea400fa4f4e0a8b7b5",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560-original_roi.png": "e04d7119d7445c147651ba43158890a046e533dfb325bc63c0c2dcd804450faa",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1560-effective.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1560-glare.png": "05fa69d1e5176fbdba68dff755f69f825e35b9de712e07582df56e983fc4a281",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1560-bgr.png": "e04d7119d7445c147651ba43158890a046e533dfb325bc63c0c2dcd804450faa",
+    "sample/output/s11-a2-target-binding-20261007-001/packet.json": "be57465f80235a65edbf16f338e45ecd5590a43238bb718762052a965d0f24c4",
+    "sample/output/s11-a2-target-binding-20261007-001/snapshot.json": "5ae726cfef8ae9b4c14fdb23bd5f3489218b9716c4b597b74fe07170f7667485",
+    "sample/output/s11-a2-target-binding-20261007-001/labels.json": "6c4d2b0a1dbee57cf294ebd0d894d141ba3a9b8667be8355dbd18296fb9fdbcc",
+    "sample/output/s11-a2-target-binding-20261007-001/mapping.json": "bf575a44224e53c03aa73f24c1dc059654111bc3ee7fa357417a91e0a294a8db",
+    "sample/output/s11-a2-target-binding-20261007-001/baseline-predictions.json": "dec1c07a7e723e48bac00538ad212b88263cd7a0010ffe376a4caaa2b1995b4d",
+    "sample/output/s11-a2-target-binding-20261007-001/baseline-report.json": "a90f5dbf78a6c19fbe6e06f200648089fc3f070950c188e5148eeee0f3a57a4b",
+    "tests/diagnostics/s11_contour_contact_probe.py": "0fe9aac16a871d6364178e34ef727048bbda6add26182786e0f092e4507afd07",
+    "tests/unit/test_s11_contour_contact_probe.py": "68a92a2f64275de0f10d7d3b4ff685e0b8cee8ce3e26ffdebb89dae406a07635",
+    "tests/diagnostics/s11_interface_shadow_evaluation.py": "5909c468871ed3c5cd2095c7c4a4a88df4d08569b10985c22e999aff0f42c808",
+    "tests/diagnostics/s11_target_truth.py": "c1159e4a75160027b30cc7728647d5d24652e17697f9c08ef9e22480aa1bd079"
+  },
+  "input_preserved": true,
+  "candidate_count": 153,
+  "elapsed_seconds": 1.021,
+  "runtime": {
+    "python": "3.14.4 (v3.14.4:23116f998f6, Apr  7 2026, 09:45:22) [Clang 17.0.0 (clang-1700.6.4.2)]",
+    "opencv": "4.14.0",
+    "numpy": "2.5.1"
+  },
+  "video_read": false,
+  "detector_rerun": false,
+  "prediction_or_scoring": false,
+  "auto_acceptance": false,
+  "artifacts": {
+    "run.py": "e8c562fb0d3234ca379cfcfe0bcccf87921bef5ea6b550b83bf1fa3be3294ee0",
+    "preflight.json": "69c2ec764c3618dd5b76bb6e538918012a0c248bdc3756693ffb8fe7318567fe",
+    "measurements.json": "95628ee191d988a7ce5543aeb7beb39afe319a81953efb2b27f14ffc5b3cf404",
+    "summary.json": "d1d3865821b7f17bc7e65fced7959aed2309bfdd23533c36cf4ddf2d30937e0d"
+  },
+  "schema_version": "s11-saved-edge-contact-readout-v1",
+  "disposition": "CLOSED WITHOUT PROMOTION",
+  "local_artifact_root": "sample/output/s11-d2-edge-contact-20261008-001",
+  "preflight": {
+    "preparation_head": "fd55c6f27112e8bc8dc7f49bea6fe0b8995254c8",
+    "frames": [
+      1140,
+      1200,
+      1260,
+      1275,
+      1320,
+      1485,
+      1560
+    ],
+    "candidate_count": 153,
+    "partition": "exposed_regression",
+    "primary_relation": {
+      "frame": 1320,
+      "candidate_indices": [
+        9,
+        21
+      ],
+      "source_x_half_open": [
+        566,
+        625
+      ],
+      "role": "evaluation-only previously human-reviewed relation; not inference input"
+    },
+    "scales": {
+      "half_width": [
+        3,
+        6,
+        9
+      ],
+      "patch_radius": [
+        6,
+        12,
+        18
+      ],
+      "aggregation": "none; report all independently"
+    },
+    "failure_policy": "Close this frozen representation if confirmed contact is lost or wrong targets share markers; no tuning.",
+    "source_files": [
+      "tests/diagnostics/s11_contour_contact_probe.py",
+      "tests/unit/test_s11_contour_contact_probe.py",
+      "tests/diagnostics/s11_interface_shadow_evaluation.py",
+      "tests/diagnostics/s11_target_truth.py"
+    ],
+    "runner_sha256": "e8c562fb0d3234ca379cfcfe0bcccf87921bef5ea6b550b83bf1fa3be3294ee0"
+  },
+  "spec": {
+    "id": "saved-canny-local-arm-contact-v1",
+    "edge_owner": "unchanged captured preprocessing.canny",
+    "connectivity": 8,
+    "removed_core_radius": 1,
+    "reference_half_width": "existing witness band_width_px at each of its three scales",
+    "patch_radius": "2 * reference_half_width; scales retained separately",
+    "geometry": "native_path when present, otherwise recorded candidate_center; no relocation",
+    "decision": "NOT_EVALUATED",
+    "limits": "Raster topology is not physical contact, target identity or scalar truth. No marker is not non-interface. Captured preprocessing remains an input limitation."
+  },
+  "role_counts": {
+    "target": 7,
+    "unreviewed": 143,
+    "other_non_target": 3
+  },
+  "primary_f1320": {
+    "9": [
+      {
+        "half_width": 3,
+        "view_count": 3,
+        "pattern_counts": {
+          "two_arm_shape": 60,
+          "complex_or_short": 1
+        },
+        "requested_centers": 413,
+        "in_crop_centers": 413,
+        "fully_observed_centers": 413,
+        "edge_center_count": 61
+      },
+      {
+        "half_width": 6,
+        "view_count": 3,
+        "pattern_counts": {
+          "unavailable": 12,
+          "two_arm_shape": 48,
+          "complex_or_short": 24
+        },
+        "requested_centers": 767,
+        "in_crop_centers": 767,
+        "fully_observed_centers": 633,
+        "edge_center_count": 84
+      },
+      {
+        "half_width": 9,
+        "view_count": 3,
+        "pattern_counts": {
+          "unavailable": 45,
+          "complex_or_short": 32,
+          "two_arm_shape": 39
+        },
+        "requested_centers": 1121,
+        "in_crop_centers": 1121,
+        "fully_observed_centers": 589,
+        "edge_center_count": 116
+      }
+    ],
+    "21": [
+      {
+        "half_width": 3,
+        "view_count": 3,
+        "pattern_counts": {
+          "unavailable": 5,
+          "complex_or_short": 62,
+          "two_arm_shape": 40,
+          "no_reaching_arm": 2
+        },
+        "requested_centers": 413,
+        "in_crop_centers": 413,
+        "fully_observed_centers": 393,
+        "edge_center_count": 109
+      },
+      {
+        "half_width": 6,
+        "view_count": 3,
+        "pattern_counts": {
+          "unavailable": 112,
+          "complex_or_short": 53,
+          "two_arm_shape": 50,
+          "no_reaching_arm": 2
+        },
+        "requested_centers": 767,
+        "in_crop_centers": 767,
+        "fully_observed_centers": 377,
+        "edge_center_count": 217
+      },
+      {
+        "half_width": 9,
+        "view_count": 3,
+        "pattern_counts": {
+          "unavailable": 264,
+          "complex_or_short": 27,
+          "one_arm_shape": 2
+        },
+        "requested_centers": 1121,
+        "in_crop_centers": 1121,
+        "fully_observed_centers": 136,
+        "edge_center_count": 293
+      }
+    ]
+  },
+  "reviewed_controls": [
+    {
+      "case_id": "sample4:f1140",
+      "frame": 1140,
+      "candidate_input_index": 9,
+      "witness_sha256": "831c0aac2a754a910f8e3f3ee360cbc81f08dd9258469186be249d85d23307db",
+      "source": "material_path",
+      "canonical_y": 844.0,
+      "geometry_role": "native_path",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 29,
+            "no_reaching_arm": 3,
+            "one_arm_shape": 6,
+            "complex_or_short": 19,
+            "two_arm_shape": 33
+          },
+          "requested_centers": 679,
+          "in_crop_centers": 679,
+          "fully_observed_centers": 448,
+          "edge_center_count": 90
+        },
+        {
+          "half_width": 6,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 70,
+            "complex_or_short": 45,
+            "two_arm_shape": 14,
+            "no_reaching_arm": 1,
+            "one_arm_shape": 7
+          },
+          "requested_centers": 1261,
+          "in_crop_centers": 1261,
+          "fully_observed_centers": 636,
+          "edge_center_count": 137
+        },
+        {
+          "half_width": 9,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 123,
+            "complex_or_short": 60,
+            "one_arm_shape": 8,
+            "no_reaching_arm": 3
+          },
+          "requested_centers": 1843,
+          "in_crop_centers": 1843,
+          "fully_observed_centers": 579,
+          "edge_center_count": 194
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "target"
+    },
+    {
+      "case_id": "sample4:f1200",
+      "frame": 1200,
+      "candidate_input_index": 4,
+      "witness_sha256": "9c80a099ed901cf9c58ae11bb42cff0c41015b99dad2f5b74e6f7084f44e92ef",
+      "source": "oil_hypothesis:76bed74eaefae78df5f06c37",
+      "canonical_y": 841.0,
+      "geometry_role": "candidate_center",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 26,
+            "two_arm_shape": 38,
+            "complex_or_short": 51,
+            "one_arm_shape": 14,
+            "no_reaching_arm": 2
+          },
+          "requested_centers": 728,
+          "in_crop_centers": 728,
+          "fully_observed_centers": 489,
+          "edge_center_count": 131
+        },
+        {
+          "half_width": 6,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 82,
+            "complex_or_short": 77,
+            "two_arm_shape": 1,
+            "one_arm_shape": 17
+          },
+          "requested_centers": 1352,
+          "in_crop_centers": 1352,
+          "fully_observed_centers": 694,
+          "edge_center_count": 177
+        },
+        {
+          "half_width": 9,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 156,
+            "complex_or_short": 84,
+            "one_arm_shape": 8
+          },
+          "requested_centers": 1976,
+          "in_crop_centers": 1976,
+          "fully_observed_centers": 705,
+          "edge_center_count": 248
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "target"
+    },
+    {
+      "case_id": "sample4:f1200",
+      "frame": 1200,
+      "candidate_input_index": 10,
+      "witness_sha256": "17ce9f6088baa2b8cc4da7f8597862084e53fb582c619616b91a88b751452b1a",
+      "source": "material_path",
+      "canonical_y": 865.5,
+      "geometry_role": "native_path",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 4,
+          "pattern_counts": {
+            "complex_or_short": 27,
+            "two_arm_shape": 67
+          },
+          "requested_centers": 546,
+          "in_crop_centers": 546,
+          "fully_observed_centers": 483,
+          "edge_center_count": 94
+        },
+        {
+          "half_width": 6,
+          "view_count": 4,
+          "pattern_counts": {
+            "complex_or_short": 35,
+            "one_arm_shape": 2,
+            "unavailable": 50,
+            "two_arm_shape": 58
+          },
+          "requested_centers": 1014,
+          "in_crop_centers": 1014,
+          "fully_observed_centers": 714,
+          "edge_center_count": 145
+        },
+        {
+          "half_width": 9,
+          "view_count": 4,
+          "pattern_counts": {
+            "unavailable": 180,
+            "complex_or_short": 12,
+            "two_arm_shape": 28
+          },
+          "requested_centers": 1482,
+          "in_crop_centers": 1482,
+          "fully_observed_centers": 587,
+          "edge_center_count": 220
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "other_non_target"
+    },
+    {
+      "case_id": "sample4:f1260",
+      "frame": 1260,
+      "candidate_input_index": 4,
+      "witness_sha256": "38de4a8b7e6f6298b591ed7f1af2998940bf1006ceacd330a723981a9647d627",
+      "source": "oil_hypothesis:ab9efea5ca32565368ef129b",
+      "canonical_y": 839.0,
+      "geometry_role": "candidate_center",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 32,
+            "two_arm_shape": 41,
+            "complex_or_short": 47,
+            "one_arm_shape": 2,
+            "upper_contact_shape": 1
+          },
+          "requested_centers": 728,
+          "in_crop_centers": 728,
+          "fully_observed_centers": 452,
+          "edge_center_count": 123
+        },
+        {
+          "half_width": 6,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 86,
+            "two_arm_shape": 31,
+            "complex_or_short": 60,
+            "one_arm_shape": 5,
+            "upper_contact_shape": 4
+          },
+          "requested_centers": 1352,
+          "in_crop_centers": 1352,
+          "fully_observed_centers": 660,
+          "edge_center_count": 186
+        },
+        {
+          "half_width": 9,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 158,
+            "complex_or_short": 84,
+            "two_arm_shape": 15
+          },
+          "requested_centers": 1976,
+          "in_crop_centers": 1976,
+          "fully_observed_centers": 614,
+          "edge_center_count": 257
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "target"
+    },
+    {
+      "case_id": "sample4:f1260",
+      "frame": 1260,
+      "candidate_input_index": 15,
+      "witness_sha256": "19d4e617bbfab6267748cfa938e9e82a7083f897ab9051f5b46d1ba496f3fd14",
+      "source": "calibrated_high_recall",
+      "canonical_y": 868.0,
+      "geometry_role": "candidate_center",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 45,
+            "two_arm_shape": 37,
+            "one_arm_shape": 1,
+            "complex_or_short": 16
+          },
+          "requested_centers": 728,
+          "in_crop_centers": 728,
+          "fully_observed_centers": 295,
+          "edge_center_count": 99
+        },
+        {
+          "half_width": 6,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 125,
+            "two_arm_shape": 40,
+            "one_arm_shape": 2,
+            "complex_or_short": 6
+          },
+          "requested_centers": 1352,
+          "in_crop_centers": 1352,
+          "fully_observed_centers": 284,
+          "edge_center_count": 173
+        },
+        {
+          "half_width": 9,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 222,
+            "complex_or_short": 3,
+            "two_arm_shape": 6
+          },
+          "requested_centers": 1976,
+          "in_crop_centers": 1976,
+          "fully_observed_centers": 85,
+          "edge_center_count": 231
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "other_non_target"
+    },
+    {
+      "case_id": "sample4:f1275",
+      "frame": 1275,
+      "candidate_input_index": 12,
+      "witness_sha256": "da3e44c4bd2d8ec5284c63aa2f025f9c2ebe351fb1065cb41ad797a285a8b1e0",
+      "source": "calibrated_high_recall",
+      "canonical_y": 835.0,
+      "geometry_role": "candidate_center",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 26,
+            "complex_or_short": 65,
+            "one_arm_shape": 5,
+            "two_arm_shape": 29,
+            "no_reaching_arm": 2,
+            "other_arm_shape": 2
+          },
+          "requested_centers": 728,
+          "in_crop_centers": 728,
+          "fully_observed_centers": 452,
+          "edge_center_count": 129
+        },
+        {
+          "half_width": 6,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 101,
+            "complex_or_short": 70,
+            "no_reaching_arm": 2,
+            "two_arm_shape": 27,
+            "one_arm_shape": 4
+          },
+          "requested_centers": 1352,
+          "in_crop_centers": 1352,
+          "fully_observed_centers": 633,
+          "edge_center_count": 204
+        },
+        {
+          "half_width": 9,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 216,
+            "complex_or_short": 74,
+            "no_reaching_arm": 2,
+            "one_arm_shape": 9,
+            "two_arm_shape": 5
+          },
+          "requested_centers": 1976,
+          "in_crop_centers": 1976,
+          "fully_observed_centers": 545,
+          "edge_center_count": 306
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "target"
+    },
+    {
+      "case_id": "sample4:f1320",
+      "frame": 1320,
+      "candidate_input_index": 9,
+      "witness_sha256": "2071fe1a62d84101a454c1b313910452028934086c5f00cc5e921dae8173dd29",
+      "source": "material_path",
+      "canonical_y": 844.0,
+      "geometry_role": "native_path",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 35,
+            "two_arm_shape": 64,
+            "complex_or_short": 2
+          },
+          "requested_centers": 679,
+          "in_crop_centers": 679,
+          "fully_observed_centers": 449,
+          "edge_center_count": 101
+        },
+        {
+          "half_width": 6,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 75,
+            "two_arm_shape": 48,
+            "complex_or_short": 24
+          },
+          "requested_centers": 1261,
+          "in_crop_centers": 1261,
+          "fully_observed_centers": 633,
+          "edge_center_count": 147
+        },
+        {
+          "half_width": 9,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 133,
+            "complex_or_short": 32,
+            "two_arm_shape": 39
+          },
+          "requested_centers": 1843,
+          "in_crop_centers": 1843,
+          "fully_observed_centers": 589,
+          "edge_center_count": 204
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "target"
+    },
+    {
+      "case_id": "sample4:f1320",
+      "frame": 1320,
+      "candidate_input_index": 21,
+      "witness_sha256": "81755c44a3f55bca4d0b0df0d599f671145a6e2b755ad78473137b1e197e3d35",
+      "source": "phase_transition_scan",
+      "canonical_y": 822.0,
+      "geometry_role": "candidate_center",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 48,
+            "complex_or_short": 62,
+            "two_arm_shape": 40,
+            "no_reaching_arm": 2
+          },
+          "requested_centers": 728,
+          "in_crop_centers": 728,
+          "fully_observed_centers": 398,
+          "edge_center_count": 152
+        },
+        {
+          "half_width": 6,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 184,
+            "complex_or_short": 53,
+            "two_arm_shape": 50,
+            "no_reaching_arm": 2
+          },
+          "requested_centers": 1352,
+          "in_crop_centers": 1352,
+          "fully_observed_centers": 377,
+          "edge_center_count": 289
+        },
+        {
+          "half_width": 9,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 363,
+            "complex_or_short": 27,
+            "one_arm_shape": 2
+          },
+          "requested_centers": 1976,
+          "in_crop_centers": 1976,
+          "fully_observed_centers": 136,
+          "edge_center_count": 392
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "other_non_target"
+    },
+    {
+      "case_id": "sample4:f1485",
+      "frame": 1485,
+      "candidate_input_index": 19,
+      "witness_sha256": "78813c2757dcef18914ce97eae5eb64c63074378e2cbcdbed92df81a20f5cb3f",
+      "source": "phase_transition_scan",
+      "canonical_y": 836.0,
+      "geometry_role": "candidate_center",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 36,
+            "one_arm_shape": 19,
+            "complex_or_short": 38,
+            "two_arm_shape": 15
+          },
+          "requested_centers": 728,
+          "in_crop_centers": 728,
+          "fully_observed_centers": 395,
+          "edge_center_count": 108
+        },
+        {
+          "half_width": 6,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 93,
+            "complex_or_short": 70,
+            "one_arm_shape": 3,
+            "two_arm_shape": 3
+          },
+          "requested_centers": 1352,
+          "in_crop_centers": 1352,
+          "fully_observed_centers": 547,
+          "edge_center_count": 169
+        },
+        {
+          "half_width": 9,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 178,
+            "complex_or_short": 54,
+            "one_arm_shape": 3
+          },
+          "requested_centers": 1976,
+          "in_crop_centers": 1976,
+          "fully_observed_centers": 472,
+          "edge_center_count": 235
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "target"
+    },
+    {
+      "case_id": "sample4:f1560",
+      "frame": 1560,
+      "candidate_input_index": 20,
+      "witness_sha256": "97118997e969404a7015f9be63490c5fdcf0e9dc2a23ca53d1cd86e410ba125a",
+      "source": "phase_transition_scan",
+      "canonical_y": 833.0,
+      "geometry_role": "candidate_center",
+      "scales": [
+        {
+          "half_width": 3,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 26,
+            "complex_or_short": 53,
+            "two_arm_shape": 17,
+            "one_arm_shape": 6
+          },
+          "requested_centers": 728,
+          "in_crop_centers": 728,
+          "fully_observed_centers": 454,
+          "edge_center_count": 102
+        },
+        {
+          "half_width": 6,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 76,
+            "two_arm_shape": 12,
+            "complex_or_short": 70,
+            "one_arm_shape": 7
+          },
+          "requested_centers": 1352,
+          "in_crop_centers": 1352,
+          "fully_observed_centers": 633,
+          "edge_center_count": 165
+        },
+        {
+          "half_width": 9,
+          "view_count": 5,
+          "pattern_counts": {
+            "unavailable": 150,
+            "complex_or_short": 54,
+            "one_arm_shape": 6
+          },
+          "requested_centers": 1976,
+          "in_crop_centers": 1976,
+          "fully_observed_centers": 502,
+          "edge_center_count": 210
+        }
+      ],
+      "decision": "NOT_EVALUATED",
+      "target_role": "target"
+    }
+  ],
+  "marker_presence_not_classification": [
+    {
+      "half_width": 3,
+      "target_with_upper_marker": 1,
+      "wrong_target_with_upper_marker": 0
+    },
+    {
+      "half_width": 6,
+      "target_with_upper_marker": 1,
+      "wrong_target_with_upper_marker": 0
+    },
+    {
+      "half_width": 9,
+      "target_with_upper_marker": 0,
+      "wrong_target_with_upper_marker": 0
+    }
+  ],
+  "interpretation_limits": [
+    "Correlated node centers, not independent contacts or confidence.",
+    "No marker does not imply non-interface; unavailable remains separate.",
+    "All cases exposed regression; no operating point or physical/scalar truth transfer."
+  ],
+  "decision": "NOT_EVALUATED",
+  "field_disposition": "FIELD FAIL",
+  "local_receipt_sha256": "617367ca895a09a09d3bf494a834afe2a136a266caf24c6db1907188b72baee5",
+  "post_readout_display": {
+    "plot_readout.py": "96ca49333aa7e11f0c805d139c8122f236e7d82b4870b1ca606e4ca8866e23ad",
+    "f1320-edge-contact.png": "6c95590cad9033cb334966428c52847d4b6e47b99112d4e2b74a1a3876bb4d93"
+  },
+  "synthetic_validation": {
+    "command": ".venv/bin/python -m pytest -q tests/unit/test_s11_contour_contact_probe.py",
+    "passed": 19,
+    "run_before_real_readout": true
+  },
+  "interpretation": {
+    "primary_relation_reproduced": false,
+    "physical_contact_denied": false,
+    "frozen_representation_rejected": true,
+    "all_nonlearned_mechanisms_rejected": false,
+    "production_unchanged": true,
+    "truth_unchanged": true,
+    "windows_result": false
+  }
+}

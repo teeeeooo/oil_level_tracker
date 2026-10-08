@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** D2 f1320 contact interpretation RECEIVED: upper bubble/texture features meet the target vicinity; pink crosses no actual boundary. Glass-pattern/low-resolution attribution remains tentative. Prepare a bounded non-learned contact measurement and opposing controls; no user/Windows reply is pending. D2/O2 algorithm entry remains unmet.
+**Next transition:** D2 saved-edge local-arm readout CLOSED WITHOUT PROMOTION: its exact T-shape representation misses the confirmed f1320 contact. Preserve the human region-level relation; next define a boundary-relative region representation and opposing controls before another run. No user/Windows reply is pending; D2/O2 algorithm entry remains unmet.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -25,7 +25,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 support/connectivity reviews closed; f1320 contact relation received. Non-learned measurement design next; no classifier or D3 started | [Contact reply and source check](../60-evidence/s11/2026-10-08-d2-contact-observability.md#contact-interpretation-received--2026-10-08), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
+| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 support/connectivity/contact-arm experiments closed; human contact relation preserved. Boundary-relative region design next; no classifier or D3 started | [Saved-edge result](../60-evidence/s11/2026-10-08-d2-saved-edge-contact.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -86,10 +86,16 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    cause, not a certified optical subtype. The saved pink phase-scan proposal is
    pooled band contrast; its 0.6 coverage is sector availability, not traced
    support. No sign veto, family rejection or scalar/sector truth follows.
-   Existing target and A/B material judgments stay closed. Next define the actual
-   non-learned contour-contact measurement, missingness and optical/structural
-   counter-controls before inference; the human reply is not an operating point.
-   No further user judgment or Windows work is currently required.
+   Existing target and A/B material judgments stay closed. The subsequent
+   [saved-edge local-arm readout](../60-evidence/s11/2026-10-08-d2-saved-edge-contact.md)
+   is CLOSED WITHOUT PROMOTION: exact T markers miss the f1320 relation even
+   with complete small-scale visibility. Do not tune scales, join gaps or turn
+   marker absence into a negative. Next specify how the boundary of the upper
+   textured region is represented relative to the lower region, with unavailable
+   support, plain-interface positives and optical/structural opposition. Reuse
+   current geometry/region owners; no new run until this distinct observable
+   is concrete. Human contact is not an operating point; temporal evidence
+   remains required. No further user or Windows judgment is currently pending.
 4. Before D3, freeze input identities, exposure/partition roles, operating-point
    policy, resource bounds and falsification. Compare wrong-target suppression
    separately from true-target recovery, through W3 and the unchanged report.
