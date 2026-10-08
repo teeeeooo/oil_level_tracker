@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 import math
 from typing import Iterable
+
+from .artifact_reference import ArtifactSupportReference
 
 
 @dataclass(frozen=True)
@@ -96,6 +98,13 @@ class ArtifactTemplate:
     angle_deg: float = 0.0
     name: str = "Artifact"
     note: str = ""
+    support_reference: ArtifactSupportReference | None = None
+
+    def to_dict(self, *, include_reference: bool = True) -> dict:
+        payload = {item.name: getattr(self, item.name) for item in fields(self) if item.name != "support_reference"}
+        if include_reference and self.support_reference is not None:
+            payload["support_reference"] = asdict(self.support_reference)
+        return payload
 
 
 @dataclass

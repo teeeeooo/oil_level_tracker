@@ -80,6 +80,7 @@ class MainWindow(QMainWindow):
         parent=None,
         *,
         artifact_proposer=None,
+        reference_reviewer=None,
     ) -> None:
         super().__init__(parent)
         self.workbench = workbench
@@ -87,6 +88,7 @@ class MainWindow(QMainWindow):
         self.analysis_controller = analysis_controller
         self.debug_renderer = debug_renderer
         self.artifact_proposer = artifact_proposer
+        self.reference_reviewer = reference_reviewer
         self.last_result_path = ""
         self.undo_stack = QUndoStack(self)
         self._last_validation = None
@@ -519,6 +521,9 @@ class MainWindow(QMainWindow):
             self.workbench.recipe.reference_frame_height,
             self,
             artifact_proposer=self.artifact_proposer,
+            source_frame_index=self.current_frame_index,
+            source_time_sec=self.current_time,
+            reference_reviewer=self.reference_reviewer,
         )
         if dialog.exec() != RoiEditorDialog.DialogCode.Accepted:
             return

@@ -829,6 +829,25 @@ cost remains explicit; passing extraction never establishes physical efficacy.
 Canonical non-Qt and externally bounded Qt runs, governance and whitespace/link
 checks remain required. A0Q is not repaired by a passing Qt run.
 
+## Registered support input controls
+
+The optional registered-support input must preserve exact original pixels,
+candidate input indices, actual playback identity distinct from detector-internal
+zero, independently hashed raw/processed/visibility images and bounded crops
+without rescaling. Missing native geometry stays missing. Mixed connected and
+disconnected edges, masking/glare and empty scopes must not become whole-area
+or whole-component labels. Changing scope requires renewed confirmation.
+
+Verify nested cancel, outer cancel/apply, real MainWindow entry, relocated recipe
+save/load from a non-repository cwd, reopening without video, and view resizing.
+Legacy/missing/corrupt/oversized evidence cannot become usable references;
+changed ROI/dimensions/Glass/settings/template geometry cannot transfer old
+attribution. Verify resource limits and unchanged matcher/frame detections and
+preflight identity with/without metadata. Genuine interfaces away from, crossing
+or stationary at structures, obscuration and physical mixing still need opposing
+and unresolved controls before any future reference consumer. Local UI checks
+do not imply Windows display/packaging or O2 field acceptance.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.

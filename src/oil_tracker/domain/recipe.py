@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from .artifact_reference import ArtifactSupportReference, MAX_REFERENCES_PER_GLASS
+
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from typing import Any
@@ -144,7 +146,7 @@ class InspectionRecipe:
                             {"id": z.id, "name": z.name, "note": z.note, "rect": rect_dict(z.rect)} for z in g.geometry.exclusions
                         ],
                         "artifact_templates": [
-                            asdict(template)
+                            template.to_dict()
                             for template in g.geometry.artifact_templates
                         ],
                     },
@@ -192,6 +194,7 @@ class InspectionRecipe:
                     angle_deg=float(value.get("angle_deg", 0.0)),
                     name=str(value.get("name", "Artifact")),
                     note=str(value.get("note", "")),
+                    support_reference=ArtifactSupportReference.from_dict(value.get("support_reference")),
                 )
                 for value in geo.get("artifact_templates", [])
             ]
@@ -202,6 +205,8 @@ class InspectionRecipe:
                 exclusions,
                 artifact_templates,
             )
+            if sum(t.support_reference is not None for t in artifact_templates) > MAX_REFERENCES_PER_GLASS:
+                raise ValueError("Too many artifact reference snapshots in one Glass.")
             jr = dict(raw.get("judgment_rule", {}))
             jr["mode"] = JudgmentMode(jr.get("mode", JudgmentMode.RECOVERY.value))
             ds = DetectorSettings(**raw.get("detector_settings", {}))

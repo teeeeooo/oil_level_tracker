@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 
 from oil_tracker.application.services.detector_settings import validate_detector_settings
+from oil_tracker.domain.artifact_reference import MAX_REFERENCES_PER_GLASS
 from oil_tracker.domain.enums import InitialObservationState, JudgmentMode, ValidationSeverity
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.domain.session import AnalysisSession
@@ -113,6 +114,12 @@ class RecipeValidationService:
                             "exclusions",
                         )
                     )
+            if sum(t.support_reference is not None for t in glass.geometry.artifact_templates) > MAX_REFERENCES_PER_GLASS:
+                issues.append(ValidationIssue(
+                    ValidationSeverity.ERROR, "STRUCT_ARTIFACT_REFERENCE_LIMIT",
+                    f"Artifact reference snapshots are limited to {MAX_REFERENCES_PER_GLASS} per Glass.",
+                    glass.id, "artifact_templates",
+                ))
             for template in glass.geometry.artifact_templates:
                 values = (
                     template.center_x,

@@ -1,0 +1,260 @@
+{
+  "schema": "s11-reference-ui-local-v1",
+  "base_commit": "2d760bbcff5ef762fe96d4dfd811ddcc660e3ac5",
+  "source_and_test_sha256": {
+    "src/oil_tracker/adapters/vision/artifact_proposal.py": "24c08617848d4a31de6e9df2d76e09ee5caa726e80235de63a1e6bd52c930351",
+    "src/oil_tracker/application/ports/review_io.py": "6bdf3d0845acc4ff039ca3ece717f21b33d8345a6e5d6ba28b3bd0ea87a9e66f",
+    "src/oil_tracker/application/preflight.py": "c88d505d521f76890800bc5dd9c212a4e00e1c8d37703504481ab7006f3e9f4d",
+    "src/oil_tracker/application/services/recipe_validation_service.py": "18750cb583a7c040d20aa298dc00a0cab77c65b1c34e546db54c2dab630c70d5",
+    "src/oil_tracker/bootstrap.py": "5edb2c59c948fe36c2920955036877d367bcc5ec33215a8ded44256e849f6e10",
+    "src/oil_tracker/domain/geometry.py": "451f38447d4decfaaf841ec78cbd44453040c83543744ef8fa4b96220f015242",
+    "src/oil_tracker/domain/recipe.py": "2ded05b7b5db1f44e394bd0aead92a3cdd74efe655361911cffb1a16e448e039",
+    "src/oil_tracker/ui/main_window.py": "5866da88c61b2dbe92edd38d5ba5da421ee40e0eb58dd2295d679f51c6bf562a",
+    "src/oil_tracker/ui/widgets/roi_editor_dialog.py": "8d95e7d7dd9a9d26f8666d506813558c9004227f463674e9f7f321a03602765a",
+    "src/oil_tracker/adapters/vision/artifact_reference.py": "645a23feb7f82fa693a8ad96e20a15e4ae10daa2862ae5156b54cf32f3e0cf85",
+    "src/oil_tracker/domain/artifact_reference.py": "70f4ba30e05c8bb3082837e126c47e10467cb8518837dedd016b2b32e7e656ab",
+    "src/oil_tracker/ui/widgets/artifact_support_dialog.py": "ef252c2b1ab33b69c4c8213d501b3730ae84cd015c61c3730c6c9981619b0e09",
+    "tests/fixtures/artifact_reference.py": "ab64de06c1f3cbc01a05199de5835fa1ecf7ffe15d14242feede1c273ee6199c",
+    "tests/gui/test_artifact_support_review.py": "fa8454e843d6ab85f5c7d49fe6f916561d3df5aff6fef63548ad06211a614f9f",
+    "tests/unit/test_artifact_reference.py": "1c4a1ac02a0c37cf42ab6d8e0842db6681064dea389102e945c3be7ec3b681af"
+  },
+  "saved_setup_check": {
+    "inputs": {
+      "sample/output/s11-d2-recipe-artifact-20261008-001/setup-f1320/proposals.json": "6c42883e037c9421d55bec0883d82e8808e35da55dd4aa601edf9f4068dc9521",
+      "sample/output/s11-d2-recipe-artifact-20261008-001/setup-f1320/f1320-full.png": "0f9c5f9e12902edf45ee6b6fe03254eaf29ac30f2530d32da1afbbf467bc560e"
+    },
+    "runner_sha256": "4a19626094410dd329f9932cb7ec214dfa2d2bda0f286e4b4d7acaab4849460d",
+    "proposal_geometry_equal": 12,
+    "references": [
+      {
+        "candidate_input_index": 9,
+        "source": "material_path",
+        "y": 844.0,
+        "crop_origin": [
+          543,
+          815
+        ],
+        "crop_size": [
+          104,
+          58
+        ],
+        "bytes": 39238,
+        "sha256": "1da5c0a85c51e4130fff0e4be4de38b1490747ec4f5a65d5468ff5f2e3d8dca9",
+        "native_available": true
+      },
+      {
+        "candidate_input_index": 10,
+        "source": "material_path",
+        "y": 879.0,
+        "crop_origin": [
+          550,
+          844
+        ],
+        "crop_size": [
+          93,
+          58
+        ],
+        "bytes": 33724,
+        "sha256": "b299e86fd971ce7b67f9b1d6413725f9f899b7ded6a6afecfde5af138cbce249",
+        "native_available": true
+      },
+      {
+        "candidate_input_index": 23,
+        "source": "phase_transition_scan",
+        "y": 882.0,
+        "crop_origin": [
+          553,
+          844
+        ],
+        "crop_size": [
+          86,
+          58
+        ],
+        "bytes": 15245,
+        "sha256": "50b5f2e030f4f3d85a737ba47caa6024479a27e3da9afe4dbaadd599b9369a14",
+        "native_available": true
+      },
+      {
+        "candidate_input_index": 24,
+        "source": "foam_evidence",
+        "y": 812.0,
+        "crop_origin": [
+          565,
+          798
+        ],
+        "crop_size": [
+          67,
+          58
+        ],
+        "bytes": 14468,
+        "sha256": "1a2f43de06f479c9845291afad7a27f09f1343be63ef0b298173e685ff19ba54",
+        "native_available": false
+      },
+      {
+        "candidate_input_index": 11,
+        "source": "material_path",
+        "y": 836.0,
+        "crop_origin": [
+          543,
+          807
+        ],
+        "crop_size": [
+          104,
+          58
+        ],
+        "bytes": 38812,
+        "sha256": "81efbf068fa721be87b54672c2e1b77652b828d6c04ade69ae0fffbd85ab78df",
+        "native_available": true
+      },
+      {
+        "candidate_input_index": 21,
+        "source": "phase_transition_scan",
+        "y": 822.0,
+        "crop_origin": [
+          543,
+          798
+        ],
+        "crop_size": [
+          104,
+          58
+        ],
+        "bytes": 20830,
+        "sha256": "600c6bc47b2b8f5d6a3ac89e80760c5d432d9739434e9c4d48db78394d1abb80",
+        "native_available": true
+      },
+      {
+        "candidate_input_index": 18,
+        "source": "calibrated_high_recall",
+        "y": 805.0,
+        "crop_origin": [
+          551,
+          798
+        ],
+        "crop_size": [
+          89,
+          58
+        ],
+        "bytes": 18853,
+        "sha256": "c32f1c701294c9dce3a90051bcb1ed5b6767b2a61292728622edb71ed2ae5635",
+        "native_available": true
+      },
+      {
+        "candidate_input_index": 12,
+        "source": "material_path",
+        "y": 863.5,
+        "crop_origin": [
+          543,
+          834
+        ],
+        "crop_size": [
+          104,
+          59
+        ],
+        "bytes": 34197,
+        "sha256": "2609693f90f9782135596cde6a052590201e1de3b6af6f44ce7a98a4d6c67ffa",
+        "native_available": true
+      },
+      {
+        "candidate_input_index": 20,
+        "source": "calibrated_high_recall",
+        "y": 868.0,
+        "crop_origin": [
+          543,
+          839
+        ],
+        "crop_size": [
+          104,
+          58
+        ],
+        "bytes": 19126,
+        "sha256": "c02cbbf39a0c6c48868be1afa41fd95fb34efdd70a58296cfe2cd6bfbbd9feb4",
+        "native_available": true
+      },
+      {
+        "candidate_input_index": 3,
+        "source": "oil_hypothesis:b93b3c7596f0315245c3c7b1",
+        "y": 833.0,
+        "crop_origin": [
+          543,
+          804
+        ],
+        "crop_size": [
+          104,
+          58
+        ],
+        "bytes": 21271,
+        "sha256": "c57e9a7bee2ec5ff980d8f233cb5883c27455dcd24c30e8ee573f9298fbf6ddc",
+        "native_available": true
+      },
+      {
+        "candidate_input_index": null,
+        "source": "glare_component",
+        "y": null,
+        "crop_origin": [
+          543,
+          798
+        ],
+        "crop_size": [
+          90,
+          104
+        ],
+        "bytes": 28557,
+        "sha256": "b7e77f96dcccaee7e5e6ba9459657bef056a39bedaf3a383b032b9b43fe4909d",
+        "native_available": false
+      },
+      {
+        "candidate_input_index": null,
+        "source": "glare_component",
+        "y": null,
+        "crop_origin": [
+          595,
+          807
+        ],
+        "crop_size": [
+          52,
+          64
+        ],
+        "bytes": 13636,
+        "sha256": "53ae3f08f623a13a57e4c392a97ac1ff65310a87d050a63f4402349f4fcd57e5",
+        "native_available": false
+      }
+    ],
+    "input_preserved": true,
+    "video_read": false,
+    "new_physical_review": false,
+    "demo_review_state": "mixed_or_uncertain",
+    "recipe_bytes": 25199,
+    "screenshots": {
+      "support-canny.png": "46efc21da50633278bfe6cfce0b23138e3b28d62ae479fd0ad768d12495c01f3",
+      "support-scope.png": "c1e2e7e545185630559576b6bdde35c90aa3a46b089872be73cd9325d8cad9e5",
+      "proposal-editor.png": "288dea349d41a1c39420aefad80f4dd08fca821ce7d5427ead9c5847ce0d0581",
+      "support-original.png": "dfd8843149d5c6c53c45583faa60b6b0e35c4c01694eca45d0b6aab8ab2f3339"
+    }
+  },
+  "runner_source": "from pathlib import Path\nfrom dataclasses import replace\nimport hashlib\nimport json\nimport sys\n\nroot = Path(__file__).resolve().parents[3]\nsys.path.insert(0, str(root / \"src\"))\nimport cv2\nfrom PySide6.QtWidgets import QApplication\nfrom oil_tracker.adapters.vision.artifact_proposal import OpenCvArtifactProposalService\nfrom oil_tracker.adapters.vision.artifact_reference import decode_reference, OpenCvArtifactReferenceReviewer\nfrom oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository\nfrom oil_tracker.domain.recipe import InspectionRecipe\nfrom oil_tracker.ui.widgets.roi_editor_dialog import RoiEditorDialog\nfrom oil_tracker.ui.widgets.artifact_support_dialog import ArtifactSupportDialog\n\nout = Path(__file__).resolve().parent\nsaved = root / \"sample/output/s11-d2-recipe-artifact-20261008-001/setup-f1320\"\ninputs = [saved / \"proposals.json\", saved / \"f1320-full.png\"]\nsha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()\npins = {str(p.relative_to(root)): sha(p) for p in inputs}\nprior = json.loads(inputs[0].read_text(encoding=\"utf-8\"))\nrecipe = InspectionRecipe.from_dict(prior[\"recipe\"])\nglass = recipe.glasses[0]\nframe = cv2.imread(str(inputs[1]))\napp = QApplication([])\neditor = RoiEditorDialog(frame, glass, frame.shape[1], frame.shape[0],\n    artifact_proposer=OpenCvArtifactProposalService(), source_frame_index=1320, source_time_sec=44.,\n    reference_reviewer=OpenCvArtifactReferenceReviewer())\neditor.show()\napp.processEvents()\neditor.scan_artifacts_button.click()\nproposals = editor._artifact_proposals\nassert len(proposals) == len(prior[\"proposals\"]) == 12\nreferences = []\nfor template, old in zip(proposals, prior[\"proposals\"], strict=True):\n    geometry = template.to_dict(include_reference=False)\n    geometry.pop(\"id\")\n    expected = dict(old[\"template\"])\n    expected.pop(\"id\")\n    assert geometry == expected\n    snapshot, images = decode_reference(template.support_reference)\n    assert snapshot[\"frame_index\"] == 1320 and snapshot[\"time_sec\"] == 44\n    x, y = snapshot[\"crop_origin\"]\n    w, h = snapshot[\"crop_size\"]\n    assert (images[\"original_roi\"] == frame[y:y+h, x:x+w]).all()\n    references.append({\"candidate_input_index\": snapshot[\"proposal\"][\"candidate_input_index\"],\n        \"source\": snapshot[\"proposal\"][\"source\"], \"y\": snapshot[\"proposal\"][\"y\"],\n        \"crop_origin\": [x, y], \"crop_size\": [w, h], \"bytes\": len(template.support_reference.snapshot_json.encode()),\n        \"sha256\": template.support_reference.snapshot_sha256,\n        \"native_available\": snapshot[\"proposal\"][\"native_path\"] is not None})\neditor.artifact_proposal_list.setCurrentRow(5)\neditor.grab().save(str(out / \"proposal-editor.png\"))\ntemplate = proposals[5]\nassert template.support_reference.snapshot()[\"proposal\"][\"y\"] == 822\nreview = ArtifactSupportDialog(template, glass, frame.shape[1], frame.shape[0], reference_reviewer=OpenCvArtifactReferenceReviewer())\nreview.show()\napp.processEvents()\nreview.grab().save(str(out / \"support-original.png\"))\n# UI demonstration only. No human edge attribution, no existing label mutation.\nreview.canvas.set_review_rect((20, 18, 35, 12))\nassert not review.confirm_edges.isChecked()\nreview.grab().save(str(out / \"support-scope.png\"))\nreview.mode.setCurrentIndex(review.mode.findData(\"canny\"))\nreview.grab().save(str(out / \"support-canny.png\"))\nreview.accept()\nassert review.reviewed_reference().review_state == \"mixed_or_uncertain\"\neditor._artifact_proposals[5] = replace(template, support_reference=review.reviewed_reference())\neditor.accept_artifact_button.click()\nrecipe.glasses[0] = editor.edited_glass()\npath = out / \"ui-demo-only.oilrecipe\"\nrepository = JsonRecipeRepository()\nrepository.save(path, recipe)\nassert repository.load(path).to_dict() == recipe.to_dict()\nassert all(sha(root / name) == digest for name, digest in pins.items())\nresult = {\"inputs\": pins, \"runner_sha256\": sha(Path(__file__)), \"proposal_geometry_equal\": 12,\n          \"references\": references, \"input_preserved\": True, \"video_read\": False,\n          \"new_physical_review\": False, \"demo_review_state\": \"mixed_or_uncertain\",\n          \"recipe_bytes\": path.stat().st_size, \"screenshots\": {p.name: sha(p) for p in out.glob(\"*.png\")}}\n(out / \"readout.json\").write_text(json.dumps(result, indent=2) + \"\\n\", encoding=\"utf-8\")\nprint(json.dumps({\"proposal_geometry_equal\": 12, \"references\": len(references), \"recipe_bytes\": path.stat().st_size,\n                  \"max_reference_bytes\": max(row[\"bytes\"] for row in references), \"input_preserved\": True}))\nreview.close()\neditor.close()\napp.processEvents()\n",
+  "validation": {
+    "focused_tests_passed": 87,
+    "new_unit_cases": 13,
+    "new_qt_cases": 9,
+    "candidate_match_equality": 90,
+    "full_frame_detection_equality": 3,
+    "test_files": [
+      "tests/unit/test_artifact_reference.py",
+      "tests/gui/test_artifact_support_review.py",
+      "tests/unit/test_artifact_calibration.py",
+      "tests/unit/test_artifact_proposal.py",
+      "tests/unit/test_recipe_storage.py",
+      "tests/unit/test_recipe_optional_scale_roundtrip.py",
+      "tests/unit/test_preflight_context.py",
+      "tests/gui/test_guided_workbench_ux.py",
+      "tests/gui/test_overlay_editor.py",
+      "tests/gui/test_main_window_collaborator_ownership.py",
+      "tests/test_ui_import_boundaries.py"
+    ],
+    "execution_note": "86-case selection passed; after adding bootstrap coverage, affected 9-case GUI suite passed. 87 distinct final tests passed."
+  },
+  "detector_behavior_change": false,
+  "windows_run": false,
+  "new_human_review": false,
+  "field_disposition": "FIELD FAIL"
+}

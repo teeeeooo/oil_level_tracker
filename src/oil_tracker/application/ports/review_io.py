@@ -172,8 +172,14 @@ class ArtifactProposalPort(Protocol):
     def propose(self, frame: Any, glass: Any) -> list[Any]: ...
 
 
+class ArtifactReferenceReviewPort(Protocol):
+    def load(self, reference: Any) -> tuple[dict, dict]: ...
+    def render(self, images: dict, rect: Any, mode: str) -> tuple[Any, int]: ...
+
+
 __all__ = [
     "ArtifactProposalPort",
+    "ArtifactReferenceReviewPort",
     "BundleAssetError",
     "BundleAssetResolverPort",
     "DebugCaseExportError",

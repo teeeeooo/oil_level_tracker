@@ -213,7 +213,7 @@ def preflight_context_key(recipe: InspectionRecipe, session: AnalysisSession) ->
                     for zone in glass.geometry.exclusions
                 ],
                 "artifact_templates": [
-                    asdict(template)
+                    template.to_dict(include_reference=False)
                     for template in glass.geometry.artifact_templates
                 ],
                 "initial_state": glass.initial_state.value,

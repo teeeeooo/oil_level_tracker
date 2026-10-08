@@ -23,6 +23,7 @@ from oil_tracker.adapters.storage.review_png_exporter import ReviewPngExporter
 from oil_tracker.adapters.system.logging_config import configure_logging
 from oil_tracker.adapters.vision.debug_renderer import DebugRenderer
 from oil_tracker.adapters.vision.artifact_proposal import OpenCvArtifactProposalService
+from oil_tracker.adapters.vision.artifact_reference import OpenCvArtifactReferenceReviewer
 from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
 from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
 from oil_tracker.adapters.vision.review_debug_overlay_renderer import ReviewDebugOverlayRenderer
@@ -83,6 +84,7 @@ def build_main_window() -> MainWindow:
         analysis_controller,
         DebugRenderer(),
         artifact_proposer=OpenCvArtifactProposalService(),
+        reference_reviewer=OpenCvArtifactReferenceReviewer(),
     )
     analysis_controller.setParent(window)
     window.destroyed.connect(lambda: analysis_controller.shutdown())

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from dataclasses import replace
 from uuid import uuid4
 
 from PySide6.QtCore import Qt
@@ -21,10 +22,12 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from oil_tracker.application.ports.review_io import ArtifactProposalPort
+from oil_tracker.application.ports.review_io import ArtifactProposalPort, ArtifactReferenceReviewPort
+from oil_tracker.domain.artifact_reference import MAX_REFERENCES_PER_GLASS
 from oil_tracker.domain.geometry import ExclusionZone, Rect
 from oil_tracker.domain.recipe import InspectionRecipe
 from oil_tracker.ui.widgets.video_overlay_canvas import VideoOverlayCanvas
+from oil_tracker.ui.widgets.artifact_support_dialog import ArtifactSupportDialog
 
 
 class RoiEditorDialog(QDialog):
@@ -39,6 +42,9 @@ class RoiEditorDialog(QDialog):
         parent=None,
         *,
         artifact_proposer: ArtifactProposalPort | None = None,
+        source_frame_index: int | None = None,
+        source_time_sec: float | None = None,
+        reference_reviewer: ArtifactReferenceReviewPort | None = None,
     ) -> None:
         super().__init__(parent)
         self.setWindowTitle("분석 영역 편집")
@@ -48,10 +54,13 @@ class RoiEditorDialog(QDialog):
         self.resize(1280, 800)
         self._frame_width = frame_width
         self._frame_height = frame_height
-        self._frame = frame
+        self._frame = frame.copy() if frame is not None else None
+        self._source_frame_index = source_frame_index
+        self._source_time_sec = source_time_sec
         self._working = deepcopy(glass)
         self._artifact_proposals = []
         self._artifact_proposer = artifact_proposer
+        self._reference_reviewer = reference_reviewer
 
         instruction = QLabel(
             "분석 영역 타원의 파란 조절점을 드래그해 크기를 바꾸고, 노란 기준선을 위아래로 움직이세요. "
@@ -101,6 +110,8 @@ class RoiEditorDialog(QDialog):
         artifact_buttons.addWidget(self.select_all_artifacts_button)
         artifact_buttons.addWidget(self.accept_artifact_button, 1)
         artifact_layout.addLayout(artifact_buttons)
+        self.review_proposal_button = QPushButton("선택 후보 원본·윤곽 확인 / 범위 지정")
+        artifact_layout.addWidget(self.review_proposal_button)
 
         self.artifact_status = QLabel("후보 찾기를 실행한 뒤 필요한 항목만 선택하세요.")
         self.artifact_status.setObjectName("ownershipHint")
@@ -125,6 +136,8 @@ class RoiEditorDialog(QDialog):
         template_layout.setContentsMargins(0, 0, 0, 0)
         template_layout.addWidget(QLabel("지정된 Artifact"))
         template_layout.addWidget(self.artifact_template_list, 1)
+        self.review_template_button = QPushButton("지정 Artifact의 저장 근거 보기 / 편집")
+        template_layout.addWidget(self.review_template_button)
         artifact_lists = QSplitter(Qt.Orientation.Vertical)
         artifact_lists.setChildrenCollapsible(False)
         artifact_lists.addWidget(proposal_panel)
@@ -183,6 +196,8 @@ class RoiEditorDialog(QDialog):
             self.artifact_proposal_list.selectAll
         )
         self.accept_artifact_button.clicked.connect(self._accept_artifact)
+        self.review_proposal_button.clicked.connect(lambda: self._review_support(proposal=True))
+        self.review_template_button.clicked.connect(lambda: self._review_support(proposal=False))
         self.select_all_templates_button.clicked.connect(
             self.artifact_template_list.selectAll
         )
@@ -293,7 +308,12 @@ class RoiEditorDialog(QDialog):
             self.artifact_status.setText(f"후보 생성 실패: {exc}")
             return
 
-        self._artifact_proposals = proposals
+        self._artifact_proposals = [
+            replace(template, support_reference=template.support_reference.with_source_position(
+                self._source_frame_index, self._source_time_sec,
+            )) if template.support_reference is not None else template
+            for template in proposals
+        ]
         self.artifact_proposal_list.clear()
         for index, template in enumerate(proposals):
             item = QListWidgetItem(
@@ -315,17 +335,28 @@ class RoiEditorDialog(QDialog):
             template.id for template in self._working.geometry.artifact_templates
         }
         added = 0
+        omitted = 0
+        reference_count = sum(t.support_reference is not None for t in self._working.geometry.artifact_templates)
         for item in items:
             index = int(item.data(Qt.ItemDataRole.UserRole))
             template = self._artifact_proposals[index]
             if template.id in existing_ids:
                 continue
+            if template.support_reference is not None:
+                if reference_count >= MAX_REFERENCES_PER_GLASS:
+                    omitted += 1
+                    continue
+                reference = template.support_reference
+                if reference.review_state == "unreviewed":
+                    template = replace(template, support_reference=replace(reference, review_state="proposal_negative"))
+                reference_count += 1
             self._working.geometry.artifact_templates.append(template)
             existing_ids.add(template.id)
             added += 1
         self.artifact_status.setText(
             f"선택한 후보 {added}개를 Artifact로 지정했습니다. "
             "적용 버튼을 눌러 Profile에 저장하세요."
+            + (f" 원본 근거는 Glass당 {MAX_REFERENCES_PER_GLASS}개까지 저장할 수 있어 {omitted}개는 추가하지 않았습니다." if omitted else "")
         )
         self._refresh()
 
@@ -338,6 +369,7 @@ class RoiEditorDialog(QDialog):
             < len(self._artifact_proposals)
         }
         self.canvas.set_highlighted_artifact_proposals(proposal_ids)
+        self.review_proposal_button.setEnabled(len(proposal_ids) == 1)
 
     def _artifact_template_selection_changed(self) -> None:
         template_ids = {
@@ -345,6 +377,7 @@ class RoiEditorDialog(QDialog):
             for item in self.artifact_template_list.selectedItems()
         }
         count = len(template_ids)
+        self.review_template_button.setEnabled(count == 1)
         self.canvas.set_highlighted_artifact_templates(template_ids)
         self.delete_artifact_button.setEnabled(count > 0)
         self.clear_template_selection_button.setEnabled(count > 0)
@@ -356,6 +389,28 @@ class RoiEditorDialog(QDialog):
             if count
             else "선택 Artifact 일괄 삭제"
         )
+
+    def _review_support(self, *, proposal: bool) -> None:
+        items = (self.artifact_proposal_list if proposal else self.artifact_template_list).selectedItems()
+        if len(items) != 1:
+            return
+        if proposal:
+            template = self._artifact_proposals[int(items[0].data(Qt.ItemDataRole.UserRole))]
+            template = next((t for t in self._working.geometry.artifact_templates if t.id == template.id), template)
+        else:
+            template_id = str(items[0].data(Qt.ItemDataRole.UserRole))
+            template = next(t for t in self._working.geometry.artifact_templates if t.id == template_id)
+        dialog = ArtifactSupportDialog(template, self._working, self._frame_width, self._frame_height, self,
+                                       reference_reviewer=self._reference_reviewer)
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return
+        updated = replace(template, support_reference=dialog.reviewed_reference())
+        self._artifact_proposals = [updated if t.id == template.id else t for t in self._artifact_proposals]
+        self._working.geometry.artifact_templates = [
+            updated if t.id == template.id else t for t in self._working.geometry.artifact_templates
+        ]
+        self.artifact_status.setText("판독 근거를 임시 저장했습니다. 후보 지정과 편집창 적용 후 Profile에 반영됩니다.")
+        self._refresh()
 
     def _delete_artifact(self) -> None:
         items = self.artifact_template_list.selectedItems()

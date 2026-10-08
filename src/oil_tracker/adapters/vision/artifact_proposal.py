@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from dataclasses import replace
 import math
 
 import cv2
@@ -12,6 +13,7 @@ from .artifact_calibration import (
     template_from_candidate,
 )
 from .opencv_phase_detector import OpenCvPhaseDetector
+from .artifact_reference import capture_reference
 
 
 class OpenCvArtifactProposalService:
@@ -50,10 +52,10 @@ def propose_artifact_templates(
 
     proposals = []
     candidates = sorted(
-        detection.candidates,
-        key=lambda candidate: (-float(candidate.final_score), float(candidate.y)),
+        enumerate(detection.candidates),
+        key=lambda item: (-float(item[1].final_score), float(item[1].y)),
     )
-    for candidate in candidates:
+    for candidate_index, candidate in candidates:
         if not math.isfinite(float(candidate.y)):
             continue
         template = template_from_candidate(
@@ -66,7 +68,9 @@ def propose_artifact_templates(
             for existing in proposals
         ):
             continue
-        proposals.append(template)
+        proposals.append(replace(template, support_reference=capture_reference(
+            frame, glass, template, artifacts, candidate=candidate, candidate_index=candidate_index,
+        )))
         if len(proposals) >= maximum_boundary_proposals:
             break
 
@@ -99,11 +103,12 @@ def propose_artifact_templates(
         height = int(stats[label, cv2.CC_STAT_HEIGHT])
         if width * height < 8:
             continue
-        proposals.append(
-            region_template_from_source_rect(
+        template = region_template_from_source_rect(
                 Rect(origin_x + x, origin_y + y, width, height),
                 detector_glass,
                 name=f"광학 구역 후보 {len(proposals) + 1}",
-            )
         )
+        proposals.append(replace(template, support_reference=capture_reference(
+            frame, glass, template, artifacts,
+        )))
     return proposals

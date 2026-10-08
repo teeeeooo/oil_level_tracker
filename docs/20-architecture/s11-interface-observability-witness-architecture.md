@@ -1860,8 +1860,9 @@ removed. No production registration or matcher change is adopted by this readout
 
 ### Registered support reference — proposed input contract
 
-This is a proposed, behavior-neutral prerequisite for a future structure-aware
-challenger, not an accepted matcher or recipe-schema migration. The
+The optional capture/review input is implemented after the user's interaction
+approval. Its future use in a structure-aware challenger remains proposed;
+there is no accepted new matcher. The
 [support audit](../60-evidence/s11/2026-10-08-d2-registered-support-design.md)
 reproduces 46 saved Oil signatures and demonstrates identical template matches
 for substantially different pixel supports. Existing normalized line envelopes
@@ -1886,7 +1887,7 @@ must be bounded and relocatable with the recipe; no absolute workstation path is
 a binding. Preserve Apply/Cancel isolation. Missing assets, edits, resizes or ROI
 changes invalidate correspondence explicitly rather than silently remapping old
 truth. Do not introduce unbounded per-frame images or automatic frame-history
-retention. No particular serialized payload format is adopted at this stage.
+retention. The bounded serialized capture below is adopted for evidence only.
 
 Keep evidence states distinct: `geometry_only`, `proposal_negative`,
 `reviewed_support`, `mixed_or_uncertain`, and `reference_unavailable` describe
@@ -1899,11 +1900,55 @@ clearance, and a snapshot must not become a learned template or ML requirement.
 
 The proposed interaction is selection → support preview → acceptance of a clear
 portion or unresolved status. Optional region/contour narrowing for mixed support
-is a product-scope decision owned by Work Plan and the user. If setup must remain
-list-only, retain reference/provenance but leave ambiguous support unresolved;
-do not add an automatic full-component fallback. Neither branch promises that
-every setup image permits registration. Do not implement dependent interaction
-or a matcher before resolving that scope and freezing its controls.
+was approved by the user. List-only registration remains available and records
+only proposal-level attribution. Narrowing is optional; uncertainty never
+triggers a full-component fallback. Not every setup image permits support
+attribution. A behavioral matcher still requires separately frozen controls.
+
+#### Implemented reference capture and review
+
+`artifact_proposal.py` captures existing debug rasters. The new vision
+`artifact_reference.py` owns bounded encoding/decoding and explicit raw-edge
+restriction, separate from the unchanged matching owner `artifact_calibration.py`.
+The bootstrap supplies `ArtifactReferenceReviewPort` to the UI; NumPy/OpenCV
+decoding and overlays stay in the vision adapter. The frozen
+`ArtifactSupportReference` stores canonical `snapshot_json` and its
+SHA-256 plus separate review state and crop-local integer `(x, y, width, height)`
+scope. Recipe schema 1 gains an optional independently versioned member; legacy
+templates remain geometry-only and serialize exactly as before.
+
+Snapshots contain lossless original PNG pixels, effective/glare masks, Canny,
+horizontal support and available Foam support, each with a byte hash. They bind
+source-frame pixel hash/dimensions, Glass/ROI/template geometry, settings and
+versioned preprocessing/OpenCV identity, original candidate input index/source/
+kind/Y, centered envelope and available native path diagnostics. Sector samples
+are not a continuous contour. MainWindow supplies actual playback frame/time;
+direct callers leave them null rather than reusing the detector's internal zero.
+
+Context is cropped, never resized, to at most 640×160 original pixels with
+clipping recorded. Canonical snapshots are at most 1 MiB each, with at most 16
+per Glass. Embedded base64 PNGs move with the `.oilrecipe`; there are no sidecars,
+absolute source paths or frame-history retention. These are storage limits,
+not detector thresholds. Preflight behavior identity excludes reference metadata
+while retaining the existing template fields.
+
+`ArtifactSupportDialog` reuses `VideoOverlayCanvas` for image/zoom/pan. Its
+rectangle restricts inspection without adding an exclusion zone. Original,
+candidate-envelope guide, raw edges and processed support are separate views.
+Explicit confirmation attributes only displayed Canny pixels inside the scope
+with nonzero effective mask and zero glare; no dilation or component expansion
+occurs. Rectangle-only saves are `mixed_or_uncertain`, list acceptance is
+`proposal_negative`, and the explicit checkbox creates `reviewed_support`.
+Changing scope clears confirmation; everything outside it remains unreviewed.
+None of these states proves scalar identity or correspondence at another frame.
+
+The preview has its own accept/cancel result, the ROI editor retains its private
+copy until outer Apply, and existing profile save owns persistence. Saved
+references are viewable without loading a video. Hash/asset/schema failures
+disable review. Different Glass, dimensions, ROI/exclusions, settings or template
+geometry make old snapshots view-only. Resizing preserves old provenance rather
+than remapping truth. Missing references are not replaced using a new frame.
+Existing matcher geometry/rejection is unaffected by narrowed support review.
 
 Test isolated structure, genuine interfaces away from and crossing/stationary
 on that structure, reference obscuration, mixed/disconnected support, missing
@@ -1915,6 +1960,13 @@ remains equal during reference capture; effectiveness, runtime/resource bounds
 and O2/O3/Windows acceptance remain their existing separate gates.
 
 ## History Review
+
+2026-10-08 approved reference UI implementation: capture and scoped review extend
+the existing proposal/editor/recipe owners. The matcher does not read the new
+reference. Source snapshots, human attribution and future correspondence remain
+separate, preserving F09 provenance without repeating F04 geometry-based identity
+or F10 position-veto tuning. Local input-seam verification is not discriminator
+or field acceptance; the earlier design entry below predates user approval.
 
 2026-10-08 support-reference design: source-backed extrema collisions demonstrate
 that the current registration loses object-support information before matching.
@@ -2056,5 +2108,5 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: NONE — reference-support retention is proposed within existing owners; the mapped diagnostic and production decision owners remain unchanged, with no new classifier or behavior consumer.
+- Logic-map impact: NONE — reference-support retention is implemented in setup owners; the mapped diagnostic and production decision owners remain unchanged, with no new classifier or behavior consumer.
 - Failure-registry impact: NONE — this architecture refines the response to existing failures without claiming field repair.
