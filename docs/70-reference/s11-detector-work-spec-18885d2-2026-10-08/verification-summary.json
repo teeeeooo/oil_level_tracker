@@ -1,0 +1,333 @@
+{
+  "schema": "s11-delivered-audit-summary-v1",
+  "document_basis_date": "2026-10-08",
+  "repository": "teeeeooo/oil_level_tracker",
+  "source_head": "18885d226a7a7745bc2d062fd750ec263b9c78f6",
+  "source_branch": "main",
+  "summary_provenance": "Manually assembled from actual connector stdout and native audit receipts. This file is not a byte copy of the native receipts.",
+  "environment": {
+    "os": "macOS",
+    "python": "3.14.4",
+    "opencv": "4.14.0"
+  },
+  "current_disposition": {
+    "s11": "ACTIVE",
+    "field": "FIELD FAIL",
+    "o1": "LOCALLY ACCEPTED",
+    "d1": "CLOSED_WITH_CORRECTION",
+    "d2": "OPEN_REFERENCE_CAPTURE_IMPLEMENTED_COMPARISON_NOT_ACCEPTED",
+    "o2": "OPEN"
+  },
+  "fresh_verification": {
+    "source_review": {
+      "status": "COMPLETE",
+      "process_exit_code": 0,
+      "selected_frames_total": 42,
+      "samples": {
+        "base_sample_1": {
+          "video_sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "recipe_sha256": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+          "fps": 30.059287442513345,
+          "backend_reported_frame_count": 434,
+          "frame_size": [
+            1280,
+            720
+          ],
+          "frame_indices": [
+            0,
+            120,
+            150,
+            151,
+            180,
+            240,
+            301,
+            361,
+            421
+          ],
+          "sheet_sha256": "6ea12492113df98ac2702d690886b56dfb19ff5cb267fe872a4f4aa0be6627f4"
+        },
+        "sample2": {
+          "video_sha256": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+          "recipe_sha256": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+          "fps": 30.0,
+          "backend_reported_frame_count": 288,
+          "frame_size": [
+            720,
+            1280
+          ],
+          "frame_indices": [
+            0,
+            8,
+            15,
+            22,
+            30,
+            38,
+            45,
+            52,
+            60
+          ],
+          "sheet_sha256": "349574630aa2f0d92835141843734f100544564083c02ac4527ce2b77d103de4"
+        },
+        "sample3": {
+          "video_sha256": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+          "recipe_sha256": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+          "fps": 29.97002997002997,
+          "backend_reported_frame_count": 4202,
+          "frame_size": [
+            1280,
+            720
+          ],
+          "frame_indices": [
+            900,
+            1049,
+            1199,
+            1349,
+            1499,
+            1648,
+            1948,
+            2250,
+            2398,
+            2697,
+            2997,
+            3147
+          ],
+          "sheet_sha256": "93cc53921c7b46a9ccfb5090675a9cb155a0286d58a1e873c64fc13920698dd8"
+        },
+        "sample4": {
+          "video_sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+          "recipe_sha256": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+          "fps": 30.0,
+          "backend_reported_frame_count": 1684,
+          "frame_size": [
+            1080,
+            1234
+          ],
+          "frame_indices": [
+            0,
+            420,
+            570,
+            840,
+            1200,
+            1260,
+            1275,
+            1290,
+            1320,
+            1335,
+            1485,
+            1560
+          ],
+          "sheet_sha256": "c30a20141d85eee8bb9bf56301eeb7cd527e073e4b1f02cdb5a94224d0c14576"
+        }
+      },
+      "source_video_and_recipe_hashes_preserved": true,
+      "visual_contact_sheets_inspected": true,
+      "all_frames_exhaustively_reviewed": false,
+      "new_human_truth_created": false,
+      "note": "Backend frame counts are reported metadata, not independently verified usable frame counts. Sequential decoding was bounded to predeclared selected timestamps."
+    },
+    "saved_sequence_replay": {
+      "status": "COMPLETE",
+      "process_exit_code": 0,
+      "complete_detection_total": 226,
+      "samples_per_variant": 113,
+      "input_pin_count": 230,
+      "inputs_preserved": true,
+      "preflight_sha256": "b67ea354dd83520042b364ada0d8a1e70914efbc0c016f822e3be76eb3cdcc68",
+      "variants": {
+        "unregistered": {
+          "entire_output_equal": true,
+          "elapsed_sec": 3.7657564590044785,
+          "anchors": [
+            {
+              "frame_index": 1320,
+              "time_sec": 44.0,
+              "raw_oil_y": 822.0
+            },
+            {
+              "frame_index": 1485,
+              "time_sec": 49.5,
+              "raw_oil_y": 836.0
+            },
+            {
+              "frame_index": 1560,
+              "time_sec": 52.0,
+              "raw_oil_y": 833.0
+            }
+          ]
+        },
+        "registered_pink822": {
+          "entire_output_equal": true,
+          "elapsed_sec": 3.8515448750113137,
+          "anchors": [
+            {
+              "frame_index": 1320,
+              "time_sec": 44.0,
+              "raw_oil_y": 842.0
+            },
+            {
+              "frame_index": 1485,
+              "time_sec": 49.5,
+              "raw_oil_y": 880.0
+            },
+            {
+              "frame_index": 1560,
+              "time_sec": 52.0,
+              "raw_oil_y": 862.0
+            }
+          ]
+        }
+      },
+      "video_read": false,
+      "frame_detector_rerun": false,
+      "completed_resolver_rerun": true,
+      "new_challenger_evaluated": false,
+      "scope": "Current-source reproduction of stored Mac paired complete detections, including all existing fields."
+    },
+    "tests": {
+      "status": "PASS",
+      "pass_count": 225,
+      "exit_code": 0,
+      "pytest_elapsed_sec": 103.63,
+      "files": [
+        "tests/unit/test_artifact_reference.py",
+        "tests/unit/test_artifact_calibration.py",
+        "tests/unit/test_artifact_proposal.py",
+        "tests/unit/test_oil_interface_tracklets.py",
+        "tests/unit/test_oil_observation_resolver.py",
+        "tests/unit/test_oil_phase_lifecycle.py",
+        "tests/unit/test_foam_episode_resolver.py",
+        "tests/gui/test_artifact_support_review.py"
+      ],
+      "command": "QT_QPA_PLATFORM=offscreen PYTHONPATH=src .venv/bin/python -m pytest -q tests/unit/test_artifact_reference.py tests/unit/test_artifact_calibration.py tests/unit/test_artifact_proposal.py tests/unit/test_oil_interface_tracklets.py tests/unit/test_oil_observation_resolver.py tests/unit/test_oil_phase_lifecycle.py tests/unit/test_foam_episode_resolver.py tests/gui/test_artifact_support_review.py",
+      "result_origin": "Actual codv process output; not an independently exported pytest log.",
+      "entire_repository_suite": false,
+      "windows_execution": false,
+      "new_mechanism_efficacy": false
+    },
+    "repository_checks": {
+      "tracked_tree_clean_at_start_and_final_check": true,
+      "final_head": "18885d226a7a7745bc2d062fd750ec263b9c78f6",
+      "git_diff_check": "PASS",
+      "detector_governance": "PASS",
+      "governance_scope": "Unchanged tracked tree; this proposal was delivered outside tracked architecture owners."
+    }
+  },
+  "inherited_evidence_not_reexecuted_here": {
+    "windows_d1": {
+      "source_kind": "user-transferred saved-record report, reconciled in repository",
+      "inventory_total": 73,
+      "retained": 45,
+      "absent_before_retention": 28,
+      "boundary_counts": {
+        "UNKNOWN_BEFORE_RETAINED_REFS": 28,
+        "TRACKLET_NOT_ADMITTED": 28,
+        "PHASE_HARD_GATE": 7,
+        "OWNER_NOT_ALLOWED": 10
+      },
+      "distinct_passive_inventory_size": 75,
+      "private_files_independently_rehashed_here": false
+    },
+    "sample4_paired_full_pipeline": {
+      "origin": "prior preserved full-pipeline pair, not rerun at image-detector level in this task",
+      "target_matcher_survival": {
+        "baseline": 7,
+        "registered": 7,
+        "denominator": 7
+      },
+      "exact_reviewed_target_selection": {
+        "baseline": 4,
+        "registered": 1,
+        "denominator": 7
+      },
+      "raw_oil_count": {
+        "baseline": 101,
+        "registered": 105
+      },
+      "valid_oil_count": {
+        "baseline": 101,
+        "registered": 102
+      },
+      "raw_foam_count": {
+        "baseline": 26,
+        "registered": 26
+      },
+      "valid_foam_count": {
+        "baseline": 26,
+        "registered": 23
+      },
+      "these_counts_are_accuracy": false
+    },
+    "sample3_long_gap": {
+      "adjacent_numeric_interval_sec": [
+        34.5345,
+        81.014267
+      ],
+      "duration_sec": 46.479767,
+      "missing_rows": 92,
+      "filled_cap_veto_rows": 87,
+      "rows_with_internal_publishable_candidate": 89,
+      "publishable_implies_physically_correct": false
+    },
+    "guarded_reciprocal_probe": {
+      "status": "CLOSED WITHOUT PROMOTION",
+      "real_complete_output_changes": 0,
+      "real_complete_detections": 226,
+      "probe_rerun_here": false
+    }
+  },
+  "native_audit_directory": "sample/output/s11-current-detector-work-spec-20261008-002/",
+  "native_executed_runners": [
+    "inspect_samples.py",
+    "verify_saved_sequences.py"
+  ],
+  "native_receipts": [
+    "source-review-receipt.json",
+    "sequence-verification-preflight.json",
+    "sequence-verification-receipt.json"
+  ],
+  "delivered_portable_helper": {
+    "file": "reproduce_saved_sequence_audit.py",
+    "relationship": "Adapted portable helper; the exact native verification runner was used for the reported execution.",
+    "validation": "Python compilation and CLI help checked; not executed against the remote corpus in this packaged form."
+  },
+  "sources_at_pinned_head": {
+    "current_state": "docs/00-project/work-plan.md",
+    "d1_correction": "docs/60-evidence/s11/2026-10-08-next-work-intake.md",
+    "reference_implementation": "docs/60-evidence/s11/2026-10-08-d2-reference-ui.md",
+    "recipe_comparison": "docs/60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md",
+    "sequence_causality": "docs/50-diagnostics/s11/2026-10-08-d2-registration-sequence-causality.md",
+    "support_representation": "docs/60-evidence/s11/2026-10-08-d2-registered-support-design.md",
+    "episode_gap": "docs/60-evidence/s11/2026-10-08-episode-source-review-validation.md",
+    "foam_owner": "docs/50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md",
+    "foam_rim": "docs/60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md",
+    "canonical_windows_truth": "docs/30-validation/windows-sample1-heating-coldstart-reviewed-truth.md",
+    "architecture": "docs/20-architecture/s11-interface-observability-witness-architecture.md",
+    "validation": "docs/30-validation/s11-interface-observability-witness-validation.md",
+    "logic_map": "docs/20-architecture/s11-current-detector-logic-map.md",
+    "failure_registry": "docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md"
+  },
+  "changes": {
+    "production_source": false,
+    "original_recipes": false,
+    "truth_or_golden": false,
+    "tracked_document_owners": false,
+    "commit_or_push": false,
+    "ignored_audit_outputs": true
+  },
+  "not_evaluated": [
+    "New registered-support comparison efficacy",
+    "New physical discriminator",
+    "O2 holdout acceptance",
+    "New O3/O4 behavior",
+    "Foam behavior improvement",
+    "Windows nine-segment replay",
+    "Independent report comprehension"
+  ],
+  "privacy": {
+    "windows_media_read": false,
+    "windows_private_assets_exported": false,
+    "raw_media_in_package": false,
+    "screenshots_in_package": false
+  },
+  "native_audit_note": "AUDIT-RESULT.md"
+}

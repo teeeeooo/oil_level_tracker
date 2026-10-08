@@ -1,0 +1,4 @@
+990fa04c6a2d3a1c52cc96fbeef74fe4ec241f45734053abc82f242abaf8a35d  README.md
+fafed551bff564ee393699390272b5fddf039ac109cb35557ea9d2c2d0b9383d  S11-detector-design-and-work-spec-18885d2-2026-10-08.md
+6b4ebe8fbca7595af1bc341aa7a53f4fdf8c1ab888275169a758aface2f486ea  reproduce_saved_sequence_audit.py
+a9fb7f8ed8c9694941640cbec6a72daa3a856dbb0c65f34570bb229fce67ed32  verification-summary.json

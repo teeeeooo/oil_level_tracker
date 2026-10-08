@@ -468,3 +468,18 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-10-08 | [D2 registration sequence causality](50-diagnostics/s11/2026-10-08-d2-registration-sequence-causality.md), [receipt](50-diagnostics/s11/2026-10-08-d2-registration-sequence-causality.json) | 저장 후보의 226개 결과 완전 재현, 묶음·추적·선택 손실 원인과 효과 없는 상호 대응 수정안 보존; 운영 코드 변경 없음 |
 | 2026-10-08 | [D2 registered support design](60-evidence/s11/2026-10-08-d2-registered-support-design.md), [receipt](60-evidence/s11/2026-10-08-d2-registered-support-design.json) | 구조물 등록이 잃는 픽셀 정보의 재현·충돌 대조와 원본 근거 보존 설계; 추가 수동 지정의 허용 범위 판단 대기 |
 | 2026-10-08 | [D2 reference capture UI](60-evidence/s11/2026-10-08-d2-reference-ui.md), [receipt](60-evidence/s11/2026-10-08-d2-reference-ui.json) | 사용자 승인에 따른 원본·윤곽 미리보기, 선택 범위·명시적 판독·프로필 보존 구현과 로컬 검증; 검출 판정 불변 |
+
+## 18885d2 detector specification intake additions
+
+2026-10-08 intake 커밋에 최초 등록. 원본과 현행 계약을 구분하며,
+같은 원본을 수정해 진행 상태로 바꾸지 않는다.
+
+| 최초 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-08 | [Intake review](60-evidence/s11/2026-10-08-spec-18885d2-intake.md), [machine record](60-evidence/s11/2026-10-08-spec-18885d2-intake.json) | 전체 첨부 검토·배치, 타당성 및 D2 준비성/진단/효과 게이트 보완 |
+| 2026-10-08 | [Fresh replay preflight](60-evidence/s11/2026-10-08-spec-18885d2-replay-preflight.json), [receipt](60-evidence/s11/2026-10-08-spec-18885d2-replay-receipt.json) | 첨부 helper의 실제 재실행: 230 input pins, 226 complete outputs 불변 |
+| 2026-10-08 | [Supplied README](70-reference/s11-detector-work-spec-18885d2-2026-10-08/README.md), [specification](70-reference/s11-detector-work-spec-18885d2-2026-10-08/S11-detector-design-and-work-spec-18885d2-2026-10-08.md) | 전달 원문 bytes 보존; D2–D6의 추가 설계 근거 |
+| 2026-10-08 | [Verification summary](70-reference/s11-detector-work-spec-18885d2-2026-10-08/verification-summary.json), [SHA256SUMS](70-reference/s11-detector-work-spec-18885d2-2026-10-08/SHA256SUMS.txt), [replay helper](70-reference/s11-detector-work-spec-18885d2-2026-10-08/reproduce_saved_sequence_audit.py) | 전달 원문 bytes 보존; helper는 exact-head 역사 재현용 |
+| 2026-10-08 | [Import manifest](70-reference/s11-detector-work-spec-18885d2-2026-10-08/import-manifest.json) | ZIP/전체 파일 identity, native 텍스트 복사본과 로컬 PNG 위치 |
+| 2026-10-08 | [Native result](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/AUDIT-RESULT.md), [source runner](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/inspect_samples.py), [source receipt](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/source-review-receipt.json) | 첨부가 참조한 로컬 원본 별도 보존; 42프레임 표본 맥락 |
+| 2026-10-08 | [Native sequence runner](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/verify_saved_sequences.py), [preflight](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/sequence-verification-preflight.json), [receipt](70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/sequence-verification-receipt.json) | 첨부가 참조한 감사 당시 실행·입력 pin 원본 별도 보존 |

@@ -3,12 +3,15 @@
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery` / `ACTIVE`.
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
-**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** User approved optional region/contour narrowing. Reference capture, original/edge preview, explicit scoped review and relocatable recipe persistence are locally implemented and verified; matcher/public detector behavior remains unchanged. Next specify a bounded diagnostic comparison of saved reviewed support with current support, with crossing/stationary/obscured counter-controls before any behavioral consumer. No established discriminator, ML or Windows run; D2/O2 entry remains unmet.
+**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
+**Next transition:** The 18885d2 specification is incorporated with readiness and acceptance refinements. Next planned work is D2-A0: establish eligible reviewed references, actual candidate-family support bases, comparison domains and resource bounds before D2-A1 diagnostic implementation. Reference capture/review is locally verified; the comparator is not implemented. D2-B/D3 real comparison and O2 entry remain gated. No established discriminator, ML or immediate Windows task.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
 is a preserved proposal, with [intake and cleanup evidence](../60-evidence/s11/2026-10-08-next-work-intake.md).
+The later [18885d2 specification package](../70-reference/s11-detector-work-spec-18885d2-2026-10-08/README.md)
+refines D2–D6; its [intake review](../60-evidence/s11/2026-10-08-spec-18885d2-intake.md)
+records adopted contracts and limitations. Both originals retain their dated scope.
 Historical pending prose never reopens a closed experiment or supplies current authority.
 
 ## S11 work-item ledger
@@ -25,14 +28,14 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; reference capture/review locally VERIFIED; no challenger promoted | Define diagnostic correspondence and counter-controls before consuming reviewed support | [Reference UI evidence](../60-evidence/s11/2026-10-08-d2-reference-ui.md), [input contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-reference--proposed-input-contract) |
+| W4 / O2 challenger | OPEN; reference capture/review locally VERIFIED; comparison contract planned, not implemented | D2-A0 readiness/basis/domain/budget → D2-A1 diagnostic contracts → gated D2-B information comparison/D3 efficacy | [Intake review](../60-evidence/s11/2026-10-08-spec-18885d2-intake.md), [comparison contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
 | Foam front / episode | Separate proposed work | D5: own design and single-change comparison before integration; no automatic Oil-gate bypass | [Responsibility architecture](../20-architecture/s11-detector-responsibility-architecture.md), [Foam investigation](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md) |
 | W7 / O5 field qualification | PENDING integrated candidate | D6: exact runtime, all nine canonical segments, existing report and target resources | [Field gate](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
 | Report adjuncts | Source context and episode-source review ADOPTED | Reuse existing report; comprehension and numerical identity remain separate unresolved outcomes | [Source context](../60-evidence/s11/2026-10-07-report-source-context-validation.md), [episode review](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
-| D0 planning intake | Source audit completed; originals and local receipts verified | Planning baseline only; no detector or field acceptance | [Intake record](../60-evidence/s11/2026-10-08-next-work-intake.md) |
+| D0 planning intake | Initial and 18885d2 packages preserved/reviewed; portable helper reproduces 226 results | Planning baseline only; no detector or field acceptance | [Initial intake](../60-evidence/s11/2026-10-08-next-work-intake.md), [18885d2 intake](../60-evidence/s11/2026-10-08-spec-18885d2-intake.md) |
 
 W4-R0–R5 remain internal continuation labels: R0 correction and R3 inventory are
 complete; R1 is closed without promotion; its censored comparison remains
@@ -152,8 +155,15 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    stays uncertain. Existing matcher geometry remains unchanged. Legacy/missing/
    changed-context evidence is never replaced by the current frame. Eighty-seven
    focused checks and saved 44 s setup verify capture/UI, not field efficacy.
-   Next freeze a diagnostic correspondence rule and opposing/unresolved controls;
-   do not automatically use registered pixels as a veto or fluid proof.
+   **18885d2 specification intake complete:** all five supplied files are
+   byte-preserved; native evidence and a fresh 226-output replay agree. The
+   [planned exact-coordinate diagnostic](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract)
+   separates reviewed edges, actual native measurement footprints, processed
+   support and centered envelopes. Its decisions remain NOT_EVALUATED. Original
+   Mac recipes have no templates and the UI demo is mixed/uncertain; this spot
+   check establishes no eligible reviewed reference. Candidate-owned observed
+   edges are also not generally retained by the current lineage sidecar.
+   No automatic registered-pixel veto or fluid proof follows.
    Do not repeat known target-admission inventory, restore a false owner, relax
    geometric association, tune thresholds, or add exclusions for new winners.
    Original recipes and labels stay fixed. Existing material judgments remain
@@ -161,11 +171,27 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    or file export is required. Ask for physical judgment only on a new material
    ambiguity encountered in a concrete subsequent design. Independent
    physical/scalar/temporal acceptance remains separate.
-4. Before D3, freeze input identities, exposure/partition roles, operating-point
-   policy, resource bounds and falsification. Compare wrong-target suppression
-   separately from true-target recovery, through W3 and the unchanged report.
-   All-abstain and raw output growth are not success. Missing Windows data does
-   not justify guessed production behavior; independent data gates remain explicit.
+4. **Planned sequence within D2/W4:**
+   D2-A0 first maps existing reference readiness and candidate-family evidence
+   bases to their current owners. Freeze exact reviewed/common raster domains,
+   unavailable denominators, review-state/rectangle/preprocessing identity and
+   measured incremental resource caps. This is a bounded reuse/readiness pass,
+   not renewed scene inventory. If real reviewed support is absent, record
+   `reviewed-reference-unavailable`; synthetic/input-contract work can proceed,
+   but do not infer labels or start a real efficacy comparison.
+   D2-A1 then implements bounded diagnostic records with legacy/context/synthetic
+   controls and complete debug ON/OFF output equality. Raw overlap/no-match
+   cannot confer physical identity; tool completion is separate from efficacy.
+   D2-B performs one fixed real information comparison only when controls exist.
+   D3 additionally requires a declared physical decision/abstention rule, input
+   identities, exposure/partition roles, operating-point policy and falsification.
+   Compare wrong-target suppression separately from true-target recovery, through
+   W3 and the unchanged report. Protect all four Mac samples and the full sample4
+   sequence, including 49.5/52 s regression. All-abstain physical decisions and
+   raw output growth are not success; NOT_EVALUATED diagnostic v1 is not itself
+   a failed physical classifier. No after-result tolerance/threshold search.
+   [Comparison gates](../30-validation/s11-interface-observability-witness-validation.md#registered-support-comparison-gates)
+   own the distinction. Missing Windows data does not justify guessed behavior.
 5. O2 acceptance precedes D4a; phase/handoff D4b has its own gate. D5 Foam needs
    independent design and ablation. D6 evaluates the integrated exact runtime.
 

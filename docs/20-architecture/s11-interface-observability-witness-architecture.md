@@ -1959,7 +1959,64 @@ identified in a concrete preview before asking the user. Public/report behavior
 remains equal during reference capture; effectiveness, runtime/resource bounds
 and O2/O3/Windows acceptance remain their existing separate gates.
 
+### Registered support diagnostic comparison — planned contract
+
+The [18885d2 specification intake](../60-evidence/s11/2026-10-08-spec-18885d2-intake.md)
+adopts the following diagnostic design, not an implemented comparator or physical
+decision. Reuse `artifact_reference`, actual candidate generation/measurement
+sidecars and the existing debug projector. First establish a family-by-family
+availability matrix: current `OilMeasurementLineage` records scalar/band evidence
+and does not generally retain candidate-owned raw edge sets. Shared Canny pixels
+inside a candidate envelope cannot substitute for that missing lineage.
+
+Keep `observed_raw_edge`, `native_measurement_footprint`, `processed_support`,
+`centered_envelope` and `unavailable` bases separate. Bind source frame/time,
+Glass/geometry, candidate source/kind/Y/input index and actual sampling provenance
+before trace score sorting; validate it again at projection. Five native sector
+samples are not a continuous contour. Preserve disconnected support and duplicate
+candidate identities without increasing independent support counts.
+
+For exact source-coordinate v1, let R be reviewed reference raw edges, C be actual
+candidate-owned observed edges and V be their common usable raster domain,
+restricted to the explicitly reviewed reference scope. Record shared R∩C∩V,
+reference-only (R−C)∩V and candidate-only (C−R)∩V pixels, with denominators and
+unavailable/censored portions. Zero denominators produce null ratios. Pixels
+outside the reviewed scope stay unreviewed. Footprint area statistics have a
+separate basis and denominator; they are not observed-edge intersections.
+Effective/glare masks establish sampling eligibility only: optical obscuration
+or coincident fluid/structure can still make physical correspondence unknown.
+
+V1 translates only known crop origins; no alignment, dilation, nearest-edge fill
+or tolerance search. The temporal registration owner's fallback `(0,0)` does not
+certify zero motion, and adjacent-frame registration does not establish a saved
+reference match. Differences from one-pixel noise are diagnostic differences,
+not object disappearance or new fluid. Overlap, difference and mixing remain
+raw observations; physical/target/path/scalar decisions stay `NOT_EVALUATED`.
+
+The consumer must validate preprocessing/version as well as frame and geometry
+context. Its cache/input identity includes snapshot hash, review state and
+rectangle, masks, current frame/candidate/support, geometry/preprocessing and
+comparator version. Snapshot hash alone omits review state/rectangle.
+`bound_reference` means valid recipe context, not present visibility. Missing,
+legacy, corrupt or incompatible inputs remain explicitly unavailable.
+
+Freeze storage/latency/RSS bounds against a measured baseline before debug
+integration; existing snapshot size/count limits do not bound per-frame work.
+Keep payloads in bounded diagnostic sidecars through existing publication owners.
+Matcher, score, authority, tracklet, phase, selector, projection and report
+behavior stay equal. Existing preflight excludes reference-only metadata while
+it is behavior-neutral; a future accepted behavioral consumer must include its
+reviewed digest and comparator version in runtime identity. No overlap veto or
+no-match anchor is authorized by this diagnostic design.
+
 ## History Review
+
+2026-10-08 specification intake at 18885d2: inspected all supplied files, native
+receipts/contact sheets, current reference/measurement/registration owners and
+F04/F09/F10. Replayed 226 saved completed outputs unchanged. Added readiness,
+review-domain and diagnostic-versus-efficacy boundaries before implementation;
+the known registered-template sequence regression remains. No classifier,
+physical label, production flow or failure disposition changes.
 
 2026-10-08 approved reference UI implementation: capture and scoped review extend
 the existing proposal/editor/recipe owners. The matcher does not read the new

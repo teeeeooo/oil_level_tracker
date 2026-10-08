@@ -1,0 +1,128 @@
+{
+  "schema": "s11-detector-spec-import-v1",
+  "basis_date": "2026-10-08",
+  "baseline_main": "18885d226a7a7745bc2d062fd750ec263b9c78f6",
+  "source_zip": {
+    "original_attachment": "1-S11-detector-work-spec-18885d2-2026-10-08.zip",
+    "sha256": "35f4d46c3edb2e62891d2cb59294f3ee597b4509e0b2d992d6cd262130f78fd6",
+    "bytes": 30438,
+    "entry_count": 5,
+    "preservation": "All five entries preserved below; ZIP container identity recorded, no duplicate tracked ZIP"
+  },
+  "files": {
+    "README.md": {
+      "sha256": "990fa04c6a2d3a1c52cc96fbeef74fe4ec241f45734053abc82f242abaf8a35d",
+      "bytes": 3520,
+      "preservation": "byte-identical",
+      "role": "supplied source; not current execution authority"
+    },
+    "S11-detector-design-and-work-spec-18885d2-2026-10-08.md": {
+      "sha256": "fafed551bff564ee393699390272b5fddf039ac109cb35557ea9d2c2d0b9383d",
+      "bytes": 51110,
+      "preservation": "byte-identical",
+      "role": "supplied source; not current execution authority"
+    },
+    "SHA256SUMS.txt": {
+      "sha256": "87327fdf6fd98e26d8a0039a1f799e279eb1e0d9a23bea37e5ac0baf712b1a1f",
+      "bytes": 390,
+      "preservation": "byte-identical",
+      "role": "supplied source; not current execution authority"
+    },
+    "reproduce_saved_sequence_audit.py": {
+      "sha256": "6b4ebe8fbca7595af1bc341aa7a53f4fdf8c1ab888275169a758aface2f486ea",
+      "bytes": 6808,
+      "preservation": "byte-identical",
+      "role": "supplied source; not current execution authority"
+    },
+    "verification-summary.json": {
+      "sha256": "a9fb7f8ed8c9694941640cbec6a72daa3a856dbb0c65f34570bb229fce67ed32",
+      "bytes": 11679,
+      "preservation": "byte-identical",
+      "role": "supplied source; not current execution authority"
+    }
+  },
+  "native_audit_artifacts": [
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/AUDIT-RESULT.md",
+      "sha256": "a5c58eb7c388310da027621b633a56a51749ec54174e29d86317783bd4d49577",
+      "bytes": 2319,
+      "preserved_copy": "docs/70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/AUDIT-RESULT.md",
+      "preservation": "byte-identical native artifact; not part of supplied ZIP"
+    },
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/base_sample_1-source-review.png",
+      "sha256": "6ea12492113df98ac2702d690886b56dfb19ff5cb267fe872a4f4aa0be6627f4",
+      "bytes": 623031,
+      "preservation": "original local asset retained; hash recorded; not committed"
+    },
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/inspect_samples.py",
+      "sha256": "eaee2140b1342c0464b07a2e4331fcc5376a15fd869edcca66b2f9ef184a1be6",
+      "bytes": 3214,
+      "preserved_copy": "docs/70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/inspect_samples.py",
+      "preservation": "byte-identical native artifact; not part of supplied ZIP"
+    },
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/sample2-source-review.png",
+      "sha256": "349574630aa2f0d92835141843734f100544564083c02ac4527ce2b77d103de4",
+      "bytes": 1108912,
+      "preservation": "original local asset retained; hash recorded; not committed"
+    },
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/sample3-source-review.png",
+      "sha256": "93cc53921c7b46a9ccfb5090675a9cb155a0286d58a1e873c64fc13920698dd8",
+      "bytes": 433808,
+      "preservation": "original local asset retained; hash recorded; not committed"
+    },
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/sample4-source-review.png",
+      "sha256": "c30a20141d85eee8bb9bf56301eeb7cd527e073e4b1f02cdb5a94224d0c14576",
+      "bytes": 198939,
+      "preservation": "original local asset retained; hash recorded; not committed"
+    },
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/sequence-verification-preflight.json",
+      "sha256": "b67ea354dd83520042b364ada0d8a1e70914efbc0c016f822e3be76eb3cdcc68",
+      "bytes": 29296,
+      "preserved_copy": "docs/70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/sequence-verification-preflight.json",
+      "preservation": "byte-identical native artifact; not part of supplied ZIP"
+    },
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/sequence-verification-receipt.json",
+      "sha256": "b56b092acf363d4a5c2ae1008dcbaae0561c8b1a60badd207769abe0380abad9",
+      "bytes": 1340,
+      "preserved_copy": "docs/70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/sequence-verification-receipt.json",
+      "preservation": "byte-identical native artifact; not part of supplied ZIP"
+    },
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/source-review-receipt.json",
+      "sha256": "bf010407f66269d3740611ad4f8f18ea84f232822a0fe98cc4925cebceb20e59",
+      "bytes": 11228,
+      "preserved_copy": "docs/70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/source-review-receipt.json",
+      "preservation": "byte-identical native artifact; not part of supplied ZIP"
+    },
+    {
+      "source_path": "sample/output/s11-current-detector-work-spec-20261008-002/verify_saved_sequences.py",
+      "sha256": "a4858c480aa9ed90738f5247e13bbb257d4957ed7f89670ca988288a9bf25e24",
+      "bytes": 3312,
+      "preserved_copy": "docs/70-reference/s11-detector-work-spec-18885d2-2026-10-08/native-audit/verify_saved_sequences.py",
+      "preservation": "byte-identical native artifact; not part of supplied ZIP"
+    }
+  ],
+  "fresh_replay_artifacts": {
+    "preflight.json": {
+      "source_path": "sample/output/s11-spec-18885d2-intake-20261008-001/helper-replay/preflight.json",
+      "preserved_copy": "docs/60-evidence/s11/2026-10-08-spec-18885d2-replay-preflight.json",
+      "sha256": "4980b99d6320bb24a74fad2441f9ad5e1188036dafb2ce6bda4d609ea77cc326",
+      "bytes": 29371
+    },
+    "receipt.json": {
+      "source_path": "sample/output/s11-spec-18885d2-intake-20261008-001/helper-replay/receipt.json",
+      "preserved_copy": "docs/60-evidence/s11/2026-10-08-spec-18885d2-replay-receipt.json",
+      "sha256": "cd4aa370e10090f790cd050f5d76f5df6dc3f1fce9f19c7e52cbac6becbe0e64",
+      "bytes": 1234
+    }
+  },
+  "source_summary_is_native_receipt_copy": false,
+  "helper_role": "Historical exact-head replay helper, outside production/test discovery; requires clean 18885d2 checkout and saved local inputs. No claim that a fresh GitHub source checkout includes ignored inputs."
+}

@@ -848,6 +848,50 @@ or stationary at structures, obscuration and physical mixing still need opposing
 and unresolved controls before any future reference consumer. Local UI checks
 do not imply Windows display/packaging or O2 field acceptance.
 
+## Registered support comparison gates
+
+The [planned comparator](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-diagnostic-comparison--planned-contract)
+has three distinct acceptance levels. These do not replace V2–V5 or O2/O3:
+
+1. **D2-A diagnostic contracts.** First freeze a bounded reference-readiness and
+   candidate-family/basis matrix, common reviewed domain, availability/count
+   denominators, lineage identities and incremental latency/RSS/trace caps.
+   Synthetic/legacy/context controls may proceed without a real reviewed
+   reference, but that absence must block real efficacy claims. Test explicit
+   review-state/rectangle changes with the same snapshot hash, preprocessing
+   mismatch, crop/mask censoring, empty support/zero denominators, missing native
+   geometry, disconnected/mixed support, permutation and duplicate candidates.
+   A shared band, centered envelope or sparse native samples cannot become
+   candidate-owned raw edges. Outside-scope pixels remain unreviewed; mask
+   eligibility is not optical visibility. Require reproducible diagnostics,
+   bounded resources and complete debug ON/OFF detector equality through the
+   actual entry path. Completion does not require physical decisions.
+2. **D2-B information feasibility.** With input-bound real controls and frozen
+   exposure/partition roles, compare isolated reviewed structure, target away
+   from structure, moving crossing, stationary coincidence, optical obscuration,
+   different contours in one envelope and identical pixels with different
+   physical causes. Preserve basis-specific unavailable denominators and all
+   unresolved results. Execute one fixed comparison; noise-dominated exact-pixel
+   results may close without promotion. Do not adjust tolerance/dilation afterward.
+   Raw information gains alone do not satisfy O2.
+3. **D3 physical efficacy / O2.** A physical decision extension first requires
+   a named additional observable, reproducible decision/abstention rule and V3
+   operating-point/partition discipline. Apply the all-unresolved/no-useful-
+   support no-go here, not to a trace-only comparator intentionally emitting
+   `NOT_EVALUATED`. Separate wrong-target suppression, true-target retention and
+   recovery, unavailable/unresolved and unreviewed outputs; scalar accuracy is
+   independent. Newly admitted but unreviewed outputs are not successful targets.
+
+Reuse the full sample4 0–56 s paired sequence and its fixed seven target/three
+negative bindings, including 40/42/44 s upstream losses and 49.5/52 s regression.
+Cover the other three samples' overlay, reflection and long-gap risks. These are
+exposed regression controls, not a new 100% final-recall product requirement or
+held-out proof. Later behavior must preserve major movement/episode outcomes;
+a better single frame cannot hide downstream harm. Engineering defects can be
+fixed and rerun; a failed mechanism does not authorize outcome-driven tuning.
+O2 Windows shadow/holdout acceptance, O3 authority/association entry, later phase
+controls and nine-segment integrated field qualification remain separate gates.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.

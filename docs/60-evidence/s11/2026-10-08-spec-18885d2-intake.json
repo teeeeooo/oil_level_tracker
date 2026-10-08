@@ -1,0 +1,83 @@
+{
+  "schema": "s11-spec-intake-review-v1",
+  "basis_date": "2026-10-08",
+  "baseline_main": "18885d226a7a7745bc2d062fd750ec263b9c78f6",
+  "disposition": "PLANNING_ADOPTED_WITH_REFINEMENTS",
+  "source_manifest": "docs/70-reference/s11-detector-work-spec-18885d2-2026-10-08/import-manifest.json",
+  "verification": {
+    "supplied_files_hash_verified": 5,
+    "sha256sums_entries_verified": 4,
+    "native_sequence_input_pins_verified": 230,
+    "fresh_helper_input_pins_verified": 230,
+    "native_and_helper_common_input_pins": 229,
+    "pin_set_difference": {
+      "native_only": [
+        "sample/output/s11-current-detector-work-spec-20261008-002/verify_saved_sequences.py"
+      ],
+      "helper_only": [
+        "sample/output/s11-d2-recipe-artifact-20261008-001/pipeline-receipt.json"
+      ]
+    },
+    "video_recipe_sheet_hashes_verified": 12,
+    "existing_contact_sheets_inspected": 4,
+    "source_frames_represented": 42,
+    "source_video_decoded_this_intake": false,
+    "fresh_helper_executed_from": "/tmp",
+    "fresh_helper_receipt": "docs/60-evidence/s11/2026-10-08-spec-18885d2-replay-receipt.json",
+    "full_detection_equality": {
+      "unregistered": 113,
+      "registered_pink822": 113
+    },
+    "input_hashes_preserved": true,
+    "historical_pytest_count": 225,
+    "historical_pytest_status": "reported in native audit text and supplied summary; no saved pytest log; not rerun this intake",
+    "new_physical_truth": false
+  },
+  "readiness_spot_check": {
+    "scope": "four original Mac recipes and existing UI demo only; not a repository-wide reference inventory",
+    "original_recipe_template_counts": {
+      "base_sample_1.oilrecipe": 0,
+      "sample2.oilrecipe": 0,
+      "sample3.oilrecipe": 0,
+      "sample4.oilrecipe": 0
+    },
+    "ui_demo_review_state": "mixed_or_uncertain",
+    "eligible_reviewed_reference_established": false,
+    "candidate_edge_support": "Current OilMeasurementLineage stores measurements/band geometry, not general candidate-owned observed-edge masks; family-specific representability remains D2-A0 work."
+  },
+  "refinements": [
+    "D2-A0 input and candidate-family representability before full integration",
+    "Separate diagnostic contract completion, added-information feasibility and physical efficacy/O2 promotion",
+    "Restrict exact comparison domain to reviewed reference scope and shared usable raster coverage; optical visibility remains separate",
+    "Freeze denominators, cache/preprocessing identity and incremental resource budgets before integration"
+  ],
+  "runtime_changed": false,
+  "tests_changed": false,
+  "original_recipes_or_labels_changed": false,
+  "windows_work_performed": false,
+  "field_disposition": "FIELD FAIL",
+  "o1": "LOCALLY ACCEPTED",
+  "o2": "OPEN",
+  "machine_learning": "EXCLUDED",
+  "documentation_verification": {
+    "detector_governance": "PASS",
+    "governance_base": "18885d226a7a7745bc2d062fd750ec263b9c78f6",
+    "git_diff_check": "Authored changes PASS; complete staged check reports only four byte-preserved Markdown hard-break lines in supplied specification lines 3-6",
+    "link_check": {
+      "changed_markdown_files": 23,
+      "local_links_checked": 684,
+      "errors": [],
+      "import_hashes_verified": true,
+      "protected_owners_unchanged": true,
+      "commit_pinned_sources_exist": true,
+      "incoming_work_plan_anchors_preserved": true,
+      "named_obligation_assertions": 17
+    },
+    "link_check_scope": "cumulative changes since 49c6d3aebeaf90aea96cd5be4c0e91115011f5a7, including this intake",
+    "supplied_zip_entries_byte_equal": 5,
+    "native_text_copies_byte_equal": 6,
+    "fresh_receipts_byte_equal": 2,
+    "changed_paths_docs_only": true,
+    "runtime_tests_original_samples_and_canonical_truth_unchanged": true
+  }
+}

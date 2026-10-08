@@ -1,0 +1,52 @@
+{
+  "head": "18885d226a7a7745bc2d062fd750ec263b9c78f6",
+  "checks": {
+    "unregistered": {
+      "complete_detection_count": 113,
+      "entire_output_equal": true,
+      "elapsed_sec": 0.4765480410133023,
+      "anchors": [
+        {
+          "frame_index": 1320,
+          "raw_oil_y": 822.0
+        },
+        {
+          "frame_index": 1485,
+          "raw_oil_y": 836.0
+        },
+        {
+          "frame_index": 1560,
+          "raw_oil_y": 833.0
+        }
+      ]
+    },
+    "registered_pink822": {
+      "complete_detection_count": 113,
+      "entire_output_equal": true,
+      "elapsed_sec": 0.47525600000517443,
+      "anchors": [
+        {
+          "frame_index": 1320,
+          "raw_oil_y": 842.0
+        },
+        {
+          "frame_index": 1485,
+          "raw_oil_y": 880.0
+        },
+        {
+          "frame_index": 1560,
+          "raw_oil_y": 862.0
+        }
+      ]
+    }
+  },
+  "inputs_preserved": true,
+  "input_pin_count": 230,
+  "production_changed": false,
+  "labels_changed": false,
+  "video_read": false,
+  "frame_detector_rerun": false,
+  "completed_resolver_rerun": true,
+  "field_qualification": false,
+  "preflight_sha256": "4980b99d6320bb24a74fad2441f9ad5e1188036dafb2ce6bda4d609ea77cc326"
+}

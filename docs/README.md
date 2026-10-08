@@ -166,6 +166,19 @@ Earlier dated plans retain rationale and rejected alternatives; current Witness
 Architecture/Validation and the parent physical-interface proposal retain their
 responsibilities. The new source neither restarts O1 nor promotes a detector.
 
+The later [18885d2 detector specification package](70-reference/s11-detector-work-spec-18885d2-2026-10-08/README.md)
+preserves all five supplied files, including the historical reproduction helper,
+plus six separately identified native text artifacts. Its
+[manifest](70-reference/s11-detector-work-spec-18885d2-2026-10-08/import-manifest.json)
+locates the four retained local contact sheets. The
+[intake review](60-evidence/s11/2026-10-08-spec-18885d2-intake.md) distinguishes
+fresh replay verification from reported tests and adopts readiness, comparison
+domain and diagnostic-versus-efficacy refinements. This is the next D2–D6 design
+input at a newer code basis, not a new milestone or a replacement live plan.
+Existing Witness Architecture/Validation own the adopted contracts; Work Plan
+alone owns the next action. The supplied and native scripts remain source
+material, outside production and test discovery.
+
 ## Supporting collection indexes
 
 - S11 diagnostics — [`50-diagnostics/s11/`](50-diagnostics/s11/)
