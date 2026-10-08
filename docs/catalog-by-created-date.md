@@ -466,3 +466,4 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 |---|---|---|
 | 2026-10-08 | [D2 recipe artifact comparison](60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md), [receipt](60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.json) | 기존 구조물 등록의 실제 후보·UI 결합, 153후보 비교와 0–56초 전체 경로 비교; 위치 충돌·후속 유면 선택 손실로 실험 recipe 미채택 |
 | 2026-10-08 | [D2 registration sequence causality](50-diagnostics/s11/2026-10-08-d2-registration-sequence-causality.md), [receipt](50-diagnostics/s11/2026-10-08-d2-registration-sequence-causality.json) | 저장 후보의 226개 결과 완전 재현, 묶음·추적·선택 손실 원인과 효과 없는 상호 대응 수정안 보존; 운영 코드 변경 없음 |
+| 2026-10-08 | [D2 registered support design](60-evidence/s11/2026-10-08-d2-registered-support-design.md), [receipt](60-evidence/s11/2026-10-08-d2-registered-support-design.json) | 구조물 등록이 잃는 픽셀 정보의 재현·충돌 대조와 원본 근거 보존 설계; 추가 수동 지정의 허용 범위 판단 대기 |

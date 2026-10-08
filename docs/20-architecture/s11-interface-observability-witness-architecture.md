@@ -1858,7 +1858,71 @@ Do not restore a known false candidate, add exclusions for each new winner or
 treat remaining candidates as physically valid merely because a competitor was
 removed. No production registration or matcher change is adopted by this readout.
 
+### Registered support reference — proposed input contract
+
+This is a proposed, behavior-neutral prerequisite for a future structure-aware
+challenger, not an accepted matcher or recipe-schema migration. The
+[support audit](../60-evidence/s11/2026-10-08-d2-registered-support-design.md)
+reproduces 46 saved Oil signatures and demonstrates identical template matches
+for substantially different pixel supports. Existing normalized line envelopes
+cannot reconstruct the intended structure. A whole connected component can also
+join the local structure to other scene edges. Preserving raw pixels alone does
+not establish which pixels the operator classified.
+
+The additional observable is **an explicitly attributed structural reference**,
+with its visibility and original evidence intact. Keep these responsibilities
+in the existing proposal → private editor copy → recipe persistence path:
+
+| Responsibility | Proposed retained information and boundary |
+|---|---|
+| `OpenCvArtifactProposalService` / frame evidence | Bound source frame, Glass geometry, original local pixels, effective/glare masks, raw Canny and separate processed support. Preserve candidate source/kind/Y/index and whether geometry is native or centered. Do not replace raw edges by horizontal closing or portray a centered line as a traced contour. |
+| `RoiEditorDialog` / existing canvas | Preview the original and proposed support. A list selection records a proposal-level negative judgment. A reviewed support portion, if the product permits specifying one, is separately attributed; unselected or uncertain pixels remain unknown. A search rectangle does not label its whole area. |
+| `ArtifactTemplate` / `InspectionRecipe` persistence | Optional, versioned reference binding; legacy normalized geometry stays readable and is not silently upgraded. Preserve reviewed scope, attribution source and omitted/obscured support separately. Do not invent frame identity from the setup detector's internal frame-zero call. |
+| Future diagnostic consumer before `OIL-AUTHORITY` / `OIL-TRACKLET` | Compare available same-frame support with the bound reference, retaining matched, differing, hidden and ambiguous portions. It may not infer fluid identity from survival or grant association from geometry alone. Any behavioral consumer requires a separate accepted rule. |
+
+The reference must bind image dimensions, source crop origin, source frame/time,
+Glass/geometry fingerprint, preprocessing identity and content hashes. Storage
+must be bounded and relocatable with the recipe; no absolute workstation path is
+a binding. Preserve Apply/Cancel isolation. Missing assets, edits, resizes or ROI
+changes invalidate correspondence explicitly rather than silently remapping old
+truth. Do not introduce unbounded per-frame images or automatic frame-history
+retention. No particular serialized payload format is adopted at this stage.
+
+Keep evidence states distinct: `geometry_only`, `proposal_negative`,
+`reviewed_support`, `mixed_or_uncertain`, and `reference_unavailable` describe
+input provenance, not detector acceptance. A reviewed reference is still not
+proof that the same structure is visible now. Simultaneous fluid and structural
+support, stationary fluid at the registered location and masked/occluded scenes
+must remain unresolved unless another validated observable separates them.
+No hard rejection follows merely from the overlap fraction. No-match is not
+clearance, and a snapshot must not become a learned template or ML requirement.
+
+The proposed interaction is selection → support preview → acceptance of a clear
+portion or unresolved status. Optional region/contour narrowing for mixed support
+is a product-scope decision owned by Work Plan and the user. If setup must remain
+list-only, retain reference/provenance but leave ambiguous support unresolved;
+do not add an automatic full-component fallback. Neither branch promises that
+every setup image permits registration. Do not implement dependent interaction
+or a matcher before resolving that scope and freezing its controls.
+
+Test isolated structure, genuine interfaces away from and crossing/stationary
+on that structure, reference obscuration, mixed/disconnected support, missing
+native geometry, legacy recipes and mismatched geometry/content. Reuse stored
+regression and original judgments first; do not transfer a candidate or semantic
+feature label to all pixels in its band/box. New physical ambiguity must be
+identified in a concrete preview before asking the user. Public/report behavior
+remains equal during reference capture; effectiveness, runtime/resource bounds
+and O2/O3/Windows acceptance remain their existing separate gates.
+
 ## History Review
+
+2026-10-08 support-reference design: source-backed extrema collisions demonstrate
+that the current registration loses object-support information before matching.
+The new proposal retains operator-attributed reference support and uncertainty,
+rather than tuning the position veto, repeating image-only patch matching or
+expanding connected components. A reference and a negative judgment remain
+distinct from positive physical identity. No UI, recipe schema, classifier or
+production control flow is changed; the manual interaction scope awaits the user.
 
 2026-10-08 registered-input comparison: exercised existing setup generation,
 explicit UI selection on a copy, unchanged calibrated matching, the complete
@@ -1992,5 +2056,5 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: NONE — this update changes offline target-truth binding only; the previously mapped A1 diagnostic and production decision owners remain unchanged.
+- Logic-map impact: NONE — reference-support retention is proposed within existing owners; the mapped diagnostic and production decision owners remain unchanged, with no new classifier or behavior consumer.
 - Failure-registry impact: NONE — this architecture refines the response to existing failures without claiming field repair.

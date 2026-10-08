@@ -1,0 +1,187 @@
+{
+  "schema": "s11-registered-support-information-boundary-v1",
+  "status": "COMPLETE_DESIGN_SCOPE_PENDING",
+  "local_directory": "sample/output/s11-d2-structure-support-20261008-001",
+  "preflight": {
+    "source_head": "a239578e65fe240864dbaf2d33ebf20aeeef3687",
+    "runner_sha256": "eee23ae64336ba235458e7ddd37cfb6301259f9db753c1390870c6c2cceeb9b4",
+    "input_pins": {
+      "sample/output/s11-d2-recipe-artifact-20261008-001/proposals.json": "40f9c2e0127dbf6561ab8fb7d2508d758bd5df8cda66c3c1fca8b775879d9da1",
+      "sample/output/s11-d2-recipe-artifact-20261008-001/f1260-full.png": "7bd6b8ee30d86bb16ebeaf99fee95093fcbc98bf6bd3415504d066c1e78d4210",
+      "sample/output/s11-d2-recipe-artifact-20261008-001/f1260-original.png": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-canny.png": "ed886ccdf19597af8e04fd58370e7aba63a1322f753311ba7b163b76278bef1a",
+      "sample/output/s11-d2-recipe-artifact-20261008-001/setup-f1320/proposals.json": "6c42883e037c9421d55bec0883d82e8808e35da55dd4aa601edf9f4068dc9521",
+      "sample/output/s11-d2-recipe-artifact-20261008-001/setup-f1320/f1320-full.png": "0f9c5f9e12902edf45ee6b6fe03254eaf29ac30f2530d32da1afbbf467bc560e",
+      "sample/output/s11-d2-recipe-artifact-20261008-001/setup-f1320/f1320-original.png": "3083e2a46604986053edf61df6ac605d959861332010421542e2c8a33a022020",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320-canny.png": "6031c2f7dff2e0252bf75409404de8b35142d9d23be2f97b8112c4169ae1bd92",
+      "src/oil_tracker/adapters/vision/artifact_calibration.py": "6f0bf8b47fc0368b152f3fb227e99f623cc2772604a56ccbf23b2f93bbddfc8a",
+      "src/oil_tracker/adapters/vision/artifact_proposal.py": "ba0057c2bf777699c73bb6607d661190ae28cd461a49b6afd84dcdbbda1400a1",
+      "src/oil_tracker/adapters/vision/preprocessing.py": "55e33486cf34e709ccaf1930720f41978f74c3448baa69eceac8bb570233236e",
+      "src/oil_tracker/adapters/vision/geometry_masks.py": "8c9bbbed8e3a9c3abb5f1c97832fc1ab8d34d5cc4b7b07f706626d4653244820",
+      "src/oil_tracker/domain/geometry.py": "a146ee41a2dc2fa829ce91b0d42066a1be89d55e621fb878e7c8d258a053d84d",
+      "src/oil_tracker/domain/recipe.py": "c645dabf05b70d06f18c93f7dacec738211c52bc821dc00dffd5769cca7fbd81"
+    },
+    "hypothesis": "Exact candidate support and explicit operator object attribution are lost by extrema-only registration. Test signature collisions without proposing classification.",
+    "falsification": "Do not infer object support from scalar band, connected component or absence of reference. No truth or matcher changes.",
+    "scope": "Two already captured setup frames, unchanged preprocessing/signature/matcher, synthetic support replacements; no video or detector rerun."
+  },
+  "receipt": {
+    "status": "COMPLETE",
+    "preflight_sha256": "f98512fb7078bfed6cc3a235e3467e7a660e90e18419a60c6d5132904e2c0af1",
+    "input_preserved": true,
+    "source_head": "a239578e65fe240864dbaf2d33ebf20aeeef3687",
+    "video_read": false,
+    "frame_detector_rerun": false,
+    "preprocessing_reconstructed": true,
+    "new_human_review": false,
+    "recipe_changed": false,
+    "auto_acceptance": false,
+    "outputs": {
+      "readout.json": "ce9ffe6145abf28f5954b6a64687c9f34b4a9547b6eac4f7e0bcc4a80e7de50c",
+      "support-information-review.png": "f67bf2d09a7eb1d6238f7291944480496e412bc1515d5a47d9ed9028849cb650"
+    }
+  },
+  "readout": {
+    "source_head": "a239578e65fe240864dbaf2d33ebf20aeeef3687",
+    "signature_reproduction": [
+      {
+        "frame": 1260,
+        "oil_signatures_reproduced": 22
+      },
+      {
+        "frame": 1320,
+        "oil_signatures_reproduced": 24
+      }
+    ],
+    "controls": [
+      {
+        "frame": 1260,
+        "candidate_input_index": 5,
+        "source": "oil_hypothesis:8d6f19bfe4f0ceb642176831",
+        "canonical_y": 844.0,
+        "source_x_extent": [
+          551,
+          639
+        ],
+        "signature_band_source_y": [
+          842,
+          847
+        ],
+        "horizontal_mask_pixels": 180,
+        "raw_canny_pixels": 75,
+        "morphology_added_pixels": 121,
+        "sparse_support_pixels": 2,
+        "disjoint_shifted_support_pixels": 88,
+        "same_signature_for_all_three": true,
+        "match_scores": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "physical_decision": "NOT_EVALUATED",
+        "template_fields": [
+          "angle_deg",
+          "center_x",
+          "center_y",
+          "height",
+          "id",
+          "kind",
+          "name",
+          "note",
+          "width"
+        ],
+        "human_feature_context": {
+          "source_box_xyxy": [
+            581,
+            839,
+            605,
+            848
+          ],
+          "pixel_truth": "NOT_ASSIGNED",
+          "canny_components_touching_box": [
+            {
+              "id": 3,
+              "pixels_inside_display_box": 14,
+              "pixels_outside_display_box": 755,
+              "source_bbox_xyxy": [
+                555,
+                804,
+                636,
+                877
+              ]
+            },
+            {
+              "id": 18,
+              "pixels_inside_display_box": 23,
+              "pixels_outside_display_box": 2,
+              "source_bbox_xyxy": [
+                581,
+                841,
+                596,
+                849
+              ]
+            }
+          ],
+          "horizontal_band_pixels_inside_box": 57,
+          "horizontal_band_pixels_outside_box": 123
+        }
+      },
+      {
+        "frame": 1320,
+        "candidate_input_index": 21,
+        "source": "phase_transition_scan",
+        "canonical_y": 822.0,
+        "source_x_extent": [
+          559,
+          636
+        ],
+        "signature_band_source_y": [
+          820,
+          825
+        ],
+        "horizontal_mask_pixels": 324,
+        "raw_canny_pixels": 110,
+        "morphology_added_pixels": 222,
+        "sparse_support_pixels": 2,
+        "disjoint_shifted_support_pixels": 77,
+        "same_signature_for_all_three": true,
+        "match_scores": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "physical_decision": "NOT_EVALUATED",
+        "template_fields": [
+          "angle_deg",
+          "center_x",
+          "center_y",
+          "height",
+          "id",
+          "kind",
+          "name",
+          "note",
+          "width"
+        ]
+      }
+    ],
+    "conclusion": "Scalar/bounding support is a many-to-one projection. Snapshot, support attribution and visibility must be distinguished; no optical/fluid decision is established."
+  },
+  "runner": {
+    "sha256": "eee23ae64336ba235458e7ddd37cfb6301259f9db753c1390870c6c2cceeb9b4",
+    "source": "\"\"\"Audit retained registration information, with unchanged production operators.\"\"\"\nfrom pathlib import Path\nfrom dataclasses import asdict, replace\nimport hashlib,json,os,subprocess,sys\nroot=Path.cwd();out=Path(__file__).resolve().parent\nsys.path.insert(0,str(root/'src'))\nos.environ['MPLCONFIGDIR']=str(out/'.mpl');os.environ['XDG_CACHE_HOME']=str(out/'.cache')\nimport cv2\nimport numpy as np\nimport matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nfrom oil_tracker.domain.detection import BoundaryCandidate\nfrom oil_tracker.domain.enums import BoundaryKind\nfrom oil_tracker.domain.recipe import InspectionRecipe\nfrom oil_tracker.adapters.vision.geometry_masks import build_mask_bundle\nfrom oil_tracker.adapters.vision.preprocessing import preprocess\nfrom oil_tracker.adapters.vision.artifact_calibration import attach_spatial_signature,template_from_candidate,artifact_match_score\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\ndef save(n,v):\n p=out/n;assert not p.exists();p.write_text(json.dumps(v,indent=2,ensure_ascii=False,allow_nan=False)+'\\n')\npre=json.loads((out/'preflight.json').read_text());assert sha(Path(__file__))==pre['runner_sha256']\nfor n,h in pre['input_pins'].items():assert sha(root/n)==h,n\nprior=root/'sample/output/s11-d2-recipe-artifact-20261008-001';a1=root/'sample/output/s11-a1-lineage-20261007-001/frames-final'\nresults=[];displays=[];counts=[]\nfor f,idx,folder in [(1260,5,prior),(1320,21,prior/'setup-f1320')]:\n data=json.loads((folder/'proposals.json').read_text());recipe=InspectionRecipe.from_dict(data['recipe']);glass=recipe.glasses[0]\n full=cv2.imread(str(folder/f'f{f}-full.png'));bundle=build_mask_bundle(full,glass);raster=preprocess(bundle.crop,bundle.effective_mask,glass.detector_settings)\n assert np.array_equal(bundle.crop,cv2.imread(str(folder/f'f{f}-original.png')))\n assert np.array_equal(raster.canny,cv2.imread(str(a1/f'f{f}-canny.png'),0))\n ox,oy=bundle.crop_origin;assert (ox,oy)==(543,798)\n matched=0\n for c in data['detection']['candidates']:\n  if c['kind']!='oil_air':continue\n  candidate=BoundaryCandidate(**dict(c,kind=BoundaryKind(c['kind'])))\n  new=attach_spatial_signature(candidate,raster.horizontal_mask,glass,crop_origin=(ox,oy))\n  fields=[k for k in c['features'] if k.startswith('artifact_')]\n  assert fields and all(new.features[k]==c['features'][k] for k in fields)\n  matched+=1\n counts.append({'frame':f,'oil_signatures_reproduced':matched})\n c=data['detection']['candidates'][idx];candidate=BoundaryCandidate(**dict(c,kind=BoundaryKind(c['kind'])))\n assert c['y']==(844 if f==1260 else 822)\n local=int(round(c['y']-oy));band=np.zeros(raster.canny.shape,bool);band[local-2:local+3]=True\n horizontal=(raster.horizontal_mask>0)&band;edges=(raster.canny>0)&band\n cols=np.flatnonzero(horizontal.any(axis=0));x0,x1=int(cols[0]),int(cols[-1]+1)\n template=template_from_candidate(candidate,name='diagnostic only');assert template is not None\n # Same extrema and the same candidate scalar, but only two endpoint pixels.\n sparse=np.zeros_like(raster.horizontal_mask);sparse[local,x0]=255;sparse[local,x1-1]=255\n sparse_candidate=attach_spatial_signature(candidate,sparse,glass,crop_origin=(ox,oy))\n assert all(sparse_candidate.features[k]==candidate.features[k] for k in fields)\n assert artifact_match_score(candidate,template)==artifact_match_score(sparse_candidate,template)==1.0\n # A support whose pixels are disjoint in Y also collapses to the same signature.\n shifted=np.zeros_like(sparse);shifted[local-2,x0:x1]=255\n shifted_candidate=attach_spatial_signature(candidate,shifted,glass,crop_origin=(ox,oy))\n assert all(shifted_candidate.features[k]==candidate.features[k] for k in fields)\n assert artifact_match_score(shifted_candidate,template)==1.0\n row={'frame':f,'candidate_input_index':idx,'source':c['source'],'canonical_y':c['y'],\n      'source_x_extent':[x0+ox,x1+ox],'signature_band_source_y':[local-2+oy,local+3+oy],\n      'horizontal_mask_pixels':int(horizontal.sum()),'raw_canny_pixels':int(edges.sum()),\n      'morphology_added_pixels':int((horizontal&~edges).sum()),\n      'sparse_support_pixels':int((sparse>0).sum()),'disjoint_shifted_support_pixels':int((shifted>0).sum()),\n      'same_signature_for_all_three':True,'match_scores':[1.,1.,1.],\n      'physical_decision':'NOT_EVALUATED','template_fields':sorted(asdict(template))}\n if f==1260:\n  box=np.zeros_like(band);box[839-oy:848-oy,581-ox:605-ox]=True\n  n,labels=cv2.connectedComponents((raster.canny>0).astype('uint8'),connectivity=8)\n  ids=sorted(int(i) for i in np.unique(labels[box]) if i)\n  components=[]\n  for i in ids:\n   m=labels==i;ys,xs=np.where(m)\n   components.append({'id':i,'pixels_inside_display_box':int((m&box).sum()),'pixels_outside_display_box':int((m&~box).sum()),\n                      'source_bbox_xyxy':[int(xs.min())+ox,int(ys.min())+oy,int(xs.max()+1)+ox,int(ys.max()+1)+oy]})\n  row['human_feature_context']={'source_box_xyxy':[581,839,605,848],'pixel_truth':'NOT_ASSIGNED','canny_components_touching_box':components,\n      'horizontal_band_pixels_inside_box':int((horizontal&box).sum()),'horizontal_band_pixels_outside_box':int((horizontal&~box).sum())}\n results.append(row);displays.append((f,c,bundle.crop,raster.canny,horizontal,edges,sparse,shifted))\nsave('readout.json',{'source_head':pre['source_head'],'signature_reproduction':counts,'controls':results,\n 'conclusion':'Scalar/bounding support is a many-to-one projection. Snapshot, support attribution and visibility must be distinguished; no optical/fluid decision is established.'})\nfig,axes=plt.subplots(2,3,figsize=(12,8),layout='constrained')\nfor axis,(f,c,crop,canny,horizontal,edges,sparse,shifted) in zip(axes,displays,strict=True):\n for ax in axis:\n  ax.imshow(cv2.cvtColor(crop,cv2.COLOR_BGR2RGB),extent=(542.5,646.5,901.5,797.5),interpolation='nearest')\n  ax.set_xlim(548,642);ax.set_ylim(890,802);ax.set_xlabel('source X');ax.set_ylabel('source Y')\n axis[0].set_title(f'{f/30:g} s: original and stored scalar')\n axis[0].axhline(c['y'],color='#df40d0',lw=1)\n axis[1].set_title('Pixels contributing to stored width')\n yy,xx=np.where(horizontal);axis[1].scatter(xx+543,yy+798,s=4,color='#27c4ed')\n yy,xx=np.where(edges);axis[1].scatter(xx+543,yy+798,s=4,color='#ff9600')\n axis[2].set_title('Two endpoints give the SAME signature')\n yy,xx=np.where(sparse);axis[2].scatter(xx+543,yy+798,s=35,color='#df40d0')\n if f==1260:\n  from matplotlib.patches import Rectangle\n  for ax in axis:ax.add_patch(Rectangle((581,839),24,9,fill=False,color='#eeeeee',ls='--',lw=.8))\nfig.suptitle('Registration geometry loses pixel identity and connectivity',fontsize=15)\nfig.supxlabel('Cyan: horizontal mask after existing closing. Orange: raw Canny in the same band.\\nRight panel is a synthetic information-loss control, not a new label or suggested detector. White box: prior human-review context only.',fontsize=9)\nfig.savefig(out/'support-information-review.png',dpi=140);plt.close(fig)\nfor n,h in pre['input_pins'].items():assert sha(root/n)==h,n\nsave('receipt.json',{'status':'COMPLETE','preflight_sha256':sha(out/'preflight.json'),'input_preserved':True,'source_head':pre['source_head'],\n 'video_read':False,'frame_detector_rerun':False,'preprocessing_reconstructed':True,'new_human_review':False,'recipe_changed':False,'auto_acceptance':False,\n 'outputs':{n:sha(out/n) for n in ('readout.json','support-information-review.png')}})\nprint(json.dumps({'reproduction':counts,'controls':results},indent=2))\n"
+  },
+  "files": {
+    "preflight.json": "f98512fb7078bfed6cc3a235e3467e7a660e90e18419a60c6d5132904e2c0af1",
+    "receipt.json": "ddc1d22a5e4917e8b82c55b7ab665e0c0798a62d99914808562c40d835ab9895",
+    "readout.json": "ce9ffe6145abf28f5954b6a64687c9f34b4a9547b6eac4f7e0bcc4a80e7de50c",
+    "audit_support.py": "eee23ae64336ba235458e7ddd37cfb6301259f9db753c1390870c6c2cceeb9b4",
+    "support-information-review.png": "f67bf2d09a7eb1d6238f7291944480496e412bc1515d5a47d9ed9028849cb650"
+  },
+  "interpretation": "Reference preservation and operator-attributed support are proposed; no complete physical classifier or detection change is established.",
+  "pending_product_decision": {
+    "question": "Optional region/contour-portion narrowing at recipe setup, or existing list selection only?",
+    "answer": null
+  },
+  "production_changed": false,
+  "field_disposition": "FIELD FAIL"
+}

@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** D2 registration sequence audit is complete, NOT PROMOTED. Saved-input replay locates regrouping, assignment, merge termination and committed-owner selection behind later target loss. A physical-proposal-preserving reciprocal probe leaves all 226 completed detections unchanged. The next bounded design must distinguish registered structure from actual surviving boundary support before association; no geometry-only relaxation, extra exclusions, ML or Windows run. D2/O2 entry remains unmet.
+**Next transition:** D2 support-reference design is prepared; user decision pending on optional region/contour narrowing during recipe registration versus list-only setup. Saved-frame checks prove existing line signatures lose pixel-support identity. Preserve reference pixels/provenance and explicit uncertainty in the proposed existing-workflow extension; do not implement dependent UI/schema/matcher changes before the input scope is settled. Production remains unchanged; no ML or Windows run. D2/O2 entry remains unmet.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -25,7 +25,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | Registration causal audit complete; guarded reciprocal probe ineffective. Require structure/boundary support evidence before association repair | [Sequence causality](../50-diagnostics/s11/2026-10-08-d2-registration-sequence-causality.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#user-confirmed-recipe-artifacts--reuse-before-new-inference) |
+| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | Support-reference design prepared; await user's permitted registration interaction scope before implementation | [Support design evidence](../60-evidence/s11/2026-10-08-d2-registered-support-design.md), [input contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-reference--proposed-input-contract) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -135,15 +135,26 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    29 existing tracklet tests but changes none of the 226 complete real outputs:
    the clear child rows lack the existing physical-proposal witness. It is
    CLOSED WITHOUT PROMOTION; do not remove that guard to force a result.
-   The next bounded design must identify an additional support distinction
-   between registered structure and surviving boundary before row grouping and
-   confirmation, including coincident/obscured controls. Reuse stored evidence
-   and current owners; no discriminator or production repair is established.
+   **Support-reference design prepared:** the [saved-setup audit](../60-evidence/s11/2026-10-08-d2-registered-support-design.md)
+   reproduces all 46 Oil signatures at 42/44 s. Two endpoint pixels and a full
+   horizontal support return identical signatures/match scores; connected Canny
+   support can extend from the local semicircle to unrelated scene edges.
+   The [proposed input contract](../20-architecture/s11-interface-observability-witness-architecture.md#registered-support-reference--proposed-input-contract)
+   retains original reference/visibility/proposal provenance and separately
+   attributed support through the existing setup owners. A selected band/box
+   is not a pixel label; no-match is not fluid evidence; coincident/obscured
+   support stays unresolved. No discriminator or production repair is established.
+   **User decision pending:** permit optional region/contour-portion narrowing
+   for mixed structure support, or keep recipe setup list-only. This changes
+   operator input and calibration burden. Stop dependent UI/schema/matcher
+   implementation until the user answers; do not treat the recommendation or
+   elapsed time as consent. No Windows work or file export is needed.
    Do not repeat known target-admission inventory, restore a false owner, relax
    geometric association, tune thresholds, or add exclusions for new winners.
-   Original recipes and labels stay fixed. No repeated human judgment, ML,
-   Windows work or file export is required by this audit. Ask only for a new
-   material ambiguity encountered in a concrete subsequent design. Independent
+   Original recipes and labels stay fixed. Existing material judgments remain
+   closed; the pending question is product interaction scope. No ML, Windows work
+   or file export is required. Ask for physical judgment only on a new material
+   ambiguity encountered in a concrete subsequent design. Independent
    physical/scalar/temporal acceptance remains separate.
 4. Before D3, freeze input identities, exposure/partition roles, operating-point
    policy, resource bounds and falsification. Compare wrong-target suppression
