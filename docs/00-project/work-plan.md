@@ -8,6 +8,14 @@
 
 **Latest bounded adoption (2026-10-08):** source-frame review is locally verified at code `52003aa` and ADOPTED into main through delivery `ae47d5c` after the user-authorized merge review. The remaining worktree is removed; original media and local evidence are preserved. The fixed side-texture challenger is CLOSED WITHOUT PROMOTION. The sample3 episode audit identifies repeated filled-cap publication constraints, without proving that their rejected candidates are true Oil. [Adoption evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md#main-adoption-review--2026-10-08) owns the review and cleanup. Detector efficacy, independent comprehension, O2/Windows acceptance and A0Q stability remain unresolved.
 
+**Windows-first investigation closeout (2026-10-08):** the interrupted continuation
+on `work/s11-windows-first-detector-20261008` is ready for diagnostic handoff.
+H1/H1b and the frozen LabPics ranking are CLOSED WITHOUT PROMOTION. The saved-audit
+exclusion reader and saved-detection replay helper are locally verified; production
+source remains identical to `49c6d3a`. [Closeout and next boundary](../60-evidence/s11/2026-10-08-windows-first-detector-closeout.md)
+own the evidence. The new branch is not main-adopted. Private Windows execution,
+physical candidate identity, O2 and field repair remain unresolved.
+
 This document owns current state, authorization, unknowns and the next transition.
 Completed execution detail belongs in linked evidence. Historical pending wording
 in audits or evidence does not reopen a closed experiment.
@@ -74,6 +82,13 @@ The latest report candidate keeps source-frame review inside the offline report,
 The full sample3 observer run finds FILLED_CAP_VETO in 87 of the 92 missing rows in its longest numerical gap. Investigate consequential phase/ownership and interface reappearance with positive and negative controls before changing publication. This does not prove those rejected rows are true Oil, authorize removing the cap, or bypass O2/O3 entry. [Episode-source evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) records the audit and exact tests.
 
 ## Next transition
+
+The latest resume point is the [Windows-first closeout](../60-evidence/s11/2026-10-08-windows-first-detector-closeout.md#handoff-and-next-boundary).
+Use its verified saved-audit reader for a named exact-row owner-filter question
+when the private W3 JSON is available. Do not rerun a broad Windows audit or reopen
+H1/H1b/LabPics by threshold tuning. A new behavior candidate needs a distinct
+mechanism and Windows-relevant positive/negative evidence for boundary reappearance
+versus full material and residue; the closed local probes do not supply it.
 
 Resume from the [A2 closure handoff](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md#a2-closure-handoff--2026-10-07),
 which pins the checkout, preserved worktrees, local-only evidence and closed human

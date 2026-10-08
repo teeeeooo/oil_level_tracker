@@ -22,7 +22,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 
 ## 폴더별 목록
 
-현재 색인 수록 270개 파일. 이후 추가된 모든 repo 문서의 전수 목록을 보증하는 수치는 아닙니다.
+현재 색인 수록 273개 파일. 이후 추가된 모든 repo 문서의 전수 목록을 보증하는 수치는 아닙니다.
 `검토 후 유지`는 승계가 확인되지 않아 현 위치를 보존한다는 뜻이며,
 그 문서의 과거 실행 지시 전체가 현행이라는 의미가 아닙니다.
 
@@ -51,7 +51,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-07-20 | [result-review-viewer-plan.md](10-product/result-review-viewer-plan.md) | 현 위치 유지 |
 | 2026-07-29 | [ux-improvement-plan.md](10-product/ux-improvement-plan.md) | 현 위치 유지 |
 
-### `docs/20-architecture/` — 34개
+### `docs/20-architecture/` — 35개
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
@@ -89,6 +89,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-09-17 | [s11-interface-observability-witness-architecture.md](20-architecture/s11-interface-observability-witness-architecture.md) | 현 위치 유지 |
 | 2026-10-07 | [s11-report-source-context-design.md](20-architecture/s11-report-source-context-design.md) | 로컬 report 후보 설계 |
 | 2026-10-08 | [s11-episode-source-review-design.md](20-architecture/s11-episode-source-review-design.md) | 원본 프레임 맥락 및 별도 텍스처 실험 계약 |
+| 2026-10-08 | [s11-terminal-contradiction-shadow-design.md](20-architecture/s11-terminal-contradiction-shadow-design.md) | 종료된 상태 전환 가설 및 저장 결과 진단 계약 |
 
 ### `docs/30-validation/` — 32개
 
@@ -209,7 +210,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-08-04 | [post-s10-windows-qt-platform-bootstrap-repair.md](60-evidence/s10/post-s10-windows-qt-platform-bootstrap-repair.md) | 완료 증거 |
 | 2026-08-04 | [s10-windows-canonical-portability-qt-teardown-repair-evidence.md](60-evidence/s10/s10-windows-canonical-portability-qt-teardown-repair-evidence.md) | 완료 증거 |
 
-### `docs/60-evidence/s11/` — 87개
+### `docs/60-evidence/s11/` — 89개
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
@@ -301,6 +302,8 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 
 | 2026-10-08 | [2026-10-08-episode-source-review-validation.json](60-evidence/s11/2026-10-08-episode-source-review-validation.json) | 원본 프레임 검토 및 독립 텍스처 실험 실행 증거 |
 | 2026-10-08 | [2026-10-08-episode-source-review-validation.md](60-evidence/s11/2026-10-08-episode-source-review-validation.md) | 원본 프레임 검토 및 독립 텍스처 실험 실행 증거 |
+| 2026-10-08 | [2026-10-08-windows-first-detector-closeout.json](60-evidence/s11/2026-10-08-windows-first-detector-closeout.json) | 중단 작업 재개 검증 및 산출물 해시 |
+| 2026-10-08 | [2026-10-08-windows-first-detector-closeout.md](60-evidence/s11/2026-10-08-windows-first-detector-closeout.md) | Windows 우선 진단·실험 종료 및 인수인계 |
 
 ### `docs/60-evidence/s6/` — 10개
 

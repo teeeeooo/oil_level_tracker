@@ -21,6 +21,7 @@ Do not scan revision history or all S11 diagnostics by default.
 | Need | Start here | Then only if needed |
 |---|---|---|
 | Current S11 candidate/gate | `work-plan.md` | current architecture + validation linked there |
+| Interrupted Windows-first investigation / H1-H1b and LabPics closure | [2026-10-08 closeout](../60-evidence/s11/2026-10-08-windows-first-detector-closeout.md) | Saved-audit exclusion reader and exact saved-replay baseline; both phase counterfactuals fail the terminal-owner guard; full/ROI LabPics rankings recover no top target. Preserve ROI pairwise signal without promoting it or retuning the rejected rule. |
 | Resume after A2 region-exchange closure | [handoff checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md#a2-closure-handoff--2026-10-07) | Verified e66eb5e baseline, preserved dirty experiment worktrees, Git versus local-only evidence, closed human judgments and next source-discovery entry. |
 | Current detector control flow | `../20-architecture/s11-current-detector-logic-map.md` | affected node detail/source |
 | Code topology / caller / blast radius | current logic map + source | optional local Graphify cache after `scripts/update_graphify_s11.sh` |
