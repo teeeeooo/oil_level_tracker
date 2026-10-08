@@ -312,8 +312,8 @@ counts are **45/28**, replacing 48/25. The supplied specification and verificati
 originals remain byte-preserved; their inherited 48/25 and review-001 admitted
 example must be read with this correction. Labels/packets are unchanged.
 
-One explanatory sentence in the latest return calls review-002 `filling`.
-It supplies no new review-002 field extraction and conflicts with the earlier D1
+One explanatory sentence in the second return called review-002 `filling`.
+It supplied no new review-002 field extraction and conflicted with the earlier D1
 case table and W3 record: review-001 and review-002 are `filled_barrier`,
 `INITIAL_FULL_BARRIER`, `hard_gate`; review-003 is `filling`, `owner_bounded`.
 Do not adopt that sentence or infer different phase rules. Review-001 shows no
@@ -321,6 +321,7 @@ admitted negatives. The narrower supported counterexample remains **within
 review-002**: interface idx8/9 and non-interface idx20 pass the same three row/
 tracklet flags and are all blocked by the same hard gate. This is recorded
 admission, not proof of physical identity, target role or scalar eligibility.
+The subsequent phase/owner table below explicitly confirms this correction.
 
 The local check expands the reported ranges, checks that each index 0..22 appears
 once, and recomputes 11/12, total 73, retained/absent 45/28 and the four boundary
@@ -337,6 +338,39 @@ remains a recorded `NONE_SELECTED`, not a `FINAL_SELECTION_UNRESOLVED` boundary.
 No identity model, phase-gate repair, O2 acceptance or field recovery follows.
 The next local stage is D2's concrete observable/control design under the current
 architecture and validation owners; FIELD FAIL/O2 OPEN are unchanged.
+
+### Phase and owner fields confirmed
+
+The user subsequently supplied the following saved-record fields for all three
+cases. This additional transferred Windows report resolves the second return's
+phase wording; it is not a new audit or a local rehash of the private files.
+
+| Case | phase.value | phase.reason | allowed_mode | allowed_tracklet_ids | owner_chain |
+|---|---|---|---|---|---|
+| review-001 | `filled_barrier` | `INITIAL_FULL_BARRIER` | `hard_gate` | `[]` | `[]` |
+| review-002 | `filled_barrier` | `INITIAL_FULL_BARRIER` | `hard_gate` | `[]` | `[]` |
+| review-003 | `filling` | `FILL_MOTION_OWNER` | `owner_bounded` | `["oil-tracklet:000381:0181"]` | `["oil-tracklet:000351:0147", "oil-tracklet:000381:0181"]` |
+
+The additional report confirms zero tracklet-admitted review-001 candidates,
+seven in review-002 (idx1/2/8/9/14/15/20), and ten in review-003. The latter two
+sets have legacy `first_known_loss=not_selected`, consistent with the earlier
+D1 readout's seven `PHASE_HARD_GATE` and ten `OWNER_NOT_ALLOWED` boundaries.
+Tracklet/row admission and the selector's allowed-owner filter are distinct.
+
+Local source review of
+[`BoundedOilInterfaceSelector.resolve`, `_constrain_layer` and `_adjacent_phase_owner_handoff`](../../../src/oil_tracker/adapters/vision/oil_interface_selector.py)
+confirms that the allowed set constrains each layer before transition scoring.
+An empty allowed set retains only the unknown node. `owner_chain` supplies
+directed adjacent-owner handoff checks; it does not add IDs to the current frame's
+allowed set. Thus review-003's two chain entries do not mean two currently allowed
+owners: only `oil-tracklet:000381:0181` is allowed. Being allowed would still not
+guarantee final selection or physical identity.
+
+The hard gate excludes Oil nodes that reach that filter. It does not establish
+that every original candidate reached it: review-001's 11 recorded members retain
+their earlier `TRACKLET_NOT_ADMITTED` boundary, and its 12 absent members retain
+`UNKNOWN_BEFORE_RETAINED_REFS`. No boundary is overwritten with a guessed causal
+order. D1 remains closed and the next-stage/field disposition is unchanged.
 
 ## Detector Governance
 
