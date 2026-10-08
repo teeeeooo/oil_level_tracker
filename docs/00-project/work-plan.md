@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. No new detector behavior is adopted by the October 8 intake.
-**Next transition:** D2 ordered-column clearance measured all 153 candidates and preserves useful spatial contrast, with scale-dependent overlap. Await one f1260 local protrusion interpretation after assistant image review; no classifier or Windows run starts. D2/O2 algorithm entry remains unmet.
+**Next transition:** D2 f1260 protrusion is user-identified as a glass-pattern lower semicircle; that checkpoint is CLOSED. Existing static-reference reconstruction explains its omission under the three-reference rule. Await same-arc correspondence at 0/28 s before a visibility-aware reference design; no classifier or Windows run starts. D2/O2 entry remains unmet.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -25,7 +25,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 ordered clearance complete without classifier; one f1260 local shape judgment pending. Closed support/connectivity/arm results retained | [Column clearance and checkpoint](../60-evidence/s11/2026-10-08-d2-column-clearance.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
+| W4 / O2 challenger | OPEN; prior frozen challengers closed without promotion | D2 ordered clearance and static-reference audit complete; f1260 glass-pattern reply received. Earlier-reference correspondence pending | [Column clearance and checkpoint](../60-evidence/s11/2026-10-08-d2-column-clearance.md), [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md#d2-boundary-role-design-entry) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -94,13 +94,18 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    now retains first-edge distances above/below original geometry, including
    mask/crop censoring. Its spatial contrast is useful, but larger scales overlap
    between true and wrong targets; do not select a scale or threshold afterward.
-   **One human checkpoint is pending:** after inspecting originals and immediate
-   neighbours, the assistant cannot identify whether the f1260 central downward
-   protrusion is fluid geometry, optical overlap or unresolved. The displayed
-   cyan-box question preserves the known target; it does not repeat its Y review.
-   Wait for that qualitative interpretation before a new region rule/classifier.
-   No Windows work or export is required. Physical/scalar and temporal acceptance
-   remain separate; plain interfaces and optical opposition stay protected.
+   **F1260 reply CLOSED:** the user identifies the local protrusion as the lower
+   semicircle of a glass-specific circular pattern. Preserve the target and raw
+   edges; no whole-box mask or nearby-candidate label follows. The
+   [reference audit](../60-evidence/s11/2026-10-08-d2-column-clearance.md#human-reply-and-existing-static-reference-audit)
+   reconstructs 1,075 stored static bands: zero support in the 56 s preparation
+   frame removes this area under the existing three-reference rule. Zero prior
+   is not optical clearance; no threshold decrease or map union follows.
+   **One new human checkpoint:** can the same glass semicircle be identified
+   in 0 s and/or 28 s? The assistant finds cross-time correspondence ambiguous.
+   Wait before treating those frames as optical references or designing a
+   visibility-aware comparison. No Windows work/export is required. Physical,
+   scalar and temporal acceptance, plain interfaces and optical opposition remain.
 4. Before D3, freeze input identities, exposure/partition roles, operating-point
    policy, resource bounds and falsification. Compare wrong-target suppression
    separately from true-target recovery, through W3 and the unchanged report.

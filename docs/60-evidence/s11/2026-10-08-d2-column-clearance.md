@@ -1,8 +1,8 @@
 # D2 ordered-column clearance and first image interpretation
 
 **Result:** measurement complete; useful spatial contrast, no classifier or
-production promotion. **Checkpoint:** f1260 local protrusion interpretation
-requested from the user. The [Work Plan](../../00-project/work-plan.md) owns current
+production promotion. **Checkpoint:** f1260 local protrusion identified by the user as a glass-pattern
+lower semicircle. Earlier-reference correspondence is the remaining question. The [Work Plan](../../00-project/work-plan.md) owns current
 state. [O2 acceptance](../../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance)
 remains unmet and Windows disposition stays `FIELD FAIL`.
 
@@ -121,9 +121,84 @@ receipt. No private Windows image or file transfer is requested.
 fluid boundary's actual irregularity/bubbles, to overlapping glass/reflection
 patterns, or is it unresolvable from this material? The answer affects whether
 an additional lower edge is geometry to preserve, an optical counter-control,
-or an unresolved component. Pending that answer, do not add a lower-edge veto,
-ignore the protrusion, snap the reference, or proceed to a classifier. A response
-will remain qualitative; it does not create pixel masks or scalar tolerances.
+or an unresolved component. This initial checkpoint was answered below. Its safeguard remains: do not add
+a lower-edge veto, ignore the protrusion, snap the reference or proceed to a
+classifier from a qualitative reply. No pixel masks or scalar tolerances follow.
+
+## Human reply and existing static-reference audit
+
+The user replied **“유리 무늬·반사 등이 겹친 것”**, then clarified
+**“glass 특유의 원형 무늬의 아래쪽 반원”**. Close the f1260 protrusion question:
+the displayed feature is the lower semicircle of a glass-specific circular
+pattern, not evidence that the true target boundary has a downward fluid bulge.
+Do not mark the entire cyan rectangle as artifact, transfer this reply to nearby
+candidates (including idx5/Y844), or erase edges from the input. Genuine target
+and optical feature coexist; a first lower-edge hit may belong to the latter.
+The original machine/display receipts retain their historical pending bytes;
+this section and the Work Plan own the resolved first checkpoint.
+
+The follow-up [optical-reference receipt](2026-10-08-d2-optical-reference.json)
+records a read-only check of existing opposition. At the 42 s review box all
+216 pixels are effective and none is in the saved glare mask. For central sector
+X[584,605), existing near-below bands at b=3/6/9 have `static_available=true`,
+`static_overlap=0`, and `glare_fraction=0`. The adjacent sector X[563,584) has
+static overlaps 0, 0.031746, 0.047619; do not describe the whole scene as static-free.
+`structural_reference_reason=vessel_fitting_geometry_unavailable` remains explicit.
+The user-confirmed optical feature demonstrates that zero glare/static response
+cannot certify absence of glass structure.
+
+### Existing preparation operator reproduced
+
+The existing schedule owner selects 0, 28 and 56 s from the 0–56 s / 2 FPS
+qualification schedule. The unchanged static-prior owner forms each reference's
+`preprocess.horizontal_mask`, then keeps pixels whose mean binary presence is
+at least 0.75. With three successful references that requires all three. This is
+the existing fixed image-processing preparation rule, not a learned model.
+The glare owner covers saturation and specific elongated bright features, not
+all circular glass patterns; broadening its mask is not implied here.
+
+The bounded audit decoded these three **local sample4** frames plus the 42 s
+anchor using the existing reader, geometry and preprocessing. It did not run the
+Oil/Foam detector pipeline or change any setting. Relevant owner bytes match the
+original A1 capture. At 42 s, reconstructed BGR/effective/Canny/normalized/glare
+arrays equal the saved arrays. The reconstructed static prior matches **1,075
+available stored static-overlap bands with zero mismatches**; 413 unavailable
+bands are not silently assigned values. All 17 audit input/source pins remain
+unchanged. This validates the recorded aggregate reconstruction, not byte equality
+to an unretained historical full static raster.
+
+| Frame / time | Horizontal-mask pixels inside the 216-pixel review box | Glare pixels |
+|---|---:|---:|
+| f0 / 0 s, reference | 207 | 0 |
+| f840 / 28 s, reference | 132 | 0 |
+| f1680 / 56 s, reference | 0 | 0 |
+| f1260 / 42 s, current comparison | 71 | 0 |
+
+The current preparation operator consequently retains **zero** static pixels in
+this box: the zero-support 56 s reference prevents the required three-way overlap.
+The assistant sees a more uniform appearance in that later image. Whether fluid
+occlusion, illumination or another optical change caused the missing reference
+edge is not mechanically established. Nor are the 0/28 s edge pixels certified as
+the same glass semicircle merely because their coordinates overlap.
+
+### Reference-correspondence checkpoint
+
+The assistant inspected enlarged original crops at all four times. At 0/28 s,
+fluid/optical structures overlap, so the specific correspondence to the 42 s
+human-identified lower semicircle remains ambiguous. The new display
+`sample/output/s11-d2-optical-reference-20261008-001/reference-visibility-review.png`
+shows original crops and unenhanced local views with the same display box.
+
+The user is asked **which, if either, of 0 s and 28 s permits identifying that
+same glass lower semicircle**. This is a new cross-time correspondence question,
+not a repeat of the settled 42 s subtype. No automatic transfer to the reference
+images is made. Until resolved, do not treat either reference as a clean optical
+template, lower 0.75, union the maps, add a per-Glass exclusion, or accept a
+candidate using a zero static prior. A positive answer permits designing a
+visibility-aware reference comparison with genuine stationary-interface and
+coincident-target controls; it does not approve a mask or veto. If correspondence
+is unresolvable, retain that limitation rather than choosing a convenient frame.
+No Windows execution or private-file export is needed at this checkpoint.
 
 ## Verification
 
@@ -140,6 +215,6 @@ is made by this diagnostic.
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F09`, `S11-F10`.
-- First harmful stage: no new production first cause is established. The new spatial readout has scale-dependent overlap and an unresolved local protrusion before any classifier/authority stage.
+- First harmful stage: no new production first cause is established. The new spatial readout has scale-dependent overlap; the human-identified glass semicircle is absent from the reconstructed static prior because the 56 s reference has no local edge support. This explains the recorded prior, not the production final-selection first cause.
 - Logic-map impact: NONE — ordered ray geometry is an offline extension of the saved-edge diagnostic owner; production control flow and physical authority are unchanged.
 - Failure-registry impact: NONE — the experiment preserves known geometry/optical ambiguity and no-retuning constraints; it proves no new field cause or accepted correction.

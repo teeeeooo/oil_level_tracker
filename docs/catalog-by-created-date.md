@@ -458,3 +458,4 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 최초 등록일 | 문서 | 역할 |
 |---|---|---|
 | 2026-10-08 | [D2 column clearance](60-evidence/s11/2026-10-08-d2-column-clearance.md), [receipt](60-evidence/s11/2026-10-08-d2-column-clearance.json) | 153후보의 순서 보존 윤곽 거리 측정·시각 판독; f1260 국소 돌출 해석 질문과 출처 |
+| 2026-10-08 | [D2 optical-reference receipt](60-evidence/s11/2026-10-08-d2-optical-reference.json) | 유리 반원 사용자 판독과 기존 3장 기준 재구성; 해석은 D2 column clearance 기록에 이어서 보존 |

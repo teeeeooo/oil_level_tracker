@@ -1793,8 +1793,12 @@ mask, scale or source-family rescue follows. Temporal/optical opposition and
 scalar acceptance remain separate, unmet conditions for any later classifier.
 
 The [ordered-column readout and local shape checkpoint](../60-evidence/s11/2026-10-08-d2-column-clearance.md)
-retain spatial contrast, scale-dependent overlap and the unresolved protrusion.
-No candidate classifier or physical interpretation follows from the ray ordering.
+retain spatial contrast and scale-dependent overlap. The subsequent user reply
+identifies the local protrusion as a glass-pattern lower semicircle; the existing
+static-reference audit exposes its absence from the stored prior. Zero prior is
+not optical clearance. Reusing earlier frames requires explicit correspondence
+and visibility handling without a threshold decrease, map union or target veto.
+No candidate classifier follows from ray ordering or that qualitative reply.
 
 ## History Review
 

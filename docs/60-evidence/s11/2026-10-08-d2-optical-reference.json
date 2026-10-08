@@ -1,0 +1,241 @@
+{
+  "source_head": "d64d33f234cf699a2adbea4a93091a04110496a6",
+  "preflight_sha256": "c2ee3199af57d67cdd0507ee56b5fd0a7995a6f6ece32d8f35056b713a94f999",
+  "input_and_source_files": {
+    "sample/sample4.mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/capture-manifest.json": "fca7623eddf3b8b199a2090a257ebab73fb4a620f2f8c50a6605ab0129045b45",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260.json": "2f1baac170542bacb918a05a4e862a766750f3eba52d25d25e1daa5a3152bfff",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-original_roi.png": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-normalized.png": "46646ee5b1fa21da44f4db9911f249c5c880e6aadd218d6910de3be27bb1937c",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260-canny.png": "ed886ccdf19597af8e04fd58370e7aba63a1322f753311ba7b163b76278bef1a",
+    "sample/output/s11-a2-region-context-20261007-001/inputs/f1260-glare.png": "90a783afbb56c519b940112aa09f5d466bd335c7e10af5ae14e2305da2a4993d",
+    "sample/output/s11-a2-target-binding-20261007-001/packet.json": "be57465f80235a65edbf16f338e45ecd5590a43238bb718762052a965d0f24c4",
+    "sample/output/s11-a2-target-binding-20261007-001/snapshot.json": "5ae726cfef8ae9b4c14fdb23bd5f3489218b9716c4b597b74fe07170f7667485",
+    "src/oil_tracker/adapters/vision/opencv_phase_detector.py": "b10e87ac27a7de377d4933502716c1ea38367f9af4b4c07502b5bcb0c9c73c78",
+    "src/oil_tracker/adapters/vision/preprocessing.py": "55e33486cf34e709ccaf1930720f41978f74c3448baa69eceac8bb570233236e",
+    "src/oil_tracker/adapters/vision/geometry_masks.py": "8c9bbbed8e3a9c3abb5f1c97832fc1ab8d34d5cc4b7b07f706626d4653244820",
+    "src/oil_tracker/adapters/vision/oil_interface_diagnostics.py": "c49abb50e21bf19b90d8fe4d5159e1d19c2c24468bfb57cd61634e166a043fad",
+    "src/oil_tracker/application/services/detection_processing.py": "9dc74b2ae485a350f6043efc27a21e581f2b00c561df6874644f410b46956e9b",
+    "src/oil_tracker/application/services/analysis_pipeline.py": "e1e3631be2ec562fa05ac69d9ff1dbd684bcd7d9f655987491df99e2444e921c",
+    "src/oil_tracker/adapters/vision/opencv_video_reader.py": "b4d3304d37890570b57101418e69546133b9a8317ce18766d52b7ab221b34686"
+  },
+  "input_preserved": true,
+  "decoded_frames": [
+    0,
+    840,
+    1680,
+    1260
+  ],
+  "timestamps": [
+    0.0,
+    28.0,
+    56.0
+  ],
+  "cases": [
+    {
+      "frame_index": 0,
+      "requested_time_sec": 0.0,
+      "actual_time_sec": 0.0,
+      "horizontal_pixels_in_review_box": 207,
+      "glare_pixels_in_review_box": 0
+    },
+    {
+      "frame_index": 840,
+      "requested_time_sec": 28.0,
+      "actual_time_sec": 28.0,
+      "horizontal_pixels_in_review_box": 132,
+      "glare_pixels_in_review_box": 0
+    },
+    {
+      "frame_index": 1680,
+      "requested_time_sec": 56.0,
+      "actual_time_sec": 56.0,
+      "horizontal_pixels_in_review_box": 0,
+      "glare_pixels_in_review_box": 0
+    },
+    {
+      "frame_index": 1260,
+      "requested_time_sec": 42.0,
+      "actual_time_sec": 42.0,
+      "horizontal_pixels_in_review_box": 71,
+      "glare_pixels_in_review_box": 0
+    }
+  ],
+  "anchor_pixel_equal": true,
+  "available_recorded_static_bands_checked": 1075,
+  "unavailable_bands_skipped": 413,
+  "static_band_mismatches": 0,
+  "review_box_source_xyxy": [
+    581,
+    839,
+    605,
+    848
+  ],
+  "review_box_pixels": 216,
+  "review_box_static_nonzero": 0,
+  "near_below_records": [
+    {
+      "sector": 1,
+      "source_x_range": [
+        563,
+        584
+      ],
+      "source_y_range": [
+        841,
+        844
+      ],
+      "band_width": 3,
+      "static_overlap": 0.0,
+      "glare_fraction": 0.0
+    },
+    {
+      "sector": 1,
+      "source_x_range": [
+        563,
+        584
+      ],
+      "source_y_range": [
+        841,
+        847
+      ],
+      "band_width": 6,
+      "static_overlap": 0.031746031746031744,
+      "glare_fraction": 0.0
+    },
+    {
+      "sector": 1,
+      "source_x_range": [
+        563,
+        584
+      ],
+      "source_y_range": [
+        841,
+        850
+      ],
+      "band_width": 9,
+      "static_overlap": 0.047619047619047616,
+      "glare_fraction": 0.0
+    },
+    {
+      "sector": 2,
+      "source_x_range": [
+        584,
+        605
+      ],
+      "source_y_range": [
+        841,
+        844
+      ],
+      "band_width": 3,
+      "static_overlap": 0.0,
+      "glare_fraction": 0.0
+    },
+    {
+      "sector": 2,
+      "source_x_range": [
+        584,
+        605
+      ],
+      "source_y_range": [
+        841,
+        847
+      ],
+      "band_width": 6,
+      "static_overlap": 0.0,
+      "glare_fraction": 0.0
+    },
+    {
+      "sector": 2,
+      "source_x_range": [
+        584,
+        605
+      ],
+      "source_y_range": [
+        841,
+        850
+      ],
+      "band_width": 9,
+      "static_overlap": 0.0,
+      "glare_fraction": 0.0
+    }
+  ],
+  "structural_reference_reason": "vessel_fitting_geometry_unavailable",
+  "interpretation_limit": "Matches saved pooled static bands, not proof of original full-map pixel identity or why each reference edge was absent.",
+  "video_read": true,
+  "video_scope": "four local sample4 frames only; no private Windows media",
+  "preprocessing_rerun": true,
+  "static_prior_reconstructed": true,
+  "detector_pipeline_rerun": false,
+  "prediction_or_scoring": false,
+  "labels_edited": false,
+  "artifacts": {
+    "f0-bgr.png": "3b842e7c3e877e1f8f7741ea7757ac224a036fa157cf7c42c43af006a281a5de",
+    "f1680-glare.png": "076238461b2d413028d2a4c1812d952b1706d056d269f1a9e36b787d1e34ed30",
+    "f840-horizontal.png": "ad95f3db73f3d69a37a60b5cb98516622aeff82f03c06416aae6e35769e54a5d",
+    "f0-horizontal.png": "02e2c2dbf079be28fbdc6269794e2837e1139beb99b76948663d802b7809db84",
+    "f840-bgr.png": "c6bd5517826ba5fceac514e0d216ff5b5e4fd46a02491c2c994d6b297624fc1c",
+    "f1260-glare.png": "90a783afbb56c519b940112aa09f5d466bd335c7e10af5ae14e2305da2a4993d",
+    "f840-glare.png": "49cb14fad79a686402035aeb5fa973379add7ab44cb132fb622078e8a45757fb",
+    "f1260-bgr.png": "015cb6cd1558bf064d7c6df7a2e413ed64b83e13ce22c50ec958dd79ca380acf",
+    "static-reconstructed.png": "57c89452da137d0539e085751dedf6de4215a554ffafe01b4fd3e55887a1e4b1",
+    "f1680-horizontal.png": "48a77fe31d0124b0d248ec3ee2c5ea29559954449e778b2456dd31219f8abffb",
+    "readout.py": "cb3eac6f8b33db676134f645369ec18ab8dff37391e1937cb85502bc39674e1d",
+    "f0-glare.png": "80b6aa8cb68ec10498565517201ca1458950fb684fba291d04d4a6976687d5b8",
+    "preflight.json": "c2ee3199af57d67cdd0507ee56b5fd0a7995a6f6ece32d8f35056b713a94f999",
+    "f1260-horizontal.png": "0b0580d681631ab79bfde3bc6890dba69f3476aec363d406812a0d81ba689145",
+    "f1680-bgr.png": "c6461782b828f81d4785c241c1e814fe5a054e34181f5698a36cb4782d54cbea"
+  },
+  "schema_version": "s11-existing-optical-reference-readout-v1",
+  "local_artifact_root": "sample/output/s11-d2-optical-reference-20261008-001",
+  "local_receipt_sha256": "0227f0921d9911401179a07e5c9bc5a77935406ad71178d97b8732ff9bc6fa75",
+  "preflight": {
+    "scope": "Read-only reproduction of existing reference-preparation operator, not a new classifier; no threshold changes.",
+    "official_schedule": {
+      "start": 0,
+      "end": 56,
+      "sampling_fps": 2
+    },
+    "reference_timestamps": [
+      0,
+      28,
+      56
+    ],
+    "anchor_time": 42,
+    "operator": "existing preprocess.horizontal_mask; mean of 3 binary maps >= 0.75",
+    "checks": "Anchor BGR/effective/canny/normalized/glare must equal saved arrays; all available saved static bands must match.",
+    "human_reply": [
+      "유리 무늬·반사 등이 겹친 것",
+      "glass 특유의 원형 무늬의 아래쪽 반원"
+    ],
+    "reply_scope": "Cyan-box feature at f1260, not a pixel mask or label transfer to candidates.",
+    "reader_sha256": "cb3eac6f8b33db676134f645369ec18ab8dff37391e1937cb85502bc39674e1d"
+  },
+  "human_reply": {
+    "source": "direct user response in this conversation",
+    "verbatim": [
+      "유리 무늬·반사 등이 겹친 것",
+      "glass 특유의 원형 무늬의 아래쪽 반원"
+    ],
+    "frame_index": 1260,
+    "display_box_source_xyxy": [
+      581,
+      839,
+      605,
+      848
+    ],
+    "interpretation": "glass-specific circular pattern, lower semicircle",
+    "scope": "qualitative identity of displayed local feature; no pixel mask, scalar tolerance, candidate-level relabel or other-frame transfer"
+  },
+  "first_checkpoint": "CLOSED_USER_GLASS_PATTERN_REPLY",
+  "next_checkpoint": "AWAITING_REFERENCE_ARC_CORRESPONDENCE_0S_28S",
+  "display": {
+    "script_sha256": "8100f810f87dabc37eca51ea6f79f8ddbcc6d412d61a57ab921577871aa63e26",
+    "image_sha256": "4fc7fa8146c529ba34646784ad2bbf8a92be8e53a65e7d0d3ee96e15d40db2f1",
+    "filename": "reference-visibility-review.png"
+  },
+  "assistant_visual_interpretation": "0/28 s have structured appearances and 56 s is more uniform in the box; exact same-arc correspondence at 0/28 s is unresolved.",
+  "field_disposition": "FIELD FAIL",
+  "production_unchanged": true,
+  "threshold_changed": false
+}
