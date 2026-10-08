@@ -432,3 +432,11 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 |---|---|---|
 | 2026-10-08 | [D2 control query](50-diagnostics/s11/2026-10-08-d2-control-query.json) | 기존 Windows target snapshot 한 case의 조회 pin·범위; 모델 freeze 아님 |
 | 2026-10-08 | [D2 control preflight](60-evidence/s11/2026-10-08-d2-control-preflight.md) | 기존 대조/실패 경계, owner 재사용 검증, 필요한 Windows 반환 범위 |
+
+## D2 region-connectivity feasibility additions
+
+아래 파일은 동일한 합성 연결성 실험의 근거와 기계 receipt이다.
+
+| 최초 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-08 | [D2 region-connectivity feasibility](60-evidence/s11/2026-10-08-d2-region-connectivity-feasibility.md), [receipt](60-evidence/s11/2026-10-08-d2-region-connectivity-feasibility.json) | 이상적 영역 연결성의 정보 이득과 단독 identity 한계; 실제 영상 실행 없이 미채택 종료 |

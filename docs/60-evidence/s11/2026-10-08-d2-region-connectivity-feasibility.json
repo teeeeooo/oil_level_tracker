@@ -1,0 +1,174 @@
+{
+  "schema_version": "s11-d2-connectivity-feasibility-v1",
+  "scope": "synthetic nominal-region oracle; no real-image segmentation or runtime classifier",
+  "base_commit": "dd557b4bc5ecd8f4517a95bc5bb6c966d2cd3013",
+  "preflight_sha256": "f01adec3ee75effc30650a080ebbd6f6d82e9ac257966d842d6fe8aabb2e4790",
+  "preflight": {
+    "proposal": "D2 candidate-side region connectivity feasibility",
+    "base_head": "dd557b4bc5ecd8f4517a95bc5bb6c966d2cd3013",
+    "scope": "synthetic oracle-region controls only; no real segmentation or classifier",
+    "observable": "4-connected regions of nominal classes on visible pixels; component border/mask contact; ordered above/below component pair at each candidate sample",
+    "comparison": "existing within-side adjacency summary versus global component connectivity; geometry information versus physical identity",
+    "controls": [
+      "full partition",
+      "closed local pocket",
+      "partial candidate sampling both partition and pocket",
+      "same-appearance structural step",
+      "pocket closure hidden by viewport/mask",
+      "permuted region patterns with equal local summaries",
+      "hidden-pixel noninterference",
+      "polarity and nominal-class renaming"
+    ],
+    "failure": "opposing target/structure assignments with identical observable cannot support a topology-only identity decision; close the proposal without threshold or sector-policy tuning",
+    "conditional_next": "only a surviving physically discriminative proposal justifies real Mac or Windows testing; synthetic geometry distinction alone does not",
+    "truth_policy": "semantic assignments are fixture expectations, never input to connectivity",
+    "runtime_change": false,
+    "private_image_read": false,
+    "windows_request": false
+  },
+  "environment": {
+    "python": "3.14.4",
+    "numpy": "2.5.1",
+    "opencv": "4.14.0"
+  },
+  "source_sha256": {
+    "tests/unit/test_s11_region_connectivity_contract.py": "c14b2d8c025a922222ff87c842bb692365794612fc87bcecc5989513738e60dd",
+    "tests/diagnostics/s11_region_competition.py": "3627e7c2ad6e218fa797b68500d70e7c8be1e038354bbad32c0ebcd68fb60b17"
+  },
+  "results": {
+    "local_summary_collision": {
+      "a": [
+        [
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          1
+        ]
+      ],
+      "b": [
+        [
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          1
+        ]
+      ],
+      "equal_row_and_column_sums": true,
+      "equal_existing_adjacency": {
+        "horizontal": {
+          "pair_count": 12,
+          "mean_squared_difference": 0.6666666666666666
+        },
+        "vertical": {
+          "pair_count": 12,
+          "mean_squared_difference": 0.6666666666666666
+        }
+      },
+      "connected_component_counts": [
+        8,
+        9
+      ]
+    },
+    "mixed_path": {
+      "ordered_side_pairs": [
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "local_pocket_component": 2,
+      "enclosed": true,
+      "candidate_aggregated": false
+    },
+    "semantic_collision": {
+      "countermodels": [
+        "constructed_target_partition",
+        "constructed_static_non_target_step"
+      ],
+      "same_input_and_observable": true,
+      "component_count": 2,
+      "points": 5,
+      "consequence": "A rule mapping this observable to target accepts the structural countermodel; mapping it to non-target rejects the target countermodel; abstention does not demonstrate target recovery."
+    },
+    "viewport_collision": {
+      "same_visible_pixels_as_partition": true,
+      "enclosed_components": 0
+    },
+    "mask_collision": {
+      "same_visible_pixels_as_partition": true,
+      "all_components_touch_unknown": true,
+      "enclosed_components": 0,
+      "hidden_pixel_noninterference_verified": true
+    }
+  },
+  "verification": {
+    "command": ".venv/bin/python -m pytest -q tests/unit/test_s11_region_connectivity_contract.py",
+    "passed": 10
+  },
+  "disposition": "CLOSED_WITHOUT_PROMOTION: standalone region-connectivity identity hypothesis rejected by synthetic countermodels",
+  "limits": [
+    "Geometry information can increase without physical identity information.",
+    "This is not proof that every joint spatial/temporal/learned model fails.",
+    "Real-image segmentation, Mac efficacy and Windows efficacy were not evaluated."
+  ],
+  "production_changed": false,
+  "private_image_read": false,
+  "field_disposition": "FIELD FAIL",
+  "auto_acceptance": false,
+  "local_detail": {
+    "path": "sample/output/s11-d2-connectivity-20261008-001/result.json",
+    "sha256": "a1ea46e0a95ac77c0f9554d54715f3cc675b7e7b53028c9155ace840dfafddff"
+  }
+}

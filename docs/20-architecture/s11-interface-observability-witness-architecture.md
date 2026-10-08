@@ -1641,7 +1641,40 @@ Expanded pixels and changed model logic require separate comparisons. If an
 optical alternative explains the same input, preserve unresolved; abstaining
 on every true target is not success. D3 and behavioral O3/O4 gates remain intact.
 
+### Region-connectivity feasibility boundary
+
+The [synthetic feasibility experiment](../60-evidence/s11/2026-10-08-d2-region-connectivity-feasibility.md)
+tests global connectivity with exact nominal regions supplied by construction.
+It adds a test-only oracle, not a real segmentation or inference owner. Existing
+`s11_region_competition._adjacency` remains the immediate-neighbour comparison
+owner. Production Foam/artifact connected components do not supply Oil identity.
+
+Four-connected region relations can distinguish patterns with identical row/
+column sums and identical local adjacency energy, and can preserve mixed local
+support along one candidate. They do not independently certify physical target
+identity: a stationary structural partition can provide the same observable as
+a fluid partition. A closed feature with its return outside the crop or behind
+a mask can also appear as a partition. Unknown support must not be completed to
+declare enclosure, and a region touching the viewport is not proven unbounded.
+
+The standalone connectivity-to-identity hypothesis is closed without promotion.
+This is not a proof against every conditional spatial or learned classifier:
+ambiguous patterns may remain unresolved while other patterns are useful. No
+descriptor sweep, learned training, Windows extraction or runtime behavior is
+implied by the synthetic result. Any later use of connectivity must state the
+additional distinguishing evidence and pass the existing support/identity
+controls. Same-observable opposing controls cannot become two confident labels
+by exposing truth or fixture names to inference.
+
 ## History Review
+
+2026-10-08 region-connectivity feasibility: reviewed F03/F04 geometry/motion
+authority, F09 missing support and F10 tuning escapes, the existing raw-region
+adjacency owner and W1 partial-path/collision controls. Exact synthetic nominal
+regions distinguish representation information from physical identity. The
+test-only oracle exposes enclosure/censoring and same-observable failures without
+an Oil classifier or production route. Standalone connectivity is not promoted;
+conditional approaches are not ruled out. Current logic and registry stay intact.
 
 2026-10-08 support-review closeout: the human identifies idx13 sector 0 with a
 local shadow/cavity-like feature distinct from idx10; preserve this qualified

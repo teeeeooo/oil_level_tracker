@@ -273,6 +273,18 @@ primary identity endpoint plus protected local/scalar outcomes before comparison
 | Unavailable native path / usable center | Existing native preference and missingness remain explicit; no silent fallback |
 | Clipped mask and partial scales | Report support extent/availability; conditional score gains cannot hide coverage loss |
 
+The [D2 connectivity controls](../../tests/unit/test_s11_region_connectivity_contract.py)
+use ideal nominal-region fixtures to add three representation-level obligations:
+preserve different region pairs along a mixed path; do not certify enclosure
+when a return is masked/cropped; and do not turn a same-observable structural
+partition into physical identity. A component count can differ while existing
+row/column sums and adjacency energy agree. These tests establish added geometric
+information and its limits, not a model's ability to recover real targets.
+The [feasibility result](../60-evidence/s11/2026-10-08-d2-region-connectivity-feasibility.md)
+does not require perfect classification of every ambiguous reflection, authorize
+training, or satisfy O2. A later conditional model must demonstrate useful support
+outside its abstentions without leaking the synthetic labels into inference.
+
 For any tested pooling change, compare on fixed inputs/geometry and equal support,
 then report expanded support separately. Count candidates, points and scales
 separately; do not pool correlated pairs into an independent success rate. Human
