@@ -1,8 +1,10 @@
 # D2 ordered-column clearance and first image interpretation
 
 **Result:** measurement complete; useful spatial contrast, no classifier or
-production promotion. **Checkpoint:** f1260 local protrusion identified by the user as a glass-pattern
-lower semicircle. Earlier-reference correspondence is the remaining question. The [Work Plan](../../00-project/work-plan.md) owns current
+production promotion. **Checkpoints:** f1260 local protrusion identified by the user as a glass-pattern
+lower semicircle; 0/28 s correspondence closed as Foam-obscured. The subsequent
+recipe-workflow audit below records an existing input omitted from this capture.
+The [Work Plan](../../00-project/work-plan.md) owns current
 state. [O2 acceptance](../../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance)
 remains unmet and Windows disposition stays `FIELD FAIL`.
 
@@ -200,6 +202,62 @@ coincident-target controls; it does not approve a mask or veto. If correspondenc
 is unresolvable, retain that limitation rather than choosing a convenient frame.
 No Windows execution or private-file export is needed at this checkpoint.
 
+### Reference reply and existing recipe workflow
+
+**Human reply received, 2026-10-08:** both 0 s and 28 s overlap Foam and do not
+permit clear identification of the semicircle. This closes the correspondence
+question as unresolved from those images; it does not weaken the separate 42 s
+glass-pattern identification. Neither earlier frame is certified as a clean
+optical reference. Historical JSON/display receipts retain their original bytes.
+
+The user also identified an existing product input: during recipe creation the
+operator can inspect detector proposals and choose structures. Source inspection
+at `3a45eb4bf227c62057c0b3d8a8e76853858e43d6` confirms the complete ownership route:
+
+| Responsibility | Existing owner and observed behavior |
+|---|---|
+| Entry and proposal | `bootstrap.py` wires `OpenCvArtifactProposalService`; `MainWindow.open_roi_editor` supplies it and the current frame. The proposal adapter detects on a copy with templates cleared, then returns bounded boundary/glare proposals. |
+| Explicit selection | `RoiEditorDialog._accept_artifact` appends only selected proposals to its working copy. Main-window Apply replaces the edited Glass and marks the recipe dirty. Unselected proposals are not saved as non-structure or fluid truth. |
+| Persistence | `InspectionRecipe.to_dict/from_dict` round-trips `geometry.artifact_templates`. `ArtifactTemplate` stores ID/kind/normalized center/width/height/angle/name/note. It contains no curve samples or reference pixels. Recipe preflight context includes the templates. |
+| Runtime use | `CurrentFrameEvidenceOwner.observe` checks selected Oil and Foam; the frame projector signs and checks assembled candidates. `apply_artifact_templates` marks matches rejected and retains their trace. `candidate_is_eligible` also excludes calibrated matches. This is an active rejection mechanism, not unused metadata. |
+
+The static preparation map and user-confirmed templates are separate inputs.
+`attach_spatial_signature` summarizes support near a candidate's scalar Y as
+position/extent; matching does not trace the circular pattern or identify the
+material covering it. A real interface at matching geometry can also be rejected.
+The existing same-Y/different-X test protects a spatially separate candidate,
+not a coincident fluid crossing. Nor does removing one false candidate prove that
+the remaining candidate will pass physical, phase and final-selection gates.
+
+**Exact local input inventory:** `sample/sample4.oilrecipe`, SHA-256
+`53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849`, has no raw
+`artifact_templates` field for `ecb6e1ec-0259-5982-a35f-7cb1f7075af2`.
+The exact A1 `frames-final/capture-manifest.json`, SHA-256
+`fca7623eddf3b8b199a2090a257ebab73fb4a620f2f8c50a6605ab0129045b45`, records that
+Glass with `artifact_templates=[]`. Missing in the source and empty in the
+normalized capture are distinguished. This diagnostic therefore did **not** test
+a recipe with user-registered structures. No claim about an uninspected Windows
+recipe follows.
+
+**Assessment:** explicit structure registration can reduce the need to infer a
+known artifact's identity automatically. Its practical gain remains unmeasured
+here. Reuse the existing workflow first, with separate registered/unregistered
+inputs and true-interface crossing controls as specified in the
+[design owner](../../20-architecture/s11-interface-observability-witness-architecture.md#user-confirmed-recipe-artifacts--reuse-before-new-inference).
+The qualitative 42 s judgment is not silently converted into a template, mask or
+new candidate label. Source, recipe, frozen measurements and production behavior
+remain unchanged; no detector rerun, new video read or Windows task was performed
+for this source audit.
+
+Focused existing tests: **23 passed, 5 deselected**, covering proposal generation,
+explicit UI acceptance on a private copy, display/bulk selection/removal,
+normalized recipe round-trip, legacy missing fields, geometric rejection and
+preflight invalidation. Command: `QT_QPA_PLATFORM=offscreen .venv/bin/python -m
+pytest -q tests/unit/test_artifact_calibration.py
+tests/unit/test_artifact_proposal.py tests/unit/test_preflight_context.py
+tests/gui/test_guided_workbench_ux.py -k 'artifact or geometry or context'`.
+These confirm existing contracts, not real-scene accuracy or Windows GUI behavior.
+
 ## Verification
 
 37 focused tests pass: the original 19 arm contracts plus 18 new clearance
@@ -213,7 +271,7 @@ is made by this diagnostic.
 
 ## Detector Governance
 
-- Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `PUBLICATION-PROVENANCE`.
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F09`, `S11-F10`.
 - First harmful stage: no new production first cause is established. The new spatial readout has scale-dependent overlap; the human-identified glass semicircle is absent from the reconstructed static prior because the 56 s reference has no local edge support. This explains the recorded prior, not the production final-selection first cause.
 - Logic-map impact: NONE — ordered ray geometry is an offline extension of the saved-edge diagnostic owner; production control flow and physical authority are unchanged.

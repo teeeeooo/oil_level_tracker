@@ -1800,7 +1800,62 @@ not optical clearance. Reusing earlier frames requires explicit correspondence
 and visibility handling without a threshold decrease, map union or target veto.
 No candidate classifier follows from ray ordering or that qualitative reply.
 
+### User-confirmed recipe artifacts — reuse before new inference
+
+The existing recipe workflow is an available source of structural knowledge.
+The operator can inspect detector proposals and explicitly register an artifact;
+the detector need not rediscover that object's physical category from every frame.
+This input is separate from the automatic three-frame static prior. Foam-obscured
+preparation frames do not establish a clean structural reference, but also do not
+invalidate a separately confirmed, visible setup feature.
+
+Reuse the existing owners: `OpenCvArtifactProposalService` generates candidates,
+`RoiEditorDialog` records selected proposals on its private working copy,
+`InspectionRecipe` persists `geometry.artifact_templates`, and
+`artifact_calibration` owns generic matching. The frame owner checks selected
+Oil/Foam and assembled candidates; completed Oil eligibility also consumes the
+calibrated-match result. The existing UI and recipe schema are the starting point,
+not a request for another registration workflow. Unselected proposals carry no
+affirmative fluid/target annotation. The stored point/line/region contains
+normalized position, extent and angle, not a sampled curved contour, reference
+image, visibility history or reviewed fluid trajectory.
+
+The bounded next comparison uses an explicitly bound registration in a separate
+recipe copy, with all other settings fixed. Inspect the existing proposal geometry
+against the confirmed structure before registration; a local semicircle reply
+does not certify a whole proposed row or rectangle. Preserve original input hashes
+and freeze the experimental recipe before reading comparative outcomes. Already
+reviewed Mac frames remain exposed regression. Report registration provenance and
+candidate matches separately from physical truth and final sequence/report output.
+
+Measure both false-structure suppression and retention of real interfaces away
+from, crossing, or stationary at the registered structure, plus obscured/ambiguous
+cases. A fixed structure and a fluid interface can occupy the same geometry;
+the present hard rejection does not resolve this collision. Do not infer fluid
+identity from motion alone or from survival after excluding a competitor. Missing
+crossing controls remain an explicit efficacy gap, not automatic permission to
+broaden exclusions or relax the matcher. Extend representation or matching only
+for a demonstrated limitation of these existing owners, with its own bounded
+design and controls. No learned model is included.
+
+User-confirmed per-Glass configuration is an existing generic product input.
+It is not a hard-coded Glass/time/Y branch in detector source. Keep configuration
+changes visible and comparisons separate from the frozen baseline; do not retune
+recipes against holdout outcomes or reinterpret old receipts as registered runs.
+The [workflow audit and human reference reply](../60-evidence/s11/2026-10-08-d2-column-clearance.md#reference-reply-and-existing-recipe-workflow)
+record the current source and sample inventory. This reuse assessment grants no
+new classifier, scalar authority, O2 acceptance or field qualification.
+
 ## History Review
+
+2026-10-08 recipe-workflow correction: reviewed the existing proposal UI,
+normalized artifact persistence, frame checks and completed Oil eligibility,
+the earlier structure-context projection and Foam/rim reuse audit, and F04/F09/F10.
+Human setup knowledge can reduce an image-only inference burden. The prior
+position-calibration collision remains: the same geometry can also contain real
+Oil. The next comparison therefore starts from the existing registration workflow
+and preserves coincident/stationary/obscured controls. No new production owner,
+private coordinate branch, recipe retuning against holdouts or ML is introduced.
 
 2026-10-08 ordered-column preflight: reviewed the frozen local-arm failure,
 material-path terminal-row aggregation, side-LBP and temporal-region failures,
