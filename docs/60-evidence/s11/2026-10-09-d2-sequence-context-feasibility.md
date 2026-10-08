@@ -68,7 +68,9 @@ The already human-reviewed true-fluid central forward chain, f1275–1320:
 
 Thus even this successful physical correspondence uses image patches that include
 registered structure coordinates. A patch-overlap veto would discard most of its
-links. This is not a claim that the selected fluid contour itself is a glass edge.
+links. **40/45 is not an error count:** this mixed sampling can occur during
+correct tracking and is not, by itself, a defect even when it lasts many frames.
+This is not a claim that the selected fluid contour itself is a glass edge.
 
 | Existing central chain | 43 s match Y | 44 s match Y | Reference pixels in winning patch at 43/44 s |
 |---|---:|---:|---|
@@ -123,6 +125,58 @@ whole-box labels and fabricated numeric output remain disallowed. O2 precedes
 Oil authority/association changes; Foam work retains its separate owner/gate.
 No further user judgment, Windows action, export or ML task is requested here.
 Live sequencing is in [Work Plan](../../00-project/work-plan.md).
+
+## Subsequent clarification: local exclusion remains untested
+
+After this readout, the user clarified the intended use of a registered structure:
+omit only the local X/Y measurement area and continue detecting the boundary from
+the remaining visible portions. When the boundary moves below that area, the same
+X coordinates at the new Y are usable again. This does not mean excluding those
+X columns at every Y, or rejecting the whole boundary whenever part intersects
+the reference. The assistant's earlier explanation did not distinguish these
+operations clearly enough.
+
+| Operation | Actual implementation / evidence status |
+|---|---|
+| Existing recipe template rejection | `apply_artifact_templates` compares candidate geometry with a registered template and marks the whole matching candidate rejected. It does not remove local samples and recompute the remaining boundary. |
+| D2-A1 reference comparison and this sequence readout | Diagnostic counts of reference coordinates inside measurement footprints. No pixels are removed and no masked matcher/detector run is performed. |
+| Local X/Y measurement exclusion with remaining-boundary detection | **PROPOSED / NOT TESTED** in these experiments. The 40/45 result neither validates nor falsifies it. |
+
+The next design preflight should examine this distinct use of the existing input,
+including the exact exclusion scope, the responsible measurement owner, remaining
+support and a fixed positive/opposing/unresolved comparison. A sampling exclusion
+policy does not certify every excluded pixel as glass or certify the remaining
+pixels as fluid. The earlier 125-edge attribution is still not a whole-box label.
+No exclusion mask, mask enlargement, tolerance, new physical label or production
+change is adopted by this clarification. The closed overlap-veto/appearance-only
+promotion remains closed; partial masking must not be described as already failed.
+The frozen JSON receipt retains the original run and preflight unchanged.
+
+## Record retrieval and preservation boundary
+
+This experiment's Markdown records the question, reuse, observed result, limits
+and disposition. Its committed JSON includes the original preflight, base commit,
+input hashes, fixed controls, complete aggregate counts, verification and local
+artifact hashes. The preceding D2-A1 implementation and tests are in `5eba72d`;
+this saved-output readout and receipt were committed in `fa59f08`.
+
+Detailed runners, per-link JSON and figures remain under the local artifact root
+listed in the receipt, inside ignored `sample/output/`. The receipt identifies
+these files but does **not** back up their bytes to GitHub; a fresh clone does not
+contain them. Do not delete them as disposable output while they are needed to
+reproduce this experiment. Private Windows media similarly remain on Windows;
+transferred text reports are attributed evidence, not locally inspected media.
+
+The [recall index](../../00-project/recall-index.md) routes future work to the
+relevant completed record, while the Work Plan owns the next action. Before
+reopening a closed hypothesis, identify what new input, measurement operation or
+control materially differs; renaming it or retuning the same observed controls
+does not supply that difference. New user clarification is recorded separately
+from the original machine result, as above.
+
+The October 9 record-integrity check rehashed all 16 referenced input/artifact
+files successfully and confirmed the committed JSON receipt is unchanged.
+This verifies present local preservation, not an off-machine backup or a rerun.
 
 ## Verification and preservation
 
