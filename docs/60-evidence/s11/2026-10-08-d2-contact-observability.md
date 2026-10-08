@@ -3,7 +3,8 @@
 Base: `912f3bdc0124ed30aa645146ea2555378a1f42e3`. The user excluded machine
 learning as excessive for the purpose and authorized continued staged work, with
 a stop for user judgment or Windows work. This records completed source/input
-checks and a prepared local review, **not a classifier experiment or new truth**.
+checks and a prepared local review, followed by the attributed human reply below.
+It is **not a classifier experiment or a rewrite of the frozen truth snapshot**.
 
 ## Distinct question and reuse
 
@@ -76,7 +77,8 @@ justify defining a conditional measurement and testing its opposition, not
 automatic classifier/production acceptance. A shared or unclear relation closes
 this bounded cue check without a threshold sweep or automatic next image request.
 
-**Status: AWAITING_USER_CONTACT_INTERPRETATION.** There is no new Windows task.
+Preparation status was `AWAITING_USER_CONTACT_INTERPRETATION`; the reply below
+closes that checkpoint. There is no new Windows task.
 No classifier, detector rerun, learned method, prediction, label edit or field
 promotion occurred. O2/D3 remain unmet and `FIELD FAIL` is unchanged. The
 [Work Plan](../../00-project/work-plan.md) owns resumption after the reply.
@@ -86,10 +88,76 @@ and question. Preflight, reproducible rendering script, full input pins and PNGs
 remain locally under `sample/output/s11-d2-contact-observability-20261008-001/`.
 These retained review artifacts must not be removed as disposable scratch.
 
+## Contact interpretation received — 2026-10-08
+
+The user's direct reply to the f1320 comparison was:
+
+> 주황선 부근에서는 위쪽 기포·무늬가 실제로 닿아 끝나고, 분홍선은 허공을 가로지름.
+> 내 생각에 분홍선은 glass 특유의 무늬 (원형 무늬가 일정 간격으로 놓여있는것과, 저픽셀 영상 특유의 색상 경계)를 인식하고있는듯. 너도 실제 이미지를 한번 봐봐
+
+**Confirmed qualitative relation:** near the orange target reference the upper
+bubble/texture features physically meet and terminate; the pink reference crosses
+no actual boundary in the user's interpretation. This supersedes the proposed
+wording that pink necessarily crosses the interior of a material texture. The
+word "허공" is not imported as a new gas-region, EMPTY-state or species label.
+The earlier A/B material interpretation and candidate target bindings remain.
+**Tentative cause:** glass-associated repeated circular patterns and low-resolution
+color boundaries. The user explicitly framed this explanation as a hypothesis.
+Periodicity, optical origin and acquisition/processing contributions are not
+separately demonstrated by the reply.
+
+The assistant directly inspected the unchanged f1320 raw crop, its reference
+figure and f1319/f1321 raw crops. At orange, the visible upper curved features
+end near a common lower boundary; at pink, curved patterns and local color changes
+do not form a comparable continuous horizontal boundary. This visual assessment
+is consistent with the user's relation, but is not independent human truth or a
+measurement proving the tentative optical cause. The three adjacent stills do
+not establish glass-fixed persistence or a physical contact event over time.
+
+### Existing source and saved measurements explain the pink proposal
+
+The unchanged packet binds idx9 to `material_path` with native geometry and idx21
+to `phase_transition_scan`, Y822, with **candidate-center geometry only**. The pink
+line is a displayed sampling height, not a captured continuous contour.
+`generate_phase_transition_candidates` and `_phase_transition_profile` in
+`src/oil_tracker/adapters/vision/oil_supplemental_path.py` pool upper/lower band
+means at three radii, take median absolute sector contrast, and choose a proposal
+height. They do not trace a contour-contact relationship.
+
+Existing A1 lineage for idx21 records:
+
+| Radius | Available pooled sectors | Clipped median absolute contrast / 48 | Availability coverage |
+|---|---|---:|---:|
+| 3 | 0, 1, 2, 3, 4 | 0.38194450 | 1.0 |
+| 6 | 1, 2, 3, 4 | 0.65699402 | 0.8 |
+| 10 | 1, 2, 3 | 1.0 | 0.6 |
+
+At the strongest radius 10, signed pooled deltas are `+49.151138`, `+48.628571`,
+`−35.747620`. The absolute-value operation allows a strong response despite
+opposite signs. Stored `narrow_horizontal_coverage≈0.6` means three available
+pooled sectors out of five, **not 60% traced boundary or physical support**.
+These are normalized-image values; they do not isolate sensor resolution,
+compression, glass optics or preprocessing effects. This explains the recorded
+proposal construction, not the causal reason for final completed-window selection.
+Neither a polarity veto nor a blanket phase-scan rejection follows.
+
+The arithmetic above uses already saved records, without replaying any generator.
+Source capture `sample/output/s11-a1-lineage-20261007-001/frames-final/f1320.json`
+has SHA-256 `a1b2a9ae3ad6b6764ba5d9b97f4553ba5ec258171ca8dc6327b343fc90b9d933`,
+matching the prior region-exchange receipt. All 108 preflight inputs and three
+display figures remain hash-identical. The preparation JSON and local receipts
+retain their historical pending status/bytes; this reply and the Work Plan own
+the resolved checkpoint.
+
+**Disposition: HUMAN_CONTACT_RELATION_RECEIVED.** This supplies one qualitative
+positive/opposing relation for bounded non-learned measurement design. It does
+not assign pixel/sector/scalar truth, prove generalization, or satisfy D2/O2
+algorithm entry. No additional human or Windows request is needed for this reply.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F09`, `S11-F10`.
-- First harmful stage: unknown for this proposed cue; no inference ran and existing candidate-level truth does not establish a local physical contact.
+- First harmful stage: final-selection first cause remains unestablished here. Saved phase-scan aggregation explains proposal construction; the user supplies a local contact contrast, not a calibrated discriminator.
 - Logic-map impact: NONE — existing readers and saved geometry render a review only; no detector owner or execution route changes.
-- Failure-registry impact: NONE — physical contact interpretation is pending; no new field cause or successful mechanism is asserted.
+- Failure-registry impact: NONE — the new qualitative contact interpretation and saved aggregation arithmetic reinforce existing geometry/provenance limits; no new field cause or successful mechanism is asserted.
