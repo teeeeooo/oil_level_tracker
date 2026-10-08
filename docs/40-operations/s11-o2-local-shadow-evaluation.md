@@ -25,6 +25,13 @@
 실제 데이터 root를 추측하지 않는다. 다른 revision이면 기존에 기록된 해당 파일의
 hash/정체성을 먼저 보고하고 멈춘다. 원본이나 기대 hash를 맞추려고 편집하지 않는다.
 
+아래 실행 pin은 2026-10-08 사용자가 전달한 Windows 실제 hash로 정정했다.
+[정정 출처와 이전 값](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md#d1-raw-file-pin-correction--2026-10-08)을 보존한다.
+Windows에서 원본 파일 hash를 직접 계산하고, 첫 target/context audit의 schema
+`s11-o2-target-audit-v1`, review-001/002/003의 후보 23/23/27개 및 기존
+case/frame/Glass/packet 연결을 확인한다. 다른 dataset/revision이면 실행을 멈추고
+차이를 보고한다. 전사 오류라는 설명은 아직 독립 확인되지 않았다.
+
 저장소 루트 또는 별도 D1 ZIP을 푼 폴더에서 PowerShell로 실행한다. 입력 경로는
 질문에 실제 전체 경로를 입력한다. 출력 폴더가 이미 있으면 기존 결과를 보존하고
 `d1-candidate-loss-002`처럼 새 이름으로 바꾼다.
@@ -36,7 +43,10 @@ if ((Get-FileHash -LiteralPath $readerPath -Algorithm SHA256).Hash.ToLowerInvari
     throw "Reader identity mismatch; stop and report."
 }
 $auditPath = Read-Host "기존 첫 W3 experiment.json의 전체 경로"
-$expectedHash = "ba5fe04b28473f70387e363ef7d40077f559c80b1852755d997e1dd04171937f"
+$expectedHash = "ba5fe84b28473f7e387e363ef7d40877f559c80b1852755d997e1dd04171937f"
+if ((Get-FileHash -LiteralPath $auditPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expectedHash) {
+    throw "Audit hash differs from the user-reported correction; stop and report."
+}
 $outputPath = Join-Path (Split-Path -Parent $auditPath) "d1-candidate-loss-001"
 py -3 $readerPath --audit $auditPath --expected-sha256 $expectedHash --output $outputPath
 if ($LASTEXITCODE -ne 0) { throw "D1 readout failed; preserve inputs/partial output and report the error." }

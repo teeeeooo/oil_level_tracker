@@ -103,7 +103,7 @@ assertions. S11 governance and whitespace checks pass. The local `docs-check-sta
 records this bounded check; full detector or Windows execution was not performed
 for the document/cleanup scope.
 
-D1 needs the original Windows W3 `experiment.json`, whose raw SHA-256 is
+D1 initially used the transferred Windows W3 `experiment.json` raw SHA-256
 `ba5fe04b28473f70387e363ef7d40077f559c80b1852755d997e1dd04171937f`.
 The [transferred W3 report](s11-o2-w3-target-audit-windows-run-001.md) names output
 alias `experiments/target-context-audit-001`; no absolute Windows path is inferred.
@@ -152,6 +152,20 @@ here, so **D1 Windows readout is pending and work stops for the user's Windows
 handoff**. D2–D6 are not executed. The reader does not import the passive batch's
 target roles; physical annotations, candidate membership and missing fields retain
 their recorded scope. Production code/dependencies/recipes/truth remain unchanged.
+
+## Windows hash correction received — 2026-10-08
+
+The first Windows attempt stopped on hash mismatch. The user then supplied
+`ba5fe84b28473f7e387e363ef7d40877f559c80b1852755d997e1dd04171937f`
+as the actual Windows hash and suspected transcription error. The
+[attributed correction](s11-o2-w3-target-audit-windows-run-001.md#d1-raw-file-pin-correction--2026-10-08)
+retains the earlier value and its uncertainty. Work Plan and the D1 operation
+now use the corrected execution pin, with file-hash and original audit-identity
+confirmation on Windows. Source audit attachments, the initial ZIP/receipts and
+historical results remain byte-preserved. The initial ZIP README's input pin is
+superseded by this correction; its reader is unchanged and remains usable.
+No source download or code change is needed to pass the corrected CLI argument.
+D1 completion, physical cause and O2/field acceptance are still pending.
 
 ## Detector Governance
 

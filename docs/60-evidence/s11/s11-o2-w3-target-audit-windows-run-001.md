@@ -43,6 +43,25 @@ renderer appends it once at the end. Treat the pasted material as a transferred
 report, not a byte-identical copy whose SHA can be independently verified here.
 No numeric error follows from that formatting difference, and no rerun is requested.
 
+## D1 raw-file pin correction — 2026-10-08
+
+During the later D1 handoff, the user reported that Windows stopped on the raw
+file hash check and supplied the actual Windows `experiment.json` SHA-256 as
+`ba5fe84b28473f7e387e363ef7d40877f559c80b1852755d997e1dd04171937f`.
+The user suspects a transcription error in the Mac-side record. Both strings
+are valid 64-digit hex; positions 6, 16 and 30 differ. The original transferred
+value in the table above is retained as historical provenance.
+
+The supplied correction is the current D1 execution pin. It is **user-reported
+Windows evidence**, not an independent local hash measurement or proof of why
+the earlier value differed. Before continuing, Windows must compute the hash
+from the unchanged file and confirm this is the first target/context audit:
+schema `s11-o2-target-audit-v1`, review-001/002/003 with 23/23/27 candidates and
+the existing case/frame/Glass/packet identities. A different dataset/revision
+or another mismatch requires a report, not changing the input or another pin.
+This correction does not reverify the historical input-preservation claim,
+change labels/results, complete D1 or establish detector efficacy.
+
 ## Recorded funnel facts
 
 All three cases report RECORDED, with selected_candidate=None. Review-001 is

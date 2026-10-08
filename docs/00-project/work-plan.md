@@ -46,8 +46,11 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    matching tests from delivery `e5d4a04`; 40 contracts pass, including standalone
    CLI and W3 compatibility. The [Windows handoff](../40-operations/s11-o2-local-shadow-evaluation.md#d1-recorded-candidate-loss-readout--windows-handoff)
    is ready. The remainder of both diagnostic branches stays unadopted.
-   The original W3 `experiment.json` raw hash
-   is `ba5fe04b28473f70387e363ef7d40077f559c80b1852755d997e1dd04171937f`.
+   The current W3 `experiment.json` execution pin is the October 8
+   [user-reported Windows correction](../60-evidence/s11/s11-o2-w3-target-audit-windows-run-001.md#d1-raw-file-pin-correction--2026-10-08):
+   `ba5fe84b28473f7e387e363ef7d40877f559c80b1852755d997e1dd04171937f`.
+   Windows must verify the unchanged file and original audit identity; the
+   suspected transcription error and D1 result are not independently confirmed.
 2. At the Windows boundary, stop and report the required input/command. D1 asks
    which recorded retention, tracklet, phase/owner or final-selection boundary
    excluded each existing member. Missing fields remain UNAVAILABLE; the task
