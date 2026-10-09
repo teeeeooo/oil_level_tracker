@@ -621,6 +621,38 @@ specific additional observable and counterexample, reuse existing extraction and
 evaluation owners, and preserve missing/unknown rationale. This does not authorize
 automatic band expansion or changing candidate identity from scene proximity.
 
+#### Fixed-center height target — selected for the offline challenger
+
+The [user direction](../50-diagnostics/s11/2026-10-09-fixed-center-choice.json)
+selects consistency and implementation simplicity. Use the existing Glass
+ellipse center to define **where** a future eligible Oil or Foam boundary is
+measured. This declares the next scalar target; it does not adopt a physical
+selector or replace current candidate Y in production or W3 records.
+
+1. For a fixed Recipe geometry, set source column
+   `x = floor(GlassGeometry.ellipse.center_x + 0.5)` once. Convert source/ROI
+   coordinates explicitly; retain the source column in measurement provenance.
+   No new user setting or geometry estimate is needed.
+2. Identify the current physical boundary using available spatial and temporal
+   context. The fixed measurement location does **not** restrict recognition
+   to one image column. Oil and Foam retain independent identity and availability.
+3. Read Y only where that selected, currently observed boundary crosses the
+   column. Missing, masked or ambiguous correspondence leaves that role UNKNOWN.
+   Neither another X, the median of side fragments, an interpolated curve nor
+   an earlier value substitutes for the missing observation. Multiple raw
+   appearance edges are proposals, not multiple accepted physical boundaries.
+4. Apply existing `GlassGeometry.level_px_from_zero` and `level_mm_from_zero`
+   after eligibility. Preserve the measured coordinate, frame and selected
+   geometry identity through projection; a report must not compute a replacement.
+
+The [saved-array prerequisite](../50-diagnostics/s11/2026-10-09-fixed-center-readout.md)
+uses existing oriented pixel faces: a horizontal face crosses the fixed column
+at its exact half-pixel Y. This representation does not certify subpixel physical
+accuracy, material identity or scalar eligibility. Keep every visible/censored
+alternative until a physical selection rule is evaluated. In particular, a
+unique support crossing, outward direction or common component label cannot
+declare the target. Existing native-path candidate medians remain unchanged.
+
 #### Versioning, migration and implementation boundary
 
 Use a versioned label/frozen/report contract for the changed meaning, with explicit
@@ -2121,6 +2153,14 @@ and Work Plan for execution/acceptance.
 
 ## History Review
 
+2026-10-09 fixed-center target: review W1's identity/local/scalar separation,
+F09 coordinate/provenance failures, the changing-coverage scalar illustration,
+and the optional-reference/current-support limitations (F04/F07). The change
+declares a location and missingness policy using existing geometry/conversion.
+It creates no physical-selection heuristic, runtime path, setting or accepted
+accuracy claim. The saved-array comparison retains all alternatives and source
+coordinates; the implementation map and failure registry need no change.
+
 2026-10-09 implementation preflight (frozen before outcomes): scope version
 `oil-local-xy-v1` accepts at most 16 integral half-open rectangles per Glass,
 at most 32 Glass bindings, signed-32-bit integral rectangle components, and
@@ -2340,5 +2380,5 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: UPDATED — the Local XY opt-in executes through frame/candidate owners and extends existing actual-measurement lineage. Other mechanisms described here remain diagnostic/proposed as individually marked; default R22 behavior is unchanged.
-- Failure-registry impact: UPDATED — the fixed Local XY comparison records a bounded F04/F06 recurrence with present but unadmitted or unselected boundary support, not field repair.
+- Logic-map impact: NONE — this revision declares the next fixed-center scalar target and reuses existing geometry in an offline readout; no executing detector owner changes. Previously documented Local XY routing remains as mapped.
+- Failure-registry impact: NONE — existing F04/F07 mixed-support limits and F09 scalar/provenance risks already cover this prerequisite; no new physical mechanism or field repair is claimed.

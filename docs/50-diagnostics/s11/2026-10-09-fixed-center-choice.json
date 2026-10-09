@@ -1,0 +1,20 @@
+{
+  "schema": "s11-fixed-center-design-choice-v1",
+  "date": "2026-10-09",
+  "source": "direct user instruction after the fixed-center versus visible-portion explanation",
+  "verbatim_reply": "일관성이랑 구현의 편이성이 좋은 방향으로하자 어렵게 갈 필요 없음",
+  "interpretation": "Proceed with the simple fixed Glass-center measurement target for the next offline challenger. This interprets the user preference for consistent comparison and implementation simplicity in the preceding choice, not acceptance of current detector accuracy.",
+  "rule": {
+    "location": "existing Recipe GlassGeometry.ellipse.center_x, rounded once to nearest native source pixel with half ties toward positive X",
+    "measurement": "Only an independently identified current-frame boundary at that column may supply the role height. Preserve its exact measured geometry; no visible-side median, x relocation, interpolation or carried coordinate.",
+    "unavailable": "No eligible observation or ambiguous alternatives at the fixed column leave the affected role UNKNOWN.",
+    "context": "Surrounding image and temporal context remain available to identify the physical boundary; this is not a single-column-only detector.",
+    "roles": "Oil and Foam remain independently selected and available.",
+    "conversion": "Reuse existing GlassGeometry.level_px_from_zero and level_mm_from_zero after eligible same-frame Y; no report-side repair.",
+    "ui": "No new user setting; reuse current Glass center.",
+    "scope": "Offline design and comparison first; existing runtime output and W3 original-candidate-Y contract remain unchanged until a validated candidate is integrated."
+  },
+  "field_disposition": "FIELD FAIL",
+  "o2": "OPEN",
+  "production_change": false
+}

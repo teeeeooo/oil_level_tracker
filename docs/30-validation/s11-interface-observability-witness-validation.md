@@ -294,6 +294,24 @@ scalar accuracy stays not_measured. No averaging of support points may silently
 replace production candidate Y. The W3 output schema below implements these separate targets and preserves
 v1 compatibility; the W1 controls themselves add no prediction enum.
 
+For the selected [fixed-center target](../20-architecture/s11-interface-observability-witness-architecture.md#fixed-center-height-target--selected-for-the-offline-challenger),
+verify fixed source/ROI conversion, deterministic native-column rounding,
+independent Oil/Foam missingness, current selected-boundary provenance and reuse
+of the existing px/mm conversion. A static inclined boundary must not change
+height solely because visible side coverage changes; loss at the fixed column
+must not relocate the measurement or carry a prior Y. Mask/crop censorship and
+multiple physical alternatives must remain explicit. Recognition may use the
+whole available image and temporal context.
+
+The [176-raster readout](../50-diagnostics/s11/2026-10-09-fixed-center-readout.md)
+checks coordinate extraction against direct pixel-neighbor enumeration and
+retains every support crossing. Its five constructed controls cover this narrow
+geometry prerequisite only. No physical selector runs: null role outputs are
+NOT_EVALUATED, not successful abstentions or measured target coverage. Existing
+qualitative replies remain qualitative; defining a target does not manufacture
+scalar truth. Physical-role efficacy and integration still require their own
+fixed controls before any runtime scalar change.
+
 W1 completion requires reproducible partial-positive and glare counter-controls,
 a stated aggregation/identity rationale, and explicit handling of indistinguishable
 inputs. The target distinctions alone do not satisfy model or calibrated O2

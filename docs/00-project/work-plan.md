@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The [late Oil reply](../50-diagnostics/s11/2026-10-09-material-reference-late-oil-reply.json) is CLOSED: the 45 s right-hand LK group appears to remain on the Foam–Oil boundary. Preserve partial correspondence without exact survivor truth. The [current-perimeter prerequisite](../50-diagnostics/s11/2026-10-09-reference-current-boundary.md) is complete: unchanged capture matches ON/OFF on 167 rasters; all 73,444 faces are verified, but mixed/missing support prevents automatic physical selection. A product measurement-target choice is pending: fixed Glass-center observed height (recommended; UNKNOWN when unavailable there) versus a representative height of the currently observed real boundary (usable partial coverage, but changing X coverage changes the statistic). Neither is implemented or accepted by the existing W1 scalar contract. After the choice, freeze the new observed-boundary/side-role and scalar eligibility design before another trial. No repeat image judgment, Recipe/UI or production change, interpolation or threshold rescue. Local XY OFF; O2 OPEN / FIELD FAIL remain. No Windows work is pending.
+**Next transition:** The user selected a simple, consistent fixed Glass-center height target; the [choice and saved-array prerequisite](../50-diagnostics/s11/2026-10-09-fixed-center-readout.md) are complete. Reuse the existing Recipe center and px/mm conversion, with independent Oil/Foam availability and UNKNOWN for missing/ambiguous current boundary at that column. This fixes where to read height; whole-image/temporal context remains available for recognition. All 792 crossings on 176 saved rasters are verified, but appearance support still mixes glass and fluid; physical selection remains unresolved. Next work is a bounded current-boundary/side-role proposal using the existing optional-reference inputs and controls, before any new efficacy trial or runtime scalar change. Do not reopen the target choice or closed image judgments, add settings/ML, retune closed hypotheses, or infer identity from upper/lower component faces. Local XY OFF; O2 OPEN / FIELD FAIL remain. No user judgment or Windows operation is pending.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -411,14 +411,15 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    73,444 independently enumerated faces. Perimeters can retain the Oil-vicinity
    boundary, but also glass and missing/mixed Foam support. No nearest/lower/upper
    face, point-membership bit or manual survivor receives physical authority.
-   **Product measurement target PENDING:** fixed Glass-center observed height
-   (recommended, unavailable there stays UNKNOWN) versus a representative height
-   of the currently observed real boundary. The synthetic static/sloping control
-   shows a median change 109→117 from visibility change alone. This is not a video
-   error or new accepted scalar. W1 still preserves original candidate Y until a
-   separately declared policy is validated. Await user preference, then freeze
-   the physical reobservation and eligibility proposal; no curve interpolation,
-   carried value, automatic UI adoption or threshold/cleanup rescue follows.
+   **Product measurement target CHOSEN:** the user prioritizes consistency and
+   simple implementation. The [fixed-center rule and readout](../50-diagnostics/s11/2026-10-09-fixed-center-readout.md)
+   reuse existing Glass center and level conversion, preserving independent role
+   availability and UNKNOWN at a missing/ambiguous center observation. Recognition
+   can still use the whole image. All 792 support crossings on 176 saved rasters
+   match direct enumeration; five geometry controls pass. No physical selector
+   runs and no new setup/helper/runtime path is added. The W1 owner now declares
+   this next-challenger scalar target; current original candidate Y stays intact.
+   No further product preference or exact-pixel review is needed for this choice.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require
