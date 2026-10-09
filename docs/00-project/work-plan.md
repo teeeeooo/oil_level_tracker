@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Lossless edge fragments remain verified. The completed 25-raster side-region audit rejects raw-edge closure/separate components as a required ownership gate: gaps reconnect both sides, while glass also supplies distinct pairs. Next specify a bounded joint comparison of existing reference features, occlusion and optical deformation, using multiple related contour parts and preserving actual fluid crossings. This is design work, not an established physical selector. No gap filling, independent patch-match promotion, new mandatory setup or threshold continuation. Existing water/Foam/Oil replies stay CLOSED. Local XY stays CLOSED WITHOUT PROMOTION and OFF; O2 OPEN / FIELD FAIL remain. No user judgment or Windows work is pending at this checkpoint.
+**Next transition:** Joint reference layout and consecutive-frame diagnostics are complete: common geometry opposes the old rim jump, but pixel-model preference and optical-flow consistency do not establish material identity. The new sample6 forming-scene A/B physical question is pending: distinguish rear/front views of one thin Foam layer from separate Foam–air / Foam–liquid interfaces before defining the next material-side control. Exact pixels are not requested. Existing water/sample4 replies remain CLOSED; no Windows work is needed. Local XY remains CLOSED WITHOUT PROMOTION/OFF; O2 OPEN / FIELD FAIL are unchanged. [Investigation and review](../50-diagnostics/s11/2026-10-09-reference-correspondence.md).
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -359,6 +359,22 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    and missing support. This design must add physical evidence beyond independent
    strip matches/reference overlap before a new classifier trial; it is not yet
    an executable or validated selection rule.
+   **Reference correspondence and consecutive-frame diagnostics complete:** the
+   [frozen investigation](../50-diagnostics/s11/2026-10-09-reference-correspondence.md)
+   retains 24 shared-layout pairs, 45 registered-pixel views and 23 native-rate
+   tracking intervals/scales. The old rim jump conflicts with common geometry
+   by 52–63 pixels; consecutive frames keep that seed near its original location.
+   The pixel model cannot identify occlusion: constant replacement is nested
+   within unconstrained photometry. Short tracking also follows an optical warp
+   with low reverse error. No physical selector or production change follows.
+   Hypotheses, failed expectation, all outcomes and independent checks are saved.
+   **New physical question PENDING:** sample6 f146/158/171 A/B may be rear/front
+   perspectives of the same thin Foam layer rather than independent material
+   interfaces. Agent inspection leans toward the former. The reply determines
+   the next side-role/control interpretation; do not assign roles by vertical
+   order or request exact pixels. An uncertain reply retains this control as
+   unresolved. Existing water/sample4 questions remain closed. Continue after
+   this necessary judgment; no Windows task or setup change is pending.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require

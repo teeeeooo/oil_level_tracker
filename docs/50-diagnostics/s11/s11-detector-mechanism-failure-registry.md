@@ -367,6 +367,22 @@ coherent correspondence among parts of the same feature and independently
 supported side roles; coherence alone cannot defeat an optical-warp counterexample.
 Existing regional replies remain closed and require no exact-pixel relabeling.
 
+**Joint reference and short-baseline follow-up:** the
+[2026-10-09 investigation](2026-10-09-reference-correspondence.md) measures 24
+multi-feature reference pairs and 23 consecutive-frame intervals/scales. Common
+geometry opposes the prior rim jump by 52–63 pixels, and native-rate local
+tracking keeps that seed nearby. These are useful correspondence diagnostics,
+not material ownership. Unconstrained channel gain/offset nests constant
+replacement; the first synthetic replacement expectation failed before real
+measurement and was preserved. Differential pixel models do not establish
+occlusion. A fixed-pattern optical warp keeps all 77 synthetic tracks with very
+small reverse error, so track survival/consistency cannot authorize Foam either.
+Do not promote lowest model error, a common map or temporal continuity alone;
+retain independent side roles, projected-depth alternatives, missing support and
+real fluid/structure crossings. No tighter error/scale/window cutoffs follow
+from these observed results. The new beer A/B physical question is distinct from
+previously closed sample4 and water interpretations.
+
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 
 **Affected detector logic node(s):** `OIL-TRACKLET` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.
