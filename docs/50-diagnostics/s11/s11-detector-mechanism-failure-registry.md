@@ -322,6 +322,19 @@ for joint correspondence and side-role evidence. The nearby structure anchor
 cannot be mandatory for all Foam fronts. No threshold fitting, exact mask from
 a regional reply, repeated physical question or episode relaxation follows.
 
+**Two-side ordered correspondence follow-up:** the [frozen 136-query comparison](2026-10-09-foam-two-side-transport.md)
+extends the existing offline patch owner with separate ordered side strips,
+2D search and alternating-column predictions. Eleven queries favor different
+side shifts, including a confirmed-rim seed that matches other upper/right image
+features in both folds. Its raw/clean-white entry and absent-chromatic predicate
+also occurs in an earlier mixed-Foam query, so that conjunction does not establish
+identity. Fifty-two fold/match disagreements and 45 masked anchors are unresolved,
+not successful suppression. No physical front is selected. Do not tune motion/
+error cutoffs, masks or scales on this result. A new joint proposal needs spatially
+coherent correspondence among parts of the same feature and independently
+supported side roles; coherence alone cannot defeat an optical-warp counterexample.
+Existing regional replies remain closed and require no exact-pixel relabeling.
+
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 
 **Affected detector logic node(s):** `OIL-TRACKLET` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.

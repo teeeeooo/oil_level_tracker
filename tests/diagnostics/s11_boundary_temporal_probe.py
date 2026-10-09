@@ -26,6 +26,124 @@ PATCH_SPEC = {
               'Unique appearance match and reciprocal agreement do not establish physical identity.',
 }
 
+SPLIT_SIDE_SPEC = {
+    'id': 'ordered-two-side-transport-v1',
+    'search': 'all fully visible integer 2D placements; no speed or direction prior',
+    'sides': 'equal-depth ordered BGR strips above and below an excluded plateau',
+    'fit': 'exact integer squared error with one additive BGR offset per side',
+    'comparison': 'common displacement versus independent side displacements',
+    'validation': 'alternate local columns, both train/test folds; no fitted tolerance',
+    'max_compared_samples': 8_000_000,
+    'max_offsets': 65_536,
+    'physical_identity': 'UNRESOLVED',
+    'limits': 'Transport of appearance is not physical flow or Foam identity. '
+              'Adjacent columns and the two folds are correlated. Ties abstain. '
+              'No camera truth, scalar, speed cutoff, optical-visibility inference or selection.',
+}
+
+
+def _side_costs(template, windows, columns):
+    """Exact training numerator after fitting additive per-channel offsets."""
+    diff = template[:, columns].astype(np.int16) - windows[:, :, columns].astype(np.int16)
+    n = diff.shape[1] * diff.shape[2]
+    sums = diff.sum(axis=(1, 2), dtype=np.int64)
+    squared = np.square(diff.astype(np.int32)).sum(axis=(1, 2, 3), dtype=np.int64)
+    return squared * n - np.square(sums).sum(axis=1), sums, n
+
+
+def _test_side(template, window, columns, train_sum, train_count):
+    diff = template[:, columns].astype(np.int16) - window[:, columns].astype(np.int16)
+    test_count = diff.shape[0] * diff.shape[1]
+    test_sum = diff.sum(axis=(0, 1), dtype=np.int64)
+    squared = int(np.square(diff.astype(np.int32)).sum(dtype=np.int64))
+    # Scale exact aggregate moments with Python integers: summing squared scaled
+    # residuals in int64 can overflow for a large, otherwise valid patch.
+    cross = sum(int(a) * int(b) for a, b in zip(test_sum, train_sum, strict=True))
+    offset_squared = sum(int(v)**2 for v in train_sum)
+    numerator = train_count**2 * squared - 2 * train_count * cross + test_count * offset_squared
+    return numerator, int(diff.size) * train_count**2
+
+
+def compare_split_sides(anchor, current, anchor_visible, current_visible, *, x_range, y_range, depth):
+    """Compare held-out ordered appearance on two sides; no physical role assignment.
+
+    x_range/y_range are half-open ROI coordinates. The whole proposed rectangle
+    including its excluded plateau must be visible in both rasters. Search all
+    contained placements, keeping model ties unavailable rather than choosing the
+    first one. A different upper/lower best placement is only differential image
+    transport, which optical warps can also produce.
+    """
+    if (not isinstance(anchor, np.ndarray) or anchor.dtype != np.uint8 or anchor.ndim != 3
+            or anchor.shape[2] != 3 or not anchor.size or anchor.size > MAX_PIXELS):
+        raise ValueError('bounded nonempty uint8 BGR required')
+    if not isinstance(current, np.ndarray) or current.shape != anchor.shape or current.dtype != np.uint8:
+        raise ValueError('same-shape current BGR required')
+    for mask in (anchor_visible, current_visible):
+        if not isinstance(mask, np.ndarray) or mask.dtype != bool or mask.shape != anchor.shape[:2]:
+            raise ValueError('same-shape boolean visibility required')
+    if (len(x_range) != 2 or len(y_range) != 2 or type(depth) is not int or depth < 1
+            or any(type(v) is not int for v in (*x_range, *y_range))):
+        raise ValueError('integer half-open geometry required')
+    x0, x1 = x_range; y0, y1 = y_range
+    h, w = anchor.shape[:2]
+    if not (0 <= x0 < x1 <= w and x1-x0 >= 3 and 0 <= y0 < y1 <= h):
+        raise ValueError('valid plateau and at least three columns required')
+    top, bottom = y0-depth, y1+depth
+    ph, pw = bottom-top, x1-x0
+    base = dict(spec_id=SPLIT_SIDE_SPEC['id'], status='UNAVAILABLE', reason=None,
+                x_range=list(x_range), y_range=list(y_range), depth=depth,
+                physical_identity='UNRESOLVED', selected_front=None, folds=[])
+    if top < 0 or bottom > h:
+        return dict(base, reason='anchor_outside_crop')
+    if not anchor_visible[top:bottom, x0:x1].all():
+        return dict(base, reason='anchor_masked')
+    positions = (h-ph+1)*(w-pw+1)
+    if (positions > SPLIT_SIDE_SPEC['max_offsets']
+            or positions * depth * pw * 3 > SPLIT_SIDE_SPEC['max_compared_samples']):
+        raise ValueError('two-side search resource bound exceeded')
+    # The view allocates no raster copy; index only fully observed rectangles.
+    valid = np.lib.stride_tricks.sliding_window_view(current_visible, (ph,pw)).all(axis=(-1,-2))
+    yy, xx = np.nonzero(valid)
+    if not len(yy):
+        return dict(base, reason='no_visible_current_placement')
+    view = np.lib.stride_tricks.sliding_window_view(current, (depth,pw), axis=(0,1))
+    # Advanced indexing yields N,C,H,W; transpose to N,H,W,C.
+    windows = [view[yy,xx].transpose(0,2,3,1),
+               view[yy+ph-depth,xx].transpose(0,2,3,1)]
+    templates = [anchor[top:y0,x0:x1], anchor[y1:bottom,x0:x1]]
+    folds=[]
+    for parity in (0,1):
+        train=np.arange(pw)%2==parity; test=~train
+        fit=[_side_costs(t,v,train) for t,v in zip(templates,windows,strict=True)]
+        assert fit[0][2]==fit[1][2]
+        minima=[np.flatnonzero(c==c.min()) for c in [fit[0][0],fit[1][0],fit[0][0]+fit[1][0]]]
+        fold=dict(training_column_parity=parity, minimizer_counts=[len(m) for m in minima],
+                  status='AMBIGUOUS_FIT', common_test_error=None, split_test_error=None,
+                  matches=None)
+        if all(len(m)==1 for m in minima):
+            ui,li,ci=[int(m[0]) for m in minima]
+            common=[];split=[]
+            for k,si in enumerate((ui,li)):
+                common.append(_test_side(templates[k],windows[k][ci],test,fit[k][1][ci],fit[k][2]))
+                split.append(_test_side(templates[k],windows[k][si],test,fit[k][1][si],fit[k][2]))
+            assert len({den for _,den in common+split})==1
+            ce=sum(num for num,_ in common);se=sum(num for num,_ in split)
+            denominator=2*common[0][1]*255**2
+            fold.update(common_test_error=ce/denominator,split_test_error=se/denominator,
+                        matches={name:[int(xx[i])-x0,int(yy[i])-top]
+                                 for name,i in [('upper_shift',ui),('lower_shift',li),('common_shift',ci)]},
+                        status=('SHARED_MATCH' if ui==li else 'SPLIT_BETTER' if se<ce else
+                                'COMMON_BETTER' if ce<se else 'TIED_TEST'))
+        folds.append(fold)
+    states=[f['status'] for f in folds]
+    result_state=(states[0] if states[0]==states[1] else 'FOLD_DISAGREEMENT')
+    required = ('upper_shift','lower_shift') if result_state=='SPLIT_BETTER' else ('common_shift',)
+    if (result_state in {'SPLIT_BETTER','COMMON_BETTER','SHARED_MATCH'}
+            and any(folds[0]['matches'][k] != folds[1]['matches'][k] for k in required)):
+        result_state='FOLD_MATCH_DISAGREEMENT'
+    return dict(base,status='MEASURED',reason=None,visible_placements=len(yy),folds=folds,
+                transport_pattern=result_state)
+
 
 def match_ordered_patch(anchor, current, *, x_range, anchor_y, radius):
     """Keep all vertical alternatives for a recorded spatial patch, not an Oil track."""

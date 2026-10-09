@@ -214,13 +214,60 @@ localized appearance changes and fully supported interpolation around mask holes
 The [local measurement](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md)
 records the bounded saved-sequence result and remaining human checkpoint.
 
+## Offline two-sided ordered appearance transport
+
+`s11_boundary_temporal_probe.compare_split_sides` compares actual ordered BGR
+strips above and below an excluded raw-gradient plateau. It reuses this offline
+correspondence owner; production imports and older probe APIs stay unchanged.
+The [fixed-glass reply and relative-gap result](../50-diagnostics/s11/2026-10-09-foam-gap-local-context.md#human-fixed-structure-reply-and-relative-gap-check)
+motivate retaining side-specific correspondence before assigning physical roles.
+
+The two image-formation alternatives are one common integer 2D displacement and
+two independent displacements. Each has an additive BGR offset per side. Fit
+with alternating local patch columns and evaluate the other columns, then swap
+the split. Exact int64 moments compare mean-centered training-error numerators;
+held-out moments are scaled with Python integers to avoid int64 overflow on
+large valid patches. Test residuals use only the training offset. No texture is replaced by a plane,
+pooled band mean or white/chromatic union. There is no speed/direction prior.
+
+Every completely observed current placement is considered. Both complete strip
+rectangles and the intervening excluded plateau must be effective and nonglare.
+Outside-crop/masked anchors or no visible current rectangle are unavailable, not
+negative physical evidence. Equal minima abstain. `SPLIT_BETTER` requires a unique
+minimum for both sides and the common competitor in each fold, strictly smaller
+held-out split error in both folds, and the same upper/lower shifts across folds.
+The outperformed common competitor need not pick the same shift in both folds.
+`COMMON_BETTER` and `SHARED_MATCH` require common-shift agreement; other outcomes
+retain ties, fit ambiguity or fold disagreement. The adjacent columns and folds
+are correlated; this is not independent validation or a confidence estimate.
+
+Input is same-shape uint8 BGR with boolean visibility, integer half-open local
+X/plateau intervals, at least three patch columns and positive integer side depth.
+The inherited input bound is 4,194,304 array elements. Pre-allocation search caps
+are 65,536 placements and 8,000,000 side sample values. No state survives a call.
+Patch scales in a real probe must be frozen before observing its outcomes.
+
+The returned `transport_pattern` is an appearance comparison, **not physical
+Foam identity or flow**. A piecewise optical warp of fixed texture can produce
+the same split advantage as two material regions. Even unique, repeatable fits
+therefore leave physical identity UNRESOLVED and the front unset. A physical
+challenger still requires independent side-role/opposition evidence; the joint
+measurements may only establish whether this observable is useful on the fixed
+controls. Never transfer a regional review to all matched patch pixels.
+
+Focused checks cover common translation plus exposure, independently transported
+sides, a fixed-pattern optical counterexample, ambiguous flat fits, masked gaps,
+poisoned target placements, exact arithmetic against brute-force centering,
+crop/type/shape/resource limits and unchanged inputs. Existing ordered-patch and
+registered-residual tests protect the unchanged old entry points.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
-- Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
-- Prior mechanisms reviewed: motion-only identity and episode confirmation, component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; missing rejected components; discarded chromatic support and support-extreme fronts; the rejected strongest/lowest/nearest/smoothest rules and existing unsigned peak representation.
+- Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
+- Prior mechanisms reviewed: motion-only identity and episode confirmation, component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; missing rejected components; discarded chromatic support and support-extreme fronts; the rejected strongest/lowest/nearest/smoothest rules, ordered-patch drift, shared-plane temporal region-exchange failure, signed-gap representation and relative-gap ambiguity.
 - Prior mechanisms rejected: no restoration of rejected Foam authority, geometry-as-identity, blanket material veto, lowering thresholds, naive white/chromatic union, automatic upper-edge substitution, polarity-as-identity or using human coordinates in runtime.
 - Preserved contracts: independent Oil/Foam owners, same-frame source provenance, fail-closed publication and unchanged temporal/sequence decisions.
-- Difference from prior failures: capture computed rejected evidence in a bounded non-authoritative sidecar; optional ordered opposite-slope brackets preserve narrow troughs lost by unsigned-plateau merging, with all alternatives and ambiguity retained. No decision owner consumes them and no physical identity is inferred.
+- Difference from prior failures: optional ordered opposite-slope brackets preserve narrow troughs; two-side transport preserves ordered texture in separate strips, searches 2D placements, and compares shared versus split displacement on alternate-column predictions. It retains explicit optical counterexamples and cannot assign physical roles. No decision owner consumes these measurements.
 - Logic-map impact: NONE — offline probes have no production caller; optional registration reasons do not change tuples, thresholds or decision ownership.
-- Failure-registry impact: NONE — existing failure classes and guards apply; no new behavior mechanism or efficacy claim.
+- Failure-registry impact: UPDATED — F07 retains the bounded two-side appearance counterexample and remaining physical correspondence gap; no behavior or efficacy claim.

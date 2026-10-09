@@ -290,6 +290,20 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    A nearby glass anchor is optional, not a new eligibility gate on earlier
    real Foam. No repeated physical question, new Windows action, automatic edge
    choice, chromatic veto or threshold/window tuning follows from this reply.
+   **Two-side correspondence comparison CLOSED WITHOUT PROMOTION:** the
+   [frozen ordered-strip experiment](../50-diagnostics/s11/2026-10-09-foam-two-side-transport.md)
+   retains 136 queries: 11 split wins, 28 shared/common wins, 52 fold/match
+   disagreements and 45 masked anchors. A confirmed-rim seed jumps to different
+   image features despite agreement of both fitting folds; its immediate white/
+   chromatic membership matches an early mixed-C2 query. This conjunction is
+   insufficient for physical identity. All 41 focused tests and 364 direct
+   held-out prediction checks pass; production is unchanged. No motion/error/
+   radius tuning, mask relaxation or standalone reciprocal-match continuation.
+   The next joint design must preserve spatial relationships among multiple
+   parts of the same feature, establish independent side ownership, and reject
+   this jump plus optical-warp opposition before a real trial or scalar rule.
+   Spatial consistency alone is not physical identity. Reuse the saved originals;
+   no new setup requirement, repeated human review or Windows task follows.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require
