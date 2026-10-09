@@ -122,9 +122,11 @@ class CurrentFrameEvidenceOwner:
         glass: GlassInspectionConfig,
         *,
         capture_diagnostics: bool = False,
+        measurement_scope=None,
     ) -> CurrentFrameEvidence:
         settings = glass.detector_settings
         bundle = build_mask_bundle(frame, glass)
+        exclusion = None if measurement_scope is None else measurement_scope.rasterize(bundle.effective_mask.shape, bundle.crop_origin)
         pre = preprocess(bundle.crop, bundle.effective_mask, settings)
         static_map = self.static_maps.get(glass.id)
         oil_result = self.evaluate_oil(glass.id, pre, bundle, static_map)
@@ -194,6 +196,8 @@ class CurrentFrameEvidenceOwner:
             white_material_layer_topology=white_material_layer_topology,
             white_material_texture_present=white_material_texture_present,
             capture_diagnostics=capture_diagnostics,
+            measurement_exclusion=exclusion,
+            scope_manifest=None if measurement_scope is None else {**measurement_scope.manifest, "sha256": measurement_scope.sha256},
         )
         static_foam_map = self.static_foam_maps.get(glass.id)
         static_foam_match = foam_static_match(foam.mask, static_foam_map)
@@ -625,6 +629,8 @@ class CurrentFrameResultProjector:
             effective_photometric_metrics(pre, bundle.effective_mask)
         )
         debug_metrics.update(oil_runtime_metrics(oil_result))
+        if evidence.candidate_assembly.measurement_scope is not None:
+            debug_metrics["oil_measurement_scope"] = evidence.candidate_assembly.measurement_scope
         oil_detail = oil_debug_detail(oil_result) if debug else None
         detection = PhaseDetection(
             glass_id=glass.id,

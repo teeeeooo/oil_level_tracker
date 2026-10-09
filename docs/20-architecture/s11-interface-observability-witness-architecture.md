@@ -2063,8 +2063,8 @@ it does not reject every possible combination of reference, region and motion.
 
 The [October 9 Local XY intake](../60-evidence/s11/2026-10-09-local-xy-spec-intake.md)
 reviews completed shared-mask and measurement-only prototypes. This section
-adopts the next bounded implementation contract, not those prototypes as
-production behavior. Supplied WP1–WP5 refine D2/W4; O2 and later authority/phase
+owns the implemented opt-in contract; the [fixed comparison](../60-evidence/s11/2026-10-09-local-xy-implementation.md)
+is closed without promotion. Default behavior remains unchanged. Supplied WP1–WP5 refine D2/W4; O2 and later authority/phase
 acceptance are unchanged. No new UI or recipe schema is part of this slice.
 
 Reuse `phase_candidate_assembler` to pass an explicit, immutable, opt-in scope
@@ -2120,6 +2120,40 @@ sweep, ML or separate dense-contour system follows. Use the
 and Work Plan for execution/acceptance.
 
 ## History Review
+
+2026-10-09 implementation preflight (frozen before outcomes): scope version
+`oil-local-xy-v1` accepts at most 16 integral half-open rectangles per Glass,
+at most 32 Glass bindings, signed-32-bit integral rectangle components, and
+at most 1,048,576 ROI pixels / 2,048 pixels per
+axis. Reject excess before state acquisition; never truncate. Bind frame size,
+geometry, detector settings and reference SHA-256. Empty scopes use the legacy
+runtime identity. Nonempty scope manifests participate in the detector version.
+Raster union costs at most 16 ROI writes; retained masks are frame-local.
+Debug capture is limited to the existing 6+4 native paths (five winning samples
+each) and three phase paths (15 operations each), with a 1 MiB trace limit.
+
+Retain original sector layout, original visible-sector percentile normalization,
+material terminal/context profiles, upstream convolution and enrichment. Native
+profiles are retained according to original eligibility, preventing a smaller
+sector denominator after removal. Original float32/window-prefix calculations
+execute for untouched contrasts. At an affected upper/lower contrast only, use
+columns with all remaining band pixels visible on both sides; require at least
+42% of the original sector width for native material, and the existing phase
+`max(2, floor(radius * width * .25))` area floor on each side. Missing common
+support is unavailable, never zero-valued evidence. Native availability uses
+the lesser of remaining centered-window coverage and common-column coverage;
+the existing .35/.65 weighting and .42 center-row floor remain. Sobel is computed
+from the original sector raster, but its row average withdraws excluded samples.
+No available contrast means no Sobel-only path. Same-X/other-Y primitive equality
+is tested outside the complete operation footprint; seed/competition changes
+are allowed in an actively changed frame. This guard is a new fixed hypothesis,
+not a continuation of the failed global pairing variants.
+
+One full-window candidate comparison uses the already frozen sample4 rectangle
+and seven positive / three negative checkpoints; the other three windows run
+OFF. Compare all completed fields and actual report series/validity, debug
+neutrality, input hashes and runtime/RSS. No additional ablation or parameter
+sweep is planned. Existing acceptance and Windows gates remain unchanged.
 
 2026-10-09 Local XY intake: reviewed source-level measurement ownership and
 F02/F04/F06/F09/F10 against all eight saved runs. Whole shared-mask withdrawal
@@ -2306,5 +2340,5 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: NONE — this clarification adds no executing owner or consumer; the mapped D2 diagnostic route and all production decisions remain unchanged.
-- Failure-registry impact: NONE — this architecture refines the response to existing failures without claiming field repair.
+- Logic-map impact: UPDATED — the Local XY opt-in executes through frame/candidate owners and extends existing actual-measurement lineage. Other mechanisms described here remain diagnostic/proposed as individually marked; default R22 behavior is unchanged.
+- Failure-registry impact: UPDATED — the fixed Local XY comparison records a bounded F04/F06 recurrence with present but unadmitted or unselected boundary support, not field repair.

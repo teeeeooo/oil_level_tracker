@@ -30,6 +30,8 @@ from .phase_frame_detection import (
     foam_static_match as _foam_static_match,
 )
 from .preprocessing import PreprocessResult, preprocess
+from .oil_measurement_scope import OilMeasurementScope, MAX_SCOPES
+from oil_tracker.domain.artifact_reference import fingerprint
 from .temporal_raster_evidence import (
     RegisteredFoamMotionTracker,
     RegisteredOilMotionTracker,
@@ -40,7 +42,16 @@ from .temporal_tracker import TemporalTracker
 class OpenCvPhaseDetector:
     version = "opencv-phase-detector-r22-3-interface-witness-diagnostics-v1"
 
-    def __init__(self) -> None:
+    def __init__(self, *, oil_measurement_scopes: Sequence[OilMeasurementScope] = ()) -> None:
+        scopes = tuple(oil_measurement_scopes)
+        if len(scopes) > MAX_SCOPES or any(not isinstance(s, OilMeasurementScope) for s in scopes):
+            raise ValueError("Invalid or excessive Oil measurement scopes.")
+        if len({s.glass_id for s in scopes}) != len(scopes):
+            raise ValueError("Duplicate Oil measurement scope for one Glass.")
+        self._measurement_scopes = {s.glass_id: s for s in scopes if s.rectangles}
+        self.measurement_scope_manifest = tuple(s.manifest for s in sorted(self._measurement_scopes.values(), key=lambda s: s.glass_id))
+        if self.measurement_scope_manifest:
+            self.version += "+oil-local-xy-v1:" + fingerprint(self.measurement_scope_manifest)
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._static_foam_maps: dict[str, np.ndarray] = {}
@@ -148,8 +159,11 @@ class OpenCvPhaseDetector:
         time_sec: float,
         debug: bool = False,
     ) -> tuple[PhaseDetection, PhaseDetectionDebugArtifacts | None]:
+        scope = self._measurement_scopes.get(glass.id)
+        if scope is not None:
+            scope.validate(glass, frame)
         tracker = self._tracker_for(glass)
-        evidence = self._frame_evidence_owner.observe(frame, glass, capture_diagnostics=debug)
+        evidence = self._frame_evidence_owner.observe(frame, glass, capture_diagnostics=debug, measurement_scope=scope)
         projection = self._frame_result_projector.project(
             evidence,
             tracker,

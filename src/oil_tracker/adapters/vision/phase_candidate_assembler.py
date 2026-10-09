@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
+import json
+import math
 from typing import Sequence
 
 import numpy as np
@@ -23,6 +25,7 @@ from .oil_supplemental_path import (
     generate_phase_transition_candidates,
 )
 from .preprocessing import PreprocessResult
+from .oil_measurement_scope import active_exclusion, band_record, MAX_TRACE_BYTES
 from .oil_pipeline_diagnostics import OilMeasurementLineage, capture_measurement_lineage
 from .temporal_raster_evidence import (
     RegisteredOilRasterEvidence,
@@ -42,6 +45,7 @@ class PhaseCandidateAssembly:
     phase_transition_count: int
     diagnostic_material_paths: dict[int, MaterialPathDiagnostic] = field(default_factory=dict)
     diagnostic_measurement_lineage: tuple[OilMeasurementLineage, ...] = ()
+    measurement_scope: dict | None = None
 
 
 def assemble_phase_candidates(
@@ -57,9 +61,13 @@ def assemble_phase_candidates(
     white_material_layer_topology: bool,
     white_material_texture_present: bool,
     capture_diagnostics: bool = False,
+    measurement_exclusion: np.ndarray | None = None,
+    scope_manifest: dict | None = None,
 ) -> PhaseCandidateAssembly:
     """Generate and enrich all Oil proposal families without selecting one."""
 
+    visible = (bundle.effective_mask > 0) & ~(pre.glare_mask > 0)
+    measurement_exclusion = active_exclusion(measurement_exclusion, visible)
     origin_y = float(bundle.crop_origin[1])
     generated_paths: dict[int, MaterialPathEvidence] | None = {} if capture_diagnostics else None
     retained_paths: dict[int, MaterialPathEvidence] = {}
@@ -74,6 +82,7 @@ def assemble_phase_candidates(
         # not accepted/public Foam authority.
         material_evidence_map=foam.combined_evidence_map,
         diagnostic_paths=generated_paths,
+        measurement_exclusion=measurement_exclusion,
     ):
         material_context = material_layer_context_features(
             foam.combined_evidence_map,
@@ -122,6 +131,7 @@ def assemble_phase_candidates(
         top_k=bounded_candidate_top_k(settings.candidate_top_k, cap=4),
         material_evidence_map=None,
         diagnostic_paths=generated_paths,
+        measurement_exclusion=measurement_exclusion,
     ):
         if any(
             abs(float(candidate.y) - float(existing.y)) <= 6.0
@@ -208,6 +218,7 @@ def assemble_phase_candidates(
             static_map,
             crop_origin_y=origin_y,
             limit=3,
+            measurement_exclusion=measurement_exclusion,
         )
     )
 
@@ -235,6 +246,41 @@ def assemble_phase_candidates(
         *calibrated_high_recall_candidates,
         *phase_transition_candidates,
     )
+    lineage = capture_measurement_lineage(
+        all_candidates, pre=pre, bundle=bundle, static_map=static_map,
+        measurement_exclusion=measurement_exclusion,
+    ) if capture_diagnostics else ()
+    if measurement_exclusion is not None and capture_diagnostics:
+        extended = []
+        for binding in lineage:
+            record = json.loads(binding.record_json)
+            candidate = all_candidates[binding.candidate_input_index]
+            path = retained_paths.get(id(candidate))
+            if path is not None:
+                bands = []
+                for sample in path.diagnostic_samples:
+                    r, y = sample.contrast_scale_px, sample.local_y
+                    if not r:
+                        continue
+                    minimum = max(2, math.ceil((sample.stop_x-sample.start_x)*.42)) * max(min(y, r), min(pre.gray.shape[0]-y-1, r))
+                    trace = band_record(visible, measurement_exclusion, row=y, radius=r,
+                        start=sample.start_x, stop=sample.stop_x, crop_origin=bundle.crop_origin,
+                        minimum=minimum, legacy_zero_weight=True)
+                    trace.update(sector=sample.sector_index, source_y=y+bundle.crop_origin[1],
+                        channel=sample.contrast_channel, signed_contrast=sample.signed_contrast,
+                        strength=sample.strength, normalization_basis="original_visible_sector",
+                        sobel_original_count=int(visible[y, sample.start_x:sample.stop_x].sum()),
+                        sobel_used_count=int((visible & ~measurement_exclusion)[y, sample.start_x:sample.stop_x].sum()))
+                    bands.append(trace)
+                record.update(status="measured", reason="scoped_native_path", native_sampling=bands)
+            if path is not None or candidate.source == "phase_transition_scan":
+                record["sampling_scope"] = scope_manifest
+            extended.append(replace(binding, record_json=json.dumps(record, sort_keys=True, allow_nan=False)))
+        if sum(len(b.record_json.encode()) for b in extended) <= MAX_TRACE_BYTES:
+            lineage = tuple(extended)
+        else:
+            # Diagnostic exhaustion cannot alter selection or raise a pipeline failure.
+            lineage = tuple(replace(b, record_json=json.dumps({"status": "unavailable", "reason": "sampling_trace_bound_exceeded"})) for b in lineage)
     return PhaseCandidateAssembly(
         candidates=all_candidates,
         material_path_count=len(material_path_candidates),
@@ -245,9 +291,11 @@ def assemble_phase_candidates(
             + len(phase_transition_candidates)
         ),
         phase_transition_count=len(phase_transition_candidates),
-        diagnostic_measurement_lineage=(capture_measurement_lineage(
-            all_candidates, pre=pre, bundle=bundle, static_map=static_map,
-        ) if capture_diagnostics else ()),
+        diagnostic_measurement_lineage=lineage,
+        measurement_scope=None if scope_manifest is None or measurement_exclusion is None else {
+            **scope_manifest, "original_eligible_count": int(visible.sum()),
+            "excluded_eligible_count": 0 if measurement_exclusion is None else int((visible & measurement_exclusion).sum()),
+        },
         diagnostic_material_paths={
             index: MaterialPathDiagnostic(candidate.source, float(candidate.y), retained_paths[id(candidate)])
             for index, candidate in enumerate(all_candidates)

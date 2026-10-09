@@ -267,7 +267,7 @@ class OilMeasurementLineage:
     record_json: str
 
 
-def capture_measurement_lineage(candidates, *, pre, bundle, static_map):
+def capture_measurement_lineage(candidates, *, pre, bundle, static_map, measurement_exclusion=None):
     """Reproduce pure spatial measurements using their existing production owners.
 
     This deliberately never runs a temporal owner or resolver. Exact hypothesis
@@ -335,12 +335,16 @@ def capture_measurement_lineage(candidates, *, pre, bundle, static_map):
             if local_y.is_integer() and 0 <= local_y < pre.gray.shape[0]:
                 support = phase_transition_support(pre.normalized,
                     (bundle.effective_mask > 0) & ~(pre.glare_mask > 0),
-                    local_y=int(local_y), crop_origin=bundle.crop_origin)
+                    local_y=int(local_y), crop_origin=bundle.crop_origin,
+                    measurement_exclusion=measurement_exclusion)
                 record.update(status="measured", reason="production_phase_scan_bands",
                     phase_support=support, phase_channel="normalized_float32",
                     phase_response_rule="max_radius(clipped_median(abs(pooled_delta)/48)); at_least_three_sectors",
                     phase_coverage_rule="available_pooled_sectors_over_five_at_strongest_radius",
                     phase_consistency_rule="fraction_radius_response_ge_max(0.08,strongest*0.60)")
+                if measurement_exclusion is not None:
+                    record["phase_pooling_rule"] = "legacy_unaffected_else_complete_common_x"
+                    record["phase_support_counts_basis"] = "original_visibility; sampling contains actual used counts"
         result.append(OilMeasurementLineage(index, candidate.source, float(candidate.y),
             json.dumps(record, sort_keys=True, allow_nan=False)))
     return tuple(result)

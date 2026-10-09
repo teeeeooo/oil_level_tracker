@@ -151,6 +151,20 @@ All decision owners and lifecycle transitions below retain R22 behavior.
 
 The tracker’s `raw_*`/`smoothed_*` fields and the current `fill_state` are not the completed-window selection. The completed resolver uses the stored candidates and detection evidence again. The accepted-Foam context parameters exist in the Oil pipeline API, but the current `observe` call runs Oil before it has a current accepted Foam component and therefore invokes it without that context.
 
+The optional [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py)
+execution input binds Glass/geometry/settings/frame size/reference before state
+acquisition. `FRAME-EVIDENCE` rasterizes its half-open source rectangles separately
+from the shared masks. `OIL-CANDIDATE` applies sampling withdrawal only in the
+material, raster-material and phase-transition lanes. Affected contrast windows
+use complete common columns; untouched windows retain legacy pooling. Original
+normalization/context, other candidate families, Foam and downstream owners are
+unchanged. The default constructor is OFF. This is an opt-in experimental path,
+not accepted detector behavior; scope digest participates in runtime identity.
+Existing A1/native lineage records actual sample counts/rules and reference
+footprints; debug capture cannot change selection. See the
+[Local XY contract](s11-interface-observability-witness-architecture.md#local-xy-oil-measurement-exclusion--proposed-contract)
+for resource limits and residual upstream dependencies.
+
 ## 4. Completed-window Oil path
 
 ### 4.1 Candidate normalization and authority (`OIL-CANDIDATE`, `FOAM-IDENTITY`, `OIL-AUTHORITY`)

@@ -168,6 +168,20 @@ removed; the paired raster controls and rejected patch preserve the lesson.
 
 **Confidence:** Confirmed mechanism for R10–R16; strong inference for the layered Oil counterfactual.
 
+**2026-10-09 Local XY recurrence:** the [fixed affected-only sampling comparison](../../60-evidence/s11/2026-10-09-local-xy-implementation.md)
+keeps original pixels, Foam and other proposal families, yet changes completed
+ownership. At 52 s an admitted/publishable boundary-region proposal is not
+selected; at 54–56 s boundary-region proposals remain present but their
+provisional tracklet is unadmitted. The final 56 s choice follows the glass rim.
+The user identifies the moving yellow-Foam/dark-Oil boundary as the target;
+no exact coordinates or candidate IDs are inherited. Current Foam is unchanged,
+but final validity fails at 40/51.5 s through composition (also F06); final Foam
+endpoint loss already exists OFF. This configuration is closed without promotion.
+Do not extend the mask to new winners, infer identity from numeric coverage, or
+relax association/phase without independent evidence. The first physical
+association error remains unproven; this is not a proof against every local XY
+measurement policy.
+
 ### S11-F05 — Initial-state and material-phase hard-lock asymmetry
 
 **Affected detector logic node(s):** `OIL-HYPOTHESIS` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.

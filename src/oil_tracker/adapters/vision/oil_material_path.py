@@ -10,6 +10,7 @@ from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import BoundaryKind
 
 from .preprocessing import PreprocessResult
+from .oil_measurement_scope import active_exclusion, band_selection
 from .oil_phase_topology import dark_border_cap_conflict
 
 
@@ -96,6 +97,7 @@ def generate_material_path_candidates(
     top_k: int = 4,
     material_evidence_map: np.ndarray | None = None,
     diagnostic_paths: dict[int, MaterialPathEvidence] | None = None,
+    measurement_exclusion: np.ndarray | None = None,
 ) -> tuple[BoundaryCandidate, ...]:
     """Generate low-contrast cross-column phase paths independently of Foam.
 
@@ -115,6 +117,7 @@ def generate_material_path_candidates(
 
     effective = effective_mask > 0
     visible = effective & ~(pre.glare_mask > 0)
+    measurement_exclusion = active_exclusion(measurement_exclusion, visible)
     material_row_profile = _material_row_profile(
         material_evidence_map,
         visible,
@@ -141,6 +144,7 @@ def generate_material_path_candidates(
             material_evidence_map=material_evidence_map,
             sector_index=sector,
             capture_diagnostics=diagnostic_paths is not None,
+            measurement_exclusion=measurement_exclusion,
         )
         if profile is not None:
             sector_profiles.append(profile)
@@ -221,6 +225,7 @@ def _sector_profile(
     material_evidence_map: np.ndarray | None,
     sector_index: int = 0,
     capture_diagnostics: bool = False,
+    measurement_exclusion: np.ndarray | None = None,
 ) -> _SectorProfile | None:
     sector_gray = gray[:, start_x:stop_x].astype(np.float32, copy=False)
     sector_mask = visible[:, start_x:stop_x]
@@ -239,6 +244,12 @@ def _sector_profile(
         18.0,
         float(np.percentile(valid_values, 90.0) - np.percentile(valid_values, 10.0)),
     )
+    excluded = active_exclusion(measurement_exclusion, visible)
+    sector_excluded = None if excluded is None else excluded[:, start_x:stop_x]
+    used_mask = sector_mask if sector_excluded is None else sector_mask & ~sector_excluded
+    used_count = np.count_nonzero(used_mask, axis=1).astype(np.float32)
+    used_support = support if sector_excluded is None else np.clip(used_count / capacity, 0.0, 1.0)
+    any_contrast = np.zeros(row_mean.size, bool)
     height = row_mean.size
     combined = np.zeros(height, dtype=np.float32)
     signed_best = np.zeros(height, dtype=np.float32)
@@ -247,9 +258,14 @@ def _sector_profile(
     for scale in (3, 6, 10):
         upper = _window_mean(row_mean, support, scale, before=True)
         lower = _window_mean(row_mean, support, scale, before=False)
+        availability = _window_support(used_support, scale)
+        if sector_excluded is not None:
+            _scoped_contrast(sector_gray, sector_mask, sector_excluded, scale, upper, lower, availability)
         signed = (lower - upper) / dynamic_range
+        if sector_excluded is not None:
+            any_contrast |= np.isfinite(signed)
+            signed = np.nan_to_num(signed, nan=0.0)
         strength = np.abs(signed)
-        availability = _window_support(support, scale)
         score = strength * np.clip((availability - 0.35) / 0.65, 0.0, 1.0)
         replace_rows = score > combined
         combined[replace_rows] = score[replace_rows]
@@ -271,8 +287,13 @@ def _sector_profile(
         for scale in (3, 6, 10):
             upper = _window_mean(material_row, support, scale, before=True)
             lower = _window_mean(material_row, support, scale, before=False)
+            availability = _window_support(used_support, scale)
+            if sector_excluded is not None:
+                _scoped_contrast(material, sector_mask, sector_excluded, scale, upper, lower, availability)
             signed = lower - upper
-            availability = _window_support(support, scale)
+            if sector_excluded is not None:
+                any_contrast |= np.isfinite(signed)
+                signed = np.nan_to_num(signed, nan=0.0)
             score = (
                 np.clip(np.abs(signed) / 0.32, 0.0, 1.0)
                 * np.clip((availability - 0.35) / 0.65, 0.0, 1.0)
@@ -288,23 +309,46 @@ def _sector_profile(
         np.divide(
             np.sum(
                 np.where(
-                    sector_mask,
+                    used_mask,
                     np.abs(cv2.Sobel(sector_gray, cv2.CV_32F, 0, 1, ksize=3)),
                     0.0,
                 ),
                 axis=1,
             ),
-            np.maximum(row_count, 1.0),
+            np.maximum(used_count, 1.0),
         )
     )
     sobel_score = np.clip(sobel / 90.0, 0.0, 1.0)
     combined = np.clip(0.78 * combined + 0.22 * sobel_score, 0.0, 1.0)
-    combined[support < 0.42] = 0.0
+    combined[used_support < 0.42] = 0.0
+    if sector_excluded is not None:
+        combined[~any_contrast] = 0.0
     margin = max(4, int(round(height * 0.05)))
     combined[:margin] = 0.0
     combined[-margin:] = 0.0
-    return _SectorProfile(start_x, stop_x, combined, signed_best, support,
+    return _SectorProfile(start_x, stop_x, combined, signed_best, used_support,
                           sector_index, channel, chosen_scale)
+
+
+def _scoped_contrast(values, visible, excluded, scale, upper, lower, availability):
+    """Override only operations losing eligible band samples; keep base prefixes."""
+    h, width = visible.shape
+    changed_rows = np.flatnonzero(np.any(visible & excluded, axis=1))
+    affected = set()
+    for y in changed_rows:
+        affected.update(range(max(0, int(y)-scale), min(h, int(y)+scale+1)))
+    for row in sorted(affected):
+        a, b = slice(max(0, row-scale), row), slice(row+1, min(h, row+scale+1))
+        minimum = max(2, math.ceil(width * .42)) * max(row-max(0, row-scale), min(h, row+scale+1)-row-1)
+        u, l, changed, reason = band_selection(visible[a], visible[b], excluded[a], excluded[b], minimum=minimum)
+        if not changed:
+            continue
+        if reason != "complete_common_x":
+            upper[row] = lower[row] = np.nan
+            availability[row] = 0.0
+        else:
+            upper[row], lower[row] = np.mean(values[a][u]), np.mean(values[b][l])
+            availability[row] = min(availability[row], float(np.all(u, axis=0).mean()))
 
 
 def _window_mean(

@@ -9,6 +9,7 @@ from oil_tracker.domain.detection import BoundaryCandidate
 from oil_tracker.domain.enums import BoundaryKind
 
 from .preprocessing import PreprocessResult
+from .oil_measurement_scope import active_exclusion, band_selection, band_record
 from .row_features import masked_row_mean, row_coverage
 
 
@@ -186,6 +187,7 @@ def generate_phase_transition_candidates(
     *,
     crop_origin_y: float,
     limit: int = 4,
+    measurement_exclusion: np.ndarray | None = None,
 ) -> tuple[BoundaryCandidate, ...]:
     """Propose diffuse cross-row phase transitions without a local-peak gate.
 
@@ -206,6 +208,8 @@ def generate_phase_transition_candidates(
 
     effective = effective_mask > 0
     visible = effective & ~(pre.glare_mask > 0)
+    measurement_exclusion = active_exclusion(measurement_exclusion, visible)
+    used_visible = visible if measurement_exclusion is None else visible & ~measurement_exclusion
     height, width = effective.shape
     if height < 48 or width < 20 or np.count_nonzero(visible) < 64:
         return ()
@@ -213,8 +217,9 @@ def generate_phase_transition_candidates(
     response, horizontal, scale_consistency, signed = _phase_transition_profile(
         pre.normalized,
         visible,
+        measurement_exclusion=measurement_exclusion,
     )
-    support = np.count_nonzero(visible, axis=1).astype(np.float32) / max(1, width)
+    support = np.count_nonzero(used_visible, axis=1).astype(np.float32) / max(1, width)
     eligible = [
         row
         for row in range(12, height - 12)
@@ -324,15 +329,18 @@ def generate_phase_transition_candidates(
     return tuple(output)
 
 
-def _phase_band_means(upper, lower, upper_visible, lower_visible, radius, width):
+def _phase_band_means(upper, lower, upper_visible, lower_visible, radius, width, excluded=None):
     """The production pooling operation, shared with its diagnostic observation."""
     minimum = max(2, int(radius * max(1, width) * 0.25))
+    if excluded is not None:
+        upper_visible, lower_visible, _, _ = band_selection(
+            upper_visible, lower_visible, *excluded, minimum=minimum)
     if np.count_nonzero(upper_visible) < minimum or np.count_nonzero(lower_visible) < minimum:
         return None
     return float(np.mean(upper[upper_visible])), float(np.mean(lower[lower_visible]))
 
 
-def phase_transition_support(gray, visible, *, local_y, crop_origin=(0, 0)):
+def phase_transition_support(gray, visible, *, local_y, crop_origin=(0, 0), measurement_exclusion=None):
     """Expose the actual scanner's 3 radii × 5 sectors; no identity or score repair.
 
     Common-X uses any valid pixel on both sides. Paired-X additionally requires
@@ -345,6 +353,7 @@ def phase_transition_support(gray, visible, *, local_y, crop_origin=(0, 0)):
         raise ValueError("Phase support sampling row must be an integer, not bool.")
     if len(crop_origin) != 2 or any(type(v) is not int for v in crop_origin):
         raise ValueError("Crop origin must contain two integers.")
+    measurement_exclusion = active_exclusion(measurement_exclusion, visible)
     h, w = gray.shape
     values = gray.astype(np.float32, copy=False)
     valid = (visible > 0) & np.isfinite(values)
@@ -363,7 +372,9 @@ def phase_transition_support(gray, visible, *, local_y, crop_origin=(0, 0)):
             uc, lc = uv.sum(axis=0), lv.sum(axis=0)
             common = (uc > 0) & (lc > 0)
             paired = (uc == radius) & (lc == radius) if complete else np.zeros(last-first, bool)
-            means = _phase_band_means(upper, lower, uv, lv, radius, last-first) if complete else None
+            means = _phase_band_means(upper, lower, uv, lv, radius, last-first,
+                None if measurement_exclusion is None else (measurement_exclusion[lo:local_y, first:last],
+                    measurement_exclusion[local_y+1:hi, first:last])) if complete else None
             deltas = lower[:, paired].mean(axis=0) - upper[:, paired].mean(axis=0) if paired.any() else None
             upper_x = np.nonzero(uv)[1] + first + crop_origin[0]
             lower_x = np.nonzero(lv)[1] + first + crop_origin[0]
@@ -386,6 +397,10 @@ def phase_transition_support(gray, visible, *, local_y, crop_origin=(0, 0)):
                 "paired_mean_delta": None if deltas is None else float(deltas.mean()),
                 "paired_median_delta": None if deltas is None else float(np.median(deltas)),
             })
+            if measurement_exclusion is not None and complete:
+                rows[-1]["sampling"] = band_record(valid, measurement_exclusion,
+                    row=local_y, radius=radius, start=first, stop=last, crop_origin=crop_origin,
+                    minimum=max(2, int(radius * max(1, last-first) * .25)))
     return tuple(rows)
 
 
@@ -404,6 +419,7 @@ def _column_runs(mask, offset):
 def _phase_transition_profile(
     gray: np.ndarray,
     visible: np.ndarray,
+    *, measurement_exclusion: np.ndarray | None = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     height, width = gray.shape
     sector_edges = np.linspace(0, width, 6, dtype=int)
@@ -425,6 +441,9 @@ def _phase_transition_profile(
                     values[row - radius : row, first:last],
                     values[row + 1 : row + radius + 1, first:last],
                     upper_visible, lower_visible, radius, int(last - first),
+                    None if measurement_exclusion is None else (
+                        measurement_exclusion[row-radius:row, first:last],
+                        measurement_exclusion[row+1:row+radius+1, first:last]),
                 )
                 if means is None:
                     continue

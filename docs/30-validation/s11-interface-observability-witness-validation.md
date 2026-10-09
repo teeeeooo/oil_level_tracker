@@ -923,6 +923,12 @@ controls and nine-segment integrated field qualification remain separate gates.
 
 ## Local XY measurement exclusion controls
 
+The [implemented fixed comparison](../60-evidence/s11/2026-10-09-local-xy-implementation.md)
+now satisfies the technical OFF/debug/sampling/report checks below and rejects
+this configuration for efficacy. The 54–56 s regional Foam–Oil clarification is
+closed; both output series remain required. These controls govern a future
+substantively new hypothesis, not an instruction to repeat the closed run.
+
 Apply these to the [proposed Oil measurement scope](../20-architecture/s11-interface-observability-witness-architecture.md#local-xy-oil-measurement-exclusion--proposed-contract).
 The [intake evidence](../60-evidence/s11/2026-10-09-local-xy-spec-intake.md)
 records A–D as completed, unpromoted prototypes. Do not rerun those variants or

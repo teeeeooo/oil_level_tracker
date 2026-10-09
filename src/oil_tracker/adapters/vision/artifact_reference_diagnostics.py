@@ -42,6 +42,22 @@ def _footprint(candidate, index, *, lineage, paths, crop_origin, shape):
               "observed_raw_edge": "unavailable", "windows": [],
               "omitted_operations": 0, "complete_score_dependency_mask": False}
     windows = result["windows"]
+    scoped = lineage.get(index)
+    if scoped is not None and "sampling_scope" in scoped:
+        if scoped["source"] != candidate.source or scoped["source_y"] != candidate.y:
+            raise ValueError("Scoped reference diagnostic binding mismatch.")
+        operations = (scoped.get("native_sampling", ()) if candidate.source != "phase_transition_scan"
+                      else [r["sampling"] for r in scoped["phase_support"] if "sampling" in r])
+        for operation in operations:
+            if operation["available"]:
+                windows.extend(operation["used_windows"])
+            else:
+                result["omitted_operations"] += 1
+        result.update(basis="native_measurement_footprint" if windows else "unavailable",
+                      reason="scoped_sampling_windows", operation="actual_scoped_contrast",
+                      scope_sha256=scoped["sampling_scope"]["sha256"])
+        result["measurement_sha256"] = fingerprint(result)
+        return result
     if not math.isfinite(float(candidate.y)):
         result.update(source_y=None, reason="nonfinite_candidate_y")
         return result

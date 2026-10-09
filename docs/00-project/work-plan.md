@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The Local XY specification and all native A–D results are preserved and reviewed; all 751 saved completed outputs reproduce. Shared-mask exclusion and global paired phase means are rejected for adoption. Oil-only measurement scope is the next implementation seam, not a successful detector. Next work is WP1–WP3 as one bounded opt-in change: freeze primitive/dependency locality, retained-support rules and resource bounds, then connect the existing three Oil measurement lanes and matching lineage. Only affected measurements may use a local numerical guard; this formal implementation remains untested. Follow with one frozen full-window WP4 comparison and WP5 disposition. O2 remains OPEN / FIELD FAIL; no user or Windows action is currently required.
+**Next transition:** WP1–WP5 Local XY implementation and the fixed comparison are complete. The opt-in Oil-only scope passes 84 focused tests, preserves all 299 OFF baseline rows and has identical scoped NONE/BASIC/FULL outputs. Its fixed configuration is CLOSED WITHOUT PROMOTION: 40/51.5 s lose final Oil/Foam validity and 56 s selects the lower glass rim. The user confirms the 54–56 s yellow Foam / dark Oil boundary as the Oil target; both series remain independently required. Saved witnesses separate 52 s unselected admitted support, 54–56 s tracklet non-admission, and pre-existing Foam episode loss. Default R22 behavior, O2 OPEN / FIELD FAIL remain. Reuse this evidence before a new physical-support/association design; no mask/threshold continuation, repeated physical question or Windows work is needed now.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -32,7 +32,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; D2-A1 verified; overlap/appearance and Local XY A–D prototypes unpromoted | WP1–WP3 Oil-only opt-in measurement implementation with affected-only numerical handling, then frozen WP4/WP5. B is a development seam, not efficacy acceptance. | [Local XY intake](../60-evidence/s11/2026-10-09-local-xy-spec-intake.md), [proposed contract](../20-architecture/s11-interface-observability-witness-architecture.md#local-xy-oil-measurement-exclusion--proposed-contract) |
+| W4 / O2 challenger | OPEN; Local XY WP1–WP5 implemented/verified, fixed configuration CLOSED WITHOUT PROMOTION | Reuse the saved support/selection/admission distinctions and closed endpoint reply before proposing a different physical discriminator. Keep the opt-in scope OFF by default. | [Local XY implementation](../60-evidence/s11/2026-10-09-local-xy-implementation.md), [scope contract](../20-architecture/s11-interface-observability-witness-architecture.md#local-xy-oil-measurement-exclusion--proposed-contract) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -218,22 +218,33 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    B's Oil-only measurement scope preserves late numeric output but misses 42 s,
    changes unreviewed coordinates and invalidates both Oil/Foam at 40 s. Numeric
    counts are not successful recovery. Do not rerun these variants or revisit
-   closed labels. Formal opt-in, affected-only numerical handling remains untested.
-   **Next implementation entry (WP1–WP3):** reuse the material/raster-material
-   and phase-transition owners with a bound Oil-only execution scope, support
-   accounting and matching existing lineage. First freeze normalization/context
-   dependencies, original support denominators, the local numerical rule and
-   resource limits. Primitive locality is distinct from later candidate/phase
-   competition; OFF/empty/no-intersection preserves complete legacy behavior.
-   Keep shared preprocessing/Foam, other families and authority/phase rules.
-   Same X outside excluded Y remains eligible; the rectangle is sampling policy,
-   not a whole-box physical label. No UI/schema change, global paired replacement,
-   threshold/rectangle sweep, dense-contour rewrite or template-veto duplication.
-   **WP4/WP5:** one frozen comparison over all four Mac windows and actual reports;
-   verify final per-series validity, major movement, existing target bindings,
-   debug equality, provenance and resources, then retain or reject with named
-   unknowns. Stop for a concrete new physical judgment or necessary Windows work,
-   not a repeat microscopic question. See the [Local XY controls](../30-validation/s11-interface-observability-witness-validation.md#local-xy-measurement-exclusion-controls).
+   closed labels. The formal implementation below supersedes the earlier untested state.
+   **WP1–WP5 complete, fixed configuration CLOSED WITHOUT PROMOTION:** the
+   [bounded scope and full comparison](../60-evidence/s11/2026-10-09-local-xy-implementation.md)
+   pass 84 focused tests, reproduce 299 complete OFF rows, and preserve scoped
+   output across NONE/BASIC/FULL. Half-open withdrawal applies only to the three
+   Oil measurement lanes, with affected-only numerical handling, original
+   normalization/support denominators and actual lineage. Same-X/other-Y remains
+   usable. Default behavior and original recipes stay fixed.
+   Scoped sample4 gives 105 numeric / 103 valid Oil and 26 numeric / 24 valid
+   Foam rows. At 40/51.5 s topology invalidates both series; at 56 s the lower
+   glass rim wins. Counts and the configured report PASS are not efficacy.
+   **Endpoint reply CLOSED:** the user identifies yellow as Foam, dark as Oil,
+   and their boundary as the Oil tracking target in 54/55/56 s originals.
+   This is regional identity, not exact XY or automatic candidate labels. Oil
+   and Foam must continue separately; the question never collapses both outputs.
+   **Saved stage readout complete:** at 52 s an admitted/publishable Y833 phase
+   proposal loses selection to high-recall Y821. At 54–56 s boundary-region
+   proposals exist, including anchors, but the relevant provisional tracklet is
+   unadmitted; at 56 s Y874 wins. First physical correspondence error remains
+   unknown. Current Foam stays identical in all 113 rows, while final Foam
+   disappears at 54–56 s in both baseline and challenger through its existing
+   episode/persistence rules. Preserve this separate D5 obligation.
+   **Next design entry:** reuse these records to separate physical support,
+   association and final two-series acceptance. Do not enlarge this mask, sweep
+   thresholds, repeat A–D/this challenger, promote nearby coordinates to truth,
+   bypass admission/phase or silently enter O3/O4. No UI/schema rewrite, ML,
+   repeated endpoint question, Windows run or file export is required.
    D2-B's stationary/crossing/optical opposing efficacy remains NOT_ASSESSABLE;
    no missing gate is waived or manufactured by this qualitative reply.
    D3 additionally requires a physical decision/abstention rule, input identities,
