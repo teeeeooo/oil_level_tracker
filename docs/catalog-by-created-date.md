@@ -609,3 +609,17 @@ The first-addition author date was checked from Git in Asia/Seoul.
 |---|---|---|
 | 2026-10-10 | [Local truth and evaluation audit](60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md) | 기존 15개 주석의 출처·불확실성과 7개 영상의 구간별 평가 용도 |
 | 2026-10-10 | [Audit machine record](60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.json) | 입력 hash, 주석별 자격, 원본 확인 및 재현 코드; 새 정답 형식 아님 |
+
+## 2026-10-10 water-first source qualification additions
+
+Ten fixed development frames and a bounded post-pour material-role review.
+No new detector or numeric truth is adopted.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-10 | [Water source qualification](50-diagnostics/s11/2026-10-10-water-first-source-qualification.md) | f205 유입 장면 정정, 41초대 물/거품 역할 질문과 기존 잔차 연산 결과 |
+| 2026-10-10 | [Machine record](50-diagnostics/s11/2026-10-10-water-first-source-qualification.json) | 사전 입력·연산 고정, 전체 결과·검증·원본 코드와 hash |
+| 2026-10-10 | [All ten frames](50-diagnostics/s11/2026-10-10-water-first-all-cases.png) | 전체 사례 원본 개요; 정답·후보 표식 없음 |
+| 2026-10-10 | [Physical role review](50-diagnostics/s11/2026-10-10-water-first-water-role-review.png) | 41.108 / 47.981 / 54.821초 원본과 중앙 확대 |
+| 2026-10-10 | [Immediate sampled context](50-diagnostics/s11/2026-10-10-water-first-water-role-neighbours.png) | f1225/f1232/f1239의 원본 확대 |
+| 2026-10-10 | [Empty-reference differences](50-diagnostics/s11/2026-10-10-water-first-water-reference-difference.png) | f205/f1643 원본과 밝기 차이; 물리 분류 아님 |

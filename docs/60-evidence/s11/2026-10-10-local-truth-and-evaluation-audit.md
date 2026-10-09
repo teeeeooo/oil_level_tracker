@@ -128,6 +128,16 @@ time windows. Exact inspected indices and authorities are in the machine record.
 | beer/sample6; forming and later cropped top | One thin layer's front/back projection; independent upper/lower visibility; structure opposition | Two interfaces inferred from two arcs; an upper coordinate outside the image |
 | milk/sample7; empty, pouring and settled | White bulk versus surface froth; visible upper outline | The lower Foam–milk coordinate, explicitly difficult to distinguish in the human reply |
 
+**Source qualification follow-up:** the
+[ten-frame water review](../../50-diagnostics/s11/2026-10-10-water-first-source-qualification.md)
+narrows the provisional water row above. F205 already contains an entering
+stream and is not a whole-frame empty negative. The 41 s post-pour feature has
+multiple bubbly outlines and a pending water/Foam-role review; f1438/f1643 are
+comparatively settled context. Neither the broad early-empty reading nor
+41–55 s becomes continuous truth. This source correction preserves this audit's
+original machine record and all old/new observations; no detector result was
+used to drop cases.
+
 The new three videos have already contributed to representation and correspondence
 investigations; they were not unused. They provide clearer development views but
 are public drinking glasses, not equivalent evidence of small compressor-sight-

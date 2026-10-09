@@ -1,0 +1,1490 @@
+{
+  "schema": "s11-water-first-source-qualification-record-v1",
+  "base_head": "c196c40dddeb6b725b7df47a416804a8b19c266f",
+  "scope": "Finite source qualification and existing residual readout; no new truth schema, classifier or runtime integration.",
+  "preflight": {
+    "schema": "s11-water-first-source-qualification-preflight-v1",
+    "base_head": "c196c40dddeb6b725b7df47a416804a8b19c266f",
+    "script_sha256": "97d53b228971947af6a8026864ee2ba75cb024610418a45a30f3040f224c840d",
+    "inputs": {
+      "sample/sample5.mp4": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "docs/50-diagnostics/s11/2026-10-09-public-video-intake.json": "e36b0804bd5b4f7504444a2d5d216f8e12a1725ed75465a46f7164b5257ab4bc",
+      "docs/50-diagnostics/s11/2026-10-09-public-video-rename.json": "7f925235e6a1cbc34313380f22bb616ba68c384b9395e73324cd2782b1e7a649",
+      "docs/50-diagnostics/s11/2026-10-09-public-water-surface-reply.json": "b720d3f19be9f2ab874428fd6ff229e34a5221dabeec2b3e5ab8fd9a066e4d23",
+      "docs/60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.json": "aa7469f2e92d33da11e3122612e13b1a1007556632951fb07f3a792b55e82654",
+      "tests/diagnostics/s11_boundary_temporal_probe.py": "37b8f7244c5a0f83a42c7dee1616d638215b072816cb68304beb0e1a3be0061e",
+      "src/oil_tracker/adapters/vision/temporal_raster_evidence.py": "c2d6a4222e06cbffb3c32b8bc6b13f6142d810b9febabfa86afd6542107b9f15",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000000.png": "bd248d9331c4b1d267572d2e44a1a016589e2065509dc16f0de0b83d7bcd808f",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000205.png": "acfc2cf9e925c1b17a32018c7bfcaef396d3a369543044a05b037b37323c8e3d",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000815.png": "38425a7172d682c2cb6fe94533d7201c686763672bcc9cd251d18b59a16e6b31",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000822.png": "19a94ae8bb16454440033559aecbe6ca714853d505423288bd2dc113767ce8b1",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000829.png": "07adeee2f636b3355d48c89c3f8da920895688fd417008869a90aa4049b83c1d",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001225.png": "101e1045e7aad0d190956c3d016243dafa7e81ee85146367cefd4ca418ecb9f1",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001239.png": "ca58ebe1a8f7b4aa1f3b39767e3f999c4b2321e9179092ac257931b90a50fa64",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22"
+    },
+    "cases": [
+      {
+        "case_id": "water-f000000",
+        "frame_index": 0,
+        "nominal_time_sec": 0.0,
+        "group": "empty_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000000.png",
+          "sha256": "bd248d9331c4b1d267572d2e44a1a016589e2065509dc16f0de0b83d7bcd808f",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "human_role_scope": "No new human role approval.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      },
+      {
+        "case_id": "water-f000205",
+        "frame_index": 205,
+        "nominal_time_sec": 6.840166666666667,
+        "group": "empty_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000205.png",
+          "sha256": "acfc2cf9e925c1b17a32018c7bfcaef396d3a369543044a05b037b37323c8e3d",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "human_role_scope": "No new human role approval.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      },
+      {
+        "case_id": "water-f000815",
+        "frame_index": 815,
+        "nominal_time_sec": 27.193833333333334,
+        "group": "inclined_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000815.png",
+          "sha256": "38425a7172d682c2cb6fe94533d7201c686763672bcc9cd251d18b59a16e6b31",
+          "source_origin_xy": [
+            740,
+            250
+          ],
+          "shape": [
+            830,
+            420,
+            3
+          ]
+        },
+        "human_role_scope": "No new human role approval.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      },
+      {
+        "case_id": "water-f000822",
+        "frame_index": 822,
+        "nominal_time_sec": 27.427400000000002,
+        "group": "inclined_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000822.png",
+          "sha256": "19a94ae8bb16454440033559aecbe6ca714853d505423288bd2dc113767ce8b1",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "human_role_scope": "Existing f822 qualitative surface reply only; no exact contour, Foam absence, centre scalar or neighbour-frame propagation.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      },
+      {
+        "case_id": "water-f000829",
+        "frame_index": 829,
+        "nominal_time_sec": 27.660966666666667,
+        "group": "inclined_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000829.png",
+          "sha256": "07adeee2f636b3355d48c89c3f8da920895688fd417008869a90aa4049b83c1d",
+          "source_origin_xy": [
+            740,
+            250
+          ],
+          "shape": [
+            830,
+            420,
+            3
+          ]
+        },
+        "human_role_scope": "No new human role approval.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      },
+      {
+        "case_id": "water-f001225",
+        "frame_index": 1225,
+        "nominal_time_sec": 40.87416666666667,
+        "group": "bubbly_post_pour_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001225.png",
+          "sha256": "101e1045e7aad0d190956c3d016243dafa7e81ee85146367cefd4ca418ecb9f1",
+          "source_origin_xy": [
+            740,
+            250
+          ],
+          "shape": [
+            830,
+            420,
+            3
+          ]
+        },
+        "human_role_scope": "No new human role approval.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      },
+      {
+        "case_id": "water-f001232",
+        "frame_index": 1232,
+        "nominal_time_sec": 41.107733333333336,
+        "group": "bubbly_post_pour_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+          "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "human_role_scope": "No new human role approval.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      },
+      {
+        "case_id": "water-f001239",
+        "frame_index": 1239,
+        "nominal_time_sec": 41.341300000000004,
+        "group": "bubbly_post_pour_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001239.png",
+          "sha256": "ca58ebe1a8f7b4aa1f3b39767e3f999c4b2321e9179092ac257931b90a50fa64",
+          "source_origin_xy": [
+            740,
+            250
+          ],
+          "shape": [
+            830,
+            420,
+            3
+          ]
+        },
+        "human_role_scope": "No new human role approval.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      },
+      {
+        "case_id": "water-f001438",
+        "frame_index": 1438,
+        "nominal_time_sec": 47.98126666666667,
+        "group": "later_surface_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png",
+          "sha256": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "human_role_scope": "No new human role approval.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      },
+      {
+        "case_id": "water-f001643",
+        "frame_index": 1643,
+        "nominal_time_sec": 54.82143333333333,
+        "group": "later_surface_context",
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+          "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "human_role_scope": "No new human role approval.",
+        "scalar_truth": null,
+        "candidate_binding": null,
+        "partition": "development"
+      }
+    ],
+    "source": {
+      "path": "sample/sample5.mp4",
+      "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "width": 1920,
+      "height": 1080,
+      "fps": 29.97002997002997,
+      "frame_count": 1644
+    },
+    "geometry": {
+      "crop_xyxy": [
+        740,
+        250,
+        1160,
+        1080
+      ],
+      "source_origin_xy": [
+        740,
+        250
+      ],
+      "diagnostic_column_x": 950,
+      "calibrated_glass_center": false,
+      "recipe_created": false,
+      "numeric_truth": false,
+      "effective_mask": "whole saved native crop; no glare exclusion or physical visibility inference"
+    },
+    "measurement": {
+      "owner": "tests.diagnostics.s11_boundary_temporal_probe.measure_pair",
+      "reference_frame": 0,
+      "compared_frames": [
+        205,
+        815,
+        822,
+        829,
+        1225,
+        1232,
+        1239,
+        1438,
+        1643
+      ],
+      "channels": [
+        "direct",
+        "exposure_only",
+        "registered",
+        "registered_exposure"
+      ],
+      "operation": "Existing four grayscale absolute-residual views; identity displacement/exposure, exposure-only, translation-only, translation-and-exposure on identical registered common support.",
+      "regions": {
+        "upper_rim_context": [
+          790,
+          320,
+          1120,
+          380
+        ],
+        "upper_interior_context": [
+          840,
+          390,
+          1070,
+          440
+        ],
+        "surface_activity_context": [
+          800,
+          450,
+          1115,
+          600
+        ],
+        "patterned_base_context": [
+          800,
+          780,
+          1110,
+          910
+        ]
+      },
+      "region_scope": "Illustrative context rectangles fixed from originals before residual measurement. Neither masks, candidate bands, homogeneous material regions nor truth.",
+      "registration": "Existing accepted numerical fit does not establish camera motion; preserve failures.",
+      "decision": "NOT_EVALUATED",
+      "threshold": null,
+      "no_new_mechanism": true
+    },
+    "review": {
+      "main_frames": [
+        1232,
+        1438,
+        1643
+      ],
+      "neighbour_frames": [
+        1225,
+        1232,
+        1239
+      ],
+      "focus_xyxy": [
+        780,
+        440,
+        1130,
+        560
+      ],
+      "detail_xyxy": [
+        840,
+        450,
+        1070,
+        540
+      ],
+      "display": "Native clean context and 2x nearest-neighbour detail; no candidate contours or derived Y labels.",
+      "proposed_question": "At 41.1 s, is the broad bright upper feature a water surface with ripples/bubbles, or a distinct Foam layer with separate water/Foam and Foam/air roles? 47.98 and 54.82 s provide later context; indeterminate is a valid answer.",
+      "question_scope": "New post-pour material-role ambiguity; not a repeat of the f822 inclined-surface question. No exact pixel, tolerance or fixed-center product choice is requested.",
+      "answer_status": "PENDING"
+    },
+    "boundaries": [
+      "No video decode, detector execution, tuning, label or Recipe rewrite.",
+      "No physical role follows from brightness, residual or inferred frame state.",
+      "No continuous 41-55 s annotation, accuracy/recall score or independent holdout.",
+      "No mandatory empty-reference product feature or new evaluator."
+    ]
+  },
+  "readout": {
+    "schema": "s11-water-first-source-qualification-readout-v1",
+    "preflight_sha256": "6a08f66aec52644b062edb4f0ed5e2311d86565bfd69d05914ad443d0ea291d6",
+    "runtime": {
+      "python": "3.14.4",
+      "numpy": "2.5.1",
+      "opencv": "4.14.0"
+    },
+    "case_count": 10,
+    "pair_count": 9,
+    "results": [
+      {
+        "frame_index": 205,
+        "metadata": {
+          "status": "measured",
+          "decision": "NOT_EVALUATED",
+          "physical_identity": "UNRESOLVED",
+          "foam_front": null,
+          "registration_current_to_anchor": {
+            "status": "accepted",
+            "raw_dx": 0.01901465870017205,
+            "raw_dy": -0.03820975705730234,
+            "raw_response": 1.0093074472843375,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "registration_anchor_to_current": {
+            "status": "accepted",
+            "raw_dx": -0.019014650585887694,
+            "raw_dy": 0.03820975509222535,
+            "raw_response": 1.0093074135983104,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "cycle_translation_error_px": 8.348840529037699e-09,
+          "common_pixels": 347351,
+          "glare_validity": "NOT_MEASURED",
+          "limits": "One ROI translation can follow changing material; accepted numerical registration is not independently verified camera motion. Fixed anchor queries are not tracks. Photometric residual is not displacement or physical identity; glare is not excluded.",
+          "exposure_only_gain": 1.0,
+          "exposure_only_offset": 0.0,
+          "registered_gain": 0.9640369045377518,
+          "registered_offset": 0.0,
+          "mean_absolute_residual": {
+            "direct": 1.4836894273757935,
+            "exposure_only": 1.4836894273757935,
+            "registered": 1.4693756103515625,
+            "registered_exposure": 1.4921234846115112
+          }
+        },
+        "regions": {
+          "upper_rim_context": {
+            "geometry_pixels": 19800,
+            "common_pixels": 19800,
+            "full_direct_mean_abs_gray": 2.4445454545454544,
+            "full_direct_changed_pixels": 8461,
+            "owner_mean_abs_gray": {
+              "direct": 2.4445455074310303,
+              "exposure_only": 2.4445455074310303,
+              "registered": 2.4371414184570312,
+              "registered_exposure": 2.412144660949707
+            }
+          },
+          "upper_interior_context": {
+            "geometry_pixels": 11500,
+            "common_pixels": 11500,
+            "full_direct_mean_abs_gray": 1.2967826086956522,
+            "full_direct_changed_pixels": 3376,
+            "owner_mean_abs_gray": {
+              "direct": 1.2967826128005981,
+              "exposure_only": 1.2967826128005981,
+              "registered": 1.2964736223220825,
+              "registered_exposure": 1.2609401941299438
+            }
+          },
+          "surface_activity_context": {
+            "geometry_pixels": 47250,
+            "common_pixels": 47250,
+            "full_direct_mean_abs_gray": 2.0884656084656084,
+            "full_direct_changed_pixels": 14992,
+            "owner_mean_abs_gray": {
+              "direct": 2.088465690612793,
+              "exposure_only": 2.088465690612793,
+              "registered": 2.0847814083099365,
+              "registered_exposure": 2.0295774936676025
+            }
+          },
+          "patterned_base_context": {
+            "geometry_pixels": 40300,
+            "common_pixels": 40300,
+            "full_direct_mean_abs_gray": 4.241786600496278,
+            "full_direct_changed_pixels": 33240,
+            "owner_mean_abs_gray": {
+              "direct": 4.241786479949951,
+              "exposure_only": 4.241786479949951,
+              "registered": 4.164766788482666,
+              "registered_exposure": 4.423323631286621
+            }
+          }
+        },
+        "arrays": {
+          "path": "sample/output/s11-water-first-20261010-001/f000205.npz",
+          "sha256": "61dc87f99d07d601537418ab49e8ba2184727416843f9867bc5c3708e5fc2c2d"
+        }
+      },
+      {
+        "frame_index": 815,
+        "metadata": {
+          "status": "measured",
+          "decision": "NOT_EVALUATED",
+          "physical_identity": "UNRESOLVED",
+          "foam_front": null,
+          "registration_current_to_anchor": {
+            "status": "accepted",
+            "raw_dx": 0.06352232379876455,
+            "raw_dy": -0.09124530309520651,
+            "raw_response": 0.2922370565444517,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "registration_anchor_to_current": {
+            "status": "accepted",
+            "raw_dx": -0.0635223528101676,
+            "raw_dy": 0.09124527900513613,
+            "raw_response": 0.2922370485726371,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "cycle_translation_error_px": 3.770932243398208e-08,
+          "common_pixels": 347351,
+          "glare_validity": "NOT_MEASURED",
+          "limits": "One ROI translation can follow changing material; accepted numerical registration is not independently verified camera motion. Fixed anchor queries are not tracks. Photometric residual is not displacement or physical identity; glare is not excluded.",
+          "exposure_only_gain": 0.7,
+          "exposure_only_offset": -2.8,
+          "registered_gain": 0.7,
+          "registered_offset": -3.3031249999999996,
+          "mean_absolute_residual": {
+            "direct": 23.01773452758789,
+            "exposure_only": 18.09663963317871,
+            "registered": 22.994657516479492,
+            "registered_exposure": 18.221832275390625
+          }
+        },
+        "regions": {
+          "upper_rim_context": {
+            "geometry_pixels": 19800,
+            "common_pixels": 19800,
+            "full_direct_mean_abs_gray": 7.3361616161616165,
+            "full_direct_changed_pixels": 10988,
+            "owner_mean_abs_gray": {
+              "direct": 7.3361616134643555,
+              "exposure_only": 7.857297897338867,
+              "registered": 7.275908470153809,
+              "registered_exposure": 8.1910400390625
+            }
+          },
+          "upper_interior_context": {
+            "geometry_pixels": 11500,
+            "common_pixels": 11500,
+            "full_direct_mean_abs_gray": 11.668260869565218,
+            "full_direct_changed_pixels": 4883,
+            "owner_mean_abs_gray": {
+              "direct": 11.66826057434082,
+              "exposure_only": 9.730608940124512,
+              "registered": 11.696972846984863,
+              "registered_exposure": 10.074687957763672
+            }
+          },
+          "surface_activity_context": {
+            "geometry_pixels": 47250,
+            "common_pixels": 47250,
+            "full_direct_mean_abs_gray": 28.999661375661375,
+            "full_direct_changed_pixels": 39064,
+            "owner_mean_abs_gray": {
+              "direct": 28.99966049194336,
+              "exposure_only": 19.441587448120117,
+              "registered": 29.016338348388672,
+              "registered_exposure": 19.385570526123047
+            }
+          },
+          "patterned_base_context": {
+            "geometry_pixels": 40300,
+            "common_pixels": 40300,
+            "full_direct_mean_abs_gray": 29.71238213399504,
+            "full_direct_changed_pixels": 37363,
+            "owner_mean_abs_gray": {
+              "direct": 29.71238136291504,
+              "exposure_only": 29.52039337158203,
+              "registered": 29.61561393737793,
+              "registered_exposure": 29.670942306518555
+            }
+          }
+        },
+        "arrays": {
+          "path": "sample/output/s11-water-first-20261010-001/f000815.npz",
+          "sha256": "234c1406caeed50be05f51973da82733e6202d67239b2cf61148ce3a8718e7d1"
+        }
+      },
+      {
+        "frame_index": 822,
+        "metadata": {
+          "status": "measured",
+          "decision": "NOT_EVALUATED",
+          "physical_identity": "UNRESOLVED",
+          "foam_front": null,
+          "registration_current_to_anchor": {
+            "status": "accepted",
+            "raw_dx": -0.013703358045859204,
+            "raw_dy": -0.1413337358058584,
+            "raw_response": 0.2816002677579312,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "registration_anchor_to_current": {
+            "status": "accepted",
+            "raw_dx": 0.013703344345969981,
+            "raw_dy": 0.14133369580355293,
+            "raw_response": 0.2816002569244395,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "cycle_translation_error_px": 4.228322844208629e-08,
+          "common_pixels": 348180,
+          "glare_validity": "NOT_MEASURED",
+          "limits": "One ROI translation can follow changing material; accepted numerical registration is not independently verified camera motion. Fixed anchor queries are not tracks. Photometric residual is not displacement or physical identity; glare is not excluded.",
+          "exposure_only_gain": 0.7,
+          "exposure_only_offset": -2.8,
+          "registered_gain": 0.7,
+          "registered_offset": -3.128125,
+          "mean_absolute_residual": {
+            "direct": 23.556915283203125,
+            "exposure_only": 18.479354858398438,
+            "registered": 23.547414779663086,
+            "registered_exposure": 18.56327247619629
+          }
+        },
+        "regions": {
+          "upper_rim_context": {
+            "geometry_pixels": 19800,
+            "common_pixels": 19800,
+            "full_direct_mean_abs_gray": 9.984292929292929,
+            "full_direct_changed_pixels": 11146,
+            "owner_mean_abs_gray": {
+              "direct": 9.984292984008789,
+              "exposure_only": 9.71785831451416,
+              "registered": 9.921667098999023,
+              "registered_exposure": 9.881326675415039
+            }
+          },
+          "upper_interior_context": {
+            "geometry_pixels": 11500,
+            "common_pixels": 11500,
+            "full_direct_mean_abs_gray": 9.57104347826087,
+            "full_direct_changed_pixels": 5255,
+            "owner_mean_abs_gray": {
+              "direct": 9.571043014526367,
+              "exposure_only": 8.248452186584473,
+              "registered": 9.622532844543457,
+              "registered_exposure": 8.501642227172852
+            }
+          },
+          "surface_activity_context": {
+            "geometry_pixels": 47250,
+            "common_pixels": 47250,
+            "full_direct_mean_abs_gray": 36.18440211640212,
+            "full_direct_changed_pixels": 39025,
+            "owner_mean_abs_gray": {
+              "direct": 36.18440246582031,
+              "exposure_only": 24.373804092407227,
+              "registered": 36.2391471862793,
+              "registered_exposure": 24.348745346069336
+            }
+          },
+          "patterned_base_context": {
+            "geometry_pixels": 40300,
+            "common_pixels": 40300,
+            "full_direct_mean_abs_gray": 30.510694789081885,
+            "full_direct_changed_pixels": 37363,
+            "owner_mean_abs_gray": {
+              "direct": 30.51069450378418,
+              "exposure_only": 30.06235694885254,
+              "registered": 30.46708106994629,
+              "registered_exposure": 30.178604125976562
+            }
+          }
+        },
+        "arrays": {
+          "path": "sample/output/s11-water-first-20261010-001/f000822.npz",
+          "sha256": "1ad883f293ea834737878df2fa46444d36eb30651bd79a36f314f7397d3f60d8"
+        }
+      },
+      {
+        "frame_index": 829,
+        "metadata": {
+          "status": "measured",
+          "decision": "NOT_EVALUATED",
+          "physical_identity": "UNRESOLVED",
+          "foam_front": null,
+          "registration_current_to_anchor": {
+            "status": "accepted",
+            "raw_dx": 0.05134479528851443,
+            "raw_dy": -0.1003440845029786,
+            "raw_response": 0.2884603429723669,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "registration_anchor_to_current": {
+            "status": "accepted",
+            "raw_dx": -0.051344846396347066,
+            "raw_dy": 0.10034407968305459,
+            "raw_response": 0.288460356013438,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "cycle_translation_error_px": 5.1334610390254037e-08,
+          "common_pixels": 347351,
+          "glare_validity": "NOT_MEASURED",
+          "limits": "One ROI translation can follow changing material; accepted numerical registration is not independently verified camera motion. Fixed anchor queries are not tracks. Photometric residual is not displacement or physical identity; glare is not excluded.",
+          "exposure_only_gain": 0.7,
+          "exposure_only_offset": -3.5,
+          "registered_gain": 0.7,
+          "registered_offset": -3.4343749999999997,
+          "mean_absolute_residual": {
+            "direct": 23.337350845336914,
+            "exposure_only": 18.484710693359375,
+            "registered": 23.314823150634766,
+            "registered_exposure": 18.44072151184082
+          }
+        },
+        "regions": {
+          "upper_rim_context": {
+            "geometry_pixels": 19800,
+            "common_pixels": 19800,
+            "full_direct_mean_abs_gray": 10.404848484848484,
+            "full_direct_changed_pixels": 11320,
+            "owner_mean_abs_gray": {
+              "direct": 10.404848098754883,
+              "exposure_only": 10.306529998779297,
+              "registered": 10.344210624694824,
+              "registered_exposure": 10.206202507019043
+            }
+          },
+          "upper_interior_context": {
+            "geometry_pixels": 11500,
+            "common_pixels": 11500,
+            "full_direct_mean_abs_gray": 7.039217391304348,
+            "full_direct_changed_pixels": 5140,
+            "owner_mean_abs_gray": {
+              "direct": 7.039217472076416,
+              "exposure_only": 7.309617519378662,
+              "registered": 7.063920974731445,
+              "registered_exposure": 7.258089542388916
+            }
+          },
+          "surface_activity_context": {
+            "geometry_pixels": 47250,
+            "common_pixels": 47250,
+            "full_direct_mean_abs_gray": 34.85519576719577,
+            "full_direct_changed_pixels": 39908,
+            "owner_mean_abs_gray": {
+              "direct": 34.855194091796875,
+              "exposure_only": 23.296249389648438,
+              "registered": 34.875030517578125,
+              "registered_exposure": 23.292423248291016
+            }
+          },
+          "patterned_base_context": {
+            "geometry_pixels": 40300,
+            "common_pixels": 40300,
+            "full_direct_mean_abs_gray": 31.734640198511165,
+            "full_direct_changed_pixels": 37398,
+            "owner_mean_abs_gray": {
+              "direct": 31.73464012145996,
+              "exposure_only": 30.96056365966797,
+              "registered": 31.63424301147461,
+              "registered_exposure": 30.90477752685547
+            }
+          }
+        },
+        "arrays": {
+          "path": "sample/output/s11-water-first-20261010-001/f000829.npz",
+          "sha256": "75f0e8478cd948cd3f2ec3e857aa90b0acab627998b219bca5a579d79dab49a0"
+        }
+      },
+      {
+        "frame_index": 1225,
+        "metadata": {
+          "status": "measured",
+          "decision": "NOT_EVALUATED",
+          "physical_identity": "UNRESOLVED",
+          "foam_front": null,
+          "registration_current_to_anchor": {
+            "status": "accepted",
+            "raw_dx": -0.08768540854634921,
+            "raw_dy": -0.0991594308140975,
+            "raw_response": 0.29402070918691503,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "registration_anchor_to_current": {
+            "status": "accepted",
+            "raw_dx": 0.08768540461483099,
+            "raw_dy": 0.09915934545898608,
+            "raw_response": 0.2940207149102691,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "cycle_translation_error_px": 8.544560773737425e-08,
+          "common_pixels": 347351,
+          "glare_validity": "NOT_MEASURED",
+          "limits": "One ROI translation can follow changing material; accepted numerical registration is not independently verified camera motion. Fixed anchor queries are not tracks. Photometric residual is not displacement or physical identity; glare is not excluded.",
+          "exposure_only_gain": 0.7,
+          "exposure_only_offset": -1.4,
+          "registered_gain": 0.7,
+          "registered_offset": -1.39384765625,
+          "mean_absolute_residual": {
+            "direct": 16.745656967163086,
+            "exposure_only": 13.723723411560059,
+            "registered": 16.72178840637207,
+            "registered_exposure": 13.702007293701172
+          }
+        },
+        "regions": {
+          "upper_rim_context": {
+            "geometry_pixels": 19800,
+            "common_pixels": 19800,
+            "full_direct_mean_abs_gray": 4.263484848484849,
+            "full_direct_changed_pixels": 9664,
+            "owner_mean_abs_gray": {
+              "direct": 4.263484954833984,
+              "exposure_only": 4.122706890106201,
+              "registered": 4.2562689781188965,
+              "registered_exposure": 4.103744029998779
+            }
+          },
+          "upper_interior_context": {
+            "geometry_pixels": 11500,
+            "common_pixels": 11500,
+            "full_direct_mean_abs_gray": 1.0661739130434782,
+            "full_direct_changed_pixels": 4674,
+            "owner_mean_abs_gray": {
+              "direct": 1.0661739110946655,
+              "exposure_only": 1.6572000980377197,
+              "registered": 1.0641450881958008,
+              "registered_exposure": 1.647951602935791
+            }
+          },
+          "surface_activity_context": {
+            "geometry_pixels": 47250,
+            "common_pixels": 47250,
+            "full_direct_mean_abs_gray": 47.852529100529104,
+            "full_direct_changed_pixels": 43048,
+            "owner_mean_abs_gray": {
+              "direct": 47.8525276184082,
+              "exposure_only": 32.179908752441406,
+              "registered": 47.85173034667969,
+              "registered_exposure": 32.16450881958008
+            }
+          },
+          "patterned_base_context": {
+            "geometry_pixels": 40300,
+            "common_pixels": 40300,
+            "full_direct_mean_abs_gray": 22.158461538461538,
+            "full_direct_changed_pixels": 36530,
+            "owner_mean_abs_gray": {
+              "direct": 22.15846061706543,
+              "exposure_only": 25.75336265563965,
+              "registered": 22.01926040649414,
+              "registered_exposure": 25.707304000854492
+            }
+          }
+        },
+        "arrays": {
+          "path": "sample/output/s11-water-first-20261010-001/f001225.npz",
+          "sha256": "9795e7bfb8ea6202fe85076c205be51c815799c8fa0d6e890530ef8946fe4ddd"
+        }
+      },
+      {
+        "frame_index": 1232,
+        "metadata": {
+          "status": "measured",
+          "decision": "NOT_EVALUATED",
+          "physical_identity": "UNRESOLVED",
+          "foam_front": null,
+          "registration_current_to_anchor": {
+            "status": "accepted",
+            "raw_dx": -0.000520729515955054,
+            "raw_dy": -0.11406966917115824,
+            "raw_response": 0.2918377723876995,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "registration_anchor_to_current": {
+            "status": "accepted",
+            "raw_dx": 0.0005207342737492127,
+            "raw_dy": 0.11406965995985274,
+            "raw_response": 0.29183777516761433,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "cycle_translation_error_px": 1.0367485432796654e-08,
+          "common_pixels": 348180,
+          "glare_validity": "NOT_MEASURED",
+          "limits": "One ROI translation can follow changing material; accepted numerical registration is not independently verified camera motion. Fixed anchor queries are not tracks. Photometric residual is not displacement or physical identity; glare is not excluded.",
+          "exposure_only_gain": 0.7,
+          "exposure_only_offset": -1.4,
+          "registered_gain": 0.7,
+          "registered_offset": -1.3125,
+          "mean_absolute_residual": {
+            "direct": 15.942730903625488,
+            "exposure_only": 13.188117980957031,
+            "registered": 15.928580284118652,
+            "registered_exposure": 13.141257286071777
+          }
+        },
+        "regions": {
+          "upper_rim_context": {
+            "geometry_pixels": 19800,
+            "common_pixels": 19800,
+            "full_direct_mean_abs_gray": 4.272121212121212,
+            "full_direct_changed_pixels": 9594,
+            "owner_mean_abs_gray": {
+              "direct": 4.272121429443359,
+              "exposure_only": 4.174126625061035,
+              "registered": 4.285467147827148,
+              "registered_exposure": 4.126263618469238
+            }
+          },
+          "upper_interior_context": {
+            "geometry_pixels": 11500,
+            "common_pixels": 11500,
+            "full_direct_mean_abs_gray": 1.0541739130434782,
+            "full_direct_changed_pixels": 4541,
+            "owner_mean_abs_gray": {
+              "direct": 1.0541739463806152,
+              "exposure_only": 1.6494783163070679,
+              "registered": 1.0507935285568237,
+              "registered_exposure": 1.5794814825057983
+            }
+          },
+          "surface_activity_context": {
+            "geometry_pixels": 47250,
+            "common_pixels": 47250,
+            "full_direct_mean_abs_gray": 44.7904126984127,
+            "full_direct_changed_pixels": 42627,
+            "owner_mean_abs_gray": {
+              "direct": 44.79041290283203,
+              "exposure_only": 30.084396362304688,
+              "registered": 44.796051025390625,
+              "registered_exposure": 30.120222091674805
+            }
+          },
+          "patterned_base_context": {
+            "geometry_pixels": 40300,
+            "common_pixels": 40300,
+            "full_direct_mean_abs_gray": 22.343573200992555,
+            "full_direct_changed_pixels": 36192,
+            "owner_mean_abs_gray": {
+              "direct": 22.34357261657715,
+              "exposure_only": 25.897966384887695,
+              "registered": 22.262025833129883,
+              "registered_exposure": 25.81444549560547
+            }
+          }
+        },
+        "arrays": {
+          "path": "sample/output/s11-water-first-20261010-001/f001232.npz",
+          "sha256": "fd75d0809056dd813c8c9bfeb92d2e625f70894fb43d055a7b9d8ddec0ef108c"
+        }
+      },
+      {
+        "frame_index": 1239,
+        "metadata": {
+          "status": "measured",
+          "decision": "NOT_EVALUATED",
+          "physical_identity": "UNRESOLVED",
+          "foam_front": null,
+          "registration_current_to_anchor": {
+            "status": "accepted",
+            "raw_dx": 0.041779646715667695,
+            "raw_dy": -0.08291019821575674,
+            "raw_response": 0.3032904992541822,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "registration_anchor_to_current": {
+            "status": "accepted",
+            "raw_dx": -0.04177968345248928,
+            "raw_dy": 0.0829101255403657,
+            "raw_response": 0.30329048306526635,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "cycle_translation_error_px": 8.143283442660697e-08,
+          "common_pixels": 347351,
+          "glare_validity": "NOT_MEASURED",
+          "limits": "One ROI translation can follow changing material; accepted numerical registration is not independently verified camera motion. Fixed anchor queries are not tracks. Photometric residual is not displacement or physical identity; glare is not excluded.",
+          "exposure_only_gain": 0.7,
+          "exposure_only_offset": -1.4,
+          "registered_gain": 0.7,
+          "registered_offset": -1.3384765625,
+          "mean_absolute_residual": {
+            "direct": 15.61019229888916,
+            "exposure_only": 12.934515953063965,
+            "registered": 15.592792510986328,
+            "registered_exposure": 12.894720077514648
+          }
+        },
+        "regions": {
+          "upper_rim_context": {
+            "geometry_pixels": 19800,
+            "common_pixels": 19800,
+            "full_direct_mean_abs_gray": 4.366969696969697,
+            "full_direct_changed_pixels": 9670,
+            "owner_mean_abs_gray": {
+              "direct": 4.366969585418701,
+              "exposure_only": 4.193257808685303,
+              "registered": 4.370850563049316,
+              "registered_exposure": 4.156874179840088
+            }
+          },
+          "upper_interior_context": {
+            "geometry_pixels": 11500,
+            "common_pixels": 11500,
+            "full_direct_mean_abs_gray": 1.0208695652173914,
+            "full_direct_changed_pixels": 4545,
+            "owner_mean_abs_gray": {
+              "direct": 1.0208696126937866,
+              "exposure_only": 1.65339994430542,
+              "registered": 1.0170108079910278,
+              "registered_exposure": 1.6016205549240112
+            }
+          },
+          "surface_activity_context": {
+            "geometry_pixels": 47250,
+            "common_pixels": 47250,
+            "full_direct_mean_abs_gray": 43.279555555555554,
+            "full_direct_changed_pixels": 42718,
+            "owner_mean_abs_gray": {
+              "direct": 43.27955627441406,
+              "exposure_only": 29.02436065673828,
+              "registered": 43.29254150390625,
+              "registered_exposure": 29.048105239868164
+            }
+          },
+          "patterned_base_context": {
+            "geometry_pixels": 40300,
+            "common_pixels": 40300,
+            "full_direct_mean_abs_gray": 22.34982630272953,
+            "full_direct_changed_pixels": 36225,
+            "owner_mean_abs_gray": {
+              "direct": 22.34982681274414,
+              "exposure_only": 25.768484115600586,
+              "registered": 22.260730743408203,
+              "registered_exposure": 25.692760467529297
+            }
+          }
+        },
+        "arrays": {
+          "path": "sample/output/s11-water-first-20261010-001/f001239.npz",
+          "sha256": "a3f69cd8c2bbee6abfec483e3eaeeb973e8a996a2a7f69684d0bfeb204db6116"
+        }
+      },
+      {
+        "frame_index": 1438,
+        "metadata": {
+          "status": "registration_unavailable",
+          "decision": "NOT_EVALUATED",
+          "physical_identity": "UNRESOLVED",
+          "foam_front": null,
+          "registration_current_to_anchor": {
+            "status": "shift_exceeds_bound",
+            "raw_dx": 21.445961178802236,
+            "raw_dy": -0.7089504913774931,
+            "raw_response": 0.03900699932715857,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "registration_anchor_to_current": {
+            "status": "shift_exceeds_bound",
+            "raw_dx": -21.445960980806348,
+            "raw_dy": 0.7089508705822709,
+            "raw_response": 0.03900700014478058,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "cycle_translation_error_px": null,
+          "common_pixels": 0,
+          "glare_validity": "NOT_MEASURED",
+          "limits": "One ROI translation can follow changing material; accepted numerical registration is not independently verified camera motion. Fixed anchor queries are not tracks. Photometric residual is not displacement or physical identity; glare is not excluded."
+        },
+        "regions": {
+          "upper_rim_context": {
+            "geometry_pixels": 19800,
+            "common_pixels": 0,
+            "full_direct_mean_abs_gray": 4.882323232323232,
+            "full_direct_changed_pixels": 9767,
+            "owner_mean_abs_gray": {
+              "direct": null,
+              "exposure_only": null,
+              "registered": null,
+              "registered_exposure": null
+            }
+          },
+          "upper_interior_context": {
+            "geometry_pixels": 11500,
+            "common_pixels": 0,
+            "full_direct_mean_abs_gray": 1.0389565217391303,
+            "full_direct_changed_pixels": 4794,
+            "owner_mean_abs_gray": {
+              "direct": null,
+              "exposure_only": null,
+              "registered": null,
+              "registered_exposure": null
+            }
+          },
+          "surface_activity_context": {
+            "geometry_pixels": 47250,
+            "common_pixels": 0,
+            "full_direct_mean_abs_gray": 16.5455873015873,
+            "full_direct_changed_pixels": 32714,
+            "owner_mean_abs_gray": {
+              "direct": null,
+              "exposure_only": null,
+              "registered": null,
+              "registered_exposure": null
+            }
+          },
+          "patterned_base_context": {
+            "geometry_pixels": 40300,
+            "common_pixels": 0,
+            "full_direct_mean_abs_gray": 23.462332506203474,
+            "full_direct_changed_pixels": 36209,
+            "owner_mean_abs_gray": {
+              "direct": null,
+              "exposure_only": null,
+              "registered": null,
+              "registered_exposure": null
+            }
+          }
+        },
+        "arrays": {
+          "path": "sample/output/s11-water-first-20261010-001/f001438.npz",
+          "sha256": "908432390f6dbbb76f438b044477946015be82d66a585b96f2b99739eed2cf99"
+        }
+      },
+      {
+        "frame_index": 1643,
+        "metadata": {
+          "status": "measured",
+          "decision": "NOT_EVALUATED",
+          "physical_identity": "UNRESOLVED",
+          "foam_front": null,
+          "registration_current_to_anchor": {
+            "status": "accepted",
+            "raw_dx": 0.0281870972521574,
+            "raw_dy": -0.08618809394545224,
+            "raw_response": 0.4610165671556575,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "registration_anchor_to_current": {
+            "status": "accepted",
+            "raw_dx": -0.02818710128821067,
+            "raw_dy": 0.08618804995666096,
+            "raw_response": 0.4610165823634269,
+            "maximum_shift_px": 14.700000000000001,
+            "minimum_response": 0.02
+          },
+          "cycle_translation_error_px": 4.417356091526745e-08,
+          "common_pixels": 347351,
+          "glare_validity": "NOT_MEASURED",
+          "limits": "One ROI translation can follow changing material; accepted numerical registration is not independently verified camera motion. Fixed anchor queries are not tracks. Photometric residual is not displacement or physical identity; glare is not excluded.",
+          "exposure_only_gain": 0.7,
+          "exposure_only_offset": 0.0,
+          "registered_gain": 0.7,
+          "registered_offset": 0.0,
+          "mean_absolute_residual": {
+            "direct": 6.733770847320557,
+            "exposure_only": 6.027682304382324,
+            "registered": 6.709799289703369,
+            "registered_exposure": 6.016340255737305
+          }
+        },
+        "regions": {
+          "upper_rim_context": {
+            "geometry_pixels": 19800,
+            "common_pixels": 19800,
+            "full_direct_mean_abs_gray": 4.542373737373738,
+            "full_direct_changed_pixels": 9549,
+            "owner_mean_abs_gray": {
+              "direct": 4.5423736572265625,
+              "exposure_only": 3.634303092956543,
+              "registered": 4.562027931213379,
+              "registered_exposure": 3.658414602279663
+            }
+          },
+          "upper_interior_context": {
+            "geometry_pixels": 11500,
+            "common_pixels": 11500,
+            "full_direct_mean_abs_gray": 1.1571304347826088,
+            "full_direct_changed_pixels": 4849,
+            "owner_mean_abs_gray": {
+              "direct": 1.157130479812622,
+              "exposure_only": 0.756260871887207,
+              "registered": 1.153953194618225,
+              "registered_exposure": 0.7528254985809326
+            }
+          },
+          "surface_activity_context": {
+            "geometry_pixels": 47250,
+            "common_pixels": 47250,
+            "full_direct_mean_abs_gray": 10.976677248677248,
+            "full_direct_changed_pixels": 29415,
+            "owner_mean_abs_gray": {
+              "direct": 10.976676940917969,
+              "exposure_only": 7.7972612380981445,
+              "registered": 10.970786094665527,
+              "registered_exposure": 7.787954330444336
+            }
+          },
+          "patterned_base_context": {
+            "geometry_pixels": 40300,
+            "common_pixels": 40300,
+            "full_direct_mean_abs_gray": 23.455657568238212,
+            "full_direct_changed_pixels": 36060,
+            "owner_mean_abs_gray": {
+              "direct": 23.455657958984375,
+              "exposure_only": 23.736860275268555,
+              "registered": 23.322092056274414,
+              "registered_exposure": 23.68863868713379
+            }
+          }
+        },
+        "arrays": {
+          "path": "sample/output/s11-water-first-20261010-001/f001643.npz",
+          "sha256": "2710c41385fa2039afe0e919d896ec806fd0c794c64197515928d1a5de4061c3"
+        }
+      }
+    ],
+    "source_inputs_preserved": true,
+    "physical_decision": "NOT_EVALUATED",
+    "figures": {
+      "sample/output/s11-water-first-20261010-001/water-reference-difference.png": "bb2c486dc66adcef620d8887499e9ca0fce8f98b1cafb851e3a29c3c6ba4d8d6",
+      "sample/output/s11-water-first-20261010-001/water-role-neighbours.png": "0c0ab7a490aeb5e6f48365995bc9c00fe3aa705b8670ec296a9a3be3e858e106",
+      "sample/output/s11-water-first-20261010-001/water-role-review.png": "ed6ed1e59bc8f16f1dd15941a8beea631431fdc2fc3e02e0ac58d09fbc46cab0"
+    }
+  },
+  "verification": {
+    "status": "PASS",
+    "scope": "Saved source pins, arithmetic, denominators and figure pixels; no physical truth acceptance.",
+    "preflight_sha256": "6a08f66aec52644b062edb4f0ed5e2311d86565bfd69d05914ad443d0ea291d6",
+    "readout_sha256": "db7e082fb518253c3d250efc9202674a9796ade5dab3c6ca48ac96c0a72280a3",
+    "input_pins_verified": 17,
+    "source_cases_verified": 10,
+    "raw_pairs_verified": 9,
+    "available_owner_pairs": 8,
+    "unavailable_owner_frames": [
+      1438
+    ],
+    "channel_results_verified": 32,
+    "scalar_pixel_values_checked": 14292600,
+    "region_readouts_verified": 36,
+    "displayed_source_regions_verified": 13,
+    "numerical_tolerance": "rtol1e-6/atol1e-5 for saved floating arithmetic only, never image truth tolerance",
+    "figure_pins_verified": 3,
+    "all_cases_figure": {
+      "path": "sample/output/s11-water-first-20261010-001/all-cases.png",
+      "sha256": "98d6a81f2cd20a0d7caef61a6fee41f7467133a7e932a524fa77a914ba8d2790"
+    },
+    "verifier_sha256": "159e5b666a8b452be94715a3ae7da434551329d6ec9b1e0c7a6252ddc7cc8151"
+  },
+  "source_qualification": [
+    {
+      "case_id": "water-f000000",
+      "frame_index": 0,
+      "observed_context": "Empty-looking vessel with rim and patterned base.",
+      "development_use": "Same-scene structure context and optional diagnostic reference.",
+      "role_authority": "agent provisional",
+      "unresolved": "No canonical EMPTY phase, dense structure mask, exact correspondence or per-pixel negative label.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    },
+    {
+      "case_id": "water-f000205",
+      "frame_index": 205,
+      "observed_context": "An entering liquid stream/droplet is already visible above and inside the vessel.",
+      "development_use": "Mixed entry/structure context; keep all pixels and the original measurement.",
+      "role_authority": "agent source correction",
+      "unresolved": "Not a whole-frame empty negative or clean empty reference. No automatic label of the visible entry outline.",
+      "supersedes": "The initial empty_context grouping in this preserved preflight and any broad early-empty reading through 6.84 s.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    },
+    {
+      "case_id": "water-f000815",
+      "frame_index": 815,
+      "observed_context": "Pouring with a strongly inclined bubbly upper feature.",
+      "development_use": "Protect real surface deformation at the exact scope of the prior f822 reply; adjacent frames supply context.",
+      "role_authority": "f822 existing qualitative user reply; adjacent-frame context remains agent observed",
+      "unresolved": "No speed ceiling, all-pixel surface label, Foam absence, numerical Y or transferred neighbour truth.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    },
+    {
+      "case_id": "water-f000822",
+      "frame_index": 822,
+      "observed_context": "Pouring with a strongly inclined bubbly upper feature.",
+      "development_use": "Protect real surface deformation at the exact scope of the prior f822 reply; adjacent frames supply context.",
+      "role_authority": "f822 existing qualitative user reply; adjacent-frame context remains agent observed",
+      "unresolved": "No speed ceiling, all-pixel surface label, Foam absence, numerical Y or transferred neighbour truth.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    },
+    {
+      "case_id": "water-f000829",
+      "frame_index": 829,
+      "observed_context": "Pouring with a strongly inclined bubbly upper feature.",
+      "development_use": "Protect real surface deformation at the exact scope of the prior f822 reply; adjacent frames supply context.",
+      "role_authority": "f822 existing qualitative user reply; adjacent-frame context remains agent observed",
+      "unresolved": "No speed ceiling, all-pixel surface label, Foam absence, numerical Y or transferred neighbour truth.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    },
+    {
+      "case_id": "water-f001225",
+      "frame_index": 1225,
+      "observed_context": "Broad rippling/bubbly bright upper feature with multiple visible outlines after pouring.",
+      "development_use": "Material-role review before treating the feature as a role-specific positive.",
+      "role_authority": "agent provisional; user question pending at f1232 with neighbours",
+      "unresolved": "Water surface with ripples/bubbles versus separately resolved Foam layer; no forced upper/lower edge or centre Y.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    },
+    {
+      "case_id": "water-f001232",
+      "frame_index": 1232,
+      "observed_context": "Broad rippling/bubbly bright upper feature with multiple visible outlines after pouring.",
+      "development_use": "Material-role review before treating the feature as a role-specific positive.",
+      "role_authority": "agent provisional; user question pending at f1232 with neighbours",
+      "unresolved": "Water surface with ripples/bubbles versus separately resolved Foam layer; no forced upper/lower edge or centre Y.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    },
+    {
+      "case_id": "water-f001239",
+      "frame_index": 1239,
+      "observed_context": "Broad rippling/bubbly bright upper feature with multiple visible outlines after pouring.",
+      "development_use": "Material-role review before treating the feature as a role-specific positive.",
+      "role_authority": "agent provisional; user question pending at f1232 with neighbours",
+      "unresolved": "Water surface with ripples/bubbles versus separately resolved Foam layer; no forced upper/lower edge or centre Y.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    },
+    {
+      "case_id": "water-f001438",
+      "frame_index": 1438,
+      "observed_context": "Later narrower bright upper feature; bubbles remain visible in the body.",
+      "development_use": "Comparatively settled surface context, retained beside the earlier role review.",
+      "role_authority": "agent provisional; no new user approval",
+      "unresolved": "No per-pixel Foam absence, front/back membership, contour, calibrated X or numerical tolerance.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    },
+    {
+      "case_id": "water-f001643",
+      "frame_index": 1643,
+      "observed_context": "Later narrower bright upper feature; bubbles remain visible in the body.",
+      "development_use": "Comparatively settled surface context, retained beside the earlier role review.",
+      "role_authority": "agent provisional; no new user approval",
+      "unresolved": "No per-pixel Foam absence, front/back membership, contour, calibrated X or numerical tolerance.",
+      "scalar_truth": null,
+      "candidate_binding": null,
+      "partition": "development"
+    }
+  ],
+  "review_question": {
+    "status": "PENDING",
+    "frame_index": 1232,
+    "nominal_time_sec": 41.107733333333336,
+    "question_ko": "A(41.108초)의 밝고 두꺼운 부분을 잔물결·기포가 있는 물 표면으로 보시나요, 별도 거품층으로 보시나요? 영상만으로 판단이 어렵다는 답도 가능합니다.",
+    "consequence": "The answer scopes the Oil/water versus Foam target role before any positive-label-based comparison; it will not certify exact edge pixels or numeric truth.",
+    "prior_closed_question": "f822 inclined-water qualitative interpretation stays closed; this asks about different post-pour frames.",
+    "windows_required": false
+  },
+  "status": "SOURCE_READOUT_VERIFIED; POST_POUR_ROLE_REVIEW_PENDING",
+  "figures": {
+    "docs/50-diagnostics/s11/2026-10-10-water-first-water-role-review.png": {
+      "sha256": "ed6ed1e59bc8f16f1dd15941a8beea631431fdc2fc3e02e0ac58d09fbc46cab0",
+      "bytes": 927106,
+      "local_source": "sample/output/s11-water-first-20261010-001/water-role-review.png"
+    },
+    "docs/50-diagnostics/s11/2026-10-10-water-first-water-role-neighbours.png": {
+      "sha256": "0c0ab7a490aeb5e6f48365995bc9c00fe3aa705b8670ec296a9a3be3e858e106",
+      "bytes": 234495,
+      "local_source": "sample/output/s11-water-first-20261010-001/water-role-neighbours.png"
+    },
+    "docs/50-diagnostics/s11/2026-10-10-water-first-water-reference-difference.png": {
+      "sha256": "bb2c486dc66adcef620d8887499e9ca0fce8f98b1cafb851e3a29c3c6ba4d8d6",
+      "bytes": 700470,
+      "local_source": "sample/output/s11-water-first-20261010-001/water-reference-difference.png"
+    },
+    "docs/50-diagnostics/s11/2026-10-10-water-first-all-cases.png": {
+      "sha256": "98d6a81f2cd20a0d7caef61a6fee41f7467133a7e932a524fa77a914ba8d2790",
+      "bytes": 1529144,
+      "local_source": "sample/output/s11-water-first-20261010-001/all-cases.png"
+    }
+  },
+  "local_artifacts": {
+    "sample/output/s11-water-first-20261010-001/all-cases.png": {
+      "sha256": "98d6a81f2cd20a0d7caef61a6fee41f7467133a7e932a524fa77a914ba8d2790",
+      "bytes": 1529144
+    },
+    "sample/output/s11-water-first-20261010-001/f000205.npz": {
+      "sha256": "61dc87f99d07d601537418ab49e8ba2184727416843f9867bc5c3708e5fc2c2d",
+      "bytes": 851797
+    },
+    "sample/output/s11-water-first-20261010-001/f000815.npz": {
+      "sha256": "234c1406caeed50be05f51973da82733e6202d67239b2cf61148ce3a8718e7d1",
+      "bytes": 1997363
+    },
+    "sample/output/s11-water-first-20261010-001/f000822.npz": {
+      "sha256": "1ad883f293ea834737878df2fa46444d36eb30651bd79a36f314f7397d3f60d8",
+      "bytes": 1757032
+    },
+    "sample/output/s11-water-first-20261010-001/f000829.npz": {
+      "sha256": "75f0e8478cd948cd3f2ec3e857aa90b0acab627998b219bca5a579d79dab49a0",
+      "bytes": 2015885
+    },
+    "sample/output/s11-water-first-20261010-001/f001225.npz": {
+      "sha256": "9795e7bfb8ea6202fe85076c205be51c815799c8fa0d6e890530ef8946fe4ddd",
+      "bytes": 1838006
+    },
+    "sample/output/s11-water-first-20261010-001/f001232.npz": {
+      "sha256": "fd75d0809056dd813c8c9bfeb92d2e625f70894fb43d055a7b9d8ddec0ef108c",
+      "bytes": 1457642
+    },
+    "sample/output/s11-water-first-20261010-001/f001239.npz": {
+      "sha256": "a3f69cd8c2bbee6abfec483e3eaeeb973e8a996a2a7f69684d0bfeb204db6116",
+      "bytes": 1808527
+    },
+    "sample/output/s11-water-first-20261010-001/f001438.npz": {
+      "sha256": "908432390f6dbbb76f438b044477946015be82d66a585b96f2b99739eed2cf99",
+      "bytes": 115925
+    },
+    "sample/output/s11-water-first-20261010-001/f001643.npz": {
+      "sha256": "2710c41385fa2039afe0e919d896ec806fd0c794c64197515928d1a5de4061c3",
+      "bytes": 1313418
+    },
+    "sample/output/s11-water-first-20261010-001/preflight.json": {
+      "sha256": "6a08f66aec52644b062edb4f0ed5e2311d86565bfd69d05914ad443d0ea291d6",
+      "bytes": 13002
+    },
+    "sample/output/s11-water-first-20261010-001/readout.json": {
+      "sha256": "db7e082fb518253c3d250efc9202674a9796ade5dab3c6ca48ac96c0a72280a3",
+      "bytes": 32926
+    },
+    "sample/output/s11-water-first-20261010-001/run.py": {
+      "sha256": "97d53b228971947af6a8026864ee2ba75cb024610418a45a30f3040f224c840d",
+      "bytes": 11460
+    },
+    "sample/output/s11-water-first-20261010-001/verification.json": {
+      "sha256": "c1c6cf71e3d952f7141b2586fcb932099568a9fb76de1bc4cfbcd57c59666546",
+      "bytes": 1035
+    },
+    "sample/output/s11-water-first-20261010-001/verify.py": {
+      "sha256": "159e5b666a8b452be94715a3ae7da434551329d6ec9b1e0c7a6252ddc7cc8151",
+      "bytes": 7902
+    },
+    "sample/output/s11-water-first-20261010-001/water-reference-difference.png": {
+      "sha256": "bb2c486dc66adcef620d8887499e9ca0fce8f98b1cafb851e3a29c3c6ba4d8d6",
+      "bytes": 700470
+    },
+    "sample/output/s11-water-first-20261010-001/water-role-neighbours.png": {
+      "sha256": "0c0ab7a490aeb5e6f48365995bc9c00fe3aa705b8670ec296a9a3be3e858e106",
+      "bytes": 234495
+    },
+    "sample/output/s11-water-first-20261010-001/water-role-review.png": {
+      "sha256": "ed6ed1e59bc8f16f1dd15941a8beea631431fdc2fc3e02e0ac58d09fbc46cab0",
+      "bytes": 927106
+    }
+  },
+  "scripts": {
+    "run.py": {
+      "sha256": "97d53b228971947af6a8026864ee2ba75cb024610418a45a30f3040f224c840d",
+      "text": "\"\"\"Run from the repository root; source qualification, not a detector trial.\"\"\"\nfrom pathlib import Path\nimport hashlib\nimport json\nimport platform\nimport subprocess\nimport sys\n\nROOT = Path.cwd()\nsys.path[:0] = [str(ROOT), str(ROOT / 'src')]\nimport cv2\nimport numpy as np\nfrom PIL import Image, ImageDraw, ImageFont\nfrom tests.diagnostics.s11_boundary_temporal_probe import measure_pair, CHANNELS\n\nOUT = ROOT / 'sample/output/s11-water-first-20261010-001'\nOUT.mkdir(exist_ok=False)\nsha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()\ndef save(name, value):\n    (OUT / name).write_text(json.dumps(value, indent=2, ensure_ascii=False) + '\\n')\n\nintake_path = ROOT / 'docs/50-diagnostics/s11/2026-10-09-public-video-intake.json'\nintake = json.loads(intake_path.read_text())\noverview = next(v for v in intake['overview']['videos'] if 'water' in v['path'])\ntemporal = next(v for v in intake['temporal']['results'] if v['kind'] == 'water')\noverview_frames = {f['frame_index']: f for f in overview['frames']}\ntemporal_frames = {f['frame_index']: f for f in temporal['frames']}\ncrop = temporal['display_crop_xyxy']\nassert crop == [740, 250, 1160, 1080]\nindices = [0, 205, 815, 822, 829, 1225, 1232, 1239, 1438, 1643]\ngroups = {'empty_context': [0, 205], 'inclined_context': [815, 822, 829],\n          'bubbly_post_pour_context': [1225, 1232, 1239], 'later_surface_context': [1438, 1643]}\ncases = []\npins = {\n    'sample/sample5.mp4': overview['sha256'],\n    str(intake_path.relative_to(ROOT)): sha(intake_path),\n}\nfor name in [\n    'docs/50-diagnostics/s11/2026-10-09-public-video-rename.json',\n    'docs/50-diagnostics/s11/2026-10-09-public-water-surface-reply.json',\n    'docs/60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.json',\n    'tests/diagnostics/s11_boundary_temporal_probe.py',\n    'src/oil_tracker/adapters/vision/temporal_raster_evidence.py',\n]:\n    pins[name] = sha(ROOT / name)\nfor n in indices:\n    full = n in overview_frames\n    f = overview_frames[n] if full else temporal_frames[n]\n    pins[f['path']] = f['sha256']\n    cases.append(dict(\n        case_id=f'water-f{n:06d}', frame_index=n,\n        nominal_time_sec=n / overview['fps'],\n        group=next(k for k, v in groups.items() if n in v),\n        source_raster=dict(path=f['path'], sha256=f['sha256'],\n                           source_origin_xy=[0, 0] if full else crop[:2],\n                           shape=[1080, 1920, 3] if full else [830, 420, 3]),\n        human_role_scope=('Existing f822 qualitative surface reply only; no exact contour, '\n                          'Foam absence, centre scalar or neighbour-frame propagation.'\n                          if n == 822 else 'No new human role approval.'),\n        scalar_truth=None, candidate_binding=None, partition='development',\n    ))\nfor name, pin in pins.items():\n    assert sha(ROOT / name) == pin, name\nregions = {\n    'upper_rim_context': [790, 320, 1120, 380],\n    'upper_interior_context': [840, 390, 1070, 440],\n    'surface_activity_context': [800, 450, 1115, 600],\n    'patterned_base_context': [800, 780, 1110, 910],\n}\npreflight = dict(\n    schema='s11-water-first-source-qualification-preflight-v1',\n    base_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),\n    script_sha256=sha(Path(__file__)), inputs=pins, cases=cases,\n    source=dict(path='sample/sample5.mp4', sha256=overview['sha256'],\n                width=1920, height=1080, fps=overview['fps'], frame_count=1644),\n    geometry=dict(crop_xyxy=crop, source_origin_xy=crop[:2],\n                  diagnostic_column_x=950, calibrated_glass_center=False,\n                  recipe_created=False, numeric_truth=False,\n                  effective_mask='whole saved native crop; no glare exclusion or physical visibility inference'),\n    measurement=dict(\n        owner='tests.diagnostics.s11_boundary_temporal_probe.measure_pair',\n        reference_frame=0, compared_frames=indices[1:],\n        channels=list(CHANNELS),\n        operation='Existing four grayscale absolute-residual views; identity displacement/exposure, '\n                  'exposure-only, translation-only, translation-and-exposure on identical registered common support.',\n        regions=regions,\n        region_scope='Illustrative context rectangles fixed from originals before residual measurement. '\n                     'Neither masks, candidate bands, homogeneous material regions nor truth.',\n        registration='Existing accepted numerical fit does not establish camera motion; preserve failures.',\n        decision='NOT_EVALUATED', threshold=None,\n        no_new_mechanism=True,\n    ),\n    review=dict(\n        main_frames=[1232, 1438, 1643], neighbour_frames=[1225, 1232, 1239],\n        focus_xyxy=[780, 440, 1130, 560], detail_xyxy=[840, 450, 1070, 540],\n        display='Native clean context and 2x nearest-neighbour detail; no candidate contours or derived Y labels.',\n        proposed_question='At 41.1 s, is the broad bright upper feature a water surface with ripples/bubbles, '\n                          'or a distinct Foam layer with separate water/Foam and Foam/air roles? '\n                          '47.98 and 54.82 s provide later context; indeterminate is a valid answer.',\n        question_scope='New post-pour material-role ambiguity; not a repeat of the f822 inclined-surface question. '\n                       'No exact pixel, tolerance or fixed-center product choice is requested.',\n        answer_status='PENDING',\n    ),\n    boundaries=['No video decode, detector execution, tuning, label or Recipe rewrite.',\n                'No physical role follows from brightness, residual or inferred frame state.',\n                'No continuous 41-55 s annotation, accuracy/recall score or independent holdout.',\n                'No mandatory empty-reference product feature or new evaluator.'],\n)\nsave('preflight.json', preflight)\n(OUT / 'run.py').write_bytes(Path(__file__).read_bytes())\n\nrasters = {}\nfor case in cases:\n    f = case['source_raster']\n    raw = cv2.imread(str(ROOT / f['path']), cv2.IMREAD_COLOR)\n    assert raw is not None and list(raw.shape) == f['shape']\n    x0, y0, x1, y1 = crop\n    im = raw[y0:y1, x0:x1].copy() if f['source_origin_xy'] == [0, 0] else raw.copy()\n    assert im.shape == (830, 420, 3)\n    rasters[case['frame_index']] = im\n\ngray = {n: cv2.cvtColor(im, cv2.COLOR_BGR2GRAY) for n, im in rasters.items()}\nmask = np.ones((830, 420), bool)\nresults = []\narrays_by_frame = {}\nfor n in indices[1:]:\n    meta, arrays = measure_pair(gray[0], gray[n], mask)\n    # A direct full-crop difference is a displayed source fact, not registration rescue.\n    full_direct = cv2.absdiff(gray[0], gray[n])\n    arrays['full_direct_uint8'] = full_direct\n    region_rows = {}\n    for name, box in regions.items():\n        x0, y0, x1, y1 = box\n        sy, sx = slice(y0-crop[1], y1-crop[1]), slice(x0-crop[0], x1-crop[0])\n        common = arrays['valid'][sy, sx]\n        region_rows[name] = dict(\n            geometry_pixels=int(common.size), common_pixels=int(common.sum()),\n            full_direct_mean_abs_gray=float(full_direct[sy, sx].mean()),\n            full_direct_changed_pixels=int(np.count_nonzero(full_direct[sy, sx])),\n            owner_mean_abs_gray={key: float(arrays[key][sy, sx][common].mean())\n                                 if common.any() else None for key in CHANNELS},\n        )\n    name = f'f{n:06d}.npz'\n    np.savez_compressed(OUT / name, **arrays)\n    results.append(dict(frame_index=n, metadata=meta, regions=region_rows,\n                        arrays=dict(path=str((OUT/name).relative_to(ROOT)), sha256=sha(OUT/name))))\n    arrays_by_frame[n] = arrays\n    print(f'f{n:06d}: {meta[\"status\"]}; common={meta[\"common_pixels\"]}', flush=True)\n\nfont_path = '/System/Library/Fonts/Supplemental/Arial.ttf'\nfont = ImageFont.truetype(font_path, 23)\nsmall = ImageFont.truetype(font_path, 18)\ntitlefont = ImageFont.truetype(font_path, 30)\nbg, fg, muted = '#111820', '#eff4fa', '#b7c3d1'\ndef canvas(size, title, subtitle):\n    im = Image.new('RGB', size, bg)\n    draw = ImageDraw.Draw(im)\n    draw.text((24, 18), title, font=titlefont, fill=fg)\n    draw.text((24, 59), subtitle, font=small, fill=muted)\n    return im, draw\ndef rgb(n):\n    return Image.fromarray(cv2.cvtColor(rasters[n], cv2.COLOR_BGR2RGB))\ndef detail(n, box):\n    x0, y0, x1, y1 = box\n    return rgb(n).crop((x0-crop[0], y0-crop[1], x1-crop[0], y1-crop[1]))\n\nsheet, draw = canvas((1468, 1250), 'Water: physical role review, before a detector trial',\n                     'A = post-pour bubbly feature; B / C = later context. Clean pixels; no detector or truth overlay.')\nfor i, n in enumerate(preflight['review']['main_frames']):\n    left = 24+i*480\n    label = f'{\"ABC\"[i]}  f{n} / {n/overview[\"fps\"]:.3f} s'\n    draw.text((left, 97), label, font=font, fill=fg)\n    sheet.paste(rgb(n), (left+20, 139))\n    draw.text((left, 986), 'Centre detail (2x nearest-neighbour)', font=small, fill=muted)\n    sheet.paste(detail(n, preflight['review']['detail_xyxy']).resize((460, 180), Image.Resampling.NEAREST), (left, 1016))\ndraw.text((24, 1214), 'Detail = source X[840,1070), Y[450,540). Crop centre X950 is diagnostic, not calibrated Glass geometry.', font=small, fill=muted)\nsheet.save(OUT/'water-role-review.png')\n\nsheet, draw = canvas((2160, 432), 'The same post-pour context, 0.234 s apart',\n                     'A broad bright feature has several visible outlines. No outlined pixel is assigned to Oil or Foam.')\nfor i, n in enumerate(preflight['review']['neighbour_frames']):\n    left = 20+i*716\n    draw.text((left, 103), f'f{n} / {n/overview[\"fps\"]:.3f} s', font=font, fill=fg)\n    im = detail(n, preflight['review']['focus_xyxy'])\n    sheet.paste(im.resize((700, 240), Image.Resampling.NEAREST), (left, 144))\ndraw.text((20, 400), 'Source X[780,1130), Y[440,560), 2x nearest-neighbour. Still frames do not establish a separate Foam layer or its lower boundary.', font=small, fill=muted)\nsheet.save(OUT/'water-role-neighbours.png')\n\nsheet, draw = canvas((1776, 1030), 'Empty-reference difference is an appearance measurement',\n                     'All differences use f0. Fixed 4x display gain clips at 255; numerical readout uses original grayscale values.')\nfor i, (n, difference) in enumerate([(205, False), (205, True), (1643, False), (1643, True)]):\n    left = 24+i*438\n    draw.text((left, 103), f'f{n} ' + ('|I-I0| x4' if difference else 'original'), font=font, fill=fg)\n    im = (Image.fromarray(np.minimum(arrays_by_frame[n]['full_direct_uint8'].astype(np.uint16)*4,255).astype(np.uint8)).convert('RGB')\n          if difference else rgb(n))\n    sheet.paste(im, (left, 147))\ndraw.text((24, 996), 'Difference is also present on fixed glass features. No subtraction mask, physical classification or threshold is adopted.', font=small, fill=muted)\nsheet.save(OUT/'water-reference-difference.png')\n\nfor name, pin in pins.items():\n    assert sha(ROOT/name) == pin, name\nreadout = dict(schema='s11-water-first-source-qualification-readout-v1',\n               preflight_sha256=sha(OUT/'preflight.json'),\n               runtime=dict(python=platform.python_version(), numpy=np.__version__, opencv=cv2.__version__),\n               case_count=len(cases), pair_count=len(results), results=results,\n               source_inputs_preserved=True, physical_decision='NOT_EVALUATED',\n               figures={str(p.relative_to(ROOT)): sha(p) for p in sorted(OUT.glob('*.png'))})\nsave('readout.json', readout)\nprint('COMPLETE', OUT, flush=True)\n"
+    },
+    "verify.py": {
+      "sha256": "159e5b666a8b452be94715a3ae7da434551329d6ec9b1e0c7a6252ddc7cc8151",
+      "text": "\"\"\"Independently check the saved source qualification, without calling its runner.\"\"\"\nfrom pathlib import Path\nimport hashlib\nimport json\nimport cv2\nimport numpy as np\nfrom PIL import Image, ImageDraw, ImageFont\n\nROOT = Path.cwd()\nOUT = ROOT/'sample/output/s11-water-first-20261010-001'\nsha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()\npre = json.loads((OUT/'preflight.json').read_text())\nrun = json.loads((OUT/'readout.json').read_text())\nassert sha(OUT/'preflight.json') == run['preflight_sha256']\nassert sha(OUT/'run.py') == pre['script_sha256']\nfor name, pin in pre['inputs'].items():\n    assert sha(ROOT/name) == pin, name\nfor name, pin in run['figures'].items():\n    assert sha(ROOT/name) == pin, name\nassert len(pre['cases']) == len({c['frame_index'] for c in pre['cases']}) == 10\nox, oy, endx, endy = pre['geometry']['crop_xyxy']\nimages = {}\nfor case in pre['cases']:\n    source = case['source_raster']\n    im = cv2.imread(str(ROOT/source['path']))\n    assert list(im.shape) == source['shape']\n    sx, sy = source['source_origin_xy']\n    im = im[oy-sy:endy-sy, ox-sx:endx-sx].copy()\n    assert im.shape == (830, 420, 3)\n    images[case['frame_index']] = im\nassert {r['frame_index'] for r in run['results']} == set(images)-{0}\ngray = {n: cv2.cvtColor(im, cv2.COLOR_BGR2GRAY) for n, im in images.items()}\nsource_gray = gray[0].astype(np.float32)\npixel_values = 0\nregions_verified = 0\nchannel_results = 0\nunavailable = []\ndef close(a, b):\n    assert np.allclose(a, b, rtol=1e-6, atol=1e-5, equal_nan=True)\nfor r in run['results']:\n    n = r['frame_index']\n    assert sha(ROOT/r['arrays']['path']) == r['arrays']['sha256']\n    with np.load(ROOT/r['arrays']['path'], allow_pickle=False) as archive:\n        arrays = {k: archive[k] for k in archive.files}\n    absolute = np.abs(gray[n].astype(np.int16)-gray[0].astype(np.int16)).astype(np.uint8)\n    assert np.array_equal(absolute, arrays['full_direct_uint8'])\n    pixel_values += absolute.size\n    meta = r['metadata']\n    if meta['status'] == 'registration_unavailable':\n        unavailable.append(n)\n        assert not arrays['valid'].any() and meta['common_pixels'] == 0\n        assert any(meta[k]['status'] != 'accepted' for k in\n                   ['registration_current_to_anchor', 'registration_anchor_to_current'])\n        for key in pre['measurement']['channels']:\n            assert np.isnan(arrays[key]).all()\n    else:\n        assert meta['status'] == 'measured'\n        translation = meta['registration_current_to_anchor']\n        assert translation['status'] == meta['registration_anchor_to_current']['status'] == 'accepted'\n        transform = np.array([[1, 0, translation['raw_dx']], [0, 1, translation['raw_dy']]], np.float32)\n        current = gray[n].astype(np.float32)\n        warp = cv2.warpAffine(current, transform, (420, 830), flags=cv2.INTER_LINEAR,\n                              borderMode=cv2.BORDER_CONSTANT)\n        common = cv2.warpAffine(np.ones((830, 420), np.float32), transform, (420, 830),\n                                flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT) == 1\n        assert np.array_equal(common, arrays['valid']) and int(common.sum()) == meta['common_pixels']\n        expected = {\n            'direct': np.abs(source_gray-current),\n            'exposure_only': np.abs(source_gray-(meta['exposure_only_gain']*current+meta['exposure_only_offset'])),\n            'registered': np.abs(source_gray-warp),\n            'registered_exposure': np.abs(source_gray-(meta['registered_gain']*warp+meta['registered_offset'])),\n        }\n        for key, value in expected.items():\n            close(np.where(common, value, np.nan), arrays[key])\n            close(float(value[common].mean()), meta['mean_absolute_residual'][key])\n            pixel_values += value.size\n            channel_results += 1\n    for name, box in pre['measurement']['regions'].items():\n        x0, y0, x1, y1 = box\n        sl = (slice(y0-oy, y1-oy), slice(x0-ox, x1-ox))\n        common = arrays['valid'][sl]\n        recorded = r['regions'][name]\n        assert common.size == recorded['geometry_pixels']\n        assert int(common.sum()) == recorded['common_pixels']\n        assert int(np.count_nonzero(absolute[sl])) == recorded['full_direct_changed_pixels']\n        close(absolute[sl].mean(), recorded['full_direct_mean_abs_gray'])\n        for key in pre['measurement']['channels']:\n            if common.any():\n                close(arrays[key][sl][common].mean(), recorded['owner_mean_abs_gray'][key])\n            else:\n                assert recorded['owner_mean_abs_gray'][key] is None\n        regions_verified += 1\nassert unavailable == [1438]\n\n# Inspect the exact crops inside the figures, not just their file hashes.\nsheet = np.asarray(Image.open(OUT/'water-role-review.png').convert('RGB'))\nfor i, n in enumerate(pre['review']['main_frames']):\n    left = 24+i*480\n    original = cv2.cvtColor(images[n], cv2.COLOR_BGR2RGB)\n    assert np.array_equal(sheet[139:969, left+20:left+440], original)\n    x0, y0, x1, y1 = pre['review']['detail_xyxy']\n    zoom = np.repeat(np.repeat(original[y0-oy:y1-oy, x0-ox:x1-ox], 2, axis=0), 2, axis=1)\n    assert np.array_equal(sheet[1016:1196, left:left+460], zoom)\nsheet = np.asarray(Image.open(OUT/'water-role-neighbours.png').convert('RGB'))\nfor i, n in enumerate(pre['review']['neighbour_frames']):\n    left = 20+i*716\n    x0, y0, x1, y1 = pre['review']['focus_xyxy']\n    original = cv2.cvtColor(images[n], cv2.COLOR_BGR2RGB)[y0-oy:y1-oy, x0-ox:x1-ox]\n    zoom = np.repeat(np.repeat(original, 2, axis=0), 2, axis=1)\n    assert np.array_equal(sheet[144:384, left:left+700], zoom)\nsheet = np.asarray(Image.open(OUT/'water-reference-difference.png').convert('RGB'))\nfor i, (n, difference) in enumerate([(205,False),(205,True),(1643,False),(1643,True)]):\n    left = 24+i*438\n    if difference:\n        d = np.abs(gray[n].astype(np.int16)-gray[0].astype(np.int16))\n        expected = np.repeat(np.minimum(d*4,255).astype(np.uint8)[:, :, None],3,axis=2)\n    else:\n        expected = cv2.cvtColor(images[n],cv2.COLOR_BGR2RGB)\n    assert np.array_equal(sheet[147:977, left:left+420], expected)\n\n# A complete source contact sheet is a review aid, not an algorithm output.\ncontact = Image.new('RGB',(1540,1280),'#111820')\ndraw = ImageDraw.Draw(contact)\nfont = ImageFont.truetype('/System/Library/Fonts/Supplemental/Arial.ttf',20)\ndraw.text((20,16),'All ten frozen source frames (development; no new truth annotations)',font=font,fill='white')\nfor i, case in enumerate(pre['cases']):\n    n = case['frame_index']; x=20+(i%5)*304; y=58+(i//5)*610\n    draw.text((x,y),f'f{n} / {case[\"nominal_time_sec\"]:.3f} s',font=font,fill='white')\n    im=Image.fromarray(cv2.cvtColor(images[n],cv2.COLOR_BGR2RGB)).resize((280,553),Image.Resampling.LANCZOS)\n    contact.paste(im,(x,y+35))\ncontact.save(OUT/'all-cases.png')\n\nverification = dict(\n    status='PASS', scope='Saved source pins, arithmetic, denominators and figure pixels; no physical truth acceptance.',\n    preflight_sha256=sha(OUT/'preflight.json'), readout_sha256=sha(OUT/'readout.json'),\n    input_pins_verified=len(pre['inputs']), source_cases_verified=len(images),\n    raw_pairs_verified=len(run['results']), available_owner_pairs=8,\n    unavailable_owner_frames=unavailable, channel_results_verified=channel_results,\n    scalar_pixel_values_checked=pixel_values, region_readouts_verified=regions_verified,\n    displayed_source_regions_verified=13,\n    numerical_tolerance='rtol1e-6/atol1e-5 for saved floating arithmetic only, never image truth tolerance',\n    figure_pins_verified=len(run['figures']),\n    all_cases_figure=dict(path=str((OUT/'all-cases.png').relative_to(ROOT)),sha256=sha(OUT/'all-cases.png')),\n    verifier_sha256=sha(Path(__file__)),\n)\n(OUT/'verify.py').write_bytes(Path(__file__).read_bytes())\n(OUT/'verification.json').write_text(json.dumps(verification,indent=2)+'\\n')\nprint(json.dumps(verification,indent=2))\n"
+    }
+  },
+  "physical_decision": "NOT_EVALUATED",
+  "production_change": false,
+  "prior_labels_changed": false,
+  "agent_visual_review": {
+    "reviewed_figures": [
+      "docs/50-diagnostics/s11/2026-10-10-water-first-water-role-review.png",
+      "docs/50-diagnostics/s11/2026-10-10-water-first-water-role-neighbours.png",
+      "docs/50-diagnostics/s11/2026-10-10-water-first-water-reference-difference.png",
+      "docs/50-diagnostics/s11/2026-10-10-water-first-all-cases.png"
+    ],
+    "observations": [
+      "f205 has an entering stream/droplet, so empty_context cannot grant a full-frame negative.",
+      "f1225/f1232/f1239 have multiple overlapping bright surface-region outlines; agent leans toward ripples/bubbles on water but does not infer absence of a separate Foam layer.",
+      "f1438/f1643 are comparatively settled, not certified featureless or Foam-free.",
+      "The f1643 difference shows strong changes on both the upper surface region and glass-pattern region; no optical subtype is inferred."
+    ]
+  }
+}

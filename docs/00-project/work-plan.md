@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The seven-video truth/qualification audit is complete. Existing 13 usable Oil points retain their historical scalar scope; none is newly certified as fixed-center numeric truth. Start the next source-bound qualitative development with the clearer settled water surface and same-scene structure, then use qualified public and target-domain controls. Freeze role/visibility/geometry and a distinct physical observation before implementing a successor; no new mechanism is established yet. The base f156 Foam conflict remains quarantined, without requiring a repeated answer to continue development. CBR-1/H0/G1 stay CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL remain. No Windows execution is required for this transition.
+**Next transition:** Water-first source qualification/readout is complete on ten frozen frames. F205 already contains an entering stream and is not a whole-frame empty negative. The f1232 post-pour feature has a pending water-surface versus separate-Foam-layer role review, with adjacent and later source images prepared. Stop for this bounded user judgment before using it as a role-specific positive; no exact-pixel labeling or Windows task is requested. Existing 13 usable Oil points retain historical scalar scope, and no new numeric truth or successor mechanism is established. Base f156 remains quarantined; CBR-1/H0/G1 stay CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL remain.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -39,7 +39,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Source/truth audit complete. Water-first development with qualified positive/opposing/unresolved claims precedes a distinct frozen role measurement. Legacy scalar agreement is reported separately; no stencil/reference/grouping retuning or runtime promotion. | [Truth audit](../60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification), [CBR-1 result](../50-diagnostics/s11/2026-10-10-current-boundary-reference.md) |
+| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Ten water cases and existing residual readout verified; one post-pour material-role review is pending before a role-specific positive comparison. Legacy scalar agreement remains separate. No new mechanism, threshold fitting or runtime promotion. | [Water qualification/review](../50-diagnostics/s11/2026-10-10-water-first-source-qualification.md), [truth audit](../60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -67,15 +67,30 @@ unusable frames, with the original values preserved. The
 now separates engineering compatibility, qualified physical claims, unresolved
 or unobservable claims, and historical scalar agreement.
 
-Next use water's inspected settling surface around 41–55 s and empty-glass
-pattern as the first development context. Freeze the exact source/role/visibility
-and measurement definition before a successor trial; add the already reviewed
-inclined surface, beer front/back/cropped-top, milk lower-unavailability and
-target-domain controls at their actual scope. These are finite observations,
-not continuously labeled windows or untouched holdout. Numeric center truth
-requires a separate compatible binding and reviewed precision; no broad relabel
-or automatic replacement of all old videos follows. Base f156's disputed Foam
-claim can remain quarantined unless a future decisive use requires adjudication.
+The [first water step](../50-diagnostics/s11/2026-10-10-water-first-source-qualification.md)
+now binds ten existing native frames, their roles/unknowns and diagnostic crop
+geometry. It corrects f205 (6.84 s) to entry/structure mixed context, not a full
+empty negative. F1225/f1232/f1239 have a broad bubbly post-pour feature; the later
+f1438/f1643 views are comparatively settled, not a continuously labeled 41–55 s
+window. Existing empty-reference residual math measures 8/9 pairs and retains
+f1438 registration as unavailable. Changes also occur on the glass pattern;
+empty subtraction does not supply physical identity or a new mechanism.
+
+**Current human checkpoint:** review A/f1232 at 41.108 s in the prepared source
+sheet: ripples/bubbles on the water surface, a separate Foam layer, or unresolved
+from these images. This determines the prospective positive's material role,
+not exact contour pixels, numeric precision or the already chosen centre rule.
+The user requested a stop when judgment is needed. The f822 inclined-surface,
+beer and milk replies remain closed; no Windows work is needed here.
+
+After the reply, append its exact source scope, retaining unresolved cases and
+all ten frames. Then specify one distinct physical observation and reproducible
+decision/abstention rule before a successor trial. Add inclined water, beer
+front/back/cropped-top, milk lower-unavailability and qualified target-domain
+controls at their actual scope. Numeric centre truth still requires separate
+compatible binding/precision. No wholesale legacy relabeling or compulsory
+empty-reference setup follows. Base f156 stays quarantined unless a decisive
+future use requires its adjudication.
 
 ### Closed CBR-1 comparison after the cc17924 intake
 
