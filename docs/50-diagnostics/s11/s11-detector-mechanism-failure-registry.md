@@ -122,6 +122,17 @@ limit, not proof of full-pipeline physical recall or public false selection.
 Preserve curved local support before temporal association; neither top-k/window
 expansion nor connected geometry alone is an established identity repair.
 
+**2026-10-09 observed-edge fragment follow-up:** the
+[lossless offline representation](2026-10-09-observed-edge-fragments.md) preserves
+all 178,209 observed pixels and 226,937 neighbour links across 25 fixed public/
+legacy rasters, partitioned into 130,607 fragments with all junction alternatives.
+It avoids the shared seed/global-band assumption without thinning or gap filling.
+Fifty-seven focused tests and independent real-raster conservation checks pass.
+Dense texture and diagonal raster junctions remain fragmented; glass also supplies
+long curved chains. This is exact representation of available evidence, not
+physical boundary recall or a promoted proposal lane. Upstream missing edges,
+side ownership and branch/cross-frame identity remain separate unresolved gates.
+
 ### S11-F03 — Motion/bootstrap authority overreach
 
 **Affected detector logic node(s):** `OIL-AUTHORITY` → `OIL-TRACKLET` → `OIL-SELECTOR`.

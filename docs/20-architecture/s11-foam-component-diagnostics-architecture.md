@@ -261,6 +261,57 @@ poisoned target placements, exact arithmetic against brute-force centering,
 crop/type/shape/resource limits and unchanged inputs. Existing ordered-patch and
 registered-residual tests protect the unchanged old entry points.
 
+## Offline observed-edge fragments
+
+`s11_contour_contact_probe.measure_edge_fragments` extends the existing saved-edge
+topology owner with an exact graph of `edges AND visible`. It preserves curved
+local support without the material-path generator's same-row seed/global-band
+assumption. This is a diagnostic representation, not a new proposal selector or
+the previously rejected connectivity-to-material identity rule. Existing local
+arm/contact and clearance APIs retain their semantics.
+
+Every observed edge pixel is a row-major vertex with source X/Y. Every pair of
+8-neighbour vertices supplies one canonical undirected link. All links, including
+diagonal links around thick or staircase corners, are preserved. Maximal paths
+whose interior vertices have degree two become fragments. Endpoints and junctions
+stop traversal; no turn is preferred at a junction. Isolated vertices, pure
+cycles and paths returning to a junction are retained. Cycles repeat their
+starting vertex. Each link belongs to exactly one fragment; shared junction
+vertices intentionally belong to several fragments. No thinning, smoothing,
+ranking, joining across a gap or scalar reduction is performed.
+
+Coordinates are in the supplied raster's units, translated by `origin`. For a
+resized diagnostic raster, the caller must retain its working-to-source mapping;
+an integer origin alone does not convert reduced pixels into native source X/Y.
+
+Per-vertex crop-edge and unavailable-neighbour flags record incomplete context.
+They do not prove occlusion, a physical endpoint, or absence of material. Edges
+under the visibility mask have no effect on the graph. An observed empty graph
+is MEASURED with unresolved identity; no visible pixels is UNAVAILABLE. All
+outputs keep physical identity UNRESOLVED, decision NOT_EVALUATED and no selected
+front. Eight-neighbour raster connectivity is not subpixel contact or object
+ownership, so a curved fluid-looking trace and an identical glass trace remain
+indistinguishable by this representation alone.
+
+Input is a nonempty boolean 2-D edge raster and same-shape boolean visibility,
+with integer origin coordinates bounded by absolute value 2^52. Work is bounded
+by 4,194,304 input pixels and 250,000 observed vertices, checked before graph
+allocation. There are at most four undirected links per vertex; CSR adjacency
+and visited-link traversal keep storage and traversal linear in vertices/links,
+apart from deterministic link sorting. Resource overflow raises an explicit
+error; it never drops shorter/weaker fragments to fit a cap. All output arrays
+are independently owned and inputs are unchanged.
+
+Fixed real controls use the previous public-video crops at native/height-200
+resolution plus the saved sample4 real-front, rim and internal-texture contexts.
+Read existing preprocessing edges and visibility; recomputation for public
+crops must use the unchanged pinned preprocessing/settings and disclose that
+these are isolated rectangular diagnostic views, not application runs. Verify
+exact pixel/link reconstruction independently and inspect the resulting
+fragment overlays. No exact contour recall can be inferred from regional human
+judgments. A successful lossless graph may still be fragmented, dominated by
+texture, or ambiguous at junctions; none is a successful physical detector.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
@@ -268,6 +319,6 @@ registered-residual tests protect the unchanged old entry points.
 - Prior mechanisms reviewed: motion-only identity and episode confirmation, component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; missing rejected components; discarded chromatic support and support-extreme fronts; the rejected strongest/lowest/nearest/smoothest rules, ordered-patch drift, shared-plane temporal region-exchange failure, signed-gap representation and relative-gap ambiguity.
 - Prior mechanisms rejected: no restoration of rejected Foam authority, geometry-as-identity, blanket material veto, lowering thresholds, naive white/chromatic union, automatic upper-edge substitution, polarity-as-identity or using human coordinates in runtime.
 - Preserved contracts: independent Oil/Foam owners, same-frame source provenance, fail-closed publication and unchanged temporal/sequence decisions.
-- Difference from prior failures: optional ordered opposite-slope brackets preserve narrow troughs; two-side transport preserves ordered texture in separate strips, searches 2D placements, and compares shared versus split displacement on alternate-column predictions. It retains explicit optical counterexamples and cannot assign physical roles. No decision owner consumes these measurements.
+- Difference from prior failures: optional ordered opposite-slope brackets and two-side transport remain diagnostic only. Observed-edge fragments now retain every visible raw edge pixel and adjacency, with junction alternatives/cycles and explicit crop/mask context, without a shared seed height or choosing a branch. This adds lossless local shape representation, not connectivity-as-identity, a joined physical contour or temporal authority. No decision owner consumes these measurements.
 - Logic-map impact: NONE — offline probes have no production caller; optional registration reasons do not change tuples, thresholds or decision ownership.
-- Failure-registry impact: UPDATED — F07 retains the bounded two-side appearance counterexample and remaining physical correspondence gap; no behavior or efficacy claim.
+- Failure-registry impact: UPDATED — F02 records the observed-edge fragment representation result and separates exact raster conservation from physical boundary recall; existing F07 appearance/correspondence counterexamples remain in force.

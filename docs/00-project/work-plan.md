@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The bounded sample5/6/7 material-path audit is complete: 18 fixed rasters retain 100 proposals; synthetic checks expose same-row seed and global seed-band restrictions before temporal association. Next establish local curved-boundary support and alternatives without treating a short seed-bound path as complete physical correspondence. Independent side identity remains required; no threshold/top-k expansion or behavior promotion follows. The sample5 water-surface reply and earlier Foam/Oil replies stay CLOSED. Local XY remains CLOSED WITHOUT PROMOTION and OFF by default; O2 OPEN / FIELD FAIL remain. No user judgment or Windows work is pending at this checkpoint.
+**Next transition:** Offline observed-edge fragments are implemented and verified on 25 fixed public/legacy rasters: all observed pixels and links are retained without a shared horizontal seed or global height band. This completes representation steps 1–2, not physical contour selection. Next define a bounded spatial side-ownership rule that retains branch/gap alternatives before joint temporal correspondence. Glass and internal texture also form chains; no longest-chain rule, threshold/top-k expansion or behavior promotion follows. The sample5 water-surface reply and earlier Foam/Oil replies stay CLOSED. Local XY remains CLOSED WITHOUT PROMOTION and OFF by default; O2 OPEN / FIELD FAIL remain. No user judgment or Windows work is pending at this checkpoint.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -335,6 +335,16 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    not full-pipeline efficacy. First retain curved local support and alternatives,
    then test joint correspondence with independent side ownership. No wider
    window, increased top-k, forced scalar or new interpretation request follows.
+   **Observed-edge representation implemented and verified:** the
+   [fixed fragment trial](../50-diagnostics/s11/2026-10-09-observed-edge-fragments.md)
+   extends the existing offline contact/clearance owner. All 25 public/legacy
+   rasters preserve every observed pixel/link, with junction alternatives and
+   crop/mask context; 57 focused tests pass. Dense texture and glass remain
+   competing fragments, and missing input edges are not recovered. Representation
+   steps 1–2 are complete; next specify independent spatial side ownership and
+   a reproducible abstention rule before joint correspondence. Keep the prior
+   rim-jump counterexample and fixed controls; no physical selector or production
+   integration is established by exact raster conservation.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require

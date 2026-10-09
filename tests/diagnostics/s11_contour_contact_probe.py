@@ -23,6 +23,123 @@ SPEC = {
 MAX_PIXELS = 262_144
 MAX_PATCH_PIXELS = 50_000_000
 
+FRAGMENT_SPEC = {
+    'id': 'observed-edge-fragments-v1',
+    'connectivity': 8,
+    'partition': 'maximal degree-two chains; all junction alternatives, cycles and isolates retained',
+    'max_pixels': 4_194_304,
+    'max_vertices': 250_000,
+    'physical_identity': 'UNRESOLVED',
+    'decision': 'NOT_EVALUATED',
+    'limits': 'Raster adjacency is not physical correspondence. No seed, rank, '
+              'scalar, gap bridge, thinning, junction pairing or material selection.',
+}
+
+
+def measure_edge_fragments(edges, visible, *, origin=(0, 0)):
+    """Losslessly partition the observed 8-neighbour graph into edge fragments.
+
+    Vertices are row-major observed pixels, expressed as source X/Y. Links are
+    canonical unordered vertex-ID pairs. Each link belongs to exactly one
+    fragment; junction vertices may belong to many. Closed walks repeat their
+    starting vertex, while isolates have a one-vertex fragment. All arrays are
+    newly owned. Existing contact/clearance APIs and production remain unchanged.
+
+    Crop/visibility adjacency marks incomplete local context, not a proven
+    occlusion or physical termination. Hidden edge values have no effect.
+    """
+    if (not isinstance(edges, np.ndarray) or edges.ndim != 2 or edges.dtype != bool
+            or not edges.size or edges.size > FRAGMENT_SPEC['max_pixels']):
+        raise ValueError('bounded nonempty boolean edge raster required')
+    if not isinstance(visible, np.ndarray) or visible.shape != edges.shape or visible.dtype != bool:
+        raise ValueError('same-shape boolean visible raster required')
+    if (not isinstance(origin, (tuple, list)) or len(origin) != 2
+            or any(type(v) is not int or abs(v) > 2**52 for v in origin)):
+        raise ValueError('bounded integer source origin required')
+    active = edges & visible
+    n = int(np.count_nonzero(active))
+    if n > FRAGMENT_SPEC['max_vertices']:
+        raise ValueError('edge fragment vertex resource bound exceeded')
+    h, w = active.shape
+    local_yx = np.argwhere(active)
+    vertex_xy = local_yx[:, ::-1].copy() + np.asarray(origin, dtype=np.int64)
+    lookup = np.full((h, w), -1, np.int32)
+    lookup[active] = np.arange(n, dtype=np.int32)
+    parts = []
+    # Four forward directions enumerate each undirected 8-neighbour link once.
+    for dy, dx in ((0, 1), (1, -1), (1, 0), (1, 1)):
+        ya, yb = max(0, -dy), min(h, h-dy)
+        xa, xb = max(0, -dx), min(w, w-dx)
+        a = lookup[ya:yb, xa:xb]
+        b = lookup[ya+dy:yb+dy, xa+dx:xb+dx]
+        valid = (a >= 0) & (b >= 0)
+        parts.append(np.column_stack((a[valid], b[valid])))
+    links = np.concatenate(parts).astype(np.int32, copy=False)
+    if len(links):
+        links = links[np.lexsort((links[:, 1], links[:, 0]))]
+    degree = np.bincount(links.ravel(), minlength=n).astype(np.uint8)
+    offsets = np.concatenate(([0], np.cumsum(degree, dtype=np.int64)))
+    # CSR adjacency keeps memory linear and avoids one Python object per link.
+    directed = np.concatenate((links, links[:, ::-1]))
+    edge_ids = np.tile(np.arange(len(links), dtype=np.int32), 2)
+    order = np.lexsort((directed[:, 1], directed[:, 0]))
+    neighbours, edge_ids = directed[order, 1], edge_ids[order]
+    used = np.zeros(len(links), bool)
+    fragments, kinds = [], []
+
+    def walk(start, neighbour, edge_id):
+        chain = [int(start)]
+        previous, current = int(start), int(neighbour)
+        used[edge_id] = True
+        while True:
+            chain.append(current)
+            if degree[current] != 2 or current == start:
+                return chain
+            lo, hi = offsets[current:current+2]
+            slot = int(lo if neighbours[lo] != previous else lo+1)
+            next_edge = edge_ids[slot]
+            if used[next_edge]:
+                raise AssertionError('fragment traversal revisited a link')
+            used[next_edge] = True
+            previous, current = current, int(neighbours[slot])
+
+    for vertex in np.flatnonzero(degree != 2):
+        if degree[vertex] == 0:
+            fragments.append([int(vertex)])
+            kinds.append('isolated')
+        for slot in range(int(offsets[vertex]), int(offsets[vertex+1])):
+            if not used[edge_ids[slot]]:
+                chain = walk(vertex, neighbours[slot], edge_ids[slot])
+                fragments.append(chain)
+                kinds.append('junction_return' if chain[0] == chain[-1] else 'chain')
+    # Remaining components consist entirely of degree-two vertices: pure cycles.
+    for edge_id, (a, b) in enumerate(links):
+        if not used[edge_id]:
+            chain = walk(a, b, edge_id)
+            if chain[0] != chain[-1]:
+                raise AssertionError('unconsumed component is not a cycle')
+            fragments.append(chain)
+            kinds.append('cycle')
+    crop_adjacent = ((local_yx[:, 0] == 0) | (local_yx[:, 0] == h-1)
+                     | (local_yx[:, 1] == 0) | (local_yx[:, 1] == w-1))
+    unavailable_adjacent = np.zeros(n, bool)
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            yy, xx = local_yx[:, 0]+dy, local_yx[:, 1]+dx
+            valid = (yy >= 0) & (yy < h) & (xx >= 0) & (xx < w)
+            unavailable_adjacent[valid] |= ~visible[yy[valid], xx[valid]]
+    return {
+        'spec_id': FRAGMENT_SPEC['id'],
+        'status': 'MEASURED' if visible.any() else 'UNAVAILABLE',
+        'reason': None if visible.any() else 'no_visible_pixels',
+        'origin': list(origin), 'shape': [h, w],
+        'vertices_xy': vertex_xy, 'links': links, 'degree': degree,
+        'crop_adjacent': crop_adjacent, 'unavailable_adjacent': unavailable_adjacent,
+        'fragments': fragments, 'fragment_kinds': kinds,
+        'physical_identity': 'UNRESOLVED', 'decision': 'NOT_EVALUATED',
+        'selected_front': None,
+    }
+
 
 def _arm_pattern(patch):
     """Branches of the center component after removing its 3x3 junction core."""
