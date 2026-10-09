@@ -126,6 +126,22 @@ They contain 15 exact reviewed frames in total. The fresh product translation is
 
 These truth files do not make the current sample set category-balanced official accuracy evidence and do not establish detector accuracy PASS. The four `*.provisional-truth.json` files remain separate immutable blind evidence.
 
+## S11 public-video development intake (2026-10-09)
+
+Three additional local downloads have been screened without detector execution:
+
+| File | Intended development use |
+|---|---|
+| `public_water_fill_pexels_6381722.mp4` | Empty-glass pattern reference, moving splash/bubbles and later settled surface |
+| `public_beer_fill_pexels_5538050.mp4` | Separate liquid/Foam boundaries; Foam top becomes cropped and unavailable |
+| `public_milk_fill_pexels_11158788.mp4` | Opaque white liquid versus surface froth; fixed-rim/base opposition |
+
+The [intake assessment](../docs/50-diagnostics/s11/2026-10-09-public-video-intake.md)
+and its machine record retain hashes, metadata, inspected frames, exposure and
+limitations. All three are development-intake exposures, not untouched holdout,
+canonical truth or field acceptance. Existing four-video corpus expectations and
+Recipes stay unchanged. No MP4 or generated-image tracking is added.
+
 ## Git policy
 
 All MP4 files remain ignored by `sample/*.mp4` and are never added by qualification work. Generated evidence under `sample/output/` also remains ignored. Only the four exact deterministic Recipes are allowlisted from the Recipe ignore rule. The provisional JSON artifacts and four product `.oiltruth` files are tracked normally, remain semantically distinct, and no truth file is stored inside a result bundle. No MP4 or output allowlist exists.

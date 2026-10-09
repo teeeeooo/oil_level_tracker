@@ -304,6 +304,15 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    this jump plus optical-warp opposition before a real trial or scalar rule.
    Spatial consistency alone is not physical identity. Reuse the saved originals;
    no new setup requirement, repeated human review or Windows task follows.
+   **New public-video intake assessed:** the [three-file review](../50-diagnostics/s11/2026-10-09-public-video-intake.md)
+   checks all 3,291 frames for decode and visually inspects 45 unique frames,
+   without detector execution. Use water first for same-scene empty-glass and
+   filling/settling correspondence; beer adds independent liquid/Foam roles and
+   cropped Foam-top unavailability; milk adds bulk-white-liquid/froth opposition.
+   All three are development-intake exposures, not untouched holdout or field
+   evidence. Before a new bounded trial, freeze its rule and source-bound controls;
+   keep the existing Mac regressions and Windows gate. No repeated strip rule,
+   automatic truth, new Recipe or current behavior change follows from intake.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require

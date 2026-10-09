@@ -1,0 +1,758 @@
+{
+  "schema": "s11-public-video-intake-v1",
+  "preflight": {
+    "schema": "s11-public-video-intake-preflight-v1",
+    "base_head": "99aa9d84ede5e5829a04c34b87edf46a42434b3e",
+    "videos": [
+      {
+        "path": "sample/public_beer_fill_pexels_5538050.mp4",
+        "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+        "bytes": 18990737,
+        "width": 2732,
+        "height": 1440,
+        "fps": 25.0,
+        "reported_frame_count": 583,
+        "nominal_duration_sec": 23.32,
+        "codec": "h264",
+        "role": "development_intake",
+        "prior_exposure": "No tracked repository reference found; outside-session exposure and recording lineage unverified"
+      },
+      {
+        "path": "sample/public_milk_fill_pexels_11158788.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+        "bytes": 11532102,
+        "width": 1920,
+        "height": 1080,
+        "fps": 23.976023976023978,
+        "reported_frame_count": 1064,
+        "nominal_duration_sec": 44.37766666666666,
+        "codec": "h264",
+        "role": "development_intake",
+        "prior_exposure": "No tracked repository reference found; outside-session exposure and recording lineage unverified"
+      },
+      {
+        "path": "sample/public_water_fill_pexels_6381722.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+        "bytes": 21089117,
+        "width": 1920,
+        "height": 1080,
+        "fps": 29.97002997002997,
+        "reported_frame_count": 1644,
+        "nominal_duration_sec": 54.854800000000004,
+        "codec": "h264",
+        "role": "development_intake",
+        "prior_exposure": "No tracked repository reference found; outside-session exposure and recording lineage unverified"
+      }
+    ],
+    "purpose": "Assess all three newly supplied videos for scene coverage and usefulness, without detector output or model/threshold fitting.",
+    "partition_policy": "All three files are assigned development_intake before pixel inspection. Intake exposure is recorded; none may be claimed an untouched holdout. Preserve one recording group per asset until acquisition lineage is known; separate downloads do not prove independent sessions.",
+    "sampling": "First,last and seven evenly spaced interior frames per video. Sequential decode, no scene/score cherry-picking. Native frames saved, display copies bounded; full decode count checked.",
+    "permitted_followup": "Bounded local temporal strips around predeclared quarters if motion or edit ambiguity is material. Record extra frame indices before review.",
+    "no_detector_run": true,
+    "no_recipe_change": true,
+    "no_new_human_truth": true,
+    "no_ml": true
+  },
+  "overview": {
+    "schema": "s11-public-video-intake-contact-v1",
+    "preflight_sha256": "053a7e43694a0fad73c462fc5c167a7a918bb29007b993ec2b198957851c4cb1",
+    "runtime": {
+      "opencv": "4.14.0",
+      "numpy": "2.5.1"
+    },
+    "videos": [
+      {
+        "path": "sample/public_beer_fill_pexels_5538050.mp4",
+        "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+        "bytes": 18990737,
+        "width": 2732,
+        "height": 1440,
+        "fps": 25.0,
+        "reported_frame_count": 583,
+        "nominal_duration_sec": 23.32,
+        "codec": "h264",
+        "role": "development_intake",
+        "prior_exposure": "No tracked repository reference found; outside-session exposure and recording lineage unverified",
+        "decoded_frame_count": 583,
+        "frames": [
+          {
+            "frame_index": 0,
+            "nominal_time_sec": 0.0,
+            "decoder_pos_msec": 0.0,
+            "shape": [
+              1440,
+              2732,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000000.png",
+            "sha256": "20814859d027ce5fa50b3f00c56084ec778d74ff5b38bd05fb980d8e208837fd"
+          },
+          {
+            "frame_index": 73,
+            "nominal_time_sec": 2.92,
+            "decoder_pos_msec": 2920.0,
+            "shape": [
+              1440,
+              2732,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000073.png",
+            "sha256": "71f9c83fb01efc10f8cb50267236fef547a2169c3291c2c7047cf22523b3143b"
+          },
+          {
+            "frame_index": 146,
+            "nominal_time_sec": 5.84,
+            "decoder_pos_msec": 5840.0,
+            "shape": [
+              1440,
+              2732,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000146.png",
+            "sha256": "2f45e444880a4f8e3df9cb29adbf269259f12544a29ddd60ae73d776d44741b4"
+          },
+          {
+            "frame_index": 218,
+            "nominal_time_sec": 8.72,
+            "decoder_pos_msec": 8720.0,
+            "shape": [
+              1440,
+              2732,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000218.png",
+            "sha256": "96829d1a9639ec0259d44aa9de1e0e5a093660279df61a55ea69be842c03c1c5"
+          },
+          {
+            "frame_index": 291,
+            "nominal_time_sec": 11.64,
+            "decoder_pos_msec": 11640.0,
+            "shape": [
+              1440,
+              2732,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000291.png",
+            "sha256": "51750e94ca3cb5cbb78929bccda398ec955e3d499389ae1297058a2e714292d5"
+          },
+          {
+            "frame_index": 364,
+            "nominal_time_sec": 14.56,
+            "decoder_pos_msec": 14560.0,
+            "shape": [
+              1440,
+              2732,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000364.png",
+            "sha256": "ab4c59e77bd145ef0be466f2577c4c6f5eb0682bd9f1a4e0b25f729415329cbd"
+          },
+          {
+            "frame_index": 436,
+            "nominal_time_sec": 17.44,
+            "decoder_pos_msec": 17440.0,
+            "shape": [
+              1440,
+              2732,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000436.png",
+            "sha256": "72fe651d0c719c08b8e63fa44c5be77b1fd9e9ad3af09dc6152c2fc6ffeffd35"
+          },
+          {
+            "frame_index": 509,
+            "nominal_time_sec": 20.36,
+            "decoder_pos_msec": 20360.0,
+            "shape": [
+              1440,
+              2732,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000509.png",
+            "sha256": "2607899c810a281bc2fafb3c417c6cd99afdea891b4c4593d88911372eea220c"
+          },
+          {
+            "frame_index": 582,
+            "nominal_time_sec": 23.28,
+            "decoder_pos_msec": 23280.0,
+            "shape": [
+              1440,
+              2732,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000582.png",
+            "sha256": "5cb1710c687e9105189e51fce40ae9e789a78eab3cf927c6c7ff574f23bae777"
+          }
+        ],
+        "overview_path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050-overview.jpg",
+        "overview_sha256": "ca01a0e64f0a3c3eb62c636ab1a4da88605f622750479e6b311507e134b03aec",
+        "input_preserved": true
+      },
+      {
+        "path": "sample/public_milk_fill_pexels_11158788.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+        "bytes": 11532102,
+        "width": 1920,
+        "height": 1080,
+        "fps": 23.976023976023978,
+        "reported_frame_count": 1064,
+        "nominal_duration_sec": 44.37766666666666,
+        "codec": "h264",
+        "role": "development_intake",
+        "prior_exposure": "No tracked repository reference found; outside-session exposure and recording lineage unverified",
+        "decoded_frame_count": 1064,
+        "frames": [
+          {
+            "frame_index": 0,
+            "nominal_time_sec": 0.0,
+            "decoder_pos_msec": 0.0,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000000.png",
+            "sha256": "f339911bc43748030ebace5b0843d0362ee213f2b38364fe48f9f52ba479f21b"
+          },
+          {
+            "frame_index": 133,
+            "nominal_time_sec": 5.547208333333333,
+            "decoder_pos_msec": 5547.208333333333,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000133.png",
+            "sha256": "bf95b31853898e3bc2898cea7044809529dd539fe74fc81dfe535af8b3d34520"
+          },
+          {
+            "frame_index": 266,
+            "nominal_time_sec": 11.094416666666666,
+            "decoder_pos_msec": 11094.416666666666,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000266.png",
+            "sha256": "e4d9746aabccdbcf3084d12eac53598ee74f947297c791facb09c3d37c996c7f"
+          },
+          {
+            "frame_index": 399,
+            "nominal_time_sec": 16.641624999999998,
+            "decoder_pos_msec": 16641.624999999996,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000399.png",
+            "sha256": "43bfa16516e255dc83fe45221af8e2e1d387d4af97be2332d90c6058031651b5"
+          },
+          {
+            "frame_index": 532,
+            "nominal_time_sec": 22.18883333333333,
+            "decoder_pos_msec": 22188.833333333332,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000532.png",
+            "sha256": "8549006127569fd3d06950616db870418c36503ae761b51827f3949e1698d4b7"
+          },
+          {
+            "frame_index": 664,
+            "nominal_time_sec": 27.694333333333333,
+            "decoder_pos_msec": 27694.333333333332,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000664.png",
+            "sha256": "037794bc010510f675a7d40c862629e4623f88a299c367352c5202460da4a205"
+          },
+          {
+            "frame_index": 797,
+            "nominal_time_sec": 33.24154166666666,
+            "decoder_pos_msec": 33241.541666666664,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000797.png",
+            "sha256": "dc67f5391c33803feb4dc6b9d0e6d82ae76ee58cd0087553d00c364717e04dce"
+          },
+          {
+            "frame_index": 930,
+            "nominal_time_sec": 38.78875,
+            "decoder_pos_msec": 38788.75,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000930.png",
+            "sha256": "416352e363ed502a1a56596bca1da0b601340af7d5843553ec3047a0b5cd1743"
+          },
+          {
+            "frame_index": 1063,
+            "nominal_time_sec": 44.33595833333333,
+            "decoder_pos_msec": 44335.95833333333,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png",
+            "sha256": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c"
+          }
+        ],
+        "overview_path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788-overview.jpg",
+        "overview_sha256": "5c79585b4ed24c4787a0b3bcc70f0f818609b0286f361697dcc315bf5d1871b4",
+        "input_preserved": true
+      },
+      {
+        "path": "sample/public_water_fill_pexels_6381722.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+        "bytes": 21089117,
+        "width": 1920,
+        "height": 1080,
+        "fps": 29.97002997002997,
+        "reported_frame_count": 1644,
+        "nominal_duration_sec": 54.854800000000004,
+        "codec": "h264",
+        "role": "development_intake",
+        "prior_exposure": "No tracked repository reference found; outside-session exposure and recording lineage unverified",
+        "decoded_frame_count": 1644,
+        "frames": [
+          {
+            "frame_index": 0,
+            "nominal_time_sec": 0.0,
+            "decoder_pos_msec": 0.0,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000000.png",
+            "sha256": "bd248d9331c4b1d267572d2e44a1a016589e2065509dc16f0de0b83d7bcd808f"
+          },
+          {
+            "frame_index": 205,
+            "nominal_time_sec": 6.840166666666667,
+            "decoder_pos_msec": 6840.166666666667,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000205.png",
+            "sha256": "acfc2cf9e925c1b17a32018c7bfcaef396d3a369543044a05b037b37323c8e3d"
+          },
+          {
+            "frame_index": 411,
+            "nominal_time_sec": 13.713700000000001,
+            "decoder_pos_msec": 13713.7,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000411.png",
+            "sha256": "3dbe6f5ab0f78a0956981b25f989dd52f1ac168baf722c672c93d05d41f2992b"
+          },
+          {
+            "frame_index": 616,
+            "nominal_time_sec": 20.553866666666668,
+            "decoder_pos_msec": 20553.86666666667,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000616.png",
+            "sha256": "bfbe0db7fb500dad708f976c7b5902d692c66512847321ad0880a1aa1b69d7bc"
+          },
+          {
+            "frame_index": 822,
+            "nominal_time_sec": 27.427400000000002,
+            "decoder_pos_msec": 27427.4,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000822.png",
+            "sha256": "19a94ae8bb16454440033559aecbe6ca714853d505423288bd2dc113767ce8b1"
+          },
+          {
+            "frame_index": 1027,
+            "nominal_time_sec": 34.26756666666667,
+            "decoder_pos_msec": 34267.566666666666,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001027.png",
+            "sha256": "efa04096b6c4e76803536a704dfdb51d9e6a0a4eecdbd7d19e83e602c37cbe56"
+          },
+          {
+            "frame_index": 1232,
+            "nominal_time_sec": 41.107733333333336,
+            "decoder_pos_msec": 41107.73333333334,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+            "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324"
+          },
+          {
+            "frame_index": 1438,
+            "nominal_time_sec": 47.98126666666667,
+            "decoder_pos_msec": 47981.26666666667,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png",
+            "sha256": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a"
+          },
+          {
+            "frame_index": 1643,
+            "nominal_time_sec": 54.82143333333333,
+            "decoder_pos_msec": 54821.43333333334,
+            "shape": [
+              1080,
+              1920,
+              3
+            ],
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+            "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22"
+          }
+        ],
+        "overview_path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722-overview.jpg",
+        "overview_sha256": "986da1fae5e507b52e3f5d04661bc4222e4cff16a8a57f5845af9d2886758248",
+        "input_preserved": true
+      }
+    ],
+    "script": "\"\"\"Sequential fixed-grid intake only; no detector, labels, or tuning.\"\"\"\nfrom pathlib import Path\nimport json,hashlib\nimport cv2,numpy as np\nfrom PIL import Image,ImageOps,ImageDraw\nout=Path(__file__).resolve().parent;root=Path.cwd()\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\npre=json.loads((out/'preflight.json').read_text());reports=[]\nfor meta in pre['videos']:\n p=root/meta['path'];assert sha(p)==meta['sha256']\n stem=p.stem;folder=out/stem;folder.mkdir(exist_ok=False)\n targets=set(int(i) for i in np.linspace(0,meta['reported_frame_count']-1,9).round())\n cap=cv2.VideoCapture(str(p));i=0;frames=[];tiles=[]\n while True:\n  ok,bgr=cap.read()\n  if not ok:break\n  if i in targets:\n   target=folder/f'f{i:06d}.png';assert cv2.imwrite(str(target),bgr)\n   record=dict(frame_index=i,nominal_time_sec=i/meta['fps'],decoder_pos_msec=cap.get(cv2.CAP_PROP_POS_MSEC),shape=list(bgr.shape),path=str(target.relative_to(root)),sha256=sha(target))\n   frames.append(record)\n   rgb=Image.fromarray(cv2.cvtColor(bgr,cv2.COLOR_BGR2RGB));thumb=ImageOps.contain(rgb,(480,270))\n   tile=Image.new('RGB',(480,300),'#181818');tile.paste(thumb,((480-thumb.width)//2,30+(270-thumb.height)//2))\n   ImageDraw.Draw(tile).text((10,8),f'{i/meta[\"fps\"]:.3f} s / frame {i}',fill='white');tiles.append(tile)\n  i+=1\n cap.release();assert i==meta['reported_frame_count'],(p,i,meta['reported_frame_count']);assert len(frames)==9\n sheet=Image.new('RGB',(1440,900),'#181818')\n for j,tile in enumerate(tiles):sheet.paste(tile,((j%3)*480,(j//3)*300))\n target=out/f'{stem}-overview.jpg';sheet.save(target,quality=94)\n assert sha(p)==meta['sha256']\n reports.append(dict(**meta,decoded_frame_count=i,frames=frames,overview_path=str(target.relative_to(root)),overview_sha256=sha(target),input_preserved=True))\n print(stem,i,'frames decoded; 9 overview frames saved',flush=True)\nreport=dict(schema='s11-public-video-intake-contact-v1',preflight_sha256=sha(out/'preflight.json'),runtime=dict(opencv=cv2.__version__,numpy=np.__version__),videos=reports,script=Path(__file__).read_text(),detector_run=False,physical_labels_created=False)\nwith (out/'contact-record.json').open('x') as f:json.dump(report,f,indent=2);f.write('\\n')\n",
+    "detector_run": false,
+    "physical_labels_created": false
+  },
+  "temporal": {
+    "preflight_sha256": "be7498b90795d5f87346772e900608c8262d0ea27ace2c632e64d6847379347a",
+    "results": [
+      {
+        "path": "sample/public_beer_fill_pexels_5538050.mp4",
+        "kind": "beer",
+        "frame_indices": [
+          140,
+          146,
+          152,
+          285,
+          291,
+          297,
+          430,
+          436,
+          442
+        ],
+        "display_crop_xyxy": [
+          200,
+          0,
+          2500,
+          1440
+        ],
+        "frames": [
+          {
+            "frame_index": 140,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000140.png",
+            "sha256": "7fc1a063d27f585fb61ebde3ed682cfa3ce83d69b42d3444dee08c3e910c9b60"
+          },
+          {
+            "frame_index": 146,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000146.png",
+            "sha256": "fcaef81a6ee6d85db7f04e4153372c0bf4a0c91dc5df68e138a670a3e639f5a0"
+          },
+          {
+            "frame_index": 152,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000152.png",
+            "sha256": "90f72df7636a050628e6efb2c8ed140694cbbcc2d42ddaa494d9da9cdbfba38e"
+          },
+          {
+            "frame_index": 285,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000285.png",
+            "sha256": "a8e7e8106cd1f47e5a4b931b92e7bcde0381f4a18fc5e515712d979e100d3609"
+          },
+          {
+            "frame_index": 291,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000291.png",
+            "sha256": "052f62eab7bc843b1937ee1f55c38eb049a67b8d778da85f1b4bd892c302a093"
+          },
+          {
+            "frame_index": 297,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000297.png",
+            "sha256": "ca88dabbf3f14acb37bacf7ecfd395d9827e0bc7584b68fb5d2aecf37975d584"
+          },
+          {
+            "frame_index": 430,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000430.png",
+            "sha256": "31c6fd3f0ac15ada2ea6064f3eeaaefb6b82d6436a5dfc369d1526ff7b218015"
+          },
+          {
+            "frame_index": 436,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000436.png",
+            "sha256": "fef26fe8b71e633e9d673abfdc3ee84ef78b1356d36132ff8a63da921525846f"
+          },
+          {
+            "frame_index": 442,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000442.png",
+            "sha256": "5037073149f2bbc9b3131e15b9fdf0330a112ff7459f47c5bc1cb8f92ce4d69f"
+          }
+        ],
+        "sheet_path": "sample/output/s11-public-video-intake-20261009-001/beer-quarter-context.jpg",
+        "sheet_sha256": "c5f6b475c2a8c087f41d82052e289d1b173ed10c44df3441742fbb2975c3d387",
+        "input_preserved": true
+      },
+      {
+        "path": "sample/public_milk_fill_pexels_11158788.mp4",
+        "kind": "milk",
+        "frame_indices": [
+          260,
+          266,
+          272,
+          526,
+          532,
+          538,
+          791,
+          797,
+          803
+        ],
+        "display_crop_xyxy": [
+          760,
+          240,
+          1480,
+          1060
+        ],
+        "frames": [
+          {
+            "frame_index": 260,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000260.png",
+            "sha256": "9e817dcbe6d9f545af035da273698962ec74a6b6303810a3db56d8ba353280db"
+          },
+          {
+            "frame_index": 266,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000266.png",
+            "sha256": "f22f8a835bbc02c481b4bb8826284747f488845ed83c828ff852cb577a290621"
+          },
+          {
+            "frame_index": 272,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000272.png",
+            "sha256": "932ff5cb6756d399866cbabb3e901c9fc44dc97f8a6ccd1d158c0757720201e1"
+          },
+          {
+            "frame_index": 526,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000526.png",
+            "sha256": "0a0e04a1019504a93149268626e98dbf88ada25cedfa5fbe7558db7f785c7b2f"
+          },
+          {
+            "frame_index": 532,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000532.png",
+            "sha256": "e30fbcad06437c9ae5060f8429c0b7ec9d838fb9ab003ff8898b508ac3103f2c"
+          },
+          {
+            "frame_index": 538,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000538.png",
+            "sha256": "62d35ba917906112690ec7016a3a80403d18f51afb570b1d846fa5b79e292974"
+          },
+          {
+            "frame_index": 791,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000791.png",
+            "sha256": "096708b6e950793b362b37f233386e4d929696dccd9a0f14041ec50506c508bf"
+          },
+          {
+            "frame_index": 797,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000797.png",
+            "sha256": "d9823a80c23fdd1af9f3aa9a3499fcb0c9607993f3f3cc0a494f9cc5cd39a26f"
+          },
+          {
+            "frame_index": 803,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000803.png",
+            "sha256": "7386433f9c4b139f4b0be3252383f1da99348b64e7d2fefc108c5929e4a19379"
+          }
+        ],
+        "sheet_path": "sample/output/s11-public-video-intake-20261009-001/milk-quarter-context.jpg",
+        "sheet_sha256": "0c1e6c5cb44c765073839180746b84a96161cf0a3ccc88fdedaf3890abbea4b1",
+        "input_preserved": true
+      },
+      {
+        "path": "sample/public_water_fill_pexels_6381722.mp4",
+        "kind": "water",
+        "frame_indices": [
+          404,
+          411,
+          418,
+          815,
+          822,
+          829,
+          1225,
+          1232,
+          1239
+        ],
+        "display_crop_xyxy": [
+          740,
+          250,
+          1160,
+          1080
+        ],
+        "frames": [
+          {
+            "frame_index": 404,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000404.png",
+            "sha256": "7beb32fca1fa462df8dc0e02db41089f338b255fc5e8a2dfdf4d4ae709efb276"
+          },
+          {
+            "frame_index": 411,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000411.png",
+            "sha256": "936dbaf4d8cc127296007cb720014a60fece24293eb1416d8c0b91b60bd911e3"
+          },
+          {
+            "frame_index": 418,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000418.png",
+            "sha256": "58e50788472b58cc9cea3becc72567d297fa6bff1b0d69608993690f261a7948"
+          },
+          {
+            "frame_index": 815,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000815.png",
+            "sha256": "38425a7172d682c2cb6fe94533d7201c686763672bcc9cd251d18b59a16e6b31"
+          },
+          {
+            "frame_index": 822,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000822.png",
+            "sha256": "b14e7cd3f917c8b4a9e1d5105322306b800aa424743d8784a5b8645147e502ff"
+          },
+          {
+            "frame_index": 829,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000829.png",
+            "sha256": "07adeee2f636b3355d48c89c3f8da920895688fd417008869a90aa4049b83c1d"
+          },
+          {
+            "frame_index": 1225,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001225.png",
+            "sha256": "101e1045e7aad0d190956c3d016243dafa7e81ee85146367cefd4ca418ecb9f1"
+          },
+          {
+            "frame_index": 1232,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001232.png",
+            "sha256": "5eb380535f27a9779953052a6d1392bcf39ece1265937a1df9f7b766806271c6"
+          },
+          {
+            "frame_index": 1239,
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001239.png",
+            "sha256": "ca58ebe1a8f7b4aa1f3b39767e3f999c4b2321e9179092ac257931b90a50fa64"
+          }
+        ],
+        "sheet_path": "sample/output/s11-public-video-intake-20261009-001/water-quarter-context.jpg",
+        "sheet_sha256": "a461d86c4b219e0b31dd17f2fac25c543e27eb9b95f26809b5e883f3be50a17b",
+        "input_preserved": true
+      }
+    ],
+    "script": "\"\"\"Predetermined quarter-time local context; display crops are not Recipes.\"\"\"\nfrom pathlib import Path\nimport json,hashlib\nimport cv2\nfrom PIL import Image,ImageOps,ImageDraw\nroot=Path.cwd();out=Path(__file__).resolve().parent\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\npre=json.loads((out/'preflight.json').read_text())\nboxes={'beer':[200,0,2500,1440],'milk':[760,240,1480,1060],'water':[740,250,1160,1080]}\nitems=[]\nfor m in pre['videos']:\n kind=next(k for k in boxes if k in m['path']);n=m['reported_frame_count'];fps=m['fps'];delta=round(.25*fps)\n centers=[round((n-1)*p) for p in [.25,.5,.75]]\n targets=[c+d for c in centers for d in [-delta,0,delta]]\n items.append(dict(path=m['path'],kind=kind,frame_indices=targets,display_crop_xyxy=boxes[kind]))\nplan=dict(reason='Inspect pouring geometry, movement context and cropping limitations; quarter-time centers and +/-0.25 playback seconds were permitted before first overview.',items=items,source_sha256={m['path']:m['sha256'] for m in pre['videos']},human_truth=False,detector_run=False)\nwith (out/'temporal-preflight.json').open('x') as f:json.dump(plan,f,indent=2);f.write('\\n')\nresults=[]\nfor m,item in zip(pre['videos'],items,strict=True):\n p=root/m['path'];assert sha(p)==m['sha256'];cap=cv2.VideoCapture(str(p));targets=set(item['frame_indices']);tiles={};records=[];i=0\n while i<=max(targets):\n  ok,bgr=cap.read();assert ok,(p,i)\n  if i in targets:\n   x0,y0,x1,y1=item['display_crop_xyxy'];crop=bgr[y0:y1,x0:x1]\n   path=out/p.stem/f'quarter-f{i:06d}.png';cv2.imwrite(str(path),crop)\n   image=Image.fromarray(cv2.cvtColor(crop,cv2.COLOR_BGR2RGB));thumb=ImageOps.contain(image,(460,440))\n   tile=Image.new('RGB',(480,475),'#181818');tile.paste(thumb,((480-thumb.width)//2,30+(440-thumb.height)//2))\n   ImageDraw.Draw(tile).text((10,8),f'{i/m[\"fps\"]:.3f} s / f{i}',fill='white');tiles[i]=tile\n   records.append(dict(frame_index=i,path=str(path.relative_to(root)),sha256=sha(path)))\n  i+=1\n cap.release();assert sha(p)==m['sha256']\n sheet=Image.new('RGB',(1440,1425),'#181818')\n for j,index in enumerate(item['frame_indices']):sheet.paste(tiles[index],(j%3*480,j//3*475))\n path=out/f'{item[\"kind\"]}-quarter-context.jpg';sheet.save(path,quality=94)\n results.append(dict(**item,frames=records,sheet_path=str(path.relative_to(root)),sheet_sha256=sha(path),input_preserved=True))\n print(item['kind'],'quarter views saved',flush=True)\nwith (out/'temporal-record.json').open('x') as f:json.dump(dict(preflight_sha256=sha(out/'temporal-preflight.json'),results=results,script=Path(__file__).read_text()),f,indent=2);f.write('\\n')\n"
+  },
+  "exposure": [
+    {
+      "path": "sample/public_beer_fill_pexels_5538050.mp4",
+      "visually_inspected_unique_frame_indices": [
+        0,
+        73,
+        140,
+        146,
+        152,
+        218,
+        285,
+        291,
+        297,
+        364,
+        430,
+        436,
+        442,
+        509,
+        582
+      ],
+      "unique_frame_count": 15,
+      "inputs_preserved": true
+    },
+    {
+      "path": "sample/public_milk_fill_pexels_11158788.mp4",
+      "visually_inspected_unique_frame_indices": [
+        0,
+        133,
+        260,
+        266,
+        272,
+        399,
+        526,
+        532,
+        538,
+        664,
+        791,
+        797,
+        803,
+        930,
+        1063
+      ],
+      "unique_frame_count": 15,
+      "inputs_preserved": true
+    },
+    {
+      "path": "sample/public_water_fill_pexels_6381722.mp4",
+      "visually_inspected_unique_frame_indices": [
+        0,
+        205,
+        404,
+        411,
+        418,
+        616,
+        815,
+        822,
+        829,
+        1027,
+        1225,
+        1232,
+        1239,
+        1438,
+        1643
+      ],
+      "unique_frame_count": 15,
+      "inputs_preserved": true
+    }
+  ],
+  "total_decoded_frames": 3291,
+  "total_unique_inspected_frames": 45,
+  "assessment_scope": "Agent visual screening only. No detector output, human truth, recipe, calibration, operating point or field acceptance.",
+  "source_provenance": "Pexels asset IDs are filename-derived only; original pages, acquisition timestamps, filming cadence and shared-session independence have not been verified.",
+  "disposition": "USEFUL_DEVELOPMENT_CONTROLS_NOT_UNTOUCHED_HOLDOUT",
+  "priority": [
+    "water",
+    "beer",
+    "milk"
+  ],
+  "scripts": {
+    "read_videos.py": "\"\"\"Sequential fixed-grid intake only; no detector, labels, or tuning.\"\"\"\nfrom pathlib import Path\nimport json,hashlib\nimport cv2,numpy as np\nfrom PIL import Image,ImageOps,ImageDraw\nout=Path(__file__).resolve().parent;root=Path.cwd()\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\npre=json.loads((out/'preflight.json').read_text());reports=[]\nfor meta in pre['videos']:\n p=root/meta['path'];assert sha(p)==meta['sha256']\n stem=p.stem;folder=out/stem;folder.mkdir(exist_ok=False)\n targets=set(int(i) for i in np.linspace(0,meta['reported_frame_count']-1,9).round())\n cap=cv2.VideoCapture(str(p));i=0;frames=[];tiles=[]\n while True:\n  ok,bgr=cap.read()\n  if not ok:break\n  if i in targets:\n   target=folder/f'f{i:06d}.png';assert cv2.imwrite(str(target),bgr)\n   record=dict(frame_index=i,nominal_time_sec=i/meta['fps'],decoder_pos_msec=cap.get(cv2.CAP_PROP_POS_MSEC),shape=list(bgr.shape),path=str(target.relative_to(root)),sha256=sha(target))\n   frames.append(record)\n   rgb=Image.fromarray(cv2.cvtColor(bgr,cv2.COLOR_BGR2RGB));thumb=ImageOps.contain(rgb,(480,270))\n   tile=Image.new('RGB',(480,300),'#181818');tile.paste(thumb,((480-thumb.width)//2,30+(270-thumb.height)//2))\n   ImageDraw.Draw(tile).text((10,8),f'{i/meta[\"fps\"]:.3f} s / frame {i}',fill='white');tiles.append(tile)\n  i+=1\n cap.release();assert i==meta['reported_frame_count'],(p,i,meta['reported_frame_count']);assert len(frames)==9\n sheet=Image.new('RGB',(1440,900),'#181818')\n for j,tile in enumerate(tiles):sheet.paste(tile,((j%3)*480,(j//3)*300))\n target=out/f'{stem}-overview.jpg';sheet.save(target,quality=94)\n assert sha(p)==meta['sha256']\n reports.append(dict(**meta,decoded_frame_count=i,frames=frames,overview_path=str(target.relative_to(root)),overview_sha256=sha(target),input_preserved=True))\n print(stem,i,'frames decoded; 9 overview frames saved',flush=True)\nreport=dict(schema='s11-public-video-intake-contact-v1',preflight_sha256=sha(out/'preflight.json'),runtime=dict(opencv=cv2.__version__,numpy=np.__version__),videos=reports,script=Path(__file__).read_text(),detector_run=False,physical_labels_created=False)\nwith (out/'contact-record.json').open('x') as f:json.dump(report,f,indent=2);f.write('\\n')\n",
+    "read_temporal.py": "\"\"\"Predetermined quarter-time local context; display crops are not Recipes.\"\"\"\nfrom pathlib import Path\nimport json,hashlib\nimport cv2\nfrom PIL import Image,ImageOps,ImageDraw\nroot=Path.cwd();out=Path(__file__).resolve().parent\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\npre=json.loads((out/'preflight.json').read_text())\nboxes={'beer':[200,0,2500,1440],'milk':[760,240,1480,1060],'water':[740,250,1160,1080]}\nitems=[]\nfor m in pre['videos']:\n kind=next(k for k in boxes if k in m['path']);n=m['reported_frame_count'];fps=m['fps'];delta=round(.25*fps)\n centers=[round((n-1)*p) for p in [.25,.5,.75]]\n targets=[c+d for c in centers for d in [-delta,0,delta]]\n items.append(dict(path=m['path'],kind=kind,frame_indices=targets,display_crop_xyxy=boxes[kind]))\nplan=dict(reason='Inspect pouring geometry, movement context and cropping limitations; quarter-time centers and +/-0.25 playback seconds were permitted before first overview.',items=items,source_sha256={m['path']:m['sha256'] for m in pre['videos']},human_truth=False,detector_run=False)\nwith (out/'temporal-preflight.json').open('x') as f:json.dump(plan,f,indent=2);f.write('\\n')\nresults=[]\nfor m,item in zip(pre['videos'],items,strict=True):\n p=root/m['path'];assert sha(p)==m['sha256'];cap=cv2.VideoCapture(str(p));targets=set(item['frame_indices']);tiles={};records=[];i=0\n while i<=max(targets):\n  ok,bgr=cap.read();assert ok,(p,i)\n  if i in targets:\n   x0,y0,x1,y1=item['display_crop_xyxy'];crop=bgr[y0:y1,x0:x1]\n   path=out/p.stem/f'quarter-f{i:06d}.png';cv2.imwrite(str(path),crop)\n   image=Image.fromarray(cv2.cvtColor(crop,cv2.COLOR_BGR2RGB));thumb=ImageOps.contain(image,(460,440))\n   tile=Image.new('RGB',(480,475),'#181818');tile.paste(thumb,((480-thumb.width)//2,30+(440-thumb.height)//2))\n   ImageDraw.Draw(tile).text((10,8),f'{i/m[\"fps\"]:.3f} s / f{i}',fill='white');tiles[i]=tile\n   records.append(dict(frame_index=i,path=str(path.relative_to(root)),sha256=sha(path)))\n  i+=1\n cap.release();assert sha(p)==m['sha256']\n sheet=Image.new('RGB',(1440,1425),'#181818')\n for j,index in enumerate(item['frame_indices']):sheet.paste(tiles[index],(j%3*480,j//3*475))\n path=out/f'{item[\"kind\"]}-quarter-context.jpg';sheet.save(path,quality=94)\n results.append(dict(**item,frames=records,sheet_path=str(path.relative_to(root)),sheet_sha256=sha(path),input_preserved=True))\n print(item['kind'],'quarter views saved',flush=True)\nwith (out/'temporal-record.json').open('x') as f:json.dump(dict(preflight_sha256=sha(out/'temporal-preflight.json'),results=results,script=Path(__file__).read_text()),f,indent=2);f.write('\\n')\n",
+    "package_intake.py": "from pathlib import Path\nimport json,hashlib\nroot=Path.cwd();out=Path(__file__).resolve().parent\nload=lambda p:json.loads(p.read_text());sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\npre=load(out/'preflight.json');contact=load(out/'contact-record.json');temporal=load(out/'temporal-record.json')\nassert sha(out/'preflight.json')==contact['preflight_sha256']\nassert sha(out/'temporal-preflight.json')==temporal['preflight_sha256']\ncoverage=[]\nfor m,v,t in zip(pre['videos'],contact['videos'],temporal['results'],strict=True):\n assert m['path']==v['path']==t['path'];assert sha(root/m['path'])==m['sha256']\n assert v['decoded_frame_count']==m['reported_frame_count']\n for f in v['frames']+t['frames']:assert sha(root/f['path'])==f['sha256']\n assert sha(root/v['overview_path'])==v['overview_sha256'];assert sha(root/t['sheet_path'])==t['sheet_sha256']\n indices=sorted({f['frame_index'] for f in v['frames']+t['frames']})\n coverage.append(dict(path=m['path'],visually_inspected_unique_frame_indices=indices,unique_frame_count=len(indices),inputs_preserved=True))\nreport=dict(schema='s11-public-video-intake-v1',preflight=pre,overview=contact,temporal=temporal,\n exposure=coverage,total_decoded_frames=sum(v['decoded_frame_count'] for v in contact['videos']),\n total_unique_inspected_frames=sum(v['unique_frame_count'] for v in coverage),\n assessment_scope='Agent visual screening only. No detector output, human truth, recipe, calibration, operating point or field acceptance.',\n source_provenance='Pexels asset IDs are filename-derived only; original pages, acquisition timestamps, filming cadence and shared-session independence have not been verified.',\n disposition='USEFUL_DEVELOPMENT_CONTROLS_NOT_UNTOUCHED_HOLDOUT',\n priority=['water','beer','milk'],scripts={name:(out/name).read_text() for name in ['read_videos.py','read_temporal.py','package_intake.py']},\n local_artifacts={str(p.relative_to(root)):sha(p) for p in [out/'preflight.json',out/'contact-record.json',out/'temporal-preflight.json',out/'temporal-record.json']})\np=root/'docs/50-diagnostics/s11/2026-10-09-public-video-intake.json'\nwith p.open('x') as f:json.dump(report,f,indent=2);f.write('\\n')\nprint('Decoded',report['total_decoded_frames'],'inspected unique',report['total_unique_inspected_frames'],'all pins unchanged')\nprint(p,p.stat().st_size)\n"
+  },
+  "local_artifacts": {
+    "sample/output/s11-public-video-intake-20261009-001/preflight.json": "053a7e43694a0fad73c462fc5c167a7a918bb29007b993ec2b198957851c4cb1",
+    "sample/output/s11-public-video-intake-20261009-001/contact-record.json": "862f2b68dfab20741276936d36725b80110576960d59e2bf13dd08bb2952b421",
+    "sample/output/s11-public-video-intake-20261009-001/temporal-preflight.json": "be7498b90795d5f87346772e900608c8262d0ea27ace2c632e64d6847379347a",
+    "sample/output/s11-public-video-intake-20261009-001/temporal-record.json": "ca860c03851d5f50bb442ee89123dd4f0fc89f23d127d149426bfc868e9dea86"
+  }
+}
