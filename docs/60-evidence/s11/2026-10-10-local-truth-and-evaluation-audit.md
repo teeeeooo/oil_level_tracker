@@ -131,12 +131,15 @@ time windows. Exact inspected indices and authorities are in the machine record.
 **Source qualification follow-up:** the
 [ten-frame water review](../../50-diagnostics/s11/2026-10-10-water-first-source-qualification.md)
 narrows the provisional water row above. F205 already contains an entering
-stream and is not a whole-frame empty negative. The 41 s post-pour feature has
-multiple bubbly outlines and a pending water/Foam-role review; f1438/f1643 are
-comparatively settled context. Neither the broad early-empty reading nor
-41–55 s becomes continuous truth. This source correction preserves this audit's
-original machine record and all old/new observations; no detector result was
-used to drop cases.
+stream and is not a whole-frame empty negative. The later
+[human reply and support readout](../../50-diagnostics/s11/2026-10-10-water-foam-representation.md)
+identify A/f1232's 41 s feature as a Foam layer, closing that role question.
+Lower water–Foam boundary visibility is a separate pending judgment; Foam
+presence alone does not approve two interfaces or their coordinates. Adjacent
+and later f1438/f1643 frames retain their source-context scope. Neither the broad
+early-empty reading nor 41–55 s becomes continuous truth. These source corrections
+preserve this audit's original machine record and all old/new observations; no
+detector result was used to drop cases.
 
 The new three videos have already contributed to representation and correspondence
 investigations; they were not unused. They provide clearer development views but

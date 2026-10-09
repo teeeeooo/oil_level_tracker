@@ -12,8 +12,9 @@ The [Work Plan](../../00-project/work-plan.md) owns the next transition.
 **Finding:** the proposed water development context is useful, but it is not a
 uniform empty/settled truth set. F205 already contains an entering stream;
 f1225/f1232/f1239 contain a broad bubbly, rippling feature whose Oil/water versus
-Foam role is not independently reviewed. No detector trial or accuracy claim
-has run. A single source-bound material-role question is prepared below.
+Foam role was not independently reviewed at this checkpoint. No detector trial
+or accuracy claim ran in this source qualification. The subsequent user reply
+below closes the question for A/f1232 as a Foam layer.
 
 ## Frozen cases and qualification
 
@@ -30,7 +31,7 @@ No Recipe, physical contour, numeric tolerance or `.oiltruth` is created.
 | 0 / 0 s | Empty-looking same-scene rim/base context; reference for this diagnostic only | No dense structure mask or canonical EMPTY phase |
 | 205 / 6.840 s | Entry/structure mixed context: an entering stream/droplet is visible | Not a whole-frame empty negative or clean empty reference |
 | 815, 822, 829 / 27.194–27.661 s | Inclined-surface context; retain the existing f822 qualitative user reply | No transferred neighbour labels, exact contour, speed limit or Foam-absence truth |
-| 1225, 1232, 1239 / 40.874–41.341 s | Broad bubbly upper feature; pending role review | Do not assume a calm single water boundary or separately identified Foam interfaces |
+| 1225, 1232, 1239 / 40.874–41.341 s | Broad bubbly upper feature; the later reply identifies A/f1232 as a Foam layer | Neighbours remain context; no exact upper/lower contours or calm water-only boundary follows |
 | 1438, 1643 / 47.981, 54.821 s | Comparatively settled, narrower surface-region appearance | Agent-provisional context, not certified Foam-free or numeric fixed-centre truth |
 
 The frozen preflight initially grouped f205 as `empty_context`. The subsequent
@@ -92,13 +93,13 @@ An accepted registration on the other frames is not proof of camera alignment.
 
 ![The post-pour feature and its immediate sampled neighbours](2026-10-10-water-first-water-role-neighbours.png)
 
-**Pending question:** A (f1232, 41.108 s)의 밝고 두꺼운 부분을
+**Original question (closed by the reply below):** A (f1232, 41.108 s)의 밝고 두꺼운 부분을
 **잔물결·기포가 있는 물 표면**으로 보는지, **별도 거품층**으로 보는지?
 영상만으로 구분하기 어렵다는 답도 가능하다. B/C are later context, not an
 assumption that they share A's exact material state.
 
-The agent leans toward ripples/bubbles on the water surface but cannot certify
-the absence of a separate Foam layer from these stills. The distinction changes
+The agent initially leaned toward ripples/bubbles on the water surface but could
+not certify the absence of a separate Foam layer from these stills. The distinction changes
 which role a future upper outline may support: water/air versus Foam/air, with
 a separate lower interface only if actually visible. Treating the broad bright
 feature as already approved water truth would repeat the oracle assumption that
@@ -106,10 +107,31 @@ the user asked to question. No exact pixel tracing, front/back convention,
 numeric tolerance or repeated fixed-centre product choice is requested.
 
 This is a different frame/role question from the closed f822 inclined-water
-reply and the closed beer/milk questions. A qualified reply will be appended
-with its source scope. If it remains indeterminate, preserve the unresolved
-role and do not convert abstention into a successful negative. The question
-does not reopen the legacy base f156 dispute or require Windows execution.
+reply and the closed beer/milk questions. The question does not reopen the
+legacy base f156 dispute or require Windows execution.
+
+## Human reply received — Foam layer at A
+
+The user answered **“A는 거품층이야”**. The
+[source-bound reply](2026-10-10-water-foam-role-reply.json) identifies the broad
+bright feature in A/f1232 as a **Foam layer**, superseding the agent's water-only
+inclination and closing this physical-role question. A is a regional
+Foam-containing positive; its upper feature must not be treated as an approved
+water–air interface. The original machine record's pending/provisional fields
+remain preserved history, with this reply supplying the later interpretation.
+
+Layer presence does not establish exact Foam–air or water–Foam contours,
+visibility of both at X950, physical thickness or calibrated centre truth.
+Do not assign every bright pixel/component to Foam or propagate A's label to
+f1225/f1239, B/f1438 or C/f1643. Upper and lower boundary availability must be
+examined independently. The f822 water, beer and milk replies remain closed.
+No repeated A material-role question or pixel-label request follows.
+
+The subsequent [retained-support and stage readout](2026-10-10-water-foam-representation.md)
+uses all ten fixed frames and locates A's central appearance-support loss in the
+existing raw white predicate. It preserves the regional Foam reply and asks
+separately whether the lower water–Foam interface is distinguishable before
+using A for liquid-interface evaluation.
 
 ## Verification and checkpoint
 
@@ -129,8 +151,9 @@ review without local video assets. Raw arrays/media still require the local
 inputs; a fresh clone does not supply them. Reproduction runs the saved runner
 from the repository root into a fresh output location.
 
-The source qualification/readout is complete; physical-role approval and a
-distinct successor decision rule are not. Production, existing labels and
+The source qualification/readout is complete, with A's regional Foam role now
+reviewed. Exact target geometry and a distinct successor decision rule remain
+unestablished. Production, existing labels and
 evaluation tools are unchanged. This is a source observation, not another
 failed/promoted detector variant, a local efficacy PASS or Windows qualification.
 

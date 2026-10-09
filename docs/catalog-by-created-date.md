@@ -623,3 +623,18 @@ No new detector or numeric truth is adopted.
 | 2026-10-10 | [Physical role review](50-diagnostics/s11/2026-10-10-water-first-water-role-review.png) | 41.108 / 47.981 / 54.821초 원본과 중앙 확대 |
 | 2026-10-10 | [Immediate sampled context](50-diagnostics/s11/2026-10-10-water-first-water-role-neighbours.png) | f1225/f1232/f1239의 원본 확대 |
 | 2026-10-10 | [Empty-reference differences](50-diagnostics/s11/2026-10-10-water-first-water-reference-difference.png) | f205/f1643 원본과 밝기 차이; 물리 분류 아님 |
+
+## 2026-10-10 water Foam role and representation additions
+
+The source-bound Foam reply and unchanged-owner support/stage readout.
+No new physical contour labels or detector behavior are adopted.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-10 | [Foam role reply](50-diagnostics/s11/2026-10-10-water-foam-role-reply.json) | A/f1232 거품층 확인; 정확한 경계·인접 프레임 판정은 포함하지 않음 |
+| 2026-10-10 | [Representation investigation](50-diagnostics/s11/2026-10-10-water-foam-representation.md) | 10개 고정 프레임의 기존 후보와 A 중앙 지지 소실 원인 |
+| 2026-10-10 | [Machine record](50-diagnostics/s11/2026-10-10-water-foam-representation.json) | 사전 조건, 전체 단계 결과·코드·검증과 실패한 최초 실행 보존 |
+| 2026-10-10 | [Complete component readout](50-diagnostics/s11/2026-10-10-water-foam-support-readout.json.gz) | 전체 718개 성분, 경계면 집계·중앙 교점의 원본 JSON을 압축 보존 |
+| 2026-10-10 | [A support and perimeters](50-diagnostics/s11/2026-10-10-water-foam-support.png) | 원본·잔존 지지·모든 경계면 비교; 물리 정답 아님 |
+| 2026-10-10 | [Fixed source contexts](50-diagnostics/s11/2026-10-10-water-foam-context-support.png) | 미리 고른 다섯 장면의 동일 영역 비교 |
+| 2026-10-10 | [A central stages](50-diagnostics/s11/2026-10-10-water-foam-center-stages.png) | 기존 밝기 조건 이전의 윤곽과 단계별 중앙 지지 보존 여부 |
