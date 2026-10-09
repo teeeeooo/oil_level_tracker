@@ -1,0 +1,54 @@
+{
+  "schema": "s11-regional-human-interpretation-v1",
+  "base_head": "3818b17ac5af963c2b74ccd5e29a2c7f5c9d016a",
+  "case_id": "water-f001232",
+  "video": "sample/sample5.mp4",
+  "video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+  "shown_frames": [
+    1232,
+    1438,
+    1643
+  ],
+  "answered_panel": "A",
+  "marked_frame": 1232,
+  "nominal_time_sec": 41.107733333333336,
+  "source_raster": {
+    "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+    "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+    "source_origin_xy": [
+      0,
+      0
+    ],
+    "shape": [
+      1080,
+      1920,
+      3
+    ]
+  },
+  "question": "A에서 거품층 아래쪽 물–거품 경계도 눈으로 구분되는가, 아니면 아래 경계는 불명확한가?",
+  "reply_verbatim": "아래 경계는 불명확",
+  "authority": "direct user visibility judgment",
+  "status": "CLOSED",
+  "interpretation": "The lower water–Foam boundary in displayed A/f1232 is unclear. Retain the confirmed Foam layer while treating the separate lower liquid-interface location as unavailable for source-truth scoring.",
+  "scope": "Regional lower-interface visibility at A/f1232 only. This is not physical absence, a claim that every optical method must fail, an exact Foam upper contour, scalar Y, thickness, per-pixel mask, centre calibration or neighbouring/later-frame judgment.",
+  "control_role": "Independent lower-interface unavailability control and regional Foam-presence positive. Keep this case in the inventory, but do not score lower-interface coordinate error or derive layer thickness. Model abstention is not credited as correct identity; Foam presence does not require two numeric outputs.",
+  "foam_presence_reply": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-water-foam-role-reply.json",
+    "sha256": "57ef93a47183b090258848adea6b756a9d0fa70b2130028a41c5933a267913f1",
+    "status": "CLOSED; unchanged"
+  },
+  "question_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-water-foam-representation.json",
+    "sha256": "efdbe145f01f9f6924c31751c4eef952b12e934eb043a5b3cd6848f00ccaa38c",
+    "field": "lower_boundary_question"
+  },
+  "source_figures": {
+    "docs/50-diagnostics/s11/2026-10-10-water-first-water-role-review.png": "ed6ed1e59bc8f16f1dd15941a8beea631431fdc2fc3e02e0ac58d09fbc46cab0",
+    "docs/50-diagnostics/s11/2026-10-10-water-first-water-role-neighbours.png": "0c0ab7a490aeb5e6f48365995bc9c00fe3aa705b8670ec296a9a3be3e858e106"
+  },
+  "supersedes": "The PENDING lower_boundary_question and unknown lower visibility in the preceding representation record. That frozen record and the original source qualification remain byte-identical.",
+  "production_label_change": false,
+  "existing_judgments": "A Foam presence, f822 inclined surface, beer projection, milk lower visibility and existing target-domain judgments remain unchanged. No transfer to B/C or adjacent frames.",
+  "new_review_request": false,
+  "windows_execution_required": false
+}

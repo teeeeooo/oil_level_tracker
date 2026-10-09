@@ -638,3 +638,4 @@ No new physical contour labels or detector behavior are adopted.
 | 2026-10-10 | [A support and perimeters](50-diagnostics/s11/2026-10-10-water-foam-support.png) | 원본·잔존 지지·모든 경계면 비교; 물리 정답 아님 |
 | 2026-10-10 | [Fixed source contexts](50-diagnostics/s11/2026-10-10-water-foam-context-support.png) | 미리 고른 다섯 장면의 동일 영역 비교 |
 | 2026-10-10 | [A central stages](50-diagnostics/s11/2026-10-10-water-foam-center-stages.png) | 기존 밝기 조건 이전의 윤곽과 단계별 중앙 지지 보존 여부 |
+| 2026-10-10 | [Lower-interface visibility reply](50-diagnostics/s11/2026-10-10-water-lower-interface-reply.json) | A의 아래 물–거품 경계 불명확; 거품 존재와 아래 좌표 평가 자격을 구분 |

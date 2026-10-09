@@ -129,9 +129,12 @@ No repeated A material-role question or pixel-label request follows.
 
 The subsequent [retained-support and stage readout](2026-10-10-water-foam-representation.md)
 uses all ten fixed frames and locates A's central appearance-support loss in the
-existing raw white predicate. It preserves the regional Foam reply and asks
-separately whether the lower water–Foam interface is distinguishable before
-using A for liquid-interface evaluation.
+existing raw white predicate. The later
+[lower-interface reply](2026-10-10-water-lower-interface-reply.json),
+**“아래 경계는 불명확”**, closes that separate visibility question. Keep A as a
+regional Foam-presence positive and lower-interface unavailability control;
+do not assign a lower liquid coordinate or infer layer thickness. Neighbours
+and B/C retain their original scope. Both A questions are closed.
 
 ## Verification and checkpoint
 

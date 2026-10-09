@@ -134,8 +134,10 @@ narrows the provisional water row above. F205 already contains an entering
 stream and is not a whole-frame empty negative. The later
 [human reply and support readout](../../50-diagnostics/s11/2026-10-10-water-foam-representation.md)
 identify A/f1232's 41 s feature as a Foam layer, closing that role question.
-Lower water–Foam boundary visibility is a separate pending judgment; Foam
-presence alone does not approve two interfaces or their coordinates. Adjacent
+The subsequent [visibility reply](../../50-diagnostics/s11/2026-10-10-water-lower-interface-reply.json)
+closes the lower water–Foam boundary as unclear. A remains a regional Foam
+positive, with lower-coordinate scoring and thickness unavailable; this is not
+physical absence or successful model abstention. Adjacent
 and later f1438/f1643 frames retain their source-context scope. Neither the broad
 early-empty reading nor 41–55 s becomes continuous truth. These source corrections
 preserve this audit's original machine record and all old/new observations; no

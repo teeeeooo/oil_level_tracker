@@ -115,7 +115,7 @@ a side fragment to manufacture a centre measurement. A future boundary/role
 measurement must account for the available raw geometry and independent structure
 opposition, rather than assume white-mask perimeters are complete physical fronts.
 
-## Remaining lower-interface visibility question
+## Lower-interface visibility review — closed
 
 The agent can distinguish A's upper air-to-layer outline regionally, but several
 arcs/cells/bubbles crowd its lower side. The Foam-presence reply does not establish
@@ -124,13 +124,32 @@ using this same frame as an **Oil/liquid-interface positive** as well as a Foam
 positive. The existing beer front/back reply also prevents inferring two material
 interfaces merely from two vertically separated outlines.
 
-The separate pending question uses the same clean A image: **거품층 아래쪽의
+The separate question used the same clean A image: **거품층 아래쪽의
 물–거품 경계도 눈으로 구분되는가, 아니면 아래 경계는 불명확한가?**
-No exact pixel, line drawing, thickness or centre calibration is requested.
-A's Foam-layer classification stays CLOSED. If the lower boundary is not
-discernible, preserve that role's unavailability while retaining the Foam
-presence evidence; no successful all-abstain or false Foam absence follows.
-No repeated f822, beer, milk or base f156 question and no Windows work is needed.
+The user answered **“아래 경계는 불명확”**. The
+[source-bound visibility reply](2026-10-10-water-lower-interface-reply.json)
+closes this question. The original machine record's `PENDING` field is preserved
+as history; this later reply supplies the visibility judgment.
+
+| Claim at A/f1232 | Qualified use after both replies |
+|---|---|
+| Foam layer is present | Human-confirmed regional positive; keep it in the inventory |
+| Lower water–Foam boundary | Human-reviewed as unclear; no lower-coordinate error score or invented line |
+| Upper Foam–air outline | Agent-observed regional context; not an exact human-approved contour or scalar |
+| Layer thickness | Unavailable: a visible-looking upper outline cannot supply the unclear lower boundary |
+| Foam absence / correct model abstention | Neither follows from the unclear lower boundary |
+
+This is visibility uncertainty, not physical absence or proof that every optical
+method must fail. It does not label neighbouring/later frames, approve every
+retained appearance component or turn diagnostic X950 into calibrated geometry.
+A remains useful for Foam-presence/representation investigation and independent
+lower-interface unavailability. The f822 inclined-water interpretation supplies
+separate qualitative liquid-surface context at its existing scope; it is not
+silently transferred into fixed-centre numeric truth.
+
+Both A questions are now CLOSED. No exact-pixel drawing, repeated f822/beer/milk/
+base f156 question or Windows work is required to complete source qualification.
+The reply changes evidence eligibility, not detector outputs or measured accuracy.
 
 ## Verification and retained artifacts
 
