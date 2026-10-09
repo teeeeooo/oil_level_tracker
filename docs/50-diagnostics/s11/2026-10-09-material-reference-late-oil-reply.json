@@ -1,0 +1,44 @@
+{
+  "schema": "s11-regional-reference-continuation-reply-v1",
+  "date": "2026-10-09",
+  "source": "direct user reply in this conversation",
+  "verbatim_reply": "foam-oil 경계에 남아있는걸로 보임",
+  "question": "45초 오른쪽 끝에 모인 주황점들은 실제 Foam–Oil 경계에 남아 있나요, 아니면 Foam 내부 무늬를 따라간 것인가요?",
+  "status": "CLOSED_QUALITATIVE_REGIONAL_CORRESPONDENCE",
+  "binding": {
+    "base_head": "d1cdab4ff438e8678bd7772ae5db0d7d90c6b3b5",
+    "video": "sample/sample4.mp4",
+    "video_sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+    "review_image": "docs/50-diagnostics/s11/2026-10-09-material-reference-late-oil.png",
+    "review_image_sha256": "643f88c3d9acc1927c86001375bceb058f0c4d23b580163b919e39206260a499",
+    "displayed_frames": [
+      1338,
+      1344,
+      1350
+    ],
+    "judgment_frame": 1350,
+    "region": "rightmost clustered orange points in the 45 s panel",
+    "source_crop_origin": [
+      543,
+      798
+    ],
+    "source_crop_shape": [
+      104,
+      104
+    ],
+    "tracking_readout": "sample/output/s11-semantic-seed-tracks-20261009-001/readout.json",
+    "tracking_readout_sha256": "9f4333e986383e638c5e298ab595f9dae337645c79b6eb220fcbd0618f465f45"
+  },
+  "interpretation": "The displayed right-hand group appears to remain at the Foam–Oil interface. Preserve alongside separately attributed agent-observed left/central drift; do not call this complete target loss.",
+  "limits": [
+    "Qualitative appearance judgment, preserving the tentative wording 보임.",
+    "No exact point IDs, contour, scalar tolerance, all-frame or whole-width correctness.",
+    "No extension to the left/central group or preceding unjudged frames.",
+    "No human-whitelisted survivor subset, runtime reference update or promotion of LK.",
+    "Existing 42.5–44 s old-chain judgment is unchanged."
+  ],
+  "formal_labels_modified": false,
+  "production_change": false,
+  "o2": "OPEN",
+  "field_disposition": "FIELD FAIL"
+}

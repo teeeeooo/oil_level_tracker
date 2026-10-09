@@ -111,7 +111,8 @@ closed physical interpretations. Production and Recipe/UI adoption remain
 conditional on the result, not consequences of choosing this investigation.
 The [executed feasibility record](2026-10-09-material-reference-feasibility.md)
 preserves the fixed-pattern failure, sequential-tracking limits and current
-pending regional interpretation; its results do not authorize UI/schema work.
+regional interpretation (now [received](2026-10-09-material-reference-late-oil-reply.json));
+its results do not authorize UI/schema work.
 
 ## Detector Governance
 

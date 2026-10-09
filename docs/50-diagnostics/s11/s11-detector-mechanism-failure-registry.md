@@ -237,6 +237,14 @@ seed IDs, low reverse error or the nearest current edge to physical identity.
 No full production A/B or efficacy claim follows; broader optional reference
 design is unresolved, rather than disproved by these two transfer rules.
 
+**Partial continuation clarification:** the user says the new LK result's rightmost
+45 s group appears to remain on the Foam–Oil boundary. The
+[bound reply and follow-up](2026-10-09-reference-current-boundary.md) distinguish
+that regional success from agent-observed left/central drift. Do not relabel the
+whole group as lost, infer exact survivor IDs or use the reply as a runtime
+whitelist. Current region perimeters may supply local boundary proposals, but
+retained appearance includes structure; a nearby face does not establish role.
+
 ### S11-F05 — Initial-state and material-phase hard-lock asymmetry
 
 **Affected detector logic node(s):** `OIL-HYPOTHESIS` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.
@@ -419,6 +427,16 @@ repair appearance ownership by automatic snapping or certify a Foam front.
 No window/radius/threshold tuning, repeated exact contour review or per-frame
 manual rescue follows. Keep local point censoring distinct from full pyramid
 support; LK may use masked/glass context even when a point center is visible.
+
+**Current-perimeter prerequisite:** the
+[same-plan follow-up](2026-10-09-reference-current-boundary.md) reuses unchanged
+isolated Foam capture on 167 rasters (capture ON/OFF equal), independently checking
+73,444 faces. Oil-vicinity support retains a plausible lower outline in shown
+frames while also outlining glass; early Foam has missing/mixed upper support.
+Neither point membership nor nearest/upper/lower face selection becomes a front
+rule. The partial Oil reply provides no dense face truth or Foam dependency.
+Do not fill/union/retune support to force a result. A separate scalar target is
+still needed before deciding whether side-only observations supply a report height.
 
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 

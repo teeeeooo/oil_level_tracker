@@ -122,7 +122,7 @@ Raster junctions do not identify physical crossings, and even initial
 approximate points can miss Canny pixels. Neither edge proximity nor a distance
 cutoff supplies the missing material ownership.
 
-**One new interpretation is pending:** in f1338/1344/1350 (44.6/44.8/45 s), the
+**Review question as originally issued:** in f1338/1344/1350 (44.6/44.8/45 s), the
 agent sees left/central point drift but cannot securely distinguish whether the
 right-hand group still follows the Foam–Oil boundary or an internal Foam
 feature. The user is asked only about that regional distinction, without exact
@@ -132,12 +132,29 @@ surviving points. The old 42.5–44 s interpretation remains CLOSED and unchange
 
 ![Late original frames and the new point proposals](2026-10-09-material-reference-late-oil.png)
 
+## Late Oil reply — CLOSED
+
+The user replied **“foam-oil 경계에 남아있는걸로 보임”**. The
+[bound reply](2026-10-09-material-reference-late-oil-reply.json) records the
+rightmost cluster in the 45 s panel as appearing to remain at the Foam–Oil
+boundary. Preserve the wording's qualitative certainty and regional scope.
+Together with separately attributed left/central drift observed by the agent,
+this supports **partial correspondence, not complete target loss**.
+
+No exact point IDs, full-width contour, earlier-frame continuity, scalar tolerance
+or dense physical labels follow. This answer does not select survivors, repair
+LK, provide a new reference update, or promote the fixed-pattern rule. The
+original machine record's pending question is historical; this bound reply and
+the Work Plan close it. No repeat question about this right-hand group is needed.
+The [current-frame perimeter follow-up](2026-10-09-reference-current-boundary.md)
+records the completed prerequisite and separate product measurement-target choice.
+
 ## Disposition and next boundary
 
 Preserve both failed/limited rules and their scripts. No radius/window/FB-error
 or distance tuning, reference-mask expansion, nearest-edge rescue, mandatory
-setup or per-frame manual correction follows. Await the narrow pending image
-interpretation. A subsequent continuation proposal must identify observed
+setup or per-frame manual correction follows. The regional interpretation above
+is received. A subsequent continuation proposal must identify observed
 current-frame boundary alternatives and independently supported sides/roles;
 remembered point identity is insufficient. Freeze its decision/abstention rule
 and opposing controls before any further trial.
