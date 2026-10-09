@@ -581,3 +581,20 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-10-10 | [native-evidence/verify_probe.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verify_probe.py) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
 | 2026-10-10 | [native-evidence/visual-preflight.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/visual-preflight.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
 | 2026-10-10 | [native-evidence/visual-review.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/visual-review.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+
+## 2026-10-10 CBR-1 comparison additions
+
+이 변경에서 처음 Git에 등록한 CBR-1 실행·검증 자료다. 현재 순서는 Work Plan이 소유한다.
+
+| 최초 Git 추가일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-10 | [Comparison and causal review](50-diagnostics/s11/2026-10-10-current-boundary-reference.md) | 198개 고정 질의와 비채택 근거 |
+| 2026-10-10 | [Preservation record](50-diagnostics/s11/2026-10-10-current-boundary-reference.json) | native 206개 inventory, 8개 Git 복사본과 로컬 archive hash |
+| 2026-10-10 | [Preflight](50-diagnostics/s11/2026-10-10-current-boundary-reference/preflight.json) | 결과 전 고정한 입력·연산·자원·진전 조건 |
+| 2026-10-10 | [Readout](50-diagnostics/s11/2026-10-10-current-boundary-reference/readout.json) | 전체 query 요약과 native detail hash |
+| 2026-10-10 | [Verification](50-diagnostics/s11/2026-10-10-current-boundary-reference/verification.json) | 원본 배열 기반 독립 재계산 결과 |
+| 2026-10-10 | [Frozen runner](50-diagnostics/s11/2026-10-10-current-boundary-reference/run.py) | 원 실행 코드 보존; docs 경로에서 실행하지 않음 |
+| 2026-10-10 | [Saved-pixel verifier](50-diagnostics/s11/2026-10-10-current-boundary-reference/verify.py) | 원 검증 코드 보존; docs 경로에서 실행하지 않음 |
+| 2026-10-10 | [Foam source/overlay](50-diagnostics/s11/2026-10-10-current-boundary-reference/foam-positive-review.png) | 사전 지정 프레임의 원본과 후보 |
+| 2026-10-10 | [Oil source/overlay](50-diagnostics/s11/2026-10-10-current-boundary-reference/oil-positive-review.png) | 사전 지정 프레임의 원본과 후보 |
+| 2026-10-10 | [Structure source/overlay](50-diagnostics/s11/2026-10-10-current-boundary-reference/rim-opposition-review.png) | 공통 참조 X 부재를 물리적 거부와 구별 |

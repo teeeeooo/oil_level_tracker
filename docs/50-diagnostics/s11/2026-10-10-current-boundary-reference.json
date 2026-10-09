@@ -1,0 +1,1424 @@
+{
+  "schema": "s11-current-boundary-reference-record-v1",
+  "date": "2026-10-10",
+  "frozen_source_head": "376132fb725454973031bd8d6c57982caeaca2db",
+  "intake_commit": "5c596a7336af5cc3061382e8841bb8bdcde17b72",
+  "disposition": "CLOSED_WITHOUT_PROMOTION",
+  "physical_efficacy": "NOT_EVALUATED",
+  "field_disposition": "FIELD_FAIL",
+  "native_directory": "sample/output/s11-cbr1-20261010-001",
+  "copies": {
+    "docs/50-diagnostics/s11/2026-10-10-current-boundary-reference/run.py": {
+      "source": "sample/output/s11-cbr1-20261010-001/run.py",
+      "sha256": "1f0aae984f4b7b7a8988de6e5b9512a40c59755eaf5f2838eb68ed865783e4b1",
+      "bytes": 10059
+    },
+    "docs/50-diagnostics/s11/2026-10-10-current-boundary-reference/verify.py": {
+      "source": "sample/output/s11-cbr1-20261010-001/verify.py",
+      "sha256": "0e55c65d9e3de12cb2c38af8bec8b02df20c71e1c62d9b5347f59a735a506c7d",
+      "bytes": 9999
+    },
+    "docs/50-diagnostics/s11/2026-10-10-current-boundary-reference/preflight.json": {
+      "source": "sample/output/s11-cbr1-20261010-001/preflight.json",
+      "sha256": "7764bd64d7bc73c74169c5c8198047bf3e3f13ddf869cda757cdcf19c1825609",
+      "bytes": 86860
+    },
+    "docs/50-diagnostics/s11/2026-10-10-current-boundary-reference/readout.json": {
+      "source": "sample/output/s11-cbr1-20261010-001/readout.json",
+      "sha256": "4ad0d4d9c788ea280a040ed9a0e536ead94e5ec5ce68ddb8fa283cf8913bd284",
+      "bytes": 401675
+    },
+    "docs/50-diagnostics/s11/2026-10-10-current-boundary-reference/verification.json": {
+      "source": "sample/output/s11-cbr1-20261010-001/verification.json",
+      "sha256": "677178a000fad10f5ceb49233fd71273eacbd8ab34e59af949da1e275281c8b7",
+      "bytes": 28884
+    },
+    "docs/50-diagnostics/s11/2026-10-10-current-boundary-reference/foam-positive-review.png": {
+      "source": "sample/output/s11-cbr1-20261010-001/foam-positive-review.png",
+      "sha256": "88a9c9f70170829a6d668549eb1abda0a859bbe7d5712d551b3c5a749c9f5938",
+      "bytes": 260670
+    },
+    "docs/50-diagnostics/s11/2026-10-10-current-boundary-reference/oil-positive-review.png": {
+      "source": "sample/output/s11-cbr1-20261010-001/oil-positive-review.png",
+      "sha256": "68ba2fe1094090d3a7eed6538f18e6782e8ee04ac10b926255747015e4e5934d",
+      "bytes": 253221
+    },
+    "docs/50-diagnostics/s11/2026-10-10-current-boundary-reference/rim-opposition-review.png": {
+      "source": "sample/output/s11-cbr1-20261010-001/rim-opposition-review.png",
+      "sha256": "4c1bf45ab63a495a75dd376a226f2bdcc3fc7bdce94f985869e32298e03d4846",
+      "bytes": 144127
+    }
+  },
+  "local_archive": {
+    "path": "sample/output/s11-cbr1-20261010-001/native-evidence.zip",
+    "sha256": "34a680a5034c0c40430a8573ac235409a273ddf41b5d149425c99ab57f5c1a35",
+    "members": 206,
+    "bytes": 3412629,
+    "all_member_hashes_and_crc": "PASS",
+    "tracked": false,
+    "includes_upstream_arrays_or_media": false
+  },
+  "inventory": [
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f420.json.gz",
+      "sha256": "e2bf809313de02461e55cafce7f93b2ec36c54b63ffe997ab1991c2f50fb15b3",
+      "bytes": 20256
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f421.json.gz",
+      "sha256": "ff2731013f2a05ad51f19182642ed1161910d6560c4987f609076c0e8712a3e8",
+      "bytes": 19972
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f422.json.gz",
+      "sha256": "c5be61dcc09b9052d8df9c64acc1f6fe956ed33ebcd00defc02b03c5585f2acd",
+      "bytes": 19551
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f423.json.gz",
+      "sha256": "da8aa9e3aadb18d66c4299af59fcbd7426f2c65c9f2540b12853a45a83c90bcd",
+      "bytes": 20893
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f424.json.gz",
+      "sha256": "daeee3d28a1713463092f4d0af4a7f49bd0fc6cc824aa38ee603b3305deebd68",
+      "bytes": 20887
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f425.json.gz",
+      "sha256": "3c2f1606bbe5f8a9a2cf70da1166f08febfa529c22a673079a9be9392466d144",
+      "bytes": 20722
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f426.json.gz",
+      "sha256": "f8ea6a09ffd6ae7626f204fe3f8be1514d7be104b04390576650658ff7f242c5",
+      "bytes": 20817
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f427.json.gz",
+      "sha256": "f7492c18b2d5662c7a4e019989beab021688ed428fee20a0e78b559b649c78fa",
+      "bytes": 20953
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f428.json.gz",
+      "sha256": "1b731d4de120b8c7662094f00fd238cccf50b6a856c78494019fe8e0f728517b",
+      "bytes": 21339
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f429.json.gz",
+      "sha256": "8c5c0c081903c00d6c87c0bc884c94ff362f493fb04db205b6cbae7665a49bec",
+      "bytes": 20236
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f430.json.gz",
+      "sha256": "bc24f6853db6fda9190985a92f8ec989865a3f2df8dae854c1810121979786ab",
+      "bytes": 20284
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f431.json.gz",
+      "sha256": "94f9a2f19e09ced9d17bb4c7d39a65bd2674838fd04450672b2b06a22e476fa9",
+      "bytes": 19237
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f432.json.gz",
+      "sha256": "222fd0eb70de32610156fc84189b88cefb157271bb52efdc50af4e44e14db388",
+      "bytes": 19933
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f433.json.gz",
+      "sha256": "9a70292918a62978da41d2d317e64ad6fd857a3b4d0f1dddc425cb42c0b88c4d",
+      "bytes": 20344
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f434.json.gz",
+      "sha256": "b8f34888d0f49f5d67f2768981435982d3d9cbbc39cd4354dcd72550a965d48f",
+      "bytes": 17780
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f435.json.gz",
+      "sha256": "a99fee2d22e571cc9b320a8e38eddfeb4edea1d5322b6485ebcc804faac82172",
+      "bytes": 17406
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f436.json.gz",
+      "sha256": "dd6af35c01e524097429ebf061523c49bf4c88cbde248b91669cb1158b7b334c",
+      "bytes": 17590
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f437.json.gz",
+      "sha256": "d5137bcfd8c37ab5c65be278edbca33280e005569ad4ad27ed1f2d7758a514b4",
+      "bytes": 17432
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f438.json.gz",
+      "sha256": "b462345b9e3009dfa58cbf413d79906976f00520b93d90f0348583c4a31dfa18",
+      "bytes": 17833
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f439.json.gz",
+      "sha256": "d894d9bca91f413c17ceec6996baceab570157034d7bb67b49423d9e276a84f2",
+      "bytes": 18466
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f440.json.gz",
+      "sha256": "1e77068bd5a5dfa617a6c6aa6953288bb65ef9a98e871b37de317c5c9a00e069",
+      "bytes": 18629
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f441.json.gz",
+      "sha256": "ff5be07784ab1c26412d2f0a2349eed87305b3c4cfab6fb04c2c64e25336a4e1",
+      "bytes": 19990
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f442.json.gz",
+      "sha256": "36649450e0501fc151cae13c6b199266238c431a571cff7579da189b63ac620f",
+      "bytes": 18961
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f443.json.gz",
+      "sha256": "174b41704f53cdd1aa56e2dbe54592bc9355d611d8510987b3a33e4384a6bc4e",
+      "bytes": 18719
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f444.json.gz",
+      "sha256": "a2f84b26348741e7252b2b45bda00e58bf8d8e91fb51e119f3d15ac23bab556f",
+      "bytes": 18357
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f445.json.gz",
+      "sha256": "463e4dbf5bb799a35dc3b687d5208c95dec60050131570e35ce3104dc0c3b341",
+      "bytes": 18218
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f446.json.gz",
+      "sha256": "75512e094853a08700420b11c48d1a2251c4094830b80e9c14ccb645395f390a",
+      "bytes": 18179
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f447.json.gz",
+      "sha256": "409850a62513023072010286595a438adf046658ca81c4c47f28aefac4fdfaa6",
+      "bytes": 19575
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f448.json.gz",
+      "sha256": "c483653aaa8678d8b34df56cfa274f51fb633670dc850bdbf3324b006190c42e",
+      "bytes": 20055
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f449.json.gz",
+      "sha256": "e03b0b6b56cda99ab84efc7e1962ecfad53d9cd9fb0d5665e8185553d566dc91",
+      "bytes": 20327
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f450.json.gz",
+      "sha256": "4dce3ab5bec43598674cc96bc8936fdf0371876c93a2b4f4bbaadb19685f1d30",
+      "bytes": 20677
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f451.json.gz",
+      "sha256": "5878ac4e23aa40cdd903665bf4acad84dde27a22168832e2c306a01a2cd9309a",
+      "bytes": 19991
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f452.json.gz",
+      "sha256": "be6a9a58cb1c140d4d73a25878657e52d9fafd8af364a38d1917a818f62d038f",
+      "bytes": 20023
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f453.json.gz",
+      "sha256": "8a173649c1ae70636a7d7500d5d78351360d57f43d630eb71348fd4ba58f613b",
+      "bytes": 19462
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f454.json.gz",
+      "sha256": "d5c4e1c12dbb2018d62f2ed5268800beafd977e1744feb0809c2a34ee552389f",
+      "bytes": 20078
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f455.json.gz",
+      "sha256": "fbb78ee376544b6c57c777d76b6a916c6cb3303b023cb5b2526c312a78b2738c",
+      "bytes": 20852
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f456.json.gz",
+      "sha256": "3c9bd10022480fd1522842b5adc2c8cd2fab0232b96428102a0e52cd528d432a",
+      "bytes": 20825
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f457.json.gz",
+      "sha256": "4dc144752b09e8f73dd203df2b203c055cf4536f1ffa84dfa7f9ad3ff554a437",
+      "bytes": 19291
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f458.json.gz",
+      "sha256": "6e5c6fac0fd147d2a668f6b5806ede88897cf47b645b5f893d393f272fd0fcb8",
+      "bytes": 19538
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f459.json.gz",
+      "sha256": "c7bcdb2f9db9f0619beeac13e76cc99415623463652710ca0ec24c662204d837",
+      "bytes": 19758
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f460.json.gz",
+      "sha256": "1180a0d70188b976b3535d77c5361011bb671d6d6a7ae32a6747b3093be6c3d2",
+      "bytes": 19169
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f461.json.gz",
+      "sha256": "fa95cbfcc319ae1a14297adaef1dbc3a1a3d46dc7b7716d3a130387537c461f4",
+      "bytes": 20613
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f462.json.gz",
+      "sha256": "3d2fb95598583740764b8a0bfe6776d2012ca3c418f7d51799cd250d7d3dbf57",
+      "bytes": 19562
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f463.json.gz",
+      "sha256": "484827db156a9f6a13662a4b5c0b434fb78679cd6ee06749ce358af2739c8acf",
+      "bytes": 19113
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f464.json.gz",
+      "sha256": "2729514e6f14be4cf2bf22b7760b668430fe1c0e13d47ca6fb3f0adaf7829a63",
+      "bytes": 18537
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f465.json.gz",
+      "sha256": "5f5d12ecdf4f91256c13f9ef8e2f9bd01d849115db3cead6f1db0ff2c0eebd07",
+      "bytes": 18219
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f466.json.gz",
+      "sha256": "707b66b156f30ce067a5ab4bcdc1b9160dd10e1565038a8007c0e05d05822ad1",
+      "bytes": 18137
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f467.json.gz",
+      "sha256": "57415a5b545b5c7d6e74663ea58c48f470f59f28f2a4a884e89162de8522cb5d",
+      "bytes": 18912
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f468.json.gz",
+      "sha256": "c1aa9e727ce0a401325d2305f9266de01e28d24ea9508cb3cbd844b67f51444a",
+      "bytes": 18200
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f469.json.gz",
+      "sha256": "8daffeecce1de1d444470d2240167396e6382e1f8722f6cdbbcfb2ffebd8a7f0",
+      "bytes": 17337
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f470.json.gz",
+      "sha256": "fbd6897d2d626acb3d5df1e0056b215fa6ef9b1ab4e522604a737a9942dbfc17",
+      "bytes": 18213
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f471.json.gz",
+      "sha256": "b8cf8ada002a3770581341dae0478d55532464ebc0294b21a6f8b5f0bda22ac4",
+      "bytes": 18223
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f472.json.gz",
+      "sha256": "7fa27c317bbd6abefbb75caeeb89eaa0d5934a155db813a06196c2e512906f55",
+      "bytes": 18981
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f473.json.gz",
+      "sha256": "66fe67fff5cbd5fdb26068e843d23262ed75740acbc74fb8a3774c9419253a73",
+      "bytes": 19577
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f474.json.gz",
+      "sha256": "ccad565b296dd17ad754f2d489c979e639d28d7a00803244e4e3c066f32a6d56",
+      "bytes": 19822
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f475.json.gz",
+      "sha256": "1f4a84b402c50d7a8c7d13caa8dfa22a3cec6837521177e8405b8eee9abf0bc3",
+      "bytes": 19941
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f476.json.gz",
+      "sha256": "f7bfc947f623ba90ca0ea4c6d883f8c566ddf889ac1cd4f78e56c323afa9812f",
+      "bytes": 18617
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f477.json.gz",
+      "sha256": "b080fcdc314b12bfc2eccee8a9e4f86cdf3e5d5d9a6fe5752e0b5c656adc9bed",
+      "bytes": 18749
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f478.json.gz",
+      "sha256": "1fb2d0357cf7a57ab2c7ad39a8ce34101120ff26cb72d73f386e696bd2fde58e",
+      "bytes": 19178
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f479.json.gz",
+      "sha256": "7b0370ad5fd1ea20aeccdd5702461e06e1f432a84e32278dc7f706429e94eb07",
+      "bytes": 19414
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f480.json.gz",
+      "sha256": "3120932d5db65f7ae60d19c23486c067cc5c12a2e6f48a302405d578a7f737a4",
+      "bytes": 18416
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f481.json.gz",
+      "sha256": "3ea11012ad85360359282c7c9088d044b1226386bccff189e3e8b9f7910524a3",
+      "bytes": 18565
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f482.json.gz",
+      "sha256": "76309d54b4d214c02d5da43ee2634d6afb9cfa7385cc55eacb55a2cdea164dc9",
+      "bytes": 18672
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f483.json.gz",
+      "sha256": "d2aea4dc0ddba85f584f66e7c2b3f83505c6f47971f04f1c66fb5162949928fc",
+      "bytes": 18151
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f484.json.gz",
+      "sha256": "c7f6372ff5024dcbf2864773036430b9c4a96ccf183f1710def2310cfbafd663",
+      "bytes": 18574
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f485.json.gz",
+      "sha256": "9293ae865ea6225a7a72162ee563f8859b8ff17841d559b38a83a94dfe4e9864",
+      "bytes": 18915
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f486.json.gz",
+      "sha256": "b15f0615352ab62787278f72daf7f38d105238c418c94e92f07a73b6ce6b82b3",
+      "bytes": 18637
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f487.json.gz",
+      "sha256": "aca042f0d17113f9236bc4fc23e6f192321e0cdeaa7973ddb683b889f304fdc5",
+      "bytes": 19136
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f488.json.gz",
+      "sha256": "9de2d3934b795066cd1ccc96e74659f501c4cee330c1e011f5147915a8f06ddf",
+      "bytes": 18440
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f489.json.gz",
+      "sha256": "70e86c6a32c9239ba0ceec8d6c7e2b84c67da3ce11a1d36af5a8e00144792d3d",
+      "bytes": 18137
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f490.json.gz",
+      "sha256": "d20c67acce9248532f197de98244aee2187f694315f501390e3962ea3c5911e7",
+      "bytes": 17443
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f491.json.gz",
+      "sha256": "b939ddc53a7618497f483d4c212c2cb8afc68c27ed4b58ac9fb06e8207aa9dc8",
+      "bytes": 17653
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f492.json.gz",
+      "sha256": "5874ffca8198387827cfdeef55a626cd25962002fc1353bf776ae133a29ce478",
+      "bytes": 20396
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f493.json.gz",
+      "sha256": "59a33fb2fda2198f47737a7a1d4a353f602fb6c183d49c7b12b829da303ce920",
+      "bytes": 18398
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f494.json.gz",
+      "sha256": "c4bd7a7a81c0d37f5843a347a05b864313c76b28145f1831d134a1a0689546ab",
+      "bytes": 20363
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f495.json.gz",
+      "sha256": "8c30607b10863e77aa819dc1baa5d112e2bcc0b96a0117412a18994ae5e1b7c4",
+      "bytes": 18236
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f496.json.gz",
+      "sha256": "cbff50bbb2706075d9d1e1696d5941ff00683b5f5b6555272a83761b9e99dece",
+      "bytes": 18231
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f497.json.gz",
+      "sha256": "b9604d811a37d1c9b2bd476e15ad07ff641613b39607a4819a11f66ca9a125ec",
+      "bytes": 19704
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f498.json.gz",
+      "sha256": "dd63eb3a2a746210a8f208f69b2f06715b1b1803ca185ab170e4a54d9a3d082c",
+      "bytes": 19033
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f499.json.gz",
+      "sha256": "a387d70bdc490f6fa8b15ee67a844b2544a0c3a7c08dd427db1736745808f47b",
+      "bytes": 18747
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f500.json.gz",
+      "sha256": "d1abe7f852280de4e26f27133aa344e1f57031999ad332281858abec78c7b24e",
+      "bytes": 20061
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f501.json.gz",
+      "sha256": "a2d4b880ab8eb43378b4ea2c21f3a5b304944a2a3f0289c704c5b169ab809007",
+      "bytes": 19050
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f502.json.gz",
+      "sha256": "a64f1a2b929c4f38e3029d6e0adc23e82469764fd2f46848bd1f5017472720b0",
+      "bytes": 18299
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f503.json.gz",
+      "sha256": "f2e07be417b7ccc68d086d81a78500e2a339523cd7aca279a66c9465dfa8e672",
+      "bytes": 18376
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f504.json.gz",
+      "sha256": "f26c41f764c119a4c81be5faec18c1982604c3c10ef5749779875dfa9e605bfe",
+      "bytes": 17190
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f505.json.gz",
+      "sha256": "138d6ec48479ad1a566a86270e6bbac8ffdeb7d4e122554021ba2027d0ded214",
+      "bytes": 17449
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f506.json.gz",
+      "sha256": "6fdf41cad452fe4b9f82dbb50d3357c84bc2e19cd9b7a69d83853a7b77050ed2",
+      "bytes": 18609
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f507.json.gz",
+      "sha256": "229b4d263f32f92d8fe4b7802f157857668ab5ae63f557c21c49487c4c54bc4f",
+      "bytes": 18446
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f508.json.gz",
+      "sha256": "ece161820855f23250697b81ee19b731d783ceb50dc5e454cc237835f0d4e115",
+      "bytes": 16920
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f509.json.gz",
+      "sha256": "66dd817773416844dd585ecf02d62f6ca1b5f8e9b89fa31a7fb6c638ac0f0097",
+      "bytes": 17466
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-f510.json.gz",
+      "sha256": "77f62bb68bcc7126af361d4125546af0f77cff14381593a6a86b0cbda4cde447",
+      "bytes": 17612
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/foam-positive-review.png",
+      "sha256": "88a9c9f70170829a6d668549eb1abda0a859bbe7d5712d551b3c5a749c9f5938",
+      "bytes": 260670
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1275.json.gz",
+      "sha256": "862966b75fa522d1bfc5e1238f6bbc38540a0dbca0240bb6d16be71c199e4c5c",
+      "bytes": 15699
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1276.json.gz",
+      "sha256": "0aa572bf1b1cf4f38e0e8f92e9d94752ecff41d120caf171a5d77a63d3c72fb2",
+      "bytes": 13374
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1277.json.gz",
+      "sha256": "70a25191a9b639f8d8f4a17937794bfc7b69b25ad8a6c67a652c4e3f6897dcd4",
+      "bytes": 12856
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1278.json.gz",
+      "sha256": "a554b5a52da5e43936b158c5f21de6f7b534c9e5eb83d74a323ab96e590f7edc",
+      "bytes": 12923
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1279.json.gz",
+      "sha256": "fd15e7d9e30030e4b9579456b74a2d582575637426520adbf7d7b74250c65a11",
+      "bytes": 14676
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1280.json.gz",
+      "sha256": "7f00516b3dba20c9a0f4a45cf259632bd4614508bece5a75afc557f0af253981",
+      "bytes": 13685
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1281.json.gz",
+      "sha256": "eb5eaa4f70e2ab179265d58e46ac8a82cc1bf2ab579f67cfdb8e3baa0180e6fb",
+      "bytes": 14759
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1282.json.gz",
+      "sha256": "b090f3aae411b0cda55ba47f5547265fb257001101e8a866487f840f17104ca8",
+      "bytes": 14727
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1283.json.gz",
+      "sha256": "b7b32122af0d62cba7b759b5bed706bccffef1437fcf796af190416fc47f7d84",
+      "bytes": 14452
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1284.json.gz",
+      "sha256": "1255ee0ab8d6ee3ae9ec04c06a7c1c9535808899d0366f06013e957ce6797c42",
+      "bytes": 13087
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1285.json.gz",
+      "sha256": "74a184f011d08cbd2e723b80479e684f7a1e85aeefa326c628de225514cb1de8",
+      "bytes": 12153
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1286.json.gz",
+      "sha256": "6bd7108553c90ba55e2fd07cb4a1c60664bf8b0cecaecf3aa5225392575ebaba",
+      "bytes": 12032
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1287.json.gz",
+      "sha256": "8128cf831001c3ae0376c4724dfe0f4c3e5720475b1fdd07382870ff6fa81f7f",
+      "bytes": 12056
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1288.json.gz",
+      "sha256": "01b47d8030b382a30e9c2ed83950126806b16c24ba5d29032e5d922a37d8695a",
+      "bytes": 15239
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1289.json.gz",
+      "sha256": "9ddde53220781bbf5dc56e765ae0d18fc602e7bfa2bb98e6addb4786eb79c1f4",
+      "bytes": 12902
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1290.json.gz",
+      "sha256": "3aee4c430732f40d7576dc53838a853d66180472c33d72d05bc5eed5033151b3",
+      "bytes": 13432
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1291.json.gz",
+      "sha256": "03848e77028e1e605e5ce22a0f1814c1f47988ad8113c28a9288c83cca245ed1",
+      "bytes": 12823
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1292.json.gz",
+      "sha256": "b5f7ab50225c432716b363403d94347f51cbef30ac5c15df49825fcec5b96cd4",
+      "bytes": 12793
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1293.json.gz",
+      "sha256": "a150aaa0c7c38811c85fb61b6ef0110526bdfa400fa0b8f87b80dc6798eca323",
+      "bytes": 13853
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1294.json.gz",
+      "sha256": "2e2e275d8cfe9c64229d31f96119f238af1b97e90949b8411c10407067966dca",
+      "bytes": 13188
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1295.json.gz",
+      "sha256": "8e21c2987cd4afa2352ab1f62c5d3ad4d6b8ddd6447c3a6f1bbcc26d2d5f17d3",
+      "bytes": 13393
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1296.json.gz",
+      "sha256": "417ed20a46cad1580c27fd6824b4e62370876c144202dc4e83196c9533f878d3",
+      "bytes": 14067
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1297.json.gz",
+      "sha256": "616b02cb4c75f8eda4d2b2a19260377fb88e9ca2d511ba21284264ce5f274b14",
+      "bytes": 14100
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1298.json.gz",
+      "sha256": "71c392f8fcd7252dd397ee23dad917bcfb160a80caa86328f87bac9eb26ef395",
+      "bytes": 15492
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1299.json.gz",
+      "sha256": "5ff9fbb9dc460101c9487c9eaa690fcbfd5d7d93baef7bbcb851c7e7fee29117",
+      "bytes": 17285
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1300.json.gz",
+      "sha256": "f3dc59a54b189b5e3b4c0a2e91fd9bb38e3f2fedafb432ba10d5ceebd019e555",
+      "bytes": 16268
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1301.json.gz",
+      "sha256": "7c9eb9d93a4ea0ea15d9fd7b09fc92ded6b628d05d2a2e63e909ef2a4e81a9d6",
+      "bytes": 14788
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1302.json.gz",
+      "sha256": "9655f83ea7f084d8c16c9cb177427ec1059470d7ab39c8b30f776c95ce898fcf",
+      "bytes": 12896
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1303.json.gz",
+      "sha256": "deb259f8b633a4fec6067b08fb8c14efceeeaab9ce75d936499657f7f57fd6ac",
+      "bytes": 12671
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1304.json.gz",
+      "sha256": "886648fb3564ab76a93843eec1d715ce646a6d27acad293dba670517d8086fc1",
+      "bytes": 12249
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1305.json.gz",
+      "sha256": "af9ece6fe2da05dc2d511777447fc33bc02d80225c87a6916b5ab988fbb85589",
+      "bytes": 13042
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1306.json.gz",
+      "sha256": "c40df37bffe0674c5d69df2347a756ba3b1dd9195bd73c4ab0263dca70341446",
+      "bytes": 13036
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1307.json.gz",
+      "sha256": "eb2654c10afe4a26e1904a6334aaeea9670cde29da0e51c841f1cdf6f1c3a559",
+      "bytes": 13643
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1308.json.gz",
+      "sha256": "36d6ba1430b2998a4ad59d7b64e65bc1b5adff95a9daa3b1822c7ae9a5caa584",
+      "bytes": 13782
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1309.json.gz",
+      "sha256": "9787c2aa1da0a3e48d15bdee8a8cb6da7ea24f3ad1c27c312ae5c15ecc78345c",
+      "bytes": 12930
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1310.json.gz",
+      "sha256": "d090755cfeff2c3f12e8f80b8c204ea7752ee90a1e69dd25de750794729be416",
+      "bytes": 14601
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1311.json.gz",
+      "sha256": "24439bd3b90e096db8a9b0e2048eb99350f3223e724697b9ae5cb6094a369dee",
+      "bytes": 13919
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1312.json.gz",
+      "sha256": "b1aaffc2b1cb997cde4cb71de89f26bbe3683e34e14108faa5375b0796d68860",
+      "bytes": 13747
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1313.json.gz",
+      "sha256": "54bbba371578306d2b8422ff49f0b5cc2dd5f391413d8c5de8474af1e7f8b951",
+      "bytes": 13843
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1314.json.gz",
+      "sha256": "53aedc2b5225ff7174b713990ea41dd2e481288906c4a32b35f1ec6e8806406a",
+      "bytes": 14476
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1315.json.gz",
+      "sha256": "36efdf39cc8778529825a506081f7249a5a073dad33e73131d9257ec1b1edd7a",
+      "bytes": 13216
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1316.json.gz",
+      "sha256": "108208e5c1aba532401f16edb2d19999ed5d55ac941e13ba7afb5d5483709c81",
+      "bytes": 13286
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1317.json.gz",
+      "sha256": "8d1b5c0ef9266cd6d6a3fbcbf5313d1b2d6af96cd033fbd9a58b41b8ac030677",
+      "bytes": 14388
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1318.json.gz",
+      "sha256": "2d75b13a38ec592fcfc3b5b369f6a8bd1bd1e59ac24c1d803312bbbfe1100089",
+      "bytes": 16878
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1319.json.gz",
+      "sha256": "fee37c81fa5dbc8ad1cf241d7db7e78af6565488c1931be43b1f463691845a5f",
+      "bytes": 16313
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1320.json.gz",
+      "sha256": "8e0af32ebc9146fc988eea815b5214595654724ca2bcc454f57c92f57773657c",
+      "bytes": 14189
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1321.json.gz",
+      "sha256": "6d71c9f4a04ccda978bba4e49c880fb8a882d9055a40c99695f2b4e6a5a44159",
+      "bytes": 15483
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1322.json.gz",
+      "sha256": "5b1efd9f491aca4d35b1c43ab30164b3e46e7f499e0a5d58da84fb782c551aac",
+      "bytes": 11885
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1323.json.gz",
+      "sha256": "8f9fc97c09cb9734e09b8d7278db750dcf41544a5b7bddca31beac8895e2d13a",
+      "bytes": 13338
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1324.json.gz",
+      "sha256": "7e76f2e7447bd050feb69165bf674778def79a550a2a6ce22a4bacf199b39986",
+      "bytes": 15454
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1325.json.gz",
+      "sha256": "31fe3512476e5fae1bc3e867a2858f6e3ab6e811f42398afff41a9de9a6c17d4",
+      "bytes": 14847
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1326.json.gz",
+      "sha256": "dada1617690c7021994dcaa906c7bca5b7834542d48eb2330fe489676d1e9f0d",
+      "bytes": 14854
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1327.json.gz",
+      "sha256": "337d6d03f679f8add002a16ed6e6bdc4b5b4a4afb69c077aac2a1206344d4163",
+      "bytes": 14344
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1328.json.gz",
+      "sha256": "06fa9ded5c2058dba6533bb078a0d14ceb7d196248013632063f1d30e41f424f",
+      "bytes": 14886
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1329.json.gz",
+      "sha256": "78c3788f332960a832326d8acaf437cf60cf7f2a9e5d871d1d1019aeb1c7e989",
+      "bytes": 14623
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1330.json.gz",
+      "sha256": "1b7d7c5e932961b148ade805f2016e10d0314095b5d60ce2a590a0498895c3e5",
+      "bytes": 13703
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1331.json.gz",
+      "sha256": "ac4b45ca90164f7edb904f2b16f54b066ad3cbb3f782b0afd4ab4747046f0995",
+      "bytes": 14652
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1332.json.gz",
+      "sha256": "16c70fae085cff6f38a6636ef5150e3ca012b8216676168f4b26f38f6fdae930",
+      "bytes": 13618
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1333.json.gz",
+      "sha256": "59886475c3bfd36748a7876f2ac736566942de568e2abd817b3605343cf9ecef",
+      "bytes": 16198
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1334.json.gz",
+      "sha256": "0b3f59765875c75e2bb583065e19e0712a6e1321abbc5d3c2cd2534a54f94ceb",
+      "bytes": 16090
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1335.json.gz",
+      "sha256": "78650741f9a856687f55aef88cad3bf6c8a6fd2082ad3463c163264aff9ace55",
+      "bytes": 14467
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1336.json.gz",
+      "sha256": "22df6963a8da639db614529b16eeb600d089ca8f06c1852060299e9af9d4ae32",
+      "bytes": 13325
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1337.json.gz",
+      "sha256": "f410d5950e99e0c59dee7bcf3eaa1ecad48831a810c6b3ed5a35dc4d6df9a948",
+      "bytes": 12923
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1338.json.gz",
+      "sha256": "2e958ea8bc93f6346f63fcc8004d1dbd08708454e71c85947e38feb34963a836",
+      "bytes": 12902
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1339.json.gz",
+      "sha256": "61505f5d5636d709e09ccd641ca5d51edc9cd40079deff10ba9a8502667eb1ee",
+      "bytes": 12656
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1340.json.gz",
+      "sha256": "9d5ef484fdbad3416bb12ba1fc3016b664574fbc7e129010d2a573b4cb2dfd2a",
+      "bytes": 12337
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1341.json.gz",
+      "sha256": "87f7bca96b7c746e4a4c9a4c5d51fc5a29ca756887ef7515e9bf03b1dd501eae",
+      "bytes": 13958
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1342.json.gz",
+      "sha256": "8c6dc2fb5d46f1e954ae455f3a62edaa2a706873f46c08469f122690fadb9822",
+      "bytes": 14502
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1343.json.gz",
+      "sha256": "7e8863c7f1ab5dd6f52a3de0593d441286e89dd71c2785239837ca612d60dea3",
+      "bytes": 15929
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1344.json.gz",
+      "sha256": "e83b1a52cf3fdb36c3f3401f5c104c5fe6f02fc298607a757d828ece0974c89e",
+      "bytes": 14501
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1345.json.gz",
+      "sha256": "14d33fdbdb0e2a5dd982d60ed88b3ca4cf66d0632cd02ac04f2bee4255c01250",
+      "bytes": 12352
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1346.json.gz",
+      "sha256": "310bdda75da914a7b33043d85a7256f8b6ca1f8e435c04d3a8d4520081bec7ff",
+      "bytes": 11564
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1347.json.gz",
+      "sha256": "125efec5a8c5c9975b1d56e57608f1c7412b4eb2b221f4f4c2107811ad497d94",
+      "bytes": 11928
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1348.json.gz",
+      "sha256": "e16fe023bb69f9d06d810de5cf012156a236f9a0db2d1aaddc90a48ca9ca0cef",
+      "bytes": 11563
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1349.json.gz",
+      "sha256": "94f965b5d8f44875eb2771ad5e25c11bdc643e28ba8df45638cc4470fec4d5bc",
+      "bytes": 11526
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-f1350.json.gz",
+      "sha256": "baf08faf47470714626537481b5cb84a081abd47a93ddd46e08e6181b46d436a",
+      "bytes": 12987
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/oil-positive-review.png",
+      "sha256": "68ba2fe1094090d3a7eed6538f18e6782e8ee04ac10b926255747015e4e5934d",
+      "bytes": 253221
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/preflight.json",
+      "sha256": "7764bd64d7bc73c74169c5c8198047bf3e3f13ddf869cda757cdcf19c1825609",
+      "bytes": 86860
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/readout.json",
+      "sha256": "4ad0d4d9c788ea280a040ed9a0e536ead94e5ec5ce68ddb8fa283cf8913bd284",
+      "bytes": 401675
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f450.json.gz",
+      "sha256": "2a91b0d69b1f52e8d49066eac7bcc3e6dde8d12bd6bdb2cdcf54874d4a5c9c74",
+      "bytes": 6056
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f451.json.gz",
+      "sha256": "d2883d68222e8bf5c489f0dbf961ee01e7a81f88748c8b7c8c4a81b3173921aa",
+      "bytes": 6086
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f452.json.gz",
+      "sha256": "97e23938a5b7a788e7e212ccefe3233b05051cfb361e7cc5432c26aa116080a8",
+      "bytes": 5722
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f453.json.gz",
+      "sha256": "e67a48c56551b108621f1aa0e15763a42955fffff1bf3957b57c4ded54b53940",
+      "bytes": 5701
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f454.json.gz",
+      "sha256": "8f01152f3d00ba08c128d40e53bd7db314e5e8701479b834e7fc8c2487dceb38",
+      "bytes": 5883
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f455.json.gz",
+      "sha256": "e0b28fac11684b7f49240acad5ac5a328c3903410b9084ee4daca9e15fd86b43",
+      "bytes": 5796
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f456.json.gz",
+      "sha256": "e916e5185de4cbb53e17ac1073b53abd9e6c898ccd0658122c64e2f3713b21a7",
+      "bytes": 5921
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f457.json.gz",
+      "sha256": "ecaf181365f15da16e5ae7f4229845ee061bf3415739a81df6c7edf1989cb9a8",
+      "bytes": 5620
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f458.json.gz",
+      "sha256": "632bb4d7b4dd75a8e9e4b43d4cfbe90b14516b383f2296a99fc5520627ad7c5e",
+      "bytes": 5569
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f459.json.gz",
+      "sha256": "cbc9e09bccbd77dcdd2b81494939a88ecfb60f8002c74b31a2cb49e7c8c49ce4",
+      "bytes": 5446
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f460.json.gz",
+      "sha256": "cd6598bff4768246fcc0551f738fac80115a9bfce0783f7d16dfee2cb36b277d",
+      "bytes": 4936
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f461.json.gz",
+      "sha256": "3587a16d624b562a65e784cf49966844f09c96808fb4cb06920338430b394ab3",
+      "bytes": 5814
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f462.json.gz",
+      "sha256": "12bc64f247e82c539b05de3b28e2c46e0f5d74a4fe5427e733ce1166e47e2342",
+      "bytes": 5430
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f463.json.gz",
+      "sha256": "e3f23ee545f157dbeaabfebaf63bb8747b5ea5e4e867dcb825208bffa93da30d",
+      "bytes": 5199
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f464.json.gz",
+      "sha256": "22310e7e50f15e2bc88f18579bf788bf0ddbfc53f0ba81aa55178e519925b4d0",
+      "bytes": 5249
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f465.json.gz",
+      "sha256": "7dde362062e2a369bf6f35404a9ea45623c646fa8ee99e155e0df23071bd0632",
+      "bytes": 4425
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f466.json.gz",
+      "sha256": "68c903490ff9b0238ac65c6921558da5093bb38bdd4756708ee57e1751f0d4b8",
+      "bytes": 4603
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f467.json.gz",
+      "sha256": "da914ccec13357c22e0f2a8b2ccc8d5f5492c3ee77d9d4055e42813a8e46742c",
+      "bytes": 4813
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f468.json.gz",
+      "sha256": "838b6da6c1901672f460323185882b46fa8aa15b53e82cb72ee53415404ed26a",
+      "bytes": 5070
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f469.json.gz",
+      "sha256": "81fba18d36cb704689d23a6b011eafe7ab8d6753212540bb0c0318ddaeb769ab",
+      "bytes": 4761
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f470.json.gz",
+      "sha256": "1e2d91b7867fcf0680217581df9073e71eff0aed929064d50899d091b0b71492",
+      "bytes": 4919
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f471.json.gz",
+      "sha256": "47e32b3350a1d74c5691716dacc4d72b0528f4c45a6663292fdc0a7b8e9cf794",
+      "bytes": 4986
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f472.json.gz",
+      "sha256": "d3abb777c46d89e6ec865f6a3d271537470c3cdb20cdb22bdb45fa98840ad93e",
+      "bytes": 5143
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f473.json.gz",
+      "sha256": "cf07b570118f0341eb535d1f8a8d89a251ebca00708c7f50cd0cd01c395d10d5",
+      "bytes": 5883
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f474.json.gz",
+      "sha256": "544b244a0ef04d54d9867e0cd693d48147c7a180fa7bb493b9cf74f5f9d0083a",
+      "bytes": 5736
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f475.json.gz",
+      "sha256": "4a8992f8da07935d520aae8d2ddc15d18a3bf3698816e3d3d9fa84a7e5a89307",
+      "bytes": 5927
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f476.json.gz",
+      "sha256": "79689a5ca33432fed1b3b553a4ac12a0f54533c4bb8e9e200a7d669150b14b63",
+      "bytes": 5468
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f477.json.gz",
+      "sha256": "df6eda62a4c464d9c5b67728d92c8bd7e600c9fb905977c76b3c85ed04a50f6f",
+      "bytes": 5526
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f478.json.gz",
+      "sha256": "e7e7aaf8d5f524882de64b85c6a3b910e97d46d809eb048eb64c8c85d650994b",
+      "bytes": 5708
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f479.json.gz",
+      "sha256": "588ca4591f938931770ec27407ae2b887b1fb66ea593d3c4fa3f67a6b6c73216",
+      "bytes": 5285
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-f480.json.gz",
+      "sha256": "f33c5eeb5b5b00d013dedf7fecd9f93552f9310c26f74fb73935338734cd4ab9",
+      "bytes": 4881
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/rim-opposition-review.png",
+      "sha256": "4c1bf45ab63a495a75dd376a226f2bdcc3fc7bdce94f985869e32298e03d4846",
+      "bytes": 144127
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/run.py",
+      "sha256": "1f0aae984f4b7b7a8988de6e5b9512a40c59755eaf5f2838eb68ed865783e4b1",
+      "bytes": 10059
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/verification.json",
+      "sha256": "677178a000fad10f5ceb49233fd71273eacbd8ab34e59af949da1e275281c8b7",
+      "bytes": 28884
+    },
+    {
+      "path": "sample/output/s11-cbr1-20261010-001/verify.py",
+      "sha256": "0e55c65d9e3de12cb2c38af8bec8b02df20c71e1c62d9b5347f59a735a506c7d",
+      "bytes": 9999
+    }
+  ],
+  "verification": {
+    "status": "PASS",
+    "totals": {
+      "candidates": 227190,
+      "sample_pairs": 82708,
+      "losses": 207132,
+      "queries": 198
+    },
+    "unique_rasters": 167,
+    "input_pins": 341,
+    "production_source_pins": 221
+  },
+  "test_run": {
+    "command": "PYTHONPATH=src .venv/bin/python -m pytest -q tests/unit/test_s11_current_boundary_reference.py tests/unit/test_s11_boundary_temporal_probe.py tests/unit/test_s11_reference_constellation.py tests/unit/test_s11_edge_fragments.py tests/unit/test_s11_foam_support_geometry.py",
+    "passed": 88,
+    "duration_s": 0.33,
+    "new_cbr_tests": 20,
+    "scope": "before real-data outcomes; diagnostic invariants, not physical discrimination"
+  },
+  "results": [
+    {
+      "plan": "foam-positive",
+      "role": "Foam",
+      "continuation_frames": 90,
+      "states": {
+        "unique_provisional_center": 40,
+        "ambiguous_provisional_center": 50
+      },
+      "unique_provisional": 40,
+      "longest_unique_native_frame_run": 5,
+      "longest_missing_native_frame_run": 8,
+      "analysis_grid_continuation_frames": 6,
+      "analysis_grid_unique_provisional": 3,
+      "outputs": [
+        [
+          421,
+          879
+        ],
+        [
+          422,
+          879
+        ],
+        [
+          430,
+          880
+        ],
+        [
+          437,
+          880
+        ],
+        [
+          438,
+          879
+        ],
+        [
+          444,
+          880
+        ],
+        [
+          445,
+          880
+        ],
+        [
+          446,
+          880
+        ],
+        [
+          447,
+          880
+        ],
+        [
+          448,
+          880
+        ],
+        [
+          450,
+          880
+        ],
+        [
+          451,
+          880
+        ],
+        [
+          454,
+          879
+        ],
+        [
+          463,
+          880
+        ],
+        [
+          465,
+          879
+        ],
+        [
+          466,
+          879
+        ],
+        [
+          468,
+          879
+        ],
+        [
+          470,
+          879
+        ],
+        [
+          471,
+          879
+        ],
+        [
+          474,
+          879
+        ],
+        [
+          475,
+          879
+        ],
+        [
+          476,
+          879
+        ],
+        [
+          477,
+          879
+        ],
+        [
+          478,
+          879
+        ],
+        [
+          483,
+          879
+        ],
+        [
+          488,
+          879
+        ],
+        [
+          489,
+          879
+        ],
+        [
+          490,
+          879
+        ],
+        [
+          491,
+          879
+        ],
+        [
+          492,
+          879
+        ],
+        [
+          496,
+          879
+        ],
+        [
+          498,
+          879
+        ],
+        [
+          499,
+          879
+        ],
+        [
+          500,
+          879
+        ],
+        [
+          501,
+          879
+        ],
+        [
+          503,
+          879
+        ],
+        [
+          504,
+          879
+        ],
+        [
+          505,
+          879
+        ],
+        [
+          508,
+          879
+        ],
+        [
+          510,
+          879
+        ]
+      ]
+    },
+    {
+      "plan": "oil-positive",
+      "role": "Oil",
+      "continuation_frames": 75,
+      "states": {
+        "unique_provisional_center": 19,
+        "ambiguous_provisional_center": 56
+      },
+      "unique_provisional": 19,
+      "longest_unique_native_frame_run": 5,
+      "longest_missing_native_frame_run": 16,
+      "analysis_grid_continuation_frames": 5,
+      "analysis_grid_unique_provisional": 0,
+      "outputs": [
+        [
+          1276,
+          836
+        ],
+        [
+          1277,
+          836
+        ],
+        [
+          1278,
+          837
+        ],
+        [
+          1285,
+          836
+        ],
+        [
+          1286,
+          836
+        ],
+        [
+          1287,
+          826
+        ],
+        [
+          1288,
+          825
+        ],
+        [
+          1289,
+          825
+        ],
+        [
+          1302,
+          837
+        ],
+        [
+          1304,
+          836
+        ],
+        [
+          1321,
+          844
+        ],
+        [
+          1322,
+          837
+        ],
+        [
+          1323,
+          836
+        ],
+        [
+          1336,
+          837
+        ],
+        [
+          1337,
+          837
+        ],
+        [
+          1338,
+          836
+        ],
+        [
+          1345,
+          836
+        ],
+        [
+          1346,
+          836
+        ],
+        [
+          1348,
+          836
+        ]
+      ]
+    },
+    {
+      "plan": "rim-opposition",
+      "role": "Structure",
+      "continuation_frames": 30,
+      "states": {
+        "no_provisional_center": 30
+      },
+      "unique_provisional": 0,
+      "longest_unique_native_frame_run": 0,
+      "longest_missing_native_frame_run": 30,
+      "analysis_grid_continuation_frames": 2,
+      "analysis_grid_unique_provisional": 0,
+      "outputs": []
+    }
+  ],
+  "causal_audit": {
+    "exact_AB_plus_BA_equals_AA_plus_BB_candidates": 51783,
+    "AB_vs_BA_redundant_given_AB_strictly_below_AA_and_BB": true,
+    "foam_continuation_frames_with_candidate_y_879_or_880": 90,
+    "foam_unique_output_range": [
+      879,
+      880
+    ],
+    "foam_unique_support_pairs_range": [
+      4,
+      14
+    ],
+    "structure_center_fragments": 414,
+    "structure_center_fragments_with_reference_columns": 0,
+    "limits": "Observed numeric Y range is descriptive. Sampled images identify the lower rim by agent interpretation, not new exact human truth. No 0-FPR or count-as-accuracy claim."
+  },
+  "production_changed": false,
+  "windows_executed": false,
+  "no_comparison_retuning": true,
+  "documentation_checks": {
+    "local_links_and_anchors_checked": 767,
+    "issues": 0,
+    "governance_base": "cc17924",
+    "include_worktree": true,
+    "governance": "PASS",
+    "diff_check": "PASS",
+    "changed_scope": "docs and offline diagnostic/tests only"
+  }
+}

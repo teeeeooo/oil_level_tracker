@@ -1,0 +1,1308 @@
+{
+  "schema": "s11-cbr1-independent-verification-v1",
+  "status": "PASS",
+  "totals": {
+    "candidates": 227190,
+    "sample_pairs": 82708,
+    "losses": 207132,
+    "queries": 198
+  },
+  "unique_rasters": 167,
+  "preflight_sha256": "7764bd64d7bc73c74169c5c8198047bf3e3f13ddf869cda757cdcf19c1825609",
+  "readout_sha256": "4ad0d4d9c788ea280a040ed9a0e536ead94e5ec5ce68ddb8fa283cf8913bd284",
+  "verifier_sha256": "0e55c65d9e3de12cb2c38af8bec8b02df20c71e1c62d9b5347f59a735a506c7d",
+  "input_pins": 341,
+  "production_source_pins": 221,
+  "plans": [
+    {
+      "plan": "foam-positive",
+      "reference_includes_center_x": false,
+      "continuation_counters": {
+        "center_fragments": 1285,
+        "center_fragments_with_reference_columns": 1045,
+        "center_fragments_with_visible_pairs": 1016,
+        "unique_provisional_center": 40,
+        "ambiguous_provisional_center": 50
+      },
+      "unique_winner_support_pairs": {
+        "13": 5,
+        "6": 5,
+        "5": 5,
+        "10": 5,
+        "11": 2,
+        "12": 9,
+        "4": 1,
+        "9": 7,
+        "14": 1
+      },
+      "all_provisional_center_support_pairs": {
+        "13": 7,
+        "6": 19,
+        "1": 34,
+        "8": 1,
+        "5": 17,
+        "3": 11,
+        "7": 1,
+        "2": 14,
+        "4": 12,
+        "11": 5,
+        "10": 6,
+        "12": 19,
+        "9": 11,
+        "14": 1
+      },
+      "analysis_grid": [
+        {
+          "frame": 435,
+          "reason": "ambiguous_provisional_center",
+          "provisional_y": null
+        },
+        {
+          "frame": 450,
+          "reason": "unique_provisional_center",
+          "provisional_y": 880
+        },
+        {
+          "frame": 465,
+          "reason": "unique_provisional_center",
+          "provisional_y": 879
+        },
+        {
+          "frame": 480,
+          "reason": "ambiguous_provisional_center",
+          "provisional_y": null
+        },
+        {
+          "frame": 495,
+          "reason": "ambiguous_provisional_center",
+          "provisional_y": null
+        },
+        {
+          "frame": 510,
+          "reason": "unique_provisional_center",
+          "provisional_y": 879
+        }
+      ],
+      "reviewed_witnesses": [
+        {
+          "frame": 420,
+          "candidates": [
+            {
+              "candidate_id": 790,
+              "center_crossings": [
+                846
+              ],
+              "pairs": 2,
+              "losses": {
+                "AB": 87,
+                "BA": 235,
+                "AA": 161,
+                "BB": 161
+              },
+              "current_xy": [
+                [
+                  592,
+                  846
+                ],
+                [
+                  594,
+                  846
+                ]
+              ]
+            },
+            {
+              "candidate_id": 1200,
+              "center_crossings": [
+                879
+              ],
+              "pairs": 6,
+              "losses": {
+                "AB": 746,
+                "BA": 1932,
+                "AA": 1450,
+                "BB": 1228
+              },
+              "current_xy": [
+                [
+                  583,
+                  877
+                ],
+                [
+                  587,
+                  878
+                ],
+                [
+                  589,
+                  878
+                ],
+                [
+                  592,
+                  879
+                ],
+                [
+                  594,
+                  879
+                ],
+                [
+                  597,
+                  880
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 438,
+          "candidates": [
+            {
+              "candidate_id": 1035,
+              "center_crossings": [
+                879
+              ],
+              "pairs": 5,
+              "losses": {
+                "AB": 611,
+                "BA": 1399,
+                "AA": 1109,
+                "BB": 901
+              },
+              "current_xy": [
+                [
+                  589,
+                  879
+                ],
+                [
+                  592,
+                  879
+                ],
+                [
+                  594,
+                  879
+                ],
+                [
+                  597,
+                  880
+                ],
+                [
+                  600,
+                  879
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 450,
+          "candidates": [
+            {
+              "candidate_id": 1278,
+              "center_crossings": [
+                880
+              ],
+              "pairs": 6,
+              "losses": {
+                "AB": 787,
+                "BA": 2027,
+                "AA": 1491,
+                "BB": 1323
+              },
+              "current_xy": [
+                [
+                  583,
+                  877
+                ],
+                [
+                  587,
+                  878
+                ],
+                [
+                  589,
+                  879
+                ],
+                [
+                  592,
+                  879
+                ],
+                [
+                  594,
+                  879
+                ],
+                [
+                  597,
+                  880
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 480,
+          "candidates": [
+            {
+              "candidate_id": 737,
+              "center_crossings": [
+                842
+              ],
+              "pairs": 1,
+              "losses": {
+                "AB": 105,
+                "BA": 119,
+                "AA": 112,
+                "BB": 112
+              },
+              "current_xy": [
+                [
+                  594,
+                  842
+                ]
+              ]
+            },
+            {
+              "candidate_id": 740,
+              "center_crossings": [
+                843
+              ],
+              "pairs": 1,
+              "losses": {
+                "AB": 105,
+                "BA": 119,
+                "AA": 112,
+                "BB": 112
+              },
+              "current_xy": [
+                [
+                  594,
+                  842
+                ]
+              ]
+            },
+            {
+              "candidate_id": 741,
+              "center_crossings": [
+                842
+              ],
+              "pairs": 1,
+              "losses": {
+                "AB": 102,
+                "BA": 116,
+                "AA": 109,
+                "BB": 109
+              },
+              "current_xy": [
+                [
+                  594,
+                  843
+                ]
+              ]
+            },
+            {
+              "candidate_id": 761,
+              "center_crossings": [
+                843
+              ],
+              "pairs": 1,
+              "losses": {
+                "AB": 102,
+                "BA": 116,
+                "AA": 109,
+                "BB": 109
+              },
+              "current_xy": [
+                [
+                  594,
+                  843
+                ]
+              ]
+            },
+            {
+              "candidate_id": 1045,
+              "center_crossings": [
+                879
+              ],
+              "pairs": 12,
+              "losses": {
+                "AB": 1075,
+                "BA": 3627,
+                "AA": 2587,
+                "BB": 2115
+              },
+              "current_xy": [
+                [
+                  587,
+                  878
+                ],
+                [
+                  589,
+                  878
+                ],
+                [
+                  592,
+                  879
+                ],
+                [
+                  594,
+                  879
+                ],
+                [
+                  597,
+                  879
+                ],
+                [
+                  600,
+                  878
+                ],
+                [
+                  602,
+                  878
+                ],
+                [
+                  604,
+                  876
+                ],
+                [
+                  606,
+                  877
+                ],
+                [
+                  607,
+                  876
+                ],
+                [
+                  609,
+                  876
+                ],
+                [
+                  610,
+                  876
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 495,
+          "candidates": [
+            {
+              "candidate_id": 783,
+              "center_crossings": [
+                844
+              ],
+              "pairs": 2,
+              "losses": {
+                "AB": 114,
+                "BA": 680,
+                "AA": 372,
+                "BB": 422
+              },
+              "current_xy": [
+                [
+                  597,
+                  843
+                ],
+                [
+                  600,
+                  843
+                ]
+              ]
+            },
+            {
+              "candidate_id": 1115,
+              "center_crossings": [
+                879
+              ],
+              "pairs": 11,
+              "losses": {
+                "AB": 1013,
+                "BA": 3359,
+                "AA": 2369,
+                "BB": 2003
+              },
+              "current_xy": [
+                [
+                  589,
+                  878
+                ],
+                [
+                  592,
+                  879
+                ],
+                [
+                  594,
+                  879
+                ],
+                [
+                  597,
+                  879
+                ],
+                [
+                  600,
+                  878
+                ],
+                [
+                  602,
+                  878
+                ],
+                [
+                  604,
+                  877
+                ],
+                [
+                  606,
+                  877
+                ],
+                [
+                  607,
+                  876
+                ],
+                [
+                  609,
+                  876
+                ],
+                [
+                  610,
+                  876
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 510,
+          "candidates": [
+            {
+              "candidate_id": 997,
+              "center_crossings": [
+                879
+              ],
+              "pairs": 9,
+              "losses": {
+                "AB": 764,
+                "BA": 2692,
+                "AA": 1859,
+                "BB": 1597
+              },
+              "current_xy": [
+                [
+                  592,
+                  879
+                ],
+                [
+                  594,
+                  879
+                ],
+                [
+                  597,
+                  879
+                ],
+                [
+                  600,
+                  878
+                ],
+                [
+                  602,
+                  877
+                ],
+                [
+                  604,
+                  877
+                ],
+                [
+                  606,
+                  876
+                ],
+                [
+                  607,
+                  876
+                ],
+                [
+                  609,
+                  876
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "plan": "oil-positive",
+      "reference_includes_center_x": true,
+      "continuation_counters": {
+        "center_fragments": 1034,
+        "center_fragments_with_reference_columns": 1034,
+        "center_fragments_with_visible_pairs": 991,
+        "unique_provisional_center": 19,
+        "ambiguous_provisional_center": 56
+      },
+      "unique_winner_support_pairs": {
+        "6": 2,
+        "14": 2,
+        "7": 4,
+        "4": 3,
+        "9": 1,
+        "20": 1,
+        "5": 5,
+        "3": 1
+      },
+      "all_provisional_center_support_pairs": {
+        "6": 11,
+        "14": 10,
+        "2": 41,
+        "15": 4,
+        "4": 13,
+        "13": 10,
+        "3": 15,
+        "18": 2,
+        "7": 13,
+        "9": 3,
+        "5": 16,
+        "10": 1,
+        "8": 5,
+        "21": 8,
+        "12": 10,
+        "11": 1,
+        "16": 1,
+        "17": 5,
+        "19": 2,
+        "20": 1
+      },
+      "analysis_grid": [
+        {
+          "frame": 1290,
+          "reason": "ambiguous_provisional_center",
+          "provisional_y": null
+        },
+        {
+          "frame": 1305,
+          "reason": "ambiguous_provisional_center",
+          "provisional_y": null
+        },
+        {
+          "frame": 1320,
+          "reason": "ambiguous_provisional_center",
+          "provisional_y": null
+        },
+        {
+          "frame": 1335,
+          "reason": "ambiguous_provisional_center",
+          "provisional_y": null
+        },
+        {
+          "frame": 1350,
+          "reason": "ambiguous_provisional_center",
+          "provisional_y": null
+        }
+      ],
+      "reviewed_witnesses": [
+        {
+          "frame": 1275,
+          "candidates": [
+            {
+              "candidate_id": 699,
+              "center_crossings": [
+                836
+              ],
+              "pairs": 4,
+              "losses": {
+                "AB": 492,
+                "BA": 1826,
+                "AA": 1194,
+                "BB": 1124
+              },
+              "current_xy": [
+                [
+                  593,
+                  836
+                ],
+                [
+                  594,
+                  837
+                ],
+                [
+                  595,
+                  836
+                ],
+                [
+                  596,
+                  836
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 1281,
+          "candidates": [
+            {
+              "candidate_id": 524,
+              "center_crossings": [
+                828
+              ],
+              "pairs": 2,
+              "losses": {
+                "AB": 249,
+                "BA": 491,
+                "AA": 435,
+                "BB": 305
+              },
+              "current_xy": [
+                [
+                  594,
+                  827
+                ],
+                [
+                  595,
+                  828
+                ]
+              ]
+            },
+            {
+              "candidate_id": 526,
+              "center_crossings": [
+                828
+              ],
+              "pairs": 2,
+              "losses": {
+                "AB": 215,
+                "BA": 489,
+                "AA": 373,
+                "BB": 331
+              },
+              "current_xy": [
+                [
+                  595,
+                  828
+                ],
+                [
+                  596,
+                  827
+                ]
+              ]
+            },
+            {
+              "candidate_id": 563,
+              "center_crossings": [
+                828
+              ],
+              "pairs": 2,
+              "losses": {
+                "AB": 225,
+                "BA": 479,
+                "AA": 333,
+                "BB": 371
+              },
+              "current_xy": [
+                [
+                  595,
+                  828
+                ],
+                [
+                  596,
+                  828
+                ]
+              ]
+            },
+            {
+              "candidate_id": 705,
+              "center_crossings": [
+                837
+              ],
+              "pairs": 13,
+              "losses": {
+                "AB": 758,
+                "BA": 4498,
+                "AA": 2477,
+                "BB": 2779
+              },
+              "current_xy": [
+                [
+                  584,
+                  840
+                ],
+                [
+                  585,
+                  840
+                ],
+                [
+                  586,
+                  840
+                ],
+                [
+                  587,
+                  840
+                ],
+                [
+                  588,
+                  840
+                ],
+                [
+                  589,
+                  840
+                ],
+                [
+                  590,
+                  840
+                ],
+                [
+                  591,
+                  839
+                ],
+                [
+                  592,
+                  838
+                ],
+                [
+                  593,
+                  838
+                ],
+                [
+                  594,
+                  838
+                ],
+                [
+                  595,
+                  837
+                ],
+                [
+                  596,
+                  837
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 1320,
+          "candidates": [
+            {
+              "candidate_id": 207,
+              "center_crossings": [
+                817
+              ],
+              "pairs": 13,
+              "losses": {
+                "AB": 1901,
+                "BA": 3921,
+                "AA": 3835,
+                "BB": 1987
+              },
+              "current_xy": [
+                [
+                  588,
+                  818
+                ],
+                [
+                  589,
+                  818
+                ],
+                [
+                  590,
+                  817
+                ],
+                [
+                  591,
+                  817
+                ],
+                [
+                  592,
+                  817
+                ],
+                [
+                  593,
+                  817
+                ],
+                [
+                  594,
+                  817
+                ],
+                [
+                  595,
+                  817
+                ],
+                [
+                  596,
+                  817
+                ],
+                [
+                  597,
+                  817
+                ],
+                [
+                  598,
+                  817
+                ],
+                [
+                  599,
+                  817
+                ],
+                [
+                  600,
+                  817
+                ]
+              ]
+            },
+            {
+              "candidate_id": 690,
+              "center_crossings": [
+                844
+              ],
+              "pairs": 21,
+              "losses": {
+                "AB": 2327,
+                "BA": 8857,
+                "AA": 5933,
+                "BB": 5251
+              },
+              "current_xy": [
+                [
+                  584,
+                  844
+                ],
+                [
+                  585,
+                  844
+                ],
+                [
+                  586,
+                  844
+                ],
+                [
+                  587,
+                  844
+                ],
+                [
+                  588,
+                  844
+                ],
+                [
+                  589,
+                  844
+                ],
+                [
+                  590,
+                  844
+                ],
+                [
+                  591,
+                  844
+                ],
+                [
+                  592,
+                  844
+                ],
+                [
+                  593,
+                  844
+                ],
+                [
+                  594,
+                  844
+                ],
+                [
+                  595,
+                  844
+                ],
+                [
+                  596,
+                  844
+                ],
+                [
+                  597,
+                  844
+                ],
+                [
+                  598,
+                  844
+                ],
+                [
+                  599,
+                  844
+                ],
+                [
+                  600,
+                  844
+                ],
+                [
+                  601,
+                  844
+                ],
+                [
+                  602,
+                  844
+                ],
+                [
+                  603,
+                  844
+                ],
+                [
+                  604,
+                  844
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 1335,
+          "candidates": [
+            {
+              "candidate_id": 397,
+              "center_crossings": [
+                825
+              ],
+              "pairs": 5,
+              "losses": {
+                "AB": 471,
+                "BA": 1313,
+                "AA": 1040,
+                "BB": 744
+              },
+              "current_xy": [
+                [
+                  594,
+                  825
+                ],
+                [
+                  595,
+                  825
+                ],
+                [
+                  596,
+                  825
+                ],
+                [
+                  597,
+                  825
+                ],
+                [
+                  598,
+                  825
+                ]
+              ]
+            },
+            {
+              "candidate_id": 590,
+              "center_crossings": [
+                837
+              ],
+              "pairs": 21,
+              "losses": {
+                "AB": 1686,
+                "BA": 6958,
+                "AA": 4246,
+                "BB": 4398
+              },
+              "current_xy": [
+                [
+                  584,
+                  838
+                ],
+                [
+                  585,
+                  838
+                ],
+                [
+                  586,
+                  838
+                ],
+                [
+                  587,
+                  838
+                ],
+                [
+                  588,
+                  838
+                ],
+                [
+                  589,
+                  838
+                ],
+                [
+                  590,
+                  838
+                ],
+                [
+                  591,
+                  837
+                ],
+                [
+                  592,
+                  837
+                ],
+                [
+                  593,
+                  837
+                ],
+                [
+                  594,
+                  836
+                ],
+                [
+                  595,
+                  837
+                ],
+                [
+                  596,
+                  837
+                ],
+                [
+                  597,
+                  837
+                ],
+                [
+                  598,
+                  838
+                ],
+                [
+                  599,
+                  838
+                ],
+                [
+                  600,
+                  838
+                ],
+                [
+                  601,
+                  838
+                ],
+                [
+                  602,
+                  838
+                ],
+                [
+                  603,
+                  838
+                ],
+                [
+                  604,
+                  838
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 1348,
+          "candidates": [
+            {
+              "candidate_id": 473,
+              "center_crossings": [
+                836
+              ],
+              "pairs": 3,
+              "losses": {
+                "AB": 698,
+                "BA": 1308,
+                "AA": 1231,
+                "BB": 775
+              },
+              "current_xy": [
+                [
+                  593,
+                  836
+                ],
+                [
+                  594,
+                  836
+                ],
+                [
+                  595,
+                  836
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 1350,
+          "candidates": [
+            {
+              "candidate_id": 178,
+              "center_crossings": [
+                817
+              ],
+              "pairs": 14,
+              "losses": {
+                "AB": 1778,
+                "BA": 4362,
+                "AA": 3782,
+                "BB": 2358
+              },
+              "current_xy": [
+                [
+                  587,
+                  818
+                ],
+                [
+                  588,
+                  818
+                ],
+                [
+                  589,
+                  818
+                ],
+                [
+                  590,
+                  817
+                ],
+                [
+                  591,
+                  817
+                ],
+                [
+                  592,
+                  817
+                ],
+                [
+                  593,
+                  817
+                ],
+                [
+                  594,
+                  817
+                ],
+                [
+                  595,
+                  817
+                ],
+                [
+                  596,
+                  817
+                ],
+                [
+                  597,
+                  817
+                ],
+                [
+                  598,
+                  817
+                ],
+                [
+                  599,
+                  817
+                ],
+                [
+                  600,
+                  817
+                ]
+              ]
+            },
+            {
+              "candidate_id": 512,
+              "center_crossings": [
+                836
+              ],
+              "pairs": 2,
+              "losses": {
+                "AB": 269,
+                "BA": 761,
+                "AA": 621,
+                "BB": 409
+              },
+              "current_xy": [
+                [
+                  595,
+                  836
+                ],
+                [
+                  596,
+                  835
+                ]
+              ]
+            },
+            {
+              "candidate_id": 535,
+              "center_crossings": [
+                836
+              ],
+              "pairs": 3,
+              "losses": {
+                "AB": 513,
+                "BA": 1221,
+                "AA": 1046,
+                "BB": 688
+              },
+              "current_xy": [
+                [
+                  593,
+                  836
+                ],
+                [
+                  594,
+                  837
+                ],
+                [
+                  595,
+                  836
+                ]
+              ]
+            },
+            {
+              "candidate_id": 536,
+              "center_crossings": [
+                836
+              ],
+              "pairs": 2,
+              "losses": {
+                "AB": 320,
+                "BA": 786,
+                "AA": 672,
+                "BB": 434
+              },
+              "current_xy": [
+                [
+                  595,
+                  836
+                ],
+                [
+                  596,
+                  836
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "plan": "rim-opposition",
+      "reference_includes_center_x": false,
+      "continuation_counters": {
+        "center_fragments": 414,
+        "center_fragments_with_reference_columns": 0,
+        "center_fragments_with_visible_pairs": 0,
+        "no_provisional_center": 30
+      },
+      "unique_winner_support_pairs": {},
+      "all_provisional_center_support_pairs": {},
+      "analysis_grid": [
+        {
+          "frame": 465,
+          "reason": "no_provisional_center",
+          "provisional_y": null
+        },
+        {
+          "frame": 480,
+          "reason": "no_provisional_center",
+          "provisional_y": null
+        }
+      ],
+      "reviewed_witnesses": [
+        {
+          "frame": 450,
+          "candidates": []
+        },
+        {
+          "frame": 465,
+          "candidates": []
+        },
+        {
+          "frame": 480,
+          "candidates": []
+        }
+      ]
+    }
+  ],
+  "scope": "All saved query/candidate mappings, visible BGR pairs, four exact losses, missingness, center decisions and summaries independently reconstructed from original NPZ arrays. No comparator import; no runtime or video decode.",
+  "physical_efficacy": "NOT_EVALUATED"
+}

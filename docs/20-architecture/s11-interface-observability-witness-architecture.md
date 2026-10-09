@@ -1695,6 +1695,15 @@ Freeze this first operation before implementation and new real-data outcomes:
    do not alter reference columns, stencil, fragment grouping or bounds afterward.
    Any genuinely undecidable physical interpretation is a user-review stop.
 
+The [first implementation and complete comparison](../50-diagnostics/s11/2026-10-10-current-boundary-reference.md)
+demonstrate why provisional appearance must remain separate from identity.
+On common support, `AB + BA = AA + BB`, so AB strictly below both AA and BB
+already implies AB below BA. These are aggregate side preferences, not four
+independent material checks. A successor needs a distinct role-discriminating
+observation and actually comparable opposition; changing fragment grouping,
+reference columns or the stencil after this result does not meet that requirement.
+The offline helper remains a bounded measurement with no production consumer.
+
 ### Fixed control matrix and input separation
 
 | Input / existing owner | Preserved role in D2 | What it cannot establish |
@@ -2269,6 +2278,13 @@ and Work Plan for execution/acceptance.
 
 ## History Review
 
+2026-10-10 frozen CBR-1 execution: reviewed all saved query/candidate mappings,
+the independently verified four-loss identity, lower-rim Foam appearances and
+Oil center ambiguity. The measured result instantiates F02/F04/F07 without
+changing production ownership; missing Structure support is not negative evidence.
+Preserve the frozen failed variant and require a distinct observation before a
+successor; no physical discriminator, runtime behavior or field acceptance follows.
+
 2026-10-10 cc17924 intake: reviewed H0 seed/partition and G1 geometry results,
 the existing observed-edge/face and reference-comparison helpers, fixed-center
 conversion, and F02/F04/F06/F07/F09/F10. CBR-1 binds measurements to current
@@ -2503,5 +2519,5 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: NONE — the fixed-center contract and proposed CBR-1 offline measurement reuse existing owners; this intake changes no executing detector route. Previously documented Local XY routing remains as mapped.
-- Failure-registry impact: NONE — existing F02/F04/F06/F07 representation, role and coupling limits plus F09/F10 provenance and tuning guards cover the reviewed H0/G1 result and CBR-1 proposal; no new field cause or repair is claimed.
+- Logic-map impact: NONE — the fixed-center contract and implemented CBR-1 offline measurement reuse existing owners without a production consumer; no executing detector route changes. Previously documented Local XY routing remains as mapped.
+- Failure-registry impact: NONE — existing F02/F04/F06/F07 representation, role and coupling limits plus F09/F10 provenance and tuning guards cover the reviewed H0/G1 and CBR-1 results; no new field cause or repair is claimed.

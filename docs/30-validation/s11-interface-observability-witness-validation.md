@@ -1050,12 +1050,23 @@ nine-segment field procedure remain later gates. No new Windows request is part
 of this intake. Stop the fixed variant if useful role support is absent or it
 needs manual seed rescue, retuning, filled gaps or downstream gate relaxation.
 
+The [2026-10-10 complete comparison](../50-diagnostics/s11/2026-10-10-current-boundary-reference.md)
+applies this stop condition: 88 focused measurement tests and all 198 independently
+checked query outcomes pass computational checks, while the physical progression
+condition fails. Lower-rim Foam appearances and ambiguous Oil analysis-grid
+outputs do not justify broader regression or Windows qualification. The Structure
+plan's zero center outputs are unavailable comparisons, not successful negatives.
+Exact real optical-discrimination/center-error efficacy remains unqualified;
+no existing O2 requirement is satisfied merely by those computational checks.
+
 ## Detector Governance
 
-The 2026-10-10 CBR-1 intake adds offline entry and progression conditions only.
-H0's support-face intersection loses available partition geometry; the first
-physical identity failure and field effectiveness remain unqualified. F07's
-Foam front/texture distinction is preserved alongside the guards below.
+The 2026-10-10 CBR-1 intake adds offline entry and progression conditions; its
+complete frozen comparison then triggers the stop rule without promotion.
+H0's support-face intersection loses available partition geometry, while CBR-1
+admits wrong-region appearance despite current geometry. Private first physical
+causes and field effectiveness remain unqualified. F07's Foam front/texture
+distinction is preserved alongside the guards below.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`, `FOAM-CANDIDATE`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`.
