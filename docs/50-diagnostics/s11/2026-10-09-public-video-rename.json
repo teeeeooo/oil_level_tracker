@@ -1,0 +1,38 @@
+{
+  "schema": "s11-video-path-rename-v1",
+  "base_head": "642db6277d95b9fe24cca122646f1ad4714d6b7d",
+  "renames": [
+    {
+      "original_path": "sample/public_water_fill_pexels_6381722.mp4",
+      "current_path": "sample/sample5.mp4",
+      "content": "water",
+      "bytes": 21089117,
+      "sha256_before": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "sha256_after": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+    },
+    {
+      "original_path": "sample/public_beer_fill_pexels_5538050.mp4",
+      "current_path": "sample/sample6.mp4",
+      "content": "beer",
+      "bytes": 18990737,
+      "sha256_before": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+      "sha256_after": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2"
+    },
+    {
+      "original_path": "sample/public_milk_fill_pexels_11158788.mp4",
+      "current_path": "sample/sample7.mp4",
+      "content": "milk",
+      "bytes": 11532102,
+      "sha256_before": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+      "sha256_after": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+    }
+  ],
+  "original_intake_record": "docs/50-diagnostics/s11/2026-10-09-public-video-intake.json",
+  "original_intake_sha256": "e36b0804bd5b4f7504444a2d5d216f8e12a1725ed75465a46f7164b5257ab4bc",
+  "original_intake_preserved": true,
+  "video_content_unchanged": true,
+  "historical_resolution": "Resolve original video input paths through these renames. Frozen intake/preflight/script text and derived-image paths remain historical and unchanged. New runs must use current paths in a new manifest.",
+  "detector_run": false,
+  "recipe_change": false,
+  "partition_change": false
+}

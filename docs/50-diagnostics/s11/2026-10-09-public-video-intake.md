@@ -15,9 +15,16 @@ They do not replace compressor sight-glass or Windows acceptance.
 
 | Local filename | Size (bytes) | Resolution | Reported playback FPS | Decoded frames | Nominal duration |
 |---|---:|---|---:|---:|---:|
-| `public_water_fill_pexels_6381722.mp4` | 21,089,117 | 1920 × 1080 | 29.970030 | 1,644 | 54.855 s |
-| `public_beer_fill_pexels_5538050.mp4` | 18,990,737 | 2732 × 1440 | 25 | 583 | 23.320 s |
-| `public_milk_fill_pexels_11158788.mp4` | 11,532,102 | 1920 × 1080 | 23.976024 | 1,064 | 44.378 s |
+| `sample5.mp4` — water | 21,089,117 | 1920 × 1080 | 29.970030 | 1,644 | 54.855 s |
+| `sample6.mp4` — beer | 18,990,737 | 2732 × 1440 | 25 | 583 | 23.320 s |
+| `sample7.mp4` — milk | 11,532,102 | 1920 × 1080 | 23.976024 | 1,064 | 44.378 s |
+
+After intake, the user requested names consistent with sample2/3/4. The
+[rename receipt](2026-10-09-public-video-rename.json) maps the original download
+paths to these current names and verifies unchanged SHA-256 values. The frozen
+intake JSON, preflights, scripts and derived-image paths retain their historical
+names. Resolve old video paths through the receipt; new runs use current paths
+in a new manifest. This path-only change does not reset exposure or partition.
 
 All **3,291 frames decode sequentially** with counts matching metadata. Before
 pixel inspection, the intake freezes all three as `development_intake`; no
