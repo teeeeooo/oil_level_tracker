@@ -311,10 +311,16 @@ raw/clean white-entry and absent-chromatic pattern also occurs in mixed C2.
 Chromatic support spans late upper-region alternatives as well as internal
 texture, so it is not adopted as a veto. Exact reviewed Canny XY hits can have
 opposite raw-gradient polarity, and outside-domain absence is not non-structure.
-The upper central gap has no existing reviewed reference coverage. A distinct
-regional upper-side identity question is pending; Foam visibility and internal
-texture replies remain closed. Do not fit a threshold to these signatures, turn
-coordinate overlap into object identity, or create an exact mask from a reply.
+The upper central gap has no coverage in the original 44 s reviewed reference.
+The [subsequent reply](2026-10-09-foam-gap-upper-side-reply.json) identifies its
+upper feature as fixed glass rim/pattern at regional scope; this question is now
+closed. It does not certify exact gradient coordinates or current reference
+correspondence. A follow-up relative-gap readout finds nonzero separation change
+even in 12/27 columns of the 15→16 s rim control; late central changes have mixed
+signs. Do not substitute relative motion, fixed-image Y, or a lower-member rule
+for joint correspondence and side-role evidence. The nearby structure anchor
+cannot be mandatory for all Foam fronts. No threshold fitting, exact mask from
+a regional reply, repeated physical question or episode relaxation follows.
 
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 

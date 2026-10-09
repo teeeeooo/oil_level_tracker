@@ -277,14 +277,19 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    rim; chromatic support spans upper-region alternatives as well as texture.
    Neither is a physical classifier. Exact reference hits can have opposite raw
    polarity, and the reviewed domain does not cover the upper central gap.
-   **Pending human checkpoint:** identify the physical feature on the **upper
-   side** of that narrow space in the
-   [pink/cyan comparison](../50-diagnostics/s11/2026-10-09-foam-gap-upper-side-review.png).
-   This is regional structure/overlap identity, not renewed Foam visibility,
-   exact marks or approval of every dot. Dependent physical selection stops here;
-   no Windows action is needed. A reply may ground adjacency comparison, but
-   cannot alone create an exclusion mask or authorize a classifier. No automatic
-   upper-edge selection, chromatic veto or threshold/window tuning follows.
+   **Upper-side checkpoint CLOSED:** the
+   [user reply](../50-diagnostics/s11/2026-10-09-foam-gap-upper-side-reply.json)
+   identifies the displayed upper feature as fixed glass rim/pattern. The regional
+   order is glass → small space → Foam; no exact contour, mask or cross-frame
+   correspondence follows. The [relative-gap check](../50-diagnostics/s11/2026-10-09-foam-gap-local-context.md#human-fixed-structure-reply-and-relative-gap-check)
+   verifies 17 comparisons / 329 pair combinations: a glass-rim control also
+   changes separation in 12/27 common columns, while the late central queries
+   have mixed signs. Nonzero separation change is not a physical selector.
+   Next require joint local correspondence and independent side-role evidence
+   before scalar selection; keep both alternatives and localization ambiguity.
+   A nearby glass anchor is optional, not a new eligibility gate on earlier
+   real Foam. No repeated physical question, new Windows action, automatic edge
+   choice, chromatic veto or threshold/window tuning follows from this reply.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require

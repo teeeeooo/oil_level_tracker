@@ -104,8 +104,93 @@ A reply can ground a structure–space–material adjacency hypothesis against t
 glass-only paired-edge control. It cannot itself create an exact exclusion mask,
 transfer the 44 s reference, identify every retained edge or certify an automatic
 selector. If unassessable, preserve the unknown instead of forcing an attribution.
-Further selection work dependent on this physical interpretation is stopped.
+At that checkpoint, selection work dependent on this interpretation stopped.
 No Windows work or file export is needed for this checkpoint.
+
+## Human fixed-structure reply and relative gap check
+
+The user subsequently answered **“위쪽은 고정된 유리 테두리, 무늬야”**.
+The [attributed reply](2026-10-09-foam-gap-upper-side-reply.json) closes the
+upper-side question for the displayed 54/55.5/56 s central region. Together
+with the earlier visible-space/Foam reply, this establishes the regional order
+**fixed glass feature → small visible space → Foam upper surface**. It does not
+certify the exact gradient positions, every cyan dot, a structure mask or a
+cross-frame correspondence. The original measurement JSON remains unchanged.
+
+The follow-up tests one narrower hypothesis before building an automatic rule:
+can raw lower-minus-upper separation change distinguish this situation from
+a glass-only paired-edge control? Source discovery reuses the existing ordered
+gap observations, rather than another patch matcher or camera-registration owner.
+The fixed preflight includes all earlier mixed-C2 time pairs, the 15→16 s rim
+control, all three late time pairs, and a separate view of the already displayed
+central pairs. Both original radii remain in the complete-component comparison;
+the display view remains radius 8 only. No display label is transferred to the
+unreviewed 54.5 s frame or to the rest of the component.
+
+For each plateau, retain every integer position in its half-open interval.
+Compute all feasible lower-minus-upper separations, then every same-X
+before/after combination. Keep multiple alternatives and missing columns;
+do not choose a nearest, strongest or smoothest match. A within-frame separation
+cancels a uniform vertical translation algebraically, but these queries do not
+establish camera motion, horizontal alignment or material correspondence.
+These operator ranges are not calibrated physical uncertainty or air-gap thickness.
+
+| Query context, radius 8 | Common X columns | Separation necessarily decreases | Zero change feasible | Separation necessarily increases |
+|---|---:|---:|---:|---:|
+| Confirmed-rim components, 15→16 s | 27 | 3 | 15 | 9 |
+| Prior central display, 54→55.5 s | 15 | 5 | 2 | 8 |
+| Prior central display, 54→56 s | 15 | 6 | 3 | 6 |
+| Prior central display, 55.5→56 s | 14 | 2 | 11 | 1 |
+
+Each row is a coordinate query over all available alternatives, not an accepted
+material track or independent accuracy trial. In the central 54→55.5 s query,
+the upper signed-gradient locations shift upward in 13/15 columns even though
+the user identifies the physical feature as fixed glass. This neither contradicts
+the reply nor proves glass motion: localization/appearance, camera effects and
+unverified correspondence remain distinct unknowns. No numeric jitter tolerance
+is calibrated from these values.
+
+**Decision:** preserve the regional role attribution; close a nonzero relative-
+separation shortcut without promotion. The glass-rim control also has nonzero
+changes in 12/27 columns, and the central material context produces mixed signs.
+Neither stationarity, gap change, the lower member of a pair, nor chromatic
+crossing can independently become a Foam selector. This is not a failure of every
+possible structure-relative method: the tested operation lacks verified local
+correspondence and a calibrated localization model.
+
+Independent integer enumeration verifies **17 comparisons / 234 common-column
+queries / 329 pair combinations**. It also catches an aggregation issue: an
+interval envelope spanning negative and positive alternatives can contain zero
+when their actual union does not. The v2 record preserves the exact feasible
+union and distinguishes `MIXED_SIGN_NO_ZERO` from `ZERO_POSSIBLE`, correcting 23
+column fields in the broader readout. The table above is unaffected. Original
+preflight, v1 result, correction script and corrected v2 result are all retained;
+this is a readout correction, not an operating-point change.
+
+The [relative-context machine record](2026-10-09-foam-gap-relative-context.json)
+pins the four direct inputs and 221 unchanged production source files, complete
+v2 comparisons, original result hash and scripts. It reuses the earlier verified
+rasters through the immutable context record; it does not claim to reread those
+67 raw inputs or rerun the detector. Local files remain in
+`sample/output/s11-foam-gap-relative-20261009-001/`.
+Source-identity and complete Cartesian-coverage checks also pass for all 329
+combinations. Detector governance, whitespace and the document audit pass
+(981 local links, 17 named obligations and unchanged protected owners).
+
+### Consequence for subsequent work
+
+The physical question is CLOSED; no further human/Windows step follows from this
+reply. D5's next design requirement is a **joint correspondence and side-role
+decision** before scalar selection: local structure evidence must correspond to
+the current upper feature, and a separate material partition must support the
+lower front. Ambiguous correspondence or localization remains unresolved.
+Preserve both same-frame alternatives until that decision; do not let a support
+mask's extreme or a motion score silently assign the roles. A nearby glass anchor
+must be optional, since earlier real Foam does not require a narrow glass/Foam gap.
+Any challenger needs an explicit decision/abstention rule and opposing controls
+before enabling behavior; this reply alone supplies neither a deployment mask
+nor an automatic classifier. The comparison adds a falsification control to that
+design requirement without reopening any completed physical review.
 
 ## Verification and preserved artifacts
 
@@ -135,6 +220,6 @@ entry record this result so the three insufficient shortcuts need not be retried
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F02`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: physical front identity remains unresolved before scalar selection. Candidate-local appearance predicates recur on the confirmed-rim control, and existing reviewed structure does not cover the upper central gap. No new causal selector or episode failure is inferred from this saved-data join.
+- First harmful stage: automatic front identity remains unresolved before scalar selection. Regional upper-side structure identity is now confirmed, but raw coordinates and cross-frame correspondence remain unverified. Candidate-local appearance and relative separation changes also occur on the confirmed-rim control; no new causal selector or episode failure is inferred.
 - Logic-map impact: NONE — saved-array context measurement has no production caller or decision authority.
-- Failure-registry impact: UPDATED — F07 records candidate-local side-support ambiguity, exact-reference limitations and the distinct upper-side physical checkpoint; no physical classifier is promoted.
+- Failure-registry impact: UPDATED — F07 records candidate-local side-support ambiguity, exact-reference limitations, the closed fixed-glass reply and relative-gap falsification; no physical classifier is promoted.

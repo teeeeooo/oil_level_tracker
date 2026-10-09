@@ -1,0 +1,35 @@
+{
+  "schema": "s11-foam-gap-upper-side-reply-v1",
+  "date": "2026-10-09",
+  "source_head": "541d14051ef48db070d7f9eec052bc1af2ff7955",
+  "status": "HUMAN_CHECKPOINT_CLOSED",
+  "user_reply": "위쪽은 고정된 유리 테두리, 무늬야",
+  "basis": "Direct user reply to the pink upper-side regional identity question.",
+  "frames": [
+    1620,
+    1665,
+    1680
+  ],
+  "image_path": "docs/50-diagnostics/s11/2026-10-09-foam-gap-upper-side-review.png",
+  "image_sha256": "ead1283c22e8709d8872fe08a0b84ad7aa79f4661e1491c020397bcc43ed0536",
+  "context_path": "docs/50-diagnostics/s11/2026-10-09-foam-gap-local-context.json",
+  "context_sha256": "49d0b8393c5f1974e5acbf0d69a8e35759fcd95ca3050f910d11bcd47465b568",
+  "source_images": {
+    "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001620_523615198887/original_roi_512ed6ab.png": "e00d97a5f265f5e6353d27014a46b6aca692112efb3b1c29fc170b171ba0462b",
+    "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001665_62f9dce1fd63/original_roi_512ed6ab.png": "f22078682f895b945b3e7db1c79def713ac0a6aea14577316a5e43971e206de5",
+    "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001680_c45cf0ca7009/original_roi_512ed6ab.png": "c6461782b828f81d4785c241c1e814fe5a054e34181f5698a36cb4782d54cbea"
+  },
+  "physical_interpretation": {
+    "upper_side": "FIXED_GLASS_RIM_OR_PATTERN",
+    "scope": "Displayed central upper side of the narrow space, regional identity only."
+  },
+  "supersedes": "Pending upper-side identity question only. Saved measurement receipt remains immutable.",
+  "limits": [
+    "No exact XY, approved gradient plateau, per-pixel mask, numeric tolerance or camera-motion truth.",
+    "No current-frame transfer of the 44 s reference and no dilation of its reviewed domain.",
+    "No blanket lower-edge selection, scalar candidate approval or structural mask inferred from the reply.",
+    "Foam upper visibility and internal-texture replies remain closed. No extension to 54.5 s or other frames."
+  ],
+  "formal_labels_changed": false,
+  "auto_acceptance": false
+}
