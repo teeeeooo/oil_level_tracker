@@ -355,6 +355,38 @@ fragment overlays. No exact contour recall can be inferred from regional human
 judgments. A successful lossless graph may still be fragmented, dominated by
 texture, or ambiguous at junctions; none is a successful physical detector.
 
+## Offline positive-reference constellation
+
+`s11_boundary_temporal_probe.match_reference_constellation` extends the existing
+offline appearance-comparison owner. It accepts same-shape bounded uint8 BGR
+images, boolean visibility and 1–128 native integer XY hints. Approximate hints
+are declared experimental initialization inputs, not exact contours or runtime
+truth. Vertical radius stencils contribute their union of pixels once; gaps
+remain unsampled. Radius is an image sampling parameter, not human uncertainty.
+
+The frozen operation compares every fully visible integer XY translation of
+the complete pattern. One additive offset per BGR channel applies jointly to
+all samples. With `n` samples and channel residual sums `s`, the exact integer
+cost is `n * sum(diff²) - sum(s²)`; normalization is `3*n*n*255²`. Every shift,
+cost and exactly tied minimum is retained. There is no nearest-position tie
+break, displacement gate, deformation, reference update or hidden interpolation.
+
+At most 4,194,304 image pixels, 4,096 distinct samples, radius 0–16 and 25 million
+compared channel values are permitted. Invalid shape/type/point/resource input
+raises before the search. A censored, masked or constant reference, or no fully
+visible current placement, returns UNAVAILABLE with a reason. Returned arrays
+are independently owned. Physical identity stays UNRESOLVED; no physical front
+or scalar is selected even for a unique zero-cost match.
+
+The [fixed feasibility comparison](../50-diagnostics/s11/2026-10-09-material-reference-feasibility.md)
+verified 676,240 costs and every candidate domain across 198 readouts. It rejected
+immutable-pattern matching for physical continuation: correct initialization
+still matches unrelated glass/texture. An unchanged existing sequential LK
+probe improves gross correspondence but also deforms/drifts and has no material
+authority. Current-frame edge proximity is a separate diagnostic observation,
+not a repair by snapping. None of these APIs has a production caller; no Recipe,
+UI, schema or accepted detector behavior changes.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
@@ -362,6 +394,6 @@ texture, or ambiguous at junctions; none is a successful physical detector.
 - Prior mechanisms reviewed: motion-only identity and episode confirmation, component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; missing rejected components; discarded chromatic support and support-extreme fronts; the rejected strongest/lowest/nearest/smoothest rules, ordered-patch drift, shared-plane temporal region-exchange failure, signed-gap representation, relative-gap ambiguity, common-reference/pixel-model and short-frame tracking limits, and the rear/front same-layer reply.
 - Prior mechanisms rejected: no restoration of rejected Foam authority, geometry-as-identity, blanket material veto, lowering thresholds, naive white/chromatic union, automatic upper-edge substitution, polarity-as-identity or using human coordinates in runtime.
 - Preserved contracts: independent Oil/Foam owners, same-frame source provenance, fail-closed publication and unchanged temporal/sequence decisions.
-- Difference from prior failures: optional ordered opposite-slope brackets and two-side transport remain diagnostic only. Observed-edge fragments now retain every visible raw edge pixel and adjacency, with junction alternatives/cycles and explicit crop/mask context, without a shared seed height or choosing a branch. This adds lossless local shape representation, not connectivity-as-identity, a joined physical contour or temporal authority. The full retained-support perimeter now preserves inside/outside and all projected parts without interpreting them as separate materials; known component contamination remains explicit. No decision owner consumes these measurements.
+- Difference from prior failures: optional ordered opposite-slope brackets and two-side transport remain diagnostic only. Observed-edge fragments retain every visible raw edge pixel and adjacency, with junction alternatives/cycles and explicit crop/mask context, without a shared seed height or choosing a branch. The full retained-support perimeter preserves inside/outside and all projected parts without interpreting them as separate materials. The new constellation operation supplies explicitly declared positive initialization and one joint pattern displacement, unlike unbound independent strips; real and synthetic counterexamples still reject its transfer of physical identity. Existing LK and edge-graph owners are reused for the comparison without a second tracker or selector. No decision owner consumes these measurements.
 - Logic-map impact: NONE — offline probes have no production caller; optional registration reasons do not change tuples, thresholds or decision ownership.
-- Failure-registry impact: UPDATED — F02 records the observed-edge fragment representation result and separates exact raster conservation from physical boundary recall; F07 retains appearance/correspondence counterexamples and records the retained-support grouping limit.
+- Failure-registry impact: UPDATED — F04/F07 record correct initialization followed by appearance drift, distinguish arithmetic uniqueness/track survival from physical ownership, and retain the current-edge ambiguity; prior F02 representation limits remain unchanged.

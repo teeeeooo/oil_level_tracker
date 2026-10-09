@@ -224,6 +224,19 @@ The other chain that reaches the glass rim passes `ANCHOR_TRAJECTORY` with
 physical correspondence remains unproven, including OFF's recovery track.
 Do not rerun the closed reciprocal probe or strip its physical-child guard.
 
+**2026-10-09 optional positive initialization:** the
+[fixed reference / sequential comparison](2026-10-09-material-reference-feasibility.md)
+explicitly supplies previously reviewed initial Oil/Foam vicinity as experimental
+input. This removes uncertainty about intended initial role, not later physical
+ownership. All 198 fixed-pattern queries have unique appearance minima, including
+Oil matches below the glass rim. The unchanged sequential LK alternative avoids
+that large jump but keeps all points alive while the pattern deforms and partly
+leaves the reviewed boundary. A perfect copied distractor and fixed-pattern
+optical warp remain opposing controls. Do not promote unique matching, surviving
+seed IDs, low reverse error or the nearest current edge to physical identity.
+No full production A/B or efficacy claim follows; broader optional reference
+design is unresolved, rather than disproved by these two transfer rules.
+
 ### S11-F05 — Initial-state and material-phase hard-lock asymmetry
 
 **Affected detector logic node(s):** `OIL-HYPOTHESIS` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.
@@ -393,6 +406,19 @@ with fluid-looking parts; conservation does not supply physical region ownership
 Do not equate one component ID with Foam, count projected arcs as independent
 interfaces, interpret their vertical span as thickness, or automatically choose
 an upper/lower perimeter. The source-bound beer reply remains regional and closed.
+
+**Explicit positive-reference follow-up:** the
+[2026-10-09 feasibility trial](2026-10-09-material-reference-feasibility.md)
+compares a frozen joint pattern with unchanged native-rate LK using the same
+approximate Foam initialization. The former jumps into lower dark interior;
+the latter retains 22/22 point IDs but misses part of the independently reviewed
+16 s shape. Approximate human points do not define a per-pixel error tolerance.
+The nearest visible current edge is often a raster junction, and the confirmed
+rim seed itself also stays close to edges. Thus current-edge proximity cannot
+repair appearance ownership by automatic snapping or certify a Foam front.
+No window/radius/threshold tuning, repeated exact contour review or per-frame
+manual rescue follows. Keep local point censoring distinct from full pyramid
+support; LK may use masked/glass context even when a point center is visible.
 
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 

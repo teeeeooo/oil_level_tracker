@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Beer A/B and milk lower-interface replies CLOSED: beer arcs are rear/front of one thin Foam layer; the separate lower Foam–milk boundary is difficult to distinguish. Preserve independent interface availability without inventing lower truth. Full retained-support boundary membership is implemented and verified offline (34 tests; 25 rasters / 166,672 faces), but current appearance components still mix structure and fluid. Source tracing confirms template rejection acts after mixed Foam support is formed. A product-scope choice is pending: continue current inputs only, or additionally investigate optional visible Oil/Foam reference initialization before any Recipe/UI change. The [decision brief](../50-diagnostics/s11/2026-10-09-material-reference-design-choice.md) defines the proposed workflow, reuse boundaries and falsification; it does not approve a tracker or mandatory setup. Existing judgments remain CLOSED; no Windows work is pending. Local XY remains CLOSED WITHOUT PROMOTION/OFF; O2 OPEN / FIELD FAIL remain. [Implementation and replies](../50-diagnostics/s11/2026-10-09-retained-support-boundaries.md).
+**Next transition:** The user selected option B, optional positive Oil/Foam initialization. The [offline feasibility comparison](../50-diagnostics/s11/2026-10-09-material-reference-feasibility.md) is recorded: fixed-pattern matching has verified arithmetic but follows unrelated features; unchanged consecutive-frame tracking reduces large jumps but retains points through partial drift. Current-edge proximity supplies no material authority. No Recipe/UI or production change follows. One new regional interpretation is pending: whether the right-hand point group at 45 s remains on the Foam–Oil boundary or follows internal Foam appearance. The old 42.5–44 s correspondence, Foam/rim, beer and milk replies remain CLOSED. After that reply, define current-frame boundary/side-role reobservation before another trial; do not tune or manually rescue these rules. Local XY remains CLOSED WITHOUT PROMOTION/OFF; O2 OPEN / FIELD FAIL remain. No Windows work is pending.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -388,13 +388,24 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    visibility independently of the assistant-observed upper bubbly outline.
    This is not physical absence or exact upper/lower truth. No lower coordinate
    follows from white bulk, vertical order or the upper contour; no repeat review.
-   **Proposed input choice PENDING:** the
+   **Optional input feasibility branch AUTHORIZED:** the
    [source trace and decision brief](../50-diagnostics/s11/2026-10-09-material-reference-design-choice.md)
    distinguish current negative artifact references from an optional positive
-   Oil/Foam reference. Decide whether the next offline feasibility branch may
-   include this explicit operator input; no runtime truth import, mandatory
-   setup, UI/schema change or reference-only numeric authority is authorized by
-   the proposal itself. Current automatic inputs remain the alternative.
+   Oil/Foam reference. The user chose option B (“권장안으로 가자”): execute the
+   offline feasibility branch with existing reviewed context where sufficient.
+   No runtime truth import, mandatory setup, UI/schema change or reference-only
+   numeric authority follows. The [frozen feasibility trial](../50-diagnostics/s11/2026-10-09-material-reference-feasibility.md)
+   now verifies 198 pattern readouts / 676,240 costs and records wrong-feature
+   matches. Same-input sequential LK keeps all 44 initial point IDs alive but
+   partly drifts; 167 current-edge graphs do not supply material identity.
+   Fixed-pattern continuation is CLOSED WITHOUT PROMOTION; LK remains a position
+   proposal only. Broad optional-reference feasibility is unresolved.
+   **Pending new interpretation:** the 45 s right-hand group in the new LK
+   result may remain on the Oil boundary or follow internal Foam. Ask only that
+   regional distinction; the old 42.5–44 s chain and exact-pixel truth are outside
+   this question. Preserve the answer as a control, not a manually chosen survivor
+   or runtime gate. After the reply, freeze a current-frame boundary/side-role
+   decision/abstention proposal before further work. No tuning of the failed rules.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require

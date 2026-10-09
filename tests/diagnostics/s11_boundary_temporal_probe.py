@@ -273,3 +273,88 @@ def sample_queries(arrays, points, *, origin=(0, 0), radius=2):
                            key: float(arrays[key][y0:y1, x0:x1][valid].mean()) if count else None
                            for key in CHANNELS}})
     return result
+
+
+CONSTELLATION_SPEC = {
+    'id': 'fixed-reference-constellation-v1',
+    'max_points': 128, 'max_samples': 4096,
+    'max_compared_values': 25_000_000,
+    'sampling': 'unique pixels in vertical radius stencils at supplied points',
+    'search': 'every integer XY translation with complete visible sample support',
+    'loss': 'exact mean-centered BGR squared error; one offset per channel for all samples',
+    'geometry': 'one translation for the complete constellation; no deformation or gap fill',
+    'authority': 'appearance hypotheses only; no physical role, track or scalar authority',
+}
+
+
+def match_reference_constellation(anchor, current, points, anchor_visible,
+                                  current_visible, *, radius=2):
+    """Compare a fixed approximate reference's spatial pattern jointly.
+
+    Points are native integer XY hints, not exact boundary truth. Duplicate or
+    overlapping stencils contribute each pixel once. All shifts and exact ties
+    survive; this operation neither selects a physical front nor updates its
+    reference. Holes in the stencil remain holes, not reconstructed context.
+    """
+    if (not isinstance(anchor, np.ndarray) or anchor.dtype != np.uint8
+            or anchor.ndim != 3 or anchor.shape[2] != 3 or not anchor.size
+            or anchor.shape[0] * anchor.shape[1] > MAX_PIXELS):
+        raise ValueError('bounded nonempty uint8 BGR anchor required')
+    if (not isinstance(current, np.ndarray) or current.dtype != np.uint8
+            or current.shape != anchor.shape):
+        raise ValueError('same-shape uint8 BGR current required')
+    for v in (anchor_visible, current_visible):
+        if not isinstance(v, np.ndarray) or v.dtype != np.bool_ or v.shape != anchor.shape[:2]:
+            raise ValueError('same-shape boolean visibility required')
+    if (not isinstance(points, np.ndarray) or points.ndim != 2 or points.shape[1] != 2
+            or points.dtype.kind not in 'iu' or not 1 <= len(points) <= CONSTELLATION_SPEC['max_points']
+            or type(radius) is not int or not 0 <= radius <= 16):
+        raise ValueError('bounded nonempty integer XY points and radius required')
+    h, w = anchor.shape[:2]
+    if np.any(points < 0) or np.any(points[:, 0] >= w) or np.any(points[:, 1] >= h):
+        raise ValueError('reference point outside crop')
+    p = points.astype(np.int64)
+    samples = np.unique((p[:, None, :] + np.array([(0, dy) for dy in range(-radius, radius+1)])).reshape(-1, 2), axis=0)
+    if len(samples) > CONSTELLATION_SPEC['max_samples']:
+        raise ValueError('reference sample budget exceeded')
+    result = dict(spec_id=CONSTELLATION_SPEC['id'], status='UNAVAILABLE', reason=None,
+                  sample_xy=samples.copy(), shifts_xy=np.empty((0, 2), np.int64),
+                  cost_numerators=np.empty(0, np.int64), cost_denominator=None,
+                  best_shifts_xy=np.empty((0, 2), np.int64),
+                  physical_identity='UNRESOLVED', selected_front=None)
+    if np.any(samples < 0) or np.any(samples[:, 0] >= w) or np.any(samples[:, 1] >= h):
+        return dict(result, reason='reference_stencil_outside_crop')
+    sx, sy = samples.T
+    if not anchor_visible[sy, sx].all():
+        return dict(result, reason='reference_stencil_masked')
+    reference = anchor[sy, sx].astype(np.int64)
+    if np.all(reference == reference[0]):
+        return dict(result, reason='constant_reference')
+    # One additive offset per channel; bounded samples keep exact moments int64-safe.
+    n = len(samples)
+    dxs = np.arange(-sx.min(), w-sx.max(), dtype=np.int64)
+    dys = np.arange(-sy.min(), h-sy.max(), dtype=np.int64)
+    if len(dxs) * len(dys) * n * 3 > CONSTELLATION_SPEC['max_compared_values']:
+        raise ValueError('reference search budget exceeded')
+    dx, dy = np.meshgrid(dxs, dys)
+    shifts = np.column_stack((dx.ravel(), dy.ravel()))
+    measured_shifts, costs = [], []
+    for start in range(0, len(shifts), 128):
+        batch = shifts[start:start+128]
+        x, y = sx[None, :]+batch[:, 0, None], sy[None, :]+batch[:, 1, None]
+        complete = current_visible[y, x].all(axis=1)
+        if not complete.any():
+            continue
+        batch, x, y = batch[complete], x[complete], y[complete]
+        diff = reference[None, :, :] - current[y, x].astype(np.int64)
+        sums = diff.sum(axis=1)
+        cost = n * np.square(diff).sum(axis=(1, 2)) - np.square(sums).sum(axis=1)
+        measured_shifts.append(batch)
+        costs.append(cost)
+    if not costs:
+        return dict(result, reason='no_visible_current_placement')
+    shifts, costs = np.concatenate(measured_shifts), np.concatenate(costs)
+    best = shifts[costs == costs.min()]
+    return dict(result, status='MEASURED', reason=None, shifts_xy=shifts,
+                cost_numerators=costs, cost_denominator=3*n*n*255**2,
+                best_shifts_xy=best, minimizer_count=len(best))

@@ -1,8 +1,9 @@
 # Optional material-reference design choice — 2026-10-09
 
 Source inspected at `7406903ab928cdde8bbfe65ae85c6e010bc6a3a9`.
-This is a **proposal awaiting a product-scope choice**, not an accepted runtime
-contract, implementation or finding that automatic detection is impossible.
+This proposal was prepared for a product-scope choice. **Option B is now
+authorized for offline feasibility** (see Choice received below), not accepted
+runtime integration or a finding that automatic detection is impossible.
 The [Work Plan](../../00-project/work-plan.md) owns the current transition.
 
 ## Why this choice is now concrete
@@ -100,10 +101,22 @@ automatic challenger design with the same existing inputs. Neither branch
 requires another milk/beer interpretation, ML, Windows execution or file export
 at this decision point. No branch has been executed by this note.
 
+## Choice received
+
+The user replied **“권장안으로 가자”**. This selects option B's offline
+feasibility branch under the limits above. The original proposal's pending text
+records its preparation state; the current work plan now carries authorization.
+Use existing bound Oil and approximate Foam examples first, without repeating
+closed physical interpretations. Production and Recipe/UI adoption remain
+conditional on the result, not consequences of choosing this investigation.
+The [executed feasibility record](2026-10-09-material-reference-feasibility.md)
+preserves the fixed-pattern failure, sequential-tracking limits and current
+pending regional interpretation; its results do not authorize UI/schema work.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PROPOSAL`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
 - First harmful stage: retained appearance support can mix structure and fluid before candidate rejection; a positive reference is an untested proposal for initial identity, not a diagnosed complete repair.
 - Logic-map impact: NONE — source tracing and a proposed optional input change no runtime owner or authority.
-- Failure-registry impact: NONE — no new mechanism was executed; prior geometry, appearance, tracking and truth-leakage limits remain applicable.
+- Failure-registry impact: UPDATED — the separate executed feasibility record adds explicit-initialization counterexamples to F04/F07; this brief remains the approved input-scope proposal, not an accepted continuation rule.
