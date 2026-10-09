@@ -1,0 +1,26 @@
+{
+  "schema": "s11-regional-human-interpretation-v1",
+  "base_head": "7bc44db254bf234e60cc0e8326aaa0eea7ec2948",
+  "case_id": "s6-forming",
+  "video": "sample/sample6.mp4",
+  "video_sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+  "shown_frames": [
+    146,
+    158,
+    171
+  ],
+  "marked_frame": 146,
+  "reply_verbatim": "같은 얇은 거품층의 뒤쪽과 앞쪽임",
+  "authority": "user physical interpretation",
+  "status": "CLOSED",
+  "interpretation": "A and B are the rear and front of the same thin Foam layer. Their projected vertical separation is not evidence of two independently labeled material interfaces or physical layer thickness.",
+  "scope": "Approximate displayed features only; no exact contour pixels, scalar Y, correspondence tracks, hidden lower interface or other frames certified.",
+  "control_role": "Opposes counting projected arcs as two material interfaces solely by vertical separation; preserves both observed geometries.",
+  "source_figures": {
+    "2026-10-09-beer-boundary-review.png": "a37dcf2651bdb52e71a85acd9c46d79d9649353d38e2f7762abbc52fd878a490",
+    "2026-10-09-beer-boundary-context.png": "a9231f7a32efaa83a3213b9e280c57b446911604362cb3a26f8836917bef2a39"
+  },
+  "production_label_change": false,
+  "existing_judgments": "UNCHANGED",
+  "new_review_request": false
+}

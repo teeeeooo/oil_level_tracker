@@ -1,0 +1,20 @@
+{
+  "schema": "s11-regional-human-interpretation-v1",
+  "base_head": "7bc44db254bf234e60cc0e8326aaa0eea7ec2948",
+  "case_id": "s7-settled",
+  "video": "sample/sample7.mp4",
+  "video_sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+  "shown_frames": [1039, 1051, 1063],
+  "reply_verbatim": "아래의 거품–우유 경계는 구분하기 어려움",
+  "authority": "user physical interpretation",
+  "status": "CLOSED",
+  "interpretation": "The separate lower Foam–liquid milk boundary is difficult to distinguish in the displayed context. Preserve its unresolvable visibility rather than assigning a lower-interface coordinate.",
+  "scope": "Regional visibility only; not physical absence of an interface, not an exact upper contour, scalar Y, segmentation mask or temporal correspondence label.",
+  "control_role": "Independent lower-interface unavailability control. The assistant-observed upper bubbly outline does not establish the hidden lower boundary; neither white bulk nor a vertically lower appearance edge supplies its truth.",
+  "source_figures": {
+    "2026-10-09-milk-interface-context.png": "b9ae104c7bded2548ba553ae0fa52b5674e16584734274074dc6dfd605988f20"
+  },
+  "production_label_change": false,
+  "existing_judgments": "UNCHANGED",
+  "new_review_request": false
+}

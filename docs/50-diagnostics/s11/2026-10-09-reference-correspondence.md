@@ -200,6 +200,22 @@ needed. After the reply, specify one bounded contour-group/side-role mechanism
 that retains optical opposition and real structure crossings before another
 physical selection trial. The current results alone do not establish that rule.
 
+## Human reply received — beer A/B closed
+
+The user replied: **“같은 얇은 거품층의 뒤쪽과 앞쪽임”**.
+The [source-bound reply](2026-10-09-public-beer-layer-reply.json) closes the
+question: A/B show the rear/front of the same thin Foam layer. Preserve both
+projected geometries; their Y separation neither counts two independently
+identified interfaces nor measures layer thickness. The answer does not label
+exact contour pixels, certify correspondence tracks, choose a public scalar or
+identify an unseen lower interface. No repeated question is needed.
+
+The next operation must preserve region membership and all of its boundary
+parts together. Existing component masks are appearance evidence, not accepted
+physical ownership; the same representation must retain glass/texture opposition.
+This does not justify filling missing support, imposing closure or merging nearby
+components merely because they have similar appearance.
+
 ## Verification and preservation
 
 - Independently reconstructed **12,911** all/held-out layout residuals, location

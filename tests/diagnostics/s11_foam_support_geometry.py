@@ -94,3 +94,85 @@ def measure(labels, visible, target_id, reference_id, *, origin=(0, 0)):
         'limits': 'retained support only; no reference in a column is not physical absence; '
                   'a clear mask corridor is not material identity or proof of no optical obstruction',
     }
+
+
+BOUNDARY_SPEC = {
+    'id': 'retained-support-boundary-faces-v1',
+    'max_faces': 1_000_000,
+    'geometry': 'oriented unit pixel faces; same-label neighbours share no face',
+    'statuses': ['VISIBLE_ZERO', 'VISIBLE_OTHER_LABEL', 'MASKED_NEIGHBOUR', 'CROP'],
+    'limits': 'Labels group retained appearance support, not physical material. '
+              'Zero is outside retained support, not air or physical absence. '
+              'No ring pairing, gap fill, component merge, scalar or selected front.',
+}
+
+
+def measure_boundary_faces(labels, visible, *, origin=(0, 0)):
+    """Retain every observed label's boundary parts with their inside/outside.
+
+    Coordinates describe unit squares centred on the source pixel. Doubled
+    corner coordinates represent half pixels exactly; oriented faces keep the
+    owning pixel on the right in screen coordinates (positive Y down). All
+    corner incidences, including diagonal contacts, remain unpaired. A mask or
+    crop face is censored support, never a newly observed physical contour.
+
+    Hidden label values have no effect. Distinct labels have one oriented face
+    each on a shared border: these are owner views, not two physical interfaces.
+    The caller owns capture completeness and the working-to-source resize map.
+    """
+    if (not isinstance(labels, np.ndarray) or labels.ndim != 2
+            or labels.dtype != np.uint16 or not labels.size
+            or labels.size > MAX_PIXELS):
+        raise ValueError('labels must be a nonempty bounded 2-D uint16 raster')
+    if (not isinstance(visible, np.ndarray) or visible.shape != labels.shape
+            or visible.dtype != np.bool_):
+        raise ValueError('visible must be a same-shape boolean raster')
+    if (not isinstance(origin, (tuple, list)) or len(origin) != 2
+            or any(type(v) is not int or abs(v) > 2**50 for v in origin)):
+        raise ValueError('bounded integer source origin required')
+    h, w = labels.shape
+    active = visible & (labels != 0)
+    # Padding has its own CROP status; it cannot masquerade as visible label 0.
+    padded_labels = np.pad(np.where(visible, labels, 0), 1)
+    padded_visible = np.pad(visible, 1)
+    padded_domain = np.pad(np.ones(labels.shape, bool), 1)
+    directions = ((0, -1), (1, 0), (0, 1), (-1, 0))
+    pieces = []
+    count = 0
+    for direction, (dx, dy) in enumerate(directions):
+        sl = np.s_[1+dy:1+dy+h, 1+dx:1+dx+w]
+        neighbour = padded_labels[sl]
+        seen, domain = padded_visible[sl], padded_domain[sl]
+        boundary = active & (~seen | (neighbour != labels))
+        n = int(np.count_nonzero(boundary))
+        count += n
+        if count > BOUNDARY_SPEC['max_faces']:
+            raise ValueError('support boundary face resource bound exceeded')
+        yy, xx = np.nonzero(boundary)
+        status = np.where(~domain[boundary], 3,
+                          np.where(~seen[boundary], 2,
+                                   np.where(neighbour[boundary] == 0, 0, 1)))
+        pieces.append((xx, yy, np.full(n, direction, np.uint8),
+                       labels[boundary], neighbour[boundary], status.astype(np.uint8)))
+    xx, yy, direction, inside, outside, status = (
+        np.concatenate([p[i] for p in pieces]) for i in range(6)
+    )
+    order = np.lexsort((direction, xx, yy, inside))
+    direction, inside, outside, status = (a[order].copy() for a in (direction, inside, outside, status))
+    owner_xy = np.column_stack((xx[order], yy[order])).astype(np.int64) + np.asarray(origin, np.int64)
+    normals = np.asarray(directions, np.int8)[direction]
+    start_offsets = np.array([[-1,-1], [1,-1], [1,1], [-1,1]], np.int64)
+    end_offsets = np.array([[1,-1], [1,1], [-1,1], [-1,-1]], np.int64)
+    ids, counts = np.unique(labels[active], return_counts=True)
+    return {
+        'schema_version': BOUNDARY_SPEC['id'], 'origin': list(origin),
+        'shape': list(labels.shape), 'status_names': list(BOUNDARY_SPEC['statuses']),
+        'owner_pixel_xy': owner_xy, 'neighbour_pixel_xy': owner_xy + normals,
+        'start_xy2': 2 * owner_xy + start_offsets[direction],
+        'end_xy2': 2 * owner_xy + end_offsets[direction],
+        'outward_normal_xy': normals.copy(), 'inside_label': inside,
+        'outside_label': outside, 'status': status,
+        'label_ids': ids.copy(), 'label_pixel_counts': counts.copy(),
+        'decision': 'NOT_EVALUATED', 'physical_identity': 'UNRESOLVED',
+        'selected_front': None, 'limits': BOUNDARY_SPEC['limits'],
+    }

@@ -100,6 +100,49 @@ inputs. These are geometry controls, not synthetic physical identity labels.
 The three saved Mac frames provide attributed regression context, not holdout
 validation or a behavior promotion.
 
+## Offline retained-support boundary faces
+
+`s11_foam_support_geometry.measure_boundary_faces` extends the existing retained
+support geometry owner. It retains the full perimeter membership of every visible
+nonzero diagnostic label rather than collapsing its upper/lower extents into
+separate material fronts. One projected layer can have multiple separated image
+arcs; a label can also wrongly join glass and fluid. Neither geometry assigns
+physical material or the count of independent interfaces.
+
+For each observed labelled pixel, retain its four unit-square faces wherever the
+neighbour differs, is masked or lies outside the crop. Same-label internal faces
+cancel. Each retained face names its inside label, outside label when visible,
+owner/neighbor pixel, outward normal and both oriented endpoints. Endpoints use
+integer **doubled raster coordinates** to retain half-pixel boundaries exactly;
+in positive-Y-down screen coordinates the owner stays on the right. An integer
+origin translates the supplied raster units; callers retain any resize mapping.
+
+Group by the original label ID without relabeling, merging or assigning an order
+to contour parts. Preserve holes and all diagonal-corner incidences; do not choose
+ring connections, fit an ellipse or bridge gaps. A shared border between two
+labels has two opposite owner views, not two proved physical interfaces. Label
+IDs remain frame-local appearance support, not object identities across time.
+
+Face status distinguishes visible zero, visible other label, masked neighbor and
+crop boundary. Zero means outside retained support, including capture omissions;
+it never means air/non-Foam. Hidden label values have no effect. Mask/crop faces
+record censored support, not newly observed contours. Caller-owned capture
+provenance must disclose truncation, upstream cleanup and visibility policy.
+No acceptance rule requires this support to close a raw image edge.
+
+Input: nonempty uint16 labels, same-shape boolean visibility, at most 4,194,304
+pixels, integer origin bounded by absolute 2^50. More than 1,000,000 faces raises
+an explicit error rather than dropping weak/small components. Outputs own their
+arrays; inputs and the existing column API stay unchanged. No production caller,
+public scalar, material classifier or selected front is added.
+
+Validation covers single pixels, a layer's multiple sides, holes, disconnected
+same-ID pieces, diagonal contact, two-label borders, crop/mask censoring, hidden
+poison values, translation, ownership, empty rasters and explicit resource errors.
+All 512 binary 3×3 configurations conserve perimeter and signed area. Real capture
+verification separately checks every face and original component metadata; exact
+support conservation is not physical boundary recall.
+
 ## Offline boundary-alternative prototype
 
 `tests/diagnostics/s11_foam_front_alternatives.py` separates a retained material
@@ -316,9 +359,9 @@ texture, or ambiguous at junctions; none is a successful physical detector.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
-- Prior mechanisms reviewed: motion-only identity and episode confirmation, component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; missing rejected components; discarded chromatic support and support-extreme fronts; the rejected strongest/lowest/nearest/smoothest rules, ordered-patch drift, shared-plane temporal region-exchange failure, signed-gap representation and relative-gap ambiguity.
+- Prior mechanisms reviewed: motion-only identity and episode confirmation, component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; missing rejected components; discarded chromatic support and support-extreme fronts; the rejected strongest/lowest/nearest/smoothest rules, ordered-patch drift, shared-plane temporal region-exchange failure, signed-gap representation, relative-gap ambiguity, common-reference/pixel-model and short-frame tracking limits, and the rear/front same-layer reply.
 - Prior mechanisms rejected: no restoration of rejected Foam authority, geometry-as-identity, blanket material veto, lowering thresholds, naive white/chromatic union, automatic upper-edge substitution, polarity-as-identity or using human coordinates in runtime.
 - Preserved contracts: independent Oil/Foam owners, same-frame source provenance, fail-closed publication and unchanged temporal/sequence decisions.
-- Difference from prior failures: optional ordered opposite-slope brackets and two-side transport remain diagnostic only. Observed-edge fragments now retain every visible raw edge pixel and adjacency, with junction alternatives/cycles and explicit crop/mask context, without a shared seed height or choosing a branch. This adds lossless local shape representation, not connectivity-as-identity, a joined physical contour or temporal authority. No decision owner consumes these measurements.
+- Difference from prior failures: optional ordered opposite-slope brackets and two-side transport remain diagnostic only. Observed-edge fragments now retain every visible raw edge pixel and adjacency, with junction alternatives/cycles and explicit crop/mask context, without a shared seed height or choosing a branch. This adds lossless local shape representation, not connectivity-as-identity, a joined physical contour or temporal authority. The full retained-support perimeter now preserves inside/outside and all projected parts without interpreting them as separate materials; known component contamination remains explicit. No decision owner consumes these measurements.
 - Logic-map impact: NONE — offline probes have no production caller; optional registration reasons do not change tuples, thresholds or decision ownership.
-- Failure-registry impact: UPDATED — F02 records the observed-edge fragment representation result and separates exact raster conservation from physical boundary recall; existing F07 appearance/correspondence counterexamples remain in force.
+- Failure-registry impact: UPDATED — F02 records the observed-edge fragment representation result and separates exact raster conservation from physical boundary recall; F07 retains appearance/correspondence counterexamples and records the retained-support grouping limit.

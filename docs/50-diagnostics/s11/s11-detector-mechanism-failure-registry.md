@@ -383,6 +383,17 @@ real fluid/structure crossings. No tighter error/scale/window cutoffs follow
 from these observed results. The new beer A/B physical question is distinct from
 previously closed sample4 and water interpretations.
 
+**Retained-support grouping and perspective:** the user confirms that sample6
+A/B are the rear/front of one thin Foam layer, not a pair of independently
+identified interfaces. The [boundary-membership implementation](2026-10-09-retained-support-boundaries.md)
+preserves every side, hole and censored neighbor of 498 retained components
+across 25 rasters (166,672 oriented faces), with 34 focused tests and independent
+pixel/perimeter checks. Real appearance support still joins glass/rim/reflection
+with fluid-looking parts; conservation does not supply physical region ownership.
+Do not equate one component ID with Foam, count projected arcs as independent
+interfaces, interpret their vertical span as thickness, or automatically choose
+an upper/lower perimeter. The source-bound beer reply remains regional and closed.
+
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 
 **Affected detector logic node(s):** `OIL-TRACKLET` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.

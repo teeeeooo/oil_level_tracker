@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Joint reference layout and consecutive-frame diagnostics are complete: common geometry opposes the old rim jump, but pixel-model preference and optical-flow consistency do not establish material identity. The new sample6 forming-scene A/B physical question is pending: distinguish rear/front views of one thin Foam layer from separate Foam–air / Foam–liquid interfaces before defining the next material-side control. Exact pixels are not requested. Existing water/sample4 replies remain CLOSED; no Windows work is needed. Local XY remains CLOSED WITHOUT PROMOTION/OFF; O2 OPEN / FIELD FAIL are unchanged. [Investigation and review](../50-diagnostics/s11/2026-10-09-reference-correspondence.md).
+**Next transition:** Beer A/B and milk lower-interface replies CLOSED: beer arcs are rear/front of one thin Foam layer; the separate lower Foam–milk boundary is difficult to distinguish. Preserve independent interface availability without inventing lower truth. Full retained-support boundary membership is implemented and verified offline (34 tests; 25 rasters / 166,672 faces), but current appearance components still mix structure and fluid. Next trace where raw support loses physical-front evidence and specify a distinct mechanism with explicit abstention and the existing opposing controls before a new challenger. Existing judgments remain CLOSED; no Windows work is pending. Local XY remains CLOSED WITHOUT PROMOTION/OFF; O2 OPEN / FIELD FAIL remain. [Implementation and replies](../50-diagnostics/s11/2026-10-09-retained-support-boundaries.md).
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -368,13 +368,26 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    within unconstrained photometry. Short tracking also follows an optical warp
    with low reverse error. No physical selector or production change follows.
    Hypotheses, failed expectation, all outcomes and independent checks are saved.
-   **New physical question PENDING:** sample6 f146/158/171 A/B may be rear/front
-   perspectives of the same thin Foam layer rather than independent material
-   interfaces. Agent inspection leans toward the former. The reply determines
-   the next side-role/control interpretation; do not assign roles by vertical
-   order or request exact pixels. An uncertain reply retains this control as
-   unresolved. Existing water/sample4 questions remain closed. Continue after
-   this necessary judgment; no Windows task or setup change is pending.
+   **Beer A/B reply CLOSED:** the user identifies the two displayed arcs as
+   rear/front of the same thin Foam layer. The [bound reply](../50-diagnostics/s11/2026-10-09-public-beer-layer-reply.json)
+   preserves both geometries and opposes treating their Y separation as two
+   material interfaces or thickness. No exact pixels, scalar, unseen interface
+   or temporal correspondence is certified. Next inspect component support and
+   its full boundary membership, with glass/texture controls; no repeat question.
+   **Full support-boundary membership implemented/verified offline:** the
+   [25-raster comparison](../50-diagnostics/s11/2026-10-09-retained-support-boundaries.md)
+   extends the existing geometry probe, preserving all 166,672 faces of retained
+   support, including holes and censored context. Thirty-four tests pass; every
+   real face and per-label area/perimeter is independently checked. Public
+   capture ON/OFF is equal on 18/18 rasters; seven legacy captures stay unchanged.
+   Components can join glass/reflection with fluid-looking parts; no physical
+   grouping, scalar or production selector follows from a shared label ID.
+   **Milk lower-interface reply CLOSED:** for sample7 f1039/1051/1063 the
+   [user reply](../50-diagnostics/s11/2026-10-09-public-milk-interface-reply.json)
+   says “아래의 거품–우유 경계는 구분하기 어려움”. Preserve unresolvable lower
+   visibility independently of the assistant-observed upper bubbly outline.
+   This is not physical absence or exact upper/lower truth. No lower coordinate
+   follows from white bulk, vertical order or the upper contour; no repeat review.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require
