@@ -165,8 +165,11 @@ would be after-result changes to the closed variant, not demonstrated repairs.
   Both write with exclusive creation and must not overwrite the frozen run.
 - Repository checks cover 767 changed-document local links/anchors with no
   missing targets, byte/hash preservation, S11 governance against `cc17924`
-  including the worktree, and `git diff --check`. All pass; changed scope is
-  documentation and offline diagnostic/tests only.
+  including the worktree, and whitespace checks for authored changes from
+  `5c596a7`. These pass; changed scope is documentation and offline diagnostic/tests
+  only. The full import range from `cc17924` reports four trailing-space lines
+  in the supplied specification's Markdown hard breaks. They are deliberately
+  preserved as original bytes, not rewritten to silence the import check.
 
 ## Consequence for subsequent work
 

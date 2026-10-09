@@ -1419,6 +1419,8 @@
     "include_worktree": true,
     "governance": "PASS",
     "diff_check": "PASS",
-    "changed_scope": "docs and offline diagnostic/tests only"
+    "changed_scope": "docs and offline diagnostic/tests only",
+    "diff_check_scope": "authored changes after intake commit 5c596a7",
+    "full_import_range_diff_check": "4 trailing-space diagnostics in byte-preserved supplied specification lines 3-6 (Markdown hard breaks); retained original bytes"
   }
 }
