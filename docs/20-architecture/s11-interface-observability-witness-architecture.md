@@ -1642,6 +1642,59 @@ distractor, optical warp or same-observable structural boundary. The experiment
 must demonstrate useful target support as well as opposition; all-abstain is
 not success. No CBR-1 implementation or efficacy is accepted by this contract.
 
+#### CBR-1 frozen first operation — 2026-10-10
+
+The user authorizes bounded implementation/local evaluation and autonomous
+commit/push, stopping when human judgment or Windows execution is required.
+Freeze this first operation before implementation and new real-data outcomes:
+
+1. Geometry is the existing `measure_edge_fragments` result on unchanged native
+   Canny and effective/non-glare visibility. Keep every maximal degree-two chain,
+   cycle, isolate and junction alternative. No Foam/H0 label input is used.
+   Current source pixel centers are the geometry basis, not half-pixel faces.
+2. Reference mapping is **same source X**, with the existing approximate initial
+   points, deduplicated exactly. Duplicate X with different reference Y makes the
+   reference unavailable. On each fragment, join reference X to its current
+   observed pixels; multiple current Y at any joined X make that fragment's
+   mapping ambiguous. No per-point motion, translation search or gap filling.
+3. Each joined point samples the two pixels at native Y−2/Y+2, using the existing
+   reference offset. Both sample pixels and the center must be visible/in bounds
+   in reference and current rasters. Record requested, missing and usable pairs;
+   all explanations use the same usable pairs. Vertical above/below is the v1
+   side convention, not a claim about material normals on steep/vertical edges.
+4. Compute exact integer sums of absolute BGR differences for AB, BA, AA, BB;
+   denominator is `6 * usable_pairs`. AB must be strictly lower than all three.
+   Equal losses abstain with no epsilon. A supplied structure reference is
+   comparable only if every usable X has its own visible paired sample; otherwise
+   the entire structure explanation is NOT_MEASURED. A comparable structure loss
+   no greater than AB contradicts it. No missing opposition supplies a vote.
+5. Keep every candidate and every actual center-column pixel. A provisional
+   frame coordinate requires exactly one AB-preferred fragment with exactly one
+   current center crossing. Different fragment alternatives sharing a junction
+   are retained, not merged into a physical owner. Other outcomes remain explicit
+   no-reference/no-comparison/no-center/ambiguous/contradicted diagnostics.
+   Physical decision stays NOT_EVALUATED for all outcomes.
+6. Raster bound: existing 4,194,304 pixels. Reference: 128 distinct points.
+   Per frame: 8,192 fragments, 250,000 geometry vertices, 2,000,000 fragment
+   vertex references, and a conservative
+   `fragment_count * reference_count <= 65,536` paired-sample budget checked
+   before candidate output allocation. Graph construction retains its existing
+   bounds. Input errors reject; budget exhaustion returns explicit UNAVAILABLE
+   without a prefix subset. Stored fields are bounded by the same sample budget.
+7. Use all original three plans unchanged: Foam 420–510 (22 reference points),
+   Oil 1275–1350 (21), Structure 450–480 (1). Structure is a separate appearance
+   reference control, not negative ground truth for every candidate in its frames.
+   Initialization is excluded. Inference reads only current raster/geometry and
+   immutable reference, never LK output. This operation has no temporal state;
+   native and existing 0.5-second analysis-grid subsets are reported separately.
+8. No extra ablation is selected for this first run. Progress requires sustained
+   non-initial target-vicinity support on the already reviewed Oil 42.5–44 s and
+   Foam 14–16 s contexts, with the complete plan showing no new long wrong-region
+   run. Later Oil and unlabeled fragments remain attributed/NOT_MEASURED. If
+   outputs are absent/ambiguous or wrong-region dominated, close this variant;
+   do not alter reference columns, stencil, fragment grouping or bounds afterward.
+   Any genuinely undecidable physical interpretation is a user-review stop.
+
 ### Fixed control matrix and input separation
 
 | Input / existing owner | Preserved role in D2 | What it cannot establish |

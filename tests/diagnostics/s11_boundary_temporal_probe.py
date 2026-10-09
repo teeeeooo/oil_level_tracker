@@ -358,3 +358,177 @@ def match_reference_constellation(anchor, current, points, anchor_visible,
     return dict(result, status='MEASURED', reason=None, shifts_xy=shifts,
                 cost_numerators=costs, cost_denominator=3*n*n*255**2,
                 best_shifts_xy=best, minimizer_count=len(best))
+
+
+CURRENT_BOUNDARY_SPEC = {
+    'id': 'current-boundary-reference-comparison-v1',
+    'geometry_basis': 'observed_canny_pixel_centers',
+    'correspondence': 'same source X on each unjoined observed fragment',
+    'side_offset': 2,
+    'loss': 'exact BGR L1 sum; identical pairs for AB, BA, AA, BB and structure',
+    'max_reference_points': 128,
+    'max_fragments': 8192,
+    'max_vertices': 250_000,
+    'max_fragment_indices': 2_000_000,
+    'max_pair_budget': 65_536,
+    'physical_decision': 'NOT_EVALUATED',
+}
+
+
+def _current_boundary_reference(image, visible, points, origin):
+    """Return frozen source-column pairs; never infer pure material labels."""
+    if (not isinstance(points, np.ndarray) or points.ndim != 2 or points.shape[1] != 2
+            or points.dtype.kind not in 'iu'
+            or len(points) > CURRENT_BOUNDARY_SPEC['max_reference_points']):
+        raise ValueError('bounded integer source reference points required')
+    if not len(points):
+        return {}, 'no_reference'
+    points = np.unique(points, axis=0)
+    if len(np.unique(points[:, 0])) != len(points):
+        return {}, 'ambiguous_reference_column'
+    h, w = visible.shape
+    result = {}
+    for sx, sy in points:
+        x, y = int(sx)-origin[0], int(sy)-origin[1]
+        if not (0 <= x < w and 0 <= y < h):
+            raise ValueError('reference point outside source crop')
+        offset = CURRENT_BOUNDARY_SPEC['side_offset']
+        seen = (offset <= y < h-offset
+                and visible[y, x] and visible[y-offset, x] and visible[y+offset, x])
+        result[int(sx)] = {
+            'source_y': int(sy), 'available': bool(seen),
+            'a': image[y-offset, x].astype(np.int32) if seen else None,
+            'b': image[y+offset, x].astype(np.int32) if seen else None,
+        }
+    return result, None
+
+
+def compare_current_boundary_reference(anchor, current, anchor_visible, current_visible,
+                                       points, geometry, *, origin=(0, 0), center_x,
+                                       structure_reference=None):
+    """Measure declared side appearance on existing current edge fragments.
+
+    ``geometry`` is the existing measure_edge_fragments result, in source pixels.
+    ``points`` are approximate initial source XY hints, never scoring truth.
+    Optional structure_reference is (image, visible, points) in the same crop.
+    A provisional coordinate is diagnostic only; no physical/public value is set.
+    """
+    for im, mask in ((anchor, anchor_visible), (current, current_visible)):
+        if (not isinstance(im, np.ndarray) or im.dtype != np.uint8 or im.ndim != 3
+                or im.shape[2] != 3 or not im.size or im.shape[0]*im.shape[1] > MAX_PIXELS
+                or not isinstance(mask, np.ndarray) or mask.dtype != np.bool_
+                or mask.shape != im.shape[:2]):
+            raise ValueError('bounded uint8 BGR and boolean visibility required')
+    if anchor.shape != current.shape:
+        raise ValueError('same-shape reference/current crops required')
+    if (len(origin) != 2 or any(type(v) is not int or abs(v) > 2**50 for v in origin)
+            or type(center_x) is not int):
+        raise ValueError('bounded integer source origin and center required')
+    h, w = current_visible.shape
+    if not origin[0] <= center_x < origin[0]+w:
+        raise ValueError('center outside crop')
+    if (geometry.get('spec_id') != 'observed-edge-fragments-v1'
+            or geometry.get('origin') != list(origin) or geometry.get('shape') != [h, w]):
+        raise ValueError('current observed-edge geometry binding required')
+    vertices, fragments = geometry['vertices_xy'], geometry['fragments']
+    if (not isinstance(vertices, np.ndarray) or vertices.ndim != 2 or vertices.shape[1] != 2
+            or vertices.dtype.kind not in 'iu' or not isinstance(fragments, list)):
+        raise ValueError('integer vertices and fragment list required')
+    base = dict(spec_id=CURRENT_BOUNDARY_SPEC['id'], status='UNAVAILABLE', reason=None,
+                geometry_basis=CURRENT_BOUNDARY_SPEC['geometry_basis'], origin=list(origin),
+                center_x=center_x, physical_decision='NOT_EVALUATED', selected_front=None,
+                provisional_y=None, candidates=[])
+    # Bound the input before allocating per-candidate support or numeric fields.
+    if (len(vertices) > CURRENT_BOUNDARY_SPEC['max_vertices']
+            or len(fragments) > CURRENT_BOUNDARY_SPEC['max_fragments']
+            or sum(len(ids) for ids in fragments) > CURRENT_BOUNDARY_SPEC['max_fragment_indices']):
+        return dict(base, reason='geometry_budget_exceeded')
+    refs, reason = _current_boundary_reference(anchor, anchor_visible, points, origin)
+    if reason:
+        return dict(base, reason=reason)
+    if not any(ref['available'] for ref in refs.values()):
+        return dict(base, reason='no_visible_reference_pairs')
+    if len(fragments)*len(refs) > CURRENT_BOUNDARY_SPEC['max_pair_budget']:
+        return dict(base, reason='pair_budget_exceeded')
+    local = vertices.astype(np.int64)-np.asarray(origin)
+    if (np.any(local < 0) or np.any(local[:, 0] >= w) or np.any(local[:, 1] >= h)
+            or not current_visible[local[:, 1], local[:, 0]].all()):
+        raise ValueError('geometry contains unobserved/outside pixel')
+    if len(vertices) != len(np.unique(vertices, axis=0)):
+        raise ValueError('geometry vertices must be unique')
+    structure, structure_reason = {}, 'not_supplied'
+    if structure_reference is not None:
+        sim, smask, spoints = structure_reference
+        if (not isinstance(sim, np.ndarray) or sim.shape != anchor.shape or sim.dtype != np.uint8
+                or not isinstance(smask, np.ndarray) or smask.shape != anchor_visible.shape
+                or smask.dtype != np.bool_):
+            raise ValueError('same-crop structure image and visibility required')
+        structure, structure_reason = _current_boundary_reference(sim, smask, spoints, origin)
+    result = dict(base, status='MEASURED', reason=None, reference_points=len(refs))
+    winners = []
+    offset = CURRENT_BOUNDARY_SPEC['side_offset']
+    for candidate_id, raw_ids in enumerate(fragments):
+        ids = np.asarray(raw_ids)
+        if (ids.ndim != 1 or ids.dtype.kind not in 'iu' or not len(ids)
+                or len(ids) > 2*len(vertices)+1 or np.any(ids >= len(vertices)) or np.any(ids < 0)):
+            raise ValueError('bounded observed fragment vertex IDs required')
+        # Cycle closure repeats its first vertex; each observed pixel counts once.
+        xy = vertices[np.unique(ids)]
+        center = sorted(int(y) for x, y in xy if x == center_x)
+        common = sorted(set(int(x) for x in xy[:, 0]) & refs.keys())
+        row = dict(candidate_id=candidate_id, center_crossings=center, requested_columns=common,
+                   samples=[], missing=[], losses=None, denominator=None,
+                   structure_loss=None, structure_status='NOT_MEASURED',
+                   structure_reason=structure_reason, appearance='UNAVAILABLE', reason=None)
+        result['candidates'].append(row)
+        if any(np.count_nonzero(xy[:, 0] == x) != 1 for x in common):
+            row['reason'] = 'ambiguous_current_column'
+            continue
+        costs = dict(AB=0, BA=0, AA=0, BB=0)
+        struct_cost, struct_complete = 0, bool(structure)
+        for sx in common:
+            sy = int(xy[xy[:, 0] == sx, 1][0]); x, y = sx-origin[0], sy-origin[1]
+            ref = refs[sx]
+            if not ref['available']:
+                row['missing'].append(dict(source_x=sx, reason='reference_side_unavailable'))
+                continue
+            if not (offset <= y < h-offset and current_visible[y-offset, x] and current_visible[y+offset, x]):
+                row['missing'].append(dict(source_x=sx, reason='current_side_unavailable'))
+                continue
+            a, b = current[y-offset, x].astype(np.int32), current[y+offset, x].astype(np.int32)
+            ra, rb = ref['a'], ref['b']
+            for key, (u, v) in {'AB': (ra, rb), 'BA': (rb, ra), 'AA': (ra, ra), 'BB': (rb, rb)}.items():
+                costs[key] += int(np.abs(a-u).sum()+np.abs(b-v).sum())
+            row['samples'].append(dict(current_xy=[sx, sy], reference_xy=[sx, ref['source_y']],
+                                       current_a=a.tolist(), current_b=b.tolist(),
+                                       reference_a=ra.tolist(), reference_b=rb.tolist()))
+            sr = structure.get(sx)
+            if sr is None or not sr['available']:
+                struct_complete = False
+            else:
+                struct_cost += int(np.abs(a-sr['a']).sum()+np.abs(b-sr['b']).sum())
+        n = len(row['samples'])
+        if not n:
+            row['reason'] = 'no_common_visible_pairs'
+            continue
+        row.update(losses=costs, denominator=6*n, appearance='UNRESOLVED')
+        if struct_complete:
+            row.update(structure_status='MEASURED', structure_reason=None, structure_loss=struct_cost)
+        elif structure_reference is not None:
+            row['structure_reason'] = structure_reason or 'incomplete_common_support'
+        if not all(costs['AB'] < costs[k] for k in ('BA', 'AA', 'BB')):
+            row['reason'] = 'ordered_sides_not_strictly_preferred'
+        elif struct_complete and struct_cost <= costs['AB']:
+            row.update(appearance='CONTRADICTED', reason='structure_not_worse')
+        else:
+            row.update(appearance='PROVISIONAL_AB', reason=None)
+            if len(center) == 1:
+                winners.append(row)
+    preferred = [r for r in result['candidates'] if r['appearance'] == 'PROVISIONAL_AB' and r['center_crossings']]
+    if len(preferred) == 1 and len(winners) == 1:
+        result.update(reason='unique_provisional_center', provisional_y=winners[0]['center_crossings'][0])
+    elif preferred:
+        result['reason'] = 'ambiguous_provisional_center'
+    else:
+        result['reason'] = 'no_provisional_center'
+    return result

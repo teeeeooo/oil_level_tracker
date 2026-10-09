@@ -547,37 +547,37 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 
 ## 2026-10-10 cc17924 handoff intake additions
 
-원문·실험은 2026-10-09, intake와 저장소 배치는 2026-10-10이다. 아래 파일은 아직 Git 미등록이며 최초 Git 추가일을 임의로 확정하지 않는다.
+원문·실험은 2026-10-09, intake와 최초 Git 등록은 2026-10-10이다 (`5c596a7`, author KST).
 
 | 최초 Git 추가일 | 문서/산출물 | 역할 |
 |---|---|---|
-| 미등록 | [Intake review](60-evidence/s11/2026-10-10-cc17924-handoff-intake.md) | 명세 검토·채택 조건; 현재 순서는 Work Plan 소유 |
-| 미등록 | [Intake verification](60-evidence/s11/2026-10-10-cc17924-handoff-intake.json) | 220개 로컬 inventory와 H0/G1 각 198개 저장 결정 검증 |
-| 미등록 | [README.md](70-reference/s11-detector-handoff-cc17924-2026-10-09/README.md) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
-| 미등록 | [S11-detector-design-work-spec-cc17924-2026-10-09.md](70-reference/s11-detector-handoff-cc17924-2026-10-09/S11-detector-design-work-spec-cc17924-2026-10-09.md) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
-| 미등록 | [S11-execution-summary-cc17924-2026-10-09.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/S11-execution-summary-cc17924-2026-10-09.json) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
-| 미등록 | [SHA256SUMS.txt](70-reference/s11-detector-handoff-cc17924-2026-10-09/SHA256SUMS.txt) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
-| 미등록 | [delivery-validation.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/delivery-validation.json) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
-| 미등록 | [verify_local_evidence.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/verify_local_evidence.py) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
-| 미등록 | [Import manifest](70-reference/s11-detector-handoff-cc17924-2026-10-09/import-manifest.json) | 6개 첨부·21개 native 복사본·219개 로컬 archive의 대응 |
-| 미등록 | [native-evidence/base_sample_1-source-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/base_sample_1-source-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/center-projection-ablation-preflight.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/center-projection-ablation-preflight.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/center-projection-ablation.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/center-projection-ablation.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/center_projection_ablation.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/center_projection_ablation.py) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/closeout.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/closeout.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/foam-positive-partition-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/foam-positive-partition-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/focused-tests.log.txt](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/focused-tests.log.txt) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/inspect_visuals.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/inspect_visuals.py) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/oil-late-ablation-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/oil-late-ablation-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/oil-positive-partition-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/oil-positive-partition-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/partition-trial/preflight.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/partition-trial/preflight.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/partition-trial/readout.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/partition-trial/readout.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/sample2-source-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/sample2-source-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/sample3-source-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/sample3-source-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/sample4-source-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/sample4-source-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/side_partition_probe.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/side_partition_probe.py) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/verification-correction.txt](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verification-correction.txt) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/verification.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verification.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/verify_probe.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verify_probe.py) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/visual-preflight.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/visual-preflight.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
-| 미등록 | [native-evidence/visual-review.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/visual-review.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [Intake review](60-evidence/s11/2026-10-10-cc17924-handoff-intake.md) | 명세 검토·채택 조건; 현재 순서는 Work Plan 소유 |
+| 2026-10-10 | [Intake verification](60-evidence/s11/2026-10-10-cc17924-handoff-intake.json) | 220개 로컬 inventory와 H0/G1 각 198개 저장 결정 검증 |
+| 2026-10-10 | [README.md](70-reference/s11-detector-handoff-cc17924-2026-10-09/README.md) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
+| 2026-10-10 | [S11-detector-design-work-spec-cc17924-2026-10-09.md](70-reference/s11-detector-handoff-cc17924-2026-10-09/S11-detector-design-work-spec-cc17924-2026-10-09.md) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
+| 2026-10-10 | [S11-execution-summary-cc17924-2026-10-09.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/S11-execution-summary-cc17924-2026-10-09.json) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
+| 2026-10-10 | [SHA256SUMS.txt](70-reference/s11-detector-handoff-cc17924-2026-10-09/SHA256SUMS.txt) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
+| 2026-10-10 | [delivery-validation.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/delivery-validation.json) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
+| 2026-10-10 | [verify_local_evidence.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/verify_local_evidence.py) | 첨부 원문 bytes 보존; 원문 작성 2026-10-09 |
+| 2026-10-10 | [Import manifest](70-reference/s11-detector-handoff-cc17924-2026-10-09/import-manifest.json) | 6개 첨부·21개 native 복사본·219개 로컬 archive의 대응 |
+| 2026-10-10 | [native-evidence/base_sample_1-source-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/base_sample_1-source-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/center-projection-ablation-preflight.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/center-projection-ablation-preflight.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/center-projection-ablation.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/center-projection-ablation.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/center_projection_ablation.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/center_projection_ablation.py) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/closeout.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/closeout.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/foam-positive-partition-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/foam-positive-partition-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/focused-tests.log.txt](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/focused-tests.log.txt) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/inspect_visuals.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/inspect_visuals.py) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/oil-late-ablation-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/oil-late-ablation-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/oil-positive-partition-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/oil-positive-partition-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/partition-trial/preflight.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/partition-trial/preflight.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/partition-trial/readout.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/partition-trial/readout.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/sample2-source-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/sample2-source-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/sample3-source-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/sample3-source-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/sample4-source-review.png](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/sample4-source-review.png) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/side_partition_probe.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/side_partition_probe.py) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/verification-correction.txt](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verification-correction.txt) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/verification.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verification.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/verify_probe.py](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verify_probe.py) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/visual-preflight.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/visual-preflight.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |
+| 2026-10-10 | [native-evidence/visual-review.json](70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/visual-review.json) | 실험 당시 native bytes 보존; production/test discovery 밖의 원본 |

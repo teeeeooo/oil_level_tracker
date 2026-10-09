@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The [cc17924 handoff intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md) is complete. H0 minimax and G1 geometry ablation are CLOSED WITHOUT PROMOTION. CBR-1 is the proposed bounded offline follow-up: first freeze current-geometry/reference correspondence, equal side support, resource bounds and event-level progression conditions, then implement D2-A/D2-B and evaluate the complete fixed plan. It is not yet an implemented or accepted physical selector. Preserve the [chosen fixed Glass-center target](../50-diagnostics/s11/2026-10-09-fixed-center-readout.md), independent Oil/Foam availability and existing conversion. No target re-choice, repeated image judgment, settings/ML, closed-variant retuning or phase/episode relaxation. Local XY OFF; O2 OPEN / FIELD FAIL remain. No user judgment or Windows operation is pending.
+**Next transition:** CBR-1's same-X/current-fragment operation is frozen and its offline measurement helper is locally implemented; 88 focused tests pass. Execute the complete 167-raster/198-query saved-data comparison, preserving every outcome and stopping the fixed variant if it lacks useful non-initial target support. Physical discrimination is not accepted. H0/G1 remain CLOSED WITHOUT PROMOTION; the fixed Glass-center target, independent Oil/Foam and existing conversion remain. Local XY OFF; O2 OPEN / FIELD FAIL remain. Stop for user judgment or required Windows work; no such request is currently pending.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -21,8 +21,9 @@ bounded tasks inside D2/W4, not new milestones or a separate live plan.
 Historical pending prose never reopens a closed experiment or supplies current authority.
 The [cc17924 package](../70-reference/s11-detector-handoff-cc17924-2026-10-09/README.md)
 and [intake review](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md) narrow
-the next D2/D3/D5 proposal. This request covers preservation, validity review and
-planning; the source's quoted future implementation prompt is not executed by intake.
+the next D2/D3/D5 proposal. The intake request covered preservation, validity review
+and planning. The subsequent user instruction authorizes bounded implementation,
+local verification and autonomous commits/pushes, stopping for user judgment or Windows work.
 
 ## S11 work-item ledger
 
@@ -38,7 +39,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY, H0/G1 fixed experiments CLOSED WITHOUT PROMOTION | CBR-1 proposed: freeze correspondence/support/resources and controls, then D2-A/D2-B and bounded D3. Preserve Local XY causal distinctions; opt-in remains OFF. | [CBR-1 contract](../20-architecture/s11-interface-observability-witness-architecture.md#cbr-1-current-boundary-reference-comparison--proposed-offline-contract), [intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md), [Local XY evidence](../60-evidence/s11/2026-10-09-local-xy-implementation.md) |
+| W4 / O2 challenger | OPEN; Local XY, H0/G1 fixed experiments CLOSED WITHOUT PROMOTION | CBR-1 preflight frozen; D2-A/D2-B offline measurement implemented with local controls. Execute the bounded D3 comparison before any promotion. Preserve Local XY causal distinctions; opt-in remains OFF. | [CBR-1 contract](../20-architecture/s11-interface-observability-witness-architecture.md#cbr-1-current-boundary-reference-comparison--proposed-offline-contract), [intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md), [Local XY evidence](../60-evidence/s11/2026-10-09-local-xy-implementation.md) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
