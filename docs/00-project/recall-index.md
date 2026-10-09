@@ -21,6 +21,7 @@ Do not scan revision history or all S11 diagnostics by default.
 | Need | Start here | Then only if needed |
 |---|---|---|
 | Current S11 candidate/gate | `work-plan.md` | current architecture + validation linked there |
+| Resume after the fixed-center measurement choice | [2026-10-09 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md) | `40e870d` checkpoint, verified local input pins, saved-array locations, closed judgments and the remaining physical-selection design entry. Work Plan remains the current owner. |
 | October 8 planning intake / Windows-first next step | [intake and results-folder preservation](../60-evidence/s11/2026-10-08-next-work-intake.md) | Supplied D tasks refine O/W, not new milestones. H1/H1b/LabPics/cellular/selector closures remain unadopted. [D1 saved-record correction](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) supersedes the old review-001 inventory; use review-002 idx20 for admitted-negative evidence. Null selection is not a causal boundary. Do not repeat D1. |
 | Resume after A2 region-exchange closure | [handoff checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md#a2-closure-handoff--2026-10-07) | Verified e66eb5e baseline, preserved dirty experiment worktrees, Git versus local-only evidence, closed human judgments and next source-discovery entry. |
 | Current detector control flow | `../20-architecture/s11-current-detector-logic-map.md` | affected node detail/source |

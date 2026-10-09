@@ -7,6 +7,8 @@
 **Next transition:** The user selected a simple, consistent fixed Glass-center height target; the [choice and saved-array prerequisite](../50-diagnostics/s11/2026-10-09-fixed-center-readout.md) are complete. Reuse the existing Recipe center and px/mm conversion, with independent Oil/Foam availability and UNKNOWN for missing/ambiguous current boundary at that column. This fixes where to read height; whole-image/temporal context remains available for recognition. All 792 crossings on 176 saved rasters are verified, but appearance support still mixes glass and fluid; physical selection remains unresolved. Next work is a bounded current-boundary/side-role proposal using the existing optional-reference inputs and controls, before any new efficacy trial or runtime scalar change. Do not reopen the target choice or closed image judgments, add settings/ML, retune closed hypotheses, or infer identity from upper/lower component faces. Local XY OFF; O2 OPEN / FIELD FAIL remain. No user judgment or Windows operation is pending.
 
 This is the sole current state, authorization, unknowns and next-action owner.
+The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
+records the fixed-center checkpoint, local-only evidence and a bounded resume path.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
 is a preserved proposal, with [intake and cleanup evidence](../60-evidence/s11/2026-10-08-next-work-intake.md).
 The later [18885d2 specification package](../70-reference/s11-detector-work-spec-18885d2-2026-10-08/README.md)

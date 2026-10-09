@@ -22,7 +22,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 
 ## 폴더별 목록
 
-현재 색인 수록 270개 파일. 이후 추가된 모든 repo 문서의 전수 목록을 보증하는 수치는 아닙니다.
+현재 색인 수록 271개 파일. 이후 추가된 모든 repo 문서의 전수 목록을 보증하는 수치는 아닙니다.
 `검토 후 유지`는 승계가 확인되지 않아 현 위치를 보존한다는 뜻이며,
 그 문서의 과거 실행 지시 전체가 현행이라는 의미가 아닙니다.
 
@@ -209,7 +209,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-08-04 | [post-s10-windows-qt-platform-bootstrap-repair.md](60-evidence/s10/post-s10-windows-qt-platform-bootstrap-repair.md) | 완료 증거 |
 | 2026-08-04 | [s10-windows-canonical-portability-qt-teardown-repair-evidence.md](60-evidence/s10/s10-windows-canonical-portability-qt-teardown-repair-evidence.md) | 완료 증거 |
 
-### `docs/60-evidence/s11/` — 87개
+### `docs/60-evidence/s11/` — 88개
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
@@ -301,6 +301,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 
 | 2026-10-08 | [2026-10-08-episode-source-review-validation.json](60-evidence/s11/2026-10-08-episode-source-review-validation.json) | 원본 프레임 검토 및 독립 텍스처 실험 실행 증거 |
 | 2026-10-08 | [2026-10-08-episode-source-review-validation.md](60-evidence/s11/2026-10-08-episode-source-review-validation.md) | 원본 프레임 검토 및 독립 텍스처 실험 실행 증거 |
+| 2026-10-09 | [2026-10-09-fixed-center-handoff.md](60-evidence/s11/2026-10-09-fixed-center-handoff.md) | 최초 추가 author 날짜(KST); 고정 중앙 측정 후 인수인계 |
 
 ### `docs/60-evidence/s6/` — 10개
 
