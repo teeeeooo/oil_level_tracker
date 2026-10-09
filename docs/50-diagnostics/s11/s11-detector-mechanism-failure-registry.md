@@ -110,6 +110,18 @@ The [current detector logic map](../../20-architecture/s11-current-detector-logi
 
 **Confidence:** Confirmed for the cited local/field checkpoints; named unknown for the unobservable share of the private Base prefix/suffix.
 
+**2026-10-09 public-video representation audit:** the
+[isolated material-path comparison](2026-10-09-public-path-representation.md)
+records 18 fixed native/reduced rasters and 100 retained proposals. Current seeds
+require positive profiles in at least three sectors at the same Y; all path rows
+then stay within one seed-centered band, in addition to the adjacent-step bound.
+An ideal five-sector inclined profile has locally permitted steps but no seed;
+even an externally supplied seed retains at most three sectors. Exhaustive saved
+seed paths obey the same band before deduplication/top-k. This is a representation
+limit, not proof of full-pipeline physical recall or public false selection.
+Preserve curved local support before temporal association; neither top-k/window
+expansion nor connected geometry alone is an established identity repair.
+
 ### S11-F03 — Motion/bootstrap authority overreach
 
 **Affected detector logic node(s):** `OIL-AUTHORITY` → `OIL-TRACKLET` → `OIL-SELECTOR`.

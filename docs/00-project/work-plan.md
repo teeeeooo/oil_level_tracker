@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Nine source-bound development scenes from sample5/6/7 are prepared before detector predictions. The sample5 checkpoint is CLOSED at qualitative scope: the user describes the inclined feature at about 27.4 s as closer to a water surface. Protect it as a deforming-surface case; no exact contour/scalar truth or splash-only negative follows. D5 still needs a distinct joint-correspondence/side-ownership rule before a new trial; earlier Foam texture/rim and Oil target replies stay CLOSED. Local XY WP1–WP5 remain complete, fixed configuration CLOSED WITHOUT PROMOTION, scope OFF by default. O2 OPEN / FIELD FAIL remain; no user judgment or Windows work is pending at this checkpoint.
+**Next transition:** The bounded sample5/6/7 material-path audit is complete: 18 fixed rasters retain 100 proposals; synthetic checks expose same-row seed and global seed-band restrictions before temporal association. Next establish local curved-boundary support and alternatives without treating a short seed-bound path as complete physical correspondence. Independent side identity remains required; no threshold/top-k expansion or behavior promotion follows. The sample5 water-surface reply and earlier Foam/Oil replies stay CLOSED. Local XY remains CLOSED WITHOUT PROMOTION and OFF by default; O2 OPEN / FIELD FAIL remain. No user judgment or Windows work is pending at this checkpoint.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -324,6 +324,17 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    remain agent-provisional. Beer supplies a cropped
    upper-surface control and milk bulk-white-liquid/froth opposition. This is
    pre-detector context, not a new truth/packet format or a validated mechanism.
+   **Existing path representation audit complete:** the
+   [fixed native/height-200 comparison](../50-diagnostics/s11/2026-10-09-public-path-representation.md)
+   reuses the material-path lane on all nine scenes: 18 rasters, 100 retained
+   proposals and 473 verified sector samples; capture ON/OFF is equal throughout.
+   Same-row three-sector seed support and a global seed-centered band restrict
+   shape before temporal matching. Ideal inclined peaks lose their seed despite
+   locally permitted steps; exhaustive original-seed inspection preserves the
+   same bound before deduplication/top-k. This is an isolated proposal-lane audit,
+   not full-pipeline efficacy. First retain curved local support and alternatives,
+   then test joint correspondence with independent side ownership. No wider
+   window, increased top-k, forced scalar or new interpretation request follows.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require
