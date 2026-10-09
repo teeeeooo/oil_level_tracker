@@ -257,6 +257,18 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    records: bounding-box gaps of 4–9 px trigger lower-edge selection, while
    same-column support gaps are 20–45 px with zero within the existing bound.
    Geometry alone does not certify physical identity or a replacement front.
+   **Cross-appearance probe complete:** the [unchanged Foam-owner replay](../50-diagnostics/s11/2026-10-09-foam-cross-appearance-support.md)
+   reproduces 113 frames / 474 components. White priority suppresses existing
+   warm support that crosses many white-component endpoints in the three
+   internal-texture cases. The same cue is absent in both earlier real-Foam and
+   glass-rim controls, so neither union nor a physical classifier is adopted.
+   **Current human checkpoint:** [54–56 s upper-region visibility](../50-diagnostics/s11/2026-10-09-foam-upper-visibility-review.png)
+   — is there a visible Foam upper surface with non-Foam space above it, or does
+   Foam reach the top / remain occluded? No exact XY is requested. Await this
+   new regional judgment before a replacement-front implementation. If the
+   upper surface is invisible or uncertain, preserve missing coordinates despite
+   Foam presence; do not force a bright/texture boundary. The earlier internal
+   texture and lower Oil-boundary replies stay closed.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require

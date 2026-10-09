@@ -282,6 +282,17 @@ formation to recover these wrong fronts, or repeat this closed question.
 Existing upper-edge/structure and real-front controls remain required; no
 front convention, threshold or acceptance changes follow from the reply.
 
+**2026-10-09 cross-appearance support:** the [frozen support probe](2026-10-09-foam-cross-appearance-support.md)
+reproduces 113 isolated current-frame Foam results and 474 component records.
+White-priority arbitration hides existing warm support continuing across many
+endpoints of the three internal-texture components. This is representation
+evidence, not a physical segmentation or a safe union/veto. The warm cue is
+absent in both earlier actual-Foam context and the confirmed glass-rim control.
+Do not promote support continuation or its absence to universal front identity,
+retune its fraction, or repeat a naive white/chromatic union. Before seeking an
+alternate upper front at 54–56 s, establish whether that surface is visible at
+all; Foam presence can coexist with an occluded or unavailable upper coordinate.
+
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 
 **Affected detector logic node(s):** `OIL-TRACKLET` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.
