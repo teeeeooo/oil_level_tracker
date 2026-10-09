@@ -1,0 +1,60 @@
+{
+  "schema_version": "s11-foam-front-physical-reply-v1",
+  "date": "2026-10-09",
+  "source_head": "5d9788abf2113583ee8fe0b906711469a4c2e518",
+  "status": "HUMAN_CHECKPOINT_CLOSED",
+  "reviewer": "user",
+  "attribution": "direct chat reply to the 54/55.5/56 s cyan-guide question",
+  "user_reply": "foam 내부의 명암 변화, 정확히 얘기하자면 텍스쳐 변화",
+  "image_path": "docs/50-diagnostics/s11/2026-10-09-local-xy-foam-front-review.png",
+  "image_sha256": "cee38c734441ff2037da9fdd8a894a9539cd861b6d49fd214a441a13b8b8ecf2",
+  "prior_record_sha256": "2af28f5b7bedf226a7561f463aa8ab5db2055ae91d56c093750ee5cf1f0b5e33",
+  "supersedes": "Prior record physical_review.status=PENDING_USER_PHYSICAL_REVIEW for this displayed question only.",
+  "role": "internal_foam_texture_change",
+  "is_physical_foam_front": false,
+  "foam_presence": "present on both sides of the reviewed local feature",
+  "exact_pixel_truth": false,
+  "whole_component_mask_reviewed": false,
+  "alternative_front_certified": false,
+  "oil_target_reply_changed": false,
+  "formal_label_files_modified": false,
+  "reviewed_guides": [
+    {
+      "frame_index": 1620,
+      "source_front_y": 833.0,
+      "candidate_source": "foam_evidence",
+      "recorded_component_label": 1,
+      "diagnostic_component_id": 1,
+      "original_path": "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001620_523615198887/original_roi_512ed6ab.png",
+      "original_sha256": "e00d97a5f265f5e6353d27014a46b6aca692112efb3b1c29fc170b171ba0462b"
+    },
+    {
+      "frame_index": 1665,
+      "source_front_y": 837.0,
+      "candidate_source": "foam_evidence",
+      "recorded_component_label": 1,
+      "diagnostic_component_id": 1,
+      "original_path": "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001665_62f9dce1fd63/original_roi_512ed6ab.png",
+      "original_sha256": "f22078682f895b945b3e7db1c79def713ac0a6aea14577316a5e43971e206de5"
+    },
+    {
+      "frame_index": 1680,
+      "source_front_y": 838.0,
+      "candidate_source": "foam_evidence",
+      "recorded_component_label": 1,
+      "diagnostic_component_id": 1,
+      "original_path": "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001680_c45cf0ca7009/original_roi_512ed6ab.png",
+      "original_sha256": "c6461782b828f81d4785c241c1e814fe5a054e34181f5698a36cb4782d54cbea"
+    }
+  ],
+  "consequences": [
+    "Do not recover these texture fronts by relaxing episode/persistence rules.",
+    "Final rejection of these three fronts is not evidence of losing a correct Foam front.",
+    "Fix physical front identity upstream; no upper/lower flip, color class or changed scalar follows."
+  ],
+  "next_controls": [
+    "Existing approximate Foam fronts at sample4 14/15/16 s, preserving mixed-support limitations.",
+    "Existing human-attributed rim controls and private Windows false-episode controls.",
+    "These three regional internal-texture negatives; 54.5 s upper edge remains unreviewed."
+  ]
+}

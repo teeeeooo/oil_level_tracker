@@ -269,10 +269,18 @@ Do not rerun the closed reciprocal probe or strip its physical-child guard.
 Foam component fronts switching upper/lower conventions at 53–56 s before
 bounded formation rejects their trajectory. Raw measurements are equal OFF and
 scoped; final Oil context nevertheless splits the scoped 56 s dynamic window.
-The physical role of the displayed cyan fronts remains pending human review.
-Do not interpret missing final Foam as disappearance, presume every raw front
-is correct, or loosen episode gates before establishing the measured boundary.
-This diagnostic changes neither front convention nor acceptance.
+The [subsequent human reply](2026-10-09-local-xy-sequence-causality.md#human-reply-received-internal-foam-texture--checkpoint-closed)
+confirms all three displayed cyan features are internal Foam texture changes,
+not physical fronts. Their final rejection is not loss of a correct front.
+A saved-raster audit reproduces all ten component records across four times:
+4–9 px bounding-box gaps trigger lower-edge selection, while same-column gaps
+are 20–45 px with zero within the existing 12 px bound. This explains the
+geometric trigger, not a complete physical discriminator. D5 must separate
+material-support extent from physical-front identity. Do not substitute the
+upper extreme automatically, treat missing height as absent Foam, loosen
+formation to recover these wrong fronts, or repeat this closed question.
+Existing upper-edge/structure and real-front controls remain required; no
+front convention, threshold or acceptance changes follow from the reply.
 
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 

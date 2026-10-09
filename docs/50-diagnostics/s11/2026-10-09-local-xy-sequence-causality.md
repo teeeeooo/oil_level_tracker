@@ -141,7 +141,7 @@ confirmed yellow-Foam/dark-Oil target remains closed.
 yellow/bright material, near the lower part of the brighter cap. It is unclear
 whether both sides are Foam with an internal appearance difference or the
 guide marks a physically distinct Foam/material boundary. This is the next
-human checkpoint; no exact XY or Windows work is needed.
+human checkpoint prepared at `5d9788a`; the subsequent reply below closes it.
 
 The answer determines whether D5 must first repair raw front meaning or can
 study loss of a physically supported front at episode confirmation. If the
@@ -159,10 +159,77 @@ probe, remove its physical-child guard, lower anchor/progress thresholds,
 copy neighboring truth, or expand the local mask to each new winner. No O3/O4
 entry or Oil/Foam behavior repair is adopted by this readout.
 
+## Human reply received: internal Foam texture — checkpoint closed
+
+The user replies:
+
+> foam 내부의 명암 변화, 정확히 얘기하자면 텍스쳐 변화
+
+The [attributed reply](2026-10-09-foam-texture-reply.json) binds the exact
+original/guide image and its three 54/55.5/56 s source images. The displayed
+cyan features are internal Foam texture changes, **not physical Foam fronts**.
+This establishes regional negative front controls, not exact pixel truth, a
+pure component mask, another correct front location or a label for every
+detached layer. The 54.5 s upper-edge proposal remains unreviewed. The earlier
+yellow-Foam/dark-Oil target reply is unchanged.
+
+This corrects the interpretation of the endpoint absence: the sequence owner
+rejects these wrong front proposals. Their absence does not demonstrate loss
+of a correct Foam front. Physical Foam is present, but a valid Foam-front
+coordinate has not been established. Do not lower formation/persistence gates
+to recover these coordinates, or equate missing height with absent Foam.
+
+### Saved geometry explains the lower-edge trigger
+
+The [follow-up geometry audit](2026-10-09-foam-texture-geometry-audit.json)
+reuses `s11_foam_support_geometry.measure`, `_structural_support_boxes` and
+`_structural_substrate_relation` on the already stored rasters. All ten retained
+components across 54/54.5/55.5/56 s reproduce their stored pixel counts, boxes
+and substrate/lower-edge predicates. Fifteen inputs and 221 production-source
+pins remain unchanged. No frame detector, decoder or policy probe runs.
+
+| Time | Selected component / computed structural reference | Bounding-box gap | Visible same-column support gaps | Columns within the existing 12 px bound |
+|---|---|---:|---|---:|
+| 54 s | diagnostic 1 / 2 | 9 px | 31–45 px | 0 |
+| 55.5 s | diagnostic 1 / 2 | 5 px | 20–45 px | 0 |
+| 56 s | diagnostic 1 / 2 | 4 px | 20–45 px | 0 |
+
+The boxes overlap the whole selected component width. Their 4–9 px gaps
+trigger the existing rule's `front_from_lower_edge=true`, although the actual
+retained supports have no same-column gap inside that bound. At 54.5 s no
+structural box is produced, and the component uses its upper edge. This is a
+reproduced implementation trigger. The computed structural reference is not a
+new human rim attribution, and visible support gaps are not physical clearance.
+
+The source selects a bright/textured component before choosing its extreme.
+`_has_material_nonstructural_support_component` also makes white support and
+the chromatic fallback mutually exclusive when its predicate passes. This is
+source-level routing evidence; no counterfactual expanded support was measured
+here. A component mask can end at an internal texture change within physical
+Foam. Its bounding edge therefore cannot supply material-front identity.
+
+### Next design boundary
+
+D5 now starts at **raw physical-front identity**, with episode thresholds kept
+fixed. Reuse the [14/15/16 s Foam references and rim controls](../../60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md)
+alongside these three internal-texture negatives. Preserve their approximate
+location and mixed-support limitations. An upper-edge replacement is not an
+established repair: the [earlier same-frame audit](2026-10-06-foam-structure-reference-audit.md#first-supported-loss-and-remaining-physical-unknown)
+already shows upper component fronts containing central structure.
+
+The next bounded proposal must separate material-support pixels, the measured
+edge convention and the actual physical Foam front. Its additional observable
+and decision/abstention rule must reject internal texture and rim controls while
+preserving supported real fronts. A box-to-column substitution alone supplies
+geometry, not that physical discriminator. Do not rerun the prior strongest,
+lowest, nearest or smoothest appearance rules, or declare all-abstain recovery.
+Evaluate raw front correctness before episode retention and final two-series
+validity. This reply introduces no production behavior or new human question.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`.
 - Failure-registry entries: `S11-F04`, `S11-F07`, `S11-F10`.
-- First harmful stage: the first physical association error remains unknown. Supported numerical losses are committed-owner selection at 52 s and ambiguity/confirmation at 54–56 s. Foam component-front edge convention changes before episode rejection; whether this is physically wrong awaits the bounded review.
+- First harmful stage: Oil's first physical association error remains unknown; numerical losses are committed-owner selection at 52 s and ambiguity/confirmation at 54–56 s. The user now confirms the three Foam proposals are internal texture, establishing a raw spatial-front identity error before the episode owner rejects them. Earlier segmentation causality and the correct alternative front remain unresolved.
 - Logic-map impact: NONE — existing owners are observed without source, policy, control-flow or publication changes.
-- Failure-registry impact: UPDATED — F04 records the exact ambiguity/confirmation contrast; F07 records edge-convention changes and the separate raw/episode review boundary.
+- Failure-registry impact: UPDATED — F04 records the exact ambiguity/confirmation contrast; F07 now retains the human-confirmed internal-texture negatives, reproduced box trigger and closed review boundary.
