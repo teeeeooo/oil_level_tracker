@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Offline observed-edge fragments are implemented and verified on 25 fixed public/legacy rasters: all observed pixels and links are retained without a shared horizontal seed or global height band. This completes representation steps 1–2, not physical contour selection. Next define a bounded spatial side-ownership rule that retains branch/gap alternatives before joint temporal correspondence. Glass and internal texture also form chains; no longest-chain rule, threshold/top-k expansion or behavior promotion follows. The sample5 water-surface reply and earlier Foam/Oil replies stay CLOSED. Local XY remains CLOSED WITHOUT PROMOTION and OFF by default; O2 OPEN / FIELD FAIL remain. No user judgment or Windows work is pending at this checkpoint.
+**Next transition:** Lossless edge fragments remain verified. The completed 25-raster side-region audit rejects raw-edge closure/separate components as a required ownership gate: gaps reconnect both sides, while glass also supplies distinct pairs. Next specify a bounded joint comparison of existing reference features, occlusion and optical deformation, using multiple related contour parts and preserving actual fluid crossings. This is design work, not an established physical selector. No gap filling, independent patch-match promotion, new mandatory setup or threshold continuation. Existing water/Foam/Oil replies stay CLOSED. Local XY stays CLOSED WITHOUT PROMOTION and OFF; O2 OPEN / FIELD FAIL remain. No user judgment or Windows work is pending at this checkpoint.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -345,6 +345,20 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    a reproducible abstention rule before joint correspondence. Keep the prior
    rim-jump counterexample and fixed controls; no physical selector or production
    integration is established by exact raster conservation.
+   **Raw-edge side-region prerequisite CLOSED WITHOUT PROMOTION:** the
+   [25-raster audit](../50-diagnostics/s11/2026-10-09-observed-side-regions.md)
+   finds 84,025/91,748 eligible geometric side queries reconnect; these are not
+   physical miss rates. A constructed missing pixel merges the two sides, while
+   empty glass also has distinct pairs. Do not demand raw-edge closure, label
+   reconnection non-interface or close gaps to rescue that gate. Eight synthetic
+   controls and exhaustive component/side checks pass; the fragment API and
+   production are unchanged. Next specify a joint reference-to-current relation
+   across multiple parts, with occlusion and optical deformation as alternatives.
+   Reuse public empty-glass frames and scoped optional references; no new setup
+   prerequisite. Protect actual fluid/structure crossings, the rim-jump control
+   and missing support. This design must add physical evidence beyond independent
+   strip matches/reference overlap before a new classifier trial; it is not yet
+   an executable or validated selection rule.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require

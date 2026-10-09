@@ -133,6 +133,15 @@ long curved chains. This is exact representation of available evidence, not
 physical boundary recall or a promoted proposal lane. Upstream missing edges,
 side ownership and branch/cross-frame identity remain separate unresolved gates.
 
+**Observed side-region prerequisite:** the [saved-graph audit](2026-10-09-observed-side-regions.md)
+finds reconnection in 84,025 of 91,748 eligible geometric side queries over the
+same 25 rasters. These are all-feature counts, not physical recall. A constructed
+one-pixel edge gap also merges the two sides; distinct pairs occur on empty-glass
+contexts. Do not require raw-edge closure/separate components for target
+eligibility, fill gaps to rescue this rule, or label reconnection non-interface.
+The fragment representation stays valid. Region identity needs independent
+evidence and must tolerate missing edge support without inventing closure.
+
 ### S11-F03 — Motion/bootstrap authority overreach
 
 **Affected detector logic node(s):** `OIL-AUTHORITY` → `OIL-TRACKLET` → `OIL-SELECTOR`.
