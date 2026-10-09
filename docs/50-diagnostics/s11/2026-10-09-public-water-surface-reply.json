@@ -1,0 +1,59 @@
+{
+  "schema": "s11-public-scene-human-reply-v1",
+  "date": "2026-10-09",
+  "source_head": "65a695157f094893e7f2ad2077276b90a7513a91",
+  "status": "HUMAN_CHECKPOINT_CLOSED_AT_QUALITATIVE_SCOPE",
+  "user_reply": "이건 수면에 가깝지",
+  "basis": "Direct user reply to the displayed inclined-water-surface versus separate-splash question.",
+  "case_id": "s5-inclined",
+  "video_path": "sample/sample5.mp4",
+  "video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+  "frame_index": 822,
+  "nominal_playback_time_sec": 27.427400000000002,
+  "source_raster": {
+    "frame_index": 822,
+    "nominal_time_sec": 27.427400000000002,
+    "decoder_pos_msec": 27427.4,
+    "shape": [
+      1080,
+      1920,
+      3
+    ],
+    "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000822.png",
+    "sha256": "19a94ae8bb16454440033559aecbe6ca714853d505423288bd2dc113767ce8b1"
+  },
+  "context_frames": [
+    815,
+    822,
+    829
+  ],
+  "image_path": "sample/output/s11-public-scene-controls-20261009-001/sample5-inclined-surface-review.png",
+  "image_sha256": "17fb80ee706642dd522439ec9ef37347023aa9fc317b23c0bab9952635849c47",
+  "context_path": "docs/50-diagnostics/s11/2026-10-09-public-scene-controls.json",
+  "context_sha256": "37268d0206dae310b9c5aeaecb45fbc3f17bd1ede001bc49454f82b40ecc9252",
+  "interpretation": {
+    "physical_reading": "CLOSER_TO_ACTUAL_WATER_SURFACE",
+    "certainty": "Qualitative user interpretation; preserves the wording closer to rather than asserting exact ground truth.",
+    "control_purpose": "Protect the displayed inclined/deforming water-surface feature; do not use it as a confirmed splash-only negative.",
+    "scope": "Display-only rectangle X[800,1110), Y[400,650); no traced contour, pixel truth or production mask.",
+    "adjacent_frames": "Display context only; no separate contour identity or correspondence certified for every frame."
+  },
+  "supersedes": "Pending human question for s5-inclined only. The frozen scene inventory, preflight and display receipt remain byte-identical.",
+  "limits": [
+    "No exact contour, scalar Y, target candidate, per-pixel mask or temporal correspondence label.",
+    "No maximum slope, speed cutoff, horizontal flattening or automatic boundary-selection rule.",
+    "No general claim that all splashes, streams or water-video contours are reportable surfaces.",
+    "No truth transfer to beer, milk, sample4, Oil/Foam outputs or Windows data.",
+    "Joint correspondence still requires independent material-side evidence; spatial coherence and motion alone do not establish physical identity."
+  ],
+  "partition": "development",
+  "formal_labels_changed": false,
+  "detector_run": false,
+  "production_change": false,
+  "auto_acceptance": false,
+  "verification": {
+    "source_inventory_preserved": true,
+    "input_pins_verified": 16,
+    "display_hashes_verified": 4
+  }
+}

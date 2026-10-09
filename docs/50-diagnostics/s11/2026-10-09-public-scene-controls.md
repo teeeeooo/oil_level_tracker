@@ -11,14 +11,16 @@ limits. Current authorization and the next checkpoint remain in the
 
 ## Scene inventory
 
-All readings below are **agent provisional**, not human-confirmed physical truth,
-candidate target binding, contour labels or scalar annotations. Frame times are
-nominal playback times. There is no inference of physical recording speed.
+The inventory began with **agent provisional** readings. The subsequent sample5
+reply below supplies a qualitative user interpretation for `s5-inclined`; all
+other readings remain agent-provisional. None supplies candidate target binding,
+contour labels or scalar annotations. Frame times are nominal playback times.
+There is no inference of physical recording speed.
 
 | Case | Frame / seconds | Visible context and proposed purpose | Limitation |
 |---|---|---|---|
 | s5-empty | 0 / 0 | Empty-looking water glass; fixed rim and patterned base oppose fluid selection | No canonical EMPTY phase or structure mask; refraction may alter appearance |
-| s5-inclined | 822 / 27.427 | Strongly inclined upper bubbly-water feature during pouring | Actual displaced surface versus separate splash sheet is unresolved; user interpretation requested |
+| s5-inclined | 822 / 27.427 | Strongly inclined upper bubbly-water feature during pouring; user says it is closer to a water surface | Protect as a qualitative surface-deformation case, not a confirmed splash-only negative; no exact contour or scalar truth |
 | s5-settled | 1643 / 54.821 | Comparatively settled upper liquid surface, internal bubbles and persistent glass pattern | No exact contour, scalar or point correspondence |
 | s6-empty | 0 / 0 | Empty-looking beer glass with thick base/rim/reflections | No whole-image negative label |
 | s6-forming | 146 / 5.840 | Forming froth and upper surface, with turbulent lower transition | Two clean contours are not automatically available |
@@ -32,20 +34,29 @@ frames were already exposed; none becomes an untouched holdout. Keep derivatives
 and neighboring frames with the same source group. Different downloads do not
 certify independent recording sessions.
 
-## New physical question: inclined water feature
+## Inclined water feature: qualitative reply received
 
 The display compares already saved sample5 f815/f822/f829, approximately
 27.194–27.661 s. Only the center panel has an orange rectangle, source
 X[800,1110), Y[400,650). It locates the question; it is not a traced contour,
 pixel label, exclusion mask or proposed scalar.
 
-The agent leans toward an actual displaced water surface but cannot confidently
-exclude a separate elevated splash sheet. This distinction reverses the proposed
-control role: protect genuine deformation versus oppose following a separate
-splash. The question asks for regional physical interpretation, not exact XY.
-Neither role is assigned while the answer is pending. An inconclusive answer
-keeps this case unresolved; it does not invite a fabricated label or force a
-detector choice.
+The agent initially leaned toward an actual displaced water surface but could
+not confidently exclude a separate elevated splash sheet. The user replied:
+**“이건 수면에 가깝지”** (“This is closer to a water surface”). The
+[source-bound reply](2026-10-09-public-water-surface-reply.json) closes this
+question at qualitative scope and preserves that qualified wording.
+
+Use the displayed feature as a water-surface deformation case to protect,
+rather than a confirmed splash-only negative. A new method must not reject it
+merely because it slopes or moves substantially. This does not certify a numeric
+height, every edge inside the rectangle, or exact temporal correspondence.
+The neighboring frames provide context; the reply is not a per-frame annotation.
+No repeated physical question or new setup step follows.
+
+The original machine inventory retains its historical `PENDING` question and
+agent reading unchanged. This linked reply supersedes that pending question;
+it does not rewrite the preflight, image receipt or the other eight cases.
 
 The linked local display is
 `sample/output/s11-public-scene-controls-20261009-001/sample5-inclined-surface-review.png`.
@@ -71,6 +82,15 @@ horizontal flattening rule. Beer supplies separate visibility and boundary-role
 opposition, while milk tests whether bright bulk liquid is mistaken for Foam.
 Existing sample4 real-front, rim and internal-texture controls still apply.
 
+For the next comparison, report the inclined-surface case separately from the
+settled-surface case: protecting the latter does not demonstrate retention of
+the former. Preserve local boundary shape and localization uncertainty before
+any scalar reduction. Record lost visible support, hops to glass/internal
+features, unresolved support and cropped coordinates separately. The regional
+reply cannot provide numerical contour error or a fitted tolerance. These are
+comparison requirements; the new correspondence/side-role mechanism still needs
+its own explicit measurement and decision rule before execution.
+
 Once a distinct observable and decision/abstention rule are specified, freeze
 the bounded native-pixel comparison before execution. One later fixed,
 aspect-preserving reduced-resolution comparison can assess detail loss, with
@@ -92,7 +112,10 @@ case identities are unique and refer to already exposed native intake frames.
 The four generated display hashes match their receipt, and all four sheets were
 visually inspected. No new video decode, detector run, fitting, Recipe/label edit
 or production change was performed. This is control preparation, not efficacy
-or field acceptance. The sample5 physical role remains pending at this record.
+or field acceptance. After the user reply, all 16 input pins and four display
+hashes were checked again; the frozen inventory remained byte-identical. The
+sample5 question is closed at qualitative scope by the linked addendum. The
+other cases' provisional readings and absent formal truth remain unchanged.
 
 ## Detector Governance
 

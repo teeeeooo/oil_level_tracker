@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Nine source-bound development scenes from sample5/6/7 are prepared before detector predictions. One new sample5 checkpoint awaits user interpretation: is the inclined feature at about 27.4 s an actual displaced water surface or a separate splash sheet? Keep that control unresolved until answered. D5 still needs a distinct joint-correspondence/side-ownership rule before a new trial; earlier Foam texture/rim and Oil target replies stay CLOSED. Local XY WP1–WP5 remain complete, fixed configuration CLOSED WITHOUT PROMOTION, scope OFF by default. O2 OPEN / FIELD FAIL remain; no Windows work is needed at this checkpoint.
+**Next transition:** Nine source-bound development scenes from sample5/6/7 are prepared before detector predictions. The sample5 checkpoint is CLOSED at qualitative scope: the user describes the inclined feature at about 27.4 s as closer to a water surface. Protect it as a deforming-surface case; no exact contour/scalar truth or splash-only negative follows. D5 still needs a distinct joint-correspondence/side-ownership rule before a new trial; earlier Foam texture/rim and Oil target replies stay CLOSED. Local XY WP1–WP5 remain complete, fixed configuration CLOSED WITHOUT PROMOTION, scope OFF by default. O2 OPEN / FIELD FAIL remain; no user judgment or Windows work is pending at this checkpoint.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -314,11 +314,14 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    keep the existing Mac regressions and Windows gate. No repeated strip rule,
    automatic truth, new Recipe or current behavior change follows from intake.
    **Source-bound scene controls prepared:** the [nine-case inventory](../50-diagnostics/s11/2026-10-09-public-scene-controls.md)
-   reuses exposed native frames and keeps all scene readings agent-provisional.
-   A new sample5 f822 question compares f815/f822/f829: actual displaced water
-   surface versus separate splash sheet. Keep this control's physical role
-   unresolved while awaiting the user's regional interpretation; no exact XY,
-   scalar, speed limit or production exclusion follows. Beer supplies a cropped
+   reuses exposed native frames. **Sample5 checkpoint CLOSED:** the
+   [user reply](../50-diagnostics/s11/2026-10-09-public-water-surface-reply.json)
+   “이건 수면에 가깝지” identifies the displayed f822 feature as closer to an
+   actual water surface, at qualitative scope. Protect this deforming-surface
+   case separately from the settled surface; do not turn it into a splash-only
+   negative or reject slope/motion alone. No exact XY, scalar, speed limit,
+   correspondence label or production selection follows. Other scene readings
+   remain agent-provisional. Beer supplies a cropped
    upper-surface control and milk bulk-white-liquid/froth opposition. This is
    pre-detector context, not a new truth/packet format or a validated mechanism.
    **Next design entry:** D5 addresses raw-front identity before episode
