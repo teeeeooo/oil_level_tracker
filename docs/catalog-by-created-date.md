@@ -598,3 +598,14 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-10-10 | [Foam source/overlay](50-diagnostics/s11/2026-10-10-current-boundary-reference/foam-positive-review.png) | 사전 지정 프레임의 원본과 후보 |
 | 2026-10-10 | [Oil source/overlay](50-diagnostics/s11/2026-10-10-current-boundary-reference/oil-positive-review.png) | 사전 지정 프레임의 원본과 후보 |
 | 2026-10-10 | [Structure source/overlay](50-diagnostics/s11/2026-10-10-current-boundary-reference/rim-opposition-review.png) | 공통 참조 X 부재를 물리적 거부와 구별 |
+
+## 2026-10-10 local truth qualification additions
+
+Seven-video source and annotation audit; original truth and historical results
+are preserved. Current state and future acceptance remain in their existing owners.
+The first-addition author date was checked from Git in Asia/Seoul.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-10 | [Local truth and evaluation audit](60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md) | 기존 15개 주석의 출처·불확실성과 7개 영상의 구간별 평가 용도 |
+| 2026-10-10 | [Audit machine record](60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.json) | 입력 hash, 주석별 자격, 원본 확인 및 재현 코드; 새 정답 형식 아님 |

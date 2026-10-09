@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** CBR-1 is CLOSED WITHOUT PROMOTION after all 167 rasters / 198 queries: Foam's 40 unique continuation outputs lie at lower-rim Y879–880; Oil has 0/5 unique outputs on the continuation analysis grid. The helper's 88 focused tests and independent saved-pixel verification pass, but the physical progression gate fails. The supplied plan stops this variant here. Before another implementation, specify a distinct role-discriminating observation that can address both failures and supply comparable opposition; no successor mechanism is yet frozen. H0/G1 remain closed, Local XY OFF and O2 OPEN / FIELD FAIL remain. No new user pixel judgment or Windows execution is needed for this disposition.
+**Next transition:** The seven-video truth/qualification audit is complete. Existing 13 usable Oil points retain their historical scalar scope; none is newly certified as fixed-center numeric truth. Start the next source-bound qualitative development with the clearer settled water surface and same-scene structure, then use qualified public and target-domain controls. Freeze role/visibility/geometry and a distinct physical observation before implementing a successor; no new mechanism is established yet. The base f156 Foam conflict remains quarantined, without requiring a repeated answer to continue development. CBR-1/H0/G1 stay CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL remain. No Windows execution is required for this transition.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -39,7 +39,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | CBR-1 measurement verified; physical progression rejected. A distinct role-discriminating observation and comparable opposition must precede a successor. No stencil/reference/grouping retuning or runtime promotion. | [CBR-1 result](../50-diagnostics/s11/2026-10-10-current-boundary-reference.md), [contract](../20-architecture/s11-interface-observability-witness-architecture.md#cbr-1-current-boundary-reference-comparison--proposed-offline-contract), [Local XY evidence](../60-evidence/s11/2026-10-09-local-xy-implementation.md) |
+| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Source/truth audit complete. Water-first development with qualified positive/opposing/unresolved claims precedes a distinct frozen role measurement. Legacy scalar agreement is reported separately; no stencil/reference/grouping retuning or runtime promotion. | [Truth audit](../60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification), [CBR-1 result](../50-diagnostics/s11/2026-10-10-current-boundary-reference.md) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -56,7 +56,28 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
 
 ## Next transition
 
-### CBR-1 next work after the cc17924 intake
+### Source and truth qualification before the next experiment
+
+The user reopened the reliability of the four-video regression oracle and
+authorized an audit before another algorithm. The
+[completed audit](../60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md)
+separates nine approved proposal coordinates, four ruler conversions and two
+unusable frames, with the original values preserved. The
+[validation owner](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification)
+now separates engineering compatibility, qualified physical claims, unresolved
+or unobservable claims, and historical scalar agreement.
+
+Next use water's inspected settling surface around 41–55 s and empty-glass
+pattern as the first development context. Freeze the exact source/role/visibility
+and measurement definition before a successor trial; add the already reviewed
+inclined surface, beer front/back/cropped-top, milk lower-unavailability and
+target-domain controls at their actual scope. These are finite observations,
+not continuously labeled windows or untouched holdout. Numeric center truth
+requires a separate compatible binding and reviewed precision; no broad relabel
+or automatic replacement of all old videos follows. Base f156's disputed Foam
+claim can remain quarantined unless a future decisive use requires adjudication.
+
+### Closed CBR-1 comparison after the cc17924 intake
 
 The [architecture](../20-architecture/s11-interface-observability-witness-architecture.md#cbr-1-current-boundary-reference-comparison--proposed-offline-contract)
 and [validation entry](../30-validation/s11-interface-observability-witness-validation.md#cbr-1-offline-comparison-entry)
@@ -71,7 +92,7 @@ successful rejection. AB/BA/AA/BB obey `AB + BA = AA + BB`; their strict orderin
 does not add independent material evidence. Steps 4–6 remain gated; their entry
 conditions are unmet for this failed variant.
 
-The next actionable design entry is one new role measurement that explains why
+After source qualification, a successor still needs one new role measurement that explains why
 the f450 lower rim and f1320 competing Oil alternatives would differ, using
 actually comparable positive/opposing/unresolved support. Existing appearance,
 connectivity, static/motion and reference failures remain constraints. There is
@@ -85,7 +106,7 @@ follows automatically. Broader optional-reference feasibility stays unresolved.
 | 1. D2-A preflight | COMPLETE: mapping, geometry, common support, exact ties, budgets and progression frozen at `376132f` before real outcomes. | Physical decisions remain NOT_EVALUATED; original plans/references unchanged. |
 | 2. D2-A/D2-B measurement | COMPLETE for the offline measurement: existing temporal probe extended; 88 focused tests passed. | Physical discrimination remains unqualified. No production consumer, schema/UI change or candidate-Y replacement. |
 | 3. D3-1 fixed comparison | COMPLETE; CLOSED WITHOUT PROMOTION: all 198 queries / 167 rasters measured and independently verified; 195 continuation queries reported separately from initialization. | Wrong-region Foam outputs and ambiguous Oil analysis outputs fail the frozen progression rule. No additional ablation or after-result tuning. |
-| 4. D3-2 regression; D5 Foam | If step 3 supports progression, protect all four Mac windows and public water/beer/milk controls. D5 separately compares true Foam fronts against rim/internal texture with independent support. | Preserve original truth semantics; disclose unmatched center truth and exposed data. No Foam episode repair before raw-front identity. |
+| 4. D3-2 regression; D5 Foam | Entry was not reached by CBR-1. A future eligible successor covers the Mac/public sources under the source-qualification strata above. D5 separately compares true Foam fronts against rim/internal texture with independent support. | Preserve original truth semantics; separate legacy agreement from supported physical regression and disclose unmatched center truth. No Foam episode repair before raw-front identity. |
 | 5. O2 shadow | A useful local candidate still needs a frozen physical decision rule, operating point, actual holdout evidence, behavior equality and reviewed Windows shadow report. | Prepare Windows procedure only when its evidence is needed; no current Windows request or automatic O2 PASS. |
 | 6. D4a/D4b, then D6 | After O2, separately plan support/association and any evidenced phase/handoff repair; finally qualify the exact integrated runtime on all nine canonical Windows segments and target resources. | O3/O4 controls and explicit field acceptance; FIELD FAIL remains until satisfied. |
 
@@ -544,6 +565,12 @@ and push. **Stop and report when user judgment or work on Windows is required.**
 This stop instruction governs the next transition; retained commands are not
 permission to run private media or claim field acceptance.
 
+The October 10 follow-up explicitly authorizes auditing possible errors in the
+old reference and qualifying regression uses before further detector work.
+Unresolved claims may remain quarantined during development. Formal replacement
+physical labels are not inferred from this grant or from agent image readings;
+ask only when a specific unresolved judgment becomes necessary to proceed.
+
 **Method scope:** the user excludes machine learning for now because it is
 excessive for the purpose. Do not pursue learned-challenger readiness, training,
 or pretrained-model adoption in the current work. This is a product-scope choice,
@@ -611,6 +638,9 @@ remain the design/acceptance owners. CBR-1's frozen operation and acceptance
 conditions live in those owners; its verified offline implementation failed the
 progression gate, as recorded in the linked diagnostic. The supplied original
 does not replace current contracts. A successor physical mechanism remains open.
+The completed source/truth audit now precedes successor design; use the
+qualified water-first development sequence above, with historical scalar
+agreement distinct from physical acceptance.
 Independent support, association, committed handoff and initial-FULL observation
 remain separate later gates. Failed descriptors do not prove physical unobservability.
 

@@ -888,6 +888,21 @@ on unchanged truth/support. Rank ties and unavailable scores are not predictions
 of UNRESOLVED. This boundary adds no classifier, confidence threshold, new schema
 or second labeling system.
 
+Historical scalar approval also has a measurement scope: a ruler percentage or
+an approved uncertain proposal does not by itself bind an exact contour at the
+new fixed-center X. Source reproducibility, physical role, visibility, measurement
+location and reviewed precision are separate qualifications. Preserve the
+original `.oiltruth`, proposal ranges and attributed later observations; an audit
+record routes their use and is not a second executable label schema.
+
+The [local source qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification)
+separates historical scalar agreement from qualified physical regression and
+engineering compatibility. Disputed/unobservable claims stay explicit without
+certifying a model's abstention. Revisions compare both models under the same
+reference version; numerical storage precision never substitutes for reviewed
+accuracy. This changes evaluation interpretation, not production geometry,
+projection, a current label value or a completed experiment's result.
+
 ### Existing context and recorded funnel audit
 
 `s11_shadow_experiment.py --target-audit` reuses existing label/packet validators,
@@ -2277,6 +2292,14 @@ sweep, ML or separate dense-contour system follows. Use the
 and Work Plan for execution/acceptance.
 
 ## History Review
+
+2026-10-10 local truth qualification: reviewed F09, the original D1 proposal
+ranges, D2 user-ruler translation, later contradictory/regional judgments,
+the existing uncertainty/evaluation owner and actual timestamp/indexed source
+readers. The seven-video audit distinguishes reproducible legacy agreement
+from compatible fixed-center physical truth. No tolerance is fitted, label
+silently changed or past failure promoted. The validation owner carries the
+qualification contract; production nodes and the failure registry are unchanged.
 
 2026-10-10 frozen CBR-1 execution: reviewed all saved query/candidate mappings,
 the independently verified four-loss identity, lower-rim Foam appearances and

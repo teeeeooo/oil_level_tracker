@@ -1,0 +1,1410 @@
+{
+  "schema": "s11-local-truth-and-evaluation-audit-v1",
+  "date": "2026-10-10",
+  "base_head": "f833d76b6236a3176c5c90d01952924847d33c04",
+  "scope": "Source/annotation qualification audit, not evaluator labels, detector output, recalculated scores or field acceptance",
+  "exposure": "All seven recordings already exposed; not independent holdout; review is not blind",
+  "source_input_pins": {
+    "sample/output/s11-local-target-reuse-20261006/inventory.json": "ca6c0a50e7360d5079864abc7bb9854e45bdf7058d0cf452f84e29e79a3ba3cf",
+    "sample/output/s6-d1-mobile-truth-review-pack/worker-0f0bf70-20260731T151330Z/review-candidates.json": "2dcf7190fd143716045ed6cddc7f2d166fd07d46c7819a84691d477094e67aee",
+    "sample/base_sample_1.mp4": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+    "sample/base_sample_1.oilrecipe": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+    "sample/base_sample_1.oiltruth": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a",
+    "sample/sample2.mp4": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+    "sample/sample2.oilrecipe": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+    "sample/sample2.oiltruth": "f45479f7bb5f4216cb9c6920ac994d2d690942f2ed432d5d8a8647af030c731f",
+    "sample/sample3.mp4": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+    "sample/sample3.oilrecipe": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+    "sample/sample3.oiltruth": "8cb2b917eede7708894fa90f59f96f1d9eac272813af6d457dcbc292496dd8ab",
+    "sample/sample4.mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+    "sample/sample4.oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+    "sample/sample4.oiltruth": "f02575ac2379b4d135567f1835aa772803af13a20413b8aa58175d890f5241bd",
+    "docs/50-diagnostics/s11/2026-10-09-public-video-intake.json": "e36b0804bd5b4f7504444a2d5d216f8e12a1725ed75465a46f7164b5257ab4bc",
+    "docs/50-diagnostics/s11/2026-10-09-public-video-rename.json": "7f925235e6a1cbc34313380f22bb616ba68c384b9395e73324cd2782b1e7a649",
+    "sample/sample5.mp4": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+    "sample/sample6.mp4": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+    "sample/sample7.mp4": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000000.png": "20814859d027ce5fa50b3f00c56084ec778d74ff5b38bd05fb980d8e208837fd",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000073.png": "71f9c83fb01efc10f8cb50267236fef547a2169c3291c2c7047cf22523b3143b",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000146.png": "2f45e444880a4f8e3df9cb29adbf269259f12544a29ddd60ae73d776d44741b4",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000218.png": "96829d1a9639ec0259d44aa9de1e0e5a093660279df61a55ea69be842c03c1c5",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000291.png": "51750e94ca3cb5cbb78929bccda398ec955e3d499389ae1297058a2e714292d5",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000364.png": "ab4c59e77bd145ef0be466f2577c4c6f5eb0682bd9f1a4e0b25f729415329cbd",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000436.png": "72fe651d0c719c08b8e63fa44c5be77b1fd9e9ad3af09dc6152c2fc6ffeffd35",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000509.png": "2607899c810a281bc2fafb3c417c6cd99afdea891b4c4593d88911372eea220c",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000582.png": "5cb1710c687e9105189e51fce40ae9e789a78eab3cf927c6c7ff574f23bae777",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050-overview.jpg": "ca01a0e64f0a3c3eb62c636ab1a4da88605f622750479e6b311507e134b03aec",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000000.png": "f339911bc43748030ebace5b0843d0362ee213f2b38364fe48f9f52ba479f21b",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000133.png": "bf95b31853898e3bc2898cea7044809529dd539fe74fc81dfe535af8b3d34520",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000266.png": "e4d9746aabccdbcf3084d12eac53598ee74f947297c791facb09c3d37c996c7f",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000399.png": "43bfa16516e255dc83fe45221af8e2e1d387d4af97be2332d90c6058031651b5",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000532.png": "8549006127569fd3d06950616db870418c36503ae761b51827f3949e1698d4b7",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000664.png": "037794bc010510f675a7d40c862629e4623f88a299c367352c5202460da4a205",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000797.png": "dc67f5391c33803feb4dc6b9d0e6d82ae76ee58cd0087553d00c364717e04dce",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000930.png": "416352e363ed502a1a56596bca1da0b601340af7d5843553ec3047a0b5cd1743",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788-overview.jpg": "5c79585b4ed24c4787a0b3bcc70f0f818609b0286f361697dcc315bf5d1871b4",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000000.png": "bd248d9331c4b1d267572d2e44a1a016589e2065509dc16f0de0b83d7bcd808f",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000205.png": "acfc2cf9e925c1b17a32018c7bfcaef396d3a369543044a05b037b37323c8e3d",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000411.png": "3dbe6f5ab0f78a0956981b25f989dd52f1ac168baf722c672c93d05d41f2992b",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000616.png": "bfbe0db7fb500dad708f976c7b5902d692c66512847321ad0880a1aa1b69d7bc",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000822.png": "19a94ae8bb16454440033559aecbe6ca714853d505423288bd2dc113767ce8b1",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001027.png": "efa04096b6c4e76803536a704dfdb51d9e6a0a4eecdbd7d19e83e602c37cbe56",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722-overview.jpg": "986da1fae5e507b52e3f5d04661bc4222e4cff16a8a57f5845af9d2886758248",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000140.png": "7fc1a063d27f585fb61ebde3ed682cfa3ce83d69b42d3444dee08c3e910c9b60",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000146.png": "fcaef81a6ee6d85db7f04e4153372c0bf4a0c91dc5df68e138a670a3e639f5a0",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000152.png": "90f72df7636a050628e6efb2c8ed140694cbbcc2d42ddaa494d9da9cdbfba38e",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000285.png": "a8e7e8106cd1f47e5a4b931b92e7bcde0381f4a18fc5e515712d979e100d3609",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000291.png": "052f62eab7bc843b1937ee1f55c38eb049a67b8d778da85f1b4bd892c302a093",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000297.png": "ca88dabbf3f14acb37bacf7ecfd395d9827e0bc7584b68fb5d2aecf37975d584",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000430.png": "31c6fd3f0ac15ada2ea6064f3eeaaefb6b82d6436a5dfc369d1526ff7b218015",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000436.png": "fef26fe8b71e633e9d673abfdc3ee84ef78b1356d36132ff8a63da921525846f",
+    "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/quarter-f000442.png": "5037073149f2bbc9b3131e15b9fdf0330a112ff7459f47c5bc1cb8f92ce4d69f",
+    "sample/output/s11-public-video-intake-20261009-001/beer-quarter-context.jpg": "c5f6b475c2a8c087f41d82052e289d1b173ed10c44df3441742fbb2975c3d387",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000260.png": "9e817dcbe6d9f545af035da273698962ec74a6b6303810a3db56d8ba353280db",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000266.png": "f22f8a835bbc02c481b4bb8826284747f488845ed83c828ff852cb577a290621",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000272.png": "932ff5cb6756d399866cbabb3e901c9fc44dc97f8a6ccd1d158c0757720201e1",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000526.png": "0a0e04a1019504a93149268626e98dbf88ada25cedfa5fbe7558db7f785c7b2f",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000532.png": "e30fbcad06437c9ae5060f8429c0b7ec9d838fb9ab003ff8898b508ac3103f2c",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000538.png": "62d35ba917906112690ec7016a3a80403d18f51afb570b1d846fa5b79e292974",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000791.png": "096708b6e950793b362b37f233386e4d929696dccd9a0f14041ec50506c508bf",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000797.png": "d9823a80c23fdd1af9f3aa9a3499fcb0c9607993f3f3cc0a494f9cc5cd39a26f",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/quarter-f000803.png": "7386433f9c4b139f4b0be3252383f1da99348b64e7d2fefc108c5929e4a19379",
+    "sample/output/s11-public-video-intake-20261009-001/milk-quarter-context.jpg": "0c1e6c5cb44c765073839180746b84a96161cf0a3ccc88fdedaf3890abbea4b1",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000404.png": "7beb32fca1fa462df8dc0e02db41089f338b255fc5e8a2dfdf4d4ae709efb276",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000411.png": "936dbaf4d8cc127296007cb720014a60fece24293eb1416d8c0b91b60bd911e3",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000418.png": "58e50788472b58cc9cea3becc72567d297fa6bff1b0d69608993690f261a7948",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000815.png": "38425a7172d682c2cb6fe94533d7201c686763672bcc9cd251d18b59a16e6b31",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000822.png": "b14e7cd3f917c8b4a9e1d5105322306b800aa424743d8784a5b8645147e502ff",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000829.png": "07adeee2f636b3355d48c89c3f8da920895688fd417008869a90aa4049b83c1d",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001225.png": "101e1045e7aad0d190956c3d016243dafa7e81ee85146367cefd4ca418ecb9f1",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001232.png": "5eb380535f27a9779953052a6d1392bcf39ece1265937a1df9f7b766806271c6",
+    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f001239.png": "ca58ebe1a8f7b4aa1f3b39767e3f999c4b2321e9179092ac257931b90a50fa64",
+    "sample/output/s11-public-video-intake-20261009-001/water-quarter-context.jpg": "a461d86c4b219e0b31dd17f2fac25c543e27eb9b95f26809b5e883f3be50a17b",
+    "docs/60-evidence/s6/s6-d2-user-confirmed-product-truth.md": "8bee1fba4244ce6d20e8d6e6c0d31a1b93212614e26b5e45791a815a1cc6127a",
+    "docs/60-evidence/s11/2026-10-06-local-corpus-target-reuse.md": "7a7fb6572d56f53793653b0458971cb24148eb130c024065e89db631aa5a8c16",
+    "docs/60-evidence/s11/s11-o2-reference-uncertainty-evaluation-audit.md": "fc32244f63b0ecc00c4f8e048563c4e99363c7d9990b94b9d62ae6eec1a392a6",
+    "docs/50-diagnostics/s11/2026-10-09-public-scene-controls.json": "37268d0206dae310b9c5aeaecb45fbc3f17bd1ede001bc49454f82b40ecc9252",
+    "docs/50-diagnostics/s11/2026-10-09-public-water-surface-reply.json": "b720d3f19be9f2ab874428fd6ff229e34a5221dabeec2b3e5ab8fd9a066e4d23",
+    "docs/50-diagnostics/s11/2026-10-09-public-beer-layer-reply.json": "2e35458317f5415311ec611f310331432378bd2f9db2533015d26da028fa74d0",
+    "docs/50-diagnostics/s11/2026-10-09-public-milk-interface-reply.json": "a87573c102f6114cd7a7af275181c95bf73215ec81496f8be0cf4c15d0405e49",
+    "tests/diagnostics/s11_resolver_replacement_compare.py": "8975a717ba38ce5b4d85fc76903deb57d204888b2cf4ed6ef600654a1b95dc25",
+    "tests/diagnostics/s11_evidence_probe.py": "a62133c29a2014929c78ba4115b82df5c57215eb54874b994c52313fba91ca6b",
+    "src/oil_tracker/adapters/vision/opencv_video_reader.py": "b4d3304d37890570b57101418e69546133b9a8317ce18766d52b7ab221b34686"
+  },
+  "annotations": [
+    {
+      "review_id": "S1-01",
+      "video": "sample/base_sample_1.mp4",
+      "frame_index": 144,
+      "historical_timestamp_sec": 4.8048,
+      "historical_annotation_id": "2876749e-7e85-4e26-bb82-f11ac860af1e",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 386.0,
+      "historical_foam_y": null,
+      "historical_foam_present": false,
+      "historical_note": "[S1-01] 사용자 승인: D1 agent Oil candidate 승인; Foam 없음; 강한 선 해당 없음.",
+      "coordinate_origin": "user_approved_agent_proposal",
+      "original_agent_proposal": {
+        "oil_source_y": 386.0,
+        "oil_source_y_range": [
+          378.0,
+          394.0
+        ],
+        "foam_source_y": null,
+        "foam_source_y_range": null,
+        "categories": [
+          "clean_weak_oil_boundary"
+        ],
+        "artifact_bands": [],
+        "uncertainty": "high"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/base_sample_1/f000144.png",
+        "sha256": "e2ccc4b7195c7870e8df99bce54c38c0e19ce16bebf7bafe37f64e1a681d604d"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "weak_broad_feature",
+        "original_agent_range_378_394"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S1-02",
+      "video": "sample/base_sample_1.mp4",
+      "frame_index": 156,
+      "historical_timestamp_sec": 5.2052000000000005,
+      "historical_annotation_id": "304aa62f-0854-4343-b5c6-d14d2e46be72",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 386.0,
+      "historical_foam_y": null,
+      "historical_foam_present": false,
+      "historical_note": "[S1-02] 사용자 승인: D1 agent Oil candidate 승인; Foam 없음; 강한 선 overlay. overlay는 전용 TruthErrorType이 없어 note에 보존.",
+      "coordinate_origin": "user_approved_agent_proposal",
+      "original_agent_proposal": {
+        "oil_source_y": 386.0,
+        "oil_source_y_range": [
+          378.0,
+          394.0
+        ],
+        "foam_source_y": null,
+        "foam_source_y_range": null,
+        "categories": [
+          "clean_weak_oil_boundary",
+          "strong_overlay"
+        ],
+        "artifact_bands": [
+          {
+            "source_y_range": [
+              315,
+              323
+            ],
+            "label": "High overlay"
+          },
+          {
+            "source_y_range": [
+              394,
+              412
+            ],
+            "label": "1/3 overlay"
+          },
+          {
+            "source_y_range": [
+              472,
+              480
+            ],
+            "label": "Low overlay"
+          }
+        ],
+        "uncertainty": "high"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/base_sample_1/f000156.png",
+        "sha256": "e068424ced60ae60b4d4aa2b104a48897bcbe782163d6b7227cc58dc9586c2fb"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "weak_broad_feature",
+        "original_agent_range_378_394",
+        "historical_foam_absence_conflicts_with_later_human_foam_air_observation",
+        "oil_candidate_correspondence_unresolved"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S1-03",
+      "video": "sample/base_sample_1.mp4",
+      "frame_index": 240,
+      "historical_timestamp_sec": 7.974633333333334,
+      "historical_annotation_id": "ae13a138-448d-442c-9dfe-c48c0d5f7076",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 386.0,
+      "historical_foam_y": null,
+      "historical_foam_present": false,
+      "historical_note": "[S1-03] 사용자 승인: D1 agent Oil candidate 승인; Foam 없음; 강한 선 overlay. overlay는 전용 TruthErrorType이 없어 note에 보존.",
+      "coordinate_origin": "user_approved_agent_proposal",
+      "original_agent_proposal": {
+        "oil_source_y": 386.0,
+        "oil_source_y_range": [
+          378.0,
+          394.0
+        ],
+        "foam_source_y": null,
+        "foam_source_y_range": null,
+        "categories": [
+          "clean_weak_oil_boundary",
+          "strong_overlay"
+        ],
+        "artifact_bands": [
+          {
+            "source_y_range": [
+              315,
+              323
+            ],
+            "label": "High overlay"
+          },
+          {
+            "source_y_range": [
+              394,
+              412
+            ],
+            "label": "1/3 overlay"
+          },
+          {
+            "source_y_range": [
+              472,
+              480
+            ],
+            "label": "Low overlay"
+          }
+        ],
+        "uncertainty": "high"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "timestamp seek and existing indexed probe agree; historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/base_sample_1/S1-03-timestamp-seek.png",
+        "sha256": "c8df1c0a8bb44bb2e9ab1f95690be833e25ebf199f2e437309fe877a80d52d24"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "weak_broad_feature",
+        "original_agent_range_378_394",
+        "sequential_ordinal_differs_from_reviewed_seek_frame_existing_reader_reproduces_review"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S2-01",
+      "video": "sample/sample2.mp4",
+      "frame_index": 0,
+      "historical_timestamp_sec": 0.0,
+      "historical_annotation_id": "c9b0504f-f792-4e07-8359-9bb1754ad10f",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 592.0,
+      "historical_foam_y": 320.0,
+      "historical_foam_present": true,
+      "historical_note": "[S2-01] 사용자 수정: Glass ruler Oil 80%, Foam 0%; reflection; 약 50–60% 부근 빛반사.",
+      "coordinate_origin": "user_ruler_percent",
+      "original_agent_proposal": {
+        "oil_source_y": null,
+        "oil_source_y_range": null,
+        "foam_source_y": null,
+        "foam_source_y_range": null,
+        "categories": [
+          "fluorescent_reflection",
+          "bubbly_texture",
+          "possible_no_interface_unconfirmed"
+        ],
+        "artifact_bands": [
+          {
+            "source_y_range": [
+              484,
+              514
+            ],
+            "label": "fluorescent reflection"
+          }
+        ],
+        "uncertainty": "medium"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample2/f000000.png",
+        "sha256": "3f3a6de3b8b6436e13e1854a302b144f9b76527069aba5889987f091ae61309d"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "ruler_percent_not_pixel_precision",
+        "foam_top_at_ruler_zero_does_not_certify_visible_foam_air_contour"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S2-02",
+      "video": "sample/sample2.mp4",
+      "frame_index": 30,
+      "historical_timestamp_sec": 1.0,
+      "historical_annotation_id": "e2070104-a258-46b4-ac9b-b9a3771224c0",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 592.0,
+      "historical_foam_y": 320.0,
+      "historical_foam_present": true,
+      "historical_note": "[S2-02] 사용자 수정: Glass ruler Oil 80%, Foam 0%; reflection; 약 50–60% 부근 빛반사.",
+      "coordinate_origin": "user_ruler_percent",
+      "original_agent_proposal": {
+        "oil_source_y": null,
+        "oil_source_y_range": null,
+        "foam_source_y": null,
+        "foam_source_y_range": null,
+        "categories": [
+          "fluorescent_reflection",
+          "bubbly_texture",
+          "possible_no_interface_unconfirmed"
+        ],
+        "artifact_bands": [
+          {
+            "source_y_range": [
+              486,
+              516
+            ],
+            "label": "fluorescent reflection"
+          }
+        ],
+        "uncertainty": "medium"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample2/f000030.png",
+        "sha256": "5feafb6a16e7735b08f1c2fbc417eb021a7a9e5e0b515a3c89ebf463d23d78aa"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "ruler_percent_not_pixel_precision",
+        "foam_top_at_ruler_zero_does_not_certify_visible_foam_air_contour"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S2-03",
+      "video": "sample/sample2.mp4",
+      "frame_index": 60,
+      "historical_timestamp_sec": 2.0,
+      "historical_annotation_id": "5327ef00-1627-4a4b-b89a-9a0735e37441",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 592.0,
+      "historical_foam_y": 320.0,
+      "historical_foam_present": true,
+      "historical_note": "[S2-03] 사용자 수정: Glass ruler Oil 80%, Foam 0%; reflection; 약 50–60% 부근 빛반사.",
+      "coordinate_origin": "user_ruler_percent",
+      "original_agent_proposal": {
+        "oil_source_y": null,
+        "oil_source_y_range": null,
+        "foam_source_y": null,
+        "foam_source_y_range": null,
+        "categories": [
+          "fluorescent_reflection",
+          "bubbly_texture",
+          "possible_no_interface_unconfirmed"
+        ],
+        "artifact_bands": [
+          {
+            "source_y_range": [
+              510,
+              540
+            ],
+            "label": "fluorescent reflection"
+          }
+        ],
+        "uncertainty": "medium"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample2/f000060.png",
+        "sha256": "f113fc6f83e7c7f23d9cb9fce42ca4534aec14fc21c67959cc1ddfd6e3bc5898"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "ruler_percent_not_pixel_precision",
+        "foam_top_at_ruler_zero_does_not_certify_visible_foam_air_contour"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S3-01",
+      "video": "sample/sample3.mp4",
+      "frame_index": 900,
+      "historical_timestamp_sec": 30.03,
+      "historical_annotation_id": "3d4a5a0f-1eb7-4e99-b628-07eb5f053799",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 316.0,
+      "historical_foam_y": 286.0,
+      "historical_foam_present": true,
+      "historical_note": "[S3-01] 사용자 승인: D1 agent Oil/Foam candidates 승인.",
+      "coordinate_origin": "user_approved_agent_proposal",
+      "original_agent_proposal": {
+        "oil_source_y": 316.0,
+        "oil_source_y_range": [
+          310.0,
+          322.0
+        ],
+        "foam_source_y": 286.0,
+        "foam_source_y_range": [
+          276.0,
+          298.0
+        ],
+        "categories": [
+          "oil_foam_dual_boundary",
+          "oil_foam_compound_state"
+        ],
+        "artifact_bands": [],
+        "uncertainty": "high"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample3/f000900.png",
+        "sha256": "2bc0ec1876c4329f916c63096702a9380eb629ff74be5226fc284477fa8617f0"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "dark_soft_boundary",
+        "original_agent_oil_range_310_322"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S3-02",
+      "video": "sample/sample3.mp4",
+      "frame_index": 1035,
+      "historical_timestamp_sec": 34.5345,
+      "historical_annotation_id": "31b9dfb9-a7d5-42fb-95ed-e37c6a794945",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 243.0,
+      "historical_foam_y": 195.0,
+      "historical_foam_present": true,
+      "historical_note": "[S3-02] 사용자 수정: Glass ruler Oil 20%, Foam 0%. 원문 note: 실제 glass의 위치는 표시 선상 -10%~60% 지점까지가 glass임. Recipe ROI/geometry는 변경하지 않음.",
+      "coordinate_origin": "user_ruler_percent",
+      "original_agent_proposal": {
+        "oil_source_y": 315.0,
+        "oil_source_y_range": [
+          304.0,
+          326.0
+        ],
+        "foam_source_y": 261.0,
+        "foam_source_y_range": [
+          248.0,
+          274.0
+        ],
+        "categories": [
+          "oil_foam_dual_boundary",
+          "oil_foam_compound_state"
+        ],
+        "artifact_bands": [],
+        "uncertainty": "high"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample3/f001035.png",
+        "sha256": "f918f7ee11d699ecd6b412378917186068481f6e5b9739e2bfc250b17270b829"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "user_reported_actual_glass_span_minus10_to60_percent",
+        "ruler_percent_not_pixel_precision"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S3-03",
+      "video": "sample/sample3.mp4",
+      "frame_index": 2848,
+      "historical_timestamp_sec": 95.02826666666667,
+      "historical_annotation_id": "ebb08d8d-3451-4d8e-9c59-db40a2df9aa9",
+      "historical_disposition": "unusable",
+      "historical_oil_y": null,
+      "historical_foam_y": null,
+      "historical_foam_present": false,
+      "historical_note": "[S3-03] 사용자 unusable: 초점 불량으로 사용 불가. candidate Oil은 맞아 보인다는 user comment를 보존하며 numeric truth는 product normalization으로 제거.",
+      "coordinate_origin": "unusable",
+      "original_agent_proposal": {
+        "oil_source_y": 343.0,
+        "oil_source_y_range": [
+          334.0,
+          352.0
+        ],
+        "foam_source_y": null,
+        "foam_source_y_range": null,
+        "categories": [
+          "oscillating_oil",
+          "severe_blur_focus_loss"
+        ],
+        "artifact_bands": [],
+        "uncertainty": "high"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample3/f002848.png",
+        "sha256": "ef05576f5209ee41b2cdc7c1eae2c3d5d49f7c2ecef89b9fe528cd8deb9d1eb5"
+      },
+      "audit_flags": [
+        "human_focus_unusable",
+        "no_numeric_truth",
+        "normalized_foam_false_is_not_physical_absence"
+      ],
+      "fixed_center_numeric_eligibility": "UNUSABLE",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "robustness_unusable"
+    },
+    {
+      "review_id": "S3-04",
+      "video": "sample/sample3.mp4",
+      "frame_index": 3147,
+      "historical_timestamp_sec": 105.0049,
+      "historical_annotation_id": "985a890f-d63a-4a9e-8248-65abfc4e17b1",
+      "historical_disposition": "unusable",
+      "historical_oil_y": null,
+      "historical_foam_y": null,
+      "historical_foam_present": false,
+      "historical_note": "[S3-04] 사용자 unusable: 초점 불량으로 사용 불가. candidate Oil은 맞아 보인다는 user comment를 보존하며 numeric truth는 product normalization으로 제거.",
+      "coordinate_origin": "unusable",
+      "original_agent_proposal": {
+        "oil_source_y": 361.0,
+        "oil_source_y_range": [
+          348.0,
+          374.0
+        ],
+        "foam_source_y": null,
+        "foam_source_y_range": null,
+        "categories": [
+          "draining_oil",
+          "severe_blur_focus_loss"
+        ],
+        "artifact_bands": [],
+        "uncertainty": "high"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample3/f003147.png",
+        "sha256": "74995b6aab0bdf599bbf5622cbc8601c47cd359df1e94adb6830696859ea3938"
+      },
+      "audit_flags": [
+        "human_focus_unusable",
+        "no_numeric_truth",
+        "normalized_foam_false_is_not_physical_absence"
+      ],
+      "fixed_center_numeric_eligibility": "UNUSABLE",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "robustness_unusable"
+    },
+    {
+      "review_id": "S4-01",
+      "video": "sample/sample4.mp4",
+      "frame_index": 0,
+      "historical_timestamp_sec": 0.0,
+      "historical_annotation_id": "d0b7c7d7-d752-4cfd-a418-463d0a102cc3",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 860.5,
+      "historical_foam_y": 850.0,
+      "historical_foam_present": true,
+      "historical_note": "[S4-01] 사용자 승인: D1 agent Oil/Foam candidates 승인; candidate가 현실에 가까움.",
+      "coordinate_origin": "user_approved_agent_proposal",
+      "original_agent_proposal": {
+        "oil_source_y": 860.5,
+        "oil_source_y_range": [
+          856.0,
+          865.0
+        ],
+        "foam_source_y": 850.0,
+        "foam_source_y_range": [
+          846.0,
+          854.0
+        ],
+        "categories": [
+          "oil_foam_dual_boundary",
+          "thin_foam",
+          "oil_under_foam"
+        ],
+        "artifact_bands": [],
+        "uncertainty": "medium"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample4/f000000.png",
+        "sha256": "d81a1abf50e4ac7fd979b9f9fd2e9949a8235d7604d263ba936954890a79948b"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "recipe_glass_diameter_104_source_pixels",
+        "original_agent_range_not_reviewed_tolerance"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S4-02",
+      "video": "sample/sample4.mp4",
+      "frame_index": 450,
+      "historical_timestamp_sec": 15.0,
+      "historical_annotation_id": "13dcc0f1-e2d0-472b-948c-237a020b7805",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 852.5,
+      "historical_foam_y": 845.0,
+      "historical_foam_present": true,
+      "historical_note": "[S4-02] 사용자 승인: D1 agent Oil/Foam candidates 승인; candidate가 현실에 가까움.",
+      "coordinate_origin": "user_approved_agent_proposal",
+      "original_agent_proposal": {
+        "oil_source_y": 852.5,
+        "oil_source_y_range": [
+          848.0,
+          857.0
+        ],
+        "foam_source_y": 845.0,
+        "foam_source_y_range": [
+          841.0,
+          849.0
+        ],
+        "categories": [
+          "oil_foam_dual_boundary",
+          "thin_foam",
+          "oil_under_foam"
+        ],
+        "artifact_bands": [],
+        "uncertainty": "medium"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample4/f000450.png",
+        "sha256": "ca7123f57dc931d8224428bd98eb0ecf4640a52e6f5c7844368023f70b0f6675"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "recipe_glass_diameter_104_source_pixels",
+        "original_agent_range_not_reviewed_tolerance"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S4-03",
+      "video": "sample/sample4.mp4",
+      "frame_index": 900,
+      "historical_timestamp_sec": 30.0,
+      "historical_annotation_id": "b5f72878-8661-4813-a635-9d421d49f8de",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 848.5,
+      "historical_foam_y": 840.0,
+      "historical_foam_present": true,
+      "historical_note": "[S4-03] 사용자 승인: D1 agent Oil/Foam candidates 승인; candidate가 현실에 가까움.",
+      "coordinate_origin": "user_approved_agent_proposal",
+      "original_agent_proposal": {
+        "oil_source_y": 848.5,
+        "oil_source_y_range": [
+          844.0,
+          853.0
+        ],
+        "foam_source_y": 840.0,
+        "foam_source_y_range": [
+          834.0,
+          844.0
+        ],
+        "categories": [
+          "oil_foam_dual_boundary",
+          "thin_foam",
+          "oil_under_foam",
+          "oscillating_oil"
+        ],
+        "artifact_bands": [],
+        "uncertainty": "medium"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample4/f000900.png",
+        "sha256": "e399e8338020ce7a31637a0e88c223a9538c17409709925e832db3e098522925"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "recipe_glass_diameter_104_source_pixels",
+        "original_agent_range_not_reviewed_tolerance"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S4-04",
+      "video": "sample/sample4.mp4",
+      "frame_index": 1470,
+      "historical_timestamp_sec": 49.0,
+      "historical_annotation_id": "7ce9ed3c-6f3d-40ca-8773-ddabd0a4a789",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 855.0,
+      "historical_foam_y": 824.0,
+      "historical_foam_present": true,
+      "historical_note": "[S4-04] 사용자 승인: D1 agent Foam/Oil candidates 모두 적절.",
+      "coordinate_origin": "user_approved_agent_proposal",
+      "original_agent_proposal": {
+        "oil_source_y": 855.0,
+        "oil_source_y_range": [
+          849.0,
+          861.0
+        ],
+        "foam_source_y": 824.0,
+        "foam_source_y_range": [
+          814.0,
+          834.0
+        ],
+        "categories": [
+          "oil_foam_dual_boundary",
+          "thick_foam",
+          "oil_under_foam"
+        ],
+        "artifact_bands": [
+          {
+            "source_y_range": [
+              810,
+              840
+            ],
+            "label": "yellow glare / foam-like region"
+          }
+        ],
+        "uncertainty": "high"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample4/f001470.png",
+        "sha256": "8fff29da71279d77cc8b022787fa72514e9faeba60d8b85469656456cadec564"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "recipe_glass_diameter_104_source_pixels",
+        "original_agent_range_not_reviewed_tolerance"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    },
+    {
+      "review_id": "S4-05",
+      "video": "sample/sample4.mp4",
+      "frame_index": 1680,
+      "historical_timestamp_sec": 56.0,
+      "historical_annotation_id": "f696dbe1-4e4c-4795-94c6-6f52ffd5bb4f",
+      "historical_disposition": "corrected",
+      "historical_oil_y": 858.5,
+      "historical_foam_y": 810.0,
+      "historical_foam_present": true,
+      "historical_note": "[S4-05] 사용자 승인: D1 agent Foam/Oil candidates 모두 적절.",
+      "coordinate_origin": "user_approved_agent_proposal",
+      "original_agent_proposal": {
+        "oil_source_y": 858.5,
+        "oil_source_y_range": [
+          852.0,
+          865.0
+        ],
+        "foam_source_y": 810.0,
+        "foam_source_y_range": [
+          800.0,
+          820.0
+        ],
+        "categories": [
+          "oil_foam_dual_boundary",
+          "thick_foam",
+          "oil_under_foam"
+        ],
+        "artifact_bands": [
+          {
+            "source_y_range": [
+              798,
+              835
+            ],
+            "label": "yellow glare / foam-like region"
+          }
+        ],
+        "uncertainty": "high"
+      },
+      "original_agent_ranges_are_not_new_approved_tolerances": true,
+      "source_binding": "sequential ordinal and historical clean-card interior verified equal",
+      "reviewed_source": {
+        "path": "sample/output/s11-truth-audit-20261010-002/sample4/f001680.png",
+        "sha256": "5f79f05407862885b59073853c82595c3d616b8163326c052825f9299feb4ae4"
+      },
+      "audit_flags": [
+        "fixed_center_x_not_bound",
+        "reviewed_numeric_tolerance_not_established",
+        "recipe_glass_diameter_104_source_pixels",
+        "original_agent_range_not_reviewed_tolerance"
+      ],
+      "fixed_center_numeric_eligibility": "NOT_ESTABLISHED",
+      "new_physical_label": null,
+      "new_scalar_truth": null,
+      "evaluation_use": "historical_scalar_agreement_and_scoped_qualitative_review"
+    }
+  ],
+  "source_role_strata": [
+    {
+      "video": "sample/base_sample_1.mp4",
+      "source_frames": [
+        144,
+        156,
+        240
+      ],
+      "context_window_sec": [
+        0,
+        14.44
+      ],
+      "evaluation_use": "overlay/weak-evidence robustness; historical scalar agreement",
+      "observation_authority": "historical human scalar plus current agent source inspection",
+      "limitation": "f156 Foam conflict; original broad Oil range; no exact center-label promotion",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample2.mp4",
+      "source_frames": [
+        0,
+        30,
+        60
+      ],
+      "context_window_sec": [
+        0,
+        2
+      ],
+      "evaluation_use": "target-domain qualitative Oil/reflection/Foam distinction; historical scalar agreement",
+      "observation_authority": "historical ruler labels; later f30 candidate-bound human reply",
+      "limitation": "After 2s fixed geometry is outside its accepted window; Foam ruler-zero is not a certified upper contour",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample2.mp4",
+      "source_frames": [
+        90,
+        180,
+        285
+      ],
+      "context_window_sec": [
+        3,
+        9.5
+      ],
+      "evaluation_use": "reframing/input-validity stress",
+      "observation_authority": "agent source inspection",
+      "limitation": "No fixed-Recipe accuracy or no-interface label outside the accepted window",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample3.mp4",
+      "source_frames": [
+        900,
+        1035
+      ],
+      "context_window_sec": [
+        30.03,
+        34.5345
+      ],
+      "evaluation_use": "target-domain qualitative dual-region context; historical scalar agreement",
+      "observation_authority": "historical user reply and current agent inspection",
+      "limitation": "Soft/dark image and documented ruler/Glass mismatch; stable-window prose is not precision certification",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample3.mp4",
+      "source_frames": [
+        2848,
+        3147
+      ],
+      "context_window_sec": [
+        95.02826666666665,
+        105.0049
+      ],
+      "evaluation_use": "focus-loss/unobservable stress",
+      "observation_authority": "human unusable labels",
+      "limitation": "Numeric truth absent; no reward for inferring an unseen boundary",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample4.mp4",
+      "source_frames": [
+        0,
+        450,
+        900,
+        1275,
+        1320,
+        1470,
+        1560,
+        1620,
+        1665,
+        1680
+      ],
+      "context_window_sec": [
+        0,
+        56
+      ],
+      "evaluation_use": "target-domain Oil/Foam/structure and temporal controls; historical scalar agreement",
+      "observation_authority": "existing scoped human bindings plus current agent source inspection",
+      "limitation": "Small 104px Recipe diameter; preserve all known positive/wrong-target bindings and major-event checks, not exact center error",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample5.mp4",
+      "source_frames": [
+        0,
+        205
+      ],
+      "context_window_sec": [
+        0,
+        6.840166666666667
+      ],
+      "evaluation_use": "same-scene empty-glass/pattern opposition",
+      "observation_authority": "agent provisional",
+      "limitation": "Not a canonical whole-image EMPTY label",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample5.mp4",
+      "source_frames": [
+        815,
+        822,
+        829
+      ],
+      "context_window_sec": [
+        27.193833333333334,
+        27.660966666666667
+      ],
+      "evaluation_use": "inclined/deforming water-surface protection",
+      "observation_authority": "f822 human qualitative reply with displayed temporal context",
+      "limitation": "No exact contour, cross-frame point correspondence or physical speed label",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample5.mp4",
+      "source_frames": [
+        1225,
+        1232,
+        1239,
+        1438,
+        1643
+      ],
+      "context_window_sec": [
+        40.87416666666667,
+        54.82143333333333
+      ],
+      "evaluation_use": "first positive development scene: visible settling water surface",
+      "observation_authority": "agent provisional",
+      "limitation": "A finite set of inspected frames; define a source-bound measurement/visibility protocol before any numeric metric",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample6.mp4",
+      "source_frames": [
+        0,
+        140,
+        146,
+        152
+      ],
+      "context_window_sec": [
+        0,
+        6.08
+      ],
+      "evaluation_use": "structure versus forming thin Foam; projected front/back ambiguity",
+      "observation_authority": "agent inspection and human interpretation of f146/158/171",
+      "limitation": "Two projected arcs of one layer are not two material interfaces",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample6.mp4",
+      "source_frames": [
+        285,
+        291,
+        297,
+        430,
+        436,
+        442,
+        509,
+        582
+      ],
+      "context_window_sec": [
+        11.4,
+        23.28
+      ],
+      "evaluation_use": "cropped upper front, separately visible lower transition",
+      "observation_authority": "agent source inspection",
+      "limitation": "Upper coordinate unavailable; never substitute lower boundary or infer Foam absence",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample7.mp4",
+      "source_frames": [
+        0,
+        133
+      ],
+      "context_window_sec": [
+        0,
+        5.547208333333333
+      ],
+      "evaluation_use": "empty glass/base opposition",
+      "observation_authority": "agent provisional",
+      "limitation": "No whole-image canonical EMPTY label",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    },
+    {
+      "video": "sample/sample7.mp4",
+      "source_frames": [
+        526,
+        532,
+        538,
+        791,
+        797,
+        803,
+        930,
+        1063
+      ],
+      "context_window_sec": [
+        21.938583333333334,
+        44.33595833333333
+      ],
+      "evaluation_use": "bulk-white liquid versus froth; visible upper outline",
+      "observation_authority": "agent provisional",
+      "limitation": "Lower milk/Foam interface remains difficult per human reply f1039/1051/1063; no invented lower coordinate",
+      "continuous_window_truth": false,
+      "fixed_center_numeric_truth": null,
+      "partition": "exposed_development"
+    }
+  ],
+  "public_scene_cases": [
+    {
+      "case_id": "s5-empty",
+      "video": "sample/sample5.mp4",
+      "frame_index": 0,
+      "source_raster": {
+        "frame_index": 0,
+        "nominal_time_sec": 0.0,
+        "decoder_pos_msec": 0.0,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000000.png",
+        "sha256": "bd248d9331c4b1d267572d2e44a1a016589e2065509dc16f0de0b83d7bcd808f"
+      },
+      "interpretation_authority": "agent_provisional",
+      "later_reply": null,
+      "numeric_truth": null,
+      "packet_binding": null,
+      "historical_inventory_is_preserved": true
+    },
+    {
+      "case_id": "s5-inclined",
+      "video": "sample/sample5.mp4",
+      "frame_index": 822,
+      "source_raster": {
+        "frame_index": 822,
+        "nominal_time_sec": 27.427400000000002,
+        "decoder_pos_msec": 27427.4,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000822.png",
+        "sha256": "19a94ae8bb16454440033559aecbe6ca714853d505423288bd2dc113767ce8b1"
+      },
+      "interpretation_authority": "human_qualitative_reply",
+      "later_reply": "docs/50-diagnostics/s11/2026-10-09-public-water-surface-reply.json",
+      "numeric_truth": null,
+      "packet_binding": null,
+      "historical_inventory_is_preserved": true
+    },
+    {
+      "case_id": "s5-settled",
+      "video": "sample/sample5.mp4",
+      "frame_index": 1643,
+      "source_raster": {
+        "frame_index": 1643,
+        "nominal_time_sec": 54.82143333333333,
+        "decoder_pos_msec": 54821.43333333334,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+        "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22"
+      },
+      "interpretation_authority": "agent_provisional",
+      "later_reply": null,
+      "numeric_truth": null,
+      "packet_binding": null,
+      "historical_inventory_is_preserved": true
+    },
+    {
+      "case_id": "s6-empty",
+      "video": "sample/sample6.mp4",
+      "frame_index": 0,
+      "source_raster": {
+        "frame_index": 0,
+        "nominal_time_sec": 0.0,
+        "decoder_pos_msec": 0.0,
+        "shape": [
+          1440,
+          2732,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000000.png",
+        "sha256": "20814859d027ce5fa50b3f00c56084ec778d74ff5b38bd05fb980d8e208837fd"
+      },
+      "interpretation_authority": "agent_provisional",
+      "later_reply": null,
+      "numeric_truth": null,
+      "packet_binding": null,
+      "historical_inventory_is_preserved": true
+    },
+    {
+      "case_id": "s6-forming",
+      "video": "sample/sample6.mp4",
+      "frame_index": 146,
+      "source_raster": {
+        "frame_index": 146,
+        "nominal_time_sec": 5.84,
+        "decoder_pos_msec": 5840.0,
+        "shape": [
+          1440,
+          2732,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000146.png",
+        "sha256": "2f45e444880a4f8e3df9cb29adbf269259f12544a29ddd60ae73d776d44741b4"
+      },
+      "interpretation_authority": "human_qualitative_reply",
+      "later_reply": "docs/50-diagnostics/s11/2026-10-09-public-beer-layer-reply.json",
+      "numeric_truth": null,
+      "packet_binding": null,
+      "historical_inventory_is_preserved": true
+    },
+    {
+      "case_id": "s6-layer",
+      "video": "sample/sample6.mp4",
+      "frame_index": 436,
+      "source_raster": {
+        "frame_index": 436,
+        "nominal_time_sec": 17.44,
+        "decoder_pos_msec": 17440.0,
+        "shape": [
+          1440,
+          2732,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000436.png",
+        "sha256": "72fe651d0c719c08b8e63fa44c5be77b1fd9e9ad3af09dc6152c2fc6ffeffd35"
+      },
+      "interpretation_authority": "agent_provisional",
+      "later_reply": null,
+      "numeric_truth": null,
+      "packet_binding": null,
+      "historical_inventory_is_preserved": true
+    },
+    {
+      "case_id": "s7-empty",
+      "video": "sample/sample7.mp4",
+      "frame_index": 0,
+      "source_raster": {
+        "frame_index": 0,
+        "nominal_time_sec": 0.0,
+        "decoder_pos_msec": 0.0,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000000.png",
+        "sha256": "f339911bc43748030ebace5b0843d0362ee213f2b38364fe48f9f52ba479f21b"
+      },
+      "interpretation_authority": "agent_provisional",
+      "later_reply": null,
+      "numeric_truth": null,
+      "packet_binding": null,
+      "historical_inventory_is_preserved": true
+    },
+    {
+      "case_id": "s7-pouring",
+      "video": "sample/sample7.mp4",
+      "frame_index": 532,
+      "source_raster": {
+        "frame_index": 532,
+        "nominal_time_sec": 22.18883333333333,
+        "decoder_pos_msec": 22188.833333333332,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000532.png",
+        "sha256": "8549006127569fd3d06950616db870418c36503ae761b51827f3949e1698d4b7"
+      },
+      "interpretation_authority": "agent_provisional",
+      "later_reply": null,
+      "numeric_truth": null,
+      "packet_binding": null,
+      "historical_inventory_is_preserved": true
+    },
+    {
+      "case_id": "s7-settled",
+      "video": "sample/sample7.mp4",
+      "frame_index": 1063,
+      "source_raster": {
+        "frame_index": 1063,
+        "nominal_time_sec": 44.33595833333333,
+        "decoder_pos_msec": 44335.95833333333,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png",
+        "sha256": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c"
+      },
+      "interpretation_authority": "human_qualitative_reply",
+      "later_reply": "docs/50-diagnostics/s11/2026-10-09-public-milk-interface-reply.json",
+      "numeric_truth": null,
+      "packet_binding": null,
+      "historical_inventory_is_preserved": true
+    }
+  ],
+  "summary": {
+    "recordings": 7,
+    "legacy_annotations": 15,
+    "legacy_usable": 13,
+    "human_unusable": 2,
+    "approved_agent_point_origins": 9,
+    "user_ruler_origins": 4,
+    "fixed_center_numeric_certifications": 0,
+    "fresh_selected_legacy_frames": 56,
+    "public_overview_frames": 27,
+    "public_temporal_context_frames": 27,
+    "unique_saved_public_frames": 45,
+    "verified_historical_images": 30,
+    "sequential_clean_panels_equal": 14,
+    "timestamp_seek_clean_panels_equal_additional": 1
+  },
+  "source_reader_followup": {
+    "schema": "s11-truth-source-audit-reader-followup-v1",
+    "case_id": "base_sample_1:240",
+    "existing_probe_reader": "tests.diagnostics.s11_evidence_probe.decode_frame",
+    "indexed_read_equals_historical_timestamp_read": true,
+    "indexed_read_equals_sequential_ordinal_240": false,
+    "indexed_bgr_sha256": "6ce11527c59b5dca6b0de2f6f0e76aa636d255d7ee43997e2148c5970afc7d15",
+    "interpretation": "A reported OpenCV index is not interchangeable with a sequential ordinal. Existing timestamp and frame-seek paths agree for the reviewed case; the audit does not establish a historical evaluator misbinding."
+  },
+  "local_artifacts": [
+    {
+      "path": "sample/output/s11-truth-audit-20261010-002/preflight.json",
+      "sha256": "31eefa2a168f04f233b9248d63a2e65b925610d9e6f625a496bea1351b7a36c9"
+    },
+    {
+      "path": "sample/output/s11-truth-audit-20261010-002/capture.json",
+      "sha256": "c6c98315dd4adc6f662eac8dcc2781bed3e4e78e9460c662ba7bfa8d4101759b"
+    },
+    {
+      "path": "sample/output/s11-truth-audit-20261010-002/verification.json",
+      "sha256": "648e56de0fec6cdeb9f447bfe6a9ec3dcafae982c8b07150f725473c9d36f62a"
+    },
+    {
+      "path": "sample/output/s11-truth-audit-20261010-002/reader-followup.json",
+      "sha256": "08ebd2ac40d91bd79cf4a477fb6232a267d67f927d4018fc0bb82804ae4ebdab"
+    },
+    {
+      "path": "sample/output/s11-truth-audit-20261010-002/inspect_sources.py",
+      "sha256": "b2f3a806478a1f14893d61767b59114966c10fe9d9a66efbdb1823c2ceaa643a"
+    },
+    {
+      "path": "sample/output/s11-truth-audit-20261010-002/verify_lineage.py",
+      "sha256": "2834a9841df114493e4b49d3ec727c194191f7adf0f244c9308957ae09713835"
+    },
+    {
+      "path": "sample/output/s11-truth-audit-20261010-002/package_audit.py",
+      "sha256": "0f3acf13bb427c3da854b9bd9d09acd34f8bd6dd9033b2a66bf2522c9faf55f9"
+    },
+    {
+      "path": "sample/output/s11-truth-audit-20261010-002/review-index.html",
+      "sha256": "b35944c110ba78560f3c35cdc0917fe0d707d07ee519abdd40f9b3cbdcf33496"
+    }
+  ],
+  "preserved_failed_capture": {
+    "path": "sample/output/s11-truth-audit-20261010-001/failure.json",
+    "sha256": "88e41560855cc8b6a13267dffabeb42add322d9c1215b582cd187d8a78afe66e"
+  },
+  "unresolved": [
+    {
+      "id": "base-f156-foam",
+      "kind": "conflicting_human_interpretations",
+      "current_action": "quarantine disputed physical claim; retain original bytes and both observations",
+      "decision_needed_for": "Only a future formal relabel or decisive physical accuracy use of this claim",
+      "blocking_this_audit": false
+    },
+    {
+      "id": "numeric-center-truth",
+      "kind": "measurement_semantics_and_precision_unqualified",
+      "current_action": "No transferred scalar error or invented tolerance; use visible source-bound qualitative controls",
+      "decision_needed_for": "A future numeric accuracy dataset requires compatible source/role/X/visibility and reviewed point/interval semantics",
+      "blocking_this_audit": false
+    }
+  ],
+  "actions": {
+    "production_changed": false,
+    "truth_changed": false,
+    "recipe_changed": false,
+    "comparator_changed": false,
+    "detector_run": false,
+    "old_scores_recalculated": false,
+    "windows_run": false
+  },
+  "reproduction_scripts": {
+    "inspect_sources.py": "\"\"\"Bounded source-only truth audit. Run from the repository root; no detector.\"\"\"\nfrom pathlib import Path\nimport hashlib\nimport json\nimport subprocess\n\nimport cv2\nimport numpy as np\nfrom PIL import Image, ImageDraw, ImageOps\n\nROOT = Path.cwd()\nOUT = Path(__file__).resolve().parent\n\n\ndef sha(path):\n    with Path(path).open('rb') as handle:\n        return hashlib.file_digest(handle, 'sha256').hexdigest()\n\n\ndef save_json(path, value):\n    Path(path).write_text(json.dumps(value, indent=2, ensure_ascii=False) + '\\n')\n\n\ndef sheet(tiles, path, columns=3):\n    result = Image.new('RGB', (columns * 420, ((len(tiles) + columns - 1) // columns) * 450), '#202020')\n    for i, (rgb, title) in enumerate(tiles):\n        tile = Image.new('RGB', (420, 450), '#202020')\n        # Nearest-neighbor enlargement is display only and creates no evidence.\n        thumb = ImageOps.contain(rgb, (410, 408), Image.Resampling.NEAREST)\n        tile.paste(thumb, ((420 - thumb.width) // 2, 37 + (408 - thumb.height) // 2))\n        ImageDraw.Draw(tile).text((9, 9), title, fill='white')\n        result.paste(tile, ((i % columns) * 420, (i // columns) * 450))\n    result.save(path)\n\n\ninventory_path = Path('sample/output/s11-local-target-reuse-20261006/inventory.json')\ninventory = json.loads(inventory_path.read_text())\nassert sha(inventory_path) == 'ca6c0a50e7360d5079864abc7bb9854e45bdf7058d0cf452f84e29e79a3ba3cf'\npins = json.loads(Path('docs/50-diagnostics/s11/s11-a-opencv-evidence-architecture-probe-manifest.json').read_text())['inputs']\nd1_path = Path('sample/output/s6-d1-mobile-truth-review-pack/worker-0f0bf70-20260731T151330Z/review-candidates.json')\nassert sha(d1_path) == '2dcf7190fd143716045ed6cddc7f2d166fd07d46c7819a84691d477094e67aee'\nd1 = {r['review_id']: r for r in json.loads(d1_path.read_text())['items']}\nextra = {'base_sample_1': [0, 150, 151, 433], 'sample2': [90, 180, 285],\n         'sample3': [0, 1800, 2250, 4198], 'sample4': [1275, 1320, 1560, 1620, 1665]}\ninputs = {str(inventory_path): sha(inventory_path), str(d1_path): sha(d1_path)}\nplans = []\nfor stem, extra_frames in extra.items():\n    for ext in ('mp4', 'oilrecipe', 'oiltruth'):\n        path = Path(f'sample/{stem}.{ext}')\n        inputs[str(path)] = sha(path)\n        assert inputs[str(path)] == pins[stem][ext], str(path)\n    recipe = json.loads(Path(f'sample/{stem}.oilrecipe').read_text())\n    ellipse = recipe['glasses'][0]['geometry']['ellipse']\n    cap = cv2.VideoCapture(f'sample/{stem}.mp4')\n    assert cap.isOpened()\n    reported_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)); fps = cap.get(cv2.CAP_PROP_FPS)\n    # Existing S6 sequential-decode last frames; metadata can overstate length.\n    count = {'base_sample_1': 434, 'sample2': 286, 'sample3': 4199, 'sample4': 1682}[stem]\n    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)); height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))\n    cap.release()\n    rows = [r for r in inventory['rows'] if r['sample'] == stem]\n    delta = round(fps * .5)\n    triplets = [[max(0, r['frame_index'] - delta), r['frame_index'], min(count - 1, r['frame_index'] + delta)] for r in rows]\n    targets = sorted(set(extra_frames).union(*(set(t) for t in triplets)))\n    cx, cy, rx, ry = [ellipse[k] for k in ('center_x', 'center_y', 'radius_x', 'radius_y')]\n    crop = [max(0, int(cx - rx * 1.35)), max(0, int(cy - ry * 1.35)),\n            min(width, int(cx + rx * 1.35)), min(height, int(cy + ry * 1.35))]\n    plans.append(dict(stem=stem, count=count, reported_count=reported_count, fps=fps, source_size=[width,height],\n                      ellipse=ellipse, display_crop_xyxy=crop, reviewed=rows,\n                      triplets=triplets, geometry_context_frames=extra_frames, target_frames=targets))\npreflight = dict(schema='s11-truth-source-audit-preflight-v1', base_head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),\n                 inputs=inputs, plans=plans, selection='All 15 existing annotation frames with +/-0.5s context, plus declared geometry/overlay/known-event context. No score-based filtering.',\n                 exposure='Existing labels and prior results were already seen; clean rendering is not a blinded independent review.',\n                 outputs='Sequential native decoding, raw BGR hashes, clean native PNGs and display-only nearest-neighbor crops. No boundary overlays.',\n                 detector_run=False, labels_changed=False, physical_coordinates_created=False)\nsave_json(OUT / 'preflight.json', preflight)\nreports=[]\nfor plan in plans:\n    stem=plan['stem']; folder=OUT/stem; folder.mkdir(exist_ok=False)\n    cap=cv2.VideoCapture(f'sample/{stem}.mp4'); records={}; frames={}\n    wanted=set(plan['target_frames']); i=0\n    while i <= max(wanted):\n        ok,bgr=cap.read(); assert ok,(stem,i)\n        if i in wanted:\n            target=folder/f'f{i:06d}.png'; assert cv2.imwrite(str(target),bgr)\n            records[i]=dict(frame_index=i, decoded_timestamp_sec=cap.get(cv2.CAP_PROP_POS_MSEC)/1000,\n                            backend_next_frame=cap.get(cv2.CAP_PROP_POS_FRAMES), shape=list(bgr.shape),\n                            bgr_sha256=hashlib.sha256(bgr.tobytes()).hexdigest(), path=str(target), sha256=sha(target))\n            frames[i]=Image.fromarray(cv2.cvtColor(bgr,cv2.COLOR_BGR2RGB))\n        i+=1\n    cap.release(); assert set(records)==wanted\n    tiles=[]\n    for row, triplet in zip(plan['reviewed'], plan['triplets'], strict=True):\n        row['original_agent_proposal']=d1[row['review_id']]['candidate_physical']\n        row['fresh_timestamp_delta_sec']=records[row['frame_index']]['decoded_timestamp_sec']-row['timestamp_sec']\n        for frame in triplet:\n            tiles.append((frames[frame].crop(plan['display_crop_xyxy']), f\"{row['review_id']} | f{frame} | {records[frame]['decoded_timestamp_sec']:.3f}s\"))\n    target=OUT/f'{stem}-annotation-context.png'; sheet(tiles,target)\n    context=[]\n    for frame in plan['geometry_context_frames']:\n        context.append((frames[frame],f'{stem} full source | f{frame}'))\n        context.append((frames[frame].crop(plan['display_crop_xyxy']),f'{stem} fixed display crop | f{frame}'))\n    overview=OUT/f'{stem}-geometry-context.png'; sheet(context,overview,columns=2)\n    reports.append(dict(**plan, frames=list(records.values()),\n                        annotation_sheet=dict(path=str(target),sha256=sha(target)),\n                        geometry_sheet=dict(path=str(overview),sha256=sha(overview))))\n    print(stem, len(records), 'unique source frames saved',flush=True)\nassert all(sha(p)==h for p,h in inputs.items())\nrecord=dict(schema='s11-truth-source-audit-capture-v1', preflight_sha256=sha(OUT/'preflight.json'),\n            runtime=dict(opencv=cv2.__version__,numpy=np.__version__), inputs_preserved=True,\n            decoded_selected_frame_count=sum(len(r['frames']) for r in reports), reports=reports,\n            script_sha256=sha(__file__), detector_run=False, physical_truth_assigned=False)\nsave_json(OUT/'capture.json',record)\nprint('complete:', record['decoded_selected_frame_count'], 'selected frames; source inputs unchanged')\n",
+    "verify_lineage.py": "\"\"\"Verify source pins, annotation lineage, public assets and one seek discrepancy.\"\"\"\nfrom pathlib import Path\nimport hashlib\nimport importlib.util\nimport json\n\nimport cv2\nimport numpy as np\n\nfrom oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository\nfrom oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader\n\nOUT = Path(__file__).resolve().parent\nPACK = Path('sample/output/s6-d1-mobile-truth-review-pack/worker-0f0bf70-20260731T151330Z')\n\n\ndef sha(path):\n    with Path(path).open('rb') as handle:\n        return hashlib.file_digest(handle, 'sha256').hexdigest()\n\n\ncapture = json.loads((OUT/'capture.json').read_text())\npre = json.loads((OUT/'preflight.json').read_text())\nassert sha(OUT/'preflight.json') == capture['preflight_sha256']\nassert all(sha(p) == h for p,h in pre['inputs'].items())\nassert sha(OUT/'inspect_sources.py') == capture['script_sha256']\nassert sha(PACK/'build_review_pack.py') == '0c6e00ce95ac4ddb0584ed6f3bb42f155d5cd57813b5db17b6842b3c80b4a883'\nspec=importlib.util.spec_from_file_location('historical_d1_renderer',PACK/'build_review_pack.py')\nrenderer=importlib.util.module_from_spec(spec);spec.loader.exec_module(renderer)\nresults=[]\nfor report in capture['reports']:\n    stem=report['stem']\n    recipe=JsonRecipeRepository().load(Path(f'sample/{stem}.oilrecipe'))\n    glass=recipe.glasses[0]\n    records={r['frame_index']:r for r in report['frames']}\n    for record in records.values():\n        assert sha(record['path'])==record['sha256']\n        bgr=cv2.imread(record['path']); assert list(bgr.shape)==record['shape']\n        assert hashlib.sha256(bgr.tobytes()).hexdigest()==record['bgr_sha256']\n    for row in report['reviewed']:\n        for asset in row['assets'].values(): assert sha(asset['path'])==asset['sha256']\n        bgr=cv2.imread(records[row['frame_index']]['path'])\n        crop,_=renderer.crop_geometry(bgr,glass)\n        panel,*_=renderer.fit_image(crop)\n        historical=cv2.imread(row['assets']['clean']['path'])[100:800,50:950]\n        # Interior panel area excludes the historical right-hand ruler and header.\n        observed=historical[:,200:650]; current=panel[:,200:650]\n        delta=np.abs(observed.astype(np.int16)-current.astype(np.int16))\n        results.append(dict(review_id=row['review_id'],sample=stem,frame_index=row['frame_index'],\n                            timestamp_delta_sec=row['fresh_timestamp_delta_sec'],\n                            comparison='historical clean-card versus current sequential frame, identical historical crop/resize, panel x[200,650),y[0,700)',\n                            equal_pixels=bool(np.array_equal(observed,current)),mean_absolute_channel_difference=float(delta.mean())))\n    for key in ('annotation_sheet','geometry_sheet'):\n        assert sha(report[key]['path'])==report[key]['sha256']\n\n# The only timestamp discrepancy is checked through the existing product reader.\nrow=next(r for r in capture['reports'][0]['reviewed'] if r['review_id']=='S1-03')\nwith OpenCvVideoReader('sample/base_sample_1.mp4') as reader:\n    frame,reported_index,timestamp=reader.read_at(row['timestamp_sec'])\nseek_path=OUT/'base_sample_1'/'S1-03-timestamp-seek.png';assert cv2.imwrite(str(seek_path),frame)\nrecipe=JsonRecipeRepository().load(Path('sample/base_sample_1.oilrecipe'))\ncrop,_=renderer.crop_geometry(frame,recipe.glasses[0]);panel,*_=renderer.fit_image(crop)\nhistorical=cv2.imread(row['assets']['clean']['path'])[100:800,50:950]\ndelta=np.abs(historical[:,200:650].astype(np.int16)-panel[:,200:650].astype(np.int16))\nseek=dict(requested_timestamp_sec=row['timestamp_sec'],reported_frame_index=reported_index,\n          actual_timestamp_sec=timestamp,path=str(seek_path),sha256=sha(seek_path),\n          historical_clean_panel_equal=bool(np.array_equal(historical[:,200:650],panel[:,200:650])),\n          mean_absolute_channel_difference=float(delta.mean()))\nintake_path=Path('docs/50-diagnostics/s11/2026-10-09-public-video-intake.json')\nrename_path=Path('docs/50-diagnostics/s11/2026-10-09-public-video-rename.json')\nintake=json.loads(intake_path.read_text());renames=json.loads(rename_path.read_text())['renames']\npublic_pins={str(intake_path):sha(intake_path),str(rename_path):sha(rename_path)}\npublic=[]\nfor rename in renames:\n    assert sha(rename['current_path'])==rename['sha256_after']; public_pins[rename['current_path']]=rename['sha256_after']\nfor report in intake['overview']['videos']:\n    for f in report['frames']:\n        assert sha(f['path'])==f['sha256'];public_pins[f['path']]=f['sha256']\n    assert sha(report['overview_path'])==report['overview_sha256'];public_pins[report['overview_path']]=report['overview_sha256']\n    public.append(dict(video=report['path'],overview_frame_indices=[f['frame_index'] for f in report['frames']],overview_path=report['overview_path']))\nfor report in intake['temporal']['results']:\n    for f in report['frames']:\n        assert sha(f['path'])==f['sha256'];public_pins[f['path']]=f['sha256']\n    assert sha(report['sheet_path'])==report['sheet_sha256'];public_pins[report['sheet_path']]=report['sheet_sha256']\nassert all(sha(p)==h for p,h in pre['inputs'].items())\nrecord=dict(schema='s11-truth-source-audit-verification-v1',capture_sha256=sha(OUT/'capture.json'),\n            preserved_inputs=len(pre['inputs']),checked_fresh_frames=sum(len(r['frames']) for r in capture['reports']),\n            checked_historical_images=30, clean_panel_comparisons=results,\n            source_pixels_are_not_truth=True, base_S1_03_timestamp_seek=seek,\n            public_pins=public_pins,public_views=public,script_sha256=sha(__file__))\n(OUT/'verification.json').write_text(json.dumps(record,indent=2,ensure_ascii=False)+'\\n')\nprint(json.dumps({'fresh_frames':record['checked_fresh_frames'],'historical_images':30,'equal_clean_panels':sum(r['equal_pixels'] for r in results),\n                  'non_equal_clean_panels':[r for r in results if not r['equal_pixels']],'base_seek':seek,'public_pins':len(public_pins)},indent=2))\n",
+    "package_audit.py": "\"\"\"Package the completed source/label audit; this is not evaluator input.\"\"\"\nfrom pathlib import Path\nimport hashlib\nimport html\nimport json\nimport os\n\nROOT = Path.cwd()\nOUT = Path(__file__).resolve().parent\nDEST = ROOT/'docs/60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.json'\n\n\ndef sha(path):\n    with Path(path).open('rb') as handle:\n        return hashlib.file_digest(handle, 'sha256').hexdigest()\n\n\ndef rel(path):\n    path=Path(path)\n    return str(path.relative_to(ROOT)) if path.is_absolute() else str(path)\n\n\ndef receipt(path):\n    return dict(path=rel(path),sha256=sha(path))\n\n\ncapture=json.loads((OUT/'capture.json').read_text())\npre=json.loads((OUT/'preflight.json').read_text())\nverification=json.loads((OUT/'verification.json').read_text())\nreader=json.loads((OUT/'reader-followup.json').read_text())\ninputs={**pre['inputs'],**verification['public_pins']}\nsources=[\n    'docs/60-evidence/s6/s6-d2-user-confirmed-product-truth.md',\n    'docs/60-evidence/s11/2026-10-06-local-corpus-target-reuse.md',\n    'docs/60-evidence/s11/s11-o2-reference-uncertainty-evaluation-audit.md',\n    'docs/50-diagnostics/s11/2026-10-09-public-scene-controls.json',\n    'docs/50-diagnostics/s11/2026-10-09-public-water-surface-reply.json',\n    'docs/50-diagnostics/s11/2026-10-09-public-beer-layer-reply.json',\n    'docs/50-diagnostics/s11/2026-10-09-public-milk-interface-reply.json',\n    'tests/diagnostics/s11_resolver_replacement_compare.py',\n    'tests/diagnostics/s11_evidence_probe.py',\n    'src/oil_tracker/adapters/vision/opencv_video_reader.py',\n]\ninputs.update({p:sha(p) for p in sources})\nannotations=[]\nfor video in capture['reports']:\n    for row in video['reviewed']:\n        rid=row['review_id']; unusable=row['disposition']=='unusable'\n        origin='unusable' if unusable else ('user_ruler_percent' if rid.startswith('S2-') or rid=='S3-02' else 'user_approved_agent_proposal')\n        flags=[] if unusable else ['fixed_center_x_not_bound','reviewed_numeric_tolerance_not_established']\n        if rid.startswith('S1-'): flags+=['weak_broad_feature','original_agent_range_378_394']\n        if rid=='S1-02': flags+=['historical_foam_absence_conflicts_with_later_human_foam_air_observation','oil_candidate_correspondence_unresolved']\n        if rid=='S1-03': flags+=['sequential_ordinal_differs_from_reviewed_seek_frame_existing_reader_reproduces_review']\n        if rid.startswith('S2-'): flags+=['ruler_percent_not_pixel_precision','foam_top_at_ruler_zero_does_not_certify_visible_foam_air_contour']\n        if rid=='S3-01': flags+=['dark_soft_boundary','original_agent_oil_range_310_322']\n        if rid=='S3-02': flags+=['user_reported_actual_glass_span_minus10_to60_percent','ruler_percent_not_pixel_precision']\n        if rid.startswith('S4-'): flags+=['recipe_glass_diameter_104_source_pixels','original_agent_range_not_reviewed_tolerance']\n        if unusable: flags+=['human_focus_unusable','no_numeric_truth','normalized_foam_false_is_not_physical_absence']\n        frames={f['frame_index']:f for f in video['frames']}\n        bound_source=frames[row['frame_index']]['path']\n        binding='sequential ordinal and historical clean-card interior verified equal'\n        if rid=='S1-03':\n            bound_source=verification['base_S1_03_timestamp_seek']['path']\n            binding='timestamp seek and existing indexed probe agree; historical clean-card interior verified equal'\n        annotations.append(dict(review_id=rid,video=f\"sample/{row['sample']}.mp4\",frame_index=row['frame_index'],\n                                historical_timestamp_sec=row['timestamp_sec'],historical_annotation_id=row['annotation_id'],\n                                historical_disposition=row['disposition'],historical_oil_y=row['oil_source_y'],\n                                historical_foam_y=row['foam_source_y'],historical_foam_present=row['foam_present'],\n                                historical_note=row['note'],coordinate_origin=origin,\n                                original_agent_proposal=row['original_agent_proposal'],\n                                original_agent_ranges_are_not_new_approved_tolerances=True,\n                                source_binding=binding,reviewed_source=receipt(bound_source),\n                                audit_flags=flags,fixed_center_numeric_eligibility='UNUSABLE' if unusable else 'NOT_ESTABLISHED',\n                                new_physical_label=None,new_scalar_truth=None,\n                                evaluation_use='robustness_unusable' if unusable else 'historical_scalar_agreement_and_scoped_qualitative_review'))\n\ndef case(video, ids, window, use, basis, limitation):\n    return dict(video=f'sample/{video}.mp4', source_frames=ids, context_window_sec=window,\n                evaluation_use=use, observation_authority=basis, limitation=limitation,\n                continuous_window_truth=False, fixed_center_numeric_truth=None,partition='exposed_development')\n\nstrata=[\n    case('base_sample_1',[144,156,240],[0,14.44],'overlay/weak-evidence robustness; historical scalar agreement','historical human scalar plus current agent source inspection','f156 Foam conflict; original broad Oil range; no exact center-label promotion'),\n    case('sample2',[0,30,60],[0,2],'target-domain qualitative Oil/reflection/Foam distinction; historical scalar agreement','historical ruler labels; later f30 candidate-bound human reply','After 2s fixed geometry is outside its accepted window; Foam ruler-zero is not a certified upper contour'),\n    case('sample2',[90,180,285],[3,9.5],'reframing/input-validity stress','agent source inspection','No fixed-Recipe accuracy or no-interface label outside the accepted window'),\n    case('sample3',[900,1035],[30.03,34.5345],'target-domain qualitative dual-region context; historical scalar agreement','historical user reply and current agent inspection','Soft/dark image and documented ruler/Glass mismatch; stable-window prose is not precision certification'),\n    case('sample3',[2848,3147],[95.02826666666666,105.0049],'focus-loss/unobservable stress','human unusable labels','Numeric truth absent; no reward for inferring an unseen boundary'),\n    case('sample4',[0,450,900,1275,1320,1470,1560,1620,1665,1680],[0,56],'target-domain Oil/Foam/structure and temporal controls; historical scalar agreement','existing scoped human bindings plus current agent source inspection','Small 104px Recipe diameter; preserve all known positive/wrong-target bindings and major-event checks, not exact center error'),\n    case('sample5',[0,205],[0,6.840166666666667],'same-scene empty-glass/pattern opposition','agent provisional','Not a canonical whole-image EMPTY label'),\n    case('sample5',[815,822,829],[27.193833333333334,27.660966666666667],'inclined/deforming water-surface protection','f822 human qualitative reply with displayed temporal context','No exact contour, cross-frame point correspondence or physical speed label'),\n    case('sample5',[1225,1232,1239,1438,1643],[40.87416666666667,54.82143333333333],'first positive development scene: visible settling water surface','agent provisional','A finite set of inspected frames; define a source-bound measurement/visibility protocol before any numeric metric'),\n    case('sample6',[0,140,146,152],[0,6.08],'structure versus forming thin Foam; projected front/back ambiguity','agent inspection and human interpretation of f146/158/171','Two projected arcs of one layer are not two material interfaces'),\n    case('sample6',[285,291,297,430,436,442,509,582],[11.4,23.28],'cropped upper front, separately visible lower transition','agent source inspection','Upper coordinate unavailable; never substitute lower boundary or infer Foam absence'),\n    case('sample7',[0,133],[0,5.547208333333333],'empty glass/base opposition','agent provisional','No whole-image canonical EMPTY label'),\n    case('sample7',[526,532,538,791,797,803,930,1063],[21.938583333333334,44.33595833333333],'bulk-white liquid versus froth; visible upper outline','agent provisional','Lower milk/Foam interface remains difficult per human reply f1039/1051/1063; no invented lower coordinate'),\n]\npublic=json.loads(Path('docs/50-diagnostics/s11/2026-10-09-public-scene-controls.json').read_text())\npublic_cases=[]\nreply_paths={'s5-inclined':sources[4],'s6-forming':sources[5],'s7-settled':sources[6]}\nfor c in public['cases']:\n    public_cases.append(dict(case_id=c['case_id'],video=c['video'],frame_index=c['frame_index'],source_raster=c['source_raster'],\n                             interpretation_authority='human_qualitative_reply' if c['case_id'] in reply_paths else 'agent_provisional',\n                             later_reply=reply_paths.get(c['case_id']),numeric_truth=None,packet_binding=None,\n                             historical_inventory_is_preserved=True))\nassert len(annotations)==15 and sum(a['coordinate_origin']=='user_approved_agent_proposal' for a in annotations)==9\nassert sum(a['coordinate_origin']=='user_ruler_percent' for a in annotations)==4\nassert all(sha(p)==h for p,h in inputs.items())\n\n# A local review index references pinned source views; it creates no annotation UI.\nsections=[]\nfor video in capture['reports']:\n    stem=video['stem']; panels=[]\n    for key in ('annotation_sheet','geometry_sheet'):\n        path=video[key]['path'];href=html.escape(os.path.relpath(path,OUT))\n        panels.append(f'<a href=\"{href}\"><img loading=\"lazy\" src=\"{href}\" alt=\"{stem} {key}\"></a>')\n    note=''\n    if stem=='base_sample_1':\n        note='<p>S1-03의 순차 240번째 프레임은 과거 검토 프레임과 1프레임 차이가 있습니다. 아래 원래 검토 화면은 기존 timestamp/frame-seek 경로로 재현했습니다.</p>'\n        path=Path(capture['reports'][0]['reviewed'][2]['assets']['clean']['path'])\n        href=html.escape(os.path.relpath(path,OUT));note+=f'<a href=\"{href}\">정확한 S1-03 원 검토 화면</a>'\n    sections.append(f'<section><h2>{stem}</h2>{note}<div class=\"views\">{\"\".join(panels)}</div></section>')\nintake=json.loads(Path('docs/50-diagnostics/s11/2026-10-09-public-video-intake.json').read_text())\nfor video in intake['overview']['videos']:\n    href=html.escape(os.path.relpath(video['overview_path'],OUT));sections.append(f'<section><h2>{html.escape(Path(video[\"path\"]).stem)}</h2><img src=\"{href}\" alt=\"public source overview\"></section>')\npage='''<!doctype html><html lang=\"ko\"><meta charset=\"utf-8\"><title>정답·평가 구간 감사</title><style>\nbody{font:17px/1.7 system-ui,sans-serif;max-width:1300px;margin:40px auto;padding:0 24px;color:#202630;background:#f7f8fa}h1{font-size:30px}h2{font-size:22px}section{background:white;margin:30px 0;padding:22px;border:1px solid #dfe3e8;border-radius:10px}img{max-width:100%;height:auto}.views{display:grid;grid-template-columns:1fr 1fr;gap:20px}.views a{min-width:0}a{color:#245d99}@media(max-width:800px){.views{grid-template-columns:1fr}}</style>\n<h1>정답·평가 구간 감사</h1><p>2026-10-10 · 기존 15개 주석과 7개 영상의 평가 용도 검토</p>\n<p>원본 영상의 경계와 화질을 살펴보기 위한 자료입니다. 확대는 새 세부 정보를 만들지 않습니다. 과거 정답·결과를 본 상태에서의 재검토이며 독립적인 블라인드 검토가 아닙니다.</p>\n<p><strong>핵심:</strong> 기존 좌표 13개 중 9개는 불확실 범위를 가진 후보 승인, 4개는 눈금 비율 환산입니다. 새 고정 중앙 기준의 픽셀 정답으로 인증된 항목은 아직 없습니다. 물의 안정된 수면부터 개발하고, 기존 영상은 확인된 의미와 구간에 맞춰 비교합니다.</p>\n'''+''.join(sections)+'</html>'\n(OUT/'review-index.html').write_text(page)\nlocal_files=['preflight.json','capture.json','verification.json','reader-followup.json','inspect_sources.py','verify_lineage.py','package_audit.py','review-index.html']\nrecord=dict(schema='s11-local-truth-and-evaluation-audit-v1',date='2026-10-10',base_head=pre['base_head'],\n            scope='Source/annotation qualification audit, not evaluator labels, detector output, recalculated scores or field acceptance',\n            exposure='All seven recordings already exposed; not independent holdout; review is not blind',\n            source_input_pins=inputs,annotations=annotations,source_role_strata=strata,public_scene_cases=public_cases,\n            summary=dict(recordings=7,legacy_annotations=15,legacy_usable=13,human_unusable=2,\n                         approved_agent_point_origins=9,user_ruler_origins=4,fixed_center_numeric_certifications=0,\n                         fresh_selected_legacy_frames=56,public_overview_frames=27,public_temporal_context_frames=27,\n                         unique_saved_public_frames=45,verified_historical_images=30,\n                         sequential_clean_panels_equal=14,timestamp_seek_clean_panels_equal_additional=1),\n            source_reader_followup=reader,local_artifacts=[receipt(OUT/p) for p in local_files],\n            preserved_failed_capture=receipt(ROOT/'sample/output/s11-truth-audit-20261010-001/failure.json'),\n            unresolved=[dict(id='base-f156-foam',kind='conflicting_human_interpretations',\n                             current_action='quarantine disputed physical claim; retain original bytes and both observations',\n                             decision_needed_for='Only a future formal relabel or decisive physical accuracy use of this claim',\n                             blocking_this_audit=False),\n                        dict(id='numeric-center-truth',kind='measurement_semantics_and_precision_unqualified',\n                             current_action='No transferred scalar error or invented tolerance; use visible source-bound qualitative controls',\n                             decision_needed_for='A future numeric accuracy dataset requires compatible source/role/X/visibility and reviewed point/interval semantics',\n                             blocking_this_audit=False)],\n            actions=dict(production_changed=False,truth_changed=False,recipe_changed=False,comparator_changed=False,\n                         detector_run=False,old_scores_recalculated=False,windows_run=False),\n            reproduction_scripts={p:(OUT/p).read_text() for p in ('inspect_sources.py','verify_lineage.py','package_audit.py')})\nDEST.write_text(json.dumps(record,indent=2,ensure_ascii=False)+'\\n')\nprint(json.dumps({'destination':rel(DEST),'source_pins':len(inputs),'summary':record['summary'],'local_review':rel(OUT/'review-index.html')},indent=2))\n"
+  }
+}

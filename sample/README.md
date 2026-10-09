@@ -126,21 +126,36 @@ They contain 15 exact reviewed frames in total. The fresh product translation is
 
 These truth files do not make the current sample set category-balanced official accuracy evidence and do not establish detector accuracy PASS. The four `*.provisional-truth.json` files remain separate immutable blind evidence.
 
+The [2026-10-10 source/annotation audit](../docs/60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md)
+qualifies future use: nine of the 13 Oil coordinates originate in approved
+agent proposals with uncertainty ranges, and four in user ruler percentages.
+Their original scalar values remain historical regression references, but none
+has been certified here as an exact contour at the new fixed-center X. The
+base f156 no-Foam annotation conflicts with a later Foam–air observation; the
+disputed physical claim is quarantined pending reconciliation. Original agent
+ranges are not automatically approved tolerances. Use the
+[current validation strata](../docs/30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification)
+to separate engineering compatibility, supported physical claims, ambiguous or
+unusable evidence, and legacy scalar agreement. Keep all cases and qualifications
+visible instead of treating the entire four-video set as uniformly precise truth.
+
 ## S11 public-video development intake (2026-10-09)
 
 Three additional local downloads have been screened without detector execution:
 
 | File | Original download name | Intended development use |
 |---|---|---|
-| `sample5.mp4` | `public_water_fill_pexels_6381722.mp4` | Empty-glass pattern reference, moving splash/bubbles and later settled surface |
+| `sample5.mp4` | `public_water_fill_pexels_6381722.mp4` | Empty-glass pattern reference, moving/deforming water surface with bubbles, and later settled surface |
 | `sample6.mp4` | `public_beer_fill_pexels_5538050.mp4` | Separate liquid/Foam boundaries; Foam top becomes cropped and unavailable |
 | `sample7.mp4` | `public_milk_fill_pexels_11158788.mp4` | Opaque white liquid versus surface froth; fixed-rim/base opposition |
 
 The [intake assessment](../docs/50-diagnostics/s11/2026-10-09-public-video-intake.md)
 and its machine record retain hashes, metadata, inspected frames, exposure and
 limitations. All three are development-intake exposures, not untouched holdout,
-canonical truth or field acceptance. Existing four-video corpus expectations and
-Recipes stay unchanged. No MP4 or generated-image tracking is added.
+canonical truth or field acceptance. The truth audit above qualifies use of both
+old and new recordings by observation/role. Existing Recipes and historical
+four-video scalar comparisons retain their original identities. No MP4 or
+generated-image tracking is added.
 The [rename receipt](../docs/50-diagnostics/s11/2026-10-09-public-video-rename.json)
 maps the frozen intake's original paths to the current names and verifies identical
 video hashes. Historical intake artifacts and generated-image paths are preserved.

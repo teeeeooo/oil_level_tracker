@@ -994,6 +994,56 @@ These local checks do not satisfy O2 opposing/holdout/Windows controls, authoriz
 an authority/phase rewrite, or change FIELD FAIL. They also do not add a 100%
 per-frame recall or per-pixel semantic-labeling requirement to the product.
 
+## Local source and truth qualification
+
+The [2026-10-10 source/annotation audit](../60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md)
+qualifies future local physical comparisons. A historical user-approved scalar
+is not automatically pixel-exact, candidate-identity truth or a contour at the
+new fixed-center X. Original truth files, test fixtures and past experiment
+outcomes stay identified; a correction is an explicit reference revision, not
+a detector improvement.
+
+Before selecting a new mechanism or inspecting its scores, freeze the source
+frames/intervals and each claim's role, authority, visibility, geometry and
+measurement semantics. Use the complete seven-recording audit inventory as
+the routing basis, not an all-or-nothing four-video accuracy gate:
+
+| Evidence stratum | Required interpretation |
+|---|---|
+| Engineering compatibility | Keep decode/input identity, independent series, same-frame provenance, output integrity and appropriate runtime checks, even on physically ambiguous images. Historical replay windows are input scope, not continuous physical truth. |
+| Qualified physical positives/opposition | Use clearly visible source-bound claims. Water settling/empty-pattern context is the first development entry; retain inclined-water, beer, milk and existing target-domain controls at their actual annotation scope. Agent interpretation stays distinct from human truth. |
+| Unobservable, disputed or geometry-incompatible claims | Report explicitly as unresolved/unassessable for that physical metric. Do not force an exact Y, infer absence from invisibility, or credit an abstention as correct identity. Inspect unsupported numerics as robustness failures only where source evidence supports that judgment. |
+| Legacy scalar agreement | Report the original complete 13-case comparison under its original values and semantics. Preserve its PASS/FAIL; it is not by itself decisive physical acceptance/rejection for a different measurement target or an unresolved reference. |
+
+The current legacy comparator and tests are not weakened by this contract.
+Any future conflict between an old assertion and a newly qualified physical
+target must be reconciled explicitly before runtime adoption; do not hide a
+failing check or preserve a demonstrated wrong behavior solely to satisfy an
+incompatible oracle. A genuine loss on a compatible, supported positive remains
+a regression. All-abstain is not successful development.
+
+Numeric fixed-center error requires compatible source/time/pixel binding,
+target role, declared X, visible intersection and reviewed point/interval
+semantics. The audited 13 historical points have no such transfer certified.
+Original agent proposal ranges are not automatically approved error tolerances;
+do not derive tolerances from candidate residuals. A label revision retains its
+reason/history and reruns baseline and candidate against the same frozen version.
+Unchanged predictions plus fewer decisive labels are not an accuracy gain.
+
+Keep every qualified/unqualified case, denominator, missing output and reason
+visible. Do not select only easy frames after results or turn crop-center geometry
+into calibrated Glass geometry. Scope difficult cases by observation/role,
+not by discarding a whole recording. Existing human-confirmed positives,
+wrong-target controls and major-event judgments remain at their original scope;
+CBR-1's wrong-rim closure is not reopened by this audit.
+
+All seven recordings remain exposed development/regression evidence. Clearer
+public drinking-glass images do not replace target-domain, independent-holdout,
+O2 or Windows obligations. Qualitative mechanism development can proceed while
+a disputed legacy claim remains quarantined; formal relabeling or a decisive
+numeric accuracy claim needs its specific missing review, not repeated review
+of all prior questions.
+
 ## CBR-1 offline comparison entry
 
 This is the validation boundary for the
@@ -1035,6 +1085,9 @@ retain NOT_ASSESSABLE and name the missing distinction.
 
 Only a useful bounded result proceeds to the existing four Mac regression
 windows (including full sample4) and public water/beer/milk opposition controls.
+For a future successor, those sources are interpreted under
+[local source and truth qualification](#local-source-and-truth-qualification),
+not as seven uniformly reliable numeric oracles. CBR-1's frozen result is retained.
 These already exposed recordings are not fresh holdouts; public crop centers
 are not calibrated Glass centers. Compare fixed-center scalar error only where
 truth declares compatible measurement semantics. Existing candidate-Y truth and
@@ -1063,6 +1116,9 @@ no existing O2 requirement is satisfied merely by those computational checks.
 
 The 2026-10-10 CBR-1 intake adds offline entry and progression conditions; its
 complete frozen comparison then triggers the stop rule without promotion.
+The subsequent local-truth audit qualifies source/annotation uses before a
+successor's physical comparison; it preserves original labels, test outputs
+and the failed experiment's disposition.
 H0's support-face intersection loses available partition geometry, while CBR-1
 admits wrong-region appearance despite current geometry. Private first physical
 causes and field effectiveness remain unqualified. F07's Foam front/texture
