@@ -270,10 +270,21 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    signed-edge helper retains both sides of narrow dark troughs; 28 tests and
    default equality across seven cases / 990 columns pass. The confirmed glass
    rim also produces pairs, so paired-gap existence is not a Foam classifier.
-   No production change is adopted. Reuse this representation for candidate-local
-   side-support and independently attributed structural comparison before any
-   scalar reduction or physical decision. No repeat visibility/texture question,
-   exact marks, automatic upper-edge selection or window tuning is required.
+   No production change is adopted. **Candidate-local context complete:** the
+   [saved join](../50-diagnostics/s11/2026-10-09-foam-gap-local-context.md)
+   preserves all 848 pairs / 1,696 edge records with raw side support and exact
+   reviewed-reference XY. White-entry predicates also occur on the confirmed
+   rim; chromatic support spans upper-region alternatives as well as texture.
+   Neither is a physical classifier. Exact reference hits can have opposite raw
+   polarity, and the reviewed domain does not cover the upper central gap.
+   **Pending human checkpoint:** identify the physical feature on the **upper
+   side** of that narrow space in the
+   [pink/cyan comparison](../50-diagnostics/s11/2026-10-09-foam-gap-upper-side-review.png).
+   This is regional structure/overlap identity, not renewed Foam visibility,
+   exact marks or approval of every dot. Dependent physical selection stops here;
+   no Windows action is needed. A reply may ground adjacency comparison, but
+   cannot alone create an exclusion mask or authorize a classifier. No automatic
+   upper-edge selection, chromatic veto or threshold/window tuning follows.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require

@@ -304,6 +304,18 @@ rim also produces 30 paired edges at the existing radius 8, so paired-gap presen
 cannot establish Foam identity. Retain alternatives for independent local
 material/structural comparison, not another polarity/strength/window shortcut.
 
+**Candidate-local context follow-up:** the [seven-frame saved join](2026-10-09-foam-gap-local-context.md)
+preserves all 848 pairs and 1,696 edge contexts. Entering raw white support occurs
+on 23/30 radius-8 lower alternatives in the confirmed-rim component; the combined
+raw/clean white-entry and absent-chromatic pattern also occurs in mixed C2.
+Chromatic support spans late upper-region alternatives as well as internal
+texture, so it is not adopted as a veto. Exact reviewed Canny XY hits can have
+opposite raw-gradient polarity, and outside-domain absence is not non-structure.
+The upper central gap has no existing reviewed reference coverage. A distinct
+regional upper-side identity question is pending; Foam visibility and internal
+texture replies remain closed. Do not fit a threshold to these signatures, turn
+coordinate overlap into object identity, or create an exact mask from a reply.
+
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 
 **Affected detector logic node(s):** `OIL-TRACKLET` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.
